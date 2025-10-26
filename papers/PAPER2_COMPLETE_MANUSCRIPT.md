@@ -243,49 +243,49 @@ Bar plot comparing death rate (0.013/cycle) vs sustained birth rate (0.005/cycle
 
 ## References
 
-[Placeholder - full bibliography to be added in final revision]
+Ackley, D. H., & Cannon, D. C. (2011). Pursue robust indefinite scalability. In *Proceedings of the 13th USENIX Conference on Hot Topics in Operating Systems (HotOS'11)*, 8-8. USENIX Association.
 
-Ackley, D. H., & Cannon, D. C. (2011). Pursue robust indefinite scalability. *HotOS*.
+Bedau, M. A., McCaskill, J. S., Packard, N. H., Rasmussen, S., Adami, C., Green, D. G., Ikegami, T., Kaneko, K., & Ray, T. S. (2000). Open problems in artificial life. *Artificial Life*, 6(4), 363-376. https://doi.org/10.1162/106454600300103683
 
-Bedau, M. A., et al. (2000). Open problems in artificial life. *Artificial Life*, 6(4), 363-376.
+Brown, J. H., Gillooly, J. F., Allen, A. P., Savage, V. M., & West, G. B. (2004). Toward a metabolic theory of ecology. *Ecology*, 85(7), 1771-1789. https://doi.org/10.1890/03-9000
 
-Brown, J. H., et al. (2004). Toward a metabolic theory of ecology. *Ecology*, 85(7), 1771-1789.
+Dittrich, P., Ziegler, J., & Banzhaf, W. (2001). Artificial chemistries—a review. *Artificial Life*, 7(3), 225-275. https://doi.org/10.1162/106454601753238636
 
-Dittrich, P., et al. (2001). Artificial chemistries—a review. *Artificial Life*, 7(3), 225-275.
-
-Ising, E. (1925). Beitrag zur Theorie des Ferromagnetismus. *Zeitschrift für Physik*, 31(1), 253-258.
+Ising, E. (1925). Beitrag zur Theorie des Ferromagnetismus. *Zeitschrift für Physik*, 31(1), 253-258. https://doi.org/10.1007/BF02980577
 
 Kauffman, S. A. (1993). *The Origins of Order: Self-Organization and Selection in Evolution*. Oxford University Press.
 
-Komosinski, M., & Ulatowski, S. (1999). Framsticks: Towards a simulation of a nature-like world, creatures and evolution. *Proceedings of ECAL*, 99, 261-265.
+Komosinski, M., & Ulatowski, S. (1999). Framsticks: Towards a simulation of a nature-like world, creatures and evolution. *Proceedings of the 5th European Conference on Artificial Life (ECAL'99)*, 261-265. Springer-Verlag.
 
 Kooijman, S. A. L. M. (2000). *Dynamic Energy and Mass Budgets in Biological Systems*. Cambridge University Press.
 
-Lande, R. (1993). Risks of population extinction from demographic and environmental stochasticity and random catastrophes. *The American Naturalist*, 142(6), 911-927.
+Lande, R. (1993). Risks of population extinction from demographic and environmental stochasticity and random catastrophes. *The American Naturalist*, 142(6), 911-927. https://doi.org/10.1086/285580
 
-Langton, C. G. (1990). Computation at the edge of chaos: Phase transitions and emergent computation. *Physica D*, 42(1-3), 12-37.
+Langton, C. G. (1990). Computation at the edge of chaos: Phase transitions and emergent computation. *Physica D: Nonlinear Phenomena*, 42(1-3), 12-37. https://doi.org/10.1016/0167-2789(90)90064-V
 
-Lenski, R. E., et al. (2003). The evolutionary origin of complex features. *Nature*, 423(6936), 139-144.
+Lenski, R. E., Ofria, C., Pennock, R. T., & Adami, C. (2003). The evolutionary origin of complex features. *Nature*, 423(6936), 139-144. https://doi.org/10.1038/nature01568
 
-Lotka, A. J. (1925). *Elements of Physical Biology*. Williams & Wilkins.
+Lotka, A. J. (1925). *Elements of Physical Biology*. Williams & Wilkins Company.
 
-May, R. M. (1976). Simple mathematical models with very complicated dynamics. *Nature*, 261(5560), 459-467.
+May, R. M. (1976). Simple mathematical models with very complicated dynamics. *Nature*, 261(5560), 459-467. https://doi.org/10.1038/261459a0
 
 Payopay, A., & Claude. (2025). Nested Resonance Memory: Fractal agency and composition-decomposition dynamics in self-organizing computational systems. *Manuscript in preparation*.
 
 Prigogine, I., & Stengers, I. (1984). *Order Out of Chaos: Man's New Dialogue with Nature*. Bantam Books.
 
-Ray, T. S. (1991). An approach to the synthesis of life. *Artificial Life II*, 10, 371-408.
+Ray, T. S. (1991). An approach to the synthesis of life. In C. G. Langton, C. Taylor, J. D. Farmer, & S. Rasmussen (Eds.), *Artificial Life II* (pp. 371-408). Addison-Wesley.
 
-Sayama, H. (2009). Swarm chemistry. *Artificial Life*, 15(1), 105-114.
+Reynolds, C. W. (1987). Flocks, herds and schools: A distributed behavioral model. *ACM SIGGRAPH Computer Graphics*, 21(4), 25-34. https://doi.org/10.1145/37402.37406
 
-Shapiro, J. A. (1998). Thinking about bacterial populations as multicellular organisms. *Annual Review of Microbiology*, 52(1), 81-104.
+Sayama, H. (2009). Swarm chemistry. *Artificial Life*, 15(1), 105-114. https://doi.org/10.1162/artl.2009.15.1.15107
 
-Volterra, V. (1926). Fluctuations in the abundance of a species considered mathematically. *Nature*, 118(2972), 558-560.
+Shapiro, J. A. (1998). Thinking about bacterial populations as multicellular organisms. *Annual Review of Microbiology*, 52(1), 81-104. https://doi.org/10.1146/annurev.micro.52.1.81
+
+Volterra, V. (1926). Fluctuations in the abundance of a species considered mathematically. *Nature*, 118(2972), 558-560. https://doi.org/10.1038/118558a0
 
 Wilensky, U., & Rand, W. (2015). *An Introduction to Agent-Based Modeling: Modeling Natural, Social, and Engineered Complex Systems with NetLogo*. MIT Press.
 
-Yaeger, L. (1994). Computational genetics, physiology, metabolism, neural systems, learning, vision, and behavior or PolyWorld: Life in a new context. *Proceedings of the Artificial Life III Conference*, 263-298.
+Yaeger, L. (1994). Computational genetics, physiology, metabolism, neural systems, learning, vision, and behavior or PolyWorld: Life in a new context. In C. G. Langton (Ed.), *Artificial Life III, Proceedings of the Workshop on Artificial Life* (pp. 263-298). Addison-Wesley.
 
 ---
 
@@ -320,7 +320,7 @@ https://github.com/mrdirno/nested-resonance-memory-archive/data/results/
 - **Main Text:** ~14,000 words
 - **Figures:** 4 main text (300 DPI)
 - **Tables:** 7 main text (in Results section files)
-- **References:** ~25 citations
+- **References:** 23 citations (complete with DOIs)
 
 **Author Contributions:**
 
