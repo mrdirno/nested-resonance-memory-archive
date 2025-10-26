@@ -1,0 +1,24 @@
+{
+  "condition_results": {
+    "BASELINE": {
+      "condition": "BASELINE",
+      "n_experiments": 10,
+      "population": {
+        "mean": 0.0006666666666666668,
+        "std": 1.142849436385645e-19,
+        "cv": 1.714274154578467e-14,
+        "min": 0.0006666666666666666,
+        "max": 0.0006666666666666666,
+        "range": 0.0
+      },
+      "composition": {
+        "mean": 0.03333333333333333,
+        "std": 0.0,
+        "cv": 0.0
+      },
+      "basin": {
+        "basin_a_pct": 0.0,
+        "basin_a_count": 0,
+        "basin_b_count": 10
+      },
+      "homeostatic": 
