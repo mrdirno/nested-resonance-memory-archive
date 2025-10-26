@@ -12,8 +12,8 @@ During theoretical energy budget analysis (Cycle 215), discovered that C176 V3 e
 
 **Experimental Sequence**:
 - **C176 V2**: No energy recharge → Population collapse (mean=0.49)
-- **C176 V3**: Energy recharge at 0.001/cycle → Predicted failure (insufficient)
-- **C176 V4**: Energy recharge at 0.01/cycle → Corrected rate (testable)
+- **C176 V3**: Energy recharge at 0.001/cycle → **CONFIRMED failure** (mean=0.49, identical to V2)
+- **C176 V4**: Energy recharge at 0.01/cycle → [RUNNING] Expected ~00:48-00:58
 
 This provides **controlled parameter sweep** demonstrating energy constraint sensitivity.
 
@@ -72,13 +72,18 @@ energy_recharge = 0.01 * available_capacity * delta_time
 
 ## Theoretical Predictions
 
-### V3 Expected Dynamics
+### V3 Actual Results (Cycle 217)
 
-**Spawn Pattern** (frequency f=2.5%, interval=40 cycles):
-- Cycles 0-320: Parent spawns 8 children, becomes sterile
-- Cycles 320-3000: Parent recovering (gains ~2.7 energy)
-- End state: Parent at E≈12.7, children may have spawned generation 2
-- **Predicted**: Limited population, possibly collapsing
+**Prediction**: Limited population, possibly collapsing
+
+**Actual Results** (n=10 seeds, 30.4 min runtime):
+- Mean population: **0.494 ± 0.50** (identical to V2)
+- CV: **101.3%** (catastrophic collapse)
+- Spawn count: **75** (deterministic across all seeds)
+- Composition events: **38** (deterministic)
+- Final count: **0** (all experiments)
+
+**Outcome**: ✅ **PREDICTION CONFIRMED** - Recharge rate 0.001/cycle insufficient, dynamics identical to no-recharge baseline
 
 ### V4 Expected Dynamics
 
@@ -154,21 +159,23 @@ This provides **10× parameter steps** for sensitivity analysis.
 
 ### Testable Predictions
 
-**If V3 fails and V4 succeeds**:
-- ✅ Validates energy budget analysis
-- ✅ Demonstrates parameter criticality
-- ✅ Establishes recharge rate threshold (0.001 < r_critical < 0.01)
-- ✅ Enables interpolation study (future: test r=0.005)
+**Scenario 1: V3 fails and V4 succeeds** ← **CURRENT TRAJECTORY**
+- ✅ V3 failure CONFIRMED (mean=0.49, identical to V2)
+- ⏳ V4 running (expected completion ~00:48-00:58)
+- **If V4 succeeds**: Validates energy budget analysis, demonstrates parameter criticality
+- **Establishes**: 0.001 < r_critical < 0.01
+- **Enables**: Future interpolation study (test r=0.005)
 
-**If both V3 and V4 fail**:
-- ❌ Recharge model insufficient regardless
-- → Suggests other mechanisms needed (energy sources, reduced spawn cost, etc.)
-- → Opens new research direction
+**Scenario 2: Both V3 and V4 fail**:
+- ✅ V3 failure CONFIRMED
+- ⏳ V4 pending
+- **If V4 also fails**: Recharge model insufficient regardless of rate
+- **Suggests**: Other mechanisms needed (energy sources, reduced spawn cost, agent cooperation)
+- **Opens**: New research direction (most publishable outcome)
 
-**If both V3 and V4 succeed**:
-- → V3 prediction wrong, threshold lower than calculated
-- → Would validate robustness but contradict theory
-- → Requires model revision
+**Scenario 3: Both V3 and V4 succeed**:
+- ✅ V3 FAILED (contradicts this scenario)
+- **Outcome**: ELIMINATED - V3 confirmed theoretical prediction
 
 ---
 
@@ -189,8 +196,8 @@ Initial implementation (V3) used r=0.001 (10× too low), discovered through pre-
 | Version | Recharge Rate | Recovery Time | Mean Population | Interpretation |
 |---------|--------------|---------------|-----------------|----------------|
 | V2      | 0.000        | ∞             | 0.49 ± 0.50     | Collapse       |
-| V3      | 0.001        | 10,000 cycles | [PENDING]       | Insufficient?  |
-| V4      | 0.010        | 1,000 cycles  | [PENDING]       | Sufficient?    |
+| V3      | 0.001        | 10,000 cycles | 0.49 ± 0.50     | Collapse (confirmed) |
+| V4      | 0.010        | 1,000 cycles  | [RUNNING]       | Expected ~00:48-00:58 |
 
 ### Discussion: Theory-Driven Parameter Validation
 
