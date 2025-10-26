@@ -231,12 +231,335 @@ If pairwise combinations show strong synergy (mean populations > 10 agents), we 
 
 ## 2. Methods
 
-[Section to be written after C177 results inform experimental design refinements]
-
 ### 2.1 Experimental Design
+
+#### 2.1.1 Factorial Structure
+
+All experiments employed a **2×2 factorial design** with two binary factors (Hypothesis A: absent/present, Hypothesis B: absent/present), yielding four experimental conditions:
+
+1. **BASELINE:** Neither hypothesis implemented (control condition)
+2. **A-only:** Hypothesis A active, Hypothesis B inactive
+3. **B-only:** Hypothesis A inactive, Hypothesis B active
+4. **A+B:** Both hypotheses active simultaneously
+
+This factorial structure enables decomposition of total effects into:
+- **Main effect of A:** Average difference between A-present and A-absent conditions
+- **Main effect of B:** Average difference between B-present and B-absent conditions
+- **Interaction effect (A×B):** Non-additive contribution when both A and B are present
+
+**Example: H1+H2 Combination**
+- **BASELINE:** No energy pooling, no external sources (f=2.5%, standard parameters)
+- **H1-only:** Energy pooling enabled (α=0.10), no external sources
+- **H2-only:** No energy pooling, external sources enabled (E_reward=5.0)
+- **H1+H2:** Both energy pooling (α=0.10) and external sources (E_reward=5.0) active
+
+#### 2.1.2 Fixed Parameters
+
+All experiments shared the following baseline parameters to ensure comparability with Paper 2 findings:
+
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| **Spawn frequency (f)** | 2.5% | Composition probability per cycle (Regime 3 baseline) |
+| **Replication count (n)** | 10 | Independent experiments per condition (different random seeds) |
+| **Simulation duration** | 3,000 cycles | Sufficient to observe long-term population dynamics |
+| **Initial energy (E₀)** | 130.0 | Root agent starting energy |
+| **Spawn threshold** | E ≥ 10.0 | Minimum energy required for reproduction |
+| **Spawn cost** | 30% | Energy transferred from parent to offspring (E_child = 0.70 × E_parent) |
+| **Energy recharge rate (r)** | 0.010 | Energy units recovered per cycle |
+| **Composition depth threshold** | d ≥ 1.5 | Minimum phase space depth for composition eligibility |
+
+**Rationale:** Using f=2.5% (Regime 3 baseline) ensures that populations face the catastrophic collapse scenario (mean=0.49, extinction=100%), providing a stringent test for hypothesis combinations. If interventions succeed only in more favorable regimes (f=2.0%), this suggests limited robustness.
+
+#### 2.1.3 Random Seed Control
+
+Each condition employed 10 independent replications with distinct random seeds (42, 123, 456, 789, 101, 202, 303, 404, 505, 606). These seeds control:
+- Transcendental phase calculations (π, e, φ oscillator phases)
+- Composition probability thresholds
+- Energy recharge stochasticity (if implemented)
+- Task completion timing (for H2 external sources)
+
+**Sample Size Justification:** With n=10 per condition and 4 conditions, each combination test comprises 40 total experiments. Power analysis (α=0.05, power=0.80, Cohen's d=0.8 "large effect") requires n≥26 per t-test comparison, but factorial ANOVA with 4 groups requires n≥10 per group to detect interaction effects at power ≥0.70 (Lakens, 2013).
+
 ### 2.2 Combinations Tested
+
+Six pairwise combinations were selected based on mechanistic complementarity (addressing different asymmetries) and predicted synergy potential:
+
+#### 2.2.1 H1+H2: Energy Pooling + External Sources
+
+**Mechanistic Rationale:**
+- **H1 (Energy Pooling):** Addresses single-parent bottleneck by distributing reproductive capacity across resonance clusters
+- **H2 (External Sources):** Addresses recovery lag by accelerating energy accumulation via task-based rewards
+- **Synergy Prediction:** Cooperative spawning + rapid recovery enables sustained multi-generational lineages where individual mechanisms fail
+
+**Implementation:**
+- **H1 parameters:** α=0.10 (10% energy contribution per agent per cycle to cluster pool), energy redistribution among agents with phase similarity > 0.70
+- **H2 parameters:** E_reward=5.0 energy units per successful resonance cluster formation event
+- **Trigger:** Agents gain external energy when participating in detected composition clusters (simulates environmental task completion)
+
+**Predicted Outcomes:**
+- Birth rate: 5-6× baseline (0.005 → 0.025-0.030 agents/cycle)
+- Mean population: 12-18 agents (vs 0.49 baseline)
+- Extinction rate: <20% (vs 100% baseline)
+
+#### 2.2.2 H1+H4: Energy Pooling + Composition Throttling
+
+**Mechanistic Rationale:**
+- **H1 (Energy Pooling):** Increases birth capacity through cooperative energy sharing
+- **H4 (Composition Throttling):** Decreases death rate via density-dependent composition probability
+- **Synergy Prediction:** Simultaneous birth enhancement + death reduction overcomes birth-death imbalance
+
+**Implementation:**
+- **H1 parameters:** α=0.10 (10% energy pooling)
+- **H4 parameters:** Composition probability P_comp(ρ) = f × (1 - ρ/ρ_max), where:
+  - f = 2.5% (base composition frequency)
+  - ρ = current population size
+  - ρ_max = 30 agents (maximum sustainable density)
+  - Example: At ρ=15, P_comp = 2.5% × (1 - 15/30) = 1.25% (50% reduction)
+
+**Predicted Outcomes:**
+- Birth rate: 3× baseline (H1 contribution: 0.005 → 0.015)
+- Death rate: 50% baseline at ρ=15 (H4 contribution: 0.013 → 0.0065)
+- Mean population: 15-25 agents (sustained ceiling)
+- Net growth: Birth exceeds death (0.015 > 0.0065)
+
+#### 2.2.3 H1+H5: Energy Pooling + Multi-Generational Recovery
+
+**Mechanistic Rationale:**
+- **H1 (Energy Pooling):** Cooperative energy sharing within clusters
+- **H5 (Multi-Generational Recovery):** Staggered spawning across parent-offspring lineages to avoid simultaneous sterility
+- **Synergy Prediction:** Spatial cooperation (H1) + temporal coordination (H5) creates persistent reproductive windows
+
+**Implementation:**
+- **H1 parameters:** α=0.10 (10% pooling)
+- **H5 parameters:** Track lineage generation depth, enforce minimum 300-cycle offset between parent and offspring spawning events
+  - Parent spawns at cycle t → enters 1,000-cycle recovery
+  - Offspring can spawn starting cycle t+300 (before parent recovers)
+  - Grandoffspring can spawn at t+600 (staggered birth opportunities)
+
+**Predicted Outcomes:**
+- Birth rate: 5-6× baseline (cooperative + asynchronous spawning)
+- Mean population: 8-12 agents (multi-generational lineages)
+- Temporal resilience: Continuous reproductive capacity across lineage depths
+
+#### 2.2.4 H2+H4: External Sources + Composition Throttling
+
+**Mechanistic Rationale:**
+- **H2 (External Sources):** Accelerates recovery, enabling more frequent births
+- **H4 (Composition Throttling):** Reduces death pressure at low densities
+- **Synergy Prediction:** Fast recovery during throttled death window creates population growth phase
+
+**Implementation:**
+- **H2 parameters:** E_reward=5.0 per task event
+- **H4 parameters:** P_comp(ρ) = f × (1 - ρ/ρ_max)
+
+**Predicted Outcomes:**
+- Birth rate: 2× baseline (H2 recovery acceleration)
+- Death rate: 50% at ρ=15 (H4 throttling)
+- Mean population: 10-15 agents
+- Growth dynamics: Initial rapid expansion (H4 protection) followed by sustained balance
+
+#### 2.2.5 H2+H5: External Sources + Multi-Generational Recovery
+
+**Mechanistic Rationale:**
+- **H2 (External Sources):** Fast recovery reduces inter-birth intervals
+- **H5 (Multi-Generational Recovery):** Temporal coordination across lineages
+- **Synergy Prediction:** Rapid energy accumulation + staggered spawning creates high-frequency birth events
+
+**Implementation:**
+- **H2 parameters:** E_reward=5.0 per task
+- **H5 parameters:** 300-cycle minimum offset between parent-offspring spawning
+
+**Predicted Outcomes:**
+- Birth rate: 4-5× baseline (fast recovery × asynchronous spawning)
+- Mean population: 6-10 agents
+- Temporal pattern: Multi-generational lineages with overlapping reproductive windows
+
+#### 2.2.6 H4+H5: Composition Throttling + Multi-Generational Recovery
+
+**Mechanistic Rationale:**
+- **H4 (Composition Throttling):** Density-dependent death reduction
+- **H5 (Multi-Generational Recovery):** Staggered spawning coordination
+- **Synergy Prediction:** Reduced death pressure + temporal birth coordination enables gradual population growth
+
+**Implementation:**
+- **H4 parameters:** P_comp(ρ) = f × (1 - ρ/ρ_max)
+- **H5 parameters:** 300-cycle lineage offset
+
+**Predicted Outcomes:**
+- Birth rate: 2-3× baseline (H5 staggering)
+- Death rate: 50% at ρ=15 (H4 throttling)
+- Mean population: 8-12 agents
+- Dynamics: Slow stable growth protected by throttling
+
 ### 2.3 Statistical Analysis
+
+#### 2.3.1 Factorial ANOVA
+
+For each combination, we conducted two-way ANOVA with factors A (Hypothesis A: absent/present) and B (Hypothesis B: absent/present) on the following dependent variables:
+
+**Primary Outcomes:**
+1. **Mean population:** Time-averaged agent count over 3,000 cycles
+2. **Birth rate:** Successful spawning events per cycle
+3. **Final agent count:** Population size at cycle 3,000
+4. **Extinction rate:** Proportion of replications reaching zero population
+
+**ANOVA Model:**
+```
+Y_ijk = μ + α_i + β_j + (αβ)_ij + ε_ijk
+```
+Where:
+- Y_ijk = outcome for condition i, factor level j, replication k
+- μ = grand mean
+- α_i = main effect of factor A (i = 0 absent, i = 1 present)
+- β_j = main effect of factor B (j = 0 absent, j = 1 present)
+- (αβ)_ij = interaction effect between A and B
+- ε_ijk = residual error
+
+**Hypothesis Testing:**
+- **Main effect A:** H₀: α₁ = 0 (no effect of Hypothesis A alone)
+- **Main effect B:** H₀: β₁ = 0 (no effect of Hypothesis B alone)
+- **Interaction A×B:** H₀: (αβ)₁₁ = 0 (no synergistic or antagonistic effect)
+
+**Significance Criteria:**
+- α = 0.05 (two-tailed)
+- F-statistic with df_numerator = 1, df_denominator = 36 (40 total - 4 groups)
+- Significant interaction F(A×B) with p < 0.05 indicates non-additive effects
+
+#### 2.3.2 Post-Hoc Pairwise Comparisons
+
+Following significant ANOVA results, we conducted Tukey HSD (Honestly Significant Difference) post-hoc tests for all six pairwise comparisons:
+
+1. BASELINE vs A-only
+2. BASELINE vs B-only
+3. BASELINE vs A+B
+4. A-only vs A+B
+5. B-only vs A+B
+6. A-only vs B-only
+
+**Bonferroni Correction:** α_adjusted = 0.05 / 6 = 0.0083 for family-wise error rate control
+
+#### 2.3.3 Effect Size Calculations
+
+**Cohen's d (standardized mean difference):**
+```
+d = (M₁ - M₂) / s_pooled
+```
+Where s_pooled = √[((n₁-1)s₁² + (n₂-1)s₂²) / (n₁ + n₂ - 2)]
+
+**Interpretation (Cohen, 1988):**
+- |d| < 0.2: Negligible effect
+- 0.2 ≤ |d| < 0.5: Small effect
+- 0.5 ≤ |d| < 0.8: Medium effect
+- |d| ≥ 0.8: Large effect
+- |d| ≥ 1.5: Huge effect (our threshold for "strongly confirmed")
+
+**Synergy Quantification:**
+```
+Synergy Index (SI) = [Effect(A+B) - (Effect(A) + Effect(B))] / Effect(BASELINE)
+```
+- SI > 0: Super-additive (synergistic)
+- SI = 0: Additive (independent mechanisms)
+- SI < 0: Sub-additive (antagonistic interference)
+
+**Example Calculation:**
+If BASELINE mean = 0.5, A-only mean = 2.0 (+1.5), B-only mean = 3.0 (+2.5), A+B mean = 8.0 (+7.5):
+- Additive prediction: 1.5 + 2.5 = 4.0 improvement → Expected mean = 4.5
+- Observed A+B: 8.0
+- Synergy Index: (7.5 - 4.0) / 0.5 = 7.0 (700% super-additive benefit)
+
+#### 2.3.4 Assumptions and Diagnostics
+
+**ANOVA Assumptions:**
+1. **Independence:** Ensured by separate random seeds per replication
+2. **Normality:** Assessed via Shapiro-Wilk test (p > 0.05) and Q-Q plots
+3. **Homogeneity of variance:** Tested via Levene's test (p > 0.05)
+
+**Violations:** If assumptions violated, we applied:
+- Non-parametric Kruskal-Wallis H test (replaces ANOVA)
+- Mann-Whitney U tests with Bonferroni correction (pairwise comparisons)
+- Robust standard errors for effect size confidence intervals
+
 ### 2.4 Hypothesis Classification
+
+We classified each combination's outcome using a 4-tier rubric based on statistical significance, effect sizes, and biological relevance:
+
+#### 2.4.1 STRONGLY SYNERGISTIC
+**Criteria:**
+- Interaction F(A×B) significant at p < 0.001
+- Cohen's d (A+B vs BASELINE) ≥ 1.5 (huge effect)
+- Synergy Index ≥ 0.50 (≥50% super-additive gain)
+- Mean population (A+B) ≥ 10 agents (vs 0.49 baseline)
+- Extinction rate (A+B) < 20%
+
+**Interpretation:** Mechanisms exhibit robust synergistic interaction, producing population homeostasis where individual interventions fail. Combined effects dramatically exceed additive predictions.
+
+**Example Pattern:**
+- BASELINE: mean = 0.5
+- A-only: mean = 2.0 (Cohen's d vs BASELINE = 0.6)
+- B-only: mean = 3.0 (Cohen's d vs BASELINE = 0.8)
+- A+B: mean = 12.0 (Cohen's d vs BASELINE = 2.5, SI = 1.4)
+
+#### 2.4.2 SYNERGISTIC
+**Criteria:**
+- Interaction F(A×B) significant at p < 0.01
+- Cohen's d (A+B vs BASELINE) ≥ 0.8 (large effect)
+- Synergy Index ≥ 0.20 (≥20% super-additive gain)
+- Mean population (A+B) ≥ 5 agents
+- Extinction rate (A+B) < 50%
+
+**Interpretation:** Combination shows statistically significant synergy with meaningful biological impact. Combined mechanisms outperform additive predictions but may not achieve full homeostasis.
+
+**Example Pattern:**
+- BASELINE: mean = 0.5
+- A-only: mean = 1.5 (Cohen's d = 0.5)
+- B-only: mean = 2.0 (Cohen's d = 0.6)
+- A+B: mean = 6.0 (Cohen's d = 1.2, SI = 0.45)
+
+#### 2.4.3 ADDITIVE
+**Criteria:**
+- Main effects A and/or B significant (p < 0.05)
+- Interaction F(A×B) NOT significant (p ≥ 0.05)
+- |Synergy Index| < 0.20 (≤20% deviation from additivity)
+- A+B effect ≈ Effect(A) + Effect(B) within measurement error
+
+**Interpretation:** Mechanisms operate independently without interference. Combined effect equals sum of individual contributions. Suggests modular design where interventions can be composed without complex interactions.
+
+**Example Pattern:**
+- BASELINE: mean = 0.5
+- A-only: mean = 2.0 (+1.5)
+- B-only: mean = 3.0 (+2.5)
+- A+B: mean = 4.5 (+4.0, predicted = 4.0, SI = 0.0)
+
+#### 2.4.4 NO SIGNIFICANT EFFECT
+**Criteria:**
+- Interaction F(A×B) NOT significant (p ≥ 0.05)
+- Main effects A and B NOT significant (p ≥ 0.05)
+- Cohen's d (A+B vs BASELINE) < 0.5 (small or negligible effect)
+- Mean population (A+B) < 3 agents
+- Extinction rate (A+B) ≥ 80%
+
+**Interpretation:** Combination fails to address underlying constraints. Neither individual mechanisms nor their interaction produce meaningful population improvements. Suggests fundamental architectural limitations beyond parameter-level interventions.
+
+**Example Pattern:**
+- BASELINE: mean = 0.5
+- A-only: mean = 0.8 (Cohen's d = 0.15)
+- B-only: mean = 1.2 (Cohen's d = 0.30)
+- A+B: mean = 1.5 (Cohen's d = 0.40, SI = 0.10)
+
+#### 2.4.5 Special Case: Antagonistic Effects
+
+**Criteria:**
+- Interaction F(A×B) significant (p < 0.05)
+- Synergy Index < -0.20 (≥20% sub-additive loss)
+- A+B effect < Effect(A) + Effect(B) by substantial margin
+
+**Interpretation:** Mechanisms interfere when combined, producing worse outcomes than additive predictions. Suggests competing resource demands, conflicting regulatory logic, or emergent constraints not present in isolated interventions.
+
+**Example Pattern:**
+- BASELINE: mean = 0.5
+- A-only: mean = 3.0 (+2.5)
+- B-only: mean = 2.5 (+2.0)
+- A+B: mean = 3.0 (+2.5, predicted = 5.0, SI = -0.55)
 
 ---
 
