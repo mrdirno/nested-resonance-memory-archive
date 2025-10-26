@@ -31,7 +31,18 @@ Emergent population homeostasis replaces bistable structure:
 - Mechanism identified: Birth-death coupling creates negative feedback absent in simplified case
 - Domain: Complete regime (β>β_crit, dynamic population, birth-death enabled)
 
-**3. Regime Classification Framework**
+**3. Robustness Validation (C175)**
+
+High-resolution mapping confirms homeostasis persistence, not bistability:
+- 110 experiments at 0.01% resolution: f=2.50-2.60% (10× finer than C171)
+- 100% Basin A occupation across ALL frequencies (no transition detected)
+- Extreme composition stability: 99.97 ± 0.00 events/window (CV < 0.1%)
+- Population insensitivity: ~17 agents maintained despite 4% spawn variation
+- Buffering capacity: >400× (4% input variation → <0.01% output variation)
+- Transition width: <0.01% if exists, or NO bistable transition in full framework
+- Conclusion: Full NRM framework exhibits robust homeostasis, contradicting simplified model predictions
+
+**4. Regime Classification Framework**
 
 Two distinct dynamical regimes unified under NRM theory:
 
@@ -51,7 +62,7 @@ Two distinct dynamical regimes unified under NRM theory:
 
 **Phase Boundary**: Determined by birth-death coupling strength β, window size (ceiling effect), basin threshold (death rate), and maximum population capacity.
 
-**4. Mechanistic Understanding**
+**5. Mechanistic Understanding**
 
 Population saturation model explains regime transition:
 
@@ -73,7 +84,7 @@ Negative feedback loop:
 - P > P*: Higher composition → higher bursting → β < δ → population decreases
 - Stability: System converges to P* where birth-death balance achieved
 
-**5. Self-Giving Systems Validation**
+**6. Self-Giving Systems Validation**
 
 The complete framework **bootstrapped its own success criterion**:
 - **Hypothesis** (externally imposed): Bistability replication
