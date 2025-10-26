@@ -252,20 +252,29 @@ def run_ablation_experiment(condition: AblationCondition, frequency: float,
             should_spawn, cycle_idx, spawn_interval, agents
         )
 
-        if should_spawn and len(agents) > 0 and len(agents) < MAX_AGENTS:
+        if should_spawn and len(agents) < MAX_AGENTS:
             spawn_count += 1
 
             # Get current reality metrics
             current_metrics = reality.get_system_metrics()
 
-            # Spawn from random existing agent
-            parent = agents[np.random.randint(len(agents))]
-
-            child_id = f"agent_{cycle_idx}_{spawn_count}"
-            child = parent.spawn_child(child_id, energy_fraction=0.3)
-
-            if child:
-                agents.append(child)
+            if len(agents) == 0:
+                # Population collapsed - respawn seed agent
+                seed_agent = FractalAgent(
+                    agent_id=f"seed_{cycle_idx}_{spawn_count}",
+                    bridge=bridge,
+                    initial_reality=current_metrics,
+                    depth=0,
+                    max_depth=7
+                )
+                agents.append(seed_agent)
+            else:
+                # Normal spawning from existing parent
+                parent = agents[np.random.randint(len(agents))]
+                child_id = f"agent_{cycle_idx}_{spawn_count}"
+                child = parent.spawn_child(child_id, energy_fraction=0.3)
+                if child:
+                    agents.append(child)
 
         # Evolve all agents
         delta_time = 0.01
