@@ -86,7 +86,8 @@ class FractalAgent:
         initial_reality: Dict[str, float],
         parent_id: Optional[str] = None,
         depth: int = 0,
-        max_depth: int = 7
+        max_depth: int = 7,
+        reality: Optional['RealityInterface'] = None
     ):
         """
         Initialize fractal agent.
@@ -98,12 +99,14 @@ class FractalAgent:
             parent_id: ID of parent agent (if nested)
             depth: Current recursion depth
             max_depth: Maximum recursion depth (constitution: 7 levels)
+            reality: Optional RealityInterface for energy recharge (Cycle 215+)
         """
         self.agent_id = agent_id
         self.bridge = bridge
         self.parent_id = parent_id
         self.depth = depth
         self.max_depth = max_depth
+        self.reality = reality  # Store for energy recharge in evolve()
 
         # Transform initial reality to phase space
         self.phase_state = bridge.reality_to_phase(initial_reality)
@@ -141,7 +144,12 @@ class FractalAgent:
         Evolve agent state through time.
 
         Uses transcendental oscillations to drive internal evolution.
-        Energy dissipates over time (entropy).
+        Energy dissipates over time (entropy) but can recharge from reality.
+
+        Framework Enhancement (Cycle 215):
+        Added reality-grounded energy recharge to enable sustained population
+        dynamics in complete birth-death coupling experiments. Energy flows
+        from available system resources (idle CPU/memory) to agents.
 
         Args:
             delta_time: Time step for evolution
@@ -155,8 +163,25 @@ class FractalAgent:
             self.phase_state = oscillation[0]
 
         # Energy dissipation (entropy)
-        energy_decay = 0.01 * delta_time
-        self.energy = max(0.0, self.energy - energy_decay)
+        energy_decay = 0.01 * delta_time  # ~0.0001/cycle
+
+        # Energy recharge from reality (absorbed from available resources)
+        # Agents can slowly recharge by absorbing idle system capacity
+        # This enables sustained spawning in birth-death coupled systems
+        if hasattr(self, 'reality') and self.reality is not None:
+            current_metrics = self.reality.get_system_metrics()
+            available_capacity = (100 - current_metrics['cpu_percent']) + \
+                                (100 - current_metrics['memory_percent'])
+            energy_recharge = 0.001 * available_capacity * delta_time  # ~0.12-0.14/cycle
+        else:
+            # Fallback: minimal recharge if no reality interface
+            energy_recharge = 0.001 * delta_time  # ~0.00001/cycle (negligible)
+
+        # Net energy change (recharge dominates decay by ~1000×)
+        self.energy = self.energy - energy_decay + energy_recharge
+
+        # Cap energy at 200 (prevents unlimited accumulation)
+        self.energy = max(0.0, min(200.0, self.energy))
 
         # Evolve children recursively
         for child in self.children:
@@ -212,7 +237,8 @@ class FractalAgent:
             initial_reality=child_reality,
             parent_id=self.agent_id,
             depth=self.depth + 1,
-            max_depth=self.max_depth
+            max_depth=self.max_depth,
+            reality=self.reality  # Inherit reality interface for energy recharge
         )
 
         # Adjust child's energy
