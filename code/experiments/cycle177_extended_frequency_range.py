@@ -123,14 +123,23 @@ def run_extended_range_experiment(frequency: float, seed: int, cycles: int) -> d
             # Get current reality metrics
             current_metrics = reality.get_system_metrics()
 
-            # Spawn from random existing agent
-            parent = agents[np.random.randint(len(agents))]
-
-            child_id = f"agent_{cycle_idx}_{spawn_count}"
-            child = parent.spawn_child(child_id, energy_fraction=0.3)
-
-            if child:
-                agents.append(child)
+            if len(agents) == 0:
+                # Population collapsed - respawn seed agent
+                seed_agent = FractalAgent(
+                    agent_id=f"seed_{cycle_idx}_{spawn_count}",
+                    bridge=bridge,
+                    initial_reality=current_metrics,
+                    depth=0,
+                    max_depth=7
+                )
+                agents.append(seed_agent)
+            else:
+                # Normal spawning from existing parent
+                parent = agents[np.random.randint(len(agents))]
+                child_id = f"agent_{cycle_idx}_{spawn_count}"
+                child = parent.spawn_child(child_id, energy_fraction=0.3)
+                if child:
+                    agents.append(child)
 
         # Evolve all agents
         delta_time = 0.01
@@ -144,6 +153,21 @@ def run_extended_range_experiment(frequency: float, seed: int, cycles: int) -> d
         if cluster_events:
             composition_events.append(cycle_idx)
 
+        # Remove agents in clusters (death through composition)
+        if cluster_events:
+            # cluster_events is list of ClusterEvent objects
+            # Extract agent IDs from all cluster events
+            agents_to_remove_ids = set()
+            for cluster_event in cluster_events:
+                for agent_id in cluster_event.agent_ids:
+                    agents_to_remove_ids.add(agent_id)
+
+            # Remove clustered agents from swarm
+            agents = [a for a in agents if a.agent_id not in agents_to_remove_ids]
+
+        # Track population
+        population_trajectory.append(len(agents))
+
     # Calculate composition rate
     bins = np.arange(0, cycles + 1, WINDOW_SIZE)
     hist, _ = np.histogram(composition_events, bins=bins)
@@ -152,8 +176,11 @@ def run_extended_range_experiment(frequency: float, seed: int, cycles: int) -> d
     # Basin classification
     basin = 'A' if avg_composition_events > BASIN_THRESHOLD else 'B'
 
-    # Final agent count (for comparison with C171 population saturation)
-    final_agent_count = len(agents)
+    # Population statistics (same as C171/C176 for comparison)
+    final_population = len(agents)
+    mean_population = float(np.mean(population_trajectory))
+    std_population = float(np.std(population_trajectory))
+    cv_population = (std_population / mean_population * 100) if mean_population > 0 else 0.0
 
     return {
         'frequency': frequency,
@@ -162,8 +189,11 @@ def run_extended_range_experiment(frequency: float, seed: int, cycles: int) -> d
         'basin': basin,
         'spawn_count': spawn_count,
         'total_composition_events': len(composition_events),
-        'final_agent_count': final_agent_count,
-        'implementation': 'HighResolution'
+        'final_agent_count': final_population,
+        'mean_population': mean_population,
+        'std_population': std_population,
+        'cv_population': cv_population,
+        'implementation': 'ExtendedRange'
     }
 
 def main():
