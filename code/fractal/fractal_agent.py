@@ -168,14 +168,16 @@ class FractalAgent:
         # Energy recharge from reality (absorbed from available resources)
         # Agents can slowly recharge by absorbing idle system capacity
         # This enables sustained spawning in birth-death coupled systems
+        # V4 Enhancement (Cycle 216): Increased recharge rate 10× (0.001 → 0.01)
+        # to enable recovery to spawn threshold (~10 energy) within ~1000 cycles
         if hasattr(self, 'reality') and self.reality is not None:
             current_metrics = self.reality.get_system_metrics()
             available_capacity = (100 - current_metrics['cpu_percent']) + \
                                 (100 - current_metrics['memory_percent'])
-            energy_recharge = 0.001 * available_capacity * delta_time  # ~0.12-0.14/cycle
+            energy_recharge = 0.01 * available_capacity * delta_time  # ~1.0/100 cycles
         else:
             # Fallback: minimal recharge if no reality interface
-            energy_recharge = 0.001 * delta_time  # ~0.00001/cycle (negligible)
+            energy_recharge = 0.01 * delta_time  # ~0.0001/cycle (negligible)
 
         # Net energy change (recharge dominates decay by ~1000×)
         self.energy = self.energy - energy_decay + energy_recharge
