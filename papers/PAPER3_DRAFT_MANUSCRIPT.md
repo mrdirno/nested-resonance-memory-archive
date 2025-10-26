@@ -597,33 +597,35 @@ We classified each combination's outcome using a 4-tier rubric based on statisti
 
 ## References
 
-[To be populated with citations from Introduction section and new literature as needed]
-
 Ackley, D. H., & Littman, M. L. (1992). Interactions between learning and evolution. In *Artificial Life II* (pp. 487-509). Addison-Wesley.
 
-Bedau, M. A., McCaskill, J. S., Packard, N. H., Rasmussen, S., Adami, C., Green, D. G., ... & Standish, R. K. (2000). Open problems in artificial life. *Artificial Life*, 6(4), 363-376.
+Bedau, M. A., McCaskill, J. S., Packard, N. H., Rasmussen, S., Adami, C., Green, D. G., ... & Standish, R. K. (2000). Open problems in artificial life. *Artificial Life*, 6(4), 363-376. DOI: 10.1162/106454600300103683
 
-Corning, P. A. (2003). Nature's magic: Synergy in evolution and the fate of humankind. *Cambridge University Press*.
+Cohen, J. (1988). *Statistical power analysis for the behavioral sciences* (2nd ed.). Lawrence Erlbaum Associates.
 
-Fersht, A. (1999). *Structure and mechanism in protein science: A guide to enzyme catalysis and protein folding*. Macmillan.
+Corning, P. A. (2003). *Nature's magic: Synergy in evolution and the fate of humankind*. Cambridge University Press.
 
-Haken, H. (1983). *Synergetics: An introduction*. Springer-Verlag.
+Fersht, A. (1999). *Structure and mechanism in protein science: A guide to enzyme catalysis and protein folding*. W.H. Freeman and Company.
 
-Holling, C. S. (1973). Resilience and stability of ecological systems. *Annual Review of Ecology and Systematics*, 4(1), 1-23.
+Haken, H. (1983). *Synergetics: An introduction* (3rd ed.). Springer-Verlag. DOI: 10.1007/978-3-642-88338-5
 
-Langton, C. G. (1989). Artificial life. In *Artificial Life* (pp. 1-47). Addison-Wesley.
+Holling, C. S. (1973). Resilience and stability of ecological systems. *Annual Review of Ecology and Systematics*, 4(1), 1-23. DOI: 10.1146/annurev.es.04.110173.000245
 
-Medzhitov, R. (2007). Recognition of microorganisms and activation of the immune response. *Nature*, 449(7164), 819-826.
+Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: A practical primer for t-tests and ANOVAs. *Frontiers in Psychology*, 4, 863. DOI: 10.3389/fpsyg.2013.00863
 
-Ofria, C., & Wilke, C. O. (2004). Avida: A software platform for research in computational evolutionary biology. *Artificial Life*, 10(2), 191-229.
+Langton, C. G. (1989). Artificial life. In C. G. Langton (Ed.), *Artificial Life* (pp. 1-47). Addison-Wesley.
 
-Paine, R. T. (1980). Food webs: Linkage, interaction strength and community infrastructure. *Journal of Animal Ecology*, 49(3), 667-685.
+Medzhitov, R. (2007). Recognition of microorganisms and activation of the immune response. *Nature*, 449(7164), 819-826. DOI: 10.1038/nature06246
 
-Ray, T. S. (1992). An approach to the synthesis of life. In *Artificial Life II* (pp. 371-408). Addison-Wesley.
+Ofria, C., & Wilke, C. O. (2004). Avida: A software platform for research in computational evolutionary biology. *Artificial Life*, 10(2), 191-229. DOI: 10.1162/106454604773563612
 
-Sporns, O., Chialvo, D. R., Kaiser, M., & Hilgetag, C. C. (2004). Organization, development and function of complex brain networks. *Trends in Cognitive Sciences*, 8(9), 418-425.
+Paine, R. T. (1980). Food webs: Linkage, interaction strength and community infrastructure. *Journal of Animal Ecology*, 49(3), 667-685. DOI: 10.2307/4220
 
-Tononi, G., Sporns, O., & Edelman, G. M. (1994). A measure for brain complexity: Relating functional segregation and integration in the nervous system. *Proceedings of the National Academy of Sciences*, 91(11), 5033-5037.
+Ray, T. S. (1992). An approach to the synthesis of life. In C. G. Langton, C. Taylor, J. D. Farmer, & S. Rasmussen (Eds.), *Artificial Life II* (pp. 371-408). Addison-Wesley.
+
+Sporns, O., Chialvo, D. R., Kaiser, M., & Hilgetag, C. C. (2004). Organization, development and function of complex brain networks. *Trends in Cognitive Sciences*, 8(9), 418-425. DOI: 10.1016/j.tics.2004.07.008
+
+Tononi, G., Sporns, O., & Edelman, G. M. (1994). A measure for brain complexity: Relating functional segregation and integration in the nervous system. *Proceedings of the National Academy of Sciences*, 91(11), 5033-5037. DOI: 10.1073/pnas.91.11.5033
 
 ---
 
