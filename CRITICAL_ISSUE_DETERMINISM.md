@@ -265,13 +265,20 @@ root = FractalAgent(initial_reality=metrics, ...)
 
 ### Immediate (Cycle 235):
 1. ✅ Document determinism issue (this file)
-2. 🔲 Commit analysis to repository
-3. 🔲 Update todo list with resolution tasks
+2. ✅ Commit analysis to repository
+3. ✅ Update todo list with resolution tasks
 
-### Short-Term (Cycles 236-237):
-1. 🔲 Implement Option 2: Modify FractalAgent to accept initial_energy parameter
-2. 🔲 Update experiment template to add seed-based perturbations
-3. 🔲 Validate with quick test (n=3, 100 cycles): confirm variance appears
+### Short-Term (Cycles 235-236):
+1. ✅ Implement Option 2: Modify FractalAgent to accept initial_energy parameter
+2. ✅ Validate with inline test (n=3): confirm variance appears
+   - **VALIDATION SUCCESSFUL** (Cycle 235):
+     - Seed 42: E₀ = 128.745401
+     - Seed 123: E₀ = 131.964692
+     - Seed 456: E₀ = 127.487559
+     - Variance: σ² = 3.554524 > 0 ✅
+     - **Conclusion:** Seeds now produce DIFFERENT initial energies
+     - **Status:** Stochasticity fix WORKING as intended
+3. 🔲 Update experiment template to add seed-based perturbations
 
 ### Medium-Term (Cycles 238-240):
 1. 🔲 Re-run C177 H1 with corrected framework (C177 V5)
