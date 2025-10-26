@@ -87,7 +87,8 @@ class FractalAgent:
         parent_id: Optional[str] = None,
         depth: int = 0,
         max_depth: int = 7,
-        reality: Optional['RealityInterface'] = None
+        reality: Optional['RealityInterface'] = None,
+        initial_energy: Optional[float] = None
     ):
         """
         Initialize fractal agent.
@@ -100,6 +101,9 @@ class FractalAgent:
             depth: Current recursion depth
             max_depth: Maximum recursion depth (constitution: 7 levels)
             reality: Optional RealityInterface for energy recharge (Cycle 215+)
+            initial_energy: Optional override for initial energy (Cycle 235+)
+                If None, energy derived from reality metrics (default behavior)
+                If provided, overrides reality-based calculation for seed control
         """
         self.agent_id = agent_id
         self.bridge = bridge
@@ -111,11 +115,17 @@ class FractalAgent:
         # Transform initial reality to phase space
         self.phase_state = bridge.reality_to_phase(initial_reality)
 
-        # Initialize energy from reality metrics
+        # Initialize energy from reality metrics or override
         # Energy represents available computational resources
-        cpu = initial_reality.get('cpu_percent', 0.0)
-        memory = initial_reality.get('memory_percent', 0.0)
-        self.energy = (100.0 - cpu) + (100.0 - memory)  # More available = more energy
+        if initial_energy is not None:
+            # Cycle 235+: Allow seed-controlled perturbations for statistical validity
+            # Reflects natural variation in agent initialization states
+            self.energy = initial_energy
+        else:
+            # Default: Reality-grounded energy calculation
+            cpu = initial_reality.get('cpu_percent', 0.0)
+            memory = initial_reality.get('memory_percent', 0.0)
+            self.energy = (100.0 - cpu) + (100.0 - memory)  # More available = more energy
 
         # Internal state
         self.memory: List[TranscendentalState] = []
@@ -250,6 +260,66 @@ class FractalAgent:
         self.children.append(child)
 
         return child
+
+    def contribute_to_pool(self, sharing_fraction: float = 0.10) -> float:
+        """
+        Contribute fraction of energy to cluster pool.
+
+        Part of Cycle 177 Hypothesis 1: Energy Pooling mechanism.
+        Enables cooperative energy sharing within resonance clusters to
+        eliminate single-parent reproductive bottleneck.
+
+        Args:
+            sharing_fraction: Fraction of energy to contribute (0.0-1.0)
+
+        Returns:
+            Amount contributed (deducted from agent energy)
+        """
+        if self.cluster_id is None:
+            return 0.0  # Not in cluster, no pooling
+
+        # Calculate contribution (fraction of current energy)
+        contribution = self.energy * sharing_fraction
+
+        # Deduct from agent energy
+        self.energy -= contribution
+
+        # Ensure energy doesn't go negative
+        self.energy = max(0.0, self.energy)
+
+        return contribution
+
+    def receive_from_pool(self, pool_energy: float, spawn_threshold: float = 10.0) -> float:
+        """
+        Receive energy from cluster pool if below spawn threshold.
+
+        Part of Cycle 177 Hypothesis 1: Energy Pooling mechanism.
+        Distributes pooled energy to agents below reproductive threshold,
+        enabling asynchronous spawning across cluster members.
+
+        Args:
+            pool_energy: Available energy in cluster pool
+            spawn_threshold: Minimum energy required for spawning
+
+        Returns:
+            Amount received (added to agent energy)
+        """
+        if self.cluster_id is None:
+            return 0.0  # Not in cluster, no pooling
+
+        if self.energy >= spawn_threshold:
+            return 0.0  # Already fertile, don't take from pool
+
+        # Calculate needed energy to reach threshold
+        needed = spawn_threshold - self.energy
+
+        # Take minimum of needed and available
+        received = min(pool_energy, needed)
+
+        # Add to agent energy
+        self.energy += received
+
+        return received
 
     def absorb_memory(self, states: List[TranscendentalState]) -> None:
         """
