@@ -772,22 +772,33 @@ The five hypotheses maintain reality grounding:
 
 #### 4.7.4 Statistical Limitations
 
-**Perfect Determinism:**
+**Framework Determinism (Post-Study Discovery):**
 
-**Observation:** All seeds produced IDENTICAL metrics (variance = 0)
+During post-completion validation (Cycle 235), we discovered that the entire experimental framework was **completely deterministic** with zero stochastic elements, despite setting random seeds in all experiments. This affected all reported results (C171-C176).
 
-**Interpretation:**
-- Dynamics dominated by deterministic energy-death coupling ✓
-- Stochastic effects negligible ✓
+**Root Cause:**
+- Random seeds were set (`np.random.seed(seed)`) but **no subsequent code used the RNG**
+- All dynamics deterministic: spawn timing (fixed intervals), energy evolution (π, e, φ oscillators), composition detection (phase space math), system metrics (psutil readings)
+- Result: All 10 seeds per condition produced **identical outcomes** (σ²=0, Cohen's d undefined)
 
-**Limitation:** Cannot test stochastic hypotheses (e.g., genetic drift, neutral evolution)
+**Impact on Results:**
+- **Qualitative Findings:** PRESERVED - Three-regime classification, collapse mechanism, death-birth imbalance remain valid
+- **Quantitative Claims:** INVALID - Cannot report confidence intervals, effect sizes, or p-values with zero variance
+- **Statistical Power:** None - n=10 misleading (actually n=1 replicated 10 times)
 
-**Future:** Introduce controlled stochasticity:
-- Variable spawn costs (Gaussian distribution around mean)
-- Stochastic composition probability
-- Random energy fluctuations
+**Correction Implemented (Cycle 235):**
+Modified `FractalAgent.__init__()` to accept optional `initial_energy` parameter, enabling seed-controlled perturbations:
+```python
+np.random.seed(seed)
+E₀ = 130.0 + np.random.uniform(-5.0, 5.0)  # ±3.8% variation
+root = FractalAgent(..., initial_energy=E₀)
+```
 
-**Expected:** Break determinism, but collapse likely persists (structural death-birth imbalance remains)
+**Validation:** Three seeds now produce variance (σ²=3.55 > 0 ✅), unblocking statistical tests for future work.
+
+**Philosophical Insight:** Pure reality grounding without stochasticity prevents statistical inference. Natural systems have initial condition variance - perfect replication is unrealistic. Controlled perturbations **enhance** rather than compromise reality grounding.
+
+**Transparency Note:** Results reported in this paper (C171-C176) used deterministic framework. Future work (C177+) uses corrected framework with seed-controlled variance, enabling rigorous statistical validation of hypotheses presented in Section 4.4.
 
 #### 4.7.5 Generalizability
 
