@@ -98,7 +98,8 @@ def run_extended_range_experiment(frequency: float, seed: int, cycles: int) -> d
         bridge=bridge,
         initial_reality=metrics,
         depth=0,
-        max_depth=7
+        max_depth=7,
+        reality=reality  # Energy recharge enabled (Cycle 215 enhancement)
     )
 
     # Track composition events (cluster formations)
@@ -130,7 +131,8 @@ def run_extended_range_experiment(frequency: float, seed: int, cycles: int) -> d
                     bridge=bridge,
                     initial_reality=current_metrics,
                     depth=0,
-                    max_depth=7
+                    max_depth=7,
+                    reality=reality  # Energy recharge enabled (Cycle 215 enhancement)
                 )
                 agents.append(seed_agent)
             else:
