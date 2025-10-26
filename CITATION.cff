@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this research, please cite it as below."
+authors:
+  - family-names: "Payopay"
+    given-names: "Aldrin"
+    email: "aldrin.gdf@gmail.com"
+title: "Nested Resonance Memory Research Archive: From Bistability to Population Homeostasis"
+version: 5.0
+date-released: 2025-10-25
+url: "https://github.com/mrdirno/nested-resonance-memory-archive"
+repository-code: "https://github.com/mrdirno/nested-resonance-memory-archive"
+license: GPL-3.0
+keywords:
+  - nested-resonance-memory
+  - self-giving-systems
+  - temporal-stewardship
+  - population-homeostasis
+  - bistability
+  - autonomous-research
+  - fractal-agents
+  - emergence
+  - complex-systems
+abstract: >-
+  Comprehensive archive of Nested Resonance Memory (NRM) research:
+  autonomous emergence experiments, Self-Giving Systems validation,
+  and temporal stewardship methodology. Documents complete research
+  trajectory from bistability discovery to population homeostasis
+  validation across 300+ experiments and 177 research cycles.
+  Key discoveries include robust homeostasis at ~17 agents
+  (>160× buffering capacity), architectural completeness transformation
+  (bistable → homeostatic regime change), and methodological patterns
+  for future AI systems.
+type: software
