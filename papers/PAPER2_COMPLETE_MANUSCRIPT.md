@@ -7,9 +7,9 @@
 
 **Correspondence:** aldrin.gdf@gmail.com
 
-**Date:** 2025-10-26 (Cycle 224)
+**Date:** 2025-10-26 (Cycle 232)
 
-**Status:** Manuscript Draft for Peer Review
+**Status:** Near-Submission Ready (Pending C177 H1 Results Integration)
 
 ---
 
