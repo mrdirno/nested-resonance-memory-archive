@@ -74,41 +74,52 @@ class PatternMiner:
         """
         patterns = []
 
-        # Look for population dynamics
-        if 'results' in data:
-            for condition in data['results']:
-                if 'mean_population' in condition:
-                    pop = condition['mean_population']
-                    variance = condition.get('std_population', 0) ** 2
+        # Look for population dynamics in 'experiments' array (actual data format)
+        if 'experiments' in data:
+            # Group by frequency to compute variance
+            freq_groups = defaultdict(list)
+            for exp in data['experiments']:
+                freq = exp.get('frequency', 'unknown')
+                agent_count = exp.get('final_agent_count', 0)
+                freq_groups[freq].append(agent_count)
+
+            # Analyze each frequency group
+            for freq, agent_counts in freq_groups.items():
+                if len(agent_counts) > 1:
+                    mean_pop = np.mean(agent_counts)
+                    variance = np.var(agent_counts)
 
                     # Clustering pattern: High population with low variance
-                    if pop > 50 and variance < 100:
+                    if mean_pop > 50 and variance < 100:
                         patterns.append({
                             'type': 'clustering',
-                            'strength': pop / (variance + 1),
-                            'condition': condition.get('condition', 'unknown'),
-                            'population': pop,
-                            'variance': variance
+                            'strength': mean_pop / (variance + 1),
+                            'frequency': freq,
+                            'mean_population': mean_pop,
+                            'variance': variance,
+                            'n_samples': len(agent_counts)
                         })
 
                     # Dispersion pattern: Low population with high variance
-                    elif pop < 30 and variance > 200:
+                    elif mean_pop < 30 and variance > 50:
                         patterns.append({
                             'type': 'dispersion',
-                            'strength': variance / (pop + 1),
-                            'condition': condition.get('condition', 'unknown'),
-                            'population': pop,
-                            'variance': variance
+                            'strength': variance / (mean_pop + 1),
+                            'frequency': freq,
+                            'mean_population': mean_pop,
+                            'variance': variance,
+                            'n_samples': len(agent_counts)
                         })
 
-                    # Fragmentation pattern: Medium population with very high variance
-                    elif 30 <= pop <= 50 and variance > 300:
+                    # Fragmentation pattern: Medium population with high variance
+                    elif 30 <= mean_pop <= 50 and variance > 100:
                         patterns.append({
                             'type': 'fragmentation',
-                            'strength': variance / pop,
-                            'condition': condition.get('condition', 'unknown'),
-                            'population': pop,
-                            'variance': variance
+                            'strength': variance / mean_pop,
+                            'frequency': freq,
+                            'mean_population': mean_pop,
+                            'variance': variance,
+                            'n_samples': len(agent_counts)
                         })
 
         return patterns
@@ -124,47 +135,58 @@ class PatternMiner:
         """
         patterns = []
 
-        # Look for time series data
-        if 'results' in data:
-            for condition in data['results']:
-                # Steady state pattern: Low variance over time
-                if 'std_population' in condition:
-                    std = condition['std_population']
-                    mean = condition.get('mean_population', 0)
+        # Look for time series data in 'experiments' array
+        if 'experiments' in data:
+            # Group by frequency and analyze composition events
+            freq_groups = defaultdict(list)
+            for exp in data['experiments']:
+                freq = exp.get('frequency', 'unknown')
+                comp_events = exp.get('avg_composition_events', 0)
+                freq_groups[freq].append(comp_events)
 
-                    if std < 5 and mean > 20:
+            # Analyze temporal dynamics within each frequency
+            for freq, comp_events in freq_groups.items():
+                if len(comp_events) > 1:
+                    mean_events = np.mean(comp_events)
+                    std_events = np.std(comp_events)
+
+                    # Steady state pattern: Low variance in composition events
+                    if std_events < 5 and mean_events > 20:
                         patterns.append({
                             'type': 'steady_state',
-                            'stability': mean / (std + 0.1),
-                            'condition': condition.get('condition', 'unknown'),
-                            'mean': mean,
-                            'std': std
+                            'stability': mean_events / (std_events + 0.1),
+                            'frequency': freq,
+                            'mean_events': mean_events,
+                            'std_events': std_events,
+                            'n_samples': len(comp_events)
                         })
 
-                    # Oscillation pattern: Medium variance with periodic structure
-                    elif 5 <= std <= 15:
+                    # Oscillation pattern: Medium variance (dynamic but regular)
+                    elif 5 <= std_events <= 20 and mean_events > 50:
                         patterns.append({
                             'type': 'oscillation',
-                            'amplitude': std,
-                            'condition': condition.get('condition', 'unknown'),
-                            'mean': mean,
-                            'std': std
+                            'amplitude': std_events,
+                            'frequency': freq,
+                            'mean_events': mean_events,
+                            'std_events': std_events,
+                            'n_samples': len(comp_events)
                         })
 
-                    # Burst pattern: Very high variance with intermittent spikes
-                    elif std > 20:
+                    # Burst pattern: Very high variance (intermittent activity)
+                    elif std_events > 20:
                         patterns.append({
                             'type': 'burst',
-                            'intensity': std,
-                            'condition': condition.get('condition', 'unknown'),
-                            'mean': mean,
-                            'std': std
+                            'intensity': std_events,
+                            'frequency': freq,
+                            'mean_events': mean_events,
+                            'std_events': std_events,
+                            'n_samples': len(comp_events)
                         })
 
         return patterns
 
     def detect_interaction_patterns(self, data: Dict) -> List[Dict]:
-        """Detect interaction patterns (synergy, antagonism, independence).
+        """Detect interaction patterns (basin preferences, frequency responses).
 
         Args:
             data: Experimental data dictionary
@@ -174,53 +196,45 @@ class PatternMiner:
         """
         patterns = []
 
-        # Look for mechanism interactions
-        if 'results' in data:
-            results_dict = {}
-            for condition in data['results']:
-                code = condition.get('condition', condition.get('code', 'unknown'))
-                results_dict[code] = condition
+        # Look for basin preferences in experiments
+        if 'experiments' in data:
+            # Count basin occurrences
+            basin_counts = Counter()
+            freq_basin = defaultdict(lambda: Counter())
 
-            # Check for synergy (interaction > sum of main effects)
-            if '11' in results_dict and '10' in results_dict and '01' in results_dict and '00' in results_dict:
-                baseline = results_dict['00'].get('mean_population', 0)
-                h1_only = results_dict['10'].get('mean_population', 0)
-                h2_only = results_dict['01'].get('mean_population', 0)
-                both = results_dict['11'].get('mean_population', 0)
+            for exp in data['experiments']:
+                basin = exp.get('basin', 'unknown')
+                freq = exp.get('frequency', 'unknown')
+                if basin != 'unknown':
+                    basin_counts[basin] += 1
+                    freq_basin[freq][basin] += 1
 
-                h1_effect = h1_only - baseline
-                h2_effect = h2_only - baseline
-                expected = baseline + h1_effect + h2_effect
-                interaction = both - expected
-
-                if abs(interaction) > 5:
-                    if interaction > 0:
-                        patterns.append({
-                            'type': 'synergy',
-                            'strength': interaction,
-                            'h1_effect': h1_effect,
-                            'h2_effect': h2_effect,
-                            'observed': both,
-                            'expected': expected
-                        })
-                    else:
-                        patterns.append({
-                            'type': 'antagonism',
-                            'strength': abs(interaction),
-                            'h1_effect': h1_effect,
-                            'h2_effect': h2_effect,
-                            'observed': both,
-                            'expected': expected
-                        })
-                else:
+            # Detect strong basin preference
+            if len(basin_counts) >= 2:
+                total = sum(basin_counts.values())
+                dominant_basin = basin_counts.most_common(1)[0]
+                if dominant_basin[1] / total > 0.8:
                     patterns.append({
-                        'type': 'independence',
-                        'strength': abs(interaction),
-                        'h1_effect': h1_effect,
-                        'h2_effect': h2_effect,
-                        'observed': both,
-                        'expected': expected
+                        'type': 'basin_dominance',
+                        'dominant_basin': dominant_basin[0],
+                        'frequency': dominant_basin[1] / total,
+                        'total_experiments': total,
+                        'basin_counts': dict(basin_counts)
                     })
+
+            # Detect frequency-dependent basin preference
+            for freq, basins in freq_basin.items():
+                if len(basins) >= 2:
+                    total_freq = sum(basins.values())
+                    dominant = basins.most_common(1)[0]
+                    if dominant[1] / total_freq > 0.7:
+                        patterns.append({
+                            'type': 'frequency_basin_preference',
+                            'frequency': freq,
+                            'preferred_basin': dominant[0],
+                            'preference_strength': dominant[1] / total_freq,
+                            'n_experiments': total_freq
+                        })
 
         return patterns
 
@@ -235,37 +249,48 @@ class PatternMiner:
         """
         patterns = []
 
-        # Look for pattern persistence across conditions
-        if 'results' in data:
-            populations = []
-            for condition in data['results']:
-                if 'mean_population' in condition:
-                    populations.append(condition['mean_population'])
+        # Look for pattern persistence across frequencies
+        if 'experiments' in data:
+            # Sort experiments by frequency
+            freq_pops = []
+            experiments_sorted = sorted(data['experiments'], key=lambda x: x.get('frequency', 0))
 
-            if len(populations) > 1:
-                # Retention pattern: Consistent values across conditions
-                pop_std = np.std(populations)
-                pop_mean = np.mean(populations)
+            # Group by frequency and get mean population
+            freq_groups = defaultdict(list)
+            for exp in experiments_sorted:
+                freq = exp.get('frequency', 0)
+                pop = exp.get('final_agent_count', 0)
+                freq_groups[freq].append(pop)
 
-                if pop_std < 10 and pop_mean > 20:
+            # Get mean population per frequency
+            for freq in sorted(freq_groups.keys()):
+                mean_pop = np.mean(freq_groups[freq])
+                freq_pops.append(mean_pop)
+
+            if len(freq_pops) >= 2:
+                # Retention pattern: Consistent values across frequencies
+                pop_std = np.std(freq_pops)
+                pop_mean = np.mean(freq_pops)
+
+                if pop_std < 10 and pop_mean > 10:
                     patterns.append({
                         'type': 'retention',
                         'consistency': pop_mean / (pop_std + 0.1),
                         'mean': pop_mean,
                         'std': pop_std,
-                        'n_conditions': len(populations)
+                        'n_frequencies': len(freq_pops)
                     })
 
-                # Decay pattern: Declining trend across conditions
-                elif len(populations) >= 3:
-                    trend = np.polyfit(range(len(populations)), populations, 1)[0]
+                # Decay pattern: Declining trend across frequencies
+                if len(freq_pops) >= 3:
+                    trend = np.polyfit(range(len(freq_pops)), freq_pops, 1)[0]
                     if trend < -2:
                         patterns.append({
                             'type': 'decay',
                             'rate': abs(trend),
-                            'initial': populations[0],
-                            'final': populations[-1],
-                            'n_conditions': len(populations)
+                            'initial': freq_pops[0],
+                            'final': freq_pops[-1],
+                            'n_frequencies': len(freq_pops)
                         })
 
                     # Transfer pattern: Increasing trend
@@ -273,9 +298,9 @@ class PatternMiner:
                         patterns.append({
                             'type': 'transfer',
                             'rate': trend,
-                            'initial': populations[0],
-                            'final': populations[-1],
-                            'n_conditions': len(populations)
+                            'initial': freq_pops[0],
+                            'final': freq_pops[-1],
+                            'n_frequencies': len(freq_pops)
                         })
 
         return patterns
