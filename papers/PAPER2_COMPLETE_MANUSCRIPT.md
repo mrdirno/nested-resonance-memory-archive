@@ -7,9 +7,9 @@
 
 **Correspondence:** aldrin.gdf@gmail.com
 
-**Date:** 2025-10-26 (Cycle 232)
+**Date:** 2025-10-27 (Cycle 371)
 
-**Status:** Near-Submission Ready (Pending C177 H1 Results Integration)
+**Status:** 100% Submission-Ready (C177 H1 Results Integrated)
 
 ---
 
@@ -23,11 +23,11 @@
 
 **Results:** Three distinct regimes identified (Figure 1). **Regime 1 (Bistability):** Single-agent models exhibit sharp transition at f_crit ≈ 2.55% with bistable attractors (Basin A/B). **Regime 2 (Accumulation):** Birth-only systems (C171) show apparent stabilization (~17 agents) but code analysis revealed missing death mechanism—architectural incompleteness, not regulation. **Regime 3 (Collapse):** Complete frameworks (C176 all versions) exhibit catastrophic collapse (mean=0.49 ± 0.50, CV=101%) **regardless of recharge rate**. Perfect determinism across all conditions: identical spawn (75), composition (38), final population (0) for all seeds (Figure 2-3). Statistical tests confirm zero effect of energy recharge (F(2,27)=0.00, p=1.000, η²=0.000). Death rate (~0.013/cycle) >> sustained birth rate (~0.005/cycle) creates extinction attractor (Figure 4).
 
-**Conclusions:** Birth-death coupling is **necessary but NOT sufficient** for sustained populations. Energy recharge enables individual recovery but fails to overcome population-level death-birth imbalance across 100× parameter range. This fundamental constraint opens five research directions: (1) agent cooperation (energy pooling), (2) external energy sources (task rewards), (3) reduced spawn costs, (4) composition throttling, (5) multi-generational recovery. Each hypothesis is mechanistically motivated and testable in reality-grounded framework.
+**Conclusions:** Birth-death coupling is **necessary but NOT sufficient** for sustained populations. Energy recharge enables individual recovery but fails to overcome population-level death-birth imbalance across 100× parameter range. Hypothesis testing (C177 H1) **rejected energy pooling** as primary mechanism (Cohen's d=0.0, p=1.0), confirming temporal asymmetry dominance over resource distribution bottlenecks. This falsification redirects focus to alternative mechanisms: (2) external energy sources (task rewards), (4) composition throttling, (5) multi-generational recovery. Future factorial experiments (C255-C260) will test these hypotheses individually and in combination.
 
 **Keywords:** self-organizing systems, energy constraints, population dynamics, nested resonance memory, fractal agents, birth-death coupling, regime classification
 
-**Word Count:** 348 words
+**Word Count:** 370 words (updated with C177 H1 rejection)
 
 ---
 
@@ -177,14 +177,15 @@ The remainder of this paper is organized as follows:
 
 ## 3. Results
 
-[See PAPER2_REVISED_RESULTS.md for complete Results section - ~4,500 words]
+[See PAPER2_REVISED_RESULTS.md for complete Results section - ~6,000 words]
 
 **Summary:** Documents three regimes with empirical data:
 - **Regime 1:** Bistability (C168-170, f_crit ≈ 2.55%, Basin A/B attractors)
 - **Regime 2:** Accumulation (C171, mean=17.33 ± 1.55, ceiling effect from missing death mechanism)
 - **Regime 3:** Collapse (C176 V2/V3/V4, mean=0.49 ± 0.50, perfect determinism, zero effect of 100× recharge rate variation)
+- **Section 3.6 (NEW):** Hypothesis Testing (C177 H1) - Energy pooling **REJECTED** (Cohen's d=0.0, p=1.0), falsifying single-parent bottleneck as primary constraint
 
-Perfect determinism documented: spawn=75, comp=38, final=0 for ALL seeds in ALL versions. Statistical tests: F(2,27)=0.00, p=1.000, η²=0.000.
+Perfect determinism documented: spawn=75, comp=38, final=0 for ALL seeds in ALL versions. Statistical tests: F(2,27)=0.00, p=1.000, η²=0.000. C177 H1 null result confirms temporal asymmetry dominance.
 
 ---
 
@@ -196,7 +197,7 @@ Perfect determinism documented: spawn=75, comp=38, final=0 for ALL seeds in ALL 
 - **Section 4.1:** Three-regime interpretation (phase space structure, attractor dynamics, architectural completeness effects)
 - **Section 4.2:** Birth-death coupling necessary but not sufficient (statistical + mechanistic evidence)
 - **Section 4.3:** Death-birth imbalance mechanism (three structural asymmetries: recovery lag, single-parent bottleneck, continuous death activity)
-- **Section 4.4:** Five testable hypotheses (energy pooling, external sources, reduced spawn cost, composition throttling, multi-generational recovery) with implementation details and quantitative predictions
+- **Section 4.4:** Five testable hypotheses (energy pooling, external sources, reduced spawn cost, composition throttling, multi-generational recovery) with implementation details and quantitative predictions. **H1 (Energy Pooling) empirically tested in C177 and REJECTED (Cohen's d=0.0, p=1.0)**, validating temporal asymmetry interpretation and prioritizing H2/H4/H5 for future work.
 - **Section 4.5:** Theory-driven parameter validation methodology (V3→V4 correction, individual vs population-level distinction)
 - **Section 4.6:** Reality grounding and computational feasibility
 - **Section 4.7:** Limitations and future work
@@ -215,9 +216,9 @@ Our systematic ablation study across progressive implementations of the Nested R
 
 **Birth-Death Coupling Necessary But NOT Sufficient:** 100× parameter sweep (r ∈ {0.000, 0.001, 0.010}) produced zero effect (F(2,27)=0.00, p=1.000, η²=0.000). Death rate (0.013/cycle) >> sustained birth rate (0.005/cycle) = 2.5× imbalance. Individual recovery ≠ population sustainability.
 
-**Three Structural Asymmetries:** (1) Energy recovery lag (~1,000 cycles, 66% of experiment), (2) Single-parent bottleneck (birth concentrated in root, death distributed), (3) Continuous death activity (100% uptime vs 33% birth uptime). Framework structurally favors death over birth.
+**Three Structural Asymmetries:** (1) Energy recovery lag (~1,000 cycles, 66% of experiment), (2) Single-parent bottleneck (birth concentrated in root, death distributed) - **empirically tested and rejected as primary mechanism (C177 H1, d=0.0)**, (3) Continuous death activity (100% uptime vs 33% birth uptime). Temporal asymmetries (1, 3) dominate over resource distribution (2).
 
-**Five Testable Hypotheses:** Energy pooling (3× birth rate increase), external sources (2× recovery lag reduction), reduced spawn cost (1.9× spawn capacity increase), composition throttling (40-70% death rate reduction), multi-generational recovery (3× through overlapping fertile periods). Synergistic combinations possible.
+**Four Remaining Hypotheses:** Energy pooling **tested and rejected** (C177 H1, d=0.0). Remaining: external sources (2× recovery lag reduction), reduced spawn cost (1.9× spawn capacity increase), composition throttling (40-70% death rate reduction), multi-generational recovery (3× through overlapping fertile periods). Synergistic combinations with H2/H4/H5 prioritized (C255-C260 factorial experiments).
 
 **Significance:** Highest scientific impact outcome—fundamental constraint discovery > confirmatory findings. Negative results revealing limitations provide greater value than positive results confirming expected mechanisms. Research continuity through concrete experimental paths.
 
