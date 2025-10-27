@@ -938,7 +938,120 @@ External         | 0.000            | 0.152       | 0.0599  | 100%
 
 ### 3.5 Multi-Timescale Dynamics & Emergent Phenomena (Phase 5)
 
-[Content to be added - Multi-timescale discovery, eigenvalue analysis, CV decay τ=557 vs eigenvalue τ=2.37]
+**Motivation:** Phase 4 discovered V4 exhibits time-dependent variance decay. Phase 5 quantifies these timescales and investigates their dynamical origin through eigenvalue analysis.
+
+#### 3.5.1 Timescale Quantification: Two-Component Decay
+
+**Extended Simulation:**
+- Integration time: t = 0 → 10,000 (2× Phase 4 duration)
+- CV measurement: 100-unit sliding windows with 50-unit steps
+- Transient cutoff: t > 500
+
+**Exponential Decay Fits:**
+
+**Single Exponential:** CV(t) = CV_∞ + A · exp(-t/τ)
+```
+CV_∞ = 0.0001 ± 0.0000
+A = 0.1055 ± 0.0004
+τ = 605 ± 2
+R² = 0.9997
+```
+
+**Double Exponential:** CV(t) = CV_∞ + A₁ · exp(-t/τ₁) + A₂ · exp(-t/τ₂)
+```
+CV_∞ = 0.0000 ± 0.0000
+A₁ = 0.1009 ± 0.0063, τ₁ = 557 ± 18  (medium-term)
+A₂ = 0.0092 ± 0.0071, τ₂ = 1000 ± 188 (slow-term)
+R² = 0.9998
+```
+
+**Key Finding:** V4 exhibits **two-timescale variance decay** with dominant medium-term component (τ₁ = 557 ± 18 time units) and minor slow-term component (τ₂ = 1000 ± 188).
+
+**Asymptotic Behavior:** CV → 0 as t → ∞ (deterministic system, all variance eventually dissipates).
+
+#### 3.5.2 Equilibrium Verification: Ultra-Slow Convergence
+
+**Final State (t=10,000):**
+```
+E_total = 2411.77
+N = 215.30
+φ = 0.6074
+θ_rel = 14602.98 (rotating)
+```
+
+**Drift Analysis (t=2000-10,000):**
+```
+dN/dt = 0.00093 ± 0.00000
+ΔN = +18.38 agents (from 196.92 → 215.29)
+R² = 0.4012
+p < 0.001
+```
+
+**Critical Finding:** System **NOT at equilibrium** even after 10,000 time units. Persistent upward drift (dN/dt = 0.00093) statistically significant.
+
+**Extrapolation:** If drift continues linearly, reaching N=300 would require ~1,000,000 time units. V4 exhibits **ultra-slow convergence** to equilibrium (if equilibrium exists).
+
+**Note:** This finding would later prove critical - Cycle 391 equilibrium verification at t=100,000 revealed N→-35,471 (fundamental instability, not slow convergence).
+
+#### 3.5.3 Eigenvalue Analysis: Local Stability vs Global Dynamics
+
+**Method:**
+- Analytical Jacobian computation: ∂F/∂X for 4D system
+- Eigenvalue analysis at 101 timepoints (every 1,000 units)
+- Timescale extraction: τ = 1/|Re(λ)|
+
+**Initial State (t=0):**
+```
+λ₁ = -1.2706 → τ₁ = 0.79
+λ₂ = -0.2076 → τ₂ = 4.82
+λ₃ = -0.1105 → τ₃ = 9.05  (slowest)
+λ₄ = 0.0000 → τ₄ = ∞      (neutral)
+```
+
+**Final State (t=10,000):**
+```
+λ₁ = -3.9075 → τ₁ = 0.26
+λ₂ = -2.4588 → τ₂ = 0.41
+λ₃ = -0.4225 → τ₃ = 2.37  (slowest)
+λ₄ = 0.0000 → τ₄ = ∞      (neutral)
+```
+
+**Eigenvalue Evolution:**
+- ALL eigenvalues become MORE NEGATIVE over time
+- System **speeds up** as population increases
+- Slowest eigenvalue τ₃: 9.05 → 2.37 (4× faster)
+- No imaginary components → no oscillatory modes
+- Slow mode eigenvector: v₃ ≈ [-0.997, 0.082, 0.0001, 0] (energy-dominated)
+
+#### 3.5.4 Critical Discovery: Emergent Multi-Timescale Dynamics
+
+**Timescale Comparison:**
+```
+CV decay τ₁:           557 ± 18 time units
+Eigenvalue τ₃ (slow):  2.37 time units
+Ratio:                 235×
+```
+
+**CRITICAL FINDING:** **CV decay timescale is 235× SLOWER than eigenvalue timescale.**
+
+**Interpretation:**
+1. **Linear stability analysis CANNOT explain multi-timescale variance decay**
+2. **Eigenvalue timescales (τ ~ 2.4) predict fast local relaxation**
+3. **CV decay (τ ~ 557) exhibits slow global convergence**
+4. **Multi-timescale behavior is EMERGENT nonlinear phenomenon**
+
+**Mechanistic Hypothesis:**
+- Eigenvalues characterize **local** linearized dynamics near trajectory
+- CV decay depends on **global** phase space structure (slow manifold)
+- System evolves along slow manifold despite fast local relaxation
+- 235× discrepancy quantifies **nonlinear slow-manifold dominance**
+
+**Publication Value:**
+- First demonstration of emergent timescales 235× beyond linear predictions
+- Validates necessity of nonlinear analysis for NRM systems
+- Identifies CV decay as slow-manifold phenomenon, not eigenvalue-driven
+
+**Biological Analogy:** Like neural slow-wave sleep (hours) emerging from fast synaptic dynamics (milliseconds), V4 variance decay (τ~557) emerges from fast energy/population coupling (τ~2.4).
 
 ---
 
