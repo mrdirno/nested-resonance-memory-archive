@@ -1,0 +1,667 @@
+{
+  "experiment_id": "exp_1761110204",
+  "start_time": 1761110204.3745742,
+  "end_time": 1761110209.915798,
+  "total_cycles": 20,
+  "cycles_completed": 20,
+  "total_decisions": 20,
+  "total_patterns_discovered": 15,
+  "total_emergent_patterns": 34,
+  "avg_decision_confidence": 0.76,
+  "reality_scores": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "avg_reality_score": 1.0,
+  "novel_patterns": [
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 1.0 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 0.0,
+        "agent_count": 1,
+        "efficiency_ratio": 1.0
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6796136382857536,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 2.0 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 0.0,
+        "agent_count": 2,
+        "efficiency_ratio": 2.0
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 67.9% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6787968540991208,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 0.6 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 4.9,
+        "agent_count": 3,
+        "efficiency_ratio": 0.6122448979591836
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 67.9% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6791706858748219,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 67.9% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6793809662486535,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 67.9% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6793809662486535,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 2.0 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 0.0,
+        "agent_count": 2,
+        "efficiency_ratio": 2.0
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6795157613600842,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 0.5 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 6.1,
+        "agent_count": 3,
+        "efficiency_ratio": 0.49180327868852464
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6795445176505227,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 2.0 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 2.0,
+        "agent_count": 4,
+        "efficiency_ratio": 2.0
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6795756702984979,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 67.9% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6794860202456773,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 1.0 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 0.0,
+        "agent_count": 1,
+        "efficiency_ratio": 1.0
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 67.9% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6794860202456773,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 0.7 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 2.8,
+        "agent_count": 2,
+        "efficiency_ratio": 0.7142857142857143
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6795211737706538,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 3.0 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 0.7,
+        "agent_count": 3,
+        "efficiency_ratio": 3.0
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6795422886002461,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.679569322969665,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 1.0 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 0.0,
+        "agent_count": 1,
+        "efficiency_ratio": 1.0
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.679569322969665,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 0.7 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 2.7,
+        "agent_count": 2,
+        "efficiency_ratio": 0.7407407407407407
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6796025239051908,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 2.1 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 1.4,
+        "agent_count": 3,
+        "efficiency_ratio": 2.142857142857143
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6796384555486089,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6796220333304146,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6796220333304146,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 2.0 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 0.0,
+        "agent_count": 2,
+        "efficiency_ratio": 2.0
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6796112580817278,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    },
+    {
+      "name": "Sustained Fractal Agent Swarm",
+      "description": "Fractal agents persisting across cycles: 3.0 agents per CPU%",
+      "modules": [
+        "reality",
+        "fractal"
+      ],
+      "significance": 0.7,
+      "evidence": {
+        "cpu_percent": 0.0,
+        "agent_count": 3,
+        "efficiency_ratio": 3.0
+      }
+    },
+    {
+      "name": "Self-Learning Pattern Library",
+      "description": "Memory evolved 107 patterns with 68.0% avg confidence",
+      "modules": [
+        "memory",
+        "fractal"
+      ],
+      "significance": 0.8,
+      "evidence": {
+        "total_patterns": 107,
+        "avg_confidence": 0.6796136382857536,
+        "pattern_types": {
+          "emergence": 2,
+          "error_recovery": 1,
+          "fractal_state": 73,
+          "optimization": 4,
+          "resource_usage": 4,
+          "system_behavior": 23
+        }
+      }
+    }
+  ],
+  "framework_validations": {
+    "NRM": true,
+    "Self-Giving": true,
+    "Temporal": true
+  },
+  "fractal_agents_spawned": 3,
+  "memory_patterns_stored": 107,
+  "publishable_insights": [
+    "Integrated system sustained operation for 20 cycles with 100.0% reality compliance",
+    "Detected 34 emergent patterns across 2 distinct types",
+    "NRM framework validated: Fractal agents exhibited composition-decomposition dynamics with pattern memory retention",
+    "Self-Giving validated: System autonomously defined success criteria through decision persistence and confidence stability",
+    "Hybrid intelligence achieved 76.0% average decision confidence across 20 decisions",
+    "Perfect reality grounding maintained: 20 cycles at \u226595% compliance"
+  ]
+}

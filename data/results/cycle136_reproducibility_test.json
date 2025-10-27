@@ -1,0 +1,302 @@
+{
+  "metadata": {
+    "cycle": 136,
+    "experiment": "reproducibility_test",
+    "date": "2025-10-23T02:23:11.403339",
+    "test_cases": [
+      {
+        "threshold": 700,
+        "diversity": 0.03
+      },
+      {
+        "threshold": 700,
+        "diversity": 0.06
+      },
+      {
+        "threshold": 700,
+        "diversity": 0.1
+      }
+    ],
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "total_experiments": 15,
+    "total_cycles": 45000
+  },
+  "results": [
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 42,
+      "spread": 0.1,
+      "mult": 0.3,
+      "basin": "B",
+      "dominant": [
+        1.847344,
+        2.142082,
+        1.598663
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.624868571766073,
+      "dist_B": 7.43044361415905,
+      "duration": 1.7450370788574219,
+      "cycles_per_sec": 1719.1611779185093
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 123,
+      "spread": 0.1,
+      "mult": 0.3,
+      "basin": "B",
+      "dominant": [
+        1.846975,
+        2.141763,
+        1.598473
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.625369819061106,
+      "dist_B": 7.430942698076536,
+      "duration": 1.7519831657409668,
+      "cycles_per_sec": 1712.34522035559
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 456,
+      "spread": 0.1,
+      "mult": 0.3,
+      "basin": "B",
+      "dominant": [
+        1.847412,
+        2.142141,
+        1.598698
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.624776093586879,
+      "dist_B": 7.430351537335296,
+      "duration": 1.7443819046020508,
+      "cycles_per_sec": 1719.8068794943133
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 789,
+      "spread": 0.1,
+      "mult": 0.3,
+      "basin": "B",
+      "dominant": [
+        1.847243,
+        2.141994,
+        1.598611
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.625006137572678,
+      "dist_B": 7.43058057976589,
+      "duration": 1.7160639762878418,
+      "cycles_per_sec": 1748.1865719770803
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 1024,
+      "spread": 0.1,
+      "mult": 0.3,
+      "basin": "B",
+      "dominant": [
+        1.847443,
+        2.142168,
+        1.598714
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.624733851552722,
+      "dist_B": 7.4303094789503215,
+      "duration": 1.744258165359497,
+      "cycles_per_sec": 1719.928884140663
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.06,
+      "seed": 42,
+      "spread": 0.1,
+      "mult": 0.6,
+      "basin": "B",
+      "dominant": [
+        1.809645,
+        2.109462,
+        1.579246
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.67611329694462,
+      "dist_B": 7.481468939977697,
+      "duration": 1.7421329021453857,
+      "cycles_per_sec": 1722.0270602234696
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.06,
+      "seed": 123,
+      "spread": 0.1,
+      "mult": 0.6,
+      "basin": "B",
+      "dominant": [
+        1.809276,
+        2.109143,
+        1.579056
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.676614846412058,
+      "dist_B": 7.481968363380923,
+      "duration": 1.7394678592681885,
+      "cycles_per_sec": 1724.6653820106396
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.06,
+      "seed": 456,
+      "spread": 0.1,
+      "mult": 0.6,
+      "basin": "B",
+      "dominant": [
+        1.809713,
+        2.109522,
+        1.579281
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.676020220219656,
+      "dist_B": 7.4813762691973995,
+      "duration": 1.7465028762817383,
+      "cycles_per_sec": 1717.71832771723
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.06,
+      "seed": 789,
+      "spread": 0.1,
+      "mult": 0.6,
+      "basin": "B",
+      "dominant": [
+        1.809544,
+        2.109375,
+        1.579194
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.676250403205591,
+      "dist_B": 7.4816054678209944,
+      "duration": 1.7629938125610352,
+      "cycles_per_sec": 1701.6508955536335
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.06,
+      "seed": 1024,
+      "spread": 0.1,
+      "mult": 0.6,
+      "basin": "B",
+      "dominant": [
+        1.809744,
+        2.109548,
+        1.579297
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.675978495427277,
+      "dist_B": 7.481334713408898,
+      "duration": 1.7556788921356201,
+      "cycles_per_sec": 1708.7407118911015
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.1,
+      "seed": 42,
+      "spread": 0.1,
+      "mult": 1.0,
+      "basin": "B",
+      "dominant": [
+        1.759379,
+        2.06597,
+        1.553358
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.74448590110241,
+      "dist_B": 7.549554858883469,
+      "duration": 1.7524847984313965,
+      "cycles_per_sec": 1711.8550772510107
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.1,
+      "seed": 123,
+      "spread": 0.1,
+      "mult": 1.0,
+      "basin": "B",
+      "dominant": [
+        1.759011,
+        2.065651,
+        1.553168
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.7449872681597745,
+      "dist_B": 7.550054150028197,
+      "duration": 1.7346408367156982,
+      "cycles_per_sec": 1729.4646456496919
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.1,
+      "seed": 456,
+      "spread": 0.1,
+      "mult": 1.0,
+      "basin": "B",
+      "dominant": [
+        1.759448,
+        2.066029,
+        1.553393
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.7443927183081955,
+      "dist_B": 7.54946206336478,
+      "duration": 1.7733509540557861,
+      "cycles_per_sec": 1691.7125136108991
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.1,
+      "seed": 789,
+      "spread": 0.1,
+      "mult": 1.0,
+      "basin": "B",
+      "dominant": [
+        1.759278,
+        2.065883,
+        1.553306
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.7446231148616915,
+      "dist_B": 7.5496915074233995,
+      "duration": 1.7569630146026611,
+      "cycles_per_sec": 1707.491833957844
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.1,
+      "seed": 1024,
+      "spread": 0.1,
+      "mult": 1.0,
+      "basin": "B",
+      "dominant": [
+        1.759479,
+        2.066056,
+        1.553409
+      ],
+      "fraction": 0.2,
+      "dist_A": 7.744350417658604,
+      "dist_B": 7.549419939121548,
+      "duration": 1.7445611953735352,
+      "cycles_per_sec": 1719.630132755336
+    }
+  ]
+}

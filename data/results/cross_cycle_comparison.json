@@ -1,0 +1,106 @@
+{
+  "cycles_analyzed": [
+    160,
+    161
+  ],
+  "spawn_accuracy_evolution": {
+    "by_cycle": {
+      "160": {
+        "mean": 99.88000000000001,
+        "std": 0.11274356350191607,
+        "min": 99.66666666666667,
+        "max": 99.96666666666667,
+        "n": 15
+      },
+      "161": {
+        "mean": 99.93333333333332,
+        "std": 0.0,
+        "min": 99.93333333333332,
+        "max": 99.93333333333332,
+        "n": 3
+      }
+    },
+    "validation": {
+      "all_cycles_above_99pct": true,
+      "overall_mean": 99.90666666666667,
+      "consistency": "PASS"
+    }
+  },
+  "composition_distribution_evolution": {
+    "by_cycle": {
+      "160": {
+        "mean": 2.4253333333333336,
+        "std": 0.21434758895049155,
+        "min": 2.1,
+        "max": 2.76,
+        "median": 2.44,
+        "n": 15
+      },
+      "161": {
+        "mean": 2.2966666666666664,
+        "std": 0.17326921891156036,
+        "min": 2.15,
+        "max": 2.54,
+        "median": 2.2,
+        "n": 3
+      }
+    },
+    "shift_analysis": {
+      "first_cycle": 160,
+      "last_cycle": 161,
+      "t_statistic": 0.9218503539645273,
+      "p_value": 0.3702989113554306,
+      "cohens_d": -0.5926759848907547,
+      "effect_size_interpretation": "medium",
+      "significant": false
+    }
+  },
+  "basin_convergence_evolution": {
+    "by_cycle": {
+      "160": {
+        "basin_a_count": 0,
+        "total_experiments": 15,
+        "basin_a_pct": 0.0
+      },
+      "161": {
+        "basin_a_count": 1,
+        "total_experiments": 3,
+        "basin_a_pct": 33.33333333333333
+      }
+    },
+    "evolution_trajectory": {
+      "cycle_sequence": [
+        160,
+        161
+      ],
+      "basin_a_percentages": [
+        0.0,
+        33.33333333333333
+      ],
+      "monotonic_increase": true,
+      "total_change_pct": 33.33333333333333
+    }
+  },
+  "publication_metrics": {
+    "reproducibility": {
+      "spawn_accuracy_consistency": "PASS",
+      "mean_spawn_accuracy": 99.90666666666667,
+      "interpretation": "Bug #1 fix (corrected spawning) maintained across all cycles"
+    },
+    "corrective_iteration": {
+      "threshold_recalibration_effect_size": -0.5926759848907547,
+      "effect_interpretation": "medium",
+      "statistical_significance": false,
+      "p_value": 0.3702989113554306
+    },
+    "framework_validation": {
+      "basin_a_discovery_progression": [
+        0.0,
+        33.33333333333333
+      ],
+      "total_improvement_pct": 33.33333333333333,
+      "monotonic_improvement": true,
+      "interpretation": "Progressed from 0.0% to 33.3% Basin A convergence through 2 correction cycles"
+    }
+  }
+}

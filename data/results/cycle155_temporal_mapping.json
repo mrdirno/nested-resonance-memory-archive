@@ -1,0 +1,608 @@
+{
+  "cycle_id": 155,
+  "description": "Comprehensive Temporal Activation Mapping",
+  "parameters": {
+    "threshold": 700.0,
+    "diversity": 0.5,
+    "frequencies": [
+      52,
+      55,
+      57,
+      60,
+      65,
+      70,
+      75,
+      80,
+      82,
+      85,
+      88,
+      90,
+      92,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99
+    ],
+    "temporal_scale": 10000,
+    "seeds": [
+      42,
+      123,
+      456
+    ],
+    "agent_cap": 15
+  },
+  "experiments": [
+    {
+      "seed": 42,
+      "spawning_freq": 52,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.6521880626678467,
+      "cycles_per_second": 3770.471687419089
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 52,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.791463851928711,
+      "cycles_per_second": 3582.3498101509294
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 52,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.652366876602173,
+      "cycles_per_second": 3770.2174945008164
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 55,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.633826971054077,
+      "cycles_per_second": 3796.756624448236
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 55,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.659158945083618,
+      "cycles_per_second": 3760.5875415941136
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 55,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.651110887527466,
+      "cycles_per_second": 3772.0036710069144
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 57,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.6313540935516357,
+      "cycles_per_second": 3800.3247166566744
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 57,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.72055721282959,
+      "cycles_per_second": 3675.7175893387025
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 57,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.646394968032837,
+      "cycles_per_second": 3778.7254437811184
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 60,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 3.2259910106658936,
+      "cycles_per_second": 3099.8226488969194
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 60,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.652000904083252,
+      "cycles_per_second": 3770.737779388811
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 60,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.6365480422973633,
+      "cycles_per_second": 3792.8381503287433
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 65,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8502371311187744,
+      "cycles_per_second": 3508.480010599961
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 65,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.817641019821167,
+      "cycles_per_second": 3549.0681494389555
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 65,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.720122814178467,
+      "cycles_per_second": 3676.304594732134
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 70,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.977870225906372,
+      "cycles_per_second": 3358.1046994606045
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 70,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8753018379211426,
+      "cycles_per_second": 3477.8957353674036
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 70,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.847188949584961,
+      "cycles_per_second": 3512.236165941047
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 75,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.782597064971924,
+      "cycles_per_second": 3593.7650211317605
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 75,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8447930812835693,
+      "cycles_per_second": 3515.194150953153
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 75,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.7674810886383057,
+      "cycles_per_second": 3613.394158700589
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 80,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8325870037078857,
+      "cycles_per_second": 3530.3416936213775
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 80,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.7921009063720703,
+      "cycles_per_second": 3581.5324500551624
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 80,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.853440999984741,
+      "cycles_per_second": 3504.5406581224124
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 82,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.9573781490325928,
+      "cycles_per_second": 3381.3734653010692
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 82,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.764702796936035,
+      "cycles_per_second": 3617.0253132027206
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 82,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8353540897369385,
+      "cycles_per_second": 3526.8963535089865
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 85,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.808581829071045,
+      "cycles_per_second": 3560.5158078330082
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 85,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8844480514526367,
+      "cycles_per_second": 3466.8677756092366
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 85,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.830172061920166,
+      "cycles_per_second": 3533.3540792623658
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 88,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.800704002380371,
+      "cycles_per_second": 3570.53083492608
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 88,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8155789375305176,
+      "cycles_per_second": 3551.6674267959897
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 88,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.784074068069458,
+      "cycles_per_second": 3591.8584619173703
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 90,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 3.1008520126342773,
+      "cycles_per_second": 3224.920105588872
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 90,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.741631031036377,
+      "cycles_per_second": 3647.4638223728643
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 90,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.941743850708008,
+      "cycles_per_second": 3399.344235084655
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 92,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8487250804901123,
+      "cycles_per_second": 3510.3422469533416
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 92,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.9445748329162598,
+      "cycles_per_second": 3396.076027076602
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 92,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8085360527038574,
+      "cycles_per_second": 3560.5738407284166
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 94,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.9298532009124756,
+      "cycles_per_second": 3413.1402886962364
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 94,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8787028789520264,
+      "cycles_per_second": 3473.7867784536475
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 94,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.9132306575775146,
+      "cycles_per_second": 3432.615256189656
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 95,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.908601999282837,
+      "cycles_per_second": 3438.077812799985
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 95,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 3.0800492763519287,
+      "cycles_per_second": 3246.7013033779117
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 95,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 3.122279167175293,
+      "cycles_per_second": 3202.788560718912
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 96,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.9993972778320312,
+      "cycles_per_second": 3334.003159204043
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 96,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.908306837081909,
+      "cycles_per_second": 3438.426741118431
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 96,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.9223527908325195,
+      "cycles_per_second": 3421.9003370743617
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 97,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8974881172180176,
+      "cycles_per_second": 3451.265232314864
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 97,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.872114896774292,
+      "cycles_per_second": 3481.7548598877866
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 97,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.935650110244751,
+      "cycles_per_second": 3406.4004988545043
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 98,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.9431519508361816,
+      "cycles_per_second": 3397.717877651166
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 98,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.9548838138580322,
+      "cycles_per_second": 3384.2278173853274
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 98,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.876549243927002,
+      "cycles_per_second": 3476.3875574569406
+    },
+    {
+      "seed": 42,
+      "spawning_freq": 99,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.873918056488037,
+      "cycles_per_second": 3479.57032992796
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 99,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.903986930847168,
+      "cycles_per_second": 3443.5416681034244
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 99,
+      "cycles": 10000,
+      "basin": "B",
+      "final_agent_count": 1,
+      "avg_composition_events": 1.0,
+      "elapsed_seconds": 2.8359289169311523,
+      "cycles_per_second": 3526.1814710156114
+    }
+  ]
+}

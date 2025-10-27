@@ -1,13 +1,4 @@
 """
-Author: Aldrin Payopay
-Email: aldrin.gdf@gmail.com
-Project: Nested Resonance Memory (NRM) Research Archive
-Repository: https://github.com/mrdirno/nested-resonance-memory-archive
-License: GPL-3.0
-"""
-
-
-"""
 DUALITY-ZERO-V2 Reality Interface
 Primary interface for all reality-grounded system operations
 

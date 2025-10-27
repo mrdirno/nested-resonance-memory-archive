@@ -1,0 +1,49 @@
+{
+  "frequency_analysis": [
+    {
+      "frequency": 85.0,
+      "n": 10,
+      "basin_a": 10,
+      "basin_b": 0,
+      "basin_a_pct": 100.0,
+      "classification": "Harmonic (Basin A)"
+    },
+    {
+      "frequency": 90.0,
+      "n": 10,
+      "basin_a": 10,
+      "basin_b": 0,
+      "basin_a_pct": 100.0,
+      "classification": "Harmonic (Basin A)"
+    },
+    {
+      "frequency": 95.0,
+      "n": 10,
+      "basin_a": 10,
+      "basin_b": 0,
+      "basin_a_pct": 100.0,
+      "classification": "Harmonic (Basin A)"
+    },
+    {
+      "frequency": 99.0,
+      "n": 10,
+      "basin_a": 10,
+      "basin_b": 0,
+      "basin_a_pct": 100.0,
+      "classification": "Harmonic (Basin A)"
+    },
+    {
+      "frequency": 99.9,
+      "n": 10,
+      "basin_a": 10,
+      "basin_b": 0,
+      "basin_a_pct": 100.0,
+      "classification": "Harmonic (Basin A)"
+    }
+  ],
+  "boundary_detection": {
+    "boundary_detected": false,
+    "conclusion": "Universal Basin A attractor extends through all tested frequencies"
+  },
+  "avg_basin_a_pct": 100.0
+}

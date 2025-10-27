@@ -1,0 +1,85 @@
+{
+  "generated_date": "2025-10-25",
+  "analysis_scope": "Cycles 133-161",
+  "bug_fix_1_spawn_accuracy": {
+    "status": "insufficient_data",
+    "pre_n": 0,
+    "post_n": 18
+  },
+  "bug_fix_2_threshold_calibration": {
+    "status": "success",
+    "pre_calibration": {
+      "cycles": "133-160",
+      "n": 679,
+      "basin_a_count": 67,
+      "basin_b_count": 612,
+      "basin_a_pct": 9.867452135493373
+    },
+    "post_calibration": {
+      "cycles": "161",
+      "n": 3,
+      "basin_a_count": 1,
+      "basin_b_count": 2,
+      "basin_a_pct": 33.33333333333333
+    },
+    "basin_discovery": {
+      "basin_a_increase_pct": 23.465881197839956,
+      "basin_a_discovered": true
+    },
+    "chi2_test": {
+      "chi2_statistic": 0.1505071722096945,
+      "p_value": 0.6980511568251819,
+      "dof": 1,
+      "significant": false
+    },
+    "composition_comparison": {
+      "pre_mean": 1.1709365558912384,
+      "post_mean": 2.2966666666666664,
+      "t_statistic": 3.1460335290840478,
+      "p_value": 0.001804753486644468,
+      "significant": true
+    }
+  },
+  "reproducibility_metrics": {
+    "n_parameter_sets": 5,
+    "reproducibility_score": 88.92252510514777,
+    "mean_cv_pct": 11.077474894852227,
+    "parameter_sets_analyzed": [
+      {
+        "parameter_signature": "NA_NA_NA",
+        "n_replicates": 286,
+        "mean": 1.2114335664335663,
+        "std": 0.6709812459474563,
+        "cv_pct": 55.38737447426113
+      },
+      {
+        "parameter_signature": "NA_300_NA",
+        "n_replicates": 12,
+        "mean": 1.0,
+        "std": 0.0,
+        "cv_pct": 0.0
+      },
+      {
+        "parameter_signature": "NA_500_NA",
+        "n_replicates": 12,
+        "mean": 1.0,
+        "std": 0.0,
+        "cv_pct": 0.0
+      },
+      {
+        "parameter_signature": "NA_700_NA",
+        "n_replicates": 12,
+        "mean": 1.0,
+        "std": 0.0,
+        "cv_pct": 0.0
+      },
+      {
+        "parameter_signature": "NA_900_NA",
+        "n_replicates": 12,
+        "mean": 1.0,
+        "std": 0.0,
+        "cv_pct": 0.0
+      }
+    ]
+  }
+}

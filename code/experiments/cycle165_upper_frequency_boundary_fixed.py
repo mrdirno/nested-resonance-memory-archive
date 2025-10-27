@@ -1,12 +1,3 @@
-"""
-Author: Aldrin Payopay
-Email: aldrin.gdf@gmail.com
-Project: Nested Resonance Memory (NRM) Research Archive
-Repository: https://github.com/mrdirno/nested-resonance-memory-archive
-License: GPL-3.0
-"""
-
-
 #!/usr/bin/env python3
 """
 CYCLE 165: UPPER FREQUENCY BOUNDARY MAPPING
