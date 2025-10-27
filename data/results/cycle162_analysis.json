@@ -1,0 +1,203 @@
+{
+  "frequency_landscape": [
+    {
+      "frequency": 1,
+      "n": 3,
+      "basin_a_count": 3,
+      "basin_b_count": 0,
+      "basin_a_pct": 100.0,
+      "mean_composition": 5.0,
+      "std_composition": 0.0,
+      "classification": "Harmonic"
+    },
+    {
+      "frequency": 5,
+      "n": 3,
+      "basin_a_count": 2,
+      "basin_b_count": 1,
+      "basin_a_pct": 66.66666666666666,
+      "mean_composition": 2.6,
+      "std_composition": 0.529150262212918,
+      "classification": "Mixed"
+    },
+    {
+      "frequency": 10,
+      "n": 3,
+      "basin_a_count": 1,
+      "basin_b_count": 2,
+      "basin_a_pct": 33.33333333333333,
+      "mean_composition": 2.42,
+      "std_composition": 0.19287301521985903,
+      "classification": "Mixed"
+    },
+    {
+      "frequency": 15,
+      "n": 3,
+      "basin_a_count": 1,
+      "basin_b_count": 2,
+      "basin_a_pct": 33.33333333333333,
+      "mean_composition": 2.423333333333334,
+      "std_composition": 0.21031722072463138,
+      "classification": "Mixed"
+    },
+    {
+      "frequency": 20,
+      "n": 3,
+      "basin_a_count": 0,
+      "basin_b_count": 3,
+      "basin_a_pct": 0.0,
+      "mean_composition": 2.283333333333333,
+      "std_composition": 0.12583057392117916,
+      "classification": "Anti-harmonic"
+    },
+    {
+      "frequency": 25,
+      "n": 3,
+      "basin_a_count": 1,
+      "basin_b_count": 2,
+      "basin_a_pct": 33.33333333333333,
+      "mean_composition": 2.31,
+      "std_composition": 0.28930952282978867,
+      "classification": "Mixed"
+    },
+    {
+      "frequency": 30,
+      "n": 3,
+      "basin_a_count": 0,
+      "basin_b_count": 3,
+      "basin_a_pct": 0.0,
+      "mean_composition": 2.3566666666666665,
+      "std_composition": 0.11676186592091328,
+      "classification": "Anti-harmonic"
+    },
+    {
+      "frequency": 40,
+      "n": 3,
+      "basin_a_count": 1,
+      "basin_b_count": 2,
+      "basin_a_pct": 33.33333333333333,
+      "mean_composition": 2.4233333333333333,
+      "std_composition": 0.25696951829610726,
+      "classification": "Mixed"
+    },
+    {
+      "frequency": 50,
+      "n": 3,
+      "basin_a_count": 1,
+      "basin_b_count": 2,
+      "basin_a_pct": 33.33333333333333,
+      "mean_composition": 2.2533333333333334,
+      "std_composition": 0.23094010767585027,
+      "classification": "Mixed"
+    },
+    {
+      "frequency": 60,
+      "n": 3,
+      "basin_a_count": 1,
+      "basin_b_count": 2,
+      "basin_a_pct": 33.33333333333333,
+      "mean_composition": 2.4233333333333333,
+      "std_composition": 0.1457166199626293,
+      "classification": "Mixed"
+    },
+    {
+      "frequency": 70,
+      "n": 3,
+      "basin_a_count": 0,
+      "basin_b_count": 3,
+      "basin_a_pct": 0.0,
+      "mean_composition": 2.35,
+      "std_composition": 0.1819340539866025,
+      "classification": "Anti-harmonic"
+    },
+    {
+      "frequency": 80,
+      "n": 3,
+      "basin_a_count": 0,
+      "basin_b_count": 3,
+      "basin_a_pct": 0.0,
+      "mean_composition": 2.4466666666666668,
+      "std_composition": 0.03214550253664317,
+      "classification": "Anti-harmonic"
+    },
+    {
+      "frequency": 90,
+      "n": 3,
+      "basin_a_count": 1,
+      "basin_b_count": 2,
+      "basin_a_pct": 33.33333333333333,
+      "mean_composition": 2.506666666666667,
+      "std_composition": 0.10969655114602883,
+      "classification": "Mixed"
+    },
+    {
+      "frequency": 95,
+      "n": 3,
+      "basin_a_count": 2,
+      "basin_b_count": 1,
+      "basin_a_pct": 66.66666666666666,
+      "mean_composition": 2.5233333333333334,
+      "std_composition": 0.047258156262526003,
+      "classification": "Mixed"
+    },
+    {
+      "frequency": 99,
+      "n": 3,
+      "basin_a_count": 1,
+      "basin_b_count": 2,
+      "basin_a_pct": 33.33333333333333,
+      "mean_composition": 2.4366666666666665,
+      "std_composition": 0.17214335111567144,
+      "classification": "Mixed"
+    }
+  ],
+  "variance_decomposition": {
+    "total_variance": 0.4660422222222222,
+    "between_frequency_variance": 0.4552235978835979,
+    "within_frequency_variance": 0.04621555555555556,
+    "frequency_explained_pct": 97.67861712463775,
+    "seed_explained_pct": 9.916602692173814
+  },
+  "hypothesis_test": {
+    "basin_a_variance": 740.7407407407408,
+    "hypothesis": "H1: Frequency-Dependent (high variance in Basin A %)",
+    "chi2_test": {
+      "chi2_statistic": 15.0,
+      "p_value": 0.3781546943234694,
+      "degrees_of_freedom": 14,
+      "significant": false
+    }
+  },
+  "harmonic_analysis": {
+    "harmonic_frequencies": [
+      1
+    ],
+    "mixed_frequencies": [
+      5,
+      10,
+      15,
+      25,
+      40,
+      50,
+      60,
+      90,
+      95,
+      99
+    ],
+    "anti_harmonic_frequencies": [
+      20,
+      30,
+      70,
+      80
+    ],
+    "harmonic_count": 1,
+    "mixed_count": 10,
+    "anti_harmonic_count": 4
+  },
+  "recommended_scenario": {
+    "scenario": "C",
+    "reasoning": "Moderate variance (741), both frequency and seed effects present",
+    "script": "cycle163c_frequency_seed_interaction.py",
+    "description": "Frequency-seed interaction analysis (50 experiments, factorial design)"
+  }
+}

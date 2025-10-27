@@ -1,0 +1,491 @@
+{
+  "metadata": {
+    "cycle": "168",
+    "scenario": "Ultra-Low Frequency Completion",
+    "date": "2025-10-25T05:37:21.201991",
+    "frequencies": [
+      0.5,
+      1.0,
+      2.0,
+      3.0,
+      4.0
+    ],
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      101,
+      202,
+      303,
+      404,
+      505,
+      606
+    ],
+    "cycles_per_experiment": 3000,
+    "total_experiments": 50,
+    "duration_minutes": 0.18721461666666667
+  },
+  "experiments": [
+    {
+      "frequency": 0.5,
+      "seed": 42,
+      "avg_composition_events": 0.5,
+      "basin": "B",
+      "spawn_count": 15,
+      "total_composition_events": 15
+    },
+    {
+      "frequency": 0.5,
+      "seed": 123,
+      "avg_composition_events": 0.5,
+      "basin": "B",
+      "spawn_count": 15,
+      "total_composition_events": 15
+    },
+    {
+      "frequency": 0.5,
+      "seed": 456,
+      "avg_composition_events": 0.5,
+      "basin": "B",
+      "spawn_count": 15,
+      "total_composition_events": 15
+    },
+    {
+      "frequency": 0.5,
+      "seed": 789,
+      "avg_composition_events": 0.5,
+      "basin": "B",
+      "spawn_count": 15,
+      "total_composition_events": 15
+    },
+    {
+      "frequency": 0.5,
+      "seed": 101,
+      "avg_composition_events": 0.5,
+      "basin": "B",
+      "spawn_count": 15,
+      "total_composition_events": 15
+    },
+    {
+      "frequency": 0.5,
+      "seed": 202,
+      "avg_composition_events": 0.5,
+      "basin": "B",
+      "spawn_count": 15,
+      "total_composition_events": 15
+    },
+    {
+      "frequency": 0.5,
+      "seed": 303,
+      "avg_composition_events": 0.5,
+      "basin": "B",
+      "spawn_count": 15,
+      "total_composition_events": 15
+    },
+    {
+      "frequency": 0.5,
+      "seed": 404,
+      "avg_composition_events": 0.5,
+      "basin": "B",
+      "spawn_count": 15,
+      "total_composition_events": 15
+    },
+    {
+      "frequency": 0.5,
+      "seed": 505,
+      "avg_composition_events": 0.5,
+      "basin": "B",
+      "spawn_count": 15,
+      "total_composition_events": 15
+    },
+    {
+      "frequency": 0.5,
+      "seed": 606,
+      "avg_composition_events": 0.5,
+      "basin": "B",
+      "spawn_count": 15,
+      "total_composition_events": 15
+    },
+    {
+      "frequency": 1.0,
+      "seed": 42,
+      "avg_composition_events": 1.0,
+      "basin": "B",
+      "spawn_count": 30,
+      "total_composition_events": 30
+    },
+    {
+      "frequency": 1.0,
+      "seed": 123,
+      "avg_composition_events": 1.0,
+      "basin": "B",
+      "spawn_count": 30,
+      "total_composition_events": 30
+    },
+    {
+      "frequency": 1.0,
+      "seed": 456,
+      "avg_composition_events": 1.0,
+      "basin": "B",
+      "spawn_count": 30,
+      "total_composition_events": 30
+    },
+    {
+      "frequency": 1.0,
+      "seed": 789,
+      "avg_composition_events": 1.0,
+      "basin": "B",
+      "spawn_count": 30,
+      "total_composition_events": 30
+    },
+    {
+      "frequency": 1.0,
+      "seed": 101,
+      "avg_composition_events": 1.0,
+      "basin": "B",
+      "spawn_count": 30,
+      "total_composition_events": 30
+    },
+    {
+      "frequency": 1.0,
+      "seed": 202,
+      "avg_composition_events": 1.0,
+      "basin": "B",
+      "spawn_count": 30,
+      "total_composition_events": 30
+    },
+    {
+      "frequency": 1.0,
+      "seed": 303,
+      "avg_composition_events": 1.0,
+      "basin": "B",
+      "spawn_count": 30,
+      "total_composition_events": 30
+    },
+    {
+      "frequency": 1.0,
+      "seed": 404,
+      "avg_composition_events": 1.0,
+      "basin": "B",
+      "spawn_count": 30,
+      "total_composition_events": 30
+    },
+    {
+      "frequency": 1.0,
+      "seed": 505,
+      "avg_composition_events": 1.0,
+      "basin": "B",
+      "spawn_count": 30,
+      "total_composition_events": 30
+    },
+    {
+      "frequency": 1.0,
+      "seed": 606,
+      "avg_composition_events": 1.0,
+      "basin": "B",
+      "spawn_count": 30,
+      "total_composition_events": 30
+    },
+    {
+      "frequency": 2.0,
+      "seed": 42,
+      "avg_composition_events": 2.0,
+      "basin": "B",
+      "spawn_count": 60,
+      "total_composition_events": 60
+    },
+    {
+      "frequency": 2.0,
+      "seed": 123,
+      "avg_composition_events": 2.0,
+      "basin": "B",
+      "spawn_count": 60,
+      "total_composition_events": 60
+    },
+    {
+      "frequency": 2.0,
+      "seed": 456,
+      "avg_composition_events": 2.0,
+      "basin": "B",
+      "spawn_count": 60,
+      "total_composition_events": 60
+    },
+    {
+      "frequency": 2.0,
+      "seed": 789,
+      "avg_composition_events": 2.0,
+      "basin": "B",
+      "spawn_count": 60,
+      "total_composition_events": 60
+    },
+    {
+      "frequency": 2.0,
+      "seed": 101,
+      "avg_composition_events": 2.0,
+      "basin": "B",
+      "spawn_count": 60,
+      "total_composition_events": 60
+    },
+    {
+      "frequency": 2.0,
+      "seed": 202,
+      "avg_composition_events": 2.0,
+      "basin": "B",
+      "spawn_count": 60,
+      "total_composition_events": 60
+    },
+    {
+      "frequency": 2.0,
+      "seed": 303,
+      "avg_composition_events": 2.0,
+      "basin": "B",
+      "spawn_count": 60,
+      "total_composition_events": 60
+    },
+    {
+      "frequency": 2.0,
+      "seed": 404,
+      "avg_composition_events": 2.0,
+      "basin": "B",
+      "spawn_count": 60,
+      "total_composition_events": 60
+    },
+    {
+      "frequency": 2.0,
+      "seed": 505,
+      "avg_composition_events": 2.0,
+      "basin": "B",
+      "spawn_count": 60,
+      "total_composition_events": 60
+    },
+    {
+      "frequency": 2.0,
+      "seed": 606,
+      "avg_composition_events": 2.0,
+      "basin": "B",
+      "spawn_count": 60,
+      "total_composition_events": 60
+    },
+    {
+      "frequency": 3.0,
+      "seed": 42,
+      "avg_composition_events": 3.033333333333333,
+      "basin": "A",
+      "spawn_count": 91,
+      "total_composition_events": 91
+    },
+    {
+      "frequency": 3.0,
+      "seed": 123,
+      "avg_composition_events": 3.033333333333333,
+      "basin": "A",
+      "spawn_count": 91,
+      "total_composition_events": 91
+    },
+    {
+      "frequency": 3.0,
+      "seed": 456,
+      "avg_composition_events": 3.033333333333333,
+      "basin": "A",
+      "spawn_count": 91,
+      "total_composition_events": 91
+    },
+    {
+      "frequency": 3.0,
+      "seed": 789,
+      "avg_composition_events": 3.033333333333333,
+      "basin": "A",
+      "spawn_count": 91,
+      "total_composition_events": 91
+    },
+    {
+      "frequency": 3.0,
+      "seed": 101,
+      "avg_composition_events": 3.033333333333333,
+      "basin": "A",
+      "spawn_count": 91,
+      "total_composition_events": 91
+    },
+    {
+      "frequency": 3.0,
+      "seed": 202,
+      "avg_composition_events": 3.033333333333333,
+      "basin": "A",
+      "spawn_count": 91,
+      "total_composition_events": 91
+    },
+    {
+      "frequency": 3.0,
+      "seed": 303,
+      "avg_composition_events": 3.033333333333333,
+      "basin": "A",
+      "spawn_count": 91,
+      "total_composition_events": 91
+    },
+    {
+      "frequency": 3.0,
+      "seed": 404,
+      "avg_composition_events": 3.033333333333333,
+      "basin": "A",
+      "spawn_count": 91,
+      "total_composition_events": 91
+    },
+    {
+      "frequency": 3.0,
+      "seed": 505,
+      "avg_composition_events": 3.033333333333333,
+      "basin": "A",
+      "spawn_count": 91,
+      "total_composition_events": 91
+    },
+    {
+      "frequency": 3.0,
+      "seed": 606,
+      "avg_composition_events": 3.033333333333333,
+      "basin": "A",
+      "spawn_count": 91,
+      "total_composition_events": 91
+    },
+    {
+      "frequency": 4.0,
+      "seed": 42,
+      "avg_composition_events": 4.0,
+      "basin": "A",
+      "spawn_count": 120,
+      "total_composition_events": 120
+    },
+    {
+      "frequency": 4.0,
+      "seed": 123,
+      "avg_composition_events": 4.0,
+      "basin": "A",
+      "spawn_count": 120,
+      "total_composition_events": 120
+    },
+    {
+      "frequency": 4.0,
+      "seed": 456,
+      "avg_composition_events": 4.0,
+      "basin": "A",
+      "spawn_count": 120,
+      "total_composition_events": 120
+    },
+    {
+      "frequency": 4.0,
+      "seed": 789,
+      "avg_composition_events": 4.0,
+      "basin": "A",
+      "spawn_count": 120,
+      "total_composition_events": 120
+    },
+    {
+      "frequency": 4.0,
+      "seed": 101,
+      "avg_composition_events": 4.0,
+      "basin": "A",
+      "spawn_count": 120,
+      "total_composition_events": 120
+    },
+    {
+      "frequency": 4.0,
+      "seed": 202,
+      "avg_composition_events": 4.0,
+      "basin": "A",
+      "spawn_count": 120,
+      "total_composition_events": 120
+    },
+    {
+      "frequency": 4.0,
+      "seed": 303,
+      "avg_composition_events": 4.0,
+      "basin": "A",
+      "spawn_count": 120,
+      "total_composition_events": 120
+    },
+    {
+      "frequency": 4.0,
+      "seed": 404,
+      "avg_composition_events": 4.0,
+      "basin": "A",
+      "spawn_count": 120,
+      "total_composition_events": 120
+    },
+    {
+      "frequency": 4.0,
+      "seed": 505,
+      "avg_composition_events": 4.0,
+      "basin": "A",
+      "spawn_count": 120,
+      "total_composition_events": 120
+    },
+    {
+      "frequency": 4.0,
+      "seed": 606,
+      "avg_composition_events": 4.0,
+      "basin": "A",
+      "spawn_count": 120,
+      "total_composition_events": 120
+    }
+  ],
+  "basin_summary": {
+    "0.5": {
+      "basin_a_count": 0,
+      "basin_b_count": 10,
+      "basin_a_pct": 0.0
+    },
+    "1.0": {
+      "basin_a_count": 0,
+      "basin_b_count": 10,
+      "basin_a_pct": 0.0
+    },
+    "2.0": {
+      "basin_a_count": 0,
+      "basin_b_count": 10,
+      "basin_a_pct": 0.0
+    },
+    "3.0": {
+      "basin_a_count": 10,
+      "basin_b_count": 0,
+      "basin_a_pct": 100.0
+    },
+    "4.0": {
+      "basin_a_count": 10,
+      "basin_b_count": 0,
+      "basin_a_pct": 100.0
+    }
+  },
+  "overall_summary": {
+    "overall_basin_a_pct": 40.0,
+    "min_basin_a_pct": 0.0,
+    "max_basin_a_pct": 100.0
+  },
+  "complete_frequency_coverage": {
+    "c163c": {
+      "range": "5-50%",
+      "basin_a": "50/50",
+      "pct": 100.0
+    },
+    "c165": {
+      "range": "60-99.9%",
+      "basin_a": "50/50",
+      "pct": 100.0
+    },
+    "c167": {
+      "range": "73-99.5%",
+      "basin_a": "80/80",
+      "pct": 100.0
+    },
+    "c168": {
+      "range": "0.5-4%",
+      "basin_a": "20/50",
+      "pct": 40.0
+    },
+    "total": {
+      "experiments": 230,
+      "basin_a": 200,
+      "pct": 86.95652173913044,
+      "coverage": "0.5-99.5%"
+    }
+  }
+}

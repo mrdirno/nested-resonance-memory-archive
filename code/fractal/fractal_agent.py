@@ -88,7 +88,8 @@ class FractalAgent:
         depth: int = 0,
         max_depth: int = 7,
         reality: Optional['RealityInterface'] = None,
-        initial_energy: Optional[float] = None
+        initial_energy: Optional[float] = None,
+        measurement_noise_std: Optional[float] = None
     ):
         """
         Initialize fractal agent.
@@ -104,6 +105,10 @@ class FractalAgent:
             initial_energy: Optional override for initial energy (Cycle 235+)
                 If None, energy derived from reality metrics (default behavior)
                 If provided, overrides reality-based calculation for seed control
+            measurement_noise_std: Optional std dev for measurement noise (Cycle 243+)
+                If None, no noise added (deterministic reality sampling)
+                If provided, adds Gaussian noise to reality metrics for statistical validity
+                Typical values: 0.01-0.05 (1-5% noise)
         """
         self.agent_id = agent_id
         self.bridge = bridge
@@ -111,6 +116,7 @@ class FractalAgent:
         self.depth = depth
         self.max_depth = max_depth
         self.reality = reality  # Store for energy recharge in evolve()
+        self.measurement_noise_std = measurement_noise_std  # Cycle 243+
 
         # Transform initial reality to phase space
         self.phase_state = bridge.reality_to_phase(initial_reality)
@@ -180,10 +186,29 @@ class FractalAgent:
         # This enables sustained spawning in birth-death coupled systems
         # V4 Enhancement (Cycle 216): Increased recharge rate 10× (0.001 → 0.01)
         # to enable recovery to spawn threshold (~10 energy) within ~1000 cycles
+        # V6 Enhancement (Cycle 243): Add measurement noise for statistical validity
+        # Noise represents natural variation in system metric sampling
         if hasattr(self, 'reality') and self.reality is not None:
             current_metrics = self.reality.get_system_metrics()
-            available_capacity = (100 - current_metrics['cpu_percent']) + \
-                                (100 - current_metrics['memory_percent'])
+
+            # V6: Apply measurement noise if configured (Cycle 243+)
+            if hasattr(self, 'measurement_noise_std') and self.measurement_noise_std is not None:
+                import numpy as np
+                # Add proportional Gaussian noise to reality metrics
+                # Noise std = measurement_noise_std × metric_value
+                cpu_noise = np.random.normal(0, self.measurement_noise_std * current_metrics['cpu_percent'])
+                mem_noise = np.random.normal(0, self.measurement_noise_std * current_metrics['memory_percent'])
+
+                # Apply noise with bounds checking [0, 100]
+                cpu_with_noise = max(0.0, min(100.0, current_metrics['cpu_percent'] + cpu_noise))
+                mem_with_noise = max(0.0, min(100.0, current_metrics['memory_percent'] + mem_noise))
+
+                available_capacity = (100 - cpu_with_noise) + (100 - mem_with_noise)
+            else:
+                # No noise: deterministic reality sampling (default behavior)
+                available_capacity = (100 - current_metrics['cpu_percent']) + \
+                                    (100 - current_metrics['memory_percent'])
+
             energy_recharge = 0.01 * available_capacity * delta_time  # ~1.0/100 cycles
         else:
             # Fallback: minimal recharge if no reality interface
@@ -250,7 +275,8 @@ class FractalAgent:
             parent_id=self.agent_id,
             depth=self.depth + 1,
             max_depth=self.max_depth,
-            reality=self.reality  # Inherit reality interface for energy recharge
+            reality=self.reality,  # Inherit reality interface for energy recharge
+            measurement_noise_std=self.measurement_noise_std  # Cycle 243+: Inherit noise parameter
         )
 
         # Adjust child's energy

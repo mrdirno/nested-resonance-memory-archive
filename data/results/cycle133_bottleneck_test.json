@@ -1,0 +1,90 @@
+{
+  "metadata": {
+    "cycle": 133,
+    "experiment": "computational_bottleneck_extended",
+    "caps_tested": [
+      50,
+      100,
+      200,
+      500,
+      1000
+    ]
+  },
+  "results": [
+    {
+      "agent_cap": 50,
+      "cycles_completed": 1000,
+      "basin": "B",
+      "dominant_fraction": 1.0,
+      "dist_A": 0.3146114354771612,
+      "dist_B": 0.15177138792275707,
+      "duration": 21.5663480758667,
+      "cycles_per_sec": 46.36853659609741,
+      "avg_cycle_time_ms": 21.565476179122925,
+      "initial_memory_mb": 28.59375,
+      "final_memory_mb": 33.53125,
+      "memory_increase_mb": 4.9375,
+      "peak_agents": 3
+    },
+    {
+      "agent_cap": 100,
+      "cycles_completed": 1000,
+      "basin": "B",
+      "dominant_fraction": 1.0,
+      "dist_A": 0.3146114354771612,
+      "dist_B": 0.15177138792275707,
+      "duration": 19.01888918876648,
+      "cycles_per_sec": 52.579306292538405,
+      "avg_cycle_time_ms": 19.01805090904236,
+      "initial_memory_mb": 33.53125,
+      "final_memory_mb": 33.671875,
+      "memory_increase_mb": 0.140625,
+      "peak_agents": 3
+    },
+    {
+      "agent_cap": 200,
+      "cycles_completed": 1000,
+      "basin": "B",
+      "dominant_fraction": 1.0,
+      "dist_A": 0.3146114354771612,
+      "dist_B": 0.15177138792275707,
+      "duration": 24.536645889282227,
+      "cycles_per_sec": 40.755366667161574,
+      "avg_cycle_time_ms": 24.535791635513306,
+      "initial_memory_mb": 33.671875,
+      "final_memory_mb": 34.046875,
+      "memory_increase_mb": 0.375,
+      "peak_agents": 3
+    },
+    {
+      "agent_cap": 500,
+      "cycles_completed": 1000,
+      "basin": "B",
+      "dominant_fraction": 1.0,
+      "dist_A": 0.3146114354771612,
+      "dist_B": 0.15177138792275707,
+      "duration": 19.968265295028687,
+      "cycles_per_sec": 50.079462848931634,
+      "avg_cycle_time_ms": 19.967399835586548,
+      "initial_memory_mb": 34.046875,
+      "final_memory_mb": 34.515625,
+      "memory_increase_mb": 0.46875,
+      "peak_agents": 3
+    },
+    {
+      "agent_cap": 1000,
+      "cycles_completed": 1000,
+      "basin": "B",
+      "dominant_fraction": 1.0,
+      "dist_A": 0.3146114354771612,
+      "dist_B": 0.15177138792275707,
+      "duration": 20.79260492324829,
+      "cycles_per_sec": 48.09402206656157,
+      "avg_cycle_time_ms": 20.791744470596313,
+      "initial_memory_mb": 34.515625,
+      "final_memory_mb": 34.609375,
+      "memory_increase_mb": 0.09375,
+      "peak_agents": 3
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "experiment_id": "exp_1761109640",
+  "start_time": 1761109640.164234,
+  "end_time": 1761109642.41438,
+  "total_cycles": 20,
+  "cycles_completed": 0,
+  "total_decisions": 0,
+  "total_patterns_discovered": 0,
+  "total_emergent_patterns": 0,
+  "avg_decision_confidence": 0.0,
+  "reality_scores": [],
+  "avg_reality_score": 0.0,
+  "novel_patterns": [],
+  "framework_validations": {
+    "NRM": false,
+    "Self-Giving": false,
+    "Temporal": false
+  },
+  "fractal_agents_spawned": 10,
+  "memory_patterns_stored": 106,
+  "publishable_insights": []
+}

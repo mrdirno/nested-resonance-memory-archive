@@ -1,0 +1,495 @@
+{
+  "metadata": {
+    "cycle": "163C",
+    "scenario": "Frequency-Seed Interaction Analysis",
+    "date": "2025-10-25T03:42:05.555025",
+    "frequencies": [
+      1,
+      20,
+      30,
+      70,
+      80
+    ],
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      101,
+      202,
+      303,
+      404,
+      505,
+      606
+    ],
+    "cycles_per_experiment": 3000,
+    "total_experiments": 50,
+    "basin_threshold": 2.5,
+    "duration_minutes": 1.1360295017560322
+  },
+  "experiments": [
+    {
+      "frequency": 1,
+      "seed": 42,
+      "avg_composition_events": 3.541333333333333,
+      "basin": "A",
+      "spawn_count": 29,
+      "expected_spawns": 30,
+      "spawn_accuracy_pct": 96.66666666666667
+    },
+    {
+      "frequency": 1,
+      "seed": 123,
+      "avg_composition_events": 3.533333333333333,
+      "basin": "A",
+      "spawn_count": 29,
+      "expected_spawns": 30,
+      "spawn_accuracy_pct": 96.66666666666667
+    },
+    {
+      "frequency": 1,
+      "seed": 456,
+      "avg_composition_events": 3.2986666666666666,
+      "basin": "A",
+      "spawn_count": 29,
+      "expected_spawns": 30,
+      "spawn_accuracy_pct": 96.66666666666667
+    },
+    {
+      "frequency": 1,
+      "seed": 789,
+      "avg_composition_events": 3.533333333333333,
+      "basin": "A",
+      "spawn_count": 29,
+      "expected_spawns": 30,
+      "spawn_accuracy_pct": 96.66666666666667
+    },
+    {
+      "frequency": 1,
+      "seed": 101,
+      "avg_composition_events": 3.533333333333333,
+      "basin": "A",
+      "spawn_count": 29,
+      "expected_spawns": 30,
+      "spawn_accuracy_pct": 96.66666666666667
+    },
+    {
+      "frequency": 1,
+      "seed": 202,
+      "avg_composition_events": 3.537333333333333,
+      "basin": "A",
+      "spawn_count": 29,
+      "expected_spawns": 30,
+      "spawn_accuracy_pct": 96.66666666666667
+    },
+    {
+      "frequency": 1,
+      "seed": 303,
+      "avg_composition_events": 3.533333333333333,
+      "basin": "A",
+      "spawn_count": 29,
+      "expected_spawns": 30,
+      "spawn_accuracy_pct": 96.66666666666667
+    },
+    {
+      "frequency": 1,
+      "seed": 404,
+      "avg_composition_events": 3.416,
+      "basin": "A",
+      "spawn_count": 29,
+      "expected_spawns": 30,
+      "spawn_accuracy_pct": 96.66666666666667
+    },
+    {
+      "frequency": 1,
+      "seed": 505,
+      "avg_composition_events": 3.533333333333333,
+      "basin": "A",
+      "spawn_count": 29,
+      "expected_spawns": 30,
+      "spawn_accuracy_pct": 96.66666666666667
+    },
+    {
+      "frequency": 1,
+      "seed": 606,
+      "avg_composition_events": 3.533333333333333,
+      "basin": "A",
+      "spawn_count": 29,
+      "expected_spawns": 30,
+      "spawn_accuracy_pct": 96.66666666666667
+    },
+    {
+      "frequency": 20,
+      "seed": 42,
+      "avg_composition_events": 14.634333333333334,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 600,
+      "spawn_accuracy_pct": 20.0
+    },
+    {
+      "frequency": 20,
+      "seed": 123,
+      "avg_composition_events": 14.517,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 600,
+      "spawn_accuracy_pct": 20.0
+    },
+    {
+      "frequency": 20,
+      "seed": 456,
+      "avg_composition_events": 14.517666666666667,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 600,
+      "spawn_accuracy_pct": 20.0
+    },
+    {
+      "frequency": 20,
+      "seed": 789,
+      "avg_composition_events": 14.624,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 600,
+      "spawn_accuracy_pct": 20.0
+    },
+    {
+      "frequency": 20,
+      "seed": 101,
+      "avg_composition_events": 14.635333333333334,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 600,
+      "spawn_accuracy_pct": 20.0
+    },
+    {
+      "frequency": 20,
+      "seed": 202,
+      "avg_composition_events": 14.633333333333333,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 600,
+      "spawn_accuracy_pct": 20.0
+    },
+    {
+      "frequency": 20,
+      "seed": 303,
+      "avg_composition_events": 14.634333333333334,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 600,
+      "spawn_accuracy_pct": 20.0
+    },
+    {
+      "frequency": 20,
+      "seed": 404,
+      "avg_composition_events": 14.63,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 600,
+      "spawn_accuracy_pct": 20.0
+    },
+    {
+      "frequency": 20,
+      "seed": 505,
+      "avg_composition_events": 14.631666666666666,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 600,
+      "spawn_accuracy_pct": 20.0
+    },
+    {
+      "frequency": 20,
+      "seed": 606,
+      "avg_composition_events": 14.654666666666667,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 600,
+      "spawn_accuracy_pct": 20.0
+    },
+    {
+      "frequency": 30,
+      "seed": 42,
+      "avg_composition_events": 14.765,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 1000,
+      "spawn_accuracy_pct": 12.0
+    },
+    {
+      "frequency": 30,
+      "seed": 123,
+      "avg_composition_events": 14.763,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 1000,
+      "spawn_accuracy_pct": 12.0
+    },
+    {
+      "frequency": 30,
+      "seed": 456,
+      "avg_composition_events": 14.78,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 1000,
+      "spawn_accuracy_pct": 12.0
+    },
+    {
+      "frequency": 30,
+      "seed": 789,
+      "avg_composition_events": 14.763333333333334,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 1000,
+      "spawn_accuracy_pct": 12.0
+    },
+    {
+      "frequency": 30,
+      "seed": 101,
+      "avg_composition_events": 14.765,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 1000,
+      "spawn_accuracy_pct": 12.0
+    },
+    {
+      "frequency": 30,
+      "seed": 202,
+      "avg_composition_events": 14.763333333333334,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 1000,
+      "spawn_accuracy_pct": 12.0
+    },
+    {
+      "frequency": 30,
+      "seed": 303,
+      "avg_composition_events": 14.793333333333333,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 1000,
+      "spawn_accuracy_pct": 12.0
+    },
+    {
+      "frequency": 30,
+      "seed": 404,
+      "avg_composition_events": 14.802666666666667,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 1000,
+      "spawn_accuracy_pct": 12.0
+    },
+    {
+      "frequency": 30,
+      "seed": 505,
+      "avg_composition_events": 14.681,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 1000,
+      "spawn_accuracy_pct": 12.0
+    },
+    {
+      "frequency": 30,
+      "seed": 606,
+      "avg_composition_events": 14.677333333333333,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 1000,
+      "spawn_accuracy_pct": 12.0
+    },
+    {
+      "frequency": 70,
+      "seed": 42,
+      "avg_composition_events": 14.765,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 70,
+      "seed": 123,
+      "avg_composition_events": 14.764333333333333,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 70,
+      "seed": 456,
+      "avg_composition_events": 14.766666666666667,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 70,
+      "seed": 789,
+      "avg_composition_events": 14.902,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 70,
+      "seed": 101,
+      "avg_composition_events": 14.901333333333334,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 70,
+      "seed": 202,
+      "avg_composition_events": 14.902,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 70,
+      "seed": 303,
+      "avg_composition_events": 14.901,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 70,
+      "seed": 404,
+      "avg_composition_events": 14.901,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 70,
+      "seed": 505,
+      "avg_composition_events": 14.905,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 70,
+      "seed": 606,
+      "avg_composition_events": 14.903,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 80,
+      "seed": 42,
+      "avg_composition_events": 14.905,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 80,
+      "seed": 123,
+      "avg_composition_events": 14.902333333333333,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 80,
+      "seed": 456,
+      "avg_composition_events": 14.898,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 80,
+      "seed": 789,
+      "avg_composition_events": 14.900666666666666,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 80,
+      "seed": 101,
+      "avg_composition_events": 14.633333333333333,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 80,
+      "seed": 202,
+      "avg_composition_events": 14.632666666666667,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 80,
+      "seed": 303,
+      "avg_composition_events": 14.896333333333333,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 80,
+      "seed": 404,
+      "avg_composition_events": 13.902,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 80,
+      "seed": 505,
+      "avg_composition_events": 14.9,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    },
+    {
+      "frequency": 80,
+      "seed": 606,
+      "avg_composition_events": 14.765666666666666,
+      "basin": "A",
+      "spawn_count": 120,
+      "expected_spawns": 3000,
+      "spawn_accuracy_pct": 4.0
+    }
+  ],
+  "analysis": {
+    "variance_decomposition": {
+      "total_variance": 1012.2128206866666,
+      "frequency_variance": 1011.1974647199997,
+      "seed_variance": 0.1833096199999998,
+      "interaction_variance": -0.18330961999976447,
+      "within_variance": 1.0153559666666672,
+      "frequency_explained_pct": 99.89968947775448,
+      "seed_explained_pct": 0.0181097903774471,
+      "interaction_explained_pct": -0.01810979037742385
+    },
+    "interpretation": "WEAK INTERACTION: Frequency and seed mostly independent"
+  }
+}

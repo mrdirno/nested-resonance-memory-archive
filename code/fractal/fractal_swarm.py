@@ -502,6 +502,87 @@ class FractalSwarm:
             'global_memory': len(self.global_memory)
         }
 
+    def energy_pooling_cycle(
+        self,
+        agents: List[FractalAgent],
+        sharing_fraction: float = 0.10,
+        spawn_threshold: float = 10.0
+    ) -> Dict[str, any]:
+        """
+        Execute energy pooling within resonance clusters.
+
+        Part of Cycle 177 Hypothesis 1: Energy Pooling mechanism.
+        Called during experiments to enable cooperative energy sharing.
+
+        Process:
+        1. Detect current resonance clusters (via composition engine)
+        2. For each cluster:
+           - Collect energy contributions from all members
+           - Distribute pool to agents below spawn threshold
+        3. Track pooling statistics
+
+        Args:
+            agents: List of active FractalAgent instances
+            sharing_fraction: Fraction of energy each agent contributes
+            spawn_threshold: Minimum energy for spawning
+
+        Returns:
+            Dictionary with pooling statistics
+        """
+        # Set cluster_id on agents based on current clusters
+        for agent in agents:
+            agent.cluster_id = None  # Reset before detecting
+
+        # Detect clusters
+        cluster_events = self.composition.detect_clusters(agents)
+
+        # Set cluster_id for agents in clusters
+        for cluster_id, member_ids in self.composition.clusters.items():
+            for agent in agents:
+                if agent.agent_id in member_ids:
+                    agent.cluster_id = cluster_id
+
+        # Process each cluster
+        pools_formed = 0
+        total_energy_pooled = 0.0
+        total_energy_distributed = 0.0
+
+        for cluster_id, member_ids in self.composition.clusters.items():
+            if len(member_ids) < 2:
+                continue  # Need at least 2 agents to pool
+
+            cluster_agents = [a for a in agents if a.agent_id in member_ids]
+
+            if not cluster_agents:
+                continue
+
+            # Phase 1: Collect contributions
+            pool_energy = 0.0
+            for agent in cluster_agents:
+                contribution = agent.contribute_to_pool(sharing_fraction)
+                pool_energy += contribution
+                total_energy_pooled += contribution
+
+            # Phase 2: Distribute to agents below threshold
+            # Sort by energy (lowest first - prioritize most sterile agents)
+            sorted_agents = sorted(cluster_agents, key=lambda a: a.energy)
+
+            for agent in sorted_agents:
+                if pool_energy <= 0:
+                    break
+                received = agent.receive_from_pool(pool_energy, spawn_threshold)
+                pool_energy -= received
+                total_energy_distributed += received
+
+            pools_formed += 1
+
+        return {
+            'pools_formed': pools_formed,
+            'total_energy_pooled': total_energy_pooled,
+            'total_energy_distributed': total_energy_distributed,
+            'energy_conservation_check': abs(total_energy_pooled - total_energy_distributed) < 0.01
+        }
+
     def get_statistics(self) -> Dict[str, any]:
         """Get current swarm statistics."""
         active_agents = [a for a in self.agents.values() if a.is_active]

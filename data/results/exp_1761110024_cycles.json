@@ -1,0 +1,47 @@
+[
+  {
+    "cycle": 1,
+    "timestamp": 1761110024.838332,
+    "duration": 0.28160786628723145,
+    "decisions": 1,
+    "patterns_discovered": 0,
+    "emergent_patterns": 0,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 5,
+    "timestamp": 1761110025.493793,
+    "duration": 0.2822279930114746,
+    "decisions": 1,
+    "patterns_discovered": 0,
+    "emergent_patterns": 0,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 10,
+    "timestamp": 1761110026.281996,
+    "duration": 0.2735559940338135,
+    "decisions": 1,
+    "patterns_discovered": 0,
+    "emergent_patterns": 0,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 14,
+    "timestamp": 1761110026.934952,
+    "duration": 0.28473997116088867,
+    "decisions": 1,
+    "patterns_discovered": 0,
+    "emergent_patterns": 0,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 18,
+    "timestamp": 1761110027.591545,
+    "duration": 0.28293395042419434,
+    "decisions": 1,
+    "patterns_discovered": 0,
+    "emergent_patterns": 0,
+    "reality_score": 1.0
+  }
+]
