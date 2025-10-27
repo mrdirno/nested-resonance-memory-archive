@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "analysis": "Paper 5D - Emergence Pattern Catalog",
+    "experiments_analyzed": [
+      "cycle171_fractal_swarm_bistability.json",
+      "cycle175_high_resolution_transition.json",
+      "cycle176_ablation_study_v4.json",
+      "cycle177_h1_energy_pooling_results.json"
+    ],
+    "total_experiments": 4,
+    "total_patterns": 0
+  },
+  "patterns_by_experiment": {
+    "cycle171_fractal_swarm_bistability.json": {
+      "spatial": [],
+      "temporal": [],
+      "interaction": [],
+      "memory": []
+    },
+    "cycle175_high_resolution_transition.json": {
+      "spatial": [],
+      "temporal": [],
+      "interaction": [],
+      "memory": []
+    },
+    "cycle176_ablation_study_v4.json": {
+      "spatial": [],
+      "temporal": [],
+      "interaction": [],
+      "memory": []
+    },
+    "cycle177_h1_energy_pooling_results.json": {
+      "spatial": [],
+      "temporal": [],
+      "interaction": [],
+      "memory": []
+    }
+  },
+  "taxonomy": {},
+  "pattern_statistics": {}
+}
