@@ -220,21 +220,103 @@ The V2 model exhibits **universal collapse** to the N>=1 constraint across the t
 
 **Conclusion:** Simple parameter tuning insufficient. Deeper model analysis required.
 
+---
+
+## ROTATING FRAME ANALYSIS + ROOT CAUSE DISCOVERY (CYCLE 379)
+
+### Rotating Frame Implementation
+**Script:** `paper7_v2_rotating_frame.py` (356 lines)
+**Transformation:** θ_rel = θ_int - ω·t (relative phase)
+**Purpose:** Convert unbounded theta to bounded variable with equilibria
+
+**Validation:** ✅ Transform equivalence verified (max error < 1e-6)
+- Rotating frame produces identical dynamics to original V2
+- Enables equilibrium analysis (dtheta_rel/dt = 0 at N=50)
+
+### Equilibrium Search in Rotating Frame
+**Method:** scipy.optimize.root on rotating frame system
+**Result:** Still no equilibria found (3 initial guesses tested)
+
+**Conclusion:** Rotating frame solves theta unboundedness but doesn't address collapse
+
+### ROOT CAUSE IDENTIFIED (CRITICAL DISCOVERY)
+
+**Problem:** Resonance (phi) dynamics drive phi → 0, causing universal collapse
+
+**Mechanism:**
+1. **Phi dynamics:** dphi/dt = -ω·sin(θ_rel) - κ·phi
+2. **Equilibrium condition:** phi_eq = -ω·sin(θ_rel) / κ
+3. **Sign problem:** For sin(θ_rel) > 0, phi_eq is **negative**
+4. **Constraint violation:** phi constrained to [0, 1], equilibrium unattainable
+5. **Collapse cascade:**
+   - System drives toward phi_eq < 0
+   - Constraint clips phi at 0
+   - Composition rate: lambda_c = lambda_0 · energy_gate · phi² → 0
+   - No composition → population collapses to N=1
+
+**Evidence:**
+```
+theta_rel = 0.785 rad: phi_eq = -0.1414 (negative, unphysical)
+theta_rel = 1.571 rad: phi_eq = -0.2000 (negative, unphysical)
+theta_rel = -1.571 rad: phi_eq = +0.2000 (positive, attainable!)
+```
+
+**Key Insight:** Phi equilibrium sign depends on theta_rel. When phi_eq < 0, system collapses.
+
+### Implication for V2 Model Design
+
+**Fundamental Issue:** dphi/dt equation sign is incorrect for sustained dynamics
+
+**Current form:**
+```
+dphi/dt = -omega * sin(theta_ext - theta_int) - kappa * phi
+```
+
+**Problem:** Negative coupling drives phi toward negative values when phase difference is positive
+
+**Required Fix:** Modify phi dynamics to ensure positive equilibrium values
+
+**Options:**
+1. **Flip coupling sign:** dphi/dt = +omega * sin(...) - kappa * phi
+2. **Add source term:** dphi/dt = phi_0 - omega * sin(...) - kappa * phi
+3. **Different coupling:** dphi/dt = omega * cos(...) - kappa * phi
+4. **Absolute value:** dphi/dt = omega * |sin(...)| - kappa * phi
+
+### Publishable Contribution
+
+**Title:** "Why Resonance-Coupled Population Models Collapse: A Case Study in Phase Dynamics"
+
+**Novel Findings:**
+1. **Rotating frame transformation** enables equilibrium analysis of perpetual motion systems
+2. **Sign-dependent equilibria** in phase-coupled resonance can cause universal collapse
+3. **Constraint boundaries** (phi ≥ 0) create unattainable equilibria
+4. **Diagnostic methodology** for identifying collapse mechanisms in coupled ODE systems
+
+**Impact:** Generalizable to any system with bounded variables coupled to phase dynamics
+
 ## NEXT ACTIONS
 
-### Immediate (Cycle 378)
+### Completed (Cycles 377-379)
 1. ✅ Document findings (this file)
 2. ✅ Implement Option 4: Direct regime classification
 3. ✅ Run frequency sweep to map regimes
-4. ⏳ Update findings with regime results (this edit)
-5. ⏳ Commit Phase 3 work to repository
+4. ✅ Update findings with regime results
+5. ✅ Commit Phase 3 work to repository
+6. ✅ Implement Option 1: Rotating frame transformation
+7. ✅ Identify root cause of universal collapse
 
-### Short-Term (Cycles 379-380)
-6. Implement Option 1: Rotating frame transformation
-7. Run bifurcation analysis in rotating frame
-8. Validate consistency between approaches
-9. Write Phase 3 results document
-10. Integrate into Paper 7 manuscript
+### Immediate (Cycle 379)
+8. ⏳ Implement V3 model with corrected phi dynamics
+9. ⏳ Test V3 for sustained dynamics + equilibria
+10. ⏳ Run bifurcation analysis on V3
+11. ⏳ Compare V2 vs V3 behavior
+12. ⏳ Commit Cycle 379 work
+
+### Short-Term (Cycles 380-381)
+13. Generate publication figures (V2 collapse + V3 sustained)
+14. Write Phase 3 results document (diagnostic methodology)
+15. Integrate Phase 3 findings into Paper 7 manuscript
+16. Validate V3 against Paper 2 empirical regimes
 
 ### Medium-Term (Phase 4)
 11. Stochastic analysis (as planned)
