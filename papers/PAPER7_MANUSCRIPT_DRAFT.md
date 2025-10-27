@@ -1313,7 +1313,172 @@ No stable solution exists - system lacks negative feedback.
 
 ### 3.8 Systematic V5 Exploration: Mean-Field Boundary Determination (Cycle 393)
 
-[Content to be added - V5A Allee effect failure (N=-38,905), V5B energy reservoir failure (N=-35,470), systematic exploration conclusion]
+**Motivation:** Section 3.7 revealed V4 fundamental instability (N→-35,471 at t=100,000). Can stabilizing mechanisms fix this? Systematic exploration tests two approaches: ecological (Allee effect) and energetic (reservoir buffering).
+
+**Hypothesis:** V4 instability correctable via additional negative feedback mechanisms.
+
+**Result:** ❌ **ALL V5 VARIANTS FAILED** - V4 represents upper limit of mean-field ODE approach for NRM.
+
+#### 3.8.1 V5A: Allee Effect (Minimum Viable Population)
+
+**Rationale:** Allee effect creates population threshold - below critical N, birth rate drops, creating stable low-population equilibrium and preventing runaway collapse.
+
+**Implementation:**
+```
+V4:  λ_c = λ₀ · energy_gate(ρ) · φ²
+V5A: λ_c = λ₀ · energy_gate(ρ) · φ² · [N/(N+N_crit)]
+
+N_crit = 30 (Allee threshold)
+All other parameters identical to V4
+```
+
+**Results (t=100,000):**
+```
+Metric   | V4        | V5A       | Change
+---------|-----------|-----------|------------------
+Final N  | -35,471   | -38,905   | -9.7% WORSE 🔴
+Final E  | 12.21     | 14.20     | +16% (irrelevant)
+dN/dt    | -0.355    | -0.389    | Faster collapse
+```
+
+**Intermediate Comparison (t=50,000):**
+- V4: N = 215 (positive, slow decline)
+- V5A: N = -19,451 (negative, already collapsed)
+- V5A collapsed **faster** than V4
+
+**🔴 FINDING:** Allee effect made collapse **WORSE, not better**.
+
+**Why It Failed:**
+1. Allee factor N/(N+30) reduces birth rate when N<30
+2. V4's root problem: Energy depletion → marginal birth rate
+3. Reducing births further accelerates energy cascade
+4. Faster collapse: V5A reaches negative N by t=50k (vs. t=100k for V4)
+
+**Lesson:** Standard ecological mechanisms don't automatically fix mean-field instabilities. Allee effect intended to stabilize low populations, but V4's problem is energy balance, not Allee dynamics.
+
+#### 3.8.2 V5B: Energy Reservoir with Buffering
+
+**Rationale:** Energy reservoir buffers input from consumption, preventing rapid depletion cascades. Decouples external recharge from population consumption.
+
+**Implementation:**
+```
+V4:  Single energy E
+     dE/dt = γR - αλ_c·E - βN·E
+
+V5B: Split into reservoir (E_r) and population (E_p)
+     dE_r/dt = γR - r_transfer·(E_r - E_p)
+     dE_p/dt = r_transfer·(E_r - E_p) - αλ_c·E_p - βN·E_p
+
+r_transfer = 0.1 (energy transfer rate)
+Initial: E_r = 100, E_p = 100
+```
+
+**Results (t=100,000):**
+```
+Metric        | V4        | V5B       | Change
+--------------|-----------|-----------|------------------
+Final N       | -35,471   | -35,470   | IDENTICAL 🟡
+Final E_total | 12.21     | 27.43     | +124% (both compartments depleted)
+- E_reservoir | —         | 15.21     | Depleted
+- E_population| —         | 12.21     | Same as V4
+dN/dt         | -0.355    | -0.355    | IDENTICAL
+```
+
+**🟡 FINDING:** Energy reservoir had **ZERO effect** on population dynamics.
+
+**Why It Failed:**
+1. Both E_r and E_p depleted (from 100 each → 15 and 12)
+2. Reservoir just distributed depletion across two variables
+3. Total energy budget unchanged: E_total = E_r + E_p still depletes
+4. Population dynamics identical to V4 (dN/dt=-0.355)
+
+**Lesson:** Compartmentalization doesn't fix underlying energy budget problem. Root cause is birth-death imbalance, not energy distribution.
+
+#### 3.8.3 Systematic Exploration Conclusion: V4 IS Best Mean-Field Model
+
+**Three Models Tested:**
+```
+Model | Approach              | Final N (t=100k) | vs. V4
+------|----------------------|------------------|--------
+V4    | Baseline             | -35,471          | —
+V5A   | Allee effect         | -38,905          | -9.7% worse
+V5B   | Energy reservoir     | -35,470          | Identical
+```
+
+**Key Finding:** **Neither ecological nor energetic stabilization mechanisms improve V4.**
+
+**Systematic Exploration Value:**
+- Three failures more informative than one success
+- Define mean-field ODE validity boundaries
+- Negative results publishable when systematically documented
+
+#### 3.8.4 Root Cause Diagnosis: Fundamental Limitation
+
+**Why Do ALL Mean-Field Variants Fail?**
+
+**Missing Discrete Stabilizers:**
+1. **Integer Constraints:**
+   - Agent-based: N ∈ {1, 2, 3, ...} (hard floor at N=1)
+   - Mean-field ODE: N ∈ ℝ (can go negative)
+
+2. **Spatial Structure:**
+   - Agent-based: Local clustering, spatial refugia, rescue effects
+   - Mean-field ODE: Homogeneous, no spatial heterogeneity
+
+3. **Hard Rate Floors:**
+   - Agent-based: Some reproduction always occurs (stochastic events)
+   - Mean-field ODE: λ_c → 0 as energy depletes (no floor)
+
+4. **Feedback Mechanisms:**
+   - Agent-based: Local adaptation, explicit death mechanisms
+   - Mean-field ODE: Averaged continuous dynamics
+
+**Agent-Based vs. Mean-Field Persistence:**
+```
+System               | Persistence Time
+---------------------|------------------
+Paper 2 agent-based  | Hundreds of thousands of cycles
+V4 mean-field ODE    | Collapses by t=100,000
+```
+
+**Gap:** Discrete effects provide essential stability that continuous averaging erases.
+
+#### 3.8.5 Mean-Field Validity Domain Identified
+
+**V4 Performance Summary:**
+```
+Timescale Range | V4 Performance                          | Validity
+----------------|-----------------------------------------|----------
+t < 10,000      | ✅ EXCELLENT                            | ✅ VALID
+                | - Bifurcation analysis accurate         |
+                | - Multi-timescale phenomena captured    |
+                | - Emergent timescales (τ~557) correct   |
+                | - Stochastic robustness (100% @ 30%)    |
+----------------|-----------------------------------------|----------
+t = 10,000-50k  | ⚠️ MARGINAL                             | ⚠️ CAUTION
+                | - Slow transient (dN/dt~0.001)          |
+                | - Appears stable but drifting           |
+                | - Ultra-slow convergence illusion       |
+----------------|-----------------------------------------|----------
+t > 50,000      | ❌ FAILS                                | ❌ INVALID
+                | - Collapses to negative populations     |
+                | - Fundamental instability revealed      |
+                | - No equilibrium exists                 |
+```
+
+**Validity Domain:** V4 (and mean-field ODEs generally) valid for **transient dynamics** (t<10k) but NOT **sustained equilibrium** (t>50k).
+
+**Publication Strategy:**
+- Reframe V4 as **transient dynamics model**, not equilibrium model
+- Honest assessment: Excellent for short-term, fails long-term
+- Negative results define theoretical boundaries (publishable discovery)
+
+**Future Directions:**
+- Agent-based required for long-term persistence (Paper 2 already demonstrates)
+- Spatial PDE might capture refugia effects
+- Stochastic models with discrete events (Gillespie, etc.)
+
+**Lesson:** "Good enough" modeling - V4 answers different research question than agent-based (transient vs. sustained).
 
 ---
 
