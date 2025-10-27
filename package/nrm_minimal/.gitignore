@@ -1,0 +1,11 @@
+# Package-specific ignores
+*.pyc
+__pycache__/
+*.egg-info/
+dist/
+build/
+workspace/
+data/*.json
+data/*.png
+*.log
+.DS_Store
