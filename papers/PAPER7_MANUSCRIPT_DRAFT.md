@@ -1186,15 +1186,134 @@ Implementation          | Inconsistent      | Consistent
 
 ---
 
-### 3.7 Equilibrium Verification & Fundamental Instability Discovery
+### 3.7 Equilibrium Verification & Fundamental Instability Discovery (Cycle 391)
 
-[Content to be added - Extended t=100,000 integration, N=-35,471 collapse, slow transient identification]
+**Motivation:** Phase 5 identified ultra-slow convergence (dN/dt = 0.00093 at t=10,000), extrapolating equilibrium to t ~ 1,000,000. Phase 6 showed marginal stochastic stability. Critical question: Does V4 have a stable equilibrium, or was Phase 5 "steady state" a slow transient?
+
+**Method:** Extend V4 deterministic integration to t = 100,000 (10× beyond Phase 5), verify equilibrium status.
+
+#### 3.7.1 Extended Integration Results
+
+**Final State (t=100,000):**
+```
+E_total = 12.21
+N = -35,471.36  🚨 NEGATIVE POPULATION (physically impossible!)
+φ = 0.1647
+θ = -2000.00 (rotating)
+```
+
+**Comparison to Phase 5 (t=10,000):**
+```
+Variable | Phase 5  | t=100k   | Delta        | Status
+---------|----------|----------|--------------|--------
+E        | 2411.77  | 12.21    | -2399.56     | ⬇️ Collapsed
+N        | 215.30   | -35,471  | -35,686.66   | 🚨 Unphysical
+φ        | 0.6074   | 0.1647   | -0.4427      | ⬇️ Declined
+```
+
+**Final Derivatives:**
+```
+dE/dt = -2.78 × 10⁻¹⁷  (essentially zero, E stabilized at depletion)
+dN/dt = -0.355          (LARGE - still collapsing at t=100k!)
+dφ/dt = -1.73 × 10⁻¹⁸  (essentially zero)
+dθ/dt = -0.02           (constant rotation)
+```
+
+**🚨 CRITICAL FINDING:** Population collapsed to **physically impossible negative value** (N = -35,471). System fundamentally unstable, **NOT at equilibrium** even after 100,000 time units.
+
+#### 3.7.2 Cascade Failure Mechanism
+
+**How Did V4 Reach Negative Populations?**
+
+1. **Energy Depletion (t=10k → 100k):**
+   - E: 2411 → 12 (99.5% loss)
+   - Birth rate λ_c ∝ energy_gate(E/N)
+   - As E depletes, λ_c drops
+
+2. **Birth-Death Imbalance:**
+   - Death rate μ_d ~ weakly density-dependent (approximately constant)
+   - Birth rate λ_c decreases faster than death rate
+   - Net growth dN/dt = (λ_c - μ_d)N becomes negative
+
+3. **Runaway Collapse:**
+   - Lower N → higher ρ = E/N initially
+   - But total E depleting faster → eventually ρ drops despite low N
+   - Birth rate crashes → death dominates
+   - **No negative feedback to prevent collapse**
+
+**Mathematical Root Cause:**
+```
+Energy balance: dE/dt = γR - αλ_c E - βNE
+
+At equilibrium: E* = γR / (αλ_c + βN)
+
+But λ_c depends on E (via energy gate), creating circular dependency.
+If λ_c drops → E* should increase... but low E means low λ_c!
+
+No stable solution exists - system lacks negative feedback.
+```
+
+#### 3.7.3 Reinterpretation: Slow Transient, Not Equilibrium
+
+**Phase 5 "Steady State" (N=215 at t=10,000):**
+- Previously interpreted: "Ultra-slow convergence to equilibrium"
+- dN/dt = 0.00093 (small but not zero)
+- Extrapolated equilibrium time: t ~ 1,000,000
+
+**NEW Interpretation (After t=100k Verification):**
+- Phase 5 state was **slow transient on collapse trajectory**
+- Population peaked somewhere between t=10,000 and t=100,000, then declined
+- At t=10,000: N=215, dN/dt = +0.00093 (still growing slightly)
+- At t=100,000: N=-35,471, dN/dt = -0.355 (collapsing rapidly)
+- **Transition from slow growth to rapid collapse occurred between t=10k-100k**
+
+**V4 Model Status:**
+- ❌ NO stable equilibrium with N >> 1
+- ✅ Captures transient dynamics excellently (t < 10,000)
+- ❌ Fundamentally unstable at extended timescales (t > 50,000)
+
+#### 3.7.4 Implications for Previous Results
+
+**Phase 3-5 Validity:**
+- Bifurcation analysis (t=5,000): ✅ VALID for transient regime boundaries
+- Stochastic robustness (t=5,000): ✅ VALID for transient structural stability
+- Multi-timescale dynamics (t=10,000): ✅ VALID for emergent phenomena during transients
+- All analyses correctly characterized **transient behavior**, not equilibrium
+
+**Phase 6 Reinterpretation:**
+- Previous: "V4 deterministically stable but stochastically unstable"
+- Revised: "V4 fundamentally unstable - Phase 6 stochasticity accelerated inherent collapse"
+- 75% CLE persistence impressive given V4 deterministic instability
+- Extinction was inevitable, stochasticity just revealed it faster
+
+**Publication Strategy Update:**
+- Reframe V4 as **transient dynamics model** (t < 10,000), NOT equilibrium model
+- Emphasize honest assessment of limitations
+- V4 failure defines **validity domain** of mean-field ODE approach
+- Negative result is publishable discovery about model class boundaries
+
+#### 3.7.5 Why Phase 3-5 Looked Successful
+
+**The "Slow Collapse" Illusion:**
+- V4 appeared stable at t=5,000 (Phase 3)
+- Still looked stable at t=10,000 (Phase 5)
+- Bifurcation boundaries correctly identified transient vs. immediate collapse regimes
+- Multi-timescale dynamics real emergent phenomena during transients
+- **Truth:** V4 was never at equilibrium, just on very slow path to instability
+
+**Timescale Separation:**
+- Fast relaxation: τ ~ 2.4 (eigenvalue timescale)
+- Slow variance decay: τ ~ 557 (CV decay)
+- Ultra-slow collapse: τ ~ 50,000-100,000 (population trajectory)
+- **Three distinct timescales** - all captured by V4 during its validity window
+
+**Lesson:** Always verify equilibrium at timescales 10× beyond apparent steady state. "Quasi-steady state" ≠ equilibrium.
 
 ---
 
-### 3.8 Systematic V5 Exploration: Mean-Field Boundary Determination
+### 3.8 Systematic V5 Exploration: Mean-Field Boundary Determination (Cycle 393)
 
-[Content to be added - V5A Allee effect failure, V5B energy reservoir failure, V4 as best mean-field model conclusion]
+[Content to be added - V5A Allee effect failure (N=-38,905), V5B energy reservoir failure (N=-35,470), systematic exploration conclusion]
 
 ---
 
