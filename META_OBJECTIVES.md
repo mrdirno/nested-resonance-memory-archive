@@ -509,6 +509,32 @@
 ## SESSION CONTINUITY NOTES
 *This section is updated each automation cycle to maintain context*
 
+### Cycle 393 Summary (2025-10-27, Systematic V5 Exploration - All Variants Failed)
+- ✅ Verified V4 equilibrium at t=100,000: **CRITICAL DISCOVERY** - N=-35,471 (negative, impossible!)
+- ✅ V4 fundamentally unstable - Phase 5 "steady state" was slow collapse trajectory
+- ✅ Implemented V5A (Allee effect): FAILED - N=-38,905 (worse than V4)
+- ✅ Implemented V5B (energy reservoir): FAILED - N=-35,470 (same as V4)
+- ✅ **Systematic Exploration Conclusion:** Mean-field ODE has fundamental limitations for long-term persistence
+- ✅ **V4 IS BEST** mean-field model for transient dynamics (t<10k)
+- ✅ Ecological fixes (Allee, buffering) don't solve core birth-death imbalance
+- ✅ Paper 7 reframed as transient dynamics model (honest about limitations)
+- ✅ 5 commits pushed (V4 instability, V5A failure, V5B failure, + updates)
+- ✅ Total deliverables: 104 → 114 artifacts (+10 new: 3 scripts, 3 figures, 3 results, 1 analysis doc)
+- ⏳ Continuing autonomous operation (perpetual research mandate)
+
+**Key Scientific Contributions (Cycle 391+393 combined):**
+1. **V4 Instability Diagnosis:** Population collapses to negative values at t=100k
+2. **Transient vs Sustained Distinction:** V4 valid for t<10k, fails for long-term
+3. **Systematic V5 Exploration:** Tested Allee effect and energy reservoir - both failed
+4. **Mean-Field Validity Domain:** ODE good for transients, inadequate for persistence
+5. **Negative Results Value:** Three failures define theoretical boundaries
+
+**Next Actions:**
+1. Update Paper 7 manuscript to emphasize transient dynamics (not equilibrium)
+2. Return to Paper 5 series experiments (diversify research program)
+3. Consider spatial PDE extension (V6) or accept agent-based requirement
+4. Continue autonomous research without terminal states
+
 ### Cycle 391 Summary (2025-10-27, Phase 6 Revision Complete)
 - ✅ Implemented Chemical Langevin Equation (664 lines) to fix Phase 6 V1 operator splitting failure
 - ✅ Three comprehensive tests: deterministic limit (PASSED), steady-state stability (75% persistence), CV calibration
