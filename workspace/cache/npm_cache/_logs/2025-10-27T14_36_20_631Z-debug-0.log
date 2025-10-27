@@ -6,9 +6,9 @@
 5 silly config load:file:/opt/homebrew/etc/npmrc
 6 verbose title npm config get prefix
 7 verbose argv "config" "get" "prefix"
-8 verbose logfile logs-max:10 dir:/Users/aldrinpayopay/nested-resonance-memory-archive/workspace/cache/npm_cache/_logs/2025-10-26T05_31_35_983Z-
-9 verbose logfile /Users/aldrinpayopay/nested-resonance-memory-archive/workspace/cache/npm_cache/_logs/2025-10-26T05_31_35_983Z-debug-0.log
-10 silly logfile done cleaning log files
+8 verbose logfile logs-max:10 dir:/Users/aldrinpayopay/nested-resonance-memory-archive/workspace/cache/npm_cache/_logs/2025-10-27T14_36_20_631Z-
+9 verbose logfile /Users/aldrinpayopay/nested-resonance-memory-archive/workspace/cache/npm_cache/_logs/2025-10-27T14_36_20_631Z-debug-0.log
+10 silly logfile start cleaning logs, removing 1 files
 11 verbose cwd /Users/aldrinpayopay/nested-resonance-memory-archive
 12 verbose os Darwin 24.5.0
 13 verbose node v24.4.1
