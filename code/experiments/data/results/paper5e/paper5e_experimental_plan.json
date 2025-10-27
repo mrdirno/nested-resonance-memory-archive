@@ -1,0 +1,691 @@
+{
+  "paper": "Paper 5E: Network Topology Effects",
+  "research_question": "How does network topology affect NRM emergent patterns?",
+  "topology_types": [
+    "fully_connected (baseline)",
+    "random (Erd\u0151s-R\u00e9nyi)",
+    "small_world (Watts-Strogatz)",
+    "scale_free (Barab\u00e1si-Albert)",
+    "lattice (2D grid)"
+  ],
+  "total_conditions": 55,
+  "runtime_estimate": {
+    "total_experiments": 55,
+    "estimated_runtime_minutes": 55.0,
+    "estimated_runtime_hours": 0.9166666666666666,
+    "topology_breakdown": {
+      "fully_connected": 5,
+      "random": 15,
+      "small_world": 15,
+      "scale_free": 15,
+      "lattice": 5
+    }
+  },
+  "conditions": [
+    {
+      "experiment_id": "TOPOLOGY_FULLY_CONNECTED_SEED42",
+      "topology_type": "fully_connected",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {}
+    },
+    {
+      "experiment_id": "TOPOLOGY_FULLY_CONNECTED_SEED123",
+      "topology_type": "fully_connected",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {}
+    },
+    {
+      "experiment_id": "TOPOLOGY_FULLY_CONNECTED_SEED456",
+      "topology_type": "fully_connected",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {}
+    },
+    {
+      "experiment_id": "TOPOLOGY_FULLY_CONNECTED_SEED789",
+      "topology_type": "fully_connected",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {}
+    },
+    {
+      "experiment_id": "TOPOLOGY_FULLY_CONNECTED_SEED101",
+      "topology_type": "fully_connected",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {}
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.1_SEED42",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.1
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.1_SEED123",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.1
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.1_SEED456",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.1
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.1_SEED789",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.1
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.1_SEED101",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.1
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.3_SEED42",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.3
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.3_SEED123",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.3
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.3_SEED456",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.3
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.3_SEED789",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.3
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.3_SEED101",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.3
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.5_SEED42",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.5
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.5_SEED123",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.5
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.5_SEED456",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.5
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.5_SEED789",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.5
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_RANDOM_P0.5_SEED101",
+      "topology_type": "random",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "p": 0.5
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.01_SEED42",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.01
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.01_SEED123",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.01
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.01_SEED456",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.01
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.01_SEED789",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.01
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.01_SEED101",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.01
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.10_SEED42",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.1
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.10_SEED123",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.1
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.10_SEED456",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.1
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.10_SEED789",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.1
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.10_SEED101",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.1
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.50_SEED42",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.5
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.50_SEED123",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.5
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.50_SEED456",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.5
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.50_SEED789",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.5
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SMALL_WORLD_K6_BETA0.50_SEED101",
+      "topology_type": "small_world",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "k": 6,
+        "beta": 0.5
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M2_SEED42",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 2
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M2_SEED123",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 2
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M2_SEED456",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 2
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M2_SEED789",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 2
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M2_SEED101",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 2
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M4_SEED42",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 4
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M4_SEED123",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 4
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M4_SEED456",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 4
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M4_SEED789",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 4
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M4_SEED101",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 4
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M6_SEED42",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 6
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M6_SEED123",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 6
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M6_SEED456",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 6
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M6_SEED789",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 6
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_SCALE_FREE_M6_SEED101",
+      "topology_type": "scale_free",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "m": 6
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_LATTICE_10X10_SEED42",
+      "topology_type": "lattice",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "grid_size": 10
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_LATTICE_10X10_SEED123",
+      "topology_type": "lattice",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "grid_size": 10
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_LATTICE_10X10_SEED456",
+      "topology_type": "lattice",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "grid_size": 10
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_LATTICE_10X10_SEED789",
+      "topology_type": "lattice",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "grid_size": 10
+      }
+    },
+    {
+      "experiment_id": "TOPOLOGY_LATTICE_10X10_SEED101",
+      "topology_type": "lattice",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "topology_params": {
+        "grid_size": 10
+      }
+    }
+  ]
+}
