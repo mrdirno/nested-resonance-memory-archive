@@ -204,10 +204,10 @@ class V4NoiseCalibrator:
         best_match = calibration['best_match']
 
         validation = {
-            'cv_match': abs(best_match['cv_mean'] - self.target_cv) < 0.01,
-            'cv_error': best_match['cv_error'],
-            'persistence_maintained': best_match['persistence_prob'] > 0.95,
-            'mean_population': best_match['mean_N'],
+            'cv_match': bool(abs(best_match['cv_mean'] - self.target_cv) < 0.01),
+            'cv_error': float(best_match['cv_error']),
+            'persistence_maintained': bool(best_match['persistence_prob'] > 0.95),
+            'mean_population': float(best_match['mean_N']),
             'interpretation': None
         }
 
