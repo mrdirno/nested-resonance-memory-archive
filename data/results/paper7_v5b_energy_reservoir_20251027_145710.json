@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "date": "2025-10-27T14:57:10.415505",
+    "purpose": "V5B with energy reservoir for stable equilibrium",
+    "params_v5b": {
+      "r": 0.15,
+      "K": 100.0,
+      "alpha": 0.1,
+      "beta": 0.02,
+      "gamma": 0.3,
+      "lambda_0": 2.5,
+      "mu_0": 0.4,
+      "sigma": 0.1,
+      "omega": 0.02,
+      "kappa": 0.1,
+      "phi_0": 0.06,
+      "rho_threshold": 5.0,
+      "r_transfer": 0.1
+    },
+    "r_transfer": 0.1
+  },
+  "v5b_final_state": {
+    "E_reservoir": 15.2129868451183,
+    "E_pop": 12.212986845118413,
+    "N": -35470.54208682159,
+    "phi": 0.16471402309329466,
+    "at_equilibrium": false
+  },
+  "v5b_derivatives": {
+    "dE_r_dt": 1.1324274851176597e-14,
+    "dE_p_dt": 9.825473767932635e-15,
+    "dN_dt": -0.35475984349734213,
+    "dphi_dt": -1.734723475976807e-17
+  },
+  "equilibrium_analysis": {
+    "final_mean_N": -33698.516668552365,
+    "final_std_N": 1024.102943652443,
+    "final_drift_N": -0.35475984349734185
+  }
+}
