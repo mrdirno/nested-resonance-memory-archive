@@ -1,0 +1,520 @@
+{
+  "metadata": {
+    "paper": "Paper 5C - Scaling Behavior Analysis",
+    "date_created": "2025-10-27T08:34:57.742698",
+    "confidence": "\u2b50\u2b50\u2b50\u2b50\u2606",
+    "timeline": "2-3 weeks",
+    "publication_target": "Complexity or Journal of Complex Networks"
+  },
+  "conditions": [
+    {
+      "population_size": 50,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 42,
+      "condition_name": "pop50_seed42"
+    },
+    {
+      "population_size": 50,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 123,
+      "condition_name": "pop50_seed123"
+    },
+    {
+      "population_size": 50,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 456,
+      "condition_name": "pop50_seed456"
+    },
+    {
+      "population_size": 50,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 789,
+      "condition_name": "pop50_seed789"
+    },
+    {
+      "population_size": 50,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 101,
+      "condition_name": "pop50_seed101"
+    },
+    {
+      "population_size": 50,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 202,
+      "condition_name": "pop50_seed202"
+    },
+    {
+      "population_size": 50,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 303,
+      "condition_name": "pop50_seed303"
+    },
+    {
+      "population_size": 50,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 404,
+      "condition_name": "pop50_seed404"
+    },
+    {
+      "population_size": 50,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 505,
+      "condition_name": "pop50_seed505"
+    },
+    {
+      "population_size": 50,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 606,
+      "condition_name": "pop50_seed606"
+    },
+    {
+      "population_size": 100,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 42,
+      "condition_name": "pop100_seed42"
+    },
+    {
+      "population_size": 100,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 123,
+      "condition_name": "pop100_seed123"
+    },
+    {
+      "population_size": 100,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 456,
+      "condition_name": "pop100_seed456"
+    },
+    {
+      "population_size": 100,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 789,
+      "condition_name": "pop100_seed789"
+    },
+    {
+      "population_size": 100,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 101,
+      "condition_name": "pop100_seed101"
+    },
+    {
+      "population_size": 100,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 202,
+      "condition_name": "pop100_seed202"
+    },
+    {
+      "population_size": 100,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 303,
+      "condition_name": "pop100_seed303"
+    },
+    {
+      "population_size": 100,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 404,
+      "condition_name": "pop100_seed404"
+    },
+    {
+      "population_size": 100,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 505,
+      "condition_name": "pop100_seed505"
+    },
+    {
+      "population_size": 100,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 606,
+      "condition_name": "pop100_seed606"
+    },
+    {
+      "population_size": 200,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 42,
+      "condition_name": "pop200_seed42"
+    },
+    {
+      "population_size": 200,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 123,
+      "condition_name": "pop200_seed123"
+    },
+    {
+      "population_size": 200,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 456,
+      "condition_name": "pop200_seed456"
+    },
+    {
+      "population_size": 200,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 789,
+      "condition_name": "pop200_seed789"
+    },
+    {
+      "population_size": 200,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 101,
+      "condition_name": "pop200_seed101"
+    },
+    {
+      "population_size": 200,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 202,
+      "condition_name": "pop200_seed202"
+    },
+    {
+      "population_size": 200,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 303,
+      "condition_name": "pop200_seed303"
+    },
+    {
+      "population_size": 200,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 404,
+      "condition_name": "pop200_seed404"
+    },
+    {
+      "population_size": 200,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 505,
+      "condition_name": "pop200_seed505"
+    },
+    {
+      "population_size": 200,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 606,
+      "condition_name": "pop200_seed606"
+    },
+    {
+      "population_size": 400,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 42,
+      "condition_name": "pop400_seed42"
+    },
+    {
+      "population_size": 400,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 123,
+      "condition_name": "pop400_seed123"
+    },
+    {
+      "population_size": 400,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 456,
+      "condition_name": "pop400_seed456"
+    },
+    {
+      "population_size": 400,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 789,
+      "condition_name": "pop400_seed789"
+    },
+    {
+      "population_size": 400,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 101,
+      "condition_name": "pop400_seed101"
+    },
+    {
+      "population_size": 400,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 202,
+      "condition_name": "pop400_seed202"
+    },
+    {
+      "population_size": 400,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 303,
+      "condition_name": "pop400_seed303"
+    },
+    {
+      "population_size": 400,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 404,
+      "condition_name": "pop400_seed404"
+    },
+    {
+      "population_size": 400,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 505,
+      "condition_name": "pop400_seed505"
+    },
+    {
+      "population_size": 400,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 606,
+      "condition_name": "pop400_seed606"
+    },
+    {
+      "population_size": 800,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 42,
+      "condition_name": "pop800_seed42"
+    },
+    {
+      "population_size": 800,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 123,
+      "condition_name": "pop800_seed123"
+    },
+    {
+      "population_size": 800,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 456,
+      "condition_name": "pop800_seed456"
+    },
+    {
+      "population_size": 800,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 789,
+      "condition_name": "pop800_seed789"
+    },
+    {
+      "population_size": 800,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 101,
+      "condition_name": "pop800_seed101"
+    },
+    {
+      "population_size": 800,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 202,
+      "condition_name": "pop800_seed202"
+    },
+    {
+      "population_size": 800,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 303,
+      "condition_name": "pop800_seed303"
+    },
+    {
+      "population_size": 800,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 404,
+      "condition_name": "pop800_seed404"
+    },
+    {
+      "population_size": 800,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 505,
+      "condition_name": "pop800_seed505"
+    },
+    {
+      "population_size": 800,
+      "frequency": 2.5,
+      "configuration": "baseline",
+      "cycles": 5000,
+      "sampling_window": 100,
+      "seed": 606,
+      "condition_name": "pop800_seed606"
+    }
+  ],
+  "population_sizes": [
+    50,
+    100,
+    200,
+    400,
+    800
+  ],
+  "fixed_parameters": {
+    "frequency": 2.5,
+    "configuration": "baseline",
+    "cycles": 5000,
+    "sampling_window": 100,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      101,
+      202,
+      303,
+      404,
+      505,
+      606
+    ]
+  },
+  "runtime_estimates": {
+    "total_conditions": 50,
+    "total_cycles": 250000,
+    "total_seconds": 75.0,
+    "total_minutes": 1.2,
+    "total_hours": 0.02,
+    "breakdown": {
+      "pop50": {
+        "count": 10,
+        "total_cycles": 50000,
+        "total_minutes": 0.2
+      },
+      "pop100": {
+        "count": 10,
+        "total_cycles": 50000,
+        "total_minutes": 0.2
+      },
+      "pop200": {
+        "count": 10,
+        "total_cycles": 50000,
+        "total_minutes": 0.2
+      },
+      "pop400": {
+        "count": 10,
+        "total_cycles": 50000,
+        "total_minutes": 0.2
+      },
+      "pop800": {
+        "count": 10,
+        "total_cycles": 50000,
+        "total_minutes": 0.2
+      }
+    }
+  }
+}
