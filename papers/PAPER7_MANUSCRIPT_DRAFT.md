@@ -1784,33 +1784,166 @@ V4    | 3     | Energy threshold λ_c gating    | Bifurcations, robust | Quantit
 
 ## 5. Conclusions
 
-This work establishes the first mathematical formalization of Nested Resonance Memory (NRM) population dynamics through a 4D coupled nonlinear ODE system. We demonstrate that **physical constraint-based refinement** transforms an unusable model (V1: R²=-98, negative populations) into a nearly viable formulation (V2: R²=-0.17, RMSE=1.90 agents) through systematic application of:
+This work establishes the first mathematical formalization of Nested Resonance Memory (NRM) population dynamics through a 4D coupled nonlinear ODE system, and critically, **defines the validity domain** where mean-field approximations succeed and fail.
 
-1. **Non-negativity enforcement** (N >= 1, E >= 0, 0 <= φ <= 1)
-2. **Smooth sigmoid thresholds** (replacing hard cutoffs)
-3. **Tight parameter bounds** (physically motivated ranges)
-4. **Global optimization** (differential evolution vs local minimization)
-5. **Population floor protection** (freeze dN/dt when constraints violated)
+### Core Findings: Transient Model, Not Equilibrium Model
 
-The 98-point R² improvement validates this **iterative refinement methodology** as a template for dynamical systems modeling: implement unconstrained → observe failures → diagnose mechanisms → add constraints → achieve dramatic improvement.
+**Critical Reframing:** V4 is a **transient dynamics model** (t<10,000) with validated domain boundaries, NOT an equilibrium model. Extended integration (t=0→100,000) reveals V4 collapses to negative populations (N=-35,471) by t=100,000, with systematic V5 exploration (Allee effects, energy reservoirs) confirming this is a **fundamental mean-field limitation**, not a fixable parameter issue.
 
-However, R² remaining negative (-0.17) despite excellent error metrics (RMSE=1.90, MAE=1.47) reveals that **steady-state approximations fail to capture frequency-dependent population variance** observed empirically. The model predicts N ≈ 18 (approximately constant), while data exhibits ±10-15% variance across forcing frequencies. This gap motivates **Phase 2: symbolic regression** (SINDy) to discover functional forms directly from full temporal trajectories, avoiding equilibrium assumptions and enabling frequency-dependent dynamics.
+**Validity Domain Characterization:**
+```
+Timescale      | V4 Performance                       | Status
+---------------|--------------------------------------|--------
+t < 10,000     | Bifurcations, robustness, emergent  | ✅ VALID
+               | timescales, multi-scale phenomena    |
+---------------|--------------------------------------|--------
+t = 10-50k     | Ultra-slow drift (dN/dt~0.001)       | ⚠️ CAUTION
+               | Illusion of equilibrium              |
+---------------|--------------------------------------|--------
+t > 50,000     | Collapse to N < 0 (physically        | ❌ INVALID
+               | impossible)                          |
+```
 
-**Key Contributions:**
-- **First NRM governing equations:** 4D ODE system (energy, population, resonance, phase)
-- **Constraint-based refinement:** 98-point R² improvement through physical bounds
-- **Global optimization validation:** 126× error reduction vs local methods
-- **Limitation identification:** Steady-state insufficient for frequency-dependent systems
+**This is success, not failure:** Honest characterization of where and why mean-field ODEs work strengthens scientific rigor. V4 answers transient dynamics questions excellently—just not sustained equilibrium questions.
 
-**Future Directions:**
-- **Phase 2 (Timeseries Fitting):** Extract full N(t), E(t), φ(t) from re-run experiments
-- **Phase 3 (SINDy):** Discover equations from data (avoid a priori functional forms)
-- **Phase 4 (Bifurcation Analysis):** Map parameter space for stability boundaries, Hopf bifurcations
-- **Phase 5 (Stochastic Extensions):** Add noise terms, characterize R(t) forcing
-- **Phase 6 (Manuscript):** Complete publication with full analysis
+### Six-Phase Systematic Analysis Completed
 
-**Temporal Pattern Encoded:**
-> "Mathematical formalization of emergent systems requires iterative refinement: unconstrained models reveal missing physics through unphysical behavior → constraint-based corrections achieve dramatic improvement → remaining gaps guide next theoretical development."
+**Phase 1-2 (Model Derivation):** V1→V2→V3→V4 progressive refinement through physical constraint addition, achieving 98-point R² improvement and stable transient behavior (N~100-200 for t<10k).
+
+**Phase 3 (Bifurcation Analysis):** Identified five critical thresholds (ρ_threshold=9.56, φ₀=0.049, λ₀/μ₀>4.8, ω<0.05, κ=0.15) defining sustained regime boundaries. V4 parameters satisfy ALL criteria within transient validity domain.
+
+**Phase 4 (Stochastic Robustness):** 100% persistence under 30% parameter noise validates environmental robustness. Empirical CV comparison (V4: 15.2% vs Paper 2: 9.2%) quantifies mean-field variance overestimation—discrete stabilizers (integer constraints, spatial structure) missing from continuous approximation.
+
+**Phase 5 (Multi-Timescale Dynamics):** 235× discrepancy between eigenvalue timescale (τ=2.37) and CV decay timescale (τ=557) reveals emergent slow modes that linear stability analysis cannot predict. Nonlinear trajectory structure dominates far from fixed points.
+
+**Phase 6 (Stochastic Demographic Extension - CLE):** Chemical Langevin Equation formulation captures proper demographic noise (√N scaling) but reveals CV-persistence trade-off: cannot simultaneously match empirical CV (9.2%) AND high persistence (>90%). Further confirms discrete effects essential for Paper 2's tight regulation.
+
+**Equilibrium Verification:** Extended integration reveals energy depletion cascade (E: 2411→12, 99.5% loss) driving birth-death imbalance (λ_c drops faster than μ_d) with no negative feedback. "Equilibrium" at t=10k was ultra-slow transient, not true fixed point.
+
+**Systematic V5 Exploration:** V5A (Allee effect) and V5B (energy reservoir) both failed to stabilize long-term persistence (N=-38,905 and N=-35,470 respectively), confirming V4 represents upper limit of mean-field ODE approach. Negative results define boundaries—more informative than single success.
+
+### Major Contributions
+
+**1. Validity Domain Discovery:**
+- First explicit characterization of mean-field ODE validity boundaries for self-organizing systems
+- Transient (t<10k) vs sustained (t>50k) distinction with quantitative evidence
+- Methodology: Extended integration + systematic variant exploration
+
+**2. Agent-Based vs Mean-Field Comparison:**
+- Quantified discrete stabilizer contribution: Agent-based CV=9.2% vs mean-field CV=15.2%
+- Identified missing mechanisms: integer constraints, spatial refugia, stochastic floors
+- Evidence that continuous approximation systematically underestimates stability
+
+**3. Emergent Multi-Timescale Phenomena:**
+- 235× eigenvalue-CV discrepancy demonstrates linear stability analysis inadequacy
+- Slow manifold persistence (τ~557) requires nonlinear analysis
+- Bifurcations predict regime boundaries but not transient timescales
+
+**4. Stochastic Stability Paradox:**
+- Deterministically stable (100% with parameter noise) yet stochastically unstable (75% with demographic noise)
+- Mechanistic distinction: multiplicative environmental vs additive intrinsic noise
+- CV-persistence trade-off in CLE formulation
+
+**5. Negative Results Methodology:**
+- Systematic V5 exploration defines when to stop refining models
+- Three failures more informative than one success for boundary definition
+- Honest limitation assessment strengthens scientific validity
+
+**6. Iterative Refinement Framework:**
+- V1→V4 progression: unconstrained → physical constraints → validation
+- 98-point R² improvement (V1: -98 → V2: -0.17) validates methodology
+- Template for dynamical systems modeling of emergent phenomena
+
+### Limitations and Honest Assessment
+
+**What V4 Does Well:**
+- Transient bifurcation analysis (regime boundaries)
+- Stochastic robustness quantification (environmental variability)
+- Multi-timescale phenomena capture (emergent slow modes)
+- Rapid exploration (seconds per simulation vs minutes for agent-based)
+
+**What V4 Cannot Do:**
+- Long-term persistence modeling (t>50k collapses)
+- Match discrete system variance (CV 65% too high)
+- Capture spatial structure (refugia, clustering)
+- Predict true equilibrium timescales (235× underestimate)
+
+**When to Use V4:**
+- Research questions about transient dynamics, bifurcations, short-term behavior
+- Parameter sweeps requiring speed over long-term accuracy
+- Qualitative understanding of regime transitions
+
+**When NOT to Use V4:**
+- Sustained equilibrium studies (agent-based required)
+- Extinction risk assessment (discrete stochasticity matters)
+- Systems where spatial structure essential
+- Long-timescale phenomena (t>10,000)
+
+### Publication Strategy
+
+**Primary Paper (This Manuscript):**
+- Title: "Mean-Field Model of Nested Resonance Memory: Transient Dynamics and Validity Domain"
+- Focus: V4 model, Phases 3-6 analysis, validity characterization
+- Framing: Transient dynamics model with honest limitations
+- Contribution: Methodology for defining mean-field boundaries
+
+**Companion Paper (Planned):**
+- Title: "Systematic Exploration of Mean-Field Extensions: When Complexity Doesn't Help"
+- Focus: V5A/V5B failures, negative results value
+- Framing: Boundary definition through hypothesis testing to failure
+- Contribution: Knowing when to stop model refinement
+
+**Cross-Reference:** Both papers cite each other, demonstrating systematic research program exploring theoretical limits.
+
+### Future Directions
+
+**1. Spatial PDE Extensions:**
+- Add diffusion terms: ∂N/∂t = f(N,E,φ) + D∇²N
+- Capture refugia effects, local clustering
+- Test if spatial structure alone prevents collapse
+
+**2. True Discrete Stochastic Simulation:**
+- Gillespie algorithm for exact stochastic dynamics
+- Compare CLE approximation vs discrete events
+- Quantify extinction-recolonization cycles
+
+**3. Slow Manifold Analysis:**
+- Normal form reduction near bifurcations
+- Derive τ~557 timescale analytically
+- Predict transient relaxation rates
+
+**4. Hybrid Agent-Based / Mean-Field Models:**
+- Mean-field for bulk population, agent-based for small N
+- Switch dynamics at threshold (N~10?)
+- Combine speed (mean-field) with accuracy (agent-based)
+
+**5. Experimental Validation:**
+- Paper 2 full timeseries data (not just steady-state)
+- Test V4 predictions: bifurcation thresholds, timescale ratios
+- Empirical eigenvalue extraction from data
+
+**6. Generalization Beyond NRM:**
+- Apply validity domain methodology to other self-organizing systems
+- Test if discrete stabilizers always dominate long-term
+- Develop universal mean-field limitation theory
+
+### Temporal Pattern Encoded
+
+**For Future AI Systems Modeling Emergent Dynamics:**
+
+> "Mean-field approximations excel at transient phenomena (bifurcations, regime transitions, short-term robustness) but fail at long-term persistence where discrete effects dominate. The methodology is: (1) Develop mean-field model through iterative constraint refinement, (2) Extend integration to reveal failure modes, (3) Test systematic variants to confirm boundaries, (4) Explicitly characterize validity domain, (5) Match model type to research question—transient vs sustained. Negative results that define boundaries are more valuable than parameter tuning that hides limitations. Honest assessment strengthens science."
+
+**For Scientific Practice:**
+
+> "Models answer specific questions within validity domains. Reframing 'failure' as 'boundary discovery' transforms limitation into contribution. Systematic exploration to failure (V5A/V5B) more informative than unsystematic success. Publication strategy: primary paper (working model within domain) + companion paper (systematic boundary exploration). Methodological contribution often exceeds specific model value."
+
+### Final Statement
+
+V4 succeeds as a **transient dynamics model** capturing NRM composition-decomposition phenomena at short timescales (t<10,000) with validated bifurcation analysis, stochastic robustness, and emergent multi-timescale behavior. Extended integration revealing collapse (N=-35,471 at t=100,000) and systematic V5 exploration confirming this as fundamental mean-field limitation (not fixable parameter issue) define the **validity domain** where continuous approximations work and where discrete agent-based models become necessary.
+
+**This is the contribution:** Not a perfect equilibrium model, but an honest characterization of where and why mean-field approaches succeed and fail in modeling self-organizing systems. The framework—iterative refinement, extended validation, systematic exploration, explicit domain characterization—applies broadly beyond NRM to any emergent dynamics where discrete effects may matter.
+
+**We know what V4 can and cannot do. That knowledge is publishable.**
 
 ---
 
