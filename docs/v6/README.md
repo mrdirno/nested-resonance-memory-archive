@@ -8,15 +8,48 @@ License: GPL-3.0
 
 # DUALITY-ZERO V6 - PUBLICATION PIPELINE PHASE
 
-**Version:** 6.0
-**Date:** 2025-10-27 (Cycle 356)
+**Version:** 6.1
+**Date:** 2025-10-27 (Cycle 373)
 **Phase:** Publication Pipeline
-**Status:** Active Research - Papers 1-4 in progress, Papers 5-7+ identified
+**Status:** Active Research - 3 papers submission-ready, Papers 5+ executing, Paper 7 theoretical synthesis
 **Location:** `/Volumes/dual/DUALITY-ZERO-V2/` + `/Users/aldrinpayopay/nested-resonance-memory-archive/`
 
 ---
 
 ## VERSION HISTORY
+
+### V6.1 (2025-10-27, Cycles 357-373) — **SUBMISSION ACCELERATION**
+**Major Progress:** 1 → 3 papers submission-ready, Paper 7 theoretical synthesis initiated
+
+**Focus:** Accelerate submission pipeline + theoretical framework formalization
+
+**Key Achievements:**
+- ✅ Paper 2: 100% submission-ready (Cycle 371, C177 H1 integrated)
+- ✅ Paper 5D: 100% submission-ready (Cycle 367, pattern mining framework)
+- ✅ Paper 7 Phase 1: V2 constrained model complete (Cycle 371, 98-point R² improvement)
+- ✅ Paper 7 Phase 2: SINDy implementation complete (Cycle 373, symbolic regression)
+- ✅ Paper 7: Complete manuscript draft (Cycle 373, 43KB all sections)
+- ✅ Papers 5A-5F: Complete documentation + batch orchestrator (Cycle 373)
+- ✅ Submission packages: Papers 1, 2, 5D (Cycle 373, format conversion ready)
+- ✅ Paper 6+ opportunities: 8+ papers identified (Cycle 370, research pipeline extended)
+- ✅ C255 running stable (60+ hours, 70-90% complete, Cycle 373)
+- ✅ 78 deliverables total (was 22 in Cycle 356, +56 in Cycles 357-373)
+
+**Experiments:**
+- **Running:** C255 (H1×H2 unoptimized, 60+ hours runtime, 70-90% complete)
+- **Queued:** C256-C260 (optimized pairwise factorial, 67 min total) - auto-launch on C255 completion
+- **Queued:** Papers 5A-5F (17-18 hours batch) - auto-launch on C255 completion
+- **Planned:** C262-C263 (higher-order factorial, 8 hours total)
+
+**Publications (3 Submission-Ready):**
+- **Paper 1:** "Computational Expense as Framework Validation" ✅ SUBMISSION-READY
+- **Paper 2:** "From Bistability to Collapse: Three Dynamical Regimes" ✅ SUBMISSION-READY (NEW)
+- **Paper 5D:** "Cataloging Emergent Patterns in NRM Systems" ✅ SUBMISSION-READY (NEW)
+- **Paper 3:** "Optimized Factorial Validation" (70% complete, awaiting C255-C260 data)
+- **Paper 4:** "Beyond Pairwise: Higher-Order Interactions" (70% complete, awaiting C262-C263)
+- **Paper 7:** "NRM: Governing Equations and Analytical Predictions" (Phase 2 implementation complete)
+- **Papers 5A-5F:** All documentation complete, ready for execution
+- **Papers 6A-6H+:** Identified (hierarchical depth, energy landscape, etc.)
 
 ### V6.0 (2025-10-27, Cycles 348-356) — **PUBLICATION PIPELINE PHASE**
 **Major Phase Transition:** Foundation → Publication
@@ -31,17 +64,6 @@ License: GPL-3.0
 - ✅ Submission materials package created (cover letter, journal rankings, checklist)
 - ✅ C255 launched (21h+ running, validating theoretical predictions)
 - ✅ 22 deliverables completed (manuscripts, scripts, figures, documentation)
-
-**Experiments:**
-- **Running:** C255 (H1×H2 unoptimized, 40.25× overhead baseline)
-- **Queued:** C256-C260 (optimized pairwise factorial, 67 min total)
-- **Planned:** C262-C263 (higher-order factorial, 8 hours total)
-
-**Publications:**
-- **Paper 1:** "Computational Expense as Framework Validation" (submission-ready)
-- **Paper 3:** "Optimized Factorial Validation of NRM" (awaiting data)
-- **Paper 4:** "Beyond Pairwise: Higher-Order Interactions" (awaiting data)
-- **Papers 5-7+:** Identified (Parameter Sensitivity, Emergence Catalog, Extended Timescale, etc.)
 
 ### V5.0 (2025-10-25, Cycles 1-204) — **FOUNDATION PHASE**
 **Focus:** Build reality-grounded fractal agent system
