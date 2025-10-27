@@ -230,6 +230,129 @@ python visualize_factorial_synergy.py results/cycle256_h1h4_optimized_results.js
 
 ---
 
+### Paper 4: Higher-Order Factorial Validation (Extended Replication)
+
+**Experiments:** C262-C263 (3-way and 4-way interactions)
+
+**Purpose:** Test for super-synergy beyond pairwise interactions
+
+**Recommended Runtime:** ~2-3 hours (optimized)
+
+#### Running Experiments
+
+```bash
+cd code/experiments
+
+# C262: 3-way factorial (H1×H2×H5 - 8 conditions)
+python cycle262_h1h2h5_3way_factorial.py
+
+# C263: 4-way factorial (H1×H2×H4×H5 - 16 conditions)
+python cycle263_h1h2h4h5_4way_factorial.py
+```
+
+**Expected console output:**
+```
+======================================================================
+CYCLE 262: 3-WAY FACTORIAL - H1 × H2 × H5
+======================================================================
+Mechanisms: Energy Pooling, Reality Sources, Energy Recovery
+Conditions: 8 (2³ factorial design)
+Cycles per condition: 3000
+Paradigm: Higher-order mechanism validation
+
+EXPERIMENTAL CONDITIONS:
+----------------------------------------------------------------------
+[1/8] Condition: 000 (OFF-OFF-OFF)
+  Running 000 (baseline)...
+    → mean=0.07, final=0, max=3, runtime=200s
+
+[2/8] Condition: 100 (H1-only)
+  Running 100...
+    → mean=0.95, final=1, max=48, runtime=215s
+
+... [additional conditions]
+
+[8/8] Condition: 111 (H1-ON, H2-ON, H5-ON)
+  Running 111 (full combination)...
+    → mean=1.85, final=12, max=78, runtime=230s
+
+======================================================================
+3-WAY SUPER-SYNERGY ANALYSIS
+======================================================================
+Baseline (000):              0.0700
+Pairwise prediction:         1.4200
+Observed (111):              1.8500
+Super-synergy (3-way):       +0.4300
+
+Classification: SYNERGISTIC
+Interpretation: H1+H2+H5 exhibit emergent amplification beyond pairwise
+======================================================================
+
+Results saved to: results/cycle262_h1h2h5_3way_factorial_results.json
+```
+
+#### Aggregating Paper 4 Results
+
+```bash
+cd code/experiments
+python aggregate_paper4_results.py --input results/
+```
+
+**Output files:**
+- `paper4_aggregated.json`: Consolidated 3-way/4-way results
+- `paper4_summary.md`: Markdown tables with hierarchical decomposition
+- `paper4_tables.tex`: LaTeX publication tables
+- `../papers/paper4_higher_order_factorial_FINAL.md`: Populated manuscript
+
+#### Generating Paper 4 Figures
+
+```bash
+python visualize_higher_order_interactions.py paper4_aggregated.json
+```
+
+**Output:** 4 publication-quality figures (300 DPI):
+- Figure 1: Hierarchical interaction decomposition (bar chart)
+- Figure 2: Variance explained by interaction order (pie/bar)
+- Figure 3: 3-way interaction landscape (3D surface)
+- Figure 4: Interaction network diagram
+
+#### Expected 3-Way Results (C262)
+
+| Condition | H1 | H2 | H5 | Expected Mean Population |
+|-----------|----|----|----|--------------------|
+| 000 | OFF | OFF | OFF | ~0.07 (baseline) |
+| 100 | ON | OFF | OFF | ~0.95 |
+| 010 | OFF | ON | OFF | ~0.12 |
+| 001 | OFF | OFF | ON | ~0.15 |
+| 110 | ON | ON | OFF | ~1.20 (H1×H2 synergy) |
+| 101 | ON | OFF | ON | ~1.10 (H1×H5 synergy) |
+| 011 | OFF | ON | ON | ~0.27 (H2×H5 additive) |
+| 111 | ON | ON | ON | ~1.85 (super-synergy expected) |
+
+**Super-Synergy Threshold:** ±0.1
+
+**Interpretation:**
+- If observed 111 > pairwise prediction + 0.1: **SYNERGISTIC** (emergent amplification)
+- If observed 111 < pairwise prediction - 0.1: **ANTAGONISTIC** (emergent interference)
+- Otherwise: **ADDITIVE** (pairwise model sufficient)
+
+#### Expected 4-Way Results (C263)
+
+**16 conditions** from 0000 (all OFF) to 1111 (all ON)
+
+**Key Predictions:**
+- **Main effects:** H1 > H2 > H5 > H4 (from Paper 3)
+- **Pairwise synergy:** H1×H2 synergistic, H1×H4/H1×H5 antagonistic
+- **3-way terms:** 4 triple interactions (expect at least one non-zero)
+- **4-way super-synergy:** Test whether 1111 exceeds 3-way prediction
+
+**Computational Expense:**
+- C262 (8 conditions): ~1.0-1.5 hours (optimized)
+- C263 (16 conditions): ~2.0-2.5 hours (optimized)
+- Total Paper 4: ~3-4 hours
+
+---
+
 ## EXPECTED RESULTS
 
 ### Determinism Validation
