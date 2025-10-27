@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "date": "2025-10-27T14:45:01.141199",
+    "purpose": "Verify V4 deterministic equilibrium at t=100,000",
+    "params": {
+      "r": 0.15,
+      "K": 100.0,
+      "alpha": 0.1,
+      "beta": 0.02,
+      "gamma": 0.3,
+      "lambda_0": 2.5,
+      "mu_0": 0.4,
+      "sigma": 0.1,
+      "omega": 0.02,
+      "kappa": 0.1,
+      "phi_0": 0.06,
+      "rho_threshold": 5.0
+    },
+    "initial_state": [
+      100.0,
+      10.0,
+      0.5,
+      0.0
+    ]
+  },
+  "final_state": {
+    "E": 12.212986845119254,
+    "N": -35471.36424931258,
+    "phi": 0.16471402309329314,
+    "theta": -2000.0
+  },
+  "final_derivatives": {
+    "dE_dt": -2.7755575615628914e-17,
+    "dN_dt": -0.35475984349734174,
+    "dphi_dt": -1.734723475976807e-18,
+    "dtheta_dt": -0.02
+  },
+  "equilibrium_analysis": {
+    "at_equilibrium": false,
+    "final_mean_N": -33699.338831043366,
+    "final_std_N": 1024.102943652443,
+    "final_drift_N": -0.35475984349734185
+  },
+  "phase5_comparison": {
+    "phase5_N_at_t10k": 215.3,
+    "final_N_at_t100k": -35471.36424931258,
+    "delta_N": -35686.664249312584,
+    "interpretation": "Positive delta means growth, negative means collapse"
+  }
+}
