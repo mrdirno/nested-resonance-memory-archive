@@ -1,0 +1,2123 @@
+{
+  "paper": "Paper 5F: Environmental Perturbations & Robustness",
+  "research_question": "How do NRM patterns respond to environmental disturbances?",
+  "perturbation_types": [
+    "none (baseline)",
+    "agent_removal (simulated failures)",
+    "parameter_noise (frequency jitter)",
+    "energy_shock (resource changes)",
+    "basin_perturbation (forced transitions)"
+  ],
+  "perturbation_cycle": 2500,
+  "resilience_metrics": [
+    "pattern_retention (% persisting)",
+    "recovery_time (cycles to baseline)",
+    "degradation_degree (stability reduction)",
+    "transformation (new patterns emerging)"
+  ],
+  "total_conditions": 140,
+  "runtime_estimate": {
+    "total_experiments": 140,
+    "estimated_runtime_minutes": 140.0,
+    "estimated_runtime_hours": 2.3333333333333335,
+    "perturbation_breakdown": {
+      "none": 10,
+      "agent_removal": 40,
+      "parameter_noise": 40,
+      "energy_shock": 40,
+      "basin_perturbation": 10
+    }
+  },
+  "conditions": [
+    {
+      "experiment_id": "PERTURBATION_NONE_SEED42",
+      "perturbation_type": "none",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": null,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {}
+    },
+    {
+      "experiment_id": "PERTURBATION_NONE_SEED123",
+      "perturbation_type": "none",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": null,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {}
+    },
+    {
+      "experiment_id": "PERTURBATION_NONE_SEED456",
+      "perturbation_type": "none",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": null,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {}
+    },
+    {
+      "experiment_id": "PERTURBATION_NONE_SEED789",
+      "perturbation_type": "none",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": null,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {}
+    },
+    {
+      "experiment_id": "PERTURBATION_NONE_SEED101",
+      "perturbation_type": "none",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": null,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {}
+    },
+    {
+      "experiment_id": "PERTURBATION_NONE_SEED202",
+      "perturbation_type": "none",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": null,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {}
+    },
+    {
+      "experiment_id": "PERTURBATION_NONE_SEED303",
+      "perturbation_type": "none",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": null,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {}
+    },
+    {
+      "experiment_id": "PERTURBATION_NONE_SEED404",
+      "perturbation_type": "none",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": null,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {}
+    },
+    {
+      "experiment_id": "PERTURBATION_NONE_SEED505",
+      "perturbation_type": "none",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": null,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {}
+    },
+    {
+      "experiment_id": "PERTURBATION_NONE_SEED606",
+      "perturbation_type": "none",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": null,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {}
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_10PCT_SEED42",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.1,
+        "description": "Remove 10% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_10PCT_SEED123",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.1,
+        "description": "Remove 10% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_10PCT_SEED456",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.1,
+        "description": "Remove 10% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_10PCT_SEED789",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.1,
+        "description": "Remove 10% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_10PCT_SEED101",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.1,
+        "description": "Remove 10% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_10PCT_SEED202",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.1,
+        "description": "Remove 10% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_10PCT_SEED303",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.1,
+        "description": "Remove 10% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_10PCT_SEED404",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.1,
+        "description": "Remove 10% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_10PCT_SEED505",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.1,
+        "description": "Remove 10% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_10PCT_SEED606",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.1,
+        "description": "Remove 10% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_25PCT_SEED42",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.25,
+        "description": "Remove 25% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_25PCT_SEED123",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.25,
+        "description": "Remove 25% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_25PCT_SEED456",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.25,
+        "description": "Remove 25% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_25PCT_SEED789",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.25,
+        "description": "Remove 25% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_25PCT_SEED101",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.25,
+        "description": "Remove 25% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_25PCT_SEED202",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.25,
+        "description": "Remove 25% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_25PCT_SEED303",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.25,
+        "description": "Remove 25% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_25PCT_SEED404",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.25,
+        "description": "Remove 25% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_25PCT_SEED505",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.25,
+        "description": "Remove 25% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_25PCT_SEED606",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.25,
+        "description": "Remove 25% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_50PCT_SEED42",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.5,
+        "description": "Remove 50% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_50PCT_SEED123",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.5,
+        "description": "Remove 50% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_50PCT_SEED456",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.5,
+        "description": "Remove 50% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_50PCT_SEED789",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.5,
+        "description": "Remove 50% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_50PCT_SEED101",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.5,
+        "description": "Remove 50% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_50PCT_SEED202",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.5,
+        "description": "Remove 50% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_50PCT_SEED303",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.5,
+        "description": "Remove 50% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_50PCT_SEED404",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.5,
+        "description": "Remove 50% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_50PCT_SEED505",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.5,
+        "description": "Remove 50% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_50PCT_SEED606",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.5,
+        "description": "Remove 50% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_75PCT_SEED42",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.75,
+        "description": "Remove 75% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_75PCT_SEED123",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.75,
+        "description": "Remove 75% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_75PCT_SEED456",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.75,
+        "description": "Remove 75% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_75PCT_SEED789",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.75,
+        "description": "Remove 75% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_75PCT_SEED101",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.75,
+        "description": "Remove 75% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_75PCT_SEED202",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.75,
+        "description": "Remove 75% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_75PCT_SEED303",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.75,
+        "description": "Remove 75% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_75PCT_SEED404",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.75,
+        "description": "Remove 75% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_75PCT_SEED505",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.75,
+        "description": "Remove 75% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_AGENT_REMOVAL_75PCT_SEED606",
+      "perturbation_type": "agent_removal",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "removal_percentage": 0.75,
+        "description": "Remove 75% of agents at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.05HZ_SEED42",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.05,
+        "sigma_percentage": 2.0,
+        "description": "Add Gaussian noise \u03c3=0.05 Hz (2% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.05HZ_SEED123",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.05,
+        "sigma_percentage": 2.0,
+        "description": "Add Gaussian noise \u03c3=0.05 Hz (2% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.05HZ_SEED456",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.05,
+        "sigma_percentage": 2.0,
+        "description": "Add Gaussian noise \u03c3=0.05 Hz (2% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.05HZ_SEED789",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.05,
+        "sigma_percentage": 2.0,
+        "description": "Add Gaussian noise \u03c3=0.05 Hz (2% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.05HZ_SEED101",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.05,
+        "sigma_percentage": 2.0,
+        "description": "Add Gaussian noise \u03c3=0.05 Hz (2% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.05HZ_SEED202",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.05,
+        "sigma_percentage": 2.0,
+        "description": "Add Gaussian noise \u03c3=0.05 Hz (2% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.05HZ_SEED303",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.05,
+        "sigma_percentage": 2.0,
+        "description": "Add Gaussian noise \u03c3=0.05 Hz (2% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.05HZ_SEED404",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.05,
+        "sigma_percentage": 2.0,
+        "description": "Add Gaussian noise \u03c3=0.05 Hz (2% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.05HZ_SEED505",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.05,
+        "sigma_percentage": 2.0,
+        "description": "Add Gaussian noise \u03c3=0.05 Hz (2% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.05HZ_SEED606",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.05,
+        "sigma_percentage": 2.0,
+        "description": "Add Gaussian noise \u03c3=0.05 Hz (2% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.10HZ_SEED42",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.1,
+        "sigma_percentage": 4.0,
+        "description": "Add Gaussian noise \u03c3=0.1 Hz (4% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.10HZ_SEED123",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.1,
+        "sigma_percentage": 4.0,
+        "description": "Add Gaussian noise \u03c3=0.1 Hz (4% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.10HZ_SEED456",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.1,
+        "sigma_percentage": 4.0,
+        "description": "Add Gaussian noise \u03c3=0.1 Hz (4% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.10HZ_SEED789",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.1,
+        "sigma_percentage": 4.0,
+        "description": "Add Gaussian noise \u03c3=0.1 Hz (4% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.10HZ_SEED101",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.1,
+        "sigma_percentage": 4.0,
+        "description": "Add Gaussian noise \u03c3=0.1 Hz (4% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.10HZ_SEED202",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.1,
+        "sigma_percentage": 4.0,
+        "description": "Add Gaussian noise \u03c3=0.1 Hz (4% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.10HZ_SEED303",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.1,
+        "sigma_percentage": 4.0,
+        "description": "Add Gaussian noise \u03c3=0.1 Hz (4% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.10HZ_SEED404",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.1,
+        "sigma_percentage": 4.0,
+        "description": "Add Gaussian noise \u03c3=0.1 Hz (4% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.10HZ_SEED505",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.1,
+        "sigma_percentage": 4.0,
+        "description": "Add Gaussian noise \u03c3=0.1 Hz (4% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.10HZ_SEED606",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.1,
+        "sigma_percentage": 4.0,
+        "description": "Add Gaussian noise \u03c3=0.1 Hz (4% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.25HZ_SEED42",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.25,
+        "sigma_percentage": 10.0,
+        "description": "Add Gaussian noise \u03c3=0.25 Hz (10% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.25HZ_SEED123",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.25,
+        "sigma_percentage": 10.0,
+        "description": "Add Gaussian noise \u03c3=0.25 Hz (10% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.25HZ_SEED456",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.25,
+        "sigma_percentage": 10.0,
+        "description": "Add Gaussian noise \u03c3=0.25 Hz (10% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.25HZ_SEED789",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.25,
+        "sigma_percentage": 10.0,
+        "description": "Add Gaussian noise \u03c3=0.25 Hz (10% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.25HZ_SEED101",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.25,
+        "sigma_percentage": 10.0,
+        "description": "Add Gaussian noise \u03c3=0.25 Hz (10% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.25HZ_SEED202",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.25,
+        "sigma_percentage": 10.0,
+        "description": "Add Gaussian noise \u03c3=0.25 Hz (10% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.25HZ_SEED303",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.25,
+        "sigma_percentage": 10.0,
+        "description": "Add Gaussian noise \u03c3=0.25 Hz (10% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.25HZ_SEED404",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.25,
+        "sigma_percentage": 10.0,
+        "description": "Add Gaussian noise \u03c3=0.25 Hz (10% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.25HZ_SEED505",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.25,
+        "sigma_percentage": 10.0,
+        "description": "Add Gaussian noise \u03c3=0.25 Hz (10% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.25HZ_SEED606",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.25,
+        "sigma_percentage": 10.0,
+        "description": "Add Gaussian noise \u03c3=0.25 Hz (10% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.50HZ_SEED42",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.5,
+        "sigma_percentage": 20.0,
+        "description": "Add Gaussian noise \u03c3=0.5 Hz (20% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.50HZ_SEED123",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.5,
+        "sigma_percentage": 20.0,
+        "description": "Add Gaussian noise \u03c3=0.5 Hz (20% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.50HZ_SEED456",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.5,
+        "sigma_percentage": 20.0,
+        "description": "Add Gaussian noise \u03c3=0.5 Hz (20% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.50HZ_SEED789",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.5,
+        "sigma_percentage": 20.0,
+        "description": "Add Gaussian noise \u03c3=0.5 Hz (20% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.50HZ_SEED101",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.5,
+        "sigma_percentage": 20.0,
+        "description": "Add Gaussian noise \u03c3=0.5 Hz (20% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.50HZ_SEED202",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.5,
+        "sigma_percentage": 20.0,
+        "description": "Add Gaussian noise \u03c3=0.5 Hz (20% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.50HZ_SEED303",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.5,
+        "sigma_percentage": 20.0,
+        "description": "Add Gaussian noise \u03c3=0.5 Hz (20% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.50HZ_SEED404",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.5,
+        "sigma_percentage": 20.0,
+        "description": "Add Gaussian noise \u03c3=0.5 Hz (20% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.50HZ_SEED505",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.5,
+        "sigma_percentage": 20.0,
+        "description": "Add Gaussian noise \u03c3=0.5 Hz (20% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_FREQUENCY_NOISE_SIGMA0.50HZ_SEED606",
+      "perturbation_type": "parameter_noise",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "noise_type": "gaussian",
+        "sigma_hz": 0.5,
+        "sigma_percentage": 20.0,
+        "description": "Add Gaussian noise \u03c3=0.5 Hz (20% of base frequency) starting cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.50_SEED42",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.5,
+        "direction": "decrease",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 0.5 (50% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.50_SEED123",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.5,
+        "direction": "decrease",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 0.5 (50% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.50_SEED456",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.5,
+        "direction": "decrease",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 0.5 (50% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.50_SEED789",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.5,
+        "direction": "decrease",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 0.5 (50% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.50_SEED101",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.5,
+        "direction": "decrease",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 0.5 (50% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.50_SEED202",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.5,
+        "direction": "decrease",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 0.5 (50% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.50_SEED303",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.5,
+        "direction": "decrease",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 0.5 (50% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.50_SEED404",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.5,
+        "direction": "decrease",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 0.5 (50% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.50_SEED505",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.5,
+        "direction": "decrease",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 0.5 (50% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.50_SEED606",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.5,
+        "direction": "decrease",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 0.5 (50% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.75_SEED42",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.75,
+        "direction": "decrease",
+        "magnitude_pct": 25.0,
+        "description": "Multiply energy threshold by 0.75 (25% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.75_SEED123",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.75,
+        "direction": "decrease",
+        "magnitude_pct": 25.0,
+        "description": "Multiply energy threshold by 0.75 (25% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.75_SEED456",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.75,
+        "direction": "decrease",
+        "magnitude_pct": 25.0,
+        "description": "Multiply energy threshold by 0.75 (25% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.75_SEED789",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.75,
+        "direction": "decrease",
+        "magnitude_pct": 25.0,
+        "description": "Multiply energy threshold by 0.75 (25% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.75_SEED101",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.75,
+        "direction": "decrease",
+        "magnitude_pct": 25.0,
+        "description": "Multiply energy threshold by 0.75 (25% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.75_SEED202",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.75,
+        "direction": "decrease",
+        "magnitude_pct": 25.0,
+        "description": "Multiply energy threshold by 0.75 (25% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.75_SEED303",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.75,
+        "direction": "decrease",
+        "magnitude_pct": 25.0,
+        "description": "Multiply energy threshold by 0.75 (25% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.75_SEED404",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.75,
+        "direction": "decrease",
+        "magnitude_pct": 25.0,
+        "description": "Multiply energy threshold by 0.75 (25% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.75_SEED505",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.75,
+        "direction": "decrease",
+        "magnitude_pct": 25.0,
+        "description": "Multiply energy threshold by 0.75 (25% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K0.75_SEED606",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 0.75,
+        "direction": "decrease",
+        "magnitude_pct": 25.0,
+        "description": "Multiply energy threshold by 0.75 (25% decrease) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K1.50_SEED42",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 1.5,
+        "direction": "increase",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 1.5 (50% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K1.50_SEED123",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 1.5,
+        "direction": "increase",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 1.5 (50% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K1.50_SEED456",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 1.5,
+        "direction": "increase",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 1.5 (50% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K1.50_SEED789",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 1.5,
+        "direction": "increase",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 1.5 (50% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K1.50_SEED101",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 1.5,
+        "direction": "increase",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 1.5 (50% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K1.50_SEED202",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 1.5,
+        "direction": "increase",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 1.5 (50% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K1.50_SEED303",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 1.5,
+        "direction": "increase",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 1.5 (50% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K1.50_SEED404",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 1.5,
+        "direction": "increase",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 1.5 (50% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K1.50_SEED505",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 1.5,
+        "direction": "increase",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 1.5 (50% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K1.50_SEED606",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 1.5,
+        "direction": "increase",
+        "magnitude_pct": 50.0,
+        "description": "Multiply energy threshold by 1.5 (50% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K2.00_SEED42",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 2.0,
+        "direction": "increase",
+        "magnitude_pct": 100.0,
+        "description": "Multiply energy threshold by 2.0 (100% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K2.00_SEED123",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 2.0,
+        "direction": "increase",
+        "magnitude_pct": 100.0,
+        "description": "Multiply energy threshold by 2.0 (100% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K2.00_SEED456",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 2.0,
+        "direction": "increase",
+        "magnitude_pct": 100.0,
+        "description": "Multiply energy threshold by 2.0 (100% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K2.00_SEED789",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 2.0,
+        "direction": "increase",
+        "magnitude_pct": 100.0,
+        "description": "Multiply energy threshold by 2.0 (100% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K2.00_SEED101",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 2.0,
+        "direction": "increase",
+        "magnitude_pct": 100.0,
+        "description": "Multiply energy threshold by 2.0 (100% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K2.00_SEED202",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 2.0,
+        "direction": "increase",
+        "magnitude_pct": 100.0,
+        "description": "Multiply energy threshold by 2.0 (100% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K2.00_SEED303",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 2.0,
+        "direction": "increase",
+        "magnitude_pct": 100.0,
+        "description": "Multiply energy threshold by 2.0 (100% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K2.00_SEED404",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 2.0,
+        "direction": "increase",
+        "magnitude_pct": 100.0,
+        "description": "Multiply energy threshold by 2.0 (100% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K2.00_SEED505",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 2.0,
+        "direction": "increase",
+        "magnitude_pct": 100.0,
+        "description": "Multiply energy threshold by 2.0 (100% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_ENERGY_SHOCK_K2.00_SEED606",
+      "perturbation_type": "energy_shock",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "shock_factor": 2.0,
+        "direction": "increase",
+        "magnitude_pct": 100.0,
+        "description": "Multiply energy threshold by 2.0 (100% increase) at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_BASIN_FLIP_SEED42",
+      "perturbation_type": "basin_perturbation",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 42,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "action": "force_opposite_basin",
+        "description": "Force all agents into opposite basin at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_BASIN_FLIP_SEED123",
+      "perturbation_type": "basin_perturbation",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 123,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "action": "force_opposite_basin",
+        "description": "Force all agents into opposite basin at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_BASIN_FLIP_SEED456",
+      "perturbation_type": "basin_perturbation",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 456,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "action": "force_opposite_basin",
+        "description": "Force all agents into opposite basin at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_BASIN_FLIP_SEED789",
+      "perturbation_type": "basin_perturbation",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 789,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "action": "force_opposite_basin",
+        "description": "Force all agents into opposite basin at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_BASIN_FLIP_SEED101",
+      "perturbation_type": "basin_perturbation",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 101,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "action": "force_opposite_basin",
+        "description": "Force all agents into opposite basin at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_BASIN_FLIP_SEED202",
+      "perturbation_type": "basin_perturbation",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 202,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "action": "force_opposite_basin",
+        "description": "Force all agents into opposite basin at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_BASIN_FLIP_SEED303",
+      "perturbation_type": "basin_perturbation",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 303,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "action": "force_opposite_basin",
+        "description": "Force all agents into opposite basin at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_BASIN_FLIP_SEED404",
+      "perturbation_type": "basin_perturbation",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 404,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "action": "force_opposite_basin",
+        "description": "Force all agents into opposite basin at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_BASIN_FLIP_SEED505",
+      "perturbation_type": "basin_perturbation",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 505,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "action": "force_opposite_basin",
+        "description": "Force all agents into opposite basin at cycle 2500"
+      }
+    },
+    {
+      "experiment_id": "PERTURBATION_BASIN_FLIP_SEED606",
+      "perturbation_type": "basin_perturbation",
+      "population": 100,
+      "frequency": 2.5,
+      "cycles": 5000,
+      "perturbation_cycle": 2500,
+      "seed": 606,
+      "configuration": "BASELINE",
+      "perturbation_params": {
+        "action": "force_opposite_basin",
+        "description": "Force all agents into opposite basin at cycle 2500"
+      }
+    }
+  ]
+}
