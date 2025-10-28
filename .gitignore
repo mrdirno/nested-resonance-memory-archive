@@ -51,3 +51,4 @@ workspace/cache/npm_cache/
 *.tmp
 *.log
 *.bak
+workspace/cache/
