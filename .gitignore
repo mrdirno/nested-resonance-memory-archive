@@ -52,3 +52,4 @@ workspace/cache/npm_cache/
 *.log
 *.bak
 workspace/cache/
+.DS_Store
