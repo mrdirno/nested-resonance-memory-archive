@@ -130,8 +130,12 @@ class TranscendentalBridge:
     @contextmanager
     def _get_connection(self):
         """Get database connection with proper cleanup."""
-        conn = sqlite3.connect(str(self.db_path))
+        # Use 30-second timeout to prevent "database is locked" errors
+        # in long-running experiments with frequent writes
+        conn = sqlite3.connect(str(self.db_path), timeout=30.0)
         try:
+            # Enable WAL mode for better concurrency
+            conn.execute("PRAGMA journal_mode=WAL")
             yield conn
         finally:
             conn.close()
