@@ -3,6 +3,7 @@
 # Usage:
 #   make install    - Install dependencies
 #   make paper1     - Compile Paper 1 (Computational Expense)
+#   make paper2     - Compile Paper 2 (Three Dynamical Regimes)
 #   make paper5d    - Compile Paper 5D (Pattern Mining)
 #   make paper6     - Compile Paper 6 (Scale-Dependent Phase Autonomy)
 #   make paper6b    - Compile Paper 6B (Multi-Timescale Dynamics)
@@ -16,7 +17,7 @@
 # Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 # License: GPL-3.0
 
-.PHONY: help install paper1 paper5d paper6 paper6b paper3 paper4 test lint format clean docker-build docker-run figures figures-c175 figures-nrmv2 list-figures
+.PHONY: help install paper1 paper2 paper5d paper6 paper6b paper3 paper4 test lint format clean docker-build docker-run figures figures-c175 figures-nrmv2 list-figures
 
 # Default target
 .DEFAULT_GOAL := help
@@ -63,6 +64,17 @@ paper1: ## Compile Paper 1 (Computational Expense Validation)
 	rm -f manuscript.aux manuscript.log manuscript.out || \
 	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
 	@echo "$(GREEN)✓ Paper 1 compiled → papers/compiled/paper1/$(NC)"
+
+paper2: ## Compile Paper 2 (Three Dynamical Regimes)
+	@echo "$(BLUE)Compiling Paper 2 (2 passes for references)...$(NC)"
+	cd papers/arxiv_submissions/paper2 && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	cp manuscript.pdf ../../compiled/paper2/Paper2_Three_Regimes_arXiv_Submission.pdf && \
+	cp *.png ../../compiled/paper2/ && \
+	rm -f manuscript.aux manuscript.log manuscript.out || \
+	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
+	@echo "$(GREEN)✓ Paper 2 compiled → papers/compiled/paper2/$(NC)"
 
 paper5d: ## Compile Paper 5D (Pattern Mining Framework)
 	@echo "$(BLUE)Compiling Paper 5D (2 passes for references)...$(NC)"
