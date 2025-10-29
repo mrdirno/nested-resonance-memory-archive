@@ -92,10 +92,15 @@ test: ## Run test suite
 
 test-quick: ## Run quick smoke tests
 	@echo "$(BLUE)Running quick smoke tests...$(NC)"
-	@echo "$(YELLOW)Testing minimal package scripts...$(NC)"
+	@echo "$(YELLOW)Testing overhead validation (C255 parameters)...$(NC)"
 	cd papers/minimal_package_with_experiments/experiments && \
-	python overhead_check.py && \
-	python replicate_patterns.py
+	python overhead_check.py --N 1080000 --C_ms 67 --T_sim_min 30 --noise 0.02 --trials 50
+	@echo "$(YELLOW)Testing replicability criterion (healthy mode)...$(NC)"
+	cd papers/minimal_package_with_experiments/experiments && \
+	python replicate_patterns.py --runs 20 --threshold 0.99 --mode healthy
+	@echo "$(YELLOW)Testing replicability criterion (degraded mode)...$(NC)"
+	cd papers/minimal_package_with_experiments/experiments && \
+	python replicate_patterns.py --runs 20 --threshold 0.99 --mode degraded
 	@echo "$(GREEN)✓ Quick tests passed$(NC)"
 
 lint: ## Run code quality checks
