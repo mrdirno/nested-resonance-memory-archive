@@ -81,6 +81,7 @@
 - 4 figures @ 300 DPI: cycle175_framework_comparison.png, cycle175_population_distribution.png, cycle175_basin_occupation.png, cycle175_composition_constancy.png
 - README.md: Complete with abstract, contributions, reproducibility instructions
 - Cover letter: `papers/submission_materials/paper2_cover_letter_plos_one.md` (finalized for PLOS ONE)
+- **Supplementary materials:** `supplementary_materials.md` (3 tables + 3 figure descriptions) - Created Cycle 466
 
 **Data Files Available:**
 - C168-170: Ultra-low frequency, critical transition mapping, basin threshold sensitivity
@@ -324,10 +325,11 @@
 
 ---
 
-**Version:** 1.2
-**Date:** 2025-10-28 (Cycle 463 - Paper 2 cover letter finalized for PLOS ONE)
+**Version:** 1.3
+**Date:** 2025-10-28 (Cycle 466 - Paper 2 supplementary materials created)
 **Author:** Aldrin Payopay (aldrin.gdf@gmail.com)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
 
+**Last Update:** Paper 2 supplementary materials completed (3 tables + 3 figure descriptions)
 **Next Update:** After Papers 1, 2, & 5D submissions
