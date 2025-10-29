@@ -486,6 +486,32 @@ cd nested-resonance-memory-archive
 pip install numpy psutil matplotlib scipy
 ```
 
+### Workspace Configuration (IMPORTANT for Reproducibility)
+
+By default, all results and data are stored in `./data/results` (within the repository). If you need to use a custom workspace location, set the `NRM_WORKSPACE_PATH` environment variable:
+
+```bash
+# Override workspace location (optional)
+export NRM_WORKSPACE_PATH=/path/to/custom/workspace
+
+# Verify workspace path
+python code/experiments/workspace_utils.py
+```
+
+**Why this matters:**
+- All experiment scripts use `workspace_utils.get_workspace_path()` to resolve paths
+- This allows portable execution across different environments
+- No hard-coded absolute paths in reproducible code
+- Supports both development workspaces and git repository structure
+
+**Default behavior (no environment variable set):**
+- Workspace: `./workspace` (created if doesn't exist)
+- Results: `./data/results` (git repository structure)
+
+**With custom workspace:**
+- Workspace: Value of `NRM_WORKSPACE_PATH`
+- Results: `$NRM_WORKSPACE_PATH/results`
+
 ### Run Demonstration Scripts (NEW - Cycle 443)
 
 ```bash
@@ -493,9 +519,9 @@ pip install numpy psutil matplotlib scipy
 cd papers/minimal_package_with_experiments/experiments
 python overhead_check.py --N 1080000 --C_ms 67 --T_sim_min 30 --noise 0.02 --trials 50
 
-# Paper 5D: Replicability criterion
-python replicate_patterns.py --runs 20 --threshold 0.99 --mode healthy
-python replicate_patterns.py --runs 20 --threshold 0.99 --mode degraded
+# Paper 5D: Replicability criterion (deterministic with seed)
+python replicate_patterns.py --runs 20 --threshold 0.99 --mode healthy --seed 42
+python replicate_patterns.py --runs 20 --threshold 0.99 --mode degraded --seed 43
 ```
 
 ### Run Full Experiments

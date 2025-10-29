@@ -64,20 +64,21 @@ def get_results_path() -> Path:
     Get results directory path.
 
     Returns:
-        Path to results directory (workspace/../experiments/results)
+        Path to results directory (workspace/results or ./data/results)
     """
     workspace = get_workspace_path()
-    # If workspace is in standard location, use experiments/results
-    # Otherwise, use workspace/../results
-    if "DUALITY-ZERO" in str(workspace):
-        # Development workspace
-        results = workspace.parent / "experiments" / "results"
-    else:
-        # Git repo or custom location
-        results = Path("./experiments/results")
-        if not results.exists():
-            results = workspace / "results"
 
+    # Try workspace/results first
+    results = workspace / "results"
+    if results.exists():
+        return results
+
+    # Try data/results in current directory (git repo structure)
+    data_results = Path("./data/results")
+    if data_results.exists():
+        return data_results
+
+    # Create workspace/results as fallback
     results.mkdir(parents=True, exist_ok=True)
     return results
 
