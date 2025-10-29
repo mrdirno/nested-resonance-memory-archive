@@ -53,3 +53,9 @@ workspace/cache/npm_cache/
 *.bak
 workspace/cache/
 .DS_Store
+
+# LaTeX build artifacts
+papers/arxiv_submissions/*/manuscript.pdf
+papers/arxiv_submissions/*/manuscript.aux
+papers/arxiv_submissions/*/manuscript.log
+papers/arxiv_submissions/*/manuscript.out
