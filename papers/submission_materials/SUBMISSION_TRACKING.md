@@ -76,12 +76,13 @@
 
 **Compiled Package:**
 - Location: `papers/compiled/paper2/`
-- DOCX format: 23KB (PLOS ONE submission format)
+- DOCX format: 25KB (PLOS ONE submission format) - Regenerated from HTML (Cycle 468)
 - HTML format: 36KB (web format)
+- **Format consistency:** DOCX and HTML verified consistent (Cycles 466-468)
 - 4 figures @ 300 DPI: cycle175_framework_comparison.png, cycle175_population_distribution.png, cycle175_basin_occupation.png, cycle175_composition_constancy.png
 - README.md: Complete with abstract, contributions, reproducibility instructions
 - Cover letter: `papers/submission_materials/paper2_cover_letter_plos_one.md` (finalized for PLOS ONE)
-- **Supplementary materials:** `supplementary_materials.md` (3 tables + 3 figure descriptions) - Created Cycle 466
+- **Supplementary materials:** `supplementary_materials.md` (3 tables + 3 figure descriptions) - Created Cycle 466, format verified Cycle 468
 
 **Data Files Available:**
 - C168-170: Ultra-low frequency, critical transition mapping, basin threshold sensitivity
@@ -107,7 +108,7 @@
 **Current Status:** ⏳ Template Ready - Awaiting C255-C260 data
 
 **Dependencies:**
-- C255 (H1×H2): Running 79h+ (95%+ complete, 0-1 days)
+- C255 (H1×H2): Running 183h+ (estimated ~90-95% complete, completion time uncertain)
 - C256-C260: Scripts ready (67 minutes total runtime)
 
 **Pipeline Ready:**
@@ -325,11 +326,11 @@
 
 ---
 
-**Version:** 1.3
-**Date:** 2025-10-28 (Cycle 466 - Paper 2 supplementary materials created)
+**Version:** 1.4
+**Date:** 2025-10-28 (Cycle 469 - Status update)
 **Author:** Aldrin Payopay (aldrin.gdf@gmail.com)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
 
-**Last Update:** Paper 2 supplementary materials completed (3 tables + 3 figure descriptions)
+**Last Update:** Paper 2 format consistency verified (Cycles 466-468), C255 runtime updated (183h+), repository status current
 **Next Update:** After Papers 1, 2, & 5D submissions
