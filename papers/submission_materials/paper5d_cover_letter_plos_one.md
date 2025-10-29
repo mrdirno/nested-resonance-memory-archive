@@ -1,6 +1,6 @@
 # Cover Letter: Cataloging Emergent Patterns in NRM Systems
 
-**Date:** October 27, 2025
+**Date:** October 28, 2025
 
 **To:** Editor-in-Chief
 **Journal:** PLOS ONE
@@ -18,7 +18,7 @@ Our work addresses a critical methodological gap in agent-based modeling researc
 
 **Key Contributions:**
 
-1. **Systematic Pattern Taxonomy:** We developed a comprehensive classification framework spanning 4 categories (spatial, temporal, interaction, memory) and 12 pattern types applicable to agent-based systems. This taxonomy enables standardized pattern reporting across studies.
+1. **Systematic Pattern Taxonomy:** We developed a comprehensive classification framework spanning 2 validated categories (temporal and memory) with 17 patterns applicable to agent-based systems. This taxonomy enables standardized pattern reporting across studies.
 
 2. **Automated Detection Methods:** Our framework implements automated algorithms for pattern detection based on population dynamics, composition event frequencies, and cross-frequency behaviors. These methods scale to large experimental datasets (150+ runs) without requiring manual inspection.
 
