@@ -759,6 +759,7 @@ See LICENSE file for full terms: https://github.com/mrdirno/nested-resonance-mem
 
 ## VERSION HISTORY
 
+- **v1.1 (2025-10-28, Cycle 461):** Infrastructure verification update (Makefile test-quick + CI/CD fixes confirmed functional)
 - **v1.0 (2025-10-27, Cycle 350):** Initial reproducibility guide
 - **v0.9 (2025-10-26):** Pre-release (awaiting C255-C260 completion)
 
@@ -773,7 +774,6 @@ This reproducibility guide was created to enable independent validation of all r
 ---
 
 **Author:** Aldrin Payopay & Claude (DUALITY-ZERO-V2)
-**Date:** 2025-10-27
-**Cycle:** 350
+**Last Updated:** 2025-10-28 (Cycle 461)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
