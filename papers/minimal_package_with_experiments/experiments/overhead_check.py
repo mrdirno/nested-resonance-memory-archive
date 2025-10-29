@@ -77,7 +77,12 @@ def main():
     parser.add_argument("--tol", type=float, default=0.05, help="Relative error tolerance (default: 0.05)")
     parser.add_argument("--noise", type=float, default=0.02, help="Std dev of multiplicative noise (default: 0.02)")
     parser.add_argument("--trials", type=int, default=30, help="Number of trials (default: 30)")
+    parser.add_argument("--seed", type=int, default=None, help="Random seed for reproducibility (default: None)")
     args = parser.parse_args()
+
+    # Set deterministic seed if provided
+    if args.seed is not None:
+        random.seed(args.seed)
     predicted, median_err, p90_err, pass_rate = run_trials(
         args.N, args.C_ms, args.T_sim_min, args.tol, args.noise, args.trials
     )

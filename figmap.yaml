@@ -174,7 +174,7 @@ metadata:
 # Reproducibility Notes
 reproducibility:
   environment:
-    - "Python 3.10+"
+    - "Python 3.9+"
     - "See requirements.txt for dependencies"
     - "NRM_WORKSPACE_PATH env var for workspace override"
 
