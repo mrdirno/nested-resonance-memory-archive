@@ -4,7 +4,7 @@
 
 **Target Audience:** Computational researchers, peer reviewers, replication studies
 
-**Last Updated:** 2025-10-28 (Cycle 460 - Verified all infrastructure functional: Makefile test-quick + GitHub Actions CI/CD fixed)
+**Last Updated:** 2025-10-29 (Cycle 501 - Added paper compilation documentation for Papers 1, 2, 5D, 6, 6B)
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 
@@ -16,12 +16,13 @@
 2. [System Requirements](#system-requirements)
 3. [Installation](#installation)
 4. [Running Experiments](#running-experiments)
-5. [Expected Results](#expected-results)
-6. [Computational Expense](#computational-expense)
-7. [Troubleshooting](#troubleshooting)
-8. [Verification Checklist](#verification-checklist)
-9. [Common Issues](#common-issues)
-10. [Contact & Support](#contact--support)
+5. [Compiling Papers](#compiling-papers)
+6. [Expected Results](#expected-results)
+7. [Computational Expense](#computational-expense)
+8. [Troubleshooting](#troubleshooting)
+9. [Verification Checklist](#verification-checklist)
+10. [Common Issues](#common-issues)
+11. [Contact & Support](#contact--support)
 
 ---
 
@@ -429,6 +430,273 @@ python visualize_higher_order_interactions.py paper4_aggregated.json
 
 ---
 
+## COMPILING PAPERS
+
+All submission-ready papers have LaTeX sources and can be compiled to PDF with embedded figures using Docker + texlive.
+
+### System Requirements for Compilation
+
+**Required:**
+- Docker installed and running
+- 2 GB free disk space (for texlive/texlive:latest image)
+- Internet connection (first run only, to pull Docker image)
+
+**Supported Papers:**
+- Paper 1: Computational Expense Validation
+- Paper 2: Three Dynamical Regimes
+- Paper 5D: Pattern Mining Framework
+- Paper 6: Scale-Dependent Phase Autonomy
+- Paper 6B: Multi-Timescale Phase Autonomy Dynamics
+
+### Option 1: Using Make (Recommended)
+
+**Quick compilation of all papers:**
+
+```bash
+# Individual papers
+make paper1   # Compile Paper 1 (~30 seconds)
+make paper2   # Compile Paper 2 (~30 seconds)
+make paper5d  # Compile Paper 5D (~30 seconds)
+make paper6   # Compile Paper 6 (~30 seconds)
+make paper6b  # Compile Paper 6B (~30 seconds)
+
+# Or compile multiple papers
+make paper1 paper2 paper5d paper6 paper6b
+```
+
+**Expected output:**
+```
+Compiling Paper 1 (2 passes for references)...
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023)
+...
+Output written on manuscript.pdf (13 pages, 1234567 bytes).
+✓ Paper 1 compiled → papers/compiled/paper1/
+```
+
+**Output location:**
+```
+papers/compiled/paper1/Paper1_Computational_Expense_Validation_arXiv_Submission.pdf
+papers/compiled/paper2/Paper2_Three_Regimes_arXiv_Submission.pdf
+papers/compiled/paper5d/Paper5D_Pattern_Mining_Framework_arXiv_Submission.pdf
+papers/compiled/paper6/Paper6_Scale_Dependent_Phase_Autonomy_arXiv_Submission.pdf
+papers/compiled/paper6b/Paper6B_Multi_Timescale_Phase_Autonomy_arXiv_Submission.pdf
+```
+
+### Option 2: Manual Docker Compilation
+
+**Step-by-step compilation (Paper 1 example):**
+
+```bash
+# Navigate to LaTeX source directory
+cd papers/arxiv_submissions/paper1
+
+# Run pdflatex twice (for references)
+docker run --rm -v "$(pwd):/work" -w /work texlive/texlive:latest \
+  pdflatex -interaction=nonstopmode manuscript.tex
+
+docker run --rm -v "$(pwd):/work" -w /work texlive/texlive:latest \
+  pdflatex -interaction=nonstopmode manuscript.tex
+
+# Copy to compiled directory
+cp manuscript.pdf ../../compiled/paper1/Paper1_Computational_Expense_Validation_arXiv_Submission.pdf
+
+# Clean auxiliary files
+rm -f manuscript.aux manuscript.log manuscript.out
+```
+
+**Repeat for other papers:**
+- Paper 2: `cd papers/arxiv_submissions/paper2`
+- Paper 5D: `cd papers/arxiv_submissions/paper5d`
+- Paper 6: `cd papers/arxiv_submissions/paper6`
+- Paper 6B: `cd papers/arxiv_submissions/paper6b`
+
+### Verifying Compilation
+
+**Check PDF was created:**
+
+```bash
+ls -lh papers/compiled/paper1/*.pdf
+# Expected: Paper1_Computational_Expense_Validation_arXiv_Submission.pdf (13 pages, ~2 MB)
+
+ls -lh papers/compiled/paper2/*.pdf
+# Expected: Paper2_Three_Regimes_arXiv_Submission.pdf (13 pages, ~200 KB)
+
+ls -lh papers/compiled/paper5d/*.pdf
+# Expected: Paper5D_Pattern_Mining_Framework_arXiv_Submission.pdf (13 pages, ~1.5 MB)
+
+ls -lh papers/compiled/paper6/*.pdf
+# Expected: Paper6_Scale_Dependent_Phase_Autonomy_arXiv_Submission.pdf (13 pages, ~1.6 MB)
+
+ls -lh papers/compiled/paper6b/*.pdf
+# Expected: Paper6B_Multi_Timescale_Phase_Autonomy_arXiv_Submission.pdf (14 pages, ~1.0 MB)
+```
+
+**Open PDF to verify:**
+
+```bash
+open papers/compiled/paper1/Paper1_Computational_Expense_Validation_arXiv_Submission.pdf
+```
+
+### Expected Compilation Output
+
+**Paper 1: Computational Expense Validation**
+- **Pages:** 13
+- **Size:** ~2 MB (includes 4 figures @ 300 DPI)
+- **Figures:** 4 embedded PNG images
+- **Contents:** Abstract, Introduction, Methods, Results, Discussion, Conclusions, References
+- **Runtime:** ~30 seconds (2 LaTeX passes)
+
+**Paper 2: Three Dynamical Regimes**
+- **Pages:** 13
+- **Size:** ~200 KB (text-only, figures separate)
+- **Figures:** 6 PNG files (separate, not embedded)
+- **Contents:** Abstract, Introduction, Methods, Results, Discussion, Conclusions, References
+- **Runtime:** ~30 seconds (2 LaTeX passes)
+
+**Paper 5D: Pattern Mining Framework**
+- **Pages:** 13
+- **Size:** ~1.5 MB (includes 4 figures @ 300 DPI)
+- **Figures:** 4 embedded PNG images
+- **Contents:** Abstract, Introduction, Methods, Results, Discussion, Conclusions, References
+- **Runtime:** ~30 seconds (2 LaTeX passes)
+
+**Paper 6: Scale-Dependent Phase Autonomy**
+- **Pages:** 13
+- **Size:** ~1.6 MB (includes 4 figures @ 300 DPI)
+- **Figures:** 4 embedded PNG images (74.5M events visualization)
+- **Contents:** Abstract, Introduction, Methods, Results, Discussion, Conclusions, References
+- **Runtime:** ~30 seconds (2 LaTeX passes)
+
+**Paper 6B: Multi-Timescale Phase Autonomy Dynamics**
+- **Pages:** 14
+- **Size:** ~1.0 MB (includes 4 figures @ 300 DPI)
+- **Figures:** 4 embedded PNG images
+- **Contents:** Abstract, Introduction, Methods, Results, Discussion, Conclusions, References
+- **Runtime:** ~30 seconds (2 LaTeX passes)
+
+### Per-Paper Documentation
+
+**Each paper has comprehensive documentation in `papers/compiled/paperX/README.md`:**
+
+```bash
+# View Paper 1 documentation
+cat papers/compiled/paper1/README.md
+
+# View Paper 2 documentation
+cat papers/compiled/paper2/README.md
+
+# View Paper 5D documentation
+cat papers/compiled/paper5d/README.md
+
+# View Paper 6 documentation
+cat papers/compiled/paper6/README.md
+
+# View Paper 6B documentation
+cat papers/compiled/paper6b/README.md
+```
+
+**Each README contains:**
+- Abstract summary
+- Key contributions (4-5 bullet points)
+- Figure descriptions
+- Reproducibility instructions with runtime estimates
+- Expected results with tolerances
+- Citation BibTeX
+
+### Troubleshooting Compilation Errors
+
+**Issue: "LaTeX Error: Unicode character not set up"**
+
+**Example:**
+```
+! LaTeX Error: Unicode character ∈ (U+2208) not set up for use with LaTeX.
+```
+
+**Solution:** Replace Unicode math symbols with LaTeX equivalents:
+```latex
+# BEFORE (error):
+r ∈ \{0.000, 0.005, 0.010\}
+
+# AFTER (correct):
+r $\in$ \{0.000, 0.005, 0.010\}
+```
+
+**Issue: "File not found: figure.png"**
+
+**Cause:** Figures not in LaTeX source directory
+
+**Solution:** Verify figures exist in `papers/arxiv_submissions/paperX/`:
+```bash
+ls papers/arxiv_submissions/paper1/*.png
+# Expected: paper1_fig1.png, paper1_fig2.png, paper1_fig3.png, paper1_fig4.png
+```
+
+If missing, copy from `data/figures/`:
+```bash
+cp data/figures/paper1_*.png papers/arxiv_submissions/paper1/
+```
+
+**Issue: "Docker: command not found"**
+
+**Solution:** Install Docker Desktop:
+- macOS: https://docs.docker.com/desktop/install/mac-install/
+- Linux: https://docs.docker.com/desktop/install/linux-install/
+- Windows: https://docs.docker.com/desktop/install/windows-install/
+
+**Issue: Compilation takes >5 minutes**
+
+**Cause:** Docker pulling texlive image (first run only, ~2 GB download)
+
+**Solution:** Wait for download to complete. Subsequent compilations will be fast (~30 sec).
+
+**Check Docker image:**
+```bash
+docker images | grep texlive
+# Expected: texlive/texlive   latest   ...   ~2 GB
+```
+
+### arXiv Submission Packages
+
+**Each paper has a complete arXiv submission package in `papers/arxiv_submissions/paperX/`:**
+
+**Contents:**
+```
+papers/arxiv_submissions/paper1/
+├── manuscript.tex           # LaTeX source
+├── paper1_fig1.png          # Figure 1 @ 300 DPI
+├── paper1_fig2.png          # Figure 2 @ 300 DPI
+├── paper1_fig3.png          # Figure 3 @ 300 DPI
+├── paper1_fig4.png          # Figure 4 @ 300 DPI
+└── README_ARXIV_SUBMISSION.md  # Submission instructions
+```
+
+**To create arXiv upload tarball:**
+
+```bash
+cd papers/arxiv_submissions/paper1
+tar -czf paper1_arxiv_submission.tar.gz manuscript.tex *.png
+```
+
+**Upload `paper1_arxiv_submission.tar.gz` to arXiv submission portal.**
+
+**See `README_ARXIV_SUBMISSION.md` in each paper directory for detailed instructions.**
+
+### Publication Timeline
+
+**All 5 papers are submission-ready:**
+
+| Paper | Status | Target Venue | Submission Window |
+|-------|--------|--------------|-------------------|
+| Paper 1 | ✅ Ready | PLOS ONE / Scientific Reports | Q4 2025 |
+| Paper 2 | ✅ Ready | Chaos / Physical Review E | Q4 2025 |
+| Paper 5D | ✅ Ready | Data Mining & Knowledge Discovery | Q1 2026 |
+| Paper 6 | ✅ Ready | Physical Review E / Chaos | Q4 2025 |
+| Paper 6B | ✅ Ready | Physica D / Nonlinear Dynamics | Q1 2026 |
+
+**See `papers/PUBLICATION_STRATEGY_2025.md` for comprehensive submission guidance.**
+
+---
+
 ## EXPECTED RESULTS
 
 ### Determinism Validation
@@ -759,6 +1027,11 @@ See LICENSE file for full terms: https://github.com/mrdirno/nested-resonance-mem
 
 ## VERSION HISTORY
 
+- **v1.2 (2025-10-29, Cycle 501):** Added comprehensive paper compilation documentation (Papers 1, 2, 5D, 6, 6B)
+  - New section: "Compiling Papers" with Make + Docker instructions
+  - Documented all 5 submission-ready papers
+  - Added expected outputs, troubleshooting, and arXiv submission guidance
+  - Updated table of contents and timeline estimates
 - **v1.1 (2025-10-28, Cycle 461):** Infrastructure verification update (Makefile test-quick + CI/CD fixes confirmed functional)
 - **v1.0 (2025-10-27, Cycle 350):** Initial reproducibility guide
 - **v0.9 (2025-10-26):** Pre-release (awaiting C255-C260 completion)
@@ -774,6 +1047,6 @@ This reproducibility guide was created to enable independent validation of all r
 ---
 
 **Author:** Aldrin Payopay & Claude (DUALITY-ZERO-V2)
-**Last Updated:** 2025-10-28 (Cycle 461)
+**Last Updated:** 2025-10-29 (Cycle 501)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
