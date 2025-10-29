@@ -493,11 +493,14 @@ class FractalAgent:
                 f"memory={len(self.memory)})")
 
 
-# TODO: Implement FractalSwarm for managing multiple agents
-# TODO: Implement CompositionEngine for clustering agents
-# TODO: Implement DecompositionEngine for burst events
-# TODO: Add database persistence for agent evolution history
-# TODO: Add reality validation checks for fractal operations
+# NOTE: Originally planned components (FractalSwarm, CompositionEngine, DecompositionEngine)
+# have been implemented differently than initially envisioned:
+#   - CompositionEngine → Implemented as Kuramoto coupling in consolidation_engine.py
+#   - DecompositionEngine → Implemented as phase perturbations in REM exploration
+#   - Database persistence → Already implemented via SQLite in pattern_memory.py
+#   - Reality validation → Integrated into consolidation_engine (psutil tracking)
+# The system evolved based on empirical research needs rather than original design.
+# See: consolidation_engine.py (NRM V2 integration, Cycle 488)
 
 if __name__ == "__main__":
     print("=" * 60)

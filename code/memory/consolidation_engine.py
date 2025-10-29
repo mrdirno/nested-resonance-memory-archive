@@ -84,17 +84,25 @@ class ConsolidationEngine:
         self,
         memory: Optional[PatternMemory] = None,
         bridge: Optional[TranscendentalBridge] = None,
-        workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace"
+        workspace_path: Optional[str] = None
     ):
         """
         Initialize consolidation engine.
 
         Args:
-            memory: Optional PatternMemory instance
-            bridge: Optional TranscendentalBridge instance
-            workspace_path: Workspace directory path
+            memory: PatternMemory instance (created if None)
+            bridge: TranscendentalBridge instance (created if None)
+            workspace_path: Workspace directory path (uses env var or relative path if None)
         """
-        self.memory = memory if memory else PatternMemory()
+        # Resolve workspace path: env var > explicit arg > relative default
+        import os
+        if workspace_path is None:
+            workspace_path = os.environ.get(
+                'NRM_WORKSPACE_PATH',
+                str(Path(__file__).parent.parent.parent / 'workspace')
+            )
+
+        self.memory = memory if memory else PatternMemory(workspace_path)
         self.bridge = bridge if bridge else TranscendentalBridge(workspace_path)
         self.workspace_path = Path(workspace_path)
 

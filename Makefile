@@ -14,7 +14,7 @@
 # Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 # License: GPL-3.0
 
-.PHONY: help install paper1 paper5d paper3 paper4 test lint format clean docker-build docker-run
+.PHONY: help install paper1 paper5d paper3 paper4 test lint format clean docker-build docker-run figures figures-c175 figures-nrmv2 list-figures
 
 # Default target
 .DEFAULT_GOAL := help
@@ -147,4 +147,30 @@ papers: paper1 paper5d ## Compile all papers
 # Experiments
 experiments: paper3 paper4 ## Run all experiments
 
-.PHONY: all papers experiments
+# Figure Regeneration (added Cycle 489)
+figures: figures-c175 figures-nrmv2 ## Regenerate all publication figures
+	@echo "$(GREEN)✓ All figures regenerated$(NC)"
+
+figures-c175: ## Regenerate C175 experimental figures
+	@echo "$(BLUE)Regenerating C175 experimental figures...$(NC)"
+	@python code/experiments/analyze_cycle175_transition.py
+	@echo "$(GREEN)✓ C175 figures regenerated$(NC)"
+
+figures-nrmv2: ## Regenerate NRM V2 consolidation figures
+	@echo "$(BLUE)Regenerating NRM V2 consolidation figures...$(NC)"
+	@python code/experiments/demo_nrmv2_c175_consolidation.py
+	@python code/analysis/visualize_nrmv2_coalitions.py
+	@echo "$(GREEN)✓ NRM V2 figures regenerated$(NC)"
+
+list-figures: ## List all figures in archive
+	@echo "$(BLUE)Figures in archive:$(NC)"
+	@find data/figures -name "*.png" -type f | wc -l | awk '{printf "  $(GREEN)Total: %s$(NC)\n", $$1}'
+	@echo ""
+	@echo "$(BLUE)By category:$(NC)"
+	@find data/figures -name "cycle175*.png" | wc -l | awk '{printf "  C175:    %s\n", $$1}'
+	@find data/figures -name "nrmv2*.png" | wc -l | awk '{printf "  NRM V2:  %s\n", $$1}'
+	@find data/figures -name "paper7*.png" | wc -l | awk '{printf "  Paper 7: %s\n", $$1}'
+	@echo ""
+	@echo "$(YELLOW)See figmap.yaml for detailed figure mapping$(NC)"
+
+.PHONY: all papers experiments figures figures-c175 figures-nrmv2 list-figures
