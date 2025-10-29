@@ -11,13 +11,18 @@
 
 Comprehensive archive of Nested Resonance Memory (NRM) research documenting autonomous emergence experiments, Self-Giving Systems validation, and temporal stewardship methodology. This repository captures a complete research trajectory from bistability discovery through mean-field theory validation to multi-paper publication pipeline with **hybrid intelligence collaboration**.
 
-**Current Status (Cycle 471 - IMMEDIATE SUBMISSION-READY + REVIEWERS IDENTIFIED):**
-- **10 Papers** in publication pipeline (3 100% submission-ready, 2 template-ready, 5 script-ready)
+**Current Status (Cycle 496 - PAPER 6B ADDED + MULTI-TIMESCALE VALIDATION):**
+- **11 Papers** in publication pipeline (3 100% submission-ready, 2 manuscript-ready, 2 template-ready, 4 script-ready)
 - **Papers 1, 2 & 5D:** ✅ **100% SUBMISSION-READY** - All formats complete, reviewers identified
   - **Paper 1:** ±5% threshold + Inverse Noise Filtration + arXiv package + **5 verified reviewers**
   - **Paper 2:** Supplementary materials + DOCX/HTML consistent + **5 verified reviewers**
   - **Paper 5D:** 2-category validation + arXiv package + **5 verified reviewers**
   - **All 3 papers:** Cover letters finalized, 15 total reviewers identified (Cycle 471)
+- **Paper 6B (NEW - Cycle 496):** ✅ **MANUSCRIPT READY** - Multi-timescale validation arc complete
+  - 3-experiment protocol: Discovery (C493) → Refutation (C494) → Quantification (C495)
+  - Exponential decay model: F(t) = 2.39 × exp(-t/454), critical transition t_c=396 cycles
+  - Markdown draft (~4,200 words) + 4 publication figures @ 300 DPI
+  - Target: Physical Review E (Statistical Mechanics) or Nature Communications
 - **Reproducibility:** World-class 9.3/10 standard maintained (8 core files + CI/CD)
 - **Total Artifacts:** 169+ deliverables (Cycle 471: reviewer suggestions + arXiv ancillary files)
 - **Empirical Validation:** 450,000+ computational cycles executed
@@ -228,12 +233,20 @@ python papers/minimal_package_with_experiments/experiments/replicate_patterns.py
 
 **Purpose:** Systematic verification reduces submission errors and ensures professional handling (complements submission guide with executable checklist)
 
-### Journal Ready ✅
+### Journal Ready / Manuscript Ready ✅
 
 **Paper 2: From Bistability to Collapse (3 Regimes)**
 - **Status:** ✅ 100% SUBMISSION-READY (Cycle 425)
 - **Formats:** Markdown + DOCX + HTML + 4 figs @ 300 DPI + cover letters
 - **Target:** PLOS ONE or Scientific Reports
+
+**Paper 6B: Multi-Timescale Phase Autonomy Dynamics**
+- **Status:** ✅ MANUSCRIPT READY (Cycle 496 - NEW)
+- **Formats:** Markdown draft (~4,200 words) + 4 figs @ 300 DPI
+- **Package:** `papers/compiled/paper6b/` (README + figures, LaTeX conversion pending)
+- **Experiments:** Cycles 493-495 (3-experiment validation arc completed)
+- **Key Finding:** Exponential decay τ=454 cycles, critical transition t_c=396 cycles
+- **Target:** Physical Review E (Statistical Mechanics) or Nature Communications
 
 ### Template Ready (Awaiting Data) ⏳
 
