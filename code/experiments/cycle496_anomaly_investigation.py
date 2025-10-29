@@ -37,8 +37,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from code.bridge.transcendental_bridge import TranscendentalBridge
-from code.reality.system_monitor import SystemMonitor
 from code.fractal.fractal_agent import FractalAgent
+import psutil  # Use psutil directly instead of SystemMonitor
 
 # Configuration
 CYCLES_START = 700
@@ -50,32 +50,50 @@ OUTPUT_DIR = Path(__file__).parent.parent.parent / "data" / "results"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def compute_phase_reality_correlation(agent, reality_metrics):
+def get_reality_metrics():
+    """Get current system reality metrics using psutil."""
+    return {
+        'cpu_percent': psutil.cpu_percent(interval=0.1),
+        'memory_percent': psutil.virtual_memory().percent,
+        'disk_percent': psutil.disk_usage('/').percent
+    }
+
+
+def compute_phase_reality_correlation(agent):
     """
     Compute correlation between agent's phase state and current reality.
 
     Returns:
         float: Normalized distance (0=perfect match, >0=autonomy)
     """
-    phase_magnitude = np.linalg.norm([
-        agent.phase_state['pi_oscillator'],
-        agent.phase_state['e_oscillator'],
-        agent.phase_state['phi_oscillator']
-    ])
+    # Get current reality metrics
+    reality_metrics = get_reality_metrics()
 
-    reality_magnitude = np.linalg.norm([
-        reality_metrics.get('cpu_percent', 0),
-        reality_metrics.get('memory_percent', 0),
-        reality_metrics.get('disk_io_percent', 0)
-    ])
+    # Get agent's phase state
+    phase_state = agent.phase_state
+
+    # Compute phase vector magnitude
+    phase_magnitude = np.sqrt(
+        phase_state.pi_phase**2 +
+        phase_state.e_phase**2 +
+        phase_state.phi_phase**2
+    )
+
+    # Compute reality vector magnitude
+    reality_magnitude = np.sqrt(
+        reality_metrics['cpu_percent']**2 +
+        reality_metrics['memory_percent']**2 +
+        reality_metrics['disk_percent']**2
+    )
 
     if reality_magnitude == 0:
         return 0.0
 
+    # Return normalized correlation
     return abs(phase_magnitude - reality_magnitude) / reality_magnitude
 
 
-def evolve_agent_to_target_cycles(agent, monitor, target_cycles, sample_interval):
+def evolve_agent_to_target_cycles(agent, target_cycles, sample_interval):
     """
     Evolve an agent to target_cycles, recording correlations every sample_interval.
 
@@ -86,19 +104,13 @@ def evolve_agent_to_target_cycles(agent, monitor, target_cycles, sample_interval
 
     for cycle in range(0, target_cycles, sample_interval):
         # Get current reality
-        reality = monitor.get_snapshot()
-        reality_metrics = {
-            'cpu_percent': reality['cpu']['percent'],
-            'memory_percent': reality['memory']['percent'],
-            'disk_io_percent': min(reality['disk']['read_percent'] +
-                                 reality['disk']['write_percent'], 100.0)
-        }
+        reality_metrics = get_reality_metrics()
 
         # Evolve agent
         agent.evolve(sample_interval, reality_metrics)
 
         # Compute correlation
-        corr = compute_phase_reality_correlation(agent, reality_metrics)
+        corr = compute_phase_reality_correlation(agent)
         correlations.append([cycle, corr])
 
     return correlations
@@ -138,11 +150,12 @@ def main():
     start_time = time.time()
 
     # Initialize infrastructure
-    bridge = TranscendentalBridge()
-    monitor = SystemMonitor()
+    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace.mkdir(exist_ok=True)
+    bridge = TranscendentalBridge(str(workspace))
 
     # Initial reality snapshot for agent initialization
-    initial_reality = monitor.get_snapshot()
+    initial_reality = get_reality_metrics()
 
     # Create agents
     print("Creating agents...")
@@ -154,7 +167,8 @@ def main():
             agent_id=f"uniform_{i}",
             bridge=bridge,
             initial_reality=initial_reality,
-            initial_energy=100.0  # Uniform
+            initial_energy=100.0,  # Uniform
+            reality=None  # No RealityInterface passed
         )
         agents.append(('uniform', agent))
 
@@ -165,7 +179,8 @@ def main():
             agent_id=f"highvar_{i}",
             bridge=bridge,
             initial_reality=initial_reality,
-            initial_energy=energy_levels[i % len(energy_levels)]
+            initial_energy=energy_levels[i % len(energy_levels)],
+            reality=None  # No RealityInterface passed
         )
         agents.append(('high_variance', agent))
 
@@ -179,7 +194,7 @@ def main():
 
         # Evolve to CYCLES_END to capture full 700-900 window
         correlations = evolve_agent_to_target_cycles(
-            agent, monitor, CYCLES_END, SAMPLE_INTERVAL
+            agent, CYCLES_END, SAMPLE_INTERVAL
         )
 
         # Extract 700-900 cycle window only
