@@ -176,6 +176,35 @@ class PatternMemory:
                 )
             """)
 
+            # Memetic embeddings table (NRM V2 integration)
+            # Stores vector representations of patterns for semantic similarity
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS pattern_embeddings (
+                    embedding_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    pattern_id TEXT UNIQUE,
+                    embedding_vector TEXT,  -- JSON array of floats
+                    embedding_model TEXT,   -- Model name (e.g., "all-mpnet-base-v2")
+                    embedding_dim INTEGER,  -- Vector dimensionality
+                    timestamp REAL,
+                    FOREIGN KEY (pattern_id) REFERENCES patterns(pattern_id)
+                )
+            """)
+
+            # Semantic graph weights (sparse adjacency matrix W)
+            # Encodes semantic similarity and co-occurrence relationships
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS semantic_graph (
+                    edge_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    pattern_id_i TEXT,
+                    pattern_id_j TEXT,
+                    weight REAL,           -- Edge weight W_ij
+                    weight_type TEXT,      -- 'semantic', 'cooccurrence', 'composite'
+                    last_updated REAL,
+                    FOREIGN KEY (pattern_id_i) REFERENCES patterns(pattern_id),
+                    FOREIGN KEY (pattern_id_j) REFERENCES patterns(pattern_id)
+                )
+            """)
+
             # Indexes
             conn.execute("""
                 CREATE INDEX IF NOT EXISTS idx_patterns_type
@@ -529,6 +558,159 @@ class PatternMemory:
             'average_pattern_confidence': avg_confidence,
             'database_path': str(self.db_path)
         }
+
+    # ============================================================================
+    # NRM V2: Memetic Embedding Support
+    # ============================================================================
+
+    def store_embedding(
+        self,
+        pattern_id: str,
+        embedding_vector: List[float],
+        embedding_model: str = "local",
+        embedding_dim: Optional[int] = None
+    ):
+        """
+        Store embedding vector for a pattern.
+
+        Part of NRM V2 integration: enables semantic similarity computation
+        and Kuramoto-style coalition detection in embedding space.
+
+        Args:
+            pattern_id: Pattern identifier
+            embedding_vector: Vector representation (list of floats)
+            embedding_model: Model name used for embedding
+            embedding_dim: Optional dimensionality (auto-detected if None)
+        """
+        if embedding_dim is None:
+            embedding_dim = len(embedding_vector)
+
+        with self._db_connection() as conn:
+            conn.execute("""
+                INSERT OR REPLACE INTO pattern_embeddings
+                (pattern_id, embedding_vector, embedding_model, embedding_dim, timestamp)
+                VALUES (?, ?, ?, ?, ?)
+            """, (
+                pattern_id,
+                json.dumps(embedding_vector),
+                embedding_model,
+                embedding_dim,
+                time.time()
+            ))
+            conn.commit()
+
+    def get_embedding(self, pattern_id: str) -> Optional[List[float]]:
+        """
+        Retrieve embedding vector for a pattern.
+
+        Args:
+            pattern_id: Pattern identifier
+
+        Returns:
+            Embedding vector or None if not found
+        """
+        with self._db_connection() as conn:
+            cursor = conn.execute("""
+                SELECT embedding_vector FROM pattern_embeddings
+                WHERE pattern_id = ?
+            """, (pattern_id,))
+            row = cursor.fetchone()
+
+            if row is None:
+                return None
+
+            return json.loads(row[0])
+
+    def store_graph_edge(
+        self,
+        pattern_id_i: str,
+        pattern_id_j: str,
+        weight: float,
+        weight_type: str = 'composite'
+    ):
+        """
+        Store or update edge in semantic graph (adjacency matrix W).
+
+        Part of NRM V2 integration: builds sparse weighted graph connecting
+        related patterns for Kuramoto coupling dynamics.
+
+        Args:
+            pattern_id_i: First pattern ID
+            pattern_id_j: Second pattern ID
+            weight: Edge weight W_ij (>= 0.0)
+            weight_type: Type of weight ('semantic', 'cooccurrence', 'composite')
+        """
+        with self._db_connection() as conn:
+            # Ensure symmetric storage (W_ij = W_ji)
+            for (pi, pj) in [(pattern_id_i, pattern_id_j), (pattern_id_j, pattern_id_i)]:
+                conn.execute("""
+                    INSERT OR REPLACE INTO semantic_graph
+                    (pattern_id_i, pattern_id_j, weight, weight_type, last_updated)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (pi, pj, weight, weight_type, time.time()))
+            conn.commit()
+
+    def get_graph_neighbors(
+        self,
+        pattern_id: str,
+        min_weight: float = 0.1,
+        limit: int = 50
+    ) -> List[Tuple[str, float]]:
+        """
+        Get neighbors of a pattern in semantic graph.
+
+        Args:
+            pattern_id: Pattern identifier
+            min_weight: Minimum edge weight threshold
+            limit: Maximum number of neighbors
+
+        Returns:
+            List of (neighbor_pattern_id, weight) tuples
+        """
+        with self._db_connection() as conn:
+            cursor = conn.execute("""
+                SELECT pattern_id_j, weight FROM semantic_graph
+                WHERE pattern_id_i = ? AND weight >= ?
+                ORDER BY weight DESC
+                LIMIT ?
+            """, (pattern_id, min_weight, limit))
+
+            return cursor.fetchall()
+
+    def compute_semantic_similarity(
+        self,
+        embedding_i: List[float],
+        embedding_j: List[float]
+    ) -> float:
+        """
+        Compute cosine similarity between two embedding vectors.
+
+        Part of NRM V2: used for building semantic graph edges.
+
+        Args:
+            embedding_i: First embedding vector
+            embedding_j: Second embedding vector
+
+        Returns:
+            Cosine similarity (0.0 to 1.0, where 1.0 = identical)
+        """
+        import math
+
+        # Dot product
+        dot_product = sum(a * b for a, b in zip(embedding_i, embedding_j))
+
+        # Magnitudes
+        mag_i = math.sqrt(sum(a * a for a in embedding_i))
+        mag_j = math.sqrt(sum(b * b for b in embedding_j))
+
+        # Cosine similarity
+        if mag_i == 0.0 or mag_j == 0.0:
+            return 0.0
+
+        similarity = dot_product / (mag_i * mag_j)
+
+        # Clamp to [0, 1] (convert from [-1, 1])
+        return max(0.0, (similarity + 1.0) / 2.0)
 
 
 # Module-level API

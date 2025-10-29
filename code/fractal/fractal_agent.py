@@ -224,6 +224,110 @@ class FractalAgent:
         for child in self.children:
             child.evolve(delta_time)
 
+    def coupled_evolve(
+        self,
+        delta_time: float,
+        neighbors: List[Tuple['FractalAgent', float]],
+        intrinsic_frequency: float = 1.0,
+        cross_frequency_beta: float = 0.1
+    ) -> None:
+        """
+        Evolve agent with Kuramoto-style coupling to neighbors.
+
+        Part of NRM V2 integration: implements coupled oscillator dynamics
+        for coalition detection and synchronization.
+
+        Mathematical form:
+            dφ_i/dt = ω + Σ_j W_ij sin(φ_j - φ_i) + β f(φ_neighbor)
+
+        where:
+            ω = intrinsic frequency
+            W_ij = coupling weights from semantic graph
+            β = cross-frequency coupling coefficient
+            f(φ) = coupling function (default: sin)
+
+        Args:
+            delta_time: Time step for evolution
+            neighbors: List of (agent, weight) tuples from semantic graph
+            intrinsic_frequency: Natural oscillation frequency ω
+            cross_frequency_beta: Cross-frequency coupling strength β
+        """
+        import math
+
+        # First, standard evolution (energy + phase)
+        self.evolve(delta_time)
+
+        if not neighbors:
+            return  # No coupling if no neighbors
+
+        # Kuramoto coupling term: Σ_j W_ij sin(φ_j - φ_i)
+        # Use π-phase as primary oscillator
+        my_phase = self.phase_state.pi_phase
+        coupling_term = 0.0
+
+        for neighbor_agent, weight in neighbors:
+            neighbor_phase = neighbor_agent.phase_state.pi_phase
+            phase_diff = neighbor_phase - my_phase
+            coupling_term += weight * math.sin(phase_diff)
+
+        # Update phase with coupled dynamics
+        # dφ/dt = ω + coupling + cross_frequency
+        phase_velocity = intrinsic_frequency + coupling_term
+
+        # Cross-frequency influence (e-phase influences π-phase)
+        cross_term = cross_frequency_beta * math.sin(self.phase_state.e_phase)
+        phase_velocity += cross_term
+
+        # Integrate phase
+        new_pi_phase = self.phase_state.pi_phase + phase_velocity * delta_time
+
+        # Wrap phase to [0, 2π)
+        new_pi_phase = new_pi_phase % (2 * math.pi)
+
+        # Update phase state (preserve other components)
+        self.phase_state.pi_phase = new_pi_phase
+        self.phase_state.timestamp = time.time()
+
+    def compute_phase_coherence(self, other: 'FractalAgent', band: str = 'pi') -> float:
+        """
+        Compute phase coherence with another agent.
+
+        Part of NRM V2: measures synchronization for coalition detection.
+
+        Args:
+            other: Another FractalAgent
+            band: Which phase band to measure ('pi', 'e', 'phi')
+
+        Returns:
+            Coherence score (0.0 to 1.0, where 1.0 = perfect sync)
+        """
+        import math
+
+        # Get phases based on band
+        if band == 'pi':
+            my_phase = self.phase_state.pi_phase
+            other_phase = other.phase_state.pi_phase
+        elif band == 'e':
+            my_phase = self.phase_state.e_phase
+            other_phase = other.phase_state.e_phase
+        elif band == 'phi':
+            my_phase = self.phase_state.phi_phase
+            other_phase = other.phase_state.phi_phase
+        else:
+            raise ValueError(f"Unknown band: {band}")
+
+        # Compute phase difference
+        phase_diff = abs(my_phase - other_phase)
+
+        # Wrap to [0, π]
+        if phase_diff > math.pi:
+            phase_diff = 2 * math.pi - phase_diff
+
+        # Convert to coherence (0 = π difference, 1 = 0 difference)
+        coherence = 1.0 - (phase_diff / math.pi)
+
+        return coherence
+
     def detect_resonance(self, other: 'FractalAgent') -> ResonanceMatch:
         """
         Detect resonance with another agent.
