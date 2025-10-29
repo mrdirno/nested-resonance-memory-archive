@@ -4,7 +4,7 @@
 
 **Target Audience:** Computational researchers, peer reviewers, replication studies
 
-**Last Updated:** 2025-10-27 (Cycle 350)
+**Last Updated:** 2025-10-28 (Cycle 443 - Added Docker, Makefile, CI)
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 
@@ -27,6 +27,59 @@
 
 ## QUICK START
 
+### Option 1: Using Make (Recommended)
+
+**Complete replication in 3 commands:**
+
+```bash
+# 1. Clone repository
+git clone https://github.com/mrdirno/nested-resonance-memory-archive.git
+cd nested-resonance-memory-archive
+
+# 2. Install dependencies and verify
+make install
+make verify
+
+# 3. Run quick smoke tests (< 5 minutes)
+make test-quick
+```
+
+**For full Paper 3 replication:**
+
+```bash
+make paper3  # Runs all 6 factorial experiments (~67 minutes)
+```
+
+---
+
+### Option 2: Using Docker (Maximum Reproducibility)
+
+**Run in isolated container:**
+
+```bash
+# 1. Clone repository
+git clone https://github.com/mrdirno/nested-resonance-memory-archive.git
+cd nested-resonance-memory-archive
+
+# 2. Build and run Docker container
+docker-compose up -d
+docker-compose exec app bash
+
+# 3. Inside container: run experiments
+make test-quick
+```
+
+**Or use Docker directly:**
+
+```bash
+docker build -t nested-resonance-memory .
+docker run -it nested-resonance-memory
+```
+
+---
+
+### Option 3: Manual Setup (Traditional)
+
 **Complete replication in 3 commands:**
 
 ```bash
@@ -45,7 +98,8 @@ python cycle256_h1h4_optimized.py  # Example: H1×H4 validation
 **For full Paper 3 replication (all 6 experiments, ~6-8 hours):**
 
 ```bash
-./run_all_factorial_experiments.sh
+cd code/experiments
+bash run_all_factorial_experiments.sh
 ```
 
 ---
@@ -94,7 +148,25 @@ pip install -r requirements.txt
 
 ## INSTALLATION
 
-### Option 1: Clone from GitHub (Recommended)
+### Option 1: Using Make (Recommended)
+
+```bash
+git clone https://github.com/mrdirno/nested-resonance-memory-archive.git
+cd nested-resonance-memory-archive
+make install
+make verify
+```
+
+### Option 2: Using Conda
+
+```bash
+git clone https://github.com/mrdirno/nested-resonance-memory-archive.git
+cd nested-resonance-memory-archive
+conda env create -f environment.yml
+conda activate nested-resonance-memory-env
+```
+
+### Option 3: Using pip (Traditional)
 
 ```bash
 git clone https://github.com/mrdirno/nested-resonance-memory-archive.git
@@ -102,13 +174,12 @@ cd nested-resonance-memory-archive
 pip install -r requirements.txt
 ```
 
-### Option 2: Download Release Archive
+### Option 4: Using Docker
 
 ```bash
-wget https://github.com/mrdirno/nested-resonance-memory-archive/archive/refs/heads/main.zip
-unzip main.zip
-cd nested-resonance-memory-archive-main
-pip install -r requirements.txt
+git clone https://github.com/mrdirno/nested-resonance-memory-archive.git
+cd nested-resonance-memory-archive
+docker-compose up -d
 ```
 
 ### Verify Installation
@@ -118,6 +189,11 @@ python -c "import numpy, psutil, matplotlib; print('✅ All dependencies install
 ```
 
 Expected output: `✅ All dependencies installed`
+
+Or using Make:
+```bash
+make verify
+```
 
 ---
 

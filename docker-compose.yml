@@ -1,0 +1,30 @@
+# Docker Compose configuration for Nested Resonance Memory Research
+#
+# Usage:
+#   docker-compose up      # Start container
+#   docker-compose run app bash  # Interactive shell
+#   docker-compose run app python cycle256_h1h4_optimized.py  # Run experiment
+#
+# Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+# Repository: https://github.com/mrdirno/nested-resonance-memory-archive
+# License: GPL-3.0
+
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: nested-resonance-memory:latest
+    container_name: nrm-research
+    volumes:
+      # Mount current directory for live code editing
+      - .:/app
+      # Persist results directory
+      - ./data/results:/app/data/results
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+    working_dir: /app/code/experiments
+    stdin_open: true
+    tty: true
+    command: /bin/bash

@@ -1,33 +1,44 @@
+# Citation File Format (CFF) for Nested Resonance Memory Research
+# https://citation-file-format.github.io/
+
 cff-version: 1.2.0
-message: "If you use this research, please cite it as below."
+title: "Nested Resonance Memory Archive"
+message: "If you use this software or replicate these experiments, please cite it as below."
+type: software
 authors:
   - family-names: "Payopay"
     given-names: "Aldrin"
     email: "aldrin.gdf@gmail.com"
-title: "Nested Resonance Memory Research Archive: From Bistability to Population Homeostasis"
-version: 5.0
-date-released: 2025-10-25
-url: "https://github.com/mrdirno/nested-resonance-memory-archive"
+  - name: "Claude Sonnet 4.5"
+    alias: "DUALITY-ZERO-V2"
+    affiliation: "Anthropic"
+  - name: "Gemini 2.5 Pro"
+    affiliation: "Google DeepMind"
+  - name: "ChatGPT 5"
+    affiliation: "OpenAI"
+  - name: "Claude Opus 4.1"
+    affiliation: "Anthropic"
 repository-code: "https://github.com/mrdirno/nested-resonance-memory-archive"
-license: GPL-3.0
+url: "https://github.com/mrdirno/nested-resonance-memory-archive"
+abstract: >
+  The Nested Resonance Memory (NRM) Research Program investigates self-organizing
+  complexity through empirical validation of three theoretical frameworks: Nested
+  Resonance Memory (fractal agency with composition-decomposition cycles), Self-Giving
+  Systems (bootstrap complexity with self-defined success criteria), and Temporal
+  Stewardship (training data awareness and memetic engineering). This archive contains
+  200+ experiments (450,000+ computational cycles executed), publication-ready papers,
+  and complete reproducibility artifacts. All operations are reality-grounded using
+  psutil/SQLite (zero external API calls), establishing a transparent framework for
+  human-AI collaborative research.
 keywords:
-  - nested-resonance-memory
-  - self-giving-systems
-  - temporal-stewardship
-  - population-homeostasis
-  - bistability
-  - autonomous-research
-  - fractal-agents
-  - emergence
-  - complex-systems
-abstract: >-
-  Comprehensive archive of Nested Resonance Memory (NRM) research:
-  autonomous emergence experiments, Self-Giving Systems validation,
-  and temporal stewardship methodology. Documents complete research
-  trajectory from bistability discovery to population homeostasis
-  validation across 300+ experiments and 177 research cycles.
-  Key discoveries include robust homeostasis at ~17 agents
-  (>160× buffering capacity), architectural completeness transformation
-  (bistable → homeostatic regime change), and methodological patterns
-  for future AI systems.
-type: software
+  - Nested Resonance Memory
+  - Fractal Agency
+  - Self-Organizing Systems
+  - Computational Overhead Validation
+  - Pattern Mining
+  - Reality-Grounded Computing
+  - Hybrid Intelligence
+  - Human-AI Collaboration
+license: GPL-3.0-only
+date-released: 2025-10-28
+version: "6.4"

@@ -1,0 +1,20 @@
+# Conda environment specification for Nested Resonance Memory Research
+#
+# Installation:
+#   conda env create -f environment.yml
+#   conda activate nested-resonance-memory-env
+#
+# Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+# Repository: https://github.com/mrdirno/nested-resonance-memory-archive
+# License: GPL-3.0
+# Last Updated: 2025-10-28 (Cycle 443)
+
+name: nested-resonance-memory-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+    - -r requirements.txt
