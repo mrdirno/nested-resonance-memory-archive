@@ -59,13 +59,18 @@
 **Journal Submission:**
 - Target: PLOS Computational Biology (Methods and Resources)
 - Materials: DOCX + HTML + cover letter ready
-- Suggested Reviewers: 3-5 needed (see SUGGESTED_REVIEWERS_GUIDELINES.md)
+- **Suggested Reviewers:** ✅ 5 verified researchers (completed Cycle 471)
+  - Leigh Tesfatsion (Iowa State) - Agent-based model validation
+  - Tilmann Rabl (Hasso Plattner Institute) - Benchmarking & performance
+  - Victoria Stodden (USC) - Computational reproducibility
+  - Ignacio Laguna (LLNL) - HPC performance evaluation
+  - Reed Milewicz (Sandia) - Scientific software quality
 - Estimated Timeline: 4-5 months (submission → publication)
 
 **Next Actions:**
 1. Submit to arXiv (see SUBMISSION_WORKFLOW.md, Phase 1)
 2. Wait for arXiv ID (~1-2 days)
-3. Submit to PLOS Computational Biology
+3. Submit to PLOS Computational Biology (all materials ready)
 4. Track review status via PLOS submission portal
 
 ---
@@ -94,11 +99,17 @@
 - Target: PLOS ONE (primary) or Scientific Reports
 - Materials: DOCX format ready for PLOS ONE
 - Key Findings: Three-regime classification, H1 hypothesis rejection, zero recharge effect
+- **Suggested Reviewers:** ✅ 5 verified researchers (completed Cycle 471)
+  - Hiroki Sayama (Binghamton) - Complex systems, agent-based modeling
+  - Marten Scheffer (Wageningen) - Critical transitions, bistability
+  - Uri Alon (Weizmann) - Systems biology, homeostasis
+  - Carlos Gershenson (Binghamton/UNAM) - Self-organizing systems
+  - Lana Sinapayen (Sony CSL/NIBB, Japan) - Artificial life, ISAL
 - Estimated Timeline: 3-4 months (submission → publication)
 
 **Next Actions:**
-1. Identify 3-5 suggested reviewers
-2. Submit to PLOS ONE via submission portal
+1. ✅ Suggested reviewers identified (Cycle 471)
+2. Submit to PLOS ONE via submission portal (all materials ready)
 3. Track review status
 
 ---
@@ -168,12 +179,17 @@
   1. PLOS ONE (Multidisciplinary) - cover letter ready
   2. IEEE Transactions on Emerging Topics in Computational Intelligence
 - Materials: DOCX + HTML + cover letter ready
-- Suggested Reviewers: 3-5 needed
+- **Suggested Reviewers:** ✅ 5 verified researchers (completed Cycle 471)
+  - James P. Crutchfield (UC Davis) - Complexity sciences, emergent organization
+  - Christopher T. Bauch (Waterloo) - Bifurcation analysis, regime detection
+  - Melanie Mitchell (Santa Fe Institute) - Complexity, emergence, patterns
+  - Lutz Oettershagen (Liverpool) - Temporal networks, pattern mining
+  - Douglas R. Brumley (Melbourne) - Self-organizing systems, PLOS CB board
 
 **Next Actions:**
 1. Submit to arXiv (see SUBMISSION_WORKFLOW.md, Phase 1)
 2. Wait for arXiv ID (~1-2 days)
-3. Submit to PLOS ONE or IEEE TETCI
+3. Submit to PLOS ONE or IEEE TETCI (all materials ready)
 4. Track review status
 
 ---
