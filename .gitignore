@@ -52,7 +52,11 @@ workspace/cache/npm_cache/
 *.log
 *.bak
 workspace/cache/
+workspace/*.db
 .DS_Store
+
+# Paper workspace directories (temporary npm cache, build artifacts)
+papers/arxiv_submissions/*/workspace/
 
 # LaTeX build artifacts
 papers/arxiv_submissions/*/manuscript.pdf
