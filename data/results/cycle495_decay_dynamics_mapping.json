@@ -1,0 +1,309 @@
+{
+  "metadata": {
+    "experiment": "Decay Dynamics Mapping of Energy-Dependent Phase Autonomy",
+    "cycle": 495,
+    "date": "2025-10-29T03:22:54.939737",
+    "hypothesis": "Energy effects decay exponentially with characteristic timescale \u03c4 \u2248 300-400 cycles",
+    "parameters": {
+      "timescales": [
+        400,
+        600,
+        800,
+        1000
+      ],
+      "num_agents_per_condition": 3,
+      "reference_points": {
+        "cycle_493": {
+          "cycles": 200,
+          "f_ratio": 2.39
+        },
+        "cycle_494": {
+          "cycles": 1000,
+          "f_ratio": 0.12
+        }
+      }
+    }
+  },
+  "timescales": [
+    {
+      "cycles": 400,
+      "conditions": [
+        {
+          "condition": "uniform",
+          "num_agents": 3,
+          "cycles": 400,
+          "agents": [
+            {
+              "agent_id": "uniform_0",
+              "initial_energy": 100.0,
+              "autonomy_slope": -0.00012446673814710239,
+              "mean_correlation": 0.933891661960988,
+              "std_correlation": 0.03164029236680791
+            },
+            {
+              "agent_id": "uniform_1",
+              "initial_energy": 100.0,
+              "autonomy_slope": -2.577613167876198e-05,
+              "mean_correlation": 0.9271539997109451,
+              "std_correlation": 0.02545963257959992
+            },
+            {
+              "agent_id": "uniform_2",
+              "initial_energy": 100.0,
+              "autonomy_slope": -0.00011253843877384916,
+              "mean_correlation": 0.9214592383628674,
+              "std_correlation": 0.03088102191769421
+            }
+          ],
+          "mean_autonomy_slope": -8.759376953323783e-05,
+          "std_autonomy_slope": 4.39820898693611e-05
+        },
+        {
+          "condition": "high_variance",
+          "num_agents": 3,
+          "cycles": 400,
+          "agents": [
+            {
+              "agent_id": "highvar_0",
+              "initial_energy": 50.0,
+              "autonomy_slope": -5.437388401036021e-05,
+              "mean_correlation": 0.9277528882412108,
+              "std_correlation": 0.024721300647562183
+            },
+            {
+              "agent_id": "highvar_1",
+              "initial_energy": 100.0,
+              "autonomy_slope": -3.256766745638615e-05,
+              "mean_correlation": 0.9327053471882758,
+              "std_correlation": 0.025055432027891344
+            },
+            {
+              "agent_id": "highvar_2",
+              "initial_energy": 150.0,
+              "autonomy_slope": -5.3386056660683585e-05,
+              "mean_correlation": 0.923081167770435,
+              "std_correlation": 0.030587270928039978
+            }
+          ],
+          "mean_autonomy_slope": -4.677586937580999e-05,
+          "std_autonomy_slope": 1.0054806547303023e-05
+        }
+      ],
+      "f_ratio": 0.40925616545217863,
+      "mean_difference": -4.0817900157427844e-05,
+      "interpretation": "Weak"
+    },
+    {
+      "cycles": 600,
+      "conditions": [
+        {
+          "condition": "uniform",
+          "num_agents": 3,
+          "cycles": 600,
+          "agents": [
+            {
+              "agent_id": "uniform_0",
+              "initial_energy": 100.0,
+              "autonomy_slope": 6.849513215734167e-06,
+              "mean_correlation": 0.9284128766120142,
+              "std_correlation": 0.02822251428463699
+            },
+            {
+              "agent_id": "uniform_1",
+              "initial_energy": 100.0,
+              "autonomy_slope": -2.1528009838558544e-05,
+              "mean_correlation": 0.9184242433300126,
+              "std_correlation": 0.026045013361087707
+            },
+            {
+              "agent_id": "uniform_2",
+              "initial_energy": 100.0,
+              "autonomy_slope": 3.6825002809068896e-05,
+              "mean_correlation": 0.9352055100216731,
+              "std_correlation": 0.026680557796253012
+            }
+          ],
+          "mean_autonomy_slope": 7.382168728748173e-06,
+          "std_autonomy_slope": 2.3825494925747087e-05
+        },
+        {
+          "condition": "high_variance",
+          "num_agents": 3,
+          "cycles": 600,
+          "agents": [
+            {
+              "agent_id": "highvar_0",
+              "initial_energy": 50.0,
+              "autonomy_slope": 1.8872766643977862e-05,
+              "mean_correlation": 0.9210905730391596,
+              "std_correlation": 0.028021472513069374
+            },
+            {
+              "agent_id": "highvar_1",
+              "initial_energy": 100.0,
+              "autonomy_slope": -1.733526727748303e-05,
+              "mean_correlation": 0.9264120860197179,
+              "std_correlation": 0.01866559727420288
+            },
+            {
+              "agent_id": "highvar_2",
+              "initial_energy": 150.0,
+              "autonomy_slope": -4.621963467637485e-05,
+              "mean_correlation": 0.933489503701232,
+              "std_correlation": 0.0312705773810371
+            }
+          ],
+          "mean_autonomy_slope": -1.4894045103293338e-05,
+          "std_autonomy_slope": 2.662986859011613e-05
+        }
+      ],
+      "f_ratio": 0.19432491600166077,
+      "mean_difference": 2.2276213832041512e-05,
+      "interpretation": "Weak"
+    },
+    {
+      "cycles": 800,
+      "conditions": [
+        {
+          "condition": "uniform",
+          "num_agents": 3,
+          "cycles": 800,
+          "agents": [
+            {
+              "agent_id": "uniform_0",
+              "initial_energy": 100.0,
+              "autonomy_slope": 4.058863406295315e-05,
+              "mean_correlation": 0.922147837126644,
+              "std_correlation": 0.021004745332399922
+            },
+            {
+              "agent_id": "uniform_1",
+              "initial_energy": 100.0,
+              "autonomy_slope": 3.710115179789818e-05,
+              "mean_correlation": 0.9246922322443784,
+              "std_correlation": 0.027740925120358348
+            },
+            {
+              "agent_id": "uniform_2",
+              "initial_energy": 100.0,
+              "autonomy_slope": 3.005504407225372e-05,
+              "mean_correlation": 0.9300499788802779,
+              "std_correlation": 0.02860204168551854
+            }
+          ],
+          "mean_autonomy_slope": 3.591494331103502e-05,
+          "std_autonomy_slope": 4.38135804317721e-06
+        },
+        {
+          "condition": "high_variance",
+          "num_agents": 3,
+          "cycles": 800,
+          "agents": [
+            {
+              "agent_id": "highvar_0",
+              "initial_energy": 50.0,
+              "autonomy_slope": 3.347430976213774e-05,
+              "mean_correlation": 0.9248812299368694,
+              "std_correlation": 0.025441113636839586
+            },
+            {
+              "agent_id": "highvar_1",
+              "initial_energy": 100.0,
+              "autonomy_slope": 1.0217141671098581e-05,
+              "mean_correlation": 0.9250675624151187,
+              "std_correlation": 0.029992527002395693
+            },
+            {
+              "agent_id": "highvar_2",
+              "initial_energy": 150.0,
+              "autonomy_slope": 2.3543015210654745e-05,
+              "mean_correlation": 0.9324334031043501,
+              "std_correlation": 0.028719177381076856
+            }
+          ],
+          "mean_autonomy_slope": 2.241148888129702e-05,
+          "std_autonomy_slope": 9.528351756004632e-06
+        }
+      ],
+      "f_ratio": 0.8289402158917814,
+      "mean_difference": 1.3503454429738e-05,
+      "interpretation": "Weak"
+    },
+    {
+      "cycles": 1000,
+      "conditions": [
+        {
+          "condition": "uniform",
+          "num_agents": 3,
+          "cycles": 1000,
+          "agents": [
+            {
+              "agent_id": "uniform_0",
+              "initial_energy": 100.0,
+              "autonomy_slope": -3.9862477008060566e-05,
+              "mean_correlation": 0.9375988798171454,
+              "std_correlation": 0.03266953477961216
+            },
+            {
+              "agent_id": "uniform_1",
+              "initial_energy": 100.0,
+              "autonomy_slope": 2.7336195474420295e-05,
+              "mean_correlation": 0.924028443072299,
+              "std_correlation": 0.019140596742222432
+            },
+            {
+              "agent_id": "uniform_2",
+              "initial_energy": 100.0,
+              "autonomy_slope": -8.22913127906497e-05,
+              "mean_correlation": 0.9334006848105874,
+              "std_correlation": 0.03551447224225889
+            }
+          ],
+          "mean_autonomy_slope": -3.160586477476333e-05,
+          "std_autonomy_slope": 4.51344390037901e-05
+        },
+        {
+          "condition": "high_variance",
+          "num_agents": 3,
+          "cycles": 1000,
+          "agents": [
+            {
+              "agent_id": "highvar_0",
+              "initial_energy": 50.0,
+              "autonomy_slope": 3.762750795701103e-05,
+              "mean_correlation": 0.9313791666462035,
+              "std_correlation": 0.020319132101182923
+            },
+            {
+              "agent_id": "highvar_1",
+              "initial_energy": 100.0,
+              "autonomy_slope": -4.719969993325666e-05,
+              "mean_correlation": 0.9239258559683234,
+              "std_correlation": 0.028432554360786635
+            },
+            {
+              "agent_id": "highvar_2",
+              "initial_energy": 150.0,
+              "autonomy_slope": 2.121155126011987e-05,
+              "mean_correlation": 0.9256032686025074,
+              "std_correlation": 0.0216934430207351
+            }
+          ],
+          "mean_autonomy_slope": 3.879786427958081e-06,
+          "std_autonomy_slope": 3.673514533125549e-05
+        }
+      ],
+      "f_ratio": 0.18591444549998784,
+      "mean_difference": -3.548565120272141e-05,
+      "interpretation": "Weak"
+    }
+  ],
+  "decay_model": {
+    "model": "F(t) = F_0 * exp(-t/tau)",
+    "tau_cycles": 454.36811263624315,
+    "t_critical_cycles": 395.887922236191,
+    "F_0": 2.39,
+    "fit_quality": "exponential approximation"
+  },
+  "runtime_seconds": 26.749050855636597
+}
