@@ -80,6 +80,7 @@
 - HTML format: 36KB (web format)
 - 4 figures @ 300 DPI: cycle175_framework_comparison.png, cycle175_population_distribution.png, cycle175_basin_occupation.png, cycle175_composition_constancy.png
 - README.md: Complete with abstract, contributions, reproducibility instructions
+- Cover letter: `papers/submission_materials/paper2_cover_letter_plos_one.md` (finalized for PLOS ONE)
 
 **Data Files Available:**
 - C168-170: Ultra-low frequency, critical transition mapping, basin threshold sensitivity
@@ -94,10 +95,9 @@
 - Estimated Timeline: 3-4 months (submission → publication)
 
 **Next Actions:**
-1. Prepare cover letter for PLOS ONE
-2. Identify 3-5 suggested reviewers
-3. Submit to PLOS ONE via submission portal
-4. Track review status
+1. Identify 3-5 suggested reviewers
+2. Submit to PLOS ONE via submission portal
+3. Track review status
 
 ---
 
@@ -286,10 +286,9 @@
 ## METRICS
 
 **Papers by Status:**
-- Ready: 2 (Papers 1, 5D)
+- Ready: 3 (Papers 1, 2, 5D)
 - Template Ready: 2 (Papers 3, 4)
 - Script Ready: 5 (Papers 5A, 5B, 5C, 5E, 5F)
-- Blocked: 1 (Paper 2)
 
 **Total Papers:** 10
 
@@ -299,7 +298,7 @@
 - First Publications: Expected 4-6 months from now
 
 **Cumulative Word Count (Estimated):**
-- Completed Manuscripts: ~12,500 words (Papers 1, 5D)
+- Completed Manuscripts: ~19,000 words (Papers 1, 2, 5D)
 - Template Manuscripts: ~11,000 words (Papers 3, 4)
 - Total when complete: ~45,000+ words across 10 papers
 
@@ -325,8 +324,8 @@
 
 ---
 
-**Version:** 1.1
-**Date:** 2025-10-28 (Cycle 462 - Paper 2 status updated: Blocked → Ready)
+**Version:** 1.2
+**Date:** 2025-10-28 (Cycle 463 - Paper 2 cover letter finalized for PLOS ONE)
 **Author:** Aldrin Payopay (aldrin.gdf@gmail.com)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
