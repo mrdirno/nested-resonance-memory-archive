@@ -1,0 +1,91 @@
+{
+  "metadata": {
+    "experiment_id": "C176",
+    "git_sha": "dc0e986a7b2c1f3d",
+    "generated_at": "2025-10-29T15:32:00Z",
+    "random_seed": 176,
+    "script": "cycle176_rem_hypothesis.py",
+    "dataset_version": "1.0.0",
+    "nrm_version": "6.7",
+    "cycle_number": 176,
+    "phase_type": "REM",
+    "num_agents": 30,
+    "parent_experiment": "C175",
+    "parameters": {
+      "coupling_strength_K": 0.3,
+      "integration_time_T": 30.0,
+      "timestep_dt": 0.05,
+      "noise_level": 0.5,
+      "perturbation_strength": 0.5
+    },
+    "runtime_seconds": 0.24,
+    "timestamp": "2025-10-29T15:32:00Z"
+  },
+  "initial_state": {
+    "source": "C175",
+    "pattern_0_coherence": 0.973,
+    "pattern_1_coherence": 0.946,
+    "pre_perturbation_coherence": 0.683
+  },
+  "post_perturbation": {
+    "coherence": 0.123,
+    "phase_spread": 2.89,
+    "mean_energy": 100.0
+  },
+  "explored_configs": [
+    {"step": 0, "time": 0.0, "coherence": 0.123, "mean_phase": 3.24, "phase_spread": 2.89},
+    {"step": 100, "time": 5.0, "coherence": 0.087, "mean_phase": 4.12, "phase_spread": 3.01},
+    {"step": 200, "time": 10.0, "coherence": 0.065, "mean_phase": 2.78, "phase_spread": 3.15},
+    {"step": 300, "time": 15.0, "coherence": 0.091, "mean_phase": 5.34, "phase_spread": 2.95},
+    {"step": 400, "time": 20.0, "coherence": 0.073, "mean_phase": 1.89, "phase_spread": 3.08},
+    {"step": 500, "time": 25.0, "coherence": 0.082, "mean_phase": 4.56, "phase_spread": 3.02},
+    {"step": 600, "time": 30.0, "coherence": 0.078, "mean_phase": 3.12, "phase_spread": 3.11}
+  ],
+  "final_state": {
+    "coherence": 0.078,
+    "mean_phase": 3.12,
+    "phase_spread": 3.11,
+    "energy_distribution_std": 5.0
+  },
+  "hypotheses": [
+    {
+      "hypothesis_id": "H_pattern_0_zero_effect",
+      "pattern_id": "pattern_0",
+      "parameter": "energy_recharge_rate",
+      "predicted_effect": "ZERO",
+      "reasoning": "Low REM coherence (r=0.078) indicates no systematic parameter effect across exploration",
+      "confidence": 0.922,
+      "information_gain_bits": 0.92,
+      "validation_method": "factorial_experiment",
+      "validation_data": {
+        "prior_entropy": 1.0,
+        "posterior_entropy": 0.08,
+        "p_zero_effect": 0.922
+      }
+    },
+    {
+      "hypothesis_id": "H_pattern_0_persistence",
+      "pattern_id": "pattern_0",
+      "predicted_effect": "PERSISTENT",
+      "reasoning": "High NREM coherence (r=0.973) indicates robust pattern despite REM perturbation",
+      "confidence": 0.973,
+      "validation_data": {
+        "nrem_coherence": 0.973,
+        "rem_stability": "pattern recoverable after perturbation removal"
+      }
+    },
+    {
+      "hypothesis_id": "H_pattern_1_persistence",
+      "pattern_id": "pattern_1",
+      "predicted_effect": "PERSISTENT",
+      "reasoning": "High NREM coherence (r=0.946) indicates robust pattern",
+      "confidence": 0.946
+    }
+  ],
+  "statistics": {
+    "num_hypotheses": 3,
+    "mean_confidence": 0.947,
+    "exploration_range": 30.0,
+    "sampling_frequency": 5.0
+  }
+}
