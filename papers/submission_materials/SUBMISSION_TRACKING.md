@@ -13,7 +13,7 @@
 | Paper ID | Title | Status | arXiv ID | arXiv Date | Journal Target | Journal Status | Submission Date | Notes |
 |----------|-------|--------|----------|------------|----------------|----------------|-----------------|-------|
 | Paper 1 | Computational Expense as Framework Validation | Ready | — | — | PLOS Computational Biology | Not Submitted | — | arXiv package ready |
-| Paper 2 | Energy Constraints | Blocked | — | — | TBD | Not Submitted | — | Missing data files |
+| Paper 2 | Energy Constraints | Ready | — | — | PLOS ONE | Not Submitted | — | DOCX + HTML + 4 figs @ 300 DPI |
 | Paper 3 | Mechanism Synergies | Template Ready | — | — | Physical Review E / Chaos | Not Submitted | — | Awaiting C255-C260 |
 | Paper 4 | Higher-Order Interactions | Template Ready | — | — | Physical Review E | Not Submitted | — | Awaiting C262-C263 |
 | Paper 5A | Parameter Space Mapping | Script Ready | — | — | PLOS Computational Biology | Not Submitted | — | Part of Paper 5 series |
@@ -70,24 +70,34 @@
 
 ---
 
-### Paper 2: Energy Constraints
+### Paper 2: Energy Constraints and Three Dynamical Regimes
 
-**Current Status:** ⛔ BLOCKED - Missing experimental data files
+**Current Status:** ✅ Ready for immediate submission
 
-**Issue:**
-- Manuscript exists (351 lines, 30KB)
-- Missing data from experiments: C168-170, C171, C176
-- Cannot generate 4 required figures without data
+**Compiled Package:**
+- Location: `papers/compiled/paper2/`
+- DOCX format: 23KB (PLOS ONE submission format)
+- HTML format: 36KB (web format)
+- 4 figures @ 300 DPI: cycle175_framework_comparison.png, cycle175_population_distribution.png, cycle175_basin_occupation.png, cycle175_composition_constancy.png
+- README.md: Complete with abstract, contributions, reproducibility instructions
 
-**Resolution Options:**
-1. Locate original data files in archived results
-2. Re-run experiments to regenerate data
-3. Defer paper until data recovered/regenerated
+**Data Files Available:**
+- C168-170: Ultra-low frequency, critical transition mapping, basin threshold sensitivity
+- C171: Fractal swarm bistability
+- C176: Ablation study (energy recharge parameter sweep)
+- All data files verified in `/Volumes/dual/DUALITY-ZERO-V2/experiments/results/`
+
+**Journal Submission:**
+- Target: PLOS ONE (primary) or Scientific Reports
+- Materials: DOCX format ready for PLOS ONE
+- Key Findings: Three-regime classification, H1 hypothesis rejection, zero recharge effect
+- Estimated Timeline: 3-4 months (submission → publication)
 
 **Next Actions:**
-- Search for data files in `/Volumes/dual/DUALITY-ZERO-V2/data/results/`
-- Check archived backups
-- If not found, add C168-170 re-run to experimental queue
+1. Prepare cover letter for PLOS ONE
+2. Identify 3-5 suggested reviewers
+3. Submit to PLOS ONE via submission portal
+4. Track review status
 
 ---
 
@@ -315,10 +325,10 @@
 
 ---
 
-**Version:** 1.0
-**Date:** 2025-10-27
+**Version:** 1.1
+**Date:** 2025-10-28 (Cycle 462 - Paper 2 status updated: Blocked → Ready)
 **Author:** Aldrin Payopay (aldrin.gdf@gmail.com)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
 
-**Next Update:** After Papers 1 & 5D arXiv submissions
+**Next Update:** After Papers 1, 2, & 5D submissions
