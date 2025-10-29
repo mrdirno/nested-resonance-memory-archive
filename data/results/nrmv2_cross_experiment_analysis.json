@@ -1,4 +1,11 @@
 {
+  "metadata": {
+    "git_sha": "08ec1007f8c2cc0782880164f5e4ab9db45eb287",
+    "generated_at": "2025-10-29T01:51:13-07:00",
+    "script": "analyze_cross_experiment_coalitions.py",
+    "nrm_version": "6.7",
+    "analysis_type": "cross_experiment_coalitions"
+  },
   "source": "nrmv2_c176_c177_consolidation.json",
   "date": "2025-10-29 01:51:13",
   "cross_experiment_coalitions": {
