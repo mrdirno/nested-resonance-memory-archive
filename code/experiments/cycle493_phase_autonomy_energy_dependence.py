@@ -44,12 +44,13 @@ sys.path.insert(0, str(parent_dir))
 from fractal.fractal_agent import FractalAgent
 from bridge.transcendental_bridge import TranscendentalBridge
 import psutil  # Use psutil directly instead of RealityInterface
+from workspace_utils import get_workspace_path, get_results_path
 
 
 class PhaseAutonomyExperiment:
     """Test phase autonomy evolution under different energy configurations."""
 
-    def __init__(self, workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace"):
+    def __init__(self, workspace_path: Path = get_workspace_path()):
         self.workspace = Path(workspace_path)
         self.workspace.mkdir(exist_ok=True)
 

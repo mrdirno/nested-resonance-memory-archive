@@ -32,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "bridge"))
 
 from fractal_agent import FractalAgent, AgentState, ClusterEvent, BurstEvent
 from transcendental_bridge import TranscendentalBridge, TranscendentalState
+from workspace_utils import get_workspace_path, get_results_path
 
 
 class CompositionEngine:
@@ -235,7 +236,7 @@ class FractalSwarm:
 
     def __init__(
         self,
-        workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace",
+        workspace_path: Path = get_workspace_path(),
         max_agents: int = 100,
         max_depth: int = 7,
         clear_on_init: bool = False

@@ -34,6 +34,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass, asdict
 import psutil
+from workspace_utils import get_workspace_path, get_results_path
 
 
 @dataclass
@@ -630,7 +631,7 @@ class MassiveResonanceMiner:
 
 def main():
     """Run massive resonance data mining"""
-    db_path = "/Volumes/dual/DUALITY-ZERO-V2/workspace/bridge.db"
+    db_path = get_workspace_path() / "bridge.db"
     workspace = "/Volumes/dual/DUALITY-ZERO-V2/workspace"
 
     miner = MassiveResonanceMiner(db_path, workspace)

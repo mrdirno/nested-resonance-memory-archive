@@ -45,7 +45,7 @@ class HybridOrchestrator:
 
     def __init__(
         self,
-        workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2",
+        workspace_path: Path = get_workspace_path(),
         mode: OperationMode = OperationMode.HYBRID
     ):
         """
@@ -316,6 +316,7 @@ class HybridOrchestrator:
             # Reality-grounded interval: perform actual metric measurements during wait
             # Instead of idle sleep, do real system monitoring work
             import psutil
+from workspace_utils import get_workspace_path, get_results_path
             samples_during_interval = max(1, int(interval))
             for _ in range(samples_during_interval):
                 # Each iteration performs real measurement work (not idle sleep)

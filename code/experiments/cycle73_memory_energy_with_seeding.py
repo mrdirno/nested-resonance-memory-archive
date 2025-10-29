@@ -44,6 +44,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fractal.fractal_swarm import FractalSwarm, DecompositionEngine
 from bridge.transcendental_bridge import TranscendentalBridge
+from workspace_utils import get_workspace_path, get_results_path
 
 def create_seed_memory(bridge: TranscendentalBridge, reality_metrics: dict, count: int = 5) -> list:
     """Create seed memory patterns."""
@@ -60,7 +61,7 @@ def run_seeded_threshold_test(threshold: float, cycles: int = 500) -> dict:
     print(f"TESTING THRESHOLD = {threshold} (WITH SEEDING)")
     print(f"{'='*80}")
 
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
     swarm = FractalSwarm(str(workspace))
     swarm.decomposition = DecompositionEngine(burst_threshold=threshold)
 

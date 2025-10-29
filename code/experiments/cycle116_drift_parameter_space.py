@@ -68,6 +68,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fractal.fractal_swarm import FractalSwarm, DecompositionEngine
 from bridge.transcendental_bridge import TranscendentalBridge
+from workspace_utils import get_workspace_path, get_results_path
 
 def create_seed_memory_range(bridge, reality_metrics, center_multiplier, spread=0.2, count=5):
     """Create seed memory patterns with specified center and spread."""
@@ -97,7 +98,7 @@ def get_dominant_pattern(memory):
 
 def run_drift_experiment(multiplier, spread, threshold, cycles, agent_cap=15):
     """Run simulation measuring drift speed and agent lifespans."""
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
     swarm = FractalSwarm(str(workspace), clear_on_init=True)
     swarm.decomposition = DecompositionEngine(burst_threshold=threshold)
     reality_metrics = {'cpu_percent': 30.0, 'memory_percent': 40.0, 'disk_percent': 50.0}
