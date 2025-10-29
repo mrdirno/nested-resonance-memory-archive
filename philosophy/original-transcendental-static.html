@@ -1,0 +1,2763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Transcendental Dynamics - N-Particle Potential Field Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="transcendental_loader.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        :root {
+            --primary: #7C3AED;
+            --primary-glow: rgba(124, 58, 237, 0.4);
+            --secondary: #EC4899;
+            --tertiary: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --panel-blur: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: #000000; 
+            color: var(--text);
+            overflow: hidden; 
+            height: 100vh;
+            position: fixed;
+            width: 100%;
+        }
+        
+        #container { 
+            width: 100vw; 
+            height: 100vh; 
+            display: block;
+            background: radial-gradient(ellipse at center, #0F0F23 0%, #000000 100%); 
+        }
+        
+        /* App Header */
+        .app-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        .app-title {
+            font-size: 18px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--tertiary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        /* Bottom Navigation Bar */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: var(--glass);
+            backdrop-filter: blur(var(--panel-blur));
+            -webkit-backdrop-filter: blur(var(--panel-blur));
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            padding: 0 20px;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--primary-glow);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+        
+        .nav-item:active::before {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .nav-item.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+        
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .nav-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.8;
+        }
+        
+        /* Slide Panels */
+        .slide-panel {
+            position: fixed;
+            background: var(--glass);
+            backdrop-filter: blur(var(--panel-blur));
+            -webkit-backdrop-filter: blur(var(--panel-blur));
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            z-index: 900;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .panel-header {
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(var(--panel-blur));
+            padding: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 10;
+        }
+        
+        .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .panel-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .panel-content {
+            padding: 20px;
+        }
+        
+        /* Bottom slide panels */
+        .bottom-panel {
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            height: 60vh;
+            max-height: 500px;
+            border-radius: 20px 20px 0 0;
+            transform: translateY(100%);
+        }
+        
+        .bottom-panel.active {
+            transform: translateY(0);
+        }
+        
+        /* Side panels for larger screens */
+        @media (min-width: 768px) {
+            .bottom-panel {
+                width: 400px;
+                height: calc(100vh - 100px);
+                max-height: none;
+                bottom: 90px;
+                border-radius: 20px;
+            }
+            
+            #controls-panel { left: 10px; right: auto; }
+            #waves-panel { left: 420px; right: auto; }
+            #labs-panel { right: 420px; left: auto; }
+            #camera-panel { right: 10px; left: auto; }
+        }
+        
+        /* Wave Display */
+        .wave-display {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wave-display::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--tertiary));
+            border-radius: 15px;
+            opacity: 0.3;
+            z-index: -1;
+            animation: gradient-shift 3s ease infinite;
+        }
+        
+        @keyframes gradient-shift {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+        
+        .wave-row {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .wave-row.active {
+            opacity: 1;
+        }
+        
+        .wave-label {
+            color: var(--primary);
+            font-weight: 600;
+            margin-right: 10px;
+            min-width: 50px;
+        }
+        
+        .current-digit {
+            background: var(--primary);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--primary-glow);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn.secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, #EC4899 100%);
+        }
+        
+        .btn.tertiary {
+            background: linear-gradient(135deg, var(--tertiary) 0%, #06B6D4 100%);
+        }
+        
+        .btn.success {
+            background: linear-gradient(135deg, var(--success) 0%, #10B981 100%);
+        }
+        
+        /* Button Groups */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .btn-group .btn {
+            flex: 1;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Sliders */
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .slider-label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .slider-value {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 600;
+            min-width: 50px;
+            text-align: right;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+            position: relative;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 20px var(--primary-glow);
+            transition: transform 0.2s;
+        }
+        
+        .slider::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+        }
+        
+        /* Toggle Switches */
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        
+        .toggle-item:active {
+            transform: scale(0.98);
+        }
+        
+        .toggle-item.active {
+            background: rgba(124, 58, 237, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .toggle-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .toggle-switch {
+            width: 50px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-switch.active::after {
+            transform: translateX(22px);
+        }
+        
+        /* Research Extensions */
+        .extension-section {
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .extension-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--tertiary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Base Selector Grid */
+        .base-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .base-btn {
+            padding: 12px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text);
+        }
+        
+        .base-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .base-btn.active {
+            background: var(--tertiary);
+            color: #000;
+            border-color: var(--tertiary);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+        }
+        
+        /* Camera Controls */
+        .camera-presets {
+            margin: 20px 0;
+        }
+        
+        .preset-group {
+            margin: 15px 0;
+        }
+        
+        .preset-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        
+        .preset-btn {
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text);
+        }
+        
+        .preset-btn:active {
+            background: var(--primary);
+            transform: scale(0.95);
+        }
+        
+        /* Status Indicator */
+        .status-bar {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass);
+            backdrop-filter: blur(var(--panel-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: blink 2s ease-in-out infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Mini preset buttons for status bar */
+        .preset-btn-mini {
+            padding: 6px 10px;
+            margin-left: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .preset-btn-mini::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--primary-glow);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+        
+        .preset-btn-mini:active::before {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .preset-btn-mini:active {
+            background: var(--primary);
+            transform: scale(0.95);
+        }
+        
+        .preset-btn-mini:hover {
+            background: rgba(124, 58, 237, 0.4);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+        
+        /* Hide scrollbars but keep functionality */
+        .slide-panel::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 380px) {
+            .nav-bar {
+                padding: 0 10px;
+            }
+            
+            .nav-item {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .nav-icon {
+                font-size: 20px;
+            }
+            
+            .nav-label {
+                font-size: 9px;
+            }
+            
+            .app-title {
+                font-size: 16px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+        
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .loading-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .loading-content {
+            text-align: center;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--glass-border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Custom Sequence Input Panel */
+        .sequence-input-panel {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass);
+            backdrop-filter: blur(var(--panel-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 15px;
+            z-index: 95;
+            width: 90%;
+            max-width: 800px;
+            font-size: 12px;
+        }
+        
+        .sequence-input-panel.collapsed {
+            transform: translateX(-50%) translateY(-80%);
+        }
+        
+        .sequence-input-panel.collapsed .sequence-input-grid {
+            display: none;
+        }
+        
+        .sequence-input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        
+        .sequence-input-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .sequence-input-toggle {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .sequence-input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+        
+        .sequence-input-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .sequence-input-label {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 12px;
+        }
+        
+        .sequence-input-field {
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 11px;
+            font-family: 'SF Mono', 'Monaco', monospace;
+            resize: none;
+            height: 60px;
+        }
+        
+        .sequence-input-field::placeholder {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .sequence-input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+        
+        @media (max-width: 768px) {
+            .sequence-input-panel {
+                width: 95%;
+                font-size: 11px;
+            }
+            
+            .sequence-input-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .sequence-input-field {
+                height: 50px;
+                font-size: 10px;
+            }
+        }
+        
+        /* Transcendental Selectors */
+        .transcendental-selectors {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .selector-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--tertiary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .selector-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .selector-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .selector-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 80px;
+        }
+        
+        .transcendental-select {
+            flex: 1;
+            margin-left: 10px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .transcendental-select:focus {
+            outline: none;
+            border-color: var(--tertiary);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+        
+        .transcendental-select option {
+            background: #1a1a1a;
+            color: var(--text);
+            font-weight: 500;
+        }
+        
+        /* Stagger Controls */
+        .stagger-controls {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .stagger-mode-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .stagger-btn {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .stagger-btn.active {
+            background: var(--tertiary);
+            color: #000;
+            border-color: var(--tertiary);
+        }
+        
+        .stagger-input-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .stagger-input-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .stagger-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 60px;
+        }
+        
+        .stagger-input {
+            flex: 1;
+            margin-left: 10px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 500;
+            max-width: 120px;
+        }
+        
+        .stagger-input:focus {
+            outline: none;
+            border-color: var(--tertiary);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+        
+        .prime-info {
+            margin-top: 8px;
+            text-align: center;
+        }
+        
+        .prime-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    
+    <!-- App Header -->
+    <div class="app-header">
+        <h1 class="app-title">Transcendental Dynamics</h1>
+    </div>
+    
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-indicator"></div>
+        <span id="status-text">📊 2500 Digits Active</span>
+        <button class="preset-btn-mini" id="fast-mode-btn" title="Fast Mode Preset">☯️</button>
+        <button class="preset-btn-mini" id="reset-defaults-btn" title="Reset to Defaults">🔄</button>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-item" data-panel="controls">
+            <div class="nav-icon">⚙️</div>
+            <div class="nav-label">Control</div>
+        </div>
+        <div class="nav-item" data-panel="waves">
+            <div class="nav-icon">🌊</div>
+            <div class="nav-label">Fields</div>
+        </div>
+        <div class="nav-item" data-panel="labs">
+            <div class="nav-icon">🧪</div>
+            <div class="nav-label">Labs</div>
+        </div>
+        <div class="nav-item" data-panel="camera">
+            <div class="nav-icon">📷</div>
+            <div class="nav-label">Camera</div>
+        </div>
+    </nav>
+    
+    <!-- Control Panel -->
+    <div id="controls-panel" class="slide-panel bottom-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">System Controls</h2>
+            <p class="panel-subtitle">Configure potential field dynamics</p>
+        </div>
+        <div class="panel-content">
+            <div class="btn-group">
+                <button class="btn" id="play-pause">⏸️ Pause</button>
+                <button class="btn secondary" id="reset">🔄 Reset</button>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn tertiary" id="speed-slow">🐌 Slow</button>
+                <button class="btn tertiary" id="speed-med">🚀 Fast</button>
+                <button class="btn tertiary" id="speed-ultra">⚡ Ultra</button>
+            </div>
+            
+            <div class="slider-container">
+                <div class="slider-header">
+                    <span class="slider-label">Particle Density</span>
+                    <span class="slider-value" id="particle-value">100K</span>
+                </div>
+                <input type="range" class="slider" id="particle-slider" min="1" max="1000000" step="1" value="350000">
+                <div style="margin-top: 10px;">
+                    <input type="number" id="particle-input" min="1" max="1000000" step="1" value="350000" 
+                           style="width: 100%; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text); font-size: 14px; font-weight: 600;"
+                           placeholder="Enter particle count (1 - 1,000,000)">
+                </div>
+            </div>
+            
+            <div class="slider-container">
+                <div class="slider-header">
+                    <span class="slider-label">Visual Quality</span>
+                    <span class="slider-value" id="quality-value">0.6x</span>
+                </div>
+                <input type="range" class="slider" id="quality-slider" min="0.2" max="2.0" step="0.1" value="0.7">
+            </div>
+            
+            <div class="slider-container">
+                <div class="slider-header">
+                    <span class="slider-label">Potential Field Amplitude</span>
+                    <span class="slider-value" id="force-value">1.0x</span>
+                </div>
+                <input type="range" class="slider" id="force-slider" min="0.01" max="0.99" step="0.01" value="0.5">
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn success" id="mode-standard">📊 Standard</button>
+                <button class="btn success" id="mode-crystal">💎 Crystal</button>
+            </div>
+            <div class="btn-group">
+                <button class="btn success" id="mode-harmonic">🎵 Harmonic</button>
+                <button class="btn success" id="mode-topology">🌀 Topology</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Waves Panel -->
+    <div id="waves-panel" class="slide-panel bottom-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Potential Field Components</h2>
+            <p class="panel-subtitle">2500-digit sequences driving Ψ(r,t)</p>
+        </div>
+        <div class="panel-content">
+            <div class="wave-display">
+                <div class="wave-row active" id="m-row">
+                    <span class="wave-label">A:</span>
+                    <span id="m-sequence"></span>
+                </div>
+                <div class="wave-row active" id="n-row">
+                    <span class="wave-label">B:</span>
+                    <span id="n-sequence"></span>
+                </div>
+                <div class="wave-row active" id="p-row">
+                    <span class="wave-label">C:</span>
+                    <span id="p-sequence"></span>
+                </div>
+            </div>
+            
+            <div class="transcendental-selectors">
+                <div class="selector-title">Transcendental Number Mapping</div>
+                <div class="selector-grid">
+                    <div class="selector-item">
+                        <label class="selector-label">Dimension A:</label>
+                        <select class="transcendental-select" id="select-a">
+                            <option value="pi">π (Pi)</option>
+                            <option value="e">e (Euler)</option>
+                            <option value="sqrt2">√2 (Root 2)</option>
+                            <option value="phi" selected>φ (Golden Ratio)</option>
+                        </select>
+                    </div>
+                    <div class="selector-item">
+                        <label class="selector-label">Dimension B:</label>
+                        <select class="transcendental-select" id="select-b">
+                            <option value="pi">π (Pi)</option>
+                            <option value="e">e (Euler)</option>
+                            <option value="sqrt2">√2 (Root 2)</option>
+                            <option value="phi" selected>φ (Golden Ratio)</option>
+                        </select>
+                    </div>
+                    <div class="selector-item">
+                        <label class="selector-label">Dimension C:</label>
+                        <select class="transcendental-select" id="select-c">
+                            <option value="pi" selected>π (Pi)</option>
+                            <option value="e">e (Euler)</option>
+                            <option value="sqrt2">√2 (Root 2)</option>
+                            <option value="phi">φ (Golden Ratio)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stagger-controls">
+                <div class="selector-title">Stagger Sequence Offsets</div>
+                <div class="stagger-mode-toggle">
+                    <button class="stagger-btn" id="stagger-manual">Manual</button>
+                    <button class="stagger-btn active" id="stagger-auto">Auto Spacing</button>
+                </div>
+                
+                <div class="stagger-manual-controls" id="manual-controls" style="display: none;">
+                    <div class="stagger-input-grid">
+                        <div class="stagger-input-item">
+                            <label class="stagger-label">A Start:</label>
+                            <input type="number" class="stagger-input" id="stagger-a" min="0" max="2500" step="1" value="0">
+                        </div>
+                        <div class="stagger-input-item">
+                            <label class="stagger-label">B Start:</label>
+                            <input type="number" class="stagger-input" id="stagger-b" min="0" max="2500" step="1" value="239">
+                        </div>
+                        <div class="stagger-input-item">
+                            <label class="stagger-label">C Start:</label>
+                            <input type="number" class="stagger-input" id="stagger-c" min="0" max="2500" step="1" value="478">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stagger-auto-controls" id="auto-controls">
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Prime Spacing</span>
+                            <span class="slider-value" id="spacing-value">239</span>
+                        </div>
+                        <input type="range" class="slider" id="spacing-slider" min="0" max="90" step="1" value="51">
+                        <div class="prime-info">
+                            <span class="prime-label">Prime #<span id="prime-index">52</span> of 91</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Position</div>
+                    <div class="stat-value" id="position-stat">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Energy ΣQi²</div>
+                    <div class="stat-value" id="energy-stat">24</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Mode M</div>
+                    <div class="stat-value" id="m-mode">3</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Mode N</div>
+                    <div class="stat-value" id="n-mode">1</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Mode P</div>
+                    <div class="stat-value" id="p-mode">4</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Labs Panel -->
+    <div id="labs-panel" class="slide-panel bottom-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Research Labs</h2>
+            <p class="panel-subtitle">Advanced N-particle dynamics experiments</p>
+        </div>
+        <div class="panel-content">
+            <!-- Crystallographic -->
+            <div class="extension-section">
+                <div class="extension-title">
+                    <span>🔷</span>
+                    <span>Crystallographic Symmetry</span>
+                </div>
+                <div class="toggle-item" id="toggle-3fold">
+                    <span class="toggle-text">3-fold (120°) Symmetry</span>
+                    <div class="toggle-switch"></div>
+                </div>
+                <div class="toggle-item" id="toggle-6fold">
+                    <span class="toggle-text">6-fold (60°) Symmetry</span>
+                    <div class="toggle-switch"></div>
+                </div>
+                <div class="toggle-item" id="toggle-lattice">
+                    <span class="toggle-text">Hexagonal Lattice</span>
+                    <div class="toggle-switch"></div>
+                </div>
+            </div>
+            
+            <!-- Harmonic -->
+            <div class="extension-section">
+                <div class="extension-title">
+                    <span>🎼</span>
+                    <span>Pythagorean Harmonics</span>
+                </div>
+                <div class="toggle-item" id="toggle-comma">
+                    <span class="toggle-text">Comma Spiral (23.46¢)</span>
+                    <div class="toggle-switch"></div>
+                </div>
+                <div class="toggle-item" id="toggle-fifths">
+                    <span class="toggle-text">Perfect Fifth Stack</span>
+                    <div class="toggle-switch"></div>
+                </div>
+                <div class="toggle-item" id="toggle-equal">
+                    <span class="toggle-text">Equal Temperament</span>
+                    <div class="toggle-switch"></div>
+                </div>
+            </div>
+            
+            <!-- Topology -->
+            <div class="extension-section">
+                <div class="extension-title">
+                    <span>🌀</span>
+                    <span>Topological Forms</span>
+                </div>
+                <div class="toggle-item" id="toggle-trefoil">
+                    <span class="toggle-text">Trefoil Knot (3,2)</span>
+                    <div class="toggle-switch"></div>
+                </div>
+                <div class="toggle-item" id="toggle-torus">
+                    <span class="toggle-text">Toroidal Container</span>
+                    <div class="toggle-switch"></div>
+                </div>
+                <div class="toggle-item" id="toggle-hopf">
+                    <span class="toggle-text">Hopf Fibration</span>
+                    <div class="toggle-switch"></div>
+                </div>
+            </div>
+            
+            <!-- Base Analysis -->
+            <div class="extension-section">
+                <div class="extension-title">
+                    <span>🔢</span>
+                    <span>Number Base Analysis</span>
+                </div>
+                <div class="base-grid">
+                    <button class="base-btn active" data-base="10">Base 10</button>
+                    <button class="base-btn" data-base="6">Base 6</button>
+                    <button class="base-btn" data-base="9">Base 9</button>
+                    <button class="base-btn" data-base="12">Base 12</button>
+                    <button class="base-btn" data-base="16">Base 16</button>
+                    <button class="base-btn" data-base="60">Base 60</button>
+                    <button class="base-btn" data-base="2">Binary</button>
+                    <button class="base-btn" data-base="3">Ternary</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Camera Panel -->
+    <div id="camera-panel" class="slide-panel bottom-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">Camera Control</h2>
+            <p class="panel-subtitle">Navigate N-particle phase space</p>
+        </div>
+        <div class="panel-content">
+            <div class="btn-group">
+                <button class="btn" id="rotate-left">← Rotate</button>
+                <button class="btn" id="rotate-right">Rotate →</button>
+            </div>
+            
+            <div class="camera-presets">
+                <div class="preset-group">
+                    <div class="preset-title">Outer Views</div>
+                    <div class="preset-grid">
+                        <button class="preset-btn" id="preset-top">Top</button>
+                        <button class="preset-btn" id="preset-side">Side</button>
+                        <button class="preset-btn" id="preset-iso">Isometric</button>
+                        <button class="preset-btn" id="preset-far">Far</button>
+                    </div>
+                </div>
+                
+                <div class="preset-group">
+                    <div class="preset-title">Inner Views</div>
+                    <div class="preset-grid">
+                        <button class="preset-btn" id="preset-core">Core</button>
+                        <button class="preset-btn" id="preset-web">Web</button>
+                        <button class="preset-btn" id="preset-void">Void</button>
+                        <button class="preset-btn" id="preset-edge">Edge</button>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn secondary" id="reset-camera">🔄 Reset Camera</button>
+            
+            <div class="stats-grid" style="margin-top: 20px;">
+                <div class="stat-card">
+                    <div class="stat-label">Camera X</div>
+                    <div class="stat-value" id="cam-x">0.00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Camera Y</div>
+                    <div class="stat-value" id="cam-y">0.00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Camera Z</div>
+                    <div class="stat-value" id="cam-z">0.00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Distance</div>
+                    <div class="stat-value" id="cam-dist">25.0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p style="color: var(--text-secondary);">Initializing potential field...</p>
+        </div>
+    </div>
+
+    <script>
+        // === MILLION-DIGIT TRANSCENDENTAL LOADER ===
+        let transcendentalLoader = null;
+        let millionDigitsLoaded = false;
+        let currentMaxCycle = 2500;
+
+        // Global variables
+        let scene, camera, renderer;
+        let particles = [];
+        let particleSystem;
+        let currentPosition = 0;
+        let isPlaying = true;
+        let animationSpeed = 1;
+        let lastFrameTime = 0;
+        let pixelDensity = 0.7;
+        
+        // Custom sequences - can be any mathematical sequences
+        let customSequences = {
+            a: '1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989380952572010654858632788659361533818279682303019520353018529689957736225994138912497217752834791315155748572424541506959508295331168617278558890750983817546374649393192550604009277016711390098488240128583616035637076601047101819429555961989467678374494482553797747268471040475346462080466842590694912933136770289891521047521620569660240580381501935112533824300355876402474964732639141992726042699227967823547816360093417216412199245863150302861829745557067498385054945885869269956909272107975093029553211653449872027559602364806654991198818347977535663698074265425278625518184175746728909777727938000816470600161452491921732172147723501414419735685481613611573525521334757418494684385233239073941433345477624168625189835694855620992192221842725502542568876717904946016534668049886272327917860857843838279679766814541009538837863609506800642251252051173929848960841284886269456042419652850222106611863067442786220391949450471237137869609563643719172874677646575739624138908658326459958133904780275900994657640789512694683983525957098258226205224894077267194782684826014769909026401363944374553050682034962524517493996514314298091906592509372216964615157098583874105978859597729754989301617539284681382686838689427741559918559252459539594310499725246808459872736446958486538367362226260991246080512438843904512441365497627807977156914359977001296160894416948685558484063534220722258284886481584560285060168427394522674676788952521385225499546667278239864565961163548862305774564980355936345681743241125',
+            b: '7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969772093101416928368190255151086574637721112523897844250569536967707854499699679468644549059879316368892300987931277361782154249992295763514822082698951936680331825288693984964651058209392398294887933203625094431173012381970684161403970198376793206832823764648042953118023287825098194558153017567173613320698112509961818815930416903515988885193458072738667385894228792284998920868058257492796104841984443634632449684875602336248270419786232090021609902353043699418491463140934317381436405462531520961836908887070167683964243781405927145635490613031072085103837505101157477041718986106873969655212671546889570350354021234078498193343210681701210056278802351930332247450158539047304199577770935036604169973297250886876966403555707162268447162560798826517871341951246652010305921236677194325278675398558944896970964097545918569563802363701621120477427228364896134225164450781824423529486363721417402388934412479635743702637552944483379980161254922785092577825620926226483262779333865664816277251640191059004916449982893150566047258027786318641551956532442586982946959308019152987211725563475463964479101459040905862984967912874068705048958586717479854667757573205681288459205413340539220001137863009455606881667400169842055804033637953764520304024322566135278369511778838638744396625322498506549958862342818997077332761717839280349465014345588970719425863987727547109629537415211151368350627526023264847287039207643100595841166120545297030236472549296669381151373227536450988890313602057248176585118063036442812314965507047510254465011727211555194866850800368532281831521960037356252794495158284188294787610852639813955990067376482922443752871846245780361929819713991475644882626039033814418232625150974827987779964373089970388867782271383605772978824125611907176639465070633045279546618550966661856647097113444740160704626215680717481877844371436988218559670959102596862002353718588748569652200050311734392073211390803293634479727355955277349071783793421637012050054513263835440001863239914907054797780566978533580489669062951194324730995876552368128590413832411607226029983305353708761389396391779574540161372236187',
+            c: '4142135623730950488016887242096980785696718753769480731766797379907324784621070388503875343276415727350138462309122970249248360558507372126441214970999358314132226659275055927557999505011527820605714701095599716059702745345968620147285174186408891986095523292304843087143214508397626036279952514079896872533965463318088296406206152583523950547457502877599617298355752203375318570113543746034084988471603868999706990048150305440277903164542478230684929369186215805784631115966687130130156185689872372352885092648612494977154218334204285686060146824720771435854874155657069677653720226485447015858801620758474922657226002085584466521458398893944370926591800311388246468157082630100594858704003186480342194897278290641045072636881313739855256117322040245091227700226941127573627280495738108967504018369868368450725799364729060762996941380475654823728997180326802474420629269124859052181004459842150591120249441341728531478105803603371077309182869314710171111683916581726889419758716582152128229518488472089694633862891562882765952635140542267653239694617511291602408715510135150455381287560052631468017127402653969470240300517495318862925631385188163478001569369176881852378684052287837629389214300655869568685964595155501644724509836896036887323114389415576651040883914292338113206052433629485317049915771756228549741438999188021762430965206564211827316726257539594717255934637238632261482742622208671155839599926521176252698917540988159348640083457085181472231814204070426509056532333398436457865796796519267292399875366617215982578860263363617827495994219403777753681426217738799194551397231274066898329989895386728822856378697749662519966583525776198939322845344735694794962952168891485492538904755828834526096524096542889394538646625744927556381964410316979833061852019379384940057156333720548068540575867999670121372239475821426306585132217408832382947287617393647467837431960001592188807347857617252211867490424977366929207311096369721608933708661156734585334833295254675851644710757848602463600834449114818587655554286455123314219926311332517970608436559704352856410087918500760361009159465670676883605571740076756905096136719401324935605240185999105062108163597726431380605467010293569971042425105781749531057255934984451126922780344913506637568747760283162829605532422426957534529028838768446429173282770888318087025339852338122749990812371892540726475367850304821591801886167108972869229201197599880703818543332536460211082299279293072871780799888099176741774108983060800326311816427988231171',
+            d: '6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911374847540880753868917521266338622235369317931800607667263544333890865959395829056383226613199282902678806752087668925017116962070322210432162695486262963136144381497587012203408058879544547492461856953648644492410443207713449470495658467885098743394422125448770664780915884607499887124007652170575179788341662562494075890697040002812104276217711177780531531714101170466659914669798731761356006708748071013179523689427521948435305678300228785699782977834784587822891109762500302696156170025046433824377648610283831268330372429267526311653392473167111211588186385133162038400522216579128667529465490681131715993432359734949850904094762132229810172610705961164562990981629055520852479035240602017279974717534277759277862561943208275051312181562855122248093947123414517022373580577278616008688382952304592647878017889921990270776903895321968198615143780314997411069260886742962267575605231727775203536139362107673893764556060605921658946675955190040055590895022953094231248235521221241544400647034056573479766397239494994658457887303962309037503399385621024236902513868041457799569812244574717803417312645322041639723213404444948730231541767689375210306873788034417009395440962795589867872320951242689355730970450959568440175551988192180206405290551893494759260073485228210108819464454422231889131929468962200230144377026992300780308526118075451928877050210968424936271359251876077788466583615023891349333312231053392321362431926372891067050339928226526355620902979864247275977256550861548754357482647181414512700060238901620777322449943530889990950168032811219432048196438767586331479857191139781539780747615077221175082694586393204565209896985556781410696837288405874610337810544439094368358358138113116899385557697548414914453415091295407005019477548616307542264172939468036731980586183391832859913039607201445595044977921207612478564591616083705949878600697018940988640076443617093341727091914336501371576601148038143062623805143211734815100559013456101180079050638142152709308588092875703450507808145458819906336129827981411745339273120809289727922213298064294687824274874017450554067787570832373109759151177629784432847479081765180977872684161176325038612112914368343767023503711163307258698832587103363222381098090121101989917684149175123313401527338438372345009347860497929459915822012581045982309255287212413704361491020547185549611808764265765110605458814756044317847985845397312863016254487611485'
+        };
+        
+        // Transcendental number mappings for dimensions A, B, C
+        let transcendentalMapping = {
+            a: 'phi',
+            b: 'phi', 
+            c: 'pi'
+        };
+        
+        // Map transcendental names to sequence keys
+        const sequenceMap = {
+            'pi': 'a',
+            'e': 'b',
+            'sqrt2': 'c',
+            'phi': 'd'
+        };
+        
+        // Stagger sequence offsets for each dimension
+        let staggerOffsets = {
+            a: 0,   // Dimension A starts at position 0
+            b: 239, // Dimension B starts at position 239 (52nd prime)
+            c: 478  // Dimension C starts at position 478 (239 × 2)
+        };
+        
+        // Prime numbers for stagger spacing (up to ~500 to stay within 2500 digit range)
+        const primeNumbers = [
+            2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 
+            73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 
+            151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 
+            233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 
+            317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 
+            421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499
+        ];
+        
+        // Touch controls
+        let touchStartX = 0, touchStartY = 0;
+        let cameraRotation = { x: 0.3, y: 0 };
+        let cameraDistance = 25;
+        
+        // Physics constants
+        let PARTICLE_COUNT = 350000;
+        const SIMULATION_EXTENT = 15;
+        const WAVE_STRENGTH = 2.5;
+        const VELOCITY_DAMPING = 0.98;
+
+        // Potential field control (amplitude coefficient A_i)
+        let potentialFieldAmplitude = 1.0;
+        let forceSliderValue = 0.5; // Maps to 1.0x amplitude (center position = normal)
+
+        // Research Extensions State
+        let activeMode = 'topology';
+        let currentBase = 10;
+        let researchExtensions = {
+            crystal: {
+                threeFold: false,
+                sixFold: false,
+                lattice: false
+            },
+            harmonic: {
+                commaSpiral: true,
+                perfectFifths: true,
+                equalTemp: false
+            },
+            topology: {
+                trefoil: false,
+                torus: false,
+                hopf: false
+            }
+        };
+
+        // Additional visual elements
+        let symmetryHelpers = [];
+        let topologicalGuides = [];
+        let harmonicVisualizers = [];
+        
+        // UI State
+        let activePanel = null;
+
+        // Initialize million-digit loader
+        async function initializeMillionDigits() {
+            console.log('📊 Using 2500-digit sequences...');
+            // Using 2500-digit sequences directly from customSequences
+                millionDigitsLoaded = true;
+            currentMaxCycle = 2500;
+                
+            console.log(`✅ 2500 digits active! Max cycle: ${currentMaxCycle.toLocaleString()}`);
+            document.getElementById('status-text').textContent = '📊 2500 Digits Active';
+                
+                updateUI();
+        }
+
+        function init() {
+            console.log('Initializing Transcendental Dynamics...');
+            
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000033, 0.015);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+            updateCameraPosition();
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ 
+                antialias: false,
+                powerPreference: "high-performance"
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio * pixelDensity, 3));
+            renderer.setClearColor(0x000011);
+            document.getElementById('container').appendChild(renderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404080, 0.4);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0x8A2BE2, 1.0);
+            directionalLight.position.set(10, 10, 5);
+            scene.add(directionalLight);
+
+            // Create boundary
+            createBoundaryContainer();
+
+            // Setup systems
+            setupParticleSystem();
+            setupTouchControls();
+            setupUI();
+            
+            // Initialize the 2500-digit sequences
+            initializeMillionDigits();
+            
+            // Hide loading
+            setTimeout(() => {
+                document.getElementById('loading').classList.remove('active');
+            }, 1500);
+            
+            // Start animation
+            animate();
+        }
+
+        function createBoundaryContainer() {
+            const geometry = new THREE.BoxGeometry(SIMULATION_EXTENT * 2, SIMULATION_EXTENT * 2, SIMULATION_EXTENT * 2);
+            const edges = new THREE.EdgesGeometry(geometry);
+            const material = new THREE.LineBasicMaterial({ 
+                color: 0x4A90E2, 
+                transparent: true, 
+                opacity: 0.3 
+            });
+            const boundaryBox = new THREE.LineSegments(edges, material);
+            scene.add(boundaryBox);
+        }
+
+        function createSymmetryHelpers() {
+            symmetryHelpers.forEach(helper => scene.remove(helper));
+            symmetryHelpers = [];
+
+            if (researchExtensions.crystal.threeFold) {
+                for (let i = 0; i < 3; i++) {
+                    const angle = (i * 120 * Math.PI) / 180;
+                    const geometry = new THREE.PlaneGeometry(SIMULATION_EXTENT * 2, 0.1);
+                    const material = new THREE.MeshBasicMaterial({ 
+                        color: 0xFF6B6B, 
+                        transparent: true, 
+                        opacity: 0.3,
+                        side: THREE.DoubleSide 
+                    });
+                    const plane = new THREE.Mesh(geometry, material);
+                    plane.rotation.z = angle;
+                    scene.add(plane);
+                    symmetryHelpers.push(plane);
+                }
+            }
+
+            if (researchExtensions.crystal.sixFold) {
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i * 60 * Math.PI) / 180;
+                    const geometry = new THREE.CylinderGeometry(0.05, 0.05, SIMULATION_EXTENT * 2);
+                    const material = new THREE.MeshBasicMaterial({ 
+                        color: 0x4ECDC4, 
+                        transparent: true, 
+                        opacity: 0.3 
+                    });
+                    const cylinder = new THREE.Mesh(geometry, material);
+                    cylinder.rotation.z = angle;
+                    scene.add(cylinder);
+                    symmetryHelpers.push(cylinder);
+                }
+            }
+
+            if (researchExtensions.crystal.lattice) {
+                const latticeGeometry = new THREE.SphereGeometry(0.2, 8, 8);
+                const latticeMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0xFFD93D, 
+                    transparent: true, 
+                    opacity: 0.5 
+                });
+                
+                const a = SIMULATION_EXTENT / 3;
+                for (let i = -3; i <= 3; i++) {
+                    for (let j = -3; j <= 3; j++) {
+                        const x = a * (i + 0.5 * j);
+                        const y = a * 0.866 * j;
+                        
+                        if (Math.sqrt(x*x + y*y) < SIMULATION_EXTENT) {
+                            const sphere = new THREE.Mesh(latticeGeometry, latticeMaterial);
+                            sphere.position.set(x, y, 0);
+                            scene.add(sphere);
+                            symmetryHelpers.push(sphere);
+                        }
+                    }
+                }
+            }
+        }
+
+        function createTopologicalGuides() {
+            topologicalGuides.forEach(guide => scene.remove(guide));
+            topologicalGuides = [];
+
+            if (researchExtensions.topology.trefoil) {
+                const curve = new THREE.Curve();
+                curve.getPoint = function(t) {
+                    const scale = SIMULATION_EXTENT * 0.5;
+                    const p = t * Math.PI * 2;
+                    return new THREE.Vector3(
+                        scale * (Math.sin(p) + 2 * Math.sin(2 * p)),
+                        scale * (Math.cos(p) - 2 * Math.cos(2 * p)),
+                        scale * (-Math.sin(3 * p))
+                    );
+                };
+                
+                const geometry = new THREE.TubeGeometry(curve, 100, 0.3, 8, true);
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: 0xFFD700,
+                    transparent: true,
+                    opacity: 0.7 
+                });
+                const trefoil = new THREE.Mesh(geometry, material);
+                scene.add(trefoil);
+                topologicalGuides.push(trefoil);
+            }
+
+            if (researchExtensions.topology.torus) {
+                const geometry = new THREE.TorusGeometry(SIMULATION_EXTENT * 0.8, SIMULATION_EXTENT * 0.3, 16, 100);
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: 0x00CED1,
+                    transparent: true,
+                    opacity: 0.2,
+                    wireframe: true
+                });
+                const torus = new THREE.Mesh(geometry, material);
+                scene.add(torus);
+                topologicalGuides.push(torus);
+            }
+
+            if (researchExtensions.topology.hopf) {
+                const geometry = new THREE.SphereGeometry(SIMULATION_EXTENT * 0.9, 32, 32);
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: 0xDA70D6,
+                    transparent: true,
+                    opacity: 0.1,
+                    wireframe: true
+                });
+                const sphere = new THREE.Mesh(geometry, material);
+                scene.add(sphere);
+                topologicalGuides.push(sphere);
+            }
+        }
+
+        function setupParticleSystem() {
+            if (particleSystem) {
+                scene.remove(particleSystem);
+                if (particleSystem.geometry) particleSystem.geometry.dispose();
+                if (particleSystem.material) particleSystem.material.dispose();
+            }
+
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(PARTICLE_COUNT * 3);
+            const velocities = new Float32Array(PARTICLE_COUNT * 3);
+            const colors = new Float32Array(PARTICLE_COUNT * 3);
+
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                const i3 = i * 3;
+                
+                const gridSize = Math.ceil(Math.cbrt(PARTICLE_COUNT));
+                const xi = i % gridSize;
+                const yi = Math.floor(i / gridSize) % gridSize;
+                const zi = Math.floor(i / (gridSize * gridSize));
+                
+                const spacing = (SIMULATION_EXTENT * 1.8) / gridSize;
+                positions[i3] = (xi - gridSize/2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
+                positions[i3 + 1] = (yi - gridSize/2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
+                positions[i3 + 2] = (zi - gridSize/2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
+                
+                velocities[i3] = 0;
+                velocities[i3 + 1] = 0;
+                velocities[i3 + 2] = 0;
+                
+                colors[i3] = 0.4;
+                colors[i3 + 1] = 0.3;
+                colors[i3 + 2] = 0.7;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.08 * Math.sqrt(50000 / PARTICLE_COUNT) * pixelDensity,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6 + (pixelDensity * 0.2),
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: true
+            });
+
+            particleSystem = new THREE.Points(geometry, material);
+            particleSystem.velocities = velocities;
+            
+            scene.add(particleSystem);
+            particles = particleSystem;
+        }
+
+        function updateCameraPosition() {
+            camera.position.x = Math.cos(cameraRotation.y) * Math.cos(cameraRotation.x) * cameraDistance;
+            camera.position.y = Math.sin(cameraRotation.x) * cameraDistance;
+            camera.position.z = Math.sin(cameraRotation.y) * Math.cos(cameraRotation.x) * cameraDistance;
+            camera.lookAt(0, 0, 0);
+            updateCameraDisplay();
+        }
+
+        function updateCameraDisplay() {
+            document.getElementById('cam-x').textContent = camera.position.x.toFixed(2);
+            document.getElementById('cam-y').textContent = camera.position.y.toFixed(2);
+            document.getElementById('cam-z').textContent = camera.position.z.toFixed(2);
+            document.getElementById('cam-dist').textContent = cameraDistance.toFixed(1);
+        }
+
+        function setupTouchControls() {
+            const canvas = renderer.domElement;
+            
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (e.touches.length === 1) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }
+            }, { passive: false });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (e.touches.length === 1) {
+                    const deltaX = (e.touches[0].clientX - touchStartX) * 0.005;
+                    const deltaY = (e.touches[0].clientY - touchStartY) * 0.005;
+                    
+                    cameraRotation.y += deltaX;
+                    cameraRotation.x = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, cameraRotation.x + deltaY));
+                    
+                    updateCameraPosition();
+                    
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }
+            }, { passive: false });
+
+            let lastPinchDistance = 0;
+            canvas.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    lastPinchDistance = Math.sqrt(dx * dx + dy * dy);
+                }
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 2) {
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (lastPinchDistance > 0) {
+                        const scale = distance / lastPinchDistance;
+                        cameraDistance /= scale;
+                        cameraDistance = Math.max(10, Math.min(60, cameraDistance));
+                        updateCameraPosition();
+                    }
+                    lastPinchDistance = distance;
+                }
+            });
+
+            // Mouse controls
+            let mouseDown = false;
+            canvas.addEventListener('mousedown', () => { mouseDown = true; });
+            canvas.addEventListener('mouseup', () => { mouseDown = false; });
+            canvas.addEventListener('mouseleave', () => { mouseDown = false; });
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (mouseDown) {
+                    cameraRotation.y += e.movementX * 0.005;
+                    cameraRotation.x = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, cameraRotation.x + e.movementY * 0.005));
+                    updateCameraPosition();
+                }
+            });
+
+            canvas.addEventListener('wheel', (e) => {
+                cameraDistance *= 1 + e.deltaY * 0.001;
+                cameraDistance = Math.max(10, Math.min(60, cameraDistance));
+                updateCameraPosition();
+            });
+
+            // New: Close panel on canvas click
+            canvas.addEventListener('click', () => {
+                if (activePanel) {
+                    const currentActivePanelElement = document.getElementById(`${activePanel}-panel`);
+                    const currentActiveNavItem = document.querySelector(`.nav-item[data-panel="${activePanel}"]`);
+
+                    if (currentActivePanelElement) currentActivePanelElement.classList.remove('active');
+                    if (currentActiveNavItem) currentActiveNavItem.classList.remove('active');
+                    
+                    activePanel = null;
+                }
+            });
+        }
+
+        function setupUI() {
+            // Set initial slider text values to match their actual initial values
+            document.getElementById('particle-value').textContent = formatParticleCount(PARTICLE_COUNT);
+            document.getElementById('quality-slider').value = pixelDensity; // Set slider position to match global
+            document.getElementById('particle-slider').value = PARTICLE_COUNT; // Set slider position to match global
+            document.getElementById('particle-input').value = PARTICLE_COUNT; // Set input field to match global
+            document.getElementById('force-slider').value = forceSliderValue; // Set slider position to center
+
+            document.getElementById('quality-value').textContent = pixelDensity.toFixed(1) + 'x';
+            document.getElementById('force-value').textContent = potentialFieldAmplitude.toFixed(1) + 'x';
+
+            // Navigation Logic (Toggle and Switch)
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const panelId = item.dataset.panel;
+                    const panelElement = document.getElementById(`${panelId}-panel`);
+
+                    if (item.classList.contains('active')) {
+                        // Clicked on already active item: close it
+                        item.classList.remove('active');
+                        if (panelElement) panelElement.classList.remove('active');
+                        activePanel = null;
+                    } else {
+                        // Clicked on a new item: close current (if any) and open new
+                        if (activePanel) {
+                            const oldPanelElement = document.getElementById(`${activePanel}-panel`);
+                            const oldNavItem = document.querySelector(`.nav-item[data-panel="${activePanel}"]`);
+                            if (oldPanelElement) oldPanelElement.classList.remove('active');
+                            if (oldNavItem) oldNavItem.classList.remove('active');
+                        }
+
+                        item.classList.add('active');
+                        if (panelElement) panelElement.classList.add('active');
+                        activePanel = panelId;
+                    }
+                });
+            });
+
+            // Control Panel buttons (play-pause, reset)
+            document.getElementById('play-pause').addEventListener('click', () => {
+                isPlaying = !isPlaying;
+                document.getElementById('play-pause').textContent = isPlaying ? '⏸️ Pause' : '▶️ Play';
+            });
+
+            document.getElementById('reset').addEventListener('click', () => {
+                currentPosition = 0;
+                setupParticleSystem();
+                updateUI();
+            });
+
+            // Speed controls
+            document.getElementById('speed-slow').addEventListener('click', () => {
+                animationSpeed = 1;
+                updateSpeedButtons('slow');
+            });
+            document.getElementById('speed-med').addEventListener('click', () => {
+                animationSpeed = 5;
+                updateSpeedButtons('med');
+            });
+            document.getElementById('speed-ultra').addEventListener('click', () => {
+                animationSpeed = 15;
+                updateSpeedButtons('ultra');
+            });
+            updateSpeedButtons('slow'); // Set initial button state for speed (animationSpeed is 1 by default)
+
+            // Particle slider listener
+            document.getElementById('particle-slider').addEventListener('input', (e) => {
+                PARTICLE_COUNT = parseInt(e.target.value);
+                document.getElementById('particle-value').textContent = formatParticleCount(PARTICLE_COUNT);
+                document.getElementById('particle-input').value = PARTICLE_COUNT; // Sync input field
+                setupParticleSystem();
+            });
+
+            // Particle text input listener
+            document.getElementById('particle-input').addEventListener('input', (e) => {
+                let value = parseInt(e.target.value);
+                
+                // Validate and clamp the value
+                if (isNaN(value)) value = 350000; // Default fallback
+                value = Math.max(1, Math.min(1000000, value)); // Clamp to valid range (minimum 1)
+                
+                PARTICLE_COUNT = value;
+                document.getElementById('particle-value').textContent = formatParticleCount(PARTICLE_COUNT);
+                document.getElementById('particle-slider').value = PARTICLE_COUNT; // Sync slider
+                
+                // Update the input field to show the clamped value
+                if (parseInt(e.target.value) !== value) {
+                    e.target.value = value;
+                }
+                
+                setupParticleSystem();
+            });
+
+            // Handle Enter key and blur for immediate updates
+            document.getElementById('particle-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.target.blur(); // Trigger blur event for final validation
+                }
+            });
+
+            document.getElementById('particle-input').addEventListener('blur', (e) => {
+                let value = parseInt(e.target.value);
+                if (isNaN(value) || value < 1) {
+                    value = 1;
+                } else if (value > 1000000) {
+                    value = 1000000;
+                }
+                e.target.value = value;
+                
+                PARTICLE_COUNT = value;
+                document.getElementById('particle-value').textContent = formatParticleCount(PARTICLE_COUNT);
+                document.getElementById('particle-slider').value = PARTICLE_COUNT;
+                setupParticleSystem();
+            });
+
+            // Quality slider listener
+            document.getElementById('quality-slider').addEventListener('input', (e) => {
+                pixelDensity = parseFloat(e.target.value);
+                document.getElementById('quality-value').textContent = pixelDensity.toFixed(1) + 'x';
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio * pixelDensity, 3));
+                
+                if (particleSystem && particleSystem.material) {
+                    particleSystem.material.size = 0.08 * Math.sqrt(50000 / PARTICLE_COUNT) * pixelDensity;
+                    particleSystem.material.opacity = 0.6 + (pixelDensity * 0.2);
+                    particleSystem.material.needsUpdate = true;
+                }
+            });
+
+            // Potential field amplitude slider listener with extreme asymptotic mapping
+            document.getElementById('force-slider').addEventListener('input', (e) => {
+                forceSliderValue = parseFloat(e.target.value);
+                
+                // Extreme asymptotic mapping using exponential approach to true infinity
+                // Transform 0.01-0.99 range to get exponential explosion at extremes
+                const centerOffset = forceSliderValue - 0.5; // -0.49 to +0.49
+                const scaledOffset = centerOffset * 2; // -0.98 to +0.98
+                
+                if (Math.abs(scaledOffset) > 0.95) {
+                    // Extreme range: use divisor approach for near-infinity
+                    const extremeness = Math.abs(scaledOffset);
+                    const divisor = Math.pow(10, -((extremeness - 0.95) * 200)); // Gets down to 10^-10 and beyond
+                    potentialFieldAmplitude = (scaledOffset > 0 ? 1 : -1) / divisor;
+                } else {
+                    // Normal range: exponential scaling
+                    const expPower = Math.abs(scaledOffset) * 8; // 0 to ~7.6
+                    const baseMultiplier = Math.pow(10, expPower); // 1x to ~36M x
+                    potentialFieldAmplitude = scaledOffset >= 0 ? baseMultiplier : -baseMultiplier;
+                }
+                
+                // Safety clamp only for truly insane values to prevent browser crash
+                potentialFieldAmplitude = Math.max(-1e12, Math.min(1e12, potentialFieldAmplitude));
+                
+                // Display the actual amplitude multiplier or ∞ symbols for extreme values
+                let displayValue;
+                if (potentialFieldAmplitude > 1e9) {
+                    displayValue = '+∞';
+                } else if (potentialFieldAmplitude < -1e9) {
+                    displayValue = '-∞';
+                } else if (Math.abs(potentialFieldAmplitude) > 1e6) {
+                    displayValue = (potentialFieldAmplitude / 1e6).toFixed(1) + 'M×';
+                } else if (Math.abs(potentialFieldAmplitude) > 1e3) {
+                    displayValue = (potentialFieldAmplitude / 1e3).toFixed(1) + 'K×';
+                } else if (Math.abs(potentialFieldAmplitude) < 0.001) {
+                    displayValue = potentialFieldAmplitude.toExponential(2) + '×';
+                } else {
+                    displayValue = potentialFieldAmplitude.toFixed(1) + '×';
+                }
+                document.getElementById('force-value').textContent = displayValue;
+            });
+
+            // Mode buttons
+            document.getElementById('mode-standard').addEventListener('click', () => setActiveMode('standard'));
+            document.getElementById('mode-crystal').addEventListener('click', () => setActiveMode('crystal'));
+            document.getElementById('mode-harmonic').addEventListener('click', () => setActiveMode('harmonic'));
+            document.getElementById('mode-topology').addEventListener('click', () => setActiveMode('topology'));
+            
+            // Set initial active mode UI (uses global activeMode)
+            setActiveMode(activeMode);
+
+            // Set initial active state for toggle switches based on global researchExtensions
+            if (researchExtensions.harmonic.commaSpiral) {
+                const toggle = document.getElementById('toggle-comma');
+                if (toggle) {
+                    toggle.classList.add('active');
+                    const switchEl = toggle.querySelector('.toggle-switch');
+                    if (switchEl) switchEl.classList.add('active');
+                }
+            }
+            if (researchExtensions.harmonic.perfectFifths) {
+                const toggle = document.getElementById('toggle-fifths');
+                 if (toggle) {
+                    toggle.classList.add('active');
+                    const switchEl = toggle.querySelector('.toggle-switch');
+                    if (switchEl) switchEl.classList.add('active');
+                }
+            }
+            
+            // Original research toggles setup (adds event listeners)
+            setupResearchToggles();
+
+            // Original camera controls setup
+            setupCameraControls();
+
+            // Update wave displays and other stats
+            updateUI();
+            
+            // Fast mode and reset preset buttons
+            document.getElementById('fast-mode-btn').addEventListener('click', () => {
+                applyFastModePreset();
+            });
+            
+            document.getElementById('reset-defaults-btn').addEventListener('click', () => {
+                resetToDefaults();
+            });
+            
+            // Transcendental selector event listeners
+            document.getElementById('select-a').addEventListener('change', (e) => {
+                transcendentalMapping.a = e.target.value;
+                updateUI();
+            });
+            
+            document.getElementById('select-b').addEventListener('change', (e) => {
+                transcendentalMapping.b = e.target.value;
+                updateUI();
+            });
+            
+            document.getElementById('select-c').addEventListener('change', (e) => {
+                transcendentalMapping.c = e.target.value;
+                updateUI();
+            });
+            
+            // Stagger control event listeners
+            document.getElementById('stagger-manual').addEventListener('click', () => {
+                document.getElementById('stagger-manual').classList.add('active');
+                document.getElementById('stagger-auto').classList.remove('active');
+                document.getElementById('manual-controls').style.display = 'block';
+                document.getElementById('auto-controls').style.display = 'none';
+            });
+            
+            document.getElementById('stagger-auto').addEventListener('click', () => {
+                document.getElementById('stagger-auto').classList.add('active');
+                document.getElementById('stagger-manual').classList.remove('active');
+                document.getElementById('manual-controls').style.display = 'none';
+                document.getElementById('auto-controls').style.display = 'block';
+            });
+            
+            // Manual stagger input listeners
+            document.getElementById('stagger-a').addEventListener('input', (e) => {
+                staggerOffsets.a = parseInt(e.target.value) || 0;
+                updateUI();
+            });
+            
+            document.getElementById('stagger-b').addEventListener('input', (e) => {
+                staggerOffsets.b = parseInt(e.target.value) || 0;
+                updateUI();
+            });
+            
+            document.getElementById('stagger-c').addEventListener('input', (e) => {
+                staggerOffsets.c = parseInt(e.target.value) || 0;
+                updateUI();
+            });
+            
+            // Auto spacing slider listener
+            document.getElementById('spacing-slider').addEventListener('input', (e) => {
+                const primeIndex = parseInt(e.target.value);
+                const spacing = primeNumbers[primeIndex];
+                
+                document.getElementById('spacing-value').textContent = spacing;
+                document.getElementById('prime-index').textContent = primeIndex + 1;
+                
+                // Auto-assign stagger offsets based on prime spacing
+                staggerOffsets.a = 0;
+                staggerOffsets.b = spacing;
+                staggerOffsets.c = spacing * 2;
+                
+                // Update manual input fields to reflect auto values
+                document.getElementById('stagger-a').value = staggerOffsets.a;
+                document.getElementById('stagger-b').value = staggerOffsets.b;
+                document.getElementById('stagger-c').value = staggerOffsets.c;
+                
+                updateUI();
+            });
+        }
+
+        function updateSpeedButtons(active) {
+            document.getElementById('speed-slow').style.opacity = active === 'slow' ? '1' : '0.7';
+            document.getElementById('speed-med').style.opacity = active === 'med' ? '1' : '0.7';
+            document.getElementById('speed-ultra').style.opacity = active === 'ultra' ? '1' : '0.7';
+        }
+
+        function setupResearchToggles() {
+            // Crystal
+            document.getElementById('toggle-3fold').addEventListener('click', function() {
+                researchExtensions.crystal.threeFold = !researchExtensions.crystal.threeFold;
+                this.classList.toggle('active');
+                this.querySelector('.toggle-switch').classList.toggle('active');
+                createSymmetryHelpers();
+            });
+
+            document.getElementById('toggle-6fold').addEventListener('click', function() {
+                researchExtensions.crystal.sixFold = !researchExtensions.crystal.sixFold;
+                this.classList.toggle('active');
+                this.querySelector('.toggle-switch').classList.toggle('active');
+                createSymmetryHelpers();
+            });
+
+            document.getElementById('toggle-lattice').addEventListener('click', function() {
+                researchExtensions.crystal.lattice = !researchExtensions.crystal.lattice;
+                this.classList.toggle('active');
+                this.querySelector('.toggle-switch').classList.toggle('active');
+                createSymmetryHelpers();
+            });
+
+            // Harmonic
+            document.getElementById('toggle-comma').addEventListener('click', function() {
+                researchExtensions.harmonic.commaSpiral = !researchExtensions.harmonic.commaSpiral;
+                this.classList.toggle('active');
+                this.querySelector('.toggle-switch').classList.toggle('active');
+            });
+
+            document.getElementById('toggle-fifths').addEventListener('click', function() {
+                researchExtensions.harmonic.perfectFifths = !researchExtensions.harmonic.perfectFifths;
+                this.classList.toggle('active');
+                this.querySelector('.toggle-switch').classList.toggle('active');
+            });
+
+            document.getElementById('toggle-equal').addEventListener('click', function() {
+                researchExtensions.harmonic.equalTemp = !researchExtensions.harmonic.equalTemp;
+                this.classList.toggle('active');
+                this.querySelector('.toggle-switch').classList.toggle('active');
+            });
+
+            // Topology
+            document.getElementById('toggle-trefoil').addEventListener('click', function() {
+                researchExtensions.topology.trefoil = !researchExtensions.topology.trefoil;
+                this.classList.toggle('active');
+                this.querySelector('.toggle-switch').classList.toggle('active');
+                createTopologicalGuides();
+            });
+
+            document.getElementById('toggle-torus').addEventListener('click', function() {
+                researchExtensions.topology.torus = !researchExtensions.topology.torus;
+                this.classList.toggle('active');
+                this.querySelector('.toggle-switch').classList.toggle('active');
+                createTopologicalGuides();
+            });
+
+            document.getElementById('toggle-hopf').addEventListener('click', function() {
+                researchExtensions.topology.hopf = !researchExtensions.topology.hopf;
+                this.classList.toggle('active');
+                this.querySelector('.toggle-switch').classList.toggle('active');
+                createTopologicalGuides();
+            });
+
+            // Base selector
+            document.querySelectorAll('.base-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    document.querySelectorAll('.base-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentBase = parseInt(e.target.dataset.base);
+                });
+            });
+        }
+
+        function setupCameraControls() {
+            // Rotation
+            document.getElementById('rotate-left').addEventListener('click', () => {
+                cameraRotation.y += Math.PI / 4;
+                updateCameraPosition();
+            });
+
+            document.getElementById('rotate-right').addEventListener('click', () => {
+                cameraRotation.y -= Math.PI / 4;
+                updateCameraPosition();
+            });
+
+            // Presets
+            document.getElementById('preset-top').addEventListener('click', () => {
+                animateCamera(new THREE.Vector3(0, SIMULATION_EXTENT * 2, 0.1));
+            });
+
+            document.getElementById('preset-side').addEventListener('click', () => {
+                animateCamera(new THREE.Vector3(SIMULATION_EXTENT * 2, 0, 0));
+            });
+
+            document.getElementById('preset-iso').addEventListener('click', () => {
+                animateCamera(new THREE.Vector3(SIMULATION_EXTENT * 1.2, SIMULATION_EXTENT * 1.2, SIMULATION_EXTENT * 1.2));
+            });
+
+            document.getElementById('preset-far').addEventListener('click', () => {
+                animateCamera(new THREE.Vector3(0, SIMULATION_EXTENT * 0.5, SIMULATION_EXTENT * 3));
+            });
+
+            document.getElementById('preset-core').addEventListener('click', () => {
+                animateCamera(new THREE.Vector3(0.1, 0.1, 0.1));
+            });
+
+            document.getElementById('preset-web').addEventListener('click', () => {
+                animateCamera(new THREE.Vector3(SIMULATION_EXTENT * 0.3, SIMULATION_EXTENT * 0.3, SIMULATION_EXTENT * 0.3));
+            });
+
+            document.getElementById('preset-void').addEventListener('click', () => {
+                animateCamera(new THREE.Vector3(SIMULATION_EXTENT * 0.5, SIMULATION_EXTENT * 0.7, SIMULATION_EXTENT * 0.4));
+            });
+
+            document.getElementById('preset-edge').addEventListener('click', () => {
+                animateCamera(new THREE.Vector3(SIMULATION_EXTENT * 0.9, SIMULATION_EXTENT * 0.9, SIMULATION_EXTENT * 0.9));
+            });
+
+            document.getElementById('reset-camera').addEventListener('click', () => {
+                cameraRotation = { x: 0.3, y: 0 };
+                cameraDistance = 25;
+                updateCameraPosition();
+            });
+        }
+
+        function animateCamera(targetPosition) {
+            const startPosition = camera.position.clone();
+            const startTime = Date.now();
+            const duration = 1000;
+
+            function update() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = easeInOutCubic(progress);
+
+                camera.position.lerpVectors(startPosition, targetPosition, eased);
+                camera.lookAt(0, 0, 0);
+                
+                cameraDistance = camera.position.length();
+                cameraRotation.x = Math.asin(camera.position.y / cameraDistance);
+                cameraRotation.y = Math.atan2(camera.position.z, camera.position.x);
+                
+                updateCameraDisplay();
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            update();
+        }
+
+        function easeInOutCubic(t) {
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function setActiveMode(mode) {
+            activeMode = mode;
+            
+            document.querySelectorAll('.btn.success').forEach(btn => {
+                btn.style.opacity = '0.7';
+            });
+            document.getElementById(`mode-${mode}`).style.opacity = '1';
+            
+            switch(mode) {
+                case 'crystal':
+                    createSymmetryHelpers();
+                    break;
+                case 'topology':
+                    createTopologicalGuides();
+                    break;
+            }
+        }
+
+        function formatParticleCount(count) {
+            if (count >= 1000000) return (count / 1000000).toFixed(1) + 'M';
+            if (count >= 1000) return (count / 1000).toFixed(0) + 'K';
+            return count.toString(); // Display exact count for values under 1000
+        }
+
+        function getDigitForMode(mode, position) {
+            let digit;
+            
+            // Apply stagger offset based on dimension
+            let staggeredPosition = position;
+                switch(mode) {
+                case 0: // Dimension A
+                    staggeredPosition = position + staggerOffsets.a;
+                    break;
+                case 1: // Dimension B
+                    staggeredPosition = position + staggerOffsets.b;
+                    break;
+                case 2: // Dimension C
+                    staggeredPosition = position + staggerOffsets.c;
+                    break;
+            }
+            
+            // Ensure position stays within bounds
+            staggeredPosition = Math.max(0, staggeredPosition % currentMaxCycle);
+            
+            // Use custom sequences directly (2500 digits each)
+            const customSequence = getCustomSequence(mode);
+            if (customSequence && customSequence.length > 0) {
+                const offset = staggeredPosition % customSequence.length;
+                digit = parseInt(customSequence[offset] || '0');
+            } else {
+                // Fallback to simple pattern if no custom sequence
+                digit = (staggeredPosition + mode) % 10;
+            }
+            
+            if (currentBase !== 10) {
+                if (currentBase < 10) {
+                    digit = digit % currentBase;
+                } else {
+                    const basePos = convertToBase(staggeredPosition, currentBase);
+                    digit = basePos % currentBase;
+                }
+            }
+            
+            return digit;
+        }
+
+        function getCustomSequence(mode) {
+            switch(mode) {
+                case 0: // Dimension A
+                    return customSequences[sequenceMap[transcendentalMapping.a]];
+                case 1: // Dimension B
+                    return customSequences[sequenceMap[transcendentalMapping.b]];
+                case 2: // Dimension C
+                    return customSequences[sequenceMap[transcendentalMapping.c]];
+                default: return '';
+            }
+        }
+
+        function convertToBase(num, base) {
+            if (base === 10) return num;
+            
+            let result = 0;
+            let power = 1;
+            while (num > 0) {
+                result += (num % base) * power;
+                num = Math.floor(num / base);
+                power *= 10;
+            }
+            return result;
+        }
+
+        function updateUI() {
+            const displayRange = 12;
+            
+            // Update wave displays
+            let mDisplay = '', nDisplay = '', pDisplay = '';
+            
+            for (let i = -displayRange; i <= displayRange; i++) {
+                const pos = currentPosition + i;
+                
+                const mDigit = getDigitForMode(0, pos);
+                const nDigit = getDigitForMode(1, pos);
+                const pDigit = getDigitForMode(2, pos);
+                
+                if (i === 0) {
+                    mDisplay += `<span class="current-digit">${mDigit}</span>`;
+                    nDisplay += `<span class="current-digit">${nDigit}</span>`;
+                    pDisplay += `<span class="current-digit">${pDigit}</span>`;
+                } else {
+                    mDisplay += mDigit;
+                    nDisplay += nDigit;
+                    pDisplay += pDigit;
+                }
+            }
+            
+            document.getElementById('m-sequence').innerHTML = mDisplay;
+            document.getElementById('n-sequence').innerHTML = nDisplay;
+            document.getElementById('p-sequence').innerHTML = pDisplay;
+            
+            // Update stats
+            const mDigit = getDigitForMode(0, currentPosition);
+            const nDigit = getDigitForMode(1, currentPosition);
+            const pDigit = getDigitForMode(2, currentPosition);
+            
+            let energySum = mDigit * mDigit + nDigit * nDigit + pDigit * pDigit;
+            
+            document.getElementById('position-stat').textContent = currentPosition.toLocaleString();
+            document.getElementById('energy-stat').textContent = energySum;
+            document.getElementById('m-mode').textContent = mDigit;
+            document.getElementById('n-mode').textContent = nDigit;
+            document.getElementById('p-mode').textContent = pDigit;
+        }
+
+        function applyFastModePreset() {
+            // Set Fast Mode settings
+            PARTICLE_COUNT = 238999;
+            
+            // Set transcendental mappings: A: sqrt2, B: pi, C: phi
+            transcendentalMapping.a = 'sqrt2';
+            transcendentalMapping.b = 'pi';
+            transcendentalMapping.c = 'phi';
+            
+            // Set stagger spacing to 239 (index 51 in prime array)
+            const spacingIndex = 51; // 239 is at index 51
+            staggerOffsets.a = 0;
+            staggerOffsets.b = 239;
+            staggerOffsets.c = 478;
+            
+            // Set speed to fast
+            animationSpeed = 5;
+            
+            // Set Potential Field Amplitude to 1M× (maximum setting)
+            forceSliderValue = 0.875; // This maps to approximately 1M× amplitude
+            const centerOffset = forceSliderValue - 0.5;
+            const scaledOffset = centerOffset * 2;
+            const expPower = Math.abs(scaledOffset) * 8;
+            const baseMultiplier = Math.pow(10, expPower);
+            potentialFieldAmplitude = scaledOffset >= 0 ? baseMultiplier : -baseMultiplier;
+            
+            // Update UI elements
+            document.getElementById('particle-slider').value = PARTICLE_COUNT;
+            document.getElementById('particle-input').value = PARTICLE_COUNT;
+            document.getElementById('particle-value').textContent = formatParticleCount(PARTICLE_COUNT);
+            
+            document.getElementById('select-a').value = 'sqrt2';
+            document.getElementById('select-b').value = 'pi';
+            document.getElementById('select-c').value = 'phi';
+            
+            document.getElementById('spacing-slider').value = spacingIndex;
+            document.getElementById('spacing-value').textContent = '239';
+            document.getElementById('prime-index').textContent = '52';
+            
+            document.getElementById('stagger-a').value = 0;
+            document.getElementById('stagger-b').value = 239;
+            document.getElementById('stagger-c').value = 478;
+            
+            // Update force slider UI
+            document.getElementById('force-slider').value = forceSliderValue;
+            document.getElementById('force-value').textContent = (potentialFieldAmplitude / 1e6).toFixed(1) + 'M×';
+            
+            // Update speed button visual state
+            updateSpeedButtons('med');
+            
+            // Recreate particle system and update UI
+            setupParticleSystem();
+            updateUI();
+            
+            console.log('🚀 Fast Mode Preset Applied: 238,999 particles, √2/π/φ mapping, 239 stagger');
+        }
+
+        function resetToDefaults() {
+            // Reset to original defaults
+            PARTICLE_COUNT = 350000;
+            
+            // Reset transcendental mappings to original
+            transcendentalMapping.a = 'phi';
+            transcendentalMapping.b = 'phi';
+            transcendentalMapping.c = 'pi';
+            
+            // Reset stagger offsets to original
+            staggerOffsets.a = 0;
+            staggerOffsets.b = 239;
+            staggerOffsets.c = 478;
+            
+            // Reset speed to slow
+            animationSpeed = 1;
+            
+            // Reset other settings
+            pixelDensity = 0.7;
+            forceSliderValue = 0.5;
+            potentialFieldAmplitude = 1.0;
+            
+            // Update UI elements
+            document.getElementById('particle-slider').value = PARTICLE_COUNT;
+            document.getElementById('particle-input').value = PARTICLE_COUNT;
+            document.getElementById('particle-value').textContent = formatParticleCount(PARTICLE_COUNT);
+            
+            document.getElementById('select-a').value = 'phi';
+            document.getElementById('select-b').value = 'phi';
+            document.getElementById('select-c').value = 'pi';
+            
+            document.getElementById('spacing-slider').value = 51;
+            document.getElementById('spacing-value').textContent = '239';
+            document.getElementById('prime-index').textContent = '52';
+            
+            document.getElementById('stagger-a').value = 0;
+            document.getElementById('stagger-b').value = 239;
+            document.getElementById('stagger-c').value = 478;
+            
+            document.getElementById('quality-slider').value = pixelDensity;
+            document.getElementById('quality-value').textContent = pixelDensity.toFixed(1) + 'x';
+            
+            document.getElementById('force-slider').value = forceSliderValue;
+            document.getElementById('force-value').textContent = potentialFieldAmplitude.toFixed(1) + 'x';
+            
+            // Update speed button visual state
+            updateSpeedButtons('slow');
+            
+            // Update renderer pixel ratio
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio * pixelDensity, 3));
+            
+            // Recreate particle system and update UI
+            setupParticleSystem();
+            updateUI();
+            
+            console.log('🔄 Reset to Defaults: 350K particles, φ/φ/π mapping, original settings');
+        }
+
+        function getWaveForce(x, y, z) {
+            const mDigit = getDigitForMode(0, currentPosition);
+            const nDigit = getDigitForMode(1, currentPosition);
+            const pDigit = getDigitForMode(2, currentPosition);
+            
+            let energySum = mDigit * mDigit + nDigit * nDigit + pDigit * pDigit;
+            const standardizedMode = energySum / 3;
+            
+            const waveNumber = Math.PI / SIMULATION_EXTENT;
+            
+            const phaseM = (mDigit / 9) * Math.PI;
+            const phaseN = (nDigit / 9) * Math.PI;
+            const phaseP = (pDigit / 9) * Math.PI;
+            
+            let forceX = 0, forceY = 0, forceZ = 0;
+            
+            switch(activeMode) {
+                case 'crystal':
+                    if (researchExtensions.crystal.threeFold) {
+                        const angle = Math.atan2(y, x);
+                        const r = Math.sqrt(x*x + y*y);
+                        const snapAngle = Math.round(angle / (2*Math.PI/3)) * (2*Math.PI/3);
+                        const targetX = r * Math.cos(snapAngle);
+                        const targetY = r * Math.sin(snapAngle);
+                        forceX += (targetX - x) * 0.1;
+                        forceY += (targetY - y) * 0.1;
+                    }
+                    
+                    if (researchExtensions.crystal.sixFold) {
+                        const angle = Math.atan2(y, x);
+                        const r = Math.sqrt(x*x + y*y);
+                        const snapAngle = Math.round(angle / (2*Math.PI/6)) * (2*Math.PI/6);
+                        const targetX = r * Math.cos(snapAngle);
+                        const targetY = r * Math.sin(snapAngle);
+                        forceX += (targetX - x) * 0.05;
+                        forceY += (targetY - y) * 0.05;
+                    }
+                    
+                    if (researchExtensions.crystal.lattice) {
+                        const a = SIMULATION_EXTENT / 3;
+                        const nearestI = Math.round(x / a);
+                        const nearestJ = Math.round(y / (a * 0.866));
+                        const latticeX = a * nearestI;
+                        const latticeY = a * 0.866 * nearestJ;
+                        forceX += (latticeX - x) * 0.02;
+                        forceY += (latticeY - y) * 0.02;
+                    }
+                    break;
+                    
+                case 'harmonic':
+                    if (researchExtensions.harmonic.commaSpiral) {
+                        const spiralPhase = currentPosition * 0.0011;
+                        const spiralForce = 0.1 * Math.sin(spiralPhase);
+                        forceX += y * spiralForce;
+                        forceY += -x * spiralForce;
+                    }
+                    
+                    if (researchExtensions.harmonic.perfectFifths) {
+                        const fifthRatio = 3/2;
+                        const harmonicX = x * fifthRatio;
+                        const harmonicY = y * fifthRatio;
+                        const harmonicZ = z * fifthRatio;
+                        forceX += Math.sin(harmonicX * waveNumber) * 0.1;
+                        forceY += Math.sin(harmonicY * waveNumber) * 0.1;
+                        forceZ += Math.sin(harmonicZ * waveNumber) * 0.1;
+                    }
+                    
+                    if (researchExtensions.harmonic.equalTemp) {
+                        const tempRatio = Math.pow(2, 1/12);
+                        const tempScale = Math.pow(tempRatio, mDigit);
+                        forceX *= tempScale;
+                        forceY *= tempScale;
+                        forceZ *= tempScale;
+                    }
+                    break;
+                    
+                case 'topology':
+                    if (researchExtensions.topology.trefoil) {
+                        const t = Math.atan2(y, x) / (2 * Math.PI);
+                        const scale = SIMULATION_EXTENT * 0.5;
+                        const knotX = scale * (Math.sin(t * 2 * Math.PI) + 2 * Math.sin(t * 4 * Math.PI));
+                        const knotY = scale * (Math.cos(t * 2 * Math.PI) - 2 * Math.cos(t * 4 * Math.PI));
+                        const knotZ = scale * (-Math.sin(t * 6 * Math.PI));
+                        forceX += (knotX - x) * 0.01;
+                        forceY += (knotY - y) * 0.01;
+                        forceZ += (knotZ - z) * 0.01;
+                    }
+                    
+                    if (researchExtensions.topology.torus) {
+                        const R = SIMULATION_EXTENT * 0.8;
+                        const r = SIMULATION_EXTENT * 0.3;
+                        const theta = Math.atan2(y, x);
+                        const distFromCenter = Math.sqrt(x*x + y*y);
+                        const phi = Math.atan2(z, distFromCenter - R);
+                        const torusR = R + r * Math.cos(phi);
+                        const targetX = torusR * Math.cos(theta);
+                        const targetY = torusR * Math.sin(theta);
+                        const targetZ = r * Math.sin(phi);
+                        if (Math.sqrt((x-targetX)**2 + (y-targetY)**2 + (z-targetZ)**2) > r) {
+                            forceX += (targetX - x) * 0.02;
+                            forceY += (targetY - y) * 0.02;
+                            forceZ += (targetZ - z) * 0.02;
+                        }
+                    }
+                    
+                    if (researchExtensions.topology.hopf) {
+                        const norm = Math.sqrt(x*x + y*y + z*z + 1);
+                        const s3x = x / norm;
+                        const s3y = y / norm;
+                        const s3z = z / norm;
+                        const hopfPhase = Math.atan2(s3y, s3x);
+                        forceX += Math.cos(hopfPhase) * 0.05;
+                        forceY += Math.sin(hopfPhase) * 0.05;
+                    }
+                    break;
+            }
+            
+            let potential = Math.cos(mDigit * x * waveNumber + phaseM) * 
+                           Math.cos(nDigit * y * waveNumber + phaseN) * 
+                           Math.cos(pDigit * z * waveNumber + phaseP);
+            
+            const delta = 0.1;
+            const potX = Math.cos(mDigit * (x + delta) * waveNumber + phaseM) * 
+                        Math.cos(nDigit * y * waveNumber + phaseN) * 
+                        Math.cos(pDigit * z * waveNumber + phaseP);
+            const potY = Math.cos(mDigit * x * waveNumber + phaseM) * 
+                        Math.cos(nDigit * (y + delta) * waveNumber + phaseN) * 
+                        Math.cos(pDigit * z * waveNumber + phaseP);
+            const potZ = Math.cos(mDigit * x * waveNumber + phaseM) * 
+                        Math.cos(nDigit * y * waveNumber + phaseN) * 
+                        Math.cos(pDigit * (z + delta) * waveNumber + phaseP);
+            
+            return {
+                x: (-(potX - potential) / delta * WAVE_STRENGTH * standardizedMode + forceX) * potentialFieldAmplitude,
+                y: (-(potY - potential) / delta * WAVE_STRENGTH * standardizedMode + forceY) * potentialFieldAmplitude,
+                z: (-(potZ - potential) / delta * WAVE_STRENGTH * standardizedMode + forceZ) * potentialFieldAmplitude
+            };
+        }
+
+        function updateParticles() {
+            if (!particles || !particles.geometry || !particles.geometry.attributes.position) return;
+
+            const positions = particles.geometry.attributes.position.array;
+            const colors = particles.geometry.attributes.color.array;
+            const velocities = particles.velocities;
+            
+            const mDigit = getDigitForMode(0, currentPosition);
+            const nDigit = getDigitForMode(1, currentPosition);
+            const pDigit = getDigitForMode(2, currentPosition);
+
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                const i3 = i * 3;
+                let x = positions[i3];
+                let y = positions[i3 + 1];
+                let z = positions[i3 + 2];
+                
+                const force = getWaveForce(x, y, z);
+                
+                velocities[i3] += force.x * 0.01;
+                velocities[i3 + 1] += force.y * 0.01;
+                velocities[i3 + 2] += force.z * 0.01;
+                
+                velocities[i3] *= VELOCITY_DAMPING;
+                velocities[i3 + 1] *= VELOCITY_DAMPING;
+                velocities[i3 + 2] *= VELOCITY_DAMPING;
+                
+                x += velocities[i3];
+                y += velocities[i3 + 1];
+                z += velocities[i3 + 2];
+                
+                const distance = Math.sqrt(x*x + y*y + z*z);
+                if (distance > SIMULATION_EXTENT) {
+                    const scale = SIMULATION_EXTENT / distance;
+                    x *= scale;
+                    y *= scale;
+                    z *= scale;
+                    
+                    velocities[i3] *= -0.5;
+                    velocities[i3 + 1] *= -0.5;
+                    velocities[i3 + 2] *= -0.5;
+                }
+                
+                positions[i3] = x;
+                positions[i3 + 1] = y;
+                positions[i3 + 2] = z;
+                
+                const brightness = pixelDensity * 0.7;
+                
+                switch(activeMode) {
+                    case 'crystal':
+                        const angle = Math.atan2(y, x);
+                        const angleNorm = (angle + Math.PI) / (2 * Math.PI);
+                        colors[i3] = 0.3 + angleNorm * brightness;
+                        colors[i3 + 1] = 0.2 + (1 - angleNorm) * brightness * 0.8;
+                        colors[i3 + 2] = 0.4 + Math.abs(z / SIMULATION_EXTENT) * brightness;
+                        break;
+                        
+                    case 'harmonic':
+                        const harmonicPhase = (x + y + z) * 0.1;
+                        colors[i3] = 0.5 + 0.5 * Math.sin(harmonicPhase) * brightness;
+                        colors[i3 + 1] = 0.5 + 0.5 * Math.sin(harmonicPhase + 2*Math.PI/3) * brightness;
+                        colors[i3 + 2] = 0.5 + 0.5 * Math.sin(harmonicPhase + 4*Math.PI/3) * brightness;
+                        break;
+                        
+                    case 'topology':
+                        const r = Math.sqrt(x*x + y*y);
+                        const theta = Math.atan2(y, x);
+                        colors[i3] = 0.3 + (r / SIMULATION_EXTENT) * brightness;
+                        colors[i3 + 1] = 0.3 + Math.abs(Math.sin(theta * 3)) * brightness;
+                        colors[i3 + 2] = 0.3 + Math.abs(z / SIMULATION_EXTENT) * brightness;
+                        break;
+                        
+                    default:
+                        const mInfluence = Math.abs(Math.cos(mDigit * x * 0.2));
+                        const nInfluence = Math.abs(Math.cos(nDigit * y * 0.2));
+                        const pInfluence = Math.abs(Math.cos(pDigit * z * 0.2));
+                        colors[i3] = 0.3 + mInfluence * brightness;
+                        colors[i3 + 1] = 0.2 + nInfluence * brightness * 0.8;
+                        colors[i3 + 2] = 0.4 + pInfluence * brightness * 0.9;
+                }
+            }
+            
+            particles.geometry.attributes.position.needsUpdate = true;
+            particles.geometry.attributes.color.needsUpdate = true;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const currentTime = Date.now();
+            
+            if (isPlaying && currentTime - lastFrameTime > (1000 / animationSpeed)) {
+                currentPosition++;
+                updateUI();
+                lastFrameTime = currentTime;
+            }
+            
+            updateParticles();
+            
+            if (activeMode === 'topology' && researchExtensions.topology.trefoil) {
+                topologicalGuides.forEach((guide, i) => {
+                    if (guide.geometry.type === 'TubeGeometry') {
+                        guide.rotation.x += 0.001;
+                        guide.rotation.y += 0.002;
+                    }
+                });
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (event) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Start the experience
+        document.getElementById('loading').classList.add('active');
+        init();
+    </script>
+</body>
+</html>

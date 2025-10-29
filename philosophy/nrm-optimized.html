@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Transcendental Field Resonance</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        :root {
+            --primary: #8B5CF6;
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --secondary: #EC4899;
+            --tertiary: #06B6D4;
+            --success: #10B981;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-strong: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.65);
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: #000000; 
+            color: var(--text);
+            overflow: hidden; 
+            height: 100vh;
+            position: fixed;
+            width: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        #container { 
+            width: 100vw; 
+            height: 100vh; 
+            display: block;
+            background: radial-gradient(ellipse at center, #0F0F23 0%, #000000 100%); 
+        }
+        
+        .app-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        
+        .app-header.hidden {
+            opacity: 0;
+        }
+        
+        .app-title {
+            font-size: 20px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 50%, #06B6D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            animation: shimmer 4s ease-in-out infinite;
+            text-shadow: 0 0 30px var(--primary-glow);
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.85; filter: brightness(1); }
+            50% { opacity: 1; filter: brightness(1.2); }
+        }
+        
+        .status-bar {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-strong);
+            backdrop-filter: blur(30px) saturate(150%);
+            -webkit-backdrop-filter: blur(30px) saturate(150%);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 10px 22px;
+            font-size: 13px;
+            font-weight: 700;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 25px var(--shadow);
+            transition: all 0.5s;
+        }
+        
+        .status-bar.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+        
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+            transition: all 0.5s;
+        }
+        
+        .controls.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+            pointer-events: none;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, #7C3AED 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+        
+        .btn:active {
+            transform: scale(0.96);
+        }
+        
+        .btn.secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, #D6006E 100%);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.5);
+        }
+        
+        .btn.tertiary {
+            background: linear-gradient(135deg, var(--tertiary) 0%, #0891B2 100%);
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.5);
+        }
+        
+        .btn.success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.5);
+        }
+        
+        .slider-float {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--glass-strong);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            z-index: 100;
+            width: 300px;
+            transition: all 0.5s;
+        }
+        
+        .slider-float.hidden {
+            opacity: 0;
+            transform: translateY(-50%) translateX(20px);
+            pointer-events: none;
+        }
+        
+        .camera-presets {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--glass-strong);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 15px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.5s;
+        }
+        
+        .camera-presets.hidden {
+            opacity: 0;
+            transform: translateY(-50%) translateX(-20px);
+            pointer-events: none;
+        }
+        
+        .preset-btn {
+            padding: 10px 16px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .preset-btn:hover {
+            background: var(--primary);
+            transform: translateX(2px);
+        }
+        
+        .toggle-ui {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--glass-strong);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 200;
+            transition: all 0.3s;
+            font-size: 20px;
+        }
+        
+        .toggle-ui:hover {
+            transform: scale(1.1);
+            background: var(--primary);
+        }
+        
+        .slider-container {
+            margin: 15px 0;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .slider-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .slider-value {
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(139, 92, 246, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    
+    <div class="toggle-ui" id="toggle-ui" title="Toggle UI (H)">👁️</div>
+    
+    <div class="app-header" id="header">
+        <h1 class="app-title">Transcendental Resonance</h1>
+    </div>
+    
+    <div class="status-bar" id="status">
+        <span id="status-text">🔮 Initializing...</span>
+    </div>
+    
+    <div class="controls" id="controls">
+        <button class="btn" id="play-pause">⏸️ Pause</button>
+        <button class="btn secondary" id="burst">💥 Burst</button>
+        <button class="btn tertiary" id="chaos">🌀 Chaos</button>
+        <button class="btn success" id="harmony">☯️ Harmony</button>
+    </div>
+    
+    <div class="camera-presets" id="camera-presets">
+        <button class="preset-btn" id="cam-top">Top View</button>
+        <button class="preset-btn" id="cam-side">Side View</button>
+        <button class="preset-btn" id="cam-iso">Isometric</button>
+        <button class="preset-btn" id="cam-far">Far View</button>
+        <button class="preset-btn" id="cam-core">Core</button>
+        <button class="preset-btn" id="cam-spiral">Spiral</button>
+        <button class="preset-btn" id="cam-aurora">Aurora</button>
+    </div>
+    
+    <div class="slider-float" id="sliders">
+        <div class="slider-container">
+            <div class="slider-header">
+                <span class="slider-label">Particles</span>
+                <span class="slider-value" id="particle-value">300K</span>
+            </div>
+            <input type="range" class="slider" id="particle-slider" min="10000" max="500000" step="10000" value="300000">
+        </div>
+        
+        <div class="slider-container">
+            <div class="slider-header">
+                <span class="slider-label">Field Force</span>
+                <span class="slider-value" id="field-value">10.0x</span>
+            </div>
+            <input type="range" class="slider" id="field-slider" min="0.1" max="20" step="0.1" value="10">
+        </div>
+        
+        <div class="slider-container">
+            <div class="slider-header">
+                <span class="slider-label">Resistance</span>
+                <span class="slider-value" id="resistance-value">85%</span>
+            </div>
+            <input type="range" class="slider" id="resistance-slider" min="0" max="100" step="5" value="85">
+        </div>
+    </div>
+
+    <script>
+        // Transcendental sequences - stored as arrays for faster access
+        const PI_DIGITS = [3,1,4,1,5,9,2,6,5,3,5,8,9,7,9,3,2,3,8,4,6,2,6,4,3,3,8,3,2,7,9,5,0,2,8,8,4,1,9,7,1,6,9,3,9,9,3,7,5,1,0,5,8,2,0,9,7,4,9,4,4,5,9,2,3,0,7,8,1,6,4,0,6,2,8,6,2,0,8,9,9,8,6,2,8,0,3,4,8,2,5,3,4,2,1,1,7,0,6,7];
+        const E_DIGITS = [2,7,1,8,2,8,1,8,2,8,4,5,9,0,4,5,2,3,5,3,6,0,2,8,7,4,7,1,3,5,2,6,6,2,4,9,7,7,5,7,2,4,7,0,9,3,6,9,9,9,5,9,5,7,4,9,6,6,9,6,7,6,2,7,7,2,4,0,7,6,6,3,0,3,5,3,5,4,7,5,9,4,5,7,1,3,8,2,1,7,8,5,2,5,1,6,6,4,2,7];
+        const PHI_DIGITS = [1,6,1,8,0,3,3,9,8,8,7,4,9,8,9,4,8,4,8,2,0,4,5,8,6,8,3,4,3,6,5,6,3,8,1,1,7,7,2,0,3,0,9,1,7,9,8,0,5,7,6,2,8,6,2,1,3,5,4,4,8,6,2,2,7,0,5,2,6,0,4,6,2,8,1,8,9,0,2,4,4,9,7,0,7,2,0,7,2,0,4,1,8,9,3,9,1,1,3,7];
+        
+        // Core variables
+        let scene, camera, renderer;
+        let particleSystem;
+        let time = 0;
+        let isPlaying = true;
+        let uiVisible = true;
+        
+        // Typed arrays for performance
+        let positions, velocities, colors, phases, resistances;
+        
+        // Camera
+        let cameraRotation = { x: 0.3, y: 0 };
+        let cameraDistance = 25;
+        let cameraTarget = { rotation: { x: 0.3, y: 0 }, distance: 25 };
+        let mouseDown = false;
+        let autoRotate = true;
+        
+        // Parameters - DEFAULT TO THE MAGIC VALUES!
+        let PARTICLE_COUNT = 300000;
+        const SIMULATION_EXTENT = 15;
+        let FIELD_STRENGTH = 10.0;
+        let RESISTANCE_RATE = 0.85;
+        const VELOCITY_DAMPING = 0.98;
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000033, 0.015);
+
+            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+            updateCameraPosition();
+
+            renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio * 0.7, 2));
+            renderer.setClearColor(0x000011);
+            document.getElementById('container').appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0x404080, 0.4);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0x8A2BE2, 1.0);
+            directionalLight.position.set(10, 10, 5);
+            scene.add(directionalLight);
+
+            createBoundaryContainer();
+            setupParticleSystem();
+            setupControls();
+            
+            animate();
+        }
+
+        function createBoundaryContainer() {
+            const geometry = new THREE.BoxGeometry(SIMULATION_EXTENT * 2, SIMULATION_EXTENT * 2, SIMULATION_EXTENT * 2);
+            const edges = new THREE.EdgesGeometry(geometry);
+            const material = new THREE.LineBasicMaterial({ color: 0x4A90E2, transparent: true, opacity: 0.3 });
+            const boundaryBox = new THREE.LineSegments(edges, material);
+            scene.add(boundaryBox);
+        }
+
+        function updateCameraPosition() {
+            camera.position.x = Math.cos(cameraRotation.y) * Math.cos(cameraRotation.x) * cameraDistance;
+            camera.position.y = Math.sin(cameraRotation.x) * cameraDistance;
+            camera.position.z = Math.sin(cameraRotation.y) * Math.cos(cameraRotation.x) * cameraDistance;
+            camera.lookAt(0, 0, 0);
+        }
+
+        function animateCameraToTarget() {
+            cameraRotation.x += (cameraTarget.rotation.x - cameraRotation.x) * 0.05;
+            cameraRotation.y += (cameraTarget.rotation.y - cameraRotation.y) * 0.05;
+            cameraDistance += (cameraTarget.distance - cameraDistance) * 0.05;
+            updateCameraPosition();
+        }
+
+        function setCameraPreset(rotX, rotY, dist) {
+            cameraTarget.rotation.x = rotX;
+            cameraTarget.rotation.y = rotY;
+            cameraTarget.distance = dist;
+            autoRotate = false;
+        }
+
+        function setupParticleSystem() {
+            if (particleSystem) {
+                scene.remove(particleSystem);
+                particleSystem.geometry.dispose();
+                particleSystem.material.dispose();
+            }
+
+            // Pre-allocate typed arrays
+            positions = new Float32Array(PARTICLE_COUNT * 3);
+            velocities = new Float32Array(PARTICLE_COUNT * 3);
+            colors = new Float32Array(PARTICLE_COUNT * 3);
+            phases = new Float32Array(PARTICLE_COUNT * 3);
+            resistances = new Float32Array(PARTICLE_COUNT);
+
+            // Initialize particles in a structured grid
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                const i3 = i * 3;
+                
+                const gridSize = Math.ceil(Math.cbrt(PARTICLE_COUNT));
+                const xi = i % gridSize;
+                const yi = Math.floor(i / gridSize) % gridSize;
+                const zi = Math.floor(i / (gridSize * gridSize));
+                
+                const spacing = (SIMULATION_EXTENT * 1.8) / gridSize;
+                positions[i3] = (xi - gridSize/2) * spacing + (Math.random() - 0.5) * spacing * 0.3;
+                positions[i3 + 1] = (yi - gridSize/2) * spacing + (Math.random() - 0.5) * spacing * 0.3;
+                positions[i3 + 2] = (zi - gridSize/2) * spacing + (Math.random() - 0.5) * spacing * 0.3;
+                
+                velocities[i3] = 0;
+                velocities[i3 + 1] = 0;
+                velocities[i3 + 2] = 0;
+                
+                colors[i3] = 0.4;
+                colors[i3 + 1] = 0.3;
+                colors[i3 + 2] = 0.7;
+                
+                phases[i3] = Math.random() * Math.PI * 2;
+                phases[i3 + 1] = Math.random() * Math.PI * 2;
+                phases[i3 + 2] = Math.random() * Math.PI * 2;
+                
+                resistances[i] = Math.random();
+            }
+
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.05 * Math.sqrt(100000 / PARTICLE_COUNT),
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.7,
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: true
+            });
+
+            particleSystem = new THREE.Points(geometry, material);
+            scene.add(particleSystem);
+        }
+
+        function updateParticles() {
+            const posArray = particleSystem.geometry.attributes.position.array;
+            const colArray = particleSystem.geometry.attributes.color.array;
+            
+            const t = Math.floor(time * 0.01);
+            const piDigit = PI_DIGITS[t % 100];
+            const eDigit = E_DIGITS[t % 100];
+            const phiDigit = PHI_DIGITS[t % 100];
+            
+            const waveNumber = Math.PI / SIMULATION_EXTENT;
+            const phaseM = (piDigit / 9) * Math.PI;
+            const phaseN = (eDigit / 9) * Math.PI;
+            const phaseP = (phiDigit / 9) * Math.PI;
+            const energyNorm = (piDigit * piDigit + eDigit * eDigit + phiDigit * phiDigit) / 243;
+            const fieldMult = FIELD_STRENGTH * energyNorm;
+            
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                const i3 = i * 3;
+                
+                const x = posArray[i3];
+                const y = posArray[i3 + 1];
+                const z = posArray[i3 + 2];
+                
+                phases[i3] += 0.02 + piDigit * 0.001;
+                phases[i3 + 1] += 0.02 + eDigit * 0.001;
+                phases[i3 + 2] += 0.02 + phiDigit * 0.001;
+                
+                const wx = Math.cos(piDigit * x * waveNumber + phaseM);
+                const wy = Math.cos(eDigit * y * waveNumber + phaseN);
+                const wz = Math.cos(phiDigit * z * waveNumber + phaseP);
+                
+                const fx = wy * wz * fieldMult;
+                const fy = wx * wz * fieldMult;
+                const fz = wx * wy * fieldMult;
+                
+                const resist = resistances[i] < RESISTANCE_RATE;
+                
+                if (resist) {
+                    const phase = phases[i3];
+                    velocities[i3] += fy * 0.3 - fx * 0.5 + Math.cos(phase) * 0.02;
+                    velocities[i3 + 1] += fz * 0.3 - fy * 0.5 + Math.sin(phase) * 0.02;
+                    velocities[i3 + 2] += fx * 0.3 - fz * 0.5;
+                } else {
+                    velocities[i3] += fx * 0.01;
+                    velocities[i3 + 1] += fy * 0.01;
+                    velocities[i3 + 2] += fz * 0.01;
+                }
+                
+                velocities[i3] *= VELOCITY_DAMPING;
+                velocities[i3 + 1] *= VELOCITY_DAMPING;
+                velocities[i3 + 2] *= VELOCITY_DAMPING;
+                
+                posArray[i3] += velocities[i3];
+                posArray[i3 + 1] += velocities[i3 + 1];
+                posArray[i3 + 2] += velocities[i3 + 2];
+                
+                const dist = Math.sqrt(posArray[i3] * posArray[i3] + 
+                                     posArray[i3 + 1] * posArray[i3 + 1] + 
+                                     posArray[i3 + 2] * posArray[i3 + 2]);
+                
+                if (dist > SIMULATION_EXTENT) {
+                    const scale = SIMULATION_EXTENT / dist;
+                    posArray[i3] *= scale;
+                    posArray[i3 + 1] *= scale;
+                    posArray[i3 + 2] *= scale;
+                    
+                    velocities[i3] *= -0.5;
+                    velocities[i3 + 1] *= -0.5;
+                    velocities[i3 + 2] *= -0.5;
+                }
+                
+                const speed = Math.sqrt(velocities[i3] * velocities[i3] + 
+                                       velocities[i3 + 1] * velocities[i3 + 1] + 
+                                       velocities[i3 + 2] * velocities[i3 + 2]);
+                
+                const waveInfluence = (wx + wy + wz) / 3;
+                
+                if (resist) {
+                    colArray[i3] = 0.7 + speed * 3;
+                    colArray[i3 + 1] = 0.3 + waveInfluence * 0.3;
+                    colArray[i3 + 2] = 0.2 + speed;
+                } else {
+                    colArray[i3] = 0.3 + waveInfluence * 0.4;
+                    colArray[i3 + 1] = 0.2 + speed * 2;
+                    colArray[i3 + 2] = 0.6 + waveInfluence * 0.4;
+                }
+            }
+            
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+            particleSystem.geometry.attributes.color.needsUpdate = true;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (isPlaying) {
+                time++;
+                updateParticles();
+                
+                const t = Math.floor(time * 0.01);
+                const piDigit = PI_DIGITS[t % 100];
+                const eDigit = E_DIGITS[t % 100];
+                const phiDigit = PHI_DIGITS[t % 100];
+                const energy = piDigit * piDigit + eDigit * eDigit + phiDigit * phiDigit;
+                
+                document.getElementById('status-text').textContent = 
+                    `🔮 π:${piDigit} e:${eDigit} φ:${phiDigit} | E=${energy} | ${(PARTICLE_COUNT/1000).toFixed(0)}K particles`;
+            }
+            
+            // Camera animation
+            if (autoRotate && !mouseDown) {
+                cameraTarget.rotation.y += 0.001;
+            }
+            animateCameraToTarget();
+            
+            renderer.render(scene, camera);
+        }
+
+        function toggleUI() {
+            uiVisible = !uiVisible;
+            document.getElementById('header').classList.toggle('hidden', !uiVisible);
+            document.getElementById('status').classList.toggle('hidden', !uiVisible);
+            document.getElementById('controls').classList.toggle('hidden', !uiVisible);
+            document.getElementById('sliders').classList.toggle('hidden', !uiVisible);
+            document.getElementById('camera-presets').classList.toggle('hidden', !uiVisible);
+            document.getElementById('toggle-ui').textContent = uiVisible ? '👁️' : '🔓';
+        }
+
+        function setupControls() {
+            const canvas = renderer.domElement;
+            
+            // Mouse controls
+            canvas.addEventListener('mousedown', () => { mouseDown = true; autoRotate = false; });
+            canvas.addEventListener('mouseup', () => { mouseDown = false; });
+            canvas.addEventListener('mouseleave', () => { mouseDown = false; });
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (mouseDown) {
+                    cameraTarget.rotation.y += e.movementX * 0.005;
+                    cameraTarget.rotation.x = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, 
+                        cameraTarget.rotation.x + e.movementY * 0.005));
+                }
+            });
+
+            canvas.addEventListener('wheel', (e) => {
+                cameraTarget.distance *= 1 + e.deltaY * 0.001;
+                cameraTarget.distance = Math.max(10, Math.min(60, cameraTarget.distance));
+                autoRotate = false;
+            });
+
+            // Touch controls
+            let touchStartX = 0, touchStartY = 0;
+            canvas.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    autoRotate = false;
+                }
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1) {
+                    const deltaX = (e.touches[0].clientX - touchStartX) * 0.005;
+                    const deltaY = (e.touches[0].clientY - touchStartY) * 0.005;
+                    
+                    cameraTarget.rotation.y += deltaX;
+                    cameraTarget.rotation.x = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, 
+                        cameraTarget.rotation.x + deltaY));
+                    
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'h' || e.key === 'H') toggleUI();
+                if (e.key === ' ') {
+                    isPlaying = !isPlaying;
+                    document.getElementById('play-pause').textContent = isPlaying ? '⏸️ Pause' : '▶️ Play';
+                }
+            });
+
+            // UI Controls
+            document.getElementById('toggle-ui').addEventListener('click', toggleUI);
+
+            document.getElementById('play-pause').addEventListener('click', () => {
+                isPlaying = !isPlaying;
+                document.getElementById('play-pause').textContent = isPlaying ? '⏸️ Pause' : '▶️ Play';
+            });
+
+            document.getElementById('burst').addEventListener('click', () => {
+                for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
+                    velocities[i] = (Math.random() - 0.5) * 2;
+                }
+            });
+
+            document.getElementById('chaos').addEventListener('click', () => {
+                FIELD_STRENGTH = 20;
+                RESISTANCE_RATE = 0.95;
+                document.getElementById('field-slider').value = 20;
+                document.getElementById('resistance-slider').value = 95;
+                document.getElementById('field-value').textContent = '20.0x';
+                document.getElementById('resistance-value').textContent = '95%';
+            });
+
+            document.getElementById('harmony').addEventListener('click', () => {
+                FIELD_STRENGTH = 2.5;
+                RESISTANCE_RATE = 0.3;
+                document.getElementById('field-slider').value = 2.5;
+                document.getElementById('resistance-slider').value = 30;
+                document.getElementById('field-value').textContent = '2.5x';
+                document.getElementById('resistance-value').textContent = '30%';
+            });
+
+            // Camera presets
+            document.getElementById('cam-top').addEventListener('click', () => {
+                setCameraPreset(Math.PI/2 - 0.01, 0, 30);
+            });
+
+            document.getElementById('cam-side').addEventListener('click', () => {
+                setCameraPreset(0, Math.PI/2, 30);
+            });
+
+            document.getElementById('cam-iso').addEventListener('click', () => {
+                setCameraPreset(Math.PI/6, Math.PI/4, 35);
+            });
+
+            document.getElementById('cam-far').addEventListener('click', () => {
+                setCameraPreset(0.2, 0, 50);
+            });
+
+            document.getElementById('cam-core').addEventListener('click', () => {
+                setCameraPreset(0, 0, 12);
+            });
+
+            document.getElementById('cam-spiral').addEventListener('click', () => {
+                setCameraPreset(-0.3, Math.PI/3, 25);
+                autoRotate = true;
+            });
+
+            document.getElementById('cam-aurora').addEventListener('click', () => {
+                setCameraPreset(-Math.PI/6, 0, 28);
+                autoRotate = true;
+            });
+
+            // Sliders
+            document.getElementById('particle-slider').addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                document.getElementById('particle-value').textContent = value >= 1000 ? 
+                    (value/1000).toFixed(0) + 'K' : value.toString();
+            });
+
+            document.getElementById('particle-slider').addEventListener('change', (e) => {
+                PARTICLE_COUNT = parseInt(e.target.value);
+                setupParticleSystem();
+            });
+
+            document.getElementById('field-slider').addEventListener('input', (e) => {
+                FIELD_STRENGTH = parseFloat(e.target.value);
+                document.getElementById('field-value').textContent = FIELD_STRENGTH.toFixed(1) + 'x';
+            });
+
+            document.getElementById('resistance-slider').addEventListener('input', (e) => {
+                RESISTANCE_RATE = parseFloat(e.target.value) / 100;
+                document.getElementById('resistance-value').textContent = e.target.value + '%';
+                for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    resistances[i] = Math.random();
+                }
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        init();
+    </script>
+</body>
+</html>
