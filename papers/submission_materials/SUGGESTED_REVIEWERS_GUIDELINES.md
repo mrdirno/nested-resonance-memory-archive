@@ -84,6 +84,74 @@
 
 ---
 
+## Paper 2: Energy Constraints and Three Dynamical Regimes
+
+**Manuscript Focus:**
+- Population dynamics in constrained systems
+- Regime transitions (bistability, accumulation, collapse)
+- Energy-based birth-death coupling mechanisms
+- Hypothesis testing and falsification (null results)
+- Statistical analysis of dynamical regimes
+
+**Reviewer Expertise Areas (3-5 total):**
+
+### Area 1: Complex Systems / Population Dynamics (1-2 reviewers)
+**Criteria:**
+- Publication record in population dynamics, multi-agent systems, or complex adaptive systems
+- Experience with regime transitions, bistability, or phase transitions
+- Understanding of self-organizing systems and emergence
+
+**Potential Search Terms:**
+- "population dynamics agent-based models"
+- "regime transitions complex systems"
+- "bistability self-organizing systems"
+- "phase transitions dynamical systems"
+
+**Journal Sources:**
+- PLOS ONE
+- PLOS Computational Biology
+- Complexity
+- Journal of Theoretical Biology
+
+### Area 2: Artificial Life / Multi-Agent Systems (1-2 reviewers)
+**Criteria:**
+- Publication record in artificial life, swarm intelligence, or collective behavior
+- Experience with birth-death processes in agent systems
+- Understanding of population homeostasis and sustainability mechanisms
+
+**Potential Search Terms:**
+- "artificial life population dynamics"
+- "birth death processes agent systems"
+- "swarm intelligence sustainability"
+- "collective behavior multi-agent"
+
+**Journal Sources:**
+- Artificial Life
+- Swarm Intelligence
+- JASSS (Journal of Artificial Societies and Social Simulation)
+- Adaptive Behavior
+
+### Area 3: Computational Modeling / Statistical Analysis (1 reviewer)
+**Criteria:**
+- Publication record in computational modeling methodology
+- Experience with ablation studies and hypothesis testing
+- Understanding of statistical analysis (ANOVA, effect sizes, null results)
+- Familiarity with reproducibility and open science practices
+
+**Potential Search Terms:**
+- "ablation study methodology computational"
+- "hypothesis testing agent-based models"
+- "statistical analysis dynamical systems"
+- "null results publication computational science"
+
+**Journal Sources:**
+- PLOS ONE
+- Scientific Reports
+- PLOS Computational Biology
+- Journal of Computational Science
+
+---
+
 ## Paper 5D: Emergence Pattern Catalog
 
 **Manuscript Focus:**
@@ -267,14 +335,14 @@ For each suggested reviewer, provide:
 
 ---
 
-**Version:** 1.0
-**Date:** 2025-10-27
+**Version:** 1.1
+**Date:** 2025-10-28 (Cycle 463 - Added Paper 2 reviewer guidance)
 **Author:** Aldrin Payopay (aldrin.gdf@gmail.com)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
 
 **Next Steps:**
-1. Use this framework to identify 3-5 reviewers per paper
+1. Use this framework to identify 3-5 reviewers per paper (Papers 1, 2, 5D)
 2. Verify qualifications and check for conflicts of interest
 3. Compile reviewer information using template above
 4. Include in journal submission cover letter
