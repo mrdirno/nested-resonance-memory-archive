@@ -39,6 +39,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from code.bridge.transcendental_bridge import TranscendentalBridge
 from code.fractal.fractal_agent import FractalAgent
 import psutil  # Use psutil directly instead of SystemMonitor
+from workspace_utils import get_workspace_path, get_results_path
 
 # Configuration
 CYCLES_START = 700
@@ -150,7 +151,7 @@ def main():
     start_time = time.time()
 
     # Initialize infrastructure
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
     workspace.mkdir(exist_ok=True)
     bridge = TranscendentalBridge(str(workspace))
 

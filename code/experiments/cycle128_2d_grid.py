@@ -62,6 +62,7 @@ def get_dominant_pattern(memory):
     if not memory:
         return None, 0, 0.0
     from collections import Counter
+from workspace_utils import get_workspace_path, get_results_path
     pattern_keys = [pattern_to_key(p) for p in memory]
     pattern_counts = Counter(pattern_keys)
     if not pattern_counts:
@@ -91,7 +92,7 @@ def run_grid_point(threshold, mult, spread, cycles, agent_cap=15):
     Returns:
         dict: Results including basin assignment, trajectory metrics
     """
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
 
     # Initialize swarm with clear database
     swarm = FractalSwarm(str(workspace), clear_on_init=True)
@@ -322,7 +323,7 @@ def main():
         print(f"  Late (>500 cycles): {late}/{len(first_closer_values)} ({late/len(first_closer_values)*100:.0f}%)")
 
     # Save results
-    results_dir = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/2d_grid")
+    results_dir = get_results_path() / "2d_grid"
     results_dir.mkdir(parents=True, exist_ok=True)
 
     output = {

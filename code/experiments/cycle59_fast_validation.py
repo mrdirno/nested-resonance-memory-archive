@@ -13,6 +13,7 @@ from collections import Counter
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fractal.fractal_swarm import FractalSwarm, DecompositionEngine
+from workspace_utils import get_workspace_path, get_results_path
 
 print("="*80)
 print("CYCLE 59: FAST VALIDATION OF THERMODYNAMIC LAW")
@@ -20,7 +21,7 @@ print("="*80)
 print()
 
 # Create swarm with modified burst threshold
-workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+workspace = get_workspace_path()
 swarm = FractalSwarm(str(workspace))
 
 # Replace with higher threshold

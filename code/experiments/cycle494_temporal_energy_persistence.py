@@ -50,12 +50,13 @@ sys.path.insert(0, str(parent_dir))
 from fractal.fractal_agent import FractalAgent
 from bridge.transcendental_bridge import TranscendentalBridge
 import psutil
+from workspace_utils import get_workspace_path, get_results_path
 
 
 class TemporalPersistenceExperiment:
     """Test temporal persistence of energy-dependent phase autonomy."""
 
-    def __init__(self, workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace"):
+    def __init__(self, workspace_path: Path = get_workspace_path()):
         self.workspace = Path(workspace_path)
         self.workspace.mkdir(exist_ok=True)
 

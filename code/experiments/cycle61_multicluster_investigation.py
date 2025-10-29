@@ -34,6 +34,7 @@ from collections import Counter, defaultdict
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fractal.fractal_swarm import FractalSwarm, DecompositionEngine
+from workspace_utils import get_workspace_path, get_results_path
 
 
 def run_multicluster_analysis(burst_threshold: float, cycles: int = 500) -> dict:
@@ -55,7 +56,7 @@ def run_multicluster_analysis(burst_threshold: float, cycles: int = 500) -> dict
     print()
 
     # Create swarm
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
     swarm = FractalSwarm(str(workspace))
     swarm.decomposition = DecompositionEngine(burst_threshold=burst_threshold)
 

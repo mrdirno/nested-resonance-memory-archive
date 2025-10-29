@@ -93,7 +93,7 @@ def run_early_warning_test(threshold: float, cycles: int = 1000) -> dict:
     print(f"EARLY WARNING DETECTION (threshold={threshold}, cycles={cycles})")
     print(f"{'='*80}")
 
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
     swarm = FractalSwarm(str(workspace))
     swarm.decomposition = DecompositionEngine(burst_threshold=threshold)
 
@@ -228,6 +228,7 @@ def main():
     except Exception as e:
         print(f"\n⚠️ Error: {e}")
         import traceback
+from workspace_utils import get_workspace_path, get_results_path
         traceback.print_exc()
         result = {'error': str(e)}
         error = True

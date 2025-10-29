@@ -168,6 +168,7 @@ def generate_simple_embeddings(patterns: List[Pattern]) -> Dict[str, List[float]
 
     In production, would use sentence-transformers. For demo, use feature vectors
     from pattern data.
+from workspace_utils import get_workspace_path, get_results_path
 
     Returns:
         Dict mapping pattern_id to embedding vector (8D)
@@ -205,7 +206,7 @@ def main():
 
     # Initialize components
     print("1. Initializing NRM V2 components...")
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
     memory = PatternMemory(workspace_path=workspace)
     bridge = TranscendentalBridge(workspace_path=str(workspace))
     engine = ConsolidationEngine(memory=memory, bridge=bridge, workspace_path=str(workspace))
@@ -342,7 +343,7 @@ def main():
         }
     }
 
-    results_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/nrmv2_c175_consolidation_demo.json")
+    results_path = get_results_path()
     with open(results_path, 'w') as f:
         json.dump(results, f, indent=2)
     print(f"\nResults saved: {results_path}")

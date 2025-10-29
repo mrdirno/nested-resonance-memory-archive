@@ -119,7 +119,7 @@ def run_single_simulation(run_id: int, threshold: float, cycles: int) -> dict:
     """Run a single independent simulation."""
     print(f"\n  Run {run_id}: Starting...")
 
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
     swarm = FractalSwarm(str(workspace))
     swarm.decomposition = DecompositionEngine(burst_threshold=threshold)
 
@@ -209,6 +209,7 @@ def main():
         except Exception as e:
             print(f"\n  ⚠️ Run {run_id} Error: {e}")
             import traceback
+from workspace_utils import get_workspace_path, get_results_path
             traceback.print_exc()
             results.append({'run_id': run_id, 'error': str(e)})
 

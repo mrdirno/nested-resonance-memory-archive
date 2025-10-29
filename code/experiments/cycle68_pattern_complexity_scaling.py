@@ -46,6 +46,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fractal.fractal_swarm import FractalSwarm, DecompositionEngine
+from workspace_utils import get_workspace_path, get_results_path
 
 
 def calculate_shannon_entropy(counts: Counter) -> float:
@@ -108,7 +109,7 @@ def run_complexity_analysis(threshold: float, cycles: int = 500) -> dict:
     print(f"{'='*80}")
 
     # Create swarm
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
     swarm = FractalSwarm(str(workspace))
     swarm.decomposition = DecompositionEngine(burst_threshold=threshold)
 

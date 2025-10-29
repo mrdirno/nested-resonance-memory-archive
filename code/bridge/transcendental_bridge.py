@@ -70,7 +70,7 @@ class TranscendentalBridge:
     All operations maintain reality anchoring - no pure simulations.
     """
 
-    def __init__(self, workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace"):
+    def __init__(self, workspace_path: Path = get_workspace_path()):
         """Initialize transcendental bridge with database backing."""
         self.workspace_path = Path(workspace_path)
         self.db_path = self.workspace_path / "bridge.db"
@@ -199,6 +199,7 @@ class TranscendentalBridge:
 
         Inverse operation of reality_to_phase. Reconstructs reality metrics
         from phase coordinates. Always returns the original reality_anchor
+from workspace_utils import get_workspace_path, get_results_path
         to maintain Reality Imperative compliance.
 
         Args:

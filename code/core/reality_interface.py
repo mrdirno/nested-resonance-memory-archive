@@ -21,6 +21,7 @@ from datetime import datetime
 from contextlib import contextmanager
 
 from .exceptions import (
+from workspace_utils import get_workspace_path, get_results_path
     RealityViolation,
     ResourceExceeded,
     ValidationFailed,
@@ -40,7 +41,7 @@ class RealityInterface:
     - All operations measured and validated
     """
 
-    def __init__(self, workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2"):
+    def __init__(self, workspace_path: Path = get_workspace_path()):
         """
         Initialize reality interface.
 

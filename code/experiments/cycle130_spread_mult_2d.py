@@ -52,6 +52,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fractal.fractal_swarm import FractalSwarm, DecompositionEngine
 import numpy as np
+from workspace_utils import get_workspace_path, get_results_path
 
 
 def pattern_distance(p1, p2):
@@ -99,7 +100,7 @@ def run_grid_point(threshold, mult, spread, cycles, agent_cap=15):
     Returns:
         dict: Results including basin assignment, trajectory metrics
     """
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
 
     # Initialize swarm with clear database
     swarm = FractalSwarm(str(workspace), clear_on_init=True)
@@ -370,7 +371,7 @@ def main():
         print(f"  Late (>500 cycles): {late}/{len(first_closer_values)} ({late/len(first_closer_values)*100:.0f}%)")
 
     # Save results
-    results_dir = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/spread_mult_2d")
+    results_dir = get_results_path() / "spread_mult_2d"
     results_dir.mkdir(parents=True, exist_ok=True)
 
     output = {

@@ -15,11 +15,12 @@ import sys
 from pathlib import Path
 from typing import Dict, List
 import numpy as np
+from workspace_utils import get_workspace_path, get_results_path
 
 # Paths
-V4_RESULTS = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/cycle176_ablation_study_v4.json")
-V3_RESULTS = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/cycle176_ablation_study_v3.json")
-V2_RESULTS = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/cycle176_ablation_study_v2.json")
+V4_RESULTS = get_results_path() / "cycle176_ablation_study_v4.json"
+V3_RESULTS = get_results_path() / "cycle176_ablation_study_v3.json"
+V2_RESULTS = get_results_path() / "cycle176_ablation_study_v2.json"
 
 def load_results(path: Path) -> Dict:
     """Load experimental results JSON."""

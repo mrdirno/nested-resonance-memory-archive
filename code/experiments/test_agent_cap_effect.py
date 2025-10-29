@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fractal.fractal_swarm import FractalSwarm, DecompositionEngine
 from bridge.transcendental_bridge import TranscendentalBridge
+from workspace_utils import get_workspace_path, get_results_path
 
 def pattern_to_key(pattern):
     return tuple(np.round([pattern.pi_phase, pattern.e_phase, pattern.phi_phase], 6))
@@ -37,7 +38,7 @@ def get_dominant_pattern(memory):
 
 def run_with_agent_cap(agent_cap, cycles=1000):
     """Run experiment with specified agent_cap."""
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
     swarm = FractalSwarm(str(workspace), clear_on_init=True)
     swarm.decomposition = DecompositionEngine(burst_threshold=400)  # FIXED threshold
     

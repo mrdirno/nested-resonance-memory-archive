@@ -54,6 +54,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fractal.fractal_swarm import FractalSwarm, DecompositionEngine
 from bridge.transcendental_bridge import TranscendentalBridge
+from workspace_utils import get_workspace_path, get_results_path
 
 def create_seed_memory_standard(bridge: TranscendentalBridge, reality_metrics: dict, count: int = 5) -> list:
     """Create standard seed memory patterns (C82 baseline)."""
@@ -106,7 +107,7 @@ def run_single_simulation(condition: str, run_id: int, threshold: float, cycles:
     """Run a single independent simulation with specific seed function."""
     print(f"    {condition}-{run_id}: Starting...")
 
-    workspace = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace")
+    workspace = get_workspace_path()
     swarm = FractalSwarm(str(workspace))
     swarm.decomposition = DecompositionEngine(burst_threshold=threshold)
 
