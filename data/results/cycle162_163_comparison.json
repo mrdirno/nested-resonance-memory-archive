@@ -1,4 +1,12 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.716694",
+    "script": "cycle162_*.py",
+    "cycle": 162,
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "basin_comparison": {
     "cycle_162": {
       "total": 45,

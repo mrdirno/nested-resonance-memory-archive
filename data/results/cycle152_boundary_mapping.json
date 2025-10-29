@@ -1,4 +1,13 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.712586",
+    "script": "cycle152_*.py",
+    "cycle": 152,
+    "description": "Anti-Harmonic Band Boundary Mapping",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "cycle_id": 152,
   "description": "Anti-Harmonic Band Boundary Mapping",
   "parameters": {

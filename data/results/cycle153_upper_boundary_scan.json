@@ -1,4 +1,13 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.712919",
+    "script": "cycle153_*.py",
+    "cycle": 153,
+    "description": "Upper Boundary Determination (95-99% Scan)",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "cycle_id": 153,
   "description": "Upper Boundary Determination (95-99% Scan)",
   "parameters": {

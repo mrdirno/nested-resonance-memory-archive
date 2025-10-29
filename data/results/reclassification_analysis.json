@@ -1,4 +1,12 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.733452",
+    "script": "analysis_script.py",
+    "analysis_type": "reclassification_analysis",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "total_experiments": 78,
   "thresholds_tested": [
     1.5,

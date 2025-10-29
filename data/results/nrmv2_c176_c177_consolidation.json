@@ -1,4 +1,12 @@
 {
+  "metadata": {
+    "git_sha": "7f945b86ae1afcf30d149eda4e82b9ff54f10ec3",
+    "generated_at": "2025-10-29 01:51:13",
+    "script": "nrmv2_c176_c177_consolidation.py",
+    "experiment": "nrmv2_c176_c177_consolidation",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "experiment": "nrmv2_c176_c177_consolidation",
   "date": "2025-10-29 01:51:13",
   "patterns": {

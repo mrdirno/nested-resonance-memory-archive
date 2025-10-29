@@ -1,4 +1,11 @@
 {
+  "metadata": {
+    "git_sha": "c6aec209980431a40261c6092ec8662d00c224dc",
+    "generated_at": "2025-10-27T12:32:45.328992",
+    "script": "paper7_bifurcation_v4_mu_0_20251027_123245.py",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "param_name": "mu_0",
   "param_values": [
     0.2,

@@ -1,4 +1,12 @@
 {
+  "metadata": {
+    "git_sha": "031c311de1abf167a37e6917dc472996fc57b578",
+    "generated_at": "2025-10-26T06:14:10.380309",
+    "script": "analysis_script.py",
+    "analysis_type": "stochasticity_investigation_analysis",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "analysis_date": "2025-10-26T06:14:10.380309",
   "metrics": [
     {

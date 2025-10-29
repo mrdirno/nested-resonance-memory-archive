@@ -1,4 +1,13 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.715282",
+    "script": "cycle158_*.py",
+    "cycle": 158,
+    "description": "Ultra-Low Frequency Testing (1-4%)",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "cycle_id": 158,
   "description": "Ultra-Low Frequency Testing (1-4%)",
   "parameters": {
