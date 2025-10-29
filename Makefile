@@ -4,6 +4,8 @@
 #   make install    - Install dependencies
 #   make paper1     - Compile Paper 1 (Computational Expense)
 #   make paper5d    - Compile Paper 5D (Pattern Mining)
+#   make paper6     - Compile Paper 6 (Scale-Dependent Phase Autonomy)
+#   make paper6b    - Compile Paper 6B (Multi-Timescale Dynamics)
 #   make paper3     - Run Paper 3 factorial experiments
 #   make test       - Run test suite
 #   make lint       - Run code quality checks
@@ -14,7 +16,7 @@
 # Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 # License: GPL-3.0
 
-.PHONY: help install paper1 paper5d paper3 paper4 test lint format clean docker-build docker-run figures figures-c175 figures-nrmv2 list-figures
+.PHONY: help install paper1 paper5d paper6 paper6b paper3 paper4 test lint format clean docker-build docker-run figures figures-c175 figures-nrmv2 list-figures
 
 # Default target
 .DEFAULT_GOAL := help
@@ -71,6 +73,26 @@ paper5d: ## Compile Paper 5D (Pattern Mining Framework)
 	rm -f manuscript.aux manuscript.log manuscript.out || \
 	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
 	@echo "$(GREEN)✓ Paper 5D compiled → papers/compiled/paper5d/$(NC)"
+
+paper6: ## Compile Paper 6 (Scale-Dependent Phase Autonomy)
+	@echo "$(BLUE)Compiling Paper 6 (2 passes for references)...$(NC)"
+	cd papers/arxiv_submissions/paper6 && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	cp manuscript.pdf ../../compiled/paper6/Paper6_Scale_Dependent_Phase_Autonomy_arXiv_Submission.pdf && \
+	rm -f manuscript.aux manuscript.log manuscript.out || \
+	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
+	@echo "$(GREEN)✓ Paper 6 compiled → papers/compiled/paper6/$(NC)"
+
+paper6b: ## Compile Paper 6B (Multi-Timescale Phase Autonomy Dynamics)
+	@echo "$(BLUE)Compiling Paper 6B (2 passes for references)...$(NC)"
+	cd papers/arxiv_submissions/paper6b && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	cp manuscript.pdf ../../compiled/paper6b/Paper6B_Multi_Timescale_Phase_Autonomy_arXiv_Submission.pdf && \
+	rm -f manuscript.aux manuscript.log manuscript.out || \
+	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
+	@echo "$(GREEN)✓ Paper 6B compiled → papers/compiled/paper6b/$(NC)"
 
 paper3: ## Run Paper 3 factorial experiments (6 experiments, ~67 mins)
 	@echo "$(BLUE)Running Paper 3 factorial experiments...$(NC)"
