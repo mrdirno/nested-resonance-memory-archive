@@ -43,6 +43,10 @@ keywords:
   - Multi-Timescale Dynamics
   - Exponential Decay
   - Temporal Validation
+  - Scale-Dependent Dynamics
+  - Massive-Scale Analysis
+  - Extended Timescales
+  - Temporal Evolution
 license: GPL-3.0-only
 date-released: 2025-10-29
-version: "6.7"
+version: "6.8"
