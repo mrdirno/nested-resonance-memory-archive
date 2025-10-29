@@ -1,4 +1,11 @@
 {
+  "metadata": {
+    "git_sha": "5407c43676e406f0aad0be29067d5649f8d4b4ca",
+    "generated_at": "2025-10-27T16:27:55.829843",
+    "script": "paper5_series_results_20251027_162755.py",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "execution_mode": "sequential",
   "start_time": "2025-10-27T16:27:55.216704",
   "total_runtime_hours": 0.00017027000586191814,

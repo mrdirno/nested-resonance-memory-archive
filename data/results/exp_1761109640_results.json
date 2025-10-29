@@ -1,4 +1,11 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.727733",
+    "script": "exp_1761109640_results.py",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "experiment_id": "exp_1761109640",
   "start_time": 1761109640.164234,
   "end_time": 1761109642.41438,

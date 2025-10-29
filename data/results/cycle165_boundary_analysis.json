@@ -1,4 +1,12 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.718357",
+    "script": "cycle165_*.py",
+    "cycle": 165,
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "frequency_analysis": [
     {
       "frequency": 85.0,

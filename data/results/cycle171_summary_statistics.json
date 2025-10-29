@@ -1,4 +1,12 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.722032",
+    "script": "cycle171_*.py",
+    "cycle": 171,
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "population_mean": 17.425,
   "population_cv": 4.825013406255451,
   "composition_mean": 101.27083333333334,

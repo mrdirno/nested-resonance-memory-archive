@@ -1,4 +1,11 @@
 {
+  "metadata": {
+    "git_sha": "08968e68ffa05520b12ce5c5f135932fc9960ea6",
+    "generated_at": "20251027_123919",
+    "script": "paper7_phase3_extreme_parameters_20251027_123919.py",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "timestamp": "20251027_123919",
   "base_params": {
     "r": 0.15,

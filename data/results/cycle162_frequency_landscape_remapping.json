@@ -1,4 +1,13 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.717360",
+    "script": "cycle162_*.py",
+    "cycle": 162,
+    "description": "Complete frequency landscape remapping with corrected implementation",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "cycle_id": 162,
   "description": "Complete frequency landscape remapping with corrected implementation",
   "total_experiments": 45,

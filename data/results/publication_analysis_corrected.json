@@ -1,4 +1,12 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.733142",
+    "script": "analysis_script.py",
+    "analysis_type": "publication_analysis_corrected",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "composition_distribution": {
     "n": 18,
     "mean": 2.403888888888889,

@@ -1,4 +1,11 @@
 {
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.733787",
+    "script": "reproducibility_report.py",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "generated_date": "2025-10-25",
   "analysis_scope": "Cycles 133-161",
   "bug_fix_1_spawn_accuracy": {

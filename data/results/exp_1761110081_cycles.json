@@ -1,182 +1,191 @@
-[
-  {
-    "cycle": 1,
-    "timestamp": 1761110081.6823628,
-    "duration": 0.2888607978820801,
-    "decisions": 1,
-    "patterns_discovered": 0,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
+{
+  "metadata": {
+    "git_sha": "cdc568180183646bcb3f0c4579ced015b1c46525",
+    "generated_at": "2025-10-27T00:51:45.730656",
+    "script": "exp_1761110081_cycles.py",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
   },
-  {
-    "cycle": 2,
-    "timestamp": 1761110081.9702,
-    "duration": 0.287830114364624,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 3,
-    "timestamp": 1761110082.246899,
-    "duration": 0.27669286727905273,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 4,
-    "timestamp": 1761110082.543157,
-    "duration": 0.296252965927124,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 5,
-    "timestamp": 1761110082.8345711,
-    "duration": 0.2914083003997803,
-    "decisions": 1,
-    "patterns_discovered": 0,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 6,
-    "timestamp": 1761110083.12197,
-    "duration": 0.28739404678344727,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 7,
-    "timestamp": 1761110083.396033,
-    "duration": 0.2740590572357178,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 8,
-    "timestamp": 1761110083.686334,
-    "duration": 0.2902960777282715,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 9,
-    "timestamp": 1761110083.975379,
-    "duration": 0.28903985023498535,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 10,
-    "timestamp": 1761110084.266876,
-    "duration": 0.2914919853210449,
-    "decisions": 1,
-    "patterns_discovered": 0,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 11,
-    "timestamp": 1761110084.558244,
-    "duration": 0.291363000869751,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 12,
-    "timestamp": 1761110084.850999,
-    "duration": 0.29275012016296387,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 13,
-    "timestamp": 1761110085.1470342,
-    "duration": 0.29602932929992676,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 14,
-    "timestamp": 1761110085.418772,
-    "duration": 0.271730899810791,
-    "decisions": 1,
-    "patterns_discovered": 0,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 15,
-    "timestamp": 1761110085.7071822,
-    "duration": 0.288405179977417,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 16,
-    "timestamp": 1761110085.998307,
-    "duration": 0.2911200523376465,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 17,
-    "timestamp": 1761110086.291552,
-    "duration": 0.29323911666870117,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 18,
-    "timestamp": 1761110086.5741818,
-    "duration": 0.2826247215270996,
-    "decisions": 1,
-    "patterns_discovered": 0,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 19,
-    "timestamp": 1761110086.867847,
-    "duration": 0.2936389446258545,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  },
-  {
-    "cycle": 20,
-    "timestamp": 1761110087.148528,
-    "duration": 0.28067612648010254,
-    "decisions": 1,
-    "patterns_discovered": 1,
-    "emergent_patterns": 0,
-    "reality_score": 1.0
-  }
-]
+  "data": [
+    {
+      "cycle": 1,
+      "timestamp": 1761110081.6823628,
+      "duration": 0.2888607978820801,
+      "decisions": 1,
+      "patterns_discovered": 0,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 2,
+      "timestamp": 1761110081.9702,
+      "duration": 0.287830114364624,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 3,
+      "timestamp": 1761110082.246899,
+      "duration": 0.27669286727905273,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 4,
+      "timestamp": 1761110082.543157,
+      "duration": 0.296252965927124,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 5,
+      "timestamp": 1761110082.8345711,
+      "duration": 0.2914083003997803,
+      "decisions": 1,
+      "patterns_discovered": 0,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 6,
+      "timestamp": 1761110083.12197,
+      "duration": 0.28739404678344727,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 7,
+      "timestamp": 1761110083.396033,
+      "duration": 0.2740590572357178,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 8,
+      "timestamp": 1761110083.686334,
+      "duration": 0.2902960777282715,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 9,
+      "timestamp": 1761110083.975379,
+      "duration": 0.28903985023498535,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 10,
+      "timestamp": 1761110084.266876,
+      "duration": 0.2914919853210449,
+      "decisions": 1,
+      "patterns_discovered": 0,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 11,
+      "timestamp": 1761110084.558244,
+      "duration": 0.291363000869751,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 12,
+      "timestamp": 1761110084.850999,
+      "duration": 0.29275012016296387,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 13,
+      "timestamp": 1761110085.1470342,
+      "duration": 0.29602932929992676,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 14,
+      "timestamp": 1761110085.418772,
+      "duration": 0.271730899810791,
+      "decisions": 1,
+      "patterns_discovered": 0,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 15,
+      "timestamp": 1761110085.7071822,
+      "duration": 0.288405179977417,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 16,
+      "timestamp": 1761110085.998307,
+      "duration": 0.2911200523376465,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 17,
+      "timestamp": 1761110086.291552,
+      "duration": 0.29323911666870117,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 18,
+      "timestamp": 1761110086.5741818,
+      "duration": 0.2826247215270996,
+      "decisions": 1,
+      "patterns_discovered": 0,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 19,
+      "timestamp": 1761110086.867847,
+      "duration": 0.2936389446258545,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    },
+    {
+      "cycle": 20,
+      "timestamp": 1761110087.148528,
+      "duration": 0.28067612648010254,
+      "decisions": 1,
+      "patterns_discovered": 1,
+      "emergent_patterns": 0,
+      "reality_score": 1.0
+    }
+  ]
+}

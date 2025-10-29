@@ -1,4 +1,11 @@
 {
+  "metadata": {
+    "git_sha": "d47cf4ca7cb95f1ed7cce6ab6483412173d1f515",
+    "generated_at": "2025-10-27T13:09:58.870330",
+    "script": "paper7_phase4_stochastic_results_20251027_130958.py",
+    "nrm_version": "6.7",
+    "metadata_added_retrospectively": true
+  },
   "parameter_noise": [
     {
       "noise_type": "parameter",
