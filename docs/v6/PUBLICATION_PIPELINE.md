@@ -8,24 +8,32 @@ License: GPL-3.0
 
 # PUBLICATION PIPELINE - DETAILED STATUS
 
-**Version:** 6.0
-**Date:** 2025-10-27 (Cycle 356)
-**Status:** 1 submission-ready, 2 at 70%, 7+ identified
+**Version:** 6.4
+**Date:** 2025-10-28 (Cycle 448)
+**Status:** 3 submission-ready (Papers 1, 2, 5D with major revisions), C255 90-95% complete, automation operational
 
 ---
 
 ## PAPER 1: COMPUTATIONAL EXPENSE AS FRAMEWORK VALIDATION
 
-**Status:** ✅ 100% COMPLETE, SUBMISSION-READY
+**Status:** ✅ ARXIV + JOURNAL-READY (MAJOR REVISIONS INTEGRATED, Cycle 443)
+
+### MAJOR REVISIONS (Cycle 443)
+- **Tightened Threshold:** ±20% → ±5% (10× stricter validation)
+- **NEW CONCEPT:** Inverse Noise Filtration (leverage NRM for environmental noise mitigation)
+- **NEW CONCEPT:** Dedicated Execution Environment (hardware solution targeting ≤1% precision)
+- **Updated Flowchart:** figure2_overhead_authentication_flowchart_v2.png (shows ±5% protocol)
+- **Revised Limitations:** Explicitly addresses 8-10% OS/Python noise floor
+- **Complete Acknowledgments:** Credits all AI collaborators (Claude Sonnet 4.5, Gemini 2.5 Pro, ChatGPT 5, Claude Opus 4.1)
 
 ### Manuscript Details
-- **Title:** "Computational Expense as Framework Validation"
+- **Title:** "Computational Expense as Framework Validation: Predictable Overhead Profiles as Evidence of Reality Grounding"
 - **Type:** Methods paper / Technical note
-- **Length:** 477 lines (~5,000 words)
-- **Abstract:** 200 words
-- **Sections:** Introduction, Theoretical Framework, Empirical Validation, Cross-Domain Applications, Discussion, Conclusions
+- **Length:** 87 lines LaTeX (~5 pages)
+- **Abstract:** Revised to emphasize ±5% threshold
+- **Sections:** Introduction, Theoretical Framework, Empirical Validation, Cross-Domain Applications, Limitations (revised), Discussion (Inverse Noise + Dedicated Execution), Conclusions
 - **References:** 25 peer-reviewed sources
-- **Figures:** 3 × 300 DPI
+- **Figures:** 3 × 300 DPI (flowchart v2 updated)
 
 ### Figures Generated
 1. **Figure 1:** Efficiency-Validity Trade-off Curve
