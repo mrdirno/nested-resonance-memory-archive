@@ -73,12 +73,17 @@ jobs:
       - name: Run minimal package tests (overhead check)
         run: |
           cd papers/minimal_package_with_experiments/experiments
-          python overhead_check.py
-      
-      - name: Run minimal package tests (pattern replication)
+          python overhead_check.py --N 1080000 --C_ms 67 --T_sim_min 30 --noise 0.02 --trials 50
+
+      - name: Run minimal package tests (pattern replication - healthy mode)
         run: |
           cd papers/minimal_package_with_experiments/experiments
-          python replicate_patterns.py
+          python replicate_patterns.py --runs 20 --threshold 0.99 --mode healthy
+
+      - name: Run minimal package tests (pattern replication - degraded mode)
+        run: |
+          cd papers/minimal_package_with_experiments/experiments
+          python replicate_patterns.py --runs 20 --threshold 0.99 --mode degraded
       
       - name: Run pytest (if tests exist)
         run: |
