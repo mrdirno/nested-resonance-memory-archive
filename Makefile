@@ -53,18 +53,24 @@ verify: ## Verify installation
 	@python -c "import pytest, black; print('$(GREEN)✓ Development tools OK$(NC)')" || echo "$(YELLOW)⚠ Optional dev tools missing$(NC)"
 
 paper1: ## Compile Paper 1 (Computational Expense Validation)
-	@echo "$(BLUE)Compiling Paper 1...$(NC)"
-	cd papers/compiled/paper1 && \
-	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript_paper1_final_ackonly.tex || \
+	@echo "$(BLUE)Compiling Paper 1 (2 passes for references)...$(NC)"
+	cd papers/arxiv_submissions/paper1 && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	cp manuscript.pdf ../../compiled/paper1/Paper1_Computational_Expense_Validation_arXiv_Submission.pdf && \
+	rm -f manuscript.aux manuscript.log manuscript.out || \
 	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
-	@echo "$(GREEN)✓ Paper 1 compiled$(NC)"
+	@echo "$(GREEN)✓ Paper 1 compiled → papers/compiled/paper1/$(NC)"
 
 paper5d: ## Compile Paper 5D (Pattern Mining Framework)
-	@echo "$(BLUE)Compiling Paper 5D...$(NC)"
-	cd papers/compiled/paper5d && \
-	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript_paper5d_final_ackonly.tex || \
+	@echo "$(BLUE)Compiling Paper 5D (2 passes for references)...$(NC)"
+	cd papers/arxiv_submissions/paper5d && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	cp manuscript.pdf ../../compiled/paper5d/Paper5D_Pattern_Mining_Framework_arXiv_Submission.pdf && \
+	rm -f manuscript.aux manuscript.log manuscript.out || \
 	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
-	@echo "$(GREEN)✓ Paper 5D compiled$(NC)"
+	@echo "$(GREEN)✓ Paper 5D compiled → papers/compiled/paper5d/$(NC)"
 
 paper3: ## Run Paper 3 factorial experiments (6 experiments, ~67 mins)
 	@echo "$(BLUE)Running Paper 3 factorial experiments...$(NC)"
