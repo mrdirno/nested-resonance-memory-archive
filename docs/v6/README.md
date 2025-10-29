@@ -9,19 +9,19 @@ License: GPL-3.0
 # DUALITY-ZERO V6 - PUBLICATION PIPELINE PHASE
 
 **Version:** 6.4
-**Date:** 2025-10-28 (Cycle 448)
+**Date:** 2025-10-28 (Cycle 455)
 **Phase:** Publication Pipeline
-**Status:** Active Research - 2 papers arXiv-ready with major revisions (Papers 1 & 5D, Cycle 443), C255 running 170h+ CPU (90-95% complete), Reproducibility 9.3/10 maintained
+**Status:** Active Research - 3 papers submission-ready (Papers 1, 2, 5D organized in compiled/), C255 running 171:51h CPU (90-95% complete), Makefile paper targets fixed, Reproducibility 9.3/10 maintained
 **Location:** `/Volumes/dual/DUALITY-ZERO-V2/` + `/Users/aldrinpayopay/nested-resonance-memory-archive/`
 
 ---
 
 ## VERSION HISTORY
 
-### V6.4 (2025-10-28, Cycles 419-448) — **MAJOR REVISIONS & PERPETUAL OPERATION**
-**Major Progress:** Paper 1 & 5D significantly strengthened, steady-state monitoring protocol established
+### V6.4 (2025-10-28, Cycles 419-455) — **MAJOR REVISIONS & INFRASTRUCTURE MAINTENANCE**
+**Major Progress:** Paper 1 & 5D significantly strengthened, all 3 submission-ready papers professionally organized
 
-**Focus:** Integrate major collaborative revisions + maintain infrastructure during C255 completion
+**Focus:** Integrate major collaborative revisions + maintain infrastructure during C255 completion + establish consistent paper organization
 
 **Key Achievements:**
 - ✅ **Paper 1 MAJOR REVISIONS** (Cycle 443): Tightened validation ±20% → ±5% (10× stricter)
@@ -33,7 +33,13 @@ License: GPL-3.0
 - ✅ **Steady-state monitoring** (Cycles 425-448): Zero idle time - infrastructure validation IS research
 - ✅ **Paper 2 formats complete** (Cycle 425): DOCX + HTML via Pandoc (100% submission-ready)
 - ✅ **Reproducibility maintained** (Cycle 448): 9.3/10 standard verified (make verify passes)
-- ✅ **C255 progression** (Cycles 419-448): 168h → 170h+ CPU time, actively computing (6.0% usage)
+- ✅ **Perpetual operation correction** (Cycle 451): Documentation versioning (docs/v6/ to V6.4), violated "done" → corrected
+- ✅ **Paper 5D LaTeX compilation** (Cycle 454): Docker + texlive, 2-pass compilation, figures embedded
+- ✅ **Paper 1 LaTeX compilation** (Cycle 454): Docker + texlive, 2-pass compilation, figures embedded
+- ✅ **Makefile paper targets fixed** (Cycle 455): Corrected paths (compiled/ → arxiv_submissions/), 2-pass compilation, cleanup
+- ✅ **Paper 2 organization** (Cycle 455): papers/compiled/paper2/ structure (DOCX + HTML + 4 figs + README)
+- ✅ **Consistent paper organization** (Cycles 454-455): All 3 papers (1, 2, 5D) in compiled/ with READMEs
+- ✅ **C255 progression** (Cycles 419-455): 168h → 171:51h CPU time, actively computing (0.7%-6.0% usage)
 
 **Experiments:**
 - **Running:** C255 (H1×H2 unoptimized, 170h+ CPU time, ~90-95% complete, 0-1 days)
@@ -41,10 +47,10 @@ License: GPL-3.0
 - **Queued:** Papers 5A-5F (545 experiments, ~17-18 hours) - scripts deployed
 - **Planned:** C262-C263 (higher-order factorial, 8 hours total)
 
-**Publications (3 arXiv/Journal-Ready):**
-- **Paper 1:** "Computational Expense as Framework Validation" ✅ ARXIV + JOURNAL-READY (Cycle 443 revisions: ±5% threshold, Inverse Noise Filtration, Dedicated Execution)
-- **Paper 2:** "From Bistability to Collapse: Three Dynamical Regimes" ✅ 100% SUBMISSION-READY (all formats: Markdown + DOCX + HTML)
-- **Paper 5D:** "Pattern Mining Framework for Temporal Stability" ✅ ARXIV + JOURNAL-READY (Cycle 443 rescoping: 2 categories, replicability criterion, noise-aware thresholds)
+**Publications (3 Submission-Ready, Professionally Organized):**
+- **Paper 1:** "Computational Expense as Framework Validation" ✅ ARXIV + JOURNAL-READY (papers/compiled/paper1/: PDF + 3 figs + README, Cycle 443 revisions: ±5% threshold)
+- **Paper 2:** "From Bistability to Collapse: Three Dynamical Regimes" ✅ 100% SUBMISSION-READY (papers/compiled/paper2/: DOCX + HTML + 4 figs + README, Cycle 455)
+- **Paper 5D:** "Pattern Mining Framework for Temporal Stability" ✅ ARXIV + JOURNAL-READY (papers/compiled/paper5d/: PDF + 7 figs + README, Cycle 443 rescoping: 2 categories)
 - **Paper 3:** Template ready, automated pipeline operational (~102 min upon C255 completion)
 - **Paper 4:** Template ready (awaiting C262-C263 data)
 - **Papers 5A-5F:** Scripts ready (~17-18 hours execution)
