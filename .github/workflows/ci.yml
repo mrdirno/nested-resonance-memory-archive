@@ -90,6 +90,17 @@ jobs:
           pytest -v --maxfail=1 --disable-warnings || echo "::warning::No pytest tests configured yet"
         continue-on-error: true
 
+      - name: Upload test outputs and artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-outputs-py${{ matrix.python-version }}
+          path: |
+            papers/minimal_package_with_experiments/experiments/*.json
+            data/figures/*.png
+            workspace/
+          retention-days: 7
+
   docker:
     name: Docker Build
     runs-on: ubuntu-latest
