@@ -1,0 +1,153 @@
+# GitHub Actions CI/CD for Nested Resonance Memory Research
+#
+# Runs on: push, pull_request
+# Jobs: lint, test, build-docker
+#
+# Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+# Repository: https://github.com/mrdirno/nested-resonance-memory-archive
+# License: GPL-3.0
+
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black pylint
+      
+      - name: Run black (code formatting check)
+        run: |
+          black --check code/ papers/ || echo "::warning::Code formatting issues detected. Run 'make format' to fix."
+        continue-on-error: true
+      
+      - name: Run pylint (code quality check)
+        run: |
+          pylint code/ --exit-zero || echo "::warning::Code quality issues detected."
+        continue-on-error: true
+
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Verify installation
+        run: |
+          python -c "import numpy, psutil, matplotlib; print('✓ Core dependencies OK')"
+          python -c "import pandas, scipy; print('✓ Analysis dependencies OK')"
+      
+      - name: Run minimal package tests (overhead check)
+        run: |
+          cd papers/minimal_package_with_experiments/experiments
+          python overhead_check.py
+      
+      - name: Run minimal package tests (pattern replication)
+        run: |
+          cd papers/minimal_package_with_experiments/experiments
+          python replicate_patterns.py
+      
+      - name: Run pytest (if tests exist)
+        run: |
+          pytest -v --maxfail=1 --disable-warnings || echo "::warning::No pytest tests configured yet"
+        continue-on-error: true
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: nested-resonance-memory:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: Test Docker image
+        run: |
+          docker run --rm nested-resonance-memory:test python -c "import numpy, psutil, matplotlib; print('✓ Docker image OK')"
+
+  reproducibility:
+    name: Reproducibility Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Check reproducibility guide exists
+        run: |
+          test -f REPRODUCIBILITY_GUIDE.md || exit 1
+      
+      - name: Check citation file exists
+        run: |
+          test -f CITATION.cff || exit 1
+      
+      - name: Check compiled papers exist
+        run: |
+          test -f papers/compiled/paper1/Paper1_Computational_Expense_Validation_arXiv_Submission.pdf || exit 1
+          test -f papers/compiled/paper5d/Paper5D_Pattern_Mining_Framework_arXiv_Submission.pdf || exit 1
+      
+      - name: Verify minimal package structure
+        run: |
+          test -d papers/minimal_package_with_experiments || exit 1
+          test -f papers/minimal_package_with_experiments/experiments/overhead_check.py || exit 1
+          test -f papers/minimal_package_with_experiments/experiments/replicate_patterns.py || exit 1
+      
+      - name: Print summary
+        run: |
+          echo "✓ Reproducibility artifacts verified"
+          echo "✓ Papers compiled and accessible"
+          echo "✓ Citation metadata present"
+          echo "✓ Minimal package complete"

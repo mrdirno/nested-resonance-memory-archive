@@ -7,25 +7,27 @@
 # Author: Aldrin Payopay <aldrin.gdf@gmail.com>
 # Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 # License: GPL-3.0
-# Last Updated: 2025-10-27 (Cycle 350)
+# Last Updated: 2025-10-28 (Cycle 443 - Frozen versions for reproducibility)
 
-# Core Dependencies
-numpy>=1.21.0,<2.0.0          # Numerical computing, array operations
-psutil>=5.8.0,<6.0.0          # System metrics (CPU, memory, processes)
+# Core Dependencies (PINNED for reproducibility)
+numpy==2.3.1              # Numerical computing, array operations
+psutil==7.0.0             # System metrics (CPU, memory, processes)
 
 # Visualization
-matplotlib>=3.4.0,<4.0.0      # Publication-quality figures
-seaborn>=0.11.0,<1.0.0        # Statistical visualizations (optional)
+matplotlib==3.10.3        # Publication-quality figures
+seaborn==0.13.2           # Statistical visualizations (optional)
 
 # Data Analysis (Optional)
-pandas>=1.3.0,<2.0.0          # Data manipulation (for result analysis)
-scipy>=1.7.0,<2.0.0           # Scientific computing (statistical tests)
+pandas==2.3.1             # Data manipulation (for result analysis)
+scipy==1.16.0             # Scientific computing (statistical tests)
 
 # Development Tools (Optional)
-pytest>=6.2.0,<8.0.0          # Testing framework
-black>=21.0,<24.0             # Code formatting
-pylint>=2.10.0,<3.0.0         # Code linting
+pytest==8.4.1             # Testing framework
+pytest-cov==6.1.1         # Test coverage reports
+pytest-mock==3.14.1       # Mocking for tests
+black==25.1.0             # Code formatting
+pylint==3.3.5             # Code linting
 
 # Documentation (Optional)
-sphinx>=4.0.0,<6.0.0          # Documentation generation
-sphinx-rtd-theme>=0.5.0,<2.0.0  # ReadTheDocs theme
+sphinx==8.2.3             # Documentation generation
+sphinx-rtd-theme==3.0.2   # ReadTheDocs theme
