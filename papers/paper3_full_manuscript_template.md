@@ -104,10 +104,10 @@ We test six mechanism pairs in a reality-grounded fractal agent system via 2×2 
 |------|------------|------------|
 | H1×H2 | Energy Pooling × Reality Sources | **Synergistic** (pooling creates, sources sustain) |
 | H1×H4 | Energy Pooling × Spawn Throttling | **Antagonistic** (pooling creates, throttling limits) |
-| H1×H5 | Energy Pooling × Burst Pruning | **Antagonistic** (pooling expands, bursts prune) |
+| H1×H5 | Energy Pooling × Energy Recovery | **Synergistic** (pooling creates, recovery sustains) |
 | H2×H4 | Reality Sources × Spawn Throttling | **Additive** (independent resource vs. reproduction control) |
-| H2×H5 | Reality Sources × Burst Pruning | **Additive** (resources provide stability, bursts reset) |
-| H4×H5 | Spawn Throttling × Burst Pruning | **Additive** (spawn control vs. population reset) |
+| H2×H5 | Reality Sources × Energy Recovery | **Synergistic** (sources provide energy, recovery accelerates recharge) |
+| H4×H5 | Spawn Throttling × Energy Recovery | **Antagonistic** (throttling limits births, recovery enables survival) |
 
 **Primary objectives:**
 1. Validate factorial design for mechanism discovery in deterministic systems
@@ -333,7 +333,7 @@ C255 results contradict the original **SYNERGISTIC** hypothesis. Both variants s
 
 ---
 
-#### 3.2.3 H1×H5: Energy Pooling × Multiple Energy Sources (C257 - PENDING)
+#### 3.2.3 H1×H5: Energy Pooling × Energy Recovery (C257 - PENDING)
 
 [INSERT FIGURE: Factorial bar chart + synergy decomposition]
 
@@ -385,7 +385,7 @@ C255 results contradict the original **SYNERGISTIC** hypothesis. Both variants s
 
 ---
 
-#### 3.2.5 H2×H5: Reality Sources × Multiple Energy Sources (C259 - PENDING)
+#### 3.2.5 H2×H5: Reality Sources × Energy Recovery (C259 - PENDING)
 
 [INSERT FIGURE: Factorial bar chart + synergy decomposition]
 
@@ -411,7 +411,7 @@ C255 results contradict the original **SYNERGISTIC** hypothesis. Both variants s
 
 ---
 
-#### 3.2.6 H4×H5: Spawn Throttling × Multiple Energy Sources (C260 - PENDING)
+#### 3.2.6 H4×H5: Spawn Throttling × Energy Recovery (C260 - PENDING)
 
 [INSERT FIGURE: Factorial bar chart + synergy decomposition]
 
