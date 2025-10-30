@@ -47,12 +47,11 @@ keywords:
   - Massive-Scale Analysis
   - Extended Timescales
   - Temporal Evolution
-  - Sleep Consolidation
-  - Kuramoto Dynamics
-  - Hebbian Learning
-  - NREM REM Phases
-  - Pattern Compression
-  - Hypothesis Generation
+  - Coupled ODEs
+  - Dynamical Systems
+  - Mathematical Formalization
+  - Parameter Estimation
+  - Physical Constraints
 license: GPL-3.0-only
 date-released: 2025-10-29
 version: "6.8"
