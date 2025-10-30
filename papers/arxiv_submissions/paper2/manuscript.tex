@@ -5,6 +5,7 @@
 ]{article}
 \usepackage{xcolor}
 \usepackage{amsmath,amssymb}
+\usepackage{graphicx}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
 \ifPDFTeX
@@ -573,29 +574,33 @@ work.}
 
 \subsection{Figures}\label{figures}
 
-\textbf{Figure 1. Three-Regime Classification} Bar plots comparing
-population level, stability (CV), and endpoint dynamics across Regime 1
-(Bistability), Regime 2 (Accumulation), and Regime 3 (Collapse).
-Demonstrates 35× difference in mean population between birth-only
-(17.33) and complete frameworks (0.49).
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{cycle175_framework_comparison.png}
+\caption{\textbf{Three-Regime Classification.} Bar plots comparing population level, stability (CV), and endpoint dynamics across Regime 1 (Bistability), Regime 2 (Accumulation), and Regime 3 (Collapse). Demonstrates 35× difference in mean population between birth-only (17.33) and complete frameworks (0.49).}
+\label{fig:regimes}
+\end{figure}
 
-\textbf{Figure 2. Energy Recharge Parameter Sweep (Zero Effect)}
-Comparison of V2 (r=0.000), V3 (r=0.001), V4 (r=0.010) showing IDENTICAL
-results despite 100× parameter range. Includes statistical summary:
-F(2,27)=0.00, p=1.000, η²=0.000. Demonstrates energy recharge
-insufficiency for sustained populations.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{cycle175_basin_occupation.png}
+\caption{\textbf{Energy Recharge Parameter Sweep (Zero Effect).} Comparison of V2 (r=0.000), V3 (r=0.001), V4 (r=0.010) showing IDENTICAL results despite 100× parameter range. Includes statistical summary: F(2,27)=0.00, p=1.000, $\eta^2$=0.000. Demonstrates energy recharge insufficiency for sustained populations.}
+\label{fig:recharge}
+\end{figure}
 
-\textbf{Figure 3. Perfect Determinism Across All Random Seeds} Scatter
-plots showing all 10 seeds produced identical metrics (spawn=75,
-comp=38, final=0, mean=0.494) with zero variance. Demonstrates dynamics
-dominated by deterministic energy-death coupling rather than stochastic
-effects.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{cycle175_composition_constancy.png}
+\caption{\textbf{Perfect Determinism Across All Random Seeds.} Scatter plots showing all 10 seeds produced identical metrics (spawn=75, comp=38, final=0, mean=0.494) with zero variance. Demonstrates dynamics dominated by deterministic energy-death coupling rather than stochastic effects.}
+\label{fig:determinism}
+\end{figure}
 
-\textbf{Figure 4. Death-Birth Rate Imbalance} Bar plot comparing death
-rate (0.013/cycle) vs sustained birth rate (0.005/cycle) showing 2.5×
-imbalance. Includes annotation of three structural asymmetries (recovery
-lag, single-parent bottleneck, continuous death activity) explaining why
-birth-death coupling is necessary but not sufficient.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{cycle175_population_distribution.png}
+\caption{\textbf{Death-Birth Rate Imbalance.} Bar plot comparing death rate (0.013/cycle) vs sustained birth rate (0.005/cycle) showing 2.5× imbalance. Includes annotation of three structural asymmetries (recovery lag, single-parent bottleneck, continuous death activity) explaining why birth-death coupling is necessary but not sufficient.}
+\label{fig:imbalance}
+\end{figure}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
