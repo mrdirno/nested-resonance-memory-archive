@@ -6,6 +6,8 @@ Nested agent architecture implementing Nested Resonance Memory (NRM) framework.
 Exports:
 - FractalAgent: Individual agent with internal universe
 - FractalSwarm: Multi-agent orchestration
+- CompositionEngine: Coalition detection and cluster formation
+- DecompositionEngine: Burst generation and agent spawning
 - AgentState, ClusterEvent, BurstEvent: Data structures
 
 Author: Aldrin Payopay <aldrin.gdf@gmail.com>
@@ -19,11 +21,17 @@ from .fractal_agent import (
     BurstEvent
 )
 
-from .fractal_swarm import FractalSwarm
+from .fractal_swarm import (
+    FractalSwarm,
+    CompositionEngine,
+    DecompositionEngine
+)
 
 __all__ = [
     'FractalAgent',
     'FractalSwarm',
+    'CompositionEngine',
+    'DecompositionEngine',
     'AgentState',
     'ClusterEvent',
     'BurstEvent'

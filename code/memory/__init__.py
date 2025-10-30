@@ -9,6 +9,7 @@ Advanced pattern memory and evolution system implementing:
 Components:
 - PatternMemory: Core pattern storage and retrieval
 - PatternEvolution: Advanced pattern lifecycle and relationships
+- ConsolidationEngine: Sleep-inspired NREM/REM consolidation
 - Temporal Encoding: Pattern encoding for future discovery
 """
 
@@ -40,6 +41,13 @@ from memory.pattern_evolution import (
     get_evolution_system
 )
 
+# Sleep-inspired consolidation
+from memory.consolidation_engine import (
+    ConsolidationEngine,
+    ConsolidationMetrics,
+    Coalition
+)
+
 __all__ = [
     # Core
     'Pattern',
@@ -60,6 +68,11 @@ __all__ = [
     # Data structures
     'PatternRelationship',
     'PatternEvolution',
+
+    # Consolidation
+    'ConsolidationEngine',
+    'ConsolidationMetrics',
+    'Coalition',
 
     # API
     'get_evolution_system'
