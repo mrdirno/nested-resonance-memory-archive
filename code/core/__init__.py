@@ -17,11 +17,13 @@ from .exceptions import (
     ResourceExceeded,
     ValidationFailed
 )
+from . import constants
 
 __version__ = "2.0.0"
 __all__ = [
     "RealityInterface",
     "RealityViolation",
     "ResourceExceeded",
-    "ValidationFailed"
+    "ValidationFailed",
+    "constants"
 ]

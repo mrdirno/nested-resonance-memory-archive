@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.reality_interface import RealityInterface
 from core.exceptions import ValidationFailed, ResourceExceeded
+from core import constants
 
 
 class SystemMonitor:
@@ -64,14 +65,14 @@ class SystemMonitor:
         self._monitoring = False
         self._monitor_thread: Optional[threading.Thread] = None
 
-        # Thresholds (from CLAUDE.md constitution)
+        # Thresholds (from core.constants)
         self.thresholds = {
-            "cpu_warning": 60.0,
-            "cpu_critical": 80.0,
-            "memory_warning": 70.0,
-            "memory_critical": 80.0,
-            "disk_warning": 80.0,
-            "disk_critical": 90.0
+            "cpu_warning": 60.0,  # Custom warning (lower than HIGH_THRESHOLD)
+            "cpu_critical": constants.CPU_HIGH_THRESHOLD,
+            "memory_warning": constants.DISK_HIGH_THRESHOLD,
+            "memory_critical": constants.MEMORY_HIGH_THRESHOLD,
+            "disk_warning": constants.CPU_HIGH_THRESHOLD,
+            "disk_critical": constants.MEMORY_CRITICAL_THRESHOLD
         }
 
     def register_alert_callback(self, callback: Callable[[str, Dict], None]) -> None:

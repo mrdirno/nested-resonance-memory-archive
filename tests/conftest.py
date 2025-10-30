@@ -29,6 +29,7 @@ sys.path.insert(0, str(project_root / "bridge"))
 sys.path.insert(0, str(project_root / "validation"))
 
 from core.reality_interface import RealityInterface
+from core import constants
 from fractal.fractal_swarm import FractalSwarm
 
 
@@ -64,10 +65,10 @@ def swarm() -> FractalSwarm:
 
     # Get real system metrics for spawning
     reality_metrics = {
-        'cpu_percent': psutil.cpu_percent(interval=0.1),
+        'cpu_percent': psutil.cpu_percent(interval=constants.CPU_SAMPLE_INTERVAL),
         'memory_percent': psutil.virtual_memory().percent,
         'disk_percent': psutil.disk_usage('/').percent,
-        'memory_available_gb': psutil.virtual_memory().available / (1024**3),
+        'memory_available_gb': psutil.virtual_memory().available / constants.BYTES_PER_GB,
         'timestamp': time.time()
     }
 
@@ -91,7 +92,7 @@ def reality_metrics() -> Dict[str, float]:
     Returns:
         Dict[str, float]: Current system metrics
     """
-    cpu_percent = psutil.cpu_percent(interval=0.1)
+    cpu_percent = psutil.cpu_percent(interval=constants.CPU_SAMPLE_INTERVAL)
     memory = psutil.virtual_memory()
     disk = psutil.disk_usage('/')
 
@@ -99,9 +100,9 @@ def reality_metrics() -> Dict[str, float]:
         'cpu_percent': cpu_percent,
         'memory_percent': memory.percent,
         'disk_percent': disk.percent,
-        'memory_available_gb': memory.available / (1024**3),
-        'memory_used_mb': memory.used / (1024**2),
-        'disk_used_gb': disk.used / (1024**3),
+        'memory_available_gb': memory.available / constants.BYTES_PER_GB,
+        'memory_used_mb': memory.used / constants.BYTES_PER_MB,
+        'disk_used_gb': disk.used / constants.BYTES_PER_GB,
         'timestamp': time.time()
     }
 
