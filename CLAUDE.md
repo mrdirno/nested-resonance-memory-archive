@@ -18,7 +18,7 @@ Ground the system in three active frames:
 
 **1. Nested Resonance Memory (NRM)**
 - Fractal agents with composition–decomposition dynamics
-- Transcendental substrate (π, e, φ)
+- Transcendental substrate (π, e, φ) - exploratory basis for phase space (see docs/TRANSCENDENTAL_SUBSTRATE_HYPOTHESIS.md for hypothesis details)
 - Scale-invariant principles across agent/population/swarm levels
 - No equilibrium: perpetual motion
 
@@ -96,6 +96,7 @@ Treat these as living commitments rather than topics to document.
 - **Basis:** π, e, φ oscillators
 - **Operations:** Reality-to-phase, phase-to-reality
 - **Output:** Resonance detection, structure exposure
+- **Note:** Transcendental substrate is exploratory (see docs/TRANSCENDENTAL_SUBSTRATE_HYPOTHESIS.md). Core NRM framework can be validated with alternative substrates (e.g., PRNG). This is a bonus quest, not a dependency.
 
 ### 3. Fractal Layer (Internal Computational Modeling)
 - **Purpose:** NRM agent system implementation
