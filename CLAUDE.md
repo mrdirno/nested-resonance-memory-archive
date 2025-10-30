@@ -200,7 +200,7 @@ https://github.com/mrdirno/nested-resonance-memory-archive
 
 **Directory Structure:**
 ```
-├── docs/v5/              # Comprehensive documentation
+├── docs/v6/              # Comprehensive documentation (V6 - Publication Pipeline Phase)
 ├── code/                 # Production Python code
 │   ├── core/             # Reality interface
 │   ├── reality/          # System monitoring
