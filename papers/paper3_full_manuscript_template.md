@@ -307,11 +307,135 @@ C255 results contradict the original **SYNERGISTIC** hypothesis. Both variants s
 - Exposes hidden constraints: system has finite resource capacity that bounds population growth
 - Publication value: contradictory findings demonstrate authentic discovery process
 
-#### 3.2.2 H1×H4: Energy Pooling × Spawn Throttling
+#### 3.2.2 H1×H4: Energy Pooling × Spawn Throttling (C256 - PENDING)
 
-[REPEAT STRUCTURE FOR ALL 6 PAIRS]
+[INSERT FIGURE: Factorial bar chart + synergy decomposition]
 
-...
+| Condition | Mean Population | SD | Classification |
+|-----------|----------------|-----|----------------|
+| OFF-OFF (baseline) | **[C256]** | 0.0 | Collapse |
+| ON-OFF (H1 only) | **[C256]** | 0.0 | H1 effect = **[CALC]** |
+| OFF-ON (H4 only) | **[C256]** | 0.0 | H4 effect = **[CALC]** |
+| ON-ON (both) | **[C256]** | 0.0 | Observed |
+| Additive prediction | **[CALC]** | — | Null hypothesis |
+| **Synergy** | **[CALC]** | — | **[CLASS]** |
+| **Fold change** | **[CALC]** | — | vs. prediction |
+
+**Population dynamics:**
+[INSERT FIGURE: Time series trajectories for all four conditions]
+
+**Interpretation - [TO BE WRITTEN BASED ON C256 RESULTS]:**
+- **Hypothesis:** H1 increases births (pooling), H4 decreases births (throttling) → Expected ANTAGONISTIC
+- **Actual result:** [PENDING C256]
+- **Mechanistic explanation:** [PENDING]
+
+**Significance:** [PENDING]
+
+---
+
+#### 3.2.3 H1×H5: Energy Pooling × Multiple Energy Sources (C257 - PENDING)
+
+[INSERT FIGURE: Factorial bar chart + synergy decomposition]
+
+| Condition | Mean Population | SD | Classification |
+|-----------|----------------|-----|----------------|
+| OFF-OFF (baseline) | **[C257]** | 0.0 | Collapse |
+| ON-OFF (H1 only) | **[C257]** | 0.0 | H1 effect = **[CALC]** |
+| OFF-ON (H5 only) | **[C257]** | 0.0 | H5 effect = **[CALC]** |
+| ON-ON (both) | **[C257]** | 0.0 | Observed |
+| Additive prediction | **[CALC]** | — | Null hypothesis |
+| **Synergy** | **[CALC]** | — | **[CLASS]** |
+| **Fold change** | **[CALC]** | — | vs. prediction |
+
+**Population dynamics:**
+[INSERT FIGURE: Time series trajectories for all four conditions]
+
+**Interpretation - [TO BE WRITTEN BASED ON C257 RESULTS]:**
+- **Hypothesis:** H1 and H5 both increase energy availability → Expected SYNERGISTIC
+- **Actual result:** [PENDING C257]
+- **Mechanistic explanation:** [PENDING]
+
+**Significance:** [PENDING]
+
+---
+
+#### 3.2.4 H2×H4: Reality Sources × Spawn Throttling (C258 - PENDING)
+
+[INSERT FIGURE: Factorial bar chart + synergy decomposition]
+
+| Condition | Mean Population | SD | Classification |
+|-----------|----------------|-----|----------------|
+| OFF-OFF (baseline) | **[C258]** | 0.0 | Collapse |
+| ON-OFF (H2 only) | **[C258]** | 0.0 | H2 effect = **[CALC]** |
+| OFF-ON (H4 only) | **[C258]** | 0.0 | H4 effect = **[CALC]** |
+| ON-ON (both) | **[C258]** | 0.0 | Observed |
+| Additive prediction | **[CALC]** | — | Null hypothesis |
+| **Synergy** | **[CALC]** | — | **[CLASS]** |
+| **Fold change** | **[CALC]** | — | vs. prediction |
+
+**Population dynamics:**
+[INSERT FIGURE: Time series trajectories for all four conditions]
+
+**Interpretation - [TO BE WRITTEN BASED ON C258 RESULTS]:**
+- **Hypothesis:** H2 sustains (sources), H4 restricts (throttling) → Expected ANTAGONISTIC or ADDITIVE
+- **Actual result:** [PENDING C258]
+- **Mechanistic explanation:** [PENDING]
+
+**Significance:** [PENDING]
+
+---
+
+#### 3.2.5 H2×H5: Reality Sources × Multiple Energy Sources (C259 - PENDING)
+
+[INSERT FIGURE: Factorial bar chart + synergy decomposition]
+
+| Condition | Mean Population | SD | Classification |
+|-----------|----------------|-----|----------------|
+| OFF-OFF (baseline) | **[C259]** | 0.0 | Collapse |
+| ON-OFF (H2 only) | **[C259]** | 0.0 | H2 effect = **[CALC]** |
+| OFF-ON (H5 only) | **[C259]** | 0.0 | H5 effect = **[CALC]** |
+| ON-ON (both) | **[C259]** | 0.0 | Observed |
+| Additive prediction | **[CALC]** | — | Null hypothesis |
+| **Synergy** | **[CALC]** | — | **[CLASS]** |
+| **Fold change** | **[CALC]** | — | vs. prediction |
+
+**Population dynamics:**
+[INSERT FIGURE: Time series trajectories for all four conditions]
+
+**Interpretation - [TO BE WRITTEN BASED ON C259 RESULTS]:**
+- **Hypothesis:** H2 and H5 both enhance sustainability → Expected SYNERGISTIC
+- **Actual result:** [PENDING C259]
+- **Mechanistic explanation:** [PENDING]
+
+**Significance:** [PENDING]
+
+---
+
+#### 3.2.6 H4×H5: Spawn Throttling × Multiple Energy Sources (C260 - PENDING)
+
+[INSERT FIGURE: Factorial bar chart + synergy decomposition]
+
+| Condition | Mean Population | SD | Classification |
+|-----------|----------------|-----|----------------|
+| OFF-OFF (baseline) | **[C260]** | 0.0 | Collapse |
+| ON-OFF (H4 only) | **[C260]** | 0.0 | H4 effect = **[CALC]** |
+| OFF-ON (H5 only) | **[C260]** | 0.0 | H5 effect = **[CALC]** |
+| ON-ON (both) | **[C260]** | 0.0 | Observed |
+| Additive prediction | **[CALC]** | — | Null hypothesis |
+| **Synergy** | **[CALC]** | — | **[CLASS]** |
+| **Fold change** | **[CALC]** | — | vs. prediction |
+
+**Population dynamics:**
+[INSERT FIGURE: Time series trajectories for all four conditions]
+
+**Interpretation - [TO BE WRITTEN BASED ON C260 RESULTS]:**
+- **Hypothesis:** H4 restricts births, H5 enhances energy → Expected ANTAGONISTIC
+- **Actual result:** [PENDING C260]
+- **Mechanistic explanation:** [PENDING]
+
+**Significance:** [PENDING]
+
+---
 
 ### 3.3 Cross-Pair Comparison
 
