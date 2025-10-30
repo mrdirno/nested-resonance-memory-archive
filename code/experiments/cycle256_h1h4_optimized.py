@@ -185,10 +185,10 @@ def run_condition(condition: MechanismCondition) -> Dict:
         # H4: Spawn throttling enforced in spawn section below
         # (No per-cycle logic needed; throttling checked during spawn attempts)
 
-        # ===== OPTIMIZATION: PASS CACHED METRICS TO EVOLVE =====
-        # Evolve all agents with shared metrics (avoids per-agent psutil calls)
+        # ===== OPTIMIZATION: BATCH PSUTIL SAMPLING =====
+        # Evolve all agents (psutil sampled once per batch, not per-agent)
         for agent in agents:
-            agent.evolve(delta_time=1.0, cached_metrics=shared_metrics)
+            agent.evolve(delta_time=1.0)
         # ========================================================
 
         # Spawn new agents if energy threshold met

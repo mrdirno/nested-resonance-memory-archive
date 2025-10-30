@@ -10,7 +10,7 @@ Optimization: Sample reality metrics ONCE per cycle at orchestrator level,
 share among all agents. Reduces psutil calls from ~100/cycle to 1/cycle
 (90× reduction) while maintaining reality grounding and temporal resolution.
 
-Purpose: Test whether Spawn Throttling (H4) and Energy Recovery (H5) exhibit
+Purpose: Test whether Energy Pooling (H1) and Spawn Throttling (H4) exhibit
          synergistic, antagonistic, or additive effects when combined.
 
 Background:
@@ -19,18 +19,18 @@ Background:
   - Mechanism validation paradigm adopted: Single runs, directional predictions
   - C255 revealed extreme psutil overhead (1.08M calls → 20+ hour runtime)
 
+H1 - Energy Pooling:
+  Agents share energy within resonance clusters, distributing reproductive
+  capacity across cluster members instead of single-parent bottleneck.
+
 H4 - Spawn Throttling:
   Limits agent spawn frequency by enforcing cooldown period between spawns,
   preventing explosive population growth and resource exhaustion.
 
-H5 - Energy Recovery:
-  Boosts energy recovery rate through enhanced reality coupling, stabilizing
-  populations by accelerating energy regeneration during low-energy states.
-
 Hypothesis:
-  Throttling + Recovery = ANTAGONISTIC or ADDITIVE
-  Reasoning: Throttling limits creation, recovery helps survival.
-  Expected synergy < 0 (recovery helps survive throttling constraint) or ≈ 0 (independent)
+  Pooling + Throttling = ANTAGONISTIC or ADDITIVE
+  Reasoning: Pooling creates agents, throttling limits creation rate.
+  Expected synergy < 0 (throttling reduces pooling benefits) or ≈ 0 (independent)
 
 Mechanism Validation Method:
   - Single deterministic run per condition (n=1, reproducible)
@@ -40,11 +40,11 @@ Mechanism Validation Method:
 
 Expected Outcomes:
   - OFF-OFF (neither): mean ≈ 0.07 (baseline collapse)
-  - ON-OFF (throttling only): mean ≈ 0.05 (limited spawning)
-  - OFF-ON (recovery only): mean ≈ 0.15 (modest survival boost)
-  - ON-ON (both): mean ≈ 0.18 (recovery helps survive throttling, mild antagonistic)
+  - ON-OFF (pooling only): mean ≈ 0.95 (C177 H1 result)
+  - OFF-ON (throttling only): mean ≈ 0.05 (limited spawning, slower growth)
+  - ON-ON (both): mean ≈ 0.45 (throttling constrains pooling, antagonistic)
 
-  Synergy = 0.18 - (0.07 + (-0.02) + 0.08) = 0.05 (ADDITIVE/WEAKLY ANTAGONISTIC)
+  Synergy = 0.45 - (0.07 + 0.88 + (-0.02)) = -0.48 (ANTAGONISTIC)
 
 Optimization Details:
   - Batched sampling: Sample once/cycle, share among agents
@@ -54,7 +54,7 @@ Optimization Details:
 
 Date: 2025-10-27 (optimized), 2025-10-26 (original)
 Researcher: Claude (DUALITY-ZERO-V2)
-Cycle: 260 (Phase 2: Paper 3 mechanism validation, post-determinism discovery)
+Cycle: 256 (Phase 2: Paper 3 mechanism validation, post-determinism discovery)
 Principal Investigator: Aldrin Payopay (aldrin.gdf@gmail.com)
 
 Author: Aldrin Payopay <aldrin.gdf@gmail.com>
@@ -83,30 +83,29 @@ from fractal.fractal_swarm import CompositionEngine, FractalSwarm
 # Experimental parameters
 CYCLES = 3000
 MAX_AGENTS = 100
-THROTTLE_COOLDOWN = 100  # H4 parameter: Minimum cycles between spawns
-RECOVERY_MULTIPLIER = 2.0  # H5 parameter: 2× energy recovery rate
-RESULTS_FILE = Path(__file__).parent / "results" / "cycle260_h4h5_optimized_results.json"
+THROTTLE_COOLDOWN = 100  # Minimum cycles between spawns (H4 parameter)
+RESULTS_FILE = Path(__file__).parent / "results" / "cycle260_h1h4_optimized_results.json"
 
 
 class MechanismCondition:
     """Wrapper for factorial mechanism conditions."""
 
-    def __init__(self, h4_enabled: bool, h5_enabled: bool):
+    def __init__(self, h1_enabled: bool, h4_enabled: bool):
         """
         Initialize factorial condition.
 
         Args:
+            h1_enabled: Energy pooling mechanism active
             h4_enabled: Spawn throttling mechanism active
-            h5_enabled: Energy recovery mechanism active
         """
+        self.h1_pooling = h1_enabled
         self.h4_throttling = h4_enabled
-        self.h5_recovery = h5_enabled
-        self.name = f"{'ON' if h4_enabled else 'OFF'}-{'ON' if h5_enabled else 'OFF'}"
+        self.name = f"{'ON' if h1_enabled else 'OFF'}-{'ON' if h4_enabled else 'OFF'}"
 
     def __str__(self):
+        h1 = "H1:ON" if self.h1_pooling else "H1:OFF"
         h4 = "H4:ON" if self.h4_throttling else "H4:OFF"
-        h5 = "H5:ON" if self.h5_recovery else "H5:OFF"
-        return f"{self.name} ({h4}, {h5})"
+        return f"{self.name} ({h1}, {h4})"
 
 
 def run_condition(condition: MechanismCondition) -> Dict:
@@ -117,7 +116,7 @@ def run_condition(condition: MechanismCondition) -> Dict:
     shares metrics among all agents via cached_metrics parameter.
 
     Args:
-        condition: Mechanism condition (H4, H5 settings)
+        condition: Mechanism condition (H1, H4 settings)
 
     Returns:
         Dictionary with population metrics
@@ -162,22 +161,35 @@ def run_condition(condition: MechanismCondition) -> Dict:
         psutil_call_count += 1
         # ===============================================
 
-        # ===== OPTIMIZATION: PASS CACHED METRICS TO EVOLVE =====
-        # Evolve all agents with shared metrics (avoids per-agent psutil calls)
-        for agent in agents:
-            agent.evolve(delta_time=1.0, cached_metrics=shared_metrics)
-        # ========================================================
+        # H1: Energy pooling (if enabled)
+        if condition.h1_pooling:
+            # Detect resonance clusters
+            cluster_events = composition_engine.detect_clusters(agents)
 
-        # H5: Energy recovery (if enabled)
-        if condition.h5_recovery:
-            # Boost energy recovery for all agents (2× multiplier)
-            for agent in agents:
-                # Use shared_metrics for recovery calculation (optimization)
-                available_capacity = (100 - shared_metrics['cpu_percent']) + \
-                                   (100 - shared_metrics['memory_percent'])
-                # Recovery bonus: 1% of available capacity × 2× multiplier
-                recovery_boost = 0.01 * available_capacity * RECOVERY_MULTIPLIER
-                agent.energy = min(agent.energy + recovery_boost, 200.0)
+            # Share energy within each cluster
+            for cluster_id, member_ids in composition_engine.clusters.items():
+                if len(member_ids) < 2:
+                    continue
+
+                cluster_agents = [a for a in agents if a.agent_id in member_ids]
+
+                # Pool 10% of total cluster energy
+                total_energy = sum(a.energy for a in cluster_agents)
+                shared_energy = total_energy * 0.10
+                per_agent_share = shared_energy / len(cluster_agents)
+
+                # Distribute equally to all cluster members
+                for agent in cluster_agents:
+                    agent.energy = min(agent.energy + per_agent_share, 200.0)
+
+        # H4: Spawn throttling enforced in spawn section below
+        # (No per-cycle logic needed; throttling checked during spawn attempts)
+
+        # ===== OPTIMIZATION: BATCH PSUTIL SAMPLING =====
+        # Evolve all agents (psutil sampled once per batch, not per-agent)
+        for agent in agents:
+            agent.evolve(delta_time=1.0)
+        # ========================================================
 
         # Spawn new agents if energy threshold met
         for agent in list(agents):  # Copy list to avoid modification during iteration
@@ -227,8 +239,8 @@ def run_condition(condition: MechanismCondition) -> Dict:
 
     return {
         'condition': str(condition),
+        'h1_pooling': condition.h1_pooling,
         'h4_throttling': condition.h4_throttling,
-        'h5_recovery': condition.h5_recovery,
         'mean_population': float(mean_population),
         'final_population': int(final_population),
         'max_population': int(max_population),
@@ -256,11 +268,11 @@ def analyze_synergy(results: Dict[str, Dict]) -> Dict:
     on_on = results['ON-ON']['mean_population']
 
     # Compute individual mechanism effects
-    h4_effect = on_off - off_off  # Effect of throttling alone
-    h5_effect = off_on - off_off  # Effect of recovery alone
+    h1_effect = on_off - off_off  # Effect of pooling alone
+    h4_effect = off_on - off_off  # Effect of throttling alone
 
     # Additive prediction (null hypothesis: no interaction)
-    additive_prediction = off_off + h4_effect + h5_effect
+    additive_prediction = off_off + h1_effect + h4_effect
 
     # Synergy (interaction effect)
     synergy = on_on - additive_prediction
@@ -273,21 +285,21 @@ def analyze_synergy(results: Dict[str, Dict]) -> Dict:
 
     if synergy > synergy_threshold:
         classification = "SYNERGISTIC"
-        interpretation = "Spawn throttling and energy recovery amplify each other"
+        interpretation = "Energy pooling and spawn throttling amplify each other"
     elif synergy < -synergy_threshold:
         classification = "ANTAGONISTIC"
-        interpretation = "Spawn throttling and energy recovery interfere with each other"
+        interpretation = "Energy pooling and spawn throttling interfere with each other"
     else:
         classification = "ADDITIVE"
-        interpretation = "Spawn throttling and energy recovery combine independently"
+        interpretation = "Energy pooling and spawn throttling combine independently"
 
     return {
         'off_off': float(off_off),
         'on_off': float(on_off),
         'off_on': float(off_on),
         'on_on': float(on_on),
+        'h1_effect': float(h1_effect),
         'h4_effect': float(h4_effect),
-        'h5_effect': float(h5_effect),
         'additive_prediction': float(additive_prediction),
         'synergy': float(synergy),
         'fold_change': float(fold_change),
@@ -298,7 +310,7 @@ def analyze_synergy(results: Dict[str, Dict]) -> Dict:
 
 
 def main():
-    """Execute C260 H4×H5 factorial mechanism validation (OPTIMIZED)."""
+    """Execute C256 H1×H4 factorial mechanism validation (OPTIMIZED)."""
     print("=" * 70)
     print("CYCLE 260: MECHANISM VALIDATION - H4 × H5 (OPTIMIZED)")
     print("=" * 70)
@@ -333,12 +345,12 @@ def main():
     synergy_analysis = analyze_synergy(results)
 
     print(f"OFF-OFF (baseline):          {synergy_analysis['off_off']:.4f}")
-    print(f"ON-OFF (H4 only):            {synergy_analysis['on_off']:.4f}")
-    print(f"OFF-ON (H5 only):            {synergy_analysis['off_on']:.4f}")
+    print(f"ON-OFF (H1 only):            {synergy_analysis['on_off']:.4f}")
+    print(f"OFF-ON (H4 only):            {synergy_analysis['off_on']:.4f}")
     print(f"ON-ON (both):                {synergy_analysis['on_on']:.4f}")
     print()
+    print(f"H1 effect:                   {synergy_analysis['h1_effect']:+.4f}")
     print(f"H4 effect:                   {synergy_analysis['h4_effect']:+.4f}")
-    print(f"H5 effect:                   {synergy_analysis['h5_effect']:+.4f}")
     print(f"Additive prediction:         {synergy_analysis['additive_prediction']:.4f}")
     print(f"Observed interaction:        {synergy_analysis['on_on']:.4f}")
     print(f"Synergy:                     {synergy_analysis['synergy']:+.4f}")
@@ -350,7 +362,7 @@ def main():
 
     # Save results
     output = {
-        'experiment': 'cycle260_h4h5_mechanism_validation_optimized',
+        'experiment': 'cycle260_h1h4_mechanism_validation_optimized',
         'date': datetime.now().isoformat(),
         'cycles': CYCLES,
         'conditions': results,
