@@ -45,8 +45,8 @@ EXPERIMENTS = {
     },
     'cycle257': {
         'pair': 'H1×H5',
-        'mechanisms': ('H1_pooling', 'H5_pruning'),
-        'names': ('Energy Pooling', 'Burst Pruning'),
+        'mechanisms': ('H1_pooling', 'H5_recovery'),
+        'names': ('Energy Pooling', 'Energy Recovery'),
         'file': 'cycle257_h1h5_mechanism_validation_results.json'
     },
     'cycle258': {
@@ -57,14 +57,14 @@ EXPERIMENTS = {
     },
     'cycle259': {
         'pair': 'H2×H5',
-        'mechanisms': ('H2_sources', 'H5_pruning'),
-        'names': ('Reality Sources', 'Burst Pruning'),
+        'mechanisms': ('H2_sources', 'H5_recovery'),
+        'names': ('Reality Sources', 'Energy Recovery'),
         'file': 'cycle259_h2h5_mechanism_validation_results.json'
     },
     'cycle260': {
         'pair': 'H4×H5',
-        'mechanisms': ('H4_throttling', 'H5_pruning'),
-        'names': ('Spawn Throttling', 'Burst Pruning'),
+        'mechanisms': ('H4_throttling', 'H5_recovery'),
+        'names': ('Spawn Throttling', 'Energy Recovery'),
         'file': 'cycle260_h4h5_mechanism_validation_results.json'
     }
 }
