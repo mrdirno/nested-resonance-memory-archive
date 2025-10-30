@@ -16,11 +16,16 @@ import ast
 import sqlite3
 import time
 import re
+import sys
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Set, Tuple, Generator
 from contextlib import contextmanager
 from datetime import datetime
 from dataclasses import dataclass
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from core import constants
 
 
 @dataclass
@@ -483,10 +488,10 @@ if __name__ == "__main__":
     score = validator.calculate_reality_score(v2_root)
     print(f"   Overall Reality Score: {score:.2%}")
 
-    if score >= 0.85:
-        print("   ✅ Meets constitution target (85%)")
+    if score >= constants.REALITY_SCORE_TARGET:
+        print(f"   ✅ Meets constitution target ({constants.REALITY_SCORE_TARGET:.0%})")
     else:
-        needed = 0.85 - score
+        needed = constants.REALITY_SCORE_TARGET - score
         print(f"   ⚠️  Below target - need {needed:.2%} improvement")
 
     print("\n3. Testing Constraint Validation")
