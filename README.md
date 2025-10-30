@@ -473,7 +473,7 @@ python papers/minimal_package_with_experiments/experiments/replicate_patterns.py
 ## 🗂️ Repository Structure
 
 ```
-├── docs/v6/                          # Publication pipeline documentation (V6.13)
+├── docs/v6/                          # Publication pipeline documentation (V6.17)
 ├── code/
 │   ├── core/                         # Reality interface (psutil)
 │   ├── reality/                      # System monitoring
