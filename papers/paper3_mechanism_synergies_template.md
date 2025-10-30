@@ -272,21 +272,21 @@ where:
 ### 3.1 Experiment 1: H1×H2 (Energy Pooling × Reality Sources)
 
 **Condition Results:**
-- OFF-OFF: [TO BE FILLED] mean population
-- H1-only: [TO BE FILLED] mean population
-- H2-only: [TO BE FILLED] mean population
-- H1×H2: [TO BE FILLED] mean population
+- OFF-OFF: 13.97 mean population (n=1, deterministic)
+- H1-only: 991.80 mean population (+977.83 vs baseline)
+- H2-only: 992.29 mean population (+978.32 vs baseline)
+- H1×H2: 994.54 mean population (+980.57 vs baseline)
 
 **Effect Sizes:**
-- H1 effect: [TO BE FILLED]
-- H2 effect: [TO BE FILLED]
-- Predicted combined: [TO BE FILLED]
-- Observed combined: [TO BE FILLED]
-- **Synergy: [TO BE FILLED]**
+- H1 effect: +977.83 (70× population increase)
+- H2 effect: +978.32 (70× population increase)
+- Predicted combined: 1,970.12 (additive prediction)
+- Observed combined: 994.54 (actual measurement)
+- **Synergy: -975.58 (antagonistic interaction)**
 
-**Classification:** [TO BE FILLED - SYNERGISTIC / ANTAGONISTIC / ADDITIVE]
+**Classification:** ANTAGONISTIC (synergy << -0.1, fold-change 0.50×)
 
-**Interpretation:** [TO BE FILLED]
+**Interpretation:** Energy Pooling (H1) and Reality Sources (H2) strongly interfere with each other rather than cooperating. Each mechanism alone supports ~71× population increase vs baseline, but when combined they achieve only ~71× (not ~141× as additive model predicts). This suggests resource competition: both mechanisms provide energy, but agents cannot efficiently utilize both sources simultaneously. The negative synergy (-975.58) is nearly equal in magnitude to each individual effect (+978), indicating complete interference rather than partial antagonism.
 
 ---
 
