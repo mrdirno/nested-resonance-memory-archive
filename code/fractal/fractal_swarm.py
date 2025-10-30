@@ -29,9 +29,11 @@ from dataclasses import asdict
 # Add modules to path
 sys.path.insert(0, str(Path(__file__).parent))
 sys.path.insert(0, str(Path(__file__).parent.parent / "bridge"))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fractal_agent import FractalAgent, AgentState, ClusterEvent, BurstEvent
 from transcendental_bridge import TranscendentalBridge, TranscendentalState
+from core import constants
 
 
 class CompositionEngine:
@@ -44,13 +46,17 @@ class CompositionEngine:
     - Tracks cluster energy and coherence
     """
 
-    def __init__(self, resonance_threshold: float = 0.85):
+    def __init__(self, resonance_threshold: float = None):
         """
         Initialize composition engine.
 
         Args:
             resonance_threshold: Minimum similarity for clustering
         """
+        # Use constant if not specified
+        if resonance_threshold is None:
+            resonance_threshold = constants.RESONANCE_SIMILARITY_THRESHOLD
+
         self.resonance_threshold = resonance_threshold
         self.clusters: Dict[str, Set[str]] = {}  # cluster_id -> agent_ids
 
@@ -506,7 +512,7 @@ class FractalSwarm:
         self,
         agents: List[FractalAgent],
         sharing_fraction: float = 0.10,
-        spawn_threshold: float = 10.0
+        spawn_threshold: float = None
     ) -> Dict[str, any]:
         """
         Execute energy pooling within resonance clusters.
@@ -529,6 +535,10 @@ class FractalSwarm:
         Returns:
             Dictionary with pooling statistics
         """
+        # Use constant if not specified
+        if spawn_threshold is None:
+            spawn_threshold = constants.AGENT_ENERGY_MINIMUM
+
         # Set cluster_id on agents based on current clusters
         for agent in agents:
             agent.cluster_id = None  # Reset before detecting
