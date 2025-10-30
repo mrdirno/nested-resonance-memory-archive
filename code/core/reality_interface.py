@@ -16,7 +16,7 @@ import sqlite3
 import os
 import time
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Generator
 from datetime import datetime
 from contextlib import contextmanager
 
@@ -40,15 +40,13 @@ class RealityInterface:
     - All operations measured and validated
     """
 
-    def __init__(self, workspace_path: Optional[Path] = None):
+    def __init__(self, workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2"):
         """
         Initialize reality interface.
 
         Args:
-            workspace_path: Root path for V2 workspace (defaults to current directory)
+            workspace_path: Root path for V2 workspace
         """
-        if workspace_path is None:
-            workspace_path = Path.cwd()
         self.workspace_path = Path(workspace_path)
         self.db_path = self.workspace_path / "workspace" / "duality_v2.db"
         self._initialize_workspace()
@@ -120,7 +118,7 @@ class RealityInterface:
             raise DatabaseError(f"Failed to initialize database: {e}")
 
     @contextmanager
-    def db_connection(self):
+    def db_connection(self) -> Generator[sqlite3.Connection, None, None]:
         """
         Context manager for database connections.
         Ensures proper connection handling and cleanup.

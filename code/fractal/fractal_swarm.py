@@ -22,7 +22,7 @@ from pathlib import Path
 import time
 import sqlite3
 import uuid
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple, Generator
 from contextlib import contextmanager
 from dataclasses import asdict
 
@@ -235,7 +235,7 @@ class FractalSwarm:
 
     def __init__(
         self,
-        workspace_path: Optional[Path] = None,
+        workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace",
         max_agents: int = 100,
         max_depth: int = 7,
         clear_on_init: bool = False
@@ -249,8 +249,6 @@ class FractalSwarm:
             max_depth: Maximum recursion depth (constitution: 7)
             clear_on_init: If True, clear database tables on init (for experiments)
         """
-        if workspace_path is None:
-            workspace_path = Path.cwd()
         self.workspace_path = Path(workspace_path)
         self.workspace_path.mkdir(exist_ok=True)
 
@@ -272,7 +270,7 @@ class FractalSwarm:
         self.cycle_count = 0
         self.global_memory: List[TranscendentalState] = []
 
-    def _init_database(self, clear_tables: bool = False):
+    def _init_database(self, clear_tables: bool = False) -> None:
         """
         Initialize SQLite database for swarm operations.
 
@@ -343,7 +341,7 @@ class FractalSwarm:
             conn.commit()
 
     @contextmanager
-    def _get_connection(self):
+    def _get_connection(self) -> Generator[sqlite3.Connection, None, None]:
         """Get database connection with proper cleanup."""
         conn = sqlite3.connect(str(self.db_path))
         try:
