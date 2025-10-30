@@ -35,10 +35,10 @@
   - Ceiling effect detected: mechanisms interfere rather than cooperate
 
 - Energy Pooling (H1) × Spawn Throttling (H4): **[PENDING C256]**
-- Energy Pooling (H1) × Multiple Energy Sources (H5): **[PENDING C257]**
+- Energy Pooling (H1) × Energy Recovery (H5): **[PENDING C257]**
 - Reality Sources (H2) × Spawn Throttling (H4): **[PENDING C258]**
-- Reality Sources (H2) × Multiple Energy Sources (H5): **[PENDING C259]**
-- Spawn Throttling (H4) × Multiple Energy Sources (H5): **[PENDING C260]**
+- Reality Sources (H2) × Energy Recovery (H5): **[PENDING C259]**
+- Spawn Throttling (H4) × Energy Recovery (H5): **[PENDING C260]**
 
 **Conclusions:** Factorial designs enable mechanistic validation in deterministic systems by detecting interaction effects beyond additive predictions. Computational expense serves as validation metric for reality grounding claims, with 40× overhead providing evidence of genuine measurement rather than simulation. This framework enables principled hypothesis testing for emergence research.
 
