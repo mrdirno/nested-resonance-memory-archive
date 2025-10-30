@@ -25,10 +25,15 @@ Reality Imperative Compliance:
 import math
 import sqlite3
 import time
+import sys
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Any, Generator
 from dataclasses import dataclass
 from contextlib import contextmanager
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from core import constants
 
 
 # Transcendental Constants (high precision)
@@ -82,7 +87,7 @@ class TranscendentalBridge:
         self.phi_offset = 0.0
 
         # Resonance threshold (cosine similarity)
-        self.resonance_threshold = 0.85
+        self.resonance_threshold = constants.RESONANCE_SIMILARITY_THRESHOLD
 
     def _init_database(self) -> None:
         """Initialize SQLite database for bridge operations."""
