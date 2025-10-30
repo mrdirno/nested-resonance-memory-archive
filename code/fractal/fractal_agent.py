@@ -26,9 +26,11 @@ from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from contextlib import contextmanager
 
-# Add bridge module to path
+# Add parent modules to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "bridge"))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 from transcendental_bridge import TranscendentalBridge, TranscendentalState, ResonanceMatch
+from core import constants
 
 
 @dataclass
@@ -131,6 +133,7 @@ class FractalAgent:
             # Default: Reality-grounded energy calculation
             cpu = initial_reality.get('cpu_percent', 0.0)
             memory = initial_reality.get('memory_percent', 0.0)
+            # Calculate energy from available resources (use 100.0 as max percentage)
             self.energy = (100.0 - cpu) + (100.0 - memory)  # More available = more energy
 
         # Internal state
@@ -361,7 +364,7 @@ class FractalAgent:
             return None
 
         # Check energy availability
-        if self.energy < 10.0:
+        if self.energy < constants.AGENT_ENERGY_MINIMUM:
             return None
 
         # Transfer energy to child
@@ -419,7 +422,7 @@ class FractalAgent:
 
         return contribution
 
-    def receive_from_pool(self, pool_energy: float, spawn_threshold: float = 10.0) -> float:
+    def receive_from_pool(self, pool_energy: float, spawn_threshold: float = None) -> float:
         """
         Receive energy from cluster pool if below spawn threshold.
 
@@ -434,6 +437,10 @@ class FractalAgent:
         Returns:
             Amount received (added to agent energy)
         """
+        # Use constant if not specified
+        if spawn_threshold is None:
+            spawn_threshold = constants.AGENT_ENERGY_MINIMUM
+
         if self.cluster_id is None:
             return 0.0  # Not in cluster, no pooling
 
