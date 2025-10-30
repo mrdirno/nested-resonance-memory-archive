@@ -25,7 +25,12 @@
       1024
     ],
     "total_experiments": 15,
-    "total_cycles": 45000
+    "total_cycles": 45000,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.705225",
+    "script": "cycle136_reproducibility_test.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "results": [
     {

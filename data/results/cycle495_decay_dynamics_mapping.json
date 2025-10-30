@@ -22,7 +22,12 @@
           "f_ratio": 0.12
         }
       }
-    }
+    },
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-29T03:23:38.278887",
+    "script": "cycle495_decay_dynamics_mapping.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "timescales": [
     {

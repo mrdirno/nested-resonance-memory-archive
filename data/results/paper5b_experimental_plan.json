@@ -4,7 +4,12 @@
     "date_created": "2025-10-27T08:07:06.640891",
     "confidence": "\u2b50\u2b50\u2b50\u2b50\u2606",
     "timeline": "3-4 weeks",
-    "publication_target": "Journal of Computational Science"
+    "publication_target": "Journal of Computational Science",
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T08:07:16.625201",
+    "script": "paper5b_experimental_plan.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "conditions": [
     {

@@ -11,7 +11,12 @@
     "hypothesis": "synergy_emerges_without_ceiling",
     "baseline_max_agents": 100,
     "capacity_multiplier": 10,
-    "reality_grounding": "maintained (psutil direct, no DB)"
+    "reality_grounding": "maintained (psutil direct, no DB)",
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-29T18:48:40.893699",
+    "script": "cycle255_h1h2_high_capacity_results.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "conditions": {
     "OFF-OFF": {

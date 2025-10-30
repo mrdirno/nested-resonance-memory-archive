@@ -25,7 +25,12 @@
     "total_experiments": 40,
     "duration_minutes": 154.02856125000002,
     "implementation": "Full FractalSwarm (NRM framework)",
-    "comparison_baseline": "C169 simplified experiments"
+    "comparison_baseline": "C169 simplified experiments",
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.721673",
+    "script": "cycle171_fractal_swarm_bistability.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "experiments": [
     {

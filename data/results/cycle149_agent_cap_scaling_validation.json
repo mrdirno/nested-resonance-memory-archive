@@ -18,7 +18,12 @@
       123,
       456
     ],
-    "total_experiments": 12
+    "total_experiments": 12,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.711338",
+    "script": "cycle149_agent_cap_scaling_validation.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "results": [
     {

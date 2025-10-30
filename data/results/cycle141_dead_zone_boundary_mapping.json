@@ -20,7 +20,12 @@
       789,
       1024
     ],
-    "total_experiments": 30
+    "total_experiments": 30,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.707767",
+    "script": "cycle141_dead_zone_boundary_mapping.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "results": [
     {

@@ -25,7 +25,12 @@
     "cycles_per_experiment": 3000,
     "total_experiments": 50,
     "basin_threshold": 2.5,
-    "duration_minutes": 1.9
+    "duration_minutes": 1.9,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.718781",
+    "script": "cycle165_upper_frequency_boundary.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "experiments": [
     {

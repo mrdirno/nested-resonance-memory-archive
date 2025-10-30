@@ -17,7 +17,12 @@
       "rho_threshold": 5.0,
       "r_transfer": 0.1
     },
-    "r_transfer": 0.1
+    "r_transfer": 0.1,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T14:57:10.415663",
+    "script": "paper7_v5b_energy_reservoir_20251027_145710.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "v5b_final_state": {
     "E_reservoir": 15.2129868451183,

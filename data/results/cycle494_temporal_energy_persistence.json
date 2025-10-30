@@ -9,7 +9,12 @@
       "sample_interval": 100,
       "num_agents_per_condition": 5,
       "comparison_to_cycle_493": "5\u00d7 longer duration, 2.5\u00d7 more agents"
-    }
+    },
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-29T05:05:21.488111",
+    "script": "cycle494_temporal_energy_persistence.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "conditions": [
     {

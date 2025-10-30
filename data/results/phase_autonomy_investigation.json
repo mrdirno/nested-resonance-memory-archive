@@ -4,7 +4,12 @@
     "temporal_span_days": 7.29,
     "n_epochs": 5,
     "sample_fraction": 0.05,
-    "analysis_timestamp": 1761729168.878755
+    "analysis_timestamp": 1761729168.878755,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-29T02:13:08.213422",
+    "script": "analysis_script.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "summary": {
     "mean_combined_correlation": 0.12918425529369498,

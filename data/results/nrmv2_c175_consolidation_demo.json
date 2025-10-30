@@ -5,7 +5,11 @@
     "nrm_version": "V2",
     "patterns_count": 5,
     "embeddings_dim": 8,
-    "graph_edges": 10
+    "graph_edges": 10,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-29T01:34:33.004358",
+    "script": "analysis_script.py",
+    "metadata_added_retrospectively": true
   },
   "patterns": [
     {

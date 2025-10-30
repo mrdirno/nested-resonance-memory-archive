@@ -8,7 +8,12 @@
       "cycle140",
       "cycle141",
       "cycle142"
-    ]
+    ],
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.708649",
+    "script": "cycle143_theoretical_harmonic_model.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "experimental_map": {
     "0": 0.0,
