@@ -493,14 +493,9 @@ class FractalAgent:
                 f"memory={len(self.memory)})")
 
 
-# NOTE: Originally planned components (FractalSwarm, CompositionEngine, DecompositionEngine)
-# have been implemented differently than initially envisioned:
-#   - CompositionEngine → Implemented as Kuramoto coupling in consolidation_engine.py
-#   - DecompositionEngine → Implemented as phase perturbations in REM exploration
-#   - Database persistence → Already implemented via SQLite in pattern_memory.py
-#   - Reality validation → Integrated into consolidation_engine (psutil tracking)
-# The system evolved based on empirical research needs rather than original design.
-# See: consolidation_engine.py (NRM V2 integration, Cycle 488)
+# NOTE: FractalSwarm, CompositionEngine, DecompositionEngine implemented in fractal_swarm.py
+# NOTE: Database persistence and reality validation implemented in fractal_swarm.py
+# This module provides the core FractalAgent class used by those higher-level components
 
 if __name__ == "__main__":
     print("=" * 60)
