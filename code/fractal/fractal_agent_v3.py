@@ -291,11 +291,9 @@ class FractalAgent:
                 f"memory={len(self.memory)})")
 
 
-# TODO: Implement FractalSwarm for managing multiple agents
-# TODO: Implement CompositionEngine for clustering agents
-# TODO: Implement DecompositionEngine for burst events
-# TODO: Add database persistence for agent evolution history
-# TODO: Add reality validation checks for fractal operations
+# NOTE: FractalSwarm, CompositionEngine, DecompositionEngine implemented in fractal_swarm.py
+# NOTE: Database persistence and reality validation implemented in fractal_swarm.py
+# This is a v3 experimental variant - production code in fractal_agent.py and fractal_swarm.py
 
 if __name__ == "__main__":
     print("=" * 60)
