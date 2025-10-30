@@ -23,6 +23,7 @@ from core.reality_interface import RealityInterface
 from core.exceptions import OrchestrationError, ValidationFailed, ResourceExceeded
 from reality.system_monitor import SystemMonitor
 from reality.metrics_analyzer import MetricsAnalyzer
+from experiments.workspace_utils import get_workspace_path, get_results_path
 
 
 class OperationMode(Enum):
@@ -316,7 +317,6 @@ class HybridOrchestrator:
             # Reality-grounded interval: perform actual metric measurements during wait
             # Instead of idle sleep, do real system monitoring work
             import psutil
-from workspace_utils import get_workspace_path, get_results_path
             samples_during_interval = max(1, int(interval))
             for _ in range(samples_during_interval):
                 # Each iteration performs real measurement work (not idle sleep)
