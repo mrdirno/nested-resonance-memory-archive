@@ -513,7 +513,7 @@ class FractalSwarm:
         agents: List[FractalAgent],
         sharing_fraction: float = 0.10,
         spawn_threshold: float = None
-    ) -> Dict[str, any]:
+    ) -> Dict[str, Any]:
         """
         Execute energy pooling within resonance clusters.
 

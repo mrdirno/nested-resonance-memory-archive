@@ -115,7 +115,7 @@ class ConsolidationEngine:
         self.start_cpu_time: float = 0.0
         self.start_memory: float = 0.0
 
-    def _init_database(self):
+    def _init_database(self) -> None:
         """Initialize consolidation database."""
         with self._get_connection() as conn:
             # Consolidation sessions
@@ -177,7 +177,7 @@ class ConsolidationEngine:
 
         return self.session_id
 
-    def end_session(self, metrics: ConsolidationMetrics):
+    def end_session(self, metrics: ConsolidationMetrics) -> None:
         """
         End consolidation session and store metrics.
 
