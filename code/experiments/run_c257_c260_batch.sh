@@ -39,12 +39,12 @@ TOTAL_EXPERIMENTS=4
 SUCCESSFUL=0
 FAILED=0
 
-# Experiment list
+# Experiment list (using optimized versions for 90× speedup)
 declare -a experiments=(
-    "cycle257_h1h5_mechanism_validation.py:H1×H5 (Energy Pooling × Energy Recovery):11"
-    "cycle258_h2h4_mechanism_validation.py:H2×H4 (Reality Sources × Spawn Throttling):12"
-    "cycle259_h2h5_mechanism_validation.py:H2×H5 (Reality Sources × Energy Recovery):13"
-    "cycle260_h4h5_mechanism_validation.py:H4×H5 (Spawn Throttling × Energy Recovery):11"
+    "cycle257_h1h5_optimized.py:H1×H5 (Energy Pooling × Energy Recovery):11"
+    "cycle258_h2h4_optimized.py:H2×H4 (Reality Sources × Spawn Throttling):12"
+    "cycle259_h2h5_optimized.py:H2×H5 (Reality Sources × Energy Recovery):13"
+    "cycle260_h4h5_optimized.py:H4×H5 (Spawn Throttling × Energy Recovery):11"
 )
 
 # Execute each experiment sequentially
