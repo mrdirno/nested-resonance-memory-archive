@@ -17,7 +17,7 @@ import json
 import time
 import hashlib
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional, Tuple, Generator
 from contextlib import contextmanager
 from datetime import datetime
 from dataclasses import dataclass, asdict
@@ -104,7 +104,7 @@ class PatternMemory:
         self.db_path = self.workspace_path / "memory.db"
         self._init_database()
 
-    def _init_database(self):
+    def _init_database(self) -> None:
         """Initialize memory database schema."""
         with self._db_connection() as conn:
             # Patterns table
@@ -229,7 +229,7 @@ class PatternMemory:
             conn.commit()
 
     @contextmanager
-    def _db_connection(self):
+    def _db_connection(self) -> Generator[sqlite3.Connection, None, None]:
         """Context manager for database connections."""
         conn = sqlite3.connect(self.db_path)
         try:
@@ -237,7 +237,7 @@ class PatternMemory:
         finally:
             conn.close()
 
-    def store_pattern(self, pattern: Pattern):
+    def store_pattern(self, pattern: Pattern) -> None:
         """
         Store or update a pattern in memory.
 
@@ -348,7 +348,7 @@ class PatternMemory:
         metrics: Optional[Dict[str, Any]] = None,
         parent_agent_id: Optional[str] = None,
         recursion_depth: int = 0
-    ):
+    ) -> None:
         """
         Save agent state snapshot.
 
@@ -415,7 +415,7 @@ class PatternMemory:
         metric_name: str,
         value: float,
         context: Optional[Dict[str, Any]] = None
-    ):
+    ) -> None:
         """
         Record a metric value.
 
@@ -472,7 +472,7 @@ class PatternMemory:
         outcome: Dict[str, Any],
         reward: float,
         patterns_discovered: Optional[List[str]] = None
-    ):
+    ) -> None:
         """
         Record a learning episode for future analysis.
 
@@ -569,7 +569,7 @@ class PatternMemory:
         embedding_vector: List[float],
         embedding_model: str = "local",
         embedding_dim: Optional[int] = None
-    ):
+    ) -> None:
         """
         Store embedding vector for a pattern.
 
@@ -627,7 +627,7 @@ class PatternMemory:
         pattern_id_j: str,
         weight: float,
         weight_type: str = 'composite'
-    ):
+    ) -> None:
         """
         Store or update edge in semantic graph (adjacency matrix W).
 

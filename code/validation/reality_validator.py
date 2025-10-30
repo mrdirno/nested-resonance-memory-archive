@@ -17,7 +17,7 @@ import sqlite3
 import time
 import re
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Set, Tuple
+from typing import Dict, Any, List, Optional, Set, Tuple, Generator
 from contextlib import contextmanager
 from datetime import datetime
 from dataclasses import dataclass
@@ -103,7 +103,7 @@ class RealityValidator:
         self.db_path = self.workspace_path / "validation.db"
         self._init_database()
 
-    def _init_database(self):
+    def _init_database(self) -> None:
         """Initialize validation database schema."""
         with self._db_connection() as conn:
             conn.execute("""
@@ -158,7 +158,7 @@ class RealityValidator:
             conn.commit()
 
     @contextmanager
-    def _db_connection(self):
+    def _db_connection(self) -> Generator[sqlite3.Connection, None, None]:
         """Context manager for database connections."""
         conn = sqlite3.connect(self.db_path)
         try:
@@ -227,7 +227,7 @@ class RealityValidator:
 
         return results
 
-    def _save_violations(self, violations: List[Violation]):
+    def _save_violations(self, violations: List[Violation]) -> None:
         """Save violations to database."""
         timestamp = time.time()
 
@@ -308,7 +308,7 @@ class RealityValidator:
 
     def _save_reality_score(self, score: float, total_files: int,
                            compliant_files: int, total_violations: int,
-                           critical_violations: int, warning_violations: int):
+                           critical_violations: int, warning_violations: int) -> None:
         """Save reality score to database."""
         with self._db_connection() as conn:
             conn.execute("""

@@ -26,7 +26,7 @@ import math
 import sqlite3
 import time
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Tuple, Optional, Any, Generator
 from dataclasses import dataclass
 from contextlib import contextmanager
 
@@ -70,10 +70,8 @@ class TranscendentalBridge:
     All operations maintain reality anchoring - no pure simulations.
     """
 
-    def __init__(self, workspace_path: Optional[Path] = None):
+    def __init__(self, workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace"):
         """Initialize transcendental bridge with database backing."""
-        if workspace_path is None:
-            workspace_path = Path.cwd()
         self.workspace_path = Path(workspace_path)
         self.db_path = self.workspace_path / "bridge.db"
         self._init_database()
@@ -86,7 +84,7 @@ class TranscendentalBridge:
         # Resonance threshold (cosine similarity)
         self.resonance_threshold = 0.85
 
-    def _init_database(self):
+    def _init_database(self) -> None:
         """Initialize SQLite database for bridge operations."""
         with self._get_connection() as conn:
             conn.execute("""
@@ -130,7 +128,7 @@ class TranscendentalBridge:
             conn.commit()
 
     @contextmanager
-    def _get_connection(self):
+    def _get_connection(self) -> Generator[sqlite3.Connection, None, None]:
         """Get database connection with proper cleanup."""
         # Use 30-second timeout to prevent "database is locked" errors
         # in long-running experiments with frequent writes
@@ -384,7 +382,7 @@ class TranscendentalBridge:
         )
 
     def _store_transformation(self, state: TranscendentalState,
-                            transformation_type: str):
+                            transformation_type: str) -> None:
         """Store phase transformation in database."""
         with self._get_connection() as conn:
             conn.execute("""
@@ -407,7 +405,7 @@ class TranscendentalBridge:
 
     def _store_resonance(self, state1: TranscendentalState,
                         state2: TranscendentalState,
-                        match: ResonanceMatch):
+                        match: ResonanceMatch) -> None:
         """Store resonance event in database."""
         # For now, use 0 as placeholder IDs (would need to track state IDs properly)
         with self._get_connection() as conn:
@@ -477,7 +475,7 @@ class TranscendentalBridge:
 
             return results
 
-    def reset_oscillators(self):
+    def reset_oscillators(self) -> None:
         """Reset oscillator offsets to zero."""
         self.pi_offset = 0.0
         self.e_offset = 0.0
