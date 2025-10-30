@@ -21,7 +21,6 @@ from datetime import datetime
 from contextlib import contextmanager
 
 from .exceptions import (
-from workspace_utils import get_workspace_path, get_results_path
     RealityViolation,
     ResourceExceeded,
     ValidationFailed,
@@ -41,13 +40,15 @@ class RealityInterface:
     - All operations measured and validated
     """
 
-    def __init__(self, workspace_path: Path = get_workspace_path()):
+    def __init__(self, workspace_path: Optional[Path] = None):
         """
         Initialize reality interface.
 
         Args:
-            workspace_path: Root path for V2 workspace
+            workspace_path: Root path for V2 workspace (defaults to current directory)
         """
+        if workspace_path is None:
+            workspace_path = Path.cwd()
         self.workspace_path = Path(workspace_path)
         self.db_path = self.workspace_path / "workspace" / "duality_v2.db"
         self._initialize_workspace()
