@@ -154,7 +154,70 @@ jobs:
         run: |
           test -f papers/compiled/paper1/Paper1_Computational_Expense_Validation_arXiv_Submission.pdf || exit 1
           test -f papers/compiled/paper5d/Paper5D_Pattern_Mining_Framework_arXiv_Submission.pdf || exit 1
-      
+
+      - name: Validate PDF file sizes (embedded figures check)
+        run: |
+          echo "Validating PDF file sizes to ensure figures are embedded..."
+
+          # Paper 1: Expected >= 1.5 MB (3 figures @ 300 DPI)
+          SIZE_PAPER1=$(stat -c%s papers/compiled/paper1/Paper1_Computational_Expense_Validation_arXiv_Submission.pdf 2>/dev/null || stat -f%z papers/compiled/paper1/Paper1_Computational_Expense_Validation_arXiv_Submission.pdf)
+          if [ "$SIZE_PAPER1" -lt 1500000 ]; then
+            echo "::warning::Paper 1 PDF size $SIZE_PAPER1 bytes < 1.5 MB - figures may not be embedded"
+          else
+            echo "✓ Paper 1 PDF: $(echo "scale=2; $SIZE_PAPER1/1048576" | bc) MB (figures likely embedded)"
+          fi
+
+          # Paper 5D: Expected >= 900 KB (7 figures @ 300 DPI)
+          SIZE_PAPER5D=$(stat -c%s papers/compiled/paper5d/Paper5D_Pattern_Mining_Framework_arXiv_Submission.pdf 2>/dev/null || stat -f%z papers/compiled/paper5d/Paper5D_Pattern_Mining_Framework_arXiv_Submission.pdf)
+          if [ "$SIZE_PAPER5D" -lt 900000 ]; then
+            echo "::warning::Paper 5D PDF size $SIZE_PAPER5D bytes < 900 KB - figures may not be embedded"
+          else
+            echo "✓ Paper 5D PDF: $(echo "scale=2; $SIZE_PAPER5D/1048576" | bc) MB (figures likely embedded)"
+          fi
+
+          # Paper 2: Expected >= 700 KB (4 figures @ 300 DPI) - known issue
+          if [ -f papers/compiled/paper2/Paper2_Three_Regimes_arXiv_Submission.pdf ]; then
+            SIZE_PAPER2=$(stat -c%s papers/compiled/paper2/Paper2_Three_Regimes_arXiv_Submission.pdf 2>/dev/null || stat -f%z papers/compiled/paper2/Paper2_Three_Regimes_arXiv_Submission.pdf)
+            if [ "$SIZE_PAPER2" -lt 700000 ]; then
+              echo "::warning::Paper 2 PDF size $SIZE_PAPER2 bytes < 700 KB - figures may not be embedded (known issue, see CYCLE605 audit)"
+            else
+              echo "✓ Paper 2 PDF: $(echo "scale=2; $SIZE_PAPER2/1048576" | bc) MB (figures likely embedded)"
+            fi
+          fi
+
+          # Paper 6: Expected >= 1.5 MB (4 figures @ 300 DPI)
+          if [ -f papers/compiled/paper6/Paper6_Scale_Dependent_Phase_Autonomy_arXiv_Submission.pdf ]; then
+            SIZE_PAPER6=$(stat -c%s papers/compiled/paper6/Paper6_Scale_Dependent_Phase_Autonomy_arXiv_Submission.pdf 2>/dev/null || stat -f%z papers/compiled/paper6/Paper6_Scale_Dependent_Phase_Autonomy_arXiv_Submission.pdf)
+            if [ "$SIZE_PAPER6" -lt 1500000 ]; then
+              echo "::warning::Paper 6 PDF size $SIZE_PAPER6 bytes < 1.5 MB - figures may not be embedded"
+            else
+              echo "✓ Paper 6 PDF: $(echo "scale=2; $SIZE_PAPER6/1048576" | bc) MB (figures likely embedded)"
+            fi
+          fi
+
+          # Paper 6B: Expected >= 900 KB (4 figures @ 300 DPI)
+          if [ -f papers/compiled/paper6b/Paper6B_Multi_Timescale_Phase_Autonomy_arXiv_Submission.pdf ]; then
+            SIZE_PAPER6B=$(stat -c%s papers/compiled/paper6b/Paper6B_Multi_Timescale_Phase_Autonomy_arXiv_Submission.pdf 2>/dev/null || stat -f%z papers/compiled/paper6b/Paper6B_Multi_Timescale_Phase_Autonomy_arXiv_Submission.pdf)
+            if [ "$SIZE_PAPER6B" -lt 900000 ]; then
+              echo "::warning::Paper 6B PDF size $SIZE_PAPER6B bytes < 900 KB - figures may not be embedded"
+            else
+              echo "✓ Paper 6B PDF: $(echo "scale=2; $SIZE_PAPER6B/1048576" | bc) MB (figures likely embedded)"
+            fi
+          fi
+
+          # Paper 7: Expected >= 2.0 MB (4 figures @ 300 DPI) - known issue
+          if [ -f papers/compiled/paper7/Paper7_Governing_Equations_arXiv_Submission.pdf ]; then
+            SIZE_PAPER7=$(stat -c%s papers/compiled/paper7/Paper7_Governing_Equations_arXiv_Submission.pdf 2>/dev/null || stat -f%z papers/compiled/paper7/Paper7_Governing_Equations_arXiv_Submission.pdf)
+            if [ "$SIZE_PAPER7" -lt 2000000 ]; then
+              echo "::warning::Paper 7 PDF size $SIZE_PAPER7 bytes < 2.0 MB - figures may not be embedded (known issue, see CYCLE605 audit)"
+            else
+              echo "✓ Paper 7 PDF: $(echo "scale=2; $SIZE_PAPER7/1048576" | bc) MB (figures likely embedded)"
+            fi
+          fi
+
+          echo "PDF file size validation complete"
+        continue-on-error: true
+
       - name: Verify minimal package structure
         run: |
           test -d papers/minimal_package_with_experiments || exit 1
