@@ -202,7 +202,7 @@ def test_fractal_recursion():
     print("TEST 5: Fractal Recursion - Nested Agents")
     print("="*60)
 
-    swarm = FractalSwarm()
+    swarm = FractalSwarm(clear_on_init=True)  # Clear DB to prevent UNIQUE constraint violations
     reality = get_reality_metrics()
 
     # Spawn root agent
