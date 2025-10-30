@@ -1,24 +1,26 @@
 # Makefile for Nested Resonance Memory Research
 #
 # Usage:
-#   make install    - Install dependencies
-#   make paper1     - Compile Paper 1 (Computational Expense)
-#   make paper2     - Compile Paper 2 (Three Dynamical Regimes)
-#   make paper5d    - Compile Paper 5D (Pattern Mining)
-#   make paper6     - Compile Paper 6 (Scale-Dependent Phase Autonomy)
-#   make paper6b    - Compile Paper 6B (Multi-Timescale Dynamics)
-#   make paper7     - Compile Paper 7 (Sleep-Inspired Consolidation)
-#   make paper3     - Run Paper 3 factorial experiments
-#   make test       - Run test suite
-#   make lint       - Run code quality checks
-#   make clean      - Clean generated files
-#   make help       - Show this help
+#   make install              - Install dependencies
+#   make paper1               - Compile Paper 1 (Computational Expense)
+#   make paper2               - Compile Paper 2 (Three Dynamical Regimes)
+#   make paper5d              - Compile Paper 5D (Pattern Mining)
+#   make paper6               - Compile Paper 6 (Scale-Dependent Phase Autonomy)
+#   make paper6b              - Compile Paper 6B (Multi-Timescale Dynamics)
+#   make paper7               - Compile Paper 7 (Sleep-Inspired Consolidation)
+#   make paper3               - Run Paper 3 factorial experiments
+#   make test                 - Run test suite
+#   make test-cached-metrics  - Run cached_metrics validation tests
+#   make verify-cached-fix    - Verify cached_metrics fix applied
+#   make lint                 - Run code quality checks
+#   make clean                - Clean generated files
+#   make help                 - Show this help
 #
 # Author: Aldrin Payopay <aldrin.gdf@gmail.com>
 # Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 # License: GPL-3.0
 
-.PHONY: help install paper1 paper2 paper5d paper6 paper6b paper7 paper3 paper4 test lint format clean docker-build docker-run figures figures-c175 figures-nrmv2 list-figures
+.PHONY: help install paper1 paper2 paper5d paper6 paper6b paper7 paper3 paper4 test test-quick test-cached-metrics verify-cached-fix lint format clean docker-build docker-run docker-test figures figures-c175 figures-nrmv2 list-figures
 
 # Default target
 .DEFAULT_GOAL := help
@@ -147,6 +149,21 @@ test-quick: ## Run quick smoke tests
 	cd papers/minimal_package_with_experiments/experiments && \
 	python replicate_patterns.py --runs 20 --threshold 0.99 --mode degraded
 	@echo "$(GREEN)✓ Quick tests passed$(NC)"
+
+test-cached-metrics: ## Run cached_metrics bug fix validation tests
+	@echo "$(BLUE)Running cached_metrics validation tests...$(NC)"
+	cd code/experiments && python test_cached_metrics_fix.py
+	@echo "$(GREEN)✓ cached_metrics tests passed (4/4)$(NC)"
+
+verify-cached-fix: ## Verify cached_metrics fix is applied in FractalAgent
+	@echo "$(BLUE)Verifying cached_metrics fix...$(NC)"
+	@if grep -q "def evolve(self, delta_time: float, cached_metrics: Optional\[Dict\[str, float\]\] = None)" /Volumes/dual/DUALITY-ZERO-V2/fractal/fractal_agent.py 2>/dev/null; then \
+		echo "$(GREEN)✓ FractalAgent.evolve() signature includes cached_metrics parameter$(NC)"; \
+	else \
+		echo "$(RED)✗ cached_metrics parameter NOT found in FractalAgent.evolve()$(NC)"; \
+		echo "$(YELLOW)  Fix required: See REPRODUCIBILITY_GUIDE.md 'TypeError: cached_metrics' section$(NC)"; \
+		exit 1; \
+	fi
 
 lint: ## Run code quality checks
 	@echo "$(BLUE)Running linters...$(NC)"

@@ -1022,9 +1022,13 @@ python test_cached_metrics_fix.py
 
 **If encountering this error:**
 1. Pull latest repository version: `git pull origin main`
-2. Verify fix applied: `grep "cached_metrics" /Volumes/dual/DUALITY-ZERO-V2/fractal/fractal_agent.py`
-3. Run test suite: `python test_cached_metrics_fix.py`
+2. Verify fix applied: `make verify-cached-fix` (or manually: `grep "cached_metrics" /Volumes/dual/DUALITY-ZERO-V2/fractal/fractal_agent.py`)
+3. Run test suite: `make test-cached-metrics` (or manually: `cd code/experiments && python test_cached_metrics_fix.py`)
 4. If tests pass, optimized scripts should work
+
+**Makefile targets:**
+- `make test-cached-metrics` - Run cached_metrics validation test suite (4 tests)
+- `make verify-cached-fix` - Verify FractalAgent.evolve() signature includes cached_metrics parameter
 
 ---
 
@@ -1081,6 +1085,11 @@ See LICENSE file for full terms: https://github.com/mrdirno/nested-resonance-mem
 
 ## VERSION HISTORY
 
+- **v1.4 (2025-10-30, Cycle 642):** Integrated cached_metrics infrastructure into Makefile
+  - Added `make test-cached-metrics` target for validation test suite
+  - Added `make verify-cached-fix` target for fix verification
+  - Updated cached_metrics troubleshooting to reference Makefile targets
+  - Maintains 9.3/10 reproducibility standard with automated testing
 - **v1.3 (2025-10-30, Cycle 639):** Added cached_metrics TypeError troubleshooting
   - Documented FractalAgent.evolve() cached_metrics parameter bug and fix
   - Added validation test suite documentation (test_cached_metrics_fix.py)
@@ -1107,6 +1116,6 @@ This reproducibility guide was created to enable independent validation of all r
 ---
 
 **Author:** Aldrin Payopay & Claude (DUALITY-ZERO-V2)
-**Last Updated:** 2025-10-29 (Cycle 501)
+**Last Updated:** 2025-10-30 (Cycle 642)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
