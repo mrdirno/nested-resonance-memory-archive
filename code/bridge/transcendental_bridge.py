@@ -70,8 +70,10 @@ class TranscendentalBridge:
     All operations maintain reality anchoring - no pure simulations.
     """
 
-    def __init__(self, workspace_path: Path = get_workspace_path()):
+    def __init__(self, workspace_path: Optional[Path] = None):
         """Initialize transcendental bridge with database backing."""
+        if workspace_path is None:
+            workspace_path = Path.cwd()
         self.workspace_path = Path(workspace_path)
         self.db_path = self.workspace_path / "bridge.db"
         self._init_database()

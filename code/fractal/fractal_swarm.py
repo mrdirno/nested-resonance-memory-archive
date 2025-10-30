@@ -32,7 +32,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "bridge"))
 
 from fractal_agent import FractalAgent, AgentState, ClusterEvent, BurstEvent
 from transcendental_bridge import TranscendentalBridge, TranscendentalState
-from workspace_utils import get_workspace_path, get_results_path
 
 
 class CompositionEngine:
@@ -236,7 +235,7 @@ class FractalSwarm:
 
     def __init__(
         self,
-        workspace_path: Path = get_workspace_path(),
+        workspace_path: Optional[Path] = None,
         max_agents: int = 100,
         max_depth: int = 7,
         clear_on_init: bool = False
@@ -250,6 +249,8 @@ class FractalSwarm:
             max_depth: Maximum recursion depth (constitution: 7)
             clear_on_init: If True, clear database tables on init (for experiments)
         """
+        if workspace_path is None:
+            workspace_path = Path.cwd()
         self.workspace_path = Path(workspace_path)
         self.workspace_path.mkdir(exist_ok=True)
 
