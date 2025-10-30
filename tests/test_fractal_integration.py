@@ -92,7 +92,6 @@ def test_reality_grounded_spawning():
         print(f"    Phase magnitude: {agent.phase_state.magnitude:.4f}")
 
     print("\n✓ TEST 1 PASSED: All agents reality-grounded")
-    return swarm
 
 
 def test_evolution_cycles(swarm: FractalSwarm):
