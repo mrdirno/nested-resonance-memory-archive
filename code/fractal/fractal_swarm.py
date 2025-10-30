@@ -22,7 +22,7 @@ from pathlib import Path
 import time
 import sqlite3
 import uuid
-from typing import Dict, List, Optional, Set, Tuple, Generator
+from typing import Any, Dict, List, Optional, Set, Tuple, Generator
 from contextlib import contextmanager
 from dataclasses import asdict
 
