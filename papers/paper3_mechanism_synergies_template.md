@@ -288,6 +288,8 @@ where:
 
 **Interpretation:** Energy Pooling (H1) and Reality Sources (H2) strongly interfere with each other rather than cooperating. Each mechanism alone supports ~71× population increase vs baseline, but when combined they achieve only ~71× (not ~141× as additive model predicts). This suggests resource competition: both mechanisms provide energy, but agents cannot efficiently utilize both sources simultaneously. The negative synergy (-975.58) is nearly equal in magnitude to each individual effect (+978), indicating complete interference rather than partial antagonism.
 
+**Robustness:** ANTAGONISTIC classification replicated across parameter configurations (high_capacity: synergy -975.58, ON-ON 994.54; lightweight: synergy -85.68, ON-ON 99.75). Despite 11× difference in population scale, both configurations show qualitatively identical antagonistic interaction, validating finding robustness.
+
 ---
 
 ### 3.2 Experiment 2: H1×H4 (Energy Pooling × Spawn Throttling)
