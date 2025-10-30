@@ -4,7 +4,7 @@
 
 **Target Audience:** Computational researchers, peer reviewers, replication studies
 
-**Last Updated:** 2025-10-29 (Cycle 501 - Added paper compilation documentation for Papers 1, 2, 5D, 6, 6B)
+**Last Updated:** 2025-10-30 (Cycle 639 - Added cached_metrics TypeError troubleshooting)
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 
@@ -972,6 +972,60 @@ python -c "import psutil; import time; start=time.time(); psutil.cpu_percent(); 
 if len(agents) < MAX_AGENTS:  # Should be present
 ```
 
+### "TypeError: FractalAgent.evolve() got an unexpected keyword argument 'cached_metrics'"
+
+**Problem:** Optimized experiment scripts (cycle256-260_optimized.py) attempt to pass `cached_metrics` parameter to `FractalAgent.evolve()`, but method signature doesn't support it.
+
+**Context:** Discovered during C256 execution (2025-10-30, Cycle 637). Optimized scripts batch-fetch system metrics once per cycle instead of per-agent to reduce I/O overhead (1.08M → 12K psutil calls, 90× reduction).
+
+**Fix Applied:** Updated `FractalAgent.evolve()` signature to accept optional `cached_metrics` parameter:
+
+```python
+# In /Volumes/dual/DUALITY-ZERO-V2/fractal/fractal_agent.py (line 161)
+def evolve(self, delta_time: float, cached_metrics: Optional[Dict[str, float]] = None) -> None:
+    """
+    ...
+    Args:
+        delta_time: Time step for evolution
+        cached_metrics: Optional pre-fetched system metrics dict with keys:
+                        'cpu_percent', 'memory_percent'. If None, fetches fresh
+                        metrics (default behavior for backward compatibility).
+    """
+    if hasattr(self, 'reality') and self.reality is not None:
+        # Use cached metrics if provided, otherwise fetch fresh
+        if cached_metrics is not None:
+            current_metrics = cached_metrics
+        else:
+            current_metrics = self.reality.get_system_metrics()
+```
+
+**Verification:** Run validation test suite:
+```bash
+cd /Volumes/dual/DUALITY-ZERO-V2/experiments  # Or code/experiments in repository
+python test_cached_metrics_fix.py
+# Expected: 4/4 tests passed
+# - Backward compatibility (existing scripts work unchanged)
+# - Cached metrics parameter (optimized scripts work with parameter)
+# - Batched evolution pattern (multiple agents, one metric fetch)
+# - Recursive propagation (children receive cached metrics)
+```
+
+**Impact:**
+- **Backward compatible:** Existing experiments (C177-C255) work unchanged
+- **Optimization enabled:** C256-C260 run 30-35% faster (13-14h vs 20h)
+- **I/O reduction:** 90× fewer psutil calls per experiment
+
+**Documentation:**
+- Fix specification: `archive/FRACTAL_AGENT_CACHED_METRICS_FIX.md` (363 lines)
+- Test suite: `code/experiments/test_cached_metrics_fix.py` (4 tests)
+- Technical analysis: `archive/summaries/CYCLE637_C256_RUNTIME_ANALYSIS.md` (354 lines)
+
+**If encountering this error:**
+1. Pull latest repository version: `git pull origin main`
+2. Verify fix applied: `grep "cached_metrics" /Volumes/dual/DUALITY-ZERO-V2/fractal/fractal_agent.py`
+3. Run test suite: `python test_cached_metrics_fix.py`
+4. If tests pass, optimized scripts should work
+
 ---
 
 ## CONTACT & SUPPORT
@@ -1027,6 +1081,12 @@ See LICENSE file for full terms: https://github.com/mrdirno/nested-resonance-mem
 
 ## VERSION HISTORY
 
+- **v1.3 (2025-10-30, Cycle 639):** Added cached_metrics TypeError troubleshooting
+  - Documented FractalAgent.evolve() cached_metrics parameter bug and fix
+  - Added validation test suite documentation (test_cached_metrics_fix.py)
+  - Documented 90× I/O optimization (1.08M → 12K psutil calls)
+  - Included backward compatibility verification steps
+  - References to fix specification and technical analysis documents
 - **v1.2 (2025-10-29, Cycle 501):** Added comprehensive paper compilation documentation (Papers 1, 2, 5D, 6, 6B)
   - New section: "Compiling Papers" with Make + Docker instructions
   - Documented all 5 submission-ready papers
