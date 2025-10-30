@@ -17,7 +17,10 @@ import json
 import numpy as np
 from collections import Counter
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add code directories to path
+repo_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(repo_root / "code"))
+sys.path.insert(0, str(repo_root / "code" / "experiments"))
 
 from fractal.fractal_swarm import FractalSwarm, DecompositionEngine
 from bridge.transcendental_bridge import TranscendentalBridge
