@@ -53,7 +53,12 @@ workspace/cache/npm_cache/
 *.bak
 workspace/cache/
 workspace/*.db
+*.db
 .DS_Store
+
+# Runtime workspace directories (SQLite databases, temporary files)
+workspace/workspace/
+code/workspace/
 
 # Paper workspace directories (temporary npm cache, build artifacts)
 papers/arxiv_submissions/*/workspace/
