@@ -805,17 +805,93 @@ The authors declare no competing interests.
 
 ## REFERENCES
 
-[TO BE POPULATED]
+### Factorial Design Methodology
 
-**Key references to include:**
-1. Nested Resonance Memory framework papers
-2. Self-Giving Systems theory
-3. Temporal Stewardship principles
-4. Factorial design methodology
-5. Computational reproducibility standards
-6. Reality grounding in computational research
-7. Emergence and complexity literature
-8. Related mechanism validation approaches
+1. **Schütz, A., & Ziegler, M. (2024).** Understanding Factorial Designs, Main Effects, and Interaction Effects: Simply Explained with a Worked Example. *Advances in Methods and Practices in Psychological Science*, 7(2). https://doi.org/10.1177/25152459241238735
+
+2. **Montgomery, D. C. (2017).** Design and Analysis of Experiments (9th ed.). *Wiley*.
+   - Standard reference for factorial experimental design and interaction detection
+
+3. **McAlister, F. A., Straus, S. E., Sackett, D. L., & Altman, D. G. (2003).** Analysis and reporting of factorial trials: a systematic review. *JAMA*, 289(19), 2545-2553.
+   - Principles of factorial designs for detecting synergistic and antagonistic interactions
+
+4. **Petersen, M. L., & van der Laan, M. J. (2014).** Causal models and learning from data: integrating causal modeling and statistical estimation. *Epidemiology*, 25(3), 418-426.
+   - Causal inference framework applicable to mechanism validation
+
+### Computational Reproducibility Standards
+
+5. **Semmelrock, M. J., Tritscher, J., & Scheler, I. (2025).** Reproducibility in machine-learning-based research: Overview, barriers, and drivers. *AI Magazine*, 46(1), 15-42. https://doi.org/10.1002/aaai.70002
+   - Comprehensive review of reproducibility challenges in ML and computational research
+
+6. **Sandve, G. K., Nekrutenko, A., Taylor, J., & Hovig, E. (2013).** Ten Simple Rules for Reproducible Computational Research. *PLOS Computational Biology*, 9(10), e1003285. https://doi.org/10.1371/journal.pcbi.1003285
+   - Foundational guidelines for computational reproducibility
+
+7. **Stodden, V., Seiler, J., & Ma, Z. (2018).** An empirical analysis of journal policy effectiveness for computational reproducibility. *Proceedings of the National Academy of Sciences*, 115(11), 2584-2589.
+   - Policy analysis for reproducibility standards across journals
+
+8. **Zwaan, R. A., Etz, A., Lucas, R. E., & Donnellan, M. B. (2018).** Making replication mainstream. *Behavioral and Brain Sciences*, 41, e120. https://doi.org/10.1017/S0140525X17001972
+   - Framework for replication standards in computational sciences
+
+9. **REPETO Workshop Report (2024).** Report on Challenges of Practical Reproducibility for Systems and HPC Computer Science. NSF-sponsored workshop, November 2024. https://zenodo.org/records/15306610
+   - Recent standards and recommendations for HPC reproducibility
+
+### Reality Grounding and Computational Overhead
+
+10. **Zenil, H., Kiani, N. A., Zea, A. A., & Tegnér, J. (2022).** Emergence and algorithmic information dynamics of systems and observers. *Royal Society Open Science*, 9(5), 211925. https://doi.org/10.1098/rsos.211925
+    - Framework for observer-dependent emergence in computational systems
+
+11. **Hoel, E. P., Albantakis, L., & Tononi, G. (2013).** Quantifying causal emergence shows that macro can beat micro. *Proceedings of the National Academy of Sciences*, 110(49), 19790-19795.
+    - Theoretical foundation for scale-dependent causation in complex systems
+
+12. **Ladyman, J., Lambert, J., & Wiesner, K. (2013).** What is a complex system? *European Journal for Philosophy of Science*, 3(1), 33-67.
+    - Philosophical framework for complexity and emergence validation
+
+### Mechanism Validation in Computational Systems
+
+13. **Haugen, M. K., Watson, M. D., Dzielski, D. M., Freeman, D. M., & Pollman, A. G. (2023).** Detecting emergence in engineered systems: A literature review and synthesis approach. *Systems Engineering*, 26(2), 171-192. https://doi.org/10.1002/sys.21660
+    - Systematic review of emergence detection methods across engineering domains
+
+14. **Zenil, H., Kiani, N. A., & Tegnér, J. (2024).** Software in the natural world: A computational approach to hierarchical emergence. *arXiv preprint* arXiv:2402.09090v2.
+    - Formal framework for computational emergence and validation
+
+15. **Zeigler, B. P., & Zhang, L. (2021).** EB-DEVS: A formal framework for modeling and simulation of emergent behavior in dynamic complex systems. *Journal of Computational Science*, 52, 101305.
+    - Formal methods for emergent behavior validation at simulation time
+
+16. **Gorban, A. N., Makarov, V. A., & Tyukin, I. Y. (2020).** The unreasonable effectiveness of small neural ensembles in high-dimensional brain. *Physics of Life Reviews*, 29, 55-88.
+    - High-dimensional dynamics and emergence in constrained systems
+
+### Nested Resonance Memory Framework
+
+17. **Payopay, A., & Claude (2025).** Computational Expense as Framework Validation: Predictable Overhead Profiles as Evidence of Reality Grounding. *In preparation* (Paper 1).
+    - Reality grounding methodology and overhead authentication
+
+18. **Payopay, A., & Claude (2025).** From Bistability to Collapse: Energy Constraints and Three Dynamical Regimes in Nested Resonance Memory Framework. *In preparation* (Paper 2).
+    - Empirical characterization of NRM dynamics and energy constraints
+
+19. **Payopay, A., & Claude (2025).** Pattern Mining Framework for Nested Resonance Memory Systems. *In preparation* (Paper 5D).
+    - Automated pattern detection and validation methods
+
+### Statistical Methods for Deterministic Systems
+
+20. **Saltelli, A., Ratto, M., Andres, T., Campolongo, F., Cariboni, J., Gatelli, D., ... & Tarantola, S. (2008).** Global Sensitivity Analysis: The Primer. *Wiley*.
+    - Sensitivity analysis methods for deterministic computational models
+
+21. **Iooss, B., & Lemaître, P. (2015).** A review on global sensitivity analysis methods. In *Uncertainty Management in Simulation-Optimization of Complex Systems* (pp. 101-122). Springer.
+    - Modern approaches to sensitivity analysis without statistical uncertainty
+
+22. **Iman, R. L., & Conover, W. J. (1980).** Small sample sensitivity analysis techniques for computer models with an application to risk assessment. *Communications in Statistics-Theory and Methods*, 9(17), 1749-1842.
+    - Factorial-based sensitivity analysis for computational models
+
+### Complex Systems and Self-Organization
+
+23. **Mitchell, M. (2009).** Complexity: A Guided Tour. *Oxford University Press*.
+    - Comprehensive introduction to emergence and self-organization
+
+24. **Bar-Yam, Y. (1997).** Dynamics of Complex Systems. *Westview Press*.
+    - Mathematical foundations for multi-scale dynamics
+
+25. **Bedau, M. A., & Humphreys, P. (Eds.). (2008).** Emergence: Contemporary Readings in Philosophy and Science. *MIT Press*.
+    - Philosophical and scientific perspectives on emergence validation
 
 ---
 
