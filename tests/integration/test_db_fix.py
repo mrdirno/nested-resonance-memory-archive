@@ -9,7 +9,10 @@ spawning agents in each. Before fix: collisions likely. After fix: no collisions
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add code directories to path
+repo_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(repo_root / "code"))
+sys.path.insert(0, str(repo_root / "code" / "experiments"))
 
 from fractal.fractal_swarm import FractalSwarm
 from workspace_utils import get_workspace_path, get_results_path

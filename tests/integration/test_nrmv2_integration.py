@@ -22,10 +22,12 @@ import tempfile
 from pathlib import Path
 from typing import List, Dict
 
-# Add modules to path
-sys.path.insert(0, str(Path(__file__).parent))
-sys.path.insert(0, str(Path(__file__).parent.parent / "fractal"))
-sys.path.insert(0, str(Path(__file__).parent.parent / "bridge"))
+# Add code directories to path
+repo_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(repo_root / "code"))
+sys.path.insert(0, str(repo_root / "code" / "memory"))
+sys.path.insert(0, str(repo_root / "code" / "fractal"))
+sys.path.insert(0, str(repo_root / "code" / "bridge"))
 
 from pattern_memory import PatternMemory, Pattern, PatternType
 from consolidation_engine import ConsolidationEngine, Coalition
