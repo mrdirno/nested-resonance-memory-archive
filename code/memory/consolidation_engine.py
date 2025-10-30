@@ -307,6 +307,9 @@ class ConsolidationEngine:
         cpu_time_ms = (process.cpu_times().user - self.start_cpu_time) * 1000
         memory_mb = (process.memory_info().rss / (1024 * 1024)) - self.start_memory
 
+        # Compute information gain from detected coalitions
+        information_gain = self._compute_information_gain(coalitions, len(patterns))
+
         metrics = ConsolidationMetrics(
             session_id=session_id,
             phase_type='nrem',
@@ -317,7 +320,7 @@ class ConsolidationEngine:
             hebbian_updates=hebbian_updates,
             cpu_time_ms=cpu_time_ms,
             memory_usage_mb=memory_mb,
-            information_gain_bits=0.0  # TODO: Compute from prediction accuracy
+            information_gain_bits=information_gain
         )
 
         self.end_session(metrics)
@@ -414,6 +417,9 @@ class ConsolidationEngine:
         cpu_time_ms = (process.cpu_times().user - self.start_cpu_time) * 1000
         memory_mb = (process.memory_info().rss / (1024 * 1024)) - self.start_memory
 
+        # Compute information gain from detected coalitions
+        information_gain = self._compute_information_gain(coalitions, len(patterns))
+
         metrics = ConsolidationMetrics(
             session_id=session_id,
             phase_type='rem',
@@ -424,7 +430,7 @@ class ConsolidationEngine:
             hebbian_updates=0,
             cpu_time_ms=cpu_time_ms,
             memory_usage_mb=memory_mb,
-            information_gain_bits=0.0  # TODO: Compute from prediction accuracy
+            information_gain_bits=information_gain
         )
 
         self.end_session(metrics)
@@ -502,6 +508,52 @@ class ConsolidationEngine:
             conn.commit()
 
         return coalition
+
+    def _compute_information_gain(
+        self,
+        coalitions: List[Coalition],
+        total_patterns: int
+    ) -> float:
+        """
+        Compute information gain from detected coalitions.
+
+        Each coalition reduces uncertainty about pattern relationships.
+        Information gain is computed as:
+            sum over coalitions of: coherence * log2(C(N, k))
+        where C(N, k) = binomial coefficient for choosing k from N patterns.
+
+        Args:
+            coalitions: List of detected coalitions
+            total_patterns: Total number of patterns processed
+
+        Returns:
+            Total information gain in bits
+        """
+        if not coalitions or total_patterns < 2:
+            return 0.0
+
+        total_bits = 0.0
+
+        for coalition in coalitions:
+            k = len(coalition.member_pattern_ids)
+            if k < 2 or k > total_patterns:
+                continue
+
+            # Compute binomial coefficient C(N, k) = N! / (k! * (N-k)!)
+            # For small k, compute directly to avoid overflow
+            binom = 1
+            for i in range(k):
+                binom = binom * (total_patterns - i) // (i + 1)
+
+            # Information bits from this coalition
+            if binom > 0:
+                info_bits = math.log2(binom)
+
+                # Weight by coalition coherence (reliable information)
+                weighted_bits = coalition.mean_coherence * info_bits
+                total_bits += weighted_bits
+
+        return total_bits
 
     def get_session_metrics(self, session_id: str) -> Optional[ConsolidationMetrics]:
         """
