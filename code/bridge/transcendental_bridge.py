@@ -201,7 +201,6 @@ class TranscendentalBridge:
 
         Inverse operation of reality_to_phase. Reconstructs reality metrics
         from phase coordinates. Always returns the original reality_anchor
-from workspace_utils import get_workspace_path, get_results_path
         to maintain Reality Imperative compliance.
 
         Args:
