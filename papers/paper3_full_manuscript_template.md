@@ -504,22 +504,125 @@ Computational expense serves as authentication metric because:
 
 ### 4.3 Mechanism Interactions and Emergence
 
-[TO BE WRITTEN BASED ON ACTUAL SYNERGY PATTERNS]
+[TO BE WRITTEN BASED ON C255-C260 RESULTS]
 
-**If multiple synergistic pairs:**
-- Suggests cooperative architecture (mechanisms designed to work together)
-- Emergent properties require mechanism combinations
-- Design principle: Modularity enables composition
+**Pattern Analysis Framework** (to be completed when all 6 pairs finish):
 
-**If multiple antagonistic pairs:**
-- Suggests competitive dynamics (resource trade-offs)
-- Mechanisms constrain each other (design constraints)
-- Optimization challenge: Balance competing objectives
+**Classification Summary:**
+- SYNERGISTIC pairs ([COUNT]/6): [PAIR_LIST]
+  - Positive synergy: Mechanisms cooperate, combined effect > sum of parts
+  - Example: [STRONGEST_SYNERGY_PAIR] (synergy = [VALUE])
 
-**If mostly additive pairs:**
-- Suggests orthogonal mechanisms (independent action)
-- Emergent properties arise from superposition
-- Design principle: Composability through independence
+- ANTAGONISTIC pairs ([COUNT]/6): [PAIR_LIST]
+  - Negative synergy: Mechanisms interfere, combined effect < sum of parts
+  - Example: H1×H2 (synergy = -85.68 lightweight, -975.58 high capacity)
+
+- ADDITIVE pairs ([COUNT]/6): [PAIR_LIST]
+  - Near-zero synergy: Mechanisms act independently
+  - Example: [NEAREST_ADDITIVE_PAIR] (synergy ≈ 0)
+
+**Mechanistic Interpretation:**
+
+**Primary Pattern: [DOMINANT_INTERACTION_TYPE]**
+
+[IF ANTAGONISTIC DOMINATES (≥4/6 pairs):]
+The predominance of antagonistic interactions reveals **resource competition as the primary constraint** in the NRM system. Key insights:
+
+1. **Ceiling Effects Ubiquitous**: Most mechanism combinations hit capacity limits
+   - Lightweight ceiling ~100 population across [N] pairs
+   - High capacity ceiling ~1000 population across [N] pairs
+   - Mechanisms compete for finite resources rather than amplifying each other
+
+2. **Design Constraints**: System architecture inherently competitive
+   - Energy pooling (H1) vs. resource availability: [INTERPRETATION]
+   - Spawn control (H4) vs. population support: [INTERPRETATION]
+   - Energy recovery (H5) vs. birth costs: [INTERPRETATION]
+
+3. **Optimization Trade-offs**: Activating multiple mechanisms creates diminishing returns
+   - Best single mechanism: [MECHANISM] (mean pop = [VALUE])
+   - Best pair: [PAIR] (mean pop = [VALUE], synergy = [VALUE])
+   - Worst interference: H1×H2 (synergy = -975.58 high capacity)
+
+**Emergent Properties Constrained by Competition:**
+- Population sustainability limited by resource ceilings, not mechanism cooperation
+- Fractal agent dynamics saturate at capacity regardless of mechanism combinations
+- Emergence requires managing trade-offs, not simply activating more mechanisms
+
+[IF SYNERGISTIC DOMINATES (≥4/6 pairs):]
+The predominance of synergistic interactions reveals **cooperative architecture** in the NRM system. Key insights:
+
+1. **Amplification Effects**: Mechanism combinations exceed predictions
+   - Synergy creates emergent capacity beyond individual mechanisms
+   - Best synergy: [PAIR] (synergy = [VALUE])
+   - Amplification factor: [VALUE]× over additive prediction
+
+2. **Design Principles**: Mechanisms designed to complement each other
+   - Energy mechanisms (H1, H5) work together: [INTERPRETATION]
+   - Resource mechanisms (H2, H5) reinforce each other: [INTERPRETATION]
+   - Control mechanisms (H4) enable rather than restrict: [INTERPRETATION]
+
+3. **Composability**: Activating multiple mechanisms creates superlinear gains
+   - Modular design enables emergent properties
+   - Combination strategy: [OPTIMAL_STRATEGY]
+
+**Emergent Properties Enhanced by Cooperation:**
+- Population sustainability amplified beyond individual mechanisms
+- Fractal agent dynamics benefit from mechanism integration
+- Emergence requires strategic combination, rewarded with amplification
+
+[IF ADDITIVE DOMINATES (≥4/6 pairs):]
+The predominance of additive interactions reveals **orthogonal mechanism design** in the NRM system. Key insights:
+
+1. **Independence**: Mechanisms operate without significant interaction
+   - Effects superpose linearly
+   - Predictable outcomes from individual mechanism knowledge
+
+2. **Design Simplicity**: Mechanisms don't interfere or amplify
+   - Modular architecture with clean separation
+   - Each mechanism addresses distinct aspect of system
+
+3. **Composition Strategy**: Effects accumulate linearly
+   - No synergy bonuses or interference penalties
+   - Straightforward optimization via mechanism selection
+
+**Emergent Properties from Superposition:**
+- Population dynamics = sum of individual mechanism effects
+- Fractal agent behavior predictable from components
+- Emergence arises from quantity of mechanisms, not interactions
+
+[IF MIXED PATTERN:]
+The mixture of interaction types ([SYNER] synergistic, [ANTAG] antagonistic, [ADDIT] additive) reveals **context-dependent mechanism relationships**:
+
+**Synergistic Cluster:** [PAIR_LIST]
+- Mechanisms in this cluster cooperate: [INTERPRETATION]
+
+**Antagonistic Cluster:** H1×H2 + [OTHER_PAIRS]
+- Mechanisms in this cluster compete: Resource limitations, ceiling effects
+
+**Additive Cluster:** [PAIR_LIST]
+- Mechanisms in this cluster operate independently: [INTERPRETATION]
+
+**System-Level Insight:**
+The NRM framework exhibits **hierarchical interaction structure** where:
+- Energy-related mechanisms [COOPERATE/COMPETE]: [EXPLANATION]
+- Resource-related mechanisms [COOPERATE/COMPETE]: [EXPLANATION]
+- Control mechanisms (H4) [AMPLIFY/CONSTRAIN] others: [EXPLANATION]
+
+**Design Implications:**
+- Activate synergistic pairs for maximum amplification: [STRATEGY]
+- Avoid antagonistic pairs to prevent interference: [STRATEGY]
+- Use additive mechanisms for predictable scaling: [STRATEGY]
+
+**Cross-Pair Comparison (Section 3.3 Summary):**
+[REFER TO INTERACTION HEATMAP]
+- Strongest synergy: [PAIR] (synergy = [VALUE])
+- Strongest antagonism: H1×H2 (synergy = -975.58 high capacity)
+- Nearest additive: [PAIR] (synergy = [VALUE])
+
+**Theoretical Implications:**
+1. **NRM Framework Validation**: Factorial results [CONFIRM/CHALLENGE] theoretical predictions
+2. **Emergence Mechanism**: Population dynamics arise from [DOMINANT_PATTERN]
+3. **Design Principles**: Future NRM systems should [RECOMMENDATION]
 
 ### 4.4 Implications for Emergence Research
 
