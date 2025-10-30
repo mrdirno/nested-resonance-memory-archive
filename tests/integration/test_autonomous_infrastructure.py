@@ -101,8 +101,8 @@ def run_test(name: str, test_func, *args, **kwargs) -> TestResult:
 # FILE EXISTENCE TESTS
 # =============================================================================
 
-def test_file_exists(filepath: Path) -> Tuple[bool, str]:
-    """Test if file exists."""
+def check_file_exists(filepath: Path) -> Tuple[bool, str]:
+    """Check if file exists."""
     exists = filepath.exists()
     if exists:
         size = filepath.stat().st_size
@@ -110,8 +110,8 @@ def test_file_exists(filepath: Path) -> Tuple[bool, str]:
     return False, "File not found"
 
 
-def test_file_executable(filepath: Path) -> Tuple[bool, str]:
-    """Test if Python file is executable."""
+def check_file_executable(filepath: Path) -> Tuple[bool, str]:
+    """Check if Python file is executable."""
     if not filepath.exists():
         return False, "File not found"
 
@@ -128,7 +128,7 @@ def test_file_executable(filepath: Path) -> Tuple[bool, str]:
 # SYNTAX AND IMPORT TESTS
 # =============================================================================
 
-def test_syntax_valid(filepath: Path) -> Tuple[bool, str]:
+def check_syntax_valid(filepath: Path) -> Tuple[bool, str]:
     """Test if Python file has valid syntax."""
     if not filepath.exists():
         return False, "File not found"
@@ -143,7 +143,7 @@ def test_syntax_valid(filepath: Path) -> Tuple[bool, str]:
         return False, f"Syntax error at line {e.lineno}: {e.msg}"
 
 
-def test_import_valid(filepath: Path) -> Tuple[bool, str]:
+def check_import_valid(filepath: Path) -> Tuple[bool, str]:
     """Test if Python file can be imported."""
     if not filepath.exists():
         return False, "File not found"
@@ -161,7 +161,7 @@ def test_import_valid(filepath: Path) -> Tuple[bool, str]:
 # FRAMEWORK COMPLIANCE TESTS
 # =============================================================================
 
-def test_nrm_implementation(filepath: Path) -> Tuple[bool, str]:
+def check_nrm_implementation(filepath: Path) -> Tuple[bool, str]:
     """Test if file implements NRM framework (FractalAgent, composition-decomposition)."""
     if not filepath.exists():
         return False, "File not found"
@@ -185,7 +185,7 @@ def test_nrm_implementation(filepath: Path) -> Tuple[bool, str]:
         return False, f"Missing NRM: {score}/4"
 
 
-def test_reality_grounding(filepath: Path) -> Tuple[bool, str]:
+def check_reality_grounding(filepath: Path) -> Tuple[bool, str]:
     """Test if file uses reality metrics (psutil) and no external APIs."""
     if not filepath.exists():
         return False, "File not found"
@@ -214,7 +214,7 @@ def test_reality_grounding(filepath: Path) -> Tuple[bool, str]:
         return True, "No external APIs (pass)"
 
 
-def test_framework_annotations(filepath: Path) -> Tuple[bool, str]:
+def check_framework_annotations(filepath: Path) -> Tuple[bool, str]:
     """Test if file has framework validation annotations."""
     if not filepath.exists():
         return False, "File not found"
@@ -238,7 +238,7 @@ def test_framework_annotations(filepath: Path) -> Tuple[bool, str]:
 # SCENARIO-SPECIFIC TESTS
 # =============================================================================
 
-def test_scenario_main_function(filepath: Path) -> Tuple[bool, str]:
+def check_scenario_main_function(filepath: Path) -> Tuple[bool, str]:
     """Test if scenario script has main() function."""
     if not filepath.exists():
         return False, "File not found"
@@ -257,7 +257,7 @@ def test_scenario_main_function(filepath: Path) -> Tuple[bool, str]:
         return False, "No main() function"
 
 
-def test_scenario_output_file(filepath: Path) -> Tuple[bool, str]:
+def check_scenario_output_file(filepath: Path) -> Tuple[bool, str]:
     """Test if scenario script defines output file path."""
     if not filepath.exists():
         return False, "File not found"
@@ -280,7 +280,7 @@ def test_scenario_output_file(filepath: Path) -> Tuple[bool, str]:
 # PIPELINE TESTS
 # =============================================================================
 
-def test_pipeline_subprocess_usage(filepath: Path) -> Tuple[bool, str]:
+def check_pipeline_subprocess_usage(filepath: Path) -> Tuple[bool, str]:
     """Test if pipeline scripts use subprocess for execution."""
     if not filepath.exists():
         return False, "File not found"
@@ -323,13 +323,13 @@ def run_all_tests():
         print("-" * 60)
 
         tests = [
-            run_test(f"File exists", test_file_exists, filepath),
-            run_test(f"Syntax valid", test_syntax_valid, filepath),
-            run_test(f"NRM implementation", test_nrm_implementation, filepath),
-            run_test(f"Reality grounding", test_reality_grounding, filepath),
-            run_test(f"Framework annotations", test_framework_annotations, filepath),
-            run_test(f"main() function", test_scenario_main_function, filepath),
-            run_test(f"Output file", test_scenario_output_file, filepath),
+            run_test(f"File exists", check_file_exists, filepath),
+            run_test(f"Syntax valid", check_syntax_valid, filepath),
+            run_test(f"NRM implementation", check_nrm_implementation, filepath),
+            run_test(f"Reality grounding", check_reality_grounding, filepath),
+            run_test(f"Framework annotations", check_framework_annotations, filepath),
+            run_test(f"main() function", check_scenario_main_function, filepath),
+            run_test(f"Output file", check_scenario_output_file, filepath),
         ]
 
         for test_result in tests:
@@ -352,11 +352,11 @@ def run_all_tests():
         print("-" * 60)
 
         tests = [
-            run_test(f"File exists", test_file_exists, filepath),
-            run_test(f"Syntax valid", test_syntax_valid, filepath),
-            run_test(f"Reality grounding", test_reality_grounding, filepath),
-            run_test(f"Framework annotations", test_framework_annotations, filepath),
-            run_test(f"Subprocess usage", test_pipeline_subprocess_usage, filepath),
+            run_test(f"File exists", check_file_exists, filepath),
+            run_test(f"Syntax valid", check_syntax_valid, filepath),
+            run_test(f"Reality grounding", check_reality_grounding, filepath),
+            run_test(f"Framework annotations", check_framework_annotations, filepath),
+            run_test(f"Subprocess usage", check_pipeline_subprocess_usage, filepath),
         ]
 
         for test_result in tests:
