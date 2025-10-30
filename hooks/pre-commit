@@ -1,0 +1,104 @@
+#!/bin/bash
+#
+# DUALITY-ZERO-V2 Pre-Commit Hook
+# Prevents commits with syntax errors, runtime artifacts, or quality issues
+#
+# Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+# Created: 2025-10-29 (Cycle 597)
+#
+# Installation:
+#   ./hooks/install-hooks.sh
+#
+# Or manually:
+#   cp hooks/pre-commit .git/hooks/pre-commit
+#   chmod +x .git/hooks/pre-commit
+
+set -e  # Exit on first error
+
+echo "🔍 Running pre-commit checks..."
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+FAILED=0
+
+# Check 1: Python syntax validation
+echo "  → Checking Python syntax..."
+PYTHON_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$' || true)
+
+if [ -n "$PYTHON_FILES" ]; then
+    for file in $PYTHON_FILES; do
+        if [ -f "$file" ]; then
+            if ! python -m py_compile "$file" 2>/dev/null; then
+                echo -e "${RED}✗ Syntax error in $file${NC}"
+                FAILED=1
+            fi
+        fi
+    done
+    if [ $FAILED -eq 0 ]; then
+        echo -e "${GREEN}  ✓ All Python files have valid syntax${NC}"
+    fi
+else
+    echo "  ℹ No Python files to check"
+fi
+
+# Check 2: Prevent committing runtime artifacts
+echo "  → Checking for runtime artifacts..."
+RUNTIME_ARTIFACTS=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(db|tmp|log)$' || true)
+
+if [ -n "$RUNTIME_ARTIFACTS" ]; then
+    echo -e "${RED}✗ Attempting to commit runtime artifacts:${NC}"
+    echo "$RUNTIME_ARTIFACTS" | sed 's/^/    /'
+    echo -e "${YELLOW}  These files should be in .gitignore, not committed${NC}"
+    FAILED=1
+else
+    echo -e "${GREEN}  ✓ No runtime artifacts detected${NC}"
+fi
+
+# Check 3: Prevent committing to workspace/workspace/ or code/workspace/
+echo "  → Checking for orphaned workspace directories..."
+WORKSPACE_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^(workspace/workspace/|code/workspace/)' || true)
+
+if [ -n "$WORKSPACE_FILES" ]; then
+    echo -e "${RED}✗ Attempting to commit files in orphaned workspace directories:${NC}"
+    echo "$WORKSPACE_FILES" | sed 's/^/    /'
+    echo -e "${YELLOW}  These directories should not exist (runtime artifacts only)${NC}"
+    FAILED=1
+else
+    echo -e "${GREEN}  ✓ No orphaned workspace directory files detected${NC}"
+fi
+
+# Check 4: Verify attribution on new Python files
+echo "  → Checking file attribution..."
+NEW_PYTHON_FILES=$(git diff --cached --name-only --diff-filter=A | grep '\.py$' || true)
+
+if [ -n "$NEW_PYTHON_FILES" ]; then
+    for file in $NEW_PYTHON_FILES; do
+        if [ -f "$file" ]; then
+            if ! grep -q "aldrin.gdf@gmail.com" "$file"; then
+                echo -e "${YELLOW}⚠ Missing attribution in new file: $file${NC}"
+                echo -e "${YELLOW}  Consider adding: Author: Aldrin Payopay <aldrin.gdf@gmail.com>${NC}"
+            fi
+        fi
+    done
+fi
+
+# Final verdict
+echo ""
+if [ $FAILED -eq 1 ]; then
+    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${RED}✗ Pre-commit checks FAILED${NC}"
+    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo "Fix the issues above and try again."
+    echo "To bypass this hook (NOT RECOMMENDED): git commit --no-verify"
+    exit 1
+else
+    echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${GREEN}✓ All pre-commit checks passed${NC}"
+    echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    exit 0
+fi
