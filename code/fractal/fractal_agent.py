@@ -488,6 +488,7 @@ class FractalAgent:
         return self.memory.copy()
 
     def __repr__(self) -> str:
+        """Return string representation of agent for debugging."""
         return (f"FractalAgent(id={self.agent_id}, depth={self.depth}, "
                 f"energy={self.energy:.1f}, children={len(self.children)}, "
                 f"memory={len(self.memory)})")
