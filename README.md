@@ -19,7 +19,7 @@ Comprehensive archive of Nested Resonance Memory (NRM) research documenting auto
   - **Paper 5D:** 2-category validation + arXiv package + **5 verified reviewers** (1.0 MB PDF)
   - **Paper 6:** Massive-scale analysis (74.5M events) + LaTeX manuscript + arXiv package (1.6 MB PDF)
   - **Paper 6B:** 3-experiment validation arc + LaTeX manuscript + arXiv package (1.0 MB PDF)
-  - **Paper 7 (NEW - Cycle 567):** Sleep consolidation + LaTeX manuscript + arXiv package (260 KB PDF, 23 pages)
+  - **Paper 7:** Governing Equations (ODE formalization) + LaTeX manuscript + arXiv package (260 KB PDF, 23 pages)
   - **Papers 1, 2, 5D:** Cover letters finalized, 15 total reviewers identified (Cycle 471)
 - **Paper 6 Details:** ✅ **100% SUBMISSION-READY** - Complete arXiv submission package
   - Massive-scale analysis: 74.5M events, 7.29 days continuous operation
@@ -34,13 +34,13 @@ Comprehensive archive of Nested Resonance Memory (NRM) research documenting auto
   - LaTeX manuscript (555 lines, ~4,200 words) + 4 publication figures @ 300 DPI
   - Complete arXiv package in `papers/arxiv_submissions/paper6b/`
   - Target: Physical Review E (cond-mat.stat-mech) or Nature Communications
-- **Paper 7 Details:** ✅ **100% SUBMISSION-READY** - Complete arXiv submission package (NEW - Cycle 567)
-  - Sleep-inspired dual-phase consolidation: NREM (0.5-4 Hz) + REM (5-12 Hz)
-  - Pattern compression: 36.7× (110 runs → 3 patterns) with 100% fidelity
-  - Predictive accuracy: 100% (correctly predicted C176 zero-effect hypothesis)
+- **Paper 7 Details:** ✅ **100% SUBMISSION-READY** - Complete arXiv submission package
+  - Mathematical formalization: 4D coupled ODE system for NRM population dynamics
+  - Physical constraints: Energy non-negativity, bounded resonance (R²=-0.17, was R²=-98 unconstrained)
+  - Parameter estimation: Differential evolution optimization across 150 experiments
   - LaTeX manuscript (1601 lines) + 4 publication figures @ 300 DPI + 23-page compiled PDF (260 KB)
   - Complete arXiv package in `papers/arxiv_submissions/paper7/`
-  - Target: PLOS Computational Biology or Physical Review E
+  - Target: Physical Review E (Statistical Physics / Complex Systems)
 - **Reproducibility:** World-class 9.3/10 standard maintained (8 core files + CI/CD + Makefile paper7 target)
 - **Total Artifacts:** 175+ deliverables (Cycle 568: docs V6.8 + Paper 7 PDF + reproducibility updates)
 - **Empirical Validation:** 450,000+ computational cycles executed
