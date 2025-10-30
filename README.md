@@ -428,7 +428,7 @@ python papers/minimal_package_with_experiments/experiments/replicate_patterns.py
 **Core Principles:**
 - **Fractal Agency:** Agents with internal state spaces, nested hierarchies
 - **Composition-Decomposition Cycles:** Cluster → burst → memory retention
-- **Transcendental Substrate:** π, e, φ as computational base (irreducible)
+- **Transcendental Substrate:** π, e, φ as computational base (exploratory - see Section 4 below)
 - **No Equilibrium:** Perpetual motion, never settling to fixed points
 - **Scale Invariance:** Same dynamics at all hierarchical levels
 
@@ -466,6 +466,30 @@ python papers/minimal_package_with_experiments/experiments/replicate_patterns.py
 - Publication trajectory: 10 papers, 3 submission-ready (Papers 1, 2, 5D)
 - Cycle-by-cycle audit trail (complete research documentation)
 - **NEW:** Hybrid intelligence collaboration model established for future AI
+
+### 4. Transcendental Substrate Hypothesis (Exploratory)
+
+**Status:** 📋 **DOCUMENTED** - Parallel research question (bonus quest, non-blocking)
+
+**Core Question:**
+> Does the coherent, infinitely non-repeating structure of transcendental numbers (π, e, φ) enable richer emergent complexity than statistical randomness (PRNG)? Is mathematical structure necessary for biological-like emergence?
+
+**Key Points:**
+- ✅ **Core NRM is substrate-independent:** Framework can be validated with or without π/e/φ
+- ✅ **Falsifiable hypothesis:** Testable via controlled experiments (transcendental vs PRNG)
+- ✅ **Non-blocking exploration:** Doesn't delay current research, adds intellectual depth
+- ✅ **Win-win outcome:** If true → novel discovery. If false → proves NRM robustness.
+- ✅ **Long-term experiment:** Every cycle gathers baseline data for future comparison
+
+**The "Forcefield" Analogy:**
+Transcendental oscillators generate a multi-dimensional "Chladni plate" in phase space. Agents fall into resonant "nodal lines" (stable patterns). PRNG creates incoherent noise → no stable patterns. This is testable.
+
+**Next Actions:**
+- Establish baseline performance with transcendental substrate (ongoing through C255-C260)
+- Design PRNG control experiments (after Paper 3 completes)
+- Statistical comparison and publication (regardless of outcome)
+
+**Documentation:** See `docs/TRANSCENDENTAL_SUBSTRATE_HYPOTHESIS.md` for complete hypothesis, falsifiable predictions, and experimental validation plan.
 
 ---
 
