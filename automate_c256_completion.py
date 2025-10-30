@@ -152,8 +152,8 @@ def generate_commit_message(data: Dict[str, Any], runtime_min: float = 0) -> str
 
     msg = f"""C256 Complete: H1×H4 (Energy Pooling × Spawn Throttling) factorial validation
 
-**Experiment:** Cycle 256 - Mechanism Validation (H1×H4 optimized)
-**Runtime:** {runtime_min:.1f} minutes (expected ~6-7 hours for unoptimized)
+**Experiment:** Cycle 256 - Mechanism Validation (H1×H4)
+**Runtime:** {runtime_min:.1f} minutes ({runtime_min/60:.1f} hours)
 **Cycles:** 3000 per condition (4 conditions, deterministic n=1)
 
 Results Summary:
