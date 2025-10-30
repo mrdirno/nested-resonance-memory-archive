@@ -21,7 +21,12 @@
       10.0,
       0.5,
       0.0
-    ]
+    ],
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T14:45:01.141339",
+    "script": "paper7_v4_equilibrium_verification_20251027_144501.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "final_state": {
     "E": 12.212986845119254,

@@ -7,7 +7,12 @@
       0.5
     ],
     "n_points": 50,
-    "model": "NRMDynamicalSystemV2"
+    "model": "NRMDynamicalSystemV2",
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T11:43:54.601561",
+    "script": "paper7_phase3_bifurcation_omega.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "equilibria": [
     {

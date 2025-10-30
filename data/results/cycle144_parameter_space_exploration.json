@@ -22,7 +22,12 @@
       456
     ],
     "diversity": 0.03,
-    "total_experiments": 36
+    "total_experiments": 36,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.709122",
+    "script": "cycle144_parameter_space_exploration.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "results": [
     {

@@ -21,7 +21,12 @@
     "duration_minutes": 55.75781567891439,
     "sharing_fraction": 0.1,
     "spawn_threshold": 10.0,
-    "energy_recharge_rate": 0.01
+    "energy_recharge_rate": 0.01,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.725333",
+    "script": "cycle177_v5_corrected_stochasticity_results.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "experiments": [
     {

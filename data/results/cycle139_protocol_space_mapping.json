@@ -18,7 +18,12 @@
       123,
       456
     ],
-    "total_experiments": 18
+    "total_experiments": 18,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.706596",
+    "script": "cycle139_protocol_space_mapping.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "results": [
     {

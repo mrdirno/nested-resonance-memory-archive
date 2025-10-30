@@ -24,7 +24,12 @@
     ],
     "cycles_per_experiment": 3000,
     "total_experiments": 550,
-    "duration_minutes": 2.0008873666666664
+    "duration_minutes": 2.0008873666666664,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.721010",
+    "script": "cycle170_basin_threshold_sensitivity.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "experiments": [
     {

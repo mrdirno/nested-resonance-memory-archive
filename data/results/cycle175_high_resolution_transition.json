@@ -32,7 +32,12 @@
     "cycles_per_experiment": 3000,
     "total_experiments": 110,
     "duration_minutes": 297.28882383333337,
-    "purpose": "Address Frank's precision critique - measure exact transition width"
+    "purpose": "Address Frank's precision critique - measure exact transition width",
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.723063",
+    "script": "cycle175_high_resolution_transition.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "experiments": [
     {

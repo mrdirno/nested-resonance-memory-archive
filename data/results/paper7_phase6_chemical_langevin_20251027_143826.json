@@ -15,7 +15,12 @@
       "kappa": 0.1,
       "phi_0": 0.06,
       "rho_threshold": 5.0
-    }
+    },
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T14:38:26.821081",
+    "script": "paper7_phase6_chemical_langevin_20251027_143826.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "test1_deterministic": {
     "final_N": 1.0,

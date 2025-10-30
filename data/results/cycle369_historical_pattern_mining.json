@@ -8,7 +8,12 @@
       "cycle177_h1_energy_pooling_results.json"
     ],
     "total_experiments": 4,
-    "total_patterns": 17
+    "total_patterns": 17,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T09:43:50.846831",
+    "script": "cycle369_historical_pattern_mining.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "patterns_by_experiment": {
     "cycle171_fractal_swarm_bistability.json": {

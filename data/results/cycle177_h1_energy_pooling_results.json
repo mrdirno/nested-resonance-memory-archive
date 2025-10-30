@@ -21,7 +21,12 @@
     "duration_minutes": 103.80588401953379,
     "sharing_fraction": 0.1,
     "spawn_threshold": 10.0,
-    "energy_recharge_rate": 0.01
+    "energy_recharge_rate": 0.01,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.724991",
+    "script": "cycle177_h1_energy_pooling_results.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "experiments": [
     {

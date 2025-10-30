@@ -4,7 +4,12 @@
     "total_transformations": 7748356,
     "dataset_duration_days": 7.29,
     "sample_fraction": 0.01,
-    "mining_timestamp": 1761728855.093347
+    "mining_timestamp": 1761728855.093347,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-29T02:09:07.196173",
+    "script": "analysis_script.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "summary": {
     "temporal_clusters": 796,

@@ -27,7 +27,12 @@
     ],
     "cycles_per_experiment": 3000,
     "total_experiments": 80,
-    "duration_minutes": 0.29497335
+    "duration_minutes": 0.29497335,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
+    "generated_at": "2025-10-27T00:51:45.719540",
+    "script": "cycle167_antiharmonic_validation_n10.py",
+    "nrm_version": "6.17",
+    "metadata_added_retrospectively": true
   },
   "experiments": [
     {

@@ -4,7 +4,8 @@
     "script": "analysis_script.py",
     "analysis_type": "comprehensive_meta_analysis",
     "nrm_version": "6.7",
-    "metadata_added_retrospectively": true
+    "metadata_added_retrospectively": true,
+    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05"
   },
   "meta_info": {
     "analysis_date": "2025-10-25",
