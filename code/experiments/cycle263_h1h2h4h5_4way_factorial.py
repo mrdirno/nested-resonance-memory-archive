@@ -134,9 +134,8 @@ def run_condition(condition: Mechanism4WayCondition) -> Dict:
 
         # Agent evolution
         for agent in agents:
-            metrics = reality.get_system_metrics()
-            phase = bridge.reality_to_phase(metrics)
-            agent.evolve(phase, delta_t=1.0)
+            # Note: FractalAgent.evolve() takes delta_time only, not phase
+            agent.evolve(delta_time=1.0)
 
         # H1: Energy Pooling (if enabled)
         if condition.h1_pooling:
