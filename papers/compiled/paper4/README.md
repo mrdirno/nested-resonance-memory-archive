@@ -37,10 +37,10 @@ Results demonstrate [RESULTS PENDING - C262-C263 completion]. This characterizat
 ### Factorial Structure
 
 **Three-Way Interactions (4 combinations):**
-1. **H1×H2×H4:** Energy Pooling × Memory Fragmentation × Spawn Throttling
-2. **H1×H2×H5:** Energy Pooling × Memory Fragmentation × Emergent Complexity
-3. **H1×H4×H5:** Energy Pooling × Spawn Throttling × Emergent Complexity
-4. **H2×H4×H5:** Memory Fragmentation × Spawn Throttling × Emergent Complexity
+1. **H1×H2×H4:** Energy Pooling × Reality Sources × Spawn Throttling
+2. **H1×H2×H5:** Energy Pooling × Reality Sources × Energy Recovery
+3. **H1×H4×H5:** Energy Pooling × Spawn Throttling × Energy Recovery
+4. **H2×H4×H5:** Reality Sources × Spawn Throttling × Energy Recovery
 
 Each 3-way: 2³ = 8 conditions (OFF-OFF-OFF, ON-OFF-OFF, OFF-ON-OFF, ..., ON-ON-ON)
 
@@ -59,14 +59,14 @@ Each 3-way: 2³ = 8 conditions (OFF-OFF-OFF, ON-OFF-OFF, OFF-ON-OFF, ..., ON-ON-
 **H1 - Energy Pooling:**
 Agents share energy within resonance clusters, distributing reproductive capacity across cluster members.
 
-**H2 - Memory Fragmentation:**
-Memory degradation over time, affecting agent performance and pattern retention.
+**H2 - Reality Sources:**
+Multiple reality sampling sources provide diverse energy inputs, stabilizing population dynamics through resource diversification.
 
 **H4 - Spawn Throttling:**
 Cooldown period between spawns (e.g., 100 cycles minimum), preventing explosive growth.
 
-**H5 - Emergent Complexity:**
-Pattern memory size influences agent sophistication and decision-making quality.
+**H5 - Energy Recovery:**
+Boosts energy recovery rate through enhanced reality coupling, stabilizing populations by accelerating energy regeneration during low-energy states.
 
 ---
 
