@@ -248,15 +248,15 @@ python code/experiments/analyze_cycle256_phase1a.py
 - ✅ Phase 1A analysis script (analyze_cycle256_phase1a.py, 653 lines)
 
 **Pending:**
-- ⏳ C256 completion (~12-13h remaining)
+- ⏳ C256 completion (extended timeline - weeks/months expected, I/O bound)
 - ⏳ Phase 1A analysis execution (~1 hour, script ready)
 - ⏳ Final figures with real C256 data (replace mockups)
 - ⏳ Manuscript finalization with Phase 1A results
 - 📋 Phase 1B experiments (future work - requires new optimized H1×H4 scripts)
 
 **Timeline:**
-- C256 completion: ~12-13h remaining (estimated 2025-10-31 12:00 PM)
-- Phase 1A analysis: Immediate upon C256 completion (script ready)
+- C256 completion: Extended (59h CPU time elapsed, I/O bound @ 1-5% CPU, weeks-months expected)
+- Phase 1A analysis: Immediate upon C256 completion (script ready since Cycle 699)
 - Figure generation: ~2 hours (6 main + 2 supplementary @ 300 DPI)
 - Manuscript finalization: ~2 hours (integrate Phase 1A results)
 - **Initial submission target:** Phase 1A results + literature integration
