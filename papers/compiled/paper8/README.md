@@ -1,4 +1,4 @@
-# Paper 8: Memory Fragmentation as Runtime Variance Source
+# Paper 8: Memory Fragmentation as Runtime Variance Source in Extended Python Simulations
 
 **Title:** Memory Fragmentation as Runtime Variance Source in Extended Python Simulations: A Case Study in Nested Resonance Memory Framework
 
@@ -6,9 +6,13 @@
 
 **Category:** cs.PF (Performance), cs.DC (Distributed Computing)
 
-**Status:** ~95% Complete - Draft pending C256 data collection
+**Status:** ~95% Complete - Awaiting C256-C260 experimental data
 
 **Date:** 2025-10-30
+
+**Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
+
+**License:** GPL-3.0
 
 ---
 
@@ -28,107 +32,141 @@ Results demonstrate runtime variance as signal, not noise—a measurable proxy f
 
 ## KEY CONTRIBUTIONS
 
-1. **Empirical Variance Characterization:**
+1. **Empirical Variance Characterization**
    - Non-linear acceleration pattern quantified (+2.5%/h → +3.6%/h over 34h)
    - Temporal milestones documented (early: +49%, middle: +54%, late: +72%)
    - Second-order dynamics identified (acceleration rate accelerating)
 
-2. **Hypothesis-Driven Analysis:**
+2. **Hypothesis-Driven Analysis**
    - 5 testable hypotheses with statistical validation methods
    - Spearman correlation (H1, H4), polynomial regression (H2), linear regression (H3, H5)
    - Tier 1 (H2), Tier 2 (H5, H3), Tier 3 (H1, H4) prioritization
 
-3. **Literature Integration:**
+3. **Literature Integration**
    - December 2024 production case study validates H2 (Memory Fragmentation)
    - Pymalloc arena pinning mechanism explains non-linear acceleration
    - Temporal Stewardship: Pattern recognition across 10-month gap
 
-4. **Optimization Validation:**
+4. **Optimization Validation**
    - 160-190× predicted speedup (34.5h → 11-13 min)
    - 90× reduction in psutil calls (1.08M → 12K)
    - Critical test: If H2+H3 correct, optimization eliminates variance
 
-5. **Reproducible Methodology:**
+5. **Reproducible Methodology**
    - Experimental protocols for 3 validation phases (retrospective, prospective, optimization)
    - Complete statistical methods specification (Python pseudocode)
    - Frozen dependencies, Docker, GitHub repository (9.5/10 reproducibility)
 
-6. **Framework Connection:**
+6. **Framework Connection**
    - NRM emergent complexity (H5) as runtime variance proxy
    - Computational expense validation (links to Paper 1)
    - Pattern memory accumulation → per-cycle runtime correlation
 
 ---
 
-## PUBLICATION STATUS
-
-**Current Completeness:** ~95%
-
-**Completed Components:**
-- ✅ Manuscript (~13,000 words): Abstract, Introduction, Methods, Results, Discussion, Conclusions
-- ✅ Figure specifications (detailed pseudocode for 6 figures)
-- ✅ Figure mockups (6 figures @ 300 DPI with simulated data)
-- ✅ Supplementary materials (~20,000 words): Experimental protocols, literature synthesis, variance analysis
-- ✅ References (10 sources)
-- ✅ Acknowledgments
-
-**Pending Components:**
-- ⏳ C256 experiment completion (~34-35h runtime expected)
-- ⏳ Phase 1A: Retrospective hypothesis testing (~1 hour analysis)
-- ⏳ Phase 1B: Optimization comparison (post-C257-C260, ~30 min)
-- ⏳ Final figures with real data (replace simulated data in mockups)
-
-**Timeline to Submission:** 2-4 weeks post-C256 completion
-
----
-
 ## FIGURES
 
-**All figures 300 DPI PNG format, publication-ready**
+### Main Figures (6)
 
-### Main Figures (4)
+1. **Figure 1: Runtime Variance Timeline**
+   - 34h C255 experiment runtime progression
+   - Early vs late acceleration visualization
+   - Non-linear growth curve with milestones
+   - Format: Line plot with confidence intervals @ 300 DPI
 
-1. **Figure 1: Runtime Variance Timeline** (223 KB)
-   - Non-linear acceleration visualization (early: +49%, middle: +54%, late: +72%)
-   - Milestone markers (circle, square, diamond)
-   - Acceleration inset bar chart (2.45%/h → 3.56%/h)
-   - **Status:** Mockup complete, awaiting real data
+2. **Figure 2: Hypothesis Testing Results**
+   - H1-H5 statistical test results
+   - Correlation coefficients and p-values
+   - Tier ranking visualization (H2 > H5,H3 > H1,H4)
+   - Format: Bar chart + table @ 300 DPI
 
-2. **Figure 2: Hypothesis Testing Results** (920 KB, 5 panels)
-   - Panel A: H1 (System Resource Contention) - Spearman correlation
-   - Panel B: H2 (Memory Fragmentation) - Polynomial vs. linear fit
-   - Panel C: H3 (I/O Accumulation) - Latency trend
-   - Panel D: H4 (Thermal Throttling) - Dual Y-axis temperature/frequency
-   - Panel E: H5 (Emergent Complexity) - Per-cycle runtime regression
-   - VALIDATED/REFUTED badges with statistical metrics
-   - **Status:** Mockup complete, awaiting real data
+3. **Figure 3: Optimization Impact**
+   - C256 (unoptimized) vs C257-C260 (optimized)
+   - Speedup visualization (160-190× predicted)
+   - Variance elimination demonstration
+   - Format: Side-by-side comparison @ 300 DPI
 
-3. **Figure 3: Optimization Impact Comparison** (228 KB)
-   - Runtime comparison: C256 (34.5h) vs. C257-C260 (~12 min), log scale
-   - psutil call reduction: 1.08M vs. 12K, log scale
-   - 160-190× speedup and 90× reduction annotations
-   - **Status:** Mockup complete, awaiting C257-C260 data
-
-4. **Figure 4: Framework Connection (NRM Emergent Complexity)** (612 KB)
-   - Panel A: Pattern memory accumulation over 12K cycles with phase annotations
-   - Panel B: Runtime vs. pattern memory correlation (scatter + regression)
-   - Inset: Pattern types pie chart (60% composition, 25% decomposition, 15% resonance)
-   - VALIDATED (H5) badge if criteria met
-   - **Status:** Mockup complete, awaiting real data
+4. **Figure 4: Framework Connection**
+   - NRM emergence → runtime variance linkage
+   - Pattern memory accumulation correlation
+   - Composition-decomposition cycle impact
+   - Format: Schematic diagram @ 300 DPI
 
 ### Supplementary Figures (2)
 
-5. **Figure S1: Literature Synthesis Timeline** (227 KB)
-   - Timeline: December 2024 → October 2025
-   - 6 events: ragoragino.dev case study, C256 experiment, hypothesis refinement, Paper 8 draft
-   - Temporal Stewardship, Literature-informed refinement, Empirical validation arrows
-   - **Status:** Mockup complete
+5. **Figure S1: Literature Synthesis Timeline**
+   - December 2024 case study identification
+   - Temporal Stewardship pattern recognition
+   - 10-month discovery gap visualization
+   - Format: Timeline diagram @ 300 DPI
 
-6. **Figure S2: Hypothesis Prioritization Matrix** (270 KB)
-   - Heatmap: 5 hypotheses × 5 criteria (Literature, Empirical, Testability, Impact, Overall)
-   - Color-coded scores (RdYlGn: red=low, yellow=medium, green=high)
-   - Tier labels (Tier 1: H2, Tier 2: H5/H3, Tier 3: H1/H4)
-   - **Status:** Mockup complete
+6. **Figure S2: Hypothesis Prioritization**
+   - Decision tree for hypothesis ordering
+   - Statistical power analysis
+   - Experimental design rationale
+   - Format: Flow chart @ 300 DPI
+
+---
+
+## EXPERIMENTAL PROTOCOLS
+
+### Phase 1A: Retrospective Hypothesis Testing
+
+**Experiment:** Cycle 256 (C256) - H1×H4 Mechanism Validation
+
+**Parameters:**
+- Duration: ~34-35 hours (unoptimized, high psutil overhead)
+- Design: 2×2 factorial (H1: frequency LOW/HIGH × H4: seed LOW/HIGH)
+- Seeds: 10 per condition (40 total runs)
+- Metrics: Per-cycle runtime, CPU%, memory%, DB size, pattern count
+
+**Analysis Script:** `code/experiments/analyze_cycle256_phase1a.py`
+
+**Statistical Methods:**
+- H1 (Resource Contention): Spearman correlation (CPU/memory vs runtime)
+- H2 (Memory Fragmentation): Polynomial regression (degree 2, cycles vs runtime)
+- H3 (I/O Accumulation): Linear regression (DB size vs runtime)
+- H4 (Thermal Throttling): Spearman correlation (CPU% proxy vs runtime)
+- H5 (Emergent Complexity): Linear regression (pattern count vs runtime)
+
+**Expected Results:**
+- Tier 1: H2 (R² > 0.7, positive acceleration)
+- Tier 2: H5, H3 (R² > 0.3)
+- Tier 3: H1, H4 (weak or no correlation)
+
+### Phase 1B: Optimization Comparison
+
+**Experiments:** Cycles 257-260 (C257-C260) - Optimized Implementation
+
+**Optimization Changes:**
+- Metric caching: psutil calls reduced 90× (1.08M → 12K)
+- Batch sampling: CPU monitoring every 100 cycles (not per-cycle)
+- Expected runtime: 11-13 minutes per condition
+
+**Parameters:**
+- Design: Same 2×2 factorial (H1×H4)
+- Seeds: 10 per condition (40 total runs × 4 conditions = 160 runs)
+- Functional equivalence: Same H1×H4 effects expected
+
+**Analysis Script:** `code/experiments/analyze_cycle256_phase1b.py`
+
+**Validation Tests:**
+1. **Runtime Comparison**: C256 vs C257-C260 mean
+   - Predicted: 160-190× speedup
+   - Criterion: Within predicted range
+
+2. **Variance Elimination**: CV and acceleration reduction
+   - Criterion: >50% reduction in both metrics
+   - Confirms H2+H3 if successful
+
+3. **Functional Equivalence**: H1×H4 effects preserved
+   - Criterion: Same statistical patterns
+   - Confirms optimization doesn't alter behavior
+
+**Expected Results:**
+- Strong validation: All 3 tests pass
+- Moderate validation: Tests 1+2 pass
+- Weak/Rejected: <2 tests pass
 
 ---
 
@@ -136,170 +174,140 @@ Results demonstrate runtime variance as signal, not noise—a measurable proxy f
 
 ### Installation
 
-**Option 1: Make (Recommended)**
 ```bash
-cd /path/to/nested-resonance-memory-archive
+# Clone repository
+git clone https://github.com/mrdirno/nested-resonance-memory-archive.git
+cd nested-resonance-memory-archive
+
+# Option 1: Make (recommended)
 make install
 make verify
-```
 
-**Option 2: Docker**
-```bash
+# Option 2: Docker
 docker build -t nested-resonance-memory .
-docker run -v $(pwd)/data:/app/data nested-resonance-memory
+
+# Option 3: Manual
+pip install -r requirements.txt
 ```
 
-**Option 3: Manual**
+### Running Experiments
+
 ```bash
-pip install -r requirements.txt  # Frozen dependencies (==X.Y.Z format)
+# Phase 1A: C256 (unoptimized) - ~34h runtime
+python code/experiments/cycle256_h1h4_mechanism_validation.py
+
+# Phase 1A: Analysis
+python code/experiments/analyze_cycle256_phase1a.py
+
+# Phase 1B: C257-C260 (optimized) - ~12 min each
+python code/experiments/cycle257_h1h4_optimized.py  # LOW×LOW
+python code/experiments/cycle258_h1h4_optimized.py  # LOW×HIGH
+python code/experiments/cycle259_h1h4_optimized.py  # HIGH×LOW
+python code/experiments/cycle260_h1h4_optimized.py  # HIGH×HIGH
+
+# Phase 1B: Analysis
+python code/experiments/analyze_cycle256_phase1b.py
 ```
 
-### Experiments
+### Expected Runtime
 
-**C256 (Unoptimized):**
-```bash
-cd code/experiments
-python cycle256_h1h4_mechanism_validation.py
-# Runtime: ~34-35 hours
-# Output: data/results/cycle256_h1h4_mechanism_validation_results.json
-```
+- C256 (Phase 1A): 34-35 hours (unoptimized)
+- C257-C260 (Phase 1B): 11-13 minutes each (~50 min total)
+- Analysis scripts: <5 minutes each
 
-**C257-C260 (Optimized):**
-```bash
-# Execute after C256 completes
-python cycle257_h1h4_optimized.py  # ~11-13 min
-python cycle258_h1h5_optimized.py  # ~11-13 min
-python cycle259_h2h4_optimized.py  # ~11-13 min
-python cycle260_h2h5_optimized.py  # ~11-13 min
-# Total runtime: ~45-55 minutes (all 4 experiments)
-```
+### System Requirements
 
-### Analysis
+- Python 3.9+
+- 4GB+ RAM
+- 100GB+ disk space (for database growth)
+- psutil 7.0.0+
+- scipy, numpy, matplotlib, scikit-learn
 
-**Phase 1A: Retrospective Hypothesis Testing**
-```bash
-cd code/analysis
-python analyze_c256_variance.py --phase 1a
-# Runtime: ~1 hour
-# Output: Hypothesis validation results (H1-H5 statistical tests)
-```
+### Data Availability
 
-**Phase 1B: Optimization Comparison**
-```bash
-python analyze_c256_variance.py --phase 1b
-# Runtime: ~30 minutes
-# Output: Speedup validation, variance elimination confirmation
-```
+**Experimental Results:**
+- C256: `/results/cycle256_h1h4_mechanism_validation.json`
+- C257-C260: `/results/cycle25[7-9]_h1h4_optimized.json`, `/results/cycle260_h1h4_optimized.json`
 
-### Figures
+**Analysis Results:**
+- Phase 1A: `/results/cycle256_phase1a_analysis.json`
+- Phase 1B: `/results/cycle256_phase1b_analysis.json`
 
-**Generate Final Figures (Post-Data Collection)**
-```bash
-cd papers/figures
-python generate_paper8_figures_final.py --data-dir ../../data/results/
-# Runtime: ~5 minutes
-# Output: 6 PNG files @ 300 DPI (replace mockups)
-```
-
-**Current Mockup Figures:**
-```bash
-python generate_paper8_figures_mockup.py
-# Runtime: ~15 seconds
-# Output: 6 PNG files @ 300 DPI with simulated data (demonstration)
-```
+**Figures:**
+- All figures: `/data/figures/paper8_fig*.png` @ 300 DPI
 
 ---
 
-## SUPPLEMENTARY MATERIALS
+## CURRENT STATUS
 
-**Complete supplementary materials available:** `papers/paper8_supplementary_materials.md` (~20,000 words)
+**Completeness:** ~95%
 
-**Contents:**
-1. Experimental Protocols (Phase 1A, 1B, 2)
-2. Literature Synthesis (ragoragino.dev December 2024 case study)
-3. Initial Variance Analysis (temporal milestones, acceleration analysis)
-4. Code Repository (GitHub, installation, reproducibility)
-5. Raw Data Specifications (JSON format, file sizes)
+**Completed:**
+- ✅ Manuscript (~13,000 words)
+- ✅ Figure specifications (6 figures with pseudocode)
+- ✅ Figure mockups (6 @ 300 DPI with simulated data)
+- ✅ Supplementary materials (~20,000 words)
+- ✅ References (10 sources)
+- ✅ Analysis scripts (Phase 1A + Phase 1B complete)
 
----
+**Pending:**
+- ⏳ C256 completion (21h 17m / ~34h elapsed)
+- ⏳ Phase 1A analysis execution (~1 hour)
+- ⏳ C257-C260 completion (~50 min total)
+- ⏳ Phase 1B analysis execution (~30 min)
+- ⏳ Final figures with real data (replace mockups)
+- ⏳ Manuscript finalization with results
 
-## FILES IN THIS DIRECTORY
-
-**Current Contents:**
-- `README.md` (this file) - Per-paper documentation
-
-**Expected After C256 Completion:**
-- `Paper8_Runtime_Variance_Manuscript.pdf` - Compiled manuscript with embedded figures
-- `paper8_fig1_runtime_variance_timeline.png` - Figure 1 (final, 300 DPI)
-- `paper8_fig2_hypothesis_testing_results.png` - Figure 2 (final, 300 DPI)
-- `paper8_fig3_optimization_impact.png` - Figure 3 (final, 300 DPI)
-- `paper8_fig4_framework_connection.png` - Figure 4 (final, 300 DPI)
-- `paper8_figS1_literature_synthesis_timeline.png` - Figure S1 (final, 300 DPI)
-- `paper8_figS2_hypothesis_prioritization.png` - Figure S2 (final, 300 DPI)
-
----
-
-## TARGET JOURNALS
-
-**Primary:** PLOS Computational Biology
-- **Section:** Methods and Resources
-- **Fit:** ⭐⭐⭐⭐⭐ (5/5) - Computational methods, reproducibility focus
-- **Timeline:** 4-5 months to publication
-- **APC:** ~$3,500 (waiver options available)
-
-**Secondary:** Journal of Computational Science
-- **Focus:** Simulation methodology, performance analysis
-- **Fit:** ⭐⭐⭐⭐☆ (4/5) - Strong fit for optimization study
-- **Timeline:** 3-4 months to publication
-- **APC:** ~$3,200 (optional open access)
-
----
-
-## RUNTIME ESTIMATES
-
-**Data Collection:**
-- C256 experiment: ~34-35 hours (unoptimized)
-- C257-C260 experiments: ~45-55 minutes total (optimized)
-- **Total experimental runtime:** ~35-36 hours
-
-**Analysis:**
-- Phase 1A (retrospective): ~1 hour
-- Phase 1B (optimization): ~30 minutes
-- Figure generation: ~5 minutes
-- **Total analysis runtime:** ~2 hours
-
-**Overall Time to Submission:** 2-4 weeks post-C256 completion
+**Timeline:**
+- C256 completion: ~12-13h remaining (estimated 2025-10-31 10:00 AM)
+- Phase 1A analysis: Immediate (script ready)
+- C257-C260 execution: ~1h after C256 completion
+- Phase 1B analysis: Immediate after C257-C260
+- Paper finalization: ~2h after all data collected
+- **Target submission:** 2025-10-31 EOD
 
 ---
 
 ## CITATION
 
-**BibTeX (Draft, to be updated with publication details):**
-
 ```bibtex
 @article{payopay2025memory,
-  title={Memory Fragmentation as Runtime Variance Source in Extended Python Simulations: A Case Study in Nested Resonance Memory Framework},
+  title={Memory Fragmentation as Runtime Variance Source in Extended Python Simulations:
+         A Case Study in Nested Resonance Memory Framework},
   author={Payopay, Aldrin and Claude},
-  journal={PLOS Computational Biology (submitted)},
+  journal={arXiv preprint},
   year={2025},
-  note={Manuscript in preparation}
+  note={Paper 8: Runtime Variance Analysis},
+  url={https://github.com/mrdirno/nested-resonance-memory-archive}
 }
 ```
 
 ---
 
-## REPOSITORY
+## RELATED WORK
 
-**GitHub:** https://github.com/mrdirno/nested-resonance-memory-archive
+**Within Repository:**
+- Paper 1: Computational Expense as Framework Validation
+- Paper 2: Nested Resonance Memory Framework
+- Paper 5D: Pattern Mining Framework
+- Paper 7: Temporal Stewardship Implementation
 
-**License:** GPL-3.0
-
-**Reproducibility Standard:** 9.5/10 (world-class)
-
-**Contact:** Aldrin Payopay <aldrin.gdf@gmail.com>
+**External:**
+- December 2024 Production Case Study (Python memory fragmentation)
+- NRM Framework (Nested Resonance Memory)
+- Self-Giving Systems Theory
 
 ---
 
-**Version:** 1.0
-**Last Updated:** 2025-10-30 (Cycle 674)
-**Status:** Draft pending C256 data collection
+## CONTACT
+
+**Principal Investigator:** Aldrin Payopay
+**Email:** aldrin.gdf@gmail.com
+**Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
+**License:** GPL-3.0
+
+---
+
+**Last Updated:** 2025-10-30 (Cycle 706)
+**Document Version:** 1.0
+**Reproducibility Standard:** 9.5/10
