@@ -245,6 +245,7 @@ class FractalSwarm:
         max_agents: int = 100,
         max_depth: int = 7,
         max_memory_size: int = 1000,
+        burst_threshold: float = 500.0,
         clear_on_init: bool = False
     ):
         """
@@ -255,6 +256,7 @@ class FractalSwarm:
             max_agents: Maximum number of agents (constitution: 100)
             max_depth: Maximum recursion depth (constitution: 7)
             max_memory_size: Maximum global memory size (default: 1000)
+            burst_threshold: Energy threshold for cluster burst (default: 500.0, Cycle 36 finding)
             clear_on_init: If True, clear database tables on init (for experiments)
         """
         self.workspace_path = Path(workspace_path)
@@ -266,8 +268,8 @@ class FractalSwarm:
         # Core components
         self.bridge = TranscendentalBridge(str(self.workspace_path))
         self.composition = CompositionEngine()
-        # Increased burst threshold from 100.0 → 500.0 for sustained composition (Cycle 36 finding)
-        self.decomposition = DecompositionEngine(burst_threshold=500.0)
+        # Configurable burst threshold (increased from 100.0 → 500.0 for sustained composition, Cycle 36 finding)
+        self.decomposition = DecompositionEngine(burst_threshold=burst_threshold)
 
         # Agent tracking
         self.agents: Dict[str, FractalAgent] = {}
