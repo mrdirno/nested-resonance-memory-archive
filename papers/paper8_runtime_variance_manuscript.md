@@ -129,14 +129,37 @@ Primary source: "Debugging Memory Issues in Production Python Services" [5]
 ### 2.4 Statistical Methods
 
 **Retrospective Analysis (Phase 1A):**
-- Extract system metrics from C256 logs (if available)
-- Spearman rank correlation for monotonic relationships
-- Polynomial vs. linear regression for non-linearity detection
+We implemented production-grade hypothesis testing (`paper8_phase1a_hypothesis_testing.py`, 565 lines):
+
+- **H1/H4 (Resource/Thermal):** Spearman rank correlation (non-parametric, robust to outliers)
+  - Validation criteria: |ρ| > 0.3, p < 0.05 (two-tailed)
+  - Tests monotonic relationships without assuming linearity
+
+- **H2 (Memory Fragmentation):** Polynomial vs. linear regression
+  - Fit degree-2 polynomial and linear models to memory growth over cycles
+  - Calculate ΔR² = R²_poly - R²_linear
+  - Validation criterion: ΔR² > 0.1 (non-linear growth indicates fragmentation)
+
+- **H3/H5 (I/O Accumulation/Memory Growth):** Linear regression
+  - Model: y = β₀ + β₁x + ε
+  - Validation criteria: β₁ > 0 (positive slope), p < 0.05, R² > 0.3
 
 **Optimization Comparison (Phase 1B):**
-- Compare C256 (unoptimized) vs. C257-C260 (optimized) runtimes
-- Calculate speedup factor and variance reduction
-- Identify which hypotheses eliminated by optimization
+We implemented comprehensive comparison analysis (`paper8_phase1b_optimization_comparison.py`, 551 lines):
+
+- **Runtime Speedup:** Independent samples t-test
+  - Compare mean runtimes: C256 (unoptimized) vs. C257-C260 (optimized)
+  - Validation: p < 0.001 (highly significant difference)
+  - Effect size: Cohen's d (expect d > 2.0, "very large" effect)
+
+- **Variance Elimination (Critical H2+H3 Test):** Levene's test
+  - Null hypothesis: Equal variances between unoptimized and optimized groups
+  - Validation criteria: Variance reduction > 80%, p < 0.05 (reject null)
+  - **Falsifiable prediction:** If H2+H3 mechanisms correct, optimization should eliminate variance
+
+- **psutil Call Reduction:** Call count comparison
+  - C256: ~1.08M calls, C257-C260: ~12K calls each
+  - Expected reduction: 90× (99% reduction)
 
 **Prospective Validation (Phase 2):**
 - Re-run C256 with comprehensive instrumentation (optional)
@@ -154,6 +177,8 @@ https://github.com/mrdirno/nested-resonance-memory-archive
 - `c256_variance_experimental_protocols.md` (validation protocols)
 
 **Analysis scripts:**
+- `code/analysis/paper8_phase1a_hypothesis_testing.py` (retrospective H1-H5 validation, 565 lines)
+- `code/analysis/paper8_phase1b_optimization_comparison.py` (optimization validation, 551 lines)
 - `c256_runtime_variance_analysis.md` (hypothesis formulation)
 - `c256_variance_literature_synthesis.md` (literature integration)
 
