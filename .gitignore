@@ -77,3 +77,4 @@ htmlcov/
 .pytest_cache/
 *.cover
 .hypothesis/
+*.backup
