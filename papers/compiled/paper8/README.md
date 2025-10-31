@@ -6,7 +6,7 @@
 
 **Category:** cs.PF (Performance), cs.DC (Distributed Computing)
 
-**Status:** ~95% Complete - Awaiting C256-C260 experimental data
+**Status:** ~95% Complete - Awaiting C256 experimental data (C257-C260 are Paper 3 experiments, different scope)
 
 **Date:** 2025-10-30
 
@@ -120,7 +120,7 @@ Results demonstrate runtime variance as signal, not noise—a measurable proxy f
 - Seeds: 10 per condition (40 total runs)
 - Metrics: Per-cycle runtime, CPU%, memory%, DB size, pattern count
 
-**Analysis Script:** `code/experiments/analyze_cycle256_phase1a.py`
+**Analysis Script:** `code/analysis/analyze_cycle256_phase1a.py`
 
 **Statistical Methods:**
 - H1 (Resource Contention): Spearman correlation (CPU/memory vs runtime)
