@@ -468,12 +468,13 @@ class FractalSwarm:
                 # Dissolve cluster
                 self.composition.dissolve_cluster(cluster_id)
 
-        # 5. Redistribute memory to survivors
-        if self.global_memory and active_agents:
-            # Keep global memory bounded
+        # 5. Keep global memory bounded (always, regardless of active agents)
+        if self.global_memory:
             self.global_memory.sort(key=lambda s: s.magnitude, reverse=True)
             self.global_memory = self.global_memory[:1000]
 
+        # 6. Redistribute memory to survivors
+        if self.global_memory and active_agents:
             # Distribute to random survivors (simple strategy)
             for i, memory_state in enumerate(self.global_memory[:100]):
                 if active_agents:
