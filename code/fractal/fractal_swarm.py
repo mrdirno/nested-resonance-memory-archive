@@ -481,7 +481,9 @@ class FractalSwarm:
         # 6. Redistribute memory to survivors
         if self.global_memory and active_agents:
             # Distribute to random survivors (simple strategy)
-            for i, memory_state in enumerate(self.global_memory[:100]):
+            # Redistribute 10% of max_memory_size (minimum 10 states)
+            redistribution_size = max(10, self.max_memory_size // 10)
+            for i, memory_state in enumerate(self.global_memory[:redistribution_size]):
                 if active_agents:
                     recipient = active_agents[i % len(active_agents)]
                     recipient.absorb_memory([memory_state])
