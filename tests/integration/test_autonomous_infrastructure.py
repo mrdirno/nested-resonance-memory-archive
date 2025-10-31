@@ -68,7 +68,7 @@ INFRASTRUCTURE_FILES = {
 # TEST UTILITIES
 # =============================================================================
 
-class TestResult:
+class AutonomousTestResult:
     """Container for test results."""
 
     def __init__(self, name: str, passed: bool, message: str = ""):
@@ -82,19 +82,19 @@ class TestResult:
         return f"{status} | {self.name}{msg}"
 
 
-def run_test(name: str, test_func, *args, **kwargs) -> TestResult:
+def run_test(name: str, test_func, *args, **kwargs) -> AutonomousTestResult:
     """Run a test function and capture result."""
     try:
         result = test_func(*args, **kwargs)
         if isinstance(result, bool):
-            return TestResult(name, result)
+            return AutonomousTestResult(name, result)
         elif isinstance(result, tuple):
             passed, message = result
-            return TestResult(name, passed, message)
+            return AutonomousTestResult(name, passed, message)
         else:
-            return TestResult(name, True, str(result))
+            return AutonomousTestResult(name, True, str(result))
     except Exception as e:
-        return TestResult(name, False, f"Exception: {str(e)}")
+        return AutonomousTestResult(name, False, f"Exception: {str(e)}")
 
 
 # =============================================================================
