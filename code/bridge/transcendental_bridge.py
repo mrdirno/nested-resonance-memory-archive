@@ -75,8 +75,18 @@ class TranscendentalBridge:
     All operations maintain reality anchoring - no pure simulations.
     """
 
-    def __init__(self, workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace"):
-        """Initialize transcendental bridge with database backing."""
+    def __init__(
+        self,
+        workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace",
+        persist_resonance: bool = False
+    ):
+        """
+        Initialize transcendental bridge with database backing.
+
+        Args:
+            workspace_path: Path for database storage
+            persist_resonance: If True, store all resonance checks to DB (slower, default: False)
+        """
         self.workspace_path = Path(workspace_path)
         self.db_path = self.workspace_path / "bridge.db"
         self._init_database()
@@ -88,6 +98,10 @@ class TranscendentalBridge:
 
         # Resonance threshold (cosine similarity)
         self.resonance_threshold = constants.RESONANCE_SIMILARITY_THRESHOLD
+
+        # Performance: Only persist resonance events if explicitly enabled
+        # Most use cases don't need full audit trail of all checks
+        self.persist_resonance = persist_resonance
 
     def _init_database(self) -> None:
         """Initialize SQLite database for bridge operations."""
@@ -411,7 +425,15 @@ class TranscendentalBridge:
     def _store_resonance(self, state1: TranscendentalState,
                         state2: TranscendentalState,
                         match: ResonanceMatch) -> None:
-        """Store resonance event in database."""
+        """
+        Store resonance event in database (only if persistence enabled).
+
+        Performance note: Disabled by default to avoid creating thousands
+        of database connections during composition detection.
+        """
+        if not self.persist_resonance:
+            return  # Skip persistence for performance
+
         # For now, use 0 as placeholder IDs (would need to track state IDs properly)
         with self._get_connection() as conn:
             conn.execute("""
