@@ -228,15 +228,27 @@ class PaperStatusTracker:
                 status['analysis'][script] = 'MISSING'
                 status['blockers'].append(f"Missing analysis: {script}")
 
-        # Check figures
-        paper_figures = list(self.figures_dir.glob(f"{paper_id}_*.png"))
+        # Check figures (in both data/figures/ and papers/compiled/)
+        paper_figures_data = list(self.figures_dir.glob(f"{paper_id}_*.png"))
+        paper_figures_compiled = list((self.papers_dir / paper_id).glob("*.png"))
+
+        # Combine and deduplicate by filename
+        all_figures = {}
+        for fig in paper_figures_data + paper_figures_compiled:
+            all_figures[fig.name] = fig
+
+        paper_figures = list(all_figures.values())
         figures_count = len(paper_figures)
         expected_figures = definition.get('expected_figures', 0)
 
         status['figures'] = {
             'count': figures_count,
             'expected': expected_figures,
-            'files': [f.name for f in paper_figures]
+            'files': [f.name for f in paper_figures],
+            'locations': {
+                'data_figures': len(paper_figures_data),
+                'compiled_dir': len(paper_figures_compiled)
+            }
         }
 
         if expected_figures > 0 and figures_count < expected_figures:
@@ -377,6 +389,9 @@ class PaperStatusTracker:
             # Figures
             lines.append("FIGURES:")
             lines.append(f"  Count: {status['figures']['count']}/{status['figures']['expected']}")
+            locations = status['figures'].get('locations', {})
+            if locations:
+                lines.append(f"  Locations: data/figures={locations.get('data_figures', 0)}, compiled={locations.get('compiled_dir', 0)}")
             if status['figures']['files']:
                 for f in status['figures']['files']:
                     lines.append(f"    - {f}")
