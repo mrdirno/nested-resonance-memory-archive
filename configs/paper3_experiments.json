@@ -1,0 +1,32 @@
+{
+  "experiments": [
+    {
+      "script": "code/experiments/cycle257_h1h5_optimized.py",
+      "name": "C257-H1xH5",
+      "description": "Energy Pooling × Emergent Complexity (2×2 factorial, 4 conditions)"
+    },
+    {
+      "script": "code/experiments/cycle258_h2h4_optimized.py",
+      "name": "C258-H2xH4",
+      "description": "Memory Fragmentation × Spawn Throttling (2×2 factorial, 4 conditions)"
+    },
+    {
+      "script": "code/experiments/cycle259_h2h5_optimized.py",
+      "name": "C259-H2xH5",
+      "description": "Memory Fragmentation × Emergent Complexity (2×2 factorial, 4 conditions)"
+    },
+    {
+      "script": "code/experiments/cycle260_h4h5_optimized.py",
+      "name": "C260-H4xH5",
+      "description": "Spawn Throttling × Emergent Complexity (2×2 factorial, 4 conditions)"
+    }
+  ],
+  "notes": {
+    "paper": "Paper 3: Factorial Validation of Mechanism Interactions",
+    "total_experiments": 4,
+    "total_conditions": 16,
+    "estimated_runtime": "80-96 hours (4 experiments × 20-24 hours each)",
+    "prerequisite": "C255 (H1×H2) and C256 (H1×H4) must complete first",
+    "analysis": "code/analysis/paper3_phase1_synergy_classification.py + paper3_phase2_cross_pair_comparison.py + paper3_visualize_synergy_results.py"
+  }
+}
