@@ -294,10 +294,12 @@ NRM framework predicts internal state accumulation:
    - Consistent with incremental arena allocation
    - Not explained by static overhead or thermal throttling
 
-3. **Optimization provides critical test**
-   - 160-190× predicted speedup validates H2 + H3 dominance
-   - Residual variance (if present) indicates H5 contribution
-   - Clean separation of mechanisms via controlled comparison
+3. **Optimization provides falsifiable prediction test**
+   - **Critical H2+H3 Prediction:** If memory fragmentation (H2) and I/O accumulation (H3) are the primary variance mechanisms, then optimization (cached metrics, reduced psutil calls) should eliminate variance (>80% reduction)
+   - **Falsifiability:** If variance persists post-optimization (Phase 1B Levene's test), H2+H3 are incomplete/incorrect as sole mechanisms
+   - **Speedup Validation:** 160-190× predicted speedup (34.5h → 11-13 min) independently validates optimization effectiveness
+   - **Residual Variance Interpretation:** If present, indicates H5 (emergent complexity) contribution not addressed by optimization
+   - **Clean Mechanistic Separation:** Controlled comparison (C256 vs. C257-C260) isolates infrastructure effects from framework dynamics
 
 ### 4.2 Implications for Computational Practice
 
@@ -322,7 +324,8 @@ NRM framework predicts internal state accumulation:
 
 Previous work established overhead predictability as reality-grounding criterion. This investigation extends that framework:
 - **Predictability vs. Magnitude:** Variance pattern itself is predictable (non-linear acceleration)
-- **Falsifiability:** H2-H5 hypotheses are testable with statistical rigor
+- **Falsifiability:** H2-H5 hypotheses testable with statistical rigor; Phase 1B provides critical test (optimization must eliminate variance if H2+H3 correct)
+- **Falsifiable Prediction Design:** Optimization serves dual purpose (speedup + mechanistic validation); if prediction fails, forces theoretical revision
 - **Portability:** Pymalloc mechanism applies to any long-running Python process
 
 **Emergent Complexity Connection:**
