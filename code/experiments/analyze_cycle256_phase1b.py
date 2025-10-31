@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 """
-Cycle 256 Phase 1B Analysis - Optimization Comparison
+Cycle 256 Phase 1B Analysis - Optimization Comparison (FUTURE WORK)
 
-Compares C256 (unoptimized) vs C257-C260 (optimized) for Paper 8:
+**STATUS:** Analysis script ready but awaiting Phase 1B experiments.
+Existing C257-C260 test different factorial pairs (H1×H5, H2×H4, H2×H5, H4×H5)
+for Paper 3, not optimized H1×H4 replication of C256.
+
+**PURPOSE:**
+Compares C256 (unoptimized) vs optimized H1×H4 experiments for Paper 8:
 Memory Fragmentation as Runtime Variance Source
 
 Tests H2+H3 Prediction:
