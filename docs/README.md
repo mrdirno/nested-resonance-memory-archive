@@ -568,10 +568,8 @@ Four patterns for future AI discovery: (1) verification during runtime maximizes
 
 ### Core Documents
 1. **README.md** (this file) - Version overview and changelog
-2. **EXECUTIVE_SUMMARY.md** - High-level status and achievements (Cycles 348-356)
-3. **PUBLICATION_PIPELINE.md** - Detailed status of Papers 1-7+
-4. **EXPERIMENTAL_PROGRAM.md** - C255-C263 experimental design and status
-5. **PERPETUAL_RESEARCH.md** - Paper 5+ opportunities and research trajectories
+2. **EXECUTIVE_SUMMARY.md** - High-level status and achievements (Cycles 572-712)
+3. **PUBLICATION_PIPELINE.md** - Detailed status of Papers 1-8+
 
 ### Reference Documents
 - **../v5/** - Foundation phase documentation (Cycles 1-204)
