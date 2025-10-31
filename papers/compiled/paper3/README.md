@@ -43,7 +43,7 @@ All figures @ 300 DPI, publication-ready. Generated via `code/analysis/paper3_vi
 ### Experimental Design
 
 **Factorial Structure:**
-- 4 mechanisms: H1 (Energy Pooling), H2 (Memory Fragmentation), H4 (Spawn Throttling), H5 (Emergent Complexity)
+- 4 mechanisms: H1 (Energy Pooling), H2 (Reality Sources), H4 (Spawn Throttling), H5 (Energy Recovery)
 - 6 pairwise combinations: H1×H2, H1×H4, H1×H5, H2×H4, H2×H5, H4×H5
 - 4 conditions per pair: OFF-OFF, ON-OFF, OFF-ON, ON-ON
 - Total: 24 experimental conditions (6 pairs × 4 conditions)
@@ -120,23 +120,23 @@ Predicted(ON-ON) = ON-OFF + OFF-ON - OFF-OFF
 
 Based on mechanism theory:
 
-**H1×H2 (Energy Pooling × Memory Fragmentation):**
-- Prediction: **ANTAGONISTIC** - Pooling increases agents, fragmentation slows each agent → interference
+**H1×H2 (Energy Pooling × Reality Sources):**
+- Prediction: **SYNERGISTIC** - Pooling creates agents, diverse sources sustain them → cooperative amplification
 
 **H1×H4 (Energy Pooling × Spawn Throttling):**
 - Prediction: **ANTAGONISTIC** - Pooling creates agents, throttling limits creation rate → direct conflict
 
-**H1×H5 (Energy Pooling × Emergent Complexity):**
-- Prediction: **SYNERGISTIC** - Pooling provides substrate, complexity enables sophisticated patterns → cooperative
+**H1×H5 (Energy Pooling × Energy Recovery):**
+- Prediction: **SYNERGISTIC** - Pooling creates agents, recovery sustains them → cooperative amplification
 
-**H2×H4 (Memory Fragmentation × Spawn Throttling):**
-- Prediction: **ADDITIVE** - Orthogonal mechanisms (memory vs spawning) → independent effects
+**H2×H4 (Reality Sources × Spawn Throttling):**
+- Prediction: **ADDITIVE** - Orthogonal mechanisms (resource diversity vs spawning rate) → independent effects
 
-**H2×H5 (Memory Fragmentation × Emergent Complexity):**
-- Prediction: **ANTAGONISTIC** - Fragmentation degrades performance, complexity requires memory → interference
+**H2×H5 (Reality Sources × Energy Recovery):**
+- Prediction: **SYNERGISTIC** - Diverse sources + faster recovery → enhanced resource stability
 
-**H4×H5 (Spawn Throttling × Emergent Complexity):**
-- Prediction: **ADDITIVE or SYNERGISTIC** - Throttling controls population, complexity enhances quality → potentially cooperative
+**H4×H5 (Spawn Throttling × Energy Recovery):**
+- Prediction: **ADDITIVE or SYNERGISTIC** - Throttling controls population, recovery stabilizes individuals → potentially cooperative
 
 ### Interpretation Scenarios
 
