@@ -244,6 +244,7 @@ class FractalSwarm:
         workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace",
         max_agents: int = 100,
         max_depth: int = 7,
+        max_memory_size: int = 1000,
         clear_on_init: bool = False
     ):
         """
@@ -253,6 +254,7 @@ class FractalSwarm:
             workspace_path: Path for database persistence
             max_agents: Maximum number of agents (constitution: 100)
             max_depth: Maximum recursion depth (constitution: 7)
+            max_memory_size: Maximum global memory size (default: 1000)
             clear_on_init: If True, clear database tables on init (for experiments)
         """
         self.workspace_path = Path(workspace_path)
@@ -275,6 +277,7 @@ class FractalSwarm:
         # Evolution state
         self.cycle_count = 0
         self.global_memory: List[TranscendentalState] = []
+        self.max_memory_size = max_memory_size
 
     def _init_database(self, clear_tables: bool = False) -> None:
         """
@@ -471,7 +474,7 @@ class FractalSwarm:
         # 5. Keep global memory bounded (always, regardless of active agents)
         if self.global_memory:
             self.global_memory.sort(key=lambda s: s.magnitude, reverse=True)
-            self.global_memory = self.global_memory[:1000]
+            self.global_memory = self.global_memory[:self.max_memory_size]
 
         # 6. Redistribute memory to survivors
         if self.global_memory and active_agents:
