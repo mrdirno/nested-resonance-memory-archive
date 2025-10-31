@@ -348,8 +348,9 @@ class TestMemoryManagement:
             )
 
             # Manually add many memory states
+            # Use same workspace as swarm to ensure isolation
             from bridge.transcendental_bridge import TranscendentalBridge
-            bridge = TranscendentalBridge()
+            bridge = TranscendentalBridge(workspace_path=tmpdir)
 
             # Add > 1000 states
             for i in range(1500):
