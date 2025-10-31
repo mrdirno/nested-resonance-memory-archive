@@ -11,7 +11,7 @@
 
 ## Abstract
 
-We present a comprehensive factorial analysis of four core mechanisms in the Nested Resonance Memory (NRM) framework: Energy Pooling (H1), Memory Fragmentation (H2), Spawn Throttling (H4), and Emergent Complexity (H5). Using a 2⁴ factorial design across six pairwise interactions (H1×H2, H1×H4, H1×H5, H2×H4, H2×H5, H4×H5), we classify each interaction as SYNERGISTIC (cooperative amplification, >+10% effect), ANTAGONISTIC (interference, <-10% effect), or ADDITIVE (independent effects, ±10%).
+We present a comprehensive factorial analysis of four core mechanisms in the Nested Resonance Memory (NRM) framework: Energy Pooling (H1), Reality Sources (H2), Spawn Throttling (H4), and Energy Recovery (H5). Using a 2⁴ factorial design across six pairwise interactions (H1×H2, H1×H4, H1×H5, H2×H4, H2×H5, H4×H5), we classify each interaction as SYNERGISTIC (cooperative amplification, >+10% effect), ANTAGONISTIC (interference, <-10% effect), or ADDITIVE (independent effects, ±10%).
 
 Results reveal that [RESULTS PENDING - C255-C260 completion]. This characterization provides empirical validation of mechanism interdependencies and informs optimization strategies for swarm intelligence systems based on composition-decomposition dynamics.
 
