@@ -1,0 +1,28 @@
+{
+  "execution_duration_minutes": 126.0,
+  "execution_duration_hours": 2.1,
+  "variance_initial": 2501.2,
+  "variance_final": 3523.4,
+  "variance_increase": 1022.2000000000003,
+  "variance_acceleration_pp_per_min": 8.212241779529403,
+  "wall_cpu_ratio_initial": 28.1,
+  "wall_cpu_ratio_final": 30.4,
+  "wall_cpu_ratio_mean": 29.466666666666665,
+  "wall_cpu_ratio_max": 30.4,
+  "time_above_30x_threshold_minutes": 28.0,
+  "io_wait_mean": 96.62222222222223,
+  "io_wait_min": 96.4,
+  "io_wait_max": 96.7,
+  "milestones_documented": 9,
+  "cycles_monitored": [
+    760,
+    762,
+    763,
+    764,
+    766,
+    767,
+    769,
+    771,
+    774
+  ]
+}
