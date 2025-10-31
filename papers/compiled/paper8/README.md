@@ -134,24 +134,23 @@ Results demonstrate runtime variance as signal, not noise—a measurable proxy f
 - Tier 2: H5, H3 (R² > 0.3)
 - Tier 3: H1, H4 (weak or no correlation)
 
-### Phase 1B: Optimization Comparison
+### Phase 1B: Optimization Comparison (Future Work)
 
-**Experiments:** Cycles 257-260 (C257-C260) - Optimized Implementation
+**Status:** Planned but not yet implemented. Experiments C257-C260 currently test different factorial pairs (H1×H5, H2×H4, H2×H5, H4×H5) for Paper 3 mechanism validation.
 
-**Optimization Changes:**
+**Proposed Design:**
+- Create optimized H1×H4 replication of C256 experimental design
+- 4 conditions (OFF-OFF, ON-OFF, OFF-ON, ON-ON)
+- Single run per condition (deterministic, n=1)
+- Expected runtime: 11-13 minutes per condition (~45-50 min total)
+
+**Optimization Changes (To Be Implemented):**
 - Metric caching: psutil calls reduced 90× (1.08M → 12K)
 - Batch sampling: CPU monitoring every 100 cycles (not per-cycle)
-- Expected runtime: 11-13 minutes per condition
+- Same H1×H4 mechanisms as C256 for direct comparison
 
-**Parameters:**
-- Design: Same 2×2 factorial (H1×H4)
-- Seeds: 10 per condition (40 total runs × 4 conditions = 160 runs)
-- Functional equivalence: Same H1×H4 effects expected
-
-**Analysis Script:** `code/experiments/analyze_cycle256_phase1b.py`
-
-**Validation Tests:**
-1. **Runtime Comparison**: C256 vs C257-C260 mean
+**Proposed Validation Tests:**
+1. **Runtime Comparison**: Unoptimized C256 vs optimized variants
    - Predicted: 160-190× speedup
    - Criterion: Within predicted range
 
@@ -163,10 +162,14 @@ Results demonstrate runtime variance as signal, not noise—a measurable proxy f
    - Criterion: Same statistical patterns
    - Confirms optimization doesn't alter behavior
 
-**Expected Results:**
-- Strong validation: All 3 tests pass
-- Moderate validation: Tests 1+2 pass
-- Weak/Rejected: <2 tests pass
+**Independent Validation:**
+Phase 1B optimization effectiveness has been independently validated through Cycle 697 performance benchmarking:
+- **Verified speedup:** 245.9× (1.6 → 400.2 iterations/sec on 50 agents, 10 iterations)
+- **Scaling validation:** 300 agents @ 20.9 iterations/sec (real-time capable)
+- **Documentation:** `archive/performance/fractal_swarm_performance_characteristics.md`
+- **Commits:** Cycle 697 (5 commits: 1abef42, 974613c, 7422e64, d7f5366, 2c17e58)
+
+This independent validation confirms optimization effectiveness, though Phase 1B controlled comparison on C256's specific H1×H4 design remains future work.
 
 ---
 
@@ -199,21 +202,15 @@ python code/experiments/cycle256_h1h4_mechanism_validation.py
 # Phase 1A: Analysis
 python code/experiments/analyze_cycle256_phase1a.py
 
-# Phase 1B: C257-C260 (optimized) - ~12 min each
-python code/experiments/cycle257_h1h4_optimized.py  # LOW×LOW
-python code/experiments/cycle258_h1h4_optimized.py  # LOW×HIGH
-python code/experiments/cycle259_h1h4_optimized.py  # HIGH×LOW
-python code/experiments/cycle260_h1h4_optimized.py  # HIGH×HIGH
-
-# Phase 1B: Analysis
-python code/experiments/analyze_cycle256_phase1b.py
+# Note: Phase 1B experiments (optimized H1×H4) not yet implemented
+# Existing C257-C260 test different factorial pairs for Paper 3
 ```
 
 ### Expected Runtime
 
 - C256 (Phase 1A): 34-35 hours (unoptimized)
-- C257-C260 (Phase 1B): 11-13 minutes each (~50 min total)
-- Analysis scripts: <5 minutes each
+- Phase 1A Analysis: ~1 hour (H1-H5 hypothesis testing)
+- Phase 1B (Future Work): Would require ~45-50 min (optimized H1×H4 experiments)
 
 ### System Requirements
 
@@ -248,23 +245,22 @@ python code/experiments/analyze_cycle256_phase1b.py
 - ✅ Figure mockups (6 @ 300 DPI with simulated data)
 - ✅ Supplementary materials (~20,000 words)
 - ✅ References (10 sources)
-- ✅ Analysis scripts (Phase 1A + Phase 1B complete)
+- ✅ Phase 1A analysis script (analyze_cycle256_phase1a.py, 653 lines)
 
 **Pending:**
-- ⏳ C256 completion (21h 17m / ~34h elapsed)
-- ⏳ Phase 1A analysis execution (~1 hour)
-- ⏳ C257-C260 completion (~50 min total)
-- ⏳ Phase 1B analysis execution (~30 min)
-- ⏳ Final figures with real data (replace mockups)
-- ⏳ Manuscript finalization with results
+- ⏳ C256 completion (~12-13h remaining)
+- ⏳ Phase 1A analysis execution (~1 hour, script ready)
+- ⏳ Final figures with real C256 data (replace mockups)
+- ⏳ Manuscript finalization with Phase 1A results
+- 📋 Phase 1B experiments (future work - requires new optimized H1×H4 scripts)
 
 **Timeline:**
-- C256 completion: ~12-13h remaining (estimated 2025-10-31 10:00 AM)
-- Phase 1A analysis: Immediate (script ready)
-- C257-C260 execution: ~1h after C256 completion
-- Phase 1B analysis: Immediate after C257-C260
-- Paper finalization: ~2h after all data collected
-- **Target submission:** 2025-10-31 EOD
+- C256 completion: ~12-13h remaining (estimated 2025-10-31 12:00 PM)
+- Phase 1A analysis: Immediate upon C256 completion (script ready)
+- Figure generation: ~2 hours (6 main + 2 supplementary @ 300 DPI)
+- Manuscript finalization: ~2 hours (integrate Phase 1A results)
+- **Initial submission target:** Phase 1A results + literature integration
+- **Phase 1B:** Future enhancement (controlled optimization comparison)
 
 ---
 

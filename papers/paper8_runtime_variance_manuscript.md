@@ -294,12 +294,12 @@ NRM framework predicts internal state accumulation:
    - Consistent with incremental arena allocation
    - Not explained by static overhead or thermal throttling
 
-3. **Optimization provides falsifiable prediction test**
-   - **Critical H2+H3 Prediction:** If memory fragmentation (H2) and I/O accumulation (H3) are the primary variance mechanisms, then optimization (cached metrics, reduced psutil calls) should eliminate variance (>80% reduction)
-   - **Falsifiability:** If variance persists post-optimization (Phase 1B Levene's test), H2+H3 are incomplete/incorrect as sole mechanisms
-   - **Speedup Validation:** 160-190× predicted speedup (34.5h → 11-13 min) independently validates optimization effectiveness
-   - **Residual Variance Interpretation:** If present, indicates H5 (emergent complexity) contribution not addressed by optimization
-   - **Clean Mechanistic Separation:** Controlled comparison (C256 vs. C257-C260) isolates infrastructure effects from framework dynamics
+3. **Optimization effectiveness independently validated (Cycle 697)**
+   - **Verified Speedup:** 245.9× (1.6 → 400.2 iterations/sec on 50 agents, 10 iterations)
+   - **Scaling Validation:** 300 agents @ 20.9 iterations/sec (real-time capable)
+   - **Mechanism Confirmation:** Optimization (cached metrics, reduced psutil calls) eliminates database bottleneck
+   - **Documentation:** Performance characteristics document (archive/performance/)
+   - **Future Work - Phase 1B:** Controlled comparison (C256 unoptimized vs. optimized H1×H4 replication) would provide direct variance elimination test, confirming H2+H3 as primary mechanisms if variance reduces >80%
 
 ### 4.2 Implications for Computational Practice
 
@@ -344,7 +344,7 @@ If H5 validates (per-cycle runtime increases), provides empirical evidence for:
 **Single Experiment:**
 - Variance pattern observed in one unoptimized experiment (C256)
 - Generalization requires replication across multiple experiments
-- Optimization comparison (C257-C260) provides critical test but limited sample
+- Optimization effectiveness validated independently (Cycle 697 benchmarking) but direct C256 comparison (Phase 1B) remains future work
 
 **System-Specific Effects:**
 - macOS-specific behavior (may differ on Linux clusters)
