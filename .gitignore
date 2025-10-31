@@ -69,3 +69,11 @@ papers/arxiv_submissions/*/manuscript.aux
 papers/arxiv_submissions/*/manuscript.log
 papers/arxiv_submissions/*/manuscript.out
 bridge.db
+
+# Test coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+*.cover
+.hypothesis/
