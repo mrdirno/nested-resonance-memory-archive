@@ -47,40 +47,39 @@ Resonance checks: 247,500 (4,950 per iteration)
 
 **Configuration:** `persist_resonance=False` (default, optimized)
 
-### Composition Detection Benchmark
-**Parameters:** 100 agents, 50 iterations (estimated from verification)
-
-```
-Throughput: 294.8 iterations/sec (estimated)
-Total time: 0.17s
-Avg per iteration: 3.4ms
-Resonance checks: 247,500 (same workload)
-```
-
-**Speedup:** 737x faster (0.4 → 294.8 iterations/sec)
-
-### Verified Performance (Independent Test)
+### Verified Performance (Independent Benchmark)
 **Parameters:** 50 agents, 10 iterations
 
 ```
 BEFORE (persist_resonance=True):
-  Throughput: 1.5 iterations/sec
-  Total time: 6.594s
-  Avg per iteration: 659.40ms
+  Throughput: 1.6 iterations/sec
+  Total time: 6.145s
+  Avg per iteration: 614.47ms
 
 AFTER (persist_resonance=False):
-  Throughput: 260.4 iterations/sec
-  Total time: 0.038s
-  Avg per iteration: 3.84ms
+  Throughput: 400.2 iterations/sec
+  Total time: 0.025s
+  Avg per iteration: 2.50ms
 
-Verified speedup: 171.7x faster
+Verified speedup: 245.9x faster
 ```
+
+### Composition Detection Benchmark (Estimated)
+**Parameters:** 100 agents, 50 iterations (extrapolated from verification)
+
+```
+BEFORE: 124.1s (2.1 minutes)
+AFTER: 0.505s
+Estimated speedup: 246x
+```
+
+**Note:** Speedup varies with agent count and iteration count. Original profiling showed 0.4 iterations/sec (100 agents), verification showed 1.6 iterations/sec (50 agents). Optimization delivers 171-246x speedup depending on parameters
 
 **Extrapolation to Original Parameters:**
 ```
-Estimated BEFORE (100 agents, 50 iterations): 133.2s
-Estimated AFTER (100 agents, 50 iterations): 0.776s
-Estimated speedup: 172x
+Estimated BEFORE (100 agents, 50 iterations): 124.1s (2.1 minutes)
+Estimated AFTER (100 agents, 50 iterations): 0.505s
+Estimated speedup: 246x
 ```
 
 ---
@@ -134,31 +133,37 @@ Composition detection requires pairwise resonance checks:
 
 ### Performance Projections (Optimized Mode)
 
-**Based on verified 260.4 iterations/sec throughput:**
+**Verified scaling results (5 iterations per test):**
 
-| Agents | Iterations | Checks   | Time (Estimated) |
-|--------|-----------|----------|------------------|
-| 50     | 10        | 12,250   | 0.038s          |
-| 50     | 50        | 61,250   | 0.19s           |
-| 100    | 10        | 49,500   | 0.15s           |
-| 100    | 50        | 247,500  | 0.78s           |
-| 100    | 100       | 495,000  | 1.5s            |
-| 200    | 50        | 995,000  | 3.1s            |
+| Agents | Checks/iter | Time     | Iter/sec  | Checks/sec | Memory |
+|--------|-------------|----------|-----------|------------|--------|
+| 10     | 45          | 0.001s   | 6,226.7   | 280,201    | 24.0MB |
+| 50     | 1,225       | 0.013s   | 382.2     | 468,242    | 26.4MB |
+| 100    | 4,950       | 0.036s   | 139.8     | 692,060    | 28.1MB |
+| 150    | 11,175      | 0.072s   | 69.6      | 777,519    | 28.8MB |
+| 200    | 19,900      | 0.110s   | 45.6      | 906,862    | 30.4MB |
+| 300    | 44,850      | 0.240s   | 20.9      | 936,067    | 34.8MB |
 
-**Implication:** Real-time composition detection for 100+ agents now practical.
+**Key Findings:**
+- Peak throughput: 936,067 checks/sec (300 agents)
+- Memory efficiency: 0.08MB per agent average
+- Real-time capable: All configurations ≥ 1 iteration/sec
+- 300 agents validated: 20.9 iterations/sec (real-time)
+
+**Implication:** Real-time composition detection for 100-300 agents verified practical.
 
 ### Performance Projections (Unoptimized Mode)
 
-**Based on verified 1.5 iterations/sec throughput:**
+**Based on verified 1.6 iterations/sec throughput:**
 
 | Agents | Iterations | Checks   | Time (Estimated) |
 |--------|-----------|----------|------------------|
-| 50     | 10        | 12,250   | 6.6s            |
-| 50     | 50        | 61,250   | 33s             |
-| 100    | 10        | 49,500   | 26s             |
-| 100    | 50        | 247,500  | 133s (2.2 min)  |
-| 100    | 100       | 495,000  | 267s (4.5 min)  |
-| 200    | 50        | 995,000  | 531s (8.9 min)  |
+| 50     | 10        | 12,250   | 6.1s            |
+| 50     | 50        | 61,250   | 31s             |
+| 100    | 10        | 49,500   | 24s             |
+| 100    | 50        | 247,500  | 124s (2.1 min)  |
+| 100    | 100       | 495,000  | 248s (4.1 min)  |
+| 200    | 50        | 995,000  | 496s (8.3 min)  |
 
 **Implication:** Large-scale experiments impractical without optimization.
 
@@ -292,8 +297,22 @@ results = benchmark_composition_detection(
     persist_resonance=False
 )
 
-# Expected: ~260 iterations/sec (optimized)
-# Expected: ~1.5 iterations/sec (unoptimized)
+# Verified results:
+# Optimized: 400.2 iterations/sec (245.9x speedup)
+# Unoptimized: 1.6 iterations/sec
+```
+
+**Scaling Test:**
+```python
+from code.utilities.test_composition_scaling import test_composition_scaling
+
+# Test multiple agent counts
+results = test_composition_scaling(
+    agent_counts=[10, 25, 50, 75, 100, 150, 200, 300],
+    iterations=5
+)
+
+# Verified: 300 agents @ 20.9 iterations/sec (real-time capable)
 ```
 
 **Full Profiling Suite:**
@@ -338,10 +357,11 @@ Profiles:
 ## Conclusion
 
 **Optimization Impact:**
-- 171-737x speedup (parameter-dependent)
-- Enables 100+ agent experiments (previously impractical)
+- 245.9x speedup verified (50 agents, parameter-dependent)
+- Enables 100-300 agent experiments (previously impractical)
 - Critical for Papers 3, 4, 8 feasibility
 - Minimal code change (+28 lines)
+- Verified real-time: 300 agents @ 20.9 iterations/sec
 
 **Research Value:**
 - Systematic performance analysis methodology
@@ -359,7 +379,7 @@ Profiles:
 
 **Performance Status: Production-Ready for Large-Scale Research**
 
-*"Small changes, massive impact. 28 lines of code, 171-737x faster composition. Profiling reveals truth, optimization delivers results."*
+*"Small changes, massive impact. 28 lines of code, 245.9x verified speedup. 300 agents real-time capable. Profiling reveals truth, optimization delivers results."*
 
 ---
 
