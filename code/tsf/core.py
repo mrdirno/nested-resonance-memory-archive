@@ -879,7 +879,7 @@ def _quantify_regime_classification(
 
 
 # =============================================================================
-# PUBLISH: Create validated Principle Card (stub)
+# PUBLISH: Create validated Principle Card
 # =============================================================================
 
 def publish(
@@ -894,7 +894,8 @@ def publish(
     """
     Create validated Principle Card from pattern.
 
-    [STUB - Implementation in Phase 5]
+    Integrates discovery, refutation, and quantification into a validated PC.
+    Creates JSON specification compatible with TEG (Temporal Embedding Graph).
 
     Args:
         pattern: Validated pattern from tsf.discover()
@@ -903,12 +904,126 @@ def publish(
         pc_id: Principle Card identifier (e.g., "PC003")
         title: Human-readable title
         author: Author name and email
-        dependencies: List of prerequisite PC IDs
+        dependencies: List of prerequisite PC IDs (default: [])
 
     Returns:
-        Path to created Principle Card file
+        Path to created Principle Card JSON file
 
     Raises:
         PublicationError: If PC creation fails
+
+    Example:
+        >>> pattern = tsf.discover(data, "regime_classification")
+        >>> refutation = tsf.refute(pattern, "10x", 0.1, val_data)
+        >>> metrics = tsf.quantify(pattern, val_data, ["stability"])
+        >>> pc_path = tsf.publish(
+        ...     pattern=pattern,
+        ...     metrics=metrics,
+        ...     refutation=refutation,
+        ...     pc_id="PC003",
+        ...     title="Multi-Regime Dynamics",
+        ...     author="Aldrin Payopay <aldrin.gdf@gmail.com>"
+        ... )
     """
-    raise NotImplementedError("tsf.publish() implementation pending (Phase 5)")
+    dependencies = dependencies or []
+
+    # Validate PC ID format
+    if not pc_id.startswith("PC"):
+        raise PublicationError(
+            f"PC ID must start with 'PC': {pc_id}",
+            context={"pc_id": pc_id}
+        )
+
+    # Validate refutation passed
+    if not refutation.passed:
+        raise PublicationError(
+            "Cannot publish pattern that failed refutation",
+            context={
+                "pc_id": pc_id,
+                "refutation_failures": refutation.failures
+            }
+        )
+
+    # Validate quantification scores meet thresholds
+    min_stability = 0.5  # Require >50% stability
+    if "stability" in metrics.scores and metrics.scores["stability"] < min_stability:
+        raise PublicationError(
+            f"Pattern stability {metrics.scores['stability']:.3f} below threshold {min_stability}",
+            context={
+                "pc_id": pc_id,
+                "stability": metrics.scores["stability"],
+                "threshold": min_stability
+            }
+        )
+
+    try:
+        # Create PC specification
+        from datetime import datetime
+
+        pc_spec = {
+            "pc_id": pc_id,
+            "version": "1.0.0",
+            "title": title,
+            "author": author,
+            "created": datetime.now().strftime("%Y-%m-%d"),
+            "status": "validated",
+            "domain": pattern.domain,
+            "dependencies": dependencies,
+            "enables": [],  # To be filled by TEG integration
+
+            # Discovery information
+            "discovery": {
+                "method": pattern.method,
+                "parameters": pattern.parameters,
+                "features": pattern.features,
+                "pattern_id": pattern.pattern_id
+            },
+
+            # Refutation results
+            "refutation": {
+                "horizon": refutation.horizon,
+                "tolerance": refutation.tolerance,
+                "passed": refutation.passed,
+                "metrics": refutation.metrics
+            },
+
+            # Quantification metrics
+            "quantification": {
+                "validation_method": metrics.validation_method,
+                "criteria": metrics.criteria,
+                "scores": metrics.scores,
+                "confidence_intervals": {
+                    k: list(v) for k, v in metrics.confidence_intervals.items()
+                },
+                "sample_size": metrics.sample_size
+            },
+
+            # Metadata
+            "metadata": {
+                "tsf_version": "0.1.0",
+                "framework": "TSF Science Engine",
+                "repository": "https://github.com/mrdirno/nested-resonance-memory-archive"
+            }
+        }
+
+        # Determine output path
+        output_dir = Path("/Users/aldrinpayopay/nested-resonance-memory-archive/principle_cards")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        output_file = output_dir / f"{pc_id.lower()}_specification.json"
+
+        # Write PC specification
+        import json
+        with open(output_file, 'w') as f:
+            json.dump(pc_spec, f, indent=2)
+
+        return output_file
+
+    except Exception as e:
+        raise PublicationError(
+            f"Failed to create Principle Card: {e}",
+            context={
+                "pc_id": pc_id,
+                "title": title,
+                "error": str(e)
+            }
+        )

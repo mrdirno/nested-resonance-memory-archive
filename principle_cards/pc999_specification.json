@@ -1,0 +1,71 @@
+{
+  "pc_id": "PC999",
+  "version": "1.0.0",
+  "title": "Test Principle Card",
+  "author": "Test Author <test@example.com>",
+  "created": "2025-11-01",
+  "status": "validated",
+  "domain": "population_dynamics",
+  "dependencies": [],
+  "enables": [],
+  "discovery": {
+    "method": "regime_classification",
+    "parameters": {},
+    "features": {
+      "regime": "SUSTAINED_STABLE",
+      "mean_population": 99.92576255376922,
+      "std_population": 2.0958649501884543,
+      "min_population": 94.96860189991119,
+      "max_population": 104.6462831670816,
+      "relative_std": 0.020974220227138247,
+      "cv_population": 0.020974220227348146,
+      "is_sustained": true,
+      "is_collapse": false,
+      "is_oscillatory": false
+    },
+    "pattern_id": "regime_sustained_stable_training"
+  },
+  "refutation": {
+    "horizon": "10x",
+    "tolerance": 0.2,
+    "passed": true,
+    "metrics": {
+      "mean_deviation": 0.0,
+      "std_deviation": 0.0,
+      "regime_consistent": true,
+      "mean_within_tolerance": true,
+      "std_within_tolerance": true,
+      "original_mean": 99.92576255376922,
+      "validation_mean": 99.92576255376922,
+      "original_relative_std": 0.020974220227138247,
+      "validation_relative_std": 0.020974220227138247
+    }
+  },
+  "quantification": {
+    "validation_method": "held_out_validation",
+    "criteria": [
+      "stability",
+      "consistency"
+    ],
+    "scores": {
+      "stability": 1.0,
+      "consistency": 1.0
+    },
+    "confidence_intervals": {
+      "stability": [
+        1.0,
+        1.0
+      ],
+      "consistency": [
+        0.95,
+        1.0
+      ]
+    },
+    "sample_size": 1
+  },
+  "metadata": {
+    "tsf_version": "0.1.0",
+    "framework": "TSF Science Engine",
+    "repository": "https://github.com/mrdirno/nested-resonance-memory-archive"
+  }
+}
