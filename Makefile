@@ -8,6 +8,7 @@
 #   make paper6               - Compile Paper 6 (Scale-Dependent Phase Autonomy)
 #   make paper6b              - Compile Paper 6B (Multi-Timescale Dynamics)
 #   make paper7               - Compile Paper 7 (Sleep-Inspired Consolidation)
+#   make paper9               - Compile Paper 9 (TSF Framework)
 #   make paper3               - Run Paper 3 factorial experiments
 #   make test                 - Run test suite
 #   make test-cached-metrics  - Run cached_metrics validation tests
@@ -20,7 +21,7 @@
 # Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 # License: GPL-3.0
 
-.PHONY: help install paper1 paper2 paper5d paper6 paper6b paper7 paper3 paper4 test test-quick test-cached-metrics verify-cached-fix lint format clean docker-build docker-run docker-test figures figures-c175 figures-nrmv2 list-figures
+.PHONY: help install paper1 paper2 paper5d paper6 paper6b paper7 paper9 paper3 paper4 test test-quick test-cached-metrics verify-cached-fix lint format clean docker-build docker-run docker-test figures figures-c175 figures-nrmv2 list-figures
 
 # Default target
 .DEFAULT_GOAL := help
@@ -119,6 +120,17 @@ paper7: ## Compile Paper 7 (Sleep-Inspired Consolidation)
 	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
 	@echo "$(GREEN)✓ Paper 7 compiled → papers/compiled/paper7/$(NC)"
 
+paper9: ## Compile Paper 9 (TSF Framework)
+	@echo "$(BLUE)Compiling Paper 9 (3 passes for references and tables)...$(NC)"
+	cd papers/arxiv_submissions/paper9 && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript_raw.tex && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript_raw.tex && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript_raw.tex && \
+	cp manuscript_raw.pdf ../../compiled/paper9/Paper9_TSF_Framework_arXiv_Submission.pdf && \
+	rm -f manuscript_raw.aux manuscript_raw.log manuscript_raw.out || \
+	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
+	@echo "$(GREEN)✓ Paper 9 compiled → papers/compiled/paper9/$(NC)"
+
 paper3: ## Run Paper 3 factorial experiments (6 experiments, ~67 mins)
 	@echo "$(BLUE)Running Paper 3 factorial experiments...$(NC)"
 	@echo "$(YELLOW)⚠ This will take ~67 minutes for optimized version$(NC)"
@@ -204,7 +216,7 @@ all: install verify test-quick ## Install, verify, and run quick tests
 	@echo "$(GREEN)✓ All tasks complete$(NC)"
 
 # Convenience targets for papers
-papers: paper1 paper5d ## Compile all papers
+papers: paper1 paper2 paper5d paper6 paper6b paper7 paper9 ## Compile all papers
 
 # Experiments
 experiments: paper3 paper4 ## Run all experiments
