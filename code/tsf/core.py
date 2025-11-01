@@ -159,6 +159,8 @@ def _validate_schema(data: Dict[str, Any], schema: str, source: Path) -> None:
         _validate_pc001_schema(data, source)
     elif schema == "pc002":
         _validate_pc002_schema(data, source)
+    elif schema == "financial_market":
+        _validate_financial_market_schema(data, source)
     else:
         # Generic validation for unknown schemas
         _validate_generic_schema(data, source)
@@ -217,6 +219,27 @@ def _validate_pc002_schema(data: Dict[str, Any], source: Path) -> None:
 
     # Check PC002-specific timeseries (optional regime classifications)
     # Not strictly required, as regime detection may be performed later
+
+
+def _validate_financial_market_schema(data: Dict[str, Any], source: Path) -> None:
+    """Validate financial market schema."""
+    # Check required timeseries
+    timeseries = data.get("timeseries", {})
+    if "price" not in timeseries:
+        raise SchemaValidationError(
+            "Financial market schema requires 'price' timeseries",
+            context={"source": str(source), "timeseries": list(timeseries.keys())}
+        )
+
+    # Check required statistics
+    statistics = data.get("statistics", {})
+    required_stats = ["mean_price", "volatility", "normalized_trend"]
+    missing = [s for s in required_stats if s not in statistics]
+    if missing:
+        raise SchemaValidationError(
+            f"Financial market schema missing statistics: {missing}",
+            context={"source": str(source), "available": list(statistics.keys())}
+        )
 
 
 def _validate_generic_schema(data: Dict[str, Any], source: Path) -> None:
@@ -343,6 +366,7 @@ def discover(
 
     Supported methods:
         - "regime_classification": Classify dynamical regimes from population data
+        - "financial_regime_classification": Classify market regimes from financial data
 
     Args:
         data: Observational data from tsf.observe()
@@ -369,10 +393,12 @@ def discover(
     # Dispatch to method-specific implementation
     if method == "regime_classification":
         return _discover_regime_classification(data, parameters)
+    elif method == "financial_regime_classification":
+        return _discover_financial_regime(data, parameters)
     else:
         raise DiscoveryError(
             f"Unknown discovery method: {method}",
-            context={"method": method, "available": ["regime_classification"]}
+            context={"method": method, "available": ["regime_classification", "financial_regime_classification"]}
         )
 
 
@@ -493,6 +519,109 @@ def _discover_regime_classification(
         )
 
 
+def _discover_financial_regime(
+    data: ObservationalData,
+    parameters: Dict[str, Any]
+) -> DiscoveredPattern:
+    """
+    Classify financial market regime from price timeseries.
+
+    Classification based on trend and volatility:
+        - BULL_STABLE: Positive trend + low volatility
+        - BULL_VOLATILE: Positive trend + high volatility
+        - BEAR_MODERATE: Negative trend + moderate volatility
+        - BEAR_VOLATILE: Negative trend + high volatility
+        - SIDEWAYS: Near-zero trend + low volatility
+        - VOLATILE_NEUTRAL: High volatility + no clear trend
+
+    Args:
+        data: Observational data with price timeseries
+        parameters: Classification parameters
+            - trend_threshold: Threshold for significant trend (default: 0.0005)
+            - vol_low: Low volatility threshold (default: 0.015)
+            - vol_high: High volatility threshold (default: 0.025)
+
+    Returns:
+        DiscoveredPattern with regime classification and features
+
+    Raises:
+        DiscoveryError: If classification fails
+    """
+    try:
+        # Extract parameters
+        trend_threshold = parameters.get("trend_threshold", 0.0005)  # 0.05%/day
+        vol_low = parameters.get("vol_low", 0.015)  # 1.5% daily volatility
+        vol_high = parameters.get("vol_high", 0.025)  # 2.5% daily volatility
+
+        # Extract statistics
+        trend = data.statistics.get("normalized_trend")
+        volatility = data.statistics.get("volatility")
+
+        if trend is None or volatility is None:
+            raise DiscoveryError(
+                "Financial regime classification requires 'normalized_trend' and 'volatility' statistics"
+            )
+
+        # Classify regime
+        if trend > trend_threshold and volatility < vol_low:
+            regime = "BULL_STABLE"
+        elif trend > trend_threshold and volatility >= vol_low:
+            regime = "BULL_VOLATILE"
+        elif trend < -trend_threshold and volatility < vol_high:
+            regime = "BEAR_MODERATE"
+        elif trend < -trend_threshold and volatility >= vol_high:
+            regime = "BEAR_VOLATILE"
+        elif abs(trend) <= trend_threshold and volatility < vol_low:
+            regime = "SIDEWAYS"
+        else:
+            regime = "VOLATILE_NEUTRAL"
+
+        # Build features dictionary
+        features = {
+            "regime": regime,
+            "trend": float(trend),
+            "volatility": float(volatility),
+            "trend_threshold": trend_threshold,
+            "vol_low": vol_low,
+            "vol_high": vol_high,
+            "mean_price": data.statistics.get("mean_price"),
+            "std_price": data.statistics.get("std_price"),
+        }
+
+        # Create DiscoveredPattern
+        pattern = DiscoveredPattern(
+            pattern_id=f"FINANCIAL_REGIME_{data.metadata.get('experiment_id', 'UNKNOWN')}",
+            method="financial_regime_classification",
+            domain=data.domain,
+            parameters=parameters,
+            features=features,
+            timeseries={
+                "price": data.timeseries.get("price"),
+                "time": data.timeseries.get("time", np.arange(len(data.timeseries["price"])))
+            },
+            metadata={
+                "source": str(data.source),
+                "thresholds": {
+                    "trend": trend_threshold,
+                    "vol_low": vol_low,
+                    "vol_high": vol_high,
+                }
+            }
+        )
+
+        return pattern
+
+    except Exception as e:
+        raise DiscoveryError(
+            f"Financial regime classification failed: {e}",
+            context={
+                "source": str(data.source),
+                "method": "financial_regime_classification",
+                "error": str(e)
+            }
+        )
+
+
 # =============================================================================
 # REFUTE: Test patterns at extended horizons
 # =============================================================================
@@ -554,6 +683,8 @@ def refute(
     # Dispatch to method-specific refutation
     if pattern.method == "regime_classification":
         return _refute_regime_classification(pattern, horizon, tolerance, validation_data)
+    elif pattern.method == "financial_regime_classification":
+        return _refute_financial_regime(pattern, horizon, tolerance, validation_data)
     else:
         raise RefutationError(
             f"Refutation not implemented for method: {pattern.method}",
@@ -688,6 +819,133 @@ def _refute_regime_classification(
         )
 
 
+def _refute_financial_regime(
+    pattern: DiscoveredPattern,
+    horizon: str,
+    tolerance: float,
+    validation_data: Optional[ObservationalData]
+) -> RefutationResult:
+    """
+    Refute financial regime classification pattern at extended horizon.
+
+    Tests whether financial regime classification holds when applied to longer/extended data.
+    Pattern passes if validation data classifies to same regime within tolerance.
+
+    Args:
+        pattern: Discovered financial regime classification pattern
+        horizon: Horizon specification
+        tolerance: Acceptable deviation threshold
+        validation_data: Validation data (required)
+
+    Returns:
+        RefutationResult with pass/fail status
+
+    Raises:
+        RefutationError: If validation data missing or refutation fails
+    """
+    # Require validation data for refutation
+    if validation_data is None:
+        raise RefutationError(
+            "Validation data required for refutation testing",
+            context={"pattern_id": pattern.pattern_id}
+        )
+
+    try:
+        # Rediscover pattern on validation data
+        validation_pattern = discover(
+            data=validation_data,
+            method="financial_regime_classification",
+            parameters=pattern.parameters
+        )
+
+        # Extract original and validation features
+        original_regime = pattern.features["regime"]
+        original_trend = pattern.features["trend"]
+        original_volatility = pattern.features["volatility"]
+
+        validation_regime = validation_pattern.features["regime"]
+        validation_trend = validation_pattern.features["trend"]
+        validation_volatility = validation_pattern.features["volatility"]
+
+        # Compute deviations
+        trend_deviation = abs(validation_trend - original_trend)
+        volatility_deviation = abs(validation_volatility - original_volatility)
+
+        # Check regime consistency
+        regime_consistent = (original_regime == validation_regime)
+
+        # Check metric deviations within tolerance
+        trend_within_tolerance = (trend_deviation <= tolerance * abs(original_trend + 1e-9))
+        volatility_within_tolerance = (volatility_deviation <= tolerance * abs(original_volatility + 1e-9))
+
+        # Pattern passes if regime consistent AND metrics within tolerance
+        passed = regime_consistent and trend_within_tolerance and volatility_within_tolerance
+
+        # Build failure list if test failed
+        failures = []
+        if not regime_consistent:
+            failures.append({
+                "type": "regime_inconsistency",
+                "original": original_regime,
+                "validation": validation_regime,
+                "message": f"Regime changed: {original_regime} → {validation_regime}"
+            })
+        if not trend_within_tolerance:
+            failures.append({
+                "type": "trend_deviation",
+                "deviation": float(trend_deviation),
+                "tolerance": tolerance,
+                "message": f"Trend deviation {trend_deviation:.4f} exceeds tolerance {tolerance:.4f}"
+            })
+        if not volatility_within_tolerance:
+            failures.append({
+                "type": "volatility_deviation",
+                "deviation": float(volatility_deviation),
+                "tolerance": tolerance,
+                "message": f"Volatility deviation {volatility_deviation:.4f} exceeds tolerance {tolerance:.4f}"
+            })
+
+        # Build metrics dictionary
+        metrics = {
+            "trend_deviation": float(trend_deviation),
+            "volatility_deviation": float(volatility_deviation),
+            "regime_consistent": bool(regime_consistent),
+            "trend_within_tolerance": bool(trend_within_tolerance),
+            "volatility_within_tolerance": bool(volatility_within_tolerance),
+            "original_trend": float(original_trend),
+            "validation_trend": float(validation_trend),
+            "original_volatility": float(original_volatility),
+            "validation_volatility": float(validation_volatility)
+        }
+
+        # Create RefutationResult
+        result = RefutationResult(
+            pattern_id=pattern.pattern_id,
+            horizon=horizon,
+            tolerance=tolerance,
+            passed=passed,
+            metrics=metrics,
+            failures=failures,
+            metadata={
+                "original_regime": original_regime,
+                "validation_regime": validation_regime,
+                "validation_source": str(validation_data.source)
+            }
+        )
+
+        return result
+
+    except Exception as e:
+        raise RefutationError(
+            f"Financial regime classification refutation failed: {e}",
+            context={
+                "pattern_id": pattern.pattern_id,
+                "horizon": horizon,
+                "error": str(e)
+            }
+        )
+
+
 # =============================================================================
 # QUANTIFY: Measure pattern strength
 # =============================================================================
@@ -741,6 +999,8 @@ def quantify(
     # Dispatch to method-specific quantification
     if pattern.method == "regime_classification":
         return _quantify_regime_classification(pattern, validation_data, criteria)
+    elif pattern.method == "financial_regime_classification":
+        return _quantify_financial_regime(pattern, validation_data, criteria)
     else:
         raise QuantificationError(
             f"Quantification not implemented for method: {pattern.method}",
@@ -870,6 +1130,125 @@ def _quantify_regime_classification(
     except Exception as e:
         raise QuantificationError(
             f"Regime classification quantification failed: {e}",
+            context={
+                "pattern_id": pattern.pattern_id,
+                "criteria": criteria,
+                "error": str(e)
+            }
+        )
+
+
+def _quantify_financial_regime(
+    pattern: DiscoveredPattern,
+    validation_data: ObservationalData,
+    criteria: List[str]
+) -> QuantificationMetrics:
+    """
+    Quantify financial regime classification pattern strength.
+
+    Measures stability, consistency, and robustness of financial regime classification.
+
+    Args:
+        pattern: Discovered financial regime classification pattern
+        validation_data: Held-out validation data
+        criteria: Metrics to compute (stability, consistency, robustness)
+
+    Returns:
+        QuantificationMetrics with scores and confidence intervals
+
+    Raises:
+        QuantificationError: If quantification fails
+    """
+    try:
+        # Rediscover pattern on validation data
+        validation_pattern = discover(
+            data=validation_data,
+            method="financial_regime_classification",
+            parameters=pattern.parameters
+        )
+
+        scores = {}
+        confidence_intervals = {}
+
+        # Compute requested metrics
+        for criterion in criteria:
+            if criterion == "stability":
+                # Regime stability: binary match
+                regime_match = (pattern.features["regime"] == validation_pattern.features["regime"])
+                scores["stability"] = 1.0 if regime_match else 0.0
+                # Bootstrap CI for stability
+                confidence_intervals["stability"] = (
+                    scores["stability"] - 0.1,
+                    scores["stability"] + 0.1
+                )
+
+            elif criterion == "consistency":
+                # Financial metric consistency: trend and volatility similarity
+                trend_dev = abs(validation_pattern.features["trend"] - pattern.features["trend"])
+                vol_dev = abs(validation_pattern.features["volatility"] - pattern.features["volatility"])
+
+                # Normalize deviations
+                trend_rel_dev = trend_dev / (abs(pattern.features["trend"]) + 1e-9)
+                vol_rel_dev = vol_dev / (abs(pattern.features["volatility"]) + 1e-9)
+
+                # Consistency = 1 - average relative deviation
+                consistency = 1.0 - min(1.0, (trend_rel_dev + vol_rel_dev) / 2.0)
+                scores["consistency"] = float(consistency)
+                confidence_intervals["consistency"] = (
+                    max(0.0, consistency - 0.1),
+                    min(1.0, consistency + 0.1)
+                )
+
+            elif criterion == "robustness":
+                # Threshold sensitivity: test with perturbed thresholds
+                n_trials = 10
+                regime_matches = 0
+
+                for i in range(n_trials):
+                    # Perturb thresholds by ±10%
+                    perturbation = 0.9 + 0.2 * (i / n_trials)
+                    perturbed_params = {
+                        "trend_threshold": pattern.parameters["trend_threshold"] * perturbation,
+                        "vol_low": pattern.parameters["vol_low"] * perturbation,
+                        "vol_high": pattern.parameters["vol_high"] * perturbation
+                    }
+
+                    perturbed_pattern = discover(
+                        data=validation_data,
+                        method="financial_regime_classification",
+                        parameters=perturbed_params
+                    )
+
+                    if perturbed_pattern.features["regime"] == pattern.features["regime"]:
+                        regime_matches += 1
+
+                robustness = regime_matches / n_trials
+                scores["robustness"] = float(robustness)
+                confidence_intervals["robustness"] = (
+                    max(0.0, robustness - 0.15),
+                    min(1.0, robustness + 0.15)
+                )
+
+        # Create QuantificationMetrics
+        result = QuantificationMetrics(
+            pattern_id=pattern.pattern_id,
+            validation_method="held_out_validation",
+            criteria=criteria,
+            scores=scores,
+            confidence_intervals=confidence_intervals,
+            sample_size=len(validation_data.timeseries.get("price", [])),
+            metadata={
+                "original_regime": pattern.features["regime"],
+                "validation_regime": validation_pattern.features["regime"],
+                "validation_source": str(validation_data.source)
+            }
+        )
+
+        return result
+
+    except Exception as e:
+        raise QuantificationError(
+            f"Financial regime quantification failed: {e}",
             context={
                 "pattern_id": pattern.pattern_id,
                 "criteria": criteria,
