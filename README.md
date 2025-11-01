@@ -1892,8 +1892,10 @@ python papers/minimal_package_with_experiments/experiments/replicate_patterns.py
 │   │   ├── paper1_final/             # 3 figures (300 DPI)
 │   │   └── paper5d_final/            # 7 figures (300 DPI)
 │   └── [10 manuscripts + cycle docs]
-├── archive/summaries/                # Cycle documentation
-│   └── CYCLE443_MAJOR_REVISION_INTEGRATION.md  # Latest
+├── archive/
+│   ├── NRM_RESEARCH_SYNTHESIS_2025.md  # Comprehensive 9-paper synthesis (6,800 words, NEW)
+│   └── summaries/                  # Cycle documentation
+│       └── CYCLE443_MAJOR_REVISION_INTEGRATION.md  # Latest
 └── tests/                            # 29/29 passing, 0 warnings
 ```
 
