@@ -1564,6 +1564,104 @@ gaps guide next theoretical development.''
 \label{fig:phase}
 \end{figure}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig5_v4_vs_v2_trajectories.png}
+\caption{\textbf{V4 vs V2 Temporal Trajectories.} Comparison of V2 (constrained) vs V4 (energy threshold) population dynamics over 1000 time units. V2 shows collapse (N→1.00) while V4 sustains population (N=139.17), demonstrating 139× improvement through energy threshold mechanism.}
+\label{fig:v4-trajectories}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig6_v4_vs_v2_phase_space.png}
+\caption{\textbf{V4 vs V2 Phase Space Structure.} Energy-population phase portraits showing V2 collapse basin vs V4 sustained attractor. Demonstrates fundamental shift from unstable to stable dynamics.}
+\label{fig:v4-phase}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig7_v4_vs_v2_parameters.png}
+\caption{\textbf{V4 vs V2 Parameter Comparison.} Parameter space changes from V2 to V4 optimization showing multi-parameter refinement: r (+200\%), lambda\_0 (+150\%), mu\_0 (-50\%), and introduction of new threshold parameter.}
+\label{fig:v4-parameters}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig8_robustness_parameter.png}
+\caption{\textbf{Parameter Noise Robustness.} V4 persistence under 30\% parameter fluctuations showing stable population (N~105-110) with 100\% persistence across all noise levels. CV increases modestly from 15.2\% to 16.9\%.}
+\label{fig:robustness-parameter}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig9_robustness_state.png}
+\caption{\textbf{State Noise Robustness.} V4 response to demographic stochasticity revealing noise-induced transitions to higher-N attractors (111→371). CV increases dramatically (15\%→45\%) while maintaining 95-100\% persistence.}
+\label{fig:robustness-state}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig10_robustness_external.png}
+\caption{\textbf{External Noise Robustness.} V4 insensitivity to resource fluctuations. Population remains stable (N≈111) with unchanged CV (15.2\%) across external noise levels, confirming threshold-dominated dynamics.}
+\label{fig:robustness-external}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig11_cv_calibration_parameter.png}
+\caption{\textbf{CV Calibration - Parameter Noise.} Attempt to match empirical CV=9.2\% using parameter fluctuations. Results show baseline CV=15.2\% persists across 0-30\% noise, demonstrating parameter noise cannot reduce V4 variance.}
+\label{fig:cv-parameter}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig12_cv_calibration_state.png}
+\caption{\textbf{CV Calibration - State Noise.} Demographic noise increases CV (15\%→45\%), opposite of calibration goal. Mean population increases (111→371), indicating noise drives transitions rather than reducing variance.}
+\label{fig:cv-state}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig13_cv_calibration_external.png}
+\caption{\textbf{CV Calibration - External Noise.} Resource fluctuations show no effect on CV (flat 15.2\%) or mean population (constant ~111), confirming external forcing ineffective when threshold dominates.}
+\label{fig:cv-external}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig14_empirical_vs_v4.png}
+\caption{\textbf{Empirical vs V4 CV Comparison.} Direct comparison showing V4 baseline CV=15.2\% (65\% overestimate) vs empirical CV=9.2\%. Gap persists across all noise configurations, motivating multi-timescale investigation.}
+\label{fig:empirical-comparison}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig15_temporal_averaging.png}
+\caption{\textbf{Temporal Averaging Effects.} CV decay from 15.2\% (t=500) to 1.0\% (t=5000) revealing three temporal regimes. Crossover at t≈1000-1500 matches empirical CV=9.2\%, suggesting measurement timescale effects.}
+\label{fig:temporal-averaging}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig16_stochastic_failures.png}
+\caption{\textbf{Initial Stochastic Implementation Failures (V1-V4).} Diagnostic trajectories showing universal extinction (20/20 runs) across all early stochastic models. Energy crashes from 2411→13 in 1 second, demonstrating systematic equation error.}
+\label{fig:stochastic-failures}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig17_v5_early.png}
+\caption{\textbf{V5 Corrected Equation Validation.} Early results with corrected energy equation showing persistent trajectories (N~215, 0/5 extinctions). Energy regulation stabilizes with demographic fluctuations, confirming intrinsic generation term critical.}
+\label{fig:v5-early}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/paper7_fig18_v5_breakthrough.png}
+\caption{\textbf{V5 Breakthrough - Complete 20-Run Ensemble.} Full validation: 0/20 extinctions, mean N=215.41 matches deterministic equilibrium (+0.19\%), CV=7.0\% demonstrates persistent variance from demographic noise. Gap to empirical CV=9.2\% reduced to 2.2 pp (24\% underprediction).}
+\label{fig:v5-breakthrough}
+\end{figure}
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{Supplementary Materials}\label{supplementary-materials}
