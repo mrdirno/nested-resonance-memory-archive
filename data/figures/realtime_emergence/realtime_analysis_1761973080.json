@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-10-31T21:58:00.193037",
+  "analysis_duration_seconds": 84.15988492965698,
+  "total_records_analyzed": 88804579,
+  "resonance_clustering": {
+    "total_events": 76317690,
+    "resonant_events": 33957,
+    "resonance_rate": 0.33957,
+    "mean_similarity": 0.7728997069790549,
+    "mean_phase_alignment": 0.7947268589790184,
+    "clustering_coefficient": 0.49064,
+    "temporal_density": 101.4015136291503
+  },
+  "phase_space_evolution": {
+    "total_transformations": 7779372,
+    "mean_magnitude": 5.96580146623629,
+    "phase_variance_pi": 3.5901150162466378,
+    "phase_variance_e": 3.325139075487532,
+    "phase_variance_phi": 3.3152768778981345,
+    "temporal_evolution_rate": 0.07761674605828181,
+    "reality_correlation": -0.007533592207795434
+  },
+  "reality_grounding": {
+    "total_metrics": 4707517,
+    "mean_cpu_percent": 2.236814,
+    "mean_memory_percent": 71.673638,
+    "io_bound_ratio": 0.94504,
+    "validation_pass_rate": 1.0
+  }
+}
