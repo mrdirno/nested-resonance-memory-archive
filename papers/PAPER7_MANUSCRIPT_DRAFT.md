@@ -1644,14 +1644,37 @@ All code for this analysis is publicly available:
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 
-**Key Files:**
+**Key Files (Phases 1-6, 25 scripts, ~9,456 lines):**
+
+**Phase 1-2 (Constraint Refinement):**
 - `code/analysis/paper7_theoretical_framework.py` - V1 implementation (220 lines)
 - `code/analysis/paper7_v2_constrained_model.py` - V2 implementation (369 lines)
 - `code/analysis/PAPER7_V1_VS_V2_COMPARISON.md` - Detailed comparison analysis
 
+**Phase 3 (Bifurcation Analysis):**
+- `code/analysis/paper7_v4_energy_threshold.py` - V4 implementation (401 lines)
+- `code/analysis/paper7_bifurcation_analysis.py` - Continuation methods (522 lines)
+- `code/analysis/paper7_regime_boundaries.py` - Critical thresholds (404 lines)
+
+**Phase 4 (Stochastic Robustness):**
+- `code/analysis/paper7_phase4_robustness_analysis.py` - Noise testing (485 lines)
+- `code/analysis/paper7_phase4_cv_calibration.py` - Variance analysis (394 lines)
+- `code/analysis/paper7_phase4_temporal_averaging.py` - Multi-timescale (289 lines)
+
+**Phase 5 (Timescale Quantification):**
+- `code/analysis/paper7_phase5_timescale_quantification.py` - CV decay fitting (517 lines)
+- `code/analysis/paper7_phase5_eigenvalue_analysis.py` - Jacobian computation (527 lines)
+
+**Phase 6 (Demographic Noise):**
+- `code/analysis/paper7_phase6_stochastic_v5_FIXED_EQUATION.py` - V5 validated model (338 lines)
+- `code/analysis/paper7_phase6_generate_v5_figure.py` - Publication figure (307 lines)
+
 **Data:**
 - `data/results/cycle171_fractal_swarm_bistability.json` - C171 experiments (40)
 - `data/results/cycle175_high_resolution_transition.json` - C175 experiments (110)
+
+**Figures (18 @ 300 DPI):**
+- See Section 5.2 for complete figure descriptions and file paths
 
 ### S2. Reproducibility
 
