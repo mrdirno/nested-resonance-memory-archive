@@ -1,0 +1,49 @@
+{
+  "nodes": {
+    "PC001": {
+      "pc_id": "PC001",
+      "version": "1.0.0",
+      "title": "NRM Population Dynamics",
+      "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+      "created": "2025-11-01",
+      "status": "validated",
+      "domain": "NRM",
+      "dependencies": [],
+      "enables": [
+        "PC002",
+        "PC005",
+        "PC006"
+      ],
+      "metadata": {}
+    },
+    "PC002": {
+      "pc_id": "PC002",
+      "version": "1.0.0",
+      "title": "Regime Detection in Population Dynamics",
+      "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+      "created": "2025-11-01",
+      "status": "validated",
+      "domain": "NRM",
+      "dependencies": [
+        "PC001"
+      ],
+      "enables": [
+        "PC005",
+        "PC006"
+      ],
+      "metadata": {}
+    }
+  },
+  "adjacency": {
+    "PC002": [
+      "PC001"
+    ],
+    "PC001": []
+  },
+  "reverse_adjacency": {
+    "PC001": [
+      "PC002"
+    ],
+    "PC002": []
+  }
+}
