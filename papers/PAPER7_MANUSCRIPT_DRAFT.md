@@ -1237,7 +1237,7 @@ Discontinuous at ρ = 40. Causes numerical issues in ODE integrators (adaptive s
 ```python
 energy_gate = 1.0 / (1.0 + np.exp(-0.1 * (rho - 40)))
 ```
-Smooth transition. Biologicallyrealistic (thresholds in nature are graded, not sharp). Improves integration stability.
+Smooth transition. Biologically realistic (thresholds in nature are graded, not sharp). Improves integration stability.
 
 **Impact:**
 - V1: Occasional integration failures (stiff solver warnings)
