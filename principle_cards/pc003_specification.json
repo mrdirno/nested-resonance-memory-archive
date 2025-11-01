@@ -1,0 +1,79 @@
+{
+  "pc_id": "PC003",
+  "version": "1.0.0",
+  "title": "Financial Market Regime Classification",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "created": "2025-11-01",
+  "status": "validated",
+  "domain": "financial_markets",
+  "dependencies": [],
+  "enables": [],
+  "discovery": {
+    "method": "financial_regime_classification",
+    "parameters": {
+      "trend_threshold": 0.0005,
+      "vol_low": 0.015,
+      "vol_high": 0.025
+    },
+    "features": {
+      "regime": "BULL_STABLE",
+      "trend": 0.0010802125856727333,
+      "volatility": 0.009652943269079168,
+      "trend_threshold": 0.0005,
+      "vol_low": 0.015,
+      "vol_high": 0.025,
+      "mean_price": 106.060155267013,
+      "std_price": 9.759601912459622
+    },
+    "pattern_id": "FINANCIAL_REGIME_FINANCIAL_BULL"
+  },
+  "refutation": {
+    "horizon": "10x",
+    "tolerance": 0.1,
+    "passed": true,
+    "metrics": {
+      "trend_deviation": 0.0,
+      "volatility_deviation": 0.0,
+      "regime_consistent": true,
+      "trend_within_tolerance": true,
+      "volatility_within_tolerance": true,
+      "original_trend": 0.0010802125856727333,
+      "validation_trend": 0.0010802125856727333,
+      "original_volatility": 0.009652943269079168,
+      "validation_volatility": 0.009652943269079168
+    }
+  },
+  "quantification": {
+    "validation_method": "held_out_validation",
+    "criteria": [
+      "stability",
+      "consistency",
+      "robustness"
+    ],
+    "scores": {
+      "stability": 1.0,
+      "consistency": 1.0,
+      "robustness": 1.0
+    },
+    "confidence_intervals": {
+      "stability": [
+        0.9,
+        1.1
+      ],
+      "consistency": [
+        0.9,
+        1.0
+      ],
+      "robustness": [
+        0.85,
+        1.0
+      ]
+    },
+    "sample_size": 253
+  },
+  "metadata": {
+    "tsf_version": "0.1.0",
+    "framework": "TSF Science Engine",
+    "repository": "https://github.com/mrdirno/nested-resonance-memory-archive"
+  }
+}
