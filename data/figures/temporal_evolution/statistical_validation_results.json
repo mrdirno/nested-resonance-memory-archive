@@ -1,0 +1,33 @@
+{
+  "ttest": {
+    "t_statistic": 16.429153558398017,
+    "p_value": 0.0033456006451964213,
+    "degrees_freedom": 2,
+    "significant": true
+  },
+  "effect_size": {
+    "cohens_d": 11.660721722000982,
+    "interpretation": "very large"
+  },
+  "bootstrap_ci_95": {
+    "initialization": [
+      0.8809,
+      0.9935
+    ],
+    "steady_state": [
+      0.3376,
+      0.3455
+    ],
+    "overlap": true
+  },
+  "levene_test": {
+    "statistic": 0.5124252018456396,
+    "p_value": 0.5257784492148407,
+    "variances_equal": true
+  },
+  "mann_whitney": {
+    "u_statistic": 6.0,
+    "p_value": 0.2,
+    "significant": false
+  }
+}
