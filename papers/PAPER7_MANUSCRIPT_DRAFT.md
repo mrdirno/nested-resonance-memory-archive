@@ -1454,6 +1454,120 @@ However, R² remaining negative (-0.17) despite excellent error metrics (RMSE=1.
 **Temporal Pattern Encoded:**
 > "Mathematical formalization of emergent systems requires iterative refinement: unconstrained models reveal missing physics through unphysical behavior → constraint-based corrections achieve dramatic improvement → remaining gaps guide next theoretical development."
 
+
+## 5.2 Figures
+
+### Phase 1-2: Model Validation & Constraint Refinement
+
+**Figure 1: NREM Consolidation Dynamics**
+(File: `data/figures/paper7_fig1_nrem_consolidation.png`)
+
+Shows V1 (unconstrained) vs V2 (constrained) population dynamics during consolidation phase. Panel A: Population trajectories showing V1 negative populations (unphysical) vs V2 N≥1 enforcement. Panel B: Energy dynamics with V1 unlimited growth vs V2 E≥0 constraint. Panel C: Resonance (φ) clipping in V2 vs unbounded V1. Demonstrates necessity of physical constraints for realistic dynamics. See Section 3.1.
+
+**Figure 2: REM Exploration Phase Dynamics**
+(File: `data/figures/paper7_fig2_rem_exploration.png`)
+
+Comparative phase space trajectories during exploration regime. Panel A: V1 unphysical trajectory entering negative N region. Panel B: V2 constrained trajectory remaining in physical domain [N≥1, E≥0, φ∈[0,1]]. Panel C: Phase velocity comparison showing V1 runaway vs V2 bounded dynamics. Illustrates constraint enforcement prevents model failure. See Section 3.1.
+
+**Figure 3: Validation Against Empirical Data**
+(File: `data/figures/paper7_fig3_validation.png`)
+
+Model predictions vs Paper 2 empirical observations. Panel A: V1 predictions (R²=-98.12, wildly incorrect). Panel B: V2 predictions (R²=-0.17, RMSE=1.90 agents). Panel C: Residual distributions showing V1 systematic bias vs V2 near-zero mean. Panel D: Parameter sensitivity showing V2 robust across parameter variations. Demonstrates 98-point R² improvement through constraint enforcement. See Section 3.2.
+
+**Figure 4: Phase Dynamics Across Parameter Space**
+(File: `data/figures/paper7_fig4_phase_dynamics.png`)
+
+V2 phase space structure across forcing frequencies. Panel A: Low frequency (f=1.0%) showing bistability. Panel B: Transition frequency (f=2.55%) with maximum variance. Panel C: High frequency (f=3.5%) with stable convergence. Panel D: Frequency-dependent variance showing regime transitions. Demonstrates V2 captures qualitative regime structure despite quantitative gap (R²=-0.17). See Section 3.3.
+
+### Phase 2-3: V4 Breakthrough & Comparison
+
+**Figure 5: V4 vs V2 Temporal Trajectories**
+(File: `data/figures/paper7_v4_vs_v2_trajectories_20251027_125323.png`)
+
+Comparison of V2 (constrained) vs V4 (energy threshold) population dynamics over 1000 time units. Panel A: V2 collapse trajectory (N→1.00 by t=500). Panel B: V4 sustained trajectory (N=139.17 at t=1000). Panel C: Energy dynamics showing V2 depletion vs V4 homeostatic regulation. Panel D: Resonance phase (φ) showing V2 decay vs V4 sustained oscillations. Demonstrates 139× population increase through energy threshold mechanism. See Section 3.5.1.
+
+**Figure 6: V4 vs V2 Phase Space Structure**
+(File: `data/figures/paper7_v4_vs_v2_phase_space_20251027_125324.png`)
+
+Energy-population phase portraits comparing V2 and V4 attractors. Panel A: V2 phase trajectory spiraling to collapse basin (N→1, E→0). Panel B: V4 phase trajectory converging to sustained attractor (N≈140, E≈2400). Panel C: Nullclines showing V2 unstable equilibrium vs V4 stable fixed point. Panel D: Basin of attraction analysis showing V4 robustness to initial conditions. Illustrates fundamental shift from collapse to persistence dynamics. See Section 3.5.1.
+
+**Figure 7: V4 vs V2 Parameter Comparison**
+(File: `data/figures/paper7_v4_vs_v2_parameters_20251027_125324.png`)
+
+Parameter space changes from V2 to V4 optimization. Shows percentage changes for 10 key parameters: r (+200%), lambda_0 (+150%), mu_0 (-50%), phi_0 (NEW), rho_threshold (-87.5%), omega (stable), kappa (stable), alpha (stable), beta (stable), gamma (stable). Bar chart visualizes multi-parameter refinement required for sustained dynamics. See Section 3.5.1.
+
+### Phase 4: Stochastic Robustness & Variance Analysis
+
+**Figure 8: Parameter Noise Robustness**
+(File: `data/figures/paper7_phase4_robustness_parameter_20251027_130757.png`)
+
+V4 persistence under parameter fluctuations. Panel A: Population trajectories (n=20 runs) with 30% parameter noise showing stable N~105-110. Panel B: CV vs noise level (0%, 10%, 30%) showing modest increase 15.2%→16.9%. Panel C: Persistence rate (100% across all noise levels). Panel D: Mean population vs noise showing stability. Demonstrates V4 robust attractor far from collapse boundaries. See Section 3.6.1.
+
+**Figure 9: State Noise Robustness**
+(File: `data/figures/paper7_phase4_robustness_state_20251027_130853.png`)
+
+V4 response to demographic stochasticity. Panel A: Population trajectories with state noise showing unexpected N increase (111→371). Panel B: CV vs noise amplitude showing dramatic jump 15%→45%. Panel C: Persistence (95-100% maintained). Panel D: Transient collapse and recovery at noise=1. Reveals noise-induced transitions to higher-N attractors. See Section 3.6.1.
+
+**Figure 10: External Noise Robustness**
+(File: `data/figures/paper7_phase4_robustness_external_20251027_130958.png`)
+
+V4 insensitivity to resource fluctuations. Panel A: Population trajectories with external forcing noise (negligible variation). Panel B: Mean N vs external noise level (flat response, N≈111). Panel C: CV unchanged (15.2% constant). Panel D: Confirms Phase 2 finding: energy recharge ineffective when rho_threshold dominates. See Section 3.6.1.
+
+**Figure 11: CV Calibration - Parameter Noise**
+(File: `data/figures/paper7_phase4_cv_calibration_parameter_20251027_131827.png`)
+
+Attempt to match empirical CV=9.2% using parameter fluctuations. Panel A: CV vs parameter noise level (0-30%). Panel B: Mean N vs noise (stable ~105-110). Panel C: Distribution of population values showing consistent baseline CV=15.2%. Panel D: Comparison to empirical showing systematic overestimate. Demonstrates parameter noise cannot reduce V4 baseline CV. See Section 3.6.2.
+
+**Figure 12: CV Calibration - State Noise**
+(File: `data/figures/paper7_phase4_cv_calibration_state_20251027_132005.png`)
+
+Attempt to match empirical CV using demographic noise. Panel A: CV vs state noise amplitude (increases from 15% to 45%, wrong direction). Panel B: Mean N vs noise (increases 111→371). Panel C: Population distributions broadening with noise. Panel D: Comparison to empirical showing calibration failure (noise increases CV instead of decreasing). See Section 3.6.2.
+
+**Figure 13: CV Calibration - External Noise**
+(File: `data/figures/paper7_phase4_cv_calibration_external_20251027_132149.png`)
+
+Attempt to match empirical CV using resource fluctuations. Panel A: CV vs external noise (flat at 15.2%, no effect). Panel B: Mean N vs noise (constant ~111). Panel C: Narrow population distributions regardless of forcing. Panel D: Comparison to empirical confirming external forcing ineffective. Reproduces Phase 2 finding. See Section 3.6.2.
+
+**Figure 14: Empirical vs V4 CV Comparison**
+(File: `data/figures/paper7_phase4_empirical_vs_v4_20251027_132149.png`)
+
+Direct comparison of V4 stochastic predictions to Paper 2 empirical CV. Shows V4 baseline CV=15.2% (65% overestimate) across all tested noise configurations. Empirical target CV=9.2% shown as reference line. Demonstrates structural discrepancy between deterministic V4 medium-term fluctuations and empirical persistent variance. Motivates multi-timescale investigation (Phase 5) and demographic noise extension (Phase 6). See Section 3.6.2.
+
+**Figure 15: Temporal Averaging Effects**
+(File: `data/figures/paper7_phase4_temporal_averaging_20251027_132536.png`)
+
+CV as function of measurement window. Panel A: CV(t) showing decay from 15.2% (t=500) to 1.0% (t=5000). Panel B: Three temporal regimes: fast transient (τ~100), medium fluctuations (τ~500), slow drift (τ~5000). Panel C: Crossover analysis showing CV=9.2% occurs at t≈1000-1500. Panel D: Comparison of window-averaged CV to empirical, suggesting measurement timescale effects. Reveals multi-timescale structure missed by single-window analysis. See Section 3.6.3.
+
+### Phase 6: Stochastic Demographic Noise Breakthrough
+
+**Figure 16: Initial Stochastic Implementation (V1-V4 Failures)**
+(File: `data/figures/paper7_phase6_stochastic_demographic_20251031_164444.png`)
+
+Diagnostic trajectories from failed stochastic models V1-V4. Panel A: Population collapse (20/20 runs → extinction, N→0 within 10 time units). Panel B: Energy crash (E drops from 2411→13 in 1 second, dE/dt=-10,515). Panel C: Catastrophic rate imbalance (death >> birth immediately). Panel D: Comparison across V1-V4 showing universal failure pattern despite parameter variations. Demonstrates systematic equation error, not parameter tuning issue. See Section 3.8.2.
+
+**Figure 17: V5 Corrected Equation Validation**
+(File: `data/figures/paper7_phase6_stochastic_FIXED_20251031_165351.png`)
+
+Early V5 results with corrected energy equation. Panel A: Persistent population trajectories (5 runs, N stable ~215, no extinctions). Panel B: Stable energy regulation (E~2400 with demographic fluctuations). Panel C: Birth-death balance maintained (rates oscillate but system persists). Panel D: Preliminary CV calculation showing persistent variance (CV~7%). Confirms intrinsic generation term N·r·(1-rho/K) critical for stochastic persistence. See Section 3.8.3.
+
+**Figure 18: V5 Breakthrough - Complete 20-Run Ensemble**
+(File: `data/figures/paper7_phase6_V5_breakthrough_20251031_171648.png`, 300 DPI, 4-panel)
+
+**Panel A: Population Trajectories (Sample Runs)**
+Five representative stochastic trajectories showing demographic fluctuations around mean N≈215. Trajectories exhibit √N-scaled noise (amplitude ~15 agents) with stable long-term mean. No extinctions observed. Demonstrates persistent variance from Poisson birth-death processes.
+
+**Panel B: Energy Trajectories (Sample Runs)**
+Corresponding energy dynamics for 5 sample runs. Energy maintained at E~2400 with homeostatic regulation via intrinsic generation term. Fluctuations coupled to population noise but system remains far from E=0 collapse threshold. Validates equation correction.
+
+**Panel C: Ensemble Statistics (n=20 runs)**
+Mean population trajectory (blue line, N=215.41) with ±1 standard deviation band (blue shading, σ=15.1 agents). Horizontal reference line shows deterministic equilibrium (N=215.00, +0.19% match). Demonstrates stochastic model converges to correct equilibrium with persistent fluctuations around mean.
+
+**Panel D: CV Comparison**
+Bar chart comparing V5 stochastic CV=7.0% to Paper 2 empirical CV=9.2%. Error bar shows ±1 SD across 20 runs. Horizontal reference line marks empirical target. Gap of 2.2 percentage points (24% underprediction) shown with annotation. Text box indicates demographic noise mechanism: CV_expected = √N/N = 14.7/215 = 6.8%, close to observed 7.0%.
+
+**Summary:** Complete validation of V5 stochastic model. 0/20 extinctions (vs 20/20 in V1-V4). Mean N matches deterministic equilibrium. CV=7.0% demonstrates persistent variance from demographic noise (vs deterministic CV→0). Remaining 2.2 pp gap likely environmental noise + measurement effects. See Section 3.8.3.
+
+---
 ---
 ## 6. References
 
