@@ -1,0 +1,704 @@
+{
+  "metadata": {
+    "cycle": "176",
+    "scenario": "Ablation Study - Mechanism Isolation",
+    "date": "2025-10-25T22:48:22.716491",
+    "frequency": 2.5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      101,
+      202,
+      303,
+      404,
+      505,
+      606
+    ],
+    "cycles_per_experiment": 3000,
+    "total_experiments": 60,
+    "duration_minutes": 32.728632850000004,
+    "conditions": [
+      {
+        "name": "BASELINE",
+        "description": "Complete framework (birth + death enabled)"
+      },
+      {
+        "name": "NO_DEATH",
+        "description": "Birth enabled, death DISABLED (composition detected, no removal)"
+      },
+      {
+        "name": "NO_BIRTH",
+        "description": "Birth DISABLED, death enabled (start with n=17)"
+      },
+      {
+        "name": "SMALL_WINDOW",
+        "description": "Window size = 25 cycles (test ceiling effect)"
+      },
+      {
+        "name": "DETERMINISTIC",
+        "description": "Deterministic spawn timing (control - already implemented)"
+      },
+      {
+        "name": "ALT_BASIS",
+        "description": "Transcendental basis = e, \u03c6 only (remove \u03c0 oscillator)"
+      }
+    ]
+  },
+  "classifications": [
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 42,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 123,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 456,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 789,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 101,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 202,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 303,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 404,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 505,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 606,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "NO_DEATH",
+      "frequency": 2.5,
+      "seed": 42,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 29.04381993895806,
+      "mean_population": 13.4
+    },
+    {
+      "condition": "NO_DEATH",
+      "frequency": 2.5,
+      "seed": 123,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 29.026244361846587,
+      "mean_population": 15.253333333333334
+    },
+    {
+      "condition": "NO_DEATH",
+      "frequency": 2.5,
+      "seed": 456,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 37.64645573394722,
+      "mean_population": 11.813333333333333
+    },
+    {
+      "condition": "NO_DEATH",
+      "frequency": 2.5,
+      "seed": 789,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 35.75733889668631,
+      "mean_population": 12.493333333333334
+    },
+    {
+      "condition": "NO_DEATH",
+      "frequency": 2.5,
+      "seed": 101,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 29.400224743677622,
+      "mean_population": 12.68
+    },
+    {
+      "condition": "NO_DEATH",
+      "frequency": 2.5,
+      "seed": 202,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 29.08934498034266,
+      "mean_population": 15.066666666666666
+    },
+    {
+      "condition": "NO_DEATH",
+      "frequency": 2.5,
+      "seed": 303,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 33.726843908080106,
+      "mean_population": 13.333333333333334
+    },
+    {
+      "condition": "NO_DEATH",
+      "frequency": 2.5,
+      "seed": 404,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 33.66959476346592,
+      "mean_population": 12.626666666666667
+    },
+    {
+      "condition": "NO_DEATH",
+      "frequency": 2.5,
+      "seed": 505,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 31.57289642669227,
+      "mean_population": 11.933333333333334
+    },
+    {
+      "condition": "NO_DEATH",
+      "frequency": 2.5,
+      "seed": 606,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 33.19518124613894,
+      "mean_population": 12.133333333333333
+    },
+    {
+      "condition": "NO_BIRTH",
+      "frequency": 2.5,
+      "seed": 42,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 42.3736202992743,
+      "mean_population": 1.0186666666666666
+    },
+    {
+      "condition": "NO_BIRTH",
+      "frequency": 2.5,
+      "seed": 123,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 42.3736202992743,
+      "mean_population": 1.0186666666666666
+    },
+    {
+      "condition": "NO_BIRTH",
+      "frequency": 2.5,
+      "seed": 456,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 42.3736202992743,
+      "mean_population": 1.0186666666666666
+    },
+    {
+      "condition": "NO_BIRTH",
+      "frequency": 2.5,
+      "seed": 789,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 42.3736202992743,
+      "mean_population": 1.0186666666666666
+    },
+    {
+      "condition": "NO_BIRTH",
+      "frequency": 2.5,
+      "seed": 101,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 42.3736202992743,
+      "mean_population": 1.0186666666666666
+    },
+    {
+      "condition": "NO_BIRTH",
+      "frequency": 2.5,
+      "seed": 202,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 42.3736202992743,
+      "mean_population": 1.0186666666666666
+    },
+    {
+      "condition": "NO_BIRTH",
+      "frequency": 2.5,
+      "seed": 303,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 42.3736202992743,
+      "mean_population": 1.0186666666666666
+    },
+    {
+      "condition": "NO_BIRTH",
+      "frequency": 2.5,
+      "seed": 404,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 42.3736202992743,
+      "mean_population": 1.0186666666666666
+    },
+    {
+      "condition": "NO_BIRTH",
+      "frequency": 2.5,
+      "seed": 505,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 42.3736202992743,
+      "mean_population": 1.0186666666666666
+    },
+    {
+      "condition": "NO_BIRTH",
+      "frequency": 2.5,
+      "seed": 606,
+      "basin": "B",
+      "regime": "accumulation",
+      "confidence": 1.0,
+      "cv_percent": 42.3736202992743,
+      "mean_population": 1.0186666666666666
+    },
+    {
+      "condition": "SMALL_WINDOW",
+      "frequency": 2.5,
+      "seed": 42,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "SMALL_WINDOW",
+      "frequency": 2.5,
+      "seed": 123,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "SMALL_WINDOW",
+      "frequency": 2.5,
+      "seed": 456,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "SMALL_WINDOW",
+      "frequency": 2.5,
+      "seed": 789,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "SMALL_WINDOW",
+      "frequency": 2.5,
+      "seed": 101,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "SMALL_WINDOW",
+      "frequency": 2.5,
+      "seed": 202,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "SMALL_WINDOW",
+      "frequency": 2.5,
+      "seed": 303,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "SMALL_WINDOW",
+      "frequency": 2.5,
+      "seed": 404,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "SMALL_WINDOW",
+      "frequency": 2.5,
+      "seed": 505,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "SMALL_WINDOW",
+      "frequency": 2.5,
+      "seed": 606,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "DETERMINISTIC",
+      "frequency": 2.5,
+      "seed": 42,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "DETERMINISTIC",
+      "frequency": 2.5,
+      "seed": 123,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "DETERMINISTIC",
+      "frequency": 2.5,
+      "seed": 456,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "DETERMINISTIC",
+      "frequency": 2.5,
+      "seed": 789,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "DETERMINISTIC",
+      "frequency": 2.5,
+      "seed": 101,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "DETERMINISTIC",
+      "frequency": 2.5,
+      "seed": 202,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "DETERMINISTIC",
+      "frequency": 2.5,
+      "seed": 303,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "DETERMINISTIC",
+      "frequency": 2.5,
+      "seed": 404,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "DETERMINISTIC",
+      "frequency": 2.5,
+      "seed": 505,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "DETERMINISTIC",
+      "frequency": 2.5,
+      "seed": 606,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "ALT_BASIS",
+      "frequency": 2.5,
+      "seed": 42,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "ALT_BASIS",
+      "frequency": 2.5,
+      "seed": 123,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "ALT_BASIS",
+      "frequency": 2.5,
+      "seed": 456,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "ALT_BASIS",
+      "frequency": 2.5,
+      "seed": 789,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "ALT_BASIS",
+      "frequency": 2.5,
+      "seed": 101,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "ALT_BASIS",
+      "frequency": 2.5,
+      "seed": 202,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "ALT_BASIS",
+      "frequency": 2.5,
+      "seed": 303,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "ALT_BASIS",
+      "frequency": 2.5,
+      "seed": 404,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "ALT_BASIS",
+      "frequency": 2.5,
+      "seed": 505,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    },
+    {
+      "condition": "ALT_BASIS",
+      "frequency": 2.5,
+      "seed": 606,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 101.3421598030599,
+      "mean_population": 0.494
+    }
+  ],
+  "regime_counts": {
+    "bistability": 0,
+    "accumulation": 20,
+    "collapse": 40,
+    "unknown": 0
+  },
+  "basin_regime_map": {
+    "B": {
+      "bistability": 0,
+      "accumulation": 20,
+      "collapse": 40,
+      "unknown": 0
+    }
+  },
+  "condition_regime_map": {
+    "BASELINE": {
+      "bistability": 0,
+      "accumulation": 0,
+      "collapse": 10,
+      "unknown": 0
+    },
+    "NO_DEATH": {
+      "bistability": 0,
+      "accumulation": 10,
+      "collapse": 0,
+      "unknown": 0
+    },
+    "NO_BIRTH": {
+      "bistability": 0,
+      "accumulation": 10,
+      "collapse": 0,
+      "unknown": 0
+    },
+    "SMALL_WINDOW": {
+      "bistability": 0,
+      "accumulation": 0,
+      "collapse": 10,
+      "unknown": 0
+    },
+    "DETERMINISTIC": {
+      "bistability": 0,
+      "accumulation": 0,
+      "collapse": 10,
+      "unknown": 0
+    },
+    "ALT_BASIS": {
+      "bistability": 0,
+      "accumulation": 0,
+      "collapse": 10,
+      "unknown": 0
+    }
+  },
+  "total_experiments": 60
+}
