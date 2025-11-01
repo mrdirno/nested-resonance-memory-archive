@@ -29,7 +29,13 @@ We extend this through six progressive research phases: bifurcation analysis rev
 
 ## Figures
 
-### Available Figures (12/18 @ 300 DPI)
+### Available Figures (16/18 @ 300 DPI)
+
+**Phase 1-2 (Constraint Refinement):**
+- **Figure 1:** NREM Consolidation Dynamics (403 KB)
+- **Figure 2:** REM Exploration Phase Dynamics (495 KB)
+- **Figure 3:** Validation Against Empirical Data (240 KB)
+- **Figure 4:** Phase Dynamics Across Parameter Space (852 KB)
 
 **Phase 3 (V4 Breakthrough & Bifurcation Analysis):**
 - **Figure 5:** V4 vs V2 Temporal Trajectories (560 KB)
@@ -49,13 +55,7 @@ We extend this through six progressive research phases: bifurcation analysis rev
 **Phase 6 (Stochastic Demographic Noise):**
 - **Figure 18:** V5 Breakthrough - Complete 20-Run Ensemble (1.3 MB, 4-panel)
 
-### Placeholder Figures (6/18 - Not Yet Generated)
-
-**Phase 1-2 (Constraint Refinement):**
-- Figure 1: NREM Consolidation Dynamics (placeholder)
-- Figure 2: REM Exploration Phase Dynamics (placeholder)
-- Figure 3: Validation Against Empirical Data (placeholder)
-- Figure 4: Phase Dynamics Across Parameter Space (placeholder)
+### Placeholder Figures (2/18 - Not Yet Generated)
 
 **Phase 6 (Diagnostic Figures):**
 - Figure 16: Initial Stochastic Implementation Failures (placeholder)
