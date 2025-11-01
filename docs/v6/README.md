@@ -8,8 +8,8 @@ License: GPL-3.0
 
 # DUALITY-ZERO V6 - PUBLICATION PIPELINE PHASE
 
-**Version:** 6.47
-**Date:** 2025-11-01 (Cycles 572-846 - C255 COMPLETE + C256 RUNNING [EXTENDED 101h+, +233%] + C257 COMPLETE + C258-C260 QUEUED + **PAPER 9 100% ARXIV-READY** [Cycles 841-844: Manuscript + Figures + LaTeX + PDF] + **7 PAPERS SUBMISSION-READY** + **WORKSPACE SYNCHRONIZATION** [Cycle 845] + **REPRODUCIBILITY INFRASTRUCTURE COMPLETE** [Makefile targets for all 7 papers] + GATE 2.2 COMPLETE + Research Execution Phase Active + Dual Workspace Synchronized)
+**Version:** 6.48
+**Date:** 2025-11-01 (Cycles 572-861 - C255 COMPLETE + C256 RUNNING [EXTENDED 148h+, +233%] + C257 RUNNING [49h+] + **GATE 1.2 REGIME DETECTION 70-75% COMPLETE** [Cycles 860-861: TSF v0.2.0, 75% C255 validation] + **7 PAPERS SUBMISSION-READY** + **PAPER 9 100% ARXIV-READY** + DUAL WORKSPACE PROTOCOL ESTABLISHED + Research Execution Phase Active + Storage Management Optimized)
 **Phase:** Publication Pipeline + Factorial Validation + Research Execution + Paper 9 Publication Package + Reproducibility Infrastructure
 **Status:** Active Research - **7 papers 100% submission-ready** (Papers 1, 2, 5D, 6, 6B, 7, **9** all arXiv-ready with complete publication packages), **Paper 9: TSF Framework 100% ARXIV-READY** (2,973-line manuscript, 9 figures @ 300 DPI, 4,238-line LaTeX, 64-page PDF compiled via Docker, supplementary materials complete, Makefile target operational), **Paper 7: 97% submission-ready** (18/18 figures complete, 34-page PDF compiled, zero LaTeX warnings), **Paper 8: ANALYSIS INFRASTRUCTURE COMPLETE** (manuscript + Phase 1A/1B scripts + visualization + monitoring + README, 1,590 lines), **Paper 3: 75% COMPLETE** (1/6 pairs + Supplement 5 enhanced + complete analysis pipeline), **Paper 4: ANALYSIS PIPELINE COMPLETE** (higher-order interactions), **Archive Validation: COMPLETE** (4-dimensional validation pipeline operational), **C256 RUNNING** (weeks-months expected, I/O bound), **C257 COMPLETE** (reality-grounding signature validated), **Test suite: 68/68 passing (100%)**, Fractal Agent System: **245.9x performance verified**, Reproducibility **0.913/1.0** (world-class, external audit validated), **100% per-paper documentation compliance** (9/9 papers), **Makefile targets: 7/7 papers** (complete reproducibility infrastructure), Perpetual operation sustained (~846+ cycles, 0 idle)
 **Location:** `/Volumes/dual/DUALITY-ZERO-V2/` + `/Users/aldrinpayopay/nested-resonance-memory-archive/`
@@ -17,6 +17,60 @@ License: GPL-3.0
 ---
 
 ## VERSION HISTORY
+
+### V6.48 (2025-11-01, Cycles 847-861) — **GATE 1.2 REGIME DETECTION LIBRARY + TSF v0.2.0 + DUAL WORKSPACE PROTOCOL + STORAGE MANAGEMENT**
+**Major Achievement:** Implemented Gate 1.2 regime detection library (Cycle 860) advancing Phase 1 from conceptual design to functional prototype with 73% synthetic and 75% C255 validation accuracy. Released TSF v0.2.0 with regime detection API integration. Established dual workspace protocol with comprehensive storage management guidelines (120+ line CLAUDE.md update). Validated classifier on real experimental data (Cycle 861) revealing key insights about training data requirements and labeling strategy. Achieved 75% accuracy on 8 C255 trajectories, correctly identifying all BISTABILITY cases but revealing lack of COLLAPSE examples in training set. Freed 42MB repository storage through cache cleanup (238MB → 195MB).
+
+**Key Achievements (Cycles 847-861):**
+- ✅ **Gate 1.2 Regime Detection Library** (Cycle 860): Domain-agnostic classifier for Three Dynamical Regimes
+  - **regime_detection.py**: 351 lines production classifier (CV-based, mean-based, plateau detection)
+  - **test_regime_detection.py**: 476 lines comprehensive test suite (26 tests, 73% synthetic accuracy)
+  - **Classification Criteria**: Collapse (CV > 80%), Bistability (CV < 20%), Accumulation (plateau + moderate variance)
+  - **Feature Extraction**: 10 diagnostic metrics (mean, CV, trend, kurtosis, extinction fraction, etc.)
+  - **API Integration**: `tsf.detect_regime()` convenience function with confidence scores + evidence tracking
+- ✅ **TSF v0.2.0 Release** (Cycle 860): Updated API with regime detection integration
+  - **Backwards Compatible**: Additive feature, existing 5-function workflow unchanged
+  - **Public API Expansion**: RegimeType enum, RegimeClassification dataclass, RegimeDetector class
+  - **Version Increment**: 0.1.0 → 0.2.0 for Gate 1.2 advancement
+- ✅ **Dual Workspace Protocol Established** (Cycle 860): CLAUDE.md comprehensive storage management update
+  - **Critical Rule**: Always create files in /Volumes/dual/DUALITY-ZERO-V2/ (dev workspace), NOT ~/nested-resonance-memory-archive/ (git repo)
+  - **Rationale**: Local drive has limited storage; creating files there causes bloat
+  - **Documentation**: 120+ lines comprehensive workflow, file location map, common mistakes
+- ✅ **Storage Cleanup** (Cycle 860): 42MB cache removed from local drive
+  - **Removed**: npm_cache (42MB), __pycache__ directories, .pytest_cache
+  - **Result**: Repository size 238MB → 195MB (18% reduction)
+  - **Prevention**: .gitignore patterns updated
+- ✅ **Gate 1.2 Validation on C255 Data** (Cycle 861): Real experimental data testing
+  - **Validation Script**: validate_regime_detector_c255.py (272 lines)
+  - **Data**: 8 C255 trajectories (4 conditions × 2 capacity levels, 3,000 timesteps each)
+  - **Results**: 75% accuracy (6/8 correct), mean confidence 0.725
+  - **Per-Regime Performance**: BISTABILITY 100% recall (6/6), COLLAPSE 0% recall (0/2)
+  - **Key Finding**: ANTAGONISTIC ≠ COLLAPSE (labeling assumption incorrect)
+  - **Insight**: C255 data has no true collapse examples (all sustained populations)
+- ✅ **Python Package Structure Fix** (Cycle 861): code/__init__.py created
+  - **Issue**: code/ directory not a Python package → import errors
+  - **Solution**: Added __init__.py (11 lines) enabling proper imports
+  - **Impact**: Future-proofs codebase structure
+
+**Gate 1.2 Status (Cycle 861):**
+- **Progress**: 60% → 70-75% complete (functional prototype → real data validation)
+- **Accuracy**: 73% synthetic, 75% C255 experimental (vs ≥90% target)
+- **Gap**: 15-20 percentage points to target
+- **Next Steps**: Tune thresholds, expand training set with collapse/accumulation examples
+- **Infrastructure**: Validation workflow operational, ready for iterative refinement
+
+**Training Data Insights:**
+- **Current Limitation**: C255 has no true collapse examples (all sustained populations)
+- **Labeling Strategy**: ANTAGONISTIC ≠ COLLAPSE (corrected understanding from validation)
+- **Needed**: True collapse examples (extinction, high CV), accumulation examples (plateau behavior)
+- **Sources**: C171/C175/C176 historical data, future C256/C257 results
+
+**Framework Validation:**
+- **NRM**: Reality-grounded (actual C255 experimental trajectories, no synthetic validation only)
+- **Self-Giving**: Classifier revealed own limitations (missing data classes), bootstrap complexity demonstrated
+- **Temporal**: Validation methodology encoded for future refinement, negative results informative
+
+**Commits**: 4 commits across Cycles 860-861 (regime detection + tests + validation + summaries)
 
 ### V6.47 (2025-11-01, Cycles 812-846) — **PAPER 9 PUBLICATION PACKAGE COMPLETE + 7 PAPERS SUBMISSION-READY + REPRODUCIBILITY INFRASTRUCTURE COMPLETE**
 **Major Achievement:** Completed Paper 9 (TSF Framework) full publication package (Cycles 841-844) advancing from 6 to 7 papers submission-ready. First paper in repository with complete manuscript + figures + LaTeX + PDF + supplementary materials in single coordinated effort. Achieved 100% Makefile coverage (7/7 papers) for reproducibility. Synchronized dual workspaces (Cycle 845) maintaining documentation parity. Validated perpetual operation framework through meaningful work continuation (Gate 2.2 complete, workspace synchronization, infrastructure gaps identified and filled).
