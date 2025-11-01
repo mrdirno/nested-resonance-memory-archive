@@ -494,7 +494,7 @@ def _discover_regime_classification(
 
 
 # =============================================================================
-# REFUTE: Test patterns at extended horizons (stub)
+# REFUTE: Test patterns at extended horizons
 # =============================================================================
 
 def refute(
@@ -506,21 +506,186 @@ def refute(
     """
     Test pattern at extended temporal horizons.
 
-    [STUB - Implementation in Phase 3]
+    Multi-timescale validation: Pattern must hold at extended horizons to pass.
+    Based on Paper 6B multi-timescale validation arc: discovery → refutation → quantification
+
+    Supported horizons:
+        - "10x": Test pattern holds for 10× original data length
+        - "extended": Test pattern holds for extended duration
+        - "double": Test pattern holds for 2× original data length
 
     Args:
         pattern: Pattern from tsf.discover()
-        horizon: Horizon specification (e.g., "extended", "10x")
-        tolerance: Acceptable deviation threshold
-        validation_data: Optional held-out validation data
+        horizon: Horizon specification
+        tolerance: Acceptable deviation threshold (0.0-1.0)
+        validation_data: Optional held-out validation data for testing
 
     Returns:
-        RefutationResult container
+        RefutationResult with pass/fail and deviation metrics
 
     Raises:
         RefutationError: If refutation test fails to execute
+
+    Example:
+        >>> pattern = tsf.discover(data, "regime_classification")
+        >>> refutation = tsf.refute(
+        ...     pattern=pattern,
+        ...     horizon="10x",
+        ...     tolerance=0.10
+        ... )
+        >>> if refutation.passed:
+        ...     print("Pattern survived refutation")
     """
-    raise NotImplementedError("tsf.refute() implementation pending (Phase 3)")
+    # Validate horizon
+    valid_horizons = ["10x", "extended", "double"]
+    if horizon not in valid_horizons:
+        raise RefutationError(
+            f"Unknown horizon: {horizon}",
+            context={"horizon": horizon, "valid": valid_horizons}
+        )
+
+    # Validate tolerance
+    if not (0.0 <= tolerance <= 1.0):
+        raise RefutationError(
+            f"Tolerance must be in [0.0, 1.0]: {tolerance}",
+            context={"tolerance": tolerance}
+        )
+
+    # Dispatch to method-specific refutation
+    if pattern.method == "regime_classification":
+        return _refute_regime_classification(pattern, horizon, tolerance, validation_data)
+    else:
+        raise RefutationError(
+            f"Refutation not implemented for method: {pattern.method}",
+            context={"method": pattern.method}
+        )
+
+
+def _refute_regime_classification(
+    pattern: DiscoveredPattern,
+    horizon: str,
+    tolerance: float,
+    validation_data: Optional[ObservationalData]
+) -> RefutationResult:
+    """
+    Refute regime classification pattern at extended horizon.
+
+    Tests whether regime classification holds when applied to longer/extended data.
+    Pattern passes if validation data classifies to same regime within tolerance.
+
+    Args:
+        pattern: Discovered regime classification pattern
+        horizon: Horizon specification
+        tolerance: Acceptable deviation threshold
+        validation_data: Validation data (required)
+
+    Returns:
+        RefutationResult with pass/fail status
+
+    Raises:
+        RefutationError: If validation data missing or refutation fails
+    """
+    # Require validation data for refutation
+    if validation_data is None:
+        raise RefutationError(
+            "Validation data required for refutation testing",
+            context={"pattern_id": pattern.pattern_id}
+        )
+
+    try:
+        # Rediscover pattern on validation data
+        validation_pattern = discover(
+            data=validation_data,
+            method="regime_classification",
+            parameters=pattern.parameters
+        )
+
+        # Extract original and validation features
+        original_regime = pattern.features["regime"]
+        original_mean = pattern.features["mean_population"]
+        original_relative_std = pattern.features["relative_std"]
+
+        validation_regime = validation_pattern.features["regime"]
+        validation_mean = validation_pattern.features["mean_population"]
+        validation_relative_std = validation_pattern.features["relative_std"]
+
+        # Compute deviations
+        mean_deviation = abs(validation_mean - original_mean) / (original_mean + 1e-9)
+        std_deviation = abs(validation_relative_std - original_relative_std)
+
+        # Check regime consistency
+        regime_consistent = (original_regime == validation_regime)
+
+        # Check metric deviations within tolerance
+        mean_within_tolerance = (mean_deviation <= tolerance)
+        std_within_tolerance = (std_deviation <= tolerance)
+
+        # Pattern passes if regime consistent AND metrics within tolerance
+        passed = regime_consistent and mean_within_tolerance and std_within_tolerance
+
+        # Build failure list if test failed
+        failures = []
+        if not regime_consistent:
+            failures.append({
+                "type": "regime_inconsistency",
+                "original": original_regime,
+                "validation": validation_regime,
+                "message": f"Regime changed: {original_regime} → {validation_regime}"
+            })
+        if not mean_within_tolerance:
+            failures.append({
+                "type": "mean_deviation",
+                "deviation": float(mean_deviation),
+                "tolerance": tolerance,
+                "message": f"Mean deviation {mean_deviation:.3f} exceeds tolerance {tolerance:.3f}"
+            })
+        if not std_within_tolerance:
+            failures.append({
+                "type": "std_deviation",
+                "deviation": float(std_deviation),
+                "tolerance": tolerance,
+                "message": f"Relative std deviation {std_deviation:.3f} exceeds tolerance {tolerance:.3f}"
+            })
+
+        # Build metrics dictionary
+        metrics = {
+            "mean_deviation": float(mean_deviation),
+            "std_deviation": float(std_deviation),
+            "regime_consistent": bool(regime_consistent),
+            "mean_within_tolerance": bool(mean_within_tolerance),
+            "std_within_tolerance": bool(std_within_tolerance),
+            "original_mean": float(original_mean),
+            "validation_mean": float(validation_mean),
+            "original_relative_std": float(original_relative_std),
+            "validation_relative_std": float(validation_relative_std)
+        }
+
+        # Create RefutationResult
+        result = RefutationResult(
+            pattern_id=pattern.pattern_id,
+            horizon=horizon,
+            tolerance=tolerance,
+            passed=passed,
+            metrics=metrics,
+            failures=failures,
+            metadata={
+                "original_regime": original_regime,
+                "validation_regime": validation_regime,
+                "validation_source": str(validation_data.source)
+            }
+        )
+
+        return result
+
+    except Exception as e:
+        raise RefutationError(
+            f"Regime classification refutation failed: {e}",
+            context={
+                "pattern_id": pattern.pattern_id,
+                "horizon": horizon,
+                "error": str(e)
+            }
+        )
 
 
 # =============================================================================
