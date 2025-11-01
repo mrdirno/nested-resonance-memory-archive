@@ -1,0 +1,7 @@
+digraph TEG {
+  rankdir=LR;
+  node [shape=box, style=rounded];
+
+  "PC001" [label="PC001\nNRM Population Dynamics Follow Logistic SDE\n(validated)", fillcolor=green, style="rounded,filled"];
+
+}
