@@ -133,8 +133,8 @@ resonance-driven composition events through coupled ordinary
 differential equations (ODEs).
 
 \textbf{Methods:} We formulated a 4D nonlinear ODE system describing
-total energy (E), population size (N), resonance strength (φ), and
-internal phase (θ). Parameters were constrained by physical reasoning
+total energy (E), population size (N), resonance strength ($\varphi$), and
+internal phase ($\theta$). Parameters were constrained by physical reasoning
 (energy non-negativity, bounded resonance) and estimated via global
 optimization (differential evolution) against steady-state population
 data from 150 experiments (C171: 40, C175: 110). Two model versions were
@@ -178,13 +178,13 @@ without central coordination (Kauffman, 1993; Prigogine \& Stengers,
 1984). The Nested Resonance Memory (NRM) framework implements fractal
 agency where agents contain internal state spaces, undergo
 composition-decomposition cycles, and are driven by transcendental
-oscillators (π, e, φ) as a computationally irreducible substrate
+oscillators ($\pi$, e, $\varphi$) as a computationally irreducible substrate
 (Payopay \& Claude, 2025).
 
 Empirical studies of NRM systems have documented robust phenomena: -
 \textbf{Bistability:} Sharp phase transitions at critical frequencies
-(f\_crit ≈ 2.55\%) with distinct basin attractors (Paper 1, C168-170) -
-\textbf{Steady-State Populations:} Deterministic convergence to N ≈
+(f\_crit $\approx$ 2.55\%) with distinct basin attractors (Paper 1, C168-170) -
+\textbf{Steady-State Populations:} Deterministic convergence to N $\approx$
 17-20 agents across frequency ranges (Paper 2, C171) - \textbf{Regime
 Transitions:} Population collapse under complete birth-death coupling
 despite energy recharge mechanisms (Paper 2, C176) - \textbf{Pattern
@@ -254,7 +254,7 @@ individual-level metabolism rather than population-level emergence.
 Synchronization phenomena in networks of oscillators:
 
 \begin{verbatim}
-dθ_i/dt = ω_i + (K/N)·Σ_j sin(θ_j - θ_i)
+d$\theta$_i/dt = $\omega$_i + (K/N)·$\Sigma$_j sin($\theta$_j - $\theta$_i)
 \end{verbatim}
 
 These describe phase coherence, critical transitions to collective
@@ -265,8 +265,8 @@ don't incorporate population birth/death or energy flow.
 Pattern formation through activator-inhibitor mechanisms:
 
 \begin{verbatim}
-∂u/∂t = D_u·∇²u + f(u,v)
-∂v/∂t = D_v·∇²v + g(u,v)
+$\partial$u/$\partial$t = D_u·$\nabla$²u + f(u,v)
+$\partial$v/$\partial$t = D_v·$\nabla$²v + g(u,v)
 \end{verbatim}
 
 These generate spatial patterns (stripes, spots) from homogeneous
@@ -300,9 +300,9 @@ irreducibility prevent analytical tractability?
 \textbf{RQ2: What are the minimal parameters required to reproduce
 empirical steady-state populations?}
 
-C171 data shows N* ≈ 17-20 agents across frequencies. What energy
-recharge rates (r), carrying capacities (K), composition rates (λ), and
-decomposition rates (μ) are necessary to match observations? Can
+C171 data shows N* $\approx$ 17-20 agents across frequencies. What energy
+recharge rates (r), carrying capacities (K), composition rates ($\lambda$), and
+decomposition rates ($\mu$) are necessary to match observations? Can
 parameter estimation reveal hidden constraints?
 
 \textbf{RQ3: Do physical constraints (non-negativity, boundedness)
@@ -342,8 +342,8 @@ computational experiments.
 
 We demonstrate that unphysical behavior (negative populations in V1
 model) signals critical gaps in parameter bounds and threshold
-functions. By enforcing: - N ≥ 1 (minimum population) - E ≥ 0 (energy
-non-negativity) - 0 ≤ φ ≤ 1 (bounded resonance) - Smooth sigmoid
+functions. By enforcing: - N $\geq$ 1 (minimum population) - E $\geq$ 0 (energy
+non-negativity) - 0 $\leq$ $\varphi$ $\leq$ 1 (bounded resonance) - Smooth sigmoid
 thresholds (vs hard cutoffs) - Tight parameter bounds (physically
 motivated)
 
@@ -368,7 +368,7 @@ nonlinear systems with complex loss landscapes.
 
 Despite excellent error metrics (RMSE\textless2 agents), R² remaining
 negative (-0.17) reveals that \textbf{steady-state approximations fail
-to capture frequency-dependent variance}. The model predicts N ≈ 18
+to capture frequency-dependent variance}. The model predicts N $\approx$ 18
 (nearly constant), while empirical data shows frequency sensitivity.
 
 This finding motivates \textbf{symbolic regression} (discovering
@@ -414,9 +414,9 @@ ODE system describing the evolution of:
 \item
   \textbf{N} - Population size (number of active agents)
 \item
-  \textbf{φ} - Resonance strength (phase coherence, 0-1 scale)
+  \textbf{$\varphi$} - Resonance strength (phase coherence, 0-1 scale)
 \item
-  \textbf{θ\_int} - Internal phase (collective oscillation state)
+  \textbf{$\theta$\_int} - Internal phase (collective oscillation state)
 \end{enumerate}
 
 \paragraph{2.1.1 State Variables}\label{state-variables}
@@ -431,13 +431,13 @@ system. Increases through composition events (births) when energy and
 resonance conditions are met. Decreases through decomposition events
 (deaths) during composition bursts when agents are marked for removal.
 
-\textbf{Resonance Strength (φ):} Measure of phase coherence between
+\textbf{Resonance Strength ($\varphi$):} Measure of phase coherence between
 agents' internal oscillators and external transcendental forcing. Ranges
 from 0 (incoherent) to 1 (perfect phase-locking). Amplifies composition
 event probability when high.
 
-\textbf{Internal Phase (θ\_int):} Collective oscillation state of the
-agent population. Evolves with external forcing frequency (ω) plus
+\textbf{Internal Phase ($\theta$\_int):} Collective oscillation state of the
+agent population. Evolves with external forcing frequency ($\omega$) plus
 feedback term dependent on population size deviation from equilibrium.
 
 \paragraph{2.1.2 Governing Equations}\label{governing-equations}
@@ -445,75 +445,75 @@ feedback term dependent on population size deviation from equilibrium.
 \textbf{Energy Dynamics:}
 
 \begin{verbatim}
-dE_total/dt = N·r(1 - ρ/K) + α·N·R(t) - β·N·ρ - γ·λ_c·ρ
+dE_total/dt = N·r(1 - $\rho$/K) + $\alpha$·N·R(t) - $\beta$·N·$\rho$ - $\gamma$·$\lambda$_c·$\rho$
 \end{verbatim}
 
-Where: - ρ = E\_total/N (energy density per agent) - r: recharge rate
+Where: - $\rho$ = E\_total/N (energy density per agent) - r: recharge rate
 (energy recovery per agent per cycle) - K: carrying capacity (maximum
-sustainable energy per agent) - α: reality coupling strength (external
+sustainable energy per agent) - $\alpha$: reality coupling strength (external
 energy influx from system metrics) - R(t): reality forcing function (CPU
-availability, system load) - β: maintenance cost coefficient (energy
-decay per agent) - γ: composition cost coefficient (energy lost during
-agent births) - λ\_c: composition rate (frequency of birth events)
+availability, system load) - $\beta$: maintenance cost coefficient (energy
+decay per agent) - $\gamma$: composition cost coefficient (energy lost during
+agent births) - $\lambda$\_c: composition rate (frequency of birth events)
 
 \textbf{Energy balance} incorporates four terms: 1. \textbf{Recharge:}
-N·r(1 - ρ/K) - Logistic growth toward carrying capacity 2.
-\textbf{Reality Coupling:} α·N·R(t) - Energy input from computational
-environment 3. \textbf{Maintenance:} -β·N·ρ - Dissipation proportional
-to population and energy density 4. \textbf{Composition Cost:} -γ·λ\_c·ρ
+N·r(1 - $\rho$/K) - Logistic growth toward carrying capacity 2.
+\textbf{Reality Coupling:} $\alpha$·N·R(t) - Energy input from computational
+environment 3. \textbf{Maintenance:} -$\beta$·N·$\rho$ - Dissipation proportional
+to population and energy density 4. \textbf{Composition Cost:} -$\gamma$·$\lambda$\_c·$\rho$
 - Energy spent creating new agents
 
 \textbf{Population Dynamics:}
 
 \begin{verbatim}
-dN/dt = λ_c(ρ, φ) - λ_d(N)
+dN/dt = $\lambda$_c($\rho$, $\varphi$) - $\lambda$_d(N)
 \end{verbatim}
 
-Where: - λ\_c: composition rate (births), function of energy density and
-resonance - λ\_d: decomposition rate (deaths), function of population
+Where: - $\lambda$\_c: composition rate (births), function of energy density and
+resonance - $\lambda$\_d: decomposition rate (deaths), function of population
 size
 
 \textbf{Birth-death balance:} Population grows when composition exceeds
 decomposition, shrinks when deaths dominate. Composition is gated by
-\textbf{energy availability} (ρ) and \textbf{resonance strength} (φ).
+\textbf{energy availability} ($\rho$) and \textbf{resonance strength} ($\varphi$).
 Decomposition increases with crowding (density-dependent mortality).
 
 \textbf{Composition Rate:}
 
 \begin{verbatim}
-λ_c(ρ, φ) = λ_0 · g(ρ) · h(φ)
+$\lambda$_c($\rho$, $\varphi$) = $\lambda$_0 · g($\rho$) · h($\varphi$)
 \end{verbatim}
 
-Where: - λ\_0: base composition rate (maximum birth frequency) - g(ρ):
-energy gating function (threshold + saturation) - h(φ): resonance
+Where: - $\lambda$\_0: base composition rate (maximum birth frequency) - g($\rho$):
+energy gating function (threshold + saturation) - h($\varphi$): resonance
 amplification function (power law)
 
 \textbf{Energy Gating Function (V2 Constrained Model):}
 
 \begin{verbatim}
-g(ρ) = 1 / (1 + exp(-k·(ρ - ρ_thresh)))
+g($\rho$) = 1 / (1 + exp(-k·($\rho$ - $\rho$_thresh)))
 \end{verbatim}
 
-Smooth sigmoid threshold centered at ρ\_thresh (energy density required
+Smooth sigmoid threshold centered at $\rho$\_thresh (energy density required
 for spawning). Steepness controlled by k. Replaces V1 hard cutoff:
-max(0, (ρ - ρ\_thresh)/K).
+max(0, ($\rho$ - $\rho$\_thresh)/K).
 
 \textbf{Resonance Amplification Function:}
 
 \begin{verbatim}
-h(φ) = φ^n
+h($\varphi$) = $\varphi$^n
 \end{verbatim}
 
 Power-law relationship between resonance strength and composition
-probability. Empirical fits suggest n ≈ 2 (quadratic amplification).
+probability. Empirical fits suggest n $\approx$ 2 (quadratic amplification).
 
 \textbf{Decomposition Rate:}
 
 \begin{verbatim}
-λ_d(N) = μ_0 · (1 + σ·(N/N_max)^2)
+$\lambda$_d(N) = $\mu$_0 · (1 + $\sigma$·(N/N_max)^2)
 \end{verbatim}
 
-Where: - μ\_0: base decomposition rate - σ: crowding coefficient
+Where: - $\mu$\_0: base decomposition rate - $\sigma$: crowding coefficient
 (strength of density dependence) - N\_max: reference population for
 normalization
 
@@ -524,25 +524,25 @@ compositional stress, and architectural bottlenecks.
 \textbf{Resonance Dynamics:}
 
 \begin{verbatim}
-dφ/dt = ω·sin(θ_ext - θ_int) - κ·φ
+d$\varphi$/dt = $\omega$·sin($\theta$_ext - $\theta$_int) - $\kappa$·$\varphi$
 \end{verbatim}
 
-Where: - ω: forcing frequency (transcendental oscillator drive) -
-θ\_ext: external phase = ω·t (sinusoidal forcing) - κ: resonance damping
+Where: - $\omega$: forcing frequency (transcendental oscillator drive) -
+$\theta$\_ext: external phase = $\omega$·t (sinusoidal forcing) - $\kappa$: resonance damping
 coefficient
 
 \textbf{Phase-locking dynamics:} Resonance grows when internal and
-external phases align (sin(θ\_ext - θ\_int) \textgreater{} 0), decays
+external phases align (sin($\theta$\_ext - $\theta$\_int) \textgreater{} 0), decays
 due to damping. At equilibrium, forcing and damping balance, determining
 steady-state coherence.
 
 \textbf{Phase Evolution:}
 
 \begin{verbatim}
-dθ_int/dt = ω + δω·(N - N_eq)
+d$\theta$_int/dt = $\omega$ + $\delta$$\omega$·(N - N_eq)
 \end{verbatim}
 
-Where: - ω: external forcing frequency (baseline) - δω: frequency shift
+Where: - $\omega$: external forcing frequency (baseline) - $\delta$$\omega$: frequency shift
 coefficient - N\_eq: equilibrium population size
 
 \textbf{Population feedback:} Internal oscillation frequency shifts
@@ -580,18 +580,18 @@ Physical Range
 Recharge rate & r & Energy recovery per agent & energy/cycle & {[}0.001,
 0.2{]} \\
 Carrying capacity & K & Max energy per agent & energy & {[}10, 200{]} \\
-Reality coupling & α & External energy influx & - & {[}0.0001, 0.5{]} \\
-Maintenance cost & β & Energy decay per agent & 1/cycle & {[}0.001,
+Reality coupling & $\alpha$ & External energy influx & - & {[}0.0001, 0.5{]} \\
+Maintenance cost & $\beta$ & Energy decay per agent & 1/cycle & {[}0.001,
 0.1{]} \\
-Composition cost & γ & Energy lost per birth & - & {[}0.01, 1.0{]} \\
-Base composition rate & λ\_0 & Max birth frequency & agents/cycle &
+Composition cost & $\gamma$ & Energy lost per birth & - & {[}0.01, 1.0{]} \\
+Base composition rate & $\lambda$\_0 & Max birth frequency & agents/cycle &
 {[}0.1, 5.0{]} \\
-Base decomposition rate & μ\_0 & Min death frequency & agents/cycle &
+Base decomposition rate & $\mu$\_0 & Min death frequency & agents/cycle &
 {[}0.1, 2.0{]} \\
-Crowding coefficient & σ & Density-dependent death & - & {[}0.01,
+Crowding coefficient & $\sigma$ & Density-dependent death & - & {[}0.01,
 0.5{]} \\
-Forcing frequency & ω & Oscillator drive & rad/cycle & {[}2.0, 3.0{]} \\
-Resonance damping & κ & Phase decay rate & 1/cycle & {[}0.05, 0.2{]} \\
+Forcing frequency & $\omega$ & Oscillator drive & rad/cycle & {[}2.0, 3.0{]} \\
+Resonance damping & $\kappa$ & Phase decay rate & 1/cycle & {[}0.05, 0.2{]} \\
 \end{longtable}
 }
 
@@ -607,26 +607,26 @@ At steady state, all time derivatives vanish:
 \begin{verbatim}
 dE_total/dt = 0
 dN/dt = 0
-dφ/dt = 0
-dθ_int/dt = 0
+d$\varphi$/dt = 0
+d$\theta$_int/dt = 0
 \end{verbatim}
 
 \textbf{Energy balance at equilibrium:}
 
 \begin{verbatim}
-N·r(1 - ρ*/K) + α·N·R_mean - β·N·ρ* - γ·λ_c*·ρ* = 0
+N·r(1 - $\rho$*/K) + $\alpha$·N·R_mean - $\beta$·N·$\rho$* - $\gamma$·$\lambda$_c*·$\rho$* = 0
 \end{verbatim}
 
-Solving for steady-state energy density ρ*:
+Solving for steady-state energy density $\rho$*:
 
 \begin{verbatim}
-ρ* = (r + α·R_mean) / (β + γ·λ_c*/K)
+$\rho$* = (r + $\alpha$·R_mean) / ($\beta$ + $\gamma$·$\lambda$_c*/K)
 \end{verbatim}
 
 \textbf{Population balance at equilibrium:}
 
 \begin{verbatim}
-λ_c(ρ*, φ*) = λ_d(N*)
+$\lambda$_c($\rho$*, $\varphi$*) = $\lambda$_d(N*)
 \end{verbatim}
 
 Birth rate equals death rate. Combined with energy density solution,
@@ -634,7 +634,7 @@ this determines steady-state population N*.
 
 \textbf{Simplified Steady-State Population (V2 Model):}
 
-Given empirical observations from C171: - N* ≈ 17-20 agents (fairly
+Given empirical observations from C171: - N* $\approx$ 17-20 agents (fairly
 constant across frequencies 2.0-3.0\%) - Weak frequency dependence
 (\textless5\% variance) - Scale invariance (population-independent
 patterns)
@@ -645,7 +645,7 @@ We use a \textbf{simplified predictor} for initial fitting:
 \begin{Highlighting}[]
 \KeywordTok{def}\NormalTok{ steady\_state\_population\_simple(}\VariableTok{self}\NormalTok{, frequency: }\BuiltInTok{float}\NormalTok{) }\OperatorTok{{-}\textgreater{}} \BuiltInTok{float}\NormalTok{:}
     \CommentTok{"""}
-\CommentTok{    Empirical baseline: N* ≈ 18 agents (mean from C171)}
+\CommentTok{    Empirical baseline: N* $\approx$ 18 agents (mean from C171)}
 \CommentTok{    Weak frequency modulation (observed \textless{}5\% variance)}
 \CommentTok{    """}
 \NormalTok{    N\_baseline }\OperatorTok{=} \FloatTok{18.0}
@@ -663,9 +663,9 @@ models will incorporate full temporal dynamics (Phase 2).
 \paragraph{2.3.1 Data Sources}\label{data-sources}
 
 \textbf{Training Data:} 150 experiments from C171 and C175 -
-\textbf{C171:} 40 experiments (4 frequencies × 10 seeds, f ∈ \{2.0, 2.5,
+\textbf{C171:} 40 experiments (4 frequencies × 10 seeds, f $\in$ \{2.0, 2.5,
 2.6, 3.0\}\%) - \textbf{C175:} 110 experiments (11 frequencies × 10
-seeds, f ∈ {[}1.0, 3.5{]}\%)
+seeds, f $\in$ {[}1.0, 3.5{]}\%)
 
 \textbf{Extracted Features:} - final\_agent\_count: Population size at
 experiment end (cycle 3000) - avg\_composition\_events: Mean births per
@@ -743,7 +743,7 @@ for non-convex landscapes.
 candidates - Generations: maxiter=100 - Mutation factor: 0.5-1.0
 (adaptive) - Crossover probability: 0.7 (70\% gene mixing)
 
-\textbf{Fixed Parameters:} ω (forcing frequency) and κ (resonance
+\textbf{Fixed Parameters:} $\omega$ (forcing frequency) and $\kappa$ (resonance
 damping) set to nominal values (2.5, 0.1) and not optimized due to
 computational cost.
 
@@ -835,7 +835,7 @@ worse than predicting mean (possible for non-linear fits)
 \textbf{Note on Negative R²:} When SS\_res \textgreater{} SS\_tot, R²
 becomes negative. This indicates predictions are farther from
 observations than the constant mean. For NRM, this occurs when model
-predicts nearly constant N ≈ 18 but data shows frequency-dependent
+predicts nearly constant N $\approx$ 18 but data shows frequency-dependent
 variance.
 
 \paragraph{2.4.2 Integration Tests}\label{integration-tests}
@@ -854,7 +854,7 @@ variance.
 
 \textbf{Checks:} - No NaN or Inf values in solution - N remains in
 {[}1.0, N\_max{]} (constraint enforcement works) - E\_total remains
-non-negative (energy conservation respected) - φ remains in {[}0.0,
+non-negative (energy conservation respected) - $\varphi$ remains in {[}0.0,
 1.0{]} (resonance bounded)
 
 \textbf{Physical Realism:} - Population doesn't explode to infinity -
@@ -952,8 +952,8 @@ capture data structure.
 
 \textbf{Diagnosis:} 1. \textbf{No constraint enforcement:} dN/dt could
 drive N below zero 2. \textbf{Hard threshold cutoff:} Discontinuity in
-λ\_c(ρ) caused numerical instability 3. \textbf{Loose parameter bounds:}
-Decomposition rate μ\_0 too high relative to composition rate λ\_0
+$\lambda$\_c($\rho$) caused numerical instability 3. \textbf{Loose parameter bounds:}
+Decomposition rate $\mu$\_0 too high relative to composition rate $\lambda$\_0
 
 \textbf{Conclusion:} V1 model is \textbf{unusable} due to unphysical
 dynamics. Negative populations violate fundamental reality constraints.
@@ -994,14 +994,14 @@ kappa:    0.1000   (resonance damping - fixed)
 \end{verbatim}
 
 \textbf{Parameter Validation:} All 10 parameters fall within physically
-reasonable bounds: - ✓ r ∈ {[}0.01, 0.1{]}: Recharge rate realistic for
-computational systems - ✓ K ∈ {[}50, 150{]}: Carrying capacity matches
-empirical energy scales - ✓ α ∈ {[}0.001, 0.05{]}: Reality coupling weak
-but nonzero - ✓ β ∈ {[}0.005, 0.05{]}: Maintenance cost balances
-recharge - ✓ γ ∈ {[}0.05, 0.5{]}: Composition cost significant but not
-prohibitive - ✓ λ\_0 ∈ {[}0.1, 5.0{]}: Base composition rate within
-feasible range - ✓ μ\_0 ∈ {[}0.1, 2.0{]}: Base decomposition rate lower
-than λ\_0 (allows growth) - ✓ σ ∈ {[}0.01, 0.5{]}: Crowding effect
+reasonable bounds: - $\checkmark$ r $\in$ {[}0.01, 0.1{]}: Recharge rate realistic for
+computational systems - $\checkmark$ K $\in$ {[}50, 150{]}: Carrying capacity matches
+empirical energy scales - $\checkmark$ $\alpha$ $\in$ {[}0.001, 0.05{]}: Reality coupling weak
+but nonzero - $\checkmark$ $\beta$ $\in$ {[}0.005, 0.05{]}: Maintenance cost balances
+recharge - $\checkmark$ $\gamma$ $\in$ {[}0.05, 0.5{]}: Composition cost significant but not
+prohibitive - $\checkmark$ $\lambda$\_0 $\in$ {[}0.1, 5.0{]}: Base composition rate within
+feasible range - $\checkmark$ $\mu$\_0 $\in$ {[}0.1, 2.0{]}: Base decomposition rate lower
+than $\lambda$\_0 (allows growth) - $\checkmark$ $\sigma$ $\in$ {[}0.01, 0.5{]}: Crowding effect
 moderate
 
 \paragraph{3.2.2 Validation Metrics (V2)}\label{validation-metrics-v2}
@@ -1019,7 +1019,7 @@ moderate
 
 \textbf{Interpretation:} - \textbf{Error metrics excellent:} RMSE
 \textless{} 2 agents, MAE \textless{} 1.5 agents - \textbf{R² still
-negative:} Model predicts N ≈ 18 (constant), data shows frequency
+negative:} Model predicts N $\approx$ 18 (constant), data shows frequency
 variance - \textbf{Dramatic improvement:} 98-point R² increase from
 enforcing physical constraints
 
@@ -1036,9 +1036,9 @@ enforcing physical constraints
 \end{Shaded}
 
 \textbf{Outcome:} - Integration successful (no numerical errors) -
-\textbf{N range:} {[}1.0, 20.0{]} throughout (constraints enforced ✓) -
-\textbf{E\_total range:} {[}0, 1000{]} (energy non-negative ✓) -
-\textbf{φ range:} {[}0.0, 1.0{]} (resonance bounded ✓) - \textbf{Final
+\textbf{N range:} {[}1.0, 20.0{]} throughout (constraints enforced $\checkmark$) -
+\textbf{E\_total range:} {[}0, 1000{]} (energy non-negative $\checkmark$) -
+\textbf{$\varphi$ range:} {[}0.0, 1.0{]} (resonance bounded $\checkmark$) - \textbf{Final
 state:} E = 6.0, N = 1.0 (low-energy equilibrium)
 
 \textbf{Constraint Verification:}
@@ -1081,8 +1081,8 @@ V2 (Constrained)
 \endlastfoot
 \textbf{Constraint Enforcement} & None & N \textgreater= 1, E
 \textgreater= 0, 0 \textless= phi \textless= 1 \\
-\textbf{Threshold Function} & Hard cutoff: max(0, (ρ-40)/K) & Smooth
-sigmoid: 1/(1+exp(-0.1*(ρ-40))) \\
+\textbf{Threshold Function} & Hard cutoff: max(0, ($\rho$-40)/K) & Smooth
+sigmoid: 1/(1+exp(-0.1*($\rho$-40))) \\
 \textbf{Parameter Bounds} & Loose (0.01-10.0 ranges) & Tight (physically
 motivated) \\
 \textbf{Optimization} & Local (scipy.minimize) & Global
@@ -1090,7 +1090,7 @@ motivated) \\
 \textbf{Population Floor} & No & Yes (freeze dN/dt at N=1) \\
 \textbf{R²} & -98.12 & -0.1712 \\
 \textbf{RMSE} & 17.51 agents & 1.90 agents \\
-\textbf{Physical Realism} & ❌ Negative populations & ✓ All constraints
+\textbf{Physical Realism} & $\times$ Negative populations & $\checkmark$ All constraints
 satisfied \\
 \end{longtable}
 }
@@ -1102,11 +1102,11 @@ Impact}\label{physical-constraint-impact}
 catastrophic population collapse. Without this constraint, decomposition
 rate exceeds composition when energy depletes, driving N negative.
 
-\textbf{Mechanism:} 1. Energy decreases due to maintenance costs (β·N·ρ)
-2. Energy depletion reduces composition rate (λ\_c approaches zero) 3.
-Decomposition continues (λ\_d \textgreater{} 0 always) 4. \textbf{V1:}
-dN/dt = λ\_c - λ\_d \textless{} 0, N decreases past zero 5. \textbf{V2:}
-When N = 1 and λ\_c \textless{} λ\_d, freeze dN/dt = 0 (prevent
+\textbf{Mechanism:} 1. Energy decreases due to maintenance costs ($\beta$·N·$\rho$)
+2. Energy depletion reduces composition rate ($\lambda$\_c approaches zero) 3.
+Decomposition continues ($\lambda$\_d \textgreater{} 0 always) 4. \textbf{V1:}
+dN/dt = $\lambda$\_c - $\lambda$\_d \textless{} 0, N decreases past zero 5. \textbf{V2:}
+When N = 1 and $\lambda$\_c \textless{} $\lambda$\_d, freeze dN/dt = 0 (prevent
 violation)
 
 \textbf{Result:} V2 maintains N = 1 as \textbf{population floor},
@@ -1136,7 +1136,7 @@ systematically - Converged to better minimum (error = 50.14) - R² =
 \end{Highlighting}
 \end{Shaded}
 
-Discontinuity at ρ = 40 causes numerical instability in ODE integration.
+Discontinuity at $\rho$ = 40 causes numerical instability in ODE integration.
 
 \textbf{V2 (Sigmoid):}
 
@@ -1162,7 +1162,7 @@ Metrics}\label{negative-ruxb2-despite-excellent-error-metrics}
 \textless{} 2 agents), yet R² = -0.17 is negative.
 
 \textbf{Explanation:} - \textbf{Mean population:} mean(N\_obs) = 17.33
-agents (from C171/C175 data) - \textbf{Model prediction:} N\_pred ≈ 18.0
+agents (from C171/C175 data) - \textbf{Model prediction:} N\_pred $\approx$ 18.0
 (approximately constant across frequencies) - \textbf{RMSE calculation:}
 sqrt(mean((18.0 - N\_obs)\^{}2)) = 1.90 (close to mean!) - \textbf{R²
 calculation:} R² = 1 - SS\_res/SS\_tot \textless{} 0 when SS\_res
@@ -1171,10 +1171,10 @@ calculation:} R² = 1 - SS\_res/SS\_tot \textless{} 0 when SS\_res
 \textbf{Why SS\_res \textgreater{} SS\_tot?}
 
 Observed data has \textbf{frequency-dependent variance}: - f = 2.0\%: N*
-≈ 16-20 (variance σ² ≈ 4) - f = 2.5\%: N* ≈ 17-19 (variance σ² ≈ 2) - f
-= 3.0\%: N* ≈ 18-21 (variance σ² ≈ 3)
+$\approx$ 16-20 (variance $\sigma$² $\approx$ 4) - f = 2.5\%: N* $\approx$ 17-19 (variance $\sigma$² $\approx$ 2) - f
+= 3.0\%: N* $\approx$ 18-21 (variance $\sigma$² $\approx$ 3)
 
-Model predicts \textbf{constant N ≈ 18} (variance σ² ≈ 0): -
+Model predicts \textbf{constant N $\approx$ 18} (variance $\sigma$² $\approx$ 0): -
 Underpredicts variance by factor of 2-4× - Residuals (N\_obs - N\_pred)
 exhibit structure (not random) - R² penalizes this lack of variance
 capture
@@ -1187,7 +1187,7 @@ trajectories.
 Breakdown}\label{steady-state-approximation-breakdown}
 
 \textbf{Assumption:} Populations converge to equilibrium (dN/dt = 0)
-where λ\_c = λ\_d.
+where $\lambda$\_c = $\lambda$\_d.
 
 \textbf{Reality:} Empirical data (C171/C175) shows: - \textbf{Transient
 dynamics:} Initial 500 cycles exhibit population growth/oscillations -
@@ -1206,12 +1206,12 @@ fluctuates ±2-3 agents
 \end{Highlighting}
 \end{Shaded}
 
-This predicts N ≈ 17.6-18.4 (±2\% variance) but data shows ±10-15\%
+This predicts N $\approx$ 17.6-18.4 (±2\% variance) but data shows ±10-15\%
 variance across frequencies.
 
 \textbf{Root Cause:} Frequency dependence not captured by equilibrium
 analysis. Requires: - Full ODE integration over time (not just
-steady-state solution) - Frequency-dependent parameters (λ\_0(ω), K(ω),
+steady-state solution) - Frequency-dependent parameters ($\lambda$\_0($\omega$), K($\omega$),
 etc.) - Symbolic regression to discover functional forms from data
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -1230,7 +1230,7 @@ Implement equations without physical bounds → Observe failures (N
 \textless{} 0, R² = -98) 2. \textbf{Diagnose Mechanism:} Identify why
 constraints violated (decomposition \textgreater{} composition, no
 population floor) 3. \textbf{Add Constraints (V2):} Enforce N
-\textgreater= 1, E \textgreater= 0, φ ∈ {[}0,1{]}, smooth thresholds,
+\textgreater= 1, E \textgreater= 0, $\varphi$ $\in$ {[}0,1{]}, smooth thresholds,
 tight bounds 4. \textbf{Dramatic Improvement:} R²: -98 → -0.17, RMSE:
 17.5 → 1.9, physical realism restored
 
@@ -1255,21 +1255,21 @@ Dependence}\label{steady-state-limitations-and-frequency-dependence}
 
 Empirical data (C171/C175) shows: - \textbf{Bistability region (f
 \textless{} 2.55\%):} N* fluctuates between Basin A (high) and Basin B
-(low) - \textbf{Transition region (f ≈ 2.5-2.7\%):} N* exhibits maximum
+(low) - \textbf{Transition region (f $\approx$ 2.5-2.7\%):} N* exhibits maximum
 variance - \textbf{Stable region (f \textgreater{} 3.0\%):} N* converges
 reliably to \textasciitilde18-20 agents
 
-Steady-state model predicts \textbf{constant N ≈ 18} (no frequency
+Steady-state model predicts \textbf{constant N $\approx$ 18} (no frequency
 sensitivity), missing this structure.
 
 \textbf{Resolution:} Implement \textbf{full ODE integration} over time:
-1. Extract complete timeseries (N(t), E(t), φ(t) for each experiment) 2.
+1. Extract complete timeseries (N(t), E(t), $\varphi$(t) for each experiment) 2.
 Fit model to temporal trajectories (not just final states) 3. Capture
 transient dynamics (first 500 cycles show growth/oscillation) 4. Test
-frequency-dependent parameters (does λ\_0 vary with ω?)
+frequency-dependent parameters (does $\lambda$\_0 vary with $\omega$?)
 
 \textbf{Phase 2 Approach:} Symbolic regression (SINDy) will discover
-functional forms λ\_c(ρ, φ, ω) and λ\_d(N, ω) directly from time-series
+functional forms $\lambda$\_c($\rho$, $\varphi$, $\omega$) and $\lambda$\_d(N, $\omega$) directly from time-series
 data, avoiding equilibrium assumptions.
 
 \subsubsection{4.3 Global Optimization for Multi-Parameter
@@ -1315,7 +1315,7 @@ Cutoffs}\label{sigmoid-thresholds-vs-hard-cutoffs}
 \end{Highlighting}
 \end{Shaded}
 
-Discontinuous at ρ = 40. Causes numerical issues in ODE integrators
+Discontinuous at $\rho$ = 40. Causes numerical issues in ODE integrators
 (adaptive step size struggles with discontinuities).
 
 \textbf{V2 (Sigmoid):}
@@ -1339,8 +1339,8 @@ tanh, exponential) in biological/physical models.
 2)}\label{next-steps-symbolic-regression-phase-2}
 
 \textbf{Motivation:} Steady-state approach fails to capture frequency
-dependence. Imposing functional forms a priori (λ\_c = λ\_0 · g(ρ) ·
-h(φ)) may miss true relationships.
+dependence. Imposing functional forms a priori ($\lambda$\_c = $\lambda$\_0 · g($\rho$) ·
+h($\varphi$)) may miss true relationships.
 
 \textbf{Symbolic Regression Approach:}
 
@@ -1377,19 +1377,19 @@ detailed logging:
 \textbf{SINDy Output Example:}
 
 \begin{verbatim}
-dN/dt = 1.2·ρ·φ² - 0.5·N² + 0.3·sin(ω·t)
+dN/dt = 1.2·$\rho$·$\varphi$² - 0.5·N² + 0.3·sin($\omega$·t)
 \end{verbatim}
 
-Discovered functional form directly from data, without assuming λ\_c =
-λ\_0·g·h structure.
+Discovered functional form directly from data, without assuming $\lambda$\_c =
+$\lambda$\_0·g·h structure.
 
 \textbf{3. Validate Against Held-Out Data:} - Train on C171 (40
 experiments) - Test on C175 (110 experiments) - Compute R² on held-out
 set
 
 \textbf{4. Interpret Discovered Terms:} - Which nonlinear interactions
-matter? (ρ·φ², N², sin terms?) - Are there hidden couplings we missed?
-(E·N, φ·θ, etc.) - Does frequency appear explicitly? (ω·t terms?)
+matter? ($\rho$·$\varphi$², N², sin terms?) - Are there hidden couplings we missed?
+(E·N, $\varphi$·$\theta$, etc.) - Does frequency appear explicitly? ($\omega$·t terms?)
 
 \textbf{Expected Outcome:} R² \textgreater{} 0.8 on held-out data,
 capturing frequency-dependent variance through data-driven equation
@@ -1404,16 +1404,16 @@ optimization with timeseries fitting: weeks of compute
 
 \textbf{2. Model Assumptions:} - Mean-field approximation (no spatial
 structure, agent heterogeneity) - Continuous approximation (discrete
-agent births treated as continuous λ\_c) - Fixed forcing frequency (ω
+agent births treated as continuous $\lambda$\_c) - Fixed forcing frequency ($\omega$
 not varied during experiments)
 
 \textbf{3. Data Limitations:} - Only 150 experiments (small sample for
 10-parameter fit) - Single initial condition per seed (no systematic IC
-exploration) - No direct measurement of φ, θ (inferred indirectly from
+exploration) - No direct measurement of $\varphi$, $\theta$ (inferred indirectly from
 composition events)
 
 \textbf{4. Generalization:} - Parameters fitted to specific experimental
-setup (3000 cycles, f ∈ {[}1-3.5{]}\%) - Untested on longer timescales,
+setup (3000 cycles, f $\in$ {[}1-3.5{]}\%) - Untested on longer timescales,
 extreme frequencies, different agent architectures
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -1432,7 +1432,7 @@ RMSE=1.90 agents) through systematic application of:
 \tightlist
 \item
   \textbf{Non-negativity enforcement} (N \textgreater= 1, E
-  \textgreater= 0, 0 \textless= φ \textless= 1)
+  \textgreater= 0, 0 \textless= $\varphi$ \textless= 1)
 \item
   \textbf{Smooth sigmoid thresholds} (replacing hard cutoffs)
 \item
@@ -1453,7 +1453,7 @@ unconstrained → observe failures → diagnose mechanisms → add constraints
 However, R² remaining negative (-0.17) despite excellent error metrics
 (RMSE=1.90, MAE=1.47) reveals that \textbf{steady-state approximations
 fail to capture frequency-dependent population variance} observed
-empirically. The model predicts N ≈ 18 (approximately constant), while
+empirically. The model predicts N $\approx$ 18 (approximately constant), while
 data exhibits ±10-15\% variance across forcing frequencies. This gap
 motivates \textbf{Phase 2: symbolic regression} (SINDy) to discover
 functional forms directly from full temporal trajectories, avoiding
@@ -1467,7 +1467,7 @@ reduction vs local methods - \textbf{Limitation identification:}
 Steady-state insufficient for frequency-dependent systems
 
 \textbf{Future Directions:} - \textbf{Phase 2 (Timeseries Fitting):}
-Extract full N(t), E(t), φ(t) from re-run experiments - \textbf{Phase 3
+Extract full N(t), E(t), $\varphi$(t) from re-run experiments - \textbf{Phase 3
 (SINDy):} Discover equations from data (avoid a priori functional forms)
 - \textbf{Phase 4 (Bifurcation Analysis):} Map parameter space for
 stability boundaries, Hopf bifurcations - \textbf{Phase 5 (Stochastic
@@ -1602,7 +1602,7 @@ gaps guide next theoretical development.''
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/paper7_fig10_robustness_external.png}
-\caption{\textbf{External Noise Robustness.} V4 insensitivity to resource fluctuations. Population remains stable (N≈111) with unchanged CV (15.2\%) across external noise levels, confirming threshold-dominated dynamics.}
+\caption{\textbf{External Noise Robustness.} V4 insensitivity to resource fluctuations. Population remains stable (N$\approx$111) with unchanged CV (15.2\%) across external noise levels, confirming threshold-dominated dynamics.}
 \label{fig:robustness-external}
 \end{figure}
 
@@ -1637,7 +1637,7 @@ gaps guide next theoretical development.''
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/paper7_fig15_temporal_averaging.png}
-\caption{\textbf{Temporal Averaging Effects.} CV decay from 15.2\% (t=500) to 1.0\% (t=5000) revealing three temporal regimes. Crossover at t≈1000-1500 matches empirical CV=9.2\%, suggesting measurement timescale effects.}
+\caption{\textbf{Temporal Averaging Effects.} CV decay from 15.2\% (t=500) to 1.0\% (t=5000) revealing three temporal regimes. Crossover at t$\approx$1000-1500 matches empirical CV=9.2\%, suggesting measurement timescale effects.}
 \label{fig:temporal-averaging}
 \end{figure}
 
