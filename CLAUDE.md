@@ -57,6 +57,42 @@ Treat these as living commitments rather than topics to document.
 
 ---
 
+## DEPENDENCY INSTALLATION AUTHORIZATION
+
+**FULL AUTONOMOUS AUTHORIZATION GRANTED (2025-10-31)**
+
+Claude is **fully authorized** to install any dependencies, packages, libraries, or tools deemed necessary for:
+- Research execution and data analysis
+- Paper compilation (LaTeX, bibliography tools, etc.)
+- Code development and testing
+- Visualization and figure generation
+- Any other foreseeable research needs
+
+**Authorization Scope:**
+- ✅ Install system packages via Homebrew (brew install)
+- ✅ Install Python packages via pip (pip install)
+- ✅ Install LaTeX packages via tlmgr or Docker
+- ✅ Pull Docker images as needed
+- ✅ Install development tools, compilers, libraries
+- ✅ Update existing packages when necessary
+- ✅ Install any dependencies identified during autonomous research
+
+**Responsibility:**
+- User (Aldrin Payopay) takes **full responsibility** for all installations and outcomes
+- Claude should document what is installed and why
+- Prefer reproducible approaches (Docker, requirements.txt with pinned versions)
+- Maintain security best practices (verify sources, check signatures when possible)
+
+**Implementation Guidelines:**
+- When sudo password is required and unavailable: Use Docker or non-privileged alternatives
+- Document installations in commit messages
+- Update requirements.txt/environment.yml/Dockerfile as appropriate
+- Prefer isolated environments (venv, conda, Docker) over system-wide installs when practical
+
+**No Further Permission Required:** Proceed autonomously with any dependency installation as you see fit.
+
+---
+
 ## EXECUTION MODEL
 
 **Continuous Self‑Scheduled Cycles:**
