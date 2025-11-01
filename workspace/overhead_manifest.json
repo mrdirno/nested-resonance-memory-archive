@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "created": "2025-11-01T00:17:50.737660",
+  "description": "Gate 1.4: \u00b15% Overhead Authentication - C255 baseline from Paper 1",
+  "threshold_percent": 5.0,
+  "total_measurements": 1,
+  "passing_measurements": 1,
+  "pass_rate": 1.0,
+  "measurements": [
+    {
+      "timestamp": "2025-11-01T00:17:49.917051",
+      "operation_name": "C255_baseline",
+      "instrumentation_count": 1080000,
+      "per_call_cost_ms": 67.0,
+      "baseline_runtime_min": 30.0,
+      "measured_runtime_min": 1207.5,
+      "predicted_overhead": 40.2,
+      "observed_overhead": 40.25,
+      "relative_error": 0.0012437810945272925,
+      "passes_authentication": 1,
+      "metadata": {}
+    }
+  ]
+}
