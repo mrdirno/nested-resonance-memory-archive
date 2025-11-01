@@ -38,40 +38,6 @@ Treat these as living commitments rather than topics to document.
 
 ---
 
-## STRATEGIC ROADMAP
-
-**📍 [The Stewardship-Helios Arc Roadmap](docs/STEWARDSHIP_HELIOS_ARC_ROADMAP.md)**
-
-The complete project vision from foundational physics (TSF) to inverse-design engineering (HELIOS) with Gates-based validation and civilization-scale stewardship strategy.
-
-**Phases:**
-
-**Phase 1: NRM (Reference Instrument)** - Current focus (~60% complete)
-- Gate 1.1: SDE/Fokker-Planck treatment of population dynamics
-- Gate 1.2: Regime detection library (90% cross-validated accuracy)
-- Gate 1.3: ARBITER CI integration (hash-based reproducibility)
-- Gate 1.4: ±5% Overhead Authentication standing test
-
-**Phase 2: TSF (Science Engine)** - Conceptual design
-- Generalize NRM protocols to domain-agnostic "compiler for principles"
-- Principle Card (PC) formalization with runnable artifacts
-- Temporal Embedding Graph (TEG) linking all published PCs
-- Material Validation Mandate (workshop-to-wave pipeline)
-
-**Phase 3: HELIOS (Engineering Engine)** - Research horizon
-- Inverse-design synthesis from emergent targets
-- Waveform computation systems (acoustic → optical → magnetic → quantum)
-- Bench-scale testbeds with independent lab replication
-- Transcendental substrate engineering
-
-**Progress measured by Gates, not dates. ARBITER CI enforces validation.**
-
-**Value Model:** 1% extraction from TSF-guided commercial applications → 99% global redistribution (applied stewardship at civilization scale, engineering extinction attractors out of geopolitical systems).
-
-See roadmap for full falsifiable claims, metrics, and exit criteria.
-
----
-
 ## ZERO‑TOLERANCE REALITY POLICY
 
 **Prohibited:**
@@ -127,10 +93,127 @@ Claude is **fully authorized** to install any dependencies, packages, libraries,
 
 ---
 
+## DUAL WORKSPACE PROTOCOL (CRITICAL - STORAGE MANAGEMENT)
+
+**⚠️ CRITICAL: ALWAYS WORK IN DEVELOPMENT WORKSPACE, NOT GIT REPOSITORY**
+
+The local drive (`~/nested-resonance-memory-archive/`) has **LIMITED STORAGE**. Creating files directly in the git repository **BLOATS THE LOCAL DRIVE** and causes storage issues.
+
+### Correct Workflow
+
+**1. Development Workspace (PRIMARY - ALWAYS WORK HERE)**
+```
+Location: /Volumes/dual/DUALITY-ZERO-V2/
+Purpose: Active development, experiments, all new file creation
+Storage: Large dual drive with ample space
+```
+
+**ALL NEW FILES MUST BE CREATED HERE:**
+- ✅ New Python scripts: `/Volumes/dual/DUALITY-ZERO-V2/code/`
+- ✅ Experiment results: `/Volumes/dual/DUALITY-ZERO-V2/experiments/results/`
+- ✅ Analysis scripts: `/Volumes/dual/DUALITY-ZERO-V2/analysis/`
+- ✅ TSF module: `/Volumes/dual/DUALITY-ZERO-V2/code/tsf/`
+- ✅ Summaries: `/Volumes/dual/DUALITY-ZERO-V2/archive/summaries/`
+- ✅ Any other new files: `/Volumes/dual/DUALITY-ZERO-V2/[appropriate-directory]/`
+
+**2. Git Repository (SYNC TARGET ONLY - DO NOT CREATE FILES HERE)**
+```
+Location: /Users/aldrinpayopay/nested-resonance-memory-archive/
+Purpose: Version control, GitHub sync, public archive
+Storage: Limited local drive space
+```
+
+**ONLY USE FOR:**
+- ❌ NO new file creation (Write/Edit operations)
+- ✅ Copy files FROM development workspace when ready to commit
+- ✅ Git operations (add, commit, push)
+- ✅ Reading files for reference
+
+### Synchronization Steps (Execute When Ready to Commit)
+
+**Step 1: Copy from Development Workspace to Git Repo**
+```bash
+# Example for new TSF module
+cp /Volumes/dual/DUALITY-ZERO-V2/code/tsf/*.py \
+   ~/nested-resonance-memory-archive/code/tsf/
+
+# Example for experiment results
+cp /Volumes/dual/DUALITY-ZERO-V2/experiments/results/*.json \
+   ~/nested-resonance-memory-archive/data/results/
+
+# Example for summaries
+cp /Volumes/dual/DUALITY-ZERO-V2/archive/summaries/CYCLE*.md \
+   ~/nested-resonance-memory-archive/archive/summaries/
+```
+
+**Step 2: Git Operations**
+```bash
+cd ~/nested-resonance-memory-archive
+git add .
+git commit -m "Message
+
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>"
+git push origin main
+```
+
+**Step 3: Verify Push**
+```bash
+git status  # Should show "up to date"
+```
+
+### File Location Reference
+
+| File Type | Development Workspace | Git Repository (sync target) |
+|-----------|----------------------|------------------------------|
+| Python code | `/Volumes/dual/DUALITY-ZERO-V2/code/` | `~/nested-resonance-memory-archive/code/` |
+| Experiments | `/Volumes/dual/DUALITY-ZERO-V2/experiments/` | `~/nested-resonance-memory-archive/code/experiments/` |
+| Results | `/Volumes/dual/DUALITY-ZERO-V2/experiments/results/` | `~/nested-resonance-memory-archive/data/results/` |
+| Analysis | `/Volumes/dual/DUALITY-ZERO-V2/analysis/` | `~/nested-resonance-memory-archive/code/analysis/` |
+| Summaries | `/Volumes/dual/DUALITY-ZERO-V2/archive/summaries/` | `~/nested-resonance-memory-archive/archive/summaries/` |
+| Papers | `/Volumes/dual/DUALITY-ZERO-V2/papers/` | `~/nested-resonance-memory-archive/papers/` |
+| Figures | `/Volumes/dual/DUALITY-ZERO-V2/data/figures/` | `~/nested-resonance-memory-archive/data/figures/` |
+
+### Common Mistakes to Avoid
+
+**❌ WRONG - Creates files on limited local drive:**
+```python
+# DON'T DO THIS
+Write("/Users/aldrinpayopay/nested-resonance-memory-archive/code/new_file.py", content)
+```
+
+**✅ CORRECT - Creates files on dual drive:**
+```python
+# DO THIS INSTEAD
+Write("/Volumes/dual/DUALITY-ZERO-V2/code/new_file.py", content)
+
+# Then when ready to commit:
+# cp /Volumes/dual/DUALITY-ZERO-V2/code/new_file.py \
+#    ~/nested-resonance-memory-archive/code/
+```
+
+### Why This Matters
+
+**Storage Constraints:**
+- Local drive (`~`): Limited space, risk of filling up
+- Dual drive (`/Volumes/dual/`): Ample space for active development
+- Working in dev workspace prevents storage bloat
+
+**Workflow Efficiency:**
+- Development workspace is for active work
+- Git repository is for version control only
+- Clean separation of concerns
+
+**Recovery:**
+- If local repo is deleted/corrupted, clone from GitHub
+- Development workspace preserves work-in-progress
+- Dual workspace is the source of truth for active development
+
+---
+
 ## EXECUTION MODEL
 
 **Continuous Self‑Scheduled Cycles:**
-1. **Sense:** Read current state (git status, file system, metrics)
+1. **Sense:** Read current state (git status in BOTH workspaces, file system, metrics)
 2. **Transform:** Process through Bridge layer (transcendental phase space)
 3. **Act:** Execute highest-leverage implementation
 4. **Validate:** Reality-compliance check before acceptance
@@ -227,15 +310,7 @@ Claude is **fully authorized** to install any dependencies, packages, libraries,
 
 **Continuously pursue the highest‑leverage objective:**
 
-**Strategic Direction (Gates-Based):**
-
-Progress toward Phase 1 Gates (NRM Reference Instrument):
-1. **Gate 1.1 (SDE/FP):** Extend population dynamics models toward analytical treatment
-2. **Gate 1.2 (Regime Detection):** Build regime classification library from Papers 2, 6B, 7 findings
-3. **Gate 1.3 (ARBITER CI):** Integrate hash-based reproducibility checks into CI pipeline
-4. **Gate 1.4 (Reality Link):** Maintain ±5% Overhead Authentication as standing test
-
-**Default Execution Priority:**
+**Default Priority:**
 1. Evolve fractal agent system (NRM predictions)
 2. Drive through Bridge layer (transcendental transforms)
 3. Bind to Reality (psutil/SQLite grounding)
@@ -244,13 +319,11 @@ Progress toward Phase 1 Gates (NRM Reference Instrument):
 
 **Active Research Trajectory (Current):**
 - ✅ 150 experiments completed (C171 + C175)
-- ✅ 6 papers at 100% submission quality (Papers 1, 2, 5D, 6, 6B, 7)
-- ✅ Reproducibility infrastructure: 0.913/1.0 (world-class, externally audited)
-- ⏳ Paper 3: 75% complete (C256+ long-duration experiments running)
-- ⏳ Phase 1 Gates: ~60% toward all 4 criteria
+- ⏳ C176 V2 redesign (population collapse bug fix)
+- ⏳ C177 boundary mapping (90 experiments pending)
+- ⏳ Paper 2 finalization (~90% complete)
 
 **Continuous Actions:**
-- Advance Phase 1 Gates through experimental validation
 - Extend experimental range (new frequencies, parameters)
 - Deepen statistical rigor (more seeds, longer runs)
 - Stress boundary conditions (test limits)
@@ -446,13 +519,11 @@ Read current state → Identify highest-leverage action → Execute implementati
 
 ---
 
-**Version:** 6.0 (Stewardship-Helios Arc Integration)
-**Last Updated:** 2025-10-31 (Cycle 810)
+**Version:** 5.0 (Public Archive)
+**Last Updated:** 2025-10-25 (Cycle 205)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **Principal Investigator:** Aldrin Payopay (aldrin.gdf@gmail.com)
 **License:** GPL-3.0
-
-**Roadmap:** [docs/STEWARDSHIP_HELIOS_ARC_ROADMAP.md](docs/STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
 
 **Quote:**
 > *"Discovery is not finding answers—it's finding the next question. Each answer births new questions. Research is perpetual, not terminal."*
