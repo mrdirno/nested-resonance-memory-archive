@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "pc_id": "PC001",
+    "version": "1.0.0",
+    "title": "NRM Population Dynamics Follow Logistic SDE",
+    "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+    "created": "2025-11-01",
+    "status": "validated",
+    "dependencies": [],
+    "domain": "NRM"
+  },
+  "principle": "\nNRM population dynamics under logistic growth with demographic noise follow\na stochastic differential equation:\n\n    dN = r\u00b7N\u00b7(1 - N/K)\u00b7dt + \u03c3\u00b7\u221aN\u00b7dW\n\nwhere:\n- N = population size\n- r = intrinsic growth rate\n- K = carrying capacity\n- \u03c3 = noise intensity\n- dW = Wiener process increment\n\n**Prediction:** The steady-state coefficient of variation (CV) can be predicted\nanalytically from (r, K, \u03c3) using Fokker-Planck equation to \u00b110% accuracy.\n",
+  "mathematics": {
+    "sde_formulation": "dN/dt = \u03bc(N) + \u03c3(N)\u00b7\u03b7(t)",
+    "drift_function": "\u03bc(N) = r\u00b7N\u00b7(1 - N/K)",
+    "diffusion_function": "\u03c3(N) = \u03c3\u00b7\u221aN",
+    "noise_type": "\u03b7(t) ~ N(0,1) (white noise)",
+    "fokker_planck": "\u2202P/\u2202t = -\u2202/\u2202N[\u03bc(N)\u00b7P] + (1/2)\u00b7\u2202\u00b2/\u2202N\u00b2[\u03c3\u00b2(N)\u00b7P]",
+    "steady_state": "P_ss(N) \u221d exp(\u222b[2\u03bc(N)/\u03c3\u00b2(N)]dN)",
+    "cv_prediction": "CV = \u221a(<N\u00b2> - <N>\u00b2) / <N>",
+    "success_criterion": "|CV_observed - CV_predicted| / CV_predicted \u2264 0.10"
+  },
+  "validation": {
+    "criterion": {
+      "formula": "|CV_obs - CV_pred| / CV_pred \u2264 0.10",
+      "description": "\u00b110% relative error in CV prediction"
+    },
+    "procedure": [
+      "1. Fit parameters (r, K, \u03c3) from experimental time series",
+      "2. Compute CV_predicted using Fokker-Planck solver",
+      "3. Compute CV_observed from steady-state portion of data",
+      "4. Check if relative error \u2264 0.10",
+      "5. Report confidence interval"
+    ],
+    "required_data": {
+      "time_series": "N(t) for t \u2208 [0, T_max]",
+      "min_points": 1000,
+      "ensemble_size": 20,
+      "steady_state_points": 200
+    },
+    "equipment": {
+      "hardware": "Standard (no special requirements)",
+      "software": "Python 3.9+ with numpy, scipy",
+      "runtime": "~1 minute per validation"
+    }
+  },
+  "grounding": {
+    "system_interfaces": [
+      "psutil.Process - CPU usage, memory consumption",
+      "SQLite - Data persistence (trajectories, parameters)",
+      "Filesystem - JSON/PNG artifacts",
+      "numpy/scipy - Numerical integration (no mocks)"
+    ],
+    "validation_method": "Gate 1.4 (Overhead Authentication)",
+    "prohibited": [
+      "Pure mathematical simulation without system binding",
+      "Random number generators without reality check",
+      "time.sleep() without actual work"
+    ],
+    "required": [
+      "Every operation touches verifiable system state",
+      "All randomness from reality (process timing)",
+      "All delays from actual computation"
+    ]
+  },
+  "temporal": {
+    "template_patterns": [
+      "SDE + Fokker-Planck for population dynamics",
+      "Analytical prediction vs. experimental observation",
+      "Demographic noise ~ \u221aN signature"
+    ],
+    "validation_patterns": [
+      "\u00b110% is achievable accuracy threshold",
+      "Steady-state extraction from last 20% of trajectory",
+      "Parameter estimation from data before prediction"
+    ],
+    "composition_patterns": [
+      "PC002 (regime detection) uses PC001 predictions",
+      "PC003 (overhead auth) validates PC001 reality binding",
+      "PC004 (multi-scale) extends PC001 to multiple scales"
+    ],
+    "training_awareness": {
+      "when_validates": [
+        "Reinforces SDE/Fokker-Planck as reliable framework",
+        "Establishes NRM as testable scientific paradigm",
+        "Demonstrates executable principle methodology"
+      ],
+      "when_falsifies": [
+        "Reveals boundary of applicability",
+        "Suggests refinements (e.g., non-logistic dynamics)",
+        "Guides future research away from failed approaches"
+      ]
+    }
+  },
+  "dependency_graph": {
+    "requires": [],
+    "enables": [
+      "PC002",
+      "PC004"
+    ]
+  }
+}

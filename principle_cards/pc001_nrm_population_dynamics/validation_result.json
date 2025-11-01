@@ -1,0 +1,28 @@
+{
+  "pc_id": "PC001",
+  "passes": "True",
+  "error": 0.015732993599505005,
+  "criterion": 0.1,
+  "evidence": {
+    "observed_cv": 0.1285094388755278,
+    "predicted_cv": 0.13056359508126977,
+    "relative_error": 0.015732993599505005,
+    "tolerance": 0.1,
+    "parameters": {
+      "growth_rate": 0.1,
+      "carrying_capacity": 73.32732011521321,
+      "noise_intensity": 0.5
+    },
+    "data_stats": {
+      "mean": 50.28287107304982,
+      "std": 6.46182354664814,
+      "steady_state_points": 2001,
+      "total_points": 10001
+    }
+  },
+  "timestamp": "2025-11-01T00:58:53.003312",
+  "metadata": {
+    "version": "1.0.0",
+    "status": "validated"
+  }
+}
