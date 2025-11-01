@@ -11,9 +11,39 @@ Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 License: GPL-3.0
 """
 
-# PC002 not yet implemented - this is a placeholder for the directory structure
-# Implementation will be completed in future cycles
+from .principle import PC002_RegimeDetection
+from .features import (
+    RegimeFeatureExtractor,
+    BaselineParams,
+    RegimeFeatures
+)
+from .classifier import (
+    RegimeClassifier,
+    ClassificationMetrics,
+    REGIME_TYPES,
+    BASELINE,
+    GROWTH,
+    COLLAPSE,
+    OSCILLATORY
+)
 
 __version__ = "1.0.0"
 __status__ = "draft"
 __dependencies__ = ["PC001"]
+
+__all__ = [
+    # Core principle
+    'PC002_RegimeDetection',
+    # Feature extraction
+    'RegimeFeatureExtractor',
+    'BaselineParams',
+    'RegimeFeatures',
+    # Classification
+    'RegimeClassifier',
+    'ClassificationMetrics',
+    'REGIME_TYPES',
+    'BASELINE',
+    'GROWTH',
+    'COLLAPSE',
+    'OSCILLATORY',
+]
