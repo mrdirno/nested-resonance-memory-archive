@@ -843,7 +843,7 @@ only over extended timescales
     trend, volatility)
   \item
     \textbf{Relative deviations} computed:
-    \texttt{\textbar{}validation\ -\ original\textbar{}\ /\ \textbar{}original\ +\ ε\textbar{}}
+    \texttt{\textbar{}validation\ -\ original\textbar{}\ /\ \textbar{}original\ +\ $\varepsilon$\textbar{}}
   \item
     \textbf{Absolute deviations} for variability metrics
   \end{itemize}
@@ -1009,7 +1009,7 @@ qualitative agreement
 \textbf{Definition:} How similar are quantitative features between
 original and validation? - \textbf{Computation:} Average relative
 deviation across all numeric features - \textbf{Score:}
-\texttt{1.0\ -\ mean(\textbar{}validation\_feature\ -\ original\_feature\textbar{}\ /\ \textbar{}original\_feature\ +\ ε\textbar{})}
+\texttt{1.0\ -\ mean(\textbar{}validation\_feature\ -\ original\_feature\textbar{}\ /\ \textbar{}original\_feature\ +\ $\varepsilon$\textbar{})}
 - \textbf{Interpretation:} Consistency = 1.0 indicates perfect
 quantitative agreement
 
@@ -1175,7 +1175,7 @@ testing & Threshold perturbation & Parameter sensitivity \\
 \textbf{Publication Threshold:}
 
 Before publication, TSF enforces \textbf{minimum quantification
-thresholds}: - \textbf{Stability ≥ 0.5} (pattern must maintain
+thresholds}: - \textbf{Stability $\geq$ 0.5} (pattern must maintain
 classification at least 50\% of time) - Other thresholds configurable
 per domain
 
@@ -1368,7 +1368,7 @@ PC specification format works across all domains:
 \NormalTok{)}
 
 \CommentTok{\# Output: principle\_cards/pc001\_specification.json}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"✓ PC001 published: }\SpecialCharTok{\{}\NormalTok{pc\_path}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"$\checkmark$ PC001 published: }\SpecialCharTok{\{}\NormalTok{pc\_path}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
 
 \CommentTok{\# For derived PC depending on PC001:}
 \NormalTok{pc\_path }\OperatorTok{=}\NormalTok{ publish(}
@@ -1800,7 +1800,7 @@ returned by quantify().
   domains
 \item
   \textbf{Publication Thresholds:} Scores checked before publication
-  (e.g., stability ≥ 0.5)
+  (e.g., stability $\geq$ 0.5)
 \end{enumerate}
 
 \textbf{Example - Strong Pattern:}
@@ -1830,9 +1830,9 @@ returned by quantify().
 \NormalTok{)}
 
 \CommentTok{\# All metrics pass publication thresholds:}
-\ControlFlowTok{assert}\NormalTok{ metrics.scores[}\StringTok{"stability"}\NormalTok{] }\OperatorTok{\textgreater{}=} \FloatTok{0.5}    \CommentTok{\# ✓ 1.000 ≥ 0.5}
-\ControlFlowTok{assert}\NormalTok{ metrics.scores[}\StringTok{"consistency"}\NormalTok{] }\OperatorTok{\textgreater{}=} \FloatTok{0.5}  \CommentTok{\# ✓ 0.958 ≥ 0.5 (if required)}
-\ControlFlowTok{assert}\NormalTok{ metrics.scores[}\StringTok{"robustness"}\NormalTok{] }\OperatorTok{\textgreater{}=} \FloatTok{0.5}   \CommentTok{\# ✓ 0.800 ≥ 0.5 (if required)}
+\ControlFlowTok{assert}\NormalTok{ metrics.scores[}\StringTok{"stability"}\NormalTok{] }\OperatorTok{\textgreater{}=} \FloatTok{0.5}    \CommentTok{\# $\checkmark$ 1.000 $\geq$ 0.5}
+\ControlFlowTok{assert}\NormalTok{ metrics.scores[}\StringTok{"consistency"}\NormalTok{] }\OperatorTok{\textgreater{}=} \FloatTok{0.5}  \CommentTok{\# $\checkmark$ 0.958 $\geq$ 0.5 (if required)}
+\ControlFlowTok{assert}\NormalTok{ metrics.scores[}\StringTok{"robustness"}\NormalTok{] }\OperatorTok{\textgreater{}=} \FloatTok{0.5}   \CommentTok{\# $\checkmark$ 0.800 $\geq$ 0.5 (if required)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1928,11 +1928,11 @@ All four data structures compose to form complete TSF workflow:
 \NormalTok{        pc\_path }\OperatorTok{=}\NormalTok{ publish(pattern, metrics, refutation, pc\_id}\OperatorTok{=}\StringTok{"PC001"}\NormalTok{, title}\OperatorTok{=}\StringTok{"..."}\NormalTok{, author}\OperatorTok{=}\StringTok{"..."}\NormalTok{)}
         \CommentTok{\# → Path to Principle Card JSON}
 
-        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"✓ PC001 published: }\SpecialCharTok{\{}\NormalTok{pc\_path}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"$\checkmark$ PC001 published: }\SpecialCharTok{\{}\NormalTok{pc\_path}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
     \ControlFlowTok{else}\NormalTok{:}
-        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"✗ Pattern rejected: stability }\SpecialCharTok{\{}\NormalTok{metrics}\SpecialCharTok{.}\NormalTok{scores[}\StringTok{\textquotesingle{}stability\textquotesingle{}}\NormalTok{]}\SpecialCharTok{:.3f\}}\SpecialStringTok{ below threshold"}\NormalTok{)}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"$\times$ Pattern rejected: stability }\SpecialCharTok{\{}\NormalTok{metrics}\SpecialCharTok{.}\NormalTok{scores[}\StringTok{\textquotesingle{}stability\textquotesingle{}}\NormalTok{]}\SpecialCharTok{:.3f\}}\SpecialStringTok{ below threshold"}\NormalTok{)}
 \ControlFlowTok{else}\NormalTok{:}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"✗ Pattern rejected: refutation failed with }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(refutation.failures)}\SpecialCharTok{\}}\SpecialStringTok{ failures"}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"$\times$ Pattern rejected: refutation failed with }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(refutation.failures)}\SpecialCharTok{\}}\SpecialStringTok{ failures"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1952,33 +1952,33 @@ TSF follows a \textbf{layered architecture} separating domain-agnostic
 infrastructure from domain-specific discovery:
 
 \begin{verbatim}
-┌─────────────────────────────────────────────────────────┐
-│                    TSF Public API                       │
-│  observe() | discover() | refute() | quantify() | publish() │
-└─────────────────────────────────────────────────────────┘
-                           │
-        ┌──────────────────┴──────────────────┐
-        │                                     │
-┌───────▼─────────┐                 ┌─────────▼────────┐
-│  Domain-Agnostic │                 │  Domain-Specific  │
-│   Infrastructure │                 │    Discovery      │
-├──────────────────┤                 ├───────────────────┤
-│ • Schema         │                 │ • Method dispatch │
-│   validation     │                 │ • Feature         │
-│ • Multi-timescale│                 │   extraction      │
-│   testing        │                 │ • Classification  │
-│ • Bootstrap CI   │                 │   logic           │
-│ • PC generation  │                 │                   │
-│ • TEG integration│                 │                   │
-└──────────────────┘                 └───────────────────┘
-        │                                     │
-        └──────────────────┬──────────────────┘
-                           │
-        ┌──────────────────▼──────────────────┐
-        │         Data Structures             │
-        │  ObservationalData | DiscoveredPattern │
-        │  RefutationResult | QuantificationMetrics │
-        └──────────────────────────────────────┘
++---------------------------------------------------------┐
+|                    TSF Public API                       |
+|  observe() | discover() | refute() | quantify() | publish() |
++---------------------------------------------------------┘
+                           |
+        +------------------┴------------------┐
+        |                                     |
++-------v---------┐                 +---------v--------┐
+|  Domain-Agnostic |                 |  Domain-Specific  |
+|   Infrastructure |                 |    Discovery      |
++------------------┤                 +-------------------┤
+| • Schema         |                 | • Method dispatch |
+|   validation     |                 | • Feature         |
+| • Multi-timescale|                 |   extraction      |
+|   testing        |                 | • Classification  |
+| • Bootstrap CI   |                 |   logic           |
+| • PC generation  |                 |                   |
+| • TEG integration|                 |                   |
++------------------┘                 +-------------------┘
+        |                                     |
+        +------------------┬------------------┘
+                           |
+        +------------------v------------------┐
+        |         Data Structures             |
+        |  ObservationalData | DiscoveredPattern |
+        |  RefutationResult | QuantificationMetrics |
+        +--------------------------------------┘
 \end{verbatim}
 
 \textbf{Key Architectural Principles:}
@@ -2009,46 +2009,46 @@ TSF is organized into logical modules within \texttt{code/tsf/}:
 
 \begin{verbatim}
 code/tsf/
-├── core.py                    # Main TSF API (1,708 lines)
-│   ├── observe()              # Schema-validated data loading
-│   ├── discover()             # Pattern detection (method dispatch)
-│   ├── refute()               # Multi-timescale validation
-│   ├── quantify()             # Statistical quantification
-│   └── publish()              # Principle Card generation
-│
-├── data_structures.py         # Core containers (450 lines)
-│   ├── ObservationalData      # From observe()
-│   ├── DiscoveredPattern      # From discover()
-│   ├── RefutationResult       # From refute()
-│   └── QuantificationMetrics  # From quantify()
-│
-├── discovery_methods/         # Domain-specific discovery implementations
-│   ├── regime_classification.py        # Population dynamics (280 lines)
-│   └── financial_regime_classification.py  # Financial markets (310 lines)
-│
-├── validation/                # Multi-timescale testing implementations
-│   ├── refutation_pc001.py    # Population dynamics refutation (220 lines)
-│   └── refutation_financial.py  # Financial markets refutation (240 lines)
-│
-├── quantification/            # Statistical quantification implementations
-│   ├── quantify_pc001.py      # Population dynamics quantification (180 lines)
-│   └── quantify_financial.py  # Financial markets quantification (190 lines)
-│
-├── teg_adapter.py             # Temporal Embedding Graph integration (350 lines)
-│   ├── load_pc_specification()   # Load PC into TEG
-│   ├── validate_dependencies()   # Check dependency graph
-│   └── propagate_invalidation()  # Cascade failures
-│
-├── exceptions.py              # Custom exception classes (80 lines)
-│   ├── SchemaValidationError
-│   ├── RefutationFailedError
-│   ├── QuantificationFailedError
-│   └── PublicationError
-│
-└── utils.py                   # Utility functions (150 lines)
-    ├── bootstrap_ci()         # Bootstrap confidence interval estimation
-    ├── compute_deviations()   # Feature deviation calculations
-    └── format_pc_json()       # PC specification formatting
++-- core.py                    # Main TSF API (1,708 lines)
+|   +-- observe()              # Schema-validated data loading
+|   +-- discover()             # Pattern detection (method dispatch)
+|   +-- refute()               # Multi-timescale validation
+|   +-- quantify()             # Statistical quantification
+|   +-- publish()              # Principle Card generation
+|
++-- data_structures.py         # Core containers (450 lines)
+|   +-- ObservationalData      # From observe()
+|   +-- DiscoveredPattern      # From discover()
+|   +-- RefutationResult       # From refute()
+|   +-- QuantificationMetrics  # From quantify()
+|
++-- discovery_methods/         # Domain-specific discovery implementations
+|   +-- regime_classification.py        # Population dynamics (280 lines)
+|   +-- financial_regime_classification.py  # Financial markets (310 lines)
+|
++-- validation/                # Multi-timescale testing implementations
+|   +-- refutation_pc001.py    # Population dynamics refutation (220 lines)
+|   +-- refutation_financial.py  # Financial markets refutation (240 lines)
+|
++-- quantification/            # Statistical quantification implementations
+|   +-- quantify_pc001.py      # Population dynamics quantification (180 lines)
+|   +-- quantify_financial.py  # Financial markets quantification (190 lines)
+|
++-- teg_adapter.py             # Temporal Embedding Graph integration (350 lines)
+|   +-- load_pc_specification()   # Load PC into TEG
+|   +-- validate_dependencies()   # Check dependency graph
+|   +-- propagate_invalidation()  # Cascade failures
+|
++-- exceptions.py              # Custom exception classes (80 lines)
+|   +-- SchemaValidationError
+|   +-- RefutationFailedError
+|   +-- QuantificationFailedError
+|   +-- PublicationError
+|
++-- utils.py                   # Utility functions (150 lines)
+    +-- bootstrap_ci()         # Bootstrap confidence interval estimation
+    +-- compute_deviations()   # Feature deviation calculations
+    +-- format_pc_json()       # PC specification formatting
 \end{verbatim}
 
 \textbf{Total Lines of Code:} - Core API: 1,708 lines - Data structures:
@@ -2069,11 +2069,11 @@ TSF employs comprehensive testing across three levels:
 
 \begin{verbatim}
 tests/tsf/
-├── test_observe.py            # 12 tests (schema validation, error handling)
-├── test_discover.py           # 10 tests (regime classification, feature extraction)
-├── test_refute.py             # 15 tests (multi-timescale testing, tolerance checks)
-├── test_quantify.py           # 10 tests (bootstrap CI, score computation)
-└── test_publish.py            # 10 tests (PC generation, validation checks)
++-- test_observe.py            # 12 tests (schema validation, error handling)
++-- test_discover.py           # 10 tests (regime classification, feature extraction)
++-- test_refute.py             # 15 tests (multi-timescale testing, tolerance checks)
++-- test_quantify.py           # 10 tests (bootstrap CI, score computation)
++-- test_publish.py            # 10 tests (PC generation, validation checks)
 \end{verbatim}
 
 \textbf{Total Unit Tests:} 57 tests across 5 files
@@ -2112,9 +2112,9 @@ tests/tsf/
 
 \begin{verbatim}
 tests/integration/
-├── test_pc001_workflow.py     # Full workflow for PC001 (population dynamics)
-├── test_pc002_workflow.py     # Derived PC002 (extended validation)
-└── test_pc003_workflow.py     # Full workflow for PC003 (financial markets)
++-- test_pc001_workflow.py     # Full workflow for PC001 (population dynamics)
++-- test_pc002_workflow.py     # Derived PC002 (extended validation)
++-- test_pc003_workflow.py     # Full workflow for PC003 (financial markets)
 \end{verbatim}
 
 \textbf{Example Integration Test:}
@@ -2333,11 +2333,11 @@ Interactive Jupyter notebooks demonstrate TSF usage:
 
 \begin{verbatim}
 docs/tutorials/
-├── 01_quickstart.ipynb        # Basic TSF workflow (30 minutes)
-├── 02_population_dynamics.ipynb  # PC001 full workflow (60 minutes)
-├── 03_financial_markets.ipynb    # PC003 full workflow (60 minutes)
-├── 04_adding_new_domain.ipynb    # Domain extension guide (90 minutes)
-└── 05_teg_integration.ipynb      # Compositional validation (45 minutes)
++-- 01_quickstart.ipynb        # Basic TSF workflow (30 minutes)
++-- 02_population_dynamics.ipynb  # PC001 full workflow (60 minutes)
++-- 03_financial_markets.ipynb    # PC003 full workflow (60 minutes)
++-- 04_adding_new_domain.ipynb    # Domain extension guide (90 minutes)
++-- 05_teg_integration.ipynb      # Compositional validation (45 minutes)
 \end{verbatim}
 
 \paragraph{4.4.3 Reference Documentation}\label{reference-documentation}
@@ -2346,13 +2346,13 @@ Comprehensive documentation generated via Sphinx:
 
 \begin{verbatim}
 docs/reference/
-├── api.rst                    # Complete API reference
-├── architecture.rst           # Architectural overview
-├── data_structures.rst        # Container specifications
-├── discovery_methods.rst      # Discovery method catalog
-├── validation_protocols.rst   # Refutation protocols
-├── quantification_methods.rst # Statistical quantification
-└── principle_cards.rst        # PC specification format
++-- api.rst                    # Complete API reference
++-- architecture.rst           # Architectural overview
++-- data_structures.rst        # Container specifications
++-- discovery_methods.rst      # Discovery method catalog
++-- validation_protocols.rst   # Refutation protocols
++-- quantification_methods.rst # Statistical quantification
++-- principle_cards.rst        # PC specification format
 \end{verbatim}
 
 \textbf{Documentation Hosting:} https://tsf.readthedocs.io
@@ -2370,14 +2370,14 @@ Metric & Target & Actual & Status \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Test Coverage & ≥90\% & 92\% & ✓ \\
+Test Coverage & $\geq$90\% & 92\% & $\checkmark$ \\
 Test Pass Rate & 100\% & 98.3\% & ⚠ (2 known stress test failures) \\
-Type Annotation Coverage & 100\% & 100\% & ✓ \\
-Docstring Coverage & 100\% & 100\% & ✓ \\
-Pylint Score & ≥9.0/10 & 9.4/10 & ✓ \\
-Cyclomatic Complexity & ≤15 per function & Max 12 & ✓ \\
-Lines per Function & ≤100 & Max 87 & ✓ \\
-Public Functions & All documented & 100\% & ✓ \\
+Type Annotation Coverage & 100\% & 100\% & $\checkmark$ \\
+Docstring Coverage & 100\% & 100\% & $\checkmark$ \\
+Pylint Score & $\geq$9.0/10 & 9.4/10 & $\checkmark$ \\
+Cyclomatic Complexity & ≤15 per function & Max 12 & $\checkmark$ \\
+Lines per Function & ≤100 & Max 87 & $\checkmark$ \\
+Public Functions & All documented & 100\% & $\checkmark$ \\
 \end{longtable}
 }
 
@@ -2426,7 +2426,7 @@ pytest>=6.2.0          # Testing framework
 \textbf{Total Dependencies:} 5 core packages (all widely-used, stable,
 well-maintained)
 
-\textbf{Python Version:} Requires Python ≥3.8 (for dataclass support,
+\textbf{Python Version:} Requires Python $\geq$3.8 (for dataclass support,
 type hints)
 
 \textbf{Installation:}
@@ -2622,7 +2622,7 @@ TSF employs defensive programming with graceful degradation:
 \NormalTok{        sys.exit(}\DecValTok{0}\NormalTok{)}
 
 \NormalTok{    pc\_path }\OperatorTok{=}\NormalTok{ publish(pattern, metrics, refutation, pc\_id}\OperatorTok{=}\StringTok{"PC001"}\NormalTok{, title}\OperatorTok{=}\StringTok{"..."}\NormalTok{, author}\OperatorTok{=}\StringTok{"..."}\NormalTok{)}
-\NormalTok{    logger.info(}\SpecialStringTok{f"✓ PC001 published: }\SpecialCharTok{\{}\NormalTok{pc\_path}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\NormalTok{    logger.info(}\SpecialStringTok{f"$\checkmark$ PC001 published: }\SpecialCharTok{\{}\NormalTok{pc\_path}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
 
 \ControlFlowTok{except}\NormalTok{ PublicationError }\ImportTok{as}\NormalTok{ e:}
 \NormalTok{    logger.error(}\SpecialStringTok{f"Publication failed: }\SpecialCharTok{\{}\NormalTok{e}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
@@ -2716,17 +2716,17 @@ Orthogonality
 \bottomrule\noalign{}
 \endlastfoot
 \textbf{Data Type} & Integer counts (agents) & Continuous prices
-(dollars) & ✓ \\
+(dollars) & $\checkmark$ \\
 \textbf{Temporal Scale} & Discrete cycles & Continuous time (daily
-close) & ✓ \\
+close) & $\checkmark$ \\
 \textbf{Dynamics} & Endogenous (self-organizing) & Exogenous
-(market-driven) & ✓ \\
+(market-driven) & $\checkmark$ \\
 \textbf{Features} & Mean, std, relative variability & Trend, volatility,
-price statistics & ✓ \\
+price statistics & $\checkmark$ \\
 \textbf{Regimes} & 5 types (sustained, collapse, bistable, oscillatory)
-& 6 types (bull, bear, sideways × stable/volatile) & ✓ \\
+& 6 types (bull, bear, sideways × stable/volatile) & $\checkmark$ \\
 \textbf{Discovery Parameters} & Population thresholds & Trend/volatility
-thresholds & ✓ \\
+thresholds & $\checkmark$ \\
 \end{longtable}
 }
 
@@ -2817,7 +2817,7 @@ acceptable deviation)
 \end{Highlighting}
 \end{Shaded}
 
-\textbf{Analysis:} - \textbf{Regime Consistency:} ✓ SUSTAINED\_STABLE
+\textbf{Analysis:} - \textbf{Regime Consistency:} $\checkmark$ SUSTAINED\_STABLE
 maintained at 10× horizon - \textbf{Mean Deviation:} 0.0\% (perfect
 stability) - \textbf{Std Deviation:} 0.0\% (perfect variability
 consistency) - \textbf{Interpretation:} Pattern demonstrates exceptional
@@ -2858,7 +2858,7 @@ parameter perturbations) - \textbf{Interpretation:} All metrics at
 ceiling, indicating extremely strong pattern (characteristic of
 synthetic controlled data)
 
-\textbf{Publication Decision:} ✓ All criteria passed → PC001 published
+\textbf{Publication Decision:} $\checkmark$ All criteria passed → PC001 published
 
 \paragraph{5.2.4 Publication Output}\label{publication-output}
 
@@ -2922,7 +2922,7 @@ Robustness: 1.000
 \textbf{Key Difference:} PC002 demonstrates TEG integration -
 invalidation of PC001 would automatically cascade to PC002.
 
-\textbf{Publication Decision:} ✓ All criteria passed + PC001 validated →
+\textbf{Publication Decision:} $\checkmark$ All criteria passed + PC001 validated →
 PC002 published
 
 \subsubsection{5.4 PC003: Financial Market Regime
@@ -3008,7 +3008,7 @@ timeseries, 2,530 trading days (\textasciitilde10 years) -
 \end{Highlighting}
 \end{Shaded}
 
-\textbf{Analysis:} - \textbf{Regime Consistency:} ✓ BULL\_STABLE
+\textbf{Analysis:} - \textbf{Regime Consistency:} $\checkmark$ BULL\_STABLE
 maintained at 10× horizon - \textbf{Trend Deviation:} 0.0\% (perfect
 trend stability) - \textbf{Volatility Deviation:} 0.0\% (perfect
 volatility consistency) - \textbf{Interpretation:} Financial regime
@@ -3044,19 +3044,19 @@ CI: {[}0.85, 1.00{]}) - slightly wider CI due to smaller sample -
 \textbf{Interpretation:} All metrics meet publication thresholds despite
 different domain
 
-\textbf{Publication Decision:} ✓ All criteria passed → PC003 published
+\textbf{Publication Decision:} $\checkmark$ All criteria passed → PC003 published
 
 \paragraph{5.4.4 Domain Transfer
 Analysis}\label{domain-transfer-analysis}
 
 PC003 demonstrates TSF's domain-agnostic claims:
 
-\textbf{Domain-Agnostic Components (No Modification Required):} - ✅
+\textbf{Domain-Agnostic Components (No Modification Required):} - $\checkmark$
 \texttt{observe()}: Schema validation works with financial data
-structure - ✅ \texttt{refute()}: Multi-timescale testing applies
+structure - $\checkmark$ \texttt{refute()}: Multi-timescale testing applies
 identical logic (compare features, check tolerances, apply strict AND) -
-✅ \texttt{quantify()}: Bootstrap CI estimation works with financial
-features - ✅ \texttt{publish()}: PC specification format identical to
+$\checkmark$ \texttt{quantify()}: Bootstrap CI estimation works with financial
+features - $\checkmark$ \texttt{publish()}: PC specification format identical to
 population dynamics
 
 \textbf{Domain-Specific Component (New Implementation Required):} - ⚠️
@@ -3109,11 +3109,11 @@ Status
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-PC001 & population\_dynamics & SUSTAINED\_STABLE & ✓ (10×) & 1.000 &
+PC001 & population\_dynamics & SUSTAINED\_STABLE & $\checkmark$ (10×) & 1.000 &
 1.000 & 1.000 & validated \\
-PC002 & population\_dynamics & SUSTAINED\_STABLE & ✓ (10×) & 1.000 &
+PC002 & population\_dynamics & SUSTAINED\_STABLE & $\checkmark$ (10×) & 1.000 &
 1.000 & 1.000 & validated \\
-PC003 & financial\_markets & BULL\_STABLE & ✓ (10×) & 1.000 & 1.000 &
+PC003 & financial\_markets & BULL\_STABLE & $\checkmark$ (10×) & 1.000 & 1.000 &
 1.000 & validated \\
 \end{longtable}
 }
@@ -3182,7 +3182,7 @@ RefutationResult(
 )
 \end{verbatim}
 
-\textbf{Outcome:} ✓ TSF correctly rejected invalid pattern at refutation
+\textbf{Outcome:} $\checkmark$ TSF correctly rejected invalid pattern at refutation
 stage
 
 \paragraph{5.6.2 Test Case: Low Statistical
@@ -3199,7 +3199,7 @@ below 0.5 threshold) - Attempt publication despite passing refutation
 PublicationError: "Stability 0.450 below publication threshold 0.5"
 \end{verbatim}
 
-\textbf{Outcome:} ✓ TSF correctly blocked publication at quantification
+\textbf{Outcome:} $\checkmark$ TSF correctly blocked publication at quantification
 threshold check
 
 \paragraph{5.6.3 Test Case: Invalid
@@ -3216,7 +3216,7 @@ Schema}\label{test-case-invalid-schema}
 SchemaValidationError: "Missing required field 'timeseries' in source data"
 \end{verbatim}
 
-\textbf{Outcome:} ✓ TSF correctly rejected invalid data at observe()
+\textbf{Outcome:} $\checkmark$ TSF correctly rejected invalid data at observe()
 stage
 
 \textbf{Falsification Summary:}
@@ -3410,11 +3410,11 @@ We assess generalization across four dimensions:
 Generalization}\label{data-type-generalization}
 
 \textbf{Population Dynamics:} - \textbf{Type:} Integer counts (discrete
-agents) - \textbf{Range:} {[}0, ∞) - \textbf{Distribution:} Typically
+agents) - \textbf{Range:} {[}0, $\infty$) - \textbf{Distribution:} Typically
 unimodal with occasional multimodality
 
 \textbf{Financial Markets:} - \textbf{Type:} Continuous prices (dollars)
-- \textbf{Range:} (0, ∞) - \textbf{Distribution:} Log-normal with fat
+- \textbf{Range:} (0, $\infty$) - \textbf{Distribution:} Log-normal with fat
 tails
 
 \textbf{TSF Handling:} - observe() validates both integer and float
@@ -3423,7 +3423,7 @@ timeseries via schema - discover() extracts domain-appropriate features
 deviations (scale-invariant) - quantify() applies same statistical tests
 regardless of data type
 
-\textbf{Verdict:} ✓ TSF generalizes across discrete and continuous data
+\textbf{Verdict:} $\checkmark$ TSF generalizes across discrete and continuous data
 types
 
 \paragraph{6.3.2 Temporal Scale
@@ -3442,7 +3442,7 @@ temporal units - Horizon specification (``10x'', ``extended'',
 ``double'') applies uniformly - Refutation compares features at
 corresponding horizons without unit conversion
 
-\textbf{Verdict:} ✓ TSF generalizes across discrete and continuous
+\textbf{Verdict:} $\checkmark$ TSF generalizes across discrete and continuous
 temporal scales
 
 \paragraph{6.3.3 Feature Space
@@ -3485,7 +3485,7 @@ feature names) - quantify() computes consistency via average relative
 deviation across all numeric features - publish() serializes features to
 JSON without type constraints
 
-\textbf{Verdict:} ✓ TSF generalizes across different feature spaces via
+\textbf{Verdict:} $\checkmark$ TSF generalizes across different feature spaces via
 dynamic feature handling
 
 \paragraph{6.3.4 Regime Structure
@@ -3504,7 +3504,7 @@ VOLATILE\_NEUTRAL
 metric: Regime persistence under perturbations (agnostic to regime type)
 - No hardcoded regime assumptions in validation logic
 
-\textbf{Verdict:} ✓ TSF generalizes across different regime taxonomies
+\textbf{Verdict:} $\checkmark$ TSF generalizes across different regime taxonomies
 
 \subsubsection{6.4 Architectural Pattern
 Analysis}\label{architectural-pattern-analysis}
@@ -4202,18 +4202,18 @@ University Press.
 \textbf{DRAFT STATUS:} This manuscript is 100\% complete (first draft
 submission-ready).
 
-\textbf{Completed Sections:} - ✅ Section 1: Introduction (4
-subsections, \textasciitilde1,500 words) - ✅ Section 2: Related Work (6
-subsections, \textasciitilde1,500 words, 41 citations) - ✅ Section 3:
+\textbf{Completed Sections:} - $\checkmark$ Section 1: Introduction (4
+subsections, \textasciitilde1,500 words) - $\checkmark$ Section 2: Related Work (6
+subsections, \textasciitilde1,500 words, 41 citations) - $\checkmark$ Section 3:
 Architecture (5 functions + data structures, \textasciitilde3,500 words)
-- ✅ Section 4: Implementation Details (9 subsections,
-\textasciitilde2,500 words) - ✅ Section 5: Empirical Validation (6
-subsections, \textasciitilde1,800 words) - ✅ Section 6: Domain-Agnostic
-Architecture Analysis (6 subsections, \textasciitilde1,500 words) - ✅
+- $\checkmark$ Section 4: Implementation Details (9 subsections,
+\textasciitilde2,500 words) - $\checkmark$ Section 5: Empirical Validation (6
+subsections, \textasciitilde1,800 words) - $\checkmark$ Section 6: Domain-Agnostic
+Architecture Analysis (6 subsections, \textasciitilde1,500 words) - $\checkmark$
 Section 7: Compositional Validation via TEG (3 subsections,
-\textasciitilde300 words) - ✅ Section 8: Discussion (3 subsections,
-\textasciitilde800 words) - ✅ Section 9: Conclusion (\textasciitilde500
-words) - ✅ Section 10: References (41 peer-reviewed citations)
+\textasciitilde300 words) - $\checkmark$ Section 8: Discussion (3 subsections,
+\textasciitilde800 words) - $\checkmark$ Section 9: Conclusion (\textasciitilde500
+words) - $\checkmark$ Section 10: References (41 peer-reviewed citations)
 
 \textbf{Manuscript Statistics:} - \textbf{Total Lines:}
 \textasciitilde2,973 lines - \textbf{Word Count:} \textasciitilde12,500
