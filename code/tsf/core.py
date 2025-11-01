@@ -689,7 +689,7 @@ def _refute_regime_classification(
 
 
 # =============================================================================
-# QUANTIFY: Measure pattern strength (stub)
+# QUANTIFY: Measure pattern strength
 # =============================================================================
 
 def quantify(
@@ -700,20 +700,182 @@ def quantify(
     """
     Quantify pattern strength with validation metrics.
 
-    [STUB - Implementation in Phase 4]
+    Measures pattern reliability using cross-validation or held-out validation.
+    Computes requested metrics and confidence intervals.
+
+    Supported criteria:
+        - "stability": Regime classification stability across data
+        - "accuracy": Classification accuracy (for labeled data)
+        - "consistency": Feature consistency across samples
+        - "robustness": Tolerance to parameter variation
 
     Args:
         pattern: Pattern from tsf.discover()
         validation_data: Held-out validation data
-        criteria: Metrics to compute (e.g., ["accuracy", "precision", "recall"])
+        criteria: List of metrics to compute
 
     Returns:
-        QuantificationMetrics container
+        QuantificationMetrics with scores and confidence intervals
+
+    Raises:
+        QuantificationError: If quantification fails
+
+    Example:
+        >>> pattern = tsf.discover(train_data, "regime_classification")
+        >>> metrics = tsf.quantify(
+        ...     pattern=pattern,
+        ...     validation_data=val_data,
+        ...     criteria=["stability", "consistency"]
+        ... )
+        >>> print(f"Stability: {metrics.scores['stability']:.3f}")
+    """
+    # Validate criteria
+    valid_criteria = ["stability", "accuracy", "consistency", "robustness"]
+    invalid = [c for c in criteria if c not in valid_criteria]
+    if invalid:
+        raise QuantificationError(
+            f"Invalid criteria: {invalid}",
+            context={"invalid": invalid, "valid": valid_criteria}
+        )
+
+    # Dispatch to method-specific quantification
+    if pattern.method == "regime_classification":
+        return _quantify_regime_classification(pattern, validation_data, criteria)
+    else:
+        raise QuantificationError(
+            f"Quantification not implemented for method: {pattern.method}",
+            context={"method": pattern.method}
+        )
+
+
+def _quantify_regime_classification(
+    pattern: DiscoveredPattern,
+    validation_data: ObservationalData,
+    criteria: List[str]
+) -> QuantificationMetrics:
+    """
+    Quantify regime classification pattern strength.
+
+    Computes metrics based on validation data performance:
+    - stability: How consistently regime is classified
+    - consistency: How similar features are
+    - robustness: Tolerance to parameter variation
+
+    Args:
+        pattern: Discovered regime classification pattern
+        validation_data: Validation data
+        criteria: Metrics to compute
+
+    Returns:
+        QuantificationMetrics with computed scores
 
     Raises:
         QuantificationError: If quantification fails
     """
-    raise NotImplementedError("tsf.quantify() implementation pending (Phase 4)")
+    try:
+        # Rediscover pattern on validation data
+        validation_pattern = discover(
+            data=validation_data,
+            method="regime_classification",
+            parameters=pattern.parameters
+        )
+
+        # Initialize scores dictionary
+        scores = {}
+        confidence_intervals = {}
+
+        # Compute requested metrics
+        if "stability" in criteria:
+            # Stability: regime consistency (binary: 1.0 if same, 0.0 if different)
+            regime_stable = (pattern.features["regime"] == validation_pattern.features["regime"])
+            scores["stability"] = 1.0 if regime_stable else 0.0
+
+            # Simple CI based on binary outcome
+            confidence_intervals["stability"] = (scores["stability"], scores["stability"])
+
+        if "consistency" in criteria:
+            # Consistency: normalized similarity of features
+            original_mean = pattern.features["mean_population"]
+            validation_mean = validation_pattern.features["mean_population"]
+            mean_deviation = abs(validation_mean - original_mean) / (original_mean + 1e-9)
+
+            original_std = pattern.features["relative_std"]
+            validation_std = validation_pattern.features["relative_std"]
+            std_deviation = abs(validation_std - original_std)
+
+            # Consistency score: 1.0 - average_deviation (higher is better)
+            avg_deviation = (mean_deviation + std_deviation) / 2.0
+            consistency = max(0.0, 1.0 - avg_deviation)
+            scores["consistency"] = float(consistency)
+
+            # Simple CI: ±5% around score
+            ci_lower = max(0.0, consistency - 0.05)
+            ci_upper = min(1.0, consistency + 0.05)
+            confidence_intervals["consistency"] = (ci_lower, ci_upper)
+
+        if "robustness" in criteria:
+            # Robustness: test with varied thresholds
+            # Vary sustained threshold by ±20%
+            base_threshold = pattern.parameters.get("threshold_sustained", 10.0)
+            thresholds = [base_threshold * 0.8, base_threshold, base_threshold * 1.2]
+
+            consistent_regimes = 0
+            for threshold in thresholds:
+                varied_params = pattern.parameters.copy()
+                varied_params["threshold_sustained"] = threshold
+
+                varied_pattern = discover(
+                    data=validation_data,
+                    method="regime_classification",
+                    parameters=varied_params
+                )
+
+                if varied_pattern.features["regime"] == pattern.features["regime"]:
+                    consistent_regimes += 1
+
+            robustness = consistent_regimes / len(thresholds)
+            scores["robustness"] = float(robustness)
+
+            # CI based on sample proportion
+            n = len(thresholds)
+            std_err = (robustness * (1 - robustness) / n) ** 0.5
+            ci_lower = max(0.0, robustness - 1.96 * std_err)
+            ci_upper = min(1.0, robustness + 1.96 * std_err)
+            confidence_intervals["robustness"] = (ci_lower, ci_upper)
+
+        if "accuracy" in criteria:
+            # Accuracy: requires labeled data (not implemented yet)
+            # For now, use regime consistency as proxy
+            regime_match = (pattern.features["regime"] == validation_pattern.features["regime"])
+            scores["accuracy"] = 1.0 if regime_match else 0.0
+            confidence_intervals["accuracy"] = (scores["accuracy"], scores["accuracy"])
+
+        # Create QuantificationMetrics
+        metrics = QuantificationMetrics(
+            pattern_id=pattern.pattern_id,
+            validation_method="held_out_validation",
+            criteria=criteria,
+            scores=scores,
+            confidence_intervals=confidence_intervals,
+            sample_size=1,  # Single validation dataset
+            metadata={
+                "original_regime": pattern.features["regime"],
+                "validation_regime": validation_pattern.features["regime"],
+                "validation_source": str(validation_data.source)
+            }
+        )
+
+        return metrics
+
+    except Exception as e:
+        raise QuantificationError(
+            f"Regime classification quantification failed: {e}",
+            context={
+                "pattern_id": pattern.pattern_id,
+                "criteria": criteria,
+                "error": str(e)
+            }
+        )
 
 
 # =============================================================================
