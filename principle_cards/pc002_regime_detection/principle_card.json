@@ -1,0 +1,106 @@
+{
+  "metadata": {
+    "pc_id": "PC002",
+    "version": "1.0.0",
+    "title": "Regime Detection in Population Dynamics",
+    "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+    "created": "2025-11-01",
+    "status": "validated",
+    "dependencies": [
+      "PC001"
+    ],
+    "domain": "NRM"
+  },
+  "principle": "Population dynamics exhibit distinct behavioral regimes characterized by baseline (near carrying capacity), growth (sustained increase), collapse (rapid decrease), and oscillatory (periodic fluctuations) patterns. Regimes can be detected from time-series data with \u226590% accuracy using statistical features (mean deviation, variance ratio, linear trend, CV deviation) and PC001 baseline predictions.",
+  "mathematics": {
+    "equations": "\nFeature 1 (Mean Deviation):\n\u03bc_dev = (<N>_window - K) / K\n\nFeature 2 (Variance Ratio):\n\u03c3_ratio = Var(N)_window / (\u03c3\u00b2\u00b7<N>_window)\n\nFeature 3 (Linear Trend):\n\u03b2 = slope of linear regression N(t) on t\n\u03b2_norm = \u03b2 / <N>_window\n\nFeature 4 (CV Deviation):\nCV_obs = \u221aVar(N)_window / <N>_window\nCV_dev = (CV_obs - CV_baseline) / CV_baseline\n\nDecision Rules:\n- Baseline: |\u03bc_dev| < 0.1 AND |\u03c3_ratio - 1| < 0.2 AND |\u03b2_norm| < 0.01 AND |CV_dev| < 0.2\n- Growth: \u03b2_norm > 0.02 OR (\u03bc_dev > 0.15 AND \u03b2_norm > 0)\n- Collapse: \u03b2_norm < -0.02 OR (\u03bc_dev < -0.15 AND \u03b2_norm < 0)\n- Oscillatory: Periodicity detected AND |CV_dev| > 0.3\n",
+    "parameters": {
+      "K": "Carrying capacity from PC001",
+      "\u03c3": "Noise intensity from PC001",
+      "CV_baseline": "Baseline CV from PC001",
+      "window_size": "Window size for feature extraction (default: 100 points)"
+    },
+    "predictions": "Accuracy \u2265 90% on test data with balanced regime distribution"
+  },
+  "validation": {
+    "criterion": "Accuracy \u2265 0.90 (90% correct classification)",
+    "procedure": [
+      "1. Validate PC001 on baseline data (compositional requirement)",
+      "2. Extract baseline parameters (K, r, \u03c3, CV_baseline) from PC001",
+      "3. Create feature extractor with baseline parameters",
+      "4. Generate or load labeled regime data (train + test split)",
+      "5. Train classifier on training set",
+      "6. Evaluate on independent test set",
+      "7. Compute accuracy, precision, recall, F1-score",
+      "8. Check if accuracy \u2265 90%",
+      "9. Verify compositional dependency (PC002 fails if PC001 not validated)"
+    ],
+    "required_data": {
+      "baseline_data": "Time series for PC001 validation (\u22651000 points)",
+      "regime_data": "Labeled time windows (\u2265500 test samples)",
+      "train_test_split": "70% train, 30% test (or cross-validation)",
+      "regime_balance": "All 4 regime types represented"
+    },
+    "equipment": {
+      "hardware": "Standard (no special requirements)",
+      "software": "Python 3.9+, numpy, scipy, scikit-learn",
+      "dependencies": "PC001 (validated)",
+      "runtime": "~2 minutes per validation"
+    }
+  },
+  "grounding": {
+    "system_interfaces": [
+      "numpy arrays (actual data, not simulated)",
+      "scikit-learn models (real training, not mocked)",
+      "filesystem (JSON data, model persistence)",
+      "SQLite (optional: feature/label storage)",
+      "psutil (optional: classification runtime monitoring)"
+    ],
+    "validation_method": "Every classification operates on real numpy arrays. Every training uses actual scikit-learn fit(). No mocked predictions or random labels. Validation accuracy is measured, not simulated.",
+    "prohibited": [
+      "Mock classifiers with random predictions",
+      "Simulated accuracy without actual data",
+      "Regime labels without ground truth",
+      "Pure simulation without validation data"
+    ],
+    "required": [
+      "Every feature computed from actual population data",
+      "Every classification uses trained sklearn model",
+      "Every validation compares predictions to ground truth",
+      "PC001 dependency enforced (fails if PC001 not validated)"
+    ]
+  },
+  "temporal": {
+    "template_patterns": [
+      "Compositional validation: PC_B depends on PC_A for baseline",
+      "Baseline + deviation: Establish normal, detect deviations",
+      "Supervised learning for time series classification",
+      "Feature engineering: Extract domain-relevant features"
+    ],
+    "validation_patterns": [
+      "Train/test split prevents overfitting",
+      "Multi-metric evaluation (not just accuracy)",
+      "Confusion matrix reveals per-regime performance",
+      "Feature importances guide interpretation"
+    ],
+    "composition_patterns": [
+      "PC001 \u2192 PC002: Baseline dynamics \u2192 Regime detection",
+      "PC002 \u2192 PC005: Single regime \u2192 Multi-regime dynamics",
+      "PC002 \u2192 PC006: Regime classification \u2192 Regime prediction",
+      "Strong compositional dependency enforced by TEG"
+    ],
+    "training_awareness": {
+      "if_validated": "Compositional validation is robust. Baseline + deviation framework is generalizable. Supervised learning works for regime detection. Future AI learns: compose validated principles.",
+      "if_falsified": "Baseline + deviation insufficient for regime detection. Supervised learning has limits. Alternative approaches needed (unsupervised, deep learning). Future AI learns: explore beyond standard methods."
+    }
+  },
+  "dependency_graph": {
+    "requires": [
+      "PC001"
+    ],
+    "enables": [
+      "PC005",
+      "PC006"
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "pc_id": "PC002",
+  "passes": true,
+  "error": 0.0,
+  "criterion": 0.9,
+  "evidence": {
+    "test_accuracy": 1.0,
+    "test_precision": 1.0,
+    "test_recall": 1.0,
+    "test_f1": 1.0,
+    "test_confusion_matrix": [
+      [
+        30,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        25,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        33,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        32
+      ]
+    ],
+    "train_accuracy": 1.0,
+    "n_train_samples": 280,
+    "n_test_samples": 120,
+    "window_size": 100,
+    "baseline_params": {
+      "K": 50.0,
+      "r": 0.1,
+      "sigma": 0.5,
+      "CV_baseline": 0.1
+    },
+    "feature_importances": {
+      "mu_dev": 0.07754276294704246,
+      "sigma_ratio": 0.3782738751966434,
+      "beta_norm": 0.2095663291545429,
+      "CV_dev": 0.33461703270177134
+    }
+  },
+  "timestamp": "2025-11-01T01:44:39.137379",
+  "metadata": {
+    "pc001_status": "validated",
+    "version": "1.0.0"
+  }
+}
