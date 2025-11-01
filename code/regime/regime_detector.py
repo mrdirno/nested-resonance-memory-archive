@@ -116,6 +116,7 @@ class RegimeDetector:
                 'spawn_frequency': (0.0245, 0.0265),  # f_crit ≈ 2.55% ± 0.1%
                 'composition_rate': (0.0, 0.05),  # Basin-dependent
                 'population_stability': (0.0, 0.3),  # Stable attractors
+                'mean_population': (0.5, 2.0),  # Single agent regime
                 'min_runtime_hours': 0.0,  # Any runtime
             },
 
@@ -139,11 +140,13 @@ class RegimeDetector:
             },
 
             # Initialization Regime (Cycles 810-813)
+            # NOTE: High resonance (85%+) is REQUIRED to distinguish from other regimes
             RegimeType.INITIALIZATION: {
-                'resonance_rate': (0.85, 1.00),  # 88-99% resonance
+                'resonance_rate': (0.85, 1.00),  # 88-99% resonance (REQUIRED)
                 'runtime_hours': (0.0, 146.0),  # 0-146h window
                 'io_bound_ratio': (0.85, 0.95),  # Stable I/O-bound
                 'resonance_stability': (0.0, 0.15),  # Low CV within regime
+                'mean_population': (4.0, 7.0),  # Established population
             },
 
             # Steady-State Regime (Cycles 810-813)
@@ -156,20 +159,22 @@ class RegimeDetector:
             },
 
             # Phase Autonomy Regime (Paper 6B)
-            RegimeType.PHASE_AUTONOMY: {
-                'phase_variance_pi': (0.02, 0.05),  # Independent oscillation
-                'phase_variance_e': (0.02, 0.05),
-                'phase_variance_phi': (0.02, 0.05),
-                'phase_balance': (0.0, 0.15),  # Some imbalance expected
-                'min_runtime_hours': 50.0,  # Multi-timescale emergence
-            },
+            # NOTE: Removed - overlaps with steady-state, needs more discriminative features
+            # RegimeType.PHASE_AUTONOMY: {
+            #     'phase_variance_pi': (0.02, 0.05),  # Independent oscillation
+            #     'phase_variance_e': (0.02, 0.05),
+            #     'phase_variance_phi': (0.02, 0.05),
+            #     'phase_balance': (0.0, 0.15),  # Some imbalance expected
+            #     'min_runtime_hours': 50.0,  # Multi-timescale emergence
+            # },
 
             # Sleep-Consolidation Regime (Paper 7)
-            RegimeType.SLEEP_CONSOLIDATION: {
-                'composition_rate': (0.01, 0.05),  # Periodic consolidation
-                'resonance_rate': (0.3, 0.7),  # Intermediate resonance
-                'min_runtime_hours': 100.0,  # Long-term pattern
-            },
+            # NOTE: Removed - overlaps with other regimes, needs more discriminative features
+            # RegimeType.SLEEP_CONSOLIDATION: {
+            #     'composition_rate': (0.01, 0.05),  # Periodic consolidation
+            #     'resonance_rate': (0.3, 0.7),  # Intermediate resonance
+            #     'min_runtime_hours': 100.0,  # Long-term pattern
+            # },
         }
 
     def extract_features(self, data: Dict) -> RegimeFeatures:
@@ -373,15 +378,18 @@ class RegimeDetector:
         # Alternative regimes
         alternatives = [(r, c) for r, c, _ in regime_scores[1:]]
 
-        # Check for transition state (multiple high-confidence matches)
-        if len(regime_scores) > 1 and regime_scores[1][1] >= self.confidence_threshold * 0.9:
-            # Close second match suggests transition
-            primary_regime = RegimeType.TRANSITION
-            primary_evidence = {
-                'primary': regime_scores[0][0].value,
-                'secondary': regime_scores[1][0].value,
-                'confidence_diff': regime_scores[0][1] - regime_scores[1][1]
-            }
+        # Check for transition state (multiple high-confidence matches with small gap)
+        # Require confidence difference < 15% to classify as transition
+        if len(regime_scores) > 1:
+            confidence_diff = regime_scores[0][1] - regime_scores[1][1]
+            if confidence_diff < 0.15 and regime_scores[1][1] >= self.confidence_threshold:
+                # Close match suggests transition
+                primary_regime = RegimeType.TRANSITION
+                primary_evidence = {
+                    'primary': regime_scores[0][0].value,
+                    'secondary': regime_scores[1][0].value,
+                    'confidence_diff': confidence_diff
+                }
 
         return RegimeClassification(
             regime=primary_regime,
