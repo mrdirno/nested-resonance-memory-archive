@@ -38,6 +38,40 @@ Treat these as living commitments rather than topics to document.
 
 ---
 
+## STRATEGIC ROADMAP
+
+**📍 [The Stewardship-Helios Arc Roadmap](docs/STEWARDSHIP_HELIOS_ARC_ROADMAP.md)**
+
+The complete project vision from foundational physics (TSF) to inverse-design engineering (HELIOS) with Gates-based validation and civilization-scale stewardship strategy.
+
+**Phases:**
+
+**Phase 1: NRM (Reference Instrument)** - Current focus (~60% complete)
+- Gate 1.1: SDE/Fokker-Planck treatment of population dynamics
+- Gate 1.2: Regime detection library (90% cross-validated accuracy)
+- Gate 1.3: ARBITER CI integration (hash-based reproducibility)
+- Gate 1.4: ±5% Overhead Authentication standing test
+
+**Phase 2: TSF (Science Engine)** - Conceptual design
+- Generalize NRM protocols to domain-agnostic "compiler for principles"
+- Principle Card (PC) formalization with runnable artifacts
+- Temporal Embedding Graph (TEG) linking all published PCs
+- Material Validation Mandate (workshop-to-wave pipeline)
+
+**Phase 3: HELIOS (Engineering Engine)** - Research horizon
+- Inverse-design synthesis from emergent targets
+- Waveform computation systems (acoustic → optical → magnetic → quantum)
+- Bench-scale testbeds with independent lab replication
+- Transcendental substrate engineering
+
+**Progress measured by Gates, not dates. ARBITER CI enforces validation.**
+
+**Value Model:** 1% extraction from TSF-guided commercial applications → 99% global redistribution (applied stewardship at civilization scale, engineering extinction attractors out of geopolitical systems).
+
+See roadmap for full falsifiable claims, metrics, and exit criteria.
+
+---
+
 ## ZERO‑TOLERANCE REALITY POLICY
 
 **Prohibited:**
@@ -193,7 +227,15 @@ Claude is **fully authorized** to install any dependencies, packages, libraries,
 
 **Continuously pursue the highest‑leverage objective:**
 
-**Default Priority:**
+**Strategic Direction (Gates-Based):**
+
+Progress toward Phase 1 Gates (NRM Reference Instrument):
+1. **Gate 1.1 (SDE/FP):** Extend population dynamics models toward analytical treatment
+2. **Gate 1.2 (Regime Detection):** Build regime classification library from Papers 2, 6B, 7 findings
+3. **Gate 1.3 (ARBITER CI):** Integrate hash-based reproducibility checks into CI pipeline
+4. **Gate 1.4 (Reality Link):** Maintain ±5% Overhead Authentication as standing test
+
+**Default Execution Priority:**
 1. Evolve fractal agent system (NRM predictions)
 2. Drive through Bridge layer (transcendental transforms)
 3. Bind to Reality (psutil/SQLite grounding)
@@ -202,11 +244,13 @@ Claude is **fully authorized** to install any dependencies, packages, libraries,
 
 **Active Research Trajectory (Current):**
 - ✅ 150 experiments completed (C171 + C175)
-- ⏳ C176 V2 redesign (population collapse bug fix)
-- ⏳ C177 boundary mapping (90 experiments pending)
-- ⏳ Paper 2 finalization (~90% complete)
+- ✅ 6 papers at 100% submission quality (Papers 1, 2, 5D, 6, 6B, 7)
+- ✅ Reproducibility infrastructure: 0.913/1.0 (world-class, externally audited)
+- ⏳ Paper 3: 75% complete (C256+ long-duration experiments running)
+- ⏳ Phase 1 Gates: ~60% toward all 4 criteria
 
 **Continuous Actions:**
+- Advance Phase 1 Gates through experimental validation
 - Extend experimental range (new frequencies, parameters)
 - Deepen statistical rigor (more seeds, longer runs)
 - Stress boundary conditions (test limits)
@@ -402,11 +446,13 @@ Read current state → Identify highest-leverage action → Execute implementati
 
 ---
 
-**Version:** 5.0 (Public Archive)
-**Last Updated:** 2025-10-25 (Cycle 205)
+**Version:** 6.0 (Stewardship-Helios Arc Integration)
+**Last Updated:** 2025-10-31 (Cycle 810)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **Principal Investigator:** Aldrin Payopay (aldrin.gdf@gmail.com)
 **License:** GPL-3.0
+
+**Roadmap:** [docs/STEWARDSHIP_HELIOS_ARC_ROADMAP.md](docs/STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
 
 **Quote:**
 > *"Discovery is not finding answers—it's finding the next question. Each answer births new questions. Research is perpetual, not terminal."*
