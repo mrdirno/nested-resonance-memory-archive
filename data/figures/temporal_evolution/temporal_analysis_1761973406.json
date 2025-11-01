@@ -1,0 +1,89 @@
+{
+  "timestamp": "2025-10-31T22:03:26.841753",
+  "num_windows": 5,
+  "total_duration_seconds": 877137.2482731342,
+  "window_duration_seconds": 175427.44965462683,
+  "windows": [
+    {
+      "label": "Early",
+      "start_time": 1761096227.546761,
+      "end_time": 1761271654.9964156,
+      "resonance_rate": 0.8809,
+      "mean_similarity": 0.9309491948243818,
+      "mean_cpu": 2.9,
+      "io_bound_ratio": 0.9418604651162791,
+      "phase_variance": {
+        "pi": 3.4155871387533114,
+        "e": 3.277965004822203,
+        "phi": 3.2579456732323417
+      }
+    },
+    {
+      "label": "Early-Mid",
+      "start_time": 1761271654.9964156,
+      "end_time": 1761447082.4460702,
+      "resonance_rate": 0.9935,
+      "mean_similarity": 0.9959331640351818,
+      "mean_cpu": 3.10959,
+      "io_bound_ratio": 0.8614,
+      "phase_variance": {
+        "pi": 3.5267137382595526,
+        "e": 3.1904248442942187,
+        "phi": 3.5536798423321767
+      }
+    },
+    {
+      "label": "Mid",
+      "start_time": 1761447082.4460702,
+      "end_time": 1761622509.895725,
+      "resonance_rate": 0.9911,
+      "mean_similarity": 0.9947480018708151,
+      "mean_cpu": 1.96449,
+      "io_bound_ratio": 0.935,
+      "phase_variance": {
+        "pi": 2.4402068085675017,
+        "e": 3.977874646909884,
+        "phi": 1.6745772558529377
+      }
+    },
+    {
+      "label": "Mid-Late",
+      "start_time": 1761622509.895725,
+      "end_time": 1761797937.3453796,
+      "resonance_rate": 0.3376,
+      "mean_similarity": 0.7707276992548826,
+      "mean_cpu": 3.10068,
+      "io_bound_ratio": 0.8669,
+      "phase_variance": {
+        "pi": 3.2948021815803363,
+        "e": 2.8767440809728564,
+        "phi": 5.137561043238922
+      }
+    },
+    {
+      "label": "Late",
+      "start_time": 1761797937.3453796,
+      "end_time": 1761973364.7950342,
+      "resonance_rate": 0.3455,
+      "mean_similarity": 0.7742233244572421,
+      "mean_cpu": 2.37046,
+      "io_bound_ratio": 0.8973,
+      "phase_variance": {
+        "pi": 3.7750973754902994,
+        "e": 1.386190222085281,
+        "phi": 0.1798270139163038
+      }
+    }
+  ],
+  "stability_metrics": {
+    "resonance_rate_mean": 0.70972,
+    "resonance_rate_std": 0.30336047468317295,
+    "resonance_rate_cv": 0.4274368408431113,
+    "io_ratio_mean": 0.9004920930232558,
+    "io_ratio_std": 0.033373485769495316,
+    "io_ratio_cv": 0.03706138679957673,
+    "cpu_mean": 2.689044,
+    "cpu_std": 0.4510609343580975,
+    "cpu_cv": 0.16774025800920234
+  }
+}
