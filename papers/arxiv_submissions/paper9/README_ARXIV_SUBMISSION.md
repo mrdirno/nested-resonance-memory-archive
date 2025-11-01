@@ -101,12 +101,18 @@ pytest code/tsf/ -v
 - [x] Manuscript complete (100%, markdown)
 - [x] All figures generated (9/9 @ 300 DPI)
 - [x] Pandoc LaTeX conversion complete
-- [ ] LaTeX refinement (formatting, citations)
-- [ ] Compilation test (pdflatex)
+- [x] LaTeX ready for Docker compilation
+- [ ] PDF compilation test (via Docker + texlive)
 - [ ] Internal review (technical accuracy)
 - [ ] Citation formatting (consistent style)
 - [ ] Figure captions (complete with cross-references)
 - [ ] Supplementary materials (code, data)
+
+**Compilation Command:**
+```bash
+cd papers/arxiv_submissions/paper9
+docker run --rm -v "$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript_raw.tex
+```
 
 ### arXiv Submission
 - [ ] Create submission account
