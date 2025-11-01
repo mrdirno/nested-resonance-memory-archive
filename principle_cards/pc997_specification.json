@@ -1,0 +1,68 @@
+{
+  "pc_id": "PC997",
+  "version": "1.0.0",
+  "title": "Dependent PC",
+  "author": "Test <test@example.com>",
+  "created": "2025-11-01",
+  "status": "validated",
+  "domain": "population_dynamics",
+  "dependencies": [
+    "PC001",
+    "PC002"
+  ],
+  "enables": [],
+  "discovery": {
+    "method": "regime_classification",
+    "parameters": {},
+    "features": {
+      "regime": "SUSTAINED_STABLE",
+      "mean_population": 99.8191923108909,
+      "std_population": 1.8754226776880538,
+      "min_population": 95.14651630111845,
+      "max_population": 106.332466097958,
+      "relative_std": 0.018788197282023543,
+      "cv_population": 0.018788197282211764,
+      "is_sustained": true,
+      "is_collapse": false,
+      "is_oscillatory": false
+    },
+    "pattern_id": "regime_sustained_stable_training"
+  },
+  "refutation": {
+    "horizon": "10x",
+    "tolerance": 0.2,
+    "passed": true,
+    "metrics": {
+      "mean_deviation": 0.0,
+      "std_deviation": 0.0,
+      "regime_consistent": true,
+      "mean_within_tolerance": true,
+      "std_within_tolerance": true,
+      "original_mean": 99.8191923108909,
+      "validation_mean": 99.8191923108909,
+      "original_relative_std": 0.018788197282023543,
+      "validation_relative_std": 0.018788197282023543
+    }
+  },
+  "quantification": {
+    "validation_method": "held_out_validation",
+    "criteria": [
+      "stability"
+    ],
+    "scores": {
+      "stability": 1.0
+    },
+    "confidence_intervals": {
+      "stability": [
+        1.0,
+        1.0
+      ]
+    },
+    "sample_size": 1
+  },
+  "metadata": {
+    "tsf_version": "0.1.0",
+    "framework": "TSF Science Engine",
+    "repository": "https://github.com/mrdirno/nested-resonance-memory-archive"
+  }
+}
