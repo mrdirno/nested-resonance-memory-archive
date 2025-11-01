@@ -330,7 +330,7 @@ def _verify_statistics_consistency(obs_data: ObservationalData) -> None:
 
 
 # =============================================================================
-# DISCOVER: Find patterns in observations (stub)
+# DISCOVER: Find patterns in observations
 # =============================================================================
 
 def discover(
@@ -341,20 +341,156 @@ def discover(
     """
     Discover patterns in observational data.
 
-    [STUB - Implementation in Phase 2]
+    Supported methods:
+        - "regime_classification": Classify dynamical regimes from population data
 
     Args:
         data: Observational data from tsf.observe()
-        method: Discovery method (e.g., "regime_classification")
-        parameters: Method-specific parameters
+        method: Discovery method identifier
+        parameters: Method-specific parameters (optional)
 
     Returns:
-        DiscoveredPattern container
+        DiscoveredPattern container with discovered features
 
     Raises:
         DiscoveryError: If pattern discovery fails
+
+    Example:
+        >>> data = tsf.observe("experiment.json", "population_dynamics", "pc001")
+        >>> pattern = tsf.discover(
+        ...     data=data,
+        ...     method="regime_classification",
+        ...     parameters={"threshold_sustained": 10.0}
+        ... )
+        >>> print(f"Regime: {pattern.features['regime']}")
     """
-    raise NotImplementedError("tsf.discover() implementation pending (Phase 2)")
+    parameters = parameters or {}
+
+    # Dispatch to method-specific implementation
+    if method == "regime_classification":
+        return _discover_regime_classification(data, parameters)
+    else:
+        raise DiscoveryError(
+            f"Unknown discovery method: {method}",
+            context={"method": method, "available": ["regime_classification"]}
+        )
+
+
+def _discover_regime_classification(
+    data: ObservationalData,
+    parameters: Dict[str, Any]
+) -> DiscoveredPattern:
+    """
+    Classify dynamical regime from population timeseries.
+
+    Based on Paper 7 Phase 3 regime classification approach.
+
+    Classification logic:
+        - Sustained: mean_population > threshold_sustained
+        - Collapse: mean_population < threshold_collapse
+        - Oscillatory: relative_std > oscillation_threshold
+
+    Args:
+        data: Observational data with population timeseries
+        parameters: Classification parameters
+            - threshold_sustained (float): Sustained regime threshold (default: 10.0)
+            - threshold_collapse (float): Collapse regime threshold (default: 3.0)
+            - oscillation_threshold (float): Oscillation detection threshold (default: 0.2)
+
+    Returns:
+        DiscoveredPattern with regime classification and features
+
+    Raises:
+        DiscoveryError: If population timeseries not found or classification fails
+    """
+    # Extract parameters with defaults
+    threshold_sustained = parameters.get("threshold_sustained", 10.0)
+    threshold_collapse = parameters.get("threshold_collapse", 3.0)
+    oscillation_threshold = parameters.get("oscillation_threshold", 0.2)
+
+    # Validate population timeseries exists
+    if "population" not in data.timeseries:
+        raise DiscoveryError(
+            "Regime classification requires 'population' timeseries",
+            context={
+                "source": str(data.source),
+                "available": list(data.timeseries.keys())
+            }
+        )
+
+    try:
+        # Extract population trajectory
+        population = data.timeseries["population"]
+
+        # Compute statistics
+        mean_pop = np.mean(population)
+        std_pop = np.std(population)
+        min_pop = np.min(population)
+        max_pop = np.max(population)
+
+        # Relative variability
+        relative_std = std_pop / (mean_pop + 1e-9)
+
+        # Classify regime
+        if mean_pop > threshold_sustained:
+            if relative_std > oscillation_threshold:
+                regime = "SUSTAINED_OSCILLATORY"
+            else:
+                regime = "SUSTAINED_STABLE"
+        elif mean_pop < threshold_collapse:
+            regime = "COLLAPSE"
+        else:
+            if relative_std > oscillation_threshold:
+                regime = "BISTABLE_OSCILLATORY"
+            else:
+                regime = "BISTABLE"
+
+        # Build features dictionary
+        features = {
+            "regime": regime,
+            "mean_population": float(mean_pop),
+            "std_population": float(std_pop),
+            "min_population": float(min_pop),
+            "max_population": float(max_pop),
+            "relative_std": float(relative_std),
+            "cv_population": float(std_pop / mean_pop) if mean_pop > 0 else 0.0,
+            "is_sustained": bool(mean_pop > threshold_sustained),
+            "is_collapse": bool(mean_pop < threshold_collapse),
+            "is_oscillatory": bool(relative_std > oscillation_threshold),
+        }
+
+        # Create pattern identifier
+        pattern_id = f"regime_{regime.lower()}_{data.metadata.get('experiment_id', 'unknown')}"
+
+        # Create DiscoveredPattern
+        pattern = DiscoveredPattern(
+            pattern_id=pattern_id,
+            method="regime_classification",
+            domain=data.domain,
+            parameters=parameters,
+            features=features,
+            timeseries={},  # No additional timeseries for basic classification
+            metadata={
+                "source": str(data.source),
+                "thresholds": {
+                    "sustained": threshold_sustained,
+                    "collapse": threshold_collapse,
+                    "oscillation": oscillation_threshold,
+                }
+            }
+        )
+
+        return pattern
+
+    except Exception as e:
+        raise DiscoveryError(
+            f"Regime classification failed: {e}",
+            context={
+                "source": str(data.source),
+                "method": "regime_classification",
+                "error": str(e)
+            }
+        )
 
 
 # =============================================================================
