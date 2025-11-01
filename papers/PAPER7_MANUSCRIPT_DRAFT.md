@@ -1571,8 +1571,6 @@ Bar chart comparing V5 stochastic CV=7.0% to Paper 2 empirical CV=9.2%. Error ba
 ---
 ## 6. References
 
-**[TO BE COMPLETED - Key Citations]**
-
 1. Kauffman, S. (1993). *The Origins of Order: Self-Organization and Selection in Evolution*. Oxford University Press.
 
 2. Prigogine, I., & Stengers, I. (1984). *Order Out of Chaos: Man's New Dialogue with Nature*. Bantam Books.
@@ -1596,6 +1594,32 @@ Bar chart comparing V5 stochastic CV=7.0% to Paper 2 empirical CV=9.2%. Error ba
 11. Brunton, S. L., Proctor, J. L., & Kutz, J. N. (2016). Discovering governing equations from data by sparse identification of nonlinear dynamical systems. *Proceedings of the National Academy of Sciences*, 113(15), 3932-3937.
 
 12. Payopay, A., & Claude (2025). Papers 1-6: Nested Resonance Memory Empirical Studies. *In preparation*.
+
+13. Gardiner, C. W. (2009). *Stochastic Methods: A Handbook for the Natural and Social Sciences* (4th ed.). Springer.
+
+14. Van Kampen, N. G. (2007). *Stochastic Processes in Physics and Chemistry* (3rd ed.). Elsevier.
+
+15. Allen, L. J. S. (2010). *An Introduction to Stochastic Processes with Applications to Biology* (2nd ed.). CRC Press.
+
+16. Lande, R., Engen, S., & Saether, B. E. (2003). *Stochastic Population Dynamics in Ecology and Conservation*. Oxford University Press.
+
+17. Black, A. J., & McKane, A. J. (2012). Stochastic formulation of ecological models and their applications. *Trends in Ecology & Evolution*, 27(6), 337-345.
+
+18. Kuznetsov, Y. A. (2004). *Elements of Applied Bifurcation Theory* (3rd ed.). Springer.
+
+19. Strogatz, S. H. (2015). *Nonlinear Dynamics and Chaos: With Applications to Physics, Biology, Chemistry, and Engineering* (2nd ed.). Westview Press.
+
+20. Guckenheimer, J., & Holmes, P. (1983). *Nonlinear Oscillations, Dynamical Systems, and Bifurcations of Vector Fields*. Springer.
+
+21. Wiggins, S. (2003). *Introduction to Applied Nonlinear Dynamical Systems and Chaos* (2nd ed.). Springer.
+
+22. Seydel, R. (2010). *Practical Bifurcation and Stability Analysis* (3rd ed.). Springer.
+
+23. Gillespie, D. T. (1977). Exact stochastic simulation of coupled chemical reactions. *The Journal of Physical Chemistry*, 81(25), 2340-2361.
+
+24. Gillespie, D. T. (2007). Stochastic simulation of chemical kinetics. *Annual Review of Physical Chemistry*, 58, 35-55.
+
+25. Anderson, D. F., & Kurtz, T. G. (2015). *Stochastic Analysis of Biochemical Systems*. Springer.
 
 ---
 
