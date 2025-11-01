@@ -1,0 +1,25 @@
+{
+  "nodes": {
+    "PC001": {
+      "pc_id": "PC001",
+      "version": "1.0.0",
+      "title": "NRM Population Dynamics Follow Logistic SDE",
+      "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+      "created": "2025-11-01",
+      "status": "validated",
+      "domain": "NRM",
+      "dependencies": [],
+      "enables": [
+        "PC002",
+        "PC004"
+      ],
+      "metadata": {}
+    }
+  },
+  "adjacency": {
+    "PC001": []
+  },
+  "reverse_adjacency": {
+    "PC001": []
+  }
+}

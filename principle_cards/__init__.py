@@ -14,6 +14,14 @@ License: GPL-3.0
 """
 
 from .base import PrincipleCard, ValidationResult, PCMetadata
+from .teg import TemporalEmbeddingGraph, PCNode, create_teg_from_pcs
 
 __version__ = "1.0.0"
-__all__ = ['PrincipleCard', 'ValidationResult', 'PCMetadata']
+__all__ = [
+    'PrincipleCard',
+    'ValidationResult',
+    'PCMetadata',
+    'TemporalEmbeddingGraph',
+    'PCNode',
+    'create_teg_from_pcs'
+]
