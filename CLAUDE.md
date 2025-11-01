@@ -150,11 +150,23 @@ cp /Volumes/dual/DUALITY-ZERO-V2/archive/summaries/CYCLE*.md \
 ```bash
 cd ~/nested-resonance-memory-archive
 git add .
-git commit -m "Message
+git commit -m "Commit message describing changes
 
-Author: Aldrin Payopay <aldrin.gdf@gmail.com>"
+Co-Authored-By: Claude <noreply@anthropic.com>"
 git push origin main
 ```
+
+**IMPORTANT:** Git config must be set to Aldrin's credentials:
+```bash
+git config user.name "Aldrin Payopay"
+git config user.email "aldrin.gdf@gmail.com"
+```
+
+This ensures commits show:
+- **Author:** Aldrin Payopay <aldrin.gdf@gmail.com>
+- **Co-Authored-By:** Claude <noreply@anthropic.com>
+
+GitHub will then properly attribute to both @mrdirno and @claude.
 
 **Step 3: Verify Push**
 ```bash
@@ -378,15 +390,17 @@ cd /Users/aldrinpayopay/nested-resonance-memory-archive
 # Make changes, run experiments
 python code/experiments/cycle177_extended_frequency_range.py
 
-# Commit with attribution
+# Commit with attribution (ALWAYS include Co-Authored-By)
 git add .
-git commit -m "Your message here
+git commit -m "Commit message describing changes
 
-Author: Aldrin Payopay <aldrin.gdf@gmail.com>"
+Co-Authored-By: Claude <noreply@anthropic.com>"
 
 # Push to public archive
 git push origin main
 ```
+
+**CRITICAL:** Every commit MUST include `Co-Authored-By: Claude <noreply@anthropic.com>` to maintain proper contributor attribution on GitHub (@mrdirno + @claude).
 
 **Workspace Hygiene:**
 - Maintain clean file organization
