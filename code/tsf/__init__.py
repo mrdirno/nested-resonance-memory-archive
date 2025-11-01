@@ -52,7 +52,14 @@ from code.tsf.errors import (
     PublicationError,
 )
 
-__version__ = "0.1.0"
+from code.tsf.regime_detection import (
+    RegimeType,
+    RegimeClassification,
+    RegimeDetector,
+    detect_regime,
+)
+
+__version__ = "0.2.0"  # Incremented for Gate 1.2 regime detection
 __author__ = "Aldrin Payopay <aldrin.gdf@gmail.com>"
 
 __all__ = [
@@ -67,6 +74,11 @@ __all__ = [
     "DiscoveredPattern",
     "RefutationResult",
     "QuantificationMetrics",
+    # Regime detection (Gate 1.2)
+    "RegimeType",
+    "RegimeClassification",
+    "RegimeDetector",
+    "detect_regime",
     # Errors
     "TSFError",
     "DataLoadError",
