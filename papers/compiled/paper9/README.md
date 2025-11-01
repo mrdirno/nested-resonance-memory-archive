@@ -27,6 +27,24 @@ We implement TSF as a Python library (1,708 lines production code) and validate 
 
 ---
 
+## Figures
+
+**All figures generated @ 300 DPI** (see `figures/` directory)
+
+1. **Figure 1:** TSF five-function workflow diagram (observe → discover → refute → quantify → publish)
+2. **Figure 2:** Domain-agnostic architecture (80/20 split: core infrastructure vs domain-specific)
+3. **Figure 3:** Multi-timescale validation strategy (10× temporal horizons)
+4. **Figure 4:** PC001 validation results (population dynamics pattern discovery and validation)
+5. **Figure 5:** PC003 validation results (financial market regime classification)
+6. **Figure 6:** Domain extension cost analysis (LOC breakdown and time investment)
+7. **Figure 7:** TEG dependency structure (PC001 → PC002 compositional validation)
+8. **Figure 8:** Code reuse visualization (54% reuse across domains)
+9. **Figure 9:** Bootstrap confidence intervals (stability, consistency, robustness distributions)
+
+**Generation:** Run `python generate_figures.py` to regenerate all figures
+
+---
+
 ## Reproducibility
 
 ```bash
