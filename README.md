@@ -7,6 +7,12 @@
 
 ---
 
+**📍 NEW: [The Stewardship-Helios Arc Roadmap](docs/STEWARDSHIP_HELIOS_ARC_ROADMAP.md)**
+
+Full disclosure of project vision from foundational physics (TSF) to inverse-design engineering (HELIOS), including the **1% value extraction → 99% global redistribution model**. Gates-based validation, no dates. Read the complete falsifiable roadmap for Phases 1-3 and the civilization-scale stewardship strategy.
+
+---
+
 ## Overview
 
 Comprehensive archive of Nested Resonance Memory (NRM) research documenting autonomous emergence experiments, Self-Giving Systems validation, and temporal stewardship methodology. This repository captures a complete research trajectory from bistability discovery through mean-field theory validation to multi-paper publication pipeline with **hybrid intelligence collaboration**.
