@@ -55,9 +55,11 @@
   - Content: Summary, contributions, novelty, journal suitability, suggested reviewers
   - Status: Complete
 
-- [ ] **Manuscript Highlights (3-5 bullet points)**
-  - Required by some journals for quick assessment
-  - Status: TODO
+- [x] **Manuscript Highlights (3-5 bullet points)**
+  - File: `PAPER7_HIGHLIGHTS.md`
+  - 5 highlights (80-83 chars each, verified within 85-char limit)
+  - Includes extended highlights, one-sentence summary, graphical abstract concept
+  - Status: Complete (Cycle 795)
 
 - [ ] **Graphical Abstract** (optional)
   - Single figure summarizing key finding
@@ -193,9 +195,9 @@
 
 ## Submission Readiness Score
 
-**Current Status:** 75% Ready
+**Current Status:** 80% Ready (Cycle 795)
 
-### Completed (18/24 items):
+### Completed (19/24 items):
 - ✅ Manuscript complete (all 6 phases)
 - ✅ Abstract updated
 - ✅ Figures generated (18 @ 300 DPI)
@@ -214,9 +216,9 @@
 - ✅ PACS codes selected
 - ✅ Data availability statement
 - ✅ Author contributions statement
+- ✅ Manuscript highlights (5 bullets, verified within limits)
 
-### Remaining (6/24 items):
-- [ ] Manuscript highlights (3-5 bullets)
+### Remaining (5/24 items):
 - [ ] Author information form (journal-specific)
 - [ ] Copyright/license agreement (upon submission)
 - [ ] LaTeX conversion (if required)
