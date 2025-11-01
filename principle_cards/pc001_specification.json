@@ -1,0 +1,81 @@
+{
+  "pc_id": "PC001",
+  "version": "1.0.0",
+  "title": "NRM Population Dynamics - Regime Classification",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "created": "2025-11-01",
+  "status": "validated",
+  "domain": "population_dynamics",
+  "dependencies": [],
+  "enables": [],
+  "discovery": {
+    "method": "regime_classification",
+    "parameters": {
+      "threshold_sustained": 10.0,
+      "threshold_collapse": 3.0,
+      "oscillation_threshold": 0.2
+    },
+    "features": {
+      "regime": "SUSTAINED_STABLE",
+      "mean_population": 97.76144652174725,
+      "std_population": 13.86439379913618,
+      "min_population": 10.0,
+      "max_population": 121.38960311009096,
+      "relative_std": 0.14181862372413032,
+      "cv_population": 0.14181862372558096,
+      "is_sustained": true,
+      "is_collapse": false,
+      "is_oscillatory": false
+    },
+    "pattern_id": "regime_sustained_stable_TEST_PC001"
+  },
+  "refutation": {
+    "horizon": "10x",
+    "tolerance": 0.1,
+    "passed": true,
+    "metrics": {
+      "mean_deviation": 0.0,
+      "std_deviation": 0.0,
+      "regime_consistent": true,
+      "mean_within_tolerance": true,
+      "std_within_tolerance": true,
+      "original_mean": 97.76144652174725,
+      "validation_mean": 97.76144652174725,
+      "original_relative_std": 0.14181862372413032,
+      "validation_relative_std": 0.14181862372413032
+    }
+  },
+  "quantification": {
+    "validation_method": "held_out_validation",
+    "criteria": [
+      "stability",
+      "consistency",
+      "robustness"
+    ],
+    "scores": {
+      "stability": 1.0,
+      "consistency": 1.0,
+      "robustness": 1.0
+    },
+    "confidence_intervals": {
+      "stability": [
+        1.0,
+        1.0
+      ],
+      "consistency": [
+        0.95,
+        1.0
+      ],
+      "robustness": [
+        1.0,
+        1.0
+      ]
+    },
+    "sample_size": 1
+  },
+  "metadata": {
+    "tsf_version": "0.1.0",
+    "framework": "TSF Science Engine",
+    "repository": "https://github.com/mrdirno/nested-resonance-memory-archive"
+  }
+}
