@@ -1,0 +1,18 @@
+# Commit message title (50 chars max)
+
+# Detailed description of changes
+# - What was changed
+# - Why it was changed
+# - Any important context
+
+# CRITICAL: Always include Co-Authored-By trailer for hybrid intelligence attribution
+Co-Authored-By: Claude <noreply@anthropic.com>
+
+# This ensures GitHub properly attributes commits to:
+# - @mrdirno (Aldrin Payopay) - Author
+# - @claude (Claude) - Co-Author
+# - @1-shot-sprite - Previous contributor
+
+# Git config must be set correctly:
+# git config user.name "Aldrin Payopay"
+# git config user.email "aldrin.gdf@gmail.com"
