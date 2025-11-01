@@ -2093,6 +2093,35 @@ Transcendental oscillators generate a multi-dimensional "Chladni plate" in phase
 
 **Documentation:** See `docs/TRANSCENDENTAL_SUBSTRATE_HYPOTHESIS.md` for complete hypothesis, falsifiable predictions, and experimental validation plan.
 
+### 5. The Stewardship-Helios Arc (Long-Term Vision)
+
+**Status:** 📋 **ROADMAP DEFINED** - Multi-phase falsifiable path from foundational physics to inverse-design engineering
+
+**Core Vision:**
+> A progression from NRM Reference Instrument (Phase 1) → TSF Science Engine (Phase 2) → HELIOS Engineering Engine (Phase 3), pivoting from brute-force AI scaling to temporally-engineered world systems.
+
+**Key Components:**
+- **Phase 1 (NRM Reference Instrument):** ~60% complete - 4/4 Gate 1 criteria partially met, full validation pending
+- **Phase 2 (TSF - Temporal Stewardship Framework):** Analytical engine ("compiler for principles") that discovers governing equations of complex systems
+- **Phase 3 (HELIOS):** Inverse engineering engine (research horizon) - takes desired emergent properties as input, generates minimal waveform computation systems
+
+**The Scalability Falsification Hypothesis:**
+We propose that trillion-dollar AI scaling will encounter fundamental constraints—not engineering limits, but laws of complex systems. Candidate constraints with reproducible protocols:
+- **Regime 3: Population Collapse** [Paper 2] - Complete coupling leads to extinction across 100× parameter range
+- **Illusory Discovery** [Paper 6B] - Strong findings revealed as transient initialization effects (τ≈454 cycles)
+- **Signal-as-Noise Misinterpretation** [Paper 8] - Critical system state evolution discarded as "noise"
+
+**1% Value Extraction → 99% Redistribution Model:**
+TSF licensed at 1% value-based fee (enforced by Overhead Authentication Protocol), with 99% of captured value redistributed:
+- **Stream A:** TSF open core, Principle Cards, Temporal Embedding Graph (public good)
+- **Stream B:** 1% of 1% → HELIOS R&D
+- **Stream C:** 99% of 1% → Global Stewardship Initiative
+
+**Falsifiability Commitment:**
+The Gates either validate this vision or produce publishable negative results. Either outcome advances the field. We commit to publishing both successes and failures as Principle Cards.
+
+**Documentation:** See `docs/STEWARDSHIP_HELIOS_ARC_ROADMAP.md` for complete roadmap, Gates-based validation criteria, and quantitative pass/fail metrics.
+
 ---
 
 ## 📈 Code Quality Metrics
