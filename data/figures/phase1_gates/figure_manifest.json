@@ -1,0 +1,14 @@
+{
+  "generated": "2025-11-01T16:36:19.878370",
+  "figures": [
+    "/Volumes/dual/DUALITY-ZERO-V2/data/figures/phase1_gates/gate11_sde_fokker_planck_validation.png",
+    "/Volumes/dual/DUALITY-ZERO-V2/data/figures/phase1_gates/gate12_regime_detection_accuracy.png",
+    "/Volumes/dual/DUALITY-ZERO-V2/data/figures/phase1_gates/gate13_arbiter_workflow.png",
+    "/Volumes/dual/DUALITY-ZERO-V2/data/figures/phase1_gates/gate14_overhead_authentication.png",
+    "/Volumes/dual/DUALITY-ZERO-V2/data/figures/phase1_gates/phase1_summary_all_gates.png"
+  ],
+  "total_count": 5,
+  "dpi": 300,
+  "format": "PNG",
+  "purpose": "Paper 8 (NRM Reference Instrument) - Phase 1 validation"
+}
