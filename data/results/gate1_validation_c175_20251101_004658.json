@@ -1,0 +1,43 @@
+{
+  "gate_1_1": {
+    "observed_mean": 104.735,
+    "observed_std": 12.075756476194847,
+    "observed_cv": 0.11529819521835917,
+    "predicted_mean": 135.00000000000006,
+    "predicted_std": 12.757531551171311,
+    "predicted_cv": 0.09450023371238005,
+    "cv_error": 0.18038410286119919,
+    "gate_1_1_pass": "False",
+    "parameters": {
+      "r": 0.1,
+      "K": "135",
+      "sigma": 0.4910376183509352
+    }
+  },
+  "gate_1_2": {
+    "features": {
+      "mean_population": 98.587,
+      "cv_population": 0.12069126207529218,
+      "persistence_rate": 1.0,
+      "extinction": "False"
+    },
+    "true_regime": "healthy",
+    "predicted_regime": "healthy",
+    "gate_1_2_pass": true
+  },
+  "gate_1_3": {
+    "manifest_exists": true,
+    "total_artifacts": 0,
+    "gate_1_3_pass": false
+  },
+  "gate_1_4": {
+    "instrumentation_count": 1000000,
+    "per_call_cost_ms": 67.0,
+    "baseline_runtime_min": 30.0,
+    "measured_runtime_min": 1146.6666666666667,
+    "predicted_overhead": 37.22222222222222,
+    "observed_overhead": 37.22222222222222,
+    "relative_error": 0.0,
+    "gate_1_4_pass": true
+  }
+}
