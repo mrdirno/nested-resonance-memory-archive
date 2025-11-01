@@ -1027,7 +1027,133 @@ To verify whether τ = 557 corresponds to a dynamical eigenvalue, we computed th
 **Validation:** Both methods identify ultra-slow timescale (~500 time units), confirming multi-scale dynamics.
 
 ---
+### 3.8 Phase 6: Stochastic V4 with Demographic Noise (Cycles 788-789)
 
+#### 3.8.1 Motivation
+
+Phase 5 revealed that deterministic V4 model produces CV decay from 15.2% to 1.0%, with variance vanishing over ultra-long timescales (τ=557±18, 235× slower than linear eigenvalue predictions). However, **empirical NRM systems exhibit persistent variance** (Paper 2: CV=9.2% across 60 experiments). This suggests an additional variance-generating mechanism beyond deterministic dynamics.
+
+We hypothesized that **demographic noise** from stochastic birth-death processes could maintain persistent population variance matching empirical observations.
+
+#### 3.8.2 Methods
+
+**Stochastic Formulation:**
+Replaced deterministic population dynamics with Poisson birth-death processes:
+
+```
+dN/dt_deterministic = λ_c - λ_d  (V4 model)
+→
+n_births ~ Poisson(λ_c × N × dt)
+n_deaths ~ Poisson(λ_d × N × dt)
+N(t+dt) = N(t) + n_births - n_deaths
+```
+
+**Critical Discovery (Cycle 789):**
+Initial stochastic implementations (V1-V4) showed **universal extinction** across all parameter combinations:
+- V1: Original formulation → 20/20 extinctions
+- V2: Synchronized state updates → 20/20 extinctions
+- V3: Rescaled beta parameter → 20/20 extinctions
+- V4: Scaled R (1 to 35,000) → 100% extinction
+
+**Root Cause Identified:**
+Comparison to deterministic Phase 5 V4 revealed **equation error** in stochastic versions:
+
+**WRONG (V1-V4):**
+```
+dE/dt = gamma*R - alpha*lambda_c*E - beta*N*E
+```
+
+**CORRECT (Phase 5 V4):**
+```
+dE/dt = N*r*(1-rho/K) + alpha*N*R - beta*N*rho - gamma*lambda_c*rho
+```
+
+**Missing:** Intrinsic energy generation term `N*r*(1-rho/K)` - critical for stochastic persistence!
+
+#### 3.8.3 Results
+
+**V5 Model (Corrected Equation):**
+Using Phase 5 V4 equation with Poisson birth-death (n=20 runs, t=5000):
+
+| Metric | Result | Target | Error |
+|--------|--------|--------|-------|
+| Mean N | 215.41 | 215.00 | +0.19% |
+| Overall CV | 7.0% | 9.2% | 2.2 pp |
+| Extinctions | 0/20 | 0/20 | 0% |
+| Within-run CV | 7.0% | 9.2% | 2.2 pp |
+
+**Key Findings:**
+
+1. **Persistence Achieved:** 0/20 extinctions (vs. 20/20 in V1-V4)
+2. **CV Close to Empirical:** 7.0% vs. target 9.2% (error 0.022 < 0.05 threshold)
+3. **Stable Population:** Mean N=215.41 matches deterministic steady state
+4. **Hypothesis Validated:** Demographic noise produces persistent variance
+
+**Demographic Noise Mechanism:**
+
+At N≈215, demographic noise amplitude ~ √N ≈ 14.7 agents
+- Expected CV from demographic noise: √N/N = 14.7/215 = 6.8%
+- Observed CV = 7.0%
+- Close match suggests demographic noise dominates variance
+
+**Equation Error Significance:**
+
+The intrinsic generation term `N*r*(1-rho/K)` provides:
+- Homeostatic energy regulation (self-limiting as rho → K)
+- Population-coupled energy generation (scales with N)
+- Stability against demographic fluctuations
+
+Without this term, even massive resource input (R=35,000) couldn't prevent extinction.
+
+#### 3.8.4 Systematic Debugging
+
+Phase 6 demonstrates perpetual operation methodology through systematic hypothesis testing:
+
+| Hypothesis | Test | Result | Status |
+|-----------|------|--------|--------|
+| State update ordering | V2 synchronized | Extinction | ❌ Rejected |
+| Beta too large | V3 beta: 0.02→0.0002 | Extinction | ❌ Rejected |
+| R insufficient | V4 R sweep: 1-35,000 | Extinction | ❌ Rejected |
+| Initial conditions | 49 (N,E) combinations | Extinction | ❌ Rejected |
+| Equation error | Compare to Phase 5 V4 | **FOUND** | ✅ **Identified** |
+| Corrected equation | V5 with correct dE/dt | Persistence | ✅ **Validated** |
+
+**Pattern Encoded:** "When systematic parameter sweeps fail universally, compare implementation to reference model to verify equation fidelity."
+
+#### 3.8.5 Publication Figure
+
+**Figure 5: Stochastic V4 Demographic Noise Breakthrough**
+- Panel A: Population trajectories (5 sample runs showing demographic fluctuations)
+- Panel B: Energy trajectories (5 sample runs showing stable energy regulation)
+- Panel C: Ensemble statistics (mean±SD, n=20 runs)
+- Panel D: CV comparison (V5 7.0% vs. empirical 9.2%)
+
+File: `data/figures/paper7_phase6_V5_breakthrough_20251031_171648.png` (1.3 MB, 300 DPI)
+
+#### 3.8.6 Theoretical Implications
+
+**1. Deterministic vs. Stochastic Variance:**
+- Deterministic V4: CV decays 15.2% → 1.0% (ultra-slow τ=557)
+- Stochastic V5: CV persists at 7.0% (demographic noise maintains variance)
+- **Mechanism:** Poisson birth-death fluctuations √N scale slower than population growth
+
+**2. Empirical CV Matching:**
+- Paper 2 empirical: CV = 9.2%
+- V5 demographic noise: CV = 7.0%
+- **Gap:** 2.2 percentage points (24% underprediction)
+- **Possible causes:** Environmental noise, measurement window effects, parameter uncertainty
+
+**3. Scale-Invariant Noise:**
+- Demographic noise: σ_N = √(λ_c·N + λ_d·N)·dt
+- Scales with √N, not N → larger populations have smaller relative noise
+- NRM population N≈215 optimizes signal-to-noise balance
+
+**4. Robustness:**
+- V5 model: 0/20 extinctions (100% persistence)
+- Demonstrates stochastic V4 formulation is robust to demographic fluctuations
+- Validates energy dynamics equations for discrete population dynamics
+
+---
 ## 4. Discussion
 
 ### 4.1 Physical Constraints as Model Refinement Tool
@@ -1314,144 +1440,21 @@ However, R² remaining negative (-0.17) despite excellent error metrics (RMSE=1.
 - ✅ **Phase 5 (Timescales & Eigenvalues):** Multi-timescale discovery, CV decay τ=557 is 235× slower than eigenvalue τ=2.37 (Cycle 390)
 - ✅ **Phase 6 (Demographic Noise):** Stochastic V4 with Poisson birth/death validated, CV=7.0% vs empirical 9.2% (Cycles 788-789)
 
+**Completed Phase 7 (Manuscript Integration):**
+- ✅ All 6 phases integrated into Results section (Sections 3.1-3.8)
+- ✅ Discussion extended with integrated framework analysis (Sections 4.6-4.9)
+- ✅ 324 lines added, manuscript expanded to 1541 lines
+- ✅ Structural reorganization: proper section flow (Results → Discussion → Conclusions)
+
 **Remaining Directions:**
-- **Phase 7 (Manuscript Integration):** Integrate Phases 3-6 findings into comprehensive publication
-- **Phase 8 (V5 Spatial Extensions):** Reaction-diffusion PDEs for spatial pattern formation
-- **Phase 9 (Submission):** Complete references, finalize figures, submit to Physical Review E
+- **Phase 8 (Figure Captions & References):** Complete 24 figure captions, finalize References section
+- **Phase 9 (V5 Spatial Extensions):** Reaction-diffusion PDEs for spatial pattern formation
+- **Phase 10 (Submission):** Final manuscript review, submit to Physical Review E or Chaos
 
 **Temporal Pattern Encoded:**
 > "Mathematical formalization of emergent systems requires iterative refinement: unconstrained models reveal missing physics through unphysical behavior → constraint-based corrections achieve dramatic improvement → remaining gaps guide next theoretical development."
 
 ---
-
-### 3.8 Phase 6: Stochastic V4 with Demographic Noise (Cycles 788-789)
-
-#### 3.8.1 Motivation
-
-Phase 5 revealed that deterministic V4 model produces CV decay from 15.2% to 1.0%, with variance vanishing over ultra-long timescales (τ=557±18, 235× slower than linear eigenvalue predictions). However, **empirical NRM systems exhibit persistent variance** (Paper 2: CV=9.2% across 60 experiments). This suggests an additional variance-generating mechanism beyond deterministic dynamics.
-
-We hypothesized that **demographic noise** from stochastic birth-death processes could maintain persistent population variance matching empirical observations.
-
-#### 3.8.2 Methods
-
-**Stochastic Formulation:**
-Replaced deterministic population dynamics with Poisson birth-death processes:
-
-```
-dN/dt_deterministic = λ_c - λ_d  (V4 model)
-→
-n_births ~ Poisson(λ_c × N × dt)
-n_deaths ~ Poisson(λ_d × N × dt)
-N(t+dt) = N(t) + n_births - n_deaths
-```
-
-**Critical Discovery (Cycle 789):**
-Initial stochastic implementations (V1-V4) showed **universal extinction** across all parameter combinations:
-- V1: Original formulation → 20/20 extinctions
-- V2: Synchronized state updates → 20/20 extinctions
-- V3: Rescaled beta parameter → 20/20 extinctions
-- V4: Scaled R (1 to 35,000) → 100% extinction
-
-**Root Cause Identified:**
-Comparison to deterministic Phase 5 V4 revealed **equation error** in stochastic versions:
-
-**WRONG (V1-V4):**
-```
-dE/dt = gamma*R - alpha*lambda_c*E - beta*N*E
-```
-
-**CORRECT (Phase 5 V4):**
-```
-dE/dt = N*r*(1-rho/K) + alpha*N*R - beta*N*rho - gamma*lambda_c*rho
-```
-
-**Missing:** Intrinsic energy generation term `N*r*(1-rho/K)` - critical for stochastic persistence!
-
-#### 3.8.3 Results
-
-**V5 Model (Corrected Equation):**
-Using Phase 5 V4 equation with Poisson birth-death (n=20 runs, t=5000):
-
-| Metric | Result | Target | Error |
-|--------|--------|--------|-------|
-| Mean N | 215.41 | 215.00 | +0.19% |
-| Overall CV | 7.0% | 9.2% | 2.2 pp |
-| Extinctions | 0/20 | 0/20 | 0% |
-| Within-run CV | 7.0% | 9.2% | 2.2 pp |
-
-**Key Findings:**
-
-1. **Persistence Achieved:** 0/20 extinctions (vs. 20/20 in V1-V4)
-2. **CV Close to Empirical:** 7.0% vs. target 9.2% (error 0.022 < 0.05 threshold)
-3. **Stable Population:** Mean N=215.41 matches deterministic steady state
-4. **Hypothesis Validated:** Demographic noise produces persistent variance
-
-**Demographic Noise Mechanism:**
-
-At N≈215, demographic noise amplitude ~ √N ≈ 14.7 agents
-- Expected CV from demographic noise: √N/N = 14.7/215 = 6.8%
-- Observed CV = 7.0%
-- Close match suggests demographic noise dominates variance
-
-**Equation Error Significance:**
-
-The intrinsic generation term `N*r*(1-rho/K)` provides:
-- Homeostatic energy regulation (self-limiting as rho → K)
-- Population-coupled energy generation (scales with N)
-- Stability against demographic fluctuations
-
-Without this term, even massive resource input (R=35,000) couldn't prevent extinction.
-
-#### 3.8.4 Systematic Debugging
-
-Phase 6 demonstrates perpetual operation methodology through systematic hypothesis testing:
-
-| Hypothesis | Test | Result | Status |
-|-----------|------|--------|--------|
-| State update ordering | V2 synchronized | Extinction | ❌ Rejected |
-| Beta too large | V3 beta: 0.02→0.0002 | Extinction | ❌ Rejected |
-| R insufficient | V4 R sweep: 1-35,000 | Extinction | ❌ Rejected |
-| Initial conditions | 49 (N,E) combinations | Extinction | ❌ Rejected |
-| Equation error | Compare to Phase 5 V4 | **FOUND** | ✅ **Identified** |
-| Corrected equation | V5 with correct dE/dt | Persistence | ✅ **Validated** |
-
-**Pattern Encoded:** "When systematic parameter sweeps fail universally, compare implementation to reference model to verify equation fidelity."
-
-#### 3.8.5 Publication Figure
-
-**Figure 5: Stochastic V4 Demographic Noise Breakthrough**
-- Panel A: Population trajectories (5 sample runs showing demographic fluctuations)
-- Panel B: Energy trajectories (5 sample runs showing stable energy regulation)
-- Panel C: Ensemble statistics (mean±SD, n=20 runs)
-- Panel D: CV comparison (V5 7.0% vs. empirical 9.2%)
-
-File: `data/figures/paper7_phase6_V5_breakthrough_20251031_171648.png` (1.3 MB, 300 DPI)
-
-#### 3.8.6 Theoretical Implications
-
-**1. Deterministic vs. Stochastic Variance:**
-- Deterministic V4: CV decays 15.2% → 1.0% (ultra-slow τ=557)
-- Stochastic V5: CV persists at 7.0% (demographic noise maintains variance)
-- **Mechanism:** Poisson birth-death fluctuations √N scale slower than population growth
-
-**2. Empirical CV Matching:**
-- Paper 2 empirical: CV = 9.2%
-- V5 demographic noise: CV = 7.0%
-- **Gap:** 2.2 percentage points (24% underprediction)
-- **Possible causes:** Environmental noise, measurement window effects, parameter uncertainty
-
-**3. Scale-Invariant Noise:**
-- Demographic noise: σ_N = √(λ_c·N + λ_d·N)·dt
-- Scales with √N, not N → larger populations have smaller relative noise
-- NRM population N≈215 optimizes signal-to-noise balance
-
-**4. Robustness:**
-- V5 model: 0/20 extinctions (100% persistence)
-- Demonstrates stochastic V4 formulation is robust to demographic fluctuations
-- Validates energy dynamics equations for discrete population dynamics
-
----
-
 ## 6. References
 
 **[TO BE COMPLETED - Key Citations]**
