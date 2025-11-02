@@ -89,7 +89,7 @@ class DecompositionEngine:
 
         # Must be at depth ≥ 1 (clusters only)
         if agent.state.depth < 1:
-            return False, f\"Agent at depth {agent.state.depth} (base agents don't decompose)"
+            return False, f"Agent at depth {agent.state.depth} (base agents don't decompose)"
 
         # Check energy threshold
         if agent.state.energy > self.energy_threshold:
