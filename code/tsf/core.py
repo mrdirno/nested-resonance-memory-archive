@@ -367,10 +367,12 @@ def discover(
     Supported methods:
         - "regime_classification": Classify dynamical regimes from population data
         - "financial_regime_classification": Classify market regimes from financial data
+        - "pc001": Use PC001 (NRM Population Dynamics) validation protocol
+        - "pc002": Use PC002 (Transcendental Substrate) validation protocol
 
     Args:
         data: Observational data from tsf.observe()
-        method: Discovery method identifier
+        method: Discovery method identifier (or PC ID like "pc001")
         parameters: Method-specific parameters (optional)
 
     Returns:
@@ -387,19 +389,221 @@ def discover(
         ...     parameters={"threshold_sustained": 10.0}
         ... )
         >>> print(f"Regime: {pattern.features['regime']}")
+
+        >>> # Using Principle Card directly
+        >>> pattern = tsf.discover(
+        ...     data=data,
+        ...     method="pc001",
+        ...     parameters={"tolerance": 0.10}
+        ... )
+        >>> print(f"Validation: {pattern.features['validation_passed']}")
     """
     parameters = parameters or {}
 
+    # Check if method is a Principle Card (e.g., "pc001", "pc002")
+    if method.lower().startswith("pc"):
+        return _discover_principle_card(data, method.upper(), parameters)
+
     # Dispatch to method-specific implementation
-    if method == "regime_classification":
+    elif method == "regime_classification":
         return _discover_regime_classification(data, parameters)
     elif method == "financial_regime_classification":
         return _discover_financial_regime(data, parameters)
     else:
         raise DiscoveryError(
             f"Unknown discovery method: {method}",
-            context={"method": method, "available": ["regime_classification", "financial_regime_classification"]}
+            context={
+                "method": method,
+                "available": [
+                    "regime_classification",
+                    "financial_regime_classification",
+                    "pc001", "pc002"
+                ]
+            }
         )
+
+
+def _discover_principle_card(
+    data: ObservationalData,
+    pc_id: str,
+    parameters: Dict[str, Any]
+) -> DiscoveredPattern:
+    """
+    Discover patterns using a Principle Card's validation protocol.
+
+    Loads the specified PC and calls its validate() method on the data,
+    then converts the ValidationResult to a DiscoveredPattern.
+
+    Args:
+        data: Observational data
+        pc_id: Principle Card ID (e.g., "PC001", "PC002")
+        parameters: PC-specific parameters (e.g., tolerance)
+
+    Returns:
+        DiscoveredPattern with validation results
+
+    Raises:
+        DiscoveryError: If PC not found or validation fails
+    """
+    try:
+        # Import PC loading functions
+        if pc_id == "PC001":
+            from code.tsf.pc001_nrm_population_dynamics import load_pc001
+            pc = load_pc001()
+        elif pc_id == "PC002":
+            # Future: PC002 implementation
+            raise DiscoveryError(
+                "PC002 not yet implemented",
+                context={"pc_id": pc_id, "available": ["PC001"]}
+            )
+        else:
+            raise DiscoveryError(
+                f"Unknown Principle Card: {pc_id}",
+                context={"pc_id": pc_id, "available": ["PC001", "PC002"]}
+            )
+
+        # Prepare validation data from ObservationalData
+        validation_data = _prepare_pc_validation_data(data, pc_id)
+
+        # Execute PC validation
+        tolerance = parameters.get("tolerance", 0.10)
+        validation_result = pc.validate(validation_data, tolerance=tolerance)
+
+        # Convert ValidationResult to DiscoveredPattern
+        pattern = _convert_validation_to_pattern(
+            validation_result=validation_result,
+            data=data,
+            pc=pc,
+            parameters=parameters
+        )
+
+        return pattern
+
+    except Exception as e:
+        if isinstance(e, DiscoveryError):
+            raise
+        raise DiscoveryError(
+            f"Principle Card discovery failed: {e}",
+            context={"pc_id": pc_id, "error": str(e)}
+        )
+
+
+def _prepare_pc_validation_data(
+    data: ObservationalData,
+    pc_id: str
+) -> Dict[str, Any]:
+    """
+    Convert ObservationalData to format expected by PrincipleCard.validate().
+
+    Args:
+        data: ObservationalData from observe()
+        pc_id: Principle Card ID
+
+    Returns:
+        Dictionary with fields required by PC.validate()
+
+    Raises:
+        DiscoveryError: If required fields missing
+    """
+    if pc_id == "PC001":
+        # PC001 requires: cv_observed, cv_predicted, regime, overhead_observed, overhead_predicted, artifact_hash
+        # Extract from data.statistics and data.validation
+
+        # Get CV (coefficient of variation)
+        if "cv" in data.statistics:
+            cv_observed = data.statistics["cv"]
+        elif "mean" in data.statistics and "std" in data.statistics:
+            mean = data.statistics["mean"]
+            std = data.statistics["std"]
+            cv_observed = std / mean if mean > 0 else 0.0
+        elif "mean_population" in data.statistics and "std_population" in data.statistics:
+            mean = data.statistics["mean_population"]
+            std = data.statistics["std_population"]
+            cv_observed = std / mean if mean > 0 else 0.0
+        else:
+            raise DiscoveryError(
+                "PC001 requires CV or (mean, std) statistics",
+                context={"available": list(data.statistics.keys())}
+            )
+
+        # Get predicted CV from validation section (if available)
+        cv_predicted = data.validation.get("cv_predicted", cv_observed)  # Fallback to observed
+
+        # Get regime from validation or metadata
+        regime = data.validation.get("regime") or data.metadata.get("regime_type", "UNKNOWN")
+
+        # Get overhead metrics from validation
+        overhead_observed = data.validation.get("overhead_observed", 1.0)
+        overhead_predicted = data.validation.get("overhead_predicted", 1.0)
+
+        # Get artifact hash from metadata
+        artifact_hash = data.metadata.get("artifact_hash", data.metadata.get("experiment_id", "NO_HASH"))
+
+        return {
+            "cv_observed": float(cv_observed),
+            "cv_predicted": float(cv_predicted),
+            "regime": str(regime),
+            "overhead_observed": float(overhead_observed),
+            "overhead_predicted": float(overhead_predicted),
+            "artifact_hash": str(artifact_hash)
+        }
+
+    else:
+        raise DiscoveryError(
+            f"Data preparation not implemented for {pc_id}",
+            context={"pc_id": pc_id}
+        )
+
+
+def _convert_validation_to_pattern(
+    validation_result,  # ValidationResult from PC.validate()
+    data: ObservationalData,
+    pc,  # PrincipleCard instance
+    parameters: Dict[str, Any]
+) -> DiscoveredPattern:
+    """
+    Convert PrincipleCard ValidationResult to DiscoveredPattern.
+
+    Args:
+        validation_result: ValidationResult from PC.validate()
+        data: Original ObservationalData
+        pc: PrincipleCard instance
+        parameters: Discovery parameters
+
+    Returns:
+        DiscoveredPattern with validation results
+    """
+    # Build features dictionary from validation evidence
+    features = {
+        "validation_passed": validation_result.passes,
+        "pc_id": validation_result.pc_id,
+        "pc_version": validation_result.pc_version,
+        **validation_result.metrics,
+        **validation_result.evidence
+    }
+
+    # Create pattern identifier
+    pattern_id = f"{validation_result.pc_id.lower()}_validation_{data.metadata.get('experiment_id', 'unknown')}"
+
+    # Create DiscoveredPattern
+    pattern = DiscoveredPattern(
+        pattern_id=pattern_id,
+        method=validation_result.pc_id.lower(),
+        domain=data.domain,
+        parameters=parameters,
+        features=features,
+        timeseries={},  # PC validation doesn't produce new timeseries
+        metadata={
+            "source": str(data.source),
+            "pc_id": validation_result.pc_id,
+            "pc_version": validation_result.pc_version,
+            "validation_timestamp": validation_result.timestamp,
+            "principle_statement": pc.principle_statement,
+            "error_message": validation_result.error_message
+        }
+    )
+
+    return pattern
 
 
 def _discover_regime_classification(
