@@ -4,7 +4,7 @@
   "title": "PC002 Comparative Results Data Schema",
   "description": "JSON schema for comparative experimental data for PC002 (Transcendental Substrate Hypothesis). Compares transcendental (π,e,φ) vs PRNG substrates.",
   "type": "object",
-  "required": ["metadata", "transcendental_results", "prng_results"],
+  "required": ["metadata", "transcendental_results", "prng_results", "metrics"],
   "properties": {
     "metadata": {
       "type": "object",
@@ -45,101 +45,119 @@
     },
     "transcendental_results": {
       "type": "object",
-      "description": "Aggregated results from transcendental substrate experiments",
-      "required": ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity"],
+      "description": "Raw results from transcendental substrate experiments (arrays for statistical testing)",
+      "required": ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity_bootstrap"],
       "properties": {
         "pattern_lifetime": {
-          "type": "object",
-          "description": "Pattern lifetime distribution metrics",
-          "required": ["mean", "std", "median"],
-          "properties": {
-            "mean": {"type": "number", "minimum": 0},
-            "std": {"type": "number", "minimum": 0},
-            "median": {"type": "number", "minimum": 0},
-            "min": {"type": "number", "minimum": 0},
-            "max": {"type": "number", "minimum": 0}
-          }
+          "type": "array",
+          "description": "Pattern lifetime values from all TS experiments",
+          "items": {"type": "number", "minimum": 0},
+          "minItems": 1
         },
         "memory_retention": {
-          "type": "number",
-          "description": "Pattern recall accuracy percentage",
-          "minimum": 0,
-          "maximum": 100
+          "type": "array",
+          "description": "Memory retention scores from all TS experiments",
+          "items": {"type": "number", "minimum": 0, "maximum": 1},
+          "minItems": 1
         },
         "cluster_stability": {
-          "type": "number",
-          "description": "Coefficient of variation in cluster lifetimes",
-          "minimum": 0
+          "type": "array",
+          "description": "Cluster stability (CV) values from all TS experiments",
+          "items": {"type": "number", "minimum": 0},
+          "minItems": 1
         },
-        "complexity": {
-          "type": "number",
-          "description": "Emergent structure complexity score",
-          "minimum": 0
+        "complexity_bootstrap": {
+          "type": "array",
+          "description": "Bootstrap time values from all TS experiments",
+          "items": {"type": "number", "minimum": 0},
+          "minItems": 1
         }
       }
     },
     "prng_results": {
       "type": "object",
-      "description": "Aggregated results from PRNG substrate experiments",
-      "required": ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity"],
+      "description": "Raw results from PRNG substrate experiments (arrays for statistical testing)",
+      "required": ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity_bootstrap"],
       "properties": {
         "pattern_lifetime": {
-          "type": "object",
-          "description": "Pattern lifetime distribution metrics",
-          "required": ["mean", "std", "median"],
-          "properties": {
-            "mean": {"type": "number", "minimum": 0},
-            "std": {"type": "number", "minimum": 0},
-            "median": {"type": "number", "minimum": 0},
-            "min": {"type": "number", "minimum": 0},
-            "max": {"type": "number", "minimum": 0}
-          }
+          "type": "array",
+          "description": "Pattern lifetime values from all PRNG experiments",
+          "items": {"type": "number", "minimum": 0},
+          "minItems": 1
         },
         "memory_retention": {
-          "type": "number",
-          "description": "Pattern recall accuracy percentage",
-          "minimum": 0,
-          "maximum": 100
+          "type": "array",
+          "description": "Memory retention scores from all PRNG experiments",
+          "items": {"type": "number", "minimum": 0, "maximum": 1},
+          "minItems": 1
         },
         "cluster_stability": {
-          "type": "number",
-          "description": "Coefficient of variation in cluster lifetimes",
-          "minimum": 0
+          "type": "array",
+          "description": "Cluster stability (CV) values from all PRNG experiments",
+          "items": {"type": "number", "minimum": 0},
+          "minItems": 1
         },
-        "complexity": {
-          "type": "number",
-          "description": "Emergent structure complexity score",
-          "minimum": 0
+        "complexity_bootstrap": {
+          "type": "array",
+          "description": "Bootstrap time values from all PRNG experiments",
+          "items": {"type": "number", "minimum": 0},
+          "minItems": 1
         }
       }
     },
+    "metrics": {
+      "type": "array",
+      "description": "List of metrics to compare in validation",
+      "items": {
+        "type": "string",
+        "enum": ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity_bootstrap"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
     "statistical_tests": {
       "type": "object",
-      "description": "Statistical test results",
+      "description": "Statistical test results (optional, computed by PC002.validate())",
       "properties": {
         "pattern_lifetime_p": {
           "type": "number",
-          "description": "p-value from Mann-Whitney U test",
+          "description": "p-value from two-sample t-test",
           "minimum": 0,
           "maximum": 1
+        },
+        "pattern_lifetime_cohens_d": {
+          "type": "number",
+          "description": "Cohen's d effect size"
         },
         "memory_retention_p": {
           "type": "number",
-          "description": "p-value from t-test",
+          "description": "p-value from two-sample t-test",
           "minimum": 0,
           "maximum": 1
+        },
+        "memory_retention_cohens_d": {
+          "type": "number",
+          "description": "Cohen's d effect size"
         },
         "cluster_stability_p": {
           "type": "number",
-          "description": "p-value from F-test",
+          "description": "p-value from two-sample t-test",
           "minimum": 0,
           "maximum": 1
         },
-        "complexity_p": {
+        "cluster_stability_cohens_d": {
           "type": "number",
-          "description": "p-value from MANOVA",
+          "description": "Cohen's d effect size"
+        },
+        "complexity_bootstrap_p": {
+          "type": "number",
+          "description": "p-value from two-sample t-test",
           "minimum": 0,
           "maximum": 1
+        },
+        "complexity_bootstrap_cohens_d": {
+          "type": "number",
+          "description": "Cohen's d effect size"
         }
       }
     }
@@ -147,42 +165,43 @@
   "examples": [
     {
       "metadata": {
-        "experiment_id": "PC002_TRANS_VS_PRNG_N50",
+        "experiment_id": "PC002_CYCLE300_TS_VS_PRNG",
         "pc_id": "PC002",
-        "domain": "nested_resonance_memory",
+        "domain": "population_dynamics",
         "timestamp": "2025-11-01T12:00:00Z",
-        "n_transcendental": 50,
-        "n_prng": 50
+        "n_transcendental": 20,
+        "n_prng": 20
       },
       "transcendental_results": {
-        "pattern_lifetime": {
-          "mean": 125.5,
-          "std": 25.3,
-          "median": 120.0,
-          "min": 80.0,
-          "max": 200.0
-        },
-        "memory_retention": 75.5,
-        "cluster_stability": 0.20,
-        "complexity": 0.85
+        "pattern_lifetime": [12.5, 13.1, 12.8, 13.5, 12.9, 13.2, 12.7, 13.0, 12.6, 13.3,
+                             13.1, 12.8, 13.4, 12.9, 13.0, 12.7, 13.2, 12.8, 13.1, 12.9],
+        "memory_retention": [0.85, 0.87, 0.84, 0.88, 0.86, 0.87, 0.85, 0.86, 0.84, 0.88,
+                             0.86, 0.85, 0.87, 0.86, 0.85, 0.84, 0.87, 0.86, 0.85, 0.87],
+        "cluster_stability": [0.12, 0.11, 0.13, 0.12, 0.11, 0.13, 0.12, 0.11, 0.13, 0.12,
+                              0.11, 0.12, 0.13, 0.11, 0.12, 0.13, 0.11, 0.12, 0.13, 0.11],
+        "complexity_bootstrap": [150, 145, 155, 148, 152, 147, 153, 149, 151, 146,
+                                 154, 148, 150, 152, 147, 149, 151, 148, 153, 150]
       },
       "prng_results": {
-        "pattern_lifetime": {
-          "mean": 95.2,
-          "std": 30.1,
-          "median": 90.0,
-          "min": 50.0,
-          "max": 150.0
-        },
-        "memory_retention": 60.2,
-        "cluster_stability": 0.32,
-        "complexity": 0.72
+        "pattern_lifetime": [10.2, 9.8, 10.5, 10.1, 9.9, 10.3, 9.7, 10.4, 10.0, 9.8,
+                             10.2, 9.9, 10.5, 10.1, 9.8, 10.3, 9.9, 10.4, 10.0, 9.7],
+        "memory_retention": [0.75, 0.73, 0.76, 0.74, 0.75, 0.76, 0.73, 0.77, 0.74, 0.75,
+                             0.76, 0.74, 0.77, 0.73, 0.75, 0.76, 0.74, 0.75, 0.73, 0.76],
+        "cluster_stability": [0.22, 0.24, 0.21, 0.23, 0.22, 0.24, 0.21, 0.23, 0.22, 0.24,
+                              0.21, 0.23, 0.22, 0.24, 0.21, 0.23, 0.22, 0.24, 0.21, 0.23],
+        "complexity_bootstrap": [200, 195, 205, 198, 202, 196, 204, 199, 201, 197,
+                                 203, 198, 200, 202, 196, 199, 201, 198, 204, 200]
       },
+      "metrics": ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity_bootstrap"],
       "statistical_tests": {
-        "pattern_lifetime_p": 0.003,
-        "memory_retention_p": 0.001,
-        "cluster_stability_p": 0.01,
-        "complexity_p": 0.005
+        "pattern_lifetime_p": 0.0001,
+        "pattern_lifetime_cohens_d": 8.76,
+        "memory_retention_p": 0.0001,
+        "memory_retention_cohens_d": 8.27,
+        "cluster_stability_p": 0.0001,
+        "cluster_stability_cohens_d": -10.60,
+        "complexity_bootstrap_p": 0.0001,
+        "complexity_bootstrap_cohens_d": -13.13
       }
     }
   ]
