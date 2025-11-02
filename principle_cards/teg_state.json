@@ -1,0 +1,92 @@
+{
+  "nodes": {
+    "PC001": {
+      "pc_id": "PC001",
+      "version": "1.0.0",
+      "title": "NRM Population Dynamics Validation Framework",
+      "author": "Aldrin Payopay",
+      "created": "2025-11-01T18:45:05.300717",
+      "status": "validated",
+      "domain": "population_dynamics",
+      "dependencies": [],
+      "enables": [
+        "PC002",
+        "PC003"
+      ],
+      "metadata": {
+        "validation_date": "2025-11-01T18:45:05.300722",
+        "test_cv_error": 2.1,
+        "test_experiment": "TSF_TEST_SYNTHETIC_PC001",
+        "gates_validated": [
+          "Gate 1.1: SDE/Fokker-Planck (2.10% error)",
+          "Gate 1.2: Regime Detection (BISTABILITY)",
+          "Gate 1.3: ARBITER Hash (present)",
+          "Gate 1.4: Overhead Auth (0% error)"
+        ],
+        "experiments": [
+          "C175",
+          "C176",
+          "C177"
+        ],
+        "reproducibility_score": 9.3
+      }
+    },
+    "PC002": {
+      "pc_id": "PC002",
+      "version": "0.1.0",
+      "title": "Transcendental Substrate Validation",
+      "author": "Aldrin Payopay",
+      "created": "2025-11-01T18:45:05.300726",
+      "status": "draft",
+      "domain": "population_dynamics",
+      "dependencies": [
+        "PC001"
+      ],
+      "enables": [
+        "PC003"
+      ],
+      "metadata": {
+        "design_date": "2025-11-01T18:45:05.300726",
+        "type": "comparative_validation",
+        "comparison": "transcendental (\u03c0,e,\u03c6) vs PRNG"
+      }
+    },
+    "PC003": {
+      "pc_id": "PC003",
+      "version": "0.1.0",
+      "title": "Bootstrap Dynamics Validation",
+      "author": "Aldrin Payopay",
+      "created": "2025-11-01T18:45:05.300730",
+      "status": "draft",
+      "domain": "population_dynamics",
+      "dependencies": [
+        "PC001",
+        "PC002"
+      ],
+      "enables": [],
+      "metadata": {
+        "design_date": "2025-11-01T18:45:05.300730",
+        "type": "self_giving_dynamics",
+        "focus": "bootstrap_complexity"
+      }
+    }
+  },
+  "adjacency": {
+    "PC002": [
+      "PC001"
+    ],
+    "PC003": [
+      "PC002",
+      "PC001"
+    ]
+  },
+  "reverse_adjacency": {
+    "PC001": [
+      "PC002",
+      "PC003"
+    ],
+    "PC002": [
+      "PC003"
+    ]
+  }
+}
