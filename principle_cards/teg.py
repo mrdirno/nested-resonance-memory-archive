@@ -362,6 +362,55 @@ class TemporalEmbeddingGraph:
         """
         return [pc_id for pc_id, node in self.nodes.items() if node.domain == domain]
 
+    def get_status(self, pc_id: str) -> str:
+        """
+        Get status of a Principle Card.
+
+        Args:
+            pc_id: PC ID to query
+
+        Returns:
+            Status string (draft | proposed | validated | falsified | deprecated)
+
+        Raises:
+            KeyError: If PC not found in TEG
+        """
+        if pc_id not in self.nodes:
+            raise KeyError(f"PC {pc_id} not found in TEG")
+        return self.nodes[pc_id].status
+
+    def update_status(self, pc_id: str, status: str):
+        """
+        Update status of a Principle Card.
+
+        This method is called automatically by TSF when a PC validates.
+        Valid status transitions:
+        - draft → proposed (when submitted for review)
+        - proposed → validated (when validation passes)
+        - proposed → draft (when validation fails)
+        - validated → falsified (when refutation fails)
+        - any → deprecated (when superseded)
+
+        Args:
+            pc_id: PC ID to update
+            status: New status (draft | proposed | validated | falsified | deprecated)
+
+        Raises:
+            KeyError: If PC not found in TEG
+            ValueError: If invalid status value
+        """
+        valid_statuses = {'draft', 'proposed', 'validated', 'falsified', 'deprecated'}
+        if status not in valid_statuses:
+            raise ValueError(
+                f"Invalid status: {status}. "
+                f"Must be one of: {', '.join(sorted(valid_statuses))}"
+            )
+
+        if pc_id not in self.nodes:
+            raise KeyError(f"PC {pc_id} not found in TEG")
+
+        self.nodes[pc_id].status = status
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert TEG to dictionary for serialization.

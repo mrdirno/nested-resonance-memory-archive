@@ -29,16 +29,51 @@ class TEGAdapter:
     - Dependency tracking between PCs
     - Compositional validation
     - Invalidation propagation
+    - Automatic TEG updates on PC validation (Gate 2.4)
+
+    Singleton pattern ensures persistent TEG state across TSF function calls.
     """
 
-    def __init__(self, teg: TemporalEmbeddingGraph):
+    _instance: 'TEGAdapter' = None
+    _teg_path: Path = Path("principle_cards/teg_state.json")
+    _auto_update_enabled: bool = True
+
+    def __new__(cls, teg: TemporalEmbeddingGraph = None):
+        """Singleton pattern - only one TEG adapter per session."""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
+
+    def __init__(self, teg: TemporalEmbeddingGraph = None):
         """
         Initialize adapter with TEG instance.
 
         Args:
-            teg: TemporalEmbeddingGraph instance to populate
+            teg: TemporalEmbeddingGraph instance (optional, loads from file if None)
         """
-        self.teg = teg
+        if self._initialized:
+            return
+
+        if teg is not None:
+            self.teg = teg
+        else:
+            # Load from file or create new
+            self.teg = self._load_or_create_teg()
+
+        self._initialized = True
+
+    def _load_or_create_teg(self) -> TemporalEmbeddingGraph:
+        """Load TEG from file or create new if doesn't exist."""
+        if self._teg_path.exists():
+            try:
+                return TemporalEmbeddingGraph.load(self._teg_path)
+            except Exception as e:
+                print(f"Warning: Failed to load TEG from {self._teg_path}: {e}")
+                print("Creating new TEG")
+                return TemporalEmbeddingGraph()
+        else:
+            return TemporalEmbeddingGraph()
 
     def load_pc_specification(
         self,
@@ -209,6 +244,143 @@ class TEGAdapter:
             invalidated.append(dep_id)
 
         return invalidated
+
+    def on_pattern_discovered(self, pattern):
+        """
+        Callback invoked when TSF discover() finds a pattern.
+
+        Automatically updates TEG status if pattern is a PC validation.
+        Implements Gate 2.4 (TEG Integration).
+
+        Args:
+            pattern: DiscoveredPattern from discover()
+        """
+        if not self._auto_update_enabled:
+            return
+
+        # Check if pattern is from a Principle Card validation
+        if not hasattr(pattern, 'pc_id') or pattern.pc_id is None:
+            return  # Not a PC validation
+
+        pc_id = pattern.pc_id
+
+        # Check if PC exists in TEG
+        if not self.teg.has_node(pc_id):
+            # PC not in TEG yet - add it
+            self._add_pc_to_teg(pattern)
+
+        # Update status based on validation result
+        validation_passed = pattern.features.get('validation_passed', False)
+
+        if validation_passed:
+            # Validation passed → update to 'validated'
+            self.teg.update_status(pc_id, 'validated')
+        else:
+            # Validation failed → revert to 'draft'
+            current_status = self.teg.get_status(pc_id)
+            if current_status == 'proposed':
+                self.teg.update_status(pc_id, 'draft')
+
+        # Save updated TEG
+        self._save_teg()
+
+    def _add_pc_to_teg(self, pattern):
+        """
+        Add PC to TEG based on DiscoveredPattern metadata.
+
+        Args:
+            pattern: DiscoveredPattern with PC metadata
+        """
+        from datetime import datetime
+
+        # Extract metadata from pattern
+        pc_id = pattern.pc_id
+        version = pattern.features.get('version', '1.0.0')
+        title = pattern.features.get('title', f"{pc_id} (Auto-Added)")
+        author = pattern.features.get('author', 'Unknown')
+        domain = pattern.features.get('domain', 'unknown')
+        dependencies = pattern.features.get('dependencies', [])
+        enables = pattern.features.get('enables', [])
+
+        # Create PCNode
+        node = PCNode(
+            pc_id=pc_id,
+            version=version,
+            title=title,
+            author=author,
+            created=datetime.now().isoformat(),
+            status='draft',  # Start as draft
+            domain=domain,
+            dependencies=dependencies,
+            enables=enables,
+            metadata={'auto_added': True, 'pattern_id': pattern.pattern_id}
+        )
+
+        # Add to TEG
+        self.teg.add_node(node)
+
+    def _save_teg(self):
+        """Persist TEG to disk."""
+        try:
+            # Ensure directory exists
+            self._teg_path.parent.mkdir(parents=True, exist_ok=True)
+
+            # Save TEG
+            self.teg.save(self._teg_path)
+        except Exception as e:
+            print(f"Warning: Failed to save TEG to {self._teg_path}: {e}")
+
+    def set_auto_update(self, enabled: bool):
+        """
+        Enable/disable automatic TEG updates.
+
+        Args:
+            enabled: True to enable auto-updates, False to disable
+        """
+        self._auto_update_enabled = enabled
+
+    def get_auto_update(self) -> bool:
+        """Check if auto-updates are enabled."""
+        return self._auto_update_enabled
+
+    def set_teg_path(self, path: Path):
+        """
+        Set custom TEG persistence path.
+
+        Args:
+            path: Path to TEG JSON file
+        """
+        self._teg_path = Path(path)
+
+    def reload_teg(self):
+        """Force reload TEG from disk."""
+        self.teg = self._load_or_create_teg()
+
+    def check_dependencies_validated(self, pc_id: str) -> tuple:
+        """
+        Check if all dependencies of a PC are validated.
+
+        Args:
+            pc_id: PC ID to check
+
+        Returns:
+            (all_validated, unvalidated_deps) tuple
+        """
+        if not self.teg.has_node(pc_id):
+            return (True, [])  # No dependencies if not in TEG
+
+        deps = self.teg.get_dependencies(pc_id)
+
+        unvalidated = []
+        for dep in deps:
+            if self.teg.has_node(dep):
+                status = self.teg.get_status(dep)
+                if status != 'validated':
+                    unvalidated.append(dep)
+            else:
+                unvalidated.append(dep)  # Dependency not in TEG
+
+        return (len(unvalidated) == 0, unvalidated)
 
     def export_teg_summary(self) -> Dict[str, Any]:
         """
