@@ -427,15 +427,19 @@ def run_substrate_experiment(
         cluster_events = composition_engine.detect_clusters(agents)
 
         # Register clusters for metrics tracking
-        for cluster in cluster_events:
+        for cluster_event in cluster_events:
+            # Get agents by ID from cluster event
+            cluster_agent_ids = cluster_event.agent_ids
+            cluster_agents = [a for a in agents if a.agent_id in cluster_agent_ids]
+
             # Create feature vector (simplified: phase averages)
-            if cluster:
+            if cluster_agents:
                 phase_vectors = [
                     np.array([agent.phase_state.pi_phase, agent.phase_state.e_phase, agent.phase_state.phi_phase])
-                    for agent in cluster
+                    for agent in cluster_agents
                 ]
                 feature_vector = np.mean(phase_vectors, axis=0)
-                metrics_collector.register_cluster(cycle_idx, cluster, feature_vector)
+                metrics_collector.register_cluster(cycle_idx, cluster_agents, feature_vector)
 
         # Progress reporting (every 1000 cycles)
         if (cycle_idx + 1) % 1000 == 0:
