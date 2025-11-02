@@ -42,8 +42,10 @@ def generate_synthetic_pc001_data():
 
     for _ in range(n_steps):
         # Logistic SDE: dN = r·N·(1 - N/K)·dt + σ·√N·dW
-        drift = r * N * (1 - N/K)
-        diffusion = sigma * np.sqrt(max(N, 0)) * np.random.normal(0, 0.1)
+        # Euler-Maruyama: N(t+dt) = N(t) + drift·dt + σ·√N·√dt·ξ (ξ ~ N(0,1))
+        dt = 1.0  # Time step
+        drift = r * N * (1 - N/K) * dt
+        diffusion = sigma * np.sqrt(max(N, 0)) * np.sqrt(dt) * np.random.normal(0, 1)
         N = max(0, N + drift + diffusion)
         population.append(N)
 
@@ -53,8 +55,8 @@ def generate_synthetic_pc001_data():
     std_pop = float(population_array.std(ddof=1))  # Sample std (Bessel's correction)
     cv_obs = std_pop / mean_pop if mean_pop > 0 else 0.0
 
-    # PC001 theoretical prediction: CV = σ / √(2r)
-    cv_pred = sigma / np.sqrt(2 * r)
+    # PC001 theoretical prediction: CV = σ / √(2rK)
+    cv_pred = sigma / np.sqrt(2 * r * K)
 
     # Create schema-compliant data
     data = {
@@ -145,15 +147,15 @@ def test_complete_workflow():
         )
 
         validation_passed = patterns.features.get('validation_passed', False)
-        relative_error = patterns.features.get('relative_error', 0.0)
+        cv_error_pct = patterns.features.get('cv_error_pct', 0.0)
 
         if validation_passed:
             print(f"✓ PC001 validation passed")
-            print(f"  Relative error: {relative_error*100:.2f}%")
+            print(f"  CV error: {cv_error_pct:.2f}%")
             print(f"  Pattern ID: {patterns.pattern_id}")
         else:
             print(f"✗ PC001 validation failed")
-            print(f"  Relative error: {relative_error*100:.2f}%")
+            print(f"  CV error: {cv_error_pct:.2f}%")
             return False
 
     except Exception as e:
