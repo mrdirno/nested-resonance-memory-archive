@@ -145,16 +145,14 @@ def _validate_schema(data: Dict[str, Any], schema: str, source: Path) -> None:
     Raises:
         SchemaValidationError: If schema validation fails
     """
-    # Check required top-level keys
-    required_keys = ["metadata", "timeseries", "statistics"]
-    missing_keys = [key for key in required_keys if key not in data]
-    if missing_keys:
+    # Check required top-level metadata (all schemas)
+    if "metadata" not in data:
         raise SchemaValidationError(
-            f"Missing required keys: {missing_keys}",
-            context={"source": str(source), "schema": schema, "missing": missing_keys}
+            "Missing required 'metadata' field",
+            context={"source": str(source), "schema": schema}
         )
 
-    # Schema-specific validation
+    # Schema-specific validation (includes structure checks)
     if schema == "pc001":
         _validate_pc001_schema(data, source)
     elif schema == "pc002":
@@ -205,20 +203,80 @@ def _validate_pc001_schema(data: Dict[str, Any], source: Path) -> None:
 
 
 def _validate_pc002_schema(data: Dict[str, Any], source: Path) -> None:
-    """Validate PC002 (Regime Detection) schema."""
-    # PC002 extends PC001, so validate PC001 first
-    _validate_pc001_schema(data, source)
+    """
+    Validate PC002 (Transcendental Substrate Comparative Validation) schema.
 
-    # Check PC002-specific metadata
+    PC002 requires comparative experimental data:
+    - metadata: experiment_id, pc_id, n_transcendental, n_prng
+    - transcendental_results: Arrays for 4 metrics from TS experiments
+    - prng_results: Arrays for 4 metrics from PS experiments (or None for design-phase)
+    - metrics: List of metrics to compare
+    """
+    # Check required metadata fields
     metadata = data.get("metadata", {})
-    if "regime_type" not in metadata:
+    required_metadata = ["experiment_id", "pc_id"]
+    missing = [key for key in required_metadata if key not in metadata]
+    if missing:
         raise SchemaValidationError(
-            "PC002 schema requires 'regime_type' in metadata",
-            context={"source": str(source), "metadata": list(metadata.keys())}
+            f"PC002 schema missing metadata fields: {missing}",
+            context={"source": str(source), "missing": missing}
         )
 
-    # Check PC002-specific timeseries (optional regime classifications)
-    # Not strictly required, as regime detection may be performed later
+    # Verify pc_id is PC002
+    if metadata.get("pc_id") != "PC002":
+        raise SchemaValidationError(
+            f"PC002 schema requires pc_id='PC002', got '{metadata.get('pc_id')}'",
+            context={"source": str(source), "pc_id": metadata.get("pc_id")}
+        )
+
+    # Check required top-level keys for PC002 (different from PC001)
+    # PC002 uses comparative_results structure, not timeseries/statistics
+    required_keys = ["transcendental_results", "metrics"]
+    missing_keys = [key for key in required_keys if key not in data]
+    if missing_keys:
+        raise SchemaValidationError(
+            f"PC002 schema missing required fields: {missing_keys}",
+            context={"source": str(source), "missing": missing_keys}
+        )
+
+    # Validate transcendental_results contains metric arrays
+    ts_results = data.get("transcendental_results", {})
+    required_metrics = ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity_bootstrap"]
+    for metric in required_metrics:
+        if metric not in ts_results:
+            raise SchemaValidationError(
+                f"PC002 transcendental_results missing metric: {metric}",
+                context={"source": str(source), "metric": metric, "available": list(ts_results.keys())}
+            )
+        # Verify it's an array (list)
+        if not isinstance(ts_results[metric], list):
+            raise SchemaValidationError(
+                f"PC002 metric '{metric}' must be array, got {type(ts_results[metric]).__name__}",
+                context={"source": str(source), "metric": metric, "type": type(ts_results[metric]).__name__}
+            )
+
+    # Validate prng_results if present (optional for design-phase)
+    if "prng_results" in data and data["prng_results"] is not None:
+        ps_results = data["prng_results"]
+        for metric in required_metrics:
+            if metric not in ps_results:
+                raise SchemaValidationError(
+                    f"PC002 prng_results missing metric: {metric}",
+                    context={"source": str(source), "metric": metric, "available": list(ps_results.keys())}
+                )
+            if not isinstance(ps_results[metric], list):
+                raise SchemaValidationError(
+                    f"PC002 metric '{metric}' must be array, got {type(ps_results[metric]).__name__}",
+                    context={"source": str(source), "metric": metric, "type": type(ps_results[metric]).__name__}
+                )
+
+    # Validate metrics field is a list
+    metrics = data.get("metrics", [])
+    if not isinstance(metrics, list):
+        raise SchemaValidationError(
+            f"PC002 'metrics' must be array, got {type(metrics).__name__}",
+            context={"source": str(source), "type": type(metrics).__name__}
+        )
 
 
 def _validate_financial_market_schema(data: Dict[str, Any], source: Path) -> None:
@@ -567,7 +625,7 @@ def _prepare_pc_validation_data(
             return {
                 "transcendental_results": data.validation.get("transcendental_results"),
                 "prng_results": None,  # Not available - triggers design-phase validation
-                "metrics": ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity"]
+                "metrics": ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity_bootstrap"]
             }
 
     else:
