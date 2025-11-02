@@ -12,6 +12,7 @@
 # Core Dependencies (PINNED for reproducibility)
 numpy==2.3.1              # Numerical computing, array operations
 psutil==7.0.0             # System metrics (CPU, memory, processes)
+networkx==3.4.2           # Graph/network analysis (fractal module resonance detection)
 
 # Visualization
 matplotlib==3.10.3        # Publication-quality figures
