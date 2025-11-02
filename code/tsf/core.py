@@ -474,6 +474,15 @@ def _discover_principle_card(
             parameters=parameters
         )
 
+        # Gate 2.4: Auto-update TEG when PC validates
+        try:
+            from code.tsf.teg_adapter import TEGAdapter
+            adapter = TEGAdapter()  # Singleton instance
+            adapter.on_pattern_discovered(pattern)
+        except Exception as teg_error:
+            # TEG update failure is non-fatal - log and continue
+            print(f"Warning: TEG auto-update failed: {teg_error}")
+
         return pattern
 
     except Exception as e:
