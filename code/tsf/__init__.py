@@ -85,6 +85,12 @@ from code.tsf.pc001_nrm_population_dynamics import (
     load_pc001,
 )
 
+# PC002 implementation (Cycle 881+)
+from code.tsf.pc002_transcendental_substrate import (
+    PC002_Transcendental_Substrate,
+    load_pc002,
+)
+
 __version__ = "1.0.0-dev"  # Upgraded from 0.2.0 with PrincipleCard system
 __author__ = "Aldrin Payopay <aldrin.gdf@gmail.com>"
 
@@ -132,4 +138,6 @@ __all__ = [
     # Concrete Principle Cards (NEW in v1.0.0)
     "PC001_NRM_Population_Dynamics",
     "load_pc001",
+    "PC002_Transcendental_Substrate",
+    "load_pc002",
 ]
