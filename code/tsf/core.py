@@ -451,11 +451,8 @@ def _discover_principle_card(
             from code.tsf.pc001_nrm_population_dynamics import load_pc001
             pc = load_pc001()
         elif pc_id == "PC002":
-            # Future: PC002 implementation
-            raise DiscoveryError(
-                "PC002 not yet implemented",
-                context={"pc_id": pc_id, "available": ["PC001"]}
-            )
+            from code.tsf.pc002_transcendental_substrate import load_pc002
+            pc = load_pc002()
         else:
             raise DiscoveryError(
                 f"Unknown Principle Card: {pc_id}",
@@ -547,6 +544,22 @@ def _prepare_pc_validation_data(
             "overhead_predicted": float(overhead_predicted),
             "artifact_hash": str(artifact_hash)
         }
+
+    elif pc_id == "PC002":
+        # PC002 requires comparative data: transcendental_results vs prng_results
+        # This is typically not in ObservationalData - need explicit experiment results
+
+        # Check if comparative data provided
+        if "comparative_results" in data.validation:
+            # User provided comparative experiment results
+            return data.validation["comparative_results"]
+        else:
+            # No comparative data - return design-phase placeholder
+            return {
+                "transcendental_results": data.validation.get("transcendental_results"),
+                "prng_results": None,  # Not available - triggers design-phase validation
+                "metrics": ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity"]
+            }
 
     else:
         raise DiscoveryError(
