@@ -46,7 +46,7 @@ C171_SPAWNS_PER_AGENT = 8.38
 
 def load_incremental_results():
     """Load C176 incremental validation results."""
-    results_file = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/cycle176_v6_incremental_validation.json")
+    results_file = Path("/Volumes/dual/DUALITY-ZERO-V2/code/experiments/results/cycle176_v6_incremental_validation.json")
 
     if not results_file.exists():
         print(f"❌ Results file not found: {results_file}")
@@ -92,7 +92,7 @@ def analyze_revised_hypotheses(results):
 
     # Extract metrics
     spawn_success_rates = [exp['spawn_success_rate'] for exp in experiments]
-    final_populations = [exp['final_population'] for exp in experiments]
+    final_populations = [exp['final_agent_count'] for exp in experiments]
     spawn_attempts = [exp['spawn_attempts'] for exp in experiments]
 
     # Calculate spawns/agent for each experiment
@@ -100,7 +100,7 @@ def analyze_revised_hypotheses(results):
     for exp in experiments:
         spa = calculate_spawns_per_agent_estimate(
             exp['spawn_attempts'],
-            exp['final_population']
+            exp['final_agent_count']
         )
         spawns_per_agent.append(spa)
 
@@ -499,7 +499,7 @@ def main():
         'decision': decision,
     }
 
-    summary_file = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c176_incremental_analysis_summary.json")
+    summary_file = Path("/Volumes/dual/DUALITY-ZERO-V2/code/experiments/results/c176_incremental_analysis_summary.json")
     with open(summary_file, 'w') as f:
         json.dump(analysis_summary, f, indent=2)
 
