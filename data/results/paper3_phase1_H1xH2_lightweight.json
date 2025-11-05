@@ -1,0 +1,26 @@
+{
+  "H1xH2": {
+    "pair_id": "H1xH2",
+    "metric": "mean_population",
+    "conditions": {
+      "OFF-OFF": 13.974,
+      "ON-OFF": 99.69066666666667,
+      "OFF-ON": 99.72066666666667,
+      "ON-ON": 99.75333333333333
+    },
+    "fold_changes": {
+      "mechanism_a_alone": 7.134010781928343,
+      "mechanism_b_alone": 7.136157626067459,
+      "combined_observed": 7.138495300796717,
+      "combined_predicted": 13.270168407995802
+    },
+    "synergy": {
+      "predicted_combined": 185.43733333333336,
+      "observed_combined": 99.75333333333333,
+      "synergy_absolute": -85.68400000000003,
+      "synergy_percent": -613.1673107199086
+    },
+    "classification": "ANTAGONISTIC",
+    "interpretation": "Mechanisms interfere (worse than additive)"
+  }
+}
