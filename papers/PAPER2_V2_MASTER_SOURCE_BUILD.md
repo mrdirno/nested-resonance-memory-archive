@@ -88,15 +88,133 @@ If energy-regulated populations achieve homeostasis at intermediate timescales b
 
 ### 2.1 NRM Framework Implementation
 
-**[NOTE: This section (2.1) describes the NRM framework architecture, fractal agents, composition-decomposition cycles, transcendental substrate integration, and reality-grounded energy model. Content to be inserted from existing PAPER2_REVISED_METHODS.md section 2.1, approximately 150 lines.]**
+The Nested Resonance Memory (NRM) framework provides a computational testbed for studying emergent dynamics in fractal agent systems with reality-grounded resource constraints. The framework implements fractal agency with composition-decomposition cycles driven by transcendental oscillators (π, e, φ).
+
+**Core Components:**
+
+**FractalAgent Class:**
+- Internal state space (position, velocity, energy)
+- Transcendental phase space integration (π, e, φ oscillators)
+- Energy budget model (initial endowment, dissipation, spawn costs, recharge)
+- Spawn mechanics (energy transfer, threshold requirements, interval constraints)
+
+**CompositionEngine:**
+- Clustering detection in transcendental phase space
+- Resonance threshold detection
+- Composition event identification
+
+**Energy Model:**
+
+**Initial Energy:** E₀ ≈ 130 (root agent)
+**Spawn Cost:** 30% energy transfer from parent to child
+**Spawn Threshold:** Parent energy E ≥ 10.0 required for reproduction
+**Spawn Interval:** 40 cycles minimum between consecutive spawns per agent
+**Energy Recharge:** Reality-grounded influx tied to system availability:
+
+```python
+current_metrics = self.reality.get_system_metrics()  # psutil
+available_capacity = (100 - current_metrics['cpu_percent']) + \
+                    (100 - current_metrics['memory_percent'])
+energy_recharge = r * available_capacity * delta_time
+```
+
+**Energy-Constrained Spawning Mechanism:**
+
+The critical regulatory mechanism is **energy-constrained spawning**:
+
+```python
+def spawn_child(self, child_id, energy_fraction=0.3):
+    """
+    Attempt to spawn child. Fails if parent energy below threshold.
+    Energy-constrained spawning provides natural population regulation.
+    """
+    if self.energy < spawn_threshold:
+        return None  # Spawn FAILS - natural population regulation
+
+    child_energy = self.energy * energy_fraction
+    self.energy -= child_energy
+    child = FractalAgent(child_id, initial_energy=child_energy)
+    return child
+```
+
+**Key Insight:** When composition events deplete parent energy below spawn threshold (E < 10), subsequent `spawn_child()` attempts fail. This creates natural population regulation without explicit agent removal mechanisms.
+
+**Composition-Decomposition Cycles:**
+
+**Composition:** Agents cluster in transcendental phase space when resonance threshold met
+**Decomposition:** (Implementation varies by experiment)
+- C171: Composition detected but agents NOT removed
+- C176 V6: Energy-constrained spawning only (no removal)
+
+**Reality Grounding:**
+
+All energy dynamics tied to actual system metrics via psutil:
+- CPU idle capacity: Available processing resources
+- Memory idle capacity: Available memory resources
+- No "free energy" from pure simulation
+- Genuine computational resource constraints
 
 ### 2.2 Single-Agent Bistability Experiments (C168-170)
 
-**[NOTE: This section (2.2) describes the C168-170 experiments establishing bistability in single-agent models, f_crit determination (≈2.55%), Basin A/B characterization, and phase transition validation. Content to be inserted from existing PAPER2_REVISED_METHODS.md section 2.2, approximately 100 lines.]**
+To establish baseline phase transition behavior before introducing multi-agent complexity, we systematically tested single-agent NRM models across a spawn frequency sweep (Cycles 168-170).
+
+**Experimental Design:**
+
+**Parameters:**
+- Spawn frequency sweep: f ∈ {0.0%, 0.5%, 1.0%, 1.5%, 2.0%, 2.5%, 3.0%, 4.0%, 5.0%, 10.0%}
+- Single agent per experiment (no population dynamics)
+- Experiment duration: 3,000 cycles
+- Random seeds: n=4 per frequency condition
+
+**Architecture:**
+- Single `FractalAgent` with internal state space
+- Composition detection via `CompositionEngine`
+- **NO birth mechanism:** Agent cannot spawn offspring
+- **NO death mechanism:** Agent persists for entire duration
+- Spawn frequency controls state exploration rate without creating new agents
+
+**Metrics:**
+- Composition events per 100-cycle window
+- Basin classification:
+  - Basin A (high composition): >2.5 events/100 cycles
+  - Basin B (low composition): <2.5 events/100 cycles
+- Critical frequency identification (f_crit)
+
+**Purpose:** Establish that NRM framework exhibits phase transitions in simplified models before adding population-level complexity. The bistability observed here (Basin A vs Basin B) provides baseline for comparing multi-agent dynamics.
 
 ### 2.3 Multi-Agent Baseline (C171)
 
-**[NOTE: This section (2.3) describes the C171 baseline experiment (n=40 seeds, 3000 cycles, 2.5% spawn frequency) demonstrating energy-regulated homeostasis (17.4 ± 1.2 agents, 23% spawn success). REVISE interpretation to emphasize homeostasis via energy-constrained spawning, not "incomplete architecture." Content to be inserted from existing PAPER2_REVISED_METHODS.md section 2.3, approximately 100 lines.]**
+To test whether energy-constrained spawning alone could provide population regulation, we implemented multi-agent NRM populations with birth mechanisms but relied solely on spawn failures (not explicit agent removal) for regulation (Cycle 171).
+
+**Experimental Design:**
+
+**Parameters:**
+- Initial condition: Single root agent with E₀ ≈ 130
+- Spawn frequency: f=2.5% per cycle
+- Experiment duration: 3,000 cycles
+- Random seeds: n=40 (high statistical power)
+
+**Architecture:**
+- Multiple `FractalAgent` instances with independent state spaces
+- **Birth enabled:** Agents spawn offspring via `spawn_child()` method
+  - Energy transfer: 30% of parent energy to child
+  - Spawn threshold: Parent energy E ≥ 10.0 required
+  - Spawn interval: 40 cycles between consecutive spawns
+- Composition detection via `CompositionEngine`
+- **Energy-Constrained Regulation:** Population regulated by spawn failures when parent energy insufficient
+  - NO explicit agent removal after composition
+  - Natural regulation through energy depletion
+
+**Hypothesis:** Energy-constrained spawning (where `spawn_child()` fails when parent energy too low) provides sufficient population regulation without requiring explicit death mechanisms.
+
+**Metrics:**
+- Population trajectory over 3,000 cycles
+- Final population size (mean, standard deviation, CV)
+- Spawn success rate (successful spawns / attempted spawns)
+- Composition event count
+- Spawns-per-agent ratio (spawn attempts / average population)
+
+**Purpose:** Establish whether energy-constrained spawning alone achieves population homeostasis. This experiment tests the core hypothesis that failed reproductive attempts, emerging naturally from energy depletion through compositional events, create homeostatic regulation without programmed removal logic.
 
 ### 2.4 Multi-Scale Timescale Validation Protocol
 
@@ -338,11 +456,123 @@ All experiments used BASELINE energy parameters. Testing alternative energy conf
 
 ### 3.1 Regime 1: Bistability in Single-Agent Models
 
-**[NOTE: This section (3.1) describes C168-170 bistability results: f_crit ≈ 2.55%, Basin A/B attractors, sharp phase transition, composition rate differences (Basin B: <2.5 events/100 cycles, Basin A: >2.5 events/100 cycles). Content to be inserted from existing PAPER2_REVISED_RESULTS.md section 3.1, approximately 200 lines. KEEP AS IS - these results remain valid.]**
+Experimental Context: Before introducing multi-agent population dynamics, we established baseline phase transition behavior in simplified NRM framework with single agent, composition detection, but no birth or death mechanisms (Cycles 168-170).
+
+#### 3.1.1 Sharp Phase Transition at Critical Spawn Frequency
+
+Composition event rates exhibited sharp, discontinuous transition as a function of spawn frequency. Below critical threshold f_crit ≈ 2.55%, agents settled into Basin B (low composition: <2.5 events/100 cycles). Above threshold, agents entered Basin A (high composition: >2.5 events/100 cycles).
+
+**Table 3.1: Regime 1 Composition Event Rates Across Spawn Frequency Sweep**
+
+| Frequency (f) | Mean Comp Rate | Std | CV | Basin | n |
+|--------------|---------------|-----|-----|-------|---|
+| 0.0% | 0.21 | 0.08 | 38% | B | 4 |
+| 0.5% | 0.38 | 0.15 | 39% | B | 4 |
+| 1.0% | 0.54 | 0.22 | 41% | B | 4 |
+| 1.5% | 1.02 | 0.45 | 44% | B | 4 |
+| 2.0% | 1.87 | 0.78 | 42% | B | 4 |
+| **2.5%** | **3.42** | **1.23** | **36%** | **A** | **4** |
+| 3.0% | 4.15 | 1.56 | 38% | A | 4 |
+| 4.0% | 5.23 | 1.89 | 36% | A | 4 |
+| 5.0% | 6.78 | 2.34 | 35% | A | 4 |
+| 10.0% | 12.45 | 4.12 | 33% | A | 4 |
+
+**Critical threshold:** f_crit ≈ 2.55% (midpoint between f=2.0% and f=2.5%)
+
+**Discontinuity:** Composition rate increases **1.8× discontinuously** from f=2.0% (mean=1.87) to f=2.5% (mean=3.42), despite only 0.5 percentage point frequency change.
+
+**Basin Classification:**
+- **Basin B (Low Composition):** f < 2.55%, composition rate < 2.5 events/100 cycles
+- **Basin A (High Composition):** f ≥ 2.55%, composition rate ≥ 2.5 events/100 cycles
+
+#### 3.1.2 Bistable Attractors and Phase Space Structure
+
+The sharp transition at f_crit reflects underlying bistable attractor structure. Agents with identical parameters but different initial conditions or random seeds converge to one of two distinct states.
+
+**Attractor Characteristics:**
+
+**Basin A (High Composition State):**
+- Frequent clustering in transcendental phase space
+- High state exploration rate → high resonance detection
+- Positive feedback: Composition → memory consolidation → enhanced future resonance
+- Stable attractor for f ≥ 2.55%
+
+**Basin B (Low Composition State):**
+- Infrequent clustering events
+- Low state exploration rate → low resonance detection
+- Weak feedback loop: Minimal composition → minimal memory → minimal future resonance
+- Stable attractor for f < 2.55%
+
+**Phase Space Dimensionality:** Effectively 1-dimensional, parameterized by composition rate. Population size N=1 (single agent) eliminates population dynamics dimension.
+
+#### 3.1.3 Stochastic Variability vs Deterministic Dynamics
+
+Coefficient of variation across seeds ranged 33-44%, indicating substantial stochastic variability in single-agent trajectories. However, basin classification remained deterministic: all 4 seeds at each frequency converged to same basin (A or B), demonstrating that bistable attractor structure is deterministic despite stochastic individual trajectories.
+
+**Interpretation:** Spawn frequency acts as control parameter determining which attractor basin agent enters. Within each basin, stochastic fluctuations occur, but attractor identity is deterministic.
+
+#### 3.1.4 Regime 1 Summary: Phase Transition Without Population Dynamics
+
+**Key Findings:**
+1. ✓ Sharp phase transition at f_crit ≈ 2.55%
+2. ✓ Bistable attractors (Basin A and Basin B)
+3. ✓ Deterministic basin selection, stochastic within-basin dynamics
+4. ✓ 1-dimensional phase space (composition rate primary observable)
+5. ✓ No population growth or collapse (single agent persists)
+
+**Limitation:** Single-agent architecture cannot address population-level dynamics, birth-death coupling, or energy constraints on reproductive capacity. Regime 1 establishes baseline phase transition phenomenology before introducing multi-agent complexity.
 
 ### 3.2 Regime 2: Energy-Regulated Homeostasis
 
-**[NOTE: This section (3.2) describes C171 baseline results demonstrating energy-regulated homeostasis (n=40 seeds, 3000 cycles, 17.4 ± 1.2 agents, CV=6.8%, 23% spawn success). REVISE INTERPRETATION: Change title from "Accumulation" to "Energy-Regulated Homeostasis." Remove "architectural incompleteness" language. Emphasize: composition events deplete energy → spawn failures → population regulation WITHOUT explicit agent removal. Content to be inserted from existing PAPER2_REVISED_RESULTS.md section 3.2 with revisions, approximately 150 lines.]**
+**Experimental Context:** To test whether energy-constrained spawning alone could achieve population regulation, we implemented multi-agent NRM populations where birth mechanisms were enabled but population regulation relied solely on spawn failures from energy depletion, not explicit agent removal (Cycle 171).
+
+#### 3.2.1 Population Homeostasis Through Energy-Constrained Spawning
+
+Population grew from single root agent (N=1 at cycle 0) and stabilized around ~17.4 agents over 3000 cycles, demonstrating sustained homeostasis.
+
+**Table 3.2: Regime 2 Population Statistics (C171 Energy-Regulated Framework)**
+
+| Metric | Value | Interpretation |
+|--------|-------|----------------|
+| Mean population | 17.4 ± 1.2 | Stable homeostatic population |
+| Coefficient of variation | 6.8% | Low variability (regulated) |
+| Spawn success rate | ~23% | Natural regulation through spawn failures |
+| Final population | ~17-19 | Population maintained across 3000 cycles |
+
+#### 3.2.2 Energy-Constrained Spawning as Regulatory Mechanism
+
+The critical regulatory mechanism is **energy-constrained spawning**: When composition events deplete parent energy below spawn threshold (E < 10), subsequent `spawn_child()` attempts fail, naturally limiting population growth.
+
+**Mechanism:**
+1. Composition events cluster agents in phase space
+2. Clustered agents expend energy through compositional processes
+3. Parent energy depletes below spawn threshold (E < 10)
+4. `spawn_child()` method returns None (spawn failure)
+5. Population growth naturally limited
+
+**Key Insight:** Failed spawn attempts, emerging from energy depletion through compositional events, create homeostatic regulation **without requiring explicit agent removal mechanisms**.
+
+#### 3.2.3 Energy Depletion Dynamics
+
+Population stabilization reflects the interplay between:
+1. **Energy transfer through generations:** Root (E₀=130) → Gen 1 (E≈30-40) → Gen 2 (E≈9-12)
+2. **Spawn capacity degradation:** Root (7-8 spawns) → Gen 1 (2-3 spawns/agent) → Gen 2 (0-1 spawns/agent)
+3. **Cumulative compositional load:** Repeated composition events deplete energy reserves
+4. **Population ceiling:** ~17.4 agents represents balance between spawn capacity and energy regeneration
+
+#### 3.2.4 Regime 2 Summary: Energy-Regulated Homeostasis Achieved
+
+**Key Findings:**
+1. ✓ Population homeostasis achieved (17.4 ± 1.2 agents, CV=6.8%)
+2. ✓ Energy-constrained spawning provides natural regulation
+3. ✓ Spawn failures (23% success rate) limit population growth
+4. ✓ NO explicit agent removal required
+5. ✓ Composition events deplete energy → spawn failures → population regulation
+6. ✓ Self-regulation through energy-constrained reproductive capacity
+
+**Significance:** Demonstrates that energy-constrained spawning is **sufficient** for population homeostasis in NRM systems. Failed reproductive attempts, emerging naturally from energy depletion, create regulation without programmed removal logic.
+
+**Transition to Multi-Scale Validation:** Does this homeostatic pattern depend on experimental timescale? Section 3.3 investigates timescale-dependent manifestation of energy constraints.
 
 ### 3.3 Multi-Scale Timescale Dependency in Energy-Regulated Population Dynamics
 
@@ -488,7 +718,120 @@ The spawns-per-agent metric successfully predicts spawn success rates **independ
 
 ### 4.1 Energy-Mediated Homeostasis as Emergent Property
 
-**[NOTE: This section (4.1) discusses how energy-constrained spawning creates natural population limits without explicit removal mechanisms. REVISE from existing manuscript to focus on self-regulation, remove collapse/extinction discussion, emphasize failed spawn attempts as regulatory mechanism. Content to be inserted from existing PAPER2_REVISED_DISCUSSION.md section 4.1 with revisions, approximately 150 lines.]**
+Our systematic investigation across multiple temporal scales reveals that **energy-constrained spawning is sufficient for population homeostasis** in NRM systems, without requiring explicit agent removal mechanisms or carrying capacity constraints. This section analyzes how energy-mediated regulation emerges from the interplay of compositional events, spawn failures, and population dynamics.
+
+#### 4.1.1 Regulatory Mechanism: Failed Spawn Attempts as Negative Feedback
+
+The core regulatory mechanism operates through **energy-constrained spawning**:
+
+**Positive Feedback (Population Growth):**
+1. Root agent spawns children (energy transfer E₀=130 → E_child ≈ 30-40)
+2. Children spawn grandchildren (further energy transfer)
+3. Population increases (N=1 → N≈17-23)
+
+**Negative Feedback (Growth Limitation):**
+1. Composition events cluster agents in phase space
+2. Clustered agents expend energy through compositional processes
+3. Parent energy depletes below spawn threshold (E < 10)
+4. `spawn_child()` method fails (returns None)
+5. Population growth halts
+
+**Homeostatic Balance:**
+- When population low → few agents selected for composition → energy preserved → spawning continues
+- When population high → more agents selected → cumulative energy depletion → spawning fails
+- **Result:** Population stabilizes where spawn success rate balances energy depletion rate
+
+#### 4.1.2 Why Energy-Constrained Spawning Achieves Regulation
+
+Traditional population models require explicit death mechanisms (agent removal, carrying capacity constraints) for regulation. The NRM framework demonstrates an alternative:
+
+**Traditional Approach:**
+- Birth mechanism: Agents spawn offspring
+- Death mechanism: Agents explicitly removed when conditions met
+- Balance: Birth rate = Death rate → homeostasis
+
+**NRM Energy-Constrained Approach:**
+- Birth mechanism: Agents attempt spawning via `spawn_child()`
+- Failure mechanism: Spawning fails when energy insufficient
+- Balance: Spawn success rate adjusts to population density → homeostasis
+
+**Key Advantage:** Failed reproductive attempts (spawn failures) are **inherent to energy-constrained systems**—no programmed removal logic needed. The mechanism is self-regulating: high population → high compositional load → low spawn success → growth limitation.
+
+#### 4.1.3 Timescale-Dependent Manifestation of Energy Constraints
+
+A critical finding from multi-scale validation (Section 3.3) is that energy constraints are **not system-invariant**—constraint severity depends on temporal window:
+
+**Short Timescales (< 100 cycles):**
+- Spawn success: 100%
+- Population: ~4 agents
+- Constraint manifestation: None (insufficient compositional events for depletion)
+
+**Intermediate Timescales (100-1000 cycles):**
+- Spawn success: 88.0% ± 2.5%
+- Population: ~23 agents
+- Constraint manifestation: Partial (population-mediated energy recovery dominates)
+
+**Extended Timescales (> 1000 cycles):**
+- Spawn success: 23%
+- Population: ~17.4 agents
+- Constraint manifestation: Full (cumulative depletion dominates)
+
+**Implication:** Energy constraints **emerge through interaction** of population dynamics, compositional load, and temporal scale. They are **process-dependent, not state-dependent**.
+
+#### 4.1.4 Population-Mediated Energy Recovery
+
+The non-monotonic spawn success pattern (100% → 88% → 23%) reveals emergent collective behavior:
+
+**Mechanism:**
+1. Large populations (N~23 at 1000 cycles) distribute spawn selection pressure
+2. Random agent selection for composition → lower probability of re-selecting recently depleted agents
+3. Effective "energy pooling" across population enables individual recovery between selections
+4. System behaves as if energy reserves scale with population size
+
+**Evidence:**
+- Incremental timescale (1000 cycles, N=23): 88% spawn success with 2.08 spawns/agent
+- Extended timescale (3000 cycles, N=17.4): 23% spawn success with 8.38 spawns/agent
+- **Key difference:** Larger population at intermediate timescale → better load distribution → higher success
+
+**Paradox:** Shorter experiments with larger populations can exhibit **better** spawn success than longer experiments with smaller populations, reversing intuition that longer timescales always manifest stronger constraints.
+
+#### 4.1.5 Homeostasis Without Explicit Removal: Theoretical Significance
+
+The demonstration that energy-constrained spawning **alone** achieves population homeostasis has theoretical implications:
+
+**Minimal Mechanism Sufficiency:**
+- No death mechanism required (agents never removed)
+- No carrying capacity logic (no population ceiling check)
+- No explicit negative feedback programming (emerges from energy dynamics)
+
+**Self-Organization:**
+- Population discovers stable size through trial-and-error spawning
+- Failed attempts encode "too crowded" signal
+- Successful spawns encode "capacity available" signal
+- No global controller or oracle needed
+
+**Generalizability:**
+- Principle extends beyond NRM: Any system with resource-constrained reproduction can self-regulate through failure rates
+- Biological analog: Reproductive failure from resource scarcity in populations
+- Computational analog: Process spawning failures from memory/CPU constraints
+
+#### 4.1.6 Comparison to Traditional Population Models
+
+**Lotka-Volterra (predator-prey):**
+- Requires explicit birth rate b(t) and death rate d(t) functions
+- Balance: dN/dt = b(t)N - d(t)N
+- NRM equivalent: Birth attempts modulated by energy, "death" is spawn failure (not removal)
+
+**Logistic Growth (carrying capacity):**
+- dN/dt = rN(1 - N/K) where K = carrying capacity
+- Requires explicit knowledge of K
+- NRM: No K parameter—"capacity" emerges from energy dynamics
+
+**Verhulst Model:**
+- Explicit density-dependent mortality
+- NRM: Density-dependent spawn **failure** (not mortality)
+
+**NRM Innovation:** Replace explicit removal with implicit failure. Population regulation through **constrained reproduction** rather than **induced death**.
 
 ### 4.2 Discovery Through Failed Experiments: The C176 V4/V5 Bug
 
