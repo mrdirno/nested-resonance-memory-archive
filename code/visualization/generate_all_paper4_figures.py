@@ -8,10 +8,10 @@ Integrates individual figure generators into unified publication pipeline.
 Figures Generated:
 - Figure 1: Hierarchical Energy Regulation (C186)
 - Figure 2: Network Structure Effects (C187)
-- Figure 3: Memory Effects (C188) [placeholder]
-- Figure 4: Burst Clustering (C189) [placeholder]
-- Figure 5: Composite Validation Scorecard
-- Figure 6: Runtime Variance Analysis
+- Figure 3: Memory Effects (C188)
+- Figure 4: Burst Clustering (C189)
+- Figure 5: Composite Validation Scorecard (C186-C189)
+- Figure 6: Runtime Variance Analysis (C186-C189)
 
 Supplementary Figures:
 - S1: Parameter Sensitivity Analysis
@@ -24,7 +24,7 @@ Resolution: 300 DPI (publication quality)
 
 Author: Aldrin Payopay <aldrin.gdf@gmail.com>
 Date: 2025-11-05
-Cycle: 1024
+Cycle: 1027 (Updated)
 License: GPL-3.0
 
 Co-Authored-By: Claude <noreply@anthropic.com>
@@ -99,35 +99,79 @@ def generate_figure2() -> bool:
 
 
 def generate_figure3() -> bool:
-    """Generate Figure 3: Memory Effects [PLACEHOLDER]."""
-    print("\n[3/6] Figure 3: Memory Effects")
-    print("   ⏳ Generator not yet implemented")
-    print("   Will be created after C188 completion")
-    return False
+    """Generate Figure 3: Memory Effects."""
+    try:
+        from generate_paper4_fig3_memory_effects import generate_figure3
+
+        c188_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/cycle188_memory_effects_results.json")
+        output_path = Path("/Volumes/dual/DUALITY-ZERO-V2/data/figures/paper4_fig3_memory_effects.png")
+
+        print("\n[3/6] Generating Figure 3: Memory Effects...")
+        success = generate_figure3(c188_path, output_path, dpi=300)
+
+        return success
+
+    except Exception as e:
+        print(f"Error generating Figure 3: {e}")
+        return False
 
 
 def generate_figure4() -> bool:
-    """Generate Figure 4: Burst Clustering [PLACEHOLDER]."""
-    print("\n[4/6] Figure 4: Burst Clustering")
-    print("   ⏳ Generator not yet implemented")
-    print("   Will be created after C189 completion")
-    return False
+    """Generate Figure 4: Burst Clustering."""
+    try:
+        from generate_paper4_fig4_burst_clustering import generate_figure4
+
+        c189_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/cycle189_burst_clustering_results.json")
+        output_path = Path("/Volumes/dual/DUALITY-ZERO-V2/data/figures/paper4_fig4_burst_clustering.png")
+
+        print("\n[4/6] Generating Figure 4: Burst Clustering...")
+        success = generate_figure4(c189_path, output_path, dpi=300)
+
+        return success
+
+    except Exception as e:
+        print(f"Error generating Figure 4: {e}")
+        return False
 
 
 def generate_figure5() -> bool:
     """Generate Figure 5: Composite Validation Scorecard."""
-    print("\n[5/6] Figure 5: Composite Validation Scorecard")
-    print("   ⏳ Requires composite validation results")
-    print("   Will be generated after C186-C189 complete")
-    return False
+    try:
+        from generate_paper4_fig5_composite_scorecard import generate_figure5
+
+        scorecard_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/composite_validation_results.json")
+        output_path = Path("/Volumes/dual/DUALITY-ZERO-V2/data/figures/paper4_fig5_composite_scorecard.png")
+
+        print("\n[5/6] Generating Figure 5: Composite Validation Scorecard...")
+        success = generate_figure5(scorecard_path, output_path, dpi=300)
+
+        return success
+
+    except Exception as e:
+        print(f"Error generating Figure 5: {e}")
+        return False
 
 
 def generate_figure6() -> bool:
     """Generate Figure 6: Runtime Variance Analysis."""
-    print("\n[6/6] Figure 6: Runtime Variance Analysis")
-    print("   ⏳ Requires C186 completion with runtime data")
-    print("   Will be generated after C186 finishes")
-    return False
+    try:
+        from generate_paper4_fig6_runtime_variance import generate_figure6
+
+        c186_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/cycle186_metapopulation_hierarchical_validation_results.json")
+        c187_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/cycle187_network_structure_effects_results.json")
+        c188_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/cycle188_memory_effects_results.json")
+        c189_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/cycle189_burst_clustering_results.json")
+        output_path = Path("/Volumes/dual/DUALITY-ZERO-V2/data/figures/paper4_fig6_runtime_variance.png")
+
+        print("\n[6/6] Generating Figure 6: Runtime Variance Analysis...")
+        success = generate_figure6(c186_path, c187_path, c188_path, c189_path,
+                                   output_path, dpi=300)
+
+        return success
+
+    except Exception as e:
+        print(f"Error generating Figure 6: {e}")
+        return False
 
 
 def generate_all_figures(skip_missing: bool = True) -> Dict[str, bool]:
@@ -214,10 +258,10 @@ def list_available_figures():
     generators = [
         ("Figure 1", "Hierarchical Energy Regulation", "generate_paper4_fig1_hierarchical_regulation.py", True),
         ("Figure 2", "Network Structure Effects", "generate_paper4_fig2_network_topology.py", True),
-        ("Figure 3", "Memory Effects", "[not yet implemented]", False),
-        ("Figure 4", "Burst Clustering", "[not yet implemented]", False),
-        ("Figure 5", "Composite Validation Scorecard", "[not yet implemented]", False),
-        ("Figure 6", "Runtime Variance Analysis", "[not yet implemented]", False),
+        ("Figure 3", "Memory Effects", "generate_paper4_fig3_memory_effects.py", True),
+        ("Figure 4", "Burst Clustering", "generate_paper4_fig4_burst_clustering.py", True),
+        ("Figure 5", "Composite Validation Scorecard", "generate_paper4_fig5_composite_scorecard.py", True),
+        ("Figure 6", "Runtime Variance Analysis", "generate_paper4_fig6_runtime_variance.py", True),
     ]
 
     for fig_id, title, generator, implemented in generators:
