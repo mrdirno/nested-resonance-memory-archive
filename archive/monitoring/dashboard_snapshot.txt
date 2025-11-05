@@ -1,0 +1,35 @@
+================================================================================
+VALIDATION CAMPAIGN DASHBOARD
+================================================================================
+
+Timestamp: 2025-11-05 03:34:40
+
+CAMPAIGN OVERVIEW
+--------------------------------------------------------------------------------
+Total Experiments: 3/180 (1.7%)
+Experiments Complete: 0/4
+Experiments Running: 1/4
+Experiments Pending: 3/4
+Estimated Remaining: 4.2 hours
+Estimated Completion: 2025-11-05 07:46:40
+
+EXPERIMENT STATUS
+--------------------------------------------------------------------------------
+⏳ C186: 3/10 experiments
+   Current: Seed 789
+   Estimated Remaining: 252.0 minutes
+
+⏸️ C187: 0/30 experiments
+   Status: Pending
+
+⏸️ C188: 0/40 experiments
+   Status: Pending
+
+⏸️ C189: 0/100 experiments
+   Status: Pending
+
+OVERALL PROGRESS
+--------------------------------------------------------------------------------
+[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 1.7%
+
+================================================================================
