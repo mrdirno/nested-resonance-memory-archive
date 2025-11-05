@@ -287,7 +287,7 @@ def main():
     print("=" * 80)
     print()
     print(f"Parameters:")
-    print(f"  f_intra = {F_INTRA*100:.1f}% (intra-population spawn rate)")
+    print(f"  f_intra = {F_INTRA_PCT:.1f}% (intra-population spawn rate)")
     print(f"  f_migrate = {F_MIGRATE*100:.1f}% (inter-population migration)")
     print(f"  n_pop = {N_POP} populations")
     print(f"  N_initial = {N_INITIAL} agents per population")
@@ -335,7 +335,7 @@ def main():
         'experiment': 'C186_V1_HIERARCHICAL_SPAWN_FAILURE_SIMPLE',
         'date': datetime.now().isoformat(),
         'metadata': {
-            'f_intra': F_INTRA,
+            'f_intra': F_INTRA_PCT / 100,
             'f_migrate': F_MIGRATE,
             'n_pop': N_POP,
             'n_initial': N_INITIAL,
