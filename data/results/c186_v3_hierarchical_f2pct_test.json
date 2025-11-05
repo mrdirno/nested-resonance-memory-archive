@@ -1,0 +1,142 @@
+{
+  "experiment": "C186_V3_HIERARCHICAL_F2PCT_TEST",
+  "date": "2025-11-05T15:25:59.904100",
+  "metadata": {
+    "f_intra": 0.02,
+    "f_migrate": 0.005,
+    "n_pop": 10,
+    "n_initial": 20,
+    "cycles": 3000,
+    "n_seeds": 10,
+    "spawn_interval": 50,
+    "hypothesis": "Testing if hierarchical critical frequency equals single-scale (\u03b1 \u2248 1.0)"
+  },
+  "aggregate_statistics": {
+    "basin_a_count": 10,
+    "basin_a_pct": 100.0,
+    "mean_population_avg": 79.86,
+    "mean_population_std": 0.15620499351813333
+  },
+  "individual_results": [
+    {
+      "seed": 42,
+      "basin": "A",
+      "mean_population": 79.7,
+      "total_population": 797,
+      "mean_energy": 49.203262233375156,
+      "active_populations": 10,
+      "intra_spawns": 597,
+      "spawn_failures": 0,
+      "migrations": 5902,
+      "runtime_seconds": 0.156264066696167
+    },
+    {
+      "seed": 123,
+      "basin": "A",
+      "mean_population": 79.9,
+      "total_population": 799,
+      "mean_energy": 49.20463078848561,
+      "active_populations": 10,
+      "intra_spawns": 599,
+      "spawn_failures": 0,
+      "migrations": 6002,
+      "runtime_seconds": 0.14913511276245117
+    },
+    {
+      "seed": 456,
+      "basin": "A",
+      "mean_population": 80.0,
+      "total_population": 800,
+      "mean_energy": 49.20625,
+      "active_populations": 10,
+      "intra_spawns": 600,
+      "spawn_failures": 0,
+      "migrations": 6003,
+      "runtime_seconds": 0.14988493919372559
+    },
+    {
+      "seed": 789,
+      "basin": "A",
+      "mean_population": 80.0,
+      "total_population": 800,
+      "mean_energy": 49.205625,
+      "active_populations": 10,
+      "intra_spawns": 600,
+      "spawn_failures": 0,
+      "migrations": 6003,
+      "runtime_seconds": 0.14909887313842773
+    },
+    {
+      "seed": 101,
+      "basin": "A",
+      "mean_population": 80.0,
+      "total_population": 800,
+      "mean_energy": 49.205625,
+      "active_populations": 10,
+      "intra_spawns": 600,
+      "spawn_failures": 0,
+      "migrations": 6003,
+      "runtime_seconds": 0.14959192276000977
+    },
+    {
+      "seed": 202,
+      "basin": "A",
+      "mean_population": 79.8,
+      "total_population": 798,
+      "mean_energy": 49.20426065162907,
+      "active_populations": 10,
+      "intra_spawns": 598,
+      "spawn_failures": 0,
+      "migrations": 6002,
+      "runtime_seconds": 0.1480698585510254
+    },
+    {
+      "seed": 303,
+      "basin": "A",
+      "mean_population": 79.9,
+      "total_population": 799,
+      "mean_energy": 49.223404255319146,
+      "active_populations": 10,
+      "intra_spawns": 599,
+      "spawn_failures": 0,
+      "migrations": 6002,
+      "runtime_seconds": 0.14965415000915527
+    },
+    {
+      "seed": 404,
+      "basin": "A",
+      "mean_population": 79.5,
+      "total_population": 795,
+      "mean_energy": 49.20125786163522,
+      "active_populations": 10,
+      "intra_spawns": 595,
+      "spawn_failures": 0,
+      "migrations": 5901,
+      "runtime_seconds": 0.14987492561340332
+    },
+    {
+      "seed": 505,
+      "basin": "A",
+      "mean_population": 80.0,
+      "total_population": 800,
+      "mean_energy": 49.205625,
+      "active_populations": 10,
+      "intra_spawns": 600,
+      "spawn_failures": 0,
+      "migrations": 6003,
+      "runtime_seconds": 0.150130033493042
+    },
+    {
+      "seed": 606,
+      "basin": "A",
+      "mean_population": 79.8,
+      "total_population": 798,
+      "mean_energy": 49.20426065162907,
+      "active_populations": 10,
+      "intra_spawns": 598,
+      "spawn_failures": 0,
+      "migrations": 6002,
+      "runtime_seconds": 0.14968013763427734
+    }
+  ]
+}
