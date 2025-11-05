@@ -1,0 +1,142 @@
+{
+  "experiment": "C186_V2_HIERARCHICAL_SPAWN_SUCCESS_SIMPLE",
+  "date": "2025-11-05T15:08:16.524873",
+  "metadata": {
+    "f_intra": 0.05,
+    "f_migrate": 0.005,
+    "n_pop": 10,
+    "n_initial": 20,
+    "cycles": 3000,
+    "n_seeds": 10,
+    "simplified": true,
+    "composition_detection": false
+  },
+  "aggregate_statistics": {
+    "basin_a_count": 10,
+    "basin_a_pct": 100.0,
+    "mean_population_avg": 169.99,
+    "mean_population_std": 0.02999999999999828
+  },
+  "individual_results": [
+    {
+      "seed": 42,
+      "basin": "A",
+      "mean_population": 170.0,
+      "total_population": 1700,
+      "mean_energy": 49.36205882352941,
+      "active_populations": 10,
+      "intra_spawns": 1500,
+      "spawn_failures": 0,
+      "migrations": 12807,
+      "runtime_seconds": 0.37786436080932617
+    },
+    {
+      "seed": 123,
+      "basin": "A",
+      "mean_population": 169.9,
+      "total_population": 1699,
+      "mean_energy": 49.36727486756916,
+      "active_populations": 10,
+      "intra_spawns": 1499,
+      "spawn_failures": 0,
+      "migrations": 12767,
+      "runtime_seconds": 0.3691110610961914
+    },
+    {
+      "seed": 456,
+      "basin": "A",
+      "mean_population": 170.0,
+      "total_population": 1700,
+      "mean_energy": 49.36764705882353,
+      "active_populations": 10,
+      "intra_spawns": 1500,
+      "spawn_failures": 0,
+      "migrations": 12807,
+      "runtime_seconds": 0.36929893493652344
+    },
+    {
+      "seed": 789,
+      "basin": "A",
+      "mean_population": 170.0,
+      "total_population": 1700,
+      "mean_energy": 49.36764705882353,
+      "active_populations": 10,
+      "intra_spawns": 1500,
+      "spawn_failures": 0,
+      "migrations": 12807,
+      "runtime_seconds": 0.373992919921875
+    },
+    {
+      "seed": 101,
+      "basin": "A",
+      "mean_population": 170.0,
+      "total_population": 1700,
+      "mean_energy": 49.36764705882353,
+      "active_populations": 10,
+      "intra_spawns": 1500,
+      "spawn_failures": 0,
+      "migrations": 12807,
+      "runtime_seconds": 0.3694610595703125
+    },
+    {
+      "seed": 202,
+      "basin": "A",
+      "mean_population": 170.0,
+      "total_population": 1700,
+      "mean_energy": 49.36764705882353,
+      "active_populations": 10,
+      "intra_spawns": 1500,
+      "spawn_failures": 0,
+      "migrations": 12807,
+      "runtime_seconds": 0.3630788326263428
+    },
+    {
+      "seed": 303,
+      "basin": "A",
+      "mean_population": 170.0,
+      "total_population": 1700,
+      "mean_energy": 49.35617647058824,
+      "active_populations": 10,
+      "intra_spawns": 1500,
+      "spawn_failures": 0,
+      "migrations": 12807,
+      "runtime_seconds": 0.3665618896484375
+    },
+    {
+      "seed": 404,
+      "basin": "A",
+      "mean_population": 170.0,
+      "total_population": 1700,
+      "mean_energy": 49.36205882352941,
+      "active_populations": 10,
+      "intra_spawns": 1500,
+      "spawn_failures": 0,
+      "migrations": 12807,
+      "runtime_seconds": 0.3656330108642578
+    },
+    {
+      "seed": 505,
+      "basin": "A",
+      "mean_population": 170.0,
+      "total_population": 1700,
+      "mean_energy": 49.36176470588235,
+      "active_populations": 10,
+      "intra_spawns": 1500,
+      "spawn_failures": 0,
+      "migrations": 12807,
+      "runtime_seconds": 0.36429786682128906
+    },
+    {
+      "seed": 606,
+      "basin": "A",
+      "mean_population": 170.0,
+      "total_population": 1700,
+      "mean_energy": 49.36735294117647,
+      "active_populations": 10,
+      "intra_spawns": 1500,
+      "spawn_failures": 0,
+      "migrations": 12807,
+      "runtime_seconds": 0.3652689456939697
+    }
+  ]
+}
