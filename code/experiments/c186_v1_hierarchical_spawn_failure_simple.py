@@ -248,7 +248,7 @@ def run_single_experiment(seed: int) -> Dict:
                   f"pop={metrics['total_population']:3d}, "
                   f"energy={metrics['mean_energy']:.1f}, "
                   f"active_pops={metrics['active_populations']}/{N_POP} "
-                  f"[{elapsed:.1f}s]")
+                  f"[{elapsed:.1f}s]", flush=True)
 
     # Final metrics
     final_metrics = system.get_metrics()
@@ -295,11 +295,11 @@ def main():
     results = []
 
     for i, seed in enumerate(SEEDS):
-        print(f"[{i+1:2d}/{len(SEEDS)}] Running seed {seed}...")
+        print(f"[{i+1:2d}/{len(SEEDS)}] Running seed {seed}...", flush=True)
         result = run_single_experiment(seed)
         results.append(result)
         print(f"  → Basin {result['basin']}, mean_pop={result['mean_population']:.2f}, "
-              f"energy={result['mean_energy']:.1f}")
+              f"energy={result['mean_energy']:.1f}", flush=True)
         print()
 
     # Aggregate statistics
