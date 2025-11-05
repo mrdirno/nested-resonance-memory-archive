@@ -92,9 +92,9 @@ CC-MP-002,"Expected outcome specification: EXPECTED_MEAN_POP=18.0, EXPECTED_CV_T
 CC-MP-003,"Explicit C171 reference in code: 'C171 NEVER removes agents on composition' - systematic baseline comparison for mechanism validation",MP,C,L,E,U,ML,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:10-13
 CC-MP-004,"Reproducible seed specification: SEEDS = list(range(42, 62)) for n=20 deterministic sequences",MP,C,Q,E,U,PT,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:50
 CC-MP-005,"Mechanism documentation in docstring: 'Population control via failed spawning, not death' - explains WHY mechanism works, not just WHAT",MP,C,L,E,N,ML,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:9-18
-CC-MP-006,"Energy budget constants: energy_fraction=0.3 (30% transfer to child) used in parent.spawn_child()",MP,C,Q,E,N,PT,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:16,120
+CC-MP-006,"Energy budget constants: energy_fraction=0.3 (30% transfer to child) used in parent.spawn_child()",MP,C,Q,E,N,PT,Cycle176,Cycle176,"cycle176_v6_baseline_validation.py:16,120"
 CC-MP-007,"Random parent selection: parent = agents[np.random.randint(len(agents))] for distributed spawn load",MP,C,L,E,N,PT,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:118
-CC-MP-008,"Composition engine separation: CompositionEngine(resonance_threshold=0.5) for cluster detection",MP,C,Q,E,N,PT,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:46,107
+CC-MP-008,"Composition engine separation: CompositionEngine(resonance_threshold=0.5) for cluster detection",MP,C,Q,E,N,PT,Cycle176,Cycle176,"cycle176_v6_baseline_validation.py:46,107"
 FD-OP-001,"Dual workspace protocol: Development workspace (/Volumes/dual/) for active work, git repository (~/nested-resonance-memory-archive/) for version control only",MP,D,L,E,R,PT,Cycle1,Cycle976,CLAUDE.md
 FD-OP-002,"Zero external APIs constraint: All fractal agents as internal Python classes/objects, NO calls to OpenAI/Anthropic/other AI platforms",FP,D,L,E,R,FV,Cycle1,Cycle976,CLAUDE.md
 FD-OP-003,"Perpetual operation mandate: Never emit 'done' or 'complete', when one avenue stabilizes → select next highest-leverage action autonomously",MR,D,L,E,T,ML,Cycle1,Cycle976,CLAUDE.md
