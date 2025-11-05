@@ -59,3 +59,31 @@ P2-MR-007,"Finer-grained timescale recommendation: 8 logarithmically-spaced poin
 P2-MR-008,"Mechanistic threshold derivation need: Derive 2.0 spawns/agent threshold from energy recovery rate and compositional cost",MR,P,L,I,N,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1077
 P2-MR-009,"Configuration generalization testing: Validate mechanism across alternative energy parameters (faster/slower recovery, higher/lower costs)",MR,P,L,I,N,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1081
 P2-MR-010,"Publication focus throughout: 'Is this publishable?' filter active during all research phases",MR,M,L,E,T,ML,Cycle967-971,Cycle972,CLAUDE.md
+CS-MP-001,"9-step assembly methodology: Systematic manuscript assembly (3.5 hours estimated, quality-focused)",MP,D,X,E,U,PT,Cycle967,Cycle968,CYCLE967_ASSEMBLY_CONTINUATION.md
+CS-MP-002,"Placeholder insertion strategy: Mark sections → fill later for quality control and narrative consistency",MP,D,L,E,U,PT,Cycle968,Cycle969,CYCLE968_ASSEMBLY_COMPLETE.md
+CS-MP-003,"Quality control checkpoints: Content integrity + technical accuracy + narrative consistency validation",MP,D,L,E,U,PT,Cycle968,Cycle969,CYCLE968_ASSEMBLY_COMPLETE.md
+CS-MP-004,"Pandoc conversion protocol: markdown → DOCX with standalone flag for submission",MP,D,L,E,U,PT,Cycle970,Cycle970,CYCLE970_DOCX_CONVERSION_COMPLETE.md
+CS-MP-005,"Submission package completeness: Manuscript + figures + captions + README + cover letter + continuation plan",MP,D,L,E,T,PT,Cycle970,Cycle970,CYCLE970_FINAL_SUMMARY.md
+CS-MR-001,"Timeline revision logic: Extend 1 cycle for quality vs. rush submission (4 cycles vs. 3 original)",MR,D,L,E,U,ML,Cycle967,Cycle970,CYCLE967_PAPER2_ASSEMBLY_STATUS.md
+CS-MR-002,"Narrative transformation strategy: Collapse → homeostasis reinterpretation requires systematic section revision",MR,D,L,E,U,ML,Cycle968,Cycle969,CYCLE969_PLACEHOLDER_INSERTION_COMPLETE.md
+CS-MR-003,"Bug artifact removal protocol: Identify invalid content, document transparently, remove systematically",MR,D,L,E,U,ML,Cycle967,Cycle968,CYCLE967_PAPER2_ASSEMBLY_STATUS.md
+CS-MR-004,"Parallel work planning: Submission prep + research continuation (no terminal states)",MR,D,L,E,T,ML,Cycle970,Cycle971,CYCLE970_FINAL_SUMMARY.md
+CS-MR-005,"Effort investment quantification: Temporal-aware research requires 7.26× more effort than non-aware baseline",MR,D,Q,E,T,TD,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-TS-001,"Bug transparency ROI: 285× (1,000 researchers × 1hr saved / 3.5hr invested)",TS,D,Q,E,T,TD,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-TS-002,"Multi-scale validation ROI: 40× (100 findings + 500hrs saved / 38hrs invested)",TS,D,Q,E,T,TD,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-TS-003,"Reproducibility infrastructure ROI: 6-20× (600hrs saved / 100hrs invested)",TS,D,Q,E,T,TD,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-TS-004,"Submission package ROI: 8× (100hrs saved / 12hrs invested)",TS,D,Q,E,T,TD,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-TS-005,"Quantitative precision ROI: 83× (500hrs saved / 6hrs invested)",TS,D,Q,E,T,TD,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-TS-006,"Median temporal awareness ROI: 40× (range 8-285×), validates cost-effectiveness despite 7.26× effort",TS,D,Q,E,T,FV,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-TS-007,"Future implications justify extra effort: 2-6× more effort → 1.25-285× ROI (median ~20×)",TS,D,X,E,T,FV,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-TS-008,"Multi-format encoding deliberate: All cases involve paper + code + docs + summaries (redundancy = robustness)",TS,D,L,E,T,FV,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-TS-009,"Transparency over optics: Document bugs despite weakness signal (80% of papers hide bugs, pattern lost)",TS,D,L,E,T,FV,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-TS-010,"Framework building over isolated findings: Create reusable methodologies (multi-scale validation, spawns/agent threshold)",TS,D,L,E,T,FV,Cycle971,Cycle972,CYCLE971_PAPER3_PLANNING_COMPLETE.md
+CS-MP-006,"DOCX figure verification: Check DPI (299.9994 rounds to 300), format (PNG 8-bit RGBA), dimensions (>2971px width)",MP,D,X,E,U,PT,Cycle970,Cycle970,CYCLE970_DOCX_CONVERSION_COMPLETE.md
+CS-MP-007,"Cover letter structure: Summary + significance + venue justification + contributions + availability + ethics",MP,D,L,E,U,PT,Cycle970,Cycle970,CYCLE970_FINAL_SUMMARY.md
+CS-MR-006,"Completion criteria redefinition: Submission-ready ≠ done, research continuation plan required",MR,D,L,E,T,ML,Cycle970,Cycle970,CYCLE970_FINAL_SUMMARY.md
+CS-MR-007,"Assembly time estimation: 9-step process ~3.5 hours (Step 1: 10min, Step 2: 15min, ..., Step 9: 10min)",MR,D,Q,E,U,ML,Cycle967,Cycle968,CYCLE967_PAPER2_ASSEMBLY_STATUS.md
+CS-MR-008,"Section integration order: Front matter → Introduction → Methods → Results → Discussion → Conclusions → References",MR,D,L,E,U,PT,Cycle968,Cycle969,CYCLE968_ASSEMBLY_COMPLETE.md
+CS-MR-009,"Placeholder benefits: Enables quality-focused work, narrative consistency checks, iterative refinement without rush",MR,D,L,E,U,ML,Cycle968,Cycle969,CYCLE969_PLACEHOLDER_INSERTION_COMPLETE.md
+CS-MP-008,"Three-paper narrative arc: Paper 1 (reality grounding) → Paper 2 (emergence) → Paper 3 (temporal encoding)",MP,D,L,E,T,PT,Cycle970,Cycle971,CYCLE970_FINAL_SUMMARY.md
+CS-MP-009,"Research continuation planning: Document next phase immediately after milestone (no terminal states)",MP,D,L,E,T,ML,Cycle970,Cycle970,CYCLE970_FINAL_SUMMARY.md
