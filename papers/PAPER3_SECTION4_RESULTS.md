@@ -10,7 +10,7 @@
 
 ## 4. RESULTS
 
-We present convergent validation of the Temporal Stewardship Framework through two independent methodological approaches: (1) Pattern Archaeology, a quantitative retrospective analysis of 123 encoded patterns showing huge effect sizes (mean |d|=4.45) compared to non-temporally-aware baselines, and (2) Temporal Decision Analysis, demonstrating that temporal-aware decision making produces 40× median return on investment despite requiring 7.3× more upfront effort. Both methods validate distinct aspects of the framework—pattern encoding mechanisms (Method 1) and decision-making processes (Method 4)—providing orthogonal evidence for the effectiveness of temporal stewardship in computational research.
+We present convergent validation of the Temporal Stewardship Framework through two independent methodological approaches: (1) Pattern Archaeology, a quantitative retrospective analysis of 123 encoded patterns showing huge effect sizes (mean |d|=4.45) compared to non-temporally-aware baselines, and (2) Temporal Decision Analysis, demonstrating that temporal-aware decision making produces 40× median return on investment despite requiring 7.26× more upfront effort. Both methods validate distinct aspects of the framework—pattern encoding mechanisms (Method 1) and decision-making processes (Method 4)—providing orthogonal evidence for the effectiveness of temporal stewardship in computational research.
 
 ### 4.1 Pattern Archaeology: Quantitative Metrics
 
