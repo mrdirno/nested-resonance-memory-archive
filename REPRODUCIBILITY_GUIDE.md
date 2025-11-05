@@ -431,6 +431,70 @@ python visualize_higher_order_interactions.py paper4_aggregated.json
 
 ---
 
+### C177: Extended Frequency Range (Boundary Mapping)
+
+**Purpose:** Map homeostatic regime boundaries beyond the validated 2.0-3.0% range
+
+**Frequency Range:** 0.5%-10.0% (step: 0.5%, n=10 seeds per frequency)
+
+**Runtime:** ~90 experiments × 3-4 min = ~4-5 hours
+
+#### Running the Experiment
+
+```bash
+cd code/experiments
+python cycle177_extended_frequency_range.py
+```
+
+**Expected Results:**
+- **f < 1.5%:** Basin B (low complexity)
+- **f = 1.5-2.5%:** Basin B (optimal homeostasis, pop=1)
+- **f = 3.0-4.0%:** Basin B (intermediate complexity)
+- **f > 4.5%:** Basin transitions or extinction
+
+**Validation:** Confirms theoretical model predicting sharp basin transitions at specific frequency thresholds
+
+---
+
+### C186-C189: Multi-Scale Energy Regulation Validation (Planned)
+
+**Purpose:** Validate 5 theoretical extensions to NRM framework across scales
+
+**Extensions:**
+1. **C186 (Extension 1):** Network Structure Effects (hub depletion in scale-free networks)
+2. **C187 (Extension 2):** Hierarchical Energy Dynamics (agent → population → swarm)
+3. **C188 (Extension 3):** Stochastic Boundaries (demographic noise, basin transitions)
+4. **C189 (Extension 4a/4b):** Memory Effects + Burst Clustering (SOC validation)
+
+**Total Experimental Burden:**
+- C186: 40 experiments (~75 min)
+- C187: 30 experiments (~60 min)
+- C188: 40 experiments (~75 min)
+- C189: 100 experiments (~150 min)
+- **Total: 210 experiments, ~6-8 hours**
+
+#### Running Experiments
+
+```bash
+cd code/experiments
+
+# Run sequentially
+python cycle186_network_structure_effects.py    # Extension 1
+python cycle187_hierarchical_energy_dynamics.py # Extension 2
+python cycle188_stochastic_boundaries.py        # Extension 3
+python cycle189_memory_and_burst_clustering.py  # Extension 4a/4b
+```
+
+**Validation Scorecard:** 20-point composite metric
+- 20-24 points: **STRONGLY VALIDATED** (all predictions confirmed)
+- 15-19 points: **VALIDATED** (core predictions confirmed)
+- 10-14 points: **PARTIALLY VALIDATED** (mixed results)
+- <10 points: **REQUIRES REVISION** (theory-data mismatch)
+
+**Expected Outcomes:** Confirm multi-scale energy regulation mechanisms predict emergent homeostasis, network effects, hierarchical dynamics, stochastic transitions, and self-organized criticality
+
+---
+
 ## COMPILING PAPERS
 
 All submission-ready papers have LaTeX sources and can be compiled to PDF with embedded figures using Docker + texlive.
