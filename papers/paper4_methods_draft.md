@@ -53,19 +53,20 @@ We conducted four complementary experiments (C186-C189) to validate Extensions 1
 
 1. **Scale-Free (Barabási-Albert):**
    - Generation: Preferential attachment with $m=2$ edges per new node
-   - $N=30$ nodes, mean degree $\langle k \rangle = 4$
+   - $N=100$ nodes, mean degree $\langle k \rangle = 4$
    - Degree distribution: $P(k) \sim k^{-\gamma}$, $\gamma \approx 3$
    - Heterogeneity: High ($CV_k \approx 0.8$)
+   - Rationale: Matches MAX_AGENTS from C171/C175/C177 for consistency
 
 2. **Random (Erdős-Rényi):**
    - Generation: $G(N, p)$ with $p = \langle k \rangle / (N-1)$
-   - $N=30$ nodes, mean degree $\langle k \rangle = 4$
+   - $N=100$ nodes, mean degree $\langle k \rangle = 4$
    - Degree distribution: Binomial (approximately Poisson for large N)
    - Heterogeneity: Low ($CV_k \approx 0.5$)
 
 3. **Lattice (2D Grid):**
    - Structure: $\sqrt{N} \times \sqrt{N}$ grid with periodic boundary conditions
-   - $N=25$ nodes (5×5 grid), degree $k=4$ (von Neumann neighborhood)
+   - $N=100$ nodes (10×10 grid), degree $k=4$ (von Neumann neighborhood)
    - Degree distribution: Delta function (all nodes have exactly $k=4$)
    - Heterogeneity: Zero ($CV_k = 0$)
 
@@ -91,14 +92,14 @@ We conducted four complementary experiments (C186-C189) to validate Extensions 1
 import networkx as nx
 
 # Scale-free
-G_sf = nx.barabasi_albert_graph(n=30, m=2, seed=seed)
+G_sf = nx.barabasi_albert_graph(n=100, m=2, seed=seed)
 
 # Random
-p = 4 / 29  # mean_degree / (n-1)
-G_rand = nx.erdos_renyi_graph(n=30, p=p, seed=seed)
+p = 4 / 99  # mean_degree / (n-1)
+G_rand = nx.erdos_renyi_graph(n=100, p=p, seed=seed)
 
 # Lattice
-G_lattice = nx.grid_2d_graph(5, 5)
+G_lattice = nx.grid_2d_graph(10, 10)
 ```
 
 **Degree-Weighted Selection:**
@@ -135,40 +136,36 @@ for agent in agents:
 ### 3.3.1 Experimental Design
 
 **Meta-Population Structure:**
-- 4 populations (P1, P2, P3, P4)
-- Each population: independent agent collective with local dynamics
-- Swarm level: Coordinates spawn frequency across populations
+- 10 populations (P0–P9) forming meta-population swarm
+- Each population: independent agent collective with local spawn dynamics
+- Swarm level: Inter-population migration enables meta-stability
 
-**Coupling Strengths (2 conditions):**
+**Migration Mechanism:**
+- **Intra-population spawn:** $f_{\text{intra}} = 2.5\%$ (validated homeostasis frequency from C171/C175)
+- **Inter-population migration:** $f_{\text{migrate}} = 0.5\%$ (agent transfer between populations)
+- **Migration selection:** Random agent from random source population → random target population
+- **Migration timing:** Independent Poisson process, occurs every $\sim 200$ cycles on average
 
-1. **Weak Coupling ($\kappa = 0.2$):**
-   - Low inter-population energy transfer
-   - Populations evolve quasi-independently
-   - Predicts: Low synchronization, high variance
-
-2. **Strong Coupling ($\kappa = 0.8$):**
-   - High inter-population energy transfer
-   - Populations tightly coordinated
-   - Predicts: High synchronization, low variance
-
-**Spawn Frequency Schedule:**
-- Swarm-level control: $f_{\text{swarm}} = 2.5\%$ (global spawn rate)
-- Population-level allocation: Proportional to relative energy depletion
-- Mechanism: Populations with lower energy receive more spawns
+**Rationale:**
+Migration tests hierarchical energy regulation by enabling:
+1. **Load balancing:** Agents redistribute when populations diverge
+2. **Meta-stability:** Total swarm population more stable than individual populations
+3. **Energy cascades:** Agent transfers carry energy across population boundaries
+4. **Hierarchical homeostasis:** Both intra- (within) and inter- (between) population regulation
 
 **Common Parameters:**
-- Populations: 4
-- Agents per population: ~10 (dynamic)
+- Populations: 10
+- Max agents per population: 100 (same as C171/C175/C177)
 - Cycles: 3000
-- Seeds: $n=10$ per coupling condition
-- Total experiments: 2 coupling levels × 4 populations × 10 seeds = **40 experiments** (analyzed at population level)
+- Seeds: $n=10$ (42, 123, 456, 789, 101, 202, 303, 404, 505, 606)
+- Total experiments: **10** (1 condition × 10 seeds)
 
 ### 3.3.2 Implementation
 
 **Meta-Population Initialization:**
 ```python
 populations = []
-for pop_id in range(4):
+for pop_id in range(10):
     initial_agent = FractalAgent(
         agent_id=f"pop{pop_id}_root",
         bridge=bridge,
@@ -177,48 +174,54 @@ for pop_id in range(4):
         max_depth=7,
         reality=reality
     )
-    populations.append({'agents': [initial_agent], 'id': pop_id})
+    populations.append(Population(pop_id, bridge, reality))
 ```
 
-**Coupling-Dependent Spawn Allocation:**
+**Migration Execution:**
 ```python
-# Calculate population energies
-pop_energies = [np.mean([a.energy for a in pop['agents']])
-               for pop in populations]
+# Determine if migration occurs this cycle
+if np.random.random() < (F_MIGRATE / 100.0):
+    # Select source and target populations
+    source_pop = np.random.choice(populations)
+    target_pop = np.random.choice([p for p in populations if p != source_pop])
 
-# Allocation proportional to energy deficit (strong coupling)
-if coupling == 'strong':
-    energy_deficits = [1.0 - E / max(pop_energies) for E in pop_energies]
-    spawn_probs = energy_deficits / np.sum(energy_deficits)
-# Uniform allocation (weak coupling)
-else:
-    spawn_probs = [0.25, 0.25, 0.25, 0.25]
+    # Select random agent from source (if non-empty)
+    if len(source_pop.agents) > 0:
+        migrant = np.random.choice(source_pop.agents)
 
-# Select population for spawn
-target_pop = np.random.choice(populations, p=spawn_probs)
+        # Transfer agent if target has space
+        if len(target_pop.agents) < MAX_AGENTS_PER_POP:
+            source_pop.agents.remove(migrant)
+            migrant.agent_id = f"pop{target_pop.pop_id}_migrant_{cycle_idx}"
+            target_pop.agents.append(migrant)
 ```
 
-**Synchronization Metric:**
+**Hierarchical Metrics:**
 ```python
-# Phase-lock detection via cross-correlation of composition rates
-comp_rates = [pop_composition_timeseries for pop in populations]
-sync_matrix = np.corrcoef(comp_rates)
-mean_sync = np.mean(sync_matrix[np.triu_indices_from(sync_matrix, k=1)])
+# Population-level metrics
+for pop in populations:
+    pop_energy = sum(agent.energy for agent in pop.agents)
+    pop_size = len(pop.agents)
+
+# Swarm-level metrics
+total_agents = sum(len(pop.agents) for pop in populations)
+total_energy = sum(sum(a.energy for a in pop.agents) for pop in populations)
+inter_pop_variance = np.var([len(pop.agents) for pop in populations])
 ```
 
 ### 3.3.3 Validation Criteria
 
-**Prediction 2.1:** $CV_{\text{comp}} < 0.2$ for each population (homeostasis)
+**Prediction 2.1:** $CV_{\text{comp}} < 0.2$ for each population (intra-population homeostasis)
 
-**Prediction 2.2:** $\rho(f_{\text{spawn}}^{\text{swarm}}, r_{\text{comp}}^{\text{pop}}) > 0.8$ (cross-level correlation)
+**Prediction 2.2:** Population sizes remain bounded: $0 < N_{\text{pop}} < 100$ across all populations
 
-**Prediction 2.3:** Basin classification consistent across populations
+**Prediction 2.3:** Basin classification consistent across populations (all Basin A or all Basin B)
 
-**Prediction 2.4:** Energy flow upward during compositions (agent → population)
+**Prediction 2.4:** Swarm population variance $< 2 \times$ individual population variance (meta-stability)
 
-**Prediction 2.5:** Lower extinction rate in meta-population vs isolated populations
+**Prediction 2.5:** Migration rate correlates with population size differences: $\rho(\Delta N, f_{\text{mig}}) > 0.5$
 
-**Prediction 2.6:** Synchronization higher for $\kappa=0.8$ vs $\kappa=0.2$ (t-test, $p < 0.05$)
+**Prediction 2.6:** Total swarm energy conserved during migrations (energy transfer validation)
 
 ---
 

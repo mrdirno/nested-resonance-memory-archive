@@ -18,7 +18,7 @@ Experimental Design:
   - Intra-population spawn frequency: f_intra = 2.5% (validated homeostasis from C171/C175)
   - Inter-population migration: f_migrate = 0.5% (cross-population agent transfer)
   - Cycles: 3000 (match C177 duration)
-  - Seeds: n=5 (sufficient for hierarchical patterns)
+  - Seeds: n=10 (robust statistical validation, matches C187/C188/C189)
   - Max agents per population: 100 (same as C171/C175/C177)
 
 Metrics Tracked:
@@ -67,7 +67,7 @@ from fractal.fractal_swarm import CompositionEngine
 N_POPULATIONS = 10  # Meta-population size
 F_INTRA = 2.5  # Intra-population spawn frequency (validated homeostasis)
 F_MIGRATE = 0.5  # Inter-population migration frequency
-SEEDS = [42, 123, 456, 789, 101]  # n=5 seeds
+SEEDS = [42, 123, 456, 789, 101, 202, 303, 404, 505, 606]  # n=10 seeds
 CYCLES = 3000
 BASIN_THRESHOLD = 2.5
 WINDOW_SIZE = 100
