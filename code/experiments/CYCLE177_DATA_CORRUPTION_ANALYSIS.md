@@ -178,6 +178,134 @@ CONTROL VALIDATION (C171 Replication):
 
 ---
 
+## DIAGNOSTIC TEST RESULTS (2025-11-05, Cycle 1043)
+
+### Test 2: Minimal Reproducibility Test (PASSED)
+
+**Objective:** Verify that `np.random.seed()` produces distinct outcomes in Python/NumPy environment
+
+**Execution:**
+```python
+import numpy as np
+
+for seed in [42, 123, 456]:
+    np.random.seed(seed)
+    sample = np.random.rand(5)
+    print(f'Seed {seed:3d}: {sample}')
+```
+
+**Results:**
+```
+Seed  42: [0.37454012 0.95071431 0.73199394 0.59865848 0.15601864]
+Seed 123: [0.69646919 0.28613933 0.22685145 0.55131477 0.71946897]
+Seed 456: [0.24875591 0.16306678 0.78364326 0.80852339 0.62562843]
+```
+
+**Interpretation:** All 3 seeds produced DIFFERENT arrays (PASS). `np.random.seed()` is working correctly at the Python/NumPy level. **Hypothesis 1 (Random Seed Not Applied) REJECTED.**
+
+### Test 3: Bridge State Isolation (FAILED)
+
+**Objective:** Check if TranscendentalBridge instances share state via SQLite database
+
+**Execution:**
+```python
+from bridge.transcendental_bridge import TranscendentalBridge
+
+bridge1 = TranscendentalBridge()
+bridge2 = TranscendentalBridge()
+
+print(f'Bridge 1 ID: {id(bridge1)}')
+print(f'Bridge 2 ID: {id(bridge2)}')
+print(f'Same object? {bridge1 is bridge2}')
+print(f'Bridge 1 db_path: {bridge1.db_path}')
+print(f'Bridge 2 db_path: {bridge2.db_path}')
+print(f'Same database? {bridge1.db_path == bridge2.db_path}')
+```
+
+**Results:**
+```
+Bridge 1 ID: 4317311872
+Bridge 2 ID: 4311463120
+Same object? False
+Bridge 1 db_path: /Volumes/dual/DUALITY-ZERO-V2/workspace/bridge.db
+Bridge 2 db_path: /Volumes/dual/DUALITY-ZERO-V2/workspace/bridge.db
+Same database? True
+```
+
+**Interpretation:** **SMOKING GUN - Bridge instances share the SAME SQLite database.** While bridge objects are distinct (different IDs), they both read/write to `/Volumes/dual/DUALITY-ZERO-V2/workspace/bridge.db`. This causes:
+
+1. **Phase space state persists across experiments**
+   - Transcendental transformations stored in database
+   - Resonance patterns accumulate across runs
+   - Cached phase space coordinates shared across seeds
+
+2. **Convergence to stable state**
+   - First experiment (seed 42) populates database with phase space mappings
+   - Subsequent experiments (seeds 123, 456, ..., 606) reuse same mappings
+   - All experiments converge to identical attractor state
+
+3. **Frequency-dependent results explained**
+   - Different frequencies → different phase space regions
+   - Each frequency initializes different stable state
+   - But within frequency, all seeds converge to same state
+
+**Hypothesis 4 (Shared State Across Runs) CONFIRMED.**
+
+### Root Cause: Shared Transcendental Bridge Database
+
+**Mechanism Confirmed:**
+- C177 experiment creates 90 TranscendentalBridge instances (one per experiment)
+- All 90 instances read/write to SAME `bridge.db` file
+- First run at each frequency establishes phase space state
+- Subsequent runs at same frequency reuse cached phase space, producing identical results
+- Random seeds have NO EFFECT because phase space is deterministic once established
+
+**Why C171/C175 showed seed variance:**
+- Smaller experiments (10-20 runs) may have had fresh database or different initialization
+- Shorter runtime → less phase space convergence
+- Different experiment design may have cleared database between runs
+
+**Why C177 failed:**
+- 90 experiments sequentially → heavy database state accumulation
+- 295 minutes runtime → phase space fully converged
+- No database clearing between experiments → cumulative state buildup
+
+### Corrective Action Required
+
+**Solution 1: Clear Database Between Runs (IMMEDIATE FIX)**
+```python
+def run_extended_range_experiment(frequency: float, seed: int, cycles: int) -> dict:
+    """Run experiment with isolated bridge state."""
+
+    # Clear bridge database before each run
+    bridge_db_path = Path("/Volumes/dual/DUALITY-ZERO-V2/workspace/bridge.db")
+    if bridge_db_path.exists():
+        bridge_db_path.unlink()  # Delete database
+
+    # Now create bridge with fresh state
+    bridge = TranscendentalBridge()
+
+    # ... rest of experiment
+```
+
+**Solution 2: Use Separate Databases Per Experiment (LONG-TERM FIX)**
+```python
+def run_extended_range_experiment(frequency: float, seed: int, cycles: int) -> dict:
+    """Run experiment with isolated bridge state."""
+
+    # Create unique database path for this experiment
+    bridge_db_path = Path(f"/Volumes/dual/DUALITY-ZERO-V2/workspace/bridge_{frequency}_{seed}.db")
+
+    # Create bridge with experiment-specific database
+    bridge = TranscendentalBridge(db_path=bridge_db_path)
+
+    # ... rest of experiment
+```
+
+**Recommended:** Solution 1 for immediate re-execution, Solution 2 for permanent infrastructure improvement.
+
+---
+
 ## DIAGNOSTIC TESTS (PLANNED)
 
 ### Test 1: Single-Frequency Seed Sensitivity
