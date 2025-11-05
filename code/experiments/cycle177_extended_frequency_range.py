@@ -105,6 +105,7 @@ def run_extended_range_experiment(frequency: float, seed: int, cycles: int) -> d
     # Track composition events (cluster formations)
     composition_events = []
     spawn_count = 0
+    population_trajectory = []  # Track population over time (added Cycle 990 fix)
 
     # Calculate spawn interval from frequency
     spawn_interval = max(1, int(100.0 / frequency)) if frequency > 0 else cycles + 1
