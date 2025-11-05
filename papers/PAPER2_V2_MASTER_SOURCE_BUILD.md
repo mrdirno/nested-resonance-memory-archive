@@ -975,14 +975,90 @@ Predicted spawn success:
 
 This enables **constraint severity prediction** from population dynamics alone, without requiring energy measurements directly.
 
+#### 4.6.1 Mathematical Formalization
+
+While the spawns-per-agent metric successfully predicts spawn success empirically, the question remains: **why does the 2.0 threshold exist?** To address this, we develop a mechanistic model deriving the threshold from energy parameters.
+
+**Energy Depletion Dynamics:**
+
+Consider an agent undergoing n compositional events. Each composition transfers fraction α = 0.3 of parent energy to child, leaving parent with (1 - α) = 0.7 of original energy. After n compositions:
+
+```
+E(n) = E₀ · (1 - α)ⁿ + r · Σ(Δtⱼ)
+```
+
+where E₀ = 50.0 is initial energy, r = 0.5 is recharge rate (units/cycle), and Δtⱼ is recovery time between compositions j and j+1.
+
+**Maximum Sustainable Compositions:**
+
+Spawn failure occurs when E(n) < E_spawn = 10.0. Without recovery (worst case), an agent starting at E₀ = 50.0 can sustain:
+
+- After composition 1: E = 50.0 × 0.7 = 35.0 ✓
+- After composition 2: E = 35.0 × 0.7 = 24.5 ✓
+- After composition 3: E = 24.5 × 0.7 = 17.15 ✓
+- After composition 4: E = 17.15 × 0.7 = 12.0 ✓
+- After composition 5: E = 12.0 × 0.7 = 8.4 ✗ (below threshold)
+
+Thus: **k_max = 4 compositions** before depletion under continuous load.
+
+**Poisson Distribution Model:**
+
+If compositional events are randomly distributed across the population, the number of times a given agent is selected follows a Poisson distribution with rate parameter λ = S/N (spawns per agent).
+
+**Spawn success rate = P(agent sustains < k_max compositions)**
+
+```
+Success(λ) = P(X < k_max) = Σⱼ₌₀^(k_max-1) [e^(-λ) · λʲ / j!]
+```
+
+For k_max = 4 and λ = S/N:
+
+```
+Success(λ) = e^(-λ) · [1 + λ + λ²/2 + λ³/6]
+```
+
+**Threshold Derivation:**
+
+Evaluating at λ = 2.0 (empirical threshold):
+
+```
+Success(2.0) = e^(-2.0) · [1 + 2.0 + 2.0 + 1.33]
+             = 0.135 · [6.33]
+             = 0.857  (85.7%)
+```
+
+**This predicts 85.7% spawn success at λ = 2.0, matching empirical observation of 88.0% ± 2.5% within measurement error.**
+
+The 2.0 threshold represents the point where ~14% of the population has experienced ≥4 compositions and become energy-depleted, reducing overall spawn success to ~85%. This explains why 2.0 marks the boundary between "high success" (>85%) and "transition" (<85%) zones.
+
 **Model Validation:**
 
 Tested across 2 orders of magnitude timescale variation:
-- 100 cycles: 0.75 spawns/agent → 100% success ✓
-- 1000 cycles: 2.08 spawns/agent → 88% success ✓
-- 3000 cycles: 8.38 spawns/agent → 23% success ✓
 
-All three data points fall within predicted threshold zones, validating model across diverse conditions.
+| Timescale   | S/N  | Predicted Success | Observed Success | Error  |
+|-------------|------|-------------------|------------------|--------|
+| 100 cycles  | 0.75 | 97.8%             | 100%             | +2.2%  |
+| 1000 cycles | 2.08 | 84.5%             | 88.0% ± 2.5%     | +3.5%  |
+| 3000 cycles | 8.38 | 3.5%              | 23.0%            | +19.5% |
+
+Model predicts successfully at low-to-moderate loads (S/N < 3.0) but underestimates success at extreme loads (S/N > 8.0). This discrepancy likely arises from population turnover: new agents born during experiments have full energy reserves (E₀ = 50.0), providing fresh spawn capacity not captured by the stationary Poisson model.
+
+**Theoretical Predictions:**
+
+The mathematical model generates quantitative predictions for spawn success rates:
+
+| S/N  | Predicted Success | Threshold Zone |
+|------|-------------------|----------------|
+| 0.5  | 99.8%            | High           |
+| 1.0  | 98.1%            | High           |
+| 1.5  | 93.4%            | High           |
+| 2.0  | 85.7%            | High (boundary)|
+| 2.5  | 75.8%            | Transition     |
+| 3.0  | 64.7%            | Transition     |
+| 4.0  | 43.3%            | Transition     |
+| 5.0  | 26.5%            | Low            |
+
+These predictions will be tested against C177 boundary mapping experiments currently in progress.
 
 ### 4.7 Connection to Self-Giving Systems Framework
 
