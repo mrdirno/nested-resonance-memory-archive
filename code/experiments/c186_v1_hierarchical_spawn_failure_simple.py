@@ -66,12 +66,15 @@ from typing import List, Dict
 from datetime import datetime
 
 # Experimental parameters
-F_INTRA = 0.025  # 2.5% intra-population spawn rate (expect failure)
+F_INTRA_PCT = 2.5  # 2.5% intra-population spawn rate (expect failure)
 F_MIGRATE = 0.005  # 0.5% inter-population migration rate
 N_POP = 10  # Number of populations
 N_INITIAL = 20  # Initial agents per population
 CYCLES = 3000
 SEEDS = [42, 123, 456, 789, 101, 202, 303, 404, 505, 606]
+
+# Spawn interval calculation (matching C176/C177 mechanism)
+SPAWN_INTERVAL = max(1, int(100.0 / F_INTRA_PCT))  # 100 / 2.5 = 40 cycles
 
 # Energy parameters (from C171 baseline)
 E_INITIAL = 50.0
@@ -79,6 +82,7 @@ E_SPAWN_THRESHOLD = 20.0
 E_SPAWN_COST = 10.0
 E_MIGRATE_THRESHOLD = 15.0
 RECHARGE_RATE = 0.5  # Energy recovery per cycle per agent
+CHILD_ENERGY_FRACTION = 0.5  # Child energy as fraction of spawn threshold (prevents cascade)
 
 @dataclass
 class Agent:
@@ -140,28 +144,30 @@ class HierarchicalSystem:
         self._energy_recovery()
 
     def _intra_spawning(self):
-        """Agents spawn within populations at F_INTRA rate"""
+        """Agents spawn within populations at SPAWN_INTERVAL (matching C176 mechanism)"""
+        # KEY FIX: Only spawn on interval cycles (every SPAWN_INTERVAL cycles)
+        should_spawn = (self.cycle_count % SPAWN_INTERVAL) == 0
+
+        if not should_spawn:
+            return  # Skip spawning this cycle
+
         for population in self.populations:
             if len(population.agents) == 0:
                 continue
 
-            # Attempt spawns at F_INTRA frequency
-            n_attempts = max(1, int(len(population.agents) * F_INTRA))
-
-            for _ in range(n_attempts):
-                if len(population.agents) == 0:
-                    break
-
+            # Single spawn attempt per population on spawn cycles (simplified from C176 logic)
+            if len(population.agents) > 0:
                 parent = self.random.choice(population.agents)
 
                 if parent.energy >= E_SPAWN_THRESHOLD:
                     # Successful spawn
                     parent.energy -= E_SPAWN_COST
 
+                    # KEY FIX: Child energy below threshold to prevent cascade
                     child = Agent(
                         id=self.next_agent_id,
                         population_id=population.id,
-                        energy=E_INITIAL * 0.5
+                        energy=E_SPAWN_THRESHOLD * CHILD_ENERGY_FRACTION  # 10.0 (< 20.0 threshold)
                     )
                     population.agents.append(child)
                     self.next_agent_id += 1
