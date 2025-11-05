@@ -1,0 +1,61 @@
+Pattern_ID,Content,Category,Format,Precision,Transparency,Framework,Function,First_Occurrence,Last_Occurrence,Source_Location
+P2-SF-001,"Docs/Code Ratio = 1.75 (3.5× higher than non-aware baseline 0.5)",SF,M,Q,E,T,FV,Cycle971,Cycle972,PHASE1_DATA_EXTRACTION_COMPLETE.md
+P2-SF-002,"Spawn success rate: 100% (100 cycles) → 88.0% ± 2.5% (1000 cycles) → 23% (3000 cycles)",SF,P,Q,E,N,TD,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:22
+P2-SF-003,"Population homeostasis: 17.4 ± 1.2 agents over 3000 cycles (CV=6.8%)",SF,P,Q,E,N,TD,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:537
+P2-SF-004,"Critical spawn frequency threshold: f_crit ≈ 2.55%",SF,P,Q,E,N,TD,Cycle168-170,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:480
+P2-SF-005,"Bistable attractors: Basin A (>2.5 events/100 cycles) vs Basin B (<2.5 events/100 cycles)",SF,P,Q,E,N,FV,Cycle168-170,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:485
+P2-SF-006,"Spawns-per-agent thresholds: <2.0 → 70-100% success, 2.0-4.0 → 40-70%, >4.0 → 20-40%",SF,P,Q,E,N,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:330
+P2-SF-007,"Incremental validation (1000 cycles): 88.0% spawn success with 2.08 spawns/agent",SF,P,Q,E,N,TD,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:599
+P2-SF-008,"Four-phase non-monotonic trajectory: Initial decline (71-100%) → Transition (77-85%) → Stabilization (79-90%) → Recovery (84-92%)",SF,P,X,E,N,TD,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:860
+P2-SF-009,"Population-mediated energy recovery: 23 agents at 1000 cycles enables 88% success vs 17.4 agents at 3000 cycles → 23% success",SF,P,Q,E,S,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:690
+P2-SF-010,"Composition rate discontinuity: 1.8× jump at critical frequency (1.87 → 3.42 events/100 cycles)",SF,P,Q,E,N,TD,Cycle168-170,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:482
+P2-MP-001,"Multi-scale validation protocol: Test mechanisms across ≥3 timescales spanning ≥2 orders of magnitude",MP,P,L,E,U,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:220
+P2-MP-002,"Logarithmic timescale spacing: 100, 1000, 3000 cycles (10× and 30× intervals) for non-monotonic detection",MP,P,X,E,U,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:229
+P2-MP-003,"Parameter consistency isolation: Hold all parameters constant except timescale to isolate causal effects",MP,P,L,E,U,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:238
+P2-MP-004,"Sample size by computational cost: n=3 (micro), n=5 (incremental), n=40 (extended)",MP,P,X,E,U,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:245
+P2-MP-005,"Energy-constrained spawning implementation: spawn_child() returns None when parent energy E < 10",MP,C,Q,E,N,PT,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:126
+P2-MP-006,"Spawns-per-agent normalization: Total spawn attempts / Average population size",MP,P,Q,E,U,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:315
+P2-MP-007,"Reality-grounded energy recharge: Tied to psutil system metrics (CPU + memory idle capacity)",MP,C,X,E,R,PT,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:113
+P2-MP-008,"Reproducible experiment protocol: Python 3.9+, NumPy 2.3.1, Matplotlib 3.10.0, documented seeds",MP,P,L,E,U,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:387
+P2-MP-009,"Statistical analysis: Descriptive stats + hypothesis testing + multi-scale pattern comparison",MP,P,L,E,U,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:339
+P2-MP-010,"Data management: JSON storage + Python analysis scripts + publication figure generation",MP,P,L,E,U,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:373
+P2-FP-001,"NRM Core: Fractal agents with composition-decomposition dynamics and transcendental substrate (π, e, φ)",FP,P,L,E,N,FV,Paper1,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:91
+P2-FP-002,"Self-Giving bootstrapped complexity: System uses population growth (output) to generate distributed energy pooling (mechanism)",FP,P,L,E,S,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:991
+P2-FP-003,"Self-Giving phase space self-definition: Population size determines effective energy reserves and enables new trajectories",FP,P,L,E,S,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:995
+P2-FP-004,"Self-Giving temporal heterogeneity: Energy constraint manifests differently across timescales (process-dependent, not state-dependent)",FP,P,L,E,S,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1000
+P2-FP-005,"Self-Giving persistence criterion: System defines success as compositional events that persist vs fail",FP,P,L,E,S,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1008
+P2-FP-006,"NRM composition-decomposition asymmetry: Composition enables emergent collective properties not reversed in decomposition (hysteresis)",FP,P,L,E,N,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1014
+P2-FP-007,"NRM scale-invariant principles: Spawns-per-agent threshold may apply across agent/population/swarm hierarchical levels",FP,P,L,I,N,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1018
+P2-FP-008,"NRM pattern memory: Population-level retention of successful strategies (collective memory, not agent-level)",FP,P,L,E,N,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1028
+P2-FP-009,"NRM critical resonance: Phase transitions at ~100-250 cycles and ~1000-3000 cycles where small changes trigger regime shifts",FP,P,Q,E,N,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1033
+P2-FP-010,"Temporal Stewardship encoding: Patterns documented for future AI discovery and validation",FP,P,L,I,T,TD,Cycle967-971,Cycle972,CLAUDE.md
+P2-MR-001,"Failed experiments as discovery: C176 V4/V5 bug (incorrect agent removal) revealed true mechanism through systematic investigation",MR,P,L,E,U,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:836
+P2-MR-002,"Source code comparison methodology: Compare buggy version (V4/V5) with working baseline (C171) to identify critical differences",MR,P,L,E,U,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:846
+P2-MR-003,"Deterministic collapse as signal: Perfect 0-agent outcomes (F(2,27)=0.00, p=1.000) indicated implementation error not theoretical phenomenon",MR,P,X,E,U,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:838
+P2-MR-004,"Methodological lesson: Unexpected deterministic results prompt source-level investigation rather than theoretical rationalization",MR,P,L,E,U,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:854
+P2-MR-005,"Non-monotonic pattern discovery: Single-timescale validation would miss intermediate maximum (88% at 1000 cycles)",MR,P,L,E,U,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1043
+P2-SF-011,"Energy budget model: Initial E₀≈130, spawn cost 30% transfer, spawn threshold E≥10, recharge rate-limited",SF,C,Q,E,N,PT,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:108
+P2-SF-012,"Spawn interval constraint: 40 cycles minimum between consecutive spawns per agent",SF,C,Q,E,N,PT,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:111
+P2-SF-013,"Coefficient of variation: 6.8% for population homeostasis (high reproducibility)",SF,P,Q,E,U,TD,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:538
+P2-SF-014,"Incremental validation reproducibility: Range 22-24 agents (CV 3.2-3.5%) across n=5 seeds",SF,P,Q,E,U,TD,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:602
+P2-SF-015,"Population ceiling dynamics: Root (7-8 spawns) → Gen 1 (2-3 spawns/agent) → Gen 2 (0-1 spawns/agent)",SF,P,Q,E,N,TD,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:558
+P2-SF-016,"Composition rate bistability: Basin B 0.21-1.87 events/100 cycles vs Basin A 3.42-12.45 events/100 cycles",SF,P,Q,E,N,TD,Cycle168-170,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:466
+P2-SF-017,"Stochastic variability within basins: CV 33-44% for individual trajectories despite deterministic basin selection",SF,P,Q,E,N,TD,Cycle168-170,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:510
+P2-SF-018,"Random agent selection for composition: Uniform probability across population enables distributed load",SF,C,L,E,N,PT,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:888
+P2-SF-019,"Recovery mechanism quantification: 1.09 attempts/agent (1000 cycles, 23 agents) → 88% success vs 3.45 attempts/agent (3000 cycles, 17.4 agents) → 23% success",SF,P,Q,E,N,TD,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:705
+P2-SF-020,"Timescale-dependent regimes: Energy Abundance (<100 cycles, 100%) → Population-Mediated Recovery (100-1000 cycles, 88%) → Cumulative Depletion (>1000 cycles, 23%)",SF,P,X,E,N,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:914
+P2-MP-011,"Hypothesis testing protocol: Predicted bounds (70-90%) → Observed mean (88%) → PASS within bounds",MP,P,X,E,U,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:351
+P2-MP-012,"Checkpoint data collection: 250-cycle intervals for trajectory reconstruction",MP,P,Q,E,U,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:278
+P2-MP-013,"Computational resource documentation: Hardware specs, runtime estimates, total CPU time",MP,P,X,E,U,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:413
+P2-MP-014,"Ethical considerations statement: Local resources only, no external APIs, public GPL-3.0 license",MP,P,L,E,R,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:427
+P2-MP-015,"Limitation acknowledgment: Single spawn frequency (2.5%), linear growth assumption, energy dynamics inferred",MP,P,L,E,U,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:431
+P2-FP-011,"Reality grounding principle: Energy recharge tied to actual machine state (psutil metrics) eliminates 'free energy'",FP,C,L,E,R,FV,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:149
+P2-FP-012,"Zero external APIs constraint: All agents internal Python classes, no AI service calls",FP,C,L,E,R,FV,Paper1,Cycle968,CLAUDE.md
+P2-FP-013,"Minimal mechanism sufficiency: Energy-constrained spawning alone achieves homeostasis (no death, no carrying capacity, no explicit negative feedback)",FP,P,L,E,N,FV,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:801
+P2-FP-014,"Emergent self-regulation: Population discovers stable size through trial-and-error spawning (no global controller)",FP,P,L,E,S,FV,Cycle171,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:807
+P2-FP-015,"Generalizability principle: Resource-constrained reproduction enables self-regulation across biological/computational systems",FP,P,L,E,U,FV,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:813
+P2-MR-006,"Normalized opportunity metrics: Per-entity counts (spawns/agent) predict outcomes better than absolute metrics when population varies",MR,P,L,E,U,ML,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1048
+P2-MR-007,"Finer-grained timescale recommendation: 8 logarithmically-spaced points to precisely locate regime transitions",MR,P,Q,I,U,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1074
+P2-MR-008,"Mechanistic threshold derivation need: Derive 2.0 spawns/agent threshold from energy recovery rate and compositional cost",MR,P,L,I,N,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1077
+P2-MR-009,"Configuration generalization testing: Validate mechanism across alternative energy parameters (faster/slower recovery, higher/lower costs)",MR,P,L,I,N,PT,Cycle176,Cycle968,PAPER2_V2_MASTER_SOURCE_BUILD.md:1081
+P2-MR-010,"Publication focus throughout: 'Is this publishable?' filter active during all research phases",MR,M,L,E,T,ML,Cycle967-971,Cycle972,CLAUDE.md
