@@ -87,3 +87,11 @@ CS-MR-008,"Section integration order: Front matter → Introduction → Methods 
 CS-MR-009,"Placeholder benefits: Enables quality-focused work, narrative consistency checks, iterative refinement without rush",MR,D,L,E,U,ML,Cycle968,Cycle969,CYCLE969_PLACEHOLDER_INSERTION_COMPLETE.md
 CS-MP-008,"Three-paper narrative arc: Paper 1 (reality grounding) → Paper 2 (emergence) → Paper 3 (temporal encoding)",MP,D,L,E,T,PT,Cycle970,Cycle971,CYCLE970_FINAL_SUMMARY.md
 CS-MP-009,"Research continuation planning: Document next phase immediately after milestone (no terminal states)",MP,D,L,E,T,ML,Cycle970,Cycle970,CYCLE970_FINAL_SUMMARY.md
+CC-MP-001,"Validation-before-execution: Run BASELINE only (n=20 seeds) before full study (6 conditions × 10 seeds) to verify mechanism before expensive computation",MP,C,X,E,U,ML,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:5-21
+CC-MP-002,"Expected outcome specification: EXPECTED_MEAN_POP=18.0, EXPECTED_CV_THRESHOLD=15.0% as falsifiable predictions before execution",MP,C,Q,E,U,PT,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:56-58
+CC-MP-003,"Explicit C171 reference in code: 'C171 NEVER removes agents on composition' - systematic baseline comparison for mechanism validation",MP,C,L,E,U,ML,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:10-13
+CC-MP-004,"Reproducible seed specification: SEEDS = list(range(42, 62)) for n=20 deterministic sequences",MP,C,Q,E,U,PT,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:50
+CC-MP-005,"Mechanism documentation in docstring: 'Population control via failed spawning, not death' - explains WHY mechanism works, not just WHAT",MP,C,L,E,N,ML,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:9-18
+CC-MP-006,"Energy budget constants: energy_fraction=0.3 (30% transfer to child) used in parent.spawn_child()",MP,C,Q,E,N,PT,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:16,120
+CC-MP-007,"Random parent selection: parent = agents[np.random.randint(len(agents))] for distributed spawn load",MP,C,L,E,N,PT,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:118
+CC-MP-008,"Composition engine separation: CompositionEngine(resonance_threshold=0.5) for cluster detection",MP,C,Q,E,N,PT,Cycle176,Cycle176,cycle176_v6_baseline_validation.py:46,107
