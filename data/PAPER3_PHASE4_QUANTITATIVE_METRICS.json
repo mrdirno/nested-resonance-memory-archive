@@ -1,0 +1,79 @@
+{
+  "docs_code_ratio": 1.7468,
+  "encoding_multiplicity": {
+    "multi_format_count": 2,
+    "single_format_count": 120,
+    "multi_format_pct": 1.639344262295082,
+    "format_distribution": {
+      "D": 54,
+      "P": 51,
+      "C": 15,
+      "M": 2
+    },
+    "format_percentages": {
+      "D": 44.26,
+      "P": 41.8,
+      "C": 12.3,
+      "M": 1.64
+    }
+  },
+  "framework_consistency": {
+    "framework_distribution": {
+      "U": 47,
+      "N": 30,
+      "T": 28,
+      "S": 9,
+      "R": 8
+    },
+    "framework_percentages": {
+      "U": 38.52,
+      "N": 24.59,
+      "T": 22.95,
+      "S": 7.38,
+      "R": 6.56
+    },
+    "core_framework_count": 75,
+    "core_framework_pct": 61.47540983606557,
+    "universal_count": 47,
+    "universal_pct": 38.52
+  },
+  "transparency": {
+    "total_cycles": 372,
+    "cycles_with_failures": 319,
+    "transparency_pct": 85.75268817204301,
+    "major_bugs_documented": 5,
+    "documented_failures_sample": [
+      "CYCLE501_SESSION_SUMMARY.md",
+      "CYCLES909_910_PAPER2_INTEGRATION_INCREMENTAL_RESULTS.md",
+      "CYCLE580_TOOLS_CONSISTENCY_CORRECTIONS.md",
+      "CYCLE369_PATTERN_MINING_SUMMARY.md",
+      "CYCLE365_SUMMARY.md",
+      "CYCLE407_SUMMARY.md",
+      "CYCLE651_META_OBJECTIVES_UPDATE.md",
+      "CYCLE843_PAPER9_LATEX_READY.md",
+      "CYCLES458-461_INFRASTRUCTURE_AUDIT_COMPLETE.md",
+      "CYCLE654_DOCS_VERSIONING_FIX.md"
+    ]
+  },
+  "pattern_survival": {
+    "mean_survival_cycles": 486.9590163934426,
+    "median_survival_cycles": 792,
+    "max_survival_cycles": 975,
+    "min_survival_cycles": 0
+  },
+  "quantitative_precision": {
+    "quantitative_count": 54,
+    "qualitative_count": 68,
+    "quantitative_pct": 44.26229508196721,
+    "precision_distribution": {
+      "L": 68,
+      "Q": 36,
+      "X": 18
+    },
+    "precision_percentages": {
+      "L": 55.74,
+      "Q": 29.51,
+      "X": 14.75
+    }
+  }
+}
