@@ -67,7 +67,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 sys.path.insert(0, str(Path(__file__).parent.parent / "fractal"))
 sys.path.insert(0, str(Path(__file__).parent.parent / "bridge"))
 
-from bridge.bridge_isolation_utils import clear_bridge_database
+from bridge_isolation_utils import clear_bridge_database
 from bridge.transcendental_bridge import TranscendentalBridge
 
 # Experimental parameters
