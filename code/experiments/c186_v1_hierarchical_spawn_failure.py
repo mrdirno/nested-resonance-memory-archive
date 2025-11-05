@@ -63,11 +63,12 @@ from typing import List, Tuple, Dict, Optional
 from datetime import datetime
 
 # Add parent directories to path
-sys.path.insert(0, str(Path(__file__).parent.parent / "bridge"))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 sys.path.insert(0, str(Path(__file__).parent.parent / "fractal"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "bridge"))
 
-from bridge_isolation_utils import clear_bridge_database
-from transcendental_bridge import TranscendentalBridge
+from bridge.bridge_isolation_utils import clear_bridge_database
+from bridge.transcendental_bridge import TranscendentalBridge
 
 # Experimental parameters
 F_INTRA = 0.025  # 2.5% intra-population spawn rate (expect failure)
