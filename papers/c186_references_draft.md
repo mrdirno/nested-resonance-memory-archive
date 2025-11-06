@@ -71,6 +71,7 @@
 - Pulliam 1988 [4]: Source-sink dynamics
 - Brown & Kodric-Brown 1977 [6]: Rescue effect
 - Newman 2015 [13]: Bulkhead patterns
+- Huitzil & Huepe 2024 [17]: Enhanced robustness through modularity (Section 4.2.1)
 
 **Section 4.3: Natural/Engineered Systems**
 - Levins 1969 [3]: Metapopulation ecology
