@@ -62,6 +62,7 @@ code/workspace/
 
 # Paper workspace directories (temporary npm cache, build artifacts)
 papers/arxiv_submissions/*/workspace/
+papers/compiled/workspace/
 
 # LaTeX build artifacts
 papers/arxiv_submissions/*/manuscript.pdf
