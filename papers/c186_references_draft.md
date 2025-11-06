@@ -41,6 +41,8 @@
 
 16. Tao, Y., Hastings, A., Lafferty, K. D., Hanski, I., & Ovaskainen, O. (2024). Landscape fragmentation overturns classical metapopulation thinking. *Proceedings of the National Academy of Sciences*, 121(20), e2303846121. https://doi.org/10.1073/pnas.2303846121
 
+17. Huitzil, S., & Huepe, C. (2024). Life's building blocks: the modular path to multiscale complexity. *Frontiers in Systems Biology*, 4, 1417800. https://doi.org/10.3389/fsysb.2024.1417800
+
 ---
 
 ## CITATIONS BY SECTION
@@ -48,6 +50,7 @@
 ### Introduction (Section 1)
 - Simon 1962 [1]: Hierarchical complexity, coordination costs
 - Gavetti & Levinthal 2004 [2]: Organizational theory, hierarchical overhead
+- Huitzil & Huepe 2024 [17]: Modularity as fundamental organizing principle, enhanced robustness through compartmentalization
 
 ### Methods (Section 2)
 - (No external citations - computational methods fully described)
@@ -92,9 +95,10 @@
 
 ## NOTES FOR INTEGRATION
 
-1. **Citation Count:** 16 peer-reviewed sources covering:
+1. **Citation Count:** 17 peer-reviewed sources covering:
    - Organizational theory (2): Simon, Gavetti & Levinthal
    - Metapopulation ecology (7): Levins, Pulliam, Brown & Kodric-Brown, Hanski (3 sources), Tao et al.
+   - Systems biology/modularity (1): Huitzil & Huepe
    - Neuroscience (2): Bullmore & Sporns, Rakic
    - Immunology (1): Janeway et al.
    - Computer science (2): Newman, Barroso & Hölzle
@@ -120,7 +124,8 @@
    - Recent hierarchical systems papers (2020-2025) for current literature
 
 7. **Cross-Domain Balance:**
-   - Ecology: 6 citations (dominant - provides theoretical foundation)
+   - Ecology: 7 citations (dominant - provides theoretical foundation)
+   - Systems Biology: 1 citation (modularity framework)
    - Computer Science: 2 citations (distributed systems analogy)
    - Neuroscience: 2 citations (biological hierarchy)
    - Immunology: 1 citation (immune architecture)
@@ -139,13 +144,21 @@
    - **Science Advances:** Cross-domain synthesis appropriate ✓
    - **PNAS:** Biological/computational integration fits well ✓
 
-10. **Significance of Tao et al. 2024:**
+10. **Significance of 2024 Papers:**
+
+    **Tao et al. 2024 (PNAS):**
     - Co-authored by Ilkka Hanski (foundational metapopulation ecologist already cited)
     - Published in PNAS 2024 (same tier as target journal Nature Communications)
     - Directly relevant: Shows how fragmentation can contradict classical predictions
     - Parallels our finding: Hierarchical compartmentalization contradicts overhead theory
     - Demonstrates current active research in metapopulation dynamics
-    - Strengthens manuscript by showing engagement with cutting-edge literature
+
+    **Huitzil & Huepe 2024 (Frontiers in Systems Biology):**
+    - Unifying framework for modularity across biological scales
+    - Identifies enhanced robustness as key advantage: "Modularity contains perturbations within subsystems, preventing system-wide failures"
+    - Directly supports our Risk Isolation hypothesis
+    - Demonstrates theoretical foundation for hierarchical advantages
+    - Strengthens Introduction by grounding in current systems biology literature
 
 11. **Next Steps:**
     - Verify all citations against manuscript text
@@ -155,4 +168,4 @@
     - Cross-check DOIs for accuracy
     - Consider citing Tao et al. in Discussion Section 4.1 or 4.3
 
-**Status:** Enhanced with recent literature. 16 citations cover all major claims + cutting-edge research. Cross-domain balance appropriate for manuscript scope. Ready for high-impact interdisciplinary journal submission.
+**Status:** Enhanced with recent literature (Tao et al. 2024, Huitzil & Huepe 2024). 17 citations cover all major claims + cutting-edge research. Cross-domain balance appropriate for manuscript scope. Ready for high-impact interdisciplinary journal submission.
