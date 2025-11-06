@@ -3,7 +3,7 @@
 
 **Author:** Aldrin Payopay <aldrin.gdf@gmail.com>
 **Date:** 2025-11-05 (Cycle 1075)
-**Status:** First draft based on V1-V5 results, V6-V8 integration slots identified
+**Status:** Enhanced with Huitzil & Huepe 2024 [17] in Section 4.2.1 to ground Risk Isolation mechanism in systems biology modularity framework. V6-V8 integration slots identified. Ready for data integration.
 
 ---
 
@@ -29,7 +29,11 @@ Detailed analysis of C186 results reveals hierarchical efficiency emerges from i
 
 Energy compartmentalization acts as "firewall" preventing local failures from propagating system-wide. In single-scale systems (C177), adverse energy fluctuations—whether from spawn clustering, stochastic recharge variation, or selection bias—affect entire 200-agent population simultaneously. A period where randomly many agents spawn creates collective energy depletion, risking population-wide reproductive failure on subsequent cycles.
 
-Hierarchical systems partition this risk across 10 independent populations. If population *i* experiences adverse fluctuation (e.g., multiple agents selected for spawning in rapid succession), energy depletion remains confined to that compartment. Populations *j* ≠ *i* continue operating normally, maintaining system-level viability even as individual compartments struggle. This implements fault-tolerant architecture analogous to bulkhead patterns in distributed computing [Newman 2015]—failures isolated to individual services cannot cascade system-wide.
+Hierarchical systems partition this risk across 10 independent populations. If population *i* experiences adverse fluctuation (e.g., multiple agents selected for spawning in rapid succession), energy depletion remains confined to that compartment. Populations *j* ≠ *i* continue operating normally, maintaining system-level viability even as individual compartments struggle.
+
+This mechanism exemplifies enhanced robustness through modularity—a fundamental organizing principle in biological systems where compartmentalization "contains perturbations within subsystems, preventing system-wide failures" [Huitzil & Huepe 2024]. Our computational results provide quantitative validation of this theoretical framework: modular hierarchical organization enables complexity evolution not despite compartmentalization costs, but because isolation of perturbations outweighs coordination overhead under resource constraints.
+
+The architecture implements fault-tolerant design analogous to bulkhead patterns in distributed computing [Newman 2015]—failures isolated to individual services cannot cascade system-wide.
 
 **Quantitative evidence:** C186 experiments show all 10 populations remain active throughout 3,000-cycle duration across all tested frequencies (1.0-5.0%). No population extinctions observed despite spawn frequencies as low as 1.0% (100-cycle intervals). In contrast, single-scale systems at similar frequencies (C177, f < 6.25%) collapse entirely. This demonstrates compartmentalization prevents population-level failures from becoming system-level catastrophes.
 
