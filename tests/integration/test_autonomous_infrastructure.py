@@ -42,7 +42,9 @@ from typing import Dict, List, Tuple
 # CONFIGURATION
 # =============================================================================
 
-EXPERIMENTS_DIR = Path(__file__).parent
+# Point to code/experiments directory
+REPO_ROOT = Path(__file__).parent.parent.parent
+EXPERIMENTS_DIR = REPO_ROOT / "code" / "experiments"
 
 # Files to test
 INFRASTRUCTURE_FILES = {
