@@ -44,6 +44,12 @@ class C186ExperimentCoordinator:
     """
 
     def __init__(self, workspace_root: Path):
+        """
+        Initialize coordinator with workspace root path.
+
+        Args:
+            workspace_root: Root directory for experiment workspace
+        """
         self.workspace_root = workspace_root
         self.experiments_dir = workspace_root / 'experiments'
         self.analysis_dir = workspace_root / 'analysis'

@@ -74,6 +74,12 @@ class CampaignResultsAggregator:
     """
 
     def __init__(self, results_dir: Path):
+        """
+        Initialize aggregator with results directory path.
+
+        Args:
+            results_dir: Path to directory containing experiment results
+        """
         self.results_dir = Path(results_dir)
         self.summaries: List[ConditionSummary] = []
         self.raw_data: Dict[str, Dict[str, Any]] = {}

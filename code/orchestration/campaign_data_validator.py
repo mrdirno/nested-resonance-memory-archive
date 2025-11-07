@@ -43,6 +43,12 @@ class CampaignDataValidator:
     """
 
     def __init__(self, results_dir: Path):
+        """
+        Initialize validator with results directory path.
+
+        Args:
+            results_dir: Path to directory containing experiment results
+        """
         self.results_dir = Path(results_dir)
         self.validation_results: List[ValidationResult] = []
 
@@ -255,6 +261,7 @@ class CampaignDataValidator:
 
         # Statistical summary
         def safe_stats(values: List[float], name: str) -> Dict[str, float]:
+            """Calculate statistical summary metrics safely handling empty lists."""
             if not values:
                 return {}
             return {
@@ -274,6 +281,7 @@ class CampaignDataValidator:
 
         # Outlier detection (simple z-score based)
         def detect_outliers(values: List[float], name: str, threshold: float = 3.0):
+            """Detect statistical outliers using z-score threshold method."""
             if len(values) < 3:
                 return
             mean = statistics.mean(values)

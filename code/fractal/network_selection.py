@@ -339,7 +339,10 @@ if __name__ == "__main__":
 
     # Create mock agents (simplified for testing)
     class MockAgent:
+        """Lightweight mock agent for network selection testing."""
+
         def __init__(self, node_id):
+            """Initialize mock agent with node ID."""
             self.agent_id = f"agent_{node_id}"
             self.node_id = node_id
 

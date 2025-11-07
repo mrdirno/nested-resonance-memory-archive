@@ -54,6 +54,18 @@ class Task:
         dependencies: Optional[List[str]] = None,
         metadata: Optional[Dict[str, Any]] = None
     ):
+        """
+        Initialize orchestration task with configuration.
+
+        Args:
+            task_id: Unique identifier for task
+            name: Human-readable task name
+            description: Task description
+            priority: Task priority level
+            status: Initial task status
+            dependencies: Optional list of task IDs this depends on
+            metadata: Optional additional metadata
+        """
         self.task_id = task_id
         self.name = name
         self.description = description
