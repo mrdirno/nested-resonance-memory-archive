@@ -113,7 +113,8 @@ if __name__ == "__main__":
     print(f"{'Cap':>5} {'Basin':>6} {'Fraction':>10} {'Cycles/sec':>12} {'Duration':>10}")
     print("-" * 70)
     for r in results:
-        print(f"{r['agent_cap']:>5} {r['basin']:>6} {r['fraction']:>10.2f} "
+        basin_str = str(r['basin']) if r['basin'] is not None else "None"
+        print(f"{r['agent_cap']:>5} {basin_str:>6} {r['fraction']:>10.2f} "
               f"{r['cycles_per_sec']:>12.1f} {r['duration']:>10.1f}s")
     
     # Check if basins differ

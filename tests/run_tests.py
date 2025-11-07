@@ -74,10 +74,12 @@ def run_test_suite(test_dir: Path, category: str) -> Tuple[int, int, List[str]]:
             print("❌ FAIL")
             failed_tests.append(test_file.name)
             print(f"    Error output:")
-            for line in output.split('\n')[:10]:  # Show first 10 lines
+            output_lines = output.split('\n')
+            for line in output_lines[:10]:  # Show first 10 lines
                 print(f"      {line}")
-            if len(output.split('\n')) > 10:
-                print(f"      ... ({len(output.split('\n')) - 10} more lines)")
+            if len(output_lines) > 10:
+                remaining_lines = len(output_lines) - 10
+                print(f"      ... ({remaining_lines} more lines)")
 
     return passed, len(test_files), failed_tests
 
