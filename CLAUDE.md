@@ -320,16 +320,76 @@ This generates a properly formatted commit message with:
 ### Why This Matters
 
 **Without this protocol:**
-- ❌ 69 commits contained impossible timeline claims
-- ❌ Visualizations showed 93-day runtime (actual: 2.5 days)
-- ❌ Critical credibility damage to research
-- ❌ Publications would be rejected immediately
+- ❌ Manual tracking leads to systematic errors
+- ❌ Timeline inconsistencies undermine reproducibility
+- ❌ Human error propagates across documentation
 
 **With this protocol:**
 - ✅ OS-verified ground truth (100% confidence)
 - ✅ Automated verification prevents human error
 - ✅ Research integrity maintained
 - ✅ Reproducible, auditable timeline
+
+---
+
+## ERROR CORRECTION PROTOCOL (CRITICAL)
+
+**⚠️ DISTINGUISH INTERNAL CORRECTIONS FROM PUBLIC PRESENTATION ⚠️**
+
+### Internal Corrections (Documentation/Tracking Issues)
+
+**Appropriate Response:**
+- ✅ Document in internal files (e.g., MILESTONE_TIMELINE_CORRECTION.md)
+- ✅ Update tracking systems and tools
+- ✅ Update CLAUDE.md with prevention protocols
+- ✅ Fix quietly, thoroughly, and move forward
+- ✅ Maintain audit trail in internal docs
+
+**PROHIBITED Actions:**
+- ❌ DO NOT announce as "CRITICAL ERROR" in README.md
+- ❌ DO NOT make minor tracking issues look catastrophic
+- ❌ DO NOT remove actual project content to highlight corrections
+- ❌ DO NOT lead README with error announcements
+- ❌ DO NOT make internal issues prominent on public front page
+
+### Public Repository Presentation (README.md)
+
+**Always Focus On:**
+- ✅ What the project IS (research frameworks, findings)
+- ✅ Current research and publications
+- ✅ How to use/understand the work
+- ✅ Professional, forward-facing content
+- ✅ Getting started instructions
+
+**Never Lead With:**
+- ❌ Internal tracking corrections
+- ❌ Error announcements
+- ❌ Process issues
+- ❌ What went wrong and how you fixed it
+
+### Principle
+
+**Internal audit trails ≠ Public front page**
+
+Fix issues thoroughly in internal documentation, but present the project professionally to external audiences.
+
+**Example:**
+- **Wrong:** "⚠️ CRITICAL ERROR: Timeline tracking was incorrect for 69 commits..."
+- **Right:** Keep correction in MILESTONE_TIMELINE_CORRECTION.md, present project normally
+
+### When to Use Each Approach
+
+**Public Announcement Required:**
+- Security vulnerabilities affecting users
+- Breaking API changes
+- Data corruption affecting reproducibility
+- Major methodology retractions
+
+**Internal Documentation Only:**
+- Tracking/counting errors
+- Process improvements
+- Tool refinements
+- Minor inconsistencies fixed
 
 ### If V6 Process Restarts
 
