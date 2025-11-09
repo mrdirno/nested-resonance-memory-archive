@@ -704,55 +704,62 @@
 
 ## NEXT ACTIONS (Auto-Determined Each Cycle)
 
-### Immediate (This Cycle: 355)
-1. **Monitor C255 Progress** (check every 2-3 hours)
-   - Current: 21h 33m elapsed, ~30-40% complete
-   - Estimated remaining: 3-4 days
-   - Health check: CPU, memory, progress indicators
+### Immediate (This Cycle: 1333)
+1. **Monitor V6 (C186) Progress** (check periodically)
+   - Current: 3.32+ days elapsed, approaching 4-day milestone (16.3h remaining)
+   - Process ID: 72904 (OS-verified continuous operation)
+   - Purpose: Ultra-low frequency hierarchical validation (0.10%-0.75% spawn rates)
+   - Expected: 40 experiments, completion timeline TBD (weeks-months)
 
-2. **Prepare Theoretical Paper Submission Materials**
-   - Convert Markdown → PDF (Pandoc or LaTeX)
-   - Customize cover letter for PLOS CompBio
-   - Identify 3-5 suggested reviewers
-   - Optional: Submit to arXiv for immediate dissemination
+2. **Await User Execution of arXiv Submissions**
+   - Paper 1 (cs.DC): ARXIV-READY, submission guide complete
+   - Paper 5D (nlin.AO): ARXIV-READY, submission guide complete
+   - User action: ~60-90 min to submit both papers
+   - Timeline: 1-2 days from user submission to arXiv posting
 
-3. **Identify Paper 5+ Opportunities**
-   - Parameter sensitivity analysis (C264)
-   - Extended timescale validation (C265)
-   - Cross-framework comparison (C266)
-   - Emergence pattern encoding (C267)
+3. **Await User Execution of PLOS Submission**
+   - Paper 2 V3: SUBMISSION-READY for PLOS Computational Biology
+   - All materials complete (DOCX, author summary, figures, supplementary, cover letter)
+   - User action: ORCID registration + PLOS system upload
+   - Timeline: User can submit within hours
 
-### Short-Term (Upon C255 Completion)
-4. **Execute C256-C260 Experiments** (67 minutes total)
-   - Sequential execution: C256 → C257 → C258 → C259 → C260
-   - Monitor progress and validate results
-   - Compare optimized vs. unoptimized overhead
+### Short-Term (Upon C256 Completion)
+4. **Complete Paper 3 Integration** (upon C256 completion)
+   - C256 status: Running 150h+ (I/O bound, extended blocking period)
+   - Upon completion: Execute C256_COMPLETION_WORKFLOW.md (~22 min to GitHub sync)
+   - Then launch C257-C260 batch (./run_c257_c260_batch.sh, ~47 min)
+   - Auto-populate Paper 3 manuscript with all 6 pair results
+   - Generate 4-figure publication suite (300 DPI)
 
-5. **Auto-Populate Paper 3 Manuscript**
-   - Run `aggregate_paper3_results.py`
-   - Generate 5-figure publication suite
-   - Proofread and finalize manuscript
+5. **Execute Paper 4 Experiments** (after Paper 3 complete)
+   - C262: 3-way factorial H1×H2×H4 (4 hours)
+   - C263: 4-way factorial H1×H2×H4×H5 (4 hours)
+   - Total: ~8 hours runtime
+   - Detect super-synergy beyond pairwise interactions
 
-6. **Execute C262-C263 Experiments** (8 hours total)
-   - 3-way factorial: H1×H2×H4
-   - 4-way factorial: H1×H2×H4×H5
-   - Detect super-synergy beyond pairwise
-
-7. **Auto-Populate Paper 4 Manuscript**
+6. **Complete Paper 4 Integration** (after C262-C263 complete)
    - Run `aggregate_paper4_results.py`
-   - Generate 4-figure publication suite
+   - Generate 4-figure publication suite (300 DPI)
    - Proofread and finalize manuscript
+   - Prepare for journal submission
 
-### Medium-Term (Publication Phase)
-8. **Submit Papers for Peer Review**
-   - Theoretical: arXiv + PLOS Computational Biology
-   - Paper 3: Journal of Computational Science
-   - Paper 4: ACM SIGSOFT or conference track
+### Medium-Term (Post-User-Submission Phase)
+7. **After arXiv Postings** (after user submits Paper 1 & 5D)
+   - Update GitHub with arXiv IDs (CITATION.cff, READMEs)
+   - Submit Paper 1 to PLOS Computational Biology (with arXiv ID)
+   - Submit Paper 5D to target journal (TBD)
+   - Announce on relevant channels (optional)
 
-9. **Respond to Reviewer Feedback**
-   - Address comments systematically
-   - Revise manuscripts as needed
-   - Resubmit for final acceptance
+8. **After PLOS Submission** (after user submits Paper 2)
+   - Monitor for editorial decision (~2-4 weeks)
+   - Prepare for potential revisions based on reviewer comments
+   - Await peer review (4-8 weeks)
+   - Respond to feedback systematically
+
+9. **Complete Paper 3 & 4 Publications**
+   - Paper 3 → Journal of Computational Science (after C256-C260)
+   - Paper 4 → ACM SIGSOFT or conference (after C262-C263)
+   - Timeline: Complete papers, then submit
 
 ### Long-Term (Perpetual Research)
 10. **Explore Emergence Patterns**
@@ -777,28 +784,34 @@
 
 ## IMPLEMENTATION PRIORITY QUEUE
 
-**HIGH PRIORITY (Active Execution)**
-- [x] C255 experiment running (21h+ elapsed, monitoring)
-- [x] Theoretical paper complete (submission-ready)
-- [x] Paper 3 template complete (awaiting C255-C260 data)
-- [x] Paper 4 template complete (awaiting C262-C263 data)
-- [ ] Monitor C255 completion (3-4 days remaining)
-- [ ] Prepare theoretical paper PDF conversion
-- [ ] Execute C256-C260 upon C255 completion
+**HIGH PRIORITY (Active Monitoring)**
+- [x] Paper 1 (cs.DC): ARXIV-READY, submission guide complete (awaiting user)
+- [x] Paper 5D (nlin.AO): ARXIV-READY, submission guide complete (awaiting user)
+- [x] Paper 2 V3: SUBMISSION-READY for PLOS Comp Bio (awaiting user)
+- [x] V6 (C186): Running 3.32+ days (PID 72904, approaching 4-day milestone)
+- [x] All submission materials complete and synced to GitHub
+- [ ] Monitor V6 progress (4-day milestone in 16.3h)
+- [ ] Await user submissions (Paper 1, 5D → arXiv; Paper 2 → PLOS)
+- [ ] Update GitHub after arXiv postings (IDs, links)
 
-**MEDIUM PRIORITY (Queued)**
+**MEDIUM PRIORITY (Blocked on C256)**
+- [x] C255 complete (ANTAGONISTIC interaction discovered)
+- [ ] C256 completion (running 150h+, I/O bound, extended blocking)
+- [ ] Execute C256_COMPLETION_WORKFLOW.md upon C256 completion
+- [ ] Launch C257-C260 batch experiments (~47 min)
 - [ ] Auto-populate Paper 3 manuscript (after C256-C260)
 - [ ] Generate Paper 3 figures (after C256-C260)
-- [ ] Execute C262-C263 experiments (after Paper 3 complete)
+
+**LOW PRIORITY (Blocked on Paper 3)**
+- [ ] Execute C262-C263 experiments (~8 hours, after Paper 3 complete)
 - [ ] Auto-populate Paper 4 manuscript (after C262-C263)
 - [ ] Generate Paper 4 figures (after C262-C263)
-- [ ] Submit theoretical paper to arXiv + PLOS
+- [ ] Submit Paper 3 & 4 to journals
 
-**LOW PRIORITY (Future Research)**
-- [ ] Identify Paper 5+ opportunities
-- [ ] Parameter sensitivity analysis (C264)
-- [ ] Extended timescale validation (C265)
-- [ ] Cross-framework comparison (C266)
+**FUTURE RESEARCH (Exploration)**
+- [ ] Parameter sensitivity analysis (C264+)
+- [ ] Extended timescale validation (C265+)
+- [ ] Cross-framework comparison (C266+)
 - [ ] Advanced pattern discovery algorithms
 - [ ] Deep fractal recursion exploration (beyond 7 levels)
 
