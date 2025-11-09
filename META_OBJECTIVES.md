@@ -70,8 +70,9 @@
   - [x] Figures ready (12 total @ 300 DPI: 4 C171 + 4 C176 + 4 C193 + 4 C194, all sources: images viewed in this session)
   - [x] All sections synced to GitHub (commits a5bf040, dfbb085, fab6c3d)
   - [x] **Manuscript assembly complete** (PAPER2_V3_MASTER_MANUSCRIPT.md, 2,825 lines, ~10,500 words, commit fab6c3d)
-  - [ ] References compilation (format in PLOS Comp Bio style)
-  - [ ] Supplementary materials (methods, figures, tables)
+  - [x] **References compiled** (PAPER2_V3_REFERENCES.md, 60 citations, PLOS format, commit 7b83824)
+  - [x] **Figure captions complete** (PAPER2_V3_FIGURE_CAPTIONS.md, 11 figures @ 300 DPI, commit e56b475)
+  - [ ] Supplementary materials (methods, figures, tables, discussion)
   - [ ] Submission package (cover letter, highlights, statements)
 - **Total Evidence:** 10,948 experiments across 4 campaigns
   - C171: n=40 (energy-regulated homeostasis baseline)
@@ -92,11 +93,11 @@
 - **Target Journal:** PLOS Computational Biology (primary)
 - **Next Actions:**
   - [x] Assemble unified V3 manuscript (COMPLETE - Cycle 1328, commit fab6c3d)
-  - [ ] Generate final figure list with captions
-  - [ ] Compile references in journal format (PLOS Comp Bio style)
+  - [x] Generate final figure list with captions (COMPLETE - Cycle 1328, commit e56b475)
+  - [x] Compile references in journal format (COMPLETE - Cycle 1328, commit 7b83824, 60 refs)
   - [ ] Create supplementary materials package
   - [ ] Write cover letter and submission statements
-- **Timeline:** References + supplementary ~2-3 cycles, submission within 1 week
+- **Timeline:** Supplementary materials ~1 cycle, submission within 2-3 days
 - **Impact:** Complete energy dynamics characterization from homeostasis to sharp phase transitions with 100% theory validation
 
 #### Paper 3: Pairwise Factorial Validation (80-85% COMPLETE - Methods + Discussion + Conclusions added Cycles 861-864)
