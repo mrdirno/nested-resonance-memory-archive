@@ -185,7 +185,8 @@ class NetworkedPopulationSystem:
         initial_nodes = self.random.sample(list(self.network.nodes()), n_initial)
 
         for node_id in initial_nodes:
-            phase = self.bridge.get_phase(np.pi)  # Initialize with π phase
+            # Initialize agents with random phase in [0, 2π]
+            phase = self.random.uniform(0, 2 * np.pi)
             agent = Agent(
                 id=self.next_agent_id,
                 energy=E_INITIAL,
@@ -287,8 +288,9 @@ class NetworkedPopulationSystem:
         parent.compositions += 1
         self.spawn_successes += 1
 
-        # Create child agent
-        phase = self.bridge.get_phase(np.e)  # Use e for child phase
+        # Create child agent with phase near parent (±π/4 perturbation)
+        phase_offset = self.random.uniform(-np.pi/4, np.pi/4)
+        phase = (parent.phase + phase_offset) % (2 * np.pi)
         child = Agent(
             id=self.next_agent_id,
             energy=E_INITIAL,
@@ -447,7 +449,10 @@ def run_experiment(seed: int, topology: str, output_path: Path, db_path: Path) -
 
     print(f"  [{exp_num:2d}/{total_exps}] {topology:12s}, Seed {seed:3d}: ", end='', flush=True)
 
-    clear_bridge_database(db_path)
+    # Clear bridge database for clean experiment
+    # db_path is a workspace directory, TranscendentalBridge creates bridge.db inside it
+    bridge_db = db_path / "bridge.db"
+    clear_bridge_database(bridge_db)
     system = NetworkedPopulationSystem(seed, topology, db_path)
 
     start_time = time.time()
@@ -508,7 +513,9 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / "c187_network_structure.json"
 
-    db_path = Path(__file__).parent.parent / "bridge" / "bridge.db"
+    # Create database directory for bridge isolation
+    db_dir = Path(__file__).parent.parent.parent / "data" / "databases"
+    db_dir.mkdir(parents=True, exist_ok=True)
 
     results = []
     start_time_total = time.time()
@@ -519,7 +526,11 @@ def main():
         print("-" * 80)
 
         for seed in SEEDS:
-            result = run_experiment(seed, topology, output_path, db_path)
+            # Create unique database directory for this experiment
+            # TranscendentalBridge expects a workspace directory, not a file path
+            db_workspace = db_dir / f"c187_{topology}_seed{seed}"
+            db_workspace.mkdir(parents=True, exist_ok=True)
+            result = run_experiment(seed, topology, output_path, db_workspace)
             results.append(result)
 
     elapsed_total = time.time() - start_time_total
