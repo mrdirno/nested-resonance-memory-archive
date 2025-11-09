@@ -1,0 +1,85 @@
+{
+  "experiment": "C187_POPULATION_COUNT_VARIATION_ANALYSIS",
+  "date": "2025-11-08T20:35:13.145802",
+  "conditions": [
+    {
+      "n_pop": 1,
+      "mean_population_per_pop": 80.0,
+      "std_population_per_pop": 0.0,
+      "basin_a_pct": 100.0,
+      "alpha": 2.0,
+      "migrations_avg": 0.0
+    },
+    {
+      "n_pop": 2,
+      "mean_population_per_pop": 80.0,
+      "std_population_per_pop": 0.0,
+      "basin_a_pct": 100.0,
+      "alpha": 2.0,
+      "migrations_avg": 13.8
+    },
+    {
+      "n_pop": 5,
+      "mean_population_per_pop": 80.0,
+      "std_population_per_pop": 0.0,
+      "basin_a_pct": 100.0,
+      "alpha": 2.0,
+      "migrations_avg": 13.7
+    },
+    {
+      "n_pop": 10,
+      "mean_population_per_pop": 80.0,
+      "std_population_per_pop": 0.0,
+      "basin_a_pct": 100.0,
+      "alpha": 2.0,
+      "migrations_avg": 13.7
+    },
+    {
+      "n_pop": 20,
+      "mean_population_per_pop": 80.0,
+      "std_population_per_pop": 0.0,
+      "basin_a_pct": 100.0,
+      "alpha": 2.0,
+      "migrations_avg": 16.3
+    },
+    {
+      "n_pop": 50,
+      "mean_population_per_pop": 80.0,
+      "std_population_per_pop": 0.0,
+      "basin_a_pct": 100.0,
+      "alpha": 2.0,
+      "migrations_avg": 15.2
+    }
+  ],
+  "statistical_tests": {
+    "anova": {
+      "F": 0.0,
+      "p": 1.0,
+      "interpretation": "All \u03b1 values identical (perfect stability)"
+    },
+    "linear_regression": {
+      "slope": 0.0,
+      "intercept": 2.0,
+      "r_squared": 1.0,
+      "p_value": 1.0,
+      "interpretation": "Constant (no variation)"
+    },
+    "logarithmic_regression": {
+      "slope": 0.0,
+      "intercept": 2.0,
+      "r_squared": 1.0,
+      "p_value": 1.0,
+      "interpretation": "Constant (no variation)"
+    },
+    "correlation": {
+      "r": 0.0,
+      "p_value": 1.0,
+      "interpretation": "No variation to correlate"
+    }
+  },
+  "unexpected_finding": {
+    "description": "n_pop=1 shows identical performance to n_pop>1",
+    "implication": "Hierarchical advantage does not scale with population count",
+    "follow_up": "Test at lower frequencies or compare hierarchical vs flat spawn"
+  }
+}
