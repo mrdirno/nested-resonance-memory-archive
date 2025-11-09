@@ -205,3 +205,47 @@ V8 is **working correctly** but experiencing **extreme computational intensity**
 - CPU/memory metrics: Real-time measurement
 - Code analysis: Direct source review
 - Reality compliance: 100% (zero fabricated data)
+
+---
+
+## UPDATE (19:30 PST, 76.5 min runtime)
+
+**ALERT:** V8 appears to be stuck - matches V7 failure pattern
+
+**Current Status:**
+- Runtime: 76.5 minutes (vs 50-70 min expected for first batch)
+- CPU: 16-21% (fluctuating in "stuck" range, same as V7's 18-30%)
+- Memory: 14.1-14.2% (stable)
+- Log: Still only header (12 lines, no progress update)
+- Results: No file created
+
+**Pattern Comparison:**
+
+| Metric | V7 (FAILED) | V8 (Current) | Assessment |
+|--------|-------------|--------------|------------|
+| Runtime | 85 min | 76.5 min | V8 approaching V7 timeout |
+| CPU | 18-30% | 16-21% | MATCH (stuck range) |
+| Log | Header only | Header only | MATCH (no progress) |
+| Results | None | None | MATCH (no output) |
+| Memory | 15.3% | 14.1% | Similar |
+
+**Diagnosis:** V8 likely stuck on n_pop=1 edge case
+
+**Hypotheses:**
+1. n_pop=1 with f_migrate=0.5% creates edge case (migration from/to same population?)
+2. 200 agents in single population overwhelms some internal limit
+3. Spawn/migration logic has infinite loop for n_pop=1 case
+4. Extremely slow but functional (less likely given 76 min >> 50-70 min estimate)
+
+**CPU Pattern Analysis:**
+- Minutes 0-52: 79-99% CPU (working)
+- Minutes 52-77: 16-21% CPU (stuck/degraded)
+- Transition at ~52 min suggests state change (possible experiment completion attempt)
+
+**Next Actions:**
+1. Continue monitoring until 85-90 min (match V7 timeout)
+2. If no progress by 90 min, terminate and investigate
+3. Document V8 failure alongside V7
+4. Both V7 and V8 suggest edge case vulnerabilities in C186 codebase
+
+---
