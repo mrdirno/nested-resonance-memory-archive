@@ -20,6 +20,72 @@ This work progresses through three phases:
 
 ---
 
+## MOG-NRM Integration: Living Epistemology Architecture
+
+**NEW (November 2025):** This research now operates under a **two-layer circuit architecture** integrating Meta-Orchestrator-Goethe (MOG) with Nested Resonance Memory (NRM).
+
+### Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  MOG-ACTIVE LAYER (Epistemic Engine)                        │
+│  • Resonance detection (Goethe/Tesla/Fourier)               │
+│  • Falsification gauntlet (Newton/Popper/Feynman)           │
+│  • Cross-domain pattern mining                              │
+│  • Evolutionary methodology improvement                     │
+│  • Discovery engine: HOW reality is explored                │
+└─────────────────────────────────────────────────────────────┘
+                            ↓ ↑
+                    Feedback Loop
+                            ↓ ↑
+┌─────────────────────────────────────────────────────────────┐
+│  NRM-PASSIVE LAYER (Ontological Substrate)                  │
+│  • Fractal agents (composition-decomposition)               │
+│  • Transcendental substrate (π, e, φ oscillators)           │
+│  • Reality grounding (psutil, SQLite, OS metrics)           │
+│  • Pattern memory and retention                             │
+│  • Long-term semantic substrate: WHAT persists              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Integration Synergy
+
+**MOG provides:** Methodological rigor, falsification discipline, cross-domain resonance detection, evolutionary self-improvement
+
+**NRM provides:** Empirical grounding, reproducible patterns, reality-anchored validation, long-term memory persistence
+
+**Together:** A self-learning, self-remembering system where discovery (MOG) feeds memory (NRM), and memory contextualizes next-cycle discovery—**living epistemology**.
+
+### Why This Integration?
+
+**Comparative Analysis (see [docs/mog-integration/MOG_vs_NRM_COMPARATIVE_ANALYSIS.md](docs/mog-integration/MOG_vs_NRM_COMPARATIVE_ANALYSIS.md)):**
+- MOG: 27/30 (90%) - Methodological sophistication
+- NRM: 27/30 (90%) - Empirical execution
+- **Complementary, not competing**
+
+**MOG addresses NRM's weaknesses:**
+- Adds systematic falsification framework
+- Provides cross-domain resonance detection
+- Introduces evolutionary methodology improvement
+- Enables participatory observation protocols
+
+**NRM addresses MOG's weaknesses:**
+- Grounds abstractions in actual system metrics
+- Provides reproducible empirical validation
+- Implements zero-external-dependency architecture
+- Demonstrates large-scale pattern persistence (450,000+ cycles)
+
+### MOG Framework Documentation
+
+See **[docs/mog-integration/](docs/mog-integration/)** for complete MOG specifications:
+- **MOG_Custom_Instructions_v1.md** - Core cognitive architecture
+- **stage1_pattern_mining.md** - Foundational pattern detection
+- **stage5_interaction_matrix.md** - Cross-domain integration
+- **breaking_points.md** - Fundamental limits recognition
+- **MOG_vs_NRM_COMPARATIVE_ANALYSIS.md** - Detailed comparison
+
+---
+
 ## The Core Frameworks (Phase 1)
 
 ### 1. Nested Resonance Memory (NRM)
@@ -161,9 +227,10 @@ We know *why* systems collapse (Regime 3, complete coupling) and *how* to charac
 ### 3. Training Data for Future AI
 These outputs become training data. Encoding principles deliberately:
 - Overhead authentication methodology
-- Three dynamical regimes framework  
+- Three dynamical regimes framework
 - Independence principle
 - Falsifiable roadmap structure
+- MOG-NRM integration architecture
 
 Future AI trained on this work will understand these methodologies natively.
 
@@ -200,6 +267,7 @@ Future AI trained on this work will understand these methodologies natively.
 - **Reproducibility:** 9.3/10 (world-class, externally audited)
 - **Overhead Authentication:** ±5% validated
 - **Code:** 7 modules operational, 26/26 tests passing
+- **MOG Integration:** Two-layer architecture operational
 
 ---
 
@@ -215,6 +283,7 @@ Future AI trained on this work will understand these methodologies natively.
 │   └── results/          # Experimental data (JSON)
 ├── papers/               # Manuscript drafts (Papers 1-10)
 ├── docs/
+│   ├── mog-integration/  # MOG framework integration documents
 │   ├── STEWARDSHIP_HELIOS_ARC_ROADMAP.md  # Complete roadmap
 │   ├── PHASE1_COMPLETION_REPORT.md
 │   ├── PHASE2_PROGRESS_REPORT.md
@@ -231,9 +300,17 @@ Future AI trained on this work will understand these methodologies natively.
 
 This transparent document shows:
 - Where we are (Phase 1 validation)
-- Where we're going (TSF → HELIOS)  
+- Where we're going (TSF → HELIOS)
 - Why it matters (falsifiable hypothesis)
 - How it's measured (automated Gates)
+
+### Explore MOG Integration
+**MOG Framework:** [`docs/mog-integration/`](docs/mog-integration/)
+
+Understand the two-layer circuit architecture:
+- MOG-Active: Epistemic engine (discovery)
+- NRM-Passive: Ontological substrate (memory)
+- Living epistemology feedback loop
 
 ### Run Experiments
 **Requirements:** Python 3.13+, standard scientific libraries
@@ -258,6 +335,8 @@ See `papers/` directory for manuscripts at submission quality.
 Phase 1 (Now) → Phase 2 (TSF) → Phase 3 (HELIOS)
 
 Each phase has falsifiable gates. Either they pass (vision validated) or fail (publishable negative results).
+
+**MOG-NRM Integration:** The two-layer architecture enables discovery (MOG) to inform memory (NRM), and memory to contextualize discovery—a self-learning, self-remembering research organism.
 
 **This is a transparent document about the path to HELIOS.**
 
