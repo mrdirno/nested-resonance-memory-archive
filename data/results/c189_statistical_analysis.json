@@ -1,0 +1,78 @@
+{
+  "test_results_by_frequency": {
+    "0.5": {
+      "hierarchical_mean": 35.0,
+      "hierarchical_std": 0.0,
+      "flat_mean": 34.0,
+      "flat_std": 3.197221015541813,
+      "mean_difference": 1.0,
+      "percent_difference": 2.941176470588235,
+      "t_statistic": 0.9890707100936805,
+      "t_p_value": 0.33573862223613105,
+      "cohens_d": 0.4423258684646914,
+      "levene_statistic": 11.675675675675675,
+      "levene_p_value": 0.0030737681364692514,
+      "variance_ratio": 0.0,
+      "n_hierarchical": 10,
+      "n_flat": 10
+    },
+    "1.0": {
+      "hierarchical_mean": 50.0,
+      "hierarchical_std": 0.0,
+      "flat_mean": 49.1,
+      "flat_std": 3.4464152068167557,
+      "mean_difference": 0.8999999999999986,
+      "percent_difference": 1.8329938900203637,
+      "t_statistic": 0.8258000627789304,
+      "t_p_value": 0.41972870679723484,
+      "cohens_d": 0.3693090152394564,
+      "levene_statistic": 12.640449438202246,
+      "levene_p_value": 0.0022609392955264145,
+      "variance_ratio": 0.0,
+      "n_hierarchical": 10,
+      "n_flat": 10
+    },
+    "1.5": {
+      "hierarchical_mean": 65.0,
+      "hierarchical_std": 0.0,
+      "flat_mean": 62.8,
+      "flat_std": 8.011103405759894,
+      "mean_difference": 2.200000000000003,
+      "percent_difference": 3.503184713375801,
+      "t_statistic": 0.86842105263158,
+      "t_p_value": 0.3965952045159997,
+      "cohens_d": 0.38836970135522714,
+      "levene_statistic": 22.479357798165136,
+      "levene_p_value": 0.00016304441426588884,
+      "variance_ratio": 0.0,
+      "n_hierarchical": 10,
+      "n_flat": 10
+    },
+    "2.0": {
+      "hierarchical_mean": 80.0,
+      "hierarchical_std": 0.0,
+      "flat_mean": 77.9,
+      "flat_std": 8.5693251387337,
+      "mean_difference": 2.0999999999999943,
+      "percent_difference": 2.6957637997432533,
+      "t_statistic": 0.7749481994021872,
+      "t_p_value": 0.44843155713167737,
+      "cohens_d": 0.3465673705808705,
+      "levene_statistic": 15.84375,
+      "levene_p_value": 0.0008772646601370138,
+      "variance_ratio": 0.0,
+      "n_hierarchical": 10,
+      "n_flat": 10
+    }
+  },
+  "anova_results": {
+    "mechanism_f_statistic": 0.1611175355409489,
+    "mechanism_p_value": 0.6892273015619694,
+    "mechanism_eta_squared": 0.002061351482950406,
+    "hierarchical_mean_overall": 57.5,
+    "hierarchical_std_overall": 16.984155512168936,
+    "flat_mean_overall": 55.95,
+    "flat_std_overall": 17.549855722980627
+  },
+  "interpretation": "================================================================================\nHYPOTHESIS EVALUATION\n================================================================================\n\nStatistical Tests Summary (across 4 frequencies):\n  Hierarchical significantly better: 0\n  Hierarchical significantly worse: 0\n  No significant difference: 4\n\nMean Effect Size (Cohen's d): 0.387\n  \u2192 SMALL effect size\n\nVariance Comparison:\n  f=0.5%: Hierarchical SD=0.00, Flat SD=3.20, Ratio=0.0000\n    \u2192 Variances SIGNIFICANTLY DIFFERENT (p=0.0031)\n  f=1.0%: Hierarchical SD=0.00, Flat SD=3.45, Ratio=0.0000\n    \u2192 Variances SIGNIFICANTLY DIFFERENT (p=0.0023)\n  f=1.5%: Hierarchical SD=0.00, Flat SD=8.01, Ratio=0.0000\n    \u2192 Variances SIGNIFICANTLY DIFFERENT (p=0.0002)\n  f=2.0%: Hierarchical SD=0.00, Flat SD=8.57, Ratio=0.0000\n    \u2192 Variances SIGNIFICANTLY DIFFERENT (p=0.0009)\n\nHYPOTHESIS SUPPORT:\n\n\u26a0\ufe0f MIXED/AMBIGUOUS RESULTS\n\nEvidence:\n  - Inconsistent pattern across frequencies\n  - Small effect sizes with variable direction\n  - No clear hypothesis support\n\n================================================================================"
+}
