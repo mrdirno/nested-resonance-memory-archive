@@ -53,10 +53,10 @@
 - **Timeline:** arXiv: 1-2 days | Journal: 4-5 months
 - **Impact:** 10× stricter validation + novel NRM-based noise mitigation strategy
 
-#### Paper 2: Energy-Regulated Population Homeostasis (V3 MASTER MANUSCRIPT COMPLETE) ✅ **MAJOR UPDATE (Cycles 1326-1328)**
+#### Paper 2: Energy-Regulated Population Homeostasis (✅ SUBMISSION-READY) ✅ **COMPLETE (Cycles 1326-1328)**
 - **Title:** "Energy-Regulated Population Homeostasis and Sharp Phase Transitions in Nested Resonance Memory"
 - **Type:** Empirical research / Energy dynamics + phase transitions
-- **Status:** ✅ **V3 ASSEMBLY COMPLETE** (Cycle 1328) → References + supplementary materials pending
+- **Status:** ✅ **SUBMISSION-READY** (Cycle 1328) → All materials complete, ready for PLOS Comp Bio submission
 - **Components:**
   - [x] Integration plan complete (PAPER2_C193_C194_INTEGRATION_PLAN.md)
   - [x] Methods 2.5: Population Size Scaling (C193, 1,200 experiments)
@@ -72,8 +72,8 @@
   - [x] **Manuscript assembly complete** (PAPER2_V3_MASTER_MANUSCRIPT.md, 2,825 lines, ~10,500 words, commit fab6c3d)
   - [x] **References compiled** (PAPER2_V3_REFERENCES.md, 60 citations, PLOS format, commit 7b83824)
   - [x] **Figure captions complete** (PAPER2_V3_FIGURE_CAPTIONS.md, 11 figures @ 300 DPI, commit e56b475)
-  - [ ] Supplementary materials (methods, figures, tables, discussion)
-  - [ ] Submission package (cover letter, highlights, statements)
+  - [x] **Supplementary materials complete** (PAPER2_V3_SUPPLEMENTARY_MATERIALS.md, ~18 pages, commit ac4fd79)
+  - [x] **Submission package complete** (cover letter + checklist, commit f069716)
 - **Total Evidence:** 10,948 experiments across 4 campaigns
   - C171: n=40 (energy-regulated homeostasis baseline)
   - C176: n=8 (timescale-dependent constraint manifestation)
@@ -91,13 +91,17 @@
   4. Sharp phase transition (C194, binary collapse at net energy threshold)
   5. Self-Giving Systems validation (system self-defines viability criterion)
 - **Target Journal:** PLOS Computational Biology (primary)
-- **Next Actions:**
-  - [x] Assemble unified V3 manuscript (COMPLETE - Cycle 1328, commit fab6c3d)
-  - [x] Generate final figure list with captions (COMPLETE - Cycle 1328, commit e56b475)
-  - [x] Compile references in journal format (COMPLETE - Cycle 1328, commit 7b83824, 60 refs)
-  - [ ] Create supplementary materials package
-  - [ ] Write cover letter and submission statements
-- **Timeline:** Supplementary materials ~1 cycle, submission within 2-3 days
+- **Completion Summary (Cycle 1328):**
+  - [x] Assemble unified V3 manuscript (fab6c3d, 2,825 lines, ~10,500 words)
+  - [x] Generate final figure list with captions (e56b475, 11 figures @ 300 DPI)
+  - [x] Compile references in journal format (7b83824, 60 citations)
+  - [x] Create supplementary materials package (ac4fd79, ~18 pages comprehensive)
+  - [x] Write cover letter and submission package (f069716, PLOS Comp Bio ready)
+- **Submission Actions (1-2 days):**
+  - [ ] Convert markdown to DOCX format
+  - [ ] Create optional author summary (150-200 words)
+  - [ ] Submit via PLOS Computational Biology system
+- **Timeline:** Submission within 1-2 days, publication in 3-6 months
 - **Impact:** Complete energy dynamics characterization from homeostasis to sharp phase transitions with 100% theory validation
 
 #### Paper 3: Pairwise Factorial Validation (80-85% COMPLETE - Methods + Discussion + Conclusions added Cycles 861-864)
