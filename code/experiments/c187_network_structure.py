@@ -167,7 +167,7 @@ class NetworkedPopulationSystem:
 
         elif topo_type == 'grid_2d':
             # 2D lattice (regular grid)
-            G = nx.grid_2d_graph(rows=topo_params['rows'], cols=topo_params['cols'])
+            G = nx.grid_2d_graph(topo_params['rows'], topo_params['cols'])
             # Relabel nodes from (i,j) tuples to integers 0..99
             mapping = {node: i for i, node in enumerate(G.nodes())}
             G = nx.relabel_nodes(G, mapping)
