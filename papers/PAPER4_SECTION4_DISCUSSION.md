@@ -998,7 +998,7 @@ This discussion integrates findings across five theoretical extensions to the NR
 
 **Key Insights:**
 
-1. **Hierarchical Advantage (α = 607)**: Compartmentalization + coupling = massive synergy (607× efficiency, not overhead)
+1. **Dual Advantage (α = 607 + σ = 0.0)**: Compartmentalization + coupling = massive synergy (607× efficiency + perfect stability, not overhead)
 2. **Hub Depletion**: Degree heterogeneity creates energy inequality and bottlenecks
 3. **Stochastic Flexibility**: Demographic noise enables adaptive exploration of basin boundaries
 4. **Temporal Regulation**: Memory and criticality operate on multiple timescales
@@ -1013,7 +1013,7 @@ This discussion integrates findings across five theoretical extensions to the NR
 
 **Broader Impacts:**
 
-Applications to AI (agent orchestration), neuroscience (brain energetics), ecology (metapopulation rescue), and organizations (hierarchical efficiency).
+Applications to AI (agent orchestration with efficiency + stability), neuroscience (brain energetics with low mean + low variance), ecology (metapopulation rescue with deterministic dynamics), and organizations (hierarchical efficiency + operational predictability).
 
 **Limitations and Future Work:**
 
@@ -1021,7 +1021,7 @@ Joint extension experiments (C191-C198), energy parameter variations (C199-C201)
 
 **The Central Finding:**
 
-Nested Resonance Memory systems exhibit **multi-scale regulation** through energy conservation, with hierarchical architectures providing **efficiency gains** (α < 0.5) that contradict classical overhead predictions. This establishes energy-based compositional dynamics as a **novel framework** for understanding emergence in constrained systems.
+Nested Resonance Memory systems exhibit **multi-scale regulation** through energy conservation, with hierarchical architectures providing a **dual advantage** (efficiency α = 607 + stability σ = 0.0) that contradicts classical overhead predictions. Hierarchical systems are **qualitatively different** from both classical hierarchies (which show overhead) and single-scale systems (which show variance), not merely quantitatively better. This establishes energy-based compositional dynamics as a **novel framework** for understanding emergence in constrained systems.
 
 ---
 
