@@ -146,6 +146,21 @@ Or use provided requirements.txt:
 pip install -r requirements.txt
 ```
 
+### Environment Variables (Optional)
+
+**NRM_WORKSPACE_PATH:**
+Set this to override the default workspace location. Useful for portable deployments or custom directory structures.
+
+```bash
+# Example: Use a custom workspace directory
+export NRM_WORKSPACE_PATH=/path/to/your/workspace
+
+# Or use default (./workspace in current directory)
+# No export needed - automatic fallback
+```
+
+**Note:** Many experiment scripts contain hard-coded paths from the original development environment (`/Volumes/dual/DUALITY-ZERO-V2`). These are being systematically migrated to use `NRM_WORKSPACE_PATH`. For now, you may need to adjust paths in individual scripts if running outside the default configuration.
+
 ---
 
 ## INSTALLATION

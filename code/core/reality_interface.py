@@ -40,13 +40,18 @@ class RealityInterface:
     - All operations measured and validated
     """
 
-    def __init__(self, workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2"):
+    def __init__(self, workspace_path: Optional[str] = None):
         """
         Initialize reality interface.
 
         Args:
-            workspace_path: Root path for V2 workspace
+            workspace_path: Root path for V2 workspace. If None, reads from
+                NRM_WORKSPACE_PATH environment variable, defaulting to
+                './workspace' if unset. This enables portable deployments.
         """
+        # Allow override via environment variable for portability
+        if workspace_path is None:
+            workspace_path = os.environ.get("NRM_WORKSPACE_PATH", "./workspace")
         self.workspace_path = Path(workspace_path)
         self.db_path = self.workspace_path / "workspace" / "duality_v2.db"
         self._initialize_workspace()

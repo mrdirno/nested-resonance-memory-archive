@@ -155,7 +155,7 @@ make build                        # Build project
 
 ### Prerequisites
 ```bash
-# Python 3.10+
+# Python 3.9+
 python --version
 
 # Install dependencies
