@@ -112,6 +112,24 @@ Systems achieving coherent emergence may require computationally irreducible sub
 
 **If Validated:** First inverse-design engine for engineering systems that demonstrably don't collapse.
 
+### New Protocol: The Negative-Space Commons (NSC/RAP)
+
+We have finalized the **v1.0.1 white paper** for the **NRM Resonance Amnesty Protocol (RAP)**, a framework for securely sharing R&D failures to accelerate collective progress. By mapping the "negative space" of what doesn't work—instability boundaries, emergent side-effects, and beautiful failures—we can eliminate redundant experiments and save compute, time, and carbon.
+
+**Key Features:**
+- **Synchronized commit-reveal windows** for safe, coordinated disclosure
+- **Machine-readable Failure Cards** with standardized schema (JSON)
+- **Generativity Score (G)** incentive system rewarding impactful contributions
+- **Risk bands (L1-L4)** protecting sensitive information while sharing learnings
+- **Independent Risk Board** for safety oversight
+- **Legal safe-harbor** (antitrust, IP, export control)
+
+**We are actively seeking partners** from frontier labs, cloud providers, and academic institutions to join a **90-day pilot trial** (Genesis Round). Early participants will help seed the Negative-Space Index with older (2+ years), low-sensitivity failures to establish trust and demonstrate value.
+
+**📄 [Read the Full White Paper](./docs/NRM_Resonance_Amnesty_Protocol_v1.0.1.md)**
+
+**Interested in participating?** Open an issue in this repository or contact the core team to discuss joining the pilot cohort.
+
 ### The Economic Model: 1% → 99% Redistribution
 
 **TSF Licensing:** 1% value-based fee (enforced by same Overhead Authentication Protocol that proves reality grounding)
