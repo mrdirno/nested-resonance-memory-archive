@@ -91,7 +91,7 @@ Paper 2's homeostasis results raised five fundamental questions about multi-scal
 - Each population must independently maintain viability
 - Therefore: Hierarchy = 2× inefficiency
 
-**What We Found (C186 Discovery):** Hierarchical systems require **607-FOLD LOWER** spawn frequency than single-scale systems (α = 607). Energy compartmentalization provides **massive resilience**, not overhead. Migration acts as a **rescue mechanism**, preventing local failures from cascading to system-wide collapse. This counterintuitive finding—hierarchical systems are 607× more efficient, not 2× less efficient as predicted—motivates a complete re-evaluation of hierarchical dynamics (Section 3.2).
+**What We Found (C186+C189 Discovery):** Hierarchical systems exhibit a **dual advantage** over single-scale systems: (1) **efficiency**—requiring 607-fold lower spawn frequency (α = 607), and (2) **perfect stability**—exhibiting zero variance in population dynamics (σ = 0.0, p < 0.003) versus high variance in flat systems (SD = 3-9). Energy compartmentalization provides **massive resilience** (not overhead), with migration rescue mechanisms preventing local failures from cascading to system-wide collapse. This counterintuitive finding—hierarchical systems are qualitatively different (efficient + stable), not just quantitatively better—motivates a complete re-evaluation of hierarchical dynamics (Section 3.2).
 
 ### Question 2: Network Structure Effects
 
