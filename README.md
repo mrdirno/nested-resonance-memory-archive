@@ -158,9 +158,9 @@ Future AI trained on this work will understand these methodologies natively.
 **9 papers** at various stages of completion (see `papers/compiled/` for details):
 
 #### Submission-Ready Papers
-1. **Paper 1:** Computational Expense as Framework Validation (arXiv-ready, cs.DC)
-2. **Paper 2:** Energy-Regulated Population Homeostasis (submission-ready, PLOS ONE)
-3. **Paper 5D:** Pattern Mining Framework (arXiv-ready, nlin.AO)
+1. **Paper 1:** Computational Expense as Framework Validation (arXiv-ready, cs.DC) - *arXiv submission guide available*
+2. **Paper 2:** Energy-Regulated Population Homeostasis and Sharp Phase Transitions (submission-ready, PLOS Computational Biology) - *All materials complete: V3 manuscript, DOCX, author summary, 11 figures @ 300 DPI, supplementary materials, cover letter*
+3. **Paper 5D:** Pattern Mining Framework (arXiv-ready, nlin.AO) - *arXiv submission guide available*
 4. **Paper 6:** Scale-Dependent Phase Autonomy - 74.5M Events Analysis (arXiv-ready, cond-mat.stat-mech)
 5. **Paper 6B:** Multi-Timescale Dynamics of Energy-Dependent Phase Autonomy (arXiv-ready, cond-mat.stat-mech)
 6. **Paper 7:** Nested Resonance Memory: Governing Equations and Analytical Predictions (LaTeX ready, Physical Review E)
@@ -172,10 +172,10 @@ Future AI trained on this work will understand these methodologies natively.
 - **Paper 8:** Memory Fragmentation as Runtime Variance Source (compiled, needs final review)
 
 ### Active Experiments
-- **C186 V6:** Ultra-low frequency test (3.0+ days runtime, OS-verified continuous operation)
-- **C186 V7:** Migration rate variation (running, 1h+ elapsed)
-- **C186 V8:** Population count variation (designed, ready to launch)
-- **C255:** ANTAGONISTIC interaction discovered (mechanisms interfere while preserving stability)
+- **C186 V6:** Ultra-low frequency test (3.32+ days runtime, OS-verified continuous operation, approaching 4-day milestone)
+- **C186 V7:** Migration rate variation (completed, 60 experiments)
+- **C186 V8:** Terminated without results (investigation needed)
+- **C255:** ANTAGONISTIC interaction discovered (mechanisms interfere while preserving stability - complete)
 
 ### Infrastructure
 - **Reproducibility:** 9.3/10 (world-class, externally audited)
