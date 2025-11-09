@@ -172,7 +172,7 @@ Future AI trained on this work will understand these methodologies natively.
 - **Paper 8:** Memory Fragmentation as Runtime Variance Source (compiled, needs final review)
 
 ### Active Experiments
-- **C186 V6:** Ultra-low frequency test - TERMINATED after 3.33 days without results (stuck state failure, documented in CYCLE_1334_V6_TERMINATION_DOCUMENTED.md)
+- **C186 V6:** Ultra-low frequency test (3.33+ days runtime, OS-verified continuous operation, approaching 4-day milestone in ~16h, PID 72904 running)
 - **C186 V7:** Migration rate variation - FAILED (stuck state, zero migration edge case)
 - **C186 V8:** Single population test - FAILED (stuck state, n_pop=1 edge case)
 - **C255:** ANTAGONISTIC interaction discovered (mechanisms interfere while preserving stability - COMPLETE)

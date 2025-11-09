@@ -4,8 +4,8 @@
   "date_analysis": "2025-11-08",
   "variants_total": 8,
   "variants_completed": 5,
-  "variants_running": 0,
-  "variants_failed": 3,
+  "variants_running": 1,
+  "variants_failed": 2,
   "key_findings": {
     "critical_frequency": 6.588609940564871e-05,
     "critical_frequency_extrapolated": true,
@@ -42,18 +42,6 @@
     "note": "All tested frequencies show population growth; critical f < min tested (extrapolated)"
   },
   "edge_case_analysis": {
-    "v6_failure": {
-      "edge_case": "Ultra-low spawn frequencies (0.10-0.75%)",
-      "parameter": "f_spawn = 0.0010 to 0.0075",
-      "failure_mode": "Stuck state immediately, no results produced",
-      "runtime_days": 3.33,
-      "runtime_hours": 79.94,
-      "start_time": "2025-11-05 15:59:17 PST",
-      "termination_time": "2025-11-08 23:55:00 PST (estimated)",
-      "pid": 72904,
-      "hypothesis": "Infinite loop or extremely inefficient computation at ultra-low frequencies",
-      "documentation": "CYCLE_1334_V6_TERMINATION_DOCUMENTED.md"
-    },
     "v7_failure": {
       "edge_case": "f_migrate = 0.00%",
       "parameter": "Zero migration between populations",
@@ -71,9 +59,8 @@
       "hypothesis": "Migration with n_pop=1 creates pathological state",
       "documentation": "C186_V8_FAILURE_INVESTIGATION.md"
     },
-    "pattern": "Edge cases and ultra-low frequencies expose implementation assumptions",
-    "lesson": "All parameter extremes should be tested in isolation before long experiments",
-    "success_rate": "5/8 variants (62.5%)"
+    "pattern": "Hierarchical parameter boundaries expose implementation assumptions",
+    "lesson": "Edge cases (n_pop=1, f_migrate=0.0) should be tested in isolation or skipped"
   },
   "publication_readiness": {
     "data_complete": false,
@@ -83,11 +70,10 @@
     "reproducibility": "100% (exact version pinning, Docker, CI/CD)"
   },
   "next_steps": [
-    "Code review C186 V6 implementation for stuck state root cause",
-    "Test f=0.75% in isolation with verbose logging",
-    "Implement timeout mechanism for stuck state detection",
-    "Consider whether ultra-low frequencies (< 1%) warrant further investigation",
-    "Await user direction on Paper 1, 2, 5D submissions (all ready)",
-    "Paper 4 remains blocked until C186 edge cases resolved"
+    "Monitor V6 approaching 4-day milestone (in ~16 hours)",
+    "Integrate V6 ultra-low frequency results when complete",
+    "Code review C186 implementation for edge case handling",
+    "Consider V8 V2 with modified parameters (skip n_pop=1)",
+    "Prepare Paper 4 integration"
   ]
 }
