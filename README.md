@@ -154,12 +154,27 @@ Future AI trained on this work will understand these methodologies natively.
 ## Current Status (November 2025)
 
 ### Publications
-- **7 papers** at submission quality
-- **Paper 3:** 80-85% complete (factorial validation, C256-C260 running)
 
-### Active Experiments  
-- **C186 V6:** Ultra-low frequency test (2.7 days runtime, validating sustained operation)
-- **C186 V7/V8:** Migration rate and population count variation studies
+**9 papers** at various stages of completion (see `papers/compiled/` for details):
+
+#### Submission-Ready Papers
+1. **Paper 1:** Computational Expense as Framework Validation (arXiv-ready, cs.DC)
+2. **Paper 2:** Energy-Regulated Population Homeostasis (submission-ready, PLOS ONE)
+3. **Paper 5D:** Pattern Mining Framework (arXiv-ready, nlin.AO)
+4. **Paper 6:** Scale-Dependent Phase Autonomy - 74.5M Events Analysis (arXiv-ready, cond-mat.stat-mech)
+5. **Paper 6B:** Multi-Timescale Dynamics of Energy-Dependent Phase Autonomy (arXiv-ready, cond-mat.stat-mech)
+6. **Paper 7:** Nested Resonance Memory: Governing Equations and Analytical Predictions (LaTeX ready, Physical Review E)
+7. **Paper 9:** Temporal Stewardship Framework - Domain-Agnostic Pattern Discovery Engine (LaTeX in progress, cs.AI)
+
+#### In Development
+- **Paper 3:** Optimized Factorial Validation (80-85% complete, awaiting C256-C260 completion)
+- **Paper 4:** Hierarchical Compartmentalization Reduces Critical Frequencies (40% complete, C186 V6-V8 in progress)
+- **Paper 8:** Memory Fragmentation as Runtime Variance Source (compiled, needs final review)
+
+### Active Experiments
+- **C186 V6:** Ultra-low frequency test (3.0+ days runtime, OS-verified continuous operation)
+- **C186 V7:** Migration rate variation (running, 1h+ elapsed)
+- **C186 V8:** Population count variation (designed, ready to launch)
 - **C255:** ANTAGONISTIC interaction discovered (mechanisms interfere while preserving stability)
 
 ### Infrastructure
