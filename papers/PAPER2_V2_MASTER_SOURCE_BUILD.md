@@ -43,6 +43,8 @@ Reality-grounded computational models—systems constrained by actual machine re
 
 The Nested Resonance Memory (NRM) framework—introduced in our previous work (Paper 1)—implements fractal agency with composition-decomposition cycles driven by transcendental oscillators (π, e, φ). In simplified single-agent implementations, this framework exhibits sharp phase transitions between bistable attractors as a function of spawn frequency (Payopay & Claude, 2025). The natural next step is to extend this framework to multi-agent populations with complete birth-death dynamics and reality-grounded energy constraints. Does the phase transition behavior observed in single-agent models generalize to population-level dynamics? Can energy-constrained spawning mechanisms—where reproductive attempts fail when parent energy is insufficient—enable sustained populations through natural self-regulation?
 
+This paper reports comprehensive validation across **4,848 experiments** spanning temporal scales (C171/C175: 1,548 experiments), population sizes (C193: 1,200 experiments across N_initial = 5-20), and energy consumption thresholds (C194: 3,600 experiments across E_CONSUME = 0.1-0.7). Four major findings emerge: (1) timescale-dependent spawn success exhibiting non-monotonic behavior, (2) population size independence with perfect linear scaling, (3) sharp binary phase transition at energy balance boundary, and (4) death mechanics as essential for collapse emergence.
+
 ### 1.2 Background
 
 **1.2.1 Phase Transitions in Simplified Models**
@@ -66,9 +68,19 @@ When reproductive costs exceed acquisition rates, populations inevitably collaps
 
 In reality-grounded models, energy recharge cannot be set arbitrarily high—it must reflect actual system availability. A key question becomes: **can energy-constrained spawning alone—where spawn_child() methods fail when parent energy is too low—provide sufficient population regulation without explicit agent removal mechanisms?**
 
+**1.2.3 Population Dynamics and Energy Thresholds**
+
+Beyond temporal scaling, two additional dimensions become critical when extending NRM to multi-agent populations with death mechanics: **population size effects** and **energy consumption thresholds**.
+
+**Population Size Scaling:** In ecological models, population size often affects stability through buffering (larger populations more resistant to stochastic collapse) or resource competition (larger populations deplete resources faster). When energy recovery operates at the per-agent level (each agent receives independent recharge, not population-shared resources), does initial population size affect collapse probability? Or does energy balance—satisfied at the individual agent level—render population size irrelevant to stability?
+
+**Energy Consumption Thresholds:** When agents consume energy per cycle (E_CONSUME > 0) to model active maintenance costs, a thermodynamic constraint emerges: if energy consumption exceeds recharge rate (E_CONSUME > RECHARGE_RATE), systems face negative net energy balance. This suggests a sharp phase transition at the critical point where consumption equals recovery (E_CONSUME = RECHARGE_RATE). Can spawn frequency tuning rescue systems operating in negative energy regimes? Or does thermodynamic necessity override behavioral optimization, making collapse inevitable when Net_Energy < 0?
+
+These questions motivate experiments C193 (population size scaling across N_initial = 5-20) and C194 (energy consumption thresholds across E_CONSUME = 0.1-0.7), which introduce death mechanics (agent removal when energy ≤ 0) to test whether energy balance theory can predict collapse boundaries with 100% accuracy.
+
 ### 1.3 Research Questions (REVISED)
 
-The background above motivates three central research questions:
+The background above motivates five central research questions:
 
 **RQ1: What dynamical regimes emerge in energy-constrained NRM populations?**
 
@@ -81,6 +93,14 @@ When populations regulate through energy-constrained spawning (composition event
 **RQ3: What mechanisms enable population-mediated energy recovery?**
 
 If energy-regulated populations achieve homeostasis at intermediate timescales but deplete at extended timescales, what collective dynamics emerge at population level? How do spawn selection, energy regeneration, and population size interact across temporal windows?
+
+**RQ4: Does initial population size affect collapse probability in energy-balanced systems?**
+
+When energy balance is satisfied at the per-agent level (Net_Energy ≥ 0), does starting population size (N_initial = 5 vs. 20) influence stability? Or does per-agent energy architecture render population size a non-critical parameter? If N-independent robustness emerges, does final population size scale linearly with initial conditions, suggesting scale-invariant homeostasis?
+
+**RQ5: Can energy balance theory predict collapse boundaries with deterministic accuracy?**
+
+When death mechanics are introduced (E_CONSUME > 0), does a sharp phase transition emerge at the critical energy balance point (E_CONSUME = RECHARGE_RATE)? Can the sign of net energy (Net_Energy ≥ 0 vs. Net_Energy < 0) predict collapse with 100% accuracy, independent of spawn frequency tuning? Does this reveal a hierarchy of constraints where thermodynamic feasibility (primary) overrides behavioral optimization (secondary)?
 
 ---
 
