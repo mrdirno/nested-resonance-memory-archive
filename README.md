@@ -186,13 +186,14 @@ Future AI trained on this work will understand these methodologies natively.
 
 #### In Development
 - **Paper 3:** Optimized Factorial Validation (80-85% complete, awaiting C256-C260 completion)
-- **Paper 4:** Hierarchical Compartmentalization Reduces Critical Frequencies (40% complete, C186 V6-V8 in progress)
+- **Paper 4:** Multi-Scale Energy Regulation in Nested Resonance Memory (87% complete, C186 V1-V5 validated, dual advantage framework integrated, awaiting V6 completion)
 - **Paper 8:** Memory Fragmentation as Runtime Variance Source (compiled, needs final review)
 
 ### Active Experiments
-- **C186 V6:** Ultra-low frequency test (3.33+ days runtime, OS-verified continuous operation, approaching 4-day milestone in ~16h, PID 72904 running)
+- **C186 V6:** Ultra-low frequency test (3.41+ days runtime, OS-verified continuous operation, approaching 4-day milestone in ~14h, PID 72904 running)
 - **C186 V7:** Migration rate variation - FAILED (stuck state, zero migration edge case)
 - **C186 V8:** Single population test - FAILED (stuck state, n_pop=1 edge case)
+- **C189:** Hierarchical stability analysis - COMPLETE (zero-variance regime discovered, σ=0.0 vs σ=3-9 for flat systems, p<0.003)
 - **C255:** ANTAGONISTIC interaction discovered (mechanisms interfere while preserving stability - COMPLETE)
 
 ### Infrastructure
