@@ -1,0 +1,153 @@
+{
+  "h31": {
+    "hypothesis": "H3.1_Hub_Accumulation",
+    "n_valid": 1,
+    "mean_ratio": 50.00000000000001,
+    "median_ratio": 50.00000000000001,
+    "t_stat": NaN,
+    "p_value": NaN,
+    "cohens_d": NaN,
+    "passed_3sigma": false,
+    "passed_5sigma": false
+  },
+  "h32": {
+    "hypothesis": "H3.2_Topology_Ranking",
+    "results": [
+      {
+        "transport_rate": 0.01,
+        "mean_sf": 0.007111559363400448,
+        "mean_rand": 0.007112536650677556,
+        "mean_latt": 0.007111553475761566,
+        "f_stat": 0.00014158312846462593,
+        "p_anova": 0.9998584272455826,
+        "p_sf_rand": 0.5269681175331983,
+        "p_rand_latt": 0.5,
+        "monotonic": false,
+        "passed_3sigma": false,
+        "passed_5sigma": false
+      },
+      {
+        "transport_rate": 0.03,
+        "mean_sf": 0.007111656826226519,
+        "mean_rand": 0.007111468854504119,
+        "mean_latt": 0.00711163318133768,
+        "f_stat": 4.631717519975205e-06,
+        "p_anova": 0.9999953682935827,
+        "p_sf_rand": 0.4892012797303215,
+        "p_rand_latt": 0.521589529797999,
+        "monotonic": false,
+        "passed_3sigma": false,
+        "passed_5sigma": false
+      },
+      {
+        "transport_rate": 0.05,
+        "mean_sf": 0.007111867406327184,
+        "mean_rand": 0.00711165222735474,
+        "mean_latt": 0.007111610407000017,
+        "f_stat": 8.412486903678392e-06,
+        "p_anova": 0.9999915875497252,
+        "p_sf_rand": 0.48920229397081016,
+        "p_rand_latt": 0.5054001084434443,
+        "monotonic": true,
+        "passed_3sigma": false,
+        "passed_5sigma": false
+      },
+      {
+        "transport_rate": 0.1,
+        "mean_sf": 0.007112761792354276,
+        "mean_rand": 0.007111785413584965,
+        "mean_latt": 0.00711165685670471,
+        "f_stat": 0.0001620001886942935,
+        "p_anova": 0.9998380133929732,
+        "p_sf_rand": 0.4838157867285711,
+        "p_rand_latt": 0.48380971262885536,
+        "monotonic": true,
+        "passed_3sigma": false,
+        "passed_5sigma": false
+      }
+    ]
+  },
+  "h33": {
+    "hypothesis": "H3.3_Gini_Scaling",
+    "results": [
+      {
+        "transport_rate": 0.01,
+        "mean_sf": 0.0,
+        "mean_rand": 0.0,
+        "mean_latt": 0.0,
+        "p_sf_rand": 1.0,
+        "p_rand_latt": 1.0,
+        "d_sf_rand": NaN,
+        "d_rand_latt": NaN,
+        "monotonic": false,
+        "passed_3sigma": false,
+        "passed_5sigma": false
+      },
+      {
+        "transport_rate": 0.03,
+        "mean_sf": 0.1036726108765684,
+        "mean_rand": 0.07932489108112195,
+        "mean_latt": 0.05678003775046886,
+        "p_sf_rand": 6.173175077478353e-08,
+        "p_rand_latt": 3.3978075640866785e-08,
+        "d_sf_rand": 3.2309186883243037,
+        "d_rand_latt": 3.5207752431095347,
+        "monotonic": true,
+        "passed_3sigma": true,
+        "passed_5sigma": true
+      },
+      {
+        "transport_rate": 0.05,
+        "mean_sf": 0.16579054420157155,
+        "mean_rand": 0.1293284522700083,
+        "mean_latt": 0.09163889958664276,
+        "p_sf_rand": 3.3978075640866785e-08,
+        "p_rand_latt": 3.3978075640866785e-08,
+        "d_sf_rand": 4.2980184406425215,
+        "d_rand_latt": 5.072386913319007,
+        "monotonic": true,
+        "passed_3sigma": true,
+        "passed_5sigma": true
+      },
+      {
+        "transport_rate": 0.1,
+        "mean_sf": 0.23502786075071333,
+        "mean_rand": 0.18781761248915024,
+        "mean_latt": 0.13829038181845318,
+        "p_sf_rand": 3.3978075640866785e-08,
+        "p_rand_latt": 3.3978075640866785e-08,
+        "d_sf_rand": 5.121195775215941,
+        "d_rand_latt": 5.05297762749527,
+        "monotonic": true,
+        "passed_3sigma": true,
+        "passed_5sigma": true
+      }
+    ]
+  },
+  "mog_falsification": {
+    "results": [
+      {
+        "hypothesis": "H3.1",
+        "passed": false,
+        "criterion": "5\u03c3"
+      },
+      {
+        "hypothesis": "H3.2",
+        "passed": false,
+        "criterion": "5\u03c3",
+        "n_passed": 0,
+        "n_total": 4
+      },
+      {
+        "hypothesis": "H3.3",
+        "passed": false,
+        "criterion": "5\u03c3",
+        "n_passed": 3,
+        "n_total": 4
+      }
+    ],
+    "n_passed": 0,
+    "n_total": 3,
+    "falsification_rate": 1.0
+  }
+}
