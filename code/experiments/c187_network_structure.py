@@ -150,6 +150,9 @@ class NetworkedPopulationSystem:
         # Network state history (sample every 100 cycles to reduce memory)
         self.network_history = []
 
+        # Degree cache for performance (updated incrementally)
+        self.degree_cache = dict(self.network.degree())
+
         self._initialize_agents()
 
     def _generate_network(self) -> nx.Graph:
@@ -243,8 +246,8 @@ class NetworkedPopulationSystem:
         if not self.agents:
             return None
 
-        # Get degrees for all agents
-        degrees = dict(self.network.degree())
+        # Use cached degrees (updated incrementally for performance)
+        degrees = self.degree_cache
         agent_ids = list(self.agents.keys())
 
         # Filter agents that exist in network
@@ -268,6 +271,13 @@ class NetworkedPopulationSystem:
     def _try_spawn(self):
         """Attempt to spawn new agent (degree-weighted parent selection)"""
         self.spawn_attempts += 1
+
+        # Population cap to prevent exponential growth
+        # Allow 20% overhead (120 agents) to capture spawn dynamics while preventing explosion
+        # Hub depletion effects should manifest via energy constraints, not hard cap
+        if len(self.agents) >= int(N_NODES * 1.2):
+            self.spawn_failures += 1
+            return
 
         parent = self._select_parent_degree_weighted()
         if parent is None:
@@ -306,10 +316,17 @@ class NetworkedPopulationSystem:
         self.network.add_node(child.id)
         self.network.add_edge(parent.id, child.id)
 
+        # Update degree cache incrementally
+        self.degree_cache[child.id] = 1  # New node has degree 1 (connected to parent)
+        self.degree_cache[parent.id] += 1  # Parent degree increases by 1
+
         parent_neighbors = list(self.network.neighbors(parent.id))
         if parent_neighbors:
             random_neighbor = self.random.choice(parent_neighbors)
             self.network.add_edge(child.id, random_neighbor)
+            # Update cache for second edge
+            self.degree_cache[child.id] += 1
+            self.degree_cache[random_neighbor] += 1
 
     def _recharge_energy(self):
         """Recharge all agents' energy"""
