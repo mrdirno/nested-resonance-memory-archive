@@ -192,13 +192,12 @@ class MemeticPopulationSystem:
         return agent
 
     def _generate_random_patterns(self) -> List[float]:
-        """Generate random pattern memory from transcendental substrate"""
+        """Generate random pattern memory (unique pattern IDs)"""
         patterns = []
         for _ in range(PATTERN_MEMORY_SIZE):
-            # Use bridge to generate resonance patterns
-            phase = self.random.uniform(0, 2 * np.pi)
-            resonance = self.bridge.reality_to_phase(phase, cycle=self.cycle_count)
-            patterns.append(resonance['phi'])  # Use φ component
+            # Generate random pattern ID (unique float in [0, 1])
+            pattern_id = self.random.uniform(0.0, 1.0)
+            patterns.append(pattern_id)
         return patterns
 
     def _inherit_patterns(self, parent_id: int) -> List[float]:
