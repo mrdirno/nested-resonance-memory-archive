@@ -117,13 +117,13 @@ class NetworkMetrics:
 class NetworkedPopulationWithTransport:
     """Population system with energy transport between neighbors"""
 
-    def __init__(self, seed: int, topology: str, transport_rate: float, db_path: Path):
+    def __init__(self, seed: int, topology: str, transport_rate: float, workspace_path: Path):
         self.seed = seed
         self.topology = topology
         self.transport_rate = transport_rate
         self.random = random.Random(seed)
         self.np_random = np.random.RandomState(seed)
-        self.bridge = TranscendentalBridge(db_path)
+        self.bridge = TranscendentalBridge(workspace_path)
 
         # Generate network
         self.network = self._generate_network()
@@ -407,11 +407,11 @@ class NetworkedPopulationWithTransport:
         }
 
 
-def run_experiment(topology: str, transport_rate: float, seed: int, db_path: Path) -> dict:
+def run_experiment(topology: str, transport_rate: float, seed: int, workspace_path: Path) -> dict:
     """Run single experiment"""
     print(f"  Seed {seed}, topology={topology}, transport={transport_rate:.2f}...")
 
-    system = NetworkedPopulationWithTransport(seed, topology, transport_rate, db_path)
+    system = NetworkedPopulationWithTransport(seed, topology, transport_rate, workspace_path)
     result = system.run()
 
     return result
@@ -431,12 +431,14 @@ def main():
     print(f"Cycles per experiment: {CYCLES}")
     print()
 
-    # Setup database (use workspace directory with known write permissions)
-    db_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c188_bridge.db")
-    db_path.parent.mkdir(parents=True, exist_ok=True)  # Ensure directory exists
-    if db_path.exists():
-        db_path.unlink()
-    clear_bridge_database(db_path)
+    # Setup database workspace (TranscendentalBridge expects directory, appends /bridge.db)
+    workspace_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c188_workspace")
+    workspace_path.mkdir(parents=True, exist_ok=True)  # Ensure directory exists
+
+    # Clear any existing bridge database in workspace
+    bridge_db = workspace_path / "bridge.db"
+    if bridge_db.exists():
+        bridge_db.unlink()
 
     # Run all experiments
     results = []
@@ -449,7 +451,7 @@ def main():
             print(f"\n{topology.upper()}, transport_rate={transport_rate:.2f}")
 
             for seed in SEEDS:
-                result = run_experiment(topology, transport_rate, seed, db_path)
+                result = run_experiment(topology, transport_rate, seed, workspace_path)
                 results.append(result)
 
                 completed += 1
