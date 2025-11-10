@@ -146,11 +146,10 @@ class SynapticHomeostasisSystem:
         # Initialize patterns
         patterns = []
         for i in range(PATTERN_MEMORY_SIZE):
-            # Generate random pattern from bridge
-            phase = self.random.uniform(0, 2 * np.pi)
-            resonance = self.bridge.reality_to_phase(phase, cycle=self.cycle_count)
+            # Generate random pattern ID (unique float in [0, 1])
+            pattern_id = self.random.uniform(0.0, 1.0)
             pattern = Pattern(
-                pattern_id=resonance['phi'],
+                pattern_id=pattern_id,
                 weight=1.0  # Start with uniform weights
             )
             patterns.append(pattern)
