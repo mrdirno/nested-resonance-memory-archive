@@ -431,8 +431,9 @@ def main():
     print(f"Cycles per experiment: {CYCLES}")
     print()
 
-    # Setup database
-    db_path = Path("/tmp/c188_bridge.db")
+    # Setup database (use workspace directory with known write permissions)
+    db_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c188_bridge.db")
+    db_path.parent.mkdir(parents=True, exist_ok=True)  # Ensure directory exists
     if db_path.exists():
         db_path.unlink()
     clear_bridge_database(db_path)
