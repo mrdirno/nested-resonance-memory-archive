@@ -1,0 +1,57 @@
+{
+  "experiment": "C264_Carrying_Capacity",
+  "analysis_date": "2025-11-09",
+  "hypothesis": "K = \u03b2 \u00d7 E_recharge (linear carrying capacity)",
+  "mog_resonance_alpha": 0.92,
+  "aggregated_results": [
+    {
+      "e_recharge": 0.1,
+      "mean_K": 0.0,
+      "sem_K": 0.0,
+      "mean_eta": 2.0955773497690577,
+      "extinction_rate": 1.0
+    },
+    {
+      "e_recharge": 0.25,
+      "mean_K": 0.0,
+      "sem_K": 0.0,
+      "mean_eta": 13.151986599652835,
+      "extinction_rate": 1.0
+    },
+    {
+      "e_recharge": 0.5,
+      "mean_K": 2.6604,
+      "sem_K": 0.26294648124665976,
+      "mean_eta": 81.66875405296716,
+      "extinction_rate": 0.15
+    },
+    {
+      "e_recharge": 1.0,
+      "mean_K": 2.9190499999999995,
+      "sem_K": 0.33822796657727755,
+      "mean_eta": 80.78839018520091,
+      "extinction_rate": 0.2
+    },
+    {
+      "e_recharge": 2.0,
+      "mean_K": 4.15005,
+      "sem_K": 0.3989934302403988,
+      "mean_eta": 80.63278564474747,
+      "extinction_rate": 0.15
+    },
+    {
+      "e_recharge": 4.0,
+      "mean_K": 8.666450000000001,
+      "sem_K": 0.25530649693065,
+      "mean_eta": 97.0285447435251,
+      "extinction_rate": 0.0
+    }
+  ],
+  "linear_test": {
+    "model": "Linear (K = \u03b2 \u00d7 E_recharge)",
+    "slope_beta": 2.09436671065033,
+    "intercept": 0.32586188689915163,
+    "r_squared": 0.9408373673325369,
+    "p_value": 0.0013393636188548123,
+    "std_err": 0.26259665960602885,
+    "monotonic": 

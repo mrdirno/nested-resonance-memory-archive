@@ -1,0 +1,4871 @@
+{
+  "experiment": "C266_Phase_Transitions",
+  "description": "Test if NRM exhibits first-order phase transitions",
+  "mog_resonance": 0.68,
+  "timestamp": "2025-11-10T02:30:49.237989",
+  "parameters": {
+    "conditions": [
+      "SWEEP_UP",
+      "SWEEP_DOWN",
+      "QUENCH"
+    ],
+    "f_spawn_min": 0.01,
+    "f_spawn_max": 0.05,
+    "f_spawn_step": 0.002,
+    "cycles_per_step": 1000,
+    "f_spawn_quench_initial": 0.01,
+    "f_spawn_quench_final": 0.04,
+    "quench_cycles": 5000,
+    "e_consume": 0.5,
+    "e_recharge": 1.0,
+    "spawn_cost": 5.0,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+    ],
+    "n_seeds": 20,
+    "n_conditions": 3,
+    "total_experiments": 60
+  },
+  "results": [
+    {
+      "seed": 42,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 13.49623796255982,
+          "population": 104
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 13.834036320866682,
+          "population": 110
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 14.73778850285264,
+          "population": 118
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 17.423007786380197,
+          "population": 140
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 19.353400094322513,
+          "population": 150
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 21.43437295910028,
+          "population": 170
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 23.78236654517399,
+          "population": 189
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 27.57306232959159,
+          "population": 217
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 31.66756601422318,
+          "population": 249
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 35.645565145601985,
+          "population": 275
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 38.95709217116031,
+          "population": 300
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 41.69895451534299,
+          "population": 320
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 46.79234461738796,
+          "population": 355
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 51.55008629678312,
+          "population": 389
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 55.568483498825884,
+          "population": 418
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 60.98517466063962,
+          "population": 469
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 66.56366579275927,
+          "population": 504
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 71.86334843084472,
+          "population": 539
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 79.36928517847105,
+          "population": 590
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 86.43419611879534,
+          "population": 637
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 93.4402282522546,
+          "population": 690
+        }
+      ],
+      "composition_count": 370694872,
+      "decomposition_count": 996138970,
+      "runtime_seconds": 182.7605390548706,
+      "timestamp": "2025-11-09T19:55:22.606840"
+    },
+    {
+      "seed": 43,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 12.244105680376762,
+          "population": 99
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 13.568024063437948,
+          "population": 108
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 14.39941676887082,
+          "population": 115
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 16.07828921672198,
+          "population": 128
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 17.053901713653953,
+          "population": 135
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 19.37246638501578,
+          "population": 154
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 21.47473848726166,
+          "population": 180
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 26.126296861728406,
+          "population": 207
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 28.578639153511734,
+          "population": 224
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 31.09946316313061,
+          "population": 241
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 34.331412687700166,
+          "population": 270
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 38.42961750685946,
+          "population": 301
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 42.60175681666059,
+          "population": 329
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 45.68119119756375,
+          "population": 356
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 49.73188859079735,
+          "population": 386
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 55.10529070040483,
+          "population": 428
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 62.15002564344507,
+          "population": 478
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 68.68933745667324,
+          "population": 526
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 74.60769505508861,
+          "population": 567
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 80.37797513159576,
+          "population": 607
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 88.55404549755941,
+          "population": 674
+        }
+      ],
+      "composition_count": 323306009,
+      "decomposition_count": 892609655,
+      "runtime_seconds": 160.00651693344116,
+      "timestamp": "2025-11-09T19:58:02.621635"
+    },
+    {
+      "seed": 44,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 13.583554271443587,
+          "population": 107
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 15.512147613544508,
+          "population": 123
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 17.29251071789106,
+          "population": 137
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 20.19620972728279,
+          "population": 157
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 22.626427134568463,
+          "population": 179
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 25.67873669869724,
+          "population": 203
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 28.87139963749097,
+          "population": 223
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 31.785546334737823,
+          "population": 248
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 34.89150992551688,
+          "population": 271
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 38.923012054843596,
+          "population": 300
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 44.113005519050276,
+          "population": 339
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 48.53703978015772,
+          "population": 373
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 53.520238375126866,
+          "population": 404
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 56.867047888011015,
+          "population": 430
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 61.52794613294432,
+          "population": 463
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 66.39676779460893,
+          "population": 495
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 72.54919884868659,
+          "population": 545
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 78.65279998418666,
+          "population": 589
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 85.5068560892519,
+          "population": 641
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 93.89959468881366,
+          "population": 698
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 100.7223589265063,
+          "population": 745
+        }
+      ],
+      "composition_count": 447644229,
+      "decomposition_count": 1204283887,
+      "runtime_seconds": 217.53381872177124,
+      "timestamp": "2025-11-09T20:01:40.158837"
+    },
+    {
+      "seed": 45,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 13.767805192668751,
+          "population": 106
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 14.063225477088636,
+          "population": 109
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 15.285795335195083,
+          "population": 120
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 16.271269769811575,
+          "population": 129
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 18.04192098767545,
+          "population": 148
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 20.750159009980962,
+          "population": 168
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 22.983279351046455,
+          "population": 184
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 27.446384624793613,
+          "population": 221
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 30.18496352898373,
+          "population": 240
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 34.05549519922603,
+          "population": 264
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 37.29123971432246,
+          "population": 288
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 41.44024797864412,
+          "population": 315
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 46.17078787188733,
+          "population": 352
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 51.318164690021455,
+          "population": 392
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 56.600554070586206,
+          "population": 430
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 61.930153862177114,
+          "population": 469
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 68.71819063442496,
+          "population": 514
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 73.62341025296426,
+          "population": 547
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 79.06665125390577,
+          "population": 589
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 84.93504612990638,
+          "population": 632
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 91.99982578774745,
+          "population": 678
+        }
+      ],
+      "composition_count": 368218077,
+      "decomposition_count": 987422111,
+      "runtime_seconds": 173.4555640220642,
+      "timestamp": "2025-11-09T20:04:33.622225"
+    },
+    {
+      "seed": 46,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 12.640059817213771,
+          "population": 104
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 14.837893474536989,
+          "population": 120
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 16.32089864890477,
+          "population": 127
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 17.46470998101876,
+          "population": 141
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 19.73013706932767,
+          "population": 157
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 21.732334257048556,
+          "population": 170
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 22.87318417090806,
+          "population": 180
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 25.64954691676227,
+          "population": 202
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 29.15729898562844,
+          "population": 231
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 32.50592483678669,
+          "population": 255
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 35.77949019640127,
+          "population": 278
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 40.262187060937606,
+          "population": 309
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 44.806222404210374,
+          "population": 341
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 50.4717394740997,
+          "population": 387
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 55.94159989695356,
+          "population": 419
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 60.67577932430923,
+          "population": 455
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 66.31808793303577,
+          "population": 501
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 71.63293407793176,
+          "population": 535
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 77.72928209178343,
+          "population": 575
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 83.58742822534529,
+          "population": 625
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 90.69945794269297,
+          "population": 678
+        }
+      ],
+      "composition_count": 355045213,
+      "decomposition_count": 956561502,
+      "runtime_seconds": 167.08552289009094,
+      "timestamp": "2025-11-09T20:07:20.715547"
+    },
+    {
+      "seed": 47,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 14.053331280001572,
+          "population": 108
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 14.648688116619088,
+          "population": 113
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 15.766721239743973,
+          "population": 120
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 17.042745888568767,
+          "population": 133
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 19.347749882785678,
+          "population": 149
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 20.70613110166621,
+          "population": 160
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 22.855438799323363,
+          "population": 178
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 27.525733455418187,
+          "population": 211
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 31.166978612166954,
+          "population": 237
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 35.095066446444996,
+          "population": 271
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 38.70268409009246,
+          "population": 295
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 43.33032486040244,
+          "population": 333
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 47.82838395348924,
+          "population": 358
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 52.935759228107116,
+          "population": 392
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 55.786912242406295,
+          "population": 417
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 60.93811880811905,
+          "population": 454
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 66.88893230672402,
+          "population": 500
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 73.69503889124177,
+          "population": 549
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 80.18429100770283,
+          "population": 589
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 86.0424061896521,
+          "population": 637
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 92.01043850023098,
+          "population": 678
+        }
+      ],
+      "composition_count": 369893550,
+      "decomposition_count": 977234731,
+      "runtime_seconds": 168.20743918418884,
+      "timestamp": "2025-11-09T20:10:08.930393"
+    },
+    {
+      "seed": 48,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 12.83067154724071,
+          "population": 98
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 14.319897762340688,
+          "population": 110
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 16.65821951058617,
+          "population": 127
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 17.19097678967145,
+          "population": 131
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 18.462243322429924,
+          "population": 143
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 20.752511364899657,
+          "population": 159
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 23.78360948900423,
+          "population": 186
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 27.582751069989413,
+          "population": 211
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 29.707348562743462,
+          "population": 227
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 33.45500129410136,
+          "population": 251
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 38.26849330305311,
+          "population": 293
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 43.84358300715312,
+          "population": 324
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 47.90369503720706,
+          "population": 360
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 52.019911418119484,
+          "population": 395
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 56.8703985650121,
+          "population": 425
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 61.81817536987149,
+          "population": 463
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 66.28247611408926,
+          "population": 493
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 71.95530902456393,
+          "population": 534
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 77.93009622234817,
+          "population": 575
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 83.97752628544532,
+          "population": 617
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 89.81272301164437,
+          "population": 665
+        }
+      ],
+      "composition_count": 360019082,
+      "decomposition_count": 953378014,
+      "runtime_seconds": 160.36523604393005,
+      "timestamp": "2025-11-09T20:12:49.303460"
+    },
+    {
+      "seed": 49,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 12.814655661747041,
+          "population": 97
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 12.812415663634187,
+          "population": 103
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 13.651924941622186,
+          "population": 111
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 15.156248000808318,
+          "population": 119
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 15.384036098722754,
+          "population": 127
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 16.39355315756215,
+          "population": 138
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 18.25363254645223,
+          "population": 153
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 20.815570681670053,
+          "population": 169
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 23.438805218144655,
+          "population": 187
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 26.217127787603,
+          "population": 211
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 29.08019521616463,
+          "population": 234
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 31.883581699682953,
+          "population": 250
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 35.1729069116828,
+          "population": 277
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 39.536059198038984,
+          "population": 311
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 45.344866236354825,
+          "population": 349
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 49.08602247026506,
+          "population": 380
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 55.68001906332133,
+          "population": 432
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 62.308790920342396,
+          "population": 478
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 69.87024315939136,
+          "population": 524
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 75.14412261011569,
+          "population": 569
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 82.02554596204834,
+          "population": 615
+        }
+      ],
+      "composition_count": 262495043,
+      "decomposition_count": 724055340,
+      "runtime_seconds": 119.51124811172485,
+      "timestamp": "2025-11-09T20:14:48.823619"
+    },
+    {
+      "seed": 50,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 13.970677948665486,
+          "population": 109
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 15.236946242870468,
+          "population": 116
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 16.41436538322532,
+          "population": 130
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 19.171257051176756,
+          "population": 148
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 20.255535935390746,
+          "population": 156
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 22.354825113018855,
+          "population": 172
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 25.04866815634761,
+          "population": 196
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 28.574125296661528,
+          "population": 221
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 31.84507336953645,
+          "population": 249
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 34.89586082522498,
+          "population": 272
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 38.69074878070401,
+          "population": 303
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 42.733958420345225,
+          "population": 328
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 48.23156028702685,
+          "population": 366
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 52.696306960147446,
+          "population": 401
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 57.05844682281576,
+          "population": 428
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 64.25641699769167,
+          "population": 487
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 70.40511884328505,
+          "population": 528
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 75.86541832607224,
+          "population": 567
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 81.37598074645267,
+          "population": 606
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 86.17637822750153,
+          "population": 639
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 93.15025968789755,
+          "population": 687
+        }
+      ],
+      "composition_count": 389126131,
+      "decomposition_count": 1041116355,
+      "runtime_seconds": 176.71180510520935,
+      "timestamp": "2025-11-09T20:17:45.543165"
+    },
+    {
+      "seed": 51,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 10.873088976527601,
+          "population": 93
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 11.489252050166819,
+          "population": 97
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 12.590352219976864,
+          "population": 105
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 14.780524612171423,
+          "population": 123
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 17.801116537494426,
+          "population": 143
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 19.95960189854938,
+          "population": 157
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 21.523855788993014,
+          "population": 173
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 24.042065536142857,
+          "population": 194
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 28.080576815098183,
+          "population": 216
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 30.112131209838083,
+          "population": 231
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 33.03200274208397,
+          "population": 255
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 37.68056098317288,
+          "population": 291
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 42.957074495888705,
+          "population": 328
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 47.50617908749111,
+          "population": 370
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 52.60906899485103,
+          "population": 404
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 56.66900845720548,
+          "population": 432
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 61.943737150171756,
+          "population": 465
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 67.96911244029103,
+          "population": 509
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 73.47437816060626,
+          "population": 560
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 80.70324402209413,
+          "population": 608
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 88.17062866063908,
+          "population": 669
+        }
+      ],
+      "composition_count": 319832148,
+      "decomposition_count": 869893082,
+      "runtime_seconds": 145.13554096221924,
+      "timestamp": "2025-11-09T20:20:10.686576"
+    },
+    {
+      "seed": 52,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 13.021410870961605,
+          "population": 94
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 12.851997858441461,
+          "population": 97
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 14.140416647773552,
+          "population": 108
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 16.26009468489892,
+          "population": 124
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 17.582284049534522,
+          "population": 135
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 20.848153447004172,
+          "population": 158
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 22.850195835364133,
+          "population": 175
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 26.21383589319938,
+          "population": 198
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 28.268998957296496,
+          "population": 217
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 31.70231039450598,
+          "population": 242
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 36.39157844062154,
+          "population": 276
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 41.13658821525052,
+          "population": 309
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 46.69413231928293,
+          "population": 349
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 49.40976436671441,
+          "population": 368
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 54.69540265101271,
+          "population": 414
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 60.11580771410445,
+          "population": 450
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 66.50490388754824,
+          "population": 505
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 72.30736639236822,
+          "population": 535
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 77.8204676726674,
+          "population": 577
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 84.03151906922652,
+          "population": 627
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 90.57259924427926,
+          "population": 683
+        }
+      ],
+      "composition_count": 349270495,
+      "decomposition_count": 929235673,
+      "runtime_seconds": 156.14602184295654,
+      "timestamp": "2025-11-09T20:22:46.836806"
+    },
+    {
+      "seed": 53,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 12.836458977663229,
+          "population": 97
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 13.427560191801298,
+          "population": 103
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 14.924550738178642,
+          "population": 118
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 16.959373727119324,
+          "population": 134
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 20.009477509291166,
+          "population": 154
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 22.072415956831858,
+          "population": 169
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 25.257456215313397,
+          "population": 199
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 28.44197406903777,
+          "population": 221
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 31.255285287547782,
+          "population": 240
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 33.59112918410488,
+          "population": 258
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 37.51832979584497,
+          "population": 289
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 42.05722122543913,
+          "population": 322
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 47.755896350281496,
+          "population": 361
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 54.23935457670818,
+          "population": 409
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 60.58416758965982,
+          "population": 450
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 66.50518878391713,
+          "population": 495
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 71.78963528692964,
+          "population": 531
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 77.1891228840502,
+          "population": 568
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 82.64878678977409,
+          "population": 608
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 89.37906450385391,
+          "population": 656
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 95.7656872979887,
+          "population": 701
+        }
+      ],
+      "composition_count": 398405444,
+      "decomposition_count": 1051835785,
+      "runtime_seconds": 178.19260501861572,
+      "timestamp": "2025-11-09T20:25:45.037329"
+    },
+    {
+      "seed": 54,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 12.911889175257729,
+          "population": 98
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 13.978586973866637,
+          "population": 109
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 15.847849800828676,
+          "population": 124
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 16.96285691200588,
+          "population": 130
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 18.958593310551585,
+          "population": 151
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 21.969004222160436,
+          "population": 173
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 24.4515887441065,
+          "population": 193
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 27.136289789611205,
+          "population": 215
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 31.421447088902177,
+          "population": 243
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 34.882537667702735,
+          "population": 272
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 39.13559570383189,
+          "population": 297
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 41.81962743354866,
+          "population": 320
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 45.503868463833896,
+          "population": 345
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 49.97266432034581,
+          "population": 381
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 55.51459894839961,
+          "population": 421
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 61.05229635895329,
+          "population": 458
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 68.52740172619899,
+          "population": 515
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 74.62765324530424,
+          "population": 561
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 81.84194771395492,
+          "population": 606
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 86.4827549076286,
+          "population": 637
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 93.15508698336963,
+          "population": 692
+        }
+      ],
+      "composition_count": 373943545,
+      "decomposition_count": 997113885,
+      "runtime_seconds": 165.49595713615417,
+      "timestamp": "2025-11-09T20:28:30.541547"
+    },
+    {
+      "seed": 55,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 11.801751969152322,
+          "population": 92
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 11.313949640974755,
+          "population": 89
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 12.134544231611557,
+          "population": 96
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 13.787495596515479,
+          "population": 110
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 15.347143820451084,
+          "population": 122
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 17.195473273840626,
+          "population": 143
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 20.080147060849143,
+          "population": 165
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 23.368623622405188,
+          "population": 187
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 26.391833643205615,
+          "population": 207
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 29.22160772970869,
+          "population": 229
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 32.20263493462974,
+          "population": 258
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 36.81570492971186,
+          "population": 287
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 41.16157478438694,
+          "population": 327
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 46.9445381339092,
+          "population": 368
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 53.24762549918814,
+          "population": 414
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 58.94998635819561,
+          "population": 450
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 64.09215493621912,
+          "population": 484
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 70.19755625667631,
+          "population": 531
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 76.91458155159705,
+          "population": 580
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 83.09266205273758,
+          "population": 628
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 90.16015714429243,
+          "population": 678
+        }
+      ],
+      "composition_count": 329915413,
+      "decomposition_count": 901227431,
+      "runtime_seconds": 148.64625525474548,
+      "timestamp": "2025-11-09T20:30:59.200575"
+    },
+    {
+      "seed": 56,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 10.550708212760929,
+          "population": 88
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 11.369336191583342,
+          "population": 95
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 12.701533807995048,
+          "population": 104
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 14.146322242452111,
+          "population": 120
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 16.113043197408686,
+          "population": 134
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 17.734795976148575,
+          "population": 145
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 19.074968469061968,
+          "population": 153
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 20.997020538542653,
+          "population": 167
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 24.001714938716475,
+          "population": 191
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 26.828322438865445,
+          "population": 212
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 29.64303020818909,
+          "population": 230
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 33.51515534220147,
+          "population": 260
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 37.53439813563265,
+          "population": 291
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 43.00151044279284,
+          "population": 336
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 47.5618933442706,
+          "population": 371
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 53.43069102663083,
+          "population": 412
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 59.68885591124629,
+          "population": 448
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 64.88098945095946,
+          "population": 492
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 71.41897780694242,
+          "population": 540
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 77.98440338775542,
+          "population": 578
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 84.41315723439224,
+          "population": 631
+        }
+      ],
+      "composition_count": 282185103,
+      "decomposition_count": 767626175,
+      "runtime_seconds": 125.63494420051575,
+      "timestamp": "2025-11-09T20:33:04.843247"
+    },
+    {
+      "seed": 57,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 11.416348314606745,
+          "population": 89
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 13.497876786293327,
+          "population": 108
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 16.028892130089687,
+          "population": 129
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 19.05764112646903,
+          "population": 153
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 22.146198573477054,
+          "population": 172
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 24.165997140295616,
+          "population": 188
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 27.906213980763184,
+          "population": 217
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 30.317561249738677,
+          "population": 233
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 34.15908824325161,
+          "population": 263
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 37.77026882969183,
+          "population": 292
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 41.96179091206589,
+          "population": 325
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 46.26025485032696,
+          "population": 356
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 51.98418596232179,
+          "population": 398
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 57.00743531934182,
+          "population": 434
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 62.38772480981007,
+          "population": 473
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 67.40316582228212,
+          "population": 510
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 73.55471515401123,
+          "population": 551
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 79.78788570366635,
+          "population": 599
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 86.25985262789705,
+          "population": 639
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 92.03082291041271,
+          "population": 684
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 98.39318188361639,
+          "population": 732
+        }
+      ],
+      "composition_count": 440249954,
+      "decomposition_count": 1188520505,
+      "runtime_seconds": 198.4681351184845,
+      "timestamp": "2025-11-09T20:36:23.319171"
+    },
+    {
+      "seed": 58,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 13.732738191744284,
+          "population": 105
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 15.811574901630808,
+          "population": 120
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 16.612839654370656,
+          "population": 129
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 18.21441406473222,
+          "population": 138
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 20.690642112822644,
+          "population": 156
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 22.530644913673395,
+          "population": 172
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 25.872805295062474,
+          "population": 192
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 27.617249254623577,
+          "population": 214
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 30.712529363993642,
+          "population": 234
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 34.95945926776214,
+          "population": 265
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 38.57898444894291,
+          "population": 290
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 42.40149761035539,
+          "population": 326
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 46.451956710956,
+          "population": 353
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 51.88763047219531,
+          "population": 396
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 57.24632075511994,
+          "population": 432
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 62.78121066705862,
+          "population": 474
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 68.08451826979443,
+          "population": 513
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 75.78369788778389,
+          "population": 574
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 83.93306565922816,
+          "population": 633
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 91.90073729717184,
+          "population": 685
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 98.59309112592216,
+          "population": 735
+        }
+      ],
+      "composition_count": 398368405,
+      "decomposition_count": 1065159241,
+      "runtime_seconds": 176.9818971157074,
+      "timestamp": "2025-11-09T20:39:20.310424"
+    },
+    {
+      "seed": 59,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 13.153914802657658,
+          "population": 99
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 13.479457686894516,
+          "population": 103
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 14.399807590299154,
+          "population": 113
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 16.4749370866636,
+          "population": 130
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 18.142329640882455,
+          "population": 146
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 20.87816351133983,
+          "population": 162
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 23.249123270099606,
+          "population": 181
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 26.19831650293432,
+          "population": 202
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 29.652953061408425,
+          "population": 226
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 32.43597088457167,
+          "population": 245
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 36.54674895418517,
+          "population": 279
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 40.877027915876546,
+          "population": 311
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 45.03625755599907,
+          "population": 342
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 50.09174803882935,
+          "population": 378
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 54.534895123689935,
+          "population": 407
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 60.21548062584213,
+          "population": 450
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 66.35048654083452,
+          "population": 496
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 73.70276987102751,
+          "population": 547
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 79.4189183349258,
+          "population": 588
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 86.70306270685775,
+          "population": 641
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 94.88514161954836,
+          "population": 696
+        }
+      ],
+      "composition_count": 359406546,
+      "decomposition_count": 950510048,
+      "runtime_seconds": 158.6679277420044,
+      "timestamp": "2025-11-09T20:41:58.986257"
+    },
+    {
+      "seed": 60,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 12.87902185116471,
+          "population": 98
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 13.704342273907319,
+          "population": 105
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 15.27166226490166,
+          "population": 119
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 18.11992740801241,
+          "population": 136
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 20.097890685639623,
+          "population": 153
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 22.298482793465404,
+          "population": 170
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 25.238879009142,
+          "population": 188
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 27.905693233051963,
+          "population": 213
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 31.85628427165148,
+          "population": 240
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 34.70797452796458,
+          "population": 256
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 37.27942270507802,
+          "population": 279
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 41.998629076859466,
+          "population": 311
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 47.53085635243475,
+          "population": 356
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 52.228563242247944,
+          "population": 385
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 56.00840598238676,
+          "population": 410
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 60.91113319742697,
+          "population": 454
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 68.54852911855167,
+          "population": 503
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 73.03598946814128,
+          "population": 533
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 79.14187699817624,
+          "population": 578
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 84.46486577475612,
+          "population": 618
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 90.75968472785033,
+          "population": 667
+        }
+      ],
+      "composition_count": 361582048,
+      "decomposition_count": 943577490,
+      "runtime_seconds": 158.0940899848938,
+      "timestamp": "2025-11-09T20:44:37.088436"
+    },
+    {
+      "seed": 61,
+      "condition": "SWEEP_UP",
+      "sweep_data": [
+        {
+          "f_spawn": 0.01,
+          "phi": 11.629588355464758,
+          "population": 91
+        },
+        {
+          "f_spawn": 0.012,
+          "phi": 12.386332384878386,
+          "population": 100
+        },
+        {
+          "f_spawn": 0.014,
+          "phi": 14.075631846717293,
+          "population": 110
+        },
+        {
+          "f_spawn": 0.016,
+          "phi": 15.865280997900783,
+          "population": 127
+        },
+        {
+          "f_spawn": 0.018000000000000002,
+          "phi": 17.842141740535588,
+          "population": 144
+        },
+        {
+          "f_spawn": 0.02,
+          "phi": 20.418616674495667,
+          "population": 165
+        },
+        {
+          "f_spawn": 0.022,
+          "phi": 23.652129845253377,
+          "population": 183
+        },
+        {
+          "f_spawn": 0.024,
+          "phi": 26.282238891992208,
+          "population": 205
+        },
+        {
+          "f_spawn": 0.026000000000000002,
+          "phi": 30.781518276307818,
+          "population": 241
+        },
+        {
+          "f_spawn": 0.028,
+          "phi": 34.66711743993217,
+          "population": 268
+        },
+        {
+          "f_spawn": 0.03,
+          "phi": 37.045456175851044,
+          "population": 290
+        },
+        {
+          "f_spawn": 0.032,
+          "phi": 40.4729391777445,
+          "population": 312
+        },
+        {
+          "f_spawn": 0.034,
+          "phi": 44.32414963325116,
+          "population": 340
+        },
+        {
+          "f_spawn": 0.036000000000000004,
+          "phi": 48.43695888374938,
+          "population": 379
+        },
+        {
+          "f_spawn": 0.038,
+          "phi": 54.42067515768188,
+          "population": 414
+        },
+        {
+          "f_spawn": 0.04,
+          "phi": 59.1034824168054,
+          "population": 446
+        },
+        {
+          "f_spawn": 0.042,
+          "phi": 65.1376281288857,
+          "population": 490
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 70.14318118221507,
+          "population": 526
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 76.40608342162396,
+          "population": 578
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 84.17355789005043,
+          "population": 635
+        },
+        {
+          "f_spawn": 0.05,
+          "phi": 91.18380392608559,
+          "population": 682
+        }
+      ],
+      "composition_count": 348644359,
+      "decomposition_count": 942930936,
+      "runtime_seconds": 155.57155299186707,
+      "timestamp": "2025-11-09T20:47:12.664202"
+    },
+    {
+      "seed": 42,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 16.390421359414976,
+          "population": 134
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 21.4673122990466,
+          "population": 170
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 26.212117029984256,
+          "population": 204
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 32.900148186541685,
+          "population": 252
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 38.130021543826075,
+          "population": 291
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 44.265079471161975,
+          "population": 333
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 49.992090629206565,
+          "population": 371
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 55.86638976480948,
+          "population": 409
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 60.81146680159222,
+          "population": 451
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 65.39987072062628,
+          "population": 478
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 69.50132968165573,
+          "population": 508
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 72.83340678656357,
+          "population": 533
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 77.9373728435282,
+          "population": 569
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 82.10084873052422,
+          "population": 593
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 84.44167492705051,
+          "population": 612
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 87.52165826067264,
+          "population": 637
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 90.47962333939066,
+          "population": 655
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 92.86176145054046,
+          "population": 675
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 95.89214236971783,
+          "population": 696
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 97.931675617754,
+          "population": 710
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 100.24073065717725,
+          "population": 724
+        }
+      ],
+      "composition_count": 723682635,
+      "decomposition_count": 1878770150,
+      "runtime_seconds": 321.04391407966614,
+      "timestamp": "2025-11-09T20:52:33.715459"
+    },
+    {
+      "seed": 43,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 16.934017324322397,
+          "population": 144
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 22.241223161137526,
+          "population": 176
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 27.676208806255737,
+          "population": 219
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 33.46652194772526,
+          "population": 261
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 38.68546213208221,
+          "population": 299
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 43.71466867588088,
+          "population": 343
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 51.32902541306677,
+          "population": 396
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 57.14908064361881,
+          "population": 430
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 60.55598469932242,
+          "population": 458
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 64.01962542196735,
+          "population": 481
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 68.01381093434111,
+          "population": 511
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 72.00657381221059,
+          "population": 539
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 76.5294811551613,
+          "population": 573
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 80.16351478681055,
+          "population": 599
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 83.26124865394024,
+          "population": 617
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 86.1281994591131,
+          "population": 639
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 89.24403427205779,
+          "population": 659
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 90.78687246856036,
+          "population": 671
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 93.17310401922455,
+          "population": 687
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 94.88900407068812,
+          "population": 700
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 97.18308406171343,
+          "population": 713
+        }
+      ],
+      "composition_count": 717094855,
+      "decomposition_count": 1921767951,
+      "runtime_seconds": 330.5901291370392,
+      "timestamp": "2025-11-09T20:58:04.314041"
+    },
+    {
+      "seed": 44,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 17.43032485477595,
+          "population": 147
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 21.986170846064265,
+          "population": 185
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 30.402299874584156,
+          "population": 242
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 37.05596408452888,
+          "population": 289
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 43.114023189487284,
+          "population": 329
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 48.72681714553844,
+          "population": 372
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 55.026018921598116,
+          "population": 412
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 60.380692431324974,
+          "population": 453
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 65.24916000361041,
+          "population": 489
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 71.22695464667183,
+          "population": 530
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 75.85388128059945,
+          "population": 561
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 80.55969176292338,
+          "population": 594
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 83.96324439453322,
+          "population": 613
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 87.01948109842957,
+          "population": 637
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 89.75981804223743,
+          "population": 658
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 92.15039846930448,
+          "population": 674
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 96.02541016813758,
+          "population": 703
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 99.08868804569636,
+          "population": 721
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 100.52824046480762,
+          "population": 734
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 102.53620201243268,
+          "population": 748
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 104.08185499123009,
+          "population": 757
+        }
+      ],
+      "composition_count": 834979442,
+      "decomposition_count": 2201811409,
+      "runtime_seconds": 382.57925605773926,
+      "timestamp": "2025-11-09T21:04:26.901195"
+    },
+    {
+      "seed": 45,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 17.34658120291645,
+          "population": 149
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 23.748714296137287,
+          "population": 191
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 29.084129350176177,
+          "population": 232
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 33.55202972639385,
+          "population": 258
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 39.982981280976674,
+          "population": 310
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 45.797993104622066,
+          "population": 345
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 50.27333882906612,
+          "population": 386
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 56.47353600263535,
+          "population": 426
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 60.54071029059767,
+          "population": 457
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 64.12744821603117,
+          "population": 478
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 67.53425744218045,
+          "population": 505
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 71.02959648860286,
+          "population": 531
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 75.91579151687894,
+          "population": 564
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 79.52220432967928,
+          "population": 588
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 83.70337513082728,
+          "population": 620
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 87.1862890052478,
+          "population": 646
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 90.24625499762966,
+          "population": 660
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 92.3039532508943,
+          "population": 676
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 93.68408619738935,
+          "population": 685
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 95.79341240071342,
+          "population": 698
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 96.950305811658,
+          "population": 704
+        }
+      ],
+      "composition_count": 717814297,
+      "decomposition_count": 1905017479,
+      "runtime_seconds": 328.8718378543854,
+      "timestamp": "2025-11-09T21:09:55.780968"
+    },
+    {
+      "seed": 46,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 15.483685166575798,
+          "population": 131
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 23.42741571973009,
+          "population": 186
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 29.507836165697498,
+          "population": 230
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 33.79502464346915,
+          "population": 264
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 40.38649353176128,
+          "population": 312
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 46.67797159894041,
+          "population": 356
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 52.27418940402246,
+          "population": 398
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 58.54008461395201,
+          "population": 446
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 63.76954174537005,
+          "population": 476
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 67.71456557577497,
+          "population": 503
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 71.72702672292257,
+          "population": 539
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 76.1687720481226,
+          "population": 566
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 81.38408296813822,
+          "population": 601
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 85.09317985089336,
+          "population": 627
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 87.3278471782222,
+          "population": 641
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 90.12682687667821,
+          "population": 665
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 93.82278203638958,
+          "population": 684
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 95.82710599173306,
+          "population": 702
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 97.77247293828509,
+          "population": 711
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 99.33669796039537,
+          "population": 724
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 100.38465829120008,
+          "population": 732
+        }
+      ],
+      "composition_count": 782083938,
+      "decomposition_count": 2070727517,
+      "runtime_seconds": 352.577508687973,
+      "timestamp": "2025-11-09T21:15:48.366772"
+    },
+    {
+      "seed": 47,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 17.484751805119398,
+          "population": 142
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 23.120371152140454,
+          "population": 180
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 27.48836383665821,
+          "population": 219
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 34.53200877504608,
+          "population": 263
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 39.531497367101494,
+          "population": 299
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 45.764510737200425,
+          "population": 346
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 50.3243240541623,
+          "population": 384
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 57.587834297512636,
+          "population": 434
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 63.3437462726344,
+          "population": 471
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 68.98361924795061,
+          "population": 507
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 72.63571219607793,
+          "population": 533
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 77.42354936393686,
+          "population": 567
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 81.36449490655176,
+          "population": 592
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 85.04178658815663,
+          "population": 608
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 87.29308066843343,
+          "population": 631
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 90.32054155484401,
+          "population": 651
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 92.18730378022825,
+          "population": 661
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 93.38534021170817,
+          "population": 671
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 94.96219111133168,
+          "population": 685
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 96.54781502838578,
+          "population": 697
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 97.69233371284214,
+          "population": 703
+        }
+      ],
+      "composition_count": 754144915,
+      "decomposition_count": 1957449614,
+      "runtime_seconds": 336.87390089035034,
+      "timestamp": "2025-11-09T21:21:25.250125"
+    },
+    {
+      "seed": 48,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 16.336757343832442,
+          "population": 138
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 22.62378662027749,
+          "population": 179
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 28.690479216620222,
+          "population": 220
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 32.48042384325759,
+          "population": 250
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 37.86330658794706,
+          "population": 291
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 42.75307230838063,
+          "population": 325
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 47.14590368311342,
+          "population": 357
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 51.53714464173979,
+          "population": 387
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 54.85585286473707,
+          "population": 413
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 58.763571430164205,
+          "population": 438
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 63.84268992054826,
+          "population": 477
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 67.08211229380927,
+          "population": 499
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 70.7771656225137,
+          "population": 527
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 73.9637832578679,
+          "population": 550
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 76.59000851587038,
+          "population": 571
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 79.92989759840067,
+          "population": 594
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 83.14148888407284,
+          "population": 619
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 85.48698070132708,
+          "population": 633
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 87.00106482223333,
+          "population": 644
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 87.92736852447327,
+          "population": 650
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 88.60348563626685,
+          "population": 655
+        }
+      ],
+      "composition_count": 619158086,
+      "decomposition_count": 1657554687,
+      "runtime_seconds": 279.3106620311737,
+      "timestamp": "2025-11-09T21:26:04.568763"
+    },
+    {
+      "seed": 49,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 16.75127173731092,
+          "population": 137
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 21.205880399642552,
+          "population": 176
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 28.448247677815576,
+          "population": 218
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 33.27672685880674,
+          "population": 254
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 38.55908606509413,
+          "population": 291
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 43.82124053115952,
+          "population": 328
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 48.63712223237689,
+          "population": 361
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 52.28900916711165,
+          "population": 393
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 57.7819926560055,
+          "population": 427
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 62.153074700963344,
+          "population": 463
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 66.46762644633674,
+          "population": 486
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 68.51989385539908,
+          "population": 505
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 72.55033872268847,
+          "population": 531
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 75.68188126236909,
+          "population": 556
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 80.5790679863966,
+          "population": 585
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 82.79977955250436,
+          "population": 601
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 85.05841317133631,
+          "population": 620
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 87.75413088265196,
+          "population": 639
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 90.32706016499658,
+          "population": 657
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 91.63402325811201,
+          "population": 665
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 92.98323157501245,
+          "population": 675
+        }
+      ],
+      "composition_count": 651780968,
+      "decomposition_count": 1707577968,
+      "runtime_seconds": 291.05731415748596,
+      "timestamp": "2025-11-09T21:30:55.633677"
+    },
+    {
+      "seed": 50,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 15.725139349470679,
+          "population": 131
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 21.635891478941346,
+          "population": 180
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 27.000494509625838,
+          "population": 216
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 33.68660464163672,
+          "population": 260
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 38.93476747756978,
+          "population": 299
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 44.22956897684719,
+          "population": 337
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 49.10900812865612,
+          "population": 363
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 52.30167687820185,
+          "population": 400
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 56.55919088278033,
+          "population": 428
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 60.15322654741551,
+          "population": 454
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 62.895596128105105,
+          "population": 479
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 66.03476450673344,
+          "population": 503
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 70.0522271189999,
+          "population": 527
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 72.79301052219428,
+          "population": 546
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 75.72548689260826,
+          "population": 571
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 79.98037419733042,
+          "population": 596
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 81.76325911298646,
+          "population": 609
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 83.79349922801586,
+          "population": 622
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 85.47953835065081,
+          "population": 636
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 87.09137111958273,
+          "population": 647
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 88.87625583711252,
+          "population": 659
+        }
+      ],
+      "composition_count": 617654296,
+      "decomposition_count": 1669616170,
+      "runtime_seconds": 283.5752639770508,
+      "timestamp": "2025-11-09T21:35:39.216612"
+    },
+    {
+      "seed": 51,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 14.898752452206296,
+          "population": 130
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 20.96879141397339,
+          "population": 172
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 26.887720773426167,
+          "population": 221
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 32.99373419236876,
+          "population": 260
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 39.93912242661159,
+          "population": 306
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 44.07475062832651,
+          "population": 339
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 48.835463015894796,
+          "population": 369
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 53.31080724103153,
+          "population": 404
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 57.38145669165398,
+          "population": 429
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 60.0535251540251,
+          "population": 446
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 63.1594813132004,
+          "population": 475
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 67.54226539660132,
+          "population": 505
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 71.1452535936431,
+          "population": 530
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 74.35170419637427,
+          "population": 549
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 77.74720416862058,
+          "population": 571
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 80.47252538936527,
+          "population": 593
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 82.73705126505995,
+          "population": 607
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 85.5975538826004,
+          "population": 627
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 87.86596413955066,
+          "population": 644
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 89.66903985163896,
+          "population": 654
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 90.40729483282674,
+          "population": 658
+        }
+      ],
+      "composition_count": 629881942,
+      "decomposition_count": 1674729502,
+      "runtime_seconds": 347.3686442375183,
+      "timestamp": "2025-11-09T21:41:26.593368"
+    },
+    {
+      "seed": 52,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 16.12252574553531,
+          "population": 135
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 21.876012410328585,
+          "population": 171
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 27.01185699539299,
+          "population": 212
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 32.71194398207162,
+          "population": 255
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 38.525747624131746,
+          "population": 298
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 45.36969520464083,
+          "population": 352
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 50.82527427309268,
+          "population": 389
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 56.59447545998495,
+          "population": 425
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 60.33638879933157,
+          "population": 452
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 65.17803813512316,
+          "population": 490
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 69.79444673078034,
+          "population": 520
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 73.94980028862783,
+          "population": 549
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 77.55561068020616,
+          "population": 569
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 79.28155582500465,
+          "population": 588
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 83.86487955837099,
+          "population": 617
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 87.00865668937026,
+          "population": 638
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 89.57095019869465,
+          "population": 657
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 90.57513115607941,
+          "population": 667
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 92.999539821591,
+          "population": 683
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 95.56891825057805,
+          "population": 703
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 97.43738723786036,
+          "population": 717
+        }
+      ],
+      "composition_count": 720307338,
+      "decomposition_count": 1914892835,
+      "runtime_seconds": 14520.343177080154,
+      "timestamp": "2025-11-10T01:43:26.945047"
+    },
+    {
+      "seed": 53,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 15.122553499899226,
+          "population": 124
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 20.044565298674375,
+          "population": 156
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 25.503199749330008,
+          "population": 202
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 31.824543332667876,
+          "population": 252
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 39.21211226775641,
+          "population": 298
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 45.008057784357064,
+          "population": 339
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 50.789984189337744,
+          "population": 379
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 55.89126006944492,
+          "population": 417
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 60.271490016440495,
+          "population": 447
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 64.37800346391427,
+          "population": 480
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 68.41634698929107,
+          "population": 512
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 72.49059295088144,
+          "population": 541
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 75.99930407189238,
+          "population": 562
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 79.82832704852362,
+          "population": 589
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 82.43220507591361,
+          "population": 611
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 85.16667471111711,
+          "population": 628
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 87.4053006584883,
+          "population": 650
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 90.1988299817958,
+          "population": 664
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 92.07481371198723,
+          "population": 679
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 93.84772001478132,
+          "population": 687
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 95.64221006419798,
+          "population": 702
+        }
+      ],
+      "composition_count": 699433297,
+      "decomposition_count": 1857980085,
+      "runtime_seconds": 316.1839048862457,
+      "timestamp": "2025-11-10T01:48:43.134181"
+    },
+    {
+      "seed": 54,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 15.850221701853316,
+          "population": 136
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 21.481580744390985,
+          "population": 171
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 26.649912607227098,
+          "population": 210
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 31.670275332245343,
+          "population": 244
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 37.98343627211592,
+          "population": 294
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 44.34165940192187,
+          "population": 339
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 49.677834610342835,
+          "population": 369
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 54.20071845970808,
+          "population": 403
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 58.91860108647863,
+          "population": 431
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 62.09933298614528,
+          "population": 461
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 65.02484731734705,
+          "population": 483
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 67.57665350090761,
+          "population": 504
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 71.26158295401021,
+          "population": 534
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 74.83430558143748,
+          "population": 558
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 77.53911170604304,
+          "population": 580
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 82.00677615466991,
+          "population": 610
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 84.28976573168258,
+          "population": 626
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 86.09617652162714,
+          "population": 639
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 87.70030904695628,
+          "population": 648
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 89.68696185695293,
+          "population": 661
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 90.36886367627281,
+          "population": 666
+        }
+      ],
+      "composition_count": 642286759,
+      "decomposition_count": 1720007939,
+      "runtime_seconds": 289.3262720108032,
+      "timestamp": "2025-11-10T01:53:32.468890"
+    },
+    {
+      "seed": 55,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 12.401992231566686,
+          "population": 108
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 17.55282289484088,
+          "population": 152
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 23.134495803620833,
+          "population": 195
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 29.78479804955949,
+          "population": 246
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 35.91860310666966,
+          "population": 284
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 41.065255738840165,
+          "population": 324
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 46.569254169512824,
+          "population": 363
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 50.48724857993204,
+          "population": 388
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 55.30707761668881,
+          "population": 428
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 60.1444691664985,
+          "population": 459
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 64.37243382971292,
+          "population": 486
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 68.73601516671008,
+          "population": 523
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 73.60908753291062,
+          "population": 553
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 76.91087701218456,
+          "population": 575
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 80.05970730735662,
+          "population": 601
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 82.25729535084315,
+          "population": 614
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 84.43676205324607,
+          "population": 631
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 86.77754424723406,
+          "population": 648
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 89.54433810637357,
+          "population": 669
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 92.0681395794468,
+          "population": 685
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 93.6499208672561,
+          "population": 694
+        }
+      ],
+      "composition_count": 651352246,
+      "decomposition_count": 1775685216,
+      "runtime_seconds": 299.88991594314575,
+      "timestamp": "2025-11-10T01:58:32.366517"
+    },
+    {
+      "seed": 56,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 14.102039338165948,
+          "population": 120
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 17.33456035464111,
+          "population": 152
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 22.140269164504957,
+          "population": 187
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 26.41435678682867,
+          "population": 222
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 30.444358361594414,
+          "population": 255
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 34.08521442144986,
+          "population": 278
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 37.55274298393699,
+          "population": 300
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 40.290739133982726,
+          "population": 328
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 45.30743917147395,
+          "population": 363
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 48.71688280456308,
+          "population": 383
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 51.72654256186139,
+          "population": 409
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 54.658651887580085,
+          "population": 426
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 57.24676057403086,
+          "population": 448
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 61.2754814102475,
+          "population": 477
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 64.81888945665048,
+          "population": 497
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 67.26521223205128,
+          "population": 513
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 69.96361951092389,
+          "population": 532
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 71.60677533503522,
+          "population": 548
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 74.35283289884417,
+          "population": 569
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 75.48883350053514,
+          "population": 574
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 77.05380322792914,
+          "population": 586
+        }
+      ],
+      "composition_count": 447951893,
+      "decomposition_count": 1266938607,
+      "runtime_seconds": 207.05087518692017,
+      "timestamp": "2025-11-10T02:01:59.425197"
+    },
+    {
+      "seed": 57,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 16.059953345121944,
+          "population": 131
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 22.54985277300168,
+          "population": 178
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 30.288749987409318,
+          "population": 238
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 36.82429778495359,
+          "population": 282
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 42.77704814408216,
+          "population": 324
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 46.83715226318697,
+          "population": 358
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 52.22009016200935,
+          "population": 388
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 56.119181190165875,
+          "population": 427
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 62.169145866507954,
+          "population": 471
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 67.78544137577781,
+          "population": 510
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 71.67271825177544,
+          "population": 537
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 76.62824195271605,
+          "population": 570
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 81.19533220867616,
+          "population": 600
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 84.32007158773077,
+          "population": 625
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 87.06221362747132,
+          "population": 644
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 89.9694951639809,
+          "population": 662
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 91.7168669665275,
+          "population": 679
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 94.32920370159441,
+          "population": 699
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 95.93094447785538,
+          "population": 708
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 97.19899065482232,
+          "population": 720
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 98.66812392377182,
+          "population": 725
+        }
+      ],
+      "composition_count": 772888157,
+      "decomposition_count": 2062252587,
+      "runtime_seconds": 350.1883158683777,
+      "timestamp": "2025-11-10T02:07:49.622034"
+    },
+    {
+      "seed": 58,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 15.719265185044994,
+          "population": 125
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 20.38957929875897,
+          "population": 156
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 24.681490329883463,
+          "population": 191
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 28.840151852138977,
+          "population": 221
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 34.80644069035401,
+          "population": 268
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 41.332453584942805,
+          "population": 316
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 46.84652666896445,
+          "population": 353
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 52.41446174512481,
+          "population": 385
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 56.47836578999915,
+          "population": 413
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 60.96083605982778,
+          "population": 444
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 63.08344377635786,
+          "population": 466
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 66.0610432706277,
+          "population": 489
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 68.8809916482405,
+          "population": 508
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 72.03151080202021,
+          "population": 528
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 74.99481004259974,
+          "population": 551
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 77.99069685366767,
+          "population": 575
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 79.81509328502119,
+          "population": 589
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 82.24551485999082,
+          "population": 605
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 84.38280861881341,
+          "population": 619
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 86.85571125629902,
+          "population": 637
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 88.46291771044379,
+          "population": 647
+        }
+      ],
+      "composition_count": 586965554,
+      "decomposition_count": 1546929662,
+      "runtime_seconds": 260.5383679866791,
+      "timestamp": "2025-11-10T02:12:10.167496"
+    },
+    {
+      "seed": 59,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 18.39743598317558,
+          "population": 148
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 22.84252827704503,
+          "population": 179
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 28.3751111417194,
+          "population": 225
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 34.71531052155495,
+          "population": 264
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 40.43005223017146,
+          "population": 309
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 45.30691120925956,
+          "population": 338
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 50.519761064557336,
+          "population": 375
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 54.946765946686035,
+          "population": 408
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 60.91123692173068,
+          "population": 444
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 64.47553067446836,
+          "population": 471
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 69.07456727475281,
+          "population": 510
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 73.9898377556466,
+          "population": 538
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 77.15358831516069,
+          "population": 559
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 80.72551303225285,
+          "population": 585
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 83.56335935684801,
+          "population": 608
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 85.82816846328411,
+          "population": 622
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 88.79669237791832,
+          "population": 642
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 91.27579551747579,
+          "population": 659
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 92.998104614816,
+          "population": 672
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 95.24463183927696,
+          "population": 686
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 95.89479076252296,
+          "population": 690
+        }
+      ],
+      "composition_count": 705252569,
+      "decomposition_count": 1830540493,
+      "runtime_seconds": 311.9335882663727,
+      "timestamp": "2025-11-10T02:17:22.108600"
+    },
+    {
+      "seed": 60,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 15.707224275231528,
+          "population": 127
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 20.44907626208185,
+          "population": 166
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 26.588754472705904,
+          "population": 207
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 32.50538134749758,
+          "population": 249
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 38.19634887844222,
+          "population": 292
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 43.28915268321896,
+          "population": 330
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 47.8093042835333,
+          "population": 355
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 52.570358105709666,
+          "population": 392
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 58.57074205189527,
+          "population": 431
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 61.84277582714436,
+          "population": 458
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 65.77194557844582,
+          "population": 488
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 69.86538555415167,
+          "population": 516
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 73.71307644633889,
+          "population": 537
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 75.99150387521216,
+          "population": 557
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 78.5478438046844,
+          "population": 576
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 81.36047891198055,
+          "population": 595
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 84.33153986782189,
+          "population": 617
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 85.5689786547595,
+          "population": 630
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 88.57493755428693,
+          "population": 648
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 90.65963595277151,
+          "population": 666
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 92.3628257283041,
+          "population": 675
+        }
+      ],
+      "composition_count": 643057449,
+      "decomposition_count": 1694931031,
+      "runtime_seconds": 287.07522416114807,
+      "timestamp": "2025-11-10T02:22:09.191468"
+    },
+    {
+      "seed": 61,
+      "condition": "SWEEP_DOWN",
+      "sweep_data": [
+        {
+          "f_spawn": 0.05,
+          "phi": 14.583849602899846,
+          "population": 114
+        },
+        {
+          "f_spawn": 0.048,
+          "phi": 19.28048681380957,
+          "population": 160
+        },
+        {
+          "f_spawn": 0.046,
+          "phi": 27.148953628820916,
+          "population": 212
+        },
+        {
+          "f_spawn": 0.044,
+          "phi": 32.62916078399305,
+          "population": 256
+        },
+        {
+          "f_spawn": 0.041999999999999996,
+          "phi": 38.826645568280995,
+          "population": 301
+        },
+        {
+          "f_spawn": 0.039999999999999994,
+          "phi": 42.884391027311715,
+          "population": 329
+        },
+        {
+          "f_spawn": 0.03799999999999999,
+          "phi": 47.654833170159584,
+          "population": 362
+        },
+        {
+          "f_spawn": 0.03599999999999999,
+          "phi": 52.54527604034928,
+          "population": 403
+        },
+        {
+          "f_spawn": 0.03399999999999999,
+          "phi": 59.11244191269186,
+          "population": 448
+        },
+        {
+          "f_spawn": 0.03199999999999999,
+          "phi": 62.935810978554464,
+          "population": 472
+        },
+        {
+          "f_spawn": 0.029999999999999985,
+          "phi": 65.93990185937483,
+          "population": 500
+        },
+        {
+          "f_spawn": 0.027999999999999983,
+          "phi": 68.93179910464599,
+          "population": 520
+        },
+        {
+          "f_spawn": 0.02599999999999998,
+          "phi": 72.56685342208709,
+          "population": 548
+        },
+        {
+          "f_spawn": 0.02399999999999998,
+          "phi": 75.9004603049143,
+          "population": 570
+        },
+        {
+          "f_spawn": 0.021999999999999978,
+          "phi": 79.06315565871184,
+          "population": 593
+        },
+        {
+          "f_spawn": 0.019999999999999976,
+          "phi": 81.9641413431292,
+          "population": 610
+        },
+        {
+          "f_spawn": 0.017999999999999974,
+          "phi": 83.48219324315716,
+          "population": 626
+        },
+        {
+          "f_spawn": 0.015999999999999973,
+          "phi": 86.08733800881978,
+          "population": 646
+        },
+        {
+          "f_spawn": 0.01399999999999997,
+          "phi": 88.44280432648031,
+          "population": 667
+        },
+        {
+          "f_spawn": 0.011999999999999969,
+          "phi": 90.51432939769683,
+          "population": 677
+        },
+        {
+          "f_spawn": 0.009999999999999967,
+          "phi": 91.56806056668233,
+          "population": 684
+        }
+      ],
+      "composition_count": 655078349,
+      "decomposition_count": 1778782681,
+      "runtime_seconds": 298.57851004600525,
+      "timestamp": "2025-11-10T02:27:07.778291"
+    },
+    {
+      "seed": 42,
+      "condition": "QUENCH",
+      "phi_pre": 13.49623796255982,
+      "phi_post": 24.17999061934369,
+      "nucleation_time": 0,
+      "composition_count": 23346100,
+      "decomposition_count": 64502006,
+      "runtime_seconds": 9.938754081726074,
+      "timestamp": "2025-11-10T02:27:17.725913"
+    },
+    {
+      "seed": 43,
+      "condition": "QUENCH",
+      "phi_pre": 12.244105680376762,
+      "phi_post": 24.785172232512263,
+      "nucleation_time": 0,
+      "composition_count": 24206021,
+      "decomposition_count": 66833832,
+      "runtime_seconds": 10.276144027709961,
+      "timestamp": "2025-11-10T02:27:28.009860"
+    },
+    {
+      "seed": 44,
+      "condition": "QUENCH",
+      "phi_pre": 13.583554271443587,
+      "phi_post": 29.294554139852103,
+      "nucleation_time": 0,
+      "composition_count": 32888228,
+      "decomposition_count": 88567188,
+      "runtime_seconds": 13.864684104919434,
+      "timestamp": "2025-11-10T02:27:41.882739"
+    },
+    {
+      "seed": 45,
+      "condition": "QUENCH",
+      "phi_pre": 13.767805192668751,
+      "phi_post": 25.039290006509866,
+      "nucleation_time": 0,
+      "composition_count": 24817314,
+      "decomposition_count": 69266567,
+      "runtime_seconds": 10.676573753356934,
+      "timestamp": "2025-11-10T02:27:52.566689"
+    },
+    {
+      "seed": 46,
+      "condition": "QUENCH",
+      "phi_pre": 12.640059817213771,
+      "phi_post": 27.922173009745073,
+      "nucleation_time": 0,
+      "composition_count": 30030230,
+      "decomposition_count": 83555219,
+      "runtime_seconds": 12.863680124282837,
+      "timestamp": "2025-11-10T02:28:05.437627"
+    },
+    {
+      "seed": 47,
+      "condition": "QUENCH",
+      "phi_pre": 14.053331280001572,
+      "phi_post": 28.086200154891547,
+      "nucleation_time": 0,
+      "composition_count": 30164523,
+      "decomposition_count": 81117231,
+      "runtime_seconds": 12.72745680809021,
+      "timestamp": "2025-11-10T02:28:18.174137"
+    },
+    {
+      "seed": 48,
+      "condition": "QUENCH",
+      "phi_pre": 12.83067154724071,
+      "phi_post": 24.409202529711465,
+      "nucleation_time": 0,
+      "composition_count": 23169183,
+      "decomposition_count": 62569766,
+      "runtime_seconds": 9.698450803756714,
+      "timestamp": "2025-11-10T02:28:27.880735"
+    },
+    {
+      "seed": 49,
+      "condition": "QUENCH",
+      "phi_pre": 12.814655661747041,
+      "phi_post": 26.036032471622946,
+      "nucleation_time": 0,
+      "composition_count": 26148952,
+      "decomposition_count": 70842869,
+      "runtime_seconds": 11.002397060394287,
+      "timestamp": "2025-11-10T02:28:38.887592"
+    },
+    {
+      "seed": 50,
+      "condition": "QUENCH",
+      "phi_pre": 13.970677948665486,
+      "phi_post": 30.19811402411041,
+      "nucleation_time": 0,
+      "composition_count": 34611569,
+      "decomposition_count": 93468594,
+      "runtime_seconds": 14.677475929260254,
+      "timestamp": "2025-11-10T02:28:53.573371"
+    },
+    {
+      "seed": 51,
+      "condition": "QUENCH",
+      "phi_pre": 10.873088976527601,
+      "phi_post": 25.59524085201045,
+      "nucleation_time": 0,
+      "composition_count": 25693459,
+      "decomposition_count": 72348623,
+      "runtime_seconds": 11.105346918106079,
+      "timestamp": "2025-11-10T02:29:04.685319"
+    },
+    {
+      "seed": 52,
+      "condition": "QUENCH",
+      "phi_pre": 13.021410870961605,
+      "phi_post": 25.100011741867714,
+      "nucleation_time": 115,
+      "composition_count": 25239214,
+      "decomposition_count": 69592027,
+      "runtime_seconds": 10.759856939315796,
+      "timestamp": "2025-11-10T02:29:15.452797"
+    },
+    {
+      "seed": 53,
+      "condition": "QUENCH",
+      "phi_pre": 12.836458977663229,
+      "phi_post": 23.16297152223751,
+      "nucleation_time": 0,
+      "composition_count": 21722647,
+      "decomposition_count": 60803098,
+      "runtime_seconds": 9.342871904373169,
+      "timestamp": "2025-11-10T02:29:24.803680"
+    },
+    {
+      "seed": 54,
+      "condition": "QUENCH",
+      "phi_pre": 12.911889175257729,
+      "phi_post": 26.287729052236383,
+      "nucleation_time": 0,
+      "composition_count": 26254738,
+      "decomposition_count": 69964123,
+      "runtime_seconds": 10.91742992401123,
+      "timestamp": "2025-11-10T02:29:35.728687"
+    },
+    {
+      "seed": 55,
+      "condition": "QUENCH",
+      "phi_pre": 11.801751969152322,
+      "phi_post": 22.895648105431768,
+      "nucleation_time": 0,
+      "composition_count": 21380639,
+      "decomposition_count": 62105408,
+      "runtime_seconds": 9.413354873657227,
+      "timestamp": "2025-11-10T02:29:45.149526"
+    },
+    {
+      "seed": 56,
+      "condition": "QUENCH",
+      "phi_pre": 10.550708212760929,
+      "phi_post": 23.444121166517284,
+      "nucleation_time": 0,
+      "composition_count": 21199738,
+      "decomposition_count": 58545152,
+      "runtime_seconds": 9.027572870254517,
+      "timestamp": "2025-11-10T02:29:54.184547"
+    },
+    {
+      "seed": 57,
+      "condition": "QUENCH",
+      "phi_pre": 11.416348314606745,
+      "phi_post": 27.786552495709458,
+      "nucleation_time": 35,
+      "composition_count": 29393809,
+      "decomposition_count": 80972334,
+      "runtime_seconds": 12.593923807144165,
+      "timestamp": "2025-11-10T02:30:06.782738"
+    },
+    {
+      "seed": 58,
+      "condition": "QUENCH",
+      "phi_pre": 13.732738191744284,
+      "phi_post": 20.678706730904796,
+      "nucleation_time": 0,
+      "composition_count": 18469746,
+      "decomposition_count": 55536885,
+      "runtime_seconds": 8.30978798866272,
+      "timestamp": "2025-11-10T02:30:15.101408"
+    },
+    {
+      "seed": 59,
+      "condition": "QUENCH",
+      "phi_pre": 13.153914802657658,
+      "phi_post": 22.90885539104746,
+      "nucleation_time": 37,
+      "composition_count": 21882935,
+      "decomposition_count": 62299828,
+      "runtime_seconds": 9.523088932037354,
+      "timestamp": "2025-11-10T02:30:24.631718"
+    },
+    {
+      "seed": 60,
+      "condition": "QUENCH",
+      "phi_pre": 12.87902185116471,
+      "phi_post": 26.810383532370956,
+      "nucleation_time": 47,
+      "composition_count": 27691060,
+      "decomposition_count": 75503572,
+      "runtime_seconds": 11.734396934509277,
+      "timestamp": "2025-11-10T02:30:36.373239"
+    },
+    {
+      "seed": 61,
+      "condition": "QUENCH",
+      "phi_pre": 11.629588355464758,
+      "phi_post": 28.295443111664582,
+      "nucleation_time": 0,
+      "composition_count": 30201511,
+      "decomposition_count": 82821186,
+      "runtime_seconds": 12.856924057006836,
+      "timestamp": "2025-11-10T02:30:49.237883"
+    }
+  ],
+  "runtime_hours": 6.6415011658271155
+}
