@@ -9,6 +9,7 @@
 #   make paper6b              - Compile Paper 6B (Multi-Timescale Dynamics)
 #   make paper7               - Compile Paper 7 (Sleep-Inspired Consolidation)
 #   make paper9               - Compile Paper 9 (TSF Framework)
+#   make topology_paper       - Compile Topology Paper (When Network Topology Matters)
 #   make paper3               - Run Paper 3 factorial experiments
 #   make test                 - Run test suite
 #   make test-cached-metrics  - Run cached_metrics validation tests
@@ -21,7 +22,7 @@
 # Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 # License: GPL-3.0
 
-.PHONY: help install paper1 paper2 paper5d paper6 paper6b paper7 paper9 paper3 paper4 test test-quick test-cached-metrics verify-cached-fix lint format clean docker-build docker-run docker-test figures figures-c175 figures-nrmv2 list-figures
+.PHONY: help install paper1 paper2 paper5d paper6 paper6b paper7 paper9 topology_paper paper3 paper4 test test-quick test-cached-metrics verify-cached-fix lint format clean docker-build docker-run docker-test figures figures-c175 figures-nrmv2 list-figures
 
 # Default target
 .DEFAULT_GOAL := help
@@ -130,6 +131,17 @@ paper9: ## Compile Paper 9 (TSF Framework)
 	rm -f manuscript_raw.aux manuscript_raw.log manuscript_raw.out || \
 	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
 	@echo "$(GREEN)✓ Paper 9 compiled → papers/compiled/paper9/$(NC)"
+
+topology_paper: ## Compile Topology Paper (When Network Topology Matters)
+	@echo "$(BLUE)Compiling Topology Paper (2 passes for references)...$(NC)"
+	cd papers/arxiv_submissions/topology_paper && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	mkdir -p ../../compiled/topology_paper && \
+	cp manuscript.pdf ../../compiled/topology_paper/Topology_Paper_When_Network_Topology_Matters_arXiv_Submission.pdf && \
+	rm -f manuscript.aux manuscript.log manuscript.out || \
+	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
+	@echo "$(GREEN)✓ Topology Paper compiled → papers/compiled/topology_paper/$(NC)"
 
 paper3: ## Run Paper 3 factorial experiments (6 experiments, ~67 mins)
 	@echo "$(BLUE)Running Paper 3 factorial experiments...$(NC)"
