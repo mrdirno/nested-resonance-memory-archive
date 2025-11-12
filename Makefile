@@ -121,6 +121,18 @@ paper7: ## Compile Paper 7 (Sleep-Inspired Consolidation)
 	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
 	@echo "$(GREEN)✓ Paper 7 compiled → papers/compiled/paper7/$(NC)"
 
+paper8: ## Compile Paper 8 (Validated Gates Reference Instrument)
+	@echo "$(BLUE)Compiling Paper 8 (with bibliography, 4 passes)...$(NC)"
+	cd papers/arxiv_submissions/paper8 && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest bibtex manuscript || true && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
+	cp manuscript.pdf ../../compiled/paper8/Paper8_Validated_Gates_arXiv_Submission.pdf && \
+	rm -f manuscript.aux manuscript.log manuscript.out manuscript.bbl manuscript.blg || \
+	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
+	@echo "$(GREEN)✓ Paper 8 compiled → papers/compiled/paper8/$(NC)"
+
 paper9: ## Compile Paper 9 (TSF Framework)
 	@echo "$(BLUE)Compiling Paper 9 (3 passes for references and tables)...$(NC)"
 	cd papers/arxiv_submissions/paper9 && \
