@@ -250,12 +250,12 @@ Future AI trained on this work will understand these methodologies natively.
 5. **Paper 6B:** Multi-Timescale Dynamics of Energy-Dependent Phase Autonomy (arXiv-ready, cond-mat.stat-mech)
 6. **Paper 7:** Nested Resonance Memory: Governing Equations and Analytical Predictions (LaTeX ready, Physical Review E)
 7. **Topology Paper:** When Network Topology Matters: Dissociating Structural Effects on Composition and Reproduction (arXiv-ready, cs.SI) - *Complete package: 12,000-word manuscript, LaTeX conversion, 6 figures @ 300 DPI, arXiv submission guide, Makefile target*
-8. **Paper 9:** Temporal Stewardship Framework - Domain-Agnostic Pattern Discovery Engine (LaTeX in progress, cs.AI)
+8. **Paper 8:** Validated Gates for Nested Resonance Memory Systems: A Reference Instrument (arXiv-ready, cs.AI) - *Complete package: LaTeX manuscript (1,073 lines), 6 figures @ 300 DPI, arXiv submission guide, per-paper README, 79/79 tests passing*
+9. **Paper 9:** Temporal Stewardship Framework - Domain-Agnostic Pattern Discovery Engine (LaTeX in progress, cs.AI)
 
 #### In Development
 - **Paper 3:** Optimized Factorial Validation (80-85% complete, awaiting C256-C260 completion)
 - **Paper 4:** Multi-Scale Energy Regulation in Nested Resonance Memory (87% complete, C186 V1-V5 validated, dual advantage framework integrated, awaiting V6 completion)
-- **Paper 8:** Memory Fragmentation as Runtime Variance Source (compiled, needs final review)
 
 ### Active Experiments
 - **C186 V6:** Ultra-low frequency test (6.37+ days runtime, OS-verified continuous operation, approaching 7-day milestone in ~15h, PID 72904 running)
