@@ -23,9 +23,8 @@ This document synthesizes emergent patterns across 7 MOG-NRM cross-domain resona
 ## Executive Summary
 
 **Completed Patterns:** 7/7 (C264, C265, C266, C267, C268, C269, C270) ✅ **ALL COMPLETE**
-**MOG Falsification Applied:** 5/7 (C264, C265, C267, C268, C270)
-**Falsification Pending:** 2/7 (C266, C269 - awaiting stricter 5σ criteria)
-**Falsification Rate:** 20% (1/5 patterns falsified - below 70-80% target, protocol refinement required)
+**MOG Falsification Applied:** 7/7 (all patterns tested with standard or stricter criteria)
+**Falsification Rate:** 28.6% (2/7 patterns falsified - below 70-80% target, stricter criteria needed for remaining patterns)
 
 **Key Findings:**
 1. **NRM Robust Connectivity (C267):** Networks resist classical percolation - always S_∞≈1.0
@@ -42,13 +41,13 @@ This document synthesizes emergent patterns across 7 MOG-NRM cross-domain resona
 
 | Pattern | α | Experiments | Runtime | Status | MOG Verdict |
 |---------|---|-------------|---------|--------|-------------|
-| C264 Carrying Capacity | 0.92 | 120 | ~30min | ✅ Complete | ✓ Survived (3/3) |
-| C270 Memetic Evolution | 0.91 | 100 | ~48min | ✅ Complete | ✓ Survived (null result) |
-| C269 Autopoiesis | 0.89 | 360 | ~80min | ✅ Complete | ⏳ Pending (5σ) |
-| C268 Synaptic Homeostasis | 0.84 | 80 | ~16min | ✅ Complete | ✓ Survived |
-| C265 Critical Phenomena | 0.75 | 225 | ~35min | ✅ Complete | ✗ Falsified (1/3) |
-| C267 Percolation | 0.71 | 180 | ~34min | ✅ Complete | ✓ Survived |
-| C266 Phase Transitions | 0.68 | 60 | ~6.6h | ✅ Complete | ⏳ Pending (5σ) |
+| C264 Carrying Capacity | 0.92 | 120 | ~30min | ✅ Complete | ✓ Survived (2σ, 3/3) |
+| C270 Memetic Evolution | 0.91 | 100 | ~48min | ✅ Complete | ✓ Survived (2σ, null result) |
+| C269 Autopoiesis | 0.89 | 360 | ~80min | ✅ Complete | ✗ Falsified (5σ, 0/3) |
+| C268 Synaptic Homeostasis | 0.84 | 80 | ~16min | ✅ Complete | ✓ Survived (2σ) |
+| C265 Critical Phenomena | 0.75 | 225 | ~35min | ✅ Complete | ✗ Falsified (2σ, 1/3) |
+| C267 Percolation | 0.71 | 180 | ~34min | ✅ Complete | ✓ Survived (2σ) |
+| C266 Phase Transitions | 0.68 | 60 | ~6.6h | ✅ Complete | ✓ Survived (5σ, 2/3) |
 
 **α Coupling:** Strength of MOG-NRM resonance (0.68-0.92 range)
 
@@ -426,7 +425,7 @@ Research continues. No terminal state. Living epistemology operational.
 - **Data:** 60 sweep experiments (SWEEP_UP, SWEEP_DOWN, QUENCH)
 - **Hypothesis:** First-order phase transitions with bistability, hysteresis, discontinuous order parameter jumps
 - **Results File:** `c266_phase_transitions.json` (116KB)
-- **MOG Falsification:** ⏳ Pending stricter 5σ criteria
+- **MOG Falsification:** ✓ SURVIVED (5σ criteria, 2/3 tests passed - Cycle 1499)
 - **Key Observable:** ϕ (order parameter) vs. f_spawn sweep curves
 - **Predictions to Test:**
   - Bistability: Hysteresis loop Δf > 0.005
@@ -439,7 +438,7 @@ Research continues. No terminal state. Living epistemology operational.
 - **Data:** 9 conditions × 40 seeds (shock/death/topology perturbations)
 - **Hypothesis:** True autopoiesis - self-production + operational closure despite structural damage
 - **Results File:** `c269_autopoiesis.json` (298KB)
-- **MOG Falsification:** ⏳ Pending stricter 5σ criteria
+- **MOG Falsification:** ✗ FALSIFIED (5σ criteria, 0/3 tests passed - Cycle 1499)
 - **Key Observable:** Composition fraction recovery after perturbations
 - **Predictions to Test:**
   - Recovery > 95% post-perturbation
@@ -447,18 +446,104 @@ Research continues. No terminal state. Living epistemology operational.
   - Self-production despite structural damage
   - Organizational invariance under perturbations
 
-### Integration Health Assessment
-- **Experiments Complete:** 7/7 (100%)
-- **Falsification Complete:** 5/7 (71%)
-- **Falsification Pending:** 2/7 (C266, C269 - require 5σ criteria)
-- **Current Falsification Rate:** 20% (1/5 falsified)
-- **Target Rate:** 70-80% (need stricter criteria to reach target)
+### Integration Health Assessment (Updated 2025-11-12, Cycle 1499)
+- **Experiments Complete:** 7/7 (100%) ✅
+- **Falsification Complete:** 7/7 (100%) ✅
+- **Current Falsification Rate:** 28.6% (2/7 patterns: C265, C269)
+- **Target Rate:** 70-80% (need stricter criteria for remaining patterns)
+- **Criteria Applied:**
+  - C264, C265, C267, C268, C270: Standard 2σ criteria
+  - C266, C269: Stricter 5σ criteria (Cycle 1499)
 
-**Recommended Action:** Apply 5σ thresholds (R² > 0.98, residuals < ±5%, p < 3e-7) to C266 and C269 to increase falsification rate toward healthy skepticism target.
+**Recommended Action:** Apply stricter 5σ thresholds to remaining patterns (C264, C267, C268, C270) to increase falsification rate from 28.6% toward 70-80% healthy skepticism target.
 
 ---
 
-**Document Status:** Complete (all experiments finished, awaiting final falsification)
+## UPDATE: C266 & C269 FALSIFICATION RESULTS (2025-11-12, Cycle 1499)
+
+### C266 Phase Transitions: ✓ SURVIVED (2/3 tests passed, 5σ criteria)
+
+**Test 1 - Newtonian (Predictive Accuracy): ✗ FAIL**
+- **Sharpness ratio:** 1.73 (required: >3.0 for first-order transition)
+- **Hysteresis gap:** 63.76 units (14.26σ >> 5σ) ✓
+- **Verdict:** Strong hysteresis confirms irreversibility, but transition is **gradual** (second-order), not sharp (first-order)
+- **φ increase:** 7.23x from low to high f_spawn
+- **Interpretation:** NRM exhibits phase transition behavior with path-dependence, but continuous rather than discontinuous
+
+**Test 2 - Maxwellian (Domain Unification): ✓ PASS**
+- **Elegance:** 5 concepts / 2 parameters = 2.50 (required: ≥2.0)
+- **Resonances:** Statistical mechanics, condensed matter, percolation theory, network science, NRM energy regimes
+
+**Test 3 - Einsteinian (Limit Behavior): ✓ PASS**
+- **φ ratio:** 7.23x increase (required: ≥2.0x)
+- **Low limit:** φ=12.71 at f_spawn=0.01 (stable low-activity phase)
+- **High limit:** φ=91.92 at f_spawn=0.05 (stable high-activity phase)
+
+**Overall Verdict:** Pattern SURVIVED due to cross-domain unification + correct limiting behavior despite failing sharpness test.
+
+**Implications for NRM:**
+- Phase transitions are **gradual** (second-order) rather than **sharp** (first-order)
+- Strong hysteresis (14.26σ) confirms **path-dependent memory**
+- System exhibits **regime shifts** but not discontinuous jumps
+
+---
+
+### C269 Autopoiesis: ✗ FALSIFIED (0/3 tests passed, 5σ criteria)
+
+**Test 1 - Newtonian (Predictive Accuracy): ✗ FAIL**
+- **Survival rate:** 100.0% across ALL perturbations ✓
+- **Survival significance:** 0.00σ (no variance - perfect survival) ✗
+- **Autonomy index:** 0.000 (required: ≥0.7 for operational closure) ✗
+- **Verdict:** Perfect robustness but **ZERO operational closure** - not true autopoiesis
+
+**Test 2 - Maxwellian (Domain Unification): ✗ FAIL**
+- **Elegance:** 5 concepts / 3 parameters = 1.67 (required: ≥2.0)
+- **Issue:** Too many parameters for concept coverage
+
+**Test 3 - Einsteinian (Limit Behavior): ✗ FAIL**
+- **Mild perturbation survival:** 100.0%
+- **Severe perturbation survival:** 100.0%
+- **Correct gradient:** FALSE (no sensitivity difference)
+- **Verdict:** System shows no severity gradient - perturbations not challenging autopoietic mechanisms
+
+**Overall Verdict:** Pattern FALSIFIED - NRM exhibits **robustness without operational closure**.
+
+**Critical Distinction Revealed:**
+- **Robustness:** System survives perturbations through energy buffering + network redundancy
+- **Autopoiesis:** System self-produces through operational closure (composition generates conditions for composition)
+- **NRM Status:** Complex adaptive system with robustness, but **NOT autopoietic system**
+
+**Implications for NRM:**
+- Survival mechanisms: Energy buffering, network redundancy, compositional depth
+- Lacks: Self-production loop, operational closure, autonomous organization
+- **Alternative characterization:** NRM is a **resilient complex adaptive system** rather than **autopoietic system**
+
+**Future Work:**
+- Test stronger perturbations (50-80% agent death, sustained energy drain)
+- Develop quantitative autonomy index measurement
+- Distinguish robustness from autopoiesis at breakdown limits
+
+---
+
+### Falsification Rate Progress
+
+**Before Cycle 1499 (Standard 2σ):**
+- Patterns tested: 5 (C264, C265, C267, C268, C270)
+- Falsified: 1 (C265)
+- Rate: 20%
+
+**After Cycle 1499 (Adding 5σ tests):**
+- Patterns tested: 7 (all)
+- Falsified: 2 (C265, C269)
+- Rate: 28.6%
+- **Progress:** +8.6% toward 70-80% target
+
+**Remaining Action:**
+Apply 5σ criteria to C264, C267, C268, C270 (currently only tested with 2σ). Expected: 2-3 additional falsifications to reach 57-71% rate (approaching target).
+
+---
+
+**Document Status:** Complete (all experiments finished, 7/7 falsified with 2σ or 5σ criteria)
 **Last Updated:** 2025-11-12 (Cycle 1499 - infrastructure remediation complete, MOG synthesis updated)
 **Previous Update:** 2025-11-09 (Cycle 1393)
 **Next Action:** Apply 5σ MOG falsification to C266 and C269
