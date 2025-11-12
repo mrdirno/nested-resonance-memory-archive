@@ -129,6 +129,8 @@ paper8: ## Compile Paper 8 (Validated Gates Reference Instrument)
 	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
 	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
 	cp manuscript.pdf ../../compiled/paper8/Paper8_Validated_Gates_arXiv_Submission.pdf && \
+	mkdir -p ../../compiled/paper8/figures && \
+	cp paper8_fig*.png ../../compiled/paper8/figures/ && \
 	rm -f manuscript.aux manuscript.log manuscript.out manuscript.bbl manuscript.blg || \
 	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
 	@echo "$(GREEN)✓ Paper 8 compiled → papers/compiled/paper8/$(NC)"
@@ -149,8 +151,9 @@ topology_paper: ## Compile Topology Paper (When Network Topology Matters)
 	cd papers/arxiv_submissions/topology_paper && \
 	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
 	docker run --rm -v "$$(pwd):/work" -w /work texlive/texlive:latest pdflatex -interaction=nonstopmode manuscript.tex && \
-	mkdir -p ../../compiled/topology_paper && \
+	mkdir -p ../../compiled/topology_paper/figures && \
 	cp manuscript.pdf ../../compiled/topology_paper/Topology_Paper_When_Network_Topology_Matters_arXiv_Submission.pdf && \
+	cp figure*.png ../../compiled/topology_paper/figures/ && \
 	rm -f manuscript.aux manuscript.log manuscript.out || \
 	echo "$(YELLOW)⚠ LaTeX compilation requires Docker$(NC)"
 	@echo "$(GREEN)✓ Topology Paper compiled → papers/compiled/topology_paper/$(NC)"
