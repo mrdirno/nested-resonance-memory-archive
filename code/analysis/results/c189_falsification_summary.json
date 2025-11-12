@@ -1,0 +1,90 @@
+{
+  "analysis_date": "2025-11-10T07:16:27.325937",
+  "experiment": "C189_Alternative_Mechanisms",
+  "n_experiments": 180,
+  "statistical_standard": "5sigma",
+  "p_threshold": 3e-07,
+  "h41_spatial_composition": {
+    "hypothesis": "H4.1_Spatial_Composition",
+    "mean_sf": 0.6654398495450503,
+    "mean_rand": 0.48428814337329174,
+    "mean_latt": 0.8459120432681848,
+    "std_sf": 0.03772275311776327,
+    "std_rand": 0.13527027588432616,
+    "std_latt": 0.031418550467372054,
+    "f_stat": 94.7248904726889,
+    "p_anova": 7.553929846467545e-19,
+    "p_sf_rand": 1.063112200128828e-07,
+    "p_rand_latt": 6.795615128173357e-08,
+    "p_sf_latt": 6.78603861673863e-08,
+    "d_sf_rand": 1.8242836651676118,
+    "d_rand_latt": -3.6826492374573117,
+    "d_sf_latt": -5.198821823480041,
+    "monotonic": false,
+    "passed_3sigma": true,
+    "passed_5sigma": true
+  },
+  "h42_memory_spawn": {
+    "hypothesis": "H4.2_Memory_Spawn",
+    "mean_sf": 0.007114519337315109,
+    "mean_rand": 0.007112600666110275,
+    "mean_latt": 0.007111775452247106,
+    "std_sf": 0.00021370454328681454,
+    "std_rand": 0.0002129032108376353,
+    "std_latt": 0.00021270068081996472,
+    "f_stat": 0.0008728178694223462,
+    "p_anova": 0.9991275762784707,
+    "p_sf_rand": 0.8924088480585518,
+    "p_rand_latt": 0.9353012506547425,
+    "p_sf_latt": 0.8817307917391243,
+    "d_sf_rand": 0.008994997401946859,
+    "d_rand_latt": 0.003877848797486442,
+    "d_sf_latt": 0.012869811667204425,
+    "monotonic": true,
+    "passed_3sigma": false,
+    "passed_5sigma": false
+  },
+  "h43_threshold_spawn": {
+    "hypothesis": "H4.3_Threshold_Spawn",
+    "mean_sf": 0.007111842843048753,
+    "mean_rand": 0.00711165222735474,
+    "mean_latt": 0.007111610407000017,
+    "std_sf": 0.0002125543478024984,
+    "std_rand": 0.00021253856831315475,
+    "std_latt": 0.0002127641524355846,
+    "f_stat": 6.7917275346021615e-06,
+    "p_anova": 0.9999932082963361,
+    "p_sf_rand": 0.9892007977753331,
+    "p_rand_latt": 1.0,
+    "p_sf_latt": 0.9892007977753331,
+    "d_sf_rand": 0.0008968189619539823,
+    "d_rand_latt": 0.00019666156269246355,
+    "d_sf_latt": 0.0010929974610864037,
+    "monotonic": true,
+    "passed_3sigma": false,
+    "passed_5sigma": false,
+    "gini_sf": 0.16542344625833066,
+    "gini_rand": 0.1293284522700083,
+    "gini_latt": 0.09163889958664276
+  },
+  "mog_falsification": {
+    "n_hypotheses": 3,
+    "n_passed": 1,
+    "n_falsified": 2,
+    "falsification_rate": 0.6666666666666666,
+    "hypotheses": [
+      {
+        "hypothesis": "H4.1 (Spatial Composition)",
+        "passed": true
+      },
+      {
+        "hypothesis": "H4.2 (Memory Spawn)",
+        "passed": false
+      },
+      {
+        "hypothesis": "H4.3 (Threshold Spawn)",
+        "passed": false
+      }
+    ]
+  }
+}
