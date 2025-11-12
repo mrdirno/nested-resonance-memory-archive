@@ -286,7 +286,7 @@ ls -lh figures/paper3/*.png
 ## REFERENCES
 
 **Related Documentation:**
-- `docs/C256_COMPLETION_WORKFLOW.md` - Step-by-step C256 integration checklist
+- `workflows/C256_COMPLETION_WORKFLOW.md` - Step-by-step C256 integration checklist
 - `papers/paper3_full_manuscript_template.md` - Complete Paper 3 manuscript template
 - `META_OBJECTIVES.md` - Current research priorities and experiment queue
 

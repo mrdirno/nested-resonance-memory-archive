@@ -142,11 +142,11 @@
   - ✅ auto_fill_paper3_manuscript.py (15,338 bytes, manuscript auto-fill)
   - ✅ generate_paper3_figures.py (337 lines, 4 × 300 DPI figures)
 - **Workflows Documented (Cycle 603):**
-  - ✅ C256_COMPLETION_WORKFLOW.md (263 lines, ~22 min systematic integration)
+  - ✅ workflows/C256_COMPLETION_WORKFLOW.md (263 lines, ~22 min systematic integration)
   - ✅ README_PAPER3_AUTOMATION.md (308 lines, complete workflow reference)
 - **Next Actions:**
   - [ ] Monitor C256 completion (~6h remaining)
-  - [ ] Execute C256_COMPLETION_WORKFLOW.md when complete (~22 min to GitHub sync)
+  - [ ] Execute workflows/C256_COMPLETION_WORKFLOW.md when complete (~22 min to GitHub sync)
   - [ ] Launch C257-C260 batch (./run_c257_c260_batch.sh, ~47 min)
   - [ ] Integrate C257-C260 results into sections 3.2.3-3.2.6
   - [ ] Complete section 3.3 cross-pair comparison
@@ -811,7 +811,7 @@
 ### Short-Term (Upon C256 Completion)
 4. **Complete Paper 3 Integration** (upon C256 completion)
    - C256 status: Running 150h+ (I/O bound, extended blocking period)
-   - Upon completion: Execute C256_COMPLETION_WORKFLOW.md (~22 min to GitHub sync)
+   - Upon completion: Execute workflows/C256_COMPLETION_WORKFLOW.md (~22 min to GitHub sync)
    - Then launch C257-C260 batch (./run_c257_c260_batch.sh, ~47 min)
    - Auto-populate Paper 3 manuscript with all 6 pair results
    - Generate 4-figure publication suite (300 DPI)
@@ -882,7 +882,7 @@
 **MEDIUM PRIORITY (Blocked on C256)**
 - [x] C255 complete (ANTAGONISTIC interaction discovered)
 - [ ] C256 completion (running 150h+, I/O bound, extended blocking)
-- [ ] Execute C256_COMPLETION_WORKFLOW.md upon C256 completion
+- [ ] Execute workflows/C256_COMPLETION_WORKFLOW.md upon C256 completion
 - [ ] Launch C257-C260 batch experiments (~47 min)
 - [ ] Auto-populate Paper 3 manuscript (after C256-C260)
 - [ ] Generate Paper 3 figures (after C256-C260)
