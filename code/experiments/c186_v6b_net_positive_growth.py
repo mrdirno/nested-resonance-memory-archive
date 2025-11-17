@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-C186 V6a - Net-Zero Homeostasis Regime (Dual-Regime Campaign Part 1)
+C186 V6b - Net-Positive Growth Regime (Dual-Regime Campaign Part 2)
 
 Purpose: Test hierarchical spawning advantage at ultra-low frequencies under
-         energy-regulated homeostasis conditions (net energy = 0).
+         net-positive energy conditions enabling population growth (net energy = +0.5).
 
-Duration: ~5-6 days (450,000 cycles)
+Duration: TBD (450,000 cycles, likely faster due to population cap)
 Conditions: 5 spawn rates (0.10%-1.00%) × 10 seeds = 50 experiments
-Energy: E_consume = E_recharge = 1.0 (homeostasis regime, not growth)
+Energy: E_consume = 0.5, E_recharge = 1.0 (net +0.5, growth regime)
 
-This is Phase 1 of the dual-regime V6 campaign. V6b (net-positive growth regime)
-will follow after V6a completion.
+This is Phase 2 of the dual-regime V6 campaign, following V6a (net-zero homeostasis).
+Direct comparison of homeostasis vs growth dynamics at ultra-low spawn frequencies.
 
 Background:
 - Original V6 failed after 10-11 days (database initialization failure)
@@ -19,20 +19,21 @@ Background:
 - Solution: Test BOTH regimes (homeostasis + growth) for comprehensive understanding
 
 Hypothesis:
-- Hierarchical spawning provides stability advantage even at ultra-low frequencies (<1%)
-- Flat spawning at <1% may be unstable (high variance in spawn timing)
-- Energy-regulated homeostasis (net=0) prevents runaway growth observed in pilot
+- Net-positive energy (+0.5) enables population growth similar to pilot (128× in 5000 cycles)
+- Population will reach cap (100K agents) quickly despite ultra-low spawn rates
+- Hierarchical spawning may show different dynamics in growth vs homeostasis regimes
+- Comparison to V6a reveals energy regime's effect on population stability
 
 Decision Tree:
-- If hierarchical outperforms flat → Advantage confirmed (proceed to V6b)
-- If no difference → Ultra-low regime too sparse for advantage (rethink hypothesis)
-- If population collapses → Energy balance incorrect (revise parameters)
+- If similar growth to pilot → Energy regime is primary driver (validates V6a comparison)
+- If population stabilizes below cap → Spawn rate limits growth (interesting boundary)
+- If population collapses → Unexpected dynamics (revise hypothesis)
 
 Author: Aldrin Payopay (aldrin.gdf@gmail.com)
 Co-Authored-By: Claude <noreply@anthropic.com>
 License: GPL-3.0
 Date: 2025-11-16
-Cycle: 1371
+Cycle: 1374
 """
 
 import sys
@@ -46,7 +47,7 @@ from datetime import datetime
 
 # Simple agent class (self-contained)
 class SimpleAgent:
-    """Minimal agent for V6a experiments."""
+    """Minimal agent for V6b experiments."""
     def __init__(self, agent_id, energy, population_id):
         self.agent_id = agent_id
         self.energy = energy
@@ -56,9 +57,9 @@ class SimpleAgent:
 # CONFIGURATION
 # =============================================================================
 
-# V6a Parameters (NET-ZERO HOMEOSTASIS)
-E_CONSUME = 1.0  # Energy consumed per cycle
-E_RECHARGE = 1.0  # Energy recharged per cycle (NET ENERGY = 0)
+# V6b Parameters (NET-POSITIVE GROWTH)
+E_CONSUME = 0.5  # Energy consumed per cycle (REDUCED from V6a's 1.0)
+E_RECHARGE = 1.0  # Energy recharged per cycle (NET ENERGY = +0.5)
 SPAWN_COST = 5.0  # Energy cost to spawn offspring
 
 # Spawn rates (0.10%-1.00%, ultra-low frequency range)
@@ -219,16 +220,16 @@ def hierarchical_spawn(agents, f_spawn, rng):
 # =============================================================================
 
 def run_experiment(f_spawn, spawn_label, seed):
-    """Execute single V6a experiment."""
+    """Execute single V6b experiment."""
     print("="*80)
-    print(f"C186 V6a - NET-ZERO HOMEOSTASIS REGIME")
+    print(f"C186 V6b - NET-POSITIVE GROWTH REGIME")
     print("="*80)
     print()
     print(f"Configuration:")
-    print(f"  Condition: HIERARCHICAL_{spawn_label}")
+    print(f"  Condition: HIERARCHICAL_GROWTH_{spawn_label}")
     print(f"  Seed: {seed}")
     print(f"  Spawn rate: {f_spawn:.4f} ({spawn_label})")
-    print(f"  Energy: E_consume={E_CONSUME}, E_recharge={E_RECHARGE} (net=0)")
+    print(f"  Energy: E_consume={E_CONSUME}, E_recharge={E_RECHARGE} (net=+0.5)")
     print(f"  Cycles: {CYCLES:,}")
     print(f"  Populations: {N_POPULATIONS}")
     print(f"  Agents per pop: {N_AGENTS_PER_POP}")
@@ -236,10 +237,10 @@ def run_experiment(f_spawn, spawn_label, seed):
     print()
 
     # File paths for this experiment
-    condition_name = f"HIERARCHICAL_{spawn_label.replace('.', '_').replace('%', 'pct')}"
-    db_path = RESULTS_DIR / f"c186_v6a_{condition_name}_seed{seed}.db"
-    heartbeat_path = RESULTS_DIR / f"c186_v6a_{condition_name}_seed{seed}_heartbeat.log"
-    json_path = RESULTS_DIR / f"c186_v6a_{condition_name}_seed{seed}.json"
+    condition_name = f"HIERARCHICAL_GROWTH_{spawn_label.replace('.', '_').replace('%', 'pct')}"
+    db_path = RESULTS_DIR / f"c186_v6b_{condition_name}_seed{seed}.db"
+    heartbeat_path = RESULTS_DIR / f"c186_v6b_{condition_name}_seed{seed}_heartbeat.log"
+    json_path = RESULTS_DIR / f"c186_v6b_{condition_name}_seed{seed}.json"
 
     # Initialize RNG
     rng = np.random.default_rng(seed)
@@ -332,7 +333,7 @@ def run_experiment(f_spawn, spawn_label, seed):
         # JSON backup
         if cycle > 0 and cycle % JSON_BACKUP_INTERVAL == 0:
             summary = {
-                'experiment': 'C186_V6a_NET_ZERO_HOMEOSTASIS',
+                'experiment': 'C186_V6b_NET_POSITIVE_GROWTH',
                 'condition': condition_name,
                 'seed': seed,
                 'parameters': {
@@ -407,21 +408,21 @@ def run_experiment(f_spawn, spawn_label, seed):
     else:
         print("✓ PASS: Database collecting data")
         print("✓ PASS: Population sustained")
-        print("✓ PASS: Net-zero homeostasis regime viable")
+        print("✓ PASS: Net-positive growth regime viable")
         print()
         if final_pop > INITIAL_AGENTS * 10:
             print("  → Note: Significant growth despite net=0 (unexpected)")
         elif final_pop < INITIAL_AGENTS / 2:
             print("  → Note: Population declined (check energy balance)")
         else:
-            print("  → Note: Population stable (homeostasis confirmed)")
+            print("  → Note: Population growth enabled (net-positive energy)")
 
     print("="*80)
     print()
 
     # Save final summary JSON
     summary = {
-        'experiment': 'C186_V6a_NET_ZERO_HOMEOSTASIS',
+        'experiment': 'C186_V6b_NET_POSITIVE_GROWTH',
         'condition': condition_name,
         'seed': seed,
         'parameters': {
@@ -446,7 +447,7 @@ def run_experiment(f_spawn, spawn_label, seed):
         'verdict': {
             'database_works': db_size > 1024,
             'population_sustained': final_pop > 0,
-            'homeostasis_viable': final_pop > 0 and db_size > 1024
+            'growth_enabled': final_pop > 0 and db_size > 1024
         },
         'timestamp': time.time()
     }
@@ -471,16 +472,16 @@ def run_experiment(f_spawn, spawn_label, seed):
 # BATCH EXECUTION
 # =============================================================================
 
-def run_v6a_campaign():
-    """Execute all 50 V6a experiments (5 conditions × 10 seeds)."""
+def run_v6b_campaign():
+    """Execute all 50 V6b experiments (5 conditions × 10 seeds)."""
     print()
     print("="*80)
-    print("C186 V6a CAMPAIGN - NET-ZERO HOMEOSTASIS REGIME")
+    print("C186 V6b CAMPAIGN - NET-POSITIVE GROWTH REGIME")
     print("="*80)
     print()
     print(f"Total experiments: {len(F_SPAWN_VALUES)} conditions × {len(SEEDS)} seeds = {len(F_SPAWN_VALUES) * len(SEEDS)}")
-    print(f"Estimated duration: ~5-6 days")
-    print(f"Energy regime: E_consume = E_recharge = {E_CONSUME} (net=0, homeostasis)")
+    print(f"Estimated duration: TBD (faster due to likely population cap)")
+    print(f"Energy regime: E_consume={E_CONSUME}, E_recharge={E_RECHARGE} (net=+0.5, growth)")
     print()
 
     campaign_start = time.time()
@@ -543,7 +544,7 @@ def run_v6a_campaign():
     # Campaign summary
     print()
     print("="*80)
-    print("V6a CAMPAIGN COMPLETE")
+    print("V6b CAMPAIGN COMPLETE")
     print("="*80)
     print(f"Total runtime: {campaign_elapsed/3600:.2f} hours ({campaign_elapsed/86400:.2f} days)")
     print(f"Experiments run: {len(results)}")
@@ -553,7 +554,7 @@ def run_v6a_campaign():
 
     # Save campaign summary
     campaign_summary = {
-        'campaign': 'C186_V6a_NET_ZERO_HOMEOSTASIS',
+        'campaign': 'C186_V6b_NET_POSITIVE_GROWTH',
         'start_time': campaign_start,
         'end_time': time.time(),
         'duration_hours': campaign_elapsed / 3600,
@@ -585,8 +586,8 @@ def run_v6a_campaign():
 
 if __name__ == '__main__':
     try:
-        # Run full V6a campaign
-        campaign_summary = run_v6a_campaign()
+        # Run full V6b campaign
+        campaign_summary = run_v6b_campaign()
 
         # Exit with success if all experiments succeeded
         if campaign_summary['summary']['failures'] == 0:
