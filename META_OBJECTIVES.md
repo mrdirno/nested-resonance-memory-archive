@@ -780,34 +780,21 @@
 
 ## NEXT ACTIONS (Auto-Determined Each Cycle)
 
-### Immediate (This Cycle: 1369-1370)
-1. **Investigate V6 Termination** (CRITICAL PRIORITY)
-   - Status: Process (PID 72904) TERMINATED after ~10-11 days runtime
-   - Last known: 6.40 days (Nov 12) → terminated Nov 15-16 (estimated)
-   - Database: Empty (0 bytes) throughout entire runtime
-   - Outcome: No experimental data generated despite 10-11 days computation
-   - **URGENT ACTIONS:**
-     - Document: When terminated (exact date/time if possible)
-     - Investigate: Why no database output (design flaw? data collection failure?)
-     - Analyze: Was computation valid or futile? (99% CPU but no results)
-     - Assess: Experimental design issues preventing data persistence?
-     - Decision: Redesign experiment OR abandon ultra-low frequency approach
-   - Timeline: 1 cycle dedicated analysis
-   - Impact: Major experimental resource expenditure with zero output
+### Immediate (This Cycle: 1372)
+1. **V6a Campaign Decision** (RESEARCH PRIORITY)
+   - Status: V6a script ready (c186_v6a_net_zero_homeostasis.py)
+   - Configuration: 5 spawn rates (0.10%-1.00%) × 10 seeds = 50 experiments
+   - Duration: ~5-6 days (450,000 cycles per experiment)
+   - Energy regime: Net-zero homeostasis (E_consume = E_recharge = 1.0)
+   - Validation: Pilot successful (ultra-low regime viable, database fix works)
+   - **DECISION OPTIONS:**
+     - Option A: Launch V6a immediately (autonomous execution, 5-6 day commitment)
+     - Option B: Continue exploratory research first (parameter sensitivity, theory)
+     - Option C: Wait for user input on V6a launch timing
+   - **RECOMMENDATION:** Option A (launch V6a) - Pilot validated, highest-leverage next step
+   - Impact: Tests hierarchical spawning advantage at ultra-low frequencies under homeostasis
 
-2. **Decide on 70% Falsification Target** (MOG INTEGRATION PRIORITY)
-   - Current: 57.1% falsification rate (4/7 patterns with 5σ)
-   - Target: 70-80% (healthy skepticism range)
-   - Gap: 12.9% below minimum target
-   - **OPTIONS:**
-     - Option A: Apply 10σ criteria to C264, C266, or C267 (even stricter)
-     - Option B: Accept 57.1% as sufficient (5σ already very rigorous)
-     - Option C: Wait for new experiments (C271+) and apply 5σ from design phase
-   - **RECOMMENDATION:** Option B (accept 57.1%) - 5σ is extraordinary rigor
-   - Rationale: Pushing to 70% risks over-falsification, 57.1% demonstrates discipline
-   - Integration health: 75% (acceptable, approaching target)
-
-3. **Await User Execution of arXiv Submissions** (7 papers ready)
+2. **Await User Execution of arXiv Submissions** (7 papers ready)
    - Paper 1 (cs.DC): ARXIV-READY, submission guide complete
    - Paper 2 V3: SUBMISSION-READY for PLOS Computational Biology
    - Paper 5D (nlin.AO): ARXIV-READY, submission guide complete
@@ -887,14 +874,16 @@
 
 ## IMPLEMENTATION PRIORITY QUEUE
 
-**CRITICAL PRIORITY (Immediate Investigation)**
-- [x] MOG 5σ falsification analysis complete (Cycle 1369, 3 commits, falsification rate 57.1%)
+**CRITICAL PRIORITY (Cycles 1369-1371 Complete)**
+- [x] MOG 5σ falsification analysis complete (Cycle 1369, falsification rate 57.1%)
 - [x] Gradual transition theme discovered (C266, C267 show second-order transitions)
 - [x] Methodological gaps exposed (C268, C270 falsified - claims not tested)
 - [x] V6 termination detected (PID 72904 stopped, ~10-11 days runtime)
-- [ ] **V6 termination analysis** (URGENT - why no database output after 10-11 days?)
-- [ ] Decide on falsification target (accept 57.1% OR push to 70% with 10σ)
-- [ ] Update MOG integration status (current: 75% health, below 85% target)
+- [x] V6 termination analysis complete (Cycle 1370, V6_TERMINATION_ANALYSIS.md)
+- [x] V6 pilot executed successfully (Cycle 1370, ultra-low regime viable, 128x growth)
+- [x] MOG falsification target decided (Cycle 1371, accept 57.1% for legacy patterns)
+- [x] V6a script created (Cycle 1371, c186_v6a_net_zero_homeostasis.py)
+- [ ] **V6a campaign launch decision** (Option A: Launch immediately recommended)
 
 **HIGH PRIORITY (Paper Submissions)**
 - [x] Paper 1 (cs.DC): ARXIV-READY, submission guide complete (awaiting user)
