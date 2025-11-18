@@ -217,8 +217,8 @@ def run_hierarchical_experiment(f_spawn, spawn_cost, seed, max_cycles=450_000):
         populations[pop_id] = []
         for i in range(10):
             agent_id = pop_id * 10 + i
-            # Initial energy: E_cap / (N_populations * 10)
-            init_energy = E_CAP / (N_POPULATIONS * 10)
+            # Initial energy: E_recharge × 10 (same as V6b)
+            init_energy = E_RECHARGE * 10
             agent = SimpleAgent(agent_id, init_energy, pop_id, depth=0)
             populations[pop_id].append(agent)
 
