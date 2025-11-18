@@ -1,44 +1,51 @@
-# C186 DUAL-REGIME MANUSCRIPT OUTLINE
+# C186 THREE-REGIME MANUSCRIPT OUTLINE
 
-**Title:** Regime-Dependent Spawn Dynamics in Energy-Constrained Agent Systems
+**Title:** Energy Balance Determines Regime-Dependent Spawn Dynamics Across Collapse, Homeostasis, and Growth in Agent-Based Systems
 
 **Authors:** Aldrin Payopay, Claude (Anthropic)
 
-**Target Journal:** PLOS Computational Biology
+**Target Journal:** PLOS Computational Biology (or Artificial Life)
 
-**Estimated Length:** 6,000-8,000 words (~12-15 pages)
+**Estimated Length:** 7,000-9,000 words (~14-18 pages)
 
-**Figures:** 3-4 @ 300 DPI
+**Figures:** 7 @ 300 DPI (3 dual-regime + 4 three-regime)
 
 **Date:** 2025-11-18
 
-**Status:** Outline phase (manuscript draft pending)
+**Status:** ~92% complete (V6a + V6b + V6c data collected, integration pending)
 
 ---
 
-## ABSTRACT (~250 words)
+## ABSTRACT (~300 words)
 
 **Background:**
 - Agent-based models assume universal parameter influence across system states
 - Energy balance vs reproduction rate: which dominates population dynamics?
+- Understanding regime transitions requires comprehensive phase space mapping
 
 **Methods:**
-- 100 experiments across two energy regimes (net-zero homeostasis, net-positive growth)
-- 5 spawn rates (0.10%-1.00%) × 10 seeds × 2 regimes
-- 450,000 cycles per experiment (or early termination at energy cap)
+- 150 experiments across three energy regimes (collapse, homeostasis, growth)
+- 5 spawn rates (0.10%-1.00%) × 10 seeds × 3 regimes
+- Net energy variation: -0.5 (collapse), 0.0 (homeostasis), +0.5 (growth)
+- 450,000 cycles per experiment (or early termination at energy cap/collapse)
+- Total runtime: 40.7 minutes (collapse: 2.6 min, homeostasis: 26 min, growth: 12 min)
 
 **Results:**
+- Net-negative regime (V6c): 100% population collapse to 0 agents (all 50 experiments), spawn rate has NO effect (uniform collapse)
 - Net-zero regime (V6a): Population homeostasis at 201 ± 1.2 agents, spawn rate has NO effect (ANOVA p=0.448)
-- Net-positive regime (V6b): Population growth to 19,320 ± 1,102 agents (96× difference), spawn rate has SIGNIFICANT effect (ANOVA p<0.001)
-- Single parameter change (E_consume: 1.0 → 0.5) produces qualitatively different dynamics
-- Energy regime acts as switch for spawn rate sensitivity
+- Net-positive regime (V6b): Population growth to 19,320 ± 1,102 agents, spawn rate has SIGNIFICANT effect (ANOVA p<0.001)
+- Population range spans 3+ orders of magnitude: 0 → 201 → 19,320 agents
+- Energy balance theory validated across full phase space (net < 0 → extinction, net = 0 → stability, net > 0 → growth)
+- Single parameter changes (E_consume: 1.0 → 0.5 or 1.5) produce qualitatively different regime dynamics
 
 **Conclusions:**
-- First demonstration of conditional parameter activation in agent-based systems
-- Energy balance determines WHETHER population grows (regime selection)
-- Spawn rate determines HOW FAST (only in growth regime)
-- Challenges assumption of universal parameter influence
-- Reveals regime-dependent emergent dynamics in self-organizing systems
+- First complete phase space mapping of regime-dependent parameter activation in agent-based systems
+- Energy balance determines WHICH regime emerges (collapse/homeostasis/growth)
+- Spawn rate determines HOW FAST (only in growth regime, irrelevant elsewhere)
+- Spawn rate influence switches on/off by energy regime (conditional parameter activation)
+- Challenges assumption of universal parameter influence across system states
+- Demonstrates energy primacy hypothesis: net energy is fundamental control parameter
+- Simple theory (energy balance) predicts complex outcomes across 3+ orders of magnitude
 
 **Keywords:** agent-based modeling, energy dynamics, population homeostasis, regime transition, parameter sensitivity, emergence, self-organization
 
