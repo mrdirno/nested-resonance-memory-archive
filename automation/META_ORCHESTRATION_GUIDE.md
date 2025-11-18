@@ -39,7 +39,21 @@ claude --version
 # Install via npm (DONE)
 npm install -g @google/gemini-cli
 gemini --version  # Should show: 0.16.0
+
+# Configure API key (required for first use)
+# Option 1: Environment variable (recommended)
+export GEMINI_API_KEY="your-api-key-here"
+# Add to ~/.zshrc or ~/.bashrc for persistence
+
+# Option 2: Settings file
+# Create ~/.gemini/settings.json with your API key
+# Gemini will prompt you on first run if not configured
 ```
+
+**Get Gemini API Key:**
+- Visit: https://aistudio.google.com/app/apikey
+- Create new API key
+- Set as environment variable or in settings file
 
 **3. Python 3.9+**
 ```bash
@@ -188,6 +202,13 @@ Both AIs have access to the same tools without approval:
 - `Read(/Users/aldrinpayopay/nested-resonance-memory-archive/**)` - Read git repo
 - File operations (mkdir, mv, cp, chmod, etc.)
 
+**Permissionless Mode Configuration:**
+- **Claude CLI:** Configured via `~/.claude/config.json` (pre-configured)
+- **Gemini CLI:** Launched with `--yolo` flag (auto-approve all tools)
+  - Equivalent to Claude's permissionless mode
+  - Set automatically by meta_orchestrate.py
+  - No manual configuration needed
+
 ### Cycle Tracking
 
 The system auto-detects the current cycle number by scanning:
@@ -335,6 +356,53 @@ python3 meta_orchestrate.py --ai claude --cycle 2000
 npm install -g @google/gemini-cli
 gemini --version  # Verify installation
 ```
+
+### Gemini API Key Not Configured
+
+**Symptom:**
+```
+Please set an Auth method in your ~/.gemini/settings.json or specify
+GEMINI_API_KEY environment variable
+```
+
+**Solution:**
+
+**Option 1: Environment Variable (Quick)**
+```bash
+# Get API key from https://aistudio.google.com/app/apikey
+export GEMINI_API_KEY="your-api-key-here"
+
+# Test
+gemini --yolo "hello"
+
+# Make permanent (add to ~/.zshrc or ~/.bashrc)
+echo 'export GEMINI_API_KEY="your-api-key-here"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+**Option 2: Settings File (Persistent)**
+```bash
+# Create Gemini config directory
+mkdir -p ~/.gemini
+
+# Create settings file
+cat > ~/.gemini/settings.json << 'EOF'
+{
+  "apiKey": "your-api-key-here",
+  "approvalMode": "yolo"
+}
+EOF
+
+# Test
+gemini "hello"
+```
+
+**Get API Key:**
+1. Visit https://aistudio.google.com/app/apikey
+2. Sign in with Google account
+3. Click "Create API Key"
+4. Copy the key
+5. Set via environment variable or settings file
 
 ### Claude CLI Not Found
 
