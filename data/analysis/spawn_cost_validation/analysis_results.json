@@ -1,0 +1,424 @@
+{
+  "data": [
+    {
+      "spawn_cost": 10.0,
+      "seed": 42,
+      "final_population": 19906,
+      "final_energy": 10004085.5,
+      "e_min": 502.56633678287955,
+      "k": 50.256633678287955,
+      "runtime_seconds": 4.218325138092041,
+      "success": true
+    },
+    {
+      "spawn_cost": 10.0,
+      "seed": 43,
+      "final_population": 19920,
+      "final_energy": 10009080.5,
+      "e_min": 502.46388052208835,
+      "k": 50.246388052208836,
+      "runtime_seconds": 4.31459379196167,
+      "success": true
+    },
+    {
+      "spawn_cost": 10.0,
+      "seed": 44,
+      "final_population": 19909,
+      "final_energy": 10003159.5,
+      "e_min": 502.4440956351399,
+      "k": 50.24440956351399,
+      "runtime_seconds": 4.270609140396118,
+      "success": true
+    },
+    {
+      "spawn_cost": 10.0,
+      "seed": 45,
+      "final_population": 19906,
+      "final_energy": 10007100.5,
+      "e_min": 502.7177986536723,
+      "k": 50.27177986536723,
+      "runtime_seconds": 4.317718744277954,
+      "success": true
+    },
+    {
+      "spawn_cost": 10.0,
+      "seed": 46,
+      "final_population": 19910,
+      "final_energy": 10005378.0,
+      "e_min": 502.53028628829736,
+      "k": 50.25302862882974,
+      "runtime_seconds": 4.337949991226196,
+      "success": true
+    },
+    {
+      "spawn_cost": 10.0,
+      "seed": 47,
+      "final_population": 19901,
+      "final_energy": 10006735.5,
+      "e_min": 502.82576252449627,
+      "k": 50.28257625244963,
+      "runtime_seconds": 4.2640540599823,
+      "success": true
+    },
+    {
+      "spawn_cost": 10.0,
+      "seed": 48,
+      "final_population": 19904,
+      "final_energy": 10005439.0,
+      "e_min": 502.68483721864953,
+      "k": 50.26848372186495,
+      "runtime_seconds": 4.224274158477783,
+      "success": true
+    },
+    {
+      "spawn_cost": 10.0,
+      "seed": 49,
+      "final_population": 19909,
+      "final_energy": 10004876.5,
+      "e_min": 502.53033803807324,
+      "k": 50.25303380380733,
+      "runtime_seconds": 4.207836151123047,
+      "success": true
+    },
+    {
+      "spawn_cost": 10.0,
+      "seed": 50,
+      "final_population": 19910,
+      "final_energy": 10005832.0,
+      "e_min": 502.5530889000502,
+      "k": 50.255308890005026,
+      "runtime_seconds": 4.185704231262207,
+      "success": true
+    },
+    {
+      "spawn_cost": 10.0,
+      "seed": 51,
+      "final_population": 19914,
+      "final_energy": 10009559.5,
+      "e_min": 502.6393240936025,
+      "k": 50.26393240936025,
+      "runtime_seconds": 4.153619050979614,
+      "success": true
+    },
+    {
+      "spawn_cost": 2.5,
+      "seed": 42,
+      "final_population": 19915,
+      "final_energy": 10005118.5,
+      "e_min": 502.3910871202611,
+      "k": 200.95643484810444,
+      "runtime_seconds": 4.078847885131836,
+      "success": true
+    },
+    {
+      "spawn_cost": 2.5,
+      "seed": 43,
+      "final_population": 19918,
+      "final_energy": 10007511.5,
+      "e_min": 502.435560799277,
+      "k": 200.9742243197108,
+      "runtime_seconds": 4.640544891357422,
+      "success": true
+    },
+    {
+      "spawn_cost": 2.5,
+      "seed": 44,
+      "final_population": 19916,
+      "final_energy": 10007666.0,
+      "e_min": 502.4937738501707,
+      "k": 200.99750954006828,
+      "runtime_seconds": 4.1808600425720215,
+      "success": true
+    },
+    {
+      "spawn_cost": 2.5,
+      "seed": 45,
+      "final_population": 19910,
+      "final_energy": 10006751.5,
+      "e_min": 502.5992717227524,
+      "k": 201.03970868910096,
+      "runtime_seconds": 4.169457912445068,
+      "success": true
+    },
+    {
+      "spawn_cost": 2.5,
+      "seed": 46,
+      "final_population": 19912,
+      "final_energy": 10001194.0,
+      "e_min": 502.26968662113296,
+      "k": 200.90787464845317,
+      "runtime_seconds": 4.216750144958496,
+      "success": true
+    },
+    {
+      "spawn_cost": 2.5,
+      "seed": 47,
+      "final_population": 19907,
+      "final_energy": 10006687.0,
+      "e_min": 502.6717737479279,
+      "k": 201.06870949917115,
+      "runtime_seconds": 4.202538967132568,
+      "success": true
+    },
+    {
+      "spawn_cost": 2.5,
+      "seed": 48,
+      "final_population": 19905,
+      "final_energy": 10001854.5,
+      "e_min": 502.47950263752824,
+      "k": 200.9918010550113,
+      "runtime_seconds": 4.233644247055054,
+      "success": true
+    },
+    {
+      "spawn_cost": 2.5,
+      "seed": 49,
+      "final_population": 19906,
+      "final_energy": 10002646.0,
+      "e_min": 502.4940219029438,
+      "k": 200.99760876117753,
+      "runtime_seconds": 4.206547021865845,
+      "success": true
+    },
+    {
+      "spawn_cost": 2.5,
+      "seed": 50,
+      "final_population": 19905,
+      "final_energy": 10006649.0,
+      "e_min": 502.720371765888,
+      "k": 201.08814870635518,
+      "runtime_seconds": 4.201101779937744,
+      "success": true
+    },
+    {
+      "spawn_cost": 2.5,
+      "seed": 51,
+      "final_population": 19918,
+      "final_energy": 10009729.5,
+      "e_min": 502.5469173611808,
+      "k": 201.01876694447233,
+      "runtime_seconds": 4.238670825958252,
+      "success": true
+    },
+    {
+      "spawn_cost": 5.0,
+      "seed": 42,
+      "final_population": 19915,
+      "final_energy": 10005118.5,
+      "e_min": 502.3910871202611,
+      "k": 100.47821742405222,
+      "runtime_seconds": 4.1751039028167725,
+      "success": true
+    },
+    {
+      "spawn_cost": 5.0,
+      "seed": 43,
+      "final_population": 19917,
+      "final_energy": 10006645.0,
+      "e_min": 502.4172817191344,
+      "k": 100.48345634382687,
+      "runtime_seconds": 4.205128908157349,
+      "success": true
+    },
+    {
+      "spawn_cost": 5.0,
+      "seed": 44,
+      "final_population": 19909,
+      "final_energy": 10002011.5,
+      "e_min": 502.3864332713848,
+      "k": 100.47728665427697,
+      "runtime_seconds": 4.153396129608154,
+      "success": true
+    },
+    {
+      "spawn_cost": 5.0,
+      "seed": 45,
+      "final_population": 19904,
+      "final_energy": 10002566.5,
+      "e_min": 502.54051949356915,
+      "k": 100.50810389871383,
+      "runtime_seconds": 4.080096960067749,
+      "success": true
+    },
+    {
+      "spawn_cost": 5.0,
+      "seed": 46,
+      "final_population": 19920,
+      "final_energy": 10009307.0,
+      "e_min": 502.47525100401606,
+      "k": 100.4950502008032,
+      "runtime_seconds": 4.106426000595093,
+      "success": true
+    },
+    {
+      "spawn_cost": 5.0,
+      "seed": 47,
+      "final_population": 19905,
+      "final_energy": 10007922.0,
+      "e_min": 502.78432554634514,
+      "k": 100.55686510926903,
+      "runtime_seconds": 4.101799011230469,
+      "success": true
+    },
+    {
+      "spawn_cost": 5.0,
+      "seed": 48,
+      "final_population": 19907,
+      "final_energy": 10005174.5,
+      "e_min": 502.59579544883707,
+      "k": 100.51915908976741,
+      "runtime_seconds": 4.098712205886841,
+      "success": true
+    },
+    {
+      "spawn_cost": 5.0,
+      "seed": 49,
+      "final_population": 19903,
+      "final_energy": 10000063.0,
+      "e_min": 502.4399839220218,
+      "k": 100.48799678440436,
+      "runtime_seconds": 4.116129159927368,
+      "success": true
+    },
+    {
+      "spawn_cost": 5.0,
+      "seed": 50,
+      "final_population": 19904,
+      "final_energy": 10005830.0,
+      "e_min": 502.704481511254,
+      "k": 100.5408963022508,
+      "runtime_seconds": 4.087740182876587,
+      "success": true
+    },
+    {
+      "spawn_cost": 5.0,
+      "seed": 51,
+      "final_population": 19918,
+      "final_energy": 10009716.5,
+      "e_min": 502.54626468520934,
+      "k": 100.50925293704186,
+      "runtime_seconds": 4.113811016082764,
+      "success": true
+    },
+    {
+      "spawn_cost": 7.5,
+      "seed": 42,
+      "final_population": 19911,
+      "final_energy": 10001645.5,
+      "e_min": 502.3175882677917,
+      "k": 66.97567843570556,
+      "runtime_seconds": 4.0825300216674805,
+      "success": true
+    },
+    {
+      "spawn_cost": 7.5,
+      "seed": 43,
+      "final_population": 19911,
+      "final_energy": 10002711.5,
+      "e_min": 502.37112651298276,
+      "k": 66.9828168683977,
+      "runtime_seconds": 4.0861217975616455,
+      "success": true
+    },
+    {
+      "spawn_cost": 7.5,
+      "seed": 44,
+      "final_population": 19907,
+      "final_energy": 10000160.0,
+      "e_min": 502.34389913095896,
+      "k": 66.97918655079452,
+      "runtime_seconds": 4.080636739730835,
+      "success": true
+    },
+    {
+      "spawn_cost": 7.5,
+      "seed": 45,
+      "final_population": 19906,
+      "final_energy": 10004414.0,
+      "e_min": 502.5828393449211,
+      "k": 67.01104524598948,
+      "runtime_seconds": 4.094939947128296,
+      "success": true
+    },
+    {
+      "spawn_cost": 7.5,
+      "seed": 46,
+      "final_population": 19915,
+      "final_energy": 10009609.0,
+      "e_min": 502.6165704243033,
+      "k": 67.01554272324044,
+      "runtime_seconds": 4.079506158828735,
+      "success": true
+    },
+    {
+      "spawn_cost": 7.5,
+      "seed": 47,
+      "final_population": 19901,
+      "final_energy": 10004765.0,
+      "e_min": 502.72674739962815,
+      "k": 67.0302329866171,
+      "runtime_seconds": 4.16995096206665,
+      "success": true
+    },
+    {
+      "spawn_cost": 7.5,
+      "seed": 48,
+      "final_population": 19910,
+      "final_energy": 10008608.0,
+      "e_min": 502.69251632345555,
+      "k": 67.0256688431274,
+      "runtime_seconds": 4.102752208709717,
+      "success": true
+    },
+    {
+      "spawn_cost": 7.5,
+      "seed": 49,
+      "final_population": 19901,
+      "final_energy": 10000272.0,
+      "e_min": 502.5009798502588,
+      "k": 67.00013064670117,
+      "runtime_seconds": 4.094880104064941,
+      "success": true
+    },
+    {
+      "spawn_cost": 7.5,
+      "seed": 50,
+      "final_population": 19909,
+      "final_energy": 10008062.5,
+      "e_min": 502.6903661660555,
+      "k": 67.02538215547408,
+      "runtime_seconds": 4.101707935333252,
+      "success": true
+    },
+    {
+      "spawn_cost": 7.5,
+      "seed": 51,
+      "final_population": 19913,
+      "final_energy": 10007682.5,
+      "e_min": 502.5703058303621,
+      "k": 67.00937411071494,
+      "runtime_seconds": 4.109232187271118,
+      "success": true
+    }
+  ],
+  "statistics": {
+    "k_mean": 104.69369262971222,
+    "k_std": 59.218648586740954,
+    "k_cv": 0.5656372136589881,
+    "k_sem": 9.363290474560634,
+    "k_min": 50.24440956351399,
+    "k_max": 201.08814870635518,
+    "k_median": 83.75375982044703,
+    "linear_regression": {
+      "slope": 0.010771435649375008,
+      "intercept": 502.4764805061604,
+      "r_squared": 0.051844880296716064,
+      "p_value": 0.1576432400078498,
+      "std_err": 0.007472545224286842
+    },
+    "anova": {
+      "f_statistic": 44475955.628036864,
+      "p_value": 2.805304858688727e-118
+    },
+    "n_experiments": 40,
+    "slope_matches_k": 
