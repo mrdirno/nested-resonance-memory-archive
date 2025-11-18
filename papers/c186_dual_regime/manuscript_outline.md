@@ -133,7 +133,7 @@ For each cycle:
 
 ### 2.2 Experimental Design
 
-**Dual-Regime Campaign:**
+**Three-Regime Campaign:**
 
 **Regime 1 - V6a (Homeostasis):**
 - Energy parameters: E_consume = 1.0, E_recharge = 1.0 (net = 0)
@@ -141,6 +141,7 @@ For each cycle:
 - Seeds: 42-51 (10 replications per spawn rate)
 - Total experiments: 50 (5 rates × 10 seeds)
 - Cycles: 450,000 per experiment
+- Expected outcome: Population homeostasis (~200 agents)
 
 **Regime 2 - V6b (Growth):**
 - Energy parameters: E_consume = 0.5, E_recharge = 1.0 (net = +0.5)
@@ -148,6 +149,15 @@ For each cycle:
 - Seeds: Same as V6a (42-51)
 - Total experiments: 50 (5 rates × 10 seeds)
 - Cycles: 450,000 or early termination at energy cap (10M units)
+- Expected outcome: Exponential population growth (>> 1,000 agents)
+
+**Regime 3 - V6c (Collapse):**
+- Energy parameters: E_consume = 1.5, E_recharge = 1.0 (net = -0.5)
+- Spawn rates: Same as V6a/V6b (0.10%-1.00%)
+- Seeds: Same as V6a/V6b (42-51)
+- Total experiments: 50 (5 rates × 10 seeds)
+- Cycles: 450,000 per experiment (no early termination)
+- Expected outcome: Complete population collapse (→ 0 agents)
 
 **Common Parameters:**
 - Initial population: 100 agents (10 populations × 10 agents)
@@ -156,10 +166,11 @@ For each cycle:
 - Energy cap: 10,000,000 units (V6b only, triggers early termination)
 
 **Rationale:**
-- Net-zero energy tests homeostasis hypothesis (composition = decomposition)
-- Net-positive energy tests growth hypothesis (composition > decomposition)
-- Identical spawn rates enable direct regime comparison
-- Multiple seeds ensure statistical robustness
+- **Complete phase space coverage:** Tests collapse (net < 0), homeostasis (net = 0), and growth (net > 0)
+- **Energy balance theory validation:** Net-negative → extinction, net-zero → stability, net-positive → growth
+- **Regime-dependent parameter activation:** Identical spawn rates across all regimes enable direct comparison
+- **Single parameter sweep:** Only E_consume varies (1.5 → 1.0 → 0.5), isolating energy balance as control parameter
+- **Statistical robustness:** 10 seeds per condition, 150 total experiments
 
 ### 2.3 Implementation Details
 
@@ -179,7 +190,13 @@ For each cycle:
 - Fail-fast database validation (verify connection before experiment)
 - Health checks at cycle 1000 (early warning system)
 - File size assertions (database > 0 bytes)
-- 100% success rate across 100 experiments
+- **100% success rate across 150 experiments** (all three regimes)
+
+**Campaign Runtimes:**
+- V6a (homeostasis): 26.0 minutes (50 experiments, ~22 sec each)
+- V6b (growth): 12.1 minutes (50 experiments, ~4 sec each, early termination at energy cap)
+- V6c (collapse): 2.6 minutes (50 experiments, ~3 sec each, fastest despite full 450k cycles)
+- **Total: 40.7 minutes for 150 experiments**
 
 ### 2.4 Statistical Analysis
 
@@ -187,17 +204,19 @@ For each cycle:
 - One-way ANOVA: Final population vs spawn rate (within each regime)
 - Null hypothesis: Spawn rate has no effect on final population
 - Significance level: α = 0.05
+- Applied to all three regimes independently (V6a, V6b, V6c)
 
 **Secondary Analyses:**
-- Descriptive statistics: Mean, standard deviation, range (per spawn rate)
-- Dual-regime comparison: V6a vs V6b (population ratios)
-- Energy cap analysis: Proportion hitting 10M limit
-- Runtime comparison: V6a vs V6b (computational efficiency)
+- **Descriptive statistics:** Mean, standard deviation, range (per spawn rate, per regime)
+- **Three-regime comparison:** Population ratios (V6c:V6a:V6b), phase diagram (net energy vs population)
+- **Energy balance validation:** Collapse rate (V6c), homeostasis stability (V6a), growth sustainability (V6b)
+- **Regime-dependent parameter activation:** Comparison of ANOVA p-values across regimes
+- **Runtime comparison:** V6a vs V6b vs V6c (computational efficiency analysis)
 
 **Software:**
 - pandas 2.2.3 (data manipulation)
-- scipy 1.14.1 (statistical tests)
-- matplotlib 3.9.2 (visualization)
+- scipy 1.14.1 (statistical tests, ANOVA)
+- matplotlib 3.9.2 (visualization, 300 DPI publication figures)
 
 ---
 
