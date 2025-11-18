@@ -1,0 +1,15 @@
+{
+  "campaign": "C186_V6b_NET_POSITIVE_GROWTH",
+  "total_experiments": 50,
+  "success_rate": 1.0,
+  "mean_population": 19320.38,
+  "std_population": 1101.7965271986195,
+  "mean_energy": 10005216.9,
+  "std_energy": 2914.0012378661945,
+  "mean_runtime_seconds": 4.295122904777527,
+  "anova_f_statistic": 6763.65240500429,
+  "anova_p_value": 6.698693626180234e-62,
+  "spawn_rate_effect": "significant",
+  "experiments_at_energy_cap": 50,
+  "energy_cap_percentage": 1.0
+}
