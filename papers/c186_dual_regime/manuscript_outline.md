@@ -476,6 +476,9 @@ Original prediction: "Spawn rate has minimal effect within each regime"
 
 **Key Insight:** Spawn rate modulates composition dynamics, but ONLY when energy balance permits net composition (net > 0). In collapse and homeostasis regimes, energy constraints override spawn rate influence.
 
+**Important Note on Growth Regime Carrying Capacity:**
+The reported carrying capacity values (17,161-19,987 agents) reflect **transient states at 450,000 cycles**, not true equilibrium. Analysis of V6b dynamics reveals zero agent mortality and continued population growth, indicating experiments had not reached steady-state with birth-death balance. Higher spawn rates approach the theoretical maximum faster (99.9% at f_spawn=0.010 vs 86% at f_spawn=0.001), suggesting spawn rate may primarily affect **rate of approach** to equilibrium rather than final carrying capacity. At true equilibrium (t→∞), all spawn rates may converge to the same maximum (~20,000 agents = energy_cap / energy_min). This temporal effect does not invalidate the three-regime framework—energy balance remains the primary determinant—but clarifies that growth regime observations represent **exponential approach to cap**, not steady-state values.
+
 ### 4.3 Conditional Parameter Activation Framework
 
 **New Parameter Interaction Class:**
@@ -542,13 +545,19 @@ Original prediction: "Spawn rate has minimal effect within each regime"
 ### 4.6 Limitations and Future Directions
 
 **Limitations:**
-1. Energy cap constraint (10M limit) prevents unbounded growth observation
-2. Single spawn cost value (5.0 units), no spawn cost variation tested
-3. Discrete spawn rates (0.10%-1.00%), continuous scan pending
-4. Three discrete energy regimes tested (net = -0.5, 0.0, +0.5), continuous energy scan pending
+1. **Transient dynamics, not equilibrium:** Growth regime (V6b) carrying capacity values reflect 450,000-cycle snapshots with zero agent mortality and ongoing population growth. True equilibrium with birth-death balance requires extended experiments (>>450k cycles). Reported spawn rate effects may represent differences in rate of approach to equilibrium rather than final steady-state values.
+2. Energy cap constraint (10M limit) prevents unbounded growth observation
+3. Single spawn cost value (5.0 units), no spawn cost variation tested
+4. Discrete spawn rates (0.10%-1.00%), continuous scan pending
+5. Three discrete energy regimes tested (net = -0.5, 0.0, +0.5), continuous energy scan pending
 
 **Future Experiments:**
-1. **Continuous Energy Scan:** Net energy from -1.0 to +1.0 (21 regimes)
+1. **Extended Equilibrium Experiments:** Run growth regime (V6b) for 1-10M cycles until true steady-state achieved
+   - Observe first agent deaths (establish birth-death balance)
+   - Test whether spawn rate effects persist at equilibrium
+   - Validate hypothesis: K → 20,000 for all spawn rates at t→∞
+
+2. **Continuous Energy Scan:** Net energy from -1.0 to +1.0 (21 regimes)
    - Map full phase space
    - Identify transition thresholds precisely
 
@@ -556,8 +565,9 @@ Original prediction: "Spawn rate has minimal effect within each regime"
    - Does spawn cost modulate regime boundaries?
    - Interaction with energy balance?
 
-4. **Theoretical Model:** Derive carrying capacity formula K(net_energy, f_spawn)
-   - Predict population fate from parameters
+4. **Theoretical Model:** Derive carrying capacity formula K(net_energy, f_spawn, t)
+   - Predict population fate from parameters and time
+   - Distinguish transient vs equilibrium dynamics
    - Validate with experimental data
 
 5. **Higher-Order Interactions:** Energy × Spawn × Population size × Timescale
