@@ -335,14 +335,14 @@ def run_experiment(spawn_cost, spawn_label, seed):
         # JSON backup
         if cycle > 0 and cycle % JSON_BACKUP_INTERVAL == 0:
             summary = {
-                'experiment': 'C186_V6b_NET_POSITIVE_GROWTH',
+                'experiment': 'C186_SPAWN_COST_SCALING_VALIDATION',
                 'condition': condition_name,
                 'seed': seed,
                 'parameters': {
-                    'f_spawn': f_spawn,
+                    'f_spawn': F_SPAWN,
                     'e_consume': E_CONSUME,
                     'e_recharge': E_RECHARGE,
-                    'spawn_cost': SPAWN_COST,
+                    'spawn_cost': spawn_cost,
                     'cycles': cycle,
                     'n_populations': N_POPULATIONS,
                     'n_agents_per_pop': N_AGENTS_PER_POP
@@ -424,14 +424,14 @@ def run_experiment(spawn_cost, spawn_label, seed):
 
     # Save final summary JSON
     summary = {
-        'experiment': 'C186_V6b_NET_POSITIVE_GROWTH',
+        'experiment': 'C186_SPAWN_COST_SCALING_VALIDATION',
         'condition': condition_name,
         'seed': seed,
         'parameters': {
-            'f_spawn': f_spawn,
+            'f_spawn': F_SPAWN,
             'e_consume': E_CONSUME,
             'e_recharge': E_RECHARGE,
-            'spawn_cost': SPAWN_COST,
+            'spawn_cost': spawn_cost,
             'cycles': CYCLES,
             'n_populations': N_POPULATIONS,
             'n_agents_per_pop': N_AGENTS_PER_POP
@@ -527,7 +527,7 @@ def run_spawn_cost_campaign():
                 import traceback
                 traceback.print_exc()
                 results.append({
-                    'f_spawn': f_spawn,
+                    'spawn_cost': spawn_cost,
                     'spawn_label': spawn_label,
                     'seed': seed,
                     'success': False,
@@ -557,7 +557,7 @@ def run_spawn_cost_campaign():
 
     # Save campaign summary
     campaign_summary = {
-        'campaign': 'C186_V6b_NET_POSITIVE_GROWTH',
+        'campaign': 'C186_SPAWN_COST_SCALING_VALIDATION',
         'start_time': campaign_start,
         'end_time': time.time(),
         'duration_hours': campaign_elapsed / 3600,
@@ -565,9 +565,9 @@ def run_spawn_cost_campaign():
         'parameters': {
             'e_consume': E_CONSUME,
             'e_recharge': E_RECHARGE,
-            'spawn_cost': SPAWN_COST,
+            'f_spawn': F_SPAWN,
             'cycles': CYCLES,
-            'f_spawn_values': F_SPAWN_VALUES,
+            'spawn_costs': SPAWN_COSTS,
             'seeds': SEEDS
         },
         'results': results,
