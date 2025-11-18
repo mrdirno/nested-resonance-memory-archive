@@ -1,0 +1,89 @@
+{
+  "statistics": {
+    "e_min_overall": {
+      "mean": 512.0522848427513,
+      "std": 25.3975068003537,
+      "cv": 0.049599440432441674,
+      "min": 500.5166416416416,
+      "max": 587.0885908797464,
+      "n": 90
+    },
+    "e_min_by_f_spawn": {
+      "0.001": {
+        "mean": 582.9380479910158,
+        "std": 3.4031292343088797,
+        "n": 10,
+        "min": 578.229288315893,
+        "max": 587.0885908797464
+      },
+      "0.0025": {
+        "mean": 511.16170320612275,
+        "std": 0.770104741009196,
+        "n": 10,
+        "min": 510.15113729090166,
+        "max": 512.6357559926245
+      },
+      "0.005": {
+        "mean": 502.54067005761596,
+        "std": 0.13285065396086912,
+        "n": 50,
+        "min": 502.26968662113296,
+        "max": 502.82576252449627
+      },
+      "0.0075": {
+        "mean": 501.0530474911314,
+        "std": 0.05373624955640134,
+        "n": 10,
+        "min": 500.96155387466814,
+        "max": 501.1445952035248
+      },
+      "0.01": {
+        "mean": 500.61441460841354,
+        "std": 0.0675354310730372,
+        "n": 10,
+        "min": 500.5166416416416,
+        "max": 500.7424712356178
+      }
+    },
+    "anova_f_spawn": {
+      "f_statistic": 11018.64377879589,
+      "p_value": 1.676557453430525e-114,
+      "interpretation": "E_min VARIES with f_spawn"
+    },
+    "correlation_f_spawn": {
+      "r": -0.6611109538085743,
+      "p_value": 1.3251052106556187e-12,
+      "r_squared": 0.4370676932456829
+    }
+  },
+  "hypothesis_test": {
+    "tests": {
+      "cv_test": {
+        "criterion": "CV(E_min) < 0.10",
+        "value": 0.049599440432441674,
+        "passed": "True",
+        "description": "Low variation in E_min overall"
+      },
+      "anova_test": {
+        "criterion": "ANOVA p > 0.05",
+        "value": 1.676557453430525e-114,
+        "passed": "False",
+        "description": "E_min does not vary significantly with f_spawn"
+      },
+      "range_test": {
+        "criterion": "495 < E_min < 510",
+        "value": 512.0522848427513,
+        "passed": "False",
+        "description": "E_min near predicted value ~502.5"
+      }
+    },
+    "validated": false,
+    "verdict": "FALSIFIED"
+  },
+  "n_experiments": {
+    "v6b": 50,
+    "v6c": 50,
+    "spawn_cost": 40,
+    "total": 140
+  }
+}
