@@ -469,8 +469,12 @@ Original prediction: "Spawn rate has minimal effect within each regime"
 - Homeostasis regime: Spawn rate irrelevant (composition = decomposition balanced)
 - Growth regime: Spawn rate matters (composition > decomposition, rate determines growth speed)
 
-**Mechanism:**
-In homeostasis (net=0), energy balance is tight constraint. System self-regulates to carrying capacity regardless of spawn attempts. In growth (net>0), energy accumulates, removing constraint. Spawn rate now determines how quickly population grows before hitting cap.
+**Mechanism Across All Regimes:**
+- **Collapse (net<0):** Energy deficit guarantees extinction. Decomposition rate exceeds composition rate regardless of spawn attempts. Spawn rate irrelevant because population cannot survive energy depletion.
+- **Homeostasis (net=0):** Energy balance is tight constraint. System self-regulates to carrying capacity (~201 agents) regardless of spawn rate. Composition exactly balances decomposition.
+- **Growth (net>0):** Energy accumulates, removing constraint. Population can grow exponentially. Spawn rate now determines HOW FAST population expands before hitting energy cap.
+
+**Key Insight:** Spawn rate modulates composition dynamics, but ONLY when energy balance permits net composition (net > 0). In collapse and homeostasis regimes, energy constraints override spawn rate influence.
 
 ### 4.3 Conditional Parameter Activation Framework
 
@@ -514,17 +518,26 @@ In homeostasis (net=0), energy balance is tight constraint. System self-regulate
 
 ### 4.5 Nested Resonance Memory Framework Integration
 
-**Composition-Decomposition Balance:**
-- V6a (net=0): Perfect balance → homeostasis
-- V6b (net>0): Imbalance → growth
+**Composition-Decomposition Balance Across Complete Phase Space:**
+- **V6c (net<0):** Decomposition dominates → population collapse (extinction)
+- **V6a (net=0):** Perfect balance → stable homeostasis (~201 agents)
+- **V6b (net>0):** Composition dominates → exponential growth (~19,320 agents)
+
+**Three-Regime Validation:**
+- Complete NRM framework mapping: collapse ↔ homeostasis ↔ growth
+- Energy balance determines regime (decomposition vs composition rate)
+- Spawn rate modulates composition ONLY when energetically permitted (net > 0)
+- Population fate emerges from local energy dynamics (no global controller)
 
 **Scale Invariance:**
 - Agent-level energy balance determines population-level dynamics
 - Fractal principle: Local rules → Global patterns
+- Single parameter (E_consume) controls 3+ orders of magnitude population range
 
 **Self-Giving Systems:**
 - System self-defines viability criterion (persistence without oracle)
 - Bootstrapped success metric (survival = success)
+- Three-regime framework validates self-organizing criticality across full phase space
 
 ### 4.6 Limitations and Future Directions
 
