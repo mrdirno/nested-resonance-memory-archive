@@ -192,24 +192,26 @@ def launch_claude(message):
 
 
 def launch_gemini(message):
-    """Launch Gemini CLI with constitution."""
+    """Launch Gemini CLI with constitution and permissionless mode."""
     print("="*80)
-    print("LAUNCHING GEMINI CLI")
+    print("LAUNCHING GEMINI CLI (PERMISSIONLESS MODE)")
     print("="*80)
     print(f"\nConstitution loaded: {CONSTITUTION_FILE}")
     print(f"Permissionless tools: {len(PERMISSIONLESS_TOOLS)}")
     print(f"Working directory: {PROJECT_ROOT}")
+    print(f"YOLO mode: ENABLED (auto-approve all tools)")
     print("\nStarting session...")
     print("="*80)
 
-    # Gemini CLI launch
-    # Note: Gemini CLI configuration may differ
-    # Constitution sent as initial message
+    # Gemini CLI launch with YOLO mode (permissionless)
+    # --yolo: Automatically accept all actions (equivalent to Claude permissionless)
+    # --approval-mode yolo: Same as --yolo but explicit
+    # Constitution sent as initial message via stdin
 
     try:
-        # Gemini CLI may have different invocation
+        # Launch Gemini with permissionless mode enabled
         subprocess.run(
-            [GEMINI_CLI, "chat"],
+            [GEMINI_CLI, "--yolo"],  # Enable permissionless mode
             cwd=str(PROJECT_ROOT),
             env={**os.environ},
             input=message.encode(),
