@@ -12,7 +12,7 @@
 
 **Date:** 2025-11-18
 
-**Status:** ~94% complete (V6a + V6b + V6c data collected, Methods + Results sections integrated, Discussion + References pending)
+**Status:** ~98% complete (V6a + V6b + V6c data collected, Methods + Results + Discussion + References integrated, final polishing pending)
 
 ---
 
@@ -709,33 +709,135 @@ Original prediction: "Spawn rate has minimal effect within each regime"
 
 ---
 
-## REFERENCES (~40-50 citations)
+## REFERENCES (~50-60 citations)
 
-### Agent-Based Modeling
-- Wilensky & Rand (2015) - Introduction to ABM
-- Epstein & Axtell (1996) - Sugarscape
-- Reynolds (1987) - Boids
+### Agent-Based Modeling Foundations
 
-### Energy-Constrained Systems
-- Brown et al. (2004) - Metabolic theory of ecology
-- Lotka (1925) - Energy in evolution
+1. **Wilensky, U., & Rand, W.** (2015). *An Introduction to Agent-Based Modeling: Modeling Natural, Social, and Engineered Complex Systems with NetLogo*. MIT Press.
 
-### Population Dynamics
-- Lotka-Volterra equations (1920s)
-- Verhulst (1838) - Logistic growth
-- May (1976) - Complex population dynamics
+2. **Epstein, J. M., & Axtell, R.** (1996). *Growing Artificial Societies: Social Science from the Bottom Up*. Brookings Institution Press.
 
-### Regime Transitions
-- Scheffer et al. (2001) - Catastrophic shifts in ecosystems
-- Strogatz (1994) - Nonlinear dynamics and chaos
+3. **Reynolds, C. W.** (1987). Flocks, herds and schools: A distributed behavioral model. *Computer Graphics*, 21(4), 25-34.
 
-### Statistical Methods
-- ANOVA theory and applications
-- Effect size measures (Cohen's d, eta-squared)
+4. **Bonabeau, E.** (2002). Agent-based modeling: Methods and techniques for simulating human systems. *Proceedings of the National Academy of Sciences*, 99(suppl 3), 7280-7287.
 
-### Computational Methods
-- SQLite documentation
-- Python scientific computing stack
+5. **Grimm, V., et al.** (2006). A standard protocol for describing individual-based and agent-based models. *Ecological Modelling*, 198(1-2), 115-126.
+
+### Energy-Constrained Systems and Metabolic Theory
+
+6. **Brown, J. H., Gillooly, J. F., Allen, A. P., Savage, V. M., & West, G. B.** (2004). Toward a metabolic theory of ecology. *Ecology*, 85(7), 1771-1789.
+
+7. **Lotka, A. J.** (1925). *Elements of Physical Biology*. Williams & Wilkins Company.
+
+8. **Odum, H. T.** (1988). Self-organization, transformity, and information. *Science*, 242(4882), 1132-1139.
+
+9. **DeLong, J. P., et al.** (2010). Shifts in metabolic scaling, production, and efficiency across major evolutionary transitions of life. *Proceedings of the National Academy of Sciences*, 107(29), 12941-12945.
+
+### Population Dynamics and Ecological Theory
+
+10. **Lotka, A. J.** (1920). Analytical note on certain rhythmic relations in organic systems. *Proceedings of the National Academy of Sciences*, 6(7), 410-415.
+
+11. **Volterra, V.** (1926). Fluctuations in the abundance of a species considered mathematically. *Nature*, 118(2972), 558-560.
+
+12. **Verhulst, P. F.** (1838). Notice sur la loi que la population suit dans son accroissement. *Correspondance Mathématique et Physique*, 10, 113-121.
+
+13. **May, R. M.** (1976). Simple mathematical models with very complicated dynamics. *Nature*, 261(5560), 459-467.
+
+14. **Berryman, A. A.** (1992). The origins and evolution of predator-prey theory. *Ecology*, 73(5), 1530-1535.
+
+### Regime Transitions and Critical Phenomena
+
+15. **Scheffer, M., Carpenter, S., Foley, J. A., Folke, C., & Walker, B.** (2001). Catastrophic shifts in ecosystems. *Nature*, 413(6856), 591-596.
+
+16. **Scheffer, M., et al.** (2009). Early-warning signals for critical transitions. *Nature*, 461(7260), 53-59.
+
+17. **Strogatz, S. H.** (1994). *Nonlinear Dynamics and Chaos: With Applications to Physics, Biology, Chemistry, and Engineering*. Westview Press.
+
+18. **Dai, L., Vorselen, D., Korolev, K. S., & Gore, J.** (2012). Generic indicators for loss of resilience before a tipping point leading to population collapse. *Science*, 336(6085), 1175-1177.
+
+19. **Dakos, V., et al.** (2012). Methods for detecting early warnings of critical transitions in time series illustrated using simulated ecological data. *PLoS ONE*, 7(7), e41010.
+
+### Parameter Interactions and Nonlinear Dynamics
+
+20. **Grimm, V., & Railsback, S. F.** (2005). *Individual-based Modeling and Ecology*. Princeton University Press.
+
+21. **DeAngelis, D. L., & Mooij, W. M.** (2005). Individual-based modeling of ecological and evolutionary processes. *Annual Review of Ecology, Evolution, and Systematics*, 36, 147-168.
+
+22. **Kooijman, S. A. L. M.** (2010). *Dynamic Energy Budget Theory for Metabolic Organisation* (3rd ed.). Cambridge University Press.
+
+23. **Holling, C. S.** (1973). Resilience and stability of ecological systems. *Annual Review of Ecology and Systematics*, 4, 1-23.
+
+### Emergence and Self-Organization
+
+24. **Kauffman, S. A.** (1993). *The Origins of Order: Self-Organization and Selection in Evolution*. Oxford University Press.
+
+25. **Holland, J. H.** (1998). *Emergence: From Chaos to Order*. Perseus Books.
+
+26. **Solé, R., & Goodwin, B.** (2000). *Signs of Life: How Complexity Pervades Biology*. Basic Books.
+
+27. **Camazine, S., et al.** (2001). *Self-Organization in Biological Systems*. Princeton University Press.
+
+### Statistical Methods and Analysis
+
+28. **Cohen, J.** (1988). *Statistical Power Analysis for the Behavioral Sciences* (2nd ed.). Lawrence Erlbaum Associates.
+
+29. **Sokal, R. R., & Rohlf, F. J.** (1995). *Biometry: The Principles and Practice of Statistics in Biological Research* (3rd ed.). W. H. Freeman.
+
+30. **Quinn, G. P., & Keough, M. J.** (2002). *Experimental Design and Data Analysis for Biologists*. Cambridge University Press.
+
+31. **Nakagawa, S., & Cuthill, I. C.** (2007). Effect size, confidence interval and statistical significance: a practical guide for biologists. *Biological Reviews*, 82(4), 591-605.
+
+### Computational Methods and Reproducibility
+
+32. **Wilson, G., et al.** (2014). Best practices for scientific computing. *PLoS Biology*, 12(1), e1001745.
+
+33. **Sandve, G. K., Nekrutenko, A., Taylor, J., & Horanik, E.** (2013). Ten simple rules for reproducible computational research. *PLoS Computational Biology*, 9(10), e1003285.
+
+34. **McKinney, W.** (2010). Data structures for statistical computing in Python. *Proceedings of the 9th Python in Science Conference*, 51-56.
+
+35. **Harris, C. R., et al.** (2020). Array programming with NumPy. *Nature*, 585(7825), 357-362.
+
+36. **Virtanen, P., et al.** (2020). SciPy 1.0: fundamental algorithms for scientific computing in Python. *Nature Methods*, 17(3), 261-272.
+
+### Energy Budget Models
+
+37. **Kearney, M., & Porter, W.** (2009). Mechanistic niche modelling: combining physiological and spatial data to predict species' ranges. *Ecology Letters*, 12(4), 334-350.
+
+38. **Nisbet, R. M., Muller, E. B., Lika, K., & Kooijman, S. A. L. M.** (2000). From molecules to ecosystems through dynamic energy budget models. *Journal of Animal Ecology*, 69(6), 913-926.
+
+### Theoretical Ecology and Complex Systems
+
+39. **Levin, S. A.** (1998). Ecosystems and the biosphere as complex adaptive systems. *Ecosystems*, 1(5), 431-436.
+
+40. **West, G. B., Brown, J. H., & Enquist, B. J.** (1997). A general model for the origin of allometric scaling laws in biology. *Science*, 276(5309), 122-126.
+
+### Bifurcation Theory and Phase Transitions
+
+41. **Kuznetsov, Y. A.** (2004). *Elements of Applied Bifurcation Theory* (3rd ed.). Springer.
+
+42. **Strogatz, S. H.** (2018). *Nonlinear Dynamics and Chaos* (2nd ed.). CRC Press.
+
+### Nested Resonance Memory and Related Frameworks
+
+43. **Payopay, A.** (2025). Nested Resonance Memory: A framework for composition-decomposition dynamics in agent-based systems. *In preparation*.
+
+44. **Payopay, A., & Claude.** (2025). Self-Giving Systems: Bootstrapped complexity without external oracles. *In preparation*.
+
+### Additional Relevant Work
+
+45. **Railsback, S. F., & Grimm, V.** (2019). *Agent-Based and Individual-Based Modeling: A Practical Introduction* (2nd ed.). Princeton University Press.
+
+46. **Bak, P.** (1996). *How Nature Works: The Science of Self-Organized Criticality*. Copernicus.
+
+47. **Newman, M. E. J.** (2005). Power laws, Pareto distributions and Zipf's law. *Contemporary Physics*, 46(5), 323-351.
+
+48. **Nowak, M. A.** (2006). *Evolutionary Dynamics: Exploring the Equations of Life*. Harvard University Press.
+
+49. **Stearns, S. C.** (1992). *The Evolution of Life Histories*. Oxford University Press.
+
+50. **Tilman, D.** (1982). *Resource Competition and Community Structure*. Princeton University Press.
+
+**Note:** Full bibliographic details and DOI/ISBN information to be added during final manuscript preparation. Citations will be formatted according to target journal requirements (PLOS Computational Biology or Artificial Life).
 
 ---
 
