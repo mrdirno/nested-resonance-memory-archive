@@ -720,9 +720,61 @@ Our quantification of these trade-offs (607$\times$ efficiency, 740$\times$ vari
 
 \section{Conclusions}
 
-% PLACEHOLDER: Conclusions section
-% TODO: Convert from paper4_manuscript_full_c186.md lines 886-1140
-% Includes subsections 5.1-5.5
+This study demonstrates that hierarchical organization in Nested Resonance Memory systems enables a \textbf{607-fold efficiency advantage} over single-scale implementations, sustaining equivalent populations with 600-fold lower spawn frequencies. This massive advantage emerges from three synergistic mechanisms—energy compartmentalization, migration rescue, and risk distribution—operating \textbf{conditionally on non-negative net energy balance}.
+
+\subsection{Key Findings}
+
+Our C186 + V6 experimental campaigns (200+ experiments) established five major results:
+
+\begin{enumerate}
+  \item \textbf{Massive Hierarchical Efficiency:} Hierarchical systems require critical spawn frequency $f_{crit}^{hier} \approx 0.0066\%$ compared to single-scale systems ($f_{crit}^{single} \approx 4.0\%$), yielding $\alpha = 607$ efficiency gain. This contradicts traditional overhead hypotheses and demonstrates hierarchical organization as efficiency asset, not liability.
+
+  \item \textbf{Perfect Linear Scaling:} Population size scales linearly with spawn frequency (Population = 3004.25 $\times$ $f_{intra}$ + 19.80, $R^2 = 1.000$) across tested range (1.0\%-5.0\%), with near-zero intercept indicating minimal hierarchical overhead. Predictable, deterministic dynamics enable precise system design.
+
+  \item \textbf{Structural Preconditions:} Zero migration ($f_{migrate} = 0.0\%$, V7) and single population ($n_{pop} = 1$, V8) represent degenerate cases where hierarchical implementations fail catastrophically. Multi-population architecture with inter-population communication are \textbf{necessary} for hierarchical advantage—structure alone is insufficient.
+
+  \item \textbf{Thermodynamic Preconditions:} V6 three-regime validation (150 experiments) demonstrates hierarchical efficiency operates \textbf{only above net energy threshold}. Negative net energy ($E_{recharge} < E_{consume}$) produces 100\% collapse regardless of hierarchical configuration. Non-negative energy balance is \textbf{necessary} for viability—hierarchical structure optimizes resource utilization within thermodynamic limits, not beyond them.
+
+  \item \textbf{Unified Scaling Framework:} Hierarchical efficiency integrates with power law energy scaling ($E_{min} \propto f^{-2.19}$) and variance scaling ($\sigma^2 \propto f^{-3.2}$), establishing unified mathematical description of efficiency-stability trade-offs. Operating near critical threshold minimizes energy consumption but maximizes variance; operating far above threshold increases energy cost but ensures deterministic outcomes.
+\end{enumerate}
+
+\subsection{Implications for Nested Resonance Memory}
+
+Our results validate core NRM principles:
+
+\textbf{1. Composition-Decomposition Dynamics Enable Emergent Capabilities:} The $\alpha = 607$ advantage emerges from \textit{interactions between hierarchical levels} (populations $\leftrightarrow$ agents), not merely from scaling up agent count. Hierarchical NRM systems exhibit super-additive benefits unavailable to single-scale systems.
+
+\textbf{2. Energy Constraints Bound Emergence:} V6 establishes hierarchical advantage as \textbf{energy-dependent emergent property}. Structure enables efficiency when energy permits, but cannot overcome fundamental energy deficits. This grounds NRM in reality-anchored dynamics: emergent properties arise from organization \textbf{given sufficient energy}, not from organizational magic alone.
+
+\textbf{3. Dual Necessity—Structure and Energy:} Both structural organization (multi-population + migration) and thermodynamic conditions (non-negative net energy) are necessary for hierarchical advantage. Remove either → advantage vanishes. This establishes hierarchical efficiency as \textbf{conditional}, not universal.
+
+\subsection{Limitations}
+
+\textbf{1. Two-level hierarchy only:} Our implementation tests populations $\rightarrow$ agents but not deeper nesting. Three-level hierarchies (swarms $\rightarrow$ populations $\rightarrow$ agents) remain untested.
+
+\textbf{2. Fixed hierarchical parameters:} We varied spawn frequency but fixed migration rate ($f_{migrate} = 0.5\%$) and population count ($n_{pop} = 10$) for baseline experiments. Optimal parameter combinations unexplored.
+
+\textbf{3. Edge case fragility:} V7/V8 failures indicate implementation fragility at parameter boundaries. Production systems require defensive parameter validation.
+
+\textbf{4. Energy regime resolution:} V6 tested three discrete energy regimes but not intermediate values. Fine-grained energy-frequency parameter sweep remains future work.
+
+\subsection{Future Directions}
+
+\textbf{1. Three-level hierarchies:} Test swarms $\rightarrow$ populations $\rightarrow$ agents to validate hierarchical advantage scales with depth.
+
+\textbf{2. Parameter optimization:} Systematic variation of $f_{migrate}$ and $n_{pop}$ to identify optimal configurations balancing efficiency, stability, and robustness.
+
+\textbf{3. Energy-frequency mapping:} 2D parameter sweep across energy regimes and spawn frequencies to characterize $E_{min}(f, E_{net})$ functional form empirically.
+
+\textbf{4. Theoretical modeling:} Develop mathematical model predicting $\alpha$ as function of $n_{pop}$, $f_{migrate}$, and hierarchy depth.
+
+\textbf{5. Cross-domain validation:} Test hierarchical advantage in other NRM contexts (pattern mining, memory retention, temporal dynamics) to assess generality.
+
+\subsection{Broader Impact}
+
+Our quantification of hierarchical efficiency (607$\times$ advantage), energy constraints (net $\geq$ 0 required), and variance trade-offs (740$\times$ reduction at 10$\times$ frequency increase) provides empirical benchmarks for understanding hierarchical organization in complex systems beyond NRM.
+
+For multi-agent systems design: hierarchical compartmentalization with low-bandwidth inter-compartment communication can reduce critical resource thresholds by 600-fold \textbf{when energy balance permits}. This establishes conditions under which hierarchical organization transitions from overhead liability to efficiency asset, informing scalable, fault-tolerant distributed system design.
 
 \section*{Data Availability}
 
