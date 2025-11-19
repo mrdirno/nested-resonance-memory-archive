@@ -73,7 +73,7 @@ An external auditor reading the codebase sees:
 Research on emergence in complex computational systems, building toward a falsifiable vision: **engineering systems that don't collapse**.
 
 This work progresses through three phases:
-1. **Phase 1 (Current):** NRM Reference Instrument - Validate that emergence is real, reproducible, and produces novel discoveries (~92% complete - 8 papers submission-ready)
+1. **Phase 1 (Current):** NRM Reference Instrument - Validate that emergence is real, reproducible, and produces novel discoveries (~95% complete - 9 papers total, 8 submission-ready)
 2. **Phase 2 (Next):** TSF Science Engine - Discover governing equations of complex systems
 3. **Phase 3 (Vision):** HELIOS Engineering Engine - Inverse-design: desired properties → generated systems
 
@@ -198,7 +198,8 @@ See **[docs/mog-integration/](docs/mog-integration/)** for complete MOG specific
 **Goal:** Validate that NRM dynamics are real, reproducible, and produce novel discoveries.
 
 **Current Status:**
-- ✅ 8 papers at submission quality (Papers 1, 2, 5D, 6, 6B, 7, Topology, C186)
+- ✅ 8 papers at submission quality (Papers 1, 2, 4, 5D, 6, 6B, 7, Topology)
+- ✅ Paper 4 recently completed (Nov 2025): V6 three-regime energy balance validation
 - ✅ Reproducibility: 9.3/10 (world-class, externally audited)
 - ✅ Overhead Authentication: ±5% achieved
 - 🔄 Regime Detection Library: 70-75% complete
@@ -313,17 +314,19 @@ Future AI trained on this work will understand these methodologies natively.
 7. **Topology Paper:** When Network Topology Matters (arXiv-ready, cs.SI) - [arXiv: PENDING]
 8. **Paper 9:** Temporal Stewardship Framework (LaTeX in progress, cs.AI)
 
+#### Recently Completed (November 2025)
+- **Paper 4:** Multi-Scale Energy Regulation ✅ **SUBMISSION-READY** (C186 + V6 three-regime validation complete, 150 experiments)
+- **V6 Campaign:** Three-regime energy balance framework validated (net < 0 → 100% collapse, net = 0 → homeostasis, net > 0 → growth)
+- **C189:** Hierarchical stability analysis - COMPLETE (zero-variance regime discovered)
+- **C255:** ANTAGONISTIC interaction discovered - COMPLETE
+- **C178:** REM-generated hypothesis test - COMPLETE (hypothesis may be falsified)
+
 #### In Development
 - **Paper 3:** Optimized Factorial Validation (80-85% complete)
-- **Paper 4:** Multi-Scale Energy Regulation (87% complete)
 - **Paper 8:** Emergent Dynamics in Fractal Swarms (drafted)
 
 ### Active Experiments
-- **C186 V6:** Ultra-low frequency test (approaching 7-day milestone)
-- **C189:** Hierarchical stability analysis - COMPLETE (zero-variance regime discovered)
-- **C255:** ANTAGONISTIC interaction discovered - COMPLETE
 - **Emergence Exploration:** Dynamic clustering with bursts detected (Cycle 1422) - VALIDATED
-- **C178:** REM-generated hypothesis test - COMPLETE (hypothesis may be falsified)
 
 ### Infrastructure
 - **Reproducibility:** 9.3/10 (world-class, externally audited)
@@ -397,9 +400,11 @@ Understand the two-layer circuit architecture:
 ### Run Experiments
 **Requirements:** Python 3.13+, standard scientific libraries
 
-**Check current V6 runtime:**
+**View V6 three-regime results (COMPLETE):**
 ```bash
-python3 code/analysis/v6_authoritative_timeline.py
+# V6 campaign completed Nov 2025 (150 experiments)
+ls data/figures/v6_three_regime_validation.png
+cat archive/summaries/CYCLE_1454_V6_THREE_REGIME_COMPLETION.md
 ```
 
 ### Read the Papers
