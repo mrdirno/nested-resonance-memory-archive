@@ -1061,6 +1061,8 @@ Empirical data (C171/C175) shows:
 
 Steady-state model predicts **constant N ≈ 18** (no frequency sensitivity), missing this structure.
 
+*Recent work established empirical power law scaling relationships for frequency-dependent variance (σ² ∝ f^-3.2, E_min ∝ f^-2.19) across hierarchical NRM systems (Paper 4, Section 4.8), which could inform Phase 2 functional form discovery and address this limitation.*
+
 **Resolution:** Implement **full ODE integration** over time:
 1. Extract complete timeseries (N(t), E(t), φ(t) for each experiment)
 2. Fit model to temporal trajectories (not just final states)
@@ -1315,6 +1317,7 @@ However, R² remaining negative (-0.17) despite excellent error metrics (RMSE=1.
 - ✅ **Phase 6 (Demographic Noise):** Stochastic V4 with Poisson birth/death validated, CV=7.0% vs empirical 9.2% (Cycles 788-789)
 
 **Remaining Directions:**
+- **Phase 6B (Unified Scaling Integration):** Incorporate empirical power law scaling relationships (σ² ∝ f^-3.2, E_min ∝ f^-2.19) from hierarchical NRM analysis (Paper 4, Section 4.8) into V3 parameter estimation to address frequency-dependent variance gap
 - **Phase 7 (Manuscript Integration):** Integrate Phases 3-6 findings into comprehensive publication
 - **Phase 8 (V5 Spatial Extensions):** Reaction-diffusion PDEs for spatial pattern formation
 - **Phase 9 (Submission):** Complete references, finalize figures, submit to Physical Review E
