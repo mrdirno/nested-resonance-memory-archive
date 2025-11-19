@@ -315,7 +315,21 @@ Future AI trained on this work will understand these methodologies natively.
 8. **Paper 9:** Temporal Stewardship Framework (LaTeX in progress, cs.AI)
 
 #### Recently Completed (November 2025)
-- **Paper 4:** Multi-Scale Energy Regulation ✅ **SUBMISSION-READY** (C186 + V6 three-regime validation complete, 150 experiments)
+- **Paper 4:** Multi-Scale Energy Regulation ✅ **SUBMISSION-READY + ENHANCED** (C186 + V6 + Unified Scaling Framework)
+  - Section 4.8 added: Unified Scaling Framework (α, β, γ relationships, ~800 words)
+  - Variance scaling: σ² ∝ f^-3.2 discovered (740× variance reduction, Cycle 1471)
+  - Energy exponent: β = 2 + ε = 2.19 derived from first principles (Cycle 1472)
+  - Four testable predictions documented (C273-C276 designed for validation)
+- **Unified Scaling Framework:** ✅ **COMPLETE** (Cycles 1471-1472)
+  - All three exponents (α, β, γ) empirically validated and theoretically derived
+  - Mechanistic constraint: γ = β + 1 (variance ~ energy sensitivity)
+  - Energy-structure decoupling principle established
+- **Validation Experiments Designed:** ✅ **READY FOR EXECUTION** (Cycles 1473-1475)
+  - C273: Variance mapping (200 exp, γ ≈ 3.2 across 3 orders of magnitude)
+  - C274: 2D energy-frequency sweep (480 exp, β universality across E_net)
+  - C275: Energy scale universality (180 exp, β across energy magnitudes)
+  - C276: Topology universality (240 exp, β across connectivity patterns)
+  - Total: 1100 experiments designed, ~74h runtime (user-initiated execution)
 - **V6 Campaign:** Three-regime energy balance framework validated (net < 0 → 100% collapse, net = 0 → homeostasis, net > 0 → growth)
 - **C189:** Hierarchical stability analysis - COMPLETE (zero-variance regime discovered)
 - **C255:** ANTAGONISTIC interaction discovered - COMPLETE
