@@ -185,6 +185,12 @@ Paper 2 is **highly empirical** (4 major campaigns):
 - [x] Final compilation SUCCESS: 18 pages, 460KB PDF
 - [x] ALL MAIN TEXT CONVERTED: 100% arXiv-ready
 
+**Cycle 1489 (Figures Added):**
+- [x] All 11 figures copied to paper2 directory
+- [x] 7 key figures integrated into manuscript.tex (Figures 1-2, 4, 7, 8, 10-11)
+- [x] Recompiled: 21 pages, 1.78MB PDF
+- [x] Committed to GitHub (535617a)
+
 ---
 
 ## NOTES
