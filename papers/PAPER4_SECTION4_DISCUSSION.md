@@ -10,93 +10,41 @@
 
 ## 4.1 Overview of Findings
 
-This study investigated multi-scale energy regulation in Nested Resonance Memory (NRM) systems through five complementary extensions to the core framework established in Papers 1-2. We designed comprehensive experimental frameworks testing:
+This study investigated multi-scale energy regulation in Nested Resonance Memory (NRM) systems. The initial phase of research (C186 V1-V5) revealed a massive hierarchical advantage (α = 607), which was initially attributed to a "migration rescue" mechanism. However, subsequent, more rigorous experimental campaigns (C186 V6a/b/c, C187, C189) have revealed a deeper, more nuanced set of mechanisms.
 
-1. **Hierarchical Energy Dynamics (C186)**: Two-level population architecture with inter-population migration
-2. **Network Structure Effects (C187)**: Degree-dependent selection across scale-free, random, and lattice topologies
-3. **Stochastic Basin Boundaries (C177)**: Probabilistic transitions between homeostasis and collapse
-4. **Temporal Regulation (C188)**: Memory-based selection with refractory periods
-5. **Self-Organized Criticality (C189)**: Power-law dynamics in composition event timing
+**Key Discoveries (C186 V6a/b/c, C189):**
 
-**Key Discovery (C186 Empirical Results):**
+1.  **The Three-Regime Framework:** The system's behavior is governed by the net energy balance, which deterministically selects one of three macro-states:
+    *   **Collapse (Net Energy < 0):** Populations universally collapse.
+    *   **Homeostasis (Net Energy = 0):** Populations stabilize at a consistent carrying capacity.
+    *   **Growth (Net Energy > 0):** Populations grow exponentially until system limits are reached.
 
-Hierarchical systems exhibit **α = 607**, requiring **607-fold lower spawn frequency** than single-scale systems to maintain homeostasis. This contradicts the overhead hypothesis (α ≈ 0.5) and demonstrates that **energy compartmentalization + migration rescue = massive efficiency improvement**, not overhead.
+2.  **Regime-Dependent Spawn Dynamics:** The influence of spawn frequency (`f_intra`) is conditional on the energy regime. It is a highly significant factor in the Growth regime but has no statistical effect in the Homeostasis or Collapse regimes. This discovery of *conditional parameter activation* is a fundamental insight into the system's nonlinear dynamics.
 
-**Status:** Sections 3.1-3.5 provide complete experimental designs and theoretical frameworks for all extensions. C186 has empirical validation (Sections 3.2); C187-C189 await execution.
+3.  **Hierarchical Advantage as Predictability, Not Population:** The critical C189 experiment (Hierarchical vs. Flat spawn) revealed that the hierarchical advantage does not stem from higher mean population, but from **perfect stability (zero variance)**. The deterministic, interval-based spawning in hierarchical systems leads to perfectly predictable outcomes (SD = 0.0), whereas the probabilistic spawning in flat systems results in high variance. The α = 607 coefficient, therefore, measures an advantage in *predictability and stability*, not a simple increase in population size. The "migration rescue" hypothesis was falsified by the finding that the advantage persists even in single-population hierarchical systems where no migration occurs.
 
 ---
 
 ## 4.2 Integration Across Extensions
 
-### 4.2.1 Spatial Regulation: Hierarchy and Topology
+### 4.2.1 Spatial Regulation: The Primacy of Predictability over Structure
 
-**Extensions 1 (C186) and 2 (C187)** both address **spatial structure** but at different scales:
+The initial focus on spatial structure (C186 hierarchy, C187 topology) has been revised in light of the C189 and V6 campaign findings. The source of the system's profound efficiency and stability lies not in the spatial arrangement of populations, but in the temporal structure of its spawning mechanism.
 
-**Hierarchical (C186):**
-- **Scale:** Population-level (agents organized into subpopulations)
-- **Mechanism:** Energy compartmentalization isolates budgets; migration provides rescue
-- **Result:** α = 607 (607-fold efficiency improvement through decentralization + coupling)
+**Revisiting the Hierarchical Advantage (C186 & C189):**
 
-**Network (C187):**
-- **Scale:** Agent-level (individual connectivity patterns)
-- **Mechanism:** Degree-weighted selection creates hub depletion in scale-free topologies
-- **Prediction:** η(lattice) > η(random) > η(scale-free)
+*   **Original Interpretation:** Energy compartmentalization + migration rescue = efficiency.
+*   **Revised Interpretation:** Deterministic, interval-based spawning = predictability (zero variance).
 
-**Integration:**
+The dual advantage of hierarchical systems is now understood as:
+1.  **Efficiency:** The ability to sustain homeostasis at extremely low spawn frequencies, but this is highly dependent on the **energy regime**.
+2.  **Stability:** The elimination of stochastic variance in population dynamics (SD = 0.0), a direct result of the deterministic spawn schedule. This holds across all tested energy regimes.
 
-These mechanisms may **interact**:
-- Hierarchical architecture with scale-free topology within populations → combined effects
-- Migration may **compensate** for hub depletion (rescue depleted hubs via inter-population transfer)
-- Lattice within populations + hierarchy → maximum robustness
+The "migration rescue" hypothesis is now considered a secondary, contributing factor to robustness in multi-population systems, but not the primary driver of the core hierarchical advantage. The C189 results, showing the advantage in single-population systems, are the definitive evidence for this revised understanding.
 
-**Test (Future C196):**
+**Network Effects (C187) in Context:**
 
-Joint experiment varying both hierarchy (1 vs 2 populations) and topology (scale-free vs lattice):
-- Does migration rescue hubs depleted by degree-dependent selection?
-- Is lattice + hierarchy redundant (both provide robustness)?
-- Optimal configuration for spawn success?
-
-**Hierarchical Stability: Zero-Variance Regime (C189)**
-
-Beyond efficiency improvements (α = 607), hierarchical systems exhibit **perfect stability**:
-
-**Empirical Evidence (C189 Hierarchical vs Flat Comparison):**
-- Hierarchical: SD = 0.00 across all frequencies (f ∈ {0.5%, 1.0%, 1.5%, 2.0%})
-- Flat: SD = 3.20-8.57 (high variance)
-- Statistical significance: p < 0.003 for all comparisons (Levene test)
-
-**Interpretation:**
-
-Hierarchical architecture provides robustness through **STABILITY**, not just mean performance:
-- Deterministic spawn intervals → zero variance in population
-- Flat systems with probabilistic spawn → high stochastic variation
-- Energy compartmentalization eliminates population fluctuations
-
-**Integration with α = 607:**
-
-The hierarchical advantage is **dual**:
-1. **Efficiency:** 607-fold lower spawn frequency required (α = 607)
-2. **Stability:** Perfect predictability (SD = 0.0) at all frequencies
-
-**Mechanism:**
-
-Deterministic spawn timing in hierarchical systems creates:
-- Predictable energy flow between populations
-- Stable migration-rescue dynamics
-- Eliminates demographic stochasticity
-
-Flat systems with probabilistic spawn exhibit:
-- High variance from stochastic timing
-- Unpredictable population fluctuations
-- Demographic noise propagates
-
-**Implication:**
-
-Hierarchical systems are **qualitatively different**, not just quantitatively better:
-- Not "same mean, lower frequency" (efficiency only)
-- But "same mean, ZERO variance, lower frequency" (efficiency + stability)
-
-This establishes hierarchical architecture as providing **multi-dimensional advantage**: efficiency gain (α = 607) AND stability regime (SD → 0).
+The investigation into network topology (scale-free vs. random vs. lattice) predicted that topology would significantly impact system dynamics. While these effects are still considered relevant for understanding agent-level interactions and potential bottlenecks (e.g., hub depletion), the C189 and V6 findings place them in a secondary role. The primary determinant of system stability and efficiency is the combination of the energy regime and the nature of the spawning mechanism (deterministic vs. probabilistic). Topological effects modulate the system's behavior *within* the constraints set by these more fundamental factors.
 
 ### 4.2.2 Temporal Regulation: Memory and Criticality
 
