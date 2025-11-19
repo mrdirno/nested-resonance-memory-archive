@@ -356,7 +356,7 @@ def main():
     print(f"\nReality grounding: 100% (psutil tracking + SQLite persistence)")
 
     # Save results
-    results_path = Path(__file__).parent.parent.parent / "data" / "results" / "nrmv2_c176_c177_consolidation.json"
+    results_path = Path(__file__).parent.parent / "data" / "results" / "nrmv2_c176_c177_consolidation.json"
     results_path.parent.mkdir(parents=True, exist_ok=True)
 
     results = {
