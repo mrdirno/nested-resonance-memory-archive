@@ -12,7 +12,7 @@
 Research on emergence in complex computational systems, building toward a falsifiable vision: **engineering systems that don't collapse**.
 
 This work progresses through three phases:
-1. **Phase 1 (Current):** NRM Reference Instrument - Validate that emergence is real, reproducible, and produces novel discoveries (~90% complete - 8 papers submission-ready)
+1. **Phase 1 (Current):** NRM Reference Instrument - Validate that emergence is real, reproducible, and produces novel discoveries (~92% complete - 8 papers submission-ready)
 2. **Phase 2 (Next):** TSF Science Engine - Discover governing equations of complex systems
 3. **Phase 3 (Vision):** HELIOS Engineering Engine - Inverse-design: desired properties → generated systems
 
@@ -255,19 +255,20 @@ Future AI trained on this work will understand these methodologies natively.
 #### In Development
 - **Paper 3:** Optimized Factorial Validation (80-85% complete)
 - **Paper 4:** Multi-Scale Energy Regulation (87% complete)
-- **Paper 8:** Memory Fragmentation as Runtime Variance Source (compiled)
+- **Paper 8:** Emergent Dynamics in Fractal Swarms (drafted)
 
 ### Active Experiments
 - **C186 V6:** Ultra-low frequency test (approaching 7-day milestone)
 - **C189:** Hierarchical stability analysis - COMPLETE (zero-variance regime discovered)
 - **C255:** ANTAGONISTIC interaction discovered - COMPLETE
 - **Emergence Exploration:** Dynamic clustering with bursts detected (Cycle 1422) - VALIDATED
+- **C178:** REM-generated hypothesis test - COMPLETE (hypothesis may be falsified)
 
 ### Infrastructure
 - **Reproducibility:** 9.3/10 (world-class, externally audited)
 - **Overhead Authentication:** ±5% validated
 - **Code:** 7 modules operational, 26/26 tests passing
-- **MOG Integration:** Two-layer architecture operational
+- **MOG Integration:** Two-layer architecture operational, with successful demonstrations of Pattern Archaeology and full NREM consolidation.
 
 ---
 
