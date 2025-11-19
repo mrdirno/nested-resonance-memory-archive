@@ -95,6 +95,7 @@
    - **Title:** A Pattern Mining Framework for Quantifying Temporal Stability and Memory Retention in Complex Systems
    - **Authors:** Aldrin Payopay
    - **Abstract:** Copy from manuscript.tex lines 17-19
+   - **arXiv ID:** PENDING
    - **Comments:** "Part of Nested Resonance Memory research series. Scope restricted to Temporal and Memory pattern categories. Companion paper on computational expense validation submitted to cs.DC."
 
 ### 4. **Compilation**
