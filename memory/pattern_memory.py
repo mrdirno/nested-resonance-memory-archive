@@ -299,45 +299,83 @@ class PatternMemory:
     def search_patterns(
         self,
         pattern_type: Optional[PatternType] = None,
+        name_like: Optional[str] = None,
+        data_query: Optional[Dict[str, Any]] = None,
+        metadata_query: Optional[Dict[str, Any]] = None,
         min_confidence: float = 0.0,
+        sort_by: str = 'confidence',
+        sort_order: str = 'DESC',
         limit: int = 100
     ) -> List[Pattern]:
         """
-        Search for patterns matching criteria.
+        Search for patterns matching criteria with advanced filtering and sorting.
 
         Args:
-            pattern_type: Optional pattern type filter
-            min_confidence: Minimum confidence threshold
-            limit: Maximum number of results
+            pattern_type: Optional pattern type filter.
+            name_like: Optional pattern name filter (case-insensitive LIKE).
+            data_query: Optional dictionary to query JSON 'data' field.
+            metadata_query: Optional dictionary to query JSON 'metadata' field.
+            min_confidence: Minimum confidence threshold.
+            sort_by: Field to sort by (e.g., 'confidence', 'last_seen', 'occurrences').
+            sort_order: 'ASC' or 'DESC'.
+            limit: Maximum number of results.
 
         Returns:
-            List of matching patterns
+            List of matching patterns.
         """
+        query = "SELECT * FROM patterns WHERE confidence >= ?"
+        params = [min_confidence]
+
+        if pattern_type:
+            query += " AND pattern_type = ?"
+            params.append(pattern_type.value)
+        
+        if name_like:
+            query += " AND name LIKE ?"
+            params.append(f"%{name_like}%")
+
+        # The rest of the implementation will require iterating through the results
+        # and filtering in Python, as direct JSON querying can be complex with pure SQL
+        # across different SQLite versions.
+
+        if sort_by not in ['confidence', 'last_seen', 'occurrences', 'first_seen', 'name']:
+            sort_by = 'confidence'
+        
+        if sort_order.upper() not in ['ASC', 'DESC']:
+            sort_order = 'DESC'
+
+        query += f" ORDER BY {sort_by} {sort_order}, last_seen DESC"
+        query += " LIMIT ?"
+        params.append(limit)
+        
+        patterns = []
         with self._db_connection() as conn:
-            if pattern_type:
-                cursor = conn.execute("""
-                    SELECT * FROM patterns
-                    WHERE pattern_type = ? AND confidence >= ?
-                    ORDER BY confidence DESC, last_seen DESC
-                    LIMIT ?
-                """, (pattern_type.value, min_confidence, limit))
-            else:
-                cursor = conn.execute("""
-                    SELECT * FROM patterns
-                    WHERE confidence >= ?
-                    ORDER BY confidence DESC, last_seen DESC
-                    LIMIT ?
-                """, (min_confidence, limit))
-
+            cursor = conn.execute(query, params)
             columns = [desc[0] for desc in cursor.description]
-            patterns = []
-
+            
             for row in cursor.fetchall():
                 data = dict(zip(columns, row))
                 data['data'] = json.loads(data['data'])
                 data['metadata'] = json.loads(data['metadata'])
-                patterns.append(Pattern.from_dict(data))
+                
+                # In-memory filtering for JSON fields
+                match = True
+                if data_query:
+                    for key, value in data_query.items():
+                        if data['data'].get(key) != value:
+                            match = False
+                            break
+                if not match: continue
 
+                if metadata_query:
+                    for key, value in metadata_query.items():
+                        if data['metadata'].get(key) != value:
+                            match = False
+                            break
+                if not match: continue
+                
+                patterns.append(Pattern.from_dict(data))
+                
             return patterns
 
     def save_agent_state(
