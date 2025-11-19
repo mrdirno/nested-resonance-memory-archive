@@ -1,14 +1,6 @@
 #!/usr/bin/env python3
 """
-CYCLE 256: MECHANISM VALIDATION - H1 × H4 Factorial Interaction (OPTIMIZED)
-
-**OPTIMIZATION NOTE (Cycle 348):**
-This is an optimized version implementing batched psutil sampling to reduce
-computational overhead from 40× (20+ hours) to ~0.5× (13 minutes).
-
-Optimization: Sample reality metrics ONCE per cycle at orchestrator level,
-share among all agents. Reduces psutil calls from ~100/cycle to 1/cycle
-(90× reduction) while maintaining reality grounding and temporal resolution.
+CYCLE 256: MECHANISM VALIDATION - H1 × H4 Factorial Interaction
 
 Purpose: Test whether Energy Pooling (H1) and Spawn Throttling (H4) exhibit
          synergistic, antagonistic, or additive effects when combined.
@@ -17,7 +9,6 @@ Background:
   - Stochasticity investigation (Cycles 235-254) proved system is deterministic
   - Statistical paradigm fails (σ²=0 across all conditions)
   - Mechanism validation paradigm adopted: Single runs, directional predictions
-  - C255 revealed extreme psutil overhead (1.08M calls → 20+ hour runtime)
 
 H1 - Energy Pooling:
   Agents share energy within resonance clusters, distributing reproductive
@@ -46,13 +37,7 @@ Expected Outcomes:
 
   Synergy = 0.45 - (0.07 + 0.88 + (-0.02)) = -0.48 (ANTAGONISTIC)
 
-Optimization Details:
-  - Batched sampling: Sample once/cycle, share among agents
-  - Psutil calls: ~300K → ~3K (100× reduction)
-  - Expected runtime: 13 minutes (vs. 20+ hours unoptimized)
-  - Reality grounding: MAINTAINED (3000 samples per condition, no simulation)
-
-Date: 2025-10-27 (optimized), 2025-10-26 (original)
+Date: 2025-10-26
 Researcher: Claude (DUALITY-ZERO-V2)
 Cycle: 256 (Phase 2: Paper 3 mechanism validation, post-determinism discovery)
 Principal Investigator: Aldrin Payopay (aldrin.gdf@gmail.com)
@@ -84,7 +69,7 @@ from fractal.fractal_swarm import CompositionEngine, FractalSwarm
 CYCLES = 3000
 MAX_AGENTS = 100
 THROTTLE_COOLDOWN = 100  # Minimum cycles between spawns (H4 parameter)
-RESULTS_FILE = Path(__file__).parent / "results" / "cycle256_h1h4_optimized_results.json"
+RESULTS_FILE = Path(__file__).parent / "results" / "cycle256_h1h4_mechanism_validation_results.json"
 
 
 class MechanismCondition:
@@ -112,11 +97,8 @@ def run_condition(condition: MechanismCondition) -> Dict:
     """
     Run single deterministic experiment with mechanism configuration.
 
-    OPTIMIZATION: Uses batched psutil sampling - samples once per cycle,
-    shares metrics among all agents via cached_metrics parameter.
-
     Args:
-        condition: Mechanism condition (H1, H4 settings)
+        condition: Mechanism condition (H1, H2 settings)
 
     Returns:
         Dictionary with population metrics
@@ -129,7 +111,7 @@ def run_condition(condition: MechanismCondition) -> Dict:
     bridge = TranscendentalBridge()
     composition_engine = CompositionEngine(resonance_threshold=0.85)
 
-    # Create root agent (initial sample - BEFORE optimization loop)
+    # Create root agent
     metrics = reality.get_system_metrics()
     root = FractalAgent(
         agent_id="root",
@@ -150,16 +132,10 @@ def run_condition(condition: MechanismCondition) -> Dict:
     # H4: Throttling tracker (cycle number when agent last spawned)
     last_spawn_cycle = {}  # agent_id -> cycle number
 
-    # Optimization: Track psutil call count for verification
-    psutil_call_count = 1  # Count initial sample above
-
     # Run simulation
     for cycle in range(CYCLES):
-        # ===== OPTIMIZATION: SAMPLE ONCE PER CYCLE =====
-        # This single call replaces ~50-100 calls scattered throughout the loop
-        shared_metrics = reality.get_system_metrics()
-        psutil_call_count += 1
-        # ===============================================
+        # OPTIMIZATION: Get reality metrics once per cycle
+        current_metrics = reality.get_system_metrics()
 
         # H1: Energy pooling (if enabled)
         if condition.h1_pooling:
@@ -185,11 +161,9 @@ def run_condition(condition: MechanismCondition) -> Dict:
         # H4: Spawn throttling enforced in spawn section below
         # (No per-cycle logic needed; throttling checked during spawn attempts)
 
-        # ===== OPTIMIZATION: BATCH PSUTIL SAMPLING =====
-        # Evolve all agents (psutil sampled once per batch, not per-agent)
+        # Evolve all agents (includes reality-based energy recharge)
         for agent in agents:
-            agent.evolve(delta_time=1.0)
-        # ========================================================
+            agent.evolve(delta_time=1.0, cached_metrics=current_metrics)
 
         # Spawn new agents if energy threshold met
         for agent in list(agents):  # Copy list to avoid modification during iteration
@@ -201,20 +175,17 @@ def run_condition(condition: MechanismCondition) -> Dict:
                     if cycles_since_spawn < THROTTLE_COOLDOWN:
                         continue  # Skip spawn - throttle enforced
 
-                # ===== OPTIMIZATION: USE SHARED METRICS FOR CHILD =====
-                # Create child agent with cached metrics (avoids psutil call)
+                # Create child agent
                 child_id = f"{agent.agent_id}_child_{cycle}"
                 child = FractalAgent(
                     agent_id=child_id,
                     bridge=bridge,
-                    initial_reality=shared_metrics,  # Use cached
+                    initial_reality=current_metrics,
                     parent_id=agent.agent_id,
                     depth=agent.depth + 1,
                     max_depth=7,
                     reality=reality
                 )
-                # ======================================================
-
                 agents.append(child)
                 agent.children.append(child)
                 agent.energy -= 10.0  # Spawning cost
@@ -235,7 +206,6 @@ def run_condition(condition: MechanismCondition) -> Dict:
     runtime = time.time() - start_time
 
     print(f"    → mean={mean_population:.2f}, final={final_population}, max={max_population}, runtime={runtime:.1f}s")
-    print(f"    → psutil calls: {psutil_call_count} (optimization: {psutil_call_count == CYCLES + 1})")
 
     return {
         'condition': str(condition),
@@ -245,9 +215,7 @@ def run_condition(condition: MechanismCondition) -> Dict:
         'final_population': int(final_population),
         'max_population': int(max_population),
         'population_history': population_history,
-        'runtime_seconds': float(runtime),
-        'psutil_calls': psutil_call_count,
-        'optimized': True
+        'runtime_seconds': float(runtime)
     }
 
 
@@ -269,10 +237,10 @@ def analyze_synergy(results: Dict[str, Dict]) -> Dict:
 
     # Compute individual mechanism effects
     h1_effect = on_off - off_off  # Effect of pooling alone
-    h4_effect = off_on - off_off  # Effect of throttling alone
+    h2_effect = off_on - off_off  # Effect of throttling alone
 
     # Additive prediction (null hypothesis: no interaction)
-    additive_prediction = off_off + h1_effect + h4_effect
+    additive_prediction = off_off + h1_effect + h2_effect
 
     # Synergy (interaction effect)
     synergy = on_on - additive_prediction
@@ -285,13 +253,13 @@ def analyze_synergy(results: Dict[str, Dict]) -> Dict:
 
     if synergy > synergy_threshold:
         classification = "SYNERGISTIC"
-        interpretation = "Energy pooling and spawn throttling amplify each other"
+        interpretation = "Energy pooling and reality sources amplify each other"
     elif synergy < -synergy_threshold:
         classification = "ANTAGONISTIC"
-        interpretation = "Energy pooling and spawn throttling interfere with each other"
+        interpretation = "Energy pooling and reality sources interfere with each other"
     else:
         classification = "ADDITIVE"
-        interpretation = "Energy pooling and spawn throttling combine independently"
+        interpretation = "Energy pooling and reality sources combine independently"
 
     return {
         'off_off': float(off_off),
@@ -299,7 +267,7 @@ def analyze_synergy(results: Dict[str, Dict]) -> Dict:
         'off_on': float(off_on),
         'on_on': float(on_on),
         'h1_effect': float(h1_effect),
-        'h4_effect': float(h4_effect),
+        'h4_effect': float(h2_effect),
         'additive_prediction': float(additive_prediction),
         'synergy': float(synergy),
         'fold_change': float(fold_change),
@@ -310,21 +278,20 @@ def analyze_synergy(results: Dict[str, Dict]) -> Dict:
 
 
 def main():
-    """Execute C256 H1×H4 factorial mechanism validation (OPTIMIZED)."""
+    """Execute C255 H1×H2 factorial mechanism validation."""
     print("=" * 70)
-    print("CYCLE 256: MECHANISM VALIDATION - H1 × H4 (OPTIMIZED)")
+    print("CYCLE 255: MECHANISM VALIDATION - H1 × H2")
     print("=" * 70)
     print(f"Start time: {datetime.now().isoformat()}")
     print(f"Cycles per experiment: {CYCLES}")
     print(f"Paradigm: Mechanism validation (deterministic, n=1)")
-    print(f"Optimization: Batched psutil sampling (once per cycle)")
     print()
 
     # Define four factorial conditions
     conditions = [
         MechanismCondition(h1_enabled=False, h4_enabled=False),  # OFF-OFF (baseline)
         MechanismCondition(h1_enabled=True, h4_enabled=False),   # ON-OFF (H1 only)
-        MechanismCondition(h1_enabled=False, h4_enabled=True),   # OFF-ON (H4 only)
+        MechanismCondition(h1_enabled=False, h4_enabled=True),   # OFF-ON (H2 only)
         MechanismCondition(h1_enabled=True, h4_enabled=True)     # ON-ON (both)
     ]
 
@@ -339,50 +306,55 @@ def main():
         print()
 
     # Analyze synergy
-    print("=" * 70)
-    print("SYNERGY ANALYSIS")
-    print("=" * 70)
+    print("SYNERGY ANALYSIS:")
+    print("-" * 70)
     synergy_analysis = analyze_synergy(results)
 
-    print(f"OFF-OFF (baseline):          {synergy_analysis['off_off']:.4f}")
-    print(f"ON-OFF (H1 only):            {synergy_analysis['on_off']:.4f}")
-    print(f"OFF-ON (H4 only):            {synergy_analysis['off_on']:.4f}")
-    print(f"ON-ON (both):                {synergy_analysis['on_on']:.4f}")
+    print(f"OFF-OFF (baseline):       {synergy_analysis['off_off']:.4f}")
+    print(f"ON-OFF (H1 only):         {synergy_analysis['on_off']:.4f}")
+    print(f"OFF-ON (H2 only):         {synergy_analysis['off_on']:.4f}")
+    print(f"ON-ON (both mechanisms):  {synergy_analysis['on_on']:.4f}")
     print()
-    print(f"H1 effect:                   {synergy_analysis['h1_effect']:+.4f}")
-    print(f"H4 effect:                   {synergy_analysis['h4_effect']:+.4f}")
-    print(f"Additive prediction:         {synergy_analysis['additive_prediction']:.4f}")
-    print(f"Observed interaction:        {synergy_analysis['on_on']:.4f}")
-    print(f"Synergy:                     {synergy_analysis['synergy']:+.4f}")
-    print(f"Fold-change:                 {synergy_analysis['fold_change']:.2f}×")
+    print(f"H1 effect (pooling):      {synergy_analysis['h1_effect']:.4f}")
+    print(f"H4 effect (sources):      {synergy_analysis['h4_effect']:.4f}")
+    print(f"Additive prediction:      {synergy_analysis['additive_prediction']:.4f}")
     print()
-    print(f"Classification: {synergy_analysis['classification']}")
-    print(f"Interpretation: {synergy_analysis['interpretation']}")
-    print("=" * 70)
+    print(f"SYNERGY:                  {synergy_analysis['synergy']:.4f}")
+    print(f"Fold-change (ON-ON/OFF-OFF): {synergy_analysis['fold_change']:.2f}×")
+    print()
+    print(f"CLASSIFICATION:           {synergy_analysis['classification']}")
+    print(f"INTERPRETATION:           {synergy_analysis['interpretation']}")
+    print()
 
     # Save results
     output = {
-        'experiment': 'cycle256_h1h4_mechanism_validation_optimized',
-        'date': datetime.now().isoformat(),
-        'cycles': CYCLES,
+        'metadata': {
+            'cycle': 256,
+            'experiment': 'h1h4_mechanism_validation',
+            'h1_mechanism': 'Energy Pooling',
+            'h4_mechanism': 'Spawn Throttling',
+            'paradigm': 'mechanism_validation',
+            'n_per_condition': 1,  # Deterministic single run
+            'cycles_per_experiment': CYCLES,
+            'timestamp': datetime.now().isoformat(),
+            'author': 'Aldrin Payopay <aldrin.gdf@gmail.com>',
+            'repository': 'https://github.com/mrdirno/nested-resonance-memory-archive'
+        },
         'conditions': results,
-        'synergy_analysis': synergy_analysis,
-        'optimization_applied': True,
-        'optimization_details': {
-            'method': 'batched_psutil_sampling',
-            'description': 'Sample once per cycle, share among all agents',
-            'expected_speedup': '90× call reduction',
-            'reality_grounding': 'maintained (3000 samples per condition)'
-        }
+        'synergy_analysis': synergy_analysis
     }
 
     RESULTS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(RESULTS_FILE, 'w') as f:
         json.dump(output, f, indent=2)
 
-    print(f"\nResults saved to: {RESULTS_FILE}")
-    print(f"Experiment complete: {datetime.now().isoformat()}")
+    print(f"Results saved: {RESULTS_FILE}")
+    print("=" * 70)
+    print(f"End time: {datetime.now().isoformat()}")
+    print("=" * 70)
+
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
