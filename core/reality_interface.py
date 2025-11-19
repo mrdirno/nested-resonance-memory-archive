@@ -118,7 +118,7 @@ class RealityInterface:
             raise DatabaseError(f"Failed to initialize database: {e}")
 
     @contextmanager
-    def db_connection(self, timeout: float = 5.0) -> Generator[sqlite3.Connection, None, None]:
+    def db_connection(self, timeout: float = 60.0) -> Generator[sqlite3.Connection, None, None]:
         """
         Context manager for database connections.
         Ensures proper connection handling and cleanup.
@@ -231,7 +231,7 @@ class RealityInterface:
                     metrics["process_count"]
                 ))
                 conn.commit()
-        except sqlite3.Error as e:
+        except (sqlite3.Error, DatabaseError) as e:
             # Non-critical error, log but don't raise
             print(f"Warning: Failed to persist metrics: {e}")
 
@@ -330,7 +330,7 @@ class RealityInterface:
                     str(metrics)
                 ))
                 conn.commit()
-        except sqlite3.Error as e:
+        except (sqlite3.Error, DatabaseError) as e:
             print(f"Warning: Failed to record validation: {e}")
 
     def track_resource_usage(
@@ -368,7 +368,7 @@ class RealityInterface:
                     status
                 ))
                 conn.commit()
-        except sqlite3.Error as e:
+        except (sqlite3.Error, DatabaseError) as e:
             print(f"Warning: Failed to track resource usage: {e}")
 
     def check_file_exists(self, file_path: str) -> bool:
