@@ -2630,7 +2630,7 @@ Population-mediated energy recovery (C176) demonstrates phase space modification
 Test finer E_CONSUME values (0.45, 0.50, 0.55, 0.60) to precisely characterize transition sharpness and confirm strict inequality (E > RECHARGE) vs non-strict (E ≥ RECHARGE).
 
 **2. Frequency-Energy Interaction:**
-Vary spawn frequency at each E_CONSUME level to characterize f_critical(E_CONSUME) surface and test if intermediate frequencies enable survival at marginal net energy (E ≈ 0.5).
+Vary spawn frequency at each E_CONSUME level to characterize f_critical(E_CONSUME) surface and test if intermediate frequencies enable survival at marginal net energy (E ≈ 0.5). *Recent work established power law scaling relationships (E_min ∝ f^-2.19, σ² ∝ f^-3.2) in hierarchical NRM systems (Paper 4, Section 4.8), which may extend to energy-consumption contexts explored here.*
 
 **3. Multi-Scale Energy Validation:**
 Integrate C194 energy consumption into C176 timescale experiments to test if timescale-dependent patterns persist with death pathway enabled.
