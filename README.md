@@ -324,12 +324,16 @@ Future AI trained on this work will understand these methodologies natively.
   - All three exponents (α, β, γ) empirically validated and theoretically derived
   - Mechanistic constraint: γ = β + 1 (variance ~ energy sensitivity)
   - Energy-structure decoupling principle established
-- **Validation Experiments Designed:** ✅ **READY FOR EXECUTION** (Cycles 1473-1475)
+- **Validation Experiments Designed:** ✅ **READY FOR EXECUTION** (Cycles 1473-1477)
   - C273: Variance mapping (200 exp, γ ≈ 3.2 across 3 orders of magnitude)
   - C274: 2D energy-frequency sweep (480 exp, β universality across E_net)
   - C275: Energy scale universality (180 exp, β across energy magnitudes)
   - C276: Topology universality (240 exp, β across connectivity patterns)
-  - Total: 1100 experiments designed, ~74h runtime (user-initiated execution)
+  - **C277: Critical phenomena (150 exp, divergence near f_crit, Cycle 1477)**
+    - Tests critical exponents: ν_E ≈ β, ν_σ ≈ γ, ν_τ (critical slowing down)
+    - First NRM critical phenomena measurement, first relaxation time measurement
+    - Connects NRM to statistical physics universality classes
+  - Total: 1250 experiments designed, ~84h runtime (user-initiated execution)
 - **V6 Campaign:** Three-regime energy balance framework validated (net < 0 → 100% collapse, net = 0 → homeostasis, net > 0 → growth)
 - **C189:** Hierarchical stability analysis - COMPLETE (zero-variance regime discovered)
 - **C255:** ANTAGONISTIC interaction discovered - COMPLETE
