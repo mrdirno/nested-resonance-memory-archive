@@ -39,11 +39,12 @@ from itertools import product
 
 # Import from existing modules
 sys.path.append(str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "fractal"))
 
 from core.reality_interface import RealityInterface
 from bridge.transcendental_bridge import TranscendentalBridge
-from code.fractal.agent import FractalAgent
-from code.fractal.composition import CompositionEngine
+from fractal.fractal_agent import FractalAgent
+from fractal.fractal_swarm import CompositionEngine
 
 # Experimental parameters (fixed)
 MAX_AGENTS = 100
@@ -101,11 +102,14 @@ def run_condition(condition: ParameterCondition) -> Dict:
     composition_engine = CompositionEngine(resonance_threshold=RESONANCE_THRESHOLD)
 
     # Create root agent
+    # V2 Signature: agent_id, bridge, initial_reality, parent_id, depth, max_depth, reality, initial_energy
     root = FractalAgent(
         agent_id="root",
+        bridge=bridge,
+        initial_reality=reality.get_system_metrics(),
         depth=0,
-        energy=INITIAL_ENERGY,
-        phase=bridge.reality_to_phase(reality.get_system_metrics())
+        initial_energy=INITIAL_ENERGY,
+        reality=reality
     )
 
     # Agent list
@@ -119,12 +123,17 @@ def run_condition(condition: ParameterCondition) -> Dict:
 
         # Agent evolution
         for agent in agents:
-            # Note: FractalAgent.evolve() takes delta_time only, not phase
+            # V2 evolve takes delta_time
             agent.evolve(delta_time=1.0)
 
         # H1: Energy Pooling (if enabled)
         if condition.h1_enabled:
-            cluster_events = composition_engine.detect_clusters(agents)
+            # V2 detect_clusters returns list of ClusterEvent, but engine.clusters is updated state
+            # We need to manually trigger detection to update state
+            composition_engine.detect_clusters(agents)
+            
+            # Access clusters from engine state
+            # V2 CompositionEngine.clusters is Dict[str, Set[str]] (cluster_id -> agent_ids)
             for cluster_id, member_ids in composition_engine.clusters.items():
                 cluster_agents = [a for a in agents if a.agent_id in member_ids]
                 if len(cluster_agents) > 1:
@@ -132,6 +141,7 @@ def run_condition(condition: ParameterCondition) -> Dict:
                     shared_energy = total_energy * condition.pooling_rate
                     per_agent_share = shared_energy / len(cluster_agents)
                     for agent in cluster_agents:
+                        # Update energy (V2 agent.energy is direct attribute)
                         agent.energy = min(agent.energy + per_agent_share, 200.0)
 
         # H2: Reality Sources (if enabled)
@@ -147,14 +157,18 @@ def run_condition(condition: ParameterCondition) -> Dict:
         for agent in list(agents):
             if agent.energy >= 10.0 and agent.depth < DEPTH_LIMIT and len(agents) < MAX_AGENTS:
                 child_id = f"{agent.agent_id}_child_{cycle}"
-                child_phase = bridge.reality_to_phase(reality.get_system_metrics())
+                
+                # V2 Manual Spawning to match experiment logic (fixed cost vs fraction)
                 child = FractalAgent(
                     agent_id=child_id,
+                    bridge=bridge,
+                    initial_reality=reality.get_system_metrics(),
+                    parent_id=agent.agent_id,
                     depth=agent.depth + 1,
-                    energy=10.0,
-                    phase=child_phase,
-                    parent=agent
+                    initial_energy=10.0,
+                    reality=reality
                 )
+                
                 agents.append(child)
                 agent.children.append(child)
                 agent.energy -= 10.0
