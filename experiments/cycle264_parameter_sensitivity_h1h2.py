@@ -30,11 +30,13 @@ License: GPL-3.0
 
 import sys
 import json
+import time
+import multiprocessing
 import numpy as np
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Tuple
-from dataclasses import dataclass
+from typing import Dict, List, Tuple, Any
+from dataclasses import dataclass, asdict
 from itertools import product
 
 # Import from existing modules
@@ -88,21 +90,18 @@ class ParameterCondition:
             return f"H1×H2_p{self.pooling_rate:.2f}_s{self.sources_rate:.4f}"
 
 
-def run_condition(condition: ParameterCondition) -> Dict:
+def run_condition_worker(args: Tuple[ParameterCondition, int]) -> Dict[str, Any]:
     """
-    Run single parameter condition for 3000 cycles.
-
-    Returns population history and final mean.
+    Worker function for parallel execution.
     """
-    # Initialize reality interface and bridge
+    condition, index = args
+    
+    # Initialize reality interface and bridge locally for each process
     reality = RealityInterface()
     bridge = TranscendentalBridge()
-
-    # Initialize composition engine
     composition_engine = CompositionEngine(resonance_threshold=RESONANCE_THRESHOLD)
 
     # Create root agent
-    # V2 Signature: agent_id, bridge, initial_reality, parent_id, depth, max_depth, reality, initial_energy
     root = FractalAgent(
         agent_id="root",
         bridge=bridge,
@@ -112,28 +111,26 @@ def run_condition(condition: ParameterCondition) -> Dict:
         reality=reality
     )
 
-    # Agent list
     agents = [root]
     population_history = []
+    
+    start_time = time.time()
 
     # Main simulation loop
     for cycle in range(CYCLES_PER_CONDITION):
-        # Record population
+        # OPTIMIZATION: Batch reality metrics once per cycle
+        current_metrics = reality.get_system_metrics()
+        
         population_history.append(len(agents))
 
         # Agent evolution
         for agent in agents:
-            # V2 evolve takes delta_time
-            agent.evolve(delta_time=1.0)
+            # Pass cached metrics to avoid per-agent I/O
+            agent.evolve(delta_time=1.0, cached_metrics=current_metrics)
 
         # H1: Energy Pooling (if enabled)
         if condition.h1_enabled:
-            # V2 detect_clusters returns list of ClusterEvent, but engine.clusters is updated state
-            # We need to manually trigger detection to update state
             composition_engine.detect_clusters(agents)
-            
-            # Access clusters from engine state
-            # V2 CompositionEngine.clusters is Dict[str, Set[str]] (cluster_id -> agent_ids)
             for cluster_id, member_ids in composition_engine.clusters.items():
                 cluster_agents = [a for a in agents if a.agent_id in member_ids]
                 if len(cluster_agents) > 1:
@@ -141,54 +138,47 @@ def run_condition(condition: ParameterCondition) -> Dict:
                     shared_energy = total_energy * condition.pooling_rate
                     per_agent_share = shared_energy / len(cluster_agents)
                     for agent in cluster_agents:
-                        # Update energy (V2 agent.energy is direct attribute)
                         agent.energy = min(agent.energy + per_agent_share, 200.0)
 
         # H2: Reality Sources (if enabled)
         if condition.h2_enabled:
+            # Use cached metrics for H2 calculation
+            available_capacity = (100 - current_metrics['cpu_percent']) + \
+                               (100 - current_metrics['memory_percent'])
+            bonus_energy = condition.sources_rate * available_capacity
+            
             for agent in agents:
-                extra_metrics = reality.get_system_metrics()
-                available_capacity = (100 - extra_metrics['cpu_percent']) + \
-                                   (100 - extra_metrics['memory_percent'])
-                bonus_energy = condition.sources_rate * available_capacity
                 agent.energy = min(agent.energy + bonus_energy, 200.0)
 
         # Spawn new agents
         for agent in list(agents):
             if agent.energy >= 10.0 and agent.depth < DEPTH_LIMIT and len(agents) < MAX_AGENTS:
                 child_id = f"{agent.agent_id}_child_{cycle}"
-                
-                # V2 Manual Spawning to match experiment logic (fixed cost vs fraction)
                 child = FractalAgent(
                     agent_id=child_id,
                     bridge=bridge,
-                    initial_reality=reality.get_system_metrics(),
+                    initial_reality=current_metrics, # Use cached metrics
                     parent_id=agent.agent_id,
                     depth=agent.depth + 1,
                     initial_energy=10.0,
                     reality=reality
                 )
-                
                 agents.append(child)
                 agent.children.append(child)
                 agent.energy -= 10.0
-
-        # Remove dead agents
-        agents = [a for a in agents if a.energy > 0]
-
-    # Compute summary statistics
-    mean_population = float(np.mean(population_history))
-
+                
+    runtime = time.time() - start_time
+    
     return {
-        'mean_population': mean_population,
-        'population_history': population_history,
-        'final_population': len(agents),
-        'parameters': {
-            'pooling_rate': condition.pooling_rate,
-            'sources_rate': condition.sources_rate,
-            'h1_enabled': condition.h1_enabled,
-            'h2_enabled': condition.h2_enabled
-        }
+        "condition_name": condition.get_name(),
+        "pooling_rate": condition.pooling_rate,
+        "sources_rate": condition.sources_rate,
+        "h1_enabled": condition.h1_enabled,
+        "h2_enabled": condition.h2_enabled,
+        "final_population": len(agents),
+        "mean_population": float(np.mean(population_history)),
+        "population_std": float(np.std(population_history)),
+        "runtime_seconds": runtime
     }
 
 
@@ -289,12 +279,18 @@ def main():
     print()
 
     # Run all conditions
-    results = {}
-    for i, condition in enumerate(conditions, 1):
-        print(f"[{i:3d}/{len(conditions)}] Running {condition}...", end=" ")
-        result = run_condition(condition)
-        results[condition.get_name()] = result
-        print(f"μ={result['mean_population']:.2f}")
+    results = {} # This will store the results from parallel execution
+    worker_args = [(condition, i) for i, condition in enumerate(conditions)]
+    
+    # Use slightly fewer than max cores to leave room for system/V6
+    num_workers = max(1, multiprocessing.cpu_count() - 2)
+    
+    with multiprocessing.Pool(processes=num_workers) as pool:
+        # Use imap_unordered for responsiveness
+        for result in pool.imap_unordered(run_condition_worker, worker_args):
+            name = result["condition_name"]
+            print(f"Completed: {name} (Pop: {result['final_population']}, Time: {result['runtime_seconds']:.2f}s)")
+            results[name] = result
 
     # Analyze sensitivity
     print()
