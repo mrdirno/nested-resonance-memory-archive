@@ -1,0 +1,5 @@
+Metric,Run1,Run2,Difference,Match
+Mean Agents,1.8000,1.8000,0.0000,Yes
+Std Deviation,1.1353,1.1353,0.0000,Yes
+CV,0.6307,0.6307,0.0000,Yes
+Stability Score,0.6132,0.6132,0.0000,Yes

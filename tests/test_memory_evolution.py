@@ -92,6 +92,7 @@ def test_relationship_creation_and_retrieval():
     print(f"  ✓ Filtered by type: {len(resonance_rels)} RESONANCE relationship(s)")
 
     print("  ✅ PASSED: Relationship creation and retrieval")
+    return True
 
 
 def test_resonance_detection():
@@ -132,6 +133,7 @@ def test_resonance_detection():
     assert all(strength >= 0.5 for _, strength in resonant), "All should meet min strength"
 
     print("  ✅ PASSED: Resonance detection")
+    return True
 
 
 def test_composition_clusters():
@@ -195,6 +197,7 @@ def test_composition_clusters():
     assert len(clusters) > 0, "Should detect at least one cluster"
 
     print("  ✅ PASSED: Composition cluster detection")
+    return True
 
 
 def test_lifecycle_phases():
@@ -256,6 +259,7 @@ def test_lifecycle_phases():
         assert isinstance(phase, LifecyclePhase)
 
     print("  ✅ PASSED: Lifecycle phase determination")
+    return True
 
 
 def test_pattern_persistence():
@@ -304,6 +308,7 @@ def test_pattern_persistence():
     assert should_persist_bad == False, "Low-quality old pattern should not persist"
 
     print("  ✅ PASSED: Pattern persistence criteria")
+    return True
 
 
 def test_quality_scoring():
@@ -353,6 +358,7 @@ def test_quality_scoring():
     assert high_score > 0.5, "High-quality pattern should score > 50%"
 
     print("  ✅ PASSED: Quality scoring")
+    return True
 
 
 def test_temporal_encoding():
@@ -394,6 +400,7 @@ def test_temporal_encoding():
     assert encoded['metadata']['temporal_stewardship'] == True
 
     print("  ✅ PASSED: Temporal encoding")
+    return True
 
 
 def test_pattern_summary_generation():
@@ -434,6 +441,7 @@ def test_pattern_summary_generation():
     assert 'Pattern Breakdown' in summary
 
     print("  ✅ PASSED: Pattern summary generation")
+    return True
 
 
 def test_full_evolution_cycle():
@@ -483,6 +491,7 @@ def test_full_evolution_cycle():
 
     # All reality-grounded operations successful
     print("  ✅ PASSED: Full evolution cycle with reality grounding")
+    return True
 
 
 def main():

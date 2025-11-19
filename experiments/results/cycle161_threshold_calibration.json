@@ -1,0 +1,90 @@
+{
+  "cycle_id": 161,
+  "description": "Basin A Threshold Calibration",
+  "context": "Testing multiple thresholds after discovering avg_composition plateaus at 2.2-2.6",
+  "parameters": {
+    "frequency": 50,
+    "thresholds": [
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      5.0
+    ],
+    "seeds": [
+      42,
+      123,
+      456
+    ],
+    "cycles": 3000,
+    "agent_cap": 15
+  },
+  "experiments": [
+    {
+      "seed": 42,
+      "spawning_freq": 50,
+      "spawn_interval_cycles": 2,
+      "expected_spawns": 1500,
+      "actual_spawns": 1499,
+      "spawn_accuracy_pct": 99.93333333333332,
+      "cycles": 3000,
+      "final_agent_count": 0,
+      "avg_composition_events": 2.15,
+      "max_composition_events": 6,
+      "avg_agent_count": 2.159666666666667,
+      "basin_classifications": {
+        "threshold_1.5": "A",
+        "threshold_2.0": "A",
+        "threshold_2.5": "B",
+        "threshold_3.0": "B",
+        "threshold_5.0": "B"
+      },
+      "elapsed_seconds": 180.56748580932617,
+      "cycles_per_second": 16.61428682220181
+    },
+    {
+      "seed": 123,
+      "spawning_freq": 50,
+      "spawn_interval_cycles": 2,
+      "expected_spawns": 1500,
+      "actual_spawns": 1499,
+      "spawn_accuracy_pct": 99.93333333333332,
+      "cycles": 3000,
+      "final_agent_count": 2,
+      "avg_composition_events": 2.2,
+      "max_composition_events": 6,
+      "avg_agent_count": 2.1856666666666666,
+      "basin_classifications": {
+        "threshold_1.5": "A",
+        "threshold_2.0": "A",
+        "threshold_2.5": "B",
+        "threshold_3.0": "B",
+        "threshold_5.0": "B"
+      },
+      "elapsed_seconds": 185.630934715271,
+      "cycles_per_second": 16.16109946653845
+    },
+    {
+      "seed": 456,
+      "spawning_freq": 50,
+      "spawn_interval_cycles": 2,
+      "expected_spawns": 1500,
+      "actual_spawns": 1499,
+      "spawn_accuracy_pct": 99.93333333333332,
+      "cycles": 3000,
+      "final_agent_count": 2,
+      "avg_composition_events": 2.54,
+      "max_composition_events": 7,
+      "avg_agent_count": 2.359,
+      "basin_classifications": {
+        "threshold_1.5": "A",
+        "threshold_2.0": "A",
+        "threshold_2.5": "A",
+        "threshold_3.0": "B",
+        "threshold_5.0": "B"
+      },
+      "elapsed_seconds": 182.5097472667694,
+      "cycles_per_second": 16.43747824391529
+    }
+  ]
+}

@@ -1,0 +1,219 @@
+/opt/homebrew/lib/python3.13/site-packages/scipy/stats/_stats_py.py:1243: RuntimeWarning: divide by zero encountered in divide
+  var *= np.divide(n, n-ddof)  # to avoid error on division by zero
+/opt/homebrew/lib/python3.13/site-packages/scipy/stats/_stats_py.py:1243: RuntimeWarning: invalid value encountered in scalar multiply
+  var *= np.divide(n, n-ddof)  # to avoid error on division by zero
+/Volumes/dual/DUALITY-ZERO-V2/analysis/c188_energy_transport_analysis.py:170: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
+  f_stat, p_anova = stats.f_oneway(sf_rates, rand_rates, latt_rates)
+/Volumes/dual/DUALITY-ZERO-V2/analysis/c188_energy_transport_analysis.py:173: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
+  _, p_sf_rand = stats.mannwhitneyu(sf_rates, rand_rates, alternative='greater')
+/Volumes/dual/DUALITY-ZERO-V2/analysis/c188_energy_transport_analysis.py:175: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
+  _, p_sf_latt = stats.mannwhitneyu(sf_rates, latt_rates, alternative='greater')
+/Volumes/dual/DUALITY-ZERO-V2/analysis/c188_energy_transport_analysis.py:247: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
+  _, p_sf_rand = stats.mannwhitneyu(sf_gini, rand_gini, alternative='greater')
+/Volumes/dual/DUALITY-ZERO-V2/analysis/c188_energy_transport_analysis.py:249: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
+  _, p_sf_latt = stats.mannwhitneyu(sf_gini, latt_gini, alternative='greater')
+/Volumes/dual/DUALITY-ZERO-V2/analysis/c188_energy_transport_analysis.py:260: RuntimeWarning: invalid value encountered in scalar divide
+  d_rand_latt = (mean_rand - mean_latt) / np.sqrt((rand_gini.std()**2 + latt_gini.std()**2) / 2)
+================================================================================
+C188 ENERGY TRANSPORT ANALYSIS
+================================================================================
+Loading results from: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/c188_energy_transport.json
+  Loaded 300 experiments
+
+================================================================================
+H3.1: HUB ACCUMULATION TEST
+================================================================================
+
+Transport rate = 0.05:
+  Total experiments: 60
+  Valid hub/periph ratios: 1
+  Mean hub rate: 4.393056
+  Mean periph rate: 0.001389
+  Mean ratio (valid only): 50.000
+  Median ratio (valid only): 50.000
+
+Statistical Test:
+  t-statistic: nan
+  p-value: nan
+  Cohen's d: nan
+  Significance (3σ): NO
+  Significance (5σ): NO
+  Effect size: SMALL
+
+MOG Falsification:
+  3σ criterion: FAIL
+  5σ criterion: FAIL
+
+================================================================================
+H3.2: TOPOLOGY RANKING TEST
+================================================================================
+
+Mean spawn rates by topology × transport:
+  topology  transport_rate     mean      std  count
+   lattice            0.00 0.007112 0.000212     20
+   lattice            0.01 0.007112 0.000212     20
+   lattice            0.03 0.007112 0.000213     20
+   lattice            0.05 0.007112 0.000213     20
+   lattice            0.10 0.007112 0.000213     20
+    random            0.00 0.007114 0.000212     20
+    random            0.01 0.007113 0.000213     20
+    random            0.03 0.007111 0.000213     20
+    random            0.05 0.007112 0.000213     20
+    random            0.10 0.007112 0.000212     20
+scale_free            0.00 0.007118 0.000214     20
+scale_free            0.01 0.007112 0.000213     20
+scale_free            0.03 0.007112 0.000213     20
+scale_free            0.05 0.007112 0.000213     20
+scale_free            0.10 0.007113 0.000212     20
+
+Transport rate = 0.01:
+  Mean spawn rates: SF=nan, Rand=0.007113, Latt=0.007112
+  ANOVA F=nan, p=nan
+  Pairwise: SF>Rand p=nan, Rand>Latt p=5.000000e-01
+  Monotonic ordering: False
+  3σ criterion: FAIL
+  5σ criterion: FAIL
+
+Transport rate = 0.03:
+  Mean spawn rates: SF=nan, Rand=0.007111, Latt=0.007112
+  ANOVA F=nan, p=nan
+  Pairwise: SF>Rand p=nan, Rand>Latt p=5.215895e-01
+  Monotonic ordering: False
+  3σ criterion: FAIL
+  5σ criterion: FAIL
+
+Transport rate = 0.05:
+  Mean spawn rates: SF=nan, Rand=0.007112, Latt=0.007112
+  ANOVA F=nan, p=nan
+  Pairwise: SF>Rand p=nan, Rand>Latt p=5.054001e-01
+  Monotonic ordering: False
+  3σ criterion: FAIL
+  5σ criterion: FAIL
+
+Transport rate = 0.1:
+  Mean spawn rates: SF=nan, Rand=0.007112, Latt=0.007112
+  ANOVA F=nan, p=nan
+  Pairwise: SF>Rand p=nan, Rand>Latt p=4.838097e-01
+  Monotonic ordering: False
+  3σ criterion: FAIL
+  5σ criterion: FAIL
+
+================================================================================
+H3.3: GINI SCALING TEST
+================================================================================
+
+Mean Gini coefficients by topology × transport:
+  topology  transport_rate     mean      std  count
+   lattice            0.00 0.000000 0.000000     20
+   lattice            0.01 0.000000 0.000000     20
+   lattice            0.03 0.056780 0.005156     20
+   lattice            0.05 0.091639 0.006484     20
+   lattice            0.10 0.138290 0.008153     20
+    random            0.00 0.000000 0.000000     20
+    random            0.01 0.000000 0.000000     20
+    random            0.03 0.079325 0.007444     20
+    random            0.05 0.129328 0.008269     20
+    random            0.10 0.187818 0.011211     20
+scale_free            0.00 0.000000 0.000000     20
+scale_free            0.01 0.000000 0.000000     20
+scale_free            0.03 0.103673 0.007626     20
+scale_free            0.05 0.165791 0.008693     20
+scale_free            0.10 0.235028 0.006655     20
+
+Transport rate = 0.01:
+  Mean Gini: SF=nan, Rand=0.0000, Latt=0.0000
+  Pairwise: SF>Rand p=nan (d=nan)
+            Rand>Latt p=1.000000e+00 (d=nan)
+  Monotonic ordering: False
+  3σ criterion: FAIL
+  5σ criterion: FAIL
+
+Transport rate = 0.03:
+  Mean Gini: SF=nan, Rand=0.0793, Latt=0.0568
+  Pairwise: SF>Rand p=nan (d=nan)
+            Rand>Latt p=3.397808e-08 (d=3.521)
+  Monotonic ordering: False
+  3σ criterion: FAIL
+  5σ criterion: FAIL
+
+Transport rate = 0.05:
+  Mean Gini: SF=nan, Rand=0.1293, Latt=0.0916
+  Pairwise: SF>Rand p=nan (d=nan)
+            Rand>Latt p=3.397808e-08 (d=5.072)
+  Monotonic ordering: False
+  3σ criterion: FAIL
+  5σ criterion: FAIL
+
+Transport rate = 0.1:
+  Mean Gini: SF=nan, Rand=0.1878, Latt=0.1383
+  Pairwise: SF>Rand p=nan (d=nan)
+            Rand>Latt p=3.397808e-08 (d=5.053)
+  Monotonic ordering: False
+  3σ criterion: FAIL
+  5σ criterion: FAIL
+
+================================================================================
+MOG FALSIFICATION GAUNTLET
+================================================================================
+
+H3.1: Hub Accumulation
+  Newtonian (Predictive): FAIL
+    Prediction: ratio >= 1.25
+    Observed: 50.000
+    Statistical: p=nan, d=nan
+  Maxwellian (Unification): PASS
+    Unifies C187 (topology-invariant) + C188 (hub advantage via transport)
+  Einsteinian (Limits): PASS (transport=0 shows Gini=0, baseline OK)
+
+H3.2: Topology Ranking
+  Newtonian (Predictive): FAIL
+    Passed at 0/4 transport rates (5σ)
+  Maxwellian (Unification): FAIL
+    Monotonic ordering: False
+  Einsteinian (Limits): PASS (transport=0 shows topology-invariance)
+
+H3.3: Gini Scaling
+  Newtonian (Predictive): FAIL
+    Passed at 0/4 transport rates (5σ)
+  Maxwellian (Unification): FAIL
+    Monotonic at all transport > 0: False
+  Einsteinian (Limits): PASS (transport=0 shows Gini=0)
+
+================================================================================
+MOG FALSIFICATION SUMMARY
+================================================================================
+  Hypotheses tested: 3
+  Passed (5σ): 0
+  Failed/Inconclusive: 3
+  Falsification rate: 100.0%
+  Target rate: 70-80%
+  Status: OUT OF TARGET
+Traceback (most recent call last):
+  File "/Volumes/dual/DUALITY-ZERO-V2/analysis/c188_energy_transport_analysis.py", line 459, in <module>
+    main()
+    ~~~~^^
+  File "/Volumes/dual/DUALITY-ZERO-V2/analysis/c188_energy_transport_analysis.py", line 440, in main
+    json.dump({
+    ~~~~~~~~~^^
+        'h31': h31_result,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        'mog_falsification': mog_result
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }, f, indent=2)
+    ^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 179, in dump
+    for chunk in iterable:
+                 ^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 433, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 407, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 407, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 440, in _iterencode
+    o = _default(o)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type bool is not JSON serializable

@@ -1,0 +1,144 @@
+{
+  "experiment": "cycle122_basin_robustness",
+  "thresholds": [
+    400,
+    600
+  ],
+  "parameter_combinations": [
+    {
+      "mult": 0.5,
+      "spread": 0.1
+    },
+    {
+      "mult": 0.5,
+      "spread": 0.3
+    },
+    {
+      "mult": 1.5,
+      "spread": 0.1
+    },
+    {
+      "mult": 1.5,
+      "spread": 0.3
+    }
+  ],
+  "cycles": 5000,
+  "results": [
+    {
+      "threshold": 400,
+      "mult": 0.5,
+      "spread": 0.1,
+      "cycles": 5000,
+      "duration": 35.38122010231018,
+      "final_dominant": "(np.float64(6.188938), np.float64(6.171029), np.float64(6.035662))",
+      "final_dominant_tuple": [
+        6.188938,
+        6.171029,
+        6.035662
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 400,
+      "mult": 0.5,
+      "spread": 0.3,
+      "cycles": 5000,
+      "duration": 35.22489905357361,
+      "final_dominant": "(np.float64(6.220353), np.float64(6.275283), np.float64(6.281831))",
+      "final_dominant_tuple": [
+        6.220353,
+        6.275283,
+        6.281831
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 400,
+      "mult": 1.5,
+      "spread": 0.1,
+      "cycles": 5000,
+      "duration": 35.47955918312073,
+      "final_dominant": "(np.float64(6.157522), np.float64(6.174386), np.float64(6.222217))",
+      "final_dominant_tuple": [
+        6.157522,
+        6.174386,
+        6.222217
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 400,
+      "mult": 1.5,
+      "spread": 0.3,
+      "cycles": 5000,
+      "duration": 48.27441191673279,
+      "final_dominant": "(np.float64(6.251769), np.float64(6.121846), np.float64(6.236088))",
+      "final_dominant_tuple": [
+        6.251769,
+        6.121846,
+        6.236088
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 600,
+      "mult": 0.5,
+      "spread": 0.1,
+      "cycles": 5000,
+      "duration": 44.32316279411316,
+      "final_dominant": "(np.float64(6.188938), np.float64(6.171029), np.float64(6.035662))",
+      "final_dominant_tuple": [
+        6.188938,
+        6.171029,
+        6.035662
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 600,
+      "mult": 0.5,
+      "spread": 0.3,
+      "cycles": 5000,
+      "duration": 41.54891395568848,
+      "final_dominant": "(np.float64(6.251769), np.float64(6.196886), np.float64(6.165681))",
+      "final_dominant_tuple": [
+        6.251769,
+        6.196886,
+        6.165681
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 600,
+      "mult": 1.5,
+      "spread": 0.1,
+      "cycles": 5000,
+      "duration": 41.59449601173401,
+      "final_dominant": "(np.float64(6.157522), np.float64(6.174386), np.float64(6.222217))",
+      "final_dominant_tuple": [
+        6.157522,
+        6.174386,
+        6.222217
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 600,
+      "mult": 1.5,
+      "spread": 0.3,
+      "cycles": 5000,
+      "duration": 41.53501796722412,
+      "final_dominant": "(np.float64(6.251769), np.float64(5.960575), np.float64(6.169056))",
+      "final_dominant_tuple": [
+        6.251769,
+        5.960575,
+        6.169056
+      ],
+      "final_fraction": 1.0
+    }
+  ],
+  "robustness_type": "PARAMETER-DEPENDENT",
+  "insight_type": "parameter_dependent",
+  "duration": 323.96949005126953,
+  "timestamp": 1761167419.241516
+}

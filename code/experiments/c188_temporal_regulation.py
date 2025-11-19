@@ -425,7 +425,7 @@ def run_experiment(seed: int, memory_condition: str, output_path: Path, db_path:
 
     print(f"  [{exp_num:2d}/{total_exps}] {memory_condition:8s} (τ={tau_str}), Seed {seed:3d}: ", end='', flush=True)
 
-    clear_bridge_database(db_path)
+    clear_bridge_database(db_path / "bridge.db")
     system = MemoryRegulatedPopulation(seed, memory_condition, db_path)
 
     start_time = time.time()
@@ -485,7 +485,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / "c188_temporal_regulation.json"
 
-    db_path = Path(__file__).parent.parent / "bridge" / "bridge.db"
+    db_path = Path(__file__).parent.parent / "bridge"
 
     results = []
     start_time_total = time.time()

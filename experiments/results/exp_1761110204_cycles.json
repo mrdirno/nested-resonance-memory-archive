@@ -1,0 +1,182 @@
+[
+  {
+    "cycle": 1,
+    "timestamp": 1761110204.6538408,
+    "duration": 0.27926087379455566,
+    "decisions": 1,
+    "patterns_discovered": 0,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 2,
+    "timestamp": 1761110204.9334972,
+    "duration": 0.2796511650085449,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 3,
+    "timestamp": 1761110205.218286,
+    "duration": 0.28478503227233887,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 4,
+    "timestamp": 1761110205.4846342,
+    "duration": 0.2663443088531494,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 1,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 5,
+    "timestamp": 1761110205.7596428,
+    "duration": 0.27500486373901367,
+    "decisions": 1,
+    "patterns_discovered": 0,
+    "emergent_patterns": 1,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 6,
+    "timestamp": 1761110206.03751,
+    "duration": 0.2778630256652832,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 7,
+    "timestamp": 1761110206.30128,
+    "duration": 0.2637660503387451,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 8,
+    "timestamp": 1761110206.577795,
+    "duration": 0.27651095390319824,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 9,
+    "timestamp": 1761110206.868632,
+    "duration": 0.2908332347869873,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 1,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 10,
+    "timestamp": 1761110207.146285,
+    "duration": 0.2776491641998291,
+    "decisions": 1,
+    "patterns_discovered": 0,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 11,
+    "timestamp": 1761110207.421781,
+    "duration": 0.27549219131469727,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 12,
+    "timestamp": 1761110207.703707,
+    "duration": 0.2819218635559082,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 13,
+    "timestamp": 1761110207.983266,
+    "duration": 0.2795541286468506,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 1,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 14,
+    "timestamp": 1761110208.256833,
+    "duration": 0.2735631465911865,
+    "decisions": 1,
+    "patterns_discovered": 0,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 15,
+    "timestamp": 1761110208.527274,
+    "duration": 0.27043676376342773,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 16,
+    "timestamp": 1761110208.811125,
+    "duration": 0.2838468551635742,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 17,
+    "timestamp": 1761110209.102456,
+    "duration": 0.29132604598999023,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 1,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 18,
+    "timestamp": 1761110209.370573,
+    "duration": 0.2681131362915039,
+    "decisions": 1,
+    "patterns_discovered": 0,
+    "emergent_patterns": 1,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 19,
+    "timestamp": 1761110209.644567,
+    "duration": 0.27399110794067383,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  },
+  {
+    "cycle": 20,
+    "timestamp": 1761110209.914677,
+    "duration": 0.27010607719421387,
+    "decisions": 1,
+    "patterns_discovered": 1,
+    "emergent_patterns": 2,
+    "reality_score": 1.0
+  }
+]

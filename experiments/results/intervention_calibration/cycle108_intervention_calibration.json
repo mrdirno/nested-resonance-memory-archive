@@ -1,0 +1,277 @@
+{
+  "experiment": "cycle108_intervention_calibration",
+  "test_triplets": [
+    [
+      1.0,
+      0.2,
+      500
+    ],
+    [
+      0.8,
+      0.4,
+      400
+    ],
+    [
+      1.2,
+      0.3,
+      600
+    ]
+  ],
+  "intervention_configs": [
+    {
+      "name": "none",
+      "agent_replacement_pct": 0.0,
+      "clear_memory": false,
+      "pattern_multiplier": 1.0,
+      "pattern_spread": 0.0,
+      "pattern_count": 0
+    },
+    {
+      "name": "weak",
+      "agent_replacement_pct": 0.0,
+      "clear_memory": false,
+      "pattern_multiplier": 1.5,
+      "pattern_spread": 0.4,
+      "pattern_count": 10
+    },
+    {
+      "name": "medium-25",
+      "agent_replacement_pct": 0.25,
+      "clear_memory": false,
+      "pattern_multiplier": 1.5,
+      "pattern_spread": 0.4,
+      "pattern_count": 15
+    },
+    {
+      "name": "medium-50",
+      "agent_replacement_pct": 0.5,
+      "clear_memory": false,
+      "pattern_multiplier": 1.5,
+      "pattern_spread": 0.5,
+      "pattern_count": 20
+    },
+    {
+      "name": "strong-75",
+      "agent_replacement_pct": 0.75,
+      "clear_memory": false,
+      "pattern_multiplier": 1.8,
+      "pattern_spread": 0.5,
+      "pattern_count": 25
+    },
+    {
+      "name": "extreme",
+      "agent_replacement_pct": 1.0,
+      "clear_memory": true,
+      "pattern_multiplier": 2.0,
+      "pattern_spread": 0.6,
+      "pattern_count": 30
+    }
+  ],
+  "cycles": 500,
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_name": "none",
+      "agent_replacement_pct": 0.0,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_name": "weak",
+      "agent_replacement_pct": 0.0,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_name": "medium-25",
+      "agent_replacement_pct": 0.25,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 0.614
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_name": "medium-50",
+      "agent_replacement_pct": 0.5,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 0.614
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_name": "strong-75",
+      "agent_replacement_pct": 0.75,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+      "final_fraction": 0.564
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_name": "extreme",
+      "agent_replacement_pct": 1.0,
+      "clear_memory": true,
+      "final_dominant": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+      "final_fraction": 0.514
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_name": "none",
+      "agent_replacement_pct": 0.0,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_name": "weak",
+      "agent_replacement_pct": 0.0,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_name": "medium-25",
+      "agent_replacement_pct": 0.25,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(5.717699), np.float64(6.036147), np.float64(5.902653))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_name": "medium-50",
+      "agent_replacement_pct": 0.5,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(5.717699), np.float64(6.036147), np.float64(5.902653))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_name": "strong-75",
+      "agent_replacement_pct": 0.75,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+      "final_fraction": 0.564
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_name": "extreme",
+      "agent_replacement_pct": 1.0,
+      "clear_memory": true,
+      "final_dominant": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+      "final_fraction": 0.514
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_name": "none",
+      "agent_replacement_pct": 0.0,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_name": "weak",
+      "agent_replacement_pct": 0.0,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_name": "medium-25",
+      "agent_replacement_pct": 0.25,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_name": "medium-50",
+      "agent_replacement_pct": 0.5,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(5.749115), np.float64(5.982554), np.float64(6.248414))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_name": "strong-75",
+      "agent_replacement_pct": 0.75,
+      "clear_memory": false,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_name": "extreme",
+      "agent_replacement_pct": 1.0,
+      "clear_memory": true,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    }
+  ],
+  "analysis": {
+    "successful_runs": 18,
+    "transitions_by_strength": {
+      "none": 0,
+      "weak": 0,
+      "medium-25": 2,
+      "medium-50": 3,
+      "strong-75": 2,
+      "extreme": 2
+    },
+    "transition_rates": {
+      "none": 0.0,
+      "weak": 0.0,
+      "medium-25": 66.66666666666666,
+      "medium-50": 100.0,
+      "strong-75": 66.66666666666666,
+      "extreme": 66.66666666666666
+    },
+    "dose_response_pattern": "threshold_at_0pct",
+    "c107_paradox_status": "PARADOX PERSISTS: EXTREME (66.7%) < STRONG (100.0%)"
+  },
+  "insight_65_discovered": true,
+  "duration": 67.2099359035492,
+  "timestamp": 1761157233.375623
+}

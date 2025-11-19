@@ -1,0 +1,7 @@
+Metric,Run 1,Run 2,Difference
+Mean Agents,1.80,1.80,0.00
+Std Agents,1.14,1.14,0.00
+Min Agents,0.00,0.00,0.00
+Max Agents,3.00,3.00,0.00
+Final Patterns,173.00,142.00,31.00
+Pattern Rate,1.73,1.42,0.31

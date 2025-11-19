@@ -1,0 +1,151 @@
+================================================================================
+CYCLE 176 ABLATION STUDY ANALYSIS
+================================================================================
+
+Total Experiments: 60
+Frequency: 2.5%
+Seeds: [42, 123, 456, 789, 101, 202, 303, 404, 505, 606]
+Cycles per experiment: N/A
+Duration: 32.73 minutes
+
+
+## Ablation Study Results Summary
+
+| Condition | n | Pop Mean | Pop CV | Comp Mean | Basin A % | Homeostatic |
+|-----------|---|----------|--------|-----------|-----------|-------------|
+| BASELINE     | 10 |     0.49 |    0.0% |      1.27 |     0.0% | ✅ YES       |
+| NO_DEATH     | 10 |    13.07 |    9.3% |      0.00 |     0.0% | ✅ YES       |
+| NO_BIRTH     | 10 |     1.02 |    0.0% |      0.27 |     0.0% | ✅ YES       |
+| SMALL_WINDOW | 10 |     0.49 |    0.0% |      0.32 |     0.0% | ✅ YES       |
+| DETERMINISTIC | 10 |     0.49 |    0.0% |      1.27 |     0.0% | ✅ YES       |
+| ALT_BASIS    | 10 |     0.49 |    0.0% |      1.27 |     0.0% | ✅ YES       |
+
+
+## Hypothesis Test: Birth-Death Coupling Critical for Homeostasis
+================================================================================
+**Verdict:** REJECTED
+
+**Interpretation:**
+Birth-death coupling is NOT necessary for homeostasis. NO_DEATH homeostatic: True. NO_BIRTH homeostatic: True. Other mechanisms may contribute to population regulation.
+
+**Conditions Tested:**
+  - BASELINE: ✅ Homeostatic
+  - NO_DEATH: ✅ Homeostatic
+  - NO_BIRTH: ✅ Homeostatic
+
+
+## Detailed Condition Results
+================================================================================
+
+### BASELINE
+--------------------------------------------------------------------------------
+Classification: HOMEOSTATIC
+Experiments: n=10
+
+**Population Statistics:**
+  Mean: 0.49 ± 0.00 agents
+  CV: 0.0%
+  Range: [0.5, 0.5]
+
+**Composition Statistics:**
+  Mean: 1.27 ± 0.00 events/window
+  CV: 0.0%
+
+**Basin Classification:**
+  Basin A: 0/10 (0.0%)
+  Basin B: 10/10 (100.0%)
+
+
+### NO_DEATH
+--------------------------------------------------------------------------------
+Classification: HOMEOSTATIC
+Experiments: n=10
+
+**Population Statistics:**
+  Mean: 13.07 ± 1.22 agents
+  CV: 9.3%
+  Range: [11.8, 15.3]
+
+**Composition Statistics:**
+  Mean: 0.00 ± 0.00 events/window
+  CV: 999.0%
+
+**Basin Classification:**
+  Basin A: 0/10 (0.0%)
+  Basin B: 10/10 (100.0%)
+
+
+### NO_BIRTH
+--------------------------------------------------------------------------------
+Classification: HOMEOSTATIC
+Experiments: n=10
+
+**Population Statistics:**
+  Mean: 1.02 ± 0.00 agents
+  CV: 0.0%
+  Range: [1.0, 1.0]
+
+**Composition Statistics:**
+  Mean: 0.27 ± 0.00 events/window
+  CV: 0.0%
+
+**Basin Classification:**
+  Basin A: 0/10 (0.0%)
+  Basin B: 10/10 (100.0%)
+
+
+### SMALL_WINDOW
+--------------------------------------------------------------------------------
+Classification: HOMEOSTATIC
+Experiments: n=10
+
+**Population Statistics:**
+  Mean: 0.49 ± 0.00 agents
+  CV: 0.0%
+  Range: [0.5, 0.5]
+
+**Composition Statistics:**
+  Mean: 0.32 ± 0.00 events/window
+  CV: 0.0%
+
+**Basin Classification:**
+  Basin A: 0/10 (0.0%)
+  Basin B: 10/10 (100.0%)
+
+
+### DETERMINISTIC
+--------------------------------------------------------------------------------
+Classification: HOMEOSTATIC
+Experiments: n=10
+
+**Population Statistics:**
+  Mean: 0.49 ± 0.00 agents
+  CV: 0.0%
+  Range: [0.5, 0.5]
+
+**Composition Statistics:**
+  Mean: 1.27 ± 0.00 events/window
+  CV: 0.0%
+
+**Basin Classification:**
+  Basin A: 0/10 (0.0%)
+  Basin B: 10/10 (100.0%)
+
+
+### ALT_BASIS
+--------------------------------------------------------------------------------
+Classification: HOMEOSTATIC
+Experiments: n=10
+
+**Population Statistics:**
+  Mean: 0.49 ± 0.00 agents
+  CV: 0.0%
+  Range: [0.5, 0.5]
+
+**Composition Statistics:**
+  Mean: 1.27 ± 0.00 events/window
+  CV: 0.0%
+
+**Basin Classification:**
+  Basin A: 0/10 (0.0%)
+  Basin B: 10/10 (100.0%)

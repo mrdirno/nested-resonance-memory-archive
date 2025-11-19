@@ -1,0 +1,60 @@
+{
+  "experiment_id": "ultralong_1761115146",
+  "start_time": 1761115147.168235,
+  "end_time": 1761115206.0452218,
+  "total_cycles": 200,
+  "cycles_completed": 200,
+  "agent_counts": [
+    3,
+    3,
+    3,
+    3,
+    2,
+    2,
+    2,
+    1,
+    1,
+    0
+  ],
+  "attractor_sequences": [],
+  "pattern_counts": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+  ],
+  "emergent_pattern_counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "phase_transitions": [],
+  "stability_score": 0.6548590014996047,
+  "learning_rate": 0.0,
+  "attractor_persistence": 0.0,
+  "checkpoint_cycles": [
+    20,
+    40,
+    60,
+    80,
+    100,
+    120,
+    140,
+    160,
+    180,
+    200
+  ]
+}

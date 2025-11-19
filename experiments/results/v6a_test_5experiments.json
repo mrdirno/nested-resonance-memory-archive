@@ -1,0 +1,48 @@
+{
+  "test": "V6a_5_EXPERIMENT_VALIDATION",
+  "purpose": "Validate filesystem sync fix prevents database I/O errors",
+  "configuration": {
+    "spawn_rate": 0.001,
+    "spawn_label": "0.10%",
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ]
+  },
+  "results": [
+    {
+      "seed": 42,
+      "success": true
+    },
+    {
+      "seed": 43,
+      "success": true
+    },
+    {
+      "seed": 44,
+      "success": true
+    },
+    {
+      "seed": 45,
+      "success": true
+    },
+    {
+      "seed": 46,
+      "success": true
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "successes": 5,
+    "failures": 0,
+    "success_rate": 1.0,
+    "duration_seconds": 150.1782419681549
+  },
+  "verdict": {
+    "passed": true,
+    "ready_for_full_campaign": true
+  }
+}

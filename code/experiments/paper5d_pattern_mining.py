@@ -23,7 +23,6 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Any
 from collections import defaultdict, Counter
 import sys
-from workspace_utils import get_workspace_path, get_results_path
 
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -452,7 +451,7 @@ def main():
     # Setup paths
     # Use git repository for data source, dev workspace for output
     data_dir = Path("/Users/aldrinpayopay/nested-resonance-memory-archive/data/results")
-    output_dir = get_results_path()
+    output_dir = Path("/Volumes/dual/DUALITY-ZERO-V2/data/results")
 
     # Initialize miner
     miner = PatternMiner(data_dir)

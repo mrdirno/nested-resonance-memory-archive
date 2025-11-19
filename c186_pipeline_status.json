@@ -1,0 +1,28 @@
+{
+  "pending_count": 2,
+  "running_count": 1,
+  "completed_count": 0,
+  "failed_count": 0,
+  "total_count": 3,
+  "experiments": [
+    {
+      "name": "V6: Ultra-Low Frequency",
+      "status": "running",
+      "pid": 72904,
+      "runtime_seconds": null
+    },
+    {
+      "name": "V7: Migration Rate Variation",
+      "status": "pending",
+      "pid": null,
+      "runtime_seconds": null
+    },
+    {
+      "name": "V8: Population Count Variation",
+      "status": "pending",
+      "pid": null,
+      "runtime_seconds": null
+    }
+  ],
+  "timestamp": "2025-11-07T04:45:36.863498"
+}

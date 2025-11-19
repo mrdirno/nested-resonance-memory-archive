@@ -1,0 +1,29 @@
+{
+  "experiment_id": "c186_power_law_validation_F_0.0060_SEED_42",
+  "parameters": {
+    "f_spawn": 0.006,
+    "spawn_cost": 5.0,
+    "e_consume": 0.5,
+    "e_recharge": 1.0,
+    "e_cap": 10000000,
+    "seed": 42,
+    "max_cycles": 450000,
+    "n_populations": 10
+  },
+  "final_state": {
+    "cycle": 1200,
+    "population": 127823,
+    "energy_total": 10054459.0,
+    "energy_mean": 78.65923190662087,
+    "e_min": 78.65923190662087,
+    "total_spawns": 127723,
+    "total_deaths": 0
+  },
+  "predictions": {
+    "power_law": 501.7,
+    "exponential": 501.25
+  },
+  "termination": "ENERGY_CAP at cycle 1200",
+  "runtime_seconds": 3.4225142002105713,
+  "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0060_SEED_42.db"
+}

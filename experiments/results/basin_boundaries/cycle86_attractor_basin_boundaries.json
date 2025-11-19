@@ -1,0 +1,173 @@
+{
+  "experiment": "cycle86_attractor_basin_boundaries",
+  "threshold": 500,
+  "cycles": 150,
+  "center_multipliers": [
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0,
+    1.1,
+    1.2,
+    1.3,
+    1.4,
+    1.6
+  ],
+  "results": [
+    {
+      "center_multiplier": 0.4,
+      "range": "0.2-0.6",
+      "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+      "dominant_fraction": 0.77,
+      "collapse_cycle": null,
+      "attractor": "Attractor_1"
+    },
+    {
+      "center_multiplier": 0.5,
+      "range": "0.3-0.7",
+      "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+      "dominant_fraction": 0.77,
+      "collapse_cycle": null,
+      "attractor": "Attractor_1"
+    },
+    {
+      "center_multiplier": 0.6,
+      "range": "0.4-0.8",
+      "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+      "dominant_fraction": 0.77,
+      "collapse_cycle": null,
+      "attractor": "Attractor_1"
+    },
+    {
+      "center_multiplier": 0.7,
+      "range": "0.5-0.9",
+      "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+      "dominant_fraction": 0.77,
+      "collapse_cycle": null,
+      "attractor": "Attractor_1"
+    },
+    {
+      "center_multiplier": 0.8,
+      "range": "0.6-1.0",
+      "dominant_pattern": "(np.float64(5.08938), np.float64(5.568782), np.float64(6.278074))",
+      "dominant_fraction": 0.77,
+      "collapse_cycle": null,
+      "attractor": "Attractor_2"
+    },
+    {
+      "center_multiplier": 0.9,
+      "range": "0.7-1.1",
+      "dominant_pattern": "(np.float64(5.08938), np.float64(5.568782), np.float64(6.278074))",
+      "dominant_fraction": 0.77,
+      "collapse_cycle": null,
+      "attractor": "Attractor_2"
+    },
+    {
+      "center_multiplier": 1.0,
+      "range": "0.8-1.2",
+      "dominant_pattern": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+      "dominant_fraction": 0.864,
+      "collapse_cycle": null,
+      "attractor": "Attractor_3"
+    },
+    {
+      "center_multiplier": 1.1,
+      "range": "0.9-1.3",
+      "dominant_pattern": "(np.float64(6.220353), np.float64(5.143045), np.float64(6.058412))",
+      "dominant_fraction": 0.864,
+      "collapse_cycle": null,
+      "attractor": "Attractor_4"
+    },
+    {
+      "center_multiplier": 1.2,
+      "range": "1.0-1.4",
+      "dominant_pattern": "(np.float64(6.220353), np.float64(5.143045), np.float64(6.058412))",
+      "dominant_fraction": 0.864,
+      "collapse_cycle": null,
+      "attractor": "Attractor_4"
+    },
+    {
+      "center_multiplier": 1.3,
+      "range": "1.1-1.5",
+      "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+      "dominant_fraction": 0.864,
+      "collapse_cycle": null,
+      "attractor": "Attractor_5"
+    },
+    {
+      "center_multiplier": 1.4,
+      "range": "1.2-1.6",
+      "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+      "dominant_fraction": 0.864,
+      "collapse_cycle": null,
+      "attractor": "Attractor_5"
+    },
+    {
+      "center_multiplier": 1.6,
+      "range": "1.4-1.8",
+      "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+      "dominant_fraction": 0.864,
+      "collapse_cycle": null,
+      "attractor": "Attractor_5"
+    }
+  ],
+  "analysis": {
+    "by_attractor": {
+      "Attractor_1": [
+        0.4,
+        0.5,
+        0.6,
+        0.7
+      ],
+      "Attractor_2": [
+        0.8,
+        0.9
+      ],
+      "Attractor_3": [
+        1.0
+      ],
+      "Attractor_4": [
+        1.1,
+        1.2
+      ],
+      "Attractor_5": [
+        1.3,
+        1.4,
+        1.6
+      ]
+    },
+    "transitions": [
+      {
+        "from": "Attractor_1",
+        "to": "Attractor_2",
+        "boundary": 0.75,
+        "range": "0.7 \u2192 0.8"
+      },
+      {
+        "from": "Attractor_2",
+        "to": "Attractor_3",
+        "boundary": 0.95,
+        "range": "0.9 \u2192 1.0"
+      },
+      {
+        "from": "Attractor_3",
+        "to": "Attractor_4",
+        "boundary": 1.05,
+        "range": "1.0 \u2192 1.1"
+      },
+      {
+        "from": "Attractor_4",
+        "to": "Attractor_5",
+        "boundary": 1.25,
+        "range": "1.2 \u2192 1.3"
+      }
+    ],
+    "sharp_boundaries": false
+  },
+  "insight_47_discovered": false,
+  "duration": 14.09684705734253,
+  "timestamp": 1761136648.587028
+}

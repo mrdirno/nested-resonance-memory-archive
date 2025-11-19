@@ -1,0 +1,309 @@
+{
+  "experiment": "cycle106_basin_boundary_mapping",
+  "boundary_paths": [
+    {
+      "start": [
+        0.6,
+        0.2,
+        500
+      ],
+      "end": [
+        0.8,
+        0.2,
+        500
+      ],
+      "dimension": "multiplier"
+    },
+    {
+      "start": [
+        0.8,
+        0.3,
+        500
+      ],
+      "end": [
+        1.0,
+        0.3,
+        500
+      ],
+      "dimension": "multiplier"
+    },
+    {
+      "start": [
+        1.0,
+        0.2,
+        500
+      ],
+      "end": [
+        1.0,
+        0.4,
+        500
+      ],
+      "dimension": "spread"
+    },
+    {
+      "start": [
+        1.2,
+        0.2,
+        500
+      ],
+      "end": [
+        1.4,
+        0.2,
+        500
+      ],
+      "dimension": "multiplier"
+    },
+    {
+      "start": [
+        1.0,
+        0.2,
+        400
+      ],
+      "end": [
+        1.0,
+        0.2,
+        600
+      ],
+      "dimension": "threshold"
+    }
+  ],
+  "interpolation_steps": 5,
+  "cycles": 500,
+  "results": [
+    {
+      "path_id": 1,
+      "step": 0,
+      "alpha": 0.0,
+      "multiplier": 0.6,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))"
+    },
+    {
+      "path_id": 1,
+      "step": 1,
+      "alpha": 0.25,
+      "multiplier": 0.65,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.000442), np.float64(5.72068), np.float64(6.043855))"
+    },
+    {
+      "path_id": 1,
+      "step": 2,
+      "alpha": 0.5,
+      "multiplier": 0.7,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))"
+    },
+    {
+      "path_id": 1,
+      "step": 3,
+      "alpha": 0.75,
+      "multiplier": 0.75,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))"
+    },
+    {
+      "path_id": 1,
+      "step": 4,
+      "alpha": 1.0,
+      "multiplier": 0.8,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))"
+    },
+    {
+      "path_id": 2,
+      "step": 0,
+      "alpha": 0.0,
+      "multiplier": 0.8,
+      "spread": 0.3,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))"
+    },
+    {
+      "path_id": 2,
+      "step": 1,
+      "alpha": 0.25,
+      "multiplier": 0.8500000000000001,
+      "spread": 0.3,
+      "threshold": 500.0,
+      "attractor": "(np.float64(5.93761), np.float64(6.013941), np.float64(5.881276))"
+    },
+    {
+      "path_id": 2,
+      "step": 2,
+      "alpha": 0.5,
+      "multiplier": 0.9,
+      "spread": 0.3,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))"
+    },
+    {
+      "path_id": 2,
+      "step": 3,
+      "alpha": 0.75,
+      "multiplier": 0.95,
+      "spread": 0.3,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))"
+    },
+    {
+      "path_id": 2,
+      "step": 4,
+      "alpha": 1.0,
+      "multiplier": 1.0,
+      "spread": 0.3,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))"
+    },
+    {
+      "path_id": 3,
+      "step": 0,
+      "alpha": 0.0,
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))"
+    },
+    {
+      "path_id": 3,
+      "step": 1,
+      "alpha": 0.25,
+      "multiplier": 1.0,
+      "spread": 0.25,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))"
+    },
+    {
+      "path_id": 3,
+      "step": 2,
+      "alpha": 0.5,
+      "multiplier": 1.0,
+      "spread": 0.30000000000000004,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))"
+    },
+    {
+      "path_id": 3,
+      "step": 3,
+      "alpha": 0.75,
+      "multiplier": 1.0,
+      "spread": 0.35000000000000003,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.267477), np.float64(5.75284), np.float64(6.062928))"
+    },
+    {
+      "path_id": 3,
+      "step": 4,
+      "alpha": 1.0,
+      "multiplier": 1.0,
+      "spread": 0.4,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))"
+    },
+    {
+      "path_id": 4,
+      "step": 0,
+      "alpha": 0.0,
+      "multiplier": 1.2,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))"
+    },
+    {
+      "path_id": 4,
+      "step": 1,
+      "alpha": 0.25,
+      "multiplier": 1.25,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))"
+    },
+    {
+      "path_id": 4,
+      "step": 2,
+      "alpha": 0.5,
+      "multiplier": 1.2999999999999998,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))"
+    },
+    {
+      "path_id": 4,
+      "step": 3,
+      "alpha": 0.75,
+      "multiplier": 1.3499999999999999,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))"
+    },
+    {
+      "path_id": 4,
+      "step": 4,
+      "alpha": 1.0,
+      "multiplier": 1.4,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))"
+    },
+    {
+      "path_id": 5,
+      "step": 0,
+      "alpha": 0.0,
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 400.0,
+      "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))"
+    },
+    {
+      "path_id": 5,
+      "step": 1,
+      "alpha": 0.25,
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 450.0,
+      "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))"
+    },
+    {
+      "path_id": 5,
+      "step": 2,
+      "alpha": 0.5,
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500.0,
+      "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))"
+    },
+    {
+      "path_id": 5,
+      "step": 3,
+      "alpha": 0.75,
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 550.0,
+      "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))"
+    },
+    {
+      "path_id": 5,
+      "step": 4,
+      "alpha": 1.0,
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 600.0,
+      "error": "UNIQUE constraint failed: agents.agent_id"
+    }
+  ],
+  "analysis": {
+    "successful_points": 24,
+    "total_transitions": 17,
+    "sharp_boundaries": 1,
+    "boundary_sharpness_pct": 20.0,
+    "conclusion": "gradual_boundaries"
+  },
+  "insight_63_discovered": true,
+  "duration": 85.21296882629395,
+  "timestamp": 1761156107.212244
+}

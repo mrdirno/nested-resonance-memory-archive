@@ -1,0 +1,145 @@
+{
+  "experiment": "cycle110_transition_persistence",
+  "test_triplets": [
+    [
+      1.0,
+      0.2,
+      500
+    ],
+    [
+      0.8,
+      0.4,
+      400
+    ],
+    [
+      1.2,
+      0.3,
+      600
+    ]
+  ],
+  "cycles": 1000,
+  "checkpoints": [
+    300,
+    500,
+    1000
+  ],
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_applied": false,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      }
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_applied": true,
+      "error": "UNIQUE constraint failed: agents.agent_id"
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_applied": false,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(6.249759), np.float64(4.773589))",
+          "fraction": 0.783
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      }
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_applied": true,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(6.249759), np.float64(4.773589))",
+          "fraction": 0.886
+        },
+        "500": {
+          "attractor": "(np.float64(5.717699), np.float64(6.036147), np.float64(5.902653))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.09469), np.float64(6.198765), np.float64(5.559882))",
+          "fraction": 1.0
+        }
+      }
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_applied": false,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.969026), np.float64(6.229857), np.float64(5.270657))",
+          "fraction": 0.975
+        },
+        "500": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        }
+      }
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_applied": true,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(6.000442), np.float64(6.176265), np.float64(5.616418))",
+          "fraction": 0.63
+        },
+        "500": {
+          "attractor": "(np.float64(5.749115), np.float64(5.982554), np.float64(6.248414))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(5.749115), np.float64(5.982554), np.float64(6.248414))",
+          "fraction": 1.0
+        }
+      }
+    }
+  ],
+  "analysis": {
+    "successful_runs": 5,
+    "persistence_count": 0,
+    "reversion_count": 0,
+    "persistence_rate_pct": 0,
+    "conclusion": "strong_reversion"
+  },
+  "insight_67_discovered": true,
+  "duration": 40.50754189491272,
+  "timestamp": 1761158271.37413
+}

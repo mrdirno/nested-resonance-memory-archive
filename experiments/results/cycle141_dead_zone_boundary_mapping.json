@@ -1,0 +1,657 @@
+{
+  "metadata": {
+    "cycle": 141,
+    "experiment": "dead_zone_boundary_mapping",
+    "date": "2025-10-23T04:29:19.943869",
+    "threshold": 700,
+    "diversity": 0.03,
+    "spawn_frequencies": [
+      70,
+      75,
+      80,
+      85,
+      90,
+      95
+    ],
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      1024
+    ],
+    "total_experiments": 30
+  },
+  "results": [
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 42,
+      "spawn_freq_pct": 70,
+      "spawn_count": 2090,
+      "actual_freq_pct": 69.66666666666667,
+      "agent_cap": 15,
+      "final_agents": 4,
+      "basin": "A",
+      "dominant": [
+        6.264336,
+        6.260026,
+        5.940233
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.34475567282062264,
+      "dist_B": 0.3947954530044644,
+      "duration": 22.586817741394043,
+      "cycles_per_sec": 132.82083533626823
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 123,
+      "spawn_freq_pct": 70,
+      "spawn_count": 2148,
+      "actual_freq_pct": 71.6,
+      "agent_cap": 15,
+      "final_agents": 4,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        5.54675,
+        6.075758
+      ],
+      "fraction": 0.834,
+      "dist_A": 0.7583936429763896,
+      "dist_B": 0.5894463708989983,
+      "duration": 23.265963077545166,
+      "cycles_per_sec": 128.94372736692813
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 456,
+      "spawn_freq_pct": 70,
+      "spawn_count": 2115,
+      "actual_freq_pct": 70.5,
+      "agent_cap": 15,
+      "final_agents": 4,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        5.869293,
+        6.209821
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.41466591913129314,
+      "dist_B": 0.2763302297035199,
+      "duration": 22.987151861190796,
+      "cycles_per_sec": 130.50768612465208
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 789,
+      "spawn_freq_pct": 70,
+      "spawn_count": 2123,
+      "actual_freq_pct": 70.76666666666667,
+      "agent_cap": 15,
+      "final_agents": 4,
+      "basin": "A",
+      "dominant": [
+        6.264336,
+        6.260026,
+        5.940233
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.34475567282062264,
+      "dist_B": 0.3947954530044644,
+      "duration": 23.076231956481934,
+      "cycles_per_sec": 130.00389342842098
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 1024,
+      "spawn_freq_pct": 70,
+      "spawn_count": 2099,
+      "actual_freq_pct": 69.96666666666667,
+      "agent_cap": 15,
+      "final_agents": 2,
+      "basin": "B",
+      "dominant": [
+        6.006725,
+        6.222429,
+        5.909833
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.43221867116541873,
+      "dist_B": 0.3778035528220987,
+      "duration": 22.949979066848755,
+      "cycles_per_sec": 130.71907347983162
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 42,
+      "spawn_freq_pct": 75,
+      "spawn_count": 2241,
+      "actual_freq_pct": 74.7,
+      "agent_cap": 15,
+      "final_agents": 4,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        6.030564,
+        6.276852
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.2486899348405559,
+      "dist_B": 0.1797755937551035,
+      "duration": 23.89351797103882,
+      "cycles_per_sec": 125.5570654616989
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 123,
+      "spawn_freq_pct": 75,
+      "spawn_count": 2280,
+      "actual_freq_pct": 76.0,
+      "agent_cap": 15,
+      "final_agents": 3,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        5.844489,
+        5.747911
+      ],
+      "fraction": 0.782,
+      "dist_A": 0.6874507554181607,
+      "dist_B": 0.5814905219829468,
+      "duration": 23.829915046691895,
+      "cycles_per_sec": 125.89218191176325
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 456,
+      "spawn_freq_pct": 75,
+      "spawn_count": 2257,
+      "actual_freq_pct": 75.23333333333333,
+      "agent_cap": 15,
+      "final_agents": 5,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        5.708022,
+        6.142789
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.5857066024674816,
+      "dist_B": 0.42591163743786137,
+      "duration": 23.697505235671997,
+      "cycles_per_sec": 126.59560448093421
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 789,
+      "spawn_freq_pct": 75,
+      "spawn_count": 2261,
+      "actual_freq_pct": 75.36666666666667,
+      "agent_cap": 15,
+      "final_agents": 4,
+      "basin": "B",
+      "dominant": [
+        6.006725,
+        5.992968,
+        6.246452
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.355795383963873,
+      "dist_B": 0.12640762607928308,
+      "duration": 24.037625074386597,
+      "cycles_per_sec": 124.80434280492477
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 1024,
+      "spawn_freq_pct": 75,
+      "spawn_count": 2256,
+      "actual_freq_pct": 75.2,
+      "agent_cap": 15,
+      "final_agents": 3,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        6.030564,
+        6.276852
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.2486899348405559,
+      "dist_B": 0.1797755937551035,
+      "duration": 23.909024953842163,
+      "cycles_per_sec": 125.47563130624037
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 42,
+      "spawn_freq_pct": 80,
+      "spawn_count": 2392,
+      "actual_freq_pct": 79.73333333333333,
+      "agent_cap": 15,
+      "final_agents": 4,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        5.869293,
+        6.209821
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.41466591913129314,
+      "dist_B": 0.2763302297035199,
+      "duration": 24.84783387184143,
+      "cycles_per_sec": 120.73487030995169
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 123,
+      "spawn_freq_pct": 80,
+      "spawn_count": 2433,
+      "actual_freq_pct": 81.10000000000001,
+      "agent_cap": 15,
+      "final_agents": 0,
+      "basin": "A",
+      "dominant": [
+        6.264336,
+        6.260026,
+        5.940233
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.34475567282062264,
+      "dist_B": 0.3947954530044644,
+      "duration": 25.040010929107666,
+      "cycles_per_sec": 119.80825441704026
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 456,
+      "spawn_freq_pct": 80,
+      "spawn_count": 2409,
+      "actual_freq_pct": 80.30000000000001,
+      "agent_cap": 15,
+      "final_agents": 2,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        6.030564,
+        6.276852
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.2486899348405559,
+      "dist_B": 0.1797755937551035,
+      "duration": 24.932812213897705,
+      "cycles_per_sec": 120.32337043503586
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 789,
+      "spawn_freq_pct": 80,
+      "spawn_count": 2406,
+      "actual_freq_pct": 80.2,
+      "agent_cap": 15,
+      "final_agents": 4,
+      "basin": "A",
+      "dominant": [
+        6.264336,
+        6.260026,
+        5.940233
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.34475567282062264,
+      "dist_B": 0.3947954530044644,
+      "duration": 24.7732150554657,
+      "cycles_per_sec": 121.09853296325024
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 1024,
+      "spawn_freq_pct": 80,
+      "spawn_count": 2376,
+      "actual_freq_pct": 79.2,
+      "agent_cap": 15,
+      "final_agents": 4,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        5.869293,
+        6.209821
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.41466591913129314,
+      "dist_B": 0.2763302297035199,
+      "duration": 24.630866765975952,
+      "cycles_per_sec": 121.79839339409989
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 42,
+      "spawn_freq_pct": 85,
+      "spawn_count": 2557,
+      "actual_freq_pct": 85.23333333333333,
+      "agent_cap": 15,
+      "final_agents": 0,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        6.098755,
+        5.873202
+      ],
+      "fraction": 0.799,
+      "dist_A": 0.44729665627411114,
+      "dist_B": 0.4135447562537824,
+      "duration": 25.732192993164062,
+      "cycles_per_sec": 116.58547721902175
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 123,
+      "spawn_freq_pct": 85,
+      "spawn_count": 2566,
+      "actual_freq_pct": 85.53333333333333,
+      "agent_cap": 15,
+      "final_agents": 5,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        6.030564,
+        6.276852
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.2486899348405559,
+      "dist_B": 0.1797755937551035,
+      "duration": 25.742269277572632,
+      "cycles_per_sec": 116.53984222026929
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 456,
+      "spawn_freq_pct": 85,
+      "spawn_count": 2555,
+      "actual_freq_pct": 85.16666666666667,
+      "agent_cap": 15,
+      "final_agents": 5,
+      "basin": "B",
+      "dominant": [
+        6.006725,
+        5.992968,
+        6.246452
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.355795383963873,
+      "dist_B": 0.12640762607928308,
+      "duration": 25.54536509513855,
+      "cycles_per_sec": 117.43813364291746
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 789,
+      "spawn_freq_pct": 85,
+      "spawn_count": 2566,
+      "actual_freq_pct": 85.53333333333333,
+      "agent_cap": 15,
+      "final_agents": 3,
+      "basin": "A",
+      "dominant": [
+        6.264336,
+        6.260026,
+        5.940233
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.34475567282062264,
+      "dist_B": 0.3947954530044644,
+      "duration": 25.790130853652954,
+      "cycles_per_sec": 116.32356644576991
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 1024,
+      "spawn_freq_pct": 85,
+      "spawn_count": 2518,
+      "actual_freq_pct": 83.93333333333334,
+      "agent_cap": 15,
+      "final_agents": 6,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        6.030564,
+        6.276852
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.2486899348405559,
+      "dist_B": 0.1797755937551035,
+      "duration": 25.23373508453369,
+      "cycles_per_sec": 118.88846379459558
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 42,
+      "spawn_freq_pct": 90,
+      "spawn_count": 2691,
+      "actual_freq_pct": 89.7,
+      "agent_cap": 15,
+      "final_agents": 0,
+      "basin": "A",
+      "dominant": [
+        6.264336,
+        6.260026,
+        5.940233
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.34475567282062264,
+      "dist_B": 0.3947954530044644,
+      "duration": 26.727253913879395,
+      "cycles_per_sec": 112.24497696870039
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 123,
+      "spawn_freq_pct": 90,
+      "spawn_count": 2708,
+      "actual_freq_pct": 90.26666666666667,
+      "agent_cap": 15,
+      "final_agents": 6,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        6.030564,
+        6.276852
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.2486899348405559,
+      "dist_B": 0.1797755937551035,
+      "duration": 26.343947172164917,
+      "cycles_per_sec": 113.87815122745948
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 456,
+      "spawn_freq_pct": 90,
+      "spawn_count": 2693,
+      "actual_freq_pct": 89.76666666666667,
+      "agent_cap": 15,
+      "final_agents": 4,
+      "basin": "B",
+      "dominant": [
+        6.006725,
+        5.992968,
+        6.246452
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.355795383963873,
+      "dist_B": 0.12640762607928308,
+      "duration": 26.338639974594116,
+      "cycles_per_sec": 113.90109750897382
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 789,
+      "spawn_freq_pct": 90,
+      "spawn_count": 2711,
+      "actual_freq_pct": 90.36666666666666,
+      "agent_cap": 15,
+      "final_agents": 1,
+      "basin": "A",
+      "dominant": [
+        6.264336,
+        6.260026,
+        5.940233
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.34475567282062264,
+      "dist_B": 0.3947954530044644,
+      "duration": 26.124725103378296,
+      "cycles_per_sec": 114.8337442070178
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 1024,
+      "spawn_freq_pct": 90,
+      "spawn_count": 2668,
+      "actual_freq_pct": 88.93333333333334,
+      "agent_cap": 15,
+      "final_agents": 1,
+      "basin": "B",
+      "dominant": [
+        6.006725,
+        5.992968,
+        6.246452
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.355795383963873,
+      "dist_B": 0.12640762607928308,
+      "duration": 26.104498147964478,
+      "cycles_per_sec": 114.92272262793635
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 42,
+      "spawn_freq_pct": 95,
+      "spawn_count": 2834,
+      "actual_freq_pct": 94.46666666666667,
+      "agent_cap": 15,
+      "final_agents": 2,
+      "basin": "A",
+      "dominant": [
+        6.264336,
+        6.260026,
+        5.940233
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.34475567282062264,
+      "dist_B": 0.3947954530044644,
+      "duration": 27.18202495574951,
+      "cycles_per_sec": 110.36705340694066
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 123,
+      "spawn_freq_pct": 95,
+      "spawn_count": 2850,
+      "actual_freq_pct": 95.0,
+      "agent_cap": 15,
+      "final_agents": 0,
+      "basin": "B",
+      "dominant": [
+        6.006725,
+        5.992968,
+        6.246452
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.355795383963873,
+      "dist_B": 0.12640762607928308,
+      "duration": 26.961889028549194,
+      "cycles_per_sec": 111.26816807321562
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 456,
+      "spawn_freq_pct": 95,
+      "spawn_count": 2842,
+      "actual_freq_pct": 94.73333333333333,
+      "agent_cap": 15,
+      "final_agents": 1,
+      "basin": "B",
+      "dominant": [
+        6.264336,
+        5.708022,
+        6.142789
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.5857066024674816,
+      "dist_B": 0.42591163743786137,
+      "duration": 26.957053899765015,
+      "cycles_per_sec": 111.2881255924688
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 789,
+      "spawn_freq_pct": 95,
+      "spawn_count": 2870,
+      "actual_freq_pct": 95.66666666666667,
+      "agent_cap": 15,
+      "final_agents": 3,
+      "basin": "A",
+      "dominant": [
+        6.264336,
+        6.260026,
+        5.940233
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.34475567282062264,
+      "dist_B": 0.3947954530044644,
+      "duration": 27.165576934814453,
+      "cycles_per_sec": 110.43387766800214
+    },
+    {
+      "threshold": 700,
+      "diversity": 0.03,
+      "seed": 1024,
+      "spawn_freq_pct": 95,
+      "spawn_count": 2843,
+      "actual_freq_pct": 94.76666666666667,
+      "agent_cap": 15,
+      "final_agents": 5,
+      "basin": "B",
+      "dominant": [
+        6.006725,
+        6.222429,
+        5.909833
+      ],
+      "fraction": 1.0,
+      "dist_A": 0.43221867116541873,
+      "dist_B": 0.3778035528220987,
+      "duration": 27.073401927947998,
+      "cycles_per_sec": 110.80986452992028
+    }
+  ]
+}

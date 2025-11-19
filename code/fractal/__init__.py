@@ -34,7 +34,7 @@ CRITICAL: This module implements fractal agents as INTERNAL COMPUTATIONAL MODELS
 from .agent import FractalAgent, AgentState
 from .composition import CompositionEngine
 from .decomposition import DecompositionEngine
-from .memory import PatternMemory, Pattern
+from code.memory import PatternMemory, Pattern
 from .resonance import ResonanceDetector
 
 __all__ = [

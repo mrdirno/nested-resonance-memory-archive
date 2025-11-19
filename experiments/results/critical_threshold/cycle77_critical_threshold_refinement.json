@@ -1,0 +1,32 @@
+{
+  "experiment": "cycle77_critical_threshold_refinement",
+  "initial_bounds": {
+    "lower": 500,
+    "upper": 625
+  },
+  "test_threshold": 562,
+  "result": {
+    "threshold": 562,
+    "final_memory": 1000,
+    "total_bursts": 95,
+    "burst_rate": 0.19,
+    "efficiency": 10.526315789473685,
+    "growth_rate": 11.283313325330148,
+    "diversity": {
+      "unique_patterns": 1,
+      "uniqueness_ratio": 0.001,
+      "shannon_entropy": -0.0,
+      "complexity_score": 0.0003
+    },
+    "duration": 4.0009520053863525
+  },
+  "refined_bounds": {
+    "lower_bound": 500,
+    "upper_bound": 562,
+    "critical_range": 62,
+    "is_diverse_at_midpoint": "False"
+  },
+  "insight_40_discovered": true,
+  "overall_duration": 4.003662824630737,
+  "timestamp": 1761130192.207102
+}

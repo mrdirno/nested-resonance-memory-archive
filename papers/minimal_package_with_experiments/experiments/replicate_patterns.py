@@ -29,19 +29,11 @@ Parameters
     --mode : str, optional
         "healthy" or "degraded" (default: "healthy").  In degraded mode the
         mean similarity is lower.
-    --seed : int, optional
-        Random seed for reproducibility (default: None). If omitted, results
-        will vary between runs.
 
 Outputs
 -------
     Prints the pass rate (fraction of runs exceeding the threshold) and
     whether the replicability criterion (≥80% runs) is satisfied.
-
-Reproducibility
----------------
-    For deterministic results, specify a seed:
-        python replicate_patterns.py --runs 20 --threshold 0.99 --mode healthy --seed 42
 """
 
 import argparse
@@ -71,20 +63,12 @@ def main():
     parser.add_argument("--runs", type=int, default=20, help="Number of runs to simulate (default: 20)")
     parser.add_argument("--threshold", type=float, default=0.99, help="Similarity threshold (default: 0.99)")
     parser.add_argument("--mode", type=str, default="healthy", choices=["healthy", "degraded"], help="Mode: healthy or degraded")
-    parser.add_argument("--seed", type=int, default=None, help="Random seed for reproducibility (default: None)")
     args = parser.parse_args()
-
-    # Set random seed if provided for deterministic results
-    if args.seed is not None:
-        random.seed(args.seed)
-
     pass_rate = run_simulation(args.runs, args.threshold, args.mode)
     criterion_met = pass_rate >= 0.8
     print(f"Mode: {args.mode}")
     print(f"Runs: {args.runs}")
     print(f"Threshold: {args.threshold:.3f}")
-    if args.seed is not None:
-        print(f"Seed: {args.seed}")
     print(f"Pass rate = {pass_rate:.3f}")
     print(f"Replicability criterion met (≥80%)? {'YES' if criterion_met else 'NO'}")
 

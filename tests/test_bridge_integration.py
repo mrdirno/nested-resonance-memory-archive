@@ -55,6 +55,8 @@ def test_bridge_with_reality():
     assert recovered['cpu_percent'] == metrics['cpu_percent']
     print(f"\n✓ Reality anchor preserved (CPU: {recovered['cpu_percent']:.1f}%)")
 
+    return True
+
 
 def test_bridge_oscillation_sequence():
     """Test bridge oscillation generation and resonance."""
@@ -82,6 +84,8 @@ def test_bridge_oscillation_sequence():
     # Test distant states (should have lower resonance)
     distant_match = bridge.detect_resonance(sequence[0], sequence[-1])
     print(f"✓ Distant state similarity: {distant_match.similarity:.4f}")
+
+    return True
 
 
 def test_bridge_interpolation():
@@ -122,6 +126,8 @@ def test_bridge_interpolation():
     assert abs(interp_end.reality_anchor['cpu_percent'] - state2.reality_anchor['cpu_percent']) < 0.01
 
     print(f"✓ Boundary conditions verified")
+
+    return True
 
 
 def test_bridge_reality_compliance():
@@ -164,6 +170,8 @@ def test_bridge_reality_compliance():
     print(f"✓ Oscillations maintain temporal reality anchoring")
     print(f"\n✓ Reality Imperative Compliance: PASSED")
 
+    return True
+
 
 def test_bridge_database_persistence():
     """Test database persistence of transformations and resonance."""
@@ -194,6 +202,8 @@ def test_bridge_database_persistence():
     # Retrieve resonance history
     resonance_history = bridge.get_resonance_history(limit=10)
     print(f"✓ Retrieved {len(resonance_history)} resonance events")
+
+    return True
 
 
 def run_all_tests():

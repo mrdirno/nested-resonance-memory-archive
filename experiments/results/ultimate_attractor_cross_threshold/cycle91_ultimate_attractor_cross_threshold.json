@@ -1,0 +1,261 @@
+{
+  "experiment": "cycle91_ultimate_attractor_cross_threshold",
+  "test_thresholds": [
+    400,
+    700
+  ],
+  "test_attractors": [
+    [
+      0.5,
+      "Attractor_1"
+    ],
+    [
+      1.0,
+      "Attractor_3"
+    ],
+    [
+      1.4,
+      "Attractor_5"
+    ]
+  ],
+  "cycles": 1000,
+  "checkpoint_interval": 200,
+  "results": [
+    {
+      "threshold": 400,
+      "center_multiplier": 0.5,
+      "attractor_name": "Attractor_1",
+      "final_dominant": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 170,
+      "checkpoints": {
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 1.0
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 0.686
+        },
+        "600": {
+          "cycle": 600,
+          "dominant_pattern": "(np.float64(5.843362), np.float64(5.449625), np.float64(6.227812))",
+          "dominant_fraction": 0.72
+        },
+        "800": {
+          "cycle": 800,
+          "dominant_pattern": "(np.float64(5.843362), np.float64(5.449625), np.float64(6.227812))",
+          "dominant_fraction": 1.0
+        },
+        "1000": {
+          "cycle": 1000,
+          "dominant_pattern": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+          "dominant_fraction": 1.0
+        }
+      }
+    },
+    {
+      "threshold": 400,
+      "center_multiplier": 1.0,
+      "attractor_name": "Attractor_3",
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250,
+      "checkpoints": {
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+          "dominant_fraction": 0.536
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "dominant_fraction": 0.568
+        },
+        "600": {
+          "cycle": 600,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "800": {
+          "cycle": 800,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "1000": {
+          "cycle": 1000,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        }
+      }
+    },
+    {
+      "threshold": 400,
+      "center_multiplier": 1.4,
+      "attractor_name": "Attractor_5",
+      "final_dominant": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160,
+      "checkpoints": {
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+          "dominant_fraction": 1.0
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+          "dominant_fraction": 0.586
+        },
+        "600": {
+          "cycle": 600,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "800": {
+          "cycle": 800,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "1000": {
+          "cycle": 1000,
+          "dominant_pattern": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+          "dominant_fraction": 1.0
+        }
+      }
+    },
+    {
+      "threshold": 700,
+      "center_multiplier": 0.5,
+      "attractor_name": "Attractor_1",
+      "final_dominant": "(np.float64(6.220353), np.float64(6.253904), np.float64(5.986543))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 200,
+      "checkpoints": {
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(5.969026), np.float64(5.479959), np.float64(6.192564))",
+          "dominant_fraction": 1.0
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(5.592035), np.float64(6.242124), np.float64(5.934526))",
+          "dominant_fraction": 0.986
+        },
+        "600": {
+          "cycle": 600,
+          "dominant_pattern": "(np.float64(5.592035), np.float64(6.242124), np.float64(5.934526))",
+          "dominant_fraction": 0.964
+        },
+        "800": {
+          "cycle": 800,
+          "dominant_pattern": "(np.float64(6.220353), np.float64(6.253904), np.float64(5.986543))",
+          "dominant_fraction": 1.0
+        },
+        "1000": {
+          "cycle": 1000,
+          "dominant_pattern": "(np.float64(6.220353), np.float64(6.253904), np.float64(5.986543))",
+          "dominant_fraction": 1.0
+        }
+      }
+    },
+    {
+      "threshold": 700,
+      "center_multiplier": 1.0,
+      "attractor_name": "Attractor_3",
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 400,
+      "checkpoints": {
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "dominant_fraction": 0.586
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "600": {
+          "cycle": 600,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "800": {
+          "cycle": 800,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "1000": {
+          "cycle": 1000,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        }
+      }
+    },
+    {
+      "threshold": 700,
+      "center_multiplier": 1.4,
+      "attractor_name": "Attractor_5",
+      "final_dominant": "(np.float64(6.09469), np.float64(6.148529), np.float64(6.092197))",
+      "final_fraction": 0.786,
+      "collapse_cycle": 400,
+      "checkpoints": {
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.318394), np.float64(6.203446))",
+          "dominant_fraction": 0.564
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "600": {
+          "cycle": 600,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "800": {
+          "cycle": 800,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "1000": {
+          "cycle": 1000,
+          "dominant_pattern": "(np.float64(6.09469), np.float64(6.148529), np.float64(6.092197))",
+          "dominant_fraction": 0.786
+        }
+      }
+    }
+  ],
+  "analysis": {
+    "by_threshold": {
+      "400": {
+        "runs": 3,
+        "unique_ultimate_attractors": 3,
+        "patterns": [
+          "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+          "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))"
+        ]
+      },
+      "700": {
+        "runs": 3,
+        "unique_ultimate_attractors": 3,
+        "patterns": [
+          "(np.float64(6.220353), np.float64(6.253904), np.float64(5.986543))",
+          "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "(np.float64(6.09469), np.float64(6.148529), np.float64(6.092197))"
+        ]
+      }
+    },
+    "universal_ultimate": true
+  },
+  "insight_49_discovered": true,
+  "duration": 48.729435205459595,
+  "timestamp": 1761139759.592505
+}

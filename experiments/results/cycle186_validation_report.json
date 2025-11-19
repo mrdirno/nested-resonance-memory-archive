@@ -1,0 +1,93 @@
+{
+  "validations": {
+    "prediction_1": {
+      "name": "Intra-population homeostasis preservation",
+      "status": "REJECTED",
+      "score": 0.0,
+      "metrics": {
+        "basin_a_percentage": 0.0,
+        "basin_a_count": 0,
+        "total_populations": 100,
+        "threshold_90": 90.0,
+        "threshold_70": 70.0
+      }
+    },
+    "prediction_2": {
+      "name": "Inter-population variance reduction",
+      "status": "VALIDATED",
+      "score": 2.0,
+      "metrics": {
+        "cv_between": 2.2864882279053345,
+        "cv_within": 100.83504589381486,
+        "ratio": 0.022675531186975795,
+        "threshold_validated": 0.8,
+        "threshold_partial": 1.0
+      }
+    },
+    "prediction_3": {
+      "name": "Meta-stability",
+      "status": "VALIDATED",
+      "score": 2.0,
+      "metrics": {
+        "cv_swarm": 44.617606913386055,
+        "cv_population": 100.83504589381491,
+        "ratio": 0.44248114847263476,
+        "threshold_validated": 0.5,
+        "threshold_partial": 0.8
+      }
+    },
+    "prediction_4": {
+      "name": "Migration effectiveness",
+      "status": "VALIDATED",
+      "score": 2.0,
+      "metrics": {
+        "mean_migrations": 14.0,
+        "std_migrations": 0.0,
+        "migration_counts": [
+          14,
+          14,
+          14,
+          14,
+          14,
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "expected_min": 10,
+        "expected_max": 18,
+        "partial_min": 5,
+        "partial_max": 25
+      }
+    },
+    "prediction_5": {
+      "name": "Energy-population correlation",
+      "status": "PARTIAL",
+      "score": 1.0,
+      "metrics": {
+        "correlation_r": 0.6813521529598529,
+        "p_value": 6.1162261611811404e-15,
+        "n_points": 100,
+        "threshold_validated": 0.8,
+        "threshold_partial": 0.6
+      }
+    },
+    "prediction_6": {
+      "name": "No migration-induced collapse",
+      "status": "REJECTED",
+      "score": 0.0,
+      "metrics": {
+        "basin_b_percentage": 100.0,
+        "basin_b_count": 100,
+        "total_populations": 100,
+        "threshold_validated": 10.0,
+        "threshold_partial": 20.0
+      }
+    }
+  },
+  "composite_score": 7.0,
+  "interpretation": "PARTIALLY VALIDATED",
+  "confidence": "Medium",
+  "action": "Refinement needed, proceed with caution"
+}

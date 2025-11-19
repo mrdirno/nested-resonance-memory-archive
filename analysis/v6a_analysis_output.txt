@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/Volumes/dual/DUALITY-ZERO-V2/analysis/aggregate_v6a_results.py", line 32, in <module>
+    import seaborn as sns
+  File "/Users/aldrinpayopay/Library/Python/3.13/lib/python/site-packages/seaborn/__init__.py", line 12, in <module>
+    from .widgets import *  # noqa: F401,F403
+    ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/aldrinpayopay/Library/Python/3.13/lib/python/site-packages/seaborn/widgets.py", line 6, in <module>
+    from ipywidgets import interact, FloatSlider, IntSlider
+  File "/Users/aldrinpayopay/Library/Python/3.13/lib/python/site-packages/ipywidgets/__init__.py", line 27, in <module>
+    from IPython import get_ipython
+  File "/opt/homebrew/lib/python3.13/site-packages/IPython/__init__.py", line 56, in <module>
+    from .core.application import Application
+  File "/opt/homebrew/lib/python3.13/site-packages/IPython/core/application.py", line 26, in <module>
+    from IPython.core import release, crashhandler
+  File "/opt/homebrew/lib/python3.13/site-packages/IPython/core/crashhandler.py", line 28, in <module>
+    from IPython.core import ultratb
+  File "/opt/homebrew/lib/python3.13/site-packages/IPython/core/ultratb.py", line 92, in <module>
+    from .doctb import DocTB
+  File "/opt/homebrew/lib/python3.13/site-packages/IPython/core/doctb.py", line 15, in <module>
+    from .tbtools import (
+    ...<7 lines>...
+    )
+  File "/opt/homebrew/lib/python3.13/site-packages/IPython/core/tbtools.py", line 14, in <module>
+    from IPython.core import debugger
+  File "/opt/homebrew/lib/python3.13/site-packages/IPython/core/debugger.py", line 144, in <module>
+    from pdb import Pdb as _OldPdb
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pdb.py", line 288, in <module>
+    class _PdbInteractiveConsole(code.InteractiveConsole):
+                                 ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'code' has no attribute 'InteractiveConsole'

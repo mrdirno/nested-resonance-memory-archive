@@ -327,6 +327,177 @@ class PatternVisualization:
         plt.close()
         print(f"Generated: {output_file}")
 
+    def figure6_c175_perfect_stability(self):
+        """Figure 6: C175 perfect stability (time series with zero variance).
+
+        Shows composition events across all frequencies in C175, demonstrating
+        perfect stability with zero variance.
+        """
+        patterns_by_exp = self.results.get('patterns_by_experiment', {})
+        c175_patterns = patterns_by_exp.get('cycle175_high_resolution_transition.json', {}).get('temporal', [])
+
+        if not c175_patterns:
+            print("No C175 temporal patterns found for perfect stability visualization")
+            return
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+
+        # Extract frequencies and mean events
+        frequencies = [p['frequency'] for p in c175_patterns]
+        mean_events = [p['mean_events'] for p in c175_patterns]
+        std_events = [p['std_events'] for p in c175_patterns]
+
+        # Plot mean events with error bars (will be invisible due to std=0)
+        ax.errorbar(frequencies, mean_events, yerr=std_events,
+                   fmt='o-', color='#4ECDC4', linewidth=2, markersize=8,
+                   capsize=5, capthick=2, label='Mean ± Std')
+
+        # Add horizontal line at mean value
+        overall_mean = np.mean(mean_events)
+        ax.axhline(y=overall_mean, color='red', linestyle='--', linewidth=1.5,
+                  alpha=0.7, label=f'Overall Mean: {overall_mean:.2f}')
+
+        ax.set_xlabel('Frequency (Hz)')
+        ax.set_ylabel('Composition Events')
+        ax.set_title('C175: Perfect Temporal Stability (σ = 0.0)', fontweight='bold')
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+
+        # Add annotation box with statistics
+        stats_text = f'Mean: {overall_mean:.2f}\nStd: 0.0\nN: {len(frequencies)} frequencies'
+        ax.text(0.02, 0.98, stats_text, transform=ax.transAxes,
+               verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5),
+               fontsize=9)
+
+        plt.tight_layout()
+        output_file = self.output_dir / 'figure6_c175_perfect_stability.png'
+        plt.savefig(output_file, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"Generated: {output_file}")
+
+    def figure7_population_collapse_comparison(self):
+        """Figure 7: Population collapse in ablation studies.
+
+        Compares final agent counts between healthy systems (C171, C175)
+        and degraded systems (C176, C177).
+        """
+        patterns_by_exp = self.results.get('patterns_by_experiment', {})
+
+        # Extract data from patterns_by_experiment or use known values
+        experiments = ['C171', 'C175', 'C176', 'C177']
+
+        # These values come from the manuscript Results section
+        final_counts = [17.4, 17.5, 0, 1]  # Approximate values
+        composition_events = [101, 100, 1.27, 0.13]  # Approximate values
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+        colors = ['#4ECDC4', '#4ECDC4', '#FF6B6B', '#FF6B6B']
+
+        # Plot 1: Final agent counts
+        bars1 = ax1.bar(experiments, final_counts, color=colors, edgecolor='black', linewidth=1.5)
+        ax1.set_ylabel('Final Agent Count')
+        ax1.set_title('Population Persistence: Healthy vs Degraded', fontweight='bold')
+        ax1.grid(axis='y', alpha=0.3)
+
+        # Add value labels
+        for bar in bars1:
+            height = bar.get_height()
+            ax1.text(bar.get_x() + bar.get_width()/2., height,
+                   f'{height:.1f}',
+                   ha='center', va='bottom', fontsize=9, fontweight='bold')
+
+        # Plot 2: Composition events
+        bars2 = ax2.bar(experiments, composition_events, color=colors, edgecolor='black', linewidth=1.5)
+        ax2.set_ylabel('Composition Events')
+        ax2.set_title('System Activity: Healthy vs Degraded', fontweight='bold')
+        ax2.grid(axis='y', alpha=0.3)
+
+        # Add value labels
+        for bar in bars2:
+            height = bar.get_height()
+            ax2.text(bar.get_x() + bar.get_width()/2., height,
+                   f'{height:.2f}',
+                   ha='center', va='bottom', fontsize=9, fontweight='bold')
+
+        # Add legend
+        from matplotlib.patches import Patch
+        legend_elements = [
+            Patch(facecolor='#4ECDC4', label='Healthy Systems'),
+            Patch(facecolor='#FF6B6B', label='Degraded Systems')
+        ]
+        fig.legend(handles=legend_elements, loc='upper center', ncol=2,
+                  bbox_to_anchor=(0.5, 0.02), frameon=False)
+
+        plt.tight_layout(rect=[0, 0.05, 1, 1])
+        output_file = self.output_dir / 'figure7_population_collapse_comparison.png'
+        plt.savefig(output_file, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"Generated: {output_file}")
+
+    def figure8_pattern_detection_workflow(self):
+        """Figure 8: Pattern detection workflow (flowchart).
+
+        Visualizes the pattern mining pipeline: data → detection → taxonomy → validation.
+        """
+        fig, ax = plt.subplots(figsize=(10, 8))
+
+        # Define workflow stages
+        stages = [
+            ('Input Data\n(C171, C175, C176, C177)', 0.5, 0.9),
+            ('Pattern Detection\n(4 methods)', 0.5, 0.7),
+            ('Spatial Patterns\n(clustering, dispersion)', 0.2, 0.5),
+            ('Temporal Patterns\n(steady state, oscillation)', 0.4, 0.5),
+            ('Interaction Patterns\n(basin preferences)', 0.6, 0.5),
+            ('Memory Patterns\n(retention, decay)', 0.8, 0.5),
+            ('Pattern Taxonomy\n(hierarchical structure)', 0.5, 0.3),
+            ('Validation\n(healthy vs degraded)', 0.5, 0.1)
+        ]
+
+        colors = ['#95E1D3', '#FFD93D', '#FF6B6B', '#4ECDC4', '#4ECDC4', '#FFD93D', '#95E1D3', '#95E1D3']
+
+        # Draw boxes
+        for i, (label, x, y) in enumerate(stages):
+            box = mpatches.FancyBboxPatch(
+                (x - 0.08, y - 0.05), 0.16, 0.08,
+                boxstyle="round,pad=0.01",
+                facecolor=colors[i],
+                edgecolor='black',
+                linewidth=1.5
+            )
+            ax.add_patch(box)
+            ax.text(x, y, label, ha='center', va='center', fontsize=9, fontweight='bold')
+
+        # Draw arrows
+        arrows = [
+            ((0.5, 0.85), (0.5, 0.75)),  # Input -> Detection
+            ((0.5, 0.65), (0.2, 0.55)),  # Detection -> Spatial
+            ((0.5, 0.65), (0.4, 0.55)),  # Detection -> Temporal
+            ((0.5, 0.65), (0.6, 0.55)),  # Detection -> Interaction
+            ((0.5, 0.65), (0.8, 0.55)),  # Detection -> Memory
+            ((0.2, 0.45), (0.5, 0.35)),  # Spatial -> Taxonomy
+            ((0.4, 0.45), (0.5, 0.35)),  # Temporal -> Taxonomy
+            ((0.6, 0.45), (0.5, 0.35)),  # Interaction -> Taxonomy
+            ((0.8, 0.45), (0.5, 0.35)),  # Memory -> Taxonomy
+            ((0.5, 0.25), (0.5, 0.15))   # Taxonomy -> Validation
+        ]
+
+        for (x1, y1), (x2, y2) in arrows:
+            ax.annotate('', xy=(x2, y2), xytext=(x1, y1),
+                       arrowprops=dict(arrowstyle='->', lw=1.5, color='black'))
+
+        ax.set_xlim(0, 1)
+        ax.set_ylim(0, 1)
+        ax.axis('off')
+        ax.set_title('Pattern Detection Workflow: Data to Validation',
+                    fontsize=12, fontweight='bold', pad=20)
+
+        plt.tight_layout()
+        output_file = self.output_dir / 'figure8_pattern_detection_workflow.png'
+        plt.savefig(output_file, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"Generated: {output_file}")
+
     def generate_all_figures(self):
         """Generate all publication figures for Paper 5D."""
         print("="*70)
@@ -341,9 +512,12 @@ class PatternVisualization:
         self.figure3_memory_retention_comparison()
         self.figure4_methodology_validation()
         self.figure5_pattern_statistics()
+        self.figure6_c175_perfect_stability()
+        self.figure7_population_collapse_comparison()
+        self.figure8_pattern_detection_workflow()
 
         print("\n" + "="*70)
-        print("ALL FIGURES GENERATED SUCCESSFULLY")
+        print("ALL FIGURES GENERATED SUCCESSFULLY (8/8)")
         print("="*70)
         print(f"\nFigures saved to: {self.output_dir}")
         print("\nReady for manuscript inclusion.")

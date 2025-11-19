@@ -1,0 +1,1289 @@
+{
+  "experiment": "cycle116_drift_parameter_space",
+  "sweeps": [
+    {
+      "name": "threshold_sweep",
+      "label": "THRESHOLD SWEEP (mult=1.0, spread=0.2)",
+      "configs": [
+        {
+          "threshold": 300,
+          "mult": 1.0,
+          "spread": 0.2
+        },
+        {
+          "threshold": 400,
+          "mult": 1.0,
+          "spread": 0.2
+        },
+        {
+          "threshold": 500,
+          "mult": 1.0,
+          "spread": 0.2
+        },
+        {
+          "threshold": 600,
+          "mult": 1.0,
+          "spread": 0.2
+        },
+        {
+          "threshold": 700,
+          "mult": 1.0,
+          "spread": 0.2
+        }
+      ]
+    },
+    {
+      "name": "mult_sweep",
+      "label": "MULT SWEEP (threshold=500, spread=0.2)",
+      "configs": [
+        {
+          "threshold": 500,
+          "mult": 0.5,
+          "spread": 0.2
+        },
+        {
+          "threshold": 500,
+          "mult": 0.75,
+          "spread": 0.2
+        },
+        {
+          "threshold": 500,
+          "mult": 1.0,
+          "spread": 0.2
+        },
+        {
+          "threshold": 500,
+          "mult": 1.25,
+          "spread": 0.2
+        },
+        {
+          "threshold": 500,
+          "mult": 1.5,
+          "spread": 0.2
+        }
+      ]
+    },
+    {
+      "name": "spread_sweep",
+      "label": "SPREAD SWEEP (threshold=500, mult=1.0)",
+      "configs": [
+        {
+          "threshold": 500,
+          "mult": 1.0,
+          "spread": 0.05
+        },
+        {
+          "threshold": 500,
+          "mult": 1.0,
+          "spread": 0.1
+        },
+        {
+          "threshold": 500,
+          "mult": 1.0,
+          "spread": 0.15
+        },
+        {
+          "threshold": 500,
+          "mult": 1.0,
+          "spread": 0.2
+        },
+        {
+          "threshold": 500,
+          "mult": 1.0,
+          "spread": 0.25
+        }
+      ]
+    }
+  ],
+  "cycles": 1000,
+  "agent_cap": 15,
+  "all_results": {
+    "threshold_sweep": [
+      {
+        "multiplier": 1.0,
+        "spread": 0.2,
+        "threshold": 300,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.5555555555555556,
+        "attractor_changes": 5,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(6.157522), np.float64(2.425271), np.float64(6.1251))",
+            "fraction": 0.694,
+            "unique_patterns": 7,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(5.717699), np.float64(4.839057), np.float64(5.837084))",
+            "fraction": 0.946,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.969026), np.float64(4.763259), np.float64(6.161467))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+            "fraction": 0.977,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(5.717699), np.float64(6.036147), np.float64(5.902653))",
+            "fraction": 0.886,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+            "fraction": 0.786,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 999,
+          "mean_age": 1.1241241241241242,
+          "median_age": 1.0,
+          "std_age": 0.9313839620120704,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 1.0,
+        "spread": 0.2,
+        "threshold": 400,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.4444444444444444,
+        "attractor_changes": 4,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(4.963716), np.float64(6.152506), np.float64(4.330159))",
+            "fraction": 0.544,
+            "unique_patterns": 18,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+            "fraction": 0.536,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+            "fraction": 0.784,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+            "fraction": 0.568,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 1.0,
+        "spread": 0.2,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.4444444444444444,
+        "attractor_changes": 4,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(4.963716), np.float64(6.152506), np.float64(4.330159))",
+            "fraction": 0.544,
+            "unique_patterns": 18,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+            "fraction": 0.536,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+            "fraction": 0.784,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+            "fraction": 0.568,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 1.0,
+        "spread": 0.2,
+        "threshold": 600,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.3333333333333333,
+        "attractor_changes": 3,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+            "fraction": 0.384,
+            "unique_patterns": 72,
+            "global_memory_size": 875
+          },
+          "200": {
+            "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+            "fraction": 0.625,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+            "fraction": 0.725,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+            "fraction": 0.65,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 996,
+          "mean_age": 2.141566265060241,
+          "median_age": 2.0,
+          "std_age": 1.5179776616775076,
+          "max_age": 6
+        }
+      },
+      {
+        "multiplier": 1.0,
+        "spread": 0.2,
+        "threshold": 700,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.3333333333333333,
+        "attractor_changes": 3,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(5.277876), np.float64(6.239031), np.float64(4.389683))",
+            "fraction": 0.3821656050955414,
+            "unique_patterns": 73,
+            "global_memory_size": 785
+          },
+          "200": {
+            "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+            "fraction": 0.586,
+            "unique_patterns": 6,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(6.157522), np.float64(5.80566), np.float64(5.330957))",
+            "fraction": 0.404,
+            "unique_patterns": 6,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 999,
+          "mean_age": 2.6116116116116115,
+          "median_age": 3.0,
+          "std_age": 1.8079197656932926,
+          "max_age": 11
+        }
+      }
+    ],
+    "mult_sweep": [
+      {
+        "multiplier": 0.5,
+        "spread": 0.2,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.4444444444444444,
+        "attractor_changes": 4,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(6.031858), np.float64(6.281146), np.float64(4.406452))",
+            "fraction": 0.624,
+            "unique_patterns": 33,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+            "fraction": 0.686,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.031858), np.float64(5.481012), np.float64(5.860674))",
+            "fraction": 0.52,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(5.843362), np.float64(5.449625), np.float64(6.227812))",
+            "fraction": 0.72,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(5.843362), np.float64(5.449625), np.float64(6.227812))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(5.843362), np.float64(5.449625), np.float64(6.227812))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+            "fraction": 0.864,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 0.75,
+        "spread": 0.2,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.2222222222222222,
+        "attractor_changes": 2,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(6.251769), np.float64(6.25894), np.float64(4.385074))",
+            "fraction": 0.644,
+            "unique_patterns": 25,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(5.749115), np.float64(5.502165), np.float64(6.213941))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.749115), np.float64(5.502165), np.float64(6.213941))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(5.749115), np.float64(5.502165), np.float64(6.213941))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 0.52,
+            "unique_patterns": 4,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 1.0,
+        "spread": 0.2,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.4444444444444444,
+        "attractor_changes": 4,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(4.963716), np.float64(6.152506), np.float64(4.330159))",
+            "fraction": 0.544,
+            "unique_patterns": 18,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+            "fraction": 0.536,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+            "fraction": 0.784,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+            "fraction": 0.568,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 1.25,
+        "spread": 0.2,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.3333333333333333,
+        "attractor_changes": 3,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(6.188938), np.float64(5.8355), np.float64(4.191398))",
+            "fraction": 0.644,
+            "unique_patterns": 9,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(5.874778), np.float64(5.296188), np.float64(6.182068))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.874778), np.float64(5.296188), np.float64(6.182068))",
+            "fraction": 0.768,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(6.126106), np.float64(6.045328), np.float64(5.514138))",
+            "fraction": 0.552,
+            "unique_patterns": 4,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 1.5,
+        "spread": 0.2,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.3333333333333333,
+        "attractor_changes": 3,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(5.717699), np.float64(6.11958), np.float64(4.417334))",
+            "fraction": 0.64,
+            "unique_patterns": 10,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+            "fraction": 0.784,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+            "fraction": 0.964,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      }
+    ],
+    "spread_sweep": [
+      {
+        "multiplier": 1.0,
+        "spread": 0.05,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.3333333333333333,
+        "attractor_changes": 3,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(4.351106), np.float64(6.273489), np.float64(4.434742))",
+            "fraction": 0.543,
+            "unique_patterns": 21,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(5.749115), np.float64(4.599389), np.float64(5.653903))",
+            "fraction": 0.48,
+            "unique_patterns": 6,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.749115), np.float64(4.785465), np.float64(6.182844))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(5.749115), np.float64(4.785465), np.float64(6.182844))",
+            "fraction": 0.536,
+            "unique_patterns": 5,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.236061), np.float64(5.992508), np.float64(6.246109))",
+            "fraction": 0.52,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.236061), np.float64(5.992508), np.float64(6.246109))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.236061), np.float64(5.992508), np.float64(6.246109))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.236061), np.float64(5.992508), np.float64(6.246109))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.236061), np.float64(5.992508), np.float64(6.246109))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.236061), np.float64(5.992508), np.float64(6.246109))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 1.0,
+        "spread": 0.1,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.3333333333333333,
+        "attractor_changes": 3,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(4.303982), np.float64(6.219123), np.float64(4.394291))",
+            "fraction": 0.538,
+            "unique_patterns": 21,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(5.843362), np.float64(4.70812), np.float64(5.734805))",
+            "fraction": 0.502,
+            "unique_patterns": 4,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+            "fraction": 0.568,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 0.52,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 1.0,
+        "spread": 0.15,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.4444444444444444,
+        "attractor_changes": 4,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(5.057964), np.float64(6.261237), np.float64(4.41106))",
+            "fraction": 0.582,
+            "unique_patterns": 13,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(5.93761), np.float64(4.816852), np.float64(5.815707))",
+            "fraction": 0.536,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.796238), np.float64(4.83983), np.float64(6.223295))",
+            "fraction": 0.784,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(5.93761), np.float64(5.827865), np.float64(5.352335))",
+            "fraction": 0.568,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.141814), np.float64(5.883777), np.float64(6.165208))",
+            "fraction": 0.52,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.141814), np.float64(5.883777), np.float64(6.165208))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.141814), np.float64(5.883777), np.float64(6.165208))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.141814), np.float64(5.883777), np.float64(6.165208))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.141814), np.float64(5.883777), np.float64(6.165208))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.141814), np.float64(5.883777), np.float64(6.165208))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 1.0,
+        "spread": 0.2,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.4444444444444444,
+        "attractor_changes": 4,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(4.963716), np.float64(6.152506), np.float64(4.330159))",
+            "fraction": 0.544,
+            "unique_patterns": 18,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+            "fraction": 0.536,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+            "fraction": 0.784,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+            "fraction": 0.568,
+            "unique_patterns": 3,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      },
+      {
+        "multiplier": 1.0,
+        "spread": 0.25,
+        "threshold": 500,
+        "agent_cap": 15,
+        "cycles": 1000,
+        "drift_speed": 0.2222222222222222,
+        "attractor_changes": 2,
+        "checkpoint_data": {
+          "100": {
+            "attractor": "(np.float64(6.126106), np.float64(5.034314), np.float64(5.97751))",
+            "fraction": 0.264,
+            "unique_patterns": 21,
+            "global_memory_size": 1000
+          },
+          "200": {
+            "attractor": "(np.float64(6.126106), np.float64(5.034314), np.float64(5.97751))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "300": {
+            "attractor": "(np.float64(6.126106), np.float64(5.034314), np.float64(5.97751))",
+            "fraction": 0.784,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "400": {
+            "attractor": "(np.float64(6.126106), np.float64(6.045328), np.float64(5.514138))",
+            "fraction": 0.586,
+            "unique_patterns": 2,
+            "global_memory_size": 1000
+          },
+          "500": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "600": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "700": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "800": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "900": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          },
+          "1000": {
+            "attractor": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+            "fraction": 1.0,
+            "unique_patterns": 1,
+            "global_memory_size": 1000
+          }
+        },
+        "burst_stats": {
+          "total_bursts": 997,
+          "mean_age": 1.5566700100300903,
+          "median_age": 2.0,
+          "std_age": 1.1645241491334755,
+          "max_age": 4
+        }
+      }
+    ]
+  },
+  "correlations": {
+    "threshold_sweep": -0.944911182523068,
+    "mult_sweep": -0.1889822365046136,
+    "spread_sweep": -0.1889822365046136
+  },
+  "strongest_parameter": "threshold",
+  "strongest_correlation": -0.944911182523068,
+  "insight_type": "threshold_primary",
+  "c113_resolution": "C113 REPLICATED - Threshold does control drift",
+  "duration": 142.61434698104858,
+  "timestamp": 1761164016.311827
+}

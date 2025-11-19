@@ -1,0 +1,277 @@
+{
+  "experiment": "cycle112_turnover_rate_modulation",
+  "test_triplet": [
+    1.0,
+    0.2,
+    500
+  ],
+  "agent_caps": [
+    5,
+    10,
+    15,
+    20,
+    25
+  ],
+  "cap_labels": {
+    "5": "VERY-LOW",
+    "10": "LOW",
+    "15": "BASELINE",
+    "20": "HIGH",
+    "25": "VERY-HIGH"
+  },
+  "cycles": 1000,
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_cap": 5,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "400": {
+          "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "fraction": 0.568
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 2,
+      "cycles_to_first_change": 400,
+      "drift_speed": 0.2857142857142857,
+      "total_spawns": 1000,
+      "total_bursts": 997,
+      "turnover_rate": 199.70000000000002
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_cap": 10,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "400": {
+          "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "fraction": 0.568
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 2,
+      "cycles_to_first_change": 400,
+      "drift_speed": 0.2857142857142857,
+      "total_spawns": 1000,
+      "total_bursts": 997,
+      "turnover_rate": 199.70000000000002
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_cap": 15,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "400": {
+          "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "fraction": 0.568
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 2,
+      "cycles_to_first_change": 400,
+      "drift_speed": 0.2857142857142857,
+      "total_spawns": 1000,
+      "total_bursts": 997,
+      "turnover_rate": 199.70000000000002
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_cap": 20,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "400": {
+          "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "fraction": 0.568
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 2,
+      "cycles_to_first_change": 400,
+      "drift_speed": 0.2857142857142857,
+      "total_spawns": 1000,
+      "total_bursts": 997,
+      "turnover_rate": 199.70000000000002
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_cap": 25,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "400": {
+          "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "fraction": 0.568
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 2,
+      "cycles_to_first_change": 400,
+      "drift_speed": 0.2857142857142857,
+      "total_spawns": 1000,
+      "total_bursts": 997,
+      "turnover_rate": 199.70000000000002
+    }
+  ],
+  "analysis": {
+    "successful_runs": 5,
+    "turnover_rates": [
+      199.70000000000002,
+      199.70000000000002,
+      199.70000000000002,
+      199.70000000000002,
+      199.70000000000002
+    ],
+    "drift_speeds": [
+      0.2857142857142857,
+      0.2857142857142857,
+      0.2857142857142857,
+      0.2857142857142857,
+      0.2857142857142857
+    ],
+    "correlation": NaN,
+    "relationship_type": "weak_relationship"
+  },
+  "insight_69_discovered": true,
+  "duration": 35.07703185081482,
+  "timestamp": 1761161373.966235
+}

@@ -1,0 +1,9 @@
+{
+  "checkpoint_id": "longterm_1761111108_checkpoint_20",
+  "cycle": 20,
+  "timestamp": 1761111114.5289369,
+  "decisions": 20,
+  "emergent_patterns": 34,
+  "agent_count": 3,
+  "avg_reality_score": 1.0
+}

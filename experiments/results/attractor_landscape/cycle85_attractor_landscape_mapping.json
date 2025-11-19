@@ -1,0 +1,324 @@
+{
+  "experiment": "cycle85_attractor_landscape_mapping",
+  "thresholds_tested": [
+    300,
+    400,
+    600,
+    700,
+    800
+  ],
+  "cycles": 150,
+  "runs_per_condition": 2,
+  "total_runs": 30,
+  "successful_runs": 30,
+  "results": [
+    {
+      "threshold": 300,
+      "condition": "A",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.207787), np.float64(4.576724), np.float64(5.627328))",
+      "dominant_fraction": 0.827,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 300,
+      "condition": "A",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.207787), np.float64(4.576724), np.float64(5.627328))",
+      "dominant_fraction": 0.827,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 300,
+      "condition": "B",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(5.215044), np.float64(5.437845), np.float64(6.175795))",
+      "dominant_fraction": 0.727,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 300,
+      "condition": "B",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(5.215044), np.float64(5.437845), np.float64(6.175795))",
+      "dominant_fraction": 0.727,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 300,
+      "condition": "C",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+      "dominant_fraction": 0.686,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 300,
+      "condition": "C",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+      "dominant_fraction": 0.686,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 400,
+      "condition": "A",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.864,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 400,
+      "condition": "A",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.864,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 400,
+      "condition": "B",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+      "dominant_fraction": 0.864,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 400,
+      "condition": "B",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+      "dominant_fraction": 0.864,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 400,
+      "condition": "C",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.23292), np.float64(6.237194), np.float64(4.368894))",
+      "dominant_fraction": 1.0,
+      "collapse_cycle": 120
+    },
+    {
+      "threshold": 400,
+      "condition": "C",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.23292), np.float64(6.237194), np.float64(4.368894))",
+      "dominant_fraction": 1.0,
+      "collapse_cycle": 120
+    },
+    {
+      "threshold": 600,
+      "condition": "A",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.586,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 600,
+      "condition": "A",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.586,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 600,
+      "condition": "B",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+      "dominant_fraction": 0.786,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 600,
+      "condition": "B",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+      "dominant_fraction": 0.786,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 600,
+      "condition": "C",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+      "dominant_fraction": 0.73,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 600,
+      "condition": "C",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+      "dominant_fraction": 0.73,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 700,
+      "condition": "A",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.195221), np.float64(5.477001), np.float64(4.305436))",
+      "dominant_fraction": 0.306,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 700,
+      "condition": "A",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.195221), np.float64(5.477001), np.float64(4.305436))",
+      "dominant_fraction": 0.306,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 700,
+      "condition": "B",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(5.843362), np.float64(6.063683), np.float64(4.244648))",
+      "dominant_fraction": 0.3,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 700,
+      "condition": "B",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(5.843362), np.float64(6.063683), np.float64(4.244648))",
+      "dominant_fraction": 0.3,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 700,
+      "condition": "C",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+      "dominant_fraction": 0.636,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 700,
+      "condition": "C",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+      "dominant_fraction": 0.636,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 800,
+      "condition": "A",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(5.566902), np.float64(4.665087), np.float64(5.707641))",
+      "dominant_fraction": 0.34517766497461927,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 800,
+      "condition": "A",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(5.566902), np.float64(4.665087), np.float64(5.707641))",
+      "dominant_fraction": 0.34517766497461927,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 800,
+      "condition": "B",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(5.215044), np.float64(5.437845), np.float64(6.175795))",
+      "dominant_fraction": 0.6071065989847716,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 800,
+      "condition": "B",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(5.215044), np.float64(5.437845), np.float64(6.175795))",
+      "dominant_fraction": 0.6071065989847716,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 800,
+      "condition": "C",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.019292), np.float64(5.186997), np.float64(6.09597))",
+      "dominant_fraction": 0.5147208121827411,
+      "collapse_cycle": null
+    },
+    {
+      "threshold": 800,
+      "condition": "C",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.019292), np.float64(5.186997), np.float64(6.09597))",
+      "dominant_fraction": 0.5147208121827411,
+      "collapse_cycle": null
+    }
+  ],
+  "analysis": {
+    "by_threshold": {
+      "300": {
+        "runs": 6,
+        "unique_attractors": 3,
+        "patterns": [
+          "(np.float64(6.207787), np.float64(4.576724), np.float64(5.627328))",
+          "(np.float64(6.207787), np.float64(4.576724), np.float64(5.627328))",
+          "(np.float64(5.215044), np.float64(5.437845), np.float64(6.175795))",
+          "(np.float64(5.215044), np.float64(5.437845), np.float64(6.175795))",
+          "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+          "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))"
+        ]
+      },
+      "400": {
+        "runs": 6,
+        "unique_attractors": 3,
+        "patterns": [
+          "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+          "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+          "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+          "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+          "(np.float64(6.23292), np.float64(6.237194), np.float64(4.368894))",
+          "(np.float64(6.23292), np.float64(6.237194), np.float64(4.368894))"
+        ]
+      },
+      "600": {
+        "runs": 6,
+        "unique_attractors": 3,
+        "patterns": [
+          "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+          "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+          "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+          "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+          "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+          "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))"
+        ]
+      },
+      "700": {
+        "runs": 6,
+        "unique_attractors": 3,
+        "patterns": [
+          "(np.float64(6.195221), np.float64(5.477001), np.float64(4.305436))",
+          "(np.float64(6.195221), np.float64(5.477001), np.float64(4.305436))",
+          "(np.float64(5.843362), np.float64(6.063683), np.float64(4.244648))",
+          "(np.float64(5.843362), np.float64(6.063683), np.float64(4.244648))",
+          "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+          "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))"
+        ]
+      },
+      "800": {
+        "runs": 6,
+        "unique_attractors": 3,
+        "patterns": [
+          "(np.float64(5.566902), np.float64(4.665087), np.float64(5.707641))",
+          "(np.float64(5.566902), np.float64(4.665087), np.float64(5.707641))",
+          "(np.float64(5.215044), np.float64(5.437845), np.float64(6.175795))",
+          "(np.float64(5.215044), np.float64(5.437845), np.float64(6.175795))",
+          "(np.float64(6.019292), np.float64(5.186997), np.float64(6.09597))",
+          "(np.float64(6.019292), np.float64(5.186997), np.float64(6.09597))"
+        ]
+      }
+    },
+    "universal": true
+  },
+  "insight_46_discovered": true,
+  "duration": 45.309942960739136,
+  "timestamp": 1761136450.6379972
+}

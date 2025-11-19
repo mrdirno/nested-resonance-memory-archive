@@ -1,0 +1,38 @@
+{
+  "experiment_id": "sweep_1761112690_th200",
+  "threshold": 200.0,
+  "cycles_completed": 30,
+  "start_time": 1761112690.34216,
+  "end_time": 1761112699.077775,
+  "duration": 8.735615015029907,
+  "agent_counts": [
+    1,
+    0,
+    1,
+    0,
+    1,
+    0
+  ],
+  "checkpoint_cycles": [
+    5,
+    10,
+    15,
+    20,
+    25,
+    30
+  ],
+  "mean_agents": 0.5,
+  "std_agents": 0.5,
+  "min_agents": 0,
+  "max_agents": 1,
+  "pattern_counts": [
+    107,
+    107,
+    107,
+    107,
+    107,
+    107
+  ],
+  "final_patterns": 107,
+  "avg_reality_score": 1.0
+}

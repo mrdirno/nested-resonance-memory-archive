@@ -1,0 +1,41 @@
+{
+  "total_experiments": 18,
+  "cycles_analyzed": [
+    160,
+    161
+  ],
+  "composition_stats": {
+    "mean": 2.403888888888889,
+    "median": 2.4299999999999997,
+    "std": 0.21351916096398804,
+    "min": 2.1,
+    "max": 2.76
+  },
+  "threshold_analysis": {
+    "1.5": {
+      "count": 18,
+      "pct": 100.0
+    },
+    "2.0": {
+      "count": 18,
+      "pct": 100.0
+    },
+    "2.5": {
+      "count": 7,
+      "pct": 38.88888888888889
+    },
+    "3.0": {
+      "count": 0,
+      "pct": 0.0
+    },
+    "5.0": {
+      "count": 0,
+      "pct": 0.0
+    },
+    "7.0": {
+      "count": 0,
+      "pct": 0.0
+    }
+  },
+  "optimal_threshold": 2.5
+}

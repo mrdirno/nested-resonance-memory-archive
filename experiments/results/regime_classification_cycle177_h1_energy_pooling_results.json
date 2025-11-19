@@ -1,0 +1,257 @@
+{
+  "metadata": {
+    "cycle": "177",
+    "hypothesis": "H1 - Energy Pooling",
+    "date": "2025-10-26T03:49:08.234059",
+    "frequency": 2.5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      101,
+      202,
+      303,
+      404,
+      505,
+      606
+    ],
+    "cycles_per_experiment": 3000,
+    "total_experiments": 20,
+    "duration_minutes": 103.80588401953379,
+    "sharing_fraction": 0.1,
+    "spawn_threshold": 10.0,
+    "energy_recharge_rate": 0.01
+  },
+  "classifications": [
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 42,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 123,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 456,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 789,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 101,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 202,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 303,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 404,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 505,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 606,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 42,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 123,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 456,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 789,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 101,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 202,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 303,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 404,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 505,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 606,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    }
+  ],
+  "regime_counts": {
+    "bistability": 0,
+    "accumulation": 0,
+    "collapse": 0,
+    "unknown": 20
+  },
+  "basin_regime_map": {
+    "B": {
+      "bistability": 0,
+      "accumulation": 0,
+      "collapse": 0,
+      "unknown": 20
+    }
+  },
+  "condition_regime_map": {
+    "BASELINE": {
+      "bistability": 0,
+      "accumulation": 0,
+      "collapse": 0,
+      "unknown": 10
+    },
+    "POOLING": {
+      "bistability": 0,
+      "accumulation": 0,
+      "collapse": 0,
+      "unknown": 10
+    }
+  },
+  "total_experiments": 20
+}

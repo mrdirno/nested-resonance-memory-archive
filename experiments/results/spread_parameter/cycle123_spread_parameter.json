@@ -1,0 +1,104 @@
+{
+  "experiment": "cycle123_spread_parameter_investigation",
+  "threshold": 400,
+  "mult": 1.0,
+  "spread_values": [
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "cycles": 5000,
+  "results": [
+    {
+      "threshold": 400,
+      "mult": 1.0,
+      "spread": 0.05,
+      "cycles": 5000,
+      "duration": 35.98864507675171,
+      "final_dominant": "(np.float64(6.188938), np.float64(6.031137), np.float64(6.263918))",
+      "final_dominant_tuple": [
+        6.188938,
+        6.031137,
+        6.263918
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 400,
+      "mult": 1.0,
+      "spread": 0.1,
+      "cycles": 5000,
+      "duration": 35.84598898887634,
+      "final_dominant": "(np.float64(6.188938), np.float64(6.031137), np.float64(6.263918))",
+      "final_dominant_tuple": [
+        6.188938,
+        6.031137,
+        6.263918
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 400,
+      "mult": 1.0,
+      "spread": 0.15,
+      "cycles": 5000,
+      "duration": 36.02922606468201,
+      "final_dominant": "(np.float64(6.000442), np.float64(6.136217), np.float64(6.236177))",
+      "final_dominant_tuple": [
+        6.000442,
+        6.136217,
+        6.236177
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 400,
+      "mult": 1.0,
+      "spread": 0.2,
+      "cycles": 5000,
+      "duration": 35.89247393608093,
+      "final_dominant": "(np.float64(6.220353), np.float64(6.275283), np.float64(6.281831))",
+      "final_dominant_tuple": [
+        6.220353,
+        6.275283,
+        6.281831
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 400,
+      "mult": 1.0,
+      "spread": 0.25,
+      "cycles": 5000,
+      "duration": 35.92022490501404,
+      "final_dominant": "(np.float64(6.047566), np.float64(6.190583), np.float64(6.276628))",
+      "final_dominant_tuple": [
+        6.047566,
+        6.190583,
+        6.276628
+      ],
+      "final_fraction": 1.0
+    },
+    {
+      "threshold": 400,
+      "mult": 1.0,
+      "spread": 0.3,
+      "cycles": 5000,
+      "duration": 35.47394299507141,
+      "final_dominant": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+      "final_dominant_tuple": [
+        6.220353,
+        6.178863,
+        6.05695
+      ],
+      "final_fraction": 1.0
+    }
+  ],
+  "relationship_type": "MULTIPLE TRANSITIONS",
+  "insight_type": "complex_relationship",
+  "duration": 215.58183073997498,
+  "timestamp": 1761168076.7071202
+}

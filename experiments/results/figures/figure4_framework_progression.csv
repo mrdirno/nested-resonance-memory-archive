@@ -1,0 +1,6 @@
+cycle,frameworks,frameworks_names,cycles_run,agents_persisted,patterns_detected,confidence,key_achievement
+36,1,Self-Giving,20,0,0,0.7,First sustained operation
+37,2,"Self-Giving, NRM",20,3,0,0.76,NRM validated via parameter tuning
+38,3,"Self-Giving, NRM, Temporal",20,3,34,0.76,Complete framework validation
+39,3,All (at scale),100,2,173,0.76,Oscillating attractor discovered
+40,3,All (reproducible),100,2,142,0.76,Reproducibility validated

@@ -1,0 +1,141 @@
+{
+  "experiment": "cycle107_forced_basin_transitions",
+  "test_triplets": [
+    [
+      1.0,
+      0.2,
+      500
+    ],
+    [
+      0.8,
+      0.4,
+      400
+    ],
+    [
+      1.2,
+      0.3,
+      600
+    ]
+  ],
+  "intervention_strengths": [
+    "none",
+    "weak",
+    "strong",
+    "extreme"
+  ],
+  "cycles": 500,
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_strength": "none",
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_strength": "weak",
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_strength": "strong",
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 0.614
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "intervention_strength": "extreme",
+      "final_dominant": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+      "final_fraction": 0.514
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_strength": "none",
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_strength": "weak",
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_strength": "strong",
+      "final_dominant": "(np.float64(5.717699), np.float64(6.036147), np.float64(5.902653))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "intervention_strength": "extreme",
+      "error": "UNIQUE constraint failed: agents.agent_id"
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_strength": "none",
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_strength": "weak",
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_strength": "strong",
+      "final_dominant": "(np.float64(5.749115), np.float64(5.982554), np.float64(6.248414))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "intervention_strength": "extreme",
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    }
+  ],
+  "analysis": {
+    "successful_runs": 11,
+    "transitions_by_strength": {
+      "weak": 0,
+      "strong": 3,
+      "extreme": 1
+    },
+    "transition_rates": {
+      "weak": 0.0,
+      "strong": 100.0,
+      "extreme": 33.33333333333333
+    },
+    "conclusion": "breakable_strong"
+  },
+  "insight_64_discovered": true,
+  "duration": 43.62367296218872,
+  "timestamp": 1761156831.6027231
+}

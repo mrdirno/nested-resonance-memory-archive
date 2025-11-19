@@ -1,12 +1,3 @@
-"""
-Author: Aldrin Payopay
-Email: aldrin.gdf@gmail.com
-Project: Nested Resonance Memory (NRM) Research Archive
-Repository: https://github.com/mrdirno/nested-resonance-memory-archive
-License: GPL-3.0
-"""
-
-
 #!/usr/bin/env python3
 """
 DUALITY-ZERO-V2 Reality System Test
@@ -90,6 +81,8 @@ def test_reality_interface():
     print(f"  Status: {health['status']}")
     print("  ✓ Health check complete")
 
+    return reality
+
 
 def test_system_monitor(reality: RealityInterface):
     """Test SystemMonitor with real monitoring"""
@@ -146,6 +139,8 @@ def test_system_monitor(reality: RealityInterface):
     print("\n  Monitoring stopped")
     print(f"  Alerts triggered: {alert_count[0]}")
 
+    return monitor
+
 
 def test_metrics_analyzer(reality: RealityInterface):
     """Test MetricsAnalyzer with real analysis"""
@@ -175,6 +170,8 @@ def test_metrics_analyzer(reality: RealityInterface):
     score = analyzer.calculate_performance_score()
     print(f"  Performance score: {score:.1f}/100")
     print("  ✓ Performance scoring complete")
+
+    return analyzer
 
 
 def test_hybrid_orchestrator():
@@ -222,6 +219,8 @@ def test_hybrid_orchestrator():
     print("\n[4.5] Shutting down orchestrator...")
     orchestrator.shutdown()
     print("  ✓ Orchestrator shutdown complete")
+
+    return orchestrator
 
 
 def test_reality_validator():
@@ -279,6 +278,8 @@ def test_reality_validator():
     print(f"  Critical: {summary.get('critical_violations', 0)}")
     print(f"  Warnings: {summary.get('warning_violations', 0)}")
     print("  ✓ Summary generated")
+
+    return validator
 
 
 def run_all_tests():

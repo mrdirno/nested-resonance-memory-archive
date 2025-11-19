@@ -1,0 +1,1404 @@
+{
+  "analysis": {
+    "total_files": 165,
+    "ok_files": 34,
+    "error_files": 4,
+    "no_exp_files": 127,
+    "classifiable_files": 5,
+    "total_classifiable_experiments": 120,
+    "field_availability": {
+      "mean_population": 5,
+      "std_population": 5,
+      "cv_population": 5,
+      "basin": 26,
+      "condition": 5,
+      "frequency": 17
+    },
+    "classifiable_files_list": [
+      "cycle176_ablation_study_v3.json",
+      "cycle177_v5_corrected_stochasticity_results.json",
+      "cycle176_ablation_study_v4.json",
+      "cycle177_h1_energy_pooling_results.json",
+      "cycle176_ablation_study.json"
+    ],
+    "all_classifiable": [
+      {
+        "file": "cycle176_ablation_study_v3.json",
+        "status": "ok",
+        "cycle": "176",
+        "scenario": "Ablation Study - Mechanism Isolation",
+        "num_experiments": 10,
+        "has_mean": true,
+        "has_std": true,
+        "has_cv": true,
+        "has_basin": true,
+        "has_condition": true,
+        "has_frequency": true,
+        "has_regime_data": true,
+        "relative_path": "cycle176_ablation_study_v3.json"
+      },
+      {
+        "file": "cycle177_v5_corrected_stochasticity_results.json",
+        "status": "ok",
+        "cycle": "177 V5",
+        "scenario": "unknown",
+        "num_experiments": 20,
+        "has_mean": true,
+        "has_std": true,
+        "has_cv": true,
+        "has_basin": true,
+        "has_condition": true,
+        "has_frequency": true,
+        "has_regime_data": true,
+        "relative_path": "cycle177_v5_corrected_stochasticity_results.json"
+      },
+      {
+        "file": "cycle176_ablation_study_v4.json",
+        "status": "ok",
+        "cycle": "176",
+        "scenario": "Ablation Study - Mechanism Isolation",
+        "num_experiments": 10,
+        "has_mean": true,
+        "has_std": true,
+        "has_cv": true,
+        "has_basin": true,
+        "has_condition": true,
+        "has_frequency": true,
+        "has_regime_data": true,
+        "relative_path": "cycle176_ablation_study_v4.json"
+      },
+      {
+        "file": "cycle177_h1_energy_pooling_results.json",
+        "status": "ok",
+        "cycle": "177",
+        "scenario": "unknown",
+        "num_experiments": 20,
+        "has_mean": true,
+        "has_std": true,
+        "has_cv": true,
+        "has_basin": true,
+        "has_condition": true,
+        "has_frequency": true,
+        "has_regime_data": true,
+        "relative_path": "cycle177_h1_energy_pooling_results.json"
+      },
+      {
+        "file": "cycle176_ablation_study.json",
+        "status": "ok",
+        "cycle": "176",
+        "scenario": "Ablation Study - Mechanism Isolation",
+        "num_experiments": 60,
+        "has_mean": true,
+        "has_std": true,
+        "has_cv": true,
+        "has_basin": true,
+        "has_condition": true,
+        "has_frequency": true,
+        "has_regime_data": true,
+        "relative_path": "cycle176_ablation_study.json"
+      }
+    ]
+  },
+  "full_survey": [
+    {
+      "file": "cycle141_dead_zone_boundary_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle141_dead_zone_boundary_mapping.json"
+    },
+    {
+      "file": "publication_analysis_corrected.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "publication_analysis_corrected.json"
+    },
+    {
+      "file": "cycle156_boundary_mechanism.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 55,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle156_boundary_mechanism.json"
+    },
+    {
+      "file": "cycle152_boundary_mapping.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 18,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle152_boundary_mapping.json"
+    },
+    {
+      "file": "exp_1761110081_results.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "exp_1761110081_results.json"
+    },
+    {
+      "file": "cycle176_ablation_study_v3.json",
+      "status": "ok",
+      "cycle": "176",
+      "scenario": "Ablation Study - Mechanism Isolation",
+      "num_experiments": 10,
+      "has_mean": true,
+      "has_std": true,
+      "has_cv": true,
+      "has_basin": true,
+      "has_condition": true,
+      "has_frequency": true,
+      "has_regime_data": true,
+      "relative_path": "cycle176_ablation_study_v3.json"
+    },
+    {
+      "file": "cycle164_antiharmonic_validation.json",
+      "status": "ok",
+      "cycle": "163C",
+      "scenario": "Frequency-Seed Interaction Analysis",
+      "num_experiments": 50,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle164_antiharmonic_validation.json"
+    },
+    {
+      "file": "cycle159_parameter_space.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 48,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle159_parameter_space.json"
+    },
+    {
+      "file": "regime_classification_analysis_c176.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "regime_classification_analysis_c176.json"
+    },
+    {
+      "file": "cycle136_reproducibility_test.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle136_reproducibility_test.json"
+    },
+    {
+      "file": "cycle162_163_comparison.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle162_163_comparison.json"
+    },
+    {
+      "file": "diagnostic_stochasticity_analysis.json",
+      "status": "error",
+      "error": "Expecting value: line 3681 column 16 (char 118499)",
+      "has_regime_data": false,
+      "relative_path": "diagnostic_stochasticity_analysis.json"
+    },
+    {
+      "file": "agent_cap_test.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "agent_cap_test.json"
+    },
+    {
+      "file": "cycle177_v5_corrected_stochasticity_results.json",
+      "status": "ok",
+      "cycle": "177 V5",
+      "scenario": "unknown",
+      "num_experiments": 20,
+      "has_mean": true,
+      "has_std": true,
+      "has_cv": true,
+      "has_basin": true,
+      "has_condition": true,
+      "has_frequency": true,
+      "has_regime_data": true,
+      "relative_path": "cycle177_v5_corrected_stochasticity_results.json"
+    },
+    {
+      "file": "exp_1761110204_results.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "exp_1761110204_results.json"
+    },
+    {
+      "file": "cycle162_frequency_landscape_remapping.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 45,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle162_frequency_landscape_remapping.json"
+    },
+    {
+      "file": "cycle153_upper_boundary_scan.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 15,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle153_upper_boundary_scan.json"
+    },
+    {
+      "file": "cycle145_anti_resonance_validation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle145_anti_resonance_validation.json"
+    },
+    {
+      "file": "cycle143_theoretical_harmonic_model.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle143_theoretical_harmonic_model.json"
+    },
+    {
+      "file": "cycle170_basin_threshold_sensitivity.json",
+      "status": "ok",
+      "cycle": "170",
+      "scenario": "Basin Threshold Sensitivity Test",
+      "num_experiments": 550,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle170_basin_threshold_sensitivity.json"
+    },
+    {
+      "file": "cycle138_spawning_protocol_validation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle138_spawning_protocol_validation.json"
+    },
+    {
+      "file": "phase_autonomy_investigation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "phase_autonomy_investigation.json"
+    },
+    {
+      "file": "cycle165_upper_frequency_boundary.json",
+      "status": "ok",
+      "cycle": "165",
+      "scenario": "Upper Frequency Boundary Mapping",
+      "num_experiments": 50,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle165_upper_frequency_boundary.json"
+    },
+    {
+      "file": "cycle139_protocol_space_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle139_protocol_space_mapping.json"
+    },
+    {
+      "file": "cycle162_analysis.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle162_analysis.json"
+    },
+    {
+      "file": "temporal_evolution_summary.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "temporal_evolution_summary.json"
+    },
+    {
+      "file": "cycle255_h1h2_lightweight_results.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle255_h1h2_lightweight_results.json"
+    },
+    {
+      "file": "cycle142_sustained_composition_threshold.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle142_sustained_composition_threshold.json"
+    },
+    {
+      "file": "cycle149_agent_cap_scaling_validation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle149_agent_cap_scaling_validation.json"
+    },
+    {
+      "file": "cycle169_critical_transition_mapping.json",
+      "status": "ok",
+      "cycle": "169",
+      "scenario": "Critical Transition Mapping",
+      "num_experiments": 110,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle169_critical_transition_mapping.json"
+    },
+    {
+      "file": "cycle166_threshold_validation_n10.json",
+      "status": "ok",
+      "cycle": "166",
+      "scenario": "Threshold Validation with N=10",
+      "num_experiments": 40,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle166_threshold_validation_n10.json"
+    },
+    {
+      "file": "corrected_experiments_analysis.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "corrected_experiments_analysis.json"
+    },
+    {
+      "file": "cycle154_temporal_validation.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 60,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle154_temporal_validation.json"
+    },
+    {
+      "file": "cycle176_ablation_study_v4.json",
+      "status": "ok",
+      "cycle": "176",
+      "scenario": "Ablation Study - Mechanism Isolation",
+      "num_experiments": 10,
+      "has_mean": true,
+      "has_std": true,
+      "has_cv": true,
+      "has_basin": true,
+      "has_condition": true,
+      "has_frequency": true,
+      "has_regime_data": true,
+      "relative_path": "cycle176_ablation_study_v4.json"
+    },
+    {
+      "file": "cycle163c_frequency_seed_interaction.json",
+      "status": "ok",
+      "cycle": "163C",
+      "scenario": "Frequency-Seed Interaction Analysis",
+      "num_experiments": 50,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle163c_frequency_seed_interaction.json"
+    },
+    {
+      "file": "cycle176_analysis_summary.json",
+      "status": "error",
+      "error": "Expecting value: line 24 column 22 (char 584)",
+      "has_regime_data": false,
+      "relative_path": "cycle176_analysis_summary.json"
+    },
+    {
+      "file": "cycle160_corrected_spawning.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 15,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle160_corrected_spawning.json"
+    },
+    {
+      "file": "cycle493_phase_autonomy_energy_dependence.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle493_phase_autonomy_energy_dependence.json"
+    },
+    {
+      "file": "cycle135_boundary_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle135_boundary_mapping.json"
+    },
+    {
+      "file": "cycle151_anti_harmonic_scan.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 21,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle151_anti_harmonic_scan.json"
+    },
+    {
+      "file": "exp_1761110024_results.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "exp_1761110024_results.json"
+    },
+    {
+      "file": "massive_resonance_mining.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "massive_resonance_mining.json"
+    },
+    {
+      "file": "cycle133_threshold_diversity_grid.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle133_threshold_diversity_grid.json"
+    },
+    {
+      "file": "exp_1761110081_cycles.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 20,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": false,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "exp_1761110081_cycles.json"
+    },
+    {
+      "file": "exp_1761109706_cycles.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 20,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": false,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "exp_1761109706_cycles.json"
+    },
+    {
+      "file": "reclassification_analysis.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "reclassification_analysis.json"
+    },
+    {
+      "file": "cycle134_ultra_longterm_stability.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle134_ultra_longterm_stability.json"
+    },
+    {
+      "file": "cycle155_temporal_mapping.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 57,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle155_temporal_mapping.json"
+    },
+    {
+      "file": "cycle171_summary_statistics.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle171_summary_statistics.json"
+    },
+    {
+      "file": "exp_1761109737_results.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "exp_1761109737_results.json"
+    },
+    {
+      "file": "cycle167_antiharmonic_validation_n10.json",
+      "status": "ok",
+      "cycle": "167",
+      "scenario": "Anti-Resonance Validation with N=10",
+      "num_experiments": 80,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle167_antiharmonic_validation_n10.json"
+    },
+    {
+      "file": "exp_1761109640_results.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "exp_1761109640_results.json"
+    },
+    {
+      "file": "cycle133_bottleneck_test.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle133_bottleneck_test.json"
+    },
+    {
+      "file": "cross_cycle_comparison.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cross_cycle_comparison.json"
+    },
+    {
+      "file": "cycle148_temporal_regime_boundary_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle148_temporal_regime_boundary_mapping.json"
+    },
+    {
+      "file": "exp_1761109706_results.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "exp_1761109706_results.json"
+    },
+    {
+      "file": "exp_1761109952_results.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "exp_1761109952_results.json"
+    },
+    {
+      "file": "cycle255_h1h2_high_capacity_results.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle255_h1h2_high_capacity_results.json"
+    },
+    {
+      "file": "cycle140_resonance_region_refinement.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle140_resonance_region_refinement.json"
+    },
+    {
+      "file": "exp_1761109952_cycles.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 20,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": false,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "exp_1761109952_cycles.json"
+    },
+    {
+      "file": "cycle174_population_bistability.json",
+      "status": "ok",
+      "cycle": "174",
+      "scenario": "Population-Based Bistability Test",
+      "num_experiments": 80,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": false,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle174_population_bistability.json"
+    },
+    {
+      "file": "cycle175_high_resolution_transition.json",
+      "status": "ok",
+      "cycle": "175",
+      "scenario": "High-Resolution Transition Mapping",
+      "num_experiments": 110,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle175_high_resolution_transition.json"
+    },
+    {
+      "file": "cycle177_h1_energy_pooling_results.json",
+      "status": "ok",
+      "cycle": "177",
+      "scenario": "unknown",
+      "num_experiments": 20,
+      "has_mean": true,
+      "has_std": true,
+      "has_cv": true,
+      "has_basin": true,
+      "has_condition": true,
+      "has_frequency": true,
+      "has_regime_data": true,
+      "relative_path": "cycle177_h1_energy_pooling_results.json"
+    },
+    {
+      "file": "cycle161_threshold_calibration.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 3,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": false,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle161_threshold_calibration.json"
+    },
+    {
+      "file": "cycle495_decay_dynamics_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle495_decay_dynamics_mapping.json"
+    },
+    {
+      "file": "cycle177_v7_measurement_noise_validation_results.json",
+      "status": "error",
+      "error": "Expecting value: line 448 column 29 (char 14225)",
+      "has_regime_data": false,
+      "relative_path": "cycle177_v7_measurement_noise_validation_results.json"
+    },
+    {
+      "file": "cycle165_boundary_analysis.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle165_boundary_analysis.json"
+    },
+    {
+      "file": "exp_1761109640_cycles.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "exp_1761109640_cycles.json"
+    },
+    {
+      "file": "cycle171_fractal_swarm_bistability.json",
+      "status": "ok",
+      "cycle": "171",
+      "scenario": "FractalSwarm Bistability Validation",
+      "num_experiments": 40,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle171_fractal_swarm_bistability.json"
+    },
+    {
+      "file": "cycle177_v6_measurement_noise_validation_results.json",
+      "status": "error",
+      "error": "Expecting value: line 448 column 29 (char 14244)",
+      "has_regime_data": false,
+      "relative_path": "cycle177_v6_measurement_noise_validation_results.json"
+    },
+    {
+      "file": "comprehensive_meta_analysis.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "comprehensive_meta_analysis.json"
+    },
+    {
+      "file": "exp_1761109737_cycles.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 20,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": false,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "exp_1761109737_cycles.json"
+    },
+    {
+      "file": "cycle147_temporal_subharmonic_detection.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle147_temporal_subharmonic_detection.json"
+    },
+    {
+      "file": "exp_1761110204_cycles.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 20,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": false,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "exp_1761110204_cycles.json"
+    },
+    {
+      "file": "cycle144_parameter_space_exploration.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle144_parameter_space_exploration.json"
+    },
+    {
+      "file": "cycle168_ultra_low_frequency_completion.json",
+      "status": "ok",
+      "cycle": "168",
+      "scenario": "Ultra-Low Frequency Completion",
+      "num_experiments": 50,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": true,
+      "has_regime_data": false,
+      "relative_path": "cycle168_ultra_low_frequency_completion.json"
+    },
+    {
+      "file": "cycle157_harmonic_discovery.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 30,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle157_harmonic_discovery.json"
+    },
+    {
+      "file": "parameter_sensitivity_analysis.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "parameter_sensitivity_analysis.json"
+    },
+    {
+      "file": "stochasticity_investigation_analysis.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "stochasticity_investigation_analysis.json"
+    },
+    {
+      "file": "nrmv2_c175_consolidation_demo.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "nrmv2_c175_consolidation_demo.json"
+    },
+    {
+      "file": "cycle137_database_load_test.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle137_database_load_test.json"
+    },
+    {
+      "file": "cycle158_ultra_low_frequency.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 12,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": true,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "cycle158_ultra_low_frequency.json"
+    },
+    {
+      "file": "reproducibility_report.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "reproducibility_report.json"
+    },
+    {
+      "file": "cycle176_ablation_study.json",
+      "status": "ok",
+      "cycle": "176",
+      "scenario": "Ablation Study - Mechanism Isolation",
+      "num_experiments": 60,
+      "has_mean": true,
+      "has_std": true,
+      "has_cv": true,
+      "has_basin": true,
+      "has_condition": true,
+      "has_frequency": true,
+      "has_regime_data": true,
+      "relative_path": "cycle176_ablation_study.json"
+    },
+    {
+      "file": "exp_1761110024_cycles.json",
+      "status": "ok",
+      "cycle": "unknown",
+      "scenario": "unknown",
+      "num_experiments": 5,
+      "has_mean": false,
+      "has_std": false,
+      "has_cv": false,
+      "has_basin": false,
+      "has_condition": false,
+      "has_frequency": false,
+      "has_regime_data": false,
+      "relative_path": "exp_1761110024_cycles.json"
+    },
+    {
+      "file": "cycle150_super_harmonic_detection.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle150_super_harmonic_detection.json"
+    },
+    {
+      "file": "cycle494_temporal_energy_persistence.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cycle494_temporal_energy_persistence.json"
+    },
+    {
+      "file": "cycle80_dominant_pattern_analysis.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "dominant_pattern/cycle80_dominant_pattern_analysis.json"
+    },
+    {
+      "file": "cycle75_pareto_frontier_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "pareto_frontier/cycle75_pareto_frontier_mapping.json"
+    },
+    {
+      "file": "cycle112_turnover_rate_modulation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "turnover_modulation/cycle112_turnover_rate_modulation.json"
+    },
+    {
+      "file": "cycle124_spread_mechanism.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "spread_mechanism/cycle124_spread_mechanism.json"
+    },
+    {
+      "file": "cycle108_intervention_calibration.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "intervention_calibration/cycle108_intervention_calibration.json"
+    },
+    {
+      "file": "cycle71_optimal_threshold_search.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "optimal_threshold/cycle71_optimal_threshold_search.json"
+    },
+    {
+      "file": "cycle130_spread_mult_2d.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "spread_mult_2d/cycle130_spread_mult_2d.json"
+    },
+    {
+      "file": "cycle99_3d_basin_reproducibility.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "3d_basin_reproducibility/cycle99_3d_basin_reproducibility.json"
+    },
+    {
+      "file": "cycle116_drift_parameter_space.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "drift_parameter_space/cycle116_drift_parameter_space.json"
+    },
+    {
+      "file": "cycle73_memory_energy_with_seeding.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "memory_energy_seeded/cycle73_memory_energy_with_seeding.json"
+    },
+    {
+      "file": "cycle68_pattern_complexity_scaling.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "pattern_complexity/cycle68_pattern_complexity_scaling.json"
+    },
+    {
+      "file": "cycle110_transition_persistence.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "transition_persistence/cycle110_transition_persistence.json"
+    },
+    {
+      "file": "cycle65_precision_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "critical_precision/cycle65_precision_mapping.json"
+    },
+    {
+      "file": "cycle113_burst_threshold_modulation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "threshold_modulation/cycle113_burst_threshold_modulation.json"
+    },
+    {
+      "file": "cycle122_basin_robustness.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "basin_robustness/cycle122_basin_robustness.json"
+    },
+    {
+      "file": "cycle109_intervention_timing.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "intervention_timing/cycle109_intervention_timing.json"
+    },
+    {
+      "file": "cycle105_basin_stability.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "basin_stability/cycle105_basin_stability.json"
+    },
+    {
+      "file": "cycle60_systematic_study.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "parameter_study/cycle60_systematic_study.json"
+    },
+    {
+      "file": "cycle103_oscillation_mechanisms.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "oscillation_mechanisms/cycle103_oscillation_mechanisms.json"
+    },
+    {
+      "file": "cycle92_basin_boundary_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "basin_boundary_mapping/cycle92_basin_boundary_mapping.json"
+    },
+    {
+      "file": "cycle97_2d_basin_reproducibility.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "2d_basin_reproducibility/cycle97_2d_basin_reproducibility.json"
+    },
+    {
+      "file": "cycle82_multi_run_reproducibility.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "reproducibility/cycle82_multi_run_reproducibility.json"
+    },
+    {
+      "file": "cycle91_ultimate_attractor_cross_threshold.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "ultimate_attractor_cross_threshold/cycle91_ultimate_attractor_cross_threshold.json"
+    },
+    {
+      "file": "cycle87_attractor_reproducibility_validation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "reproducibility_validation/cycle87_attractor_reproducibility_validation.json"
+    },
+    {
+      "file": "cycle114_agent_burst_analysis.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "agent_burst_analysis/cycle114_agent_burst_analysis.json"
+    },
+    {
+      "file": "cycle88_fine_grained_cross_threshold.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "fine_grained_cross_threshold/cycle88_fine_grained_cross_threshold.json"
+    },
+    {
+      "file": "cycle84_cross_regime_validation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cross_regime/cycle84_cross_regime_validation.json"
+    },
+    {
+      "file": "cycle62_threshold_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "critical_threshold/cycle62_threshold_mapping.json"
+    },
+    {
+      "file": "cycle76_critical_threshold_bisection.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "critical_threshold/cycle76_critical_threshold_bisection.json"
+    },
+    {
+      "file": "cycle121_critical_threshold.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "critical_threshold/cycle121_critical_threshold.json"
+    },
+    {
+      "file": "cycle77_critical_threshold_refinement.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "critical_threshold/cycle77_critical_threshold_refinement.json"
+    },
+    {
+      "file": "cycle119_framework_validation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "framework_validation/cycle119_framework_validation.json"
+    },
+    {
+      "file": "cycle86_attractor_basin_boundaries.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "basin_boundaries/cycle86_attractor_basin_boundaries.json"
+    },
+    {
+      "file": "cycle106_basin_boundary_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "basin_boundaries/cycle106_basin_boundary_mapping.json"
+    },
+    {
+      "file": "cycle89_longterm_attractor_persistence.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "longterm_persistence/cycle89_longterm_attractor_persistence.json"
+    },
+    {
+      "file": "cycle69_memory_energy_coupling.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "memory_energy/cycle69_memory_energy_coupling.json"
+    },
+    {
+      "file": "cycle98_threshold_cross_section.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "threshold_cross_section/cycle98_threshold_cross_section.json"
+    },
+    {
+      "file": "cycle117_ultralong_validation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "ultralong_validation/cycle117_ultralong_validation.json"
+    },
+    {
+      "file": "cycle79_active_diversity_maintenance.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "diversity_maintenance/cycle79_active_diversity_maintenance.json"
+    },
+    {
+      "file": "cycle79b_rapid_intervention.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "diversity_maintenance/cycle79b_rapid_intervention.json"
+    },
+    {
+      "file": "cycle95_cross_multiplier_spread_validation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "cross_multiplier_spread_validation/cycle95_cross_multiplier_spread_validation.json"
+    },
+    {
+      "file": "cycle125_resonance_validation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "resonance_validation/cycle125_resonance_validation.json"
+    },
+    {
+      "file": "cycle64_ultralow_scan.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "phase_diagram/cycle64_ultralow_scan.json"
+    },
+    {
+      "file": "cycle123_spread_parameter.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "spread_parameter/cycle123_spread_parameter.json"
+    },
+    {
+      "file": "cycle100_3d_basin_topology.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "3d_basin_topology/cycle100_3d_basin_topology.json"
+    },
+    {
+      "file": "cycle83_initial_condition_sensitivity.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "initial_conditions/cycle83_initial_condition_sensitivity.json"
+    },
+    {
+      "file": "cycle131_threshold700_grid.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "threshold700_grid/cycle131_threshold700_grid.json"
+    },
+    {
+      "file": "sweep_1761112713_th750.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "parameter_sweep/sweep_1761112713_th750.json"
+    },
+    {
+      "file": "sweep_1761112731_th1000.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "parameter_sweep/sweep_1761112731_th1000.json"
+    },
+    {
+      "file": "sweep_1761111943_th300.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "parameter_sweep/sweep_1761111943_th300.json"
+    },
+    {
+      "file": "sweep_1761112690_th200.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "parameter_sweep/sweep_1761112690_th200.json"
+    },
+    {
+      "file": "cycle90_ultra_longterm_convergence.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "ultra_longterm_convergence/cycle90_ultra_longterm_convergence.json"
+    },
+    {
+      "file": "cycle129_threshold_mult_2d.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "threshold_mult_2d/cycle129_threshold_mult_2d.json"
+    },
+    {
+      "file": "cycle63_lower_threshold_scan.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "phase_boundary/cycle63_lower_threshold_scan.json"
+    },
+    {
+      "file": "cycle66_critical_dynamics.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "critical_dynamics/cycle66_critical_dynamics.json"
+    },
+    {
+      "file": "cycle107_forced_basin_transitions.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "forced_transitions/cycle107_forced_basin_transitions.json"
+    },
+    {
+      "file": "cycle102_phase_space_trajectories.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "phase_space_trajectories/cycle102_phase_space_trajectories.json"
+    },
+    {
+      "file": "cycle93_ultimate_fine_structure_validation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "ultimate_fine_structure_validation/cycle93_ultimate_fine_structure_validation.json"
+    },
+    {
+      "file": "cycle118_pattern_stabilization.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "pattern_stabilization/cycle118_pattern_stabilization.json"
+    },
+    {
+      "file": "cycle70_memory_retention_threshold.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "memory_threshold/cycle70_memory_retention_threshold.json"
+    },
+    {
+      "file": "cycle101_agent_count_dimension.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "agent_count_dimension/cycle101_agent_count_dimension.json"
+    },
+    {
+      "file": "cycle74_memory_diversity_analysis.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "memory_diversity/cycle74_memory_diversity_analysis.json"
+    },
+    {
+      "file": "cycle94_spread_parameter_variation.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "spread_parameter_variation/cycle94_spread_parameter_variation.json"
+    },
+    {
+      "file": "cycle85_attractor_landscape_mapping.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "attractor_landscape/cycle85_attractor_landscape_mapping.json"
+    },
+    {
+      "file": "cycle104_oscillation_control.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "oscillation_control/cycle104_oscillation_control.json"
+    },
+    {
+      "file": "cycle127_threshold_resonance.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "threshold_resonance/cycle127_threshold_resonance.json"
+    },
+    {
+      "file": "cycle61_multicluster_1200.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "multicluster/cycle61_multicluster_1200.json"
+    },
+    {
+      "file": "cycle78_temporal_memory_evolution.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "temporal_evolution/cycle78_temporal_memory_evolution.json"
+    },
+    {
+      "file": "cycle115_lifespan_extension.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "lifespan_extension/cycle115_lifespan_extension.json"
+    },
+    {
+      "file": "cycle67_temporal_energy_coupling.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "temporal_energy/cycle67_temporal_energy_coupling.json"
+    },
+    {
+      "file": "cycle81_early_warning_detection.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "early_warning/cycle81_early_warning_detection.json"
+    },
+    {
+      "file": "cycle120_basin_boundary.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "basin_boundary/cycle120_basin_boundary.json"
+    },
+    {
+      "file": "cycle96_2d_basin_topology.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "2d_basin_topology/cycle96_2d_basin_topology.json"
+    },
+    {
+      "file": "cycle72_memory_seeding_solution.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "memory_seeding/cycle72_memory_seeding_solution.json"
+    },
+    {
+      "file": "cycle111_drift_mechanism.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "drift_mechanism/cycle111_drift_mechanism.json"
+    },
+    {
+      "file": "cycle128_2d_grid.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "2d_grid/cycle128_2d_grid.json"
+    },
+    {
+      "file": "cycle59_fast_750.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "validation/cycle59_fast_750.json"
+    },
+    {
+      "file": "cycle126_mult_parameter.json",
+      "status": "no_experiments",
+      "has_regime_data": false,
+      "relative_path": "mult_parameter/cycle126_mult_parameter.json"
+    }
+  ]
+}

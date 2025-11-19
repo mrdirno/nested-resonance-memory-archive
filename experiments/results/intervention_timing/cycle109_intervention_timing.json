@@ -1,0 +1,350 @@
+{
+  "experiment": "cycle109_intervention_timing",
+  "test_triplets": [
+    [
+      1.0,
+      0.2,
+      500
+    ],
+    [
+      0.8,
+      0.4,
+      400
+    ],
+    [
+      1.2,
+      0.3,
+      600
+    ]
+  ],
+  "timing_configs": [
+    {
+      "name": "control",
+      "intervention_cycles": [],
+      "agent_replacement_pct": 0.0
+    },
+    {
+      "name": "early-single",
+      "intervention_cycles": [
+        150
+      ],
+      "agent_replacement_pct": 0.5
+    },
+    {
+      "name": "early-multi",
+      "intervention_cycles": [
+        100,
+        150,
+        200
+      ],
+      "agent_replacement_pct": 0.5
+    },
+    {
+      "name": "baseline",
+      "intervention_cycles": [
+        200,
+        250,
+        300
+      ],
+      "agent_replacement_pct": 0.5
+    },
+    {
+      "name": "late-multi",
+      "intervention_cycles": [
+        300,
+        350,
+        400
+      ],
+      "agent_replacement_pct": 0.5
+    },
+    {
+      "name": "late-single",
+      "intervention_cycles": [
+        350
+      ],
+      "agent_replacement_pct": 0.5
+    }
+  ],
+  "cycles": 500,
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "timing_name": "control",
+      "intervention_cycles": [],
+      "num_interventions": 0,
+      "agent_replacement_pct": 0.0,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "timing_name": "early-single",
+      "intervention_cycles": [
+        150
+      ],
+      "num_interventions": 1,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 0.664
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "timing_name": "early-multi",
+      "intervention_cycles": [
+        100,
+        150,
+        200
+      ],
+      "num_interventions": 3,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "timing_name": "baseline",
+      "intervention_cycles": [
+        200,
+        250,
+        300
+      ],
+      "num_interventions": 3,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 0.614
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "timing_name": "late-multi",
+      "intervention_cycles": [
+        300,
+        350,
+        400
+      ],
+      "num_interventions": 3,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+      "final_fraction": 0.564
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "timing_name": "late-single",
+      "intervention_cycles": [
+        350
+      ],
+      "num_interventions": 1,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "timing_name": "control",
+      "intervention_cycles": [],
+      "num_interventions": 0,
+      "agent_replacement_pct": 0.0,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "timing_name": "early-single",
+      "intervention_cycles": [
+        150
+      ],
+      "num_interventions": 1,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(5.906194), np.float64(5.611949), np.float64(5.962953))",
+      "final_fraction": 0.664
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "timing_name": "early-multi",
+      "intervention_cycles": [
+        100,
+        150,
+        200
+      ],
+      "num_interventions": 3,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "timing_name": "baseline",
+      "intervention_cycles": [
+        200,
+        250,
+        300
+      ],
+      "num_interventions": 3,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(5.717699), np.float64(6.036147), np.float64(5.902653))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "timing_name": "late-multi",
+      "intervention_cycles": [
+        300,
+        350,
+        400
+      ],
+      "num_interventions": 3,
+      "agent_replacement_pct": 0.5,
+      "error": "UNIQUE constraint failed: agents.agent_id"
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "timing_name": "late-single",
+      "intervention_cycles": [
+        350
+      ],
+      "num_interventions": 1,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "timing_name": "control",
+      "intervention_cycles": [],
+      "num_interventions": 0,
+      "agent_replacement_pct": 0.0,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "timing_name": "early-single",
+      "intervention_cycles": [
+        150
+      ],
+      "num_interventions": 1,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "timing_name": "early-multi",
+      "intervention_cycles": [
+        100,
+        150,
+        200
+      ],
+      "num_interventions": 3,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "timing_name": "baseline",
+      "intervention_cycles": [
+        200,
+        250,
+        300
+      ],
+      "num_interventions": 3,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(5.749115), np.float64(5.982554), np.float64(6.248414))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "timing_name": "late-multi",
+      "intervention_cycles": [
+        300,
+        350,
+        400
+      ],
+      "num_interventions": 3,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "timing_name": "late-single",
+      "intervention_cycles": [
+        350
+      ],
+      "num_interventions": 1,
+      "agent_replacement_pct": 0.5,
+      "final_dominant": "(np.float64(5.749115), np.float64(5.982554), np.float64(6.248414))",
+      "final_fraction": 1.0
+    }
+  ],
+  "analysis": {
+    "successful_runs": 17,
+    "transitions_by_timing": {
+      "control": 0,
+      "early-single": 2,
+      "early-multi": 0,
+      "baseline": 3,
+      "late-multi": 1,
+      "late-single": 1
+    },
+    "transition_rates": {
+      "control": 0.0,
+      "early-single": 66.66666666666666,
+      "early-multi": 0.0,
+      "baseline": 100.0,
+      "late-multi": 33.33333333333333,
+      "late-single": 33.33333333333333
+    },
+    "timing_pattern": "timing_insensitive",
+    "optimal_timings": [
+      "baseline"
+    ],
+    "single_vs_multi": {
+      "single_avg": 49.99999999999999,
+      "multi_avg": 44.444444444444436
+    },
+    "early_vs_late": {
+      "early_avg": 33.33333333333333,
+      "late_avg": 33.33333333333333
+    }
+  },
+  "insight_66_discovered": true,
+  "duration": 65.30650877952576,
+  "timestamp": 1761157613.583468
+}

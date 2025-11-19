@@ -1,0 +1,554 @@
+{
+  "experiment_id": "ultralong_1761118251",
+  "start_time": 1761118251.972875,
+  "end_time": 1761118385.164103,
+  "total_cycles": 500,
+  "cycles_completed": 500,
+  "agent_counts": [
+    1,
+    3,
+    1,
+    3,
+    1,
+    3,
+    1,
+    3,
+    0,
+    2,
+    0,
+    2,
+    0,
+    2,
+    3,
+    1,
+    3,
+    1,
+    3,
+    0,
+    2,
+    0,
+    2,
+    0,
+    1,
+    3,
+    1,
+    3,
+    0,
+    2,
+    0,
+    2,
+    0,
+    2,
+    3,
+    1,
+    3,
+    1,
+    3,
+    0,
+    2,
+    0,
+    2,
+    0,
+    2,
+    3,
+    1,
+    3,
+    1,
+    2
+  ],
+  "attractor_sequences": [
+    {
+      "type": "agent_count_attractor",
+      "state": 3,
+      "frequency": 14,
+      "probability": 0.28
+    },
+    {
+      "type": "agent_count_attractor",
+      "state": 1,
+      "frequency": 12,
+      "probability": 0.24
+    },
+    {
+      "type": "agent_count_attractor",
+      "state": 0,
+      "frequency": 12,
+      "probability": 0.24
+    },
+    {
+      "type": "agent_count_attractor",
+      "state": 2,
+      "frequency": 12,
+      "probability": 0.24
+    }
+  ],
+  "pattern_counts": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+  ],
+  "emergent_pattern_counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "phase_transitions": [
+    {
+      "cycle": 20,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 0
+    },
+    {
+      "cycle": 30,
+      "from_state": 3,
+      "to_state": 1,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 40,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 50,
+      "from_state": 3,
+      "to_state": 1,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 60,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 70,
+      "from_state": 3,
+      "to_state": 1,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 80,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 90,
+      "from_state": 3,
+      "to_state": 0,
+      "magnitude": 3,
+      "interval": 10
+    },
+    {
+      "cycle": 100,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 110,
+      "from_state": 2,
+      "to_state": 0,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 120,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 130,
+      "from_state": 2,
+      "to_state": 0,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 140,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 160,
+      "from_state": 3,
+      "to_state": 1,
+      "magnitude": 2,
+      "interval": 20
+    },
+    {
+      "cycle": 170,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 180,
+      "from_state": 3,
+      "to_state": 1,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 190,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 200,
+      "from_state": 3,
+      "to_state": 0,
+      "magnitude": 3,
+      "interval": 10
+    },
+    {
+      "cycle": 210,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 220,
+      "from_state": 2,
+      "to_state": 0,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 230,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 240,
+      "from_state": 2,
+      "to_state": 0,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 260,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 20
+    },
+    {
+      "cycle": 270,
+      "from_state": 3,
+      "to_state": 1,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 280,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 290,
+      "from_state": 3,
+      "to_state": 0,
+      "magnitude": 3,
+      "interval": 10
+    },
+    {
+      "cycle": 300,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 310,
+      "from_state": 2,
+      "to_state": 0,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 320,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 330,
+      "from_state": 2,
+      "to_state": 0,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 340,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 360,
+      "from_state": 3,
+      "to_state": 1,
+      "magnitude": 2,
+      "interval": 20
+    },
+    {
+      "cycle": 370,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 380,
+      "from_state": 3,
+      "to_state": 1,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 390,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 400,
+      "from_state": 3,
+      "to_state": 0,
+      "magnitude": 3,
+      "interval": 10
+    },
+    {
+      "cycle": 410,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 420,
+      "from_state": 2,
+      "to_state": 0,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 430,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 440,
+      "from_state": 2,
+      "to_state": 0,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 450,
+      "from_state": 0,
+      "to_state": 2,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 470,
+      "from_state": 3,
+      "to_state": 1,
+      "magnitude": 2,
+      "interval": 20
+    },
+    {
+      "cycle": 480,
+      "from_state": 1,
+      "to_state": 3,
+      "magnitude": 2,
+      "interval": 10
+    },
+    {
+      "cycle": 490,
+      "from_state": 3,
+      "to_state": 1,
+      "magnitude": 2,
+      "interval": 10
+    }
+  ],
+  "stability_score": 0.5765583092943535,
+  "learning_rate": 0.0,
+  "attractor_persistence": 0.5,
+  "checkpoint_cycles": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    110,
+    120,
+    130,
+    140,
+    150,
+    160,
+    170,
+    180,
+    190,
+    200,
+    210,
+    220,
+    230,
+    240,
+    250,
+    260,
+    270,
+    280,
+    290,
+    300,
+    310,
+    320,
+    330,
+    340,
+    350,
+    360,
+    370,
+    380,
+    390,
+    400,
+    410,
+    420,
+    430,
+    440,
+    450,
+    460,
+    470,
+    480,
+    490,
+    500
+  ]
+}

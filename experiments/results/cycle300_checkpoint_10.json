@@ -1,0 +1,172 @@
+[
+  {
+    "substrate": "TS",
+    "scale": "Light",
+    "capacity": 20,
+    "agents_target": 17,
+    "seed": 42,
+    "cycles": 10000,
+    "final_agent_count": 19,
+    "total_patterns": 10190,
+    "metrics": {
+      "pattern_lifetime": 0.0,
+      "memory_retention": 0.0,
+      "cluster_stability": 0.0,
+      "complexity_bootstrap": 10000
+    },
+    "elapsed_time": 1148.0239412784576
+  },
+  {
+    "substrate": "TS",
+    "scale": "Light",
+    "capacity": 20,
+    "agents_target": 17,
+    "seed": 43,
+    "cycles": 10000,
+    "final_agent_count": 19,
+    "total_patterns": 10188,
+    "metrics": {
+      "pattern_lifetime": 0.0,
+      "memory_retention": 0.0,
+      "cluster_stability": 0.0,
+      "complexity_bootstrap": 10000
+    },
+    "elapsed_time": 1348.9252727031708
+  },
+  {
+    "substrate": "TS",
+    "scale": "Light",
+    "capacity": 20,
+    "agents_target": 17,
+    "seed": 44,
+    "cycles": 10000,
+    "final_agent_count": 19,
+    "total_patterns": 10187,
+    "metrics": {
+      "pattern_lifetime": 0.0,
+      "memory_retention": 0.0,
+      "cluster_stability": 0.0,
+      "complexity_bootstrap": 10000
+    },
+    "elapsed_time": 1205.1032435894012
+  },
+  {
+    "substrate": "TS",
+    "scale": "Light",
+    "capacity": 20,
+    "agents_target": 17,
+    "seed": 45,
+    "cycles": 10000,
+    "final_agent_count": 19,
+    "total_patterns": 10184,
+    "metrics": {
+      "pattern_lifetime": 0.0,
+      "memory_retention": 0.0,
+      "cluster_stability": 0.0,
+      "complexity_bootstrap": 10000
+    },
+    "elapsed_time": 1177.150915145874
+  },
+  {
+    "substrate": "TS",
+    "scale": "Light",
+    "capacity": 20,
+    "agents_target": 17,
+    "seed": 46,
+    "cycles": 10000,
+    "final_agent_count": 19,
+    "total_patterns": 10183,
+    "metrics": {
+      "pattern_lifetime": 0.0,
+      "memory_retention": 0.0,
+      "cluster_stability": 0.0,
+      "complexity_bootstrap": 10000
+    },
+    "elapsed_time": 1536.1685771942139
+  },
+  {
+    "substrate": "TS",
+    "scale": "Light",
+    "capacity": 20,
+    "agents_target": 17,
+    "seed": 47,
+    "cycles": 10000,
+    "final_agent_count": 19,
+    "total_patterns": 10190,
+    "metrics": {
+      "pattern_lifetime": 0.0,
+      "memory_retention": 0.0,
+      "cluster_stability": 0.0,
+      "complexity_bootstrap": 10000
+    },
+    "elapsed_time": 1336.2692139148712
+  },
+  {
+    "substrate": "TS",
+    "scale": "Light",
+    "capacity": 20,
+    "agents_target": 17,
+    "seed": 48,
+    "cycles": 10000,
+    "final_agent_count": 19,
+    "total_patterns": 10173,
+    "metrics": {
+      "pattern_lifetime": 0.0,
+      "memory_retention": 0.0,
+      "cluster_stability": 0.0,
+      "complexity_bootstrap": 10000
+    },
+    "elapsed_time": 1131.8452532291412
+  },
+  {
+    "substrate": "TS",
+    "scale": "Light",
+    "capacity": 20,
+    "agents_target": 17,
+    "seed": 49,
+    "cycles": 10000,
+    "final_agent_count": 19,
+    "total_patterns": 10175,
+    "metrics": {
+      "pattern_lifetime": 0.0,
+      "memory_retention": 0.0,
+      "cluster_stability": 0.0,
+      "complexity_bootstrap": 10000
+    },
+    "elapsed_time": 1249.316171169281
+  },
+  {
+    "substrate": "TS",
+    "scale": "Light",
+    "capacity": 20,
+    "agents_target": 17,
+    "seed": 50,
+    "cycles": 10000,
+    "final_agent_count": 19,
+    "total_patterns": 10188,
+    "metrics": {
+      "pattern_lifetime": 0.0,
+      "memory_retention": 0.0,
+      "cluster_stability": 0.0,
+      "complexity_bootstrap": 10000
+    },
+    "elapsed_time": 1158.5895521640778
+  },
+  {
+    "substrate": "TS",
+    "scale": "Light",
+    "capacity": 20,
+    "agents_target": 17,
+    "seed": 51,
+    "cycles": 10000,
+    "final_agent_count": 19,
+    "total_patterns": 10186,
+    "metrics": {
+      "pattern_lifetime": 0.0,
+      "memory_retention": 0.0,
+      "cluster_stability": 0.0,
+      "complexity_bootstrap": 10000
+    },
+    "elapsed_time": 1103.4874320030212
+  }
+]

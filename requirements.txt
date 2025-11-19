@@ -7,25 +7,25 @@
 # Author: Aldrin Payopay <aldrin.gdf@gmail.com>
 # Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 # License: GPL-3.0
-# Last Updated: 2025-11-08 (Cycle 1296)
+# Last Updated: 2025-11-18 (Cycle 1388)
 
-# Core Dependencies (FROZEN - exact versions for reproducibility)
-numpy==2.3.1                  # Numerical computing, array operations
-psutil==7.0.0                 # System metrics (CPU, memory, processes)
+# Core Dependencies
+numpy==2.3.1
+psutil==7.0.0
 
 # Visualization
-matplotlib==3.10.3            # Publication-quality figures
-seaborn==0.13.2               # Statistical visualizations
+matplotlib==3.10.3
+seaborn==0.13.2
 
-# Data Analysis
-pandas==2.3.1                 # Data manipulation (for result analysis)
-scipy==1.16.0                 # Scientific computing (statistical tests)
-networkx==3.5                 # Network/graph analysis (C187 topology experiments)
+# Data Analysis (Optional)
+pandas==2.3.1
+scipy==1.16.0
 
-# Development Tools
-pytest==8.4.1                 # Testing framework
-pytest-cov==6.1.1             # Test coverage reporting
-black==25.1.0                 # Code formatting
+# Development Tools (Optional)
+pytest==8.4.1
+black==25.1.0
+# pylint not installed in environment, removing to avoid install errors
 
-# Documentation
-sphinx-rtd-theme==3.0.2       # ReadTheDocs theme
+# Documentation (Optional)
+sphinx-rtd-theme==3.0.2
+

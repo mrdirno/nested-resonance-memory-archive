@@ -1,0 +1,133 @@
+{
+  "experiment": "cycle104_oscillation_control",
+  "test_triplets": [
+    [
+      1.0,
+      0.2,
+      500
+    ],
+    [
+      0.8,
+      0.4,
+      400
+    ],
+    [
+      1.2,
+      0.3,
+      600
+    ]
+  ],
+  "cycles": 500,
+  "sample_interval": 10,
+  "conditions": [
+    "low",
+    "high"
+  ],
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "seed_diversity": "low",
+      "seed_spread": 0.05,
+      "seed_count": 3,
+      "trajectory_length": 50,
+      "avg_velocity": 0.1794150060680115,
+      "velocity_std": 0.2802687623916747,
+      "max_velocity": 1.4384008612043115,
+      "monotonic_convergence": false,
+      "smoothness_score": 3.5679910364447673
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "seed_diversity": "high",
+      "seed_spread": 0.3,
+      "seed_count": 5,
+      "trajectory_length": 50,
+      "avg_velocity": 0.15479692542071383,
+      "velocity_std": 0.27551427512258075,
+      "max_velocity": 1.3695076320160158,
+      "monotonic_convergence": false,
+      "smoothness_score": 3.6295628238945574
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "seed_diversity": "low",
+      "seed_spread": 0.05,
+      "seed_count": 3,
+      "trajectory_length": 50,
+      "avg_velocity": 0.2154874973004559,
+      "velocity_std": 0.30708497934300133,
+      "max_velocity": 1.5471973485484074,
+      "monotonic_convergence": false,
+      "smoothness_score": 3.2564169882957916
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "seed_diversity": "high",
+      "seed_spread": 0.3,
+      "seed_count": 5,
+      "trajectory_length": 50,
+      "avg_velocity": 0.1674858175304237,
+      "velocity_std": 0.3008205032288429,
+      "max_velocity": 1.4733684764373522,
+      "monotonic_convergence": false,
+      "smoothness_score": 3.324230446515898
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "seed_diversity": "low",
+      "seed_spread": 0.05,
+      "seed_count": 3,
+      "trajectory_length": 50,
+      "avg_velocity": 0.13172950126223715,
+      "velocity_std": 0.20653117179916067,
+      "max_velocity": 1.1011067104814085,
+      "monotonic_convergence": false,
+      "smoothness_score": 4.841860671336164
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "seed_diversity": "high",
+      "seed_spread": 0.3,
+      "seed_count": 5,
+      "trajectory_length": 50,
+      "avg_velocity": 0.1555617976222747,
+      "velocity_std": 0.17956687609210803,
+      "max_velocity": 1.012691341623786,
+      "monotonic_convergence": false,
+      "smoothness_score": 5.568924808616979
+    }
+  ],
+  "analysis": {
+    "successful_runs": 6,
+    "low_diversity_stats": {
+      "avg_velocity": 0.1755440015435682,
+      "velocity_std": 0.2646283045112789,
+      "smoothness": 3.8887562320255746
+    },
+    "high_diversity_stats": {
+      "avg_velocity": 0.15928151352447073,
+      "velocity_std": 0.2519672181478439,
+      "smoothness": 4.174239359675812
+    },
+    "control_effectiveness": {
+      "velocity_reduction_pct": -10.209902994548722,
+      "smoothness_improvement_pct": -6.839165247879052
+    },
+    "conclusion": "weak_control"
+  },
+  "insight_61_discovered": true,
+  "duration": 20.461973905563354,
+  "timestamp": 1761154569.518228
+}

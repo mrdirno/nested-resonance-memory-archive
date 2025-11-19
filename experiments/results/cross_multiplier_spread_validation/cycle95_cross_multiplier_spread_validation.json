@@ -1,0 +1,51 @@
+{
+  "experiment": "cycle95_cross_multiplier_spread_validation",
+  "test_multipliers": [
+    0.5,
+    1.4
+  ],
+  "test_spreads": [
+    0.1,
+    0.6
+  ],
+  "threshold": 500,
+  "cycles": 1000,
+  "results": [
+    {
+      "multiplier": 0.5,
+      "spread": 0.1,
+      "final_dominant": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 170
+    },
+    {
+      "multiplier": 0.5,
+      "spread": 0.6,
+      "final_dominant": "(np.float64(6.09469), np.float64(6.065723), np.float64(6.121382))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 100
+    },
+    {
+      "multiplier": 1.4,
+      "spread": 0.1,
+      "final_dominant": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    },
+    {
+      "multiplier": 1.4,
+      "spread": 0.6,
+      "final_dominant": "(np.float64(5.78053), np.float64(6.223275), np.float64(6.099705))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    }
+  ],
+  "analysis": {
+    "universal_spread": true,
+    "spread_sensitive_multipliers": 2,
+    "total_tested": 2
+  },
+  "insight_52_discovered": true,
+  "duration": 28.35242486000061,
+  "timestamp": 1761141318.065999
+}
