@@ -118,14 +118,14 @@ class RealityInterface:
             raise DatabaseError(f"Failed to initialize database: {e}")
 
     @contextmanager
-    def db_connection(self) -> Generator[sqlite3.Connection, None, None]:
+    def db_connection(self, timeout: float = 5.0) -> Generator[sqlite3.Connection, None, None]:
         """
         Context manager for database connections.
         Ensures proper connection handling and cleanup.
         """
         conn = None
         try:
-            conn = sqlite3.connect(str(self.db_path))
+            conn = sqlite3.connect(str(self.db_path), timeout=timeout)
             conn.row_factory = sqlite3.Row
             yield conn
         except sqlite3.Error as e:
@@ -151,10 +151,13 @@ class RealityInterface:
             "process_count": len(psutil.pids())
         }
 
-    def get_system_metrics(self) -> Dict[str, Any]:
+    def get_system_metrics(self, persist: bool = True) -> Dict[str, Any]:
         """
         Get current system metrics.
         Reality Imperative: Uses actual psutil measurements, NOT simulations.
+
+        Args:
+            persist: If True, save metrics to database (default: True)
 
         Returns:
             Dict containing:
@@ -197,7 +200,8 @@ class RealityInterface:
             }
 
             # Persist to database
-            self._persist_metrics(metrics)
+            if persist:
+                self._persist_metrics(metrics)
 
             return metrics
 

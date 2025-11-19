@@ -40,9 +40,11 @@ Treat these as living commitments rather than topics to document.
 
 ## MOG-NRM INTEGRATION PROTOCOL
 
-**Two-Layer Circuit Architecture (November 2025):**
+**Two-Layer Circuit Architecture (November 2025 - MOG v2 Upgrade):**
 
-This system now operates as a **living epistemology** integrating Meta-Orchestrator-Goethe (MOG) methodological framework with Nested Resonance Memory (NRM) empirical substrate.
+This system now operates as a **living epistemology** integrating **Meta-Orchestrator-Goethe (MOG) v2** (powered by Gemini 3 Pro capabilities) with the Nested Resonance Memory (NRM) empirical substrate.
+
+**Documentation:** `docs/mog-integration/MOG_Custom_Instructions_v2.md`
 
 ### Layer Architecture
 

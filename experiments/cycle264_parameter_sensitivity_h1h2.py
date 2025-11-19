@@ -105,7 +105,7 @@ def run_condition_worker(args: Tuple[ParameterCondition, int]) -> Dict[str, Any]
     root = FractalAgent(
         agent_id="root",
         bridge=bridge,
-        initial_reality=reality.get_system_metrics(),
+        initial_reality=reality.get_system_metrics(persist=False),
         depth=0,
         initial_energy=INITIAL_ENERGY,
         reality=reality

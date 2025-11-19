@@ -60,12 +60,12 @@ def test_autopoietic_boundary():
     
     # Create a simple cluster manually in the graph
     print("Creating mock cluster topology...")
-    swarm.composition_graph.add_edge("A", "B")
-    swarm.composition_graph.add_edge("B", "C")
-    swarm.composition_graph.add_edge("C", "A") # Triangle (Strong cluster)
+    swarm.composition.graph.add_edge("A", "B")
+    swarm.composition.graph.add_edge("B", "C")
+    swarm.composition.graph.add_edge("C", "A") # Triangle (Strong cluster)
     
     # Add an external edge
-    swarm.composition_graph.add_edge("C", "D") # Bridge to D
+    swarm.composition.graph.add_edge("C", "D") # Bridge to D
     
     # Manually define the cluster (A, B, C)
     swarm.composition.clusters["cluster_1"] = {"A", "B", "C"}

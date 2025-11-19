@@ -25,6 +25,7 @@ import uuid
 from typing import Any, Dict, List, Optional, Set, Tuple, Generator
 from contextlib import contextmanager
 from dataclasses import asdict
+import networkx as nx
 
 # Add modules to path
 sys.path.insert(0, str(Path(__file__).parent))
@@ -59,6 +60,7 @@ class CompositionEngine:
 
         self.resonance_threshold = resonance_threshold
         self.clusters: Dict[str, Set[str]] = {}  # cluster_id -> agent_ids
+        self.graph = nx.Graph() # V3 Autopoiesis Topology
 
     def detect_clusters(self, agents: List[FractalAgent]) -> List[ClusterEvent]:
         """
@@ -73,6 +75,12 @@ class CompositionEngine:
             List of ClusterEvent for newly formed clusters
         """
         events = []
+        
+        # Reset clusters and graph for this cycle (dynamic topology)
+        self.clusters.clear()
+        self.graph.clear()
+        for agent in agents:
+            self.graph.add_node(agent.agent_id)
 
         # Find resonant pairs
         resonant_pairs: List[Tuple[str, str, float]] = []
@@ -87,6 +95,8 @@ class CompositionEngine:
                         agent2.agent_id,
                         match.similarity
                     ))
+                    # Add edge to topology
+                    self.graph.add_edge(agent1.agent_id, agent2.agent_id, weight=match.similarity)
 
         # Group resonant pairs into clusters
         # Simple algorithm: merge pairs that share agents
@@ -131,8 +141,28 @@ class CompositionEngine:
         return events
 
     def get_cluster_members(self, cluster_id: str) -> Set[str]:
-        """Get agent IDs in a cluster."""
-        return self.clusters.get(cluster_id, set()).copy()
+        """Get member agent IDs for a cluster."""
+        return self.clusters.get(cluster_id, set())
+
+    def compute_boundary_strength(self) -> float:
+        """
+        Compute ratio of intra-cluster edges to total edges (Autopoiesis metric).
+        
+        Returns:
+            Float between 0.0 (no structure) and 1.0 (perfect modularity)
+        """
+        if self.graph.number_of_edges() == 0:
+            return 0.0
+            
+        intra_edges = 0
+        # Iterate over defined clusters
+        for cluster_id, members in self.clusters.items():
+            # Count edges where both nodes are in the same cluster
+            subgraph = self.graph.subgraph(members)
+            intra_edges += subgraph.number_of_edges()
+            
+        total_edges = self.graph.number_of_edges()
+        return intra_edges / total_edges if total_edges > 0 else 0.0
 
     def dissolve_cluster(self, cluster_id: str) -> Set[str]:
         """Dissolve a cluster and return member agent IDs."""
@@ -244,7 +274,8 @@ class FractalSwarm:
         workspace_path: str = "/Volumes/dual/DUALITY-ZERO-V2/workspace",
         max_agents: int = 100,
         max_depth: int = 7,
-        clear_on_init: bool = False
+        clear_on_init: bool = False,
+        burst_threshold: float = 500.0
     ):
         """
         Initialize fractal swarm.
@@ -254,6 +285,7 @@ class FractalSwarm:
             max_agents: Maximum number of agents (constitution: 100)
             max_depth: Maximum recursion depth (constitution: 7)
             clear_on_init: If True, clear database tables on init (for experiments)
+            burst_threshold: Energy threshold for cluster bursting
         """
         self.workspace_path = Path(workspace_path)
         self.workspace_path.mkdir(exist_ok=True)
@@ -265,7 +297,7 @@ class FractalSwarm:
         self.bridge = TranscendentalBridge(str(self.workspace_path))
         self.composition = CompositionEngine()
         # Increased burst threshold from 100.0 → 500.0 for sustained composition (Cycle 36 finding)
-        self.decomposition = DecompositionEngine(burst_threshold=500.0)
+        self.decomposition = DecompositionEngine(burst_threshold=burst_threshold)
 
         # Agent tracking
         self.agents: Dict[str, FractalAgent] = {}
@@ -275,10 +307,6 @@ class FractalSwarm:
         # Evolution state
         self.cycle_count = 0
         self.global_memory: List[TranscendentalState] = []
-        
-        # V3 Autopoiesis: Interaction topology
-        import networkx as nx
-        self.composition_graph = nx.Graph()
 
     def _init_database(self, clear_tables: bool = False) -> None:
         """
@@ -361,22 +389,24 @@ class FractalSwarm:
 
     def spawn_agent(
         self,
-        reality_metrics: Dict[str, float],
-        agent_id: Optional[str] = None,
+        reality_metrics: Dict[str, Any],
         parent_id: Optional[str] = None,
-        depth: int = 0
+        depth: int = 0,
+        agent_id: Optional[str] = None,
+        initial_energy: Optional[float] = None
     ) -> Optional[FractalAgent]:
         """
-        Spawn new fractal agent grounded in reality.
+        Spawn a new agent into the swarm.
 
         Args:
-            reality_metrics: Real system metrics to anchor agent
-            agent_id: Optional ID (generated if None)
-            parent_id: Optional parent agent ID
+            reality_metrics: Current system metrics for initialization
+            parent_id: ID of parent agent (if any)
             depth: Recursion depth
+            agent_id: Optional specific ID
+            initial_energy: Optional initial energy override
 
         Returns:
-            FractalAgent or None if limits exceeded
+            New FractalAgent or None if limits reached
         """
         # Check limits
         if len(self.agents) >= self.max_agents:
@@ -396,7 +426,8 @@ class FractalSwarm:
             initial_reality=reality_metrics,
             parent_id=parent_id,
             depth=depth,
-            max_depth=self.max_depth
+            max_depth=self.max_depth,
+            initial_energy=initial_energy
         )
 
         # Add to swarm
@@ -600,18 +631,7 @@ class FractalSwarm:
 
     def compute_boundary_strength(self) -> float:
         """Compute ratio of intra-cluster edges to total edges (Autopoiesis metric)."""
-        if self.composition_graph.number_of_edges() == 0:
-            return 0.0
-            
-        intra_edges = 0
-        # Iterate over defined clusters
-        for cluster_id, members in self.composition.clusters.items():
-            # Count edges where both nodes are in the same cluster
-            subgraph = self.composition_graph.subgraph(members)
-            intra_edges += subgraph.number_of_edges()
-            
-        total_edges = self.composition_graph.number_of_edges()
-        return intra_edges / total_edges if total_edges > 0 else 0.0
+        return self.composition.compute_boundary_strength()
 
     def get_statistics(self) -> Dict[str, any]:
         """Get current swarm statistics."""
