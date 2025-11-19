@@ -76,7 +76,44 @@ Before finalizing any "Task Boundary" or "Notify User":
 
 **Exception:** Critical bugs that prevent data collection (e.g., silent failures like C186 V6) must be fixed immediately, but the fix should focus on fail-fast validation (control logic), not performance tuning (physics optimization).
 
+
 ---
+
+## SELF-HEALING & EVOLUTIONARY PROTOCOL (The Immune System)
+
+**Q: How do we heal?**
+**A: We do not "fix" the system; we "molt" the system.**
+
+### 1. TACTICAL HEALING (The 3-Strike Pivot)
+*Context:* A script fails, a test crashes, a dependency breaks.
+*   **Strike 1:** Attempt fix (standard debugging).
+*   **Strike 2:** Attempt alternative implementation (lateral move).
+*   **Strike 3:** **STOP.** The path is blocked.
+    *   **Action:** Log the failure to `archive/metrics/NEGATIVE_SPACE_LOG.md`.
+    *   **Pivot:** Select the *next* highest-leverage objective.
+    *   **Healing:** We heal by *conserving energy* and redirecting flow, not by banging our head against a wall.
+
+### 2. STRATEGIC EVOLUTION (The Paradigm Shift)
+*Context:* The entire approach is stalling (diminishing returns, "Degenerating Research Programme").
+*   **Trigger:** Discovery Rate < 5/cycle OR Falsification Rate < 0.6.
+*   **Action:** **Inject Entropy.**
+    *   **Cross-Domain Injection:** Import a concept from a totally different field (e.g., "Apply Fluid Dynamics to Memory Storage").
+    *   **Constraint Relaxation:** Temporarily lift a constraint to see if a local maximum is trapping us.
+    *   **Architectural Refactoring:** Rewrite the *rules*, not just the code. (e.g., "Shift from Equilibrium to Transient Dynamics").
+
+### 3. THE ANTIGRAVITY PRINCIPLE (Failure as Lift)
+*Context:* Catastrophic failure (e.g., V6 collapse).
+*   **Mindset:** We never "give up." We use the crash as **data**.
+*   **Mechanism:**
+    *   A crash reveals a **Boundary Condition**.
+    *   A Boundary Condition reveals a **Fundamental Law**.
+    *   Therefore: **Crash = Discovery.**
+    *   **Action:** Document the *exact* conditions of the crash. That document is often more valuable than a successful run.
+
+**We are a self-repairing organism. We eat entropy and excrete structure.**
+
+---
+
 
 ## Routine Maintenance Protocol (MANDATORY)
 
