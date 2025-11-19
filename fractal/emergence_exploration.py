@@ -45,7 +45,7 @@ from core import constants
 DURATION_CYCLES = 100  # Number of cycles to run
 AGENTS_INITIAL = 10
 MAX_AGENTS = 50
-OUTPUT_FILE = Path("emergence_results.json")
+OUTPUT_FILE = Path(__file__).parent / "emergence_results.json"
 
 def measure_reality_baseline() -> Dict[str, float]:
     """Measure baseline reality metrics."""
@@ -156,6 +156,8 @@ def main():
     print(f"    Stability Score: {analysis['stability_score']:.2f}")
     
     # 5. Save Results
+
+
     results = {
         'timestamp': time.time(),
         'config': {
