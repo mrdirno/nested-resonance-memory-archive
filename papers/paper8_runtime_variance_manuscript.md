@@ -395,6 +395,8 @@ This research was conducted within the DUALITY-ZERO-V2 Nested Resonance Memory R
 
 [10] Python Software Foundation (2024). Python Bug Tracker Issue 36694: Excessive memory use or memory fragmentation. https://bugs.python.org/issue36694
 
+[11] Murati, M., & He, H. (2025). *Defeating Nondeterminism in LLM Inference: Batch Sensitivity in Kernel Pipelines*. Thinking Machines Lab Technical Report, September 2025. https://thinkingmachines.ai/deterministic-inference (Demonstrates that enforcing deterministic kernels eliminates output hallucination, paralleling NRM's findings on memory determinism)
+
 ---
 
 ## SUPPLEMENTARY MATERIALS
