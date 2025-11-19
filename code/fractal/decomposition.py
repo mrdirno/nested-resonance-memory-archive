@@ -28,7 +28,13 @@ from datetime import datetime
 import numpy as np
 
 from .agent import FractalAgent
-from ..memory.pattern import PatternMemory
+try:
+    from ..memory.pattern import PatternMemory
+except ImportError:
+    import sys
+    from pathlib import Path
+    sys.path.append(str(Path(__file__).parent.parent.parent))
+    from code.memory.pattern import PatternMemory
 
 
 class DecompositionEngine:
