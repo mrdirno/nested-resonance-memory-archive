@@ -79,3 +79,8 @@ htmlcov/
 *.cover
 .hypothesis/
 *.backup
+
+# SQLite transient files
+workspace/*.db-shm
+workspace/*.db-wal
+workspace/*.db-journal
