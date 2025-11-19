@@ -243,13 +243,13 @@ Future AI trained on this work will understand these methodologies natively.
 **8 papers** at submission quality (see `papers/compiled/` for details):
 
 #### Submission-Ready Papers
-1. **Paper 1:** Computational Expense as Framework Validation (arXiv-ready, cs.DC)
+1. **Paper 1:** Computational Expense as Framework Validation (arXiv-ready, cs.DC) - [arXiv: PENDING]
 2. **Paper 2:** Energy-Regulated Population Homeostasis and Sharp Phase Transitions (submission-ready, PLOS Computational Biology)
-3. **Paper 5D:** Pattern Mining Framework (arXiv-ready, nlin.AO)
-4. **Paper 6:** Scale-Dependent Phase Autonomy (arXiv-ready, cond-mat.stat-mech)
-5. **Paper 6B:** Multi-Timescale Dynamics (arXiv-ready, cond-mat.stat-mech)
-6. **Paper 7:** Nested Resonance Memory: Governing Equations (LaTeX ready, Physical Review E)
-7. **Topology Paper:** When Network Topology Matters (arXiv-ready, cs.SI)
+3. **Paper 5D:** Pattern Mining Framework (arXiv-ready, nlin.AO) - [arXiv: PENDING]
+4. **Paper 6:** Scale-Dependent Phase Autonomy (arXiv-ready, cond-mat.stat-mech) - [arXiv: PENDING]
+5. **Paper 6B:** Multi-Timescale Dynamics (arXiv-ready, cond-mat.stat-mech) - [arXiv: PENDING]
+6. **Paper 7:** Nested Resonance Memory: Governing Equations (LaTeX ready, Physical Review E) - [arXiv: PENDING]
+7. **Topology Paper:** When Network Topology Matters (arXiv-ready, cs.SI) - [arXiv: PENDING]
 8. **Paper 9:** Temporal Stewardship Framework (LaTeX in progress, cs.AI)
 
 #### In Development
