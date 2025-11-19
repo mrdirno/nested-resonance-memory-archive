@@ -94,8 +94,17 @@ def load_experiment_final_pop(regime: str, f_spawn: float, seed: int) -> int:
     Returns:
         Final population count (0 if collapsed)
     """
-    spawn_pct = f"{f_spawn * 100:.2f}".rstrip('0').rstrip('.')
-    db_file = EXPERIMENTS_DIR / f"c186_{regime}_HIERARCHICAL_{spawn_pct}pct_seed{seed}.db"
+    # Format spawn rate to match actual filename pattern: 0.1% -> 0_10pct
+    spawn_pct = f"{f_spawn * 100:.2f}".replace('.', '_')
+
+    # V6 experiments have regime-specific labels in filenames
+    regime_label = {
+        'v6a': '',  # V6a has no label (homeostasis)
+        'v6b': '_GROWTH',  # V6b growth regime
+        'v6c': '_COLLAPSE',  # V6c collapse regime
+    }.get(regime, '')
+
+    db_file = EXPERIMENTS_DIR / f"c186_{regime}_HIERARCHICAL{regime_label}_{spawn_pct}pct_seed{seed}.db"
 
     if not db_file.exists():
         print(f"Warning: DB not found: {db_file}")
@@ -105,13 +114,15 @@ def load_experiment_final_pop(regime: str, f_spawn: float, seed: int) -> int:
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
 
-        # Get final population count
+        # Get final population from results table (last cycle)
         cursor.execute("""
-            SELECT COUNT(*) FROM agents
-            WHERE status = 'active'
+            SELECT population FROM results
+            ORDER BY cycle DESC
+            LIMIT 1
         """)
 
-        final_pop = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        final_pop = result[0] if result else 0
         conn.close()
 
         return final_pop
