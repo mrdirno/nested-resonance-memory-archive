@@ -22,11 +22,11 @@ from datetime import datetime
 import sys
 
 # V6 Process ID (constant since launch)
-V6_PID = 72904
+V6_PID = 36859
 
 # V6 AUTHORITATIVE START TIME (from OS kernel)
-# Verified by: ps -p 72904 -o lstart
-V6_START = datetime.fromisoformat('2025-11-05T15:59:17-08:00')
+# Verified by: ps -p 36859 -o lstart
+V6_START = datetime.fromisoformat('2025-11-19T02:00:09.636103-08:00')
 
 
 def get_current_runtime() -> dict:

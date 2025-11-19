@@ -123,6 +123,7 @@
   - [ ] C258: H2×H4 (Reality Sources × Spawn Throttling) - ⏳ QUEUED (12 min, expected ANTAGONISTIC/ADDITIVE)
   - [ ] C259: H2×H5 (Reality Sources × Energy Recovery) - ⏳ QUEUED (13 min, expected SYNERGISTIC)
   - [ ] C260: H4×H5 (Spawn Throttling × Energy Recovery) - ⏳ QUEUED (11 min, expected ANTAGONISTIC)
+  - [ ] C264: H1×H2 Parameter Sensitivity - 🔄 RUNNING (PID 35193, Cycle 1423) - 64 conditions, 3000 cycles each
 - **Manuscript Status:**
   - Abstract: ✅ Complete
   - Introduction: ✅ Complete
@@ -163,7 +164,7 @@
   - [x] C187: Network topology effects (60 experiments, dissociation discovery)
   - [x] C188: Temporal regulation (energy transport analysis)
   - [x] C189: Self-organized criticality (alternative mechanisms, zero-variance stability)
-  - [ ] C186 V6: Ultra-low frequency test (0.10-0.75%) - ⏳ RUNNING (6.40 days, approaching 7-day milestone in 14.5h)
+  - [ ] C186 V6: Ultra-low frequency test (0.10-0.75%) - 🔄 RESTARTED (PID 36859, Cycle 1423) - Previous run crashed at ~6.4 days.
 - **BREAKTHROUGH Findings:**
   - **Dual Advantage:** Hierarchical systems show (1) 607× efficiency (α = 607.1, require 607× lower spawn frequency) AND (2) perfect stability (σ = 0.0 vs. 3-9 in flat systems)
   - **Dissociation:** Network topology affects composition but NOT reproduction (p < 0.003)
