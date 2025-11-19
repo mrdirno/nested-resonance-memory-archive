@@ -134,6 +134,9 @@ def run_condition(condition: MechanismCondition) -> Dict:
 
     # Run simulation
     for cycle in range(CYCLES):
+        # OPTIMIZATION: Get reality metrics once per cycle
+        current_metrics = reality.get_system_metrics()
+
         # H1: Energy pooling (if enabled)
         if condition.h1_pooling:
             # Detect resonance clusters
@@ -160,7 +163,7 @@ def run_condition(condition: MechanismCondition) -> Dict:
 
         # Evolve all agents (includes reality-based energy recharge)
         for agent in agents:
-            agent.evolve(delta_time=1.0)
+            agent.evolve(delta_time=1.0, cached_metrics=current_metrics)
 
         # Spawn new agents if energy threshold met
         for agent in list(agents):  # Copy list to avoid modification during iteration
@@ -174,11 +177,10 @@ def run_condition(condition: MechanismCondition) -> Dict:
 
                 # Create child agent
                 child_id = f"{agent.agent_id}_child_{cycle}"
-                child_metrics = reality.get_system_metrics()
                 child = FractalAgent(
                     agent_id=child_id,
                     bridge=bridge,
-                    initial_reality=child_metrics,
+                    initial_reality=current_metrics,
                     parent_id=agent.agent_id,
                     depth=agent.depth + 1,
                     max_depth=7,
