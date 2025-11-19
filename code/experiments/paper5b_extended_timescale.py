@@ -40,7 +40,6 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Any
 from datetime import datetime
 import sys
-from workspace_utils import get_workspace_path, get_results_path
 
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -394,7 +393,7 @@ def main():
     config, conditions = generate_paper5b_experimental_plan()
 
     # Save experimental plan to JSON
-    output_dir = get_results_path()
+    output_dir = Path("/Volumes/dual/DUALITY-ZERO-V2/data/results")
     output_file = output_dir / "paper5b_experimental_plan.json"
 
     runtime = config.estimate_runtime(conditions)

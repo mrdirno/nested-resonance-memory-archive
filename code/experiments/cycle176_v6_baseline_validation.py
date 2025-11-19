@@ -108,7 +108,6 @@ def run_baseline_validation(frequency: float, seed: int, cycles: int) -> Dict:
 
     # Run cycles
     for cycle_idx in range(cycles):
-
         # V6 spawn logic: Match C171 exact mechanism (C171 lines 133-141)
         should_spawn = (cycle_idx % spawn_interval) == 0
 

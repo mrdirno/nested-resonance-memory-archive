@@ -20,9 +20,9 @@ alias dv2-claude="cd /Volumes/dual/DUALITY-ZERO-V2 && claude --dangerously-skip-
 alias claude-yolo="claude --dangerously-skip-permissions"
 alias dv2-auto="python3 /Users/aldrinpayopay/Desktop/DUALITY-ZERO/USER-PROTECTED-DO-NOT-DELETE/claude_code_automation_macos.py"
 
-# Meta-Orchestration - THE MAIN COMMAND ⭐ (Cross-compatible: Claude/Gemini)
-alias dv2-orchestrate="/Volumes/dual/DUALITY-ZERO-V2/automation/launch_ai.sh"
-alias meta-orchestrate="/Volumes/dual/DUALITY-ZERO-V2/automation/launch_ai.sh"
+# Meta-Orchestration - THE MAIN COMMAND ⭐ (GUI Automation Tool)
+alias dv2-orchestrate="python3 $DUALITY_AUTOMATION"
+alias meta-orchestrate="python3 $DUALITY_AUTOMATION"
 
 # Quick status checks
 alias dv2-status="cat /Volumes/dual/DUALITY-ZERO-V2/META_OBJECTIVES.md"

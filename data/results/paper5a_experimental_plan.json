@@ -1,15 +1,10 @@
 {
   "metadata": {
     "paper": "Paper 5A - Parameter Sensitivity Analysis",
-    "date_created": "2025-10-27T07:47:55.348249",
+    "date_created": "2025-10-28T22:21:26.589478",
     "confidence": "\u2b50\u2b50\u2b50\u2b50\u2b50",
     "timeline": "2-3 weeks",
-    "publication_target": "IEEE Transactions on Systems, Man, and Cybernetics",
-    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
-    "generated_at": "2025-10-27T07:48:04.003423",
-    "script": "paper5a_experimental_plan.py",
-    "nrm_version": "6.17",
-    "metadata_added_retrospectively": true
+    "publication_target": "IEEE Transactions on Systems, Man, and Cybernetics"
   },
   "pilot_conditions": [
     {

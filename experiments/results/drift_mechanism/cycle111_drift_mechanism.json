@@ -1,0 +1,125 @@
+{
+  "experiment": "cycle111_drift_mechanism",
+  "test_triplet": [
+    1.0,
+    0.2,
+    500
+  ],
+  "freeze_configs": [
+    {
+      "name": "control",
+      "freeze_cycle": 300,
+      "freeze_memory": false,
+      "freeze_agents": false
+    },
+    {
+      "name": "frozen-memory",
+      "freeze_cycle": 300,
+      "freeze_memory": true,
+      "freeze_agents": false
+    },
+    {
+      "name": "frozen-agents",
+      "freeze_cycle": 300,
+      "freeze_memory": false,
+      "freeze_agents": true
+    },
+    {
+      "name": "both-frozen",
+      "freeze_cycle": 300,
+      "freeze_memory": true,
+      "freeze_agents": true
+    }
+  ],
+  "cycles": 1000,
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "freeze_name": "control",
+      "freeze_memory": false,
+      "freeze_agents": false,
+      "freeze_cycle": 300,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      }
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "freeze_name": "frozen-memory",
+      "error": "UNIQUE constraint failed: agents.agent_id"
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "freeze_name": "frozen-agents",
+      "freeze_memory": false,
+      "freeze_agents": true,
+      "freeze_cycle": 300,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "500": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "1000": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        }
+      }
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "freeze_name": "both-frozen",
+      "freeze_memory": true,
+      "freeze_agents": true,
+      "freeze_cycle": 300,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "500": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "1000": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        }
+      }
+    }
+  ],
+  "analysis": {
+    "successful_runs": 3,
+    "drift_by_condition": {
+      "control": true,
+      "frozen-agents": false,
+      "both-frozen": false
+    },
+    "primary_mechanism": "combined_mechanism"
+  },
+  "insight_68_discovered": true,
+  "duration": 20.3591890335083,
+  "timestamp": 1761159002.367105
+}

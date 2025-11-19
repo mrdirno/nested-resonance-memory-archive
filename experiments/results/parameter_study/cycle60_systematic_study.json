@@ -1,0 +1,141 @@
+{
+  "experiment": "cycle60_systematic_parameter_study",
+  "test_thresholds": [
+    300,
+    450,
+    600,
+    900,
+    1200
+  ],
+  "results": [
+    {
+      "burst_threshold": 300,
+      "predicted_max": 2,
+      "observed_max": 3,
+      "states": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "state_frequencies": {
+        "1": 11,
+        "2": 9,
+        "3": 1,
+        "0": 9
+      },
+      "prediction_correct": true,
+      "cycles": 300,
+      "checkpoints": 30,
+      "duration": 1.002094030380249
+    },
+    {
+      "burst_threshold": 450,
+      "predicted_max": 3,
+      "observed_max": 3,
+      "states": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "state_frequencies": {
+        "1": 8,
+        "3": 9,
+        "0": 7,
+        "2": 6
+      },
+      "prediction_correct": true,
+      "cycles": 300,
+      "checkpoints": 30,
+      "duration": 1.203618049621582
+    },
+    {
+      "burst_threshold": 600,
+      "predicted_max": 4,
+      "observed_max": 5,
+      "states": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "state_frequencies": {
+        "0": 3,
+        "5": 2,
+        "3": 16,
+        "1": 3,
+        "4": 2,
+        "2": 4
+      },
+      "prediction_correct": true,
+      "cycles": 300,
+      "checkpoints": 30,
+      "duration": 1.6019089221954346
+    },
+    {
+      "burst_threshold": 900,
+      "predicted_max": 6,
+      "observed_max": 7,
+      "states": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "state_frequencies": {
+        "3": 7,
+        "6": 4,
+        "0": 7,
+        "5": 3,
+        "1": 3,
+        "4": 3,
+        "2": 2,
+        "7": 1
+      },
+      "prediction_correct": true,
+      "cycles": 300,
+      "checkpoints": 30,
+      "duration": 2.416285991668701
+    },
+    {
+      "burst_threshold": 1200,
+      "predicted_max": 8,
+      "observed_max": 10,
+      "states": [
+        0,
+        3,
+        5,
+        6,
+        7,
+        8,
+        10
+      ],
+      "state_frequencies": {
+        "0": 1,
+        "10": 1,
+        "8": 2,
+        "7": 7,
+        "6": 16,
+        "5": 1,
+        "3": 2
+      },
+      "prediction_correct": false,
+      "cycles": 300,
+      "checkpoints": 30,
+      "duration": 3.648406982421875
+    }
+  ],
+  "correct_predictions": 4,
+  "total_tests": 5,
+  "accuracy": 80.0,
+  "overall_duration": 12.401710033416748,
+  "insight_25_discovered": true,
+  "timestamp": 1761122029.354291
+}

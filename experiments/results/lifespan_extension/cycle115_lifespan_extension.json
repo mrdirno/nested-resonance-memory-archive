@@ -1,0 +1,381 @@
+{
+  "experiment": "cycle115_lifespan_extension",
+  "configs": [
+    {
+      "name": "baseline",
+      "mult": 1.0,
+      "spread": 0.2,
+      "threshold": 500
+    },
+    {
+      "name": "high-threshold",
+      "mult": 1.0,
+      "spread": 0.2,
+      "threshold": 1000
+    },
+    {
+      "name": "low-mult",
+      "mult": 0.5,
+      "spread": 0.2,
+      "threshold": 500
+    },
+    {
+      "name": "high-mult",
+      "mult": 1.5,
+      "spread": 0.2,
+      "threshold": 500
+    },
+    {
+      "name": "low-spread",
+      "mult": 1.0,
+      "spread": 0.1,
+      "threshold": 500
+    }
+  ],
+  "cycles": 1000,
+  "agent_cap": 15,
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_cap": 15,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "400": {
+          "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "fraction": 0.568
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 2,
+      "drift_speed": 0.2857142857142857,
+      "burst_stats": {
+        "total_bursts": 997,
+        "mean_age": 1.5566700100300903,
+        "median_age": 2.0,
+        "std_age": 1.1645241491334755,
+        "min_age": 0,
+        "max_age": 4,
+        "age_histogram": {
+          "1": 244,
+          "2": 244,
+          "3": 244,
+          "0": 243,
+          "4": 22
+        },
+        "ages_0_to_2": 731,
+        "ages_3_to_5": 266,
+        "ages_6_plus": 0
+      }
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 1000,
+      "agent_cap": 15,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.969026), np.float64(4.763259), np.float64(6.161467))",
+          "fraction": 0.441
+        },
+        "400": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 0.909
+        },
+        "500": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 0.642
+        },
+        "900": {
+          "attractor": "(np.float64(6.157522), np.float64(5.855268), np.float64(6.254777))",
+          "fraction": 0.958
+        },
+        "1000": {
+          "attractor": "(np.float64(6.157522), np.float64(5.855268), np.float64(6.254777))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 2,
+      "drift_speed": 0.2857142857142857,
+      "burst_stats": {
+        "total_bursts": 998,
+        "mean_age": 3.776553106212425,
+        "median_age": 4.0,
+        "std_age": 2.4967255796192784,
+        "min_age": 0,
+        "max_age": 15,
+        "age_histogram": {
+          "1": 117,
+          "0": 117,
+          "3": 118,
+          "5": 118,
+          "4": 118,
+          "2": 118,
+          "7": 117,
+          "6": 118,
+          "8": 49,
+          "9": 4,
+          "10": 3,
+          "15": 1
+        },
+        "ages_0_to_2": 352,
+        "ages_3_to_5": 354,
+        "ages_6_plus": 292
+      }
+    },
+    {
+      "multiplier": 0.5,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_cap": 15,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "fraction": 1.0
+        },
+        "400": {
+          "attractor": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "fraction": 0.686
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(5.481012), np.float64(5.860674))",
+          "fraction": 0.52
+        },
+        "600": {
+          "attractor": "(np.float64(5.843362), np.float64(5.449625), np.float64(6.227812))",
+          "fraction": 0.72
+        },
+        "700": {
+          "attractor": "(np.float64(5.843362), np.float64(5.449625), np.float64(6.227812))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(5.843362), np.float64(5.449625), np.float64(6.227812))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+          "fraction": 0.864
+        },
+        "1000": {
+          "attractor": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 3,
+      "drift_speed": 0.4285714285714286,
+      "burst_stats": {
+        "total_bursts": 997,
+        "mean_age": 1.5566700100300903,
+        "median_age": 2.0,
+        "std_age": 1.1645241491334755,
+        "min_age": 0,
+        "max_age": 4,
+        "age_histogram": {
+          "0": 243,
+          "1": 244,
+          "3": 244,
+          "2": 244,
+          "4": 22
+        },
+        "ages_0_to_2": 731,
+        "ages_3_to_5": 266,
+        "ages_6_plus": 0
+      }
+    },
+    {
+      "multiplier": 1.5,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_cap": 15,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+          "fraction": 0.784
+        },
+        "400": {
+          "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+          "fraction": 1.0
+        },
+        "500": {
+          "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+          "fraction": 0.964
+        },
+        "1000": {
+          "attractor": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 2,
+      "drift_speed": 0.2857142857142857,
+      "burst_stats": {
+        "total_bursts": 997,
+        "mean_age": 1.5566700100300903,
+        "median_age": 2.0,
+        "std_age": 1.1645241491334755,
+        "min_age": 0,
+        "max_age": 4,
+        "age_histogram": {
+          "1": 244,
+          "3": 244,
+          "2": 244,
+          "0": 243,
+          "4": 22
+        },
+        "ages_0_to_2": 731,
+        "ages_3_to_5": 266,
+        "ages_6_plus": 0
+      }
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.1,
+      "threshold": 500,
+      "agent_cap": 15,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 1.0
+        },
+        "400": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.568
+        },
+        "500": {
+          "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+          "fraction": 0.52
+        },
+        "600": {
+          "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 1,
+      "drift_speed": 0.14285714285714285,
+      "burst_stats": {
+        "total_bursts": 997,
+        "mean_age": 1.5566700100300903,
+        "median_age": 2.0,
+        "std_age": 1.1645241491334755,
+        "min_age": 0,
+        "max_age": 4,
+        "age_histogram": {
+          "1": 244,
+          "3": 244,
+          "0": 243,
+          "2": 244,
+          "4": 22
+        },
+        "ages_0_to_2": 731,
+        "ages_3_to_5": 266,
+        "ages_6_plus": 0
+      }
+    }
+  ],
+  "analysis": {
+    "successful_runs": 5,
+    "conditions": [
+      "baseline",
+      "high-threshold",
+      "low-mult",
+      "high-mult",
+      "low-spread"
+    ],
+    "mean_ages": [
+      1.5566700100300903,
+      3.776553106212425,
+      1.5566700100300903,
+      1.5566700100300903,
+      1.5566700100300903
+    ],
+    "median_ages": [
+      2.0,
+      4.0,
+      2.0,
+      2.0,
+      2.0
+    ],
+    "max_ages": [
+      4,
+      15,
+      4,
+      4,
+      4
+    ],
+    "tunability_type": "tunable_lifespans"
+  },
+  "insight_72_discovered": true,
+  "duration": 51.1606068611145,
+  "timestamp": 1761163579.935006
+}

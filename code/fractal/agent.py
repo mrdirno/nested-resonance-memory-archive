@@ -26,6 +26,9 @@ from typing import Dict, List, Optional, Set, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 import numpy as np
+import uuid
+
+from ..memory.pattern import PatternMemory
 
 
 @dataclass
@@ -120,6 +123,26 @@ class FractalAgent:
 
         # Pattern memory (successful strategies persist)
         self._pattern_memory: Dict[str, float] = {}
+        
+        # Child agents (object graph)
+        self.children: List['FractalAgent'] = []
+
+    @property
+    def agent_id(self) -> str:
+        return self.state.agent_id
+
+    @property
+    def depth(self) -> int:
+        return self.state.depth
+
+    @property
+    def energy(self) -> float:
+        return self.state.energy
+
+    @energy.setter
+    def energy(self, value: float) -> None:
+        self.state.energy = value
+        self.state.last_update = datetime.now()
 
     def update_phase(self, delta_t: float, frequency: float = 1.0) -> None:
         """Update agent's transcendental phase based on time evolution.
@@ -138,6 +161,16 @@ class FractalAgent:
 
         # Update timestamp
         self.state.last_update = datetime.now()
+
+    def evolve(self, delta_time: float) -> None:
+        """Evolve agent state: update phase and apply metabolic cost.
+        
+        Args:
+            delta_time: Time step (seconds)
+        """
+        self.update_phase(delta_time)
+        # Standard metabolic cost (entropy)
+        self.update_energy(-0.01 * delta_time)
 
     def calculate_resonance(self, other: 'FractalAgent') -> float:
         """Calculate resonance strength with another agent via phase alignment.

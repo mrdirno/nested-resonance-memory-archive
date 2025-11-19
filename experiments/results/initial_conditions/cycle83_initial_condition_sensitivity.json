@@ -1,0 +1,97 @@
+{
+  "experiment": "cycle83_initial_condition_sensitivity",
+  "threshold": 500,
+  "cycles": 200,
+  "runs_per_condition": 3,
+  "conditions": [
+    "A_standard",
+    "B_modified",
+    "C_wide"
+  ],
+  "results": [
+    {
+      "condition": "A",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.518,
+      "collapse_cycle": null,
+      "duration": 1.4573800563812256
+    },
+    {
+      "condition": "A",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.518,
+      "collapse_cycle": null,
+      "duration": 1.4600059986114502
+    },
+    {
+      "condition": "A",
+      "run_id": 3,
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.518,
+      "collapse_cycle": null,
+      "duration": 1.7186369895935059
+    },
+    {
+      "condition": "B",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+      "dominant_fraction": 1.0,
+      "collapse_cycle": 160,
+      "duration": 1.4564099311828613
+    },
+    {
+      "condition": "B",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+      "dominant_fraction": 1.0,
+      "collapse_cycle": 160,
+      "duration": 1.4383111000061035
+    },
+    {
+      "condition": "B",
+      "run_id": 3,
+      "dominant_pattern": "(np.float64(6.107256), np.float64(5.012568), np.float64(5.96133))",
+      "dominant_fraction": 1.0,
+      "collapse_cycle": 160,
+      "duration": 1.4331278800964355
+    },
+    {
+      "condition": "C",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.23292), np.float64(6.237194), np.float64(4.368894))",
+      "dominant_fraction": 1.0,
+      "collapse_cycle": 120,
+      "duration": 1.439560890197754
+    },
+    {
+      "condition": "C",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.23292), np.float64(6.237194), np.float64(4.368894))",
+      "dominant_fraction": 1.0,
+      "collapse_cycle": 120,
+      "duration": 1.440195083618164
+    },
+    {
+      "condition": "C",
+      "run_id": 3,
+      "dominant_pattern": "(np.float64(6.23292), np.float64(6.237194), np.float64(4.368894))",
+      "dominant_fraction": 1.0,
+      "collapse_cycle": 120,
+      "duration": 1.4584200382232666
+    }
+  ],
+  "analysis": {
+    "cross_diversity": 0.3333333333333333,
+    "within_diversity": {
+      "A": 0.3333333333333333,
+      "B": 0.3333333333333333,
+      "C": 0.3333333333333333
+    },
+    "sensitive": false
+  },
+  "insight_44_discovered": false,
+  "overall_duration": 16.078832149505615,
+  "timestamp": 1761134577.314879
+}

@@ -328,7 +328,7 @@ where:
 
 | Mechanism Pair | Synergy | Classification | Hypothesis |
 |----------------|---------|----------------|-----------|
-| H1×H2 | [TO BE FILLED] | [TO BE FILLED] | SYNERGISTIC |
+| H1×H2 | -975.578 | ANTAGONISTIC | SYNERGISTIC |
 | H1×H4 | [TO BE FILLED] | [TO BE FILLED] | ANTAGONISTIC |
 | H1×H5 | [TO BE FILLED] | [TO BE FILLED] | SYNERGISTIC |
 | H2×H4 | [TO BE FILLED] | [TO BE FILLED] | ADDITIVE |

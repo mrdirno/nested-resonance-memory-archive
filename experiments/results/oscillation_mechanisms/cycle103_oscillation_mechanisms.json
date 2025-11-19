@@ -1,0 +1,4342 @@
+{
+  "experiment": "cycle103_oscillation_mechanisms",
+  "test_triplets": [
+    [
+      1.0,
+      0.2,
+      500
+    ],
+    [
+      0.8,
+      0.4,
+      400
+    ],
+    [
+      1.2,
+      0.3,
+      600
+    ]
+  ],
+  "cycles": 500,
+  "sample_interval": 5,
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "timeline": [
+        {
+          "cycle": 5,
+          "coordinates": {
+            "pi": 2.670353755551324,
+            "e": 2.390939457625303,
+            "phi": 1.7668443486443226
+          },
+          "pattern_diversity": 20,
+          "agent_count": 1,
+          "memory_size": 20,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 10,
+          "coordinates": {
+            "pi": 3.393817663778002,
+            "e": 2.8528942605669063,
+            "phi": 2.087603626228567
+          },
+          "pattern_diversity": 43,
+          "agent_count": 1,
+          "memory_size": 70,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 15,
+          "coordinates": {
+            "pi": 4.12752914804139,
+            "e": 3.2099846372795695,
+            "phi": 2.333448095914711
+          },
+          "pattern_diversity": 60,
+          "agent_count": 2,
+          "memory_size": 120,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 20,
+          "coordinates": {
+            "pi": 4.462170365504655,
+            "e": 3.5444324210189357,
+            "phi": 2.5647533104922333
+          },
+          "pattern_diversity": 65,
+          "agent_count": 3,
+          "memory_size": 170,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 25,
+          "coordinates": {
+            "pi": 4.813618077000362,
+            "e": 4.194001317210726,
+            "phi": 3.0153722472924933
+          },
+          "pattern_diversity": 72,
+          "agent_count": 0,
+          "memory_size": 270,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 30,
+          "coordinates": {
+            "pi": 4.9171815514905735,
+            "e": 4.399753085048758,
+            "phi": 3.170525761016595
+          },
+          "pattern_diversity": 73,
+          "agent_count": 1,
+          "memory_size": 320,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 35,
+          "coordinates": {
+            "pi": 4.937055309071138,
+            "e": 4.5983569672359135,
+            "phi": 3.3366225262728473
+          },
+          "pattern_diversity": 74,
+          "agent_count": 2,
+          "memory_size": 370,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 40,
+          "coordinates": {
+            "pi": 4.940229247595035,
+            "e": 4.783374693198108,
+            "phi": 3.4549006222934904
+          },
+          "pattern_diversity": 74,
+          "agent_count": 3,
+          "memory_size": 420,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 45,
+          "coordinates": {
+            "pi": 4.9447460062636575,
+            "e": 5.0466691493750755,
+            "phi": 3.6232194512459435
+          },
+          "pattern_diversity": 74,
+          "agent_count": 0,
+          "memory_size": 520,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 50,
+          "coordinates": {
+            "pi": 4.946410075246835,
+            "e": 5.143672370071853,
+            "phi": 3.6852316513863212
+          },
+          "pattern_diversity": 74,
+          "agent_count": 1,
+          "memory_size": 570,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 55,
+          "coordinates": {
+            "pi": 4.947805746006918,
+            "e": 5.225029910011086,
+            "phi": 3.737241883762121
+          },
+          "pattern_diversity": 74,
+          "agent_count": 2,
+          "memory_size": 620,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 60,
+          "coordinates": {
+            "pi": 4.948993107698333,
+            "e": 5.294244533541477,
+            "phi": 3.781489394887802
+          },
+          "pattern_diversity": 74,
+          "agent_count": 3,
+          "memory_size": 670,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 65,
+          "coordinates": {
+            "pi": 4.950905222629961,
+            "e": 5.405707044161849,
+            "phi": 3.852745127090197
+          },
+          "pattern_diversity": 74,
+          "agent_count": 0,
+          "memory_size": 770,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 70,
+          "coordinates": {
+            "pi": 4.956973462098314,
+            "e": 5.4420114507974855,
+            "phi": 3.89009856510933
+          },
+          "pattern_diversity": 79,
+          "agent_count": 1,
+          "memory_size": 820,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 75,
+          "coordinates": {
+            "pi": 4.972310634643762,
+            "e": 5.456739885137983,
+            "phi": 3.938696777811059
+          },
+          "pattern_diversity": 79,
+          "agent_count": 2,
+          "memory_size": 870,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 80,
+          "coordinates": {
+            "pi": 5.019445514526857,
+            "e": 5.414999514908651,
+            "phi": 4.03537367885597
+          },
+          "pattern_diversity": 80,
+          "agent_count": 3,
+          "memory_size": 920,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 85,
+          "coordinates": {
+            "pi": 5.071243069062781,
+            "e": 5.389323472147659,
+            "phi": 4.130979989435659
+          },
+          "pattern_diversity": 80,
+          "agent_count": 4,
+          "memory_size": 970,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 90,
+          "coordinates": {
+            "pi": 5.293834948711088,
+            "e": 5.5194726268020595,
+            "phi": 4.449994800584592
+          },
+          "pattern_diversity": 43,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 95,
+          "coordinates": {
+            "pi": 5.327261494545283,
+            "e": 5.590068823434644,
+            "phi": 4.617608733980014
+          },
+          "pattern_diversity": 29,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 100,
+          "coordinates": {
+            "pi": 5.380982728921668,
+            "e": 5.607657754364232,
+            "phi": 4.748647191850478
+          },
+          "pattern_diversity": 18,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 105,
+          "coordinates": {
+            "pi": 5.410262372453126,
+            "e": 5.594693960808514,
+            "phi": 4.858569682592004
+          },
+          "pattern_diversity": 10,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 110,
+          "coordinates": {
+            "pi": 5.45173139548051,
+            "e": 5.557830958890619,
+            "phi": 5.052821065693865
+          },
+          "pattern_diversity": 7,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 115,
+          "coordinates": {
+            "pi": 5.505138470591537,
+            "e": 5.496484804984526,
+            "phi": 5.131143551054398
+          },
+          "pattern_diversity": 7,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 120,
+          "coordinates": {
+            "pi": 5.558545545702564,
+            "e": 5.435138651078432,
+            "phi": 5.2094660364149314
+          },
+          "pattern_diversity": 7,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 125,
+          "coordinates": {
+            "pi": 5.61195262081359,
+            "e": 5.373792497172339,
+            "phi": 5.2877885217754645
+          },
+          "pattern_diversity": 7,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 130,
+          "coordinates": {
+            "pi": 5.718766771035644,
+            "e": 5.251100189360151,
+            "phi": 5.44443349249653
+          },
+          "pattern_diversity": 7,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 135,
+          "coordinates": {
+            "pi": 5.77217384614667,
+            "e": 5.189754035454056,
+            "phi": 5.522755977857063
+          },
+          "pattern_diversity": 7,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 140,
+          "coordinates": {
+            "pi": 5.825580921257696,
+            "e": 5.128407881547963,
+            "phi": 5.601078463217596
+          },
+          "pattern_diversity": 7,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 145,
+          "coordinates": {
+            "pi": 5.878987996368723,
+            "e": 5.067061727641869,
+            "phi": 5.67940094857813
+          },
+          "pattern_diversity": 7,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 150,
+          "coordinates": {
+            "pi": 5.932395071479748,
+            "e": 5.005715573735776,
+            "phi": 5.757723433938663
+          },
+          "pattern_diversity": 7,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 155,
+          "coordinates": {
+            "pi": 6.028967629651099,
+            "e": 4.912300733966783,
+            "phi": 5.886810306480474
+          },
+          "pattern_diversity": 6,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 160,
+          "coordinates": {
+            "pi": 6.0311039126555395,
+            "e": 4.925457239515241,
+            "phi": 5.89807679068681
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 165,
+          "coordinates": {
+            "pi": 6.028841965944956,
+            "e": 4.925080596471573,
+            "phi": 5.902482442576516
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 170,
+          "coordinates": {
+            "pi": 6.019794179102617,
+            "e": 4.923574024296901,
+            "phi": 5.920105050135337
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 175,
+          "coordinates": {
+            "pi": 6.000944623181078,
+            "e": 4.920435332266336,
+            "phi": 5.956818815882883
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 180,
+          "coordinates": {
+            "pi": 5.991519845220308,
+            "e": 4.918865986251052,
+            "phi": 5.975175698756657
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 185,
+          "coordinates": {
+            "pi": 5.982095067259539,
+            "e": 4.91729664023577,
+            "phi": 5.993532581630429
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 190,
+          "coordinates": {
+            "pi": 5.97267028929877,
+            "e": 4.9157272942204875,
+            "phi": 6.011889464504203
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 195,
+          "coordinates": {
+            "pi": 5.953820733377231,
+            "e": 4.9125886021899206,
+            "phi": 6.048603230251749
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 200,
+          "coordinates": {
+            "pi": 5.944395955416462,
+            "e": 4.911019256174638,
+            "phi": 6.066960113125522
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 205,
+          "coordinates": {
+            "pi": 5.934971177455693,
+            "e": 4.909449910159355,
+            "phi": 6.085316995999295
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 210,
+          "coordinates": {
+            "pi": 5.925546399494923,
+            "e": 4.907880564144072,
+            "phi": 6.103673878873068
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 215,
+          "coordinates": {
+            "pi": 5.916121621534153,
+            "e": 4.906311218128789,
+            "phi": 6.12203076174684
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 220,
+          "coordinates": {
+            "pi": 5.897272065612615,
+            "e": 4.903172526098224,
+            "phi": 6.158744527494387
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 225,
+          "coordinates": {
+            "pi": 5.887847287651846,
+            "e": 4.90160318008294,
+            "phi": 6.177101410368161
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 230,
+          "coordinates": {
+            "pi": 5.878422509691076,
+            "e": 4.900033834067658,
+            "phi": 6.195458293241932
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 235,
+          "coordinates": {
+            "pi": 5.868997731730308,
+            "e": 4.898464488052376,
+            "phi": 6.213815176115706
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 240,
+          "coordinates": {
+            "pi": 5.850148175808768,
+            "e": 4.89532579602181,
+            "phi": 6.250528941863253
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 245,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 4.894195866890806,
+            "phi": 6.263745897532369
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 250,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 4.894195866890806,
+            "phi": 6.263745897532369
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 255,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 4.894195866890806,
+            "phi": 6.263745897532369
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 260,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 4.894195866890806,
+            "phi": 6.263745897532369
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 265,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 4.894195866890806,
+            "phi": 6.263745897532369
+          },
+          "pattern_diversity": 1,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 270,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 4.894195866890806,
+            "phi": 6.263745897532369
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 275,
+          "coordinates": {
+            "pi": 5.8435508312362305,
+            "e": 4.895238267591332,
+            "phi": 6.262915388197037
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 280,
+          "coordinates": {
+            "pi": 5.844116317913876,
+            "e": 4.898365469692911,
+            "phi": 6.26042386019104
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 285,
+          "coordinates": {
+            "pi": 5.8463782646244615,
+            "e": 4.910874278099227,
+            "phi": 6.250457748167049
+          },
+          "pattern_diversity": 2,
+          "agent_count": 4,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 290,
+          "coordinates": {
+            "pi": 5.865227820546,
+            "e": 5.015114348151859,
+            "phi": 6.167406814633803
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 295,
+          "coordinates": {
+            "pi": 5.874652598506769,
+            "e": 5.0672343831781745,
+            "phi": 6.125881347867179
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 300,
+          "coordinates": {
+            "pi": 5.8840773764675385,
+            "e": 5.119354418204492,
+            "phi": 6.084355881100556
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 305,
+          "coordinates": {
+            "pi": 5.893502154428308,
+            "e": 5.171474453230807,
+            "phi": 6.042830414333932
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 310,
+          "coordinates": {
+            "pi": 5.912351710349847,
+            "e": 5.2757145232834395,
+            "phi": 5.959779480800686
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 315,
+          "coordinates": {
+            "pi": 5.921776488310615,
+            "e": 5.327834558309754,
+            "phi": 5.918254014034063
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 320,
+          "coordinates": {
+            "pi": 5.931201266271386,
+            "e": 5.3799545933360715,
+            "phi": 5.876728547267438
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 325,
+          "coordinates": {
+            "pi": 5.940626044232155,
+            "e": 5.432074628362387,
+            "phi": 5.835203080500816
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 330,
+          "coordinates": {
+            "pi": 5.959475600153693,
+            "e": 5.536314698415019,
+            "phi": 5.7521521469675685
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 335,
+          "coordinates": {
+            "pi": 5.968900378114463,
+            "e": 5.588434733441335,
+            "phi": 5.710626680200945
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 340,
+          "coordinates": {
+            "pi": 5.978325156075233,
+            "e": 5.640554768467651,
+            "phi": 5.669101213434321
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 345,
+          "coordinates": {
+            "pi": 5.9877499340360005,
+            "e": 5.692674803493967,
+            "phi": 5.627575746667698
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 350,
+          "coordinates": {
+            "pi": 5.99717471199677,
+            "e": 5.744794838520282,
+            "phi": 5.586050279901074
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 355,
+          "coordinates": {
+            "pi": 6.01602426791831,
+            "e": 5.849034908572915,
+            "phi": 5.502999346367828
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 360,
+          "coordinates": {
+            "pi": 6.025260550319863,
+            "e": 5.901309632304896,
+            "phi": 5.46236995831503
+          },
+          "pattern_diversity": 4,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 365,
+          "coordinates": {
+            "pi": 6.0311039126555395,
+            "e": 5.937215322239787,
+            "phi": 5.436820877055203
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 370,
+          "coordinates": {
+            "pi": 6.028841965944956,
+            "e": 5.939071586707772,
+            "phi": 5.447573821621114
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 375,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 5.957244224212325,
+            "phi": 5.50014432045841
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 380,
+          "coordinates": {
+            "pi": 6.028464974826524,
+            "e": 5.966548005510878,
+            "phi": 5.526591373275932
+          },
+          "pattern_diversity": 3,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 385,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 5.975851786809431,
+            "phi": 5.553038426093455
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 390,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 5.985155568107984,
+            "phi": 5.579485478910977
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 395,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 6.0037631307050905,
+            "phi": 5.6323795845460225
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 400,
+          "coordinates": {
+            "pi": 6.028464974826524,
+            "e": 6.0130669120036435,
+            "phi": 5.658826637363545
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 405,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 6.0223706933021965,
+            "phi": 5.685273690181067
+          },
+          "pattern_diversity": 3,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 410,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 6.03167447460075,
+            "phi": 5.7117207429985895
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 415,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 6.040978255899303,
+            "phi": 5.7381677958161115
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 420,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 6.059585818496409,
+            "phi": 5.791061901451157
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 425,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 6.068889599794963,
+            "phi": 5.81750895426868
+          },
+          "pattern_diversity": 3,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 430,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 6.078193381093516,
+            "phi": 5.843956007086202
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 435,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 6.087497162392069,
+            "phi": 5.870403059903725
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 440,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 6.106104724989175,
+            "phi": 5.92329716553877
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 445,
+          "coordinates": {
+            "pi": 6.028464974826525,
+            "e": 6.115408506287728,
+            "phi": 5.949744218356293
+          },
+          "pattern_diversity": 3,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 450,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 455,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 460,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 465,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 470,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 475,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 480,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 485,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 490,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 495,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 500,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        }
+      ],
+      "burst_events": [
+        4,
+        9,
+        13,
+        17,
+        21,
+        25,
+        30,
+        33,
+        37,
+        41,
+        45,
+        49,
+        53,
+        57,
+        61,
+        65,
+        69,
+        73,
+        77,
+        81,
+        86,
+        90,
+        94,
+        98,
+        102,
+        106,
+        110,
+        114,
+        118,
+        122,
+        126,
+        130,
+        134,
+        138,
+        143,
+        147,
+        151,
+        155,
+        159,
+        163,
+        167,
+        171,
+        175,
+        179,
+        183,
+        187,
+        191,
+        195,
+        200,
+        204,
+        208,
+        212,
+        216,
+        220,
+        224,
+        228,
+        232,
+        236,
+        240,
+        244,
+        249,
+        253,
+        257,
+        261,
+        265,
+        269,
+        273,
+        277,
+        281,
+        286,
+        290,
+        294,
+        298,
+        302,
+        306,
+        310,
+        314,
+        318,
+        322,
+        326,
+        330,
+        334,
+        338,
+        343,
+        347,
+        351,
+        355,
+        359,
+        363,
+        367,
+        371,
+        375,
+        379,
+        383,
+        387,
+        391,
+        395,
+        400,
+        404,
+        408,
+        412,
+        416,
+        420,
+        424,
+        428,
+        432,
+        436,
+        440,
+        444,
+        448,
+        452,
+        457,
+        461,
+        465,
+        469,
+        473,
+        477,
+        481,
+        485,
+        489,
+        493,
+        498
+      ],
+      "total_bursts": 122,
+      "oscillation_analysis": {
+        "velocities": [
+          0.9163453391728477,
+          0.8522239040041276,
+          0.5266328576572337,
+          0.8651662678458903,
+          0.27772611695318655,
+          0.2596663314501347,
+          0.21961634912784536,
+          0.3125309583742398,
+          0.11514298466419358,
+          0.09657153552480767,
+          0.08215787350617845,
+          0.13230618590605567,
+          0.05244151793436318,
+          0.05304660137665434,
+          0.1153706141273555,
+          0.11172650737594082,
+          0.41019068379841434,
+          0.18492048997792854,
+          0.14271096298195737,
+          0.11449153435737286,
+          0.20202019854022116,
+          0.11291624322494921,
+          0.11291624322494921,
+          0.11291624322494921,
+          0.22583248644989828,
+          0.11291624322494927,
+          0.11291624322494921,
+          0.11291624322494984,
+          0.11291624322494836,
+          0.18632233345321614,
+          0.01745253591009884,
+          0.00496669220680458,
+          0.019866768827217912,
+          0.04138910172337227,
+          0.020694550861687023,
+          0.020694550861684907,
+          0.020694550861686888,
+          0.041389101723372,
+          0.0206945508616861,
+          0.020694550861685763,
+          0.02069455086168617,
+          0.02069455086168538,
+          0.04138910172337265,
+          0.02069455086168662,
+          0.02069455086168493,
+          0.02069455086168608,
+          0.04138910172337312,
+          0.014900076620413311,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0013460592677798304,
+          0.0040381778033395065,
+          0.016152711213358806,
+          0.13460592677798605,
+          0.06730296338899289,
+          0.06730296338899439,
+          0.06730296338899232,
+          0.13460592677798672,
+          0.06730296338899165,
+          0.06730296338899505,
+          0.06730296338899233,
+          0.13460592677798658,
+          0.06730296338899301,
+          0.0673029633889937,
+          0.06730296338899276,
+          0.06730296338899301,
+          0.13460592677798686,
+          0.0668483569536379,
+          0.04445356010836243,
+          0.011143964175022184,
+          0.05562413346900262,
+          0.028035815472072585,
+          0.028035815472073424,
+          0.028035815472072585,
+          0.05607163094414685,
+          0.028035815472073424,
+          0.028035815472072585,
+          0.028035815472072585,
+          0.028035815472072585,
+          0.05607163094414685,
+          0.028035815472073716,
+          0.028035815472072585,
+          0.028035815472073424,
+          0.056071630944146,
+          0.028035815472073424,
+          0.014794002070177673,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "avg_velocity": 0.09674470197270095,
+        "max_velocity": 0.9163453391728477,
+        "correlations": {
+          "pattern_diversity": 0.5367778000755359,
+          "agent_count": -0.1395810570774811,
+          "burst_events": 0.16646467779886417
+        },
+        "dominant_mechanism": "diversity",
+        "dominant_correlation": 0.5367778000755359
+      }
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "timeline": [
+        {
+          "cycle": 5,
+          "coordinates": {
+            "pi": 2.2933626371205493,
+            "e": 1.956014365071855,
+            "phi": 1.443237550894344
+          },
+          "pattern_diversity": 20,
+          "agent_count": 1,
+          "memory_size": 20,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 10,
+          "coordinates": {
+            "pi": 3.193653331849281,
+            "e": 2.555688148307944,
+            "phi": 1.8707673655784804
+          },
+          "pattern_diversity": 42,
+          "agent_count": 1,
+          "memory_size": 70,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 15,
+          "coordinates": {
+            "pi": 3.8955748904513436,
+            "e": 2.936535691784469,
+            "phi": 2.1320109921604424
+          },
+          "pattern_diversity": 57,
+          "agent_count": 2,
+          "memory_size": 120,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 20,
+          "coordinates": {
+            "pi": 4.303612336282301,
+            "e": 3.300431151190945,
+            "phi": 2.3866310557036687
+          },
+          "pattern_diversity": 65,
+          "agent_count": 3,
+          "memory_size": 170,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 25,
+          "coordinates": {
+            "pi": 4.720301139660397,
+            "e": 4.024940351312296,
+            "phi": 2.8903913618773167
+          },
+          "pattern_diversity": 74,
+          "agent_count": 0,
+          "memory_size": 270,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 30,
+          "coordinates": {
+            "pi": 4.843157774590365,
+            "e": 4.286989861355558,
+            "phi": 3.0813590256895633
+          },
+          "pattern_diversity": 75,
+          "agent_count": 1,
+          "memory_size": 320,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 35,
+          "coordinates": {
+            "pi": 4.945376284207673,
+            "e": 4.523379153812434,
+            "phi": 3.236407659274244
+          },
+          "pattern_diversity": 75,
+          "agent_count": 2,
+          "memory_size": 370,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 40,
+          "coordinates": {
+            "pi": 5.088183301614098,
+            "e": 4.716637318663726,
+            "phi": 3.363239067590025
+          },
+          "pattern_diversity": 75,
+          "agent_count": 3,
+          "memory_size": 420,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 45,
+          "coordinates": {
+            "pi": 5.293825282272154,
+            "e": 4.9923241347824385,
+            "phi": 3.544187795916006
+          },
+          "pattern_diversity": 75,
+          "agent_count": 0,
+          "memory_size": 520,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 50,
+          "coordinates": {
+            "pi": 5.369588117251439,
+            "e": 5.093892961773542,
+            "phi": 3.610853116878209
+          },
+          "pattern_diversity": 75,
+          "agent_count": 1,
+          "memory_size": 570,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 55,
+          "coordinates": {
+            "pi": 5.43313114013729,
+            "e": 5.179079719895114,
+            "phi": 3.6667659667174766
+          },
+          "pattern_diversity": 75,
+          "agent_count": 2,
+          "memory_size": 620,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 60,
+          "coordinates": {
+            "pi": 5.487190129756597,
+            "e": 5.251552036506004,
+            "phi": 3.7143336150881954
+          },
+          "pattern_diversity": 75,
+          "agent_count": 3,
+          "memory_size": 670,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 65,
+          "coordinates": {
+            "pi": 5.574246164987687,
+            "e": 5.368260702217045,
+            "phi": 3.7909360618150694
+          },
+          "pattern_diversity": 75,
+          "agent_count": 0,
+          "memory_size": 770,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 70,
+          "coordinates": {
+            "pi": 5.60965849193436,
+            "e": 5.414447015677917,
+            "phi": 3.824172958691501
+          },
+          "pattern_diversity": 76,
+          "agent_count": 1,
+          "memory_size": 820,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 75,
+          "coordinates": {
+            "pi": 5.640711554390282,
+            "e": 5.452509325349527,
+            "phi": 3.8572502945135656
+          },
+          "pattern_diversity": 76,
+          "agent_count": 2,
+          "memory_size": 870,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 80,
+          "coordinates": {
+            "pi": 5.66715996510611,
+            "e": 5.474454390733397,
+            "phi": 3.902310443905565
+          },
+          "pattern_diversity": 76,
+          "agent_count": 3,
+          "memory_size": 920,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 85,
+          "coordinates": {
+            "pi": 5.686217927891266,
+            "e": 5.448687042046513,
+            "phi": 4.0018259266243525
+          },
+          "pattern_diversity": 76,
+          "agent_count": 4,
+          "memory_size": 970,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 90,
+          "coordinates": {
+            "pi": 5.9153048074442225,
+            "e": 5.59203723426867,
+            "phi": 4.335619933400388
+          },
+          "pattern_diversity": 41,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 95,
+          "coordinates": {
+            "pi": 5.954260556348736,
+            "e": 5.674179619779456,
+            "phi": 4.512043321637836
+          },
+          "pattern_diversity": 26,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 100,
+          "coordinates": {
+            "pi": 5.994912765286187,
+            "e": 5.711252889966132,
+            "phi": 4.656656614444526
+          },
+          "pattern_diversity": 17,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 105,
+          "coordinates": {
+            "pi": 6.032360549716977,
+            "e": 5.700313641705668,
+            "phi": 4.7683379516664965
+          },
+          "pattern_diversity": 8,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 110,
+          "coordinates": {
+            "pi": 6.09123399604525,
+            "e": 5.636026116678371,
+            "phi": 4.956120679874145
+          },
+          "pattern_diversity": 6,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 115,
+          "coordinates": {
+            "pi": 6.098459659148506,
+            "e": 5.587279013962239,
+            "phi": 5.038570583713715
+          },
+          "pattern_diversity": 3,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 120,
+          "coordinates": {
+            "pi": 6.089914527130743,
+            "e": 5.54193782723776,
+            "phi": 5.104716146498955
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 125,
+          "coordinates": {
+            "pi": 6.074583554981223,
+            "e": 5.544266976632527,
+            "phi": 5.130433029864147
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 130,
+          "coordinates": {
+            "pi": 6.043167628445326,
+            "e": 5.554221979435311,
+            "phi": 5.177374721103416
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 135,
+          "coordinates": {
+            "pi": 6.0274596651773775,
+            "e": 5.559199480836702,
+            "phi": 5.200845566723049
+          },
+          "pattern_diversity": 3,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 140,
+          "coordinates": {
+            "pi": 6.011751701909428,
+            "e": 5.564176982238094,
+            "phi": 5.2243164123426835
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 145,
+          "coordinates": {
+            "pi": 5.996043738641478,
+            "e": 5.569154483639486,
+            "phi": 5.247787257962317
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 150,
+          "coordinates": {
+            "pi": 5.980335775373529,
+            "e": 5.574131985040878,
+            "phi": 5.2712581035819515
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 155,
+          "coordinates": {
+            "pi": 5.948919848837631,
+            "e": 5.584086987843661,
+            "phi": 5.318199794821219
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 160,
+          "coordinates": {
+            "pi": 5.934971177455693,
+            "e": 5.606209252899037,
+            "phi": 5.319376539448448
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 165,
+          "coordinates": {
+            "pi": 5.925546399494923,
+            "e": 5.672418053064657,
+            "phi": 5.263225595809492
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 170,
+          "coordinates": {
+            "pi": 5.916121621534153,
+            "e": 5.7386268532302775,
+            "phi": 5.207074652170537
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 175,
+          "coordinates": {
+            "pi": 5.897272065612615,
+            "e": 5.871044453561517,
+            "phi": 5.0947727648926255
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 180,
+          "coordinates": {
+            "pi": 5.887847287651846,
+            "e": 5.937253253727137,
+            "phi": 5.03862182125367
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 185,
+          "coordinates": {
+            "pi": 5.878422509691076,
+            "e": 6.003462053892758,
+            "phi": 4.982470877614714
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 190,
+          "coordinates": {
+            "pi": 5.868997731730308,
+            "e": 6.069670854058378,
+            "phi": 4.926319933975759
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 195,
+          "coordinates": {
+            "pi": 5.850148175808768,
+            "e": 6.202088454389617,
+            "phi": 4.814018046697849
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 200,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 205,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 210,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 215,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 220,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 225,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 230,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 235,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 240,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 245,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 250,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 255,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 260,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 265,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 270,
+          "coordinates": {
+            "pi": 5.843362335677015,
+            "e": 6.249758790508864,
+            "phi": 4.7735893672778005
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 275,
+          "coordinates": {
+            "pi": 5.8435508312362305,
+            "e": 6.2494456282857715,
+            "phi": 4.774249014472723
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 280,
+          "coordinates": {
+            "pi": 5.844116317913876,
+            "e": 6.248506141616497,
+            "phi": 4.776227956057489
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 285,
+          "coordinates": {
+            "pi": 5.84600127350603,
+            "e": 6.244685421098785,
+            "phi": 4.784877997711504
+          },
+          "pattern_diversity": 3,
+          "agent_count": 4,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 290,
+          "coordinates": {
+            "pi": 5.864850829427569,
+            "e": 6.213369198789611,
+            "phi": 4.850842717203715
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 295,
+          "coordinates": {
+            "pi": 5.874275607388339,
+            "e": 6.197711087635024,
+            "phi": 4.88382507694982
+          },
+          "pattern_diversity": 3,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 300,
+          "coordinates": {
+            "pi": 5.883700385349107,
+            "e": 6.182052976480437,
+            "phi": 4.916807436695924
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 305,
+          "coordinates": {
+            "pi": 5.893125163309877,
+            "e": 6.1663948653258505,
+            "phi": 4.94978979644203
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 310,
+          "coordinates": {
+            "pi": 5.911974719231416,
+            "e": 6.135078643016676,
+            "phi": 5.01575451593424
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 315,
+          "coordinates": {
+            "pi": 5.921399497192185,
+            "e": 6.119420531862089,
+            "phi": 5.048736875680344
+          },
+          "pattern_diversity": 3,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 320,
+          "coordinates": {
+            "pi": 5.930824275152954,
+            "e": 6.103762420707502,
+            "phi": 5.0817192354264495
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 325,
+          "coordinates": {
+            "pi": 5.940249053113724,
+            "e": 6.088104309552915,
+            "phi": 5.114701595172554
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 330,
+          "coordinates": {
+            "pi": 5.959098609035262,
+            "e": 6.056788087243742,
+            "phi": 5.180666314664764
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 335,
+          "coordinates": {
+            "pi": 5.968523386996032,
+            "e": 6.041129976089154,
+            "phi": 5.213648674410869
+          },
+          "pattern_diversity": 3,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 340,
+          "coordinates": {
+            "pi": 5.977948164956802,
+            "e": 6.025471864934568,
+            "phi": 5.246631034156974
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 345,
+          "coordinates": {
+            "pi": 5.987372942917571,
+            "e": 6.009813753779981,
+            "phi": 5.2796133939030785
+          },
+          "pattern_diversity": 3,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 350,
+          "coordinates": {
+            "pi": 5.996797720878339,
+            "e": 5.994155642625394,
+            "phi": 5.312595753649184
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 355,
+          "coordinates": {
+            "pi": 6.0156472767998785,
+            "e": 5.962839420316221,
+            "phi": 5.378560473141394
+          },
+          "pattern_diversity": 3,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 360,
+          "coordinates": {
+            "pi": 6.025072054760648,
+            "e": 5.947367384787604,
+            "phi": 5.4120717739438495
+          },
+          "pattern_diversity": 4,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 365,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 5.937340869921011,
+            "phi": 5.435352326425302
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 370,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 5.9395737774326625,
+            "phi": 5.441699619101507
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 375,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 5.957809188777826,
+            "phi": 5.493535842623851
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 380,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 5.967112970076379,
+            "phi": 5.519982895441373
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 385,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 5.976416751374933,
+            "phi": 5.546429948258896
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 390,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 5.9857205326734855,
+            "phi": 5.572877001076418
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 395,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.004328095270592,
+            "phi": 5.625771106711463
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 400,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.013631876569145,
+            "phi": 5.652218159528986
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 405,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.0229356578676985,
+            "phi": 5.678665212346508
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 410,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.032239439166252,
+            "phi": 5.705112265164032
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 415,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.041543220464805,
+            "phi": 5.731559317981553
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 420,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.0601507830619115,
+            "phi": 5.784453423616599
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 425,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.0694545643604645,
+            "phi": 5.810900476434122
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 430,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.0787583456590175,
+            "phi": 5.837347529251644
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 435,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.0880621269575705,
+            "phi": 5.863794582069167
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 440,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.106669689554677,
+            "phi": 5.916688687704212
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 445,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.11597347085323,
+            "phi": 5.943135740521734
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 450,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 455,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 460,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 465,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 470,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 475,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 480,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 485,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 490,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 495,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 500,
+          "coordinates": {
+            "pi": 6.0318578948924015,
+            "e": 6.122672193388188,
+            "phi": 5.962177618550351
+          },
+          "pattern_diversity": 1,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        }
+      ],
+      "burst_events": [
+        4,
+        9,
+        13,
+        17,
+        21,
+        25,
+        30,
+        33,
+        37,
+        41,
+        45,
+        49,
+        53,
+        57,
+        61,
+        65,
+        69,
+        73,
+        77,
+        81,
+        86,
+        90,
+        94,
+        98,
+        102,
+        106,
+        110,
+        114,
+        118,
+        122,
+        126,
+        130,
+        134,
+        138,
+        143,
+        147,
+        151,
+        155,
+        159,
+        163,
+        167,
+        171,
+        175,
+        179,
+        183,
+        187,
+        191,
+        195,
+        200,
+        204,
+        208,
+        212,
+        216,
+        220,
+        224,
+        228,
+        232,
+        236,
+        240,
+        244,
+        249,
+        253,
+        257,
+        261,
+        265,
+        269,
+        273,
+        277,
+        281,
+        286,
+        290,
+        294,
+        298,
+        302,
+        306,
+        310,
+        314,
+        318,
+        322,
+        326,
+        330,
+        334,
+        338,
+        343,
+        347,
+        351,
+        355,
+        359,
+        363,
+        367,
+        371,
+        375,
+        379,
+        383,
+        387,
+        391,
+        395,
+        400,
+        404,
+        408,
+        412,
+        416,
+        420,
+        424,
+        428,
+        432,
+        436,
+        440,
+        444,
+        448,
+        452,
+        457,
+        461,
+        465,
+        469,
+        473,
+        477,
+        481,
+        485,
+        489,
+        493,
+        498
+      ],
+      "total_bursts": 122,
+      "oscillation_analysis": {
+        "velocities": [
+          1.1631481950979754,
+          0.8402303007105542,
+          0.6031134547791638,
+          0.975867606797826,
+          0.34674536346162776,
+          0.30061370573066504,
+          0.2717144983941279,
+          0.38863129965743964,
+          0.14317995250537213,
+          0.12008641177869972,
+          0.10216306673710286,
+          0.1645223412389696,
+          0.06702163654267607,
+          0.05922113010163285,
+          0.05667028663528028,
+          0.10454900049558155,
+          0.42947469652243797,
+          0.198469478225986,
+          0.15472567308052687,
+          0.11829930175181291,
+          0.2070297601066348,
+          0.09605455155094529,
+          0.08064786401983154,
+          0.03003034688396666,
+          0.05735490299281435,
+          0.028677451496406537,
+          0.02867745149640806,
+          0.02867745149640718,
+          0.02867745149640742,
+          0.05735490299281411,
+          0.02617909036653692,
+          0.08732330805991084,
+          0.08732330805991027,
+          0.17464661611981966,
+          0.08732330805991018,
+          0.08732330805991094,
+          0.08732330805991008,
+          0.1746466161198192,
+          0.06287278180313555,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0007541455930951157,
+          0.0022624367792836103,
+          0.009642312143623204,
+          0.0754145593094789,
+          0.037707279654738676,
+          0.037707279654738454,
+          0.037707279654739086,
+          0.07541455930947791,
+          0.037707279654738676,
+          0.03770727965473923,
+          0.037707279654738676,
+          0.07541455930947753,
+          0.03770727965473982,
+          0.03770727965473831,
+          0.037707279654738676,
+          0.037707279654739016,
+          0.07541455930947775,
+          0.0380948501044596,
+          0.026240479235436882,
+          0.00672859571329679,
+          0.05495019832526344,
+          0.028035815472072585,
+          0.028035815472073716,
+          0.02803581547207229,
+          0.0560716309441463,
+          0.028035815472073424,
+          0.028035815472072585,
+          0.028035815472074555,
+          0.02803581547207175,
+          0.05607163094414685,
+          0.028035815472073424,
+          0.028035815472072585,
+          0.028035815472073424,
+          0.05607163094414685,
+          0.028035815472072585,
+          0.02018578713989293,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "avg_velocity": 0.09536151395284699,
+        "max_velocity": 1.1631481950979754,
+        "correlations": {
+          "pattern_diversity": 0.5579263729053366,
+          "agent_count": -0.1309609616125817,
+          "burst_events": 0.14935865218816125
+        },
+        "dominant_mechanism": "diversity",
+        "dominant_correlation": 0.5579263729053366
+      }
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "timeline": [
+        {
+          "cycle": 5,
+          "coordinates": {
+            "pi": 3.518583772020568,
+            "e": 2.9556529470935895,
+            "phi": 2.1797373623309584
+          },
+          "pattern_diversity": 25,
+          "agent_count": 0,
+          "memory_size": 25,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 10,
+          "coordinates": {
+            "pi": 4.033804967209294,
+            "e": 3.519912139214999,
+            "phi": 2.575233776697578
+          },
+          "pattern_diversity": 39,
+          "agent_count": 0,
+          "memory_size": 75,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 15,
+          "coordinates": {
+            "pi": 4.534449172485362,
+            "e": 3.9501796817799315,
+            "phi": 2.8767951841296444
+          },
+          "pattern_diversity": 53,
+          "agent_count": 0,
+          "memory_size": 125,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 20,
+          "coordinates": {
+            "pi": 4.534449172485362,
+            "e": 3.9501796817799315,
+            "phi": 2.8767951841296444
+          },
+          "pattern_diversity": 53,
+          "agent_count": 5,
+          "memory_size": 125,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 25,
+          "coordinates": {
+            "pi": 4.801610211746639,
+            "e": 4.334616469001389,
+            "phi": 3.1628042173082407
+          },
+          "pattern_diversity": 58,
+          "agent_count": 4,
+          "memory_size": 175,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 30,
+          "coordinates": {
+            "pi": 5.0638284785662675,
+            "e": 4.651776996747504,
+            "phi": 3.3798483734877633
+          },
+          "pattern_diversity": 58,
+          "agent_count": 3,
+          "memory_size": 225,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 35,
+          "coordinates": {
+            "pi": 5.22840985370342,
+            "e": 4.871036839602075,
+            "phi": 3.531289633191438
+          },
+          "pattern_diversity": 58,
+          "agent_count": 1,
+          "memory_size": 275,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 40,
+          "coordinates": {
+            "pi": 5.342350805721448,
+            "e": 5.022832115424471,
+            "phi": 3.6361335822170595
+          },
+          "pattern_diversity": 58,
+          "agent_count": 1,
+          "memory_size": 325,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 45,
+          "coordinates": {
+            "pi": 5.425907503868003,
+            "e": 5.1341486510275605,
+            "phi": 3.713019144835848
+          },
+          "pattern_diversity": 58,
+          "agent_count": 1,
+          "memory_size": 375,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 50,
+          "coordinates": {
+            "pi": 5.489803802450663,
+            "e": 5.219273060606395,
+            "phi": 3.7718139868384513
+          },
+          "pattern_diversity": 58,
+          "agent_count": 0,
+          "memory_size": 425,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 55,
+          "coordinates": {
+            "pi": 5.489803802450663,
+            "e": 5.219273060606395,
+            "phi": 3.7718139868384513
+          },
+          "pattern_diversity": 58,
+          "agent_count": 5,
+          "memory_size": 425,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 60,
+          "coordinates": {
+            "pi": 5.536478337515822,
+            "e": 5.280056950565885,
+            "phi": 3.83358694981066
+          },
+          "pattern_diversity": 62,
+          "agent_count": 4,
+          "memory_size": 475,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 65,
+          "coordinates": {
+            "pi": 5.560618996853934,
+            "e": 5.306030150161246,
+            "phi": 3.939167665823001
+          },
+          "pattern_diversity": 62,
+          "agent_count": 3,
+          "memory_size": 525,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 70,
+          "coordinates": {
+            "pi": 5.581927190504368,
+            "e": 5.293442249642595,
+            "phi": 4.125388816526036
+          },
+          "pattern_diversity": 62,
+          "agent_count": 2,
+          "memory_size": 575,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 75,
+          "coordinates": {
+            "pi": 5.587762357380949,
+            "e": 5.295438360246943,
+            "phi": 4.291633391588639
+          },
+          "pattern_diversity": 62,
+          "agent_count": 2,
+          "memory_size": 625,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 80,
+          "coordinates": {
+            "pi": 5.592733055090629,
+            "e": 5.297138750761759,
+            "phi": 4.433249140716041
+          },
+          "pattern_diversity": 62,
+          "agent_count": 2,
+          "memory_size": 675,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 85,
+          "coordinates": {
+            "pi": 5.5970181393231115,
+            "e": 5.298604604653842,
+            "phi": 4.555331683067249
+          },
+          "pattern_diversity": 62,
+          "agent_count": 2,
+          "memory_size": 725,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 90,
+          "coordinates": {
+            "pi": 5.6007503094610795,
+            "e": 5.299881316108236,
+            "phi": 4.661661639308624
+          },
+          "pattern_diversity": 62,
+          "agent_count": 2,
+          "memory_size": 775,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 95,
+          "coordinates": {
+            "pi": 5.604030095339902,
+            "e": 5.301003274659068,
+            "phi": 4.755103116005591
+          },
+          "pattern_diversity": 62,
+          "agent_count": 2,
+          "memory_size": 825,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 100,
+          "coordinates": {
+            "pi": 5.606935048546858,
+            "e": 5.301997009375519,
+            "phi": 4.837865566794332
+          },
+          "pattern_diversity": 62,
+          "agent_count": 1,
+          "memory_size": 875,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 105,
+          "coordinates": {
+            "pi": 5.609525952758468,
+            "e": 5.3028833133118125,
+            "phi": 4.911680725605913
+          },
+          "pattern_diversity": 62,
+          "agent_count": 0,
+          "memory_size": 925,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 110,
+          "coordinates": {
+            "pi": 5.609525952758468,
+            "e": 5.3028833133118125,
+            "phi": 4.911680725605913
+          },
+          "pattern_diversity": 62,
+          "agent_count": 5,
+          "memory_size": 925,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 115,
+          "coordinates": {
+            "pi": 5.611851123204783,
+            "e": 5.303678714280282,
+            "phi": 4.977925098898356
+          },
+          "pattern_diversity": 62,
+          "agent_count": 3,
+          "memory_size": 975,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 120,
+          "coordinates": {
+            "pi": 5.681067659192568,
+            "e": 5.362229939803992,
+            "phi": 5.108565204690955
+          },
+          "pattern_diversity": 42,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 125,
+          "coordinates": {
+            "pi": 5.7330610176094785,
+            "e": 5.4434856300566326,
+            "phi": 5.2839209935630445
+          },
+          "pattern_diversity": 27,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 130,
+          "coordinates": {
+            "pi": 5.762026501875576,
+            "e": 5.478400863390412,
+            "phi": 5.422214736768646
+          },
+          "pattern_diversity": 15,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 135,
+          "coordinates": {
+            "pi": 5.762057917802113,
+            "e": 5.4776456001162535,
+            "phi": 5.541774520084797
+          },
+          "pattern_diversity": 6,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 140,
+          "coordinates": {
+            "pi": 5.7459101315626615,
+            "e": 5.454035330204326,
+            "phi": 5.643872588593292
+          },
+          "pattern_diversity": 5,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 145,
+          "coordinates": {
+            "pi": 5.730202168294713,
+            "e": 5.427069705191791,
+            "phi": 5.743406123740822
+          },
+          "pattern_diversity": 5,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 150,
+          "coordinates": {
+            "pi": 5.714808364292123,
+            "e": 5.401015543931449,
+            "phi": 5.842006870298102
+          },
+          "pattern_diversity": 6,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 155,
+          "coordinates": {
+            "pi": 5.700357038085609,
+            "e": 5.377695773927686,
+            "phi": 5.937809251084633
+          },
+          "pattern_diversity": 6,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 160,
+          "coordinates": {
+            "pi": 5.692503056451635,
+            "e": 5.373516742719972,
+            "phi": 6.01402307147592
+          },
+          "pattern_diversity": 6,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 165,
+          "coordinates": {
+            "pi": 5.692503056451635,
+            "e": 5.392124305317078,
+            "phi": 6.066917177110965
+          },
+          "pattern_diversity": 6,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 170,
+          "coordinates": {
+            "pi": 5.700985356616328,
+            "e": 5.431384568152017,
+            "phi": 6.077887759369585
+          },
+          "pattern_diversity": 3,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 175,
+          "coordinates": {
+            "pi": 5.711415444226245,
+            "e": 5.482457107591665,
+            "phi": 6.035544058563622
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 180,
+          "coordinates": {
+            "pi": 5.727123407494194,
+            "e": 5.528030295201305,
+            "phi": 5.988904629051139
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 185,
+          "coordinates": {
+            "pi": 5.727123407494194,
+            "e": 5.528030295201305,
+            "phi": 5.988904629051139
+          },
+          "pattern_diversity": 2,
+          "agent_count": 5,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 190,
+          "coordinates": {
+            "pi": 5.7428313707621435,
+            "e": 5.573603482810946,
+            "phi": 5.942265199538654
+          },
+          "pattern_diversity": 2,
+          "agent_count": 4,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 195,
+          "coordinates": {
+            "pi": 5.758539334030092,
+            "e": 5.619176670420588,
+            "phi": 5.89562577002617
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 200,
+          "coordinates": {
+            "pi": 5.774247297298041,
+            "e": 5.664749858030228,
+            "phi": 5.848986340513685
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 205,
+          "coordinates": {
+            "pi": 5.78995526056599,
+            "e": 5.710323045639869,
+            "phi": 5.8023469110012
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 210,
+          "coordinates": {
+            "pi": 5.805663223833939,
+            "e": 5.75589623324951,
+            "phi": 5.755707481488717
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 215,
+          "coordinates": {
+            "pi": 5.821371187101888,
+            "e": 5.801469420859151,
+            "phi": 5.709068051976232
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 220,
+          "coordinates": {
+            "pi": 5.837079150369837,
+            "e": 5.847042608468793,
+            "phi": 5.6624286224637475
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 225,
+          "coordinates": {
+            "pi": 5.852787113637786,
+            "e": 5.892615796078433,
+            "phi": 5.615789192951262
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 230,
+          "coordinates": {
+            "pi": 5.8684950769057345,
+            "e": 5.9381889836880735,
+            "phi": 5.569149763438778
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 235,
+          "coordinates": {
+            "pi": 5.8842030401736825,
+            "e": 5.983762171297715,
+            "phi": 5.522510333926293
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 240,
+          "coordinates": {
+            "pi": 5.899911003441631,
+            "e": 6.029335358907356,
+            "phi": 5.475870904413808
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 245,
+          "coordinates": {
+            "pi": 5.91561896670958,
+            "e": 6.074908546516997,
+            "phi": 5.429231474901324
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 250,
+          "coordinates": {
+            "pi": 5.93132692997753,
+            "e": 6.120481734126637,
+            "phi": 5.382592045388841
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 255,
+          "coordinates": {
+            "pi": 5.947034893245479,
+            "e": 6.166054921736278,
+            "phi": 5.335952615876357
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 260,
+          "coordinates": {
+            "pi": 5.962742856513428,
+            "e": 6.211628109345919,
+            "phi": 5.289313186363872
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 265,
+          "coordinates": {
+            "pi": 5.969026041820607,
+            "e": 6.229857384389776,
+            "phi": 5.270657414558879
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 270,
+          "coordinates": {
+            "pi": 5.969026041820607,
+            "e": 6.229857384389776,
+            "phi": 5.270657414558879
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 275,
+          "coordinates": {
+            "pi": 5.969026041820607,
+            "e": 6.229857384389776,
+            "phi": 5.270657414558879
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 280,
+          "coordinates": {
+            "pi": 5.969026041820607,
+            "e": 6.229857384389776,
+            "phi": 5.270657414558879
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 285,
+          "coordinates": {
+            "pi": 5.969026041820607,
+            "e": 6.229857384389776,
+            "phi": 5.270657414558879
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 290,
+          "coordinates": {
+            "pi": 5.968429139216425,
+            "e": 6.22981681622436,
+            "phi": 5.271413067429308
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 295,
+          "coordinates": {
+            "pi": 5.966041528799696,
+            "e": 6.229654543562695,
+            "phi": 5.274435678911032
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 300,
+          "coordinates": {
+            "pi": 5.954103476716056,
+            "e": 6.228843180254371,
+            "phi": 5.289548736319644
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 305,
+          "coordinates": {
+            "pi": 5.924258346506953,
+            "e": 6.226814771983562,
+            "phi": 5.327331379841176
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 310,
+          "coordinates": {
+            "pi": 5.894413216297849,
+            "e": 6.224786363712753,
+            "phi": 5.365114023362708
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 315,
+          "coordinates": {
+            "pi": 5.864568086088747,
+            "e": 6.222757955441945,
+            "phi": 5.40289666688424
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 320,
+          "coordinates": {
+            "pi": 5.834722955879644,
+            "e": 6.220729547171135,
+            "phi": 5.4406793104057725
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 325,
+          "coordinates": {
+            "pi": 5.804877825670541,
+            "e": 6.218701138900325,
+            "phi": 5.4784619539273045
+          },
+          "pattern_diversity": 2,
+          "agent_count": 2,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 330,
+          "coordinates": {
+            "pi": 5.775032695461437,
+            "e": 6.216672730629517,
+            "phi": 5.516244597448837
+          },
+          "pattern_diversity": 2,
+          "agent_count": 1,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 335,
+          "coordinates": {
+            "pi": 5.745187565252335,
+            "e": 6.2146443223587085,
+            "phi": 5.5540272409703695
+          },
+          "pattern_diversity": 2,
+          "agent_count": 0,
+          "memory_size": 1000,
+          "burst_occurred": true
+        },
+        {
+          "cycle": 340,
+          "coordinates": {
+            "pi": 5.745187565252335,
+            "e": 6.2146443223587085,
+            "phi": 5.5540272409703695
+          },
+          "pattern_diversity": 2,
+          "agent_count": 5,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 345,
+          "coordinates": {
+            "pi": 5.715342435043232,
+            "e": 6.212615914087899,
+            "phi": 5.5918098844919015
+          },
+          "pattern_diversity": 2,
+          "agent_count": 4,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 350,
+          "coordinates": {
+            "pi": 5.685497304834129,
+            "e": 6.21058750581709,
+            "phi": 5.629592528013434
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 355,
+          "coordinates": {
+            "pi": 5.655652174625026,
+            "e": 6.20855909754628,
+            "phi": 5.667375171534966
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 360,
+          "coordinates": {
+            "pi": 5.626529610726249,
+            "e": 6.206170811432914,
+            "phi": 5.705256261537699
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 365,
+          "coordinates": {
+            "pi": 5.599574745758448,
+            "e": 6.202702891791873,
+            "phi": 5.743432690984038
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 370,
+          "coordinates": {
+            "pi": 5.584180941755858,
+            "e": 6.193476926669902,
+            "phi": 5.783184264129608
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 375,
+          "coordinates": {
+            "pi": 5.590464127063038,
+            "e": 6.17345462627119,
+            "phi": 5.8258892317112325
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 380,
+          "coordinates": {
+            "pi": 5.5967473123702165,
+            "e": 6.153432325872478,
+            "phi": 5.868594199292857
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 385,
+          "coordinates": {
+            "pi": 5.603030497677397,
+            "e": 6.133410025473766,
+            "phi": 5.911299166874482
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 390,
+          "coordinates": {
+            "pi": 5.609313682984576,
+            "e": 6.113387725075054,
+            "phi": 5.954004134456106
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 395,
+          "coordinates": {
+            "pi": 5.615596868291757,
+            "e": 6.093365424676342,
+            "phi": 5.99670910203773
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 400,
+          "coordinates": {
+            "pi": 5.621880053598935,
+            "e": 6.0733431242776295,
+            "phi": 6.0394140696193555
+          },
+          "pattern_diversity": 3,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 405,
+          "coordinates": {
+            "pi": 5.643085804010667,
+            "e": 6.054335028014322,
+            "phi": 6.063227715440213
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 410,
+          "coordinates": {
+            "pi": 5.679214119526948,
+            "e": 6.03634113588642,
+            "phi": 6.068150039500306
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 415,
+          "coordinates": {
+            "pi": 5.7153424350432305,
+            "e": 6.018347243758516,
+            "phi": 6.0730723635603985
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 420,
+          "coordinates": {
+            "pi": 5.751470750559514,
+            "e": 6.000353351630613,
+            "phi": 6.077994687620491
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 425,
+          "coordinates": {
+            "pi": 5.7875990660757966,
+            "e": 5.982359459502709,
+            "phi": 6.082917011680583
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 430,
+          "coordinates": {
+            "pi": 5.823727381592078,
+            "e": 5.9643655673748075,
+            "phi": 6.087839335740675
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 435,
+          "coordinates": {
+            "pi": 5.859855697108362,
+            "e": 5.946371675246905,
+            "phi": 6.092761659800768
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 440,
+          "coordinates": {
+            "pi": 5.895984012624644,
+            "e": 5.928377783119001,
+            "phi": 6.097683983860859
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 445,
+          "coordinates": {
+            "pi": 5.932112328140925,
+            "e": 5.910383890991098,
+            "phi": 6.1026063079209525
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 450,
+          "coordinates": {
+            "pi": 5.968240643657209,
+            "e": 5.8923899988631945,
+            "phi": 6.107528631981045
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 455,
+          "coordinates": {
+            "pi": 6.004368959173491,
+            "e": 5.874396106735292,
+            "phi": 6.112450956041137
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 460,
+          "coordinates": {
+            "pi": 6.0404972746897725,
+            "e": 5.85640221460739,
+            "phi": 6.117373280101229
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 465,
+          "coordinates": {
+            "pi": 6.076625590206056,
+            "e": 5.838408322479486,
+            "phi": 6.122295604161321
+          },
+          "pattern_diversity": 2,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 470,
+          "coordinates": {
+            "pi": 6.094689747964198,
+            "e": 5.829411376415535,
+            "phi": 6.124756766191368
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 475,
+          "coordinates": {
+            "pi": 6.094689747964198,
+            "e": 5.829411376415535,
+            "phi": 6.124756766191368
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 480,
+          "coordinates": {
+            "pi": 6.094689747964198,
+            "e": 5.829411376415535,
+            "phi": 6.124756766191368
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 485,
+          "coordinates": {
+            "pi": 6.094689747964198,
+            "e": 5.829411376415535,
+            "phi": 6.124756766191368
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 490,
+          "coordinates": {
+            "pi": 6.094689747964198,
+            "e": 5.829411376415535,
+            "phi": 6.124756766191368
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 495,
+          "coordinates": {
+            "pi": 6.094689747964198,
+            "e": 5.829411376415535,
+            "phi": 6.124756766191368
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        },
+        {
+          "cycle": 500,
+          "coordinates": {
+            "pi": 6.094689747964198,
+            "e": 5.829411376415535,
+            "phi": 6.124756766191368
+          },
+          "pattern_diversity": 1,
+          "agent_count": 3,
+          "memory_size": 1000,
+          "burst_occurred": false
+        }
+      ],
+      "burst_events": [
+        5,
+        10,
+        15,
+        21,
+        27,
+        34,
+        39,
+        44,
+        50,
+        56,
+        62,
+        68,
+        73,
+        78,
+        83,
+        88,
+        93,
+        99,
+        105,
+        112,
+        117,
+        122,
+        127,
+        132,
+        137,
+        142,
+        147,
+        152,
+        158,
+        164,
+        169,
+        174,
+        180,
+        186,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        323,
+        329,
+        335,
+        341,
+        347,
+        352,
+        357,
+        362,
+        367,
+        372,
+        377,
+        382,
+        387,
+        392,
+        397,
+        402,
+        407,
+        412,
+        417,
+        422,
+        427,
+        432,
+        437,
+        442,
+        447,
+        452,
+        457,
+        463,
+        467,
+        472,
+        477,
+        482,
+        487,
+        492,
+        497
+      ],
+      "total_bursts": 95,
+      "oscillation_analysis": {
+        "velocities": [
+          0.8603828971115464,
+          0.7257506878493337,
+          0.0,
+          0.5486053511660975,
+          0.4652498098288326,
+          0.31320338898435185,
+          0.21683311545070555,
+          0.1590109513305166,
+          0.12159660984098465,
+          0.0,
+          0.09843318777994567,
+          0.11137623680201218,
+          0.18785848749863382,
+          0.1663589263242814,
+          0.1417131594614243,
+          0.12216651677708973,
+          0.10640309525746587,
+          0.09350575037777342,
+          0.08281937890602717,
+          0.07386593253780853,
+          0.0,
+          0.06628993945700691,
+          0.15901576055843714,
+          0.2001385750145511,
+          0.14554460555904783,
+          0.11956217293182053,
+          0.10602929519201061,
+          0.1043111195477668,
+          0.10314017520977382,
+          0.09965314177948953,
+          0.07673132181825922,
+          0.056071630944146,
+          0.041637378988663494,
+          0.06715787377746352,
+          0.06707377970698118,
+          0.0,
+          0.06707377970698263,
+          0.0670737797069824,
+          0.06707377970698182,
+          0.06707377970698242,
+          0.06707377970698178,
+          0.06707377970698242,
+          0.0670737797069824,
+          0.06707377970698182,
+          0.0670737797069818,
+          0.0670737797069828,
+          0.06707377970698242,
+          0.0670737797069818,
+          0.0670737797069808,
+          0.0670737797069824,
+          0.06707377970698242,
+          0.026829511882792628,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0009638203958795002,
+          0.0038552815835215916,
+          0.01927640791760279,
+          0.04819101979400898,
+          0.04819101979400949,
+          0.04819101979400839,
+          0.04819101979400901,
+          0.04819101979400898,
+          0.04819101979401018,
+          0.04819101979400839,
+          0.0,
+          0.04819101979400898,
+          0.04819101979400898,
+          0.04819101979400901,
+          0.04784145292936756,
+          0.046861828574441766,
+          0.04361507997985998,
+          0.04758240417431855,
+          0.04758240417431832,
+          0.047582404174319345,
+          0.04758240417431843,
+          0.04758240417431867,
+          0.047582404174319116,
+          0.03712251744374396,
+          0.04066035673856224,
+          0.04066035673856331,
+          0.04066035673856449,
+          0.04066035673856331,
+          0.040660356738561734,
+          0.0406603567385646,
+          0.040660356738563205,
+          0.04066035673856224,
+          0.040660356738564885,
+          0.04066035673856292,
+          0.040660356738561734,
+          0.040660356738564885,
+          0.020330178369281904,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "avg_velocity": 0.08601638315454782,
+        "max_velocity": 0.8603828971115464,
+        "correlations": {
+          "pattern_diversity": 0.47496644209758193,
+          "agent_count": -0.39822262983869716,
+          "burst_events": 0.4472946002892881
+        },
+        "dominant_mechanism": "diversity",
+        "dominant_correlation": 0.47496644209758193
+      }
+    }
+  ],
+  "analysis": {
+    "successful_runs": 3,
+    "avg_correlations": {
+      "pattern_diversity": 0.5232235383594848,
+      "agent_count": 0.22292154950958665,
+      "burst_events": 0.25437264342543786
+    },
+    "dominant_mechanism": "pattern_diversity",
+    "conclusion": "pattern_competition"
+  },
+  "insight_60_discovered": true,
+  "duration": 11.185504913330078,
+  "timestamp": 1761154209.6374762
+}

@@ -26,7 +26,6 @@ import matplotlib.patches as mpatches
 from pathlib import Path
 from typing import Dict, List, Tuple
 import seaborn as sns
-from workspace_utils import get_workspace_path, get_results_path
 
 # Set publication style
 plt.style.use('seaborn-v0_8-paper')
@@ -450,7 +449,7 @@ class CoalitionVisualizer:
 def main():
     """Generate NRM V2 consolidation figures."""
     # Paths
-    results_path = get_results_path()
+    results_path = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results/nrmv2_c175_consolidation_demo.json")
     output_dir = Path("/Volumes/dual/DUALITY-ZERO-V2/data/figures/nrmv2_consolidation")
 
     # Create visualizer

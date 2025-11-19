@@ -1,0 +1,471 @@
+{
+  "campaign": "power_law_validation",
+  "cycle": 1400,
+  "timestamp": "2025-11-18T04:38:35.143107",
+  "parameters": {
+    "f_spawn_values": [
+      0.003,
+      0.006,
+      0.008
+    ],
+    "spawn_cost": 5.0,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "max_cycles": 450000
+  },
+  "predictions": {
+    "power_law": {
+      "0.003": 507.54,
+      "0.006": 501.7,
+      "0.008": 500.94
+    },
+    "exponential": {
+      "0.003": 509.46,
+      "0.006": 501.25,
+      "0.008": 500.93
+    }
+  },
+  "results": [
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0030_SEED_42",
+      "parameters": {
+        "f_spawn": 0.003,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 42,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 2174,
+        "population": 61732,
+        "energy_total": 10008266.5,
+        "energy_mean": 162.12444923216484,
+        "e_min": 162.12444923216484,
+        "total_spawns": 61632,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 507.54,
+        "exponential": 509.46
+      },
+      "termination": "ENERGY_CAP at cycle 2174",
+      "runtime_seconds": 3.192816734313965,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0030_SEED_42.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0030_SEED_43",
+      "parameters": {
+        "f_spawn": 0.003,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 43,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 2178,
+        "population": 61996,
+        "energy_total": 10013295.0,
+        "energy_mean": 161.51517839860637,
+        "e_min": 161.51517839860637,
+        "total_spawns": 61896,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 507.54,
+        "exponential": 509.46
+      },
+      "termination": "ENERGY_CAP at cycle 2178",
+      "runtime_seconds": 3.2257320880889893,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0030_SEED_43.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0030_SEED_44",
+      "parameters": {
+        "f_spawn": 0.003,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 44,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 2149,
+        "population": 61930,
+        "energy_total": 10002905.5,
+        "energy_mean": 161.5195462619086,
+        "e_min": 161.5195462619086,
+        "total_spawns": 61830,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 507.54,
+        "exponential": 509.46
+      },
+      "termination": "ENERGY_CAP at cycle 2149",
+      "runtime_seconds": 3.241647720336914,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0030_SEED_44.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0030_SEED_45",
+      "parameters": {
+        "f_spawn": 0.003,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 45,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 2149,
+        "population": 62337,
+        "energy_total": 10024615.5,
+        "energy_mean": 160.81324895327012,
+        "e_min": 160.81324895327012,
+        "total_spawns": 62237,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 507.54,
+        "exponential": 509.46
+      },
+      "termination": "ENERGY_CAP at cycle 2149",
+      "runtime_seconds": 3.2590160369873047,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0030_SEED_45.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0030_SEED_46",
+      "parameters": {
+        "f_spawn": 0.003,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 46,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 2229,
+        "population": 62266,
+        "energy_total": 10010606.0,
+        "energy_mean": 160.7716249638647,
+        "e_min": 160.7716249638647,
+        "total_spawns": 62166,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 507.54,
+        "exponential": 509.46
+      },
+      "termination": "ENERGY_CAP at cycle 2229",
+      "runtime_seconds": 3.2690141201019287,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0030_SEED_46.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0060_SEED_42",
+      "parameters": {
+        "f_spawn": 0.006,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 42,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 1200,
+        "population": 127823,
+        "energy_total": 10054459.0,
+        "energy_mean": 78.65923190662087,
+        "e_min": 78.65923190662087,
+        "total_spawns": 127723,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 501.7,
+        "exponential": 501.25
+      },
+      "termination": "ENERGY_CAP at cycle 1200",
+      "runtime_seconds": 3.4225142002105713,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0060_SEED_42.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0060_SEED_43",
+      "parameters": {
+        "f_spawn": 0.006,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 43,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 1220,
+        "population": 127211,
+        "energy_total": 10006273.0,
+        "energy_mean": 78.65886597857103,
+        "e_min": 78.65886597857103,
+        "total_spawns": 127111,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 501.7,
+        "exponential": 501.25
+      },
+      "termination": "ENERGY_CAP at cycle 1220",
+      "runtime_seconds": 3.3943979740142822,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0060_SEED_43.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0060_SEED_44",
+      "parameters": {
+        "f_spawn": 0.006,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 44,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 1187,
+        "population": 128218,
+        "energy_total": 10044587.5,
+        "energy_mean": 78.3399171723159,
+        "e_min": 78.3399171723159,
+        "total_spawns": 128118,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 501.7,
+        "exponential": 501.25
+      },
+      "termination": "ENERGY_CAP at cycle 1187",
+      "runtime_seconds": 3.5087571144104004,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0060_SEED_44.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0060_SEED_45",
+      "parameters": {
+        "f_spawn": 0.006,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 45,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 1202,
+        "population": 129121,
+        "energy_total": 10049469.5,
+        "energy_mean": 77.82986113800234,
+        "e_min": 77.82986113800234,
+        "total_spawns": 129021,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 501.7,
+        "exponential": 501.25
+      },
+      "termination": "ENERGY_CAP at cycle 1202",
+      "runtime_seconds": 3.626352071762085,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0060_SEED_45.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0060_SEED_46",
+      "parameters": {
+        "f_spawn": 0.006,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 46,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 1234,
+        "population": 128765,
+        "energy_total": 10043002.5,
+        "energy_mean": 77.99481613792568,
+        "e_min": 77.99481613792568,
+        "total_spawns": 128665,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 501.7,
+        "exponential": 501.25
+      },
+      "termination": "ENERGY_CAP at cycle 1234",
+      "runtime_seconds": 3.460548162460327,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0060_SEED_46.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0080_SEED_42",
+      "parameters": {
+        "f_spawn": 0.008,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 42,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 941,
+        "population": 173829,
+        "energy_total": 10058790.5,
+        "energy_mean": 57.86600912390913,
+        "e_min": 57.86600912390913,
+        "total_spawns": 173729,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 500.94,
+        "exponential": 500.93
+      },
+      "termination": "ENERGY_CAP at cycle 941",
+      "runtime_seconds": 3.633209228515625,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0080_SEED_42.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0080_SEED_43",
+      "parameters": {
+        "f_spawn": 0.008,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 43,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 955,
+        "population": 173354,
+        "energy_total": 10021761.0,
+        "energy_mean": 57.81095907795609,
+        "e_min": 57.81095907795609,
+        "total_spawns": 173254,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 500.94,
+        "exponential": 500.93
+      },
+      "termination": "ENERGY_CAP at cycle 955",
+      "runtime_seconds": 3.6482019424438477,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0080_SEED_43.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0080_SEED_44",
+      "parameters": {
+        "f_spawn": 0.008,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 44,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 936,
+        "population": 174794,
+        "energy_total": 10057011.0,
+        "energy_mean": 57.536362804215244,
+        "e_min": 57.536362804215244,
+        "total_spawns": 174694,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 500.94,
+        "exponential": 500.93
+      },
+      "termination": "ENERGY_CAP at cycle 936",
+      "runtime_seconds": 3.606768846511841,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0080_SEED_44.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0080_SEED_45",
+      "parameters": {
+        "f_spawn": 0.008,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 45,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 952,
+        "population": 174739,
+        "energy_total": 10017079.5,
+        "energy_mean": 57.32595184818501,
+        "e_min": 57.32595184818501,
+        "total_spawns": 174639,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 500.94,
+        "exponential": 500.93
+      },
+      "termination": "ENERGY_CAP at cycle 952",
+      "runtime_seconds": 3.547877788543701,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0080_SEED_45.db"
+    },
+    {
+      "experiment_id": "c186_power_law_validation_F_0.0080_SEED_46",
+      "parameters": {
+        "f_spawn": 0.008,
+        "spawn_cost": 5.0,
+        "e_consume": 0.5,
+        "e_recharge": 1.0,
+        "e_cap": 10000000,
+        "seed": 46,
+        "max_cycles": 450000,
+        "n_populations": 10
+      },
+      "final_state": {
+        "cycle": 963,
+        "population": 175033,
+        "energy_total": 10057177.5,
+        "energy_mean": 57.458750635594434,
+        "e_min": 57.458750635594434,
+        "total_spawns": 174933,
+        "total_deaths": 0
+      },
+      "predictions": {
+        "power_law": 500.94,
+        "exponential": 500.93
+      },
+      "termination": "ENERGY_CAP at cycle 963",
+      "runtime_seconds": 3.5268681049346924,
+      "database": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c186_power_law_validation_F_0.0080_SEED_46.db"
+    }
+  ],
+  "runtime_seconds": 202.49241614341736
+}

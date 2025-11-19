@@ -1,0 +1,98 @@
+{
+  "metadata": {
+    "cycle": 143,
+    "experiment": "theoretical_harmonic_model",
+    "date": "2025-10-23T19:41:42.934682",
+    "experimental_data_sources": [
+      "cycle139",
+      "cycle140",
+      "cycle141",
+      "cycle142"
+    ]
+  },
+  "experimental_map": {
+    "0": 0.0,
+    "10": 0.0,
+    "25": 0.0,
+    "50": 0.25,
+    "75": 0.0,
+    "100": 1.0,
+    "35": 0.0,
+    "40": 0.0,
+    "45": 0.0,
+    "55": 0.2,
+    "60": 0.0,
+    "65": 0.0,
+    "70": 0.4,
+    "80": 0.4,
+    "85": 0.2,
+    "90": 0.4,
+    "95": 0.4,
+    "96": 0.6,
+    "97": 0.4,
+    "98": 0.0,
+    "99": 0.0
+  },
+  "lifetime_metrics": {
+    "avg_lifetime": 3004.8150367210924,
+    "std_lifetime": 4.489898576587621,
+    "avg_spawn_count": 2031.990291262136,
+    "avg_final_agents": 2.6699029126213594
+  },
+  "model_parameters": {
+    "first_harmonic": {
+      "center": 52.5,
+      "bandwidth": 5.0,
+      "amplitude": 0.2,
+      "mode": 1
+    },
+    "second_harmonic": {
+      "center": 82.5,
+      "bandwidth": 27.0,
+      "amplitude": 0.35,
+      "mode": 1.5714285714285714
+    },
+    "anti_node": {
+      "frequency": 75.0,
+      "mechanism": "destructive_interference",
+      "bandwidth": 0,
+      "position_theory": "1.5 \u00d7 first_harmonic (3/2 ratio)"
+    },
+    "anti_window": {
+      "center": 98.5,
+      "bandwidth": 2.0,
+      "mechanism": "phase_barrier",
+      "position_theory": "Pre-sustained composition threshold"
+    },
+    "phase_transition": {
+      "frequency": 100.0,
+      "mechanism": "critical_point",
+      "basin_A_prob": 1.0
+    },
+    "harmonic_ratio": 1.5714285714285714,
+    "fundamental_frequency": 52.5,
+    "third_harmonic_predictions": {
+      "linear_spacing": {
+        "frequency": 112.5,
+        "reasoning": "Equal spacing between harmonics"
+      },
+      "harmonic_series": {
+        "frequency": 157.5,
+        "reasoning": "Pure harmonic series (n=3)"
+      },
+      "overtone_ratio": {
+        "frequency": 129.64285714285714,
+        "reasoning": "Constant ratio (1.57)"
+      },
+      "likely": "linear_spacing",
+      "note": "Third harmonic may not be observable at spawn_freq (limited to 0-100%)"
+    }
+  },
+  "model_fit": {
+    "mse": 0.046788327127833304,
+    "rmse": 0.21630609591001662,
+    "r_squared": 0.31879655782850824,
+    "max_error": 0.6,
+    "num_points": 21
+  }
+}

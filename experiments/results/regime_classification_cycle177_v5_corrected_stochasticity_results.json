@@ -1,0 +1,257 @@
+{
+  "metadata": {
+    "cycle": "177 V5",
+    "hypothesis": "H1 - Energy Pooling (Corrected Stochasticity Framework)",
+    "date": "2025-10-26T05:17:11.687747",
+    "frequency": 2.5,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      101,
+      202,
+      303,
+      404,
+      505,
+      606
+    ],
+    "cycles_per_experiment": 3000,
+    "total_experiments": 20,
+    "duration_minutes": 55.75781567891439,
+    "sharing_fraction": 0.1,
+    "spawn_threshold": 10.0,
+    "energy_recharge_rate": 0.01
+  },
+  "classifications": [
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 42,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 374.1657386773942,
+      "mean_population": 0.06666666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 123,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 374.1657386773942,
+      "mean_population": 0.06666666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 456,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 374.1657386773942,
+      "mean_population": 0.06666666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 789,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 374.1657386773942,
+      "mean_population": 0.06666666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 101,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 374.1657386773942,
+      "mean_population": 0.06666666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 202,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 374.1657386773942,
+      "mean_population": 0.06666666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 303,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 374.1657386773942,
+      "mean_population": 0.06666666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 404,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 374.1657386773942,
+      "mean_population": 0.06666666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 505,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 374.1657386773942,
+      "mean_population": 0.06666666666666667
+    },
+    {
+      "condition": "BASELINE",
+      "frequency": 2.5,
+      "seed": 606,
+      "basin": "B",
+      "regime": "collapse",
+      "confidence": 1.0,
+      "cv_percent": 374.1657386773942,
+      "mean_population": 0.06666666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 42,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 123,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 456,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 789,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 101,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 202,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 303,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 404,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 505,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    },
+    {
+      "condition": "POOLING",
+      "frequency": 2.5,
+      "seed": 606,
+      "basin": "B",
+      "regime": "unknown",
+      "confidence": 0.0,
+      "cv_percent": 23.735633163877065,
+      "mean_population": 0.9466666666666667
+    }
+  ],
+  "regime_counts": {
+    "bistability": 0,
+    "accumulation": 0,
+    "collapse": 10,
+    "unknown": 10
+  },
+  "basin_regime_map": {
+    "B": {
+      "bistability": 0,
+      "accumulation": 0,
+      "collapse": 10,
+      "unknown": 10
+    }
+  },
+  "condition_regime_map": {
+    "BASELINE": {
+      "bistability": 0,
+      "accumulation": 0,
+      "collapse": 10,
+      "unknown": 0
+    },
+    "POOLING": {
+      "bistability": 0,
+      "accumulation": 0,
+      "collapse": 0,
+      "unknown": 10
+    }
+  },
+  "total_experiments": 20
+}

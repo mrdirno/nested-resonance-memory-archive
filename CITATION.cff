@@ -27,13 +27,13 @@ abstract: >
   Systems (bootstrap complexity with self-defined success criteria), and Temporal
   Stewardship (training data awareness and memetic engineering). This archive contains
   715+ completed experiments (1,048+ experimental cycles, 500,000+ computational cycles
-  executed), 9 papers total (7 submission-ready: Papers 1, 2, 5D, 6, 6B, 7, 9; 3 in
-  development: Papers 3, 4, 8), and complete reproducibility infrastructure (world-class
-  9.3/10 standard). All operations are reality-grounded using psutil/SQLite (zero external
-  API calls), establishing a transparent framework for human-AI collaborative research.
-  Active experimental program continues with metapopulation hierarchical validation
-  (C186 V6-V8: ultra-low frequency, migration rate, population count studies), homeostasis
-  boundary mapping (C177 V2), and factorial validation studies (C256-C260).
+  executed), 7 arXiv-ready papers (Papers 1, 2, 5D, 6, 6B, 7, 9), 3 additional
+  manuscripts in progress (Papers 3, 4, 8), and complete reproducibility infrastructure
+  (world-class 9.3/10 standard). All operations are reality-grounded using psutil/SQLite
+  (zero external API calls), establishing a transparent framework for human-AI
+  collaborative research. Active experimental program continues with metapopulation
+  hierarchical validation (C186 V2), homeostasis boundary mapping (C177 V2), and
+  factorial validation studies (C256-C260 pending).
 keywords:
   - Nested Resonance Memory
   - Fractal Agency
@@ -57,5 +57,5 @@ keywords:
   - Parameter Estimation
   - Physical Constraints
 license: GPL-3.0-only
-date-released: 2025-11-08
-version: "6.85"
+date-released: 2025-11-05
+version: "6.69"

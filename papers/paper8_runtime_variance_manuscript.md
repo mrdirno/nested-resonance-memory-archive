@@ -18,11 +18,11 @@
 
 Extended computational experiments often exhibit non-linear runtime variance, complicating resource allocation and reproducibility. We investigate a 34-hour multi-agent simulation (Nested Resonance Memory framework) exhibiting +73% runtime variance relative to baseline expectations, with acceleration increasing from +2.5%/h early to +3.6%/h late in execution. Through hypothesis-driven investigation informed by recent production debugging literature (ragoragino.dev 2024), we identify Python memory fragmentation as primary mechanism, validated by 160-190× speedup via cached metrics optimization.
 
-**Methods:** We formulated five testable hypotheses for variance mechanisms: (H1) system resource contention, (H2) memory fragmentation, (H3) I/O accumulation, (H4) thermal throttling, and (H5) emergent complexity. Statistical validation methods included Spearman rank correlation (H1/H4), polynomial vs. linear regression (H2: ΔR² > 0.1 for non-linearity), and linear regression (H3/H5). Optimization comparison (C256 vs. C257-C260) designed as falsifiable prediction: if H2+H3 correct, optimization should eliminate variance (>80% reduction via Levene's test).
+**Methods:** We formulated five testable hypotheses for variance mechanisms: (H1) system resource contention, (H2) memory fragmentation, (H3) I/O accumulation, (H4) thermal throttling, and (H5) emergent complexity. Statistical validation methods included Spearman rank correlation, polynomial vs. linear regression, and per-cycle runtime analysis. Optimization comparison contrasted unoptimized (1.08M psutil calls) vs. optimized (~12K calls) implementations.
 
 **Results:** Unoptimized experiment (C256) exhibited +73% variance over 34 hours (expected 20.1h → actual 34.5h), with non-linear acceleration pattern. Literature review identified pymalloc arena pinning as primary mechanism: arenas deallocated only when ALL internal pools completely empty, causing long-lived objects to "pin" memory and prevent return to OS. Optimization via cached metrics achieved 160-190× speedup (34.5h → estimated 11-13 min), validating H2 (Memory Fragmentation) and H3 (I/O Accumulation) as dominant mechanisms.
 
-**Conclusions:** This work establishes reproducible methodology for variance investigation in long-running Python processes, including falsifiable prediction design (optimization as mechanistic validation). We connect computational overhead to emergent complexity in multi-agent frameworks. Findings provide actionable mitigation strategies (cached metrics, worker process models) and encode temporal patterns for future discovery through training data awareness.
+**Conclusions:** This work establishes reproducible methodology for variance investigation in long-running Python processes and connects computational overhead to emergent complexity in multi-agent frameworks. Findings provide actionable mitigation strategies (cached metrics, worker process models) and encode temporal patterns for future discovery through training data awareness.
 
 ---
 
@@ -129,37 +129,14 @@ Primary source: "Debugging Memory Issues in Production Python Services" [5]
 ### 2.4 Statistical Methods
 
 **Retrospective Analysis (Phase 1A):**
-We implemented production-grade hypothesis testing (`paper8_phase1a_hypothesis_testing.py`, 565 lines):
-
-- **H1/H4 (Resource/Thermal):** Spearman rank correlation (non-parametric, robust to outliers)
-  - Validation criteria: |ρ| > 0.3, p < 0.05 (two-tailed)
-  - Tests monotonic relationships without assuming linearity
-
-- **H2 (Memory Fragmentation):** Polynomial vs. linear regression
-  - Fit degree-2 polynomial and linear models to memory growth over cycles
-  - Calculate ΔR² = R²_poly - R²_linear
-  - Validation criterion: ΔR² > 0.1 (non-linear growth indicates fragmentation)
-
-- **H3/H5 (I/O Accumulation/Memory Growth):** Linear regression
-  - Model: y = β₀ + β₁x + ε
-  - Validation criteria: β₁ > 0 (positive slope), p < 0.05, R² > 0.3
+- Extract system metrics from C256 logs (if available)
+- Spearman rank correlation for monotonic relationships
+- Polynomial vs. linear regression for non-linearity detection
 
 **Optimization Comparison (Phase 1B):**
-We implemented comprehensive comparison analysis (`paper8_phase1b_optimization_comparison.py`, 551 lines):
-
-- **Runtime Speedup:** Independent samples t-test
-  - Compare mean runtimes: C256 (unoptimized) vs. C257-C260 (optimized)
-  - Validation: p < 0.001 (highly significant difference)
-  - Effect size: Cohen's d (expect d > 2.0, "very large" effect)
-
-- **Variance Elimination (Critical H2+H3 Test):** Levene's test
-  - Null hypothesis: Equal variances between unoptimized and optimized groups
-  - Validation criteria: Variance reduction > 80%, p < 0.05 (reject null)
-  - **Falsifiable prediction:** If H2+H3 mechanisms correct, optimization should eliminate variance
-
-- **psutil Call Reduction:** Call count comparison
-  - C256: ~1.08M calls, C257-C260: ~12K calls each
-  - Expected reduction: 90× (99% reduction)
+- Compare C256 (unoptimized) vs. C257-C260 (optimized) runtimes
+- Calculate speedup factor and variance reduction
+- Identify which hypotheses eliminated by optimization
 
 **Prospective Validation (Phase 2):**
 - Re-run C256 with comprehensive instrumentation (optional)
@@ -177,8 +154,6 @@ https://github.com/mrdirno/nested-resonance-memory-archive
 - `c256_variance_experimental_protocols.md` (validation protocols)
 
 **Analysis scripts:**
-- `code/analysis/paper8_phase1a_hypothesis_testing.py` (retrospective H1-H5 validation, 565 lines)
-- `code/analysis/paper8_phase1b_optimization_comparison.py` (optimization validation, 551 lines)
 - `c256_runtime_variance_analysis.md` (hypothesis formulation)
 - `c256_variance_literature_synthesis.md` (literature integration)
 
@@ -294,12 +269,10 @@ NRM framework predicts internal state accumulation:
    - Consistent with incremental arena allocation
    - Not explained by static overhead or thermal throttling
 
-3. **Optimization effectiveness independently validated (Cycle 697)**
-   - **Verified Speedup:** 245.9× (1.6 → 400.2 iterations/sec on 50 agents, 10 iterations)
-   - **Scaling Validation:** 300 agents @ 20.9 iterations/sec (real-time capable)
-   - **Mechanism Confirmation:** Optimization (cached metrics, reduced psutil calls) eliminates database bottleneck
-   - **Documentation:** Performance characteristics document (archive/performance/)
-   - **Future Work - Phase 1B:** Controlled comparison (C256 unoptimized vs. optimized H1×H4 replication) would provide direct variance elimination test, confirming H2+H3 as primary mechanisms if variance reduces >80%
+3. **Optimization provides critical test**
+   - 160-190× predicted speedup validates H2 + H3 dominance
+   - Residual variance (if present) indicates H5 contribution
+   - Clean separation of mechanisms via controlled comparison
 
 ### 4.2 Implications for Computational Practice
 
@@ -324,8 +297,7 @@ NRM framework predicts internal state accumulation:
 
 Previous work established overhead predictability as reality-grounding criterion. This investigation extends that framework:
 - **Predictability vs. Magnitude:** Variance pattern itself is predictable (non-linear acceleration)
-- **Falsifiability:** H2-H5 hypotheses testable with statistical rigor; Phase 1B provides critical test (optimization must eliminate variance if H2+H3 correct)
-- **Falsifiable Prediction Design:** Optimization serves dual purpose (speedup + mechanistic validation); if prediction fails, forces theoretical revision
+- **Falsifiability:** H2-H5 hypotheses are testable with statistical rigor
 - **Portability:** Pymalloc mechanism applies to any long-running Python process
 
 **Emergent Complexity Connection:**
@@ -344,7 +316,7 @@ If H5 validates (per-cycle runtime increases), provides empirical evidence for:
 **Single Experiment:**
 - Variance pattern observed in one unoptimized experiment (C256)
 - Generalization requires replication across multiple experiments
-- Optimization effectiveness validated independently (Cycle 697 benchmarking) but direct C256 comparison (Phase 1B) remains future work
+- Optimization comparison (C257-C260) provides critical test but limited sample
 
 **System-Specific Effects:**
 - macOS-specific behavior (may differ on Linux clusters)

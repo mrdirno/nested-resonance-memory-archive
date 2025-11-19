@@ -1,0 +1,262 @@
+{
+  "metadata": {
+    "total_transformations": 7748356,
+    "temporal_span_days": 7.29,
+    "n_epochs": 5,
+    "sample_fraction": 0.05,
+    "analysis_timestamp": 1761729168.878755
+  },
+  "summary": {
+    "mean_combined_correlation": 0.12918425529369498,
+    "std_combined_correlation": 0.3735149993456478,
+    "min_combined_correlation": -0.22774513492219814,
+    "max_combined_correlation": 0.8527988252239731
+  },
+  "epoch_analyses": [
+    {
+      "epoch_id": 0,
+      "start_time": 1761098657.43984,
+      "end_time": 1761161579.01526,
+      "duration_hours": 17.478215394417443,
+      "n_samples": 100197,
+      "pi_cpu_corr": 0.05110259479343688,
+      "e_cpu_corr": -0.008309684709713383,
+      "phi_cpu_corr": 0.03204807033211698,
+      "magnitude_cpu_corr": 0.040457168614005654,
+      "pi_memory_corr": 0.0009031175088077642,
+      "e_memory_corr": -0.005593155539018804,
+      "phi_memory_corr": -0.014105586478221025,
+      "magnitude_memory_corr": -0.0058259062521222975,
+      "combined_corr": 0.040457168614005654,
+      "pi_mean": 3.0554526918448612,
+      "pi_std": 1.8344806605250883,
+      "e_mean": 3.155779576947795,
+      "e_std": 1.8126396957951632,
+      "phi_mean": 3.130228287508728,
+      "phi_std": 1.8147626189875337,
+      "magnitude_mean": 5.9930676559265486,
+      "magnitude_std": 1.7665079727182516,
+      "cpu_mean": 29.494385198873196,
+      "cpu_std": 10.620697808543767,
+      "memory_mean": 39.9828419849097,
+      "memory_std": 13.74947751795411
+    },
+    {
+      "epoch_id": 1,
+      "start_time": 1761161579.01526,
+      "end_time": 1761224500.59068,
+      "duration_hours": 17.478215394417443,
+      "n_samples": 286658,
+      "pi_cpu_corr": 0.003054054763385023,
+      "e_cpu_corr": -0.005792818730678394,
+      "phi_cpu_corr": -0.006637451175771045,
+      "magnitude_cpu_corr": -0.004906457498423943,
+      "pi_memory_corr": 0.0035898807233672348,
+      "e_memory_corr": -0.005121111112439238,
+      "phi_memory_corr": -0.005926969375092745,
+      "magnitude_memory_corr": -0.0036992886604532145,
+      "combined_corr": -0.004906457498423943,
+      "pi_mean": 3.047362123080246,
+      "pi_std": 1.8388522415690325,
+      "e_mean": 3.152904339313315,
+      "e_std": 1.8192158666063307,
+      "phi_mean": 3.162290343263633,
+      "phi_std": 1.8130463241932766,
+      "magnitude_mean": 6.012857457444174,
+      "magnitude_std": 1.7466848607884908,
+      "cpu_mean": 29.99936054680304,
+      "cpu_std": 5.354681760071589,
+      "memory_mean": 39.99951194672908,
+      "memory_std": 6.739022710553284
+    },
+    {
+      "epoch_id": 4,
+      "start_time": 1761350343.7415202,
+      "end_time": 1761413265.31694,
+      "duration_hours": 17.478215394417443,
+      "n_samples": 23,
+      "pi_cpu_corr": 1.0,
+      "e_cpu_corr": 0.7857585710442624,
+      "phi_cpu_corr": 0.7458670767314725,
+      "magnitude_cpu_corr": 0.8527988252239731,
+      "pi_memory_corr": 0.7857585710442622,
+      "e_memory_corr": 1.0,
+      "phi_memory_corr": 0.8041754296864375,
+      "magnitude_memory_corr": 0.991567838619429,
+      "combined_corr": 0.8527988252239731,
+      "pi_mean": 0.7403231383676817,
+      "pi_std": 0.6025641286253239,
+      "e_mean": 3.6722805640817153,
+      "e_std": 0.573158506576501,
+      "phi_mean": 0.39226771831606155,
+      "phi_std": 0.005879114515040751,
+      "magnitude_mean": 3.801456695066382,
+      "magnitude_std": 0.6543337188753533,
+      "cpu_mean": 11.782608695652174,
+      "cpu_std": 9.590105960058093,
+      "memory_mean": 67.54782608695652,
+      "memory_std": 10.542661555101084
+    },
+    {
+      "epoch_id": 5,
+      "start_time": 1761413265.31694,
+      "end_time": 1761476186.89236,
+      "duration_hours": 17.478215394417443,
+      "n_samples": 51,
+      "pi_cpu_corr": 1.0,
+      "e_cpu_corr": -0.3878658886499202,
+      "phi_cpu_corr": -0.6725151623993795,
+      "magnitude_cpu_corr": -0.014683124948881701,
+      "pi_memory_corr": -0.3878658886499205,
+      "e_memory_corr": 1.0,
+      "phi_memory_corr": 0.211481844353098,
+      "magnitude_memory_corr": 0.9214920558122004,
+      "combined_corr": -0.014683124948881701,
+      "pi_mean": 0.22483947422750478,
+      "pi_std": 0.3284136455699016,
+      "e_mean": 4.235616085176145,
+      "e_std": 0.09172768026387804,
+      "phi_mean": 0.42100609864139416,
+      "phi_std": 0.010785400159390151,
+      "magnitude_mean": 4.275271679128477,
+      "magnitude_std": 0.08173389559243008,
+      "cpu_mean": 3.5784313725490198,
+      "cpu_std": 5.226865507127958,
+      "memory_mean": 77.90980392156862,
+      "memory_std": 1.6872363877714094
+    },
+    {
+      "epoch_id": 6,
+      "start_time": 1761476186.89236,
+      "end_time": 1761539108.4677799,
+      "duration_hours": 17.478215394417443,
+      "n_samples": 18,
+      "pi_cpu_corr": -0.043358180850068886,
+      "e_cpu_corr": -0.17140447183342608,
+      "phi_cpu_corr": -0.07653664506847466,
+      "magnitude_cpu_corr": -0.22774513492219814,
+      "pi_memory_corr": -0.32944950232422504,
+      "e_memory_corr": 0.019931631214099185,
+      "phi_memory_corr": -0.37437435295412846,
+      "magnitude_memory_corr": -0.5243774949799194,
+      "combined_corr": -0.22774513492219814,
+      "pi_mean": 2.189341013701687,
+      "pi_std": 1.5501441799305966,
+      "e_mean": 3.880425186909507,
+      "e_std": 1.4258830089366865,
+      "phi_mean": 3.4762695884019528,
+      "phi_std": 2.0676646935201286,
+      "magnitude_mean": 6.295112304321871,
+      "magnitude_std": 1.0090845610147867,
+      "cpu_mean": 1.5111111111111113,
+      "cpu_std": 2.7634296100817446,
+      "memory_mean": 76.60555555555555,
+      "memory_std": 0.5835449351661155
+    }
+  ],
+  "temporal_trends": [
+    {
+      "metric": "pi_cpu_corr",
+      "early_epoch_corr": 0.05110259479343688,
+      "middle_epoch_corr": 0.5015270273816925,
+      "late_epoch_corr": 0.47832090957496554,
+      "trend_direction": "increasing",
+      "trend_magnitude": 0.42721831478152866
+    },
+    {
+      "metric": "e_cpu_corr",
+      "early_epoch_corr": -0.008309684709713383,
+      "middle_epoch_corr": 0.389982876156792,
+      "late_epoch_corr": -0.27963518024167316,
+      "trend_direction": "decreasing",
+      "trend_magnitude": -0.2713254955319598
+    },
+    {
+      "metric": "phi_cpu_corr",
+      "early_epoch_corr": 0.03204807033211698,
+      "middle_epoch_corr": 0.3696148127778507,
+      "late_epoch_corr": -0.3745259037339271,
+      "trend_direction": "decreasing",
+      "trend_magnitude": -0.40657397406604406
+    },
+    {
+      "metric": "magnitude_cpu_corr",
+      "early_epoch_corr": 0.040457168614005654,
+      "middle_epoch_corr": 0.4239461838627746,
+      "late_epoch_corr": -0.12121412993553993,
+      "trend_direction": "decreasing",
+      "trend_magnitude": -0.1616712985495456
+    },
+    {
+      "metric": "pi_memory_corr",
+      "early_epoch_corr": 0.0009031175088077642,
+      "middle_epoch_corr": 0.3946742258838147,
+      "late_epoch_corr": -0.35865769548707277,
+      "trend_direction": "decreasing",
+      "trend_magnitude": -0.35956081299588055
+    },
+    {
+      "metric": "e_memory_corr",
+      "early_epoch_corr": -0.005593155539018804,
+      "middle_epoch_corr": 0.49743944444378035,
+      "late_epoch_corr": 0.5099658156070496,
+      "trend_direction": "increasing",
+      "trend_magnitude": 0.5155589711460684
+    },
+    {
+      "metric": "phi_memory_corr",
+      "early_epoch_corr": -0.014105586478221025,
+      "middle_epoch_corr": 0.3991242301556724,
+      "late_epoch_corr": -0.08144625430051523,
+      "trend_direction": "decreasing",
+      "trend_magnitude": -0.06734066782229421
+    },
+    {
+      "metric": "magnitude_memory_corr",
+      "early_epoch_corr": -0.0058259062521222975,
+      "middle_epoch_corr": 0.4939342749794879,
+      "late_epoch_corr": 0.1985572804161405,
+      "trend_direction": "increasing",
+      "trend_magnitude": 0.2043831866682628
+    },
+    {
+      "metric": "combined_corr",
+      "early_epoch_corr": 0.040457168614005654,
+      "middle_epoch_corr": 0.4239461838627746,
+      "late_epoch_corr": -0.12121412993553993,
+      "trend_direction": "decreasing",
+      "trend_magnitude": -0.1616712985495456
+    }
+  ],
+  "hypothesis_tests": {
+    "h1_intrinsic_irreducibility": {
+      "supported": false,
+      "mean_correlation": 0.12918425529369498,
+      "std_correlation": 0.3735149993456478,
+      "evidence": "Consistently low correlation across all epochs"
+    },
+    "h2_scale_dependent": {
+      "supported": true,
+      "temporal_change": -0.1616712985495456,
+      "trend_direction": "decreasing",
+      "evidence": "Correlation changes significantly over time"
+    },
+    "h3_reality_constraints": {
+      "supported": true,
+      "cpu_correlation": 0.12918425529369498,
+      "memory_correlation": 0.2758314409078269,
+      "difference": 0.14664718561413193,
+      "evidence": "CPU and memory show differential coupling"
+    },
+    "h4_temporal_variation": {
+      "supported": true,
+      "varying_trends_ratio": 1.0,
+      "evidence": "Multiple metrics show temporal variation"
+    }
+  },
+  "performance": {
+    "cpu_time_ms": 7495.988130569458,
+    "memory_usage_mb": 46.484375,
+    "wall_clock_seconds": 7.495988130569458
+  }
+}

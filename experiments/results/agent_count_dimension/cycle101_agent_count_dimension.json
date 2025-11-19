@@ -1,0 +1,126 @@
+{
+  "experiment": "cycle101_agent_count_dimension",
+  "fixed_parameters": {
+    "multiplier": 1.0,
+    "spread": 0.2,
+    "threshold": 500
+  },
+  "test_agent_counts": [
+    5,
+    10,
+    15,
+    20,
+    25
+  ],
+  "runs_per_count": 2,
+  "total_runs": 10,
+  "cycles": 1000,
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_count": 5,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_count": 5,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_count": 10,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_count": 10,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_count": 15,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_count": 15,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_count": 20,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_count": 20,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_count": 25,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_count": 25,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    }
+  ],
+  "analysis": {
+    "conclusion": "independent"
+  },
+  "insight_58_discovered": true,
+  "duration": 70.34094905853271,
+  "timestamp": 1761149415.800002
+}

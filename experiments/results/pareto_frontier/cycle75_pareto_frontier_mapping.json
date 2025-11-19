@@ -1,0 +1,95 @@
+{
+  "experiment": "cycle75_pareto_frontier_mapping",
+  "test_thresholds": [
+    500,
+    750,
+    1000,
+    1250,
+    1500
+  ],
+  "results": [
+    {
+      "threshold": 500,
+      "final_memory": 1000,
+      "total_bursts": 122,
+      "burst_rate": 0.244,
+      "efficiency": 8.19672131147541,
+      "growth_rate": 8.647298919567833,
+      "diversity": {
+        "unique_patterns": 4,
+        "uniqueness_ratio": 0.004,
+        "shannon_entropy": 1.1974776241409462,
+        "complexity_score": 0.2719109257821912,
+        "magnitude_range": 0.4214550441169642
+      },
+      "duration": 3.4617373943328857
+    },
+    {
+      "threshold": 750,
+      "final_memory": 1000,
+      "total_bursts": 80,
+      "burst_rate": 0.16,
+      "efficiency": 12.5,
+      "growth_rate": 12.232412965186082,
+      "diversity": {
+        "unique_patterns": 1,
+        "uniqueness_ratio": 0.001,
+        "shannon_entropy": -0.0,
+        "complexity_score": 0.0003,
+        "magnitude_range": 0.0
+      },
+      "duration": 4.48396372795105
+    },
+    {
+      "threshold": 1000,
+      "final_memory": 1000,
+      "total_bursts": 59,
+      "burst_rate": 0.118,
+      "efficiency": 16.949152542372882,
+      "growth_rate": 15.592316926770717,
+      "diversity": {
+        "unique_patterns": 1,
+        "uniqueness_ratio": 0.001,
+        "shannon_entropy": -0.0,
+        "complexity_score": 0.0003,
+        "magnitude_range": 0.0
+      },
+      "duration": 6.160891056060791
+    },
+    {
+      "threshold": 1250,
+      "final_memory": 1000,
+      "total_bursts": 47,
+      "burst_rate": 0.094,
+      "efficiency": 21.27659574468085,
+      "growth_rate": 18.280912364945987,
+      "diversity": {
+        "unique_patterns": 1,
+        "uniqueness_ratio": 0.001,
+        "shannon_entropy": -0.0,
+        "complexity_score": 0.0003,
+        "magnitude_range": 0.0
+      },
+      "duration": 7.97760796546936
+    },
+    {
+      "threshold": 1500,
+      "final_memory": 1000,
+      "total_bursts": 40,
+      "burst_rate": 0.08,
+      "efficiency": 25.0,
+      "growth_rate": 19.31122448979592,
+      "diversity": {
+        "unique_patterns": 1,
+        "uniqueness_ratio": 0.001,
+        "shannon_entropy": -0.0,
+        "complexity_score": 0.0003,
+        "magnitude_range": 0.0
+      },
+      "duration": 9.871233940124512
+    }
+  ],
+  "insight_39_discovered": true,
+  "overall_duration": 34.4936888217926,
+  "timestamp": 1761129418.861867
+}

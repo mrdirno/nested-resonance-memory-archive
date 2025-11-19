@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Nested Resonance Memory</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        :root {
+            --primary: #8B5CF6;
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --secondary: #EC4899;
+            --tertiary: #06B6D4;
+            --success: #10B981;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-strong: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.65);
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: #000000; 
+            color: var(--text);
+            overflow: hidden; 
+            height: 100vh;
+            position: fixed;
+            width: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        #container { 
+            width: 100vw; 
+            height: 100vh; 
+            display: block;
+            background: radial-gradient(ellipse at center, #0F0F23 0%, #000000 100%); 
+        }
+        
+        .app-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        .app-title {
+            font-size: 20px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 50%, #06B6D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            animation: shimmer 4s ease-in-out infinite;
+            text-shadow: 0 0 30px var(--primary-glow);
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.85; filter: brightness(1); }
+            50% { opacity: 1; filter: brightness(1.2); }
+        }
+        
+        .status-bar {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-strong);
+            backdrop-filter: blur(30px) saturate(150%);
+            -webkit-backdrop-filter: blur(30px) saturate(150%);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 10px 22px;
+            font-size: 13px;
+            font-weight: 700;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+        
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 85px;
+            background: var(--glass);
+            backdrop-filter: blur(30px) saturate(150%);
+            -webkit-backdrop-filter: blur(30px) saturate(150%);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            padding: 0 20px;
+            box-shadow: 0 -10px 40px var(--shadow);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 17px;
+            background: linear-gradient(135deg, var(--primary) 0%, #7C3AED 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            margin: 10px 0;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+        
+        .btn:active {
+            transform: scale(0.96);
+        }
+        
+        .btn.secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, #D6006E 100%);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.5);
+        }
+        
+        .slider-container {
+            margin: 22px 0;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .slider-label {
+            font-size: 14px;
+            font-weight: 700;
+        }
+        
+        .slider-value {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 800;
+            min-width: 55px;
+            text-align: right;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0.4) 100%);
+            outline: none;
+            -webkit-appearance: none;
+            position: relative;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #7C3AED);
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--primary-glow), 0 0 25px var(--primary-glow);
+            transition: all 0.3s;
+        }
+        
+        .slide-panel {
+            position: fixed;
+            background: var(--glass);
+            backdrop-filter: blur(40px) saturate(150%);
+            -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid var(--glass-border);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 900;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            box-shadow: 0 20px 60px var(--shadow);
+        }
+        
+        .panel-header {
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(30px);
+            padding: 22px;
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 10;
+        }
+        
+        .panel-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+        
+        .panel-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .panel-content {
+            padding: 22px;
+        }
+        
+        .bottom-panel {
+            bottom: 85px;
+            left: 0;
+            right: 0;
+            height: 65vh;
+            max-height: 550px;
+            border-radius: 24px 24px 0 0;
+            transform: translateY(100%);
+        }
+        
+        .bottom-panel.active {
+            transform: translateY(0);
+        }
+        
+        @media (min-width: 768px) {
+            .bottom-panel {
+                width: 420px;
+                height: calc(100vh - 110px);
+                max-height: none;
+                bottom: 95px;
+                border-radius: 24px;
+                left: 15px;
+                right: auto;
+            }
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 65px;
+            height: 65px;
+            border-radius: 22px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary) 0%, #7C3AED 100%);
+            border-color: var(--primary);
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px var(--primary-glow);
+        }
+        
+        .nav-icon {
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+        
+        .nav-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    
+    <div class="app-header">
+        <h1 class="app-title">Nested Resonance Memory</h1>
+    </div>
+    
+    <div class="status-bar">
+        <span id="status-text">ðŸ§¬ Initializing System...</span>
+    </div>
+    
+    <nav class="nav-bar">
+        <div class="nav-item" data-panel="controls">
+            <div class="nav-icon">âš™ï¸</div>
+            <div class="nav-label">Control</div>
+        </div>
+    </nav>
+    
+    <div id="controls-panel" class="slide-panel bottom-panel">
+        <div class="panel-header">
+            <h2 class="panel-title">System Controls</h2>
+            <p class="panel-subtitle">Configure resonance dynamics</p>
+        </div>
+        <div class="panel-content">
+            <button class="btn" id="play-pause">â¸ï¸ Pause</button>
+            <button class="btn secondary" id="reset">ðŸ”„ Reset</button>
+            
+            <div class="slider-container">
+                <div class="slider-header">
+                    <span class="slider-label">Particle Count</span>
+                    <span class="slider-value" id="particle-value">500</span>
+                </div>
+                <input type="range" class="slider" id="particle-slider" min="100" max="1000" step="50" value="500">
+            </div>
+            
+            <div class="slider-container">
+                <div class="slider-header">
+                    <span class="slider-label">Resonance Threshold</span>
+                    <span class="slider-value" id="resonance-value">0.75</span>
+                </div>
+                <input type="range" class="slider" id="resonance-slider" min="0.5" max="0.95" step="0.05" value="0.75">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Transcendental constants
+        var TRANSCENDENTALS = {
+            pi: "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679",
+            e: "2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274",
+            phi: "1.6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911374",
+            sqrt2: "1.4142135623730950488016887242096980785696718753769480731766797379907324784621070388503875343276415727"
+        };
+
+        // Core variables
+        var scene, camera, renderer;
+        var particles = [];
+        var particleSystem;
+        var time = 0;
+        var isPlaying = true;
+        
+        // Camera controls
+        var touchStartX = 0;
+        var touchStartY = 0;
+        var cameraRotation = { x: 0.3, y: 0 };
+        var cameraDistance = 25;
+        
+        // Parameters
+        var PARTICLE_COUNT = 500;
+        var SIMULATION_EXTENT = 15;
+        var RESONANCE_THRESHOLD = 0.75;
+        var K_OSCILLATORS = 5;
+        var MEMORY_CAPACITY = 10;
+        var FORGETTING_RATE = 0.95;
+        var SENSING_RADIUS = 3.0;
+        var ATTRACTION_STRENGTH = 0.05;
+        var FIELD_STRENGTH = 0.3;
+        var BURST_INTENSITY = 1.5;
+        var CLUSTER_DURATION = 100;
+        
+        var clusters = [];
+        var globalField = { strength: 1.0, phase: 0 };
+        var activePanel = null;
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000033, 0.015);
+
+            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+            updateCameraPosition();
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setClearColor(0x000011);
+            document.getElementById('container').appendChild(renderer.domElement);
+
+            var ambientLight = new THREE.AmbientLight(0x404080, 0.4);
+            scene.add(ambientLight);
+            
+            var directionalLight = new THREE.DirectionalLight(0x8A2BE2, 1.0);
+            directionalLight.position.set(10, 10, 5);
+            scene.add(directionalLight);
+
+            createBoundaryContainer();
+            setupParticleSystem();
+            setupControls();
+            setupUI();
+            
+            animate();
+        }
+
+        function createBoundaryContainer() {
+            var geometry = new THREE.BoxGeometry(SIMULATION_EXTENT * 2, SIMULATION_EXTENT * 2, SIMULATION_EXTENT * 2);
+            var edges = new THREE.EdgesGeometry(geometry);
+            var material = new THREE.LineBasicMaterial({ color: 0x4A90E2, transparent: true, opacity: 0.3 });
+            var boundaryBox = new THREE.LineSegments(edges, material);
+            scene.add(boundaryBox);
+        }
+
+        function updateCameraPosition() {
+            camera.position.x = Math.cos(cameraRotation.y) * Math.cos(cameraRotation.x) * cameraDistance;
+            camera.position.y = Math.sin(cameraRotation.x) * cameraDistance;
+            camera.position.z = Math.sin(cameraRotation.y) * Math.cos(cameraRotation.x) * cameraDistance;
+            camera.lookAt(0, 0, 0);
+        }
+
+        function setupParticleSystem() {
+            if (particleSystem) {
+                scene.remove(particleSystem);
+                particleSystem.geometry.dispose();
+                particleSystem.material.dispose();
+            }
+
+            var geometry = new THREE.BufferGeometry();
+            var positions = new Float32Array(PARTICLE_COUNT * 3);
+            var colors = new Float32Array(PARTICLE_COUNT * 3);
+            
+            particles = [];
+
+            for (var i = 0; i < PARTICLE_COUNT; i++) {
+                var i3 = i * 3;
+                
+                positions[i3] = (Math.random() - 0.5) * SIMULATION_EXTENT * 2;
+                positions[i3 + 1] = (Math.random() - 0.5) * SIMULATION_EXTENT * 2;
+                positions[i3 + 2] = (Math.random() - 0.5) * SIMULATION_EXTENT * 2;
+                
+                colors[i3] = 0.4;
+                colors[i3 + 1] = 0.3;
+                colors[i3 + 2] = 0.7;
+                
+                var oscillators = [];
+                for (var j = 0; j < K_OSCILLATORS; j++) {
+                    var transcKeys = Object.keys(TRANSCENDENTALS);
+                    oscillators.push({
+                        phase: Math.random() * Math.PI * 2,
+                        omega: 0.5 + Math.random() * 1.5,
+                        transcendental: transcKeys[Math.floor(Math.random() * 4)]
+                    });
+                }
+                
+                particles.push({
+                    id: i,
+                    vx: (Math.random() - 0.5) * 0.1,
+                    vy: (Math.random() - 0.5) * 0.1,
+                    vz: (Math.random() - 0.5) * 0.1,
+                    oscillators: oscillators,
+                    memory: [],
+                    clusterId: null
+                });
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            var material = new THREE.PointsMaterial({
+                size: 0.15,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: true
+            });
+
+            particleSystem = new THREE.Points(geometry, material);
+            scene.add(particleSystem);
+        }
+
+        function getMeanPhase(particle) {
+            var meanPhases = [];
+            for (var i = 0; i < K_OSCILLATORS; i++) {
+                var sumCos = 0;
+                var sumSin = 0;
+                for (var j = 0; j < particle.oscillators.length; j++) {
+                    var osc = particle.oscillators[j];
+                    sumCos += Math.cos(osc.phase);
+                    sumSin += Math.sin(osc.phase);
+                }
+                meanPhases.push(Math.atan2(sumSin / K_OSCILLATORS, sumCos / K_OSCILLATORS));
+            }
+            return meanPhases;
+        }
+
+        function computeResonance(p1, p2) {
+            var phases1 = getMeanPhase(p1);
+            var phases2 = getMeanPhase(p2);
+            
+            var sum = 0;
+            for (var i = 0; i < K_OSCILLATORS; i++) {
+                var diff = phases1[i] - phases2[i];
+                sum += Math.pow(Math.sin(diff / 2), 2);
+            }
+            
+            var phaseResonance = Math.exp(-sum / K_OSCILLATORS);
+            
+            var memoryBonus = 0;
+            if (p1.memory.length > 0 && p2.memory.length > 0) {
+                for (var i = 0; i < p1.memory.length; i++) {
+                    var m1 = p1.memory[i];
+                    for (var j = 0; j < p2.memory.length; j++) {
+                        var m2 = p2.memory[j];
+                        var distSum = 0;
+                        for (var k = 0; k < m1.signature.length; k++) {
+                            var d = m1.signature[k] - m2.signature[k];
+                            distSum += d * d;
+                        }
+                        var dist = Math.sqrt(distSum);
+                        if (dist < 0.5) memoryBonus += 0.1;
+                    }
+                }
+            }
+            
+            return Math.min(1, phaseResonance + memoryBonus);
+        }
+
+        function findNeighbors(particleId) {
+            var positions = particleSystem.geometry.attributes.position.array;
+            var px = positions[particleId * 3];
+            var py = positions[particleId * 3 + 1];
+            var pz = positions[particleId * 3 + 2];
+            
+            var neighbors = [];
+            for (var i = 0; i < PARTICLE_COUNT; i++) {
+                if (i === particleId) continue;
+                var dx = positions[i * 3] - px;
+                var dy = positions[i * 3 + 1] - py;
+                var dz = positions[i * 3 + 2] - pz;
+                var dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < SENSING_RADIUS) {
+                    neighbors.push(i);
+                }
+            }
+            return neighbors;
+        }
+
+        function updateOscillators(particle, dt) {
+            for (var i = 0; i < particle.oscillators.length; i++) {
+                var osc = particle.oscillators[i];
+                var digitIndex = Math.floor(time * 10) % 80;
+                var transcendentalValue = parseFloat(
+                    TRANSCENDENTALS[osc.transcendental].substring(digitIndex, digitIndex + 1)
+                ) / 10;
+                
+                osc.phase += osc.omega * transcendentalValue * dt;
+                osc.phase = osc.phase % (Math.PI * 2);
+            }
+        }
+
+        function updateMemory(particle, pattern, success) {
+            for (var i = 0; i < particle.memory.length; i++) {
+                particle.memory[i].weight *= FORGETTING_RATE;
+            }
+            
+            var newMemory = [];
+            for (var i = 0; i < particle.memory.length; i++) {
+                if (particle.memory[i].weight > 0.01) {
+                    newMemory.push(particle.memory[i]);
+                }
+            }
+            particle.memory = newMemory;
+            
+            if (pattern && success) {
+                var existing = null;
+                for (var i = 0; i < particle.memory.length; i++) {
+                    var mem = particle.memory[i];
+                    var allClose = true;
+                    for (var j = 0; j < mem.signature.length; j++) {
+                        if (Math.abs(mem.signature[j] - pattern.signature[j]) >= 0.1) {
+                            allClose = false;
+                            break;
+                        }
+                    }
+                    if (allClose) {
+                        existing = mem;
+                        break;
+                    }
+                }
+                
+                if (existing) {
+                    existing.weight = existing.weight * 0.7 + 0.3;
+                } else if (particle.memory.length < MEMORY_CAPACITY) {
+                    particle.memory.push({ 
+                        signature: pattern.signature.slice(),
+                        timestamp: pattern.timestamp,
+                        weight: 0.5 
+                    });
+                }
+            }
+        }
+
+        function formClusters() {
+            var assigned = {};
+            var newClusters = [];
+            
+            for (var i = 0; i < particles.length; i++) {
+                var particle = particles[i];
+                if (assigned[i] || particle.clusterId !== null) continue;
+                
+                var neighbors = findNeighbors(i);
+                var resonances = [];
+                
+                for (var j = 0; j < neighbors.length; j++) {
+                    var neighborId = neighbors[j];
+                    resonances.push({
+                        id: neighborId,
+                        resonance: computeResonance(particle, particles[neighborId])
+                    });
+                }
+                
+                var compatible = [];
+                for (var j = 0; j < resonances.length; j++) {
+                    var r = resonances[j];
+                    if (r.resonance >= RESONANCE_THRESHOLD && !assigned[r.id]) {
+                        compatible.push(r);
+                    }
+                }
+                
+                if (compatible.length >= 2) {
+                    var members = [i];
+                    for (var k = 0; k < compatible.length; k++) {
+                        members.push(compatible[k].id);
+                    }
+                    
+                    var clusterId = 'cluster_' + time + '_' + i;
+                    
+                    var positions = particleSystem.geometry.attributes.position.array;
+                    var centerX = 0;
+                    var centerY = 0;
+                    var centerZ = 0;
+                    
+                    for (var m = 0; m < members.length; m++) {
+                        var id = members[m];
+                        centerX += positions[id * 3];
+                        centerY += positions[id * 3 + 1];
+                        centerZ += positions[id * 3 + 2];
+                        particles[id].clusterId = clusterId;
+                        assigned[id] = true;
+                    }
+                    
+                    newClusters.push({
+                        id: clusterId,
+                        members: members,
+                        birthTime: time,
+                        centerX: centerX / members.length,
+                        centerY: centerY / members.length,
+                        centerZ: centerZ / members.length,
+                        pattern: {
+                            signature: [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()],
+                            timestamp: time
+                        }
+                    });
+                }
+            }
+            
+            clusters = clusters.concat(newClusters);
+        }
+
+        function burstCluster(cluster) {
+            var positions = particleSystem.geometry.attributes.position.array;
+            
+            for (var i = 0; i < cluster.members.length; i++) {
+                var id = cluster.members[i];
+                var particle = particles[id];
+                var lifespan = time - cluster.birthTime;
+                var success = lifespan / CLUSTER_DURATION;
+                updateMemory(particle, cluster.pattern, success);
+                
+                var dx = positions[id * 3] - cluster.centerX;
+                var dy = positions[id * 3 + 1] - cluster.centerY;
+                var dz = positions[id * 3 + 2] - cluster.centerZ;
+                var dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist === 0) dist = 1;
+                
+                particle.vx += (dx / dist) * BURST_INTENSITY;
+                particle.vy += (dy / dist) * BURST_INTENSITY;
+                particle.vz += (dz / dist) * BURST_INTENSITY;
+                
+                particle.clusterId = null;
+            }
+        }
+
+        function updateParticles() {
+            var positions = particleSystem.geometry.attributes.position.array;
+            var colors = particleSystem.geometry.attributes.color.array;
+            
+            for (var i = 0; i < particles.length; i++) {
+                var particle = particles[i];
+                updateOscillators(particle, 0.016);
+                
+                var neighbors = findNeighbors(i);
+                for (var j = 0; j < neighbors.length; j++) {
+                    var neighborId = neighbors[j];
+                    var resonance = computeResonance(particle, particles[neighborId]);
+                    if (resonance >= RESONANCE_THRESHOLD) {
+                        var dx = positions[neighborId * 3] - positions[i * 3];
+                        var dy = positions[neighborId * 3 + 1] - positions[i * 3 + 1];
+                        var dz = positions[neighborId * 3 + 2] - positions[i * 3 + 2];
+                        var dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                        if (dist === 0) dist = 1;
+                        
+                        particle.vx += (dx / dist) * resonance * ATTRACTION_STRENGTH;
+                        particle.vy += (dy / dist) * resonance * ATTRACTION_STRENGTH;
+                        particle.vz += (dz / dist) * resonance * ATTRACTION_STRENGTH;
+                    }
+                }
+                
+                var meanPhases = getMeanPhase(particle);
+                var avgPhase = 0;
+                for (var j = 0; j < meanPhases.length; j++) {
+                    avgPhase += meanPhases[j];
+                }
+                avgPhase = avgPhase / K_OSCILLATORS;
+                
+                var fx = Math.cos(avgPhase + globalField.phase) * FIELD_STRENGTH * globalField.strength;
+                var fy = Math.sin(avgPhase + globalField.phase) * FIELD_STRENGTH * globalField.strength;
+                var fz = Math.cos(avgPhase * 2 + globalField.phase) * FIELD_STRENGTH * globalField.strength;
+                
+                particle.vx += fx * 0.01;
+                particle.vy += fy * 0.01;
+                particle.vz += fz * 0.01;
+                
+                particle.vx *= 0.95;
+                particle.vy *= 0.95;
+                particle.vz *= 0.95;
+                
+                positions[i * 3] += particle.vx;
+                positions[i * 3 + 1] += particle.vy;
+                positions[i * 3 + 2] += particle.vz;
+                
+                var x = positions[i * 3];
+                var y = positions[i * 3 + 1];
+                var z = positions[i * 3 + 2];
+                var dist = Math.sqrt(x*x + y*y + z*z);
+                
+                if (dist > SIMULATION_EXTENT) {
+                    var scale = SIMULATION_EXTENT / dist;
+                    positions[i * 3] *= scale;
+                    positions[i * 3 + 1] *= scale;
+                    positions[i * 3 + 2] *= scale;
+                    particle.vx *= -0.5;
+                    particle.vy *= -0.5;
+                    particle.vz *= -0.5;
+                }
+                
+                var memoryHue = particle.memory.length > 0 
+                    ? (particle.memory[0].signature[0] * 360) % 360
+                    : 240;
+                colors[i * 3] = Math.sin(memoryHue * Math.PI / 180) * 0.4 + 0.5;
+                colors[i * 3 + 1] = Math.sin((memoryHue + 120) * Math.PI / 180) * 0.4 + 0.5;
+                colors[i * 3 + 2] = Math.sin((memoryHue + 240) * Math.PI / 180) * 0.4 + 0.5;
+            }
+            
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+            particleSystem.geometry.attributes.color.needsUpdate = true;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (isPlaying) {
+                time++;
+                
+                if (time % 5 === 0) formClusters();
+                
+                var survivingClusters = [];
+                for (var i = 0; i < clusters.length; i++) {
+                    var cluster = clusters[i];
+                    var age = time - cluster.birthTime;
+                    if (age >= CLUSTER_DURATION) {
+                        burstCluster(cluster);
+                    } else {
+                        survivingClusters.push(cluster);
+                    }
+                }
+                clusters = survivingClusters;
+                
+                updateParticles();
+                
+                globalField.strength = 0.5 + 0.5 * Math.sin(time * 0.01);
+                globalField.phase += 0.01;
+                
+                var totalMemory = 0;
+                var patternSet = {};
+                for (var i = 0; i < particles.length; i++) {
+                    totalMemory += particles[i].memory.length;
+                    for (var j = 0; j < particles[i].memory.length; j++) {
+                        var key = JSON.stringify(particles[i].memory[j].signature);
+                        patternSet[key] = true;
+                    }
+                }
+                var avgMemory = totalMemory / particles.length;
+                var diversity = Object.keys(patternSet).length;
+                document.getElementById('status-text').textContent = 
+                    'ðŸ§¬ ' + clusters.length + ' Clusters | ðŸ§  ' + diversity + ' Patterns | âš¡ ' + avgMemory.toFixed(1) + ' Memory';
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        function setupControls() {
+            var canvas = renderer.domElement;
+            
+            canvas.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                if (e.touches.length === 1) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }
+            }, { passive: false });
+
+            canvas.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                if (e.touches.length === 1) {
+                    var deltaX = (e.touches[0].clientX - touchStartX) * 0.005;
+                    var deltaY = (e.touches[0].clientY - touchStartY) * 0.005;
+                    
+                    cameraRotation.y += deltaX;
+                    cameraRotation.x = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, cameraRotation.x + deltaY));
+                    updateCameraPosition();
+                    
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }
+            }, { passive: false });
+
+            var mouseDown = false;
+            canvas.addEventListener('mousedown', function() { mouseDown = true; });
+            canvas.addEventListener('mouseup', function() { mouseDown = false; });
+            canvas.addEventListener('mouseleave', function() { mouseDown = false; });
+            
+            canvas.addEventListener('mousemove', function(e) {
+                if (mouseDown) {
+                    cameraRotation.y += e.movementX * 0.005;
+                    cameraRotation.x = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, cameraRotation.x + e.movementY * 0.005));
+                    updateCameraPosition();
+                }
+            });
+
+            canvas.addEventListener('wheel', function(e) {
+                cameraDistance *= 1 + e.deltaY * 0.001;
+                cameraDistance = Math.max(10, Math.min(60, cameraDistance));
+                updateCameraPosition();
+            });
+
+            canvas.addEventListener('click', function() {
+                if (activePanel) {
+                    document.getElementById('controls-panel').classList.remove('active');
+                    document.querySelector('.nav-item').classList.remove('active');
+                    activePanel = null;
+                }
+            });
+        }
+
+        function setupUI() {
+            var navItems = document.querySelectorAll('.nav-item');
+            for (var i = 0; i < navItems.length; i++) {
+                (function(item) {
+                    item.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        var panelId = item.getAttribute('data-panel');
+                        var panelElement = document.getElementById(panelId + '-panel');
+
+                        if (item.classList.contains('active')) {
+                            item.classList.remove('active');
+                            if (panelElement) panelElement.classList.remove('active');
+                            activePanel = null;
+                        } else {
+                            var allNavItems = document.querySelectorAll('.nav-item');
+                            for (var j = 0; j < allNavItems.length; j++) {
+                                allNavItems[j].classList.remove('active');
+                            }
+                            var allPanels = document.querySelectorAll('.slide-panel');
+                            for (var k = 0; k < allPanels.length; k++) {
+                                allPanels[k].classList.remove('active');
+                            }
+                            
+                            item.classList.add('active');
+                            if (panelElement) panelElement.classList.add('active');
+                            activePanel = panelId;
+                        }
+                    });
+                })(navItems[i]);
+            }
+
+            document.getElementById('play-pause').addEventListener('click', function() {
+                isPlaying = !isPlaying;
+                document.getElementById('play-pause').textContent = isPlaying ? 'â¸ï¸ Pause' : 'â–¶ï¸ Play';
+            });
+
+            document.getElementById('reset').addEventListener('click', function() {
+                time = 0;
+                clusters = [];
+                setupParticleSystem();
+            });
+
+            document.getElementById('particle-slider').addEventListener('input', function(e) {
+                PARTICLE_COUNT = parseInt(e.target.value);
+                document.getElementById('particle-value').textContent = PARTICLE_COUNT;
+            });
+
+            document.getElementById('particle-slider').addEventListener('change', function() {
+                setupParticleSystem();
+            });
+
+            document.getElementById('resonance-slider').addEventListener('input', function(e) {
+                RESONANCE_THRESHOLD = parseFloat(e.target.value);
+                document.getElementById('resonance-value').textContent = RESONANCE_THRESHOLD.toFixed(2);
+            });
+        }
+
+        window.addEventListener('resize', function() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        init();
+    </script>
+</body>
+</html>

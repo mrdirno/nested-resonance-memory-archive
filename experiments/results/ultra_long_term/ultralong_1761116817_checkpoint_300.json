@@ -1,0 +1,19 @@
+{
+  "experiment_id": "ultralong_1761116817",
+  "cycle": 300,
+  "timestamp": 1761116903.026127,
+  "agent_count": 2,
+  "pattern_count": 100,
+  "agents": [
+    {
+      "id": "agent_a9f42d85",
+      "energy": 140.28000000000003,
+      "memory_size": 0
+    },
+    {
+      "id": "agent_adee9d7b",
+      "energy": 140.29000000000002,
+      "memory_size": 0
+    }
+  ]
+}

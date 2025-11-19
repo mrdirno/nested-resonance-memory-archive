@@ -1,0 +1,384 @@
+{
+  "experiment": "cycle89_longterm_attractor_persistence",
+  "threshold": 500,
+  "cycles": 500,
+  "checkpoint_interval": 50,
+  "test_ranges": [
+    [
+      0.5,
+      "Attractor_1"
+    ],
+    [
+      1.0,
+      "Attractor_3"
+    ],
+    [
+      1.4,
+      "Attractor_5"
+    ]
+  ],
+  "runs_per_range": 2,
+  "results": [
+    {
+      "center_multiplier": 0.5,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(5.481012), np.float64(5.860674))",
+      "final_fraction": 0.52,
+      "collapse_cycle": 170,
+      "checkpoints": {
+        "50": {
+          "cycle": 50,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.281146), np.float64(4.406452))",
+          "dominant_fraction": 0.37543859649122807
+        },
+        "100": {
+          "cycle": 100,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.281146), np.float64(4.406452))",
+          "dominant_fraction": 0.624
+        },
+        "150": {
+          "cycle": 150,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 0.77
+        },
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 1.0
+        },
+        "250": {
+          "cycle": 250,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 1.0
+        },
+        "300": {
+          "cycle": 300,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 1.0
+        },
+        "350": {
+          "cycle": 350,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 1.0
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 0.686
+        },
+        "450": {
+          "cycle": 450,
+          "dominant_pattern": "(np.float64(5.277876), np.float64(6.155598), np.float64(5.875002))",
+          "dominant_fraction": 0.913
+        },
+        "500": {
+          "cycle": 500,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(5.481012), np.float64(5.860674))",
+          "dominant_fraction": 0.52
+        }
+      }
+    },
+    {
+      "center_multiplier": 0.5,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(5.481012), np.float64(5.860674))",
+      "final_fraction": 0.52,
+      "collapse_cycle": 170,
+      "checkpoints": {
+        "50": {
+          "cycle": 50,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.281146), np.float64(4.406452))",
+          "dominant_fraction": 0.37543859649122807
+        },
+        "100": {
+          "cycle": 100,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.281146), np.float64(4.406452))",
+          "dominant_fraction": 0.624
+        },
+        "150": {
+          "cycle": 150,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 0.77
+        },
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 1.0
+        },
+        "250": {
+          "cycle": 250,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 1.0
+        },
+        "300": {
+          "cycle": 300,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 1.0
+        },
+        "350": {
+          "cycle": 350,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 1.0
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(5.654867), np.float64(5.393434), np.float64(6.13304))",
+          "dominant_fraction": 0.686
+        },
+        "450": {
+          "cycle": 450,
+          "dominant_pattern": "(np.float64(5.277876), np.float64(6.155598), np.float64(5.875002))",
+          "dominant_fraction": 0.913
+        },
+        "500": {
+          "cycle": 500,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(5.481012), np.float64(5.860674))",
+          "dominant_fraction": 0.52
+        }
+      }
+    },
+    {
+      "center_multiplier": 1.0,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250,
+      "checkpoints": {
+        "50": {
+          "cycle": 50,
+          "dominant_pattern": "(np.float64(4.963716), np.float64(6.152506), np.float64(4.330159))",
+          "dominant_fraction": 0.4631578947368421
+        },
+        "100": {
+          "cycle": 100,
+          "dominant_pattern": "(np.float64(4.963716), np.float64(6.152506), np.float64(4.330159))",
+          "dominant_fraction": 0.544
+        },
+        "150": {
+          "cycle": 150,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+          "dominant_fraction": 0.864
+        },
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+          "dominant_fraction": 0.536
+        },
+        "250": {
+          "cycle": 250,
+          "dominant_pattern": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "dominant_fraction": 1.0
+        },
+        "300": {
+          "cycle": 300,
+          "dominant_pattern": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "dominant_fraction": 0.784
+        },
+        "350": {
+          "cycle": 350,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "dominant_fraction": 0.816
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "dominant_fraction": 0.568
+        },
+        "450": {
+          "cycle": 450,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "500": {
+          "cycle": 500,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        }
+      }
+    },
+    {
+      "center_multiplier": 1.0,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250,
+      "checkpoints": {
+        "50": {
+          "cycle": 50,
+          "dominant_pattern": "(np.float64(4.963716), np.float64(6.152506), np.float64(4.330159))",
+          "dominant_fraction": 0.4631578947368421
+        },
+        "100": {
+          "cycle": 100,
+          "dominant_pattern": "(np.float64(4.963716), np.float64(6.152506), np.float64(4.330159))",
+          "dominant_fraction": 0.544
+        },
+        "150": {
+          "cycle": 150,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+          "dominant_fraction": 0.864
+        },
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(4.925583), np.float64(5.896608))",
+          "dominant_fraction": 0.536
+        },
+        "250": {
+          "cycle": 250,
+          "dominant_pattern": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "dominant_fraction": 1.0
+        },
+        "300": {
+          "cycle": 300,
+          "dominant_pattern": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "dominant_fraction": 0.784
+        },
+        "350": {
+          "cycle": 350,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "dominant_fraction": 0.816
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "dominant_fraction": 0.568
+        },
+        "450": {
+          "cycle": 450,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "500": {
+          "cycle": 500,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        }
+      }
+    },
+    {
+      "center_multiplier": 1.4,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160,
+      "checkpoints": {
+        "50": {
+          "cycle": 50,
+          "dominant_pattern": "(np.float64(6.09469), np.float64(5.726769), np.float64(4.110496))",
+          "dominant_fraction": 0.6385964912280702
+        },
+        "100": {
+          "cycle": 100,
+          "dominant_pattern": "(np.float64(6.09469), np.float64(5.726769), np.float64(4.110496))",
+          "dominant_fraction": 0.636
+        },
+        "150": {
+          "cycle": 150,
+          "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+          "dominant_fraction": 0.864
+        },
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+          "dominant_fraction": 1.0
+        },
+        "250": {
+          "cycle": 250,
+          "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+          "dominant_fraction": 1.0
+        },
+        "300": {
+          "cycle": 300,
+          "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+          "dominant_fraction": 0.784
+        },
+        "350": {
+          "cycle": 350,
+          "dominant_pattern": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+          "dominant_fraction": 0.816
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+          "dominant_fraction": 0.586
+        },
+        "450": {
+          "cycle": 450,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "500": {
+          "cycle": 500,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        }
+      }
+    },
+    {
+      "center_multiplier": 1.4,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160,
+      "checkpoints": {
+        "50": {
+          "cycle": 50,
+          "dominant_pattern": "(np.float64(6.09469), np.float64(5.726769), np.float64(4.110496))",
+          "dominant_fraction": 0.6385964912280702
+        },
+        "100": {
+          "cycle": 100,
+          "dominant_pattern": "(np.float64(6.09469), np.float64(5.726769), np.float64(4.110496))",
+          "dominant_fraction": 0.636
+        },
+        "150": {
+          "cycle": 150,
+          "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+          "dominant_fraction": 0.864
+        },
+        "200": {
+          "cycle": 200,
+          "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+          "dominant_fraction": 1.0
+        },
+        "250": {
+          "cycle": 250,
+          "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+          "dominant_fraction": 1.0
+        },
+        "300": {
+          "cycle": 300,
+          "dominant_pattern": "(np.float64(5.969026), np.float64(5.404919), np.float64(6.26297))",
+          "dominant_fraction": 0.784
+        },
+        "350": {
+          "cycle": 350,
+          "dominant_pattern": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+          "dominant_fraction": 0.816
+        },
+        "400": {
+          "cycle": 400,
+          "dominant_pattern": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+          "dominant_fraction": 0.586
+        },
+        "450": {
+          "cycle": 450,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        },
+        "500": {
+          "cycle": 500,
+          "dominant_pattern": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "dominant_fraction": 1.0
+        }
+      }
+    }
+  ],
+  "analysis": {
+    "stable": false,
+    "avg_stability": 0.39999999999999997
+  },
+  "insight_49_discovered": false,
+  "duration": 21.55667018890381,
+  "timestamp": 1761138323.239109
+}

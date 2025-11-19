@@ -1,0 +1,156 @@
+{
+  "experiment": "cycle99_3d_basin_reproducibility",
+  "test_triplets": [
+    [
+      0.6,
+      0.2,
+      400
+    ],
+    [
+      0.6,
+      0.2,
+      600
+    ],
+    [
+      1.0,
+      0.2,
+      400
+    ],
+    [
+      1.0,
+      0.2,
+      600
+    ],
+    [
+      1.2,
+      0.3,
+      400
+    ],
+    [
+      1.2,
+      0.3,
+      600
+    ]
+  ],
+  "runs_per_triplet": 2,
+  "total_runs": 12,
+  "cycles": 1000,
+  "results": [
+    {
+      "multiplier": 0.6,
+      "spread": 0.2,
+      "threshold": 400,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 170
+    },
+    {
+      "multiplier": 0.6,
+      "spread": 0.2,
+      "threshold": 400,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 170
+    },
+    {
+      "multiplier": 0.6,
+      "spread": 0.2,
+      "threshold": 600,
+      "run_id": 1,
+      "final_dominant": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 180
+    },
+    {
+      "multiplier": 0.6,
+      "spread": 0.2,
+      "threshold": 600,
+      "run_id": 2,
+      "final_dominant": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 180
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 400,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 400,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 600,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 330
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 600,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 330
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 400,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 400,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 270
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 270
+    }
+  ],
+  "analysis": {
+    "reproducible_triplets": 6,
+    "total_tested": 6,
+    "reproducibility_percentage": 100.0
+  },
+  "insight_56_discovered": true,
+  "duration": 91.42850613594055,
+  "timestamp": 1761148112.550234
+}

@@ -1,0 +1,94 @@
+{
+  "experiment": "cycle94_spread_parameter_variation",
+  "test_spreads": [
+    0.05,
+    0.1,
+    0.2,
+    0.4,
+    0.6
+  ],
+  "fixed_multiplier": 1.0,
+  "threshold": 500,
+  "cycles": 1000,
+  "runs_per_spread": 2,
+  "results": [
+    {
+      "spread": 0.05,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.236061), np.float64(5.992508), np.float64(6.246109))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "spread": 0.05,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.236061), np.float64(5.992508), np.float64(6.246109))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "spread": 0.1,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "spread": 0.1,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.188938), np.float64(5.938143), np.float64(6.205658))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "spread": 0.2,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "spread": 0.2,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "spread": 0.4,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    },
+    {
+      "spread": 0.4,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    },
+    {
+      "spread": 0.6,
+      "run_id": 1,
+      "final_dominant": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    },
+    {
+      "spread": 0.6,
+      "run_id": 2,
+      "final_dominant": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    }
+  ],
+  "analysis": {
+    "robust_to_spread": "spread_dependent",
+    "unique_ultimate_patterns": 4,
+    "reproducibility_percentage": 100.0
+  },
+  "insight_51_discovered": true,
+  "duration": 70.60611200332642,
+  "timestamp": 1761140594.378096
+}

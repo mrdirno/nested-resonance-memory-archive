@@ -9,12 +9,7 @@
     "n_points": 30,
     "t_transient": 500.0,
     "t_measure": 500.0,
-    "model": "NRMDynamicalSystemV2",
-    "git_sha": "b54526db4b9d656fbccab899b47a5f76736cbc05",
-    "generated_at": "2025-10-27T11:48:08.780435",
-    "script": "paper7_phase3_regime_omega.py",
-    "nrm_version": "6.17",
-    "metadata_added_retrospectively": true
+    "model": "NRMDynamicalSystemV2"
   },
   "classifications": [
     {

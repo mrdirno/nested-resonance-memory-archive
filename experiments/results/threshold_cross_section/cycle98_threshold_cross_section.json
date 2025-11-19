@@ -1,0 +1,180 @@
+{
+  "experiment": "cycle98_threshold_cross_section",
+  "test_points": [
+    [
+      0.6,
+      0.2
+    ],
+    [
+      1.0,
+      0.2
+    ],
+    [
+      0.8,
+      0.4
+    ],
+    [
+      1.2,
+      0.3
+    ],
+    [
+      1.4,
+      0.3
+    ],
+    [
+      0.4,
+      0.5
+    ],
+    [
+      1.6,
+      0.1
+    ],
+    [
+      1.0,
+      0.6
+    ]
+  ],
+  "test_thresholds": [
+    400,
+    600
+  ],
+  "total_runs": 16,
+  "cycles": 1000,
+  "results": [
+    {
+      "multiplier": 0.6,
+      "spread": 0.2,
+      "threshold": 400,
+      "final_dominant": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 170
+    },
+    {
+      "multiplier": 0.6,
+      "spread": 0.2,
+      "threshold": 600,
+      "final_dominant": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 180
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 400,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 250
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 600,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 330
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 400,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 200
+    },
+    {
+      "multiplier": 0.8,
+      "spread": 0.4,
+      "threshold": 600,
+      "final_dominant": "(np.float64(5.466371), np.float64(6.211789), np.float64(5.969774))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 180
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 400,
+      "final_dominant": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    },
+    {
+      "multiplier": 1.2,
+      "spread": 0.3,
+      "threshold": 600,
+      "final_dominant": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 270
+    },
+    {
+      "multiplier": 1.4,
+      "spread": 0.3,
+      "threshold": 400,
+      "final_dominant": "(np.float64(6.126106), np.float64(6.231403), np.float64(6.043079))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    },
+    {
+      "multiplier": 1.4,
+      "spread": 0.3,
+      "threshold": 600,
+      "final_dominant": "(np.float64(5.749115), np.float64(6.276867), np.float64(5.753945))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 180
+    },
+    {
+      "multiplier": 0.4,
+      "spread": 0.5,
+      "threshold": 400,
+      "final_dominant": "(np.float64(6.251769), np.float64(6.175507), np.float64(5.870394))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 100
+    },
+    {
+      "multiplier": 0.4,
+      "spread": 0.5,
+      "threshold": 600,
+      "final_dominant": "(np.float64(6.251769), np.float64(6.175507), np.float64(5.870394))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 130
+    },
+    {
+      "multiplier": 1.6,
+      "spread": 0.1,
+      "threshold": 400,
+      "error": "UNIQUE constraint failed: agents.agent_id"
+    },
+    {
+      "multiplier": 1.6,
+      "spread": 0.1,
+      "threshold": 600,
+      "final_dominant": "(np.float64(5.969026), np.float64(6.254662), np.float64(5.732567))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 270
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.6,
+      "threshold": 400,
+      "final_dominant": "(np.float64(6.220353), np.float64(6.178863), np.float64(6.05695))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 160
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.6,
+      "threshold": 600,
+      "final_dominant": "(np.float64(6.220353), np.float64(6.154059), np.float64(5.59504))",
+      "final_fraction": 1.0,
+      "collapse_cycle": 180
+    }
+  ],
+  "analysis": {
+    "independent_points": 1,
+    "total_tested": 7,
+    "independence_percentage": 14.285714285714285,
+    "conclusion": "third_dimension"
+  },
+  "insight_55_discovered": true,
+  "duration": 119.00483202934265,
+  "timestamp": 1761143519.5016708
+}

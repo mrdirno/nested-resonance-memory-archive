@@ -1,0 +1,30 @@
+{
+  "experiment": "C186_SPAWN_COST_SCALING_VALIDATION",
+  "condition": "SPAWN_COST_7_5",
+  "seed": 50,
+  "parameters": {
+    "f_spawn": 0.005,
+    "e_consume": 0.5,
+    "e_recharge": 1.0,
+    "spawn_cost": 7.5,
+    "cycles": 450000,
+    "n_populations": 10,
+    "n_agents_per_pop": 10
+  },
+  "results": {
+    "runtime_seconds": 4.101707935333252,
+    "runtime_hours": 0.0011393633153703477,
+    "final_population": 19909,
+    "final_energy": 10008062.5,
+    "total_decompositions": 0,
+    "database_size_bytes": 81920,
+    "database_rows": 2396,
+    "success": true
+  },
+  "verdict": {
+    "database_works": true,
+    "population_sustained": true,
+    "growth_enabled": true
+  },
+  "timestamp": 1763467150.9271019
+}

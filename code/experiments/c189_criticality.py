@@ -304,7 +304,7 @@ def run_experiment(seed: int, frequency_label: str, f_spawn: float, output_path:
 
     print(f"  [{exp_num:3d}/{total_exps}] {frequency_label:6s} (f={f_spawn*100:4.1f}%), Seed {seed:4d}: ", end='', flush=True)
 
-    clear_bridge_database(db_path)
+    clear_bridge_database(db_path / "bridge.db")
     system = CriticalityPopulation(seed, f_spawn, frequency_label, db_path)
 
     start_time = time.time()
@@ -365,7 +365,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / "c189_criticality.json"
 
-    db_path = Path(__file__).parent.parent / "bridge" / "bridge.db"
+    db_path = Path(__file__).parent.parent / "bridge"
 
     results = []
     start_time_total = time.time()

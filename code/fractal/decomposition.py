@@ -28,6 +28,7 @@ from datetime import datetime
 import numpy as np
 
 from .agent import FractalAgent
+from ..memory.pattern import PatternMemory
 
 
 class DecompositionEngine:

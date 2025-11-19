@@ -37,7 +37,6 @@ from typing import Dict, List, Tuple, Any
 from datetime import datetime
 from itertools import product
 import sys
-from workspace_utils import get_workspace_path, get_results_path
 
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -381,7 +380,7 @@ def main():
     config, pilot_conditions, full_conditions = generate_paper5a_experimental_plan()
 
     # Save experimental plan to JSON
-    output_dir = get_results_path()
+    output_dir = Path("/Volumes/dual/DUALITY-ZERO-V2/data/results")
     output_file = output_dir / "paper5a_experimental_plan.json"
 
     plan = {

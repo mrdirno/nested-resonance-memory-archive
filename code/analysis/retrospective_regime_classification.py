@@ -141,6 +141,8 @@ def analyze_cycle_results(
 
 def main():
     """Main analysis routine."""
+    import sys
+
     # Initialize detector with default thresholds
     detector = RegimeDetector(
         bistability_cv_threshold=0.20,
@@ -148,23 +150,30 @@ def main():
         collapse_mean_threshold=1.0,
     )
 
-    # Analyze Cycle 176 (ablation study - original with all conditions)
+    # Allow command-line argument for file selection
     results_dir = Path("/Volumes/dual/DUALITY-ZERO-V2/experiments/results")
-    c176_path = results_dir / "cycle176_ablation_study.json"
 
-    if not c176_path.exists():
-        print(f"❌ Results file not found: {c176_path}")
+    if len(sys.argv) > 1:
+        # Use specified file
+        target_file = sys.argv[1]
+        analysis_path = results_dir / target_file
+    else:
+        # Default to C176 original
+        analysis_path = results_dir / "cycle176_ablation_study.json"
+
+    if not analysis_path.exists():
+        print(f"❌ Results file not found: {analysis_path}")
         return 1
 
     print("=" * 80)
     print("RETROSPECTIVE REGIME CLASSIFICATION ANALYSIS")
     print("=" * 80)
-    print(f"\nAnalyzing: {c176_path.name}")
+    print(f"\nAnalyzing: {analysis_path.name}")
     print(f"Detector thresholds: CV_bistability<{detector.bistability_cv_threshold*100}%, "
           f"CV_collapse>{detector.collapse_cv_threshold*100}%\n")
 
     # Perform analysis
-    results = analyze_cycle_results(c176_path, detector)
+    results = analyze_cycle_results(analysis_path, detector)
 
     # Display results
     metadata = results["metadata"]
@@ -216,8 +225,9 @@ def main():
     print("ANALYSIS COMPLETE")
     print("=" * 80)
 
-    # Save results
-    output_path = results_dir / "regime_classification_analysis_c176.json"
+    # Save results with file-specific name
+    output_name = f"regime_classification_{analysis_path.stem}.json"
+    output_path = results_dir / output_name
     with open(output_path, 'w') as f:
         json.dump(results, f, indent=2)
     print(f"\n✓ Results saved to: {output_path}")

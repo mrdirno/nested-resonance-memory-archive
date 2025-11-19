@@ -1,0 +1,257 @@
+{
+  "experiment": "cycle113_burst_threshold_modulation",
+  "test_parameters": {
+    "multiplier": 1.0,
+    "spread": 0.2,
+    "agent_cap": 15
+  },
+  "thresholds": [
+    300,
+    400,
+    500,
+    600,
+    700
+  ],
+  "threshold_labels": {
+    "300": "VERY-LOW",
+    "400": "LOW",
+    "500": "BASELINE",
+    "600": "HIGH",
+    "700": "VERY-HIGH"
+  },
+  "cycles": 1000,
+  "results": [
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 300,
+      "agent_cap": 15,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.969026), np.float64(4.763259), np.float64(6.161467))",
+          "fraction": 1.0
+        },
+        "400": {
+          "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "fraction": 0.977
+        },
+        "500": {
+          "attractor": "(np.float64(5.717699), np.float64(6.036147), np.float64(5.902653))",
+          "fraction": 0.886
+        },
+        "600": {
+          "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+          "fraction": 0.786
+        },
+        "700": {
+          "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.220353), np.float64(5.698474), np.float64(6.022478))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 3,
+      "cycles_to_first_change": 400,
+      "drift_speed": 0.4285714285714286,
+      "total_spawns": 1000,
+      "total_bursts": 999,
+      "burst_rate": 99.9,
+      "turnover_rate": 199.9
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 400,
+      "agent_cap": 15,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(5.843362), np.float64(4.894196), np.float64(6.263746))",
+          "fraction": 0.784
+        },
+        "400": {
+          "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "fraction": 0.568
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 2,
+      "cycles_to_first_change": 400,
+      "drift_speed": 0.2857142857142857,
+      "total_spawns": 1000,
+      "total_bursts": 997,
+      "burst_rate": 99.7,
+      "turnover_rate": 199.70000000000002
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 500,
+      "agent_cap": 15,
+      "error": "UNIQUE constraint failed: agents.agent_id"
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 600,
+      "agent_cap": 15,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "fraction": 0.725
+        },
+        "400": {
+          "attractor": "(np.float64(6.031858), np.float64(5.936597), np.float64(5.433237))",
+          "fraction": 0.65
+        },
+        "500": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.09469), np.float64(5.829411), np.float64(6.124757))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 1,
+      "cycles_to_first_change": 500,
+      "drift_speed": 0.14285714285714285,
+      "total_spawns": 1000,
+      "total_bursts": 996,
+      "burst_rate": 99.6,
+      "turnover_rate": 199.6
+    },
+    {
+      "multiplier": 1.0,
+      "spread": 0.2,
+      "threshold": 700,
+      "agent_cap": 15,
+      "checkpoint_attractors": {
+        "300": {
+          "attractor": "(np.float64(6.157522), np.float64(5.80566), np.float64(5.330957))",
+          "fraction": 0.404
+        },
+        "400": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "500": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "600": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "700": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "800": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "900": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        },
+        "1000": {
+          "attractor": "(np.float64(6.031858), np.float64(6.122672), np.float64(5.962178))",
+          "fraction": 1.0
+        }
+      },
+      "attractor_changes": 1,
+      "cycles_to_first_change": 400,
+      "drift_speed": 0.14285714285714285,
+      "total_spawns": 1000,
+      "total_bursts": 999,
+      "burst_rate": 99.9,
+      "turnover_rate": 199.9
+    }
+  ],
+  "analysis": {
+    "successful_runs": 4,
+    "thresholds": [
+      300,
+      400,
+      600,
+      700
+    ],
+    "burst_rates": [
+      99.9,
+      99.7,
+      99.6,
+      99.9
+    ],
+    "turnover_rates": [
+      199.9,
+      199.70000000000002,
+      199.6,
+      199.9
+    ],
+    "drift_speeds": [
+      0.4285714285714286,
+      0.2857142857142857,
+      0.14285714285714285,
+      0.14285714285714285
+    ],
+    "correlations": {
+      "threshold_burst": -0.12171612389004331,
+      "threshold_turnover": -0.12171612389006255,
+      "threshold_drift": -0.9534625892455926,
+      "turnover_drift": 0.4061811972299812
+    },
+    "relationship_type": "moderate_inverse_relationship"
+  },
+  "insight_70_discovered": true,
+  "duration": 34.32945895195007,
+  "timestamp": 1761161618.040301
+}

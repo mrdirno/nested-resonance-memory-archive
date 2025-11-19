@@ -1,0 +1,56 @@
+{
+  "experiment": "cycle84_cross_regime_validation",
+  "threshold": 750,
+  "cycles": 150,
+  "runs_per_condition": 2,
+  "results": [
+    {
+      "condition": "A",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.195221), np.float64(5.477001), np.float64(4.305436))",
+      "dominant_fraction": 0.306,
+      "collapse_cycle": null
+    },
+    {
+      "condition": "A",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.195221), np.float64(5.477001), np.float64(4.305436))",
+      "dominant_fraction": 0.306,
+      "collapse_cycle": null
+    },
+    {
+      "condition": "B",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(5.843362), np.float64(6.063683), np.float64(4.244648))",
+      "dominant_fraction": 0.3,
+      "collapse_cycle": null
+    },
+    {
+      "condition": "B",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(5.843362), np.float64(6.063683), np.float64(4.244648))",
+      "dominant_fraction": 0.3,
+      "collapse_cycle": null
+    },
+    {
+      "condition": "C",
+      "run_id": 1,
+      "dominant_pattern": "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+      "dominant_fraction": 0.636,
+      "collapse_cycle": null
+    },
+    {
+      "condition": "C",
+      "run_id": 2,
+      "dominant_pattern": "(np.float64(6.09469), np.float64(5.349022), np.float64(6.090285))",
+      "dominant_fraction": 0.636,
+      "collapse_cycle": null
+    }
+  ],
+  "analysis": {
+    "cross_diversity": 0.5,
+    "generalizes": true
+  },
+  "insight_45_discovered": true,
+  "timestamp": 1761136175.678321
+}

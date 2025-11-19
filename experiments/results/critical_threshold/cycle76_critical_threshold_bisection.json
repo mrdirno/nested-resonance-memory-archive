@@ -1,0 +1,33 @@
+{
+  "experiment": "cycle76_critical_threshold_bisection",
+  "initial_bounds": {
+    "lower": 500,
+    "upper": 750
+  },
+  "test_threshold": 625,
+  "result": {
+    "threshold": 625,
+    "final_memory": 1000,
+    "total_bursts": 95,
+    "burst_rate": 0.19,
+    "efficiency": 10.526315789473685,
+    "growth_rate": 11.283313325330148,
+    "diversity": {
+      "unique_patterns": 1,
+      "uniqueness_ratio": 0.001,
+      "shannon_entropy": -0.0,
+      "complexity_score": 0.0003,
+      "magnitude_range": 0.0
+    },
+    "duration": 4.049310922622681
+  },
+  "refined_bounds": {
+    "lower_bound": 500,
+    "upper_bound": 625,
+    "critical_range": 125,
+    "is_diverse_at_midpoint": "False"
+  },
+  "insight_40_discovered": false,
+  "overall_duration": 4.054283618927002,
+  "timestamp": 1761130115.052458
+}

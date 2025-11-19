@@ -1,0 +1,93 @@
+{
+  "experiment": "cycle82_multi_run_reproducibility",
+  "threshold": 500,
+  "cycles": 200,
+  "n_runs": 5,
+  "results": [
+    {
+      "run_id": 1,
+      "final_memory": 1000,
+      "final_diversity": {
+        "unique_patterns": 3,
+        "uniqueness_ratio": 0.003,
+        "shannon_entropy": 1.1099157598752971
+      },
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.518,
+      "collapse_cycle": 160,
+      "total_bursts": 49,
+      "mean_entropy": 1.5461430550741002,
+      "duration": 1.4237070083618164
+    },
+    {
+      "run_id": 2,
+      "final_memory": 1000,
+      "final_diversity": {
+        "unique_patterns": 3,
+        "uniqueness_ratio": 0.003,
+        "shannon_entropy": 1.1099157598752971
+      },
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.518,
+      "collapse_cycle": 160,
+      "total_bursts": 49,
+      "mean_entropy": 1.5461430550741002,
+      "duration": 1.4332127571105957
+    },
+    {
+      "run_id": 3,
+      "final_memory": 1000,
+      "final_diversity": {
+        "unique_patterns": 3,
+        "uniqueness_ratio": 0.003,
+        "shannon_entropy": 1.1099157598752971
+      },
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.518,
+      "collapse_cycle": 160,
+      "total_bursts": 49,
+      "mean_entropy": 1.5461430550741002,
+      "duration": 1.438727855682373
+    },
+    {
+      "run_id": 4,
+      "final_memory": 1000,
+      "final_diversity": {
+        "unique_patterns": 3,
+        "uniqueness_ratio": 0.003,
+        "shannon_entropy": 1.1099157598752971
+      },
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.518,
+      "collapse_cycle": 160,
+      "total_bursts": 49,
+      "mean_entropy": 1.5461430550741002,
+      "duration": 1.4425089359283447
+    },
+    {
+      "run_id": 5,
+      "final_memory": 1000,
+      "final_diversity": {
+        "unique_patterns": 3,
+        "uniqueness_ratio": 0.003,
+        "shannon_entropy": 1.1099157598752971
+      },
+      "dominant_pattern": "(np.float64(5.881061), np.float64(4.751613), np.float64(5.767166))",
+      "dominant_fraction": 0.518,
+      "collapse_cycle": 160,
+      "total_bursts": 49,
+      "mean_entropy": 1.5461430550741002,
+      "duration": 1.4474129676818848
+    }
+  ],
+  "analysis": {
+    "unique_dominants": 1,
+    "collapse_timing_mean": 160.0,
+    "collapse_timing_std": 0.0,
+    "diversity_ratio": 0.2,
+    "stochastic": false
+  },
+  "insight_44_discovered": false,
+  "overall_duration": 9.729104995727539,
+  "timestamp": 1761133081.9490361
+}
