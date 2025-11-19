@@ -234,6 +234,17 @@ Progress is defined by rigorous, automated, and falsifiable **exit criteria (Gat
 - **Gate 2.5 — Material Validation Mandate:**
   The "Workshop-to-Wave" pipeline is active. At least one PC is validated with a **physical build** (e.g., coupled oscillators, electronics) that mirrors the computational discovery.
 
+- **Gate 2.6 — Multi-Modal Anchor Validation:**
+  Demonstrate that the `TranscendentalBridge` can ingest entropy from a **non-CPU source** (e.g., thermal sensor via GPIO, optical noise via camera, true random number generator via /dev/hwrng, or audio entropy) and produce coherent Phase States, validating the "Universal Adapter" claim.
+
+  **Success Criteria:**
+  - Bridge accepts ≥2 distinct reality anchors (CPU + 1 alternative)
+  - Phase state coherence maintained (correlation > 0.7 between modalities)
+  - ±5% overhead authentication protocol extends to multi-modal inputs
+  - Alternative anchor demonstrates substrate independence (same NRM dynamics with different energy source)
+
+  **Purpose:** Addresses critique that current psutil-only implementation may be substrate-dependent. Validates claim that NRM dynamics are universal across energy substrates, not artifacts of x86 CPU architecture.
+
 ### **Phase 3: HELIOS (The Engineering Engine)**
 
 **Status:** Research horizon (experimental validation required)
