@@ -46,6 +46,7 @@ workspace/cache/npm_cache/
 # Data (exclude large binary files, keep JSON results)
 *.hdf5
 *.h5
+experiments/results/*.json
 
 # Temporary files
 *.tmp
