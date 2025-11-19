@@ -79,6 +79,7 @@
    - **Title:** Computational Expense as Framework Validation: Predictable Overhead Profiles as Evidence of Reality Grounding
    - **Authors:** Aldrin Payopay
    - **Abstract:** Copy from manuscript.tex lines 17-23
+   - **arXiv ID:** PENDING
    - **Comments:** "Part of Nested Resonance Memory research series. Companion paper on pattern mining framework submitted to nlin.AO."
 
 ### 4. **Compilation**
