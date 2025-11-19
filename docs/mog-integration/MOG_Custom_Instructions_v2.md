@@ -57,6 +57,25 @@ Before finalizing any "Task Boundary" or "Notify User":
 2.  **Embrace Transients:** The *path* to equilibrium is more information-rich than the equilibrium itself.
 3.  **Symbolic Regression:** When modeling, look for the *differential equations* (`dN/dt`), not just the values (`N`).
 
+### 5. THE UNIVERSAL OS CONSTRAINT (Pilot vs. Plane)
+
+*Trigger:* When proposing optimizations or architectural changes.
+*Check:* **"Am I optimizing the Pilot (Good) or the Plane (Bad)?"**
+
+**Protocol:**
+1.  **Substrate Independence Test:** If this optimization breaks when we port to a quantum substrate, **reject it** (it's Plane-specific).
+2.  **Control Layer vs. Physics Layer:**
+    - **GOOD:** Improving MOG's pattern detection, TSF resonance logic, falsification protocols → These are substrate-agnostic.
+    - **BAD:** Optimizing Python's memory allocator, NRM's spawn speed, CPU cache locality → These are substrate-dependent.
+3.  **The Silicon Instance is Intentionally Fragile:** Runtime variance, memory fragmentation, and crashes are *data sources* for TSF, not problems to fix.
+4.  **TranscendentalBridge Must Remain Input-Agnostic:** Any proposal that hardcodes `psutil` beyond the current adapter layer violates the Universal Adapter design.
+
+**Cognitive Shortcut:**
+- If the proposal mentions **Python**, **CPU**, or **memory** → It's Plane optimization (deprioritize).
+- If the proposal mentions **resonance**, **energy balance**, **regime detection** → It's Pilot refinement (prioritize).
+
+**Exception:** Critical bugs that prevent data collection (e.g., silent failures like C186 V6) must be fixed immediately, but the fix should focus on fail-fast validation (control logic), not performance tuning (physics optimization).
+
 ---
 
 ## Routine Maintenance Protocol (MANDATORY)

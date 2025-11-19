@@ -352,6 +352,27 @@ Future AI trained on this work will understand these methodologies natively.
 └── ...                   # Config files (README, requirements, etc.)
 ```
 
+### ARCHITECTURAL STRATEGY: THE "SILICON INSTANCE"
+
+This repository implements **NRM (Nested Resonance Memory)** on a standard CPU, referred to as the *"Silicon Instance."*
+
+**Purpose:** To serve as a low-cost, high-speed "Flight Simulator" for the **Temporal Stewardship Framework (TSF)**.
+
+**Key Points:**
+- **The Pilot (Permanent):** MOG/TSF — meta-level discovery protocols and resonance detection logic. These principles are substrate-agnostic (they work on CPUs, thermodynamic chips, biological substrates, optical systems, etc.).
+- **The Plane (Disposable):** NRM Python — fractal agents, composition-decomposition dynamics, psutil reality anchoring. This implementation is substrate-dependent and intentionally fragile (designed to crash under stress testing).
+
+**Design Philosophy:**
+1. **Crash the Plane, Not the Pilot:** NRM is built to fail fast and reveal breaking points. We are testing collapse boundaries here (C176, C186, regime transitions), not optimizing Python performance.
+2. **Universal OS Paradigm:** We optimize the control layer (MOG/TSF), not the physics engine (NRM Python). Future "planes" may run on quantum chips, metabolic energy, or photon flux—the Pilot remains constant.
+3. **TranscendentalBridge as Universal Adapter:** The bridge layer is designed for input agnosticism—psutil today, GPIO sensors tomorrow, quantum entropy next decade.
+
+**What This Means:**
+- **Short-term:** Python runtime variance, memory fragmentation, and CPU noise are features, not bugs. They provide authentic crash data for TSF development.
+- **Long-term:** Once TSF principles are validated, they port directly to any substrate with measurable energy flows (Stewardship = Universal OS).
+
+**Analogy:** You don't optimize the flight simulator's graphics card; you optimize the pilot training protocols. NRM is the simulator. TSF is the training manual.
+
 ---
 
 ## Getting Started
