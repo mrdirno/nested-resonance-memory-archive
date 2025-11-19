@@ -34,10 +34,12 @@
 - [x] Convert edge case diagnostics (2.6)
 - [x] Format equations properly
 
-**Section 3: Results** (from separate markdown files)
-- [ ] Convert results sections
-- [ ] Create tables (3 total)
-- [ ] Add figure placeholders (4 total)
+**Section 3: Results** ✅ COMPLETE
+- [x] Convert results sections (3.1-3.6)
+- [x] Create Table 2 (Campaign Summary)
+- [x] Create Table 3 (V6 Three-Regime Results)
+- [x] Create frequency-specific results table (inline)
+- [x] Add 3 figure placeholders (Figures 1-3)
 
 **Section 4: Discussion** (~40KB markdown, includes Section 4.8)
 - [ ] Convert subsections 4.1-4.8
