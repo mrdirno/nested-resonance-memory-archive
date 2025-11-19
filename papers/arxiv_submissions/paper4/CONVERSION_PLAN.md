@@ -41,10 +41,18 @@
 - [x] Create frequency-specific results table (inline)
 - [x] Add 3 figure placeholders (Figures 1-3)
 
-**Section 4: Discussion** (~40KB markdown, includes Section 4.8)
-- [ ] Convert subsections 4.1-4.8
-- [ ] **Ensure Section 4.8 "Unified Scaling Framework" is clearly marked** (cited by Papers 2, 7)
-- [ ] Convert equations and citations
+**Section 4: Discussion** ⏳ PARTIAL (4/8 subsections)
+- [x] 4.1 Hierarchical Advantage Quantification
+- [x] 4.2 Perfect Linear Scaling
+- [x] 4.3 Edge Case Vulnerabilities
+- [ ] 4.4 Mechanisms of Hierarchical Advantage (pending)
+- [ ] 4.5 Implications for NRM Framework (pending)
+- [ ] 4.6 Limitations and Future Work (pending)
+- [ ] 4.7 Practical Implications (pending)
+- [x] **4.8 Unified Scaling Framework** ✅ CRITICAL SECTION COMPLETE
+  - σ² ∝ f^-3.2, E_min ∝ f^-2.19 equations included
+  - Properly numbered for Papers 2/7 cross-references
+- [x] Convert equations (all power laws, unified equation)
 
 **Section 5: Conclusions** (~2,600 words)
 - [ ] Convert subsections 5.1-5.5
