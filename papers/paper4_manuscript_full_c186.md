@@ -827,11 +827,11 @@ The authors declare no competing interests.
 
 ---
 
-**Manuscript Status:** Complete draft pending V6 integration and reference completion
+**Manuscript Status:** ✅ **SUBMISSION-READY** (C186 + V6 three-regime validation complete, references compiled, figures ready)
 **Submission Target:** PLOS Computational Biology (primary) or Nature Communications (condensed)
-**Word Count:** ~8,900 words (main text excluding references)
-**Figures:** 3 (frequency response, hierarchical advantage α, edge case comparison)
-**Tables:** 2 (campaign design, campaign summary)
+**Word Count:** ~10,200 words (main text excluding references)
+**Figures:** 4 (frequency response, hierarchical advantage α, edge case comparison, V6 three-regime validation)
+**Tables:** 3 (campaign design, campaign summary, V6 three-regime results)
 
 ---
 
