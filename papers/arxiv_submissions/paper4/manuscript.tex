@@ -381,7 +381,7 @@ Hierarchical spawn frequency ($f_{intra}$) exhibited \textbf{perfect linear scal
 
 \begin{figure}[h]
 \centering
-% \includegraphics[width=0.8\textwidth]{c186_frequency_response.png}
+\includegraphics[width=0.9\textwidth]{c186_frequency_response.png}
 \caption{Hierarchical Spawn Frequency Response. Population size scales linearly with intra-population spawn frequency. Linear fit: Population = 3004.25 $\times$ $f_{intra}$ + 19.80 ($R^2$ = 1.000, $n$ = 50 experiments across 5 frequencies). Red dashed line indicates extrapolated critical frequency ($f_{crit}^{hier} \approx 0.0066\%$) where population approaches initial size (20 agents). All tested frequencies sustained populations well above critical threshold, demonstrating hierarchical advantage.}
 \label{fig:frequency_response}
 \end{figure}
@@ -425,7 +425,7 @@ This \textbf{607-fold efficiency gain} indicates hierarchical systems sustain po
 
 \begin{figure}[h]
 \centering
-% \includegraphics[width=0.8\textwidth]{c186_hierarchical_advantage_alpha.png}
+\includegraphics[width=0.9\textwidth]{c186_hierarchical_advantage_alpha.png}
 \caption{Hierarchical Advantage in Nested Resonance Memory. Hierarchical organization (10 populations) enables population sustainability at spawn frequencies 607$\times$ lower than single-scale systems. Single-scale critical frequency $f_{crit}^{single} \approx 4.0\%$ determined from previous NRM experiments. Hierarchical critical frequency $f_{crit}^{hier} \approx 0.0066\%$ extrapolated from linear fit (Figure 1). This massive efficiency advantage emerges from compartmentalization, migration rescue, and risk distribution mechanisms.}
 \label{fig:hierarchical_advantage}
 \end{figure}
@@ -448,7 +448,7 @@ Two edge cases (V7, V8) exposed critical implementation vulnerabilities at hiera
 
 \begin{figure}[h]
 \centering
-% \includegraphics[width=0.8\textwidth]{c186_edge_case_comparison.png}
+\includegraphics[width=0.9\textwidth]{c186_edge_case_comparison.png}
 \caption{Edge Case CPU Diagnostic Patterns. CPU usage patterns reveal distinct failure modes. \textbf{Top:} V7 ($f_{migrate} = 0.00\%$) exhibits immediate stuck state (18-30\% CPU from start), indicating infinite loop or deadlock. \textbf{Bottom:} V8 ($n_{pop} = 1$) shows transition from working phase (79-99\% CPU for 52 min) to stuck state (15-22\% CPU for 28 min), indicating progressive system degradation. Healthy zone (79-99\% CPU, green) indicates correct operation. Stuck zone (15-30\% CPU, red) indicates system failure.}
 \label{fig:edge_case}
 \end{figure}
@@ -546,6 +546,13 @@ V6b (Growth) & +0.5 & $19{,}320 \pm 1{,}102$ & High-density stable & 50 & 0\% (0
 \end{itemize}
 
 \textbf{Critical Threshold:} Sharp phase transition at net energy = 0. Below this threshold, \textbf{hierarchical advantage cannot prevent collapse} regardless of spawn frequency configuration.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{v6_three_regime_validation.png}
+\caption{V6 Three-Regime Energy Balance Validation. Three distinct energy regimes produce deterministic population outcomes. \textbf{Collapse regime} (net energy $<$ 0, red): 100\% extinction across all spawn frequencies (0.10\%-1.00\%). \textbf{Homeostasis regime} (net energy $=$ 0, yellow): Stable equilibrium at $\sim$201 agents regardless of spawn frequency. \textbf{Growth regime} (net energy $>$ 0, green): High-density equilibrium at $\sim$19,320 agents (96$\times$ population increase). Sharp phase transition at net energy = 0 establishes thermodynamic boundary: hierarchical advantage operates only above this threshold.}
+\label{fig:v6_regimes}
+\end{figure}
 
 \subsubsection{Hierarchical Advantage Energy Constraint}
 
