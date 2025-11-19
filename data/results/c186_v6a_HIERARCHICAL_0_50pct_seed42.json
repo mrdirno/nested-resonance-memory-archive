@@ -1,0 +1,30 @@
+{
+  "experiment": "C186_V6a_NET_ZERO_HOMEOSTASIS",
+  "condition": "HIERARCHICAL_0_50pct",
+  "seed": 42,
+  "parameters": {
+    "f_spawn": 0.005,
+    "e_consume": 1.0,
+    "e_recharge": 1.0,
+    "spawn_cost": 5.0,
+    "cycles": 450000,
+    "n_populations": 10,
+    "n_agents_per_pop": 10
+  },
+  "results": {
+    "runtime_seconds": 22.662956953048706,
+    "runtime_hours": 0.0062952658202913075,
+    "final_population": 204,
+    "final_energy": 1000.0,
+    "total_decompositions": 449494,
+    "database_size_bytes": 14131200,
+    "database_rows": 450000,
+    "success": true
+  },
+  "verdict": {
+    "database_works": true,
+    "population_sustained": true,
+    "homeostasis_viable": true
+  },
+  "timestamp": 1763511343.0570822
+}

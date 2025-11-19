@@ -1,0 +1,30 @@
+{
+  "experiment": "C186_V6b_NET_POSITIVE_GROWTH",
+  "condition": "HIERARCHICAL_GROWTH_1_00pct",
+  "seed": 47,
+  "parameters": {
+    "f_spawn": 0.01,
+    "e_consume": 0.5,
+    "e_recharge": 1.0,
+    "spawn_cost": 5.0,
+    "cycles": 450000,
+    "n_populations": 10,
+    "n_agents_per_pop": 10
+  },
+  "results": {
+    "runtime_seconds": 4.309851884841919,
+    "runtime_hours": 0.0011971810791227553,
+    "final_population": 19982,
+    "final_energy": 10003576.0,
+    "total_decompositions": 0,
+    "database_size_bytes": 69632,
+    "database_rows": 2148,
+    "success": true
+  },
+  "verdict": {
+    "database_works": true,
+    "population_sustained": true,
+    "growth_enabled": true
+  },
+  "timestamp": 1763454260.1624022
+}
