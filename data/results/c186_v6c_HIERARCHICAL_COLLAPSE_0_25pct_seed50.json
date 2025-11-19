@@ -1,0 +1,30 @@
+{
+  "experiment": "C186_V6c_NET_NEGATIVE_COLLAPSE",
+  "condition": "HIERARCHICAL_COLLAPSE_0_25pct",
+  "seed": 50,
+  "parameters": {
+    "f_spawn": 0.0025,
+    "e_consume": 1.5,
+    "e_recharge": 1.0,
+    "spawn_cost": 5.0,
+    "cycles": 450000,
+    "n_populations": 10,
+    "n_agents_per_pop": 10
+  },
+  "results": {
+    "runtime_seconds": 2.809932231903076,
+    "runtime_hours": 0.0007805367310841878,
+    "final_population": 0,
+    "final_energy": 0,
+    "total_decompositions": 104,
+    "database_size_bytes": 11296768,
+    "database_rows": 450000,
+    "success": false
+  },
+  "verdict": {
+    "database_works": true,
+    "population_collapsed": true,
+    "collapse_as_predicted": true
+  },
+  "timestamp": 1763455759.4886541
+}
