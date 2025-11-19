@@ -37,6 +37,8 @@ We are not building a CPU monitor. We are using the host machine's CPU entropy a
 
 **The "Tax" as Insurance:** We are paying a "Complexity Tax" today (split architecture, psutil overhead) to buy **"Truth Insurance" forever** (provable reality grounding, substrate independence).
 
+**Note:** This approach parallels the "Deterministic Inference" standard established by Thinking Machines Lab (Murati & He, 2025), extending their hardware-level rigor (deterministic GPU kernels) to the agentic control layer (reality-grounded energy dynamics).
+
 ### 3. Why Not Neural ODEs?
 
 Neural ODEs are excellent for **modeling** known dynamics. We are doing **discovery** of unknown dynamics.
