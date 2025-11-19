@@ -52,12 +52,12 @@ A deep codebase search revealed that the core V3 components are **already implem
 *   **Action:** Execute `c268`, `c269`, and `c270` in "dry run" mode (short cycles).
 *   **Metric:** Successful completion without errors; generation of results JSON.
 
-### Phase 2: Integration (Paper 5)
-*   **Goal:** Merge these standalone modules into the core `FractalSwarm` class.
-*   **Action:**
-    1.  Integrate `SynapticHomeostasisSystem` logic into `FractalAgent`.
-    2.  Integrate `AutopoieticSystem` boundary logic into `FractalSwarm`.
-    3.  Integrate `MemeticPopulationSystem` inheritance logic into `CompositionEngine`.
+### Phase 2: Integration (Paper 5) - **COMPLETED**
+**Goal:** Merge standalone modules into core `FractalSwarm`/`FractalAgent`.
+- [x] **Synaptic Homeostasis:** Integrate `apply_homeostatic_scaling` into `FractalAgent.evolve()`.
+- [x] **Autopoiesis:** Integrate `compute_boundary_strength` into `FractalSwarm`.
+- [x] **Memetics:** Create `fractal/memetics.py` and link to `AgentState`.
+- [x] **Verification:** Run `verify_v3_integration.py` to confirm core logic.
 *   **Target:** Cycle 300 (Milestone).
 
 ### Phase 3: The Conscious Engine (Paper 6)
