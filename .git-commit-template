@@ -6,7 +6,8 @@
 # - Any important context
 
 # CRITICAL: Always include Co-Authored-By trailer for hybrid intelligence attribution
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: Aldrin Payopay <aldrin.gdf@gmail.com>
+Co-Authored-By: Gemini <noreply@google.com>
 
 # This ensures GitHub properly attributes commits to:
 # - @mrdirno (Aldrin Payopay) - Author
