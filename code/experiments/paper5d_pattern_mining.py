@@ -450,7 +450,7 @@ def main():
 
     # Setup paths
     # Use git repository for data source, dev workspace for output
-    data_dir = Path("/Users/aldrinpayopay/nested-resonance-memory-archive/data/results")
+    data_dir = Path(__file__).parent.parent.parent / "experiments" / "results"
     output_dir = Path("/Volumes/dual/DUALITY-ZERO-V2/data/results")
 
     # Initialize miner
