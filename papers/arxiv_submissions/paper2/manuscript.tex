@@ -442,6 +442,20 @@ The timescale dependency is \textbf{not monotonic}. Spawn success does not decre
 
 \textbf{Population-Mediated Energy Recovery Mechanism:} Large populations ($>$20 agents) enable sustained high spawn success through distributed selection pressure. At each compositional event, one agent is randomly selected; large populations reduce probability of re-selecting recently depleted agents, creating effective energy ``pooling'' across population.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{c176_v6_multi_scale_comparison_final.png}
+\caption{\textbf{Multi-scale timescale validation reveals non-monotonic spawn success pattern.} (A) Micro-validation (100 cycles): 100\% spawn success. (B) Incremental validation (1000 cycles): 88.0\% spawn success with four-phase trajectory. (C) Extended validation (3000 cycles): 23\% spawn success. Non-monotonic pattern (100\% $\rightarrow$ 88\% $\rightarrow$ 23\%) demonstrates timescale-dependent constraint manifestation.}
+\label{fig:multiscale}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{c176_v6_seed_comparison_final.png}
+\caption{\textbf{Seed-level trajectories validate population-mediated energy recovery mechanism.} (A) Population trajectories show stabilization around 20-25 agents with CV=2.6\%. (B) Four-phase non-monotonic spawn success pattern replicated across all seeds. (C) Hypothesis testing: t(4)=8.63, p=0.0010, d=3.86 vs.\ C171 baseline.}
+\label{fig:seedlevel}
+\end{figure}
+
 \subsection{Population Size Robustness (C193)}
 
 To test whether collapse boundary depends on initial population size ($N_{\text{initial}}$), we varied $N$ from 5 to 20 agents while holding spawn frequency constant ($f=0.05\%-0.20\%$), testing whether smaller populations exhibit collapse (C193 campaign, 1,200 experiments).
@@ -457,6 +471,20 @@ To test whether collapse boundary depends on initial population size ($N_{\text{
 Population size exhibited \textbf{perfect linear scaling} with $N_{\text{initial}}$, with growth proportional to spawn frequency. Linear regression: pop$_{\text{final}} = \beta_0 + \beta_1 \times N_{\text{initial}}$, with $\beta_1 = 1.00$ (perfect scaling), $R^2 = 0.996$ (99.6\% variance explained).
 
 \textbf{Mechanism Effects:} Deterministic spawn (SD=0.00, zero variance) and Flat spawn (SD$\approx$1.5-3.2, stochastic variation) showed \textbf{identical collapse rates} (0\% for both). Despite higher variance, Flat spawn shows identical viability. Variance does NOT increase fragility in this energy model.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{c193_fig1_population_vs_n.png}
+\caption{\textbf{Population size scales perfectly linearly with $N_{\text{initial}}$.} Final population shown for $N \in \{5, 10, 15, 20\}$ at three spawn frequencies. All conditions show parallel growth trajectories. Linear regression: $R^2 > 0.99$ for all frequencies, confirming $\text{pop}_{\text{final}} = N_{\text{initial}} + (f \times \text{cycles}/100)$.}
+\label{fig:popscaling}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{c193_fig4_robustness_summary.png}
+\caption{\textbf{Collapse rate is N-independent---zero collapses across all population sizes.} Heatmap showing collapse rate for all conditions: $N \in \{5,10,15,20\} \times f \in \{0.05\%, 0.10\%, 0.20\%\}$. All 12 conditions: 0/100 collapsed (0.0\%). Small populations equally viable as large populations when net energy $\geq 0$.}
+\label{fig:robustness}
+\end{figure}
 
 \subsection{Sharp Energy Consumption Phase Transition (C194 - BREAKTHROUGH)}
 
@@ -511,6 +539,27 @@ Collapse rate was \textbf{independent of spawn mechanism} (Deterministic = Flat 
 The sharp transition reflects a fundamental thermodynamic constraint. Net Energy $\geq$ 0: Energy input $\geq$ energy output, system can maintain reserves, agents persist indefinitely, population sustainable. Net Energy $<$ 0: Energy output $>$ energy input, system loses energy every cycle, inevitable energy depletion → death → extinction, population collapse.
 
 \textbf{No Middle Ground:} Either energy is sustainable (net $\geq$ 0) or it's not (net $<$ 0). No partial viability exists. Analogous to phase transitions in physics (water freezing at 0°C). Systems with net energy loss cannot sustain order indefinitely. Collapse is \textbf{inevitable} when net $<$ 0, regardless of interventions (spawning, redundancy, variance reduction).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{c194_fig1_phase_transition.png}
+\caption{\textbf{Binary phase transition at $E_{\text{CONSUME}} = \text{RECHARGE\_RATE} (0.5)$.} Sharp transition: $E_{\text{CONSUME}} \leq 0.5$ (net $\geq 0$) $\rightarrow$ 0.0\% collapse (2,700/2,700), $E_{\text{CONSUME}} > 0.5$ (net $< 0$) $\rightarrow$ 100.0\% collapse (900/900). Chi-square: $\chi^2(3)=3600.0$, $p<0.001$, $\phi=1.0$ (perfect association). Logistic regression shows perfect separation (step function, not continuous).}
+\label{fig:phasetransition}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{c194_fig3_energy_balance_validation.png}
+\caption{\textbf{Energy balance theory predicts collapse with 100\% accuracy.} Theory: If Net Energy $= \text{RECHARGE} - E_{\text{CONSUME}} \geq 0$ then 0\% collapse; if Net $< 0$ then 100\% collapse. All 4 conditions predicted exactly: $E_{\text{CONSUME}} \in \{0.1, 0.3, 0.5, 0.7\}$ matched predictions perfectly. Any $E_{\text{CONSUME}}$ can now be classified \textit{a priori} without empirical testing.}
+\label{fig:energybalance}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{c194_fig4_phase_diagram.png}
+\caption{\textbf{Binary phase space separates survival and collapse regimes.} Survival phase (Net $\geq 0$): 0\% collapse, energy sustainable indefinitely. Collapse phase (Net $< 0$): 100\% collapse, inevitable energy depletion. Critical boundary at Net $= 0$ ($E_{\text{CONSUME}} = 0.5$). Transition is N-independent, mechanism-independent, and frequency-independent---net energy alone determines fate.}
+\label{fig:phasediagram}
+\end{figure}
 
 % ============================================================================
 % 4. DISCUSSION
