@@ -636,6 +636,20 @@ V1 (local optimization) trapped in poor minimum (error = 6308, $R^2 = -98$). V2 
 
 V1 hard cutoff creates discontinuity at $\rho = 40$ causing numerical instability. V2 sigmoid threshold provides smooth transition, improving integration stability and biological realism (thresholds rarely sharp in natural systems).
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{paper7_v4_vs_v2_trajectories_20251027_125323.png}
+\caption{\textbf{V4 vs V2 trajectory comparison.} V4 achieves sustained population dynamics ($N = 139.17$ at $t=1000$) while V2 collapses to floor ($N \to 1$). Modified parameters: $r = 0.15$ (+200\%), $\lambda_0 = 2.5$ (+150\%), $\mu_0 = 0.4$ ($-50\%$).}
+\label{fig:v4v2trajectories}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{paper7_v4_vs_v2_parameters_20251027_125324.png}
+\caption{\textbf{V4 vs V2 parameter comparison.} Key parameter modifications that enable V4 sustained dynamics: increased composition rates ($r$, $\lambda_0$), decreased decomposition ($\mu_0$), and resonance source ($\phi_0$).}
+\label{fig:v4v2params}
+\end{figure}
+
 \subsection{Remaining Model Limitations}
 
 \subsubsection{Negative $R^2$ Despite Excellent Error Metrics}
@@ -698,6 +712,20 @@ Ensemble analysis with three noise types tested V4 robustness under realistic pe
 
 \textbf{Variance-Noise Relationship:} Linear scaling relationship: CV increases by $\sim$0.05-0.06 per 10\% noise level. This predictable response validates V4 as suitable substrate for stochastic modeling.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{paper7_phase4_robustness_parameter_20251027_130757.png}
+\caption{\textbf{Phase 4 stochastic robustness under parameter perturbations.} V4 achieves 100\% persistence (420/420 runs) under 30\% noise across parameter, state, and external perturbation types. Population variance increases linearly with noise level (CV $\sim$0.05-0.06 per 10\% noise).}
+\label{fig:phase4robustness}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{paper7_phase4_cv_calibration_parameter_20251027_131827.png}
+\caption{\textbf{Coefficient of variation calibration for Phase 4 noise analysis.} CV remains bounded (15-20\%) across all noise conditions, demonstrating exceptional structural stability of V4 attractor under realistic perturbations.}
+\label{fig:phase4cv}
+\end{figure}
+
 \subsection{Phase 5: Timescale Quantification and Eigenvalue Analysis}
 
 Eigenvalue decomposition of V4 system at equilibrium quantifies characteristic timescales governing population dynamics.
@@ -725,6 +753,13 @@ Demographic noise extension models discrete birth-death events via Poisson proce
 \textbf{Persistent Variance:} Even at long times ($t > 500$ cycles), population variance remains $\sim$15-20\%, not approaching zero. This indicates demographic noise drives \textbf{perpetual fluctuations} around equilibrium, matching empirical $\pm 2$-3 agent fluctuations observed in C171/C175.
 
 \textbf{Conclusion:} Stochastic V4 successfully captures population variance structure, explaining empirical frequency-dependent fluctuations as demographic noise interacting with deterministic dynamics.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{paper7_phase4_empirical_vs_v4_20251027_132149.png}
+\caption{\textbf{Empirical data vs V4 model predictions.} V4 captures mean population behavior across experimental frequencies (C171/C175 data). Remaining variance gap motivates Phase 6 stochastic extensions to model frequency-dependent fluctuations.}
+\label{fig:empiricalv4}
+\end{figure}
 
 % ============================================================================
 % 4. DISCUSSION
