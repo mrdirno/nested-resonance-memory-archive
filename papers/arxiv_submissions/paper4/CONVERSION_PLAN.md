@@ -9,25 +9,30 @@
 
 ## CONVERSION STEPS
 
-### Phase 1: Template Setup ✅ (Cycle 1482)
+### Phase 1: Template Setup ✅ (Cycle 1482-1483)
 
 - [x] Create CONVERSION_PLAN.md (this document)
-- [ ] Create manuscript.tex skeleton (preamble, structure)
-- [ ] Set up document class and packages
-- [ ] Add title, authors, abstract
-- [ ] Create section structure (1-5)
+- [x] Create manuscript.tex skeleton (preamble, structure)
+- [x] Set up document class and packages
+- [x] Add title, authors, abstract
+- [x] Create section structure (1-5)
 
-### Phase 2: Content Conversion (Est. 2-3 hours, multiple cycles)
+### Phase 2: Content Conversion ⏳ IN PROGRESS (Cycle 1483)
 
-**Section 1: Introduction** (~21KB markdown)
-- [ ] Convert subsections 1.1, 1.2
-- [ ] Convert citations to \cite{}
-- [ ] Convert emphasis/bold to LaTeX commands
+**Section 1: Introduction** ✅ COMPLETE
+- [x] Convert subsections 1.1, 1.2, 1.3, 1.4, 1.5
+- [x] Convert citations to \cite{}
+- [x] Convert emphasis/bold to LaTeX commands
 
-**Section 2: Methods** (from separate markdown files)
-- [ ] Identify methods content sources
-- [ ] Convert experimental design descriptions
-- [ ] Format equations properly
+**Section 2: Methods** ✅ COMPLETE
+- [x] Identify methods content sources (in main manuscript)
+- [x] Convert experimental design descriptions (2.1.1-2.1.4)
+- [x] Convert campaign variants with Table 1 (2.2)
+- [x] Convert computational implementation (2.3)
+- [x] Convert outcome measures (2.4)
+- [x] Convert statistical analysis (2.5)
+- [x] Convert edge case diagnostics (2.6)
+- [x] Format equations properly
 
 **Section 3: Results** (from separate markdown files)
 - [ ] Convert results sections
