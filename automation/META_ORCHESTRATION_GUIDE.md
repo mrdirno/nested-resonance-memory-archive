@@ -86,27 +86,40 @@ python3 meta_orchestrate.py --help
 
 ### Command Line
 
-**Interactive Selection:**
+**Simple Method (Using Alias):**
 ```bash
+# Interactive selection (most common)
+meta-orchestrate
+
+# Direct launch
+meta-orchestrate claude   # Launch Claude
+meta-orchestrate gemini   # Launch Gemini
+```
+
+The `meta-orchestrate` alias is automatically configured when you source the automation setup:
+```bash
+source ~/.zshrc  # Reload shell config to activate alias
+```
+
+**Full Path Method:**
+```bash
+# Interactive selection
 cd /Volumes/dual/DUALITY-ZERO-V2/automation
 ./launch_ai.sh
-```
 
-**Direct Launch:**
-```bash
-# Claude
+# Direct launch
 ./launch_ai.sh claude
-python3 meta_orchestrate.py --ai claude
-
-# Gemini
 ./launch_ai.sh gemini
-python3 meta_orchestrate.py --ai gemini
 ```
 
-**Auto-detect:**
+**Python Script Method:**
 ```bash
-# Automatically select if only one AI is available
-python3 meta_orchestrate.py --ai auto
+# Interactive (auto-detect or prompt)
+python3 /Volumes/dual/DUALITY-ZERO-V2/automation/meta_orchestrate.py --ai auto
+
+# Direct launch
+python3 /Volumes/dual/DUALITY-ZERO-V2/automation/meta_orchestrate.py --ai claude
+python3 /Volumes/dual/DUALITY-ZERO-V2/automation/meta_orchestrate.py --ai gemini
 ```
 
 ### Keyboard Shortcut (macOS)
