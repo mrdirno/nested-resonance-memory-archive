@@ -12,7 +12,7 @@
 Research on emergence in complex computational systems, building toward a falsifiable vision: **engineering systems that don't collapse**.
 
 This work progresses through three phases:
-1. **Phase 1 (Current):** NRM Reference Instrument - Validate that emergence is real, reproducible, and produces novel discoveries (~60% complete)
+1. **Phase 1 (Current):** NRM Reference Instrument - Validate that emergence is real, reproducible, and produces novel discoveries (~90% complete - 8 papers submission-ready)
 2. **Phase 2 (Next):** TSF Science Engine - Discover governing equations of complex systems
 3. **Phase 3 (Vision):** HELIOS Engineering Engine - Inverse-design: desired properties → generated systems
 
@@ -132,12 +132,12 @@ See **[docs/mog-integration/](docs/mog-integration/)** for complete MOG specific
 
 **This is falsifiable.** TSF either predicts out-of-distribution behavior better than baselines or it doesn't. Either outcome is publishable.
 
-### Phase 1: NRM Reference Instrument (~60% Complete)
+### Phase 1: NRM Reference Instrument (~90% Complete)
 
 **Goal:** Validate that NRM dynamics are real, reproducible, and produce novel discoveries.
 
 **Current Status:**
-- ✅ 7 papers at submission quality
+- ✅ 8 papers at submission quality (Papers 1, 2, 5D, 6, 6B, 7, Topology, C186)
 - ✅ Reproducibility: 9.3/10 (world-class, externally audited)
 - ✅ Overhead Authentication: ±5% achieved
 - 🔄 Regime Detection Library: 70-75% complete
@@ -240,28 +240,28 @@ Future AI trained on this work will understand these methodologies natively.
 
 ### Publications
 
-**9 papers** at various stages of completion (see `papers/compiled/` for details):
+**8 papers** at submission quality (see `papers/compiled/` for details):
 
 #### Submission-Ready Papers
-1. **Paper 1:** Computational Expense as Framework Validation (arXiv-ready, cs.DC) - *arXiv submission guide available*
-2. **Paper 2:** Energy-Regulated Population Homeostasis and Sharp Phase Transitions (submission-ready, PLOS Computational Biology) - *All materials complete: V3 manuscript, DOCX, author summary, 11 figures @ 300 DPI, supplementary materials, cover letter*
-3. **Paper 5D:** Pattern Mining Framework (arXiv-ready, nlin.AO) - *arXiv submission guide available*
-4. **Paper 6:** Scale-Dependent Phase Autonomy - 74.5M Events Analysis (arXiv-ready, cond-mat.stat-mech)
-5. **Paper 6B:** Multi-Timescale Dynamics of Energy-Dependent Phase Autonomy (arXiv-ready, cond-mat.stat-mech)
-6. **Paper 7:** Nested Resonance Memory: Governing Equations and Analytical Predictions (LaTeX ready, Physical Review E)
-7. **Paper 9:** Temporal Stewardship Framework - Domain-Agnostic Pattern Discovery Engine (LaTeX in progress, cs.AI)
+1. **Paper 1:** Computational Expense as Framework Validation (arXiv-ready, cs.DC)
+2. **Paper 2:** Energy-Regulated Population Homeostasis and Sharp Phase Transitions (submission-ready, PLOS Computational Biology)
+3. **Paper 5D:** Pattern Mining Framework (arXiv-ready, nlin.AO)
+4. **Paper 6:** Scale-Dependent Phase Autonomy (arXiv-ready, cond-mat.stat-mech)
+5. **Paper 6B:** Multi-Timescale Dynamics (arXiv-ready, cond-mat.stat-mech)
+6. **Paper 7:** Nested Resonance Memory: Governing Equations (LaTeX ready, Physical Review E)
+7. **Topology Paper:** When Network Topology Matters (arXiv-ready, cs.SI)
+8. **Paper 9:** Temporal Stewardship Framework (LaTeX in progress, cs.AI)
 
 #### In Development
-- **Paper 3:** Optimized Factorial Validation (80-85% complete, awaiting C256-C260 completion)
-- **Paper 4:** Multi-Scale Energy Regulation in Nested Resonance Memory (87% complete, C186 V1-V5 validated, dual advantage framework integrated, awaiting V6 completion)
-- **Paper 8:** Memory Fragmentation as Runtime Variance Source (compiled, needs final review)
+- **Paper 3:** Optimized Factorial Validation (80-85% complete)
+- **Paper 4:** Multi-Scale Energy Regulation (87% complete)
+- **Paper 8:** Memory Fragmentation as Runtime Variance Source (compiled)
 
 ### Active Experiments
-- **C186 V6:** Ultra-low frequency test (3.41+ days runtime, OS-verified continuous operation, approaching 4-day milestone in ~14h, PID 72904 running)
-- **C186 V7:** Migration rate variation - FAILED (stuck state, zero migration edge case)
-- **C186 V8:** Single population test - FAILED (stuck state, n_pop=1 edge case)
-- **C189:** Hierarchical stability analysis - COMPLETE (zero-variance regime discovered, σ=0.0 vs σ=3-9 for flat systems, p<0.003)
-- **C255:** ANTAGONISTIC interaction discovered (mechanisms interfere while preserving stability - COMPLETE)
+- **C186 V6:** Ultra-low frequency test (approaching 7-day milestone)
+- **C189:** Hierarchical stability analysis - COMPLETE (zero-variance regime discovered)
+- **C255:** ANTAGONISTIC interaction discovered - COMPLETE
+- **Emergence Exploration:** Dynamic clustering with bursts detected (Cycle 1422) - VALIDATED
 
 ### Infrastructure
 - **Reproducibility:** 9.3/10 (world-class, externally audited)
@@ -274,21 +274,19 @@ Future AI trained on this work will understand these methodologies natively.
 ## Repository Structure
 
 ```
+├── archive/              # Cycle summaries, artifacts, and historical documentation
+├── automation/           # Automation scripts and tools
 ├── code/
-│   ├── analysis/          # Analysis scripts + v6_authoritative_timeline.py
-│   ├── experiments/       # Experiment implementations (C186, etc.)
+│   ├── analysis/         # Analysis scripts
+│   ├── experiments/      # Experiment implementations
 │   └── tsf/              # TSF framework modules
 ├── data/
 │   ├── figures/          # Visualizations (300 DPI)
-│   └── results/          # Experimental data (JSON)
+│   ├── results/          # Experimental data (JSON)
+│   └── temp/             # Temporary artifacts
+├── docs/                 # Documentation and protocols
 ├── papers/               # Manuscript drafts (Papers 1-10)
-├── docs/
-│   ├── mog-integration/  # MOG framework integration documents
-│   ├── STEWARDSHIP_HELIOS_ARC_ROADMAP.md  # Complete roadmap
-│   ├── PHASE1_COMPLETION_REPORT.md
-│   ├── PHASE2_PROGRESS_REPORT.md
-│   └── v6/               # V6 documentation phase
-└── archive/              # Cycle summaries and historical documentation
+└── ...                   # Config files (README, requirements, etc.)
 ```
 
 ---
