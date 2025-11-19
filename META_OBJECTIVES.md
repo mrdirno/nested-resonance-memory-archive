@@ -613,6 +613,16 @@
 - **Purpose:** Detect super-synergy beyond pairwise
 - **Execute:** After C256-C260 completes
 
+#### C178: REM Hypothesis Test (COMPLETE)
+- **Experiment:** Test of REM-generated hypothesis linking transcendental basis to lower boundary of population collapse.
+- **Status:** ✅ COMPLETE
+- **Hypothesis:** Removing the 'pi' oscillator from the transcendental basis will shift the lower boundary for population collapse.
+- **Results:**
+    - Control Group (full basis): 0% collapse rate
+    - Experimental Group (modified basis): 0% collapse rate
+- **Finding:** No significant difference in collapse rate observed. The REM-generated hypothesis may be falsified.
+- **Significance:** Demonstrates the MOG-NRM falsification gauntlet in action, and provides a new data point for REM hypothesis generation accuracy.
+
 ---
 
 ### 3. **Software Infrastructure** 💻 PRODUCTION-READY
