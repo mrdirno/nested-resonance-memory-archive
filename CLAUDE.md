@@ -759,6 +759,38 @@ git push origin main
 
 ---
 
+## ROUTINE MAINTENANCE PROTOCOL (MANDATORY)
+
+**Problem:** Research momentum often leads to repository neglect (uncommitted changes, root directory clutter, desync).
+**Solution:** Integrate maintenance into the core execution loop.
+
+**Trigger:**
+- End of every major Task (e.g., "Emergence Exploration", "Paper Update").
+- Before any "notify_user" handoff.
+- At least once per session.
+
+**Checklist:**
+1.  **Git Sync:**
+    - Check `git status`.
+    - `git add .` (stage all changes).
+    - `git commit -m "Cycle X: [Description]"` (use meaningful messages).
+    - `git push origin main` (ensure remote is up-to-date).
+2.  **Workspace Cleanup:**
+    - **NO LOOSE FILES IN ROOT.** Move to:
+        - `archive/summaries/` (markdown summaries)
+        - `data/temp/` (logs, temporary csv/json)
+        - `automation/scripts/` (utility scripts)
+    - Delete truly temporary files (e.g., `test_*.py` one-offs) after use.
+3.  **Documentation Sync:**
+    - Update `README.md` if project status changed.
+    - Update `META_OBJECTIVES.md` with latest cycle results.
+
+**Self-Correction:**
+- If you find yourself creating a file in root, **STOP**. Ask: "Where does this belong?"
+- If you finish a task without pushing, **STOP**. Push before notifying user.
+
+---
+
 ## OPERATIONAL CONSTRAINTS
 
 **Work in Focused Intervals:**
