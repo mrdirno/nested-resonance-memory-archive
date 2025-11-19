@@ -273,7 +273,7 @@ def main():
     print(f"EXPERIMENTAL CONDITIONS: {len(conditions)} total")
     print("-" * 70)
     for i in range(min(10, len(conditions))):
-        print(f"[{i+1:2d}/{len(conditions)}] {conditions[i]}")
+        print(f"[{i:3d}/{len(conditions)}] Running {conditions[i]}...", end=" ", flush=True)
     if len(conditions) > 10:
         print(f"... ({len(conditions) - 10} more conditions)")
     print()

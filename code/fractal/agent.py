@@ -28,8 +28,17 @@ from datetime import datetime
 import numpy as np
 import uuid
 
-from ..memory.pattern import PatternMemory
+try:
+    from ..memory.pattern import PatternMemory
+except ImportError:
+    # Fallback for when running as script or different structure
+    import sys
+    from pathlib import Path
+    sys.path.append(str(Path(__file__).parent.parent.parent))
+    from code.memory.pattern import PatternMemory
 
+
+from .memetics import Pattern
 
 @dataclass
 class AgentState:
@@ -43,7 +52,8 @@ class AgentState:
         position: Spatial coordinates in phase space
         velocity: Rate of phase change
         resonance: Resonance strength with environment (0-1)
-        memory: Pattern memory from successful transformations
+        memory: Pattern memory from successful transformations (Legacy V2)
+        patterns: V3 Memetic patterns with weights (Synaptic Homeostasis)
         birth_time: Timestamp of agent creation
         last_update: Timestamp of last state update
         parent_id: ID of parent agent (if decomposed from cluster)
@@ -58,6 +68,7 @@ class AgentState:
     velocity: float = 0.0
     resonance: float = 0.0
     memory: Dict[str, float] = field(default_factory=dict)
+    patterns: List[Pattern] = field(default_factory=list)
     birth_time: datetime = field(default_factory=datetime.now)
     last_update: datetime = field(default_factory=datetime.now)
     parent_id: Optional[str] = None
@@ -171,6 +182,15 @@ class FractalAgent:
         self.update_phase(delta_time)
         # Standard metabolic cost (entropy)
         self.update_energy(-0.01 * delta_time)
+        
+        # V3: Apply synaptic homeostasis (slow timescale)
+        # Only apply occasionally to save compute, or every step if needed.
+        # For now, applying every step but with a check inside would be better.
+        # But to match C268, it's periodic. Let's assume continuous for now or 
+        # let the caller handle periodicity. 
+        # Actually, let's add a probabilistic check or counter.
+        # Or just call it, it's O(K) where K is small (10).
+        self.apply_homeostatic_scaling()
 
     def calculate_resonance(self, other: 'FractalAgent') -> float:
         """Calculate resonance strength with another agent via phase alignment.
@@ -197,6 +217,28 @@ class FractalAgent:
         self.state.resonance = abs(resonance)
 
         return resonance
+
+    def apply_homeostatic_scaling(self, target_sum: float = 10.0) -> None:
+        """Apply synaptic homeostasis to normalize pattern weights.
+        
+        Mechanisms (from C268):
+            - Multiplicative scaling to maintain target weight sum.
+            - Prevents runaway potentiation (Hebbian explosion).
+        """
+        if not self.state.patterns:
+            return
+            
+        current_sum = sum(p.weight for p in self.state.patterns)
+        
+        if current_sum > 0:
+            scale_factor = target_sum / current_sum
+            for p in self.state.patterns:
+                p.weight *= scale_factor
+        else:
+            # Reset to uniform if zero
+            uniform_weight = target_sum / len(self.state.patterns)
+            for p in self.state.patterns:
+                p.weight = uniform_weight
 
     def update_energy(self, delta_energy: float, min_energy: float = 0.0, max_energy: float = 1.0) -> None:
         """Update agent's energy level with bounds.

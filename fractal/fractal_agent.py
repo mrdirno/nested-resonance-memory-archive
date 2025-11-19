@@ -25,6 +25,7 @@ import sqlite3
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from contextlib import contextmanager
+import numpy as np
 
 # Add parent modules to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "bridge"))
@@ -40,6 +41,7 @@ class AgentState:
     phase_state: TranscendentalState
     energy: float  # Available computational resources
     memory: List[TranscendentalState] = field(default_factory=list)
+    patterns: List['Pattern'] = field(default_factory=list) # V3
     children: List[str] = field(default_factory=list)  # Child agent IDs
     parent_id: Optional[str] = None
     depth: int = 0  # Recursion depth (0 = root)
@@ -138,6 +140,7 @@ class FractalAgent:
 
         # Internal state
         self.memory: List[TranscendentalState] = []
+        self.patterns: List['Pattern'] = [] # V3 Synaptic Homeostasis
         self.children: List['FractalAgent'] = []
         self.is_active = True
 
@@ -481,6 +484,48 @@ class FractalAgent:
         if len(self.memory) > 100:
             self.memory.sort(key=lambda s: s.magnitude, reverse=True)
             self.memory = self.memory[:100]
+
+    def move(self, delta_position: np.ndarray) -> None:
+        """Move agent in phase space.
+
+        Args:
+            delta_position: Position change vector (3D)
+        """
+        self.state.position += delta_position
+        self.state.last_update = datetime.now()
+
+    def apply_homeostatic_scaling(self, target_sum: float = 10.0) -> None:
+        """Apply synaptic homeostasis to normalize pattern weights.
+        
+        Mechanisms (from C268):
+            - Multiplicative scaling to maintain target weight sum.
+            - Prevents runaway potentiation (Hebbian explosion).
+        """
+        if not hasattr(self, 'patterns') or not self.patterns:
+            return
+            
+        current_sum = sum(p.weight for p in self.patterns)
+        
+        if current_sum > 0:
+            scale_factor = target_sum / current_sum
+            for p in self.patterns:
+                p.weight *= scale_factor
+        else:
+            # Reset to uniform if zero
+            uniform_weight = target_sum / len(self.patterns)
+            for p in self.patterns:
+                p.weight = uniform_weight
+
+    def is_alive(self, energy_threshold: float = 0.0) -> bool:
+        """Check if the agent is alive based on its energy level.
+
+        Args:
+            energy_threshold: The minimum energy required to be considered alive.
+
+        Returns:
+            True if the agent's energy is above the threshold, False otherwise.
+        """
+        return self.energy > energy_threshold
 
     def dissolve(self) -> List[TranscendentalState]:
         """

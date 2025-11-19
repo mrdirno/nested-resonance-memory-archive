@@ -275,6 +275,10 @@ class FractalSwarm:
         # Evolution state
         self.cycle_count = 0
         self.global_memory: List[TranscendentalState] = []
+        
+        # V3 Autopoiesis: Interaction topology
+        import networkx as nx
+        self.composition_graph = nx.Graph()
 
     def _init_database(self, clear_tables: bool = False) -> None:
         """
@@ -594,6 +598,21 @@ class FractalSwarm:
             'energy_conservation_check': abs(total_energy_pooled - total_energy_distributed) < 0.01
         }
 
+    def compute_boundary_strength(self) -> float:
+        """Compute ratio of intra-cluster edges to total edges (Autopoiesis metric)."""
+        if self.composition_graph.number_of_edges() == 0:
+            return 0.0
+            
+        intra_edges = 0
+        # Iterate over defined clusters
+        for cluster_id, members in self.composition.clusters.items():
+            # Count edges where both nodes are in the same cluster
+            subgraph = self.composition_graph.subgraph(members)
+            intra_edges += subgraph.number_of_edges()
+            
+        total_edges = self.composition_graph.number_of_edges()
+        return intra_edges / total_edges if total_edges > 0 else 0.0
+
     def get_statistics(self) -> Dict[str, any]:
         """Get current swarm statistics."""
         active_agents = [a for a in self.agents.values() if a.is_active]
@@ -606,6 +625,7 @@ class FractalSwarm:
             'global_memory_size': len(self.global_memory),
             'total_energy': sum(a.energy for a in active_agents),
             'avg_depth': sum(a.depth for a in active_agents) / max(len(active_agents), 1),
+            'boundary_strength': self.compute_boundary_strength(), # V3 Metric
         }
 
     def self_test(self) -> Dict[str, any]:
