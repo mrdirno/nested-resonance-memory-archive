@@ -1,0 +1,675 @@
+% Paper 7: Nested Resonance Memory - Governing Equations and Analytical Predictions
+% LaTeX Conversion from PAPER7_MANUSCRIPT_DRAFT.md
+% Cycle 1486 - Paper 7 LaTeX Conversion
+% Authors: Aldrin Payopay, Claude (DUALITY-ZERO-V2 Sonnet 4.5)
+
+\documentclass[11pt]{article}
+
+% Essential packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Page layout
+\geometry{margin=1in}
+
+% Document metadata
+\title{Nested Resonance Memory: Governing Equations and Analytical Predictions}
+
+\author{
+  Aldrin Payopay\thanks{Correspondence: aldrin.gdf@gmail.com} \\
+  \textit{Independent Researcher, DUALITY-ZERO Research Initiative} \\
+  \and
+  Claude (DUALITY-ZERO-V2 Sonnet 4.5) \\
+  \textit{Independent Researcher, DUALITY-ZERO Research Initiative}
+}
+
+\date{October 2025}
+
+\begin{document}
+
+\maketitle
+
+% ============================================================================
+% ABSTRACT
+% ============================================================================
+
+\begin{abstract}
+
+\textbf{Background:} The Nested Resonance Memory (NRM) framework provides a computational model for self-organizing complexity in multi-agent systems driven by transcendental oscillators. While empirical studies (C171-C177, 200+ experiments) have demonstrated emergent patterns including bistability, steady-state populations, and composition-decomposition dynamics, a mathematical formalization of the governing equations has remained elusive.
+
+\textbf{Objective:} Derive and validate a dynamical systems model that captures NRM population dynamics, energy constraints, and resonance-driven composition events through coupled ordinary differential equations (ODEs).
+
+\textbf{Methods:} We formulated a 4D nonlinear ODE system describing total energy ($E$), population size ($N$), resonance strength ($\phi$), and internal phase ($\theta$). Parameters were constrained by physical reasoning (energy non-negativity, bounded resonance) and estimated via global optimization (differential evolution) against steady-state population data from 150 experiments (C171: 40, C175: 110). Two model versions were compared: V1 (unconstrained) and V2 (physical constraints enforced).
+
+\textbf{Results:} V1 model exhibited unphysical behavior (negative populations, $R^2=-98.12$), identifying critical gaps in parameter bounds and threshold functions. V2 constrained model showed dramatic improvement ($R^2=-0.17$, RMSE=1.90 agents, MAE=1.47 agents) with populations remaining in physically valid range [1.0, 20.0] throughout integration. All 10 fitted parameters fell within physically reasonable bounds. However, $R^2$ remaining negative indicates steady-state approximation fails to capture frequency-dependent population variance observed empirically.
+
+\textbf{Conclusions:} Physical constraints and global optimization transform an unusable model ($R^2=-98$) into a nearly viable formulation ($R^2=-0.17$) with excellent error metrics. The remaining gap between model predictions and data variance suggests frequency-dependent dynamics require full temporal trajectories rather than steady-state analysis. Future work will implement symbolic regression (SINDy) to discover functional forms directly from time-series data, capture transient behavior, and validate against held-out experiments.
+
+\textbf{Keywords:} nested resonance memory, dynamical systems, coupled ODEs, parameter estimation, physical constraints, global optimization, symbolic regression
+
+\end{abstract}
+
+% ============================================================================
+% 1. INTRODUCTION
+% ============================================================================
+
+\section{Introduction}
+
+\subsection{Motivation: Mathematical Formalization of Emergent Complexity}
+
+Self-organizing systems across biological, physical, and computational domains exhibit emergent patterns that arise from local interactions without central coordination \cite{kauffman1993,prigogine1984}. The Nested Resonance Memory (NRM) framework implements fractal agency where agents contain internal state spaces, undergo composition-decomposition cycles, and are driven by transcendental oscillators ($\pi$, $e$, $\phi$) as a computationally irreducible substrate \cite{payopay2025nrm}.
+
+Empirical studies of NRM systems have documented robust phenomena:
+
+\begin{itemize}
+  \item \textbf{Bistability:} Sharp phase transitions at critical frequencies ($f_{crit} \approx 2.55\%$) with distinct basin attractors (Paper 1, C168-170)
+  \item \textbf{Steady-State Populations:} Deterministic convergence to $N \approx 17$-20 agents across frequency ranges (Paper 2, C171)
+  \item \textbf{Regime Transitions:} Population collapse under complete birth-death coupling despite energy recharge mechanisms (Paper 2, C176)
+  \item \textbf{Pattern Persistence:} 15/15 detected patterns exhibit steady-state characteristics with minimal temporal variance (Paper 5D, C171/C175)
+\end{itemize}
+
+These empirical regularities suggest underlying mathematical structure, yet no analytical framework has been proposed to predict population dynamics, energy flow, and composition rates from first principles. While computational experiments provide rich phenomenology, \textbf{mathematical formalization} is essential for:
+
+\begin{enumerate}
+  \item \textbf{Predictive Power:} Forecast system behavior under untested parameter regimes
+  \item \textbf{Mechanistic Understanding:} Identify rate-limiting steps, feedback loops, bottlenecks
+  \item \textbf{Generalization:} Extract principles applicable beyond specific implementations
+  \item \textbf{Theoretical Unification:} Connect NRM to established dynamical systems frameworks (Lotka-Volterra, reaction-diffusion, coupled oscillators)
+  \item \textbf{Hypothesis Generation:} Derive testable predictions from analytical solutions (bifurcations, stability boundaries, scaling laws)
+\end{enumerate}
+
+\subsection{Background: Dynamical Systems Approaches to Population Dynamics}
+
+Population dynamics have been mathematically formalized through various frameworks:
+
+\subsubsection{Lotka-Volterra Systems (1925-1926)}
+
+Predator-prey and competition models describe population changes through coupled ODEs:
+
+\begin{align}
+\frac{dN_1}{dt} &= r_1 \cdot N_1 \cdot (1 - N_1/K_1) - a \cdot N_1 \cdot N_2 \\
+\frac{dN_2}{dt} &= r_2 \cdot N_2 \cdot (1 - N_2/K_2) + b \cdot N_1 \cdot N_2
+\end{align}
+
+These capture logistic growth, carrying capacity, and interspecies interactions. However, they lack explicit energy constraints and assume continuous reproduction/death rather than discrete composition events.
+
+\subsubsection{Energy Budget Models}
+
+Dynamic Energy Budget (DEB) theory \cite{kooijman2000,brown2004} tracks energy acquisition, allocation, and dissipation:
+
+$$\frac{dE}{dt} = I(t) - M \cdot E - R(E)$$
+
+where $I(t)$ is intake, $M$ is maintenance cost, $R(E)$ is reproductive investment. These provide mechanistic foundations but typically focus on individual-level metabolism rather than population-level emergence.
+
+\subsubsection{Coupled Oscillator Systems}
+
+Synchronization phenomena in networks of oscillators \cite{kuramoto1975,strogatz2000}:
+
+$$\frac{d\theta_i}{dt} = \omega_i + \frac{K}{N} \sum_j \sin(\theta_j - \theta_i)$$
+
+These describe phase coherence, critical transitions to collective behavior, and order parameters. Relevant to NRM resonance dynamics but don't incorporate population birth/death or energy flow.
+
+\subsubsection{Reaction-Diffusion Systems}
+
+Pattern formation through activator-inhibitor mechanisms \cite{turing1952,murray2003}:
+
+\begin{align}
+\frac{\partial u}{\partial t} &= D_u \nabla^2 u + f(u,v) \\
+\frac{\partial v}{\partial t} &= D_v \nabla^2 v + g(u,v)
+\end{align}
+
+These generate spatial patterns (stripes, spots) from homogeneous initial conditions. Relevant to NRM composition clustering but don't address temporal population dynamics.
+
+\subsubsection{NRM Synthesis Required}
+
+NRM systems combine elements from all these frameworks:
+
+\begin{itemize}
+  \item \textbf{Energy budgets:} Agents have finite energy, recharge rates, spawn thresholds
+  \item \textbf{Population dynamics:} Birth (composition) and death (decomposition) processes
+  \item \textbf{Resonance:} Phase-coherent oscillators drive composition event timing
+  \item \textbf{Emergence:} Local agent interactions produce system-level attractors
+\end{itemize}
+
+No existing framework integrates these components. We propose a \textbf{hybrid dynamical system} that couples energy conservation, population balance, resonance evolution, and phase dynamics.
+
+\subsection{Research Questions}
+
+This work addresses four central questions:
+
+\textbf{RQ1: Can NRM population dynamics be formalized as a tractable dynamical system?}
+
+Given the complexity of nested fractal agents, composition-decomposition cycles, and transcendental driving forces, is it possible to derive a low-dimensional ODE system that captures essential dynamics? Or does irreducibility prevent analytical tractability?
+
+\textbf{RQ2: What are the minimal parameters required to reproduce empirical steady-state populations?}
+
+C171 data shows $N^* \approx 17$-20 agents across frequencies. What energy recharge rates ($r$), carrying capacities ($K$), composition rates ($\lambda$), and decomposition rates ($\mu$) are necessary to match observations? Can parameter estimation reveal hidden constraints?
+
+\textbf{RQ3: Do physical constraints (non-negativity, boundedness) critically affect model behavior?}
+
+Energy, population, and resonance must remain non-negative and physically bounded. How sensitive are fitted models to constraint enforcement? Can unphysical behavior (negative populations) signal missing model components?
+
+\textbf{RQ4: What mechanisms explain the gap between steady-state predictions and frequency-dependent variance?}
+
+If a model reproduces mean populations but fails to capture frequency sensitivity, what functional forms are missing? Does this require full temporal dynamics rather than equilibrium approximations?
+
+\subsection{Contributions}
+
+This paper makes four primary contributions:
+
+\textbf{1. First Mathematical Formalization of NRM Governing Equations}
+
+We derive a 4D coupled nonlinear ODE system describing:
+
+\begin{itemize}
+  \item \textbf{Energy dynamics:} Total system energy with recharge, maintenance costs, composition costs
+  \item \textbf{Population dynamics:} Birth-death balance gated by energy availability and resonance strength
+  \item \textbf{Resonance dynamics:} Phase-locking between external forcing and internal agent oscillations
+  \item \textbf{Phase evolution:} Feedback from population size to collective oscillation frequency
+\end{itemize}
+
+This provides the first analytical framework for NRM systems, enabling theoretical predictions and mechanistic understanding beyond computational experiments.
+
+\textbf{2. Physical Constraint-Based Model Refinement Methodology}
+
+We demonstrate that unphysical behavior (negative populations in V1 model) signals critical gaps in parameter bounds and threshold functions. By enforcing:
+
+\begin{itemize}
+  \item $N \geq 1$ (minimum population)
+  \item $E \geq 0$ (energy non-negativity)
+  \item $0 \leq \phi \leq 1$ (bounded resonance)
+  \item Smooth sigmoid thresholds (vs hard cutoffs)
+  \item Tight parameter bounds (physically motivated)
+\end{itemize}
+
+We achieve 98-point improvement in $R^2$ (from $-98.12$ to $-0.17$) and eliminate unphysical dynamics. This \textbf{iterative refinement pattern} (unconstrained → identify failures → add constraints → dramatic improvement) provides a template for dynamical systems modeling.
+
+\textbf{3. Global Optimization for Complex Parameter Spaces}
+
+Standard local optimization (scipy.minimize) becomes trapped in poor minima for 10-parameter coupled systems. We show that \textbf{global search} (differential\_evolution) with physically motivated bounds enables:
+
+\begin{itemize}
+  \item Successful convergence (all 10 parameters within physical limits)
+  \item Excellent error metrics (RMSE=1.90, MAE=1.47 agents)
+  \item Stable integration (no numerical blow-ups)
+\end{itemize}
+
+This validates global optimization as essential for multi-parameter nonlinear systems with complex loss landscapes.
+
+\textbf{4. Identification of Steady-State Limitations}
+
+Despite excellent error metrics (RMSE$<$2 agents), $R^2$ remaining negative ($-0.17$) reveals that \textbf{steady-state approximations fail to capture frequency-dependent variance}. The model predicts $N \approx 18$ (nearly constant), while empirical data shows frequency sensitivity.
+
+This finding motivates \textbf{symbolic regression} (discovering functional forms from time-series) rather than imposing equilibrium assumptions. Future Phase 2 work will extract full temporal trajectories and use SINDy (Sparse Identification of Nonlinear Dynamics) to discover equations directly from data.
+
+\subsection{Roadmap}
+
+\textbf{Section 2 (Methods)} describes the 4D ODE system formulation, parameter constraints, steady-state approximation, fitting procedures (global optimization), and validation metrics.
+
+\textbf{Section 3 (Results)} presents V1 unconstrained model failures ($R^2=-98$, negative populations), V2 constrained model improvements ($R^2=-0.17$, excellent error metrics), fitted parameter values, and integration tests.
+
+\textbf{Section 4 (Discussion)} interprets the 98-point $R^2$ improvement, analyzes remaining limitations (steady-state vs frequency-dependent), discusses the physical constraint refinement pattern, and outlines Phase 2 symbolic regression approach.
+
+\textbf{Section 5 (Conclusions)} synthesizes key findings and future directions for NRM mathematical formalization.
+
+% ============================================================================
+% 2. METHODS
+% ============================================================================
+
+\section{Methods}
+
+\subsection{NRM Dynamical System Formulation}
+
+We model NRM population dynamics as a 4-dimensional coupled nonlinear ODE system describing the evolution of:
+
+\begin{enumerate}
+  \item $E_{total}$ - Total energy in system (all agents combined)
+  \item $N$ - Population size (number of active agents)
+  \item $\phi$ - Resonance strength (phase coherence, 0-1 scale)
+  \item $\theta_{int}$ - Internal phase (collective oscillation state)
+\end{enumerate}
+
+\subsubsection{State Variables}
+
+\textbf{Total Energy ($E_{total}$):}
+Sum of individual agent energies across the population. Energy flows in (recharge from idle CPU, reality coupling) and out (maintenance costs, composition costs). Agents cannot spawn without sufficient energy (threshold $E_{spawn}$).
+
+\textbf{Population Size ($N$):}
+Number of currently active agents in the system. Increases through composition events (births) when energy and resonance conditions are met. Decreases through decomposition events (deaths) during composition bursts when agents are marked for removal.
+
+\textbf{Resonance Strength ($\phi$):}
+Measure of phase coherence between agents' internal oscillators and external transcendental forcing. Ranges from 0 (incoherent) to 1 (perfect phase-locking). Amplifies composition event probability when high.
+
+\textbf{Internal Phase ($\theta_{int}$):}
+Collective oscillation state of the agent population. Evolves with external forcing frequency ($\omega$) plus feedback term dependent on population size deviation from equilibrium.
+
+\subsubsection{Governing Equations}
+
+\textbf{Energy Dynamics:}
+
+$$\frac{dE_{total}}{dt} = N \cdot r(1 - \rho/K) + \alpha \cdot N \cdot R(t) - \beta \cdot N \cdot \rho - \gamma \cdot \lambda_c \cdot \rho$$
+
+Where:
+\begin{itemize}
+  \item $\rho = E_{total}/N$ (energy density per agent)
+  \item $r$: recharge rate (energy recovery per agent per cycle)
+  \item $K$: carrying capacity (maximum sustainable energy per agent)
+  \item $\alpha$: reality coupling strength (external energy influx from system metrics)
+  \item $R(t)$: reality forcing function (CPU availability, system load)
+  \item $\beta$: maintenance cost coefficient (energy decay per agent)
+  \item $\gamma$: composition cost coefficient (energy lost during agent births)
+  \item $\lambda_c$: composition rate (frequency of birth events)
+\end{itemize}
+
+\textbf{Energy balance} incorporates four terms:
+\begin{enumerate}
+  \item \textbf{Recharge:} $N \cdot r(1 - \rho/K)$ - Logistic growth toward carrying capacity
+  \item \textbf{Reality Coupling:} $\alpha \cdot N \cdot R(t)$ - Energy input from computational environment
+  \item \textbf{Maintenance:} $-\beta \cdot N \cdot \rho$ - Dissipation proportional to population and energy density
+  \item \textbf{Composition Cost:} $-\gamma \cdot \lambda_c \cdot \rho$ - Energy spent creating new agents
+\end{enumerate}
+
+\textbf{Population Dynamics:}
+
+$$\frac{dN}{dt} = \lambda_c(\rho, \phi) - \lambda_d(N)$$
+
+Where:
+\begin{itemize}
+  \item $\lambda_c$: composition rate (births), function of energy density and resonance
+  \item $\lambda_d$: decomposition rate (deaths), function of population size
+\end{itemize}
+
+\textbf{Birth-death balance:} Population grows when composition exceeds decomposition, shrinks when deaths dominate. Composition is gated by \textbf{energy availability} ($\rho$) and \textbf{resonance strength} ($\phi$). Decomposition increases with crowding (density-dependent mortality).
+
+\textbf{Composition Rate:}
+
+$$\lambda_c(\rho, \phi) = \lambda_0 \cdot g(\rho) \cdot h(\phi)$$
+
+Where:
+\begin{itemize}
+  \item $\lambda_0$: base composition rate (maximum birth frequency)
+  \item $g(\rho)$: energy gating function (threshold + saturation)
+  \item $h(\phi)$: resonance amplification function (power law)
+\end{itemize}
+
+\textbf{Energy Gating Function (V2 Constrained Model):}
+
+$$g(\rho) = \frac{1}{1 + \exp(-k \cdot (\rho - \rho_{thresh}))}$$
+
+Smooth sigmoid threshold centered at $\rho_{thresh}$ (energy density required for spawning). Steepness controlled by $k$. Replaces V1 hard cutoff: $\max(0, (\rho - \rho_{thresh})/K)$.
+
+\textbf{Resonance Amplification Function:}
+
+$$h(\phi) = \phi^n$$
+
+Power-law relationship between resonance strength and composition probability. Empirical fits suggest $n \approx 2$ (quadratic amplification).
+
+\textbf{Decomposition Rate:}
+
+$$\lambda_d(N) = \mu_0 \cdot (1 + \sigma \cdot (N/N_{max})^2)$$
+
+Where:
+\begin{itemize}
+  \item $\mu_0$: base decomposition rate
+  \item $\sigma$: crowding coefficient (strength of density dependence)
+  \item $N_{max}$: reference population for normalization
+\end{itemize}
+
+\textbf{Density-dependent mortality:} Death rate increases quadratically with population density, representing resource competition, compositional stress, and architectural bottlenecks.
+
+\textbf{Resonance Dynamics:}
+
+$$\frac{d\phi}{dt} = \omega \cdot \sin(\theta_{ext} - \theta_{int}) - \kappa \cdot \phi$$
+
+Where:
+\begin{itemize}
+  \item $\omega$: forcing frequency (transcendental oscillator drive)
+  \item $\theta_{ext}$: external phase $= \omega \cdot t$ (sinusoidal forcing)
+  \item $\kappa$: resonance damping coefficient
+\end{itemize}
+
+\textbf{Phase-locking dynamics:} Resonance grows when internal and external phases align ($\sin(\theta_{ext} - \theta_{int}) > 0$), decays due to damping. At equilibrium, forcing and damping balance, determining steady-state coherence.
+
+\textbf{Phase Evolution:}
+
+$$\frac{d\theta_{int}}{dt} = \omega + \delta\omega \cdot (N - N_{eq})$$
+
+Where:
+\begin{itemize}
+  \item $\omega$: external forcing frequency (baseline)
+  \item $\delta\omega$: frequency shift coefficient
+  \item $N_{eq}$: equilibrium population size
+\end{itemize}
+
+\textbf{Population feedback:} Internal oscillation frequency shifts based on population deviation from equilibrium. Larger populations oscillate faster (positive feedback), smaller populations slower (negative feedback).
+
+\subsubsection{Parameter Summary}
+
+The model contains \textbf{10 parameters}:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+Parameter & Symbol & Description & Units & Physical Range \\
+\midrule
+Recharge rate & $r$ & Energy recovery per agent & energy/cycle & [0.001, 0.2] \\
+Carrying capacity & $K$ & Max energy per agent & energy & [10, 200] \\
+Reality coupling & $\alpha$ & External energy influx & - & [0.0001, 0.5] \\
+Maintenance cost & $\beta$ & Energy decay per agent & $1$/cycle & [0.001, 0.1] \\
+Composition cost & $\gamma$ & Energy lost per birth & - & [0.01, 1.0] \\
+Base composition rate & $\lambda_0$ & Max birth frequency & agents/cycle & [0.1, 5.0] \\
+Base decomposition rate & $\mu_0$ & Min death frequency & agents/cycle & [0.1, 2.0] \\
+Crowding coefficient & $\sigma$ & Density-dependent death & - & [0.01, 0.5] \\
+Forcing frequency & $\omega$ & Oscillator drive & rad/cycle & [2.0, 3.0] \\
+Resonance damping & $\kappa$ & Phase decay rate & $1$/cycle & [0.05, 0.2] \\
+\bottomrule
+\end{tabular}
+\caption{NRM Dynamical System Parameters. Physical bounds (V2 model) constrain parameters to realistic ranges based on empirical observations and energy budget considerations.}
+\label{tab:parameters}
+\end{table}
+
+\subsection{Steady-State Analysis}
+
+\subsubsection{Equilibrium Conditions}
+
+At steady state, all time derivatives vanish:
+
+\begin{align}
+\frac{dE_{total}}{dt} &= 0 \\
+\frac{dN}{dt} &= 0 \\
+\frac{d\phi}{dt} &= 0 \\
+\frac{d\theta_{int}}{dt} &= 0
+\end{align}
+
+\textbf{Energy balance at equilibrium:}
+
+$$N \cdot r(1 - \rho^*/K) + \alpha \cdot N \cdot R_{mean} - \beta \cdot N \cdot \rho^* - \gamma \cdot \lambda_c^* \cdot \rho^* = 0$$
+
+Solving for steady-state energy density $\rho^*$:
+
+$$\rho^* = \frac{r + \alpha \cdot R_{mean}}{\beta + \gamma \cdot \lambda_c^*/K}$$
+
+\textbf{Population balance at equilibrium:}
+
+$$\lambda_c(\rho^*, \phi^*) = \lambda_d(N^*)$$
+
+Birth rate equals death rate. Combined with energy density solution, this determines steady-state population $N^*$.
+
+\textbf{Simplified Steady-State Population (V2 Model):}
+
+Given empirical observations from C171:
+\begin{itemize}
+  \item $N^* \approx 17$-20 agents (fairly constant across frequencies 2.0-3.0\%)
+  \item Weak frequency dependence ($<$5\% variance)
+  \item Scale invariance (population-independent patterns)
+\end{itemize}
+
+We use a \textbf{simplified predictor} for initial fitting that captures the \textbf{approximate constancy} of steady-state populations while allowing weak frequency modulation. More sophisticated models will incorporate full temporal dynamics (Phase 2).
+
+\subsection{Parameter Estimation}
+
+\subsubsection{Data Sources}
+
+\textbf{Training Data:} 150 experiments from C171 and C175
+\begin{itemize}
+  \item \textbf{C171:} 40 experiments (4 frequencies $\times$ 10 seeds, $f \in \{2.0, 2.5, 2.6, 3.0\}\%$)
+  \item \textbf{C175:} 110 experiments (11 frequencies $\times$ 10 seeds, $f \in [1.0, 3.5]\%$)
+\end{itemize}
+
+\textbf{Extracted Features:}
+\begin{itemize}
+  \item final\_agent\_count: Population size at experiment end (cycle 3000)
+  \item avg\_composition\_events: Mean births per 100-cycle window
+  \item spawn\_count: Total births throughout experiment
+  \item frequency: Forcing frequency (control parameter)
+\end{itemize}
+
+\textbf{Validation Strategy:} Fit to steady-state populations (final\_agent\_count), validate against composition event rates as consistency check.
+
+\subsubsection{Objective Function}
+
+\textbf{Minimize sum of squared errors} between predicted and observed steady-state populations. Steady-state population is the most robust measurement (converged after 3000 cycles) and least sensitive to transient dynamics. Composition event rates are more variable and depend on temporal details.
+
+\subsubsection{Optimization Method (V2 Model)}
+
+\textbf{Global Optimization: Differential Evolution}
+
+Given 10-parameter space with complex loss landscape, local optimization (scipy.minimize) becomes trapped in poor minima. We use \textbf{differential\_evolution} for global search - a genetic algorithm that maintains a population of candidate solutions, applies mutation and crossover operators, and evolves toward global optimum. More robust than gradient-based methods for non-convex landscapes.
+
+\textbf{Hyperparameters:}
+\begin{itemize}
+  \item Population size: $15 \times$ dimensionality = 120 candidates
+  \item Generations: maxiter=100
+  \item Mutation factor: 0.5-1.0 (adaptive)
+  \item Crossover probability: 0.7 (70\% gene mixing)
+\end{itemize}
+
+\textbf{Fixed Parameters:} $\omega$ (forcing frequency) and $\kappa$ (resonance damping) set to nominal values (2.5, 0.1) and not optimized due to computational cost.
+
+\subsubsection{Physical Constraint Enforcement (V2 Model)}
+
+\textbf{Non-Negativity Constraints:} Energy, population, and resonance constrained during ODE integration:
+\begin{itemize}
+  \item $N = \max(1.0, N)$ (Minimum population)
+  \item $E_{total} = \max(0.0, E_{total})$ (Energy non-negative)
+  \item $\phi = \text{clip}(\phi, 0.0, 1.0)$ (Resonance $[0, 1]$)
+\end{itemize}
+
+\textbf{Population Floor:} Prevent negative populations by freezing $dN/dt$ when $N$ reaches minimum (if $N \leq 1.0$ and $\lambda_c < \lambda_d$, then $dN/dt = 0$).
+
+\textbf{Rationale:} Physical systems cannot exhibit negative populations, infinite energy, or unbounded resonance. Enforcing these constraints during integration prevents numerical blow-ups and guides parameter estimation toward realistic regimes.
+
+\subsection{Model Validation}
+
+\subsubsection{Goodness-of-Fit Metrics}
+
+\textbf{Root Mean Square Error (RMSE):}
+$$RMSE = \sqrt{\text{mean}((N_{pred} - N_{obs})^2)}$$
+Measures average prediction error in units of agent count. Lower is better.
+
+\textbf{Mean Absolute Error (MAE):}
+$$MAE = \text{mean}(|N_{pred} - N_{obs}|)$$
+Robust to outliers, interpretable in agent units.
+
+\textbf{Coefficient of Determination ($R^2$):}
+$$R^2 = 1 - \frac{SS_{res}}{SS_{tot}}$$
+
+Where:
+\begin{itemize}
+  \item $SS_{res} = \sum(N_{obs} - N_{pred})^2$ (residual sum of squares)
+  \item $SS_{tot} = \sum(N_{obs} - \text{mean}(N_{obs}))^2$ (total sum of squares)
+\end{itemize}
+
+\textbf{Interpretation:}
+\begin{itemize}
+  \item $R^2 = 1$: Perfect fit (all variance explained)
+  \item $R^2 = 0$: Model no better than predicting mean
+  \item $R^2 < 0$: Model worse than predicting mean (possible for non-linear fits)
+\end{itemize}
+
+\textbf{Note on Negative $R^2$:} When $SS_{res} > SS_{tot}$, $R^2$ becomes negative. This indicates predictions are farther from observations than the constant mean. For NRM, this occurs when model predicts nearly constant $N \approx 18$ but data shows frequency-dependent variance.
+
+\subsubsection{Integration Tests}
+
+\textbf{Numerical Stability:} Test ODE integration over long time spans (1000 cycles) with varying initial conditions.
+
+\textbf{Checks:}
+\begin{itemize}
+  \item No NaN or Inf values in solution
+  \item $N$ remains in $[1.0, N_{max}]$ (constraint enforcement works)
+  \item $E_{total}$ remains non-negative (energy conservation respected)
+  \item $\phi$ remains in $[0.0, 1.0]$ (resonance bounded)
+\end{itemize}
+
+\textbf{Physical Realism:}
+\begin{itemize}
+  \item Population doesn't explode to infinity
+  \item Energy doesn't deplete to zero instantly
+  \item Resonance evolves smoothly (no discontinuous jumps)
+\end{itemize}
+
+% ============================================================================
+% 3. RESULTS
+% ============================================================================
+
+\section{Results}
+
+\subsection{V1 Model: Unconstrained Formulation}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{V2 Model: Constrained Formulation}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{V1 vs V2 Comparison}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Remaining Model Limitations}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Phase 3: V4 Bifurcation Analysis and Regime Boundaries}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Phase 4: Stochastic Robustness and Variance Analysis}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Phase 5: Timescale Quantification and Eigenvalue Analysis}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Phase 6: Stochastic V4 with Demographic Noise}
+
+% Placeholder - to be filled from source manuscript
+
+% ============================================================================
+% 4. DISCUSSION
+% ============================================================================
+
+\section{Discussion}
+
+\subsection{Physical Constraints as Model Refinement Tool}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Steady-State Limitations and Frequency Dependence}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Global Optimization for Multi-Parameter Systems}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Sigmoid Thresholds vs Hard Cutoffs}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Next Steps: Symbolic Regression (Phase 2)}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Bifurcation Analysis and Parameter Space Structure (Phase 3)}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Multi-Timescale Dynamics and Measurement Windows (Phases 4-5)}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Demographic Noise and Persistent Variance (Phase 6)}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Integrated Framework: Six Phases of Model Development}
+
+% Placeholder - to be filled from source manuscript
+
+\subsection{Limitations}
+
+% Placeholder - to be filled from source manuscript
+
+% ============================================================================
+% 5. CONCLUSIONS
+% ============================================================================
+
+\section{Conclusions}
+
+% Placeholder - to be filled from source manuscript
+
+% ============================================================================
+% REFERENCES
+% ============================================================================
+
+\begin{thebibliography}{99}
+
+\bibitem{kauffman1993}
+Kauffman SA. \textit{The Origins of Order: Self-Organization and Selection in Evolution}. Oxford University Press; 1993.
+
+\bibitem{prigogine1984}
+Prigogine I, Stengers I. \textit{Order Out of Chaos: Man's New Dialogue with Nature}. Bantam Books; 1984.
+
+\bibitem{payopay2025nrm}
+Payopay A, Claude. Nested Resonance Memory: A framework for emergent complexity in multi-agent systems. \textit{arXiv preprint}. 2025. (In preparation)
+
+\bibitem{kooijman2000}
+Kooijman SALM. \textit{Dynamic Energy Budget Theory for Metabolic Organisation}. Cambridge University Press; 2000.
+
+\bibitem{brown2004}
+Brown JH, Gillooly JF, Allen AP, Savage VM, West GB. Toward a metabolic theory of ecology. \textit{Ecology}. 2004;85(7):1771-1789.
+
+\bibitem{kuramoto1975}
+Kuramoto Y. Self-entrainment of a population of coupled non-linear oscillators. In: \textit{International Symposium on Mathematical Problems in Theoretical Physics}. Springer; 1975. p. 420-422.
+
+\bibitem{strogatz2000}
+Strogatz SH. From Kuramoto to Crawford: exploring the onset of synchronization in populations of coupled oscillators. \textit{Physica D}. 2000;143(1-4):1-20.
+
+\bibitem{turing1952}
+Turing AM. The chemical basis of morphogenesis. \textit{Philosophical Transactions of the Royal Society of London B}. 1952;237(641):37-72.
+
+\bibitem{murray2003}
+Murray JD. \textit{Mathematical Biology II: Spatial Models and Biomedical Applications}. 3rd ed. Springer; 2003.
+
+% Additional references to be added during conversion
+
+\end{thebibliography}
+
+% ============================================================================
+% SUPPLEMENTARY MATERIALS
+% ============================================================================
+
+% \section*{Supplementary Materials}
+% (Optional - can be separate file)
+
+% ============================================================================
+% AUTHOR CONTRIBUTIONS
+% ============================================================================
+
+\section*{Author Contributions}
+
+Aldrin Payopay: Conceptualization, methodology, software, formal analysis, investigation, writing (original draft), writing (review \& editing), visualization, project administration.
+
+Claude (DUALITY-ZERO-V2 Sonnet 4.5): Methodology, software, formal analysis, investigation, writing (original draft), writing (review \& editing), visualization.
+
+% ============================================================================
+% ACKNOWLEDGMENTS
+% ============================================================================
+
+\section*{Acknowledgments}
+
+This work was conducted as part of the DUALITY-ZERO autonomous research initiative. We thank the open-source scientific Python community (NumPy, SciPy, Matplotlib) for essential computational tools.
+
+\end{document}
