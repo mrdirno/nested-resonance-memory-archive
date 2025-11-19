@@ -2,9 +2,11 @@
 ## Section 3.2: Hierarchical Energy Dynamics - Results (C186 V1-V5)
 
 **Author:** Aldrin Payopay <aldrin.gdf@gmail.com>
-**Date:** 2025-11-09 (Cycle 1336-1338, corrected from 2025-11-08 version)
+**Date:** 2025-11-18 (Cycle 1404, updated with V6a/b/c findings)
 **Experiments:** C186 V1-V5 (50 experiments complete, 100% Basin A)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
+
+**UPDATE NOTE:** This section is being updated to incorporate major new findings from the C186 V6a, V6b, and V6c experimental campaigns, which revealed the Three-Regime Framework and regime-dependent spawn dynamics.
 
 **CORRECTION NOTE:** This version corrects systematic errors in the original manuscript regarding hierarchical advantage coefficient α. Original claimed α < 0.5 when actual data shows α = 607.1, a factor of 1,200× understatement of the hierarchical advantage.
 
@@ -501,8 +503,46 @@ This transforms qualitative resilience theory into quantitatively testable predi
 
 ---
 
+## 3.2.10 Major Discovery (C186 V6a, V6b, V6c): The Three-Regime Framework
+
+Subsequent to the initial V1-V5 analysis, a comprehensive investigation into the ultra-low frequency domain was conducted through the V6a, V6b, and V6c campaigns. These campaigns systematically explored the impact of the net energy balance, leading to the discovery of a **Three-Regime Framework** that governs the system's behavior.
+
+### Experimental Design (V6a, V6b, V6c)
+
+The three campaigns consisted of 50 experiments each, varying the spawn frequency across five levels (0.10%, 0.25%, 0.50%, 0.75%, 1.00%) with 10 seeds per level. The key distinction between the campaigns was the net energy balance, controlled by the `E_consume` parameter:
+
+| Campaign | Net Energy | `E_consume` | `E_recharge` | Predicted Outcome |
+|:---|:---|:---|:---|:---|
+| **V6c** | **-0.5** | 1.5 | 1.0 | **Collapse** |
+| **V6a** | **0.0** | 1.0 | 1.0 | **Homeostasis** |
+| **V6b** | **+0.5** | 0.5 | 1.0 | **Growth** |
+
+### Three-Regime Framework Validation
+
+The experimental results provided a stunning validation of the energy balance theory, revealing three distinct and predictable regimes of system behavior:
+
+| Regime | Net Energy | Final Population | Key Observation |
+|:---|:---|:---|:---|
+| **Collapse (V6c)** | -0.5 | 0 | 100% of experiments resulted in population collapse. |
+| **Homeostasis (V6a)**| 0.0 | ~200 | Population stabilized around a consistent carrying capacity. |
+| **Growth (V6b)** | +0.5 | ~19,920 | Population grew exponentially until hitting the system's energy cap. |
+
+This demonstrates that the net energy balance is the primary determinant of the system's macro-state, switching it between guaranteed collapse, stable homeostasis, and unbounded growth.
+
+### Novel Discovery: Regime-Dependent Spawn Dynamics
+
+The most significant finding from this series was the discovery of **regime-dependent spawn dynamics**. The influence of the `f_intra` (spawn frequency) parameter was found to be conditional on the system's energy regime:
+
+- **Collapse & Homeostasis Regimes (V6c, V6a):** In net-negative and net-zero energy regimes, the spawn frequency had **no statistically significant effect** on the final population outcome. All populations in V6c collapsed, and all in V6a reached the same carrying capacity, regardless of spawn rate.
+
+- **Growth Regime (V6b):** In the net-positive energy regime, the spawn frequency was **highly significant (p < 0.001)**. Higher spawn rates led to faster and larger population growth.
+
+This discovery of **conditional parameter activation**, where the energy regime acts as a switch, turning the influence of the spawn rate "on" or "off," represents a fundamental insight into the nonlinear dynamics of the NRM system. It challenges the assumption of uniform parameter influence and highlights the primacy of energy balance in shaping the system's evolutionary trajectory.
+
+---
+
 **Author:** Aldrin Payopay <aldrin.gdf@gmail.com>
-**Date:** 2025-11-09 (Cycle 1338, corrected version)
+**Date:** 2025-11-18 (Cycle 1404, updated with V6a/b/c findings)
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
 
@@ -510,4 +550,4 @@ This transforms qualitative resilience theory into quantitatively testable predi
 
 ---
 
-**END OF SECTION 3.2 (CORRECTED VERSION)**
+**END OF SECTION 3.2 (CORRECTED AND EXTENDED VERSION)**
