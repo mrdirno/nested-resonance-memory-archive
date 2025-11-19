@@ -36,7 +36,21 @@ export GEMINI_API_KEY="AIzaSyAusVDqRZs1YSGaNCjM-WcgPXsSrzv8S6w"
 
 ## How to Use
 
-### Quick Launch
+### Quick Launch (Alias - Simplest Method)
+
+**Just type this from anywhere:**
+```bash
+meta-orchestrate          # Interactive selection
+meta-orchestrate claude   # Launch Claude directly
+meta-orchestrate gemini   # Launch Gemini directly
+```
+
+The alias is automatically loaded via `~/.zshrc` → `shell_aliases.sh`. If it doesn't work, reload your shell:
+```bash
+source ~/.zshrc
+```
+
+### Alternative: Full Path Method
 
 **Interactive selection:**
 ```bash
@@ -50,11 +64,12 @@ cd /Volumes/dual/DUALITY-ZERO-V2/automation
 ./launch_ai.sh gemini   # Launch Gemini
 ```
 
-### Python script:
+### Alternative: Python Script
+
 ```bash
-python3 meta_orchestrate.py --ai claude
-python3 meta_orchestrate.py --ai gemini
-python3 meta_orchestrate.py --ai auto
+python3 /Volumes/dual/DUALITY-ZERO-V2/automation/meta_orchestrate.py --ai claude
+python3 /Volumes/dual/DUALITY-ZERO-V2/automation/meta_orchestrate.py --ai gemini
+python3 /Volumes/dual/DUALITY-ZERO-V2/automation/meta_orchestrate.py --ai auto
 ```
 
 ---
