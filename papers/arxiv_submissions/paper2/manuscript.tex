@@ -51,7 +51,7 @@
 
 \textbf{1. Energy-Regulated Homeostasis (C171):} Multi-agent populations achieve stable homeostasis ($17.4 \pm 1.2$ agents over 3000 cycles, CV=6.8\%) without explicit agent removal, using energy-constrained spawning alone for regulation.
 
-\textbf{2. Timescale-Dependent Constraint Manifestation (C176):} Spawn success exhibits non-monotonic pattern across timescales: 100\% (100 cycles) → $88.0\% \pm 2.5\%$ (1000 cycles) → 23.0\% (3000 cycles). We identified a spawns-per-agent threshold model ($< 2.0$ spawns/agent → 70-100\% success, 2.0-4.0 → transition, $> 4.0$ → 20-40\% success) validated across two orders of magnitude experimental duration.
+\textbf{2. Timescale-Dependent Constraint Manifestation (C176):} Spawn success exhibits non-monotonic pattern across timescales: 100\% (100 cycles) $\rightarrow$ $88.0\% \pm 2.5\%$ (1000 cycles) $\rightarrow$ 23.0\% (3000 cycles). We identified a spawns-per-agent threshold model ($< 2.0$ spawns/agent $\rightarrow$ 70-100\% success, 2.0-4.0 $\rightarrow$ transition, $> 4.0$ $\rightarrow$ 20-40\% success) validated across two orders of magnitude experimental duration.
 
 \textbf{3. Population Size Independence (C193):} Collapse boundary is N-independent across $N=5$-20 agents (0/1,200 collapses observed). Small populations ($N=5$) as viable as large populations ($N=20$), contradicting buffer hypothesis. Finding explained by E\_CONSUME=0 energy model being fundamentally non-collapsible.
 
@@ -63,7 +63,7 @@
 
 Energy balance theory validated with \textbf{100\% prediction accuracy} (4/4 conditions exact match). Collapse independent of spawn frequency, population size, and mechanism variance—net energy determines fate completely.
 
-\textbf{Conclusions:} Energy-constrained spawning is sufficient for population homeostasis in NRM systems when net energy $\geq$ 0. Energy constraints are timescale-dependent, not system-invariant: intermediate timescales (1000 cycles) show near-maximum spawn success (88\%) via population-mediated energy recovery before cumulative depletion dominates at extended timescales. The sharp binary phase transition (0\% → 100\% collapse at E\_CONSUME = RECHARGE\_RATE) reflects a fundamental thermodynamic constraint: systems with net negative energy cannot sustain populations regardless of interventions (spawning, redundancy, variance reduction). Collapse boundary is N-independent because energy dynamics are per-agent, not population-level. This demonstrates \textbf{Self-Giving Systems} principles—populations modify constraint landscapes through distributed energy pooling (output → mechanism → phase space alteration). Total evidence: 10,948 experiments across 4 campaigns (C171 $n=40$, C176 $n=8$, C193 $n=1,200$, C194 $n=3,600$).
+\textbf{Conclusions:} Energy-constrained spawning is sufficient for population homeostasis in NRM systems when net energy $\geq$ 0. Energy constraints are timescale-dependent, not system-invariant: intermediate timescales (1000 cycles) show near-maximum spawn success (88\%) via population-mediated energy recovery before cumulative depletion dominates at extended timescales. The sharp binary phase transition (0\% $\rightarrow$ 100\% collapse at E\_CONSUME = RECHARGE\_RATE) reflects a fundamental thermodynamic constraint: systems with net negative energy cannot sustain populations regardless of interventions (spawning, redundancy, variance reduction). Collapse boundary is N-independent because energy dynamics are per-agent, not population-level. This demonstrates \textbf{Self-Giving Systems} principles—populations modify constraint landscapes through distributed energy pooling (output $\rightarrow$ mechanism $\rightarrow$ phase space alteration). Total evidence: 10,948 experiments across 4 campaigns (C171 $n=40$, C176 $n=8$, C193 $n=1,200$, C194 $n=3,600$).
 
 \textbf{Keywords:} self-organizing systems, energy constraints, population dynamics, nested resonance memory, fractal agents, energy-regulated homeostasis, timescale dependency, phase transitions, energy balance theory
 
@@ -403,7 +403,7 @@ Population grew from single root agent ($N=1$ at cycle 0) and stabilized around 
 
 \textbf{Regulatory Mechanism:} When composition events deplete parent energy below spawn threshold ($E < 10$), subsequent \texttt{spawn\_child()} attempts fail, naturally limiting population growth. Failed spawn attempts, emerging from energy depletion through compositional events, create homeostatic regulation \textbf{without requiring explicit agent removal mechanisms}.
 
-\textbf{Energy Depletion Dynamics:} Population stabilization reflects the interplay between: (1) energy transfer through generations (Root $E_0=130$ → Gen 1 $E\approx$30-40 → Gen 2 $E\approx$9-12), (2) spawn capacity degradation (Root 7-8 spawns → Gen 1 2-3 spawns/agent → Gen 2 0-1 spawns/agent), (3) cumulative compositional load, and (4) population ceiling ($\sim$17.4 agents represents balance between spawn capacity and energy regeneration).
+\textbf{Energy Depletion Dynamics:} Population stabilization reflects the interplay between: (1) energy transfer through generations (Root $E_0=130$ $\rightarrow$ Gen 1 $E\approx$30-40 $\rightarrow$ Gen 2 $E\approx$9-12), (2) spawn capacity degradation (Root 7-8 spawns $\rightarrow$ Gen 1 2-3 spawns/agent $\rightarrow$ Gen 2 0-1 spawns/agent), (3) cumulative compositional load, and (4) population ceiling ($\sim$17.4 agents represents balance between spawn capacity and energy regeneration).
 
 \textbf{Significance:} Demonstrates that energy-constrained spawning is \textbf{sufficient} for population homeostasis in NRM systems. Failed reproductive attempts, emerging naturally from energy depletion, create regulation without programmed removal logic.
 
@@ -426,7 +426,7 @@ Mean spawn success rate: 100.0\% (3/3 attempts), Mean final population: $4.0 \pm
   \item Mean spawns per agent: $2.08 \pm 0.06$ (Range: 2.00-2.17)
 \end{itemize}
 
-\textbf{Four-Phase Non-Monotonic Trajectory:} Phase 1 (0-250 cycles): Initial growth → 71.4-100\% success, 6-8 agents; Phase 2 (250-500 cycles): Transition → 76.9-84.6\% success, 11-12 agents; Phase 3 (500-750 cycles): Stabilization → 78.9-89.5\% success, 16-18 agents; Phase 4 (750-1000 cycles): \textbf{Recovery} → 84.0-92.0\% success, 22-24 agents.
+\textbf{Four-Phase Non-Monotonic Trajectory:} Phase 1 (0-250 cycles): Initial growth $\rightarrow$ 71.4-100\% success, 6-8 agents; Phase 2 (250-500 cycles): Transition $\rightarrow$ 76.9-84.6\% success, 11-12 agents; Phase 3 (500-750 cycles): Stabilization $\rightarrow$ 78.9-89.5\% success, 16-18 agents; Phase 4 (750-1000 cycles): \textbf{Recovery} $\rightarrow$ 84.0-92.0\% success, 22-24 agents.
 
 \textbf{Key Finding:} Spawn success at 1000 cycles (88.0\%) \textbf{exceeds} predictions, indicating that population-mediated energy recovery is more effective than theoretical models anticipated.
 
@@ -436,9 +436,9 @@ C171 Results: Mean spawn success rate: 23.0\%, Mean final population: 17.4 agent
 
 \textbf{Multi-Scale Pattern:}
 
-The timescale dependency is \textbf{not monotonic}. Spawn success does not decrease linearly: 100 → 1000 cycles: -12\% decrease (100\% → 88\%), 1000 → 3000 cycles: -65\% decrease (88\% → 23\%). This non-linearity indicates \textbf{distinct mechanistic regimes}: (1) Short timescales (<100 cycles): Energy constraint invisible, (2) Intermediate timescales (100-1000 cycles): Population-mediated recovery dominates cumulative depletion, (3) Long timescales (>1000 cycles): Cumulative depletion overwhelms recovery mechanisms.
+The timescale dependency is \textbf{not monotonic}. Spawn success does not decrease linearly: 100 $\rightarrow$ 1000 cycles: -12\% decrease (100\% $\rightarrow$ 88\%), 1000 $\rightarrow$ 3000 cycles: -65\% decrease (88\% $\rightarrow$ 23\%). This non-linearity indicates \textbf{distinct mechanistic regimes}: (1) Short timescales (<100 cycles): Energy constraint invisible, (2) Intermediate timescales (100-1000 cycles): Population-mediated recovery dominates cumulative depletion, (3) Long timescales (>1000 cycles): Cumulative depletion overwhelms recovery mechanisms.
 
-\textbf{Spawns-Per-Agent Threshold Model:} The spawns-per-agent metric successfully predicts spawn success rates \textbf{independent of absolute timescale}: $< 2.0$ spawns/agent → High success (70-100\%), 2.0-4.0 spawns/agent → Transition zone (40-70\%), $> 4.0$ spawns/agent → Low success (20-40\%).
+\textbf{Spawns-Per-Agent Threshold Model:} The spawns-per-agent metric successfully predicts spawn success rates \textbf{independent of absolute timescale}: $< 2.0$ spawns/agent $\rightarrow$ High success (70-100\%), 2.0-4.0 spawns/agent $\rightarrow$ Transition zone (40-70\%), $> 4.0$ spawns/agent $\rightarrow$ Low success (20-40\%).
 
 \textbf{Population-Mediated Energy Recovery Mechanism:} Large populations ($>$20 agents) enable sustained high spawn success through distributed selection pressure. At each compositional event, one agent is randomly selected; large populations reduce probability of re-selecting recently depleted agents, creating effective energy ``pooling'' across population.
 
@@ -510,7 +510,7 @@ Following four consecutive null results (C190-C193) totaling 6,000+ experiments 
 
 We formulated an energy balance model predicting collapse conditions:
 
-\textbf{Theory:} Net Energy per Cycle = RECHARGE\_RATE - $E_{\text{CONSUME}}$. If Net $\geq$ 0: System sustainable → collapse rate = 0\%. If Net $<$ 0: Inevitable death spiral → collapse rate = 100\%.
+\textbf{Theory:} Net Energy per Cycle = RECHARGE\_RATE - $E_{\text{CONSUME}}$. If Net $\geq$ 0: System sustainable $\rightarrow$ collapse rate = 0\%. If Net $<$ 0: Inevitable death spiral $\rightarrow$ collapse rate = 100\%.
 
 \textbf{Validation Results:} Theory Accuracy: \textbf{100\%} (4/4 predictions exact match). Chi-square test: $\chi^2(3) = 3,600.0$, $p < 0.001$, effect size $\phi = 1.0$ (perfect association). $E_{\text{CONSUME}}$ \textbf{completely determines} collapse probability.
 
@@ -526,7 +526,7 @@ Logistic regression attempting to fit continuous curve failed due to \textbf{per
 
 Agent death count mirrored collapse pattern. ANOVA: $F(3,3596) = 47,832.5$, $p < 0.001$, $\eta^2 = 0.976$ ($E_{\text{CONSUME}}$ explains 97.6\% of death variance). \textbf{Zero deaths} when net energy $\geq$ 0, \textbf{Universal deaths} when net energy $<$ 0 (mean 12.4 deaths at $E_{\text{CONSUME}}=0.7$, 62\% death rate).
 
-\textbf{Death Cascade Dynamics ($E_{\text{CONSUME}} = 0.7$):} All agents consume 0.7 energy per cycle, recharge provides only 0.5, net loss -0.2 per cycle. Energy depletes 50.0 → 49.8 → ... → 0.0 (after 250 cycles), agents die when energy $\leq$ 0, population shrinks 20 → 0 (collapse). \textbf{Inevitable collapse} - no recovery possible.
+\textbf{Death Cascade Dynamics ($E_{\text{CONSUME}} = 0.7$):} All agents consume 0.7 energy per cycle, recharge provides only 0.5, net loss -0.2 per cycle. Energy depletes 50.0 $\rightarrow$ 49.8 $\rightarrow$ ... $\rightarrow$ 0.0 (after 250 cycles), agents die when energy $\leq$ 0, population shrinks 20 $\rightarrow$ 0 (collapse). \textbf{Inevitable collapse} - no recovery possible.
 
 \subsubsection{Mechanism, Population Size, and Frequency Independence}
 
@@ -536,7 +536,7 @@ Collapse rate was \textbf{independent of spawn mechanism} (Deterministic = Flat 
 
 \subsubsection{Thermodynamic Interpretation}
 
-The sharp transition reflects a fundamental thermodynamic constraint. Net Energy $\geq$ 0: Energy input $\geq$ energy output, system can maintain reserves, agents persist indefinitely, population sustainable. Net Energy $<$ 0: Energy output $>$ energy input, system loses energy every cycle, inevitable energy depletion → death → extinction, population collapse.
+The sharp transition reflects a fundamental thermodynamic constraint. Net Energy $\geq$ 0: Energy input $\geq$ energy output, system can maintain reserves, agents persist indefinitely, population sustainable. Net Energy $<$ 0: Energy output $>$ energy input, system loses energy every cycle, inevitable energy depletion $\rightarrow$ death $\rightarrow$ extinction, population collapse.
 
 \textbf{No Middle Ground:} Either energy is sustainable (net $\geq$ 0) or it's not (net $<$ 0). No partial viability exists. Analogous to phase transitions in physics (water freezing at 0°C). Systems with net energy loss cannot sustain order indefinitely. Collapse is \textbf{inevitable} when net $<$ 0, regardless of interventions (spawning, redundancy, variance reduction).
 
@@ -575,17 +575,17 @@ Our systematic investigation across multiple temporal scales reveals that energy
 
 \subsection{Population-Mediated Energy Recovery Mechanism}
 
-The non-monotonic spawn success pattern (100\% → 88\% → 23\%) reveals emergent collective behavior. Large populations ($N\sim$23 at 1000 cycles) distribute spawn selection pressure; random agent selection for composition reduces probability of re-selecting recently depleted agents, enabling effective ``energy pooling'' across population. System behaves as if energy reserves scale with population size. \textbf{Paradox:} Shorter experiments with larger populations exhibit better spawn success than longer experiments with smaller populations, reversing intuition that longer timescales always manifest stronger constraints.
+The non-monotonic spawn success pattern (100\% $\rightarrow$ 88\% $\rightarrow$ 23\%) reveals emergent collective behavior. Large populations ($N\sim$23 at 1000 cycles) distribute spawn selection pressure; random agent selection for composition reduces probability of re-selecting recently depleted agents, enabling effective ``energy pooling'' across population. System behaves as if energy reserves scale with population size. \textbf{Paradox:} Shorter experiments with larger populations exhibit better spawn success than longer experiments with smaller populations, reversing intuition that longer timescales always manifest stronger constraints.
 
 \subsection{Spawns-Per-Agent Threshold Model}
 
-The spawns-per-agent metric successfully predicts spawn success rates independent of absolute timescale: $< 2.0$ spawns/agent → High success (70-100\%), 2.0-4.0 spawns/agent → Transition zone (40-70\%), $> 4.0$ spawns/agent → Low success (20-40\%). This demonstrates that outcomes depend on cumulative load per entity, not absolute load—a generalizable principle for resource-limited systems.
+The spawns-per-agent metric successfully predicts spawn success rates independent of absolute timescale: $< 2.0$ spawns/agent $\rightarrow$ High success (70-100\%), 2.0-4.0 spawns/agent $\rightarrow$ Transition zone (40-70\%), $> 4.0$ spawns/agent $\rightarrow$ Low success (20-40\%). This demonstrates that outcomes depend on cumulative load per entity, not absolute load—a generalizable principle for resource-limited systems.
 
 \subsection{Sharp Phase Transitions and Energy Balance Theory}
 
-The sharp binary phase transition discovered in C194 reflects a fundamental thermodynamic constraint. Net Energy $\geq$ 0: Energy input $\geq$ energy output, agents persist indefinitely, population sustainable. Net Energy $<$ 0: Energy output $>$ energy input, inevitable energy depletion → death → extinction. No middle ground exists—either energy is sustainable or it's not. This binary nature arises because systems with net energy loss cannot sustain order indefinitely (2nd law of thermodynamics). Collapse is inevitable when net $<$ 0, regardless of interventions (spawning, redundancy, variance reduction).
+The sharp binary phase transition discovered in C194 reflects a fundamental thermodynamic constraint. Net Energy $\geq$ 0: Energy input $\geq$ energy output, agents persist indefinitely, population sustainable. Net Energy $<$ 0: Energy output $>$ energy input, inevitable energy depletion $\rightarrow$ death $\rightarrow$ extinction. No middle ground exists—either energy is sustainable or it's not. This binary nature arises because systems with net energy loss cannot sustain order indefinitely (2nd law of thermodynamics). Collapse is inevitable when net $<$ 0, regardless of interventions (spawning, redundancy, variance reduction).
 
-\textbf{Energy Balance Model Validation:} Theory predicted collapse with 100\% accuracy (4/4 conditions exact match): $E_{\text{CONSUME}} \leq 0.5$ → 0\% collapse (2,700/2,700), $E_{\text{CONSUME}} > 0.5$ → 100\% collapse (900/900). This transforms energy dynamics research from empirical boundary search to theoretical deduction—any energy configuration can be classified based solely on comparison to RECHARGE\_RATE, without running experiments.
+\textbf{Energy Balance Model Validation:} Theory predicted collapse with 100\% accuracy (4/4 conditions exact match): $E_{\text{CONSUME}} \leq 0.5$ $\rightarrow$ 0\% collapse (2,700/2,700), $E_{\text{CONSUME}} > 0.5$ $\rightarrow$ 100\% collapse (900/900). This transforms energy dynamics research from empirical boundary search to theoretical deduction—any energy configuration can be classified based solely on comparison to RECHARGE\_RATE, without running experiments.
 
 \subsection{Population Size Independence and Robustness}
 
@@ -619,13 +619,13 @@ We demonstrated that energy-constrained spawning is sufficient for population ho
 
 \textbf{Four Key Findings:}
 
-\textbf{1. Non-Monotonic Timescale Dependency (C176):} Energy constraint manifestation depends critically on experimental timescale. Spawn success exhibited non-monotonic pattern: 100\% (100 cycles) → $88.0\% \pm 2.5\%$ (1000 cycles) → 23.0\% (3000 cycles). Intermediate timescales show near-maximum spawn success via population-mediated energy recovery—large populations distribute spawn selection pressure, enabling individual energy regeneration between compositional events. This ``distributed load balancing'' temporarily overcomes constraints before cumulative depletion dominates at extended timescales ($>$1000 cycles). Constraint severity is not system-invariant.
+\textbf{1. Non-Monotonic Timescale Dependency (C176):} Energy constraint manifestation depends critically on experimental timescale. Spawn success exhibited non-monotonic pattern: 100\% (100 cycles) $\rightarrow$ $88.0\% \pm 2.5\%$ (1000 cycles) $\rightarrow$ 23.0\% (3000 cycles). Intermediate timescales show near-maximum spawn success via population-mediated energy recovery—large populations distribute spawn selection pressure, enabling individual energy regeneration between compositional events. This ``distributed load balancing'' temporarily overcomes constraints before cumulative depletion dominates at extended timescales ($>$1000 cycles). Constraint severity is not system-invariant.
 
-\textbf{2. Population-Mediated Energy Recovery (C176):} We identified the mechanism enabling intermediate-timescale robustness: spawns-per-agent normalization. Spawn success rate depends on cumulative load per entity ($< 2.0$ spawns/agent → 70-100\% success, $> 4.0$ → 20-40\% success), independent of absolute timescale. At 1000 cycles, populations achieve 2.08 spawns/agent (at threshold boundary). This demonstrates Self-Giving Systems principles—populations use their own growth to generate distributed energy pooling that modifies constraint landscape.
+\textbf{2. Population-Mediated Energy Recovery (C176):} We identified the mechanism enabling intermediate-timescale robustness: spawns-per-agent normalization. Spawn success rate depends on cumulative load per entity ($< 2.0$ spawns/agent $\rightarrow$ 70-100\% success, $> 4.0$ $\rightarrow$ 20-40\% success), independent of absolute timescale. At 1000 cycles, populations achieve 2.08 spawns/agent (at threshold boundary). This demonstrates Self-Giving Systems principles—populations use their own growth to generate distributed energy pooling that modifies constraint landscape.
 
 \textbf{3. Population Size Independence (C193):} Collapse boundary is N-independent across $N=5$-20 agents (0/1,200 collapses). Small populations ($N=5$) exhibit identical viability as large populations ($N=20$), contradicting buffer hypothesis. This N-independence reflects the per-agent nature of NRM energy dynamics: each agent's fate is determined by its own energy budget, independent of population size. NRM systems scale down to minimal populations ($N=5$-10) without loss of robustness, provided net energy $\geq$ 0. Redundancy cannot overcome energy deficits. C193's zero collapses explained by $E_{\text{CONSUME}}=0$ energy model being fundamentally non-collapsible.
 
-\textbf{4. Sharp Energy Consumption Phase Transition (C194 - BREAKTHROUGH):} After 6,000+ experiments with zero collapses (C190-C193), C194 introduced death mechanics and discovered a sharp binary phase transition at $E_{\text{CONSUME}} = \text{RECHARGE\_RATE}$ (0.5): Survival Phase (Net Energy $\geq$ 0): $E_{\text{CONSUME}} \leq 0.5$ → 0\% collapse (2,700/2,700), Collapse Phase (Net Energy $<$ 0): $E_{\text{CONSUME}} > 0.5$ → 100\% collapse (900/900). No intermediate collapse rates exist. The transition is perfectly sharp, reflecting a fundamental thermodynamic constraint: systems with net positive energy are sustainable, while systems with net negative energy inevitably collapse (2nd law of thermodynamics).
+\textbf{4. Sharp Energy Consumption Phase Transition (C194 - BREAKTHROUGH):} After 6,000+ experiments with zero collapses (C190-C193), C194 introduced death mechanics and discovered a sharp binary phase transition at $E_{\text{CONSUME}} = \text{RECHARGE\_RATE}$ (0.5): Survival Phase (Net Energy $\geq$ 0): $E_{\text{CONSUME}} \leq 0.5$ $\rightarrow$ 0\% collapse (2,700/2,700), Collapse Phase (Net Energy $<$ 0): $E_{\text{CONSUME}} > 0.5$ $\rightarrow$ 100\% collapse (900/900). No intermediate collapse rates exist. The transition is perfectly sharp, reflecting a fundamental thermodynamic constraint: systems with net positive energy are sustainable, while systems with net negative energy inevitably collapse (2nd law of thermodynamics).
 
 \textbf{Energy Balance Theory Validation (100\% Accuracy):} Theory predicted collapse with 100\% accuracy (4/4 conditions exact match): $E=0.1$ (net +0.4): 0\% predicted, 0\% observed; $E=0.3$ (net +0.2): 0\% predicted, 0\% observed; $E=0.5$ (net 0.0): 0\% predicted, 0\% observed; $E=0.7$ (net -0.2): 100\% predicted, 100\% observed. Collapse requires $E_{\text{CONSUME}}$ strictly greater than RECHARGE\_RATE. Net zero energy is sufficient for survival.
 
