@@ -136,17 +136,39 @@ This transforms NRM from "emergent mystery" to "predictable mechanics"—all pop
 
 These findings exemplify Self-Giving Systems principles: the system defines its own viability criteria through parameter relationships. Success (persistence) emerges not from external oracles but from satisfying internally-determined energy constraints. The spawn_energy parameter acts as a self-imposed threshold that shapes the phase space accessible to the population.
 
+### 4.13.10 Substrate Independence: Linear vs Exponential Growth (C280)
+
+To test whether the spawn viability mechanism is substrate-dependent, we modified the spawning logic from per-cycle (linear) to per-agent (exponential):
+
+**Linear (C279):** `if random() < f_intra: spawn_one_agent()`
+**Exponential (C280):** `for agent in agents: if random() < f_intra: spawn()`
+
+This changes growth from N = N₀ + f×t to N = N₀×(1+f)^t.
+
+**Results (C280, n=45):**
+All 9 conditions matched predictions exactly (100% accuracy):
+- GROWTH (E_consume < spawn_energy): Population hit 100,000 cap in ~1,870 cycles
+- THRESHOLD/DEATH (E_consume ≥ spawn_energy): Population stayed at initial (10)
+
+**Key finding:** The spawn viability threshold (E_consume < spawn_energy) is **substrate-independent**—it determines reproductive viability regardless of growth mode.
+
+The explosive difference in growth rates confirms the mechanism:
+- Linear: 100 → 2,363 in 450,000 cycles (4.3 births/100 cycles)
+- Exponential: 10 → 100,000 in ~1,870 cycles (240× faster)
+
+This validates that the energy comparison is the universal criterion for reproductive viability, not an artifact of specific spawning implementation.
+
 ---
 
 ## Integration Notes
 
-**Abstract Update:** Add "870 experiments (C274-C279)" and "spawn viability threshold mechanism" to findings.
+**Abstract Update:** Add "915 experiments (C274-C280)" and "substrate-independent spawn viability mechanism" to findings.
 
-**Methods Update:** Add experimental design for C274 (24 E_net values), C277 (critical phenomena), C278 (growth regime), C279 (spawn threshold validation).
+**Methods Update:** Add experimental design for C274 (24 E_net values), C277 (critical phenomena), C278 (growth regime), C279 (spawn threshold validation), C280 (exponential growth validation).
 
-**Results Update:** Add Section 3.6 for C274 energy mapping, Section 3.7 for C279 mechanism validation.
+**Results Update:** Add Section 3.6 for C274 energy mapping, Section 3.7 for C279 mechanism validation, Section 3.8 for C280 substrate independence.
 
-**Conclusions Update:** Add "complete predictive model for population dynamics from energy parameters alone" as key contribution.
+**Conclusions Update:** Add "substrate-independent predictive model for population dynamics from energy parameters alone" as key contribution.
 
 **References:** No new external references needed—findings are internally validated.
 
