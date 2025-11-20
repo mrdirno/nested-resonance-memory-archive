@@ -115,10 +115,10 @@ The project is evolving from a single-scale simulation tool into a **Multi-Scale
 
 **Core Innovation: The Meso-Linker**
 The architecture connects scales ($L_N \to L_{N+1}$) via **Meso-Linkers**—formalized interfaces that manage:
-1.  **Upward Causation (Emergence):** Coarse-graining micro-dynamics into macro-variables (Order Parameters).
+1.  **Upward Causation (Emergence):** Coarse-graining micro-dynamics into macro-variables (Order Parameters) using **Information Bottleneck** principles.
 2.  **Downward Causation (Control):** Propagating macro-constraints to micro-boundary conditions.
 
-**The Goal:** To automatically discover these linkers, enabling **Inverse Design (HELIOS)** across the full stack of reality.
+**The Goal:** To automatically discover these linkers using a **Federated Architecture** (Scale-Specific Modules + Meta-Controller), enabling **Inverse Design (HELIOS)** across the full stack of reality.
 
 See the full blueprint: [`docs/architecture/NRM_vNext_Architecture.md`](docs/architecture/NRM_vNext_Architecture.md)
 
