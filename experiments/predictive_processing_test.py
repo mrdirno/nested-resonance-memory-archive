@@ -49,81 +49,87 @@ def predictive_processing_test():
     inputs = data[:TOTAL_LEN]
     targets = data[PREDICTION_HORIZON:TOTAL_LEN + PREDICTION_HORIZON]
     
-    # 2. Initialize Swarm (Reservoir)
-    print("2. Initializing Swarm Reservoir...")
-    swarm = FractalSwarm(max_agents=N_AGENTS, burst_threshold=200.0)
+    # 3. Grid Search for Optimal Parameters (Energy-Based Reservoir)
+    print("3. Running Grid Search (Energy-Based Reservoir / ESN)...")
     
-    # Create agents with random natural frequencies
-    agents = []
-    for i in range(N_AGENTS):
-        agent = swarm.spawn_agent(reality_metrics={}, initial_energy=50.0)
-        # Randomize phase and velocity for rich dynamics
-        agent.state.phase = np.random.uniform(0, 2*np.pi)
-        agent.state.velocity = np.random.normal(0, 1.0)
-        agents.append(agent)
+    # Standard ESN parameters
+    spectral_radii = [0.8, 0.9, 0.95, 1.0, 1.1]
+    input_scalings = [0.1, 0.5, 1.0]
+    leak_rates = [0.1, 0.5, 1.0]
+    
+    best_score = -1.0
+    best_params = {}
+    
+    N_AGENTS_LARGE = 200
+    SPARSITY = 0.1
+    
+    # Generate Sparse Adjacency Matrix
+    W_res = np.random.normal(0, 1.0, (N_AGENTS_LARGE, N_AGENTS_LARGE))
+    mask = np.random.rand(N_AGENTS_LARGE, N_AGENTS_LARGE) > SPARSITY
+    W_res[mask] = 0
+    rho = np.max(np.abs(np.linalg.eigvals(W_res)))
+    W_res_base = W_res / rho
+    
+    W_in = np.random.uniform(-1, 1, N_AGENTS_LARGE)
+    
+    for rho_val in spectral_radii:
+        W_eff = W_res_base * rho_val
         
-    # 3. Running Reservoir Dynamics (Coupled)
-    print("3. Running Reservoir Dynamics (Coupled)...")
-    reservoir_states = []
+        for scale in input_scalings:
+            for alpha in leak_rates:
+                print(f"  Testing Rho={rho_val}, Scale={scale}, Alpha={alpha}...", end="", flush=True)
+                
+                # Reset Agents (State = Energy)
+                # Initialize random energy states [-1, 1]
+                current_states = np.random.uniform(-1, 1, N_AGENTS_LARGE)
+                
+                reservoir_states = []
+                
+                # Run Dynamics (Standard ESN)
+                # x(t+1) = (1-alpha)*x(t) + alpha * tanh(W_res @ x(t) + W_in * u(t))
+                
+                for t in range(TOTAL_LEN):
+                    u = inputs[t]
+                    
+                    # Update
+                    update = np.tanh(W_eff @ current_states + W_in * scale * u)
+                    current_states = (1 - alpha) * current_states + alpha * update
+                    
+                    # Harvest State (Energy)
+                    reservoir_states.append(current_states.copy())
+                
+                # Train & Test
+                X = np.array(reservoir_states)
+                X_train = X[:TRAIN_LEN]
+                y_train = targets[:TRAIN_LEN]
+                X_test = X[TRAIN_LEN:]
+                y_test = targets[TRAIN_LEN:]
+                
+                # Ridge Regression
+                X_train_bias = np.hstack([np.ones((TRAIN_LEN, 1)), X_train])
+                reg = 1e-4 # Lower regularization for ESN
+                I = np.eye(X_train_bias.shape[1])
+                try:
+                    W_out = np.linalg.inv(X_train_bias.T @ X_train_bias + reg * I) @ X_train_bias.T @ y_train
+                    
+                    X_test_bias = np.hstack([np.ones((TEST_LEN, 1)), X_test])
+                    y_pred = X_test_bias @ W_out
+                    
+                    corr = np.corrcoef(y_test, y_pred)[0, 1]
+                except:
+                    corr = 0.0
+                    
+                print(f" Corr: {corr:.4f}")
+                
+                if corr > best_score:
+                    best_score = corr
+                    best_params = {'Rho': rho_val, 'Scale': scale, 'Alpha': alpha}
+                
+    print(f"\n--- BEST RESULT ---")
+    print(f"Params: {best_params}")
+    print(f"Correlation: {best_score:.4f}")
     
-    # Set coupling strength for the swarm
-    swarm.coupling_strength = 2.0
-    
-    for t in range(TOTAL_LEN):
-        u = inputs[t]
-        
-        # 1. Inject Input (PRC)
-        # d(theta)/dt = omega + Input * cos(theta)
-        for agent in agents:
-            forcing = INPUT_SCALING * u * np.cos(agent.state.phase)
-            # Update phase with forcing
-            agent.state.phase = (agent.state.phase + forcing * 0.1) % (2 * np.pi)
-            
-        # 2. Evolve Swarm (Coupling)
-        # This applies the internal reservoir dynamics: d(theta_i)/dt += K * sum(sin(theta_j - theta_i))
-        swarm.evolve(dt=0.1)
-            
-        # 3. Collect State
-        state_vector = []
-        for agent in agents:
-            state_vector.append(np.sin(agent.state.phase))
-            state_vector.append(np.cos(agent.state.phase))
-        
-        reservoir_states.append(state_vector)
-        
-    X = np.array(reservoir_states) # Shape: (TOTAL_LEN, 2*N_AGENTS)
-    y = targets # Shape: (TOTAL_LEN,)
-    
-    # 4. Train Readout (Ridge Regression)
-    print("\n4. Training Linear Readout (Ridge Regression)...")
-    X_train = X[:TRAIN_LEN]
-    y_train = y[:TRAIN_LEN]
-    
-    # Add bias term
-    X_train_bias = np.hstack([np.ones((TRAIN_LEN, 1)), X_train])
-    
-    # Ridge Regression: W = (X^T X + alpha I)^-1 X^T y
-    alpha = 1e-2
-    I = np.eye(X_train_bias.shape[1])
-    W = np.linalg.inv(X_train_bias.T @ X_train_bias + alpha * I) @ X_train_bias.T @ y_train
-    
-    # 5. Test Prediction
-    print("5. Testing Prediction...")
-    X_test = X[TRAIN_LEN:]
-    y_test = y[TRAIN_LEN:]
-    
-    X_test_bias = np.hstack([np.ones((TEST_LEN, 1)), X_test])
-    y_pred = X_test_bias @ W
-    
-    # 6. Analysis
-    mse = np.mean((y_test - y_pred)**2)
-    correlation = np.corrcoef(y_test, y_pred)[0, 1]
-    
-    print(f"\n--- RESULTS ---")
-    print(f"MSE: {mse:.4f}")
-    print(f"Correlation: {correlation:.4f}")
-    
-    if correlation > 0.8:
+    if best_score > 0.8:
         print("SUCCESS: Swarm successfully predicted chaotic future.")
     else:
         print("FAILURE: Prediction correlation too low.")

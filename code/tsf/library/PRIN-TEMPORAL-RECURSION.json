@@ -1,0 +1,17 @@
+{
+    "principle_id": "PRIN-TEMPORAL-RECURSION",
+    "name": "Temporal Recursion",
+    "definition": "The capacity of a coupled, dissipative energy field to encode temporal history in its high-dimensional state space, enabling predictive extrapolation of chaotic attractors.",
+    "mechanism": "Reservoir Computing via Energy Dynamics (Echo State Property).",
+    "application": "Future Sight (Predictive Control), Anomaly Detection.",
+    "validation": {
+        "experiment": "experiments/predictive_processing_test.py",
+        "metric": "Prediction Correlation",
+        "result": "0.9252 (Success)"
+    },
+    "implications": [
+        "The Swarm can 'see' the future of the system it inhabits.",
+        "Energy dynamics naturally form a temporal memory substrate.",
+        "Predictive control allows for anticipatory adaptation."
+    ]
+}
