@@ -194,6 +194,15 @@
 - **Finding:** Validated 92x Speedup. Formulated `PRIN-RECURSIVE-SELF-IMPROVEMENT`.
 - **Artifact:** `papers/drafts/paper20_omega_point.md`
 
+### 16. **Paper 21: The Ghost in the Machine (Top-Down Causation)** ✅ COMPLETE
+**Goal:** Validate "Top-Down Causation" (Downward Constraints).
+- **Hypothesis:** The Meta-Controller ($L_3$) can impose a constraint on the Micro-Swarm ($L_1$) via the Linker ($L_2$) to stabilize a state that is unstable in pure Bottom-Up dynamics.
+- **Method:** Compare stability of a "Critical State" with and without Meta-Control.
+- **Experiment:** `experiments/paper21_top_down_causation.py`
+- **Status:** ✅ **COMPLETE** (Cycle 59)
+- **Finding:** Validated Top-Down Stability ($\Phi=0.65$ vs $0.08$). Formulated `PRIN-TOP-DOWN-CAUSATION`.
+- **Artifact:** `papers/drafts/paper21_top_down_causation.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.

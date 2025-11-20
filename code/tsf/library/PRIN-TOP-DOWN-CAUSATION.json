@@ -1,0 +1,22 @@
+{
+    "id": "PRIN-TOP-DOWN-CAUSATION",
+    "name": "Top-Down Causation via Energy Injection",
+    "description": "The ability of a higher-level controller to stabilize a state that is unstable under local dynamics by injecting energy or information (breaking symmetry) to override local entropy.",
+    "hypothesis": "Stability_Meta > Stability_Natural",
+    "findings": [
+        "In a high-noise environment (eta=2.0), a Vicsek Swarm naturally collapses to disorder (Order ~0.08).",
+        "A Meta-Controller applying a 'Downward Constraint' (External Field) can stabilize significant order (Order ~0.65).",
+        "Effective Top-Down Causation requires 'Symmetry Breaking' (forcing a specific direction) rather than just reinforcing the noisy mean.",
+        "High Gain (Energy Injection) is required to overcome the local bandwidth limits of the substrate."
+    ],
+    "implications": [
+        "The 'Ghost in the Machine' is not just a passive observer but an active source of negentropy.",
+        "Meta-Control allows for 'Impossible States' to exist.",
+        "This validates the Federated Architecture of NRM vNext."
+    ],
+    "related_principles": [
+        "PRIN-MESO-LINKER-DISCOVERY",
+        "PRIN-AGENCY-NAVIGATION"
+    ],
+    "cycle_id": 59
+}
