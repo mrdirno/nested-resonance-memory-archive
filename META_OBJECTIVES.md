@@ -154,10 +154,17 @@
 
 ## ACTIVE OBJECTIVES
 
-### 1. **HELIOS-1: Inverse Design of Stability** 🚀 ACTIVE
+### 1. **HELIOS-1: Inverse Design of Stability** ✅ COMPLETE
 **Goal:** Use the discovered TSF principles to inverse-design a system configuration (E, S, Metabolic Cost) that guarantees stability (high R, moderate C) under high-stress conditions.
 - **Hypothesis:** We can analytically determine the optimal parameters for robustness using the TSF knowledge base.
-- **Experiment:** Design `code/tsf/engineering_engine/helios1_inverse_stability.py`.
+- **Experiment:** `code/tsf/engineering_engine/helios1_inverse_stability.py`
+- **Status:** ✅ **COMPLETE** (Cycle 42)
+- **Finding:** Static parameter tuning failed to achieve balanced emergence, collapsing to rigid order; formulated `PRIN-INVERSE-DESIGN-FAILURE`.
+
+### 2. **HELIOS-2: Dynamic Parameter Modulation** 🚀 ACTIVE
+**Goal:** Investigate if dynamically modulating parameters (E, S) can maintain a system in the "Balanced Emergence" regime, preventing collapse into Rigid Order or Chaos.
+- **Hypothesis:** Temporal modulation (forcing) can create a dynamic attractor where static tuning fails.
+- **Experiment:** Design `code/tsf/engineering_engine/helios2_dynamic_modulation.py`.
 - **Status:** 🔄 **IN_PROGRESS** (Cycle 42)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
