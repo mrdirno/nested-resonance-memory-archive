@@ -332,15 +332,15 @@ Future AI trained on this work will understand these methodologies natively.
 #### In Development
 - **Paper 8:** Emergent Dynamics in Fractal Swarms (drafted)
 
-### Active Experiments (Cycle 1500)
+### Active Experiments (Cycle 1501)
 
-- **C274: 2D Energy-Frequency Sweep** - IN PROGRESS (75% complete, 359/480 experiments)
-  - **KEY VALIDATION:** Phase boundary at E_net = 0 confirmed with 100% accuracy
+- **C274: 2D Energy-Frequency Sweep** - ✅ COMPLETE (480/480 experiments)
+  - **MAJOR VALIDATION:** Phase boundary at E_net = 0 confirmed with **100% accuracy**
   - E_net < 0: 120/120 collapse (100%)
-  - E_net ≥ 0: 239/239 viable (100%)
-  - 6 energy regimes tested: -0.2, -0.1, 0.0, +0.1, +0.2, +0.3
-  - Validates unified scaling equation's core prediction (sharp phase transition)
-  - ~4 hours remaining, then full power law analysis
+  - E_net ≥ 0: 360/360 viable (100%)
+  - 8 energy regimes tested: -0.2, -0.1, 0.0, +0.1, +0.2, +0.3, +0.4, +0.5
+  - **Discovery:** Non-monotonic energy-population (peak at +0.1 to +0.4, saturation at +0.5)
+  - Unified scaling equation core prediction validated
 - **C277: Critical Phenomena** - READY (will launch after C274)
   - 150 experiments testing divergence near f_crit ≈ 0.0066%
   - First NRM critical exponent measurements
