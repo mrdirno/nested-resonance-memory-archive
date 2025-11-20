@@ -52,13 +52,13 @@
 
 ### Phase 1: Formalize the Architecture 🔄 ACTIVE
 **Goal:** Define standardized schemas for Level Encapsulation ($L_N$) and Meso-Linkers ($M_{N \to N+1}$).
-- **Artifact:** `docs/architecture/NRM_vNext_Architecture.md` (Blueprint Created)
+- **Artifact:** `docs/architecture/NRM_vNext_Architecture.md` (Blueprint Refined)
 
 ### Phase 2: Prototype Automated Linker Discovery ⏳ PENDING
-**Goal:** Automatically discover the Meso-Linker between two adjacent scales using Information Bottleneck and Causal Inference.
+**Goal:** Select two adjacent domains (e.g., Agent behavior → Economic micro-structures) and automatically discover the Meso-Linker using Information Bottleneck and Causal Inference.
 
 ### Phase 3: Implement the Federated System ⏳ PENDING
-**Goal:** Build the NRM Meta-Controller to manage the hierarchical stack and implement "Adaptive Zoom".
+**Goal:** Build the NRM Meta-Controller to manage the stack, implement "Adaptive Zoom" guided by HELIOS, and generate cross-scale Cards.
 
 ---
 
