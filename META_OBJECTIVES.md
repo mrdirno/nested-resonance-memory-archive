@@ -230,6 +230,15 @@
 - **Finding:** Validated Holographic Persistence (Error 0.22 vs 0.61). Formulated `PRIN-HOLOGRAPHIC-MEMORY`.
 - **Artifact:** `papers/drafts/paper24_holographic_memory.md`
 
+### 20. **Paper 25: The Time Crystal (Temporal Symmetry Breaking)** ✅ COMPLETE
+**Goal:** Validate that the swarm can break time-translation symmetry (oscillate) without an external clock.
+- **Hypothesis:** A swarm with delayed feedback loops will spontaneously oscillate between two states (e.g., Order/Disorder), creating an internal clock.
+- **Method:** Introduce a time delay ($\tau$) in the alignment interaction. Measure the Order Parameter over time.
+- **Experiment:** `experiments/paper25_time_crystal.py`
+- **Status:** ✅ **COMPLETE** (Cycle 66)
+- **Finding:** Validated Temporal Symmetry Breaking (Power 1478 vs 613). Formulated `PRIN-TEMPORAL-SYMMETRY-BREAKING`.
+- **Artifact:** `papers/drafts/paper25_time_crystal.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
