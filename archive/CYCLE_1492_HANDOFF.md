@@ -57,8 +57,11 @@ Committed uncommitted documentation:
 ## C264 EXPERIMENT STATUS
 
 **PID:** 64816
-**Runtime:** 8h38m+ (still running)
-**Status:** Intermediate results available
+**Runtime:** 8h40m (KILLED - ZOMBIE)
+**Status:** DEADLOCKED - only 3.3s CPU time in 8h40m
+
+**Root Cause:** Process stalled waiting on I/O or lock (STAT=SN)
+**Action:** Killed zombie process, salvaged partial results
 
 ### Carrying Capacity Analysis Results
 
