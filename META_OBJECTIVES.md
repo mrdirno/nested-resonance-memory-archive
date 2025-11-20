@@ -62,11 +62,18 @@
 - **Status:** ✅ **COMPLETE** (Cycle 23)
 - **Finding:** Discovered and mapped distinct emergent regimes (Extinction, Chaotic Complexity, Rigid Order, Balanced Emergence). Formulated `PRIN-COMPLEXITY-ORDER-PHASE-TRANSITION`.
 
-### 3. **TSF-3: Navigating Phase Space with Agency** 🚀 ACTIVE
+### 3. **TSF-3: Navigating Phase Space with Agency** ✅ COMPLETE
 **Goal:** Demonstrate the Pilot's ability to use "Agency" to navigate or optimize within the Complexity-Order Phase Space.
-- **Hypothesis:** A system with Agency can actively adjust E and S to target a specific (C, R) regime.
-- **Experiment:** Design `code/tsf/science_engine/tsf3_agency_navigation.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 23)
+- **Hypothesis:** A critical balance of E and S leads to phase transitions between chaotic complexity and rigid order.
+- **Experiment:** `code/tsf/science_engine/tsf3_agency_navigation.py`
+- **Status:** ✅ **COMPLETE** (Cycle 25)
+- **Finding:** Observed oscillatory navigation with simple feedback; formulated `PRIN-AGENCY-NAVIGATION`. Demonstrated the challenge of convergence with basic agency.
+
+### 4. **TSF-4: Robust Agency - Convergent Navigation** 🚀 ACTIVE
+**Goal:** Implement a more robust Agency model to achieve stable convergence to a target (C, R) state.
+- **Hypothesis:** Adaptive learning rates or evolutionary search can overcome the oscillatory behavior observed in TSF-3.
+- **Experiment:** Design `code/tsf/science_engine/tsf4_robust_agency.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 25)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.

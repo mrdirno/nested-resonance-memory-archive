@@ -1,0 +1,10 @@
+{
+  "converged": false,
+  "final_E": 0.25,
+  "final_S": 0.05,
+  "final_C": 0.29795208264065065,
+  "final_R": 0.16133182006144045,
+  "target_C": 0.2,
+  "target_R": 0.6,
+  "steps_taken": 150
+}
