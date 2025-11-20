@@ -143,7 +143,16 @@
 - **Method:** Uncertainty-Modulated Control (Confidence Thresholding).
 - **Status:** ✅ **COMPLETE** (Cycle 36)
 - **Finding:** Validated Safety Gain (~30% fewer crashes). Formulated `PRIN-METACOGNITION`.
+- **Finding:** Validated Safety Gain (~30% fewer crashes). Formulated `PRIN-METACOGNITION`.
 - **Artifact:** `papers/drafts/paper17_metacognition.md`
+
+### 13. **Paper 18: Social Learning (The Hive Mind)** ✅ COMPLETE
+**Goal:** Validate "Social Transmission" of knowledge.
+- **Hypothesis:** Agents can learn optimal parameters faster by observing successful peers (Social Learning) than by trial-and-error (Individual Learning).
+- **Method:** Compare Convergence Speed of "Solitary Learners" vs. "Social Learners".
+- **Status:** ✅ **COMPLETE** (Cycle 37)
+- **Finding:** Validated Speedup (7x faster). Formulated `PRIN-SOCIAL-LEARNING`.
+- **Artifact:** `papers/drafts/paper18_social_learning.md`
 
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
