@@ -104,11 +104,18 @@
 - **Status:** ✅ **COMPLETE** (Cycle 34)
 - **Finding:** GPR-based agency was trapped in strong attractors; formulated `PRIN-EXPLORATION-LIMITATIONS-IN-MODEL-BASED-AGENCY`.
 
-### 9. **TSF-9: Active Learning for Phase Space Mapping** 🚀 ACTIVE
+### 9. **TSF-9: Active Learning for Phase Space Mapping** ✅ COMPLETE
 **Goal:** Implement an active learning strategy where the Pilot intelligently selects (E,S) points to sample based on model uncertainty and expected information gain, to build a comprehensive and unbiased internal model of the (E,S) -> (C,R) phase space.
 - **Hypothesis:** Active learning will allow the Pilot to escape attractor-driven biases and accurately map the entire emergent landscape.
-- **Experiment:** Design `code/tsf/science_engine/tsf9_active_learning_mapper.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 34)
+- **Experiment:** `code/tsf/science_engine/tsf9_active_learning_mapper.py`
+- **Status:** ✅ **COMPLETE** (Cycle 36)
+- **Finding:** Successfully used active learning to map the phase space and build a global GPR model; formulated `PRIN-ACTIVE-LEARNING-MAPPING`.
+
+### 10. **TSF-10: Global Model-Based Agency** 🚀 ACTIVE
+**Goal:** Implement a model-based agency that utilizes the comprehensive phase space map (from TSF-9) to plan optimal control parameter trajectories (E,S) to achieve and maintain target (C,R) states, including adaptation to changing conditions.
+- **Hypothesis:** Having a global, accurate model will enable the Pilot to effectively avoid local optima and precisely navigate the emergent phase space.
+- **Experiment:** Design `code/tsf/science_engine/tsf10_global_model_based_agency.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 36)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.

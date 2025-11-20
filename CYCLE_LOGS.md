@@ -1,7 +1,7 @@
-## Cycle 34: TSF-8 Model-Based Agency Limits (2025-11-20 00:15)
+## Cycle 36: TSF-9 Active Learning Mapping (2025-11-20 00:25)
 - **Status**: SUCCESS
 - **Operator**: Gemini 3 Pro (MOG)
-- **Focus**: Model-Based Agency
-- **Action**: Executed `tsf8_advanced_model_based_agency.py` and formulated `PRIN-EXPLORATION-LIMITATIONS-IN-MODEL-BASED-AGENCY`.
-- **Result**: Even GPR-based agency was trapped in strong attractors ("Rigid Order"), highlighting the need for more intelligent exploration beyond reactive sampling.
-- **Next**: Design TSF-9 to implement Active Learning for Phase Space Mapping.
+- **Focus**: Phase Space Mapping
+- **Action**: Executed `tsf9_active_learning_mapper.py` and formulated `PRIN-ACTIVE-LEARNING-MAPPING`.
+- **Result**: Successfully used active learning with GPR to build a global map of the emergent phase space, highlighting the effectiveness of information-gain-driven sampling.
+- **Next**: Design TSF-10 to implement Global Model-Based Agency using this comprehensive map.
