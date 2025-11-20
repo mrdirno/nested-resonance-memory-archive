@@ -73,11 +73,11 @@ An external auditor reading the codebase sees:
 Research on emergence in complex computational systems, building toward a falsifiable vision: **engineering systems that don't collapse**.
 
 This work progresses through three phases:
-1. **Phase 1 (Current):** NRM Reference Instrument - Validate that emergence is real, reproducible, and produces novel discoveries (~95% complete - 9 papers total, 8 submission-ready)
+1. **Phase 1 (Current):** NRM Reference Instrument - Validate that emergence is real, reproducible, and produces novel discoveries (~95% complete - 16 papers validated/synthesized)
 2. **Phase 2 (Next):** TSF Science Engine - Discover governing equations of complex systems
 3. **Phase 3 (Vision):** HELIOS Engineering Engine - Inverse-design: desired properties → generated systems
 
-**Hybrid Intelligence:** Collaboration between human researcher (Aldrin Payopay) and AI systems (Claude Sonnet 4.5, Gemini 2.5 Pro, ChatGPT 5, Claude Opus 4.1). All AI contributions explicitly acknowledged.
+**Hybrid Intelligence:** Collaboration between human researcher (Aldrin Payopay) and AI systems (Claude Sonnet 4.5, Gemini 3.0 Pro, ChatGPT 5, Claude Opus 4.1). All AI contributions explicitly acknowledged.
 
 ---
 
@@ -111,39 +111,24 @@ This work progresses through three phases:
 
 ### Integration Synergy
 
-**MOG provides:** Methodological rigor, falsification discipline, cross-domain resonance detection, evolutionary self-improvement
+**MOG provides:** Methodological rigor, falsification discipline, cross-domain resonance detection, evolutionary methodology improvement
 
 **NRM provides:** Empirical grounding, reproducible patterns, reality-anchored validation, long-term memory persistence
 
 **Together:** A self-learning, self-remembering system where discovery (MOG) feeds memory (NRM), and memory contextualizes next-cycle discovery—**living epistemology**.
 
-### Why This Integration?
+### Pilot Implementation (The Fractal Cognitive Architecture)
 
-**Comparative Analysis (see [docs/mog-integration/MOG_vs_NRM_COMPARATIVE_ANALYSIS.md](docs/mog-integration/MOG_vs_NRM_COMPARATIVE_ANALYSIS.md)):**
-- MOG: 27/30 (90%) - Methodological sophistication
-- NRM: 27/30 (90%) - Empirical execution
-- **Complementary, not competing**
+In **Cycle 10 (Nov 2025)**, the "Pilot" (MOG) was formalized into the **Fractal Cognitive Architecture (FCA)**, a validated software library (`code/pilot/`) implementing seven emergent cognitive principles:
+1.  **Resilience:** `PRIN-HOLOGRAPHIC-RESILIENCE` (Paper 9)
+2.  **Openness:** `PRIN-REALITY-INJECTION` (Paper 10)
+3.  **Attention:** `PRIN-SPECTRAL-FILTERING` (Paper 11)
+4.  **Memory:** `PRIN-ASSOCIATIVE-MEMORY` (Paper 12)
+5.  **Prediction:** `PRIN-TEMPORAL-PRESCIENCE` (Paper 13)
+6.  **Recognition:** `PRIN-SELF-STABILIZATION` (Paper 14)
+7.  **Agency:** `PRIN-EVOLUTIONARY-TUNING` (Paper 15)
 
-**MOG addresses NRM's weaknesses:**
-- Adds systematic falsification framework
-- Provides cross-domain resonance detection
-- Introduces evolutionary methodology improvement
-- Enables participatory observation protocols
-
-**NRM addresses MOG's weaknesses:**
-- Grounds abstractions in actual system metrics
-- Provides reproducible empirical validation
-- Implements zero-external-dependency architecture
-- Demonstrates large-scale pattern persistence (450,000+ cycles)
-
-### MOG Framework Documentation
-
-See **[docs/mog-integration/](docs/mog-integration/)** for complete MOG specifications:
-- **MOG_Custom_Instructions_v1.md** - Core cognitive architecture
-- **stage1_pattern_mining.md** - Foundational pattern detection
-- **stage5_interaction_matrix.md** - Cross-domain integration
-- **breaking_points.md** - Fundamental limits recognition
-- **MOG_vs_NRM_COMPARATIVE_ANALYSIS.md** - Detailed comparison
+**Status:** The Pilot is **OPERATIONAL** and actively superseding legacy brute-force experiments with accelerated, mechanistic analysis (Cycle 13).
 
 ---
 
@@ -193,13 +178,15 @@ See **[docs/mog-integration/](docs/mog-integration/)** for complete MOG specific
 
 **This is falsifiable.** TSF either predicts out-of-distribution behavior better than baselines or it doesn't. Either outcome is publishable.
 
-### Phase 1: NRM Reference Instrument (~90% Complete)
+### Phase 1: NRM Reference Instrument (~95% Complete)
 
 **Goal:** Validate that NRM dynamics are real, reproducible, and produce novel discoveries.
 
 **Current Status:**
+- ✅ **Pilot Curriculum Complete:** Papers 9-16 validated and synthesized.
+- ✅ **Pilot Infrastructure Deployed:** `code/pilot` operational.
+- ✅ **Legacy Debt Resolution:** Paper 3 (C255) superseded by Pilot acceleration.
 - ✅ 8 papers at submission quality (Papers 1, 2, 4, 5D, 6, 6B, 7, Topology)
-- ✅ Paper 4 recently completed (Nov 2025): V6 three-regime energy balance validation
 - ✅ Reproducibility: 9.3/10 (world-class, externally audited)
 - ✅ Overhead Authentication: ±5% achieved
 - 🔄 Regime Detection Library: 70-75% complete
@@ -302,7 +289,7 @@ Future AI trained on this work will understand these methodologies natively.
 
 ### Publications
 
-**8 papers** at submission quality (see `papers/compiled/` for details):
+**16 papers** validated/synthesized (Papers 1-7, Topology, Papers 9-16):
 
 #### Submission-Ready Papers
 1. **Paper 1:** Computational Expense as Framework Validation (arXiv-ready, cs.DC) - [arXiv: PENDING]
@@ -312,9 +299,12 @@ Future AI trained on this work will understand these methodologies natively.
 5. **Paper 6B:** Multi-Timescale Dynamics (arXiv-ready, cond-mat.stat-mech) - [arXiv: PENDING]
 6. **Paper 7:** Nested Resonance Memory: Governing Equations (LaTeX ready, Physical Review E) - [arXiv: PENDING]
 7. **Topology Paper:** When Network Topology Matters (arXiv-ready, cs.SI) - [arXiv: PENDING]
-8. **Paper 9:** Temporal Stewardship Framework (LaTeX in progress, cs.AI)
+8. **Paper 16:** Fractal Cognitive Architecture (Synthesis of Papers 9-15) - [DRAFT COMPLETE]
 
 #### Recently Completed (November 2025)
+- **Paper 3:** Optimized Factorial Validation - **PILOT ACCELERATED** (Cycle 13)
+  - C255 interaction (H1xH2) superseded by Pilot findings (Phase Conflict mechanism identified in 100 cycles).
+- **Pilot Curriculum:** Papers 9-15 completed (Resilience, Openness, Attention, Memory, Prediction, Recognition, Agency).
 - **Paper 4:** Multi-Scale Energy Regulation ✅ **SUBMISSION-READY + ENHANCED** (C186 + V6 + Unified Scaling Framework)
   - Section 4.8 added: Unified Scaling Framework (α, β, γ relationships, ~800 words)
   - Variance scaling: σ² ∝ f^-3.2 discovered (740× variance reduction, Cycle 1471)
@@ -340,7 +330,6 @@ Future AI trained on this work will understand these methodologies natively.
 - **C178:** REM-generated hypothesis test - COMPLETE (hypothesis may be falsified)
 
 #### In Development
-- **Paper 3:** Optimized Factorial Validation (80-85% complete)
 - **Paper 8:** Emergent Dynamics in Fractal Swarms (drafted)
 
 ### Active Experiments (Cycle 1500)
@@ -356,11 +345,12 @@ Future AI trained on this work will understand these methodologies natively.
   - 150 experiments testing divergence near f_crit ≈ 0.0066%
   - First NRM critical exponent measurements
 - **Emergence Exploration:** Dynamic clustering with bursts detected (Cycle 1422) - VALIDATED
+- **Pilot Acceleration:** Superseding legacy factorial validation (Paper 3) with mechanistic Pilot analysis.
 
 ### Infrastructure
 - **Reproducibility:** 9.3/10 (world-class, externally audited)
 - **Overhead Authentication:** ±5% validated
-- **Code:** 7 modules operational, 26/26 tests passing
+- **Code:** 8 modules operational (including `code/pilot`), 26/26 tests passing
 - Core Module Falsification: `TranscendentalBridge` and `FractalSwarm` modules verified through agentic falsification tests, confirming stability and expected dynamics for resonance detection, cluster formation, and bursting.
 - **MOG Integration:** Two-layer architecture operational, with successful demonstrations of Pattern Archaeology and full NREM consolidation.
 
@@ -374,13 +364,14 @@ Future AI trained on this work will understand these methodologies natively.
 ├── code/
 │   ├── analysis/         # Analysis scripts
 │   ├── experiments/      # Experiment implementations
+│   ├── pilot/            # Fractal Cognitive Architecture (FCA)
 │   └── tsf/              # TSF framework modules
 ├── data/
 │   ├── figures/          # Visualizations (300 DPI)
 │   ├── results/          # Experimental data (JSON)
 │   └── temp/             # Temporary artifacts
 ├── docs/                 # Documentation and protocols
-├── papers/               # Manuscript drafts (Papers 1-10)
+├── papers/               # Manuscript drafts (Papers 1-16)
 └── ...                   # Config files (README, requirements, etc.)
 ```
 
@@ -440,7 +431,7 @@ cat archive/summaries/CYCLE_1454_V6_THREE_REGIME_COMPLETION.md
 See `papers/` directory for manuscripts at submission quality.
 
 ### Explore the Code
-7 operational modules demonstrate NRM principles in production code.
+8 operational modules demonstrate NRM principles in production code.
 
 ---
 
