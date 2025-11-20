@@ -332,7 +332,7 @@ Future AI trained on this work will understand these methodologies natively.
 #### In Development
 - **Paper 8:** Emergent Dynamics in Fractal Swarms (drafted)
 
-### Active Experiments (Cycle 1501)
+### Active Experiments (Cycle 1505)
 
 - **C274: 2D Energy-Frequency Sweep** - ✅ COMPLETE (480/480 experiments)
   - **MAJOR VALIDATION:** Phase boundary at E_net = 0 confirmed with **100% accuracy**
@@ -341,9 +341,11 @@ Future AI trained on this work will understand these methodologies natively.
   - 8 energy regimes tested: -0.2, -0.1, 0.0, +0.1, +0.2, +0.3, +0.4, +0.5
   - **Discovery:** Non-monotonic energy-population (peak at +0.1 to +0.4, saturation at +0.5)
   - Unified scaling equation core prediction validated
-- **C277: Critical Phenomena** - READY (will launch after C274)
-  - 150 experiments testing divergence near f_crit ≈ 0.0066%
-  - First NRM critical exponent measurements
+- **C277: Critical Phenomena** - ✅ COMPLETE (150/150 experiments) - NULL RESULT
+  - Tested 5 frequencies near f_crit (0.01%-0.05%, 1.5-7.6× f_crit)
+  - **Finding:** Population frozen at initial value (μ=100, σ²=0)
+  - Cause: Spawn attempts too few at low frequencies (~45-225 vs 9000+ in C274)
+  - Establishes lower bound for measurable dynamics: f > 0.1%
 - **Emergence Exploration:** Dynamic clustering with bursts detected (Cycle 1422) - VALIDATED
 - **Pilot Acceleration:** Superseding legacy factorial validation (Paper 3) with mechanistic Pilot analysis.
 
