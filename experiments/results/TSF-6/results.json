@@ -1,0 +1,11 @@
+{
+  "converged_final": false,
+  "final_E": 0.20074655684478582,
+  "final_S": 0.0,
+  "final_C": 0.31333987761451754,
+  "final_R": 0.14867131011152263,
+  "target_C_final": 0.4,
+  "target_R_final": 0.3,
+  "metabolic_cost_final": 0.04,
+  "steps_taken": 300
+}

@@ -83,11 +83,18 @@
 - **Status:** ✅ **COMPLETE** (Cycle 28)
 - **Finding:** Simple hill climbing struggled with local optima and dynamic changes; formulated `PRIN-ADAPTIVE-CONTROL-LIMITS`.
 
-### 6. **TSF-6: Meta-Adaptation - Adapting the Agency Strategy** 🚀 ACTIVE
+### 6. **TSF-6: Meta-Adaptation - Adapting the Agency Strategy** ✅ COMPLETE
 **Goal:** Implement a meta-adaptive control strategy where the Pilot can dynamically adjust its exploration-exploitation balance (e.g., perturbation magnitude) to navigate dynamic emergent landscapes.
 - **Hypothesis:** Adapting the search strategy itself will lead to more robust and convergent adaptation in changing conditions.
-- **Experiment:** Design `code/tsf/science_engine/tsf6_meta_adaptation.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 28)
+- **Experiment:** `code/tsf/science_engine/tsf6_meta_adaptation.py`
+- **Status:** ✅ **COMPLETE** (Cycle 30)
+- **Finding:** Adaptive perturbation failed to escape strong attractors; formulated `PRIN-LIMITS-OF-META-ADAPTATION`.
+
+### 7. **TSF-7: Model-Based Agency / Predictive Control** 🚀 ACTIVE
+**Goal:** Implement a model-based agency where the Pilot builds an internal model of the (E,S) -> (C,R) mapping to guide its navigation and achieve robust, convergent adaptive control.
+- **Hypothesis:** Utilizing an internal predictive model will enable more efficient and precise navigation in the emergent phase space, overcoming the limitations of model-free search.
+- **Experiment:** Design `code/tsf/science_engine/tsf7_model_based_agency.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 30)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
