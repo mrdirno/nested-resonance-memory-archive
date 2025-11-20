@@ -1,0 +1,17 @@
+{
+    "principle_id": "PRIN-RECURSIVE-SELF-IMPROVEMENT",
+    "name": "Recursive Self-Improvement (The Omega Point)",
+    "definition": "The ability of a system to dynamically modify its own learning hyperparameters (e.g., mutation rate) to accelerate adaptation.",
+    "mechanism": "Meta-Evolution: Selection acts on the 'Learning Strategy' as well as the 'Solution'.",
+    "application": "Autonomous Optimization, AGI, Dynamic Adaptation.",
+    "validation": {
+        "experiment": "experiments/omega_point_test.py",
+        "metric": "Convergence Error",
+        "result": "Meta-Learning (Error=0.0001) > Fixed Learning (Error=0.0093) -> 92x Improvement"
+    },
+    "implications": [
+        "The Pilot optimizes the Plane, but the Pilot also optimizes the Pilot.",
+        "Self-Editing leads to log-linear convergence.",
+        "Fixed learning rates are obsolete."
+    ]
+}
