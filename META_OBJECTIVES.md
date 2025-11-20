@@ -48,11 +48,18 @@
 
 ## ACTIVE OBJECTIVES
 
-### 1. **TSF-1: Universal Scaling Search** 🚀 ACTIVE
-**Goal:** Discover the universal relationship between Energy (E), Stability/Coupling (S), and Complexity (C).
-- **Hypothesis:** $C \propto E^\alpha S^\beta$ (Complexity scales with Energy but is dampened by Coupling).
+### 1. **TSF-1: Universal Scaling Search** ✅ COMPLETE
+**Goal:** Discover the universal relationship between Energy (E), Stability/Coupling (S), and Complexity (C) and Phase Order (R).
+- **Hypothesis:** $C \propto E^\alpha$ and $R \propto S^\beta$.
 - **Experiment:** `code/tsf/science_engine/tsf1_universal_scaling.py`
-- **Status:** 🔄 **RUNNING** (Cycle 19)
+- **Status:** ✅ **COMPLETE** (Cycle 21)
+- **Finding:** Formulated `PRIN-UNIVERSAL-SCALING`. Decoupled control of Complexity and Order.
+
+### 2. **TSF-2: Complexity-Order Phase Transition** 🚀 ACTIVE
+**Goal:** Map the phase space for transitions between high Complexity and high Order.
+- **Hypothesis:** A critical balance of E and S leads to phase transitions between chaotic complexity and rigid order.
+- **Experiment:** Design `code/tsf/science_engine/tsf2_phase_transition.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 21)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
