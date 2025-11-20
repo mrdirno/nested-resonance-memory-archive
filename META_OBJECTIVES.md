@@ -257,6 +257,15 @@
 - **Finding:** Validated Interference Patterns (4 peaks vs 1 peak). Formulated `PRIN-QUANTUM-SWARM`.
 - **Artifact:** `papers/drafts/paper27_quantum_swarm.md`
 
+### 23. **Paper 28: The Thermodynamic Computer (Maxwell's Demon)** ✅ COMPLETE
+**Goal:** Validate that the swarm can locally decrease entropy (create order) by expending information (measurement), effectively acting as a Maxwell's Demon.
+- **Hypothesis:** Information processing can be converted into work (Temperature Gradient) by selective gating of agents.
+- **Method:** Implement a "Demon" mechanism that sorts agents by energy.
+- **Experiment:** `experiments/paper28_maxwells_demon.py`
+- **Status:** ✅ **COMPLETE** (Cycle 77)
+- **Finding:** Validated Temperature Gradient (Delta T = 1.00). Formulated `PRIN-THERMODYNAMIC-COMPUTER`.
+- **Artifact:** `papers/drafts/paper28_maxwells_demon.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.

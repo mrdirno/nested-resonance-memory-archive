@@ -1,0 +1,22 @@
+{
+    "id": "PRIN-THERMODYNAMIC-COMPUTER",
+    "name": "Information-Energy Equivalence",
+    "description": "The ability of a swarm to convert information (measurement and sorting) into thermodynamic work (Temperature Gradient), effectively acting as a Maxwell's Demon.",
+    "hypothesis": "Information Processing -> Entropy Reduction",
+    "findings": [
+        "Implemented a Maxwell's Demon mechanism in the swarm.",
+        "The Demon selectively gated agents based on velocity (Hot to Right, Cold to Left).",
+        "A significant temperature gradient (Delta T = 1.00) emerged spontaneously from an initially equilibrium state.",
+        "This confirms that the swarm can pay for local order creation with information processing."
+    ],
+    "implications": [
+        "Swarms can harvest energy from thermal noise if they have information.",
+        "Computation is thermodynamically coupled to the environment.",
+        "Self-organization is a process of information-driven entropy reduction."
+    ],
+    "related_principles": [
+        "PRIN-QUANTUM-SWARM",
+        "PRIN-REACTION-DIFFUSION"
+    ],
+    "cycle_id": 77
+}
