@@ -1,0 +1,381 @@
+================================================================================
+CYCLE 274: ENERGY-FREQUENCY 2D PARAMETER SWEEP
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+Date: 2025-11-19 23:17:15
+================================================================================
+
+Experimental Design:
+  Energy conditions: 9 (E_net: -0.2 to +0.5)
+  Frequencies: 1 points (0.05% - 2.0%)
+  Seeds per condition: 10
+  Total experiments: 90
+  Cycles per experiment: 450,000
+
+================================================================================
+Energy: spawn0.3_consume0.2 (E_net = +0.8, Regime: GROWTH)
+Frequency: 0.50% (10 experiments)
+================================================================================
+
+[1/90] Running: spawn0.3_consume0.2, f=0.50%, seed=100
+  ✓ Complete: 2346 agents, 37.4s
+
+[2/90] Running: spawn0.3_consume0.2, f=0.50%, seed=101
+  ✓ Complete: 2312 agents, 35.4s
+
+[3/90] Running: spawn0.3_consume0.2, f=0.50%, seed=102
+  ✓ Complete: 2358 agents, 33.4s
+
+[4/90] Running: spawn0.3_consume0.2, f=0.50%, seed=103
+  ✓ Complete: 2382 agents, 33.9s
+
+[5/90] Running: spawn0.3_consume0.2, f=0.50%, seed=104
+  ✓ Complete: 2392 agents, 34.5s
+
+[6/90] Running: spawn0.3_consume0.2, f=0.50%, seed=105
+  ✓ Complete: 2405 agents, 33.9s
+
+[7/90] Running: spawn0.3_consume0.2, f=0.50%, seed=106
+  ✓ Complete: 2388 agents, 34.1s
+
+[8/90] Running: spawn0.3_consume0.2, f=0.50%, seed=107
+  ✓ Complete: 2329 agents, 33.2s
+
+[9/90] Running: spawn0.3_consume0.2, f=0.50%, seed=108
+  ✓ Complete: 2393 agents, 34.1s
+
+[10/90] Running: spawn0.3_consume0.2, f=0.50%, seed=109
+  ✓ Complete: 2321 agents, 33.5s
+
+Condition Summary (spawn0.3_consume0.2, f=0.50%):
+  Mean: 2362.6
+  Std Dev: 33.9
+  Collapse: 0/10
+
+================================================================================
+Energy: spawn0.3_consume0.3 (E_net = +0.7, Regime: THRESHOLD)
+Frequency: 0.50% (10 experiments)
+================================================================================
+
+[11/90] Running: spawn0.3_consume0.3, f=0.50%, seed=100
+  ✓ Complete: 100 agents, 3.4s
+
+[12/90] Running: spawn0.3_consume0.3, f=0.50%, seed=101
+  ✓ Complete: 100 agents, 3.4s
+
+[13/90] Running: spawn0.3_consume0.3, f=0.50%, seed=102
+  ✓ Complete: 100 agents, 3.4s
+
+[14/90] Running: spawn0.3_consume0.3, f=0.50%, seed=103
+  ✓ Complete: 100 agents, 3.4s
+
+[15/90] Running: spawn0.3_consume0.3, f=0.50%, seed=104
+  ✓ Complete: 100 agents, 3.4s
+
+[16/90] Running: spawn0.3_consume0.3, f=0.50%, seed=105
+  ✓ Complete: 100 agents, 3.4s
+
+[17/90] Running: spawn0.3_consume0.3, f=0.50%, seed=106
+  ✓ Complete: 100 agents, 3.4s
+
+[18/90] Running: spawn0.3_consume0.3, f=0.50%, seed=107
+  ✓ Complete: 100 agents, 3.4s
+
+[19/90] Running: spawn0.3_consume0.3, f=0.50%, seed=108
+  ✓ Complete: 100 agents, 3.4s
+
+[20/90] Running: spawn0.3_consume0.3, f=0.50%, seed=109
+  ✓ Complete: 100 agents, 3.4s
+
+Condition Summary (spawn0.3_consume0.3, f=0.50%):
+  Mean: 100.0
+  Std Dev: 0.0
+  Collapse: 0/10
+
+================================================================================
+Energy: spawn0.3_consume0.4 (E_net = +0.6, Regime: DEATH)
+Frequency: 0.50% (10 experiments)
+================================================================================
+
+[21/90] Running: spawn0.3_consume0.4, f=0.50%, seed=100
+  ✓ Complete: 100 agents, 3.4s
+
+[22/90] Running: spawn0.3_consume0.4, f=0.50%, seed=101
+  ✓ Complete: 100 agents, 3.5s
+
+[23/90] Running: spawn0.3_consume0.4, f=0.50%, seed=102
+  ✓ Complete: 100 agents, 3.5s
+
+[24/90] Running: spawn0.3_consume0.4, f=0.50%, seed=103
+  ✓ Complete: 100 agents, 3.4s
+
+[25/90] Running: spawn0.3_consume0.4, f=0.50%, seed=104
+  ✓ Complete: 100 agents, 3.4s
+
+[26/90] Running: spawn0.3_consume0.4, f=0.50%, seed=105
+  ✓ Complete: 100 agents, 3.4s
+
+[27/90] Running: spawn0.3_consume0.4, f=0.50%, seed=106
+  ✓ Complete: 100 agents, 3.4s
+
+[28/90] Running: spawn0.3_consume0.4, f=0.50%, seed=107
+  ✓ Complete: 100 agents, 3.4s
+
+[29/90] Running: spawn0.3_consume0.4, f=0.50%, seed=108
+  ✓ Complete: 100 agents, 3.4s
+
+[30/90] Running: spawn0.3_consume0.4, f=0.50%, seed=109
+  ✓ Complete: 100 agents, 3.4s
+
+Condition Summary (spawn0.3_consume0.4, f=0.50%):
+  Mean: 100.0
+  Std Dev: 0.0
+  Collapse: 0/10
+
+================================================================================
+Energy: spawn0.5_consume0.4 (E_net = +0.6, Regime: GROWTH)
+Frequency: 0.50% (10 experiments)
+================================================================================
+
+[31/90] Running: spawn0.5_consume0.4, f=0.50%, seed=100
+  ✓ Complete: 2346 agents, 33.8s
+
+[32/90] Running: spawn0.5_consume0.4, f=0.50%, seed=101
+  ✓ Complete: 2312 agents, 33.3s
+
+[33/90] Running: spawn0.5_consume0.4, f=0.50%, seed=102
+  ✓ Complete: 2358 agents, 33.3s
+
+[34/90] Running: spawn0.5_consume0.4, f=0.50%, seed=103
+  ✓ Complete: 2382 agents, 34.0s
+
+[35/90] Running: spawn0.5_consume0.4, f=0.50%, seed=104
+  ✓ Complete: 2392 agents, 34.6s
+
+[36/90] Running: spawn0.5_consume0.4, f=0.50%, seed=105
+  ✓ Complete: 2405 agents, 33.9s
+
+[37/90] Running: spawn0.5_consume0.4, f=0.50%, seed=106
+  ✓ Complete: 2388 agents, 34.1s
+
+[38/90] Running: spawn0.5_consume0.4, f=0.50%, seed=107
+  ✓ Complete: 2329 agents, 32.8s
+
+[39/90] Running: spawn0.5_consume0.4, f=0.50%, seed=108
+  ✓ Complete: 2393 agents, 33.9s
+
+[40/90] Running: spawn0.5_consume0.4, f=0.50%, seed=109
+  ✓ Complete: 2321 agents, 33.3s
+
+Condition Summary (spawn0.5_consume0.4, f=0.50%):
+  Mean: 2362.6
+  Std Dev: 33.9
+  Collapse: 0/10
+
+================================================================================
+Energy: spawn0.5_consume0.5 (E_net = +0.5, Regime: THRESHOLD)
+Frequency: 0.50% (10 experiments)
+================================================================================
+
+[41/90] Running: spawn0.5_consume0.5, f=0.50%, seed=100
+  ✓ Complete: 100 agents, 3.4s
+
+[42/90] Running: spawn0.5_consume0.5, f=0.50%, seed=101
+  ✓ Complete: 100 agents, 3.4s
+
+[43/90] Running: spawn0.5_consume0.5, f=0.50%, seed=102
+  ✓ Complete: 100 agents, 3.4s
+
+[44/90] Running: spawn0.5_consume0.5, f=0.50%, seed=103
+  ✓ Complete: 100 agents, 3.4s
+
+[45/90] Running: spawn0.5_consume0.5, f=0.50%, seed=104
+  ✓ Complete: 100 agents, 3.4s
+
+[46/90] Running: spawn0.5_consume0.5, f=0.50%, seed=105
+  ✓ Complete: 100 agents, 3.4s
+
+[47/90] Running: spawn0.5_consume0.5, f=0.50%, seed=106
+  ✓ Complete: 100 agents, 3.4s
+
+[48/90] Running: spawn0.5_consume0.5, f=0.50%, seed=107
+  ✓ Complete: 100 agents, 3.4s
+
+[49/90] Running: spawn0.5_consume0.5, f=0.50%, seed=108
+  ✓ Complete: 100 agents, 3.4s
+
+[50/90] Running: spawn0.5_consume0.5, f=0.50%, seed=109
+  ✓ Complete: 100 agents, 3.4s
+
+Condition Summary (spawn0.5_consume0.5, f=0.50%):
+  Mean: 100.0
+  Std Dev: 0.0
+  Collapse: 0/10
+
+================================================================================
+Energy: spawn0.5_consume0.6 (E_net = +0.4, Regime: DEATH)
+Frequency: 0.50% (10 experiments)
+================================================================================
+
+[51/90] Running: spawn0.5_consume0.6, f=0.50%, seed=100
+  ✓ Complete: 100 agents, 3.4s
+
+[52/90] Running: spawn0.5_consume0.6, f=0.50%, seed=101
+  ✓ Complete: 100 agents, 3.5s
+
+[53/90] Running: spawn0.5_consume0.6, f=0.50%, seed=102
+  ✓ Complete: 100 agents, 3.4s
+
+[54/90] Running: spawn0.5_consume0.6, f=0.50%, seed=103
+  ✓ Complete: 100 agents, 3.4s
+
+[55/90] Running: spawn0.5_consume0.6, f=0.50%, seed=104
+  ✓ Complete: 100 agents, 3.4s
+
+[56/90] Running: spawn0.5_consume0.6, f=0.50%, seed=105
+  ✓ Complete: 100 agents, 3.4s
+
+[57/90] Running: spawn0.5_consume0.6, f=0.50%, seed=106
+  ✓ Complete: 100 agents, 3.4s
+
+[58/90] Running: spawn0.5_consume0.6, f=0.50%, seed=107
+  ✓ Complete: 100 agents, 3.4s
+
+[59/90] Running: spawn0.5_consume0.6, f=0.50%, seed=108
+  ✓ Complete: 100 agents, 3.4s
+
+[60/90] Running: spawn0.5_consume0.6, f=0.50%, seed=109
+  ✓ Complete: 100 agents, 3.4s
+
+Condition Summary (spawn0.5_consume0.6, f=0.50%):
+  Mean: 100.0
+  Std Dev: 0.0
+  Collapse: 0/10
+
+================================================================================
+Energy: spawn0.7_consume0.6 (E_net = +0.4, Regime: GROWTH)
+Frequency: 0.50% (10 experiments)
+================================================================================
+
+[61/90] Running: spawn0.7_consume0.6, f=0.50%, seed=100
+  ✓ Complete: 2346 agents, 33.8s
+
+[62/90] Running: spawn0.7_consume0.6, f=0.50%, seed=101
+  ✓ Complete: 2312 agents, 33.0s
+
+[63/90] Running: spawn0.7_consume0.6, f=0.50%, seed=102
+  ✓ Complete: 2358 agents, 32.7s
+
+[64/90] Running: spawn0.7_consume0.6, f=0.50%, seed=103
+  ✓ Complete: 2382 agents, 34.2s
+
+[65/90] Running: spawn0.7_consume0.6, f=0.50%, seed=104
+  ✓ Complete: 2392 agents, 34.8s
+
+[66/90] Running: spawn0.7_consume0.6, f=0.50%, seed=105
+  ✓ Complete: 2405 agents, 33.8s
+
+[67/90] Running: spawn0.7_consume0.6, f=0.50%, seed=106
+  ✓ Complete: 2388 agents, 34.1s
+
+[68/90] Running: spawn0.7_consume0.6, f=0.50%, seed=107
+  ✓ Complete: 2329 agents, 32.8s
+
+[69/90] Running: spawn0.7_consume0.6, f=0.50%, seed=108
+  ✓ Complete: 2393 agents, 33.8s
+
+[70/90] Running: spawn0.7_consume0.6, f=0.50%, seed=109
+  ✓ Complete: 2321 agents, 33.3s
+
+Condition Summary (spawn0.7_consume0.6, f=0.50%):
+  Mean: 2362.6
+  Std Dev: 33.9
+  Collapse: 0/10
+
+================================================================================
+Energy: spawn0.7_consume0.7 (E_net = +0.3, Regime: THRESHOLD)
+Frequency: 0.50% (10 experiments)
+================================================================================
+
+[71/90] Running: spawn0.7_consume0.7, f=0.50%, seed=100
+  ✓ Complete: 100 agents, 3.4s
+
+[72/90] Running: spawn0.7_consume0.7, f=0.50%, seed=101
+  ✓ Complete: 100 agents, 3.4s
+
+[73/90] Running: spawn0.7_consume0.7, f=0.50%, seed=102
+  ✓ Complete: 100 agents, 3.4s
+
+[74/90] Running: spawn0.7_consume0.7, f=0.50%, seed=103
+  ✓ Complete: 100 agents, 3.4s
+
+[75/90] Running: spawn0.7_consume0.7, f=0.50%, seed=104
+  ✓ Complete: 100 agents, 3.5s
+
+[76/90] Running: spawn0.7_consume0.7, f=0.50%, seed=105
+  ✓ Complete: 100 agents, 3.5s
+
+[77/90] Running: spawn0.7_consume0.7, f=0.50%, seed=106
+  ✓ Complete: 100 agents, 3.4s
+
+[78/90] Running: spawn0.7_consume0.7, f=0.50%, seed=107
+  ✓ Complete: 100 agents, 3.4s
+
+[79/90] Running: spawn0.7_consume0.7, f=0.50%, seed=108
+  ✓ Complete: 100 agents, 3.5s
+
+[80/90] Running: spawn0.7_consume0.7, f=0.50%, seed=109
+  ✓ Complete: 100 agents, 3.4s
+
+Condition Summary (spawn0.7_consume0.7, f=0.50%):
+  Mean: 100.0
+  Std Dev: 0.0
+  Collapse: 0/10
+
+================================================================================
+Energy: spawn0.7_consume0.8 (E_net = +0.2, Regime: DEATH)
+Frequency: 0.50% (10 experiments)
+================================================================================
+
+[81/90] Running: spawn0.7_consume0.8, f=0.50%, seed=100
+  ✓ Complete: 100 agents, 3.4s
+
+[82/90] Running: spawn0.7_consume0.8, f=0.50%, seed=101
+  ✓ Complete: 100 agents, 3.4s
+
+[83/90] Running: spawn0.7_consume0.8, f=0.50%, seed=102
+  ✓ Complete: 100 agents, 3.4s
+
+[84/90] Running: spawn0.7_consume0.8, f=0.50%, seed=103
+  ✓ Complete: 100 agents, 3.4s
+
+[85/90] Running: spawn0.7_consume0.8, f=0.50%, seed=104
+  ✓ Complete: 100 agents, 3.4s
+
+[86/90] Running: spawn0.7_consume0.8, f=0.50%, seed=105
+  ✓ Complete: 100 agents, 3.5s
+
+[87/90] Running: spawn0.7_consume0.8, f=0.50%, seed=106
+  ✓ Complete: 100 agents, 3.4s
+
+[88/90] Running: spawn0.7_consume0.8, f=0.50%, seed=107
+  ✓ Complete: 100 agents, 3.4s
+
+[89/90] Running: spawn0.7_consume0.8, f=0.50%, seed=108
+  ✓ Complete: 100 agents, 3.5s
+
+[90/90] Running: spawn0.7_consume0.8, f=0.50%, seed=109
+  ✓ Complete: 100 agents, 3.4s
+
+Condition Summary (spawn0.7_consume0.8, f=0.50%):
+  Mean: 100.0
+  Std Dev: 0.0
+  Collapse: 0/10
+
+================================================================================
+CAMPAIGN COMPLETE
+================================================================================
+Total experiments: 90
+Results saved: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/c279_spawn_viability_threshold_results.json
+
+Next: Run analysis script to fit 2D surface and validate unified equation

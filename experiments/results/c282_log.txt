@@ -1,0 +1,236 @@
+================================================================================
+CYCLE 282: DENSITY-DEPENDENT DYNAMICS
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+Date: 2025-11-20 00:31:05
+================================================================================
+
+Research Question: Can density-dependent mechanics produce emergent equilibrium?
+
+Conditions:
+  Density factors: [0.0, 0.1, 0.5]
+  Carrying capacities: [100, 500, 1000]
+  Seeds: 3
+  Total: 27
+
+
+============================================================
+Density Factor=0.0, K=100
+============================================================
+
+[1/27] df=0.0, K=100, seed=100
+      Cycle 0: pop=11
+      [CAP] at cycle 1373
+    → final=10009, mean_late=1274.4, CV=1.561
+
+[2/27] df=0.0, K=100, seed=101
+      Cycle 0: pop=10
+      [CAP] at cycle 1365
+    → final=10034, mean_late=1325.7, CV=1.563
+
+[3/27] df=0.0, K=100, seed=102
+      Cycle 0: pop=10
+      [CAP] at cycle 1449
+    → final=10003, mean_late=1334.3, CV=1.630
+
+============================================================
+Density Factor=0.0, K=500
+============================================================
+
+[4/27] df=0.0, K=500, seed=100
+      Cycle 0: pop=11
+      [CAP] at cycle 1373
+    → final=10009, mean_late=1274.4, CV=1.561
+
+[5/27] df=0.0, K=500, seed=101
+      Cycle 0: pop=10
+      [CAP] at cycle 1365
+    → final=10034, mean_late=1325.7, CV=1.563
+
+[6/27] df=0.0, K=500, seed=102
+      Cycle 0: pop=10
+      [CAP] at cycle 1449
+    → final=10003, mean_late=1334.3, CV=1.630
+
+============================================================
+Density Factor=0.0, K=1000
+============================================================
+
+[7/27] df=0.0, K=1000, seed=100
+      Cycle 0: pop=11
+      [CAP] at cycle 1373
+    → final=10009, mean_late=1274.4, CV=1.561
+
+[8/27] df=0.0, K=1000, seed=101
+      Cycle 0: pop=10
+      [CAP] at cycle 1365
+    → final=10034, mean_late=1325.7, CV=1.563
+
+[9/27] df=0.0, K=1000, seed=102
+      Cycle 0: pop=10
+      [CAP] at cycle 1449
+    → final=10003, mean_late=1334.3, CV=1.630
+
+============================================================
+Density Factor=0.1, K=100
+============================================================
+
+[10/27] df=0.1, K=100, seed=100
+      Cycle 0: pop=11
+      Cycle 5000: pop=2
+      Cycle 10000: pop=4
+      [EXTINCT] at cycle 11977
+    → final=0, mean_late=3.5, CV=0.453
+
+[11/27] df=0.1, K=100, seed=101
+      Cycle 0: pop=10
+      Cycle 5000: pop=1
+      Cycle 10000: pop=5
+      Cycle 15000: pop=6
+    → final=5, mean_late=4.2, CV=0.375
+
+[12/27] df=0.1, K=100, seed=102
+      Cycle 0: pop=10
+      [EXTINCT] at cycle 3536
+    → final=0, mean_late=4.8, CV=0.387
+
+============================================================
+Density Factor=0.1, K=500
+============================================================
+
+[13/27] df=0.1, K=500, seed=100
+      Cycle 0: pop=11
+      Cycle 5000: pop=27
+      Cycle 10000: pop=23
+      Cycle 15000: pop=27
+    → final=27, mean_late=28.6, CV=0.181
+
+[14/27] df=0.1, K=500, seed=101
+      Cycle 0: pop=10
+      Cycle 5000: pop=30
+      Cycle 10000: pop=17
+      Cycle 15000: pop=25
+    → final=27, mean_late=23.1, CV=0.181
+
+[15/27] df=0.1, K=500, seed=102
+      Cycle 0: pop=10
+      Cycle 5000: pop=12
+      Cycle 10000: pop=12
+      Cycle 15000: pop=20
+    → final=22, mean_late=23.4, CV=0.142
+
+============================================================
+Density Factor=0.1, K=1000
+============================================================
+
+[16/27] df=0.1, K=1000, seed=100
+      Cycle 0: pop=11
+      Cycle 5000: pop=41
+      Cycle 10000: pop=40
+      Cycle 15000: pop=54
+    → final=53, mean_late=46.0, CV=0.117
+
+[17/27] df=0.1, K=1000, seed=101
+      Cycle 0: pop=10
+      Cycle 5000: pop=46
+      Cycle 10000: pop=56
+      Cycle 15000: pop=40
+    → final=47, mean_late=47.0, CV=0.112
+
+[18/27] df=0.1, K=1000, seed=102
+      Cycle 0: pop=10
+      Cycle 5000: pop=52
+      Cycle 10000: pop=54
+      Cycle 15000: pop=41
+    → final=40, mean_late=50.5, CV=0.130
+
+============================================================
+Density Factor=0.5, K=100
+============================================================
+
+[19/27] df=0.5, K=100, seed=100
+      Cycle 0: pop=11
+      [EXTINCT] at cycle 205
+    → final=0, mean_late=0.0, CV=0.000
+
+[20/27] df=0.5, K=100, seed=101
+      Cycle 0: pop=10
+      [EXTINCT] at cycle 178
+    → final=0, mean_late=0.0, CV=0.000
+
+[21/27] df=0.5, K=100, seed=102
+      Cycle 0: pop=10
+      [EXTINCT] at cycle 1426
+    → final=0, mean_late=2.0, CV=1.140
+
+============================================================
+Density Factor=0.5, K=500
+============================================================
+
+[22/27] df=0.5, K=500, seed=100
+      Cycle 0: pop=11
+      Cycle 5000: pop=2
+      Cycle 10000: pop=4
+      [EXTINCT] at cycle 11977
+    → final=0, mean_late=3.5, CV=0.453
+
+[23/27] df=0.5, K=500, seed=101
+      Cycle 0: pop=10
+      Cycle 5000: pop=1
+      Cycle 10000: pop=5
+      Cycle 15000: pop=6
+    → final=5, mean_late=4.2, CV=0.375
+
+[24/27] df=0.5, K=500, seed=102
+      Cycle 0: pop=10
+      [EXTINCT] at cycle 3536
+    → final=0, mean_late=4.8, CV=0.387
+
+============================================================
+Density Factor=0.5, K=1000
+============================================================
+
+[25/27] df=0.5, K=1000, seed=100
+      Cycle 0: pop=11
+      Cycle 5000: pop=6
+      Cycle 10000: pop=7
+      Cycle 15000: pop=13
+    → final=11, mean_late=7.9, CV=0.286
+
+[26/27] df=0.5, K=1000, seed=101
+      Cycle 0: pop=10
+      Cycle 5000: pop=4
+      Cycle 10000: pop=15
+      Cycle 15000: pop=16
+    → final=4, mean_late=7.9, CV=0.317
+
+[27/27] df=0.5, K=1000, seed=102
+      Cycle 0: pop=10
+      Cycle 5000: pop=6
+      Cycle 10000: pop=6
+      Cycle 15000: pop=12
+    → final=11, mean_late=7.5, CV=0.318
+
+================================================================================
+RESULTS SUMMARY
+================================================================================
+
+Equilibrium Analysis:
+----------------------------------------------------------------------
+    DF        K    Mean Late        Std         CV       Status
+----------------------------------------------------------------------
+   0.0      100       1311.5     2078.6      1.585      CONTROL
+   0.0      500       1311.5     2078.6      1.585      CONTROL
+   0.0     1000       1311.5     2078.6      1.585      CONTROL
+   0.1      100          4.1        1.7      0.405     UNSTABLE
+   0.1      500         25.0        4.2      0.168 QUASI-STABLE
+   0.1     1000         47.9        5.7      0.120 QUASI-STABLE
+   0.5      100          0.7        0.8      0.380     UNSTABLE
+   0.5      500          4.1        1.7      0.405     UNSTABLE
+   0.5     1000          7.8        2.4      0.307     UNSTABLE
+
+Results saved to: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/c282_density_dependent_results.json
+
+================================================================================
+C282 COMPLETE
+================================================================================

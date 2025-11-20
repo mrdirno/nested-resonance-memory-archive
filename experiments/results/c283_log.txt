@@ -1,0 +1,167 @@
+================================================================================
+CYCLE 283: MIGRATION DYNAMICS
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+Date: 2025-11-20 00:33:46
+================================================================================
+
+Research Question: Does migration produce emergent collective behavior?
+
+Migration rates: [0.0, 0.01, 0.1]
+Density configs: ['no_density', 'with_density']
+Populations: 5
+Total experiments: 18
+
+
+============================================================
+Migration=0.0, Density=no_density
+============================================================
+
+[1/18] mig=0.0, no_density, seed=100
+      Cycle 0: total=101
+      [CAP] at cycle 1065
+    → total=20682, mean=3430.3, sync=0.147
+
+[2/18] mig=0.0, no_density, seed=101
+      Cycle 0: total=100
+      [CAP] at cycle 1041
+    → total=18064, mean=3372.0, sync=0.244
+
+[3/18] mig=0.0, no_density, seed=102
+      Cycle 0: total=100
+      [CAP] at cycle 1086
+    → total=20828, mean=3105.5, sync=0.116
+
+============================================================
+Migration=0.0, Density=with_density
+============================================================
+
+[4/18] mig=0.0, with_density, seed=100
+      Cycle 0: total=100
+      Cycle 5000: total=118
+      Cycle 10000: total=102
+      Cycle 15000: total=115
+    → total=117, mean=117.8, sync=0.154
+
+[5/18] mig=0.0, with_density, seed=101
+      Cycle 0: total=99
+      Cycle 5000: total=114
+      Cycle 10000: total=142
+      Cycle 15000: total=121
+    → total=135, mean=120.1, sync=0.162
+
+[6/18] mig=0.0, with_density, seed=102
+      Cycle 0: total=99
+      Cycle 5000: total=129
+      Cycle 10000: total=117
+      Cycle 15000: total=126
+    → total=129, mean=113.2, sync=0.197
+
+============================================================
+Migration=0.01, Density=no_density
+============================================================
+
+[7/18] mig=0.01, no_density, seed=100
+      Cycle 0: total=101
+      [CAP] at cycle 1112
+    → total=24644, mean=4923.2, sync=0.026
+
+[8/18] mig=0.01, no_density, seed=101
+      Cycle 0: total=100
+      [CAP] at cycle 1114
+    → total=24339, mean=4811.6, sync=0.033
+
+[9/18] mig=0.01, no_density, seed=102
+      Cycle 0: total=100
+      [CAP] at cycle 1141
+    → total=24663, mean=4236.2, sync=0.025
+
+============================================================
+Migration=0.01, Density=with_density
+============================================================
+
+[10/18] mig=0.01, with_density, seed=100
+      Cycle 0: total=101
+      Cycle 5000: total=114
+      Cycle 10000: total=113
+      Cycle 15000: total=133
+    → total=110, mean=117.8, sync=0.156
+
+[11/18] mig=0.01, with_density, seed=101
+      Cycle 0: total=98
+      Cycle 5000: total=111
+      Cycle 10000: total=127
+      Cycle 15000: total=138
+    → total=119, mean=109.8, sync=0.173
+
+[12/18] mig=0.01, with_density, seed=102
+      Cycle 0: total=100
+      Cycle 5000: total=128
+      Cycle 10000: total=117
+      Cycle 15000: total=126
+    → total=128, mean=115.5, sync=0.183
+
+============================================================
+Migration=0.1, Density=no_density
+============================================================
+
+[13/18] mig=0.1, no_density, seed=100
+      Cycle 0: total=101
+      [CAP] at cycle 1090
+    → total=24315, mean=3610.5, sync=0.037
+
+[14/18] mig=0.1, no_density, seed=101
+      Cycle 0: total=100
+      [CAP] at cycle 1120
+    → total=23979, mean=4584.0, sync=0.040
+
+[15/18] mig=0.1, no_density, seed=102
+      Cycle 0: total=100
+      [CAP] at cycle 1110
+    → total=23651, mean=4742.3, sync=0.045
+
+============================================================
+Migration=0.1, Density=with_density
+============================================================
+
+[16/18] mig=0.1, with_density, seed=100
+      Cycle 0: total=101
+      Cycle 5000: total=111
+      Cycle 10000: total=124
+      Cycle 15000: total=105
+    → total=146, mean=124.3, sync=0.166
+
+[17/18] mig=0.1, with_density, seed=101
+      Cycle 0: total=98
+      Cycle 5000: total=124
+      Cycle 10000: total=120
+      Cycle 15000: total=109
+    → total=115, mean=116.3, sync=0.182
+
+[18/18] mig=0.1, with_density, seed=102
+      Cycle 0: total=99
+      Cycle 5000: total=139
+      Cycle 10000: total=122
+      Cycle 15000: total=127
+    → total=112, mean=117.6, sync=0.160
+
+================================================================================
+RESULTS SUMMARY
+================================================================================
+
+Migration Effects:
+--------------------------------------------------------------------------------
+  Mig Rate         Density   Mean Total        Std       Sync
+--------------------------------------------------------------------------------
+      0.00      no_density       3302.6     4326.2      0.169
+      0.00    with_density        117.0       11.3      0.171
+      0.01      no_density       4657.0     6483.7      0.028
+      0.01    with_density        114.4        9.3      0.171
+      0.10      no_density       4312.3     5915.0      0.041
+      0.10    with_density        119.4        8.4      0.169
+
+Results saved to: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_migration_dynamics_results.json
+
+================================================================================
+C283 COMPLETE
+================================================================================
