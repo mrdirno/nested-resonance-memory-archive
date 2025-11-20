@@ -26,14 +26,15 @@ class ScienceEngineTSF1:
         Run a single cell of the parameter sweep.
         Energy Influx: Rate of resource addition.
         Stability Coupling: Strength of H1 pooling (homogenization).
-        Measure: Complexity (Variance of Agent States).
+        Measure: Complexity (Variance of Agent States) and Phase Order.
         """
         agents = [FractalAgent(str(i), phase=np.random.uniform(0, 2*math.pi)) for i in range(AGENTS_PER_CELL)]
         
-        # Pre-load Pilot
-        pilot = CognitiveEngine()
+        # Pilot is not directly used in this baseline measurement, but could be for adaptive sampling.
+        # pilot = CognitiveEngine()
         
-        complexity_series = []
+        energy_variance_series = []
+        phase_order_series = []
         
         for t in range(DURATION):
             # 1. Influx
@@ -41,29 +42,43 @@ class ScienceEngineTSF1:
                 a.update_energy(energy_influx, max_energy=10.0)
             
             # 2. Coupling (Stability)
+            current_phases = [a.state.phase for a in agents]
+            if len(current_phases) > 0:
+                complex_sum = sum(math.e ** (1j * p) for p in current_phases)
+                mean_phase = math.atan2(complex_sum.imag, complex_sum.real)
+                current_order = abs(complex_sum) / len(current_phases)
+            else:
+                mean_phase = 0
+                current_order = 0
+
             if stability_coupling > 0:
                 energies = [a.state.energy for a in agents]
                 avg_e = sum(energies)/len(agents)
                 for a in agents:
-                    # Pull to mean
-                    diff = avg_e - a.state.energy
-                    a.update_energy(diff * stability_coupling)
+                    # Energy Pooling (H1)
+                    diff_e = avg_e - a.state.energy
+                    a.update_energy(diff_e * stability_coupling)
+                    
+                    # Phase Coupling (H1 - the 'stability' component for order)
+                    phase_pull = math.sin(mean_phase - a.state.phase) * stability_coupling
+                    a.state.phase += phase_pull
             
             # 3. Evolve
             for a in agents:
                 a.update_energy(-0.01) # Metabolism
                 a.update_phase(1.0)
             
-            # 4. Measure Complexity (Standard Deviation of Energy)
+            # 4. Measure Complexity (Standard Deviation of Energy) and Phase Order
             current_energies = [a.state.energy for a in agents]
-            complexity = np.std(current_energies)
-            complexity_series.append(complexity)
+            energy_variance = np.std(current_energies)
+            energy_variance_series.append(energy_variance)
+            phase_order_series.append(current_order)
             
-        return np.mean(complexity_series[-10:]) # Average of last 10 steps
+        return np.mean(energy_variance_series[-10:]), np.mean(phase_order_series[-10:])
 
     def run(self):
         print(f"--- STARTING {EXPERIMENT_ID}: {TITLE} ---")
-        print(f"Goal: Find C = f(E, S)")
+        print(f"Goal: Find C, R = f(E, S)")
         
         energies = np.linspace(0.01, 0.2, DIMENSIONS)
         couplings = np.linspace(0.0, 0.5, DIMENSIONS)
@@ -73,10 +88,10 @@ class ScienceEngineTSF1:
         for e in energies:
             row = []
             for s in couplings:
-                c = self.run_cell(e, s)
-                self.data_points.append({"E": e, "S": s, "C": c})
-                row.append(c)
-                # print(f"E={e:.2f}, S={s:.2f} -> C={c:.4f}") # Verbose
+                c, r = self.run_cell(e, s)
+                self.data_points.append({"E": e, "S": s, "C": c, "R": r})
+                row.append({"C": c, "R": r})
+                # print(f"E={e:.2f}, S={s:.2f} -> C={c:.4f}, R={r:.4f}") # Verbose
             results_grid.append(row)
             print(f"Completed Row E={e:.2f}")
             
@@ -84,27 +99,27 @@ class ScienceEngineTSF1:
 
     def _analyze(self):
         print("--- ANALYSIS: EQUATION DISCOVERY ---")
-        # Attempt to fit C = k * E^alpha * S^beta
-        # log(C) = log(k) + alpha*log(E) + beta*log(S)
-        # But S can be 0, so use S+epsilon or model S differently.
-        # Actually, Coupling (S) reduces Complexity. So C ~ E / S?
         
-        # Let's try to find correlation
         Es = np.array([d["E"] for d in self.data_points])
         Ss = np.array([d["S"] for d in self.data_points])
         Cs = np.array([d["C"] for d in self.data_points])
+        Rs = np.array([d["R"] for d in self.data_points])
         
-        # Simple correlation
+        # Correlations
         corr_EC = np.corrcoef(Es, Cs)[0,1]
         corr_SC = np.corrcoef(Ss, Cs)[0,1]
+        corr_SR = np.corrcoef(Ss, Rs)[0,1]
+        corr_ER = np.corrcoef(Es, Rs)[0,1] # Expect neutral or slightly positive
         
-        print(f"Corr(E, C): {corr_EC:.4f} (Expect Positive)")
-        print(f"Corr(S, C): {corr_SC:.4f} (Expect Negative)")
+        print(f"Corr(E, C): {corr_EC:.4f} (Energy vs Energy_Variance - Expect Positive)")
+        print(f"Corr(S, C): {corr_SC:.4f} (Coupling vs Energy_Variance - Expect Negative)")
+        print(f"Corr(S, R): {corr_SR:.4f} (Coupling vs Phase_Order - Expect Positive)")
+        print(f"Corr(E, R): {corr_ER:.4f} (Energy vs Phase_Order - Expect neutral/positive)")
         
-        equation = "C ~ E^a * S^b"
+        equation = "C ~ E^a * S^b; R ~ S^c * E^d"
         
         results = {
-            "correlations": {"EC": corr_EC, "SC": corr_SC},
+            "correlations": {"EC": corr_EC, "SC": corr_SC, "SR": corr_SR, "ER": corr_ER},
             "data": self.data_points
         }
         
