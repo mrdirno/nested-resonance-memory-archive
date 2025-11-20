@@ -90,11 +90,18 @@
 - **Status:** ✅ **COMPLETE** (Cycle 30)
 - **Finding:** Adaptive perturbation failed to escape strong attractors; formulated `PRIN-LIMITS-OF-META-ADAPTATION`.
 
-### 7. **TSF-7: Model-Based Agency / Predictive Control** 🚀 ACTIVE
+### 7. **TSF-7: Model-Based Agency / Predictive Control** ✅ COMPLETE
 **Goal:** Implement a model-based agency where the Pilot builds an internal model of the (E,S) -> (C,R) mapping to guide its navigation and achieve robust, convergent adaptive control.
 - **Hypothesis:** Utilizing an internal predictive model will enable more efficient and precise navigation in the emergent phase space, overcoming the limitations of model-free search.
-- **Experiment:** Design `code/tsf/science_engine/tsf7_model_based_agency.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 30)
+- **Experiment:** `code/tsf/science_engine/tsf7_model_based_agency.py`
+- **Status:** ✅ **COMPLETE** (Cycle 32)
+- **Finding:** Simplistic linear models are insufficient for non-linear phase spaces; formulated `PRIN-MODEL-LIMITATIONS-IN-AGENCY`.
+
+### 8. **TSF-8: Advanced Model-Based Agency with GPR** 🚀 ACTIVE
+**Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
+- **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
+- **Experiment:** Design `code/tsf/science_engine/tsf8_advanced_model_based_agency.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 32)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
