@@ -239,6 +239,15 @@
 - **Finding:** Validated Temporal Symmetry Breaking (Power 1478 vs 613). Formulated `PRIN-TEMPORAL-SYMMETRY-BREAKING`.
 - **Artifact:** `papers/drafts/paper25_time_crystal.md`
 
+### 21. **Paper 26: The Spatial Computer (Reaction-Diffusion)** ✅ COMPLETE
+**Goal:** Validate that the swarm can generate complex Turing Patterns (Spots/Stripes) via Reaction-Diffusion.
+- **Hypothesis:** Short-range activation + Long-range inhibition = Turing Patterns.
+- **Method:** Implement Activator-Inhibitor dynamics in the swarm.
+- **Experiment:** `experiments/paper26_reaction_diffusion.py`
+- **Status:** ✅ **COMPLETE** (Cycle 75)
+- **Finding:** Validated Turing Pattern Formation (Variance 0.89 vs 0.0). Formulated `PRIN-REACTION-DIFFUSION`.
+- **Artifact:** `papers/drafts/paper26_reaction_diffusion.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
