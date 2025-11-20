@@ -50,9 +50,10 @@
 
 ## NRM vNext: Multi-Scale Decision Engine (Implementation Pathway)
 
-### Phase 1: Formalize the Architecture 🔄 ACTIVE
+### Phase 1: Formalize the Architecture ✅ COMPLETE
 **Goal:** Define standardized schemas for Level Encapsulation ($L_N$) and Meso-Linkers ($M_{N \to N+1}$).
 - **Artifact:** `docs/architecture/NRM_vNext_Architecture.md` (Blueprint Refined)
+- **Code:** `code/nrm/schemas.py` (Pydantic Models)
 
 ### Phase 2: Prototype Automated Linker Discovery ⏳ PENDING
 **Goal:** Select two adjacent domains (e.g., Agent behavior → Economic micro-structures) and automatically discover the Meso-Linker using Information Bottleneck and Causal Inference.
