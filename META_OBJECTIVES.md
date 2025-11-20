@@ -34,7 +34,9 @@
 > > *Current Phase:* **PHASE 2: TSF SCIENCE ENGINE (Discovery of Laws)**
 
 *Orchestration Tracker*
-*Last Updated: Cycle 19 (Phase 2 Initialization)*
+*Primary Log:* `MOG_LOG.md` (Pilot Strategy)
+*Legacy Log:* `CYCLE_LOGS.md` (Automated Experiments)
+*Last Updated:* Cycle 58 (Architecture Separation)
 
 ---
 
