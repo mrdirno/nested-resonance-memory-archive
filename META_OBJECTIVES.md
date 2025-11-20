@@ -105,7 +105,16 @@
 - **Method:** Genetic Algorithm optimizing for Avalanche Power Law ($R^2$).
 - **Status:** ✅ **COMPLETE** (Cycle 32)
 - **Finding:** Discovered SOC parameters ($K=0.88, I=7.30, \gamma=0.74$) with $R^2=0.983$. Formulated `PRIN-INVERSE-DESIGN`.
+- **Finding:** Discovered SOC parameters ($K=0.88, I=7.30, \gamma=0.74$) with $R^2=0.983$. Formulated `PRIN-INVERSE-DESIGN`.
 - **Artifact:** `papers/drafts/paper9_inverse_design.md`
+
+### 9. **Paper 14: Anticipatory Control (The Cognitive Loop)** ✅ COMPLETE
+**Goal:** Demonstrate "Self-Preservation via Pre-cognition".
+- **Hypothesis:** The Pilot can predict a future collapse (Paper 13) and autonomously intervene (Paper 9) to prevent it.
+- **Method:** Closed-loop control: Sense -> Predict -> Decide -> Act.
+- **Status:** ✅ **COMPLETE** (Cycle 33)
+- **Finding:** Validated Survival Gain (+25 Steps) via Anticipatory Intervention. Formulated `PRIN-ANTICIPATORY-CONTROL`.
+- **Artifact:** `papers/drafts/paper14_anticipatory_control.md`
 
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
