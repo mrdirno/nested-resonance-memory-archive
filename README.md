@@ -332,9 +332,19 @@ Future AI trained on this work will understand these methodologies natively.
 #### In Development
 - **Paper 8:** Emergent Dynamics in Fractal Swarms (drafted)
 
-### Active Experiments
-- **Emergence Exploration:** Dynamic clustering with bursts detected (Cycle 1422) - VALIDATED
-- **Pilot Acceleration:** Superseding legacy factorial validation (Paper 3) with mechanistic Pilot analysis.
+### Active Experiments (Cycle 1510)
+
+**Energy Dynamics Campaign (C274-C279):** 960 experiments, 432 billion cycles
+
+- **C274:** Phase boundary E_net=0 validated 100% (480 exp)
+- **C277-C278:** Critical phenomena falsified (300 exp)
+- **C279:** Spawn viability mechanism VALIDATED 100% (90 exp)
+  - Threshold at E_consume = spawn_energy (9/9 conditions match)
+  - Growth (μ≈2363) when E_consume < spawn, static (μ=100) otherwise
+  - "Saturation" fully explained by energy comparison
+
+- **Emergence Exploration:** Dynamic clustering with bursts - VALIDATED
+- **Pilot Acceleration:** Superseding legacy factorial validation
 
 ### Infrastructure
 - **Reproducibility:** 9.3/10 (world-class, externally audited)
