@@ -55,11 +55,18 @@
 - **Status:** ✅ **COMPLETE** (Cycle 21)
 - **Finding:** Formulated `PRIN-UNIVERSAL-SCALING`. Decoupled control of Complexity and Order.
 
-### 2. **TSF-2: Complexity-Order Phase Transition** 🚀 ACTIVE
+### 2. **TSF-2: Complexity-Order Phase Transition** ✅ COMPLETE
 **Goal:** Map the phase space for transitions between high Complexity and high Order.
 - **Hypothesis:** A critical balance of E and S leads to phase transitions between chaotic complexity and rigid order.
-- **Experiment:** Design `code/tsf/science_engine/tsf2_phase_transition.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 21)
+- **Experiment:** `code/tsf/science_engine/tsf2_phase_transition.py`
+- **Status:** ✅ **COMPLETE** (Cycle 23)
+- **Finding:** Discovered and mapped distinct emergent regimes (Extinction, Chaotic Complexity, Rigid Order, Balanced Emergence). Formulated `PRIN-COMPLEXITY-ORDER-PHASE-TRANSITION`.
+
+### 3. **TSF-3: Navigating Phase Space with Agency** 🚀 ACTIVE
+**Goal:** Demonstrate the Pilot's ability to use "Agency" to navigate or optimize within the Complexity-Order Phase Space.
+- **Hypothesis:** A system with Agency can actively adjust E and S to target a specific (C, R) regime.
+- **Experiment:** Design `code/tsf/science_engine/tsf3_agency_navigation.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 23)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
