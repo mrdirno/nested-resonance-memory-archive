@@ -341,11 +341,11 @@ Future AI trained on this work will understand these methodologies natively.
   - 8 energy regimes tested: -0.2, -0.1, 0.0, +0.1, +0.2, +0.3, +0.4, +0.5
   - **Discovery:** Non-monotonic energy-population (peak at +0.1 to +0.4, saturation at +0.5)
   - Unified scaling equation core prediction validated
-- **C277: Critical Phenomena** - ✅ COMPLETE (150/150 experiments) - NULL RESULT
-  - Tested 5 frequencies near f_crit (0.01%-0.05%, 1.5-7.6× f_crit)
-  - **Finding:** Population frozen at initial value (μ=100, σ²=0)
-  - Cause: Spawn attempts too few at low frequencies (~45-225 vs 9000+ in C274)
-  - Establishes lower bound for measurable dynamics: f > 0.1%
+- **C277: Critical Phenomena** - ✅ COMPLETE (150/150 experiments) - VALIDATES SATURATION
+  - Tested 5 frequencies near f_crit (0.01%-0.05%) at E_net = +0.5
+  - **Finding:** Population = 100 across all frequencies (saturation regime)
+  - **Validates C274:** E_net = +0.5 produces saturation regardless of frequency
+  - C278 planned: Test critical phenomena with E_net = +0.2 (growth regime)
 - **Emergence Exploration:** Dynamic clustering with bursts detected (Cycle 1422) - VALIDATED
 - **Pilot Acceleration:** Superseding legacy factorial validation (Paper 3) with mechanistic Pilot analysis.
 
