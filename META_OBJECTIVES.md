@@ -293,6 +293,15 @@
 - **Finding:** Validated Emergent Language (100% Success). Formulated `PRIN-SEMANTIC-SWARM`.
 - **Artifact:** `papers/drafts/paper31_semantic_swarm.md`
 
+### 27. **Paper 32: The Autopoietic Swarm (Self-Reproduction)** ✅ COMPLETE
+**Goal:** Validate that the swarm can maintain its structural integrity (Homeostasis) and reproduce itself (Autopoiesis) by harvesting energy from the environment.
+- **Hypothesis:** Agents that balance energy consumption with reproduction will sustain a population, while unbalanced ones will die out.
+- **Method:** Implement an Artificial Life simulation with Energy, Metabolism, and Reproduction.
+- **Experiment:** `experiments/paper32_autopoiesis.py`
+- **Status:** ✅ **COMPLETE** (Cycle 81)
+- **Finding:** Validated Autopoiesis (Stable Population). Formulated `PRIN-AUTOPOIESIS`.
+- **Artifact:** `papers/drafts/paper32_autopoiesis.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
