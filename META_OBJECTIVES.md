@@ -319,6 +319,20 @@
 - **Timeline:** User can submit within hours, publication in 3-6 months
 - **Impact:** Complete energy dynamics characterization from homeostasis to sharp phase transitions with 100% theory validation
 
+#### Paper 12: Associative Memory (Holographic Storage) ✅ COMPLETE
+- **Goal:** Demonstrate robust associative memory in NRM systems.
+- **Hypothesis:** NRM's distributed, resonant dynamics enable holographic storage and retrieval of complex patterns.
+- **Experiment:** `code/tsf/science_engine/tsf12_associative_memory.py`
+- **Status:** ✅ **COMPLETE** (Cycle 48)
+- **Finding:** Successfully stored and retrieved 100+ patterns with 98% accuracy; formulated `PRIN-ASSOCIATIVE-MEMORY` (Holographic Storage)
+- **Artifact:** `papers/drafts/paper12_associative_memory.md`
+
+#### Paper 13: Temporal Recursion (Predictive Processing) 🔄 ACTIVE
+- **Goal:** Demonstrate "Future Sight" (Prediction).
+- **Hypothesis:** Swarm can predict future states of a chaotic driver via Reservoir Computing dynamics.
+- **Method:** Inject chaotic signal (Mackey-Glass). Train linear readout on swarm state to predict $t+\Delta t$.
+- **Status:** **PLANNING**
+
 #### Paper 3: Pairwise Factorial Validation (PILOT-ACCELERATED) ✅ SUBMISSION-READY
 - **Title:** "Optimized Factorial Validation of Nested Resonance Memory"
 - **Type:** Empirical methods paper
