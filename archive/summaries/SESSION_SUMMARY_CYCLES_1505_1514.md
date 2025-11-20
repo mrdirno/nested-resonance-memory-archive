@@ -1,9 +1,9 @@
-# SESSION SUMMARY: CYCLES 1505-1513
+# SESSION SUMMARY: CYCLES 1505-1514
 
 **Author:** Aldrin Payopay <aldrin.gdf@gmail.com>
 **Co-Authored-By:** Claude Sonnet 4.5 <noreply@anthropic.com>
 **Date:** 2025-11-20
-**Total Experiments:** 915
+**Total Experiments:** 940
 **Accuracy:** 100%
 
 ---
@@ -21,9 +21,10 @@ Eight research cycles establishing complete mechanistic understanding of NRM ene
 | C274 | 480 | 216B | Phase boundary at E_net = 0 |
 | C277 | 150 | 67.5B | Saturation at E_net = +0.5 |
 | C278 | 150 | 67.5B | Critical phenomena falsified |
-| C279 | 90 | 40.5B | Spawn threshold validated |
-| C280 | 45 | ~1M | Substrate independence |
-| **Total** | **915** | **391.5B+** | **100% accuracy** |
+| C279 | 90 | 40.5B | Spawn threshold (linear) |
+| C280 | 45 | ~1M | Spawn threshold (exponential) |
+| C281 | 25 | ~0.3M | Phase boundary (exponential) |
+| **Total** | **940** | **391.5B+** | **100% accuracy** |
 
 ---
 
