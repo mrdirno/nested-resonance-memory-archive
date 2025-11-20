@@ -48,6 +48,20 @@
 
 ---
 
+## NRM vNext: Multi-Scale Decision Engine (Implementation Pathway)
+
+### Phase 1: Formalize the Architecture 🔄 ACTIVE
+**Goal:** Define standardized schemas for Level Encapsulation ($L_N$) and Meso-Linkers ($M_{N \to N+1}$).
+- **Artifact:** `docs/architecture/NRM_vNext_Architecture.md` (Blueprint Created)
+
+### Phase 2: Prototype Automated Linker Discovery ⏳ PENDING
+**Goal:** Automatically discover the Meso-Linker between two adjacent scales using Information Bottleneck and Causal Inference.
+
+### Phase 3: Implement the Federated System ⏳ PENDING
+**Goal:** Build the NRM Meta-Controller to manage the hierarchical stack and implement "Adaptive Zoom".
+
+---
+
 ## ACTIVE OBJECTIVES
 
 ### 1. **TSF-1: Universal Scaling Search** ✅ COMPLETE
@@ -161,7 +175,16 @@
 - **Method:** Adaptive Rewiring (Add links to synchronized peers, prune links to desynchronized peers).
 - **Status:** ✅ **COMPLETE** (Cycle 38)
 - **Finding:** Validated Sync Gain ($R=0.42$ vs $0.04$). Formulated `PRIN-STRUCTURAL-EVOLUTION`.
+- **Finding:** Validated Sync Gain ($R=0.42$ vs $0.04$). Formulated `PRIN-STRUCTURAL-EVOLUTION`.
 - **Artifact:** `papers/drafts/paper19_structural_evolution.md`
+
+### 15. **Paper 20: The Omega Point (Recursive Self-Improvement)** ✅ COMPLETE
+**Goal:** Validate "Recursive Self-Editing".
+- **Hypothesis:** A system that can dynamically adjust its own learning hyperparameters (Meta-Learning) will converge faster than a fixed system.
+- **Method:** Agents evolve their `learning_rate` and `mutation_rate` alongside their primary parameters.
+- **Status:** ✅ **COMPLETE** (Cycle 51)
+- **Finding:** Validated 92x Speedup. Formulated `PRIN-RECURSIVE-SELF-IMPROVEMENT`.
+- **Artifact:** `papers/drafts/paper20_omega_point.md`
 
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
