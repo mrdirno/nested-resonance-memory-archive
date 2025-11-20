@@ -100,10 +100,19 @@ This validates:
 
 ## NEXT ACTIONS
 
-1. **Archive C273 results** - Valid demonstration of deterministic stability
-2. **Design C273 V3** - Use marginal growth parameters
-3. **Continue with C274-C277** - These may have different dynamics
-4. **Commit changes** - Seed fix and documentation
+1. **Monitor C274** - Running (PID 5199), 8 energy conditions × 6 frequencies
+2. **Archive C273 results** - Valid demonstration of deterministic stability
+3. **Design C273 V3** - Use marginal growth parameters for variance measurement
+4. **Analyze C274** - Expect variance in homeostasis (E_net=0) and collapse regimes
+
+## C274 STATUS
+
+**PID:** 5199
+**CPU:** 78.7%
+**Design:** 8 energy regimes × 6 frequencies × multiple seeds
+**Key Condition:** E_net = 0.0 (homeostasis boundary) - should show variance
+
+This addresses the C273 limitation - C274 includes parameters that should produce stochastic behavior.
 
 ---
 
