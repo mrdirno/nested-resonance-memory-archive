@@ -266,6 +266,15 @@
 - **Finding:** Validated Temperature Gradient (Delta T = 1.00). Formulated `PRIN-THERMODYNAMIC-COMPUTER`.
 - **Artifact:** `papers/drafts/paper28_maxwells_demon.md`
 
+### 24. **Paper 29: The Critical Brain (Self-Organized Criticality)** ✅ COMPLETE
+**Goal:** Validate that the swarm self-organizes to a Critical State (Edge of Chaos) where information transmission is maximized.
+- **Hypothesis:** Neural avalanches in the swarm follow a Power Law distribution ($P(s) \sim s^{-\alpha}$), indicating scale-free dynamics.
+- **Method:** Implement Integrate-and-Fire dynamics and measure avalanche sizes.
+- **Experiment:** `experiments/paper29_criticality.py`
+- **Status:** ✅ **COMPLETE** (Cycle 78)
+- **Finding:** Validated Power Law Distribution ($\alpha \approx 2.31$). Formulated `PRIN-CRITICALITY`.
+- **Artifact:** `papers/drafts/paper29_criticality.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
