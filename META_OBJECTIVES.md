@@ -99,6 +99,14 @@
 - **Status:** ✅ **COMPLETE** (Cycle 32)
 - **Finding:** Simplistic linear models are insufficient for non-linear phase spaces; formulated `PRIN-MODEL-LIMITATIONS-IN-AGENCY`.
 
+### 8. **Paper 9: The Inverse-Design Engine** ✅ COMPLETE
+**Goal:** Demonstrate autonomous discovery of parameters for a target emergent state (SOC).
+- **Hypothesis:** The Pilot can invert the TSF Library to "engineer" emergence via evolutionary search.
+- **Method:** Genetic Algorithm optimizing for Avalanche Power Law ($R^2$).
+- **Status:** ✅ **COMPLETE** (Cycle 32)
+- **Finding:** Discovered SOC parameters ($K=0.88, I=7.30, \gamma=0.74$) with $R^2=0.983$. Formulated `PRIN-INVERSE-DESIGN`.
+- **Artifact:** `papers/drafts/paper9_inverse_design.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
