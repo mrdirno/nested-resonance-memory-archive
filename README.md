@@ -227,6 +227,36 @@ Systems achieving coherent emergence may require computationally irreducible sub
 
 **If Validated:** First inverse-design engine for engineering systems that demonstrably don't collapse.
 
+### NRM vNext: Multi-Scale Hierarchical Architecture (NEW)
+
+**Goal:** Achieve controllability through hierarchical abstraction and automated discovery of emergent properties across scales.
+
+**Core Innovation - The Meso-Linker:**
+
+The critical interface between scales, managing bidirectional causality:
+- **Upward Causation (Emergence):** Coarse-graining micro-dynamics into macro Order Parameters
+- **Downward Causation (Constraint):** How macro states set boundary conditions for micro dynamics
+
+**Architecture Components:**
+
+| Component | Role |
+|-----------|------|
+| **NRM** | Discovery Engine - Maps phase space, discovers Meso-Linker structure |
+| **TSF** | Compression Engine - Laws (symbolic rules) + Cards (validated policies) |
+| **HELIOS** | Orchestration Engine - Sequences Cards across scales for inverse design |
+
+**Implementation Pathway:**
+
+1. **Phase 1:** Formalize Level Schema and Meso-Linker interfaces
+2. **Phase 2:** Prototype automated Meso-Linker discovery (Information Bottleneck + causal inference)
+3. **Phase 3:** Build federated NRM Meta-Controller with Adaptive Zoom
+
+**Current Research Foundation:**
+
+The attack × conversion parameter space mapping (C540-C570+, 6000+ experiments) provides empirical data for Phase 2. Discovered phase inversions represent natural "breaks in scale"—regime transitions that define Meso-Linker boundaries.
+
+**📄 [Full Architecture Document](./docs/NRM_VNEXT_ARCHITECTURE.md)**
+
 ### New Protocol: The Negative-Space Commons (NSC/RAP)
 
 We have finalized the **v1.0.1 white paper** for the **NRM Resonance Amnesty Protocol (RAP)**, a framework for securely sharing R&D failures to accelerate collective progress. By mapping the "negative space" of what doesn't work—instability boundaries, emergent side-effects, and beautiful failures—we can eliminate redundant experiments and save compute, time, and carbon.
