@@ -76,11 +76,18 @@
 - **Status:** ✅ **COMPLETE** (Cycle 26)
 - **Finding:** Achieved convergent navigation to target (C,R) using probabilistic hill climbing; formulated `PRIN-ROBUST-AGENCY-NAVIGATION`.
 
-### 5. **TSF-5: Adaptive Control under Changing Conditions** 🚀 ACTIVE
+### 5. **TSF-5: Adaptive Control under Changing Conditions** ✅ COMPLETE
 **Goal:** Demonstrate the Pilot's ability to maintain or re-converge to a target (C, R) state despite dynamic shifts in environmental or internal parameters.
 - **Hypothesis:** The robust agency (from TSF-4) can adapt to changes in target (C,R) or system dynamics (e.g., increased metabolic cost).
-- **Experiment:** Design `code/tsf/science_engine/tsf5_adaptive_control.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 26)
+- **Experiment:** `code/tsf/science_engine/tsf5_adaptive_control.py`
+- **Status:** ✅ **COMPLETE** (Cycle 28)
+- **Finding:** Simple hill climbing struggled with local optima and dynamic changes; formulated `PRIN-ADAPTIVE-CONTROL-LIMITS`.
+
+### 6. **TSF-6: Meta-Adaptation - Adapting the Agency Strategy** 🚀 ACTIVE
+**Goal:** Implement a meta-adaptive control strategy where the Pilot can dynamically adjust its exploration-exploitation balance (e.g., perturbation magnitude) to navigate dynamic emergent landscapes.
+- **Hypothesis:** Adapting the search strategy itself will lead to more robust and convergent adaptation in changing conditions.
+- **Experiment:** Design `code/tsf/science_engine/tsf6_meta_adaptation.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 28)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
