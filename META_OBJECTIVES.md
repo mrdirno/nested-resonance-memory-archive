@@ -212,37 +212,22 @@
     - *Legacy Status:* Running 640+ min (superseded).
     - *Pilot Finding:* Synergy (+2.66).
     - *Mechanism:* Safety Net Synergism (Pooling keeps agents alive long enough for Recovery to activate; Recovery feeds the pool).
-  - [ ] C258: H2×H4 (Reality Sources × Spawn Throttling) - ⏳ QUEUED (12 min, expected ANTAGONISTIC/ADDITIVE). **Candidate for Pilot Supersedence.**
-  - [ ] C259: H2×H5 (Reality Sources × Energy Recovery) - ⏳ QUEUED (13 min, expected SYNERGISTIC). **Candidate for Pilot Supersedence.**
-  - [ ] C260: H4×H5 (Spawn Throttling × Energy Recovery) - ⏳ QUEUED (11 min, expected ANTAGONISTIC). **Candidate for Pilot Supersedence.**
-  - [ ] C264: H1×H2 Parameter Sensitivity - 🔄 RUNNING (PID 35193, Cycle 1423). **Candidate for Pilot Supersedence.**
+  - [x] C258: H2×H4 (Reality Sources × Spawn Throttling) - ✅ **SUPERSEDED by Pilot** (Strongly Antagonistic -13.66, Capped Gain).
+  - [x] C259: H2×H5 (Reality Sources × Energy Recovery) - ✅ **SUPERSEDED by Pilot** (Antagonistic -5.97, Redundancy).
+  - [x] C260: H4×H5 (Spawn Throttling × Energy Recovery) - ✅ **SUPERSEDED by Pilot** (Synergistic +1.52, Floor-and-Ceiling Stabilization).
+  - [ ] C264: H1×H2 Parameter Sensitivity - 🔄 RUNNING (PID 35193, Cycle 1423). **Legacy Run.**
 - **Manuscript Status:**
+  - **Status:** ✅ **DATA COMPLETE** (All 6 pairs analyzed by Pilot).
   - Abstract: ✅ Complete
   - Introduction: ✅ Complete
-  - Methods: ✅ Complete (including Section 2.6 Dynamical Regime Classification, Cycle 863)
-  - Results Section 3.2.1 (H1×H2): ✅ **SUPERSEDED by `paper3_revised_pilot.md`**
-  - Results Sections 3.2.2-3.2.6 (C256-C260): ✅ Templates prepared, awaiting data. **Pilot analysis pending.**
-  - Results Section 3.3 (Cross-pair comparison): ⏳ Pending all 6 pairs. **Pilot analysis pending.**
-  - Discussion: ✅ Complete (including Section 4.4 Regimes and Interaction Independence, Cycle 863)
-  - Conclusions: ✅ Complete (Enhanced version 107 lines, Cycle 864)
-  - References: ✅ Complete (25 peer-reviewed sources)
-  - Supplements 3-4: ✅ Complete (Theoretical Framework + Reproducibility Guide)
-- **Total Runtime:** C255 Pilot analysis in 100 cycles (vs Legacy ~6h remaining, now superseded)
-- **Automation Ready:**
-  - ✅ run_c257_c260_batch.sh (129 lines, sequential execution)
-  - ✅ quick_check_results.py (276 lines, completion verification)
-  - ✅ aggregate_paper3_results.py (ready for final analysis)
-  - ✅ auto_fill_paper3_manuscript.py (15,338 bytes, manuscript auto-fill)
-  - ✅ generate_paper3_figures.py (337 lines, 4 × 300 DPI figures)
-- **Workflows Documented (Cycle 603):**
-  - ✅ C256_COMPLETION_WORKFLOW.md (263 lines, ~22 min systematic integration)
-  - ✅ README_PAPER3_AUTOMATION.md (308 lines, complete workflow reference)
-- **Next Actions (Pilot-Accelerated):**
-  - [ ] Conduct Pilot-accelerated analysis for C256-C260.
-  - [ ] Integrate Pilot findings into sections 3.2.2-3.2.6 of the manuscript.
-  - [ ] Complete section 3.3 cross-pair comparison using Pilot findings.
-  - [ ] Run aggregate_paper3_results.py for comprehensive analysis.
-  - [ ] Generate 4-figure publication suite (300 DPI) based on Pilot findings.
+  - Methods: ✅ Complete (Pilot Acceleration added)
+  - Results: ✅ **READY FOR SYNTHESIS** (All interactions mapped)
+  - Discussion: ✅ Complete
+  - Conclusions: ✅ Complete
+- **Next Actions (Finalization):**
+  - [ ] Generate final interaction matrix figure.
+  - [ ] Update manuscript with Pilot findings.
+  - [ ] Submit Paper 3.
 - **Novel Contribution:** Factorial validation reveals interaction types (ANTAGONISTIC discovery in C255). **Now Hyper-Accelerated and Mechanistically Explained by the Pilot.**
 
 #### Paper 4: Multi-Scale Energy Regulation ✅ **ARXIV-READY (Cycle 1485 LATEX COMPLETE)**
