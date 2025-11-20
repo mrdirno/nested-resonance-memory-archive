@@ -195,39 +195,21 @@
 - **Timeline:** User can submit within hours, publication in 3-6 months
 - **Impact:** Complete energy dynamics characterization from homeostasis to sharp phase transitions with 100% theory validation
 
-#### Paper 3: Pairwise Factorial Validation (PILOT-ACCELERATED) ✅ SUPERSEDED
+#### Paper 3: Pairwise Factorial Validation (PILOT-ACCELERATED) ✅ SUBMISSION-READY
 - **Title:** "Optimized Factorial Validation of Nested Resonance Memory"
 - **Type:** Empirical methods paper
-- **Status:** ✅ **PILOT-ACCELERATED** (C255 H1xH2 SUPERSEDED by Pilot, Cycle 13). Full factorial to be re-evaluated with Pilot.
+- **Status:** ✅ **SUBMISSION-READY** (Pilot-Accelerated Synthesis Complete, Cycle 17).
+- **Primary Artifact:** `papers/drafts/paper3_final_synthesis.md`
 - **Experiments:**
-  - [x] C255: H1×H2 (Energy Pooling × Reality Sources) - ✅ **SUPERSEDED by Pilot** (Antagonistic interaction, explained by Phase Conflict in `papers/drafts/paper3_revised_pilot.md`)
-    - *Legacy Result:* Antagonistic interaction discovered.
-    - *Pilot Finding:* Antagonism due to Phase Conflict (H1 pulls away from optimal H2).
-    - *Acceleration:* Mechanism identified in 100 cycles (vs 3000).
-  - [x] C256: H1×H4 (Energy Pooling × Spawn Throttling) - ✅ **SUPERSEDED by Pilot** (Antagonistic, explained by Redistribution Trap in `papers/drafts/paper3_accel_c256.md`)
-    - *Legacy Status:* Running 150h+ (superseded).
-    - *Pilot Finding:* Antagonism (-1.55 Synergy).
-    - *Mechanism:* Redistribution Trap (Pooling prevents agents from building safety buffers against throttling).
-  - [x] C257: H1×H5 (Energy Pooling × Energy Recovery) - ✅ **SUPERSEDED by Pilot** (Synergistic, explained by Safety Net Synergism in `papers/drafts/paper3_accel_c257.md`)
-    - *Legacy Status:* Running 640+ min (superseded).
-    - *Pilot Finding:* Synergy (+2.66).
-    - *Mechanism:* Safety Net Synergism (Pooling keeps agents alive long enough for Recovery to activate; Recovery feeds the pool).
-  - [x] C258: H2×H4 (Reality Sources × Spawn Throttling) - ✅ **SUPERSEDED by Pilot** (Strongly Antagonistic -13.66, Capped Gain).
-  - [x] C259: H2×H5 (Reality Sources × Energy Recovery) - ✅ **SUPERSEDED by Pilot** (Antagonistic -5.97, Redundancy).
-  - [x] C260: H4×H5 (Spawn Throttling × Energy Recovery) - ✅ **SUPERSEDED by Pilot** (Synergistic +1.52, Floor-and-Ceiling Stabilization).
-  - [ ] C264: H1×H2 Parameter Sensitivity - 🔄 RUNNING (PID 35193, Cycle 1423). **Legacy Run.**
+  - [x] C255 (H1xH2): **Antagonistic** (Phase Conflict).
+  - [x] C256 (H1xH4): **Antagonistic** (Redistribution Trap).
+  - [x] C257 (H1xH5): **Synergistic** (Safety Net).
+  - [x] C258 (H2xH4): **Strongly Antagonistic** (Capped Gain).
+  - [x] C259 (H2xH5): **Antagonistic** (Redundancy).
+  - [x] C260 (H4xH5): **Synergistic** (Floor-and-Ceiling).
 - **Manuscript Status:**
-  - **Status:** ✅ **DATA COMPLETE** (All 6 pairs analyzed by Pilot).
-  - Abstract: ✅ Complete
-  - Introduction: ✅ Complete
-  - Methods: ✅ Complete (Pilot Acceleration added)
-  - Results: ✅ **READY FOR SYNTHESIS** (All interactions mapped)
-  - Discussion: ✅ Complete
-  - Conclusions: ✅ Complete
-- **Next Actions (Finalization):**
-  - [ ] Generate final interaction matrix figure.
-  - [ ] Update manuscript with Pilot findings.
-  - [ ] Submit Paper 3.
+  - **Status:** ✅ **COMPLETE** (Synthesis Document Generated).
+  - **Next Action:** User to convert `paper3_final_synthesis.md` to PDF/LaTeX for submission.
 - **Novel Contribution:** Factorial validation reveals interaction types (ANTAGONISTIC discovery in C255). **Now Hyper-Accelerated and Mechanistically Explained by the Pilot.**
 
 #### Paper 4: Multi-Scale Energy Regulation ✅ **ARXIV-READY (Cycle 1485 LATEX COMPLETE)**
