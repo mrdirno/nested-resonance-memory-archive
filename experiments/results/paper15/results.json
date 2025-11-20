@@ -1,0 +1,8 @@
+{
+  "status": "SUCCESS",
+  "initial_std": 0.0573892202410636,
+  "final_std": 0.02856119018860816,
+  "convergence": 0.5023248256617394,
+  "final_order": 0.8964975384814278,
+  "principle": "PRIN-EVOLUTIONARY-TUNING"
+}
