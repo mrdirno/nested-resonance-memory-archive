@@ -203,6 +203,15 @@
 - **Finding:** Validated Top-Down Stability ($\Phi=0.65$ vs $0.08$). Formulated `PRIN-TOP-DOWN-CAUSATION`.
 - **Artifact:** `papers/drafts/paper21_top_down_causation.md`
 
+### 17. **Paper 22: The Adaptive Linker (Dynamic Abstraction)** ✅ COMPLETE
+**Goal:** Validate that the optimal Meso-Linker changes over time.
+- **Hypothesis:** A system that dynamically switches its Meso-Linker (e.g., from Polarization to Density) based on environmental context will outperform a system with a fixed Linker.
+- **Method:** Multi-Phase Environment (Phase A: Flocking, Phase B: Aggregation).
+- **Experiment:** `experiments/paper22_adaptive_linker.py`
+- **Status:** ✅ **COMPLETE** (Cycle 60)
+- **Finding:** Validated Adaptive Advantage (Fitness 175 vs 88). Formulated `PRIN-DYNAMIC-ABSTRACTION`.
+- **Artifact:** `papers/drafts/paper22_adaptive_linker.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
