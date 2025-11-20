@@ -1,0 +1,721 @@
+================================================================================
+CYCLE 273: EXTENDED FREQUENCY-VARIANCE MAPPING
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+Date: 2025-11-19 16:45:48
+================================================================================
+
+Experimental Design:
+  Regime: V6b (Growth, E_net = +0.5)
+  Frequencies: 10 points (0.01% - 10%)
+  Seeds per frequency: 20
+  Total experiments: 200
+  Cycles per experiment: 450,000
+
+================================================================================
+Frequency: 0.01% (20 experiments)
+================================================================================
+
+[1/200] Running: f=0.01%, seed=42
+  ✓ Complete: 100 agents, 3.7s
+
+[2/200] Running: f=0.01%, seed=43
+  ✓ Complete: 100 agents, 3.7s
+
+[3/200] Running: f=0.01%, seed=44
+  ✓ Complete: 100 agents, 3.7s
+
+[4/200] Running: f=0.01%, seed=45
+  ✓ Complete: 100 agents, 3.7s
+
+[5/200] Running: f=0.01%, seed=46
+  ✓ Complete: 100 agents, 3.7s
+
+[6/200] Running: f=0.01%, seed=47
+  ✓ Complete: 100 agents, 3.8s
+
+[7/200] Running: f=0.01%, seed=48
+  ✓ Complete: 100 agents, 3.7s
+
+[8/200] Running: f=0.01%, seed=49
+  ✓ Complete: 100 agents, 3.7s
+
+[9/200] Running: f=0.01%, seed=50
+  ✓ Complete: 100 agents, 3.7s
+
+[10/200] Running: f=0.01%, seed=51
+  ✓ Complete: 100 agents, 3.7s
+
+[11/200] Running: f=0.01%, seed=52
+  ✓ Complete: 100 agents, 3.7s
+
+[12/200] Running: f=0.01%, seed=53
+  ✓ Complete: 100 agents, 3.7s
+
+[13/200] Running: f=0.01%, seed=54
+  ✓ Complete: 100 agents, 3.7s
+
+[14/200] Running: f=0.01%, seed=55
+  ✓ Complete: 100 agents, 3.7s
+
+[15/200] Running: f=0.01%, seed=56
+  ✓ Complete: 100 agents, 3.7s
+
+[16/200] Running: f=0.01%, seed=57
+  ✓ Complete: 100 agents, 3.7s
+
+[17/200] Running: f=0.01%, seed=58
+  ✓ Complete: 100 agents, 3.7s
+
+[18/200] Running: f=0.01%, seed=59
+  ✓ Complete: 100 agents, 3.7s
+
+[19/200] Running: f=0.01%, seed=60
+  ✓ Complete: 100 agents, 3.7s
+
+[20/200] Running: f=0.01%, seed=61
+  ✓ Complete: 100 agents, 3.7s
+
+Frequency 0.01% Summary:
+  Mean: 100.0
+  Std Dev: 0.0
+  Variance: 0.0
+  CV: 0.0000
+
+================================================================================
+Frequency: 0.02% (20 experiments)
+================================================================================
+
+[21/200] Running: f=0.02%, seed=42
+  ✓ Complete: 100 agents, 3.7s
+
+[22/200] Running: f=0.02%, seed=43
+  ✓ Complete: 100 agents, 3.7s
+
+[23/200] Running: f=0.02%, seed=44
+  ✓ Complete: 100 agents, 3.7s
+
+[24/200] Running: f=0.02%, seed=45
+  ✓ Complete: 100 agents, 3.7s
+
+[25/200] Running: f=0.02%, seed=46
+  ✓ Complete: 100 agents, 3.7s
+
+[26/200] Running: f=0.02%, seed=47
+  ✓ Complete: 100 agents, 3.7s
+
+[27/200] Running: f=0.02%, seed=48
+  ✓ Complete: 100 agents, 3.7s
+
+[28/200] Running: f=0.02%, seed=49
+  ✓ Complete: 100 agents, 3.7s
+
+[29/200] Running: f=0.02%, seed=50
+  ✓ Complete: 100 agents, 3.7s
+
+[30/200] Running: f=0.02%, seed=51
+  ✓ Complete: 100 agents, 3.7s
+
+[31/200] Running: f=0.02%, seed=52
+  ✓ Complete: 100 agents, 3.7s
+
+[32/200] Running: f=0.02%, seed=53
+  ✓ Complete: 100 agents, 3.7s
+
+[33/200] Running: f=0.02%, seed=54
+  ✓ Complete: 100 agents, 3.7s
+
+[34/200] Running: f=0.02%, seed=55
+  ✓ Complete: 100 agents, 5.9s
+
+[35/200] Running: f=0.02%, seed=56
+  ✓ Complete: 100 agents, 6.7s
+
+[36/200] Running: f=0.02%, seed=57
+  ✓ Complete: 100 agents, 5.7s
+
+[37/200] Running: f=0.02%, seed=58
+  ✓ Complete: 100 agents, 5.3s
+
+[38/200] Running: f=0.02%, seed=59
+  ✓ Complete: 100 agents, 5.4s
+
+[39/200] Running: f=0.02%, seed=60
+  ✓ Complete: 100 agents, 9.3s
+
+[40/200] Running: f=0.02%, seed=61
+  ✓ Complete: 100 agents, 8.5s
+
+Frequency 0.02% Summary:
+  Mean: 100.0
+  Std Dev: 0.0
+  Variance: 0.0
+  CV: 0.0000
+
+================================================================================
+Frequency: 0.05% (20 experiments)
+================================================================================
+
+[41/200] Running: f=0.05%, seed=42
+  ✓ Complete: 100 agents, 7.4s
+
+[42/200] Running: f=0.05%, seed=43
+  ✓ Complete: 100 agents, 4.0s
+
+[43/200] Running: f=0.05%, seed=44
+  ✓ Complete: 100 agents, 3.8s
+
+[44/200] Running: f=0.05%, seed=45
+  ✓ Complete: 100 agents, 3.7s
+
+[45/200] Running: f=0.05%, seed=46
+  ✓ Complete: 100 agents, 3.7s
+
+[46/200] Running: f=0.05%, seed=47
+  ✓ Complete: 100 agents, 3.7s
+
+[47/200] Running: f=0.05%, seed=48
+  ✓ Complete: 100 agents, 3.7s
+
+[48/200] Running: f=0.05%, seed=49
+  ✓ Complete: 100 agents, 3.8s
+
+[49/200] Running: f=0.05%, seed=50
+  ✓ Complete: 100 agents, 3.7s
+
+[50/200] Running: f=0.05%, seed=51
+  ✓ Complete: 100 agents, 3.8s
+
+[51/200] Running: f=0.05%, seed=52
+  ✓ Complete: 100 agents, 3.7s
+
+[52/200] Running: f=0.05%, seed=53
+  ✓ Complete: 100 agents, 3.7s
+
+[53/200] Running: f=0.05%, seed=54
+  ✓ Complete: 100 agents, 3.8s
+
+[54/200] Running: f=0.05%, seed=55
+  ✓ Complete: 100 agents, 3.7s
+
+[55/200] Running: f=0.05%, seed=56
+  ✓ Complete: 100 agents, 3.7s
+
+[56/200] Running: f=0.05%, seed=57
+  ✓ Complete: 100 agents, 3.7s
+
+[57/200] Running: f=0.05%, seed=58
+  ✓ Complete: 100 agents, 3.7s
+
+[58/200] Running: f=0.05%, seed=59
+  ✓ Complete: 100 agents, 3.8s
+
+[59/200] Running: f=0.05%, seed=60
+  ✓ Complete: 100 agents, 3.8s
+
+[60/200] Running: f=0.05%, seed=61
+  ✓ Complete: 100 agents, 3.7s
+
+Frequency 0.05% Summary:
+  Mean: 100.0
+  Std Dev: 0.0
+  Variance: 0.0
+  CV: 0.0000
+
+================================================================================
+Frequency: 0.10% (20 experiments)
+================================================================================
+
+[61/200] Running: f=0.10%, seed=42
+  ✓ Complete: 100 agents, 4.5s
+
+[62/200] Running: f=0.10%, seed=43
+  ✓ Complete: 100 agents, 3.7s
+
+[63/200] Running: f=0.10%, seed=44
+  ✓ Complete: 100 agents, 3.8s
+
+[64/200] Running: f=0.10%, seed=45
+  ✓ Complete: 100 agents, 3.7s
+
+[65/200] Running: f=0.10%, seed=46
+  ✓ Complete: 100 agents, 3.7s
+
+[66/200] Running: f=0.10%, seed=47
+  ✓ Complete: 100 agents, 3.8s
+
+[67/200] Running: f=0.10%, seed=48
+  ✓ Complete: 100 agents, 3.7s
+
+[68/200] Running: f=0.10%, seed=49
+  ✓ Complete: 100 agents, 3.8s
+
+[69/200] Running: f=0.10%, seed=50
+  ✓ Complete: 100 agents, 3.7s
+
+[70/200] Running: f=0.10%, seed=51
+  ✓ Complete: 100 agents, 3.8s
+
+[71/200] Running: f=0.10%, seed=52
+  ✓ Complete: 100 agents, 3.7s
+
+[72/200] Running: f=0.10%, seed=53
+  ✓ Complete: 100 agents, 3.9s
+
+[73/200] Running: f=0.10%, seed=54
+  ✓ Complete: 100 agents, 3.7s
+
+[74/200] Running: f=0.10%, seed=55
+  ✓ Complete: 100 agents, 3.8s
+
+[75/200] Running: f=0.10%, seed=56
+  ✓ Complete: 100 agents, 3.7s
+
+[76/200] Running: f=0.10%, seed=57
+  ✓ Complete: 100 agents, 3.7s
+
+[77/200] Running: f=0.10%, seed=58
+  ✓ Complete: 100 agents, 3.8s
+
+[78/200] Running: f=0.10%, seed=59
+  ✓ Complete: 100 agents, 3.7s
+
+[79/200] Running: f=0.10%, seed=60
+  ✓ Complete: 100 agents, 6.1s
+
+[80/200] Running: f=0.10%, seed=61
+  ✓ Complete: 100 agents, 5.9s
+
+Frequency 0.10% Summary:
+  Mean: 100.0
+  Std Dev: 0.0
+  Variance: 0.0
+  CV: 0.0000
+
+================================================================================
+Frequency: 0.20% (20 experiments)
+================================================================================
+
+[81/200] Running: f=0.20%, seed=42
+  ✓ Complete: 100 agents, 5.3s
+
+[82/200] Running: f=0.20%, seed=43
+  ✓ Complete: 100 agents, 5.0s
+
+[83/200] Running: f=0.20%, seed=44
+  ✓ Complete: 100 agents, 5.2s
+
+[84/200] Running: f=0.20%, seed=45
+  ✓ Complete: 100 agents, 9.3s
+
+[85/200] Running: f=0.20%, seed=46
+  ✓ Complete: 100 agents, 7.1s
+
+[86/200] Running: f=0.20%, seed=47
+  ✓ Complete: 100 agents, 7.2s
+
+[87/200] Running: f=0.20%, seed=48
+  ✓ Complete: 100 agents, 4.3s
+
+[88/200] Running: f=0.20%, seed=49
+  ✓ Complete: 100 agents, 3.8s
+
+[89/200] Running: f=0.20%, seed=50
+  ✓ Complete: 100 agents, 3.8s
+
+[90/200] Running: f=0.20%, seed=51
+  ✓ Complete: 100 agents, 3.8s
+
+[91/200] Running: f=0.20%, seed=52
+  ✓ Complete: 100 agents, 3.8s
+
+[92/200] Running: f=0.20%, seed=53
+  ✓ Complete: 100 agents, 3.8s
+
+[93/200] Running: f=0.20%, seed=54
+  ✓ Complete: 100 agents, 3.8s
+
+[94/200] Running: f=0.20%, seed=55
+  ✓ Complete: 100 agents, 3.8s
+
+[95/200] Running: f=0.20%, seed=56
+  ✓ Complete: 100 agents, 4.1s
+
+[96/200] Running: f=0.20%, seed=57
+  ✓ Complete: 100 agents, 3.9s
+
+[97/200] Running: f=0.20%, seed=58
+  ✓ Complete: 100 agents, 3.9s
+
+[98/200] Running: f=0.20%, seed=59
+  ✓ Complete: 100 agents, 3.9s
+
+[99/200] Running: f=0.20%, seed=60
+  ✓ Complete: 100 agents, 3.8s
+
+[100/200] Running: f=0.20%, seed=61
+  ✓ Complete: 100 agents, 3.7s
+
+Frequency 0.20% Summary:
+  Mean: 100.0
+  Std Dev: 0.0
+  Variance: 0.0
+  CV: 0.0000
+
+================================================================================
+Frequency: 0.50% (20 experiments)
+================================================================================
+
+[101/200] Running: f=0.50%, seed=42
+  ✓ Complete: 100 agents, 3.7s
+
+[102/200] Running: f=0.50%, seed=43
+  ✓ Complete: 100 agents, 3.7s
+
+[103/200] Running: f=0.50%, seed=44
+  ✓ Complete: 100 agents, 3.7s
+
+[104/200] Running: f=0.50%, seed=45
+  ✓ Complete: 100 agents, 3.7s
+
+[105/200] Running: f=0.50%, seed=46
+  ✓ Complete: 100 agents, 3.7s
+
+[106/200] Running: f=0.50%, seed=47
+  ✓ Complete: 100 agents, 3.7s
+
+[107/200] Running: f=0.50%, seed=48
+  ✓ Complete: 100 agents, 3.7s
+
+[108/200] Running: f=0.50%, seed=49
+  ✓ Complete: 100 agents, 3.6s
+
+[109/200] Running: f=0.50%, seed=50
+  ✓ Complete: 100 agents, 3.6s
+
+[110/200] Running: f=0.50%, seed=51
+  ✓ Complete: 100 agents, 3.6s
+
+[111/200] Running: f=0.50%, seed=52
+  ✓ Complete: 100 agents, 3.6s
+
+[112/200] Running: f=0.50%, seed=53
+  ✓ Complete: 100 agents, 3.6s
+
+[113/200] Running: f=0.50%, seed=54
+  ✓ Complete: 100 agents, 3.6s
+
+[114/200] Running: f=0.50%, seed=55
+  ✓ Complete: 100 agents, 3.7s
+
+[115/200] Running: f=0.50%, seed=56
+  ✓ Complete: 100 agents, 3.6s
+
+[116/200] Running: f=0.50%, seed=57
+  ✓ Complete: 100 agents, 3.6s
+
+[117/200] Running: f=0.50%, seed=58
+  ✓ Complete: 100 agents, 3.6s
+
+[118/200] Running: f=0.50%, seed=59
+  ✓ Complete: 100 agents, 3.6s
+
+[119/200] Running: f=0.50%, seed=60
+  ✓ Complete: 100 agents, 3.6s
+
+[120/200] Running: f=0.50%, seed=61
+  ✓ Complete: 100 agents, 3.6s
+
+Frequency 0.50% Summary:
+  Mean: 100.0
+  Std Dev: 0.0
+  Variance: 0.0
+  CV: 0.0000
+
+================================================================================
+Frequency: 1.00% (20 experiments)
+================================================================================
+
+[121/200] Running: f=1.00%, seed=42
+  ✓ Complete: 100 agents, 3.6s
+
+[122/200] Running: f=1.00%, seed=43
+  ✓ Complete: 100 agents, 3.7s
+
+[123/200] Running: f=1.00%, seed=44
+  ✓ Complete: 100 agents, 3.7s
+
+[124/200] Running: f=1.00%, seed=45
+  ✓ Complete: 100 agents, 3.6s
+
+[125/200] Running: f=1.00%, seed=46
+  ✓ Complete: 100 agents, 3.6s
+
+[126/200] Running: f=1.00%, seed=47
+  ✓ Complete: 100 agents, 3.7s
+
+[127/200] Running: f=1.00%, seed=48
+  ✓ Complete: 100 agents, 4.6s
+
+[128/200] Running: f=1.00%, seed=49
+  ✓ Complete: 100 agents, 4.8s
+
+[129/200] Running: f=1.00%, seed=50
+  ✓ Complete: 100 agents, 6.1s
+
+[130/200] Running: f=1.00%, seed=51
+  ✓ Complete: 100 agents, 6.0s
+
+[131/200] Running: f=1.00%, seed=52
+  ✓ Complete: 100 agents, 6.0s
+
+[132/200] Running: f=1.00%, seed=53
+  ✓ Complete: 100 agents, 5.2s
+
+[133/200] Running: f=1.00%, seed=54
+  ✓ Complete: 100 agents, 5.1s
+
+[134/200] Running: f=1.00%, seed=55
+  ✓ Complete: 100 agents, 5.2s
+
+[135/200] Running: f=1.00%, seed=56
+  ✓ Complete: 100 agents, 5.7s
+
+[136/200] Running: f=1.00%, seed=57
+  ✓ Complete: 100 agents, 4.5s
+
+[137/200] Running: f=1.00%, seed=58
+  ✓ Complete: 100 agents, 3.6s
+
+[138/200] Running: f=1.00%, seed=59
+  ✓ Complete: 100 agents, 3.7s
+
+[139/200] Running: f=1.00%, seed=60
+  ✓ Complete: 100 agents, 3.6s
+
+[140/200] Running: f=1.00%, seed=61
+  ✓ Complete: 100 agents, 3.7s
+
+Frequency 1.00% Summary:
+  Mean: 100.0
+  Std Dev: 0.0
+  Variance: 0.0
+  CV: 0.0000
+
+================================================================================
+Frequency: 2.00% (20 experiments)
+================================================================================
+
+[141/200] Running: f=2.00%, seed=42
+  ✓ Complete: 100 agents, 3.7s
+
+[142/200] Running: f=2.00%, seed=43
+  ✓ Complete: 100 agents, 3.7s
+
+[143/200] Running: f=2.00%, seed=44
+  ✓ Complete: 100 agents, 3.7s
+
+[144/200] Running: f=2.00%, seed=45
+  ✓ Complete: 100 agents, 3.7s
+
+[145/200] Running: f=2.00%, seed=46
+  ✓ Complete: 100 agents, 3.7s
+
+[146/200] Running: f=2.00%, seed=47
+  ✓ Complete: 100 agents, 3.7s
+
+[147/200] Running: f=2.00%, seed=48
+  ✓ Complete: 100 agents, 3.7s
+
+[148/200] Running: f=2.00%, seed=49
+  ✓ Complete: 100 agents, 3.7s
+
+[149/200] Running: f=2.00%, seed=50
+  ✓ Complete: 100 agents, 3.6s
+
+[150/200] Running: f=2.00%, seed=51
+  ✓ Complete: 100 agents, 3.7s
+
+[151/200] Running: f=2.00%, seed=52
+  ✓ Complete: 100 agents, 3.7s
+
+[152/200] Running: f=2.00%, seed=53
+  ✓ Complete: 100 agents, 3.7s
+
+[153/200] Running: f=2.00%, seed=54
+  ✓ Complete: 100 agents, 3.7s
+
+[154/200] Running: f=2.00%, seed=55
+  ✓ Complete: 100 agents, 3.7s
+
+[155/200] Running: f=2.00%, seed=56
+  ✓ Complete: 100 agents, 3.7s
+
+[156/200] Running: f=2.00%, seed=57
+  ✓ Complete: 100 agents, 3.6s
+
+[157/200] Running: f=2.00%, seed=58
+  ✓ Complete: 100 agents, 3.7s
+
+[158/200] Running: f=2.00%, seed=59
+  ✓ Complete: 100 agents, 3.7s
+
+[159/200] Running: f=2.00%, seed=60
+  ✓ Complete: 100 agents, 3.7s
+
+[160/200] Running: f=2.00%, seed=61
+  ✓ Complete: 100 agents, 3.7s
+
+Frequency 2.00% Summary:
+  Mean: 100.0
+  Std Dev: 0.0
+  Variance: 0.0
+  CV: 0.0000
+
+================================================================================
+Frequency: 5.00% (20 experiments)
+================================================================================
+
+[161/200] Running: f=5.00%, seed=42
+  ✓ Complete: 100 agents, 3.8s
+
+[162/200] Running: f=5.00%, seed=43
+  ✓ Complete: 100 agents, 3.7s
+
+[163/200] Running: f=5.00%, seed=44
+  ✓ Complete: 100 agents, 3.8s
+
+[164/200] Running: f=5.00%, seed=45
+  ✓ Complete: 100 agents, 3.7s
+
+[165/200] Running: f=5.00%, seed=46
+  ✓ Complete: 100 agents, 3.7s
+
+[166/200] Running: f=5.00%, seed=47
+  ✓ Complete: 100 agents, 3.7s
+
+[167/200] Running: f=5.00%, seed=48
+  ✓ Complete: 100 agents, 3.8s
+
+[168/200] Running: f=5.00%, seed=49
+  ✓ Complete: 100 agents, 3.7s
+
+[169/200] Running: f=5.00%, seed=50
+  ✓ Complete: 100 agents, 3.8s
+
+[170/200] Running: f=5.00%, seed=51
+  ✓ Complete: 100 agents, 3.7s
+
+[171/200] Running: f=5.00%, seed=52
+  ✓ Complete: 100 agents, 3.8s
+
+[172/200] Running: f=5.00%, seed=53
+  ✓ Complete: 100 agents, 3.8s
+
+[173/200] Running: f=5.00%, seed=54
+  ✓ Complete: 100 agents, 3.8s
+
+[174/200] Running: f=5.00%, seed=55
+  ✓ Complete: 100 agents, 3.7s
+
+[175/200] Running: f=5.00%, seed=56
+  ✓ Complete: 100 agents, 3.7s
+
+[176/200] Running: f=5.00%, seed=57
+  ✓ Complete: 100 agents, 4.4s
+
+[177/200] Running: f=5.00%, seed=58
+  ✓ Complete: 100 agents, 4.7s
+
+[178/200] Running: f=5.00%, seed=59
+  ✓ Complete: 100 agents, 5.4s
+
+[179/200] Running: f=5.00%, seed=60
+  ✓ Complete: 100 agents, 5.0s
+
+[180/200] Running: f=5.00%, seed=61
+  ✓ Complete: 100 agents, 4.8s
+
+Frequency 5.00% Summary:
+  Mean: 100.0
+  Std Dev: 0.0
+  Variance: 0.0
+  CV: 0.0000
+
+================================================================================
+Frequency: 10.00% (20 experiments)
+================================================================================
+
+[181/200] Running: f=10.00%, seed=42
+  ✓ Complete: 100 agents, 4.7s
+
+[182/200] Running: f=10.00%, seed=43
+  ✓ Complete: 100 agents, 3.9s
+
+[183/200] Running: f=10.00%, seed=44
+  ✓ Complete: 100 agents, 3.9s
+
+[184/200] Running: f=10.00%, seed=45
+  ✓ Complete: 100 agents, 3.8s
+
+[185/200] Running: f=10.00%, seed=46
+  ✓ Complete: 100 agents, 3.9s
+
+[186/200] Running: f=10.00%, seed=47
+  ✓ Complete: 100 agents, 3.9s
+
+[187/200] Running: f=10.00%, seed=48
+  ✓ Complete: 100 agents, 3.9s
+
+[188/200] Running: f=10.00%, seed=49
+  ✓ Complete: 100 agents, 3.8s
+
+[189/200] Running: f=10.00%, seed=50
+  ✓ Complete: 100 agents, 3.9s
+
+[190/200] Running: f=10.00%, seed=51
+  ✓ Complete: 100 agents, 3.9s
+
+[191/200] Running: f=10.00%, seed=52
+  ✓ Complete: 100 agents, 3.8s
+
+[192/200] Running: f=10.00%, seed=53
+  ✓ Complete: 100 agents, 3.8s
+
+[193/200] Running: f=10.00%, seed=54
+  ✓ Complete: 100 agents, 3.8s
+
+[194/200] Running: f=10.00%, seed=55
+  ✓ Complete: 100 agents, 3.9s
+
+[195/200] Running: f=10.00%, seed=56
+  ✓ Complete: 100 agents, 3.9s
+
+[196/200] Running: f=10.00%, seed=57
+  ✓ Complete: 100 agents, 3.8s
+
+[197/200] Running: f=10.00%, seed=58
+  ✓ Complete: 100 agents, 3.9s
+
+[198/200] Running: f=10.00%, seed=59
+  ✓ Complete: 100 agents, 3.8s
+
+[199/200] Running: f=10.00%, seed=60
+  ✓ Complete: 100 agents, 3.9s
+
+[200/200] Running: f=10.00%, seed=61
+  ✓ Complete: 100 agents, 3.9s
+
+Frequency 10.00% Summary:
+  Mean: 100.0
+  Std Dev: 0.0
+  Variance: 0.0
+  CV: 0.0000
+
+================================================================================
+CAMPAIGN COMPLETE
+================================================================================
+Total experiments: 200
+Results saved: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_extended_variance_mapping_results.json
+
+Next: Run analysis script to fit power law and validate γ ≈ 3.2

@@ -1,0 +1,855 @@
+{
+  "timestamp": "2025-05-27T10:15:15.152Z",
+  "sessionDuration": 120000,
+  "cosmicFrequency": 98,
+  "dataPoints": [
+    {
+      "timestamp": 0,
+      "heartRate": 54.3011625939425,
+      "brainwaveFreq": 7.76312426671072,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 1,
+      "heartRate": 55.82476880093123,
+      "brainwaveFreq": 8.399037084769283,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 2,
+      "heartRate": 56.39360243701647,
+      "brainwaveFreq": 8.235590554450738,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 3,
+      "heartRate": 57.4275588395408,
+      "brainwaveFreq": 9.002714287382569,
+      "couplingStrength": 0.9776707436652095,
+      "isValid": true
+    },
+    {
+      "timestamp": 4,
+      "heartRate": 58.010708651114044,
+      "brainwaveFreq": 9.248710071787357,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 5,
+      "heartRate": 58.13136722495635,
+      "brainwaveFreq": 8.479842623665085,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 6,
+      "heartRate": 59.48784102787383,
+      "brainwaveFreq": 8.978295303924625,
+      "couplingStrength": 0.973001182906038,
+      "isValid": true
+    },
+    {
+      "timestamp": 7,
+      "heartRate": 60.45857980170404,
+      "brainwaveFreq": 8.98737016874885,
+      "couplingStrength": 0.9749836385442335,
+      "isValid": true
+    },
+    {
+      "timestamp": 8,
+      "heartRate": 61.8523692821609,
+      "brainwaveFreq": 9.603573263916124,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 9,
+      "heartRate": 61.71196156865349,
+      "brainwaveFreq": 9.707009207285616,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 10,
+      "heartRate": 62.82155866731294,
+      "brainwaveFreq": 10.255979004551198,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 11,
+      "heartRate": 62.80665894762118,
+      "brainwaveFreq": 9.759878533358917,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 12,
+      "heartRate": 62.84300168131402,
+      "brainwaveFreq": 10.471197062960883,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 13,
+      "heartRate": 64.25848580018945,
+      "brainwaveFreq": 10.037600841134934,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 14,
+      "heartRate": 62.98261652149782,
+      "brainwaveFreq": 10.686297433246477,
+      "couplingStrength": 0.9605236064216505,
+      "isValid": true
+    },
+    {
+      "timestamp": 15,
+      "heartRate": 63.01947577075002,
+      "brainwaveFreq": 10.817199159994457,
+      "couplingStrength": 0.9348568979191807,
+      "isValid": true
+    },
+    {
+      "timestamp": 16,
+      "heartRate": 62.9355949118757,
+      "brainwaveFreq": 10.921963949507298,
+      "couplingStrength": 0.9243784799052092,
+      "isValid": true
+    },
+    {
+      "timestamp": 17,
+      "heartRate": 63.651693889027435,
+      "brainwaveFreq": 11.22031138972139,
+      "couplingStrength": 0.971375132687008,
+      "isValid": true
+    },
+    {
+      "timestamp": 18,
+      "heartRate": 63.362580946606535,
+      "brainwaveFreq": 11.414401291503902,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 19,
+      "heartRate": 63.54068957457384,
+      "brainwaveFreq": 11.117957415442262,
+      "couplingStrength": 0.9549439590796428,
+      "isValid": true
+    },
+    {
+      "timestamp": 20,
+      "heartRate": 63.20715343742275,
+      "brainwaveFreq": 11.586523845096492,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 21,
+      "heartRate": 63.73350792425834,
+      "brainwaveFreq": 11.225263106662224,
+      "couplingStrength": 0.9721872382119009,
+      "isValid": true
+    },
+    {
+      "timestamp": 22,
+      "heartRate": 62.60901907393747,
+      "brainwaveFreq": 11.340425029161485,
+      "couplingStrength": 0.9909702855189875,
+      "isValid": true
+    },
+    {
+      "timestamp": 23,
+      "heartRate": 62.605965700337485,
+      "brainwaveFreq": 11.590955176799687,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 24,
+      "heartRate": 60.79885599213961,
+      "brainwaveFreq": 11.971769782757523,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 25,
+      "heartRate": 59.954823612479814,
+      "brainwaveFreq": 12.179612757201339,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 26,
+      "heartRate": 60.01072181601798,
+      "brainwaveFreq": 12.109293237665415,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 27,
+      "heartRate": 60.2218810766316,
+      "brainwaveFreq": 11.32525418927823,
+      "couplingStrength": 0.9881922690621094,
+      "isValid": true
+    },
+    {
+      "timestamp": 28,
+      "heartRate": 59.05946491062506,
+      "brainwaveFreq": 11.51398881153916,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 29,
+      "heartRate": 58.96870800826011,
+      "brainwaveFreq": 11.459167384371153,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 30,
+      "heartRate": 57.14666027445113,
+      "brainwaveFreq": 11.799593597424643,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 31,
+      "heartRate": 56.40854624708459,
+      "brainwaveFreq": 11.870230943118456,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 32,
+      "heartRate": 55.02584847794907,
+      "brainwaveFreq": 11.872246835572183,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 33,
+      "heartRate": 56.00479040517471,
+      "brainwaveFreq": 11.75797090949916,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 34,
+      "heartRate": 53.93033225021487,
+      "brainwaveFreq": 11.980835023394448,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 35,
+      "heartRate": 54.105798819860475,
+      "brainwaveFreq": 12.125554798070045,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 36,
+      "heartRate": 53.59625453200308,
+      "brainwaveFreq": 12.196337220607255,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 37,
+      "heartRate": 53.10035636878319,
+      "brainwaveFreq": 11.832280550596398,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 38,
+      "heartRate": 51.14308178109728,
+      "brainwaveFreq": 11.162054351491316,
+      "couplingStrength": 0.9606383405503339,
+      "isValid": true
+    },
+    {
+      "timestamp": 39,
+      "heartRate": 51.676737375340416,
+      "brainwaveFreq": 11.73360000901749,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 40,
+      "heartRate": 50.28680351859489,
+      "brainwaveFreq": 11.320723013093552,
+      "couplingStrength": 0.9863796967461422,
+      "isValid": true
+    },
+    {
+      "timestamp": 41,
+      "heartRate": 50.46922163456105,
+      "brainwaveFreq": 11.619629295131523,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 42,
+      "heartRate": 49.360875884704605,
+      "brainwaveFreq": 11.242158593896477,
+      "couplingStrength": 0.9733880159866649,
+      "isValid": true
+    },
+    {
+      "timestamp": 43,
+      "heartRate": 48.76373627893197,
+      "brainwaveFreq": 11.61595096128129,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 44,
+      "heartRate": 49.70887062426112,
+      "brainwaveFreq": 11.038540882024554,
+      "couplingStrength": 0.9409510443447564,
+      "isValid": true
+    },
+    {
+      "timestamp": 45,
+      "heartRate": 48.99047898183982,
+      "brainwaveFreq": 10.686361780458622,
+      "couplingStrength": 0.9585240380002479,
+      "isValid": true
+    },
+    {
+      "timestamp": 46,
+      "heartRate": 49.41405008142256,
+      "brainwaveFreq": 10.934445210812807,
+      "couplingStrength": 0.9248328984992982,
+      "isValid": true
+    },
+    {
+      "timestamp": 47,
+      "heartRate": 49.58904575012107,
+      "brainwaveFreq": 10.439205100937947,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 48,
+      "heartRate": 48.39078795828886,
+      "brainwaveFreq": 10.175045381944539,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 49,
+      "heartRate": 48.96670998429914,
+      "brainwaveFreq": 10.43272730474107,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 50,
+      "heartRate": 49.89898219578957,
+      "brainwaveFreq": 10.629572419547046,
+      "couplingStrength": 0.970055398956913,
+      "isValid": true
+    },
+    {
+      "timestamp": 51,
+      "heartRate": 49.203729028086705,
+      "brainwaveFreq": 9.595374559597062,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 52,
+      "heartRate": 48.70440465363041,
+      "brainwaveFreq": 10.334920829017344,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 53,
+      "heartRate": 50.814244884531384,
+      "brainwaveFreq": 9.62270444713,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 54,
+      "heartRate": 50.99360764695379,
+      "brainwaveFreq": 9.472739339127216,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 55,
+      "heartRate": 51.49827378527742,
+      "brainwaveFreq": 8.975342884345132,
+      "couplingStrength": 0.9712714635012839,
+      "isValid": true
+    },
+    {
+      "timestamp": 56,
+      "heartRate": 52.61934205499648,
+      "brainwaveFreq": 9.574176457563809,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 57,
+      "heartRate": 51.773646626254646,
+      "brainwaveFreq": 9.396511181113873,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 58,
+      "heartRate": 52.38918629266401,
+      "brainwaveFreq": 8.434904219460147,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 59,
+      "heartRate": 54.17600839451792,
+      "brainwaveFreq": 8.815295131005115,
+      "couplingStrength": 0.9826477038573971,
+      "isValid": true
+    },
+    {
+      "timestamp": 60,
+      "heartRate": 53.589253172407425,
+      "brainwaveFreq": 8.660793168760165,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 61,
+      "heartRate": 55.384144650283986,
+      "brainwaveFreq": 7.757377074438916,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 62,
+      "heartRate": 56.21427945420454,
+      "brainwaveFreq": 7.849625042741775,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 63,
+      "heartRate": 57.00309539843815,
+      "brainwaveFreq": 7.812760303783318,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 64,
+      "heartRate": 56.91124019927762,
+      "brainwaveFreq": 7.9380609688082435,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 65,
+      "heartRate": 59.07202715313569,
+      "brainwaveFreq": 7.250344976900491,
+      "couplingStrength": 0.9203146017021782,
+      "isValid": true
+    },
+    {
+      "timestamp": 66,
+      "heartRate": 58.79515683333911,
+      "brainwaveFreq": 6.848482019589726,
+      "couplingStrength": 0.913214682416523,
+      "isValid": true
+    },
+    {
+      "timestamp": 67,
+      "heartRate": 60.26432266232416,
+      "brainwaveFreq": 6.514804797088605,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 68,
+      "heartRate": 60.96592275052952,
+      "brainwaveFreq": 6.573128517618814,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 69,
+      "heartRate": 61.098593303622145,
+      "brainwaveFreq": 6.474237814589912,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 70,
+      "heartRate": 61.87264704687515,
+      "brainwaveFreq": 6.477732649281862,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 71,
+      "heartRate": 62.99729232519122,
+      "brainwaveFreq": 6.500660102547839,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 72,
+      "heartRate": 63.19387878538434,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 73,
+      "heartRate": 62.93004073941384,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 74,
+      "heartRate": 63.73779774677848,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 75,
+      "heartRate": 64.22333132008931,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 76,
+      "heartRate": 65.19827118915046,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 77,
+      "heartRate": 64.20994456955476,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 78,
+      "heartRate": 65.6476563553261,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 79,
+      "heartRate": 65.3331593005256,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 80,
+      "heartRate": 64.61606148800139,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 81,
+      "heartRate": 64.97058393796593,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 82,
+      "heartRate": 63.787217875675374,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 83,
+      "heartRate": 64.58182369522325,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 84,
+      "heartRate": 63.806848225608654,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 85,
+      "heartRate": 62.11400002123917,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 86,
+      "heartRate": 62.0427920884108,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 87,
+      "heartRate": 62.18449825572462,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 88,
+      "heartRate": 60.82475715260376,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 89,
+      "heartRate": 60.16158725080209,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 90,
+      "heartRate": 60.153278055593496,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 91,
+      "heartRate": 59.0111862130464,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 92,
+      "heartRate": 57.47782028164201,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 93,
+      "heartRate": 56.608184648405334,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 94,
+      "heartRate": 56.421251799666926,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 95,
+      "heartRate": 56.03958871351525,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 96,
+      "heartRate": 54.95464256951988,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 97,
+      "heartRate": 53.21585288191871,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 98,
+      "heartRate": 53.30790231504228,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 99,
+      "heartRate": 52.14772112282445,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 100,
+      "heartRate": 50.85361991197843,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 101,
+      "heartRate": 50.965012322322195,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 102,
+      "heartRate": 50.47230168689204,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 103,
+      "heartRate": 50.19366415766571,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 104,
+      "heartRate": 49.36875858245196,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 105,
+      "heartRate": 47.852302436029234,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 106,
+      "heartRate": 48.23886494479606,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 107,
+      "heartRate": 48.34178323077284,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 108,
+      "heartRate": 48.462708288941016,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 109,
+      "heartRate": 47.671275773359156,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 110,
+      "heartRate": 48.45538536547167,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 111,
+      "heartRate": 47.64869926284991,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 112,
+      "heartRate": 47.62809743645566,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 113,
+      "heartRate": 47.81445249401532,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 114,
+      "heartRate": 48.167355020503,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 115,
+      "heartRate": 47.484343820395786,
+      "brainwaveFreq": 6,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 116,
+      "heartRate": 48.470112130457004,
+      "brainwaveFreq": 6.140691910710084,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 117,
+      "heartRate": 48.54413003276462,
+      "brainwaveFreq": 6.267873684799073,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 118,
+      "heartRate": 49.20744373941964,
+      "brainwaveFreq": 6.291455323536012,
+      "couplingStrength": 1,
+      "isValid": true
+    },
+    {
+      "timestamp": 119,
+      "heartRate": 49.1596066229376,
+      "brainwaveFreq": 6.2423695791483365,
+      "couplingStrength": 1,
+      "isValid": true
+    }
+  ],
+  "statistics": {
+    "dataQuality": 1,
+    "firstMinAvgCoupling": 0.9881962005727367,
+    "secondMinAvgCoupling": 0.997225488068645,
+    "couplingProgression": 0.009029287495908256,
+    "maxCoupling": 1,
+    "minCoupling": 0.913214682416523
+  }
+}

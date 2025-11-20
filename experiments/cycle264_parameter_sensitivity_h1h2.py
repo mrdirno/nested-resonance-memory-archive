@@ -282,15 +282,28 @@ def main():
     results = {} # This will store the results from parallel execution
     worker_args = [(condition, i) for i, condition in enumerate(conditions)]
     
-    # Use slightly fewer than max cores to leave room for system/V6
-    num_workers = max(1, multiprocessing.cpu_count() - 2)
+    # Serial execution for robustness
+    print(f"Starting serial execution of {len(conditions)} conditions...")
     
-    with multiprocessing.Pool(processes=num_workers) as pool:
-        # Use imap_unordered for responsiveness
-        for result in pool.imap_unordered(run_condition_worker, worker_args):
-            name = result["condition_name"]
-            print(f"Completed: {name} (Pop: {result['final_population']}, Time: {result['runtime_seconds']:.2f}s)")
-            results[name] = result
+    for i, (condition, idx) in enumerate(worker_args):
+        try:
+            print(f"[{i+1}/{len(conditions)}] Running {condition.get_name()}...", end=" ", flush=True)
+            
+            # Run condition
+            result = run_condition_worker((condition, idx))
+            
+            # Log success
+            print(f"DONE (Pop: {result['final_population']}, Time: {result['runtime_seconds']:.2f}s)")
+            results[result["condition_name"]] = result
+            
+            # Force flush to ensure log updates
+            sys.stdout.flush()
+            
+        except Exception as e:
+            print(f"FAILED: {e}")
+            import traceback
+            traceback.print_exc()
+            sys.stdout.flush()
 
     # Analyze sensitivity
     print()

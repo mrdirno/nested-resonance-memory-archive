@@ -155,20 +155,20 @@ class FractalAgent:
         self.state.energy = value
         self.state.last_update = datetime.now()
 
-    def update_phase(self, delta_t: float, frequency: float = 1.0) -> None:
+    def update_phase(self, delta_t: float, frequency: Optional[float] = None) -> None:
         """Update agent's transcendental phase based on time evolution.
 
-        Phase evolution follows: φ(t+Δt) = φ(t) + 2π * f * Δt (mod 2π)
+        Phase evolution follows: φ(t+Δt) = φ(t) + v * Δt (mod 2π)
 
         Args:
             delta_t: Time step (seconds)
-            frequency: Oscillation frequency (Hz)
+            frequency: Optional oscillation frequency (Hz). If None, uses current velocity.
         """
-        # Phase evolution (transcendental dynamics)
-        self.state.phase = (self.state.phase + 2 * np.pi * frequency * delta_t) % (2 * np.pi)
+        if frequency is not None:
+            self.state.velocity = 2 * np.pi * frequency
 
-        # Velocity update (rate of phase change)
-        self.state.velocity = 2 * np.pi * frequency
+        # Phase evolution (transcendental dynamics) using current velocity
+        self.state.phase = (self.state.phase + self.state.velocity * delta_t) % (2 * np.pi)
 
         # Update timestamp
         self.state.last_update = datetime.now()
@@ -179,7 +179,8 @@ class FractalAgent:
         Args:
             delta_time: Time step (seconds)
         """
-        self.update_phase(delta_time)
+        # Use current velocity (don't reset it)
+        self.update_phase(delta_time, frequency=None)
         # Standard metabolic cost (entropy)
         self.update_energy(-0.01 * delta_time)
         
@@ -240,13 +241,13 @@ class FractalAgent:
             for p in self.state.patterns:
                 p.weight = uniform_weight
 
-    def update_energy(self, delta_energy: float, min_energy: float = 0.0, max_energy: float = 1.0) -> None:
+    def update_energy(self, delta_energy: float, min_energy: float = 0.0, max_energy: float = 10000.0) -> None:
         """Update agent's energy level with bounds.
 
         Args:
             delta_energy: Energy change (positive = gain, negative = loss)
             min_energy: Minimum energy threshold (default: 0.0)
-            max_energy: Maximum energy capacity (default: 1.0)
+            max_energy: Maximum energy capacity (default: 10000.0)
         """
         self.state.energy = np.clip(self.state.energy + delta_energy, min_energy, max_energy)
         self.state.last_update = datetime.now()
@@ -270,6 +271,11 @@ class FractalAgent:
             True if energy > threshold, False otherwise
         """
         return self.state.energy > energy_threshold
+
+    @property
+    def is_active(self) -> bool:
+        """Check if agent is active (alive)."""
+        return self.is_alive()
 
     def can_compose(self, resonance_threshold: float = 0.5) -> bool:
         """Check if agent can participate in composition.
