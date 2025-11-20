@@ -161,11 +161,18 @@
 - **Status:** ✅ **COMPLETE** (Cycle 42)
 - **Finding:** Static parameter tuning failed to achieve balanced emergence, collapsing to rigid order; formulated `PRIN-INVERSE-DESIGN-FAILURE`.
 
-### 2. **HELIOS-2: Dynamic Parameter Modulation** 🚀 ACTIVE
+### 2. **HELIOS-2: Dynamic Parameter Modulation** ✅ COMPLETE
 **Goal:** Investigate if dynamically modulating parameters (E, S) can maintain a system in the "Balanced Emergence" regime, preventing collapse into Rigid Order or Chaos.
 - **Hypothesis:** Temporal modulation (forcing) can create a dynamic attractor where static tuning fails.
-- **Experiment:** Design `code/tsf/engineering_engine/helios2_dynamic_modulation.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 42)
+- **Experiment:** `code/tsf/engineering_engine/helios2_dynamic_modulation.py`
+- **Status:** ✅ **COMPLETE** (Cycle 44)
+- **Finding:** Modulation failed to escape the Rigid Order attractor (0% success); formulated `PRIN-DYNAMIC-MODULATION-FAILURE`.
+
+### 3. **HELIOS-3: Structural Heterogeneity** 🚀 ACTIVE
+**Goal:** Determine if a heterogeneous swarm (mixed population of "Stabilizers" and "Energizers") can achieve stable Balanced Emergence where homogeneous swarms fail.
+- **Hypothesis:** Diversity in agent parameters prevents global synchronized collapse, creating an internal dynamic tension that sustains complexity.
+- **Experiment:** Design `code/tsf/engineering_engine/helios3_heterogeneity.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 44)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
