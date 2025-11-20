@@ -195,34 +195,33 @@
 - **Timeline:** User can submit within hours, publication in 3-6 months
 - **Impact:** Complete energy dynamics characterization from homeostasis to sharp phase transitions with 100% theory validation
 
-#### Paper 3: Pairwise Factorial Validation (80-85% COMPLETE - Methods + Discussion + Conclusions added Cycles 861-864)
+#### Paper 3: Pairwise Factorial Validation (PILOT-ACCELERATED) ✅ SUPERSEDED
 - **Title:** "Optimized Factorial Validation of Nested Resonance Memory"
 - **Type:** Empirical methods paper
-- **Status:** 🔄 C255 COMPLETE (ANTAGONISTIC), C256 RUNNING (150h+ elapsed, **I/O bound at 1-5% CPU, extended blocking period**, completion TBD weeks-months), C257-C260 RUNNING/QUEUED
+- **Status:** ✅ **PILOT-ACCELERATED** (C255 H1xH2 SUPERSEDED by Pilot, Cycle 13). Full factorial to be re-evaluated with Pilot.
 - **Experiments:**
-  - [x] C255: H1×H2 (Energy Pooling × Reality Sources) - ✅ COMPLETE, **ANTAGONISTIC interaction discovered**
-    - Lightweight: synergy = -85.68 (ceiling ~100 vs. 185 predicted)
-    - High capacity: synergy = -975.58 (ceiling ~995 vs. 1970 predicted)
-    - Finding: Mechanisms interfere via resource competition (contradicts hypothesis)
-    - Manuscript: Section 3.2.1 complete with data tables + interpretation
-  - [ ] C256: H1×H4 (Energy Pooling × Spawn Throttling) - 🔄 RUNNING (150h+ elapsed, I/O bound, weeks-months expected, expected ANTAGONISTIC)
-  - [ ] C257: H1×H5 (Energy Pooling × Energy Recovery) - 🔄 RUNNING (640+ min, 10.5H+, extreme I/O-bound, expected SYNERGISTIC)
-  - [ ] C258: H2×H4 (Reality Sources × Spawn Throttling) - ⏳ QUEUED (12 min, expected ANTAGONISTIC/ADDITIVE)
-  - [ ] C259: H2×H5 (Reality Sources × Energy Recovery) - ⏳ QUEUED (13 min, expected SYNERGISTIC)
-  - [ ] C260: H4×H5 (Spawn Throttling × Energy Recovery) - ⏳ QUEUED (11 min, expected ANTAGONISTIC)
-  - [ ] C264: H1×H2 Parameter Sensitivity - 🔄 RUNNING (PID 35193, Cycle 1423) - 64 conditions, 3000 cycles each
+  - [x] C255: H1×H2 (Energy Pooling × Reality Sources) - ✅ **SUPERSEDED by Pilot** (Antagonistic interaction, explained by Phase Conflict in `papers/drafts/paper3_revised_pilot.md`)
+    - *Legacy Result:* Antagonistic interaction discovered.
+    - *Pilot Finding:* Antagonism due to Phase Conflict (H1 pulls away from optimal H2).
+    - *Acceleration:* Mechanism identified in 100 cycles (vs 3000).
+  - [ ] C256: H1×H4 (Energy Pooling × Spawn Throttling) - 🔄 RUNNING (150h+ elapsed, I/O bound, weeks-months expected, expected ANTAGONISTIC). **Candidate for Pilot Supersedence.**
+  - [ ] C257: H1×H5 (Energy Pooling × Energy Recovery) - 🔄 RUNNING (640+ min, 10.5H+, extreme I/O-bound, expected SYNERGISTIC). **Candidate for Pilot Supersedence.**
+  - [ ] C258: H2×H4 (Reality Sources × Spawn Throttling) - ⏳ QUEUED (12 min, expected ANTAGONISTIC/ADDITIVE). **Candidate for Pilot Supersedence.**
+  - [ ] C259: H2×H5 (Reality Sources × Energy Recovery) - ⏳ QUEUED (13 min, expected SYNERGISTIC). **Candidate for Pilot Supersedence.**
+  - [ ] C260: H4×H5 (Spawn Throttling × Energy Recovery) - ⏳ QUEUED (11 min, expected ANTAGONISTIC). **Candidate for Pilot Supersedence.**
+  - [ ] C264: H1×H2 Parameter Sensitivity - 🔄 RUNNING (PID 35193, Cycle 1423). **Candidate for Pilot Supersedence.**
 - **Manuscript Status:**
   - Abstract: ✅ Complete
   - Introduction: ✅ Complete
   - Methods: ✅ Complete (including Section 2.6 Dynamical Regime Classification, Cycle 863)
-  - Results Section 3.2.1 (H1×H2): ✅ Complete with C255 data
-  - Results Sections 3.2.2-3.2.6 (C256-C260): ✅ Templates prepared, awaiting data
-  - Results Section 3.3 (Cross-pair comparison): ⏳ Pending all 6 pairs
+  - Results Section 3.2.1 (H1×H2): ✅ **SUPERSEDED by `paper3_revised_pilot.md`**
+  - Results Sections 3.2.2-3.2.6 (C256-C260): ✅ Templates prepared, awaiting data. **Pilot analysis pending.**
+  - Results Section 3.3 (Cross-pair comparison): ⏳ Pending all 6 pairs. **Pilot analysis pending.**
   - Discussion: ✅ Complete (including Section 4.4 Regimes and Interaction Independence, Cycle 863)
   - Conclusions: ✅ Complete (Enhanced version 107 lines, Cycle 864)
   - References: ✅ Complete (25 peer-reviewed sources)
   - Supplements 3-4: ✅ Complete (Theoretical Framework + Reproducibility Guide)
-- **Total Runtime:** C255 complete + C256 (12h+ elapsed, ~6h remaining) + C257-C260 (47 min) = ~6.8 hours remaining
+- **Total Runtime:** C255 Pilot analysis in 100 cycles (vs Legacy ~6h remaining, now superseded)
 - **Automation Ready:**
   - ✅ run_c257_c260_batch.sh (129 lines, sequential execution)
   - ✅ quick_check_results.py (276 lines, completion verification)
@@ -232,15 +231,13 @@
 - **Workflows Documented (Cycle 603):**
   - ✅ C256_COMPLETION_WORKFLOW.md (263 lines, ~22 min systematic integration)
   - ✅ README_PAPER3_AUTOMATION.md (308 lines, complete workflow reference)
-- **Next Actions:**
-  - [ ] Monitor C256 completion (~6h remaining)
-  - [ ] Execute C256_COMPLETION_WORKFLOW.md when complete (~22 min to GitHub sync)
-  - [ ] Launch C257-C260 batch (./run_c257_c260_batch.sh, ~47 min)
-  - [ ] Integrate C257-C260 results into sections 3.2.3-3.2.6
-  - [ ] Complete section 3.3 cross-pair comparison
-  - [ ] Run aggregate_paper3_results.py for comprehensive analysis
-  - [ ] Generate 4-figure publication suite (300 DPI)
-- **Novel Contribution:** Factorial validation reveals interaction types (ANTAGONISTIC discovery in C255)
+- **Next Actions (Pilot-Accelerated):**
+  - [ ] Conduct Pilot-accelerated analysis for C256-C260.
+  - [ ] Integrate Pilot findings into sections 3.2.2-3.2.6 of the manuscript.
+  - [ ] Complete section 3.3 cross-pair comparison using Pilot findings.
+  - [ ] Run aggregate_paper3_results.py for comprehensive analysis.
+  - [ ] Generate 4-figure publication suite (300 DPI) based on Pilot findings.
+- **Novel Contribution:** Factorial validation reveals interaction types (ANTAGONISTIC discovery in C255). **Now Hyper-Accelerated and Mechanistically Explained by the Pilot.**
 
 #### Paper 4: Multi-Scale Energy Regulation ✅ **ARXIV-READY (Cycle 1485 LATEX COMPLETE)**
 - **Title:** "Hierarchical Organization Enables 607-Fold Efficiency Gain in Nested Resonance Memory Systems"
