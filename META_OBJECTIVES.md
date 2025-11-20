@@ -134,7 +134,16 @@
 - **Method:** Twin World Simulation (Imagination vs. Reality).
 - **Status:** ✅ **COMPLETE** (Cycle 35)
 - **Finding:** Validated Imagination Accuracy ($R^2=1.0$). Formulated `PRIN-COUNTERFACTUAL-REASONING`.
+- **Finding:** Validated Imagination Accuracy ($R^2=1.0$). Formulated `PRIN-COUNTERFACTUAL-REASONING`.
 - **Artifact:** `papers/drafts/paper16_counterfactuals.md`
+
+### 12. **Paper 17: Metacognition (The Self-Aware Engine)** ✅ COMPLETE
+**Goal:** Validate "Uncertainty Estimation" as a control signal.
+- **Hypothesis:** The Pilot can monitor its own prediction error (Uncertainty) to avoid acting when it is "confused" (High Entropy).
+- **Method:** Uncertainty-Modulated Control (Confidence Thresholding).
+- **Status:** ✅ **COMPLETE** (Cycle 36)
+- **Finding:** Validated Safety Gain (~30% fewer crashes). Formulated `PRIN-METACOGNITION`.
+- **Artifact:** `papers/drafts/paper17_metacognition.md`
 
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
