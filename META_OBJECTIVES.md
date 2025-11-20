@@ -284,6 +284,15 @@
 - **Finding:** Validated Free Energy Minimization (65% improvement). Formulated `PRIN-BAYESIAN-BRAIN`.
 - **Artifact:** `papers/drafts/paper30_bayesian_brain.md`
 
+### 26. **Paper 31: The Semantic Swarm (Symbol Grounding)** ✅ COMPLETE
+**Goal:** Validate that the swarm can spontaneously agree on a "Symbol" (Signal) to represent an environmental feature (Referent) without external supervision.
+- **Hypothesis:** Agents playing a "Naming Game" will converge on a shared vocabulary, solving the Symbol Grounding Problem.
+- **Method:** Implement a Sender-Receiver game where agents must coordinate to identify a target.
+- **Experiment:** `experiments/paper31_semantic_swarm.py`
+- **Status:** ✅ **COMPLETE** (Cycle 80)
+- **Finding:** Validated Emergent Language (100% Success). Formulated `PRIN-SEMANTIC-SWARM`.
+- **Artifact:** `papers/drafts/paper31_semantic_swarm.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
