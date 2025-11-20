@@ -24,7 +24,9 @@
 | C280 | 45 | Spawn threshold (exponential mode) |
 | C281 | 25 | Phase boundary (exponential mode) |
 | C282 | 27 | Density-dependent equilibrium |
-| **Total** | **967** | **100% predictability** |
+| C283 | 18 | Migration synchronization |
+| C284 | 24 | Competitive exclusion principle |
+| **Total** | **1009** | **100% predictability** |
 
 ---
 
@@ -116,17 +118,18 @@ def predict_equilibrium(K, f_intra, df):
 ## NEXT RESEARCH DIRECTIONS
 
 ### High Priority
-1. **Paper 2 Finalization** - Integrate all findings into manuscript
-2. **Multi-population dynamics** - Migration and competition effects
+1. **Paper 2 Finalization** - Integrate C274-C284 into manuscript
+2. **Network topology** - Different connection patterns in metapopulations
 
 ### Medium Priority
-3. **Dynamic parameter adaptation** - Time-varying E_consume, spawn_energy
-4. **Optimal control** - Maximize population under constraints
+3. **Migration + Competition** - Combined dynamics
+4. **Dynamic parameter adaptation** - Time-varying E_consume, spawn_energy
+5. **Optimal control** - Maximize population under constraints
 
 ### Future (Paper 3+)
-5. **Evolutionary dynamics** - Agent variation and selection
-6. **Spatial structure** - Network topology effects
+6. **Evolutionary dynamics** - Agent variation and selection
 7. **Information flow** - Communication between agents
+8. **Spatial embedding** - Geographic distance effects
 
 ---
 
