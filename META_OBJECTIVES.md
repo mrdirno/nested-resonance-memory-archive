@@ -111,11 +111,18 @@
 - **Status:** ✅ **COMPLETE** (Cycle 36)
 - **Finding:** Successfully used active learning to map the phase space and build a global GPR model; formulated `PRIN-ACTIVE-LEARNING-MAPPING`.
 
-### 10. **TSF-10: Global Model-Based Agency** 🚀 ACTIVE
+### 10. **TSF-10: Global Model-Based Agency** ✅ COMPLETE
 **Goal:** Implement a model-based agency that utilizes the comprehensive phase space map (from TSF-9) to plan optimal control parameter trajectories (E,S) to achieve and maintain target (C,R) states, including adaptation to changing conditions.
 - **Hypothesis:** Having a global, accurate model will enable the Pilot to effectively avoid local optima and precisely navigate the emergent phase space.
-- **Experiment:** Design `code/tsf/science_engine/tsf10_global_model_based_agency.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 36)
+- **Experiment:** `code/tsf/science_engine/tsf10_global_model_based_agency.py`
+- **Status:** ✅ **COMPLETE** (Cycle 38)
+- **Finding:** Despite global GPR models, the Pilot struggled to converge due to model inaccuracies in non-linear phase spaces and the presence of strong attractors; formulated `PRIN-MODEL-GUIDED-NAVIGATION-LIMITS`.
+
+### 11. **TSF-11: Phase Space Reachability Analysis** 🚀 ACTIVE
+**Goal:** Systematically map the entire (E,S) parameter space to determine which (C,R) emergent states are stably reachable and to precisely identify the boundaries of the various regimes (Extinction, Rigid Order, Chaotic Complexity, Balanced Emergence) under the current simulation physics.
+- **Hypothesis:** Understanding the inherent reachability limits is crucial before attempting precise control.
+- **Experiment:** Design `code/tsf/science_engine/tsf11_reachability_analysis.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 38)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
