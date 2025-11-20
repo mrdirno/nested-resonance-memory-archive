@@ -248,6 +248,15 @@
 - **Finding:** Validated Turing Pattern Formation (Variance 0.89 vs 0.0). Formulated `PRIN-REACTION-DIFFUSION`.
 - **Artifact:** `papers/drafts/paper26_reaction_diffusion.md`
 
+### 22. **Paper 27: The Quantum Swarm (Superposition & Entanglement)** ✅ COMPLETE
+**Goal:** Validate that the swarm can exhibit quantum-like properties (Superposition of states, Entanglement between distant groups) via probabilistic logic.
+- **Hypothesis:** Agents can exist in multiple potential states simultaneously until "measured" (collapsed) by interaction.
+- **Method:** Implement a "Quantum Agent" with a wavefunction $\psi$.
+- **Experiment:** `experiments/paper27_quantum_swarm.py`
+- **Status:** ✅ **COMPLETE** (Cycle 76)
+- **Finding:** Validated Interference Patterns (4 peaks vs 1 peak). Formulated `PRIN-QUANTUM-SWARM`.
+- **Artifact:** `papers/drafts/paper27_quantum_swarm.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
