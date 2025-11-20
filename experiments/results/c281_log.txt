@@ -1,0 +1,197 @@
+================================================================================
+CYCLE 281: PHASE BOUNDARY IN EXPONENTIAL GROWTH
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+Date: 2025-11-20 00:18:32
+================================================================================
+
+Experimental Design:
+  Purpose: Validate phase boundary (E_net=0) in exponential mode
+  Conditions: 5
+  Seeds per condition: 5
+  Total experiments: 25
+  Cycles per experiment: 10000
+  Initial population: 100
+
+================================================================================
+Condition: E_net_-0.2 (expected: COLLAPSE)
+  E_consume=0.7, E_recharge=0.5, E_net=-0.2
+================================================================================
+
+[1/25] Running: E_net_-0.2, seed=100
+      Cycle 0: pop=100
+      [EXTINCT] at cycle 8
+    → final=0, max=100, runtime=0.0s
+
+[2/25] Running: E_net_-0.2, seed=101
+      Cycle 0: pop=100
+      [EXTINCT] at cycle 8
+    → final=0, max=100, runtime=0.0s
+
+[3/25] Running: E_net_-0.2, seed=102
+      Cycle 0: pop=100
+      [EXTINCT] at cycle 8
+    → final=0, max=100, runtime=0.0s
+
+[4/25] Running: E_net_-0.2, seed=103
+      Cycle 0: pop=100
+      [EXTINCT] at cycle 8
+    → final=0, max=100, runtime=0.0s
+
+[5/25] Running: E_net_-0.2, seed=104
+      Cycle 0: pop=100
+      [EXTINCT] at cycle 8
+    → final=0, max=100, runtime=0.0s
+================================================================================
+Condition: E_net_-0.1 (expected: COLLAPSE)
+  E_consume=0.6, E_recharge=0.5, E_net=-0.1
+================================================================================
+
+[6/25] Running: E_net_-0.1, seed=100
+      Cycle 0: pop=100
+      [EXTINCT] at cycle 11
+    → final=0, max=100, runtime=0.0s
+
+[7/25] Running: E_net_-0.1, seed=101
+      Cycle 0: pop=100
+      [EXTINCT] at cycle 11
+    → final=0, max=100, runtime=0.0s
+
+[8/25] Running: E_net_-0.1, seed=102
+      Cycle 0: pop=100
+      [EXTINCT] at cycle 11
+    → final=0, max=100, runtime=0.0s
+
+[9/25] Running: E_net_-0.1, seed=103
+      Cycle 0: pop=100
+      [EXTINCT] at cycle 11
+    → final=0, max=100, runtime=0.0s
+
+[10/25] Running: E_net_-0.1, seed=104
+      Cycle 0: pop=100
+      [EXTINCT] at cycle 11
+    → final=0, max=100, runtime=0.0s
+================================================================================
+Condition: E_net_0.0 (expected: HOMEOSTASIS)
+  E_consume=0.5, E_recharge=0.5, E_net=0.0
+================================================================================
+
+[11/25] Running: E_net_0.0, seed=100
+      Cycle 0: pop=100
+      Cycle 2000: pop=100
+      Cycle 4000: pop=100
+      Cycle 6000: pop=100
+      Cycle 8000: pop=100
+    → final=100, max=101, runtime=0.2s
+
+[12/25] Running: E_net_0.0, seed=101
+      Cycle 0: pop=100
+      Cycle 2000: pop=100
+      Cycle 4000: pop=100
+      Cycle 6000: pop=100
+      Cycle 8000: pop=100
+    → final=100, max=101, runtime=0.2s
+
+[13/25] Running: E_net_0.0, seed=102
+      Cycle 0: pop=100
+      Cycle 2000: pop=100
+      Cycle 4000: pop=100
+      Cycle 6000: pop=101
+      Cycle 8000: pop=100
+    → final=100, max=101, runtime=0.2s
+
+[14/25] Running: E_net_0.0, seed=103
+      Cycle 0: pop=100
+      Cycle 2000: pop=100
+      Cycle 4000: pop=100
+      Cycle 6000: pop=100
+      Cycle 8000: pop=101
+    → final=100, max=101, runtime=0.2s
+
+[15/25] Running: E_net_0.0, seed=104
+      Cycle 0: pop=100
+      Cycle 2000: pop=100
+      Cycle 4000: pop=100
+      Cycle 6000: pop=100
+      Cycle 8000: pop=100
+    → final=100, max=101, runtime=0.2s
+================================================================================
+Condition: E_net_+0.1 (expected: VIABLE)
+  E_consume=0.4, E_recharge=0.5, E_net=0.1
+================================================================================
+
+[16/25] Running: E_net_+0.1, seed=100
+      Cycle 0: pop=101
+      [CAP] Population hit 100000 at cycle 1383
+    → final=100053, max=66579, runtime=3.4s
+
+[17/25] Running: E_net_+0.1, seed=101
+      Cycle 0: pop=100
+      [CAP] Population hit 100000 at cycle 1386
+    → final=100455, max=66088, runtime=3.4s
+
+[18/25] Running: E_net_+0.1, seed=102
+      Cycle 0: pop=100
+      [CAP] Population hit 100000 at cycle 1403
+    → final=100071, max=99055, runtime=3.4s
+
+[19/25] Running: E_net_+0.1, seed=103
+      Cycle 0: pop=100
+      [CAP] Population hit 100000 at cycle 1407
+    → final=100338, max=97509, runtime=3.4s
+
+[20/25] Running: E_net_+0.1, seed=104
+      Cycle 0: pop=100
+      [CAP] Population hit 100000 at cycle 1391
+    → final=100236, max=63829, runtime=3.3s
+================================================================================
+Condition: E_net_+0.2 (expected: VIABLE)
+  E_consume=0.3, E_recharge=0.5, E_net=0.2
+================================================================================
+
+[21/25] Running: E_net_+0.2, seed=100
+      Cycle 0: pop=101
+      [CAP] Population hit 100000 at cycle 1383
+    → final=100053, max=66579, runtime=3.3s
+
+[22/25] Running: E_net_+0.2, seed=101
+      Cycle 0: pop=100
+      [CAP] Population hit 100000 at cycle 1386
+    → final=100455, max=66088, runtime=3.4s
+
+[23/25] Running: E_net_+0.2, seed=102
+      Cycle 0: pop=100
+      [CAP] Population hit 100000 at cycle 1403
+    → final=100071, max=99055, runtime=3.3s
+
+[24/25] Running: E_net_+0.2, seed=103
+      Cycle 0: pop=100
+      [CAP] Population hit 100000 at cycle 1407
+    → final=100338, max=97509, runtime=3.4s
+
+[25/25] Running: E_net_+0.2, seed=104
+      Cycle 0: pop=100
+      [CAP] Population hit 100000 at cycle 1391
+    → final=100236, max=63829, runtime=3.3s
+
+================================================================================
+RESULTS SUMMARY
+================================================================================
+
+Population by Condition:
+----------------------------------------------------------------------
+Condition               E_net   Mean Pop       Status     Expected
+----------------------------------------------------------------------
+E_net_+0.1                0.1   100230.6       GROWTH       VIABLE ✓
+E_net_+0.2                0.2   100230.6       GROWTH       VIABLE ✓
+E_net_-0.1               -0.1        0.0     COLLAPSE     COLLAPSE ✓
+E_net_-0.2               -0.2        0.0     COLLAPSE     COLLAPSE ✓
+E_net_0.0                 0.0      100.0  HOMEOSTASIS  HOMEOSTASIS ✓
+----------------------------------------------------------------------
+Accuracy: 5/5 (100.0%)
+
+Results saved to: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/c281_phase_boundary_exponential_results.json
+
+================================================================================
+C281 COMPLETE
+================================================================================

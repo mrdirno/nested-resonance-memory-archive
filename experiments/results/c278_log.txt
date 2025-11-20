@@ -1,0 +1,521 @@
+================================================================================
+CYCLE 277: CRITICAL PHENOMENA NEAR f_crit
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+Date: 2025-11-19 22:05:11
+================================================================================
+
+Experimental Design:
+  f_crit (hierarchical): 0.0066%
+  Test frequencies: 5 points near f_crit
+  Seeds per frequency: 30
+  Total experiments: 150
+  Cycles per experiment: 450,000
+
+================================================================================
+Frequency: 0.010% (1.5× f_crit, 30 experiments)
+================================================================================
+
+[1/150] Running: f=0.010%, seed=400
+  ✓ Complete: 146 agents, τ=not equilibrated, 3.9s
+
+[2/150] Running: f=0.010%, seed=401
+  ✓ Complete: 142 agents, τ=not equilibrated, 3.8s
+
+[3/150] Running: f=0.010%, seed=402
+  ✓ Complete: 149 agents, τ=not equilibrated, 3.9s
+
+[4/150] Running: f=0.010%, seed=403
+  ✓ Complete: 135 agents, τ=not equilibrated, 3.7s
+
+[5/150] Running: f=0.010%, seed=404
+  ✓ Complete: 150 agents, τ=not equilibrated, 4.1s
+
+[6/150] Running: f=0.010%, seed=405
+  ✓ Complete: 159 agents, τ=not equilibrated, 4.1s
+
+[7/150] Running: f=0.010%, seed=406
+  ✓ Complete: 146 agents, τ=not equilibrated, 3.9s
+
+[8/150] Running: f=0.010%, seed=407
+  ✓ Complete: 143 agents, τ=not equilibrated, 3.8s
+
+[9/150] Running: f=0.010%, seed=408
+  ✓ Complete: 155 agents, τ=not equilibrated, 3.9s
+
+[10/150] Running: f=0.010%, seed=409
+  ✓ Complete: 157 agents, τ=not equilibrated, 4.1s
+
+[11/150] Running: f=0.010%, seed=410
+  ✓ Complete: 158 agents, τ=not equilibrated, 4.0s
+
+[12/150] Running: f=0.010%, seed=411
+  ✓ Complete: 147 agents, τ=not equilibrated, 4.0s
+
+[13/150] Running: f=0.010%, seed=412
+  ✓ Complete: 140 agents, τ=not equilibrated, 3.9s
+
+[14/150] Running: f=0.010%, seed=413
+  ✓ Complete: 133 agents, τ=not equilibrated, 3.7s
+
+[15/150] Running: f=0.010%, seed=414
+  ✓ Complete: 134 agents, τ=not equilibrated, 3.7s
+
+[16/150] Running: f=0.010%, seed=415
+  ✓ Complete: 142 agents, τ=not equilibrated, 3.9s
+
+[17/150] Running: f=0.010%, seed=416
+  ✓ Complete: 143 agents, τ=not equilibrated, 3.8s
+
+[18/150] Running: f=0.010%, seed=417
+  ✓ Complete: 138 agents, τ=not equilibrated, 3.9s
+
+[19/150] Running: f=0.010%, seed=418
+  ✓ Complete: 141 agents, τ=not equilibrated, 3.8s
+
+[20/150] Running: f=0.010%, seed=419
+  ✓ Complete: 164 agents, τ=not equilibrated, 4.0s
+
+[21/150] Running: f=0.010%, seed=420
+  ✓ Complete: 154 agents, τ=not equilibrated, 4.0s
+
+[22/150] Running: f=0.010%, seed=421
+  ✓ Complete: 135 agents, τ=not equilibrated, 3.8s
+
+[23/150] Running: f=0.010%, seed=422
+  ✓ Complete: 141 agents, τ=not equilibrated, 3.9s
+
+[24/150] Running: f=0.010%, seed=423
+  ✓ Complete: 146 agents, τ=not equilibrated, 4.0s
+
+[25/150] Running: f=0.010%, seed=424
+  ✓ Complete: 140 agents, τ=not equilibrated, 3.8s
+
+[26/150] Running: f=0.010%, seed=425
+  ✓ Complete: 145 agents, τ=not equilibrated, 3.9s
+
+[27/150] Running: f=0.010%, seed=426
+  ✓ Complete: 145 agents, τ=not equilibrated, 3.9s
+
+[28/150] Running: f=0.010%, seed=427
+  ✓ Complete: 137 agents, τ=not equilibrated, 3.8s
+
+[29/150] Running: f=0.010%, seed=428
+  ✓ Complete: 145 agents, τ=not equilibrated, 3.9s
+
+[30/150] Running: f=0.010%, seed=429
+  ✓ Complete: 150 agents, τ=not equilibrated, 4.0s
+
+Frequency 0.010% Summary:
+  Mean population: 145.3
+  Variance: 62.3
+  Mean τ: N/A
+  Distance from f_crit: 1.5×
+
+================================================================================
+Frequency: 0.015% (2.3× f_crit, 30 experiments)
+================================================================================
+
+[31/150] Running: f=0.015%, seed=400
+  ✓ Complete: 165 agents, τ=not equilibrated, 4.6s
+
+[32/150] Running: f=0.015%, seed=401
+  ✓ Complete: 170 agents, τ=not equilibrated, 4.2s
+
+[33/150] Running: f=0.015%, seed=402
+  ✓ Complete: 171 agents, τ=not equilibrated, 4.3s
+
+[34/150] Running: f=0.015%, seed=403
+  ✓ Complete: 178 agents, τ=not equilibrated, 4.2s
+
+[35/150] Running: f=0.015%, seed=404
+  ✓ Complete: 161 agents, τ=not equilibrated, 4.1s
+
+[36/150] Running: f=0.015%, seed=405
+  ✓ Complete: 173 agents, τ=10,000, 4.3s
+
+[37/150] Running: f=0.015%, seed=406
+  ✓ Complete: 157 agents, τ=10,000, 4.1s
+
+[38/150] Running: f=0.015%, seed=407
+  ✓ Complete: 156 agents, τ=not equilibrated, 4.1s
+
+[39/150] Running: f=0.015%, seed=408
+  ✓ Complete: 166 agents, τ=not equilibrated, 4.1s
+
+[40/150] Running: f=0.015%, seed=409
+  ✓ Complete: 166 agents, τ=30,000, 4.2s
+
+[41/150] Running: f=0.015%, seed=410
+  ✓ Complete: 169 agents, τ=not equilibrated, 4.3s
+
+[42/150] Running: f=0.015%, seed=411
+  ✓ Complete: 158 agents, τ=not equilibrated, 4.1s
+
+[43/150] Running: f=0.015%, seed=412
+  ✓ Complete: 160 agents, τ=50,000, 4.2s
+
+[44/150] Running: f=0.015%, seed=413
+  ✓ Complete: 161 agents, τ=not equilibrated, 4.1s
+
+[45/150] Running: f=0.015%, seed=414
+  ✓ Complete: 157 agents, τ=not equilibrated, 4.0s
+
+[46/150] Running: f=0.015%, seed=415
+  ✓ Complete: 162 agents, τ=not equilibrated, 4.2s
+
+[47/150] Running: f=0.015%, seed=416
+  ✓ Complete: 163 agents, τ=not equilibrated, 4.2s
+
+[48/150] Running: f=0.015%, seed=417
+  ✓ Complete: 169 agents, τ=not equilibrated, 4.3s
+
+[49/150] Running: f=0.015%, seed=418
+  ✓ Complete: 163 agents, τ=not equilibrated, 4.1s
+
+[50/150] Running: f=0.015%, seed=419
+  ✓ Complete: 176 agents, τ=not equilibrated, 4.4s
+
+[51/150] Running: f=0.015%, seed=420
+  ✓ Complete: 153 agents, τ=not equilibrated, 4.0s
+
+[52/150] Running: f=0.015%, seed=421
+  ✓ Complete: 152 agents, τ=not equilibrated, 4.0s
+
+[53/150] Running: f=0.015%, seed=422
+  ✓ Complete: 158 agents, τ=not equilibrated, 4.0s
+
+[54/150] Running: f=0.015%, seed=423
+  ✓ Complete: 160 agents, τ=not equilibrated, 4.1s
+
+[55/150] Running: f=0.015%, seed=424
+  ✓ Complete: 163 agents, τ=not equilibrated, 4.1s
+
+[56/150] Running: f=0.015%, seed=425
+  ✓ Complete: 163 agents, τ=not equilibrated, 4.1s
+
+[57/150] Running: f=0.015%, seed=426
+  ✓ Complete: 154 agents, τ=not equilibrated, 4.0s
+
+[58/150] Running: f=0.015%, seed=427
+  ✓ Complete: 153 agents, τ=not equilibrated, 3.8s
+
+[59/150] Running: f=0.015%, seed=428
+  ✓ Complete: 167 agents, τ=not equilibrated, 4.1s
+
+[60/150] Running: f=0.015%, seed=429
+  ✓ Complete: 168 agents, τ=not equilibrated, 4.2s
+
+Frequency 0.015% Summary:
+  Mean population: 163.1
+  Variance: 46.3
+  Mean τ: 25000.0
+  Distance from f_crit: 2.3×
+
+================================================================================
+Frequency: 0.020% (3.0× f_crit, 30 experiments)
+================================================================================
+
+[61/150] Running: f=0.020%, seed=400
+  ✓ Complete: 188 agents, τ=60,000, 4.4s
+
+[62/150] Running: f=0.020%, seed=401
+  ✓ Complete: 187 agents, τ=20,000, 4.5s
+
+[63/150] Running: f=0.020%, seed=402
+  ✓ Complete: 201 agents, τ=not equilibrated, 4.5s
+
+[64/150] Running: f=0.020%, seed=403
+  ✓ Complete: 202 agents, τ=not equilibrated, 4.6s
+
+[65/150] Running: f=0.020%, seed=404
+  ✓ Complete: 196 agents, τ=not equilibrated, 4.4s
+
+[66/150] Running: f=0.020%, seed=405
+  ✓ Complete: 205 agents, τ=80,000, 4.7s
+
+[67/150] Running: f=0.020%, seed=406
+  ✓ Complete: 171 agents, τ=20,000, 4.3s
+
+[68/150] Running: f=0.020%, seed=407
+  ✓ Complete: 180 agents, τ=not equilibrated, 4.2s
+
+[69/150] Running: f=0.020%, seed=408
+  ✓ Complete: 193 agents, τ=not equilibrated, 4.5s
+
+[70/150] Running: f=0.020%, seed=409
+  ✓ Complete: 203 agents, τ=40,000, 4.5s
+
+[71/150] Running: f=0.020%, seed=410
+  ✓ Complete: 197 agents, τ=50,000, 4.6s
+
+[72/150] Running: f=0.020%, seed=411
+  ✓ Complete: 180 agents, τ=not equilibrated, 4.2s
+
+[73/150] Running: f=0.020%, seed=412
+  ✓ Complete: 192 agents, τ=60,000, 4.5s
+
+[74/150] Running: f=0.020%, seed=413
+  ✓ Complete: 186 agents, τ=50,000, 4.3s
+
+[75/150] Running: f=0.020%, seed=414
+  ✓ Complete: 179 agents, τ=10,000, 4.3s
+
+[76/150] Running: f=0.020%, seed=415
+  ✓ Complete: 185 agents, τ=not equilibrated, 4.4s
+
+[77/150] Running: f=0.020%, seed=416
+  ✓ Complete: 185 agents, τ=not equilibrated, 4.4s
+
+[78/150] Running: f=0.020%, seed=417
+  ✓ Complete: 191 agents, τ=60,000, 4.6s
+
+[79/150] Running: f=0.020%, seed=418
+  ✓ Complete: 179 agents, τ=not equilibrated, 4.3s
+
+[80/150] Running: f=0.020%, seed=419
+  ✓ Complete: 207 agents, τ=not equilibrated, 4.6s
+
+[81/150] Running: f=0.020%, seed=420
+  ✓ Complete: 191 agents, τ=30,000, 4.4s
+
+[82/150] Running: f=0.020%, seed=421
+  ✓ Complete: 177 agents, τ=30,000, 4.3s
+
+[83/150] Running: f=0.020%, seed=422
+  ✓ Complete: 174 agents, τ=40,000, 4.3s
+
+[84/150] Running: f=0.020%, seed=423
+  ✓ Complete: 200 agents, τ=120,000, 4.6s
+
+[85/150] Running: f=0.020%, seed=424
+  ✓ Complete: 188 agents, τ=20,000, 4.5s
+
+[86/150] Running: f=0.020%, seed=425
+  ✓ Complete: 188 agents, τ=not equilibrated, 4.4s
+
+[87/150] Running: f=0.020%, seed=426
+  ✓ Complete: 183 agents, τ=60,000, 4.4s
+
+[88/150] Running: f=0.020%, seed=427
+  ✓ Complete: 188 agents, τ=30,000, 4.2s
+
+[89/150] Running: f=0.020%, seed=428
+  ✓ Complete: 186 agents, τ=20,000, 4.5s
+
+[90/150] Running: f=0.020%, seed=429
+  ✓ Complete: 194 agents, τ=50,000, 4.6s
+
+Frequency 0.020% Summary:
+  Mean population: 189.2
+  Variance: 87.2
+  Mean τ: 44736.84210526316
+  Distance from f_crit: 3.0×
+
+================================================================================
+Frequency: 0.030% (4.5× f_crit, 30 experiments)
+================================================================================
+
+[91/150] Running: f=0.030%, seed=400
+  ✓ Complete: 251 agents, τ=180,000, 5.5s
+
+[92/150] Running: f=0.030%, seed=401
+  ✓ Complete: 230 agents, τ=110,000, 5.1s
+
+[93/150] Running: f=0.030%, seed=402
+  ✓ Complete: 267 agents, τ=250,000, 5.5s
+
+[94/150] Running: f=0.030%, seed=403
+  ✓ Complete: 234 agents, τ=180,000, 5.2s
+
+[95/150] Running: f=0.030%, seed=404
+  ✓ Complete: 245 agents, τ=50,000, 5.2s
+
+[96/150] Running: f=0.030%, seed=405
+  ✓ Complete: 238 agents, τ=180,000, 5.1s
+
+[97/150] Running: f=0.030%, seed=406
+  ✓ Complete: 231 agents, τ=80,000, 5.1s
+
+[98/150] Running: f=0.030%, seed=407
+  ✓ Complete: 216 agents, τ=60,000, 4.8s
+
+[99/150] Running: f=0.030%, seed=408
+  ✓ Complete: 243 agents, τ=90,000, 5.1s
+
+[100/150] Running: f=0.030%, seed=409
+  ✓ Complete: 232 agents, τ=70,000, 5.0s
+
+[101/150] Running: f=0.030%, seed=410
+  ✓ Complete: 247 agents, τ=140,000, 5.2s
+
+[102/150] Running: f=0.030%, seed=411
+  ✓ Complete: 224 agents, τ=190,000, 4.9s
+
+[103/150] Running: f=0.030%, seed=412
+  ✓ Complete: 239 agents, τ=290,000, 5.1s
+
+[104/150] Running: f=0.030%, seed=413
+  ✓ Complete: 233 agents, τ=40,000, 4.9s
+
+[105/150] Running: f=0.030%, seed=414
+  ✓ Complete: 235 agents, τ=210,000, 5.2s
+
+[106/150] Running: f=0.030%, seed=415
+  ✓ Complete: 216 agents, τ=50,000, 4.8s
+
+[107/150] Running: f=0.030%, seed=416
+  ✓ Complete: 221 agents, τ=20,000, 4.8s
+
+[108/150] Running: f=0.030%, seed=417
+  ✓ Complete: 220 agents, τ=160,000, 5.1s
+
+[109/150] Running: f=0.030%, seed=418
+  ✓ Complete: 231 agents, τ=110,000, 4.9s
+
+[110/150] Running: f=0.030%, seed=419
+  ✓ Complete: 234 agents, τ=290,000, 5.0s
+
+[111/150] Running: f=0.030%, seed=420
+  ✓ Complete: 227 agents, τ=100,000, 5.0s
+
+[112/150] Running: f=0.030%, seed=421
+  ✓ Complete: 218 agents, τ=80,000, 4.9s
+
+[113/150] Running: f=0.030%, seed=422
+  ✓ Complete: 231 agents, τ=170,000, 5.2s
+
+[114/150] Running: f=0.030%, seed=423
+  ✓ Complete: 233 agents, τ=170,000, 5.0s
+
+[115/150] Running: f=0.030%, seed=424
+  ✓ Complete: 242 agents, τ=190,000, 5.1s
+
+[116/150] Running: f=0.030%, seed=425
+  ✓ Complete: 222 agents, τ=100,000, 4.9s
+
+[117/150] Running: f=0.030%, seed=426
+  ✓ Complete: 217 agents, τ=not equilibrated, 4.8s
+
+[118/150] Running: f=0.030%, seed=427
+  ✓ Complete: 218 agents, τ=60,000, 4.7s
+
+[119/150] Running: f=0.030%, seed=428
+  ✓ Complete: 230 agents, τ=40,000, 5.0s
+
+[120/150] Running: f=0.030%, seed=429
+  ✓ Complete: 253 agents, τ=270,000, 5.3s
+
+Frequency 0.030% Summary:
+  Mean population: 232.6
+  Variance: 149.3
+  Mean τ: 135517.24137931035
+  Distance from f_crit: 4.5×
+
+================================================================================
+Frequency: 0.050% (7.6× f_crit, 30 experiments)
+================================================================================
+
+[121/150] Running: f=0.050%, seed=400
+  ✓ Complete: 331 agents, τ=200,000, 6.6s
+
+[122/150] Running: f=0.050%, seed=401
+  ✓ Complete: 327 agents, τ=310,000, 6.1s
+
+[123/150] Running: f=0.050%, seed=402
+  ✓ Complete: 346 agents, τ=not equilibrated, 6.6s
+
+[124/150] Running: f=0.050%, seed=403
+  ✓ Complete: 350 agents, τ=230,000, 6.8s
+
+[125/150] Running: f=0.050%, seed=404
+  ✓ Complete: 314 agents, τ=310,000, 6.1s
+
+[126/150] Running: f=0.050%, seed=405
+  ✓ Complete: 314 agents, τ=270,000, 6.2s
+
+[127/150] Running: f=0.050%, seed=406
+  ✓ Complete: 311 agents, τ=290,000, 6.1s
+
+[128/150] Running: f=0.050%, seed=407
+  ✓ Complete: 323 agents, τ=340,000, 6.3s
+
+[129/150] Running: f=0.050%, seed=408
+  ✓ Complete: 310 agents, τ=not equilibrated, 5.9s
+
+[130/150] Running: f=0.050%, seed=409
+  ✓ Complete: 313 agents, τ=330,000, 6.0s
+
+[131/150] Running: f=0.050%, seed=410
+  ✓ Complete: 334 agents, τ=not equilibrated, 6.4s
+
+[132/150] Running: f=0.050%, seed=411
+  ✓ Complete: 309 agents, τ=280,000, 6.1s
+
+[133/150] Running: f=0.050%, seed=412
+  ✓ Complete: 313 agents, τ=180,000, 6.2s
+
+[134/150] Running: f=0.050%, seed=413
+  ✓ Complete: 305 agents, τ=not equilibrated, 5.8s
+
+[135/150] Running: f=0.050%, seed=414
+  ✓ Complete: 304 agents, τ=300,000, 6.2s
+
+[136/150] Running: f=0.050%, seed=415
+  ✓ Complete: 312 agents, τ=290,000, 6.1s
+
+[137/150] Running: f=0.050%, seed=416
+  ✓ Complete: 304 agents, τ=320,000, 6.1s
+
+[138/150] Running: f=0.050%, seed=417
+  ✓ Complete: 317 agents, τ=not equilibrated, 6.1s
+
+[139/150] Running: f=0.050%, seed=418
+  ✓ Complete: 313 agents, τ=not equilibrated, 6.0s
+
+[140/150] Running: f=0.050%, seed=419
+  ✓ Complete: 312 agents, τ=not equilibrated, 6.1s
+
+[141/150] Running: f=0.050%, seed=420
+  ✓ Complete: 342 agents, τ=not equilibrated, 6.6s
+
+[142/150] Running: f=0.050%, seed=421
+  ✓ Complete: 302 agents, τ=240,000, 6.0s
+
+[143/150] Running: f=0.050%, seed=422
+  ✓ Complete: 344 agents, τ=270,000, 6.6s
+
+[144/150] Running: f=0.050%, seed=423
+  ✓ Complete: 331 agents, τ=320,000, 6.3s
+
+[145/150] Running: f=0.050%, seed=424
+  ✓ Complete: 318 agents, τ=290,000, 6.1s
+
+[146/150] Running: f=0.050%, seed=425
+  ✓ Complete: 297 agents, τ=250,000, 6.0s
+
+[147/150] Running: f=0.050%, seed=426
+  ✓ Complete: 309 agents, τ=340,000, 6.0s
+
+[148/150] Running: f=0.050%, seed=427
+  ✓ Complete: 311 agents, τ=270,000, 6.1s
+
+[149/150] Running: f=0.050%, seed=428
+  ✓ Complete: 326 agents, τ=170,000, 6.3s
+
+[150/150] Running: f=0.050%, seed=429
+  ✓ Complete: 336 agents, τ=not equilibrated, 6.3s
+
+Frequency 0.050% Summary:
+  Mean population: 319.3
+  Variance: 202.1
+  Mean τ: 276190.4761904762
+  Distance from f_crit: 7.6×
+
+================================================================================
+CAMPAIGN COMPLETE
+================================================================================
+Total experiments: 150
+Results saved: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_critical_phenomena_results.json
+
+Next: Run analysis to measure critical exponents

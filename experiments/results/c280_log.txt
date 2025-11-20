@@ -1,0 +1,556 @@
+================================================================================
+CYCLE 280: EXPONENTIAL GROWTH DYNAMICS
+Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+Date: 2025-11-20 00:13:09
+================================================================================
+
+Experimental Design:
+  Spawn mode: PER-AGENT (exponential growth)
+  Conditions: 9
+  Seeds per condition: 5
+  Total experiments: 45
+  Cycles per experiment: 10000
+  Initial population: 10
+  f_intra: 0.500%
+
+================================================================================
+Condition: spawn0.3_consume0.2 (expected: GROWTH)
+  E_consume=0.2, spawn_energy=0.3
+================================================================================
+
+[1/45] Running: spawn0.3_consume0.2, seed=100
+      Cycle 0: pop=11
+      Cycle 1000: pop=1565
+      [CAP] Population hit 100000 at cycle 1834
+    → final=100186, max=84932, runtime=3.2s
+
+[2/45] Running: spawn0.3_consume0.2, seed=101
+      Cycle 0: pop=10
+      Cycle 1000: pop=1625
+      [CAP] Population hit 100000 at cycle 1825
+    → final=100356, max=89136, runtime=3.3s
+
+[3/45] Running: spawn0.3_consume0.2, seed=102
+      Cycle 0: pop=10
+      Cycle 1000: pop=1062
+      [CAP] Population hit 100000 at cycle 1911
+    → final=100179, max=95361, runtime=3.3s
+
+[4/45] Running: spawn0.3_consume0.2, seed=103
+      Cycle 0: pop=10
+      Cycle 1000: pop=954
+      [CAP] Population hit 100000 at cycle 1938
+    → final=100109, max=83386, runtime=3.3s
+
+[5/45] Running: spawn0.3_consume0.2, seed=104
+      Cycle 0: pop=10
+      Cycle 1000: pop=1573
+      [CAP] Population hit 100000 at cycle 1839
+    → final=100216, max=82966, runtime=3.3s
+================================================================================
+Condition: spawn0.3_consume0.3 (expected: THRESHOLD)
+  E_consume=0.3, spawn_energy=0.3
+================================================================================
+
+[6/45] Running: spawn0.3_consume0.3, seed=100
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[7/45] Running: spawn0.3_consume0.3, seed=101
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[8/45] Running: spawn0.3_consume0.3, seed=102
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[9/45] Running: spawn0.3_consume0.3, seed=103
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[10/45] Running: spawn0.3_consume0.3, seed=104
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+================================================================================
+Condition: spawn0.3_consume0.4 (expected: DEATH)
+  E_consume=0.4, spawn_energy=0.3
+================================================================================
+
+[11/45] Running: spawn0.3_consume0.4, seed=100
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[12/45] Running: spawn0.3_consume0.4, seed=101
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[13/45] Running: spawn0.3_consume0.4, seed=102
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[14/45] Running: spawn0.3_consume0.4, seed=103
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[15/45] Running: spawn0.3_consume0.4, seed=104
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+================================================================================
+Condition: spawn0.5_consume0.4 (expected: GROWTH)
+  E_consume=0.4, spawn_energy=0.5
+================================================================================
+
+[16/45] Running: spawn0.5_consume0.4, seed=100
+      Cycle 0: pop=11
+      Cycle 1000: pop=1565
+      [CAP] Population hit 100000 at cycle 1834
+    → final=100186, max=84932, runtime=3.3s
+
+[17/45] Running: spawn0.5_consume0.4, seed=101
+      Cycle 0: pop=10
+      Cycle 1000: pop=1625
+      [CAP] Population hit 100000 at cycle 1825
+    → final=100356, max=89136, runtime=3.3s
+
+[18/45] Running: spawn0.5_consume0.4, seed=102
+      Cycle 0: pop=10
+      Cycle 1000: pop=1062
+      [CAP] Population hit 100000 at cycle 1911
+    → final=100179, max=95361, runtime=3.3s
+
+[19/45] Running: spawn0.5_consume0.4, seed=103
+      Cycle 0: pop=10
+      Cycle 1000: pop=954
+      [CAP] Population hit 100000 at cycle 1938
+    → final=100109, max=83386, runtime=3.3s
+
+[20/45] Running: spawn0.5_consume0.4, seed=104
+      Cycle 0: pop=10
+      Cycle 1000: pop=1573
+      [CAP] Population hit 100000 at cycle 1839
+    → final=100216, max=82966, runtime=3.3s
+================================================================================
+Condition: spawn0.5_consume0.5 (expected: THRESHOLD)
+  E_consume=0.5, spawn_energy=0.5
+================================================================================
+
+[21/45] Running: spawn0.5_consume0.5, seed=100
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[22/45] Running: spawn0.5_consume0.5, seed=101
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[23/45] Running: spawn0.5_consume0.5, seed=102
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[24/45] Running: spawn0.5_consume0.5, seed=103
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[25/45] Running: spawn0.5_consume0.5, seed=104
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+================================================================================
+Condition: spawn0.5_consume0.6 (expected: DEATH)
+  E_consume=0.6, spawn_energy=0.5
+================================================================================
+
+[26/45] Running: spawn0.5_consume0.6, seed=100
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[27/45] Running: spawn0.5_consume0.6, seed=101
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[28/45] Running: spawn0.5_consume0.6, seed=102
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[29/45] Running: spawn0.5_consume0.6, seed=103
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[30/45] Running: spawn0.5_consume0.6, seed=104
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+================================================================================
+Condition: spawn0.7_consume0.6 (expected: GROWTH)
+  E_consume=0.6, spawn_energy=0.7
+================================================================================
+
+[31/45] Running: spawn0.7_consume0.6, seed=100
+      Cycle 0: pop=11
+      Cycle 1000: pop=1565
+      [CAP] Population hit 100000 at cycle 1834
+    → final=100186, max=84932, runtime=3.3s
+
+[32/45] Running: spawn0.7_consume0.6, seed=101
+      Cycle 0: pop=10
+      Cycle 1000: pop=1625
+      [CAP] Population hit 100000 at cycle 1825
+    → final=100356, max=89136, runtime=3.3s
+
+[33/45] Running: spawn0.7_consume0.6, seed=102
+      Cycle 0: pop=10
+      Cycle 1000: pop=1062
+      [CAP] Population hit 100000 at cycle 1911
+    → final=100179, max=95361, runtime=3.3s
+
+[34/45] Running: spawn0.7_consume0.6, seed=103
+      Cycle 0: pop=10
+      Cycle 1000: pop=954
+      [CAP] Population hit 100000 at cycle 1938
+    → final=100109, max=83386, runtime=3.3s
+
+[35/45] Running: spawn0.7_consume0.6, seed=104
+      Cycle 0: pop=10
+      Cycle 1000: pop=1573
+      [CAP] Population hit 100000 at cycle 1839
+    → final=100216, max=82966, runtime=3.3s
+================================================================================
+Condition: spawn0.7_consume0.7 (expected: THRESHOLD)
+  E_consume=0.7, spawn_energy=0.7
+================================================================================
+
+[36/45] Running: spawn0.7_consume0.7, seed=100
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[37/45] Running: spawn0.7_consume0.7, seed=101
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[38/45] Running: spawn0.7_consume0.7, seed=102
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[39/45] Running: spawn0.7_consume0.7, seed=103
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[40/45] Running: spawn0.7_consume0.7, seed=104
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+================================================================================
+Condition: spawn0.7_consume0.8 (expected: DEATH)
+  E_consume=0.8, spawn_energy=0.7
+================================================================================
+
+[41/45] Running: spawn0.7_consume0.8, seed=100
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[42/45] Running: spawn0.7_consume0.8, seed=101
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[43/45] Running: spawn0.7_consume0.8, seed=102
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[44/45] Running: spawn0.7_consume0.8, seed=103
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+[45/45] Running: spawn0.7_consume0.8, seed=104
+      Cycle 0: pop=10
+      Cycle 1000: pop=10
+      Cycle 2000: pop=10
+      Cycle 3000: pop=10
+      Cycle 4000: pop=10
+      Cycle 5000: pop=10
+      Cycle 6000: pop=10
+      Cycle 7000: pop=10
+      Cycle 8000: pop=10
+      Cycle 9000: pop=10
+    → final=10, max=10, runtime=0.0s
+
+================================================================================
+RESULTS SUMMARY
+================================================================================
+
+Population by Condition:
+------------------------------------------------------------
+Condition                            Mean        Max     Regime
+------------------------------------------------------------
+spawn0.3_consume0.2              100209.2    87156.2     GROWTH
+spawn0.3_consume0.3                  10.0       10.0  THRESHOLD
+spawn0.3_consume0.4                  10.0       10.0      DEATH
+spawn0.5_consume0.4              100209.2    87156.2     GROWTH
+spawn0.5_consume0.5                  10.0       10.0  THRESHOLD
+spawn0.5_consume0.6                  10.0       10.0      DEATH
+spawn0.7_consume0.6              100209.2    87156.2     GROWTH
+spawn0.7_consume0.7                  10.0       10.0  THRESHOLD
+spawn0.7_consume0.8                  10.0       10.0      DEATH
+
+Results saved to: /Volumes/dual/DUALITY-ZERO-V2/experiments/results/c280_exponential_growth_results.json
+
+================================================================================
+C280 COMPLETE
+================================================================================
