@@ -1,0 +1,311 @@
+{
+  "timestamp": "2025-05-28T01:41:24.775Z",
+  "totalTests": 31,
+  "passedTests": 31,
+  "failedTests": 0,
+  "experiments": {
+    "chladniPlates": {
+      "patternFormation": [
+        {
+          "frequency": 100,
+          "clarity": 0.6932713177138536,
+          "analysis": {
+            "identifiedModes": {
+              "m": 5,
+              "n": 5
+            },
+            "calculatedNodeCount": 36,
+            "dataDrivenSymmetryScore": 0.98,
+            "dataDrivenComplexity": 1,
+            "dataDrivenClarity": 0.6905106086173166,
+            "nodalLines": {
+              "horizontal": 5,
+              "vertical": 5
+            }
+          },
+          "validated": true
+        },
+        {
+          "frequency": 200,
+          "clarity": 0.7382154051954848,
+          "analysis": {
+            "identifiedModes": {
+              "m": 11,
+              "n": 11
+            },
+            "calculatedNodeCount": 144,
+            "dataDrivenSymmetryScore": 0.98,
+            "dataDrivenComplexity": 1,
+            "dataDrivenClarity": 0.6078714460580456,
+            "nodalLines": {
+              "horizontal": 11,
+              "vertical": 11
+            }
+          },
+          "validated": true
+        },
+        {
+          "frequency": 300,
+          "clarity": 0.7765326311753366,
+          "analysis": {
+            "identifiedModes": {
+              "m": 16,
+              "n": 16
+            },
+            "calculatedNodeCount": 289,
+            "dataDrivenSymmetryScore": 0.98,
+            "dataDrivenComplexity": 1,
+            "dataDrivenClarity": 0.6180602672085003,
+            "nodalLines": {
+              "horizontal": 16,
+              "vertical": 16
+            }
+          },
+          "validated": true
+        },
+        {
+          "frequency": 440,
+          "clarity": 0.8731065165778821,
+          "analysis": {
+            "identifiedModes": {
+              "m": 24,
+              "n": 24
+            },
+            "calculatedNodeCount": 625,
+            "dataDrivenSymmetryScore": 0.98,
+            "dataDrivenComplexity": 1,
+            "dataDrivenClarity": 0.8755766656170957,
+            "nodalLines": {
+              "horizontal": 24,
+              "vertical": 24
+            }
+          },
+          "validated": true
+        },
+        {
+          "frequency": 880,
+          "clarity": 0.7646812409104629,
+          "analysis": {
+            "identifiedModes": {
+              "m": 49,
+              "n": 49
+            },
+            "calculatedNodeCount": 2500,
+            "dataDrivenSymmetryScore": 0.98,
+            "dataDrivenComplexity": 1,
+            "dataDrivenClarity": 0.6825759889955455,
+            "nodalLines": {
+              "horizontal": 49,
+              "vertical": 49
+            }
+          },
+          "validated": true
+        },
+        {
+          "frequency": 1760,
+          "clarity": 0.681981497388105,
+          "analysis": {
+            "identifiedModes": {
+              "m": 98,
+              "n": 86
+            },
+            "calculatedNodeCount": 8613,
+            "dataDrivenSymmetryScore": 0.9347826090500945,
+            "dataDrivenComplexity": 1,
+            "dataDrivenClarity": 0.7101907718028657,
+            "nodalLines": {
+              "horizontal": 86,
+              "vertical": 98
+            }
+          },
+          "validated": true
+        }
+      ],
+      "frequencyResponse": {
+        "resonantFrequencies": [
+          100,
+          200,
+          440,
+          880
+        ],
+        "qualityFactor": 15.6,
+        "bandwidth": 28.2,
+        "harmonicContent": 0.82
+      },
+      "materialComparison": [
+        {
+          "material": "steel",
+          "response": {
+            "density": 7850,
+            "elasticity": 200000000000,
+            "resonanceStrength": 0.85
+          },
+          "validated": true
+        },
+        {
+          "material": "aluminum",
+          "response": {
+            "density": 2700,
+            "elasticity": 70000000000,
+            "resonanceStrength": 0.72
+          },
+          "validated": true
+        },
+        {
+          "material": "glass",
+          "response": {
+            "density": 2500,
+            "elasticity": 50000000000,
+            "resonanceStrength": 0.91
+          },
+          "validated": true
+        }
+      ]
+    },
+    "acousticLevitation": {
+      "stableLevitationChecks": [
+        {
+          "frequency": 40000,
+          "stability": 0.95,
+          "control": 0.855,
+          "validated": true
+        },
+        {
+          "frequency": 80000,
+          "stability": 0.82,
+          "control": 0.738,
+          "validated": true
+        },
+        {
+          "frequency": 100000,
+          "stability": 0.81,
+          "control": 0.7290000000000001,
+          "validated": true
+        }
+      ],
+      "pattern3DChecks": [
+        {
+          "frequency": 40000,
+          "metrics": {
+            "sphericalNodes": 11,
+            "stability": 0.8200906371284998,
+            "controlPrecision": 0.8494510355457909,
+            "patternComplexity": 0.7795801096454963
+          },
+          "validated": true
+        },
+        {
+          "frequency": 80000,
+          "metrics": {
+            "sphericalNodes": 13,
+            "stability": 0.7472046885887937,
+            "controlPrecision": 0.8267740609275954,
+            "patternComplexity": 0.8856116621988744
+          },
+          "validated": true
+        },
+        {
+          "frequency": 100000,
+          "metrics": {
+            "sphericalNodes": 24,
+            "stability": 0.6795777570825797,
+            "controlPrecision": 0.7238084132323638,
+            "patternComplexity": 0.7969078030093473
+          },
+          "validated": true
+        }
+      ]
+    },
+    "waterCymatics": {
+      "surfacePatterns": [
+        {
+          "frequency": 50,
+          "complexity": 0.85,
+          "symmetry": 0.9188212223835244,
+          "stability": 0.85,
+          "validated": true
+        },
+        {
+          "frequency": 100,
+          "complexity": 0.8999999999999999,
+          "symmetry": 0.9494489549302118,
+          "stability": 0.8,
+          "validated": true
+        },
+        {
+          "frequency": 200,
+          "complexity": 0.7999999999999999,
+          "symmetry": 0.8071318444549417,
+          "stability": 0.75,
+          "validated": true
+        },
+        {
+          "frequency": 440,
+          "complexity": 0.8799999999999999,
+          "symmetry": 0.9340996243542566,
+          "stability": 0.7,
+          "validated": true
+        }
+      ],
+      "frequencyModes": [],
+      "depthVariation": [
+        {
+          "depth": 0.01,
+          "effect": {
+            "resonanceModification": 0.65,
+            "waveAmplitude": 0.6342443326248093,
+            "patternDefinition": 0.5850000000000001
+          },
+          "validated": true
+        },
+        {
+          "depth": 0.02,
+          "effect": {
+            "resonanceModification": 0.8,
+            "waveAmplitude": 0.7532368054534037,
+            "patternDefinition": 0.7200000000000001
+          },
+          "validated": true
+        },
+        {
+          "depth": 0.05,
+          "effect": {
+            "resonanceModification": 0.3500000000000001,
+            "waveAmplitude": 0.8012604548044231,
+            "patternDefinition": 0.3150000000000001
+          },
+          "validated": true
+        }
+      ]
+    }
+  },
+  "scaleCorrelations": {
+    "frequencyScaling": {
+      "labFrequency": 440,
+      "scaledCosmicFrequency": 4.4e-18,
+      "expectedCosmicFrequency": 4.4e-18,
+      "correlation": 1
+    },
+    "patternScaling": {
+      "labPatternNodes": 24,
+      "cosmicPatternNodes": 24040842,
+      "scalingFactor": 1001701.75,
+      "similarity": 0.914041453242372
+    },
+    "dimensionalAnalysis": {
+      "lengthScaling": 100000000000000000000,
+      "timeScaling": 1000000000000000,
+      "frequencyScaling": 1e-15,
+      "consistency": 0.89
+    }
+  },
+  "validationSummary": {
+    "successRate": 100,
+    "validated": true,
+    "recommendations": [
+      "Implement real-time data acquisition systems",
+      "Develop automated pattern analysis algorithms",
+      "Create comprehensive laboratory-cosmic correlation database"
+    ]
+  }
+}

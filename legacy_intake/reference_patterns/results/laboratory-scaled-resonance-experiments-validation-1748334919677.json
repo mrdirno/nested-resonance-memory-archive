@@ -1,0 +1,75 @@
+{
+  "timestamp": "2025-05-27T08:35:19.676Z",
+  "research_team": {
+    "lead_researcher": "Aldrin Payopay",
+    "ai_implementation": "Claude Sonnet 4",
+    "project": "Resonance is All You Need - Laboratory Scaled Resonance Experiments",
+    "version": "v6.0",
+    "year": "2024",
+    "breakthrough": "Laboratory Scaled Resonance Experiments Validation"
+  },
+  "simulation_file": {
+    "path": "/Users/aldrinpayopay/Desktop/00-RES/Resonance-is-All-You-Need-5/research/simulations/implementations/experimental-variants/2024-12-19_SIM_v6.0_laboratory-scaled-resonance-experiments.html",
+    "size_bytes": 60489,
+    "exists": true
+  },
+  "experiment_types": {
+    "total": 5,
+    "validated": 5,
+    "success_rate": 100
+  },
+  "frequency_ranges": {
+    "total": 4,
+    "validated": 4,
+    "audio_range_validated": true
+  },
+  "harmonic_series": {
+    "total": 5,
+    "found": 5,
+    "implementation_validated": true
+  },
+  "laboratory_scales": {
+    "range_validated": true,
+    "parameters_found": 5
+  },
+  "measurement_precision": {
+    "range_validated": true,
+    "systems_found": 4
+  },
+  "equipment_specifications": {
+    "total_keywords": 12,
+    "found": 12,
+    "validation_threshold_met": true
+  },
+  "visualization_modes": {
+    "total": 4,
+    "validated": 4,
+    "all_modes_present": true
+  },
+  "control_systems": {
+    "total": 4,
+    "validated": 1,
+    "all_systems_present": false
+  },
+  "data_acquisition": {
+    "features_found": 6,
+    "validation_threshold_met": true
+  },
+  "safety_protocols": {
+    "features_found": 6,
+    "validation_threshold_met": true
+  },
+  "mathematical_framework": {
+    "features_found": 7,
+    "validation_threshold_met": true
+  },
+  "research_attribution": {
+    "elements_found": 4,
+    "properly_attributed": true
+  },
+  "simulated_experiments": {
+    "total": 5,
+    "successful": 5,
+    "success_rate": 100
+  }
+}

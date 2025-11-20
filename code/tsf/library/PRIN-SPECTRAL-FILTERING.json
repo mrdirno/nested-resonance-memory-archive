@@ -1,0 +1,25 @@
+{
+    "id": "PRIN-SPECTRAL-FILTERING",
+    "name": "Spectral Filtering (Resonance Selectivity)",
+    "category": "Cognition",
+    "status": "Validated",
+    "discovery_cycle": 5,
+    "description": "The Swarm acts as a bank of coupled oscillators that can selectively resonate with a target frequency embedded in high-amplitude noise, effectively filtering the signal. This mechanism provides a physical basis for 'Attention' in the Pilot.",
+    "hypothesis": "If agents are tuned to a target frequency and coupled to a noisy signal via Phase Response Curve (PRC) injection, they will phase-lock to the signal component and reject uncorrelated noise, increasing SNR.",
+    "validation_data": {
+        "input_snr": "-8.39 dB",
+        "output_snr": "-1.76 dB",
+        "snr_gain": "+5.02 dB",
+        "correlation": 0.5525,
+        "order_parameter": 0.6224
+    },
+    "implications": [
+        "The Pilot can 'attend' to specific reality signals by tuning the swarm's natural frequency.",
+        "Noise tolerance is an emergent property of collective resonance.",
+        "Provides a mechanism for 'Cognitive Filtering' without digital logic."
+    ],
+    "related_principles": [
+        "PRIN-RESONANCE-COUPLING",
+        "PRIN-REALITY-INJECTION"
+    ]
+}

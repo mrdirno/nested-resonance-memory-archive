@@ -117,8 +117,7 @@ from typing import Dict, List, Tuple
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from core.reality_interface import RealityInterface
-from core.fractal_agent import FractalAgent
+from core.fractal_agent import FractalAgent, RealityInterface
 
 # ============================================================================
 # CONFIGURATION

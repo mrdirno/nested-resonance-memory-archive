@@ -1,0 +1,1462 @@
+{
+  "timestamp": "2025-05-27T09:55:55.825Z",
+  "testSuite": "Enhanced Real-World Data Application and Validation",
+  "agent": "Agent 4",
+  "enhancements": [
+    "Extended musical frequency range (32-392 Hz)",
+    "Enhanced gravitational wave harmonic analysis",
+    "Multi-scale frequency correlation",
+    "Improved statistical validation methods"
+  ],
+  "dataSimulation": {
+    "sdssGalaxies": 1000,
+    "ligoEvents": 50,
+    "galaxyClusters": 100,
+    "biologicalDataPoints": 365
+  },
+  "results": {
+    "cosmicWebResonance": {
+      "C1": {
+        "frequency": 32.7,
+        "avgResonance": 0.6576067091171736,
+        "nodeCount": 706,
+        "filamentCount": 184,
+        "nodeRatio": 0.706,
+        "filamentRatio": 0.184,
+        "structuralCorrelation": 0.7979999999999999
+      },
+      "E1": {
+        "frequency": 41.2,
+        "avgResonance": 0.6574653782445694,
+        "nodeCount": 707,
+        "filamentCount": 183,
+        "nodeRatio": 0.707,
+        "filamentRatio": 0.183,
+        "structuralCorrelation": 0.7985
+      },
+      "G1": {
+        "frequency": 49,
+        "avgResonance": 0.6573307301730442,
+        "nodeCount": 708,
+        "filamentCount": 182,
+        "nodeRatio": 0.708,
+        "filamentRatio": 0.182,
+        "structuralCorrelation": 0.7989999999999999
+      },
+      "C2": {
+        "frequency": 65.41,
+        "avgResonance": 0.657040999119723,
+        "nodeCount": 708,
+        "filamentCount": 181,
+        "nodeRatio": 0.708,
+        "filamentRatio": 0.181,
+        "structuralCorrelation": 0.7985
+      },
+      "E2": {
+        "frequency": 82.41,
+        "avgResonance": 0.6567457749207826,
+        "nodeCount": 707,
+        "filamentCount": 184,
+        "nodeRatio": 0.707,
+        "filamentRatio": 0.184,
+        "structuralCorrelation": 0.7989999999999999
+      },
+      "G2": {
+        "frequency": 98,
+        "avgResonance": 0.6564631133941923,
+        "nodeCount": 708,
+        "filamentCount": 186,
+        "nodeRatio": 0.708,
+        "filamentRatio": 0.186,
+        "structuralCorrelation": 0.8009999999999999
+      },
+      "C3": {
+        "frequency": 130.81,
+        "avgResonance": 0.6558456522730223,
+        "nodeCount": 704,
+        "filamentCount": 192,
+        "nodeRatio": 0.704,
+        "filamentRatio": 0.192,
+        "structuralCorrelation": 0.7999999999999999
+      },
+      "C4": {
+        "frequency": 261.63,
+        "avgResonance": 0.6534493661244397,
+        "nodeCount": 695,
+        "filamentCount": 200,
+        "nodeRatio": 0.695,
+        "filamentRatio": 0.2,
+        "structuralCorrelation": 0.7949999999999999
+      },
+      "E4": {
+        "frequency": 329.63,
+        "avgResonance": 0.6520555302846959,
+        "nodeCount": 697,
+        "filamentCount": 189,
+        "nodeRatio": 0.697,
+        "filamentRatio": 0.189,
+        "structuralCorrelation": 0.7915
+      },
+      "G4": {
+        "frequency": 392,
+        "avgResonance": 0.6506908662753934,
+        "nodeCount": 695,
+        "filamentCount": 189,
+        "nodeRatio": 0.695,
+        "filamentRatio": 0.189,
+        "structuralCorrelation": 0.7895
+      }
+    },
+    "enhancedGravitationalWaveHarmonics": {
+      "musicalEvents": 10,
+      "totalEvents": 50,
+      "musicalPercentage": 20,
+      "harmonicRelationships": [
+        {
+          "event": "GW2025E003",
+          "note": "E1",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "isco",
+          "frequency": 41.2,
+          "observedFreq": 37.813547312857104,
+          "ratio": 0.08219545357142959,
+          "score": 1
+        },
+        {
+          "event": "GW2025E009",
+          "note": "C1",
+          "harmonic": 6,
+          "harmonicType": "×6",
+          "type": "isco",
+          "frequency": 196.20000000000002,
+          "observedFreq": 191.25100476134378,
+          "ratio": 0.025224236690398763,
+          "score": 0.16666666666666666
+        },
+        {
+          "event": "GW2025E009",
+          "note": "C1",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "peak",
+          "frequency": 98.10000000000001,
+          "observedFreq": 95.62550238067189,
+          "ratio": 0.025224236690398763,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E009",
+          "note": "C1",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "peak",
+          "frequency": 98.10000000000001,
+          "observedFreq": 95.62550238067189,
+          "ratio": 0.025224236690398763,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E009",
+          "note": "C1",
+          "harmonic": 6,
+          "harmonicType": "×6",
+          "type": "isco",
+          "frequency": 196.20000000000002,
+          "observedFreq": 191.25100476134378,
+          "ratio": 0.025224236690398763,
+          "score": 0.16666666666666666
+        },
+        {
+          "event": "GW2025E009",
+          "note": "G1",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "isco",
+          "frequency": 196,
+          "observedFreq": 191.25100476134378,
+          "ratio": 0.02422956754416439,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E009",
+          "note": "G1",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "peak",
+          "frequency": 98,
+          "observedFreq": 95.62550238067189,
+          "ratio": 0.02422956754416439,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E009",
+          "note": "G1",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "peak",
+          "frequency": 98,
+          "observedFreq": 95.62550238067189,
+          "ratio": 0.02422956754416439,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E009",
+          "note": "G1",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "isco",
+          "frequency": 196,
+          "observedFreq": 191.25100476134378,
+          "ratio": 0.02422956754416439,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E009",
+          "note": "C2",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "isco",
+          "frequency": 196.23,
+          "observedFreq": 191.25100476134378,
+          "ratio": 0.0253732621854773,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E009",
+          "note": "C2",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "isco",
+          "frequency": 196.23,
+          "observedFreq": 191.25100476134378,
+          "ratio": 0.0253732621854773,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E009",
+          "note": "G2",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 196,
+          "observedFreq": 191.25100476134378,
+          "ratio": 0.02422956754416439,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E009",
+          "note": "G2",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "peak",
+          "frequency": 98,
+          "observedFreq": 95.62550238067189,
+          "ratio": 0.02422956754416439,
+          "score": 1
+        },
+        {
+          "event": "GW2025E009",
+          "note": "G2",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 196,
+          "observedFreq": 191.25100476134378,
+          "ratio": 0.02422956754416439,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C1",
+          "harmonic": 16,
+          "harmonicType": "×16",
+          "type": "isco",
+          "frequency": 523.2,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.026940968419729795,
+          "score": 0.0625
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C1",
+          "harmonic": 8,
+          "harmonicType": "×8",
+          "type": "peak",
+          "frequency": 261.6,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.026940968419729795,
+          "score": 0.125
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C1",
+          "harmonic": 8,
+          "harmonicType": "×8",
+          "type": "peak",
+          "frequency": 261.6,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.026940968419729795,
+          "score": 0.125
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C1",
+          "harmonic": 16,
+          "harmonicType": "×16",
+          "type": "isco",
+          "frequency": 523.2,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.026940968419729795,
+          "score": 0.0625
+        },
+        {
+          "event": "GW2025E010",
+          "note": "E1",
+          "harmonic": 12,
+          "harmonicType": "×12",
+          "type": "isco",
+          "frequency": 494.40000000000003,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.029742081963586936,
+          "score": 0.08333333333333333
+        },
+        {
+          "event": "GW2025E010",
+          "note": "E1",
+          "harmonic": 6,
+          "harmonicType": "×6",
+          "type": "peak",
+          "frequency": 247.20000000000002,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.029742081963586936,
+          "score": 0.16666666666666666
+        },
+        {
+          "event": "GW2025E010",
+          "note": "E1",
+          "harmonic": 6,
+          "harmonicType": "×6",
+          "type": "peak",
+          "frequency": 247.20000000000002,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.029742081963586936,
+          "score": 0.16666666666666666
+        },
+        {
+          "event": "GW2025E010",
+          "note": "E1",
+          "harmonic": 12,
+          "harmonicType": "×12",
+          "type": "isco",
+          "frequency": 494.40000000000003,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.029742081963586936,
+          "score": 0.08333333333333333
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C2",
+          "harmonic": 8,
+          "harmonicType": "×8",
+          "type": "isco",
+          "frequency": 523.28,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.027089731457733062,
+          "score": 0.125
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C2",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "peak",
+          "frequency": 261.64,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.027089731457733062,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C2",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "peak",
+          "frequency": 261.64,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.027089731457733062,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C2",
+          "harmonic": 8,
+          "harmonicType": "×8",
+          "type": "isco",
+          "frequency": 523.28,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.027089731457733062,
+          "score": 0.125
+        },
+        {
+          "event": "GW2025E010",
+          "note": "E2",
+          "harmonic": 6,
+          "harmonicType": "×6",
+          "type": "isco",
+          "frequency": 494.46,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.02961712842858358,
+          "score": 0.16666666666666666
+        },
+        {
+          "event": "GW2025E010",
+          "note": "E2",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "peak",
+          "frequency": 247.23,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.02961712842858358,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E010",
+          "note": "E2",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "peak",
+          "frequency": 247.23,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.02961712842858358,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E010",
+          "note": "E2",
+          "harmonic": 6,
+          "harmonicType": "×6",
+          "type": "isco",
+          "frequency": 494.46,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.02961712842858358,
+          "score": 0.16666666666666666
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C3",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "isco",
+          "frequency": 523.24,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.027015355624957178,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C3",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "peak",
+          "frequency": 261.62,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.027015355624957178,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C3",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "peak",
+          "frequency": 261.62,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.027015355624957178,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C3",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "isco",
+          "frequency": 523.24,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.027015355624957178,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C4",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 523.26,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.027052544962738553,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C4",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "peak",
+          "frequency": 261.63,
+          "observedFreq": 254.5522426613987,
+          "ratio": 0.027052544962738553,
+          "score": 1
+        },
+        {
+          "event": "GW2025E010",
+          "note": "C4",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 523.26,
+          "observedFreq": 509.1044853227974,
+          "ratio": 0.027052544962738553,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C1",
+          "harmonic": 8,
+          "harmonicType": "×8",
+          "type": "isco",
+          "frequency": 261.6,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.025367993689966062,
+          "score": 0.125
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C1",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "peak",
+          "frequency": 130.8,
+          "observedFreq": 134.11813357464757,
+          "ratio": 0.025367993689966062,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C1",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "peak",
+          "frequency": 130.8,
+          "observedFreq": 134.11813357464757,
+          "ratio": 0.025367993689966062,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C1",
+          "harmonic": 8,
+          "harmonicType": "×8",
+          "type": "isco",
+          "frequency": 261.6,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.025367993689966062,
+          "score": 0.125
+        },
+        {
+          "event": "GW2025E017",
+          "note": "E1",
+          "harmonic": 6,
+          "harmonicType": "×6",
+          "type": "isco",
+          "frequency": 247.20000000000002,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.08509816807967284,
+          "score": 0.16666666666666666
+        },
+        {
+          "event": "GW2025E017",
+          "note": "E1",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "peak",
+          "frequency": 123.60000000000001,
+          "observedFreq": 134.11813357464757,
+          "ratio": 0.08509816807967284,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E017",
+          "note": "E1",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "peak",
+          "frequency": 123.60000000000001,
+          "observedFreq": 134.11813357464757,
+          "ratio": 0.08509816807967284,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E017",
+          "note": "E1",
+          "harmonic": 6,
+          "harmonicType": "×6",
+          "type": "isco",
+          "frequency": 247.20000000000002,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.08509816807967284,
+          "score": 0.16666666666666666
+        },
+        {
+          "event": "GW2025E017",
+          "note": "G1",
+          "harmonic": 6,
+          "harmonicType": "×6",
+          "type": "isco",
+          "frequency": 294,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.08763174439015257,
+          "score": 0.16666666666666666
+        },
+        {
+          "event": "GW2025E017",
+          "note": "G1",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "peak",
+          "frequency": 147,
+          "observedFreq": 134.11813357464757,
+          "ratio": 0.08763174439015257,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E017",
+          "note": "G1",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "peak",
+          "frequency": 147,
+          "observedFreq": 134.11813357464757,
+          "ratio": 0.08763174439015257,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E017",
+          "note": "G1",
+          "harmonic": 6,
+          "harmonicType": "×6",
+          "type": "isco",
+          "frequency": 294,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.08763174439015257,
+          "score": 0.16666666666666666
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C2",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "isco",
+          "frequency": 261.64,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.025211233562510163,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C2",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "peak",
+          "frequency": 130.82,
+          "observedFreq": 134.11813357464757,
+          "ratio": 0.025211233562510163,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C2",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "peak",
+          "frequency": 130.82,
+          "observedFreq": 134.11813357464757,
+          "ratio": 0.025211233562510163,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C2",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "isco",
+          "frequency": 261.64,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.025211233562510163,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E017",
+          "note": "E2",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "isco",
+          "frequency": 247.23,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.08496649738824234,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E017",
+          "note": "E2",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "isco",
+          "frequency": 247.23,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.08496649738824234,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E017",
+          "note": "G2",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "isco",
+          "frequency": 294,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.08763174439015257,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E017",
+          "note": "G2",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "isco",
+          "frequency": 294,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.08763174439015257,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C3",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 261.62,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.025289607634336596,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C3",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "peak",
+          "frequency": 130.81,
+          "observedFreq": 134.11813357464757,
+          "ratio": 0.025289607634336596,
+          "score": 1
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C3",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 261.62,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.025289607634336596,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E017",
+          "note": "C4",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "isco",
+          "frequency": 261.63,
+          "observedFreq": 268.23626714929514,
+          "ratio": 0.025250419100619766,
+          "score": 1
+        },
+        {
+          "event": "GW2025E022",
+          "note": "E1",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "isco",
+          "frequency": 164.8,
+          "observedFreq": 150.81616461312527,
+          "ratio": 0.08485337006598752,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E022",
+          "note": "E1",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "peak",
+          "frequency": 82.4,
+          "observedFreq": 75.40808230656263,
+          "ratio": 0.08485337006598752,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E022",
+          "note": "E1",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "peak",
+          "frequency": 82.4,
+          "observedFreq": 75.40808230656263,
+          "ratio": 0.08485337006598752,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E022",
+          "note": "E1",
+          "harmonic": 4,
+          "harmonicType": "×4",
+          "type": "isco",
+          "frequency": 164.8,
+          "observedFreq": 150.81616461312527,
+          "ratio": 0.08485337006598752,
+          "score": 0.25
+        },
+        {
+          "event": "GW2025E022",
+          "note": "G1",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "isco",
+          "frequency": 147,
+          "observedFreq": 150.81616461312527,
+          "ratio": 0.02596030349064807,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E022",
+          "note": "G1",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "isco",
+          "frequency": 147,
+          "observedFreq": 150.81616461312527,
+          "ratio": 0.02596030349064807,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E022",
+          "note": "E2",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 164.82,
+          "observedFreq": 150.81616461312527,
+          "ratio": 0.08496441807350277,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E022",
+          "note": "E2",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "peak",
+          "frequency": 82.41,
+          "observedFreq": 75.40808230656263,
+          "ratio": 0.08496441807350277,
+          "score": 1
+        },
+        {
+          "event": "GW2025E022",
+          "note": "E2",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 164.82,
+          "observedFreq": 150.81616461312527,
+          "ratio": 0.08496441807350277,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E031",
+          "note": "C1",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "isco",
+          "frequency": 98.10000000000001,
+          "observedFreq": 103.12885099535724,
+          "ratio": 0.05126249740425312,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E031",
+          "note": "C1",
+          "harmonic": 3,
+          "harmonicType": "×3",
+          "type": "isco",
+          "frequency": 98.10000000000001,
+          "observedFreq": 103.12885099535724,
+          "ratio": 0.05126249740425312,
+          "score": 0.3333333333333333
+        },
+        {
+          "event": "GW2025E031",
+          "note": "G1",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 98,
+          "observedFreq": 103.12885099535724,
+          "ratio": 0.05233521423833919,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E031",
+          "note": "G1",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "peak",
+          "frequency": 49,
+          "observedFreq": 51.56442549767862,
+          "ratio": 0.05233521423833919,
+          "score": 1
+        },
+        {
+          "event": "GW2025E031",
+          "note": "G1",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 98,
+          "observedFreq": 103.12885099535724,
+          "ratio": 0.05233521423833919,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E031",
+          "note": "G2",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "isco",
+          "frequency": 98,
+          "observedFreq": 103.12885099535724,
+          "ratio": 0.05233521423833919,
+          "score": 1
+        },
+        {
+          "event": "GW2025E033",
+          "note": "C1",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "isco",
+          "frequency": 32.7,
+          "observedFreq": 34.828943613107974,
+          "ratio": 0.06510530926935691,
+          "score": 1
+        },
+        {
+          "event": "GW2025E037",
+          "note": "C1",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 65.4,
+          "observedFreq": 63.6669070055298,
+          "ratio": 0.026499892881807412,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E037",
+          "note": "C1",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "peak",
+          "frequency": 32.7,
+          "observedFreq": 31.8334535027649,
+          "ratio": 0.026499892881807412,
+          "score": 1
+        },
+        {
+          "event": "GW2025E037",
+          "note": "C1",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 65.4,
+          "observedFreq": 63.6669070055298,
+          "ratio": 0.026499892881807412,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E037",
+          "note": "C2",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "isco",
+          "frequency": 65.41,
+          "observedFreq": 63.6669070055298,
+          "ratio": 0.026648723352242713,
+          "score": 1
+        },
+        {
+          "event": "GW2025E043",
+          "note": "E1",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 82.4,
+          "observedFreq": 83.97966170344908,
+          "ratio": 0.01917065174088685,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E043",
+          "note": "E1",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "peak",
+          "frequency": 41.2,
+          "observedFreq": 41.98983085172454,
+          "ratio": 0.01917065174088685,
+          "score": 1
+        },
+        {
+          "event": "GW2025E043",
+          "note": "E1",
+          "harmonic": 2,
+          "harmonicType": "×2",
+          "type": "isco",
+          "frequency": 82.4,
+          "observedFreq": 83.97966170344908,
+          "ratio": 0.01917065174088685,
+          "score": 0.5
+        },
+        {
+          "event": "GW2025E043",
+          "note": "E2",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "isco",
+          "frequency": 82.41,
+          "observedFreq": 83.97966170344908,
+          "ratio": 0.019046980990766724,
+          "score": 1
+        },
+        {
+          "event": "GW2025E044",
+          "note": "G1",
+          "harmonic": 1,
+          "harmonicType": "×1",
+          "type": "isco",
+          "frequency": 49,
+          "observedFreq": 49.0639819447098,
+          "ratio": 0.0013057539736694287,
+          "score": 1
+        }
+      ],
+      "frequencyAnalysis": {
+        "GW2025E000": {
+          "fPeak": 2.3192589242042176,
+          "fISCO": 4.638517848408435,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E001": {
+          "fPeak": 3.03016696104427,
+          "fISCO": 6.06033392208854,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E002": {
+          "fPeak": 1.6059767541419876,
+          "fISCO": 3.211953508283975,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E003": {
+          "fPeak": 18.906773656428552,
+          "fISCO": 37.813547312857104,
+          "musicalScore": 1,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E004": {
+          "fPeak": 1.3717737426792365,
+          "fISCO": 2.743547485358473,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E005": {
+          "fPeak": 1.0573962942890187,
+          "fISCO": 2.1147925885780374,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E006": {
+          "fPeak": 0.9878315668232285,
+          "fISCO": 1.975663133646457,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E007": {
+          "fPeak": 7.140357129227095,
+          "fISCO": 14.28071425845419,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E008": {
+          "fPeak": 1.4324100365187444,
+          "fISCO": 2.864820073037489,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E009": {
+          "fPeak": 95.62550238067189,
+          "fISCO": 191.25100476134378,
+          "musicalScore": 5.166666666666667,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E010": {
+          "fPeak": 254.5522426613987,
+          "fISCO": 509.1044853227974,
+          "musicalScore": 6.125,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E011": {
+          "fPeak": 7.472152000112433,
+          "fISCO": 14.944304000224866,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E012": {
+          "fPeak": 0.9132248636520773,
+          "fISCO": 1.8264497273041547,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E013": {
+          "fPeak": 3.2243549133594063,
+          "fISCO": 6.4487098267188125,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E014": {
+          "fPeak": 1.9913285278695776,
+          "fISCO": 3.982657055739155,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E015": {
+          "fPeak": 2.6402120655320402,
+          "fISCO": 5.2804241310640805,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E016": {
+          "fPeak": 4.273279458278971,
+          "fISCO": 8.546558916557942,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E017": {
+          "fPeak": 134.11813357464757,
+          "fISCO": 268.23626714929514,
+          "musicalScore": 8.583333333333332,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E018": {
+          "fPeak": 1.2667270373730306,
+          "fISCO": 2.533454074746061,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E019": {
+          "fPeak": 1.8748400842015542,
+          "fISCO": 3.7496801684031085,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E020": {
+          "fPeak": 1.163536558766163,
+          "fISCO": 2.327073117532326,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E021": {
+          "fPeak": 1.262648750110374,
+          "fISCO": 2.525297500220748,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E022": {
+          "fPeak": 75.40808230656263,
+          "fISCO": 150.81616461312527,
+          "musicalScore": 4.166666666666666,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E023": {
+          "fPeak": 1.6329315166035876,
+          "fISCO": 3.265863033207175,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E024": {
+          "fPeak": 0.9429355866436808,
+          "fISCO": 1.8858711732873616,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E025": {
+          "fPeak": 0.9012254191475559,
+          "fISCO": 1.8024508382951119,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E026": {
+          "fPeak": 1.8424681305911224,
+          "fISCO": 3.6849362611822447,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E027": {
+          "fPeak": 1.5090322681296249,
+          "fISCO": 3.0180645362592498,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E028": {
+          "fPeak": 4.873837863597375,
+          "fISCO": 9.74767572719475,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E029": {
+          "fPeak": 1.5451346872486458,
+          "fISCO": 3.0902693744972916,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E030": {
+          "fPeak": 1.0382016387226707,
+          "fISCO": 2.0764032774453414,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E031": {
+          "fPeak": 51.56442549767862,
+          "fISCO": 103.12885099535724,
+          "musicalScore": 3.6666666666666665,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E032": {
+          "fPeak": 1.420724056658023,
+          "fISCO": 2.841448113316046,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E033": {
+          "fPeak": 17.414471806553987,
+          "fISCO": 34.828943613107974,
+          "musicalScore": 1,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E034": {
+          "fPeak": 4.447043791222006,
+          "fISCO": 8.894087582444012,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E035": {
+          "fPeak": 54.70178499781765,
+          "fISCO": 109.4035699956353,
+          "musicalScore": 0,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E036": {
+          "fPeak": 55.34913667762534,
+          "fISCO": 110.69827335525068,
+          "musicalScore": 0,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E037": {
+          "fPeak": 31.8334535027649,
+          "fISCO": 63.6669070055298,
+          "musicalScore": 3,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E038": {
+          "fPeak": 1.9841487908854183,
+          "fISCO": 3.9682975817708366,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E039": {
+          "fPeak": 0.9997579477103057,
+          "fISCO": 1.9995158954206114,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E040": {
+          "fPeak": 1.3867333780265614,
+          "fISCO": 2.7734667560531228,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E041": {
+          "fPeak": 2.278436813184756,
+          "fISCO": 4.556873626369512,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E042": {
+          "fPeak": 1.7102366797000637,
+          "fISCO": 3.4204733594001273,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E043": {
+          "fPeak": 41.98983085172454,
+          "fISCO": 83.97966170344908,
+          "musicalScore": 3,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E044": {
+          "fPeak": 24.5319909723549,
+          "fISCO": 49.0639819447098,
+          "musicalScore": 1,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E045": {
+          "fPeak": 1.2643569219531041,
+          "fISCO": 2.5287138439062082,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E046": {
+          "fPeak": 12.041324923560516,
+          "fISCO": 24.082649847121033,
+          "musicalScore": 0,
+          "sourceType": "high-frequency"
+        },
+        "GW2025E047": {
+          "fPeak": 1.529177646839705,
+          "fISCO": 3.05835529367941,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E048": {
+          "fPeak": 1.6360135494742767,
+          "fISCO": 3.2720270989485534,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        },
+        "GW2025E049": {
+          "fPeak": 1.1297549509887586,
+          "fISCO": 2.259509901977517,
+          "musicalScore": 0,
+          "sourceType": "standard"
+        }
+      },
+      "bySourceType": {
+        "standard": {
+          "total": 37,
+          "musical": 0
+        },
+        "highFreq": {
+          "total": 13,
+          "musical": 10
+        }
+      }
+    },
+    "bioCosmicCoupling": [
+      {
+        "note": "C1",
+        "cosmicFreq": 32.7,
+        "avgCoupling": 0.5406231362413433,
+        "strongCouplings": 79,
+        "strongCouplingPercentage": 79
+      },
+      {
+        "note": "E1",
+        "cosmicFreq": 41.2,
+        "avgCoupling": 0.5846234090793996,
+        "strongCouplings": 99,
+        "strongCouplingPercentage": 99
+      },
+      {
+        "note": "G1",
+        "cosmicFreq": 49,
+        "avgCoupling": 0.5190914039434716,
+        "strongCouplings": 58,
+        "strongCouplingPercentage": 57.99999999999999
+      },
+      {
+        "note": "C2",
+        "cosmicFreq": 65.41,
+        "avgCoupling": 0.5733281801983391,
+        "strongCouplings": 96,
+        "strongCouplingPercentage": 96
+      },
+      {
+        "note": "E2",
+        "cosmicFreq": 82.41,
+        "avgCoupling": 0.5819013338354542,
+        "strongCouplings": 98,
+        "strongCouplingPercentage": 98
+      },
+      {
+        "note": "G2",
+        "cosmicFreq": 98,
+        "avgCoupling": 0.5152416663845999,
+        "strongCouplings": 54,
+        "strongCouplingPercentage": 54
+      },
+      {
+        "note": "C3",
+        "cosmicFreq": 130.81,
+        "avgCoupling": 0.5707902583927897,
+        "strongCouplings": 98,
+        "strongCouplingPercentage": 98
+      },
+      {
+        "note": "C4",
+        "cosmicFreq": 261.63,
+        "avgCoupling": 0.555825580052763,
+        "strongCouplings": 93,
+        "strongCouplingPercentage": 93
+      },
+      {
+        "note": "E4",
+        "cosmicFreq": 329.63,
+        "avgCoupling": 0.5880537400541522,
+        "strongCouplings": 98,
+        "strongCouplingPercentage": 98
+      },
+      {
+        "note": "G4",
+        "cosmicFreq": 392,
+        "avgCoupling": 0.5173437978716356,
+        "strongCouplings": 55,
+        "strongCouplingPercentage": 55.00000000000001
+      }
+    ],
+    "enhancedStatisticalValidation": {
+      "cosmicWebCorrelation": 0.8009999999999999,
+      "gravitationalWaveCorrelation": 0.2,
+      "bioCosmicCorrelation": 0.5880537400541522,
+      "multiScaleCorrelation": 0.5,
+      "overallCorrelation": 0.537313435013538
+    }
+  },
+  "summary": {
+    "overallCorrelation": 0.537313435013538,
+    "targetThreshold": 0.7,
+    "validationSuccess": false,
+    "strongPartialSuccess": false,
+    "readyForPeerReview": false
+  }
+}
