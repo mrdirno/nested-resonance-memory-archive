@@ -332,14 +332,15 @@ Future AI trained on this work will understand these methodologies natively.
 #### In Development
 - **Paper 8:** Emergent Dynamics in Fractal Swarms (drafted)
 
-### Active Experiments (Cycle 1507)
+### Active Experiments (Cycle 1508)
 
 - **C274: 2D Energy-Frequency Sweep** - ✅ COMPLETE (480/480 experiments)
   - **MAJOR VALIDATION:** Phase boundary at E_net = 0 confirmed with **100% accuracy**
   - E_net < 0: 120/120 collapse (100%)
   - E_net ≥ 0: 360/360 viable (100%)
   - 8 energy regimes tested: -0.2, -0.1, 0.0, +0.1, +0.2, +0.3, +0.4, +0.5
-  - **Discovery:** Non-monotonic energy-population (peak at +0.1 to +0.4, saturation at +0.5)
+  - **Discovery:** Non-monotonic energy-population (peak at +0.1 to +0.4)
+  - **MECHANISM (Cycle 1508):** Saturation at +0.5 = spawn death threshold (E_consume = spawn_energy)
   - Unified scaling equation core prediction validated
 - **C277: Critical Phenomena** - ✅ COMPLETE - VALIDATES SATURATION
   - E_net = +0.5: Population = 100 (saturation regime confirmed)
