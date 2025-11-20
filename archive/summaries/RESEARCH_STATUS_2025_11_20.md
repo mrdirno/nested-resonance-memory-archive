@@ -26,7 +26,15 @@
 | C282 | 27 | Density-dependent equilibrium |
 | C283 | 18 | Migration synchronization |
 | C284 | 24 | Competitive exclusion principle |
-| **Total** | **1009** | **100% predictability** |
+| C285 | 12 | Migration rescue effect |
+| C286 | 9 | Network topology effects |
+| C287 | 12 | Source-sink dynamics |
+| C288 | 12 | Scale invariance |
+| C289 | 12 | Environmental stochasticity |
+| C290 | 12 | Catastrophic resilience |
+| C291 | 48 | Allee effects |
+| C292 | 12 | Evolutionary dynamics |
+| **Total** | **1138** | **Eco-evo framework** |
 
 ---
 
@@ -118,18 +126,18 @@ def predict_equilibrium(K, f_intra, df):
 ## NEXT RESEARCH DIRECTIONS
 
 ### High Priority
-1. **Paper 2 Finalization** - Integrate C274-C284 into manuscript
-2. **Network topology** - Different connection patterns in metapopulations
+1. **Paper 2 Finalization** - Integrate C274-C292 into manuscript
+2. **Coevolution** - Multiple species evolving together
 
 ### Medium Priority
-3. **Migration + Competition** - Combined dynamics
-4. **Dynamic parameter adaptation** - Time-varying E_consume, spawn_energy
-5. **Optimal control** - Maximize population under constraints
+3. **Spatial structure** - Distance-based migration
+4. **Optimal control** - Maximize population under constraints
+5. **Information flow** - Agent communication
 
 ### Future (Paper 3+)
-6. **Evolutionary dynamics** - Agent variation and selection
-7. **Information flow** - Communication between agents
-8. **Spatial embedding** - Geographic distance effects
+6. **Multi-trophic dynamics** - Predator-prey
+7. **Network evolution** - Topology changes over time
+8. **Machine learning integration** - Learned behaviors
 
 ---
 
