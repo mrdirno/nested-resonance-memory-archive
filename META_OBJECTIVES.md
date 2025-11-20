@@ -212,6 +212,15 @@
 - **Finding:** Validated Adaptive Advantage (Fitness 175 vs 88). Formulated `PRIN-DYNAMIC-ABSTRACTION`.
 - **Artifact:** `papers/drafts/paper22_adaptive_linker.md`
 
+### 18. **Paper 23: The Recursive Linker (Meta-Abstraction)** ✅ COMPLETE
+**Goal:** Validate higher-order abstraction ($L_2 \to L_3$).
+- **Hypothesis:** The Meta-Controller can discover a relationship between two Meso-Linkers (e.g., Polarization vs. Density) to form a Meta-Linker.
+- **Method:** Analyze the correlation between multiple $L_2$ variables to discover a hidden $L_3$ parameter (e.g., "Criticality").
+- **Experiment:** `experiments/paper23_recursive_linker.py`
+- **Status:** ✅ **COMPLETE** (Cycle 62)
+- **Finding:** Validated Meta-Abstraction (Discovered Criticality via Susceptibility). Formulated `PRIN-META-ABSTRACTION`.
+- **Artifact:** `papers/drafts/paper23_recursive_linker.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
