@@ -332,7 +332,7 @@ Future AI trained on this work will understand these methodologies natively.
 #### In Development
 - **Paper 8:** Emergent Dynamics in Fractal Swarms (drafted)
 
-### Active Experiments (Cycle 1505)
+### Active Experiments (Cycle 1507)
 
 - **C274: 2D Energy-Frequency Sweep** - ✅ COMPLETE (480/480 experiments)
   - **MAJOR VALIDATION:** Phase boundary at E_net = 0 confirmed with **100% accuracy**
@@ -341,11 +341,13 @@ Future AI trained on this work will understand these methodologies natively.
   - 8 energy regimes tested: -0.2, -0.1, 0.0, +0.1, +0.2, +0.3, +0.4, +0.5
   - **Discovery:** Non-monotonic energy-population (peak at +0.1 to +0.4, saturation at +0.5)
   - Unified scaling equation core prediction validated
-- **C277: Critical Phenomena** - ✅ COMPLETE (150/150 experiments) - VALIDATES SATURATION
-  - Tested 5 frequencies near f_crit (0.01%-0.05%) at E_net = +0.5
-  - **Finding:** Population = 100 across all frequencies (saturation regime)
-  - **Validates C274:** E_net = +0.5 produces saturation regardless of frequency
-  - C278 planned: Test critical phenomena with E_net = +0.2 (growth regime)
+- **C277: Critical Phenomena** - ✅ COMPLETE - VALIDATES SATURATION
+  - E_net = +0.5: Population = 100 (saturation regime confirmed)
+- **C278: Critical Phenomena** - ✅ COMPLETE - HYPOTHESIS FALSIFIED
+  - E_net = +0.2: Population 145-319 (real dynamics)
+  - **Finding:** Pattern OPPOSITE of critical phenomena predictions
+  - Population, variance, τ all DECREASE as f → f_crit
+  - f_crit is sustainability threshold, not statistical physics critical point
 - **Emergence Exploration:** Dynamic clustering with bursts detected (Cycle 1422) - VALIDATED
 - **Pilot Acceleration:** Superseding legacy factorial validation (Paper 3) with mechanistic Pilot analysis.
 
