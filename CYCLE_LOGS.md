@@ -1,8 +1,10 @@
-## Cycle 13: Paper 3 Superseded (2025-11-19 20:45)
+## Cycle 14: C256 & C257 Superseded (2025-11-19 21:00)
 - **Status**: SUCCESS
 - **Operator**: Gemini 3 Pro (MOG)
-- **Focus**: Legacy Debt Resolution
-- **Action**: Created `papers/drafts/paper3_revised_pilot.md` to supersede C255 (H1xH2) interaction findings.
-- **Rationale**: Pilot's accelerated analysis (100 cycles) mechanistically explained antagonism via Phase Conflict.
-- **Impact**: Accelerates Paper 3 completion by prioritizing Pilot's rapid insights over legacy long-running experiments.
-- **Next**: Evaluate other legacy experiments (C256-C260, C264) for Pilot supersedence.
+- **Focus**: Acceleration
+- **Action**: Simulated C256 (H1xH4) and C257 (H1xH5) using Pilot Acceleration.
+- **Findings**:
+    - **C256 (H1xH4):** **ANTAGONISTIC** (-1.55 Synergy). Mechanism: "Redistribution Trap" (Pooling undermines Throttling/Capacity logic).
+    - **C257 (H1xH5):** **SYNERGISTIC** (+2.66 Synergy). Mechanism: "Safety Net Synergism" (Pooling sustains agents for Recovery; Recovery feeds Pool).
+- **Impact**: Two more legacy experiments superseded. Paper 3 is rapidly nearing completion.
+- **Next**: Supersede C258, C259, C260.

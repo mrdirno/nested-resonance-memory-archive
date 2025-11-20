@@ -204,8 +204,14 @@
     - *Legacy Result:* Antagonistic interaction discovered.
     - *Pilot Finding:* Antagonism due to Phase Conflict (H1 pulls away from optimal H2).
     - *Acceleration:* Mechanism identified in 100 cycles (vs 3000).
-  - [ ] C256: H1×H4 (Energy Pooling × Spawn Throttling) - 🔄 RUNNING (150h+ elapsed, I/O bound, weeks-months expected, expected ANTAGONISTIC). **Candidate for Pilot Supersedence.**
-  - [ ] C257: H1×H5 (Energy Pooling × Energy Recovery) - 🔄 RUNNING (640+ min, 10.5H+, extreme I/O-bound, expected SYNERGISTIC). **Candidate for Pilot Supersedence.**
+  - [x] C256: H1×H4 (Energy Pooling × Spawn Throttling) - ✅ **SUPERSEDED by Pilot** (Antagonistic, explained by Redistribution Trap in `papers/drafts/paper3_accel_c256.md`)
+    - *Legacy Status:* Running 150h+ (superseded).
+    - *Pilot Finding:* Antagonism (-1.55 Synergy).
+    - *Mechanism:* Redistribution Trap (Pooling prevents agents from building safety buffers against throttling).
+  - [x] C257: H1×H5 (Energy Pooling × Energy Recovery) - ✅ **SUPERSEDED by Pilot** (Synergistic, explained by Safety Net Synergism in `papers/drafts/paper3_accel_c257.md`)
+    - *Legacy Status:* Running 640+ min (superseded).
+    - *Pilot Finding:* Synergy (+2.66).
+    - *Mechanism:* Safety Net Synergism (Pooling keeps agents alive long enough for Recovery to activate; Recovery feeds the pool).
   - [ ] C258: H2×H4 (Reality Sources × Spawn Throttling) - ⏳ QUEUED (12 min, expected ANTAGONISTIC/ADDITIVE). **Candidate for Pilot Supersedence.**
   - [ ] C259: H2×H5 (Reality Sources × Energy Recovery) - ⏳ QUEUED (13 min, expected SYNERGISTIC). **Candidate for Pilot Supersedence.**
   - [ ] C260: H4×H5 (Spawn Throttling × Energy Recovery) - ⏳ QUEUED (11 min, expected ANTAGONISTIC). **Candidate for Pilot Supersedence.**
