@@ -1,0 +1,12 @@
+{
+  "mapped_points": 1600,
+  "E_range": [
+    0.01,
+    0.35
+  ],
+  "S_range": [
+    0.0,
+    0.9
+  ],
+  "metabolic_cost": 0.02
+}

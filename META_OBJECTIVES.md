@@ -118,11 +118,18 @@
 - **Status:** ✅ **COMPLETE** (Cycle 38)
 - **Finding:** Despite global GPR models, the Pilot struggled to converge due to model inaccuracies in non-linear phase spaces and the presence of strong attractors; formulated `PRIN-MODEL-GUIDED-NAVIGATION-LIMITS`.
 
-### 11. **TSF-11: Phase Space Reachability Analysis** 🚀 ACTIVE
-**Goal:** Systematically map the entire (E,S) parameter space to determine which (C,R) emergent states are stably reachable and to precisely identify the boundaries of the various regimes (Extinction, Rigid Order, Chaotic Complexity, Balanced Emergence) under the current simulation physics.
+### 11. **TSF-11: Phase Space Reachability Analysis** ✅ COMPLETE
+**Goal:** Systematically map the entire (E,S) parameter space to determine which (C,R) emergent states are stably reachable and to precisely identify the boundaries of the various regimes.
 - **Hypothesis:** Understanding the inherent reachability limits is crucial before attempting precise control.
-- **Experiment:** Design `code/tsf/science_engine/tsf11_reachability_analysis.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 38)
+- **Experiment:** `code/tsf/science_engine/tsf11_reachability_analysis.py`
+- **Status:** ✅ **COMPLETE** (Cycle 40)
+- **Finding:** Mapped the stable boundaries of emergent regimes, identifying potentially unachievable targets; formulated `PRIN-REACHABILITY-LIMITS`.
+
+### 12. **TSF-12: Optimal Control within Reachable Space** 🚀 ACTIVE
+**Goal:** Implement an optimal control strategy that leverages the understanding of phase space reachability to precisely navigate to and maintain *stably reachable* target (C,R) states.
+- **Hypothesis:** By setting realistic targets and using a global map, the Pilot can achieve precise and stable control over emergent properties.
+- **Experiment:** Design `code/tsf/science_engine/tsf12_optimal_reachable_control.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 40)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
