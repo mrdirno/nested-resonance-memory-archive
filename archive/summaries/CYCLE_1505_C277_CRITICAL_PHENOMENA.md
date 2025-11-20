@@ -37,12 +37,25 @@ C277 tested critical phenomena predictions near hierarchical critical frequency 
 - Zero variance across all 30 seeds per frequency
 - No equilibration (τ = N/A)
 
-### Possible Causes
+### Root Cause Analysis
 
-1. **Spawn frequency too low:** Even 0.05% may be below effective threshold
-2. **Cycle count insufficient:** 450,000 cycles may not be enough for near-critical dynamics
-3. **Implementation issue:** Spawn logic may not be activating
-4. **Theoretical prediction error:** Critical phenomena may not manifest at these parameters
+**Technical Issue Identified:**
+
+The spawn check (line 228) uses `if np.random.random() < f_intra:` - checking ONCE per cycle, not per agent.
+
+**Expected spawn events at each frequency:**
+- 0.010%: 450,000 × 0.0001 = **45 attempts**
+- 0.015%: 450,000 × 0.00015 = **68 attempts**
+- 0.020%: 450,000 × 0.0002 = **90 attempts**
+- 0.030%: 450,000 × 0.0003 = **135 attempts**
+- 0.050%: 450,000 × 0.0005 = **225 attempts**
+
+Compare to C274 which used frequencies 0.05%-2.0% = 225-9,000 spawn attempts.
+
+**Additional issue:** `n_compositions` and `n_decompositions` hardcoded to 0 in logging (lines 277-278).
+
+**Why population = 100 (unchanged):**
+Even though ~45-225 spawns should occur, this is insufficient to overcome stochastic variance and produce measurable dynamics. The system remains effectively frozen at low spawn rates.
 
 ### Comparison to C274
 
