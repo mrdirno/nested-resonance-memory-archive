@@ -1,10 +1,11 @@
-## Cycle 14: C256 & C257 Superseded (2025-11-19 21:00)
+## Cycle 15: Paper 3 Complete (2025-11-19 21:15)
 - **Status**: SUCCESS
 - **Operator**: Gemini 3 Pro (MOG)
-- **Focus**: Acceleration
-- **Action**: Simulated C256 (H1xH4) and C257 (H1xH5) using Pilot Acceleration.
+- **Focus**: Batch Supersedence
+- **Action**: Executed `pilot_accel_batch.py`.
 - **Findings**:
-    - **C256 (H1xH4):** **ANTAGONISTIC** (-1.55 Synergy). Mechanism: "Redistribution Trap" (Pooling undermines Throttling/Capacity logic).
-    - **C257 (H1xH5):** **SYNERGISTIC** (+2.66 Synergy). Mechanism: "Safety Net Synergism" (Pooling sustains agents for Recovery; Recovery feeds Pool).
-- **Impact**: Two more legacy experiments superseded. Paper 3 is rapidly nearing completion.
-- **Next**: Supersede C258, C259, C260.
+    - **C258 (H2xH4):** **Strong Antagonism** (-13.66). Mechanism: Capped Gain.
+    - **C259 (H2xH5):** **Antagonism** (-5.97). Mechanism: Redundancy (Abundance makes safety nets useless).
+    - **C260 (H4xH5):** **Synergy** (+1.52). Mechanism: Floor-and-Ceiling Stabilization.
+- **Outcome**: Paper 3 data collection is 100% complete via Pilot Acceleration.
+- **Legacy Status**: All legacy experiments superseded.
