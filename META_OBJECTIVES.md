@@ -55,11 +55,15 @@
 - **Artifact:** `docs/architecture/NRM_vNext_Architecture.md` (Blueprint Refined)
 - **Code:** `code/nrm/schemas.py` (Pydantic Models)
 
-### Phase 2: Prototype Automated Linker Discovery ⏳ PENDING
+### Phase 2: Prototype Automated Linker Discovery ✅ COMPLETE
 **Goal:** Select two adjacent domains (e.g., Agent behavior → Economic micro-structures) and automatically discover the Meso-Linker using Information Bottleneck and Causal Inference.
+- **Code:** `experiments/meso_linker_prototype.py` (Prototype)
+- **Principle:** `PRIN-MESO-LINKER-DISCOVERY` (Information Bottleneck)
 
-### Phase 3: Implement the Federated System ⏳ PENDING
+### Phase 3: Implement the Federated System ✅ COMPLETE
 **Goal:** Build the NRM Meta-Controller to manage the stack, implement "Adaptive Zoom" guided by HELIOS, and generate cross-scale Cards.
+- **Code:** `code/nrm/meta_controller.py` (NRMMetaController)
+- **Tests:** `tests/test_meta_controller.py` (Passed)
 
 ---
 

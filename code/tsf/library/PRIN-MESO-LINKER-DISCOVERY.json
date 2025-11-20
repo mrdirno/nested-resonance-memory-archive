@@ -1,0 +1,17 @@
+{
+    "principle_id": "PRIN-MESO-LINKER-DISCOVERY",
+    "name": "Automated Abstraction via Information Bottleneck",
+    "definition": "The optimal Meso-Linker (Abstraction) between scales is the variable that maximizes predictive power while minimizing complexity.",
+    "mechanism": "Information Bottleneck: Maximize I(Macro; Future) / I(Micro; Macro).",
+    "application": "Automated Science, Multi-Scale Modeling, Inverse Design.",
+    "validation": {
+        "experiment": "experiments/meso_linker_prototype.py",
+        "metric": "Predictive Score (R2 * log(Variance))",
+        "result": "System automatically selected 'Angular_Momentum' (Score=1.16) over 'Random' (Score=0.00) and 'Mean_Speed' (Score=0.00)."
+    },
+    "implications": [
+        "We do not need to manually define order parameters.",
+        "The system can 'discover' physics by looking for predictable macro-variables.",
+        "This enables the automated construction of the NRM vNext Hierarchical Stack."
+    ]
+}
