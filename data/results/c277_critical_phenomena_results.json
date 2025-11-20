@@ -1,0 +1,1559 @@
+{
+  "cycle_id": "C277",
+  "cycle_name": "Critical Phenomena Near f_crit",
+  "date": "2025-11-19T21:27:00.110138",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "f_crit_hier": 6.6e-05,
+    "frequencies": [
+      0.0001,
+      0.00015,
+      0.0002,
+      0.0003,
+      0.0005
+    ],
+    "seeds": [
+      400,
+      401,
+      402,
+      403,
+      404,
+      405,
+      406,
+      407,
+      408,
+      409,
+      410,
+      411,
+      412,
+      413,
+      414,
+      415,
+      416,
+      417,
+      418,
+      419,
+      420,
+      421,
+      422,
+      423,
+      424,
+      425,
+      426,
+      427,
+      428,
+      429
+    ],
+    "cycles_per_experiment": 450000,
+    "n_populations": 10,
+    "f_migrate": 0.005,
+    "energy_params": {
+      "E_consume": 0.5,
+      "E_recharge": 1.0,
+      "net_energy": 0.5
+    }
+  },
+  "results": [
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 400,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3992271423339844,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed400.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 401,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3644540309906006,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed401.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 402,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.385159969329834,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed402.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 403,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3916831016540527,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed403.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 404,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.7868669033050537,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed404.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 405,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3690412044525146,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed405.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 406,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.4643712043762207,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed406.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 407,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3704378604888916,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed407.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 408,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.377808094024658,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed408.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 409,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3734447956085205,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed409.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 410,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3695828914642334,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed410.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 411,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.389586925506592,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed411.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 412,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3734400272369385,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed412.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 413,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3862879276275635,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed413.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 414,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.377497911453247,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed414.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 415,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.376199960708618,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed415.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 416,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.365525960922241,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed416.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 417,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.383751153945923,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed417.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 418,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3652639389038086,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed418.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 419,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.368105173110962,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed419.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 420,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3668699264526367,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed420.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 421,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3644232749938965,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed421.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 422,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3760170936584473,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed422.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 423,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3650259971618652,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed423.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 424,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.370971918106079,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed424.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 425,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3779819011688232,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed425.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 426,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3797240257263184,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed426.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 427,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.384934902191162,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed427.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 428,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.356245994567871,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed428.db"
+    },
+    {
+      "frequency": 0.0001,
+      "f_over_fcrit": 1.5151515151515151,
+      "seed": 429,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3609912395477295,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_010pct_seed429.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 400,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.354804039001465,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed400.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 401,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.375447988510132,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed401.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 402,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3602511882781982,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed402.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 403,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.377648115158081,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed403.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 404,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.372581958770752,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed404.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 405,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.36356520652771,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed405.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 406,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.35848069190979,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed406.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 407,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3664700984954834,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed407.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 408,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3689589500427246,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed408.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 409,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.380573272705078,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed409.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 410,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.382112979888916,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed410.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 411,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3622000217437744,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed411.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 412,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 4.150084972381592,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed412.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 413,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.690929889678955,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed413.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 414,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 4.381443738937378,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed414.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 415,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.9976911544799805,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed415.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 416,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 4.064839124679565,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed416.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 417,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.625525951385498,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed417.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 418,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.4506280422210693,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed418.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 419,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3778209686279297,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed419.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 420,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.370032787322998,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed420.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 421,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3920631408691406,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed421.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 422,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.357778787612915,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed422.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 423,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3838419914245605,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed423.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 424,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3810079097747803,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed424.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 425,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.372572898864746,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed425.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 426,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.370386838912964,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed426.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 427,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.372547149658203,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed427.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 428,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.379328966140747,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed428.db"
+    },
+    {
+      "frequency": 0.00015,
+      "f_over_fcrit": 2.2727272727272725,
+      "seed": 429,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.363550901412964,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_015pct_seed429.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 400,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.371777057647705,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed400.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 401,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3907861709594727,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed401.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 402,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3782799243927,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed402.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 403,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3658008575439453,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed403.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 404,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3752801418304443,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed404.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 405,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.374871015548706,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed405.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 406,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3993682861328125,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed406.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 407,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3686342239379883,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed407.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 408,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.380990982055664,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed408.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 409,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.373667001724243,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed409.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 410,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3612921237945557,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed410.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 411,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.391895055770874,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed411.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 412,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3747189044952393,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed412.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 413,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3756470680236816,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed413.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 414,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3752071857452393,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed414.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 415,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.367393970489502,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed415.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 416,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.39711594581604,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed416.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 417,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3745217323303223,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed417.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 418,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.37567400932312,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed418.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 419,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.363501787185669,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed419.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 420,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.369494915008545,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed420.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 421,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.380316972732544,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed421.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 422,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.978933572769165,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed422.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 423,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.373044013977051,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed423.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 424,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3741910457611084,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed424.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 425,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.373699903488159,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed425.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 426,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3632588386535645,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed426.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 427,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.396044969558716,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed427.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 428,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3718349933624268,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed428.db"
+    },
+    {
+      "frequency": 0.0002,
+      "f_over_fcrit": 3.0303030303030303,
+      "seed": 429,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.376758098602295,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_020pct_seed429.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 400,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3629279136657715,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed400.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 401,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.360379219055176,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed401.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 402,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3907670974731445,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed402.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 403,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3776628971099854,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed403.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 404,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3733489513397217,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed404.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 405,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3739869594573975,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed405.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 406,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3734002113342285,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed406.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 407,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3825771808624268,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed407.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 408,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3854880332946777,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed408.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 409,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.368767023086548,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed409.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 410,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.371393918991089,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed410.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 411,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.894563913345337,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed411.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 412,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.9271790981292725,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed412.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 413,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 4.117691993713379,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed413.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 414,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 4.012339115142822,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed414.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 415,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 4.028146028518677,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed415.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 416,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.694716215133667,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed416.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 417,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.5402748584747314,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed417.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 418,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.365679979324341,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed418.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 419,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.374319076538086,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed419.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 420,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.380182981491089,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed420.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 421,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3747920989990234,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed421.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 422,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3786733150482178,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed422.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 423,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3861517906188965,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed423.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 424,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.380770206451416,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed424.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 425,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3814220428466797,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed425.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 426,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.38338303565979,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed426.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 427,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3780627250671387,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed427.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 428,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.387596845626831,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed428.db"
+    },
+    {
+      "frequency": 0.0003,
+      "f_over_fcrit": 4.545454545454545,
+      "seed": 429,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3812217712402344,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_030pct_seed429.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 400,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.382924795150757,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed400.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 401,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3812921047210693,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed401.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 402,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.392615795135498,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed402.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 403,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.387535810470581,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed403.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 404,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.389105796813965,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed404.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 405,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.350425958633423,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed405.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 406,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3950281143188477,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed406.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 407,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3767411708831787,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed407.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 408,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.376112222671509,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed408.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 409,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.392634868621826,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed409.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 410,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3903138637542725,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed410.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 411,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3756680488586426,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed411.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 412,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3836328983306885,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed412.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 413,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.391446113586426,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed413.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 414,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.376204013824463,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed414.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 415,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.38043212890625,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed415.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 416,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.386972188949585,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed416.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 417,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.379671096801758,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed417.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 418,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.37985897064209,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed418.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 419,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.384316921234131,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed419.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 420,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3781509399414062,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed420.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 421,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3822531700134277,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed421.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 422,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.407334089279175,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed422.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 423,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.380228042602539,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed423.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 424,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.37296986579895,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed424.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 425,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3784420490264893,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed425.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 426,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3892810344696045,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed426.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 427,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3825249671936035,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed427.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 428,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.380072832107544,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed428.db"
+    },
+    {
+      "frequency": 0.0005,
+      "f_over_fcrit": 7.575757575757575,
+      "seed": 429,
+      "final_population": 100,
+      "equilibration_time": 0,
+      "cycles": 450000,
+      "runtime_seconds": 3.3830950260162354,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c277_CRITICAL_0_050pct_seed429.db"
+    }
+  ]
+}
