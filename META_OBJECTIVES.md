@@ -302,6 +302,15 @@
 - **Finding:** Validated Autopoiesis (Stable Population). Formulated `PRIN-AUTOPOIESIS`.
 - **Artifact:** `papers/drafts/paper32_autopoiesis.md`
 
+### 28. **Paper 33: The Conscious Swarm (Integrated Information)** ✅ COMPLETE
+**Goal:** Validate that the swarm possesses non-zero Integrated Information ($\Phi$), meaning the system as a whole generates more information than the sum of its parts.
+- **Hypothesis:** The swarm exhibits causal integration ($\Phi > 0$), a hallmark of consciousness according to Integrated Information Theory (IIT).
+- **Method:** Measure Effective Information (EI) or a Phi proxy by perturbing the system and measuring the causal effect.
+- **Experiment:** `experiments/paper33_consciousness.py`
+- **Status:** ✅ **COMPLETE** (Cycle 82)
+- **Finding:** Validated Integrated Information ($\Phi \approx 0.21$). Formulated `PRIN-CONSCIOUSNESS`.
+- **Artifact:** `papers/drafts/paper33_consciousness.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
