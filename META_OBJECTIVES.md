@@ -69,11 +69,18 @@
 - **Status:** ✅ **COMPLETE** (Cycle 25)
 - **Finding:** Observed oscillatory navigation with simple feedback; formulated `PRIN-AGENCY-NAVIGATION`. Demonstrated the challenge of convergence with basic agency.
 
-### 4. **TSF-4: Robust Agency - Convergent Navigation** 🚀 ACTIVE
+### 4. **TSF-4: Robust Agency - Convergent Navigation** ✅ COMPLETE
 **Goal:** Implement a more robust Agency model to achieve stable convergence to a target (C, R) state.
 - **Hypothesis:** Adaptive learning rates or evolutionary search can overcome the oscillatory behavior observed in TSF-3.
-- **Experiment:** Design `code/tsf/science_engine/tsf4_robust_agency.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 25)
+- **Experiment:** `code/tsf/science_engine/tsf4_robust_agency.py`
+- **Status:** ✅ **COMPLETE** (Cycle 26)
+- **Finding:** Achieved convergent navigation to target (C,R) using probabilistic hill climbing; formulated `PRIN-ROBUST-AGENCY-NAVIGATION`.
+
+### 5. **TSF-5: Adaptive Control under Changing Conditions** 🚀 ACTIVE
+**Goal:** Demonstrate the Pilot's ability to maintain or re-converge to a target (C, R) state despite dynamic shifts in environmental or internal parameters.
+- **Hypothesis:** The robust agency (from TSF-4) can adapt to changes in target (C,R) or system dynamics (e.g., increased metabolic cost).
+- **Experiment:** Design `code/tsf/science_engine/tsf5_adaptive_control.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 26)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
