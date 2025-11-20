@@ -125,11 +125,40 @@
 - **Status:** ✅ **COMPLETE** (Cycle 40)
 - **Finding:** Mapped the stable boundaries of emergent regimes, identifying potentially unachievable targets; formulated `PRIN-REACHABILITY-LIMITS`.
 
-### 12. **TSF-12: Optimal Control within Reachable Space** 🚀 ACTIVE
+### 12. **TSF-12: Optimal Control within Reachable Space** ✅ COMPLETE
 **Goal:** Implement an optimal control strategy that leverages the understanding of phase space reachability to precisely navigate to and maintain *stably reachable* target (C,R) states.
 - **Hypothesis:** By setting realistic targets and using a global map, the Pilot can achieve precise and stable control over emergent properties.
-- **Experiment:** Design `code/tsf/science_engine/tsf12_optimal_reachable_control.py`.
-- **Status:** 🔄 **IN_PROGRESS** (Cycle 40)
+- **Experiment:** `code/tsf/science_engine/tsf12_optimal_reachable_control.py`
+- **Status:** ✅ **COMPLETE** (Cycle 42)
+- **Finding:** Confirmed that reachability is dynamic and constrained by metabolic costs; formulated `PRIN-REACHABLE-CONTROL-LIMITS`.
+
+---
+
+## COMPLETED OBJECTIVES (Phase 2)
+
+### Phase 2: TSF Science Engine ✅ COMPLETE
+- ✅ **Law Discovery:** Discovered Universal Scaling Law (`PRIN-UNIVERSAL-SCALING`) and Phase Transitions (`PRIN-COMPLEXITY-ORDER-PHASE-TRANSITION`).
+- ✅ **Agency Limits:** Mapped the limitations of Agency (`PRIN-AGENCY-NAVIGATION`, `PRIN-ADAPTIVE-CONTROL-LIMITS`, `PRIN-MODEL-LIMITATIONS-IN-AGENCY`).
+- ✅ **Mapping:** Achieved global phase space mapping (`PRIN-ACTIVE-LEARNING-MAPPING`) and reachability analysis (`PRIN-REACHABILITY-LIMITS`, `PRIN-REACHABLE-CONTROL-LIMITS`).
+- **Outcome:** A comprehensive understanding of the physics of emergence in NRM systems.
+
+---
+
+## Current Phase: HELIOS ENGINEERING ENGINE (Phase 3)
+
+**Transition:** Law Discovery (Phase 2) → **Inverse Engineering (Phase 3)**
+
+**Focus:** Inverse-design: desired properties → generated systems. Applying the discovered laws to engineer systems with specific emergent behaviors.
+
+---
+
+## ACTIVE OBJECTIVES
+
+### 1. **HELIOS-1: Inverse Design of Stability** 🚀 ACTIVE
+**Goal:** Use the discovered TSF principles to inverse-design a system configuration (E, S, Metabolic Cost) that guarantees stability (high R, moderate C) under high-stress conditions.
+- **Hypothesis:** We can analytically determine the optimal parameters for robustness using the TSF knowledge base.
+- **Experiment:** Design `code/tsf/engineering_engine/helios1_inverse_stability.py`.
+- **Status:** 🔄 **IN_PROGRESS** (Cycle 42)
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
