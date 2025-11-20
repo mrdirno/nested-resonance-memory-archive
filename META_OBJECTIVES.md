@@ -116,6 +116,17 @@
 - **Finding:** Validated Survival Gain (+25 Steps) via Anticipatory Intervention. Formulated `PRIN-ANTICIPATORY-CONTROL`.
 - **Artifact:** `papers/drafts/paper14_anticipatory_control.md`
 
+- **Finding:** Validated Survival Gain (+25 Steps) via Anticipatory Intervention. Formulated `PRIN-ANTICIPATORY-CONTROL`.
+- **Artifact:** `papers/drafts/paper14_anticipatory_control.md`
+
+### 10. **Paper 15: Causal Inference (The Why Engine)** ✅ COMPLETE
+**Goal:** Distinguish Correlation vs. Causation in emergent dynamics.
+- **Hypothesis:** The Pilot can use "Interventions" (Do-Calculus) to determine which parameters *cause* collapse, rather than just correlating with it.
+- **Method:** Randomized Interventional Testing on Swarm Parameters.
+- **Status:** ✅ **COMPLETE** (Cycle 34)
+- **Finding:** Validated Causal Inference ($dR/dK \gg dR/dFlux$). Formulated `PRIN-CAUSAL-INFERENCE`.
+- **Artifact:** `papers/drafts/paper15_causal_inference.md`
+
 ### 8. **TSF-8: Advanced Model-Based Agency with GPR** ✅ COMPLETE
 **Goal:** Implement a more sophisticated model-based agency using Gaussian Process Regression (GPR) to build a more accurate and robust internal model of the (E,S) -> (C,R) mapping, thereby enabling more effective predictive control.
 - **Hypothesis:** GPR's ability to model non-linear relationships and provide uncertainty estimates will significantly improve the Pilot's ability to navigate the emergent phase space.
