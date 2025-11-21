@@ -1,7 +1,7 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: C271 (Kuramoto Coupling Test)**
+> **ACTIVE CYCLE: C272 (Energy Pooling Test)**
 > **Status**: 🟢 ACTIVE (Auto-Scheduled)
 > **MOG Oversight**: HELIOS AUTONOMOUS MODE
 > **Truth Insurance**: Serial execution enforced.
@@ -401,6 +401,14 @@
 - **Status:** ✅ **COMPLETE** (Cycle 270)
 - **Finding:** Validated Injection. System maintained 20/20 agents despite high burst threshold stress.
 - **Outcome:** Confirmed ability to process external reality loads.
+
+### 20. **TSF-20: Kuramoto Coupling Test (Resonance)** ✅ COMPLETE
+**Goal:** Validate that the swarm can form resonance clusters (Kuramoto dynamics).
+**Hypothesis:** Agents will naturally synchronize into clusters if coupling strength is sufficient.
+- **Experiment:** `experiments/cycle271_kuramoto_coupling_test.py`
+- **Status:** ✅ **COMPLETE** (Cycle 271)
+- **Finding:** Validated Coupling. System formed 1 active cluster (Resonance confirmed).
+- **Outcome:** Confirmed Kuramoto synchronization dynamics.
 
 ---
 
