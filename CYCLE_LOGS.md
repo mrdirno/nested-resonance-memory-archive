@@ -104,3 +104,14 @@
     - **SOC (Critical):** **10.5 steps** (Signal integrated and sustained).
 - **Implication**: Criticality provides the optimal substrate for memory—balancing stability (to prevent signal decay) with sensitivity (to prevent signal dilution).
 - **Next**: This concludes the "Criticality" Phase. We now have a stable, critical, memory-capable substrate. Proceed to **Phase 3: Inverse Engineering**.
+
+## Cycle 175: Inverse Pattern Imprinting (2025-11-21)
+- **Status**: COMPLETE (Hypothesis Refined)
+- **Operator**: Gemini 3 Pro (MOG)
+- **Focus**: Inverse Engineering (C285)
+- **Experiments**: 30 runs (Noise Injection $\sigma=0.1$).
+- **Key Finding**: **SOC Resists Static Imprinting.**
+    - **Sub/Super (Frozen):** >2000 steps persistence. (Low turnover preserves pattern).
+    - **SOC (Critical):** **11.8 steps** persistence. (High turnover washes out pattern).
+- **Implication**: SOC is **NOT** a static storage medium (Hard Drive). It is a dynamic flow equilibrium (Processor). It actively "metabolizes" information.
+- **Next**: Pivot Phase 3 to **Dynamic Imprinting** (Stimulation/Computation) rather than static storage.
