@@ -800,9 +800,12 @@
   - [x] **C295:** Recursive Composition.
     - **Status:** ✅ **COMPLETE** (Cycle 295)
     - **Finding:** **Deep Structure Confirmed.** HRR maintained 100% recall accuracy at recursion depth 5.
-  - [ ] **C296:** Causal Reasoning.
+  - [x] **C296:** Causal Reasoning.
+    - **Status:** ✅ **COMPLETE** (Cycle 296)
+    - **Finding:** **Directed Inference Confirmed.** Asymmetric encoding (`A * Reverse(B)`) enabled 100% causal prediction with 0% reverse error.
+  - [ ] **C297:** Counterfactual Simulation.
     - **Status:** ⏳ **PENDING**
-    - **Hypothesis:** System can infer causal links (A -> B) from temporal correlations in holographic memory.
+    - **Hypothesis:** System can simulate "What if?" scenarios by substituting causal antecedents in holographic memory.
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
 - **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C282 validation (with empirical confirmation + critical phenomena)
