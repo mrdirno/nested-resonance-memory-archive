@@ -51,9 +51,11 @@ NRM introduces a physics shift.
 
 ### **4.1 Resonance Instead of Addressing**
 
-* Data is not *retrieved*; it is *evoked*.  
-* Access emerges from harmonic match.  
+* Data is not *retrieved*; it is *evoked*.
+* Access emerges from harmonic match.
 * Information behaves as a **waveform**, not a payload.
+
+**Operational Proof:** When a query enters the NRM kernel, it is translated into a frequency signature rather than a lookup key. Memory nodes do not wait for an explicit address; they passively monitor the field. Nodes with matching internal states naturally resonate with the incoming signal, while irrelevant nodes remain silent. The data serves itself to the user based on harmonic strength. No pointer, no index, no central controller. **Alignment replaces command.**
 
 **Extraction becomes alignment.**
 
