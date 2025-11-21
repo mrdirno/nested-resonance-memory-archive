@@ -1132,6 +1132,11 @@
 - ✅ C177: Boundary mapping (extended frequency range)
 - **Total Baseline:** ~200 experiments, 450,000+ cycles validated
 
+#### **Cycle 278: Critical Phenomena II (Sub-Saturation) (Active - v5)**
+*   **Objective:** Locate $f_{crit}$ and measure critical exponents $\nu, \beta, \gamma$.
+*   **Status:** Running (PID 16854). Fixed resource leak and buffering issues.
+*   **Hypothesis:** Phase transition occurs at $f \approx 0.005\%$.
+
 #### Current Experiment: C255 (Running - Near Completion)
 - **Experiment:** H1×H2 mechanism validation (unoptimized)
 - **Status:** Running (PID 6309)

@@ -25,10 +25,10 @@
     - [x] Run experiment (Completed)
     - [/] Verify critical exponents (check `experiments/cycle277_execution.log`)
 
-# Task: Cycle 278 - Critical Phenomena II (Sub-Saturation)
-
-- [/] **Verify C278 Script**
-    - [x] Create `experiments/cycle278_critical_phenomena_sub_saturation.py`
+- [ ] **Cycle 278: Critical Phenomena II (Sub-Saturation)** (PID: 16854)
+    - [x] Hypothesis: Identify $f_{crit}$ and critical exponents.
+    - [/] Execution: Running v5 (Physics Patch + Resource Leak Fix).
+    - [ ] Verification: Analyze `c278_critical_phenomena_sub_saturation_results.json`.
 - [ ] **Execute C278**
     - [/] Run experiment (Running in background: PID 4850 - v3 Physics Patch)
     - [ ] Verify critical exponents (ν_E, ν_σ, ν_τ)
