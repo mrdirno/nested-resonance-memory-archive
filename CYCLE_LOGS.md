@@ -213,3 +213,4 @@
 | 299 | Concept Blending | MOG Pilot | Vector Superposition | Confirmed | Blended concept (A+B) successfully retrieved properties of both A and B (100% recall). | Compositional Semantics | C300: Quantum Logic Gates |
 | 300 | Quantum Logic Gates | MOG Pilot | Vector Logic | Confirmed | Implemented AND (Binding), OR (Superposition), NOT (Negation) with 100% accuracy. | Cognitive Logic | C301: Metacognitive Loop |
 | 301 | Metacognitive Loop | MOG Pilot | Resonance Monitoring | Confirmed | System distinguished Known (Conf ~0.58) from Unknown (Conf ~0.01) with 100% accuracy. | Self-Monitoring | C302: Recursive Self-Correction |
+| 302 | Recursive Self-Correction | MOG Pilot | Auto-Associative Loop | Confirmed | Auto-associative cleanup increased retrieval confidence from ~0.36 to ~0.58 on noisy inputs. | Error Correction | C303: Hierarchical Chunking |
