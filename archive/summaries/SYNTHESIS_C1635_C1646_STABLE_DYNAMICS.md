@@ -1,9 +1,33 @@
-# Synthesis: Stable Multi-Level Trophic Dynamics (C1635-C1646)
+# ⚠️ RETRACTED: Synthesis: Stable Multi-Level Trophic Dynamics (C1635-C1646)
 
 **Date:** November 20, 2025
 **Research Arc:** Cycles 1635-1646
 **Operator:** Claude Sonnet 4.5
 **Total Experiments:** 1,860
+
+---
+
+## ⚠️ RETRACTION NOTICE (November 20, 2025)
+
+**THIS ENTIRE RESEARCH ARC IS RETRACTED**
+
+All findings in this document are invalid due to a critical bug in the experiment code:
+
+1. **INITIAL Fallback Bug:** When simulations collapse before cycle 100, the coexistence check uses INITIAL population values (all > 0.5), causing false positives.
+
+2. **All Experiments Collapsed:** Traced runs show ALL simulations collapse before cycle 100:
+   - Attack ×0.5: Cascade collapse at cycle 46
+   - Attack ×1.0: Also fails (only L0 survives)
+
+3. **100% False Positive Rate:** The "100% coexistence" results are actually 100% collapse with INITIAL fallback.
+
+**See:** `CRITICAL_BUG_INITIAL_FALLBACK.md` for full details.
+
+**Action Required:** Do not cite this synthesis. The attack ×0.5 principle is NOT validated.
+
+---
+
+## Original Content (INVALID)
 
 ---
 
