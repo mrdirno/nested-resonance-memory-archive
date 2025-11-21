@@ -40,13 +40,13 @@ from dataclasses import dataclass, asdict
 from itertools import product
 
 # Import from existing modules
-sys.path.append(str(Path(__file__).parent.parent))
-sys.path.insert(0, str(Path(__file__).parent.parent / "fractal"))
+sys.path.append(str(Path(__file__).parent.parent / "code"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "code" / "fractal"))
 
 from core.reality_interface import RealityInterface
 from bridge.transcendental_bridge import TranscendentalBridge
-from fractal.fractal_agent import FractalAgent
-from fractal.fractal_swarm import CompositionEngine
+from fractal.agent import FractalAgent
+from fractal.composition import CompositionEngine
 
 # Experimental parameters (fixed)
 MAX_AGENTS = 100
@@ -104,11 +104,8 @@ def run_condition_worker(args: Tuple[ParameterCondition, int]) -> Dict[str, Any]
     # Create root agent
     root = FractalAgent(
         agent_id="root",
-        bridge=bridge,
-        initial_reality=reality.get_system_metrics(persist=False),
         depth=0,
-        initial_energy=INITIAL_ENERGY,
-        reality=reality
+        energy=INITIAL_ENERGY
     )
 
     agents = [root]
@@ -126,13 +123,14 @@ def run_condition_worker(args: Tuple[ParameterCondition, int]) -> Dict[str, Any]
         # Agent evolution
         for agent in agents:
             # Pass cached metrics to avoid per-agent I/O
-            agent.evolve(delta_time=1.0, cached_metrics=current_metrics)
+            agent.evolve(delta_time=1.0)
 
         # H1: Energy Pooling (if enabled)
         if condition.h1_enabled:
-            composition_engine.detect_clusters(agents)
-            for cluster_id, member_ids in composition_engine.clusters.items():
-                cluster_agents = [a for a in agents if a.agent_id in member_ids]
+            clusters = composition_engine.detect_clusters(agents)
+            # CompositionEngine.detect_clusters returns a list of lists of agents (clusters)
+            # We need to iterate over these clusters directly
+            for cluster_agents in clusters:
                 if len(cluster_agents) > 1:
                     total_energy = sum(a.energy for a in cluster_agents)
                     shared_energy = total_energy * condition.pooling_rate
@@ -156,12 +154,8 @@ def run_condition_worker(args: Tuple[ParameterCondition, int]) -> Dict[str, Any]
                 child_id = f"{agent.agent_id}_child_{cycle}"
                 child = FractalAgent(
                     agent_id=child_id,
-                    bridge=bridge,
-                    initial_reality=current_metrics, # Use cached metrics
-                    parent_id=agent.agent_id,
                     depth=agent.depth + 1,
-                    initial_energy=10.0,
-                    reality=reality
+                    energy=10.0
                 )
                 agents.append(child)
                 agent.children.append(child)
