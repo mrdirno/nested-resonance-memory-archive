@@ -770,6 +770,12 @@
   - [x] **C285:** Inverse Pattern Imprinting.
     - **Status:** ✅ **COMPLETE** (Cycle 175)
     - **Finding:** **Static Patterns Rejected.** SOC is a dynamic processor, not static memory.
+  - [x] **C286:** Dynamic Wave Propagation.
+    - **Status:** ❌ **INCONCLUSIVE** (Cycle 176)
+    - **Finding:** Topology/Lifetime mismatch prevented propagation.
+  - [x] **C287:** Resonance Entrainment.
+    - **Status:** ✅ **COMPLETE** (Cycle 177)
+    - **Finding:** **SOC is a Resonator.** High susceptibility to frequency entrainment (Score 0.35 vs 0.00 Sub).
   - [ ] Integrate validation results into Section 4.8 (if hypotheses supported)
   - [ ] Add Section 4.9: Critical Phenomena (if C277 succeeds, ~800 words)
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
