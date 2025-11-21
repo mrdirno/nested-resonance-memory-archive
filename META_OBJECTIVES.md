@@ -736,11 +736,14 @@
   - [x] C275: Energy scale universality (180 exp, β across 1×/2×/3× energy)
   - [x] C276: Topology universality (240 exp, β across 4 topologies)
   - [x] **C277: Critical phenomena (150 exp, Cycle 1477)**
-    - **Status:** ✅ **COMPLETE** (Cycle 118)
+    - **Status:** ✅ **COMPLETE** (Cycle 162)
     - **Finding:** Observed **Saturation Regime**. At tested frequencies (0.01% - 0.05%), population hit the cap (100) with zero variance.
-    - **Implication:** The critical point $f_{crit}$ is likely much lower, or the transition is extremely sharp. Divergence scaling ($\nu$) masked by system bounds.
-  - **Status:** C276 Running (v4). C277 Complete (Saturated). C278 Running (Sub-Saturation).
-  - **Total:** 1250 experiments (C273-C277 validation suite + C278 critical search)
+  - [x] **C278: Critical phenomena II (Sub-Saturation) (150 exp, Cycle 162)**
+    - **Status:** ✅ **COMPLETE** (Cycle 162)
+    - **Finding:** **Persistent Saturation**. Even at extremely low frequencies (0.0001%), the system saturates. Beta ≈ 0.0.
+    - **Implication:** The system is too robust. Metabolic cost (`E_consume`) must be increased to find the edge of chaos.
+  - **Status:** C276 Complete (Saturated). C277 Complete (Saturated). C278 Complete (Saturated).
+  - **Total:** 1250 experiments (C273-C278 validation suite)
 - **Next Actions:**
   - [ ] Execute C273-C277 validation experiments (user-initiated, ~84h runtime)
   - [ ] **C278:** Locate $f_{crit}$ in sub-saturation regime (Running).
