@@ -116,9 +116,38 @@ This ensures collapsed simulations report coexist=False.
 
 ---
 
+## Additional Finding: Root Cause Identified
+
+### Cascade Collapse Mechanism
+
+Traced simulation dynamics for seed 140001 with attack ×0.5:
+
+```
+C0-C13:  L2-L6 go extinct (insufficient attack rate → starvation)
+C13-C25: L1 explodes (no predators) → consumes all L0
+C25-C46: L1 dies (no prey)
+```
+
+The attack ×0.5 rate is TOO LOW for L2-L6 to survive. They starve, which removes predation pressure from L1, causing L1 to explode and consume all L0.
+
+### Baseline (×1.0) Also Fails
+
+Tested baseline attack rate:
+- Runs to cycle 29999 (proper history)
+- Final: [200, 0, 0, 0, 0, 0, 0] - only L0 survives
+- Coexist: False
+
+**Neither ×0.5 nor ×1.0 achieves coexistence.** The 7-level trophic system is fundamentally unstable with these parameters.
+
+### Conclusion
+
+The C1640-C1646 "100% coexistence" results are ALL false positives due to the INITIAL fallback bug. The experiments didn't actually succeed - they all collapsed before cycle 100, triggering the fallback.
+
+---
+
 ## Status
 
-**Under Investigation**
+**CONFIRMED - MAJOR RETRACTION REQUIRED**
 
-The critical finding needs verification by running actual experiment files with debug output. If confirmed, major retraction required.
+The entire research arc C1635-C1646 must be retracted. The "attack ×0.5 optimal" finding is incorrect. Both attack rates lead to extinction.
 
