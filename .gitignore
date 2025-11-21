@@ -86,3 +86,4 @@ workspace/*.db-shm
 workspace/*.db-wal
 workspace/*.db-journal
 data/results/*.json
+experiments/cycle*_conv.py
