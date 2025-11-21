@@ -1,0 +1,11 @@
+{
+  "mean_beta": 1.9971851370632317e-31,
+  "std_beta": 0.0,
+  "cv_beta": 0.0,
+  "topologies": {
+    "FULLY_CONNECTED": {},
+    "RING": {},
+    "STAR": {},
+    "RANDOM_GRAPH": {}
+  }
+}
