@@ -1,7 +1,7 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: C267 (Criticality Test)**
+> **ACTIVE CYCLE: C268 (Holographic Memory Test)**
 > **Status**: 🟢 ACTIVE (Auto-Scheduled)
 > **MOG Oversight**: HELIOS AUTONOMOUS MODE
 > **Truth Insurance**: Serial execution enforced.
@@ -369,6 +369,14 @@
 - **Status:** ✅ **COMPLETE** (Cycle 266)
 - **Finding:** Validated Stability. Population maintained at 50/50 agents for 100 cycles.
 - **Outcome:** Confirmed simulation baseline is stable.
+
+### 16. **TSF-16: Criticality Test (Edge of Chaos)** ✅ COMPLETE
+**Goal:** Validate that the swarm can maintain a critical state (clusters exist but do not dominate).
+**Hypothesis:** Tuned burst thresholds will keep the system at the "Edge of Chaos".
+- **Experiment:** `experiments/cycle267_criticality_test.py`
+- **Status:** ✅ **COMPLETE** (Cycle 267)
+- **Finding:** Validated Criticality. System maintained 1 active cluster (Criteria: 0 < clusters <= 5).
+- **Outcome:** Confirmed ability to sustain critical dynamics.
 
 ---
 
