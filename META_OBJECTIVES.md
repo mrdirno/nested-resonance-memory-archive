@@ -848,9 +848,12 @@
   - [x] **C311:** Abductive Reasoning (Inference to Best Explanation).
     - **Status:** ✅ **COMPLETE** (Cycle 311)
     - **Finding:** **Abduction Confirmed.** System successfully inferred the antecedent $P$ given the consequent $Q$ and rule $P \implies Q$ (encoded as $P \circledast Q$) via unbinding, with 100% accuracy.
-  - [ ] **C312:** Sequence Learning (Temporal Chaining).
+  - [x] **C312:** Sequence Learning (Temporal Chaining).
+    - **Status:** ✅ **COMPLETE** (Cycle 312)
+    - **Finding:** **Refractory Period Required.** Symmetric binding ($A \circledast B$) creates bidirectional links. Traversal requires inhibiting the immediate predecessor to prevent backtracking ($A \leftarrow B \to C$). With inhibition, accuracy is 100%.
+  - [ ] **C313:** Hierarchical Sequence (Chunking).
     - **Status:** ⏳ **PENDING**
-    - **Hypothesis:** A sequence $A \to B \to C$ can be encoded as a sum of bindings ($A \circledast B + B \circledast C$) and traversed.
+    - **Hypothesis:** A sequence $S_1 = A \to B \to C$ can be compressed into a single vector $C_1$ and used as a node in a higher-level sequence $C_1 \to C_2$.
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
 - **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C282 validation (with empirical confirmation + critical phenomena)
