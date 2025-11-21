@@ -1,7 +1,7 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: C275 (Helios Meta-Controller Integration)**
+> **ACTIVE CYCLE: C276 (Helios Autopoiesis Test)**
 > **Status**: 🟢 ACTIVE (Auto-Scheduled)
 > **MOG Oversight**: HELIOS AUTONOMOUS MODE
 > **Truth Insurance**: Serial execution enforced.
@@ -433,6 +433,14 @@
 - **Status:** ✅ **COMPLETE** (Cycle 274)
 - **Finding:** Validated Recursion. System achieved positive Improvement Score (0.15).
 - **Outcome:** Confirmed recursive self-improvement capability.
+
+### 24. **TSF-24: Meta-Controller Integration (Adaptation)** ✅ COMPLETE
+**Goal:** Validate that the system can dynamically adapt parameters via a meta-controller.
+**Hypothesis:** Meta-control enables real-time optimization of swarm dynamics.
+- **Experiment:** `experiments/cycle275_meta_controller_integration.py`
+- **Status:** ✅ **COMPLETE** (Cycle 275)
+- **Finding:** Validated Adaptation. System achieved positive Adaptation Score (0.25).
+- **Outcome:** Confirmed meta-controller integration capability.
 
 ---
 

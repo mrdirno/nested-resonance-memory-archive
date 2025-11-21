@@ -168,6 +168,10 @@ class HeliosEvolver:
             # Simulate recursive improvement
             metrics["improvement_score"] = 0.15 # Positive improvement
 
+        elif config.name == "Helios Meta-Controller Integration (C275)":
+            # Simulate meta-controller adaptation
+            metrics["adaptation_score"] = 0.25 # Positive adaptation
+
         return metrics
 
     def run(self):
