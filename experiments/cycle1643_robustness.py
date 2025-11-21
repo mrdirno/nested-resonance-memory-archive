@@ -6,7 +6,7 @@ Validates 100% coexistence finding with high confidence.
 """
 import sys, json, numpy as np
 from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2/experiments')
+sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
 from core.fractal_agent import FractalAgent, RealityInterface
 
 CYCLE_ID = "C1643"
@@ -99,8 +99,8 @@ def run_experiment(seed):
 
         if all(n == 0 for n in ns[:3]): break
 
-    finals = {i: np.mean(histories[i][-10:]) if len(histories[i]) > 10 else INITIAL[i] for i in range(n_levels)}
-    return {"seed": seed, "coexist": all(finals[i] >= 0.5 for i in range(n_levels))}
+    finals = {i: np.mean(histories[i][-10:]) if len(histories[i]) > 10 else 0.0 for i in range(n_levels)}
+    return {"seed": seed, "coexist": all(finals[i] >= 0.5 for i in range(n_levels)), "finals": finals}
 
 def main():
     print(f"CYCLE 1643: Robustness Test | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -114,6 +114,10 @@ def main():
 
     for i, seed in enumerate(seeds, 1):
         r = run_experiment(seed)
+        if i == 1:
+            print(f"DEBUG: Seed {seed} Result: {r}")
+            # We can't easily access internal vars here, so we'll rely on the return value.
+            # But wait, run_experiment returns a dict. I should modify run_experiment to print debug info.
         results.append(r)
         if i % 20 == 0:
             current = sum(1 for r in results if r["coexist"])
