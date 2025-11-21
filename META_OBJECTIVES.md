@@ -767,6 +767,9 @@
   - [x] **C284:** Critical Memory Capacity.
     - **Status:** ✅ **COMPLETE** (Cycle 174)
     - **Finding:** **Maximized Retention** in SOC state (10.5 steps vs 6.0/7.8).
+  - [x] **C285:** Inverse Pattern Imprinting.
+    - **Status:** ✅ **COMPLETE** (Cycle 175)
+    - **Finding:** **Static Patterns Rejected.** SOC is a dynamic processor, not static memory.
   - [ ] Integrate validation results into Section 4.8 (if hypotheses supported)
   - [ ] Add Section 4.9: Critical Phenomena (if C277 succeeds, ~800 words)
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
