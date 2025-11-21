@@ -320,6 +320,18 @@ def run_single_experiment(
     }
 
 
+
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NumpyEncoder, self).default(obj)
+
+
 def run_campaign():
     """
     Execute full experimental campaign (240 experiments).
@@ -412,7 +424,7 @@ def run_campaign():
                 "f_migrate": F_MIGRATE
             },
             "results": results
-        }, f, indent=2)
+        }, f, indent=2, cls=NumpyEncoder)
 
     print(f"\n{'='*80}")
     print(f"CAMPAIGN COMPLETE")
