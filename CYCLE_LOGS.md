@@ -207,3 +207,4 @@
 | 293 | Predictive Control | MOG Pilot | Control Theory | Confirmed | Predictive Control (with smoothing) achieved 38.69% lower MSE than Reactive Control. | Anticipatory Regulation | C294: Holographic Memory Integration |
 | 294 | Holographic Memory Integration | MOG Pilot | Distributed Representation | Confirmed | HRR maintained 100% recall at 20% noise (Discrete: 0%). Demonstrated graceful degradation. | Robust Persistence | C295: Recursive Composition |
 | 295 | Recursive Composition | MOG Pilot | Hierarchical Binding | Confirmed | HRR maintained 100% recall accuracy at recursion depth 5. | Deep Structure | C296: Causal Reasoning |
+| 296 | Causal Reasoning | MOG Pilot | Asymmetric Binding | Confirmed | HRR with Reverse encoding achieved 100% causal prediction and 0% reverse error. | Directed Inference | C297: Counterfactual Simulation |
