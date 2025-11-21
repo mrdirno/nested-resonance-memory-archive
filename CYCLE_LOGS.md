@@ -216,3 +216,4 @@
 | 302 | Recursive Self-Correction | MOG Pilot | Auto-Associative Loop | Confirmed | Auto-associative cleanup increased retrieval confidence from ~0.36 to ~0.58 on noisy inputs. | Error Correction | C303: Hierarchical Chunking |
 | 303 | Hierarchical Chunking | MOG Pilot | Sequence Compression | Confirmed | Compressed sequence (A,B,C) into single chunk vector and successfully decoded all items (100% accuracy). | Data Compression | C304: Temporal Prediction |
 | 304 | Temporal Prediction | MOG Pilot | Asymmetric Binding | Confirmed | Learned sequence A->B->C->D using random permutation binding ($P(A) \circledast B$). Achieved 100% prediction accuracy. | Sequence Learning | C305: Contextual Disambiguation |
+| 305 | Contextual Disambiguation | MOG Pilot | Contextual Binding | Confirmed | Resolved ambiguity of "Bank" (River vs Finance) with 100% accuracy using context vectors. Zero cross-talk observed. | Semantic Disambiguation | C306: Causal Inference |
