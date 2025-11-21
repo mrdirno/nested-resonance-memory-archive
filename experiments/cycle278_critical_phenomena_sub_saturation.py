@@ -88,6 +88,7 @@ class NumpyEncoder(json.JSONEncoder):
 def run_experiment(freq, seed):
     """Run a single experiment."""
     print(f"Running: f={freq*100:.3f}%, seed={seed}")
+    sys.stdout.flush()
     
     start_time = time.time()
     
@@ -204,6 +205,10 @@ def run_experiment(freq, seed):
     final_pop = sum(len(reality.get_population_agents(p)) for p in range(N_POPULATIONS))
     
     print(f"  ✓ Complete: {final_pop} agents, τ={equilibration_time if equilibration_time > 0 else 'N/A'}, {runtime:.1f}s")
+    sys.stdout.flush()
+
+    # Close database connection
+    reality.close()
     
     return {
         "frequency": freq,
