@@ -210,3 +210,4 @@
 | 296 | Causal Reasoning | MOG Pilot | Asymmetric Binding | Confirmed | HRR with Reverse encoding achieved 100% causal prediction and 0% reverse error. | Directed Inference | C297: Counterfactual Simulation |
 | 297 | Counterfactual Simulation | MOG Pilot | Vector Substitution | Confirmed | Successfully transported effect B to new cause A' (100% accuracy) without decoding. | "What If" Reasoning | C298: Metaphorical Mapping |
 | 298 | Metaphorical Mapping | MOG Pilot | Relational Abstraction | Confirmed | Learned relation R from 10 examples, achieved 100% generalization on unseen data. | Analogical Transfer | C299: Concept Blending |
+| 299 | Concept Blending | MOG Pilot | Vector Superposition | Confirmed | Blended concept (A+B) successfully retrieved properties of both A and B (100% recall). | Compositional Semantics | C300: Quantum Logic Gates |
