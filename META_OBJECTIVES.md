@@ -751,12 +751,17 @@
   - **Status:** C276-C279 Complete. Phase transition localized.
   - **Total:** 1350 experiments (C273-C279 validation suite)
 - **Next Actions:**
-  - [ ] **C280:** Fine-grained sweep of `E_consume` (0.10 - 0.20) to pinpoint $f_{crit}$.
+  - [x] **C280:** Fine-grained sweep of `E_consume` (0.10 - 0.20) to pinpoint $f_{crit}$.
+    - **Status:** ✅ **COMPLETE** (Cycle 165)
+    - **Finding:** Critical point localized to 0.100-0.110.
+  - [x] **C281:** Ultra-fine sweep of `E_consume` (0.100 - 0.110).
+    - **Status:** ✅ **COMPLETE** (Cycle 166)
+    - **Finding:** **Binary Phase Transition** at E=0.1045. System is either Saturated (E<=0.104) or Collapsed (E>=0.105).
   - [ ] Integrate validation results into Section 4.8 (if hypotheses supported)
   - [ ] Add Section 4.9: Critical Phenomena (if C277 succeeds, ~800 words)
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
-- **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C277 validation (with empirical confirmation + critical phenomena)
+- **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C281 validation (with empirical confirmation + critical phenomena)
 - **Novel Contribution:** First demonstration that hierarchical efficiency (607× advantage) operates **conditionally on energy balance**—structure optimizes resource utilization within thermodynamic limits. **ENHANCED:** Unified scaling framework connecting efficiency (α), energy (β), and variance (γ) with mechanistic derivations and testable predictions.
 
 #### Paper 5D: Emergence Pattern Catalog (ARXIV-READY + JOURNAL-READY - MAJOR RESCOPING) ✅
