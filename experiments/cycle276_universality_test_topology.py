@@ -275,16 +275,38 @@ def run_single_experiment(
                 migrant = np.random.choice(source_agents)
                 reality.migrate_agent(migrant.agent_id, source_pop, target_pop)
 
-        # Death phase
+        # Death / Metabolism / Reproduction
         for pop_id in range(N_POPULATIONS):
             agents = reality.get_population_agents(pop_id)
-            for agent in agents:
-                agent.energy -= ENERGY_PARAMS["E_consume"]
-
+            n_agents = len(agents)
+            
+            # Resource Sharing (Inflow = 5.0 per population)
+            # Capacity K = Inflow / E_consume = 5.0 / 0.1 = 50 agents
+            resource_inflow = 5.0
+            energy_gain = resource_inflow / n_agents if n_agents > 0 else 0
+            
+            # Create a copy for iteration
+            for agent in list(agents):
+                # 1. Metabolism
+                agent.energy -= 0.1  # E_consume
+                
+                # 2. Resource Gain
+                agent.energy += energy_gain
+                
+                # 3. Death
                 if agent.energy <= 0:
                     reality.remove_agent(agent.agent_id, pop_id)
-                else:
-                    agent.energy = min(agent.energy + ENERGY_PARAMS["E_recharge"], 2.0)
+                    continue
+                    
+                # 4. Reproduction (Non-linearity)
+                if agent.energy > 1.5:
+                    agent.energy -= 0.5
+                    child = FractalAgent(
+                        agent_id=f"rep_{cycle}_{pop_id}_{agent.agent_id[-4:]}",
+                        population_id=pop_id,
+                        energy=0.5
+                    )
+                    reality.add_agent(child, population_id=pop_id)
 
         # Record metrics every 1000 cycles
         if cycle % 1000 == 0:
