@@ -1,0 +1,9 @@
+{
+  "population_divergence": {
+    "exponent": -0.0,
+    "r_squared": NaN,
+    "slope": 0.0
+  },
+  "susceptibility": null,
+  "relaxation_time": null
+}
