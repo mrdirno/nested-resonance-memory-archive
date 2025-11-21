@@ -742,11 +742,16 @@
     - **Status:** ✅ **COMPLETE** (Cycle 162)
     - **Finding:** **Persistent Saturation**. Even at extremely low frequencies (0.0001%), the system saturates. Beta ≈ 0.0.
     - **Implication:** The system is too robust. Metabolic cost (`E_consume`) must be increased to find the edge of chaos.
-  - **Status:** C276 Complete (Saturated). C277 Complete (Saturated). C278 Complete (Saturated).
-  - **Total:** 1250 experiments (C273-C278 validation suite)
+  - [x] **C279: Metabolic Stress (Phase Transition Search) (100 exp, Cycle 164)**
+    - **Status:** ✅ **COMPLETE** (Cycle 164)
+    - **Finding:** **Sharp Phase Transition**.
+        - E=0.10: Saturation (100% Survival).
+        - E=0.20+: Total Collapse (0% Survival).
+    - **Implication:** The critical point lies between 0.10 and 0.20.
+  - **Status:** C276-C279 Complete. Phase transition localized.
+  - **Total:** 1350 experiments (C273-C279 validation suite)
 - **Next Actions:**
-  - [ ] Execute C273-C277 validation experiments (user-initiated, ~84h runtime)
-  - [ ] **C278:** Locate $f_{crit}$ in sub-saturation regime (Running).
+  - [ ] **C280:** Fine-grained sweep of `E_consume` (0.10 - 0.20) to pinpoint $f_{crit}$.
   - [ ] Integrate validation results into Section 4.8 (if hypotheses supported)
   - [ ] Add Section 4.9: Critical Phenomena (if C277 succeeds, ~800 words)
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)

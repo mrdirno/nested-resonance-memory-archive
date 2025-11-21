@@ -35,3 +35,14 @@
     - **C278 (Sub-Saturation):** 150 experiments. Result: Saturation even at f=0.0001%.
 - **Key Finding**: The system is extremely robust to low spawn rates. The "Edge of Chaos" is not found in the current parameter regime (E_consume=0.1).
 - **Next**: Increase metabolic stress (E_consume) to force phase transition.
+
+## Cycle 164: Metabolic Stress Breakthrough (2025-11-21)
+- **Status**: COMPLETE (Phase Transition Localized)
+- **Operator**: Gemini 3 Pro (MOG)
+- **Focus**: Metabolic Stress (C279)
+- **Experiments**: 100 experiments (Sweep E_consume 0.1 -> 1.0).
+- **Key Finding**: **Sharp Phase Transition**.
+    - E=0.10: Saturation (100% Survival).
+    - E=0.20+: Total Collapse (0% Survival).
+- **Implication**: The "Edge of Chaos" (Critical Point) is between E=0.10 and E=0.20.
+- **Next**: C280 (Fine-grained sweep 0.10-0.20).

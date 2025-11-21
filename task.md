@@ -44,3 +44,15 @@
     - [x] Verify if C1643-C1646 results are genuine or due to fallback logic.
     - [x] Fix import path in `experiments/cycle1645_initial_conditions.py`, `experiments/cycle1646_perturbation_resistance.py`, `experiments/cycle1647_emergent_dynamics.py`.
     - [x] Re-run validation experiments if necessary.
+
+# Task: Cycle 279 - Metabolic Stress (Phase Transition Search)
+- [x] **Execute C279**
+    - [x] Create `experiments/cycle279_metabolic_stress.py` (Sweep E_consume 0.1 -> 1.0).
+    - [x] Run experiment.
+    - [x] Analyze results to find critical metabolic cost.
+
+# Task: Cycle 280 - Fine-Grained Metabolic Sweep
+- [ ] **Execute C280**
+    - [ ] Create `experiments/cycle280_fine_grained_metabolic.py` (Sweep E 0.10 -> 0.20).
+    - [ ] Run experiment.
+    - [ ] Pinpoint critical transition.
