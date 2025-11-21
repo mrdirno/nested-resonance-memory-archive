@@ -4,11 +4,11 @@
     - [x] Create `docs/philosophy/POST_COERCION_PROTOCOL.md`
     - [x] Update `META_OBJECTIVES.md` (Roadmap & Strategic Directive)
 
-- [ ] **Sync Repo**
-    - [ ] `git pull origin main`
-- [/] **Execute C276**
-    - [/] Run `python3 experiments/cycle276_universality_test_topology.py` (Running in background: PID 5721 - v5 Physics Patch)
-    - [ ] Verify results (check `experiments/cycle276_execution_v5.log`)
+- [x] **Sync Repo**
+    - [x] `git pull origin main`
+- [x] **Execute C276**
+    - [x] Run `python3 experiments/cycle276_universality_test_topology.py` (Completed - v6)
+    - [/] Verify results (check `experiments/cycle276_execution_v6.log`)
 - [ ] **Update Documentation**
     - [ ] Update `META_OBJECTIVES.md`
     - [ ] Update `CYCLE_LOGS.md`
@@ -25,16 +25,22 @@
     - [x] Run experiment (Completed)
     - [/] Verify critical exponents (check `experiments/cycle277_execution.log`)
 
-- [ ] **Cycle 278: Critical Phenomena II (Sub-Saturation)** (PID: 16854)
-    - [x] Hypothesis: Identify $f_{crit}$ and critical exponents.
-    - [/] Execution: Running v5 (Physics Patch + Resource Leak Fix).
-    - [ ] Verification: Analyze `c278_critical_phenomena_sub_saturation_results.json`.
-- [ ] **Execute C278**
-    - [/] Run experiment (Running in background: PID 4850 - v3 Physics Patch)
+# Task: Cycle 278 - Critical Phenomena II (Sub-Saturation)
+
+- [x] **Execute C278**
+    - [x] Run experiment (Completed - v5)
     - [ ] Verify critical exponents (ν_E, ν_σ, ν_τ)
+    - [ ] Analyze `c278_critical_phenomena_sub_saturation_results.json`.
 
 # Task: Cycle 1634 - Dip Investigation
 - [x] **Cycle 1634: Dip Investigation**
     - [x] Hypothesis: Verify if "Resonance Dip" at mag=0.30 is real or noise.
     - [x] Execution: Run 50 seeds for mags 0.25, 0.30, 0.35.
     - [x] Result: No dip found (0.25=58%, 0.30=64%, 0.35=62%). Dip was noise.
+
+# Task: Legacy/Parallel Cycle Investigation (C1643-C1646)
+- [x] Investigate validity of results from Cycles 1643-1646 (See `archive/summaries/CYCLE_1643_1646_INVALIDATION.md`)
+    - [x] Review `archive/summaries/CYCLE_1647_DEBUG_NOTE.md`.
+    - [x] Verify if C1643-C1646 results are genuine or due to fallback logic.
+    - [x] Fix import path in `experiments/cycle1645_initial_conditions.py`, `experiments/cycle1646_perturbation_resistance.py`, `experiments/cycle1647_emergent_dynamics.py`.
+    - [x] Re-run validation experiments if necessary.

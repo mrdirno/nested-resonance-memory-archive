@@ -105,7 +105,7 @@ def run_experiment(seed, condition, initial):
 
         if all(n == 0 for n in ns[:3]): break
 
-    finals = {i: np.mean(histories[i][-10:]) if len(histories[i]) > 10 else initial[i] for i in range(n_levels)}
+    finals = {i: np.mean(histories[i][-10:]) if len(histories[i]) > 10 else 0.0 for i in range(n_levels)}
     return {"seed": seed, "condition": condition, "coexist": all(finals[i] >= 0.5 for i in range(n_levels))}
 
 def main():

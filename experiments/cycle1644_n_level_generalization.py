@@ -6,7 +6,7 @@ Compares baseline vs optimal across 3, 5, 7, 9 levels.
 """
 import sys, json, numpy as np
 from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2/experiments')
+sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
 from core.fractal_agent import FractalAgent, RealityInterface
 
 CYCLE_ID = "C1644"
@@ -110,7 +110,7 @@ def run_experiment(seed, n_levels, attack_mult):
 
         if all(n == 0 for n in ns[:min(3, n_levels)]): break
 
-    finals = {i: np.mean(histories[i][-10:]) if len(histories[i]) > 10 else initial[i] for i in range(n_levels)}
+    finals = {i: np.mean(histories[i][-10:]) if len(histories[i]) > 10 else 0.0 for i in range(n_levels)}
     return {"seed": seed, "n_levels": n_levels, "attack_mult": attack_mult, "coexist": all(finals[i] >= 0.5 for i in range(n_levels))}
 
 def main():
