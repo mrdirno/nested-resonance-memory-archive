@@ -58,7 +58,9 @@
     - [x] Pinpoint critical transition.
 
 # Task: Cycle 281 - Ultra-Fine Metabolic Sweep
-- [ ] **Execute C281**
-    - [ ] Create `experiments/cycle281_ultra_fine_metabolic.py` (Sweep E 0.100 -> 0.110).
-    - [ ] Run experiment.
-    - [ ] Determine $f_{crit}$ to 3 decimal places.
+- [x] **Execute C281**
+    - [x] Create `experiments/cycle281_ultra_fine_metabolic.py` (Sweep E 0.100 -> 0.110).
+    - [x] Run experiment.
+    - [x] Determine $f_{crit}$ to 3 decimal places.
+    - **RESULT:** $f_{crit} = 0.100$ (sharp first-order transition)
+    - E=0.100: 100% survival, E=0.101: 5% survival
