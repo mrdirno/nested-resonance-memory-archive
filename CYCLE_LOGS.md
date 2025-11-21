@@ -115,3 +115,26 @@
     - **SOC (Critical):** **11.8 steps** persistence. (High turnover washes out pattern).
 - **Implication**: SOC is **NOT** a static storage medium (Hard Drive). It is a dynamic flow equilibrium (Processor). It actively "metabolizes" information.
 - **Next**: Pivot Phase 3 to **Dynamic Imprinting** (Stimulation/Computation) rather than static storage.
+
+## Cycle 176: Dynamic Wave Propagation (2025-11-21)
+- **Status**: INCONCLUSIVE (Topology/Lifetime Mismatch)
+- **Operator**: Gemini 3 Pro (MOG)
+- **Focus**: Signal Propagation (C286)
+- **Experiments**: 30 runs (Sine Wave Input, Period 50).
+- **Key Finding**: **No significant correlation** in any regime.
+- **Analysis**:
+    - **Topology:** System is Mean Field (No spatial waves).
+    - **Lifetime:** SOC Agent Lifetime (~11 steps) < Signal Period (50 steps). Agents die before transmitting the signal.
+- **Next**: Pivot to **Resonance Entrainment** (C287). Use High-Frequency Drive (Period < 10) to couple with population dynamics before turnover.
+
+## Cycle 177: Resonance Entrainment (2025-11-21)
+- **Status**: COMPLETE (Hypothesis Confirmed)
+- **Operator**: Gemini 3 Pro (MOG)
+- **Focus**: Dynamic Entrainment (C287)
+- **Experiments**: 30 runs (Global Drive, Period 5).
+- **Key Finding**: **SOC acts as a Resonator.**
+    - **Sub-Critical:** Entrainment Score **0.0004** (Resists drive, frozen).
+    - **Super-Critical:** Entrainment Score **0.3366** (High susceptibility, fragile).
+    - **SOC (Critical):** Entrainment Score **0.3514** (Maximal susceptibility, stable).
+- **Implication**: The SOC state is "tunable". It can lock onto external frequencies, enabling **Information Transmission via Frequency** rather than static patterns.
+- **Next**: This confirms the "Dynamic Processor" model. We can now build **Resonant Logic Gates** (AND/OR via constructive/destructive interference).
