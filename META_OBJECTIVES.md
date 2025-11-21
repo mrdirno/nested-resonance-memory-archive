@@ -818,9 +818,12 @@
   - [x] **C301:** Metacognitive Loop.
     - **Status:** ✅ **COMPLETE** (Cycle 301)
     - **Finding:** **Self-Monitoring Confirmed.** System successfully used resonance magnitude to distinguish between known memories and unknown queries (100% decision accuracy).
-  - [ ] **C302:** Recursive Self-Correction.
+  - [x] **C302:** Recursive Self-Correction.
+    - **Status:** ✅ **COMPLETE** (Cycle 302)
+    - **Finding:** **Self-Repair Confirmed.** Auto-associative loop successfully "cleaned" noisy queries, restoring confidence from ~0.36 (uncertain) to ~0.58 (certain).
+  - [ ] **C303:** Hierarchical Chunking.
     - **Status:** ⏳ **PENDING**
-    - **Hypothesis:** If confidence is low, the system can use a "correction vector" (feedback) to iteratively refine the query and improve retrieval.
+    - **Hypothesis:** System can compress a sequence of items ($A, B, C$) into a single chunk vector ($X$) and retrieve the sequence from the chunk.
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
 - **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C282 validation (with empirical confirmation + critical phenomena)
