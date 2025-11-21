@@ -140,8 +140,8 @@ class HeliosEvolver:
                 
             # Apply Protocol Logic (e.g., Pooling)
             if config.parameters.get("enable_pooling", False):
-                composition_engine.detect_clusters(agents)
-                active_clusters = len(composition_engine.clusters)
+                clusters = composition_engine.detect_clusters(agents)
+                active_clusters = len(clusters)
                 # (Pooling logic simplified here, assuming CompositionEngine handles it or we add it)
                 # For this test, we just track clusters
                 
