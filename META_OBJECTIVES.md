@@ -806,9 +806,12 @@
   - [x] **C297:** Counterfactual Simulation.
     - **Status:** ✅ **COMPLETE** (Cycle 297)
     - **Finding:** **"What If" Reasoning Confirmed.** Vector substitution (`M' = M * inv(A) * A'`) enabled 100% transfer of effects to new causes without decoding.
-  - [ ] **C298:** Metaphorical Mapping.
+  - [x] **C298:** Metaphorical Mapping.
+    - **Status:** ✅ **COMPLETE** (Cycle 298)
+    - **Finding:** **Relational Abstraction Confirmed.** System learned generic relation $R$ from examples and achieved 100% accuracy on unseen data.
+  - [ ] **C299:** Concept Blending.
     - **Status:** ⏳ **PENDING**
-    - **Hypothesis:** System can map relationships from one domain (Source) to another (Target) using rotation/transformation matrices.
+    - **Hypothesis:** System can create novel concepts by superposing non-orthogonal vectors (A + B) and retrieving emergent properties.
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
 - **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C282 validation (with empirical confirmation + critical phenomena)
