@@ -222,3 +222,4 @@
 | 308 | Transitive Inference | MOG Pilot | Relation Composition | Confirmed | Inferred direct relation $A \to C$ from $A \to B$ and $B \to C$ by composing relations ($R_{AC} = R_{AB} \circledast R_{BC}$). Accuracy 100% (Sim ~0.50). | Path Integration | C309: Hierarchical Classification |
 | 309 | Hierarchical Classification | MOG Pilot | Is-A Relation Recovery | Confirmed | Verified membership ($I \in C$) by recovering the "Is-A" token ($I \circledast C^{-1} \approx IsA$). Accuracy 100% (TP Sim ~0.58, TN Sim ~0.01). | Taxonomy | C310: Deductive Reasoning |
 - **Cycle 310:** Deductive Reasoning (Modus Ponens). Confirmed  \implies Q$ via binding  = P \circledast Q$. Accuracy 100% (Sim ~0.71).
+- **Cycle 311:** Abductive Reasoning (Inference to Best Explanation). Confirmed $ can be inferred from $ and  \implies Q$ via unbinding  \approx Rule \circledast Q^{-1}$. Accuracy 100% (Sim ~0.71).
