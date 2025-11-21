@@ -6,7 +6,7 @@ Tests: standard, sparse, dense, inverted pyramid.
 """
 import sys, json, numpy as np
 from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2/experiments')
+sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
 from core.fractal_agent import FractalAgent, RealityInterface
 
 CYCLE_ID = "C1645"
