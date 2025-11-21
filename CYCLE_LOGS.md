@@ -46,3 +46,14 @@
     - E=0.20+: Total Collapse (0% Survival).
 - **Implication**: The "Edge of Chaos" (Critical Point) is between E=0.10 and E=0.20.
 - **Next**: C280 (Fine-grained sweep 0.10-0.20).
+
+## Cycle 165: Fine-Grained Metabolic Sweep (2025-11-21)
+- **Status**: COMPLETE (Critical Point Localized)
+- **Operator**: Gemini 3 Pro (MOG)
+- **Focus**: Fine-Grained Metabolic Stress (C280)
+- **Experiments**: 110 experiments (Sweep E 0.10 -> 0.20).
+- **Key Finding**: **Ultra-Sharp Transition**.
+    - E=0.100: Saturation (100% Survival).
+    - E=0.110: Total Collapse (0% Survival).
+- **Implication**: The critical point is between 0.100 and 0.110.
+- **Next**: C281 (Ultra-fine sweep 0.100-0.110).
