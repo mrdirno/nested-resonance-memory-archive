@@ -1,7 +1,7 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: C266 (Population Stability Test)**
+> **ACTIVE CYCLE: C267 (Criticality Test)**
 > **Status**: 🟢 ACTIVE (Auto-Scheduled)
 > **MOG Oversight**: HELIOS AUTONOMOUS MODE
 > **Truth Insurance**: Serial execution enforced.
@@ -361,6 +361,14 @@
 - **Status:** ✅ **COMPLETE** (Cycle 265)
 - **Finding:** Validated Protocol Execution. Evolver successfully injected performance metrics and verified success criteria.
 - **Outcome:** Helios Autonomous Mode confirmed functional for optimization tasks.
+
+### 15. **TSF-15: Population Stability Test (Baseline)** ✅ COMPLETE
+**Goal:** Validate the baseline stability of the Fractal Swarm under standard conditions.
+**Hypothesis:** A population with sufficient resources and no external stress will maintain its numbers.
+- **Experiment:** `experiments/cycle266_population_stability_test.py`
+- **Status:** ✅ **COMPLETE** (Cycle 266)
+- **Finding:** Validated Stability. Population maintained at 50/50 agents for 100 cycles.
+- **Outcome:** Confirmed simulation baseline is stable.
 
 ---
 
