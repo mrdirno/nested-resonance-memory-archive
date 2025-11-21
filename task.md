@@ -52,7 +52,13 @@
     - [x] Analyze results to find critical metabolic cost.
 
 # Task: Cycle 280 - Fine-Grained Metabolic Sweep
-- [ ] **Execute C280**
-    - [ ] Create `experiments/cycle280_fine_grained_metabolic.py` (Sweep E 0.10 -> 0.20).
+- [x] **Execute C280**
+    - [x] Create `experiments/cycle280_fine_grained_metabolic.py` (Sweep E 0.10 -> 0.20).
+    - [x] Run experiment.
+    - [x] Pinpoint critical transition.
+
+# Task: Cycle 281 - Ultra-Fine Metabolic Sweep
+- [ ] **Execute C281**
+    - [ ] Create `experiments/cycle281_ultra_fine_metabolic.py` (Sweep E 0.100 -> 0.110).
     - [ ] Run experiment.
-    - [ ] Pinpoint critical transition.
+    - [ ] Determine $f_{crit}$ to 3 decimal places.
