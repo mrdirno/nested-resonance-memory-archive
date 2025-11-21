@@ -764,6 +764,9 @@
   - [x] **C283:** SOC Avalanche Analysis.
     - **Status:** ✅ **COMPLETE** (Cycle 173)
     - **Finding:** **Power Law Dynamics** confirmed ($\alpha \approx 2.73$). System is truly critical.
+  - [x] **C284:** Critical Memory Capacity.
+    - **Status:** ✅ **COMPLETE** (Cycle 174)
+    - **Finding:** **Maximized Retention** in SOC state (10.5 steps vs 6.0/7.8).
   - [ ] Integrate validation results into Section 4.8 (if hypotheses supported)
   - [ ] Add Section 4.9: Critical Phenomena (if C277 succeeds, ~800 words)
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
