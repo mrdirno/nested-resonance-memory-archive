@@ -827,9 +827,12 @@
   - [x] **C304:** Temporal Prediction.
     - **Status:** ✅ **COMPLETE** (Cycle 304)
     - **Finding:** **Sequence Learning Confirmed.** System successfully predicted future states ($A \to B$) using asymmetric binding ($\Pi(A) \circledast B$). Random permutation was required to prevent backwards leakage.
-  - [ ] **C305:** Contextual Disambiguation.
+  - [x] **C305:** Contextual Disambiguation.
+    - **Status:** ✅ **COMPLETE** (Cycle 305)
+    - **Finding:** **Polysemy Resolved.** System successfully stored and retrieved multiple meanings for a single concept ("Bank") by binding with context vectors. Cross-talk was negligible.
+  - [ ] **C306:** Causal Inference (Counterfactuals).
     - **Status:** ⏳ **PENDING**
-    - **Hypothesis:** System can resolve ambiguity (e.g., "Bank" as river vs. finance) by binding the concept with a context vector ($Concept \circledast Context$).
+    - **Hypothesis:** System can infer "What would have happened?" by substituting a cause vector in a stored transition ($Cause \to Effect$) and retrieving the new effect.
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
 - **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C282 validation (with empirical confirmation + critical phenomena)
