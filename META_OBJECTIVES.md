@@ -836,9 +836,12 @@
   - [x] **C307:** Analogical Reasoning ($A:B :: C:D$).
     - **Status:** ✅ **COMPLETE** (Cycle 307)
     - **Finding:** **Relational Inference Confirmed.** System successfully extracted relation $R$ from pair $(A,B)$ and applied it to $C$ to predict $D$ with 100% accuracy (Sim ~0.71).
-  - [ ] **C308:** Transitive Inference (Path Integration).
+  - [x] **C308:** Transitive Inference (Path Integration).
+    - **Status:** ✅ **COMPLETE** (Cycle 308)
+    - **Finding:** **Path Integration Confirmed.** System successfully inferred the direct relation $A \to C$ by composing extracted relations $R_{AB}$ and $R_{BC}$ ($R_{AC} = R_{AB} \circledast R_{BC}$).
+  - [ ] **C309:** Hierarchical Classification (Is-A Relations).
     - **Status:** ⏳ **PENDING**
-    - **Hypothesis:** System can infer the relation between $A$ and $C$ given $A \to B$ and $B \to C$ by composing the relations ($R_{AC} = R_{AB} \circledast R_{BC}$).
+    - **Hypothesis:** System can classify an instance $I$ as a member of class $C$ if $I \circledast C^{-1}$ yields a generic "Is-A" vector.
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
 - **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C282 validation (with empirical confirmation + critical phenomena)
