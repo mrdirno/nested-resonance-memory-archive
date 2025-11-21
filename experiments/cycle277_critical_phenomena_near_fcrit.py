@@ -372,6 +372,16 @@ def run_campaign():
 
         results.extend(freq_results)
 
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NumpyEncoder, self).default(obj)
+
     # Save complete results
     results_file = RESULTS_DIR / "c277_critical_phenomena_results.json"
     with open(results_file, 'w') as f:
@@ -391,7 +401,7 @@ def run_campaign():
                 "energy_params": ENERGY_PARAMS
             },
             "results": results
-        }, f, indent=2)
+        }, f, indent=2, cls=NumpyEncoder)
 
     print(f"\n{'='*80}")
     print(f"CAMPAIGN COMPLETE")
