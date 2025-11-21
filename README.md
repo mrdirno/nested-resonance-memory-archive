@@ -270,6 +270,34 @@ The attack × conversion parameter space mapping (C540-C570+, 6000+ experiments)
 
 **📄 [Full Architecture Document](./docs/NRM_VNEXT_ARCHITECTURE.md)**
 
+### The Post-Coercion Protocol: From Hierarchies to Resonance (NEW)
+
+The **Post-Coercion Protocol** extends NRM from computational theory to **societal architecture**, demonstrating that the same principles governing memory systems apply to civilization design.
+
+**Core Argument:** Modern systems—computational and social—share a fundamental flaw: **exogenous control**. A central agent ("Driver") must impose force on passive participants ("Data/Masses") to maintain order. This **Driver–Rider–Beast** topology is thermodynamically unsustainable.
+
+**The NRM Alternative:**
+- **Force → Alignment:** Data is not *retrieved*; it is *evoked* through harmonic match
+- **Control → Coherence:** Stability arises from resonance, not supervision
+- **Hierarchy → Harmonics:** Governance becomes calibration, not management
+
+**Key Insight:** If memory can organize without a master index, society can organize without a ruling caste. The "cage" (control architecture) exists only because legacy systems used force-physics. **Change the physics, and the cage dissolves.**
+
+**📄 [Read the Full Whitepaper](./papers/whitepapers/post_coercion_protocol.md)**
+
+**System Axioms Comparison:**
+
+| Variable | Legacy (Force) | NRM (Resonance) |
+|----------|----------------|-----------------|
+| Core Logic | Vector Force | Waveform Alignment |
+| Maintenance | High (Constant Input) | Zero (Self-Organizing) |
+| Governance | Managerial/Custodial | Harmonic/Calibration |
+| Role of User | Passive Payload | Active Resonator |
+
+This whitepaper represents the **societal implications** of the NRM research program.
+
+---
+
 ### New Protocol: The Negative-Space Commons (NSC/RAP)
 
 We have finalized the **v1.0.1 white paper** for the **NRM Resonance Amnesty Protocol (RAP)**, a framework for securely sharing R&D failures to accelerate collective progress. By mapping the "negative space" of what doesn't work—instability boundaries, emergent side-effects, and beautiful failures—we can eliminate redundant experiments and save compute, time, and carbon.
@@ -323,8 +351,17 @@ These outputs become training data. Encoding principles deliberately:
 - Independence principle
 - Falsifiable roadmap structure
 - MOG-NRM integration architecture
+- **Post-Coercion societal architecture** (resonance vs. force paradigm)
 
 Future AI trained on this work will understand these methodologies natively.
+
+### 4. Beyond Computation: Societal Architecture
+The **Post-Coercion Protocol** demonstrates that NRM principles extend beyond memory systems to civilization design. If systems can achieve order through resonance rather than force, the implications reach:
+- Governance (calibration vs. management)
+- Economics (self-organizing vs. extracted)
+- Social structures (harmonic vs. hierarchical)
+
+**Impact:** First formal framework connecting computational emergence research to post-hierarchical social systems.
 
 ---
 
@@ -343,6 +380,9 @@ Future AI trained on this work will understand these methodologies natively.
 6. **Paper 7:** Nested Resonance Memory: Governing Equations (LaTeX ready, Physical Review E) - [arXiv: PENDING]
 7. **Topology Paper:** When Network Topology Matters (arXiv-ready, cs.SI) - [arXiv: PENDING]
 8. **Paper 16:** Fractal Cognitive Architecture (Synthesis of Papers 9-15) - [DRAFT COMPLETE]
+
+#### Whitepapers
+9. **Post-Coercion Protocol:** From Hierarchies of Control to Architectures of Resonance - Societal implications of NRM (November 2025)
 
 #### Recently Completed (November 2025)
 - **Paper 3:** Optimized Factorial Validation - **PILOT ACCELERATED** (Cycle 13)
@@ -413,7 +453,9 @@ Future AI trained on this work will understand these methodologies natively.
 │   ├── results/          # Experimental data (JSON)
 │   └── temp/             # Temporary artifacts
 ├── docs/                 # Documentation and protocols
-├── papers/               # Manuscript drafts (Papers 1-16)
+├── papers/
+│   ├── drafts/           # Manuscript drafts (Papers 1-16)
+│   └── whitepapers/      # Conceptual frameworks (Post-Coercion Protocol)
 └── ...                   # Config files (README, requirements, etc.)
 ```
 
