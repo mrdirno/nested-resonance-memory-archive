@@ -108,6 +108,17 @@ class ProtocolRegistry:
                     "enable_pooling": False # Optimization doesn't need pooling
                 }
             )
+        elif method_name == "recursive_improvement_test":
+            return ExperimentConfig(
+                name="Helios Recursive Self-Improvement (C274)",
+                duration_cycles=30,
+                agent_count=15,
+                parameters={
+                    "recursion_depth": 3,
+                    "enable_pooling": True,
+                    "burst_threshold": 2000.0
+                }
+            )
         else:
             # Default fallback
             return ExperimentConfig(
@@ -164,5 +175,9 @@ class ProtocolRegistry:
             perf = final_state.get("performance_score", 0)
             error = final_state.get("validation_error", 0.0)
             return perf > 50 and error < 0.05
+
+        elif method_name == "recursive_improvement_test":
+            # Success if improvement score is positive (simulated)
+            return final_state.get("improvement_score", 0.0) > 0.0
 
         return True
