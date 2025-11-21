@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+"""
+CYCLE 1809: NEUTRAL ZONE ANALYSIS
+Testing pattern at crossover probability (prob=0.22).
+"""
+import sys, numpy as np, math
+from datetime import datetime
+sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
+from core.fractal_agent import FractalAgent, RealityInterface
+
+CYCLE_ID = "C1809"
+CYCLES = 500
+N_DEPTHS = 5
+
+PI = math.pi
+E = math.e
+PHI = (1 + math.sqrt(5)) / 2
+
+def compute_phase_resonance(e1, d1, e2, d2):
+    pi1 = (e1 * PI * 2) % (2 * PI)
+    e_1 = (d1 * E / 4) % (2 * PI)
+    phi1 = (e1 * PHI) % (2 * PI)
+    pi2 = (e2 * PI * 2) % (2 * PI)
+    e_2 = (d2 * E / 4) % (2 * PI)
+    phi2 = (e2 * PHI) % (2 * PI)
+    v1 = [pi1, e_1, phi1]
+    v2 = [pi2, e_2, phi2]
+    dot = sum(a * b for a, b in zip(v1, v2))
+    mag1 = math.sqrt(sum(a**2 for a in v1))
+    mag2 = math.sqrt(sum(a**2 for a in v2))
+    if mag1 == 0 or mag2 == 0: return 0.0
+    return dot / (mag1 * mag2)
+
+def run_test(seed, n_initial, repro_prob):
+    reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
+    np.random.seed(seed)
+
+    for i in range(n_initial):
+        reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
+
+    for cycle in range(CYCLES):
+        pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
+        total = sum(len(p) for p in pops)
+        if total >= 3000 or total == 0: break
+
+        for d in range(N_DEPTHS):
+            for agent in pops[d]:
+                agent.recharge_energy(0.1 / (1 + d * 0.5), cap=2.0)
+
+        for agent in list(reality.get_population_agents(0)):
+            if agent.energy > 1.0 and np.random.random() < repro_prob:
+                reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
+                agent.energy -= 0.3
+
+        for d in range(N_DEPTHS - 1):
+            agents = list(reality.get_population_agents(d))
+            if len(agents) < 2: continue
+            np.random.shuffle(agents)
+            i = 0
+            while i < len(agents) - 1:
+                sim = compute_phase_resonance(agents[i].energy, d, agents[i+1].energy, d)
+                if sim >= 0.5:
+                    new_e = (agents[i].energy + agents[i+1].energy) * 0.85
+                    reality.remove_agent(agents[i].agent_id, d)
+                    reality.remove_agent(agents[i+1].agent_id, d)
+                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
+                    i += 2
+                else:
+                    i += 1
+
+        for d in range(1, N_DEPTHS):
+            for agent in list(reality.get_population_agents(d)):
+                if agent.energy > 1.3:
+                    ce = agent.energy * 0.45
+                    for j in range(2):
+                        reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
+                    reality.remove_agent(agent.agent_id, d)
+
+        for d in range(N_DEPTHS):
+            decay = 0.02 * (1 + d * 0.1) * 0.1
+            for agent in list(reality.get_population_agents(d)):
+                if not agent.consume_energy(decay):
+                    reality.remove_agent(agent.agent_id, d)
+
+    final_pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
+    return sum(1 for p in final_pops if len(p) > 0) >= 2
+
+def main():
+    print(f"CYCLE 1809: Neutral Zone | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("=" * 70)
+    print("Testing pattern at crossover probability (prob=0.22)")
+    print("=" * 70)
+
+    seeds = list(range(1809001, 1809031))
+    prob = 0.22  # Crossover probability
+
+    # Test both original dead/safe zones and inverted zones
+    n_values = [24, 29, 35, 43, 46, 51, 58, 60]
+
+    print(f"\n{'N':<8} | {'Coex':>6} | {'Orig':>10} | {'Inv':>10}")
+    print("-" * 45)
+
+    for n in n_values:
+        coex = sum(run_test(seed, n, prob) for seed in seeds) / len(seeds) * 100
+        if n in [29, 43, 58]:
+            orig = "DEAD"
+        elif n in [35, 51]:
+            orig = "safe"
+        else:
+            orig = "-"
+        if n in [24, 46, 60]:
+            inv = "DEAD"
+        elif n in [35]:
+            inv = "safe→dead"
+        else:
+            inv = "-"
+        print(f"{n:<8} | {coex:>5.0f}% | {orig:>10} | {inv:>10}")
+
+    # Calculate statistics
+    results = [sum(run_test(seed, n, prob) for seed in seeds) / len(seeds) * 100 for n in n_values]
+    print(f"\nRange: {min(results):.0f}% - {max(results):.0f}%")
+    print(f"Spread: {max(results) - min(results):.0f}pp")
+
+if __name__ == "__main__":
+    main()

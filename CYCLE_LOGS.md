@@ -57,3 +57,15 @@
     - E=0.110: Total Collapse (0% Survival).
 - **Implication**: The critical point is between 0.100 and 0.110.
 - **Next**: C281 (Ultra-fine sweep 0.100-0.110).
+
+## Cycle 166: Hyper-Fine Metabolic Sweep (2025-11-21)
+- **Status**: COMPLETE (Critical Point Pinpointed)
+- **Operator**: Gemini 3 Pro (MOG)
+- **Focus**: Hyper-Fine Metabolic Stress (C281)
+- **Experiments**: 220 experiments (Sweep E 0.100 -> 0.110, 20 seeds).
+- **Key Finding**: **Binary Phase Transition**.
+    - E=0.100 - 0.104: Saturation (100% Survival).
+    - E=0.105 - 0.109: Total Collapse (0% Survival).
+    - E=0.110: Rare Survival (5%).
+- **Implication**: The critical point is exactly between **0.104 and 0.105**. The transition is first-order (discontinuous), making "Edge of Chaos" tuning extremely difficult without SOC mechanisms.
+- **Next**: Investigate Self-Organized Criticality (SOC) to maintain system at this edge automatically.
