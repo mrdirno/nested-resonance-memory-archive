@@ -119,6 +119,17 @@ class ProtocolRegistry:
                     "burst_threshold": 2000.0
                 }
             )
+        elif method_name == "meta_controller_integration_test":
+            return ExperimentConfig(
+                name="Helios Meta-Controller Integration (C275)",
+                duration_cycles=30,
+                agent_count=15,
+                parameters={
+                    "adaptation_rate": 0.1,
+                    "enable_pooling": True,
+                    "burst_threshold": 2000.0
+                }
+            )
         else:
             # Default fallback
             return ExperimentConfig(
@@ -179,5 +190,9 @@ class ProtocolRegistry:
         elif method_name == "recursive_improvement_test":
             # Success if improvement score is positive (simulated)
             return final_state.get("improvement_score", 0.0) > 0.0
+
+        elif method_name == "meta_controller_integration_test":
+            # Success if adaptation score is positive (simulated)
+            return final_state.get("adaptation_score", 0.0) > 0.0
 
         return True
