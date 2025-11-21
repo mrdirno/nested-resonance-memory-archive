@@ -52,7 +52,7 @@ from fractal.fractal_swarm import CompositionEngine
 MAX_AGENTS = 100
 INITIAL_ENERGY = 130.0
 DEPTH_LIMIT = 7
-CYCLES_PER_CONDITION = 3000
+CYCLES_PER_CONDITION = 1000
 RESONANCE_THRESHOLD = 0.85
 
 # Parameter grids (to be varied)
@@ -282,28 +282,25 @@ def main():
     results = {} # This will store the results from parallel execution
     worker_args = [(condition, i) for i, condition in enumerate(conditions)]
     
-    # Serial execution for robustness
-    print(f"Starting serial execution of {len(conditions)} conditions...")
+    # Parallel execution
+    num_processes = min(multiprocessing.cpu_count(), 8)
+    print(f"Starting parallel execution of {len(conditions)} conditions with {num_processes} processes...")
     
-    for i, (condition, idx) in enumerate(worker_args):
-        try:
-            print(f"[{i+1}/{len(conditions)}] Running {condition.get_name()}...", end=" ", flush=True)
+    try:
+        with multiprocessing.Pool(processes=num_processes) as pool:
+            # Use starmap or map. worker_args is a list of tuples, so map works if worker expects a tuple.
+            # run_condition_worker takes a single argument (tuple).
+            results_list = pool.map(run_condition_worker, worker_args)
             
-            # Run condition
-            result = run_condition_worker((condition, idx))
-            
-            # Log success
-            print(f"DONE (Pop: {result['final_population']}, Time: {result['runtime_seconds']:.2f}s)")
+        for result in results_list:
+            print(f"DONE: {result['condition_name']} (Pop: {result['final_population']}, Time: {result['runtime_seconds']:.2f}s)")
             results[result["condition_name"]] = result
             
-            # Force flush to ensure log updates
-            sys.stdout.flush()
-            
-        except Exception as e:
-            print(f"FAILED: {e}")
-            import traceback
-            traceback.print_exc()
-            sys.stdout.flush()
+    except Exception as e:
+        print(f"FAILED: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.stdout.flush()
 
     # Analyze sensitivity
     print()
