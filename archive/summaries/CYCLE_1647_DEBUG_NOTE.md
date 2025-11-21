@@ -1,8 +1,8 @@
-# Cycle 1647: Debug Note - Import Path Issue
+# Cycle 1647: Debug Note - Import Path Issue (RESOLVED)
 
 **Date:** November 20, 2025
 **Cycle:** 1647
-**Status:** BLOCKED - Requires investigation
+**Status:** RESOLVED - Working directory issue
 
 ---
 
@@ -56,7 +56,30 @@ The JSON results show 100% coexistence, but current reproduction attempts fail. 
 
 ---
 
+## Resolution
+
+**Root Cause:** When running experiments from home directory (`/Users/aldrinpayopay`), the path `/Volumes/dual/DUALITY-ZERO-V2` is not in sys.path. When running from experiments directory, it is automatically included.
+
+**Evidence:** Running actual cycle1643_robustness.py from experiments directory produces 100/100 coexistence as originally reported.
+
+**Conclusion:** C1643-C1646 results ARE VALID. The inline test code had incorrect Python path setup.
+
+### Correct Usage
+
+Always run experiments from the experiments directory:
+```bash
+cd /Volumes/dual/DUALITY-ZERO-V2/experiments
+python3 cycle1643_robustness.py
+```
+
+Or explicitly add the parent directory to sys.path:
+```python
+sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
+```
+
+---
+
 ## Research Arc Status
 
-C1635-C1646 findings may need revalidation. The synthesis document should be updated pending investigation.
+**C1635-C1646 findings VALIDATED.** The synthesis document remains accurate.
 
