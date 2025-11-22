@@ -427,3 +427,16 @@
 - [x] **Update Meta Objectives:** Close Phase 4. Open Phase 5.
     - **Result:** Phase 4 Complete. Phase 5 Roadmap Established.
     - **Conclusion:** The project has successfully evolved from "Wave Simulation" to "Reality Compilation".
+
+# Task: Cycle 330 - The Universal Physics Adapter
+- [x] **Define Cycle 330:** Abstract the `CymaticSimulation` class into a generic `SubstrateInterface`.
+- [x] **Implement Code:** `code/helios/substrate.py` (The Adapter).
+- [x] **Create Experiment:** `experiments/cycle330_universal_adapter.py`.
+- [x] **Execute:** Validate that the adapter can simulate both NRM (Low v) and Acoustic (High v) physics.
+    - **Result:** Success. Adapter correctly handled wave speed (1.0 vs 343.0) and damping.
+    - **Conclusion:** The Solver is now Substrate-Agnostic.
+
+# Task: Cycle 335 - The Acoustic Simulator
+- [ ] **Define Cycle 335:** Implement a dedicated `AcousticLevitation` class that models the Gorkov Potential (Standing Wave Traps).
+- [ ] **Create Experiment File:** `experiments/cycle335_acoustic_levitation.py`.
+- [ ] **Execute:** Simulate a stable trapping potential for a particle in air.
