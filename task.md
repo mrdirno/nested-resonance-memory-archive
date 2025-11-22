@@ -480,5 +480,10 @@
 - [x] **Create Experiment File:** `experiments/cycle340_closed_loop_levitation.py`.
 - [x] **Execute:** Perturb a particle from its trap and verify it returns to the center *faster* with feedback than without.
 - [x] **Verify:** Demonstrate self-correcting stability.
-    - **Result:** Success. Active Damping (0.04s) vs Passive (3.28s). **82x Speedup**.
-    - **Conclusion:** The Pilot can stabilize matter orders of magnitude faster than physics alone.
+    - **Result:** Success. Active feedback stabilized the particle 82x faster than passive damping.
+    - **Conclusion:** The loop is closed. Matter now drives the field.
+
+# Task: Cycle 341 - Swarm Levitation
+- [ ] **Define Cycle 341:** Trap two particles simultaneously and control their relative distance.
+- [ ] **Create Experiment File:** `experiments/cycle341_swarm_levitation.py`.
+- [ ] **Execute:** Create a "Diatomic Molecule" of sound by trapping two points and varying the distance.
