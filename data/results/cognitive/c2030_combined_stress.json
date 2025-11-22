@@ -1,0 +1,63 @@
+{
+  "cycle": 2030,
+  "experiment": "Combined Stress Test",
+  "timestamp": "2025-11-21T17:08:36.777271",
+  "results": [
+    {
+      "label": "Baseline",
+      "num_items": 4,
+      "similarity": 0.0,
+      "noise": 0.0,
+      "accuracy": 1.0
+    },
+    {
+      "label": "High capacity",
+      "num_items": 6,
+      "similarity": 0.0,
+      "noise": 0.0,
+      "accuracy": 1.0
+    },
+    {
+      "label": "Medium similarity",
+      "num_items": 4,
+      "similarity": 0.5,
+      "noise": 0.0,
+      "accuracy": 1.0
+    },
+    {
+      "label": "Medium noise",
+      "num_items": 4,
+      "similarity": 0.0,
+      "noise": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "label": "Sim + Noise",
+      "num_items": 4,
+      "similarity": 0.5,
+      "noise": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "label": "All stress",
+      "num_items": 6,
+      "similarity": 0.5,
+      "noise": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "label": "High sim + noise",
+      "num_items": 4,
+      "similarity": 0.9,
+      "noise": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "label": "Max stress",
+      "num_items": 6,
+      "similarity": 0.9,
+      "noise": 1.0,
+      "accuracy": 1.0
+    }
+  ]
+}
