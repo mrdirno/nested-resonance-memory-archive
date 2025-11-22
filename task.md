@@ -78,3 +78,10 @@
     - [x] Run experiment.
     - [x] **RESULT:** 100% Survival across entire E_consume range (0.100-0.110) with σ=0.05. Mean population smoothly declines with increasing E_consume.
     - [x] **Conclusion:** Small variance (σ=0.05) completely eliminates the sharp critical transition, demonstrating enhanced resilience.
+
+# Task: Cycle 284 - Variance-Scaling Law
+- [x] **Execute C284**
+    - [x] Create `experiments/cycle284_variance_scaling.py` (Sweep σ 0.0 -> 0.1 at lethal E=0.105).
+    - [x] Run experiment.
+    - [x] **RESULT:** σ=0.00: 0% Survival. σ≥0.01: 100% Survival.
+    - [x] **Conclusion:** The "Variance Barrier" is extremely low. Even minimal heterogeneity (σ=0.01) is sufficient to break synchronization-induced extinction.
