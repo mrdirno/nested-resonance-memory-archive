@@ -1,0 +1,39 @@
+{
+  "cycle": 2043,
+  "experiment": "Sqrt Scaling Validation",
+  "timestamp": "2025-11-21T17:17:22.119793",
+  "scaling_law": "capacity = 2.25 * sqrt(d)",
+  "r_squared": 0.8040159783721544,
+  "results": [
+    {
+      "dimension": 256,
+      "sqrt_d": 16.0,
+      "capacity": 21,
+      "ratio": 1.3125
+    },
+    {
+      "dimension": 512,
+      "sqrt_d": 22.627416997969522,
+      "capacity": 35,
+      "ratio": 1.5467960838455725
+    },
+    {
+      "dimension": 1024,
+      "sqrt_d": 32.0,
+      "capacity": 81,
+      "ratio": 2.53125
+    },
+    {
+      "dimension": 2048,
+      "sqrt_d": 45.254833995939045,
+      "capacity": 124,
+      "ratio": 2.7400387770978716
+    },
+    {
+      "dimension": 4096,
+      "sqrt_d": 64.0,
+      "capacity": 199,
+      "ratio": 3.109375
+    }
+  ]
+}
