@@ -1,5 +1,5 @@
 """
-CYCLE 317: Active Emergence Control
+CYCLE 318: Active Emergence Control
 Objective: Use the Holographic Reasoner (Pilot) to steer the Swarm (Plane) to Criticality.
 Hypothesis: Active stewardship can maintain the system at the Edge of Chaos (c=0.195) despite the natural attractor (c=0.044).
 Author: Aldrin Payopay (aldrin.gdf@gmail.com)
@@ -215,7 +215,7 @@ def run_controlled_sim(n_agents=50, steps=300, pilot_interval=10):
     return cohesion_history, control_actions
 
 def main():
-    print("CYCLE 317: ACTIVE EMERGENCE CONTROL")
+    print("CYCLE 318: ACTIVE EMERGENCE CONTROL")
     print("===================================")
     
     # Run Control Experiment
@@ -244,7 +244,7 @@ def main():
         
     # Save results
     results = {
-        "cycle": 317,
+        "cycle": 318,
         "target": target_c,
         "final": final_c,
         "success": bool(success),
@@ -253,10 +253,10 @@ def main():
     }
     
     os.makedirs("experiments/results", exist_ok=True)
-    with open("experiments/results/c317_active_control.json", "w") as f:
+    with open("experiments/results/c318_active_control.json", "w") as f:
         json.dump(results, f, indent=2)
         
-    print("\n--- C317 Complete ---")
+    print("\n--- C318 Complete ---")
 
 if __name__ == "__main__":
     main()

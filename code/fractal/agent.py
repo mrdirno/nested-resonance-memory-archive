@@ -74,6 +74,7 @@ class AgentState:
     parent_id: Optional[str] = None
     children_ids: Set[str] = field(default_factory=set)
     cluster_id: Optional[str] = None
+    coupling_sign: float = 1.0 # 1.0 for Attractive, -1.0 for Repulsive
 
 
 class FractalAgent:
@@ -107,6 +108,7 @@ class FractalAgent:
         phase: float = 0.0,
         position: Optional[np.ndarray] = None,
         agent_id: Optional[str] = None,
+        coupling_sign: float = 1.0,
     ):
         """Initialize fractal agent with internal state space.
 
@@ -126,6 +128,7 @@ class FractalAgent:
             energy=energy,
             phase=phase,
             position=position.copy(),
+            coupling_sign=coupling_sign,
         )
 
         # Composition-decomposition history
@@ -349,6 +352,7 @@ class FractalAgent:
             "position": self.state.position.tolist(),
             "velocity": float(self.state.velocity),
             "resonance": float(self.state.resonance),
+            "coupling_sign": float(self.state.coupling_sign),
             "memory": self.state.memory.copy(),
             "birth_time": self.state.birth_time.isoformat(),
             "last_update": self.state.last_update.isoformat(),
@@ -376,6 +380,7 @@ class FractalAgent:
             phase=data["phase"],
             position=np.array(data["position"]),
             agent_id=data["agent_id"],
+            coupling_sign=data.get("coupling_sign", 1.0),
         )
 
         agent.state.velocity = data["velocity"]
