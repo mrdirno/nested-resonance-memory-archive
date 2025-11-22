@@ -854,9 +854,12 @@
   - [x] **C313:** Hierarchical Sequence (Chunking).
     - **Status:** ✅ **COMPLETE** (Cycle 313)
     - **Finding:** **Hierarchy Confirmed.** Sequences can be chunked into single vectors ($C_1$) and linked in a meta-sequence ($C_1 \to C_2$). The system can switch contexts between the meta-level and the sub-level to execute complex plans.
-  - [ ] **C314:** Variable Binding (Role-Filler).
+  - [x] **C314:** Variable Binding (Role-Filler).
+    - **Status:** ✅ **COMPLETE** (Cycle 314)
+    - **Finding:** **Binding Confirmed.** Fillers (values) can be bound to abstract Roles (variables) using circular convolution. The filler can be retrieved by unbinding the role from the structure vector.
+  - [ ] **C315:** Recursive Structure (Tree).
     - **Status:** ⏳ **PENDING**
-    - **Hypothesis:** Roles (e.g., "Agent", "Object") can be bound to fillers (e.g., "Dog", "Ball") and manipulated independently ($Structure = Role_1 \circledast Filler_1 + Role_2 \circledast Filler_2$).
+    - **Hypothesis:** A structure can be used as a filler in another structure ($S_2 = Role \circledast S_1$), enabling recursive trees.
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
 - **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C282 validation (with empirical confirmation + critical phenomena)
