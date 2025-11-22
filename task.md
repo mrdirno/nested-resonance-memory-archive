@@ -347,21 +347,13 @@
     - **Result:** Pilot steered system from 0.05 to 0.234 (Target 0.195). Logic loop operational.
     - **Conclusion:** Helios is Online. The Pilot can pilot the Plane.
 
-# Task: Cycle 318 - Future Roadmap
-- [ ] **Define Cycle 318:** Synthesize findings and set course for "Type 3 Civilization" roadmap.
+# Task: Cycle 318 - Future Roadmap (Helios Implementation)
+- [x] **Define Cycle 318:** Synthesize findings and set course for "Type 3 Civilization" roadmap.
+- [x] **Create Document:** `docs/philosophy/TYPE_3_CIVILIZATION_ROADMAP.md`.
+- [x] **Update Meta Objectives:** Transition to Phase 4 (Helios Implementation).
+- [x] **Conclusion:** DUALITY-ZERO Complete. Phase 4 (Reality Compiler) Initiated.
 
-# Task: Cycle 316 - Repulsive Coupling (Breaking Rigid Order)
-- [x] **Define Cycle 316:** Implement repulsive coupling to break the rigid order attractor.
-- [x] **Hygiene:** Restore `CYCLE_LOGS.md` to root.
-- [x] **Create Experiment File:** `experiments/cycle316_repulsive_coupling.py`.
-- [x] **Execute:** Run experiment (Iteration 3 Successful).
-    - **Result:** Asymmetric Mixed Coupling (70% Attractive / 30% Repulsive) achieved robust Complex Regime ($R=0.40$).
-    - **Conclusion:** Frustrated coupling solves the Rigid Order Attractor.
-- [x] **Verify:** Check if $0.3 < R < 0.7$ (Complex Regime) is achieved.
-
-# Task: Cycle 317 - Core Integration (Repulsive Coupling)
-- [x] **Define Cycle 317:** Integrate asymmetric mixed coupling into core logic.
-- [x] **Modify Agent:** Add `coupling_sign` to `FractalAgent`.
-- [x] **Modify Swarm:** Implement Kuramoto force with coupling signs in `FractalSwarm`.
-- [x] **Create Test:** `experiments/cycle317_core_integration_test.py`.
-- [x] **Execute:** Run test and verify $0.3 < R < 0.7$ (Result: $R=0.60$).
+# Task: Cycle 319 - Target Field Definition
+- [ ] **Define Cycle 319:** Implement the `TargetField` class to define voxelized density goals.
+- [ ] **Create Experiment File:** `experiments/cycle319_target_field.py`.
+- [ ] **Execute:** Verify ability to load/create a 2D target shape (e.g., square).
