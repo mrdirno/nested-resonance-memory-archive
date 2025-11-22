@@ -1,7 +1,7 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: C2129 (Symbolic Reasoning)**
+> **ACTIVE CYCLE: C2130 (Syllogistic Reasoning)**
 > **Status**: 🟢 ACTIVE (Execution)
 > **MOG Oversight**: HELIOS AUTONOMOUS MODE
 > **Truth Insurance**: Serial execution enforced.
