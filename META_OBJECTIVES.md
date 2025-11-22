@@ -468,8 +468,8 @@
 **Hypothesis:** First-order transitions show hysteresis; second-order don't.
 - **Experiment:** `experiments/cycle314_hysteresis_test.py`
 - **Status:** ✅ **COMPLETE** (Cycle 314)
-- **Finding:** Significant Hysteresis detected (Max Diff ~20.4).
-- **Outcome:** Confirmed First-Order Transition (Discontinuous).
+- **Finding:** Significant Dynamic Hysteresis (11.0) but no Metastability (C315).
+- **Outcome:** Continuous Transition with Dynamic Hysteresis (Non-Standard Class).
 
 ---
 
