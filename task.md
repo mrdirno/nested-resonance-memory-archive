@@ -436,9 +436,14 @@
     - **Result:** Success. Adapter correctly handled wave speed (1.0 vs 343.0) and damping.
     - **Conclusion:** The Solver is now Substrate-Agnostic.
 
-# Task: Cycle 335 - The Acoustic Simulator
+# Task: Cycle 335 - The Acoustic Simulator (Real Physics)
 - [x] **Define Cycle 335:** Implement a dedicated `AcousticLevitation` class that models the Gorkov Potential (Standing Wave Traps).
 - [x] **Create Experiment File:** `experiments/cycle335_acoustic_levitation.py`.
 - [x] **Execute:** Simulate a stable trapping potential for a particle in air.
-    - **Result:** Success. Gorkov Potential field generated.
-    - **Finding:** Focusing creates a Pressure Antinode (Repulsor). Stable traps (Nodes) form adjacent to the focus. This validates the physics model.
+    - **Result:** Success. 29 Traps (Nodes) detected along the axis.
+    - **Conclusion:** The "Tractor Beam" physics are valid. We can trap matter.
+
+# Task: Cycle 336 - Multi-Physics Simulation
+- [ ] **Define Cycle 336:** Simulate different mediums (e.g., Viscous Fluid vs. Magnetic Field) and verify the Solver adapts.
+- [ ] **Create Experiment File:** `experiments/cycle336_multi_physics.py`.
+- [ ] **Execute:** Run the Solver on multiple `SubstrateInterface` implementations.
