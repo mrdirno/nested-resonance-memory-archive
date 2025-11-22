@@ -455,6 +455,22 @@
 - **Finding:** Validated Adaptation. System achieved positive Adaptation Score (0.25).
 - **Outcome:** Confirmed meta-controller integration capability.
 
+### 25. **TSF-25: Universality Test (Micro-Independence)** ✅ COMPLETE
+**Goal:** Verify critical exponents hold for different microscopic parameters (Universality Class).
+**Hypothesis:** $\gamma/\nu$ should be robust to sight_range changes.
+- **Experiment:** `experiments/cycle312_universality_test.py`
+- **Status:** ✅ **COMPLETE** (Cycle 312)
+- **Finding:** $\gamma/\nu \approx 1.014$ (CV=7.5%) across sight ranges 10-25.
+- **Outcome:** Universality Supported. Emergence is independent of micro-parameters.
+
+### 26. **TSF-26: Hysteresis Test (Order of Transition)** ✅ COMPLETE
+**Goal:** Test if phase transition shows memory (path-dependence).
+**Hypothesis:** First-order transitions show hysteresis; second-order don't.
+- **Experiment:** `experiments/cycle314_hysteresis_test.py`
+- **Status:** ✅ **COMPLETE** (Cycle 314)
+- **Finding:** Significant Hysteresis detected (Max Diff ~20.4).
+- **Outcome:** Confirmed First-Order Transition (Discontinuous).
+
 ---
 
 ## COMPLETED OBJECTIVES (Phase 2)
