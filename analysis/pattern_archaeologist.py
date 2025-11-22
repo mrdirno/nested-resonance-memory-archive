@@ -207,6 +207,28 @@ class PatternArchaeologist:
             print("  No semantically related patterns found (even with min_weight=0.0).")
         print("------------------------------------------")
 
+    @staticmethod
+    def get_depth(node: Dict[str, Any]) -> int:
+        """
+        Calculates the maximum depth of an ancestry or descendancy tree.
+        Assumes the tree structure returned by trace_ancestry or trace_descendancy.
+        """
+        if not node.get("parents") and not node.get("children"): # Base case: leaf node
+            return 1
+        
+        max_d = 0
+        if "parents" in node:
+            for p_rel in node["parents"]:
+                depth = PatternArchaeologist.get_depth(p_rel["pattern"])
+                if depth > max_d:
+                    max_d = depth
+        if "children" in node:
+            for c_rel in node["children"]:
+                depth = PatternArchaeologist.get_depth(c_rel["pattern"])
+                if depth > max_d:
+                    max_d = depth
+        return 1 + max_d
+
 
 def print_pattern_tree(node: Dict[str, Any], indent: int = 0, relation_label: str = ""):
     """Helper function to pretty print the pattern tree."""
