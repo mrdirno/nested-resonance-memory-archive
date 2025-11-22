@@ -1,0 +1,20 @@
+{
+  "cycle": 2022,
+  "experiment": "Cognitive NRM Control",
+  "timestamp": "2025-11-21T17:02:48.029525",
+  "hypothesis": "Cognitive prediction improves NRM dynamics",
+  "results": {
+    "baseline": {
+      "avg_depth": 0.6055815097768699,
+      "max_depth": 1.45,
+      "bursts": 10.65
+    },
+    "cognitive": {
+      "avg_depth": 0.5746547316881644,
+      "max_depth": 1.4,
+      "bursts": 9.65,
+      "prevented": 0.0
+    },
+    "depth_improvement": -5.106955478231267
+  }
+}

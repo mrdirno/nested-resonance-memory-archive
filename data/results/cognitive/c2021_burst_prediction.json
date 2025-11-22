@@ -1,0 +1,10 @@
+{
+  "cycle": 2021,
+  "experiment": "Burst Prediction",
+  "timestamp": "2025-11-21T17:01:59.065373",
+  "hypothesis": "Burst cascades are predictable",
+  "results": {
+    "single_decomp_accuracy": 1.0,
+    "cascade_accuracy": 1.0
+  }
+}
