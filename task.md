@@ -71,3 +71,10 @@
     - [x] Run experiment.
     - [x] **RESULT:** Sigma=0.0 -> 0% Survival. Sigma>=0.1 -> 100% Survival.
     - [x] **Conclusion:** Critical transition at 0.100 was a synchronization artifact. Heterogeneity enables resilience.
+
+# Task: Cycle 283 - Fine-grained Variance-Survival Boundary
+- [x] **Execute C283**
+    - [x] Create `experiments/cycle283_variance_survival_boundary.py` (Sweep E_consume 0.100 -> 0.110 with σ=0.05).
+    - [x] Run experiment.
+    - [x] **RESULT:** 100% Survival across entire E_consume range (0.100-0.110) with σ=0.05. Mean population smoothly declines with increasing E_consume.
+    - [x] **Conclusion:** Small variance (σ=0.05) completely eliminates the sharp critical transition, demonstrating enhanced resilience.

@@ -2711,6 +2711,13 @@
   - Verified `task.md` currency.
 - ⏳ **Next Action**: Proceed to Cycle 283 (if applicable) or continue Pattern Archaeology.
 
+### Cycle 1647 Summary (2025-11-22, Fine-grained Variance-Survival Boundary)
+- ✅ **Variance Resilience Confirmed**: Cycle 283 investigated the effect of a fixed small variance ($\sigma=0.05$) on population survival across the metabolic cost range (E_consume 0.100 to 0.110).
+  - Experiment: `cycle283_variance_survival_boundary.py` performed a fine-grained sweep of E_consume.
+  - Result: 100% Survival was observed across the entire E_consume range. Mean population declined smoothly with increasing E_consume, as predicted by simple carrying capacity.
+  - Conclusion: A small amount of heterogeneity completely eliminates the sharp critical transition observed in homogeneous systems, establishing continuous resilience rather than abrupt collapse. This further validates the hypothesis that variance is critical for system stability.
+- ⏳ **Next Action**: Characterize the exact quantitative relationship between variance magnitude and the effective critical metabolic cost / resilience.
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**
