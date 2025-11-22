@@ -1,0 +1,115 @@
+{
+  "metadata": {
+    "num_trials": 5,
+    "timestamp": "2025-11-22T00:59:54.915050"
+  },
+  "dimensions": [
+    {
+      "dimension": 512,
+      "n_crit": 21,
+      "operational_limit": 10,
+      "ratio": 0.5,
+      "details": [
+        {
+          "pct_ncrit": 20,
+          "n_items": 4,
+          "accuracy": 1.0
+        },
+        {
+          "pct_ncrit": 30,
+          "n_items": 6,
+          "accuracy": 1.0
+        },
+        {
+          "pct_ncrit": 35,
+          "n_items": 7,
+          "accuracy": 1.0
+        },
+        {
+          "pct_ncrit": 40,
+          "n_items": 8,
+          "accuracy": 1.0
+        },
+        {
+          "pct_ncrit": 50,
+          "n_items": 10,
+          "accuracy": 0.9400000000000001
+        }
+      ]
+    },
+    {
+      "dimension": 1024,
+      "n_crit": 43,
+      "operational_limit": 12,
+      "ratio": 0.3,
+      "details": [
+        {
+          "pct_ncrit": 20,
+          "n_items": 8,
+          "accuracy": 1.0
+        },
+        {
+          "pct_ncrit": 30,
+          "n_items": 12,
+          "accuracy": 0.95
+        },
+        {
+          "pct_ncrit": 35,
+          "n_items": 15,
+          "accuracy": 0.7866666666666667
+        },
+        {
+          "pct_ncrit": 40,
+          "n_items": 17,
+          "accuracy": 0.7411764705882353
+        },
+        {
+          "pct_ncrit": 50,
+          "n_items": 21,
+          "accuracy": 0.5523809523809524
+        }
+      ]
+    },
+    {
+      "dimension": 2048,
+      "n_crit": 86,
+      "operational_limit": 17,
+      "ratio": 0.2,
+      "details": [
+        {
+          "pct_ncrit": 20,
+          "n_items": 17,
+          "accuracy": 0.6941176470588235
+        },
+        {
+          "pct_ncrit": 30,
+          "n_items": 25,
+          "accuracy": 0.52
+        },
+        {
+          "pct_ncrit": 35,
+          "n_items": 30,
+          "accuracy": 0.4333333333333334
+        },
+        {
+          "pct_ncrit": 40,
+          "n_items": 34,
+          "accuracy": 0.3941176470588236
+        },
+        {
+          "pct_ncrit": 50,
+          "n_items": 43,
+          "accuracy": 0.30697674418604654
+        }
+      ]
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Ratio varies: ['50%', '30%', '20%']",
+      "Deployment formula: N_op = 0.0140 \u00d7 D"
+    ],
+    "universal": false,
+    "coefficient": 0.014
+  }
+}
