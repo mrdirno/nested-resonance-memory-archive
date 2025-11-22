@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "dimension": 4096,
+    "n_op_expected": 57,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:17:11.938894"
+  },
+  "capacities": [
+    {
+      "n_items": 14,
+      "pct_nop": 25,
+      "accuracy": 0.7380952380952381
+    },
+    {
+      "n_items": 28,
+      "pct_nop": 50,
+      "accuracy": 0.4166666666666667
+    },
+    {
+      "n_items": 42,
+      "pct_nop": 75,
+      "accuracy": 0.2777777777777778
+    },
+    {
+      "n_items": 57,
+      "pct_nop": 100,
+      "accuracy": 0.1871345029239766
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Operating at 33% of theoretical N_crit"
+    ],
+    "validated": false
+  }
+}
