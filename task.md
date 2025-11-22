@@ -194,3 +194,15 @@
     - **Archaeology:** `PatternArchaeologist` successfully traced the lineage of a high-level "Cluster" pattern back 12 steps to the original "Self" patterns.
 - [x] **Result:** **Lineage Depth: 12**. Proven causal link between micro-interactions and macro-emergence.
 - [x] **Significance:** This provides the empirical foundation for Paper 8 ("Emergent Dynamics"), allowing us to claim that we can *audit* emergence rather than just observing it.
+
+# Task: Cycle 296 - Paper 8 Data Generation (2D Swarm Emergence)
+- [x] **Define Cycle 296:** Generate rich dataset of emergent behaviors with causal lineage for Paper 8.
+- [x] **Experiment:** `experiments/paper8_swarm_emergence_2d.py`.
+    - **Simulation:** 50 agents in 100x100 2D space with 5 resources.
+    - **Behaviors:** Resource gathering and simple flocking (cohesion).
+    - **Pattern Discovery:** Agents discovered "Self", "Interaction", "Resource Consumed", "Flock_Formed" patterns with causal linking.
+    - **Analysis:** `PatternArchaeologist` successfully identified and traced "hero" emergent patterns.
+- [x] **Result:**
+    - **Hero Flock Pattern Found:** `Observation_cf776541` (ID: `cf776541717fbc47`) with **Lineage Depth: 17**.
+    - **Hero Resource Event Found:** `Observation_0fe7fe29` (ID: `0fe7fe2958733b4b`) with **Lineage Depth: 17**.
+- [x] **Significance:** This successfully scaled up the proof-of-concept from Cycle 295, demonstrating deep and traceable causal lineages for complex emergent behaviors in a 2D environment. The generated data is suitable for the "Hero Figure" and analysis in Paper 8.
