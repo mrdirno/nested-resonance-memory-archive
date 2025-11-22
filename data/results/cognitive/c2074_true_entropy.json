@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T00:47:39.323171"
+  },
+  "conditions": [
+    {
+      "entropy_type": "none",
+      "mean_final_accuracy": 0.96,
+      "mean_accuracy": 0.9460000000000001,
+      "mean_stability": 0.920278682562158
+    },
+    {
+      "entropy_type": "synthetic",
+      "mean_final_accuracy": 0.9399999999999998,
+      "mean_accuracy": 0.868,
+      "mean_stability": 0.8922053849950243
+    },
+    {
+      "entropy_type": "real_v1",
+      "mean_final_accuracy": 0.68,
+      "mean_accuracy": 0.6859999999999999,
+      "mean_stability": 0.8997924401867239
+    },
+    {
+      "entropy_type": "real_v2",
+      "mean_final_accuracy": 0.96,
+      "mean_accuracy": 0.9259999999999999,
+      "mean_stability": 0.9025409611322365
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "V2 FIX WORKS: +28% over V1 (96% vs 68%)",
+      "Reality grounding restored: V2 \u2248 Synthetic (2% diff)",
+      "Deployment viable: 96% \u2265 80%"
+    ],
+    "fix_effective": true,
+    "reality_valid": true,
+    "deployment_viable": true
+  }
+}

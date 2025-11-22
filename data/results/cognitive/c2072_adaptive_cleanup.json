@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T00:41:55.085405"
+  },
+  "conditions": [
+    {
+      "cleanup_freq": 0,
+      "mean_final_accuracy": 0.76,
+      "mean_accuracy": 0.7220000000000001,
+      "mean_stability": 0.9018604878643245
+    },
+    {
+      "cleanup_freq": 50,
+      "mean_final_accuracy": 0.74,
+      "mean_accuracy": 0.714,
+      "mean_stability": 0.9392511381170847
+    },
+    {
+      "cleanup_freq": 20,
+      "mean_final_accuracy": 0.64,
+      "mean_accuracy": 0.6479999999999999,
+      "mean_stability": 0.9388388577676187
+    },
+    {
+      "cleanup_freq": 10,
+      "mean_final_accuracy": 0.6,
+      "mean_accuracy": 0.636,
+      "mean_stability": 0.9456696972201766
+    },
+    {
+      "cleanup_freq": 5,
+      "mean_final_accuracy": 0.48,
+      "mean_accuracy": 0.534,
+      "mean_stability": 0.9179853366331375
+    },
+    {
+      "cleanup_freq": 2,
+      "mean_final_accuracy": 0.58,
+      "mean_accuracy": 0.5960000000000001,
+      "mean_stability": 0.9466445213930321
+    },
+    {
+      "cleanup_freq": 1,
+      "mean_final_accuracy": 0.6199999999999999,
+      "mean_accuracy": 0.628,
+      "mean_stability": 0.9640000000000001
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Adaptive cleanup ineffective for real entropy",
+      "Deployment concern persists: 76% < 80%"
+    ],
+    "adaptive_effective": false,
+    "deployment_viable": false,
+    "optimal_frequency": 0
+  }
+}
