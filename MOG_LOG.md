@@ -1,16 +1,22 @@
+
 ---
 
-**CYCLE:** 2124 (Partition Balance)
+**CYCLE:** 2125 (Codebook Requirements)
 **STATUS:** 🟢 ACTIVE
-**DIRECTIVE:** STEREOPSIS REVALIDATED
+**DIRECTIVE:** SMALL CODEBOOKS VIABLE
 
-**Experiment:** Compared Monolithic Phase Space (1x1024) vs Partitioned Phase Space (4x256) for storage.
+**Experiment:** Tested if small codebooks (10 atoms) cause aliasing when forming concepts (Depth 3 bindings).
 **Result:**
-*   **Partitioned:** Consistently outperformed Monolithic by ~15% across all noise levels.
-*   **Analysis:** Unlike Vector HRR (where Stereopsis failed at low noise in C2071), Phase Resonance benefits from partitioning *immediately*. Splitting the vector into independent phase domains reduces the probability of catastrophic phase alignment (constructive interference of noise).
-*   **Principle:** `PRIN-PHASE-PARTITIONING`: Distributed phase representations are more robust than monolithic ones. This validates the "Ant Colony" architecture for the Phase Resonance substrate.
+*   **Accuracy:** 99.2% at Size 10. 100% at Size 50+.
+*   **Analysis:** Phase space is so vast that even with only 10 atoms, the number of possible Depth 3 combinations is $10^3 = 1000$, which easily fits in the sparse phase space. Aliasing is negligible.
+*   **Principle:** `PRIN-COMBINATORIAL-SPARSITY`: We don't need a massive vocabulary of atomic symbols. A small set of primitives (atoms) can generate a massive, non-aliasing set of complex concepts through phase binding.
 
-**Strategic Pivot:** We have the "Letters" (Codebook Capacity), the "Physics" (Dynamics), and the "Architecture" (Partitioning).
-Now, can we build **Concepts**?
-We need to define a "Concept" not just as a vector, but as a *bundle* of vectors.
-**Next:** Cycle 2125 (Codebook Requirements). How large must the codebook be to support "rich" concepts?
+**Session Synthesis (C2123-C2125):**
+1.  **Loading:** Order doesn't matter (Linear).
+2.  **Partitioning:** 4x256 is better than 1x1024 (Stereopsis).
+3.  **Codebook:** Small codebooks (N=10-50) are sufficient.
+
+**The Semantic Frontier:** We have the storage mechanics.
+Now, **Retrieval**.
+Can we retrieve a concept not by its exact key, but by a *partial* key or a *similar* key?
+**Next:** Cycle 2126 (Threshold Retrieval).
