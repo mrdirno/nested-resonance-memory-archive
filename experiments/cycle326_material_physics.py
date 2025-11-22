@@ -43,6 +43,10 @@ class ThresholdMatter:
         self.threshold = threshold
         self.sharpness = sharpness # For sigmoid
         
+    def apply(self, field):
+        """Defaults to sigmoid for differentiable approximation of hard step."""
+        return self.apply_sigmoid(field)
+
     def apply_hard(self, field):
         """Binary Step Function (0 or 1)."""
         return (field > self.threshold).astype(float)

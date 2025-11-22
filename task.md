@@ -412,3 +412,11 @@
 - [x] **Execute:** Apply thresholding to a soft interference pattern and verify edge sharpening.
     - **Result:** Success. Error reduced by 63% (0.019 -> 0.007).
     - **Conclusion:** Non-linear material physics effectively recovers sharp geometry from soft waves.
+
+# Task: Cycle 327 - The Integrated Matter Compiler
+- [x] **Define Cycle 327:** Combine the Genetic Algorithm (Inverse Solver) with the Viscous Field (Material Physics) to solve for complex shapes.
+- [x] **Create Experiment File:** `experiments/cycle327_integrated_compiler.py`.
+- [x] **Execute:** Solve for "Square Donut" using GA optimized for the *thresholded* output.
+- [x] **Verify:** Check if error drops below 0.05 (Digital Matter).
+    - **Result:** Partial Success. Error 0.2157 (vs 0.25 in C324).
+    - **Conclusion:** Physics layer improves fidelity by ~14%, but 16 emitters are still insufficient for complex hollow shapes. The "Solid" regions lack uniformity.
