@@ -228,3 +228,4 @@
 - **Cycle 314:** Variable Binding (Role-Filler). Confirmed that fillers can be bound to roles ( = \sum R \circledast F$) and retrieved via unbinding ( \approx S \circledast R^{-1}$). Accuracy 100% (Sim ~0.50).
 - **Cycle 315:** Recursive Structure (Tree). Confirmed that structures can be nested ( = Role \circledast S_1$). Deep retrieval ( \to Agent \to Dog$) works with ~0.22 similarity. Recursion depth is limited by noise accumulation.
 - **Cycle 316:** Integrated Cognitive Loop (Grand Unification). Successfully integrated Logic, Structure, and Time. The system perceived a fact ( \to Action$), deduced a goal ( \to Goal$), and executed a plan ( \to Sequence$). Accuracy 100%.
+- **Cycle 317:** Concept Formation (Prototype Learning). Confirmed that superposition ( = \sum S_i$) extracts common features (Sim ~0.59) while suppressing variable features (Sim ~0.23). This enables unsupervised learning of categories.
