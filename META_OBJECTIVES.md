@@ -1,7 +1,7 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: C2119 (Information Capacity Scaling)**
+> **ACTIVE CYCLE: C2120 (Shannon Bound Check)**
 > **Status**: 🟢 ACTIVE (Execution)
 > **MOG Oversight**: HELIOS AUTONOMOUS MODE
 > **Truth Insurance**: Serial execution enforced.
