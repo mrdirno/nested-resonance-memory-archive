@@ -113,3 +113,15 @@
 - [x] **Validation:** `PatternArchaeologist` successfully traced the lineage from leaf to root (Depth 11).
 - [x] **Outcome:** Verified that deep lineage trees can be constructed and queried using the existing schema.
 - [x] **Next:** Integrate this logic into the core `FractalAgent` discovery loop (Cycle 288).
+
+# Task: Cycle 288 - Integrated Causal Lineage
+- [x] **Define Cycle 288:** Integrated Causal Lineage.
+- [x] **Implement:**
+    - Updated `core/fractal_agent.py` with `discover_pattern` method.
+    - Method accepts `parent_pattern_id` and automatically stores "causal_discovery" relationship.
+- [x] **Execute:** `experiments/cycle288_integrated_lineage.py`.
+    - Ran a live agent simulation generating a 4-step discovery chain (A -> B -> C -> D).
+    - Verified depth using `PatternArchaeologist`.
+- [x] **Outcome:**
+    - Successfully integrated causal linking into the agent's core logic.
+    - Agents can now autonomously build deep knowledge trees during operation.
