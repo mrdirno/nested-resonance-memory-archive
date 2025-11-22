@@ -1,0 +1,58 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:46:00.885147"
+  },
+  "measurements": [
+    {
+      "k_partitions": 1,
+      "n_items": 12,
+      "accuracy": 1.0,
+      "total_bits": 43.01955000865387,
+      "bits_per_dim": 0.04201127930532605,
+      "bits_per_partition": 43.01955000865387
+    },
+    {
+      "k_partitions": 2,
+      "n_items": 24,
+      "accuracy": 1.0,
+      "total_bits": 110.03910001730775,
+      "bits_per_dim": 0.1074600586106521,
+      "bits_per_partition": 55.01955000865387
+    },
+    {
+      "k_partitions": 4,
+      "n_items": 48,
+      "accuracy": 1.0,
+      "total_bits": 268.0782000346155,
+      "bits_per_dim": 0.2617951172213042,
+      "bits_per_partition": 67.01955000865388
+    },
+    {
+      "k_partitions": 8,
+      "n_items": 96,
+      "accuracy": 0.96875,
+      "total_bits": 612.4015125670675,
+      "bits_per_dim": 0.5980483521162768,
+      "bits_per_partition": 76.55018907088343
+    },
+    {
+      "k_partitions": 16,
+      "n_items": 192,
+      "accuracy": 0.9652777777777778,
+      "total_bits": 1405.7463834669877,
+      "bits_per_dim": 1.3727992026044802,
+      "bits_per_partition": 87.85914896668673
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Bits per partition: 65.9 \u00b1 15.7",
+      "Per-partition efficiency: 25.7% of D/4=256.0",
+      "Total capacity formula: K \u00d7 66 bits",
+      "Scaling rate: 91.4 bits per partition added"
+    ]
+  }
+}
