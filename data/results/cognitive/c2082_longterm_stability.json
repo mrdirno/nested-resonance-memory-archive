@@ -1,0 +1,206 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_items": 14,
+    "num_cycles": 1000,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T01:05:17.168837"
+  },
+  "trials": [
+    {
+      "trial": 0,
+      "history": [
+        {
+          "cycle": 0,
+          "accuracy": 0.6428571428571429
+        },
+        {
+          "cycle": 100,
+          "accuracy": 0.9285714285714286
+        },
+        {
+          "cycle": 200,
+          "accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 300,
+          "accuracy": 1.0
+        },
+        {
+          "cycle": 400,
+          "accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 500,
+          "accuracy": 0.7857142857142857
+        },
+        {
+          "cycle": 600,
+          "accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 700,
+          "accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 800,
+          "accuracy": 0.7857142857142857
+        },
+        {
+          "cycle": 900,
+          "accuracy": 0.9285714285714286
+        }
+      ]
+    },
+    {
+      "trial": 1,
+      "history": [
+        {
+          "cycle": 0,
+          "accuracy": 0.5
+        },
+        {
+          "cycle": 100,
+          "accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 200,
+          "accuracy": 1.0
+        },
+        {
+          "cycle": 300,
+          "accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 400,
+          "accuracy": 1.0
+        },
+        {
+          "cycle": 500,
+          "accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 600,
+          "accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 700,
+          "accuracy": 0.9285714285714286
+        },
+        {
+          "cycle": 800,
+          "accuracy": 0.7142857142857143
+        },
+        {
+          "cycle": 900,
+          "accuracy": 0.9285714285714286
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "history": [
+        {
+          "cycle": 0,
+          "accuracy": 0.5714285714285714
+        },
+        {
+          "cycle": 100,
+          "accuracy": 0.9285714285714286
+        },
+        {
+          "cycle": 200,
+          "accuracy": 0.7857142857142857
+        },
+        {
+          "cycle": 300,
+          "accuracy": 1.0
+        },
+        {
+          "cycle": 400,
+          "accuracy": 0.7857142857142857
+        },
+        {
+          "cycle": 500,
+          "accuracy": 0.7857142857142857
+        },
+        {
+          "cycle": 600,
+          "accuracy": 0.7857142857142857
+        },
+        {
+          "cycle": 700,
+          "accuracy": 0.7857142857142857
+        },
+        {
+          "cycle": 800,
+          "accuracy": 0.9285714285714286
+        },
+        {
+          "cycle": 900,
+          "accuracy": 0.8571428571428571
+        }
+      ]
+    }
+  ],
+  "aggregated": [
+    {
+      "cycle": 0,
+      "mean_accuracy": 0.5714285714285714,
+      "std_accuracy": 0.05832118435198045
+    },
+    {
+      "cycle": 100,
+      "mean_accuracy": 0.9047619047619048,
+      "std_accuracy": 0.03367175148507373
+    },
+    {
+      "cycle": 200,
+      "mean_accuracy": 0.8809523809523809,
+      "std_accuracy": 0.08908708063747481
+    },
+    {
+      "cycle": 300,
+      "mean_accuracy": 0.9523809523809524,
+      "std_accuracy": 0.0673435029701474
+    },
+    {
+      "cycle": 400,
+      "mean_accuracy": 0.8809523809523809,
+      "std_accuracy": 0.08908708063747481
+    },
+    {
+      "cycle": 500,
+      "mean_accuracy": 0.8095238095238094,
+      "std_accuracy": 0.033671751485073675
+    },
+    {
+      "cycle": 600,
+      "mean_accuracy": 0.8333333333333334,
+      "std_accuracy": 0.033671751485073675
+    },
+    {
+      "cycle": 700,
+      "mean_accuracy": 0.8571428571428571,
+      "std_accuracy": 0.05832118435198045
+    },
+    {
+      "cycle": 800,
+      "mean_accuracy": 0.8095238095238096,
+      "std_accuracy": 0.08908708063747481
+    },
+    {
+      "cycle": 900,
+      "mean_accuracy": 0.9047619047619048,
+      "std_accuracy": 0.03367175148507373
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Unstable: 57% \u2192 90% (\u0394 = 33%)",
+      "Drops below threshold: min=57%",
+      "No degradation trend detected"
+    ],
+    "stable": false
+  }
+}
