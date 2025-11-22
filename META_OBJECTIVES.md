@@ -2698,7 +2698,18 @@
   - `C186 V6: Ultra-low frequency test` (PID 36859) is actively running.
   - `C256: H1×H4` is still running (150h+ elapsed, I/O bound, extended blocking, weeks-months expected).
 - ✅ **Infrastructure Maintenance**: Moved `analyze_emergence.py` and `pattern_archaeologist.py` to `analysis/` for better organization.
-- ⏳ **Next Action**: Monitor ongoing experiments and await user action for arXiv submissions.
+- ⏳ **Next Action**: Monitor ongoing experiments and await user action for arXiv submissions. 
+
+### Cycle 1646 Summary (2025-11-22, Metabolic Criticality & Variance Survival)
+- ✅ **Critical Transition Resolved**: Investigated "sharp transition" at E=0.100 found in Cycle 281.
+  - Hypothesis: Transition was a synchronization artifact due to zero variance.
+  - Experiment: Cycle 282 tested E=0.105 (lethal) with variable initial energy variance (σ).
+  - Result: σ=0.0 → 0% Survival. σ≥0.1 → 100% Survival.
+  - Conclusion: **Heterogeneity is a prerequisite for resilience.** Uniform populations collapse; diverse ones adapt.
+- ✅ **Repo Hygiene**:
+  - Archived `experiments/cycle281_phase_boundary_exponential.py` to `archive/experiments/`.
+  - Verified `task.md` currency.
+- ⏳ **Next Action**: Proceed to Cycle 283 (if applicable) or continue Pattern Archaeology.
 
 ## PERPETUAL OPERATION VALIDATED
 
