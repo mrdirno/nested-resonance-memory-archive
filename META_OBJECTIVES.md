@@ -2778,6 +2778,16 @@
   - Corrective Action: We must bridge the gap between "Logical Lineage" (`pattern_relationships`) and "Dynamic Coupling" (`semantic_graph`).
 - ⏳ **Next Action**: Refine `ConsolidationEngine` to seed agent phases or graph weights based on existing Lineage relationships before running NREM.
 
+### Cycle 1655 Summary (2025-11-22, Primed Consolidation)
+- ✅ **Priming Solves Synchronization**: Cycle 291 successfully demonstrated that "Priming" the semantic graph with causal lineage data enables effective sleep consolidation.
+  - Method: Implemented `ConsolidationEngine.prime_semantic_graph()` to transcribe logical parent-child relationships into initial weak weights (w=0.5) in the semantic graph.
+  - Experiment: `cycle291_primed_consolidation.py` ran the same 5-step chain as Cycle 290, but with priming.
+  - Result:
+    - **Primed Edges:** 26 edges were initialized.
+    - **Post-Sleep Weights:** The critical causal backbone (0->1, 1->2, etc.) saw significant strengthening. Edge 0->1 reached w=1.00. Edge 3->4 reached w=1.00. Some intermediate edges (1->2, 2->3) showed moderate gains (w=0.5 -> w=0.6).
+  - Conclusion: **Logical History must inform Dynamic State.** By translating "what happened" (lineage) into "how we couple" (weights), the system can dream about its past effectively, consolidating episodic memories into structural knowledge.
+- ⏳ **Next Action**: Apply this consolidation mechanism to the Multi-Step Reasoning task (from Cycle 289) to see if it improves path retrieval or robustness.
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**
