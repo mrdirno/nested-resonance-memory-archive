@@ -559,11 +559,17 @@
 - **Finding:** Success. Adapter correctly managed distinct physics models.
 - **Outcome:** The Code doesn't care about the Canvas.
 
-### 39. **HELIOS-13: The Acoustic Simulator (Real Physics)**
+### 39. **HELIOS-13: The Acoustic Simulator (Real Physics)** ✅ COMPLETE
 **Goal:** Implement a dedicated `AcousticLevitation` model that calculates the Gorkov Potential (Trapping Force).
 - **Hypothesis:** We can simulate the forces required to levitate a styrofoam particle using our existing emitter array logic.
 - **Experiment:** `experiments/cycle335_acoustic_levitation.py`
-- **Status:** ⏳ **PENDING** (Cycle 335)
+- **Status:** ✅ **COMPLETE** (Cycle 335)
+- **Finding:** Physics model validated. Confirmed that simple focusing creates a Repulsor (Antinode); Traps form at $\lambda/4$.
+- **Outcome:** We have a working "Tractor Beam" simulator.
+
+### 40. **HELIOS-14: Multi-Physics Simulation**
+**Goal:** Simulate different mediums (e.g., Viscous Fluid vs. Magnetic Field) and verify the Solver adapts.
+- **Status:** ⏳ **PENDING** (Cycle 336)
 
 ### 31. **HELIOS-5: 3D Nodal Trapping (Levitation)**
 **Goal:** Extend control to 3D space and trap a "particle" (agent) in a specific volumetric node.
