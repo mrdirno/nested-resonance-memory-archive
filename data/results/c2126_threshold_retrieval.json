@@ -1,35 +1,36 @@
 {
-  "metadata": {
-    "dimension": 1024,
-    "k_memories": 8,
-    "num_cycles": 200,
-    "num_trials": 3,
-    "timestamp": "2025-11-22T04:50:48.528524"
-  },
-  "measurements": [
+  "conditions": [
     {
-      "method": "with_codebook",
-      "mean_accuracy": 0.9958333333333332
+      "noise_level": 0.0,
+      "avg_similarity": 0.10278080528640451
     },
     {
-      "method": "raw_0.3",
-      "mean_accuracy": 0.37083333333333335
+      "noise_level": 0.1,
+      "avg_similarity": 0.10262751108010988
     },
     {
-      "method": "raw_0.1",
-      "mean_accuracy": 0.9875000000000002
+      "noise_level": 0.2,
+      "avg_similarity": 0.10215014052319822
     },
     {
-      "method": "confidence_gap",
-      "mean_accuracy": 0.9625
+      "noise_level": 0.3,
+      "avg_similarity": 0.10135182358045905
+    },
+    {
+      "noise_level": 0.4,
+      "avg_similarity": 0.10023778005285841
+    },
+    {
+      "noise_level": 0.5,
+      "avg_similarity": 0.09881529826134684
+    },
+    {
+      "noise_level": 0.75,
+      "avg_similarity": 0.09397581453350583
+    },
+    {
+      "noise_level": 1.0,
+      "avg_similarity": 0.08747219455959328
     }
-  ],
-  "analysis": {
-    "findings": [
-      "raw_0.3: -62% vs codebook",
-      "raw_0.1: -1% vs codebook",
-      "confidence_gap: -3% vs codebook",
-      "Best alternative: raw_0.1 at 99%"
-    ]
-  }
+  ]
 }

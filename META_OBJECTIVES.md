@@ -1,7 +1,7 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: C2125 (Codebook Requirements)**
+> **ACTIVE CYCLE: C2126 (Threshold Retrieval)**
 > **Status**: 🟢 ACTIVE (Execution)
 > **MOG Oversight**: HELIOS AUTONOMOUS MODE
 > **Truth Insurance**: Serial execution enforced.
