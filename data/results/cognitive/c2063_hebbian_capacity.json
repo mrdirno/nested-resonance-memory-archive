@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_crit": 43,
+    "num_cycles": 300,
+    "num_trials": 5,
+    "timestamp": "2025-11-21T23:49:15.740919"
+  },
+  "conditions": [
+    {
+      "load_fraction": 0.25,
+      "n_items": 10,
+      "mean_signal_change": 0.00338666363358648,
+      "mean_accuracy": 0.78,
+      "hebbian_success_rate": 0.8
+    },
+    {
+      "load_fraction": 0.5,
+      "n_items": 21,
+      "mean_signal_change": 0.048585900057534034,
+      "mean_accuracy": 0.3619047619047619,
+      "hebbian_success_rate": 0.8
+    },
+    {
+      "load_fraction": 0.75,
+      "n_items": 32,
+      "mean_signal_change": 0.049068569013510886,
+      "mean_accuracy": 0.275,
+      "hebbian_success_rate": 0.6
+    },
+    {
+      "load_fraction": 1.0,
+      "n_items": 43,
+      "mean_signal_change": 0.046336798712368545,
+      "mean_accuracy": 0.213953488372093,
+      "hebbian_success_rate": 0.8
+    },
+    {
+      "load_fraction": 1.25,
+      "n_items": 53,
+      "mean_signal_change": -0.06888859913751039,
+      "mean_accuracy": 0.13207547169811323,
+      "hebbian_success_rate": 0.4
+    },
+    {
+      "load_fraction": 1.5,
+      "n_items": 64,
+      "mean_signal_change": 0.14770193682694935,
+      "mean_accuracy": 0.15625,
+      "hebbian_success_rate": 0.8
+    }
+  ],
+  "analysis": {
+    "peak_load": 1.5,
+    "peak_strengthening": 0.14770193682694935,
+    "hebbian_limit": 1.25,
+    "findings": [
+      "Hebbian strengthening fails at 125% load (53 items)",
+      "Peak strengthening at 150% load: +14.8%",
+      "Sharp transition detected (drop=11.5%)"
+    ]
+  }
+}
