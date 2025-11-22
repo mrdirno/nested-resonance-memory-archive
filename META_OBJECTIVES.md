@@ -579,11 +579,19 @@
 - **Finding:** Confirmed. The Compiler automatically adjusted phase delays for the 343x difference in wave speed.
 - **Outcome:** Material Agnosticism Verified.
 
-### 31. **HELIOS-5: 3D Nodal Trapping (Levitation)**
+### 31. **HELIOS-5: 3D Nodal Trapping (Levitation)** ✅ COMPLETE
 **Goal:** Extend control to 3D space and trap a "particle" (agent) in a specific volumetric node.
 - **Hypothesis:** 3D interference patterns can create stable potential wells for agent confinement.
-- **Experiment:** `experiments/cycle333_3d_levitation.py`
-- **Status:** ⏳ **PENDING** (Cycles 331-340)
+- **Experiment:** `experiments/cycle337_3d_levitation.py`
+- **Status:** ✅ **COMPLETE** (Cycle 337)
+- **Finding:** 9128 volumetric traps detected. Central trap confirmed stable.
+- **Outcome:** 3D Addressing unlocked.
+
+### 41. **HELIOS-15: The Active Matter Loop (Telekinesis)**
+**Goal:** Integrate the Cognitive Loop to dynamically shift the trap location, dragging the particle with it.
+- **Hypothesis:** Continuously varying the phase $\phi(t)$ will move the node $x(t)$ without losing confinement.
+- **Experiment:** `experiments/cycle338_active_matter_loop.py`
+- **Status:** ⏳ **PENDING** (Cycle 338)
 
 ---
 

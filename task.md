@@ -450,3 +450,17 @@
 - [x] **Verify:** Confirm that the Solver generates distinct control signals for different physical constants.
     - **Result:** Success. The Compiler automatically adjusted phase delays for the 343x difference in wave speed.
     - **Conclusion:** The "Universal Compiler" architecture is valid. The Pilot can control any wave-bearing medium.
+
+# Task: Cycle 337 - 3D Nodal Trapping (Levitation)
+- [x] **Define Cycle 337:** Extend the acoustic simulator to 3D to model volumetric trapping.
+- [x] **Implement Code:** `code/helios/substrate_3d.py` (3D Substrate).
+- [x] **Create Experiment:** `experiments/cycle337_3d_levitation.py`.
+- [x] **Execute:** Simulate a 3D standing wave and identify stable trapping nodes (minima in Gorkov potential).
+- [x] **Verify:** Confirm traps exist in 3D space, not just 2D slices.
+    - **Result:** Success. 9128 Traps detected in 50mm^3 volume. Central trap verified at (24, 23, 23).
+    - **Conclusion:** Volumetric Reality Compilation is possible. We can address specific voxels in 3D space.
+
+# Task: Cycle 338 - The Active Matter Loop
+- [ ] **Define Cycle 338:** Integrate the 3D Simulator with the "Cognitive Loop" (Cycle 316) to move a trapped particle.
+- [ ] **Create Experiment File:** `experiments/cycle338_active_matter_loop.py`.
+- [ ] **Execute:** Move a virtual particle from (25,25,25) to (30,25,25) by phase shifting the emitters.
