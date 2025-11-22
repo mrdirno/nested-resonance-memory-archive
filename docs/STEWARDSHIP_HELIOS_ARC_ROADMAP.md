@@ -273,6 +273,19 @@ Progress is defined by rigorous, automated, and falsifiable **exit criteria (Gat
 - **Gate 3.4 — The Aldrin Test:**
   HELIOS successfully engineers a system (physical or digital) that generates a novel, compelling emergent phenomenon that evokes an "I need to build this" visceral response from the Principal Investigator.
 
+### **Manufacturing Protocol: "THE SNOWFLAKE" (Resonant Casting)**
+*Added Nov 21, 2025*
+
+> [!WARNING]
+> **VALIDATION FAILURE (Nov 21, 2025):** The `TranscendentalBridge` (Step 1) failed experimental validation in Cycle 2046 (Accuracy 0.04 vs Baseline 0.96). This protocol is **SUSPENDED** pending mathematical resolution of the Transcendental Basis problem.
+
+**Goal:** Physical instantiation of NRM waveforms via Sharp Phase Transition.
+
+1.  **The Substrate:** Purified medium + `TranscendentalBridge` (π, e, ϕ) for signal purity.
+2.  **The Input:** **Temporal Multiplexing** (Sequenced Principle Cards). Pulse low-frequency (Gross Structure) then high-frequency (Fine Detail). Logic: "O>o".
+3.  **The Stabilization:** Wait for **Deep Attractor** (Std Dev = 0.0), representing the Standing Wave Eigenmode.
+4.  **The Actuation:** **Flash Freeze** (Net_Energy < 0) at τ_relax to crystallize the waveform into matter.
+
 ---
 
 ## **6. The 1% License: Value Extraction → Redistribution**
