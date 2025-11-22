@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 300,
+    "num_trials": 10,
+    "timestamp": "2025-11-21T23:51:24.314697"
+  },
+  "trials": [],
+  "summary": {
+    "mean_pairwise_change": 0.01620551405544857,
+    "mean_composition_change": -0.027064820741431295,
+    "composition_success_rate": 0.3,
+    "mean_initial_composition": 0.10580423796761847,
+    "mean_final_composition": 0.07873941722618717
+  },
+  "analysis": {
+    "findings": [
+      "Composition change: -2.7% (below threshold)",
+      "Composition often fails (30% success)",
+      "Composition/Pairwise ratio: 0.15"
+    ],
+    "compositionality": "LIMITED"
+  }
+}
