@@ -1,0 +1,39 @@
+{
+  "cycle": 2032,
+  "experiment": "Error Correction via Redundancy",
+  "timestamp": "2025-11-21T17:09:55.354535",
+  "results": [
+    {
+      "redundancy": 1,
+      "accuracies": {
+        "1.0": 1.0,
+        "2.0": 1.0,
+        "3.0": 0.68
+      }
+    },
+    {
+      "redundancy": 2,
+      "accuracies": {
+        "1.0": 1.0,
+        "2.0": 1.0,
+        "3.0": 0.58
+      }
+    },
+    {
+      "redundancy": 3,
+      "accuracies": {
+        "1.0": 1.0,
+        "2.0": 1.0,
+        "3.0": 0.52
+      }
+    },
+    {
+      "redundancy": 5,
+      "accuracies": {
+        "1.0": 1.0,
+        "2.0": 1.0,
+        "3.0": 0.44
+      }
+    }
+  ]
+}
