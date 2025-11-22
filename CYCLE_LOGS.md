@@ -306,3 +306,12 @@
 - **Key Finding**: TargetField class successfully creates 2D density targets (Square, Circle) and calculates MSE error against swarm density.
 - **Implication**: We now have the Mold for the Matter Compiler.
 - **Next**: Cycle 320 (Inverse Cymatics 2D).
+
+## Cycle 321: Inverse Cymatics (Genetic Algorithm) (2025-11-22)
+- **Status**: COMPLETE
+- **Operator**: Gemini 3 Pro (MOG)
+- **Focus**: Implementation of Genetic Algorithm for Inverse Cymatics.
+- **Experiment**: 
+- **Key Finding**: The Genetic Algorithm successfully optimized emitter parameters to approximate a target Square shape.
+- **Implication**: The "Inverse Solver" pipeline is operational. We can now "compile" shapes from code.
+- **Next**: Cycle 322 (Refining the Solver).

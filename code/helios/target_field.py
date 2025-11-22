@@ -1,93 +1,92 @@
 import numpy as np
 from PIL import Image
 
+import numpy as np
+from PIL import Image
+
 class TargetField:
-    def __init__(self, resolution=(100, 100)):
-        """
-        Initialize the TargetField.
-        
-        Args:
-            resolution (tuple): Grid size (height, width).
-        """
-        self.resolution = resolution
-        self.field = np.zeros(resolution, dtype=float)
+    """
+    Represents a 2D grid of target density values.
+    Used to define the desired emergent pattern for Inverse Cymatics.
+    """
+    def __init__(self, width: int, height: int, default_density: float = 0.0):
+        if not isinstance(width, int) or width <= 0:
+            raise ValueError("Width must be a positive integer.")
+        if not isinstance(height, int) or height <= 0:
+            raise ValueError("Height must be a positive integer.")
+            
+        self.width = width
+        self.height = height
+        self.field = np.full((height, width), default_density, dtype=float)
+        self.default_density = default_density
 
-    def create_square(self, center, size):
-        """
-        Create a square target in the field.
-        
-        Args:
-            center (tuple): (y, x) coordinates of the center.
-            size (int): Side length of the square.
-        """
-        y_c, x_c = center
+    def set_point(self, x: int, y: int, density: float = 1.0):
+        """Sets the density at a specific point."""
+        if 0 <= x < self.width and 0 <= y < self.height:
+            self.field[y, x] = density
+        else:
+            raise IndexError(f"Coordinates ({x},{y}) out of bounds for field of size ({self.width},{self.height}).")
+
+    def set_square(self, x_center: int, y_center: int, size: int, density: float = 1.0):
+        """Fills a square region with the given density."""
         half_size = size // 2
-        
-        y_min = max(0, int(y_c - half_size))
-        y_max = min(self.resolution[0], int(y_c + half_size))
-        x_min = max(0, int(x_c - half_size))
-        x_max = min(self.resolution[1], int(x_c + half_size))
-        
-        self.field[y_min:y_max, x_min:x_max] = 1.0
+        x_min = max(0, x_center - half_size)
+        x_max = min(self.width, x_center + half_size + (size % 2))
+        y_min = max(0, y_center - half_size)
+        y_max = min(self.height, y_center + half_size + (size % 2))
 
-    def create_circle(self, center, radius):
+        self.field[y_min:y_max, x_min:x_max] = density
+
+    def set_circle(self, x_center: int, y_center: int, radius: int, density: float = 1.0):
+        """Fills a circular region with the given density."""
+        for y in range(self.height):
+            for x in range(self.width):
+                if (x - x_center)**2 + (y - y_center)**2 <= radius**2:
+                    self.field[y, x] = density
+    
+    def get_density(self, x: int, y: int) -> float:
+        """Returns the target density at a given coordinate."""
+        if 0 <= x < self.width and 0 <= y < self.height:
+            return self.field[y, x]
+        return self.default_density # Or raise IndexError
+
+    def get_field_as_numpy_array(self) -> np.ndarray:
+        """Returns the entire field as a NumPy array."""
+        return self.field
+
+    def calculate_error(self, actual_density_field: np.ndarray) -> float:
         """
-        Create a circular target in the field.
+        Calculates the Mean Squared Error (MSE) between the target field
+        and an actual density field.
+        The actual_density_field must have the same shape.
+        """
+        if self.field.shape != actual_density_field.shape:
+            raise ValueError(f"Shape mismatch: Target {self.field.shape}, Actual {actual_density_field.shape}")
         
-        Args:
-            center (tuple): (y, x) coordinates of the center.
-            radius (float): Radius of the circle.
-        """
-        y_c, x_c = center
-        y, x = np.ogrid[:self.resolution[0], :self.resolution[1]]
-        mask = (y - y_c)**2 + (x - x_c)**2 <= radius**2
-        self.field[mask] = 1.0
+        # We only care about matching where the target density is > 0
+        # For inverse cymatics, empty space is as important as filled space
+        # So, calculate MSE over the entire field.
+        return np.mean((self.field - actual_density_field)**2)
+
+    def display(self, scale: int = 1):
+        """Prints a text-based representation of the field."""
+        print(f"Target Field ({self.width}x{self.height}):")
+        for y in range(self.height):
+            row = ""
+            for x in range(self.width):
+                char = "#" if self.field[y, x] > 0.5 else "."
+                row += char * scale
+            print(row)
 
     def load_image(self, path):
         """
         Load a target from an image file.
         The image is resized to the field resolution and converted to grayscale.
-        
-        Args:
-            path (str): Path to the image file.
         """
         try:
             img = Image.open(path).convert('L')
-            img = img.resize((self.resolution[1], self.resolution[0])) # PIL uses (width, height)
+            img = img.resize((self.width, self.height)) # PIL uses (width, height)
             img_data = np.array(img)
             self.field = img_data / 255.0
         except Exception as e:
             print(f"Error loading image: {e}")
-
-    def get_error(self, current_density):
-        """
-        Calculate the error between the current swarm density and the target field.
-        
-        Args:
-            current_density (np.array): 2D array of the same shape as the field.
-            
-        Returns:
-            float: Mean Squared Error (MSE).
-        """
-        if current_density.shape != self.resolution:
-            raise ValueError(f"Density shape {current_density.shape} does not match field resolution {self.resolution}")
-        
-        return np.mean((self.field - current_density)**2)
-
-    def visualize(self):
-        """
-        Return a string representation of the field for console visualization.
-        """
-        chars = " .:-=+*#%@"
-        result = []
-        step_y = max(1, self.resolution[0] // 20)
-        step_x = max(1, self.resolution[1] // 40) # Aspect ratio correction
-        
-        for y in range(0, self.resolution[0], step_y):
-            row = ""
-            for x in range(0, self.resolution[1], step_x):
-                val = self.field[y, x]
-                char_idx = int(val * (len(chars) - 1))
-                row += chars[char_idx]
-            result.append(row)
-        return "\n".join(result)
