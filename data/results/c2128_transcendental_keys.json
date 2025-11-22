@@ -1,39 +1,19 @@
 {
-  "metadata": {
-    "dimension": 1024,
-    "k_memories": 8,
-    "num_cycles": 200,
-    "num_trials": 3,
-    "timestamp": "2025-11-22T04:52:38.935882"
-  },
-  "measurements": [
-    {
-      "key_type": "random",
-      "mean_accuracy": 0.9958333333333332,
-      "std": 0.005892556509887875
+  "distributions": {
+    "random": {
+      "mean": 0.027716399716077197,
+      "std": 0.013894379947632485,
+      "max": 0.07958293637660348
     },
-    {
-      "key_type": "pi",
-      "mean_accuracy": 1.0,
-      "std": 0.0
+    "pi_self": {
+      "mean": 1.0,
+      "std": 1.4766383598692854e-16,
+      "max": 1.0000000000000004
     },
-    {
-      "key_type": "e",
-      "mean_accuracy": 0.9875000000000002,
-      "std": 1.1102230246251565e-16
-    },
-    {
-      "key_type": "phi",
-      "mean_accuracy": 1.0,
-      "std": 0.0
+    "pi_phi": {
+      "mean": 0.0003721032921665802,
+      "std": 2.5697609913422514e-11,
+      "max": 0.0003721033469891093
     }
-  ],
-  "analysis": {
-    "findings": [
-      "pi: +0% vs random",
-      "e: -1% vs random",
-      "phi: +0% vs random",
-      "Best transcendental: pi at 100%"
-    ]
   }
 }
