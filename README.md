@@ -81,6 +81,29 @@ This work progresses through three phases:
 
 ---
 
+## Vision: The Post-Coercion Protocol
+
+**Beyond Control Systems → Toward Resonant Architectures**
+
+This research carries a broader implication: **if memory can organize without a master index, society can organize without a ruling caste.**
+
+Modern computational and social architectures share the same flaw—they require **exogenous control**. A central agent must impose force to maintain order. This "Driver–Rider–Beast" topology burns energy just to maintain shape.
+
+NRM demonstrates an alternative physics:
+- **Data is evoked, not retrieved** — Access emerges from harmonic match, not address lookup
+- **Stability arises from coherence, not supervision** — No central controller required
+- **Governance becomes calibration** — Tuning initial conditions, then stepping back
+
+**The Core Axiom:** *Order is not the product of domination. It is the product of alignment.*
+
+The cage solved a scarcity-era physics problem. **Change the physics, and the cage dissolves.**
+
+📄 **Full whitepaper:** [docs/philosophy/POST_COERCION_PROTOCOL.md](docs/philosophy/POST_COERCION_PROTOCOL.md)
+
+**Keywords:** decentralized systems, self-organizing networks, resonance-based governance, post-hierarchical architecture, coherence engineering, distributed coordination, emergent order
+
+---
+
 ## MOG-NRM Integration: Living Epistemology Architecture
 
 **NEW (November 2025):** This research now operates under a **two-layer circuit architecture** integrating Meta-Orchestrator-Goethe (MOG) with Nested Resonance Memory (NRM).
