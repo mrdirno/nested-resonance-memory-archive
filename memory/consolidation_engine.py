@@ -579,6 +579,52 @@ class ConsolidationEngine:
 
             return ConsolidationMetrics(**data)
 
+    def prime_semantic_graph(self, initial_weight: float = 0.5) -> int:
+        """
+        Prime the semantic graph using explicit causal lineages.
+        
+        Transcribes 'pattern_relationships' (logical lineage) into 'semantic_graph'
+        (dynamic coupling) to ensure causally linked patterns are phase-locked
+        during NREM sleep.
+        
+        Args:
+            initial_weight: Weight to assign to causal edges (0.0 to 1.0)
+            
+        Returns:
+            Number of edges primed.
+        """
+        primed_count = 0
+        with self.memory._db_connection() as conn:
+            # Fetch all causal relationships
+            # We assume 'causal_discovery' or 'causal_derivation' types
+            cursor = conn.execute("""
+                SELECT parent_pattern_id, child_pattern_id 
+                FROM pattern_relationships 
+                WHERE relationship_type IN ('causal_discovery', 'causal_derivation')
+            """)
+            relationships = cursor.fetchall()
+            
+        for parent, child in relationships:
+            # Check if edge already exists with higher weight?
+            # For priming, we generally want to set a baseline.
+            # store_graph_edge handles upsert.
+            
+            # We only prime if the current weight is low or non-existent
+            current_neighbors = self.memory.get_graph_neighbors(parent, min_weight=0.0)
+            current_weight = 0.0
+            for nid, w in current_neighbors:
+                if nid == child:
+                    current_weight = w
+                    break
+            
+            if current_weight < initial_weight:
+                self.memory.store_graph_edge(
+                    parent, child, weight=initial_weight, weight_type='causal_priming'
+                )
+                primed_count += 1
+                
+        return primed_count
+
 
 if __name__ == "__main__":
     print("=" * 60)
