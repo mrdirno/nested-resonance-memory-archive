@@ -2725,6 +2725,16 @@
   - Conclusion: The "Variance Barrier" is extremely low. Even minimal heterogeneity ($\sigma=0.01$, or 1% of mean energy) is sufficient to desynchronize the population and prevent simultaneous collapse. This suggests that *any* natural noise is sufficient for stability, and instability is a unique pathology of artificial, perfectly uniform systems.
 - ⏳ **Next Action**: Proceed to Pattern Archaeology or investigate higher-order variance effects.
 
+### Cycle 1649 Summary (2025-11-22, Evolution vs. Buffering)
+- ✅ **Evolutionary Advantage of Parameter Variance**: Cycle 285 compared systems with State Variance (variable energy) vs. Parameter Variance (variable metabolic rate).
+  - Experiment: `cycle285_parameter_vs_state_variance.py` ran 20 seeds per condition.
+  - Result:
+    - **State Variance**: 100% Survival, Mean Pop ~95 (Stable but static).
+    - **Parameter Variance**: 100% Survival, **Mean Pop ~125 (+31%)**.
+    - **Mechanism**: Parameter variance allowed natural selection to favor efficient agents. The mean metabolic rate evolved from 0.105 down to ~0.080.
+  - Conclusion: While "State Variance" (noise) prevents immediate collapse (buffering), "Parameter Variance" (diversity) enables **optimization and higher carrying capacity** (evolution).
+- ⏳ **Next Action**: Proceed to Pattern Archaeology or apply these findings to Memory Systems.
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**
