@@ -272,10 +272,57 @@
 - [x] **Significance:** The paper is now fully prepared and awaiting the user to perform the final external submission steps.
 
 # Task: Cycle 304 - Active Emergence Control (Initial Exploration)
-- [ ] **Define Cycle 304:** Initiate research into "Active Emergence Control", aiming to use the understanding of emergent lineage to guide system behavior towards desired emergent states.
-- [ ] **Create Experiment File:** `experiments/cycle304_active_emergence_control_initial.py`.
-- [ ] **Outline Experiment:**
-    - Utilize a simplified swarm simulation (e.g., a variant of 1D flocking from C295 or 2D from C296).
-    - Introduce a "control signal" or "perturbation" mechanism that subtly modifies agent behaviors (e.g., temporarily increasing/decreasing cohesion strength for a subset of agents).
-    - Observe if this perturbation systematically alters the formation and lineage of an emergent pattern (e.g., a flock).
-    - Quantify the change in lineage characteristics (e.g., depth, composition) or the emergent pattern's properties (e.g., flock size, stability).
+- [x] **Define Cycle 304:** Initiate research into "Active Emergence Control".
+- [x] **Create Experiment File:** `experiments/cycle304_active_emergence_control_initial.py`.
+- [x] **Status:** Code generated.
+
+# Task: Cycle 305 - Control Emergence Parameter Sweep
+- [x] **Define Cycle 305:** Map the control landscape for emergence.
+- [x] **Create Experiment File:** `experiments/cycle305_control_emergence_parameter_sweep.py`.
+- [x] **Status:** Code generated.
+
+# Task: Cycle 306 - Fast Cohesion Parameter Sweep
+- [x] **Define Cycle 306:** Map cohesion-emergence relationship without expensive lineage calculations.
+- [x] **Create Experiment File:** `experiments/cycle306_cohesion_sweep_fast.py`.
+- [x] **Status:** Code generated.
+
+# Task: Cycle 307 - Cohesion Phase Transition Hunt
+- [x] **Define Cycle 307:** Fine-grained sweep around optimal cohesion (0.173) to detect phase transitions.
+- [x] **Create Experiment File:** `experiments/cycle307_cohesion_phase_transition.py`.
+- [x] **Status:** Code generated.
+
+# Task: Cycle 308 - Finite-Size Scaling
+- [x] **Define Cycle 308:** Test how phase transition changes with system size (N agents).
+- [x] **Create Experiment File:** `experiments/cycle308_finite_size_scaling.py`.
+- [x] **Status:** Code generated.
+
+# Task: Cycle 309 - Order Parameter Exponent Beta
+- [x] **Define Cycle 309:** Measure how order parameter scales near critical point.
+- [x] **Create Experiment File:** `experiments/cycle309_order_parameter_exponent.py`.
+- [x] **Status:** Code generated.
+
+# Task: Cycle 310 - 2D Phase Diagram
+- [x] **Define Cycle 310:** Map emergence transition across 2D parameter space (Cohesion x Metabolic).
+- [x] **Create Experiment File:** `experiments/cycle310_2d_phase_diagram.py`.
+- [x] **Status:** Code generated.
+
+# Task: Cycle 311 - Dynamic Critical Behavior
+- [x] **Define Cycle 311:** Measure how relaxation time diverges near critical point (Critical Slowing Down).
+- [x] **Create Experiment File:** `experiments/cycle311_dynamic_critical_behavior.py`.
+- [x] **Status:** Code generated.
+
+# Task: Cycle 312 - Universality Test
+- [ ] **Define Cycle 312:** Verify critical exponents hold for different microscopic parameters (Universality Class).
+- [x] **Create Experiment File:** `experiments/cycle312_universality_test.py`.
+- [ ] **Execute:** Run `python3 experiments/cycle312_universality_test.py`.
+- [ ] **Verify:** Analyze results for exponent robustness.
+
+# Task: Cycle 313 - Self-Organized Criticality (SOC)
+- [ ] **Define Cycle 313:** Test if system naturally evolves toward critical point without tuning.
+- [x] **Create Experiment File:** `experiments/cycle313_self_organized_criticality.py`.
+- [ ] **Execute:** Run experiment (pending C312 validation).
+
+# Task: Cycle 314 - Hysteresis Test
+- [ ] **Define Cycle 314:** Test if phase transition shows memory (path-dependence) to distinguish 1st vs 2nd order.
+- [x] **Create Experiment File:** `experiments/cycle314_hysteresis_test.py`.
+- [ ] **Execute:** Run experiment (pending C312 validation).
