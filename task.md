@@ -217,3 +217,10 @@
     - `analysis/figures/paper8_hero_flock_lineage.png`
     - `analysis/figures/paper8_hero_resource_lineage.png`
 - [x] **Significance:** These visualizations clearly illustrate the causal pathways leading to high-level emergent phenomena, providing a key "Hero Figure" for Paper 8 and directly supporting the claim of auditable emergence.
+
+# Task: Cycle 298 - Paper 8 Manuscript Draft
+- [x] **Define Cycle 298:** Draft the initial manuscript for "Paper 8: Emergent Dynamics in Fractal Swarms".
+- [x] **File:** `papers/paper8_emergent_dynamics_fractal_swarms.md`.
+- [x] **Structure:** Outlined with standard scientific sections: Abstract, Introduction, Theoretical Framework (Universal Memory System), Methods (Simulation, Pattern Discovery, Lineage Tracing), Results (referencing C296 data and C297 figures), Discussion, Conclusion.
+- [x] **Initial Content:** Placeholder text added to guide content development, summarizing key findings.
+- [x] **Significance:** This initiates the formal scientific communication of the auditable emergence research, transforming raw data and visualizations into a publishable paper.
