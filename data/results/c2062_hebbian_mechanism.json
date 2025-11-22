@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_items": 20,
+    "num_cycles": 300,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T00:32:31.759971"
+  },
+  "conditions": [
+    {
+      "refresh_rate": 0.0,
+      "mean_signal_change": -0.9616193333633578,
+      "mean_noise_change": 0.0051458617680257305,
+      "mean_snr_change": -0.9619191890630729,
+      "mean_initial_signal": 0.11882341244745605,
+      "mean_final_signal": 0.004568514124332726,
+      "mean_initial_noise": 0.03114879663295444,
+      "mean_final_noise": 0.03130834081999021
+    },
+    {
+      "refresh_rate": 0.5,
+      "mean_signal_change": -0.16476203763148967,
+      "mean_noise_change": 0.0018546846991376342,
+      "mean_snr_change": -0.165931185853378,
+      "mean_initial_signal": 0.11882341244745605,
+      "mean_final_signal": 0.09930945031854743,
+      "mean_initial_noise": 0.03114879663295444,
+      "mean_final_noise": 0.03120551593479059
+    },
+    {
+      "refresh_rate": 1.0,
+      "mean_signal_change": 0.12090660149033754,
+      "mean_noise_change": -0.0013003708893313186,
+      "mean_snr_change": 0.12263049964993158,
+      "mean_initial_signal": 0.11882341244745605,
+      "mean_final_signal": 0.13332158646365672,
+      "mean_initial_noise": 0.03114879663295444,
+      "mean_final_noise": 0.031107831456748985
+    }
+  ],
+  "analysis": {
+    "mechanism": "SIGNAL_STRENGTHENING",
+    "findings": [
+      "Signal INCREASED by 108.3% with refresh",
+      "Hebbian strengthening confirmed: signals grow with repetition"
+    ],
+    "finding": "Primary effect is amplifying the target binding",
+    "hebbian_confirmed": true
+  }
+}
