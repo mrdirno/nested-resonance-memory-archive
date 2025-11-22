@@ -1,34 +1,15 @@
 {
-  "metadata": {
-    "dimension": 1024,
-    "k_memories": 8,
-    "num_cycles": 200,
-    "timestamp": "2025-11-22T04:53:35.416789"
-  },
-  "measurements": [
-    {
-      "test": "transitivity_direct",
-      "accuracy": 1.0
-    },
-    {
-      "test": "transitivity_infer",
-      "accuracy": 1.0
-    },
-    {
-      "test": "negation",
-      "accuracy": 1.0
-    },
-    {
-      "test": "conjunction",
-      "accuracy": 1.0
-    }
-  ],
-  "analysis": {
-    "findings": [
-      "transitivity_direct: WORKS (100%)",
-      "transitivity_infer: WORKS (100%)",
-      "negation: WORKS (100%)",
-      "conjunction: WORKS (100%)"
-    ]
-  }
+  "avg_similarity": 0.9966951060770143,
+  "trials": [
+    0.9968132607909264,
+    0.9965247928722667,
+    0.9966846583185086,
+    0.9967451205182098,
+    0.9965897017893809,
+    0.9965772110571933,
+    0.9968928410313082,
+    0.9967522653604829,
+    0.9966319848512365,
+    0.9967392241806287
+  ]
 }
