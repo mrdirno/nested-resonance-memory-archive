@@ -1,0 +1,12 @@
+{
+  "cycle": 2005,
+  "experiment": "Hierarchical Chunking",
+  "timestamp": "2025-11-21T16:12:00.986438",
+  "hypothesis": "Chunking extends working memory like in humans",
+  "results": {
+    "flat_accuracy": 0.0,
+    "chunked_accuracy": 1.0,
+    "flat_sim": 0.18452618019824676,
+    "chunked_sim": 0.5109881063403854
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "cycle_id": "C319",
+  "cycle_name": "Eight-Trophic Chain",
+  "date": "2025-11-20T02:01:20.687765",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "results": [
+    {
+      "condition": "seven_trophic",
+      "seed": 2600,
+      "finals": {
+        "L0": 600.0,
+        "L1": 60.0,
+        "L2": 20.0,
+        "L3": 10.0,
+        "L4": 6.0,
+        "L5": 4.0,
+        "L6": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.14036321640014648
+    },
+    {
+      "condition": "seven_trophic",
+      "seed": 2601,
+      "finals": {
+        "L0": 600.0,
+        "L1": 60.0,
+        "L2": 20.0,
+        "L3": 10.0,
+        "L4": 6.0,
+        "L5": 4.0,
+        "L6": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.14464473724365234
+    },
+    {
+      "condition": "seven_trophic",
+      "seed": 2602,
+      "finals": {
+        "L0": 600.0,
+        "L1": 60.0,
+        "L2": 20.0,
+        "L3": 10.0,
+        "L4": 6.0,
+        "L5": 4.0,
+        "L6": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.20045804977416992
+    },
+    {
+      "condition": "eight_trophic",
+      "seed": 2600,
+      "finals": {
+        "L0": 600.0,
+        "L1": 60.0,
+        "L2": 20.0,
+        "L3": 10.0,
+        "L4": 6.0,
+        "L5": 4.0,
+        "L6": 2.0,
+        "L7": 1.0
+      },
+      "coexist": true,
+      "runtime": 0.1905820369720459
+    },
+    {
+      "condition": "eight_trophic",
+      "seed": 2601,
+      "finals": {
+        "L0": 600.0,
+        "L1": 60.0,
+        "L2": 20.0,
+        "L3": 10.0,
+        "L4": 6.0,
+        "L5": 4.0,
+        "L6": 2.0,
+        "L7": 1.0
+      },
+      "coexist": true,
+      "runtime": 0.20059585571289062
+    },
+    {
+      "condition": "eight_trophic",
+      "seed": 2602,
+      "finals": {
+        "L0": 600.0,
+        "L1": 60.0,
+        "L2": 20.0,
+        "L3": 10.0,
+        "L4": 6.0,
+        "L5": 4.0,
+        "L6": 2.0,
+        "L7": 1.0
+      },
+      "coexist": true,
+      "runtime": 0.16125202178955078
+    }
+  ]
+}

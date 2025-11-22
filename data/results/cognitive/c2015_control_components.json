@@ -1,0 +1,12 @@
+{
+  "cycle": 2015,
+  "experiment": "Control Component Analysis",
+  "timestamp": "2025-11-21T16:18:23.429767",
+  "e_test": 0.15,
+  "results": {
+    "baseline": 0.0,
+    "fixed_reduction": 1.0,
+    "state_only": 1.0,
+    "full_cognitive": 1.0
+  }
+}

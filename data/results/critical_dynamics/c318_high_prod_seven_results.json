@@ -1,0 +1,104 @@
+{
+  "cycle_id": "C318",
+  "cycle_name": "High Productivity Seven-Trophic",
+  "date": "2025-11-20T01:59:47.692981",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "results": [
+    {
+      "condition": "K600_seven",
+      "K": 600,
+      "seed": 2500,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0,
+        "L6": 1.0
+      },
+      "coexist": true,
+      "runtime": 0.04319882392883301
+    },
+    {
+      "condition": "K600_seven",
+      "K": 600,
+      "seed": 2501,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0,
+        "L6": 1.0
+      },
+      "coexist": true,
+      "runtime": 0.03797006607055664
+    },
+    {
+      "condition": "K600_seven",
+      "K": 600,
+      "seed": 2502,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0,
+        "L6": 1.0
+      },
+      "coexist": true,
+      "runtime": 0.03804516792297363
+    },
+    {
+      "condition": "K1200_seven",
+      "K": 1200,
+      "seed": 2500,
+      "finals": {
+        "L0": 600.0,
+        "L1": 60.0,
+        "L2": 20.0,
+        "L3": 10.0,
+        "L4": 6.0,
+        "L5": 4.0,
+        "L6": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.09378981590270996
+    },
+    {
+      "condition": "K1200_seven",
+      "K": 1200,
+      "seed": 2501,
+      "finals": {
+        "L0": 600.0,
+        "L1": 60.0,
+        "L2": 20.0,
+        "L3": 10.0,
+        "L4": 6.0,
+        "L5": 4.0,
+        "L6": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.13410186767578125
+    },
+    {
+      "condition": "K1200_seven",
+      "K": 1200,
+      "seed": 2502,
+      "finals": {
+        "L0": 600.0,
+        "L1": 60.0,
+        "L2": 20.0,
+        "L3": 10.0,
+        "L4": 6.0,
+        "L5": 4.0,
+        "L6": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.24376797676086426
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "cycle": 2013,
+  "experiment": "Survival Frontier",
+  "timestamp": "2025-11-21T16:16:52.510290",
+  "results": [
+    {
+      "e_consume": 0.104,
+      "baseline": 0.3,
+      "cognitive": 1.0
+    },
+    {
+      "e_consume": 0.105,
+      "baseline": 0.0,
+      "cognitive": 1.0
+    },
+    {
+      "e_consume": 0.106,
+      "baseline": 0.0,
+      "cognitive": 1.0
+    },
+    {
+      "e_consume": 0.107,
+      "baseline": 0.0,
+      "cognitive": 1.0
+    },
+    {
+      "e_consume": 0.108,
+      "baseline": 0.0,
+      "cognitive": 1.0
+    }
+  ]
+}

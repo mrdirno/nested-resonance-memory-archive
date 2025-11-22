@@ -1,0 +1,13 @@
+{
+  "cycle": 2000,
+  "experiment": "Analogical Reasoning",
+  "timestamp": "2025-11-21T15:58:39.208362",
+  "hypothesis": "Holographic memory can transfer relations across domains",
+  "method": "Extract relation via unbinding, apply via binding",
+  "results": {
+    "analogy_accuracy": 0.0,
+    "avg_valid_sim": -0.0059680403207699574,
+    "avg_invalid_sim": 0.021150534412531483
+  },
+  "status": "PARTIAL"
+}

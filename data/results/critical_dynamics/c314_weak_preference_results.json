@@ -1,0 +1,130 @@
+{
+  "cycle_id": "C314",
+  "cycle_name": "Weak Preference",
+  "date": "2025-11-20T01:51:29.581931",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "base_attack": 0.003,
+    "conditions": [
+      {
+        "name": "no_pref_1.0x",
+        "ratio": 1.0
+      },
+      {
+        "name": "weak_1.25x",
+        "ratio": 1.25
+      },
+      {
+        "name": "moderate_1.5x",
+        "ratio": 1.5
+      }
+    ],
+    "seeds": [
+      2100,
+      2101,
+      2102
+    ]
+  },
+  "results": [
+    {
+      "condition": "no_pref_1.0x",
+      "ratio": 1.0,
+      "seed": 2100,
+      "prey_a_final": 300.0,
+      "prey_b_final": 301.0,
+      "pred_final": 0.0,
+      "ratio_b_a": 1.0033333333333334,
+      "coexist": false,
+      "runtime_seconds": 3.844163179397583
+    },
+    {
+      "condition": "no_pref_1.0x",
+      "ratio": 1.0,
+      "seed": 2101,
+      "prey_a_final": 300.0,
+      "prey_b_final": 301.0,
+      "pred_final": 0.0,
+      "ratio_b_a": 1.0033333333333334,
+      "coexist": false,
+      "runtime_seconds": 3.7360332012176514
+    },
+    {
+      "condition": "no_pref_1.0x",
+      "ratio": 1.0,
+      "seed": 2102,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "ratio_b_a": 1.0,
+      "coexist": true,
+      "runtime_seconds": 0.04617881774902344
+    },
+    {
+      "condition": "weak_1.25x",
+      "ratio": 1.25,
+      "seed": 2100,
+      "prey_a_final": 301.0,
+      "prey_b_final": 300.0,
+      "pred_final": 0.0,
+      "ratio_b_a": 0.9966777408637874,
+      "coexist": false,
+      "runtime_seconds": 3.764230251312256
+    },
+    {
+      "condition": "weak_1.25x",
+      "ratio": 1.25,
+      "seed": 2101,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "ratio_b_a": 1.0,
+      "coexist": true,
+      "runtime_seconds": 0.047460079193115234
+    },
+    {
+      "condition": "weak_1.25x",
+      "ratio": 1.25,
+      "seed": 2102,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "ratio_b_a": 1.0,
+      "coexist": true,
+      "runtime_seconds": 0.028465986251831055
+    },
+    {
+      "condition": "moderate_1.5x",
+      "ratio": 1.5,
+      "seed": 2100,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "ratio_b_a": 1.0,
+      "coexist": true,
+      "runtime_seconds": 0.02389693260192871
+    },
+    {
+      "condition": "moderate_1.5x",
+      "ratio": 1.5,
+      "seed": 2101,
+      "prey_a_final": 300.0,
+      "prey_b_final": 300.0,
+      "pred_final": 0.0,
+      "ratio_b_a": 1.0,
+      "coexist": false,
+      "runtime_seconds": 3.8520121574401855
+    },
+    {
+      "condition": "moderate_1.5x",
+      "ratio": 1.5,
+      "seed": 2102,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "ratio_b_a": 1.0,
+      "coexist": true,
+      "runtime_seconds": 0.030318021774291992
+    }
+  ]
+}

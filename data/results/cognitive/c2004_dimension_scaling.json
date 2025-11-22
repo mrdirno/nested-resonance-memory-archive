@@ -1,0 +1,29 @@
+{
+  "cycle": 2004,
+  "experiment": "Dimension Scaling",
+  "timestamp": "2025-11-21T16:01:17.517415",
+  "hypothesis": "Higher dimensions extend working memory",
+  "test_depth": 3,
+  "results": [
+    {
+      "dimension": 512,
+      "accuracy": 0.9,
+      "similarity": 0.3976524178989844
+    },
+    {
+      "dimension": 1024,
+      "accuracy": 0.92,
+      "similarity": 0.3863861446010523
+    },
+    {
+      "dimension": 2048,
+      "accuracy": 0.94,
+      "similarity": 0.3838718280732856
+    },
+    {
+      "dimension": 4096,
+      "accuracy": 0.9,
+      "similarity": 0.3624928120432912
+    }
+  ]
+}

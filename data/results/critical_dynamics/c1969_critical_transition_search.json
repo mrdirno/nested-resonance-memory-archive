@@ -1,0 +1,80 @@
+{
+  "cycle": 1969,
+  "experiment": "Critical Transition Search",
+  "timestamp": "2025-11-21T15:54:55.180043",
+  "hypothesis": "Reducing E_consume toward f_crit induces criticality signatures",
+  "results": [
+    {
+      "e_consume": 0.05,
+      "mean_pop": 488.60133333333334,
+      "cv": 12.623126559529048,
+      "mean_burst": 0.0,
+      "max_burst": 0.0,
+      "burst_skew": 0.0,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.07,
+      "mean_pop": 481.068,
+      "cv": 16.39138091086983,
+      "mean_burst": 0.0,
+      "max_burst": 0.0,
+      "burst_skew": 0.0,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.08,
+      "mean_pop": 472.3593333333333,
+      "cv": 19.85107284566652,
+      "mean_burst": 0.0,
+      "max_burst": 0.0,
+      "burst_skew": 0.0,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.09,
+      "mean_pop": 448.00666666666666,
+      "cv": 27.565356679961834,
+      "mean_burst": 0.0,
+      "max_burst": 0.0,
+      "burst_skew": 0.0,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.095,
+      "mean_pop": 407.0453333333333,
+      "cv": 37.3369747852176,
+      "mean_burst": 0.0,
+      "max_burst": 0.0,
+      "burst_skew": 0.0,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.098,
+      "mean_pop": 319.10133333333334,
+      "cv": 52.21574299066222,
+      "mean_burst": 1.2807628181990065,
+      "max_burst": 5.0,
+      "burst_skew": 2.4225689214458743,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.1,
+      "mean_pop": 108.03399999999999,
+      "cv": 17.279948130923287,
+      "mean_burst": 1.3892159822866343,
+      "max_burst": 8.0,
+      "burst_skew": 2.398801346612715,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.102,
+      "mean_pop": 38.51466666666667,
+      "cv": 56.74805329473412,
+      "mean_burst": 1.330913530913531,
+      "max_burst": 6.0,
+      "burst_skew": 2.4347621423936747,
+      "survival_rate": 1.0
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "cycle": 2011,
+  "experiment": "Cognitive Swarm Control",
+  "timestamp": "2025-11-21T16:15:54.970596",
+  "hypothesis": "Cognitive control extends survival in critical zone",
+  "results": {
+    "e_consume": 0.103,
+    "baseline_survival": 486.05,
+    "cognitive_survival": 500.0,
+    "improvement_pct": 2.8700750951548226
+  }
+}
