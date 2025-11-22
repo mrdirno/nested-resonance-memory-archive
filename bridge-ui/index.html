@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Transcendental Dynamics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#7C3AED', // Violet-600
+              secondary: '#EC4899', // Pink-500
+              tertiary: '#06B6D4', // Cyan-500
+              success: '#10B981',
+              glass: 'rgba(255, 255, 255, 0.05)',
+              'glass-border': 'rgba(255, 255, 255, 0.1)',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'SF Mono', 'monospace'],
+            },
+            animation: {
+              'shimmer': 'shimmer 3s ease-in-out infinite',
+              'pulse-fast': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            },
+            keyframes: {
+              shimmer: {
+                '0%, 100%': { opacity: '0.8' },
+                '50%': { opacity: '1' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body { 
+        margin: 0; 
+        padding: 0; 
+        overflow: hidden; 
+        background: radial-gradient(ellipse at center, #0F0F23 0%, #000000 100%);
+        color: white;
+        -webkit-font-smoothing: antialiased;
+      }
+      canvas { touch-action: none; }
+      
+      /* Glass Panel Utilities */
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar { width: 0px; height: 0px; }
+      
+      /* Range Slider Styling to match original */
+      input[type=range] {
+        -webkit-appearance: none;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        height: 6px;
+      }
+      input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: #7C3AED;
+        box-shadow: 0 0 15px rgba(124, 58, 237, 0.5);
+        margin-top: -7px;
+      }
+      input[type=range]::-webkit-slider-runnable-track {
+        height: 6px;
+        border-radius: 4px;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@react-three/fiber": "https://aistudiocdn.com/@react-three/fiber@^9.4.0",
+    "@react-three/drei": "https://aistudiocdn.com/@react-three/drei@^10.7.7",
+    "three": "https://aistudiocdn.com/three@^0.181.2",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client",
+    "three-stdlib": "https://aistudiocdn.com/three-stdlib@^2.35.13",
+    "maath": "https://aistudiocdn.com/maath@^0.10.8",
+    "scheduler": "https://aistudiocdn.com/scheduler@^0.23.2",
+    "zustand": "https://aistudiocdn.com/zustand@^4.5.0",
+    "suspend-react": "https://aistudiocdn.com/suspend-react@^0.1.3"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
