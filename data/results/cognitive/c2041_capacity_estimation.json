@@ -1,0 +1,37 @@
+{
+  "cycle": 2041,
+  "experiment": "Capacity Estimation",
+  "timestamp": "2025-11-21T17:15:36.013105",
+  "results": [
+    {
+      "dimension": 128,
+      "capacity": 11,
+      "bits": 3.4594316186372973,
+      "bits_per_dim": 0.027026809520603885
+    },
+    {
+      "dimension": 256,
+      "capacity": 19,
+      "bits": 4.247927513443585,
+      "bits_per_dim": 0.016593466849389005
+    },
+    {
+      "dimension": 512,
+      "capacity": 19,
+      "bits": 4.247927513443585,
+      "bits_per_dim": 0.008296733424694502
+    },
+    {
+      "dimension": 1024,
+      "capacity": 19,
+      "bits": 4.247927513443585,
+      "bits_per_dim": 0.004148366712347251
+    },
+    {
+      "dimension": 2048,
+      "capacity": 19,
+      "bits": 4.247927513443585,
+      "bits_per_dim": 0.0020741833561736256
+    }
+  ]
+}
