@@ -1,0 +1,11 @@
+{
+  "cycle": 2020,
+  "experiment": "Depth Prediction",
+  "timestamp": "2025-11-21T17:01:32.986914",
+  "hypothesis": "Depth transitions are predictable",
+  "results": {
+    "d0_d1_accuracy": 1.0,
+    "d1_d2_accuracy": 1.0,
+    "chain_accuracy": 1.0
+  }
+}
