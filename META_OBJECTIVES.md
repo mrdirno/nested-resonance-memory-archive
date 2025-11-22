@@ -463,13 +463,13 @@
 - **Finding:** $\gamma/\nu \approx 1.014$ (CV=7.5%) across sight ranges 10-25.
 - **Outcome:** Universality Supported. Emergence is independent of micro-parameters.
 
-### 26. **TSF-26: Hysteresis Test (Order of Transition)** ✅ COMPLETE
-**Goal:** Test if phase transition shows memory (path-dependence).
-**Hypothesis:** First-order transitions show hysteresis; second-order don't.
-- **Experiment:** `experiments/cycle314_hysteresis_test.py`
-- **Status:** ✅ **COMPLETE** (Cycle 314)
-- **Finding:** Significant Dynamic Hysteresis (11.0) but no Metastability (C315).
-- **Outcome:** Continuous Transition with Dynamic Hysteresis (Non-Standard Class).
+### 27. **TSF-27: Self-Organized Criticality Test (Evolution)** ✅ COMPLETE
+**Goal:** Test if system naturally evolves toward critical point without tuning.
+**Hypothesis:** SOC = system self-tunes without external parameter tuning.
+- **Experiment:** `experiments/cycle313_self_organized_criticality.py`
+- **Status:** ✅ **COMPLETE** (Cycle 313)
+- **Finding:** Convergence to $c \approx 0.044$ (Sub-Critical).
+- **Outcome:** SOC Falsified. Criticality requires external or meta-control.
 
 ---
 
