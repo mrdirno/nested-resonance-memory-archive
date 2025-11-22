@@ -1,0 +1,117 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_trials": 10,
+    "max_depth": 8,
+    "timestamp": "2025-11-22T00:14:24.573388"
+  },
+  "conditions": [
+    {
+      "depth": 1,
+      "use_cleanup": false,
+      "mean_similarity": 0.34666173562084424,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 1,
+      "use_cleanup": true,
+      "mean_similarity": 1.0,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 2,
+      "use_cleanup": false,
+      "mean_similarity": 0.13211067051534506,
+      "success_rate": 0.7
+    },
+    {
+      "depth": 2,
+      "use_cleanup": true,
+      "mean_similarity": 1.0,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 3,
+      "use_cleanup": false,
+      "mean_similarity": 0.030137173726490975,
+      "success_rate": 0.1
+    },
+    {
+      "depth": 3,
+      "use_cleanup": true,
+      "mean_similarity": 1.0,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 4,
+      "use_cleanup": false,
+      "mean_similarity": 0.013142792362266596,
+      "success_rate": 0.0
+    },
+    {
+      "depth": 4,
+      "use_cleanup": true,
+      "mean_similarity": 1.0,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 5,
+      "use_cleanup": false,
+      "mean_similarity": -0.020922530990208365,
+      "success_rate": 0.0
+    },
+    {
+      "depth": 5,
+      "use_cleanup": true,
+      "mean_similarity": 1.0,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 6,
+      "use_cleanup": false,
+      "mean_similarity": -0.01606018090029034,
+      "success_rate": 0.0
+    },
+    {
+      "depth": 6,
+      "use_cleanup": true,
+      "mean_similarity": 0.871939901091752,
+      "success_rate": 0.9
+    },
+    {
+      "depth": 7,
+      "use_cleanup": false,
+      "mean_similarity": -0.001779790357425349,
+      "success_rate": 0.0
+    },
+    {
+      "depth": 7,
+      "use_cleanup": true,
+      "mean_similarity": 0.6762429889962825,
+      "success_rate": 0.7
+    },
+    {
+      "depth": 8,
+      "use_cleanup": false,
+      "mean_similarity": -0.021338096147401106,
+      "success_rate": 0.0
+    },
+    {
+      "depth": 8,
+      "use_cleanup": true,
+      "mean_similarity": 0.2135697773374421,
+      "success_rate": 0.5
+    }
+  ],
+  "analysis": {
+    "no_cleanup_limit": 2,
+    "cleanup_limit": 8,
+    "depth_gain": 6,
+    "findings": [
+      "Without cleanup: Max depth = 2",
+      "With cleanup: Max depth = 8",
+      "Cleanup extends depth by 6 levels",
+      "Sharp cliff without cleanup at depth 3"
+    ]
+  }
+}
