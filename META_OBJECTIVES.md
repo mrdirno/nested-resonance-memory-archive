@@ -2767,6 +2767,17 @@
   - Conclusion: The system can now autonomously generate retrievable, verifiable audit trails of its own decision-making processes. This is a foundational capability for "explainable AI" within the NRM framework.
 - ⏳ **Next Action**: Investigate sleep-dependent consolidation mechanisms (Cycle 290) to strengthen these causal chains.
 
+### Cycle 1654 Summary (2025-11-22, Sleep Consolidation)
+- ❌ **Consolidation Failure (Initial Attempt)**: Cycle 290 failed to demonstrate Hebbian strengthening of a causal chain during NREM sleep.
+  - Experiment: `cycle290_sleep_consolidation.py` seeded a 5-step chain with weak edges (w=0.1) and ran `nrem_consolidation`.
+  - Result: 20 coalitions were detected, but the edges between causally linked patterns (e.g., 955d... <-> c176...) did not strengthen consistently. Some edges reached w=1.0, others remained at w=0.1.
+  - Root Cause Analysis:
+    1. **Missing Bridge Integration:** The `FractalAgent` used in the experiment lacked the `bridge` argument in `__init__` (fixed in this cycle).
+    2. **Stochastic Phase Initialization:** `nrem_consolidation` initializes new agents with random phases. Without a mechanism to "prime" them with the causal structure (e.g., initializing phase based on parent phase), they may not synchronize quickly enough.
+    3. **Graph Edge Logic:** The `PatternMemory.get_graph_neighbors` method relies on the `semantic_graph` table, but `FractalAgent.discover_pattern` currently writes to `pattern_relationships` (for lineage) but does NOT automatically create weighted edges in `semantic_graph` (for Kuramoto coupling).
+  - Corrective Action: We must bridge the gap between "Logical Lineage" (`pattern_relationships`) and "Dynamic Coupling" (`semantic_graph`).
+- ⏳ **Next Action**: Refine `ConsolidationEngine` to seed agent phases or graph weights based on existing Lineage relationships before running NREM.
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**
