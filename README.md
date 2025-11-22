@@ -63,6 +63,7 @@ See the physics of Nodal Accumulation yourself.
 **2. Read the Doctrine:**
 *   [The Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md)
 *   [The Helios Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
+*   [The Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) - *Why we can win against the giants.*
 
 **3. Contribute:**
 We need minds that understand that **Code is Physics.**
