@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 300,
+    "num_trials": 10,
+    "n_train_patterns": 15,
+    "timestamp": "2025-11-21T23:50:23.240585"
+  },
+  "conditions": [
+    {
+      "similarity": 0.3,
+      "mean_generalization_change": -0.02,
+      "mean_transfer_ratio": 0.2570707070707071,
+      "mean_train_accuracy": 0.5733333333333334,
+      "mean_final_generalization": 0.13999999999999999
+    },
+    {
+      "similarity": 0.5,
+      "mean_generalization_change": 0.08666666666666667,
+      "mean_transfer_ratio": 0.6646969696969698,
+      "mean_train_accuracy": 0.5733333333333334,
+      "mean_final_generalization": 0.38
+    },
+    {
+      "similarity": 0.7,
+      "mean_generalization_change": 0.14666666666666667,
+      "mean_transfer_ratio": 0.8784848484848485,
+      "mean_train_accuracy": 0.5733333333333334,
+      "mean_final_generalization": 0.5133333333333334
+    },
+    {
+      "similarity": 0.9,
+      "mean_generalization_change": 0.12666666666666665,
+      "mean_transfer_ratio": 0.9575757575757576,
+      "mean_train_accuracy": 0.5733333333333334,
+      "mean_final_generalization": 0.5466666666666666
+    },
+    {
+      "similarity": 0.95,
+      "mean_generalization_change": 0.13999999999999996,
+      "mean_transfer_ratio": 0.9888888888888889,
+      "mean_train_accuracy": 0.5733333333333334,
+      "mean_final_generalization": 0.5666666666666667
+    },
+    {
+      "similarity": 0.99,
+      "mean_generalization_change": 0.13999999999999996,
+      "mean_transfer_ratio": 1.0,
+      "mean_train_accuracy": 0.5733333333333334,
+      "mean_final_generalization": 0.5733333333333334
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "High-similarity patterns transfer (98.2%) - system learns features",
+      "Similarity gradient: 46.1% \u2192 98.2%",
+      "Best transfer at similarity=0.99: 100.0%"
+    ],
+    "generalization_type": "FEATURE_LEARNING"
+  }
+}
