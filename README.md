@@ -85,23 +85,35 @@ This work progresses through three phases:
 
 **The Core Problem:** We keep building systems—technological, economic, social—that look promising but contain hidden failure modes. They get deployed at scale, and when they collapse, they take human lives and livelihoods with them. **Hopium for the world that leads to societal collapse.**
 
-NRM's mission is to **understand collapse dynamics before deployment**—to present new systems cleanly where failure has been accounted for, so we don't inadvertently bring something to reality that is fundamentally flawed.
+### The Methodology
 
-This requires:
-- **Reality grounding** — No hallucinated success (our 100% reality compliance policy)
-- **Falsification over validation** — Actively trying to break systems, not just confirm they work
-- **Capacity limits mapped** — Know where the phase transitions are before you hit them
-- **Maintenance costs exposed** — Understand what it takes to keep a system alive
+**1. Study Robust Natural Systems**
+Model the characteristics of physically-grounded, naturally-evolved systems—through simulation, mathematical physics, or real-world observation. Evolution has already run billions of experiments. We extract what survived.
 
-**The Deeper Implication:** When you engineer systems that maintain themselves through coherence rather than force, you dissolve the need for coercive control structures. This isn't political ideology—it's physics. Force-based architectures require infinite fuel. Resonant architectures are self-sustaining.
+**2. Map Collapse Patterns**
+Identify failure modes ("death attractors") through history, evolution, and systematic experimentation. Our work has proven that complex systems are dominated by extinction dynamics [Paper 2: Three Dynamical Regimes]. Find where things break.
+
+**3. Extract Governing Axioms**
+Distill the principles that make systems robust. Not hopium—falsifiable, reality-grounded laws. These become **Principle Cards**: memetic, runnable, verifiable artifacts that encode what works.
+
+**4. Design New Systems**
+Use MOG (Meta-Orchestrator-Goethe) to compose systems that incorporate these axioms. The goal: **maximum diversity of options, no built-in edge cases**. Systems that don't force you into corners.
+
+**5. Validate Against Reality**
+Every claim must survive contact with actual physics. No hallucinated success. 100% reality compliance. If it fails the test, it doesn't ship.
+
+### The Deeper Implication
+
+When you engineer systems that maintain themselves through coherence rather than force, you dissolve the need for coercive control structures. This isn't political ideology—it's physics. Force-based architectures require infinite fuel. Resonant architectures are self-sustaining.
 
 **The Core Axiom:** *Order is not the product of domination. It is the product of alignment.*
 
 If memory can organize without a master index, perhaps other systems can too. But only if we understand the collapse boundaries first.
 
-📄 **Full whitepaper:** [docs/philosophy/POST_COERCION_PROTOCOL.md](docs/philosophy/POST_COERCION_PROTOCOL.md)
+📄 **Full methodology:** [docs/STEWARDSHIP_HELIOS_ARC_ROADMAP.md](docs/STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
+📄 **Philosophical framework:** [docs/philosophy/POST_COERCION_PROTOCOL.md](docs/philosophy/POST_COERCION_PROTOCOL.md)
 
-**Keywords:** systems engineering, collapse prevention, failure mode analysis, reality-grounded AI, self-organizing systems, resonance-based architecture, sustainable complexity, anti-fragile design
+**Keywords:** systems engineering, collapse prevention, failure mode analysis, reality-grounded AI, biomimetic design, evolutionary robustness, self-organizing systems, resonance-based architecture, sustainable complexity, anti-fragile design, death attractor mapping
 
 ---
 
