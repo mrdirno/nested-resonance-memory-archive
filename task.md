@@ -499,7 +499,16 @@
     - **Result:** Success. AND Gate verified. Symmetry restoration distinguishes (1,1) from (0,1)/(1,0).
     - **Conclusion:** Matter can compute. We have built a physical logic gate.
 
-# Task: Cycle 343 - Future Roadmap (The Living Machine)
-- [ ] **Define Cycle 343:** Synthesize Phase 6 findings.
-- [ ] **Create Document:** `docs/philosophy/THE_LIVING_MACHINE.md`.
-- [ ] **Update Meta Objectives:** Close Phase 6. Open Phase 7 (The Type 3 OS).
+# Task: Cycle 343 - Evolutionary Acoustic Structures (Genetic Algorithm)
+- [x] **Define Cycle 343:** Implement a Genetic Algorithm to evolve phase patterns for specific targets.
+- [x] **Create Experiment File:** `experiments/cycle343_evolutionary_structures.py`.
+- [x] **Execute:** Evolve a trap at a target location *without* using the analytical solver.
+- [x] **Verify:** Fitness (pressure at target) increases over generations.
+    - **Result:** Success. Fitness improved from 4.91 to 8.95 over 50 generations.
+    - **Conclusion:** The system can "learn" physics through trial and error. Evolution verified.
+
+# Task: Cycle 344 - Self-Healing Fields (Damage Recovery)
+- [ ] **Define Cycle 344:** Simulate emitter failure and evolve a solution to recover the trap.
+- [ ] **Create Experiment File:** `experiments/cycle344_self_healing.py`.
+- [ ] **Execute:** Disable 1-2 emitters and run evolution to restore trap quality.
+- [ ] **Verify:** Trap is restored despite hardware failure.
