@@ -1,0 +1,12 @@
+{
+  "cycle": 2044,
+  "experiment": "NRM with Capacity Limits",
+  "timestamp": "2025-11-21T17:18:44.778349",
+  "results": {
+    "avg_final_depth": 1.0033333333333334,
+    "avg_final_pop": 11.0,
+    "avg_capacity_usage": 0.5208138591196385,
+    "base_dimension": 512,
+    "base_capacity": 50
+  }
+}
