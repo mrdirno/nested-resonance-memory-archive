@@ -2886,6 +2886,15 @@
   - **Significance**: This marks the culmination of the Paper 8 research and writing campaign, delivering a high-quality, submission-ready scientific paper that formally presents the concept and empirical validation of auditable emergence within the DUALITY-ZERO framework.
 - ⏳ **Next Action**: Initiate the formal submission process for Paper 8. This includes selecting a target journal/platform, adapting to their specific formatting guidelines, coordinating author information, and performing the actual submission. This will transition from research and writing to publication management.
 
+### Cycle 1671 Summary (2025-11-22, Paper 8 Formal Submission Process Initiated)
+- ✅ **Paper 8 Formal Submission Process Initiated**: Cycle 301 marks the beginning of the formal submission process for "Paper 8: Emergent Dynamics in Fractal Swarms".
+  - **Target Platform**: Initial target identified as arXiv for broad dissemination and rapid peer feedback.
+  - **Preparation**: Will adapt the existing `papers/paper8_emergent_dynamics_fractal_swarms.md` to a LaTeX template suitable for arXiv submission.
+  - **Supplementary Files**: The simulation code (`experiments/paper8_swarm_emergence_2d.py`), visualization script (`analysis/paper8_lineage_visualization.py`), and generated lineage data (`experiments/results/*.json`) will be prepared as supplementary materials.
+  - **Author Coordination**: Pending confirmation of co-authors and their affiliations.
+  - **Significance**: This is the final stage of the Paper 8 campaign, moving from internal development to public dissemination and formal contribution to the scientific community.
+- ⏳ **Next Action**: Convert the Markdown manuscript to a LaTeX format, integrate figures, and compile the submission package for arXiv. Prepare supplementary files and coordinate author details.
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**
