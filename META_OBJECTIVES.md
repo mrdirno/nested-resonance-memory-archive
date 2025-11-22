@@ -463,13 +463,13 @@
 - **Finding:** $\gamma/\nu \approx 1.014$ (CV=7.5%) across sight ranges 10-25.
 - **Outcome:** Universality Supported. Emergence is independent of micro-parameters.
 
-### 27. **TSF-27: Self-Organized Criticality Test (Evolution)** ✅ COMPLETE
-**Goal:** Test if system naturally evolves toward critical point without tuning.
-**Hypothesis:** SOC = system self-tunes without external parameter tuning.
-- **Experiment:** `experiments/cycle313_self_organized_criticality.py`
-- **Status:** ✅ **COMPLETE** (Cycle 313)
-- **Finding:** Convergence to $c \approx 0.044$ (Sub-Critical).
-- **Outcome:** SOC Falsified. Criticality requires external or meta-control.
+### 29. **TSF-29: Active Emergence Control (Stewardship)** ✅ COMPLETE
+**Goal:** Use the Holographic Reasoner to steer the Swarm to Criticality.
+**Hypothesis:** Active stewardship can maintain the system at the Edge of Chaos.
+- **Experiment:** `experiments/cycle317_active_emergence_control.py`
+- **Status:** ✅ **COMPLETE** (Cycle 317)
+- **Finding:** Pilot successfully steered swarm to Criticality (Error 0.039).
+- **Outcome:** Helios Operational. Stewardship Principle Validated.
 
 ---
 
@@ -516,11 +516,12 @@
 
 ---
 
-## RESEARCH PAUSE (Strategic Pivot)
+## RESEARCH PAUSE (Strategic Pivot) -> **ACTIVE RESOLUTION**
 
-**Status:** 🛑 **PHASE 3 PAUSED**
+**Status:** 🟢 **PHASE 3 ACTIVE (Cycle 316)**
 **Reason:** Fundamental attractor dominance identified. Static tuning, dynamic modulation, and simple heterogeneity are insufficient to engineer "Robust Complexity" in the current NRM physics.
 **Required Innovation:** New interaction logic (e.g., Repulsive Coupling) is needed to break the Rigid Order attractor.
+**Current Action:** Cycle 316 (Repulsive Coupling) CONFIRMED. Asymmetric Mixed Coupling (70/30) yields robust complexity ($R \approx 0.4$).
 
 ---
 
