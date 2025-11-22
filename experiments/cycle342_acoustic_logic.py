@@ -55,8 +55,8 @@ def simulate_logic_gate(input_a_present, input_b_present):
     # Move scatterers further out (15mm from center) to reduce influence
     pos_a = np.array([15.0, 30.0, 30.0])
     pos_b = np.array([45.0, 30.0, 30.0])
-    pos_c_0 = np.array([30.0, 30.0, 30.0]) # Default "0" position (Center)
-    pos_c_1 = np.array([30.0, 40.0, 30.0]) # Target "1" position (Shifted Y)
+    pos_c_0 = np.array([30.0, 30.0, 30.0]) # Default "0" position (Center) 
+    pos_c_1 = np.array([30.0, 40.0, 30.0]) # Target "1" position (Shifted Y) 
     
     # 4. Configure Phases (The "Program")
     # We tune the emitters such that:
@@ -79,7 +79,7 @@ def simulate_logic_gate(input_a_present, input_b_present):
         dist = np.sqrt((e.x - pos_c_0[0])**2 + (e.y - pos_c_0[1])**2 + (e.z - pos_c_0[2])**2)
         dist_m = dist / 1000.0
         e.phase = (k * dist_m) % (2 * np.pi) # Constructive interference (Antinode)
-        # Wait, trap is Node. So we want Destructive?
+        # Wait, trap is Node. So we want Destructive? 
         # Actually, standard levitation uses Standing Wave.
         # Let's stick to the "Focus = Antinode, Trap = Adjacent Node" model.
         
