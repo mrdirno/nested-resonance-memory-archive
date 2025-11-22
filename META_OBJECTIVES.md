@@ -479,6 +479,14 @@
 - **Finding:** Active Damping settled in 0.04s vs 3.28s for Passive (82x Speedup).
 - **Outcome:** Super-Stability unlocked.
 
+### 61. **HELIOS-17: Computational Matter (Acoustic Logic)** ✅ COMPLETE
+**Goal:** Implement an AND Gate using particle interactions.
+- **Hypothesis:** Field superposition from multiple scatterers can implement non-linear logic.
+- **Experiment:** `experiments/cycle342_acoustic_logic.py`
+- **Status:** ✅ **COMPLETE** (Cycle 342)
+- **Finding:** AND Gate verified. Output state "1" (Centered & Shifted) only achieved with inputs (1,1).
+- **Outcome:** Physical Computation unlocked.
+
 ---
 
 ## COMPLETED OBJECTIVES (Phase 5)
