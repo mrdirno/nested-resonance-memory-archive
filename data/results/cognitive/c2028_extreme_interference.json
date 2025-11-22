@@ -1,0 +1,43 @@
+{
+  "cycle": 2028,
+  "experiment": "Extreme Interference",
+  "timestamp": "2025-11-21T17:07:23.700552",
+  "results": [
+    {
+      "similarity": 0.8,
+      "accuracies": {
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0
+      }
+    },
+    {
+      "similarity": 0.9,
+      "accuracies": {
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0
+      }
+    },
+    {
+      "similarity": 0.95,
+      "accuracies": {
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0
+      }
+    },
+    {
+      "similarity": 0.99,
+      "accuracies": {
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0
+      }
+    }
+  ]
+}
