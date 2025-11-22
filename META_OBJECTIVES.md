@@ -1,7 +1,7 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: C2058 (Replenishment Under Load)**
+> **ACTIVE CYCLE: C2062 (Hebbian Strengthening)**
 > **Status**: 🟢 ACTIVE (Execution)
 > **MOG Oversight**: HELIOS AUTONOMOUS MODE
 > **Truth Insurance**: Serial execution enforced.
