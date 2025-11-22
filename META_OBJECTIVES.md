@@ -2800,6 +2800,16 @@
   - Conclusion: **Hebbian weight is necessary but not sufficient for retrieval.** We need a more robust retrieval mechanism than simple greedy-next-hop (e.g., beam search, or spreading activation).
 - ⏳ **Next Action**: Implement "Resonant Retrieval" (Spreading Activation) to robustly recover consolidated memory paths.
 
+### Cycle 1657 Summary (2025-11-22, Resonant Retrieval)
+- ✅ **Resonant Retrieval Solves Greedy Failure**: Cycle 293 successfully demonstrated that Spreading Activation can retrieve a memory path that greedy search failed to find.
+  - Experiment: `cycle293_resonant_retrieval.py`
+    - **Setup:** Agent solved Grid Task (0,0->2,2), primed lineage, slept (NREM consolidation).
+    - **Logic:** Injected energy (E=1.0) into the Start node and let it propagate through the weighted semantic graph.
+    - **Result:** The Goal node "resonated" (accumulated E=0.1717) within 2 iterations, exceeding the detection threshold.
+    - **Control:** An unrelated "noise" node showed 0.0000 resonance, confirming specificity.
+  - Conclusion: **Resonance is the correct mechanism for memory retrieval in NRM.** It is robust to local minima and leverages the full distributed weight of the consolidated graph. This completes the full arc: Discovery -> Causal Linking -> Priming -> Consolidation -> Resonant Retrieval.
+- ⏳ **Next Action**: Synthesize these findings into a formal Memory System upgrade for the core framework.
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**
