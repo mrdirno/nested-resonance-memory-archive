@@ -1,0 +1,23 @@
+{
+  "cycle": 2016,
+  "experiment": "Temporal Encoding",
+  "timestamp": "2025-11-21T16:37:52.141522",
+  "hypothesis": "Position markers enable sequence storage",
+  "results": [
+    {
+      "length": 3,
+      "accuracy": 1.0,
+      "avg_similarity": 0.5076346962976841
+    },
+    {
+      "length": 5,
+      "accuracy": 1.0,
+      "avg_similarity": 0.4102435740158735
+    },
+    {
+      "length": 7,
+      "accuracy": 1.0,
+      "avg_similarity": 0.35359260268497955
+    }
+  ]
+}
