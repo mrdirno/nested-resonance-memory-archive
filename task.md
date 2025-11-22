@@ -64,3 +64,10 @@
     - [x] Determine $f_{crit}$ to 3 decimal places.
     - **RESULT:** $f_{crit} = 0.100$ (sharp first-order transition)
     - E=0.100: 100% survival, E=0.101: 5% survival
+
+# Task: Cycle 282 - Variance Survival Test
+- [x] **Execute C282**
+    - [x] Create `experiments/cycle282_variance_survival.py` (Test E=0.105 with variance).
+    - [x] Run experiment.
+    - [x] **RESULT:** Sigma=0.0 -> 0% Survival. Sigma>=0.1 -> 100% Survival.
+    - [x] **Conclusion:** Critical transition at 0.100 was a synchronization artifact. Heterogeneity enables resilience.
