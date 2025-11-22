@@ -1,0 +1,42 @@
+{
+  "cycle": 2050,
+  "experiment": "Depth Population Tradeoff",
+  "timestamp": "2025-11-21T17:27:33.006300",
+  "results": [
+    {
+      "comp_prob": 0.05,
+      "pop": 11.65,
+      "avg_depth": 1.8657967726717726,
+      "max_depth": 3.8,
+      "total_stored": 585.5
+    },
+    {
+      "comp_prob": 0.1,
+      "pop": 1.95,
+      "avg_depth": 8.617307692307692,
+      "max_depth": 8.9,
+      "total_stored": 1187.2
+    },
+    {
+      "comp_prob": 0.15,
+      "pop": 1.0,
+      "avg_depth": 8.4,
+      "max_depth": 8.4,
+      "total_stored": 269.0
+    },
+    {
+      "comp_prob": 0.2,
+      "pop": 1.0,
+      "avg_depth": 8.05,
+      "max_depth": 8.05,
+      "total_stored": 117.5
+    },
+    {
+      "comp_prob": 0.3,
+      "pop": 1.0,
+      "avg_depth": 8.0,
+      "max_depth": 8.0,
+      "total_stored": 106.0
+    }
+  ]
+}
