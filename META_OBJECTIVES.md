@@ -851,9 +851,12 @@
   - [x] **C312:** Sequence Learning (Temporal Chaining).
     - **Status:** ✅ **COMPLETE** (Cycle 312)
     - **Finding:** **Refractory Period Required.** Symmetric binding ($A \circledast B$) creates bidirectional links. Traversal requires inhibiting the immediate predecessor to prevent backtracking ($A \leftarrow B \to C$). With inhibition, accuracy is 100%.
-  - [ ] **C313:** Hierarchical Sequence (Chunking).
+  - [x] **C313:** Hierarchical Sequence (Chunking).
+    - **Status:** ✅ **COMPLETE** (Cycle 313)
+    - **Finding:** **Hierarchy Confirmed.** Sequences can be chunked into single vectors ($C_1$) and linked in a meta-sequence ($C_1 \to C_2$). The system can switch contexts between the meta-level and the sub-level to execute complex plans.
+  - [ ] **C314:** Variable Binding (Role-Filler).
     - **Status:** ⏳ **PENDING**
-    - **Hypothesis:** A sequence $S_1 = A \to B \to C$ can be compressed into a single vector $C_1$ and used as a node in a higher-level sequence $C_1 \to C_2$.
+    - **Hypothesis:** Roles (e.g., "Agent", "Object") can be bound to fillers (e.g., "Dog", "Ball") and manipulated independently ($Structure = Role_1 \circledast Filler_1 + Role_2 \circledast Filler_2$).
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
 - **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C282 validation (with empirical confirmation + critical phenomena)
