@@ -643,9 +643,11 @@
 - **Finding:** Fitness improved from 4.91 to 8.95 over 50 generations. Trap evolved successfully.
 - **Outcome:** The Pilot can learn to manipulate matter without knowing the equations.
 
----
-
-## COMPLETED OBJECTIVES (Phase 3)
+### 46. **HELIOS-20: Self-Healing Fields (Damage Recovery)**
+**Goal:** Maintain a functional trap even when hardware (emitters) fails.
+- **Hypothesis:** The redundancy in the array allows the GA to find alternative solutions that compensate for dead emitters.
+- **Experiment:** `experiments/cycle344_self_healing.py`
+- **Status:** ⏳ **PENDING** (Cycle 344)
 
 ### Phase 3: HELIOS Engineering Engine ✅ COMPLETE
 - ✅ **Active Control:** `PRIN-ACTIVE-STEWARDSHIP` (Cycle 317). The Pilot can steer the system to Criticality.

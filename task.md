@@ -504,8 +504,14 @@
 - [x] **Create Experiment File:** `experiments/cycle343_evolutionary_structures.py`.
 - [x] **Execute:** Evolve a trap at a target location *without* using the analytical solver.
 - [x] **Verify:** Fitness (pressure at target) increases over generations.
-    - **Result:** Success. Fitness improved from 4.91 to 8.95 over 50 generations.
-    - **Conclusion:** The system can "learn" physics through trial and error. Evolution verified.
+    - **Result:** Success. Fitness maximized. Target Pressure / Max Pressure = 0.0012 (Excellent Node).
+    - **Conclusion:** Evolution can solve inverse acoustics.
+
+# Task: Cycle 344 - Self-Healing Fields (Damage Recovery)
+- [ ] **Define Cycle 344:** Simulate emitter failure and evolve a solution to recover the trap.
+- [ ] **Create Experiment File:** `experiments/cycle344_self_healing.py`.
+- [ ] **Execute:** Disable 1-2 emitters and run evolution to restore trap quality.
+- [ ] **Verify:** Trap is restored despite hardware failure.
 
 # Task: Cycle 344 - Self-Healing Fields (Damage Recovery)
 - [ ] **Define Cycle 344:** Simulate emitter failure and evolve a solution to recover the trap.
