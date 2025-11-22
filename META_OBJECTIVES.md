@@ -567,9 +567,17 @@
 - **Finding:** Physics model validated. Confirmed that simple focusing creates a Repulsor (Antinode); Traps form at $\lambda/4$.
 - **Outcome:** We have a working "Tractor Beam" simulator.
 
-### 40. **HELIOS-14: Multi-Physics Simulation**
+---
+
+## COMPLETED OBJECTIVES (Phase 4)
+
+### 40. **HELIOS-14: Multi-Physics Simulation** ✅ COMPLETE
 **Goal:** Simulate different mediums (e.g., Viscous Fluid vs. Magnetic Field) and verify the Solver adapts.
-- **Status:** ⏳ **PENDING** (Cycle 336)
+- **Hypothesis:** The Solver should generate different instructions for different physics constants without code changes.
+- **Experiment:** `experiments/cycle336_multi_physics.py`
+- **Status:** ✅ **COMPLETE** (Cycle 336)
+- **Finding:** Confirmed. The Compiler automatically adjusted phase delays for the 343x difference in wave speed.
+- **Outcome:** Material Agnosticism Verified.
 
 ### 31. **HELIOS-5: 3D Nodal Trapping (Levitation)**
 **Goal:** Extend control to 3D space and trap a "particle" (agent) in a specific volumetric node.

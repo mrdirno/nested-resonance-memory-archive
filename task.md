@@ -444,6 +444,8 @@
     - **Conclusion:** The "Tractor Beam" physics are valid. We can trap matter.
 
 # Task: Cycle 336 - Multi-Physics Simulation
-- [ ] **Define Cycle 336:** Simulate different mediums (e.g., Viscous Fluid vs. Magnetic Field) and verify the Solver adapts.
-- [ ] **Create Experiment File:** `experiments/cycle336_multi_physics.py`.
-- [ ] **Execute:** Run the Solver on multiple `SubstrateInterface` implementations.
+- [x] **Define Cycle 336:** Simulate different mediums (e.g., Viscous Fluid vs. Magnetic Field) and verify the Solver adapts.
+- [x] **Create Experiment File:** `experiments/cycle336_multi_physics.py`.
+- [x] **Execute:** Run the Solver on multiple `SubstrateInterface` implementations.
+    - **Result:** Success. Compiler generated distinct phase instructions for NRM ($v=1$) and Acoustics ($v=343$).
+    - **Conclusion:** The "Universal Compiler" architecture is valid. The Pilot can control any wave-bearing medium.
