@@ -85,3 +85,14 @@
     - [x] Run experiment.
     - [x] **RESULT:** σ=0.00: 0% Survival. σ≥0.01: 100% Survival.
     - [x] **Conclusion:** The "Variance Barrier" is extremely low. Even minimal heterogeneity (σ=0.01) is sufficient to break synchronization-induced extinction.
+
+# Task: Cycle 285 - Parameter Variance vs. State Variance
+- [x] **Execute C285**
+    - [x] Create `experiments/cycle285_parameter_vs_state_variance.py`.
+    - [x] Run experiment comparing Control, State Variance (E), Parameter Variance (Metabolic Rate), and Both.
+    - [x] **RESULT:**
+        - Control (No Variance): 0% Survival.
+        - State Variance: 100% Survival, Mean Pop ~95.
+        - Parameter Variance: 100% Survival, **Mean Pop ~125**, **Metabolic Rate Evolved from 0.105 to ~0.080**.
+        - Both: 100% Survival, **Mean Pop ~127**, **Metabolic Rate Evolved from 0.105 to ~0.079**.
+    - [x] **Conclusion:** State Variance provides *survival* (buffering). Parameter Variance enables *evolution* (efficiency), leading to significantly higher population capacity.
