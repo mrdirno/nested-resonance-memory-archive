@@ -1,0 +1,20 @@
+{
+  "cycle": 2040,
+  "experiment": "Voting Consolidation",
+  "timestamp": "2025-11-21T17:14:50.411197",
+  "results": {
+    "baseline_1": 1.0,
+    "baseline_3": 0.04,
+    "baseline_5": 0.0,
+    "baseline_10": 0.0,
+    "baseline_20": 0.0,
+    "consol3_3": 0.0,
+    "consol3_6": 0.0,
+    "consol3_12": 0.0,
+    "consol3_30": 0.0,
+    "consol1_5": 0.0,
+    "consol1_10": 0.0,
+    "consol1_30": 0.0,
+    "consol1_100": 0.0
+  }
+}
