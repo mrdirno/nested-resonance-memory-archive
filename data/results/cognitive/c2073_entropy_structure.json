@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_samples": 100,
+    "timestamp": "2025-11-22T00:44:06.656669"
+  },
+  "distributions": [
+    {
+      "name": "synthetic",
+      "mean": 3.614616601302193e-05,
+      "std": 0.01002834695706092,
+      "skewness": -0.0062006875187404775,
+      "kurtosis": 0.018796742556927537,
+      "min": -0.04284447705376246,
+      "max": 0.04268665017745936
+    },
+    {
+      "name": "real_seeded",
+      "mean": 1.69069880953414e-05,
+      "std": 0.009976866249039307,
+      "skewness": 0.018648355620600576,
+      "kurtosis": 0.031146266875700768,
+      "min": -0.04294547506311031,
+      "max": 0.03713219850427869
+    },
+    {
+      "name": "true_cpu",
+      "mean": 2.7647155398380364e-20,
+      "std": 0.0099498743710662,
+      "skewness": 28.001445635885332,
+      "kurtosis": 818.6831433216369,
+      "min": -0.0007706889312247961,
+      "max": 0.3198437118343897
+    }
+  ],
+  "correlations": [
+    {
+      "name": "synthetic",
+      "mean_autocorr": -0.0025579630712996987,
+      "std_autocorr": 0.03148453356226354,
+      "max_autocorr": 0.09209930950236314
+    },
+    {
+      "name": "real_seeded",
+      "mean_autocorr": 0.9197596572781673,
+      "std_autocorr": 0.270785557769505,
+      "max_autocorr": 0.9999999999999998
+    },
+    {
+      "name": "true_cpu",
+      "mean_autocorr": NaN,
+      "std_autocorr": NaN,
+      "max_autocorr": NaN
+    }
+  ],
+  "uniqueness": [
+    {
+      "name": "synthetic",
+      "total_samples": 100,
+      "unique_first_component": 100,
+      "uniqueness_ratio": 1.0
+    },
+    {
+      "name": "real_seeded",
+      "total_samples": 100,
+      "unique_first_component": 8,
+      "uniqueness_ratio": 0.08
+    },
+    {
+      "name": "true_cpu",
+      "total_samples": 100,
+      "unique_first_component": 47,
+      "uniqueness_ratio": 0.47
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "PROBLEM: Real seeded has only 8% unique samples",
+      "Cause: CPU/mem values repeat \u2192 same seed \u2192 identical noise",
+      "PROBLEM: Real seeded has high autocorrelation (0.920)",
+      "FIX: Use true CPU entropy without deterministic seeding"
+    ],
+    "low_uniqueness": true,
+    "high_autocorr": true
+  }
+}
