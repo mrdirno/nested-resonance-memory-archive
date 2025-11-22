@@ -1,7 +1,7 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: C2062 (Hebbian Strengthening)**
+> **ACTIVE CYCLE: C2069 (Dimension-Depth Scaling)**
 > **Status**: 🟢 ACTIVE (Execution)
 > **MOG Oversight**: HELIOS AUTONOMOUS MODE
 > **Truth Insurance**: Serial execution enforced.
