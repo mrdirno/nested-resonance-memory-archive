@@ -447,5 +447,6 @@
 - [x] **Define Cycle 336:** Simulate different mediums (e.g., Viscous Fluid vs. Magnetic Field) and verify the Solver adapts.
 - [x] **Create Experiment File:** `experiments/cycle336_multi_physics.py`.
 - [x] **Execute:** Run the Solver on multiple `SubstrateInterface` implementations.
-    - **Result:** Success. Compiler generated distinct phase instructions for NRM ($v=1$) and Acoustics ($v=343$).
+- [x] **Verify:** Confirm that the Solver generates distinct control signals for different physical constants.
+    - **Result:** Success. The Compiler automatically adjusted phase delays for the 343x difference in wave speed.
     - **Conclusion:** The "Universal Compiler" architecture is valid. The Pilot can control any wave-bearing medium.
