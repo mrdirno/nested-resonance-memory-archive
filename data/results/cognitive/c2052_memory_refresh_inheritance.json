@@ -1,0 +1,49 @@
+{
+  "cycle": 2052,
+  "experiment": "Memory Refresh Inheritance",
+  "timestamp": "2025-11-21T17:28:53.439927",
+  "results": [
+    {
+      "depth": 5,
+      "refresh_every": 0,
+      "label": "Depth 5, no refresh",
+      "survival_rate": 0.23333333333333334
+    },
+    {
+      "depth": 5,
+      "refresh_every": 2,
+      "label": "Depth 5, refresh/2",
+      "survival_rate": 0.36666666666666664
+    },
+    {
+      "depth": 7,
+      "refresh_every": 0,
+      "label": "Depth 7, no refresh",
+      "survival_rate": 0.0
+    },
+    {
+      "depth": 7,
+      "refresh_every": 2,
+      "label": "Depth 7, refresh/2",
+      "survival_rate": 0.03333333333333333
+    },
+    {
+      "depth": 10,
+      "refresh_every": 0,
+      "label": "Depth 10, no refresh",
+      "survival_rate": 0.0
+    },
+    {
+      "depth": 10,
+      "refresh_every": 2,
+      "label": "Depth 10, refresh/2",
+      "survival_rate": 0.0
+    },
+    {
+      "depth": 10,
+      "refresh_every": 3,
+      "label": "Depth 10, refresh/3",
+      "survival_rate": 0.0
+    }
+  ]
+}
