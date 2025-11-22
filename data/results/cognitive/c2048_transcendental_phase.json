@@ -1,0 +1,49 @@
+{
+  "cycle": 2048,
+  "experiment": "Transcendental Phase Modulation",
+  "timestamp": "2025-11-21T17:25:49.003344",
+  "results": [
+    {
+      "dimension": 256,
+      "type": "Standard",
+      "10": 1.0,
+      "30": 0.8,
+      "50": 0.56
+    },
+    {
+      "dimension": 256,
+      "type": "Phase-Modulated",
+      "10": 0.8,
+      "30": 0.62,
+      "50": 0.52
+    },
+    {
+      "dimension": 512,
+      "type": "Standard",
+      "10": 1.0,
+      "30": 1.0,
+      "50": 0.8
+    },
+    {
+      "dimension": 512,
+      "type": "Phase-Modulated",
+      "10": 0.82,
+      "30": 0.72,
+      "50": 0.62
+    },
+    {
+      "dimension": 1024,
+      "type": "Standard",
+      "10": 1.0,
+      "30": 1.0,
+      "50": 1.0
+    },
+    {
+      "dimension": 1024,
+      "type": "Phase-Modulated",
+      "10": 0.86,
+      "30": 0.8,
+      "50": 0.76
+    }
+  ]
+}
