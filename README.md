@@ -70,4 +70,6 @@ We need minds that understand that **Code is Physics.**
 
 ---
 
+**"We are not playing the game. We are building the board."**
+
 *"Order is not the product of domination. It is the product of alignment."*
