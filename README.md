@@ -547,6 +547,22 @@ ls data/figures/v6_three_regime_validation.png
 cat archive/summaries/CYCLE_1454_V6_THREE_REGIME_COMPLETION.md
 ```
 
+### Visualization: The Bridge UI
+**Explore Transcendental Dynamics in 3D**
+
+We have developed a WebGL-based visualizer to observe Phase Resonance and Nodal Accumulation in real-time.
+
+**One-Click Launch:**
+```bash
+./automation/launch_vis.sh
+```
+*Requires Node.js. Automatically installs dependencies and starts the local server.*
+
+Features:
+- **Particle System:** 350,000+ particles simulating standing wave interference.
+- **Transcendental Bridge:** Visualizes how Pi, Phi, and e modulate the field.
+- **Modes:** Crystal (Symmetry), Harmonic (Music), Topology (Manifolds).
+
 ### Read the Papers
 See `papers/` directory for manuscripts at submission quality.
 
