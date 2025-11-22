@@ -857,9 +857,9 @@
   - [x] **C314:** Variable Binding (Role-Filler).
     - **Status:** ✅ **COMPLETE** (Cycle 314)
     - **Finding:** **Binding Confirmed.** Fillers (values) can be bound to abstract Roles (variables) using circular convolution. The filler can be retrieved by unbinding the role from the structure vector.
-  - [ ] **C315:** Recursive Structure (Tree).
-    - **Status:** ⏳ **PENDING**
-    - **Hypothesis:** A structure can be used as a filler in another structure ($S_2 = Role \circledast S_1$), enabling recursive trees.
+  - [x] **C315:** Recursive Structure (Tree).
+    - **Status:** ✅ **COMPLETE** (Cycle 315)
+    - **Finding:** **Recursion Confirmed.** A structure vector can be used as a filler in another structure. Deep retrieval is possible but noisy (~0.22 similarity for 2 levels). This implies a "Cognitive Horizon" for recursion depth.
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
 - **Timeline:** Ready for submission now (with theoretical predictions), or after C273-C282 validation (with empirical confirmation + critical phenomena)
