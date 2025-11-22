@@ -1,0 +1,79 @@
+{
+  "cycle": 2054,
+  "experiment": "Golden Ratio Optimization",
+  "timestamp": "2025-11-21T17:43:32.638614",
+  "results": [
+    {
+      "label": "Baseline",
+      "comp": 0.1,
+      "decomp": 0.1,
+      "thresh": 0.5,
+      "pop": 48.3,
+      "avg_depth": 0.028908363067706267,
+      "max_depth": 0.8
+    },
+    {
+      "label": "C2053 Best",
+      "comp": 0.1618033988749895,
+      "decomp": 0.061803398874989486,
+      "thresh": 0.8090169943749475,
+      "pop": 25.8,
+      "avg_depth": 3.762688002473717,
+      "max_depth": 5.9
+    },
+    {
+      "label": "Half Rate",
+      "comp": 0.08090169943749476,
+      "decomp": 0.030901699437494743,
+      "thresh": 0.8090169943749475,
+      "pop": 28.2,
+      "avg_depth": 3.144382363154664,
+      "max_depth": 4.6
+    },
+    {
+      "label": "1.5x Rate",
+      "comp": 0.2427050983124842,
+      "decomp": 0.09270509831248422,
+      "thresh": 0.8090169943749475,
+      "pop": 43.9,
+      "avg_depth": 1.1805870603560575,
+      "max_depth": 2.9
+    },
+    {
+      "label": "Low Thresh",
+      "comp": 0.1618033988749895,
+      "decomp": 0.061803398874989486,
+      "thresh": 0.4854101966249684,
+      "pop": 32.4,
+      "avg_depth": 3.4401972789115645,
+      "max_depth": 6.25
+    },
+    {
+      "label": "High Thresh",
+      "comp": 0.1618033988749895,
+      "decomp": 0.061803398874989486,
+      "thresh": 1.1326237921249263,
+      "pop": 45.25,
+      "avg_depth": 0.918765306122449,
+      "max_depth": 3.6
+    },
+    {
+      "label": "\u03c6\u00b2 Scaling",
+      "comp": 0.2618033988749895,
+      "decomp": 0.03819660112501052,
+      "thresh": 0.8090169943749475,
+      "pop": 1.35,
+      "avg_depth": 7.45625,
+      "max_depth": 7.6
+    },
+    {
+      "label": "Pure \u03c6 Powers",
+      "comp": 0.2360679774997897,
+      "decomp": 0.38196601125010515,
+      "thresh": 0.6180339887498948,
+      "pop": 48.45,
+      "avg_depth": 0.005102040816326531,
+      "max_depth": 0.2
+    }
+  ]
+}
