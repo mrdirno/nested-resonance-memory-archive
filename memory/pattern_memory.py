@@ -538,6 +538,18 @@ class PatternMemory:
             ))
             conn.commit()
 
+    def clear_patterns(self) -> None:
+        """Clear all patterns from the database."""
+        with self._db_connection() as conn:
+            conn.execute("DELETE FROM patterns")
+            conn.commit()
+
+    def clear_relationships(self) -> None:
+        """Clear all pattern relationships from the database."""
+        with self._db_connection() as conn:
+            conn.execute("DELETE FROM pattern_relationships")
+            conn.commit()
+
     def create_pattern_id(self, pattern_data: Dict[str, Any]) -> str:
         """
         Create a unique pattern ID based on pattern data.
