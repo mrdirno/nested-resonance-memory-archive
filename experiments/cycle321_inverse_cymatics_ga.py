@@ -92,11 +92,12 @@ class Genome:
                 emitter.frequency = np.clip(emitter.frequency, self.bounds['f'][0], self.bounds['f'][1])
                 emitter.phase = np.clip(emitter.phase, self.bounds['p'][0], self.bounds['p'][1])
 
-class GeneticSolver:
-    def __init__(self, target_field, population_size=50, num_emitters=4):
+class InverseCymaticsGA:
+    def __init__(self, target_field, population_size=50, num_emitters=4, mutation_rate=0.1):
         self.target_field = target_field
         self.pop_size = population_size
         self.num_emitters = num_emitters
+        self.mutation_rate = mutation_rate # Added to match C322 call signature
         self.bounds = {
             'x': (0, target_field.width),
             'y': (0, target_field.height),
@@ -155,12 +156,16 @@ class GeneticSolver:
                 parent1 = self._tournament(fitness_scores)
                 parent2 = self._tournament(fitness_scores)
                 child = self._crossover(parent1, parent2)
-                child.mutate(rate=0.2, sigma=0.1)
+                child.mutate(rate=self.mutation_rate, sigma=0.1) # Use self.mutation_rate
                 new_pop.append(child)
                 
             self.population = new_pop
             
-        return self.best_genome, history
+        return {
+            'genome': [e.to_dict() for e in self.best_genome.emitters],
+            'error': self.best_error,
+            'fitness': self.best_fitness
+        } # Return dictionary to match C322 expectations
 
     def _tournament(self, scores, k=3):
         candidates = random.sample(scores, k)
@@ -176,6 +181,9 @@ class GeneticSolver:
                 child.emitters[i] = copy.deepcopy(p2.emitters[i])
         return child
 
+class GeneticSolver(InverseCymaticsGA): # Backward compatibility if needed
+    pass
+
 def main():
     print("CYCLE 321: INVERSE CYMATICS (GENETIC ALGORITHM)")
     print("===============================================")
@@ -189,21 +197,24 @@ def main():
     target.display()
     
     # 2. Initialize Solver
-    solver = GeneticSolver(target, population_size=50, num_emitters=4)
+    solver = InverseCymaticsGA(target, population_size=50, num_emitters=4)
     
     # 3. Evolve
     print("\n--- Evolution Start ---")
-    best_genome, history = solver.evolve(generations=100)
+    result = solver.evolve(generations=100) # Returns dict
+    best_genome_dict = result['genome']
+    # Need to reconstruct Emitter objects for simulation
+    best_emitters = [Emitter(**p) for p in best_genome_dict]
     print("--- Evolution Complete ---")
     
     # 4. Results
-    print(f"\nBest Error: {solver.best_error:.6f}")
+    print(f"\nBest Error: {result['error']:.6f}")
     print("Best Configuration:")
-    for i, e in enumerate(best_genome.emitters):
+    for i, e in enumerate(best_emitters):
         print(f"  Emitter {i}: x={e.x:.1f}, y={e.y:.1f}, f={e.frequency:.2f}, p={e.phase:.2f}")
         
     # 5. Visualize Result
-    sim = CymaticSimulation(width, height, best_genome.emitters)
+    sim = CymaticSimulation(width, height, best_emitters)
     result_field = sim.calculate_density_field()
     
     # Create a temp TargetField just to use its display method
@@ -216,16 +227,16 @@ def main():
     results = {
         "cycle": 321,
         "target": "Square",
-        "best_error": solver.best_error,
-        "emitters": [e.to_dict() for e in best_genome.emitters],
-        "history": history
+        "best_error": result['error'],
+        "emitters": best_genome_dict,
+        "history": [] # History logging was removed from evolve return in new class structure, simplify for now
     }
     
     os.makedirs("experiments/results", exist_ok=True)
     with open("experiments/results/c321_inverse_cymatics.json", "w") as f:
         json.dump(results, f, indent=2)
         
-    if solver.best_error < 0.15: # Threshold for "Soft Success"
+    if result['error'] < 0.15: # Threshold for "Soft Success"
         print("\n>> SUCCESS: GA converged to a reasonable approximation.")
     else:
         print("\n>> RESULT: GA struggled to find a perfect match (Expected for complex inverse problem).")

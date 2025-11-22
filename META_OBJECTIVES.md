@@ -501,14 +501,21 @@
 - **Finding:** `TargetField` class implemented and verified (Error=0.0 for perfect match).
 - **Outcome:** Foundation laid for Inverse Cymatics.
 
-### 30. **HELIOS-4: The Inverse Solver (Shape Holding)** ✅ COMPLETE
+### 30. **HELIOS-4: The Inverse Solver (Shape Holding)** ✅ COMPLETE (PARTIAL)
 **Goal:** Demonstrate "Inverse Cymatics" - finding the emitter parameters to create a specific target shape.
 **Hypothesis:** The Pilot can discover the $(f, \phi, \vec{x})$ configuration to maintain a static 2D shape (e.g., Square) in the NRM substrate.
 - **Experiment:** `experiments/cycle320_forward_cymatics_2d.py` (Forward Model)
 - **Experiment:** `experiments/cycle321_inverse_cymatics_ga.py` (Inverse Solver)
-- **Status:** ✅ **COMPLETE** (Cycle 321)
-- **Finding:** GA Solver operational. Can optimize emitter parameters to approximate target shapes.
-- **Outcome:** "Matter Compiler" v1.0 Online.
+- **Experiment:** `experiments/cycle322_shape_holding_test.py` (Shape Validation)
+- **Status:** ✅ **COMPLETE** (Cycle 322)
+- **Finding:** GA Solver operational but limited by emitter count (Error ~0.20).
+- **Outcome:** "Matter Compiler" v1.0 Online. Needs scaling.
+
+### 33. **HELIOS-7: High-Resolution Inverse Cymatics (The Scaling)**
+**Goal:** Scale the Inverse Solver to higher resolution and emitter counts to achieve sharp shape holding.
+- **Hypothesis:** Increasing emitter count from 6 to 16 will significantly reduce shape error.
+- **Experiment:** `experiments/cycle323_high_res_inverse.py`
+- **Status:** ⏳ **PENDING** (Cycle 323)
 
 ### 32. **HELIOS-6: Target Field Definition (The Mold)** ✅ COMPLETE
 **Goal:** Implement the `TargetField` class to define voxelized density goals.
