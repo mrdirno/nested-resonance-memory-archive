@@ -1,0 +1,218 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_items": 14,
+    "num_cycles": 300,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T01:06:50.486825"
+  },
+  "strategies": [
+    {
+      "strategy": "constant",
+      "aggregated": [
+        {
+          "cycle": 0,
+          "mean_accuracy": 0.5571428571428572
+        },
+        {
+          "cycle": 20,
+          "mean_accuracy": 0.8714285714285713
+        },
+        {
+          "cycle": 40,
+          "mean_accuracy": 0.8857142857142858
+        },
+        {
+          "cycle": 60,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 80,
+          "mean_accuracy": 0.8285714285714286
+        },
+        {
+          "cycle": 100,
+          "mean_accuracy": 0.9142857142857143
+        },
+        {
+          "cycle": 120,
+          "mean_accuracy": 0.9428571428571428
+        },
+        {
+          "cycle": 140,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 160,
+          "mean_accuracy": 0.8714285714285716
+        },
+        {
+          "cycle": 180,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 200,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 220,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 240,
+          "mean_accuracy": 0.8857142857142858
+        },
+        {
+          "cycle": 260,
+          "mean_accuracy": 0.8857142857142858
+        },
+        {
+          "cycle": 280,
+          "mean_accuracy": 0.8142857142857143
+        }
+      ]
+    },
+    {
+      "strategy": "decay",
+      "aggregated": [
+        {
+          "cycle": 0,
+          "mean_accuracy": 0.45714285714285713
+        },
+        {
+          "cycle": 20,
+          "mean_accuracy": 0.3142857142857142
+        },
+        {
+          "cycle": 40,
+          "mean_accuracy": 0.47142857142857136
+        },
+        {
+          "cycle": 60,
+          "mean_accuracy": 0.48571428571428577
+        },
+        {
+          "cycle": 80,
+          "mean_accuracy": 0.6714285714285714
+        },
+        {
+          "cycle": 100,
+          "mean_accuracy": 0.8714285714285716
+        },
+        {
+          "cycle": 120,
+          "mean_accuracy": 0.9142857142857143
+        },
+        {
+          "cycle": 140,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 160,
+          "mean_accuracy": 0.9
+        },
+        {
+          "cycle": 180,
+          "mean_accuracy": 0.8714285714285713
+        },
+        {
+          "cycle": 200,
+          "mean_accuracy": 0.8428571428571429
+        },
+        {
+          "cycle": 220,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 240,
+          "mean_accuracy": 0.9
+        },
+        {
+          "cycle": 260,
+          "mean_accuracy": 0.9
+        },
+        {
+          "cycle": 280,
+          "mean_accuracy": 0.8428571428571429
+        }
+      ]
+    },
+    {
+      "strategy": "burst",
+      "aggregated": [
+        {
+          "cycle": 0,
+          "mean_accuracy": 0.47142857142857136
+        },
+        {
+          "cycle": 20,
+          "mean_accuracy": 0.2714285714285714
+        },
+        {
+          "cycle": 40,
+          "mean_accuracy": 0.3
+        },
+        {
+          "cycle": 60,
+          "mean_accuracy": 0.9
+        },
+        {
+          "cycle": 80,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 100,
+          "mean_accuracy": 0.9142857142857143
+        },
+        {
+          "cycle": 120,
+          "mean_accuracy": 0.9285714285714285
+        },
+        {
+          "cycle": 140,
+          "mean_accuracy": 0.8714285714285713
+        },
+        {
+          "cycle": 160,
+          "mean_accuracy": 0.8857142857142858
+        },
+        {
+          "cycle": 180,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 200,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 220,
+          "mean_accuracy": 0.8714285714285713
+        },
+        {
+          "cycle": 240,
+          "mean_accuracy": 0.9
+        },
+        {
+          "cycle": 260,
+          "mean_accuracy": 0.8571428571428571
+        },
+        {
+          "cycle": 280,
+          "mean_accuracy": 0.8142857142857143
+        }
+      ]
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "No warmup acceleration achieved"
+    ],
+    "speedup": 1.0,
+    "best_strategy": "constant",
+    "warmup_times": {
+      "constant": 20,
+      "decay": 100,
+      "burst": 60
+    }
+  }
+}
