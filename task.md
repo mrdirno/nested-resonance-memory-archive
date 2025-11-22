@@ -96,3 +96,11 @@
         - Parameter Variance: 100% Survival, **Mean Pop ~125**, **Metabolic Rate Evolved from 0.105 to ~0.080**.
         - Both: 100% Survival, **Mean Pop ~127**, **Metabolic Rate Evolved from 0.105 to ~0.079**.
     - [x] **Conclusion:** State Variance provides *survival* (buffering). Parameter Variance enables *evolution* (efficiency), leading to significantly higher population capacity.
+
+# Task: Cycle 286 - Pattern Archaeology
+- [x] **Define Cycle 286:** Pattern Archaeology - Memory Lineage Analysis.
+- [x] **Execute Analysis:** Run `experiments/cycle286_pattern_archaeology.py`.
+- [x] **Findings:**
+    - **Shallow Lineage:** Most patterns have depth=1. No deep causal chains yet.
+    - **Semantic Hubs:** "Cluster Formation" and "Population Homeostasis" are key connected nodes.
+- [x] **Recommendation:** Future cycles must prioritize *explicit linking* of new patterns to their causal ancestors to build deep memory hierarchies.

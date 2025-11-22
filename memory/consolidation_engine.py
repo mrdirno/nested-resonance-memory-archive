@@ -31,7 +31,7 @@ from dataclasses import dataclass, field
 from contextlib import contextmanager
 
 # Add modules to path
-sys.path.insert(0, str(Path(__file__).parent.parent / "fractal"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "core"))
 sys.path.insert(0, str(Path(__file__).parent.parent / "bridge"))
 sys.path.insert(0, str(Path(__file__).parent))
 
