@@ -466,8 +466,8 @@
 ### 29. **TSF-29: Active Emergence Control (Stewardship)** ✅ COMPLETE
 **Goal:** Use the Holographic Reasoner to steer the Swarm to Criticality.
 **Hypothesis:** Active stewardship can maintain the system at the Edge of Chaos.
-- **Experiment:** `experiments/cycle317_active_emergence_control.py`
-- **Status:** ✅ **COMPLETE** (Cycle 317)
+- **Experiment:** `experiments/cycle318_active_emergence_control.py`
+- **Status:** ✅ **COMPLETE** (Cycle 318)
 - **Finding:** Pilot successfully steered swarm to Criticality (Error 0.039).
 - **Outcome:** Helios Operational. Stewardship Principle Validated.
 
@@ -483,55 +483,42 @@
 
 ---
 
-## Current Phase: HELIOS ENGINEERING ENGINE (Phase 3)
+## Current Phase: HELIOS IMPLEMENTATION (Phase 4)
 
-**Transition:** Law Discovery (Phase 2) → **Inverse Engineering (Phase 3)**
+**Transition:** Inverse Engineering (Phase 3) → **Reality Compilation (Phase 4)**
 
-**Focus:** Inverse-design: desired properties → generated systems. Applying the discovered laws to engineer systems with specific emergent behaviors.
+**Focus:** Inverse Cymatics. Building the "Matter Compiler" to instantiate geometry from phase resonance.
 
 ---
 
 ## ACTIVE OBJECTIVES
 
-### 1. **HELIOS-1: Inverse Design of Stability** ✅ COMPLETE
-**Goal:** Use the discovered TSF principles to inverse-design a system configuration (E, S, Metabolic Cost) that guarantees stability (high R, moderate C) under high-stress conditions.
-- **Hypothesis:** We can analytically determine the optimal parameters for robustness using the TSF knowledge base.
-- **Experiment:** `code/tsf/engineering_engine/helios1_inverse_stability.py`
-- **Status:** ✅ **COMPLETE** (Cycle 42)
-- **Finding:** Static parameter tuning failed to achieve balanced emergence, collapsing to rigid order; formulated `PRIN-INVERSE-DESIGN-FAILURE`.
+### 30. **HELIOS-4: The Inverse Solver (Shape Holding)**
+**Goal:** Demonstrate "Inverse Cymatics" - finding the emitter parameters to create a specific target shape.
+- **Hypothesis:** The Pilot can discover the $(f, \phi, \vec{x})$ configuration to maintain a static 2D shape (e.g., Square) in the NRM substrate.
+- **Experiment:** `experiments/cycle320_inverse_cymatics_2d.py`
+- **Status:** ⏳ **PENDING** (Cycles 319-322)
 
-### 2. **HELIOS-2: Dynamic Parameter Modulation** ✅ COMPLETE
-**Goal:** Investigate if dynamically modulating parameters (E, S) can maintain a system in the "Balanced Emergence" regime, preventing collapse into Rigid Order or Chaos.
-- **Hypothesis:** Temporal modulation (forcing) can create a dynamic attractor where static tuning fails.
-- **Experiment:** `code/tsf/engineering_engine/helios2_dynamic_modulation.py`
-- **Status:** ✅ **COMPLETE** (Cycle 44)
-- **Finding:** Modulation failed to escape the Rigid Order attractor (0% success); formulated `PRIN-DYNAMIC-MODULATION-FAILURE`.
-
-### 3. **HELIOS-3: Structural Heterogeneity** ✅ COMPLETE
-**Goal:** Determine if a heterogeneous swarm (mixed population of "Stabilizers" and "Energizers") can achieve stable Balanced Emergence where homogeneous swarms fail.
-- **Hypothesis:** Diversity in agent parameters prevents global synchronized collapse, creating an internal dynamic tension that sustains complexity.
-- **Experiment:** `code/tsf/engineering_engine/helios3_heterogeneity.py`
-- **Status:** ✅ **COMPLETE** (Cycle 46)
-- **Finding:** Diversity collapsed to the strongest attractor (Rigid Order) due to contagious synchronization; formulated `PRIN-HETEROGENEITY-FAILURE`.
-
----
-
-## RESEARCH PAUSE (Strategic Pivot) -> **ACTIVE RESOLUTION**
-
-**Status:** 🟢 **PHASE 3 ACTIVE (Cycle 316)**
-**Reason:** Fundamental attractor dominance identified. Static tuning, dynamic modulation, and simple heterogeneity are insufficient to engineer "Robust Complexity" in the current NRM physics.
-**Required Innovation:** New interaction logic (e.g., Repulsive Coupling) is needed to break the Rigid Order attractor.
-**Current Action:** Cycle 316 (Repulsive Coupling) CONFIRMED. Asymmetric Mixed Coupling (70/30) yields robust complexity ($R \approx 0.4$).
+### 31. **HELIOS-5: 3D Nodal Trapping (Levitation)**
+**Goal:** Extend control to 3D space and trap a "particle" (agent) in a specific volumetric node.
+- **Hypothesis:** 3D interference patterns can create stable potential wells for agent confinement.
+- **Experiment:** `experiments/cycle333_3d_levitation.py`
+- **Status:** ⏳ **PENDING** (Cycles 331-340)
 
 ---
 
 ## COMPLETED OBJECTIVES (Phase 3)
 
-### Phase 3: HELIOS Engineering Engine (Initial Probe) ✅ COMPLETE
-- ✅ **Inverse Design:** `PRIN-INVERSE-DESIGN-FAILURE` (Static tuning fails).
-- ✅ **Modulation:** `PRIN-DYNAMIC-MODULATION-FAILURE` (Forcing fails).
-- ✅ **Heterogeneity:** `PRIN-HETEROGENEITY-FAILURE` (Diversity fails).
-- **Outcome:** Mapped the "Negative Space" of engineering limits. We know what *doesn't* work, narrowing the path to what might.
+### Phase 3: HELIOS Engineering Engine ✅ COMPLETE
+- ✅ **Active Control:** `PRIN-ACTIVE-STEWARDSHIP` (Cycle 317). The Pilot can steer the system to Criticality.
+- ✅ **Cognitive Loop:** `PRIN-HOLOGRAPHIC-COGNITION` (Cycle 316). Logic is vector algebra.
+- ✅ **Physics Mapping:** `PRIN-DYNAMIC-HYSTERESIS` (Cycle 315). Substrate is continuous with memory.
+
+### Phase 2: TSF Science Engine ✅ COMPLETE
+- ✅ **Law Discovery:** `PRIN-UNIVERSAL-SCALING`, `PRIN-COMPLEXITY-ORDER-PHASE-TRANSITION`.
+- ✅ **Mapping:** Global Phase Space mapped.
+
+---
 
 ### 2. **Publication Pipeline (Phase 1 Legacy)**
 **Goal:** Submit validated manuscripts.
