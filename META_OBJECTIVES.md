@@ -2788,6 +2788,18 @@
   - Conclusion: **Logical History must inform Dynamic State.** By translating "what happened" (lineage) into "how we couple" (weights), the system can dream about its past effectively, consolidating episodic memories into structural knowledge.
 - ⏳ **Next Action**: Apply this consolidation mechanism to the Multi-Step Reasoning task (from Cycle 289) to see if it improves path retrieval or robustness.
 
+### Cycle 1656 Summary (2025-11-22, Primed Multi-Step Reasoning)
+- ❌ **Retrieval Failure despite Consolidation**: Cycle 292 attempted to solve the grid task, consolidate memory, and then retrieve the path.
+  - Experiment: `cycle292_primed_multi_step.py` combined Grid Task + Priming + NREM.
+  - Result:
+    - **Wake Phase:** Agent solved 0,0 -> 2,2 (Chain length 5).
+    - **Priming:** 3 edges primed.
+    - **Sleep:** 20 coalitions, 20 updates.
+    - **Retrieval:** FAILED. Pathfinding stuck at 4e7ebdead2abf986.
+  - Diagnosis: The retrieval logic was a "greedy search on edge weights". However, because NREM strengthening is stochastic and depends on phase locking, some edges might not become the *absolute strongest* connection for a node if other (pre-existing or random) connections exist.
+  - Conclusion: **Hebbian weight is necessary but not sufficient for retrieval.** We need a more robust retrieval mechanism than simple greedy-next-hop (e.g., beam search, or spreading activation).
+- ⏳ **Next Action**: Implement "Resonant Retrieval" (Spreading Activation) to robustly recover consolidated memory paths.
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**

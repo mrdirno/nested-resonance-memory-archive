@@ -134,3 +134,34 @@
 - [x] **Validation:** `PatternArchaeologist` traced the lineage from the "Goal" pattern back to the "Start" pattern.
 - [x] **Result:** Lineage Depth (7) matched Path Length (6 moves + start).
 - [x] **Conclusion:** The system can effectively map a sequential reasoning process or plan execution into a retrievable causal chain.
+
+# Task: Cycle 290 - Sleep-Dependent Memory Consolidation (Initial Attempt)
+- [x] **Define Cycle 290:** Sleep-Dependent Memory Consolidation.
+- [x] **Execute:** `experiments/cycle290_sleep_consolidation.py`.
+    - Generated a causal chain of 5 patterns.
+    - Seeded weak semantic graph edges (w=0.1) to simulate temporal association.
+    - Ran `nrem_consolidation`.
+- [x] **Result:** Mixed/Failed. Some edges strengthened, others didn't.
+- [x] **Diagnosis:** Disconnect between "Logical Lineage" (pattern_relationships) and "Dynamic Coupling" (semantic_graph).
+
+# Task: Cycle 291 - Primed Consolidation
+- [x] **Define Cycle 291:** Pre-Sleep Causal Priming.
+- [x] **Implement:** Added `prime_semantic_graph()` to `ConsolidationEngine`.
+    - Transcribes causal lineage relationships into initial weights (w=0.5) in the semantic graph.
+- [x] **Execute:** `experiments/cycle291_primed_consolidation.py`.
+- [x] **Result:** **Success.**
+    - Priming initialized 26 edges.
+    - NREM sleep successfully strengthened the critical causal backbone (edges reached w=1.0).
+- [x] **Conclusion:** Logical history must inform dynamic state to enable effective consolidation.
+
+# Task: Cycle 292 - Multi-Step Reasoning with Primed Consolidation
+- [x] **Define Cycle 292:** Multi-Step Reasoning with Primed Consolidation.
+- [x] **Execute:** `experiments/cycle292_primed_multi_step.py`.
+    - Agent solved Grid Task (0,0 -> 2,2).
+    - Primed semantic graph from lineage.
+    - Slept (NREM).
+    - Attempted retrieval via semantic graph pathfinding.
+- [x] **Result:** **Failure.** "Could not retrieve path."
+    - Retrieval got stuck at w=0.5 edges, didn't follow the strengthened path?
+    - Or perhaps the path wasn't strengthened enough?
+- [x] **Next:** Investigate why retrieval failed despite successful consolidation in C291.
