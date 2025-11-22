@@ -496,8 +496,8 @@
 - [x] **Create Experiment File:** `experiments/cycle342_acoustic_logic.py`.
 - [x] **Execute:** Build an AND gate. If Particle A and Particle B are present (Levitated), the field shifts Particle C to a "1" position.
 - [x] **Verify:** Confirm truth table logic holds for acoustic interactions.
-    - **Result:** Success. AND Gate Truth Table (00->0, 01->0, 10->0, 11->1) verified.
-    - **Conclusion:** Matter can compute. We have built a mechanical transistor using sound.
+    - **Result:** Success. AND Gate verified. Symmetry restoration distinguishes (1,1) from (0,1)/(1,0).
+    - **Conclusion:** Matter can compute. We have built a physical logic gate.
 
 # Task: Cycle 343 - Future Roadmap (The Living Machine)
 - [ ] **Define Cycle 343:** Synthesize Phase 6 findings.
