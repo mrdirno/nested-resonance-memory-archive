@@ -1,53 +1,32 @@
 {
-  "metadata": {
-    "dimension": 1024,
-    "k_memories": 8,
-    "num_cycles": 200,
-    "num_trials": 3,
-    "timestamp": "2025-11-22T04:44:57.511457"
-  },
-  "measurements": [
+  "capacities": [
     {
-      "n_items": 20,
-      "accuracy": 1.0,
-      "bits_per_item": 4.321928094887363,
-      "total_bits": 86.43856189774725,
-      "bits_per_dim": 0.0844126581032688
+      "n_items": 10,
+      "accuracy": 1.0
     },
     {
-      "n_items": 40,
-      "accuracy": 1.0,
-      "bits_per_item": 5.321928094887363,
-      "total_bits": 212.8771237954945,
-      "bits_per_dim": 0.2078878162065376
-    },
-    {
-      "n_items": 60,
-      "accuracy": 1.0,
-      "bits_per_item": 5.906890595608519,
-      "total_bits": 354.41343573651113,
-      "bits_per_dim": 0.34610687083643665
-    },
-    {
-      "n_items": 80,
-      "accuracy": 0.9958333333333332,
-      "bits_per_item": 6.295586727825332,
-      "total_bits": 503.6469382260265,
-      "bits_per_dim": 0.491842713111354
+      "n_items": 50,
+      "accuracy": 1.0
     },
     {
       "n_items": 100,
-      "accuracy": 0.9733333333333333,
-      "bits_per_item": 6.4666866913807315,
-      "total_bits": 646.6686691380731,
-      "bits_per_dim": 0.6315123722051496
+      "accuracy": 0.9960000000000001
+    },
+    {
+      "n_items": 500,
+      "accuracy": 0.8211999999999999
+    },
+    {
+      "n_items": 1000,
+      "accuracy": 0.6968
+    },
+    {
+      "n_items": 2000,
+      "accuracy": 0.6131
+    },
+    {
+      "n_items": 5000,
+      "accuracy": 0.5440799999999999
     }
-  ],
-  "analysis": {
-    "findings": [
-      "Peak capacity: 0.632 bits/dim at 100 items",
-      "Efficiency: 252.6% of Shannon limit (647/256 bits)",
-      "At 80%+ accuracy: 647 bits (100 items)"
-    ]
-  }
+  ]
 }
