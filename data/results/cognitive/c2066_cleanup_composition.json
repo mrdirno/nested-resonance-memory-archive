@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 300,
+    "num_trials": 10,
+    "timestamp": "2025-11-21T23:52:20.197092"
+  },
+  "conditions": [
+    {
+      "cleanup": false,
+      "mean_similarity": 0.08431140752349586,
+      "success_rate": 0.4
+    },
+    {
+      "cleanup": true,
+      "mean_similarity": 1.0,
+      "success_rate": 1.0
+    }
+  ],
+  "analysis": {
+    "no_cleanup_success": 0.4,
+    "with_cleanup_success": 1.0,
+    "improvement": 0.6,
+    "findings": [
+      "Cleanup improves composition by 60% (40% \u2192 100%)"
+    ],
+    "status": "CLEANUP_EFFECTIVE"
+  }
+}
