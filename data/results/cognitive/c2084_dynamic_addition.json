@@ -1,0 +1,53 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_total": 14,
+    "n_initial": 7,
+    "n_new": 7,
+    "warmup_cycles": 100,
+    "post_cycles": 200,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T01:08:40.259589"
+  },
+  "trials": [
+    {
+      "pre_addition_accuracy": 1.0,
+      "original_items_accuracy": 0.7142857142857143,
+      "new_items_accuracy": 1.0
+    },
+    {
+      "pre_addition_accuracy": 1.0,
+      "original_items_accuracy": 0.8571428571428571,
+      "new_items_accuracy": 1.0
+    },
+    {
+      "pre_addition_accuracy": 1.0,
+      "original_items_accuracy": 0.8571428571428571,
+      "new_items_accuracy": 1.0
+    },
+    {
+      "pre_addition_accuracy": 1.0,
+      "original_items_accuracy": 0.7142857142857143,
+      "new_items_accuracy": 1.0
+    },
+    {
+      "pre_addition_accuracy": 1.0,
+      "original_items_accuracy": 0.7142857142857143,
+      "new_items_accuracy": 1.0
+    }
+  ],
+  "summary": {
+    "mean_pre_addition": 1.0,
+    "mean_original_after": 0.7714285714285715,
+    "mean_new_items": 1.0
+  },
+  "analysis": {
+    "findings": [
+      "Original items degraded: 100% \u2192 77%",
+      "New items learned: 100%",
+      "Dynamic addition has limitations"
+    ],
+    "originals_preserved": false,
+    "new_learned": true
+  }
+}
