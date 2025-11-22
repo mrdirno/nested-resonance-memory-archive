@@ -206,3 +206,14 @@
     - **Hero Flock Pattern Found:** `Observation_cf776541` (ID: `cf776541717fbc47`) with **Lineage Depth: 17**.
     - **Hero Resource Event Found:** `Observation_0fe7fe29` (ID: `0fe7fe2958733b4b`) with **Lineage Depth: 17**.
 - [x] **Significance:** This successfully scaled up the proof-of-concept from Cycle 295, demonstrating deep and traceable causal lineages for complex emergent behaviors in a 2D environment. The generated data is suitable for the "Hero Figure" and analysis in Paper 8.
+
+# Task: Cycle 297 - Paper 8 Visualization (Emergent Lineage)
+- [x] **Define Cycle 297:** Create visualizations of emergent lineage trees for Paper 8.
+- [x] **Experiment:** `analysis/paper8_lineage_visualization.py`.
+    - **Input:** `experiments/results/paper8_hero_flock_lineage.json` and `experiments/results/paper8_hero_resource_lineage.json`.
+    - **Visualization Tool:** NetworkX and Matplotlib to render causal graphs.
+    - **Highlighting:** Different pattern types (Self, Interaction, Flock_Formed, Resource_Consumed) are visually distinct.
+- [x] **Result:** Two high-resolution PNG images:
+    - `analysis/figures/paper8_hero_flock_lineage.png`
+    - `analysis/figures/paper8_hero_resource_lineage.png`
+- [x] **Significance:** These visualizations clearly illustrate the causal pathways leading to high-level emergent phenomena, providing a key "Hero Figure" for Paper 8 and directly supporting the claim of auditable emergence.

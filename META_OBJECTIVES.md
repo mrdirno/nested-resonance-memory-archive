@@ -2854,6 +2854,14 @@
   - **Significance**: This quantitatively demonstrates that complex emergent behaviors in 2D swarm systems exhibit deep, traceable causal lineages, confirming that emergence is an auditable process. This data is now ready for visualization and integration into Paper 8.
 - ⏳ **Next Action**: Develop visualization tools for Paper 8 to graphically represent the emergent lineage trees and prepare the final manuscript.
 
+### Cycle 1667 Summary (2025-11-22, Paper 8 Visualization Complete)
+- ✅ **Paper 8 Lineage Visualizations Completed**: Cycle 297 successfully generated compelling visualizations of emergent lineage trees for Paper 8.
+  - **Experiment**: `analysis/paper8_lineage_visualization.py`.
+  - **Input**: `experiments/results/paper8_hero_flock_lineage.json` and `experiments/results/paper8_hero_resource_lineage.json`.
+  - **Output**: Two high-resolution PNG images: `analysis/figures/paper8_hero_flock_lineage.png` and `analysis/figures/paper8_hero_resource_lineage.png`.
+  - **Significance**: These visualizations serve as crucial "Hero Figures" for Paper 8, offering a clear and intuitive representation of how high-level emergent patterns (flocks, resource consumption events) causally depend on sequences of low-level agent interactions. This directly supports the central thesis that emergence is an auditable process within the NRM framework.
+- ⏳ **Next Action**: Draft "Paper 8: Emergent Dynamics in Fractal Swarms" manuscript, integrating the empirical data and visualizations produced in Cycles 296-297.
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**
