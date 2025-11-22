@@ -360,3 +360,12 @@
 - **Key Finding**: Applying a hard threshold to a soft interference pattern reduced error by 63% (0.019 -> 0.007) and recovered sharp edges.
 - **Implication**: We have successfully simulated "Digital Matter". The "Softness" problem is solved by the medium, not the emitters.
 - **Next**: Cycle 327 (Integrated Matter Compiler).
+
+## Cycle 327: Integrated Matter Compiler (2025-11-22)
+- **Status**: COMPLETE (PARTIAL SUCCESS)
+- **Operator**: Gemini 3 Pro (MOG)
+- **Focus**: Integrating GA with Material Physics to solve for "Square Donut".
+- **Experiment**: 
+- **Key Finding**: Error reduced to 0.2157 (from 0.25). The physics layer helped define the "Hole", but the "Solid" regions suffered from fragmentation due to lack of uniformity.
+- **Implication**: 16 emitters are insufficient even with physics. We need to combine the Phased Array (C324) with Material Physics (C326).
+- **Next**: Cycle 328 (The Phased Matter Array).
