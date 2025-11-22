@@ -1,0 +1,306 @@
+{
+  "cycle": 2036,
+  "experiment": "Operational Profile",
+  "timestamp": "2025-11-21T17:12:09.692933",
+  "profile": {
+    "safe_zone": [
+      {
+        "items": 3,
+        "similarity": 0.0,
+        "noise": 0.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.0,
+        "noise": 1.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.0,
+        "noise": 2.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.0,
+        "noise": 3.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.5,
+        "noise": 0.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.5,
+        "noise": 1.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.5,
+        "noise": 2.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.5,
+        "noise": 3.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.9,
+        "noise": 0.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.9,
+        "noise": 1.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.9,
+        "noise": 2.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 3,
+        "similarity": 0.9,
+        "noise": 3.0,
+        "accuracy": 0.94
+      },
+      {
+        "items": 3,
+        "similarity": 0.99,
+        "noise": 0.0,
+        "accuracy": 0.9
+      },
+      {
+        "items": 5,
+        "similarity": 0.0,
+        "noise": 0.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 5,
+        "similarity": 0.0,
+        "noise": 1.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 5,
+        "similarity": 0.0,
+        "noise": 2.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 5,
+        "similarity": 0.0,
+        "noise": 3.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 5,
+        "similarity": 0.5,
+        "noise": 0.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 5,
+        "similarity": 0.5,
+        "noise": 1.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 5,
+        "similarity": 0.5,
+        "noise": 2.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 5,
+        "similarity": 0.5,
+        "noise": 3.0,
+        "accuracy": 0.98
+      },
+      {
+        "items": 5,
+        "similarity": 0.9,
+        "noise": 0.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 5,
+        "similarity": 0.9,
+        "noise": 1.0,
+        "accuracy": 0.98
+      },
+      {
+        "items": 7,
+        "similarity": 0.0,
+        "noise": 0.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 7,
+        "similarity": 0.0,
+        "noise": 1.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 7,
+        "similarity": 0.0,
+        "noise": 2.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 7,
+        "similarity": 0.0,
+        "noise": 3.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 7,
+        "similarity": 0.5,
+        "noise": 0.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 7,
+        "similarity": 0.5,
+        "noise": 1.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 7,
+        "similarity": 0.5,
+        "noise": 2.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 7,
+        "similarity": 0.5,
+        "noise": 3.0,
+        "accuracy": 0.96
+      },
+      {
+        "items": 7,
+        "similarity": 0.9,
+        "noise": 0.0,
+        "accuracy": 1.0
+      },
+      {
+        "items": 7,
+        "similarity": 0.9,
+        "noise": 1.0,
+        "accuracy": 1.0
+      }
+    ],
+    "degraded_zone": [
+      {
+        "items": 3,
+        "similarity": 0.99,
+        "noise": 1.0,
+        "accuracy": 0.78
+      },
+      {
+        "items": 3,
+        "similarity": 0.99,
+        "noise": 2.0,
+        "accuracy": 0.7
+      },
+      {
+        "items": 3,
+        "similarity": 0.99,
+        "noise": 3.0,
+        "accuracy": 0.52
+      },
+      {
+        "items": 5,
+        "similarity": 0.9,
+        "noise": 2.0,
+        "accuracy": 0.88
+      },
+      {
+        "items": 5,
+        "similarity": 0.9,
+        "noise": 3.0,
+        "accuracy": 0.68
+      },
+      {
+        "items": 5,
+        "similarity": 0.99,
+        "noise": 0.0,
+        "accuracy": 0.88
+      },
+      {
+        "items": 7,
+        "similarity": 0.9,
+        "noise": 2.0,
+        "accuracy": 0.66
+      },
+      {
+        "items": 7,
+        "similarity": 0.99,
+        "noise": 0.0,
+        "accuracy": 0.54
+      }
+    ],
+    "failure_zone": [
+      {
+        "items": 5,
+        "similarity": 0.99,
+        "noise": 1.0,
+        "accuracy": 0.38
+      },
+      {
+        "items": 5,
+        "similarity": 0.99,
+        "noise": 2.0,
+        "accuracy": 0.38
+      },
+      {
+        "items": 5,
+        "similarity": 0.99,
+        "noise": 3.0,
+        "accuracy": 0.24
+      },
+      {
+        "items": 7,
+        "similarity": 0.9,
+        "noise": 3.0,
+        "accuracy": 0.46
+      },
+      {
+        "items": 7,
+        "similarity": 0.99,
+        "noise": 1.0,
+        "accuracy": 0.18
+      },
+      {
+        "items": 7,
+        "similarity": 0.99,
+        "noise": 2.0,
+        "accuracy": 0.08
+      },
+      {
+        "items": 7,
+        "similarity": 0.99,
+        "noise": 3.0,
+        "accuracy": 0.06
+      }
+    ]
+  },
+  "summary": {
+    "safe_count": 33,
+    "degraded_count": 8,
+    "failure_count": 7
+  }
+}
