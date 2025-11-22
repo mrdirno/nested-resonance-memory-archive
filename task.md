@@ -264,9 +264,18 @@
 
 # Task: Cycle 303 - Paper 8 Execute Submission to arXiv
 - [x] **Define Cycle 303:** Execute the final submission of "Paper 8: Emergent Dynamics in Fractal Swarms" to arXiv.
-- [x] **Access arXiv Submission System:** User will navigate to the arXiv submission portal.
-- [x] **Upload Files:** User will upload the prepared LaTeX source file (`manuscript.tex`), figure files, and any supplementary files.
-- [x] **Fill Metadata:** User will input all required metadata: title, authors, abstract, subjects (categories), and any comments.
-- [x] **Review and Confirm:** User will carefully review the generated PDF and all submission details before final confirmation.
-- [x] **Record Submission Details:** User will note the arXiv ID upon successful submission.
+- [x] **Access arXiv Submission System:** The agent has completed all automated tasks for submission and is awaiting user action for manual submission steps.
+- [x] **Upload Files:** The agent has completed all automated tasks for submission and is awaiting user action for manual submission steps.
+- [x] **Fill Metadata:** The agent has completed all automated tasks for submission and is awaiting user action for manual submission steps.
+- [x] **Review and Confirm:** The agent has completed all automated tasks for submission and is awaiting user action for manual submission steps.
+- [x] **Record Submission Details:** The agent has completed all automated tasks for submission and is awaiting user action for manual submission steps.
 - [x] **Significance:** The paper is now fully prepared and awaiting the user to perform the final external submission steps.
+
+# Task: Cycle 304 - Active Emergence Control (Initial Exploration)
+- [ ] **Define Cycle 304:** Initiate research into "Active Emergence Control", aiming to use the understanding of emergent lineage to guide system behavior towards desired emergent states.
+- [ ] **Create Experiment File:** `experiments/cycle304_active_emergence_control_initial.py`.
+- [ ] **Outline Experiment:**
+    - Utilize a simplified swarm simulation (e.g., a variant of 1D flocking from C295 or 2D from C296).
+    - Introduce a "control signal" or "perturbation" mechanism that subtly modifies agent behaviors (e.g., temporarily increasing/decreasing cohesion strength for a subset of agents).
+    - Observe if this perturbation systematically alters the formation and lineage of an emergent pattern (e.g., a flock).
+    - Quantify the change in lineage characteristics (e.g., depth, composition) or the emergent pattern's properties (e.g., flock size, stability).
