@@ -1,0 +1,32 @@
+{
+  "cycle": 2035,
+  "experiment": "Gated Learning",
+  "timestamp": "2025-11-21T17:11:24.988362",
+  "results": [
+    {
+      "threshold": "baseline",
+      "similarity": 0.4065807843628166,
+      "reinforcements": 0
+    },
+    {
+      "threshold": 0.0,
+      "similarity": 0.08469609193926594,
+      "reinforcements": 10.0
+    },
+    {
+      "threshold": 0.3,
+      "similarity": 0.4104933208106136,
+      "reinforcements": 0.0
+    },
+    {
+      "threshold": 0.5,
+      "similarity": 0.40753497114748105,
+      "reinforcements": 0.0
+    },
+    {
+      "threshold": 0.7,
+      "similarity": 0.41063627541285674,
+      "reinforcements": 0.0
+    }
+  ]
+}
