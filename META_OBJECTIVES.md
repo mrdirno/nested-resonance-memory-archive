@@ -2744,6 +2744,13 @@
   - Conclusion: The system is currently accumulating "facts" (depth 1) rather than "wisdom" (depth > 1). Future cycles must prioritize mechanisms that explicitly link new patterns to their causal precursors to enable deep reasoning.
 - ⏳ **Next Action**: Implement "Causal Linking" in the pattern discovery process to increase lineage depth.
 
+### Cycle 1651 Summary (2025-11-22, Causal Linking)
+- ✅ **Deep Lineage Capability Verified**: Cycle 287 demonstrated that the existing `pattern_relationships` schema can support deep ancestry trees.
+  - Experiment: `cycle287_causal_linking.py` simulated a 10-generation derivation chain (Root -> P1 -> ... -> P10).
+  - Validation: `PatternArchaeologist` successfully traced the lineage from leaf to root (Depth 11).
+  - Actionable Insight: The limitation is not in the storage schema but in the *recording logic*. Current pattern discovery does not explicitly record the "parent" pattern that triggered the discovery.
+- ⏳ **Next Action**: Integrate explicit parent-child linking into the core `FractalAgent` pattern discovery loop (Cycle 288).
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**

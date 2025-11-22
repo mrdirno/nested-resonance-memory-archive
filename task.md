@@ -104,3 +104,12 @@
     - **Shallow Lineage:** Most patterns have depth=1. No deep causal chains yet.
     - **Semantic Hubs:** "Cluster Formation" and "Population Homeostasis" are key connected nodes.
 - [x] **Recommendation:** Future cycles must prioritize *explicit linking* of new patterns to their causal ancestors to build deep memory hierarchies.
+
+# Task: Cycle 287 - Causal Linking
+- [x] **Define Cycle 287:** Causal Linking - Explicit Pattern Genealogy.
+- [x] **Execute:** `experiments/cycle287_causal_linking.py`.
+    - Simulated a causal chain of 10 generations (Root -> P1 -> ... -> P10).
+    - Explicitly populated `pattern_relationships` table with `parent_pattern_id` and `child_pattern_id`.
+- [x] **Validation:** `PatternArchaeologist` successfully traced the lineage from leaf to root (Depth 11).
+- [x] **Outcome:** Verified that deep lineage trees can be constructed and queried using the existing schema.
+- [x] **Next:** Integrate this logic into the core `FractalAgent` discovery loop (Cycle 288).
