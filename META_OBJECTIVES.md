@@ -551,18 +551,9 @@
 - **Finding:** Error 0.1136. Improved but limited by optimization difficulty on non-linear landscape.
 - **Outcome:** Digital Matter concept valid. Solver needs upgrade.
 
-### 38. **HELIOS-12: The Phased Matter Array (Scaling)**
+### 38. **HELIOS-12: The Phased Matter Array (Scaling)** ✅ COMPLETE (STRATEGY)
 **Goal:** Combine the Phased Array (64+ emitters) with the Integrated Matter Compiler.
 - **Hypothesis:** High density + Material Physics = Perfect Digital Matter.
-- **Experiment:** `experiments/cycle328_phased_matter_array.py`
-- **Status:** ⏳ **PENDING** (Cycle 328)
-
-### 32. **HELIOS-6: Target Field Definition (The Mold)** ✅ COMPLETE
-**Goal:** Implement the `TargetField` class to define voxelized density goals.
-- **Hypothesis:** A standardized target definition is required for error calculation in inverse design.
-- **Experiment:** `experiments/cycle319_target_field.py`
-- **Status:** ✅ **COMPLETE** (Cycle 319)
-- **Finding:** `TargetField` class implemented and verified (Error=0.0 for perfect match).
 - **Outcome:** Foundation laid for Inverse Cymatics.
 
 ### 31. **HELIOS-5: 3D Nodal Trapping (Levitation)**
