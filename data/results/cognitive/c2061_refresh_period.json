@@ -1,0 +1,111 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_crit": 43,
+    "n_items": 32,
+    "load_fraction": 0.75,
+    "num_cycles": 500,
+    "num_trials": 8,
+    "timestamp": "2025-11-21T23:29:58.272113"
+  },
+  "periods": [
+    {
+      "refresh_period": 1,
+      "effective_rate": 1.0,
+      "mean_retention": 1.3511904761904763,
+      "std_retention": 0.3884584190240412,
+      "mean_final_accuracy": 0.26953125,
+      "efficiency": 1.337812352663838
+    },
+    {
+      "refresh_period": 2,
+      "effective_rate": 0.5,
+      "mean_retention": 0.9055059523809523,
+      "std_retention": 0.23518378968490913,
+      "mean_final_accuracy": 0.18359375,
+      "efficiency": 1.775501867413632
+    },
+    {
+      "refresh_period": 3,
+      "effective_rate": 0.3333333333333333,
+      "mean_retention": 0.6830357142857143,
+      "std_retention": 0.2106955786019337,
+      "mean_final_accuracy": 0.13671875,
+      "efficiency": 1.9894244105409156
+    },
+    {
+      "refresh_period": 4,
+      "effective_rate": 0.25,
+      "mean_retention": 0.678422619047619,
+      "std_retention": 0.11918212267756315,
+      "mean_final_accuracy": 0.13671875,
+      "efficiency": 2.6093177655677655
+    },
+    {
+      "refresh_period": 5,
+      "effective_rate": 0.2,
+      "mean_retention": 0.5293154761904761,
+      "std_retention": 0.16585574137995993,
+      "mean_final_accuracy": 0.10546875,
+      "efficiency": 2.5205498866213145
+    },
+    {
+      "refresh_period": 7,
+      "effective_rate": 0.14285714285714285,
+      "mean_retention": 0.3944940476190476,
+      "std_retention": 0.07344123145100999,
+      "mean_final_accuracy": 0.078125,
+      "efficiency": 2.580802180685358
+    },
+    {
+      "refresh_period": 10,
+      "effective_rate": 0.1,
+      "mean_retention": 0.37068452380952377,
+      "std_retention": 0.040558990502734496,
+      "mean_final_accuracy": 0.07421875,
+      "efficiency": 3.369859307359307
+    },
+    {
+      "refresh_period": 15,
+      "effective_rate": 0.06666666666666667,
+      "mean_retention": 0.2181547619047619,
+      "std_retention": 0.08285523995488675,
+      "mean_final_accuracy": 0.04296875,
+      "efficiency": 2.845496894409938
+    },
+    {
+      "refresh_period": 20,
+      "effective_rate": 0.05,
+      "mean_retention": 0.20877976190476188,
+      "std_retention": 0.07505416010252959,
+      "mean_final_accuracy": 0.04296875,
+      "efficiency": 3.4796626984126977
+    },
+    {
+      "refresh_period": 30,
+      "effective_rate": 0.03333333333333333,
+      "mean_retention": 0.05133928571428571,
+      "std_retention": 0.06647889558855102,
+      "mean_final_accuracy": 0.01171875,
+      "efficiency": 1.1847527472527473
+    },
+    {
+      "refresh_period": 50,
+      "effective_rate": 0.02,
+      "mean_retention": 0.15967261904761904,
+      "std_retention": 0.021182762607585975,
+      "mean_final_accuracy": 0.03125,
+      "efficiency": 5.322420634920634
+    }
+  ],
+  "analysis": {
+    "optimal_period": 1,
+    "optimal_retention": 1.3511904761904763,
+    "optimal_rate": 1.0,
+    "most_efficient_period": 50,
+    "most_efficient_retention": 0.15967261904761904,
+    "efficiency_score": 5.322420634920634,
+    "critical_period": 2,
+    "max_retention_drop": 0.44568452380952395
+  }
+}
