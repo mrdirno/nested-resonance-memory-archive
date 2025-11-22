@@ -1,29 +1,15 @@
 {
-  "metadata": {
-    "dimension": 1024,
-    "k_memories": 8,
-    "num_cycles": 200,
-    "timestamp": "2025-11-22T04:54:33.226124"
-  },
-  "measurements": [
-    {
-      "test": "modus_ponens",
-      "accuracy": 1.0
-    },
-    {
-      "test": "chain_rule",
-      "accuracy": 1.0
-    },
-    {
-      "test": "role_binding",
-      "accuracy": 1.0
-    }
-  ],
-  "analysis": {
-    "findings": [
-      "modus_ponens: WORKS (100%)",
-      "chain_rule: WORKS (100%)",
-      "role_binding: WORKS (100%)"
-    ]
-  }
+  "avg_similarity": 1.0,
+  "trials": [
+    1.0,
+    1.0,
+    1.0,
+    0.9999999999999999,
+    1.0,
+    0.9999999999999999,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ]
 }
