@@ -11,7 +11,10 @@ Agents have energy dynamics and can be managed by population.
 
 import time
 import json
-from typing import Optional, Dict, Any
+import math
+import random
+from typing import Optional, Dict, Any, List, Tuple
+from dataclasses import dataclass
 
 # Import PatternMemory for integrated pattern discovery
 try:
@@ -20,6 +23,12 @@ try:
 except ImportError:
     _HAS_MEMORY_SYSTEM = False
 
+@dataclass
+class PhaseState:
+    """Phase state for Kuramoto dynamics."""
+    pi_phase: float = 0.0
+    phi_phase: float = 0.0
+    e_phase: float = 0.0
 
 class FractalAgent:
     """
@@ -38,7 +47,9 @@ class FractalAgent:
         agent_id: str,
         population_id: int = 0,
         energy: float = 1.0,
-        depth: int = 0
+        depth: int = 0,
+        bridge: Any = None,
+        initial_reality: Optional[Dict[str, float]] = None
     ):
         """
         Initialize a fractal agent.
@@ -48,15 +59,27 @@ class FractalAgent:
             population_id: Population this agent belongs to
             energy: Initial energy level (default 1.0)
             depth: Hierarchical depth (default 0)
+            bridge: TranscendentalBridge instance
+            initial_reality: Initial reality metrics
         """
         self.agent_id = agent_id
         self.population_id = population_id
         self.energy = energy
         self.depth = depth
+        self.bridge = bridge
+        self.reality = initial_reality or {}
+        
         self.memory = {}
         self.birth_cycle = 0
         self.compositions = 0
         self.decompositions = 0
+        
+        # Phase state for Kuramoto dynamics
+        self.phase_state = PhaseState(
+            pi_phase=random.uniform(0, 2*math.pi),
+            phi_phase=random.uniform(0, 2*math.pi),
+            e_phase=random.uniform(0, 2*math.pi)
+        )
         
         # Integrated Pattern Memory reference
         self.pattern_memory = get_memory() if _HAS_MEMORY_SYSTEM else None
@@ -149,6 +172,54 @@ class FractalAgent:
                 print(f"Failed to link pattern {parent_pattern_id} -> {pattern_id}: {e}")
                 
         return pattern_id
+
+    def coupled_evolve(
+        self,
+        delta_time: float,
+        neighbors: List[Tuple['FractalAgent', float]],
+        intrinsic_frequency: float,
+        cross_frequency_beta: float = 0.0
+    ) -> None:
+        """
+        Evolve internal phase state with Kuramoto coupling.
+        
+        Args:
+            delta_time: Time step
+            neighbors: List of (agent, weight) tuples
+            intrinsic_frequency: Base frequency
+            cross_frequency_beta: Cross-frequency coupling strength
+        """
+        # Simple Kuramoto model
+        # dθ/dt = ω + K * Σ sin(θ_j - θ_i)
+        
+        coupling = 0.0
+        if neighbors:
+            # Normalize weights
+            total_weight = sum(w for _, w in neighbors)
+            if total_weight > 0:
+                for neighbor, weight in neighbors:
+                    coupling += (weight / total_weight) * math.sin(neighbor.phase_state.pi_phase - self.phase_state.pi_phase)
+        
+        # Update phase
+        d_theta = intrinsic_frequency + coupling # Assuming K=1 for now
+        self.phase_state.pi_phase += d_theta * delta_time
+        self.phase_state.pi_phase %= (2 * math.pi)
+
+    def compute_phase_coherence(self, other: 'FractalAgent', band: str = 'pi') -> float:
+        """
+        Compute phase coherence with another agent.
+        
+        Returns:
+            Coherence score (0.0 to 1.0)
+        """
+        # Phase difference
+        diff = abs(self.phase_state.pi_phase - other.phase_state.pi_phase)
+        diff = min(diff, 2*math.pi - diff) # Shortest arc
+        
+        # Coherence = 1 - (diff / pi)
+        # 0 diff -> 1.0
+        # pi diff -> 0.0
+        return max(0.0, 1.0 - (diff / math.pi))
 
     def __repr__(self) -> str:
         return f"FractalAgent({self.agent_id}, pop={self.population_id}, E={self.energy:.2f})"
