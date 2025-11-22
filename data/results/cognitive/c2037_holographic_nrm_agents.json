@@ -1,0 +1,14 @@
+{
+  "cycle": 2037,
+  "experiment": "Holographic NRM Agents",
+  "timestamp": "2025-11-21T17:13:21.521824",
+  "results": {
+    "composition_memory": 1.0,
+    "decomposition_memory": 1.0,
+    "dynamics": {
+      "avg_final_pop": 6.4,
+      "avg_max_depth": 4.6,
+      "avg_depth": 2.788214285714286
+    }
+  }
+}
