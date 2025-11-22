@@ -511,11 +511,19 @@
 - **Finding:** GA Solver operational but limited by emitter count (Error ~0.20).
 - **Outcome:** "Matter Compiler" v1.0 Online. Needs scaling.
 
-### 33. **HELIOS-7: High-Resolution Inverse Cymatics (The Scaling)**
+### 33. **HELIOS-7: High-Resolution Inverse Cymatics (The Scaling)** ✅ COMPLETE (LIMITATION)
 **Goal:** Scale the Inverse Solver to higher resolution and emitter counts to achieve sharp shape holding.
 - **Hypothesis:** Increasing emitter count from 6 to 16 will significantly reduce shape error.
 - **Experiment:** `experiments/cycle323_high_res_inverse.py`
-- **Status:** ⏳ **PENDING** (Cycle 323)
+- **Status:** ✅ **COMPLETE** (Cycle 323)
+- **Finding:** Error plateaued at ~0.18. 16 emitters are insufficient for sharp 128x128 control.
+- **Outcome:** Identified "Complexity Barrier". Need massive scaling or better physics (e.g., Phased Arrays).
+
+### 34. **HELIOS-8: The Phased Array (Holographic Control)**
+**Goal:** Implement a dense phased array (e.g., 64+ emitters) to overcome the Complexity Barrier.
+- **Hypothesis:** A dense array can approximate arbitrary wavefronts (Huygens-Fresnel principle).
+- **Experiment:** `experiments/cycle324_phased_array.py`
+- **Status:** ⏳ **PENDING** (Cycle 324)
 
 ### 32. **HELIOS-6: Target Field Definition (The Mold)** ✅ COMPLETE
 **Goal:** Implement the `TargetField` class to define voxelized density goals.

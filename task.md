@@ -385,6 +385,8 @@
     - **Conclusion:** Shape holding is difficult with only 6 emitters. Resolution/Emitter count must increase.
 
 # Task: Cycle 323 - High-Resolution Inverse Cymatics
-- [ ] **Define Cycle 323:** Scale up the Inverse Solver to 128x128 grid and 16 emitters.
-- [ ] **Create Experiment File:** `experiments/cycle323_high_res_inverse.py`.
-- [ ] **Execute:** Attempt to hold complex shapes with higher fidelity.
+- [x] **Define Cycle 323:** Scale up the Inverse Solver to 128x128 grid and 16 emitters.
+- [x] **Create Experiment File:** `experiments/cycle323_high_res_inverse.py`.
+- [x] **Execute:** Attempt to hold complex shapes with higher fidelity.
+    - **Result:** Convergence Limited. Best Error ~0.18.
+    - **Conclusion:** 16 emitters insufficient for sharp 128x128 shapes. "Complexity Barrier" identified.
