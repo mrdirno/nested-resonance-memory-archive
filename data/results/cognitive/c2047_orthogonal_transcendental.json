@@ -1,0 +1,49 @@
+{
+  "cycle": 2047,
+  "experiment": "Orthogonal Transcendental",
+  "timestamp": "2025-11-21T17:20:42.952077",
+  "results": [
+    {
+      "dimension": 256,
+      "type": "Gaussian",
+      "10": 1.0,
+      "30": 0.72,
+      "50": 0.56
+    },
+    {
+      "dimension": 256,
+      "type": "Orth-Transcendental",
+      "10": 0.44,
+      "30": 0.28,
+      "50": 0.3
+    },
+    {
+      "dimension": 512,
+      "type": "Gaussian",
+      "10": 1.0,
+      "30": 0.98,
+      "50": 0.92
+    },
+    {
+      "dimension": 512,
+      "type": "Orth-Transcendental",
+      "10": 0.38,
+      "30": 0.22,
+      "50": 0.26
+    },
+    {
+      "dimension": 1024,
+      "type": "Gaussian",
+      "10": 1.0,
+      "30": 1.0,
+      "50": 0.98
+    },
+    {
+      "dimension": 1024,
+      "type": "Orth-Transcendental",
+      "10": 0.5,
+      "30": 0.32,
+      "50": 0.22
+    }
+  ]
+}
