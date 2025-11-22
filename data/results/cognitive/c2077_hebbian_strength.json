@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T00:54:11.995149"
+  },
+  "strengths": [
+    {
+      "strength": 0.5,
+      "n_items": 20,
+      "accuracy": 0.6300000000000001
+    },
+    {
+      "strength": 1.0,
+      "n_items": 20,
+      "accuracy": 0.41
+    },
+    {
+      "strength": 2.0,
+      "n_items": 20,
+      "accuracy": 0.22999999999999998
+    },
+    {
+      "strength": 3.0,
+      "n_items": 20,
+      "accuracy": 0.20999999999999996
+    },
+    {
+      "strength": 5.0,
+      "n_items": 20,
+      "accuracy": 0.14
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Strength doesn't help much: best 0.5\u00d7 at 63%",
+      "80% not achieved: capacity limitation at 20 items"
+    ],
+    "threshold_met": false,
+    "optimal_strength": 0.5
+  }
+}

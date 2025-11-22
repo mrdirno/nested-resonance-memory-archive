@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T00:55:48.066984"
+  },
+  "intervals": [
+    {
+      "interval": 0,
+      "n_items": 20,
+      "num_cleanups": 0,
+      "accuracy": 0.6699999999999999
+    },
+    {
+      "interval": 100,
+      "n_items": 20,
+      "num_cleanups": 1,
+      "accuracy": 0.6599999999999999
+    },
+    {
+      "interval": 50,
+      "n_items": 20,
+      "num_cleanups": 3,
+      "accuracy": 0.6599999999999999
+    },
+    {
+      "interval": 20,
+      "n_items": 20,
+      "num_cleanups": 9,
+      "accuracy": 0.65
+    },
+    {
+      "interval": 10,
+      "n_items": 20,
+      "num_cleanups": 19,
+      "accuracy": 0.49000000000000005
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "In-operation cleanup doesn't help: best 67%",
+      "80% not achieved: fundamental capacity limit at 20 items"
+    ],
+    "cleanup_helps": false,
+    "threshold_met": false,
+    "optimal_interval": 0
+  }
+}

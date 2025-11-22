@@ -1,0 +1,60 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 5,
+    "n_crit": 43,
+    "timestamp": "2025-11-22T00:57:20.539310"
+  },
+  "capacities": [
+    {
+      "n_items": 5,
+      "pct_ncrit": 11.627906976744185,
+      "accuracy": 1.0
+    },
+    {
+      "n_items": 8,
+      "pct_ncrit": 18.6046511627907,
+      "accuracy": 1.0
+    },
+    {
+      "n_items": 10,
+      "pct_ncrit": 23.25581395348837,
+      "accuracy": 0.96
+    },
+    {
+      "n_items": 12,
+      "pct_ncrit": 27.906976744186046,
+      "accuracy": 0.9166666666666666
+    },
+    {
+      "n_items": 15,
+      "pct_ncrit": 34.883720930232556,
+      "accuracy": 0.8400000000000001
+    },
+    {
+      "n_items": 18,
+      "pct_ncrit": 41.86046511627907,
+      "accuracy": 0.7333333333333334
+    },
+    {
+      "n_items": 20,
+      "pct_ncrit": 46.51162790697674,
+      "accuracy": 0.7100000000000001
+    },
+    {
+      "n_items": 25,
+      "pct_ncrit": 58.139534883720934,
+      "accuracy": 0.544
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Max deployable: 15 items (35% N_crit)",
+      "Operational range: 35% of theoretical N_crit",
+      "Capacity efficiency: 35% of theoretical",
+      "90% accuracy limit: 12 items (28% N_crit)"
+    ],
+    "max_deployable": 15
+  }
+}
