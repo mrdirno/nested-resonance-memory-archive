@@ -1,52 +1,12 @@
 {
-  "metadata": {
-    "dimension": 1024,
-    "k_memories": 8,
-    "num_trials": 3,
-    "timestamp": "2025-11-22T04:48:17.701849"
-  },
-  "measurements": [
+  "conditions": [
     {
-      "n_items": 24,
-      "load_percent": 25.0,
-      "mean_warmup": 0.0,
-      "warmup_std": 0.0,
-      "mean_accuracy": 1.0
+      "warmup": false,
+      "accuracy": 0.9960000000000001
     },
     {
-      "n_items": 48,
-      "load_percent": 50.0,
-      "mean_warmup": 0.6666666666666666,
-      "warmup_std": 0.9428090415820634,
-      "mean_accuracy": 0.9652777777777778
-    },
-    {
-      "n_items": 72,
-      "load_percent": 75.0,
-      "mean_warmup": 6.0,
-      "warmup_std": 0.816496580927726,
-      "mean_accuracy": 0.9629629629629629
-    },
-    {
-      "n_items": 96,
-      "load_percent": 100.0,
-      "mean_warmup": 8.333333333333334,
-      "warmup_std": 0.4714045207910317,
-      "mean_accuracy": 0.9618055555555557
-    },
-    {
-      "n_items": 120,
-      "load_percent": 125.0,
-      "mean_warmup": 14.333333333333334,
-      "warmup_std": 3.0912061651652345,
-      "mean_accuracy": 0.9611111111111111
+      "warmup": true,
+      "accuracy": 0.9960000000000001
     }
-  ],
-  "analysis": {
-    "findings": [
-      "Warmup formula: -5 + 0.15 \u00d7 load%",
-      "Warmup scales with load: 0 to 14 cycles",
-      "At full load: 8 cycles for 96%"
-    ]
-  }
+  ]
 }
