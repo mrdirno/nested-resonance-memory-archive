@@ -1,0 +1,45 @@
+{
+  "metadata": {
+    "dimensions": [
+      512,
+      1024,
+      2048,
+      4096
+    ],
+    "max_depth": 10,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T01:07:39.717674"
+  },
+  "conditions": [
+    {
+      "dimension": 512,
+      "mean_max_depth": 7.6,
+      "depth_per_sqrt_d": 0.33587572106361
+    },
+    {
+      "dimension": 1024,
+      "mean_max_depth": 8.2,
+      "depth_per_sqrt_d": 0.25625
+    },
+    {
+      "dimension": 2048,
+      "mean_max_depth": 8.6,
+      "depth_per_sqrt_d": 0.19003494744388463
+    },
+    {
+      "dimension": 4096,
+      "mean_max_depth": 9.2,
+      "depth_per_sqrt_d": 0.14375
+    }
+  ],
+  "analysis": {
+    "scaling_type": "SQRT",
+    "r_squared": 0.9731259887646424,
+    "slope": 0.037020619195090504,
+    "findings": [
+      "Depth scales with \u221aD (R\u00b2=0.973)",
+      "Depth \u2248 0.04 \u00d7 \u221aD + 6.9",
+      "Best: D=4096 achieves depth 9"
+    ]
+  }
+}
