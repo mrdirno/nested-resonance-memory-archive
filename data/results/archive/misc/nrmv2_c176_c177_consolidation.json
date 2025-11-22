@@ -1,0 +1,309 @@
+{
+  "experiment": "nrmv2_c176_c177_consolidation",
+  "date": "2025-11-19 04:50:39",
+  "patterns": {
+    "c176_count": 3,
+    "c177_count": 4,
+    "total_count": 7
+  },
+  "nrem": {
+    "coalitions": 15,
+    "hebbian_updates": 15,
+    "cpu_time_ms": 307.183488,
+    "memory_usage_mb": 14.578125,
+    "coalition_details": [
+      {
+        "size": 2,
+        "coherence": 0.9986264009626683,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h3_unbounded"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9943604142915043,
+        "members": [
+          "c177_h2_upper_boundary",
+          "c177_h4_phase_diagram"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9674544511864844,
+        "members": [
+          "c177_h2_upper_boundary",
+          "c177_h4_phase_diagram"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.8796084087644003,
+        "members": [
+          "c177_h2_upper_boundary",
+          "c177_h3_unbounded"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9993534423886837,
+        "members": [
+          "c176_h1_birth_death_coupling",
+          "c176_h3_basis_independence"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9466483218135954,
+        "members": [
+          "c176_h1_birth_death_coupling",
+          "c177_h3_unbounded"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9642890735780241,
+        "members": [
+          "c177_h2_upper_boundary",
+          "c177_h3_unbounded"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9855236934430869,
+        "members": [
+          "c176_h2_window_independence",
+          "c177_h4_phase_diagram"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9776348022390079,
+        "members": [
+          "c176_h1_birth_death_coupling",
+          "c176_h3_basis_independence"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9264232110914743,
+        "members": [
+          "c176_h3_basis_independence",
+          "c177_h1_lower_boundary"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9933488714982511,
+        "members": [
+          "c177_h3_unbounded",
+          "c177_h4_phase_diagram"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.988687067068683,
+        "members": [
+          "c176_h3_basis_independence",
+          "c177_h2_upper_boundary"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9537839505208145,
+        "members": [
+          "c176_h1_birth_death_coupling",
+          "c177_h3_unbounded"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9449263063129092,
+        "members": [
+          "c176_h3_basis_independence",
+          "c177_h1_lower_boundary"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.989495913770376,
+        "members": [
+          "c176_h3_basis_independence",
+          "c177_h1_lower_boundary"
+        ]
+      }
+    ]
+  },
+  "rem": {
+    "coalitions": 20,
+    "cpu_time_ms": 111.45254400000005,
+    "memory_usage_mb": 2.359375,
+    "coalition_details": [
+      {
+        "size": 2,
+        "coherence": 0.9670100918399828,
+        "members": [
+          "c176_h3_basis_independence",
+          "c177_h1_lower_boundary"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9981750903419316,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h3_unbounded"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.989720821334198,
+        "members": [
+          "c177_h3_unbounded",
+          "c177_h4_phase_diagram"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9945393479197708,
+        "members": [
+          "c176_h1_birth_death_coupling",
+          "c176_h3_basis_independence"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9889426959035067,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h3_unbounded"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9946034832774076,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h2_upper_boundary"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9947211587435046,
+        "members": [
+          "c177_h2_upper_boundary",
+          "c177_h4_phase_diagram"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9969224633370467,
+        "members": [
+          "c176_h2_window_independence",
+          "c177_h4_phase_diagram"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9995142821541444,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h3_unbounded"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9824584319212305,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h2_upper_boundary"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9931834810460066,
+        "members": [
+          "c176_h3_basis_independence",
+          "c177_h2_upper_boundary"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9785691199655353,
+        "members": [
+          "c177_h3_unbounded",
+          "c177_h4_phase_diagram"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9942082411348163,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h2_upper_boundary"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9836845347331264,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h2_upper_boundary"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9756744386959025,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h4_phase_diagram"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999262820330246,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h3_unbounded"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9934276967373653,
+        "members": [
+          "c176_h1_birth_death_coupling",
+          "c176_h3_basis_independence"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9942085391538971,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h2_upper_boundary"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9893662297824585,
+        "members": [
+          "c176_h3_basis_independence",
+          "c177_h3_unbounded"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9987498316239973,
+        "members": [
+          "c177_h1_lower_boundary",
+          "c177_h3_unbounded"
+        ]
+      }
+    ]
+  },
+  "total": {
+    "cpu_time_ms": 418.63603200000006,
+    "memory_usage_mb": 14.578125,
+    "reality_grounding": "100% (psutil + SQLite)"
+  }
+}
