@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:52:38.935882"
+  },
+  "measurements": [
+    {
+      "key_type": "random",
+      "mean_accuracy": 0.9958333333333332,
+      "std": 0.005892556509887875
+    },
+    {
+      "key_type": "pi",
+      "mean_accuracy": 1.0,
+      "std": 0.0
+    },
+    {
+      "key_type": "e",
+      "mean_accuracy": 0.9875000000000002,
+      "std": 1.1102230246251565e-16
+    },
+    {
+      "key_type": "phi",
+      "mean_accuracy": 1.0,
+      "std": 0.0
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "pi: +0% vs random",
+      "e: -1% vs random",
+      "phi: +0% vs random",
+      "Best transcendental: pi at 100%"
+    ]
+  }
+}

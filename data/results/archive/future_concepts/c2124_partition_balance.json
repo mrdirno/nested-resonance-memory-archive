@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:49:10.148787"
+  },
+  "measurements": [
+    {
+      "distribution": "uniform",
+      "mean_imbalance": 0.0,
+      "mean_accuracy": 1.0,
+      "mean_max_load": 10.0
+    },
+    {
+      "distribution": "skewed_2x",
+      "mean_imbalance": 0.6145868787176669,
+      "mean_accuracy": 0.9583333333333334,
+      "mean_max_load": 22.333333333333332
+    },
+    {
+      "distribution": "skewed_4x",
+      "mean_imbalance": 0.8987624883983311,
+      "mean_accuracy": 0.9083333333333333,
+      "mean_max_load": 32.333333333333336
+    },
+    {
+      "distribution": "concentrated",
+      "mean_imbalance": 1.7320508075688774,
+      "mean_accuracy": 0.5958333333333333,
+      "mean_max_load": 40.0
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "skewed_2x: -4% vs uniform",
+      "skewed_4x: -9% vs uniform",
+      "concentrated: -40% vs uniform",
+      "System tolerates extreme concentration: 60%"
+    ]
+  }
+}
