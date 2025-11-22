@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_crit": 43,
+    "phi": 1.618033988749895,
+    "num_cycles": 300,
+    "num_trials": 5,
+    "survival_threshold": 0.5,
+    "timestamp": "2025-11-21T23:27:44.637779"
+  },
+  "thresholds": [
+    {
+      "load_fraction": 0.3,
+      "n_items": 12,
+      "r_critical": 0.226806640625,
+      "status": "R_crit = 0.2268"
+    },
+    {
+      "load_fraction": 0.5,
+      "n_items": 21,
+      "r_critical": 0.224853515625,
+      "status": "R_crit = 0.2249"
+    },
+    {
+      "load_fraction": 0.6,
+      "n_items": 25,
+      "r_critical": 0.328857421875,
+      "status": "R_crit = 0.3289"
+    },
+    {
+      "load_fraction": 0.7,
+      "n_items": 30,
+      "r_critical": 0.124267578125,
+      "status": "R_crit = 0.1243"
+    },
+    {
+      "load_fraction": 0.8,
+      "n_items": 34,
+      "r_critical": 0.375732421875,
+      "status": "R_crit = 0.3757"
+    },
+    {
+      "load_fraction": 0.9,
+      "n_items": 38,
+      "r_critical": 0.255126953125,
+      "status": "R_crit = 0.2551"
+    },
+    {
+      "load_fraction": 1.0,
+      "n_items": 43,
+      "r_critical": 0.219482421875,
+      "status": "R_crit = 0.2195"
+    },
+    {
+      "load_fraction": 1.1,
+      "n_items": 47,
+      "r_critical": 0.151611328125,
+      "status": "R_crit = 0.1516"
+    }
+  ],
+  "analysis": {
+    "scaling_model": "exponential",
+    "exponent": -0.26150009086877724,
+    "base_rate": 0.2732702487192008,
+    "r_squared": 0.03660509069534834,
+    "equation": "R_crit \u2248 0.2733 \u00d7 exp(-0.26 \u00d7 L)",
+    "finding": "Non-exponential relationship (R\u00b2=0.037)"
+  }
+}
