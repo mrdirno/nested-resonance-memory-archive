@@ -184,3 +184,13 @@
     - `example_consolidation.py` (from C291)
     - `example_retrieval.py` (from C293)
 - [x] **Outcome:** The Memory System is now a fully validated, documented, and reusable component of the DUALITY-ZERO framework.
+
+# Task: Cycle 295 - Emergent Lineage (Paper 8)
+- [x] **Define Cycle 295:** Applying Memory to Emergence.
+- [x] **Execute:** `experiments/cycle295_emergent_lineage.py`.
+    - **Simulation:** 20 agents flocking in 1D space.
+    - **Detection:** Agents detected neighbors ("Interactions") and groups ("Clusters").
+    - **Linkage:** "Cluster" patterns were explicitly linked to their causal "Interaction" patterns.
+    - **Archaeology:** `PatternArchaeologist` successfully traced the lineage of a high-level "Cluster" pattern back 12 steps to the original "Self" patterns.
+- [x] **Result:** **Lineage Depth: 12**. Proven causal link between micro-interactions and macro-emergence.
+- [x] **Significance:** This provides the empirical foundation for Paper 8 ("Emergent Dynamics"), allowing us to claim that we can *audit* emergence rather than just observing it.
