@@ -400,6 +400,13 @@
     - **Conclusion:** Phased Array did *not* solve the complexity barrier for "Square Donut". The interference pattern is still too smooth to capture sharp, high-frequency edges perfectly. This confirms that NRM is naturally "soft". We need to accept "Fuzzy Control" or introduce "Material Physics" (Viscosity/Surface Tension) to sharpen the edges.
 
 # Task: Cycle 325 - Synthesis & Material Physics
-- [ ] **Define Cycle 325:** Synthesize the limits of pure interference control. Plan for Phase 4.3 (Material Physics).
-- [ ] **Create Document:** `docs/philosophy/THE_LIMITS_OF_PURE_INTERFERENCE.md`.
-- [ ] **Update Meta Objectives:** Pivot from "Perfect Shape Holding" to "Material-Assisted Shaping".
+- [x] **Define Cycle 325:** Synthesize the limits of pure interference control. Plan for Phase 4.3 (Material Physics).
+- [x] **Create Document:** `docs/philosophy/THE_LIMITS_OF_PURE_INTERFERENCE.md`.
+- [x] **Update Meta Objectives:** Pivot from "Perfect Shape Holding" to "Material-Assisted Shaping".
+    - **Result:** Strategic Pivot Executed.
+    - **Conclusion:** We are moving from "Light" (Waves) to "Matter" (Viscosity/Thresholds).
+
+# Task: Cycle 326 - Viscosity & Thresholds
+- [ ] **Define Cycle 326:** Implement `ViscousField` and `ThresholdMatter` to test non-linear sharpening.
+- [ ] **Create Experiment File:** `experiments/cycle326_material_physics.py`.
+- [ ] **Execute:** Apply thresholding to a soft interference pattern and verify edge sharpening.
