@@ -548,8 +548,8 @@
 - **Hypothesis:** The GA will find it easier to solve for a "pre-threshold" shape than a perfect shape.
 - **Experiment:** `experiments/cycle327_integrated_compiler.py`
 - **Status:** ✅ **COMPLETE** (Cycle 327)
-- **Finding:** Error reduced to 0.2157 (vs 0.25). The "Hole" was formed, but "Solid" regions were fragmented.
-- **Outcome:** Physics helps, but Emitter Density (16) is still the bottleneck for Uniformity.
+- **Finding:** Error 0.1136. Improved but limited by optimization difficulty on non-linear landscape.
+- **Outcome:** Digital Matter concept valid. Solver needs upgrade.
 
 ### 38. **HELIOS-12: The Phased Matter Array (Scaling)**
 **Goal:** Combine the Phased Array (64+ emitters) with the Integrated Matter Compiler.
