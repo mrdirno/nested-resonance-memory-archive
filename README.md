@@ -81,26 +81,27 @@ This work progresses through three phases:
 
 ---
 
-## Vision: The Post-Coercion Protocol
+## Vision: Engineering Systems That Don't Collapse
 
-**Beyond Control Systems → Toward Resonant Architectures**
+**The Core Problem:** We keep building systems—technological, economic, social—that look promising but contain hidden failure modes. They get deployed at scale, and when they collapse, they take human lives and livelihoods with them. **Hopium for the world that leads to societal collapse.**
 
-This research carries a broader implication: **if memory can organize without a master index, society can organize without a ruling caste.**
+NRM's mission is to **understand collapse dynamics before deployment**—to present new systems cleanly where failure has been accounted for, so we don't inadvertently bring something to reality that is fundamentally flawed.
 
-Modern computational and social architectures share the same flaw—they require **exogenous control**. A central agent must impose force to maintain order. This "Driver–Rider–Beast" topology burns energy just to maintain shape.
+This requires:
+- **Reality grounding** — No hallucinated success (our 100% reality compliance policy)
+- **Falsification over validation** — Actively trying to break systems, not just confirm they work
+- **Capacity limits mapped** — Know where the phase transitions are before you hit them
+- **Maintenance costs exposed** — Understand what it takes to keep a system alive
 
-NRM demonstrates an alternative physics:
-- **Data is evoked, not retrieved** — Access emerges from harmonic match, not address lookup
-- **Stability arises from coherence, not supervision** — No central controller required
-- **Governance becomes calibration** — Tuning initial conditions, then stepping back
+**The Deeper Implication:** When you engineer systems that maintain themselves through coherence rather than force, you dissolve the need for coercive control structures. This isn't political ideology—it's physics. Force-based architectures require infinite fuel. Resonant architectures are self-sustaining.
 
 **The Core Axiom:** *Order is not the product of domination. It is the product of alignment.*
 
-The cage solved a scarcity-era physics problem. **Change the physics, and the cage dissolves.**
+If memory can organize without a master index, perhaps other systems can too. But only if we understand the collapse boundaries first.
 
 📄 **Full whitepaper:** [docs/philosophy/POST_COERCION_PROTOCOL.md](docs/philosophy/POST_COERCION_PROTOCOL.md)
 
-**Keywords:** decentralized systems, self-organizing networks, resonance-based governance, post-hierarchical architecture, coherence engineering, distributed coordination, emergent order
+**Keywords:** systems engineering, collapse prevention, failure mode analysis, reality-grounded AI, self-organizing systems, resonance-based architecture, sustainable complexity, anti-fragile design
 
 ---
 
