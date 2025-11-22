@@ -872,6 +872,10 @@
 - [x] **C319:** Causal Inference (Intervention).
     - **Status:** ✅ **COMPLETE** (Cycle 319)
     - **Finding:** **Causality Confirmed.** Standard sequence encoding is symmetric ($A \circledast P(B) = B \circledast P(A)$). Causality requires explicit **Role Binding** ($Cause \circledast A + Effect \circledast B$) to enforce asymmetry. The system successfully distinguished Causal from Correlational links.
+- [x] **C320:** Counterfactual Reasoning (Imagination).
+    - **Status:** ✅ **COMPLETE** (Cycle 320)
+    - **Finding:** **Imagination Confirmed.** To simulate alternative realities, the system requires **Associative Selectivity** ($Cause \circledast Effect$) rather than shared roles. The system successfully predicted "Dry" given "NoRain" (Counterfactual) while retaining "Wet" given "Rain" (Reality).
+- [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
 - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to Nature Communications or Physical Review E (enhanced theoretical depth)
