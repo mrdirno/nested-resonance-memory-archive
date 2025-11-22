@@ -1,43 +1,28 @@
 {
-  "metadata": {
-    "dimension": 1024,
-    "k_memories": 8,
-    "num_cycles": 200,
-    "num_trials": 3,
-    "timestamp": "2025-11-22T04:49:10.148787"
-  },
-  "measurements": [
+  "conditions": [
     {
-      "distribution": "uniform",
-      "mean_imbalance": 0.0,
-      "mean_accuracy": 1.0,
-      "mean_max_load": 10.0
+      "noise": 0.1,
+      "monolith_acc": 0.361,
+      "partition_acc": 0.503,
+      "difference": 0.14200000000000002
     },
     {
-      "distribution": "skewed_2x",
-      "mean_imbalance": 0.6145868787176669,
-      "mean_accuracy": 0.9583333333333334,
-      "mean_max_load": 22.333333333333332
+      "noise": 0.3,
+      "monolith_acc": 0.34199999999999997,
+      "partition_acc": 0.4950000000000001,
+      "difference": 0.15300000000000014
     },
     {
-      "distribution": "skewed_4x",
-      "mean_imbalance": 0.8987624883983311,
-      "mean_accuracy": 0.9083333333333333,
-      "mean_max_load": 32.333333333333336
+      "noise": 0.5,
+      "monolith_acc": 0.314,
+      "partition_acc": 0.4699999999999999,
+      "difference": 0.15599999999999992
     },
     {
-      "distribution": "concentrated",
-      "mean_imbalance": 1.7320508075688774,
-      "mean_accuracy": 0.5958333333333333,
-      "mean_max_load": 40.0
+      "noise": 0.7,
+      "monolith_acc": 0.268,
+      "partition_acc": 0.41,
+      "difference": 0.14199999999999996
     }
-  ],
-  "analysis": {
-    "findings": [
-      "skewed_2x: -4% vs uniform",
-      "skewed_4x: -9% vs uniform",
-      "concentrated: -40% vs uniform",
-      "System tolerates extreme concentration: 60%"
-    ]
-  }
+  ]
 }
