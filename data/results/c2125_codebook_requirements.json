@@ -1,54 +1,24 @@
 {
-  "metadata": {
-    "dimension": 1024,
-    "k_memories": 8,
-    "num_cycles": 200,
-    "num_trials": 3,
-    "timestamp": "2025-11-22T04:49:59.025312"
-  },
-  "measurements": [
+  "conditions": [
     {
-      "codebook_fraction": 1.0,
-      "codebook_size": 80.0,
-      "overall_accuracy": 0.9958333333333332,
-      "in_codebook_accuracy": 0.9958333333333332
+      "codebook_size": 10,
+      "accuracy": 0.992
     },
     {
-      "codebook_fraction": 0.8,
-      "codebook_size": 64.0,
-      "overall_accuracy": 0.8000000000000002,
-      "in_codebook_accuracy": 1.0
+      "codebook_size": 50,
+      "accuracy": 1.0
     },
     {
-      "codebook_fraction": 0.6,
-      "codebook_size": 48.0,
-      "overall_accuracy": 0.6,
-      "in_codebook_accuracy": 1.0
+      "codebook_size": 100,
+      "accuracy": 1.0
     },
     {
-      "codebook_fraction": 0.4,
-      "codebook_size": 32.0,
-      "overall_accuracy": 0.4000000000000001,
-      "in_codebook_accuracy": 1.0
+      "codebook_size": 500,
+      "accuracy": 1.0
     },
     {
-      "codebook_fraction": 0.2,
-      "codebook_size": 16.0,
-      "overall_accuracy": 0.20000000000000004,
-      "in_codebook_accuracy": 1.0
-    },
-    {
-      "codebook_fraction": 0.0,
-      "codebook_size": 0.0,
-      "overall_accuracy": 0.016666666666666666,
-      "in_codebook_accuracy": 0.0
+      "codebook_size": 1000,
+      "accuracy": 1.0
     }
-  ],
-  "analysis": {
-    "findings": [
-      "60% codebook: -40% overall accuracy",
-      "No codebook: 2% (raw retrieval)",
-      "At 80%: 100% for items in codebook"
-    ]
-  }
+  ]
 }
