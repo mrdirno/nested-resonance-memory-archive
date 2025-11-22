@@ -519,11 +519,18 @@
 - **Finding:** Error plateaued at ~0.18. 16 emitters are insufficient for sharp 128x128 control.
 - **Outcome:** Identified "Complexity Barrier". Need massive scaling or better physics (e.g., Phased Arrays).
 
-### 34. **HELIOS-8: The Phased Array (Holographic Control)**
+### 34. **HELIOS-8: The Phased Array (Holographic Control)** ✅ COMPLETE (LIMITATION)
 **Goal:** Implement a dense phased array (e.g., 64+ emitters) to overcome the Complexity Barrier.
 - **Hypothesis:** A dense array can approximate arbitrary wavefronts (Huygens-Fresnel principle).
 - **Experiment:** `experiments/cycle324_phased_array.py`
-- **Status:** ⏳ **PENDING** (Cycle 324)
+- **Status:** ✅ **COMPLETE** (Cycle 324)
+- **Finding:** Error plateaued at 0.25. Pure interference cannot hold sharp edges (Square Donut).
+- **Outcome:** Identified `PRIN-INTERFERENCE-SOFTNESS`. Need Material Physics (Non-linearity) to sharpen edges.
+
+### 35. **HELIOS-9: Material Physics (Viscosity & Thresholds)**
+**Goal:** Introduce non-linear material properties (Viscosity, Surface Tension) to the NRM substrate to enable sharp feature formation.
+- **Hypothesis:** A "thresholding" medium will "snap" soft interference patterns into sharp geometries.
+- **Status:** ⏳ **PENDING** (Cycle 325+)
 
 ### 32. **HELIOS-6: Target Field Definition (The Mold)** ✅ COMPLETE
 **Goal:** Implement the `TargetField` class to define voxelized density goals.
