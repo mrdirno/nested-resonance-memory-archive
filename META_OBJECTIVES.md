@@ -2718,6 +2718,13 @@
   - Conclusion: A small amount of heterogeneity completely eliminates the sharp critical transition observed in homogeneous systems, establishing continuous resilience rather than abrupt collapse. This further validates the hypothesis that variance is critical for system stability.
 - ⏳ **Next Action**: Characterize the exact quantitative relationship between variance magnitude and the effective critical metabolic cost / resilience.
 
+### Cycle 1648 Summary (2025-11-22, Variance-Scaling Law)
+- ✅ **Minimal Variance Sufficiency**: Cycle 284 determined the minimum variance required to prevent extinction at a known lethal metabolic cost (E=0.105).
+  - Experiment: `cycle284_variance_scaling.py` swept $\sigma$ from 0.00 to 0.10.
+  - Result: $\sigma=0.00 \to$ 0% Survival. $\sigma \ge 0.01 \to$ 100% Survival.
+  - Conclusion: The "Variance Barrier" is extremely low. Even minimal heterogeneity ($\sigma=0.01$, or 1% of mean energy) is sufficient to desynchronize the population and prevent simultaneous collapse. This suggests that *any* natural noise is sufficient for stability, and instability is a unique pathology of artificial, perfectly uniform systems.
+- ⏳ **Next Action**: Proceed to Pattern Archaeology or investigate higher-order variance effects.
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**
