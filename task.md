@@ -359,3 +359,17 @@
 - [x] **Execute:** Verify ability to load/create a 2D target shape (e.g., square).
     - **Result:** Success. Perfect match Error=0.0. Empty field Error=0.16 (Expected).
     - **Conclusion:** TargetField class operational. Ready for Inverse Cymatics.
+
+# Task: Cycle 320 - Forward Cymatics (Emitters -> Pattern)
+- [x] **Define Cycle 320:** Implement "Forward Cymatics" to simulate emitter-generated patterns on a 2D grid.
+- [x] **Create Experiment File:** `experiments/cycle320_forward_cymatics_2d.py`.
+- [x] **Execute:** Verify different emitter configurations produce distinct patterns.
+- [x] **Verify:** Use `TargetField.display()` to visualize the generated patterns.
+    - **Result:** Success. Distinct patterns generated for single, dual, and mixed-frequency emitters.
+    - **Conclusion:** Forward Cymatics model operational. Provides testbed for Inverse Cymatics.
+
+# Task: Cycle 321 - Inverse Cymatics (Pattern -> Emitters)
+- [ ] **Define Cycle 321:** Implement "Inverse Cymatics" using Genetic Algorithms to find emitter configurations for a target pattern.
+- [ ] **Create Experiment File:** `experiments/cycle321_inverse_cymatics_ga.py`.
+- [ ] **Execute:** Attempt to generate a square pattern using a genetic algorithm.
+- [ ] **Verify:** Measure error reduction (MSE) over generations and visualize the best pattern.
