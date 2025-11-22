@@ -125,3 +125,12 @@
 - [x] **Outcome:**
     - Successfully integrated causal linking into the agent's core logic.
     - Agents can now autonomously build deep knowledge trees during operation.
+
+# Task: Cycle 289 - Multi-Step Reasoning (Grid Path)
+- [x] **Define Cycle 289:** Applying Causal Lineage to Multi-Step Reasoning.
+- [x] **Execute:** `experiments/cycle289_multi_step_reasoning.py`.
+    - Agent "PathFinder_001" navigated a grid (0,0 to 3,3).
+    - Each move was recorded as a pattern linked to the previous position.
+- [x] **Validation:** `PatternArchaeologist` traced the lineage from the "Goal" pattern back to the "Start" pattern.
+- [x] **Result:** Lineage Depth (7) matched Path Length (6 moves + start).
+- [x] **Conclusion:** The system can effectively map a sequential reasoning process or plan execution into a retrievable causal chain.
