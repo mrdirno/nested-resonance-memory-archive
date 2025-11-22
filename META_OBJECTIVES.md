@@ -471,9 +471,17 @@
 - **Finding:** Pilot successfully steered swarm to Criticality (Error 0.039).
 - **Outcome:** Helios Operational. Stewardship Principle Validated.
 
+### 51. **HELIOS-16: Closed-Loop Levitation (Active Damping)** ✅ COMPLETE
+**Goal:** Implement a PID control loop to actively dampen particle oscillations.
+- **Hypothesis:** Active feedback can stabilize a particle faster than passive fluid damping.
+- **Experiment:** `experiments/cycle340_closed_loop_levitation.py`
+- **Status:** ✅ **COMPLETE** (Cycle 340)
+- **Finding:** Active Damping settled in 0.04s vs 3.28s for Passive (82x Speedup).
+- **Outcome:** Super-Stability unlocked.
+
 ---
 
-## COMPLETED OBJECTIVES (Phase 2)
+## COMPLETED OBJECTIVES (Phase 5)
 
 ### Phase 2: TSF Science Engine ✅ COMPLETE
 - ✅ **Law Discovery:** Discovered Universal Scaling Law (`PRIN-UNIVERSAL-SCALING`) and Phase Transitions (`PRIN-COMPLEXITY-ORDER-PHASE-TRANSITION`).
