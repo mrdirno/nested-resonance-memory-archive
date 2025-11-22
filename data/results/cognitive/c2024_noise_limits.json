@@ -1,0 +1,49 @@
+{
+  "cycle": 2024,
+  "experiment": "Noise Limits",
+  "timestamp": "2025-11-21T17:05:12.445991",
+  "results": [
+    {
+      "noise_level": 1.0,
+      "bind_accuracy": 1.0,
+      "sequence_accuracy": 1.0,
+      "composition_accuracy": 1.0
+    },
+    {
+      "noise_level": 2.0,
+      "bind_accuracy": 1.0,
+      "sequence_accuracy": 0.0,
+      "composition_accuracy": 1.0
+    },
+    {
+      "noise_level": 3.0,
+      "bind_accuracy": 0.56,
+      "sequence_accuracy": 0.0,
+      "composition_accuracy": 0.48
+    },
+    {
+      "noise_level": 4.0,
+      "bind_accuracy": 0.0,
+      "sequence_accuracy": 0.0,
+      "composition_accuracy": 0.0
+    },
+    {
+      "noise_level": 5.0,
+      "bind_accuracy": 0.0,
+      "sequence_accuracy": 0.0,
+      "composition_accuracy": 0.0
+    },
+    {
+      "noise_level": 7.0,
+      "bind_accuracy": 0.0,
+      "sequence_accuracy": 0.0,
+      "composition_accuracy": 0.0
+    },
+    {
+      "noise_level": 10.0,
+      "bind_accuracy": 0.0,
+      "sequence_accuracy": 0.0,
+      "composition_accuracy": 0.0
+    }
+  ]
+}
