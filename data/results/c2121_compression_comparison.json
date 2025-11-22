@@ -1,59 +1,12 @@
 {
-  "metadata": {
-    "dimension": 1024,
-    "k_memories": 8,
-    "timestamp": "2025-11-22T04:46:48.184958"
-  },
-  "measurements": [
+  "conditions": [
     {
-      "method": "holographic",
-      "n_items": 50,
-      "storage_bytes": 65536,
-      "bits_stored": 528,
-      "bits_per_byte": 0.008056640625
+      "method": "linear",
+      "similarity": 0.44763207690785445
     },
     {
-      "method": "raw",
-      "n_items": 50,
-      "storage_bytes": 819200,
-      "bits_stored": 282.1928094887362,
-      "bits_per_byte": 0.00034447364439542995
-    },
-    {
-      "method": "compressed",
-      "n_items": 50,
-      "storage_bytes": 785975,
-      "bits_stored": 282.1928094887362,
-      "bits_per_byte": 0.0003590353503466856
-    },
-    {
-      "method": "holographic",
-      "n_items": 100,
-      "storage_bytes": 65536,
-      "bits_stored": 528,
-      "bits_per_byte": 0.008056640625
-    },
-    {
-      "method": "raw",
-      "n_items": 100,
-      "storage_bytes": 1638400,
-      "bits_stored": 664.3856189774724,
-      "bits_per_byte": 0.00040550880064542995
-    },
-    {
-      "method": "compressed",
-      "n_items": 100,
-      "storage_bytes": 1571669,
-      "bits_stored": 664.3856189774724,
-      "bits_per_byte": 0.0004227261713359953
+      "method": "phase",
+      "similarity": 0.4482818765290951
     }
-  ],
-  "analysis": {
-    "findings": [
-      "Holographic uses 25.0\u00d7 less storage than raw",
-      "Holographic uses 24.0\u00d7 less storage than compressed",
-      "Trade-off: Holographic has fixed storage (K\u00d7D), lossy retrieval",
-      "Benefit: O(1) retrieval, error recovery, graceful degradation"
-    ]
-  }
+  ]
 }
