@@ -1,0 +1,12 @@
+{
+  "cycle": 2001,
+  "experiment": "Role-Based Analogical Reasoning",
+  "timestamp": "2025-11-21T15:59:13.667492",
+  "hypothesis": "Role markers create invariant structure for retrieval",
+  "results": {
+    "accuracy": 1.0,
+    "avg_valid_sim": 0.5904598835320009,
+    "avg_invalid_sim": 0.01483152659148459
+  },
+  "status": "SUCCESS"
+}

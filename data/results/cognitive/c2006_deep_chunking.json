@@ -1,0 +1,12 @@
+{
+  "cycle": 2006,
+  "experiment": "Deep Chunking",
+  "timestamp": "2025-11-21T16:12:31.452146",
+  "hypothesis": "Multi-level chunking enables arbitrary depth",
+  "results": {
+    "flat_9_accuracy": 0.0,
+    "flat_9_sim": 0.10899646668537628,
+    "chunk_3x3_accuracy": 1.0,
+    "chunk_3x3_sim": 0.5196682821680486
+  }
+}

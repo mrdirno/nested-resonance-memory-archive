@@ -1,0 +1,11 @@
+{
+  "cycle": 2010,
+  "experiment": "Integrated Reasoning",
+  "timestamp": "2025-11-21T16:15:05.758035",
+  "hypothesis": "Combined capabilities work together",
+  "results": {
+    "direct_accuracy": 1.0,
+    "chain_accuracy": 0.9,
+    "analogy_accuracy": 1.0
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "cycle_id": "C312",
+  "cycle_name": "Differentiated Prey",
+  "date": "2025-11-20T01:47:44.862630",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 30000,
+    "prey_a": {
+      "f": 0.15,
+      "K": 200
+    },
+    "prey_b": {
+      "f": 0.08,
+      "K": 400
+    },
+    "seeds": [
+      1900,
+      1901,
+      1902
+    ]
+  },
+  "results": [
+    {
+      "seed": 1900,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "total_prey": 300.0,
+      "prey_a_survive": true,
+      "prey_b_survive": true,
+      "pred_survive": true,
+      "coexist_all": true,
+      "exclusion": false,
+      "winner": "both",
+      "runtime_seconds": 0.05041790008544922,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c312_seed1900.db"
+    },
+    {
+      "seed": 1901,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "total_prey": 300.0,
+      "prey_a_survive": true,
+      "prey_b_survive": true,
+      "pred_survive": true,
+      "coexist_all": true,
+      "exclusion": false,
+      "winner": "both",
+      "runtime_seconds": 0.061762094497680664,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c312_seed1901.db"
+    },
+    {
+      "seed": 1902,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "total_prey": 300.0,
+      "prey_a_survive": true,
+      "prey_b_survive": true,
+      "pred_survive": true,
+      "coexist_all": true,
+      "exclusion": false,
+      "winner": "both",
+      "runtime_seconds": 0.03452920913696289,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c312_seed1902.db"
+    }
+  ]
+}

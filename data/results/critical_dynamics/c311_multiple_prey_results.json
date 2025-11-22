@@ -1,0 +1,122 @@
+{
+  "cycle_id": "C311",
+  "cycle_name": "Multiple Prey Species",
+  "date": "2025-11-20T01:45:55.496604",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 30000,
+    "initial_prey_a": 150,
+    "initial_prey_b": 150,
+    "initial_pred": 30,
+    "conditions": [
+      {
+        "name": "one_prey",
+        "two_prey": false,
+        "n_pops": 2
+      },
+      {
+        "name": "two_prey",
+        "two_prey": true,
+        "n_pops": 3
+      }
+    ],
+    "seeds": [
+      1800,
+      1801,
+      1802
+    ]
+  },
+  "results": [
+    {
+      "condition": "one_prey",
+      "two_prey": false,
+      "seed": 1800,
+      "prey_a_final": 300.0,
+      "prey_b_final": 0.0,
+      "pred_final": 30.0,
+      "total_prey": 300.0,
+      "prey_a_survive": true,
+      "prey_b_survive": true,
+      "pred_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.058656930923461914,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c311_one_prey_seed1800.db"
+    },
+    {
+      "condition": "one_prey",
+      "two_prey": false,
+      "seed": 1801,
+      "prey_a_final": 300.0,
+      "prey_b_final": 0.0,
+      "pred_final": 30.0,
+      "total_prey": 300.0,
+      "prey_a_survive": true,
+      "prey_b_survive": true,
+      "pred_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.05318188667297363,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c311_one_prey_seed1801.db"
+    },
+    {
+      "condition": "one_prey",
+      "two_prey": false,
+      "seed": 1802,
+      "prey_a_final": 300.0,
+      "prey_b_final": 0.0,
+      "pred_final": 30.0,
+      "total_prey": 300.0,
+      "prey_a_survive": true,
+      "prey_b_survive": true,
+      "pred_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.0744168758392334,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c311_one_prey_seed1802.db"
+    },
+    {
+      "condition": "two_prey",
+      "two_prey": true,
+      "seed": 1800,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "total_prey": 300.0,
+      "prey_a_survive": true,
+      "prey_b_survive": true,
+      "pred_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.06847190856933594,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c311_two_prey_seed1800.db"
+    },
+    {
+      "condition": "two_prey",
+      "two_prey": true,
+      "seed": 1801,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "total_prey": 300.0,
+      "prey_a_survive": true,
+      "prey_b_survive": true,
+      "pred_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.055512189865112305,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c311_two_prey_seed1801.db"
+    },
+    {
+      "condition": "two_prey",
+      "two_prey": true,
+      "seed": 1802,
+      "prey_a_final": 150.0,
+      "prey_b_final": 150.0,
+      "pred_final": 30.0,
+      "total_prey": 300.0,
+      "prey_a_survive": true,
+      "prey_b_survive": true,
+      "pred_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.03675699234008789,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c311_two_prey_seed1802.db"
+    }
+  ]
+}

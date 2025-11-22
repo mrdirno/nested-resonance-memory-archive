@@ -1,0 +1,38 @@
+{
+  "cycle": 2003,
+  "experiment": "Chain Depth Limit",
+  "timestamp": "2025-11-21T16:00:34.190135",
+  "hypothesis": "Chain accuracy degrades with depth",
+  "results": [
+    {
+      "depth": 1,
+      "accuracy": 1.0,
+      "avg_similarity": 0.7079422053003418
+    },
+    {
+      "depth": 2,
+      "accuracy": 1.0,
+      "avg_similarity": 0.5148190158433493
+    },
+    {
+      "depth": 3,
+      "accuracy": 0.96,
+      "avg_similarity": 0.37616280280761366
+    },
+    {
+      "depth": 4,
+      "accuracy": 0.4,
+      "avg_similarity": 0.2829554153947675
+    },
+    {
+      "depth": 5,
+      "accuracy": 0.18,
+      "avg_similarity": 0.2470454181013978
+    },
+    {
+      "depth": 6,
+      "accuracy": 0.0,
+      "avg_similarity": 0.19141415249198615
+    }
+  ]
+}

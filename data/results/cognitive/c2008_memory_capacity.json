@@ -1,0 +1,48 @@
+{
+  "cycle": 2008,
+  "experiment": "Memory Capacity",
+  "timestamp": "2025-11-21T16:13:31.936877",
+  "dimension": 2048,
+  "results": [
+    {
+      "n_items": 1,
+      "accuracy": 1.0,
+      "similarity": 0.7057595348112237
+    },
+    {
+      "n_items": 2,
+      "accuracy": 1.0,
+      "similarity": 0.5791014725558294
+    },
+    {
+      "n_items": 5,
+      "accuracy": 1.0,
+      "similarity": 0.4088022285337362
+    },
+    {
+      "n_items": 10,
+      "accuracy": 0.03333333333333333,
+      "similarity": 0.3009734464906687
+    },
+    {
+      "n_items": 20,
+      "accuracy": 0.0,
+      "similarity": 0.21919203365056544
+    },
+    {
+      "n_items": 50,
+      "accuracy": 0.0,
+      "similarity": 0.14009176281758567
+    },
+    {
+      "n_items": 100,
+      "accuracy": 0.0,
+      "similarity": 0.09983560061354242
+    },
+    {
+      "n_items": 200,
+      "accuracy": 0.0,
+      "similarity": 0.0706542560603622
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "cycle": 1968,
+  "experiment": "Variance Dynamics",
+  "timestamp": "2025-11-21T15:48:02",
+  "results": {
+    "equilibrium_var_depth": 0.093935,
+    "equilibrium_var_energy": 0.344655,
+    "equilibrium_cv": 152.8,
+    "var_mean_scaling": 1.00,
+    "mean_population": 1076,
+    "fluctuation_magnitude_late": 9.2
+  },
+  "findings": [
+    "Variance-Mean scaling Var ~ Mean^1.00 indicates Poisson-like independent dynamics",
+    "System reaches stable attractor, NOT at criticality",
+    "Equilibrium CV 152.8% confirms stable variance structure",
+    "Depth distribution dominated by D0 with stable hierarchy"
+  ],
+  "principle": "PRIN-VARIANCE-STABILITY: Equilibrium variance stabilization confirms attractor dynamics",
+  "session_cycles": "C1664-C1968 (305 cycles)",
+  "status": "SUCCESS"
+}

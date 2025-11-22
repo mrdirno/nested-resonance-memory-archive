@@ -1,0 +1,10 @@
+{
+  "cycle": 2007,
+  "experiment": "Extreme Depth",
+  "timestamp": "2025-11-21T16:12:57.905396",
+  "hypothesis": "3-level hierarchy enables 27 steps",
+  "results": {
+    "depth_27_accuracy": 1.0,
+    "depth_27_similarity": 0.5071734977220417
+  }
+}

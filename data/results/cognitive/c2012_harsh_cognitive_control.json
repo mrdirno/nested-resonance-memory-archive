@@ -1,0 +1,11 @@
+{
+  "cycle": 2012,
+  "experiment": "Harsh Cognitive Control",
+  "timestamp": "2025-11-21T16:16:20.535379",
+  "results": {
+    "e_consume": 0.104,
+    "baseline_survival": 0.13333333333333333,
+    "cognitive_survival": 1.0,
+    "improvement": 0.8666666666666667
+  }
+}

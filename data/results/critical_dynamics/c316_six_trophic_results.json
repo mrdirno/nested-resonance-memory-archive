@@ -1,0 +1,89 @@
+{
+  "cycle_id": "C316",
+  "cycle_name": "Six-Trophic Chain",
+  "date": "2025-11-20T01:55:23.037209",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "results": [
+    {
+      "condition": "five_trophic",
+      "seed": 2300,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0
+      },
+      "coexist": true,
+      "runtime": 0.03487992286682129
+    },
+    {
+      "condition": "five_trophic",
+      "seed": 2301,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0
+      },
+      "coexist": true,
+      "runtime": 0.05915403366088867
+    },
+    {
+      "condition": "five_trophic",
+      "seed": 2302,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0
+      },
+      "coexist": true,
+      "runtime": 0.024263858795166016
+    },
+    {
+      "condition": "six_trophic",
+      "seed": 2300,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.06092214584350586
+    },
+    {
+      "condition": "six_trophic",
+      "seed": 2301,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.06511092185974121
+    },
+    {
+      "condition": "six_trophic",
+      "seed": 2302,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.05848407745361328
+    }
+  ]
+}
