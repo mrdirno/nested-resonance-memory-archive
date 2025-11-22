@@ -527,10 +527,19 @@
 - **Finding:** Error plateaued at 0.25. Pure interference cannot hold sharp edges (Square Donut).
 - **Outcome:** Identified `PRIN-INTERFERENCE-SOFTNESS`. Need Material Physics (Non-linearity) to sharpen edges.
 
-### 35. **HELIOS-9: Material Physics (Viscosity & Thresholds)**
+### 35. **HELIOS-9: Material Physics (Viscosity & Thresholds)** ✅ COMPLETE (STRATEGY)
 **Goal:** Introduce non-linear material properties (Viscosity, Surface Tension) to the NRM substrate to enable sharp feature formation.
 - **Hypothesis:** A "thresholding" medium will "snap" soft interference patterns into sharp geometries.
-- **Status:** ⏳ **PENDING** (Cycle 325+)
+- **Document:** `docs/philosophy/THE_LIMITS_OF_PURE_INTERFERENCE.md`
+- **Status:** ✅ **COMPLETE** (Cycle 325)
+- **Finding:** Pure interference is limited by linearity. Non-linear material physics is required for "Digital Matter".
+- **Outcome:** Strategic Pivot to Phase 4.3 (Material Physics).
+
+### 36. **HELIOS-10: The Viscous Field (Implementation)**
+**Goal:** Implement the `ViscousField` simulation to demonstrate edge sharpening via thresholding.
+- **Hypothesis:** Applying a sigmoid threshold to a soft interference pattern will recover the target shape with high fidelity.
+- **Experiment:** `experiments/cycle326_material_physics.py`
+- **Status:** ⏳ **PENDING** (Cycle 326)
 
 ### 32. **HELIOS-6: Target Field Definition (The Mold)** ✅ COMPLETE
 **Goal:** Implement the `TargetField` class to define voxelized density goals.
