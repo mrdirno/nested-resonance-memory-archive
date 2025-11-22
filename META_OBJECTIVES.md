@@ -551,10 +551,19 @@
 - **Finding:** Error 0.1136. Improved but limited by optimization difficulty on non-linear landscape.
 - **Outcome:** Digital Matter concept valid. Solver needs upgrade.
 
-### 38. **HELIOS-12: The Phased Matter Array (Scaling)** ✅ COMPLETE (STRATEGY)
-**Goal:** Combine the Phased Array (64+ emitters) with the Integrated Matter Compiler.
-- **Hypothesis:** High density + Material Physics = Perfect Digital Matter.
-- **Outcome:** Foundation laid for Inverse Cymatics.
+### 38. **HELIOS-12: The Universal Physics Adapter** ✅ COMPLETE
+**Goal:** Abstract the simulation into a generic interface for any wave-bearing medium.
+- **Hypothesis:** A single `SubstrateInterface` can handle NRM, Acoustics, and Social Dynamics by just changing constants ($v, \gamma$).
+- **Experiment:** `experiments/cycle330_universal_adapter.py`
+- **Status:** ✅ **COMPLETE** (Cycle 330)
+- **Finding:** Success. Adapter correctly managed distinct physics models.
+- **Outcome:** The Code doesn't care about the Canvas.
+
+### 39. **HELIOS-13: The Acoustic Simulator (Real Physics)**
+**Goal:** Implement a dedicated `AcousticLevitation` model that calculates the Gorkov Potential (Trapping Force).
+- **Hypothesis:** We can simulate the forces required to levitate a styrofoam particle using our existing emitter array logic.
+- **Experiment:** `experiments/cycle335_acoustic_levitation.py`
+- **Status:** ⏳ **PENDING** (Cycle 335)
 
 ### 31. **HELIOS-5: 3D Nodal Trapping (Levitation)**
 **Goal:** Extend control to 3D space and trap a "particle" (agent) in a specific volumetric node.
