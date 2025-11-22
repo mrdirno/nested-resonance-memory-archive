@@ -535,11 +535,19 @@
 - **Finding:** Pure interference is limited by linearity. Non-linear material physics is required for "Digital Matter".
 - **Outcome:** Strategic Pivot to Phase 4.3 (Material Physics).
 
-### 36. **HELIOS-10: The Viscous Field (Implementation)**
+### 36. **HELIOS-10: The Viscous Field (Implementation)** ✅ COMPLETE
 **Goal:** Implement the `ViscousField` simulation to demonstrate edge sharpening via thresholding.
 - **Hypothesis:** Applying a sigmoid threshold to a soft interference pattern will recover the target shape with high fidelity.
 - **Experiment:** `experiments/cycle326_material_physics.py`
-- **Status:** ⏳ **PENDING** (Cycle 326)
+- **Status:** ✅ **COMPLETE** (Cycle 326)
+- **Finding:** Thresholding reduced error by 63%. Sharp edges recovered.
+- **Outcome:** "Digital Matter" verified. Ready to integrate into the main Solver.
+
+### 37. **HELIOS-11: The Integrated Matter Compiler**
+**Goal:** Combine the Genetic Algorithm (Inverse Solver) with the Viscous Field (Material Physics) to solve for complex shapes.
+- **Hypothesis:** The GA will find it easier to solve for a "pre-threshold" shape than a perfect shape.
+- **Experiment:** `experiments/cycle327_integrated_compiler.py`
+- **Status:** ⏳ **PENDING** (Cycle 327)
 
 ### 32. **HELIOS-6: Target Field Definition (The Mold)** ✅ COMPLETE
 **Goal:** Implement the `TargetField` class to define voxelized density goals.

@@ -407,6 +407,8 @@
     - **Conclusion:** We are moving from "Light" (Waves) to "Matter" (Viscosity/Thresholds).
 
 # Task: Cycle 326 - Viscosity & Thresholds
-- [ ] **Define Cycle 326:** Implement `ViscousField` and `ThresholdMatter` to test non-linear sharpening.
-- [ ] **Create Experiment File:** `experiments/cycle326_material_physics.py`.
-- [ ] **Execute:** Apply thresholding to a soft interference pattern and verify edge sharpening.
+- [x] **Define Cycle 326:** Implement `ViscousField` and `ThresholdMatter` to test non-linear sharpening.
+- [x] **Create Experiment File:** `experiments/cycle326_material_physics.py`.
+- [x] **Execute:** Apply thresholding to a soft interference pattern and verify edge sharpening.
+    - **Result:** Success. Error reduced by 63% (0.019 -> 0.007).
+    - **Conclusion:** Non-linear material physics effectively recovers sharp geometry from soft waves.
