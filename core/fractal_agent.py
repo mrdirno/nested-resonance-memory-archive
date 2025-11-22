@@ -9,6 +9,17 @@ This module provides the FractalAgent class for NRM experiments.
 Agents have energy dynamics and can be managed by population.
 """
 
+import time
+import json
+from typing import Optional, Dict, Any
+
+# Import PatternMemory for integrated pattern discovery
+try:
+    from memory.pattern_memory import get_memory, Pattern, PatternType
+    _HAS_MEMORY_SYSTEM = True
+except ImportError:
+    _HAS_MEMORY_SYSTEM = False
+
 
 class FractalAgent:
     """
@@ -46,6 +57,9 @@ class FractalAgent:
         self.birth_cycle = 0
         self.compositions = 0
         self.decompositions = 0
+        
+        # Integrated Pattern Memory reference
+        self.pattern_memory = get_memory() if _HAS_MEMORY_SYSTEM else None
 
     def consume_energy(self, amount: float) -> bool:
         """
@@ -69,6 +83,72 @@ class FractalAgent:
             cap: Maximum energy level (default 2.0)
         """
         self.energy = min(self.energy + amount, cap)
+        
+    def discover_pattern(
+        self, 
+        observation: Dict[str, Any], 
+        parent_pattern_id: Optional[str] = None
+    ) -> Optional[str]:
+        """
+        Discover and store a pattern from an observation.
+        
+        If parent_pattern_id is provided, explicitly links the new pattern
+        to its causal ancestor in the memory system.
+        
+        Args:
+            observation: Dictionary containing observed data
+            parent_pattern_id: ID of the pattern that caused/preceded this one
+            
+        Returns:
+            The ID of the newly discovered pattern, or None if memory system unavailable.
+        """
+        if not self.pattern_memory:
+            return None
+            
+        # Generate pattern from observation
+        pattern_id = self.pattern_memory.create_pattern_id(observation)
+        
+        # Check if already exists to avoid redundancy? 
+        # For now, we update it (store_pattern handles upsert)
+        
+        pattern = Pattern(
+            pattern_id=pattern_id,
+            pattern_type=PatternType.SYSTEM_BEHAVIOR, # Default for now
+            name=f"Observation_{pattern_id[:8]}",
+            description=f"Pattern discovered by {self.agent_id}",
+            data=observation,
+            confidence=0.5 + (0.1 * self.depth), # Higher depth = higher confidence?
+            occurrences=1,
+            first_seen=time.time(),
+            last_seen=time.time(),
+            metadata={"agent_id": self.agent_id}
+        )
+        
+        self.pattern_memory.store_pattern(pattern)
+        
+        # Causal Linking
+        if parent_pattern_id:
+            # We need to access the lower-level DB connection or add a method to PatternMemory.
+            # Since we can't easily modify PatternMemory right now without potentially breaking things,
+            # let's use the _db_connection context manager if available, or fail gracefully.
+            try:
+                with self.pattern_memory._db_connection() as conn:
+                    conn.execute("""
+                        INSERT INTO pattern_relationships
+                        (timestamp, parent_pattern_id, child_pattern_id, relationship_type, strength)
+                        VALUES (?, ?, ?, ?, ?)
+                    """, (
+                        time.time(),
+                        parent_pattern_id,
+                        pattern_id,
+                        "causal_discovery",
+                        1.0
+                    ))
+                    conn.commit()
+            except Exception as e:
+                print(f"Failed to link pattern {parent_pattern_id} -> {pattern_id}: {e}")
+                
+        return pattern_id
 
     def __repr__(self) -> str:
         return f"FractalAgent({self.agent_id}, pop={self.population_id}, E={self.energy:.2f})"

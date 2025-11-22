@@ -2751,6 +2751,13 @@
   - Actionable Insight: The limitation is not in the storage schema but in the *recording logic*. Current pattern discovery does not explicitly record the "parent" pattern that triggered the discovery.
 - ⏳ **Next Action**: Integrate explicit parent-child linking into the core `FractalAgent` pattern discovery loop (Cycle 288).
 
+### Cycle 1652 Summary (2025-11-22, Integrated Causal Lineage)
+- ✅ **Core Integration Complete**: Cycle 288 successfully integrated causal linking into the core `FractalAgent` logic.
+  - Implementation: `FractalAgent.discover_pattern` now accepts a `parent_pattern_id` and automatically stores the "causal_discovery" relationship in the database.
+  - Verification: `experiments/cycle288_integrated_lineage.py` ran a live agent that built a 4-step knowledge chain (A -> B -> C -> D). `PatternArchaeologist` correctly recovered the lineage depth.
+  - Significance: This transforms the agent from a passive observer into an active *historian* of its own cognitive process. All future discoveries made by agents using this method will automatically build a deep, queryable knowledge graph.
+- ⏳ **Next Action**: Apply this new capability to a complex task (e.g., multi-step problem solving) to demonstrate "reasoning" via lineage traversal.
+
 ## PERPETUAL OPERATION VALIDATED
 
 **Zero Idle Time Pattern (Cycles 352-364):**
