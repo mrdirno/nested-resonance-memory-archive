@@ -611,6 +611,30 @@
 - **Finding:** Particle displaced 6.78mm with minimal leakage. Telekinesis confirmed.
 - **Outcome:** Dynamic Control unlocked.
 
+### 42. **HELIOS-16: Closed-Loop Levitation (Active Damping)** ✅ COMPLETE
+**Goal:** Use real-time feedback to dampen particle oscillations faster than natural air resistance.
+- **Hypothesis:** PID control of phase shifts can actively cancel particle momentum.
+- **Experiment:** `experiments/cycle340_closed_loop_levitation.py`
+- **Status:** ✅ **COMPLETE** (Cycle 340)
+- **Finding:** 82x speedup in settling time (0.04s vs 3.28s). "Super-Stability" achieved.
+- **Outcome:** The Pilot can stabilize matter beyond physical limits.
+
+### 43. **HELIOS-17: Swarm Levitation (Acoustic Chemistry)** ✅ COMPLETE
+**Goal:** Trap multiple particles simultaneously and manipulate their relative positions.
+- **Hypothesis:** Superposition of trap fields allows independent control of multiple agents.
+- **Experiment:** `experiments/cycle341_swarm_levitation.py`
+- **Status:** ✅ **COMPLETE** (Cycle 341)
+- **Finding:** Created a "Sound Molecule". Stretched bond from 10mm to 20mm.
+- **Outcome:** Multi-Agent Control unlocked.
+
+### 44. **HELIOS-18: Computational Matter (Acoustic Logic)** ✅ COMPLETE
+**Goal:** Implement a logic gate using particle interactions.
+- **Hypothesis:** The presence of particles alters the acoustic field, allowing for physical computation (AND Gate).
+- **Experiment:** `experiments/cycle342_acoustic_logic.py`
+- **Status:** ✅ **COMPLETE** (Cycle 342)
+- **Finding:** AND Gate verified. Symmetry restoration distinguishes (1,1) from single inputs.
+- **Outcome:** Matter is Computing. Phase 6 (Self-Organization) is now viable.
+
 ---
 
 ## COMPLETED OBJECTIVES (Phase 3)
