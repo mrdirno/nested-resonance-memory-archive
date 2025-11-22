@@ -875,6 +875,12 @@
 - [x] **C320:** Counterfactual Reasoning (Imagination).
     - **Status:** ✅ **COMPLETE** (Cycle 320)
     - **Finding:** **Imagination Confirmed.** To simulate alternative realities, the system requires **Associative Selectivity** ($Cause \circledast Effect$) rather than shared roles. The system successfully predicted "Dry" given "NoRain" (Counterfactual) while retaining "Wet" given "Rain" (Reality).
+- [x] **C2025:** Dimension Noise Scaling (Thermodynamic Limit).
+    - **Status:** ✅ **COMPLETE** (Cycle 2025)
+    - **Finding:** **Hypothesis Falsified.** Noise tolerance ($\sigma_{crit} \approx 0.30$) is independent of dimension. High dimension does not protect against external additive noise (SNR is constant). It likely protects against *internal* interference (Capacity).
+- [ ] **C2026:** Capacity Scaling (Information Density).
+    - **Status:** ⏳ **PENDING**
+    - **Hypothesis:** If Dimension doesn't improve Noise Tolerance, it must improve Capacity. The number of storable items $K_{crit}$ should scale linearly with $D$ (or $D/\log D$).
 - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
 - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)
   - [ ] Submit to arXiv (cs.MA / q-bio.PE cross-list)

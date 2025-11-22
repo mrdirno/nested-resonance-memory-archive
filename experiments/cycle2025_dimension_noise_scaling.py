@@ -1,103 +1,129 @@
-"""
-Cycle 2025: Dimensional Scaling of Noise Robustness
-===================================================
-How does noise robustness scale with dimension?
-
-Hypothesis: Higher dimensions provide better noise immunity.
-Test: Same noise levels across dimensions 256-8192.
-"""
-
 import numpy as np
 import json
-from datetime import datetime
+import os
+import datetime
 
-class DimensionNoiseScaling:
+class HolographicNoiseExperiment:
     def __init__(self):
-        self.dimensions = [256, 512, 1024, 2048, 4096, 8192]
-        self.noise_levels = [1.0, 2.0, 3.0]
-        self.num_trials = 30
+        self.results = []
+        self.timestamp = datetime.datetime.now().isoformat()
 
     def _normalize(self, v):
         norm = np.linalg.norm(v)
-        return v / norm if norm > 0 else v
+        if norm == 0: return v
+        return v / norm
 
-    def _circ_conv(self, a, b):
-        return np.real(np.fft.ifft(np.fft.fft(a) * np.fft.fft(b)))
-
-    def _circ_corr(self, a, b):
-        return np.real(np.fft.ifft(np.fft.fft(a) * np.conj(np.fft.fft(b))))
-
-    def _generate(self, d):
+    def generate_vector(self, d):
         v = np.random.normal(0, 1.0/np.sqrt(d), d)
         return self._normalize(v)
 
-    def add_noise(self, v, noise_level, d):
-        noise = np.random.normal(0, noise_level/np.sqrt(d), d)
-        return self._normalize(v + noise)
-
-    def test_bind(self, d, noise_level):
-        correct = 0
-        for _ in range(self.num_trials):
-            A = self._generate(d)
-            B = self._generate(d)
-            AB = self._circ_conv(A, B)
-            AB_noisy = self.add_noise(AB, noise_level, d)
-            retrieved = self._circ_corr(AB_noisy, A)
-            retrieved = self._normalize(retrieved)
-            if np.dot(retrieved, B) > 0.3:
-                correct += 1
-        return correct / self.num_trials
+    def test_capacity(self, dimension, noise_std, num_items=10, trials=20):
+        """
+        Tests retrieval accuracy for a given dimension and noise level.
+        """
+        correct_count = 0
+        
+        for _ in range(trials):
+            # 1. Generate Items
+            items = [self.generate_vector(dimension) for _ in range(num_items)]
+            
+            # 2. Superpose
+            memory = np.sum(items, axis=0)
+            
+            # 3. Add Noise
+            noise = np.random.normal(0, noise_std, dimension)
+            noisy_memory = memory + noise
+            
+            # 4. Retrieve
+            # Check if each item is retrieved correctly (dot product > threshold)
+            # Threshold is tricky with noise. 
+            # Instead, let's check if the item is closer to the memory than a random vector?
+            # Or standard retrieval check: dot(M, I) > 0.5?
+            # With superposition of 10 items, expected dot is 1/10? No.
+            # M = I1 + ... + I10.
+            # M . I1 = 1 + sum(noise).
+            # So expected dot is 1.0.
+            # With added noise N: (M+N).I1 = 1 + sum(inter-item) + N.I1.
+            
+            # Let's use a strict check: Is the dot product > 0.5?
+            # Or better: Can we distinguish it from a random vector?
+            # Let's count "successful retrievals".
+            
+            trial_success = 0
+            for item in items:
+                sim = np.dot(noisy_memory, item)
+                # Expected sim for target = 1.0
+                # Expected sim for random = 0.0
+                # With 10 items, noise from other items is sqrt(9/D).
+                # External noise is sigma * sqrt(1/D)? No.
+                # Noise vector N has std sigma. Length is sigma * sqrt(D).
+                # Dot product N . I (unit vector) is Normal(0, sigma).
+                
+                # So we have Signal (1.0) + Interference (N(0, sqrt(K-1)/sqrt(D))) + External Noise (N(0, sigma)).
+                # We want Signal > Noise.
+                # Let's set threshold at 0.5.
+                if sim > 0.5:
+                    trial_success += 1
+            
+            if trial_success == num_items:
+                correct_count += 1
+                
+        return correct_count / trials
 
     def run(self):
-        print("Cycle 2025: Dimensional Scaling of Noise Robustness")
-        print("-" * 60)
+        print("Cycle 2025: Dimension Noise Scaling")
+        print("-----------------------------------")
+        
+        dimensions = [512, 1024, 2048, 4096, 8192]
+        noise_levels = np.arange(0.0, 2.1, 0.1)
+        
+        scaling_data = {}
+        
+        for d in dimensions:
+            print(f"\nTesting Dimension: {d}")
+            sigma_crit = 0.0
+            
+            for sigma in noise_levels:
+                accuracy = self.test_capacity(d, sigma, num_items=10)
+                print(f"  Noise {sigma:.1f}: Accuracy {accuracy:.2f}")
+                
+                if accuracy < 0.9:
+                    # Found the breaking point
+                    sigma_crit = sigma
+                    print(f"  -> Critical Noise Limit: {sigma_crit:.2f}")
+                    break
+            
+            # If we didn't break, limit is > 2.0
+            if sigma_crit == 0.0 and accuracy >= 0.9:
+                sigma_crit = 2.0
+                
+            scaling_data[d] = sigma_crit
+            
+            self.results.append({
+                "dimension": d,
+                "sigma_crit": sigma_crit
+            })
 
-        results = []
-
-        # Header
-        header = f"{'Dim':>6}"
-        for nl in self.noise_levels:
-            header += f" | noise={nl:<4}"
-        print(header)
-        print("-" * 60)
-
-        for d in self.dimensions:
-            row = f"{d:>6}"
-            dim_results = {"dimension": d, "accuracies": {}}
-
-            for nl in self.noise_levels:
-                acc = self.test_bind(d, nl)
-                row += f" | {acc*100:>8.0f}%"
-                dim_results["accuracies"][str(nl)] = acc
-
-            results.append(dim_results)
-            print(row)
-
-        print()
-        # Analysis
-        print("Scaling Analysis:")
-        for nl in self.noise_levels:
-            accs = [r["accuracies"][str(nl)] for r in results]
-            if accs[0] < accs[-1]:
-                print(f"  noise={nl}: Higher dim = better robustness ({accs[0]*100:.0f}% -> {accs[-1]*100:.0f}%)")
-            else:
-                print(f"  noise={nl}: Dimension-independent ({accs[0]*100:.0f}% -> {accs[-1]*100:.0f}%)")
-
-        return results
+        # Save Results
+        output_path = "data/results/cognitive/c2025_dimension_noise_scaling.json"
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        
+        with open(output_path, 'w') as f:
+            json.dump({
+                "cycle": 2025,
+                "timestamp": self.timestamp,
+                "scaling_data": scaling_data,
+                "results": self.results
+            }, f, indent=2)
+            
+        print("\nScaling Analysis:")
+        print("Dimension | Sigma_crit | Ratio (Sigma/sqrt(D))")
+        for res in self.results:
+            d = res['dimension']
+            s = res['sigma_crit']
+            ratio = s / np.sqrt(d)
+            print(f"{d:9d} | {s:10.2f} | {ratio:.5f}")
 
 if __name__ == "__main__":
-    exp = DimensionNoiseScaling()
-    results = exp.run()
-
-    output = {
-        "cycle": 2025,
-        "experiment": "Dimension Noise Scaling",
-        "timestamp": datetime.now().isoformat(),
-        "results": results
-    }
-
-    path = "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c2025_dimension_noise_scaling.json"
-    with open(path, 'w') as f:
-        json.dump(output, f, indent=2)
-
-    print(f"\nResults saved: {path}")
+    exp = HolographicNoiseExperiment()
+    exp.run()
