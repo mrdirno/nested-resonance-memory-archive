@@ -493,6 +493,14 @@
 
 ## ACTIVE OBJECTIVES
 
+### 32. **HELIOS-6: Target Field Definition (The Mold)** ✅ COMPLETE
+**Goal:** Implement the `TargetField` class to define voxelized density goals.
+**Hypothesis:** A standardized target definition is required for error calculation in inverse design.
+- **Experiment:** `experiments/cycle319_target_field.py`
+- **Status:** ✅ **COMPLETE** (Cycle 319)
+- **Finding:** `TargetField` class implemented and verified (Error=0.0 for perfect match).
+- **Outcome:** Foundation laid for Inverse Cymatics.
+
 ### 30. **HELIOS-4: The Inverse Solver (Shape Holding)**
 **Goal:** Demonstrate "Inverse Cymatics" - finding the emitter parameters to create a specific target shape.
 - **Hypothesis:** The Pilot can discover the $(f, \phi, \vec{x})$ configuration to maintain a static 2D shape (e.g., Square) in the NRM substrate.
