@@ -29,7 +29,15 @@ const CameraController: React.FC<{
     }
   });
 
-  return <OrbitControls enableDamping dampingFactor={0.05} minDistance={1} maxDistance={100} />;
+  return (
+    <OrbitControls
+      enableDamping
+      dampingFactor={0.05}
+      minDistance={1}
+      maxDistance={100}
+      onStart={() => setTarget(null)} // Stop auto-move on user interaction
+    />
+  );
 };
 
 // Component to handle dynamic exposure updates
