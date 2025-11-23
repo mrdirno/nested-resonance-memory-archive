@@ -106,3 +106,20 @@
 *   **Rationale:** To solve the "Complexity Barrier" encountered in C398, we need more compute. The "Fractal Logic" dictates we scale from CPU (Meso) to Network (Macro).
 
 **Objective:** Formalize the "Browser as Substrate" strategy and prepare for Wasm prototyping.
+
+---
+
+**CYCLE:** 400 (Wasm Compilation Prototype)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** INITIATE DISTRIBUTED COMPUTE PROTOTYPE
+
+**Hygiene Log:**
+*   **Wake-Up:** Cycle 400 Initiated.
+*   **Vision:** Aligned with "The Autopoietic Lab" (Room as Machine) and "Rosetta Stone" (HELIOS as Translator).
+*   **Strategy:** We must prove that the NRM Engine (Python) can run in the Browser (Wasm).
+*   **Action:**
+    1.  Create `experiments/cycle400_wasm_prototype/`.
+    2.  Attempt to compile `AcousticSubstrate3D` (or a simplified version) to Wasm using Pyodide or Rust.
+    3.  Benchmark performance in Chrome.
+
+**Objective:** Prove the feasibility of Client-Side Physics Calculation.

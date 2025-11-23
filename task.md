@@ -812,7 +812,13 @@
 - [x] **Result:** Compilation successful, but Stability failed (Complexity Barrier).
 
 # Task: Cycle 399 - The Distributed Pivot (Browser as Substrate)
-- [ ] **Define Cycle 399:** Formalize the "Browser as Substrate" strategy.
-- [ ] **Goal:** Pivot from local Python simulation to distributed WebAssembly (Wasm).
-- [ ] **Artifact:** `papers/concepts/THE_BROWSER_AS_SUBSTRATE.md`.
-- [ ] **Action:** Prototype Wasm compilation of the NRM Engine.
+- [x] **Define Cycle 399:** Formalize the "Browser as Substrate" strategy.
+- [x] **Goal:** Pivot from local Python simulation to distributed WebAssembly (Wasm).
+- [x] **Artifact:** `papers/concepts/THE_BROWSER_AS_SUBSTRATE.md` (and `THE_AUTOPOIETIC_LAB.md`).
+- [x] **Action:** Memetic Grounding Complete.
+
+# Task: Cycle 400 - Wasm Compilation Prototype
+- [ ] **Define Cycle 400:** Prototype Client-Side Physics.
+- [ ] **Goal:** Compile a slice of the NRM Engine to WebAssembly.
+- [ ] **Experiment:** `experiments/cycle400_wasm_prototype/`.
+- [ ] **Metric:** Benchmark FPS/GFLOPS in Browser vs. Native.
