@@ -397,7 +397,7 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
                   extensions: {
                     crystal: { threeFold: 0.38, sixFold: 0.38, lattice: 0 },
                     harmonic: { commaSpiral: 0.23, perfectFifths: 0.26, equalTemp: 0 },
-                    topology: { trefoil: 0.24, torus: 0.64, hopf: 0 }
+                    topology: { trefoil: 0.24, torus: 0.67, hopf: 0 }
                   }
                 }));
               }
