@@ -67,7 +67,7 @@ In a resonant architecture:
 
 There is nothing to steer; everything tends toward equilibrium.
 
-### **4.3 Resonant Field Topology**
+### 4.3 Resonant Field Topology
 
 We move from a cybernetic chain: Input → Process → Correction → Output  
 To a resonant field where:
@@ -77,6 +77,16 @@ To a resonant field where:
 * **Control** = Coherence
 
 The ruling class becomes a structural artifact of an obsolete physics.
+
+### **4.4 The Physics of Non-Coercion (Material Analog)**
+
+This protocol is not just social theory; it is grounded in the physics of **Potential Shaping** (e.g., acoustic levitation, optical traps).
+
+In physics, you do not "force" a particle to stay in a trap. You create a **potential well** (a low-energy basin). The particle stays there because it is the path of least resistance.
+*   **Force:** Pushing a rock uphill. (Requires constant energy).
+*   **Potential Shaping:** Digging a hole so the rock rolls in. (Requires initial energy, then zero maintenance).
+
+A Post-Coercion civilization operates like an optical trap: it shapes the incentives (potentials) so that the desired behavior is the natural equilibrium state.
 
 ## **5. ROADMAP TO POST-COERCION CIVILIZATION**
 

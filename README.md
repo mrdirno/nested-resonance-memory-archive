@@ -88,14 +88,21 @@ We are mapping the applicable route to civilization-scale engineering.
 
 ---
 
-## DIFFERENTIATION: WHY WE WIN
+## DIFFERENTIATION: ENGINEERING VIA POTENTIAL SHAPING
 
-While others (Google Isomorphic Labs) use Deep Learning to **predict** equilibrium (where matter *wants* to go), we use Phase Physics to **force** stability (where we *want* matter to go).
+While others use Deep Learning to **predict** equilibrium (where matter *wants* to go), we use Phase Physics to **shape the potential** so that the desired form *becomes* the equilibrium.
+
+We do not force matter. We sculpt the energy landscape, and matter flows into the shape we designed as its natural resting state.
+
+### The Construction Logic (The "Epoxy" Protocol)
+1.  **Liquid Phase (Substrate):** We start with a responsive medium (plasma, gel, resin).
+2.  **Wavefield Control (Potential Basin):** We inject amplitudes and phase shifts to sculpt a dynamic potential basin. The material flows into this invisible mold.
+3.  **Phase Transition (Lock-in):** We trigger a state change (curing, freezing, crystallization). The dynamic shape becomes permanent structure.
 
 *   **They Predict Collapse.**
-*   **We Engineer Stability.**
+*   **We Shape the Basin.**
 
-This is not a passive observation of nature. This is **Active Reality Injection.**
+This is not coercion. This is **Active Potential Injection.**
 
 ---
 
