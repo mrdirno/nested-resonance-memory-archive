@@ -30,6 +30,8 @@ class HeliosShell(cmd.Cmd):
             self.do_create(f"{intent['shape']} {intent['location'][0]} {intent['location'][1]} {intent['location'][2]}")
         elif action == 'move':
             self.do_move(f"{intent['id']} {intent['target'][0]} {intent['target'][1]} {intent['target'][2]}")
+        elif action == 'load':
+            self.do_load(intent['filename'])
         elif action == 'delete':
             self.do_delete(f"{intent['id']}")
         elif action == 'status':
@@ -66,6 +68,23 @@ class HeliosShell(cmd.Cmd):
                 
         except Exception as e:
             print(f"Error: {e}")
+
+    def do_load(self, arg):
+        'Load an OBJ file: load <filename>'
+        filename = arg.strip()
+        print(f"Loading model from {filename}...")
+        try:
+            obj_id, point_count = self.op.create_from_file(filename)
+            stability = self.op.get_stability(obj_id)
+            
+            print(f"Object ID {obj_id} Created (Points: {point_count}).")
+            print(f"Stability Index: {stability:.4f}")
+            if stability < 0.1:
+                print(">> Status: STABLE")
+            else:
+                print(">> Status: UNSTABLE (Optimization needed)")
+        except Exception as e:
+            print(f"Error loading file: {e}")
 
     def do_move(self, arg):
         'Move an object: move <id> <x> <y> <z>'
@@ -123,6 +142,10 @@ if __name__ == '__main__':
         print("\n--- Testing NLP Commands ---")
         shell.default("Make a cube at 30 30 30")
         shell.default("Move object 2 to 40 40 40")
+        
+        print("\n--- Testing Mesh Loader ---")
+        shell.default("Load data/models/pyramid.obj")
+        
         shell.default("Status report")
         shell.default("Delete object 1")
         shell.default("Status")

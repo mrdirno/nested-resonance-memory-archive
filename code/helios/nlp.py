@@ -19,6 +19,8 @@ class NaturalLanguageInterface:
             (r'(?i)create\s+(?:a\s+)?(\w+)\s+(?:at\s+)?(\d+(?:\.\d+)?)[,\s]+(\d+(?:\.\d+)?)[,\s]+(\d+(?:\.\d+)?)', self._parse_create),
             (r'(?i)make\s+(?:a\s+)?(\w+)\s+(?:at\s+)?(\d+(?:\.\d+)?)[,\s]+(\d+(?:\.\d+)?)[,\s]+(\d+(?:\.\d+)?)', self._parse_create),
             (r'(?i)move\s+(?:object\s+)?(\d+)\s+(?:to\s+)?(\d+(?:\.\d+)?)[,\s]+(\d+(?:\.\d+)?)[,\s]+(\d+(?:\.\d+)?)', self._parse_move),
+            (r'(?i)load\s+(?:model\s+)?([\w\./\\-]+)', self._parse_load),
+            (r'(?i)import\s+(?:model\s+)?([\w\./\\-]+)', self._parse_load),
             (r'(?i)delete\s+(?:object\s+)?(\d+)', self._parse_delete),
             (r'(?i)remove\s+(?:object\s+)?(\d+)', self._parse_delete),
             (r'(?i)status|report|list', self._parse_status),
@@ -47,6 +49,13 @@ class NaturalLanguageInterface:
             "action": "create",
             "shape": shape,
             "location": (x, y, z)
+        }
+
+    def _parse_load(self, match):
+        filename = match.group(1)
+        return {
+            "action": "load",
+            "filename": filename
         }
 
     def _parse_move(self, match):

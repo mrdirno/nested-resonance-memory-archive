@@ -4,8 +4,10 @@ The Engine of the Type 3 Operating System.
 Translates high-level intent into low-level phase instructions.
 """
 import numpy as np
+import os
 from code.helios.substrate_3d import AcousticSubstrate3D
 from experiments.cycle320_forward_cymatics_2d import Emitter
+from code.helios.mesh_loader import MeshLoader
 
 class Emitter3D(Emitter):
     def __init__(self, x, y, z, frequency, phase, amplitude=1.0):
@@ -26,6 +28,7 @@ class UniversalOperator:
             resolution_mm=self.resolution
         )
         self.emitters = self._create_hardware_layer()
+        self.mesh_loader = MeshLoader()
         self.active_objects = {} # ID -> {type, phases, location}
         self.next_id = 1
         
@@ -75,6 +78,35 @@ class UniversalOperator:
         self.next_id += 1
         return obj_id
 
+    def create_from_file(self, filepath: str, scale_mm=50.0):
+        """
+        Loads an OBJ file, centers/scales it, voxelizes it, and compiles it.
+        """
+        if not os.path.exists(filepath):
+            raise FileNotFoundError(f"File not found: {filepath}")
+            
+        # Load and Process
+        verts, faces = self.mesh_loader.load_obj(filepath)
+        verts = self.mesh_loader.center_and_scale(verts, target_scale_mm=scale_mm)
+        targets = self.mesh_loader.voxelize_surface(verts, faces, self.resolution)
+        
+        if not targets:
+            raise ValueError("Mesh voxelization yielded zero targets.")
+            
+        # Solve
+        phases = self._solve_phases(targets)
+        
+        # Store
+        obj_id = self.next_id
+        self.active_objects[obj_id] = {
+            "type": f"file:{os.path.basename(filepath)}",
+            "location": (50.0, 50.0, 50.0), # Centered by default
+            "phases": phases,
+            "targets": targets
+        }
+        self.next_id += 1
+        return obj_id, len(targets)
+
     def move_object(self, object_id: int, new_location: tuple):
         """
         Moves an existing object to a new location.
@@ -86,10 +118,15 @@ class UniversalOperator:
         shape = obj['type']
         
         # Recalculate targets
-        if shape == "cube":
+        if "file:" in shape:
+             # Complex case: need to reload or shift points
+             # Simple shift for now
+             current_loc = obj['location']
+             shift = np.array(new_location) - np.array(current_loc)
+             new_targets = [t + shift for t in obj['targets']]
+        elif shape == "cube":
             new_targets = self._get_cube_targets(new_location)
         else:
-            # Should not happen if create only allows valid shapes
             raise ValueError(f"Unknown shape: {shape}")
             
         # Solve for new phases
@@ -99,7 +136,6 @@ class UniversalOperator:
         obj['location'] = new_location
         obj['phases'] = phases
         obj['targets'] = new_targets
-        
         return True
 
     def delete_object(self, object_id: int):
