@@ -9,17 +9,23 @@
 
 ### API Key Setup
 
+> [!CAUTION]
+> **SECURITY WARNING: DO NOT HARDCODE KEYS HERE**
+> This file is tracked by git. **NEVER** put real API keys in this file.
+> Use `export GEMINI_API_KEY="AIza..."` in your local shell (`~/.zshrc`) ONLY.
+> The examples below use placeholders. **DO NOT UN-REDACT THEM.**
+
 **Method 1: Environment Variable** (Active)
 ```bash
 # Added to ~/.zshrc
-export GEMINI_API_KEY="AIzaSyAusVDqRZs1YSGaNCjM-WcgPXsSrzv8S6w"
+export GEMINI_API_KEY="REDACTED_API_KEY"
 ```
 
 **Method 2: Settings File** (Backup)
 ```bash
 # Created at ~/.gemini/settings.json
 {
-  "apiKey": "AIzaSyAusVDqRZs1YSGaNCjM-WcgPXsSrzv8S6w",
+  "apiKey": "REDACTED_API_KEY",
   "approvalMode": "yolo"
 }
 ```

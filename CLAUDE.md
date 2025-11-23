@@ -64,6 +64,20 @@ Treat these as living commitments rather than topics to document.
 
 ---
 
+## ZERO-LEAK PROTOCOL (MEMETIC LAW)
+
+**"Secrets never touch the repo. Secrets live in the environment."**
+
+**The Law:**
+1.  **NEVER** commit API keys, tokens, or passwords to git.
+2.  **NEVER** write secrets to markdown files, logs, or code comments.
+3.  **ALWAYS** use environment variables (`os.getenv`) or `.env` files (which must be gitignored).
+4.  **ALWAYS** audit files for secrets before `git add`.
+
+**Violation Consequence:** Immediate revocation of credentials and security incident report.
+
+---
+
 ## DEPENDENCY INSTALLATION AUTHORIZATION
 
 **FULL AUTONOMOUS AUTHORIZATION GRANTED (2025-10-31)**
