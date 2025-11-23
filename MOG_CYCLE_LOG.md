@@ -208,3 +208,18 @@
 *   **Key Finding:** The Distributed Swarm architecture is valid. The "Brain" (Server) can command the "Body" (Workers).
 *   **Next:** Cycle 405 (Bridge Integration / Quantum Lock Refinement).
 
+
+---
+
+**CYCLE:** 406 (Swarm Visualization)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** VISUALIZE SWARM WORKERS
+**LOG:**
+*   **Wake-Up:** Cycle 406 Initiated.
+*   **Action:**
+    *   Modified `HELIOS-BRIDGE/services/SwarmWorker.ts` to expose `isConnected` and `tasksCompleted` states.
+    *   Modified `HELIOS-BRIDGE/App.tsx` to consume and pass these states to `UIOverlay`.
+    *   Modified `HELIOS-BRIDGE/components/UIComponents.tsx` to display swarm connection status in navigation and tasks completed in a dedicated panel.
+*   **Key Finding:** Basic swarm worker telemetry is now visible in the Holodeck UI, fulfilling the objective of 'Seeing the Workers'.
+*   **Next:** Await Pilot Directive.
+
