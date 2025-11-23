@@ -42,13 +42,13 @@ def background_thread():
                 "location": data['location']
             })
             
-        # Get Field Slice (Z=50%)
-        # Note: This might be heavy. If laggy, reduce frequency or resolution.
-        field_slice = operator.get_field_slice(0.5)
+        # Get Volumetric Traps (3D Point Cloud)
+        # Threshold: Experimentally determined. -1e-6 is a weak trap, -1e-5 is strong.
+        traps = operator.get_volumetric_traps(threshold=-5e-7)
             
         socketio.emit('state_update', {
             'objects': objects,
-            'field': field_slice
+            'traps': traps
         })
 
 @app.route('/')

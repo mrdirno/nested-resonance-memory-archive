@@ -179,6 +179,45 @@ class AcousticSubstrate3DGPU(SubstrateInterface3DGPU):
 
         return U.cpu().numpy()
 
+    def get_trap_indices(self, field: np.ndarray, threshold: float = -1e-5) -> list:
+        """
+        Returns a list of (x, y, z) coordinates where the Gorkov potential is below the threshold.
+        Optimized to perform thresholding on GPU if possible, but currently using CPU numpy for simplicity
+        given the potential is already returned as numpy.
+        """
+        # Calculate Potential
+        U = self.calculate_gorkov_potential(field)
+        
+        # Thresholding
+        # We want indices where U < threshold (negative potential well)
+        # U is [z, y, x]
+        
+        # Get indices
+        # z_idxs, y_idxs, x_idxs = np.where(U < threshold)
+        # But we want coordinates in spatial units (or just indices for voxel rendering)
+        # The frontend expects coordinates.
+        # Let's return voxel indices [x, y, z] for now, and let frontend scale?
+        # Or return physical coordinates?
+        # Operator uses resolution.
+        # Let's return indices [x, y, z] and let Operator convert to physical if needed,
+        # or just return indices since the Holodeck is a voxel grid.
+        
+        # Note: np.where returns tuple of arrays.
+        # zip them to get points.
+        
+        indices = np.argwhere(U < threshold)
+        # indices is [ [z, y, x], ... ]
+        
+        # Convert to [x, y, z] list
+        # And maybe subsample if too many?
+        # For now, return all.
+        
+        # Swap columns: z,y,x -> x,y,z
+        # col 0 is z, col 1 is y, col 2 is x
+        traps = indices[:, [2, 1, 0]].tolist()
+        
+        return traps
+
 
 # Benchmark utility
 def benchmark_gpu_vs_cpu():

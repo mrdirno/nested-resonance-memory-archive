@@ -152,33 +152,23 @@
             addLog('Connected to HELIOS Stream', 'success');
         });
 
-        // Field Visualization (Heatmap)
-        const planeGeometry = new THREE.PlaneGeometry(100, 100);
-        // Rotate to match X-Y plane (default is X-Y, but we want it horizontal? No, Z is up in our physics?)
-        // In substrate: z, y, x. 
-        // In Three.js: y is up usually.
-        // Let's assume we map Substrate (x,y,z) to Three (x,y,z).
-        // If we slice Z, we want an X-Y plane.
+        // Field Visualization (Volumetric Point Cloud)
+        const particleGeometry = new THREE.BufferGeometry();
+        // Initial buffer size (max points)
+        const maxParticles = 50000;
+        const positions = new Float32Array(maxParticles * 3);
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-        // Create a canvas for the texture
-        const fieldCanvas = document.createElement('canvas');
-        fieldCanvas.width = 100; // Resolution of substrate
-        fieldCanvas.height = 100;
-        const fieldCtx = fieldCanvas.getContext('2d');
-        const fieldTexture = new THREE.CanvasTexture(fieldCanvas);
-        fieldTexture.magFilter = THREE.NearestFilter; // Pixelated look
-        // fieldTexture.minFilter = THREE.LinearFilter;
-
-        const planeMaterial = new THREE.MeshBasicMaterial({
-            map: fieldTexture,
-            side: THREE.DoubleSide,
+        const particleMaterial = new THREE.PointsMaterial({
+            color: 0x00ffff,
+            size: 1.0,
             transparent: true,
-            opacity: 0.5,
+            opacity: 0.6,
             blending: THREE.AdditiveBlending
         });
-        const fieldPlane = new THREE.Mesh(planeGeometry, planeMaterial);
-        fieldPlane.position.set(50, 50, 50); // Center of box
-        scene.add(fieldPlane);
+
+        const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particleSystem);
 
         socket.on('state_update', (data) => {
             // Sync objects
@@ -216,38 +206,31 @@
                 objects[obj.id].position.set(x, y, z);
             });
 
-            // Update Field Heatmap
-            if (data.field) {
-                const field = data.field; // 2D array [y][x]
-                const imgData = fieldCtx.createImageData(100, 100);
-                const pixels = imgData.data;
+            // Update Field Traps (Point Cloud)
+            if (data.traps) {
+                const traps = data.traps; // List of [x, y, z] indices
+                const positions = particleSystem.geometry.attributes.position.array;
 
-                // Find max for normalization (auto-gain)
-                // Or use fixed scale. Let's use fixed for now to see absolute intensity.
-                // Or simple local max.
-                let maxVal = 0;
-                for (let row of field) for (let val of row) if (val > maxVal) maxVal = val;
-                if (maxVal === 0) maxVal = 1;
+                let idx = 0;
+                const resolution = 4.0; // Hardcoded to match server.py
 
-                for (let y = 0; y < 100; y++) {
-                    for (let x = 0; x < 100; x++) {
-                        // Substrate Y is 0..99. Canvas Y is 0..99.
-                        // Substrate X is 0..99.
-                        const val = field[y][x];
-                        const norm = Math.min(1.0, val / (maxVal * 0.8)); // Gain boost
+                for (let i = 0; i < traps.length && idx < maxParticles * 3; i++) {
+                    const [vx, vy, vz] = traps[i];
 
-                        const idx = (y * 100 + x) * 4;
+                    // Convert voxel index to mm
+                    // Assuming resolution is 4.0mm (from server.py)
+                    // And we might need to center it? 
+                    // Voxel 0 is at 0mm? Yes.
 
-                        // Heatmap Color (Blue -> Red)
-                        // Simple: Red channel = intensity
-                        pixels[idx] = Math.floor(norm * 255);     // R
-                        pixels[idx + 1] = Math.floor(norm * 50);  // G
-                        pixels[idx + 2] = Math.floor((1 - norm) * 50); // B
-                        pixels[idx + 3] = Math.floor(norm * 200); // Alpha
-                    }
+                    positions[idx++] = vx * resolution;
+                    positions[idx++] = vy * resolution;
+                    positions[idx++] = vz * resolution;
                 }
-                fieldCtx.putImageData(imgData, 0, 0);
-                fieldTexture.needsUpdate = true;
+
+                // Hide remaining particles
+                // We can't easily resize buffer, so we just set drawRange
+                particleSystem.geometry.setDrawRange(0, traps.length);
+                particleSystem.geometry.attributes.position.needsUpdate = true;
             }
         });
 

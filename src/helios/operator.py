@@ -353,3 +353,21 @@ class UniversalOperator:
         # Let's return raw list of lists.
         
         return intensity.tolist()
+
+    def get_volumetric_traps(self, threshold: float = -1e-6) -> list:
+        """
+        Returns a list of [x, y, z] coordinates (voxel indices) of active traps.
+        """
+        # Propagate
+        if self.use_gpu:
+             field = self.box.propagate(self.emitters)
+             # Use GPU substrate method
+             if hasattr(self.box, 'get_trap_indices'):
+                 return self.box.get_trap_indices(field, threshold)
+        
+        # Fallback for CPU or if method missing
+        # Calculate U manually
+        field = self.box.propagate(self.emitters)
+        U = self.box.calculate_gorkov_potential(field)
+        indices = np.argwhere(U < threshold)
+        return indices[:, [2, 1, 0]].tolist()
