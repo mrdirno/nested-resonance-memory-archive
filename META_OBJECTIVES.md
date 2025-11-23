@@ -68,7 +68,8 @@
 - ✅ **Physical Trap:** `PRIN-SERIAL-COMMS` (Cycle 386). Integrated with fallback.
 - ✅ **Reality Injection:** `PRIN-CLOSED-LOOP` (Cycle 387). First Injection verified.
 - ✅ **Physical Deployment:** `PRIN-HARDWARE-GUIDE` (Cycle 389). Assembly Guide & Health Check created.
-- [ ] **Physical Calibration:** Execute C382 on physical hardware.
+- ✅ **Physical Calibration:** `PRIN-HOMOGRAPHY` (Cycle 390). Wizard & Persistence implemented.
+- [ ] **Physical Levitation:** Execute C387 on physical hardware.
 
 
 

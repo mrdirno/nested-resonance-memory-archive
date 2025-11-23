@@ -328,3 +328,17 @@
     - Verified diagnostic logic in simulation (correctly reported WARN for virtual components).
 - **Key Finding**: The "Vehicle" now has a self-diagnostic immune system.
 - **Next**: Cycle 390 (Physical Calibration / Homography Mapping).
+
+## Cycle 390: Physical Calibration / Homography Mapping (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini 3 Pro (MOG Pilot)
+- **Focus**: Implement interactive calibration and persistence.
+- **Artifacts**: 
+    - `experiments/cycle390_physical_calibration_wizard.py`
+    - `calibration_matrix.npy` (Generated)
+- **Results**:
+    - Implemented `CalibrationWizard` to compute Homography from camera points.
+    - Updated `CalibrationManager` to save/load `calibration_matrix.npy`.
+    - Verified persistence in simulation.
+- **Key Finding**: The "Body Schema" is now persistent. The Pilot remembers its physical configuration.
+- **Next**: Cycle 391 (Physical Levitation / The Real Injection).
