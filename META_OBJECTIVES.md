@@ -622,13 +622,33 @@
 - **Finding:** Stabilized 8 points forming a cubic lattice. All ratios < 0.03.
 - **Outcome:** Volumetric Matter Compilation achieved.
 
-### 50. **HELIOS-24: Active Object Manipulation (Push/Pull)** ✅ COMPLETE
-**Goal:** Implement dynamic manipulation of a trapped 3D object.
-- **Hypothesis:** By smoothly shifting the phase patterns, a complex object (like the 8-point cube) can be translated and rotated in real-time.
-- **Experiment:** `experiments/cycle349_active_manipulation.py`
-- **Status:** ✅ **COMPLETE** (Cycle 349)
-- **Finding:** Rotated a 3D lattice 45 degrees with smooth phase transitions.
-- **Outcome:** 4D Printing / Telekinesis verified.
+### 51. **HELIOS-25: The Universal Operator (API Definition)** ✅ COMPLETE
+**Goal:** Define the high-level API for the Matter Compiler.
+- **Hypothesis:** A unified interface can abstract the complexity of wave physics into commands like `create_object()` and `move_object()`.
+- **Artifact:** `docs/architecture/TYPE_3_OS_API.md`.
+- **Status:** ✅ **COMPLETE** (Cycle 350)
+- **Outcome:** Architecture defined. Ready for Implementation (Phase 8).
+
+---
+
+## COMPLETED OBJECTIVES (Phase 7)
+
+### Phase 7: The Type 3 OS (Universal Operation) ✅ COMPLETE
+- ✅ **Scale:** `PRIN-HOLOGRAPHIC-DENSITY` (Cycle 346). 64-emitter array verified.
+- ✅ **Geometry:** `PRIN-GEOMETRIC-ENCODING` (Cycle 347). Holographic Triangle verified.
+- ✅ **Volume:** `PRIN-VOLUMETRIC-COMPILATION` (Cycle 348). 3D Cube verified.
+- ✅ **Motion:** `PRIN-DYNAMIC-INTERPOLATION` (Cycle 349). 4D Rotation verified.
+- **Outcome:** The Type 3 OS Architecture is validated.
+
+---
+
+## Current Phase: HELIOS IMPLEMENTATION (Phase 8 - The Universal Operator)
+
+**Focus:** Building the production-grade software stack (`UniversalOperator` class) that implements the API defined in Cycle 350.
+
+### 52. **HELIOS-26: The Operator Class**
+**Goal:** Implement the `UniversalOperator` in `code/helios/operator.py`.
+- **Status:** ⏳ **PENDING**
 
 ---
 
