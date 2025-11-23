@@ -1,0 +1,179 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/mrdirno/nested-resonance-memory-archive/schemas/pc001_population_dynamics.json",
+  "title": "PC001 Population Dynamics Data Schema",
+  "description": "JSON schema for experimental data compatible with PC001 (NRM Population Dynamics Validation Framework). Follows TSF Data Archiving Protocol.",
+  "type": "object",
+  "required": ["metadata", "timeseries", "statistics"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "Experiment metadata and provenance information",
+      "required": ["experiment_id", "pc_id"],
+      "properties": {
+        "experiment_id": {
+          "type": "string",
+          "description": "Unique experiment identifier (e.g., C175_BASELINE_SEED42)",
+          "pattern": "^[A-Z0-9_]+$"
+        },
+        "pc_id": {
+          "type": "string",
+          "description": "Principle Card ID that this data validates",
+          "const": "PC001"
+        },
+        "domain": {
+          "type": "string",
+          "description": "Scientific domain",
+          "default": "population_dynamics"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "ISO 8601 timestamp of experiment execution",
+          "format": "date-time"
+        },
+        "regime_type": {
+          "type": "string",
+          "description": "Expected regime classification",
+          "enum": ["COLLAPSE", "BISTABILITY", "ACCUMULATION", "UNKNOWN"]
+        },
+        "artifact_hash": {
+          "type": "string",
+          "description": "SHA-256 hash of experimental artifact for Gate 1.3 validation",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Experiment parameters for reproducibility",
+          "properties": {
+            "birth_rate": {"type": "number"},
+            "death_rate": {"type": "number"},
+            "initial_population": {"type": "integer"},
+            "duration_cycles": {"type": "integer"},
+            "random_seed": {"type": "integer"}
+          }
+        }
+      }
+    },
+    "timeseries": {
+      "type": "object",
+      "description": "Time-series data arrays",
+      "required": ["population"],
+      "properties": {
+        "population": {
+          "type": "array",
+          "description": "Population trajectory over time",
+          "items": {"type": "number", "minimum": 0},
+          "minItems": 1
+        },
+        "time": {
+          "type": "array",
+          "description": "Time steps (optional, defaults to 0,1,2,...)",
+          "items": {"type": "number"}
+        }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "description": "Summary statistics computed from timeseries",
+      "anyOf": [
+        {"required": ["mean_population", "std_population", "cv"]},
+        {"required": ["mean", "std"]}
+      ],
+      "properties": {
+        "mean_population": {
+          "type": "number",
+          "description": "Mean population (preferred key name)"
+        },
+        "mean": {
+          "type": "number",
+          "description": "Mean population (alternative key name)"
+        },
+        "std_population": {
+          "type": "number",
+          "description": "Standard deviation of population (preferred)",
+          "minimum": 0
+        },
+        "std": {
+          "type": "number",
+          "description": "Standard deviation (alternative)",
+          "minimum": 0
+        },
+        "cv": {
+          "type": "number",
+          "description": "Coefficient of variation",
+          "minimum": 0
+        },
+        "min_population": {
+          "type": "number",
+          "description": "Minimum population observed"
+        },
+        "max_population": {
+          "type": "number",
+          "description": "Maximum population observed"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "description": "Validation data for PC001 gates",
+      "properties": {
+        "cv_predicted": {
+          "type": "number",
+          "description": "Predicted CV from SDE/Fokker-Planck theory (Gate 1.1)",
+          "minimum": 0
+        },
+        "regime": {
+          "type": "string",
+          "description": "Regime classification (Gate 1.2)",
+          "enum": ["COLLAPSE", "BISTABILITY", "ACCUMULATION"]
+        },
+        "overhead_observed": {
+          "type": "number",
+          "description": "Observed computational overhead (Gate 1.4)",
+          "minimum": 1.0
+        },
+        "overhead_predicted": {
+          "type": "number",
+          "description": "Predicted computational overhead (Gate 1.4)",
+          "minimum": 1.0
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "metadata": {
+        "experiment_id": "C175_BASELINE_SEED42",
+        "pc_id": "PC001",
+        "domain": "population_dynamics",
+        "timestamp": "2025-11-01T12:00:00Z",
+        "regime_type": "BISTABILITY",
+        "artifact_hash": "abc123def456...",
+        "parameters": {
+          "birth_rate": 0.1,
+          "death_rate": 0.05,
+          "initial_population": 10,
+          "duration_cycles": 1000,
+          "random_seed": 42
+        }
+      },
+      "timeseries": {
+        "population": [10.0, 10.2, 10.1, 10.3, 10.0],
+        "time": [0, 1, 2, 3, 4]
+      },
+      "statistics": {
+        "mean_population": 10.12,
+        "std_population": 0.12,
+        "cv": 0.0119,
+        "min_population": 10.0,
+        "max_population": 10.3
+      },
+      "validation": {
+        "cv_predicted": 0.0115,
+        "regime": "BISTABILITY",
+        "overhead_observed": 40.5,
+        "overhead_predicted": 40.2
+      }
+    }
+  ]
+}

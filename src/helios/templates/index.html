@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HELIOS | The Replicator</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; color: #0f0; font-family: 'Courier New', Courier, monospace; }
+        #ui-container { position: absolute; bottom: 20px; left: 20px; right: 20px; pointer-events: none; }
+        #command-input { 
+            width: 100%; 
+            background: rgba(0, 20, 0, 0.8); 
+            border: 1px solid #0f0; 
+            color: #0f0; 
+            padding: 15px; 
+            font-size: 18px; 
+            pointer-events: auto; 
+            outline: none;
+        }
+        #log {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 400px;
+            height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            pointer-events: none;
+        }
+        .log-entry { margin-bottom: 5px; opacity: 0.8; }
+        .log-success { color: #0f0; }
+        .log-error { color: #f00; }
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="log"></div>
+    <div id="ui-container">
+        <input type="text" id="command-input" placeholder="Enter command (e.g., 'Create a cube at 0 0 0')..." autofocus>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // Scene Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x050505);
+        scene.fog = new THREE.FogExp2(0x050505, 0.002);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(100, 100, 100);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // Grid
+        const gridHelper = new THREE.GridHelper(200, 50, 0x004400, 0x002200);
+        scene.add(gridHelper);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
+
+        // State
+        const objects = {}; // Map ID -> Mesh
+
+        // API Interaction
+        const input = document.getElementById('command-input');
+        const log = document.getElementById('log');
+
+        function addLog(message, type='info') {
+            const div = document.createElement('div');
+            div.className = `log-entry log-${type}`;
+            div.textContent = `> ${message}`;
+            log.appendChild(div);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        async function sendCommand(text) {
+            try {
+                const response = await fetch('/api/command', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command: text })
+                });
+                const data = await response.json();
+                
+                if (data.status === 'error') {
+                    addLog(data.message, 'error');
+                } else {
+                    addLog(data.message, 'success');
+                    refreshState();
+                }
+            } catch (e) {
+                addLog(`Connection Error: ${e}`, 'error');
+            }
+        }
+
+        async function refreshState() {
+            try {
+                const response = await fetch('/api/state');
+                const data = await response.json();
+                
+                // Sync objects
+                const currentIds = new Set(data.objects.map(o => o.id));
+                
+                // Remove deleted
+                for (const id in objects) {
+                    if (!currentIds.has(parseInt(id))) {
+                        scene.remove(objects[id]);
+                        delete objects[id];
+                    }
+                }
+
+                // Add/Update
+                data.objects.forEach(obj => {
+                    if (!objects[obj.id]) {
+                        // Create new mesh
+                        let geometry;
+                        if (obj.type === 'cube') geometry = new THREE.BoxGeometry(10, 10, 10);
+                        else if (obj.type === 'sphere') geometry = new THREE.SphereGeometry(5, 32, 32);
+                        else geometry = new THREE.OctahedronGeometry(5); // Default
+
+                        const material = new THREE.MeshStandardMaterial({ 
+                            color: 0x00ff00, 
+                            emissive: 0x004400,
+                            wireframe: true
+                        });
+                        const mesh = new THREE.Mesh(geometry, material);
+                        scene.add(mesh);
+                        objects[obj.id] = mesh;
+                    }
+                    
+                    // Update position
+                    const [x, y, z] = obj.location;
+                    objects[obj.id].position.set(x, y, z);
+                });
+
+            } catch (e) {
+                console.error("State sync failed:", e);
+            }
+        }
+
+        // Input Handler
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const text = input.value;
+                if (text.trim()) {
+                    sendCommand(text);
+                    input.value = '';
+                }
+            }
+        });
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            
+            // Rotate objects slightly for effect
+            for (const id in objects) {
+                objects[id].rotation.x += 0.01;
+                objects[id].rotation.y += 0.01;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Initial State Load
+        refreshState();
+        animate();
+
+        // Window Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

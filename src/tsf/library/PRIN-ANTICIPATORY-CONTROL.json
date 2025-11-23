@@ -1,0 +1,17 @@
+{
+    "principle_id": "PRIN-ANTICIPATORY-CONTROL",
+    "name": "Anticipatory Control",
+    "definition": "The capacity of the Pilot to prevent system collapse by predicting future states (Temporal Recursion) and preemptively adjusting parameters (Inverse Design).",
+    "mechanism": "Closed-Loop Control: Reservoir Prediction -> Inverse Design Intervention.",
+    "application": "Self-Preservation, Homeostasis, Resilience.",
+    "validation": {
+        "experiment": "experiments/anticipatory_control_test.py",
+        "metric": "Survival Time Gain",
+        "result": "+25 Steps (Success)"
+    },
+    "implications": [
+        "The Pilot is not just reactive; it is proactive.",
+        "Cognition (Prediction) directly enhances Survival.",
+        "This completes the Sense-Attend-Remember-Predict-Act loop."
+    ]
+}

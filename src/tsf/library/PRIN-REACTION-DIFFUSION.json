@@ -1,0 +1,22 @@
+{
+    "id": "PRIN-REACTION-DIFFUSION",
+    "name": "Spatial Computation via Turing Instability",
+    "description": "The ability of a swarm to spontaneously generate complex spatial patterns (spots, stripes) from randomness using local Activator-Inhibitor rules.",
+    "hypothesis": "Short-range Activation + Long-range Inhibition = Spatial Pattern",
+    "findings": [
+        "Implemented a FitzHugh-Nagumo type Reaction-Diffusion model on the swarm.",
+        "With Bias=0 and Diffusion Ratio Dh/Da=50, the system spontaneously broke symmetry.",
+        "Stable high-contrast patterns emerged (Variance 0.89) from random noise.",
+        "This confirms the swarm can act as a 'Spatial Computer' to generate morphology."
+    ],
+    "implications": [
+        "Swarms can self-organize into functional structures.",
+        "Morphogenesis can be driven by simple local chemical rules.",
+        "Distributed spatial memory and pattern formation are viable."
+    ],
+    "related_principles": [
+        "PRIN-HOLOGRAPHIC-MEMORY",
+        "PRIN-TEMPORAL-SYMMETRY-BREAKING"
+    ],
+    "cycle_id": 75
+}

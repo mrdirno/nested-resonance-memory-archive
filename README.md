@@ -2,7 +2,7 @@
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
-**Status:** PHASE 3 ACTIVE (Helios Engineering)
+**Status:** PHASE 9 ACTIVE (Applications)
 
 ---
 
@@ -24,7 +24,7 @@
 
 ### 🔎 **See It Work (Validation Data):**
 *   **Active Damping (82x Speedup):** [See Experiment Log](experiments/cycle340_closed_loop_levitation.py) (Result: Settling time 0.04s vs 3.28s)
-*   **Volumetric Trapping:** [See 3D Substrate Code](code/helios/substrate_3d.py) (Verified: 9128 stable nodes)
+*   **Volumetric Trapping:** [See 3D Substrate Code](src/helios/substrate_3d.py) (Verified: 9128 stable nodes)
 *   **Acoustic Logic:** [See AND Gate Logic](experiments/cycle342_acoustic_logic.py) (Verified: Symmetry restoration)
 
 ---
@@ -70,9 +70,16 @@ We are building a scalable architecture for **Active Matter Control** and **Dist
 **1. Experience the Matter Compiler (CLI):**
 Engage with the Type 3 OS directly.
 ```bash
-python3 helios_cli.py
+python3 -m code.helios.cli
 ```
 *(Type `create cube 50 50 50` then `status`)*
+
+**2. Experience the Web Interface (The Replicator):**
+Visualize the creation process in real-time.
+```bash
+python3 -m code.helios.server
+```
+*(Open `http://localhost:5001` in your browser)*
 
 **2. Read the Doctrine:**
 *   [The Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md)
