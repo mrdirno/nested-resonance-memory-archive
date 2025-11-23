@@ -29,15 +29,17 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
   const lastFrameTimeRef = useRef(0);
 
   // -- Initialization --
+  // Allocate MAX buffer once (1M particles)
+  const MAX_PARTICLES = 1000000;
+
   const { positions, colors, velocities } = useMemo(() => {
-    const count = config.particleCount;
-    const pos = new Float32Array(count * 3);
-    const col = new Float32Array(count * 3);
-    const vel = new Float32Array(count * 3);
+    const pos = new Float32Array(MAX_PARTICLES * 3);
+    const col = new Float32Array(MAX_PARTICLES * 3);
+    const vel = new Float32Array(MAX_PARTICLES * 3);
 
-    const gridSize = Math.ceil(Math.cbrt(count));
+    const gridSize = Math.ceil(Math.cbrt(MAX_PARTICLES));
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < MAX_PARTICLES; i++) {
       const i3 = i * 3;
       const xi = i % gridSize;
       const yi = Math.floor(i / gridSize) % gridSize;
@@ -56,6 +58,13 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
     }
 
     return { positions: pos, colors: col, velocities: vel };
+  }, []); // Run ONCE
+
+  // Update Draw Range when count changes
+  useEffect(() => {
+    if (meshRef.current) {
+      meshRef.current.geometry.setDrawRange(0, config.particleCount);
+    }
   }, [config.particleCount]);
 
   // Reset logic

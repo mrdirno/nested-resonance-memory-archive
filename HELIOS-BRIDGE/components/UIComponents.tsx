@@ -179,13 +179,7 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
             <input
               type="range" min="10000" max="1000000" step="10000"
               value={config.particleCount}
-              onChange={(e) => {
-                const val = parseInt(e.target.value);
-                // Pause briefly to allow memory reallocation
-                setConfig(c => ({ ...c, isPlaying: false, particleCount: val }));
-                // Auto-resume after 500ms
-                setTimeout(() => setConfig(c => ({ ...c, isPlaying: true })), 500);
-              }}
+              onChange={(e) => handleRange('particleCount', parseInt(e.target.value))}
               className="w-full"
             />
           </div>
