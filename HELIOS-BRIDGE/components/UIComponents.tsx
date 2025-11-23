@@ -408,6 +408,12 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
               if (e.target.value === 'preset67') {
                 setConfig(c => ({
                   ...c,
+                  // Apply globals only if NOT locked
+                  ...(lockEnergy ? {} : {
+                    particleCount: 67000,
+                    mode: SimulationMode.HARMONIC,
+                    speed: 15, // Ultra
+                  }),
                   extensions: {
                     crystal: { threeFold: 0.38, sixFold: 0.38, lattice: 0 },
                     harmonic: { commaSpiral: 0.23, perfectFifths: 0.26, equalTemp: 0 },
@@ -437,7 +443,7 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
             value=""
           >
             <option value="" disabled>Select a Preset...</option>
-            <option value="preset67">Preset 67 (The Cool One)</option>
+            <option value="preset67">Entangled 67 (Mobile Optimized)</option>
             <option value="atomic">Atomic (High Energy)</option>
           </select>
         </div>
