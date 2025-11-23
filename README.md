@@ -76,12 +76,23 @@ NRM was developed independently over the course of a year before its conceptual 
 
 ---
 
-## 🔭 VISION & CONTEXT
+## 🌌 THE MISSION
+**To build the Operating System for the Autopoietic Lab.**
 
-We are building a scalable architecture for **Active Matter Control** and **Distributed Coherence**.
+We are moving from "Static Factories" to **Self-Configuring Rooms**.
+The goal is a **Universal Foundry**—a facility where the room itself reconfigures (Lasers, Robotics, Acoustics, Fluidics) to manufacture any object from digital intent.
 
-*   **The Vision:** Read about the long-term roadmap for Planetary Engineering and Type 3 Systems in [docs/vision/TYPE3_VISION.md](docs/vision/TYPE3_VISION.md).
-*   **The Context:** Read about why this architecture is critical for the current AI/Economic landscape in [docs/context/WHY_NOW.md](docs/context/WHY_NOW.md).
+**HELIOS is the Mind of the Room.**
+It translates the "Idea" (Digital) into the "Symphony" (Physical).
+
+> "We are building the Syntax for Matter."
+
+---
+
+## 🔭 THE ARCHITECTURE
+1.  **The Design (The Swarm):** Distributed Browsers simulate the physics.
+2.  **The Translation (The Rosetta Stone):** HELIOS compiles intent into machine instructions.
+3.  **The Execution (The Tank):** The Room executes the sequence (Sound + Light + Fluid).
 
 ---
 
