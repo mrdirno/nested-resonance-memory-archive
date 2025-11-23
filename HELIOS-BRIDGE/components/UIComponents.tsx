@@ -143,7 +143,7 @@ const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: num
 };
 export const UIOverlay: React.FC<UIProps> = (props) => {
   const { config, setConfig, activePanel, setActivePanel, digitRefs, onCameraMove, onResetCamera } = props;
-  const [lockEnergy, setLockEnergy] = React.useState(true);
+  const [lockEnergy, setLockEnergy] = React.useState(false);
 
   // Helper to update sliders without lag
   const handleRange = (key: keyof SimulationState, val: number) => {
@@ -390,13 +390,17 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
         <div className="bg-white/5 p-3 rounded-xl border border-white/10 mb-4">
           <div className="flex justify-between items-center mb-2">
             <div className="text-xs font-bold text-white/60 uppercase tracking-wider">Quick Load Presets</div>
-            <button
-              onClick={() => setLockEnergy(!lockEnergy)}
-              className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase transition-colors ${lockEnergy ? 'bg-primary/20 text-primary border border-primary/30' : 'bg-white/5 text-white/40 border border-white/10 hover:bg-white/10'}`}
-              title={lockEnergy ? "Energy Locked: Presets only change geometry" : "Energy Unlocked: Presets apply global physics settings"}
-            >
-              {lockEnergy ? <React.Fragment>🔒 Locked</React.Fragment> : <React.Fragment>🔓 Unlocked</React.Fragment>}
-            </button>
+            <div className="relative group">
+              <button
+                onClick={() => setLockEnergy(!lockEnergy)}
+                className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase transition-colors ${lockEnergy ? 'bg-primary/20 text-primary border border-primary/30' : 'bg-white/5 text-white/40 border border-white/10 hover:bg-white/10'}`}
+              >
+                {lockEnergy ? <React.Fragment>🔒 Locked</React.Fragment> : <React.Fragment>🔓 Unlocked</React.Fragment>}
+              </button>
+              <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-black/90 backdrop-blur border border-white/10 rounded text-[10px] font-bold text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl z-50">
+                {lockEnergy ? "Energy Locked: Presets only change geometry" : "Energy Unlocked: Presets apply global physics settings"}
+              </div>
+            </div>
           </div>
           <select
             className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-primary transition-colors"
