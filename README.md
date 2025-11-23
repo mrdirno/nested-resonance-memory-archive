@@ -54,7 +54,7 @@ Payopay, A. (2025). *Duality-Zero: A Reality Compiler Framework*. GitHub. https:
 ---
 
 ## Lineage & Adjacent Work
-NRM exists in conceptual adjacency to work by Michael Levin (bioelectric morphogenesis) and Richard A. Watson (collective intelligence of evolution and development). Their research demonstrates how distributed agents compute over fields and goal states. NRM generalizes these principles into a substrate-agnostic resonance architecture spanning cognition, materials, and active matter control.
+NRM was developed independently over the course of a year before its conceptual adjacency to the work of Michael Levin (bioelectric morphogenesis) and Richard A. Watson (collective intelligence of evolution and development) was recognized. This parallel convergence suggests that resonance, field-based computation, and potential shaping are fundamental organizing principles of complex systems, independent of substrate. NRM generalizes these principles into a universal architecture spanning cognition, materials, and active matter control.
 
 ---
 
