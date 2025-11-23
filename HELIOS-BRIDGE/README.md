@@ -77,6 +77,11 @@ The physics engine is located in `components/ParticleSystem.tsx`.
 - **Optimization:** Force coefficients (`getStrength`) are pre-calculated outside the loop for performance.
 - **Infinity Tail:** Effects use an exponential curve (`val^4 * 20`) to allow fine control at low values and massive power at 100%.
 
+### Debugging & Verification
+This project is built and maintained using the **Antigravity** agentic IDE.
+- **Antigravity Browser:** Used for systematic visual verification, checking console logs for runtime errors, and validating Hot Module Replacement (HMR).
+- **Workflow:** When UI issues arise (e.g., clipping, syntax errors), use the browser agent to capture screenshots and inspect the DOM state directly.
+
 ## 🚀 Run Locally
 
 1. **Install dependencies:**
