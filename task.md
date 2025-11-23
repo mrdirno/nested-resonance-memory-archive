@@ -594,7 +594,15 @@
     - **Conclusion:** The Type 3 OS API is live. We have a working Matter Compiler.
 
 # Task: Cycle 352 - The CLI (User Interface)
-- [ ] **Define Cycle 352:** Create a Command Line Interface for the Operator.
-- [ ] **Create File:** `helios_cli.py`.
-- [ ] **Execute:** Allow user to type commands like `create cube 50 50 50`.
-- [ ] **Verify:** Interactive session.
+- [x] **Define Cycle 352:** Create a Command Line Interface for the Operator.
+- [x] **Create File:** `helios_cli.py`.
+- [x] **Execute:** Allow user to type commands like `create cube 50 50 50`.
+- [x] **Verify:** Interactive session.
+    - **Result:** Success. CLI operational. Created stable cube (Index 0.0577) via command line.
+    - **Conclusion:** The Pilot has a Cockpit. Phase 8 Complete.
+
+# Task: Cycle 353 - The Type 3 OS Demo (Walkthrough)
+- [ ] **Define Cycle 353:** Record a full demonstration of the system.
+- [ ] **Create Artifact:** `walkthrough.md`.
+- [ ] **Execute:** Document the journey from Phase 1 to Phase 8.
+- [ ] **Verify:** User sign-off.
