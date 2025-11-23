@@ -74,6 +74,42 @@ class UniversalOperator:
         }
         self.next_id += 1
         return obj_id
+
+    def move_object(self, object_id: int, new_location: tuple):
+        """
+        Moves an existing object to a new location.
+        """
+        if object_id not in self.active_objects:
+            raise ValueError(f"Object ID {object_id} not found.")
+            
+        obj = self.active_objects[object_id]
+        shape = obj['type']
+        
+        # Recalculate targets
+        if shape == "cube":
+            new_targets = self._get_cube_targets(new_location)
+        else:
+            # Should not happen if create only allows valid shapes
+            raise ValueError(f"Unknown shape: {shape}")
+            
+        # Solve for new phases
+        phases = self._solve_phases(new_targets)
+        
+        # Update object
+        obj['location'] = new_location
+        obj['phases'] = phases
+        obj['targets'] = new_targets
+        
+        return True
+
+    def delete_object(self, object_id: int):
+        """
+        Removes an object from the field.
+        """
+        if object_id in self.active_objects:
+            del self.active_objects[object_id]
+            return True
+        return False
         
     def _get_cube_targets(self, center):
         offset = 25.0
