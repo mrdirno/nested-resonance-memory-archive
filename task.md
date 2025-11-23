@@ -572,18 +572,18 @@
     - **Conclusion:** The Type 3 OS API is live. We have a working Matter Compiler.
 
 # Task: Cycle 352 - The CLI (User Interface)
-- [ ] **Define Cycle 352:** Create a Command Line Interface for the Operator.
-- [ ] **Create File:** `helios_cli.py`.
-- [ ] **Execute:** Allow user to type commands like `create cube 50 50 50`.
-- [ ] **Verify:** Interactive session.
+- [x] **Define Cycle 352:** Create a Command Line Interface for the Operator.
+- [x] **Create File:** `helios_cli.py`.
+- [x] **Execute:** Allow user to type commands like `create cube 50 50 50`.
+- [x] **Verify:** Interactive session.
+    - **Result:** Success. CLI verified. Cube created with stability 0.0341.
+    - **Conclusion:** The Pilot has a Cockpit. Phase 8 Complete.
 
-# Task: Cycle 350 - The Universal Operator (Integration)
-- [x] **Define Cycle 350:** Combine Scale, Complexity, and Motion.
-- [x] **Create Experiment File:** `docs/architecture/TYPE_3_OS_API.md` (Synthesis).
-- [x] **Execute:** Define the API for the Matter Compiler.
-- [x] **Verify:** Architecture Review.
-    - **Result:** Success. API Specification Drafted.
-    - **Conclusion:** Phase 7 Complete. Phase 8 (Implementation) Begins.
+# Task: Cycle 353 - The Type 3 OS Demo (Walkthrough)
+- [ ] **Define Cycle 353:** Record a full demonstration of the system.
+- [ ] **Create Artifact:** `walkthrough.md`.
+- [ ] **Execute:** Document the journey from Phase 1 to Phase 8.
+- [ ] **Verify:** User sign-off.
 
 # Task: Cycle 351 - The Operator Class (Implementation)
 - [x] **Define Cycle 351:** Implement the `UniversalOperator` class.
