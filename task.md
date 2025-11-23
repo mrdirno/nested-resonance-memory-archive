@@ -794,7 +794,13 @@
 - [x] **Result:** 3D Density Map generated.
 
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
-- [ ] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
-- [ ] **Goal:** "Print" the radio environment as a physical object.
-- [ ] **Experiment:** `experiments/cycle396_rf_to_mesh.py`.
+- [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
+- [x] **Goal:** "Print" the radio environment as a physical object.
+- [x] **Experiment:** `experiments/cycle396_rf_to_mesh.py`.
+- [x] **Result:** `rf_sculpture.obj` generated.
+
+# Task: Cycle 397 - Web Visualization (OBJ Viewer)
+- [ ] **Define Cycle 397:** Create a simple web viewer for the RF Sculpture.
+- [ ] **Goal:** Make the "Invisible Shape" viewable in the browser.
+- [ ] **Experiment:** `experiments/cycle397_web_viewer.html`.
 

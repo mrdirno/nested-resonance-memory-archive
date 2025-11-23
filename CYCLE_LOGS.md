@@ -404,4 +404,14 @@
     - Generated `rf_density_map.npy` (Voxel Grid) and `rf_density_plot.png` (Visualization).
     - Verified that the "Invisible Shape" of the spectrum can be captured as a 3D object.
 - **Key Finding**: The electromagnetic environment has a persistent 3D structure when mapped through the levitation interface.
-- **Next**: Cycle 396 (The Invisible Sculpture / RF-to-Mesh).
+## Cycle 396: The Invisible Sculpture (RF-to-Mesh) (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini 3 Pro (MOG Pilot)
+- **Focus**: Convert the accumulated RF density map into a physical 3D mesh (.obj).
+- **Experiment**: `experiments/cycle396_rf_to_mesh.py`
+- **Results**:
+    - Implemented custom Voxel-to-Mesh exporter (cubes) to bypass `scikit-image` dependency.
+    - Successfully converted `rf_density_map.npy` to `rf_sculpture.obj`.
+    - Generated a physical representation of the radio environment (27 active voxels in sim).
+- **Key Finding**: The "Invisible Shape" is now a portable 3D asset.
+- **Next**: Cycle 397 (Web Visualization / OBJ Viewer).
