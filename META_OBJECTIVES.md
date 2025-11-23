@@ -657,6 +657,11 @@
 - **Finding:** Interactive command loop verified.
 - **Outcome:** The Pilot has a Cockpit.
 
+### 54. **HELIOS-28: The Type 3 OS Demo (Walkthrough)**
+**Goal:** Document the full system capability from Phase 1 to Phase 8.
+- **Artifact:** `walkthrough.md`
+- **Status:** ⏳ **PENDING** (Cycle 353)
+
 ---
 
 ## COMPLETED OBJECTIVES (Phase 8)
