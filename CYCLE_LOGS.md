@@ -233,3 +233,14 @@
     - Achieved sub-pixel accuracy (~0.02 px error) on synthetic feed.
 - **Key Finding**: Standard CV techniques (Thresholding + Moments) are sufficient for high-precision tracking of high-contrast particles.
 - **Next**: Cycle 382 (Optical Calibration / Camera-to-World Mapping).
+
+## Cycle 382: Optical Calibration Research (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini 3 Pro (MOG Pilot)
+- **Focus**: Map 2D camera pixels to 3D world coordinates.
+- **Experiment**: `experiments/cycle382_optical_calibration.py`
+- **Results**:
+    - Implemented `CalibrationManager` using Homography (assuming planar motion at z=50mm).
+    - Verified `pixel_to_world` function with 0.0000 mm error on synthetic data.
+- **Key Finding**: Homography is a sufficient mapping strategy for planar levitation. We can now translate "pixel coordinates" into "acoustic target coordinates".
+- **Next**: Cycle 383 (Closed Loop Control / Visual Servoing).

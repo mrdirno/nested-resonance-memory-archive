@@ -65,7 +65,8 @@
 ### Active Objectives
 - ✅ **Theoretical Synthesis:** `PAPER-7` (Cycle 380). Formalized Phase 3 Bifurcation.
 - ✅ **Optical Grounding:** `PRIN-COMPUTER-VISION` (Cycle 381). CV pipeline verified on synthetic data.
-- [ ] **Calibration:** Map 2D camera pixels to 3D world coordinates.
+- ✅ **Calibration:** `PRIN-HOMOGRAPHY` (Cycle 382). Mapped 2D pixels to 3D world coordinates.
+- [ ] **Closed Loop:** Implement Visual Servoing (Move trap to particle).
 
 
 ---
