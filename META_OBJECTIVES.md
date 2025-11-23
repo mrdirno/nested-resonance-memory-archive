@@ -113,9 +113,15 @@
 - [x] **Artifact:** `docs/architecture/THE_AUTOPOIETIC_LAB.md`.
 
 # Task: Cycle 402 - The Coordinator (Server Implementation)
-- [ ] **Define Cycle 402:** Implement the Python WebSocket Server.
-- [ ] **Goal:** Orchestrate the distributed swarm.
-- [ ] **Experiment:** `experiments/cycle402_coordinator_server.py`.
+- [x] **Define Cycle 402:** Implement the Python WebSocket Server.
+- [x] **Goal:** Orchestrate the distributed swarm.
+- [x] **Experiment:** `experiments/cycle402_coordinator_server.py`.
+- [x] **Result:** Server operational (listening on 8765).
+
+# Task: Cycle 403 - The Worker (Client-Side Wasm Integration)
+- [ ] **Define Cycle 403:** Build the Browser Client.
+- [ ] **Goal:** Load `helios_physics.wasm` in the browser and connect to the Coordinator.
+- [ ] **Experiment:** `experiments/cycle403_worker_client.html`.
 
 
 

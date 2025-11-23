@@ -829,6 +829,12 @@
 - [x] **Artifact:** `docs/architecture/THE_AUTOPOIETIC_LAB.md`.
 
 # Task: Cycle 402 - The Coordinator (Server)
-- [ ] **Define Cycle 402:** Implement the WebSocket Coordinator.
-- [ ] **Goal:** Create the central nervous system for the distributed lab.
-- [ ] **Experiment:** `experiments/cycle402_coordinator_server.py`.
+- [x] **Define Cycle 402:** Implement the WebSocket Coordinator.
+- [x] **Goal:** Create the central nervous system for the distributed lab.
+- [x] **Experiment:** `experiments/cycle402_coordinator_server.py`.
+- [x] **Result:** Server online.
+
+# Task: Cycle 403 - The Worker (Client)
+- [ ] **Define Cycle 403:** Implement the Browser Worker.
+- [ ] **Goal:** Run Wasm physics in the browser.
+- [ ] **Experiment:** `experiments/cycle403_worker_client.html`.
