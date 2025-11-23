@@ -400,12 +400,28 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
                     topology: { trefoil: 0.24, torus: 0.67, hopf: 0 }
                   }
                 }));
+              } else if (e.target.value === 'atomic') {
+                setConfig(c => ({
+                  ...c,
+                  speed: 5, // 200ms
+                  exposure: 3.0,
+                  particleCount: 350000,
+                  quality: 2.0,
+                  amplitude: 12.0,
+                  mode: SimulationMode.HARMONIC,
+                  extensions: {
+                    crystal: { threeFold: 0, sixFold: 0, lattice: 0 },
+                    harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
+                    topology: { trefoil: 0, torus: 0, hopf: 0 }
+                  }
+                }));
               }
             }}
             defaultValue=""
           >
             <option value="" disabled>Select a Preset...</option>
             <option value="preset67">Preset 67 (The Cool One)</option>
+            <option value="atomic">Atomic (High Energy)</option>
           </select>
         </div>
 
