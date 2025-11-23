@@ -22,6 +22,12 @@ class VirtualSerial:
         self.is_open = True
         print(f"[VirtualSerial] Connected to {port} @ {baudrate}")
 
+    def send_command(self, cmd):
+        """
+        Helper to send a command string with newline.
+        """
+        self.write(f"{cmd}\n".encode('utf-8'))
+
     def write(self, data):
         """
         Simulates sending data. Prints to stdout.
@@ -60,6 +66,12 @@ class PhysicalSerial:
         self.ser = serial.Serial(port, baudrate, timeout=timeout)
         time.sleep(2) # Wait for Arduino reset
         print(f"[PhysicalSerial] Connected to {port} @ {baudrate}")
+
+    def send_command(self, cmd):
+        """
+        Helper to send a command string with newline.
+        """
+        self.ser.write(f"{cmd}\n".encode('utf-8'))
 
     def write(self, data):
         return self.ser.write(data)
