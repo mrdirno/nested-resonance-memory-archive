@@ -70,7 +70,8 @@
 - ✅ **Physical Deployment:** `PRIN-HARDWARE-GUIDE` (Cycle 389). Assembly Guide & Health Check created.
 - ✅ **Physical Calibration:** `PRIN-HOMOGRAPHY` (Cycle 390). Wizard & Persistence implemented.
 - ✅ **Physical Levitation:** `PRIN-REALITY-INJECTION` (Cycle 391). Flight Computer verified.
-- [ ] **Physical Tuning:** Optimize PID gains on real hardware.
+- ✅ **Physical Tuning:** `PRIN-PID-OPTIMIZATION` (Cycle 392). Dashboard & Persistence implemented.
+- [ ] **Physical Trajectory:** Execute complex paths on physical hardware.
 
 
 
