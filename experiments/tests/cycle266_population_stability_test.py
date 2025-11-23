@@ -18,7 +18,7 @@ from pathlib import Path
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from code.helios.core.evolver import HeliosEvolver
+from src.helios.core.evolver import HeliosEvolver
 
 def main():
     print("=" * 70)

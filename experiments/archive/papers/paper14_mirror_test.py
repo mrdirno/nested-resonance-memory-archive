@@ -9,7 +9,7 @@ import json
 # Ensure root directory is in path for imports
 sys.path.append(os.path.abspath("."))
 
-from code.fractal.agent import FractalAgent
+from src.fractal.agent import FractalAgent
 
 # --- CONFIGURATION ---
 PAPER_ID = "14"

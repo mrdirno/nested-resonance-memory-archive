@@ -6,7 +6,7 @@ from pathlib import Path
 # Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
-from code.tsf.api.v1 import TemporalStewardshipFramework as TSF
+from src.tsf.api.v1 import TemporalStewardshipFramework as TSF
 
 def verify_tsf_memory():
     print("--- HELIOS SLOW MEMORY VERIFICATION ---")

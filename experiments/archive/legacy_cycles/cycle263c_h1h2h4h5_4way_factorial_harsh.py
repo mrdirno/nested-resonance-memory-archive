@@ -47,9 +47,9 @@ from collections import defaultdict, deque
 sys.path.append(str(Path(__file__).parent.parent))
 
 from core.reality_interface import RealityInterface
-from code.bridge.transcendental_bridge import TranscendentalBridge
-from code.fractal.agent import FractalAgent
-from code.fractal.composition import CompositionEngine
+from src.bridge.transcendental_bridge import TranscendentalBridge
+from src.fractal.agent import FractalAgent
+from src.fractal.composition import CompositionEngine
 
 # -----------------------------------------------------------------------------
 # Configuration

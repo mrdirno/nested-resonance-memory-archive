@@ -1,3 +1,0 @@
-"""
-Helios: The Pilot Engine
-"""

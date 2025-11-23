@@ -14,8 +14,8 @@ from pathlib import Path
 # Ensure project root is in path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from code.fractal.fractal_swarm import FractalSwarm
-from code.fractal.resonance import ResonanceDetector
+from src.fractal.fractal_swarm import FractalSwarm
+from src.fractal.resonance import ResonanceDetector
 
 def calculate_kuramoto_force(agents, coupling_strength):
     """

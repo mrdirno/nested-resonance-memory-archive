@@ -6,8 +6,8 @@ import sys
 # Ensure root directory is in path for imports
 sys.path.append(os.path.abspath("."))
 
-from code.fractal.agent import FractalAgent
-from code.pilot.cognitive_engine import CognitiveEngine, AssociativeMemory, PredictiveModel
+from src.fractal.agent import FractalAgent
+from src.pilot.cognitive_engine import CognitiveEngine, AssociativeMemory, PredictiveModel
 
 def run_integration_test():
     print("--- PILOT INTEGRATION TEST ---")

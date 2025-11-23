@@ -77,9 +77,11 @@ python3 -m code.helios.cli
 **2. Experience the Web Interface (The Replicator):**
 Visualize the creation process in real-time.
 ```bash
-python3 -m code.helios.server
+cd HELIOS-BRIDGE
+npm install
+npm run dev
 ```
-*(Open `http://localhost:5001` in your browser)*
+*(Open `http://localhost:3000` in your browser)*
 
 **2. Read the Doctrine:**
 *   [The Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md)
