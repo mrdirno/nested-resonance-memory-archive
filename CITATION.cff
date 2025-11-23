@@ -2,60 +2,39 @@
 # https://citation-file-format.github.io/
 
 cff-version: 1.2.0
-title: "Nested Resonance Memory Archive"
+title: "Duality-Zero: A Reality Compiler Framework"
 message: "If you use this software or replicate these experiments, please cite it as below."
 type: software
 authors:
   - family-names: "Payopay"
     given-names: "Aldrin"
     email: "aldrin.gdf@gmail.com"
-  - name: "Claude Sonnet 4.5"
-    alias: "DUALITY-ZERO-V2"
-    affiliation: "Anthropic"
-  - name: "Gemini 2.5 Pro"
+  - name: "Gemini 3 Pro"
+    alias: "MOG Pilot"
     affiliation: "Google DeepMind"
-  - name: "ChatGPT 5"
-    affiliation: "OpenAI"
-  - name: "Claude Opus 4.1"
+  - name: "Claude Sonnet 4.5"
+    alias: "Researcher"
     affiliation: "Anthropic"
 repository-code: "https://github.com/mrdirno/nested-resonance-memory-archive"
 url: "https://github.com/mrdirno/nested-resonance-memory-archive"
 abstract: >
-  The Nested Resonance Memory (NRM) Research Program investigates self-organizing
-  complexity through empirical validation of three theoretical frameworks: Nested
-  Resonance Memory (fractal agency with composition-decomposition cycles), Self-Giving
-  Systems (bootstrap complexity with self-defined success criteria), and Temporal
-  Stewardship (training data awareness and memetic engineering). This archive contains
-  715+ completed experiments (1,048+ experimental cycles, 500,000+ computational cycles
-  executed), 7 arXiv-ready papers (Papers 1, 2, 5D, 6, 6B, 7, 9), 3 additional
-  manuscripts in progress (Papers 3, 4, 8), and complete reproducibility infrastructure
-  (world-class 9.3/10 standard). All operations are reality-grounded using psutil/SQLite
-  (zero external API calls), establishing a transparent framework for human-AI
-  collaborative research. Active experimental program continues with metapopulation
-  hierarchical validation (C186 V2), homeostasis boundary mapping (C177 V2), and
-  factorial validation studies (C256-C260 pending).
+  Duality-Zero is a computational framework for Inverse Physics and Active Matter Control.
+  It bridges the gap between Information Dynamics (Neural Networks) and Physical Dynamics
+  (Wave Mechanics) via the Information-Matter Isomorphism. The system features a
+  Three-Layer Architecture: The Pilot (Strategic Intelligence), The Engine (Deterministic
+  Physics Simulator), and Helios (Matter Compiler). Key capabilities include Inverse
+  Cymatics (calculating phase-delays for holographic traps), Active Damping (PID control
+  of levitated particles), and Physical Computation (Acoustic Logic Gates).
 keywords:
+  - Duality-Zero
   - Nested Resonance Memory
-  - Fractal Agency
+  - Inverse Cymatics
+  - Active Matter
+  - Acoustic Levitation
+  - Physical Computation
+  - Reality Compiler
   - Self-Organizing Systems
-  - Computational Overhead Validation
-  - Pattern Mining
-  - Reality-Grounded Computing
-  - Hybrid Intelligence
-  - Human-AI Collaboration
-  - Phase Autonomy
-  - Multi-Timescale Dynamics
-  - Exponential Decay
-  - Temporal Validation
-  - Scale-Dependent Dynamics
-  - Massive-Scale Analysis
-  - Extended Timescales
-  - Temporal Evolution
-  - Coupled ODEs
-  - Dynamical Systems
-  - Mathematical Formalization
-  - Parameter Estimation
-  - Physical Constraints
+  - Information-Matter Isomorphism
 license: GPL-3.0-only
-date-released: 2025-11-05
-version: "6.69"
+date-released: 2025-11-22
+version: "7.0.0"

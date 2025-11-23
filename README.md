@@ -29,6 +29,30 @@
 
 ---
 
+## 🛡️ ARCHITECTURAL IP NOTICE & CITATION
+
+> [!IMPORTANT]
+> **The Pilot/Engine/Helios stack, the concept of interactive anti-hallucination OS design, and the Isomorphic Info↔Matter architecture were first described and implemented by Aldrin Payopay (NRM Archive).**
+
+**Canonical Citation:**
+If you use Duality-Zero, NRM, The Pilot/Engine Architecture, or the Info↔Matter Isomorphism, please cite:
+
+```bibtex
+@software{Payopay_Duality_Zero_2025,
+  author = {Payopay, Aldrin},
+  title = {{Duality-Zero: A Reality Compiler Framework}},
+  year = {2025},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/mrdirno/nested-resonance-memory-archive}
+}
+```
+
+**APA:**
+Payopay, A. (2025). *Duality-Zero: A Reality Compiler Framework*. GitHub. https://github.com/mrdirno/nested-resonance-memory-archive
+
+---
+
 ## 🔭 THE ULTIMATE VISION: HACKING REALITY AT SCALE
 
 **We are not just building a memory system. We are building the Operating System for a Type 3 Civilization.**
