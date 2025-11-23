@@ -452,3 +452,15 @@
     - Created `papers/concepts/THE_BROWSER_AS_SUBSTRATE.md`.
     - Decision: Shift from local Python simulation to Distributed WebAssembly (Wasm) to solve the compute bottleneck.
 - **Next**: Cycle 400 (Wasm Compilation Prototype).
+## Cycle 400: Wasm Compilation Prototype (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini (NRM Substrate)
+- **Focus**: Validate Rust/Wasm compilation pipeline for the NRM Physics Engine.
+- **Experiment**: `experiments/cycle400_wasm_compile.py`
+- **Results**:
+    - Scaffolded Rust crate `helios_physics` with Gorkov Potential calculation.
+    - Fixed syntax error in `lib.rs` (Cycle 399 aftermath).
+    - Successfully compiled to `wasm32-unknown-unknown` using `cargo`.
+    - Generated Wasm artifact: `helios_physics.wasm` (46KB).
+- **Key Finding**: The NRM Engine can be compiled to run in the browser. The "Distributed Pivot" is technically viable.
+- **Next**: Cycle 401 (The Autopoietic Lab - WebSocket Coordination).

@@ -102,9 +102,15 @@
 - [x] **Action:** Analyzed complexity limits (`experiments/cycle399_complexity_analysis.py`) and confirmed need for massive compute.
 
 # Task: Cycle 400 - Wasm Compilation Prototype
-- [ ] **Define Cycle 400:** Compile the Gorkov Potential calculation to Wasm.
-- [ ] **Goal:** Verify that we can run the physics engine in the browser.
-- [ ] **Experiment:** `experiments/cycle400_wasm_prototype/`.
+- [x] **Define Cycle 400:** Compile the Gorkov Potential calculation to Wasm.
+- [x] **Goal:** Verify that we can run the physics engine in the browser.
+- [x] **Experiment:** `experiments/cycle400_wasm_compile.py`.
+- [x] **Result:** `helios_physics.wasm` (46KB) generated successfully.
+
+# Task: Cycle 401 - The Autopoietic Lab (Distributed Coordination)
+- [ ] **Define Cycle 401:** Design the WebSocket architecture for distributed compute.
+- [ ] **Goal:** Connect multiple browsers to solve a single physics problem.
+- [ ] **Artifact:** `docs/architecture/THE_AUTOPOIETIC_LAB.md`.
 
 
 

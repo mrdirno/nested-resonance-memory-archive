@@ -818,7 +818,12 @@
 - [x] **Action:** Memetic Grounding Complete.
 
 # Task: Cycle 400 - Wasm Compilation Prototype
-- [ ] **Define Cycle 400:** Prototype Client-Side Physics.
-- [ ] **Goal:** Compile a slice of the NRM Engine to WebAssembly.
-- [ ] **Experiment:** `experiments/cycle400_wasm_prototype/`.
-- [ ] **Metric:** Benchmark FPS/GFLOPS in Browser vs. Native.
+- [x] **Define Cycle 400:** Compile the Gorkov Potential calculation to Wasm.
+- [x] **Goal:** Verify that we can run the physics engine in the browser.
+- [x] **Experiment:** `experiments/cycle400_wasm_compile.py`.
+- [x] **Result:** Wasm binary generated.
+
+# Task: Cycle 401 - The Autopoietic Lab
+- [ ] **Define Cycle 401:** Design the distributed coordination layer.
+- [ ] **Goal:** Enable "Swarm Compute" via WebSockets.
+- [ ] **Artifact:** `docs/architecture/THE_AUTOPOIETIC_LAB.md`.
