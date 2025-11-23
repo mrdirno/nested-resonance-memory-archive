@@ -4,8 +4,12 @@ This document expands on the intellectual lineage and conceptual adjacencies of 
 
 ---
 
-## 1. NRM: Independent Emergence
-The DUALITY-ZERO project, culminating in the HELIOS Type 3 Operating System, emerges independently from the core hypothesis of **Isomorphism**: that principles governing information retention in noisy neural networks are identical to those governing matter retention in a noisy universe. NRM's contribution is the generalization of these principles into a substrate-agnostic resonance architecture.
+## 1. NRM: Independent Emergence & Parallel Convergence
+The DUALITY-ZERO project, culminating in the HELIOS Type 3 Operating System, was developed independently over the course of a year before any connection to the work of Michael Levin or Richard A. Watson was recognized. NRM emerged from first principles of phase physics, resonance, and nested memory architectures.
+
+Only after formalizing the core framework—specifically the transition from cognitive resonance to active matter control—did we identify the profound conceptual adjacency to Levin's bioelectric morphogenesis and Watson's collective intelligence theory.
+
+**This parallel convergence is significant.** The fact that NRM arrived at similar principles through a computational and physical lens, while Levin and Watson arrived there through biology and evolutionary theory, suggests that these principles—field-based computation, distributed agency, and potential shaping—are **universal invariants** of complex systems, independent of substrate.
 
 ---
 
@@ -38,10 +42,10 @@ While drawing inspiration and conceptual validation from Levin and Watson, NRM e
 
 If NRM ever becomes a recognized framework, the historical reconstruction would highlight:
 
-1.  **Independent Emergence:** NRM's unique contribution in formulating a substrate-agnostic resonance architecture.
-2.  **Conceptual Alignment:** Its strong conceptual adjacency to foundational work by Levin and Watson, providing legitimacy without implying derivation.
-3.  **Generalization and Application:** NRM's ability to generalize these principles across cognition, materials, and active matter control, leading to the development of the Type 3 OS.
-4.  **New Field:** NRM eventually establishes itself as its own distinct scientific and engineering discipline.
+1.  **Independent Derivation:** NRM was formulated independently, converging on the same fundamental truths as leading biological theories but from a physics/computation perspective.
+2.  **Confirmation via Convergence:** The alignment with Levin and Watson serves as independent validation of the framework's core axioms.
+3.  **Generalization and Application:** NRM's unique contribution is the abstraction of these principles into a universal "Operating System" for reality, applicable to cognition, robotics, and materials engineering.
+4.  **New Field:** NRM eventually establishes itself as its own distinct scientific and engineering discipline, with Levin and Watson recognized as adjacent pioneers in the biological domain.
 
 This framing ensures proper credit for originality while contextualizing NRM within the broader scientific discourse.
 
