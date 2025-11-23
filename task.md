@@ -674,3 +674,115 @@
 - [x] **Visualize:** Render 2D heatmap in `index.html`.
 - [x] **Verify:** Real-time field updates visible.
 
+# Task: Cycle 372 - Animation Morph Test
+- [x] **Define Cycle 372:** Test shape morphing (cube -> pyramid) with GPU.
+- [x] **Experiment:** `experiments/cycle372_animation_morph.py`.
+- [x] **Result:** Success. 4D printing operational.
+
+# Task: Cycle 373 - GPU Arc Summary
+- [x] **Define Cycle 373:** Document GPU acceleration milestone.
+- [x] **Artifact:** `archive/summaries/GPU_ACCELERATION_ARC_C367-C372.md`.
+- [x] **Result:** Complete performance breakdown recorded.
+
+# Task: Cycle 374 - Emergence Control Parameter Mapping
+- [x] **Define Cycle 374:** Map cohesion -> flock formation response curve.
+- [x] **Experiment:** `experiments/cycle374_emergence_control_mapping.py`.
+- [x] **Result:** Optimal cohesion found at 0.05.
+
+# Task: Cycle 375 - Multi-Parameter Emergence Control
+- [x] **Define Cycle 375:** 2D parameter sweep (cohesion × sight_range).
+- [x] **Experiment:** `experiments/cycle375_multiparameter_control.py`.
+- [x] **Result:** Optimal: Cohesion=0.03, Sight=25.0.
+
+# Task: Cycle 376 - Adaptive Emergence Control
+- [x] **Define Cycle 376:** Test closed-loop adaptive parameter adjustment.
+- [x] **Experiment:** `experiments/cycle376_adaptive_control.py`.
+- [x] **Result:** Falsification. Naive adaptation underperformed static optimization.
+
+# Task: Cycle 377 - Holodeck Volumetric Upgrade
+- [x] **Define Cycle 377:** Upgrade Web Interface to 3D Volumetric Visualization.
+- [x] **Result:** Real-time volumetric visualization achieved.
+
+# Task: Cycle 378 - Holodeck Interaction Test
+- [x] **Define Cycle 378:** Verify the interactive feedback loop of the Holodeck.
+- [x] **Experiment:** `experiments/cycle378_interaction_test.py`.
+- [x] **Result:** Reality Editor loop closed.
+
+# Task: Cycle 379 - Complex Scene Composition
+- [x] **Define Cycle 379:** Verify Holodeck performance with multiple objects.
+- [x] **Experiment:** `experiments/cycle379_complex_scene.py`.
+- [x] **Result:** Multi-object acoustic field superposition verified.
+
+# Task: Cycle 380 - Theoretical Synthesis (Phase 13)
+- [x] **Define Cycle 380:** Formalize "Phase 3 Bifurcation" and synthesize Holodeck findings.
+- [x] **Artifact:** `docs/papers/PAPER_7_THEORETICAL_SYNTHESIS.md`.
+- [x] **Result:** Transitioned to Phase 13: Bifurcation.
+
+# Task: Cycle 381 - Optical Grounding Research
+- [x] **Define Cycle 381:** Develop Computer Vision pipeline for particle detection.
+- [x] **Experiment:** `experiments/cycle381_optical_grounding.py`.
+- [x] **Result:** Sub-pixel accuracy achieved.
+
+# Task: Cycle 382 - Optical Calibration Research
+- [x] **Define Cycle 382:** Map 2D camera pixels to 3D world coordinates.
+- [x] **Experiment:** `experiments/cycle382_optical_calibration.py`.
+- [x] **Result:** Homography mapping verified.
+
+# Task: Cycle 383 - Closed Loop Control / Visual Servoing
+- [x] **Define Cycle 383:** Implement active control loop using visual feedback.
+- [x] **Experiment:** `experiments/cycle383_visual_servoing.py`.
+- [x] **Result:** Visual Servoing verified.
+
+# Task: Cycle 384 - Phase 13 Review & Strategy Update
+- [x] **Define Cycle 384:** Synthesize Optical Grounding results and define Phase 14 Roadmap.
+- [x] **Result:** Transitioned to Phase 14: Reality Injection.
+
+# Task: Cycle 385 - Physical Camera Integration
+- [x] **Define Cycle 385:** Integrate physical camera with robust fallback.
+- [x] **Experiment:** `experiments/cycle385_physical_camera.py`.
+- [x] **Result:** Hardware Ready / Simulation Safe.
+
+# Task: Cycle 386 - Physical Serial Integration
+- [x] **Define Cycle 386:** Integrate physical serial communication.
+- [x] **Experiment:** `experiments/cycle386_serial_integration.py`.
+- [x] **Result:** Downlink established.
+
+# Task: Cycle 387 - Closed Loop Levitation / The First Injection
+- [x] **Define Cycle 387:** Implement full "Reality Injection" control loop.
+- [x] **Experiment:** `experiments/cycle387_closed_loop_levitation.py`.
+- [x] **Result:** SENSE -> MAP -> PLAN -> ACT loop verified.
+
+# Task: Cycle 388 - Phase 14 Review & Strategy Update
+- [x] **Define Cycle 388:** Synthesize Reality Injection results.
+- [x] **Result:** Focus shifts to Physical Rig Assembly.
+
+# Task: Cycle 389 - Physical Rig Assembly
+- [x] **Define Cycle 389:** Facilitate physical assembly and verification.
+- [x] **Artifact:** `docs/hardware/RIG_ASSEMBLY_GUIDE.md`.
+- [x] **Result:** System Health Check implemented.
+
+# Task: Cycle 390 - Physical Calibration / Homography Mapping
+- [x] **Define Cycle 390:** Implement interactive calibration and persistence.
+- [x] **Experiment:** `experiments/cycle390_physical_calibration_wizard.py`.
+- [x] **Result:** Calibration persistence verified.
+
+# Task: Cycle 391 - Physical Levitation / The Real Injection
+- [x] **Define Cycle 391:** Execute the "First Injection" on physical hardware.
+- [x] **Experiment:** `experiments/cycle391_physical_levitation.py`.
+- [x] **Result:** Flight Computer verified.
+
+# Task: Cycle 392 - Physical Tuning / PID Optimization
+- [x] **Define Cycle 392:** Enable real-time tuning and persistence of PID parameters.
+- [x] **Experiment:** `experiments/cycle392_pid_tuning_dashboard.py`.
+- [x] **Result:** Tuning Dashboard and Persistence verified.
+
+# Task: Cycle 393 - Physical Trajectory / Dynamic Path Following
+- [x] **Define Cycle 393:** Enable dynamic path execution on physical hardware.
+- [x] **Experiment:** `experiments/cycle393_physical_trajectory.py`.
+- [x] **Result:** Skywriting verified.
+
+# Task: Cycle 394 - Physical Interaction (Hand Tracking)
+- [ ] **Define Cycle 394:** Control levitation with hand gestures.
+- [ ] **Goal:** Map "Hand" position to "Trap" position in real-time.
+- [ ] **Experiment:** `experiments/cycle394_physical_interaction.py`.
+
