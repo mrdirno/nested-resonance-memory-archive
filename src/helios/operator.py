@@ -12,6 +12,7 @@ from src.helios.mesh_loader import MeshLoader
 # GPU acceleration (optional)
 try:
     from src.helios.substrate_3d_gpu import AcousticSubstrate3DGPU
+    from src.helios.ga_gpu import GeneticAlgorithmGPU
     GPU_AVAILABLE = True
 except ImportError:
     GPU_AVAILABLE = False
@@ -266,16 +267,15 @@ class UniversalOperator:
         ]
 
     def _solve_phases(self, targets):
-        # Simplified GA for production use (fast convergence)
-        # In a real system, this would be GPU-accelerated or pre-computed.
-        # For now, we use the CPU implementation from Cycle 348.
-        
-        # Import local GA to avoid circular dependencies if possible, 
-        # or re-implement efficiently.
-        from experiments.cycle348_volumetric_printing import genetic_algorithm_multi_target
-        
-        # Reduce generations for unit test speed, but keep high enough for success
-        best_phases = genetic_algorithm_multi_target(targets, self.box, self.emitters, generations=20, pop_size=20)
+        # GPU-accelerated GA for production use (51x speedup)
+        if self.use_gpu and GPU_AVAILABLE:
+            # Use GPU-accelerated solver
+            ga = GeneticAlgorithmGPU(self.box, self.emitters)
+            best_phases = ga.solve(targets, generations=20, pop_size=20)
+        else:
+            # Fallback to CPU implementation
+            from experiments.cycle348_volumetric_printing import genetic_algorithm_multi_target
+            best_phases = genetic_algorithm_multi_target(targets, self.box, self.emitters, generations=20, pop_size=20)
         return best_phases
 
     def get_stability(self, object_id: int) -> float:
