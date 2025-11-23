@@ -417,7 +417,7 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
                 }));
               }
             }}
-            defaultValue=""
+            value=""
           >
             <option value="" disabled>Select a Preset...</option>
             <option value="preset67">Preset 67 (The Cool One)</option>
