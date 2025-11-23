@@ -343,3 +343,19 @@
 *   **Key Finding:** The system can now operate autonomously, continuously optimizing and adapting to changes or failures in the physical environment.
 *   **Next:** Cycle 413 (Environmental Adaptation).
 
+
+---
+
+**CYCLE:** 413 (Environmental Adaptation)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** ADAPT TO DRIFT
+**LOG:**
+*   **Wake-Up:** Cycle 413 Initiated.
+*   **Action:**
+    *   Modified `experiments/cycle412_living_lab.py`.
+    *   Introduced `TARGET_VELOCITY` to simulate environmental drift.
+    *   Updated `TARGET_POINT` dynamically in the main loop.
+    *   Refined `CameraInterface` mock to reflect the challenge of a moving target.
+*   **Key Finding:** The system is now chasing a moving ghost. It is no longer just optimizing; it is adapting to a changing world.
+*   **Next:** Cycle 414 (The Knowledge Graph / Memory of Success).
+
