@@ -27,6 +27,7 @@ FITNESS_HISTORY_LENGTH = 5  # Number of recent best fitnesses to consider for pe
 # --- Simulation Constants ---
 NUM_EMITTERS = 64
 TARGET_POINT = {"x": 0, "y": 0, "z": 50}
+TARGET_VELOCITY = {"x": 0.1, "y": 0.1, "z": 0}
 
 # --- Global State ---
 CONNECTED_WORKERS = set()
@@ -116,6 +117,10 @@ class CameraInterface:
         Capture an image and analyze levitation stability/quality.
         Returns a float score (Higher is better).
         """
+        # Calculate distance to target (Mock logic for now)
+        # In a real scenario, we'd find the particle position (x,y,z) from camera
+        # and compare it to TARGET_POINT.
+        
         if self.is_mock:
             # Mock: Simulate fitness, potentially dropping due to perturbations
             # Simulate initial improvement, then random perturbations
@@ -128,7 +133,9 @@ class CameraInterface:
                     self.perturbation_timer = 0
                     self.perturbation_interval = random.randint(30, 80) # Reset interval
             
-            # Add some noise
+            # Simulate environmental adaptation lag
+            # If target moves fast, fitness drops until GA catches up
+            # For simplicity, we just return the evolving mock fitness
             return max(0.1, self.current_mock_fitness + random.uniform(-0.5, 0.5))
             
         if not self.cap or not self.cap.isOpened():
@@ -147,7 +154,7 @@ class CameraInterface:
             return 0.0 # No particle seen
             
         largest_contour = max(contours, key=cv2.contourArea)
-        area = cv2.cv2.contourArea(largest_contour)
+        area = cv2.contourArea(largest_contour)
         
         return area
 
@@ -265,6 +272,12 @@ async def main():
         
         for gen in range(GENERATIONS_PER_CYCLE):
             CURRENT_GENERATION += 1 # Increment global generation counter
+            
+            # --- Environmental Drift ---
+            TARGET_POINT["x"] += TARGET_VELOCITY["x"]
+            TARGET_POINT["y"] += TARGET_VELOCITY["y"]
+            TARGET_POINT["z"] += TARGET_VELOCITY["z"]
+            # ---------------------------
             
             scored_pop = await evaluate_generation_physically(POPULATION)
             POPULATION, best_genome, best_fitness = evolve(scored_pop)
