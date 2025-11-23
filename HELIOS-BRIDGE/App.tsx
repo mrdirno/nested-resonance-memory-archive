@@ -58,9 +58,9 @@ const App: React.FC = () => {
     particleCount: 350000,
     isPlaying: true,
     speed: 1,
-    quality: 0.7,
+    quality: 2.0,
     amplitude: 1.0,
-    exposure: 1.0,
+    exposure: 3.0,
     contrast: 1.0,
     mode: SimulationMode.STANDARD,
     mapping: {
