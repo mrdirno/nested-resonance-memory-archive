@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Define the Wasm interface
 interface HeliosWasm {
@@ -16,6 +16,8 @@ interface ComputeTask {
 export const useSwarmWorker = (enabled: boolean = true) => {
     const ws = useRef<WebSocket | null>(null);
     const wasmInstance = useRef<WebAssembly.Instance | null>(null);
+    const [isConnected, setIsConnected] = useState<boolean>(false);
+    const [tasksCompleted, setTasksCompleted] = useState<number>(0);
 
     useEffect(() => {
         if (!enabled) return;
@@ -45,6 +47,7 @@ export const useSwarmWorker = (enabled: boolean = true) => {
 
             socket.onopen = () => {
                 console.log("[Swarm] Connected to Coordinator.");
+                setIsConnected(true);
                 socket.send(JSON.stringify({ type: "ready" }));
             };
 
@@ -57,6 +60,7 @@ export const useSwarmWorker = (enabled: boolean = true) => {
 
             socket.onclose = () => {
                 console.log("[Swarm] Disconnected. Retrying in 5s...");
+                setIsConnected(false);
                 setTimeout(connectToCoordinator, 5000);
             };
 
@@ -97,5 +101,8 @@ export const useSwarmWorker = (enabled: boolean = true) => {
             task_id: task.task_id,
             results: results
         }));
+        setTasksCompleted(prev => prev + 1);
     };
+
+    return { isConnected, tasksCompleted };
 };

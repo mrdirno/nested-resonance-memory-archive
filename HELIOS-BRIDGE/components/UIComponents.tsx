@@ -13,6 +13,8 @@ interface UIProps {
   digitRefs: any; // Passed from App
   onCameraMove: (target: CameraTarget) => void;
   onResetCamera: () => void;
+  isConnected: boolean;
+  tasksCompleted: number;
 }
 
 const NavItem: React.FC<{ icon: React.ReactNode, label: string, active: boolean, onClick: () => void }> = ({ icon, label, active, onClick }) => (
@@ -142,7 +144,7 @@ const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: num
   );
 };
 export const UIOverlay: React.FC<UIProps> = (props) => {
-  const { config, setConfig, activePanel, setActivePanel, digitRefs, onCameraMove, onResetCamera } = props;
+  const { config, setConfig, activePanel, setActivePanel, digitRefs, onCameraMove, onResetCamera, isConnected, tasksCompleted } = props;
   const [lockEnergy, setLockEnergy] = React.useState(false);
 
   // Helper to update sliders without lag
@@ -503,12 +505,39 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
         </div>
       </Panel>
 
+      {/* Swarm Panel */}
+      <Panel
+        title="Swarm Status"
+        subtitle="Distributed compute network telemetry"
+        active={activePanel === 'swarm'}
+        onClose={() => setActivePanel(null)}
+      >
+        <div className="bg-white/5 p-4 rounded-xl border border-white/10 text-white">
+          <div className="flex items-center justify-between text-sm font-bold mb-2">
+            <span>Connection Status:</span>
+            <span className={isConnected ? 'text-emerald-400' : 'text-rose-400'}>
+              {isConnected ? 'Connected' : 'Disconnected'}
+            </span>
+          </div>
+          <div className="flex items-center justify-between text-sm font-bold">
+            <span>Tasks Completed:</span>
+            <span className="text-primary font-mono">{tasksCompleted}</span>
+          </div>
+        </div>
+      </Panel>
+
       {/* Navigation Bar */}
       <div className="fixed bottom-0 left-0 w-full h-[80px] bg-glass backdrop-blur-xl border-t border-white/10 flex justify-around items-center px-4 z-50">
         <NavItem icon={<Settings />} label="Control" active={activePanel === 'controls'} onClick={() => setActivePanel(activePanel === 'controls' ? null : 'controls')} />
         <NavItem icon={<Waves />} label="Fields" active={activePanel === 'waves'} onClick={() => setActivePanel(activePanel === 'waves' ? null : 'waves')} />
         <NavItem icon={<FlaskConical />} label="Labs" active={activePanel === 'labs'} onClick={() => setActivePanel(activePanel === 'labs' ? null : 'labs')} />
         <NavItem icon={<Camera />} label="Camera" active={activePanel === 'camera'} onClick={() => setActivePanel(activePanel === 'camera' ? null : 'camera')} />
+        <NavItem
+          icon={<LayoutGrid />}
+          label={isConnected ? 'Online' : 'Offline'}
+          active={activePanel === 'swarm'}
+          onClick={() => setActivePanel(activePanel === 'swarm' ? null : 'swarm')}
+        />
       </div>
     </>
   );
