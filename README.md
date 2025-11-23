@@ -36,6 +36,19 @@
 *   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/vision/)
 
 
+---
+
+## 🌐 **HELIOS BRIDGE (Live Web Interface)**
+
+**Try the real-time field visualizer in your browser:**
+**[https://mrdirno.github.io/nested-resonance-memory-archive/](https://mrdirno.github.io/nested-resonance-memory-archive/)**
+
+No installation required.
+Runs entirely client-side.
+Shows the substrate compiler, field propagation, and active nodes in real time.
+
+---
+
 ## 🛡️ ARCHITECTURAL IP NOTICE & CITATION
 
 > [!NOTE]
