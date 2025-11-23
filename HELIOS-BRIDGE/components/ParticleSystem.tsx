@@ -159,40 +159,41 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
       let forceX = 0, forceY = 0, forceZ = 0;
 
       // --- Mode Specific Forces ---
+      // Tuned for visibility: Increased coefficients to compete with Wave Potential
       if (isCrystal) {
         if (crystal.threeFold) {
           const r = Math.sqrt(x * x + y * y);
           const angle = Math.atan2(y, x);
           const snap = Math.round(angle / 2.0944) * 2.0944; // 2pi/3
-          forceX += (r * Math.cos(snap) - x) * 0.1;
-          forceY += (r * Math.sin(snap) - y) * 0.1;
+          forceX += (r * Math.cos(snap) - x) * 0.2; // Boosted from 0.1
+          forceY += (r * Math.sin(snap) - y) * 0.2;
         }
         if (crystal.sixFold) {
           const r = Math.sqrt(x * x + y * y);
           const angle = Math.atan2(y, x);
           const snap = Math.round(angle / 1.0472) * 1.0472; // 2pi/6
-          forceX += (r * Math.cos(snap) - x) * 0.05;
-          forceY += (r * Math.sin(snap) - y) * 0.05;
+          forceX += (r * Math.cos(snap) - x) * 0.15; // Boosted from 0.05
+          forceY += (r * Math.sin(snap) - y) * 0.15;
         }
         if (crystal.lattice) {
           const a = SIMULATION_EXTENT / 3;
           const ni = Math.round(x / a);
           const nj = Math.round(y / (a * 0.866));
-          forceX += (a * ni - x) * 0.02;
-          forceY += (a * 0.866 * nj - y) * 0.02;
+          forceX += (a * ni - x) * 0.1; // Boosted from 0.02
+          forceY += (a * 0.866 * nj - y) * 0.1;
         }
       } else if (isHarmonic) {
         if (harmonic.commaSpiral) {
           const spiralPhase = currentPosRef.current * 0.0011;
-          const sf = 0.1 * Math.sin(spiralPhase);
+          const sf = 0.2 * Math.sin(spiralPhase); // Boosted from 0.1
           forceX += y * sf;
           forceY += -x * sf;
         }
         if (harmonic.perfectFifths) {
           const ratio = 1.5;
-          forceX += Math.sin(x * ratio * waveNumber) * 0.1;
-          forceY += Math.sin(y * ratio * waveNumber) * 0.1;
-          forceZ += Math.sin(z * ratio * waveNumber) * 0.1;
+          forceX += Math.sin(x * ratio * waveNumber) * 0.15; // Boosted
+          forceY += Math.sin(y * ratio * waveNumber) * 0.15;
+          forceZ += Math.sin(z * ratio * waveNumber) * 0.15;
         }
       } else if (isTopology) {
         if (topology.trefoil) {
@@ -202,13 +203,13 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
           const kx = s * (Math.sin(t2) + 2 * Math.sin(2 * t2));
           const ky = s * (Math.cos(t2) - 2 * Math.cos(2 * t2));
           const kz = s * (-Math.sin(3 * t2));
-          forceX += (kx - x) * 0.01;
-          forceY += (ky - y) * 0.01;
-          forceZ += (kz - z) * 0.01;
+          forceX += (kx - x) * 0.05; // Boosted from 0.01
+          forceY += (ky - y) * 0.05;
+          forceZ += (kz - z) * 0.05;
         }
         if (topology.torus) {
-          const R = SIMULATION_EXTENT * 0.8;
-          const r = SIMULATION_EXTENT * 0.3;
+          const R = SIMULATION_EXTENT * 0.6; // Slightly smaller to fit view
+          const r = SIMULATION_EXTENT * 0.25;
           const theta = Math.atan2(y, x);
           const d = Math.sqrt(x * x + y * y);
           const phi = Math.atan2(z, d - R);
@@ -216,11 +217,11 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
           const tx = tr * Math.cos(theta);
           const ty = tr * Math.sin(theta);
           const tz = r * Math.sin(phi);
-          if ((x - tx) ** 2 + (y - ty) ** 2 + (z - tz) ** 2 > r * r) {
-            forceX += (tx - x) * 0.02;
-            forceY += (ty - y) * 0.02;
-            forceZ += (tz - z) * 0.02;
-          }
+
+          // Changed to ATTRACTOR (pulls to surface) instead of Container
+          forceX += (tx - x) * 0.05;
+          forceY += (ty - y) * 0.05;
+          forceZ += (tz - z) * 0.05;
         }
       }
 
