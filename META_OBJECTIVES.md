@@ -1688,29 +1688,17 @@
 *   **Status:** Running (PID 16854). Fixed resource leak and buffering issues.
 *   **Hypothesis:** Phase transition occurs at $f \approx 0.005\%$.
 
-#### Current Experiment: C255 (Running - Near Completion)
-- **Experiment:** H1×H2 mechanism validation (unoptimized)
-- **Status:** Running (PID 6309)
-- **Runtime:** 2 days, 8 hours elapsed (wall clock, Cycle 446)
-- **CPU Time:** 168:08 actual CPU time (168 hours, Cycle 446)
-- **CPU Usage:** 3.4% (healthy, stable, CPU-intensive computation)
-- **Memory:** 0.1% (minimal footprint)
-- **Predicted Overhead:** 40.25× (from profiling)
-- **Progress:** ~90-95% complete (0-1 days remaining, estimated)
-- **Health:** Excellent, stable, progressing normally
-- **Purpose:** Baseline validation demonstrating 99.9% match between predicted/observed overhead
-- **Note:** Long runtime reflects high computational expense of unoptimized factorial (as predicted)
-
-#### Queued Experiments: C256-C260 (Ready to Execute)
-- **C256:** H1×H4 (10 min, 0.5× overhead)
-- **C257:** H1×H5 (11 min, 0.5× overhead)
-- **C258:** H2×H4 (12 min, 0.5× overhead)
-- **C259:** H2×H5 (13 min, 0.5× overhead)
-- **C260:** H4×H5 (11 min, 0.5× overhead)
-- **Total:** 67 minutes (all 5 experiments)
-- **Innovation:** Batched sampling optimization (90× speedup)
-- **Scripts:** All ready in `/experiments/` directory
-- **Execute:** Immediately upon C255 completion
+#### Factorial Experiments: C255-C260 (✅ COMPLETE)
+- **Status:** ✅ COMPLETE (All pairwise factorial experiments completed, Cycle 572 onward)
+- **Purpose:** Validate pairwise mechanistic interactions and discover synergy/antagonism.
+- **Findings:**
+  - C255 (H1xH2): **Antagonistic** (Phase Conflict).
+  - C256 (H1xH4): **Antagonistic** (Redistribution Trap).
+  - C257 (H1xH5): **Synergistic** (Safety Net).
+  - C258 (H2xH4): **Strongly Antagonistic** (Capped Gain).
+  - C259 (H2xH5): **Antagonistic** (Redundancy).
+  - C260 (H4xH5): **Synergistic** (Floor-and-Ceiling).
+- **Note:** Results integrated into Paper 3.
 
 #### Active Experiments: C263c (Running)
 - **C262:** 3-way factorial H1×H2×H5 (✅ Complete, Result: Saturation/Additive)
@@ -1944,19 +1932,16 @@
    - MOG integration docs: all 5 files maintained
    - GitHub sync: 100% complete (latest: 24edf23, Cycle 1478)
 
-### Short-Term (Upon C256 Completion)
-4. **Complete Paper 3 Integration** (upon C256 completion)
-   - C256 status: Running 150h+ (I/O bound, extended blocking period)
-   - Upon completion: Execute C256_COMPLETION_WORKFLOW.md (~22 min to GitHub sync)
-   - Then launch C257-C260 batch (./run_c257_c260_batch.sh, ~47 min)
-   - Auto-populate Paper 3 manuscript with all 6 pair results
-   - Generate 4-figure publication suite (300 DPI)
+### Short-Term (Paper 3 Integration and Paper 4 Execution)
+4. **Complete Paper 3 Integration**
+   - Status: ✅ C255-C260 pairwise factorial experiments are COMPLETE.
+   - Action: Auto-populate Paper 3 manuscript with all 6 pair results (C255-C260).
+   - Action: Generate 4-figure publication suite (300 DPI) for Paper 3.
 
-5. **Execute Paper 4 Experiments** (after Paper 3 complete)
-   - C262: 3-way factorial H1×H2×H5 (4 hours)
-   - C263: 4-way factorial H1×H2×H4×H5 (4 hours)
-   - Total: ~8 hours runtime
-   - Detect super-synergy beyond pairwise
+5. **Execute Paper 4 Experiments** (after Paper 3 integration)
+   - Action: Launch C262 (3-way factorial H1×H2×H5, 4 hours).
+   - Action: Launch C263 (4-way factorial H1×H2×H4×H5, 4 hours).
+   - Goal: Detect super-synergy beyond pairwise interactions.
 
 6. **Complete Paper 4 Integration** (after C262-C263 complete)
    - Run `aggregate_paper4_results.py`

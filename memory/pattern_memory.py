@@ -378,6 +378,19 @@ class PatternMemory:
                 
             return patterns
 
+    def get_all_patterns(self) -> List[Pattern]:
+        """Helper to get all patterns for lineage pre-fetching optimization."""
+        with self._db_connection() as conn:
+            cursor = conn.execute("SELECT * FROM patterns")
+            columns = [desc[0] for desc in cursor.description]
+            patterns = []
+            for row in cursor.fetchall():
+                data = dict(zip(columns, row))
+                data['data'] = json.loads(data['data'])
+                data['metadata'] = json.loads(data['metadata'])
+                patterns.append(Pattern.from_dict(data))
+            return patterns
+
     def save_agent_state(
         self,
         agent_id: str,
@@ -564,50 +577,128 @@ class PatternMemory:
         data_str = json.dumps(pattern_data, sort_keys=True)
         return hashlib.sha256(data_str.encode()).hexdigest()[:16]
 
+    def store_pattern_relationship(
+        self,
+        parent_pattern_id: str,
+        child_pattern_id: str,
+        relationship_type: str,
+        strength: float = 1.0
+    ) -> None:
+        """
+        Store a relationship between two patterns (parent -> child).
+
+        Args:
+            parent_pattern_id: ID of the parent pattern
+            child_pattern_id: ID of the child pattern
+            relationship_type: Type of relationship (e.g., 'evolved_from', 'composed_of', 'refinement')
+            strength: Strength of the relationship (e.g., confidence, correlation)
+        """
+        with self._db_connection() as conn:
+            conn.execute("""
+                INSERT INTO pattern_relationships
+                (timestamp, parent_pattern_id, child_pattern_id, relationship_type, strength)
+                VALUES (?, ?, ?, ?, ?)
+            """, (time.time(), parent_pattern_id, child_pattern_id, relationship_type, strength))
+            conn.commit()
+
+    def get_pattern_lineage(
+        self,
+        pattern_id: str,
+        direction: str = 'ancestors',  # 'ancestors', 'descendants'
+        max_depth: int = -1  # -1 for unlimited depth
+    ) -> List[Dict[str, Any]]:
+        """
+        Trace the lineage (ancestors or descendants) of a given pattern.
+
+        Args:
+            pattern_id: The ID of the starting pattern.
+            direction: 'ancestors' to trace back, 'descendants' to trace forward.
+            max_depth: Maximum depth to traverse. -1 for unlimited.
+
+        Returns:
+            A list of dictionaries, each representing a pattern in the lineage
+            with its relationship details, sorted by depth, including the starting pattern.
+        """
+        if direction not in ['ancestors', 'descendants']:
+            raise ValueError("Direction must be 'ancestors' or 'descendants'")
+
+        lineage_map = {} # To store patterns and their relationship info
+        visited = {pattern_id}
+        queue = [(pattern_id, 0)]  # (pattern_id, depth)
+
+        # Optimization: Fetch all patterns once
+        all_patterns_map = {p.pattern_id: p.to_dict() for p in self.get_all_patterns()}
+
+        while queue:
+            current_id, current_depth = queue.pop(0) # BFS
+
+            if max_depth != -1 and current_depth > max_depth:
+                continue
+            
+            # Add current pattern to lineage if not already there, with its depth
+            if current_id not in lineage_map:
+                pattern_data = all_patterns_map.get(current_id)
+                if pattern_data:
+                    lineage_map[current_id] = {
+                        'pattern': pattern_data,
+                        'depth': current_depth
+                    }
+                else:
+                    # Pattern doesn't exist, skip
+                    continue
+
+            with self._db_connection() as conn:
+                cursor = None
+                if direction == 'ancestors':
+                    cursor = conn.execute("""
+                        SELECT parent_pattern_id, relationship_type, strength FROM pattern_relationships
+                        WHERE child_pattern_id = ?
+                    """, (current_id,))
+                    for row in cursor.fetchall():
+                        parent_id, rel_type, strength = row
+                        if parent_id not in visited:
+                            visited.add(parent_id)
+                            queue.append((parent_id, current_depth + 1))
+                            # Store relationship info for display
+                            if parent_id not in lineage_map:
+                                lineage_map[parent_id] = {
+                                    'pattern': all_patterns_map.get(parent_id),
+                                    'depth': current_depth + 1,
+                                    'relationship_to_child': {'type': rel_type, 'strength': strength, 'child_id': current_id}
+                                }
+                            elif 'relationship_to_child' not in lineage_map[parent_id]:
+                                lineage_map[parent_id]['relationship_to_child'] = {'type': rel_type, 'strength': strength, 'child_id': current_id}
+
+                elif direction == 'descendants':
+                    cursor = conn.execute("""
+                        SELECT child_pattern_id, relationship_type, strength FROM pattern_relationships
+                        WHERE parent_pattern_id = ?
+                    """, (current_id,))
+                    for row in cursor.fetchall():
+                        child_id, rel_type, strength = row
+                        if child_id not in visited:
+                            visited.add(child_id)
+                            queue.append((child_id, current_depth + 1))
+                            # Store relationship info for display
+                            if child_id not in lineage_map:
+                                lineage_map[child_id] = {
+                                    'pattern': all_patterns_map.get(child_id),
+                                    'depth': current_depth + 1,
+                                    'relationship_to_parent': {'type': rel_type, 'strength': strength, 'parent_id': current_id}
+                                }
+                            elif 'relationship_to_parent' not in lineage_map[child_id]:
+                                lineage_map[child_id]['relationship_to_parent'] = {'type': rel_type, 'strength': strength, 'parent_id': current_id}
+        
+        # Convert map to list and sort by depth
+        lineage_list = sorted(lineage_map.values(), key=lambda x: x['depth'])
+        return lineage_list
+
     def get_statistics(self) -> Dict[str, Any]:
         """
         Get memory system statistics.
 
         Returns:
             Statistics dictionary
-        """
-        with self._db_connection() as conn:
-            # Pattern counts
-            cursor = conn.execute("""
-                SELECT pattern_type, COUNT(*) FROM patterns
-                GROUP BY pattern_type
-            """)
-            pattern_counts = dict(cursor.fetchall())
-
-            # Total patterns
-            cursor = conn.execute("SELECT COUNT(*) FROM patterns")
-            total_patterns = cursor.fetchone()[0]
-
-            # Agent state count
-            cursor = conn.execute("SELECT COUNT(*) FROM agent_states")
-            agent_states = cursor.fetchone()[0]
-
-            # Metrics count
-            cursor = conn.execute("SELECT COUNT(*) FROM metrics_history")
-            metrics_count = cursor.fetchone()[0]
-
-            # Learning episodes
-            cursor = conn.execute("SELECT COUNT(*) FROM learning_episodes")
-            episodes = cursor.fetchone()[0]
-
-            # Average pattern confidence
-            cursor = conn.execute("SELECT AVG(confidence) FROM patterns")
-            avg_confidence = cursor.fetchone()[0] or 0.0
-
-        return {
-            'total_patterns': total_patterns,
-            'patterns_by_type': pattern_counts,
-            'agent_states_stored': agent_states,
-            'metrics_recorded': metrics_count,
-            'learning_episodes': episodes,
-            'average_pattern_confidence': avg_confidence,
-            'database_path': str(self.db_path)
-        }
 
     # ============================================================================
     # NRM V2: Memetic Embedding Support

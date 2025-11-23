@@ -34,6 +34,11 @@ class ResonanceStatistics:
     mean_phase_alignment: float
     clustering_coefficient: float
     temporal_density: float  # events per second
+    num_bursts: int
+    mean_burst_duration: float  # seconds
+    mean_events_per_burst: float
+    burst_rate: float # bursts per second
+    burstiness_coefficient: float # fraction of resonant events in bursts
 
 @dataclass
 class PhaseSpaceStatistics:
@@ -68,14 +73,16 @@ class RealtimeEmergenceAnalyzer:
         """Initialize analyzer with workspace databases."""
         self.workspace_path = workspace_path
         self.bridge_db = workspace_path / "workspace" / "bridge.db"
-        self.main_db = workspace_path / "workspace" / "duality_v2.db"
+        self.main_db = workspace_path / "workspace" / "workspace" / "duality_v2.db"
         self.results_path = workspace_path / "analysis" / "realtime_emergence"
         self.results_path.mkdir(parents=True, exist_ok=True)
 
     def analyze_resonance_clustering(
         self,
         sample_size: int = 100000,
-        random_seed: int = 42
+        random_seed: int = 42,
+        burst_threshold_time: float = 0.1,  # seconds
+        min_events_per_burst: int = 3
     ) -> ResonanceStatistics:
         """
         Analyze resonance events for clustering dynamics.
@@ -131,6 +138,61 @@ class RealtimeEmergenceAnalyzer:
         # Clustering coefficient (fraction of high-similarity pairs)
         clustering_coefficient = (similarities > 0.8).mean()
 
+        # Burst detection logic (only for resonant events)
+        resonant_timestamps = timestamps[is_resonant]
+        if len(resonant_timestamps) > 1:
+            resonant_timestamps.sort()
+            time_diffs = np.diff(resonant_timestamps)
+
+            bursts = []
+            current_burst_events = []
+            current_burst_start_time = None
+
+            for i, diff in enumerate(time_diffs):
+                if diff <= burst_threshold_time:
+                    if not current_burst_events: # Start of a new burst
+                        current_burst_events.append(resonant_timestamps[i])
+                        current_burst_start_time = resonant_timestamps[i]
+                    current_burst_events.append(resonant_timestamps[i+1])
+                else: # Gap larger than threshold
+                    if current_burst_events:
+                        if len(current_burst_events) >= min_events_per_burst:
+                            bursts.append({
+                                'start': current_burst_start_time,
+                                'end': resonant_timestamps[i], # The last event before the gap
+                                'events': len(current_burst_events),
+                                'duration': resonant_timestamps[i] - current_burst_start_time
+                            })
+                        current_burst_events = []
+                        current_burst_start_time = None
+            # Check for a burst at the very end of the data
+            if current_burst_events and len(current_burst_events) >= min_events_per_burst:
+                bursts.append({
+                    'start': current_burst_start_time,
+                    'end': resonant_timestamps[-1],
+                    'events': len(current_burst_events),
+                    'duration': resonant_timestamps[-1] - current_burst_start_time
+                })
+
+            num_bursts = len(bursts)
+            if num_bursts > 0:
+                mean_burst_duration = np.mean([b['duration'] for b in bursts])
+                mean_events_per_burst = np.mean([b['events'] for b in bursts])
+                total_events_in_bursts = np.sum([b['events'] for b in bursts])
+                burstiness_coefficient = total_events_in_bursts / resonant_count if resonant_count > 0 else 0.0
+                burst_rate = num_bursts / (timestamps.max() - timestamps.min()) if (timestamps.max() - timestamps.min()) > 0 else 0.0
+            else:
+                mean_burst_duration = 0.0
+                mean_events_per_burst = 0.0
+                burstiness_coefficient = 0.0
+                burst_rate = 0.0
+        else: # Not enough resonant events to form a burst
+            num_bursts = 0
+            mean_burst_duration = 0.0
+            mean_events_per_burst = 0.0
+            burstiness_coefficient = 0.0
+            burst_rate = 0.0
+
         stats = ResonanceStatistics(
             total_events=total,
             resonant_events=int(resonant_count),
@@ -138,13 +200,23 @@ class RealtimeEmergenceAnalyzer:
             mean_similarity=similarities.mean(),
             mean_phase_alignment=phase_alignments.mean(),
             clustering_coefficient=clustering_coefficient,
-            temporal_density=temporal_density
+            temporal_density=temporal_density,
+            num_bursts=num_bursts,
+            mean_burst_duration=mean_burst_duration,
+            mean_events_per_burst=mean_events_per_burst,
+            burst_rate=burst_rate,
+            burstiness_coefficient=burstiness_coefficient
         )
 
         print(f"  Resonance rate: {resonance_rate:.1%}")
         print(f"  Mean similarity: {similarities.mean():.3f}")
         print(f"  Clustering coefficient: {clustering_coefficient:.3f}")
         print(f"  Temporal density: {temporal_density:.2f} events/sec")
+        print(f"  Detected bursts: {num_bursts}")
+        print(f"  Mean burst duration: {mean_burst_duration:.3f} sec")
+        print(f"  Mean events per burst: {mean_events_per_burst:.1f}")
+        print(f"  Burstiness coefficient: {burstiness_coefficient:.1%}")
+        print(f"  Burst rate: {burst_rate:.3f} bursts/sec")
 
         return stats
 
@@ -318,7 +390,10 @@ class RealtimeEmergenceAnalyzer:
         start_time = time.time()
 
         # Run all analyses
-        resonance_stats = self.analyze_resonance_clustering()
+        resonance_stats = self.analyze_resonance_clustering(
+            burst_threshold_time=0.1,  # Default to 100ms
+            min_events_per_burst=3     # Default to 3 events to constitute a burst
+        )
         phase_stats = self.analyze_phase_space_evolution()
         reality_stats = self.analyze_reality_grounding_signature()
 
@@ -340,7 +415,12 @@ class RealtimeEmergenceAnalyzer:
                 'mean_similarity': resonance_stats.mean_similarity,
                 'mean_phase_alignment': resonance_stats.mean_phase_alignment,
                 'clustering_coefficient': resonance_stats.clustering_coefficient,
-                'temporal_density': resonance_stats.temporal_density
+                'temporal_density': resonance_stats.temporal_density,
+                'num_bursts': resonance_stats.num_bursts,
+                'mean_burst_duration': resonance_stats.mean_burst_duration,
+                'mean_events_per_burst': resonance_stats.mean_events_per_burst,
+                'burst_rate': resonance_stats.burst_rate,
+                'burstiness_coefficient': resonance_stats.burstiness_coefficient
             },
             'phase_space_evolution': {
                 'total_transformations': phase_stats.total_transformations,
@@ -377,9 +457,10 @@ class RealtimeEmergenceAnalyzer:
         # Print key findings
         print("KEY FINDINGS:")
         print(f"1. Resonance rate: {resonance_stats.resonance_rate:.1%} ({resonance_stats.resonant_events:,} resonant events)")
-        print(f"2. Phase space exploration: π={phase_stats.phase_variance['pi']:.3f}, e={phase_stats.phase_variance['e']:.3f}, φ={phase_stats.phase_variance['phi']:.3f}")
-        print(f"3. I/O-bound signature: {reality_stats.io_bound_ratio:.1%} of time in I/O wait (validates reality-grounding)")
-        print(f"4. Validation pass rate: {reality_stats.validation_pass_rate:.1%} (confirms reality compliance)")
+        print(f"2. Bursts detected: {resonance_stats.num_bursts} (Mean duration: {resonance_stats.mean_burst_duration:.3f}s, Mean events: {resonance_stats.mean_events_per_burst:.1f})")
+        print(f"3. Phase space exploration: π={phase_stats.phase_variance['pi']:.3f}, e={phase_stats.phase_variance['e']:.3f}, φ={phase_stats.phase_variance['phi']:.3f}")
+        print(f"4. I/O-bound signature: {reality_stats.io_bound_ratio:.1%} of time in I/O wait (validates reality-grounding)")
+        print(f"5. Validation pass rate: {reality_stats.validation_pass_rate:.1%} (confirms reality compliance)")
         print()
 
         return results

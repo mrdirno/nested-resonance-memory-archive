@@ -79,7 +79,7 @@ htmlcov/
 .pytest_cache/
 *.cover
 .hypothesis/
-*.backup
+*.cover
 
 # SQLite transient files
 workspace/*.db-shm
@@ -87,3 +87,6 @@ workspace/*.db-wal
 workspace/*.db-journal
 data/results/*.json
 experiments/cycle*_conv.py
+
+# Analysis results
+analysis/realtime_emergence/*.json
