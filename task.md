@@ -788,7 +788,13 @@
 - [x] **Result:** Matter dances to the radio.
 
 # Task: Cycle 395 - Spectral Accumulation (Long-Duration Exposure)
-- [ ] **Define Cycle 395:** Create a 3D density map of the RF environment over time.
-- [ ] **Goal:** Visualize the "Shape" of the local radio spectrum.
-- [ ] **Experiment:** `experiments/cycle395_spectral_accumulation.py`.
+- [x] **Define Cycle 395:** Create a 3D density map of the RF environment over time.
+- [x] **Goal:** Visualize the "Shape" of the local radio spectrum.
+- [x] **Experiment:** `experiments/cycle395_spectral_accumulation.py`.
+- [x] **Result:** 3D Density Map generated.
+
+# Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
+- [ ] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
+- [ ] **Goal:** "Print" the radio environment as a physical object.
+- [ ] **Experiment:** `experiments/cycle396_rf_to_mesh.py`.
 
