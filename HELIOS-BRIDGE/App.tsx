@@ -74,7 +74,8 @@ const App: React.FC = () => {
       harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
       topology: { trefoil: 0, torus: 0, hopf: 0 }
     },
-    cameraStats: { x: '0', y: '0', z: '0', dist: '25' }
+    cameraStats: { x: '0', y: '0', z: '0', dist: '25' },
+    resetTrigger: 0
   });
 
   return (

@@ -29,7 +29,7 @@ const NavItem: React.FC<{ icon: React.ReactNode, label: string, active: boolean,
   </button>
 );
 
-const Panel: React.FC<{ title: string, subtitle: string, active: boolean, onClose: () => void, children: React.ReactNode }> = ({ title, subtitle, active, onClose, children }) => {
+const Panel: React.FC<{ title: string, subtitle: string, active: boolean, onClose: () => void, children: React.ReactNode, onResetParticles?: () => void, onResetDefaults?: () => void }> = ({ title, subtitle, active, onClose, children, onResetParticles, onResetDefaults }) => {
   if (!active) return null;
   return (
     <div className="fixed bottom-[90px] left-0 md:left-10 right-0 md:right-auto md:w-[400px] w-full md:max-h-[calc(100vh-120px)] max-h-[60vh] glass-panel rounded-t-2xl md:rounded-2xl overflow-y-auto z-40 animate-in slide-in-from-bottom-10 fade-in duration-300">
@@ -38,7 +38,19 @@ const Panel: React.FC<{ title: string, subtitle: string, active: boolean, onClos
           <h2 className="text-xl font-bold text-white tracking-tight">{title}</h2>
           <p className="text-xs text-white/60 font-medium">{subtitle}</p>
         </div>
-        <button onClick={onClose} className="text-white/50 hover:text-white transition-colors text-2xl leading-none">&times;</button>
+        <div className="flex items-center gap-2">
+          {onResetParticles && (
+            <button onClick={onResetParticles} title="Reset Particles" className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-colors">
+              <RotateCcw size={14} />
+            </button>
+          )}
+          {onResetDefaults && (
+            <button onClick={onResetDefaults} title="Reset Tab Defaults" className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-colors">
+              <Settings size={14} />
+            </button>
+          )}
+          <button onClick={onClose} className="p-2 text-white/50 hover:text-white transition-colors text-2xl leading-none">&times;</button>
+        </div>
       </div>
       <div className="p-5 space-y-6">
         {children}
@@ -132,14 +144,28 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
       </div>
 
       {/* Controls Panel */}
-      <Panel title="System Controls" subtitle="Configure potential field dynamics" active={activePanel === 'controls'} onClose={() => setActivePanel(null)}>
+      <Panel
+        title="System Controls"
+        subtitle="Configure potential field dynamics"
+        active={activePanel === 'controls'}
+        onClose={() => setActivePanel(null)}
+        onResetParticles={() => setConfig(c => ({ ...c, resetTrigger: c.resetTrigger + 1 }))}
+        onResetDefaults={() => setConfig(c => ({
+          ...c,
+          speed: 1,
+          quality: 1,
+          amplitude: 1,
+          exposure: 0.5,
+          particleCount: 100000
+        }))}
+      >
         <div className="flex gap-3">
           <Button onClick={() => setConfig(c => ({ ...c, isPlaying: !c.isPlaying }))}>
             {config.isPlaying ? <Pause size={18} /> : <Play size={18} />}
             {config.isPlaying ? 'PAUSE' : 'RESUME'}
           </Button>
           <Button variant="secondary" onClick={() => window.location.reload()}>
-            <RotateCcw size={18} /> RESET
+            <RotateCcw size={18} /> RELOAD APP
           </Button>
         </div>
 
@@ -247,7 +273,18 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
       </Panel>
 
       {/* Waves Panel */}
-      <Panel title="Potential Field" subtitle="2500-digit sequences driving Ψ(r,t)" active={activePanel === 'waves'} onClose={() => setActivePanel(null)}>
+      <Panel
+        title="Potential Field"
+        subtitle="2500-digit sequences driving Ψ(r,t)"
+        active={activePanel === 'waves'}
+        onClose={() => setActivePanel(null)}
+        onResetParticles={() => setConfig(c => ({ ...c, resetTrigger: c.resetTrigger + 1 }))}
+        onResetDefaults={() => setConfig(c => ({
+          ...c,
+          mapping: { a: TranscendentalNumber.PHI, b: TranscendentalNumber.PHI, c: TranscendentalNumber.PI },
+          stagger: { a: 0, b: 239, c: 478 }
+        }))}
+      >
         <div className="relative overflow-hidden rounded-xl bg-black/50 border border-white/10 p-4 font-mono text-sm leading-relaxed">
           {/* The gradient background for wave display */}
           <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-secondary/20 to-tertiary/20 opacity-50 animate-pulse" />
@@ -313,7 +350,21 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
       </Panel>
 
       {/* Labs Panel */}
-      <Panel title="Research Labs" subtitle="Advanced N-particle dynamics experiments" active={activePanel === 'labs'} onClose={() => setActivePanel(null)}>
+      <Panel
+        title="Research Labs"
+        subtitle="Advanced N-particle dynamics experiments"
+        active={activePanel === 'labs'}
+        onClose={() => setActivePanel(null)}
+        onResetParticles={() => setConfig(c => ({ ...c, resetTrigger: c.resetTrigger + 1 }))}
+        onResetDefaults={() => setConfig(c => ({
+          ...c,
+          extensions: {
+            crystal: { threeFold: 0, sixFold: 0, lattice: 0 },
+            harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
+            topology: { trefoil: 0, torus: 0, hopf: 0 }
+          }
+        }))}
+      >
         <div className="space-y-6">
           <div className="bg-black/30 p-4 rounded-xl border border-white/5">
             <div className="text-tertiary font-bold text-sm mb-3 flex items-center gap-2"><Fingerprint size={16} /> Crystallographic Symmetry</div>

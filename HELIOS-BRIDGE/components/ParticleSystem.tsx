@@ -32,33 +32,49 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
   // Allocate MAX buffer once (1M particles)
   const MAX_PARTICLES = 1000000;
 
+  // Helper to initialize/reset particles
+  const initParticles = (pos: Float32Array, col: Float32Array, vel: Float32Array) => {
+    const gridSize = Math.ceil(Math.cbrt(MAX_PARTICLES));
+    const spacing = SIMULATION_EXTENT / gridSize;
+    const offset = SIMULATION_EXTENT / 2;
+
+    for (let i = 0; i < MAX_PARTICLES; i++) {
+      const x = (i % gridSize) * spacing - offset;
+      const y = (Math.floor(i / gridSize) % gridSize) * spacing - offset;
+      const z = Math.floor(i / (gridSize * gridSize)) * spacing - offset;
+
+      pos[i * 3] = x + (Math.random() - 0.5) * 0.5;
+      pos[i * 3 + 1] = y + (Math.random() - 0.5) * 0.5;
+      pos[i * 3 + 2] = z + (Math.random() - 0.5) * 0.5;
+
+      col[i * 3] = 1;
+      col[i * 3 + 1] = 1;
+      col[i * 3 + 2] = 1;
+
+      vel[i * 3] = 0;
+      vel[i * 3 + 1] = 0;
+      vel[i * 3 + 2] = 0;
+    }
+  };
+
   const { positions, colors, velocities } = useMemo(() => {
     const pos = new Float32Array(MAX_PARTICLES * 3);
     const col = new Float32Array(MAX_PARTICLES * 3);
     const vel = new Float32Array(MAX_PARTICLES * 3);
-
-    const gridSize = Math.ceil(Math.cbrt(MAX_PARTICLES));
-
-    for (let i = 0; i < MAX_PARTICLES; i++) {
-      const i3 = i * 3;
-      const xi = i % gridSize;
-      const yi = Math.floor(i / gridSize) % gridSize;
-      const zi = Math.floor(i / (gridSize * gridSize));
-
-      const spacing = (SIMULATION_EXTENT * 1.8) / gridSize;
-      // Add some jitter like original
-      pos[i3] = (xi - gridSize / 2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
-      pos[i3 + 1] = (yi - gridSize / 2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
-      pos[i3 + 2] = (zi - gridSize / 2) * spacing + (Math.random() - 0.5) * spacing * 0.5;
-
-      // Initial colors
-      col[i3] = 0.4;
-      col[i3 + 1] = 0.3;
-      col[i3 + 2] = 0.7;
-    }
-
+    initParticles(pos, col, vel);
     return { positions: pos, colors: col, velocities: vel };
-  }, []); // Run ONCE
+  }, []);
+
+  // Reset Effect
+  useEffect(() => {
+    if (config.resetTrigger > 0) {
+      initParticles(positions, colors, velocities);
+      if (meshRef.current) {
+        meshRef.current.geometry.attributes.position.needsUpdate = true;
+        meshRef.current.geometry.attributes.color.needsUpdate = true;
+      }
+    }
+  }, [config.resetTrigger, positions, colors, velocities]);
 
   // Update Draw Range when count changes
   useEffect(() => {

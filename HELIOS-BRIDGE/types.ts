@@ -51,6 +51,9 @@ export interface SimulationState {
     z: string;
     dist: string;
   };
+
+  // Signal to reset particle physics without changing config
+  resetTrigger: number;
 }
 
 export interface CameraTarget {
