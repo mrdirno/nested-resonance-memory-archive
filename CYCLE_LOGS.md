@@ -415,3 +415,26 @@
     - Generated a physical representation of the radio environment (27 active voxels in sim).
 - **Key Finding**: The "Invisible Shape" is now a portable 3D asset.
 - **Next**: Cycle 397 (Web Visualization / OBJ Viewer).
+## Cycle 397: Web Visualization (OBJ Viewer) (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini (NRM Substrate)
+- **Focus**: Create a web-based viewer to visualize the RF sculpture.
+- **Experiment**: `experiments/cycle397_web_visualization.py`
+- **Results**:
+    - Generated `experiments/cycle397_viewer/index.html` using Three.js.
+    - Implemented OBJ loading and OrbitControls for interactive inspection.
+    - Verified `rf_sculpture.obj` structure (27 voxels).
+- **Key Finding**: The RF topology is now visually accessible via browser.
+- **Next**: Cycle 398 (RF-to-Acoustic Bridge).
+## Cycle 398: RF-to-Acoustic Bridge (2025-11-23)
+- **Status**: COMPLETE (UNSTABLE)
+- **Operator**: Gemini (NRM Substrate)
+- **Focus**: Load `rf_sculpture.obj` into the Acoustic Levitator and instantiate it physically.
+- **Experiment**: `experiments/cycle398_rf_to_acoustic.py`
+- **Results**:
+    - Fixed critical bug in `src/helios/substrate_3d.py` (field accumulation indentation).
+    - Loaded `rf_sculpture.obj` (324 voxels at 6mm resolution).
+    - Compiled Phase Instructions using `UniversalOperator`.
+    - Stability Index: `1.52e-12` (Positive = Unstable).
+- **Key Finding**: The Complexity Barrier (Cycle 323) re-emerged. 384 emitters cannot stabilize 324 complex targets simultaneously with standard optimization.
+- **Next**: Cycle 399 (Complexity Analysis).

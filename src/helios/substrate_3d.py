@@ -71,7 +71,7 @@ class AcousticSubstrate3D(SubstrateInterface3D):
             # We ignore 1/r decay for now to match previous simplified model, 
             # or add it for realism. Let's stick to the previous model's amplitude 
             # but make it complex: A * e^(i(kr + phi))
-        field += e.amplitude * np.exp(1j * (k * dist_m + e.phase))
+            field += e.amplitude * np.exp(1j * (k * dist_m + e.phase))
             
         return field
 

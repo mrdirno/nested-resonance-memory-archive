@@ -1,0 +1,172 @@
+import os
+import shutil
+import sys
+
+def run_cycle397():
+    print("Cycle 397: Web Visualization (OBJ Viewer)")
+    
+    # Define paths
+    output_dir = "experiments/cycle397_viewer"
+    obj_source = "rf_sculpture.obj"
+    obj_dest = os.path.join(output_dir, "rf_sculpture.obj")
+    html_path = os.path.join(output_dir, "index.html")
+    
+    # Create output directory
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        print(f"Created directory: {output_dir}")
+    
+    # Copy OBJ file
+    if os.path.exists(obj_source):
+        shutil.copy2(obj_source, obj_dest)
+        print(f"Copied {obj_source} to {obj_dest}")
+    else:
+        print(f"Error: {obj_source} not found in root.")
+        return
+
+    # Generate HTML content
+    html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cycle 397: RF Sculpture Viewer</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #1a1a1a; color: #00ff00; font-family: monospace; }
+        #info { position: absolute; top: 10px; left: 10px; z-index: 100; pointer-events: none; }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+</head>
+<body>
+    <div id="info">
+        <h1>DUALITY-ZERO: RF SCULPTURE</h1>
+        <p>Cycle 396 Artifact | Local Radio Spectrum Topology</p>
+        <p>Left Click: Rotate | Right Click: Pan | Scroll: Zoom</p>
+    </div>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // Scene Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x1a1a1a);
+        scene.fog = new THREE.Fog(0x1a1a1a, 20, 100);
+
+        // Camera
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(30, 30, 50);
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+
+        // Controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
+        
+        const pointLight = new THREE.PointLight(0x00ff00, 2, 50);
+        pointLight.position.set(0, 10, 0);
+        scene.add(pointLight);
+
+        // Grid Helper
+        const gridHelper = new THREE.GridHelper(100, 100, 0x333333, 0x222222);
+        scene.add(gridHelper);
+        
+        // Axes Helper
+        const axesHelper = new THREE.AxesHelper(5);
+        scene.add(axesHelper);
+
+        // Load OBJ
+        const loader = new OBJLoader();
+        loader.load(
+            'rf_sculpture.obj',
+            function (object) {
+                // Material
+                const material = new THREE.MeshStandardMaterial({
+                    color: 0x00ff00, 
+                    roughness: 0.3,
+                    metalness: 0.7,
+                    wireframe: false
+                });
+
+                const wireframeMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x003300,
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.5
+                });
+
+                object.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material = material;
+                        
+                        // Add wireframe clone
+                        const wireframe = new THREE.Mesh(child.geometry, wireframeMaterial);
+                        child.add(wireframe);
+                    }
+                });
+
+                // Center the object
+                const box = new THREE.Box3().setFromObject(object);
+                const center = box.getCenter(new THREE.Vector3());
+                object.position.sub(center);
+                object.position.y += (box.max.y - box.min.y) / 2; // Sit on grid
+
+                scene.add(object);
+                console.log("RF Sculpture loaded successfully");
+            },
+            function (xhr) {
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+            },
+            function (error) {
+                console.error('An error happened', error);
+            }
+        );
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Window Resize Handling
+        window.addEventListener('resize', onWindowResize, false);
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        animate();
+    </script>
+</body>
+</html>"""
+
+    with open(html_path, 'w') as f:
+        f.write(html_content)
+    
+    print(f"Generated HTML viewer: {html_path}")
+    print("\nTo view the sculpture, run:")
+    print(f"cd {output_dir} && python3 -m http.server")
+
+if __name__ == "__main__":
+    run_cycle397()
