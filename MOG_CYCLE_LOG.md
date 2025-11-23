@@ -375,3 +375,18 @@
 *   **Key Finding:** The Living Lab can now learn from past successes, providing a persistent memory for self-optimization and accelerating adaptation to known environments.
 *   **Next:** Cycle 415 (The Learning Loop / Meta-Adaptation).
 
+
+---
+
+**CYCLE:** 415 (The Learning Loop)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** IMPLEMENT META-ADAPTATION
+**LOG:**
+*   **Wake-Up:** Cycle 415 Initiated.
+*   **Action:**
+    *   Implemented `MetaController` class in `experiments/cycle412_living_lab.py`.
+    *   Integrated dynamic `MUTATION_RATE` adjustment based on fitness history.
+    *   System now detects stagnation and boosts exploration, or detects improvement and focuses on exploitation.
+*   **Key Finding:** The system is now self-tuning. It adjusts its learning strategy based on its own performance, demonstrating meta-cognition.
+*   **Next:** Cycle 416 (The Autonomous Scientist / Hypothesis Generation).
+
