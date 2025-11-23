@@ -29,6 +29,17 @@ const NavItem: React.FC<{ icon: React.ReactNode, label: string, active: boolean,
   </button>
 );
 
+const IconButtonWithTooltip: React.FC<{ onClick: () => void, icon: React.ReactNode, label: string, colorClass: string }> = ({ onClick, icon, label, colorClass }) => (
+  <div className="relative group">
+    <button onClick={onClick} className={`p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors ${colorClass}`}>
+      {icon}
+    </button>
+    <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-black/90 backdrop-blur border border-white/10 rounded text-[10px] font-bold text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl z-50">
+      {label}
+    </div>
+  </div>
+);
+
 const Panel: React.FC<{ title: string, subtitle: string, active: boolean, onClose: () => void, children: React.ReactNode, onResetParticles?: () => void, onResetDefaults?: () => void }> = ({ title, subtitle, active, onClose, children, onResetParticles, onResetDefaults }) => {
   if (!active) return null;
   return (
@@ -40,16 +51,22 @@ const Panel: React.FC<{ title: string, subtitle: string, active: boolean, onClos
         </div>
         <div className="flex items-center gap-2">
           {onResetParticles && (
-            <button onClick={onResetParticles} title="Reset Particles" className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-colors">
-              <RotateCcw size={14} />
-            </button>
+            <IconButtonWithTooltip
+              onClick={onResetParticles}
+              icon={<RotateCcw size={14} />}
+              label="Reset Particles"
+              colorClass="text-emerald-400 hover:text-emerald-300 hover:shadow-[0_0_10px_rgba(52,211,153,0.3)]"
+            />
           )}
           {onResetDefaults && (
-            <button onClick={onResetDefaults} title="Reset Tab Defaults" className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-colors">
-              <Settings size={14} />
-            </button>
+            <IconButtonWithTooltip
+              onClick={onResetDefaults}
+              icon={<RotateCcw size={14} />}
+              label="Reset Defaults"
+              colorClass="text-rose-400 hover:text-rose-300 hover:shadow-[0_0_10px_rgba(251,113,133,0.3)]"
+            />
           )}
-          <button onClick={onClose} className="p-2 text-white/50 hover:text-white transition-colors text-2xl leading-none">&times;</button>
+          <button onClick={onClose} className="p-2 text-white/50 hover:text-white transition-colors text-2xl leading-none ml-2">&times;</button>
         </div>
       </div>
       <div className="p-5 space-y-6">
