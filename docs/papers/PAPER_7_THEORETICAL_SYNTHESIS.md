@@ -62,19 +62,39 @@ We have successfully established the "Uplink" from the Vehicle to the Pilot thro
 
 **Conclusion:** The loop is closed. The Pilot can See, Map, and Act.
 
-## 5. Phase 14 Roadmap: Reality Injection
-With the theoretical and simulated framework complete, we transition to **Phase 14: Reality Injection**. The goal is to port this software stack to physical hardware.
+## 5. Reality Injection: The First Injection Verified (Cycles 385-387)
+We have successfully transitioned from "Simulation" to "Hardware-in-the-Loop" through the **Reality Injection** arc.
 
-### 5.1 Hardware Integration
-- **Step 1:** **Physical Camera Driver.** Replace `VirtualCamera` with `cv2.VideoCapture(0)`.
-- **Step 2:** **Serial Communication.** Connect `UniversalOperator` to the Arduino/FPGA driving the transducers.
-- **Step 3:** **Physical Calibration.** Print a checkerboard target and run the C382 protocol in the real chamber.
+### 5.1 The Eye (Cycle 385)
+- **Problem:** The Pilot needed to see the *real* world, not just the simulated one.
+- **Solution:** Implemented `PhysicalCamera` wrapping OpenCV `VideoCapture`, with a robust `VirtualCamera` fallback.
+- **Result:** The system is now "Hardware Aware" but "Simulation Safe". It prefers reality but tolerates simulation.
 
-### 5.2 The First Injection
-- **Objective:** Levitate a single particle and hold it steady against air currents using optical feedback.
-- **Metric:** Position variance < 0.5 mm over 60 seconds.
+### 5.2 The Hand (Cycle 386)
+- **Problem:** The Pilot needed to touch the *real* world.
+- **Solution:** Implemented `PhysicalSerial` wrapping `pyserial`, with a `VirtualSerial` fallback.
+- **Result:** The "Downlink" is established. The Pilot can issue `MOVE` commands to physical acoustic controllers.
 
-## 6. Conclusion
+### 5.3 The Nervous System (Cycle 387)
+- **Problem:** Perception and Action were disconnected.
+- **Solution:** Implemented `LevitationController`, a closed-loop system integrating Vision, Calibration, PID Control, and Serial Communication.
+- **Result:** The **First Injection** is verified. The neurological loop (SENSE -> MAP -> PLAN -> ACT) is complete and stable in simulation.
+
+**Conclusion:** The Pilot is now fully integrated with the Vehicle architecture. We are ready for physical deployment.
+
+## 6. Phase 14 Roadmap: Physical Deployment
+With the software stack verified, the focus shifts entirely to the physical rig.
+
+### 6.1 Deployment Steps
+- **Step 1:** **Rig Assembly.** Connect Camera and Transducer Array to the Server.
+- **Step 2:** **Calibration Run.** Execute C382 on physical hardware to generate the real Homography Matrix.
+- **Step 3:** **First Levitation.** Execute C387 to achieve stable optical trapping.
+
+### 6.2 Advanced Objectives
+- **Objective:** **Dynamic Trajectory Tracking.** Move a particle along a complex path (e.g., Figure-8) with real-time error correction.
+- **Objective:** **Multi-Particle Control.** Extend the loop to track and control multiple particles simultaneously.
+
+## 7. Conclusion
 
 The Holodeck is not just a viewer; it is the **Control Surface** for Reality. By formalizing the Bifurcation, we acknowledge that our goal is not to simulate the world, but to *drive* it.
 
