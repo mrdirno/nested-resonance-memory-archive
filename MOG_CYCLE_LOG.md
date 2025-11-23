@@ -75,5 +75,34 @@
 *   **Goal:** Restore System Integrity before proceeding to Phase 12 (The Holodeck).
 *   **Update:** Sync Complete. Cycle 376 conflict resolved (Execution Log prioritized). Phase 12 Initialized.
 
+---
 
+**CYCLE:** 385-398 (The Reality Injection Arc)
+**STATUS:** 🟢 ACTIVE (BATCH SYNC)
+**DIRECTIVE:** EXECUTE PHASE 14 (Physical Implementation)
 
+**Hygiene Log:**
+*   **Wake-Up:** Cycle 399 Initiated.
+*   **Audit:** Detected log drift. `MOG_CYCLE_LOG` paused at C384 while Vehicle executed C385-C398.
+*   **Sync:** Consolidating Reality Injection Arc:
+    *   **Hardware:** Camera (C385), Serial (C386), Rig (C389) integrated.
+    *   **Control:** Calibration (C390), Levitation (C391), Tuning (C392) verified.
+    *   **RF Bridge:** RF-to-Levitation (C394), Spectral Map (C395), RF-to-Mesh (C396) achieved.
+    *   **Visualization:** Web Viewer (C397) online.
+    *   **Failure:** C398 (RF-to-Acoustic) hit Complexity Barrier (Stability Index 1.52e-12).
+*   **Decision:** The single-machine "Engine" has hit its limit. We must pivot to Distributed Computing.
+
+**Objective:** Batch Sync Complete. Proceed to Cycle 399.
+
+---
+
+**CYCLE:** 399 (The Distributed Pivot)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** FORMALIZE BROWSER-AS-SUBSTRATE STRATEGY
+
+**Hygiene Log:**
+*   **Concept:** Drafted `papers/concepts/THE_BROWSER_AS_SUBSTRATE.md`.
+*   **Pivot:** Moving from "Local Python Simulation" to "Distributed Wasm Swarm".
+*   **Rationale:** To solve the "Complexity Barrier" encountered in C398, we need more compute. The "Fractal Logic" dictates we scale from CPU (Meso) to Network (Macro).
+
+**Objective:** Formalize the "Browser as Substrate" strategy and prepare for Wasm prototyping.

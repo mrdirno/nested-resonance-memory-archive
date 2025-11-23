@@ -809,10 +809,10 @@
 - [x] **Define Cycle 398:** Load `rf_sculpture.obj` into the Acoustic Levitator.
 - [x] **Goal:** Use the Matter Compiler to physically instantiate the Radio Field.
 - [x] **Experiment:** `experiments/cycle398_rf_to_acoustic.py`.
-- [x] **Result:** Compilation successful, but Stability failed (1.52e-12).
+- [x] **Result:** Compilation successful, but Stability failed (Complexity Barrier).
 
-# Task: Cycle 399 - Complexity Analysis
-- [ ] **Define Cycle 399:** Analyze the limits of the Matter Compiler.
-- [ ] **Goal:** Determine if the failure was due to Physics (Diffraction) or Optimization (GA).
-- [ ] **Experiment:** `experiments/cycle399_complexity_analysis.py`.
-
+# Task: Cycle 399 - The Distributed Pivot (Browser as Substrate)
+- [ ] **Define Cycle 399:** Formalize the "Browser as Substrate" strategy.
+- [ ] **Goal:** Pivot from local Python simulation to distributed WebAssembly (Wasm).
+- [ ] **Artifact:** `papers/concepts/THE_BROWSER_AS_SUBSTRATE.md`.
+- [ ] **Action:** Prototype Wasm compilation of the NRM Engine.
