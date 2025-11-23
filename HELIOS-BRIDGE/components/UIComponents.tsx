@@ -143,6 +143,7 @@ const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: num
 };
 export const UIOverlay: React.FC<UIProps> = (props) => {
   const { config, setConfig, activePanel, setActivePanel, digitRefs, onCameraMove, onResetCamera } = props;
+  const [lockEnergy, setLockEnergy] = React.useState(true);
 
   // Helper to update sliders without lag
   const handleRange = (key: keyof SimulationState, val: number) => {
@@ -387,7 +388,16 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
       >
         {/* Presets Dropdown */}
         <div className="bg-white/5 p-3 rounded-xl border border-white/10 mb-4">
-          <div className="text-xs font-bold text-white/60 mb-2 uppercase tracking-wider">Quick Load Presets</div>
+          <div className="flex justify-between items-center mb-2">
+            <div className="text-xs font-bold text-white/60 uppercase tracking-wider">Quick Load Presets</div>
+            <button
+              onClick={() => setLockEnergy(!lockEnergy)}
+              className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase transition-colors ${lockEnergy ? 'bg-primary/20 text-primary border border-primary/30' : 'bg-white/5 text-white/40 border border-white/10 hover:bg-white/10'}`}
+              title={lockEnergy ? "Energy Locked: Presets only change geometry" : "Energy Unlocked: Presets apply global physics settings"}
+            >
+              {lockEnergy ? <React.Fragment>🔒 Locked</React.Fragment> : <React.Fragment>🔓 Unlocked</React.Fragment>}
+            </button>
+          </div>
           <select
             className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-primary transition-colors"
             onChange={(e) => {
@@ -403,12 +413,15 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
               } else if (e.target.value === 'atomic') {
                 setConfig(c => ({
                   ...c,
-                  speed: 5, // 200ms
-                  exposure: 3.0,
-                  particleCount: 350000,
-                  quality: 2.0,
-                  amplitude: 12.0,
-                  mode: SimulationMode.HARMONIC,
+                  // Apply globals only if NOT locked
+                  ...(lockEnergy ? {} : {
+                    speed: 5, // 200ms
+                    exposure: 3.0,
+                    particleCount: 350000,
+                    quality: 2.0,
+                    amplitude: 12.0,
+                    mode: SimulationMode.HARMONIC,
+                  }),
                   extensions: {
                     crystal: { threeFold: 0, sixFold: 0, lattice: 0 },
                     harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
