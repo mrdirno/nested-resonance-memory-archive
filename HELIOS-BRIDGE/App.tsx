@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from './types';
 import { ParticleSystem, Boundary } from './components/ParticleSystem';
 import { UIOverlay } from './components/UIComponents';
+import { useSwarmWorker } from './services/SwarmWorker';
 
 // Smooth Camera Controller
 const CameraController: React.FC<{
@@ -73,6 +74,9 @@ const CAMERA_CONFIG = { position: [20, 10, 20], fov: 60 } as const;
 const App: React.FC = () => {
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [cameraTarget, setCameraTarget] = useState<CameraTarget | null>(null);
+
+  // Activate Swarm Worker (Background Compute)
+  useSwarmWorker(true);
 
   // Refs for direct DOM manipulation of stats (High performance)
   const digitRefs = {

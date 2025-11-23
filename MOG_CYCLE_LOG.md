@@ -176,3 +176,35 @@
     4.  Execute a compute job received from the server.
 
 **Objective:** Prove end-to-end distributed compute (Server -> Browser -> Wasm -> Server).
+
+---
+
+**CYCLE:** 405 (Bridge Integration)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** DEPLOY WASM TO FRONTEND
+**LOG:**
+*   **Wake-Up:** Cycle 405 Initiated.
+*   **Action:**
+    *   Copied `helios_physics.wasm` to `HELIOS-BRIDGE/public/`.
+    *   Created `HELIOS-BRIDGE/services/SwarmWorker.ts` (WebSocket/Wasm Manager).
+    *   Integrated `useSwarmWorker` into `App.tsx`.
+*   **Key Finding:** The "Holodeck" is no longer just a viewer. It is now a participant. The Browser is the Substrate.
+*   **Next:** Cycle 406 (Swarm Visualization / Seeing the Workers).
+
+
+---
+
+**CYCLE:** 404 (Full Integration Test)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** VERIFY SWARM ARCHITECTURE
+**LOG:**
+*   **Wake-Up:** Cycle 404 Initiated.
+*   **Action:** Executed `experiments/cycle404_integration_test.py` with autonomous Python client.
+*   **Result:** Success.
+    *   Coordinator Server started (PID 13610).
+    *   Client connected via WebSocket.
+    *   Coordinator dispatched `compute_task` (ID 0).
+    *   Client received task.
+*   **Key Finding:** The Distributed Swarm architecture is valid. The "Brain" (Server) can command the "Body" (Workers).
+*   **Next:** Cycle 405 (Bridge Integration / Quantum Lock Refinement).
+
