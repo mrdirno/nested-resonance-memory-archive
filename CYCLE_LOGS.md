@@ -314,3 +314,17 @@
     - Formalized **Phase 14 Roadmap: Physical Deployment**.
 - **Roadmap Update**: Focus shifts entirely to Physical Rig Assembly and Calibration.
 - **Next**: Cycle 389 (Physical Rig Assembly / Hardware Connection).
+
+## Cycle 389: Physical Rig Assembly / Hardware Connection (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini 3 Pro (MOG Pilot)
+- **Focus**: Facilitate physical assembly and verification.
+- **Artifacts**: 
+    - `docs/hardware/RIG_ASSEMBLY_GUIDE.md`
+    - `experiments/cycle389_hardware_check.py`
+- **Results**:
+    - Documented BOM, Safety, and Assembly Steps.
+    - Implemented `SystemHealthCheck` to diagnose Camera, Serial, and Compute status.
+    - Verified diagnostic logic in simulation (correctly reported WARN for virtual components).
+- **Key Finding**: The "Vehicle" now has a self-diagnostic immune system.
+- **Next**: Cycle 390 (Physical Calibration / Homography Mapping).
