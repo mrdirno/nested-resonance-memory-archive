@@ -7,6 +7,7 @@ import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } f
 import { ParticleSystem, Boundary } from './components/ParticleSystem';
 import { UIOverlay } from './components/UIComponents';
 import { useSwarmWorker } from './services/SwarmWorker';
+import { EvolvedArray } from './components/EvolvedArray';
 
 // Smooth Camera Controller
 const CameraController: React.FC<{
@@ -74,6 +75,7 @@ const CAMERA_CONFIG = { position: [20, 10, 20], fov: 60 } as const;
 const App: React.FC = () => {
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [cameraTarget, setCameraTarget] = useState<CameraTarget | null>(null);
+  const [showArray, setShowArray] = useState(false);
 
   // Activate Swarm Worker (Background Compute)
   const { isConnected, tasksCompleted, gaStatus } = useSwarmWorker(true);
@@ -132,6 +134,7 @@ const App: React.FC = () => {
         {/* Core Systems */}
         <Boundary />
         <ParticleSystem config={config} digitRefs={digitRefs} />
+        {showArray && <EvolvedArray phases={gaStatus?.best_genome || []} />}
         <CameraController target={cameraTarget} setTarget={setCameraTarget} />
         <ExposureController exposure={config.exposure} />
         <ResponsiveCamera />
@@ -149,6 +152,8 @@ const App: React.FC = () => {
         isConnected={isConnected}
         tasksCompleted={tasksCompleted}
         gaStatus={gaStatus}
+        showArray={showArray}
+        setShowArray={setShowArray}
       />
     </div>
   );

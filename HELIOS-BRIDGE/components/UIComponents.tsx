@@ -22,6 +22,8 @@ interface UIProps {
   isConnected: boolean;
   tasksCompleted: number;
   gaStatus: GaStatus | null;
+  showArray: boolean;
+  setShowArray: (v: boolean) => void;
 }
 
 const NavItem: React.FC<{ icon: React.ReactNode, label: string, active: boolean, onClick: () => void }> = ({ icon, label, active, onClick }) => (
@@ -546,6 +548,13 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
             <div className="text-xs text-white/70 font-mono break-all line-clamp-3">
               [{gaStatus.best_genome.map(p => p.toFixed(2)).join(', ')}]
             </div>
+
+            <button
+              onClick={() => props.setShowArray(!props.showArray)}
+              className={`mt-4 w-full py-2 rounded-lg text-xs font-bold uppercase transition-colors ${props.showArray ? 'bg-primary text-white' : 'bg-white/10 text-white/50 hover:bg-white/20'}`}
+            >
+              {props.showArray ? 'Hide Emitters' : 'Show Emitters'}
+            </button>
           </div>
         )}
       </Panel>
