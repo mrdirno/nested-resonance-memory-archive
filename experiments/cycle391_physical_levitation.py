@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import sys
 import time
+import json
+import os
 from experiments.cycle385_physical_camera import get_camera, PhysicalCamera
 from experiments.cycle386_serial_integration import get_serial, PhysicalSerial
 from experiments.cycle382_optical_calibration import CalibrationManager
@@ -22,6 +24,7 @@ class PhysicalLevitationController:
         
         # 3. Initialize Control
         self.pid = PIDController(kp=0.1, ki=0.0, kd=0.05)
+        self.load_config()
         
         # 4. State
         self.target_pos = np.array([50.0, 50.0, 20.0]) # Center of 100x100mm workspace, 20mm height
@@ -57,6 +60,21 @@ class PhysicalLevitationController:
             return False
             
         return True
+
+    def load_config(self, filename="pid_config.json"):
+        """Loads PID configuration from a JSON file."""
+        if os.path.exists(filename):
+            try:
+                with open(filename, 'r') as f:
+                    config = json.load(f)
+                self.pid.kp = config.get("kp", self.pid.kp)
+                self.pid.ki = config.get("ki", self.pid.ki)
+                self.pid.kd = config.get("kd", self.pid.kd)
+                print(f"[CONFIG] Loaded PID Config: Kp={self.pid.kp}, Ki={self.pid.ki}, Kd={self.pid.kd}")
+            except Exception as e:
+                print(f"[CONFIG] Error loading config: {e}")
+        else:
+            print("[CONFIG] No config file found. Using defaults.")
 
     def run(self):
         print("[START] Starting Control Loop...")
