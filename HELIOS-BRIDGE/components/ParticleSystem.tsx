@@ -179,74 +179,75 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
       // This allows subtle control at low values and "god mode" forces at 100%
       const getStrength = (val: number) => Math.pow(val, 4) * 20.0;
 
-      if (isCrystal) {
-        if (crystal.threeFold > 0) {
-          const r = Math.sqrt(x * x + y * y);
-          const angle = Math.atan2(y, x);
-          const snap = Math.round(angle / 2.0944) * 2.0944; // 2pi/3
-          const strength = getStrength(crystal.threeFold);
-          forceX += (r * Math.cos(snap) - x) * strength;
-          forceY += (r * Math.sin(snap) - y) * strength;
-        }
-        if (crystal.sixFold > 0) {
-          const r = Math.sqrt(x * x + y * y);
-          const angle = Math.atan2(y, x);
-          const snap = Math.round(angle / 1.0472) * 1.0472; // 2pi/6
-          const strength = getStrength(crystal.sixFold);
-          forceX += (r * Math.cos(snap) - x) * strength;
-          forceY += (r * Math.sin(snap) - y) * strength;
-        }
-        if (crystal.lattice > 0) {
-          const a = SIMULATION_EXTENT / 3;
-          const ni = Math.round(x / a);
-          const nj = Math.round(y / (a * 0.866));
-          const strength = getStrength(crystal.lattice);
-          forceX += (a * ni - x) * strength;
-          forceY += (a * 0.866 * nj - y) * strength;
-        }
-      } else if (isHarmonic) {
-        if (harmonic.commaSpiral > 0) {
-          const spiralPhase = currentPosRef.current * 0.0011;
-          const sf = getStrength(harmonic.commaSpiral) * Math.sin(spiralPhase);
-          forceX += y * sf;
-          forceY += -x * sf;
-        }
-        if (harmonic.perfectFifths > 0) {
-          const ratio = 1.5;
-          const strength = getStrength(harmonic.perfectFifths);
-          forceX += Math.sin(x * ratio * waveNumber) * strength;
-          forceY += Math.sin(y * ratio * waveNumber) * strength;
-          forceZ += Math.sin(z * ratio * waveNumber) * strength;
-        }
-      } else if (isTopology) {
-        if (topology.trefoil > 0) {
-          const t = Math.atan2(y, x) * 0.15915;
-          const s = SIMULATION_EXTENT * 0.5;
-          const t2 = t * 6.283;
-          const kx = s * (Math.sin(t2) + 2 * Math.sin(2 * t2));
-          const ky = s * (Math.cos(t2) - 2 * Math.cos(2 * t2));
-          const kz = s * (-Math.sin(3 * t2));
-          const strength = getStrength(topology.trefoil);
-          forceX += (kx - x) * strength;
-          forceY += (ky - y) * strength;
-          forceZ += (kz - z) * strength;
-        }
-        if (topology.torus > 0) {
-          const R = SIMULATION_EXTENT * 0.6;
-          const r = SIMULATION_EXTENT * 0.25;
-          const theta = Math.atan2(y, x);
-          const d = Math.sqrt(x * x + y * y);
-          const phi = Math.atan2(z, d - R);
-          const tr = R + r * Math.cos(phi);
-          const tx = tr * Math.cos(theta);
-          const ty = tr * Math.sin(theta);
-          const tz = r * Math.sin(phi);
+      // Crystal Forces
+      if (crystal.threeFold > 0) {
+        const r = Math.sqrt(x * x + y * y);
+        const angle = Math.atan2(y, x);
+        const snap = Math.round(angle / 2.0944) * 2.0944; // 2pi/3
+        const strength = getStrength(crystal.threeFold);
+        forceX += (r * Math.cos(snap) - x) * strength;
+        forceY += (r * Math.sin(snap) - y) * strength;
+      }
+      if (crystal.sixFold > 0) {
+        const r = Math.sqrt(x * x + y * y);
+        const angle = Math.atan2(y, x);
+        const snap = Math.round(angle / 1.0472) * 1.0472; // 2pi/6
+        const strength = getStrength(crystal.sixFold);
+        forceX += (r * Math.cos(snap) - x) * strength;
+        forceY += (r * Math.sin(snap) - y) * strength;
+      }
+      if (crystal.lattice > 0) {
+        const a = SIMULATION_EXTENT / 3;
+        const ni = Math.round(x / a);
+        const nj = Math.round(y / (a * 0.866));
+        const strength = getStrength(crystal.lattice);
+        forceX += (a * ni - x) * strength;
+        forceY += (a * 0.866 * nj - y) * strength;
+      }
 
-          const strength = getStrength(topology.torus);
-          forceX += (tx - x) * strength;
-          forceY += (ty - y) * strength;
-          forceZ += (tz - z) * strength;
-        }
+      // Harmonic Forces
+      if (harmonic.commaSpiral > 0) {
+        const spiralPhase = currentPosRef.current * 0.0011;
+        const sf = getStrength(harmonic.commaSpiral) * Math.sin(spiralPhase);
+        forceX += y * sf;
+        forceY += -x * sf;
+      }
+      if (harmonic.perfectFifths > 0) {
+        const ratio = 1.5;
+        const strength = getStrength(harmonic.perfectFifths);
+        forceX += Math.sin(x * ratio * waveNumber) * strength;
+        forceY += Math.sin(y * ratio * waveNumber) * strength;
+        forceZ += Math.sin(z * ratio * waveNumber) * strength;
+      }
+
+      // Topology Forces
+      if (topology.trefoil > 0) {
+        const t = Math.atan2(y, x) * 0.15915;
+        const s = SIMULATION_EXTENT * 0.5;
+        const t2 = t * 6.283;
+        const kx = s * (Math.sin(t2) + 2 * Math.sin(2 * t2));
+        const ky = s * (Math.cos(t2) - 2 * Math.cos(2 * t2));
+        const kz = s * (-Math.sin(3 * t2));
+        const strength = getStrength(topology.trefoil);
+        forceX += (kx - x) * strength;
+        forceY += (ky - y) * strength;
+        forceZ += (kz - z) * strength;
+      }
+      if (topology.torus > 0) {
+        const R = SIMULATION_EXTENT * 0.6;
+        const r = SIMULATION_EXTENT * 0.25;
+        const theta = Math.atan2(y, x);
+        const d = Math.sqrt(x * x + y * y);
+        const phi = Math.atan2(z, d - R);
+        const tr = R + r * Math.cos(phi);
+        const tx = tr * Math.cos(theta);
+        const ty = tr * Math.sin(theta);
+        const tz = r * Math.sin(phi);
+
+        const strength = getStrength(topology.torus);
+        forceX += (tx - x) * strength;
+        forceY += (ty - y) * strength;
+        forceZ += (tz - z) * strength;
       }
 
       // --- Wave Potential (The core logic - Analytical Gradient) ---
