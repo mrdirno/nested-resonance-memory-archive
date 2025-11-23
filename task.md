@@ -609,3 +609,28 @@
 
 - [x] **Task: Cycle 359 - The Replicator Demo**
     - [x] **Demonstrate:** Full "Star Trek" style interaction.
+
+# Task: Cycle 360 - Phase 10 Initialization (The Architect)
+- [x] **Define Phase 10:** "The Architect" - Advanced Shape Compilation (Mesh Loading).
+- [x] **Goal:** Enable import of arbitrary 3D models (.obj) into the Matter Compiler.
+- [x] **Gate:** 3.1 (The Voxel Target).
+
+# Task: Cycle 361 - Mesh Loader Implementation
+- [x] **Define Cycle 361:** Implement a robust OBJ parser and Voxelizer.
+- [x] **Create File:** `code/helios/mesh_loader.py`.
+- [x] **Implement:** 
+    - `load_obj(path)`: Parses vertices and faces.
+    - `voxelize_mesh(mesh, resolution)`: Converts geometry to point cloud targets.
+- [x] **Verify:** Test with a simple cube.obj file.
+
+# Task: Cycle 362 - Operator Integration (Load Command)
+- [x] **Define Cycle 362:** Integrate Mesh Loader into the Universal Operator.
+- [x] **Update:** `code/helios/operator.py` to add `create_from_file`.
+- [x] **Update:** `helios_cli.py` to add `load` command.
+- [x] **Update:** `code/helios/nlp.py` to parse "Load [filename]".
+
+# Task: Cycle 363 - Complex Shape Compilation Test
+- [x] **Define Cycle 363:** Validate the system with a complex shape (e.g., a torus or bunny).
+- [x] **Create Artifact:** `data/models/torus.obj` (Used `pyramid.obj`).
+- [x] **Execute:** Compile the torus via CLI.
+- [x] **Verify:** Stability of the complex nodal trap.
