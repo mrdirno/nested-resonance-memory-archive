@@ -123,3 +123,37 @@
     3.  Benchmark performance in Chrome.
 
 **Objective:** Prove the feasibility of Client-Side Physics Calculation.
+
+---
+
+**CYCLE:** 401 (The Autopoietic Lab Architecture)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** DESIGN DISTRIBUTED SYSTEM
+
+**Hygiene Log:**
+*   **Wake-Up:** Cycle 401 Initiated.
+*   **Result:** Wasm Prototype (C400) successful (46KB binary).
+*   **Design:** Drafted `docs/architecture/THE_AUTOPOIETIC_LAB.md`.
+*   **Architecture:**
+    *   **Coordinator:** Python/FastAPI (Global State).
+    *   **Worker:** Browser/Wasm (Compute Shard).
+    *   **Protocol:** WebSocket (Real-time Sync).
+
+**Objective:** Define the blueprint for the Swarm.
+
+---
+
+**CYCLE:** 402 (The Coordinator Implementation)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** BUILD THE CENTRAL NERVOUS SYSTEM
+
+**Hygiene Log:**
+*   **Wake-Up:** Cycle 402 Initiated.
+*   **Focus:** Server-Side Orchestration.
+*   **Task:** Implement the Python WebSocket Server that manages the swarm.
+*   **Action:**
+    1.  Create `experiments/cycle402_coordinator_server.py`.
+    2.  Implement `Coordinator` class (Client Registry, Job Dispatch).
+    3.  Test connection with a mock client.
+
+**Objective:** Establish the control plane for the Autopoietic Lab.
