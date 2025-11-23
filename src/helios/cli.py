@@ -34,15 +34,49 @@ class HeliosShell(cmd.Cmd):
             self.do_load(intent['filename'])
         elif action == 'delete':
             self.do_delete(f"{intent['id']}")
+        elif action == 'animate':
+            self.do_animate(f"{intent['id']} to {intent['target_mesh']} {intent['duration']}")
         elif action == 'status':
             self.do_status("")
         elif action == 'help':
             self.do_help("")
         elif action == 'unknown':
             print(f"I didn't understand: '{intent.get('original_text')}'")
-            print("Try: 'Create a cube at 50 50 50' or 'Move object 1 to 20 20 20'")
+            print("Try: 'Create a cube at 50 50 50' or 'Animate object 1 to pyramid.obj'")
         else:
             print(f"Error: Action '{action}' not implemented.")
+
+    def do_animate(self, arg):
+        'Animate an object: animate <id> to <mesh_path> [frames]'
+        try:
+            args = arg.split()
+            # Parse args: id, "to", mesh, [frames]
+            if len(args) < 3:
+                print("Usage: animate <id> to <mesh_path> [frames]")
+                return
+            
+            obj_id = int(args[0])
+            if args[1] != "to":
+                print("Usage: animate <id> to <mesh_path> [frames]")
+                return
+                
+            mesh_path = args[2]
+            frames = 10
+            if len(args) > 3:
+                # Handle "10 frames" or just "10"
+                try:
+                    frames = int(args[3])
+                except ValueError:
+                    pass
+            
+            print(f"Animating Object {obj_id} to {mesh_path} ({frames} frames)...")
+            phases = self.op.animate_object(obj_id, mesh_path, frames)
+            
+            print(f"Animation Compiled. {len(phases)} frames generated.")
+            print(">> Status: READY FOR PLAYBACK")
+            
+        except Exception as e:
+            print(f"Error: {e}")
 
     def do_create(self, arg):
         'Create an object: create <shape> <x> <y> <z>'

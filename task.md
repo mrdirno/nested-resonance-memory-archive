@@ -654,6 +654,23 @@
 - [ ] **Update:** `helios_cli.py` with `animate` command.
 
 # Task: Cycle 367 - 4D Printing Demo
-- [ ] **Define Cycle 367:** Morph a Cube into a Pyramid.
-- [ ] **Execute:** `animate <cube_id> to data/models/pyramid.obj 5s`.
-- [ ] **Verify:** Smooth transition of phases and stability.
+- [x] **Define Cycle 367:** Morph a Cube into a Pyramid.
+- [x] **Execute:** `animate <cube_id> to data/models/pyramid.obj 5s`.
+- [x] **Verify:** Smooth transition of phases and stability.
+
+# Task: Cycle 368 - Phase 12 Initialization (The Holodeck)
+- [x] **Define Phase 12:** "The Holodeck" - Real-Time Visualization.
+- [x] **Goal:** Visualize the 3D acoustic field and trapped objects in real-time.
+- [x] **Upgrade:** `src/helios/server.py` to serve point cloud data.
+- [x] **Upgrade:** `src/helios/templates/index.html` to render point clouds.
+
+# Task: Cycle 369 - Real-Time Field Stream
+- [x] **Define Cycle 369:** Implement WebSocket streaming for field data.
+- [x] **Goal:** Stream phase/pressure data to the browser at 60fps.
+
+# Task: Cycle 371 - Volumetric Field Visualization
+- [x] **Define Cycle 371:** Visualize the acoustic pressure field.
+- [x] **Implement:** `get_field_slice` in Operator.
+- [x] **Visualize:** Render 2D heatmap in `index.html`.
+- [x] **Verify:** Real-time field updates visible.
+

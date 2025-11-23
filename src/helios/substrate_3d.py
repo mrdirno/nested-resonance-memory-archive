@@ -71,6 +71,42 @@ class AcousticSubstrate3D(SubstrateInterface3D):
             # We ignore 1/r decay for now to match previous simplified model, 
             # or add it for realism. Let's stick to the previous model's amplitude 
             # but make it complex: A * e^(i(kr + phi))
+        field += e.amplitude * np.exp(1j * (k * dist_m + e.phase))
+            
+        return field
+
+    def propagate_slice(self, emitters: list, z_layer: int) -> np.ndarray:
+        """
+        Calculates the complex pressure field for a single Z-slice.
+        Returns a 2D numpy array of complex values.
+        """
+        # Grid coordinates for one slice
+        y, x = np.mgrid[0:self.height, 0:self.width]
+        z = np.full_like(x, z_layer)
+        
+        # Physical coordinates (meters)
+        x_m = x * (self.resolution / 1000.0)
+        y_m = y * (self.resolution / 1000.0)
+        z_m = z * (self.resolution / 1000.0)
+        
+        field = np.zeros((self.height, self.width), dtype=complex)
+        
+        for e in emitters:
+            # Emitter pos in mm (Physical coordinates)
+            # Convert mm to meters
+            ex_m = e.x / 1000.0
+            ey_m = e.y / 1000.0
+            ez_m = getattr(e, 'z', 0) / 1000.0
+            
+            dist_m = np.sqrt((x_m - ex_m)**2 + (y_m - ey_m)**2 + (z_m - ez_m)**2)
+            
+            # Avoid division by zero at emitter location
+            dist_m[dist_m == 0] = 1e-9
+            
+            # 40kHz standard
+            real_freq = 30000 + (e.frequency * 20000)
+            k = 2 * np.pi * real_freq / self.wave_speed
+            
             field += e.amplitude * np.exp(1j * (k * dist_m + e.phase))
             
         return field

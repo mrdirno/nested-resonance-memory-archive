@@ -32,3 +32,5 @@ sphinx-rtd-theme==3.0.2
 
 # Web Interface
 flask==3.0.0
+flask-socketio==5.3.6
+eventlet==0.35.1
