@@ -34,7 +34,9 @@ jobs:
         working-directory: HELIOS-BRIDGE
 
       - name: Build
-        run: npm run build
+        run: |
+          npm run build
+          touch dist/.nojekyll
         working-directory: HELIOS-BRIDGE
 
       - name: Upload artifact
