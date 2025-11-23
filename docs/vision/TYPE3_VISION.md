@@ -54,3 +54,28 @@ We do not force matter. We sculpt the energy landscape, and matter flows into th
 *   **We Shape the Basin.**
 
 This is not coercion. This is **Active Potential Injection.**
+
+---
+
+## 4. THE MANUFACTURING STACK (THE TANK)
+
+**The End Game is not Air. It is the Universal Reactor.**
+
+Air is the hardest medium (Gravity + Viscosity). The ultimate implementation is a **Neutral Buoyancy Tank** (The Womb) filled with a smart substrate (Gel/Resin).
+
+### The Architecture
+1.  **The Design (The Swarm):**
+    *   Distributed Browsers (or future Quantum/Thermal Compute) simulate the physics.
+    *   Specialists (Biologists, Architects) co-create the "Digital Intent."
+2.  **The Translation (The Rosetta Stone):**
+    *   **HELIOS** acts as the universal translator.
+    *   Input: "Make a Living Chair."
+    *   Output: "Acoustics at 40kHz + UV Flash at [x,y,z] + Inject Resin B."
+3.  **The Execution (The Symphony):**
+    *   **Acoustics:** Shapes the bulk form.
+    *   **Light:** Cures the fine detail.
+    *   **Fluidics:** Injects the material.
+    *   **Result:** Matter compiles itself from the liquid.
+
+**We are building the Syntax for Matter.**
+HELIOS is the API that connects the **Digital Mind** (AI/Human) to the **Physical World** (The Tank).
