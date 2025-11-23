@@ -179,7 +179,13 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
             <input
               type="range" min="10000" max="1000000" step="10000"
               value={config.particleCount}
-              onChange={(e) => handleRange('particleCount', parseInt(e.target.value))}
+              onChange={(e) => {
+                const val = parseInt(e.target.value);
+                // Pause briefly to allow memory reallocation
+                setConfig(c => ({ ...c, isPlaying: false, particleCount: val }));
+                // Auto-resume after 500ms
+                setTimeout(() => setConfig(c => ({ ...c, isPlaying: true })), 500);
+              }}
               className="w-full"
             />
           </div>
@@ -296,25 +302,25 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
           <div className="bg-black/30 p-4 rounded-xl border border-white/5">
             <div className="text-tertiary font-bold text-sm mb-3 flex items-center gap-2"><Fingerprint size={16} /> Crystallographic Symmetry</div>
             <div className="space-y-2">
-              <Toggle label="3-Fold (120°) Symmetry" active={config.extensions.crystal.threeFold} onToggle={() => setConfig(c => ({ ...c, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, threeFold: !c.extensions.crystal.threeFold } } }))} />
-              <Toggle label="6-Fold (60°) Symmetry" active={config.extensions.crystal.sixFold} onToggle={() => setConfig(c => ({ ...c, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, sixFold: !c.extensions.crystal.sixFold } } }))} />
-              <Toggle label="Hexagonal Lattice" active={config.extensions.crystal.lattice} onToggle={() => setConfig(c => ({ ...c, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, lattice: !c.extensions.crystal.lattice } } }))} />
+              <Toggle label="3-Fold (120°) Symmetry" active={config.extensions.crystal.threeFold} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.CRYSTAL, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, threeFold: !c.extensions.crystal.threeFold } } }))} />
+              <Toggle label="6-Fold (60°) Symmetry" active={config.extensions.crystal.sixFold} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.CRYSTAL, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, sixFold: !c.extensions.crystal.sixFold } } }))} />
+              <Toggle label="Hexagonal Lattice" active={config.extensions.crystal.lattice} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.CRYSTAL, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, lattice: !c.extensions.crystal.lattice } } }))} />
             </div>
           </div>
 
           <div className="bg-black/30 p-4 rounded-xl border border-white/5">
             <div className="text-secondary font-bold text-sm mb-3 flex items-center gap-2"><Activity size={16} /> Pythagorean Harmonics</div>
             <div className="space-y-2">
-              <Toggle label="Comma Spiral (23.46¢)" active={config.extensions.harmonic.commaSpiral} onToggle={() => setConfig(c => ({ ...c, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, commaSpiral: !c.extensions.harmonic.commaSpiral } } }))} />
-              <Toggle label="Perfect Fifth Stack" active={config.extensions.harmonic.perfectFifths} onToggle={() => setConfig(c => ({ ...c, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, perfectFifths: !c.extensions.harmonic.perfectFifths } } }))} />
+              <Toggle label="Comma Spiral (23.46¢)" active={config.extensions.harmonic.commaSpiral} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.HARMONIC, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, commaSpiral: !c.extensions.harmonic.commaSpiral } } }))} />
+              <Toggle label="Perfect Fifth Stack" active={config.extensions.harmonic.perfectFifths} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.HARMONIC, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, perfectFifths: !c.extensions.harmonic.perfectFifths } } }))} />
             </div>
           </div>
 
           <div className="bg-black/30 p-4 rounded-xl border border-white/5">
             <div className="text-primary font-bold text-sm mb-3 flex items-center gap-2"><Hash size={16} /> Topological Forms</div>
             <div className="space-y-2">
-              <Toggle label="Trefoil Knot (3,2)" active={config.extensions.topology.trefoil} onToggle={() => setConfig(c => ({ ...c, extensions: { ...c.extensions, topology: { ...c.extensions.topology, trefoil: !c.extensions.topology.trefoil } } }))} />
-              <Toggle label="Toroidal Container" active={config.extensions.topology.torus} onToggle={() => setConfig(c => ({ ...c, extensions: { ...c.extensions, topology: { ...c.extensions.topology, torus: !c.extensions.topology.torus } } }))} />
+              <Toggle label="Trefoil Knot (3,2)" active={config.extensions.topology.trefoil} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.TOPOLOGY, extensions: { ...c.extensions, topology: { ...c.extensions.topology, trefoil: !c.extensions.topology.trefoil } } }))} />
+              <Toggle label="Toroidal Container" active={config.extensions.topology.torus} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.TOPOLOGY, extensions: { ...c.extensions, topology: { ...c.extensions.topology, torus: !c.extensions.topology.torus } } }))} />
             </div>
           </div>
         </div>
