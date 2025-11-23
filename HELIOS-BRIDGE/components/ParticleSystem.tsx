@@ -159,13 +159,16 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
       let forceX = 0, forceY = 0, forceZ = 0;
 
       // --- Mode Specific Forces ---
-      // Tuned for visibility: Increased coefficients to compete with Wave Potential
+      // Tuned for "Infinity Tail": Exponential scaling (val^4 * 20)
+      // This allows subtle control at low values and "god mode" forces at 100%
+      const getStrength = (val: number) => Math.pow(val, 4) * 20.0;
+
       if (isCrystal) {
         if (crystal.threeFold > 0) {
           const r = Math.sqrt(x * x + y * y);
           const angle = Math.atan2(y, x);
           const snap = Math.round(angle / 2.0944) * 2.0944; // 2pi/3
-          const strength = crystal.threeFold * 0.2; // Max strength 0.2
+          const strength = getStrength(crystal.threeFold);
           forceX += (r * Math.cos(snap) - x) * strength;
           forceY += (r * Math.sin(snap) - y) * strength;
         }
@@ -173,7 +176,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
           const r = Math.sqrt(x * x + y * y);
           const angle = Math.atan2(y, x);
           const snap = Math.round(angle / 1.0472) * 1.0472; // 2pi/6
-          const strength = crystal.sixFold * 0.15; // Max strength 0.15
+          const strength = getStrength(crystal.sixFold);
           forceX += (r * Math.cos(snap) - x) * strength;
           forceY += (r * Math.sin(snap) - y) * strength;
         }
@@ -181,20 +184,20 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
           const a = SIMULATION_EXTENT / 3;
           const ni = Math.round(x / a);
           const nj = Math.round(y / (a * 0.866));
-          const strength = crystal.lattice * 0.1; // Max strength 0.1
+          const strength = getStrength(crystal.lattice);
           forceX += (a * ni - x) * strength;
           forceY += (a * 0.866 * nj - y) * strength;
         }
       } else if (isHarmonic) {
         if (harmonic.commaSpiral > 0) {
           const spiralPhase = currentPosRef.current * 0.0011;
-          const sf = (harmonic.commaSpiral * 0.2) * Math.sin(spiralPhase);
+          const sf = getStrength(harmonic.commaSpiral) * Math.sin(spiralPhase);
           forceX += y * sf;
           forceY += -x * sf;
         }
         if (harmonic.perfectFifths > 0) {
           const ratio = 1.5;
-          const strength = harmonic.perfectFifths * 0.15;
+          const strength = getStrength(harmonic.perfectFifths);
           forceX += Math.sin(x * ratio * waveNumber) * strength;
           forceY += Math.sin(y * ratio * waveNumber) * strength;
           forceZ += Math.sin(z * ratio * waveNumber) * strength;
@@ -207,13 +210,13 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
           const kx = s * (Math.sin(t2) + 2 * Math.sin(2 * t2));
           const ky = s * (Math.cos(t2) - 2 * Math.cos(2 * t2));
           const kz = s * (-Math.sin(3 * t2));
-          const strength = topology.trefoil * 0.05;
+          const strength = getStrength(topology.trefoil);
           forceX += (kx - x) * strength;
           forceY += (ky - y) * strength;
           forceZ += (kz - z) * strength;
         }
         if (topology.torus > 0) {
-          const R = SIMULATION_EXTENT * 0.6; // Slightly smaller to fit view
+          const R = SIMULATION_EXTENT * 0.6;
           const r = SIMULATION_EXTENT * 0.25;
           const theta = Math.atan2(y, x);
           const d = Math.sqrt(x * x + y * y);
@@ -223,8 +226,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({ config, digitRef
           const ty = tr * Math.sin(theta);
           const tz = r * Math.sin(phi);
 
-          // Changed to ATTRACTOR (pulls to surface) instead of Container
-          const strength = topology.torus * 0.05;
+          const strength = getStrength(topology.torus);
           forceX += (tx - x) * strength;
           forceY += (ty - y) * strength;
           forceZ += (tz - z) * strength;
