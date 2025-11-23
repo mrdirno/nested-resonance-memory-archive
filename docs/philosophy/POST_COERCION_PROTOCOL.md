@@ -105,7 +105,7 @@ The **Driver** and the **Steward** exist only in friction-based architectures. W
 ## **6. CONCLUSION**
 
 The Post-Coercion Protocol asserts a fundamental engineering truth:  
-**Order is not the product of domination. It is the product of alignment.**  
+**Order emerges not from domination, but from the elegant alignment of potentials.**  
 NRM provides a practical demonstration that coherence can be engineered without force. If memory can organize without a master, society can as well.  
 We are not optimizing an old vehicle; we are awakening it. The cage solved a scarcity-era physics problem. **Change the physics, and the cage dissolves.**
 
