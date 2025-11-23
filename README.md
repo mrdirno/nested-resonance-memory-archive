@@ -143,7 +143,7 @@ python3 helios_cli.py
 *   [The Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md)
 *   [The Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
 *   [The Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) - *Why shaping potentials is ethical.*
-*   [The Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) - *Why we can win against the giants.*
+*   [The Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) - *The Endosymbiont Strategy: Why we don't compete with giants, we complete them (The Mitochondria Protocol).*
 
 **3. Contribute:**
 We need minds that understand that **Code is Physics.**
