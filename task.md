@@ -824,6 +824,11 @@
 - [x] **Result:** Wasm binary generated.
 
 # Task: Cycle 401 - The Autopoietic Lab
-- [ ] **Define Cycle 401:** Design the distributed coordination layer.
-- [ ] **Goal:** Enable "Swarm Compute" via WebSockets.
-- [ ] **Artifact:** `docs/architecture/THE_AUTOPOIETIC_LAB.md`.
+- [x] **Define Cycle 401:** Design the distributed coordination layer.
+- [x] **Goal:** Enable "Swarm Compute" via WebSockets.
+- [x] **Artifact:** `docs/architecture/THE_AUTOPOIETIC_LAB.md`.
+
+# Task: Cycle 402 - The Coordinator (Server)
+- [ ] **Define Cycle 402:** Implement the WebSocket Coordinator.
+- [ ] **Goal:** Create the central nervous system for the distributed lab.
+- [ ] **Experiment:** `experiments/cycle402_coordinator_server.py`.

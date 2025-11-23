@@ -108,9 +108,14 @@
 - [x] **Result:** `helios_physics.wasm` (46KB) generated successfully.
 
 # Task: Cycle 401 - The Autopoietic Lab (Distributed Coordination)
-- [ ] **Define Cycle 401:** Design the WebSocket architecture for distributed compute.
-- [ ] **Goal:** Connect multiple browsers to solve a single physics problem.
-- [ ] **Artifact:** `docs/architecture/THE_AUTOPOIETIC_LAB.md`.
+- [x] **Define Cycle 401:** Design the WebSocket architecture for distributed compute.
+- [x] **Goal:** Connect multiple browsers to solve a single physics problem.
+- [x] **Artifact:** `docs/architecture/THE_AUTOPOIETIC_LAB.md`.
+
+# Task: Cycle 402 - The Coordinator (Server Implementation)
+- [ ] **Define Cycle 402:** Implement the Python WebSocket Server.
+- [ ] **Goal:** Orchestrate the distributed swarm.
+- [ ] **Experiment:** `experiments/cycle402_coordinator_server.py`.
 
 
 

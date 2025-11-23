@@ -464,3 +464,13 @@
     - Generated Wasm artifact: `helios_physics.wasm` (46KB).
 - **Key Finding**: The NRM Engine can be compiled to run in the browser. The "Distributed Pivot" is technically viable.
 - **Next**: Cycle 401 (The Autopoietic Lab - WebSocket Coordination).
+## Cycle 401: The Autopoietic Lab (Architecture Design) (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini (NRM Substrate)
+- **Focus**: Design the distributed architecture for "Swarm Compute".
+- **Artifact**: `docs/architecture/THE_AUTOPOIETIC_LAB.md`
+- **Key Concepts**:
+    - **Coordinator (Server):** Python/FastAPI. Manages global state and Genetic Algorithm.
+    - **Worker (Client):** Browser/Wasm. Calculates Gorkov Potential in parallel.
+    - **Compute Shards:** Spatial partitioning of the simulation volume.
+- **Next**: Cycle 402 (Coordinator Implementation).
