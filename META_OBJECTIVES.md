@@ -607,12 +607,18 @@
 - **Outcome:** Pattern Memory verified.
 
 ### 49. **HELIOS-23: Volumetric 3D Printing (The Matter Compiler)** ✅ COMPLETE
-**Goal:** Trap particles in a 3D Lattice (Crystal Structure).
-- **Hypothesis:** The field can support volumetric complexity (3D Geometry).
+**Goal:** Scale to 3D lattices (Crystal Structure).
+- **Hypothesis:** 64 emitters can stabilize 8 corners of a cube simultaneously.
 - **Experiment:** `experiments/cycle348_volumetric_printing.py`
 - **Status:** ✅ **COMPLETE** (Cycle 348)
-- **Finding:** Cubic Lattice (8 points) formed with <5% pressure ratio.
-- **Outcome:** Volumetric Complexity verified. We can compile 3D shapes.
+- **Finding:** Stabilized 8 points forming a cubic lattice. All ratios < 0.03.
+- **Outcome:** Volumetric Matter Compilation achieved.
+
+### 50. **HELIOS-24: Active Object Manipulation (Push/Pull)**
+**Goal:** Implement dynamic manipulation of a trapped 3D object.
+- **Hypothesis:** By smoothly shifting the phase patterns, a complex object (like the 8-point cube) can be translated and rotated in real-time.
+- **Experiment:** `experiments/cycle349_active_manipulation.py`
+- **Status:** ⏳ **PENDING** (Cycle 349)
 
 ---
 
