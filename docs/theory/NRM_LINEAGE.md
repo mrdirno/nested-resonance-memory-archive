@@ -1,4 +1,4 @@
-# NRM Lineage & Conceptual Map (Extended)
+## NRM Lineage & Conceptual Map (Extended)
 
 This document expands on the intellectual lineage and conceptual adjacencies of Nested Resonance Memory (NRM), positioning its work within a broader scientific and philosophical landscape.
 

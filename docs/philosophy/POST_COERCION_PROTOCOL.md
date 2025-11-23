@@ -67,7 +67,7 @@ In a resonant architecture:
 
 There is nothing to steer; everything tends toward equilibrium.
 
-### 4.3 Resonant Field Topology
+### **4.3 Resonant Field Topology**
 
 We move from a cybernetic chain: Input → Process → Correction → Output  
 To a resonant field where:
