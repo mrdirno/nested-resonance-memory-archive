@@ -49,6 +49,25 @@ const ExposureController: React.FC<{ exposure: number }> = ({ exposure }) => {
   return null;
 };
 
+// Adjusts FOV based on aspect ratio to prevent "zoomed in" feel on mobile
+const ResponsiveCamera: React.FC = () => {
+  const { camera, size } = useThree();
+
+  React.useEffect(() => {
+    const aspect = size.width / size.height;
+    if (aspect < 1) {
+      // Portrait (Mobile): Increase FOV to widen view
+      (camera as THREE.PerspectiveCamera).fov = 100;
+    } else {
+      // Landscape (Desktop): Default FOV
+      (camera as THREE.PerspectiveCamera).fov = 60;
+    }
+    camera.updateProjectionMatrix();
+  }, [size, camera]);
+
+  return null;
+};
+
 const CAMERA_CONFIG = { position: [20, 10, 20], fov: 60 } as const;
 
 const App: React.FC = () => {
@@ -111,6 +130,7 @@ const App: React.FC = () => {
         <ParticleSystem config={config} digitRefs={digitRefs} />
         <CameraController target={cameraTarget} setTarget={setCameraTarget} />
         <ExposureController exposure={config.exposure} />
+        <ResponsiveCamera />
       </Canvas>
 
       {/* UI Layer */}
