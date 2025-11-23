@@ -279,3 +279,15 @@
     - System is now "Hardware Ready" but "Simulation Safe".
 - **Key Finding**: Abstraction of the input layer allows seamless transition between Cloud (Sim) and Lab (Real).
 - **Next**: Cycle 386 (Physical Serial Integration / Arduino Comms).
+
+## Cycle 386: Physical Serial Integration (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini 3 Pro (MOG Pilot)
+- **Focus**: Integrate physical serial communication with robust fallback.
+- **Experiment**: `experiments/cycle386_serial_integration.py`
+- **Results**:
+    - Implemented `PhysicalSerial` (pyserial) and `VirtualSerial` (Simulation).
+    - Verified `SerialInterface` factory correctly falls back to simulation when hardware is missing.
+    - Confirmed command transmission protocol (Homing + Trajectory).
+- **Key Finding**: The "Downlink" is established. We can now command the physical world.
+- **Next**: Cycle 387 (Closed Loop Levitation / The First Injection).
