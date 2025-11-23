@@ -1,10 +1,9 @@
 """
 CYCLE 346: Massive Scale Simulation (64 Emitters)
-Objective: Scale the simulation to an 8x8 Phased Array and create MULTIPLE traps.
-Hypothesis: A higher density array (64 emitters) can support complex geometries (2+ traps).
-
+Objective: Scale up the simulation to a 64-emitter Phased Array (8x8 grid) to test high-density field control.
+Hypothesis: Increasing emitter density allows for arbitrary field geometry (Holography), enabling the simultaneous trapping of multiple independent targets.
 Author: Aldrin Payopay (aldrin.gdf@gmail.com)
-Co-Authored-By: Gemini 3 Pro (MOG Pilot)
+Co-Authored-By: Gemini 2.5 Flash (MOG Pilot)
 """
 import numpy as np
 import json
@@ -16,7 +15,6 @@ import random
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from code.helios.substrate_3d import AcousticSubstrate3D
-# Import GA components or redefine if needed. Redefining for clarity and specific modifications.
 from experiments.cycle320_forward_cymatics_2d import Emitter
 
 class Emitter3D(Emitter):
@@ -24,126 +22,127 @@ class Emitter3D(Emitter):
         super().__init__(x, y, frequency, phase, amplitude)
         self.z = z
 
-def calculate_fitness_multi(phases, box, emitters, targets):
+def create_phased_array(rows=8, cols=8, spacing=5.0, z_plane=0.0):
     """
-    Fitness Function for Multiple Targets.
-    Fitness = Sum of (Max Pressure - Target Pressure) for all targets.
-    We want LOW pressure at ALL target points.
+    Creates an 8x8 grid of emitters on a specific Z-plane.
+    Spacing in mm.
     """
-    # Apply phases
-    for i, e in enumerate(emitters):
-        e.phase = phases[i]
-        
-    field = box.propagate(emitters)
-    potential = field**2
-    p_max = np.max(potential)
+    emitters = []
+    center_offset_x = (rows - 1) * spacing / 2.0
+    center_offset_y = (cols - 1) * spacing / 2.0
     
-    total_score = 0
-    for t in targets:
-        tx, ty, tz = int(t[0]), int(t[1]), int(t[2])
-        
-        # Bounds check
-        if not (0 <= tx < box.width and 0 <= ty < box.height and 0 <= tz < box.depth):
-            return -1.0
+    # Center the array in the 100x100 simulation box (Box center is 50,50)
+    box_center = 50.0
+    
+    for i in range(rows):
+        for j in range(cols):
+            x = box_center - center_offset_x + i * spacing
+            y = box_center - center_offset_y + j * spacing
+            # Default: 40kHz, Phase 0
+            emitters.append(Emitter3D(x, y, z_plane, 1.0, 0.0)) 
             
-        p_target = potential[tz, ty, tx]
-        # Score: We want p_target to be small.
-        # Contribution = p_max - p_target.
-        total_score += (p_max - p_target)
-        
-    return total_score
+    return emitters
 
-def genetic_algorithm_multi(targets, box, emitters, generations=50, pop_size=50):
+def optimize_for_multi_trap(box, emitters, targets):
     """
-    GA for Multi-Trap Optimization.
+    Simple analytical focusing (Reverse Phase) for multiple targets.
+    Superposition principle: Field = Sum(Field_i).
+    To focus at T1 and T2, we can sum the complex signals required for each.
+    However, phase is modulo 2pi. 
+    Simple heuristic: Phase_i = -Distance(E_i, T_mean) * k? No.
+    Better: Genetic Algorithm again. Analytical multi-focal is complex.
     """
-    num_emitters = len(emitters)
+    # Let's use the GA from Cycle 343, adapted for multiple minima.
     
-    # Initialize Population
+    def fitness_func(phases):
+        # Apply phases
+        for i, e in enumerate(emitters):
+            e.phase = phases[i]
+            
+        field = box.propagate(emitters)
+        potential = field**2
+        
+        score = 0
+        p_max = np.max(potential)
+        if p_max < 0.001: return -100.0
+        
+        for t in targets:
+            tx, ty, tz = int(t[0]), int(t[1]), int(t[2])
+            if 0 <= tx < box.width and 0 <= ty < box.height and 0 <= tz < box.depth:
+                p_target = potential[tz, ty, tx]
+                # We want p_target to be 0 relative to p_max
+                # Maximize (P_max - P_target) for all targets
+                score += (p_max - p_target)
+            else:
+                score -= 100.0 # OOB penalty
+                
+        return score
+
+    # Run GA
+    pop_size = 30
+    generations = 30
+    num_emitters = len(emitters)
     population = [np.random.uniform(0, 2*np.pi, num_emitters) for _ in range(pop_size)]
     
-    history = []
+    best_fitness = -9999.0
+    best_genes = None
     
-    print(f"Evolution Start: {num_emitters} Emitters, {len(targets)} Targets")
+    print(f"Optimizing for {len(targets)} targets with {num_emitters} emitters...")
     
     for gen in range(generations):
         scores = []
         for individual in population:
-            fitness = calculate_fitness_multi(individual, box, emitters, targets)
-            scores.append((fitness, individual))
+            f = fitness_func(individual)
+            scores.append((f, individual))
             
         scores.sort(key=lambda x: x[0], reverse=True)
-        best_fitness = scores[0][0]
-        best_genes = scores[0][1]
+        if scores[0][0] > best_fitness:
+            best_fitness = scores[0][0]
+            best_genes = scores[0][1]
+            
+        # print(f"Gen {gen}: Best Fitness = {best_fitness:.2f}")
         
-        history.append(best_fitness)
-        if gen % 10 == 0:
-            print(f"Gen {gen}: Best Fitness = {best_fitness:.4f}")
-        
-        # Selection & Reproduction
-        elite_size = int(pop_size * 0.2)
-        elite = [x[1] for x in scores[:elite_size]]
-        
+        # Selection/Crossover (Simple Elitism)
+        elite = [x[1] for x in scores[:10]]
         new_pop = elite[:]
         while len(new_pop) < pop_size:
-            parent1 = random.choice(elite)
-            parent2 = random.choice(elite)
-            
+            p1 = random.choice(elite)
+            p2 = random.choice(elite)
             cut = random.randint(1, num_emitters-1)
-            child = np.concatenate((parent1[:cut], parent2[cut:]))
-            
+            child = np.concatenate((p1[:cut], p2[cut:]))
             if random.random() < 0.2: # Mutation
                 idx = random.randint(0, num_emitters-1)
                 child[idx] = np.random.uniform(0, 2*np.pi)
-                
             new_pop.append(child)
-            
         population = new_pop
         
-    return best_genes, history
+    return best_genes
 
 def main():
-    print("CYCLE 346: MASSIVE SCALE SIMULATION (64 EMITTERS)")
-    print("===============================================")
+    print("CYCLE 346: MASSIVE SCALE SIMULATION")
+    print("===================================")
     
-    # 1. Setup Environment (Larger Box)
-    # 100mm x 100mm x 50mm, 2mm resolution (to keep speed reasonable)
-    res = 2
-    box = AcousticSubstrate3D(width_mm=100, height_mm=100, depth_mm=50, resolution_mm=res)
-    print(f"Volume: {box.width}x{box.height}x{box.depth} voxels")
+    # 1. Setup Box (Larger box for this array)
+    # 100x100x100 mm
+    box = AcousticSubstrate3D(width_mm=100, height_mm=100, depth_mm=100, resolution_mm=2) # Res 2mm for speed
     
-    # 2. 8x8 Emitter Array (Bottom Plane, z=0)
-    emitters = []
-    spacing = 10 # mm spacing
-    start_x = 15
-    start_y = 15
+    # 2. Create Phased Array (8x8 = 64 emitters) on floor (Z=0)
+    emitters = create_phased_array(rows=8, cols=8, spacing=10.0, z_plane=0.0)
+    print(f"Created Phased Array: {len(emitters)} emitters.")
     
-    for row in range(8):
-        for col in range(8):
-            x = start_x + (col * spacing)
-            y = start_y + (row * spacing)
-            z = 0
-            emitters.append(Emitter3D(x, y, z, 1.0, 0.0))
-            
-    print(f"Array Configured: {len(emitters)} Emitters")
+    # 3. Define Targets (Two points floating above the array)
+    # Target A: (30, 50, 50)
+    # Target B: (70, 50, 50)
+    targets = [
+        np.array([30.0, 50.0, 50.0]),
+        np.array([70.0, 50.0, 50.0])
+    ]
+    print(f"Targets: {targets}")
     
-    # 3. Targets (Two Traps)
-    # In mm: (35, 50, 25) and (65, 50, 25)
-    # In voxels (res=2): (17, 25, 12) and (32, 25, 12)
-    t1_mm = np.array([35, 50, 25])
-    t2_mm = np.array([65, 50, 25])
-    
-    t1_vox = t1_mm / res
-    t2_vox = t2_mm / res
-    
-    targets = [t1_vox, t2_vox]
-    print(f"Targets (Voxels): {targets}")
-    
-    # 4. Run GA
-    best_phases, history = genetic_algorithm_multi(targets, box, emitters, generations=50, pop_size=50)
+    # 4. Optimize
+    best_phases = optimize_for_multi_trap(box, emitters, targets)
     
     # 5. Verify
-    print("\n--- Verifying Solution ---")
     for i, e in enumerate(emitters):
         e.phase = best_phases[i]
         
@@ -151,40 +150,38 @@ def main():
     potential = field**2
     p_max = np.max(potential)
     
-    results_data = {}
-    success_count = 0
+    print("\nVerification:")
+    success = True
+    results_data = []
     
     for i, t in enumerate(targets):
-        tx, ty, tz = int(t[0]), int(t[1]), int(t[2])
-        p_val = potential[tz, ty, tx]
-        ratio = p_val / p_max
-        print(f"Target {i+1}: Pressure={p_val:.4f}, Ratio={ratio:.4f}")
+        tx, ty, tz = int(t[0]/2), int(t[1]/2), int(t[2]/2) # Scale to res 2mm grid coordinates
+        # Note: Box is 100mm, Res 2mm -> Grid is 50x50x50.
+        # Coordinates 30 -> 15.
         
-        results_data[f"target_{i+1}"] = {"pressure": float(p_val), "ratio": float(ratio)}
+        p_target = potential[tz, ty, tx]
+        ratio = p_target / p_max if p_max > 0 else 1.0
+        print(f"Target {i}: Pressure={p_target:.4f}, Ratio={ratio:.4f}")
         
-        if ratio < 0.1: # <10% max pressure is a node
-            success_count += 1
-            
-    success = (success_count == len(targets))
-    
-    if success:
-        print(">> SUCCESS: Multiple Traps Formed.")
-    else:
-        print(f">> FAILURE: Only {success_count}/{len(targets)} traps formed.")
+        results_data.append({"target_index": i, "ratio": float(ratio)})
+        if ratio > 0.1: success = False # Stricter tolerance for holography
         
-    # 6. Save Results
-    output = {
+    outcome = {
         "cycle": 346,
-        "emitters": 64,
+        "num_emitters": 64,
         "targets": len(targets),
-        "fitness_history": [float(x) for x in history],
-        "target_data": results_data,
-        "success": bool(success)
+        "success": bool(success),
+        "data": results_data
     }
     
     os.makedirs("experiments/results", exist_ok=True)
     with open("experiments/results/c346_massive_scale.json", "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(outcome, f, indent=2)
+        
+    if success:
+        print("\n>> SUCCESS: Holographic Field Generated. Multiple stable traps confirmed.")
+    else:
+        print("\n>> FAILURE: Could not stabilize multiple traps.")
 
 if __name__ == "__main__":
     main()
