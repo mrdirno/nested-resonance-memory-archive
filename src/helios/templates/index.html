@@ -1,22 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HELIOS | The Replicator</title>
+    <title>HELIOS | The Holodeck</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #000; color: #0f0; font-family: 'Courier New', Courier, monospace; }
-        #ui-container { position: absolute; bottom: 20px; left: 20px; right: 20px; pointer-events: none; }
-        #command-input { 
-            width: 100%; 
-            background: rgba(0, 20, 0, 0.8); 
-            border: 1px solid #0f0; 
-            color: #0f0; 
-            padding: 15px; 
-            font-size: 18px; 
-            pointer-events: auto; 
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        #ui-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            pointer-events: none;
+        }
+
+        #command-input {
+            width: 100%;
+            background: rgba(0, 20, 0, 0.8);
+            border: 1px solid #0f0;
+            color: #0f0;
+            padding: 15px;
+            font-size: 18px;
+            pointer-events: auto;
             outline: none;
         }
+
         #log {
             position: absolute;
             top: 20px;
@@ -28,19 +44,35 @@
             padding: 10px;
             pointer-events: none;
         }
-        .log-entry { margin-bottom: 5px; opacity: 0.8; }
-        .log-success { color: #0f0; }
-        .log-error { color: #f00; }
+
+        .log-entry {
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .log-success {
+            color: #0f0;
+        }
+
+        .log-error {
+            color: #f00;
+        }
+
+        .log-info {
+            color: #aaa;
+        }
     </style>
     <script type="importmap">
         {
             "imports": {
                 "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+                "socket.io-client": "https://cdn.socket.io/4.7.4/socket.io.esm.min.js"
             }
         }
     </script>
 </head>
+
 <body>
     <div id="log"></div>
     <div id="ui-container">
@@ -50,6 +82,7 @@
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { io } from "socket.io-client";
 
         // Scene Setup
         const scene = new THREE.Scene();
@@ -84,7 +117,7 @@
         const input = document.getElementById('command-input');
         const log = document.getElementById('log');
 
-        function addLog(message, type='info') {
+        function addLog(message, type = 'info') {
             const div = document.createElement('div');
             div.className = `log-entry log-${type}`;
             div.textContent = `> ${message}`;
@@ -100,62 +133,127 @@
                     body: JSON.stringify({ command: text })
                 });
                 const data = await response.json();
-                
+
                 if (data.status === 'error') {
                     addLog(data.message, 'error');
                 } else {
                     addLog(data.message, 'success');
-                    refreshState();
+                    // No need to refreshState(), socket will handle it
                 }
             } catch (e) {
                 addLog(`Connection Error: ${e}`, 'error');
             }
         }
 
-        async function refreshState() {
-            try {
-                const response = await fetch('/api/state');
-                const data = await response.json();
-                
-                // Sync objects
-                const currentIds = new Set(data.objects.map(o => o.id));
-                
-                // Remove deleted
-                for (const id in objects) {
-                    if (!currentIds.has(parseInt(id))) {
-                        scene.remove(objects[id]);
-                        delete objects[id];
-                    }
+        // WebSocket Connection
+        const socket = io();
+
+        socket.on('connect', () => {
+            addLog('Connected to HELIOS Stream', 'success');
+        });
+
+        // Field Visualization (Heatmap)
+        const planeGeometry = new THREE.PlaneGeometry(100, 100);
+        // Rotate to match X-Y plane (default is X-Y, but we want it horizontal? No, Z is up in our physics?)
+        // In substrate: z, y, x. 
+        // In Three.js: y is up usually.
+        // Let's assume we map Substrate (x,y,z) to Three (x,y,z).
+        // If we slice Z, we want an X-Y plane.
+
+        // Create a canvas for the texture
+        const fieldCanvas = document.createElement('canvas');
+        fieldCanvas.width = 100; // Resolution of substrate
+        fieldCanvas.height = 100;
+        const fieldCtx = fieldCanvas.getContext('2d');
+        const fieldTexture = new THREE.CanvasTexture(fieldCanvas);
+        fieldTexture.magFilter = THREE.NearestFilter; // Pixelated look
+        // fieldTexture.minFilter = THREE.LinearFilter;
+
+        const planeMaterial = new THREE.MeshBasicMaterial({
+            map: fieldTexture,
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.5,
+            blending: THREE.AdditiveBlending
+        });
+        const fieldPlane = new THREE.Mesh(planeGeometry, planeMaterial);
+        fieldPlane.position.set(50, 50, 50); // Center of box
+        scene.add(fieldPlane);
+
+        socket.on('state_update', (data) => {
+            // Sync objects
+            const currentIds = new Set(data.objects.map(o => o.id));
+
+            // Remove deleted
+            for (const id in objects) {
+                if (!currentIds.has(parseInt(id))) {
+                    scene.remove(objects[id]);
+                    delete objects[id];
+                }
+            }
+
+            // Add/Update Objects
+            data.objects.forEach(obj => {
+                if (!objects[obj.id]) {
+                    // Create new mesh
+                    let geometry;
+                    if (obj.type === 'cube') geometry = new THREE.BoxGeometry(10, 10, 10);
+                    else if (obj.type === 'sphere') geometry = new THREE.SphereGeometry(5, 32, 32);
+                    else geometry = new THREE.OctahedronGeometry(5); // Default
+
+                    const material = new THREE.MeshStandardMaterial({
+                        color: 0x00ff00,
+                        emissive: 0x004400,
+                        wireframe: true
+                    });
+                    const mesh = new THREE.Mesh(geometry, material);
+                    scene.add(mesh);
+                    objects[obj.id] = mesh;
                 }
 
-                // Add/Update
-                data.objects.forEach(obj => {
-                    if (!objects[obj.id]) {
-                        // Create new mesh
-                        let geometry;
-                        if (obj.type === 'cube') geometry = new THREE.BoxGeometry(10, 10, 10);
-                        else if (obj.type === 'sphere') geometry = new THREE.SphereGeometry(5, 32, 32);
-                        else geometry = new THREE.OctahedronGeometry(5); // Default
+                // Update position
+                const [x, y, z] = obj.location;
+                objects[obj.id].position.set(x, y, z);
+            });
 
-                        const material = new THREE.MeshStandardMaterial({ 
-                            color: 0x00ff00, 
-                            emissive: 0x004400,
-                            wireframe: true
-                        });
-                        const mesh = new THREE.Mesh(geometry, material);
-                        scene.add(mesh);
-                        objects[obj.id] = mesh;
+            // Update Field Heatmap
+            if (data.field) {
+                const field = data.field; // 2D array [y][x]
+                const imgData = fieldCtx.createImageData(100, 100);
+                const pixels = imgData.data;
+
+                // Find max for normalization (auto-gain)
+                // Or use fixed scale. Let's use fixed for now to see absolute intensity.
+                // Or simple local max.
+                let maxVal = 0;
+                for (let row of field) for (let val of row) if (val > maxVal) maxVal = val;
+                if (maxVal === 0) maxVal = 1;
+
+                for (let y = 0; y < 100; y++) {
+                    for (let x = 0; x < 100; x++) {
+                        // Substrate Y is 0..99. Canvas Y is 0..99.
+                        // Substrate X is 0..99.
+                        const val = field[y][x];
+                        const norm = Math.min(1.0, val / (maxVal * 0.8)); // Gain boost
+
+                        const idx = (y * 100 + x) * 4;
+
+                        // Heatmap Color (Blue -> Red)
+                        // Simple: Red channel = intensity
+                        pixels[idx] = Math.floor(norm * 255);     // R
+                        pixels[idx + 1] = Math.floor(norm * 50);  // G
+                        pixels[idx + 2] = Math.floor((1 - norm) * 50); // B
+                        pixels[idx + 3] = Math.floor(norm * 200); // Alpha
                     }
-                    
-                    // Update position
-                    const [x, y, z] = obj.location;
-                    objects[obj.id].position.set(x, y, z);
-                });
-
-            } catch (e) {
-                console.error("State sync failed:", e);
+                }
+                fieldCtx.putImageData(imgData, 0, 0);
+                fieldTexture.needsUpdate = true;
             }
-        }
+        });
+
+        socket.on('disconnect', () => {
+            addLog('Disconnected from Stream', 'error');
+        });
 
         // Input Handler
         input.addEventListener('keypress', (e) => {
@@ -172,7 +270,7 @@
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
-            
+
             // Rotate objects slightly for effect
             for (const id in objects) {
                 objects[id].rotation.x += 0.01;
@@ -182,8 +280,7 @@
             renderer.render(scene, camera);
         }
 
-        // Initial State Load
-        refreshState();
+        // Start
         animate();
 
         // Window Resize
@@ -194,4 +291,5 @@
         });
     </script>
 </body>
+
 </html>
