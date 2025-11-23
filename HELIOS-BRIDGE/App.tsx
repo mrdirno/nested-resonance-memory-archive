@@ -76,7 +76,7 @@ const App: React.FC = () => {
   const [cameraTarget, setCameraTarget] = useState<CameraTarget | null>(null);
 
   // Activate Swarm Worker (Background Compute)
-  const { isConnected, tasksCompleted } = useSwarmWorker(true);
+  const { isConnected, tasksCompleted, gaStatus } = useSwarmWorker(true);
 
   // Refs for direct DOM manipulation of stats (High performance)
   const digitRefs = {
@@ -148,6 +148,7 @@ const App: React.FC = () => {
         onResetCamera={() => setCameraTarget({ position: [20, 10, 20], target: [0, 0, 0] })}
         isConnected={isConnected}
         tasksCompleted={tasksCompleted}
+        gaStatus={gaStatus}
       />
     </div>
   );

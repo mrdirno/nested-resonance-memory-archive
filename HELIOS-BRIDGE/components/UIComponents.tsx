@@ -5,6 +5,12 @@ import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } f
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
 
+interface GaStatus {
+  generation: number;
+  best_fitness: number;
+  best_genome: number[]; // Array of phases
+}
+
 interface UIProps {
   config: SimulationState;
   setConfig: React.Dispatch<React.SetStateAction<SimulationState>>;
@@ -15,6 +21,7 @@ interface UIProps {
   onResetCamera: () => void;
   isConnected: boolean;
   tasksCompleted: number;
+  gaStatus: GaStatus | null;
 }
 
 const NavItem: React.FC<{ icon: React.ReactNode, label: string, active: boolean, onClick: () => void }> = ({ icon, label, active, onClick }) => (
@@ -144,7 +151,7 @@ const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: num
   );
 };
 export const UIOverlay: React.FC<UIProps> = (props) => {
-  const { config, setConfig, activePanel, setActivePanel, digitRefs, onCameraMove, onResetCamera, isConnected, tasksCompleted } = props;
+  const { config, setConfig, activePanel, setActivePanel, digitRefs, onCameraMove, onResetCamera, isConnected, tasksCompleted, gaStatus } = props;
   const [lockEnergy, setLockEnergy] = React.useState(false);
 
   // Helper to update sliders without lag
@@ -524,6 +531,23 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
             <span className="text-primary font-mono">{tasksCompleted}</span>
           </div>
         </div>
+
+        {gaStatus && (
+          <div className="bg-white/5 p-4 rounded-xl border border-white/10 text-white mt-4">
+            <div className="flex items-center justify-between text-sm font-bold mb-2">
+              <span>GA Generation:</span>
+              <span className="text-tertiary font-mono">{gaStatus.generation}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm font-bold mb-2">
+              <span>Best Fitness:</span>
+              <span className="text-secondary font-mono">{gaStatus.best_fitness.toFixed(4)}</span>
+            </div>
+            <div className="text-xs font-bold mb-1">Best Genome (Phases):</div>
+            <div className="text-xs text-white/70 font-mono break-all line-clamp-3">
+              [{gaStatus.best_genome.map(p => p.toFixed(2)).join(', ')}]
+            </div>
+          </div>
+        )}
       </Panel>
 
       {/* Navigation Bar */}

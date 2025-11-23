@@ -20,6 +20,7 @@ ELITISM_COUNT = 2
 NUM_EMITTERS = 64  # Example array size
 TARGET_POINT = {"x": 0, "y": 0, "z": 50} # Levitation target (mm)
 
+import copy
 # --- Global State ---
 CONNECTED_WORKERS = set()
 TASK_QUEUE = asyncio.Queue()
@@ -98,7 +99,8 @@ def evolve(scored_population):
     # Sort by fitness (Descending)
     scored_population.sort(key=lambda x: x[1], reverse=True)
     
-    best_genome, best_fitness = scored_population[0]
+    best_genome = copy.deepcopy(scored_population[0][0])
+    best_fitness = scored_population[0][1]
     print(f"[GA] Gen {CURRENT_GENERATION} Best Fitness: {best_fitness:.4f}")
     
     next_gen = []
@@ -121,7 +123,7 @@ def evolve(scored_population):
         
         next_gen.append(child)
         
-    return next_gen
+    return next_gen, best_genome, best_fitness
 
 def tournament_select(scored_pop, k=3):
     candidates = random.sample(scored_pop, k)
@@ -140,6 +142,28 @@ def mutate(genome):
     return genome
 
 # --- WebSocket Infrastructure ---
+
+async def broadcast_ga_status(generation, best_fitness, best_genome):
+    """Broadcasts current GA status to all connected workers (UI clients)."""
+    if not CONNECTED_WORKERS:
+        return
+
+    status_payload = json.dumps({
+        "type": "ga_status",
+        "generation": generation,
+        "best_fitness": best_fitness,
+        "best_genome": best_genome.tolist() # Convert numpy array to list for JSON
+    })
+
+    # Broadcast to all connected workers
+    for worker in list(CONNECTED_WORKERS): # Iterate over a copy to avoid issues if set changes
+        try:
+            await worker.send(status_payload)
+        except websockets.exceptions.ConnectionClosed:
+            print(f"[Broadcast] Worker connection closed. Removing.")
+            # Removal handled by handler's finally block
+        except Exception as e:
+            print(f"[Broadcast] Error sending to worker: {e}")
 
 async def distributor():
     while True:
@@ -211,7 +235,8 @@ async def main():
     for gen in range(GENERATIONS):
         CURRENT_GENERATION = gen
         scored_pop = await evaluate_generation(POPULATION)
-        POPULATION = evolve(scored_pop)
+        POPULATION, best_genome, best_fitness = evolve(scored_pop)
+        await broadcast_ga_status(CURRENT_GENERATION, best_fitness, np.array(best_genome).tolist())
         await asyncio.sleep(0.1)
         
     print("[GA] Evolution Complete.")

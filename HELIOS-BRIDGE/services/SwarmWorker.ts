@@ -13,11 +13,18 @@ interface ComputeTask {
     targets: Array<{ x: number, y: number, z: number }>;
 }
 
+interface GaStatus {
+    generation: number;
+    best_fitness: number;
+    best_genome: number[]; // Array of phases
+}
+
 export const useSwarmWorker = (enabled: boolean = true) => {
     const ws = useRef<WebSocket | null>(null);
     const wasmInstance = useRef<WebAssembly.Instance | null>(null);
     const [isConnected, setIsConnected] = useState<boolean>(false);
     const [tasksCompleted, setTasksCompleted] = useState<number>(0);
+    const [gaStatus, setGaStatus] = useState<GaStatus | null>(null);
 
     useEffect(() => {
         if (!enabled) return;
@@ -55,6 +62,8 @@ export const useSwarmWorker = (enabled: boolean = true) => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'compute_task') {
                     handleTask(data, socket);
+                } else if (data.type === 'ga_status') {
+                    setGaStatus(data);
                 }
             };
 
@@ -104,5 +113,5 @@ export const useSwarmWorker = (enabled: boolean = true) => {
         setTasksCompleted(prev => prev + 1);
     };
 
-    return { isConnected, tasksCompleted };
+    return { isConnected, tasksCompleted, gaStatus };
 };
