@@ -39,10 +39,10 @@ from collections import defaultdict
 # Import from existing modules
 sys.path.append(str(Path(__file__).parent.parent))
 
-from code.core.reality_interface import RealityInterface
-from code.bridge.transcendental_bridge import TranscendentalBridge
-from code.fractal.fractal_agent import FractalAgent
-from code.fractal.composition_engine import CompositionEngine
+from src.core.reality_interface import RealityInterface
+from src.bridge.transcendental_bridge import TranscendentalBridge
+from src.fractal.fractal_agent import FractalAgent
+from src.fractal.composition_engine import CompositionEngine
 
 # Experimental parameters
 MAX_AGENTS = 100

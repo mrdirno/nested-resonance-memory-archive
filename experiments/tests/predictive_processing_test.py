@@ -7,8 +7,8 @@ from typing import List, Tuple
 # Add project root and code directory to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
-from code.fractal.fractal_swarm import FractalSwarm
-from code.fractal.agent import FractalAgent
+from src.fractal.fractal_swarm import FractalSwarm
+from src.fractal.agent import FractalAgent
 
 def mackey_glass(length=1000, tau=17, delta_t=10, n=10, beta=0.2, gamma=0.1):
     """Generates Mackey-Glass chaotic time series."""

@@ -13,7 +13,7 @@ import sys
 # Ensure project root is in path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from code.helios.substrate import AcousticSubstrate
+from src.helios.substrate import AcousticSubstrate
 from experiments.cycle320_forward_cymatics_2d import Emitter
 from experiments.cycle319_target_field import TargetField
 

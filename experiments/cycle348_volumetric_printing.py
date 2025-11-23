@@ -14,7 +14,7 @@ import random
 # Ensure project root is in path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from code.helios.substrate_3d import AcousticSubstrate3D
+from src.helios.substrate_3d import AcousticSubstrate3D
 from experiments.cycle320_forward_cymatics_2d import Emitter
 
 class Emitter3D(Emitter):
@@ -88,7 +88,7 @@ def genetic_algorithm_multi_target(target_positions, box, emitters, generations=
             for i, e in enumerate(emitters): e.phase = individual[i]
             
             field = box.propagate(emitters)
-            potential = field**2
+            potential = np.abs(field)**2
             p_max = np.max(potential)
             
             if p_max < 0.001:

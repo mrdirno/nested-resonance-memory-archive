@@ -12,7 +12,7 @@ import copy
 # Ensure project root is in path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from code.helios.target_field import TargetField
+from src.helios.target_field import TargetField
 
 # --- Shared Classes (Redefined/Enhanced for this experiment) ---
 

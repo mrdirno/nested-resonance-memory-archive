@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'bridge-ui/**'
+      - 'HELIOS-BRIDGE/**'
 
 permissions:
   contents: read
@@ -27,20 +27,20 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: bridge-ui/package-lock.json
+          cache-dependency-path: HELIOS-BRIDGE/package-lock.json
 
       - name: Install dependencies
         run: npm ci
-        working-directory: bridge-ui
+        working-directory: HELIOS-BRIDGE
 
       - name: Build
         run: npm run build
-        working-directory: bridge-ui
+        working-directory: HELIOS-BRIDGE
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: bridge-ui/dist
+          path: HELIOS-BRIDGE/dist
 
   deploy:
     environment:

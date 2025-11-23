@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 # Add project root
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
-from code.fractal.fractal_swarm import FractalSwarm
-from code.fractal.agent import FractalAgent
+from src.fractal.fractal_swarm import FractalSwarm
+from src.fractal.agent import FractalAgent
 
 # --- PILOT COMPONENT: RESERVOIR (PREDICTION) ---
 class ReservoirPilot:

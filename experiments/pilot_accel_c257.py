@@ -5,7 +5,7 @@ import sys
 import json
 
 sys.path.append(os.path.abspath("."))
-from code.fractal.agent import FractalAgent
+from src.fractal.agent import FractalAgent
 
 # --- CONFIGURATION ---
 PAPER_ID = "3_ACCEL_C257"

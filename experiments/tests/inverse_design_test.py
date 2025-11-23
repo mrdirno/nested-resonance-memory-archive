@@ -7,8 +7,8 @@ from typing import List, Dict, Tuple
 # Add project root
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
-from code.fractal.fractal_swarm import FractalSwarm
-from code.fractal.agent import FractalAgent
+from src.fractal.fractal_swarm import FractalSwarm
+from src.fractal.agent import FractalAgent
 
 def run_swarm_simulation(params: Dict[str, float], steps: int = 1000) -> List[float]:
     """Runs a swarm simulation and returns avalanche sizes."""

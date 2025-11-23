@@ -9,8 +9,8 @@ import scipy.signal
 # Add project root and code directory to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
-from code.fractal.fractal_swarm import FractalSwarm
-from code.fractal.agent import FractalAgent
+from src.fractal.fractal_swarm import FractalSwarm
+from src.fractal.agent import FractalAgent
 
 def generate_signal_noise(cycles: int, target_freq: float, noise_level: float) -> Tuple[np.ndarray, np.ndarray]:
     """Generates a target sine wave with added noise."""

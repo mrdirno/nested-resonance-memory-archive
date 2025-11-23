@@ -12,7 +12,7 @@ import time
 # Ensure project root is in path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from code.helios.substrate_3d import AcousticSubstrate3D
+from src.helios.substrate_3d import AcousticSubstrate3D
 
 class Particle:
     def __init__(self, x, y, z, mass=1.0):
