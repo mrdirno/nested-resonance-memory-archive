@@ -500,7 +500,15 @@
 - **Experiment:** `experiments/cycle342_acoustic_logic.py`
 - **Status:** ✅ **COMPLETE** (Cycle 342)
 - **Finding:** AND Gate verified. Output state "1" (Centered & Shifted) only achieved with inputs (1,1).
-- **Outcome:** Physical Computation unlocked.
+- **Outcome:** Volumetric Complexity verified. We can compile 3D shapes.
+
+### 50. **HELIOS-24: The Dynamic Engine (4D Printing)** ✅ COMPLETE
+**Goal:** Animate the lattice (Rotation).
+- **Hypothesis:** Seeded evolution allows for smooth frame-by-frame transitions (Motion).
+- **Experiment:** `experiments/cycle349_dynamic_engine.py`
+- **Status:** ✅ **COMPLETE** (Cycle 349)
+- **Finding:** 90-degree rotation achieved in 10 frames with <2% pressure ratio.
+- **Outcome:** Motion verified. The Pilot can animate matter.
 
 ---
 
