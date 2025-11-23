@@ -64,7 +64,7 @@
 
 ### Active Objectives
 - ✅ **Optical Grounding:** `PRIN-COMPUTER-VISION` (Cycle 381-383). Verified in simulation.
-- [ ] **Physical Camera:** Integrate real webcam feed.
+- ✅ **Physical Camera:** `PRIN-HARDWARE-ABSTRACTION` (Cycle 385). Integrated with fallback.
 - [ ] **Physical Trap:** Connect to acoustic phased array.
 - [ ] **Reality Injection:** Levitate and hold a particle using visual feedback.
 

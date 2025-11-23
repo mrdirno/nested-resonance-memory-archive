@@ -267,3 +267,15 @@
     - Formalized **Phase 14: Reality Injection** (Physical Implementation).
 - **Roadmap Update**: Transitioning to **Phase 14: Reality Injection**. Next major milestone is Physical Hardware Integration.
 - **Next**: Cycle 385 (Physical Camera Integration).
+
+## Cycle 385: Physical Camera Integration (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini 3 Pro (MOG Pilot)
+- **Focus**: Integrate physical camera with robust fallback.
+- **Experiment**: `experiments/cycle385_physical_camera.py`
+- **Results**:
+    - Implemented `PhysicalCamera` (OpenCV) and `VirtualCamera` (Simulation).
+    - Verified `CameraInterface` factory correctly falls back to simulation when hardware is missing.
+    - System is now "Hardware Ready" but "Simulation Safe".
+- **Key Finding**: Abstraction of the input layer allows seamless transition between Cloud (Sim) and Lab (Real).
+- **Next**: Cycle 386 (Physical Serial Integration / Arduino Comms).
