@@ -105,7 +105,7 @@ const Button: React.FC<{ children: React.ReactNode, variant?: 'primary' | 'secon
 };
 
 
-const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: number) => void }> = ({ label, value, onChange }) => {
+const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: number) => void, max?: number }> = ({ label, value, onChange, max = 1 }) => {
   const isActive = value > 0;
   const displayValue = Math.abs(value);
 
@@ -128,12 +128,12 @@ const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: num
         <span className={`font-mono text-xs ${isActive ? 'text-primary' : 'text-white/30'}`}>{Math.round(displayValue * 100)}%</span>
       </div>
       <input
-        type="range" min="0" max="1" step="0.01"
+        type="range" min="0" max={max} step="0.01"
         value={displayValue}
         onChange={(e) => {
           const newVal = parseFloat(e.target.value);
-          // If it was disabled (negative), keep it negative (disabled) while sliding? 
-          // No, dragging usually implies "I want to use this". Let's make dragging auto-enable.
+          // Preserve sign if active, else just set value (which makes it active if > 0)
+          // Actually, if it's disabled (negative), dragging should re-enable it (positive)
           onChange(newVal);
         }}
         className={`w-full h-1 rounded-lg appearance-none cursor-pointer ${isActive ? 'bg-white/10 accent-primary' : 'bg-white/5 accent-white/20'}`}
@@ -365,83 +365,110 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
               <div className="text-[10px] uppercase text-white/50">Cycle Pos</div>
               <div ref={digitRefs.pos} className="text-xl font-mono font-bold text-primary">0</div>
             </div>
-          </div>
-        </div>
-      </Panel>
+          </Panel>
 
-      {/* Labs Panel */}
-      <Panel
-        title="Research Labs"
-        subtitle="Advanced N-particle dynamics experiments"
-        active={activePanel === 'labs'}
-        onClose={() => setActivePanel(null)}
-        onResetParticles={() => setConfig(c => ({ ...c, resetTrigger: c.resetTrigger + 1 }))}
-        onResetDefaults={() => setConfig(c => ({
-          ...c,
-          extensions: {
-            crystal: { threeFold: 0, sixFold: 0, lattice: 0 },
-            harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
-            topology: { trefoil: 0, torus: 0, hopf: 0 }
-          }
-        }))}
-      >
-        <div className="space-y-6">
-          <div className="bg-black/30 p-4 rounded-xl border border-white/5">
-            <div className="text-tertiary font-bold text-sm mb-3 flex items-center gap-2"><Fingerprint size={16} /> Crystallographic Symmetry</div>
-            <div className="space-y-2">
-              <EffectSlider label="3-Fold (120°) Symmetry" value={config.extensions.crystal.threeFold} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.CRYSTAL : c.mode, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, threeFold: v } } }))} />
-              <EffectSlider label="6-Fold (60°) Symmetry" value={config.extensions.crystal.sixFold} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.CRYSTAL : c.mode, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, sixFold: v } } }))} />
-              <EffectSlider label="Hexagonal Lattice" value={config.extensions.crystal.lattice} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.CRYSTAL : c.mode, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, lattice: v } } }))} />
+          {/* Labs Panel */}
+          <Panel
+            title="Research Labs"
+            subtitle="Advanced N-particle dynamics experiments"
+            active={activePanel === 'labs'}
+            onClose={() => setActivePanel(null)}
+            onResetParticles={() => setConfig(c => ({ ...c, resetTrigger: c.resetTrigger + 1 }))}
+            onResetDefaults={() => setConfig(c => ({
+              ...c,
+              extensions: {
+                crystal: { threeFold: 0, sixFold: 0, lattice: 0 },
+                harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
+                topology: { trefoil: 0, torus: 0, hopf: 0 }
+              }
+            }))}
+          >
+            {/* Presets Dropdown */}
+            <div className="bg-white/5 p-3 rounded-xl border border-white/10 mb-4">
+              <div className="text-xs font-bold text-white/60 mb-2 uppercase tracking-wider">Quick Load Presets</div>
+              <select
+                className="w-full bg-black border border-white/20 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-primary transition-colors"
+                onChange={(e) => {
+                  if (e.target.value === 'preset67') {
+                    setConfig(c => ({
+                      ...c,
+                      extensions: {
+                        crystal: { threeFold: 0.75, sixFold: 0.51, lattice: 0 },
+                        harmonic: { commaSpiral: 0.71, perfectFifths: 0.45, equalTemp: 0 },
+                        topology: { trefoil: 0, torus: 0.67, hopf: 0 }
+                      }
+                    }));
+                  }
+                }}
+                defaultValue=""
+              >
+                <option value="" disabled>Select a Preset...</option>
+                <option value="preset67">Preset 67 (The Cool One)</option>
+              </select>
             </div>
-          </div>
 
-          <div className="bg-black/30 p-4 rounded-xl border border-white/5">
-            <div className="text-secondary font-bold text-sm mb-3 flex items-center gap-2"><Activity size={16} /> Pythagorean Harmonics</div>
-            <div className="space-y-2">
-              <EffectSlider label="Comma Spiral (23.46¢)" value={config.extensions.harmonic.commaSpiral} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.HARMONIC : c.mode, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, commaSpiral: v } } }))} />
-              <EffectSlider label="Perfect Fifth Stack" value={config.extensions.harmonic.perfectFifths} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.HARMONIC : c.mode, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, perfectFifths: v } } }))} />
+            <div className="space-y-6">
+              <div className="bg-black/30 p-4 rounded-xl border border-white/5">
+                <div className="text-tertiary font-bold text-sm mb-3 flex items-center gap-2"><Fingerprint size={16} /> Crystallographic Symmetry</div>
+                <div className="space-y-2">
+                  <EffectSlider label="3-Fold (120°) Symmetry" value={config.extensions.crystal.threeFold} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.CRYSTAL : c.mode, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, threeFold: v } } }))} />
+                  <EffectSlider label="6-Fold (60°) Symmetry" value={config.extensions.crystal.sixFold} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.CRYSTAL : c.mode, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, sixFold: v } } }))} />
+                  <EffectSlider label="Hexagonal Lattice" value={config.extensions.crystal.lattice} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.CRYSTAL : c.mode, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, lattice: v } } }))} />
+                </div>
+              </div>
+
+              <div className="bg-black/30 p-4 rounded-xl border border-white/5">
+                <div className="text-secondary font-bold text-sm mb-3 flex items-center gap-2"><Activity size={16} /> Pythagorean Harmonics</div>
+                <div className="space-y-2">
+                  <EffectSlider label="Comma Spiral (23.46¢)" value={config.extensions.harmonic.commaSpiral} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.HARMONIC : c.mode, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, commaSpiral: v } } }))} />
+                  <EffectSlider label="Perfect Fifth Stack" value={config.extensions.harmonic.perfectFifths} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.HARMONIC : c.mode, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, perfectFifths: v } } }))} />
+                </div>
+              </div>
+
+              <div className="bg-black/30 p-4 rounded-xl border border-white/5">
+                <div className="text-primary font-bold text-sm mb-3 flex items-center gap-2"><Hash size={16} /> Topological Forms</div>
+                <div className="space-y-3">
+                  <EffectSlider
+                    label="Trefoil Knot"
+                    value={config.extensions.topology.trefoil}
+                    max={0.42}
+                    onChange={(v) => setConfig(c => ({ ...c, extensions: { ...c.extensions, topology: { ...c.extensions.topology, trefoil: v } } }))}
+                  />
+                  <EffectSlider label="Toroidal Attractor" value={config.extensions.topology.torus} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.TOPOLOGY : c.mode, extensions: { ...c.extensions, topology: { ...c.extensions.topology, torus: v } } }))} />
+                </div>
+              </div>
             </div>
-          </div>
+          </Panel>
 
-          <div className="bg-black/30 p-4 rounded-xl border border-white/5">
-            <div className="text-primary font-bold text-sm mb-3 flex items-center gap-2"><Hash size={16} /> Topological Forms</div>
-            <div className="space-y-2">
-              <EffectSlider label="Trefoil Knot (3,2)" value={config.extensions.topology.trefoil} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.TOPOLOGY : c.mode, extensions: { ...c.extensions, topology: { ...c.extensions.topology, trefoil: v } } }))} />
-              <EffectSlider label="Toroidal Attractor" value={config.extensions.topology.torus} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.TOPOLOGY : c.mode, extensions: { ...c.extensions, topology: { ...c.extensions.topology, torus: v } } }))} />
+          {/* Camera Panel */}
+          <Panel title="Camera Control" subtitle="Navigate N-particle phase space" active={activePanel === 'camera'} onClose={() => setActivePanel(null)}>
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <button onClick={() => onCameraMove({ position: [0, 30, 0.1], target: [0, 0, 0] })} className="p-4 bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/50 rounded-xl text-sm font-bold transition">Top View</button>
+              <button onClick={() => onCameraMove({ position: [30, 0, 0], target: [0, 0, 0] })} className="p-4 bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/50 rounded-xl text-sm font-bold transition">Side View</button>
+              <button onClick={() => onCameraMove({ position: [20, 20, 20], target: [0, 0, 0] })} className="p-4 bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/50 rounded-xl text-sm font-bold transition">Isometric</button>
+              <button onClick={() => onCameraMove({ position: [0.1, 0.1, 0.1], target: [10, 10, 10] })} className="p-4 bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/50 rounded-xl text-sm font-bold transition">Core View</button>
             </div>
+
+            <Button variant="secondary" onClick={onResetCamera}>Reset Camera</Button>
+
+            <div className="mt-6 p-4 bg-black/30 rounded-xl border border-white/5">
+              <div className="text-xs text-white/40 uppercase mb-2">Camera Telemetry</div>
+              <div className="grid grid-cols-2 gap-4 font-mono text-sm">
+                <div>X: <span className="text-tertiary">0.00</span></div>
+                <div>Y: <span className="text-tertiary">0.00</span></div>
+                <div>Z: <span className="text-tertiary">0.00</span></div>
+                <div>D: <span className="text-primary">25.0</span></div>
+              </div>
+            </div>
+          </Panel>
+
+          {/* Navigation Bar */}
+          <div className="fixed bottom-0 left-0 w-full h-[80px] bg-glass backdrop-blur-xl border-t border-white/10 flex justify-around items-center px-4 z-50">
+            <NavItem icon={<Settings />} label="Control" active={activePanel === 'controls'} onClick={() => setActivePanel(activePanel === 'controls' ? null : 'controls')} />
+            <NavItem icon={<Waves />} label="Fields" active={activePanel === 'waves'} onClick={() => setActivePanel(activePanel === 'waves' ? null : 'waves')} />
+            <NavItem icon={<FlaskConical />} label="Labs" active={activePanel === 'labs'} onClick={() => setActivePanel(activePanel === 'labs' ? null : 'labs')} />
+            <NavItem icon={<Camera />} label="Camera" active={activePanel === 'camera'} onClick={() => setActivePanel(activePanel === 'camera' ? null : 'camera')} />
           </div>
-        </div>
-      </Panel>
-
-      {/* Camera Panel */}
-      <Panel title="Camera Control" subtitle="Navigate N-particle phase space" active={activePanel === 'camera'} onClose={() => setActivePanel(null)}>
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          <button onClick={() => onCameraMove({ position: [0, 30, 0.1], target: [0, 0, 0] })} className="p-4 bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/50 rounded-xl text-sm font-bold transition">Top View</button>
-          <button onClick={() => onCameraMove({ position: [30, 0, 0], target: [0, 0, 0] })} className="p-4 bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/50 rounded-xl text-sm font-bold transition">Side View</button>
-          <button onClick={() => onCameraMove({ position: [20, 20, 20], target: [0, 0, 0] })} className="p-4 bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/50 rounded-xl text-sm font-bold transition">Isometric</button>
-          <button onClick={() => onCameraMove({ position: [0.1, 0.1, 0.1], target: [10, 10, 10] })} className="p-4 bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/50 rounded-xl text-sm font-bold transition">Core View</button>
-        </div>
-
-        <Button variant="secondary" onClick={onResetCamera}>Reset Camera</Button>
-
-        <div className="mt-6 p-4 bg-black/30 rounded-xl border border-white/5">
-          <div className="text-xs text-white/40 uppercase mb-2">Camera Telemetry</div>
-          <div className="grid grid-cols-2 gap-4 font-mono text-sm">
-            <div>X: <span className="text-tertiary">0.00</span></div>
-            <div>Y: <span className="text-tertiary">0.00</span></div>
-            <div>Z: <span className="text-tertiary">0.00</span></div>
-            <div>D: <span className="text-primary">25.0</span></div>
-          </div>
-        </div>
-      </Panel>
-
-      {/* Navigation Bar */}
-      <div className="fixed bottom-0 left-0 w-full h-[80px] bg-glass backdrop-blur-xl border-t border-white/10 flex justify-around items-center px-4 z-50">
-        <NavItem icon={<Settings />} label="Control" active={activePanel === 'controls'} onClick={() => setActivePanel(activePanel === 'controls' ? null : 'controls')} />
-        <NavItem icon={<Waves />} label="Fields" active={activePanel === 'waves'} onClick={() => setActivePanel(activePanel === 'waves' ? null : 'waves')} />
-        <NavItem icon={<FlaskConical />} label="Labs" active={activePanel === 'labs'} onClick={() => setActivePanel(activePanel === 'labs' ? null : 'labs')} />
-        <NavItem icon={<Camera />} label="Camera" active={activePanel === 'camera'} onClick={() => setActivePanel(activePanel === 'camera' ? null : 'camera')} />
-      </div>
-    </>
-  );
+        </>
+        );
 };
