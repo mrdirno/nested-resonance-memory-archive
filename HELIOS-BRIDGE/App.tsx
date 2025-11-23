@@ -41,6 +41,8 @@ const ExposureController: React.FC<{ exposure: number }> = ({ exposure }) => {
   return null;
 };
 
+const CAMERA_CONFIG = { position: [20, 10, 20], fov: 60 } as const;
+
 const App: React.FC = () => {
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [cameraTarget, setCameraTarget] = useState<CameraTarget | null>(null);
@@ -81,7 +83,7 @@ const App: React.FC = () => {
   return (
     <div className="w-full h-screen relative overflow-hidden select-none">
       <Canvas
-        camera={{ position: [20, 10, 20], fov: 60 }}
+        camera={CAMERA_CONFIG}
         dpr={2} // Fixed High Quality for Capture
         gl={{
           antialias: false,
