@@ -70,9 +70,9 @@ const App: React.FC = () => {
     },
     stagger: { a: 0, b: 239, c: 478 },
     extensions: {
-      crystal: { threeFold: false, sixFold: false, lattice: false },
-      harmonic: { commaSpiral: true, perfectFifths: true, equalTemp: false },
-      topology: { trefoil: false, torus: false, hopf: false }
+      crystal: { threeFold: 0, sixFold: 0, lattice: 0 },
+      harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
+      topology: { trefoil: 0, torus: 0, hopf: 0 }
     },
     cameraStats: { x: '0', y: '0', z: '0', dist: '25' }
   });

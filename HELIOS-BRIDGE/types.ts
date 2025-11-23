@@ -22,14 +22,14 @@ export interface SimulationState {
   exposure: number; // New: Tone mapping exposure (The "Existence Threshold")
   contrast: number; // New: Visual hardness
   mode: SimulationMode;
-  
+
   // Sequence Mapping
   mapping: {
     a: TranscendentalNumber;
     b: TranscendentalNumber;
     c: TranscendentalNumber;
   };
-  
+
   // Stagger Offsets
   stagger: {
     a: number;
@@ -39,9 +39,9 @@ export interface SimulationState {
 
   // Extensions
   extensions: {
-    crystal: { threeFold: boolean; sixFold: boolean; lattice: boolean };
-    harmonic: { commaSpiral: boolean; perfectFifths: boolean; equalTemp: boolean };
-    topology: { trefoil: boolean; torus: boolean; hopf: boolean };
+    crystal: { threeFold: number; sixFold: number; lattice: number };
+    harmonic: { commaSpiral: number; perfectFifths: number; equalTemp: number };
+    topology: { trefoil: number; torus: number; hopf: number };
   };
 
   // Camera Stats (Read-only for UI)

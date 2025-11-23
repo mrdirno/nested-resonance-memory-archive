@@ -72,21 +72,21 @@ const Button: React.FC<{ children: React.ReactNode, variant?: 'primary' | 'secon
   );
 };
 
-const Toggle: React.FC<{ label: string, active: boolean, onToggle: () => void, icon?: React.ReactNode }> = ({ label, active, onToggle, icon }) => (
-  <div
-    onClick={onToggle}
-    className={`flex items-center justify-between p-4 rounded-xl cursor-pointer transition-all border ${active ? 'bg-primary/20 border-primary' : 'bg-black/30 border-transparent hover:bg-white/5'}`}
-  >
-    <div className="flex items-center gap-3">
-      {icon && <span className={active ? 'text-primary' : 'text-white/50'}>{icon}</span>}
-      <span className="font-medium text-sm">{label}</span>
+
+const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: number) => void }> = ({ label, value, onChange }) => (
+  <div className="bg-black/20 p-3 rounded-xl border border-white/5">
+    <div className="flex justify-between text-xs font-bold mb-2">
+      <span className={value > 0 ? 'text-white' : 'text-white/40'}>{label}</span>
+      <span className="text-primary font-mono">{Math.round(value * 100)}%</span>
     </div>
-    <div className={`w-12 h-7 rounded-full p-1 transition-colors relative ${active ? 'bg-primary' : 'bg-white/20'}`}>
-      <div className={`w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 ${active ? 'translate-x-5' : ''}`} />
-    </div>
+    <input
+      type="range" min="0" max="1" step="0.01"
+      value={value}
+      onChange={(e) => onChange(parseFloat(e.target.value))}
+      className="w-full accent-primary h-1 bg-white/10 rounded-lg appearance-none cursor-pointer"
+    />
   </div>
 );
-
 export const UIOverlay: React.FC<UIProps> = (props) => {
   const { config, setConfig, activePanel, setActivePanel, digitRefs, onCameraMove, onResetCamera } = props;
 
@@ -296,25 +296,25 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
           <div className="bg-black/30 p-4 rounded-xl border border-white/5">
             <div className="text-tertiary font-bold text-sm mb-3 flex items-center gap-2"><Fingerprint size={16} /> Crystallographic Symmetry</div>
             <div className="space-y-2">
-              <Toggle label="3-Fold (120°) Symmetry" active={config.extensions.crystal.threeFold} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.CRYSTAL, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, threeFold: !c.extensions.crystal.threeFold } } }))} />
-              <Toggle label="6-Fold (60°) Symmetry" active={config.extensions.crystal.sixFold} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.CRYSTAL, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, sixFold: !c.extensions.crystal.sixFold } } }))} />
-              <Toggle label="Hexagonal Lattice" active={config.extensions.crystal.lattice} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.CRYSTAL, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, lattice: !c.extensions.crystal.lattice } } }))} />
+              <EffectSlider label="3-Fold (120°) Symmetry" value={config.extensions.crystal.threeFold} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.CRYSTAL : c.mode, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, threeFold: v } } }))} />
+              <EffectSlider label="6-Fold (60°) Symmetry" value={config.extensions.crystal.sixFold} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.CRYSTAL : c.mode, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, sixFold: v } } }))} />
+              <EffectSlider label="Hexagonal Lattice" value={config.extensions.crystal.lattice} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.CRYSTAL : c.mode, extensions: { ...c.extensions, crystal: { ...c.extensions.crystal, lattice: v } } }))} />
             </div>
           </div>
 
           <div className="bg-black/30 p-4 rounded-xl border border-white/5">
             <div className="text-secondary font-bold text-sm mb-3 flex items-center gap-2"><Activity size={16} /> Pythagorean Harmonics</div>
             <div className="space-y-2">
-              <Toggle label="Comma Spiral (23.46¢)" active={config.extensions.harmonic.commaSpiral} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.HARMONIC, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, commaSpiral: !c.extensions.harmonic.commaSpiral } } }))} />
-              <Toggle label="Perfect Fifth Stack" active={config.extensions.harmonic.perfectFifths} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.HARMONIC, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, perfectFifths: !c.extensions.harmonic.perfectFifths } } }))} />
+              <EffectSlider label="Comma Spiral (23.46¢)" value={config.extensions.harmonic.commaSpiral} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.HARMONIC : c.mode, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, commaSpiral: v } } }))} />
+              <EffectSlider label="Perfect Fifth Stack" value={config.extensions.harmonic.perfectFifths} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.HARMONIC : c.mode, extensions: { ...c.extensions, harmonic: { ...c.extensions.harmonic, perfectFifths: v } } }))} />
             </div>
           </div>
 
           <div className="bg-black/30 p-4 rounded-xl border border-white/5">
             <div className="text-primary font-bold text-sm mb-3 flex items-center gap-2"><Hash size={16} /> Topological Forms</div>
             <div className="space-y-2">
-              <Toggle label="Trefoil Knot (3,2)" active={config.extensions.topology.trefoil} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.TOPOLOGY, extensions: { ...c.extensions, topology: { ...c.extensions.topology, trefoil: !c.extensions.topology.trefoil } } }))} />
-              <Toggle label="Toroidal Container" active={config.extensions.topology.torus} onToggle={() => setConfig(c => ({ ...c, mode: SimulationMode.TOPOLOGY, extensions: { ...c.extensions, topology: { ...c.extensions.topology, torus: !c.extensions.topology.torus } } }))} />
+              <EffectSlider label="Trefoil Knot (3,2)" value={config.extensions.topology.trefoil} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.TOPOLOGY : c.mode, extensions: { ...c.extensions, topology: { ...c.extensions.topology, trefoil: v } } }))} />
+              <EffectSlider label="Toroidal Attractor" value={config.extensions.topology.torus} onChange={(v) => setConfig(c => ({ ...c, mode: v > 0 ? SimulationMode.TOPOLOGY : c.mode, extensions: { ...c.extensions, topology: { ...c.extensions.topology, torus: v } } }))} />
             </div>
           </div>
         </div>
