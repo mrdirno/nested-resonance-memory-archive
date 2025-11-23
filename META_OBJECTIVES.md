@@ -69,7 +69,8 @@
 - ✅ **Reality Injection:** `PRIN-CLOSED-LOOP` (Cycle 387). First Injection verified.
 - ✅ **Physical Deployment:** `PRIN-HARDWARE-GUIDE` (Cycle 389). Assembly Guide & Health Check created.
 - ✅ **Physical Calibration:** `PRIN-HOMOGRAPHY` (Cycle 390). Wizard & Persistence implemented.
-- [ ] **Physical Levitation:** Execute C387 on physical hardware.
+- ✅ **Physical Levitation:** `PRIN-REALITY-INJECTION` (Cycle 391). Flight Computer verified.
+- [ ] **Physical Tuning:** Optimize PID gains on real hardware.
 
 
 
