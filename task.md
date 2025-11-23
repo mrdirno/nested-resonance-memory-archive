@@ -634,3 +634,26 @@
 - [x] **Create Artifact:** `data/models/torus.obj` (Used `pyramid.obj`).
 - [x] **Execute:** Compile the torus via CLI.
 - [x] **Verify:** Stability of the complex nodal trap.
+
+# Task: Cycle 364 - Phase 11 Initialization (The Animator)
+- [ ] **Define Phase 11:** "The Animator" - Dynamic Topology Interpolation.
+- [ ] **Goal:** Interpolate between two shapes over time (4D Printing).
+- [ ] **Gate:** 3.5 (Dynamic Compilation).
+
+# Task: Cycle 365 - The Interpolator Class
+- [ ] **Define Cycle 365:** Implement `code/helios/animator.py`.
+- [ ] **Logic:**
+    - Load two meshes (A, B).
+    - Correspond points (Nearest Neighbor or optimal transport).
+    - Generate `N` frames of intermediate target clouds.
+    - Solve phases for each frame.
+
+# Task: Cycle 366 - Operator Integration (Animate Command)
+- [ ] **Define Cycle 366:** Add animation support to the Operator.
+- [ ] **Update:** `code/helios/operator.py` with `animate_object(id, target_mesh, duration)`.
+- [ ] **Update:** `helios_cli.py` with `animate` command.
+
+# Task: Cycle 367 - 4D Printing Demo
+- [ ] **Define Cycle 367:** Morph a Cube into a Pyramid.
+- [ ] **Execute:** `animate <cube_id> to data/models/pyramid.obj 5s`.
+- [ ] **Verify:** Smooth transition of phases and stability.
