@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NRM Worker Node</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            margin: 20px;
+        }
+        #status {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #00ff00;
+        }
+        #log {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #333;
+            padding: 10px;
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>NRM Worker Node (Cycle 403)</h1>
+    <div id="status">Status: Idle</div>
+    <div id="log"></div>
+
+    <script type="module">
+        // Configuration
+        const COORDINATOR_URL = 'ws://localhost:8765';
+        const WASM_PATH = '../experiments/cycle400_wasm_prototype/target/wasm32-unknown-unknown/release/helios_physics.wasm';
+
+        // State
+        let socket = null;
+        let wasmInstance = null;
+
+        // Logger
+        function log(msg) {
+            const logDiv = document.getElementById('log');
+            const line = document.createElement('div');
+            line.textContent = `[${new Date().toISOString().split('T')[1].split('.')[0]}] ${msg}`;
+            logDiv.appendChild(line);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function updateStatus(msg) {
+            document.getElementById('status').textContent = `Status: ${msg}`;
+        }
+
+        // Wasm Loader
+        async function loadWasm() {
+            try {
+                log(`Loading Wasm from ${WASM_PATH}...`);
+                const response = await fetch(WASM_PATH);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const buffer = await response.arrayBuffer();
+                const { instance } = await WebAssembly.instantiate(buffer, {
+                    // Imports if needed (e.g. console.log from Rust)
+                });
+                wasmInstance = instance.exports;
+                log('Wasm loaded successfully.');
+                return true;
+            } catch (e) {
+                log(`Wasm load failed: ${e.message}`);
+                updateStatus('Wasm Error');
+                return false;
+            }
+        }
+
+        // WebSocket Connection
+        function connect() {
+            log(`Connecting to Coordinator at ${COORDINATOR_URL}...`);
+            socket = new WebSocket(COORDINATOR_URL);
+
+            socket.onopen = () => {
+                log('Connected to Coordinator.');
+                updateStatus('Connected (Idle)');
+                socket.send(JSON.stringify({ type: 'ready' }));
+            };
+
+            socket.onmessage = async (event) => {
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'compute_task') {
+                    await handleTask(data);
+                }
+            };
+
+            socket.onclose = () => {
+                log('Disconnected from Coordinator.');
+                updateStatus('Disconnected');
+                setTimeout(connect, 5000); // Reconnect
+            };
+
+            socket.onerror = (error) => {
+                log(`WebSocket Error: ${error.message || 'Unknown'}`);
+            };
+        }
+
+        // Task Handler
+        async function handleTask(task) {
+            if (!wasmInstance) {
+                log('Cannot process task: Wasm not loaded.');
+                return;
+            }
+
+            updateStatus(`Computing Task ${task.task_id}...`);
+            const startTime = performance.now();
+
+            // Mock Computation using Wasm
+            // In production, we would loop over targets and call `gorkov_potential`
+            // For this prototype, we run the benchmark loop to prove Wasm execution.
+            
+            let totalPotential = 0;
+            // Running benchmark_loop from Cycle 400
+            // Iterations = 1,000,000 to simulate load
+            totalPotential = wasmInstance.benchmark_loop(1000000);
+
+            const duration = performance.now() - startTime;
+            log(`Task ${task.task_id} complete. Result: ${totalPotential.toFixed(2)}. Time: ${duration.toFixed(2)}ms`);
+
+            // Send Result
+            socket.send(JSON.stringify({
+                type: 'result',
+                task_id: task.task_id,
+                results: [totalPotential], // Mock result list
+                duration: duration
+            }));
+            
+            updateStatus('Connected (Idle)');
+        }
+
+        // Init
+        async function init() {
+            if (await loadWasm()) {
+                connect();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

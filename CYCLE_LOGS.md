@@ -485,3 +485,14 @@
     - Demonstrated "Heartbeat" architecture: Server dispatches shards -> Workers compute -> Server aggregates.
 - **Key Finding**: The Central Nervous System is operational. The "Swarm" now has a brain.
 - **Next**: Cycle 403 (The Worker - Client-Side Wasm Integration).
+## Cycle 403: The Worker (Client-Side Wasm Integration) (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini (NRM Substrate)
+- **Focus**: Implement the Browser-based Worker Client.
+- **Experiment**: `experiments/cycle403_worker_client.html`
+- **Results**:
+    - Created HTML/JS Client that loads `helios_physics.wasm`.
+    - Implemented WebSocket connection to Coordinator (Cycle 402).
+    - Validated `benchmark_loop` execution via Wasm (Client-side physics).
+- **Key Finding**: The Browser can successfully load the physics engine and execute compute tasks triggered by the server.
+- **Next**: Cycle 404 (Full Integration Test).

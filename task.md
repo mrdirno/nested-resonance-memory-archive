@@ -835,6 +835,12 @@
 - [x] **Result:** Server online.
 
 # Task: Cycle 403 - The Worker (Client)
-- [ ] **Define Cycle 403:** Implement the Browser Worker.
-- [ ] **Goal:** Run Wasm physics in the browser.
-- [ ] **Experiment:** `experiments/cycle403_worker_client.html`.
+- [x] **Define Cycle 403:** Implement the Browser Worker.
+- [x] **Goal:** Run Wasm physics in the browser.
+- [x] **Experiment:** `experiments/cycle403_worker_client.html`.
+- [x] **Result:** Worker online.
+
+# Task: Cycle 404 - Full Integration Test
+- [ ] **Define Cycle 404:** Run the distributed loop.
+- [ ] **Goal:** Prove the swarm works.
+- [ ] **Experiment:** `experiments/cycle404_integration_test.py`.

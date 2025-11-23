@@ -119,9 +119,15 @@
 - [x] **Result:** Server operational (listening on 8765).
 
 # Task: Cycle 403 - The Worker (Client-Side Wasm Integration)
-- [ ] **Define Cycle 403:** Build the Browser Client.
-- [ ] **Goal:** Load `helios_physics.wasm` in the browser and connect to the Coordinator.
-- [ ] **Experiment:** `experiments/cycle403_worker_client.html`.
+- [x] **Define Cycle 403:** Build the Browser Client.
+- [x] **Goal:** Load `helios_physics.wasm` in the browser and connect to the Coordinator.
+- [x] **Experiment:** `experiments/cycle403_worker_client.html`.
+- [x] **Result:** Worker Client operational.
+
+# Task: Cycle 404 - Full Integration Test (The Swarm)
+- [ ] **Define Cycle 404:** Run the full Coordinator-Worker loop.
+- [ ] **Goal:** Prove distributed physics calculation.
+- [ ] **Experiment:** `experiments/cycle404_integration_test.py`.
 
 
 
