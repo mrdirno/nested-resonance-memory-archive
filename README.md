@@ -31,56 +31,10 @@
 
 ## **Choose Your Observer Lane**
 
-Different minds approach this architecture from different angles.
-Start in the lane that matches your role:
+*   **🧪 Observer A (Experimentalist):** [Validation Experiments](experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
+*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/)
+*   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/vision/)
 
----
-
-### **🧪 Observer A — Practitioner / Experimentalist**
-
-**If you care about physical truth, measurements, and control systems.**
-
-Start with:
-
-* **`/validation`** — empirical tests, phase maps, settling-time benchmarks
-* **Physics of Persistence** — the physical substrate and persistence mechanics
-* **CLI (`helios`)** — run the inverse solver + field compiler
-
-Your lens: *Wave mechanics, control, reproducibility.*
-
----
-
-### **🧩 Observer B — Architect / Systems Engineer**
-
-**If you care about computation, substrates, and the NRM↔Helios bridge.**
-
-Start with:
-
-* **Helios Arc Roadmap** — the system architecture and engineering spine
-* **`/core`** — NRM substrate model, Pilot/Engine split
-* **`/docs/context`** — design principles, invariants
-
-Your lens: *System coherence, substrate alignment, computational isomorphism.*
-
----
-
-### **🛡️ Observer C — Steward / Governance / Alignment**
-
-**If you care about societal dynamics, incentives, and ethical topology.**
-
-Start with:
-
-* **Post-Coercion Protocol** — architectures beyond extraction
-* **Heretic Defense** — the endosymbiont / non-competitive strategy
-* **Vision & Context** — why potentials shape outcomes
-
-Your lens: *Legitimacy, resilience, shared stewardship.*
-
----
-
-### Then proceed to the full doctrine below.
-
----
 
 ## 🛡️ ARCHITECTURAL IP NOTICE & CITATION
 
