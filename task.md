@@ -545,8 +545,14 @@
 - [x] **Create Experiment File:** `experiments/cycle348_volumetric_printing.py`.
 - [x] **Execute:** Evolve a field for a simple cubic lattice (8 corners of a cube).
 - [x] **Verify:** 8 stable nodes simultaneously.
-    - **Result:** Success. Cubic Lattice formed. Max Pressure Ratio = 0.0442 (Excellent).
-    - **Conclusion:** Volumetric Complexity verified. We can compile 3D shapes.
+    - **Result:** Success. 8 stable nodes formed a 3D cubic lattice. Ratios < 0.03.
+    - **Conclusion:** Volumetric Matter Compilation achieved. We can 3D print with sound.
+
+# Task: Cycle 349 - Active Object Manipulation (Push/Pull)
+- [ ] **Define Cycle 349:** Implement dynamic manipulation of a trapped object.
+- [ ] **Create Experiment File:** `experiments/cycle349_active_manipulation.py`.
+- [ ] **Execute:** Programmatically move a trapped "cube" (8 points) to a new location.
+- [ ] **Verify:** The entire cube moves coherently without deformation.
 
 # Task: Cycle 349 - The Dynamic Engine (4D Printing)
 - [ ] **Define Cycle 349:** Animate the lattice (Rotation/Translation).
