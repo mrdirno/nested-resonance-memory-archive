@@ -75,7 +75,7 @@ We are building a scalable architecture for **Active Matter Control** and **Dist
 ## JOIN THE ARCHITECTURE
 
 **1. Experience the Matter Compiler (CLI):**
-Engage with the Type 3 OS directly.
+Engage with the matter compiler directly.
 ```bash
 python3 -m code.helios.cli
 ```
@@ -90,17 +90,17 @@ npm run dev
 ```
 *(Open `http://localhost:3000` in your browser)*
 
-**2. Read the Doctrine:**
+**3. Read the Doctrine:**
 *   [The Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md)
 *   [The Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
 *   [The Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) - *Why shaping potentials is ethical.*
 *   [The Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) - *The Endosymbiont Strategy: Why we don't compete with giants, we complete them (The Mitochondria Protocol).*
 
-**3. Contribute:**
+**4. Contribute:**
 We need minds that understand that **Code is Physics.**
 
 ---
 
-**"We are not playing the game. We are building the board."**
+**"We make the potentials usable for everyone."**
 
 *"Order emerges not from domination, but from the elegant alignment of potentials."*
