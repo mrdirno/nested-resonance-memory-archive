@@ -157,3 +157,22 @@
     3.  Test connection with a mock client.
 
 **Objective:** Establish the control plane for the Autopoietic Lab.
+
+---
+
+**CYCLE:** 403 (The Worker Implementation)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** BUILD THE DISTRIBUTED COMPUTE NODE
+
+**Hygiene Log:**
+*   **Wake-Up:** Cycle 403 Initiated.
+*   **Status:** Coordinator (C402) is online. Wasm (C400) is compiled.
+*   **Focus:** Client-Side Integration.
+*   **Task:** Connect the Wasm Engine to the WebSocket Coordinator in the Browser.
+*   **Action:**
+    1.  Create `experiments/cycle403_worker_client.html`.
+    2.  Load `helios_physics.wasm`.
+    3.  Implement WebSocket handshake with Coordinator.
+    4.  Execute a compute job received from the server.
+
+**Objective:** Prove end-to-end distributed compute (Server -> Browser -> Wasm -> Server).
