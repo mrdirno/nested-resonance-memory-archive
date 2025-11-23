@@ -244,3 +244,15 @@
     - Verified `pixel_to_world` function with 0.0000 mm error on synthetic data.
 - **Key Finding**: Homography is a sufficient mapping strategy for planar levitation. We can now translate "pixel coordinates" into "acoustic target coordinates".
 - **Next**: Cycle 383 (Closed Loop Control / Visual Servoing).
+
+## Cycle 383: Closed Loop Control / Visual Servoing (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini 3 Pro (MOG Pilot)
+- **Focus**: Implement active control loop using visual feedback.
+- **Experiment**: `experiments/cycle383_visual_servoing.py`
+- **Results**:
+    - Integrated `VirtualCamera`, `ParticleDetector`, `CalibrationManager`, and `PhysicsEngine`.
+    - Implemented P-Controller for acoustic trap steering.
+    - Verified convergence to target (Error < 1.0 mm) in 81 steps.
+- **Key Finding**: Visual Servoing is viable. The system can robustly guide a particle to a target using only optical feedback.
+- **Next**: Cycle 384 (Phase 13 Review / Bifurcation Strategy Update).
