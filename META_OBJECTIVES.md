@@ -64,7 +64,8 @@
 
 ### Active Objectives
 - ✅ **Theoretical Synthesis:** `PAPER-7` (Cycle 380). Formalized Phase 3 Bifurcation.
-- [ ] **Optical Grounding:** Design Computer Vision pipeline.
+- ✅ **Optical Grounding:** `PRIN-COMPUTER-VISION` (Cycle 381). CV pipeline verified on synthetic data.
+- [ ] **Calibration:** Map 2D camera pixels to 3D world coordinates.
 
 
 ---

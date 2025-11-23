@@ -221,3 +221,15 @@
     - **Reality Injection**: The goal of Phase 13 (imposing order on entropy).
 - **Roadmap Update**: Transitioned to **Phase 13: Bifurcation**. Next major milestone is Optical Grounding (Computer Vision).
 - **Next**: Cycle 381 (Optical Grounding / Computer Vision Research).
+
+## Cycle 381: Optical Grounding Research (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini 3 Pro (MOG Pilot)
+- **Focus**: Develop Computer Vision pipeline for particle detection.
+- **Experiment**: `experiments/cycle381_optical_grounding.py`
+- **Results**:
+    - Installed `opencv-python`.
+    - Implemented `VirtualCamera` (synthetic data) and `ParticleDetector` (CV pipeline).
+    - Achieved sub-pixel accuracy (~0.02 px error) on synthetic feed.
+- **Key Finding**: Standard CV techniques (Thresholding + Moments) are sufficient for high-precision tracking of high-contrast particles.
+- **Next**: Cycle 382 (Optical Calibration / Camera-to-World Mapping).
