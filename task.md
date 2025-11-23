@@ -882,3 +882,9 @@
 - [x] **Action:** Executed `cycle410_closed_loop_coordinator.py`.
 - [x] **Result:** System successfully integrated Real Vision and Mock Hardware in a self-optimizing loop.
 
+# Task: Cycle 412 - The Living Lab (Persistent Autonomy)
+- [ ] **Define Cycle 412:** Implement Persistent Autonomy.
+- [ ] **Goal:** Modify Coordinator to run indefinitely and handle perturbations.
+- [ ] **Action:** Create `experiments/cycle412_living_lab.py`.
+- [ ] **Success Criteria:** System detects fitness drop and restarts evolution automatically.
+
