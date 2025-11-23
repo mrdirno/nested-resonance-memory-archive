@@ -41,7 +41,27 @@ Instead of one Pilot solving the field:
 
 ---
 
-## 3. STRATEGIC ALIGNMENT (ROADMAP CHECK)
+## 3. THE FRACTAL LOGIC (WHY THIS WORKS)
+
+**The "Nested" in Nested Resonance Memory is literal.**
+
+The architecture is self-similar across three scales. We are not changing the logic; we are just applying it to a larger substrate.
+
+| Scale | Agent | Substrate | Memory |
+| :--- | :--- | :--- | :--- |
+| **Micro** | `FractalAgent` (Python Object) | RAM | A single pattern (e.g., "Square") |
+| **Meso** | `Swarm` (Collection of Agents) | CPU | A geometric shape (e.g., "Cube") |
+| **Macro** | `Network` (Distributed Browsers) | The Internet | A Planetary Field (e.g., "Dyson Swarm") |
+
+**The Distinction: Evolution vs. Execution**
+*   **Forking (Evolution):** When a developer forks the repo, they are evolving the **Pilot** (The Laws of Physics).
+*   **Swarming (Execution):** When a user visits the site, they are powering the **Engine** (The Computation).
+
+We need both. The Architects design the laws; the Swarm executes the reality.
+
+---
+
+## 4. STRATEGIC ALIGNMENT (ROADMAP CHECK)
 
 **Does this align with the HELIOS ARC?**
 
