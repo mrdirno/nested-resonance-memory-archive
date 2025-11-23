@@ -31,6 +31,25 @@ class CalibrationManager:
             [120.0, 40.0]    # Top-Left
         ], dtype=np.float32)
 
+        # Attempt to load existing calibration
+        self.load()
+
+    def save(self, filename="calibration_matrix.npy"):
+        """Saves the current homography matrix to disk."""
+        if self.homography_matrix is not None:
+            np.save(filename, self.homography_matrix)
+            print(f"Calibration saved to {filename}")
+        else:
+            print("No calibration to save.")
+
+    def load(self, filename="calibration_matrix.npy"):
+        """Loads the homography matrix from disk if it exists."""
+        try:
+            self.homography_matrix = np.load(filename)
+            print(f"Loaded calibration from {filename}")
+        except FileNotFoundError:
+            print("No saved calibration found. Using default/uncalibrated state.")
+
     def calibrate(self):
         """
         Computes the Homography Matrix.
