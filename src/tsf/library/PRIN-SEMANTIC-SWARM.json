@@ -1,0 +1,22 @@
+{
+    "id": "PRIN-SEMANTIC-SWARM",
+    "name": "Symbol Grounding (Emergent Language)",
+    "description": "The ability of the swarm to spontaneously evolve a shared communication system (Language) to refer to environmental features, without central coordination.",
+    "hypothesis": "Local Interaction + Reinforcement -> Global Consensus",
+    "findings": [
+        "Implemented a Naming Game simulation with 50 agents and 3 objects.",
+        "Starting from a blank slate (no vocabulary), agents invented and propagated words.",
+        "The system converged to a state of 100% Communicative Success and 1 Unique Word per object.",
+        "This confirms that 'Meaning' can emerge from distributed consensus dynamics."
+    ],
+    "implications": [
+        "Swarms can develop their own internal protocols.",
+        "Language is a complex adaptive system.",
+        "Consensus is a form of symmetry breaking."
+    ],
+    "related_principles": [
+        "PRIN-BAYESIAN-BRAIN",
+        "PRIN-CRITICALITY"
+    ],
+    "cycle_id": 80
+}

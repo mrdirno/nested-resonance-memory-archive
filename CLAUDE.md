@@ -123,10 +123,10 @@ Storage: Large dual drive with ample space
 ```
 
 **ALL NEW FILES MUST BE CREATED HERE:**
-- ✅ New Python scripts: `/Volumes/dual/DUALITY-ZERO-V2/code/`
+- ✅ New Python scripts: `/Volumes/dual/DUALITY-ZERO-V2/src/`
 - ✅ Experiment results: `/Volumes/dual/DUALITY-ZERO-V2/experiments/results/`
 - ✅ Analysis scripts: `/Volumes/dual/DUALITY-ZERO-V2/analysis/`
-- ✅ TSF module: `/Volumes/dual/DUALITY-ZERO-V2/code/tsf/`
+- ✅ TSF module: `/Volumes/dual/DUALITY-ZERO-V2/src/tsf/`
 - ✅ Summaries: `/Volumes/dual/DUALITY-ZERO-V2/archive/summaries/`
 - ✅ Any other new files: `/Volumes/dual/DUALITY-ZERO-V2/[appropriate-directory]/`
 
@@ -148,8 +148,8 @@ Storage: Limited local drive space
 **Step 1: Copy from Development Workspace to Git Repo**
 ```bash
 # Example for new TSF module
-cp /Volumes/dual/DUALITY-ZERO-V2/code/tsf/*.py \
-   ~/nested-resonance-memory-archive/code/tsf/
+cp /Volumes/dual/DUALITY-ZERO-V2/src/tsf/*.py \
+   ~/nested-resonance-memory-archive/src/tsf/
 
 # Example for experiment results
 cp /Volumes/dual/DUALITY-ZERO-V2/experiments/results/*.json \
@@ -191,10 +191,10 @@ git status  # Should show "up to date"
 
 | File Type | Development Workspace | Git Repository (sync target) |
 |-----------|----------------------|------------------------------|
-| Python code | `/Volumes/dual/DUALITY-ZERO-V2/code/` | `~/nested-resonance-memory-archive/code/` |
-| Experiments | `/Volumes/dual/DUALITY-ZERO-V2/experiments/` | `~/nested-resonance-memory-archive/code/experiments/` |
+| Python code | `/Volumes/dual/DUALITY-ZERO-V2/src/` | `~/nested-resonance-memory-archive/src/` |
+| Experiments | `/Volumes/dual/DUALITY-ZERO-V2/experiments/` | `~/nested-resonance-memory-archive/src/experiments/` |
 | Results | `/Volumes/dual/DUALITY-ZERO-V2/experiments/results/` | `~/nested-resonance-memory-archive/data/results/` |
-| Analysis | `/Volumes/dual/DUALITY-ZERO-V2/analysis/` | `~/nested-resonance-memory-archive/code/analysis/` |
+| Analysis | `/Volumes/dual/DUALITY-ZERO-V2/analysis/` | `~/nested-resonance-memory-archive/src/analysis/` |
 | Summaries | `/Volumes/dual/DUALITY-ZERO-V2/archive/summaries/` | `~/nested-resonance-memory-archive/archive/summaries/` |
 | Papers | `/Volumes/dual/DUALITY-ZERO-V2/papers/` | `~/nested-resonance-memory-archive/papers/` |
 | Figures | `/Volumes/dual/DUALITY-ZERO-V2/data/figures/` | `~/nested-resonance-memory-archive/data/figures/` |
@@ -204,17 +204,17 @@ git status  # Should show "up to date"
 **❌ WRONG - Creates files on limited local drive:**
 ```python
 # DON'T DO THIS
-Write("/Users/aldrinpayopay/nested-resonance-memory-archive/code/new_file.py", content)
+Write("/Users/aldrinpayopay/nested-resonance-memory-archive/src/new_file.py", content)
 ```
 
 **✅ CORRECT - Creates files on dual drive:**
 ```python
 # DO THIS INSTEAD
-Write("/Volumes/dual/DUALITY-ZERO-V2/code/new_file.py", content)
+Write("/Volumes/dual/DUALITY-ZERO-V2/src/new_file.py", content)
 
 # Then when ready to commit:
-# cp /Volumes/dual/DUALITY-ZERO-V2/code/new_file.py \
-#    ~/nested-resonance-memory-archive/code/
+# cp /Volumes/dual/DUALITY-ZERO-V2/src/new_file.py \
+#    ~/nested-resonance-memory-archive/src/
 ```
 
 ### Why This Matters
@@ -271,7 +271,7 @@ Age: 13+ days (as of Nov 8, 2025)
 
 **ALWAYS use this tool for V6 runtime:**
 ```bash
-python3 /Volumes/dual/DUALITY-ZERO-V2/code/analysis/v6_authoritative_timeline.py
+python3 /Volumes/dual/DUALITY-ZERO-V2/src/analysis/v6_authoritative_timeline.py
 ```
 
 **Output example:**
@@ -298,7 +298,7 @@ VERIFICATION:
 
 **For milestone documentation, use:**
 ```bash
-python3 /Volumes/dual/DUALITY-ZERO-V2/code/analysis/v6_authoritative_timeline.py commit-message <milestone_day>
+python3 /Volumes/dual/DUALITY-ZERO-V2/src/analysis/v6_authoritative_timeline.py commit-message <milestone_day>
 ```
 
 This generates a properly formatted commit message with:
@@ -524,10 +524,9 @@ Fix issues thoroughly in internal documentation, but present the project profess
 5. Persist insights (code, figures, data, commits)
 
 **Active Research Trajectory (Current):**
-- ✅ 150 experiments completed (C171 + C175)
-- ⏳ C176 V2 redesign (population collapse bug fix)
-- ⏳ C177 boundary mapping (90 experiments pending)
-- ⏳ Paper 2 finalization (~90% complete)
+- ✅ Phase 8 Complete (CLI, Operator, API)
+- 🟢 Phase 9: Applications (The Replicator)
+- ⏳ Helios-App-1: Natural Language Interface
 
 **Continuous Actions:**
 - Extend experimental range (new frequencies, parameters)
@@ -560,7 +559,7 @@ https://github.com/mrdirno/nested-resonance-memory-archive
 **Directory Structure:**
 ```
 ├── docs/v6/              # Comprehensive documentation (V6 - Publication Pipeline Phase)
-├── code/                 # Production Python code
+├── src/                 # Production Python code
 │   ├── core/             # Reality interface
 │   ├── reality/          # System monitoring
 │   ├── orchestration/    # Hybrid coordination
@@ -582,7 +581,7 @@ https://github.com/mrdirno/nested-resonance-memory-archive
 cd /Users/aldrinpayopay/nested-resonance-memory-archive
 
 # Make changes, run experiments
-python code/experiments/cycle177_extended_frequency_range.py
+python src/experiments/cycle177_extended_frequency_range.py
 
 # Commit with attribution (ALWAYS include Co-Authored-By)
 git add .

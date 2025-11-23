@@ -1,0 +1,17 @@
+{
+    "principle_id": "PRIN-INVERSE-DESIGN",
+    "name": "Inverse Design",
+    "definition": "The capability of the Pilot to autonomously discover the micro-parameters required to generate a specific macro-emergent phenomenon (e.g., SOC) by inverting the TSF Library.",
+    "mechanism": "Evolutionary Search (Genetic Algorithm) over the TSF Parameter Space.",
+    "application": "Autonomous Engineering, Self-Repair, Adaptive Control.",
+    "validation": {
+        "experiment": "experiments/inverse_design_test.py",
+        "metric": "Avalanche Power Law Fit (R^2)",
+        "result": "0.9832 (Success)"
+    },
+    "implications": [
+        "The Pilot can 'engineer' emergence.",
+        "We do not need to manually tune parameters; we define the goal, and the Pilot finds the path.",
+        "This marks the transition from Science (Observation) to Engineering (Creation)."
+    ]
+}

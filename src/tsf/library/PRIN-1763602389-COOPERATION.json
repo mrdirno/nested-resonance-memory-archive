@@ -1,0 +1,28 @@
+{
+  "id": "PRIN-1763602389-COOPERATION",
+  "title": "Cooperative Energy Pooling",
+  "domain": "Thermodynamics / Game Theory",
+  "status": "Validated",
+  "claim_falsifiable": "Agents that share energy will survive longer than isolated agents.",
+  "discovery_protocol": {
+    "method": "energy_pooling_test",
+    "parameters": {
+      "sharing_fraction": 0.1
+    }
+  },
+  "refutation_protocol": {
+    "method": "isolation_test",
+    "threshold": 0.0
+  },
+  "quantification_outputs": {},
+  "provenance": {
+    "timestamp": "2025-11-19T17:33:09.447833",
+    "schema_version": "0.1"
+  },
+  "reviewer_mode": {},
+  "safety": {
+    "no_network_required": true,
+    "overhead_auth_pass": true,
+    "resource_class": "Low-Compute"
+  }
+}

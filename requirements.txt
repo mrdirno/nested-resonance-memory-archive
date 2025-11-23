@@ -29,3 +29,6 @@ black==25.1.0
 # Documentation (Optional)
 sphinx-rtd-theme==3.0.2
 
+
+# Web Interface
+flask==3.0.0

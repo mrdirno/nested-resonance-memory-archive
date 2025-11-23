@@ -1,0 +1,237 @@
+{
+  "metadata": {
+    "total_samples": 8,
+    "sources": [
+      "Paper 2 (C168-170 bistability, C171 accumulation, C176 collapse)",
+      "Cycles 810-813 (initialization/steady-state phase transition)"
+    ],
+    "target_accuracy": 0.9,
+    "gate": "Phase 1 Gate 1.2"
+  },
+  "samples": [
+    {
+      "features": {
+        "mean_population": 1.0,
+        "population_stability": 0.0,
+        "birth_rate": 0.0,
+        "death_rate": 0.0,
+        "composition_rate": 0.03,
+        "resonance_rate": 0.8,
+        "resonance_stability": 0.1,
+        "io_bound_ratio": 0.92,
+        "io_bound_stability": 0.05,
+        "phase_variance_pi": 0.035,
+        "phase_variance_e": 0.033,
+        "phase_variance_phi": 0.033,
+        "phase_balance": 0.06,
+        "runtime_hours": 50.0,
+        "cycle_count": 3000,
+        "spawn_frequency": 0.026,
+        "energy_recharge_rate": 0.0
+      },
+      "true_regime": "bistability",
+      "experiment_id": "C168_BasinA",
+      "cycle_range": [
+        0,
+        3000
+      ],
+      "notes": "High spawn frequency (f>2.55%), Basin A attractor, high composition rate"
+    },
+    {
+      "features": {
+        "mean_population": 1.0,
+        "population_stability": 0.0,
+        "birth_rate": 0.0,
+        "death_rate": 0.0,
+        "composition_rate": 0.015,
+        "resonance_rate": 0.3,
+        "resonance_stability": 0.15,
+        "io_bound_ratio": 0.91,
+        "io_bound_stability": 0.06,
+        "phase_variance_pi": 0.036,
+        "phase_variance_e": 0.034,
+        "phase_variance_phi": 0.032,
+        "phase_balance": 0.06,
+        "runtime_hours": 50.0,
+        "cycle_count": 3000,
+        "spawn_frequency": 0.024,
+        "energy_recharge_rate": 0.0
+      },
+      "true_regime": "bistability",
+      "experiment_id": "C168_BasinB",
+      "cycle_range": [
+        0,
+        3000
+      ],
+      "notes": "Low spawn frequency (f<2.55%), Basin B attractor, low composition rate"
+    },
+    {
+      "features": {
+        "mean_population": 17.33,
+        "population_stability": 0.09,
+        "birth_rate": 0.005,
+        "death_rate": 0.0001,
+        "composition_rate": 0.02,
+        "resonance_rate": 0.6,
+        "resonance_stability": 0.12,
+        "io_bound_ratio": 0.93,
+        "io_bound_stability": 0.04,
+        "phase_variance_pi": 0.037,
+        "phase_variance_e": 0.035,
+        "phase_variance_phi": 0.034,
+        "phase_balance": 0.04,
+        "runtime_hours": 80.0,
+        "cycle_count": 3000,
+        "spawn_frequency": 0.025,
+        "energy_recharge_rate": 0.0
+      },
+      "true_regime": "accumulation",
+      "experiment_id": "C171",
+      "cycle_range": [
+        0,
+        3000
+      ],
+      "notes": "Birth-only system, population ceiling ~17 agents, missing death mechanism"
+    },
+    {
+      "features": {
+        "mean_population": 0.49,
+        "population_stability": 1.01,
+        "birth_rate": 0.005,
+        "death_rate": 0.013,
+        "composition_rate": 0.0012666666666666666,
+        "resonance_rate": 0.35,
+        "resonance_stability": 0.2,
+        "io_bound_ratio": 0.94,
+        "io_bound_stability": 0.03,
+        "phase_variance_pi": 0.036,
+        "phase_variance_e": 0.033,
+        "phase_variance_phi": 0.033,
+        "phase_balance": 0.05,
+        "runtime_hours": 100.0,
+        "cycle_count": 3000,
+        "spawn_frequency": 0.025,
+        "energy_recharge_rate": 0.001
+      },
+      "true_regime": "collapse",
+      "experiment_id": "C176_V3",
+      "cycle_range": [
+        0,
+        3000
+      ],
+      "notes": "Complete birth-death coupling, catastrophic collapse, death>>birth imbalance"
+    },
+    {
+      "features": {
+        "mean_population": 5.5,
+        "population_stability": 0.15,
+        "birth_rate": 0.003,
+        "death_rate": 0.003,
+        "composition_rate": 0.881,
+        "resonance_rate": 0.881,
+        "resonance_stability": 0.08,
+        "io_bound_ratio": 0.942,
+        "io_bound_stability": 0.037,
+        "phase_variance_pi": 0.0359,
+        "phase_variance_e": 0.0333,
+        "phase_variance_phi": 0.0332,
+        "phase_balance": 0.08,
+        "runtime_hours": 25.0,
+        "cycle_count": 15000,
+        "spawn_frequency": 0.025,
+        "energy_recharge_rate": 0.001
+      },
+      "true_regime": "initialization",
+      "experiment_id": "C256_Window1",
+      "cycle_range": [
+        0,
+        15000
+      ],
+      "notes": "Early initialization phase, 88% resonance, 0-49h runtime"
+    },
+    {
+      "features": {
+        "mean_population": 5.8,
+        "population_stability": 0.12,
+        "birth_rate": 0.003,
+        "death_rate": 0.003,
+        "composition_rate": 0.994,
+        "resonance_rate": 0.994,
+        "resonance_stability": 0.03,
+        "io_bound_ratio": 0.861,
+        "io_bound_stability": 0.037,
+        "phase_variance_pi": 0.0359,
+        "phase_variance_e": 0.0333,
+        "phase_variance_phi": 0.0332,
+        "phase_balance": 0.08,
+        "runtime_hours": 73.0,
+        "cycle_count": 30000,
+        "spawn_frequency": 0.025,
+        "energy_recharge_rate": 0.001
+      },
+      "true_regime": "initialization",
+      "experiment_id": "C256_Window2",
+      "cycle_range": [
+        15000,
+        30000
+      ],
+      "notes": "Peak initialization phase, 99.4% resonance, 49-97h runtime"
+    },
+    {
+      "features": {
+        "mean_population": 6.0,
+        "population_stability": 0.1,
+        "birth_rate": 0.003,
+        "death_rate": 0.003,
+        "composition_rate": 0.338,
+        "resonance_rate": 0.338,
+        "resonance_stability": 0.037,
+        "io_bound_ratio": 0.867,
+        "io_bound_stability": 0.037,
+        "phase_variance_pi": 0.0359,
+        "phase_variance_e": 0.0333,
+        "phase_variance_phi": 0.0332,
+        "phase_balance": 0.08,
+        "runtime_hours": 170.0,
+        "cycle_count": 50000,
+        "spawn_frequency": 0.025,
+        "energy_recharge_rate": 0.001
+      },
+      "true_regime": "steady_state",
+      "experiment_id": "C256_Window4",
+      "cycle_range": [
+        45000,
+        60000
+      ],
+      "notes": "Steady-state onset, 33.8% resonance, 146-195h runtime"
+    },
+    {
+      "features": {
+        "mean_population": 6.1,
+        "population_stability": 0.09,
+        "birth_rate": 0.003,
+        "death_rate": 0.003,
+        "composition_rate": 0.345,
+        "resonance_rate": 0.345,
+        "resonance_stability": 0.037,
+        "io_bound_ratio": 0.897,
+        "io_bound_stability": 0.037,
+        "phase_variance_pi": 0.0359,
+        "phase_variance_e": 0.0333,
+        "phase_variance_phi": 0.0332,
+        "phase_balance": 0.08,
+        "runtime_hours": 220.0,
+        "cycle_count": 65000,
+        "spawn_frequency": 0.025,
+        "energy_recharge_rate": 0.001
+      },
+      "true_regime": "steady_state",
+      "experiment_id": "C256_Window5",
+      "cycle_range": [
+        60000,
+        75000
+      ],
+      "notes": "Sustained steady-state, 34.5% resonance, 195-244h runtime"
+    }
+  ]
+}
