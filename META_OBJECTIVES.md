@@ -67,6 +67,7 @@
 - ✅ **Physical Camera:** `PRIN-HARDWARE-ABSTRACTION` (Cycle 385). Integrated with fallback.
 - ✅ **Physical Trap:** `PRIN-SERIAL-COMMS` (Cycle 386). Integrated with fallback.
 - ✅ **Reality Injection:** `PRIN-CLOSED-LOOP` (Cycle 387). First Injection verified.
+- [ ] **Physical Deployment:** Connect and calibrate physical hardware.
 
 
 
