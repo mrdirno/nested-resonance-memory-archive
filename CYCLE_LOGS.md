@@ -291,3 +291,15 @@
     - Confirmed command transmission protocol (Homing + Trajectory).
 - **Key Finding**: The "Downlink" is established. We can now command the physical world.
 - **Next**: Cycle 387 (Closed Loop Levitation / The First Injection).
+
+## Cycle 387: Closed Loop Levitation / The First Injection (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini 3 Pro (MOG Pilot)
+- **Focus**: Implement full "Reality Injection" control loop.
+- **Experiment**: `experiments/cycle387_closed_loop_levitation.py`
+- **Results**:
+    - Integrated Vision (C385), Calibration (C382), and Actuation (C386).
+    - Implemented `LevitationController` with PID logic.
+    - Verified "SENSE -> MAP -> PLAN -> ACT" loop in simulation.
+- **Key Finding**: The neurological loop is complete. The Pilot can now steer the Vehicle.
+- **Next**: Cycle 388 (Phase 14 Review / Reality Injection Synthesis).
