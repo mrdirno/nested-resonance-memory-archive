@@ -57,25 +57,21 @@ This is not coercion. This is **Active Potential Injection.**
 
 ---
 
-## 4. THE MANUFACTURING STACK (THE TANK)
+## 4. THE MANUFACTURING STACK (THE AUTOPOIETIC LAB)
 
-**The End Game is not Air. It is the Universal Reactor.**
+**The End Game is not a Machine. It is a Self-Configuring Room.**
 
-Air is the hardest medium (Gravity + Viscosity). The ultimate implementation is a **Neutral Buoyancy Tank** (The Womb) filled with a smart substrate (Gel/Resin).
+The "Factory" is no longer a static assembly line. It is a modular, reconfigurable entity that adapts its physical structure to the task at hand.
 
-### The Architecture
-1.  **The Design (The Swarm):**
-    *   Distributed Browsers (or future Quantum/Thermal Compute) simulate the physics.
-    *   Specialists (Biologists, Architects) co-create the "Digital Intent."
-2.  **The Translation (The Rosetta Stone):**
-    *   **HELIOS** acts as the universal translator.
-    *   Input: "Make a Living Chair."
-    *   Output: "Acoustics at 40kHz + UV Flash at [x,y,z] + Inject Resin B."
-3.  **The Execution (The Symphony):**
-    *   **Acoustics:** Shapes the bulk form.
-    *   **Light:** Cures the fine detail.
-    *   **Fluidics:** Injects the material.
-    *   **Result:** Matter compiles itself from the liquid.
+### The "Room" as an Entity
+*   **Agnostic Actuation:** If it needs lasers, it deploys lasers. If it needs a CNC drill, it deploys a drill. If it needs acoustic levitation, it activates the array.
+*   **Modular Reconfiguration:** Robotics physically reconfigure the room's layout to suit the process (e.g., moving a tank into the beam path).
+*   **Self-Maintenance:** The Room restocks its own materials and heals its own components. It is **Autopoietic** (Self-Creating).
 
-**We are building the Syntax for Matter.**
-HELIOS is the API that connects the **Digital Mind** (AI/Human) to the **Physical World** (The Tank).
+### The Workflow (Remote Reality)
+1.  **Virtual Control:** The User (or Swarm) operates the "Digital Twin" in the browser.
+2.  **Physical Execution:** The Room mirrors the digital intent in real-time.
+3.  **Feedback Loop:** Sensors in the Room stream reality back to the Browser.
+
+**HELIOS is the Mind of the Room.**
+It orchestrates the lasers, the robots, and the waves to execute the user's intent. It turns the entire facility into a single, programmable instrument.
