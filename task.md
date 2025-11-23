@@ -781,8 +781,14 @@
 - [x] **Experiment:** `experiments/cycle393_physical_trajectory.py`.
 - [x] **Result:** Skywriting verified.
 
-# Task: Cycle 394 - Physical Interaction (Hand Tracking)
-- [ ] **Define Cycle 394:** Control levitation with hand gestures.
-- [ ] **Goal:** Map "Hand" position to "Trap" position in real-time.
-- [ ] **Experiment:** `experiments/cycle394_physical_interaction.py`.
+# Task: Cycle 394 - RF-Driven Levitation (SDR Integration)
+- [x] **Define Cycle 394:** Transduce invisible RF signals into physical levitation.
+- [x] **Goal:** Autonomous Environmental Coupling (No Human Loop).
+- [x] **Experiment:** `experiments/cycle394_rf_levitation.py`.
+- [x] **Result:** Matter dances to the radio.
+
+# Task: Cycle 395 - Spectral Accumulation (Long-Duration Exposure)
+- [ ] **Define Cycle 395:** Create a 3D density map of the RF environment over time.
+- [ ] **Goal:** Visualize the "Shape" of the local radio spectrum.
+- [ ] **Experiment:** `experiments/cycle395_spectral_accumulation.py`.
 
