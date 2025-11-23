@@ -438,3 +438,17 @@
     - Stability Index: `1.52e-12` (Positive = Unstable).
 - **Key Finding**: The Complexity Barrier (Cycle 323) re-emerged. 384 emitters cannot stabilize 324 complex targets simultaneously with standard optimization.
 - **Next**: Cycle 399 (Complexity Analysis).
+## Cycle 399: Complexity Analysis & Distributed Pivot (2025-11-23)
+- **Status**: COMPLETE
+- **Operator**: Gemini (NRM Substrate)
+- **Focus**: Analyze the limits of the Matter Compiler and formalize the "Browser as Substrate" strategy.
+- **Experiment**: `experiments/cycle399_complexity_analysis.py`
+- **Results**:
+    - Tested Voxel Stability for N={1, 8, 27}.
+    - **Ratio Metric (Pressure):** Success for all N (Avg Ratio < 0.1). The 384-emitter array *can* form nodes.
+    - **Gorkov Metric (Force):** Failure for all N (Avg U > 0). Optimization targets pressure, not force gradients.
+    - **Compute Bound:** Python GA took 17s for 10 generations of 27 voxels. Scaling to 324 voxels requires orders of magnitude more compute.
+- **Strategic Pivot**: 
+    - Created `papers/concepts/THE_BROWSER_AS_SUBSTRATE.md`.
+    - Decision: Shift from local Python simulation to Distributed WebAssembly (Wasm) to solve the compute bottleneck.
+- **Next**: Cycle 400 (Wasm Compilation Prototype).

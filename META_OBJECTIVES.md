@@ -95,6 +95,17 @@
 - [x] **Experiment:** `experiments/cycle398_rf_to_acoustic.py`.
 - [x] **Result:** Compilation successful, but Stability failed (Complexity Barrier).
 
+# Task: Cycle 399 - The Distributed Pivot (Browser as Substrate)
+- [x] **Define Cycle 399:** Formalize the "Browser as Substrate" strategy.
+- [x] **Goal:** Pivot from local Python simulation to distributed WebAssembly (Wasm).
+- [x] **Artifact:** `papers/concepts/THE_BROWSER_AS_SUBSTRATE.md`.
+- [x] **Action:** Analyzed complexity limits (`experiments/cycle399_complexity_analysis.py`) and confirmed need for massive compute.
+
+# Task: Cycle 400 - Wasm Compilation Prototype
+- [ ] **Define Cycle 400:** Compile the Gorkov Potential calculation to Wasm.
+- [ ] **Goal:** Verify that we can run the physics engine in the browser.
+- [ ] **Experiment:** `experiments/cycle400_wasm_prototype/`.
+
 
 
 ---

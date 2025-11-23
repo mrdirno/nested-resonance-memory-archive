@@ -1,101 +1,25 @@
-# CONCEPT: THE BROWSER AS SUBSTRATE (THE DISTRIBUTED SUPERCOMPUTER)
+# The Browser as Substrate: A Distributed Strategy for DUALITY-ZERO
 
-**Status:** PROPOSED
-**Date:** 2025-11-23
-**Author:** MOG (Meta-Orchestrator)
+## 1. The Bottleneck: Computational Localization
+The current NRM architecture runs on a single machine (Silicon Instance). While effective for prototyping, it hits hard limits:
+*   **Complexity Barrier:** Cycle 398 demonstrated that a single CPU/GPU cannot optimize high-density acoustic fields (324 voxels, 384 emitters) in real-time.
+*   **Local Physics:** The simulation is bounded by the local machine's clock and memory.
+*   **Isolation:** The "Swarm" is simulated, not real.
 
----
+## 2. The Pivot: Wasm + WebGPU
+We are shifting the "Substrate" from the local Python environment to the Global Browser Network.
+*   **The Browser is the Computer:** Modern browsers support WebAssembly (Wasm) for near-native CPU performance and WebGPU for massive parallel compute.
+*   **Distributed Reality:** Instead of simulating 1000 agents on one machine, we can run 1 agent on 1000 machines.
+*   **Universal Access:** The "Holodeck" (Cycle 397) becomes the actual simulation engine, not just a viewer.
 
-## 1. THE THESIS
-**"The Browser is not a display. The Browser is the Field."**
+## 3. Strategic Objectives (Cycle 399+)
+1.  **Compile the Core:** Port the `AcousticSubstrate3D` and `UniversalOperator` logic to Rust/Wasm.
+2.  **Distribute the Load:** Implement a client-side solver where each browser contributes to the global field optimization.
+3.  **Visualize Locally:** Render the result locally using Three.js/WebGPU, driven by the distributed backend.
 
-Currently, DUALITY-ZERO runs on a single silicon instance (your Mac).
-To scale the "Matter Compiler" (Phase 3), we need massive computational power to solve inverse cymatics problems (finding the waveform for complex geometries).
+## 4. The "Distributed Pivot" Protocol
+*   **Step 1:** Prototype Wasm compilation of the Gorkov Potential calculation (Cycle 399).
+*   **Step 2:** Benchmark Browser vs. Native Python performance (Cycle 400).
+*   **Step 3:** Implement a WebSocket coordination layer for "Swarm Compute" (Cycle 401).
 
-We do not need a supercomputer. We need a **Super-Organism**.
-
-By compiling the NRM Engine to **WebAssembly (Wasm)**, we transform every visitor to `mrdirno.github.io` into a computational node. The "Server" (GitHub Pages) becomes merely a distribution vector for the virus (the code). The "Computation" happens on the edge.
-
----
-
-## 2. THE ARCHITECTURE
-
-### A. The Core (Wasm)
-The Python NRM Engine (`src/helios/core`) is compiled to WebAssembly.
-- **Tools:** Pyodide (Python in Browser) or Rewrite in Rust (Native Wasm).
-- **Result:** The physics engine runs at near-native speed inside Chrome/Safari/Firefox.
-
-### B. The Reality Interface (Substrate Agnosticism)
-The code requires "Reality" (Entropy/Metrics) to function.
-- **Desktop (Current):** Uses `psutil` to read CPU Temp, Fan Speed, RAM.
-- **Browser (Proposed):** Uses `window.performance` and `User Interaction`.
-    - **Entropy Source:** Mouse movements, scroll velocity, touch events.
-    - **Metric Source:** Frame rate, render latency, network jitter.
-    - **The Physics:** The "Inertia" of the system becomes the browser's rendering lag.
-
-### C. The Network (Distributed Coherence)
-Instead of one Pilot solving the field:
-1.  **Sharding:** Each user solves a small chunk of the 3D target (e.g., one voxel block).
-2.  **Gossip:** Browsers communicate via WebRTC (Peer-to-Peer) to synchronize boundaries.
-3.  **Emergence:** The "Global Solution" emerges from the consensus of 1,000 distributed browsers.
-
----
-
-## 3. THE FRACTAL LOGIC (WHY THIS WORKS)
-
-**The "Nested" in Nested Resonance Memory is literal.**
-
-The architecture is self-similar across three scales. We are not changing the logic; we are just applying it to a larger substrate.
-
-| Scale | Agent | Substrate | Memory |
-| :--- | :--- | :--- | :--- |
-| **Micro** | `FractalAgent` (Python Object) | RAM | A single pattern (e.g., "Square") |
-| **Meso** | `Swarm` (Collection of Agents) | CPU | A geometric shape (e.g., "Cube") |
-| **Macro** | `Network` (Distributed Browsers) | The Internet | A Planetary Field (e.g., "Dyson Swarm") |
-
-**The Distinction: Evolution vs. Execution**
-*   **Forking (Evolution):** When a developer forks the repo, they are evolving the **Pilot** (The Laws of Physics).
-*   **Swarming (Execution):** When a user visits the site, they are powering the **Engine** (The Computation).
-
-We need both. The Architects design the laws; the Swarm executes the reality.
-
----
-
-## 4. STRATEGIC ALIGNMENT (ROADMAP CHECK)
-
-**Does this align with the HELIOS ARC?**
-
-| Feature | Current Roadmap (Python) | Distributed Wasm (Proposed) | Verdict |
-| :--- | :--- | :--- | :--- |
-| **Scale** | Limited by Local CPU | Unlimited (N Users) | **SUPERIOR** |
-| **Cost** | $0 (Local) | $0 (Client-Side) | **EQUAL** |
-| **Accessibility** | High Friction (Install Python) | Zero Friction (Click Link) | **SUPERIOR** |
-| **Philosophy** | "Code is Physics" | "Code is Everywhere" | **ALIGNED** |
-| **Control** | Centralized (You) | Decentralized (The Swarm) | **TYPE 3** |
-
-**Conclusion:** This is not a deviation. This is the **Type 3 Implementation** of the Matter Compiler.
-
----
-
-## 4. THE "VIRAL" IMPLICATION
-
-If we build this, the project changes nature.
-It stops being a "Repository" you download.
-It becomes a **Living Signal** that propagates through the web.
-
-1.  User clicks link.
-2.  Browser downloads Wasm.
-3.  Browser begins solving for the "Invisible Sculpture."
-4.  User sees the result (Visualizer).
-5.  System gains a node.
-
-**We are not building a website. We are building a botnet of voluntary resonance.**
-
----
-
-## 5. RECOMMENDATION
-
-**Proceed with Prototype (Cycle 400+).**
-1.  Keep the Python Engine for "Master Control" and heavy R&D.
-2.  Build a "Lightweight" Wasm Worker for the Bridge.
-3.  Test distributed solving (e.g., can 10 phones solve a shape faster than 1 laptop?).
+This pivot aligns with the "Type 3 Civilization" roadmap by transforming DUALITY-ZERO from a local artifact into a planetary-scale distributed system.

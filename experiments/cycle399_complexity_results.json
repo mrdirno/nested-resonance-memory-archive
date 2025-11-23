@@ -1,0 +1,23 @@
+{
+  "1": {
+    "avg_ratio": 0.09138401733592974,
+    "avg_gorkov": 4.609863396970913e-12,
+    "success_ratio": 1,
+    "success_gorkov": 0,
+    "duration": 17.59426212310791
+  },
+  "8": {
+    "avg_ratio": 0.06095120386682463,
+    "avg_gorkov": 1.9028367899627713e-12,
+    "success_ratio": 8,
+    "success_gorkov": 0,
+    "duration": 17.760003805160522
+  },
+  "27": {
+    "avg_ratio": 0.0633343979028027,
+    "avg_gorkov": 2.061383350812116e-12,
+    "success_ratio": 26,
+    "success_gorkov": 8,
+    "duration": 17.795104026794434
+  }
+}
