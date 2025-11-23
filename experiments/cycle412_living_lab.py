@@ -38,6 +38,7 @@ POPULATION = []
 SERIAL_PORT = None
 BEST_FITNESS_HISTORY = [] # To track recent fitness peaks
 
+import sqlite3 # New import
 # --- Hardware Interfaces ---
 
 class SerialInterface:
@@ -90,77 +91,65 @@ class SerialInterface:
             print(f"[Serial] Write Error: {e}")
 
 class CameraInterface:
-    def __init__(self):
-        self.cap = None
-        self.is_mock = True
-        self.current_mock_fitness = 5.0 # Starting mock fitness
-        self.perturbation_timer = 0
-        self.perturbation_interval = random.randint(30, 80) # Perturb every X generations (mock)
-        
-    def auto_connect(self):
-        """Attempt to find a camera."""
-        try:
-            self.cap = cv2.VideoCapture(0)
-            if self.cap.isOpened():
-                self.is_mock = False
-                print("[Camera] Connected to Video Device 0.")
-                return True
-        except Exception as e:
-            print(f"[Camera] Connection failed: {e}")
-            
-        print("[Camera] No camera found. Using Mock Vision.")
-        self.is_mock = True
-        return False
-        
-    def get_fitness_score(self):
-        """
-        Capture an image and analyze levitation stability/quality.
-        Returns a float score (Higher is better).
-        """
-        # Calculate distance to target (Mock logic for now)
-        # In a real scenario, we'd find the particle position (x,y,z) from camera
-        # and compare it to TARGET_POINT.
-        
-        if self.is_mock:
-            # Mock: Simulate fitness, potentially dropping due to perturbations
-            # Simulate initial improvement, then random perturbations
-            if CURRENT_GENERATION < GENERATIONS_PER_CYCLE / 2:
-                self.current_mock_fitness += random.uniform(0.1, 0.5) # Simulate GA improvement
-            else:
-                self.perturbation_timer += 1
-                if self.perturbation_timer > self.perturbation_interval:
-                    self.current_mock_fitness *= random.uniform(0.5, 0.9) # Simulate fitness drop
-                    self.perturbation_timer = 0
-                    self.perturbation_interval = random.randint(30, 80) # Reset interval
-            
-            # Simulate environmental adaptation lag
-            # If target moves fast, fitness drops until GA catches up
-            # For simplicity, we just return the evolving mock fitness
-            return max(0.1, self.current_mock_fitness + random.uniform(-0.5, 0.5))
-            
-        if not self.cap or not self.cap.isOpened():
-            return 0.0
-            
-        ret, frame = self.cap.read()
-        if not ret:
-            return 0.0
-            
-        # --- Vision Logic ---
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        _, thresh = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY)
-        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        
-        if not contours:
-            return 0.0 # No particle seen
-            
-        largest_contour = max(contours, key=cv2.contourArea)
-        area = cv2.contourArea(largest_contour)
-        
-        return area
+    # ... (existing CameraInterface code) ...
 
+class KnowledgeGraphInterface:
+    def __init__(self, db_path="knowledge_graph.db"):
+        self.db_path = db_path
+        self._init_db()
+
+    def _init_db(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS solutions (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    target_x REAL,
+                    target_y REAL,
+                    target_z REAL,
+                    generation INTEGER,
+                    best_fitness REAL,
+                    best_genome TEXT,
+                    timestamp TEXT DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            conn.commit()
+
+    def save_solution(self, target_point, generation, best_fitness, best_genome):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO solutions (target_x, target_y, target_z, generation, best_fitness, best_genome) VALUES (?, ?, ?, ?, ?, ?)",
+                (target_point["x"], target_point["y"], target_point["z"], generation, best_fitness, json.dumps(best_genome))
+            )
+            conn.commit()
+        print(f"[KnowledgeGraph] Saved solution for target {target_point} with fitness {best_fitness:.4f}")
+
+    def load_best_solution(self, target_point, tolerance=0.5):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            # Find solutions near the target point
+            cursor.execute(
+                """
+                SELECT best_genome, best_fitness FROM solutions
+                WHERE ABS(target_x - ?) < ? AND ABS(target_y - ?) < ? AND ABS(target_z - ?) < ?
+                ORDER BY best_fitness DESC
+                LIMIT 1
+                """,
+                (target_point["x"], tolerance, target_point["y"], tolerance, target_point["z"], tolerance)
+            )
+            result = cursor.fetchone()
+            if result:
+                genome = json.loads(result[0])
+                fitness = result[1]
+                print(f"[KnowledgeGraph] Loaded best solution for target {target_point} with fitness {fitness:.4f}")
+                return genome, fitness
+            return None, None
+            
 # Instantiate Global Hardware
 HARDWARE = SerialInterface()
 EYES = CameraInterface()
+MEMORY = KnowledgeGraphInterface() # New global instance
 
 def init_population():
     pop = []
@@ -252,6 +241,7 @@ async def handler(websocket):
 async def main():
     global CURRENT_GENERATION, POPULATION, BEST_FITNESS_HISTORY
     
+    # Init Hardware
     HARDWARE.auto_connect()
     EYES.auto_connect()
     
@@ -266,6 +256,13 @@ async def main():
     POPULATION = init_population()
     CURRENT_GENERATION = 0
     BEST_FITNESS_HISTORY = []
+
+    # Try to load a known solution from the knowledge graph
+    loaded_genome, loaded_fitness = MEMORY.load_best_solution(TARGET_POINT)
+    if loaded_genome and loaded_fitness is not None:
+        POPULATION[0] = loaded_genome # Seed the best individual
+        BEST_FITNESS_HISTORY.append(loaded_fitness)
+        print(f"[KnowledgeGraph] Seeded GA with loaded solution (Fitness: {loaded_fitness:.4f}).")
     
     while True: # Infinite loop for persistent autonomy
         print(f"\n--- Starting Optimization Cycle {CURRENT_GENERATION // GENERATIONS_PER_CYCLE + 1} ---")
@@ -283,6 +280,9 @@ async def main():
             POPULATION, best_genome, best_fitness = evolve(scored_pop)
             
             await broadcast_ga_status(CURRENT_GENERATION, best_fitness, np.array(best_genome).tolist())
+            
+            # Save the best solution to the knowledge graph
+            MEMORY.save_solution(TARGET_POINT, CURRENT_GENERATION, best_fitness, best_genome)
             
             # Perturbation detection and recovery
             if len(BEST_FITNESS_HISTORY) >= FITNESS_HISTORY_LENGTH:
