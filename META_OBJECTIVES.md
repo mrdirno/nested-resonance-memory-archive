@@ -62,6 +62,10 @@
 
 **Focus:** Real-Time Visualization of the Acoustic Field and Trapped Objects.
 
+### Active Objectives
+- ✅ **Volumetric Visualization:** `PRIN-HOLODECK-V1` (Cycle 377). 3D Point Cloud of acoustic traps.
+- [ ] **Interaction Loop:** Verify real-time manipulation feedback.
+
 
 ---
 
