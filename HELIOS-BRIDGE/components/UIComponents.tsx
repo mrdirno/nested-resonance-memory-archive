@@ -73,20 +73,42 @@ const Button: React.FC<{ children: React.ReactNode, variant?: 'primary' | 'secon
 };
 
 
-const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: number) => void }> = ({ label, value, onChange }) => (
-  <div className="bg-black/20 p-3 rounded-xl border border-white/5">
-    <div className="flex justify-between text-xs font-bold mb-2">
-      <span className={value > 0 ? 'text-white' : 'text-white/40'}>{label}</span>
-      <span className="text-primary font-mono">{Math.round(value * 100)}%</span>
+const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: number) => void }> = ({ label, value, onChange }) => {
+  const isActive = value > 0;
+  const displayValue = Math.abs(value);
+
+  return (
+    <div className={`p-3 rounded-xl border transition-all ${isActive ? 'bg-black/40 border-white/10' : 'bg-black/10 border-white/5 opacity-60'}`}>
+      <div className="flex justify-between items-center mb-2">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              // Toggle polarity
+              if (value === 0) onChange(0.1); // Default to 10% if 0
+              else onChange(value * -1);
+            }}
+            className={`p-1 rounded-full transition-colors ${isActive ? 'bg-primary text-white shadow-[0_0_10px_rgba(124,58,237,0.5)]' : 'bg-white/10 text-white/30 hover:bg-white/20'}`}
+          >
+            <Settings size={12} className={isActive ? "animate-spin-slow" : ""} />
+          </button>
+          <span className={`text-xs font-bold ${isActive ? 'text-white' : 'text-white/40'}`}>{label}</span>
+        </div>
+        <span className={`font-mono text-xs ${isActive ? 'text-primary' : 'text-white/30'}`}>{Math.round(displayValue * 100)}%</span>
+      </div>
+      <input
+        type="range" min="0" max="1" step="0.01"
+        value={displayValue}
+        onChange={(e) => {
+          const newVal = parseFloat(e.target.value);
+          // If it was disabled (negative), keep it negative (disabled) while sliding? 
+          // No, dragging usually implies "I want to use this". Let's make dragging auto-enable.
+          onChange(newVal);
+        }}
+        className={`w-full h-1 rounded-lg appearance-none cursor-pointer ${isActive ? 'bg-white/10 accent-primary' : 'bg-white/5 accent-white/20'}`}
+      />
     </div>
-    <input
-      type="range" min="0" max="1" step="0.01"
-      value={value}
-      onChange={(e) => onChange(parseFloat(e.target.value))}
-      className="w-full accent-primary h-1 bg-white/10 rounded-lg appearance-none cursor-pointer"
-    />
-  </div>
-);
+  );
+};
 export const UIOverlay: React.FC<UIProps> = (props) => {
   const { config, setConfig, activePanel, setActivePanel, digitRefs, onCameraMove, onResetCamera } = props;
 
