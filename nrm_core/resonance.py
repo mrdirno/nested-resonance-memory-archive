@@ -1,25 +1,23 @@
 """
-NRM Core: Resonance Logic
+NRM Core: Resonance Logic (Vectorized)
 """
-import math
-import random
+from .vector import Vector
 
 class ResonantNode:
     def __init__(self, node_id, vector):
         self.id = node_id
-        self.vector = vector # List or Tuple of floats
+        # Auto-convert list to Vector if needed
+        if isinstance(vector, list):
+            self.vector = Vector(vector)
+        else:
+            self.vector = vector
         self.energy = 0.0
         
     def resonate(self, input_vector):
-        # Dot product similarity
-        dot = sum(a * b for a, b in zip(self.vector, input_vector))
-        mag_a = math.sqrt(sum(a * a for a in self.vector))
-        mag_b = math.sqrt(sum(b * b for b in input_vector))
-        
-        if mag_a == 0 or mag_b == 0:
-            similarity = 0.0
-        else:
-            similarity = dot / (mag_a * mag_b)
+        if isinstance(input_vector, list):
+            input_vector = Vector(input_vector)
+            
+        similarity = self.vector.cosine_similarity(input_vector)
             
         # Energy increases based on similarity
         if similarity > 0:

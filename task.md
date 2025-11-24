@@ -1519,6 +1519,17 @@
 - [x] **Goal:** Write a final reflection on the session.
 - [x] **Artifact:** `EPILOGUE_SESSION_1.md`.
 
+# Task: Cycle 491 - The Vector Class
+- [x] **Define Cycle 491:** Library Upgrade.
+- [x] **Goal:** Implement a dedicated Vector class for NRM.
+- [x] **Experiment:** `experiments/cycle491_vector_test.py`.
+- [x] **Result:** Vector class operational.
+
+# Task: Cycle 492 - The Integration
+- [ ] **Define Cycle 492:** Library Refactor.
+- [ ] **Goal:** Update `resonance.py` to use `Vector`.
+- [ ] **Experiment:** `experiments/cycle492_integration_test.py`.
+
 
 
 
