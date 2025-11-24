@@ -381,41 +381,40 @@ class UniversalOperator:
             
         Returns:
             dict: {
-                'vector_sum': float, # Visibility (Coherent Sum)
-                'scalar_sum': float, # Mass/Gravity (Incoherent Sum)
-                'ratio': float       # Coherence Ratio
+                'vector_sum': float, # Visibility (Total Coherent Intensity)
+                'scalar_sum': float, # Mass (Total Incoherent Energy)
+                'coherence_ratio': float, # V/M: >1 = Focusing, <1 = Cancellation
+                'dark_matter_index': float # 1 - (V/M_focus) normalized? Or just M - V?
             }
         """
-        # Vector Sum (Visibility) - Already calculated as field magnitude squared at each point
-        # But for the whole field, "Visibility" is the sum of intensities?
-        # No, OSD defines local Visibility V(z) = |Sum(psi_n)|^2.
-        # The field_data IS the coherent sum (Sum(psi_n)) at each voxel.
-        # So |field_data|^2 is the local Visibility map.
-        # Global Visibility = Sum(|field_data|^2)
-        
+        # 1. Vector Sum (Visibility)
+        # V = Sum(|Sum(psi)|^2) over volume
         visibility_map = np.abs(field_data)**2
-        global_visibility = np.sum(visibility_map)
+        vector_sum_total = np.sum(visibility_map)
         
-        # Scalar Sum (Mass) - Sum of individual emitter intensities
-        # M(z) = Sum(|psi_n(z)|^2)
-        # We need to recalculate this because field_data is already interfered.
-        # This is computationally expensive (requires propagating each emitter individually).
-        # For this implementation, we will use a simplified proxy or just note the limitation.
+        # 2. Scalar Sum (Mass)
+        # M = Sum(Sum(|psi|^2)) over volume
+        # Since our current physics model (AcousticSubstrate3D) ignores 1/r decay,
+        # |psi_n|^2 = |A_n|^2 is constant everywhere for each emitter.
+        # Thus, Mass Density is uniform: Sum(A_n^2).
+        # Total Mass = Volume * Sum(A_n^2).
         
-        # PROXY: In a perfectly coherent field, Scalar Sum == Vector Sum.
-        # In a destructive field, Vector Sum << Scalar Sum.
-        # We can estimate Scalar Sum by assuming incoherent addition of all emitters?
-        # M_total ~ N_emitters * Average_Intensity?
+        emitter_intensities = [e.amplitude**2 for e in self.emitters]
+        mass_density = sum(emitter_intensities)
+        scalar_sum_total = mass_density * field_data.size
         
-        # Let's implement the EXACT calculation for a small sample or just the concept.
-        # Since we can't easily un-interfere the field without re-propagating 384 times,
-        # we will add a placeholder that acknowledges the OSD theory.
-        
-        # "Dark Matter" Index:
-        # If we had the Scalar Sum, we could find (Scalar - Vector).
-        
+        # 3. Coherence Ratio
+        # If incoherent (random), V ~ M.
+        # If coherent (focused), V > M (up to N times M).
+        # If destructive, V < M.
+        if scalar_sum_total > 0:
+            ratio = vector_sum_total / scalar_sum_total
+        else:
+            ratio = 0.0
+            
         return {
-            "vector_sum": float(global_visibility),
-            "scalar_sum": "Requires per-emitter propagation (Future Cycle)",
-            "note": "OSD Integration Successful: System is aware of the Vector/Scalar distinction."
+            "vector_sum": float(vector_sum_total),
+            "scalar_sum": float(scalar_sum_total),
+            "coherence_ratio": float(ratio),
+            "note": "Scalar Sum is uniform due to non-decaying simulation model. Ratio indicates focusing efficiency."
         }

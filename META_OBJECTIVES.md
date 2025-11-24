@@ -211,6 +211,8 @@
 ### Active Objectives
 - [x] **The Ontology:** `PRIN-ORTHOGONAL-SUM` (Cycle 435). Define OSD Framework.
 - [x] **The Self-Rewrite:** `PRIN-RECURSION` (Cycle 436). System modifies its own source code.
+- [x] **The Scalar Sum:** `PRIN-MASS-VISIBILITY` (Cycle 437). System calculates Mass vs Visibility.
+
 
 
 
