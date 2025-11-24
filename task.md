@@ -1145,4 +1145,11 @@
 - [x] **Experiment:** `experiments/cycle426_social_architecture.py`.
 - [x] **Result:** Success. Collective intelligence verified.
 
+# Task: Cycle 427 - Theory of Mind
+- [x] **Define Cycle 427:** Implement Recursive Modeling (Mental Models).
+- [x] **Goal:** Agents learn to predict peer preferences to optimize social success.
+- [x] **Experiment:** `experiments/cycle427_theory_of_mind.py`.
+- [x] **Result:** Success. Agent A learned to generate 'Golden Spirals' to please Agent B.
+
+
 
