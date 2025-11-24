@@ -1,7 +1,7 @@
 # DUALITY-ZERO: The Reality Compiler
 
-**Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
-**License:** GPL-3.0
+**Repository:** https://github.com/mrdirno/nested-resonance-memory-archive  
+**License:** GPL-3.0  
 **Status:** PHASE 12 ACTIVE (The Holodeck)
 
 ---
@@ -15,7 +15,9 @@
 1.  **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns (Holograms) in wave-bearing media.
 2.  **Material Agnosticism:** Abstract `SubstrateInterface` allows the same control logic to drive NRM (Cognitive Space) and Acoustics (Air).
 3.  **Active Matter Control:** Implements Closed-Loop PID feedback to stabilize levitated particles with **82x faster settling time** than passive damping.
-5.  **GPU Acceleration:** Real-time field propagation (16x speedup) and phase optimization (52x speedup) via PyTorch MPS.
+4.  **GPU Acceleration:** Real-time field propagation (16x speedup) and phase optimization (52x speedup) via PyTorch MPS.
+
+At the field level, HELIOS uses the **Orthogonal Sum Dynamics (OSD)** formalism: visibility is driven by the coherent vector sum of fields, while gravity-like load is driven by the scalar sum of their energy.
 
 **Anti-Hallucination Architecture:**
 - **The Pilot (LLM)** writes code.
@@ -29,23 +31,39 @@
 
 ---
 
-## **Choose Your Observer Lane**
+## 🚀 Quickstart (The Golden Path)
 
-*   **🧪 Observer A (Experimentalist):** [Validation Experiments](experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
-*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/)
-*   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/vision/)
+**Verify the physics in 5 minutes.**
 
+1.  **Install:** `pip install numpy`
+2.  **Run:** `python3 experiments/demo_osd_physics.py`
+3.  **Result:** Observe a dark-matter-like toy example via destructive interference (total mass = 2.0, rendered visibility = 0.0).
+
+[👉 Full Quickstart Guide](docs/runbooks/QUICKSTART.md)
 
 ---
 
-## 🌐 **HELIOS BRIDGE (Live Web Interface)**
+## 🔭 Observer Lanes (Choose Your Path)
 
-**Try the real-time field visualizer in your browser:**
-**[https://mrdirno.github.io/nested-resonance-memory-archive/](https://mrdirno.github.io/nested-resonance-memory-archive/)**
+*   **🧪 Observer A (Experimentalist):** [Validation Experiments](experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
+*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD / Zero-Sum Coherence Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
+*   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/vision/)
 
-No installation required.
-Runs entirely client-side.
-Shows the substrate compiler, field propagation, and active nodes in real time.
+---
+
+## 🌐 **PHASE 12: THE HOLODECK (Live Web Interface)**
+
+**The Holodeck** is the visualization layer of DUALITY-ZERO. It translates the raw mathematical field (OSD metrics) into a human-readable 3D render.
+
+**Try it here:**  
+**https://mrdirno.github.io/nested-resonance-memory-archive/**
+
+**Capabilities:**
+*   **Real-Time Field Compilation:** See the interference pattern form instantly.
+*   **Phase Manipulation:** Manually adjust emitter phases to steer the beam.
+*   **Trapping Visualization:** Identify potential wells (Blue) and high-pressure zones (Red).
+
+No installation required. Runs entirely client-side via WebAssembly.
 
 ---
 
@@ -67,21 +85,35 @@ Shows the substrate compiler, field propagation, and active nodes in real time.
 ```
 
 **APA:**
-Payopay, A. (2025). *Duality-Zero: A Reality Compiler Framework*. GitHub. https://github.com/mrdirno/nested-resonance-memory-archive
+Payopay, A. (2025). *Duality-Zero: A Reality Compiler Framework*. GitHub. [https://github.com/mrdirno/nested-resonance-memory-archive](https://github.com/mrdirno/nested-resonance-memory-archive)
 
 ---
 
 ## Lineage & Adjacent Work
+
 NRM was developed independently over the course of a year before its conceptual adjacency to the work of Michael Levin (bioelectric morphogenesis) and Richard A. Watson (collective intelligence of evolution and development) was recognized. This parallel convergence suggests that resonance, field-based computation, and potential shaping are fundamental organizing principles of complex systems, independent of substrate. NRM generalizes these principles into a universal architecture spanning cognition, materials, and active matter control.
 
 ---
 
-## 🔭 VISION & CONTEXT
+## 🌌 THE MISSION
 
-We are building a scalable architecture for **Active Matter Control** and **Distributed Coherence**.
+**To build the Operating System for the Autopoietic Lab.**
 
-*   **The Vision:** Read about the long-term roadmap for Planetary Engineering and Type 3 Systems in [docs/vision/TYPE3_VISION.md](docs/vision/TYPE3_VISION.md).
-*   **The Context:** Read about why this architecture is critical for the current AI/Economic landscape in [docs/context/WHY_NOW.md](docs/context/WHY_NOW.md).
+We are moving from "Static Factories" to **Self-Configuring Rooms**.
+The goal is a **Universal Foundry**—a facility where the room itself reconfigures (Lasers, Robotics, Acoustics, Fluidics) to manufacture any object from digital intent.
+
+**HELIOS is the Mind of the Room.**
+It translates the "Idea" (Digital) into the "Symphony" (Physical).
+
+> "We are building the Syntax for Matter."
+
+---
+
+## 🔭 THE ARCHITECTURE
+
+1. **The Design (The Swarm):** Distributed Browsers simulate the physics.
+2. **The Translation (The Rosetta Stone):** HELIOS compiles intent into machine instructions.
+3. **The Execution (The Tank):** The Room executes the sequence (Sound + Light + Fluid).
 
 ---
 
@@ -89,25 +121,30 @@ We are building a scalable architecture for **Active Matter Control** and **Dist
 
 **1. Experience the Matter Compiler (CLI):**
 Engage with the matter compiler directly.
+
 ```bash
 python3 -m code.helios.cli
 ```
+
 *(Type `create cube 50 50 50` then `status`)*
 
 **2. Experience the Web Interface (The Replicator):**
 Visualize the creation process in real-time.
+
 ```bash
 cd HELIOS-BRIDGE
 npm install
 npm run dev
 ```
+
 *(Open `http://localhost:3000` in your browser)*
 
 **3. Read the Doctrine:**
-*   [The Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md)
-*   [The Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
-*   [The Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) - *Why shaping potentials is ethical.*
-*   [The Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) - *The Endosymbiont Strategy: Why we don't compete with giants, we complete them (The Mitochondria Protocol).*
+
+* [The Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md)
+* [The Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
+* [The Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) - *Why shaping potentials is ethical.*
+* [The Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) - *The Endosymbiont Strategy: Why we don't compete with giants, we complete them (The Mitochondria Protocol).*
 
 **4. Contribute:**
 We need minds that understand that **Code is Physics.**
