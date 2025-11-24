@@ -1,313 +1,110 @@
 """
-Cycle 418: The Creative Machine (Generative Design)
-Role: Generative Designer & Optimizer
-Responsibility: Invent new target shapes, assess novelty, and attempt physical realization.
+Cycle 418: The Creative Machine
+Role: The Artist
+Responsibility: Autonomously generate novel geometric targets for the Matter Compiler.
 """
-import asyncio
-import websockets
-import json
 import random
-import numpy as np
-import time
-import copy
-import serial
-import serial.tools.list_ports
-import cv2
-import sqlite3
 import math
-
-# --- GA Parameters ---
-POPULATION_SIZE = 20
-GENERATIONS_PER_SHAPE = 30
-MUTATION_RATE = 0.1
-ELITISM_COUNT = 2
-
-# --- Simulation Constants ---
-NUM_EMITTERS = 64
-# Bounding box for generation
-MIN_COORD = -20
-MAX_COORD = 20
-
-# --- Global State ---
-CONNECTED_WORKERS = set()
-CURRENT_GENERATION = 0
-POPULATION = []
-SERIAL_PORT = None
-BEST_FITNESS_HISTORY = []
-
-# --- Hardware Interfaces (Mock/Real) ---
-
-class SerialInterface:
-    def __init__(self):
-        self.port = None
-        self.is_mock = True
-        
-    def auto_connect(self):
-        ports = list(serial.tools.list_ports.comports())
-        target_port = None
-        for p in ports:
-            if "USB" in p.description or "ACM" in p.device:
-                target_port = p.device
-                break
-        if target_port:
-            try:
-                self.port = serial.Serial(target_port, 115200, timeout=0.1)
-                self.is_mock = False
-                self.port.write(b"READY\n")
-                return True
-            except:
-                pass
-        self.is_mock = True
-        return False
-
-    def send_phases(self, phases):
-        if self.is_mock or not self.port or not self.port.is_open:
-            return
-        try:
-            data = bytearray([0xFF])
-            for p in phases:
-                val = int((p / (2 * np.pi)) * 255) % 256
-                data.append(val)
-            checksum = sum(data[1:]) % 256
-            data.append(checksum)
-            self.port.write(data)
-        except:
-            pass
-
-class CameraInterface:
-    def __init__(self):
-        self.cap = None
-        self.is_mock = True
-        self.current_mock_fitness = 5.0
-        
-    def auto_connect(self):
-        try:
-            self.cap = cv2.VideoCapture(0)
-            if self.cap.isOpened():
-                self.is_mock = False
-                return True
-        except:
-            pass
-        self.is_mock = True
-        return False
-        
-    def get_fitness_score(self, target_point):
-        # In a real scenario, this would measure how close the particle is to the target_point.
-        # For mock, we simulate "realizability" - some shapes are harder than others.
-        if self.is_mock:
-            # Distance from center makes it harder
-            dist = math.sqrt(target_point['x']**2 + target_point['y']**2 + target_point['z']**2)
-            difficulty = 1.0 + (dist / 50.0)
-            base_fitness = 10.0 / difficulty
-            return max(0.1, base_fitness + random.uniform(-0.5, 0.5))
-            
-        if not self.cap or not self.cap.isOpened():
-            return 0.0
-        ret, frame = self.cap.read()
-        if not ret:
-            return 0.0
-        # Placeholder for real CV logic
-        return 0.0
-
-class KnowledgeGraphInterface:
-    def __init__(self, db_path="knowledge_graph.db"):
-        self.db_path = db_path
-        self._init_db()
-
-    def _init_db(self):
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS creations (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    shape_type TEXT,
-                    parameters TEXT,
-                    target_x REAL,
-                    target_y REAL,
-                    target_z REAL,
-                    novelty_score REAL,
-                    realizability_score REAL,
-                    best_genome TEXT,
-                    timestamp TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
-            conn.commit()
-
-    def save_creation(self, shape_data, novelty, realizability, genome):
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                "INSERT INTO creations (shape_type, parameters, target_x, target_y, target_z, novelty_score, realizability_score, best_genome) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                (shape_data['type'], json.dumps(shape_data['params']), shape_data['target']['x'], shape_data['target']['y'], shape_data['target']['z'], novelty, realizability, json.dumps(genome))
-            )
-            conn.commit()
-            
-    def get_history(self):
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT target_x, target_y, target_z FROM creations")
-            return cursor.fetchall()
+import numpy as np
 
 class GenerativeDesigner:
-    def __init__(self, memory_interface):
-        self.memory = memory_interface
-        
+    def __init__(self):
+        self.known_shapes = set(["cube", "sphere", "pyramid"])
+        self.novelty_threshold = 0.8
+
     def generate_shape(self):
-        """Procedurally generates a new target point/shape."""
-        # Simple generator: Random point within bounds, but with some structure
-        # e.g., favoring shells or axes
+        # 1. Select Generator
+        generators = [self.lorenz_attractor, self.mobius_strip, self.torus_knot, self.random_cloud]
+        gen_func = random.choice(generators)
         
-        mode = random.choice(["random", "spherical_shell", "axis_aligned"])
+        # 2. Generate Point Cloud
+        points = gen_func()
         
-        if mode == "random":
-            x = random.uniform(MIN_COORD, MAX_COORD)
-            y = random.uniform(MIN_COORD, MAX_COORD)
-            z = random.uniform(MIN_COORD + 20, MAX_COORD + 20) # Levitation height offset
-        elif mode == "spherical_shell":
-            r = random.uniform(10, 20)
-            theta = random.uniform(0, 2*math.pi)
-            phi = random.uniform(0, math.pi)
-            x = r * math.sin(phi) * math.cos(theta)
-            y = r * math.sin(phi) * math.sin(theta)
-            z = r * math.cos(phi) + 40 # Center at z=40
-        elif mode == "axis_aligned":
-            axis = random.choice(['x', 'y'])
-            if axis == 'x':
-                x = random.uniform(MIN_COORD, MAX_COORD)
-                y = 0
-                z = 40
-            else:
-                x = 0
-                y = random.uniform(MIN_COORD, MAX_COORD)
-                z = 40
-                
+        # 3. Analyze Features (Simple Hash)
+        signature = self.analyze_signature(points)
+        
+        # 4. Assess Novelty
+        is_novel = signature not in self.known_shapes
+        
         return {
-            "type": "point",
-            "params": {"mode": mode},
-            "target": {"x": x, "y": y, "z": z}
+            "name": gen_func.__name__,
+            "points": points,
+            "signature": signature,
+            "is_novel": is_novel
         }
 
-    def calculate_novelty(self, new_shape):
-        """Calculates distance to nearest neighbor in history."""
-        history = self.memory.get_history()
-        if not history:
-            return 1.0 # Maximum novelty if no history
-            
-        target = new_shape['target']
-        min_dist = float('inf')
+    def analyze_signature(self, points):
+        # Simplified shape signature: Aspect Ratio of Bounding Box
+        xs = [p[0] for p in points]
+        ys = [p[1] for p in points]
+        zs = [p[2] for p in points]
         
-        for h in history:
-            d = math.sqrt((target['x'] - h[0])**2 + (target['y'] - h[1])**2 + (target['z'] - h[2])**2)
-            if d < min_dist:
-                min_dist = d
-                
-        # Normalize novelty (e.g., sigmoid or bounded)
-        # Here, just raw distance
-        return min_dist
+        dx = max(xs) - min(xs)
+        dy = max(ys) - min(ys)
+        dz = max(zs) - min(zs)
+        
+        # Quantize to avoid float drift
+        ratio_xy = round(dx / (dy + 0.001), 1)
+        ratio_xz = round(dx / (dz + 0.001), 1)
+        
+        return f"{ratio_xy}:{ratio_xz}"
 
-# Instantiate Global Objects
-HARDWARE = SerialInterface()
-EYES = CameraInterface()
-MEMORY = KnowledgeGraphInterface()
-DESIGNER = GenerativeDesigner(MEMORY)
+    def lorenz_attractor(self, n=100):
+        points = []
+        x, y, z = 0.1, 0.0, 0.0
+        dt = 0.01
+        sigma, rho, beta = 10.0, 28.0, 8.0/3.0
+        
+        for _ in range(n):
+            dx = sigma * (y - x)
+            dy = x * (rho - z) - y
+            dz = x * y - beta * z
+            x += dx * dt
+            y += dy * dt
+            z += dz * dt
+            points.append((x, y, z + 40)) # Shift up
+        return points
 
-def init_population():
-    pop = []
-    for _ in range(POPULATION_SIZE):
-        genome = [random.uniform(0, 2 * np.pi) for _ in range(NUM_EMITTERS)]
-        pop.append(genome)
-    return pop
+    def mobius_strip(self, n=100):
+        points = []
+        for i in range(n):
+            u = (i / n) * 2 * math.pi
+            v = random.uniform(-1, 1)
+            x = (1 + v/2 * math.cos(u/2)) * math.cos(u) * 10
+            y = (1 + v/2 * math.cos(u/2)) * math.sin(u) * 10
+            z = v/2 * math.sin(u/2) * 10 + 40
+            points.append((x, y, z))
+        return points
 
-async def evaluate_genome_physically(genome, target_point):
-    HARDWARE.send_phases(genome)
-    await asyncio.sleep(0.02) # Fast update
-    fitness = EYES.get_fitness_score(target_point)
-    return fitness
+    def torus_knot(self, n=100):
+        points = []
+        for i in range(n):
+            t = (i / n) * 2 * math.pi * 3 # 3 loops
+            x = (10 + 5 * math.cos(3*t)) * math.cos(2*t)
+            y = (10 + 5 * math.cos(3*t)) * math.sin(2*t)
+            z = 5 * math.sin(3*t) + 40
+            points.append((x, y, z))
+        return points
 
-async def evaluate_generation_physically(population, target_point):
-    scored_population = []
-    for i, genome in enumerate(population):
-        fitness = await evaluate_genome_physically(genome, target_point)
-        scored_population.append((genome, fitness))
-    return scored_population
+    def random_cloud(self, n=100):
+        return [(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(30, 50)) for _ in range(n)]
 
-def evolve(scored_population, mutation_rate):
-    scored_population.sort(key=lambda x: x[1], reverse=True)
-    best_genome = copy.deepcopy(scored_population[0][0])
-    best_fitness = scored_population[0][1]
+def run_experiment():
+    print("Cycle 418: Generative Design Test")
+    print("=================================")
     
-    next_gen = []
-    for i in range(ELITISM_COUNT):
-        next_gen.append(scored_population[i][0])
-        
-    while len(next_gen) < POPULATION_SIZE:
-        parent1 = tournament_select(scored_population)
-        parent2 = tournament_select(scored_population)
-        child = mutate(crossover(parent1, parent2), mutation_rate)
-        next_gen.append(child)
-        
-    return next_gen, best_genome, best_fitness
-
-def tournament_select(scored_pop, k=3):
-    candidates = random.sample(scored_pop, k)
-    candidates.sort(key=lambda x: x[1], reverse=True)
-    return candidates[0][0]
-
-def crossover(p1, p2):
-    point = random.randint(1, len(p1) - 1)
-    return p1[:point] + p2[point:]
-
-def mutate(genome, rate):
-    for i in range(len(genome)):
-        if random.random() < rate:
-            genome[i] += random.gauss(0, 0.5)
-            genome[i] %= (2 * np.pi)
-    return genome
-
-async def main():
-    HARDWARE.auto_connect()
-    EYES.auto_connect()
+    designer = GenerativeDesigner()
     
-    print("Starting The Creative Machine (Cycle 418)...")
-    
-    creation_count = 0
-    
-    while creation_count < 5: # Generate 5 shapes for this cycle
-        creation_count += 1
-        print(f"\n--- Creation {creation_count} ---")
+    for i in range(5):
+        creation = designer.generate_shape()
+        print(f"\n--- Creation {i+1}: {creation['name']} ---")
+        print(f"Points: {len(creation['points'])}")
+        print(f"Signature: {creation['signature']}")
+        print(f"Novelty: {'NEW' if creation['is_novel'] else 'KNOWN'}")
         
-        # 1. Generate
-        shape = DESIGNER.generate_shape()
-        novelty = DESIGNER.calculate_novelty(shape)
-        print(f"[DESIGNER] Generated: {shape['params']['mode']} at {shape['target']}")
-        print(f"[DESIGNER] Novelty Score: {novelty:.4f}")
-        
-        # 2. Realize (Optimize)
-        population = init_population()
-        best_fitness_for_shape = 0
-        best_genome_for_shape = []
-        
-        for gen in range(GENERATIONS_PER_SHAPE):
-            scored_pop = await evaluate_generation_physically(population, shape['target'])
-            population, best_genome, best_fitness = evolve(scored_pop, MUTATION_RATE)
-            
-            if best_fitness > best_fitness_for_shape:
-                best_fitness_for_shape = best_fitness
-                best_genome_for_shape = best_genome
-                
-            if gen % 10 == 0:
-                print(f"  Gen {gen}: Best Fitness = {best_fitness:.4f}")
-                
-        print(f"[REALIZER] Optimization Complete. Realizability: {best_fitness_for_shape:.4f}")
-        
-        # 3. Save
-        MEMORY.save_creation(shape, novelty, best_fitness_for_shape, best_genome_for_shape)
-        print("[MEMORY] Creation saved.")
-        
-    print("Cycle 418 Complete.")
+        if creation['is_novel']:
+            designer.known_shapes.add(creation['signature'])
+            print("Action: Added to Memory.")
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("Stopped.")
+    run_experiment()
