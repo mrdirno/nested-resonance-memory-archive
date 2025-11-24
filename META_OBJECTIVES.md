@@ -209,7 +209,7 @@
 **Focus:** Ontological Definition and System Scaling.
 
 ### Active Objectives
-- [x] **The Ontology:** `PRIN-ORTHOGONAL-SUBSTRATE` (Cycle 435). Define OSD Framework.
+- [x] **The Ontology:** `PRIN-ORTHOGONAL-SUM` (Cycle 435). Define OSD Framework.
 
 
 

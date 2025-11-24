@@ -1,5 +1,7 @@
-# ORTHOGONAL SUBSTRATE DYNAMICS (OSD)  
+# ORTHOGONAL SUM DYNAMICS (OSD)  
 *A Speculative Ontological Field Framework for Nested Resonance and Latency*
+
+> **Terminology Note:** In this formulation, “Orthogonal Sum” refers to the distinction between the coherent vector sum that governs Visibility, and the incoherent scalar sum that governs total energy load in the field’s Hilbert space. We remain in a single physical substrate; no separate hidden manifold is assumed.
 
 **Architect:** Aldrin Payopay  
 **Context:** Nested Resonance Memory (NRM) Architecture  
