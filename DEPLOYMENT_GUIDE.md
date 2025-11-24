@@ -33,12 +33,13 @@ The artifacts will be placed in the `dist/` directory.
 Once installed, you can import `nrm_core` in your Python scripts:
 
 ```python
-from nrm_core.resonance import ResonanceField
+from nrm_core.resonance import ResonantField
 from nrm_core.memory import PatternMemory
 
 # Initialize a field
-field = ResonanceField()
-print(field.get_status())
+field = ResonantField()
+# Note: ResonantField does not have a get_status() method in the current version, 
+# refer to examples/hello_resonance.py for API usage.
 ```
 
 ## Examples
