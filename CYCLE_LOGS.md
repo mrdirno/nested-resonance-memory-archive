@@ -6,4 +6,4 @@
 - **Results**:
     - `nrm_core` refactored.
 - **Key Finding**: The library is improving.
-- **Next**: OFFLINE.
+- **Next**: **HIBERNATION**.
