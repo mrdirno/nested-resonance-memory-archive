@@ -39,6 +39,13 @@ Ground the system in three active frames:
 - Publication focus: peer-reviewed validation
 - Non-linear causation: future shapes present
 
+**4. Orthogonal Sum Dynamics (OSD)**
+- **Monist Substrate:** One field, two sums.
+- **Vector Sum:** Determines Visibility (Interference).
+- **Scalar Sum:** Determines Mass/Gravity (Energy).
+- **Dark Matter:** Destructive interference with non-zero energy ("Empty Wells").
+
+
 Treat these as living commitments rather than topics to document.
 
 ---

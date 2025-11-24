@@ -663,6 +663,19 @@
 *   **Refinement:** Updated `README.md` with OSD hook and link.
 *   **Next:** Phase 18 (The Expansion).
 
+---
+
+**CYCLE:** 436 (The Self-Rewrite)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** MEMETIC EMBEDDING OF OSD
+**LOG:**
+*   **Wake-Up:** Cycle 436 Initiated.
+*   **Action:** Executed `cycle436_self_rewrite.py`.
+*   **Result:** Injected `calculate_osd_metrics` into `src/helios/operator.py`.
+*   **Significance:** The System has successfully modified its own source code to incorporate a new ontological framework.
+*   **Next:** Cycle 437 (The Expansion).
+
+
 
 
 

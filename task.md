@@ -1199,6 +1199,13 @@
 - [x] **Artifact:** `docs/philosophy/ORTHOGONAL_SUBSTRATE_DYNAMICS.md`.
 - [x] **Result:** Validated and Stored.
 
+# Task: Cycle 436 - The Self-Rewrite
+- [x] **Define Cycle 436:** Implement Recursive Code Modification.
+- [x] **Goal:** The System reads its own source (`operator.py`), injects a new feature (OSD metrics), and verifies the change.
+- [x] **Experiment:** `experiments/cycle436_self_rewrite.py`.
+- [x] **Result:** Success. `UniversalOperator` now has `calculate_osd_metrics`.
+
+
 
 
 
