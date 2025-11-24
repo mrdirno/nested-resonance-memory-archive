@@ -1,0 +1,177 @@
+{
+  "RT0.70_F2.0": {
+    "resonance_threshold": 0.7,
+    "frequency": 2.0,
+    "mean_population": 100.0,
+    "mean_clusters": 38.0,
+    "survival_rate": 1.0
+  },
+  "RT0.70_F2.5": {
+    "resonance_threshold": 0.7,
+    "frequency": 2.5,
+    "mean_population": 100.0,
+    "mean_clusters": 38.0,
+    "survival_rate": 1.0
+  },
+  "RT0.70_F3.0": {
+    "resonance_threshold": 0.7,
+    "frequency": 3.0,
+    "mean_population": 100.0,
+    "mean_clusters": 38.0,
+    "survival_rate": 1.0
+  },
+  "RT0.70_F3.5": {
+    "resonance_threshold": 0.7,
+    "frequency": 3.5,
+    "mean_population": 100.0,
+    "mean_clusters": 38.0,
+    "survival_rate": 1.0
+  },
+  "RT0.70_F4.0": {
+    "resonance_threshold": 0.7,
+    "frequency": 4.0,
+    "mean_population": 100.0,
+    "mean_clusters": 38.0,
+    "survival_rate": 1.0
+  },
+  "RT0.75_F2.0": {
+    "resonance_threshold": 0.75,
+    "frequency": 2.0,
+    "mean_population": 100.0,
+    "mean_clusters": 40.0,
+    "survival_rate": 1.0
+  },
+  "RT0.75_F2.5": {
+    "resonance_threshold": 0.75,
+    "frequency": 2.5,
+    "mean_population": 100.0,
+    "mean_clusters": 40.0,
+    "survival_rate": 1.0
+  },
+  "RT0.75_F3.0": {
+    "resonance_threshold": 0.75,
+    "frequency": 3.0,
+    "mean_population": 100.0,
+    "mean_clusters": 40.0,
+    "survival_rate": 1.0
+  },
+  "RT0.75_F3.5": {
+    "resonance_threshold": 0.75,
+    "frequency": 3.5,
+    "mean_population": 100.0,
+    "mean_clusters": 40.0,
+    "survival_rate": 1.0
+  },
+  "RT0.75_F4.0": {
+    "resonance_threshold": 0.75,
+    "frequency": 4.0,
+    "mean_population": 100.0,
+    "mean_clusters": 40.0,
+    "survival_rate": 1.0
+  },
+  "RT0.80_F2.0": {
+    "resonance_threshold": 0.8,
+    "frequency": 2.0,
+    "mean_population": 100.0,
+    "mean_clusters": 37.0,
+    "survival_rate": 1.0
+  },
+  "RT0.80_F2.5": {
+    "resonance_threshold": 0.8,
+    "frequency": 2.5,
+    "mean_population": 100.0,
+    "mean_clusters": 37.0,
+    "survival_rate": 1.0
+  },
+  "RT0.80_F3.0": {
+    "resonance_threshold": 0.8,
+    "frequency": 3.0,
+    "mean_population": 100.0,
+    "mean_clusters": 37.0,
+    "survival_rate": 1.0
+  },
+  "RT0.80_F3.5": {
+    "resonance_threshold": 0.8,
+    "frequency": 3.5,
+    "mean_population": 100.0,
+    "mean_clusters": 37.0,
+    "survival_rate": 1.0
+  },
+  "RT0.80_F4.0": {
+    "resonance_threshold": 0.8,
+    "frequency": 4.0,
+    "mean_population": 100.0,
+    "mean_clusters": 37.0,
+    "survival_rate": 1.0
+  },
+  "RT0.85_F2.0": {
+    "resonance_threshold": 0.85,
+    "frequency": 2.0,
+    "mean_population": 100.0,
+    "mean_clusters": 35.0,
+    "survival_rate": 1.0
+  },
+  "RT0.85_F2.5": {
+    "resonance_threshold": 0.85,
+    "frequency": 2.5,
+    "mean_population": 100.0,
+    "mean_clusters": 35.0,
+    "survival_rate": 1.0
+  },
+  "RT0.85_F3.0": {
+    "resonance_threshold": 0.85,
+    "frequency": 3.0,
+    "mean_population": 100.0,
+    "mean_clusters": 35.0,
+    "survival_rate": 1.0
+  },
+  "RT0.85_F3.5": {
+    "resonance_threshold": 0.85,
+    "frequency": 3.5,
+    "mean_population": 100.0,
+    "mean_clusters": 35.0,
+    "survival_rate": 1.0
+  },
+  "RT0.85_F4.0": {
+    "resonance_threshold": 0.85,
+    "frequency": 4.0,
+    "mean_population": 100.0,
+    "mean_clusters": 35.0,
+    "survival_rate": 1.0
+  },
+  "RT0.90_F2.0": {
+    "resonance_threshold": 0.9,
+    "frequency": 2.0,
+    "mean_population": 100.0,
+    "mean_clusters": 28.0,
+    "survival_rate": 1.0
+  },
+  "RT0.90_F2.5": {
+    "resonance_threshold": 0.9,
+    "frequency": 2.5,
+    "mean_population": 100.0,
+    "mean_clusters": 28.0,
+    "survival_rate": 1.0
+  },
+  "RT0.90_F3.0": {
+    "resonance_threshold": 0.9,
+    "frequency": 3.0,
+    "mean_population": 100.0,
+    "mean_clusters": 28.0,
+    "survival_rate": 1.0
+  },
+  "RT0.90_F3.5": {
+    "resonance_threshold": 0.9,
+    "frequency": 3.5,
+    "mean_population": 100.0,
+    "mean_clusters": 28.0,
+    "survival_rate": 1.0
+  },
+  "RT0.90_F4.0": {
+    "resonance_threshold": 0.9,
+    "frequency": 4.0,
+    "mean_population": 100.0,
+    "mean_clusters": 28.0,
+    "survival_rate": 1.0
+  }
+}

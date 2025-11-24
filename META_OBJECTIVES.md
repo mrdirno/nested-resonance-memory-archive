@@ -1994,7 +1994,9 @@
 - [x] V6 pilot executed successfully (Cycle 1370, ultra-low regime viable, 128x growth)
 - [x] MOG falsification target decided (Cycle 1371, accept 57.1% for legacy patterns)
 - [x] V6a script created (Cycle 1371, c186_v6a_net_zero_homeostasis.py)
-- [ ] **V6a campaign launch decision** (Option A: Launch immediately recommended)
+- [x] V6a campaign launch decision (Executed Cycle 1376 - Homeostasis Confirmed)
+- [x] **V6b campaign launch** (Executed Cycle 1801 - Runaway Growth Confirmed)
+- [x] **Paper 5A Pilot (Accelerated)** (Executed Cycle 1801 - Resonance Threshold Effect Confirmed)
 
 **HIGH PRIORITY (Paper Submissions)**
 - [x] Paper 1 (cs.DC): ARXIV-READY, submission guide complete (awaiting user)

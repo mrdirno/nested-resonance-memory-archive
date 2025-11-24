@@ -1,0 +1,8 @@
+{
+  "experiment": "C186_V6b_ACCEL",
+  "condition": "ACCEL_GROWTH_0_25pct",
+  "f_spawn": 0.0025,
+  "final_population": 88769,
+  "cycles_run": 9999,
+  "success": true
+}
