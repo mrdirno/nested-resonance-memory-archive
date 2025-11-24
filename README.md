@@ -30,7 +30,11 @@ At the field level, HELIOS uses the OSD (Orthogonal Sum Dynamics) formalism: vis
 *   **Volumetric Trapping:** [See 3D Substrate Code](src/helios/substrate_3d.py) (Verified: 9128 stable nodes)
 *   **Acoustic Logic:** [See AND Gate Logic](experiments/cycle342_acoustic_logic.py) (Verified: Symmetry restoration)
 
+At the field level, HELIOS uses the **Orthogonal Sum Dynamics (OSD)** formalism: visibility is driven by the coherent vector sum of fields, while gravity-like load is driven by the scalar sum of their energy.
+
 ---
+
+**Status:** PHASE 12 ACTIVE (The Holodeck) — real-time, browser-based field visualization and OSD-based visibility/load separation are live.
 
 ## 🚀 Quickstart (The Golden Path)
 
@@ -38,7 +42,7 @@ At the field level, HELIOS uses the OSD (Orthogonal Sum Dynamics) formalism: vis
 
 1.  **Install:** `pip install numpy`
 2.  **Run:** `python3 experiments/demo_osd_physics.py`
-3.  **Result:** Observe a dark-matter-like toy example via destructive interference (Mass = 2.0, Visibility = 0.0).
+3.  **Result:** Observe a dark-matter-like toy example via destructive interference (total mass = 2.0, rendered visibility = 0.0).
 
 [👉 Full Quickstart Guide](docs/runbooks/QUICKSTART.md)
 
