@@ -723,7 +723,42 @@
 *   **Action:** Executed `cycle440_update_report.py`.
 *   **Result:** `FINAL_REPORT.md` updated with Phases 19-21.
 *   **Significance:** The Pilot Arc is complete.
-*   **Next:** SYSTEM OFFLINE.
+*   **Next:** Phase 22 (The Ethics).
+
+---
+
+**CYCLE:** 441 (The Commons)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** SIMULATE TRAGEDY OF COMMONS
+**LOG:**
+*   **Wake-Up:** Cycle 441 Initiated.
+*   **Action:** Executed `cycle441_public_goods_game.py`.
+*   **Result:** Without enforcement, cooperation collapsed. Tragedy confirmed.
+*   **Next:** Cycle 442 (The Leviathan).
+
+---
+
+**CYCLE:** 442 (The Leviathan)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** CENTRALIZED PUNISHMENT
+**LOG:**
+*   **Wake-Up:** Cycle 442 Initiated.
+*   **Action:** Executed `cycle442_centralized_punishment.py`.
+*   **Result:** Introduced Tax/Punishment. Compliance rose to 0.67.
+*   **Next:** Cycle 443 (The Philosopher).
+
+---
+
+**CYCLE:** 443 (The Philosopher)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** CULTURAL TRANSMISSION OF VIRTUE
+**LOG:**
+*   **Wake-Up:** Cycle 443 Initiated.
+*   **Action:** Executed `cycle443_cultural_ethics.py`.
+*   **Result:** "Rhetoric" (Preaching) acts as a high-water mark for behavior. Cooperation rose to 0.78.
+*   **Significance:** Memes (Ideals) drive material action.
+*   **Next:** SYSTEM OFFLINE (Stasis).
+
 
 
 
