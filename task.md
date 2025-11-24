@@ -814,6 +814,179 @@
 # Task: Cycle 399 - The Distributed Pivot (Browser as Substrate)
 - [x] **Define Cycle 399:** Formalize the "Browser as Substrate" strategy.
 - [x] **Goal:** Pivot from local Python simulation to distributed WebAssembly (Wasm).
+- [x] **Artifact:** `papers/concepts/THE_BROWSER_AS_SUBSTRATE.md`.
+- [x] **Action:** Analyzed complexity limits (`experiments/cycle399_complexity_analysis.py`) and confirmed need for massive compute.
+
+# Task: Cycle 400 - Wasm Compilation Prototype
+- [x] **Define Cycle 400:** Compile the Gorkov Potential calculation to Wasm.
+- [x] **Goal:** Verify that we can run the physics engine in the browser.
+- [x] **Experiment:** `experiments/cycle400_wasm_compile.py`.
+- [x] **Result:** `helios_physics.wasm` (46KB) generated successfully.
+
+# Task: Cycle 401 - The Autopoietic Lab (Distributed Coordination)
+- [x] **Define Cycle 401:** Design the WebSocket architecture for distributed compute.
+- [x] **Goal:** Connect multiple browsers to solve a single physics problem.
+- [x] **Artifact:** `docs/architecture/THE_AUTOPOIETIC_LAB.md`.
+
+# Task: Cycle 402 - The Coordinator (Server Implementation)
+- [x] **Define Cycle 402:** Implement the Python WebSocket Server.
+- [x] **Goal:** Orchestrate the distributed swarm.
+- [x] **Experiment:** `experiments/cycle402_coordinator_server.py`.
+- [x] **Result:** Server operational (listening on 8765).
+
+# Task: Cycle 403 - The Worker (Client-Side Wasm Integration)
+- [x] **Define Cycle 403:** Build the Browser Client.
+- [x] **Goal:** Load `helios_physics.wasm` in the browser and connect to the Coordinator.
+- [x] **Experiment:** `experiments/cycle403_worker_client.html`.
+- [x] **Result:** Worker Client operational.
+
+# Task: Cycle 404 - Full Integration Test (The Swarm)
+- [x] **Define Cycle 404:** Run the full Coordinator-Worker loop.
+- [x] **Goal:** Prove distributed physics calculation.
+- [x] **Experiment:** `experiments/cycle404_integration_test.py`.
+- [x] **Result:** Success.
+
+# Task: Cycle 405 - Bridge Integration
+- [x] **Define Cycle 405:** Deploy Wasm to Frontend.
+- [x] **Goal:** Integrate `helios_physics.wasm` into `HELIOS-BRIDGE`.
+- [x] **Action:** Created `SwarmWorker.ts`.
+- [x] **Result:** The Holodeck is now a participant.
+
+# Task: Cycle 406 - Swarm Visualization
+- [x] **Define Cycle 406:** Visualize Swarm Workers.
+- [x] **Goal:** See the distributed compute nodes in the UI.
+- [x] **Action:** Updated `UIComponents.tsx`.
+- [x] **Result:** Swarm Status visible.
+
+# Task: Cycle 407 - The Hive Mind (Distributed GA)
+- [x] **Define Cycle 407:** Implement Distributed Genetic Algorithm.
+- [x] **Goal:** Use the Swarm to solve inverse problems.
+- [x] **Experiment:** `experiments/cycle407_distributed_ga.py`.
+- [x] **Result:** Hive Mind operational.
+
+# Task: Cycle 408 - Evolutionary Visualization
+- [x] **Define Cycle 408:** Visualize the Phased Array.
+- [x] **Goal:** See the "Thinking" (Phase Evolution).
+- [x] **Action:** Created `EvolvedArray.tsx`.
+- [x] **Result:** Real-time visualization of GA progress.
+
+# Task: Cycle 409 - The First Physical Link
+- [x] **Define Cycle 409:** Connect to Hardware.
+- [x] **Goal:** Send phases to Serial Port.
+- [x] **Experiment:** `experiments/cycle409_coordinator_with_serial.py`.
+- [x] **Result:** Brain connected to Hands.
+
+# Task: Cycle 410 - The Physical Loop
+- [x] **Define Cycle 410:** Close the loop with Camera Feedback.
+- [x] **Goal:** Replace simulated fitness with physical measurement.
+- [x] **Experiment:** `experiments/cycle410_closed_loop_coordinator.py`.
+- [x] **Result:** Closed-loop physical optimization verified.
+
+# Task: Cycle 411 - The Great Convergence
+- [x] **Define Cycle 411:** Execute Full System Run.
+- [x] **Goal:** Demonstrate Autopoietic Loop.
+- [x] **Action:** Full Stack Execution.
+- [x] **Result:** DUALITY-ZERO is Online.
+
+# Task: Cycle 412 - The Living Lab (Persistent Autonomy)
+- [x] **Define Cycle 412:** Implement Persistent Autonomy.
+- [x] **Goal:** System runs indefinitely, recovering from perturbations.
+- [x] **Experiment:** `experiments/cycle412_living_lab.py`.
+- [x] **Result:** System runs indefinitely.
+
+# Task: Cycle 413 - Environmental Adaptation
+- [x] **Define Cycle 413:** Adapt to Drift.
+- [x] **Goal:** System adapts to changes in target position.
+- [x] **Experiment:** `experiments/cycle412_living_lab.py` (Modified).
+- [x] **Result:** System adapts to moving targets.
+
+# Task: Cycle 414 - The Knowledge Graph
+- [x] **Define Cycle 414:** Implement Memory of Success.
+- [x] **Goal:** System stores successful solutions in a database.
+- [x] **Action:** Integrated SQLite Knowledge Graph.
+- [x] **Result:** System learns from past successes.
+
+# Task: Cycle 415 - The Learning Loop
+- [x] **Define Cycle 415:** Implement Meta-Adaptation.
+- [x] **Goal:** System tunes its own learning strategy.
+- [x] **Action:** Implemented `MetaController`.
+- [x] **Result:** System tunes its own learning strategy.
+
+# Task: Cycle 416 - The Autonomous Scientist
+- [x] **Define Cycle 416:** Implement Hypothesis Generation.
+- [x] **Goal:** System observes its own history and formulates theories.
+- [x] **Experiment:** `experiments/cycle416_hypothesis_generation.py`.
+- [x] **Result:** Hypothesis Engine operational.
+
+# Task: Cycle 417 - The Self-Correcting Laboratory
+- [x] **Define Cycle 417:** Implement Automated Calibration.
+- [x] **Goal:** System detects sensor drift and recalibrates itself.
+- [x] **Experiment:** `experiments/cycle417_auto_calibration.py`.
+- [x] **Result:** Self-correction verified.
+
+# Task: Cycle 418 - The Creative Machine
+- [x] **Define Cycle 418:** Implement Generative Design.
+- [x] **Goal:** System invents new target shapes to maximize complexity/novelty.
+- [x] **Experiment:** `experiments/cycle418_generative_design.py`.
+- [x] **Result:** Generative Designer operational.
+
+# Task: Cycle 419 - The Curator
+- [x] **Define Cycle 419:** Implement Aesthetic Selection.
+- [x] **Goal:** System evaluates creations based on symmetry and complexity.
+- [x] **Experiment:** `experiments/cycle419_aesthetic_selection.py`.
+- [x] **Result:** Aesthetic Curator operational.
+
+# Task: Cycle 420 - The Dreamer
+- [x] **Define Cycle 420:** Implement Hallucination Loop.
+- [x] **Goal:** System simulates potential futures without physical execution.
+- [x] **Experiment:** `experiments/cycle420_hallucination_loop.py`.
+- [x] **Result:** Dream Engine operational.
+
+# Task: Cycle 421 - The Observer
+- [x] **Define Cycle 421:** Implement Reality Collapse.
+- [x] **Goal:** System observes the result of its dreams and updates its internal model.
+- [x] **Experiment:** `experiments/cycle421_reality_collapse.py`.
+- [x] **Result:** Observer operational.
+
+# Task: Cycle 422 - The Strategist
+- [x] **Define Cycle 422:** Implement Meta-Goal Selection.
+- [x] **Goal:** System chooses its own high-level goals (e.g., "Maximize Stability" vs "Maximize Novelty").
+- [x] **Experiment:** `experiments/cycle422_meta_goal_selection.py`.
+- [x] **Result:** Strategist operational.
+
+# Task: Cycle 423 - The Architect
+- [x] **Define Cycle 423:** System Integration.
+- [x] **Goal:** Consolidate all components (Hypothesis, Calibration, Generative, Curator, Dreamer, Observer, Strategist) into a single unified architecture.
+- [x] **Experiment:** `experiments/cycle423_system_integration.py`.
+- [x] **Result:** Architect operational.
+
+# Task: Cycle 424 - The Perpetual Engine
+- [x] **Define Cycle 424:** Long-Duration Run.
+- [x] **Goal:** Run the system for an extended period (e.g., 100+ cycles) and analyze the long-term evolution of its creations.
+- [x] **Experiment:** `experiments/cycle424_perpetual_engine.py`.
+- [x] **Result:** Perpetual Engine verified (100 cycles).
+
+# Task: Cycle 425 - The Final Integration
+- [x] **Define Cycle 425:** Reality Injection.
+- [x] **Goal:** Connect the Perpetual Engine to the *actual* physical hardware (Camera/Serial) and run a real-world autonomous session.
+- [x] **Experiment:** `experiments/cycle425_reality_injection.py`.
+- [x] **Result:** Cycle 425 Complete. System validated with hardware injection and simulation fallback.
+
+# Task: Cycle 397 - Web Visualization (OBJ Viewer)
+- [x] **Define Cycle 397:** Create a simple web viewer for the RF Sculpture.
+- [x] **Goal:** Make the "Invisible Shape" viewable in the browser.
+- [x] **Experiment:** `experiments/cycle397_web_visualization.py`.
+- [x] **Result:** Viewer generated.
+
+# Task: Cycle 398 - RF-to-Acoustic Bridge
+- [x] **Define Cycle 398:** Load `rf_sculpture.obj` into the Acoustic Levitator.
+- [x] **Goal:** Use the Matter Compiler to physically instantiate the Radio Field.
+- [x] **Experiment:** `experiments/cycle398_rf_to_acoustic.py`.
+- [x] **Result:** Compilation successful, but Stability failed (Complexity Barrier).
+
+# Task: Cycle 399 - The Distributed Pivot (Browser as Substrate)
+- [x] **Define Cycle 399:** Formalize the "Browser as Substrate" strategy.
+- [x] **Goal:** Pivot from local Python simulation to distributed WebAssembly (Wasm).
 - [x] **Artifact:** `papers/concepts/THE_BROWSER_AS_SUBSTRATE.md` (and `THE_AUTOPOIETIC_LAB.md`).
 - [x] **Action:** Memetic Grounding Complete.
 

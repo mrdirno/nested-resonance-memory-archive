@@ -1,4 +1,5 @@
-"Cycle 416: The Autonomous Scientist (Hypothesis Generation)"
+"""
+Cycle 416: The Autonomous Scientist (Hypothesis Generation)
 Role: Hypothesis-Generating Coordinator
 Responsibility: Analyze knowledge, generate hypotheses, and design experiments.
 """
