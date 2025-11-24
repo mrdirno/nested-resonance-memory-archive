@@ -1,194 +1,203 @@
-[
-  {
-    "condition": "OFF-OFF-OFF-OFF",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.3177950382232666,
-    "flags": {
-      "H1": false,
-      "H2": false,
-      "H4": false,
-      "H5": false
+{
+  "experiment": "Cycle 263: H1\u00d7H2\u00d7H4\u00d7H5 4-way factorial",
+  "timestamp": "2025-11-23T16:24:13.171506",
+  "conditions": {
+    "0000": {
+      "condition": "0000",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.3715372085571289,
+      "flags": {
+        "H1": false,
+        "H2": false,
+        "H4": false,
+        "H5": false
+      }
+    },
+    "1000": {
+      "condition": "1000",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.3623511791229248,
+      "flags": {
+        "H1": true,
+        "H2": false,
+        "H4": false,
+        "H5": false
+      }
+    },
+    "0100": {
+      "condition": "0100",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.337536096572876,
+      "flags": {
+        "H1": false,
+        "H2": true,
+        "H4": false,
+        "H5": false
+      }
+    },
+    "0010": {
+      "condition": "0010",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.38976478576660156,
+      "flags": {
+        "H1": false,
+        "H2": false,
+        "H4": true,
+        "H5": false
+      }
+    },
+    "0001": {
+      "condition": "0001",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.3357999324798584,
+      "flags": {
+        "H1": false,
+        "H2": false,
+        "H4": false,
+        "H5": true
+      }
+    },
+    "1100": {
+      "condition": "1100",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.3962690830230713,
+      "flags": {
+        "H1": true,
+        "H2": true,
+        "H4": false,
+        "H5": false
+      }
+    },
+    "1010": {
+      "condition": "1010",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.4034130573272705,
+      "flags": {
+        "H1": true,
+        "H2": false,
+        "H4": true,
+        "H5": false
+      }
+    },
+    "0110": {
+      "condition": "0110",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.3829212188720703,
+      "flags": {
+        "H1": false,
+        "H2": true,
+        "H4": true,
+        "H5": false
+      }
+    },
+    "1001": {
+      "condition": "1001",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.3771350383758545,
+      "flags": {
+        "H1": true,
+        "H2": false,
+        "H4": false,
+        "H5": true
+      }
+    },
+    "0101": {
+      "condition": "0101",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.3439490795135498,
+      "flags": {
+        "H1": false,
+        "H2": true,
+        "H4": false,
+        "H5": true
+      }
+    },
+    "0011": {
+      "condition": "0011",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.3383491039276123,
+      "flags": {
+        "H1": false,
+        "H2": false,
+        "H4": true,
+        "H5": true
+      }
+    },
+    "1110": {
+      "condition": "1110",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.37550997734069824,
+      "flags": {
+        "H1": true,
+        "H2": true,
+        "H4": true,
+        "H5": false
+      }
+    },
+    "1101": {
+      "condition": "1101",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.38056015968322754,
+      "flags": {
+        "H1": true,
+        "H2": true,
+        "H4": false,
+        "H5": true
+      }
+    },
+    "1011": {
+      "condition": "1011",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.38219285011291504,
+      "flags": {
+        "H1": true,
+        "H2": false,
+        "H4": true,
+        "H5": true
+      }
+    },
+    "0111": {
+      "condition": "0111",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.34763002395629883,
+      "flags": {
+        "H1": false,
+        "H2": true,
+        "H4": true,
+        "H5": true
+      }
+    },
+    "1111": {
+      "condition": "1111",
+      "mean_population": 46.1,
+      "final_population": 50,
+      "elapsed_time": 0.37197399139404297,
+      "flags": {
+        "H1": true,
+        "H2": true,
+        "H4": true,
+        "H5": true
+      }
     }
   },
-  {
-    "condition": "H1",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.8708930015563965,
-    "flags": {
-      "H1": true,
-      "H2": false,
-      "H4": false,
-      "H5": false
-    }
-  },
-  {
-    "condition": "H2",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.363858938217163,
-    "flags": {
-      "H1": false,
-      "H2": true,
-      "H4": false,
-      "H5": false
-    }
-  },
-  {
-    "condition": "H4",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.37148118019104,
-    "flags": {
-      "H1": false,
-      "H2": false,
-      "H4": true,
-      "H5": false
-    }
-  },
-  {
-    "condition": "H5",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.313504934310913,
-    "flags": {
-      "H1": false,
-      "H2": false,
-      "H4": false,
-      "H5": true
-    }
-  },
-  {
-    "condition": "H1\u00d7H2",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.872653007507324,
-    "flags": {
-      "H1": true,
-      "H2": true,
-      "H4": false,
-      "H5": false
-    }
-  },
-  {
-    "condition": "H1\u00d7H4",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.899970054626465,
-    "flags": {
-      "H1": true,
-      "H2": false,
-      "H4": true,
-      "H5": false
-    }
-  },
-  {
-    "condition": "H2\u00d7H4",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.3297877311706543,
-    "flags": {
-      "H1": false,
-      "H2": true,
-      "H4": true,
-      "H5": false
-    }
-  },
-  {
-    "condition": "H1\u00d7H5",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.8968560695648193,
-    "flags": {
-      "H1": true,
-      "H2": false,
-      "H4": false,
-      "H5": true
-    }
-  },
-  {
-    "condition": "H2\u00d7H5",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.341642141342163,
-    "flags": {
-      "H1": false,
-      "H2": true,
-      "H4": false,
-      "H5": true
-    }
-  },
-  {
-    "condition": "H4\u00d7H5",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.3800909519195557,
-    "flags": {
-      "H1": false,
-      "H2": false,
-      "H4": true,
-      "H5": true
-    }
-  },
-  {
-    "condition": "H1\u00d7H2\u00d7H4",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.8517439365386963,
-    "flags": {
-      "H1": true,
-      "H2": true,
-      "H4": true,
-      "H5": false
-    }
-  },
-  {
-    "condition": "H1\u00d7H2\u00d7H5",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.9101150035858154,
-    "flags": {
-      "H1": true,
-      "H2": true,
-      "H4": false,
-      "H5": true
-    }
-  },
-  {
-    "condition": "H1\u00d7H4\u00d7H5",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.855177164077759,
-    "flags": {
-      "H1": true,
-      "H2": false,
-      "H4": true,
-      "H5": true
-    }
-  },
-  {
-    "condition": "H2\u00d7H4\u00d7H5",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.3645339012145996,
-    "flags": {
-      "H1": false,
-      "H2": true,
-      "H4": true,
-      "H5": true
-    }
-  },
-  {
-    "condition": "H1\u00d7H2\u00d7H4\u00d7H5",
-    "mean_population": 49.74,
-    "final_population": 50,
-    "elapsed_time": 2.915271759033203,
-    "flags": {
-      "H1": true,
-      "H2": true,
-      "H4": true,
-      "H5": true
-    }
+  "synergy_analysis": {
+    "4way_interaction": 7.105427357601002e-15,
+    "classification": "ADDITIVE",
+    "observed_full": 46.1
   }
-]
+}

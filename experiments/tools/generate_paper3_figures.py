@@ -41,7 +41,7 @@ plt.rcParams['legend.fontsize'] = 9
 plt.rcParams['figure.titlesize'] = 13
 
 # Paths
-RESULTS_DIR = Path(__file__).parent / "results"
+RESULTS_DIR = Path(__file__).parent.parent / "results"
 FIGURES_DIR = Path(__file__).parent / "figures" / "paper3"
 
 # Experiment metadata

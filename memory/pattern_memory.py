@@ -699,6 +699,44 @@ class PatternMemory:
 
         Returns:
             Statistics dictionary
+        """
+        with self._db_connection() as conn:
+            # Pattern counts
+            cursor = conn.execute("""
+                SELECT pattern_type, COUNT(*) FROM patterns
+                GROUP BY pattern_type
+            """)
+            pattern_counts = dict(cursor.fetchall())
+
+            # Total patterns
+            cursor = conn.execute("SELECT COUNT(*) FROM patterns")
+            total_patterns = cursor.fetchone()[0]
+
+            # Agent state count
+            cursor = conn.execute("SELECT COUNT(*) FROM agent_states")
+            agent_states = cursor.fetchone()[0]
+
+            # Metrics count
+            cursor = conn.execute("SELECT COUNT(*) FROM metrics_history")
+            metrics_count = cursor.fetchone()[0]
+
+            # Learning episodes
+            cursor = conn.execute("SELECT COUNT(*) FROM learning_episodes")
+            episodes = cursor.fetchone()[0]
+
+            # Average pattern confidence
+            cursor = conn.execute("SELECT AVG(confidence) FROM patterns")
+            avg_confidence = cursor.fetchone()[0] or 0.0
+
+        return {
+            'total_patterns': total_patterns,
+            'patterns_by_type': pattern_counts,
+            'agent_states_stored': agent_states,
+            'metrics_recorded': metrics_count,
+            'learning_episodes': episodes,
+            'average_pattern_confidence': avg_confidence,
+            'database_path': str(self.db_path)
+        }
 
     # ============================================================================
     # NRM V2: Memetic Embedding Support

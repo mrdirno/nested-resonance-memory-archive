@@ -76,6 +76,11 @@ def calculate_main_effects(conditions: Dict) -> Dict[str, float]:
 
     Returns dict mapping mechanism -> effect size.
     """
+    print(f"DEBUG: conditions type: {type(conditions)}")
+    if not isinstance(conditions, dict):
+        print(f"DEBUG: conditions content: {conditions}")
+        return {}
+
     baseline = conditions.get('000', {}).get('mean_population', 0.0) or \
                conditions.get('0000', {}).get('mean_population', 0.0)
 

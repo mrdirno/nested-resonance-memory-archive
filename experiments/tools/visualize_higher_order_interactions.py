@@ -145,17 +145,28 @@ def create_variance_explained_plot(aggregated: Dict, output_dir: Path):
         exp = aggregated['experiments']['cycle262']
         var_exp = exp['variance_explained']
 
-        # Calculate incremental R²
-        r2_main = var_exp['r2_main']
-        r2_pairwise_incr = var_exp['r2_pairwise'] - var_exp['r2_main']
-        r2_residual = var_exp['r2_residual']
+        # Calculate incremental R² with clamping
+        r2_main = max(0.0, var_exp.get('r2_main', 0.0))
+        r2_pairwise_total = max(0.0, var_exp.get('r2_pairwise', 0.0))
+        r2_pairwise_incr = max(0.0, r2_pairwise_total - r2_main)
+        
+        # Residual is what's left
+        r2_residual = max(0.0, 1.0 - (r2_main + r2_pairwise_incr))
 
         # Pie chart
         sizes = [r2_main, r2_pairwise_incr, r2_residual]
+        
+        # Normalize if sum > 0
+        total_size = sum(sizes)
+        if total_size > 0:
+            sizes = [s / total_size for s in sizes]
+        else:
+            sizes = [0.33, 0.33, 0.34] # Fallback
+
         labels = [
-            f"Main Effects\n({r2_main:.1%})",
-            f"Pairwise\n({r2_pairwise_incr:.1%})",
-            f"3-Way + Noise\n({r2_residual:.1%})"
+            f"Main Effects\n({sizes[0]:.1%})",
+            f"Pairwise\n({sizes[1]:.1%})",
+            f"3-Way + Noise\n({sizes[2]:.1%})"
         ]
         colors = ['#3182bd', '#9ecae1', '#e6550d']
 
