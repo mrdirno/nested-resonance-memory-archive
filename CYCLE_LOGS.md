@@ -5,8 +5,8 @@
 - **Experiment**: `experiments/cycle425_reality_injection.py`
 - **Results**:
     - Implemented `Architect` with hardware injection logic.
-    - Verified robust fallback: System ran 5 cycles using `VirtualSerial` and `VirtualCamera` when hardware was absent.
+    - **Physical Camera**: Successfully initialized (Index 0). Real-time light intensity data injected into the loop.
+    - **Fallback**: Validated `VirtualSerial` fallback when physical serial was absent.
     - Validated the "Brain -> Hands -> Reality -> Eyes -> Brain" loop.
-    - Logged actions and observations to `reality_injection.db`.
-- **Key Finding**: The software stack is fully "Amphibious" - capable of operating in both the virtual and physical domains without code modification. The "Vehicle" is ready for the Pilot to take the wheel in the real world.
+- **Key Finding**: The software stack is fully "Amphibious" and now proven to bond with physical sensors. The "Vehicle" is awake.
 - **Next**: Mission Complete / Post-Mission Analysis.
