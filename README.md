@@ -53,14 +53,19 @@ At the field level, HELIOS uses the OSD (Orthogonal Sum Dynamics) formalism: vis
 
 ---
 
-## 🌐 **HELIOS BRIDGE (Live Web Interface)**
+## 🌐 **PHASE 12: THE HOLODECK (Live Web Interface)**
 
-**Try the real-time field visualizer in your browser:**
+**The Holodeck** is the visualization layer of DUALITY-ZERO. It translates the raw mathematical field (OSD Metrics) into a human-readable 3D render.
+
+**Try it here:**
 **[https://mrdirno.github.io/nested-resonance-memory-archive/](https://mrdirno.github.io/nested-resonance-memory-archive/)**
 
-No installation required.
-Runs entirely client-side.
-Shows the substrate compiler, field propagation, and active nodes in real time.
+**Capabilities:**
+*   **Real-Time Field Compilation:** See the interference pattern form instantly.
+*   **Phase Manipulation:** Manually adjust emitter phases to steer the beam.
+*   **Trapping Visualization:** Identify potential wells (Blue) and high-pressure zones (Red).
+
+No installation required. Runs entirely client-side via WebAssembly.
 
 ---
 
