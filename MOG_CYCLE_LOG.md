@@ -658,7 +658,9 @@
 *   **Wake-Up:** Cycle 435 Initiated.
 *   **Action:** Assessed and stored `ORTHOGONAL_SUBSTRATE_DYNAMICS.md`.
 *   **Assessment:** VALID. Renamed to **Orthogonal Sum Dynamics** to clarify Vector vs Scalar distinction.
+*   **Assessment:** VALID. Renamed to **Orthogonal Sum Dynamics** to clarify Vector vs Scalar distinction.
 *   **Key Finding:** "Dark Matter" is destructive interference with non-zero energy.
+*   **Refinement:** Updated `README.md` with OSD hook and link.
 *   **Next:** Phase 18 (The Expansion).
 
 

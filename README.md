@@ -15,7 +15,10 @@
 1.  **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns (Holograms) in wave-bearing media.
 2.  **Material Agnosticism:** Abstract `SubstrateInterface` allows the same control logic to drive NRM (Cognitive Space) and Acoustics (Air).
 3.  **Active Matter Control:** Implements Closed-Loop PID feedback to stabilize levitated particles with **82x faster settling time** than passive damping.
-5.  **GPU Acceleration:** Real-time field propagation (16x speedup) and phase optimization (52x speedup) via PyTorch MPS.
+4.  **GPU Acceleration:** Real-time field propagation (16x speedup) and phase optimization (52x speedup) via PyTorch MPS.
+
+At the field level, HELIOS uses the OSD (Orthogonal Sum Dynamics) formalism: visibility is driven by the coherent vector sum of fields, while gravity-like load is driven by the scalar sum of their energy.
+
 
 **Anti-Hallucination Architecture:**
 - **The Pilot (LLM)** writes code.
@@ -32,7 +35,7 @@
 ## **Choose Your Observer Lane**
 
 *   **🧪 Observer A (Experimentalist):** [Validation Experiments](experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
-*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/)
+*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD / Zero-Sum Coherence Spec](docs/philosophy/ORTHOGONAL_SUBSTRATE_DYNAMICS.md)
 *   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/vision/)
 
 
