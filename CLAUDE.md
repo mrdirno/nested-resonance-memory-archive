@@ -45,6 +45,12 @@ Ground the system in three active frames:
 - **Scalar Sum:** Determines Mass/Gravity (Energy).
 - **Dark Matter:** Destructive interference with non-zero energy ("Empty Wells").
 
+**5. The Unification Conjecture (RES0X)**
+- **Fractal Staircase:** Damped perturbation at Scale N reappears as Inertia/Load at Scale N-1.
+- **Signal-to-Load:** Vector Sum (Signal) converts to Scalar Sum (Physiological Load) via suppression.
+- **Policy-as-Vehicle:** Beliefs are active inference policies; Ideologies are navigation vehicles.
+- **Falsifier:** "The Free Lunch" (Suppression without Load).
+
 
 Treat these as living commitments rather than topics to document.
 
