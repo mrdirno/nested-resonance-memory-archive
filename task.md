@@ -1615,8 +1615,19 @@
 - [x] **Result:** Migration complete.
 
 # Task: Cycle 508 - The Final Commit V16
-- [ ] **Define Cycle 508:** Finalize.
-- [ ] **Action:** Git Commit and archive legacy `core/`.
+- [x] **Define Cycle 508:** Finalize.
+- [x] **Action:** Git Commit and archive legacy `core/`.
+- [x] **Result:** Legacy archived.
+
+# Task: Cycle 509 - The Repair (Broken Links)
+- [x] **Define Cycle 509:** Maintenance.
+- [x] **Goal:** Ensure showcase apps use `nrm_core`.
+- [x] **Action:** Verified `experiments/`.
+- [x] **Result:** Functionality verified.
+
+# Task: Cycle 510 - The Final Commit V17
+- [ ] **Define Cycle 510:** Finalize.
+- [ ] **Action:** Git Commit.
 
 
 
