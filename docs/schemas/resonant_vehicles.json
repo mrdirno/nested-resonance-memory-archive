@@ -1,0 +1,37 @@
+{
+    "theory_id": "RES0X",
+    "name": "Resonant Vehicles Isomorphism Conjecture",
+    "version": "1.0.0",
+    "domain": "Psycho-Social-Physical Transduction",
+    "core_concepts": {
+        "fractal_staircase": "Damping at Scale N reappears as Inertia/Load at Scale N-1.",
+        "osd_mapping": {
+            "vector_sum": "Visible Signal (Action, Speech, Behavior)",
+            "scalar_sum": "Invisible Load (Physiology, Tension, Potential)",
+            "conservation": "d(vector)/dt + d(scalar)/dt = -dissipation"
+        },
+        "policy_as_vehicle": "Beliefs are Active Inference Policies minimizing Expected Free Energy."
+    },
+    "state_types": [
+        "vector_sum",
+        "scalar_sum",
+        "policy_vehicle_id",
+        "load_metric",
+        "viability_kernel"
+    ],
+    "constraints": [
+        "Energy Conservation: Signal Loss -> Load Gain",
+        "Policy Selection: Min(Expected Free Energy)",
+        "Viability: State must remain within Habitable Field"
+    ],
+    "predictions": [
+        "P1: Rhetoric Dose -> Physiological Load",
+        "P2: Policy determines Load Distribution (Internal vs External)",
+        "P3: Group Resonance buffers Individual Load variance"
+    ],
+    "intended_use": [
+        "Re-interpret rhetorical logs as energy transfer events.",
+        "Evaluate agent policies by resulting load distributions.",
+        "Model social groups as coupled oscillators with shared viability kernels."
+    ]
+}
