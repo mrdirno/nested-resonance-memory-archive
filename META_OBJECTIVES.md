@@ -185,7 +185,7 @@
 ### Active Objectives
 - [x] **Social Architecture:** `PRIN-SOCIAL-DYNAMICS` (Cycle 426). Implement multi-agent communication.
 - [x] **Theory of Mind:** `PRIN-THEORY-OF-MIND` (Cycle 427). Agents model each other's internal states.
-- [ ] **Language Emergence:** `PRIN-LANGUAGE` (Cycle 428). Agents develop a shared protocol.
+- [x] **Language Emergence:** `PRIN-LANGUAGE` (Cycle 428). Agents develop a shared protocol.
 
 ---
 
