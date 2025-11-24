@@ -1271,6 +1271,12 @@
 - [x] **Experiment:** `experiments/cycle447_first_contact.py`.
 - [x] **Result:** Merchant Advantage. Economic gravity favors efficiency.
 
+# Task: Cycle 448 - The Oracle
+- [x] **Define Cycle 448:** Implement Substrate Communication.
+- [x] **Goal:** Can agents detect a signal from "Outside" the simulation?
+- [x] **Experiment:** `experiments/cycle448_the_oracle.py`.
+- [x] **Result:** Success. Contact established via Primes.
+
 
 
 
