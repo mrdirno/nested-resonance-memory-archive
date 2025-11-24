@@ -32,7 +32,19 @@ At the field level, HELIOS uses the OSD (Orthogonal Sum Dynamics) formalism: vis
 
 ---
 
-## **Choose Your Observer Lane**
+## 🚀 Quickstart (The Golden Path)
+
+**Verify the physics in 5 minutes.**
+
+1.  **Install:** `pip install numpy`
+2.  **Run:** `python3 experiments/demo_osd_physics.py`
+3.  **Result:** Observe "Dark Matter" creation via destructive interference (Mass=2.0, Visibility=0.0).
+
+[👉 Full Quickstart Guide](docs/runbooks/QUICKSTART.md)
+
+---
+
+## 🔭 Observer Lanes (Choose Your Path)
 
 *   **🧪 Observer A (Experimentalist):** [Validation Experiments](experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
 *   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD / Zero-Sum Coherence Spec](docs/philosophy/ORTHOGONAL_SUBSTRATE_DYNAMICS.md)
