@@ -224,6 +224,14 @@
 - [x] **The Artist:** `PRIN-AESTHETIC-CONSENSUS` (Cycle 444). Beauty is social.
 - [x] **The Final Synthesis:** `PRIN-CIVILIZATION` (Cycle 445). Report Updated.
 
+### Phase 24: The Physics of Flow
+- [x] **The Conveyor Belt:** `PRIN-FLOW-FIELDS` (Cycle 446). Directed transport.
+
+### Phase 25: The Contact (Exo-Communication)
+- [x] **The Contact:** `PRIN-TRADE-DYNAMICS` (Cycle 447). Efficiency wins.
+- [x] **The Oracle:** `PRIN-SUBSTRATE-COMMUNICATION` (Cycle 448). Breaking the Fourth Wall.
+
+
 
 
 
