@@ -1604,8 +1604,19 @@
 - [x] **Result:** Migration complete.
 
 # Task: Cycle 506 - The Final Commit V15
-- [ ] **Define Cycle 506:** Finalize.
-- [ ] **Action:** Git Commit.
+- [x] **Define Cycle 506:** Finalize.
+- [x] **Action:** Git Commit.
+- [x] **Result:** Migration committed.
+
+# Task: Cycle 507 - The Core Migration (Constants & Exceptions)
+- [x] **Define Cycle 507:** Refactoring.
+- [x] **Goal:** Move `constants.py` and `exceptions.py` to `nrm_core`.
+- [x] **Action:** Migrated and updated imports.
+- [x] **Result:** Migration complete.
+
+# Task: Cycle 508 - The Final Commit V16
+- [ ] **Define Cycle 508:** Finalize.
+- [ ] **Action:** Git Commit and archive legacy `core/`.
 
 
 

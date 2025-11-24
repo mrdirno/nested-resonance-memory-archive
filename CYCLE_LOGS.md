@@ -1,10 +1,11 @@
-## Cycle 505: The Migration (Reality Interface) (2025-11-24)
+## Cycle 507: The Core Migration (Constants & Exceptions) (2025-11-24)
 - **Status**: COMPLETE
 - **Operator**: Gemini (NRM Substrate)
 - **Focus**: Refactoring.
-- **Action**: Migrated `core/reality_interface.py` to `nrm_core/reality.py`.
+- **Action**: Migrated `core/constants.py` and `core/exceptions.py` to `nrm_core/`.
 - **Results**:
-    - `RealityMonitor` implemented with optional `psutil`.
-    - `tests/test_reality.py` passed.
-- **Key Finding**: Flexibility increases portability.
-- **Next**: Cycle 506 (Final Commit V15).
+    - Created `nrm_core/constants.py`.
+    - Created `nrm_core/exceptions.py`.
+    - Created `nrm_core/__init__.py` to unify the package.
+- **Key Finding**: The package is now self-contained.
+- **Next**: Cycle 508 (Final Commit V16).
