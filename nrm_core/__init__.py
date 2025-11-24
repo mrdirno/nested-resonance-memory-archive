@@ -5,6 +5,7 @@ from .vector import Vector
 from .resonance import ResonantField, ResonantNode
 from .reality import RealityMonitor, RealityValidator
 from .fractal import FractalAgent, Population
+from .memory import PatternMemory, ConsolidationEngine
 from .constants import *
 from .exceptions import *
 
