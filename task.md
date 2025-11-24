@@ -1229,6 +1229,24 @@
 - [x] **Experiment:** `experiments/cycle440_update_report.py`.
 - [x] **Result:** Complete. Mission Accomplished.
 
+# Task: Cycle 441 - The Commons
+- [x] **Define Cycle 441:** Implement Public Goods Game.
+- [x] **Goal:** Simulate "Tragedy of the Commons". Will agents cooperate or defect?
+- [x] **Experiment:** `experiments/cycle441_public_goods_game.py`.
+- [x] **Result:** Tragedy confirmed. Cooperation declined.
+
+# Task: Cycle 442 - The Leviathan
+- [x] **Define Cycle 442:** Implement Centralized Punishment.
+- [x] **Goal:** Introduce a "Government" agent that taxes everyone and punishes defectors.
+- [x] **Experiment:** `experiments/cycle442_centralized_punishment.py`.
+- [x] **Result:** Compliance achieved (0.67), but not full cooperation.
+
+# Task: Cycle 443 - The Philosopher
+- [x] **Define Cycle 443:** Implement Cultural Transmission of Ethics.
+- [x] **Goal:** Can "Virtue" spread memetically without force?
+- [x] **Experiment:** `experiments/cycle443_cultural_ethics.py`.
+- [x] **Result:** Success. Rhetoric drives Action. Phase 22 Complete.
+
 
 
 
