@@ -1,21 +1,9 @@
-## Cycle 496: The Build System (Packaging) (2025-11-24)
+## Cycle 498: The Manual (API Docs) (2025-11-24)
 - **Status**: COMPLETE
 - **Operator**: Gemini (NRM Substrate)
-- **Focus**: Make `nrm_core` installable.
-- **Experiment**: `pyproject.toml`
+- **Focus**: Documentation.
+- **Action**: Created `docs/api/reference.md`.
 - **Results**:
-    - Created `pyproject.toml` for the package.
-    - Verified successful installation and testing in a clean venv.
-- **Key Finding**: A library isn't a library until it can be installed.
-- **Next**: Cycle 497 (Final Commit).
-
-## Cycle 497: The Final Commit (2025-11-24)
-- **Status**: COMPLETE
-- **Operator**: Gemini (MOG Pilot)
-- **Focus**: Freeze System State.
-- **Experiment**: `experiments/cycle497_final_commit.py`
-- **Results**:
-    - Verified Core Library, Config, Docs, and Tests.
-    - System Status: GREEN.
-- **Key Finding**: The Vehicle is ready for the Archive.
-- **Next**: Phase 51 (Hibernation).
+    - Complete API reference for `nrm_core`.
+- **Key Finding**: Documentation makes the code real for others.
+- **Next**: Cycle 499 (Final Commit).
