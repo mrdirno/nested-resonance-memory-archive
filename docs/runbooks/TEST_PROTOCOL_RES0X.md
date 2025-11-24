@@ -24,17 +24,18 @@ To test RES0X, you need a dataset containing the following dimensions. This can 
 
 The conjecture predicts specific relationships between these variables based on **Conservation of Information-Energy**.
 
-### Case A: The Pass-Through (Venting)
-*   **Condition:** High Input ($V_{in} \uparrow$), High Threat ($P_{threat} \uparrow$).
-*   **Action:** Agent externalizes reaction ($A_{out} \uparrow$).
-*   **Prediction:** Load ($S_{load}$) increases moderately or stays baseline. Energy is dissipated via Action.
+### Action Categories (Nuance Required)
+*   **Suppress:** Inhibit expression; maintain social surface; no processing.
+*   **Express (Regulated):** Express with safety/context/problem-solving.
+*   **Vent (Ruminative):** Repetitive, unstructured discharge (may increase load).
 
-### Case B: The Staircase (Suppression)
+### Prediction: The Suppression Penalty
 *   **Condition:** High Input ($V_{in} \uparrow$), High Threat ($P_{threat} \uparrow$).
-*   **Action:** Agent suppresses reaction ($A_{out} \approx 0$).
-*   **Prediction:** Load ($S_{load}$) **MUST** increase significantly.
-    *   $\Delta S_{load} \propto f(V_{in}, P_{threat})$
-    *   *Rationale:* The energy of the signal + the energy of suppression must go somewhere (Internalization).
+*   **Comparison:** Suppression vs. Regulated Expression.
+*   **Time Windows:**
+    *   **Acute (0-30m):** Suppression may show lower visible cost (Vector $\approx$ 0).
+    *   **Residual (4h-24h):** Suppression **MUST** show higher accumulated load ($S_{load}$) than Regulated Expression.
+*   **Inequality:** $\Delta S_{load}(Suppression) > \Delta S_{load}(RegulatedExpression)$ over the Residual window.
 
 ---
 
@@ -42,15 +43,17 @@ The conjecture predicts specific relationships between these variables based on 
 
 Flag the conjecture as **FALSIFIED** if the data shows:
 
-### ❌ Trigger 1: The Free Lunch
-*   **Observation:** Agent suppresses high-threat input ($A_{out} \approx 0$) AND Internal Load does not rise ($\Delta S_{load} \approx 0$).
+### ❌ Trigger 1: The Free Lunch (Aggregate)
+*   **Observation:** In a large sample, suppression shows **no systematic load penalty** relative to regulated expression once confounds are controlled.
 *   **Implication:** Energy disappeared without work. Violates Conservation.
-*   **Verdict:** RES0X Falsified.
+*   **Verdict:** RES0X Falsified (for this channel).
 
 ### ❌ Trigger 2: The Null Correlation
 *   **Observation:** Across a large sample, $\Delta S_{load}$ is statistically independent of $V_{in}$ and $P_{threat}$.
 *   **Implication:** The "Fractal Staircase" transduction does not exist.
 *   **Verdict:** RES0X Falsified.
+
+*Note: Individual exceptions (e.g., trained meditators) do not falsify the aggregate law, as they may have alternative dissipation channels.*
 
 ---
 
@@ -59,10 +62,11 @@ Flag the conjecture as **FALSIFIED** if the data shows:
 When analyzing a log or dataset with this protocol:
 
 1.  **Ingest** the table of events.
-2.  **Calculate** $\Delta S_{load}$ for "Suppression Events" vs "Venting Events".
-3.  **Check** if $\Delta S_{load}(Suppression) > \Delta S_{load}(Venting)$.
-4.  **Report:**
-    *   "RES0X Supported" if Staircase effect is observed.
+2.  **Categorize** Actions into `Suppress`, `Regulated`, or `Ruminative`.
+3.  **Calculate** $\Delta S_{load}$ for the **Residual Window** (4h+).
+4.  **Check** if $\Delta S_{load}(Suppress) > \Delta S_{load}(Regulated)$.
+5.  **Report:**
+    *   "RES0X Supported" if Suppression Penalty is observed.
     *   "RES0X Challenged" if Free Lunch is observed.
 
 ---
