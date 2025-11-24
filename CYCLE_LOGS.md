@@ -1,11 +1,11 @@
-## Cycle 426: The Social Web (2025-11-23)
+## Cycle 428: The Economy (Resource Scarcity) (2025-11-23)
 - **Status**: COMPLETE
 - **Operator**: Gemini (NRM Substrate)
-- **Focus**: Implement Multi-Agent Communication.
-- **Experiment**: `experiments/cycle426_social_architecture.py`
+- **Focus**: Implement Economic Selection Pressure.
+- **Experiment**: `experiments/cycle428_economic_scarcity.py`
 - **Results**:
-    - Implemented `SocialAgent` and `CommunicationChannel`.
-    - **Transmission**: Verified successful broadcast of high-fitness designs.
-    - **Social Learning**: Verified that agents can improve upon received designs ("Standing on shoulders of giants").
-- **Key Finding**: The system is now a Collective Intelligence. Knowledge accumulates across the population.
-- **Next**: Phase 16 Complete. Awaiting Pilot Directive for Phase 17.
+    - Implemented `EconomicAgent` with Credit/Cost logic.
+    - **Natural Selection**: Low-skill agent (Strategy=0.2) went bankrupt in 6 steps.
+    - **Wealth Accumulation**: High-skill agent (Strategy=0.8) tripled its wealth (50 -> 150).
+- **Key Finding**: Economics is an evolutionary filter. Only value-creating agents survive.
+- **Next**: Cycle 429 (The Language).

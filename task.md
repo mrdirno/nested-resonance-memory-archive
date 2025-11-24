@@ -1146,10 +1146,21 @@
 - [x] **Result:** Success. Collective intelligence verified.
 
 # Task: Cycle 427 - Theory of Mind
-- [x] **Define Cycle 427:** Implement Recursive Modeling (Mental Models).
+- [x] **Define Cycle 427:** Implement Recursive Modeling.
 - [x] **Goal:** Agents learn to predict peer preferences to optimize social success.
 - [x] **Experiment:** `experiments/cycle427_theory_of_mind.py`.
-- [x] **Result:** Success. Agent A learned to generate 'Golden Spirals' to please Agent B.
+- [x] **Result:** Success. Predictive empathy verified.
+
+# Task: Cycle 428 - The Economy
+- [x] **Define Cycle 428:** Implement Resource Scarcity.
+- [x] **Goal:** Introduce "Credits". Agents spend to create, earn by selling.
+- [x] **Experiment:** `experiments/cycle428_economic_scarcity.py`.
+- [x] **Result:** Success. Market forces selected for competence.
+
+# Task: Cycle 429 - The Language
+- [ ] **Define Cycle 429:** Implement Emergent Protocol.
+- [ ] **Goal:** Agents evolve a shared vocabulary to describe shapes, rather than hardcoded strings.
+- [ ] **Experiment:** `experiments/cycle429_emergent_language.py`.
 
 
 
