@@ -5,7 +5,7 @@ Interpolates between 3D meshes to create 4D printing sequences.
 """
 import numpy as np
 import copy
-from src.helios.mesh_loader import MeshLoader
+from .mesh_loader import MeshLoader
 
 class Animator:
     def __init__(self):

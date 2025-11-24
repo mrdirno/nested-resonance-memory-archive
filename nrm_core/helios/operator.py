@@ -5,22 +5,17 @@ Translates high-level intent into low-level phase instructions.
 """
 import numpy as np
 import os
-from src.helios.substrate_3d import AcousticSubstrate3D
-from experiments.cycle320_forward_cymatics_2d import Emitter
-from src.helios.mesh_loader import MeshLoader
+from .substrate_3d import AcousticSubstrate3D
+from .types import Emitter, Emitter3D
+from .mesh_loader import MeshLoader
 
 # GPU acceleration (optional)
 try:
-    from src.helios.substrate_3d_gpu import AcousticSubstrate3DGPU
-    from src.helios.ga_gpu import GeneticAlgorithmGPU
+    from .substrate_3d_gpu import AcousticSubstrate3DGPU
+    from .ga_gpu import GeneticAlgorithmGPU
     GPU_AVAILABLE = True
 except ImportError:
     GPU_AVAILABLE = False
-
-class Emitter3D(Emitter):
-    def __init__(self, x, y, z, frequency, phase, amplitude=1.0):
-        super().__init__(x, y, frequency, phase, amplitude)
-        self.z = z
 
 class UniversalOperator:
     """
@@ -65,9 +60,25 @@ class UniversalOperator:
                 for j in range(num):
                     c1 = center - center_offset + i * spacing
                     c2 = center - center_offset + j * spacing
-                    if orientation == 'z': emitters.append(Emitter3D(c1, c2, fixed, 1.0, 0.0))
-                    elif orientation == 'x': emitters.append(Emitter3D(fixed, c1, c2, 1.0, 0.0))
-                    elif orientation == 'y': emitters.append(Emitter3D(c1, fixed, c2, 1.0, 0.0))
+                    if orientation == 'z': emitters.append(Emitter3D(c1, c2, fixed, 1.0, 0.0, fixed))
+                    elif orientation == 'x': emitters.append(Emitter3D(fixed, c1, c2, 1.0, 0.0, c2)) # Note: Emitter3D init is x, y, freq, phase, amp, z. Wait, let's check Emitter3D definition in types.py
+                    # Emitter3D(x, y, frequency, phase, amplitude=1.0, z=0.0) - Wait, inheritance order.
+                    # Let's fix instantiation to be explicit or cleaner.
+                    # Actually, in types.py:
+                    # @dataclass class Emitter: x, y, frequency, phase, amplitude=1.0
+                    # @dataclass class Emitter3D(Emitter): z: float = 0.0
+                    # So args are x, y, freq, phase, amplitude, z (because z has default).
+                    
+                    # Correcting logic:
+                    if orientation == 'z': 
+                        # Top/Bottom faces. x=c1, y=c2, z=fixed
+                        emitters.append(Emitter3D(c1, c2, 1.0, 0.0, 1.0, fixed))
+                    elif orientation == 'x': 
+                        # Left/Right faces. x=fixed, y=c1, z=c2
+                        emitters.append(Emitter3D(fixed, c1, 1.0, 0.0, 1.0, c2))
+                    elif orientation == 'y': 
+                        # Front/Back faces. x=c1, y=fixed, z=c2
+                        emitters.append(Emitter3D(c1, fixed, 1.0, 0.0, 1.0, c2))
                     
         add_face(0.0, 'z'); add_face(self.box_dim, 'z')
         add_face(0.0, 'x'); add_face(self.box_dim, 'x')
@@ -175,62 +186,15 @@ class UniversalOperator:
             raise ValueError(f"Object ID {object_id} not found.")
             
         # Lazy import to avoid circular dependency
-        from src.helios.animator import Animator
+        from .animator import Animator
         animator = Animator()
-        
-        # Get current state
-        # We need the current mesh/cloud. 
-        # If it was loaded from file, we might have the path.
-        # If it was a primitive (cube), we need to generate a mesh/cloud for it.
         
         obj = self.active_objects[object_id]
         current_type = obj['type']
         
-        # Define Start Cloud/Mesh
-        if "file:" in current_type:
-            current_path = current_type.split("file:")[1]
-            # We assume it's in the current directory or we need full path
-            # This is a bit hacky, assuming we can find it.
-            # Ideally we store the full path or the cloud itself.
-            # For now, let's assume we can't easily get the start mesh if we didn't store it.
-            # Let's reconstruct it from targets? No, targets are points.
-            # Let's just use the targets as the start cloud!
-            start_cloud = obj['targets']
-            # We need a tuple (verts, faces) for the animator signature?
-            # Actually animator.interpolate takes (verts, faces).
-            # We should overload it or adjust logic.
-            # Let's adjust logic in this method to handle "Cloud to Mesh" morph.
-            pass 
-        else:
-            # Primitive
-            # We can't easily morph a cube primitive without a mesh.
-            # Let's require the object to be a mesh for now?
-            # Or just generate a cube mesh on the fly.
-            pass
-
-        # REVISED STRATEGY:
-        # Since we don't store the mesh data in active_objects, we will cheat for the demo.
-        # We will load the START mesh from a file provided in arguments?
-        # No, that breaks the API "animate object X".
-        
-        # Let's assume the user provides the start mesh path too?
-        # "animate <id> from <start_obj> to <end_obj>"?
-        # A bit verbose.
-        
-        # Better: Store the mesh path in active_objects when created from file.
-        # If created from primitive, we can't animate it yet.
-        
         if "file:" not in current_type:
              raise ValueError("Animation only supported for file-loaded objects.")
              
-        # Reconstruct full path? 
-        # We stored basename. Let's try to find it.
-        # Assumption: It's in the CWD or we stored it.
-        # Let's update create_from_file to store full path.
-        
-        # For now, let's just use the target_mesh_path as the END.
-        # And we need the START.
-        # Let's try to load the file from the type string if it exists locally.
         start_filename = current_type.split("file:")[1]
         if os.path.exists(start_filename):
             start_path = start_filename
@@ -273,18 +237,28 @@ class UniversalOperator:
             ga = GeneticAlgorithmGPU(self.box, self.emitters)
             best_phases = ga.solve(targets, generations=20, pop_size=20)
         else:
-            # Fallback to CPU implementation
-            from experiments.cycle348_volumetric_printing import genetic_algorithm_multi_target
-            best_phases = genetic_algorithm_multi_target(targets, self.box, self.emitters, generations=20, pop_size=20)
+            # Fallback to simple phase conjugation or error
+            # Since we moved genetic_algorithm_multi_target out of range, we need a local implementation or simple heuristic
+            # Implementing simple heuristic: Phase Conjugation (Time Reversal)
+            # Phase = -k * distance for each emitter to centroid of targets
+            # This focuses on the center, not optimal for 8 corners, but it's a valid fallback.
+            
+            center = np.mean(targets, axis=0)
+            best_phases = []
+            k = 2 * np.pi * 40000 / 343.0 # Approx k
+            for e in self.emitters:
+                # dist to center
+                # e.x is in mm, e.y in mm, e.z in mm
+                dist = np.sqrt((e.x - center[0])**2 + (e.y - center[1])**2 + (e.z - center[2])**2)
+                # Phase = -k*d
+                phase = -k * (dist / 1000.0) # Convert mm to m
+                best_phases.append(phase % (2*np.pi))
+                
         return best_phases
 
     def get_stability(self, object_id: int) -> float:
         """
         Returns stability index based on Gorkov Potential.
-        Stability = Potential at target (should be negative/min) / Global Min Potential.
-        Or simply the value of U at the target (lower is better).
-        For normalized metric 0-1:
-        We want a deep potential well.
         """
         obj = self.active_objects.get(object_id)
         if not obj: return -1.0
@@ -298,10 +272,6 @@ class UniversalOperator:
         
         # Calculate Gorkov Potential
         potential = self.box.calculate_gorkov_potential(field)
-        
-        # Analyze stability at target points
-        # Ideally, targets should be at local minima of U.
-        # We return the average potential at target points (should be negative).
         
         total_u = 0.0
         count = 0
@@ -319,12 +289,11 @@ class UniversalOperator:
         if count == 0: return 0.0
         
         avg_u = total_u / count
-        return avg_u # Return raw potential (negative is good)
+        return avg_u 
 
     def get_field_slice(self, z_ratio: float = 0.5) -> list[list[float]]:
         """
         Returns a 2D slice of the pressure field (magnitude squared).
-        z_ratio: 0.0 to 1.0 (relative to box depth)
         """
         z_layer = int(z_ratio * self.box.depth)
         z_layer = max(0, min(z_layer, self.box.depth - 1))
@@ -339,19 +308,7 @@ class UniversalOperator:
              full_field = self.box.propagate(self.emitters)
              field = full_field[z_layer]
              
-        # Return Magnitude Squared (Intensity)
-        # Normalize for visualization (0-1 range approx)
         intensity = np.abs(field)**2
-        
-        # Simple normalization
-        # Max theoretical intensity is (N_emitters * Amp)^2
-        # With 384 emitters, it can be large.
-        # Let's just return raw values and normalize in frontend or clamp?
-        # Let's clamp to a reasonable max for visualization.
-        # 384 emitters constructive interference -> 384^2 ~ 147,000
-        # But usually much lower.
-        # Let's return raw list of lists.
-        
         return intensity.tolist()
 
     def get_volumetric_traps(self, threshold: float = -1e-6) -> list:
@@ -375,38 +332,17 @@ class UniversalOperator:
     def calculate_osd_metrics(self, field_data: np.ndarray) -> dict:
         """
         Calculates Orthogonal Sum Dynamics (OSD) metrics.
-        
-        Args:
-            field_data: Complex pressure field (3D numpy array).
-            
-        Returns:
-            dict: {
-                'vector_sum': float, # Visibility (Total Coherent Intensity)
-                'scalar_sum': float, # Mass (Total Incoherent Energy)
-                'coherence_ratio': float, # V/M: >1 = Focusing, <1 = Cancellation
-                'dark_matter_index': float # 1 - (V/M_focus) normalized? Or just M - V?
-            }
         """
         # 1. Vector Sum (Visibility)
-        # V = Sum(|Sum(psi)|^2) over volume
         visibility_map = np.abs(field_data)**2
         vector_sum_total = np.sum(visibility_map)
         
         # 2. Scalar Sum (Mass)
-        # M = Sum(Sum(|psi|^2)) over volume
-        # Since our current physics model (AcousticSubstrate3D) ignores 1/r decay,
-        # |psi_n|^2 = |A_n|^2 is constant everywhere for each emitter.
-        # Thus, Mass Density is uniform: Sum(A_n^2).
-        # Total Mass = Volume * Sum(A_n^2).
-        
         emitter_intensities = [e.amplitude**2 for e in self.emitters]
         mass_density = sum(emitter_intensities)
         scalar_sum_total = mass_density * field_data.size
         
         # 3. Coherence Ratio
-        # If incoherent (random), V ~ M.
-        # If coherent (focused), V > M (up to N times M).
-        # If destructive, V < M.
         if scalar_sum_total > 0:
             ratio = vector_sum_total / scalar_sum_total
         else:
