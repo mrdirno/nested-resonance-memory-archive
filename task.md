@@ -1181,6 +1181,12 @@
 - [x] **Experiment:** `experiments/cycle432_genetic_reproduction.py`.
 - [x] **Result:** Success. Population optimized via natural selection.
 
+# Task: Cycle 433 - The Ecosystem
+- [x] **Define Cycle 433:** Implement Niche Speciation.
+- [x] **Goal:** Create an environment with distinct resources to drive evolutionary divergence.
+- [x] **Experiment:** `experiments/cycle433_ecosystem_speciation.py`.
+- [x] **Result:** Competitive Exclusion verified. Specialization emerged.
+
 
 
 

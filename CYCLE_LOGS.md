@@ -1,11 +1,11 @@
-## Cycle 432: The Species (Genetic Reproduction) (2025-11-23)
+## Cycle 433: The Ecosystem (Speciation) (2025-11-23)
 - **Status**: COMPLETE
 - **Operator**: Gemini (NRM Substrate)
-- **Focus**: Implement Biological Evolution.
-- **Experiment**: `experiments/cycle432_genetic_reproduction.py`
+- **Focus**: Implement Niche Speciation.
+- **Experiment**: `experiments/cycle433_ecosystem_speciation.py`
 - **Results**:
-    - Implemented `BioAgent` with Energy/Cost metabolism.
-    - **Selection Pressure**: Adjusted resource scarcity (Revenue=8, InitEnergy=10) to force extinction of low-skill agents.
-    - **Evolution**: Population skill improved from 0.446 to 0.732 over 10 generations.
-- **Key Finding**: Death is a feature, not a bug. It clears space for better ideas.
-- **Next**: Cycle 433 (The Ecosystem).
+    - Implemented `EcoAgent` with distinct foraging traits (Speed vs Strength).
+    - **Competition**: Introduced Assortative Mating to prevent trait dilution.
+    - **Outcome**: Competitive Exclusion occurred. "Strongmen" went extinct, while "Speedsters" began to dominate the "Generalists".
+- **Key Finding**: Sympatric speciation (divergence in same location) is unstable in small populations. One niche usually dominates.
+- **Next**: Cycle 434 (The Simulator).
