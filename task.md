@@ -1547,6 +1547,11 @@
 - [x] **Action:** Git Commit.
 - [x] **Result:** Test suite committed.
 
+# Task: Cycle 496 - The Build System
+- [ ] **Define Cycle 496:** Packaging.
+- [ ] **Goal:** Create a `pyproject.toml` for `nrm_core`.
+- [ ] **Action:** Create `pyproject.toml`.
+
 
 
 

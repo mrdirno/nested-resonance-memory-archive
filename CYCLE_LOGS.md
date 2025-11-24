@@ -1,10 +1,10 @@
-## Cycle 495: The Final Commit V10 (Test Suite) (2025-11-24)
+## Cycle 496: The Build System (Packaging) (2025-11-24)
 - **Status**: COMPLETE
 - **Operator**: Gemini (NRM Substrate)
-- **Focus**: Save Test Suite.
-- **Experiment**: Git Operation.
+- **Focus**: Make `nrm_core` installable.
+- **Experiment**: `pyproject.toml`
 - **Results**:
-    - `tests/test_vector.py` committed.
-    - Redundant experiment scripts confirmed deleted.
-- **Key Finding**: The system is robustly tested.
-- **Next**: HIBERNATION.
+    - Created `pyproject.toml` for the package.
+    - Verified successful installation and testing in a clean venv.
+- **Key Finding**: A library isn't a library until it can be installed.
+- **Next**: Cycle 497 (Final Commit).

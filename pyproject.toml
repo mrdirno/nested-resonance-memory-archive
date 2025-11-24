@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nrm_core"
+version = "0.0.1"
+authors = [
+  { name="Aldrin Payopay", email="aldrin.gdf@gmail.com" },
+]
+description = "A library for Nested Resonance Memory"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/mrdirno/nested-resonance-memory-archive"
+"Bug Tracker" = "https://github.com/mrdirno/nested-resonance-memory-archive/issues"
