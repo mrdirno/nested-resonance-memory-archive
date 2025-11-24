@@ -61,7 +61,31 @@
 
 ---
 
-## 4. NEXT STEPS (PROOF STRATEGY)
+## 4. WORKED EXAMPLE (TOY SCENARIO)
+
+**Scenario:** "The Mean Tweet"
+1.  **Input (Vector Signal):** Agent receives a high-valence social threat (e.g., public insult).
+2.  **Vehicle (Policy):** Agent operates under "Status Anxiety" vehicle (High Gain on social signaling).
+3.  **Reaction:**
+    *   *Option A (Externalize):* Reply with insult. Vector Sum remains high. Scalar Load is moderate.
+    *   *Option B (Suppress):* "Be the bigger person." Agent suppresses the reply.
+4.  **Transduction (The Staircase):**
+    *   Vector Sum (Action) $\rightarrow$ 0.
+    *   Conservation Law dictates energy transfer.
+    *   Scalar Sum (Internal Load) spikes: Blood Pressure $\uparrow$, Muscle Tension $\uparrow$.
+5.  **Outcome:** The "invisible" social hit becomes a "visible" physiological cost.
+
+---
+
+## 5. FALSIFICATION CRITERIA (SCIENTIFIC RIGOR)
+
+This conjecture is **falsifiable**. It would be proven false if:
+1.  **Null Correlation:** Chronic exposure to rhetorical threat patterns shows *no correlation* with resting load metrics (BP, HRV, Inflammation) when controlling for physical factors.
+2.  **Free Lunch:** An agent can suppress high-energy reactions (Vector $\rightarrow$ 0) without any corresponding increase in internal state parameters (Scalar $\rightarrow$ 0) or dissipation (Heat). This would violate Information-Energy conservation.
+
+---
+
+## 6. NEXT STEPS (PROOF STRATEGY)
 
 To move from **Conjecture** to **Theorem**, we must:
 1.  **Formalize State Mapping:** Explicitly map \( V_{sum}, S_{sum} \) to FEP state partitions.
