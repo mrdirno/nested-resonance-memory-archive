@@ -219,7 +219,7 @@ git status  # Should show "up to date"
 | File Type | Development Workspace | Git Repository (sync target) |
 |-----------|----------------------|------------------------------|
 | Python code | `/Volumes/dual/DUALITY-ZERO-V2/src/` | `~/nested-resonance-memory-archive/src/` |
-| Experiments | `/Volumes/dual/DUALITY-ZERO-V2/experiments/` | `~/nested-resonance-memory-archive/src/experiments/` |
+| Experiments | `/Volumes/dual/DUALITY-ZERO-V2/src/experiments/` | `~/nested-resonance-memory-archive/src/experiments/` |
 | Results | `/Volumes/dual/DUALITY-ZERO-V2/experiments/results/` | `~/nested-resonance-memory-archive/data/results/` |
 | Analysis | `/Volumes/dual/DUALITY-ZERO-V2/analysis/` | `~/nested-resonance-memory-archive/src/analysis/` |
 | Summaries | `/Volumes/dual/DUALITY-ZERO-V2/archive/summaries/` | `~/nested-resonance-memory-archive/archive/summaries/` |
