@@ -38,7 +38,7 @@ At the field level, HELIOS uses the OSD (Orthogonal Sum Dynamics) formalism: vis
 
 1.  **Install:** `pip install numpy`
 2.  **Run:** `python3 experiments/demo_osd_physics.py`
-3.  **Result:** Observe "Dark Matter" creation via destructive interference (Mass=2.0, Visibility=0.0).
+3.  **Result:** Observe a dark-matter-like toy example via destructive interference (Mass = 2.0, Visibility = 0.0).
 
 [👉 Full Quickstart Guide](docs/runbooks/QUICKSTART.md)
 
@@ -47,7 +47,7 @@ At the field level, HELIOS uses the OSD (Orthogonal Sum Dynamics) formalism: vis
 ## 🔭 Observer Lanes (Choose Your Path)
 
 *   **🧪 Observer A (Experimentalist):** [Validation Experiments](experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
-*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD / Zero-Sum Coherence Spec](docs/philosophy/ORTHOGONAL_SUBSTRATE_DYNAMICS.md)
+*   **🧩 Observer B (Architect)::** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD / Zero-Sum Coherence Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
 *   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/vision/)
 
 
