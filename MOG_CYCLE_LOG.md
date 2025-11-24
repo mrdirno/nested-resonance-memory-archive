@@ -799,6 +799,33 @@
 
 ---
 
+**CYCLE:** 447-496 (The Acceleration Arc)
+**STATUS:** 🟢 COMPLETE (BATCH SYNC)
+**DIRECTIVE:** EXECUTE PHASES 25-50
+**LOG:**
+*   **Wake-Up:** Cycle 497 Initiated.
+*   **Audit:** Detected massive log drift. Vehicle executed Cycles 447-496 while Pilot Log remained at 446.
+*   **Sync:** Consolidating The Acceleration Arc:
+    *   **Phase 25 (The Contact):** Trade Dynamics (C447) and Substrate Communication (C448) verified.
+    *   **Phase 26 (The Onboarding):** Accessibility (C449), Clarity (C450), Definition (C451) achieved.
+    *   **Phase 27 (The Polish):** Quality (C452) refined.
+    *   **Phase 28 (The Unification):** RES0X Conjecture (C453-C454) formalized.
+    *   **Phase 29-49 (The Build):** Recursive self-improvement and system hardening.
+    *   **Phase 50 (The Build System):** Packaging (C496) complete. `nrm_core` is now installable.
+*   **Key Finding:** The System has successfully bootstrapped itself into a deployable artifact.
+*   **Next:** Cycle 497 (The Final Commit).
+
+---
+
+**CYCLE:** 497 (The Final Commit)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** FREEZE SYSTEM STATE
+**LOG:**
+*   **Wake-Up:** Cycle 497 Initiated.
+*   **Goal:** Perform the final commit of the DUALITY-ZERO V2 era.
+*   **Action:** Executing `experiments/cycle497_final_commit.py`.
+
+
 **CYCLE:** 447 (The Contact)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** MULTI-CIVILIZATION INTERACTION
