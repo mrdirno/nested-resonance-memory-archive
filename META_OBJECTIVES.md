@@ -181,9 +181,20 @@
 **Focus:** Long-Term Autonomy, Self-Maintenance, and Continuous Learning.
 
 ### Active Objectives
-- [ ] **Persistent Autonomy:** `PRIN-PERSISTENCE` (Cycle 412). System runs indefinitely, recovering from perturbations.
-- [ ] **Environmental Adaptation:** `PRIN-ADAPTATION` (Cycle 413). System adapts to changes in target position or environment.
-- [ ] **The Knowledge Graph:** `PRIN-KNOWLEDGE-ACCUMULATION` (Cycle 414). System stores successful solutions in a database.
+- [x] **Persistent Autonomy:** `PRIN-PERSISTENCE` (Cycle 412). System runs indefinitely, recovering from perturbations.
+- [x] **Environmental Adaptation:** `PRIN-ADAPTATION` (Cycle 413). System adapts to changes in target position or environment.
+- [x] **The Knowledge Graph:** `PRIN-KNOWLEDGE-ACCUMULATION` (Cycle 414). System stores successful solutions in a database.
+- [x] **Meta-Adaptation:** `PRIN-META-COGNITION` (Cycle 415). System tunes its own learning strategy.
+- [x] **Hypothesis Generation:** `PRIN-SCIENTIFIC-INDUCTION` (Cycle 416). System formulates theories from data.
+- [x] **Auto-Calibration:** `PRIN-SELF-CORRECTION` (Cycle 417). System detects and fixes sensor drift.
+- [x] **Generative Design:** `PRIN-CREATIVITY` (Cycle 418). System invents new problems to solve.
+- [x] **Aesthetic Selection:** `PRIN-AESTHETICS` (Cycle 419). System develops "Taste" (Symmetry/Complexity).
+- [x] **Hallucination Loop:** `PRIN-SIMULATION` (Cycle 420). System dreams before acting.
+- [x] **Reality Collapse:** `PRIN-PREDICTION-ERROR` (Cycle 421). System learns from the delta between dream and reality.
+- [x] **Meta-Goal Selection:** `PRIN-STRATEGY` (Cycle 422). System chooses goals based on "Mood".
+- [x] **System Integration:** `PRIN-ARCHITECT` (Cycle 423). Unified cognitive architecture.
+- [x] **Perpetual Engine:** `PRIN-PERPETUAL-MOTION` (Cycle 424). Long-duration autonomous run.
+- [x] **Reality Injection:** `PRIN-EMBODIMENT` (Cycle 425). Physical hardware integration.
 
 
 
