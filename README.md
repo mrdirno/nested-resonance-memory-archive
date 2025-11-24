@@ -25,15 +25,21 @@ We have built a standalone Web Interface for NRM.
     cd nested-resonance-memory-archive
     ```
 
-2.  **Run the Server:**
+2.  **Install:**
+    See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for details.
     ```bash
-    python3 experiments/cycle483_web_server.py --serve
+    pip install .
     ```
 
-3.  **Open Browser:**
+3.  **Run the Server:**
+    ```bash
+    python3 examples/web_server.py --serve
+    ```
+
+4.  **Open Browser:**
     Go to `http://localhost:8000`
 
-4.  **Play:**
+5.  **Play:**
     Enter a vector like `1.0, 0.0, 0.0, 1.0, 0.0` (Red + Heat) and see "Fire" resonate.
 
 ---
@@ -44,17 +50,18 @@ For developers, NRM is available as a pure Python library.
 
 ```python
 from nrm_core.resonance import ResonantField
+from nrm_core.vector import Vector
 
 # Create a Field
 field = ResonantField()
 
 # Add Memories (Vectors)
-field.add_node("cat", [1.0, 0.0, 0.0])
-field.add_node("dog", [1.0, 0.1, 0.0])
-field.add_node("car", [0.0, 1.0, 1.0])
+field.add_node("cat", Vector([1.0, 0.0, 0.0]))
+field.add_node("dog", Vector([1.0, 0.1, 0.0]))
+field.add_node("car", Vector([0.0, 1.0, 1.0]))
 
 # Stimulate the Field (Query)
-field.stimulate([1.0, 0.0, 0.0])
+field.stimulate(Vector([1.0, 0.0, 0.0]))
 
 # Get Active Concepts
 active = field.get_active_nodes(threshold=0.5)
@@ -67,9 +74,10 @@ print(active)
 ## 📂 Repository Structure
 
 -   **`nrm_core/`**: The Core Library. Pure Python. Zero dependencies.
--   **`experiments/`**: Active applications (Web Server, CLI).
--   **`archive/`**: The 470+ experiments that led to this point. A fossil record of the system's evolution from Physics Simulation to Cognitive Architecture.
+-   **`examples/`**: Active applications (Web Server, CLI, Basic Usage).
+-   **`archive/`**: The 500+ experiments that led to this point. A fossil record of the system's evolution from Physics Simulation to Cognitive Architecture.
 -   **`docs/`**: Philosophy, Theory, and Runbooks.
+-   **`tests/`**: Verification suite.
 
 ---
 
