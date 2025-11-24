@@ -1,0 +1,34 @@
+{
+  "conditions": [
+    {
+      "noise_level": 0.1,
+      "control_accuracy": 0.425,
+      "stereo_accuracy": 0.9800000000000001,
+      "difference": 0.5549999999999999
+    },
+    {
+      "noise_level": 0.3,
+      "control_accuracy": 0.015000000000000003,
+      "stereo_accuracy": 0.13499999999999998,
+      "difference": 0.12
+    },
+    {
+      "noise_level": 0.5,
+      "control_accuracy": 0.0,
+      "stereo_accuracy": 0.015000000000000003,
+      "difference": 0.015000000000000003
+    },
+    {
+      "noise_level": 0.7,
+      "control_accuracy": 0.0,
+      "stereo_accuracy": 0.015000000000000003,
+      "difference": 0.015000000000000003
+    },
+    {
+      "noise_level": 0.9,
+      "control_accuracy": 0.005,
+      "stereo_accuracy": 0.005,
+      "difference": 0.0
+    }
+  ]
+}

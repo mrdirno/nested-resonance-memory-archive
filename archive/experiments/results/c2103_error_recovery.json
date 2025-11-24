@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "n_items": 50,
+    "timestamp": "2025-11-22T04:30:31.954096"
+  },
+  "tests": [
+    {
+      "corruption_type": "zero",
+      "accuracy_before": 0.94,
+      "accuracy_corrupted": 0.7866666666666667,
+      "accuracy_recovered": 0.9933333333333333,
+      "items_corrupted": 9.333333333333334
+    },
+    {
+      "corruption_type": "noise",
+      "accuracy_before": 0.94,
+      "accuracy_corrupted": 0.7866666666666667,
+      "accuracy_recovered": 0.9933333333333333,
+      "items_corrupted": 9.333333333333334
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "zero: Partial recovery +21%",
+      "noise: Partial recovery +21%",
+      "zero: Full recovery to 99%",
+      "noise: Full recovery to 99%"
+    ],
+    "resilient": false
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "depth_performance": [
+    {
+      "depth": 1,
+      "avg_similarity": 0.770515846387487,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 2,
+      "avg_similarity": 0.724896158142313,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 3,
+      "avg_similarity": 0.6949476287019205,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 4,
+      "avg_similarity": 0.6634977526235106,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 5,
+      "avg_similarity": 0.6423349399232978,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 6,
+      "avg_similarity": 0.6160510485802679,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 7,
+      "avg_similarity": 0.5942211058406525,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 8,
+      "avg_similarity": 0.5774957174413939,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 9,
+      "avg_similarity": 0.5634071007911647,
+      "success_rate": 1.0
+    },
+    {
+      "depth": 10,
+      "avg_similarity": 0.5461382914134376,
+      "success_rate": 1.0
+    }
+  ]
+}

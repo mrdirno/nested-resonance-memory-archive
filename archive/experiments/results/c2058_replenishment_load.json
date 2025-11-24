@@ -1,0 +1,140 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_crit": 43,
+    "phi": 1.618033988749895,
+    "num_cycles": 500,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T00:07:18.151606"
+  },
+  "conditions": [
+    {
+      "load_fraction": 0.5,
+      "n_items": 21,
+      "replenish_rate": 0.0,
+      "mean_initial_accuracy": 0.2857142857142857,
+      "mean_final_accuracy": 0.0,
+      "mean_time_to_failure": 100.0,
+      "mean_stability": 0.0502164502164502,
+      "retention_ratio": 0.0
+    },
+    {
+      "load_fraction": 0.5,
+      "n_items": 21,
+      "replenish_rate": 0.05,
+      "mean_initial_accuracy": 0.2857142857142857,
+      "mean_final_accuracy": 0.06666666666666667,
+      "mean_time_to_failure": 100.0,
+      "mean_stability": 0.08138528138528138,
+      "retention_ratio": 0.23333333333333334
+    },
+    {
+      "load_fraction": 0.5,
+      "n_items": 21,
+      "replenish_rate": 0.1,
+      "mean_initial_accuracy": 0.2857142857142857,
+      "mean_final_accuracy": 0.12380952380952381,
+      "mean_time_to_failure": 140.0,
+      "mean_stability": 0.12121212121212122,
+      "retention_ratio": 0.43333333333333335
+    },
+    {
+      "load_fraction": 0.75,
+      "n_items": 32,
+      "replenish_rate": 0.0,
+      "mean_initial_accuracy": 0.2,
+      "mean_final_accuracy": 0.0,
+      "mean_time_to_failure": 100.0,
+      "mean_stability": 0.0375,
+      "retention_ratio": 0.0
+    },
+    {
+      "load_fraction": 0.75,
+      "n_items": 32,
+      "replenish_rate": 0.05,
+      "mean_initial_accuracy": 0.2,
+      "mean_final_accuracy": 0.0375,
+      "mean_time_to_failure": 100.0,
+      "mean_stability": 0.061931818181818185,
+      "retention_ratio": 0.18749999999999997
+    },
+    {
+      "load_fraction": 0.75,
+      "n_items": 32,
+      "replenish_rate": 0.1,
+      "mean_initial_accuracy": 0.2,
+      "mean_final_accuracy": 0.05,
+      "mean_time_to_failure": 120.0,
+      "mean_stability": 0.08125000000000002,
+      "retention_ratio": 0.25
+    },
+    {
+      "load_fraction": 0.9,
+      "n_items": 38,
+      "replenish_rate": 0.0,
+      "mean_initial_accuracy": 0.16842105263157894,
+      "mean_final_accuracy": 0.0,
+      "mean_time_to_failure": 100.0,
+      "mean_stability": 0.02966507177033493,
+      "retention_ratio": 0.0
+    },
+    {
+      "load_fraction": 0.9,
+      "n_items": 38,
+      "replenish_rate": 0.05,
+      "mean_initial_accuracy": 0.16842105263157894,
+      "mean_final_accuracy": 0.010526315789473684,
+      "mean_time_to_failure": 100.0,
+      "mean_stability": 0.046889952153110044,
+      "retention_ratio": 0.0625
+    },
+    {
+      "load_fraction": 0.9,
+      "n_items": 38,
+      "replenish_rate": 0.1,
+      "mean_initial_accuracy": 0.16842105263157894,
+      "mean_final_accuracy": 0.042105263157894736,
+      "mean_time_to_failure": 120.0,
+      "mean_stability": 0.07081339712918659,
+      "retention_ratio": 0.25
+    },
+    {
+      "load_fraction": 1.0,
+      "n_items": 43,
+      "replenish_rate": 0.0,
+      "mean_initial_accuracy": 0.15813953488372096,
+      "mean_final_accuracy": 0.0,
+      "mean_time_to_failure": 100.0,
+      "mean_stability": 0.029175475687103596,
+      "retention_ratio": 0.0
+    },
+    {
+      "load_fraction": 1.0,
+      "n_items": 43,
+      "replenish_rate": 0.05,
+      "mean_initial_accuracy": 0.15813953488372096,
+      "mean_final_accuracy": 0.027906976744186046,
+      "mean_time_to_failure": 110.0,
+      "mean_stability": 0.047780126849894286,
+      "retention_ratio": 0.17647058823529407
+    },
+    {
+      "load_fraction": 1.0,
+      "n_items": 43,
+      "replenish_rate": 0.1,
+      "mean_initial_accuracy": 0.15813953488372096,
+      "mean_final_accuracy": 0.04186046511627907,
+      "mean_time_to_failure": 110.0,
+      "mean_stability": 0.06553911205073995,
+      "retention_ratio": 0.2647058823529411
+    }
+  ],
+  "analysis": {
+    "key_findings": [
+      "Replenishment prevents collapse: 26.5% retention gain at N_crit",
+      "Rate 0.05: Load-retention correlation = -0.625",
+      "Rate 0.1: Load-retention correlation = -0.849"
+    ],
+    "hypothesis_status": "CONFIRMED"
+  }
+}

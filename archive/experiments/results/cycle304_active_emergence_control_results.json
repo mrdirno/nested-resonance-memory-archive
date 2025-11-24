@@ -1,0 +1,20 @@
+{
+  "baseline": {
+    "simulation_id": "baseline",
+    "cohesion_factor": 0.05,
+    "agents_at_end": 50,
+    "total_flock_patterns": 717,
+    "avg_flock_size": 13.89
+  },
+  "controlled": {
+    "simulation_id": "controlled",
+    "cohesion_factor": 0.15,
+    "agents_at_end": 50,
+    "total_flock_patterns": 964,
+    "avg_flock_size": 10.27
+  },
+  "impact": {
+    "flock_size_change_percent": -26.06,
+    "flock_impact_description": "Decreased"
+  }
+}

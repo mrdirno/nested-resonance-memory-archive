@@ -1,0 +1,590 @@
+{
+  "cycle_id": "C1651",
+  "results": [
+    {
+      "seed": 500001,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500002,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500003,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500004,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500005,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500001,
+      "f_mult": 2.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500002,
+      "f_mult": 2.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500003,
+      "f_mult": 2.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500004,
+      "f_mult": 2.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500005,
+      "f_mult": 2.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500001,
+      "f_mult": 3.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500002,
+      "f_mult": 3.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500003,
+      "f_mult": 3.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500004,
+      "f_mult": 3.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500005,
+      "f_mult": 3.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500001,
+      "f_mult": 1.0,
+      "conv_mult": 2.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500002,
+      "f_mult": 1.0,
+      "conv_mult": 2.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500003,
+      "f_mult": 1.0,
+      "conv_mult": 2.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500004,
+      "f_mult": 1.0,
+      "conv_mult": 2.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500005,
+      "f_mult": 1.0,
+      "conv_mult": 2.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500001,
+      "f_mult": 1.0,
+      "conv_mult": 3.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500002,
+      "f_mult": 1.0,
+      "conv_mult": 3.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500003,
+      "f_mult": 1.0,
+      "conv_mult": 3.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500004,
+      "f_mult": 1.0,
+      "conv_mult": 3.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500005,
+      "f_mult": 1.0,
+      "conv_mult": 3.0,
+      "e_gain_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500001,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 2.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500002,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 2.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500003,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 2.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500004,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 2.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500005,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 2.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500001,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 3.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500002,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 3.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500003,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 3.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500004,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 3.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500005,
+      "f_mult": 1.0,
+      "conv_mult": 1.0,
+      "e_gain_mult": 3.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500001,
+      "f_mult": 2.0,
+      "conv_mult": 2.0,
+      "e_gain_mult": 2.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500002,
+      "f_mult": 2.0,
+      "conv_mult": 2.0,
+      "e_gain_mult": 2.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500003,
+      "f_mult": 2.0,
+      "conv_mult": 2.0,
+      "e_gain_mult": 2.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500004,
+      "f_mult": 2.0,
+      "conv_mult": 2.0,
+      "e_gain_mult": 2.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500005,
+      "f_mult": 2.0,
+      "conv_mult": 2.0,
+      "e_gain_mult": 2.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500001,
+      "f_mult": 3.0,
+      "conv_mult": 3.0,
+      "e_gain_mult": 3.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500002,
+      "f_mult": 3.0,
+      "conv_mult": 3.0,
+      "e_gain_mult": 3.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500003,
+      "f_mult": 3.0,
+      "conv_mult": 3.0,
+      "e_gain_mult": 3.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500004,
+      "f_mult": 3.0,
+      "conv_mult": 3.0,
+      "e_gain_mult": 3.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 500005,
+      "f_mult": 3.0,
+      "conv_mult": 3.0,
+      "e_gain_mult": 3.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ]
+}

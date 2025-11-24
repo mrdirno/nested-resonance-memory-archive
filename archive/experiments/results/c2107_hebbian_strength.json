@@ -1,0 +1,48 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "n_items": 50,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:33:43.409107"
+  },
+  "strengths": [
+    {
+      "strength": 0.1,
+      "accuracy": 0.9933333333333333
+    },
+    {
+      "strength": 0.2,
+      "accuracy": 1.0
+    },
+    {
+      "strength": 0.3,
+      "accuracy": 1.0
+    },
+    {
+      "strength": 0.5,
+      "accuracy": 0.9933333333333333
+    },
+    {
+      "strength": 0.7,
+      "accuracy": 0.94
+    },
+    {
+      "strength": 1.0,
+      "accuracy": 0.86
+    },
+    {
+      "strength": 1.5,
+      "accuracy": 0.6866666666666665
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Optimal strength: 0.2\u00d7 (100%)",
+      "Current 0.5\u00d7 is near-optimal (within 1%)",
+      "Safe range: 0.1\u00d7 to 0.7\u00d7"
+    ],
+    "optimal_strength": 0.2
+  }
+}

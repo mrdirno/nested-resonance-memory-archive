@@ -1,0 +1,171 @@
+{
+  "experiment": "C309_order_parameter_exponent",
+  "parameters": {
+    "n_agents": 100,
+    "critical_cohesion": 0.2,
+    "seeds": 15,
+    "steps": 100
+  },
+  "results": {
+    "above_critical": [
+      {
+        "cohesion": 0.21,
+        "distance_from_critical": 0.01,
+        "order_parameter": 0.32354
+      },
+      {
+        "cohesion": 0.22,
+        "distance_from_critical": 0.02,
+        "order_parameter": 0.32468
+      },
+      {
+        "cohesion": 0.23,
+        "distance_from_critical": 0.03,
+        "order_parameter": 0.33011
+      },
+      {
+        "cohesion": 0.24,
+        "distance_from_critical": 0.04,
+        "order_parameter": 0.33674
+      },
+      {
+        "cohesion": 0.25,
+        "distance_from_critical": 0.05,
+        "order_parameter": 0.32155
+      },
+      {
+        "cohesion": 0.26,
+        "distance_from_critical": 0.06,
+        "order_parameter": 0.29892
+      },
+      {
+        "cohesion": 0.27,
+        "distance_from_critical": 0.07,
+        "order_parameter": 0.34838
+      },
+      {
+        "cohesion": 0.28,
+        "distance_from_critical": 0.08,
+        "order_parameter": 0.32377
+      },
+      {
+        "cohesion": 0.29,
+        "distance_from_critical": 0.09,
+        "order_parameter": 0.32715
+      },
+      {
+        "cohesion": 0.3,
+        "distance_from_critical": 0.1,
+        "order_parameter": 0.32969
+      },
+      {
+        "cohesion": 0.31,
+        "distance_from_critical": 0.11,
+        "order_parameter": 0.34862
+      },
+      {
+        "cohesion": 0.32,
+        "distance_from_critical": 0.12,
+        "order_parameter": 0.31798
+      },
+      {
+        "cohesion": 0.33,
+        "distance_from_critical": 0.13,
+        "order_parameter": 0.37488
+      },
+      {
+        "cohesion": 0.34,
+        "distance_from_critical": 0.14,
+        "order_parameter": 0.30906
+      },
+      {
+        "cohesion": 0.35,
+        "distance_from_critical": 0.15,
+        "order_parameter": 0.32027
+      }
+    ],
+    "below_critical": [
+      {
+        "cohesion": 0.05,
+        "distance_from_critical": 0.15,
+        "order_parameter": 0.26609
+      },
+      {
+        "cohesion": 0.06,
+        "distance_from_critical": 0.14,
+        "order_parameter": 0.27065
+      },
+      {
+        "cohesion": 0.07,
+        "distance_from_critical": 0.13,
+        "order_parameter": 0.3066
+      },
+      {
+        "cohesion": 0.08,
+        "distance_from_critical": 0.12,
+        "order_parameter": 0.28088
+      },
+      {
+        "cohesion": 0.09,
+        "distance_from_critical": 0.11,
+        "order_parameter": 0.26495
+      },
+      {
+        "cohesion": 0.1,
+        "distance_from_critical": 0.1,
+        "order_parameter": 0.32514
+      },
+      {
+        "cohesion": 0.11,
+        "distance_from_critical": 0.09,
+        "order_parameter": 0.29642
+      },
+      {
+        "cohesion": 0.12,
+        "distance_from_critical": 0.08,
+        "order_parameter": 0.30869
+      },
+      {
+        "cohesion": 0.13,
+        "distance_from_critical": 0.07,
+        "order_parameter": 0.30672
+      },
+      {
+        "cohesion": 0.14,
+        "distance_from_critical": 0.06,
+        "order_parameter": 0.32531
+      },
+      {
+        "cohesion": 0.15,
+        "distance_from_critical": 0.05,
+        "order_parameter": 0.298
+      },
+      {
+        "cohesion": 0.16,
+        "distance_from_critical": 0.04,
+        "order_parameter": 0.31708
+      },
+      {
+        "cohesion": 0.17,
+        "distance_from_critical": 0.03,
+        "order_parameter": 0.30741
+      },
+      {
+        "cohesion": 0.18,
+        "distance_from_critical": 0.02,
+        "order_parameter": 0.32684
+      },
+      {
+        "cohesion": 0.19,
+        "distance_from_critical": 0.01,
+        "order_parameter": 0.29611
+      }
+    ]
+  },
+  "analysis": {
+    "beta_above": 0.0089,
+    "beta_below": -0.0418,
+    "asymmetry": 0.0507,
+    "interpretation": "weak scaling"
+  }
+}

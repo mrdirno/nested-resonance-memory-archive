@@ -1,0 +1,2735 @@
+{
+  "cycle_id": "C1658",
+  "results": [
+    {
+      "seed": 970001,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.4,
+        1.2,
+        1.4,
+        3.3,
+        6.7
+      ]
+    },
+    {
+      "seed": 970002,
+      "circular_prob": 0.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ]
+    },
+    {
+      "seed": 970003,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        2.0,
+        7.0
+      ]
+    },
+    {
+      "seed": 970004,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.4,
+        1.6,
+        0.6,
+        1.4,
+        6.3
+      ]
+    },
+    {
+      "seed": 970005,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        2.3,
+        0.2,
+        1.4,
+        6.3
+      ]
+    },
+    {
+      "seed": 970006,
+      "circular_prob": 0.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        1.9,
+        5.5
+      ]
+    },
+    {
+      "seed": 970007,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        1.3,
+        2.0,
+        5.4
+      ]
+    },
+    {
+      "seed": 970008,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.4,
+        1.4,
+        1.5,
+        3.2,
+        5.7
+      ]
+    },
+    {
+      "seed": 970009,
+      "circular_prob": 0.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.6,
+        6.2
+      ]
+    },
+    {
+      "seed": 970010,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        2.0,
+        7.0
+      ]
+    },
+    {
+      "seed": 970011,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        1.6,
+        7.2
+      ]
+    },
+    {
+      "seed": 970012,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        1.6,
+        7.2
+      ]
+    },
+    {
+      "seed": 970013,
+      "circular_prob": 0.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.6,
+        7.2
+      ]
+    },
+    {
+      "seed": 970014,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.2,
+        2.3,
+        8.3
+      ]
+    },
+    {
+      "seed": 970015,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.8,
+        7.1
+      ]
+    },
+    {
+      "seed": 970016,
+      "circular_prob": 0.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        3.9,
+        6.5
+      ]
+    },
+    {
+      "seed": 970017,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        2.2,
+        7.9
+      ]
+    },
+    {
+      "seed": 970018,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.4,
+        0.8,
+        0.4,
+        2.6,
+        6.1
+      ]
+    },
+    {
+      "seed": 970019,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.2,
+        2.9,
+        6.0
+      ]
+    },
+    {
+      "seed": 970020,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        1.3,
+        2.0,
+        7.4
+      ]
+    },
+    {
+      "seed": 970021,
+      "circular_prob": 0.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        3.6,
+        6.6
+      ]
+    },
+    {
+      "seed": 970022,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        2.2,
+        6.9
+      ]
+    },
+    {
+      "seed": 970023,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.4,
+        3.0,
+        8.9
+      ]
+    },
+    {
+      "seed": 970024,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.4,
+        6.3
+      ]
+    },
+    {
+      "seed": 970025,
+      "circular_prob": 0.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        2.0,
+        7.4
+      ]
+    },
+    {
+      "seed": 970026,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 5,
+      "finals": [
+        0.8,
+        1.0,
+        1.2,
+        3.4,
+        7.7
+      ]
+    },
+    {
+      "seed": 970027,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.2,
+        2.9,
+        5.0
+      ]
+    },
+    {
+      "seed": 970028,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.4,
+        2.8,
+        5.0
+      ]
+    },
+    {
+      "seed": 970029,
+      "circular_prob": 0.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        7.0
+      ]
+    },
+    {
+      "seed": 970030,
+      "circular_prob": 0.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        1.4,
+        2.7,
+        6.0
+      ]
+    },
+    {
+      "seed": 970001,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970002,
+      "circular_prob": 0.1,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        1.5,
+        0.6,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970003,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.2,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970004,
+      "circular_prob": 0.1,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        1.3,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970005,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970006,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970007,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970008,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.4,
+        1.0,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970009,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970010,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.4,
+        0.8,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970011,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970012,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.4,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970013,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970014,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970015,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970016,
+      "circular_prob": 0.1,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.5,
+        1.2,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970017,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970018,
+      "circular_prob": 0.1,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        1.0,
+        1.8,
+        0.5,
+        0.0
+      ]
+    },
+    {
+      "seed": 970019,
+      "circular_prob": 0.1,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.9,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970020,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.4,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970021,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970022,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.6,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "seed": 970023,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970024,
+      "circular_prob": 0.1,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970025,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.6,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "seed": 970026,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970027,
+      "circular_prob": 0.1,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        1.2,
+        1.1,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970028,
+      "circular_prob": 0.1,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.7,
+        1.3,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "seed": 970029,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970030,
+      "circular_prob": 0.1,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.4,
+        0.8,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970001,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970002,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        1.2,
+        1.3,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970003,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970004,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970005,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970006,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970007,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970008,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.4,
+        1.4,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970009,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.1,
+        1.0,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970010,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        0.6,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970011,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970012,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970013,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970014,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        1.1,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970015,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970016,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.3,
+        1.5,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "seed": 970017,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970018,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970019,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        0.6,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970020,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        1.2,
+        1.1,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970021,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        1.6,
+        0.5,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970022,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970023,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970024,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.7,
+        1.1,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970025,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970026,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.4,
+        1.4,
+        0.7,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970027,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.3,
+        1.1,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970028,
+      "circular_prob": 0.2,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.5,
+        1.2,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970029,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970030,
+      "circular_prob": 0.2,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970001,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.4,
+        0.8,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970002,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970003,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.2,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970004,
+      "circular_prob": 0.3,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.5,
+        1.0,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970005,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970006,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970007,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970008,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970009,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970010,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970011,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.0,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970012,
+      "circular_prob": 0.3,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.5,
+        1.0,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970013,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.4,
+        0.8,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970014,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        2.1,
+        0.4,
+        0.0
+      ]
+    },
+    {
+      "seed": 970015,
+      "circular_prob": 0.3,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        1.3,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970016,
+      "circular_prob": 0.3,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        1.0,
+        1.6,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "seed": 970017,
+      "circular_prob": 0.3,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        1.1,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970018,
+      "circular_prob": 0.3,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.4,
+        1.2,
+        1.0,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970019,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.8,
+        0.5,
+        0.0
+      ]
+    },
+    {
+      "seed": 970020,
+      "circular_prob": 0.3,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        1.0,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970021,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970022,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970023,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970024,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970025,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.4,
+        0.8,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970026,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970027,
+      "circular_prob": 0.3,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970028,
+      "circular_prob": 0.3,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970029,
+      "circular_prob": 0.3,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        2.3,
+        0.4,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970030,
+      "circular_prob": 0.3,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970001,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970002,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        1.3,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970003,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970004,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.4,
+        0.8,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970005,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970006,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970007,
+      "circular_prob": 0.5,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970008,
+      "circular_prob": 0.5,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.3,
+        1.3,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970009,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.4,
+        1.4,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970010,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970011,
+      "circular_prob": 0.5,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        0.6,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970012,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970013,
+      "circular_prob": 0.5,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970014,
+      "circular_prob": 0.5,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.6,
+        1.3,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970015,
+      "circular_prob": 0.5,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.1,
+        1.6,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "seed": 970016,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970017,
+      "circular_prob": 0.5,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970018,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970019,
+      "circular_prob": 0.5,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        1.3,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970020,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        1.3,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970021,
+      "circular_prob": 0.5,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.4,
+        1.4,
+        0.7,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970022,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970023,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970024,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970025,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        1.3,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970026,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970027,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        1.3,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970028,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970029,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970030,
+      "circular_prob": 0.5,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970001,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.4,
+        0.8,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970002,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        1.7,
+        0.5,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970003,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        1.2,
+        1.5,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "seed": 970004,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.9,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970005,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        1.1,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970006,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        1.4,
+        1.0,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970007,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        1.3,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970008,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        1.2,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970009,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970010,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.7,
+        1.1,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970011,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.6,
+        0.9,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970012,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.8,
+        1.8,
+        0.4,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970013,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970014,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970015,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.7,
+        0.9,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970016,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970017,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970018,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        1.7,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "seed": 970019,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.4,
+        1.6,
+        0.6,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970020,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970021,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        1.6,
+        0.5,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970022,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.1,
+        1.6,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "seed": 970023,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        1.9,
+        0.5,
+        0.0
+      ]
+    },
+    {
+      "seed": 970024,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.3,
+        1.3,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970025,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.0,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970026,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970027,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        1.1,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970028,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970029,
+      "circular_prob": 0.7,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.8,
+        0.5,
+        0.0
+      ]
+    },
+    {
+      "seed": 970030,
+      "circular_prob": 0.7,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970001,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970002,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.3,
+        0.9,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970003,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        1.8,
+        1.0,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970004,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970005,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970006,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.4,
+        1.0,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970007,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970008,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970009,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.0,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970010,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.0,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970011,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970012,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        0.6,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970013,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        0.6,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970014,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970015,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970016,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970017,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.4,
+        0.7,
+        0.0
+      ]
+    },
+    {
+      "seed": 970018,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.6,
+        0.7,
+        0.2,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970019,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.6,
+        1.5,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "seed": 970020,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970021,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.4,
+        1.0,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970022,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.4,
+        0.8,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970023,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970024,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970025,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        0.6,
+        0.4,
+        0.8,
+        0.0
+      ]
+    },
+    {
+      "seed": 970026,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        1.0,
+        0.8,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970027,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.2,
+        1.1,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970028,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.8,
+        1.2,
+        0.7,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 970029,
+      "circular_prob": 1.0,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        1.5,
+        0.8,
+        0.9,
+        0.0
+      ]
+    },
+    {
+      "seed": 970030,
+      "circular_prob": 1.0,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.4,
+        0.8,
+        0.4,
+        0.8,
+        0.0
+      ]
+    }
+  ]
+}

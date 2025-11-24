@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_items": 10,
+    "num_cycles": 200,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T01:11:11.292670"
+  },
+  "noise_levels": [
+    {
+      "noise": 0,
+      "accuracy": 1.0
+    },
+    {
+      "noise": 0.1,
+      "accuracy": 0.5800000000000001
+    },
+    {
+      "noise": 0.2,
+      "accuracy": 0.27999999999999997
+    },
+    {
+      "noise": 0.3,
+      "accuracy": 0.24000000000000005
+    },
+    {
+      "noise": 0.5,
+      "accuracy": 0.16
+    },
+    {
+      "noise": 0.7,
+      "accuracy": 0.2
+    },
+    {
+      "noise": 1.0,
+      "accuracy": 0.2
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Noise tolerance: \u03c3 \u2264 0 for 80% accuracy",
+      "Graceful degradation to \u03c3 = 0.1",
+      "Baseline: 100% with clean queries"
+    ],
+    "noise_threshold": 0
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "cycles_per_phase": 100,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:25:47.288702"
+  },
+  "phases": [
+    {
+      "phase": "initial_50",
+      "n_active": 50,
+      "accuracy": 1.0
+    },
+    {
+      "phase": "add_25",
+      "n_active": 75,
+      "accuracy": 0.9022222222222221
+    },
+    {
+      "phase": "remove_25",
+      "n_active": 50,
+      "accuracy": 0.9733333333333333
+    },
+    {
+      "phase": "add_new_25",
+      "n_active": 75,
+      "accuracy": 0.9111111111111111
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "All phases maintain 80%+ accuracy",
+      "Degradation after removal+add: 97% \u2192 91%"
+    ],
+    "stable": true
+  }
+}

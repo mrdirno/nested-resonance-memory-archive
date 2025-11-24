@@ -1,0 +1,20 @@
+{
+  "task": "Primed Multi-Step",
+  "original_chain": [
+    "15f9617150dadf3f",
+    "2c72df5bfca05f1e",
+    "f98f3ae365f599b4",
+    "30b412c84f858be1",
+    "f4b8d2d63b7f7001"
+  ],
+  "retrieved_path": [
+    "15f9617150dadf3f",
+    "2c72df5bfca05f1e",
+    "4e7ebdead2abf986"
+  ],
+  "success": false,
+  "metrics": {
+    "coalitions": 20,
+    "updates": 20
+  }
+}

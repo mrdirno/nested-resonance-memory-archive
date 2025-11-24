@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T00:50:55.325625"
+  },
+  "ratios": [
+    {
+      "ratio": 1,
+      "n_items": 20,
+      "num_cycles": 20,
+      "accuracy": 0.6699999999999999
+    },
+    {
+      "ratio": 2,
+      "n_items": 20,
+      "num_cycles": 40,
+      "accuracy": 0.61
+    },
+    {
+      "ratio": 3,
+      "n_items": 20,
+      "num_cycles": 60,
+      "accuracy": 0.65
+    },
+    {
+      "ratio": 5,
+      "n_items": 20,
+      "num_cycles": 100,
+      "accuracy": 0.65
+    },
+    {
+      "ratio": 7,
+      "n_items": 20,
+      "num_cycles": 140,
+      "accuracy": 0.6799999999999999
+    },
+    {
+      "ratio": 10,
+      "n_items": 20,
+      "num_cycles": 200,
+      "accuracy": 0.75
+    },
+    {
+      "ratio": 15,
+      "n_items": 20,
+      "num_cycles": 300,
+      "accuracy": 0.69
+    },
+    {
+      "ratio": 20,
+      "n_items": 20,
+      "num_cycles": 400,
+      "accuracy": 0.7
+    },
+    {
+      "ratio": 30,
+      "n_items": 20,
+      "num_cycles": 600,
+      "accuracy": 0.6900000000000002
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "80% not achieved at tested ratios"
+    ]
+  }
+}

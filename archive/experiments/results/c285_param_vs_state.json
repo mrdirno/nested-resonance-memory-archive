@@ -1,0 +1,722 @@
+[
+  {
+    "condition": "CONTROL",
+    "seed": 1000,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1001,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1002,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1003,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1004,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1005,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1006,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1007,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1008,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1009,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1010,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1011,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1012,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1013,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1014,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1015,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1016,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1017,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1018,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "CONTROL",
+    "seed": 1019,
+    "final_pop": 0,
+    "mean_pop": 0,
+    "survived": false,
+    "mean_final_metabolic": 0.0,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1000,
+    "final_pop": 95,
+    "mean_pop": 95.57,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1001,
+    "final_pop": 95,
+    "mean_pop": 95.0,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1002,
+    "final_pop": 95,
+    "mean_pop": 95.566,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1003,
+    "final_pop": 95,
+    "mean_pop": 95.0,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1004,
+    "final_pop": 95,
+    "mean_pop": 95.0,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1005,
+    "final_pop": 95,
+    "mean_pop": 95.754,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1006,
+    "final_pop": 95,
+    "mean_pop": 95.0,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1007,
+    "final_pop": 95,
+    "mean_pop": 95.0,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1008,
+    "final_pop": 95,
+    "mean_pop": 95.0,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1009,
+    "final_pop": 95,
+    "mean_pop": 95.604,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1010,
+    "final_pop": 95,
+    "mean_pop": 95.0,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1011,
+    "final_pop": 96,
+    "mean_pop": 96.0,
+    "survived": true,
+    "mean_final_metabolic": 0.105,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1012,
+    "final_pop": 95,
+    "mean_pop": 95.908,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1013,
+    "final_pop": 95,
+    "mean_pop": 95.654,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1014,
+    "final_pop": 95,
+    "mean_pop": 95.0,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1015,
+    "final_pop": 95,
+    "mean_pop": 95.22,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1016,
+    "final_pop": 95,
+    "mean_pop": 95.0,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1017,
+    "final_pop": 95,
+    "mean_pop": 95.954,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1018,
+    "final_pop": 95,
+    "mean_pop": 95.446,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "STATE_VARIANCE",
+    "seed": 1019,
+    "final_pop": 95,
+    "mean_pop": 95.484,
+    "survived": true,
+    "mean_final_metabolic": 0.10500000000000004,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1000,
+    "final_pop": 128,
+    "mean_pop": 128.0,
+    "survived": true,
+    "mean_final_metabolic": 0.07818407552436071,
+    "std_final_metabolic": 2.7755575615628914e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1001,
+    "final_pop": 122,
+    "mean_pop": 122.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08212370684613698,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1002,
+    "final_pop": 119,
+    "mean_pop": 126.3,
+    "survived": true,
+    "mean_final_metabolic": 0.07904642577620825,
+    "std_final_metabolic": 5.551115123125783e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1003,
+    "final_pop": 123,
+    "mean_pop": 125.46,
+    "survived": true,
+    "mean_final_metabolic": 0.07944806958108544,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1004,
+    "final_pop": 123,
+    "mean_pop": 123.916,
+    "survived": true,
+    "mean_final_metabolic": 0.08121047048561365,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1005,
+    "final_pop": 122,
+    "mean_pop": 121.066,
+    "survived": true,
+    "mean_final_metabolic": 0.08310846435263561,
+    "std_final_metabolic": 0.0001582696851986014
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1006,
+    "final_pop": 133,
+    "mean_pop": 133.0,
+    "survived": true,
+    "mean_final_metabolic": 0.07514879499255814,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1007,
+    "final_pop": 121,
+    "mean_pop": 121.0,
+    "survived": true,
+    "mean_final_metabolic": 0.0832272770350457,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1008,
+    "final_pop": 134,
+    "mean_pop": 135.89,
+    "survived": true,
+    "mean_final_metabolic": 0.07335969674275966,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1009,
+    "final_pop": 135,
+    "mean_pop": 135.0,
+    "survived": true,
+    "mean_final_metabolic": 0.0733535045153138,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1010,
+    "final_pop": 127,
+    "mean_pop": 127.0,
+    "survived": true,
+    "mean_final_metabolic": 0.07916482603430963,
+    "std_final_metabolic": 2.7755575615628914e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1011,
+    "final_pop": 116,
+    "mean_pop": 116.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08632787435344146,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1012,
+    "final_pop": 134,
+    "mean_pop": 134.0,
+    "survived": true,
+    "mean_final_metabolic": 0.07477110963826933,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1013,
+    "final_pop": 125,
+    "mean_pop": 125.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08003022702023378,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1014,
+    "final_pop": 113,
+    "mean_pop": 113.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08839388775104429,
+    "std_final_metabolic": 4.8561661694881327e-05
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1015,
+    "final_pop": 118,
+    "mean_pop": 118.048,
+    "survived": true,
+    "mean_final_metabolic": 0.08447704636633772,
+    "std_final_metabolic": 2.7755575615628914e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1016,
+    "final_pop": 134,
+    "mean_pop": 123.692,
+    "survived": true,
+    "mean_final_metabolic": 0.08038312412841554,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1017,
+    "final_pop": 130,
+    "mean_pop": 130.0,
+    "survived": true,
+    "mean_final_metabolic": 0.07677510844231815,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1018,
+    "final_pop": 115,
+    "mean_pop": 122.632,
+    "survived": true,
+    "mean_final_metabolic": 0.08075497964402359,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "PARAM_VARIANCE",
+    "seed": 1019,
+    "final_pop": 125,
+    "mean_pop": 125.816,
+    "survived": true,
+    "mean_final_metabolic": 0.0787285795493573,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1000,
+    "final_pop": 120,
+    "mean_pop": 120.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08337905488140177,
+    "std_final_metabolic": 2.7755575615628914e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1001,
+    "final_pop": 120,
+    "mean_pop": 120.0,
+    "survived": true,
+    "mean_final_metabolic": 0.0828809548997966,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1002,
+    "final_pop": 130,
+    "mean_pop": 130.0,
+    "survived": true,
+    "mean_final_metabolic": 0.07670542007314733,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1003,
+    "final_pop": 126,
+    "mean_pop": 126.0,
+    "survived": true,
+    "mean_final_metabolic": 0.07944806958108543,
+    "std_final_metabolic": 2.7755575615628914e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1004,
+    "final_pop": 123,
+    "mean_pop": 123.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08121047048561365,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1005,
+    "final_pop": 129,
+    "mean_pop": 128.084,
+    "survived": true,
+    "mean_final_metabolic": 0.07800270052266865,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1006,
+    "final_pop": 133,
+    "mean_pop": 133.0,
+    "survived": true,
+    "mean_final_metabolic": 0.07514879499255814,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1007,
+    "final_pop": 146,
+    "mean_pop": 146.0,
+    "survived": true,
+    "mean_final_metabolic": 0.06836813735042457,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1008,
+    "final_pop": 147,
+    "mean_pop": 147.0,
+    "survived": true,
+    "mean_final_metabolic": 0.06798936086711185,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1009,
+    "final_pop": 135,
+    "mean_pop": 135.0,
+    "survived": true,
+    "mean_final_metabolic": 0.0733535045153138,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1010,
+    "final_pop": 123,
+    "mean_pop": 122.642,
+    "survived": true,
+    "mean_final_metabolic": 0.08136292803544619,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1011,
+    "final_pop": 124,
+    "mean_pop": 124.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08061610786857712,
+    "std_final_metabolic": 2.7755575615628914e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1012,
+    "final_pop": 115,
+    "mean_pop": 115.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08691247567947949,
+    "std_final_metabolic": 0.00013618380264820187
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1013,
+    "final_pop": 119,
+    "mean_pop": 119.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08424371335351546,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1014,
+    "final_pop": 154,
+    "mean_pop": 156.688,
+    "survived": true,
+    "mean_final_metabolic": 0.06400473884102324,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1015,
+    "final_pop": 120,
+    "mean_pop": 120.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08338966823213624,
+    "std_final_metabolic": 0.0
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1016,
+    "final_pop": 125,
+    "mean_pop": 125.756,
+    "survived": true,
+    "mean_final_metabolic": 0.07951913743390128,
+    "std_final_metabolic": 4.163336342344337e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1017,
+    "final_pop": 115,
+    "mean_pop": 115.0,
+    "survived": true,
+    "mean_final_metabolic": 0.08643938644771103,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1018,
+    "final_pop": 117,
+    "mean_pop": 120.24,
+    "survived": true,
+    "mean_final_metabolic": 0.08367774948118935,
+    "std_final_metabolic": 1.3877787807814457e-17
+  },
+  {
+    "condition": "BOTH",
+    "seed": 1019,
+    "final_pop": 127,
+    "mean_pop": 127.0,
+    "survived": true,
+    "mean_final_metabolic": 0.07872857954935732,
+    "std_final_metabolic": 2.7755575615628914e-17
+  }
+]

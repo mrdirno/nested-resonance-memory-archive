@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:27:40.579564"
+  },
+  "tests": [
+    {
+      "n_base": 20,
+      "n_composed": 10,
+      "n_total": 30,
+      "base_accuracy": 1.0,
+      "decomposition_accuracy": 0.39999999999999997
+    },
+    {
+      "n_base": 30,
+      "n_composed": 15,
+      "n_total": 45,
+      "base_accuracy": 1.0,
+      "decomposition_accuracy": 0.17777777777777778
+    },
+    {
+      "n_base": 40,
+      "n_composed": 20,
+      "n_total": 60,
+      "base_accuracy": 0.9333333333333332,
+      "decomposition_accuracy": 0.18333333333333332
+    },
+    {
+      "n_base": 50,
+      "n_composed": 25,
+      "n_total": 75,
+      "base_accuracy": 0.9133333333333332,
+      "decomposition_accuracy": 0.13333333333333333
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Decomposition fails: 22% avg",
+      "Best: 10 composed at 40%"
+    ],
+    "decomposition_works": false
+  }
+}

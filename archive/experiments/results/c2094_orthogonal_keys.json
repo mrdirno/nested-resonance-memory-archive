@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:22:04.950300"
+  },
+  "comparisons": [
+    {
+      "n_items": 10,
+      "random_pre": 0.7666666666666666,
+      "random_post": 1.0,
+      "orth_pre": 0.8000000000000002,
+      "orth_post": 0.9666666666666667,
+      "improvement_pre": 0.03333333333333355,
+      "improvement_post": -0.033333333333333326
+    },
+    {
+      "n_items": 16,
+      "random_pre": 0.5416666666666666,
+      "random_post": 0.8333333333333334,
+      "orth_pre": 0.5,
+      "orth_post": 0.875,
+      "improvement_pre": -0.04166666666666663,
+      "improvement_post": 0.04166666666666663
+    },
+    {
+      "n_items": 24,
+      "random_pre": 0.40277777777777785,
+      "random_post": 0.625,
+      "orth_pre": 0.375,
+      "orth_post": 0.6111111111111112,
+      "improvement_pre": -0.027777777777777846,
+      "improvement_post": -0.01388888888888884
+    },
+    {
+      "n_items": 32,
+      "random_pre": 0.23958333333333334,
+      "random_post": 0.4270833333333333,
+      "orth_pre": 0.28125,
+      "orth_post": 0.375,
+      "improvement_pre": 0.04166666666666666,
+      "improvement_post": -0.052083333333333315
+    },
+    {
+      "n_items": 43,
+      "random_pre": 0.17054263565891473,
+      "random_post": 0.27906976744186046,
+      "orth_pre": 0.186046511627907,
+      "orth_post": 0.34108527131782945,
+      "improvement_pre": 0.015503875968992276,
+      "improvement_post": 0.06201550387596899
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Orthogonal keys provide marginal benefit (+0%)",
+      "Orthogonal keys do not break plateau"
+    ],
+    "orthogonal_helps": false,
+    "plateau_broken": false
+  }
+}

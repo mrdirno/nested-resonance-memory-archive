@@ -1,0 +1,7 @@
+{
+  "agent_count": 20,
+  "steps": 20,
+  "cluster_patterns_found": 660,
+  "sample_lineage_depth": 12,
+  "success": true
+}

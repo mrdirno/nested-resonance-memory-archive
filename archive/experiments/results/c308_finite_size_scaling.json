@@ -1,0 +1,342 @@
+{
+  "experiment": "C308_finite_size_scaling",
+  "parameters": {
+    "n_agents_list": [
+      20,
+      35,
+      50,
+      75,
+      100
+    ],
+    "cohesion_range": [
+      0.1447,
+      0.2447
+    ],
+    "seeds": 8,
+    "steps": 100
+  },
+  "results": [
+    {
+      "n_agents": 20,
+      "peak_cohesion": 0.2047,
+      "peak_susceptibility": 10.5434,
+      "peak_flock_size": 8.672,
+      "cohesion_sweep": [
+        {
+          "cohesion": 0.1447,
+          "avg_flock_size": 8.173,
+          "susceptibility": 3.3989
+        },
+        {
+          "cohesion": 0.1547,
+          "avg_flock_size": 6.626,
+          "susceptibility": 2.042
+        },
+        {
+          "cohesion": 0.1647,
+          "avg_flock_size": 8.343,
+          "susceptibility": 1.4457
+        },
+        {
+          "cohesion": 0.1747,
+          "avg_flock_size": 7.795,
+          "susceptibility": 3.983
+        },
+        {
+          "cohesion": 0.1847,
+          "avg_flock_size": 9.43,
+          "susceptibility": 7.7786
+        },
+        {
+          "cohesion": 0.1947,
+          "avg_flock_size": 7.785,
+          "susceptibility": 2.4059
+        },
+        {
+          "cohesion": 0.2047,
+          "avg_flock_size": 8.672,
+          "susceptibility": 10.5434
+        },
+        {
+          "cohesion": 0.2147,
+          "avg_flock_size": 8.274,
+          "susceptibility": 5.1999
+        },
+        {
+          "cohesion": 0.2247,
+          "avg_flock_size": 7.856,
+          "susceptibility": 1.4452
+        },
+        {
+          "cohesion": 0.2347,
+          "avg_flock_size": 7.293,
+          "susceptibility": 4.1747
+        },
+        {
+          "cohesion": 0.2447,
+          "avg_flock_size": 8.193,
+          "susceptibility": 3.4701
+        }
+      ]
+    },
+    {
+      "n_agents": 35,
+      "peak_cohesion": 0.2347,
+      "peak_susceptibility": 21.3645,
+      "peak_flock_size": 12.884,
+      "cohesion_sweep": [
+        {
+          "cohesion": 0.1447,
+          "avg_flock_size": 11.554,
+          "susceptibility": 5.8195
+        },
+        {
+          "cohesion": 0.1547,
+          "avg_flock_size": 13.623,
+          "susceptibility": 11.2062
+        },
+        {
+          "cohesion": 0.1647,
+          "avg_flock_size": 13.244,
+          "susceptibility": 17.0762
+        },
+        {
+          "cohesion": 0.1747,
+          "avg_flock_size": 12.59,
+          "susceptibility": 12.394
+        },
+        {
+          "cohesion": 0.1847,
+          "avg_flock_size": 15.189,
+          "susceptibility": 15.1698
+        },
+        {
+          "cohesion": 0.1947,
+          "avg_flock_size": 10.773,
+          "susceptibility": 1.7674
+        },
+        {
+          "cohesion": 0.2047,
+          "avg_flock_size": 12.562,
+          "susceptibility": 16.933
+        },
+        {
+          "cohesion": 0.2147,
+          "avg_flock_size": 12.073,
+          "susceptibility": 9.5259
+        },
+        {
+          "cohesion": 0.2247,
+          "avg_flock_size": 11.674,
+          "susceptibility": 9.9841
+        },
+        {
+          "cohesion": 0.2347,
+          "avg_flock_size": 12.884,
+          "susceptibility": 21.3645
+        },
+        {
+          "cohesion": 0.2447,
+          "avg_flock_size": 10.782,
+          "susceptibility": 2.4872
+        }
+      ]
+    },
+    {
+      "n_agents": 50,
+      "peak_cohesion": 0.1947,
+      "peak_susceptibility": 30.2085,
+      "peak_flock_size": 16.46,
+      "cohesion_sweep": [
+        {
+          "cohesion": 0.1447,
+          "avg_flock_size": 16.374,
+          "susceptibility": 7.6239
+        },
+        {
+          "cohesion": 0.1547,
+          "avg_flock_size": 16.912,
+          "susceptibility": 13.4761
+        },
+        {
+          "cohesion": 0.1647,
+          "avg_flock_size": 18.761,
+          "susceptibility": 26.7996
+        },
+        {
+          "cohesion": 0.1747,
+          "avg_flock_size": 13.852,
+          "susceptibility": 3.45
+        },
+        {
+          "cohesion": 0.1847,
+          "avg_flock_size": 15.834,
+          "susceptibility": 18.5032
+        },
+        {
+          "cohesion": 0.1947,
+          "avg_flock_size": 16.46,
+          "susceptibility": 30.2085
+        },
+        {
+          "cohesion": 0.2047,
+          "avg_flock_size": 16.256,
+          "susceptibility": 20.9098
+        },
+        {
+          "cohesion": 0.2147,
+          "avg_flock_size": 19.084,
+          "susceptibility": 5.9816
+        },
+        {
+          "cohesion": 0.2247,
+          "avg_flock_size": 18.562,
+          "susceptibility": 27.9587
+        },
+        {
+          "cohesion": 0.2347,
+          "avg_flock_size": 19.957,
+          "susceptibility": 24.4494
+        },
+        {
+          "cohesion": 0.2447,
+          "avg_flock_size": 18.069,
+          "susceptibility": 8.3776
+        }
+      ]
+    },
+    {
+      "n_agents": 75,
+      "peak_cohesion": 0.1447,
+      "peak_susceptibility": 71.8313,
+      "peak_flock_size": 26.664,
+      "cohesion_sweep": [
+        {
+          "cohesion": 0.1447,
+          "avg_flock_size": 26.664,
+          "susceptibility": 71.8313
+        },
+        {
+          "cohesion": 0.1547,
+          "avg_flock_size": 23.576,
+          "susceptibility": 25.3776
+        },
+        {
+          "cohesion": 0.1647,
+          "avg_flock_size": 26.248,
+          "susceptibility": 25.9085
+        },
+        {
+          "cohesion": 0.1747,
+          "avg_flock_size": 23.421,
+          "susceptibility": 12.8332
+        },
+        {
+          "cohesion": 0.1847,
+          "avg_flock_size": 25.295,
+          "susceptibility": 43.2099
+        },
+        {
+          "cohesion": 0.1947,
+          "avg_flock_size": 22.949,
+          "susceptibility": 15.6229
+        },
+        {
+          "cohesion": 0.2047,
+          "avg_flock_size": 23.344,
+          "susceptibility": 32.2536
+        },
+        {
+          "cohesion": 0.2147,
+          "avg_flock_size": 23.693,
+          "susceptibility": 14.9986
+        },
+        {
+          "cohesion": 0.2247,
+          "avg_flock_size": 26.023,
+          "susceptibility": 29.2666
+        },
+        {
+          "cohesion": 0.2347,
+          "avg_flock_size": 25.414,
+          "susceptibility": 68.4917
+        },
+        {
+          "cohesion": 0.2447,
+          "avg_flock_size": 26.581,
+          "susceptibility": 24.4306
+        }
+      ]
+    },
+    {
+      "n_agents": 100,
+      "peak_cohesion": 0.2347,
+      "peak_susceptibility": 174.0753,
+      "peak_flock_size": 35.82,
+      "cohesion_sweep": [
+        {
+          "cohesion": 0.1447,
+          "avg_flock_size": 35.374,
+          "susceptibility": 45.788
+        },
+        {
+          "cohesion": 0.1547,
+          "avg_flock_size": 30.446,
+          "susceptibility": 31.2538
+        },
+        {
+          "cohesion": 0.1647,
+          "avg_flock_size": 28.571,
+          "susceptibility": 19.4988
+        },
+        {
+          "cohesion": 0.1747,
+          "avg_flock_size": 37.63,
+          "susceptibility": 68.5774
+        },
+        {
+          "cohesion": 0.1847,
+          "avg_flock_size": 29.093,
+          "susceptibility": 29.7789
+        },
+        {
+          "cohesion": 0.1947,
+          "avg_flock_size": 29.487,
+          "susceptibility": 4.8538
+        },
+        {
+          "cohesion": 0.2047,
+          "avg_flock_size": 32.256,
+          "susceptibility": 24.4685
+        },
+        {
+          "cohesion": 0.2147,
+          "avg_flock_size": 33.14,
+          "susceptibility": 92.0431
+        },
+        {
+          "cohesion": 0.2247,
+          "avg_flock_size": 36.408,
+          "susceptibility": 114.468
+        },
+        {
+          "cohesion": 0.2347,
+          "avg_flock_size": 35.82,
+          "susceptibility": 174.0753
+        },
+        {
+          "cohesion": 0.2447,
+          "avg_flock_size": 36.58,
+          "susceptibility": 67.1175
+        }
+      ]
+    }
+  ],
+  "analysis": {
+    "scaling_exponent": 1.6271,
+    "susceptibility_growth": "positive",
+    "critical_cohesion_std": 0.0331,
+    "mean_critical_cohesion": 0.2027,
+    "finite_size_scaling_confirmed": true
+  }
+}

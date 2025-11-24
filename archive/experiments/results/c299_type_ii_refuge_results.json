@@ -1,0 +1,223 @@
+{
+  "cycle_id": "C299",
+  "cycle_name": "Type II + Refuge Combination",
+  "date": "2025-11-20T01:21:07.815995",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 30000,
+    "n_populations": 2,
+    "initial_prey": 200,
+    "initial_predator": 20,
+    "base_attack_rate": 0.01,
+    "conditions": [
+      {
+        "name": "neither",
+        "handling_time": 0.0,
+        "refuge": 0.0
+      },
+      {
+        "name": "refuge_only",
+        "handling_time": 0.0,
+        "refuge": 0.3
+      },
+      {
+        "name": "type_ii_only",
+        "handling_time": 0.02,
+        "refuge": 0.0
+      },
+      {
+        "name": "both",
+        "handling_time": 0.02,
+        "refuge": 0.3
+      }
+    ],
+    "seeds": [
+      600,
+      601,
+      602
+    ]
+  },
+  "results": [
+    {
+      "condition": "neither",
+      "handling_time": 0.0,
+      "refuge_fraction": 0.0,
+      "seed": 600,
+      "prey_init": 461.6,
+      "prey_final": 500.0,
+      "pred_init": 2.2,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.1073157787323,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_neither_seed600.db"
+    },
+    {
+      "condition": "neither",
+      "handling_time": 0.0,
+      "refuge_fraction": 0.0,
+      "seed": 601,
+      "prey_init": 456.4,
+      "prey_final": 500.0,
+      "pred_init": 2.4,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.1178488731384277,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_neither_seed601.db"
+    },
+    {
+      "condition": "neither",
+      "handling_time": 0.0,
+      "refuge_fraction": 0.0,
+      "seed": 602,
+      "prey_init": 458.1,
+      "prey_final": 500.0,
+      "pred_init": 2.5,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.096613883972168,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_neither_seed602.db"
+    },
+    {
+      "condition": "refuge_only",
+      "handling_time": 0.0,
+      "refuge_fraction": 0.3,
+      "seed": 600,
+      "prey_init": 467.8,
+      "prey_final": 500.0,
+      "pred_init": 2.2,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.104602813720703,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_refuge_only_seed600.db"
+    },
+    {
+      "condition": "refuge_only",
+      "handling_time": 0.0,
+      "refuge_fraction": 0.3,
+      "seed": 601,
+      "prey_init": 463.6,
+      "prey_final": 500.0,
+      "pred_init": 2.4,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.0970640182495117,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_refuge_only_seed601.db"
+    },
+    {
+      "condition": "refuge_only",
+      "handling_time": 0.0,
+      "refuge_fraction": 0.3,
+      "seed": 602,
+      "prey_init": 464.8,
+      "prey_final": 501.0,
+      "pred_init": 2.6,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.119494915008545,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_refuge_only_seed602.db"
+    },
+    {
+      "condition": "type_ii_only",
+      "handling_time": 0.02,
+      "refuge_fraction": 0.0,
+      "seed": 600,
+      "prey_init": 464.5,
+      "prey_final": 500.0,
+      "pred_init": 2.2,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.1173031330108643,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_type_ii_only_seed600.db"
+    },
+    {
+      "condition": "type_ii_only",
+      "handling_time": 0.02,
+      "refuge_fraction": 0.0,
+      "seed": 601,
+      "prey_init": 447.8,
+      "prey_final": 500.0,
+      "pred_init": 2.6,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.108625888824463,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_type_ii_only_seed601.db"
+    },
+    {
+      "condition": "type_ii_only",
+      "handling_time": 0.02,
+      "refuge_fraction": 0.0,
+      "seed": 602,
+      "prey_init": 200.0,
+      "prey_final": 200.0,
+      "pred_init": 20.0,
+      "pred_final": 20.0,
+      "prey_survive": true,
+      "pred_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.0057451725006103516,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_type_ii_only_seed602.db"
+    },
+    {
+      "condition": "both",
+      "handling_time": 0.02,
+      "refuge_fraction": 0.3,
+      "seed": 600,
+      "prey_init": 467.1,
+      "prey_final": 500.0,
+      "pred_init": 2.1,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.105107069015503,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_both_seed600.db"
+    },
+    {
+      "condition": "both",
+      "handling_time": 0.02,
+      "refuge_fraction": 0.3,
+      "seed": 601,
+      "prey_init": 463.9,
+      "prey_final": 500.0,
+      "pred_init": 2.5,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.1160972118377686,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_both_seed601.db"
+    },
+    {
+      "condition": "both",
+      "handling_time": 0.02,
+      "refuge_fraction": 0.3,
+      "seed": 602,
+      "prey_init": 464.7,
+      "prey_final": 500.0,
+      "pred_init": 2.6,
+      "pred_final": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.137373924255371,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c299_both_seed602.db"
+    }
+  ]
+}

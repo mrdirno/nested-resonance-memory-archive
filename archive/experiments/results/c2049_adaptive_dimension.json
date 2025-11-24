@@ -1,0 +1,21 @@
+{
+  "cycle": 2049,
+  "experiment": "Adaptive Dimension Scaling",
+  "timestamp": "2025-11-21T17:26:47.657167",
+  "results": {
+    "adaptive": {
+      "pop": 4.95,
+      "depth": 5.976763334704511,
+      "avg_dim": 3898.935,
+      "max_dim": 3916.85,
+      "compositions": 30.5,
+      "upgrades": 18.7
+    },
+    "fixed": {
+      "pop": 9.75,
+      "depth": 1.2,
+      "compositions": 11.95,
+      "blocked": 37.7
+    }
+  }
+}

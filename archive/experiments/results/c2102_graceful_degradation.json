@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:29:32.786468"
+  },
+  "curve": [
+    {
+      "n_items": 10,
+      "accuracy": 1.0,
+      "items_per_memory": 1.25
+    },
+    {
+      "n_items": 20,
+      "accuracy": 1.0,
+      "items_per_memory": 2.5
+    },
+    {
+      "n_items": 30,
+      "accuracy": 1.0,
+      "items_per_memory": 3.75
+    },
+    {
+      "n_items": 40,
+      "accuracy": 0.9916666666666667,
+      "items_per_memory": 5.0
+    },
+    {
+      "n_items": 50,
+      "accuracy": 0.9933333333333333,
+      "items_per_memory": 6.25
+    },
+    {
+      "n_items": 60,
+      "accuracy": 0.9611111111111111,
+      "items_per_memory": 7.5
+    },
+    {
+      "n_items": 70,
+      "accuracy": 0.9714285714285715,
+      "items_per_memory": 8.75
+    },
+    {
+      "n_items": 80,
+      "accuracy": 0.9125,
+      "items_per_memory": 10.0
+    },
+    {
+      "n_items": 90,
+      "accuracy": 0.8407407407407407,
+      "items_per_memory": 11.25
+    },
+    {
+      "n_items": 100,
+      "accuracy": 0.81,
+      "items_per_memory": 12.5
+    },
+    {
+      "n_items": 120,
+      "accuracy": 0.725,
+      "items_per_memory": 15.0
+    },
+    {
+      "n_items": 150,
+      "accuracy": 0.5777777777777778,
+      "items_per_memory": 18.75
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "80% threshold: 100-120 items",
+      "Gradual degradation: max drop = 15%",
+      "At 150 items: 58% (\u2248260 items equivalent)",
+      "Rate: 3.3 items per 1% accuracy loss"
+    ],
+    "threshold_80": 110.0,
+    "degradation_type": "gradual"
+  }
+}

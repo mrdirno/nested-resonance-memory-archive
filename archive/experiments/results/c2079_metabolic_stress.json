@@ -1,0 +1,44 @@
+{
+  "conditions": [
+    {
+      "cost_multiplier": 1.0,
+      "depth": 1,
+      "accuracy": 0.8
+    },
+    {
+      "cost_multiplier": 1.0,
+      "depth": 2,
+      "accuracy": 0.3
+    },
+    {
+      "cost_multiplier": 0.75,
+      "depth": 1,
+      "accuracy": 0.9
+    },
+    {
+      "cost_multiplier": 0.75,
+      "depth": 2,
+      "accuracy": 0.1
+    },
+    {
+      "cost_multiplier": 0.5,
+      "depth": 1,
+      "accuracy": 0.7
+    },
+    {
+      "cost_multiplier": 0.5,
+      "depth": 2,
+      "accuracy": 0.1
+    },
+    {
+      "cost_multiplier": 0.25,
+      "depth": 1,
+      "accuracy": 0.9
+    },
+    {
+      "cost_multiplier": 0.25,
+      "depth": 2,
+      "accuracy": 0.0
+    }
+  ]
+}

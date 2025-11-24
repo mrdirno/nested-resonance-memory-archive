@@ -1,0 +1,182 @@
+{
+  "cycle_id": "C293",
+  "cycle_name": "Coevolution",
+  "date": "2025-11-20T01:03:44.666919",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 25000,
+    "n_populations": 2,
+    "initial_agents_per_pop": 50,
+    "base_f_intra": 0.005,
+    "mutation_rate": 0.1,
+    "mutation_std": 0.001,
+    "selection": 1.0,
+    "energy": {
+      "E_consume": 0.3,
+      "E_recharge": 0.5,
+      "spawn": 0.5
+    },
+    "density_factor": 0.1,
+    "K": 500,
+    "evolution_configs": [
+      {
+        "name": "none",
+        "pop0": false,
+        "pop1": false
+      },
+      {
+        "name": "pop1_only",
+        "pop0": false,
+        "pop1": true
+      },
+      {
+        "name": "both",
+        "pop0": true,
+        "pop1": true
+      }
+    ],
+    "seeds": [
+      100,
+      101,
+      102
+    ]
+  },
+  "results": [
+    {
+      "config": "none",
+      "seed": 100,
+      "winner": "pop0",
+      "pop0_init_f": 0.004803347872599889,
+      "pop0_final_f": 0.004052520845884123,
+      "pop0_init_pop": 11.1,
+      "pop0_final_pop": 24.7,
+      "pop1_init_f": 0.003778621530096117,
+      "pop1_final_f": 0.004999999999999999,
+      "pop1_init_pop": 20.9,
+      "pop1_final_pop": 0.0,
+      "runtime_seconds": 0.25954103469848633,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c293_none_seed100.db"
+    },
+    {
+      "config": "none",
+      "seed": 101,
+      "winner": "pop0",
+      "pop0_init_f": 0.009493634046339103,
+      "pop0_final_f": 0.008700610285280536,
+      "pop0_init_pop": 22.6,
+      "pop0_final_pop": 22.4,
+      "pop1_init_f": 0.011048261889089812,
+      "pop1_final_f": 0.004999999999999999,
+      "pop1_init_pop": 14.3,
+      "pop1_final_pop": 0.0,
+      "runtime_seconds": 0.2554597854614258,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c293_none_seed101.db"
+    },
+    {
+      "config": "none",
+      "seed": 102,
+      "winner": "pop1",
+      "pop0_init_f": 0.003119957829389781,
+      "pop0_final_f": 0.004999999999999999,
+      "pop0_init_pop": 13.8,
+      "pop0_final_pop": 0.0,
+      "pop1_init_f": 0.004198930991331881,
+      "pop1_final_f": 0.005781233491362946,
+      "pop1_init_pop": 20.5,
+      "pop1_final_pop": 28.0,
+      "runtime_seconds": 0.25461602210998535,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c293_none_seed102.db"
+    },
+    {
+      "config": "pop1_only",
+      "seed": 100,
+      "winner": "pop1",
+      "pop0_init_f": 0.004019683167936224,
+      "pop0_final_f": 0.004999999999999999,
+      "pop0_init_pop": 7.9,
+      "pop0_final_pop": 0.0,
+      "pop1_init_f": 0.011434997936357476,
+      "pop1_final_f": 0.10896837734984906,
+      "pop1_init_pop": 53.1,
+      "pop1_final_pop": 494.2,
+      "runtime_seconds": 5.0163209438323975,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c293_pop1_only_seed100.db"
+    },
+    {
+      "config": "pop1_only",
+      "seed": 101,
+      "winner": "pop1",
+      "pop0_init_f": 0.005923546848313532,
+      "pop0_final_f": 0.004999999999999999,
+      "pop0_init_pop": 20.8,
+      "pop0_final_pop": 0.0,
+      "pop1_init_f": 0.008320668282072499,
+      "pop1_final_f": 0.1008724373898701,
+      "pop1_init_pop": 16.7,
+      "pop1_final_pop": 465.5,
+      "runtime_seconds": 4.192461967468262,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c293_pop1_only_seed101.db"
+    },
+    {
+      "config": "pop1_only",
+      "seed": 102,
+      "winner": "pop1",
+      "pop0_init_f": 0.005760480800614762,
+      "pop0_final_f": 0.004999999999999999,
+      "pop0_init_pop": 14.3,
+      "pop0_final_pop": 0.0,
+      "pop1_init_f": 0.009351388878035945,
+      "pop1_final_f": 0.11239846247468535,
+      "pop1_init_pop": 32.9,
+      "pop1_final_pop": 504.5,
+      "runtime_seconds": 4.605391025543213,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c293_pop1_only_seed102.db"
+    },
+    {
+      "config": "both",
+      "seed": 100,
+      "winner": "pop1",
+      "pop0_init_f": 0.0044365750553685915,
+      "pop0_final_f": 0.004999999999999999,
+      "pop0_init_pop": 8.4,
+      "pop0_final_pop": 0.0,
+      "pop1_init_f": 0.013297485031049303,
+      "pop1_final_f": 0.1516186537680492,
+      "pop1_init_pop": 58.0,
+      "pop1_final_pop": 657.8,
+      "runtime_seconds": 8.413778066635132,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c293_both_seed100.db"
+    },
+    {
+      "config": "both",
+      "seed": 101,
+      "winner": "pop0",
+      "pop0_init_f": 0.012197396993136192,
+      "pop0_final_f": 0.10015650043767632,
+      "pop0_init_pop": 31.6,
+      "pop0_final_pop": 464.1,
+      "pop1_init_f": 0.010773678570735381,
+      "pop1_final_f": 0.004999999999999999,
+      "pop1_init_pop": 31.1,
+      "pop1_final_pop": 0.0,
+      "runtime_seconds": 4.066855192184448,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c293_both_seed101.db"
+    },
+    {
+      "config": "both",
+      "seed": 102,
+      "winner": "pop1",
+      "pop0_init_f": 0.009628446145942847,
+      "pop0_final_f": 0.004999999999999999,
+      "pop0_init_pop": 32.4,
+      "pop0_final_pop": 0.0,
+      "pop1_init_f": 0.009827527839164112,
+      "pop1_final_f": 0.09076904708152161,
+      "pop1_init_pop": 24.3,
+      "pop1_final_pop": 404.4,
+      "runtime_seconds": 3.1213090419769287,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c293_both_seed102.db"
+    }
+  ]
+}

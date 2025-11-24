@@ -1,0 +1,92 @@
+{
+  "cycle": 1970,
+  "experiment": "Fine Critical Zone",
+  "timestamp": "2025-11-21T15:55:49.674828",
+  "method": "Ultra-fine sweep 0.095-0.108 in 0.001 increments",
+  "results": [
+    {
+      "e_consume": 0.095,
+      "mean_pop": 412.6008,
+      "cv": 36.09024933203332,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.096,
+      "mean_pop": 396.5084,
+      "cv": 39.47600486134624,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.097,
+      "mean_pop": 373.81719999999996,
+      "cv": 43.72793619258544,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.098,
+      "mean_pop": 336.3148,
+      "cv": 49.67109552815776,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.099,
+      "mean_pop": 261.8516,
+      "cv": 54.21709203940069,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.1,
+      "mean_pop": 139.382,
+      "cv": 26.763851821771187,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.101,
+      "mean_pop": 74.7948,
+      "cv": 14.387968295595963,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.10200000000000001,
+      "mean_pop": 44.8836,
+      "cv": 47.00911001231717,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.10300000000000001,
+      "mean_pop": 29.460400000000003,
+      "cv": 81.43201266667555,
+      "survival_rate": 1.0
+    },
+    {
+      "e_consume": 0.10400000000000001,
+      "mean_pop": 23.47814119960669,
+      "cv": 104.03483229537694,
+      "survival_rate": 0.6
+    },
+    {
+      "e_consume": 0.10500000000000001,
+      "mean_pop": 25.540468131274924,
+      "cv": 96.13522694540428,
+      "survival_rate": 0.0
+    },
+    {
+      "e_consume": 0.10600000000000001,
+      "mean_pop": 23.45738001325869,
+      "cv": 98.73539590838203,
+      "survival_rate": 0.0
+    },
+    {
+      "e_consume": 0.10700000000000001,
+      "mean_pop": 27.336245505473915,
+      "cv": 86.95397049650194,
+      "survival_rate": 0.0
+    },
+    {
+      "e_consume": 0.10800000000000001,
+      "mean_pop": 27.503362003007986,
+      "cv": 86.4646077806219,
+      "survival_rate": 0.0
+    }
+  ]
+}

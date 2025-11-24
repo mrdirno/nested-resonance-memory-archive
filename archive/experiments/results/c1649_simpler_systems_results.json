@@ -1,0 +1,476 @@
+{
+  "cycle_id": "C1649",
+  "hypothesis": "Simpler systems may achieve coexistence where 7-level fails",
+  "results": [
+    {
+      "seed": 300001,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300002,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300003,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 300004,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 300005,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 300001,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300002,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300003,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300004,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300005,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300001,
+      "n_levels": 3,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300002,
+      "n_levels": 3,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300003,
+      "n_levels": 3,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300004,
+      "n_levels": 3,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300005,
+      "n_levels": 3,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300001,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 300002,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 300003,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300004,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300005,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 300001,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300002,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300003,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300004,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300005,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300001,
+      "n_levels": 5,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300002,
+      "n_levels": 5,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300003,
+      "n_levels": 5,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300004,
+      "n_levels": 5,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300005,
+      "n_levels": 5,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300001,
+      "n_levels": 7,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300002,
+      "n_levels": 7,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300003,
+      "n_levels": 7,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300004,
+      "n_levels": 7,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 300005,
+      "n_levels": 7,
+      "attack_mult": 0.7,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "n_items": 50,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:35:33.467968"
+  },
+  "results": {
+    "forward": 1.0,
+    "reverse": 1.0
+  },
+  "analysis": {
+    "findings": [
+      "Content-addressable works: value\u2192key = 100%",
+      "Symmetric: forward \u2248 reverse"
+    ],
+    "content_addressable": true
+  }
+}

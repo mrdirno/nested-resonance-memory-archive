@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:26:42.619505"
+  },
+  "tests": [
+    {
+      "n_base": 30,
+      "n_composed": 10,
+      "n_total": 40,
+      "base_accuracy": 1.0,
+      "composed_accuracy": 1.0
+    },
+    {
+      "n_base": 40,
+      "n_composed": 20,
+      "n_total": 60,
+      "base_accuracy": 0.9416666666666668,
+      "composed_accuracy": 1.0
+    },
+    {
+      "n_base": 50,
+      "n_composed": 25,
+      "n_total": 75,
+      "base_accuracy": 0.9066666666666667,
+      "composed_accuracy": 0.96
+    },
+    {
+      "n_base": 60,
+      "n_composed": 30,
+      "n_total": 90,
+      "base_accuracy": 0.8333333333333334,
+      "composed_accuracy": 0.888888888888889
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "10 composed items at 100% (total=40)",
+      "20 composed items at 100% (total=60)",
+      "25 composed items at 96% (total=75)",
+      "30 composed items at 89% (total=90)",
+      "Composed items maintain comparable accuracy to base items",
+      "Composition capacity: 30 composed items at 80%+"
+    ],
+    "composition_works": true
+  }
+}

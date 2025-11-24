@@ -1,0 +1,47 @@
+{
+  "experiment": "C313_self_organized_criticality",
+  "parameters": {
+    "n_agents": 50,
+    "seeds": 8,
+    "steps": 200,
+    "known_critical": 0.195
+  },
+  "results": [
+    {
+      "initial_cohesion": 0.05,
+      "final_cohesion_mean": 0.0174,
+      "final_cohesion_std": 0.0061,
+      "distance_to_critical": 0.1776
+    },
+    {
+      "initial_cohesion": 0.1,
+      "final_cohesion_mean": 0.0388,
+      "final_cohesion_std": 0.0289,
+      "distance_to_critical": 0.1562
+    },
+    {
+      "initial_cohesion": 0.2,
+      "final_cohesion_mean": 0.031,
+      "final_cohesion_std": 0.0332,
+      "distance_to_critical": 0.164
+    },
+    {
+      "initial_cohesion": 0.3,
+      "final_cohesion_mean": 0.0349,
+      "final_cohesion_std": 0.0417,
+      "distance_to_critical": 0.1601
+    },
+    {
+      "initial_cohesion": 0.4,
+      "final_cohesion_mean": 0.1,
+      "final_cohesion_std": 0.1258,
+      "distance_to_critical": 0.095
+    }
+  ],
+  "analysis": {
+    "convergence_point": 0.0444,
+    "convergence_std": 0.0287,
+    "distance_to_critical": 0.1506,
+    "soc_supported": false
+  }
+}

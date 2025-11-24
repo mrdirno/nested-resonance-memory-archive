@@ -1,0 +1,6 @@
+{
+  "task": "Resonant Retrieval",
+  "chain_length": 5,
+  "resonance_success": true,
+  "control_resonance": false
+}

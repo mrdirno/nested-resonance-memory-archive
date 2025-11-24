@@ -1,0 +1,118 @@
+{
+  "cycle_id": "C294",
+  "cycle_name": "Niche Differentiation",
+  "date": "2025-11-20T01:07:00.397144",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 25000,
+    "n_populations": 2,
+    "initial_agents_per_pop": 50,
+    "base_f_intra": 0.005,
+    "mutation_rate": 0.1,
+    "mutation_std": 0.001,
+    "selection": 1.0,
+    "energy": {
+      "E_consume": 0.3,
+      "E_recharge": 0.5,
+      "spawn": 0.5
+    },
+    "density_factor": 0.1,
+    "K": 500,
+    "competition_modes": [
+      {
+        "name": "global_K",
+        "mode": "global"
+      },
+      {
+        "name": "local_K",
+        "mode": "local"
+      }
+    ],
+    "seeds": [
+      100,
+      101,
+      102
+    ]
+  },
+  "results": [
+    {
+      "competition": "global_K",
+      "seed": 100,
+      "coexist": false,
+      "pop0_init_f": 0.0044365750553685915,
+      "pop0_final_f": 0.004999999999999999,
+      "pop0_final_pop": 0.0,
+      "pop1_init_f": 0.013297485031049303,
+      "pop1_final_f": 0.1516186537680492,
+      "pop1_final_pop": 657.8,
+      "runtime_seconds": 8.710062026977539,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c294_global_K_seed100.db"
+    },
+    {
+      "competition": "global_K",
+      "seed": 101,
+      "coexist": false,
+      "pop0_init_f": 0.012197396993136192,
+      "pop0_final_f": 0.10015650043767632,
+      "pop0_final_pop": 464.1,
+      "pop1_init_f": 0.010773678570735381,
+      "pop1_final_f": 0.004999999999999999,
+      "pop1_final_pop": 0.0,
+      "runtime_seconds": 4.169220209121704,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c294_global_K_seed101.db"
+    },
+    {
+      "competition": "global_K",
+      "seed": 102,
+      "coexist": false,
+      "pop0_init_f": 0.009628446145942847,
+      "pop0_final_f": 0.004999999999999999,
+      "pop0_final_pop": 0.0,
+      "pop1_init_f": 0.009827527839164112,
+      "pop1_final_f": 0.09076904708152161,
+      "pop1_final_pop": 404.4,
+      "runtime_seconds": 3.2345542907714844,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c294_global_K_seed102.db"
+    },
+    {
+      "competition": "local_K",
+      "seed": 100,
+      "coexist": true,
+      "pop0_init_f": 0.01025179838976441,
+      "pop0_final_f": 0.1163828784279681,
+      "pop0_final_pop": 526.3,
+      "pop1_init_f": 0.011158592699065462,
+      "pop1_final_f": 0.10079956690267489,
+      "pop1_final_pop": 435.5,
+      "runtime_seconds": 9.143589973449707,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c294_local_K_seed100.db"
+    },
+    {
+      "competition": "local_K",
+      "seed": 101,
+      "coexist": true,
+      "pop0_init_f": 0.013818700559142114,
+      "pop0_final_f": 0.1112800759690968,
+      "pop0_final_pop": 502.7,
+      "pop1_init_f": 0.011886331624824989,
+      "pop1_final_f": 0.11099691491034167,
+      "pop1_final_pop": 489.2,
+      "runtime_seconds": 10.25152587890625,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c294_local_K_seed101.db"
+    },
+    {
+      "competition": "local_K",
+      "seed": 102,
+      "coexist": true,
+      "pop0_init_f": 0.017554781607554533,
+      "pop0_final_f": 0.16930379071714943,
+      "pop0_final_pop": 719.7,
+      "pop1_init_f": 0.012277106131695326,
+      "pop1_final_f": 0.12700713394369414,
+      "pop1_final_pop": 562.3,
+      "runtime_seconds": 20.187269926071167,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c294_local_K_seed102.db"
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "cycle_id": "C290",
+  "cycle_name": "Catastrophic Disturbance",
+  "date": "2025-11-20T00:49:46.568476",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 20000,
+    "catastrophe_cycle": 10000,
+    "n_populations": 5,
+    "initial_agents_per_pop": 20,
+    "f_intra": 0.005,
+    "energy": {
+      "E_consume": 0.3,
+      "E_recharge": 0.5,
+      "spawn": 0.5
+    },
+    "density_factor": 0.1,
+    "K": 500,
+    "migration_rate": 0.05,
+    "catastrophe_severities": [
+      0.0,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "seeds": [
+      100,
+      101,
+      102
+    ]
+  },
+  "results": [
+    {
+      "severity": 0.0,
+      "seed": 100,
+      "pre_catastrophe": 0,
+      "post_catastrophe": 0,
+      "mean_final": 121.05,
+      "recovery_time": 0,
+      "recovered": true,
+      "runtime_seconds": 1.3333508968353271,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev0_seed100.db"
+    },
+    {
+      "severity": 0.0,
+      "seed": 101,
+      "pre_catastrophe": 0,
+      "post_catastrophe": 0,
+      "mean_final": 115.7,
+      "recovery_time": 0,
+      "recovered": true,
+      "runtime_seconds": 1.3256208896636963,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev0_seed101.db"
+    },
+    {
+      "severity": 0.0,
+      "seed": 102,
+      "pre_catastrophe": 0,
+      "post_catastrophe": 0,
+      "mean_final": 116.55,
+      "recovery_time": 0,
+      "recovered": true,
+      "runtime_seconds": 1.3621060848236084,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev0_seed102.db"
+    },
+    {
+      "severity": 0.5,
+      "seed": 100,
+      "pre_catastrophe": 120,
+      "post_catastrophe": 62,
+      "mean_final": 118.4,
+      "recovery_time": 900,
+      "recovered": true,
+      "runtime_seconds": 1.3177027702331543,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev50_seed100.db"
+    },
+    {
+      "severity": 0.5,
+      "seed": 101,
+      "pre_catastrophe": 116,
+      "post_catastrophe": 53,
+      "mean_final": 122.45,
+      "recovery_time": 600,
+      "recovered": true,
+      "runtime_seconds": 1.3349339962005615,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev50_seed101.db"
+    },
+    {
+      "severity": 0.5,
+      "seed": 102,
+      "pre_catastrophe": 121,
+      "post_catastrophe": 58,
+      "mean_final": 114.65,
+      "recovery_time": 300,
+      "recovered": true,
+      "runtime_seconds": 1.3393657207489014,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev50_seed102.db"
+    },
+    {
+      "severity": 0.75,
+      "seed": 100,
+      "pre_catastrophe": 120,
+      "post_catastrophe": 30,
+      "mean_final": 117.8,
+      "recovery_time": 700,
+      "recovered": true,
+      "runtime_seconds": 1.3132269382476807,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev75_seed100.db"
+    },
+    {
+      "severity": 0.75,
+      "seed": 101,
+      "pre_catastrophe": 116,
+      "post_catastrophe": 22,
+      "mean_final": 111.85,
+      "recovery_time": 700,
+      "recovered": true,
+      "runtime_seconds": 1.2807459831237793,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev75_seed101.db"
+    },
+    {
+      "severity": 0.75,
+      "seed": 102,
+      "pre_catastrophe": 121,
+      "post_catastrophe": 21,
+      "mean_final": 124.8,
+      "recovery_time": 1200,
+      "recovered": true,
+      "runtime_seconds": 1.3193793296813965,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev75_seed102.db"
+    },
+    {
+      "severity": 0.9,
+      "seed": 100,
+      "pre_catastrophe": 120,
+      "post_catastrophe": 12,
+      "mean_final": 115.35,
+      "recovery_time": 900,
+      "recovered": true,
+      "runtime_seconds": 1.3151049613952637,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev90_seed100.db"
+    },
+    {
+      "severity": 0.9,
+      "seed": 101,
+      "pre_catastrophe": 116,
+      "post_catastrophe": 7,
+      "mean_final": 113.25,
+      "recovery_time": 900,
+      "recovered": true,
+      "runtime_seconds": 1.2688498497009277,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev90_seed101.db"
+    },
+    {
+      "severity": 0.9,
+      "seed": 102,
+      "pre_catastrophe": 121,
+      "post_catastrophe": 8,
+      "mean_final": 123.55,
+      "recovery_time": 1200,
+      "recovered": true,
+      "runtime_seconds": 1.3054580688476562,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c290_sev90_seed102.db"
+    }
+  ]
+}

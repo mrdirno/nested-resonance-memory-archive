@@ -1,0 +1,39 @@
+{
+  "cycle": 2033,
+  "experiment": "Voting Error Correction",
+  "timestamp": "2025-11-21T17:10:17.376346",
+  "results": [
+    {
+      "num_copies": 1,
+      "accuracies": {
+        "2.0": 1.0,
+        "3.0": 0.6,
+        "4.0": 0.0
+      }
+    },
+    {
+      "num_copies": 3,
+      "accuracies": {
+        "2.0": 1.0,
+        "3.0": 1.0,
+        "4.0": 1.0
+      }
+    },
+    {
+      "num_copies": 5,
+      "accuracies": {
+        "2.0": 1.0,
+        "3.0": 1.0,
+        "4.0": 1.0
+      }
+    },
+    {
+      "num_copies": 7,
+      "accuracies": {
+        "2.0": 1.0,
+        "3.0": 1.0,
+        "4.0": 1.0
+      }
+    }
+  ]
+}

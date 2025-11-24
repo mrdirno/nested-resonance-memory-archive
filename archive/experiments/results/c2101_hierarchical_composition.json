@@ -1,0 +1,54 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:28:36.646014"
+  },
+  "tests": [
+    {
+      "n_base": 16,
+      "n_level1": 8,
+      "n_level2": 4,
+      "n_total": 28,
+      "base_accuracy": 1.0,
+      "level1_accuracy": 1.0,
+      "level2_accuracy": 1.0
+    },
+    {
+      "n_base": 24,
+      "n_level1": 12,
+      "n_level2": 6,
+      "n_total": 42,
+      "base_accuracy": 0.9861111111111112,
+      "level1_accuracy": 1.0,
+      "level2_accuracy": 1.0
+    },
+    {
+      "n_base": 32,
+      "n_level1": 16,
+      "n_level2": 8,
+      "n_total": 56,
+      "base_accuracy": 0.96875,
+      "level1_accuracy": 0.9583333333333334,
+      "level2_accuracy": 1.0
+    },
+    {
+      "n_base": 40,
+      "n_level1": 20,
+      "n_level2": 10,
+      "n_total": 70,
+      "base_accuracy": 0.875,
+      "level1_accuracy": 1.0,
+      "level2_accuracy": 1.0
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Hierarchical composition works: L2 = 100%",
+      "Level progression: Base 96% \u2192 L1 99% \u2192 L2 100%"
+    ],
+    "hierarchical_works": true
+  }
+}

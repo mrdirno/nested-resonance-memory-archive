@@ -1,0 +1,231 @@
+{
+  "experiment": "C307_phase_transition_hunt",
+  "parameters": {
+    "n_agents": 50,
+    "steps": 100,
+    "seeds": 10,
+    "cohesion_range": [
+      0.1,
+      0.25
+    ],
+    "n_points": 20
+  },
+  "results": [
+    {
+      "cohesion_factor": 0.1,
+      "avg_flock_size": 16.224,
+      "flock_size_std": 3.161,
+      "avg_flock_count": 4479.0,
+      "survival_rate": 78.6,
+      "susceptibility": 9.9899,
+      "avg_variance": 57.168,
+      "avg_energy": 1.029
+    },
+    {
+      "cohesion_factor": 0.1079,
+      "avg_flock_size": 15.139,
+      "flock_size_std": 2.333,
+      "avg_flock_count": 4558.0,
+      "survival_rate": 80.8,
+      "susceptibility": 5.4413,
+      "avg_variance": 37.897,
+      "avg_energy": 1.084
+    },
+    {
+      "cohesion_factor": 0.1158,
+      "avg_flock_size": 16.991,
+      "flock_size_std": 4.009,
+      "avg_flock_count": 4470.0,
+      "survival_rate": 73.4,
+      "susceptibility": 16.075,
+      "avg_variance": 59.667,
+      "avg_energy": 0.97
+    },
+    {
+      "cohesion_factor": 0.1237,
+      "avg_flock_size": 17.302,
+      "flock_size_std": 3.223,
+      "avg_flock_count": 4457.0,
+      "survival_rate": 74.8,
+      "susceptibility": 10.3859,
+      "avg_variance": 53.547,
+      "avg_energy": 0.995
+    },
+    {
+      "cohesion_factor": 0.1316,
+      "avg_flock_size": 15.433,
+      "flock_size_std": 3.799,
+      "avg_flock_count": 4470.0,
+      "survival_rate": 74.8,
+      "susceptibility": 14.4354,
+      "avg_variance": 55.997,
+      "avg_energy": 0.952
+    },
+    {
+      "cohesion_factor": 0.1395,
+      "avg_flock_size": 17.772,
+      "flock_size_std": 3.08,
+      "avg_flock_count": 4481.0,
+      "survival_rate": 76.0,
+      "susceptibility": 9.4839,
+      "avg_variance": 62.465,
+      "avg_energy": 0.973
+    },
+    {
+      "cohesion_factor": 0.1474,
+      "avg_flock_size": 14.498,
+      "flock_size_std": 2.774,
+      "avg_flock_count": 4566.0,
+      "survival_rate": 78.0,
+      "susceptibility": 7.6951,
+      "avg_variance": 34.106,
+      "avg_energy": 0.898
+    },
+    {
+      "cohesion_factor": 0.1553,
+      "avg_flock_size": 15.669,
+      "flock_size_std": 2.872,
+      "avg_flock_count": 4427.0,
+      "survival_rate": 73.0,
+      "susceptibility": 8.2473,
+      "avg_variance": 51.356,
+      "avg_energy": 0.887
+    },
+    {
+      "cohesion_factor": 0.1632,
+      "avg_flock_size": 15.432,
+      "flock_size_std": 2.075,
+      "avg_flock_count": 4595.0,
+      "survival_rate": 77.4,
+      "susceptibility": 4.304,
+      "avg_variance": 45.096,
+      "avg_energy": 0.969
+    },
+    {
+      "cohesion_factor": 0.1711,
+      "avg_flock_size": 17.041,
+      "flock_size_std": 4.922,
+      "avg_flock_count": 4559.0,
+      "survival_rate": 76.6,
+      "susceptibility": 24.2244,
+      "avg_variance": 61.084,
+      "avg_energy": 0.919
+    },
+    {
+      "cohesion_factor": 0.1789,
+      "avg_flock_size": 17.361,
+      "flock_size_std": 3.371,
+      "avg_flock_count": 4496.0,
+      "survival_rate": 74.6,
+      "susceptibility": 11.3616,
+      "avg_variance": 69.03,
+      "avg_energy": 0.88
+    },
+    {
+      "cohesion_factor": 0.1868,
+      "avg_flock_size": 15.261,
+      "flock_size_std": 2.897,
+      "avg_flock_count": 4559.0,
+      "survival_rate": 76.6,
+      "susceptibility": 8.3923,
+      "avg_variance": 53.569,
+      "avg_energy": 0.895
+    },
+    {
+      "cohesion_factor": 0.1947,
+      "avg_flock_size": 19.707,
+      "flock_size_std": 7.474,
+      "avg_flock_count": 4528.0,
+      "survival_rate": 75.0,
+      "susceptibility": 55.868,
+      "avg_variance": 79.757,
+      "avg_energy": 0.891
+    },
+    {
+      "cohesion_factor": 0.2026,
+      "avg_flock_size": 17.817,
+      "flock_size_std": 4.094,
+      "avg_flock_count": 4491.0,
+      "survival_rate": 75.6,
+      "susceptibility": 16.7648,
+      "avg_variance": 57.886,
+      "avg_energy": 0.86
+    },
+    {
+      "cohesion_factor": 0.2105,
+      "avg_flock_size": 14.564,
+      "flock_size_std": 1.791,
+      "avg_flock_count": 4541.0,
+      "survival_rate": 74.8,
+      "susceptibility": 3.2083,
+      "avg_variance": 34.729,
+      "avg_energy": 0.866
+    },
+    {
+      "cohesion_factor": 0.2184,
+      "avg_flock_size": 18.038,
+      "flock_size_std": 2.589,
+      "avg_flock_count": 4442.0,
+      "survival_rate": 70.4,
+      "susceptibility": 6.7016,
+      "avg_variance": 58.431,
+      "avg_energy": 0.812
+    },
+    {
+      "cohesion_factor": 0.2263,
+      "avg_flock_size": 17.22,
+      "flock_size_std": 3.11,
+      "avg_flock_count": 4473.0,
+      "survival_rate": 72.2,
+      "susceptibility": 9.6692,
+      "avg_variance": 67.428,
+      "avg_energy": 0.808
+    },
+    {
+      "cohesion_factor": 0.2342,
+      "avg_flock_size": 18.543,
+      "flock_size_std": 4.71,
+      "avg_flock_count": 4439.0,
+      "survival_rate": 70.6,
+      "susceptibility": 22.184,
+      "avg_variance": 68.588,
+      "avg_energy": 0.837
+    },
+    {
+      "cohesion_factor": 0.2421,
+      "avg_flock_size": 15.726,
+      "flock_size_std": 2.437,
+      "avg_flock_count": 4489.0,
+      "survival_rate": 72.0,
+      "susceptibility": 5.9393,
+      "avg_variance": 44.663,
+      "avg_energy": 0.82
+    },
+    {
+      "cohesion_factor": 0.25,
+      "avg_flock_size": 16.7,
+      "flock_size_std": 3.937,
+      "avg_flock_count": 4427.0,
+      "survival_rate": 71.8,
+      "susceptibility": 15.501,
+      "avg_variance": 50.414,
+      "avg_energy": 0.852
+    }
+  ],
+  "analysis": {
+    "peak_susceptibility": {
+      "cohesion": 0.1947,
+      "value": 55.868
+    },
+    "max_flock_size": {
+      "cohesion": 0.1947,
+      "value": 19.707
+    },
+    "steepest_change": {
+      "cohesion": 0.2026,
+      "derivative": -325.506
+    },
+    "susceptibility_peak_prominence": 4.202,
+    "phase_transition_detected": true
+  }
+}

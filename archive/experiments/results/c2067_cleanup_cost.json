@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_trials": 10,
+    "timestamp": "2025-11-22T01:07:04.210489"
+  },
+  "conditions": [
+    {
+      "codebook_size": 10,
+      "mean_time_ms": 0.005830709123983979,
+      "accuracy": 1.0,
+      "mean_similarity": 0.0979817129978227
+    },
+    {
+      "codebook_size": 25,
+      "mean_time_ms": 0.01434362615691498,
+      "accuracy": 0.9,
+      "mean_similarity": 0.09824418691451928
+    },
+    {
+      "codebook_size": 50,
+      "mean_time_ms": 0.028604707040358335,
+      "accuracy": 0.6,
+      "mean_similarity": 0.10318713880680988
+    },
+    {
+      "codebook_size": 100,
+      "mean_time_ms": 0.05673666810616851,
+      "accuracy": 0.5,
+      "mean_similarity": 0.1044922204008579
+    },
+    {
+      "codebook_size": 200,
+      "mean_time_ms": 0.11262945696944371,
+      "accuracy": 0.6,
+      "mean_similarity": 0.10147384195882699
+    },
+    {
+      "codebook_size": 500,
+      "mean_time_ms": 0.2833687499514781,
+      "accuracy": 0.9,
+      "mean_similarity": 0.11704497194698571
+    },
+    {
+      "codebook_size": 1000,
+      "mean_time_ms": 0.5709224568563513,
+      "accuracy": 0.4,
+      "mean_similarity": 0.10503608212121232
+    }
+  ],
+  "analysis": {
+    "scaling": "LINEAR",
+    "slope_ms_per_item": 0.0005704493516407801,
+    "r_squared": 0.9999816285157311,
+    "findings": [
+      "Scaling: LINEAR (R\u00b2=1.000)",
+      "Cost: 0.570 \u03bcs per codebook item",
+      "At N_crit (43): 0.024 ms per cleanup",
+      "Warning: Accuracy degrades at large sizes (40%)"
+    ],
+    "cost_at_capacity_ms": 0.024120657315100404
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T00:39:39.565104"
+  },
+  "conditions": [
+    {
+      "entropy_type": "none",
+      "mean_final_accuracy": 0.96,
+      "mean_accuracy": 0.9460000000000001,
+      "mean_stability": 0.920278682562158
+    },
+    {
+      "entropy_type": "synthetic",
+      "mean_final_accuracy": 0.9399999999999998,
+      "mean_accuracy": 0.868,
+      "mean_stability": 0.8922053849950243
+    },
+    {
+      "entropy_type": "real",
+      "mean_final_accuracy": 0.6799999999999999,
+      "mean_accuracy": 0.7060000000000001,
+      "mean_stability": 0.9316363273146958
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Continuous operation: Real \u2260 Synthetic (26% diff)",
+      "Stability: Real \u2248 Synthetic",
+      "Deployment concern: Only 68% accuracy"
+    ],
+    "continuous_valid": false
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "conditions": [
+    {
+      "warmup": false,
+      "accuracy": 0.9960000000000001
+    },
+    {
+      "warmup": true,
+      "accuracy": 0.9960000000000001
+    }
+  ]
+}

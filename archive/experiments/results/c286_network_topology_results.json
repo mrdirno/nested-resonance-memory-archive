@@ -1,0 +1,195 @@
+{
+  "cycle_id": "C286",
+  "cycle_name": "Network Topology Effects",
+  "date": "2025-11-20T00:41:49.903282",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 20000,
+    "n_populations": 5,
+    "initial_agents_per_pop": 20,
+    "f_intra": 0.005,
+    "energy": {
+      "E_consume": 0.3,
+      "E_recharge": 0.5,
+      "spawn": 0.5
+    },
+    "density_factor": 0.1,
+    "K": 500,
+    "migration_rate": 0.05,
+    "topologies": [
+      "complete",
+      "ring",
+      "star"
+    ],
+    "seeds": [
+      100,
+      101,
+      102
+    ]
+  },
+  "results": [
+    {
+      "topology": "complete",
+      "seed": 100,
+      "final_total": 133,
+      "final_pops": [
+        23,
+        33,
+        29,
+        26,
+        22
+      ],
+      "mean_total": 125.65,
+      "std_total": 10.622028996382943,
+      "sync_metric": 0.14383454918665478,
+      "mean_stability": 0.1747217098890978,
+      "runtime_seconds": 1.413048267364502,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c286_complete_seed100.db"
+    },
+    {
+      "topology": "complete",
+      "seed": 101,
+      "final_total": 119,
+      "final_pops": [
+        23,
+        28,
+        17,
+        28,
+        23
+      ],
+      "mean_total": 120.95,
+      "std_total": 7.2558597009589425,
+      "sync_metric": 0.18719370619251816,
+      "mean_stability": 0.1654814660347797,
+      "runtime_seconds": 1.4019958972930908,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c286_complete_seed101.db"
+    },
+    {
+      "topology": "complete",
+      "seed": 102,
+      "final_total": 122,
+      "final_pops": [
+        26,
+        20,
+        23,
+        23,
+        30
+      ],
+      "mean_total": 109.15,
+      "std_total": 7.037577708274346,
+      "sync_metric": 0.19230023568838936,
+      "mean_stability": 0.20166599004366872,
+      "runtime_seconds": 1.3450860977172852,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c286_complete_seed102.db"
+    },
+    {
+      "topology": "ring",
+      "seed": 100,
+      "final_total": 106,
+      "final_pops": [
+        28,
+        16,
+        25,
+        22,
+        15
+      ],
+      "mean_total": 121.05,
+      "std_total": 7.921331958704925,
+      "sync_metric": 0.14255196157228847,
+      "mean_stability": 0.16324733256227156,
+      "runtime_seconds": 1.3692669868469238,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c286_ring_seed100.db"
+    },
+    {
+      "topology": "ring",
+      "seed": 101,
+      "final_total": 115,
+      "final_pops": [
+        15,
+        16,
+        26,
+        27,
+        31
+      ],
+      "mean_total": 115.7,
+      "std_total": 9.566085928947116,
+      "sync_metric": 0.16964624103744735,
+      "mean_stability": 0.1982659383480522,
+      "runtime_seconds": 1.3638968467712402,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c286_ring_seed101.db"
+    },
+    {
+      "topology": "ring",
+      "seed": 102,
+      "final_total": 121,
+      "final_pops": [
+        19,
+        26,
+        27,
+        26,
+        23
+      ],
+      "mean_total": 116.55,
+      "std_total": 9.886733535399848,
+      "sync_metric": 0.17017614546679813,
+      "mean_stability": 0.20235800838149837,
+      "runtime_seconds": 1.3896641731262207,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c286_ring_seed102.db"
+    },
+    {
+      "topology": "star",
+      "seed": 100,
+      "final_total": 69,
+      "final_pops": [
+        36,
+        10,
+        5,
+        9,
+        9
+      ],
+      "mean_total": 77.6,
+      "std_total": 9.946858800646565,
+      "sync_metric": 0.7288548696531908,
+      "mean_stability": 0.2715522917026491,
+      "runtime_seconds": 0.9085068702697754,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c286_star_seed100.db"
+    },
+    {
+      "topology": "star",
+      "seed": 101,
+      "final_total": 78,
+      "final_pops": [
+        39,
+        8,
+        5,
+        16,
+        10
+      ],
+      "mean_total": 73.0,
+      "std_total": 8.07465169527454,
+      "sync_metric": 0.7190045403334321,
+      "mean_stability": 0.31872787893098947,
+      "runtime_seconds": 0.8781960010528564,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c286_star_seed101.db"
+    },
+    {
+      "topology": "star",
+      "seed": 102,
+      "final_total": 75,
+      "final_pops": [
+        35,
+        5,
+        10,
+        15,
+        10
+      ],
+      "mean_total": 70.05,
+      "std_total": 5.962172422867356,
+      "sync_metric": 0.7135293766392998,
+      "mean_stability": 0.315228269853575,
+      "runtime_seconds": 0.8936569690704346,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c286_star_seed102.db"
+    }
+  ]
+}

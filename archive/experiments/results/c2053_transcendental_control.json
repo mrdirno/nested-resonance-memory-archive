@@ -1,0 +1,47 @@
+{
+  "cycle": 2053,
+  "experiment": "Transcendental Control",
+  "timestamp": "2025-11-21T17:42:39.698617",
+  "results": [
+    {
+      "label": "Baseline (0.1/0.1/0.5)",
+      "comp_prob": 0.1,
+      "decomp_prob": 0.1,
+      "energy_thresh": 0.5,
+      "pop": 48.0,
+      "avg_depth": 0.023197991962742543,
+      "max_depth": 0.65,
+      "variance": 8.439722393673854
+    },
+    {
+      "label": "Transcendental (1/\u03c0, 1/e, 1/\u03c6)",
+      "comp_prob": 0.3183098861837907,
+      "decomp_prob": 0.36787944117144233,
+      "energy_thresh": 0.6180339887498948,
+      "pop": 47.7,
+      "avg_depth": 0.01843631592421915,
+      "max_depth": 0.75,
+      "variance": 10.605558400669494
+    },
+    {
+      "label": "Scaled Trans (\u03c0/10, e/10, \u03c6/2)",
+      "comp_prob": 0.3141592653589793,
+      "decomp_prob": 0.2718281828459045,
+      "energy_thresh": 0.8090169943749475,
+      "pop": 49.5,
+      "avg_depth": 0.011289115646258502,
+      "max_depth": 0.45,
+      "variance": 10.416033067531313
+    },
+    {
+      "label": "Golden Ratio",
+      "comp_prob": 0.1618033988749895,
+      "decomp_prob": 0.061803398874989486,
+      "energy_thresh": 0.8090169943749475,
+      "pop": 30.75,
+      "avg_depth": 3.965674699667101,
+      "max_depth": 6.15,
+      "variance": 6.414749345946957
+    }
+  ]
+}

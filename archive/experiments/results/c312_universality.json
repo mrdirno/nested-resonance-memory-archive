@@ -1,0 +1,45 @@
+{
+  "experiment": "C312_universality_test",
+  "parameters": {
+    "n_agents": 50,
+    "seeds": 6,
+    "sight_ranges": [
+      10.0,
+      15.0,
+      20.0,
+      25.0
+    ]
+  },
+  "results": [
+    {
+      "sight_range": 10.0,
+      "critical_cohesion": 0.177,
+      "peak_susceptibility": 43.11,
+      "gamma_nu_estimate": 0.968
+    },
+    {
+      "sight_range": 15.0,
+      "critical_cohesion": 0.114,
+      "peak_susceptibility": 38.15,
+      "gamma_nu_estimate": 0.937
+    },
+    {
+      "sight_range": 20.0,
+      "critical_cohesion": 0.4,
+      "peak_susceptibility": 51.69,
+      "gamma_nu_estimate": 1.013
+    },
+    {
+      "sight_range": 25.0,
+      "critical_cohesion": 0.4,
+      "peak_susceptibility": 84.57,
+      "gamma_nu_estimate": 1.137
+    }
+  ],
+  "analysis": {
+    "gamma_nu_mean": 1.0138,
+    "gamma_nu_std": 0.0761,
+    "gamma_nu_cv": 0.0751,
+    "universality_supported": true
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "cycle": 1972,
+  "experiment": "Critical Zone Map",
+  "timestamp": "2025-11-21T15:57:32.225025",
+  "purpose": "Synthesize C1969-1971 findings",
+  "num_seeds": 10,
+  "results": [
+    {
+      "e_consume": 0.09,
+      "mean_pop": 448.86580000000004,
+      "cv": 27.282556823562352,
+      "turnover": 11.160799999999998,
+      "survival_rate": 1.0,
+      "phase": "STABLE"
+    },
+    {
+      "e_consume": 0.091,
+      "mean_pop": 443.9524,
+      "cv": 28.626226433912667,
+      "turnover": 10.003799999999998,
+      "survival_rate": 1.0,
+      "phase": "STABLE"
+    },
+    {
+      "e_consume": 0.092,
+      "mean_pop": 437.89639999999997,
+      "cv": 30.228049179922902,
+      "turnover": 8.846,
+      "survival_rate": 1.0,
+      "phase": "STABLE"
+    },
+    {
+      "e_consume": 0.093,
+      "mean_pop": 430.56620000000004,
+      "cv": 32.03434305239438,
+      "turnover": 7.743199999999999,
+      "survival_rate": 1.0,
+      "phase": "STABLE"
+    },
+    {
+      "e_consume": 0.094,
+      "mean_pop": 422.01180000000005,
+      "cv": 34.04766662846042,
+      "turnover": 6.6456,
+      "survival_rate": 1.0,
+      "phase": "STABLE"
+    },
+    {
+      "e_consume": 0.095,
+      "mean_pop": 409.56160000000006,
+      "cv": 36.82789078958755,
+      "turnover": 5.554399999999999,
+      "survival_rate": 1.0,
+      "phase": "STABLE"
+    },
+    {
+      "e_consume": 0.096,
+      "mean_pop": 393.3052,
+      "cv": 40.131194163353754,
+      "turnover": 4.445800000000001,
+      "survival_rate": 1.0,
+      "phase": "STABLE"
+    },
+    {
+      "e_consume": 0.097,
+      "mean_pop": 368.8576,
+      "cv": 44.6631148418381,
+      "turnover": 3.3836,
+      "survival_rate": 1.0,
+      "phase": "STABLE"
+    },
+    {
+      "e_consume": 0.098,
+      "mean_pop": 327.87919999999997,
+      "cv": 51.21543156910811,
+      "turnover": 2.3808000000000002,
+      "survival_rate": 1.0,
+      "phase": "STABLE"
+    },
+    {
+      "e_consume": 0.099,
+      "mean_pop": 248.54119999999998,
+      "cv": 55.451974196752396,
+      "turnover": 1.4486,
+      "survival_rate": 1.0,
+      "phase": "STABLE"
+    },
+    {
+      "e_consume": 0.1,
+      "mean_pop": 124.21459999999998,
+      "cv": 25.116509324243474,
+      "turnover": 0.6281999999999999,
+      "survival_rate": 1.0,
+      "phase": "COLLAPSE"
+    },
+    {
+      "e_consume": 0.101,
+      "mean_pop": 67.589,
+      "cv": 16.10182603870411,
+      "turnover": 0.36880000000000007,
+      "survival_rate": 1.0,
+      "phase": "COLLAPSE"
+    },
+    {
+      "e_consume": 0.10200000000000001,
+      "mean_pop": 40.852199999999996,
+      "cv": 52.90201820014026,
+      "turnover": 0.26180000000000003,
+      "survival_rate": 1.0,
+      "phase": "CRITICAL"
+    },
+    {
+      "e_consume": 0.10300000000000001,
+      "mean_pop": 27.524032667450058,
+      "cv": 87.44738545954542,
+      "turnover": 0.22059898159028596,
+      "survival_rate": 0.8,
+      "phase": "CRITICAL"
+    },
+    {
+      "e_consume": 0.10400000000000001,
+      "mean_pop": 23.742008427728248,
+      "cv": 101.98890704376421,
+      "turnover": 0.22821599023562938,
+      "survival_rate": 0.3,
+      "phase": "CRITICAL"
+    },
+    {
+      "e_consume": 0.10500000000000001,
+      "mean_pop": 23.901386341438602,
+      "cv": 100.30178187178375,
+      "turnover": 0.2719071119281242,
+      "survival_rate": 0.0,
+      "phase": "EXTINCT"
+    },
+    {
+      "e_consume": 0.10600000000000001,
+      "mean_pop": 25.505154522428153,
+      "cv": 95.69024641528964,
+      "turnover": 0.3360911087092966,
+      "survival_rate": 0.0,
+      "phase": "EXTINCT"
+    },
+    {
+      "e_consume": 0.10700000000000001,
+      "mean_pop": 26.980984937898246,
+      "cv": 89.84308528020692,
+      "turnover": 0.40290384257388123,
+      "survival_rate": 0.0,
+      "phase": "EXTINCT"
+    },
+    {
+      "e_consume": 0.10800000000000001,
+      "mean_pop": 25.769607420719336,
+      "cv": 93.17244720851598,
+      "turnover": 0.432605914959116,
+      "survival_rate": 0.0,
+      "phase": "EXTINCT"
+    },
+    {
+      "e_consume": 0.10900000000000001,
+      "mean_pop": 28.93510287565918,
+      "cv": 83.98339204131733,
+      "turnover": 0.5452271904503053,
+      "survival_rate": 0.0,
+      "phase": "EXTINCT"
+    },
+    {
+      "e_consume": 0.11000000000000001,
+      "mean_pop": 29.98653898473294,
+      "cv": 82.25132847688006,
+      "turnover": 0.6232124107094335,
+      "survival_rate": 0.0,
+      "phase": "EXTINCT"
+    },
+    {
+      "e_consume": 0.11100000000000002,
+      "mean_pop": 29.902316353080703,
+      "cv": 82.14356798141857,
+      "turnover": 0.6679603698912626,
+      "survival_rate": 0.0,
+      "phase": "EXTINCT"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "points": [
+    {
+      "dimension": 16384,
+      "avg_similarity": 0.03858762452420811,
+      "success_rate": 0.0
+    },
+    {
+      "dimension": 32768,
+      "avg_similarity": 0.02025478513991646,
+      "success_rate": 0.0
+    },
+    {
+      "dimension": 65536,
+      "avg_similarity": 0.020212850087339397,
+      "success_rate": 0.0
+    }
+  ]
+}

@@ -1,0 +1,918 @@
+{
+  "cycle_id": "C1646",
+  "attack_mult": 0.5,
+  "magnitude": 0.25,
+  "perturbation_cycle": 5000,
+  "reduction": 0.5,
+  "seeds_per_condition": 30,
+  "rates": {
+    "0": 0.9666666666666667,
+    "1": 0.9666666666666667,
+    "3": 0.9666666666666667,
+    "5": 0.9666666666666667,
+    "6": 0.9666666666666667,
+    "all": 0.9666666666666667
+  },
+  "results": [
+    {
+      "seed": 170001,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170002,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170003,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170004,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170005,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170006,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170007,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170008,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170009,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170010,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170011,
+      "perturb_level": "0",
+      "coexist": false
+    },
+    {
+      "seed": 170012,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170013,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170014,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170015,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170016,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170017,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170018,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170019,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170020,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170021,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170022,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170023,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170024,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170025,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170026,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170027,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170028,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170029,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170030,
+      "perturb_level": "0",
+      "coexist": true
+    },
+    {
+      "seed": 170001,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170002,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170003,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170004,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170005,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170006,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170007,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170008,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170009,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170010,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170011,
+      "perturb_level": "1",
+      "coexist": false
+    },
+    {
+      "seed": 170012,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170013,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170014,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170015,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170016,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170017,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170018,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170019,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170020,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170021,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170022,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170023,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170024,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170025,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170026,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170027,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170028,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170029,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170030,
+      "perturb_level": "1",
+      "coexist": true
+    },
+    {
+      "seed": 170001,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170002,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170003,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170004,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170005,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170006,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170007,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170008,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170009,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170010,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170011,
+      "perturb_level": "3",
+      "coexist": false
+    },
+    {
+      "seed": 170012,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170013,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170014,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170015,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170016,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170017,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170018,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170019,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170020,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170021,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170022,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170023,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170024,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170025,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170026,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170027,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170028,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170029,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170030,
+      "perturb_level": "3",
+      "coexist": true
+    },
+    {
+      "seed": 170001,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170002,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170003,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170004,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170005,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170006,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170007,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170008,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170009,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170010,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170011,
+      "perturb_level": "5",
+      "coexist": false
+    },
+    {
+      "seed": 170012,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170013,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170014,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170015,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170016,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170017,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170018,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170019,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170020,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170021,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170022,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170023,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170024,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170025,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170026,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170027,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170028,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170029,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170030,
+      "perturb_level": "5",
+      "coexist": true
+    },
+    {
+      "seed": 170001,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170002,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170003,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170004,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170005,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170006,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170007,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170008,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170009,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170010,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170011,
+      "perturb_level": "6",
+      "coexist": false
+    },
+    {
+      "seed": 170012,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170013,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170014,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170015,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170016,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170017,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170018,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170019,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170020,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170021,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170022,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170023,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170024,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170025,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170026,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170027,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170028,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170029,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170030,
+      "perturb_level": "6",
+      "coexist": true
+    },
+    {
+      "seed": 170001,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170002,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170003,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170004,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170005,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170006,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170007,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170008,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170009,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170010,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170011,
+      "perturb_level": "all",
+      "coexist": false
+    },
+    {
+      "seed": 170012,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170013,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170014,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170015,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170016,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170017,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170018,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170019,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170020,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170021,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170022,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170023,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170024,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170025,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170026,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170027,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170028,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170029,
+      "perturb_level": "all",
+      "coexist": true
+    },
+    {
+      "seed": 170030,
+      "perturb_level": "all",
+      "coexist": true
+    }
+  ]
+}

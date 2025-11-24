@@ -1,0 +1,64 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_items": 10,
+    "n_forgotten": 2,
+    "warmup_cycles": 100,
+    "forgetting_cycles": 200,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T01:09:56.495485"
+  },
+  "trials": [
+    {
+      "pre_forget_mean": 1.0,
+      "forgotten_items_sim": 0.013797955738953833,
+      "retained_items_sim": 0.9999999999999999,
+      "forgotten_success": 0.0,
+      "retained_success": 1.0
+    },
+    {
+      "pre_forget_mean": 0.8997399252438338,
+      "forgotten_items_sim": -0.018193444721729388,
+      "retained_items_sim": 0.9999999999999999,
+      "forgotten_success": 0.0,
+      "retained_success": 1.0
+    },
+    {
+      "pre_forget_mean": 1.0,
+      "forgotten_items_sim": -0.00454652275515407,
+      "retained_items_sim": 1.0,
+      "forgotten_success": 0.0,
+      "retained_success": 1.0
+    },
+    {
+      "pre_forget_mean": 1.0,
+      "forgotten_items_sim": 0.030526266243814264,
+      "retained_items_sim": 1.0,
+      "forgotten_success": 0.0,
+      "retained_success": 1.0
+    },
+    {
+      "pre_forget_mean": 1.0,
+      "forgotten_items_sim": -0.01697393800825729,
+      "retained_items_sim": 1.0,
+      "forgotten_success": 0.0,
+      "retained_success": 1.0
+    }
+  ],
+  "summary": {
+    "mean_pre_forget": 0.9799479850487668,
+    "mean_forgotten_similarity": 0.0009220632995254691,
+    "mean_retained_similarity": 1.0,
+    "mean_forgotten_success": 0.0,
+    "mean_retained_success": 1.0
+  },
+  "analysis": {
+    "findings": [
+      "Forgetting works: 0% retrievable (target < 30%)",
+      "Retained items preserved: 100%",
+      "Selective forgetting is viable for memory management"
+    ],
+    "forgetting_works": true,
+    "retention_works": true
+  }
+}

@@ -1,0 +1,363 @@
+{
+  "cycle_id": "C1648",
+  "bug_fix": "Uses 0 instead of INITIAL for collapsed runs",
+  "results": [
+    {
+      "seed": 200001,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200002,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200003,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 200001,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200002,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200003,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200001,
+      "attack_mult": 0.7,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200002,
+      "attack_mult": 0.7,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200003,
+      "attack_mult": 0.7,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200001,
+      "attack_mult": 0.8,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200002,
+      "attack_mult": 0.8,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200003,
+      "attack_mult": 0.8,
+      "magnitude": 0.25,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200001,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "energy_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200002,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "energy_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200003,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "energy_mult": 0.5,
+      "coexist": false,
+      "hist_len": 300,
+      "finals": [
+        200.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 200001,
+      "attack_mult": 0.8,
+      "magnitude": 0.35,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200002,
+      "attack_mult": 0.8,
+      "magnitude": 0.35,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200003,
+      "attack_mult": 0.8,
+      "magnitude": 0.35,
+      "energy_mult": 1.0,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200001,
+      "attack_mult": 0.8,
+      "magnitude": 0.25,
+      "energy_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200002,
+      "attack_mult": 0.8,
+      "magnitude": 0.25,
+      "energy_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 200003,
+      "attack_mult": 0.8,
+      "magnitude": 0.25,
+      "energy_mult": 0.5,
+      "coexist": false,
+      "hist_len": 1,
+      "finals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2477 @@
+{
+  "cycle_id": "C276",
+  "cycle_name": "Universality Test 2: Topology Variation",
+  "date": "2025-11-20T22:30:14.531849",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "topologies": {
+      "FULLY_CONNECTED": {
+        "label": "Fully Connected (k=9)",
+        "adjacency": {
+          "0": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "1": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "2": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "3": [
+            0,
+            1,
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "4": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "5": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            6,
+            7,
+            8,
+            9
+          ],
+          "6": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            8,
+            9
+          ],
+          "7": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            8,
+            9
+          ],
+          "8": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9
+          ],
+          "9": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        }
+      },
+      "RING": {
+        "label": "Ring (k=2)",
+        "adjacency": {
+          "0": [
+            9,
+            1
+          ],
+          "1": [
+            0,
+            2
+          ],
+          "2": [
+            1,
+            3
+          ],
+          "3": [
+            2,
+            4
+          ],
+          "4": [
+            3,
+            5
+          ],
+          "5": [
+            4,
+            6
+          ],
+          "6": [
+            5,
+            7
+          ],
+          "7": [
+            8,
+            6
+          ],
+          "8": [
+            9,
+            7
+          ],
+          "9": [
+            8,
+            0
+          ]
+        }
+      },
+      "STAR": {
+        "label": "Star (hub+9)",
+        "adjacency": {
+          "0": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "1": [
+            0
+          ],
+          "2": [
+            0
+          ],
+          "3": [
+            0
+          ],
+          "4": [
+            0
+          ],
+          "5": [
+            0
+          ],
+          "6": [
+            0
+          ],
+          "7": [
+            0
+          ],
+          "8": [
+            0
+          ],
+          "9": [
+            0
+          ]
+        }
+      },
+      "RANDOM_GRAPH": {
+        "label": "Random (k\u22484)",
+        "adjacency": {
+          "0": [
+            1,
+            2,
+            5,
+            6,
+            8
+          ],
+          "1": [
+            0,
+            2,
+            3,
+            5,
+            6
+          ],
+          "2": [
+            0,
+            1,
+            3,
+            7,
+            9
+          ],
+          "3": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            8,
+            9
+          ],
+          "4": [
+            3,
+            5,
+            6,
+            8,
+            9
+          ],
+          "5": [
+            0,
+            1,
+            3,
+            4,
+            7
+          ],
+          "6": [
+            0,
+            1,
+            3,
+            4
+          ],
+          "7": [
+            8,
+            9,
+            2,
+            5
+          ],
+          "8": [
+            0,
+            3,
+            4,
+            7
+          ],
+          "9": [
+            2,
+            3,
+            4,
+            7
+          ]
+        }
+      }
+    },
+    "energy_params": {
+      "E_consume": 0.5,
+      "E_recharge": 1.0,
+      "net": 0.5
+    },
+    "frequencies": [
+      0.0005,
+      0.001,
+      0.002,
+      0.005,
+      0.01,
+      0.02
+    ],
+    "seeds": [
+      300,
+      301,
+      302,
+      303,
+      304,
+      305,
+      306,
+      307,
+      308,
+      309
+    ],
+    "cycles_per_experiment": 450000,
+    "n_populations": 10,
+    "f_migrate": 0.005
+  },
+  "results": [
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.0005,
+      "seed": 300,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.172044038772583,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_05pct_seed300.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.0005,
+      "seed": 301,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.163266658782959,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_05pct_seed301.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.0005,
+      "seed": 302,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.252552032470703,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_05pct_seed302.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.0005,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.183369874954224,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_05pct_seed303.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.0005,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.255254030227661,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_05pct_seed304.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.0005,
+      "seed": 305,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.248630046844482,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_05pct_seed305.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.0005,
+      "seed": 306,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.295745849609375,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_05pct_seed306.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.0005,
+      "seed": 307,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.553947925567627,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_05pct_seed307.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.0005,
+      "seed": 308,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 11.452167987823486,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_05pct_seed308.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.0005,
+      "seed": 309,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.709561824798584,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_05pct_seed309.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.001,
+      "seed": 300,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.658069133758545,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_10pct_seed300.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.001,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.701668977737427,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_10pct_seed301.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.001,
+      "seed": 302,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.707233190536499,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_10pct_seed302.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.001,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.597550868988037,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_10pct_seed303.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.001,
+      "seed": 304,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.383149862289429,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_10pct_seed304.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.001,
+      "seed": 305,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.12161922454834,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_10pct_seed305.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.001,
+      "seed": 306,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.116076707839966,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_10pct_seed306.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.001,
+      "seed": 307,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.097484111785889,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_10pct_seed307.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.001,
+      "seed": 308,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.126790285110474,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_10pct_seed308.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.001,
+      "seed": 309,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.103193759918213,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_10pct_seed309.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.002,
+      "seed": 300,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.107802867889404,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_20pct_seed300.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.002,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.09420108795166,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_20pct_seed301.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.002,
+      "seed": 302,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.083647012710571,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_20pct_seed302.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.002,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.099897146224976,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_20pct_seed303.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.002,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.03351879119873,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_20pct_seed304.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.002,
+      "seed": 305,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.072574853897095,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_20pct_seed305.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.002,
+      "seed": 306,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.182546854019165,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_20pct_seed306.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.002,
+      "seed": 307,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.100121974945068,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_20pct_seed307.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.002,
+      "seed": 308,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.122519254684448,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_20pct_seed308.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.002,
+      "seed": 309,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.268903017044067,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_20pct_seed309.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.005,
+      "seed": 300,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.315726041793823,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_50pct_seed300.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.005,
+      "seed": 301,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.08044981956482,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_50pct_seed301.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.005,
+      "seed": 302,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 12.071938037872314,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_50pct_seed302.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.005,
+      "seed": 303,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.302600860595703,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_50pct_seed303.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.005,
+      "seed": 304,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.175153017044067,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_50pct_seed304.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.005,
+      "seed": 305,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.086141109466553,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_50pct_seed305.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.005,
+      "seed": 306,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.124659061431885,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_50pct_seed306.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.005,
+      "seed": 307,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.023950815200806,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_50pct_seed307.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.005,
+      "seed": 308,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.910465002059937,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_50pct_seed308.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.005,
+      "seed": 309,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.067116022109985,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f0_50pct_seed309.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.01,
+      "seed": 300,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.056056261062622,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f1_00pct_seed300.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.01,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.073527097702026,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f1_00pct_seed301.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.01,
+      "seed": 302,
+      "final_population": 503,
+      "cycles": 450000,
+      "runtime_seconds": 11.087283849716187,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f1_00pct_seed302.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.01,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.069735288619995,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f1_00pct_seed303.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.01,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.127165079116821,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f1_00pct_seed304.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.01,
+      "seed": 305,
+      "final_population": 503,
+      "cycles": 450000,
+      "runtime_seconds": 11.11960482597351,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f1_00pct_seed305.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.01,
+      "seed": 306,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.387350082397461,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f1_00pct_seed306.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.01,
+      "seed": 307,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.125828981399536,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f1_00pct_seed307.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.01,
+      "seed": 308,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.132483959197998,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f1_00pct_seed308.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.01,
+      "seed": 309,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.160094976425171,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f1_00pct_seed309.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.02,
+      "seed": 300,
+      "final_population": 503,
+      "cycles": 450000,
+      "runtime_seconds": 11.18880581855774,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f2_00pct_seed300.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.02,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.180912733078003,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f2_00pct_seed301.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.02,
+      "seed": 302,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.042680025100708,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f2_00pct_seed302.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.02,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.994385004043579,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f2_00pct_seed303.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.02,
+      "seed": 304,
+      "final_population": 497,
+      "cycles": 450000,
+      "runtime_seconds": 11.012780904769897,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f2_00pct_seed304.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.02,
+      "seed": 305,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.958331823348999,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f2_00pct_seed305.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.02,
+      "seed": 306,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.975000858306885,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f2_00pct_seed306.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.02,
+      "seed": 307,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.940204858779907,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f2_00pct_seed307.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.02,
+      "seed": 308,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.868844032287598,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f2_00pct_seed308.db"
+    },
+    {
+      "topology": "FULLY_CONNECTED",
+      "frequency": 0.02,
+      "seed": 309,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.987760782241821,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_FULLY_CONNECTED_f2_00pct_seed309.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.0005,
+      "seed": 300,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.96573519706726,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_05pct_seed300.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.0005,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.039315938949585,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_05pct_seed301.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.0005,
+      "seed": 302,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.123188972473145,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_05pct_seed302.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.0005,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.099931955337524,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_05pct_seed303.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.0005,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.063905954360962,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_05pct_seed304.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.0005,
+      "seed": 305,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.112215995788574,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_05pct_seed305.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.0005,
+      "seed": 306,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.163876056671143,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_05pct_seed306.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.0005,
+      "seed": 307,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.11353588104248,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_05pct_seed307.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.0005,
+      "seed": 308,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.158886909484863,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_05pct_seed308.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.0005,
+      "seed": 309,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.172247171401978,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_05pct_seed309.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.001,
+      "seed": 300,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.102421998977661,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_10pct_seed300.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.001,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.925095081329346,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_10pct_seed301.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.001,
+      "seed": 302,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.864487171173096,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_10pct_seed302.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.001,
+      "seed": 303,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.889708995819092,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_10pct_seed303.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.001,
+      "seed": 304,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.860607147216797,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_10pct_seed304.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.001,
+      "seed": 305,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.876648187637329,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_10pct_seed305.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.001,
+      "seed": 306,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.873400926589966,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_10pct_seed306.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.001,
+      "seed": 307,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.926803827285767,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_10pct_seed307.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.001,
+      "seed": 308,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.903069972991943,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_10pct_seed308.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.001,
+      "seed": 309,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 10.852741003036499,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_10pct_seed309.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.002,
+      "seed": 300,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.940981149673462,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_20pct_seed300.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.002,
+      "seed": 301,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.000098943710327,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_20pct_seed301.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.002,
+      "seed": 302,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.012880086898804,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_20pct_seed302.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.002,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.973952054977417,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_20pct_seed303.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.002,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.878076076507568,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_20pct_seed304.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.002,
+      "seed": 305,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.78305721282959,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_20pct_seed305.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.002,
+      "seed": 306,
+      "final_population": 503,
+      "cycles": 450000,
+      "runtime_seconds": 10.731729745864868,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_20pct_seed306.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.002,
+      "seed": 307,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.793758153915405,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_20pct_seed307.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.002,
+      "seed": 308,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.780497074127197,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_20pct_seed308.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.002,
+      "seed": 309,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.921184062957764,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_20pct_seed309.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.005,
+      "seed": 300,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.991136074066162,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_50pct_seed300.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.005,
+      "seed": 301,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 11.054355144500732,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_50pct_seed301.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.005,
+      "seed": 302,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.352684020996094,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_50pct_seed302.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.005,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.382075071334839,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_50pct_seed303.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.005,
+      "seed": 304,
+      "final_population": 497,
+      "cycles": 450000,
+      "runtime_seconds": 11.223941802978516,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_50pct_seed304.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.005,
+      "seed": 305,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.423584222793579,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_50pct_seed305.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.005,
+      "seed": 306,
+      "final_population": 503,
+      "cycles": 450000,
+      "runtime_seconds": 11.204082012176514,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_50pct_seed306.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.005,
+      "seed": 307,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.156101942062378,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_50pct_seed307.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.005,
+      "seed": 308,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.887336254119873,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_50pct_seed308.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.005,
+      "seed": 309,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.854679107666016,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f0_50pct_seed309.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.01,
+      "seed": 300,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 10.863266944885254,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f1_00pct_seed300.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.01,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.914301872253418,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f1_00pct_seed301.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.01,
+      "seed": 302,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.962323904037476,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f1_00pct_seed302.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.01,
+      "seed": 303,
+      "final_population": 504,
+      "cycles": 450000,
+      "runtime_seconds": 10.954246044158936,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f1_00pct_seed303.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.01,
+      "seed": 304,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.956629037857056,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f1_00pct_seed304.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.01,
+      "seed": 305,
+      "final_population": 503,
+      "cycles": 450000,
+      "runtime_seconds": 10.966669082641602,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f1_00pct_seed305.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.01,
+      "seed": 306,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.09226393699646,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f1_00pct_seed306.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.01,
+      "seed": 307,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.170842170715332,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f1_00pct_seed307.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.01,
+      "seed": 308,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.180720806121826,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f1_00pct_seed308.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.01,
+      "seed": 309,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.142486095428467,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f1_00pct_seed309.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.02,
+      "seed": 300,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.212926864624023,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f2_00pct_seed300.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.02,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.268862962722778,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f2_00pct_seed301.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.02,
+      "seed": 302,
+      "final_population": 506,
+      "cycles": 450000,
+      "runtime_seconds": 11.085804224014282,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f2_00pct_seed302.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.02,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.037146806716919,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f2_00pct_seed303.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.02,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.982384204864502,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f2_00pct_seed304.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.02,
+      "seed": 305,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.080331802368164,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f2_00pct_seed305.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.02,
+      "seed": 306,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.16239309310913,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f2_00pct_seed306.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.02,
+      "seed": 307,
+      "final_population": 497,
+      "cycles": 450000,
+      "runtime_seconds": 11.016175031661987,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f2_00pct_seed307.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.02,
+      "seed": 308,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 10.976547718048096,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f2_00pct_seed308.db"
+    },
+    {
+      "topology": "RING",
+      "frequency": 0.02,
+      "seed": 309,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.075996160507202,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RING_f2_00pct_seed309.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.0005,
+      "seed": 300,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.027726173400879,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_05pct_seed300.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.0005,
+      "seed": 301,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.97193694114685,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_05pct_seed301.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.0005,
+      "seed": 302,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.923985004425049,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_05pct_seed302.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.0005,
+      "seed": 303,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.022547960281372,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_05pct_seed303.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.0005,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.962582111358643,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_05pct_seed304.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.0005,
+      "seed": 305,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.992836236953735,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_05pct_seed305.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.0005,
+      "seed": 306,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.956931829452515,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_05pct_seed306.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.0005,
+      "seed": 307,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.975018978118896,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_05pct_seed307.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.0005,
+      "seed": 308,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.020050048828125,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_05pct_seed308.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.0005,
+      "seed": 309,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.148027896881104,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_05pct_seed309.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.001,
+      "seed": 300,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.149121046066284,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_10pct_seed300.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.001,
+      "seed": 301,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.220194101333618,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_10pct_seed301.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.001,
+      "seed": 302,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.236173152923584,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_10pct_seed302.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.001,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.146161079406738,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_10pct_seed303.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.001,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.09082818031311,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_10pct_seed304.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.001,
+      "seed": 305,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.954495906829834,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_10pct_seed305.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.001,
+      "seed": 306,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.011938095092773,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_10pct_seed306.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.001,
+      "seed": 307,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.067208051681519,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_10pct_seed307.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.001,
+      "seed": 308,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.059138059616089,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_10pct_seed308.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.001,
+      "seed": 309,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.957630157470703,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_10pct_seed309.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.002,
+      "seed": 300,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.982276916503906,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_20pct_seed300.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.002,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.882626056671143,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_20pct_seed301.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.002,
+      "seed": 302,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.798464059829712,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_20pct_seed302.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.002,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.743275880813599,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_20pct_seed303.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.002,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.005055904388428,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_20pct_seed304.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.002,
+      "seed": 305,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.940281867980957,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_20pct_seed305.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.002,
+      "seed": 306,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.984807014465332,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_20pct_seed306.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.002,
+      "seed": 307,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.963495969772339,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_20pct_seed307.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.002,
+      "seed": 308,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.026123762130737,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_20pct_seed308.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.002,
+      "seed": 309,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.995388269424438,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_20pct_seed309.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.005,
+      "seed": 300,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.991699934005737,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_50pct_seed300.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.005,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.016517877578735,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_50pct_seed301.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.005,
+      "seed": 302,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.09539794921875,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_50pct_seed302.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.005,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.09709906578064,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_50pct_seed303.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.005,
+      "seed": 304,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 11.102679014205933,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_50pct_seed304.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.005,
+      "seed": 305,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.043720006942749,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_50pct_seed305.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.005,
+      "seed": 306,
+      "final_population": 497,
+      "cycles": 450000,
+      "runtime_seconds": 10.797034978866577,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_50pct_seed306.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.005,
+      "seed": 307,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.795665264129639,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_50pct_seed307.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.005,
+      "seed": 308,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.822919130325317,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_50pct_seed308.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.005,
+      "seed": 309,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 10.862435817718506,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f0_50pct_seed309.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.01,
+      "seed": 300,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.94886589050293,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f1_00pct_seed300.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.01,
+      "seed": 301,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.015651226043701,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f1_00pct_seed301.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.01,
+      "seed": 302,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.99744200706482,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f1_00pct_seed302.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.01,
+      "seed": 303,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.902033805847168,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f1_00pct_seed303.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.01,
+      "seed": 304,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.9915189743042,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f1_00pct_seed304.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.01,
+      "seed": 305,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 11.017750978469849,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f1_00pct_seed305.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.01,
+      "seed": 306,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.18884015083313,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f1_00pct_seed306.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.01,
+      "seed": 307,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.903861999511719,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f1_00pct_seed307.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.01,
+      "seed": 308,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 10.86037564277649,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f1_00pct_seed308.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.01,
+      "seed": 309,
+      "final_population": 497,
+      "cycles": 450000,
+      "runtime_seconds": 10.856643199920654,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f1_00pct_seed309.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.02,
+      "seed": 300,
+      "final_population": 504,
+      "cycles": 450000,
+      "runtime_seconds": 10.965932130813599,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f2_00pct_seed300.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.02,
+      "seed": 301,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.936023950576782,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f2_00pct_seed301.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.02,
+      "seed": 302,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.982561111450195,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f2_00pct_seed302.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.02,
+      "seed": 303,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.911188840866089,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f2_00pct_seed303.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.02,
+      "seed": 304,
+      "final_population": 497,
+      "cycles": 450000,
+      "runtime_seconds": 10.87411093711853,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f2_00pct_seed304.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.02,
+      "seed": 305,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.972203016281128,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f2_00pct_seed305.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.02,
+      "seed": 306,
+      "final_population": 503,
+      "cycles": 450000,
+      "runtime_seconds": 11.046366930007935,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f2_00pct_seed306.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.02,
+      "seed": 307,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.044441938400269,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f2_00pct_seed307.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.02,
+      "seed": 308,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.93953800201416,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f2_00pct_seed308.db"
+    },
+    {
+      "topology": "STAR",
+      "frequency": 0.02,
+      "seed": 309,
+      "final_population": 503,
+      "cycles": 450000,
+      "runtime_seconds": 10.894869089126587,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_STAR_f2_00pct_seed309.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.0005,
+      "seed": 300,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.90324091911316,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_05pct_seed300.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.0005,
+      "seed": 301,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.949687957763672,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_05pct_seed301.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.0005,
+      "seed": 302,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.971835851669312,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_05pct_seed302.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.0005,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.848376750946045,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_05pct_seed303.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.0005,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.8772292137146,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_05pct_seed304.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.0005,
+      "seed": 305,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.891655921936035,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_05pct_seed305.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.0005,
+      "seed": 306,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.909927368164062,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_05pct_seed306.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.0005,
+      "seed": 307,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.959645748138428,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_05pct_seed307.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.0005,
+      "seed": 308,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.973204851150513,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_05pct_seed308.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.0005,
+      "seed": 309,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.901635885238647,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_05pct_seed309.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.001,
+      "seed": 300,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.90691089630127,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_10pct_seed300.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.001,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.117914915084839,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_10pct_seed301.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.001,
+      "seed": 302,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.882229089736938,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_10pct_seed302.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.001,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.8555588722229,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_10pct_seed303.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.001,
+      "seed": 304,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.912235021591187,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_10pct_seed304.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.001,
+      "seed": 305,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.864389896392822,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_10pct_seed305.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.001,
+      "seed": 306,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.914142847061157,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_10pct_seed306.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.001,
+      "seed": 307,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 10.963213920593262,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_10pct_seed307.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.001,
+      "seed": 308,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.925103902816772,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_10pct_seed308.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.001,
+      "seed": 309,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.97172212600708,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_10pct_seed309.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.002,
+      "seed": 300,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.920478105545044,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_20pct_seed300.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.002,
+      "seed": 301,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.010082960128784,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_20pct_seed301.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.002,
+      "seed": 302,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.975986957550049,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_20pct_seed302.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.002,
+      "seed": 303,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 11.029571056365967,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_20pct_seed303.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.002,
+      "seed": 304,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.0658278465271,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_20pct_seed304.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.002,
+      "seed": 305,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.038776874542236,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_20pct_seed305.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.002,
+      "seed": 306,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.096326112747192,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_20pct_seed306.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.002,
+      "seed": 307,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.093954801559448,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_20pct_seed307.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.002,
+      "seed": 308,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.084216117858887,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_20pct_seed308.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.002,
+      "seed": 309,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 14.147199153900146,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_20pct_seed309.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.005,
+      "seed": 300,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.023515224456787,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_50pct_seed300.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.005,
+      "seed": 301,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.053545951843262,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_50pct_seed301.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.005,
+      "seed": 302,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 11.081998109817505,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_50pct_seed302.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.005,
+      "seed": 303,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.183217287063599,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_50pct_seed303.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.005,
+      "seed": 304,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.077123880386353,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_50pct_seed304.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.005,
+      "seed": 305,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.083369970321655,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_50pct_seed305.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.005,
+      "seed": 306,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.092389106750488,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_50pct_seed306.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.005,
+      "seed": 307,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.16890811920166,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_50pct_seed307.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.005,
+      "seed": 308,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.164942979812622,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_50pct_seed308.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.005,
+      "seed": 309,
+      "final_population": 497,
+      "cycles": 450000,
+      "runtime_seconds": 11.126047134399414,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f0_50pct_seed309.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.01,
+      "seed": 300,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.039095640182495,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f1_00pct_seed300.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.01,
+      "seed": 301,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.995099782943726,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f1_00pct_seed301.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.01,
+      "seed": 302,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.89999008178711,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f1_00pct_seed302.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.01,
+      "seed": 303,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 10.914735078811646,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f1_00pct_seed303.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.01,
+      "seed": 304,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 10.950172901153564,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f1_00pct_seed304.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.01,
+      "seed": 305,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 10.938621997833252,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f1_00pct_seed305.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.01,
+      "seed": 306,
+      "final_population": 499,
+      "cycles": 450000,
+      "runtime_seconds": 11.081943035125732,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f1_00pct_seed306.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.01,
+      "seed": 307,
+      "final_population": 501,
+      "cycles": 450000,
+      "runtime_seconds": 11.108285188674927,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f1_00pct_seed307.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.01,
+      "seed": 308,
+      "final_population": 495,
+      "cycles": 450000,
+      "runtime_seconds": 10.963457107543945,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f1_00pct_seed308.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.01,
+      "seed": 309,
+      "final_population": 503,
+      "cycles": 450000,
+      "runtime_seconds": 10.998929977416992,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f1_00pct_seed309.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.02,
+      "seed": 300,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 11.117846965789795,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f2_00pct_seed300.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.02,
+      "seed": 301,
+      "final_population": 503,
+      "cycles": 450000,
+      "runtime_seconds": 11.058377981185913,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f2_00pct_seed301.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.02,
+      "seed": 302,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.062086820602417,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f2_00pct_seed302.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.02,
+      "seed": 303,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 11.064313173294067,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f2_00pct_seed303.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.02,
+      "seed": 304,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 10.999188899993896,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f2_00pct_seed304.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.02,
+      "seed": 305,
+      "final_population": 497,
+      "cycles": 450000,
+      "runtime_seconds": 11.097585916519165,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f2_00pct_seed305.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.02,
+      "seed": 306,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.085746049880981,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f2_00pct_seed306.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.02,
+      "seed": 307,
+      "final_population": 500,
+      "cycles": 450000,
+      "runtime_seconds": 11.013174057006836,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f2_00pct_seed307.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.02,
+      "seed": 308,
+      "final_population": 502,
+      "cycles": 450000,
+      "runtime_seconds": 11.039648056030273,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f2_00pct_seed308.db"
+    },
+    {
+      "topology": "RANDOM_GRAPH",
+      "frequency": 0.02,
+      "seed": 309,
+      "final_population": 498,
+      "cycles": 450000,
+      "runtime_seconds": 10.935831069946289,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c276_UNIV_TOPO_RANDOM_GRAPH_f2_00pct_seed309.db"
+    }
+  ]
+}

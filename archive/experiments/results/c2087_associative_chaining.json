@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T01:13:30.828512"
+  },
+  "chains": [
+    {
+      "chain_length": 2,
+      "direct_accuracy": 1.0,
+      "chained_accuracy": 1.0
+    },
+    {
+      "chain_length": 3,
+      "direct_accuracy": 0.6666666666666666,
+      "chained_accuracy": 0.5
+    },
+    {
+      "chain_length": 4,
+      "direct_accuracy": 0.85,
+      "chained_accuracy": 0.6
+    },
+    {
+      "chain_length": 5,
+      "direct_accuracy": 1.0,
+      "chained_accuracy": 1.0
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "2-hop chaining works: 100%",
+      "Max viable chain: 5 hops"
+    ],
+    "chaining_works": true
+  }
+}

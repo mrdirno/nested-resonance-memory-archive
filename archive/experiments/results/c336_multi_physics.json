@@ -1,0 +1,8 @@
+{
+  "cycle": 336,
+  "fluid_phase": 5.836653075853022,
+  "plasma_phase": 5.612259324780638,
+  "fluid_verification": 1.0,
+  "plasma_verification": 1.0,
+  "success": true
+}

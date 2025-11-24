@@ -1,0 +1,1471 @@
+{
+  "cycle_id": "C1644",
+  "magnitude": 0.25,
+  "n_levels_tested": [
+    3,
+    5,
+    7,
+    9
+  ],
+  "seeds_per_condition": 30,
+  "rates": {
+    "3": {
+      "1.0": 0.8,
+      "0.5": 1.0
+    },
+    "5": {
+      "1.0": 0.6666666666666666,
+      "0.5": 1.0
+    },
+    "7": {
+      "1.0": 0.7333333333333333,
+      "0.5": 1.0
+    },
+    "9": {
+      "1.0": 0.8,
+      "0.5": 1.0
+    }
+  },
+  "results": [
+    {
+      "seed": 150001,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150002,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150003,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150004,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150005,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150006,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150007,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150008,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150009,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150010,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150011,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150012,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150013,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150014,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150015,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150016,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150017,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150018,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150019,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150020,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150021,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150022,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150023,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150024,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150025,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150026,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150027,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150028,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150029,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150030,
+      "n_levels": 3,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150001,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150002,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150003,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150004,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150005,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150006,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150007,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150008,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150009,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150010,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150011,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150012,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150013,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150014,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150015,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150016,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150017,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150018,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150019,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150020,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150021,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150022,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150023,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150024,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150025,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150026,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150027,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150028,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150029,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150030,
+      "n_levels": 3,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150001,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150002,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150003,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150004,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150005,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150006,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150007,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150008,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150009,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150010,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150011,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150012,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150013,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150014,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150015,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150016,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150017,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150018,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150019,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150020,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150021,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150022,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150023,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150024,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150025,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150026,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150027,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150028,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150029,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150030,
+      "n_levels": 5,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150001,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150002,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150003,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150004,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150005,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150006,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150007,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150008,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150009,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150010,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150011,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150012,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150013,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150014,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150015,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150016,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150017,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150018,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150019,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150020,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150021,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150022,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150023,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150024,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150025,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150026,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150027,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150028,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150029,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150030,
+      "n_levels": 5,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150001,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150002,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150003,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150004,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150005,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150006,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150007,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150008,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150009,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150010,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150011,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150012,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150013,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150014,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150015,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150016,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150017,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150018,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150019,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150020,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150021,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150022,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150023,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150024,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150025,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150026,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150027,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150028,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150029,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150030,
+      "n_levels": 7,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150001,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150002,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150003,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150004,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150005,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150006,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150007,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150008,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150009,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150010,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150011,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150012,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150013,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150014,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150015,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150016,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150017,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150018,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150019,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150020,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150021,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150022,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150023,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150024,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150025,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150026,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150027,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150028,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150029,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150030,
+      "n_levels": 7,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150001,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150002,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150003,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150004,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150005,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150006,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150007,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150008,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150009,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150010,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150011,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150012,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150013,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150014,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150015,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150016,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150017,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150018,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150019,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150020,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150021,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150022,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150023,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150024,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150025,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150026,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150027,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150028,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150029,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": true
+    },
+    {
+      "seed": 150030,
+      "n_levels": 9,
+      "attack_mult": 1.0,
+      "coexist": false
+    },
+    {
+      "seed": 150001,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150002,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150003,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150004,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150005,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150006,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150007,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150008,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150009,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150010,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150011,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150012,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150013,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150014,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150015,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150016,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150017,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150018,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150019,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150020,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150021,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150022,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150023,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150024,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150025,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150026,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150027,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150028,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150029,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    },
+    {
+      "seed": 150030,
+      "n_levels": 9,
+      "attack_mult": 0.5,
+      "coexist": true
+    }
+  ]
+}

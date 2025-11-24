@@ -1,0 +1,90 @@
+{
+  "metadata": {
+    "num_trials": 3,
+    "num_cycles": 200,
+    "timestamp": "2025-11-22T04:21:12.086933"
+  },
+  "tests": [
+    {
+      "d": 512,
+      "n_items": 10,
+      "pre_accuracy": 0.7999999999999999,
+      "post_accuracy": 1.0,
+      "delta": 0.20000000000000007
+    },
+    {
+      "d": 512,
+      "n_items": 16,
+      "pre_accuracy": 0.5,
+      "post_accuracy": 0.8333333333333334,
+      "delta": 0.33333333333333337
+    },
+    {
+      "d": 512,
+      "n_items": 21,
+      "pre_accuracy": 0.34920634920634913,
+      "post_accuracy": 0.6190476190476191,
+      "delta": 0.26984126984126994
+    },
+    {
+      "d": 1024,
+      "n_items": 10,
+      "pre_accuracy": 0.8666666666666667,
+      "post_accuracy": 1.0,
+      "delta": 0.1333333333333333
+    },
+    {
+      "d": 1024,
+      "n_items": 16,
+      "pre_accuracy": 0.5625,
+      "post_accuracy": 0.8333333333333334,
+      "delta": 0.27083333333333337
+    },
+    {
+      "d": 1024,
+      "n_items": 32,
+      "pre_accuracy": 0.28125,
+      "post_accuracy": 0.4375,
+      "delta": 0.15625
+    },
+    {
+      "d": 1024,
+      "n_items": 43,
+      "pre_accuracy": 0.18604651162790697,
+      "post_accuracy": 0.29457364341085274,
+      "delta": 0.10852713178294576
+    },
+    {
+      "d": 2048,
+      "n_items": 16,
+      "pre_accuracy": 0.5416666666666666,
+      "post_accuracy": 0.8541666666666666,
+      "delta": 0.3125
+    },
+    {
+      "d": 2048,
+      "n_items": 32,
+      "pre_accuracy": 0.2916666666666667,
+      "post_accuracy": 0.3645833333333333,
+      "delta": 0.07291666666666663
+    },
+    {
+      "d": 2048,
+      "n_items": 64,
+      "pre_accuracy": 0.11458333333333333,
+      "post_accuracy": 0.1875,
+      "delta": 0.07291666666666667
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Pre-op fails at high items: 10 items at D=512",
+      "D=512: avg degradation = +27%",
+      "D=1024: avg degradation = +17%",
+      "D=2048: avg degradation = +15%",
+      "DIAGNOSIS: Binding interference at storage, not operation"
+    ],
+    "pre_op_good": false,
+    "degradation": false
+  }
+}

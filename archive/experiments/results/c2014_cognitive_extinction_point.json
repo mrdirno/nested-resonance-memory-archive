@@ -1,0 +1,14 @@
+{
+  "cycle": 2014,
+  "experiment": "Cognitive Extinction Point",
+  "timestamp": "2025-11-21T16:15:00",
+  "findings": {
+    "baseline_extinction": 0.105,
+    "cognitive_extinction": 0.22,
+    "extension_factor": 2.1,
+    "survival_at_e_20": 1.0,
+    "survival_at_e_25": 0.0
+  },
+  "principle": "PRIN-COGNITIVE-EXTENSION-FACTOR: Simple cognitive control approximately doubles the survivable metabolic stress (from 0.10 to 0.22)",
+  "mechanism": "Adaptive metabolism reduces effective consumption to 0.3x in emergencies, shifting system back into viable region"
+}

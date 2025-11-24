@@ -1,0 +1,1035 @@
+{
+  "cycle_id": "C1641",
+  "magnitude": 0.25,
+  "seeds_per_condition": 50,
+  "conditions": {
+    "baseline": {
+      "attack_mult": 1.0,
+      "energy_mult": 1.0
+    },
+    "attack_only": {
+      "attack_mult": 0.5,
+      "energy_mult": 1.0
+    },
+    "energy_only": {
+      "attack_mult": 1.0,
+      "energy_mult": 0.5
+    },
+    "combined": {
+      "attack_mult": 0.5,
+      "energy_mult": 0.5
+    }
+  },
+  "rates": {
+    "baseline": 0.5,
+    "attack_only": 0.98,
+    "energy_only": 0.58,
+    "combined": 0.98
+  },
+  "optimal": {
+    "condition": "attack_only",
+    "rate": 0.98
+  },
+  "results": [
+    {
+      "seed": 120001,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120002,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120003,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120004,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120005,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120006,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120007,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120008,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120009,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120010,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120011,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120012,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120013,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120014,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120015,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120016,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120017,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120018,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120019,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120020,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120021,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120022,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120023,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120024,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120025,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120026,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120027,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120028,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120029,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120030,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120031,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120032,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120033,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120034,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120035,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120036,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120037,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120038,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120039,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120040,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120041,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120042,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120043,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120044,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120045,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120046,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120047,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120048,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120049,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 120050,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 120001,
+      "condition": "attack_only",
+      "coexist": false
+    },
+    {
+      "seed": 120002,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120003,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120004,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120005,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120006,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120007,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120008,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120009,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120010,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120011,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120012,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120013,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120014,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120015,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120016,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120017,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120018,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120019,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120020,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120021,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120022,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120023,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120024,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120025,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120026,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120027,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120028,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120029,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120030,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120031,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120032,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120033,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120034,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120035,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120036,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120037,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120038,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120039,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120040,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120041,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120042,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120043,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120044,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120045,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120046,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120047,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120048,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120049,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120050,
+      "condition": "attack_only",
+      "coexist": true
+    },
+    {
+      "seed": 120001,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120002,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120003,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120004,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120005,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120006,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120007,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120008,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120009,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120010,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120011,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120012,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120013,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120014,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120015,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120016,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120017,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120018,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120019,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120020,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120021,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120022,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120023,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120024,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120025,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120026,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120027,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120028,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120029,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120030,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120031,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120032,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120033,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120034,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120035,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120036,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120037,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120038,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120039,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120040,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120041,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120042,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120043,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120044,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120045,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120046,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120047,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120048,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120049,
+      "condition": "energy_only",
+      "coexist": true
+    },
+    {
+      "seed": 120050,
+      "condition": "energy_only",
+      "coexist": false
+    },
+    {
+      "seed": 120001,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120002,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120003,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120004,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120005,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120006,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120007,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120008,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120009,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120010,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120011,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120012,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120013,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120014,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120015,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120016,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120017,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120018,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120019,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120020,
+      "condition": "combined",
+      "coexist": false
+    },
+    {
+      "seed": 120021,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120022,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120023,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120024,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120025,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120026,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120027,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120028,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120029,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120030,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120031,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120032,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120033,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120034,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120035,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120036,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120037,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120038,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120039,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120040,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120041,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120042,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120043,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120044,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120045,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120046,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120047,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120048,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120049,
+      "condition": "combined",
+      "coexist": true
+    },
+    {
+      "seed": 120050,
+      "condition": "combined",
+      "coexist": true
+    }
+  ]
+}

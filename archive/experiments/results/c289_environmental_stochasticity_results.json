@@ -1,0 +1,191 @@
+{
+  "cycle_id": "C289",
+  "cycle_name": "Environmental Stochasticity",
+  "date": "2025-11-20T00:47:57.999545",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 20000,
+    "n_populations": 5,
+    "initial_agents_per_pop": 20,
+    "f_intra": 0.005,
+    "energy": {
+      "E_consume": 0.3,
+      "E_recharge": 0.5,
+      "spawn": 0.5
+    },
+    "density_factor": 0.1,
+    "base_K": 500,
+    "fluctuation_period": 1000,
+    "migration_rate": 0.05,
+    "fluctuation_amplitudes": [
+      0.0,
+      0.1,
+      0.25,
+      0.5
+    ],
+    "seeds": [
+      100,
+      101,
+      102
+    ]
+  },
+  "results": [
+    {
+      "amplitude": 0.0,
+      "seed": 100,
+      "final_total": 106,
+      "mean_total": 121.05,
+      "std_total": 7.921331958704925,
+      "cv_total": 0.06543851267001177,
+      "mean_K": 500.0,
+      "theoretical": 124.99999999999999,
+      "correlation": 0.0,
+      "runtime_seconds": 1.3392338752746582,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp0_seed100.db"
+    },
+    {
+      "amplitude": 0.0,
+      "seed": 101,
+      "final_total": 115,
+      "mean_total": 115.7,
+      "std_total": 9.566085928947116,
+      "cv_total": 0.08268008581631042,
+      "mean_K": 500.0,
+      "theoretical": 124.99999999999999,
+      "correlation": 0.0,
+      "runtime_seconds": 1.3387682437896729,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp0_seed101.db"
+    },
+    {
+      "amplitude": 0.0,
+      "seed": 102,
+      "final_total": 121,
+      "mean_total": 116.55,
+      "std_total": 9.886733535399848,
+      "cv_total": 0.08482825856198926,
+      "mean_K": 500.0,
+      "theoretical": 124.99999999999999,
+      "correlation": 0.0,
+      "runtime_seconds": 1.367253065109253,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp0_seed102.db"
+    },
+    {
+      "amplitude": 0.1,
+      "seed": 100,
+      "final_total": 105,
+      "mean_total": 123.25,
+      "std_total": 15.358629496149714,
+      "cv_total": 0.12461362674360822,
+      "mean_K": 500.0000000000001,
+      "theoretical": 125.00000000000001,
+      "correlation": -0.010522967304629026,
+      "runtime_seconds": 1.467844009399414,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp10_seed100.db"
+    },
+    {
+      "amplitude": 0.1,
+      "seed": 101,
+      "final_total": 116,
+      "mean_total": 120.2,
+      "std_total": 10.979981785048643,
+      "cv_total": 0.09134760220506359,
+      "mean_K": 500.0000000000001,
+      "theoretical": 125.00000000000001,
+      "correlation": 0.5497335429676509,
+      "runtime_seconds": 1.438967227935791,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp10_seed101.db"
+    },
+    {
+      "amplitude": 0.1,
+      "seed": 102,
+      "final_total": 102,
+      "mean_total": 124.85,
+      "std_total": 14.192515633248393,
+      "cv_total": 0.11367653691027949,
+      "mean_K": 500.0000000000001,
+      "theoretical": 125.00000000000001,
+      "correlation": 0.08279001224450444,
+      "runtime_seconds": 1.488253116607666,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp10_seed102.db"
+    },
+    {
+      "amplitude": 0.25,
+      "seed": 100,
+      "final_total": 109,
+      "mean_total": 113.5,
+      "std_total": 16.381391882254697,
+      "cv_total": 0.14432944389651714,
+      "mean_K": 500.0000000000001,
+      "theoretical": 125.00000000000001,
+      "correlation": 0.17099418794833154,
+      "runtime_seconds": 1.449131965637207,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp25_seed100.db"
+    },
+    {
+      "amplitude": 0.25,
+      "seed": 101,
+      "final_total": 108,
+      "mean_total": 113.9,
+      "std_total": 13.345036530485782,
+      "cv_total": 0.11716449982867236,
+      "mean_K": 500.0000000000001,
+      "theoretical": 125.00000000000001,
+      "correlation": 0.11177373351600124,
+      "runtime_seconds": 1.42209792137146,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp25_seed101.db"
+    },
+    {
+      "amplitude": 0.25,
+      "seed": 102,
+      "final_total": 92,
+      "mean_total": 109.6,
+      "std_total": 14.221111067704943,
+      "cv_total": 0.12975466302650496,
+      "mean_K": 500.0000000000001,
+      "theoretical": 125.00000000000001,
+      "correlation": 0.5900167542227138,
+      "runtime_seconds": 1.4515929222106934,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp25_seed102.db"
+    },
+    {
+      "amplitude": 0.5,
+      "seed": 100,
+      "final_total": 84,
+      "mean_total": 110.5,
+      "std_total": 29.280539612513973,
+      "cv_total": 0.264982258936778,
+      "mean_K": 500.0000000000003,
+      "theoretical": 125.00000000000006,
+      "correlation": 0.6014531244706375,
+      "runtime_seconds": 1.3851778507232666,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp50_seed100.db"
+    },
+    {
+      "amplitude": 0.5,
+      "seed": 101,
+      "final_total": 79,
+      "mean_total": 115.65,
+      "std_total": 30.335251770835857,
+      "cv_total": 0.2623022202406905,
+      "mean_K": 500.0000000000003,
+      "theoretical": 125.00000000000006,
+      "correlation": 0.6111781191843532,
+      "runtime_seconds": 1.3606271743774414,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp50_seed101.db"
+    },
+    {
+      "amplitude": 0.5,
+      "seed": 102,
+      "final_total": 72,
+      "mean_total": 103.9,
+      "std_total": 24.355492193753754,
+      "cv_total": 0.2344128218840592,
+      "mean_K": 500.0000000000003,
+      "theoretical": 125.00000000000006,
+      "correlation": 0.40767232980955653,
+      "runtime_seconds": 1.3483881950378418,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c289_amp50_seed102.db"
+    }
+  ]
+}

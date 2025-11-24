@@ -1,0 +1,48 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:23:04.763690"
+  },
+  "comparisons": [
+    {
+      "n_items": 16,
+      "single": 0.7708333333333334,
+      "k2": 0.9791666666666666,
+      "k4": 1.0,
+      "k8": 1.0
+    },
+    {
+      "n_items": 32,
+      "single": 0.4270833333333333,
+      "k2": 0.7604166666666666,
+      "k4": 0.9791666666666666,
+      "k8": 1.0
+    },
+    {
+      "n_items": 48,
+      "single": 0.2638888888888889,
+      "k2": 0.5416666666666666,
+      "k4": 0.875,
+      "k8": 1.0
+    },
+    {
+      "n_items": 64,
+      "single": 0.203125,
+      "k2": 0.40625,
+      "k4": 0.7239583333333334,
+      "k8": 0.953125
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "32 items: single=43%, K=8=100%",
+      "48 items: single=26%, K=8=100%",
+      "64 items: single=20%, K=8=95%",
+      "SUCCESS: K=8 memories achieves 80%+ at 64 items!",
+      "K=8 provides 4.7\u00d7 accuracy improvement at high capacity"
+    ],
+    "scales": true
+  }
+}

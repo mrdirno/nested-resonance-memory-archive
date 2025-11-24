@@ -1,0 +1,45 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:40:11.085847"
+  },
+  "tests": [
+    {
+      "depth": 3,
+      "branching": 2,
+      "num_nodes": 15,
+      "num_edges": 14,
+      "accuracy": 0.2857142857142857
+    },
+    {
+      "depth": 4,
+      "branching": 2,
+      "num_nodes": 31,
+      "num_edges": 30,
+      "accuracy": 0.3111111111111111
+    },
+    {
+      "depth": 3,
+      "branching": 3,
+      "num_nodes": 40,
+      "num_edges": 39,
+      "accuracy": 0.23076923076923075
+    },
+    {
+      "depth": 2,
+      "branching": 5,
+      "num_nodes": 31,
+      "num_edges": 30,
+      "accuracy": 0.16666666666666666
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Tree storage limited: 25% avg",
+      "Binary trees: 30%",
+      "Best: depth=4, branch=2 at 31%"
+    ]
+  }
+}

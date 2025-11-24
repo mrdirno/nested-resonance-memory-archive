@@ -1,0 +1,158 @@
+{
+  "cycle_id": "C309",
+  "cycle_name": "Strong Omnivory",
+  "date": "2025-11-20T01:42:10.022544",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 30000,
+    "top_attack_meso": 0.005,
+    "conditions": [
+      {
+        "name": "weak_0.001",
+        "top_attack_prey": 0.001
+      },
+      {
+        "name": "medium_0.002",
+        "top_attack_prey": 0.002
+      },
+      {
+        "name": "strong_0.003",
+        "top_attack_prey": 0.003
+      }
+    ],
+    "seeds": [
+      1600,
+      1601,
+      1602
+    ]
+  },
+  "results": [
+    {
+      "condition": "weak_0.001",
+      "top_attack_prey": 0.001,
+      "seed": 1600,
+      "prey_final": 0.0,
+      "meso_final": 0.0,
+      "top_final": 0.0,
+      "prey_survive": false,
+      "meso_survive": false,
+      "top_survive": false,
+      "coexist": false,
+      "runtime_seconds": 0.04471302032470703,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c309_weak_0.001_seed1600.db"
+    },
+    {
+      "condition": "weak_0.001",
+      "top_attack_prey": 0.001,
+      "seed": 1601,
+      "prey_final": 600.0,
+      "meso_final": 0.0,
+      "top_final": 0.0,
+      "prey_survive": true,
+      "meso_survive": false,
+      "top_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.91200590133667,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c309_weak_0.001_seed1601.db"
+    },
+    {
+      "condition": "weak_0.001",
+      "top_attack_prey": 0.001,
+      "seed": 1602,
+      "prey_final": 600.0,
+      "meso_final": 0.0,
+      "top_final": 0.0,
+      "prey_survive": true,
+      "meso_survive": false,
+      "top_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.9100778102874756,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c309_weak_0.001_seed1602.db"
+    },
+    {
+      "condition": "medium_0.002",
+      "top_attack_prey": 0.002,
+      "seed": 1600,
+      "prey_final": 0.0,
+      "meso_final": 0.0,
+      "top_final": 0.0,
+      "prey_survive": false,
+      "meso_survive": false,
+      "top_survive": false,
+      "coexist": false,
+      "runtime_seconds": 0.042555809020996094,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c309_medium_0.002_seed1600.db"
+    },
+    {
+      "condition": "medium_0.002",
+      "top_attack_prey": 0.002,
+      "seed": 1601,
+      "prey_final": 0.0,
+      "meso_final": 0.0,
+      "top_final": 0.0,
+      "prey_survive": false,
+      "meso_survive": false,
+      "top_survive": false,
+      "coexist": false,
+      "runtime_seconds": 0.04875802993774414,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c309_medium_0.002_seed1601.db"
+    },
+    {
+      "condition": "medium_0.002",
+      "top_attack_prey": 0.002,
+      "seed": 1602,
+      "prey_final": 0.0,
+      "meso_final": 0.0,
+      "top_final": 0.0,
+      "prey_survive": false,
+      "meso_survive": false,
+      "top_survive": false,
+      "coexist": false,
+      "runtime_seconds": 0.02805495262145996,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c309_medium_0.002_seed1602.db"
+    },
+    {
+      "condition": "strong_0.003",
+      "top_attack_prey": 0.003,
+      "seed": 1600,
+      "prey_final": 0.0,
+      "meso_final": 0.0,
+      "top_final": 0.0,
+      "prey_survive": false,
+      "meso_survive": false,
+      "top_survive": false,
+      "coexist": false,
+      "runtime_seconds": 0.029843807220458984,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c309_strong_0.003_seed1600.db"
+    },
+    {
+      "condition": "strong_0.003",
+      "top_attack_prey": 0.003,
+      "seed": 1601,
+      "prey_final": 0.0,
+      "meso_final": 0.0,
+      "top_final": 0.0,
+      "prey_survive": false,
+      "meso_survive": false,
+      "top_survive": false,
+      "coexist": false,
+      "runtime_seconds": 0.08199691772460938,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c309_strong_0.003_seed1601.db"
+    },
+    {
+      "condition": "strong_0.003",
+      "top_attack_prey": 0.003,
+      "seed": 1602,
+      "prey_final": 0.0,
+      "meso_final": 0.0,
+      "top_final": 0.0,
+      "prey_survive": false,
+      "meso_survive": false,
+      "top_survive": false,
+      "coexist": false,
+      "runtime_seconds": 0.040325164794921875,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c309_strong_0.003_seed1602.db"
+    }
+  ]
+}

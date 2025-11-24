@@ -1,0 +1,182 @@
+[
+  {
+    "seed": 500,
+    "logic_case": "single",
+    "response_amp": 59.564328790705765,
+    "runtime_seconds": 0.06846809387207031
+  },
+  {
+    "seed": 501,
+    "logic_case": "single",
+    "response_amp": 61.116832631796704,
+    "runtime_seconds": 0.06688094139099121
+  },
+  {
+    "seed": 502,
+    "logic_case": "single",
+    "response_amp": 63.18324411851973,
+    "runtime_seconds": 0.06756019592285156
+  },
+  {
+    "seed": 503,
+    "logic_case": "single",
+    "response_amp": 62.37916328845987,
+    "runtime_seconds": 0.06898093223571777
+  },
+  {
+    "seed": 504,
+    "logic_case": "single",
+    "response_amp": 62.84000801194021,
+    "runtime_seconds": 0.06928491592407227
+  },
+  {
+    "seed": 505,
+    "logic_case": "single",
+    "response_amp": 61.348568853443346,
+    "runtime_seconds": 0.07100296020507812
+  },
+  {
+    "seed": 506,
+    "logic_case": "single",
+    "response_amp": 59.18412913771111,
+    "runtime_seconds": 0.06747102737426758
+  },
+  {
+    "seed": 507,
+    "logic_case": "single",
+    "response_amp": 61.73704032715708,
+    "runtime_seconds": 0.06833195686340332
+  },
+  {
+    "seed": 508,
+    "logic_case": "single",
+    "response_amp": 60.838789032907286,
+    "runtime_seconds": 0.06825995445251465
+  },
+  {
+    "seed": 509,
+    "logic_case": "single",
+    "response_amp": 62.86876184103582,
+    "runtime_seconds": 0.06807708740234375
+  },
+  {
+    "seed": 500,
+    "logic_case": "constructive",
+    "response_amp": 123.1307546777538,
+    "runtime_seconds": 0.06928706169128418
+  },
+  {
+    "seed": 501,
+    "logic_case": "constructive",
+    "response_amp": 121.48500585768633,
+    "runtime_seconds": 0.06778383255004883
+  },
+  {
+    "seed": 502,
+    "logic_case": "constructive",
+    "response_amp": 121.96263360129097,
+    "runtime_seconds": 0.06780695915222168
+  },
+  {
+    "seed": 503,
+    "logic_case": "constructive",
+    "response_amp": 119.98820608324395,
+    "runtime_seconds": 0.06824207305908203
+  },
+  {
+    "seed": 504,
+    "logic_case": "constructive",
+    "response_amp": 121.74278783810963,
+    "runtime_seconds": 0.06817007064819336
+  },
+  {
+    "seed": 505,
+    "logic_case": "constructive",
+    "response_amp": 122.46023103135853,
+    "runtime_seconds": 0.07230997085571289
+  },
+  {
+    "seed": 506,
+    "logic_case": "constructive",
+    "response_amp": 122.73653989537175,
+    "runtime_seconds": 0.06870603561401367
+  },
+  {
+    "seed": 507,
+    "logic_case": "constructive",
+    "response_amp": 123.56811886474294,
+    "runtime_seconds": 0.06757092475891113
+  },
+  {
+    "seed": 508,
+    "logic_case": "constructive",
+    "response_amp": 121.933066458144,
+    "runtime_seconds": 0.06911420822143555
+  },
+  {
+    "seed": 509,
+    "logic_case": "constructive",
+    "response_amp": 123.63524028805607,
+    "runtime_seconds": 0.06733918190002441
+  },
+  {
+    "seed": 500,
+    "logic_case": "destructive",
+    "response_amp": 0.1160392283520867,
+    "runtime_seconds": 0.06934785842895508
+  },
+  {
+    "seed": 501,
+    "logic_case": "destructive",
+    "response_amp": 1.5189187103498192,
+    "runtime_seconds": 0.0691080093383789
+  },
+  {
+    "seed": 502,
+    "logic_case": "destructive",
+    "response_amp": 1.367709431237443,
+    "runtime_seconds": 0.06964421272277832
+  },
+  {
+    "seed": 503,
+    "logic_case": "destructive",
+    "response_amp": 1.7646956839833454,
+    "runtime_seconds": 0.06994891166687012
+  },
+  {
+    "seed": 504,
+    "logic_case": "destructive",
+    "response_amp": 1.8061804194121238,
+    "runtime_seconds": 0.06929898262023926
+  },
+  {
+    "seed": 505,
+    "logic_case": "destructive",
+    "response_amp": 0.7375283933839243,
+    "runtime_seconds": 0.07130193710327148
+  },
+  {
+    "seed": 506,
+    "logic_case": "destructive",
+    "response_amp": 2.00030429650041,
+    "runtime_seconds": 0.06780529022216797
+  },
+  {
+    "seed": 507,
+    "logic_case": "destructive",
+    "response_amp": 0.7675698227418076,
+    "runtime_seconds": 0.06727194786071777
+  },
+  {
+    "seed": 508,
+    "logic_case": "destructive",
+    "response_amp": 2.0743243572614123,
+    "runtime_seconds": 0.06793713569641113
+  },
+  {
+    "seed": 509,
+    "logic_case": "destructive",
+    "response_amp": 2.6491544645797345,
+    "runtime_seconds": 0.0681312084197998
+  }
+]

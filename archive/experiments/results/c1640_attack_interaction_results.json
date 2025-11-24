@@ -1,0 +1,1118 @@
+{
+  "cycle_id": "C1640",
+  "attack_multipliers": [
+    0.5,
+    1.0,
+    1.5
+  ],
+  "magnitudes": [
+    0.15,
+    0.25,
+    0.35
+  ],
+  "seeds_per_cell": 20,
+  "grid": {
+    "0.5": {
+      "0.15": 0.7,
+      "0.25": 1.0,
+      "0.35": 1.0
+    },
+    "1.0": {
+      "0.15": 0.9,
+      "0.25": 0.65,
+      "0.35": 0.9
+    },
+    "1.5": {
+      "0.15": 0.35,
+      "0.25": 0.2,
+      "0.35": 0.25
+    }
+  },
+  "optimal": {
+    "attack_mult": 0.5,
+    "magnitude": 0.25,
+    "rate": 1.0
+  },
+  "results": [
+    {
+      "seed": 110001,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110002,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110003,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110004,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110005,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110006,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110007,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110008,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110009,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110010,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110011,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110012,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110013,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110014,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110015,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110016,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110017,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110018,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110019,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110020,
+      "attack_mult": 0.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110001,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110002,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110003,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110004,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110005,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110006,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110007,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110008,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110009,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110010,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110011,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110012,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110013,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110014,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110015,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110016,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110017,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110018,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110019,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110020,
+      "attack_mult": 0.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110001,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110002,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110003,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110004,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110005,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110006,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110007,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110008,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110009,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110010,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110011,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110012,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110013,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110014,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110015,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110016,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110017,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110018,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110019,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110020,
+      "attack_mult": 0.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110001,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110002,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110003,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110004,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110005,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110006,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110007,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110008,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110009,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110010,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110011,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110012,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110013,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110014,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110015,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110016,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110017,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110018,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110019,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110020,
+      "attack_mult": 1.0,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110001,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110002,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110003,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110004,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110005,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110006,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110007,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110008,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110009,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110010,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110011,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110012,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110013,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110014,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110015,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110016,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110017,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110018,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110019,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110020,
+      "attack_mult": 1.0,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110001,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110002,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110003,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110004,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110005,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110006,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110007,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110008,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110009,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110010,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110011,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110012,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110013,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110014,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110015,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110016,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110017,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110018,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110019,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110020,
+      "attack_mult": 1.0,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110001,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110002,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110003,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110004,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110005,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110006,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110007,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110008,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110009,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110010,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110011,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110012,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110013,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110014,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110015,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110016,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": true
+    },
+    {
+      "seed": 110017,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110018,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110019,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110020,
+      "attack_mult": 1.5,
+      "magnitude": 0.15,
+      "coexist": false
+    },
+    {
+      "seed": 110001,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110002,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110003,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110004,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110005,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110006,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110007,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110008,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110009,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110010,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110011,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110012,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110013,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110014,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110015,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110016,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110017,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110018,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": false
+    },
+    {
+      "seed": 110019,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110020,
+      "attack_mult": 1.5,
+      "magnitude": 0.25,
+      "coexist": true
+    },
+    {
+      "seed": 110001,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110002,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110003,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110004,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110005,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110006,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110007,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110008,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110009,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110010,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110011,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110012,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110013,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110014,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110015,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": true
+    },
+    {
+      "seed": 110016,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110017,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110018,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110019,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    },
+    {
+      "seed": 110020,
+      "attack_mult": 1.5,
+      "magnitude": 0.35,
+      "coexist": false
+    }
+  ]
+}

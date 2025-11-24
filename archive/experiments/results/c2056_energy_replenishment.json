@@ -1,0 +1,37 @@
+{
+  "cycle": 2056,
+  "experiment": "Energy Replenishment",
+  "timestamp": "2025-11-21T17:44:47.767993",
+  "results": [
+    {
+      "replenish_rate": 0.0,
+      "final_depth": 0.0841266398242082,
+      "avg_depth": 0.06122837493431442,
+      "final_pop": 48.2
+    },
+    {
+      "replenish_rate": 0.005,
+      "final_depth": 6.9,
+      "avg_depth": 6.9,
+      "final_pop": 1.0
+    },
+    {
+      "replenish_rate": 0.01,
+      "final_depth": 6.4,
+      "avg_depth": 6.4,
+      "final_pop": 1.0
+    },
+    {
+      "replenish_rate": 0.02,
+      "final_depth": 7.0,
+      "avg_depth": 7.0,
+      "final_pop": 1.0
+    },
+    {
+      "replenish_rate": 0.05,
+      "final_depth": 6.1,
+      "avg_depth": 6.1,
+      "final_pop": 1.0
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "experiment": "C315_metastability_test",
+  "parameters": {
+    "n_agents": 50,
+    "seeds": 10,
+    "steps": 150,
+    "test_cohesions": [
+      0.15,
+      0.2,
+      0.25
+    ]
+  },
+  "results": [
+    {
+      "cohesion": 0.15,
+      "dispersed_mean": 0.976,
+      "dispersed_std": 0.038,
+      "clustered_mean": 0.927,
+      "clustered_std": 0.096,
+      "difference": 0.048
+    },
+    {
+      "cohesion": 0.2,
+      "dispersed_mean": 0.964,
+      "dispersed_std": 0.049,
+      "clustered_mean": 0.98,
+      "clustered_std": 0.06,
+      "difference": 0.016
+    },
+    {
+      "cohesion": 0.25,
+      "dispersed_mean": 0.982,
+      "dispersed_std": 0.03,
+      "clustered_mean": 0.97,
+      "clustered_std": 0.064,
+      "difference": 0.012
+    }
+  ],
+  "analysis": {
+    "max_difference": 0.048,
+    "max_diff_cohesion": 0.15,
+    "avg_difference": 0.0253,
+    "metastability_confirmed": false
+  }
+}

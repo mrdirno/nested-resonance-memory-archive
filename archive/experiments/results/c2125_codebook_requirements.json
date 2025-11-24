@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "codebook_size": 10,
+      "accuracy": 0.992
+    },
+    {
+      "codebook_size": 50,
+      "accuracy": 1.0
+    },
+    {
+      "codebook_size": 100,
+      "accuracy": 1.0
+    },
+    {
+      "codebook_size": 500,
+      "accuracy": 1.0
+    },
+    {
+      "codebook_size": 1000,
+      "accuracy": 1.0
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+[
+  {
+    "seed": 400,
+    "condition": "sub",
+    "entrainment_score": 0.26330901982431165,
+    "runtime_seconds": 0.07187104225158691
+  },
+  {
+    "seed": 401,
+    "condition": "sub",
+    "entrainment_score": 0.3480367666020698,
+    "runtime_seconds": 0.07168912887573242
+  },
+  {
+    "seed": 402,
+    "condition": "sub",
+    "entrainment_score": 0.39153380229505724,
+    "runtime_seconds": 0.07015824317932129
+  },
+  {
+    "seed": 403,
+    "condition": "sub",
+    "entrainment_score": 0.38707735739108523,
+    "runtime_seconds": 0.06944465637207031
+  },
+  {
+    "seed": 404,
+    "condition": "sub",
+    "entrainment_score": 0.32553108168702183,
+    "runtime_seconds": 0.06991791725158691
+  },
+  {
+    "seed": 405,
+    "condition": "sub",
+    "entrainment_score": 0.30281960123978013,
+    "runtime_seconds": 0.07052803039550781
+  },
+  {
+    "seed": 406,
+    "condition": "sub",
+    "entrainment_score": 0.5062377022258555,
+    "runtime_seconds": 0.06985068321228027
+  },
+  {
+    "seed": 407,
+    "condition": "sub",
+    "entrainment_score": 0.3274666091863303,
+    "runtime_seconds": 0.07057690620422363
+  },
+  {
+    "seed": 408,
+    "condition": "sub",
+    "entrainment_score": 0.4344657704809614,
+    "runtime_seconds": 0.07205677032470703
+  },
+  {
+    "seed": 409,
+    "condition": "sub",
+    "entrainment_score": 0.32914916950703693,
+    "runtime_seconds": 0.06963014602661133
+  },
+  {
+    "seed": 400,
+    "condition": "super",
+    "entrainment_score": 0.4086526807927971,
+    "runtime_seconds": 0.0637509822845459
+  },
+  {
+    "seed": 401,
+    "condition": "super",
+    "entrainment_score": 0.3724109224834796,
+    "runtime_seconds": 0.06387090682983398
+  },
+  {
+    "seed": 402,
+    "condition": "super",
+    "entrainment_score": 0.28309269714097984,
+    "runtime_seconds": 0.06290006637573242
+  },
+  {
+    "seed": 403,
+    "condition": "super",
+    "entrainment_score": 0.32045129150284407,
+    "runtime_seconds": 0.06372189521789551
+  },
+  {
+    "seed": 404,
+    "condition": "super",
+    "entrainment_score": 0.28762808009943264,
+    "runtime_seconds": 0.06368589401245117
+  },
+  {
+    "seed": 405,
+    "condition": "super",
+    "entrainment_score": 0.3886138392289705,
+    "runtime_seconds": 0.06403303146362305
+  },
+  {
+    "seed": 406,
+    "condition": "super",
+    "entrainment_score": 0.37609699318987605,
+    "runtime_seconds": 0.06410503387451172
+  },
+  {
+    "seed": 407,
+    "condition": "super",
+    "entrainment_score": 0.322300144284612,
+    "runtime_seconds": 0.06390500068664551
+  },
+  {
+    "seed": 408,
+    "condition": "super",
+    "entrainment_score": 0.27022132238215807,
+    "runtime_seconds": 0.06396007537841797
+  },
+  {
+    "seed": 409,
+    "condition": "super",
+    "entrainment_score": 0.336924175804303,
+    "runtime_seconds": 0.06355404853820801
+  },
+  {
+    "seed": 400,
+    "condition": "soc",
+    "entrainment_score": 0.3550521617285621,
+    "runtime_seconds": 0.06700778007507324
+  },
+  {
+    "seed": 401,
+    "condition": "soc",
+    "entrainment_score": 0.3339266623718444,
+    "runtime_seconds": 0.06763792037963867
+  },
+  {
+    "seed": 402,
+    "condition": "soc",
+    "entrainment_score": 0.3154566486989292,
+    "runtime_seconds": 0.06760215759277344
+  },
+  {
+    "seed": 403,
+    "condition": "soc",
+    "entrainment_score": 0.3767825654648777,
+    "runtime_seconds": 0.06769394874572754
+  },
+  {
+    "seed": 404,
+    "condition": "soc",
+    "entrainment_score": 0.32578542191956805,
+    "runtime_seconds": 0.06868195533752441
+  },
+  {
+    "seed": 405,
+    "condition": "soc",
+    "entrainment_score": 0.44447214524223766,
+    "runtime_seconds": 0.06827902793884277
+  },
+  {
+    "seed": 406,
+    "condition": "soc",
+    "entrainment_score": 0.32828393821161306,
+    "runtime_seconds": 0.06799578666687012
+  },
+  {
+    "seed": 407,
+    "condition": "soc",
+    "entrainment_score": 0.366979775515128,
+    "runtime_seconds": 0.06783223152160645
+  },
+  {
+    "seed": 408,
+    "condition": "soc",
+    "entrainment_score": 0.32935502045187237,
+    "runtime_seconds": 0.06825971603393555
+  },
+  {
+    "seed": 409,
+    "condition": "soc",
+    "entrainment_score": 0.33778716678829407,
+    "runtime_seconds": 0.06707930564880371
+  }
+]

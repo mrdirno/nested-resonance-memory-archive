@@ -1,0 +1,1515 @@
+{
+  "cycle_id": "C1654",
+  "parameters": {
+    "decay_mult": 0.1,
+    "repro_rate": 0.1
+  },
+  "n_seeds": 100,
+  "coexistence_rate": 0.72,
+  "ci_95": [
+    62.51178763865427,
+    79.86044083240164
+  ],
+  "results": [
+    {
+      "seed": 800001,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 40029,
+      "n_decomps": 39898,
+      "finals": [
+        0.0,
+        1.0,
+        1.6,
+        2.9,
+        6.9
+      ]
+    },
+    {
+      "seed": 800002,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 31643,
+      "n_decomps": 31537,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        2.2,
+        6.4
+      ]
+    },
+    {
+      "seed": 800003,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 29207,
+      "n_decomps": 29093,
+      "finals": [
+        0.0,
+        0.4,
+        2.0,
+        2.2,
+        6.1
+      ]
+    },
+    {
+      "seed": 800004,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 35757,
+      "n_decomps": 35634,
+      "finals": [
+        0.0,
+        1.4,
+        0.8,
+        0.4,
+        7.8
+      ]
+    },
+    {
+      "seed": 800005,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 31664,
+      "n_decomps": 31551,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        2.2,
+        6.4
+      ]
+    },
+    {
+      "seed": 800006,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 30418,
+      "n_decomps": 30298,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.6,
+        7.2
+      ]
+    },
+    {
+      "seed": 800007,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 24902,
+      "n_decomps": 24794,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.6,
+        6.2
+      ]
+    },
+    {
+      "seed": 800008,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 34969,
+      "n_decomps": 34827,
+      "finals": [
+        0.0,
+        0.4,
+        1.4,
+        3.9,
+        7.4
+      ]
+    },
+    {
+      "seed": 800009,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 34479,
+      "n_decomps": 34351,
+      "finals": [
+        2.0,
+        0.0,
+        0.4,
+        1.8,
+        7.5
+      ]
+    },
+    {
+      "seed": 800010,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 31651,
+      "n_decomps": 31539,
+      "finals": [
+        2.0,
+        0.0,
+        0.4,
+        3.2,
+        5.8
+      ]
+    },
+    {
+      "seed": 800011,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 29232,
+      "n_decomps": 29119,
+      "finals": [
+        0.0,
+        0.2,
+        1.1,
+        1.9,
+        6.5
+      ]
+    },
+    {
+      "seed": 800012,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 31648,
+      "n_decomps": 31536,
+      "finals": [
+        0.0,
+        1.0,
+        0.2,
+        3.3,
+        5.8
+      ]
+    },
+    {
+      "seed": 800013,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 36357,
+      "n_decomps": 36191,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.8,
+        10.1
+      ]
+    },
+    {
+      "seed": 800014,
+      "coexist": true,
+      "depths_alive": 5,
+      "hist_len": 300,
+      "n_comps": 37167,
+      "n_decomps": 37053,
+      "finals": [
+        2.0,
+        0.8,
+        0.8,
+        1.5,
+        6.7
+      ]
+    },
+    {
+      "seed": 800015,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 30397,
+      "n_decomps": 30277,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.6,
+        7.2
+      ]
+    },
+    {
+      "seed": 800016,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 22955,
+      "n_decomps": 22835,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.2,
+        7.4
+      ]
+    },
+    {
+      "seed": 800017,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 35767,
+      "n_decomps": 35644,
+      "finals": [
+        0.0,
+        1.8,
+        0.6,
+        1.4,
+        7.3
+      ]
+    },
+    {
+      "seed": 800018,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 24109,
+      "n_decomps": 23998,
+      "finals": [
+        0.0,
+        0.0,
+        0.2,
+        2.1,
+        6.4
+      ]
+    },
+    {
+      "seed": 800019,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 34311,
+      "n_decomps": 34212,
+      "finals": [
+        0.0,
+        1.8,
+        1.2,
+        3.7,
+        4.5
+      ]
+    },
+    {
+      "seed": 800020,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 33265,
+      "n_decomps": 33132,
+      "finals": [
+        2.0,
+        0.0,
+        0.0,
+        1.4,
+        8.3
+      ]
+    },
+    {
+      "seed": 800021,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 42906,
+      "n_decomps": 42760,
+      "finals": [
+        2.0,
+        0.4,
+        1.2,
+        2.6,
+        8.1
+      ]
+    },
+    {
+      "seed": 800022,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27545,
+      "n_decomps": 27444,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.0,
+        6.5
+      ]
+    },
+    {
+      "seed": 800023,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 22932,
+      "n_decomps": 22817,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.6,
+        7.2
+      ]
+    },
+    {
+      "seed": 800024,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 32880,
+      "n_decomps": 32772,
+      "finals": [
+        0.0,
+        2.4,
+        0.3,
+        1.2,
+        6.4
+      ]
+    },
+    {
+      "seed": 800025,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 24132,
+      "n_decomps": 24020,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        1.8,
+        6.5
+      ]
+    },
+    {
+      "seed": 800026,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 27759,
+      "n_decomps": 27637,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.4,
+        7.8
+      ]
+    },
+    {
+      "seed": 800027,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 26288,
+      "n_decomps": 26189,
+      "finals": [
+        0.0,
+        0.2,
+        2.1,
+        1.6,
+        5.4
+      ]
+    },
+    {
+      "seed": 800028,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 30414,
+      "n_decomps": 30295,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.0,
+        7.5
+      ]
+    },
+    {
+      "seed": 800029,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 20032,
+      "n_decomps": 19927,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ]
+    },
+    {
+      "seed": 800030,
+      "coexist": true,
+      "depths_alive": 5,
+      "hist_len": 300,
+      "n_comps": 37164,
+      "n_decomps": 37050,
+      "finals": [
+        2.0,
+        0.6,
+        1.1,
+        3.4,
+        5.7
+      ]
+    },
+    {
+      "seed": 800031,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 34538,
+      "n_decomps": 34410,
+      "finals": [
+        0.0,
+        1.0,
+        0.4,
+        2.2,
+        7.3
+      ]
+    },
+    {
+      "seed": 800032,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 32108,
+      "n_decomps": 31980,
+      "finals": [
+        0.0,
+        0.2,
+        1.7,
+        1.0,
+        7.8
+      ]
+    },
+    {
+      "seed": 800033,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 29215,
+      "n_decomps": 29101,
+      "finals": [
+        0.0,
+        0.2,
+        1.1,
+        2.5,
+        6.2
+      ]
+    },
+    {
+      "seed": 800034,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 20039,
+      "n_decomps": 19934,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.8,
+        6.1
+      ]
+    },
+    {
+      "seed": 800035,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 20036,
+      "n_decomps": 19931,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ]
+    },
+    {
+      "seed": 800036,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 30664,
+      "n_decomps": 30527,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        1.8,
+        8.1
+      ]
+    },
+    {
+      "seed": 800037,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 26307,
+      "n_decomps": 26207,
+      "finals": [
+        0.0,
+        0.2,
+        1.5,
+        2.1,
+        5.3
+      ]
+    },
+    {
+      "seed": 800038,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27779,
+      "n_decomps": 27656,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.6,
+        7.2
+      ]
+    },
+    {
+      "seed": 800039,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 34507,
+      "n_decomps": 34380,
+      "finals": [
+        0.0,
+        1.0,
+        0.2,
+        2.9,
+        7.0
+      ]
+    },
+    {
+      "seed": 800040,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 24900,
+      "n_decomps": 24792,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        2.0,
+        6.0
+      ]
+    },
+    {
+      "seed": 800041,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 22937,
+      "n_decomps": 22818,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        7.3
+      ]
+    },
+    {
+      "seed": 800042,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 26321,
+      "n_decomps": 26223,
+      "finals": [
+        0.0,
+        0.4,
+        1.4,
+        2.1,
+        5.3
+      ]
+    },
+    {
+      "seed": 800043,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27536,
+      "n_decomps": 27434,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.4,
+        6.3
+      ]
+    },
+    {
+      "seed": 800044,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 24162,
+      "n_decomps": 24050,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        2.4,
+        6.3
+      ]
+    },
+    {
+      "seed": 800045,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 35755,
+      "n_decomps": 35634,
+      "finals": [
+        0.0,
+        1.4,
+        0.8,
+        1.0,
+        7.5
+      ]
+    },
+    {
+      "seed": 800046,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 30423,
+      "n_decomps": 30302,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.6,
+        7.2
+      ]
+    },
+    {
+      "seed": 800047,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 37172,
+      "n_decomps": 37056,
+      "finals": [
+        2.0,
+        0.4,
+        1.2,
+        3.0,
+        5.9
+      ]
+    },
+    {
+      "seed": 800048,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 27022,
+      "n_decomps": 26896,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        1.4,
+        7.7
+      ]
+    },
+    {
+      "seed": 800049,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 34991,
+      "n_decomps": 34847,
+      "finals": [
+        0.0,
+        0.2,
+        1.1,
+        3.9,
+        7.5
+      ]
+    },
+    {
+      "seed": 800050,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 37199,
+      "n_decomps": 37083,
+      "finals": [
+        0.0,
+        1.6,
+        1.1,
+        2.2,
+        6.3
+      ]
+    },
+    {
+      "seed": 800051,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 22949,
+      "n_decomps": 22829,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.2,
+        7.4
+      ]
+    },
+    {
+      "seed": 800052,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 37364,
+      "n_decomps": 37223,
+      "finals": [
+        0.0,
+        1.0,
+        0.2,
+        1.9,
+        8.5
+      ]
+    },
+    {
+      "seed": 800053,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 20065,
+      "n_decomps": 19960,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.8,
+        6.1
+      ]
+    },
+    {
+      "seed": 800054,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 33265,
+      "n_decomps": 33130,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        2.0,
+        8.0
+      ]
+    },
+    {
+      "seed": 800055,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 34991,
+      "n_decomps": 34848,
+      "finals": [
+        0.0,
+        0.4,
+        1.0,
+        3.1,
+        7.9
+      ]
+    },
+    {
+      "seed": 800056,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 22919,
+      "n_decomps": 22799,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.8,
+        7.1
+      ]
+    },
+    {
+      "seed": 800057,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27780,
+      "n_decomps": 27657,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.8,
+        7.1
+      ]
+    },
+    {
+      "seed": 800058,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 35736,
+      "n_decomps": 35612,
+      "finals": [
+        0.0,
+        1.4,
+        0.8,
+        1.6,
+        7.2
+      ]
+    },
+    {
+      "seed": 800059,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 29200,
+      "n_decomps": 29085,
+      "finals": [
+        0.0,
+        0.2,
+        1.5,
+        2.5,
+        6.1
+      ]
+    },
+    {
+      "seed": 800060,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 33258,
+      "n_decomps": 33122,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.8,
+        8.1
+      ]
+    },
+    {
+      "seed": 800061,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 27070,
+      "n_decomps": 26944,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        1.2,
+        7.8
+      ]
+    },
+    {
+      "seed": 800062,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 35769,
+      "n_decomps": 35646,
+      "finals": [
+        2.0,
+        0.4,
+        0.8,
+        1.6,
+        7.2
+      ]
+    },
+    {
+      "seed": 800063,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 38634,
+      "n_decomps": 38499,
+      "finals": [
+        2.0,
+        0.2,
+        0.9,
+        2.2,
+        7.9
+      ]
+    },
+    {
+      "seed": 800064,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27782,
+      "n_decomps": 27659,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        0.8,
+        7.6
+      ]
+    },
+    {
+      "seed": 800065,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27756,
+      "n_decomps": 27633,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.4,
+        6.8
+      ]
+    },
+    {
+      "seed": 800066,
+      "coexist": true,
+      "depths_alive": 5,
+      "hist_len": 300,
+      "n_comps": 37225,
+      "n_decomps": 37109,
+      "finals": [
+        2.0,
+        0.8,
+        1.0,
+        3.8,
+        5.5
+      ]
+    },
+    {
+      "seed": 800067,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 25845,
+      "n_decomps": 25710,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.6,
+        8.2
+      ]
+    },
+    {
+      "seed": 800068,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27538,
+      "n_decomps": 27437,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.6,
+        6.2
+      ]
+    },
+    {
+      "seed": 800069,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 37206,
+      "n_decomps": 37090,
+      "finals": [
+        0.0,
+        1.8,
+        1.4,
+        2.2,
+        6.2
+      ]
+    },
+    {
+      "seed": 800070,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 24141,
+      "n_decomps": 24030,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.8,
+        6.6
+      ]
+    },
+    {
+      "seed": 800071,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 25821,
+      "n_decomps": 25688,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        8.0
+      ]
+    },
+    {
+      "seed": 800072,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 33295,
+      "n_decomps": 33161,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        2.0,
+        8.0
+      ]
+    },
+    {
+      "seed": 800073,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 25831,
+      "n_decomps": 25696,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        8.3
+      ]
+    },
+    {
+      "seed": 800074,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 25842,
+      "n_decomps": 25707,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        2.8,
+        7.6
+      ]
+    },
+    {
+      "seed": 800075,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27542,
+      "n_decomps": 27436,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.8,
+        6.1
+      ]
+    },
+    {
+      "seed": 800076,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 29194,
+      "n_decomps": 29081,
+      "finals": [
+        0.0,
+        0.2,
+        1.3,
+        2.2,
+        6.3
+      ]
+    },
+    {
+      "seed": 800077,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 29195,
+      "n_decomps": 29082,
+      "finals": [
+        0.0,
+        0.4,
+        1.2,
+        2.8,
+        6.0
+      ]
+    },
+    {
+      "seed": 800078,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 31623,
+      "n_decomps": 31511,
+      "finals": [
+        2.0,
+        0.0,
+        0.4,
+        1.4,
+        6.7
+      ]
+    },
+    {
+      "seed": 800079,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 31619,
+      "n_decomps": 31506,
+      "finals": [
+        0.0,
+        1.0,
+        0.4,
+        2.8,
+        6.0
+      ]
+    },
+    {
+      "seed": 800080,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27542,
+      "n_decomps": 27439,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.4,
+        6.3
+      ]
+    },
+    {
+      "seed": 800081,
+      "coexist": true,
+      "depths_alive": 5,
+      "hist_len": 300,
+      "n_comps": 34310,
+      "n_decomps": 34209,
+      "finals": [
+        2.0,
+        0.8,
+        0.6,
+        1.8,
+        5.6
+      ]
+    },
+    {
+      "seed": 800082,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 20027,
+      "n_decomps": 19923,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.6,
+        6.2
+      ]
+    },
+    {
+      "seed": 800083,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 28699,
+      "n_decomps": 28549,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.8,
+        9.1
+      ]
+    },
+    {
+      "seed": 800084,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27753,
+      "n_decomps": 27630,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.4,
+        7.3
+      ]
+    },
+    {
+      "seed": 800085,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 34287,
+      "n_decomps": 34186,
+      "finals": [
+        0.0,
+        1.6,
+        1.1,
+        3.0,
+        4.9
+      ]
+    },
+    {
+      "seed": 800086,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27781,
+      "n_decomps": 27659,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.4,
+        7.3
+      ]
+    },
+    {
+      "seed": 800087,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27762,
+      "n_decomps": 27639,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        2.6,
+        6.7
+      ]
+    },
+    {
+      "seed": 800088,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 24894,
+      "n_decomps": 24787,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.2,
+        6.4
+      ]
+    },
+    {
+      "seed": 800089,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 27029,
+      "n_decomps": 26902,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        1.6,
+        7.6
+      ]
+    },
+    {
+      "seed": 800090,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 40053,
+      "n_decomps": 39923,
+      "finals": [
+        0.0,
+        1.6,
+        0.9,
+        2.3,
+        7.3
+      ]
+    },
+    {
+      "seed": 800091,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 27035,
+      "n_decomps": 26908,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        2.4,
+        7.2
+      ]
+    },
+    {
+      "seed": 800092,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 32916,
+      "n_decomps": 32807,
+      "finals": [
+        0.0,
+        1.8,
+        0.6,
+        1.4,
+        6.3
+      ]
+    },
+    {
+      "seed": 800093,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 32905,
+      "n_decomps": 32801,
+      "finals": [
+        0.0,
+        1.2,
+        0.9,
+        1.6,
+        6.2
+      ]
+    },
+    {
+      "seed": 800094,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 29949,
+      "n_decomps": 29808,
+      "finals": [
+        0.0,
+        0.0,
+        0.4,
+        1.0,
+        8.9
+      ]
+    },
+    {
+      "seed": 800095,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 27556,
+      "n_decomps": 27451,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.6,
+        6.2
+      ]
+    },
+    {
+      "seed": 800096,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 22940,
+      "n_decomps": 22820,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.2,
+        7.4
+      ]
+    },
+    {
+      "seed": 800097,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 24149,
+      "n_decomps": 24040,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.8,
+        6.6
+      ]
+    },
+    {
+      "seed": 800098,
+      "coexist": true,
+      "depths_alive": 3,
+      "hist_len": 300,
+      "n_comps": 26285,
+      "n_decomps": 26185,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.8,
+        5.6
+      ]
+    },
+    {
+      "seed": 800099,
+      "coexist": false,
+      "depths_alive": 2,
+      "hist_len": 300,
+      "n_comps": 25814,
+      "n_decomps": 25681,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        8.0
+      ]
+    },
+    {
+      "seed": 800100,
+      "coexist": true,
+      "depths_alive": 4,
+      "hist_len": 300,
+      "n_comps": 37188,
+      "n_decomps": 37073,
+      "finals": [
+        0.0,
+        1.2,
+        1.7,
+        2.4,
+        6.1
+      ]
+    }
+  ]
+}

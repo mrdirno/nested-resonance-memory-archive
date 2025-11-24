@@ -1,0 +1,1652 @@
+{
+  "cycle_id": "C278",
+  "cycle_name": "Critical Phenomena II (Sub-Saturation)",
+  "date": "2025-11-20T22:34:59.687235",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Gemini 3 Pro (MOG Pilot)",
+  "config": {
+    "frequencies": [
+      1e-05,
+      2e-05,
+      3e-05,
+      4e-05,
+      5e-05,
+      6e-05,
+      7e-05,
+      8e-05,
+      9e-05,
+      0.0001
+    ],
+    "seeds": [
+      500,
+      501,
+      502,
+      503,
+      504,
+      505,
+      506,
+      507,
+      508,
+      509,
+      510,
+      511,
+      512,
+      513,
+      514,
+      515,
+      516,
+      517,
+      518,
+      519
+    ],
+    "cycles_per_experiment": 450000,
+    "n_populations": 10,
+    "f_migrate": 0.005,
+    "energy_params": {
+      "E_consume": 0.5,
+      "E_recharge": 1.0
+    }
+  },
+  "results": [
+    {
+      "frequency": 1e-05,
+      "seed": 500,
+      "final_population": 500,
+      "equilibration_time": 140000,
+      "runtime_seconds": 10.528173923492432,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed500.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 501,
+      "final_population": 500,
+      "equilibration_time": 97000,
+      "runtime_seconds": 10.542356252670288,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed501.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 502,
+      "final_population": 500,
+      "equilibration_time": 85000,
+      "runtime_seconds": 10.475724697113037,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed502.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 503,
+      "final_population": 500,
+      "equilibration_time": 79000,
+      "runtime_seconds": 10.506224870681763,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed503.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 504,
+      "final_population": 500,
+      "equilibration_time": 160000,
+      "runtime_seconds": 10.493812084197998,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed504.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 505,
+      "final_population": 499,
+      "equilibration_time": 147000,
+      "runtime_seconds": 10.464966058731079,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed505.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 506,
+      "final_population": 500,
+      "equilibration_time": 159000,
+      "runtime_seconds": 10.450565814971924,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed506.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 507,
+      "final_population": 499,
+      "equilibration_time": 75000,
+      "runtime_seconds": 10.501930952072144,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed507.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 508,
+      "final_population": 500,
+      "equilibration_time": 131000,
+      "runtime_seconds": 10.576252222061157,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed508.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 509,
+      "final_population": 501,
+      "equilibration_time": 198000,
+      "runtime_seconds": 10.48967981338501,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed509.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 510,
+      "final_population": 500,
+      "equilibration_time": 122000,
+      "runtime_seconds": 10.525918960571289,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed510.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 511,
+      "final_population": 499,
+      "equilibration_time": 117000,
+      "runtime_seconds": 10.51874303817749,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed511.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 512,
+      "final_population": 499,
+      "equilibration_time": 114000,
+      "runtime_seconds": 10.479180097579956,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed512.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 513,
+      "final_population": 499,
+      "equilibration_time": 107000,
+      "runtime_seconds": 10.4952712059021,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed513.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 514,
+      "final_population": 500,
+      "equilibration_time": 162000,
+      "runtime_seconds": 10.553053855895996,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed514.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 515,
+      "final_population": 499,
+      "equilibration_time": 174000,
+      "runtime_seconds": 10.556861162185669,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed515.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 516,
+      "final_population": 500,
+      "equilibration_time": 79000,
+      "runtime_seconds": 10.672914981842041,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed516.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 517,
+      "final_population": 500,
+      "equilibration_time": 97000,
+      "runtime_seconds": 10.650198221206665,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed517.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 518,
+      "final_population": 501,
+      "equilibration_time": 85000,
+      "runtime_seconds": 10.717455863952637,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed518.db"
+    },
+    {
+      "frequency": 1e-05,
+      "seed": 519,
+      "final_population": 500,
+      "equilibration_time": 86000,
+      "runtime_seconds": 10.88268518447876,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_001pct_seed519.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 500,
+      "final_population": 500,
+      "equilibration_time": 140000,
+      "runtime_seconds": 10.86541485786438,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed500.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 501,
+      "final_population": 499,
+      "equilibration_time": 86000,
+      "runtime_seconds": 10.850480079650879,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed501.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 502,
+      "final_population": 500,
+      "equilibration_time": 113000,
+      "runtime_seconds": 10.824251174926758,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed502.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 503,
+      "final_population": 500,
+      "equilibration_time": 79000,
+      "runtime_seconds": 10.798903703689575,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed503.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 504,
+      "final_population": 499,
+      "equilibration_time": 160000,
+      "runtime_seconds": 10.758360147476196,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed504.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 505,
+      "final_population": 499,
+      "equilibration_time": 127000,
+      "runtime_seconds": 10.492902040481567,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed505.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 506,
+      "final_population": 501,
+      "equilibration_time": 86000,
+      "runtime_seconds": 10.521603107452393,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed506.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 507,
+      "final_population": 500,
+      "equilibration_time": 75000,
+      "runtime_seconds": 10.510053157806396,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed507.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 508,
+      "final_population": 500,
+      "equilibration_time": 73000,
+      "runtime_seconds": 10.505584001541138,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed508.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 509,
+      "final_population": 499,
+      "equilibration_time": 198000,
+      "runtime_seconds": 10.54262924194336,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed509.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 510,
+      "final_population": 500,
+      "equilibration_time": 139000,
+      "runtime_seconds": 10.550557851791382,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed510.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 511,
+      "final_population": 498,
+      "equilibration_time": 154000,
+      "runtime_seconds": 10.580285787582397,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed511.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 512,
+      "final_population": 501,
+      "equilibration_time": 71000,
+      "runtime_seconds": 10.498348951339722,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed512.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 513,
+      "final_population": 500,
+      "equilibration_time": 107000,
+      "runtime_seconds": 10.58374285697937,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed513.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 514,
+      "final_population": 500,
+      "equilibration_time": 162000,
+      "runtime_seconds": 10.695628881454468,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed514.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 515,
+      "final_population": 499,
+      "equilibration_time": 174000,
+      "runtime_seconds": 10.665967226028442,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed515.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 516,
+      "final_population": 501,
+      "equilibration_time": 119000,
+      "runtime_seconds": 10.7064528465271,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed516.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 517,
+      "final_population": 502,
+      "equilibration_time": 97000,
+      "runtime_seconds": 10.711505889892578,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed517.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 518,
+      "final_population": 502,
+      "equilibration_time": 121000,
+      "runtime_seconds": 10.684601068496704,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed518.db"
+    },
+    {
+      "frequency": 2e-05,
+      "seed": 519,
+      "final_population": 500,
+      "equilibration_time": 172000,
+      "runtime_seconds": 10.69837737083435,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_002pct_seed519.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 500,
+      "final_population": 500,
+      "equilibration_time": 137000,
+      "runtime_seconds": 10.546955823898315,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed500.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 501,
+      "final_population": 500,
+      "equilibration_time": 86000,
+      "runtime_seconds": 10.563966035842896,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed501.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 502,
+      "final_population": 500,
+      "equilibration_time": 113000,
+      "runtime_seconds": 10.52392292022705,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed502.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 503,
+      "final_population": 500,
+      "equilibration_time": 109000,
+      "runtime_seconds": 10.644999265670776,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed503.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 504,
+      "final_population": 500,
+      "equilibration_time": 159000,
+      "runtime_seconds": 10.660087823867798,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed504.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 505,
+      "final_population": 499,
+      "equilibration_time": 127000,
+      "runtime_seconds": 10.587091207504272,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed505.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 506,
+      "final_population": 500,
+      "equilibration_time": 86000,
+      "runtime_seconds": 10.54440712928772,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed506.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 507,
+      "final_population": 500,
+      "equilibration_time": 87000,
+      "runtime_seconds": 10.551626920700073,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed507.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 508,
+      "final_population": 499,
+      "equilibration_time": 73000,
+      "runtime_seconds": 10.650087118148804,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed508.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 509,
+      "final_population": 501,
+      "equilibration_time": 105000,
+      "runtime_seconds": 10.597240924835205,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed509.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 510,
+      "final_population": 500,
+      "equilibration_time": 107000,
+      "runtime_seconds": 10.554542064666748,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed510.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 511,
+      "final_population": 499,
+      "equilibration_time": 113000,
+      "runtime_seconds": 10.57772707939148,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed511.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 512,
+      "final_population": 502,
+      "equilibration_time": 71000,
+      "runtime_seconds": 10.566767930984497,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed512.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 513,
+      "final_population": 500,
+      "equilibration_time": 69000,
+      "runtime_seconds": 10.591812133789062,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed513.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 514,
+      "final_population": 500,
+      "equilibration_time": 105000,
+      "runtime_seconds": 10.572815179824829,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed514.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 515,
+      "final_population": 500,
+      "equilibration_time": 174000,
+      "runtime_seconds": 10.52971601486206,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed515.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 516,
+      "final_population": 501,
+      "equilibration_time": 119000,
+      "runtime_seconds": 10.632261991500854,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed516.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 517,
+      "final_population": 500,
+      "equilibration_time": 144000,
+      "runtime_seconds": 10.704297065734863,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed517.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 518,
+      "final_population": 501,
+      "equilibration_time": 121000,
+      "runtime_seconds": 10.766353845596313,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed518.db"
+    },
+    {
+      "frequency": 3e-05,
+      "seed": 519,
+      "final_population": 500,
+      "equilibration_time": 111000,
+      "runtime_seconds": 10.903268098831177,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_003pct_seed519.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 500,
+      "final_population": 500,
+      "equilibration_time": 137000,
+      "runtime_seconds": 10.924009799957275,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed500.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 501,
+      "final_population": 499,
+      "equilibration_time": 86000,
+      "runtime_seconds": 10.828219890594482,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed501.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 502,
+      "final_population": 500,
+      "equilibration_time": 113000,
+      "runtime_seconds": 10.846163272857666,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed502.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 503,
+      "final_population": 501,
+      "equilibration_time": 89000,
+      "runtime_seconds": 10.629315853118896,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed503.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 504,
+      "final_population": 499,
+      "equilibration_time": 145000,
+      "runtime_seconds": 10.61584186553955,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed504.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 505,
+      "final_population": 500,
+      "equilibration_time": 106000,
+      "runtime_seconds": 10.659017086029053,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed505.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 506,
+      "final_population": 500,
+      "equilibration_time": 86000,
+      "runtime_seconds": 10.62262511253357,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed506.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 507,
+      "final_population": 500,
+      "equilibration_time": 87000,
+      "runtime_seconds": 10.591540098190308,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed507.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 508,
+      "final_population": 500,
+      "equilibration_time": 116000,
+      "runtime_seconds": 10.590550899505615,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed508.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 509,
+      "final_population": 499,
+      "equilibration_time": 154000,
+      "runtime_seconds": 10.6528000831604,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed509.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 510,
+      "final_population": 500,
+      "equilibration_time": 107000,
+      "runtime_seconds": 10.604331016540527,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed510.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 511,
+      "final_population": 499,
+      "equilibration_time": 113000,
+      "runtime_seconds": 10.613635063171387,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed511.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 512,
+      "final_population": 500,
+      "equilibration_time": 162000,
+      "runtime_seconds": 10.583882093429565,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed512.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 513,
+      "final_population": 500,
+      "equilibration_time": 69000,
+      "runtime_seconds": 10.685633897781372,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed513.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 514,
+      "final_population": 500,
+      "equilibration_time": 68000,
+      "runtime_seconds": 10.655667781829834,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed514.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 515,
+      "final_population": 499,
+      "equilibration_time": 127000,
+      "runtime_seconds": 10.690094232559204,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed515.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 516,
+      "final_population": 501,
+      "equilibration_time": 76000,
+      "runtime_seconds": 10.682800054550171,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed516.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 517,
+      "final_population": 500,
+      "equilibration_time": 120000,
+      "runtime_seconds": 10.70950198173523,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed517.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 518,
+      "final_population": 500,
+      "equilibration_time": 175000,
+      "runtime_seconds": 10.659680128097534,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed518.db"
+    },
+    {
+      "frequency": 4e-05,
+      "seed": 519,
+      "final_population": 500,
+      "equilibration_time": 111000,
+      "runtime_seconds": 10.646542072296143,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_004pct_seed519.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 500,
+      "final_population": 500,
+      "equilibration_time": 137000,
+      "runtime_seconds": 10.705265998840332,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed500.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 501,
+      "final_population": 500,
+      "equilibration_time": 156000,
+      "runtime_seconds": 10.68759560585022,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed501.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 502,
+      "final_population": 500,
+      "equilibration_time": 63000,
+      "runtime_seconds": 10.702226161956787,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed502.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 503,
+      "final_population": 500,
+      "equilibration_time": 89000,
+      "runtime_seconds": 10.671709060668945,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed503.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 504,
+      "final_population": 499,
+      "equilibration_time": 145000,
+      "runtime_seconds": 10.64971375465393,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed504.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 505,
+      "final_population": 499,
+      "equilibration_time": 127000,
+      "runtime_seconds": 10.51258897781372,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed505.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 506,
+      "final_population": 500,
+      "equilibration_time": 89000,
+      "runtime_seconds": 10.549676895141602,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed506.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 507,
+      "final_population": 499,
+      "equilibration_time": 160000,
+      "runtime_seconds": 10.52863097190857,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed507.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 508,
+      "final_population": 500,
+      "equilibration_time": 116000,
+      "runtime_seconds": 10.520748138427734,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed508.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 509,
+      "final_population": 500,
+      "equilibration_time": 105000,
+      "runtime_seconds": 10.58171010017395,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed509.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 510,
+      "final_population": 500,
+      "equilibration_time": 107000,
+      "runtime_seconds": 10.650633811950684,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed510.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 511,
+      "final_population": 500,
+      "equilibration_time": 152000,
+      "runtime_seconds": 10.60592794418335,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed511.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 512,
+      "final_population": 500,
+      "equilibration_time": 109000,
+      "runtime_seconds": 10.56433391571045,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed512.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 513,
+      "final_population": 500,
+      "equilibration_time": 69000,
+      "runtime_seconds": 10.567249059677124,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed513.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 514,
+      "final_population": 500,
+      "equilibration_time": 68000,
+      "runtime_seconds": 10.622322797775269,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed514.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 515,
+      "final_population": 500,
+      "equilibration_time": 88000,
+      "runtime_seconds": 10.680531024932861,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed515.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 516,
+      "final_population": 501,
+      "equilibration_time": 77000,
+      "runtime_seconds": 10.6895112991333,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed516.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 517,
+      "final_population": 500,
+      "equilibration_time": 120000,
+      "runtime_seconds": 10.578809261322021,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed517.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 518,
+      "final_population": 502,
+      "equilibration_time": 175000,
+      "runtime_seconds": 10.51497507095337,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed518.db"
+    },
+    {
+      "frequency": 5e-05,
+      "seed": 519,
+      "final_population": 500,
+      "equilibration_time": 65000,
+      "runtime_seconds": 10.54015064239502,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_005pct_seed519.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 500,
+      "final_population": 500,
+      "equilibration_time": 168000,
+      "runtime_seconds": 10.522740125656128,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed500.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 501,
+      "final_population": 500,
+      "equilibration_time": 156000,
+      "runtime_seconds": 10.551374197006226,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed501.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 502,
+      "final_population": 499,
+      "equilibration_time": 63000,
+      "runtime_seconds": 10.60357403755188,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed502.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 503,
+      "final_population": 500,
+      "equilibration_time": 89000,
+      "runtime_seconds": 10.583184719085693,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed503.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 504,
+      "final_population": 500,
+      "equilibration_time": 119000,
+      "runtime_seconds": 10.574418783187866,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed504.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 505,
+      "final_population": 499,
+      "equilibration_time": 144000,
+      "runtime_seconds": 10.583460807800293,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed505.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 506,
+      "final_population": 500,
+      "equilibration_time": 143000,
+      "runtime_seconds": 10.59146499633789,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed506.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 507,
+      "final_population": 500,
+      "equilibration_time": 87000,
+      "runtime_seconds": 10.642998218536377,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed507.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 508,
+      "final_population": 499,
+      "equilibration_time": 129000,
+      "runtime_seconds": 10.657459259033203,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed508.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 509,
+      "final_population": 499,
+      "equilibration_time": 105000,
+      "runtime_seconds": 10.606376886367798,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed509.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 510,
+      "final_population": 500,
+      "equilibration_time": 107000,
+      "runtime_seconds": 10.622879981994629,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed510.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 511,
+      "final_population": 500,
+      "equilibration_time": 152000,
+      "runtime_seconds": 10.599298000335693,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed511.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 512,
+      "final_population": 500,
+      "equilibration_time": 129000,
+      "runtime_seconds": 10.561677932739258,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed512.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 513,
+      "final_population": 500,
+      "equilibration_time": 63000,
+      "runtime_seconds": 10.607516050338745,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed513.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 514,
+      "final_population": 500,
+      "equilibration_time": 68000,
+      "runtime_seconds": 10.549736976623535,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed514.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 515,
+      "final_population": 500,
+      "equilibration_time": 88000,
+      "runtime_seconds": 10.573932886123657,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed515.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 516,
+      "final_population": 501,
+      "equilibration_time": 77000,
+      "runtime_seconds": 10.565922021865845,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed516.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 517,
+      "final_population": 501,
+      "equilibration_time": 138000,
+      "runtime_seconds": 10.552144765853882,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed517.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 518,
+      "final_population": 502,
+      "equilibration_time": 175000,
+      "runtime_seconds": 10.534080982208252,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed518.db"
+    },
+    {
+      "frequency": 6e-05,
+      "seed": 519,
+      "final_population": 500,
+      "equilibration_time": 121000,
+      "runtime_seconds": 10.57553482055664,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_006pct_seed519.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 500,
+      "final_population": 500,
+      "equilibration_time": 175000,
+      "runtime_seconds": 10.557960987091064,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed500.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 501,
+      "final_population": 500,
+      "equilibration_time": 98000,
+      "runtime_seconds": 10.546653032302856,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed501.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 502,
+      "final_population": 500,
+      "equilibration_time": 63000,
+      "runtime_seconds": 10.531920909881592,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed502.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 503,
+      "final_population": 500,
+      "equilibration_time": 89000,
+      "runtime_seconds": 10.49921727180481,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed503.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 504,
+      "final_population": 499,
+      "equilibration_time": 119000,
+      "runtime_seconds": 10.561271905899048,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed504.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 505,
+      "final_population": 499,
+      "equilibration_time": 144000,
+      "runtime_seconds": 10.506320238113403,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed505.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 506,
+      "final_population": 501,
+      "equilibration_time": 142000,
+      "runtime_seconds": 10.538973093032837,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed506.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 507,
+      "final_population": 500,
+      "equilibration_time": 87000,
+      "runtime_seconds": 10.56019401550293,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed507.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 508,
+      "final_population": 499,
+      "equilibration_time": 128000,
+      "runtime_seconds": 10.55328106880188,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed508.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 509,
+      "final_population": 499,
+      "equilibration_time": 133000,
+      "runtime_seconds": 10.550761938095093,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed509.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 510,
+      "final_population": 500,
+      "equilibration_time": 139000,
+      "runtime_seconds": 10.504467964172363,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed510.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 511,
+      "final_population": 500,
+      "equilibration_time": 152000,
+      "runtime_seconds": 10.536717176437378,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed511.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 512,
+      "final_population": 499,
+      "equilibration_time": 129000,
+      "runtime_seconds": 10.53077220916748,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed512.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 513,
+      "final_population": 500,
+      "equilibration_time": 99000,
+      "runtime_seconds": 10.543112754821777,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed513.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 514,
+      "final_population": 500,
+      "equilibration_time": 82000,
+      "runtime_seconds": 10.52227520942688,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed514.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 515,
+      "final_population": 498,
+      "equilibration_time": 155000,
+      "runtime_seconds": 10.591599702835083,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed515.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 516,
+      "final_population": 501,
+      "equilibration_time": 77000,
+      "runtime_seconds": 10.612881183624268,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed516.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 517,
+      "final_population": 501,
+      "equilibration_time": 138000,
+      "runtime_seconds": 10.580343961715698,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed517.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 518,
+      "final_population": 501,
+      "equilibration_time": 144000,
+      "runtime_seconds": 10.605226993560791,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed518.db"
+    },
+    {
+      "frequency": 7e-05,
+      "seed": 519,
+      "final_population": 501,
+      "equilibration_time": 98000,
+      "runtime_seconds": 10.570389986038208,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_007pct_seed519.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 500,
+      "final_population": 500,
+      "equilibration_time": 119000,
+      "runtime_seconds": 10.63374400138855,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed500.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 501,
+      "final_population": 500,
+      "equilibration_time": 143000,
+      "runtime_seconds": 10.5258309841156,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed501.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 502,
+      "final_population": 500,
+      "equilibration_time": 121000,
+      "runtime_seconds": 10.493322134017944,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed502.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 503,
+      "final_population": 500,
+      "equilibration_time": 110000,
+      "runtime_seconds": 10.51962399482727,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed503.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 504,
+      "final_population": 500,
+      "equilibration_time": 183000,
+      "runtime_seconds": 10.610387802124023,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed504.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 505,
+      "final_population": 499,
+      "equilibration_time": 95000,
+      "runtime_seconds": 10.595746040344238,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed505.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 506,
+      "final_population": 500,
+      "equilibration_time": 61000,
+      "runtime_seconds": 10.552892208099365,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed506.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 507,
+      "final_population": 500,
+      "equilibration_time": 159000,
+      "runtime_seconds": 10.539437055587769,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed507.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 508,
+      "final_population": 499,
+      "equilibration_time": 128000,
+      "runtime_seconds": 10.671974182128906,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed508.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 509,
+      "final_population": 499,
+      "equilibration_time": 141000,
+      "runtime_seconds": 10.645364999771118,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed509.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 510,
+      "final_population": 500,
+      "equilibration_time": 140000,
+      "runtime_seconds": 10.650568962097168,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed510.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 511,
+      "final_population": 500,
+      "equilibration_time": 126000,
+      "runtime_seconds": 10.605479001998901,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed511.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 512,
+      "final_population": 500,
+      "equilibration_time": 129000,
+      "runtime_seconds": 10.580497741699219,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed512.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 513,
+      "final_population": 499,
+      "equilibration_time": 99000,
+      "runtime_seconds": 10.501302003860474,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed513.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 514,
+      "final_population": 500,
+      "equilibration_time": 82000,
+      "runtime_seconds": 10.550684213638306,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed514.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 515,
+      "final_population": 499,
+      "equilibration_time": 155000,
+      "runtime_seconds": 10.634598016738892,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed515.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 516,
+      "final_population": 502,
+      "equilibration_time": 77000,
+      "runtime_seconds": 10.557411670684814,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed516.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 517,
+      "final_population": 500,
+      "equilibration_time": 138000,
+      "runtime_seconds": 10.569001913070679,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed517.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 518,
+      "final_population": 501,
+      "equilibration_time": 110000,
+      "runtime_seconds": 10.521507740020752,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed518.db"
+    },
+    {
+      "frequency": 8e-05,
+      "seed": 519,
+      "final_population": 500,
+      "equilibration_time": 98000,
+      "runtime_seconds": 10.67500901222229,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_008pct_seed519.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 500,
+      "final_population": 499,
+      "equilibration_time": 119000,
+      "runtime_seconds": 10.509514093399048,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed500.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 501,
+      "final_population": 500,
+      "equilibration_time": 143000,
+      "runtime_seconds": 10.525346755981445,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed501.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 502,
+      "final_population": 500,
+      "equilibration_time": 121000,
+      "runtime_seconds": 10.519104957580566,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed502.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 503,
+      "final_population": 500,
+      "equilibration_time": 110000,
+      "runtime_seconds": 10.560986042022705,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed503.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 504,
+      "final_population": 499,
+      "equilibration_time": 157000,
+      "runtime_seconds": 10.597689867019653,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed504.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 505,
+      "final_population": 500,
+      "equilibration_time": 95000,
+      "runtime_seconds": 10.553239822387695,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed505.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 506,
+      "final_population": 500,
+      "equilibration_time": 61000,
+      "runtime_seconds": 10.579458236694336,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed506.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 507,
+      "final_population": 503,
+      "equilibration_time": 159000,
+      "runtime_seconds": 10.554774045944214,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed507.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 508,
+      "final_population": 500,
+      "equilibration_time": 147000,
+      "runtime_seconds": 10.515131950378418,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed508.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 509,
+      "final_population": 499,
+      "equilibration_time": 141000,
+      "runtime_seconds": 10.52474594116211,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed509.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 510,
+      "final_population": 500,
+      "equilibration_time": 139000,
+      "runtime_seconds": 10.492752075195312,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed510.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 511,
+      "final_population": 501,
+      "equilibration_time": 171000,
+      "runtime_seconds": 10.537736892700195,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed511.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 512,
+      "final_population": 501,
+      "equilibration_time": 90000,
+      "runtime_seconds": 10.538914680480957,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed512.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 513,
+      "final_population": 500,
+      "equilibration_time": 99000,
+      "runtime_seconds": 10.329051971435547,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed513.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 514,
+      "final_population": 500,
+      "equilibration_time": 82000,
+      "runtime_seconds": 10.43056607246399,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed514.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 515,
+      "final_population": 498,
+      "equilibration_time": 139000,
+      "runtime_seconds": 10.42124319076538,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed515.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 516,
+      "final_population": 500,
+      "equilibration_time": 77000,
+      "runtime_seconds": 10.380466938018799,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed516.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 517,
+      "final_population": 499,
+      "equilibration_time": 138000,
+      "runtime_seconds": 10.410943984985352,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed517.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 518,
+      "final_population": 500,
+      "equilibration_time": 110000,
+      "runtime_seconds": 10.39547085762024,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed518.db"
+    },
+    {
+      "frequency": 9e-05,
+      "seed": 519,
+      "final_population": 500,
+      "equilibration_time": 98000,
+      "runtime_seconds": 10.377552270889282,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_009pct_seed519.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 500,
+      "final_population": 499,
+      "equilibration_time": 190000,
+      "runtime_seconds": 10.419450283050537,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed500.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 501,
+      "final_population": 500,
+      "equilibration_time": 143000,
+      "runtime_seconds": 10.327019929885864,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed501.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 502,
+      "final_population": 500,
+      "equilibration_time": 121000,
+      "runtime_seconds": 10.425312042236328,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed502.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 503,
+      "final_population": 500,
+      "equilibration_time": 86000,
+      "runtime_seconds": 10.42365288734436,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed503.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 504,
+      "final_population": 499,
+      "equilibration_time": 90000,
+      "runtime_seconds": 10.646233081817627,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed504.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 505,
+      "final_population": 500,
+      "equilibration_time": 95000,
+      "runtime_seconds": 10.43470573425293,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed505.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 506,
+      "final_population": 499,
+      "equilibration_time": 61000,
+      "runtime_seconds": 10.38408088684082,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed506.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 507,
+      "final_population": 502,
+      "equilibration_time": 159000,
+      "runtime_seconds": 10.372136116027832,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed507.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 508,
+      "final_population": 499,
+      "equilibration_time": 167000,
+      "runtime_seconds": 10.485482692718506,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed508.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 509,
+      "final_population": 500,
+      "equilibration_time": 141000,
+      "runtime_seconds": 10.49712610244751,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed509.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 510,
+      "final_population": 500,
+      "equilibration_time": 139000,
+      "runtime_seconds": 10.8887300491333,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed510.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 511,
+      "final_population": 500,
+      "equilibration_time": 131000,
+      "runtime_seconds": 10.580363035202026,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed511.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 512,
+      "final_population": 500,
+      "equilibration_time": 90000,
+      "runtime_seconds": 10.378599882125854,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed512.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 513,
+      "final_population": 499,
+      "equilibration_time": 162000,
+      "runtime_seconds": 10.477355003356934,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed513.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 514,
+      "final_population": 500,
+      "equilibration_time": 131000,
+      "runtime_seconds": 10.394918203353882,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed514.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 515,
+      "final_population": 500,
+      "equilibration_time": 139000,
+      "runtime_seconds": 10.358611345291138,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed515.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 516,
+      "final_population": 501,
+      "equilibration_time": 86000,
+      "runtime_seconds": 10.346785068511963,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed516.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 517,
+      "final_population": 500,
+      "equilibration_time": 89000,
+      "runtime_seconds": 10.36982011795044,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed517.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 518,
+      "final_population": 501,
+      "equilibration_time": 115000,
+      "runtime_seconds": 10.361134052276611,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed518.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 519,
+      "final_population": 499,
+      "equilibration_time": 98000,
+      "runtime_seconds": 10.427490949630737,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c278_CRIT_SUB_0_010pct_seed519.db"
+    }
+  ]
+}

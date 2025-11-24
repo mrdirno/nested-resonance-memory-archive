@@ -1,0 +1,137 @@
+{
+  "cycle_id": "C300",
+  "cycle_name": "Predator Efficiency Evolution",
+  "date": "2025-11-20T01:23:13.353514",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 40000,
+    "n_populations": 2,
+    "initial_prey": 200,
+    "initial_predator": 30,
+    "base_attack_rate": 0.01,
+    "initial_h": 0.02,
+    "mutation_rate": 0.2,
+    "mutation_std": 0.002,
+    "selection_strength": 1.0,
+    "conditions": [
+      {
+        "name": "fixed_h",
+        "evolving": false
+      },
+      {
+        "name": "evolving_h",
+        "evolving": true
+      }
+    ],
+    "seeds": [
+      700,
+      701,
+      702
+    ]
+  },
+  "results": [
+    {
+      "condition": "fixed_h",
+      "evolving": false,
+      "seed": 700,
+      "prey_init": 448.9,
+      "prey_final": 500.0,
+      "pred_init": 3.7,
+      "pred_final": 0.0,
+      "h_init": 0.02,
+      "h_final": 0.019999999999999997,
+      "h_change": -3.469446951953614e-18,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 4.147351980209351,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c300_fixed_h_seed700.db"
+    },
+    {
+      "condition": "fixed_h",
+      "evolving": false,
+      "seed": 701,
+      "prey_init": 444.3,
+      "prey_final": 500.0,
+      "pred_init": 3.7,
+      "pred_final": 0.0,
+      "h_init": 0.02,
+      "h_final": 0.019999999999999997,
+      "h_change": -3.469446951953614e-18,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 4.138766050338745,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c300_fixed_h_seed701.db"
+    },
+    {
+      "condition": "fixed_h",
+      "evolving": false,
+      "seed": 702,
+      "prey_init": 425.5,
+      "prey_final": 500.0,
+      "pred_init": 3.8,
+      "pred_final": 0.0,
+      "h_init": 0.02,
+      "h_final": 0.019999999999999997,
+      "h_change": -3.469446951953614e-18,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 4.1350061893463135,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c300_fixed_h_seed702.db"
+    },
+    {
+      "condition": "evolving_h",
+      "evolving": true,
+      "seed": 700,
+      "prey_init": 200.0,
+      "prey_final": 200.0,
+      "pred_init": 30.0,
+      "pred_final": 30.0,
+      "h_init": 0.02,
+      "h_final": 0.02,
+      "h_change": 0.0,
+      "prey_survive": true,
+      "pred_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.007197856903076172,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c300_evolving_h_seed700.db"
+    },
+    {
+      "condition": "evolving_h",
+      "evolving": true,
+      "seed": 701,
+      "prey_init": 425.8,
+      "prey_final": 500.0,
+      "pred_init": 3.5,
+      "pred_final": 0.0,
+      "h_init": 0.019999999999999997,
+      "h_final": 0.019999999999999997,
+      "h_change": 0.0,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 4.141593933105469,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c300_evolving_h_seed701.db"
+    },
+    {
+      "condition": "evolving_h",
+      "evolving": true,
+      "seed": 702,
+      "prey_init": 200.0,
+      "prey_final": 200.0,
+      "pred_init": 30.0,
+      "pred_final": 30.0,
+      "h_init": 0.02,
+      "h_final": 0.02,
+      "h_change": 0.0,
+      "prey_survive": true,
+      "pred_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.006209850311279297,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c300_evolving_h_seed702.db"
+    }
+  ]
+}

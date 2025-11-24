@@ -1,0 +1,16 @@
+{
+  "cycle": 346,
+  "num_emitters": 64,
+  "targets": 2,
+  "success": true,
+  "data": [
+    {
+      "target_index": 0,
+      "ratio": 0.055897808032305374
+    },
+    {
+      "target_index": 1,
+      "ratio": 0.09295323496389905
+    }
+  ]
+}

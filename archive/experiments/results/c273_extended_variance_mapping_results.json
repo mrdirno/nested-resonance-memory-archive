@@ -1,0 +1,1654 @@
+{
+  "cycle_id": "C273",
+  "cycle_name": "Extended Frequency-Variance Mapping",
+  "date": "2025-11-19T17:15:00.009962",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "frequencies": [
+      0.0001,
+      0.0002,
+      0.0005,
+      0.001,
+      0.002,
+      0.005,
+      0.01,
+      0.02,
+      0.05,
+      0.1
+    ],
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+    ],
+    "cycles_per_experiment": 450000,
+    "n_populations": 10,
+    "f_migrate": 0.005,
+    "energy_params": {
+      "E_consume": 0.5,
+      "E_recharge": 1.0,
+      "net_energy": 0.5,
+      "regime": "GROWTH"
+    }
+  },
+  "results": [
+    {
+      "frequency": 0.0001,
+      "seed": 42,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6157379150390625,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed42.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 43,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.598422050476074,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed43.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 44,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6093640327453613,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed44.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 45,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6050291061401367,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed45.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 46,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6200029850006104,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed46.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 47,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6071178913116455,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed47.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 48,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5922510623931885,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed48.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 49,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5839271545410156,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed49.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 50,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5842721462249756,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed50.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 51,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5736639499664307,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed51.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 52,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.570004940032959,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed52.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 53,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5849270820617676,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed53.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 54,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.644252061843872,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed54.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 55,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5988638401031494,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed55.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 56,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5905368328094482,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed56.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 57,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.599409818649292,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed57.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 58,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.603863000869751,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed58.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 59,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.578173875808716,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed59.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 60,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.607137680053711,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed60.db"
+    },
+    {
+      "frequency": 0.0001,
+      "seed": 61,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5867397785186768,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_01pct_seed61.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 42,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5706348419189453,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed42.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 43,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5903079509735107,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed43.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 44,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5722849369049072,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed44.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 45,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6159169673919678,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed45.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 46,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.621650218963623,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed46.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 47,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6006672382354736,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed47.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 48,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6203670501708984,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed48.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 49,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.582129955291748,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed49.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 50,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5786898136138916,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed50.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 51,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.577425956726074,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed51.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 52,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.632451057434082,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed52.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 53,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.586306095123291,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed53.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 54,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.5774502754211426,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed54.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 55,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.583466053009033,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed55.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 56,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.604403257369995,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed56.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 57,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.587141990661621,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed57.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 58,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.610564708709717,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed58.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 59,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 4.08557391166687,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed59.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 60,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 4.924095869064331,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed60.db"
+    },
+    {
+      "frequency": 0.0002,
+      "seed": 61,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.358306169509888,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_02pct_seed61.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 42,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.34752893447876,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed42.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 43,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.8721179962158203,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed43.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 44,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6357738971710205,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed44.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 45,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6426949501037598,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed45.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 46,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.64648175239563,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed46.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 47,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6296231746673584,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed47.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 48,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.639382839202881,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed48.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 49,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.642199993133545,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed49.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 50,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.632755994796753,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed50.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 51,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.641456127166748,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed51.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 52,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6161367893218994,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed52.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 53,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6217610836029053,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed53.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 54,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.638381004333496,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed54.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 55,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.640432834625244,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed55.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 56,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.616492748260498,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed56.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 57,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6410250663757324,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed57.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 58,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6405599117279053,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed58.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 59,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.686223268508911,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed59.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 60,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6310060024261475,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed60.db"
+    },
+    {
+      "frequency": 0.0005,
+      "seed": 61,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6191837787628174,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_05pct_seed61.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 42,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.625504970550537,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed42.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 43,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6225390434265137,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed43.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 44,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6504080295562744,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed44.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 45,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6260039806365967,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed45.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 46,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6508100032806396,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed46.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 47,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 4.324005126953125,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed47.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 48,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.633399248123169,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed48.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 49,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.634783983230591,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed49.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 50,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.636594295501709,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed50.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 51,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6257998943328857,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed51.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 52,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6338229179382324,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed52.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 53,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 4.7629876136779785,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed53.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 54,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.790099859237671,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed54.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 55,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 8.184892177581787,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed55.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 56,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.961332082748413,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed56.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 57,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.802314043045044,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed57.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 58,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 6.17564582824707,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed58.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 59,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 4.795323133468628,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed59.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 60,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.648374080657959,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed60.db"
+    },
+    {
+      "frequency": 0.001,
+      "seed": 61,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.60673189163208,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_10pct_seed61.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 42,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.63675594329834,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed42.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 43,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6422019004821777,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed43.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 44,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6249048709869385,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed44.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 45,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6525590419769287,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed45.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 46,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.655282974243164,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed46.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 47,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.646733045578003,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed47.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 48,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6264820098876953,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed48.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 49,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.639620780944824,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed49.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 50,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.639370918273926,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed50.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 51,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.642767906188965,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed51.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 52,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.670867919921875,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed52.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 53,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6526100635528564,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed53.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 54,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6392271518707275,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed54.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 55,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6550581455230713,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed55.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 56,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.656730890274048,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed56.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 57,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6593658924102783,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed57.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 58,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.643806219100952,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed58.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 59,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6589999198913574,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed59.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 60,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.638669013977051,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed60.db"
+    },
+    {
+      "frequency": 0.002,
+      "seed": 61,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6622159481048584,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_20pct_seed61.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 42,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.662369966506958,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed42.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 43,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7097532749176025,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed43.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 44,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7150092124938965,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed44.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 45,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6682488918304443,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed45.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 46,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.68912935256958,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed46.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 47,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 4.47812819480896,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed47.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 48,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.038651943206787,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed48.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 49,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 8.535583019256592,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed49.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 50,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 6.083964109420776,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed50.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 51,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.81617283821106,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed51.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 52,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.712944984436035,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed52.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 53,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.351521015167236,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed53.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 54,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.9530439376831055,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed54.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 55,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.649622917175293,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed55.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 56,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6568949222564697,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed56.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 57,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.645423173904419,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed57.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 58,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.639270782470703,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed58.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 59,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.639813184738159,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed59.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 60,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6530020236968994,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed60.db"
+    },
+    {
+      "frequency": 0.005,
+      "seed": 61,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6629421710968018,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_0_50pct_seed61.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 42,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.659998893737793,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed42.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 43,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6859872341156006,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed43.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 44,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6678359508514404,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed44.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 45,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6776130199432373,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed45.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 46,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6660192012786865,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed46.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 47,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.67962908744812,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed47.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 48,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6902172565460205,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed48.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 49,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.712362051010132,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed49.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 50,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6978509426116943,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed50.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 51,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.691127061843872,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed51.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 52,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.681041955947876,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed52.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 53,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.686612129211426,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed53.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 54,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6921308040618896,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed54.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 55,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6811208724975586,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed55.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 56,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.70215106010437,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed56.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 57,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.662104845046997,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed57.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 58,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.649949789047241,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed58.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 59,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6879467964172363,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed59.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 60,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.673957109451294,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed60.db"
+    },
+    {
+      "frequency": 0.01,
+      "seed": 61,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 4.4606781005859375,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_1_00pct_seed61.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 42,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.5516650676727295,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed42.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 43,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 7.842432975769043,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed43.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 44,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.679594039916992,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed44.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 45,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.512463092803955,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed45.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 46,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 6.016524791717529,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed46.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 47,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 4.630034923553467,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed47.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 48,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 4.2418951988220215,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed48.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 49,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.700975179672241,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed49.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 50,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.70273494720459,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed50.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 51,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7122740745544434,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed51.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 52,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7058358192443848,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed52.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 53,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.6880388259887695,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed53.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 54,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.727010726928711,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed54.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 55,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.714993953704834,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed55.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 56,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 6.563521862030029,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed56.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 57,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.714568853378296,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed57.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 58,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.716992139816284,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed58.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 59,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7050743103027344,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed59.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 60,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.700050115585327,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed60.db"
+    },
+    {
+      "frequency": 0.02,
+      "seed": 61,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.699795961380005,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_2_00pct_seed61.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 42,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7846009731292725,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed42.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 43,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.790947198867798,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed43.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 44,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.781633138656616,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed44.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 45,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.760650157928467,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed45.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 46,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7946760654449463,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed46.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 47,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7832088470458984,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed47.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 48,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.813563823699951,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed48.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 49,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.806135892868042,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed49.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 50,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.803424119949341,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed50.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 51,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.794782876968384,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed51.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 52,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7753310203552246,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed52.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 53,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.791973829269409,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed53.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 54,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.777155876159668,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed54.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 55,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.001385927200317,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed55.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 56,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.711775064468384,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed56.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 57,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 5.6350626945495605,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed57.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 58,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 4.299441814422607,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed58.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 59,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7825679779052734,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed59.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 60,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7967069149017334,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed60.db"
+    },
+    {
+      "frequency": 0.05,
+      "seed": 61,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.7999351024627686,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_5_00pct_seed61.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 42,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.886786937713623,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed42.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 43,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.886864185333252,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed43.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 44,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.870537757873535,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed44.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 45,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.8995108604431152,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed45.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 46,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.8981480598449707,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed46.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 47,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.877556324005127,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed47.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 48,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.889389753341675,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed48.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 49,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.8994932174682617,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed49.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 50,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.911005973815918,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed50.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 51,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.890739917755127,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed51.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 52,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.89994215965271,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed52.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 53,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.8948440551757812,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed53.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 54,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.9160492420196533,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed54.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 55,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.895029067993164,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed55.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 56,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.8801982402801514,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed56.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 57,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.909860134124756,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed57.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 58,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.875560998916626,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed58.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 59,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.887082099914551,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed59.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 60,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.902729034423828,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed60.db"
+    },
+    {
+      "frequency": 0.1,
+      "seed": 61,
+      "final_population": 100,
+      "cycles": 450000,
+      "runtime_seconds": 3.9206552505493164,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c273_v6b_EXTENDED_VARIANCE_10_00pct_seed61.db"
+    }
+  ]
+}

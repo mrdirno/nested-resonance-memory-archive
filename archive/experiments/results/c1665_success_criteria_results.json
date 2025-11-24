@@ -1,0 +1,21 @@
+{
+  "cycle_id": "C1665",
+  "results": [
+    {
+      "seed": 1665001,
+      "depths_alive": 3,
+      "finals": [
+        0.2,
+        2.1,
+        0.4,
+        2.4,
+        5.3
+      ],
+      "total_final": 10.4,
+      "min_pop": 0.2,
+      "complexity": 31.3,
+      "stability": 0.7353,
+      "success_3plus": true,
+      "success_4plus": false,
+      "success_all5": false,
+      "success_stable": 

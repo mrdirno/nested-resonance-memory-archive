@@ -1,0 +1,28 @@
+{
+  "conditions": [
+    {
+      "noise": 0.1,
+      "monolith_acc": 0.361,
+      "partition_acc": 0.503,
+      "difference": 0.14200000000000002
+    },
+    {
+      "noise": 0.3,
+      "monolith_acc": 0.34199999999999997,
+      "partition_acc": 0.4950000000000001,
+      "difference": 0.15300000000000014
+    },
+    {
+      "noise": 0.5,
+      "monolith_acc": 0.314,
+      "partition_acc": 0.4699999999999999,
+      "difference": 0.15599999999999992
+    },
+    {
+      "noise": 0.7,
+      "monolith_acc": 0.268,
+      "partition_acc": 0.41,
+      "difference": 0.14199999999999996
+    }
+  ]
+}

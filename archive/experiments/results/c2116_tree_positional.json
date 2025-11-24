@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:41:02.679110"
+  },
+  "tests": [
+    {
+      "depth": 3,
+      "branching": 2,
+      "num_edges": 14,
+      "accuracy": 0.7619047619047619
+    },
+    {
+      "depth": 4,
+      "branching": 2,
+      "num_edges": 30,
+      "accuracy": 0.6777777777777777
+    },
+    {
+      "depth": 3,
+      "branching": 3,
+      "num_edges": 39,
+      "accuracy": 0.6239316239316239
+    },
+    {
+      "depth": 2,
+      "branching": 5,
+      "num_edges": 30,
+      "accuracy": 0.7333333333333333
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Positional tree limited: 70% avg",
+      "Improvement over direct binding: +45%",
+      "Best: depth=3, branch=2 at 76%"
+    ]
+  }
+}

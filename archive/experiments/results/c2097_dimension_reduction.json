@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "target_items": 100,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:24:47.603875"
+  },
+  "dimensions": [
+    {
+      "d": 128,
+      "total_memory": 1024,
+      "accuracy": 0.49,
+      "memory_ratio": 1.0
+    },
+    {
+      "d": 256,
+      "total_memory": 2048,
+      "accuracy": 0.62,
+      "memory_ratio": 2.0
+    },
+    {
+      "d": 512,
+      "total_memory": 4096,
+      "accuracy": 0.7566666666666667,
+      "memory_ratio": 4.0
+    },
+    {
+      "d": 1024,
+      "total_memory": 8192,
+      "accuracy": 0.7933333333333333,
+      "memory_ratio": 8.0
+    },
+    {
+      "d": 2048,
+      "total_memory": 16384,
+      "accuracy": 0.7866666666666667,
+      "memory_ratio": 16.0
+    }
+  ],
+  "analysis": {
+    "findings": []
+  }
+}

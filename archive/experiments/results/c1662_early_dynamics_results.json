@@ -1,0 +1,957 @@
+{
+  "cycle_id": "C1662",
+  "n_success": 40,
+  "n_failure": 10,
+  "results": [
+    {
+      "seed": 1030001,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 239,
+        "total_decomps_100": 139,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.34,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030002,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.6,
+        5.2
+      ],
+      "early": {
+        "total_comps_100": 276,
+        "total_decomps_100": 178,
+        "min_d0_pop": 1,
+        "avg_d0_pop": 3.33,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030003,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 242,
+        "total_decomps_100": 134,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030004,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 232,
+        "total_decomps_100": 132,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030005,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 248,
+        "total_decomps_100": 142,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.67,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030006,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        2.8,
+        6.1
+      ],
+      "early": {
+        "total_comps_100": 239,
+        "total_decomps_100": 128,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030007,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        2.6,
+        5.2
+      ],
+      "early": {
+        "total_comps_100": 235,
+        "total_decomps_100": 138,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.15,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030008,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.4,
+        1.6,
+        0.6,
+        2.6,
+        5.2
+      ],
+      "early": {
+        "total_comps_100": 255,
+        "total_decomps_100": 155,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.37,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030009,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.6,
+        0.7,
+        2.2,
+        5.4
+      ],
+      "early": {
+        "total_comps_100": 255,
+        "total_decomps_100": 157,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.24,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030010,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 217,
+        "total_decomps_100": 112,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 7
+      }
+    },
+    {
+      "seed": 1030011,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        2.6,
+        5.2
+      ],
+      "early": {
+        "total_comps_100": 231,
+        "total_decomps_100": 132,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030012,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 217,
+        "total_decomps_100": 112,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 7
+      }
+    },
+    {
+      "seed": 1030013,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.8,
+        0.6,
+        1.2,
+        5.4
+      ],
+      "early": {
+        "total_comps_100": 237,
+        "total_decomps_100": 143,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.1,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030014,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 240,
+        "total_decomps_100": 142,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.63,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030015,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 245,
+        "total_decomps_100": 137,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.2,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030016,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.2,
+        0.9,
+        3.2,
+        4.9
+      ],
+      "early": {
+        "total_comps_100": 254,
+        "total_decomps_100": 157,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.2,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030017,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        2.2,
+        0.4,
+        3.0,
+        5.0
+      ],
+      "early": {
+        "total_comps_100": 259,
+        "total_decomps_100": 158,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.1,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030018,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 248,
+        "total_decomps_100": 142,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.61,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030019,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 217,
+        "total_decomps_100": 112,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 7
+      }
+    },
+    {
+      "seed": 1030020,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        6.0
+      ],
+      "early": {
+        "total_comps_100": 224,
+        "total_decomps_100": 119,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.1,
+        "min_total": 7
+      }
+    },
+    {
+      "seed": 1030021,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.2,
+        0.9,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 255,
+        "total_decomps_100": 155,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.16,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030022,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 241,
+        "total_decomps_100": 142,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.41,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030023,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 230,
+        "total_decomps_100": 132,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030024,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 249,
+        "total_decomps_100": 143,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.62,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030025,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.6,
+        0.7,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 255,
+        "total_decomps_100": 155,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.09,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030026,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.9,
+        0.5,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 256,
+        "total_decomps_100": 157,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.16,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030027,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        2.6,
+        0.2,
+        2.8,
+        5.1
+      ],
+      "early": {
+        "total_comps_100": 256,
+        "total_decomps_100": 155,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.14,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030028,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.4,
+        0.8,
+        0.0,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 242,
+        "total_decomps_100": 145,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.64,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030029,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        3.2,
+        4.9
+      ],
+      "early": {
+        "total_comps_100": 230,
+        "total_decomps_100": 132,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030030,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        2.8,
+        5.1
+      ],
+      "early": {
+        "total_comps_100": 207,
+        "total_decomps_100": 112,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 7
+      }
+    },
+    {
+      "seed": 1030031,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 250,
+        "total_decomps_100": 146,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.72,
+        "min_total": 7
+      }
+    },
+    {
+      "seed": 1030032,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        3.2,
+        4.9
+      ],
+      "early": {
+        "total_comps_100": 238,
+        "total_decomps_100": 140,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.62,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030033,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.5,
+        0.7,
+        2.6,
+        5.2
+      ],
+      "early": {
+        "total_comps_100": 256,
+        "total_decomps_100": 156,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.18,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030034,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 243,
+        "total_decomps_100": 135,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030035,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.6,
+        0.7,
+        2.6,
+        5.2
+      ],
+      "early": {
+        "total_comps_100": 253,
+        "total_decomps_100": 152,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.25,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030036,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 255,
+        "total_decomps_100": 155,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 2.14,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030037,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        2.8,
+        5.1
+      ],
+      "early": {
+        "total_comps_100": 231,
+        "total_decomps_100": 132,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030038,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.6,
+        0.7,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 266,
+        "total_decomps_100": 157,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.35,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030039,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 217,
+        "total_decomps_100": 112,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 7
+      }
+    },
+    {
+      "seed": 1030040,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.8,
+        6.1
+      ],
+      "early": {
+        "total_comps_100": 244,
+        "total_decomps_100": 139,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.0,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030041,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 239,
+        "total_decomps_100": 144,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.65,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030042,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.4,
+        0.8,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 250,
+        "total_decomps_100": 145,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.64,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030043,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        3.0,
+        5.0
+      ],
+      "early": {
+        "total_comps_100": 243,
+        "total_decomps_100": 144,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.54,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030044,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 246,
+        "total_decomps_100": 140,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.7,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030045,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 219,
+        "total_decomps_100": 114,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.03,
+        "min_total": 7
+      }
+    },
+    {
+      "seed": 1030046,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.4,
+        1.4,
+        0.7,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 255,
+        "total_decomps_100": 158,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.14,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030047,
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.8,
+        6.1
+      ],
+      "early": {
+        "total_comps_100": 223,
+        "total_decomps_100": 120,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.06,
+        "min_total": 7
+      }
+    },
+    {
+      "seed": 1030048,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.6,
+        0.7,
+        2.4,
+        5.3
+      ],
+      "early": {
+        "total_comps_100": 253,
+        "total_decomps_100": 154,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.26,
+        "min_total": 9
+      }
+    },
+    {
+      "seed": 1030049,
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "early": {
+        "total_comps_100": 250,
+        "total_decomps_100": 144,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.64,
+        "min_total": 8
+      }
+    },
+    {
+      "seed": 1030050,
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.4,
+        0.8,
+        0.0,
+        2.6,
+        5.2
+      ],
+      "early": {
+        "total_comps_100": 240,
+        "total_decomps_100": 145,
+        "min_d0_pop": 0,
+        "avg_d0_pop": 1.64,
+        "min_total": 8
+      }
+    }
+  ]
+}

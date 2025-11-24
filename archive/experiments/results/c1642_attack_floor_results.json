@@ -1,0 +1,1277 @@
+{
+  "cycle_id": "C1642",
+  "magnitude": 0.25,
+  "attack_multipliers": [
+    0.3,
+    0.4,
+    0.5,
+    0.6
+  ],
+  "seeds_per_condition": 50,
+  "rates": {
+    "0.3": 0.72,
+    "0.4": 0.94,
+    "0.5": 1.0,
+    "0.6": 0.98
+  },
+  "optimal": {
+    "attack_mult": 0.5,
+    "rate": 1.0
+  },
+  "results": [
+    {
+      "seed": 130001,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 3,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130002,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130003,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130004,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130005,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130006,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130007,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130008,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130009,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 5,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130010,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130011,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130012,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130013,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130014,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130015,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130016,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130017,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130018,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130019,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130020,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130021,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 5,
+        "cycle": 5
+      }
+    },
+    {
+      "seed": 130022,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130023,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130024,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130025,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130026,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130027,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130028,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130029,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130030,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130031,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130032,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130033,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130034,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130035,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130036,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130037,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130038,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130039,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130040,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130041,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130042,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130043,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130044,
+      "attack_mult": 0.3,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130045,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130046,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130047,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130048,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130049,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130050,
+      "attack_mult": 0.3,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130001,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130002,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130003,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130004,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130005,
+      "attack_mult": 0.4,
+      "coexist": false,
+      "first_extinct": {
+        "level": 5,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130006,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130007,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130008,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130009,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130010,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130011,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130012,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130013,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130014,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130015,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130016,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130017,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130018,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130019,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130020,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130021,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130022,
+      "attack_mult": 0.4,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130023,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130024,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130025,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130026,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130027,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130028,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130029,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130030,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130031,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130032,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130033,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130034,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130035,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130036,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130037,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130038,
+      "attack_mult": 0.4,
+      "coexist": false,
+      "first_extinct": {
+        "level": 4,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130039,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130040,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130041,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130042,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130043,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130044,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130045,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130046,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130047,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130048,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130049,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130050,
+      "attack_mult": 0.4,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130001,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130002,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130003,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130004,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130005,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130006,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130007,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130008,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130009,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130010,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130011,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130012,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130013,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130014,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130015,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130016,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130017,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130018,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130019,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130020,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130021,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130022,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130023,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130024,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130025,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130026,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130027,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130028,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130029,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130030,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130031,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130032,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130033,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130034,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130035,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130036,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130037,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130038,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130039,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130040,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130041,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130042,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130043,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130044,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130045,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130046,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130047,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130048,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130049,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130050,
+      "attack_mult": 0.5,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130001,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130002,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130003,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130004,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130005,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130006,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130007,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130008,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130009,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130010,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130011,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130012,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130013,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130014,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130015,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130016,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130017,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130018,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130019,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130020,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130021,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130022,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130023,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130024,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130025,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130026,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130027,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130028,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130029,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130030,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130031,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130032,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130033,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130034,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130035,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130036,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130037,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130038,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130039,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130040,
+      "attack_mult": 0.6,
+      "coexist": false,
+      "first_extinct": {
+        "level": 5,
+        "cycle": 6
+      }
+    },
+    {
+      "seed": 130041,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130042,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130043,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130044,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130045,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130046,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130047,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130048,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130049,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    },
+    {
+      "seed": 130050,
+      "attack_mult": 0.6,
+      "coexist": true,
+      "first_extinct": null
+    }
+  ]
+}

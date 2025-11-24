@@ -1,0 +1,42 @@
+[
+  {
+    "seed": 1001,
+    "final_population": 95,
+    "mean_population": 95.627,
+    "mean_e": 0.10456277000000003,
+    "activity_distribution": {
+      "0": 9986,
+      "3": 1,
+      "2": 1,
+      "1": 12
+    },
+    "steps_survived": 10000,
+    "runtime_seconds": 0.04782271385192871
+  },
+  {
+    "seed": 1002,
+    "final_population": 96,
+    "mean_population": 95.6527,
+    "mean_e": 0.10456531,
+    "activity_distribution": {
+      "0": 9989,
+      "1": 10,
+      "4": 1
+    },
+    "steps_survived": 10000,
+    "runtime_seconds": 0.046843767166137695
+  },
+  {
+    "seed": 1003,
+    "final_population": 96,
+    "mean_population": 95.6427,
+    "mean_e": 0.10456432,
+    "activity_distribution": {
+      "0": 9984,
+      "1": 14,
+      "2": 2
+    },
+    "steps_survived": 10000,
+    "runtime_seconds": 0.048336029052734375
+  }
+]

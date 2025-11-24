@@ -1,0 +1,12 @@
+{
+  "conditions": [
+    {
+      "method": "vector",
+      "avg_tracking_sim": 0.7354925987038662
+    },
+    {
+      "method": "phase",
+      "avg_tracking_sim": 0.998454818527998
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+[
+  {
+    "seed": 300,
+    "condition": "sub",
+    "correlation": 0.2210859558722294,
+    "runtime_seconds": 0.06601810455322266
+  },
+  {
+    "seed": 301,
+    "condition": "sub",
+    "correlation": 0.22132737535594027,
+    "runtime_seconds": 0.06687307357788086
+  },
+  {
+    "seed": 302,
+    "condition": "sub",
+    "correlation": 0.012236598156979438,
+    "runtime_seconds": 0.06431293487548828
+  },
+  {
+    "seed": 303,
+    "condition": "sub",
+    "correlation": -0.2687612449955865,
+    "runtime_seconds": 0.06627511978149414
+  },
+  {
+    "seed": 304,
+    "condition": "sub",
+    "correlation": -0.06285336575225606,
+    "runtime_seconds": 0.06517291069030762
+  },
+  {
+    "seed": 305,
+    "condition": "sub",
+    "correlation": -0.08067964691226057,
+    "runtime_seconds": 0.06612515449523926
+  },
+  {
+    "seed": 306,
+    "condition": "sub",
+    "correlation": 0.1856445446528784,
+    "runtime_seconds": 0.06690406799316406
+  },
+  {
+    "seed": 307,
+    "condition": "sub",
+    "correlation": 0.07022155635983937,
+    "runtime_seconds": 0.06719517707824707
+  },
+  {
+    "seed": 308,
+    "condition": "sub",
+    "correlation": -0.2904848709482267,
+    "runtime_seconds": 0.06598711013793945
+  },
+  {
+    "seed": 309,
+    "condition": "sub",
+    "correlation": -0.0720213995379424,
+    "runtime_seconds": 0.06668901443481445
+  },
+  {
+    "seed": 300,
+    "condition": "super",
+    "correlation": -0.15163516903579669,
+    "runtime_seconds": 0.06061720848083496
+  },
+  {
+    "seed": 301,
+    "condition": "super",
+    "correlation": 0.06080709155911859,
+    "runtime_seconds": 0.05935406684875488
+  },
+  {
+    "seed": 302,
+    "condition": "super",
+    "correlation": -0.11724916090991183,
+    "runtime_seconds": 0.060681819915771484
+  },
+  {
+    "seed": 303,
+    "condition": "super",
+    "correlation": 0.15052294486440443,
+    "runtime_seconds": 0.060500144958496094
+  },
+  {
+    "seed": 304,
+    "condition": "super",
+    "correlation": -0.06392889875652896,
+    "runtime_seconds": 0.06157279014587402
+  },
+  {
+    "seed": 305,
+    "condition": "super",
+    "correlation": 0.22447765588947172,
+    "runtime_seconds": 0.06129097938537598
+  },
+  {
+    "seed": 306,
+    "condition": "super",
+    "correlation": 0.1607119391247949,
+    "runtime_seconds": 0.06055784225463867
+  },
+  {
+    "seed": 307,
+    "condition": "super",
+    "correlation": 0.07270564557857084,
+    "runtime_seconds": 0.06017112731933594
+  },
+  {
+    "seed": 308,
+    "condition": "super",
+    "correlation": -0.1509201797296264,
+    "runtime_seconds": 0.058830976486206055
+  },
+  {
+    "seed": 309,
+    "condition": "super",
+    "correlation": -0.13655141161528334,
+    "runtime_seconds": 0.058656930923461914
+  },
+  {
+    "seed": 300,
+    "condition": "soc",
+    "correlation": -0.021649121819318266,
+    "runtime_seconds": 0.06230282783508301
+  },
+  {
+    "seed": 301,
+    "condition": "soc",
+    "correlation": 0.12015205700961033,
+    "runtime_seconds": 0.06366682052612305
+  },
+  {
+    "seed": 302,
+    "condition": "soc",
+    "correlation": 0.20775777179610766,
+    "runtime_seconds": 0.0641641616821289
+  },
+  {
+    "seed": 303,
+    "condition": "soc",
+    "correlation": 0.1798854998325992,
+    "runtime_seconds": 0.06358599662780762
+  },
+  {
+    "seed": 304,
+    "condition": "soc",
+    "correlation": -0.19491751249836992,
+    "runtime_seconds": 0.06388401985168457
+  },
+  {
+    "seed": 305,
+    "condition": "soc",
+    "correlation": 0.024496220588394905,
+    "runtime_seconds": 0.062196969985961914
+  },
+  {
+    "seed": 306,
+    "condition": "soc",
+    "correlation": -0.014756528813144147,
+    "runtime_seconds": 0.06284117698669434
+  },
+  {
+    "seed": 307,
+    "condition": "soc",
+    "correlation": -0.16447739228533495,
+    "runtime_seconds": 0.06308579444885254
+  },
+  {
+    "seed": 308,
+    "condition": "soc",
+    "correlation": -0.07488726711039755,
+    "runtime_seconds": 0.06351399421691895
+  },
+  {
+    "seed": 309,
+    "condition": "soc",
+    "correlation": 0.06498999470014835,
+    "runtime_seconds": 0.06222414970397949
+  }
+]

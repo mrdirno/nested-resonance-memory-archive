@@ -1,0 +1,28 @@
+{
+  "conditions": [
+    {
+      "noise": 0.01,
+      "monolith": 1.0,
+      "swarm": 1.0,
+      "diff": 0.0
+    },
+    {
+      "noise": 0.05,
+      "monolith": 1.0,
+      "swarm": 1.0,
+      "diff": 0.0
+    },
+    {
+      "noise": 0.1,
+      "monolith": 1.0,
+      "swarm": 1.0,
+      "diff": 0.0
+    },
+    {
+      "noise": 0.2,
+      "monolith": 0.7,
+      "swarm": 0.65,
+      "diff": -0.04999999999999993
+    }
+  ]
+}

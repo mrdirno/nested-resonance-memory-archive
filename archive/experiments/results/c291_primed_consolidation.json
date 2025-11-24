@@ -1,0 +1,16 @@
+{
+  "chain_ids": [
+    "1ebe60579d887d53",
+    "984308f253e77deb",
+    "fb205833739ca1a5",
+    "c7cad94ef77b7244",
+    "1a772c3bc6104eab"
+  ],
+  "metrics": {
+    "coalitions": 20,
+    "updates": 20,
+    "primed_edges": 26,
+    "strengthened_edges": 2
+  },
+  "success": false
+}

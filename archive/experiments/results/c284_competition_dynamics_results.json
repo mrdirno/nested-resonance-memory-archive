@@ -1,0 +1,50 @@
+{
+  "cycle_id": "C284",
+  "cycle_name": "Competition Dynamics",
+  "date": "2025-11-20T00:37:42.970172",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 30000,
+    "n_populations": 2,
+    "initial_agents_per_pop": 50,
+    "base_f_intra": 0.005,
+    "energy": {
+      "E_consume": 0.3,
+      "E_recharge": 0.5,
+      "spawn": 0.5
+    },
+    "fitness_ratios": [
+      1.0,
+      1.5,
+      2.0,
+      3.0
+    ],
+    "competition_modes": [
+      "local_K",
+      "global_K"
+    ],
+    "global_K": 500,
+    "density_factor": 0.1,
+    "seeds": [
+      100,
+      101,
+      102
+    ]
+  },
+  "results": [
+    {
+      "fitness_ratio": 1.0,
+      "competition_mode": "local_K",
+      "f_intra_0": 0.005,
+      "f_intra_1": 0.005,
+      "seed": 100,
+      "final_pops": [
+        15,
+        25
+      ],
+      "outcome_type": "COEXISTENCE_EQUAL",
+      "dominance": 0.5354025218234724,
+      "pop0_mean": 23.95,
+      "pop0_std": 2.1324868112136124,
+      "pop0_extinct": 

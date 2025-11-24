@@ -1,0 +1,7805 @@
+{
+  "cycle_id": "C1664",
+  "results": [
+    {
+      "seed": 1664001,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 32702,
+      "n_decomps": 32596,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664002,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 32704,
+      "n_decomps": 32598,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664003,
+      "energy_source": "synthetic",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 23483,
+      "n_decomps": 23378,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664004,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        2.0,
+        0.5,
+        2.2,
+        5.4
+      ],
+      "n_comps": 35774,
+      "n_decomps": 35674,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664005,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 32702,
+      "n_decomps": 32596,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664006,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        2.4,
+        5.3
+      ],
+      "n_comps": 29214,
+      "n_decomps": 29115,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664007,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.4,
+        6.3
+      ],
+      "n_comps": 29234,
+      "n_decomps": 29126,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664008,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.8,
+        0.6,
+        2.2,
+        5.4
+      ],
+      "n_comps": 35754,
+      "n_decomps": 35654,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664009,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.2,
+        0.9,
+        2.4,
+        5.3
+      ],
+      "n_comps": 35773,
+      "n_decomps": 35673,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664010,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        2.8,
+        5.1
+      ],
+      "n_comps": 29209,
+      "n_decomps": 29112,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664011,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.2,
+        2.1,
+        0.4,
+        2.6,
+        5.2
+      ],
+      "n_comps": 35769,
+      "n_decomps": 35669,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664012,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.7,
+        0.6,
+        2.4,
+        5.3
+      ],
+      "n_comps": 35749,
+      "n_decomps": 35649,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664013,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        2.6,
+        5.2
+      ],
+      "n_comps": 29207,
+      "n_decomps": 29109,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664014,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.4,
+        1.6,
+        0.6,
+        3.0,
+        5.0
+      ],
+      "n_comps": 35770,
+      "n_decomps": 35672,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664015,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.5,
+        0.7,
+        2.4,
+        5.3
+      ],
+      "n_comps": 35758,
+      "n_decomps": 35658,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664016,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.6,
+        5.2
+      ],
+      "n_comps": 29208,
+      "n_decomps": 29111,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664017,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.4,
+        5.3
+      ],
+      "n_comps": 29217,
+      "n_decomps": 29117,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664018,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        2.6,
+        5.2
+      ],
+      "n_comps": 32694,
+      "n_decomps": 32597,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664019,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        2.0,
+        0.5,
+        2.8,
+        5.1
+      ],
+      "n_comps": 35799,
+      "n_decomps": 35701,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664020,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        2.0,
+        0.5,
+        2.6,
+        5.2
+      ],
+      "n_comps": 35773,
+      "n_decomps": 35674,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664021,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 32703,
+      "n_decomps": 32597,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664022,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.1,
+        0.9,
+        1.4,
+        6.3
+      ],
+      "n_comps": 35778,
+      "n_decomps": 35669,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664023,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.6,
+        0.7,
+        2.0,
+        5.5
+      ],
+      "n_comps": 35798,
+      "n_decomps": 35698,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664024,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        2.0,
+        0.5,
+        2.8,
+        5.1
+      ],
+      "n_comps": 35735,
+      "n_decomps": 35636,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664025,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.4,
+        0.8,
+        2.6,
+        5.2
+      ],
+      "n_comps": 35778,
+      "n_decomps": 35678,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664026,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        2.6,
+        5.2
+      ],
+      "n_comps": 32691,
+      "n_decomps": 32594,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664027,
+      "energy_source": "synthetic",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 23506,
+      "n_decomps": 23401,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664028,
+      "energy_source": "synthetic",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 23471,
+      "n_decomps": 23366,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664029,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.4,
+        1.2,
+        0.8,
+        2.6,
+        5.2
+      ],
+      "n_comps": 35765,
+      "n_decomps": 35666,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664030,
+      "energy_source": "synthetic",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.8,
+        0.6,
+        2.2,
+        5.4
+      ],
+      "n_comps": 35723,
+      "n_decomps": 35622,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664001,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.5,
+        0.7,
+        0.8,
+        6.6
+      ],
+      "n_comps": 15480,
+      "n_decomps": 15371,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664002,
+      "energy_source": "cpu",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        0.4,
+        6.8
+      ],
+      "n_comps": 12591,
+      "n_decomps": 12484,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664003,
+      "energy_source": "cpu",
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.4,
+        6.8
+      ],
+      "n_comps": 10155,
+      "n_decomps": 10050,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664004,
+      "energy_source": "cpu",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.6,
+        6.7
+      ],
+      "n_comps": 10145,
+      "n_decomps": 10040,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664005,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.2,
+        6.4
+      ],
+      "n_comps": 12591,
+      "n_decomps": 12483,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664006,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.4,
+        5.8
+      ],
+      "n_comps": 12638,
+      "n_decomps": 12538,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664007,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.2,
+        0.9,
+        1.4,
+        6.3
+      ],
+      "n_comps": 15484,
+      "n_decomps": 15375,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664008,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.2,
+        6.4
+      ],
+      "n_comps": 13742,
+      "n_decomps": 13636,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664009,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.2,
+        0.9,
+        1.8,
+        5.6
+      ],
+      "n_comps": 15548,
+      "n_decomps": 15449,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664010,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        1.2,
+        5.9
+      ],
+      "n_comps": 12644,
+      "n_decomps": 12544,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664011,
+      "energy_source": "cpu",
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.4,
+        6.8
+      ],
+      "n_comps": 10156,
+      "n_decomps": 10051,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664012,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.0,
+        1.0,
+        2.8,
+        5.1
+      ],
+      "n_comps": 15562,
+      "n_decomps": 15461,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664013,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.4,
+        5.8
+      ],
+      "n_comps": 12644,
+      "n_decomps": 12544,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664014,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.4,
+        0.8,
+        1.2,
+        5.9
+      ],
+      "n_comps": 15530,
+      "n_decomps": 15429,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664015,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.6,
+        0.7,
+        2.6,
+        5.2
+      ],
+      "n_comps": 15539,
+      "n_decomps": 15438,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664016,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.4,
+        5.3
+      ],
+      "n_comps": 12638,
+      "n_decomps": 12538,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664017,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        1.2,
+        5.9
+      ],
+      "n_comps": 12640,
+      "n_decomps": 12540,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664018,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.2,
+        5.9
+      ],
+      "n_comps": 12652,
+      "n_decomps": 12556,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664019,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.6,
+        0.7,
+        1.4,
+        5.8
+      ],
+      "n_comps": 15537,
+      "n_decomps": 15436,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664020,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.4,
+        0.8,
+        1.2,
+        5.9
+      ],
+      "n_comps": 15540,
+      "n_decomps": 15439,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664021,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        6.5
+      ],
+      "n_comps": 12589,
+      "n_decomps": 12482,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664022,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.8,
+        6.6
+      ],
+      "n_comps": 14122,
+      "n_decomps": 14007,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664023,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.2,
+        0.9,
+        2.0,
+        5.5
+      ],
+      "n_comps": 15531,
+      "n_decomps": 15431,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664024,
+      "energy_source": "cpu",
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.4,
+        6.8
+      ],
+      "n_comps": 10147,
+      "n_decomps": 10042,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664025,
+      "energy_source": "cpu",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.8,
+        6.6
+      ],
+      "n_comps": 10148,
+      "n_decomps": 10043,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664026,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.0,
+        6.0
+      ],
+      "n_comps": 13804,
+      "n_decomps": 13706,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664027,
+      "energy_source": "cpu",
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.4,
+        6.8
+      ],
+      "n_comps": 10164,
+      "n_decomps": 10059,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664028,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.2,
+        6.4
+      ],
+      "n_comps": 13743,
+      "n_decomps": 13638,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664029,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.0,
+        1.0,
+        1.0,
+        6.0
+      ],
+      "n_comps": 15556,
+      "n_decomps": 15455,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664030,
+      "energy_source": "cpu",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.0,
+        1.0,
+        2.0,
+        5.5
+      ],
+      "n_comps": 15533,
+      "n_decomps": 15432,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664001,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        1.0,
+        0.5,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 44668,
+      "n_decomps": 44562,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664002,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 44671,
+      "n_decomps": 44565,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664003,
+      "energy_source": "memory",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.8,
+        6.1
+      ],
+      "n_comps": 31259,
+      "n_decomps": 31156,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664004,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        2.6,
+        0.2,
+        2.2,
+        5.4
+      ],
+      "n_comps": 47868,
+      "n_decomps": 47767,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664005,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 44678,
+      "n_decomps": 44572,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664006,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        4.0,
+        4.5
+      ],
+      "n_comps": 39092,
+      "n_decomps": 38993,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664007,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        1.4,
+        6.3
+      ],
+      "n_comps": 39102,
+      "n_decomps": 38994,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664008,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.9,
+        0.5,
+        2.2,
+        5.4
+      ],
+      "n_comps": 47912,
+      "n_decomps": 47813,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664009,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.4,
+        0.8,
+        3.2,
+        4.9
+      ],
+      "n_comps": 47882,
+      "n_decomps": 47785,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.773,
+          "disk": 0.042,
+          "combined": 0.27166666666666667
+        }
+      ]
+    },
+    {
+      "seed": 1664010,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        3.4,
+        4.8
+      ],
+      "n_comps": 39049,
+      "n_decomps": 38951,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664011,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.2,
+        2.1,
+        0.4,
+        3.8,
+        4.6
+      ],
+      "n_comps": 47864,
+      "n_decomps": 47769,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664012,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.2,
+        2.1,
+        0.4,
+        3.2,
+        4.9
+      ],
+      "n_comps": 47857,
+      "n_decomps": 47757,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664013,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        2.4,
+        5.3
+      ],
+      "n_comps": 39052,
+      "n_decomps": 38953,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664014,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.9,
+        0.5,
+        3.4,
+        4.8
+      ],
+      "n_comps": 47902,
+      "n_decomps": 47803,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664015,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        2.4,
+        0.3,
+        3.6,
+        4.7
+      ],
+      "n_comps": 47888,
+      "n_decomps": 47787,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664016,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        2.0,
+        5.5
+      ],
+      "n_comps": 39043,
+      "n_decomps": 38945,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664017,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.6,
+        0.7,
+        2.4,
+        5.3
+      ],
+      "n_comps": 39084,
+      "n_decomps": 38985,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664018,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.6,
+        0.7,
+        0.0,
+        3.2,
+        4.9
+      ],
+      "n_comps": 44640,
+      "n_decomps": 44543,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664019,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.8,
+        0.6,
+        4.0,
+        4.5
+      ],
+      "n_comps": 47823,
+      "n_decomps": 47723,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664020,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        2.4,
+        0.3,
+        3.2,
+        4.9
+      ],
+      "n_comps": 47791,
+      "n_decomps": 47691,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664021,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        1.0,
+        0.5,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 44670,
+      "n_decomps": 44565,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664022,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.7,
+        0.6,
+        1.4,
+        6.3
+      ],
+      "n_comps": 47902,
+      "n_decomps": 47795,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664023,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.4,
+        1.6,
+        0.6,
+        3.4,
+        4.8
+      ],
+      "n_comps": 47899,
+      "n_decomps": 47798,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664024,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.9,
+        0.5,
+        3.2,
+        4.9
+      ],
+      "n_comps": 47882,
+      "n_decomps": 47785,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664025,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.2,
+        2.3,
+        0.3,
+        3.0,
+        5.0
+      ],
+      "n_comps": 47862,
+      "n_decomps": 47764,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664026,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        1.2,
+        0.4,
+        0.0,
+        3.0,
+        5.0
+      ],
+      "n_comps": 44643,
+      "n_decomps": 44546,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664027,
+      "energy_source": "memory",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        2.6,
+        5.7
+      ],
+      "n_comps": 31263,
+      "n_decomps": 31160,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664028,
+      "energy_source": "memory",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 31248,
+      "n_decomps": 31143,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664029,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        2.0,
+        0.5,
+        3.8,
+        4.6
+      ],
+      "n_comps": 47791,
+      "n_decomps": 47691,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664030,
+      "energy_source": "memory",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.8,
+        0.6,
+        3.2,
+        4.9
+      ],
+      "n_comps": 47867,
+      "n_decomps": 47767,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664001,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        0.6,
+        6.7
+      ],
+      "n_comps": 13905,
+      "n_decomps": 13797,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664002,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        6.5
+      ],
+      "n_comps": 13903,
+      "n_decomps": 13795,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664003,
+      "energy_source": "disk",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        6.5
+      ],
+      "n_comps": 11210,
+      "n_decomps": 11108,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664004,
+      "energy_source": "disk",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.6,
+        6.7
+      ],
+      "n_comps": 11198,
+      "n_decomps": 11093,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664005,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        0.8,
+        6.6
+      ],
+      "n_comps": 13899,
+      "n_decomps": 13792,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664006,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        0.8,
+        0.6,
+        2.0,
+        5.5
+      ],
+      "n_comps": 13952,
+      "n_decomps": 13852,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664007,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        1.4,
+        0.8,
+        0.0,
+        7.0
+      ],
+      "n_comps": 17050,
+      "n_decomps": 16941,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664008,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        1.0,
+        6.5
+      ],
+      "n_comps": 15195,
+      "n_decomps": 15092,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664009,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.1,
+        0.9,
+        1.2,
+        5.9
+      ],
+      "n_comps": 17114,
+      "n_decomps": 17014,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664010,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        1.4,
+        0.3,
+        1.4,
+        5.8
+      ],
+      "n_comps": 13951,
+      "n_decomps": 13851,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664011,
+      "energy_source": "disk",
+      "coexist": false,
+      "depths_alive": 1,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.4,
+        6.8
+      ],
+      "n_comps": 11212,
+      "n_decomps": 11107,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664012,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.8,
+        0.6,
+        1.4,
+        5.8
+      ],
+      "n_comps": 17096,
+      "n_decomps": 16995,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664013,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        2.2,
+        5.4
+      ],
+      "n_comps": 13953,
+      "n_decomps": 13853,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664014,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.4,
+        0.8,
+        1.2,
+        5.9
+      ],
+      "n_comps": 17101,
+      "n_decomps": 17000,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664015,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.2,
+        0.9,
+        1.8,
+        5.6
+      ],
+      "n_comps": 17106,
+      "n_decomps": 17005,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664016,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        1.4,
+        5.8
+      ],
+      "n_comps": 13957,
+      "n_decomps": 13857,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664017,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        1.2,
+        5.9
+      ],
+      "n_comps": 13959,
+      "n_decomps": 13859,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664018,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        1.8,
+        5.6
+      ],
+      "n_comps": 13964,
+      "n_decomps": 13864,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664019,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.1,
+        0.9,
+        1.4,
+        5.8
+      ],
+      "n_comps": 17133,
+      "n_decomps": 17032,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664020,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.0,
+        1.0,
+        2.2,
+        5.4
+      ],
+      "n_comps": 17099,
+      "n_decomps": 16998,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664021,
+      "energy_source": "disk",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        0.4,
+        6.8
+      ],
+      "n_comps": 13894,
+      "n_decomps": 13787,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664022,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.0,
+        1.0,
+        2.2,
+        6.4
+      ],
+      "n_comps": 15560,
+      "n_decomps": 15446,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664023,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.8,
+        0.6,
+        1.4,
+        5.8
+      ],
+      "n_comps": 17106,
+      "n_decomps": 17005,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664024,
+      "energy_source": "disk",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        6.5
+      ],
+      "n_comps": 11199,
+      "n_decomps": 11094,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664025,
+      "energy_source": "disk",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        6.5
+      ],
+      "n_comps": 11201,
+      "n_decomps": 11096,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664026,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        2.4,
+        5.3
+      ],
+      "n_comps": 15259,
+      "n_decomps": 15161,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664027,
+      "energy_source": "disk",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.6,
+        6.7
+      ],
+      "n_comps": 11204,
+      "n_decomps": 11100,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664028,
+      "energy_source": "disk",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        1.0,
+        0.0,
+        0.2,
+        6.9
+      ],
+      "n_comps": 15195,
+      "n_decomps": 15091,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664029,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.4,
+        0.8,
+        1.8,
+        5.6
+      ],
+      "n_comps": 17105,
+      "n_decomps": 17004,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664030,
+      "energy_source": "disk",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.6,
+        0.7,
+        1.8,
+        5.6
+      ],
+      "n_comps": 17093,
+      "n_decomps": 16993,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664001,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.4,
+        6.3
+      ],
+      "n_comps": 21317,
+      "n_decomps": 21210,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664002,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.2,
+        6.4
+      ],
+      "n_comps": 21318,
+      "n_decomps": 21212,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664003,
+      "energy_source": "combined",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.2,
+        6.4
+      ],
+      "n_comps": 17183,
+      "n_decomps": 17078,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664004,
+      "energy_source": "combined",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        6.5
+      ],
+      "n_comps": 17173,
+      "n_decomps": 17068,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664005,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.4,
+        6.3
+      ],
+      "n_comps": 21315,
+      "n_decomps": 21207,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664006,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.6,
+        5.7
+      ],
+      "n_comps": 21379,
+      "n_decomps": 21279,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664007,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        7.0
+      ],
+      "n_comps": 26058,
+      "n_decomps": 25949,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664008,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 23486,
+      "n_decomps": 23381,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664009,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.5,
+        0.7,
+        1.8,
+        5.6
+      ],
+      "n_comps": 26134,
+      "n_decomps": 26033,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664010,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        1.8,
+        5.6
+      ],
+      "n_comps": 21382,
+      "n_decomps": 21282,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664011,
+      "energy_source": "combined",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 17180,
+      "n_decomps": 17075,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664012,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.5,
+        0.7,
+        2.4,
+        5.3
+      ],
+      "n_comps": 26128,
+      "n_decomps": 26027,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664013,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.2,
+        5.4
+      ],
+      "n_comps": 21379,
+      "n_decomps": 21279,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664014,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.0,
+        1.0,
+        2.0,
+        5.5
+      ],
+      "n_comps": 26105,
+      "n_decomps": 26004,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664015,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.2,
+        0.9,
+        2.6,
+        5.2
+      ],
+      "n_comps": 26159,
+      "n_decomps": 26058,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664016,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.4,
+        5.3
+      ],
+      "n_comps": 21382,
+      "n_decomps": 21282,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664017,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.4,
+        5.8
+      ],
+      "n_comps": 21379,
+      "n_decomps": 21281,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664018,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.2,
+        0.9,
+        2.2,
+        5.4
+      ],
+      "n_comps": 21391,
+      "n_decomps": 21291,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664019,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.2,
+        1.3,
+        0.8,
+        2.2,
+        5.4
+      ],
+      "n_comps": 26150,
+      "n_decomps": 26049,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664020,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.4,
+        1.0,
+        0.9,
+        2.2,
+        5.4
+      ],
+      "n_comps": 26138,
+      "n_decomps": 26037,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664021,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        1.4,
+        6.3
+      ],
+      "n_comps": 21313,
+      "n_decomps": 21205,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        }
+      ]
+    },
+    {
+      "seed": 1664022,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.0,
+        0.4,
+        0.8,
+        2.4,
+        6.3
+      ],
+      "n_comps": 23829,
+      "n_decomps": 23714,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        }
+      ]
+    },
+    {
+      "seed": 1664023,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.4,
+        1.2,
+        0.8,
+        2.0,
+        5.5
+      ],
+      "n_comps": 26110,
+      "n_decomps": 26010,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        }
+      ]
+    },
+    {
+      "seed": 1664024,
+      "energy_source": "combined",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 17176,
+      "n_decomps": 17071,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        }
+      ]
+    },
+    {
+      "seed": 1664025,
+      "energy_source": "combined",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.8,
+        6.6
+      ],
+      "n_comps": 17175,
+      "n_decomps": 17070,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.7709999999999999,
+          "disk": 0.042,
+          "combined": 0.27099999999999996
+        }
+      ]
+    },
+    {
+      "seed": 1664026,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.8,
+        0.6,
+        0.0,
+        2.6,
+        5.2
+      ],
+      "n_comps": 23558,
+      "n_decomps": 23461,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664027,
+      "energy_source": "combined",
+      "coexist": false,
+      "depths_alive": 2,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.8,
+        6.6
+      ],
+      "n_comps": 17179,
+      "n_decomps": 17074,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664028,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 3,
+      "finals": [
+        0.4,
+        0.8,
+        0.0,
+        1.4,
+        6.3
+      ],
+      "n_comps": 23489,
+      "n_decomps": 23383,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664029,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.2,
+        0.9,
+        1.6,
+        5.7
+      ],
+      "n_comps": 26140,
+      "n_decomps": 26040,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    },
+    {
+      "seed": 1664030,
+      "energy_source": "combined",
+      "coexist": true,
+      "depths_alive": 4,
+      "finals": [
+        0.0,
+        1.6,
+        0.7,
+        2.6,
+        5.2
+      ],
+      "n_comps": 26143,
+      "n_decomps": 26042,
+      "reality_samples": [
+        {
+          "cycle": 0,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 1000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 2000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 3000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        },
+        {
+          "cycle": 4000,
+          "cpu": 0.0,
+          "memory": 0.772,
+          "disk": 0.042,
+          "combined": 0.27133333333333337
+        }
+      ]
+    }
+  ]
+}

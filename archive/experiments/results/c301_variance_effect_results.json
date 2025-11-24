@@ -1,0 +1,134 @@
+{
+  "cycle_id": "C301",
+  "cycle_name": "Variance Effect Test",
+  "date": "2025-11-20T01:26:04.355879",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 30000,
+    "n_populations": 2,
+    "initial_prey": 200,
+    "initial_predator": 30,
+    "base_attack_rate": 0.01,
+    "mean_h": 0.02,
+    "conditions": [
+      {
+        "name": "low_variance",
+        "h_std": 0.001
+      },
+      {
+        "name": "high_variance",
+        "h_std": 0.005
+      }
+    ],
+    "seeds": [
+      800,
+      801,
+      802
+    ]
+  },
+  "results": [
+    {
+      "condition": "low_variance",
+      "h_std": 0.001,
+      "initial_h_variance": 7.555495727528826e-07,
+      "seed": 800,
+      "prey_init": 459.7,
+      "prey_final": 500.0,
+      "pred_init": 3.9,
+      "pred_final": 0.0,
+      "h_init": 0.019971793092294594,
+      "h_final": 0.019999999999999997,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.213050127029419,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c301_low_variance_seed800.db"
+    },
+    {
+      "condition": "low_variance",
+      "h_std": 0.001,
+      "initial_h_variance": 1.2148599615697215e-06,
+      "seed": 801,
+      "prey_init": 444.5,
+      "prey_final": 500.0,
+      "pred_init": 3.9,
+      "pred_final": 0.0,
+      "h_init": 0.02001023411610825,
+      "h_final": 0.019999999999999997,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.1206510066986084,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c301_low_variance_seed801.db"
+    },
+    {
+      "condition": "low_variance",
+      "h_std": 0.001,
+      "initial_h_variance": 9.303836044752271e-07,
+      "seed": 802,
+      "prey_init": 455.9,
+      "prey_final": 500.0,
+      "pred_init": 3.7,
+      "pred_final": 0.0,
+      "h_init": 0.020009822252836252,
+      "h_final": 0.019999999999999997,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.140033006668091,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c301_low_variance_seed802.db"
+    },
+    {
+      "condition": "high_variance",
+      "h_std": 0.005,
+      "initial_h_variance": 1.8888739318822057e-05,
+      "seed": 800,
+      "prey_init": 434.1,
+      "prey_final": 500.0,
+      "pred_init": 3.9,
+      "pred_final": 0.0,
+      "h_init": 0.01985896546147296,
+      "h_final": 0.019999999999999997,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.1211769580841064,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c301_high_variance_seed800.db"
+    },
+    {
+      "condition": "high_variance",
+      "h_std": 0.005,
+      "initial_h_variance": 3.037149903924303e-05,
+      "seed": 801,
+      "prey_init": 444.7,
+      "prey_final": 500.0,
+      "pred_init": 3.8,
+      "pred_final": 0.0,
+      "h_init": 0.020051535225201495,
+      "h_final": 0.019999999999999997,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.106973886489868,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c301_high_variance_seed801.db"
+    },
+    {
+      "condition": "high_variance",
+      "h_std": 0.005,
+      "initial_h_variance": 2.3259590111880678e-05,
+      "seed": 802,
+      "prey_init": 459.8,
+      "prey_final": 500.0,
+      "pred_init": 3.8,
+      "pred_final": 0.0,
+      "h_init": 0.019992691503993805,
+      "h_final": 0.019999999999999997,
+      "prey_survive": true,
+      "pred_survive": false,
+      "coexist": false,
+      "runtime_seconds": 3.1336381435394287,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c301_high_variance_seed802.db"
+    }
+  ]
+}

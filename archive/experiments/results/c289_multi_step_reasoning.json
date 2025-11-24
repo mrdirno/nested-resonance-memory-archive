@@ -1,0 +1,14 @@
+{
+  "task": "Grid Navigation (0,0) to (3,3)",
+  "path": [
+    "EAST",
+    "EAST",
+    "EAST",
+    "NORTH",
+    "NORTH",
+    "NORTH"
+  ],
+  "steps": 6,
+  "lineage_depth": 7,
+  "success": true
+}

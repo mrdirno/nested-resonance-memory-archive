@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "energy": 50.0,
+      "optimal_rate": 0.17891412716201854,
+      "accuracy": 0.32999999999999996
+    },
+    {
+      "energy": 100.0,
+      "optimal_rate": 0.1436035159567664,
+      "accuracy": 0.26
+    },
+    {
+      "energy": 200.0,
+      "optimal_rate": 0.15462244324960597,
+      "accuracy": 0.27
+    },
+    {
+      "energy": 400.0,
+      "optimal_rate": 0.15353553821457816,
+      "accuracy": 0.26
+    }
+  ]
+}

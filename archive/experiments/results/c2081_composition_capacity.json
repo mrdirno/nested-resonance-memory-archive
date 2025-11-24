@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "n_op": 14,
+    "num_cycles": 200,
+    "num_trials": 5,
+    "timestamp": "2025-11-22T01:03:53.092916"
+  },
+  "capacities": [
+    {
+      "pct_nop": 50,
+      "n_items": 7,
+      "retrieval_accuracy": 1.0,
+      "composition_accuracy": 1.0
+    },
+    {
+      "pct_nop": 75,
+      "n_items": 10,
+      "retrieval_accuracy": 1.0,
+      "composition_accuracy": 1.0
+    },
+    {
+      "pct_nop": 100,
+      "n_items": 14,
+      "retrieval_accuracy": 0.8857142857142858,
+      "composition_accuracy": 0.72
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Composition degrades at capacity: 72%",
+      "Composition-safe limit: 10 items (75% N_op)"
+    ],
+    "composition_viable": false
+  }
+}

@@ -1,0 +1,333 @@
+{
+  "cycle_id": "C350",
+  "cycle_name": "Full Reintroduction Test",
+  "date": "2025-11-20T03:03:07.253490",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "k_collapse": 200,
+  "k_recovery": 250,
+  "reintro_cycle": 5000,
+  "n_seeds": 20,
+  "recovery_rate": 0.0,
+  "results": [
+    {
+      "seed": 4980,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 0.40944886207580566,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4981,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": true,
+      "coexist": false,
+      "runtime": 0.13373804092407227,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4982,
+      "finals": {
+        "L0": 250.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 2.0785789489746094,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4983,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": true,
+      "coexist": false,
+      "runtime": 0.12878727912902832,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4984,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 0.4003031253814697,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4985,
+      "finals": {
+        "L0": 250.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": true,
+      "coexist": false,
+      "runtime": 1.775862216949463,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4986,
+      "finals": {
+        "L0": 250.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 2.052960157394409,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4987,
+      "finals": {
+        "L0": 250.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 2.0501723289489746,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4988,
+      "finals": {
+        "L0": 250.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 2.0667803287506104,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4989,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": true,
+      "coexist": false,
+      "runtime": 0.12930703163146973,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4990,
+      "finals": {
+        "L0": 250.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 2.066253185272217,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4991,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 0.40052127838134766,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4992,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 0.40152788162231445,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4993,
+      "finals": {
+        "L0": 250.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 2.0839128494262695,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4994,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 0.39452481269836426,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4995,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 0.3925490379333496,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4996,
+      "finals": {
+        "L0": 250.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 2.0554261207580566,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4997,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 0.4003000259399414,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4998,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": true,
+      "coexist": false,
+      "runtime": 0.13977289199829102,
+      "n_recordings": 300
+    },
+    {
+      "seed": 4999,
+      "finals": {
+        "L0": 0.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "collapsed": false,
+      "coexist": false,
+      "runtime": 0.3957209587097168,
+      "n_recordings": 300
+    }
+  ]
+}

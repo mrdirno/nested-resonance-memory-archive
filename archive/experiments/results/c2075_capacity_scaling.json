@@ -1,0 +1,60 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 100,
+    "num_trials": 5,
+    "n_crit": 43,
+    "timestamp": "2025-11-22T00:49:20.859105"
+  },
+  "scaling": [
+    {
+      "n_items": 10,
+      "pct_ncrit": 25,
+      "none": 0.9800000000000001,
+      "synthetic": 0.9800000000000001,
+      "real": 0.9399999999999998
+    },
+    {
+      "n_items": 21,
+      "pct_ncrit": 50,
+      "none": 0.7904761904761906,
+      "synthetic": 0.6190476190476191,
+      "real": 0.6761904761904761
+    },
+    {
+      "n_items": 32,
+      "pct_ncrit": 75,
+      "none": 0.575,
+      "synthetic": 0.43125,
+      "real": 0.4375
+    },
+    {
+      "n_items": 43,
+      "pct_ncrit": 100,
+      "none": 0.4279069767441861,
+      "synthetic": 0.2930232558139535,
+      "real": 0.2930232558139535
+    },
+    {
+      "n_items": 53,
+      "pct_ncrit": 125,
+      "none": 0.30943396226415093,
+      "synthetic": 0.24528301886792453,
+      "real": 0.26037735849056604
+    },
+    {
+      "n_items": 64,
+      "pct_ncrit": 150,
+      "none": 0.275,
+      "synthetic": 0.1875,
+      "real": 0.18125
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "V2 entropy scales with synthetic across all capacities",
+      "Capacity concern: 68% at 50% N_crit",
+      "Graceful degradation beyond N_crit: -11%"
+    ]
+  }
+}

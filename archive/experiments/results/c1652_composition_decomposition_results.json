@@ -1,0 +1,816 @@
+{
+  "cycle_id": "C1652",
+  "concept": "Composition-decomposition dynamics (not trophic)",
+  "results": [
+    {
+      "seed": 600001,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600002,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600003,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600004,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600005,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600001,
+      "comp_threshold": 0.2,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600002,
+      "comp_threshold": 0.2,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600003,
+      "comp_threshold": 0.2,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600004,
+      "comp_threshold": 0.2,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600005,
+      "comp_threshold": 0.2,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600001,
+      "comp_threshold": 0.5,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600002,
+      "comp_threshold": 0.5,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600003,
+      "comp_threshold": 0.5,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600004,
+      "comp_threshold": 0.5,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600005,
+      "comp_threshold": 0.5,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600001,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.5,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600002,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.5,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600003,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.5,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600004,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.5,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600005,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.5,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600001,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 2.0,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 118,
+      "n_decomps": 25,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600002,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 2.0,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 118,
+      "n_decomps": 25,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600003,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 2.0,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 118,
+      "n_decomps": 25,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600004,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 2.0,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 118,
+      "n_decomps": 25,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600005,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 2.0,
+      "energy_input": 0.1,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 118,
+      "n_decomps": 25,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600001,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.05,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600002,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.05,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600003,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.05,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600004,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.05,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600005,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.05,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600001,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.15,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600002,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.15,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600003,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.15,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600004,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.15,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600005,
+      "comp_threshold": 0.3,
+      "decomp_threshold": 1.8,
+      "energy_input": 0.15,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600001,
+      "comp_threshold": 0.4,
+      "decomp_threshold": 1.6,
+      "energy_input": 0.12,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600002,
+      "comp_threshold": 0.4,
+      "decomp_threshold": 1.6,
+      "energy_input": 0.12,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600003,
+      "comp_threshold": 0.4,
+      "decomp_threshold": 1.6,
+      "energy_input": 0.12,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600004,
+      "comp_threshold": 0.4,
+      "decomp_threshold": 1.6,
+      "energy_input": 0.12,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600005,
+      "comp_threshold": 0.4,
+      "decomp_threshold": 1.6,
+      "energy_input": 0.12,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 120,
+      "n_decomps": 27,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600001,
+      "comp_threshold": 0.2,
+      "decomp_threshold": 2.0,
+      "energy_input": 0.08,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 118,
+      "n_decomps": 25,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600002,
+      "comp_threshold": 0.2,
+      "decomp_threshold": 2.0,
+      "energy_input": 0.08,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 118,
+      "n_decomps": 25,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600003,
+      "comp_threshold": 0.2,
+      "decomp_threshold": 2.0,
+      "energy_input": 0.08,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 118,
+      "n_decomps": 25,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600004,
+      "comp_threshold": 0.2,
+      "decomp_threshold": 2.0,
+      "energy_input": 0.08,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 118,
+      "n_decomps": 25,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 600005,
+      "comp_threshold": 0.2,
+      "decomp_threshold": 2.0,
+      "energy_input": 0.08,
+      "coexist": false,
+      "depths_alive": 0,
+      "hist_len": 1,
+      "n_comps": 118,
+      "n_decomps": 25,
+      "finals": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "cycle": 2019,
+  "experiment": "Temporal Composition",
+  "timestamp": "2025-11-21T17:01:03.268490",
+  "hypothesis": "NRM composition-decomposition can be encoded temporally",
+  "results": {
+    "composition_accuracy": 1.0,
+    "decomposition_accuracy": 1.0
+  }
+}

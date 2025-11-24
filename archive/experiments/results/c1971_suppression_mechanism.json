@@ -1,0 +1,41 @@
+{
+  "cycle": 1971,
+  "experiment": "Suppression Mechanism",
+  "timestamp": "2025-11-21T15:56:29.577721",
+  "hypothesis": "CV dip is finite-size effect, not distinct regime",
+  "results": {
+    "0.099": {
+      "mean_pop_early": 78.35,
+      "mean_pop_late": 248.5375,
+      "cv_early": 14.440382833992684,
+      "cv_late": 44.964916928404776,
+      "mean_energy_var": 0.02412345742813257,
+      "total_births": 531,
+      "total_deaths": 76,
+      "turnover_rate": 1.214,
+      "final_pop": 500
+    },
+    "0.1": {
+      "mean_pop_early": 73.04,
+      "mean_pop_late": 128.2425,
+      "cv_early": 9.579720619510077,
+      "cv_late": 14.865333035384234,
+      "mean_energy_var": 0.02794736916721815,
+      "total_births": 218,
+      "total_deaths": 109,
+      "turnover_rate": 0.654,
+      "final_pop": 159
+    },
+    "0.101": {
+      "mean_pop_early": 66.06,
+      "mean_pop_late": 59.8775,
+      "cv_early": 3.7315099859246486,
+      "cv_late": 19.789700284475803,
+      "mean_energy_var": 0.028694275395971212,
+      "total_births": 70,
+      "total_deaths": 83,
+      "turnover_rate": 0.306,
+      "final_pop": 37
+    }
+  }
+}

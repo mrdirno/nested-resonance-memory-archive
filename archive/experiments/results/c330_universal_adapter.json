@@ -1,0 +1,14 @@
+{
+  "cycle": 330,
+  "nrm": {
+    "type": "NRM",
+    "v": 1.0,
+    "gamma": 0.01
+  },
+  "acoustic": {
+    "type": "Acoustic",
+    "v": 343.0,
+    "gamma": 0.001
+  },
+  "success": true
+}

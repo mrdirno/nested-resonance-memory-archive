@@ -1,0 +1,12 @@
+{
+  "conditions": [
+    {
+      "method": "linear",
+      "similarity": 0.44763207690785445
+    },
+    {
+      "method": "phase",
+      "similarity": 0.4482818765290951
+    }
+  ]
+}

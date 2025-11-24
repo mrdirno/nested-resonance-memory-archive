@@ -1,0 +1,96 @@
+{
+  "experiment": "C311_dynamic_critical_behavior",
+  "parameters": {
+    "n_agents": 50,
+    "seeds": 8,
+    "critical_cohesion": 0.195,
+    "steps": 150
+  },
+  "results": [
+    {
+      "cohesion": 0.1,
+      "distance_from_critical": 0.095,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 33.25
+    },
+    {
+      "cohesion": 0.12,
+      "distance_from_critical": 0.075,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 9.5
+    },
+    {
+      "cohesion": 0.14,
+      "distance_from_critical": 0.055,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 10.75
+    },
+    {
+      "cohesion": 0.16,
+      "distance_from_critical": 0.035,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 15.62
+    },
+    {
+      "cohesion": 0.18,
+      "distance_from_critical": 0.015,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 27.62
+    },
+    {
+      "cohesion": 0.195,
+      "distance_from_critical": 0.0,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 37.38
+    },
+    {
+      "cohesion": 0.21,
+      "distance_from_critical": 0.015,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 33.5
+    },
+    {
+      "cohesion": 0.2325,
+      "distance_from_critical": 0.0375,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 2.0
+    },
+    {
+      "cohesion": 0.255,
+      "distance_from_critical": 0.06,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 16.25
+    },
+    {
+      "cohesion": 0.2775,
+      "distance_from_critical": 0.0825,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 26.38
+    },
+    {
+      "cohesion": 0.3,
+      "distance_from_critical": 0.105,
+      "relaxation_time": 0.0,
+      "relaxation_std": 0.0,
+      "decay_time": 36.62
+    }
+  ],
+  "analysis": {
+    "peak_relaxation": {
+      "cohesion": 0.1,
+      "time": 0.0
+    },
+    "dynamic_exponent_nuz": NaN,
+    "critical_slowing_down": false
+  }
+}

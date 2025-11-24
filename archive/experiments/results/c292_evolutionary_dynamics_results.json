@@ -1,0 +1,41 @@
+{
+  "cycle_id": "C292",
+  "cycle_name": "Evolutionary Dynamics",
+  "date": "2025-11-20T01:01:03.036740",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 20000,
+    "initial_agents": 100,
+    "base_f_intra": 0.005,
+    "mutation_rate": 0.1,
+    "mutation_std": 0.001,
+    "energy": {
+      "E_consume": 0.3,
+      "E_recharge": 0.5,
+      "spawn": 0.5
+    },
+    "density_factor": 0.1,
+    "K": 500,
+    "selection_strengths": [
+      0.0,
+      0.5,
+      1.0,
+      2.0
+    ],
+    "seeds": [
+      100,
+      101,
+      102
+    ]
+  },
+  "results": [
+    {
+      "selection": 0.0,
+      "seed": 100,
+      "final_pop": 25,
+      "initial_fitness": 0.006050160278889824,
+      "final_fitness": 0.003698722485452744,
+      "fitness_change": -0.00235143779343708,
+      "relative_change": -0.3886571074227074,
+      "evolved": 

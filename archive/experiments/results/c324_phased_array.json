@@ -1,0 +1,12 @@
+{
+  "cycle": 324,
+  "target": "Square Donut",
+  "best_error": 0.25016630118278155,
+  "emitters_count": 64,
+  "parameters": {
+    "width": 64,
+    "height": 64,
+    "gens": 150
+  },
+  "status": "Phased Array Test Complete"
+}

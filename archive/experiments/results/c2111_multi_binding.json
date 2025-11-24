@@ -1,0 +1,45 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:37:04.819330"
+  },
+  "tests": [
+    {
+      "num_keys": 5,
+      "values_per_key": 2,
+      "total_bindings": 10,
+      "any_correct": 1.0,
+      "all_correct": 1.0
+    },
+    {
+      "num_keys": 5,
+      "values_per_key": 3,
+      "total_bindings": 15,
+      "any_correct": 1.0,
+      "all_correct": 0.9333333333333332
+    },
+    {
+      "num_keys": 3,
+      "values_per_key": 5,
+      "total_bindings": 15,
+      "any_correct": 1.0,
+      "all_correct": 1.0
+    },
+    {
+      "num_keys": 4,
+      "values_per_key": 4,
+      "total_bindings": 16,
+      "any_correct": 1.0,
+      "all_correct": 0.0
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Multi-binding retrieves at least one: 100%",
+      "Partial multi-binding: 73% get all values",
+      "Best: 5 keys \u00d7 2 values"
+    ]
+  }
+}

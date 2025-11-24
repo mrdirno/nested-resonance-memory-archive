@@ -1,0 +1,242 @@
+[
+  {
+    "seed": 100,
+    "condition": "sub",
+    "baseline_mean": 0.9889467166877018,
+    "baseline_std": 2.220446049250313e-16,
+    "retention_steps": 6,
+    "runtime_seconds": 0.010541915893554688
+  },
+  {
+    "seed": 101,
+    "condition": "sub",
+    "baseline_mean": 0.9979164223793079,
+    "baseline_std": 0.0,
+    "retention_steps": 6,
+    "runtime_seconds": 0.010411977767944336
+  },
+  {
+    "seed": 102,
+    "condition": "sub",
+    "baseline_mean": 0.994160051125517,
+    "baseline_std": 2.220446049250313e-16,
+    "retention_steps": 6,
+    "runtime_seconds": 0.01106405258178711
+  },
+  {
+    "seed": 103,
+    "condition": "sub",
+    "baseline_mean": 0.9912880103899049,
+    "baseline_std": 4.440892098500626e-16,
+    "retention_steps": 6,
+    "runtime_seconds": 0.010555267333984375
+  },
+  {
+    "seed": 104,
+    "condition": "sub",
+    "baseline_mean": 0.9856176569333024,
+    "baseline_std": 2.220446049250313e-16,
+    "retention_steps": 6,
+    "runtime_seconds": 0.01089787483215332
+  },
+  {
+    "seed": 105,
+    "condition": "sub",
+    "baseline_mean": 0.9878484351458782,
+    "baseline_std": 2.220446049250313e-16,
+    "retention_steps": 6,
+    "runtime_seconds": 0.010428190231323242
+  },
+  {
+    "seed": 106,
+    "condition": "sub",
+    "baseline_mean": 1.0020685464751762,
+    "baseline_std": 4.440892098500626e-16,
+    "retention_steps": 6,
+    "runtime_seconds": 0.010249853134155273
+  },
+  {
+    "seed": 107,
+    "condition": "sub",
+    "baseline_mean": 0.997783590586868,
+    "baseline_std": 2.220446049250313e-16,
+    "retention_steps": 6,
+    "runtime_seconds": 0.010757923126220703
+  },
+  {
+    "seed": 108,
+    "condition": "sub",
+    "baseline_mean": 1.001076203504589,
+    "baseline_std": 0.0,
+    "retention_steps": 6,
+    "runtime_seconds": 0.010408163070678711
+  },
+  {
+    "seed": 109,
+    "condition": "sub",
+    "baseline_mean": 1.0194291191633815,
+    "baseline_std": 0.0,
+    "retention_steps": 6,
+    "runtime_seconds": 0.010484933853149414
+  },
+  {
+    "seed": 100,
+    "condition": "super",
+    "baseline_mean": 0.5229177449549116,
+    "baseline_std": 0.03207341116413504,
+    "retention_steps": 8,
+    "runtime_seconds": 0.009637117385864258
+  },
+  {
+    "seed": 101,
+    "condition": "super",
+    "baseline_mean": 0.5537944111690605,
+    "baseline_std": 0.03207341116413481,
+    "retention_steps": 8,
+    "runtime_seconds": 0.009804725646972656
+  },
+  {
+    "seed": 102,
+    "condition": "super",
+    "baseline_mean": 0.5581460604909555,
+    "baseline_std": 0.03207341116413483,
+    "retention_steps": 8,
+    "runtime_seconds": 0.009788036346435547
+  },
+  {
+    "seed": 103,
+    "condition": "super",
+    "baseline_mean": 0.5720493831546082,
+    "baseline_std": 0.03207341116413478,
+    "retention_steps": 8,
+    "runtime_seconds": 0.010142326354980469
+  },
+  {
+    "seed": 104,
+    "condition": "super",
+    "baseline_mean": 0.4580365566956806,
+    "baseline_std": 0.03207341116413526,
+    "retention_steps": 8,
+    "runtime_seconds": 0.009679079055786133
+  },
+  {
+    "seed": 105,
+    "condition": "super",
+    "baseline_mean": 1.2817612842990789,
+    "baseline_std": 0.005763622693931055,
+    "retention_steps": 5,
+    "runtime_seconds": 0.010051965713500977
+  },
+  {
+    "seed": 106,
+    "condition": "super",
+    "baseline_mean": 0.44095531864443155,
+    "baseline_std": 0.03207341116413532,
+    "retention_steps": 9,
+    "runtime_seconds": 0.009824991226196289
+  },
+  {
+    "seed": 107,
+    "condition": "super",
+    "baseline_mean": 0.5839574019780965,
+    "baseline_std": 0.03207341116413472,
+    "retention_steps": 8,
+    "runtime_seconds": 0.009902000427246094
+  },
+  {
+    "seed": 108,
+    "condition": "super",
+    "baseline_mean": 0.4899130200325486,
+    "baseline_std": 0.03207341116413506,
+    "retention_steps": 8,
+    "runtime_seconds": 0.010010719299316406
+  },
+  {
+    "seed": 109,
+    "condition": "super",
+    "baseline_mean": 0.5507477819076645,
+    "baseline_std": 0.03207341116413485,
+    "retention_steps": 8,
+    "runtime_seconds": 0.009347677230834961
+  },
+  {
+    "seed": 100,
+    "condition": "soc",
+    "baseline_mean": 0.39303069449209543,
+    "baseline_std": 0.02202936924694466,
+    "retention_steps": 11,
+    "runtime_seconds": 0.010015010833740234
+  },
+  {
+    "seed": 101,
+    "condition": "soc",
+    "baseline_mean": 0.4060410609893006,
+    "baseline_std": 0.022029369246944666,
+    "retention_steps": 10,
+    "runtime_seconds": 0.01027679443359375
+  },
+  {
+    "seed": 102,
+    "condition": "soc",
+    "baseline_mean": 0.376857547250373,
+    "baseline_std": 0.022029369246944677,
+    "retention_steps": 11,
+    "runtime_seconds": 0.010162830352783203
+  },
+  {
+    "seed": 103,
+    "condition": "soc",
+    "baseline_mean": 0.40146485756220296,
+    "baseline_std": 0.022029369246944656,
+    "retention_steps": 10,
+    "runtime_seconds": 0.009996891021728516
+  },
+  {
+    "seed": 104,
+    "condition": "soc",
+    "baseline_mean": 0.36667513903487664,
+    "baseline_std": 0.022029369246944732,
+    "retention_steps": 11,
+    "runtime_seconds": 0.009747028350830078
+  },
+  {
+    "seed": 105,
+    "condition": "soc",
+    "baseline_mean": 0.38101189465676943,
+    "baseline_std": 0.02202936924694469,
+    "retention_steps": 11,
+    "runtime_seconds": 0.010465860366821289
+  },
+  {
+    "seed": 106,
+    "condition": "soc",
+    "baseline_mean": 0.4140208065535124,
+    "baseline_std": 0.022029369246944625,
+    "retention_steps": 10,
+    "runtime_seconds": 0.009816169738769531
+  },
+  {
+    "seed": 107,
+    "condition": "soc",
+    "baseline_mean": 0.393879740660968,
+    "baseline_std": 0.022029369246944663,
+    "retention_steps": 11,
+    "runtime_seconds": 0.009891748428344727
+  },
+  {
+    "seed": 108,
+    "condition": "soc",
+    "baseline_mean": 0.41295430178467335,
+    "baseline_std": 0.022029369246944666,
+    "retention_steps": 10,
+    "runtime_seconds": 0.010044097900390625
+  },
+  {
+    "seed": 109,
+    "condition": "soc",
+    "baseline_mean": 0.4046727720566325,
+    "baseline_std": 0.022029369246944666,
+    "retention_steps": 10,
+    "runtime_seconds": 0.010470867156982422
+  }
+]

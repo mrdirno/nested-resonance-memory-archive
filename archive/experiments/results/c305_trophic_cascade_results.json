@@ -1,0 +1,163 @@
+{
+  "cycle_id": "C305",
+  "cycle_name": "Trophic Cascade",
+  "date": "2025-11-20T01:35:51.553741",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 30000,
+    "removal_cycle": 15000,
+    "initial_prey": 300,
+    "initial_meso": 30,
+    "initial_top": 10,
+    "prey_params": {
+      "f_intra": 0.1,
+      "K": 600
+    },
+    "meso_params": {
+      "attack_prey": 0.003,
+      "h": 0.02
+    },
+    "top_params": {
+      "attack_meso": 0.005,
+      "h": 0.03
+    },
+    "conditions": [
+      {
+        "name": "control",
+        "remove_top": false
+      },
+      {
+        "name": "removal",
+        "remove_top": true
+      }
+    ],
+    "seeds": [
+      1200,
+      1201,
+      1202
+    ]
+  },
+  "results": [
+    {
+      "condition": "control",
+      "remove_top": false,
+      "seed": 1200,
+      "pre_prey_eq": 300.0,
+      "pre_meso_eq": 30.0,
+      "post_prey_eq": 300.0,
+      "post_meso_eq": 30.0,
+      "meso_release": false,
+      "prey_crash": false,
+      "cascade": false,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.0515749454498291,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c305_control_seed1200.db"
+    },
+    {
+      "condition": "control",
+      "remove_top": false,
+      "seed": 1201,
+      "pre_prey_eq": 300.0,
+      "pre_meso_eq": 30.0,
+      "post_prey_eq": 300.0,
+      "post_meso_eq": 30.0,
+      "meso_release": false,
+      "prey_crash": false,
+      "cascade": false,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.06865620613098145,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c305_control_seed1201.db"
+    },
+    {
+      "condition": "control",
+      "remove_top": false,
+      "seed": 1202,
+      "pre_prey_eq": 300.0,
+      "pre_meso_eq": 30.0,
+      "post_prey_eq": 300.0,
+      "post_meso_eq": 30.0,
+      "meso_release": false,
+      "prey_crash": false,
+      "cascade": false,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.02941417694091797,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c305_control_seed1202.db"
+    },
+    {
+      "condition": "removal",
+      "remove_top": true,
+      "seed": 1200,
+      "pre_prey_eq": 300.0,
+      "pre_meso_eq": 30.0,
+      "post_prey_eq": 300.0,
+      "post_meso_eq": 30.0,
+      "meso_release": false,
+      "prey_crash": false,
+      "cascade": false,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.05215287208557129,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c305_removal_seed1200.db"
+    },
+    {
+      "condition": "removal",
+      "remove_top": true,
+      "seed": 1201,
+      "pre_prey_eq": 300.0,
+      "pre_meso_eq": 30.0,
+      "post_prey_eq": 300.0,
+      "post_meso_eq": 30.0,
+      "meso_release": false,
+      "prey_crash": false,
+      "cascade": false,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.06925582885742188,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c305_removal_seed1201.db"
+    },
+    {
+      "condition": "removal",
+      "remove_top": true,
+      "seed": 1202,
+      "pre_prey_eq": 300.0,
+      "pre_meso_eq": 30.0,
+      "post_prey_eq": 300.0,
+      "post_meso_eq": 30.0,
+      "meso_release": false,
+      "prey_crash": false,
+      "cascade": false,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.02907395362854004,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c305_removal_seed1202.db"
+    }
+  ]
+}

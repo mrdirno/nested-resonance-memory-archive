@@ -1,0 +1,82 @@
+[
+  {
+    "seed": 800,
+    "initial_e": 0.10081378775279026,
+    "final_e": 0.10881378775279027,
+    "mean_e_stable": 0.10906378775279028,
+    "final_pop": 91,
+    "runtime_seconds": 0.09079098701477051
+  },
+  {
+    "seed": 801,
+    "initial_e": 0.10508294765781287,
+    "final_e": 0.10508294765781287,
+    "mean_e_stable": 0.10533294765781287,
+    "final_pop": 92,
+    "runtime_seconds": 0.09047174453735352
+  },
+  {
+    "seed": 802,
+    "initial_e": 0.10471091797219365,
+    "final_e": 0.10671091797219365,
+    "mean_e_stable": 0.10596091797219366,
+    "final_pop": 96,
+    "runtime_seconds": 0.09056520462036133
+  },
+  {
+    "seed": 803,
+    "initial_e": 0.10184680575933384,
+    "final_e": 0.10084680575933384,
+    "mean_e_stable": 0.10119680575933383,
+    "final_pop": 103,
+    "runtime_seconds": 0.09554576873779297
+  },
+  {
+    "seed": 804,
+    "initial_e": 0.10218603566341755,
+    "final_e": 0.10218603566341755,
+    "mean_e_stable": 0.10283603566341756,
+    "final_pop": 91,
+    "runtime_seconds": 0.09491705894470215
+  },
+  {
+    "seed": 805,
+    "initial_e": 0.10026145717955763,
+    "final_e": 0.10126145717955763,
+    "mean_e_stable": 0.10171145717955761,
+    "final_pop": 94,
+    "runtime_seconds": 0.0930337905883789
+  },
+  {
+    "seed": 806,
+    "initial_e": 0.10169362422980668,
+    "final_e": 0.10269362422980668,
+    "mean_e_stable": 0.10344362422980669,
+    "final_pop": 104,
+    "runtime_seconds": 0.09211015701293945
+  },
+  {
+    "seed": 807,
+    "initial_e": 0.10891357038715285,
+    "final_e": 0.109,
+    "mean_e_stable": 0.1093,
+    "final_pop": 96,
+    "runtime_seconds": 0.08633804321289062
+  },
+  {
+    "seed": 808,
+    "initial_e": 0.10958849537571913,
+    "final_e": 0.1065,
+    "mean_e_stable": 0.10654999999999999,
+    "final_pop": 97,
+    "runtime_seconds": 0.08811283111572266
+  },
+  {
+    "seed": 809,
+    "initial_e": 0.10046167327286522,
+    "final_e": 0.10200000000000001,
+    "mean_e_stable": 0.10154999999999999,
+    "final_pop": 94,
+    "runtime_seconds": 0.09389686584472656
+  }
+]

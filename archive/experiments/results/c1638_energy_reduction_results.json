@@ -1,0 +1,512 @@
+{
+  "cycle_id": "C1638",
+  "magnitude": 0.25,
+  "seeds_per_condition": 50,
+  "baseline_rate": 0.68,
+  "reduced_rate": 0.74,
+  "improvement": 0.05999999999999994,
+  "z_score": 0.6611394640818892,
+  "significant": false,
+  "results": [
+    {
+      "seed": 90001,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90002,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90003,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90004,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90005,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90006,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90007,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90008,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90009,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90010,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90011,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90012,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90013,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90014,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90015,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90016,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90017,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90018,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90019,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90020,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90021,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90022,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90023,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90024,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90025,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90026,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90027,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90028,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90029,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90030,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90031,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90032,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90033,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90034,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90035,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90036,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90037,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90038,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90039,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90040,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90041,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90042,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90043,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90044,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90045,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90046,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90047,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90048,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90049,
+      "condition": "baseline",
+      "coexist": true
+    },
+    {
+      "seed": 90050,
+      "condition": "baseline",
+      "coexist": false
+    },
+    {
+      "seed": 90001,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90002,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90003,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90004,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90005,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90006,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90007,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90008,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90009,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90010,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90011,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90012,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90013,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90014,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90015,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90016,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90017,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90018,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90019,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90020,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90021,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90022,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90023,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90024,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90025,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90026,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90027,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90028,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90029,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90030,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90031,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90032,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90033,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90034,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90035,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90036,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90037,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90038,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90039,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90040,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90041,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90042,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90043,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90044,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90045,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90046,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90047,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90048,
+      "condition": "reduced",
+      "coexist": true
+    },
+    {
+      "seed": 90049,
+      "condition": "reduced",
+      "coexist": false
+    },
+    {
+      "seed": 90050,
+      "condition": "reduced",
+      "coexist": true
+    }
+  ]
+}

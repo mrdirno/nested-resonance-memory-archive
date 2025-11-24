@@ -1,0 +1,11 @@
+{
+  "agent_id": "Explorer_001",
+  "chain": [
+    "876dbfa3d125506e",
+    "c5a70c8a46c3ce53",
+    "bd3f0e43e3e55357",
+    "101a296045272bd1"
+  ],
+  "measured_depth": 4,
+  "success": true
+}

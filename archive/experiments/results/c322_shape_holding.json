@@ -1,0 +1,12 @@
+{
+  "cycle": 322,
+  "square_error": 0.19800961535060754,
+  "circle_error": 0.20535440521210646,
+  "parameters": {
+    "width": 40,
+    "height": 20,
+    "population": 50,
+    "generations": 50
+  },
+  "status": "Shape Holding Test Complete"
+}

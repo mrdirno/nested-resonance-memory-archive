@@ -1,0 +1,36 @@
+{
+  "conditions": [
+    {
+      "noise_level": 0.0,
+      "avg_similarity": 0.10278080528640451
+    },
+    {
+      "noise_level": 0.1,
+      "avg_similarity": 0.10262751108010988
+    },
+    {
+      "noise_level": 0.2,
+      "avg_similarity": 0.10215014052319822
+    },
+    {
+      "noise_level": 0.3,
+      "avg_similarity": 0.10135182358045905
+    },
+    {
+      "noise_level": 0.4,
+      "avg_similarity": 0.10023778005285841
+    },
+    {
+      "noise_level": 0.5,
+      "avg_similarity": 0.09881529826134684
+    },
+    {
+      "noise_level": 0.75,
+      "avg_similarity": 0.09397581453350583
+    },
+    {
+      "noise_level": 1.0,
+      "avg_similarity": 0.08747219455959328
+    }
+  ]
+}

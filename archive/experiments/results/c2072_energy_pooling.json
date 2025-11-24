@@ -1,0 +1,14 @@
+{
+  "conditions": [
+    {
+      "pooling": false,
+      "avg_survival": 22.0,
+      "survival_pct": 0.0
+    },
+    {
+      "pooling": true,
+      "avg_survival": 51.0,
+      "survival_pct": 0.0
+    }
+  ]
+}

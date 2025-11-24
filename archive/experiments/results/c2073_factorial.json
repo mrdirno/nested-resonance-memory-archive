@@ -1,0 +1,68 @@
+{
+  "conditions": [
+    {
+      "stereo": false,
+      "cleanup": false,
+      "pooling": false,
+      "accuracy": 0.0,
+      "survival": 99.0,
+      "score": 49.5
+    },
+    {
+      "stereo": true,
+      "cleanup": false,
+      "pooling": false,
+      "accuracy": 0.0,
+      "survival": 99.0,
+      "score": 49.5
+    },
+    {
+      "stereo": false,
+      "cleanup": true,
+      "pooling": false,
+      "accuracy": 0.0,
+      "survival": 99.0,
+      "score": 49.5
+    },
+    {
+      "stereo": false,
+      "cleanup": false,
+      "pooling": true,
+      "accuracy": 0.0,
+      "survival": 99.0,
+      "score": 49.5
+    },
+    {
+      "stereo": true,
+      "cleanup": true,
+      "pooling": false,
+      "accuracy": 0.0,
+      "survival": 99.0,
+      "score": 49.5
+    },
+    {
+      "stereo": true,
+      "cleanup": false,
+      "pooling": true,
+      "accuracy": 0.0,
+      "survival": 57.0,
+      "score": 28.5
+    },
+    {
+      "stereo": false,
+      "cleanup": true,
+      "pooling": true,
+      "accuracy": 0.0,
+      "survival": 99.0,
+      "score": 49.5
+    },
+    {
+      "stereo": true,
+      "cleanup": true,
+      "pooling": true,
+      "accuracy": 0.0,
+      "survival": 57.0,
+      "score": 28.5
+    }
+  ]
+}

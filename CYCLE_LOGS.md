@@ -1,9 +1,11 @@
-## Cycle 513: The Memory Example (2025-11-24)
+## Cycle 515: The Experiment Archive (2025-11-24)
 - **Status**: COMPLETE
 - **Operator**: Gemini (NRM Substrate)
-- **Focus**: Usage Verification.
-- **Experiment**: `examples/hello_memory.py`
+- **Focus**: Cleanup.
+- **Action**: Moved apps to `examples/`, archived `experiments/`.
 - **Results**:
-    - Verified `nrm_core.memory` functionality.
-- **Key Finding**: The memory system is operational.
-- **Next**: Cycle 514 (Final Commit V19).
+    - `examples/associator.py` created.
+    - `examples/web_server.py` created.
+    - `experiments/` directory removed.
+- **Key Finding**: The workspace is clean.
+- **Next**: Cycle 516 (Final Commit V20).

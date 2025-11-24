@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:39:28.623038"
+  },
+  "tests": [
+    {
+      "num_nodes": 10,
+      "num_edges": 20,
+      "accuracy": 0.3715686274509804
+    },
+    {
+      "num_nodes": 10,
+      "num_edges": 30,
+      "accuracy": 0.26666666666666666
+    },
+    {
+      "num_nodes": 10,
+      "num_edges": 40,
+      "accuracy": 0.2704876822523881
+    },
+    {
+      "num_nodes": 20,
+      "num_edges": 40,
+      "accuracy": 0.38847653321337533
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Graph storage limited: 32% avg",
+      "Best: 20 nodes, 40 edges at 39%",
+      "Degradation at density 0.22"
+    ]
+  }
+}

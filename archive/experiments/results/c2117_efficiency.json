@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "timestamp": "2025-11-22T04:42:05.411446"
+  },
+  "measurements": [
+    {
+      "operation": "storage",
+      "items": 100,
+      "ops_per_sec": 26006.349206349205,
+      "time_sec": 0.00384521484375
+    },
+    {
+      "operation": "storage",
+      "items": 500,
+      "ops_per_sec": 33787.97447960301,
+      "time_sec": 0.014798164367675781
+    },
+    {
+      "operation": "storage",
+      "items": 1000,
+      "ops_per_sec": 33806.76569917867,
+      "time_sec": 0.029579877853393555
+    },
+    {
+      "operation": "retrieval",
+      "items": 50,
+      "queries": 1000,
+      "ops_per_sec": 19632.853859584247,
+      "time_sec": 0.05093502998352051
+    },
+    {
+      "operation": "retrieval",
+      "items": 100,
+      "queries": 1000,
+      "ops_per_sec": 13121.633797176895,
+      "time_sec": 0.07621002197265625
+    },
+    {
+      "operation": "maintenance",
+      "items": 50,
+      "cycles": 1000,
+      "cycles_per_sec": 2907.038348777732,
+      "time_sec": 0.3439927101135254
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Storage: ~31200 ops/sec",
+      "Retrieval: ~16377 ops/sec",
+      "Maintenance: ~2907 cycles/sec"
+    ]
+  }
+}

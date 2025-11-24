@@ -1,0 +1,29 @@
+{
+  "cycle_id": "C1637",
+  "magnitude": 0.25,
+  "seeds_per_condition": 50,
+  "conditions": {
+    "baseline": [
+      300,
+      30,
+      10,
+      5,
+      3,
+      2,
+      2
+    ],
+    "boosted": [
+      300,
+      30,
+      10,
+      5,
+      5,
+      4,
+      3
+    ]
+  },
+  "baseline_rate": 0.64,
+  "boosted_rate": 0.58,
+  "improvement": -0.06000000000000005,
+  "z_score": 0.6150692760785478,
+  "significant": 

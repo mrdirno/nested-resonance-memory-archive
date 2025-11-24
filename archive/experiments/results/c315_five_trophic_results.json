@@ -1,0 +1,83 @@
+{
+  "cycle_id": "C315",
+  "cycle_name": "Five-Trophic Chain",
+  "date": "2025-11-20T01:53:06.050072",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "results": [
+    {
+      "condition": "four_trophic",
+      "seed": 2200,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0
+      },
+      "coexist": true,
+      "runtime": 0.041784048080444336
+    },
+    {
+      "condition": "four_trophic",
+      "seed": 2201,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0
+      },
+      "coexist": true,
+      "runtime": 0.039746761322021484
+    },
+    {
+      "condition": "four_trophic",
+      "seed": 2202,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0
+      },
+      "coexist": true,
+      "runtime": 0.03522205352783203
+    },
+    {
+      "condition": "five_trophic",
+      "seed": 2200,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0
+      },
+      "coexist": false,
+      "runtime": 0.05457711219787598
+    },
+    {
+      "condition": "five_trophic",
+      "seed": 2201,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0
+      },
+      "coexist": false,
+      "runtime": 0.029458999633789062
+    },
+    {
+      "condition": "five_trophic",
+      "seed": 2202,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0
+      },
+      "coexist": false,
+      "runtime": 0.032746076583862305
+    }
+  ]
+}

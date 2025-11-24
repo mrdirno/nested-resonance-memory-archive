@@ -1,0 +1,415 @@
+{
+  "experiment": "nrem_full_consolidation",
+  "date": "2025-11-19 04:38:47",
+  "patterns_processed": 305,
+  "new_embeddings_generated": 293,
+  "new_graph_edges": 46085,
+  "nrem_metrics": {
+    "coalitions": 50,
+    "hebbian_updates": 50,
+    "cpu_time_ms": 2631.727615999999,
+    "memory_usage_mb": 24.40625,
+    "coalition_details": [
+      {
+        "size": 2,
+        "coherence": 0.9999407807042827,
+        "members": [
+          "f8e7dae9a7d76e83",
+          "876424280951f851"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.999999822880412,
+        "members": [
+          "448e1b4dc338ac75",
+          "623671188115e04a"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999506006478768,
+        "members": [
+          "c175_homeostasis",
+          "459abcffc7b40c78"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999860907106132,
+        "members": [
+          "bd69384bf2275b1d",
+          "5f332a0808343575"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999975208064706,
+        "members": [
+          "bd69384bf2275b1d",
+          "a8009eb3c4bc39b0"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999472913331593,
+        "members": [
+          "ecb97ecd727ff040",
+          "3e6619c3d62427aa"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999506351485162,
+        "members": [
+          "85bbbf58d07c41b5",
+          "c176_h1_birth_death_coupling"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999978859524087,
+        "members": [
+          "3c58d168612c1aca",
+          "5f332a0808343575"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999185759643909,
+        "members": [
+          "92539c35758859b2",
+          "9f756ba5f6447d18"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999959387981101,
+        "members": [
+          "85bbbf58d07c41b5",
+          "5fc3e4492e209927"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999870300931275,
+        "members": [
+          "834466daa87869c8",
+          "f7875faa7e68cc1b"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999933542469801,
+        "members": [
+          "39a3e3e21c79481a",
+          "cc66cc545e827ead"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999888379208319,
+        "members": [
+          "c49fbbe8a17b7f14",
+          "b2f84cf1044ed519"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999648646126279,
+        "members": [
+          "65fe57e42646f95c",
+          "14ed3e11a2eaf194"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999964599128299,
+        "members": [
+          "40900b19ca8c5362",
+          "35b5ee51a70a177a"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999608004479834,
+        "members": [
+          "c176_h3_basis_independence",
+          "d0ad4ea6c9375521"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999737729006336,
+        "members": [
+          "1e4360868fadc325",
+          "52765b252fac9128"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999972249384027,
+        "members": [
+          "39a3e3e21c79481a",
+          "a15a6e14a8f48ad0"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999620685349045,
+        "members": [
+          "fa2d399666a11430",
+          "b8e48b2c840c9559"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999802804608064,
+        "members": [
+          "4fbe8ff02098d1d8",
+          "349a288276afa9aa"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999764844878709,
+        "members": [
+          "0ec731eb28194dfa",
+          "dc91ddd2b9b1b6b9"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999860763491606,
+        "members": [
+          "f4345291ff66b6fc",
+          "c2d6aea4a47bda73"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999408052879343,
+        "members": [
+          "448e1b4dc338ac75",
+          "82dc2966941ca27f"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999981300819418,
+        "members": [
+          "f21e08b739c3de5d",
+          "eddb717fab4ecb9e"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999845069244665,
+        "members": [
+          "349a288276afa9aa",
+          "fd65a12837e62293"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999997099483899,
+        "members": [
+          "238848f4f4e70470",
+          "5662d24d8f177211"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999825243781196,
+        "members": [
+          "020f6d8e8be0b18e",
+          "091de18a0859e1e9"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999867192806827,
+        "members": [
+          "e7e0b07203d72c6a",
+          "5662d24d8f177211"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999829319885629,
+        "members": [
+          "85bbbf58d07c41b5",
+          "d1d8266e782c157c"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999790568211755,
+        "members": [
+          "c176_h1_birth_death_coupling",
+          "c580794d63f18231"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999757029969547,
+        "members": [
+          "bf3bdc3dd3447955",
+          "005ea48408fa227f"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999992795421445,
+        "members": [
+          "c176_h2_window_independence",
+          "ece2a94024bf9d48"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999715191014842,
+        "members": [
+          "e5b0f19a76611d27",
+          "d3ea07c8f421d106"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999588086796188,
+        "members": [
+          "6afa00f0da0f595e",
+          "4f4ca9bafcd3107d"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.999990332058388,
+        "members": [
+          "52765b252fac9128",
+          "10bd434aeade80d1"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999837501677566,
+        "members": [
+          "c177_h2_upper_boundary",
+          "654c5b147c980750"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.99998811204123,
+        "members": [
+          "b2f84cf1044ed519",
+          "d886eda26d5e01f0"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999880116523778,
+        "members": [
+          "35b5ee51a70a177a",
+          "c81f46eddc4771ea"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999722567115203,
+        "members": [
+          "876424280951f851",
+          "de9749835f2b97a3"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.999981166611051,
+        "members": [
+          "91b3d2a6e5a98126",
+          "169aa0c3b78e109d"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999660907296223,
+        "members": [
+          "9a6f01c247cd1980",
+          "4608da4609ddb796"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999722620496243,
+        "members": [
+          "f86e899918006c3a",
+          "5f332a0808343575"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999793530663074,
+        "members": [
+          "f8e7dae9a7d76e83",
+          "d3ea07c8f421d106"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999926449698927,
+        "members": [
+          "9b3afa602b6ec533",
+          "b02382c87e9dd83f"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999676379920234,
+        "members": [
+          "1c9395cc2bfcbffe",
+          "681020c0cb43967f"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999780882373028,
+        "members": [
+          "5bc05458ec05c301",
+          "1244700263fe5a5f"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.999946059137472,
+        "members": [
+          "5e03bbb1ea932a00",
+          "f8e7dae9a7d76e83"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999438331875671,
+        "members": [
+          "c175_bistability",
+          "76e72ced41192775"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.9999925714215648,
+        "members": [
+          "b7926a4cad84c4a4",
+          "81cc50ca812edcbb"
+        ]
+      },
+      {
+        "size": 2,
+        "coherence": 0.999962170051221,
+        "members": [
+          "4057dd33bfe5ca98",
+          "1c9395cc2bfcbffe"
+        ]
+      }
+    ]
+  }
+}

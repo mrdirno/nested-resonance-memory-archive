@@ -1,0 +1,32 @@
+{
+  "capacities": [
+    {
+      "n_items": 10,
+      "accuracy": 1.0
+    },
+    {
+      "n_items": 50,
+      "accuracy": 1.0
+    },
+    {
+      "n_items": 100,
+      "accuracy": 0.9960000000000001
+    },
+    {
+      "n_items": 500,
+      "accuracy": 0.8211999999999999
+    },
+    {
+      "n_items": 1000,
+      "accuracy": 0.6968
+    },
+    {
+      "n_items": 2000,
+      "accuracy": 0.6131
+    },
+    {
+      "n_items": 5000,
+      "accuracy": 0.5440799999999999
+    }
+  ]
+}

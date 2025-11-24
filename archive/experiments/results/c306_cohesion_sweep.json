@@ -1,0 +1,102 @@
+{
+  "experiment": "C306_cohesion_sweep_fast",
+  "parameters": {
+    "n_agents": 50,
+    "steps": 100,
+    "seeds": 5,
+    "cohesion_range": [
+      0.01,
+      0.5
+    ]
+  },
+  "results": [
+    {
+      "cohesion_factor": 0.01,
+      "avg_flock_size": 12.52,
+      "avg_flock_count": 4348.0,
+      "survival_rate": 80.0,
+      "max_flock_size": 28
+    },
+    {
+      "cohesion_factor": 0.064,
+      "avg_flock_size": 15.29,
+      "avg_flock_count": 4567.0,
+      "survival_rate": 77.6,
+      "max_flock_size": 50
+    },
+    {
+      "cohesion_factor": 0.119,
+      "avg_flock_size": 14.75,
+      "avg_flock_count": 4320.0,
+      "survival_rate": 69.6,
+      "max_flock_size": 36
+    },
+    {
+      "cohesion_factor": 0.173,
+      "avg_flock_size": 20.18,
+      "avg_flock_count": 4478.0,
+      "survival_rate": 75.2,
+      "max_flock_size": 49
+    },
+    {
+      "cohesion_factor": 0.228,
+      "avg_flock_size": 17.3,
+      "avg_flock_count": 4465.0,
+      "survival_rate": 70.0,
+      "max_flock_size": 33
+    },
+    {
+      "cohesion_factor": 0.282,
+      "avg_flock_size": 16.19,
+      "avg_flock_count": 4351.0,
+      "survival_rate": 61.6,
+      "max_flock_size": 29
+    },
+    {
+      "cohesion_factor": 0.337,
+      "avg_flock_size": 18.18,
+      "avg_flock_count": 4453.0,
+      "survival_rate": 70.8,
+      "max_flock_size": 49
+    },
+    {
+      "cohesion_factor": 0.391,
+      "avg_flock_size": 17.99,
+      "avg_flock_count": 4301.0,
+      "survival_rate": 65.2,
+      "max_flock_size": 49
+    },
+    {
+      "cohesion_factor": 0.446,
+      "avg_flock_size": 15.2,
+      "avg_flock_count": 4445.0,
+      "survival_rate": 63.6,
+      "max_flock_size": 32
+    },
+    {
+      "cohesion_factor": 0.5,
+      "avg_flock_size": 15.8,
+      "avg_flock_count": 4263.0,
+      "survival_rate": 56.4,
+      "max_flock_size": 28
+    }
+  ],
+  "analysis": {
+    "best_for_large_flocks": {
+      "cohesion_factor": 0.173,
+      "avg_flock_size": 20.18,
+      "avg_flock_count": 4478.0,
+      "survival_rate": 75.2,
+      "max_flock_size": 49
+    },
+    "best_for_many_flocks": {
+      "cohesion_factor": 0.064,
+      "avg_flock_size": 15.29,
+      "avg_flock_count": 4567.0,
+      "survival_rate": 77.6,
+      "max_flock_size": 50
+    },
+    "correlation_size": 0.324,
+    "correlation_count": -0.363
+  }
+}

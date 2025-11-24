@@ -1,0 +1,7 @@
+{
+  "cycle": 326,
+  "initial_error": 0.019741653888386047,
+  "hard_error": 0.0072021484375,
+  "improvement_percent": 63.5180087837676,
+  "physics": "Viscosity + Thresholding"
+}

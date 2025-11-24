@@ -1,0 +1,10 @@
+{
+  "cycle": 319,
+  "width": 20,
+  "height": 10,
+  "default_density": 0.0,
+  "error_perfect_square": 0.0,
+  "error_partial_square": 0.06,
+  "error_perfect_circle": 0.0,
+  "status": "TargetField class operational and verified"
+}

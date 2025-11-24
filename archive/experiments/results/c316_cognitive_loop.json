@@ -1,0 +1,14 @@
+{
+  "cycle": 316,
+  "dimension": 1024,
+  "test_key": {
+    "stimulus": "KEY",
+    "action": "UNLOCK",
+    "success": true
+  },
+  "test_door": {
+    "stimulus": "DOOR",
+    "action": "WALK",
+    "success": true
+  }
+}

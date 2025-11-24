@@ -1,0 +1,113 @@
+{
+  "cycle_id": "C322",
+  "cycle_name": "Ten-Trophic Chain",
+  "date": "2025-11-20T02:10:49.310896",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "results": [
+    {
+      "condition": "nine_trophic",
+      "seed": 2900,
+      "finals": {
+        "L0": 2400.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0,
+        "L7": 0.0,
+        "L8": 0.0
+      },
+      "coexist": false,
+      "runtime": 20.95948576927185
+    },
+    {
+      "condition": "nine_trophic",
+      "seed": 2901,
+      "finals": {
+        "L0": 2400.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0,
+        "L7": 0.0,
+        "L8": 0.0
+      },
+      "coexist": false,
+      "runtime": 21.162889003753662
+    },
+    {
+      "condition": "nine_trophic",
+      "seed": 2902,
+      "finals": {
+        "L0": 1200.0,
+        "L1": 120.0,
+        "L2": 40.0,
+        "L3": 20.0,
+        "L4": 12.0,
+        "L5": 8.0,
+        "L6": 4.0,
+        "L7": 2.0,
+        "L8": 1.0
+      },
+      "coexist": true,
+      "runtime": 0.8047680854797363
+    },
+    {
+      "condition": "ten_trophic",
+      "seed": 2900,
+      "finals": {
+        "L0": 2400.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0,
+        "L7": 0.0,
+        "L8": 0.0,
+        "L9": 0.0
+      },
+      "coexist": false,
+      "runtime": 21.073443174362183
+    },
+    {
+      "condition": "ten_trophic",
+      "seed": 2901,
+      "finals": {
+        "L0": 1200.0,
+        "L1": 120.0,
+        "L2": 40.0,
+        "L3": 20.0,
+        "L4": 12.0,
+        "L5": 8.0,
+        "L6": 4.0,
+        "L7": 2.0,
+        "L8": 1.0,
+        "L9": 1.0
+      },
+      "coexist": true,
+      "runtime": 0.9803061485290527
+    },
+    {
+      "condition": "ten_trophic",
+      "seed": 2902,
+      "finals": {
+        "L0": 2400.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0,
+        "L7": 0.0,
+        "L8": 0.0,
+        "L9": 0.0
+      },
+      "coexist": false,
+      "runtime": 21.15133285522461
+    }
+  ]
+}

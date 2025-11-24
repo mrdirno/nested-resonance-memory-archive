@@ -1,0 +1,113 @@
+{
+  "cycle_id": "C308",
+  "cycle_name": "Omnivory",
+  "date": "2025-11-20T01:41:05.398940",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 30000,
+    "top_attack_meso": 0.005,
+    "top_attack_prey": 0.001,
+    "conditions": [
+      {
+        "name": "specialist",
+        "omnivory": false
+      },
+      {
+        "name": "omnivore",
+        "omnivory": true
+      }
+    ],
+    "seeds": [
+      1500,
+      1501,
+      1502
+    ]
+  },
+  "results": [
+    {
+      "condition": "specialist",
+      "omnivory": false,
+      "seed": 1500,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.050195932388305664,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c308_specialist_seed1500.db"
+    },
+    {
+      "condition": "specialist",
+      "omnivory": false,
+      "seed": 1501,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.06642699241638184,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c308_specialist_seed1501.db"
+    },
+    {
+      "condition": "specialist",
+      "omnivory": false,
+      "seed": 1502,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.06635308265686035,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c308_specialist_seed1502.db"
+    },
+    {
+      "condition": "omnivore",
+      "omnivory": true,
+      "seed": 1500,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.0244443416595459,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c308_omnivore_seed1500.db"
+    },
+    {
+      "condition": "omnivore",
+      "omnivory": true,
+      "seed": 1501,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.031176090240478516,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c308_omnivore_seed1501.db"
+    },
+    {
+      "condition": "omnivore",
+      "omnivory": true,
+      "seed": 1502,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.05204319953918457,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c308_omnivore_seed1502.db"
+    }
+  ]
+}

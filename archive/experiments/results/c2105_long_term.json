@@ -1,0 +1,60 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "total_cycles": 2000,
+    "num_trials": 2,
+    "n_items": 50,
+    "timestamp": "2025-11-22T04:32:11.017354"
+  },
+  "checkpoints": [
+    {
+      "cycle": 200,
+      "accuracy": 1.0
+    },
+    {
+      "cycle": 400,
+      "accuracy": 0.99
+    },
+    {
+      "cycle": 600,
+      "accuracy": 0.99
+    },
+    {
+      "cycle": 800,
+      "accuracy": 1.0
+    },
+    {
+      "cycle": 1000,
+      "accuracy": 0.98
+    },
+    {
+      "cycle": 1200,
+      "accuracy": 1.0
+    },
+    {
+      "cycle": 1400,
+      "accuracy": 0.99
+    },
+    {
+      "cycle": 1600,
+      "accuracy": 0.99
+    },
+    {
+      "cycle": 1800,
+      "accuracy": 1.0
+    },
+    {
+      "cycle": 2000,
+      "accuracy": 1.0
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Stable: no drift over 2000 cycles",
+      "Variance: \u00b10.7%",
+      "Final accuracy at 2000 cycles: 100%"
+    ],
+    "stable": true
+  }
+}

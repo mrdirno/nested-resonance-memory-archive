@@ -1,0 +1,11 @@
+{
+  "cycle": 327,
+  "target": "Square Donut",
+  "best_error": 0.11362617676515385,
+  "emitters_count": 16,
+  "physics": {
+    "threshold": 0.6,
+    "sharpness": 20.0
+  },
+  "status": "Integrated Compiler Test Complete"
+}

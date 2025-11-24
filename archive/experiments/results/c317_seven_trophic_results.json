@@ -1,0 +1,95 @@
+{
+  "cycle_id": "C317",
+  "cycle_name": "Seven-Trophic Chain",
+  "date": "2025-11-20T01:58:14.738020",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "results": [
+    {
+      "condition": "six_trophic",
+      "seed": 2400,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.06702303886413574
+    },
+    {
+      "condition": "six_trophic",
+      "seed": 2401,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.05918598175048828
+    },
+    {
+      "condition": "six_trophic",
+      "seed": 2402,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0
+      },
+      "coexist": true,
+      "runtime": 0.04748868942260742
+    },
+    {
+      "condition": "seven_trophic",
+      "seed": 2400,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0,
+        "L6": 1.0
+      },
+      "coexist": true,
+      "runtime": 0.05689811706542969
+    },
+    {
+      "condition": "seven_trophic",
+      "seed": 2401,
+      "finals": {
+        "L0": 300.0,
+        "L1": 30.0,
+        "L2": 10.0,
+        "L3": 5.0,
+        "L4": 3.0,
+        "L5": 2.0,
+        "L6": 1.0
+      },
+      "coexist": true,
+      "runtime": 0.040429115295410156
+    },
+    {
+      "condition": "seven_trophic",
+      "seed": 2402,
+      "finals": {
+        "L0": 600.0,
+        "L1": 0.0,
+        "L2": 0.0,
+        "L3": 0.0,
+        "L4": 0.0,
+        "L5": 0.0,
+        "L6": 0.0
+      },
+      "coexist": false,
+      "runtime": 5.151993751525879
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "target_items": 100,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:23:58.613087"
+  },
+  "partitions": [
+    {
+      "k": 4,
+      "expected_per_k": 25.0,
+      "accuracy": 0.48333333333333334,
+      "max_load": 30.0
+    },
+    {
+      "k": 8,
+      "expected_per_k": 12.5,
+      "accuracy": 0.8133333333333334,
+      "max_load": 19.333333333333332
+    },
+    {
+      "k": 12,
+      "expected_per_k": 8.333333333333334,
+      "accuracy": 0.9400000000000001,
+      "max_load": 12.666666666666666
+    },
+    {
+      "k": 16,
+      "expected_per_k": 6.25,
+      "accuracy": 0.9633333333333334,
+      "max_load": 13.0
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "K=8 achieves 81% (12 items/memory)",
+      "Formula: K = ceil(T / 12) for 80% accuracy",
+      "Load imbalance: max deviation = 7 items"
+    ],
+    "min_k_80": 8,
+    "min_k_90": 12
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "cycle": 2009,
+  "experiment": "Chunked Storage",
+  "timestamp": "2025-11-21T16:14:08.635527",
+  "hypothesis": "Hierarchical storage extends capacity",
+  "results": {
+    "flat_25_accuracy": 0.0,
+    "chunked_5x5_accuracy": 0.0
+  }
+}

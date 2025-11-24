@@ -1,0 +1,402 @@
+{
+  "cycle_id": "C283",
+  "cycle_name": "Migration Dynamics",
+  "date": "2025-11-20T00:34:40.892573",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 20000,
+    "n_populations": 5,
+    "initial_agents_per_pop": 20,
+    "f_intra": 0.005,
+    "energy": {
+      "E_consume": 0.3,
+      "E_recharge": 0.5,
+      "spawn": 0.5
+    },
+    "migration_rates": [
+      0.0,
+      0.01,
+      0.1
+    ],
+    "density_configs": [
+      {
+        "df": 0.0,
+        "K": 1000,
+        "label": "no_density"
+      },
+      {
+        "df": 0.1,
+        "K": 500,
+        "label": "with_density"
+      }
+    ],
+    "seeds": [
+      100,
+      101,
+      102
+    ]
+  },
+  "results": [
+    {
+      "migration_rate": 0.0,
+      "density_config": "no_density",
+      "df": 0.0,
+      "K": 1000,
+      "seed": 100,
+      "final_total": 20682,
+      "final_pops": [
+        5014,
+        4352,
+        3328,
+        4265,
+        3723
+      ],
+      "mean_total": 3430.2727272727275,
+      "std_total": 4489.926038890924,
+      "sync_metric": 0.1471880070995017,
+      "runtime_seconds": 0.7015008926391602,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.0_no_density_seed100.db"
+    },
+    {
+      "migration_rate": 0.0,
+      "density_config": "no_density",
+      "df": 0.0,
+      "K": 1000,
+      "seed": 101,
+      "final_total": 18064,
+      "final_pops": [
+        3371,
+        3528,
+        2562,
+        5003,
+        3600
+      ],
+      "mean_total": 3372.0,
+      "std_total": 4421.920088912426,
+      "sync_metric": 0.24421155764765853,
+      "runtime_seconds": 0.6075968742370605,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.0_no_density_seed101.db"
+    },
+    {
+      "migration_rate": 0.0,
+      "density_config": "no_density",
+      "df": 0.0,
+      "K": 1000,
+      "seed": 102,
+      "final_total": 20828,
+      "final_pops": [
+        3959,
+        4089,
+        3751,
+        4000,
+        5029
+      ],
+      "mean_total": 3105.4545454545455,
+      "std_total": 4066.8630833657253,
+      "sync_metric": 0.11636603256144694,
+      "runtime_seconds": 0.7030818462371826,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.0_no_density_seed102.db"
+    },
+    {
+      "migration_rate": 0.0,
+      "density_config": "with_density",
+      "df": 0.1,
+      "K": 500,
+      "seed": 100,
+      "final_total": 117,
+      "final_pops": [
+        24,
+        22,
+        26,
+        19,
+        26
+      ],
+      "mean_total": 117.8,
+      "std_total": 10.279105019407089,
+      "sync_metric": 0.1536741336451955,
+      "runtime_seconds": 0.753183126449585,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.0_with_density_seed100.db"
+    },
+    {
+      "migration_rate": 0.0,
+      "density_config": "with_density",
+      "df": 0.1,
+      "K": 500,
+      "seed": 101,
+      "final_total": 135,
+      "final_pops": [
+        29,
+        30,
+        22,
+        24,
+        30
+      ],
+      "mean_total": 120.1,
+      "std_total": 12.78632081562167,
+      "sync_metric": 0.16222183083337263,
+      "runtime_seconds": 0.7455649375915527,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.0_with_density_seed101.db"
+    },
+    {
+      "migration_rate": 0.0,
+      "density_config": "with_density",
+      "df": 0.1,
+      "K": 500,
+      "seed": 102,
+      "final_total": 129,
+      "final_pops": [
+        28,
+        29,
+        27,
+        21,
+        24
+      ],
+      "mean_total": 113.25,
+      "std_total": 10.96300597464035,
+      "sync_metric": 0.19740074338413943,
+      "runtime_seconds": 0.7450399398803711,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.0_with_density_seed102.db"
+    },
+    {
+      "migration_rate": 0.01,
+      "density_config": "no_density",
+      "df": 0.0,
+      "K": 1000,
+      "seed": 100,
+      "final_total": 24644,
+      "final_pops": [
+        4996,
+        4843,
+        4987,
+        4813,
+        5005
+      ],
+      "mean_total": 4923.166666666667,
+      "std_total": 6864.059316873329,
+      "sync_metric": 0.025710368087623697,
+      "runtime_seconds": 2.563584089279175,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.01_no_density_seed100.db"
+    },
+    {
+      "migration_rate": 0.01,
+      "density_config": "no_density",
+      "df": 0.0,
+      "K": 1000,
+      "seed": 101,
+      "final_total": 24339,
+      "final_pops": [
+        4718,
+        4848,
+        4775,
+        5018,
+        4980
+      ],
+      "mean_total": 4811.583333333333,
+      "std_total": 6695.612474577829,
+      "sync_metric": 0.032909614958733895,
+      "runtime_seconds": 2.5291190147399902,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.01_no_density_seed101.db"
+    },
+    {
+      "migration_rate": 0.01,
+      "density_config": "no_density",
+      "df": 0.0,
+      "K": 1000,
+      "seed": 102,
+      "final_total": 24663,
+      "final_pops": [
+        5005,
+        4925,
+        4989,
+        4803,
+        4941
+      ],
+      "mean_total": 4236.25,
+      "std_total": 5891.4110240388645,
+      "sync_metric": 0.02494775181461084,
+      "runtime_seconds": 2.560887098312378,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.01_no_density_seed102.db"
+    },
+    {
+      "migration_rate": 0.01,
+      "density_config": "with_density",
+      "df": 0.1,
+      "K": 500,
+      "seed": 100,
+      "final_total": 110,
+      "final_pops": [
+        20,
+        27,
+        23,
+        21,
+        19
+      ],
+      "mean_total": 117.8,
+      "std_total": 9.10274683818022,
+      "sync_metric": 0.15553010210512672,
+      "runtime_seconds": 1.0529799461364746,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.01_with_density_seed100.db"
+    },
+    {
+      "migration_rate": 0.01,
+      "density_config": "with_density",
+      "df": 0.1,
+      "K": 500,
+      "seed": 101,
+      "final_total": 119,
+      "final_pops": [
+        29,
+        12,
+        27,
+        27,
+        24
+      ],
+      "mean_total": 109.75,
+      "std_total": 8.757139944068497,
+      "sync_metric": 0.17318282903375518,
+      "runtime_seconds": 1.0379679203033447,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.01_with_density_seed101.db"
+    },
+    {
+      "migration_rate": 0.01,
+      "density_config": "with_density",
+      "df": 0.1,
+      "K": 500,
+      "seed": 102,
+      "final_total": 128,
+      "final_pops": [
+        26,
+        29,
+        29,
+        24,
+        20
+      ],
+      "mean_total": 115.55,
+      "std_total": 10.047263308981206,
+      "sync_metric": 0.18327057941199135,
+      "runtime_seconds": 1.0261468887329102,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.01_with_density_seed102.db"
+    },
+    {
+      "migration_rate": 0.1,
+      "density_config": "no_density",
+      "df": 0.0,
+      "K": 1000,
+      "seed": 100,
+      "final_total": 24315,
+      "final_pops": [
+        5069,
+        5020,
+        4953,
+        4647,
+        4626
+      ],
+      "mean_total": 3610.4545454545455,
+      "std_total": 4733.271045840121,
+      "sync_metric": 0.03711771196084464,
+      "runtime_seconds": 12.232606172561646,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.1_no_density_seed100.db"
+    },
+    {
+      "migration_rate": 0.1,
+      "density_config": "no_density",
+      "df": 0.0,
+      "K": 1000,
+      "seed": 101,
+      "final_total": 23979,
+      "final_pops": [
+        5030,
+        4842,
+        4873,
+        4615,
+        4619
+      ],
+      "mean_total": 4584.0,
+      "std_total": 6381.453452519,
+      "sync_metric": 0.03985003272997338,
+      "runtime_seconds": 11.648660898208618,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.1_no_density_seed101.db"
+    },
+    {
+      "migration_rate": 0.1,
+      "density_config": "no_density",
+      "df": 0.0,
+      "K": 1000,
+      "seed": 102,
+      "final_total": 23651,
+      "final_pops": [
+        5035,
+        4807,
+        4646,
+        4643,
+        4520
+      ],
+      "mean_total": 4742.333333333333,
+      "std_total": 6630.130483046486,
+      "sync_metric": 0.044600484590882915,
+      "runtime_seconds": 11.662907123565674,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.1_no_density_seed102.db"
+    },
+    {
+      "migration_rate": 0.1,
+      "density_config": "with_density",
+      "df": 0.1,
+      "K": 500,
+      "seed": 100,
+      "final_total": 146,
+      "final_pops": [
+        34,
+        31,
+        38,
+        22,
+        21
+      ],
+      "mean_total": 124.3,
+      "std_total": 11.541663658242687,
+      "sync_metric": 0.16579261667572393,
+      "runtime_seconds": 1.28472900390625,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.1_with_density_seed100.db"
+    },
+    {
+      "migration_rate": 0.1,
+      "density_config": "with_density",
+      "df": 0.1,
+      "K": 500,
+      "seed": 101,
+      "final_total": 115,
+      "final_pops": [
+        18,
+        26,
+        22,
+        25,
+        24
+      ],
+      "mean_total": 116.3,
+      "std_total": 8.426743143112883,
+      "sync_metric": 0.18198680680480794,
+      "runtime_seconds": 1.284891128540039,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.1_with_density_seed101.db"
+    },
+    {
+      "migration_rate": 0.1,
+      "density_config": "with_density",
+      "df": 0.1,
+      "K": 500,
+      "seed": 102,
+      "final_total": 112,
+      "final_pops": [
+        24,
+        24,
+        16,
+        29,
+        19
+      ],
+      "mean_total": 117.6,
+      "std_total": 5.276362383309167,
+      "sync_metric": 0.16007821103947545,
+      "runtime_seconds": 1.2962970733642578,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c283_mig0.1_with_density_seed102.db"
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "id": "0fe7fe2958733b4b",
+  "name": "Observation_0fe7fe29",
+  "type": "system_behavior",
+  "confidence": 0.5,
+  "parents": [
+    {
+      "pattern": {
+        "id": "f5786bc8b1ec4a01",
+        "name": "Observation_f5786bc8",
+        "type": "system_behavior",
+        "confidence": 0.5,
+        "parents": [
+          {
+            "pattern": {
+              "id": "3dc9e395d25e5dcb",
+              "name": "Observation_3dc9e395",
+              "type": "system_behavior",
+              "confidence": 0.5,
+              "parents": [
+                {
+                  "pattern": {
+                    "id": "71d6866e00acf8c1",
+                    "name": "Observation_71d6866e",
+                    "type": "system_behavior",
+                    "confidence": 0.5,
+                    "parents": [
+                      {
+                        "pattern": {
+                          "id": "20cac5619a12134a",
+                          "name": "Observation_20cac561",
+                          "type": "system_behavior",
+                          "confidence": 0.5,
+                          "parents": [
+                            {
+                              "pattern": {
+                                "id": "fd62ee213235d099",
+                                "name": "Observation_fd62ee21",
+                                "type": "system_behavior",
+                                "confidence": 0.5,
+                                "parents": [
+                                  {
+                                    "pattern": {
+                                      "id": "ff0a90ec7e2eab9a",
+                                      "name": "Observation_ff0a90ec",
+                                      "type": "system_behavior",
+                                      "confidence": 0.5,
+                                      "parents": [
+                                        {
+                                          "pattern": {
+                                            "id": "faaba5c9e836ec09",
+                                            "name": "Observation_faaba5c9",
+                                            "type": "system_behavior",
+                                            "confidence": 0.5,
+                                            "parents": [
+                                              {
+                                                "pattern": {
+                                                  "id": "668db210334a4185",
+                                                  "name": "Observation_668db210",
+                                                  "type": "system_behavior",
+                                                  "confidence": 0.5,
+                                                  "parents": [
+                                                    {
+                                                      "pattern": {
+                                                        "id": "693f23280cf96f48",
+                                                        "name": "Observation_693f2328",
+                                                        "type": "system_behavior",
+                                                        "confidence": 0.5,
+                                                        "parents": [
+                                                          {
+                                                            "pattern": {
+                                                              "id": "e12204c2df0d5fab",
+                                                              "name": "Observation_e12204c2",
+                                                              "type": "system_behavior",
+                                                              "confidence": 0.5,
+                                                              "parents": [
+                                                                {
+                                                                  "pattern": {
+                                                                    "id": "b921c8e571a4884e",
+                                                                    "name": "Observation_b921c8e5",
+                                                                    "type": "system_behavior",
+                                                                    "confidence": 0.5,
+                                                                    "parents": [
+                                                                      {
+                                                                        "pattern": {
+                                                                          "id": "5ea326b17d3dcefe",
+                                                                          "name": "Observation_5ea326b1",
+                                                                          "type": "system_behavior",
+                                                                          "confidence": 0.5,
+                                                                          "parents": [
+                                                                            {
+                                                                              "pattern": {
+                                                                                "id": "99a6aed0a24a09eb",
+                                                                                "name": "Observation_99a6aed0",
+                                                                                "type": "system_behavior",
+                                                                                "confidence": 0.5,
+                                                                                "parents": [
+                                                                                  {
+                                                                                    "pattern": {
+                                                                                      "id": "ef452fe1bfbe9b78",
+                                                                                      "name": "Observation_ef452fe1",
+                                                                                      "type": "system_behavior",
+                                                                                      "confidence": 0.5,
+                                                                                      "parents": [
+                                                                                        {
+                                                                                          "pattern": {
+                                                                                            "id": "58f4ab32cb51d2ac",
+                                                                                            "name": "Observation_58f4ab32",
+                                                                                            "type": "system_behavior",
+                                                                                            "confidence": 0.5,
+                                                                                            "parents": [
+                                                                                              {
+                                                                                                "pattern": {
+                                                                                                  "id": "966da0acf6c06c43",
+                                                                                                  "name": "Observation_966da0ac",
+                                                                                                  "type": "system_behavior",
+                                                                                                  "confidence": 0.5
+                                                                                                },
+                                                                                                "relationship_type": "causal_discovery",
+                                                                                                "strength": 1.0
+                                                                                              }
+                                                                                            ]
+                                                                                          },
+                                                                                          "relationship_type": "causal_discovery",
+                                                                                          "strength": 1.0
+                                                                                        }
+                                                                                      ]
+                                                                                    },
+                                                                                    "relationship_type": "causal_discovery",
+                                                                                    "strength": 1.0
+                                                                                  }
+                                                                                ]
+                                                                              },
+                                                                              "relationship_type": "causal_discovery",
+                                                                              "strength": 1.0
+                                                                            }
+                                                                          ]
+                                                                        },
+                                                                        "relationship_type": "causal_discovery",
+                                                                        "strength": 1.0
+                                                                      }
+                                                                    ]
+                                                                  },
+                                                                  "relationship_type": "causal_discovery",
+                                                                  "strength": 1.0
+                                                                }
+                                                              ]
+                                                            },
+                                                            "relationship_type": "causal_discovery",
+                                                            "strength": 1.0
+                                                          }
+                                                        ]
+                                                      },
+                                                      "relationship_type": "causal_discovery",
+                                                      "strength": 1.0
+                                                    }
+                                                  ]
+                                                },
+                                                "relationship_type": "causal_discovery",
+                                                "strength": 1.0
+                                              }
+                                            ]
+                                          },
+                                          "relationship_type": "causal_discovery",
+                                          "strength": 1.0
+                                        }
+                                      ]
+                                    },
+                                    "relationship_type": "causal_discovery",
+                                    "strength": 1.0
+                                  }
+                                ]
+                              },
+                              "relationship_type": "causal_discovery",
+                              "strength": 1.0
+                            }
+                          ]
+                        },
+                        "relationship_type": "causal_discovery",
+                        "strength": 1.0
+                      }
+                    ]
+                  },
+                  "relationship_type": "causal_discovery",
+                  "strength": 1.0
+                }
+              ]
+            },
+            "relationship_type": "causal_discovery",
+            "strength": 1.0
+          }
+        ]
+      },
+      "relationship_type": "causal_discovery",
+      "strength": 1.0
+    }
+  ]
+}

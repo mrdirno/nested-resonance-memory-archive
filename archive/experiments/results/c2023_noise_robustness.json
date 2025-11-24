@@ -1,0 +1,49 @@
+{
+  "cycle": 2023,
+  "experiment": "Noise Robustness",
+  "timestamp": "2025-11-21T17:04:42.751536",
+  "results": [
+    {
+      "noise_level": 0.0,
+      "bind_accuracy": 1.0,
+      "sequence_accuracy": 1.0,
+      "composition_accuracy": 1.0
+    },
+    {
+      "noise_level": 0.1,
+      "bind_accuracy": 1.0,
+      "sequence_accuracy": 1.0,
+      "composition_accuracy": 1.0
+    },
+    {
+      "noise_level": 0.2,
+      "bind_accuracy": 1.0,
+      "sequence_accuracy": 1.0,
+      "composition_accuracy": 1.0
+    },
+    {
+      "noise_level": 0.3,
+      "bind_accuracy": 1.0,
+      "sequence_accuracy": 1.0,
+      "composition_accuracy": 1.0
+    },
+    {
+      "noise_level": 0.5,
+      "bind_accuracy": 1.0,
+      "sequence_accuracy": 1.0,
+      "composition_accuracy": 1.0
+    },
+    {
+      "noise_level": 0.7,
+      "bind_accuracy": 1.0,
+      "sequence_accuracy": 1.0,
+      "composition_accuracy": 1.0
+    },
+    {
+      "noise_level": 1.0,
+      "bind_accuracy": 1.0,
+      "sequence_accuracy": 1.0,
+      "composition_accuracy": 1.0
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "cycle_id": "C304",
+  "cycle_name": "Tri-trophic Dynamics",
+  "date": "2025-11-20T01:32:42.836858",
+  "author": "Aldrin Payopay <aldrin.gdf@gmail.com>",
+  "co_author": "Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "config": {
+    "cycles": 30000,
+    "initial_prey": 300,
+    "initial_meso": 30,
+    "initial_top": 10,
+    "prey_params": {
+      "f_intra": 0.1,
+      "K": 600
+    },
+    "meso_params": {
+      "attack_prey": 0.003,
+      "h": 0.02
+    },
+    "top_params": {
+      "attack_meso": 0.005,
+      "h": 0.03
+    },
+    "conditions": [
+      {
+        "name": "two_trophic",
+        "include_top": false,
+        "n_pops": 2
+      },
+      {
+        "name": "three_trophic",
+        "include_top": true,
+        "n_pops": 3
+      }
+    ],
+    "seeds": [
+      1100,
+      1101,
+      1102
+    ]
+  },
+  "results": [
+    {
+      "condition": "two_trophic",
+      "include_top": false,
+      "seed": 1100,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 0.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.06926918029785156,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c304_two_trophic_seed1100.db"
+    },
+    {
+      "condition": "two_trophic",
+      "include_top": false,
+      "seed": 1101,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 0.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.051210880279541016,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c304_two_trophic_seed1101.db"
+    },
+    {
+      "condition": "two_trophic",
+      "include_top": false,
+      "seed": 1102,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 0.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.06745004653930664,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c304_two_trophic_seed1102.db"
+    },
+    {
+      "condition": "three_trophic",
+      "include_top": true,
+      "seed": 1100,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.028446197509765625,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c304_three_trophic_seed1100.db"
+    },
+    {
+      "condition": "three_trophic",
+      "include_top": true,
+      "seed": 1101,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.046360015869140625,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c304_three_trophic_seed1101.db"
+    },
+    {
+      "condition": "three_trophic",
+      "include_top": true,
+      "seed": 1102,
+      "prey_final": 300.0,
+      "meso_final": 30.0,
+      "top_final": 10.0,
+      "prey_survive": true,
+      "meso_survive": true,
+      "top_survive": true,
+      "coexist": true,
+      "runtime_seconds": 0.029868125915527344,
+      "db_path": "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c304_three_trophic_seed1102.db"
+    }
+  ]
+}

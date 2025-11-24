@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "num_cycles": 200,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:36:19.006902"
+  },
+  "tests": [
+    {
+      "seq_length": 5,
+      "num_sequences": 5,
+      "total_elements": 25,
+      "accuracy": 1.0
+    },
+    {
+      "seq_length": 10,
+      "num_sequences": 3,
+      "total_elements": 30,
+      "accuracy": 1.0
+    },
+    {
+      "seq_length": 10,
+      "num_sequences": 5,
+      "total_elements": 50,
+      "accuracy": 1.0
+    },
+    {
+      "seq_length": 20,
+      "num_sequences": 3,
+      "total_elements": 60,
+      "accuracy": 0.8999999999999999
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Sequence memory works excellently: 98% avg",
+      "Best: 5\u00d75 at 100%",
+      "Long sequences work: length 20 at 90%"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "metadata": {
+    "dimension": 1024,
+    "k_memories": 8,
+    "num_cycles": 200,
+    "n_items": 50,
+    "num_trials": 3,
+    "timestamp": "2025-11-22T04:32:56.957144"
+  },
+  "noise_levels": [
+    {
+      "sigma": 0,
+      "accuracy": 1.0
+    },
+    {
+      "sigma": 0.001,
+      "accuracy": 0.9933333333333333
+    },
+    {
+      "sigma": 0.005,
+      "accuracy": 0.9866666666666667
+    },
+    {
+      "sigma": 0.01,
+      "accuracy": 0.98
+    },
+    {
+      "sigma": 0.02,
+      "accuracy": 0.8733333333333334
+    },
+    {
+      "sigma": 0.05,
+      "accuracy": 0.48666666666666664
+    },
+    {
+      "sigma": 0.1,
+      "accuracy": 0.35333333333333333
+    }
+  ],
+  "analysis": {
+    "findings": [
+      "Best noise: \u03c3=0 (100%)",
+      "80% threshold: \u03c3 between 0.02 and 0.05",
+      "No noise is optimal or equivalent",
+      "Safe range: \u03c3 \u2264 0.01 for 90%+ accuracy"
+    ]
+  }
+}
