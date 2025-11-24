@@ -1,168 +1,96 @@
 """
-Cycle 426: The Social Web (Multi-Agent Architecture)
-Role: The Social Architect
-Responsibility: Enable communication and social learning between agents.
+Cycle 426: The Social Web
+Role: The Sociologist
+Responsibility: Enable communication and cultural transmission between autonomous agents.
 """
 import asyncio
-import json
 import random
-import numpy as np
-import time
+import json
 import copy
-import sqlite3
-import math
-
-# --- Mock Components from Previous Cycles ---
-
-class AestheticCurator:
-    def calculate_symmetry(self, shape):
-        x, y = shape['target']['x'], shape['target']['y']
-        score = 0.0
-        if abs(x) < 1.0: score += 0.5
-        if abs(y) < 1.0: score += 0.5
-        if abs(abs(x) - abs(y)) < 1.0: score += 0.3
-        r = math.sqrt(x**2 + y**2)
-        if abs(r - 15.0) < 2.0: score += 0.2
-        return min(1.0, score)
-
-    def calculate_complexity(self, shape):
-        mode = shape['params']['mode']
-        if mode == "random": return 0.1
-        if mode == "axis_aligned": return 0.3
-        if mode == "spherical_shell": return 0.5
-        if mode == "golden_spiral": return 0.9
-        return 0.0
-
-    def evaluate(self, shape):
-        sym = self.calculate_symmetry(shape)
-        comp = self.calculate_complexity(shape)
-        interest = (sym * 0.4) + (comp * 0.6)
-        return {"symmetry": sym, "complexity": comp, "interest": interest}
-
-class GenerativeDesigner:
-    def generate_batch(self):
-        batch = []
-        modes = ["random", "spherical_shell", "axis_aligned", "golden_spiral"]
-        for _ in range(5):
-            mode = random.choice(modes)
-            x = random.uniform(-20, 20)
-            y = random.uniform(-20, 20)
-            z = random.uniform(20, 60)
-            batch.append({"type": "point", "params": {"mode": mode}, "target": {"x": x, "y": y, "z": z}})
-        return batch
-
-class KnowledgeGraph:
-    def __init__(self, agent_id):
-        self.agent_id = agent_id
-        self.memory = []
-
-    def log(self, event_type, data):
-        entry = {"agent": self.agent_id, "type": event_type, "data": data, "timestamp": time.time()}
-        self.memory.append(entry)
-        # print(f"[{self.agent_id} MEMORY] {event_type}: {data}")
-
-# --- New Social Components ---
 
 class CommunicationChannel:
     def __init__(self):
-        self.agents = {}
-        self.message_log = []
+        self.messages = []
+    
+    def broadcast(self, sender_id, message):
+        print(f"[COMMS] Agent {sender_id} broadcast: {message['type']}")
+        self.messages.append({"sender": sender_id, "payload": message})
+        
+    def get_messages(self, receiver_id):
+        # Return messages NOT from self
+        return [m for m in self.messages if m["sender"] != receiver_id]
 
-    def register(self, agent):
-        self.agents[agent.id] = agent
-        print(f"[CHANNEL] Registered Agent: {agent.id}")
-
-    async def send(self, sender_id, recipient_id, content):
-        if recipient_id in self.agents:
-            msg = {"from": sender_id, "to": recipient_id, "content": content, "timestamp": time.time()}
-            self.message_log.append(msg)
-            print(f"[CHANNEL] {sender_id} -> {recipient_id}: {content['type']}")
-            await self.agents[recipient_id].receive(msg)
-        else:
-            print(f"[CHANNEL] Error: Recipient {recipient_id} not found.")
-
-# Global Channel
-GLOBAL_CHANNEL = CommunicationChannel()
-
-class SocialArchitect:
-    def __init__(self, agent_id):
+class SocialAgent:
+    def __init__(self, agent_id, channel):
         self.id = agent_id
-        self.designer = GenerativeDesigner()
-        self.curator = AestheticCurator()
-        self.memory = KnowledgeGraph(agent_id)
-        self.inbox = asyncio.Queue()
+        self.channel = channel
+        self.knowledge = [] # List of known designs
         
-        # Register with Global Channel
-        GLOBAL_CHANNEL.register(self)
-
-    async def receive(self, message):
-        await self.inbox.put(message)
-
-    async def process_inbox(self):
-        while not self.inbox.empty():
-            msg = await self.inbox.get()
-            sender = msg['from']
-            content = msg['content']
+    def invent(self):
+        # Create a random design (mock)
+        design = {
+            "id": random.randint(1000, 9999),
+            "fitness": random.uniform(0.0, 10.0),
+            "data": "RandomShape"
+        }
+        self.knowledge.append(design)
+        print(f"[Agent {self.id}] Invented Design {design['id']} (Fitness: {design['fitness']:.2f})")
+        
+        # Share if good
+        if design['fitness'] > 5.0:
+            self.channel.broadcast(self.id, {"type": "NEW_DESIGN", "design": design})
             
-            if content['type'] == 'DESIGN_SHARE':
-                print(f"[{self.id}] Received design from {sender}. Evaluating...")
-                shape = content['data']
-                scores = self.curator.evaluate(shape)
+    def listen(self):
+        messages = self.channel.get_messages(self.id)
+        for msg in messages:
+            payload = msg['payload']
+            if payload['type'] == "NEW_DESIGN":
+                design = payload['design']
+                # Evaluate
+                print(f"[Agent {self.id}] Received Design {design['id']} from Agent {msg['sender']}")
+                self.learn(design)
                 
-                # Reply with Feedback
-                reply = {
-                    "type": "FEEDBACK",
-                    "data": {
-                        "ref_id": content.get('id'),
-                        "scores": scores,
-                        "comment": "Nice spiral!" if scores['interest'] > 0.6 else "Too random."
-                    }
-                }
-                await GLOBAL_CHANNEL.send(self.id, sender, reply)
-                self.memory.log("SOCIAL_EVALUATION", {"peer": sender, "scores": scores})
-
-            elif content['type'] == 'FEEDBACK':
-                print(f"[{self.id}] Received feedback from {sender}: {content['data']['comment']} (Interest: {content['data']['scores']['interest']:.2f})")
-                self.memory.log("SOCIAL_LEARNING", {"peer": sender, "feedback": content['data']})
-
-    async def run_cycle(self):
-        print(f"\n=== {self.id} Cycle ===")
+        # Clear buffer (simplified)
+        # In reality, we'd track read status per agent
         
-        # 1. Process Inbox
-        await self.process_inbox()
+    def learn(self, design):
+        # Improve the design (Social Learning)
+        improved = copy.deepcopy(design)
+        improved['fitness'] += random.uniform(0.1, 1.0) # "Standing on shoulders of giants"
+        improved['id'] = random.randint(1000, 9999)
         
-        # 2. Design & Share (Randomly)
-        if random.random() < 0.5:
-            batch = self.designer.generate_batch()
-            best_shape = batch[0] # Simplification
-            
-            # Find a peer
-            peers = [aid for aid in GLOBAL_CHANNEL.agents.keys() if aid != self.id]
-            if peers:
-                recipient = random.choice(peers)
-                msg = {
-                    "type": "DESIGN_SHARE",
-                    "id": str(random.randint(1000, 9999)),
-                    "data": best_shape
-                }
-                print(f"[{self.id}] Sharing design {msg['id']} with {recipient}...")
-                await GLOBAL_CHANNEL.send(self.id, recipient, msg)
+        print(f"[Agent {self.id}] Improved Design {design['id']} -> {improved['id']} (Fitness: {improved['fitness']:.2f})")
+        self.knowledge.append(improved)
+        
+        # Share back
+        if improved['fitness'] > 8.0:
+             self.channel.broadcast(self.id, {"type": "IMPROVED_DESIGN", "design": improved})
 
-async def main():
-    print("Starting Cycle 426: The Social Web...")
+def run_experiment():
+    print("Cycle 426: Social Architecture Test")
+    print("===================================")
     
-    # Create Agents
-    agent_a = SocialArchitect("AGENT_A")
-    agent_b = SocialArchitect("AGENT_B")
+    channel = CommunicationChannel()
+    agent_a = SocialAgent("A", channel)
+    agent_b = SocialAgent("B", channel)
     
-    # Run Simulation Loop
-    for i in range(5):
-        print(f"\n--- Global Tick {i} ---")
-        await agent_a.run_cycle()
-        await agent_b.run_cycle()
-        await asyncio.sleep(0.5)
-        
-    print("\nCycle 426 Complete.")
+    print("\n--- Step 1: Invention ---")
+    agent_a.invent() # Might be low fitness
+    agent_a.invent() # Might be high fitness
+    
+    print("\n--- Step 2: Transmission ---")
+    agent_b.listen()
+    
+    print("\n--- Step 3: Reciprocity ---")
+    # Check if B broadcasted an improvement
+    # For this test, we force a high fitness to ensure flow
+    good_design = {"id": 5555, "fitness": 6.0, "data": "GoldenSpiral"}
+    channel.broadcast("A", {"type": "NEW_DESIGN", "design": good_design})
+    
+    agent_b.listen()
+    
+    # Check A listening to B
+    agent_a.listen()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    run_experiment()
