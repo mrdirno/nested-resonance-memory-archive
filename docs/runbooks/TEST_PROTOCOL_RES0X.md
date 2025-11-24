@@ -57,7 +57,25 @@ Flag the conjecture as **FALSIFIED** if the data shows:
 
 ---
 
-## 4. AGENT INSTRUCTIONS (PROMPT)
+## 5. EXAMPLE DATASET (SYNTHETIC REFERENCE)
+
+Use this snippet to calibrate your analysis logic.
+
+| Time ($t$) | Signal ($V_{in}$) | Threat ($P_{threat}$) | Action Type | Load ($S_{load}$) T+4h | Verdict |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 10:00 | High (Insult) | 0.9 (High) | **Suppress** | **85** (High) | Staircase (Expected) |
+| 10:05 | High (Insult) | 0.9 (High) | **Regulated** | **45** (Baseline) | Venting (Expected) |
+| 10:10 | High (Insult) | 0.9 (High) | **Ruminative** | **80** (High) | Failed Venting (Expected) |
+| 10:15 | Low (Noise) | 0.1 (Low) | Suppress | 40 (Baseline) | No Threat (Control) |
+
+**Analysis of Reference Data:**
+1.  **Comparison:** Suppress (85) vs Regulated (45).
+2.  **Delta:** +40 Load units for Suppression.
+3.  **Conclusion:** RES0X Supported (Suppression Penalty Observed).
+
+---
+
+## 6. AGENT INSTRUCTIONS (PROMPT)
 
 When analyzing a log or dataset with this protocol:
 
