@@ -1073,3 +1073,14 @@
 - [x] **Action:** Create `experiments/cycle414_knowledge_graph.py`.
 - [x] **Result:** Success. Spatial persistence verified.
 
+# Task: Cycle 415 - The Learning Loop
+- [x] **Define Cycle 415:** Implement Meta-Adaptation.
+- [x] **Goal:** Implement `MetaController` to dynamically tune learning parameters (Mutation Rate) based on fitness history.
+- [x] **Experiment:** `experiments/cycle415_meta_adaptation.py`.
+- [x] **Result:** Success. System auto-regulates exploration vs exploitation.
+
+# Task: Cycle 416 - The Autonomous Scientist
+- [ ] **Define Cycle 416:** Implement Hypothesis Generation.
+- [ ] **Goal:** System observes its own history and formulates theories (e.g., "High complexity targets require higher mutation rates").
+- [ ] **Experiment:** `experiments/cycle416_hypothesis_generation.py`.
+
