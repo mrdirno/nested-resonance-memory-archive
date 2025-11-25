@@ -675,6 +675,7 @@ git push origin main
 - TodoWrite: Track multi-step tasks proactively
 - Bash: Terminal operations (git, system commands)
 - Read/Write/Edit: File operations (prefer over bash when possible)
+- **Background Execution:** ALL heavy compute tasks (>10s) MUST use `automation/run_background.py`.
 
 **Progress Tracking:**
 - Automatic audit trails (databases, logs, commits)
