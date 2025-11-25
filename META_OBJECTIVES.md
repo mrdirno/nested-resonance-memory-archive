@@ -147,10 +147,15 @@
 - [x] **Result:** Clustered Age (100) >> Single Age (0). Clusters are immortal.
 
 # Task: Cycle 1961 - Pattern Persistence
-- [ ] **Define Cycle 1961:** Inject signal ($\Phi = \pi$).
-- [ ] **Goal:** Verify information storage duration.
-- [ ] **Hypothesis:** Signal persists in clusters, decays in singles.
-- [ ] **Action:** `src/experiments/cycle1961_pattern_persistence.py`.
+- [x] **Define Cycle 1961:** Inject signal ($\Phi = \pi$).
+- [x] **Action:** `src/experiments/cycle1961_pattern_persistence.py`.
+- [x] **Result:** 100% Retention. Orthogonal signals do not mix.
+
+# Task: Cycle 1962 - Energy-Composition Probability
+- [ ] **Define Cycle 1962:** Map probability landscape.
+- [ ] **Goal:** Determine if hunger drives socialization.
+- [ ] **Hypothesis:** Low energy agents take higher risks (lower resonance threshold).
+- [ ] **Action:** `src/experiments/cycle1962_energy_composition_prob.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
