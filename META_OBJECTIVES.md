@@ -127,10 +127,15 @@
 - [x] **Result:** Abundance (0.0038) >> Starvation (0.0008). 4.75x frequency shift.
 
 # Task: Cycle 1957 - Perturbation Response
-- [ ] **Define Cycle 1957:** Inject 50% biomass shock.
-- [ ] **Goal:** Test resilience of the "Glassy" state.
-- [ ] **Hypothesis:** Starvation regime is fragile; Abundance regime is antifragile.
-- [ ] **Action:** `src/experiments/cycle1957_perturbation_response.py`.
+- [x] **Define Cycle 1957:** Inject 50% biomass shock.
+- [x] **Action:** `src/experiments/cycle1957_perturbation_response.py`.
+- [x] **Result:** Starvation (0.61) > Abundance (0.50). Clustering provides redundancy.
+
+# Task: Cycle 1958 - Scaling Laws
+- [ ] **Define Cycle 1958:** Analyze cluster size distribution.
+- [ ] **Goal:** Determine if the system is Critical.
+- [ ] **Hypothesis:** Power Law distribution ($P(s) \sim s^{-\alpha}$).
+- [ ] **Action:** `src/experiments/cycle1958_scaling_laws.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.

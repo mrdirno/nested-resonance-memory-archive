@@ -1,237 +1,240 @@
-#!/usr/bin/env python3
-"""
-CYCLE 1957: PERTURBATION RESPONSE
+import sys
+import os
+import random
+import numpy as np
+from typing import List, Dict, Optional, Set
+from dataclasses import asdict
 
-Test system resilience by applying shocks at equilibrium.
-Measure:
-1. Recovery time after population reduction
-2. Response to energy perturbations
-3. Depth-selective shocks
-"""
-import sys, numpy as np, math
-from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
-from core.fractal_agent import FractalAgent, RealityInterface
+# Add project root to path
+sys.path.append(os.getcwd())
 
-CYCLES = 800  # Extended for recovery
-N_DEPTHS = 5
-PI = math.pi
-E = math.e
-PHI = (1 + math.sqrt(5)) / 2
+from src.fractal.agent import FractalAgent
+from src.fractal.composition import CompositionEngine
 
-# OPTIMAL PARAMETERS
-P_BASE = 0.17
-K = 30
-N_INITIAL = 14
-COMP_THRESH = 0.99
-DECOMP_THRESH = 1.7
-RECHARGE_BASE = 0.4
+class SpatialCompositionEngine(CompositionEngine):
+    def __init__(self, resonance_threshold: float = 0.7, energy_threshold: float = 0.5, distance_threshold: float = 20.0):
+        super().__init__(resonance_threshold, energy_threshold)
+        self.distance_threshold = distance_threshold
 
-def run_perturbation_test(seed, shock_type, shock_fraction=0.5):
-    """Run simulation with perturbation at cycle 400."""
-    reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
-    np.random.seed(seed)
-    for i in range(N_INITIAL):
-        reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
+    def detect_clusters(
+        self,
+        agents: List[FractalAgent],
+        min_cluster_size: int = 2,
+        max_cluster_size: Optional[int] = None,
+    ) -> List[List[FractalAgent]]:
+        if len(agents) < min_cluster_size:
+            return []
 
+        depth_groups: Dict[int, List[FractalAgent]] = {}
+        for agent in agents:
+            depth = agent.state.depth
+            if depth not in depth_groups:
+                depth_groups[depth] = []
+            depth_groups[depth].append(agent)
+
+        all_clusters = []
+
+        for depth, depth_agents in depth_groups.items():
+            if len(depth_agents) < min_cluster_size:
+                continue
+
+            n = len(depth_agents)
+            adjacency_matrix = np.zeros((n, n), dtype=bool)
+
+            for i in range(n):
+                for j in range(i + 1, n):
+                    agent_i = depth_agents[i]
+                    agent_j = depth_agents[j]
+                    
+                    dist = np.linalg.norm(agent_i.state.position - agent_j.state.position)
+                    if dist > self.distance_threshold:
+                        continue
+
+                    resonance = abs(agent_i.calculate_resonance(agent_j))
+                    if resonance >= self.resonance_threshold:
+                        adjacency_matrix[i, j] = True
+                        adjacency_matrix[j, i] = True
+
+            visited = set()
+            for i in range(n):
+                if i in visited:
+                    continue
+
+                cluster = [depth_agents[i]]
+                visited.add(i)
+
+                for j in range(n):
+                    if j in visited:
+                        continue
+                    
+                    is_connected_to_all = True
+                    for member in cluster:
+                        member_idx = depth_agents.index(member) 
+                        if not adjacency_matrix[member_idx, j]:
+                            is_connected_to_all = False
+                            break
+                    
+                    if is_connected_to_all:
+                        cluster.append(depth_agents[j])
+                        visited.add(j)
+
+                if len(cluster) >= min_cluster_size:
+                    if max_cluster_size is None or len(cluster) <= max_cluster_size:
+                        all_clusters.append(cluster)
+
+        return all_clusters
+
+def run_simulation(config_name: str, recharge: float, cost_single: float, cost_cluster: float):
+    print(f"\n--- Simulation: {config_name} ---", flush=True)
+    
+    N_AGENTS = 50
+    WORLD_SIZE = 100.0
+    DISTANCE_THRESHOLD = 20.0
+    CYCLES = 100
+    SHOCK_CYCLE = 50
+    VELOCITY_MAGNITUDE = 5.0
+    
+    DECOMP_LOW_ENERGY = 0.2 
+    DECOMP_HIGH_ENERGY = 4.0 
+    
+    cluster_registry: Dict[str, List[FractalAgent]] = {}
+
+    # Initialize Population
+    agents = []
+    for i in range(N_AGENTS):
+        pos = np.random.rand(3) * WORLD_SIZE
+        pos[2] = 0
+        agent = FractalAgent(
+            agent_id=f"gen0_{i}",
+            energy=1.0,
+            phase=random.uniform(0, 2*np.pi),
+            position=pos
+        )
+        agents.append(agent)
+
+    comp_engine = SpatialCompositionEngine(distance_threshold=DISTANCE_THRESHOLD)
+    
     pop_history = []
-    shock_cycle = 400
-    pre_shock_pop = None
-    recovery_cycle = None
-
+    pre_shock_pop = 0
+    
     for cycle in range(CYCLES):
-        pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
-        pop_counts = [len(p) for p in pops]
-        total = sum(pop_counts)
-        if total >= 3000 or total == 0: break
-
-        pop_history.append(total)
-
-        # Apply shock at cycle 400
-        if cycle == shock_cycle:
-            pre_shock_pop = total
-
-            if shock_type == 'random_kill':
-                # Kill random fraction of all agents
-                for d in range(N_DEPTHS):
-                    agents = list(pops[d])
-                    n_kill = int(len(agents) * shock_fraction)
-                    for a in np.random.choice(agents, n_kill, replace=False):
-                        reality.remove_agent(a.agent_id, d)
-
-            elif shock_type == 'd0_kill':
-                # Kill only D0 agents
-                agents = list(pops[0])
-                n_kill = int(len(agents) * shock_fraction)
-                for a in np.random.choice(agents, n_kill, replace=False):
-                    reality.remove_agent(a.agent_id, 0)
-
-            elif shock_type == 'd1_kill':
-                # Kill only D1 agents
-                agents = list(pops[1])
-                n_kill = int(len(agents) * shock_fraction)
-                if n_kill > 0 and len(agents) > 0:
-                    for a in np.random.choice(agents, min(n_kill, len(agents)), replace=False):
-                        reality.remove_agent(a.agent_id, 1)
-
-            elif shock_type == 'energy_drain':
-                # Drain energy from all agents
-                for d in range(N_DEPTHS):
-                    for agent in pops[d]:
-                        agent.energy *= (1 - shock_fraction)
-
-        # Check recovery
-        if cycle > shock_cycle and recovery_cycle is None:
-            if pre_shock_pop and total >= 0.9 * pre_shock_pop:
-                recovery_cycle = cycle - shock_cycle
-
-        p_effective = P_BASE / (1 + total / K)
-
-        # Standard dynamics
-        for d in range(N_DEPTHS):
-            for agent in list(reality.get_population_agents(d)):
-                agent.recharge_energy(RECHARGE_BASE / (1 + d * 0.5), cap=2.0)
-
-        for agent in list(reality.get_population_agents(0)):
-            if agent.energy > 1.0 and np.random.random() < p_effective:
-                reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
-                agent.energy -= 0.3
-
-        for d in range(N_DEPTHS - 1):
-            agents = list(reality.get_population_agents(d))
-            if len(agents) < 2: continue
-            np.random.shuffle(agents)
-            i = 0
-            while i < len(agents) - 1:
-                e1, e2 = agents[i].energy, agents[i+1].energy
-                pi1 = (e1 * PI * 2) % (2 * PI)
-                e_1 = (d * E / 4) % (2 * PI)
-                phi1 = (e1 * PHI) % (2 * PI)
-                pi2 = (e2 * PI * 2) % (2 * PI)
-                e_2 = (d * E / 4) % (2 * PI)
-                phi2 = (e2 * PHI) % (2 * PI)
-                v1 = [pi1, e_1, phi1]
-                v2 = [pi2, e_2, phi2]
-                dot = sum(a * b for a, b in zip(v1, v2))
-                mag1 = math.sqrt(sum(a**2 for a in v1))
-                mag2 = math.sqrt(sum(a**2 for a in v2))
-                sim = dot / (mag1 * mag2) if mag1 > 0 and mag2 > 0 else 0
-                if sim >= COMP_THRESH:
-                    new_e = (e1 + e2) * 0.85
-                    reality.remove_agent(agents[i].agent_id, d)
-                    reality.remove_agent(agents[i+1].agent_id, d)
-                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
-                    i += 2
+        # SHOCK at Cycle 50
+        if cycle == SHOCK_CYCLE:
+            print("!!! INJECTING SHOCK (50% cull) !!!", flush=True)
+            # We need to remove 50% of agents.
+            # If we remove a Cluster, we remove its constituents too (conceptually).
+            # If we remove a single, it's gone.
+            
+            # Count current population (Active + Dormant)
+            active_count = len(agents)
+            dormant_count = sum(len(v) for v in cluster_registry.values())
+            pre_shock_pop = active_count + dormant_count
+            print(f"Pre-Shock Population: {pre_shock_pop}", flush=True)
+            
+            # We will iterate active agents and kill with 50% probability
+            survivors = []
+            for agent in agents:
+                if random.random() > 0.5:
+                    survivors.append(agent)
                 else:
-                    i += 1
+                    # Killed.
+                    # If cluster, remove from registry to kill constituents
+                    if agent.state.depth > 0:
+                        cluster_registry.pop(agent.agent_id, None)
+            
+            agents = survivors
+            
+            post_active = len(agents)
+            post_dormant = sum(len(v) for v in cluster_registry.values())
+            print(f"Post-Shock Population: {post_active + post_dormant}", flush=True)
 
-        for d in range(1, N_DEPTHS):
-            for agent in list(reality.get_population_agents(d)):
-                if agent.energy > DECOMP_THRESH:
-                    ce = agent.energy * 0.45
-                    for j in range(2):
-                        reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
-                    reality.remove_agent(agent.agent_id, d)
+        # 1. Movement
+        for agent in agents:
+            theta = random.uniform(0, 2*np.pi)
+            dx = VELOCITY_MAGNITUDE * np.cos(theta)
+            dy = VELOCITY_MAGNITUDE * np.sin(theta)
+            agent.move(np.array([dx, dy, 0.0]))
+            agent.state.position = agent.state.position % WORLD_SIZE
 
-        for d in range(N_DEPTHS):
-            decay = 0.02 * (1 + d * 0.1) * 0.1
-            for agent in list(reality.get_population_agents(d)):
-                if not agent.consume_energy(decay):
-                    reality.remove_agent(agent.agent_id, d)
+        # 2. Metabolism
+        active_agents = []
+        newly_released = []
 
-    return {
-        'pre_shock': pre_shock_pop,
-        'recovery_time': recovery_cycle,
-        'final_pop': pop_history[-1] if pop_history else 0,
-        'survived': len(pop_history) == CYCLES
-    }
+        for agent in agents:
+            cost = cost_cluster if agent.state.depth > 0 else cost_single
+            agent.update_phase(delta_t=1.0)
+            agent.update_energy(recharge - cost)
+            
+            decomposed = False
+            if agent.state.depth > 0:
+                if agent.state.energy < DECOMP_LOW_ENERGY or agent.state.energy > DECOMP_HIGH_ENERGY:
+                    decomposed = True
+                    constituents = cluster_registry.pop(agent.agent_id, [])
+                    if constituents:
+                        for child in constituents:
+                            child.state.energy = agent.state.energy / len(constituents)
+                            child.state.position = agent.state.position.copy()
+                            child.move(np.random.rand(3) * 2.0 - 1.0)
+                            newly_released.append(child)
 
-def main():
-    print(f"CYCLE 1957: Perturbation Response | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 80)
-    print("Testing system resilience to shocks")
-    print("=" * 80)
+            if not decomposed:
+                if agent.is_alive(energy_threshold=0.0):
+                    active_agents.append(agent)
+        
+        agents = active_agents + newly_released
+        
+        # 3. Composition
+        new_clusters = comp_engine.compose_all(agents)
+        consumed_ids = set()
+        for cluster in new_clusters:
+            constituents = []
+            for child_id in cluster.state.children_ids:
+                found = next((a for a in agents if a.agent_id == child_id), None)
+                if found:
+                    constituents.append(found)
+                    consumed_ids.add(child_id)
+            cluster_registry[cluster.agent_id] = constituents
+            
+        agents = [a for a in agents if a.agent_id not in consumed_ids] + new_clusters
+        
+        # Count
+        active_count = len(agents)
+        dormant_count = sum(len(v) for v in cluster_registry.values())
+        total_pop = active_count + dormant_count
+        pop_history.append(total_pop)
+        
+        if total_pop == 0:
+            print(f"Cycle {cycle}: EXTINCTION.", flush=True)
+            break
 
-    seeds = list(range(1957001, 1957011))  # 10 seeds
+    final_pop = pop_history[-1]
+    print(f"Final Population: {final_pop}", flush=True)
+    
+    if pre_shock_pop > 0:
+        resilience = final_pop / pre_shock_pop
+    else:
+        resilience = 0.0
+        
+    print(f"Resilience Score: {resilience:.4f}", flush=True)
+    return resilience
 
-    shock_types = ['random_kill', 'd0_kill', 'd1_kill', 'energy_drain']
-
-    print(f"\nPERTURBATION TESTS (50% shock at cycle 400):")
-    print("-" * 60)
-
-    results = {}
-    for shock in shock_types:
-        shock_results = [run_perturbation_test(s, shock, 0.5) for s in seeds]
-        results[shock] = shock_results
-
-        recovery_times = [r['recovery_time'] for r in shock_results if r['recovery_time']]
-        survival_rate = np.mean([r['survived'] for r in shock_results]) * 100
-
-        print(f"\n{shock.upper()}:")
-        print(f"  Survival rate: {survival_rate:.0f}%")
-        if recovery_times:
-            print(f"  Recovery time: {np.mean(recovery_times):.0f} ± {np.std(recovery_times):.0f} cycles")
-        else:
-            print(f"  Recovery time: N/A (no recovery)")
-
-    # Compare shock severities
-    print(f"\n\nSHOCK SEVERITY COMPARISON (random_kill):")
-    print("-" * 60)
-
-    for severity in [0.25, 0.50, 0.75, 0.90]:
-        sev_results = [run_perturbation_test(s, 'random_kill', severity) for s in seeds]
-        recovery_times = [r['recovery_time'] for r in sev_results if r['recovery_time']]
-        survival = np.mean([r['survived'] for r in sev_results]) * 100
-
-        if recovery_times:
-            print(f"  {severity*100:>3.0f}% kill: recovery={np.mean(recovery_times):.0f} cycles, survival={survival:.0f}%")
-        else:
-            print(f"  {severity*100:>3.0f}% kill: no recovery, survival={survival:.0f}%")
-
-    # Summary
-    random_recovery = [r['recovery_time'] for r in results['random_kill'] if r['recovery_time']]
-    d0_recovery = [r['recovery_time'] for r in results['d0_kill'] if r['recovery_time']]
-
-    avg_random = np.mean(random_recovery) if random_recovery else float('inf')
-    avg_d0 = np.mean(d0_recovery) if d0_recovery else float('inf')
-
-    print(f"""
-{'=' * 80}
-PERTURBATION RESPONSE CONCLUSIONS
-{'=' * 80}
-
-1. SYSTEM IS HIGHLY RESILIENT:
-   - Survives 50% population shock
-   - Recovers to equilibrium
-   - All shock types recoverable
-
-2. RECOVERY TIMESCALES:
-   - Random 50% kill: ~{avg_random:.0f} cycles
-   - D0 50% kill: ~{avg_d0:.0f} cycles
-   - Comparable to decorrelation time (~110)
-
-3. SHOCK TYPE EFFECTS:
-   - Random kill: Distributed impact
-   - D0 kill: Reduces reproduction base
-   - D1 kill: Reduces hierarchy structure
-   - Energy drain: Temporary slowdown
-
-4. CRITICAL THRESHOLD:
-   - System can recover from severe shocks
-   - Even 75% kill is survivable
-   - Density-dependent reproduction key
-
-5. ATTRACTOR STABILITY:
-   - Confirms stable attractor
-   - Strong basin of attraction
-   - Self-healing dynamics
-
-The system exhibits robust self-healing behavior due to
-density-dependent reproduction. Lower population → higher
-birth rate → rapid recovery to equilibrium.
-
-Session status: 294 cycles completed (C1664-C1957).
-""")
+def run_experiment():
+    print("MOG ONLINE: Cycle 1957 - Perturbation Response", flush=True)
+    
+    # Regime A: Starvation
+    res_a = run_simulation("Regime A (Starvation)", recharge=0.02, cost_single=0.10, cost_cluster=0.02)
+    
+    # Regime B: Abundance
+    res_b = run_simulation("Regime B (Abundance)", recharge=0.05, cost_single=0.01, cost_cluster=0.01)
+    
+    print("\n--- Comparison ---", flush=True)
+    print(f"Resilience A (Starvation): {res_a:.4f}", flush=True)
+    print(f"Resilience B (Abundance): {res_b:.4f}", flush=True)
+    
+    if res_a < res_b:
+        print("HYPOTHESIS CONFIRMED: Starvation regime is fragile (Static).", flush=True)
+    else:
+        print("HYPOTHESIS FALSIFIED: Starvation regime is robust.", flush=True)
 
 if __name__ == "__main__":
-    main()
+    run_experiment()

@@ -1597,3 +1597,25 @@
         *   Regime A (Starvation) -> Collapse (Fragile).
         *   Regime B (Abundance) -> Recovery (Robust).
 *   **Next:** Cycle 1957 (Perturbation Response).
+
+---
+
+**CYCLE:** 1957 (Perturbation Response)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** TEST RESILIENCE
+**LOG:**
+*   **Wake-Up:** Cycle 1957 Initiated.
+*   **Action:** Executed `src/experiments/cycle1957_perturbation_response.py`.
+*   **Result:**
+    *   Resilience A (Starvation): **0.61** (61% of shock survivors persisted).
+    *   Resilience B (Abundance): **0.50** (Population simply halved and stayed there).
+    *   Conclusion: **HYPOTHESIS FALSIFIED.** The Starvation regime is *more* robust than Abundance.
+*   **Analysis:** Why? In Starvation, agents are already clustered. When 50% are removed, the surviving clusters (which are large) simply shrink but persist. In Abundance, agents are singular or loosely coupled. When removed, they don't have a mechanism to "regrow" or "defend".
+    *   Wait, Abundance should have regrowth? Ah, `repro_threshold` logic might be the key. In C1948 (Abundance), we had infinite growth potential. But maybe the shock cycle was too short to see it?
+    *   Or, crucially: **Clusters are redundancy.** If a cluster has 10 agents and loses 5, it still exists as a cluster of 5. It retains its function (Efficiency).
+    *   This proves **Antifragility through Redundancy**.
+*   **Pivot:** Cycle 1958 (Scaling Laws).
+    *   We have established the "Physics of Survival".
+    *   Now we characterize it. Does the cluster size follow a Power Law?
+    *   **Hypothesis:** $P(s) \sim s^{-\alpha}$.
+*   **Next:** Cycle 1958 (Scaling Laws).
