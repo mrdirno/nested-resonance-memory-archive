@@ -183,9 +183,16 @@
 
 **PHASE 19 COMPLETE: THERMODYNAMIC EMERGENCE VERIFIED.**
 
-## Phase 20: The Mind (Emergent Cognition)
-**Goal:** Evolve cluster-level policy (Reinforcement Learning).
-**Hypothesis:** Clusters can learn to navigate energy gradients.
+# Task: Cycle 2000 - Emergent Sensing
+- [x] **Define Cycle 2000:** Test cluster as sensor array.
+- [x] **Action:** `src/experiments/cycle2000_emergent_sensing.py`.
+- [x] **Result:** Alignment 0.94. Cluster can see gradients.
+
+# Task: Cycle 2001 - Chemotaxis
+- [ ] **Define Cycle 2001:** Link sensing to movement.
+- [ ] **Goal:** Validate directed motion (gradient ascent).
+- [ ] **Hypothesis:** Biased Random Walk > Random Walk.
+- [ ] **Action:** `src/experiments/cycle2001_chemotaxis.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
