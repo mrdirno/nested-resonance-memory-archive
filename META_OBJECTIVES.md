@@ -117,10 +117,14 @@
 - [x] **Result:** Intra (0.027) >> Inter (0.000). Clusters are distinct entities.
 
 # Task: Cycle 1955 - Spectral Analysis
-- [ ] **Define Cycle 1955:** FFT of global phase dynamics.
-- [ ] **Goal:** Identify characteristic frequencies of the swarm.
-- [ ] **Hypothesis:** Power spectrum will show peaks (harmonics).
-- [ ] **Action:** `src/experiments/cycle1955_spectral_analysis.py`.
+- [x] **Define Cycle 1955:** FFT of global phase dynamics.
+- [x] **Action:** `src/experiments/cycle1955_spectral_analysis.py`.
+- [x] **Result:** Noisy Dynamics. System is "Glassy" not "Resonant".
+
+# Task: Cycle 1956 - Substrate Comparison
+- [ ] **Define Cycle 1956:** Compare spectral signatures of Starvation vs Abundance.
+- [ ] **Goal:** Differentiate regimes by their "sound".
+- [ ] **Action:** `src/experiments/cycle1956_substrate_comparison.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
