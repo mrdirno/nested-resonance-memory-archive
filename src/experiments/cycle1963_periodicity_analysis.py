@@ -1,155 +1,226 @@
-#!/usr/bin/env python3
-"""
-CYCLE 1963: PERIODICITY ANALYSIS
+import sys
+import os
+import random
+import numpy as np
+from typing import List, Dict, Optional, Set
+from dataclasses import asdict
 
-C1962 showed periodic composition probability structure.
-Analyze the period and its relationship to transcendental constants.
-"""
-import sys, numpy as np, math
-from datetime import datetime
+# Add project root to path
+sys.path.append(os.getcwd())
 
-PI = math.pi
-E = math.e
-PHI = (1 + math.sqrt(5)) / 2
+from src.fractal.agent import FractalAgent
+from src.fractal.composition import CompositionEngine
 
-def compute_similarity(e1, e2, d=0):
-    """Compute phase resonance similarity."""
-    pi1 = (e1 * PI * 2) % (2 * PI)
-    e_1 = (d * E / 4) % (2 * PI)
-    phi1 = (e1 * PHI) % (2 * PI)
-    pi2 = (e2 * PI * 2) % (2 * PI)
-    e_2 = (d * E / 4) % (2 * PI)
-    phi2 = (e2 * PHI) % (2 * PI)
-    v1 = [pi1, e_1, phi1]
-    v2 = [pi2, e_2, phi2]
-    dot = sum(a * b for a, b in zip(v1, v2))
-    mag1 = math.sqrt(sum(a**2 for a in v1))
-    mag2 = math.sqrt(sum(a**2 for a in v2))
-    return dot / (mag1 * mag2) if mag1 > 0 and mag2 > 0 else 0
+class SpatialCompositionEngine(CompositionEngine):
+    def __init__(self, resonance_threshold: float = 0.7, energy_threshold: float = 0.5, distance_threshold: float = 20.0):
+        super().__init__(resonance_threshold, energy_threshold)
+        self.distance_threshold = distance_threshold
 
-def main():
-    print(f"CYCLE 1963: Periodicity Analysis | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 80)
-    print("Analyzing periodic structure in phase resonance")
-    print("=" * 80)
+    def detect_clusters(
+        self,
+        agents: List[FractalAgent],
+        min_cluster_size: int = 2,
+        max_cluster_size: Optional[int] = None,
+    ) -> List[List[FractalAgent]]:
+        if len(agents) < min_cluster_size:
+            return []
 
-    # Theoretical periods
-    print(f"\nTHEORETICAL PERIOD ANALYSIS:")
-    print("-" * 60)
-    print(f"  π term period: 2π/(2π) = 1.0 energy units")
-    print(f"  φ term period: 2π/φ = {2*PI/PHI:.4f} energy units")
-    print(f"  Combined period: LCM approach complex (incommensurate)")
+        depth_groups: Dict[int, List[FractalAgent]] = {}
+        for agent in agents:
+            depth = agent.state.depth
+            if depth not in depth_groups:
+                depth_groups[depth] = []
+            depth_groups[depth].append(agent)
 
-    # Self-similarity along energy axis
-    print(f"\nSELF-SIMILARITY (e1 = e2 = e):")
-    print("-" * 60)
+        all_clusters = []
 
-    energies = np.linspace(0.5, 2.5, 201)
-    similarities = [compute_similarity(e, e) for e in energies]
+        for depth, depth_agents in depth_groups.items():
+            if len(depth_agents) < min_cluster_size:
+                continue
 
-    # All self-similarities should be 1.0
-    print(f"  All values = 1.0 (by definition): {np.allclose(similarities, 1.0)}")
+            n = len(depth_agents)
+            adjacency_matrix = np.zeros((n, n), dtype=bool)
 
-    # Find high-similarity regions for near-equal energies
-    print(f"\nNEAR-SIMILARITY PERIODICITY (e2 = e1 + δ):")
-    print("-" * 60)
+            for i in range(n):
+                for j in range(i + 1, n):
+                    agent_i = depth_agents[i]
+                    agent_j = depth_agents[j]
+                    
+                    dist = np.linalg.norm(agent_i.state.position - agent_j.state.position)
+                    if dist > self.distance_threshold:
+                        continue
 
-    e1 = 1.0
-    deltas = np.linspace(0, 1.5, 1501)
-    similarities = [compute_similarity(e1, e1 + d) for d in deltas]
+                    resonance = abs(agent_i.calculate_resonance(agent_j))
+                    if resonance >= self.resonance_threshold:
+                        adjacency_matrix[i, j] = True
+                        adjacency_matrix[j, i] = True
 
-    # Find peaks (high similarity)
-    threshold = 0.99
-    high_sim_deltas = [d for d, s in zip(deltas, similarities) if s >= threshold]
+            visited = set()
+            for i in range(n):
+                if i in visited:
+                    continue
 
-    if len(high_sim_deltas) > 1:
-        gaps = np.diff(high_sim_deltas)
-        if len(gaps) > 0:
-            period = np.median(gaps)
-            print(f"  High similarity peaks (≥0.99) at deltas:")
-            for d in high_sim_deltas[:6]:
-                print(f"    Δ = {d:.4f}")
-            print(f"  Estimated period: {period:.4f}")
+                cluster = [depth_agents[i]]
+                visited.add(i)
 
-    # Probability map across energy pairs
-    print(f"\nPROBABILITY MAP (random pairs):")
-    print("-" * 60)
+                for j in range(n):
+                    if j in visited:
+                        continue
+                    
+                    is_connected_to_all = True
+                    for member in cluster:
+                        member_idx = depth_agents.index(member) 
+                        if not adjacency_matrix[member_idx, j]:
+                            is_connected_to_all = False
+                            break
+                    
+                    if is_connected_to_all:
+                        cluster.append(depth_agents[j])
+                        visited.add(j)
 
-    n_samples = 50000
-    np.random.seed(1963)
+                if len(cluster) >= min_cluster_size:
+                    if max_cluster_size is None or len(cluster) <= max_cluster_size:
+                        all_clusters.append(cluster)
 
-    # Sample pairs and bin by average energy
-    e_pairs = np.random.uniform(0.5, 2.0, (n_samples, 2))
-    avg_energies = np.mean(e_pairs, axis=1)
-    sims = [compute_similarity(e[0], e[1]) for e in e_pairs]
+        return all_clusters
 
-    # Bin by average energy
-    bins = np.linspace(0.5, 2.0, 16)
-    for i in range(len(bins)-1):
-        mask = (avg_energies >= bins[i]) & (avg_energies < bins[i+1])
-        if np.sum(mask) > 0:
-            bin_sims = np.array(sims)[mask]
-            prob = np.mean(bin_sims >= 0.99) * 100
-            mean_sim = np.mean(bin_sims)
-            print(f"  [{bins[i]:.2f}, {bins[i+1]:.2f}): P(≥0.99)={prob:>5.1f}%, mean={mean_sim:.3f}")
+def calculate_autocorrelation(signal: List[float]) -> float:
+    if len(signal) < 2: return 0.0
+    # Lag-1 Autocorrelation
+    return np.corrcoef(signal[:-1], signal[1:])[0, 1]
 
-    # FFT of similarity along energy axis
-    print(f"\nFFT OF SIMILARITY FUNCTION:")
-    print("-" * 60)
+def run_experiment():
+    print("MOG ONLINE: Cycle 1963 - Periodicity Analysis", flush=True)
+    
+    # Parameters
+    N_AGENTS = 100
+    WORLD_SIZE = 100.0
+    DISTANCE_THRESHOLD = 20.0
+    CYCLES = 500
+    VELOCITY_MAGNITUDE = 5.0
+    
+    # Starvation Regime
+    RECHARGE_RATE = 0.02
+    COST_SINGLE = 0.10
+    COST_CLUSTER = 0.02
+    DECOMP_LOW_ENERGY = 0.2 
+    DECOMP_HIGH_ENERGY = 4.0 
+    
+    cluster_registry: Dict[str, List[FractalAgent]] = {}
 
-    e_range = np.linspace(0.5, 3.0, 1000)
-    sims_fixed = [compute_similarity(1.0, e) for e in e_range]
+    agents = []
+    for i in range(N_AGENTS):
+        pos = np.random.rand(3) * WORLD_SIZE
+        pos[2] = 0
+        agent = FractalAgent(
+            agent_id=f"gen0_{i}",
+            energy=1.0,
+            phase=random.uniform(0, 2*np.pi),
+            position=pos
+        )
+        agents.append(agent)
 
-    fft = np.fft.fft(sims_fixed)
-    freqs = np.fft.fftfreq(len(e_range), e_range[1] - e_range[0])
-    power = np.abs(fft)**2
+    comp_engine = SpatialCompositionEngine(distance_threshold=DISTANCE_THRESHOLD)
+    
+    pop_history = []
+    cluster_history = []
+    
+    for cycle in range(CYCLES):
+        # 1. Movement
+        for agent in agents:
+            theta = random.uniform(0, 2*np.pi)
+            dx = VELOCITY_MAGNITUDE * np.cos(theta)
+            dy = VELOCITY_MAGNITUDE * np.sin(theta)
+            agent.move(np.array([dx, dy, 0.0]))
+            agent.state.position = agent.state.position % WORLD_SIZE
 
-    # Find dominant frequencies
-    pos_mask = freqs > 0.1
-    top_indices = np.argsort(power[pos_mask])[-3:][::-1]
-    top_freqs = freqs[pos_mask][top_indices]
-    top_periods = 1 / top_freqs
+        # 2. Metabolism & Willingness Filter
+        active_agents = []
+        newly_released = []
+        
+        # Filter for composition
+        willing_agents = []
 
-    print(f"  Dominant periods:")
-    for p in top_periods:
-        print(f"    T = {p:.4f} energy units")
+        for agent in agents:
+            cost = COST_CLUSTER if agent.state.depth > 0 else COST_SINGLE
+            agent.update_phase(delta_t=1.0)
+            agent.update_energy(RECHARGE_RATE - cost)
+            
+            # Willingness Logic: 1 / (Energy + epsilon)
+            willingness = min(1.0, 0.2 / (agent.state.energy + 0.01))
+            if random.random() < willingness:
+                willing_agents.append(agent)
+            
+            decomposed = False
+            if agent.state.depth > 0:
+                if agent.state.energy < DECOMP_LOW_ENERGY or agent.state.energy > DECOMP_HIGH_ENERGY:
+                    decomposed = True
+                    constituents = cluster_registry.pop(agent.agent_id, [])
+                    if constituents:
+                        for child in constituents:
+                            child.state.energy = agent.state.energy / len(constituents)
+                            child.state.position = agent.state.position.copy()
+                            child.move(np.random.rand(3) * 2.0 - 1.0)
+                            newly_released.append(child)
 
-    print(f"""
-{'=' * 80}
-PERIODICITY CONCLUSIONS
-{'=' * 80}
-
-1. TRANSCENDENTAL PERIODS:
-   - π term: period 1.0 energy units
-   - φ term: period {2*PI/PHI:.3f} energy units
-   - Combined: quasi-periodic (incommensurate)
-
-2. OBSERVED COMPOSITION BANDS (from C1962):
-   - High: [0.5,0.75], [1.0,1.5], [1.75,2.0]
-   - Low: [0.75,1.0], [1.5,1.75]
-   - Period ~0.5-0.75 energy units
-
-3. MECHANISM:
-   - Phase angles wrap at 2π
-   - Energy determines phase alignment
-   - Similar phases → high similarity
-
-4. QUASI-PERIODICITY:
-   - Not exactly periodic (π, φ incommensurate)
-   - Creates complex beating patterns
-   - Bands are approximate, not exact
-
-5. IMPLICATIONS:
-   - Energy-selective composition emerges from math
-   - Creates natural "affinity bands"
-   - Agents cluster in preferred energy ranges
-
-The periodic composition structure is a direct consequence
-of the transcendental phase space geometry. The constants
-π and φ create quasi-periodic resonance patterns.
-
-Session status: 300 cycles completed (C1664-C1963).
-""")
+            if not decomposed:
+                if agent.is_alive(energy_threshold=0.0):
+                    active_agents.append(agent)
+        
+        # Note: We pass 'willing_agents' to compose, but update 'active_agents' list.
+        # We must intersect willing_agents with active_agents (survivors).
+        surviving_ids = set(a.agent_id for a in active_agents)
+        compose_candidates = [a for a in willing_agents if a.agent_id in surviving_ids]
+        
+        # 3. Composition
+        new_clusters = comp_engine.compose_all(compose_candidates)
+        
+        consumed_ids = set()
+        for cluster in new_clusters:
+            constituents = []
+            for child_id in cluster.state.children_ids:
+                found = next((a for a in agents if a.agent_id == child_id), None)
+                if found:
+                    constituents.append(found)
+                    consumed_ids.add(child_id)
+            cluster_registry[cluster.agent_id] = constituents
+            
+        agents = [a for a in active_agents if a.agent_id not in consumed_ids] + new_clusters + newly_released
+        
+        # Stats
+        active_count = len(agents)
+        dormant_count = sum(len(v) for v in cluster_registry.values())
+        total_pop = active_count + dormant_count
+        n_clusters = sum(1 for a in agents if a.state.depth > 0)
+        
+        pop_history.append(total_pop)
+        cluster_history.append(n_clusters)
+        
+        if total_pop == 0:
+            print(f"Cycle {cycle}: EXTINCTION.", flush=True)
+            break
+            
+    # Analysis
+    lag1_pop = calculate_autocorrelation(pop_history)
+    lag1_clus = calculate_autocorrelation(cluster_history)
+    
+    print(f"Final Population: {pop_history[-1]}", flush=True)
+    print(f"Pop Autocorrelation (Lag-1): {lag1_pop:.4f}", flush=True)
+    print(f"Cluster Autocorrelation (Lag-1): {lag1_clus:.4f}", flush=True)
+    
+    # Detect Oscillation via FFT
+    fft_vals = np.fft.rfft(pop_history)
+    power = np.abs(fft_vals)**2
+    peak_idx = np.argmax(power[1:]) + 1
+    peak_power = power[peak_idx]
+    
+    print(f"Dominant Freq: {peak_idx / len(pop_history):.4f}", flush=True)
+    print(f"Peak Power: {peak_power:.2f}", flush=True)
+    
+    if peak_power > 1000: # Arbitrary threshold for "Strong Cycle"
+        print("OSCILLATION CONFIRMED.", flush=True)
+    else:
+        print("NO STRONG OSCILLATION.", flush=True)
 
 if __name__ == "__main__":
-    main()
+    run_experiment()
