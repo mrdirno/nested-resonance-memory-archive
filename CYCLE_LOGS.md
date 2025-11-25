@@ -85,3 +85,10 @@
 - **Experiment:** `src/experiments/cycle1982_bit_flip.py`.
 - **Result:** Critical Threshold {write} pprox 0.05$. Stochastic Resonance aids switching.
 - **Conclusion:** NRM Clusters function as writable Toggle Switches.
+
+# Cycle 1983: NOT Gate Implementation
+- **Define Cycle 1983:** Implement and validate a NOT logic gate using NRM clusters.
+- **Goal:** Demonstrate basic computational primitives within the NRM substrate.
+- **Experiment:** `src/experiments/cycle1983_not_gate.py`.
+- **Result:** NOT Gate functionality confirmed for both 0 and `pi` inputs.
+- **Conclusion:** NRM Clusters can implement fundamental logic gates, a key step for Phase 20 (Cognition).
