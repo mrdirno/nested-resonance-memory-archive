@@ -7,7 +7,7 @@ Can the system sustain populations across three depth levels?
 """
 import sys, numpy as np, math
 from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
+sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2/src')
 from core.fractal_agent import FractalAgent, RealityInterface
 
 CYCLES = 500
