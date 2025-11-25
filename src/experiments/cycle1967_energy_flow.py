@@ -1,266 +1,244 @@
-#!/usr/bin/env python3
-"""
-CYCLE 1967: ENERGY FLOW ANALYSIS
+import sys
+import os
+import random
+import numpy as np
+from typing import List, Dict, Optional, Set
+from dataclasses import asdict
 
-Track energy conservation and flow through the hierarchical system.
-Where does energy enter, accumulate, and exit?
-"""
-import sys, numpy as np, math
-from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
-from core.fractal_agent import FractalAgent, RealityInterface
+# Add project root to path
+sys.path.append(os.getcwd())
 
-CYCLES = 500
-N_DEPTHS = 5
-PI = math.pi
-E = math.e
-PHI = (1 + math.sqrt(5)) / 2
+from src.fractal.agent import FractalAgent
+from src.fractal.composition import CompositionEngine
 
-P_BASE = 0.17
-K = 30
-N_INITIAL = 14
-COMP_THRESH = 0.99
-DECOMP_THRESH = 1.7
-RECHARGE_BASE = 0.4
+class SpatialCompositionEngine(CompositionEngine):
+    def __init__(self, resonance_threshold: float = 0.7, energy_threshold: float = 0.5, distance_threshold: float = 20.0):
+        super().__init__(resonance_threshold, energy_threshold)
+        self.distance_threshold = distance_threshold
 
-def run_energy_flow_tracking(seed):
-    """Track energy flow through the system."""
-    reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
-    np.random.seed(seed)
-    for i in range(N_INITIAL):
-        reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
+    def detect_clusters(
+        self,
+        agents: List[FractalAgent],
+        min_cluster_size: int = 2,
+        max_cluster_size: Optional[int] = None,
+    ) -> List[List[FractalAgent]]:
+        if len(agents) < min_cluster_size:
+            return []
 
-    # Energy tracking
-    energy_in = np.zeros(N_DEPTHS)  # Recharge
-    energy_out_decay = np.zeros(N_DEPTHS)  # Decay loss
-    energy_out_death = np.zeros(N_DEPTHS)  # Death loss
-    energy_comp_up = np.zeros(N_DEPTHS - 1)  # Energy going up via composition
-    energy_decomp_down = np.zeros(N_DEPTHS - 1)  # Energy going down via decomposition
-    energy_spawn = 0  # Energy created by spawning
+        depth_groups: Dict[int, List[FractalAgent]] = {}
+        for agent in agents:
+            depth = agent.state.depth
+            if depth not in depth_groups:
+                depth_groups[depth] = []
+            depth_groups[depth].append(agent)
 
+        all_clusters = []
+
+        for depth, depth_agents in depth_groups.items():
+            if len(depth_agents) < min_cluster_size:
+                continue
+
+            n = len(depth_agents)
+            adjacency_matrix = np.zeros((n, n), dtype=bool)
+
+            for i in range(n):
+                for j in range(i + 1, n):
+                    agent_i = depth_agents[i]
+                    agent_j = depth_agents[j]
+                    
+                    dist = np.linalg.norm(agent_i.state.position - agent_j.state.position)
+                    if dist > self.distance_threshold:
+                        continue
+
+                    resonance = abs(agent_i.calculate_resonance(agent_j))
+                    if resonance >= self.resonance_threshold:
+                        adjacency_matrix[i, j] = True
+                        adjacency_matrix[j, i] = True
+
+            visited = set()
+            for i in range(n):
+                if i in visited:
+                    continue
+
+                cluster = [depth_agents[i]]
+                visited.add(i)
+
+                for j in range(n):
+                    if j in visited:
+                        continue
+                    
+                    is_connected_to_all = True
+                    for member in cluster:
+                        member_idx = depth_agents.index(member) 
+                        if not adjacency_matrix[member_idx, j]:
+                            is_connected_to_all = False
+                            break
+                    
+                    if is_connected_to_all:
+                        cluster.append(depth_agents[j])
+                        visited.add(j)
+
+                if len(cluster) >= min_cluster_size:
+                    if max_cluster_size is None or len(cluster) <= max_cluster_size:
+                        all_clusters.append(cluster)
+
+        return all_clusters
+
+def plot_stacked_energy(single_energy, cluster_energy, width=60, height=20):
+    """ASCII Stacked Area Chart."""
+    if not single_energy: return
+    
+    total = [s + c for s, c in zip(single_energy, cluster_energy)]
+    max_val = max(total) if total else 1.0
+    
+    print(f"Energy Flow (Single vs Cluster)")
+    print(f"Max Energy: {max_val:.2f}")
+    print("-" * (width + 2))
+    
+    grid = [[' ' for _ in range(width)] for _ in range(height)]
+    
+    for col in range(width):
+        idx = int(col / width * len(total))
+        if idx >= len(total): idx = len(total) - 1
+        
+        s_val = single_energy[idx]
+        c_val = cluster_energy[idx]
+        
+        s_height = int(s_val / max_val * height)
+        c_height = int(c_val / max_val * height)
+        
+        # Draw Single (Bottom)
+        for r in range(s_height):
+            grid[height - 1 - r][col] = '.'
+            
+        # Draw Cluster (Top)
+        for r in range(c_height):
+            row = height - 1 - s_height - r
+            if 0 <= row < height:
+                grid[row][col] = '#'
+                
+    for row in grid:
+        print("|" + "".join(row) + "|")
+    print("-" * (width + 2))
+    print("Legend: '.' = Single, '#' = Cluster")
+
+def run_experiment():
+    print("MOG ONLINE: Cycle 1967 - Energy Flow Visualization", flush=True)
+    
+    # Parameters
+    N_AGENTS = 100
+    WORLD_SIZE = 100.0
+    DISTANCE_THRESHOLD = 20.0
+    CYCLES = 100
+    VELOCITY_MAGNITUDE = 5.0
+    
+    # Starvation Regime
+    RECHARGE_RATE = 0.02
+    COST_SINGLE = 0.10
+    COST_CLUSTER = 0.02
+    DECOMP_LOW_ENERGY = 0.2 
+    DECOMP_HIGH_ENERGY = 4.0 
+    
+    cluster_registry: Dict[str, List[FractalAgent]] = {}
+
+    agents = []
+    for i in range(N_AGENTS):
+        pos = np.random.rand(3) * WORLD_SIZE
+        pos[2] = 0
+        agent = FractalAgent(
+            agent_id=f"gen0_{i}",
+            energy=1.0,
+            phase=random.uniform(0, 2*np.pi),
+            position=pos
+        )
+        agents.append(agent)
+
+    comp_engine = SpatialCompositionEngine(distance_threshold=DISTANCE_THRESHOLD)
+    
+    single_energy_history = []
+    cluster_energy_history = []
+    
     for cycle in range(CYCLES):
-        pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
-        total = sum(len(p) for p in pops)
-        if total >= 3000 or total == 0: break
+        # 1. Movement
+        for agent in agents:
+            theta = random.uniform(0, 2*np.pi)
+            dx = VELOCITY_MAGNITUDE * np.cos(theta)
+            dy = VELOCITY_MAGNITUDE * np.sin(theta)
+            agent.move(np.array([dx, dy, 0.0]))
+            agent.state.position = agent.state.position % WORLD_SIZE
 
-        p_effective = P_BASE / (1 + total / K)
+        # 2. Metabolism
+        active_agents = []
+        newly_released = []
+        willing_agents = []
 
-        # Recharge - track energy input
-        for d in range(N_DEPTHS):
-            recharge_rate = RECHARGE_BASE / (1 + d * 0.5)
-            for agent in pops[d]:
-                old_e = agent.energy
-                agent.recharge_energy(recharge_rate, cap=2.0)
-                energy_in[d] += agent.energy - old_e
+        for agent in agents:
+            cost = COST_CLUSTER if agent.state.depth > 0 else COST_SINGLE
+            agent.update_phase(delta_t=1.0)
+            agent.update_energy(RECHARGE_RATE - cost)
+            
+            willingness = min(1.0, 0.2 / (agent.state.energy + 0.01))
+            if random.random() < willingness:
+                willing_agents.append(agent)
+            
+            decomposed = False
+            if agent.state.depth > 0:
+                if agent.state.energy < DECOMP_LOW_ENERGY or agent.state.energy > DECOMP_HIGH_ENERGY:
+                    decomposed = True
+                    constituents = cluster_registry.pop(agent.agent_id, [])
+                    if constituents:
+                        for child in constituents:
+                            child.state.energy = agent.state.energy / len(constituents)
+                            child.state.position = agent.state.position.copy()
+                            child.move(np.random.rand(3) * 2.0 - 1.0)
+                            newly_released.append(child)
 
-        # Spawning
-        for agent in list(reality.get_population_agents(0)):
-            if agent.energy > 1.0 and np.random.random() < p_effective:
-                reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
-                agent.energy -= 0.3
-                energy_spawn += 0.5  # New agent energy
-
-        # Composition with energy tracking
-        for d in range(N_DEPTHS - 1):
-            agents = list(reality.get_population_agents(d))
-            if len(agents) < 2: continue
-            np.random.shuffle(agents)
-            i = 0
-            while i < len(agents) - 1:
-                e1, e2 = agents[i].energy, agents[i+1].energy
-                pi1 = (e1 * PI * 2) % (2 * PI)
-                e_1 = (d * E / 4) % (2 * PI)
-                phi1 = (e1 * PHI) % (2 * PI)
-                pi2 = (e2 * PI * 2) % (2 * PI)
-                e_2 = (d * E / 4) % (2 * PI)
-                phi2 = (e2 * PHI) % (2 * PI)
-                v1 = [pi1, e_1, phi1]
-                v2 = [pi2, e_2, phi2]
-                dot = sum(a * b for a, b in zip(v1, v2))
-                mag1 = math.sqrt(sum(a**2 for a in v1))
-                mag2 = math.sqrt(sum(a**2 for a in v2))
-                sim = dot / (mag1 * mag2) if mag1 > 0 and mag2 > 0 else 0
-                if sim >= COMP_THRESH:
-                    new_e = (e1 + e2) * 0.85
-                    energy_comp_up[d] += new_e  # Energy transferred up
-                    # Energy lost in composition: (e1 + e2) * 0.15
-                    reality.remove_agent(agents[i].agent_id, d)
-                    reality.remove_agent(agents[i+1].agent_id, d)
-                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
-                    i += 2
-                else:
-                    i += 1
-
-        # Decomposition with energy tracking
-        for d in range(1, N_DEPTHS):
-            for agent in list(reality.get_population_agents(d)):
-                if agent.energy > DECOMP_THRESH:
-                    ce = agent.energy * 0.45
-                    energy_decomp_down[d-1] += ce * 2  # Total energy going down
-                    # Energy lost in decomposition: agent.energy * 0.1
-                    for j in range(2):
-                        reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
-                    reality.remove_agent(agent.agent_id, d)
-
-        # Decay - energy loss
-        for d in range(N_DEPTHS):
-            decay = 0.02 * (1 + d * 0.1) * 0.1
-            for agent in list(reality.get_population_agents(d)):
-                old_e = agent.energy
-                if not agent.consume_energy(decay):
-                    energy_out_death[d] += old_e  # Agent died, all energy lost
-                    reality.remove_agent(agent.agent_id, d)
-                else:
-                    energy_out_decay[d] += decay
-
-    return {
-        'energy_in': energy_in,
-        'energy_out_decay': energy_out_decay,
-        'energy_out_death': energy_out_death,
-        'energy_comp_up': energy_comp_up,
-        'energy_decomp_down': energy_decomp_down,
-        'energy_spawn': energy_spawn
-    }
-
-def main():
-    print(f"CYCLE 1967: Energy Flow Analysis | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 80)
-    print("Tracking energy conservation and flow through hierarchy")
-    print("=" * 80)
-
-    seeds = list(range(1967001, 1967021))
-    results = [run_energy_flow_tracking(s) for s in seeds]
-
-    # Aggregate
-    total_in = np.zeros(N_DEPTHS)
-    total_decay = np.zeros(N_DEPTHS)
-    total_death = np.zeros(N_DEPTHS)
-    total_comp_up = np.zeros(N_DEPTHS - 1)
-    total_decomp_down = np.zeros(N_DEPTHS - 1)
-    total_spawn = 0
-
-    for r in results:
-        total_in += r['energy_in']
-        total_decay += r['energy_out_decay']
-        total_death += r['energy_out_death']
-        total_comp_up += r['energy_comp_up']
-        total_decomp_down += r['energy_decomp_down']
-        total_spawn += r['energy_spawn']
-
-    # Energy sources
-    print(f"\nENERGY SOURCES:")
-    print("-" * 60)
-    print(f"  Recharge (total): {np.sum(total_in):,.0f}")
-    for d in range(N_DEPTHS):
-        pct = total_in[d] / np.sum(total_in) * 100
-        print(f"    D{d}: {total_in[d]:>12,.0f} ({pct:>5.1f}%)")
-    print(f"  Spawning: {total_spawn:,.0f}")
-
-    # Energy sinks
-    print(f"\nENERGY SINKS:")
-    print("-" * 60)
-    print(f"  Decay (total): {np.sum(total_decay):,.0f}")
-    print(f"  Death (total): {np.sum(total_death):,.0f}")
-    for d in range(N_DEPTHS):
-        print(f"    D{d}: decay={total_decay[d]:>10,.0f}, death={total_death[d]:>10,.0f}")
-
-    # Energy flow between depths
-    print(f"\nENERGY FLOW BETWEEN DEPTHS:")
-    print("-" * 60)
-
-    for d in range(N_DEPTHS - 1):
-        up = total_comp_up[d]
-        down = total_decomp_down[d]
-        net = up - down
-        sign = "+" if net > 0 else ""
-        print(f"  D{d}↔D{d+1}: up={up:,.0f}, down={down:,.0f}, net={sign}{net:,.0f}")
-
-    # Energy balance per depth
-    print(f"\nENERGY BALANCE BY DEPTH:")
-    print("-" * 60)
-
-    for d in range(N_DEPTHS):
-        # In: recharge + composition from below + decomposition from above
-        e_in = total_in[d]
-        if d > 0:
-            e_in += total_comp_up[d-1]  # Wait, this goes TO d+1, not d
-        # Actually need to reconsider
-        # Composition at d sends energy to d+1
-        # Decomposition at d sends energy to d-1
-
-        # Energy INTO depth d:
-        #   - Recharge
-        #   - Composition from d-1 (agents at d-1 compose into d)
-        #   - Decomposition from d+1 (agents at d+1 decompose into d)
-
-        into_d = total_in[d]
-        if d > 0:
-            into_d += total_comp_up[d-1]  # From composition at d-1
-        if d < N_DEPTHS - 1:
-            into_d += total_decomp_down[d]  # From decomposition at d+1
-
-        # Energy OUT OF depth d:
-        #   - Decay
-        #   - Death
-        #   - Composition to d+1 (agents at d compose)
-        #   - Decomposition to d-1 (agents at d decompose)
-
-        out_d = total_decay[d] + total_death[d]
-        if d < N_DEPTHS - 1:
-            # Need to account for composition energy LEAVING d
-            # When 2 agents at d compose, they leave with e1+e2
-            # and arrive at d+1 with (e1+e2)*0.85
-            # So energy leaving d is e1+e2, which is total_comp_up[d]/0.85
-            out_d += total_comp_up[d] / 0.85 if total_comp_up[d] > 0 else 0
-        if d > 0:
-            # Decomposition: agent at d leaves with energy E
-            # children arrive at d-1 with E*0.45*2 = E*0.9
-            # So energy leaving d is E, which is total_decomp_down[d-1]/0.9
-            out_d += total_decomp_down[d-1] / 0.9 if total_decomp_down[d-1] > 0 else 0
-
-        balance = into_d - out_d
-        sign = "+" if balance > 0 else ""
-        print(f"  D{d}: in={into_d:>12,.0f}, out={out_d:>12,.0f}, balance={sign}{balance:,.0f}")
-
-    # Summary statistics
-    total_energy_in = np.sum(total_in) + total_spawn
-    total_energy_out = np.sum(total_decay) + np.sum(total_death)
-    # Composition loses 15%, decomposition loses 10%
-    comp_loss = np.sum(total_comp_up) * 0.15 / 0.85
-    decomp_loss = np.sum(total_decomp_down) * 0.1 / 0.9
-
-    print(f"""
-{'=' * 80}
-ENERGY FLOW CONCLUSIONS
-{'=' * 80}
-
-1. ENERGY BUDGET:
-   - Total input: {total_energy_in:,.0f} (recharge + spawn)
-   - Total output: {total_energy_out:,.0f} (decay + death)
-   - Process losses: {comp_loss + decomp_loss:,.0f} (composition + decomposition)
-
-2. DOMINANT FLOWS:
-   - Primary source: Recharge at D0 ({total_in[0]/np.sum(total_in)*100:.1f}% of recharge)
-   - Primary sink: Decay at D0 ({total_decay[0]/np.sum(total_decay)*100:.1f}% of decay)
-
-3. VERTICAL ENERGY FLOW:
-   - Upward (composition): {np.sum(total_comp_up):,.0f}
-   - Downward (decomposition): {np.sum(total_decomp_down):,.0f}
-   - Net upward: {np.sum(total_comp_up) - np.sum(total_decomp_down):,.0f}
-
-4. ENERGY DISSIPATION:
-   - Composition efficiency: 85% (15% loss)
-   - Decomposition efficiency: 90% (10% loss)
-   - Drives thermodynamic arrow
-
-5. IMPLICATIONS:
-   - D0 is energy source (high recharge)
-   - Higher depths are energy sinks
-   - Flow balance maintains hierarchy
-   - Dissipation creates irreversibility
-
-Session status: 304 cycles completed (C1664-C1967).
-""")
+            if not decomposed:
+                if agent.is_alive(energy_threshold=0.0):
+                    active_agents.append(agent)
+        
+        surviving_ids = set(a.agent_id for a in active_agents)
+        compose_candidates = [a for a in willing_agents if a.agent_id in surviving_ids]
+        
+        # 3. Composition
+        new_clusters = comp_engine.compose_all(compose_candidates)
+        
+        consumed_ids = set()
+        for cluster in new_clusters:
+            constituents = []
+            for child_id in cluster.state.children_ids:
+                found = next((a for a in agents if a.agent_id == child_id), None)
+                if found:
+                    constituents.append(found)
+                    consumed_ids.add(child_id)
+            cluster_registry[cluster.agent_id] = constituents
+            
+        agents = [a for a in active_agents if a.agent_id not in consumed_ids] + new_clusters + newly_released
+        
+        # 4. Energy Tracking
+        e_single = sum(a.state.energy for a in agents if a.state.depth == 0)
+        e_cluster = sum(a.state.energy for a in agents if a.state.depth > 0)
+        
+        single_energy_history.append(e_single)
+        cluster_energy_history.append(e_cluster)
+        
+        if len(agents) == 0:
+            break
+            
+    # Analysis
+    plot_stacked_energy(single_energy_history, cluster_energy_history)
+    
+    final_single = single_energy_history[-1]
+    final_cluster = cluster_energy_history[-1]
+    total = final_single + final_cluster
+    
+    ratio = final_cluster / total if total > 0 else 0
+    print(f"Final Cluster Energy Ratio: {ratio:.4f}", flush=True)
+    
+    if ratio > 0.8:
+        print("HYPOTHESIS CONFIRMED: Clusters act as Energy Capacitors.", flush=True)
+    else:
+        print("HYPOTHESIS FAILED.", flush=True)
 
 if __name__ == "__main__":
-    main()
+    run_experiment()
