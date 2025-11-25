@@ -135,8 +135,8 @@ def run_simulation(seed, use_habitat=True):
                 if agent.energy > decomp_thresh:
                     ce = agent.energy * 0.45
                     # Decompose into neighbors
-                    reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}_A", d-1, ce, depth=d-1, x=agent.x-1, y=agent.y), d-1)
-                    reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}_B", d-1, ce, depth=d-1, x=agent.x+1, y=agent.y), d-1)
+                    reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_0", d-1, ce, depth=d-1, x=agent.x-1, y=agent.y), d-1)
+                    reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_1", d-1, ce, depth=d-1, x=agent.x+1, y=agent.y), d-1)
                     reality.remove_agent(agent.agent_id, d)
 
         # 6. Decay
