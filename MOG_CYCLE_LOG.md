@@ -1040,3 +1040,30 @@
 *   **Key Finding:** A slight boost (`P=1.05`) is optimal. It provides just enough "extra" upward flux to form D1 shields quickly, without the runaway cascade of `P=2.0`.
 *   **Pivot:** While 32% is an improvement, it's still not >90%. We need to address the *depth dependence* of these parameters. Currently, `comp_thresh` is constant across all depths.
 *   **Next:** Cycle 1921 (Depth-Dependent Thresholds).
+
+---
+
+**CYCLE:** 1921 (Depth-Dependent Thresholds)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** BLOCK D2+ CASCADE
+**LOG:**
+*   **Wake-Up:** Cycle 1921 Initiated.
+*   **Action:** Executed `src/experiments/cycle1921_depth_dependence.py` testing differential composition thresholds by depth.
+*   **Result:**
+    *   `[0.95, 0.95, 0.95]`: **24.0%** (Baseline).
+    *   `[0.95, 0.96, 0.97]`: **24.0%** (No improvement).
+    *   `[0.95, 0.98, 0.98]`: **16.0%** (Degradation).
+    *   `[0.90, 0.95, 0.98]`: **24.0%** (No improvement).
+*   **Key Finding:** Depth-dependent thresholds did not unlock higher stability. The bottleneck is likely not the D1->D2 transition itself, but the sheer *volume* of D0 agents flooding the system.
+*   **Pivot:** We've optimized Parameters (C1914-C1916), Probability (C1918-C1920), and Structure (C1921). The last variable is *Scale*. Is N=14 just too small?
+*   **Next:** Cycle 1922 (Minimum Viable N).
+
+---
+
+**CYCLE:** 1922 (Minimum Viable N)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** FIND THE FLOOR
+**LOG:**
+*   **Wake-Up:** Cycle 1922 Initiated.
+*   **Goal:** Determine the absolute minimum N for reliable (>90%) coexistence using the optimized parameters (`comp=0.95`, `P=1.05`).
+*   **Hypothesis:** The "Dead Zone" might end at N=15 or N=16 with these new optimized parameters.
