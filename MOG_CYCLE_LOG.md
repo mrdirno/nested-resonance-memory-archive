@@ -1454,3 +1454,45 @@
     *   Hypothesis: `cluster_registry` logic might be duplicating agents if they are re-added to `agents` list incorrectly.
 *   **Pivot:** Cycle 1951 (Conservation of Mass Check). We must verify that we aren't violating physics.
 *   **Next:** Cycle 1951 (Conservation Check).
+
+---
+
+**CYCLE:** 1951 (Conservation of Mass Check)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** DEBUG MASS VIOLATION
+**LOG:**
+*   **Wake-Up:** Cycle 1951 Initiated.
+*   **Action:** Executed `src/experiments/cycle1951_conservation_check.py` with strict logging.
+*   **Result:** **VIOLATION CONFIRMED.**
+    *   Cycle 0: Base Mass 50. OK.
+    *   Cycle 1: Base Mass 56. Violation (+6).
+    *   Cycle 1 Pre-Comp shows Active 26 + Dormant 39 = 65 Entities.
+*   **Analysis:**
+    *   The bug is in `cluster_registry` persistence across cycles vs `agents` list management.
+    *   In `cycle1950`, we did `agents = surviving_agents + new_clusters`.
+    *   But `cluster_registry` is a global dict (in scope).
+    *   Wait, `new_clusters` are added to `agents`.
+    *   The issue is likely `newly_released`.
+    *   Ah! Look at the log: "Mass Check 1 (Pre-Comp): Active 26 + Dormant 39".
+    *   Active 26 includes 11 singles + 15 clusters.
+    *   Dormant 39 are the constituents of those 15 clusters.
+    *   Total Base Mass = 11 + 39 = 50.
+    *   BUT... wait.
+    *   Cycle 1 Pre-Comp Active count is 26.
+    *   If 11 singles + 15 clusters = 26.
+    *   Constituents are 39.
+    *   11 + 39 = 50. That's correct.
+    *   So why did Cycle 1 Post-Comp show 56?
+    *   "Formed 3 new clusters."
+    *   If new clusters form, constituents move from Active to Dormant.
+    *   The bug must be in how we handle *new* clusters vs *existing* clusters.
+    *   We call `comp_engine.compose_all(agents)`. This considers ALL agents, including existing clusters (if they are in the list).
+    *   If an *existing cluster* composes into a *new super-cluster* (Depth 2), its constituents (Depth 1) become dormant.
+    *   But `cluster_registry` tracks Base Agents? Or immediate children?
+    *   The registry tracks `state.children_ids`.
+    *   If a Cluster (D1) becomes a child of SuperCluster (D2), the Cluster (D1) moves to `dormant`.
+    *   But the Cluster (D1) *also* has children (D0) in `dormant`.
+    *   We are likely double-counting.
+    *   OR: `surviving_agents` logic is flawed.
+*   **Fix:** Cycle 1952 (Strict ID Accounting Fix). We need to ensure that when a cluster is formed, we correctly handle the transfer of ownership.
+*   **Next:** Cycle 1952 (Mass Correction).

@@ -95,10 +95,14 @@
 - [x] **Result:** Survival Confirmed, but Biomass Anomaly detected (50 -> 71).
 
 # Task: Cycle 1951 - Conservation of Mass Check
-- [ ] **Define Cycle 1951:** Debug the population accounting logic.
-- [ ] **Goal:** Ensure Total Agents (Active + Dormant) <= Initial + Births.
-- [ ] **Hypothesis:** Composition logic might be duplicating references.
-- [ ] **Action:** `src/experiments/cycle1951_conservation_check.py`.
+- [x] **Define Cycle 1951:** Debug the population accounting logic.
+- [x] **Action:** `src/experiments/cycle1951_conservation_check.py`.
+- [x] **Result:** Violation Confirmed (+6 Mass in Cycle 1).
+
+# Task: Cycle 1952 - Mass Correction
+- [ ] **Define Cycle 1952:** Fix the composition/accounting bug.
+- [ ] **Goal:** Achieve conservation of base agents (Mass = 50).
+- [ ] **Action:** `src/experiments/cycle1952_mass_correction.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.

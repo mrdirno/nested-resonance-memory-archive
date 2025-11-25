@@ -23,8 +23,23 @@ def run_test():
         print(f"Object Created: ID {obj_id}")
         
         # Check stability
+        obj = operator.active_objects[obj_id]
+        targets = obj['targets']
+        
+        # Propagate
+        # Note: Operator box is default Styrofoam. If created with other material, this check is invalid.
+        # But we used Styrofoam.
+        field = operator.box.propagate(operator.emitters)
+        U = operator.box.calculate_gorkov_potential(field)
+        
+        print("Target Potentials:")
+        for i, t in enumerate(targets):
+            tx, ty, tz = int(t[0]/operator.resolution), int(t[1]/operator.resolution), int(t[2]/operator.resolution)
+            val = U[tz, ty, tx]
+            print(f"  Point {i}: {val}")
+            
         stab = operator.get_stability(obj_id)
-        print(f"Stability Index: {stab}")
+        print(f"Stability Index (Avg): {stab}")
         
         if stab < 0:
             print("SUCCESS: Stability is negative (Trapping Potential).")
