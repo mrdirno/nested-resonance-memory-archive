@@ -1,31 +1,21 @@
 #!/usr/bin/env python3
 """
-CYCLE 1930: OPTIMAL PARAMETER VALIDATION
+CYCLE 1930: OPTIMAL VALIDATION
 
-Validate all optimized parameters together:
-- p = 0.17
-- N = 14
-- comp_thresh = 0.99
-- decomp_thresh = 1.7
-Target: 96%+ coexistence
+Final large-scale verification (N=100 seeds) of the 'Golden Parameter Set'
+found in C1929 (p=0.17, comp=0.99, decomp=1.7, recharge=0.20).
+Goal: Prove that the Dead Zone (N=14) can be stabilized with >95% reliability.
 """
 import sys, numpy as np, math
 from datetime import datetime
 sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2/src')
 from core.fractal_agent import FractalAgent, RealityInterface
 
-CYCLES = 500
+CYCLES = 1000
 N_DEPTHS = 5
 PI = math.pi
 E = math.e
 PHI = (1 + math.sqrt(5)) / 2
-
-# OPTIMAL PARAMETERS
-REPRO_PROB = 0.17
-N_INITIAL = 14
-COMP_THRESH = 0.99
-DECOMP_THRESH = 1.7
-RECHARGE_BASE = 0.2
 
 def compute_phase_resonance(e1, d1, e2, d2):
     pi1 = (e1 * PI * 2) % (2 * PI)
@@ -43,112 +33,110 @@ def compute_phase_resonance(e1, d1, e2, d2):
     return dot / (mag1 * mag2)
 
 def run_simulation(seed):
+    """Run simulation with Golden Parameter Set."""
+    # Golden Parameters
+    n_initial = 14
+    repro_prob = 0.17
+    comp_thresh = 0.99
+    decomp_thresh = 1.7
+    recharge_base = 0.20
+    effective_prob = 1.05 # P=1.05 from C1920
+    
     reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
     np.random.seed(seed)
-    for i in range(N_INITIAL):
+
+    for i in range(n_initial):
         reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
+
     for cycle in range(CYCLES):
         pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
         total = sum(len(p) for p in pops)
-        if total >= 3000 or total == 0: break
+        
+        if total >= 3000: return False
+        if total == 0: return False
+
         for d in range(N_DEPTHS):
             for agent in pops[d]:
-                agent.recharge_energy(RECHARGE_BASE / (1 + d * 0.5), cap=2.0)
+                agent.recharge_energy(recharge_base / (1 + d * 0.5), cap=2.0)
+
         for agent in list(reality.get_population_agents(0)):
-            if agent.energy > 1.0 and np.random.random() < REPRO_PROB:
+            if agent.energy > 1.0 and np.random.random() < repro_prob:
                 reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
                 agent.energy -= 0.3
-        for d in range(N_DEPTHS - 1):
-            agents = list(reality.get_population_agents(d))
-            if len(agents) < 2: continue
-            np.random.shuffle(agents)
-            i = 0
-            while i < len(agents) - 1:
-                sim = compute_phase_resonance(agents[i].energy, d, agents[i+1].energy, d)
-                if sim >= COMP_THRESH:
-                    new_e = (agents[i].energy + agents[i+1].energy) * 0.85
-                    reality.remove_agent(agents[i].agent_id, d)
-                    reality.remove_agent(agents[i+1].agent_id, d)
-                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
-                    i += 2
-                else:
-                    i += 1
+
+        # Composition Logic with P=1.05
+        passes = 2
+        for p_idx in range(passes):
+            current_pass_prob = 1.0 if p_idx == 0 else (effective_prob - 1.0)
+
+            for d in range(N_DEPTHS - 1):
+                agents = list(reality.get_population_agents(d))
+                if len(agents) < 2: continue
+                np.random.shuffle(agents)
+                i = 0
+                while i < len(agents) - 1:
+                    sim = compute_phase_resonance(agents[i].energy, d, agents[i+1].energy, d)
+                    
+                    if sim >= comp_thresh and np.random.random() < current_pass_prob:
+                        new_e = (agents[i].energy + agents[i+1].energy) * 0.85
+                        reality.remove_agent(agents[i].agent_id, d)
+                        reality.remove_agent(agents[i+1].agent_id, d)
+                        reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
+                        i += 2
+                    else:
+                        i += 1
+
         for d in range(1, N_DEPTHS):
             for agent in list(reality.get_population_agents(d)):
-                if agent.energy > DECOMP_THRESH:
+                if agent.energy > decomp_thresh:
                     ce = agent.energy * 0.45
                     for j in range(2):
                         reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
                     reality.remove_agent(agent.agent_id, d)
+
         for d in range(N_DEPTHS):
             decay = 0.02 * (1 + d * 0.1) * 0.1
             for agent in list(reality.get_population_agents(d)):
                 if not agent.consume_energy(decay):
                     reality.remove_agent(agent.agent_id, d)
+
     final_pops = [len(reality.get_population_agents(d)) for d in range(N_DEPTHS)]
-    return final_pops[0] > 0 and final_pops[1] > 0
+    d0_alive = final_pops[0] > 0
+    d1_alive = final_pops[1] > 0
+    controlled = sum(final_pops[2:]) < sum(final_pops[:2])
+    
+    return d0_alive and d1_alive and controlled
 
 def main():
     print(f"CYCLE 1930: Optimal Validation | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 80)
-    print("Validating all optimized parameters together")
+    
+    seeds = list(range(1930000, 1930100)) # 100 seeds
+    print(f"Validation Seeds: {len(seeds)}")
+    print("Testing Golden Parameter Set (p=0.17, comp=0.99, decomp=1.7, rech=0.20)")
+    print("-" * 40)
+    
+    successes = 0
+    for s in seeds:
+        if run_simulation(s):
+            successes += 1
+            
+    rate = (successes / len(seeds)) * 100
+    
+    print(f"Success Rate: {rate:.1f}%")
     print("=" * 80)
-    print(f"\nParameters:")
-    print(f"  p = {REPRO_PROB}")
-    print(f"  N = {N_INITIAL}")
-    print(f"  comp_thresh = {COMP_THRESH}")
-    print(f"  decomp_thresh = {DECOMP_THRESH}")
-    print(f"\nTarget: 96%+ coexistence")
-    print("=" * 80)
-
-    seeds = list(range(1930001, 1930101))  # 100 seeds for high confidence
-
-    results = [run_simulation(s) for s in seeds]
-    coex = np.mean(results) * 100
-
-    # Calculate confidence interval
-    se = np.std(results) / np.sqrt(len(results)) * 100
-    ci_low = coex - 1.96 * se
-    ci_high = coex + 1.96 * se
-
-    print(f"\nRESULTS (n=100):")
-    print(f"  Coexistence: {coex:.1f}%")
-    print(f"  95% CI: [{ci_low:.1f}%, {ci_high:.1f}%]")
-    print(f"  Success count: {sum(results)}/100")
-
-    # Validation
-    target = 96
-    validated = coex >= target
-
-    print(f"\n{'=' * 80}")
-    print("VALIDATION")
-    print("=" * 80)
-    print(f"\nTarget: {target}%")
-    print(f"Achieved: {coex:.1f}%")
-    print(f"Status: {'✓ VALIDATED' if validated else '✗ NOT VALIDATED'}")
-
-    if not validated:
-        deficit = target - coex
-        print(f"Deficit: {deficit:.1f}%")
-        print("Possible causes:")
-        print("  - Stochastic variation")
-        print("  - Parameter interaction effects")
-        print("  - N=14 may need adjustment")
-
-    print(f"""
-CONCLUSION:
-
-Optimal parameter validation with n=100:
-
-Coexistence: {coex:.1f}% ± {1.96*se:.1f}%
-Target: {target}%
-Result: {'VALIDATED' if validated else 'NOT VALIDATED'}
-
-These parameters represent the current best configuration
-for D0+D1 coexistence in the NRM system.
-
-Session status: 267 cycles completed (C1664-C1930).
-""")
+    
+    # 95% Confidence Interval
+    ci = 1.96 * math.sqrt((rate/100 * (1 - rate/100)) / len(seeds)) * 100
+    print(f"95% Confidence Interval: {rate:.1f}% +/- {ci:.1f}%")
+    print(f"Range: [{rate-ci:.1f}%, {rate+ci:.1f}%]")
+    
+    if rate >= 95.0:
+        print("\nCONCLUSION: VALIDATION SUCCESSFUL. Dead Zone Stabilized.")
+    elif rate >= 90.0:
+        print("\nCONCLUSION: VALIDATION PARTIAL. High Stability achieved, but below 95% target.")
+    else:
+        print("\nCONCLUSION: VALIDATION FAILED. Parameters insufficient for robust stability.")
 
 if __name__ == "__main__":
     main()
