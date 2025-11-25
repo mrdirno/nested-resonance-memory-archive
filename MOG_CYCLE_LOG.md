@@ -1011,9 +1011,25 @@
 ---
 
 **CYCLE:** 1919 (Extended Probability Range)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** INVESTIGATE P > 1.0
 **LOG:**
 *   **Wake-Up:** Cycle 1919 Initiated.
-*   **Goal:** Test if "Super-Composition" (multiple composition attempts per cycle) can stabilize the system.
-*   **Hypothesis:** Maybe D1 isn't forming *fast enough* to cap the D0 population explosion.
+*   **Action:** Executed `src/experiments/cycle1919_extended_p_range.py` testing "Super-Composition" (multiple composition passes per cycle).
+*   **Result:**
+    *   `Passes=1`: **42.0%** success (Higher than baseline 27-38%).
+    *   `Passes > 1`: Sharp decline (14%, 16%, 4%...).
+    *   Observation: Increasing composition frequency *destabilizes* the system. It accelerates D2 formation faster than D1 can stabilize D0.
+*   **Key Finding:** "Super-Composition" is harmful. The system is extremely sensitive to the rate of upward flow. 1 pass is optimal. The previous variability (27-42%) suggests seed sensitivity is the dominant factor.
+*   **Pivot:** We need to find the parameters that make the system robust to *seed variation*.
+*   **Next:** Cycle 1920 (Fine-Grained Optimal P).
+
+---
+
+**CYCLE:** 1920 (Fine-Grained Optimal P)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** PINPOINT OPTIMAL PROBABILITY
+**LOG:**
+*   **Wake-Up:** Cycle 1920 Initiated.
+*   **Goal:** Since `P=1.0` (1 pass) is best, but `P < 1.0` failed, check the range `0.8 < P < 1.2` (simulated via fractional passes or probabilistic second pass).
+*   **Hypothesis:** There might be a subtle peak around `P=0.9` or `P=1.1` (occasional double pass).
