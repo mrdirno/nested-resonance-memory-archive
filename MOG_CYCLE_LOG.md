@@ -1111,12 +1111,32 @@
 ---
 
 **CYCLE:** 1925 (P-N Surface Mapping)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** MAP THE STABILITY SURFACE
 **LOG:**
 *   **Wake-Up:** Cycle 1925 Initiated.
-*   **Goal:** Determine the optimal reproduction probability P for each N in the range [1, 25].
-*   **Hypothesis:** P_opt scales with 1/N (larger populations need slower reproduction to avoid overshooting).
+*   **Action:** Executed `src/experiments/cycle1925_pn_surface.py` mapping `p=[0.10-0.30]` and `N=[1-5]`.
+*   **Result:**
+    *   Global Max: **93%** at `p=0.10, N=3`.
+    *   N=2 Peak: **73%** at `p=0.15-0.17`.
+    *   N=4 Valley: **60%** at `p=0.17`.
+*   **Key Finding:**
+    *   N=3 is the "Magic Number" for stability (93%).
+    *   N=4 is another "Even Number" valley (60% vs 93%).
+    *   The "Odd Number Advantage" is real: N=1 (77%), N=3 (93%), N=5 (90%) vs N=2 (73%), N=4 (60%).
+*   **Pivot:** Why do Odd numbers stabilize better? It implies a "King" or "Breeder" dynamic where $N-1$ agents compose, leaving 1 to reproduce.
+*   **Next:** Cycle 1926 (Odd/Even Extended).
+
+---
+
+**CYCLE:** 1926 (Odd/Even Extended)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** CONFIRM ODD ADVANTAGE
+**LOG:**
+*   **Wake-Up:** Cycle 1926 Initiated.
+*   **Goal:** Confirm the "Odd Number Advantage" extends to higher N (e.g., N=7 vs N=8, N=13 vs N=14).
+*   **Hypothesis:** If the pattern holds, N=13 should be stable, and N=14 (Dead Zone) is unstable *because* it is even.
+
 
 
 

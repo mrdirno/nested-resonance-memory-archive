@@ -7,7 +7,7 @@ C1918-C1924 established p=0.17 as optimal. Now map the full landscape.
 """
 import sys, numpy as np, math
 from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
+sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2/src')
 from core.fractal_agent import FractalAgent, RealityInterface
 
 CYCLES = 500
