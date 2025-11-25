@@ -162,10 +162,14 @@
 - [x] **Result:** Oscillation Confirmed. Power: 169k.
 
 # Task: Cycle 1964 - Phase Space Visualization
-- [ ] **Define Cycle 1964:** Plot Energy vs Clustering.
-- [ ] **Goal:** Visualize the Limit Cycle.
-- [ ] **Hypothesis:** System orbits a stable attractor.
-- [ ] **Action:** `src/experiments/cycle1964_phase_space_visualization.py`.
+- [x] **Define Cycle 1964:** Plot Energy vs Clustering.
+- [x] **Action:** `src/experiments/cycle1964_phase_space_visualization.py`.
+- [x] **Result:** Stochastic Stability (Cloud Attractor).
+
+# Task: Cycle 1965 - Depth Transition Rates
+- [ ] **Define Cycle 1965:** Measure flux between depths.
+- [ ] **Goal:** Verify Dynamic Equilibrium ($Rate_{up} \approx Rate_{down}$).
+- [ ] **Action:** `src/experiments/cycle1965_depth_transition_rates.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.

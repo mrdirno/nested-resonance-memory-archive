@@ -1773,3 +1773,25 @@
     *   We will plot `Energy` vs `Clustering` over time.
     *   **Hypothesis:** Limit Cycle (Closed Loop in Phase Space).
 *   **Next:** Cycle 1964 (Phase Space Visualization).
+
+---
+
+**CYCLE:** 1964 (Phase Space Visualization)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** MAP THE ATTRACTOR
+**LOG:**
+*   **Wake-Up:** Cycle 1964 Initiated.
+*   **Action:** Executed `src/experiments/cycle1964_phase_space_visualization.py`.
+*   **Result:**
+    *   Trajectory: Confined region ($E \in [53, 92]$, $C \in [7, 32]$).
+    *   Classification: **FIXED POINT ATTRACTOR (Stable)**.
+*   **Analysis:** The oscillation detected in C1963 (Power 169k) might have been a transient or a very slow drift. The Phase Space plot shows a cloud, not a clean loop.
+    *   This means the system is **Robustly Chaotic** or **Stochastically Stable**.
+    *   It doesn't repeat exactly, but it stays within a "Viability Envelope".
+    *   This is actually *better* for evolution than a limit cycle (which is repetitive).
+    *   The system explores the state space within bounds.
+*   **Pivot:** Cycle 1965 (Depth Transition Rates).
+    *   We need to know the flux between layers.
+    *   How many agents move from Depth 0 -> 1 (Compose) vs 1 -> 0 (Decompose) per cycle?
+    *   If Rate(Up) == Rate(Down), we have Dynamic Equilibrium.
+*   **Next:** Cycle 1965 (Depth Transition Rates).
