@@ -27,7 +27,10 @@ class FractalAgent:
         agent_id: str,
         population_id: int = 0,
         energy: float = 1.0,
-        depth: int = 0
+        depth: int = 0,
+        x: float = 50.0,
+        y: float = 50.0,
+        z: float = 50.0
     ):
         """
         Initialize a fractal agent.
@@ -37,15 +40,56 @@ class FractalAgent:
             population_id: Population this agent belongs to
             energy: Initial energy level (default 1.0)
             depth: Hierarchical depth (default 0)
+            x, y, z: Spatial coordinates (default center 50.0)
         """
         self.agent_id = agent_id
         self.population_id = population_id
         self.energy = energy
         self.depth = depth
+        self.x = x
+        self.y = y
+        self.z = z
         self.memory = {}
         self.birth_cycle = 0
         self.compositions = 0
         self.decompositions = 0
+
+    def update_position(self, potential_func, step_size: float = 1.0) -> None:
+        """
+        Update position based on gradient descent of the potential field.
+        Agents seek lower potential (higher stability).
+
+        Args:
+            potential_func: Callable(x, y, z) -> potential value (float)
+            step_size: Movement speed (default 1.0)
+        """
+        # Sample current and neighbors
+        current_val = potential_func(self.x, self.y, self.z)
+        
+        # Simple gradient estimation
+        # Look around
+        candidates = [
+            (self.x + step_size, self.y, self.z),
+            (self.x - step_size, self.y, self.z),
+            (self.x, self.y + step_size, self.z),
+            (self.x, self.y - step_size, self.z),
+            (self.x, self.y, self.z + step_size),
+            (self.x, self.y, self.z - step_size)
+        ]
+        
+        best_loc = (self.x, self.y, self.z)
+        min_val = current_val
+        
+        for cx, cy, cz in candidates:
+            # Bounds check (0-100)
+            if 0 <= cx <= 100 and 0 <= cy <= 100 and 0 <= cz <= 100:
+                val = potential_func(cx, cy, cz)
+                if val < min_val:
+                    min_val = val
+                    best_loc = (cx, cy, cz)
+        
+        # Move
+        self.x, self.y, self.z = best_loc
 
     def consume_energy(self, amount: float) -> bool:
         """
