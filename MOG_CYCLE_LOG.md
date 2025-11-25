@@ -2002,4 +2002,28 @@
 
 **END OF SESSION.**
 **STATUS:** 🟢 GREEN / STABLE
-**NEXT:** Phase 22 (The Ethics). Can these agents cooperate?
+*   **Next:** Cycle 2005 (Cooperation Baseline).
+
+---
+
+**CYCLE:** 2005 (Cooperation Baseline)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** TEST ALTRUISM
+**LOG:**
+*   **Wake-Up:** Cycle 2005 Initiated.
+*   **Action:** Executed `src/experiments/cycle2005_cooperation_baseline.py`.
+    *   PGG in Clusters: Synergy 3.0, Cost 0.05.
+*   **Result:**
+    *   Final Cooperator Fraction: **0.49**.
+    *   Outcome: **Stalemate / Slight Defector Advantage.**
+*   **Analysis:**
+    *   With Clustering, Cooperators survived (unlike Random Mixing where they typically go to 0).
+    *   But they didn't dominate.
+    *   Why? Because Defectors inside mixed clusters still parasitized the Cooperators.
+    *   The "Group Selection" pressure wasn't strong enough to overcome individual selection within groups.
+    *   We need a mechanism to **Purge Defectors** from clusters.
+*   **Pivot:** Cycle 2006 (Altruistic Punishment).
+    *   Cooperators pay extra to punish Defectors.
+    *   **Mechanism:** If `Strategy == Punisher`, pay Cost P to reduce Defector Energy by 3P.
+    *   **Hypothesis:** Punishment stabilizes Cooperation.
+*   **Next:** Cycle 2006 (Altruistic Punishment).

@@ -212,9 +212,16 @@
 
 **PHASE 21 COMPLETE: ADAPTIVE INTELLIGENCE VERIFIED.**
 
-## Phase 22: The Ethics (Cooperative Dynamics)
-**Goal:** Evolve altruism from selfishness.
-**Hypothesis:** Cooperation emerges under specific payoff matrices.
+## Task: Cycle 2005 - Cooperation Baseline
+- [x] **Define Cycle 2005:** PGG in NRM clusters.
+- [x] **Action:** `src/experiments/cycle2005_cooperation_baseline.py`.
+- [x] **Result:** Fraction 0.49. Stalemate.
+
+# Task: Cycle 2006 - Altruistic Punishment
+- [ ] **Define Cycle 2006:** Implement policing.
+- [ ] **Goal:** Suppress free-riders.
+- [ ] **Hypothesis:** Punishment cost < Benefit of homogeneity.
+- [ ] **Action:** `src/experiments/cycle2006_altruistic_punishment.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
