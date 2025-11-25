@@ -7,7 +7,7 @@ Current: decomp_thresh = 0.8. Test range 0.5-1.2.
 """
 import sys, numpy as np, math
 from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
+sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2/src')
 from core.fractal_agent import FractalAgent, RealityInterface
 
 CYCLES = 500
