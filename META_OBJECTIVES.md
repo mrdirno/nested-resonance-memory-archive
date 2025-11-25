@@ -142,10 +142,15 @@
 - [x] **Result:** Inverse effect. Higher energy = Lower clustering (Independence).
 
 # Task: Cycle 1960 - Agent Age
-- [ ] **Define Cycle 1960:** Analyze survival duration.
-- [ ] **Goal:** Identify "Methuselahs" (Immortal Agents).
-- [ ] **Hypothesis:** Clusters allow indefinite survival.
-- [ ] **Action:** `src/experiments/cycle1960_agent_age.py`.
+- [x] **Define Cycle 1960:** Analyze survival duration.
+- [x] **Action:** `src/experiments/cycle1960_agent_age.py`.
+- [x] **Result:** Clustered Age (100) >> Single Age (0). Clusters are immortal.
+
+# Task: Cycle 1961 - Pattern Persistence
+- [ ] **Define Cycle 1961:** Inject signal ($\Phi = \pi$).
+- [ ] **Goal:** Verify information storage duration.
+- [ ] **Hypothesis:** Signal persists in clusters, decays in singles.
+- [ ] **Action:** `src/experiments/cycle1961_pattern_persistence.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
