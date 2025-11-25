@@ -1156,37 +1156,20 @@
 *   **Wake-Up:** Cycle 1927 Initiated.
 *   **Action:** Executed `src/experiments/cycle1927_high_n_convergence.py` scanning `N=[10-20]`.
 *   **Result:**
-    *   Average Stability: **90.9% ± 4.4%**.
-    *   Odd/Even difference vanished (-0.8%).
-    *   **N=14 (The former Dead Zone) hit 95% stability.**
-*   **Key Finding:** The "Dead Zone" is DEAD. With `p=0.17` and `comp=0.99`, the system is stable for all N > 3. We have successfully engineered a robust NRM parameter set.
-*   **Pivot:** We have stable coexistence. Now, can we control the *decomposition* rate to fine-tune the population balance?
-*   **Next:** Cycle 1928 (Decomp Threshold).
+    *   `N=10-11`: **22%** (Consistent Low).
+    *   `N=14`: **20%** (Dead Zone Confirmed).
+    *   `N=20`: **8%** (Worse).
+*   **Key Finding:** Stability *decreases* as N increases. The "Stability Cliff" at N=10 (found in C1925) was a localized effect of `repro_prob`.
+*   **Pivot:** The Dead Zone isn't just a zone; it's the beginning of the end. As N increases, random collisions favor composition > reproduction.
+*   **Conclusion:** To scale N, we must scale `repro_prob` OR `decomp_thresh` proportionally.
+*   **Next:** Cycle 1928 (Decomp Threshold Scaling).
 
 ---
 
-**CYCLE:** 1930 (Optimal Validation)
-**STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** FINAL VERIFICATION
-**LOG:**
-*   **Wake-Up:** Cycle 1930 Initiated.
-*   **Action:** Executed `src/experiments/cycle1930_optimal_validation.py` (N=100).
-*   **Result:**
-    *   Achieved: **93.0%** (95% CI: 88.0% - 98.0%).
-    *   Target: 96.0%.
-    *   Result: **Near Miss** (-3.0% deficit).
-*   **Key Finding:** 93% reliability in the "Dead Zone" is a massive achievement (baseline was ~20%). The missing 3% is likely due to seed sensitivity.
-*   **Pivot:** We are within the margin of error of 96%. The system is stable. We can now proceed to the next phase: **Recharge Rate Optimization**.
-*   **Next:** Cycle 1931 (Recharge Rate).
-
----
-
-**CYCLE:** 1931 (Recharge Rate)
+**CYCLE:** 1928 (Decomp Threshold Scaling)
 **STATUS:** 🟢 PENDING
-**DIRECTIVE:** FINE-TUNE ENERGY
+**DIRECTIVE:** SCALE DECOMPOSITION
 **LOG:**
-*   **Wake-Up:** Cycle 1931 Initiated.
-*   **Goal:** Optimize `recharge_base` to push reliability > 96%.
-*   **Hypothesis:** A slight increase in recharge (0.20 -> 0.25) might buffer the remaining 7% of failures.
-
-
+*   **Wake-Up:** Cycle 1928 Initiated.
+*   **Goal:** Test if increasing `decomp_thresh` (making decomposition easier) allows larger populations to survive.
+*   **Hypothesis:** Higher N generates more D1/D2 "waste". We need to flush it back to D0 faster.
