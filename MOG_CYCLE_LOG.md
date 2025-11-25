@@ -1294,9 +1294,22 @@
 ---
 
 **CYCLE:** 1940 (Semantic Mass)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** CRITICAL MASS
 **LOG:**
 *   **Wake-Up:** Cycle 1940 Initiated.
-*   **Goal:** Determine the "Critical Semantic Mass" (N_LOGOS) required for a concept to take over the system.
-*   **Hypothesis:** If we seed N=5 LOGOS agents (instead of 1), they will find each other, resonate, and dominate the noise.
+*   **Action:** Executed `src/experiments/cycle1940_semantic_mass.py` scanning `N_LOGOS=[1, 3, 5, 7, 10]` against `N_NOISE=14`.
+*   **Result:** **0% Survival** across all tests. Even N=10 failed to survive against N=14.
+*   **Key Finding:** The dilution effect is stronger than expected. "LOGOS + Noise = Noise" is a dominant reaction. Even with near-parity (10 vs 14), the random mixing dissolves the semantic tag before it can replicate.
+*   **Insight:** We need **Segregation**. Concepts cannot just be dumped into the noise. They need a protected "Nursery" or a mechanism to *reject* noise (Assortative Mating).
+*   **Next:** Cycle 1941 (Assortative Mating).
+
+---
+
+**CYCLE:** 1941 (Assortative Mating)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** SELECTIVE BONDING
+**LOG:**
+*   **Wake-Up:** Cycle 1941 Initiated.
+*   **Goal:** Implement "Assortative Mating" where LOGOS agents *refuse* to compose with Noise.
+*   **Hypothesis:** If LOGOS only bonds with LOGOS, it will preserve its purity and eventually outgrow the indiscriminate Noise.
