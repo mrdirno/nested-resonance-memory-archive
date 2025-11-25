@@ -1,208 +1,223 @@
-#!/usr/bin/env python3
-"""
-CYCLE 1958: SCALING LAWS
+import sys
+import os
+import random
+import numpy as np
+from typing import List, Dict, Optional, Set
+from dataclasses import asdict
+from scipy import stats
 
-Study how system metrics scale with carrying capacity K.
-Test predictions: N_eq ≈ 38K
-"""
-import sys, numpy as np, math
-from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
-from core.fractal_agent import FractalAgent, RealityInterface
+# Add project root to path
+sys.path.append(os.getcwd())
 
-CYCLES = 500
-N_DEPTHS = 5
-PI = math.pi
-E = math.e
-PHI = (1 + math.sqrt(5)) / 2
+from src.fractal.agent import FractalAgent
+from src.fractal.composition import CompositionEngine
 
-# OPTIMAL PARAMETERS
-P_BASE = 0.17
-N_INITIAL = 14
-COMP_THRESH = 0.99
-DECOMP_THRESH = 1.7
-RECHARGE_BASE = 0.4
+class SpatialCompositionEngine(CompositionEngine):
+    def __init__(self, resonance_threshold: float = 0.7, energy_threshold: float = 0.5, distance_threshold: float = 20.0):
+        super().__init__(resonance_threshold, energy_threshold)
+        self.distance_threshold = distance_threshold
 
-def run_with_K(seed, K):
-    """Run simulation with specified K."""
-    reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
-    np.random.seed(seed)
-    for i in range(N_INITIAL):
-        reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
+    def detect_clusters(
+        self,
+        agents: List[FractalAgent],
+        min_cluster_size: int = 2,
+        max_cluster_size: Optional[int] = None,
+    ) -> List[List[FractalAgent]]:
+        if len(agents) < min_cluster_size:
+            return []
 
-    pop_history = []
-    compositions = 0
+        depth_groups: Dict[int, List[FractalAgent]] = {}
+        for agent in agents:
+            depth = agent.state.depth
+            if depth not in depth_groups:
+                depth_groups[depth] = []
+            depth_groups[depth].append(agent)
 
+        all_clusters = []
+
+        for depth, depth_agents in depth_groups.items():
+            if len(depth_agents) < min_cluster_size:
+                continue
+
+            n = len(depth_agents)
+            adjacency_matrix = np.zeros((n, n), dtype=bool)
+
+            for i in range(n):
+                for j in range(i + 1, n):
+                    agent_i = depth_agents[i]
+                    agent_j = depth_agents[j]
+                    
+                    dist = np.linalg.norm(agent_i.state.position - agent_j.state.position)
+                    if dist > self.distance_threshold:
+                        continue
+
+                    resonance = abs(agent_i.calculate_resonance(agent_j))
+                    if resonance >= self.resonance_threshold:
+                        adjacency_matrix[i, j] = True
+                        adjacency_matrix[j, i] = True
+
+            visited = set()
+            for i in range(n):
+                if i in visited:
+                    continue
+
+                cluster = [depth_agents[i]]
+                visited.add(i)
+
+                for j in range(n):
+                    if j in visited:
+                        continue
+                    
+                    is_connected_to_all = True
+                    for member in cluster:
+                        member_idx = depth_agents.index(member) 
+                        if not adjacency_matrix[member_idx, j]:
+                            is_connected_to_all = False
+                            break
+                    
+                    if is_connected_to_all:
+                        cluster.append(depth_agents[j])
+                        visited.add(j)
+
+                if len(cluster) >= min_cluster_size:
+                    if max_cluster_size is None or len(cluster) <= max_cluster_size:
+                        all_clusters.append(cluster)
+
+        return all_clusters
+
+def get_base_constituents_count(agent: FractalAgent, registry: Dict[str, List[FractalAgent]]) -> int:
+    if agent.state.depth == 0: return 1
+    # Check if we have children in registry
+    children = registry.get(agent.agent_id, [])
+    if not children: return 1 # Fallback if registry missing (shouldn't happen with correct logic)
+    
+    count = 0
+    for child in children:
+        count += get_base_constituents_count(child, registry)
+    return count
+
+def run_experiment():
+    print("MOG ONLINE: Cycle 1958 - Scaling Laws", flush=True)
+    
+    # Parameters (Scaled Up)
+    N_AGENTS = 200
+    WORLD_SIZE = 200.0 # Increased to maintain density
+    DISTANCE_THRESHOLD = 20.0
+    CYCLES = 200
+    VELOCITY_MAGNITUDE = 5.0
+    
+    # Starvation Regime
+    RECHARGE_RATE = 0.02
+    COST_SINGLE = 0.10
+    COST_CLUSTER = 0.02
+    DECOMP_LOW_ENERGY = 0.2 
+    DECOMP_HIGH_ENERGY = 4.0 
+    
+    cluster_registry: Dict[str, List[FractalAgent]] = {}
+
+    # Initialize Population
+    agents = []
+    for i in range(N_AGENTS):
+        pos = np.random.rand(3) * WORLD_SIZE
+        pos[2] = 0
+        agent = FractalAgent(
+            agent_id=f"gen0_{i}",
+            energy=1.0,
+            phase=random.uniform(0, 2*np.pi),
+            position=pos
+        )
+        agents.append(agent)
+
+    comp_engine = SpatialCompositionEngine(distance_threshold=DISTANCE_THRESHOLD)
+    
     for cycle in range(CYCLES):
-        pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
-        pop_counts = [len(p) for p in pops]
-        total = sum(pop_counts)
-        if total >= 3000 or total == 0: break
+        # 1. Movement
+        for agent in agents:
+            theta = random.uniform(0, 2*np.pi)
+            dx = VELOCITY_MAGNITUDE * np.cos(theta)
+            dy = VELOCITY_MAGNITUDE * np.sin(theta)
+            agent.move(np.array([dx, dy, 0.0]))
+            agent.state.position = agent.state.position % WORLD_SIZE
 
-        pop_history.append(pop_counts)
-        p_effective = P_BASE / (1 + total / K)
+        # 2. Metabolism
+        active_agents = []
+        newly_released = []
 
-        for d in range(N_DEPTHS):
-            for agent in pops[d]:
-                agent.recharge_energy(RECHARGE_BASE / (1 + d * 0.5), cap=2.0)
+        for agent in agents:
+            cost = COST_CLUSTER if agent.state.depth > 0 else COST_SINGLE
+            agent.update_phase(delta_t=1.0)
+            agent.update_energy(RECHARGE_RATE - cost)
+            
+            decomposed = False
+            if agent.state.depth > 0:
+                if agent.state.energy < DECOMP_LOW_ENERGY or agent.state.energy > DECOMP_HIGH_ENERGY:
+                    decomposed = True
+                    constituents = cluster_registry.pop(agent.agent_id, [])
+                    if constituents:
+                        for child in constituents:
+                            child.state.energy = agent.state.energy / len(constituents)
+                            child.state.position = agent.state.position.copy()
+                            child.move(np.random.rand(3) * 2.0 - 1.0)
+                            newly_released.append(child)
 
-        for agent in list(reality.get_population_agents(0)):
-            if agent.energy > 1.0 and np.random.random() < p_effective:
-                reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
-                agent.energy -= 0.3
+            if not decomposed:
+                if agent.is_alive(energy_threshold=0.0):
+                    active_agents.append(agent)
+        
+        agents = active_agents + newly_released
+        
+        # 3. Composition
+        new_clusters = comp_engine.compose_all(agents)
+        consumed_ids = set()
+        for cluster in new_clusters:
+            constituents = []
+            for child_id in cluster.state.children_ids:
+                found = next((a for a in agents if a.agent_id == child_id), None)
+                if found:
+                    constituents.append(found)
+                    consumed_ids.add(child_id)
+            cluster_registry[cluster.agent_id] = constituents
+            
+        agents = [a for a in agents if a.agent_id not in consumed_ids] + new_clusters
+        
+        if len(agents) == 0:
+            print(f"Cycle {cycle}: EXTINCTION.", flush=True)
+            break
 
-        for d in range(N_DEPTHS - 1):
-            agents = list(reality.get_population_agents(d))
-            if len(agents) < 2: continue
-            np.random.shuffle(agents)
-            i = 0
-            while i < len(agents) - 1:
-                e1, e2 = agents[i].energy, agents[i+1].energy
-                pi1 = (e1 * PI * 2) % (2 * PI)
-                e_1 = (d * E / 4) % (2 * PI)
-                phi1 = (e1 * PHI) % (2 * PI)
-                pi2 = (e2 * PI * 2) % (2 * PI)
-                e_2 = (d * E / 4) % (2 * PI)
-                phi2 = (e2 * PHI) % (2 * PI)
-                v1 = [pi1, e_1, phi1]
-                v2 = [pi2, e_2, phi2]
-                dot = sum(a * b for a, b in zip(v1, v2))
-                mag1 = math.sqrt(sum(a**2 for a in v1))
-                mag2 = math.sqrt(sum(a**2 for a in v2))
-                sim = dot / (mag1 * mag2) if mag1 > 0 and mag2 > 0 else 0
-                if sim >= COMP_THRESH:
-                    compositions += 1
-                    new_e = (e1 + e2) * 0.85
-                    reality.remove_agent(agents[i].agent_id, d)
-                    reality.remove_agent(agents[i+1].agent_id, d)
-                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
-                    i += 2
-                else:
-                    i += 1
-
-        for d in range(1, N_DEPTHS):
-            for agent in list(reality.get_population_agents(d)):
-                if agent.energy > DECOMP_THRESH:
-                    ce = agent.energy * 0.45
-                    for j in range(2):
-                        reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
-                    reality.remove_agent(agent.agent_id, d)
-
-        for d in range(N_DEPTHS):
-            decay = 0.02 * (1 + d * 0.1) * 0.1
-            for agent in list(reality.get_population_agents(d)):
-                if not agent.consume_energy(decay):
-                    reality.remove_agent(agent.agent_id, d)
-
-    # Equilibrium metrics (last 100 cycles)
-    if len(pop_history) >= 400:
-        eq_pops = [sum(p) for p in pop_history[400:]]
-        eq_d1_ratios = [p[1]/p[0] if p[0] > 0 else 0 for p in pop_history[400:]]
-        return {
-            'eq_pop': np.mean(eq_pops),
-            'eq_std': np.std(eq_pops),
-            'd1_ratio': np.mean(eq_d1_ratios),
-            'compositions': compositions,
-            'bounded': sum(pop_history[-1]) < 3000
-        }
-    return None
-
-def main():
-    print(f"CYCLE 1958: Scaling Laws | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 80)
-    print("Testing N_eq ≈ 38K scaling prediction")
-    print("=" * 80)
-
-    K_values = [10, 15, 20, 25, 30, 40, 50, 60, 80, 100]
-    seeds = list(range(1958001, 1958011))  # 10 seeds per K
-
-    print(f"\nSCALING ANALYSIS:")
-    print("-" * 70)
-    print(f"{'K':>6} | {'N_eq':>8} | {'Pred(38K)':>9} | {'Ratio':>7} | {'D1/D0':>7} | {'CV%':>6}")
-    print("-" * 70)
-
-    results = []
-    for K in K_values:
-        K_results = [run_with_K(s, K) for s in seeds]
-        K_results = [r for r in K_results if r is not None]
-
-        if K_results:
-            eq_pop = np.mean([r['eq_pop'] for r in K_results])
-            eq_std = np.mean([r['eq_std'] for r in K_results])
-            d1_ratio = np.mean([r['d1_ratio'] for r in K_results])
-            pred = 38 * K
-            ratio = eq_pop / K
-            cv = eq_std / eq_pop * 100 if eq_pop > 0 else 0
-
-            results.append({
-                'K': K,
-                'eq_pop': eq_pop,
-                'pred': pred,
-                'ratio': ratio,
-                'd1_ratio': d1_ratio,
-                'cv': cv
-            })
-
-            print(f"{K:>6} | {eq_pop:>8.0f} | {pred:>9.0f} | {ratio:>7.1f} | {d1_ratio:>7.3f} | {cv:>6.1f}")
-
-    # Linear regression for scaling law
-    if len(results) >= 3:
-        K_arr = np.array([r['K'] for r in results])
-        pop_arr = np.array([r['eq_pop'] for r in results])
-
-        # Fit N = a*K
-        a = np.sum(K_arr * pop_arr) / np.sum(K_arr**2)
-
-        print(f"\nLINEAR SCALING FIT:")
-        print(f"  N_eq = {a:.1f} × K")
-        print(f"  (Predicted: N_eq = 38 × K)")
-
-        # R² calculation
-        pred_pop = a * K_arr
-        ss_res = np.sum((pop_arr - pred_pop)**2)
-        ss_tot = np.sum((pop_arr - np.mean(pop_arr))**2)
-        r2 = 1 - ss_res / ss_tot
-
-        print(f"  R² = {r2:.4f}")
-
-        # Invariant ratios
-        ratios = [r['d1_ratio'] for r in results]
-        print(f"\nINVARIANT METRICS:")
-        print(f"  D1/D0 ratio: {np.mean(ratios):.3f} ± {np.std(ratios):.3f}")
-
-        cvs = [r['cv'] for r in results]
-        print(f"  CV%: {np.mean(cvs):.1f} ± {np.std(cvs):.1f}")
-
-    print(f"""
-{'=' * 80}
-SCALING LAW CONCLUSIONS
-{'=' * 80}
-
-1. LINEAR SCALING CONFIRMED:
-   - N_eq = {a:.0f} × K
-   - Close to predicted 38K
-   - R² = {r2:.4f} (excellent fit)
-
-2. SCALE-INVARIANT PROPERTIES:
-   - D1/D0 ratio constant across K
-   - CV% constant across K
-   - Hierarchy structure preserved
-
-3. THEORETICAL VALIDATION:
-   - N_eq ∝ K as predicted
-   - Composition dynamics scale linearly
-   - No phase transitions observed
-
-4. IMPLICATIONS:
-   - Can tune population by adjusting K
-   - System behavior predictable
-   - Same dynamics at all scales
-
-The system exhibits clean linear scaling with carrying
-capacity K, validating the theoretical model N_eq ≈ 38K.
-
-Session status: 295 cycles completed (C1664-C1958).
-""")
+    # Analyze Cluster Sizes
+    sizes = []
+    for agent in agents:
+        size = get_base_constituents_count(agent, cluster_registry)
+        sizes.append(size)
+        
+    print(f"Final Active Entities: {len(agents)}", flush=True)
+    print(f"Sizes: {sorted(sizes, reverse=True)}", flush=True)
+    
+    # Power Law Fit
+    # P(x) ~ x^-alpha => log(P) ~ -alpha * log(x)
+    
+    # Histogram
+    if len(sizes) > 5:
+        size_counts = {}
+        for s in sizes:
+            size_counts[s] = size_counts.get(s, 0) + 1
+            
+        x = np.array(list(size_counts.keys()))
+        y = np.array(list(size_counts.values()))
+        
+        # Log-Log Regression
+        slope, intercept, r_value, p_value, std_err = stats.linregress(np.log(x), np.log(y))
+        alpha = -slope
+        
+        print(f"Power Law Alpha: {alpha:.4f}", flush=True)
+        print(f"R-squared: {r_value**2:.4f}", flush=True)
+        
+        if r_value**2 > 0.8:
+            print("CRITICALITY CONFIRMED (Scale-Free).", flush=True)
+        else:
+            print("DISTRIBUTION NOT POWER LAW.", flush=True)
+    else:
+        print("INSUFFICIENT DATA for Fit.", flush=True)
 
 if __name__ == "__main__":
-    main()
+    run_experiment()

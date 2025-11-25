@@ -132,10 +132,15 @@
 - [x] **Result:** Starvation (0.61) > Abundance (0.50). Clustering provides redundancy.
 
 # Task: Cycle 1958 - Scaling Laws
-- [ ] **Define Cycle 1958:** Analyze cluster size distribution.
-- [ ] **Goal:** Determine if the system is Critical.
-- [ ] **Hypothesis:** Power Law distribution ($P(s) \sim s^{-\alpha}$).
-- [ ] **Action:** `src/experiments/cycle1958_scaling_laws.py`.
+- [x] **Define Cycle 1958:** Analyze cluster size distribution.
+- [x] **Action:** `src/experiments/cycle1958_scaling_laws.py`.
+- [x] **Result:** Not Power Law ($R^2=0.62$). System is "Shattered" (Uniform small clusters).
+
+# Task: Cycle 1959 - Recharge Sensitivity
+- [ ] **Define Cycle 1959:** Sweep Recharge rate.
+- [ ] **Goal:** Find the Phase Transition to Criticality.
+- [ ] **Hypothesis:** $R_{crit}$ exists where distribution becomes scale-free.
+- [ ] **Action:** `src/experiments/cycle1959_recharge_sensitivity.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
