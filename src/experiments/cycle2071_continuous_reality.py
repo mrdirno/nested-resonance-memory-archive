@@ -1,240 +1,241 @@
-"""
-Cycle 2071: Continuous Reality Integration
-===========================================
-Test cognition under continuous real entropy stream.
-
-From C2070: Single-shot reality grounding validated.
-Question: Does it hold under continuous perturbation?
-
-This simulates actual deployment conditions where the system
-experiences ongoing environmental noise, not just initialization noise.
-"""
-
+import sys
+import os
+import random
 import numpy as np
-import json
-import psutil
-import time
-from datetime import datetime
+from typing import List, Dict, Optional, Set
+from dataclasses import asdict
 
-class ContinuousReality:
-    def __init__(self):
-        self.dimension = 1024
-        self.num_cycles = 200
-        self.num_trials = 5
-        self.measurement_interval = 20
+# Add project root to path
+sys.path.append(os.getcwd())
 
-    def _normalize(self, v):
-        norm = np.linalg.norm(v)
-        return v / norm if norm > 0 else v
+from src.fractal.agent import FractalAgent
+from src.fractal.composition import CompositionEngine
+from src.core.system_entropy import entropy as real_entropy
 
-    def _circ_conv(self, a, b):
-        return np.real(np.fft.ifft(np.fft.fft(a) * np.fft.fft(b)))
+class SpatialCompositionEngine(CompositionEngine):
+    def __init__(self, resonance_threshold: float = 0.7, energy_threshold: float = 0.5, distance_threshold: float = 20.0):
+        super().__init__(resonance_threshold, energy_threshold)
+        self.distance_threshold = distance_threshold
 
-    def _generate(self, d):
-        v = np.random.normal(0, 1.0/np.sqrt(d), d)
-        return self._normalize(v)
+    def detect_clusters(
+        self,
+        agents: List[FractalAgent],
+        min_cluster_size: int = 2,
+        max_cluster_size: Optional[int] = None,
+    ) -> List[List[FractalAgent]]:
+        if len(agents) < min_cluster_size:
+            return []
 
-    def _get_entropy_vector(self, d):
-        """Get real entropy as noise vector."""
-        cpu = psutil.cpu_percent(interval=0.01)
-        mem = psutil.virtual_memory().percent
+        depth_groups: Dict[int, List[FractalAgent]] = {}
+        for agent in agents:
+            depth = agent.state.depth
+            if depth not in depth_groups:
+                depth_groups[depth] = []
+            depth_groups[depth].append(agent)
 
-        # Use as seed for structured noise
-        np.random.seed(int((cpu + mem) * 1000) % (2**31))
-        noise = np.random.normal(0, 0.01, d)
-        return noise
+        all_clusters = []
 
-    def _cleanup(self, noisy, codebook):
-        best_match = None
-        best_sim = -1
-        for clean in codebook:
-            sim = np.dot(noisy, clean)
-            if sim > best_sim:
-                best_sim = sim
-                best_match = clean
-        return best_match if best_match is not None else noisy
+        for depth, depth_agents in depth_groups.items():
+            if len(depth_agents) < min_cluster_size:
+                continue
 
-    def run_trial(self, entropy_type, seed):
-        """Run continuous operation with given entropy type."""
-        np.random.seed(seed)
-        d = self.dimension
+            n = len(depth_agents)
+            adjacency_matrix = np.zeros((n, n), dtype=bool)
 
-        # Create and store patterns
-        n_items = 10
-        memory = np.zeros(d)
-        keys = []
-        values = []
+            for i in range(n):
+                for j in range(i + 1, n):
+                    agent_i = depth_agents[i]
+                    agent_j = depth_agents[j]
+                    
+                    dist = np.linalg.norm(agent_i.state.position - agent_j.state.position)
+                    if dist > self.distance_threshold:
+                        continue
 
-        for _ in range(n_items):
-            key = self._generate(d)
-            value = self._generate(d)
-            binding = self._circ_conv(key, value)
-            memory = self._normalize(memory + binding)
-            keys.append(key)
-            values.append(value)
+                    resonance = abs(agent_i.calculate_resonance(agent_j))
+                    if resonance >= self.resonance_threshold:
+                        adjacency_matrix[i, j] = True
+                        adjacency_matrix[j, i] = True
 
-        codebook = values.copy()
+            visited = set()
+            for i in range(n):
+                if i in visited:
+                    continue
 
-        # Track accuracy over time
-        accuracy_history = []
+                cluster = [depth_agents[i]]
+                visited.add(i)
 
-        for cycle in range(self.num_cycles):
-            # Add noise based on type
-            if entropy_type == "synthetic":
-                noise = np.random.normal(0, 0.01, d)
-            elif entropy_type == "real":
-                noise = self._get_entropy_vector(d)
-            else:
-                noise = np.zeros(d)
+                for j in range(n):
+                    if j in visited:
+                        continue
+                    
+                    is_connected_to_all = True
+                    for member in cluster:
+                        member_idx = depth_agents.index(member) 
+                        if not adjacency_matrix[member_idx, j]:
+                            is_connected_to_all = False
+                            break
+                    
+                    if is_connected_to_all:
+                        cluster.append(depth_agents[j])
+                        visited.add(j)
 
-            memory = self._normalize(memory + noise)
+                if len(cluster) >= min_cluster_size:
+                    if max_cluster_size is None or len(cluster) <= max_cluster_size:
+                        all_clusters.append(cluster)
 
-            # Composition dynamics
-            phi = (1 + np.sqrt(5)) / 2
-            if np.random.random() < 0.1 * phi:
-                new_key = self._generate(d)
-                new_value = self._generate(d)
-                binding = self._circ_conv(new_key, new_value)
-                memory = self._normalize(memory + 0.1 * binding)
+        return all_clusters
 
-            if np.random.random() < 0.1 / phi:
-                memory = self._normalize(memory + np.random.normal(0, 0.05, d))
+def run_simulation(use_real_entropy: bool) -> float:
+    print(f"\n--- Simulation: Real Entropy = {use_real_entropy} ---", flush=True)
+    
+    N_AGENTS = 50
+    WORLD_SIZE = 100.0
+    DISTANCE_THRESHOLD = 20.0
+    CYCLES = 100
+    VELOCITY_MAGNITUDE = 5.0
+    
+    RECHARGE_RATE = 0.02
+    COST_SINGLE = 0.10
+    COST_CLUSTER = 0.02
+    DECOMP_LOW_ENERGY = 0.2 
+    DECOMP_HIGH_ENERGY = 4.0 
+    
+    cluster_registry: Dict[str, List[FractalAgent]] = {}
 
-            # Hebbian refresh (round-robin)
-            idx = cycle % n_items
-            binding = self._circ_conv(keys[idx], values[idx])
-            memory = self._normalize(memory + 0.5 * binding)
-
-            # Measure accuracy periodically
-            if cycle % self.measurement_interval == 0:
-                correct = 0
-                for key, value in zip(keys, values):
-                    key_inv = np.roll(key[::-1], 1)
-                    retrieved = self._circ_conv(memory, key_inv)
-                    retrieved = self._cleanup(retrieved, codebook)
-                    if np.dot(retrieved, value) > 0.5:
-                        correct += 1
-                accuracy = correct / n_items
-                accuracy_history.append(accuracy)
-
-        # Final accuracy
-        final_accuracy = accuracy_history[-1] if accuracy_history else 0
-
-        # Stability (variance of accuracy)
-        stability = 1 - np.std(accuracy_history) if len(accuracy_history) > 1 else 1
-
-        return {
-            "entropy_type": entropy_type,
-            "final_accuracy": final_accuracy,
-            "mean_accuracy": np.mean(accuracy_history),
-            "stability": stability,
-            "accuracy_history": accuracy_history
-        }
-
-    def run_experiment(self):
-        """Compare entropy types under continuous operation."""
-        results = {
-            "metadata": {
-                "dimension": self.dimension,
-                "num_cycles": self.num_cycles,
-                "num_trials": self.num_trials,
-                "timestamp": datetime.now().isoformat()
-            },
-            "conditions": []
-        }
-
-        print(f"{'Entropy':<12} {'Final Acc':<12} {'Mean Acc':<12} {'Stability':<12}")
-        print("-" * 50)
-
-        for entropy_type in ["none", "synthetic", "real"]:
-            trial_results = []
-            for trial in range(self.num_trials):
-                result = self.run_trial(entropy_type, seed=trial*100)
-                trial_results.append(result)
-
-            mean_final = np.mean([r["final_accuracy"] for r in trial_results])
-            mean_mean = np.mean([r["mean_accuracy"] for r in trial_results])
-            mean_stability = np.mean([r["stability"] for r in trial_results])
-
-            condition = {
-                "entropy_type": entropy_type,
-                "mean_final_accuracy": float(mean_final),
-                "mean_accuracy": float(mean_mean),
-                "mean_stability": float(mean_stability)
-            }
-            results["conditions"].append(condition)
-
-            print(f"{entropy_type:<12} {mean_final*100:<12.0f}% {mean_mean*100:<12.0f}% {mean_stability:<12.3f}")
-
-        return results
-
-    def analyze(self, results):
-        """Determine if continuous reality is viable."""
-        conditions = results["conditions"]
-
-        analysis = {"findings": []}
-
-        synthetic = [c for c in conditions if c["entropy_type"] == "synthetic"][0]
-        real = [c for c in conditions if c["entropy_type"] == "real"][0]
-
-        # Accuracy comparison
-        acc_diff = abs(synthetic["mean_final_accuracy"] - real["mean_final_accuracy"])
-        if acc_diff < 0.1:
-            analysis["findings"].append(
-                f"Continuous operation: Real ≈ Synthetic ({acc_diff*100:.0f}% diff)"
-            )
-            analysis["continuous_valid"] = True
+    # Helper for random
+    def get_rand():
+        if use_real_entropy:
+            return real_entropy.get_float()
         else:
-            analysis["findings"].append(
-                f"Continuous operation: Real ≠ Synthetic ({acc_diff*100:.0f}% diff)"
-            )
-            analysis["continuous_valid"] = False
+            # Seeded PRNG for "Standard"
+            return random.random()
 
-        # Stability comparison
-        stab_diff = synthetic["mean_stability"] - real["mean_stability"]
-        if abs(stab_diff) < 0.1:
-            analysis["findings"].append("Stability: Real ≈ Synthetic")
-        elif stab_diff > 0:
-            analysis["findings"].append(
-                f"Warning: Real less stable than synthetic ({stab_diff:.2f})"
-            )
+    # Initialize Population
+    if not use_real_entropy:
+        random.seed(42) # Fixed seed for pseudo
+        
+    agents = []
+    for i in range(N_AGENTS):
+        # Use standard random for init to ensure comparable starting positions?
+        # Or use entropy for init too?
+        # Let's use the specified method for everything.
+        
+        rx = get_rand()
+        ry = get_rand()
+        pos = np.array([rx * WORLD_SIZE, ry * WORLD_SIZE, 0.0])
+        
+        r_phase = get_rand()
+        phase = r_phase * 2 * np.pi
+        
+        agent = FractalAgent(
+            agent_id=f"gen0_{i}",
+            energy=1.0,
+            phase=phase,
+            position=pos
+        )
+        agents.append(agent)
 
-        # Overall viability
-        if real["mean_final_accuracy"] >= 0.8:
-            analysis["findings"].append(
-                "Deployment viable: ≥80% accuracy under continuous real entropy"
-            )
-        else:
-            analysis["findings"].append(
-                f"Deployment concern: Only {real['mean_final_accuracy']*100:.0f}% accuracy"
-            )
+    comp_engine = SpatialCompositionEngine(distance_threshold=DISTANCE_THRESHOLD)
+    
+    history = []
+    
+    for cycle in range(CYCLES):
+        # 1. Movement
+        for agent in agents:
+            theta = get_rand() * 2 * np.pi
+            dx = VELOCITY_MAGNITUDE * np.cos(theta)
+            dy = VELOCITY_MAGNITUDE * np.sin(theta)
+            agent.move(np.array([dx, dy, 0.0]))
+            agent.state.position = agent.state.position % WORLD_SIZE
 
-        return analysis
+        # 2. Metabolism
+        active_agents = []
+        newly_released = []
 
+        for agent in agents:
+            cost = COST_CLUSTER if agent.state.depth > 0 else COST_SINGLE
+            agent.update_phase(delta_t=1.0)
+            agent.update_energy(RECHARGE_RATE - cost)
+            
+            decomposed = False
+            if agent.state.depth > 0:
+                if agent.state.energy < DECOMP_LOW_ENERGY or agent.state.energy > DECOMP_HIGH_ENERGY:
+                    decomposed = True
+                    constituents = cluster_registry.pop(agent.agent_id, [])
+                    if constituents:
+                        for child in constituents:
+                            child.state.energy = agent.state.energy / len(constituents)
+                            child.state.position = agent.state.position.copy()
+                            
+                            # Kick
+                            kx = get_rand() * 2.0 - 1.0
+                            ky = get_rand() * 2.0 - 1.0
+                            child.move(np.array([kx, ky, 0.0]))
+                            newly_released.append(child)
 
-def main():
-    print("=" * 60)
-    print("Cycle 2071: Continuous Reality Integration")
-    print("=" * 60)
-    print()
+            if not decomposed:
+                if agent.is_alive(energy_threshold=0.0):
+                    active_agents.append(agent)
+        
+        # 3. Composition
+        new_clusters = comp_engine.compose_all(active_agents)
+        
+        consumed_ids = set()
+        for cluster in new_clusters:
+            constituents = []
+            for child_id in cluster.state.children_ids:
+                found = next((a for a in agents if a.agent_id == child_id), None)
+                if found:
+                    constituents.append(found)
+                    consumed_ids.add(child_id)
+            cluster_registry[cluster.agent_id] = constituents
+            
+        agents = [a for a in active_agents if a.agent_id not in consumed_ids] + new_clusters + newly_released
+        
+        active_count = len(agents)
+        dormant_count = sum(len(v) for v in cluster_registry.values())
+        total_pop = active_count + dormant_count
+        history.append(total_pop)
+        
+        if total_pop == 0:
+            break
+            
+    final_pop = history[-1] if history else 0
+    print(f"Final Population: {final_pop}", flush=True)
+    
+    # Calculate Entropy of Outcome (Variance across multiple runs needed, but here we check magnitude)
+    return final_pop
 
-    exp = ContinuousReality()
-    results = exp.run_experiment()
-    analysis = exp.analyze(results)
-    results["analysis"] = analysis
-
-    print()
-    print("=" * 60)
-    print("ANALYSIS")
-    print("=" * 60)
-    for finding in analysis["findings"]:
-        print(f"  • {finding}")
-
-    output_path = "/Volumes/dual/DUALITY-ZERO-V2/experiments/results/c2071_continuous_reality.json"
-    with open(output_path, 'w') as f:
-        json.dump(results, f, indent=2)
-    print(f"\nResults saved: {output_path}")
-
+def run_experiment():
+    print("MOG ONLINE: Cycle 2071 - Continuous Reality", flush=True)
+    
+    # Run 5 seeds of Pseudo
+    pseudo_results = []
+    for i in range(5):
+        # Reseed for pseudo variation
+        random.seed(i)
+        res = run_simulation(use_real_entropy=False)
+        pseudo_results.append(res)
+        
+    # Run 5 runs of Real
+    real_results = []
+    for i in range(5):
+        res = run_simulation(use_real_entropy=True)
+        real_results.append(res)
+        
+    avg_p = np.mean(pseudo_results)
+    avg_r = np.mean(real_results)
+    var_p = np.var(pseudo_results)
+    var_r = np.var(real_results)
+    
+    print("\n--- Comparison ---", flush=True)
+    print(f"Pseudo-Random (Seed): Mean {avg_p:.2f}, Var {var_p:.2f}", flush=True)
+    print(f"Real-Entropy (System): Mean {avg_r:.2f}, Var {var_r:.2f}", flush=True)
+    
+    if var_r > var_p:
+        print("HYPOTHESIS CONFIRMED: Real Entropy introduces higher variance (True Unpredictability).", flush=True)
+    else:
+        print("HYPOTHESIS FAILED: Pseudo-Random is noisier.", flush=True)
 
 if __name__ == "__main__":
-    main()
+    run_experiment()
