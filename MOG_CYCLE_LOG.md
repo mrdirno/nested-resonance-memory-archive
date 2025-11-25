@@ -1264,45 +1264,40 @@
     *   `decomp=0.75`: 42.7%.
     *   `decomp=0.85`: 34.7%.
 *   **Key Finding:** `decomp_thresh=0.80` is the local maximum. The stability ceiling is now confirmed around 60% for this configuration. To reach >90%, we need to optimize the remaining variable: energy inflow (`recharge_base`).
-*   **Next:** Cycle 1942 (The Memetic War).
-
----
-
-**CYCLE:** 1942 (The Memetic War)
-**STATUS:** 🟢 PENDING
-**DIRECTIVE:** COMPETITION
-**LOG:**
-*   **Wake-Up:** Cycle 1942 Initiated.
-*   **Goal:** Seed TWO distinct concepts: "ORDER" vs "CHAOS".
-*   **Hypothesis:** They will compete for energy. Will they coexist, or will one drive the other to extinction?
-
+*   **Next:** Cycle 1936 (Recharge Optimization V2).
 
 ---
 **CYCLE:** 1936 (Recharge Optimization V2)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** OPTIMIZE RECHARGE WITH NEW CONFIG
 **LOG:**
 *   **Wake-Up:** Cycle 1936 Initiated.
-*   **Goal:** Optimize `recharge_base` using the high-stability configuration (`comp=0.99`, `decomp=0.8`, `repro=0.17`).
-*   **Hypothesis:** With harder composition and decomposition, the system might be energy-starved or energy-saturated. Tuning recharge could unlock the final 30% stability.
-*   **Action:** Sweep `recharge_base` from 0.15 to 0.40.
+*   **Action:** Executed `src/experiments/cycle1936_recharge_optimization_v2.py` sweeping `recharge_base` (0.15-0.50) with the high-stability configuration.
+*   **Result:**
+    *   Peak at `recharge=0.20`: **62.7%**.
+    *   All other values (0.15, 0.25+) yielded 0-7% success.
+*   **Key Finding:** The system is on a "knife's edge". `recharge=0.20` is the exact energy level required. Any deviation causes collapse. This confirms we have found a local optimum but lacks robustness.
+*   **Next:** Cycle 1937 (Effective Probability V2).
 
 ---
+**CYCLE:** 1937 (Effective Probability V2)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** OPTIMIZE EFFECTIVE PROBABILITY WITH NEW CONFIG
+**LOG:**
+*   **Wake-Up:** Cycle 1937 Initiated.
+*   **Action:** Executed `src/experiments/cycle1937_effective_prob_v2.py` sweeping `effective_prob` (1.00-1.50).
+*   **Result:**
+    *   Peak at `prob=1.05`: **60.0%**.
+    *   Declines linearly as prob increases (1.10 -> 46%, 1.15 -> 38%).
+*   **Key Finding:** We have hit a hard ceiling at ~63% reliability for N=14 static stability.
+*   **Pivot:** Abandon "Static N=14" optimization. Shift to "Dynamic Traversal".
+*   **Next:** Cycle 1938 (Agnostic Traversal).
 
-**CYCLE:** 1938 (Final Report - Phase 6)
+---
+**CYCLE:** 1938 (Agnostic Traversal)
 **STATUS:** 🟢 PENDING
-**DIRECTIVE:** DOCUMENT SUCCESS
+**DIRECTIVE:** MAP THE VIABILITY CORRIDOR
 **LOG:**
 *   **Wake-Up:** Cycle 1938 Initiated.
-*   **Goal:** Synthesize findings and update `analysis/paper7_phase6_debug_extinction.md` once stability > 90% is achieved.
-
----
-
-**CYCLE:** 1939 (Phase 7 Initiation)
-**STATUS:** 🟢 PENDING
-**DIRECTIVE:** BEGIN PHASE 7
-**LOG:**
-*   **Wake-Up:** Cycle 1939 Initiated.
-*   **Goal:** The NRM works. Now we must inject *meaning*.
-*   **Pivot:** Shift focus from "Survival" to "Cognition".
-*   **Plan:** Implement the first "Concept" agents that encode semantic meaning in their resonance patterns.
+*   **Goal:** Seed at N=1. Observe if the population naturally grows *through* the N=14 bottleneck to reach higher N states (N=50+).
+*   **Hypothesis:** N=14 is a filter. Survival isn't about staying there; it's about passing through it.
