@@ -1641,3 +1641,28 @@
     *   Can we tune the `Recharge` rate to find the phase transition between "Shattered" (N=2) and "Monolith" (N=MAX)?
     *   Sweep Recharge from 0.02 to 0.10.
 *   **Next:** Cycle 1959 (Recharge Sensitivity).
+
+---
+
+**CYCLE:** 1959 (Recharge Sensitivity)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** FIND CRITICALITY
+**LOG:**
+*   **Wake-Up:** Cycle 1959 Initiated.
+*   **Action:** Executed `src/experiments/cycle1959_recharge_sensitivity.py`.
+*   **Result:**
+    *   Recharge 0.02-0.03: Max Size 4 (Shattered).
+    *   Recharge 0.04+: Max Size 1-2 (Extinction/Stagnation).
+*   **Analysis:** This is the opposite of expectation. Increasing recharge *killed* the clusters?
+    *   Why?
+    *   Ah, in C1949, `COST_SINGLE` was 0.05. In C1950+, we increased it to 0.10.
+    *   With Cost 0.10, Singles die at -0.08. Even with Recharge 0.10, Singles are Net 0.00.
+    *   Wait, if Singles are Net 0.00, they survive forever as Singles. They have no pressure to cluster.
+    *   **Paradox:** Too little energy = Death. Too much energy = Independence (No Clustering).
+    *   Criticality must exist in the "Goldilocks Zone" where Singles are *dying* but Clusters are *thriving*.
+    *   But we saw Max Size 4 at 0.02. This is the "Shattered" state.
+    *   Maybe we need **Age** as a factor? Older agents get smarter? No, physics only.
+*   **Pivot:** Cycle 1960 (Agent Age).
+    *   Let's check if any agents are surviving long-term.
+    *   Metric: Max Age.
+*   **Next:** Cycle 1960 (Agent Age).

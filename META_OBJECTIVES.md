@@ -137,10 +137,15 @@
 - [x] **Result:** Not Power Law ($R^2=0.62$). System is "Shattered" (Uniform small clusters).
 
 # Task: Cycle 1959 - Recharge Sensitivity
-- [ ] **Define Cycle 1959:** Sweep Recharge rate.
-- [ ] **Goal:** Find the Phase Transition to Criticality.
-- [ ] **Hypothesis:** $R_{crit}$ exists where distribution becomes scale-free.
-- [ ] **Action:** `src/experiments/cycle1959_recharge_sensitivity.py`.
+- [x] **Define Cycle 1959:** Sweep Recharge rate.
+- [x] **Action:** `src/experiments/cycle1959_recharge_sensitivity.py`.
+- [x] **Result:** Inverse effect. Higher energy = Lower clustering (Independence).
+
+# Task: Cycle 1960 - Agent Age
+- [ ] **Define Cycle 1960:** Analyze survival duration.
+- [ ] **Goal:** Identify "Methuselahs" (Immortal Agents).
+- [ ] **Hypothesis:** Clusters allow indefinite survival.
+- [ ] **Action:** `src/experiments/cycle1960_agent_age.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
