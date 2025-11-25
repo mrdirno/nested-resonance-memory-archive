@@ -12,12 +12,15 @@ from .substrate_3d_gpu import AcousticSubstrate3DGPU
 from .ga_gpu import genetic_algorithm_gpu
 
 class MatterCompiler:
-    def __init__(self, width_mm=100, height_mm=100, depth_mm=100):
+    def __init__(self, width_mm=100, height_mm=100, depth_mm=100, emitters: List[Emitter3D] = None):
         self.width = width_mm
         self.height = height_mm
         self.depth = depth_mm
         # Standard Array Configuration (can be overridden)
-        self.emitters = self._build_standard_array()
+        if emitters is None:
+            self.emitters = self._build_standard_array()
+        else:
+            self.emitters = emitters
         
     def _build_standard_array(self) -> List[Emitter3D]:
         """

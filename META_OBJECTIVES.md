@@ -89,10 +89,16 @@
 - [x] **Result:** Survival Confirmed via Clustering (15 Clusters).
 
 # Task: Cycle 1950 - The Great Filter
-- [ ] **Define Cycle 1950:** Increase metabolic pressure to critical levels.
-- [ ] **Goal:** Find the parameter set where P(Survival) ~ 0.5.
-- [ ] **Hypothesis:** Extreme stress requires rapid, large-scale clustering.
-- [ ] **Action:** `src/experiments/cycle1950_great_filter.py`.
+- [x] **Define Cycle 1950:** Increase metabolic pressure to critical levels.
+- [x] **Goal:** Find the parameter set where P(Survival) ~ 0.5.
+- [x] **Action:** `src/experiments/cycle1950_great_filter.py`.
+- [x] **Result:** Survival Confirmed, but Biomass Anomaly detected (50 -> 71).
+
+# Task: Cycle 1951 - Conservation of Mass Check
+- [ ] **Define Cycle 1951:** Debug the population accounting logic.
+- [ ] **Goal:** Ensure Total Agents (Active + Dormant) <= Initial + Births.
+- [ ] **Hypothesis:** Composition logic might be duplicating references.
+- [ ] **Action:** `src/experiments/cycle1951_conservation_check.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.

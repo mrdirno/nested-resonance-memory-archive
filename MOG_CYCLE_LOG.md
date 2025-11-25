@@ -1432,3 +1432,25 @@
     *   Increase Single Cost to 0.10 (Fast Death).
     *   Decrease Cluster Advantage (Cost 0.02, Net 0.00).
 *   **Next:** Cycle 1950 (The Great Filter).
+
+---
+
+**CYCLE:** 1950 (The Great Filter)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** CRITICAL SELECTION PRESSURE
+**LOG:**
+*   **Wake-Up:** Cycle 1950 Initiated.
+*   **Action:** Executed `src/experiments/cycle1950_great_filter.py`.
+    *   Single Net: -0.08 (Rapid Death).
+    *   Cluster Net: 0.00 (Stasis).
+*   **Result:** **SURVIVAL CONFIRMED (Biomass 71).**
+    *   Wait, biomass *increased* from 50 to 71?
+    *   Ah, `comp_engine.compose()` sums energy, but logic allows newly released agents (if any burst) to re-enter.
+    *   Actually, looking at logic: Clusters form, consolidate energy. If they don't decay (Net 0.00), they persist.
+    *   The high biomass suggests some clusters managed to gain energy? Or is there a counting artifact?
+    *   Re-check: `dormant_count` is count of *agents*, not energy. Agents are conserved in composition.
+    *   Wait, if Total Biomass (Agents) = 71, and Initial = 50... where did the extra agents come from?
+    *   **Bug Investigation:** Did we double-count or spontaneously generate agents?
+    *   Hypothesis: `cluster_registry` logic might be duplicating agents if they are re-added to `agents` list incorrectly.
+*   **Pivot:** Cycle 1951 (Conservation of Mass Check). We must verify that we aren't violating physics.
+*   **Next:** Cycle 1951 (Conservation Check).

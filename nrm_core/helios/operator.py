@@ -6,8 +6,9 @@ Translates high-level intent into low-level phase instructions.
 import numpy as np
 import os
 from .substrate_3d import AcousticSubstrate3D
-from .types import Emitter, Emitter3D
+from .types import Emitter, Emitter3D, Material
 from .mesh_loader import MeshLoader
+from .compiler import MatterCompiler
 
 # GPU acceleration (optional)
 try:
@@ -43,12 +44,20 @@ class UniversalOperator:
             )
         self.emitters = self._create_hardware_layer()
         self.mesh_loader = MeshLoader()
+        
+        # Initialize Matter Compiler with current hardware config
+        self.compiler = MatterCompiler(
+            width_mm=self.box_dim, 
+            height_mm=self.box_dim, 
+            depth_mm=self.box_dim,
+            emitters=self.emitters
+        )
+        
         self.active_objects = {} # ID -> {type, phases, location}
         self.next_id = 1
         
     def _create_hardware_layer(self):
         # Initialize 384-emitter array (6 sides, 8x8)
-        # Reusing logic from Cycle 348
         emitters = []
         spacing = 10.0
         num = 8
@@ -60,16 +69,6 @@ class UniversalOperator:
                 for j in range(num):
                     c1 = center - center_offset + i * spacing
                     c2 = center - center_offset + j * spacing
-                    if orientation == 'z': emitters.append(Emitter3D(c1, c2, fixed, 1.0, 0.0, fixed))
-                    elif orientation == 'x': emitters.append(Emitter3D(fixed, c1, c2, 1.0, 0.0, c2)) # Note: Emitter3D init is x, y, freq, phase, amp, z. Wait, let's check Emitter3D definition in types.py
-                    # Emitter3D(x, y, frequency, phase, amplitude=1.0, z=0.0) - Wait, inheritance order.
-                    # Let's fix instantiation to be explicit or cleaner.
-                    # Actually, in types.py:
-                    # @dataclass class Emitter: x, y, frequency, phase, amplitude=1.0
-                    # @dataclass class Emitter3D(Emitter): z: float = 0.0
-                    # So args are x, y, freq, phase, amplitude, z (because z has default).
-                    
-                    # Correcting logic:
                     if orientation == 'z': 
                         # Top/Bottom faces. x=c1, y=c2, z=fixed
                         emitters.append(Emitter3D(c1, c2, 1.0, 0.0, 1.0, fixed))
@@ -85,7 +84,22 @@ class UniversalOperator:
         add_face(0.0, 'y'); add_face(self.box_dim, 'y')
         return emitters
 
-    def create_object(self, shape: str, location: tuple):
+    def _get_material(self, name: str) -> Material:
+        """
+        Returns a Material object by name.
+        """
+        name = name.lower()
+        if name == "styrofoam":
+            return Material(name="Styrofoam", density=25.0, sound_speed=2350.0)
+        elif name == "water":
+            return Material(name="Water", density=1000.0, sound_speed=1480.0)
+        elif name == "lead":
+            return Material(name="Lead", density=11340.0, sound_speed=1260.0) # High density, hard to trap
+        else:
+            # Default to Styrofoam
+            return Material(name="Styrofoam", density=25.0, sound_speed=2350.0)
+
+    def create_object(self, shape: str, location: tuple, material="Styrofoam"):
         """
         Instantiates a static object.
         """
@@ -94,8 +108,10 @@ class UniversalOperator:
         else:
             raise ValueError(f"Unknown shape: {shape}")
             
-        # Solve for phases
-        phases = self._solve_phases(targets)
+        # Compile
+        mat = self._get_material(material)
+        compiled_emitters = self.compiler.compile(targets, mat)
+        phases = [e.phase for e in compiled_emitters]
         
         # Store object
         obj_id = self.next_id
@@ -103,12 +119,13 @@ class UniversalOperator:
             "type": shape,
             "location": location,
             "phases": phases,
-            "targets": targets
+            "targets": targets,
+            "material": mat.name
         }
         self.next_id += 1
         return obj_id
 
-    def create_from_file(self, filepath: str, scale_mm=50.0):
+    def create_from_file(self, filepath: str, scale_mm=50.0, material="Styrofoam"):
         """
         Loads an OBJ file, centers/scales it, voxelizes it, and compiles it.
         """
@@ -123,8 +140,10 @@ class UniversalOperator:
         if not targets:
             raise ValueError("Mesh voxelization yielded zero targets.")
             
-        # Solve
-        phases = self._solve_phases(targets)
+        # Compile
+        mat = self._get_material(material)
+        compiled_emitters = self.compiler.compile(targets, mat)
+        phases = [e.phase for e in compiled_emitters]
         
         # Store
         obj_id = self.next_id
@@ -132,7 +151,8 @@ class UniversalOperator:
             "type": f"file:{os.path.basename(filepath)}",
             "location": (50.0, 50.0, 50.0), # Centered by default
             "phases": phases,
-            "targets": targets
+            "targets": targets,
+            "material": mat.name
         }
         self.next_id += 1
         return obj_id, len(targets)
@@ -146,6 +166,8 @@ class UniversalOperator:
             
         obj = self.active_objects[object_id]
         shape = obj['type']
+        mat_name = obj.get('material', 'Styrofoam')
+        mat = self._get_material(mat_name)
         
         # Recalculate targets
         if "file:" in shape:
@@ -159,8 +181,9 @@ class UniversalOperator:
         else:
             raise ValueError(f"Unknown shape: {shape}")
             
-        # Solve for new phases
-        phases = self._solve_phases(new_targets)
+        # Re-Compile
+        compiled_emitters = self.compiler.compile(new_targets, mat)
+        phases = [e.phase for e in compiled_emitters]
         
         # Update object
         obj['location'] = new_location
@@ -229,32 +252,6 @@ class UniversalOperator:
             np.array([cx-offset, cy+offset, cz+offset]),
             np.array([cx+offset, cy+offset, cz+offset])
         ]
-
-    def _solve_phases(self, targets):
-        # GPU-accelerated GA for production use (51x speedup)
-        if self.use_gpu and GPU_AVAILABLE:
-            # Use GPU-accelerated solver
-            ga = GeneticAlgorithmGPU(self.box, self.emitters)
-            best_phases = ga.solve(targets, generations=20, pop_size=20)
-        else:
-            # Fallback to simple phase conjugation or error
-            # Since we moved genetic_algorithm_multi_target out of range, we need a local implementation or simple heuristic
-            # Implementing simple heuristic: Phase Conjugation (Time Reversal)
-            # Phase = -k * distance for each emitter to centroid of targets
-            # This focuses on the center, not optimal for 8 corners, but it's a valid fallback.
-            
-            center = np.mean(targets, axis=0)
-            best_phases = []
-            k = 2 * np.pi * 40000 / 343.0 # Approx k
-            for e in self.emitters:
-                # dist to center
-                # e.x is in mm, e.y in mm, e.z in mm
-                dist = np.sqrt((e.x - center[0])**2 + (e.y - center[1])**2 + (e.z - center[2])**2)
-                # Phase = -k*d
-                phase = -k * (dist / 1000.0) # Convert mm to m
-                best_phases.append(phase % (2*np.pi))
-                
-        return best_phases
 
     def apply_phase_function(self, func):
         """
