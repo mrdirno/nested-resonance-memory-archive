@@ -77,19 +77,23 @@ class FractalAgent:
             (self.x, self.y, self.z - step_size)
         ]
         
-        best_loc = (self.x, self.y, self.z)
+        # Initialize with current position as best_loc
+        new_x, new_y, new_z = self.x, self.y, self.z
         min_val = current_val
-        
-        for cx, cy, cz in candidates:
+
+        # Consider current position as a candidate
+        all_candidates = [(self.x, self.y, self.z)] + candidates
+
+        for cx, cy, cz in all_candidates:
             # Bounds check (0-100)
             if 0 <= cx <= 100 and 0 <= cy <= 100 and 0 <= cz <= 100:
                 val = potential_func(cx, cy, cz)
                 if val < min_val:
                     min_val = val
-                    best_loc = (cx, cy, cz)
+                    new_x, new_y, new_z = cx, cy, cz
         
         # Move
-        self.x, self.y, self.z = best_loc
+        self.x, self.y, self.z = new_x, new_y, new_z
 
     def consume_energy(self, amount: float) -> bool:
         """
