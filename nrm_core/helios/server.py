@@ -159,4 +159,4 @@ def handle_connect():
 if __name__ == '__main__':
     # Start the background task
     socketio.start_background_task(background_thread)
-    socketio.run(app, host='0.0.0.0', port=5001, debug=True)
+    socketio.run(app, host='0.0.0.0', port=5001, debug=True, allow_unsafe_werkzeug=True)
