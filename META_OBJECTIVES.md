@@ -218,10 +218,11 @@
 - [x] **Result:** Fraction 0.49. Stalemate.
 
 # Task: Cycle 2006 - Altruistic Punishment
-- [ ] **Define Cycle 2006:** Implement policing.
-- [ ] **Goal:** Suppress free-riders.
-- [ ] **Hypothesis:** Punishment cost < Benefit of homogeneity.
-- [ ] **Action:** `src/experiments/cycle2006_altruistic_punishment.py`.
+- [x] **Define Cycle 2006:** Implement policing.
+- [x] **Action:** `src/experiments/cycle2006_altruistic_punishment.py`.
+- [x] **Result:** Failed. Defectors persist (27/93). Punishers suffer.
+
+**PHASE 22 PAUSED: REPUTATION SYSTEM REQUIRED.**
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.

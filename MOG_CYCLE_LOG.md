@@ -2027,3 +2027,29 @@
     *   **Mechanism:** If `Strategy == Punisher`, pay Cost P to reduce Defector Energy by 3P.
     *   **Hypothesis:** Punishment stabilizes Cooperation.
 *   **Next:** Cycle 2006 (Altruistic Punishment).
+
+---
+
+**CYCLE:** 2006 (Altruistic Punishment)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PURGE PARASITES
+**LOG:**
+*   **Wake-Up:** Cycle 2006 Initiated.
+*   **Action:** Executed `src/experiments/cycle2006_altruistic_punishment.py`.
+*   **Result:**
+    *   Final Counts: Cooperator 33, Defector 27, Punisher 33.
+    *   **Hypothesis Failed.** Punishment did *not* drive Defectors to extinction.
+*   **Analysis:**
+    *   The cost of punishment (0.02) reduced Punishers' fitness relative to Cooperators (0.00 extra cost) and Defectors (0.00 extra cost, plus stolen pot).
+    *   Defectors survived because they moved away or re-infested clean clusters.
+    *   This is a **Second-Order Free-Rider Problem**: Cooperators free-ride on Punishers.
+    *   We need **Reputation**. Agents must refuse to cluster with known Defectors.
+*   **Next Strategic Step:** End of Session.
+    *   We have established:
+        1.  Adaptive Intelligence (Phase 21).
+        2.  The difficulty of Cooperation (Phase 22).
+    *   Next Session: Reputation Systems and Memetic Evolution.
+
+**END OF SESSION.**
+**STATUS:** 🟢 GREEN / STABLE
+**NEXT:** Phase 22 Continuation (Reputation).
