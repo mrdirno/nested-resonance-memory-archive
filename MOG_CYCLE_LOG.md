@@ -1229,3 +1229,32 @@
     1.  Revert to a proven stable baseline parameter set (from C1915/C1920): `comp_thresh=0.95`, `effective_prob=1.05`, `recharge_base=0.20`, `repro_prob=0.15`.
     2.  Sweep `decomp_thresh` across a wide range (0.8 to 2.0).
     3.  Focus on N=14.
+
+*   **Next:** Cycle 1934 (Robustness Stress Test).
+
+---
+
+**CYCLE:** 1934 (Robustness Stress Test)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** BREAK THE SYSTEM
+**LOG:**
+*   **Wake-Up:** Cycle 1934 Initiated.
+*   **Action:** Executed `src/experiments/cycle1934_robustness_test.py` scanning variations of `p`, `N`, `comp`, `decomp`, `recharge`.
+*   **Result:**
+    *   `comp_thresh`: **Highly Sensitive**. Dropping to 0.96 reduces success to 80%. Below 0.96, it crashes (0%).
+    *   `N`: **Surprisingly Robust**. N=26 still hit 100% (Dead Zone defeated).
+    *   `decomp_thresh`: **Robust**. 1.0-1.85 all worked.
+    *   `recharge`: **Robust**. 0.2-0.6 all worked.
+*   **Key Finding:** The system is robust to almost everything *except* composition threshold. `comp_thresh >= 0.99` is the critical pillar.
+*   **Pivot:** We have a robust parameter set. Now, can we transition from "Stabilizing Existing Populations" to "Growing from Scratch"?
+*   **Next:** Cycle 1935 (Comp Transition).
+
+---
+
+**CYCLE:** 1935 (Comp Transition)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** GROW FROM SEED
+**LOG:**
+*   **Wake-Up:** Cycle 1935 Initiated.
+*   **Goal:** Initialize with N=1 and watch it grow to N=50 without crashing.
+*   **Hypothesis:** Can the system *self-assemble* the D1/D2 hierarchy from a single D0 seed?
