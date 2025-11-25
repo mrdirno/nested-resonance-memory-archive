@@ -1,6 +1,12 @@
 from dataclasses import dataclass
 
 @dataclass
+class Material:
+    name: str
+    density: float      # kg/m^3
+    sound_speed: float  # m/s
+
+@dataclass
 class PhysicsConfig:
     rho_air: float = 1.2      # Air density (kg/m^3)
     c_air: float = 343.0      # Sound speed (m/s)

@@ -121,10 +121,16 @@ class GeneticAlgorithmGPU:
                 0 <= ty < potentials.shape[2] and
                 0 <= tz < potentials.shape[1]):
                 p_val = potentials[:, tz, ty, tx]  # (pop,)
-                # Want low potential at target (deep well)
-                fitness += (p_max - p_val)
+                
+                # Goal: Minimize p_val (make it negative)
+                # Fitness = -p_val
+                fitness += -p_val
+                
+                # Penalize positive potentials (repulsive zones)
+                # If p_val > 0, subtract penalty
+                fitness -= torch.where(p_val > 0, p_val * 10.0, torch.zeros_like(p_val))
             else:
-                fitness -= 50.0
+                fitness -= 500.0 # Out of bounds penalty
 
         return fitness
 

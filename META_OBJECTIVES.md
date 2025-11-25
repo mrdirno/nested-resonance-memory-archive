@@ -83,10 +83,16 @@
 - [x] **Result:** 100% Survival. System is too energy-rich.
 
 # Task: Cycle 1949 - The Starvation Stress
-- [ ] **Define Cycle 1949:** Invert energy balance (Singles starve, Clusters thrive).
-- [ ] **Goal:** Force evolutionary selection for clustering.
-- [ ] **Hypothesis:** Only agents that compose will survive the metabolic filter.
-- [ ] **Action:** `src/experiments/cycle1949_starvation_stress.py`.
+- [x] **Define Cycle 1949:** Invert energy balance (Singles starve, Clusters thrive).
+- [x] **Goal:** Force evolutionary selection for clustering.
+- [x] **Action:** `src/experiments/cycle1949_starvation_stress.py`.
+- [x] **Result:** Survival Confirmed via Clustering (15 Clusters).
+
+# Task: Cycle 1950 - The Great Filter
+- [ ] **Define Cycle 1950:** Increase metabolic pressure to critical levels.
+- [ ] **Goal:** Find the parameter set where P(Survival) ~ 0.5.
+- [ ] **Hypothesis:** Extreme stress requires rapid, large-scale clustering.
+- [ ] **Action:** `src/experiments/cycle1950_great_filter.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
