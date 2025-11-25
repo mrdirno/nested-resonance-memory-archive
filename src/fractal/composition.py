@@ -248,6 +248,7 @@ class CompositionEngine:
                     continue
 
                 cluster = [depth_agents[i]]
+                cluster_indices = [i]
                 visited.add(i)
 
                 # Add connected agents
@@ -255,9 +256,10 @@ class CompositionEngine:
                     if j in visited:
                         continue
                     # Check if j resonates with all current cluster members
-                    if all(resonance_matrix[cluster_idx, j] >= self.resonance_threshold
-                           for cluster_idx, _ in enumerate(cluster)):
+                    if all(resonance_matrix[member_idx, j] >= self.resonance_threshold
+                           for member_idx in cluster_indices):
                         cluster.append(depth_agents[j])
+                        cluster_indices.append(j)
                         visited.add(j)
 
                 # Filter by size constraints
