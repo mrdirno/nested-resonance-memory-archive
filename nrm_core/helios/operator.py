@@ -22,7 +22,7 @@ class UniversalOperator:
     """
     The Interface for Reality Compilation.
     """
-    def __init__(self, resolution_mm=2.0, use_gpu=True):
+    def __init__(self, resolution_mm=2.0, use_gpu=True, solver_config=None):
         self.resolution = resolution_mm
         self.box_dim = 100.0
         self.use_gpu = use_gpu and GPU_AVAILABLE
@@ -50,7 +50,8 @@ class UniversalOperator:
             width_mm=self.box_dim, 
             height_mm=self.box_dim, 
             depth_mm=self.box_dim,
-            emitters=self.emitters
+            emitters=self.emitters,
+            solver_config=solver_config
         )
         
         self.active_objects = {} # ID -> {type, phases, location}

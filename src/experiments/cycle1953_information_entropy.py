@@ -1,253 +1,251 @@
-#!/usr/bin/env python3
-"""
-CYCLE 1953: INFORMATION ENTROPY ANALYSIS
+import sys
+import os
+import random
+import numpy as np
+from typing import List, Dict, Optional, Set
+from dataclasses import asdict
 
-Quantify system complexity using Shannon entropy:
-1. Energy distribution entropy by depth
-2. Hierarchy distribution entropy
-3. Entropy evolution over time
-"""
-import sys, numpy as np, math
-from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
-from core.fractal_agent import FractalAgent, RealityInterface
+# Add project root to path
+sys.path.append(os.getcwd())
 
-CYCLES = 500
-N_DEPTHS = 5
-PI = math.pi
-E = math.e
-PHI = (1 + math.sqrt(5)) / 2
+from src.fractal.agent import FractalAgent
+from src.fractal.composition import CompositionEngine
 
-# OPTIMAL PARAMETERS
-P_BASE = 0.17
-K = 30
-N_INITIAL = 14
-COMP_THRESH = 0.99
-DECOMP_THRESH = 1.7
-RECHARGE_BASE = 0.4
+class SpatialCompositionEngine(CompositionEngine):
+    def __init__(self, resonance_threshold: float = 0.7, energy_threshold: float = 0.5, distance_threshold: float = 20.0):
+        super().__init__(resonance_threshold, energy_threshold)
+        self.distance_threshold = distance_threshold
 
-def shannon_entropy(probs):
-    """Compute Shannon entropy from probability distribution."""
-    probs = np.array(probs)
-    probs = probs[probs > 0]  # Remove zeros
-    return -np.sum(probs * np.log2(probs))
+    def detect_clusters(
+        self,
+        agents: List[FractalAgent],
+        min_cluster_size: int = 2,
+        max_cluster_size: Optional[int] = None,
+    ) -> List[List[FractalAgent]]:
+        if len(agents) < min_cluster_size:
+            return []
 
-def energy_entropy(energies, n_bins=20):
-    """Compute entropy of energy distribution."""
-    if len(energies) == 0:
-        return 0
-    hist, _ = np.histogram(energies, bins=n_bins, range=(0, 2.5))
-    probs = hist / len(energies)
-    return shannon_entropy(probs)
+        depth_groups: Dict[int, List[FractalAgent]] = {}
+        for agent in agents:
+            depth = agent.state.depth
+            if depth not in depth_groups:
+                depth_groups[depth] = []
+            depth_groups[depth].append(agent)
 
-def run_entropy_tracking(seed):
-    """Track entropy evolution."""
-    reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
-    np.random.seed(seed)
-    for i in range(N_INITIAL):
-        reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
+        all_clusters = []
 
-    hierarchy_entropy = []
-    energy_entropies = {d: [] for d in range(N_DEPTHS)}
-    total_energy_entropy = []
+        for depth, depth_agents in depth_groups.items():
+            if len(depth_agents) < min_cluster_size:
+                continue
 
+            n = len(depth_agents)
+            adjacency_matrix = np.zeros((n, n), dtype=bool)
+
+            for i in range(n):
+                for j in range(i + 1, n):
+                    agent_i = depth_agents[i]
+                    agent_j = depth_agents[j]
+                    
+                    dist = np.linalg.norm(agent_i.state.position - agent_j.state.position)
+                    if dist > self.distance_threshold:
+                        continue
+
+                    resonance = abs(agent_i.calculate_resonance(agent_j))
+                    if resonance >= self.resonance_threshold:
+                        adjacency_matrix[i, j] = True
+                        adjacency_matrix[j, i] = True
+
+            visited = set()
+            for i in range(n):
+                if i in visited:
+                    continue
+
+                cluster = [depth_agents[i]]
+                visited.add(i)
+
+                for j in range(n):
+                    if j in visited:
+                        continue
+                    
+                    is_connected_to_all = True
+                    for member in cluster:
+                        member_idx = depth_agents.index(member) 
+                        if not adjacency_matrix[member_idx, j]:
+                            is_connected_to_all = False
+                            break
+                    
+                    if is_connected_to_all:
+                        cluster.append(depth_agents[j])
+                        visited.add(j)
+
+                if len(cluster) >= min_cluster_size:
+                    if max_cluster_size is None or len(cluster) <= max_cluster_size:
+                        all_clusters.append(cluster)
+
+        return all_clusters
+
+def get_all_base_positions(agent: FractalAgent, registry: Dict[str, List[FractalAgent]]) -> List[np.ndarray]:
+    """Recursively retrieve positions of all base agents (depth 0)."""
+    if agent.state.depth == 0:
+        return [agent.state.position]
+    
+    positions = []
+    constituents = registry.get(agent.agent_id, [])
+    for child in constituents:
+        # Constituents in registry might have outdated positions if we don't update them?
+        # In current logic, constituents are 'frozen' inside cluster until decomposition.
+        # They effectively exist at the cluster's position (conceptually).
+        # OR we can say they exist at their last known position.
+        # For entropy of the 'System', we should use the Cluster's position for all its constituents 
+        # to reflect the physical reality that they are 'bound'. 
+        # If we use dispersed positions, we miss the ordering effect of clustering.
+        # So: All children take parent's position.
+        positions.extend([agent.state.position] * get_base_constituents_count(child, registry))
+        
+    return positions
+
+def get_base_constituents_count(agent: FractalAgent, registry: Dict[str, List[FractalAgent]]) -> int:
+    if agent.state.depth == 0: return 1
+    return sum(get_base_constituents_count(c, registry) for c in registry.get(agent.agent_id, []))
+
+def calculate_entropy(positions: List[np.ndarray], grid_size: int = 10, world_size: float = 100.0) -> float:
+    if not positions:
+        return 0.0
+        
+    # 2D Histogram
+    x = [p[0] for p in positions]
+    y = [p[1] for p in positions]
+    
+    hist, _, _ = np.histogram2d(x, y, bins=grid_size, range=[[0, world_size], [0, world_size]])
+    
+    # Normalize to probability distribution
+    prob = hist / np.sum(hist)
+    
+    # Filter zero probabilities for log
+    prob = prob[prob > 0]
+    
+    # Shannon Entropy
+    entropy = -np.sum(prob * np.log2(prob))
+    
+    return entropy
+
+def run_experiment():
+    print("MOG ONLINE: Cycle 1953 - Information Entropy", flush=True)
+    
+    # Parameters
+    N_AGENTS = 50
+    WORLD_SIZE = 100.0
+    DISTANCE_THRESHOLD = 20.0
+    CYCLES = 100
+    VELOCITY_MAGNITUDE = 5.0
+    
+    RECHARGE_RATE = 0.02
+    COST_SINGLE = 0.10
+    COST_CLUSTER = 0.02
+    DECOMP_LOW_ENERGY = 0.2 
+    DECOMP_HIGH_ENERGY = 4.0 
+    
+    cluster_registry: Dict[str, List[FractalAgent]] = {}
+
+    # Initialize Population
+    agents = []
+    for i in range(N_AGENTS):
+        pos = np.random.rand(3) * WORLD_SIZE
+        pos[2] = 0
+        agent = FractalAgent(
+            agent_id=f"gen0_{i}",
+            energy=1.0,
+            phase=random.uniform(0, 2*np.pi),
+            position=pos
+        )
+        agents.append(agent)
+
+    comp_engine = SpatialCompositionEngine(distance_threshold=DISTANCE_THRESHOLD)
+    
+    # Calculate Max Entropy (Uniform Distribution)
+    # For 10x10 grid, max entropy is log2(100) = 6.64 bits
+    max_entropy = np.log2(100)
+    print(f"Max Possible Entropy: {max_entropy:.2f} bits", flush=True)
+    
+    initial_positions = [a.state.position for a in agents]
+    h_initial = calculate_entropy(initial_positions)
+    print(f"Initial Entropy: {h_initial:.4f} bits", flush=True)
+    
     for cycle in range(CYCLES):
-        pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
-        pop_counts = [len(p) for p in pops]
-        total = sum(pop_counts)
-        if total >= 3000 or total == 0: break
+        # 1. Movement
+        for agent in agents:
+            theta = random.uniform(0, 2*np.pi)
+            dx = VELOCITY_MAGNITUDE * np.cos(theta)
+            dy = VELOCITY_MAGNITUDE * np.sin(theta)
+            agent.move(np.array([dx, dy, 0.0]))
+            agent.state.position = agent.state.position % WORLD_SIZE
 
-        # Hierarchy entropy (how spread across depths)
-        if total > 0:
-            probs = [c/total for c in pop_counts]
-            h_ent = shannon_entropy(probs)
-            hierarchy_entropy.append(h_ent)
-        else:
-            hierarchy_entropy.append(0)
+        # 2. Metabolism
+        active_agents = []
+        newly_released = []
 
-        # Energy entropy per depth
-        all_energies = []
-        for d in range(N_DEPTHS):
-            energies = [a.energy for a in pops[d]]
-            all_energies.extend(energies)
-            if energies:
-                e_ent = energy_entropy(energies)
-                energy_entropies[d].append(e_ent)
-            else:
-                energy_entropies[d].append(0)
+        for agent in agents:
+            cost = COST_CLUSTER if agent.state.depth > 0 else COST_SINGLE
+            agent.update_phase(delta_t=1.0)
+            agent.update_energy(RECHARGE_RATE - cost)
+            
+            decomposed = False
+            if agent.state.depth > 0:
+                if agent.state.energy < DECOMP_LOW_ENERGY or agent.state.energy > DECOMP_HIGH_ENERGY:
+                    decomposed = True
+                    constituents = cluster_registry.pop(agent.agent_id, [])
+                    if constituents:
+                        for child in constituents:
+                            child.state.energy = agent.state.energy / len(constituents)
+                            child.state.position = agent.state.position.copy()
+                            child.move(np.random.rand(3) * 2.0 - 1.0)
+                            newly_released.append(child)
 
-        # Total system energy entropy
-        if all_energies:
-            total_energy_entropy.append(energy_entropy(all_energies))
-        else:
-            total_energy_entropy.append(0)
+            if not decomposed:
+                if agent.is_alive(energy_threshold=0.0):
+                    active_agents.append(agent)
+        
+        agents = active_agents + newly_released
+        
+        # 3. Composition
+        new_clusters = comp_engine.compose_all(agents)
+        consumed_ids = set()
+        for cluster in new_clusters:
+            constituents = []
+            for child_id in cluster.state.children_ids:
+                found = next((a for a in agents if a.agent_id == child_id), None)
+                if found:
+                    constituents.append(found)
+                    consumed_ids.add(child_id)
+            cluster_registry[cluster.agent_id] = constituents
+            
+        agents = [a for a in agents if a.agent_id not in consumed_ids] + new_clusters
+        
+        # 4. Entropy Measurement
+        # Get positions of all base agents (using cluster position for constituents)
+        all_positions = []
+        for agent in agents:
+            # If agent is cluster, we add N copies of its position where N is number of constituents
+            count = get_base_constituents_count(agent, cluster_registry)
+            all_positions.extend([agent.state.position] * count)
+            
+        if not all_positions:
+            print(f"Cycle {cycle}: EXTINCTION.", flush=True)
+            break
+            
+        h = calculate_entropy(all_positions)
+        
+        if cycle % 10 == 0 or cycle == CYCLES-1:
+            print(f"Cycle {cycle}: H = {h:.4f} bits (Pop: {len(all_positions)})", flush=True)
 
-        p_effective = P_BASE / (1 + total / K)
-
-        # Standard NRM dynamics
-        for d in range(N_DEPTHS):
-            for agent in pops[d]:
-                agent.recharge_energy(RECHARGE_BASE / (1 + d * 0.5), cap=2.0)
-
-        for agent in list(reality.get_population_agents(0)):
-            if agent.energy > 1.0 and np.random.random() < p_effective:
-                reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
-                agent.energy -= 0.3
-
-        for d in range(N_DEPTHS - 1):
-            agents = list(reality.get_population_agents(d))
-            if len(agents) < 2: continue
-            np.random.shuffle(agents)
-            i = 0
-            while i < len(agents) - 1:
-                e1, e2 = agents[i].energy, agents[i+1].energy
-                pi1 = (e1 * PI * 2) % (2 * PI)
-                e_1 = (d * E / 4) % (2 * PI)
-                phi1 = (e1 * PHI) % (2 * PI)
-                pi2 = (e2 * PI * 2) % (2 * PI)
-                e_2 = (d * E / 4) % (2 * PI)
-                phi2 = (e2 * PHI) % (2 * PI)
-                v1 = [pi1, e_1, phi1]
-                v2 = [pi2, e_2, phi2]
-                dot = sum(a * b for a, b in zip(v1, v2))
-                mag1 = math.sqrt(sum(a**2 for a in v1))
-                mag2 = math.sqrt(sum(a**2 for a in v2))
-                sim = dot / (mag1 * mag2) if mag1 > 0 and mag2 > 0 else 0
-                if sim >= COMP_THRESH:
-                    new_e = (e1 + e2) * 0.85
-                    reality.remove_agent(agents[i].agent_id, d)
-                    reality.remove_agent(agents[i+1].agent_id, d)
-                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
-                    i += 2
-                else:
-                    i += 1
-
-        for d in range(1, N_DEPTHS):
-            for agent in list(reality.get_population_agents(d)):
-                if agent.energy > DECOMP_THRESH:
-                    ce = agent.energy * 0.45
-                    for j in range(2):
-                        reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
-                    reality.remove_agent(agent.agent_id, d)
-
-        for d in range(N_DEPTHS):
-            decay = 0.02 * (1 + d * 0.1) * 0.1
-            for agent in list(reality.get_population_agents(d)):
-                if not agent.consume_energy(decay):
-                    reality.remove_agent(agent.agent_id, d)
-
-    return {
-        'hierarchy_entropy': hierarchy_entropy,
-        'energy_entropies': energy_entropies,
-        'total_energy_entropy': total_energy_entropy
-    }
-
-def main():
-    print(f"CYCLE 1953: Information Entropy | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 80)
-    print("Quantifying system complexity via Shannon entropy")
-    print("=" * 80)
-
-    seeds = list(range(1953001, 1953021))  # 20 seeds
-    results = [run_entropy_tracking(s) for s in seeds]
-
-    # Hierarchy entropy evolution
-    print(f"\nHIERARCHY ENTROPY EVOLUTION:")
-    print("-" * 60)
-    print("(Max = log2(5) = 2.32 bits for uniform across 5 depths)")
-
-    for period in [(0, 100), (100, 300), (300, 500)]:
-        vals = []
-        for r in results:
-            if len(r['hierarchy_entropy']) >= period[1]:
-                vals.extend(r['hierarchy_entropy'][period[0]:period[1]])
-        if vals:
-            print(f"  Cycles {period[0]:>3}-{period[1]:>3}: {np.mean(vals):.3f} ± {np.std(vals):.3f} bits")
-
-    # Equilibrium hierarchy entropy
-    eq_h_ent = []
-    for r in results:
-        if len(r['hierarchy_entropy']) >= 400:
-            eq_h_ent.extend(r['hierarchy_entropy'][400:])
-
-    print(f"\nEQUILIBRIUM HIERARCHY ENTROPY:")
-    print(f"  Mean: {np.mean(eq_h_ent):.3f} bits")
-    print(f"  Std:  {np.std(eq_h_ent):.3f} bits")
-    print(f"  Max possible: 2.32 bits")
-    print(f"  Efficiency: {np.mean(eq_h_ent)/2.32*100:.1f}%")
-
-    # Energy entropy by depth
-    print(f"\nENERGY ENTROPY BY DEPTH (equilibrium):")
-    print("-" * 60)
-    print("(20 bins in [0, 2.5], max = log2(20) = 4.32 bits)")
-
-    for d in range(N_DEPTHS):
-        vals = []
-        for r in results:
-            if len(r['energy_entropies'][d]) >= 400:
-                vals.extend(r['energy_entropies'][d][400:])
-        if vals:
-            mean_ent = np.mean(vals)
-            print(f"  D{d}: {mean_ent:.2f} bits ({mean_ent/4.32*100:.0f}% of max)")
-
-    # Total energy entropy
-    eq_e_ent = []
-    for r in results:
-        if len(r['total_energy_entropy']) >= 400:
-            eq_e_ent.extend(r['total_energy_entropy'][400:])
-
-    print(f"\nTOTAL SYSTEM ENERGY ENTROPY:")
-    print(f"  Mean: {np.mean(eq_e_ent):.2f} bits")
-    print(f"  Max possible: 4.32 bits")
-    print(f"  Efficiency: {np.mean(eq_e_ent)/4.32*100:.0f}%")
-
-    # Entropy evolution trend
-    print(f"\nENTROPY EVOLUTION TREND:")
-    early = []
-    late = []
-    for r in results:
-        if len(r['total_energy_entropy']) >= 400:
-            early.extend(r['total_energy_entropy'][:100])
-            late.extend(r['total_energy_entropy'][400:])
-    if early and late:
-        print(f"  Early (0-100): {np.mean(early):.2f} bits")
-        print(f"  Late (400-500): {np.mean(late):.2f} bits")
-        print(f"  Change: {np.mean(late) - np.mean(early):+.2f} bits")
-
-    h_ent_mean = np.mean(eq_h_ent) if eq_h_ent else 0
-    e_ent_mean = np.mean(eq_e_ent) if eq_e_ent else 0
-
-    print(f"""
-{'=' * 80}
-INFORMATION ENTROPY CONCLUSIONS
-{'=' * 80}
-
-1. HIERARCHY ENTROPY: {h_ent_mean:.2f} bits ({h_ent_mean/2.32*100:.0f}% of max)
-   - Not uniform across depths (would be 2.32)
-   - Most agents at D0, exponential decay with depth
-   - Reflects emergent hierarchy structure
-
-2. ENERGY ENTROPY: {e_ent_mean:.2f} bits ({e_ent_mean/4.32*100:.0f}% of max)
-   - Energy distribution has moderate complexity
-   - Not uniform (would be 4.32)
-   - Peaked around 1.5 due to recharge
-
-3. D0 HIGHEST ENERGY ENTROPY:
-   - Broadest energy distribution
-   - Mixed sources: birth (0.5), recharge, decomposition
-   - Higher depths more constrained
-
-4. STABLE INFORMATION CONTENT:
-   - Entropy stabilizes at equilibrium
-   - Slight increase from early to late cycles
-   - System reaches information equilibrium
-
-The system maintains ~{h_ent_mean:.0f} bit hierarchy + ~{e_ent_mean:.0f} bit energy
-complexity at equilibrium. This is well below maximum,
-indicating structured, non-random organization.
-
-Session status: 290 cycles completed (C1664-C1953).
-""")
+    print(f"Final Entropy: {h:.4f} bits", flush=True)
+    delta_h = h - h_initial
+    print(f"Entropy Change: {delta_h:.4f} bits", flush=True)
+    
+    if delta_h < -0.5:
+        print("ORDER EMERGED.", flush=True)
+    else:
+        print("NO SIGNIFICANT ORDER.", flush=True)
 
 if __name__ == "__main__":
-    main()
+    run_experiment()

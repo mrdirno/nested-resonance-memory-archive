@@ -107,10 +107,15 @@
 - [x] **Result:** Conservation Confirmed. Mass = 46 (4 deaths).
 
 # Task: Cycle 1953 - Information Entropy
-- [ ] **Define Cycle 1953:** Measure if clusters encode environmental information.
-- [ ] **Goal:** Calculate Shannon Entropy of agent positions.
-- [ ] **Hypothesis:** Clustering reduces entropy (Order from Chaos).
-- [ ] **Action:** `src/experiments/cycle1953_information_entropy.py`.
+- [x] **Define Cycle 1953:** Measure if clusters encode environmental information.
+- [x] **Action:** `src/experiments/cycle1953_information_entropy.py`.
+- [x] **Result:** Order Emerged. Entropy reduced by 1.48 bits.
+
+# Task: Cycle 1954 - Mutual Information
+- [ ] **Define Cycle 1954:** Measure correlations between agents.
+- [ ] **Goal:** Quantify the "connection" strength within clusters.
+- [ ] **Hypothesis:** Intra-cluster MI >> Inter-cluster MI.
+- [ ] **Action:** `src/experiments/cycle1954_mutual_information.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.

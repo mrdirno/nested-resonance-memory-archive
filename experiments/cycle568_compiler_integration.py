@@ -13,8 +13,8 @@ import numpy as np
 
 def run_integration_test():
     print("Initializing UniversalOperator...", flush=True)
-    # Use lower resolution for speed in test
-    op = UniversalOperator(resolution_mm=2.0, use_gpu=True)
+    # Use lower resolution for speed in test, and reduced GA parameters
+    op = UniversalOperator(resolution_mm=2.0, use_gpu=True, solver_config={"generations": 5, "pop_size": 20})
     
     target_loc = (50.0, 50.0, 50.0)
     print(f"Creating 'cube' at {target_loc}...", flush=True)

@@ -10,8 +10,8 @@ import logging
 # import eventlet # Disabled due to Python 3.13 compatibility issues
 from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
-from src.helios.operator import UniversalOperator
-from src.helios.nlp import NaturalLanguageInterface
+from nrm_core.helios.operator import UniversalOperator
+from nrm_core.helios.nlp import NaturalLanguageInterface
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

@@ -12,10 +12,11 @@ from .substrate_3d_gpu import AcousticSubstrate3DGPU
 from .ga_gpu import genetic_algorithm_gpu
 
 class MatterCompiler:
-    def __init__(self, width_mm=100, height_mm=100, depth_mm=100, emitters: List[Emitter3D] = None):
+    def __init__(self, width_mm=100, height_mm=100, depth_mm=100, emitters: List[Emitter3D] = None, solver_config: dict = None):
         self.width = width_mm
         self.height = height_mm
         self.depth = depth_mm
+        self.solver_config = solver_config or {"generations": 100, "pop_size": 100}
         # Standard Array Configuration (can be overridden)
         if emitters is None:
             self.emitters = self._build_standard_array()
@@ -80,8 +81,8 @@ class MatterCompiler:
             geometry, 
             substrate, 
             self.emitters, 
-            generations=100, # Increased for stability
-            pop_size=100
+            generations=self.solver_config.get("generations", 100), 
+            pop_size=self.solver_config.get("pop_size", 100)
         )
         
         # 4. Apply Phases

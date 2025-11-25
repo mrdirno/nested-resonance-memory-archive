@@ -151,7 +151,7 @@ class GeneticAlgorithmGPU:
                                 device=self.device) * 2 * np.pi
 
         best_genes = None
-        best_score = -9999.0
+        best_score = -float('inf')
 
         for gen in range(generations):
             # Evaluate entire population at once
