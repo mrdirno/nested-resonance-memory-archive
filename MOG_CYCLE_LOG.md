@@ -1095,11 +1095,28 @@
 ---
 
 **CYCLE:** 1924 (High-P N2)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** TEST HIGH THRESHOLD ON DEAD ZONE
 **LOG:**
 *   **Wake-Up:** Cycle 1924 Initiated.
-*   **Goal:** Test if the extremely high composition threshold (0.999) that saved N=2 can also save N=14.
-*   **Hypothesis:** If we make composition *nearly impossible*, we might stabilize the Dead Zone at the cost of slower evolution.
+*   **Action:** Executed `src/experiments/cycle1924_high_p_n2.py` sweeping `repro_prob` from 0.10 to 0.50.
+*   **Result:**
+    *   `P=0.17`: **68.0%** N=2 survival (Peak).
+    *   `P=0.50`: **22.0%** N=2 survival (Crash).
+    *   Observation: Higher P HURTS N=2 (population explosion -> exhaustion). But `P=0.17` actually RESOLVED the N=2 < N=1 anomaly (68% vs 66%).
+*   **Key Finding:** The composition trap CAN be escaped if reproduction is fast enough (but not too fast). There is a "Goldilocks P" (0.17) for N=2.
+*   **Pivot:** Can we find a general "Goldilocks Surface" P(N) that stabilizes *all* N?
+*   **Next:** Cycle 1925 (P-N Surface Mapping).
+
+---
+
+**CYCLE:** 1925 (P-N Surface Mapping)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** MAP THE STABILITY SURFACE
+**LOG:**
+*   **Wake-Up:** Cycle 1925 Initiated.
+*   **Goal:** Determine the optimal reproduction probability P for each N in the range [1, 25].
+*   **Hypothesis:** P_opt scales with 1/N (larger populations need slower reproduction to avoid overshooting).
+
 
 
