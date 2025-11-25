@@ -256,6 +256,14 @@ class UniversalOperator:
                 
         return best_phases
 
+    def apply_phase_function(self, func):
+        """
+        Applies a mathematical function to set the phase of all emitters.
+        func: callable(x, y, z) -> float (phase in radians)
+        """
+        for e in self.emitters:
+            e.phase = func(e.x, e.y, e.z)
+            
     def get_stability(self, object_id: int) -> float:
         """
         Returns stability index based on Gorkov Potential.

@@ -32,7 +32,7 @@ from dataclasses import dataclass
 from contextlib import contextmanager
 
 # Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from core import constants
 
 
@@ -593,6 +593,58 @@ class TranscendentalBridge:
         )
 
         return results
+
+
+class TranscendentalShapes:
+    """
+    Generates phase functions for geometric field shaping.
+    Maps mathematical constants (Pi, Phi, Sqrt2) to spatial topologies.
+    """
+    
+    @staticmethod
+    def bessel_ring(scale: float = 0.5, center: Tuple[float, float, float] = (50.0, 50.0, 50.0)):
+        """
+        Generates concentric rings (Bessel-like).
+        Scale determines the density of the rings.
+        """
+        def func(x, y, z):
+            # 2D distance from center
+            r = math.sqrt((x - center[0])**2 + (y - center[1])**2)
+            # Phase oscillates with radius: Rings
+            return (scale * r) % (2 * PI)
+        return func
+
+    @staticmethod
+    def diagonal_line(period: float = 20.0):
+        """
+        Generates diagonal wave fronts using Root 2.
+        Angle is fixed at 45 degrees (1/1 slope).
+        """
+        root2 = math.sqrt(2)
+        def func(x, y, z):
+            # Projection onto diagonal axis (x+y)
+            # Normalized by period
+            val = (x + y) / (period * root2)
+            return (val * 2 * PI) % (2 * PI)
+        return func
+
+    @staticmethod
+    def golden_spiral(twist: float = 1.0, center: Tuple[float, float, float] = (50.0, 50.0, 50.0)):
+        """
+        Generates a spiral phase plate using Phi.
+        Combines angular momentum (theta) with radial expansion.
+        """
+        def func(x, y, z):
+            dx = x - center[0]
+            dy = y - center[1]
+            theta = math.atan2(dy, dx)
+            r = math.sqrt(dx**2 + dy**2)
+            
+            # Spiral: Phase = L*theta + k*r
+            # We use Phi as the topological charge multiplier
+            phase = (PHI * theta + twist * r * 0.1) 
+            return phase % (2 * PI)
+        return func
 
 
 if __name__ == "__main__":
