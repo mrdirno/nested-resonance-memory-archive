@@ -1040,14 +1040,3 @@
 *   **Key Finding:** A slight boost (`P=1.05`) is optimal. It provides just enough "extra" upward flux to form D1 shields quickly, without the runaway cascade of `P=2.0`.
 *   **Pivot:** While 32% is an improvement, it's still not >90%. We need to address the *depth dependence* of these parameters. Currently, `comp_thresh` is constant across all depths.
 *   **Next:** Cycle 1921 (Depth-Dependent Thresholds).
-
----
-
-**CYCLE:** 1921 (Depth-Dependent Thresholds)
-**STATUS:** 🟢 PENDING
-**DIRECTIVE:** BLOCK D2+ CASCADE
-**LOG:**
-*   **Wake-Up:** Cycle 1921 Initiated.
-*   **Goal:** Implement depth-dependent composition thresholds.
-*   **Hypothesis:** Making composition *harder* at higher depths (D1->D2) will act as a soft ceiling, preventing the cascade while allowing D0->D1 to form shields easily.
-
