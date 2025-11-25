@@ -1079,10 +1079,27 @@
 ---
 
 **CYCLE:** 1923 (N2 Anomaly Investigation)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** INVESTIGATE N RESONANCE
 **LOG:**
 *   **Wake-Up:** Cycle 1923 Initiated.
-*   **Goal:** Check if specific N values (primes, evens, odds) have higher stability.
-*   **Hypothesis:** Composition requires pairs. Odd N might leave a "remainder" agent that triggers instability or decay.
+*   **Action:** Executed `src/experiments/cycle1923_n2_anomaly.py`.
+*   **Result:**
+    *   High composition threshold (0.999) raised N=2 survival from 10% to **60%**.
+    *   However, N=3 survival jumped to **92%**.
+    *   The anomaly (N=2 < N=1, N=3) persists. N=2 remains a "local minimum" of stability.
+*   **Key Finding:** Two agents are uniquely vulnerable because *any* successful composition event consumes 100% of the population (2 -> 1). With N=3, one agent remains to repopulate.
+*   **Pivot:** If high threshold (0.999) works for N=2, does it work for N=14 (the Dead Zone)?
+*   **Next:** Cycle 1924 (High-P N2).
+
+---
+
+**CYCLE:** 1924 (High-P N2)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** TEST HIGH THRESHOLD ON DEAD ZONE
+**LOG:**
+*   **Wake-Up:** Cycle 1924 Initiated.
+*   **Goal:** Test if the extremely high composition threshold (0.999) that saved N=2 can also save N=14.
+*   **Hypothesis:** If we make composition *nearly impossible*, we might stabilize the Dead Zone at the cost of slower evolution.
+
 
