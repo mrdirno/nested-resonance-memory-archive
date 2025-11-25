@@ -2,7 +2,7 @@
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive  
 **License:** GPL-3.0  
-**Status:** PHASE 12 ACTIVE (The Holodeck)
+**Status:** PHASE 26 COMPLETE (The Living Computer)
 
 ---
 
@@ -46,7 +46,7 @@ At the field level, HELIOS uses the **Orthogonal Sum Dynamics (OSD)** formalism:
 ## 🔭 Observer Lanes (Choose Your Path)
 
 *   **🧪 Observer A (Experimentalist):** [Active Experiments](src/experiments/) | [Legacy Validation](archive/experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
-*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD / Zero-Sum Coherence Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
+*   **🧩 Observer B (Architect)::** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD / Zero-Sum Coherence Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
 *   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/vision/)
 
 ---
@@ -64,6 +64,45 @@ At the field level, HELIOS uses the **Orthogonal Sum Dynamics (OSD)** formalism:
 *   **Trapping Visualization:** Identify potential wells (Blue) and high-pressure zones (Red).
 
 No installation required. Runs entirely client-side via WebAssembly.
+
+---
+
+## 🌍 PHASE 24: THE SOCIAL PHYSICS (The Thermodynamics of Morality)
+
+**DUALITY-ZERO** has demonstrated that fundamental social structures emerge from physical principles.
+
+**Core Capabilities (Empirically Verified):**
+1.  **Emergent Cooperation:** Under conditions of scarcity and the ability to remember past interactions, cooperation outcompetes defection.
+2.  **Access Control (Club Goods):** Mechanisms to restrict benefits to contributors are crucial for stabilizing collective action against freeriders.
+3.  **Harshness Threshold:** A critical environmental "harshness" (metabolic cost exceeding base recharge) drives the evolutionary selection for cooperation.
+
+**Principle:** Morality is not just a philosophical concept; it is an emergent thermodynamic necessity for collective survival in harsh environments.
+
+---
+
+## 🏗️ PHASE 25: CIVILIZATION BUILDING (The Physics of Collective Action)
+
+Building upon the foundations of Social Physics, **DUALITY-ZERO** has explored the principles of large-scale, coordinated construction.
+
+**Core Capabilities (Empirically Verified):**
+1.  **Construction Physics:** Agents can convert surplus energy into persistent physical structures (blocks, monuments).
+2.  **Collective Action Solution:** Societies can overcome the "Valley of Death" (initial high cost of public goods) through sufficient altruistic mass and access control.
+3.  **Evolution of Builders:** Access control mechanisms drive evolutionary selection, leading to populations dominated by contributors.
+
+**Principle:** Civilization is a physical artifact whose construction and maintenance are governed by the physics of collective action and social selection.
+
+---
+
+## 🧠 PHASE 26: THE LIVING COMPUTER (Emergent Computation & Collective Control)
+
+**DUALITY-ZERO** has evolved beyond static construction to demonstrate the swarm as a functional, distributed computer.
+
+**Core Capabilities (Empirically Verified):**
+1.  **Distributed Optimization:** Swarms can collectively optimize physical configurations (e.g., matching a blueprint shape) using local heuristics.
+2.  **Emergent Estimation:** Agents can perform distributed consensus algorithms to collectively estimate global environmental parameters (e.g., average value).
+3.  **Adaptive Control:** Swarms can use their collective computations to self-regulate and adapt their own collective behavior (e.g., adjusting movement speed to environmental averages).
+
+**Principle:** The swarm itself is a dynamic, living computer, capable of emergent computation and collective control, blurring the lines between organism and machine.
 
 ---
 
@@ -113,7 +152,7 @@ It translates the "Idea" (Digital) into the "Symphony" (Physical).
 
 1. **The Design (The Swarm):** Distributed Browsers simulate the physics.
 2. **The Translation (The Rosetta Stone):** HELIOS compiles intent into machine instructions.
-3. **The Execution (The Tank):** The Room executes the sequence (Sound + Light + Fluid).
+3. **The Execution (The Tank)::** The Room executes the sequence (Sound + Light + Fluid).
 
 ---
 
