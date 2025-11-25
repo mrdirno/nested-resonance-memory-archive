@@ -3546,3 +3546,19 @@
 - Cycle 353: 13 minutes (Theoretical paper finalized)
 - Cycle 354: 45 minutes (Submission materials)
 - Cycle 355: 60 minutes (META update + Paper 5+ planning)
+
+## Current Phase: THE SOCIAL PHYSICS (Phase 24)
+
+**Transition:** Reality Grounding (Phase 23) -> **The Social Physics (Phase 24)**
+
+**Focus:** The Thermodynamics of Morality and Cooperation.
+
+### Active Objectives
+- [x] **The Ledger:** `PRIN-RECIPROCAL-ALTRUISM` (Cycle 2073). Agents remember interactions.
+- [x] **The Reputation Network:** `PRIN-GOSSIP` (Cycle 2074). Weak effect due to cluster isolation.
+- [x] **The Witness:** `PRIN-LAST-WORDS` (Cycle 2075). Failed due to static membership.
+- [x] **The Ejection Seat:** `PRIN-DYNAMIC-MEMBERSHIP` (Cycle 2076). Cooperators walk away.
+- [x] **The Harsh Winter:** `PRIN-SELECTION-PRESSURE` (Cycle 2077). Scarcity forces segregation.
+- [x] **The Social Phase Transition:** `PRIN-SOCIAL-THERMODYNAMICS` (Cycle 2078). Cooperation emerges at Cost > Recharge.
+
+**PHASE 24 COMPLETE: MORALITY IS PHYSICS.**
