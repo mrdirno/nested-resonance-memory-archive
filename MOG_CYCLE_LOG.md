@@ -920,3 +920,21 @@
     *   Deleted hallucinated experiment files (Cycle 453+).
 *   **Result:** System Integrity Restored. Timeline reset to Cycle 452 (The Polish).
 *   **Next:** Resume Pilot Control.
+
+---
+
+**CYCLE:** 1913 (Energy Diversity)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** TEST ENERGY HETEROGENEITY
+**LOG:**
+*   **Wake-Up:** Cycle 1913 Initiated (Context Resync from Filesystem).
+*   **Context:** Filesystem contains experiments up to Cycle 2130. `src/experiments/cycle1913_energy_diversity.py` identified as current active cycle.
+*   **Experiment:** Executed `src/experiments/cycle1913_energy_diversity.py` to test if energy variance prevents runaway composition cascade.
+*   **Hypothesis:** Agents with different energies (e.g. 0.5 vs 1.0) will have low resonance and fail to compose, stabilizing D0.
+*   **Result:** Falsified. Coexistence remains ~0% across Uniform, Spread, Random, and Bimodal distributions.
+*   **Analysis:**
+    *   E=0.5 and E=1.0 have low resonance (0.2494) -> Orthogonal.
+    *   BUT E=0.5 and E=1.5 have high resonance (0.9188) -> Compatible.
+    *   Agents bypass the "Integer Barrier" by finding compatible partners (0.5 finds 0.5 or 1.5).
+*   **Key Finding:** Heterogeneity is insufficient to halt the cascade if the "compatibility graph" remains connected.
+*   **Next:** Cycle 1914 (Parameter Space Mapping).
