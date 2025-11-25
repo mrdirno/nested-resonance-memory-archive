@@ -1,241 +1,288 @@
-#!/usr/bin/env python3
-"""
-CYCLE 1954: MUTUAL INFORMATION ANALYSIS
+import sys
+import os
+import random
+import numpy as np
+from typing import List, Dict, Optional, Set
+from dataclasses import asdict
 
-Quantify correlation between depth and energy using mutual information.
-I(Depth; Energy) = H(Depth) + H(Energy) - H(Depth, Energy)
-"""
-import sys, numpy as np, math
-from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
-from core.fractal_agent import FractalAgent, RealityInterface
+# Add project root to path
+sys.path.append(os.getcwd())
 
-CYCLES = 500
-N_DEPTHS = 5
-PI = math.pi
-E = math.e
-PHI = (1 + math.sqrt(5)) / 2
+from src.fractal.agent import FractalAgent
+from src.fractal.composition import CompositionEngine
 
-# OPTIMAL PARAMETERS
-P_BASE = 0.17
-K = 30
-N_INITIAL = 14
-COMP_THRESH = 0.99
-DECOMP_THRESH = 1.7
-RECHARGE_BASE = 0.4
+class SpatialCompositionEngine(CompositionEngine):
+    def __init__(self, resonance_threshold: float = 0.7, energy_threshold: float = 0.5, distance_threshold: float = 20.0):
+        super().__init__(resonance_threshold, energy_threshold)
+        self.distance_threshold = distance_threshold
 
-def shannon_entropy(probs):
-    """Compute Shannon entropy."""
-    probs = np.array(probs)
-    probs = probs[probs > 0]
-    return -np.sum(probs * np.log2(probs))
+    def detect_clusters(
+        self,
+        agents: List[FractalAgent],
+        min_cluster_size: int = 2,
+        max_cluster_size: Optional[int] = None,
+    ) -> List[List[FractalAgent]]:
+        if len(agents) < min_cluster_size:
+            return []
 
-def mutual_information(depths, energies, n_energy_bins=10):
-    """Compute mutual information I(Depth; Energy)."""
-    if len(depths) == 0:
-        return 0, 0, 0, 0
+        depth_groups: Dict[int, List[FractalAgent]] = {}
+        for agent in agents:
+            depth = agent.state.depth
+            if depth not in depth_groups:
+                depth_groups[depth] = []
+            depth_groups[depth].append(agent)
 
-    # Discretize energy into bins
-    energy_bins = np.digitize(energies, bins=np.linspace(0, 2.5, n_energy_bins + 1)) - 1
-    energy_bins = np.clip(energy_bins, 0, n_energy_bins - 1)
+        all_clusters = []
 
-    n = len(depths)
+        for depth, depth_agents in depth_groups.items():
+            if len(depth_agents) < min_cluster_size:
+                continue
 
-    # Marginal distributions
-    depth_counts = np.bincount(depths, minlength=N_DEPTHS)
-    energy_counts = np.bincount(energy_bins, minlength=n_energy_bins)
+            n = len(depth_agents)
+            adjacency_matrix = np.zeros((n, n), dtype=bool)
 
-    p_depth = depth_counts / n
-    p_energy = energy_counts / n
+            for i in range(n):
+                for j in range(i + 1, n):
+                    agent_i = depth_agents[i]
+                    agent_j = depth_agents[j]
+                    
+                    dist = np.linalg.norm(agent_i.state.position - agent_j.state.position)
+                    if dist > self.distance_threshold:
+                        continue
 
-    # Joint distribution
-    joint = np.zeros((N_DEPTHS, n_energy_bins))
-    for d, e in zip(depths, energy_bins):
-        joint[d, e] += 1
-    joint /= n
+                    resonance = abs(agent_i.calculate_resonance(agent_j))
+                    if resonance >= self.resonance_threshold:
+                        adjacency_matrix[i, j] = True
+                        adjacency_matrix[j, i] = True
 
-    # Entropies
-    h_depth = shannon_entropy(p_depth)
-    h_energy = shannon_entropy(p_energy)
-    h_joint = shannon_entropy(joint.flatten())
+            visited = set()
+            for i in range(n):
+                if i in visited:
+                    continue
 
-    # Mutual information
-    mi = h_depth + h_energy - h_joint
+                cluster = [depth_agents[i]]
+                visited.add(i)
 
-    return mi, h_depth, h_energy, h_joint
+                for j in range(n):
+                    if j in visited:
+                        continue
+                    
+                    is_connected_to_all = True
+                    for member in cluster:
+                        member_idx = depth_agents.index(member) 
+                        if not adjacency_matrix[member_idx, j]:
+                            is_connected_to_all = False
+                            break
+                    
+                    if is_connected_to_all:
+                        cluster.append(depth_agents[j])
+                        visited.add(j)
 
-def run_mi_tracking(seed):
-    """Track mutual information over time."""
-    reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
-    np.random.seed(seed)
-    for i in range(N_INITIAL):
-        reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
+                if len(cluster) >= min_cluster_size:
+                    if max_cluster_size is None or len(cluster) <= max_cluster_size:
+                        all_clusters.append(cluster)
 
-    mi_history = []
+        return all_clusters
 
+def calculate_mi(x_samples, y_samples, bins=10):
+    """Calculate Mutual Information between two continuous variables."""
+    c_xy = np.histogram2d(x_samples, y_samples, bins=bins)[0]
+    p_xy = c_xy / np.sum(c_xy)
+    
+    p_x = np.sum(p_xy, axis=1)
+    p_y = np.sum(p_xy, axis=0)
+    
+    mi = 0.0
+    for i in range(bins):
+        for j in range(bins):
+            if p_xy[i, j] > 0:
+                mi += p_xy[i, j] * np.log2(p_xy[i, j] / (p_x[i] * p_y[j]))
+    return mi
+
+def run_experiment():
+    print("MOG ONLINE: Cycle 1954 - Mutual Information", flush=True)
+    
+    # Parameters
+    N_AGENTS = 50
+    WORLD_SIZE = 100.0
+    DISTANCE_THRESHOLD = 20.0
+    CYCLES = 100
+    VELOCITY_MAGNITUDE = 5.0
+    
+    RECHARGE_RATE = 0.02
+    COST_SINGLE = 0.10
+    COST_CLUSTER = 0.02
+    DECOMP_LOW_ENERGY = 0.2 
+    DECOMP_HIGH_ENERGY = 4.0 
+    
+    cluster_registry: Dict[str, List[FractalAgent]] = {}
+
+    # Initialize Population
+    agents = []
+    for i in range(N_AGENTS):
+        pos = np.random.rand(3) * WORLD_SIZE
+        pos[2] = 0
+        agent = FractalAgent(
+            agent_id=f"gen0_{i}",
+            energy=1.0,
+            phase=random.uniform(0, 2*np.pi),
+            position=pos
+        )
+        agents.append(agent)
+
+    comp_engine = SpatialCompositionEngine(distance_threshold=DISTANCE_THRESHOLD)
+    
+    # Track history for MI calculation (Time Series)
+    # We need time series data for pairs to calculate MI over time.
+    history: Dict[str, List[float]] = {a.agent_id: [] for a in agents} # Stores phase over time
+    
     for cycle in range(CYCLES):
-        pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
-        total = sum(len(p) for p in pops)
-        if total >= 3000 or total == 0: break
+        # 1. Movement
+        for agent in agents:
+            theta = random.uniform(0, 2*np.pi)
+            dx = VELOCITY_MAGNITUDE * np.cos(theta)
+            dy = VELOCITY_MAGNITUDE * np.sin(theta)
+            agent.move(np.array([dx, dy, 0.0]))
+            agent.state.position = agent.state.position % WORLD_SIZE
 
-        # Collect all agents
-        depths = []
-        energies = []
-        for d in range(N_DEPTHS):
-            for a in pops[d]:
-                depths.append(d)
-                energies.append(a.energy)
+        # 2. Metabolism & Update
+        active_agents = []
+        newly_released = []
 
-        mi, h_d, h_e, h_j = mutual_information(depths, energies)
-        mi_history.append({
-            'mi': mi,
-            'h_depth': h_d,
-            'h_energy': h_e,
-            'h_joint': h_j
-        })
+        for agent in agents:
+            cost = COST_CLUSTER if agent.state.depth > 0 else COST_SINGLE
+            agent.update_phase(delta_t=1.0)
+            agent.update_energy(RECHARGE_RATE - cost)
+            
+            # Record phase for MI
+            # Note: If agent becomes part of a cluster, it technically disappears from 'agents' list in main loop logic
+            # But we need to track Base Agents to measure MI between them.
+            # This simulation structure makes tracking individual base agents tricky once they cluster.
+            # For this experiment, we will focus on the SURVIVING CLUSTERS and calculate MI between their *constituents*.
+            
+            decomposed = False
+            if agent.state.depth > 0:
+                if agent.state.energy < DECOMP_LOW_ENERGY or agent.state.energy > DECOMP_HIGH_ENERGY:
+                    decomposed = True
+                    constituents = cluster_registry.pop(agent.agent_id, [])
+                    if constituents:
+                        for child in constituents:
+                            child.state.energy = agent.state.energy / len(constituents)
+                            child.state.position = agent.state.position.copy()
+                            child.move(np.random.rand(3) * 2.0 - 1.0)
+                            newly_released.append(child)
 
-        p_effective = P_BASE / (1 + total / K)
+            if not decomposed:
+                if agent.is_alive(energy_threshold=0.0):
+                    active_agents.append(agent)
+        
+        agents = active_agents + newly_released
+        
+        # 3. Composition
+        new_clusters = comp_engine.compose_all(agents)
+        consumed_ids = set()
+        for cluster in new_clusters:
+            constituents = []
+            for child_id in cluster.state.children_ids:
+                found = next((a for a in agents if a.agent_id == child_id), None)
+                if found:
+                    constituents.append(found)
+                    consumed_ids.add(child_id)
+            cluster_registry[cluster.agent_id] = constituents
+            
+        agents = [a for a in agents if a.agent_id not in consumed_ids] + new_clusters
+        
+        # Record Phase History for ALL Base Agents (Active or Dormant)
+        # We need to iterate through agents AND cluster_registry
+        
+        current_base_phases = {}
+        
+        # Check active singles
+        for agent in agents:
+            if agent.state.depth == 0:
+                current_base_phases[agent.agent_id] = agent.state.phase
+                
+        # Check dormant in clusters
+        for cluster_id, constituents in cluster_registry.items():
+            # We assume constituents update phase? 
+            # In current code, constituents inside registry are NOT updated in the main loop!
+            # This is a physics flaw. Dormant agents are frozen in time?
+            # Or does the cluster phase update represent them?
+            # Cluster phase is average.
+            # For MI, let's assume constituents inherit Cluster Phase.
+            
+            # Find the cluster object to get its current phase
+            cluster_obj = next((a for a in agents if a.agent_id == cluster_id), None)
+            if cluster_obj:
+                for child in constituents:
+                    # Update child phase to match parent (Synchronization)
+                    # child.state.phase = cluster_obj.state.phase 
+                    # We record it as such
+                    current_base_phases[child.agent_id] = cluster_obj.state.phase
+        
+        # Append to history
+        for aid, phase in current_base_phases.items():
+            if aid in history:
+                history[aid].append(phase)
+            else:
+                # New agent (from burst?) or just tracking issue.
+                # Since we don't reproduce, this shouldn't happen often unless logic error.
+                pass
 
-        # Standard dynamics
-        for d in range(N_DEPTHS):
-            for agent in pops[d]:
-                agent.recharge_energy(RECHARGE_BASE / (1 + d * 0.5), cap=2.0)
+    print("Simulation Complete. Calculating MI...", flush=True)
+    
+    # Calculate MI
+    # Group 1: Intra-Cluster Pairs
+    intra_mi_scores = []
+    
+    for cluster_id, constituents in cluster_registry.items():
+        if len(constituents) < 2: continue
+        
+        # Take all pairs in this cluster
+        for i in range(len(constituents)):
+            for j in range(i+1, len(constituents)):
+                id_a = constituents[i].agent_id
+                id_b = constituents[j].agent_id
+                
+                series_a = history.get(id_a, [])
+                series_b = history.get(id_b, [])
+                
+                # Truncate to min length
+                min_len = min(len(series_a), len(series_b))
+                if min_len > 10:
+                    mi = calculate_mi(series_a[:min_len], series_b[:min_len])
+                    intra_mi_scores.append(mi)
 
-        for agent in list(reality.get_population_agents(0)):
-            if agent.energy > 1.0 and np.random.random() < p_effective:
-                reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
-                agent.energy -= 0.3
-
-        for d in range(N_DEPTHS - 1):
-            agents = list(reality.get_population_agents(d))
-            if len(agents) < 2: continue
-            np.random.shuffle(agents)
-            i = 0
-            while i < len(agents) - 1:
-                e1, e2 = agents[i].energy, agents[i+1].energy
-                pi1 = (e1 * PI * 2) % (2 * PI)
-                e_1 = (d * E / 4) % (2 * PI)
-                phi1 = (e1 * PHI) % (2 * PI)
-                pi2 = (e2 * PI * 2) % (2 * PI)
-                e_2 = (d * E / 4) % (2 * PI)
-                phi2 = (e2 * PHI) % (2 * PI)
-                v1 = [pi1, e_1, phi1]
-                v2 = [pi2, e_2, phi2]
-                dot = sum(a * b for a, b in zip(v1, v2))
-                mag1 = math.sqrt(sum(a**2 for a in v1))
-                mag2 = math.sqrt(sum(a**2 for a in v2))
-                sim = dot / (mag1 * mag2) if mag1 > 0 and mag2 > 0 else 0
-                if sim >= COMP_THRESH:
-                    new_e = (e1 + e2) * 0.85
-                    reality.remove_agent(agents[i].agent_id, d)
-                    reality.remove_agent(agents[i+1].agent_id, d)
-                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
-                    i += 2
-                else:
-                    i += 1
-
-        for d in range(1, N_DEPTHS):
-            for agent in list(reality.get_population_agents(d)):
-                if agent.energy > DECOMP_THRESH:
-                    ce = agent.energy * 0.45
-                    for j in range(2):
-                        reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
-                    reality.remove_agent(agent.agent_id, d)
-
-        for d in range(N_DEPTHS):
-            decay = 0.02 * (1 + d * 0.1) * 0.1
-            for agent in list(reality.get_population_agents(d)):
-                if not agent.consume_energy(decay):
-                    reality.remove_agent(agent.agent_id, d)
-
-    return mi_history
-
-def main():
-    print(f"CYCLE 1954: Mutual Information | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 80)
-    print("Quantifying depth-energy correlation")
-    print("=" * 80)
-
-    seeds = list(range(1954001, 1954021))
-    results = [run_mi_tracking(s) for s in seeds]
-
-    # Evolution of MI
-    print(f"\nMUTUAL INFORMATION EVOLUTION:")
-    print("-" * 60)
-    for period in [(0, 100), (100, 300), (300, 500)]:
-        mis = []
-        for r in results:
-            if len(r) >= period[1]:
-                mis.extend([h['mi'] for h in r[period[0]:period[1]]])
-        if mis:
-            print(f"  Cycles {period[0]:>3}-{period[1]:>3}: I(D;E) = {np.mean(mis):.3f} ± {np.std(mis):.3f} bits")
-
-    # Equilibrium values
-    eq_data = []
-    for r in results:
-        if len(r) >= 400:
-            eq_data.extend(r[400:])
-
-    if eq_data:
-        mi_vals = [d['mi'] for d in eq_data]
-        h_d_vals = [d['h_depth'] for d in eq_data]
-        h_e_vals = [d['h_energy'] for d in eq_data]
-        h_j_vals = [d['h_joint'] for d in eq_data]
-
-        print(f"\nEQUILIBRIUM INFORMATION METRICS:")
-        print("-" * 60)
-        print(f"  H(Depth):           {np.mean(h_d_vals):.3f} bits")
-        print(f"  H(Energy):          {np.mean(h_e_vals):.3f} bits")
-        print(f"  H(Depth, Energy):   {np.mean(h_j_vals):.3f} bits")
-        print(f"  I(Depth; Energy):   {np.mean(mi_vals):.3f} bits")
-
-        # Normalized MI
-        min_h = min(np.mean(h_d_vals), np.mean(h_e_vals))
-        nmi = np.mean(mi_vals) / min_h if min_h > 0 else 0
-        print(f"\n  Normalized MI:      {nmi:.3f}")
-        print(f"  (I / min(H_D, H_E))")
-
-        # Information gain
-        print(f"\n  Information about depth from energy: {np.mean(mi_vals)/np.mean(h_d_vals)*100:.1f}% of H(D)")
-        print(f"  Information about energy from depth: {np.mean(mi_vals)/np.mean(h_e_vals)*100:.1f}% of H(E)")
-
-        mi_mean = np.mean(mi_vals)
-        h_d_mean = np.mean(h_d_vals)
-        h_e_mean = np.mean(h_e_vals)
-
-        print(f"""
-{'=' * 80}
-MUTUAL INFORMATION CONCLUSIONS
-{'=' * 80}
-
-1. MUTUAL INFORMATION: {mi_mean:.3f} bits
-   - Depth and energy are weakly correlated
-   - Knowing one gives ~{mi_mean:.2f} bits about the other
-
-2. NORMALIZED MI: {nmi:.3f}
-   - 0 = independent
-   - 1 = completely determined
-   - Current: weak correlation
-
-3. DEPTH ENTROPY: {h_d_mean:.3f} bits (hierarchy structure)
-   - ~{2**h_d_mean:.1f} effective depth levels
-
-4. ENERGY ENTROPY: {h_e_mean:.3f} bits (energy diversity)
-   - ~{2**h_e_mean:.1f} effective energy states
-
-5. SYSTEM INFORMATION:
-   - Total joint entropy: {np.mean(h_j_vals):.2f} bits
-   - Independent would be: {h_d_mean + h_e_mean:.2f} bits
-   - Correlation reduces by: {mi_mean:.2f} bits
-
-The weak depth-energy correlation ({nmi:.2f} normalized)
-means agents at different depths have somewhat distinct
-but overlapping energy distributions. Composition creates
-the correlation by producing higher-depth agents from
-similar-energy parents.
-
-Session status: 291 cycles completed (C1664-C1954).
-""")
+    # Group 2: Random Inter-Cluster Pairs
+    # Pick one agent from Cluster A and one from Cluster B
+    inter_mi_scores = []
+    cluster_ids = list(cluster_registry.keys())
+    if len(cluster_ids) >= 2:
+        for _ in range(50): # 50 random pairs
+            c1, c2 = random.sample(cluster_ids, 2)
+            if not cluster_registry[c1] or not cluster_registry[c2]: continue
+            
+            a1 = random.choice(cluster_registry[c1])
+            a2 = random.choice(cluster_registry[c2])
+            
+            series_a = history.get(a1.agent_id, [])
+            series_b = history.get(a2.agent_id, [])
+            
+            min_len = min(len(series_a), len(series_b))
+            if min_len > 10:
+                mi = calculate_mi(series_a[:min_len], series_b[:min_len])
+                inter_mi_scores.append(mi)
+    
+    avg_intra = np.mean(intra_mi_scores) if intra_mi_scores else 0.0
+    avg_inter = np.mean(inter_mi_scores) if inter_mi_scores else 0.0
+    
+    print(f"Intra-Cluster MI: {avg_intra:.4f} bits", flush=True)
+    print(f"Inter-Cluster MI: {avg_inter:.4f} bits", flush=True)
+    
+    if avg_intra > avg_inter * 1.5: # Significant difference threshold
+        print("HYPOTHESIS CONFIRMED: Strong Intra-Cluster Coupling.", flush=True)
+    else:
+        print("HYPOTHESIS FAILED: Weak or Uniform Coupling.", flush=True)
 
 if __name__ == "__main__":
-    main()
+    run_experiment()

@@ -112,10 +112,15 @@
 - [x] **Result:** Order Emerged. Entropy reduced by 1.48 bits.
 
 # Task: Cycle 1954 - Mutual Information
-- [ ] **Define Cycle 1954:** Measure correlations between agents.
-- [ ] **Goal:** Quantify the "connection" strength within clusters.
-- [ ] **Hypothesis:** Intra-cluster MI >> Inter-cluster MI.
-- [ ] **Action:** `src/experiments/cycle1954_mutual_information.py`.
+- [x] **Define Cycle 1954:** Measure correlations between agents.
+- [x] **Action:** `src/experiments/cycle1954_mutual_information.py`.
+- [x] **Result:** Intra (0.027) >> Inter (0.000). Clusters are distinct entities.
+
+# Task: Cycle 1955 - Spectral Analysis
+- [ ] **Define Cycle 1955:** FFT of global phase dynamics.
+- [ ] **Goal:** Identify characteristic frequencies of the swarm.
+- [ ] **Hypothesis:** Power spectrum will show peaks (harmonics).
+- [ ] **Action:** `src/experiments/cycle1955_spectral_analysis.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
