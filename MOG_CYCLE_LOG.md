@@ -977,3 +977,17 @@
 *   **Conclusion:** We have likely found the local maximum for this parameter set around `comp=0.95`. The Dead Zone (N=14) is inherently unstable.
 *   **Pivot:** To reach >90% reliability, we need structural intervention, not just parameter tuning.
 *   **Next:** Cycle 1917 (Threshold Retest / Confirmation).
+
+---
+
+**CYCLE:** 1917 (Threshold Retest / Confirmation)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** CONFIRM 38% BASELINE RELIABILITY
+**LOG:**
+*   **Wake-Up:** Cycle 1917 Initiated.
+*   **Action:** Executed `src/experiments/cycle1917_threshold_retest.py` with the C1915 best config (`Comp=0.95`, `Decomp=1.0`, `Recharge=0.2`) across 100 seeds.
+*   **Result:**
+    *   Baseline Success Rate: **27.0%**.
+*   **Key Finding:** The previous 38.0% success rate was an overestimate due to smaller sample size. The true reliability for the optimal parameter set is 27.0%. This confirms the inherent instability of the Dead Zone with current mechanics.
+*   **Pivot:** Structural change is required to break the cascade. Parameter tuning alone is insufficient.
+*   **Next:** Cycle 1918 (Probability-Dependent Composition).
