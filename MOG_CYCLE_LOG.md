@@ -1795,3 +1795,26 @@
     *   How many agents move from Depth 0 -> 1 (Compose) vs 1 -> 0 (Decompose) per cycle?
     *   If Rate(Up) == Rate(Down), we have Dynamic Equilibrium.
 *   **Next:** Cycle 1965 (Depth Transition Rates).
+
+---
+
+**CYCLE:** 1965 (Depth Transition Rates)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** MEASURE FLUX
+**LOG:**
+*   **Wake-Up:** Cycle 1965 Initiated.
+*   **Action:** Executed `src/experiments/cycle1965_depth_transition_rates.py`.
+*   **Result:**
+    *   Comp Rate: **0.0100** / cycle.
+    *   Decomp Rate: **0.0075** / cycle.
+    *   Ratio: **1.33**.
+*   **Analysis:** Flux Imbalance. Composition > Decomposition.
+    *   The system is slowly aggregating. It hasn't reached steady state yet (even after 500 cycles).
+    *   Or, it is "Growing".
+    *   However, rates are very low (1 event per 100 cycles). This confirms the "Glassy" / "Stochastic Stability" finding.
+    *   It's not a raging boil; it's a slow simmer.
+*   **Pivot:** Cycle 1966 (Depth Cross-Correlation).
+    *   Does a burst in Decomposition cause a burst in Composition (Lagged Response)?
+    *   We will check the Cross-Correlation between the two time series.
+    *   **Hypothesis:** Positive correlation at lag $\tau > 0$.
+*   **Next:** Cycle 1966 (Depth Cross-Correlation).

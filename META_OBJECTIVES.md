@@ -167,9 +167,15 @@
 - [x] **Result:** Stochastic Stability (Cloud Attractor).
 
 # Task: Cycle 1965 - Depth Transition Rates
-- [ ] **Define Cycle 1965:** Measure flux between depths.
-- [ ] **Goal:** Verify Dynamic Equilibrium ($Rate_{up} \approx Rate_{down}$).
-- [ ] **Action:** `src/experiments/cycle1965_depth_transition_rates.py`.
+- [x] **Define Cycle 1965:** Measure flux between depths.
+- [x] **Action:** `src/experiments/cycle1965_depth_transition_rates.py`.
+- [x] **Result:** Imbalance (1.33). Slow aggregation trend.
+
+# Task: Cycle 1966 - Depth Cross-Correlation
+- [ ] **Define Cycle 1966:** Analyze lead-lag relationship.
+- [ ] **Goal:** Determine causality between Decomp and Comp.
+- [ ] **Hypothesis:** Decomp -> Singles -> Comp (Lagged).
+- [ ] **Action:** `src/experiments/cycle1966_depth_cross_correlation.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
