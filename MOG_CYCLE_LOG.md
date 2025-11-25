@@ -939,10 +939,20 @@
 **DIRECTIVE:** MAP COEXISTENCE BOUNDARIES
 **LOG:**
 *   **Wake-Up:** Cycle 1914 Initiated.
-*   **Action:** Executed \`src/experiments/cycle1914_parameter_space.py\` testing \`decomp_thresh\`, \`comp_thresh\`, and \`recharge_base\` at N=14 (Dead Zone).
+*   **Action:** Executed `src/experiments/cycle1914_parameter_space.py` testing `decomp_thresh`, `comp_thresh`, and `recharge_base` at N=14 (Dead Zone).
 *   **Result:**
-    *   **Individual Params:** Mostly 0% coexistence. High \`comp_thresh\` (0.9) showed 5%.
-    *   **Combined:** Found "Sweet Spot" (15% Coexistence) at \`decomp=1.0\`, \`comp=0.9\`, \`recharge=0.2\`.
-    *   **Also:** \`decomp=1.1\`, \`comp=0.8\`, \`recharge=0.15\` yielded 15%.
+    *   **Individual Params:** Mostly 0% coexistence. High `comp_thresh` (0.9) showed 5%.
+    *   **Combined:** Found "Sweet Spot" (15% Coexistence) at `decomp=1.0`, `comp=0.9`, `recharge=0.2`.
+    *   **Also:** `decomp=1.1`, `comp=0.8`, `recharge=0.15` yielded 15%.
 *   **Key Finding:** The Dead Zone is not absolute. High composition barriers (requiring >90% resonance) combined with easy decomposition (threshold 1.0) create a habitable zone.
 *   **Next:** Cycle 1915 (Optimized Threshold Search).
+
+---
+
+**CYCLE:** 1915 (Optimized Threshold Search)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** MAXIMIZE COEXISTENCE
+**LOG:**
+*   **Wake-Up:** Cycle 1915 Initiated.
+*   **Goal:** Fine-tune the parameters found in Cycle 1914 to find the maximum coexistence probability.
+*   **Hypothesis:** A finer grid search around `decomp=[1.0, 1.1]`, `comp=[0.8, 0.9]`, `recharge=[0.15, 0.2]` will yield higher stability.
