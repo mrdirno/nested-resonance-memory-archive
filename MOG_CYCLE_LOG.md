@@ -1888,3 +1888,31 @@
     *   We need to link Sensing to Action.
     *   If Gradient > Threshold, Bias Random Walk.
 *   **Next:** Cycle 2001 (Chemotaxis).
+
+---
+
+**CYCLE:** 2001 (Chemotaxis)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** CONNECT SENSING TO MOTION
+**LOG:**
+*   **Wake-Up:** Cycle 2001 Initiated.
+*   **Action:** Executed `src/experiments/cycle2001_chemotaxis.py`.
+*   **Result:**
+    *   Dumb Energy: **13.18**.
+    *   Smart Energy: **12.27**.
+    *   Conclusion: **HYPOTHESIS FAILED.** Smart clusters did *worse*.
+*   **Analysis:** Why?
+    *   Biased Random Walk (50% bias) might be too rigid. It prevents exploration.
+    *   Or the gradient calculation is noisy.
+    *   Or moving towards food (Center) increases competition (Crowding).
+    *   Or the "Smart" logic has a bug (e.g. moving away from food).
+    *   Wait, we used `weighted_vector += direction * signal`. `direction` is relative pos. If child is at (+5, 0) and has high signal, we move (+5, 0). This is correct (move towards sensor with high signal).
+    *   BUT: If child is at (+5, 0) relative to center, and center is at (20, 20), child is at (25, 20). If food is at (50, 50), signal is higher at child. So we move +X. Correct.
+    *   Maybe crowding? If everyone goes to the center, they compete for limited recharge?
+    *   Our recharge model `get_recharge_at_pos` doesn't account for density. It's infinite source.
+    *   Maybe "Smart" clusters decompose faster? No, logic is same.
+*   **Pivot:** Cycle 2002 (Policy Optimization).
+    *   We need to tune the **Bias Factor** ($\alpha$).
+    *   Maybe 0.5 is too high?
+    *   We will sweep $\alpha$ from 0.0 to 1.0.
+*   **Next:** Cycle 2002 (Policy Optimization).
