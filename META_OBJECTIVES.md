@@ -194,10 +194,15 @@
 - [x] **Result:** Failed. Smart clusters starved faster.
 
 # Task: Cycle 2002 - Policy Optimization
-- [ ] **Define Cycle 2002:** Tune the exploration/exploitation ratio.
-- [ ] **Goal:** Find optimal bias $\alpha$.
-- [ ] **Hypothesis:** Small bias ($\alpha=0.1$) beats large bias.
-- [ ] **Action:** `src/experiments/cycle2002_policy_optimization.py`.
+- [x] **Define Cycle 2002:** Tune the exploration/exploitation ratio.
+- [x] **Action:** `src/experiments/cycle2002_policy_optimization.py`.
+- [x] **Result:** Greedy ($\alpha=1.0$) wins. U-shaped curve observed.
+
+**PHASE 20 COMPLETE: COGNITION INITIATED.**
+
+## Phase 21: Adaptive Intelligence (Meta-Learning)
+**Goal:** Agents switch strategies dynamically.
+**Hypothesis:** Adaptive > Static Greedy > Static Random.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
