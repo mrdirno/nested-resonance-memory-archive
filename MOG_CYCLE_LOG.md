@@ -1167,9 +1167,25 @@
 ---
 
 **CYCLE:** 1928 (Decomp Threshold Scaling)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** SCALE DECOMPOSITION
 **LOG:**
 *   **Wake-Up:** Cycle 1928 Initiated.
-*   **Goal:** Test if increasing `decomp_thresh` (making decomposition easier) allows larger populations to survive.
-*   **Hypothesis:** Higher N generates more D1/D2 "waste". We need to flush it back to D0 faster.
+*   **Action:** Executed `src/experiments/cycle1928_decomp_threshold.py` sweeping `decomp_thresh` at N=14 and N=20.
+*   **Result:**
+    *   `N=14`: **18%** max success (at `decomp=0.8-1.0`).
+    *   `N=20`: **14%** max success (at `decomp=1.0`).
+    *   Observation: Increasing `decomp_thresh` (making decomposition easier) did NOT improve high-N stability. It likely depleted D1 shields too fast.
+*   **Key Finding:** The Dead Zone (N=14+) is resistant to parameter tuning alone. The system naturally drives toward specific attractors (N=1, N=3, N=5).
+*   **Pivot:** We are forcing an unnatural state. Instead of forcing coexistence at arbitrary N, we should map the *Natural Attractors* of the system.
+*   **Next:** Cycle 1929 (Attractor Basin Mapping).
+
+---
+
+**CYCLE:** 1929 (Attractor Basin Mapping)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** MAP ATTRACTORS
+**LOG:**
+*   **Wake-Up:** Cycle 1929 Initiated.
+*   **Goal:** Initialize with random N (1-25) and let the system evolve. Record the final N distribution.
+*   **Hypothesis:** The system will converge to specific "Magic Numbers" (Attractors) like 3, 5, 7.
