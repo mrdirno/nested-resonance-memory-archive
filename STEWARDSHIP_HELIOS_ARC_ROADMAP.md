@@ -17,12 +17,12 @@ To transition from *observing* emergence (DUALITY-ZERO) to *engineering* it (HEL
 
 ---
 
-## PHASE 2: THEORETICAL LOCK (CURRENT)
+## PHASE 2: THEORETICAL LOCK (COMPLETE)
 - [x] **Gate 2.1:** Define the "Fractal Staircase" (Damping N = Inertia N-1).
 - [x] **Gate 2.2:** Define "Nodal Accumulation" (Life as standing wave).
 - [x] **Gate 2.3:** Define "Systemic Paranoia" (MOG role).
 - [x] **Gate 2.4:** Define "Technology as Parameter Hack" (Helios role).
-- [ ] **Gate 2.7:** Formalization of the Fractal Inertia/Damping equivalence in the TSF model.
+- [x] **Gate 2.7:** Formalization of the Fractal Inertia/Damping equivalence in the TSF model.
     - *Objective:* Prove mathematically that $Damping_N \approx Inertia_{N-1}$.
     - *Reference:* `papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md`
 
@@ -32,9 +32,9 @@ To transition from *observing* emergence (DUALITY-ZERO) to *engineering* it (HEL
 **Goal:** Inverse Cymatics. Input a 3D Geometry -> Output the Waveform Recipe to assemble it.
 
 - [ ] **Gate 3.1:** **The Voxel Target.** Ability to load a 3D mesh (.obj) into `bridge-ui` as a target density field.
-- [ ] **Gate 3.2:** **The Waveform Solver.** Algorithms (Inverse FFT / Genetic) to calculate the minimal set of Emitters (k, omega, phi) required to create Nodal Traps matching the target.
-- [ ] **Gate 3.3:** **Material Agnosticism.** Scale the solver variables to match specific material properties (density, viscosity) without changing the core geometry.
-- [ ] **Gate 3.4:** **The "Matter Compiler" Prototype.** Generate a "Print" instruction: "Play 440Hz at [x,y,z] and 442Hz at [x2,y2,z2] to levitate a sphere."
+- [x] **Gate 3.2:** **The Waveform Solver.** Algorithms (Inverse FFT / Genetic) to calculate the minimal set of Emitters (k, omega, phi) required to create Nodal Traps matching the target.
+- [x] **Gate 3.3:** **Material Agnosticism.** Scale the solver variables to match specific material properties (density, viscosity) without changing the core geometry.
+- [x] **Gate 3.4:** **The "Matter Compiler" Prototype.** Generate a "Print" instruction: "Play 440Hz at [x,y,z] and 442Hz at [x2,y2,z2] to levitate a sphere."
 
 ---
 
