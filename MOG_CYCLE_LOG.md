@@ -853,7 +853,7 @@
 *   **Plan:**
     1.  Create `demo_osd_physics.py`.
     2.  Create `docs/runbooks/QUICKSTART.md`.
-    3.  Update `README.md`.
+    2.  Update `README.md`.
 *   **Action:** Executed plan. Golden Path is live.
 *   **Result:** New users can verify OSD physics in < 5 mins.
 *   **Next:** Cycle 450 (The Brief).
@@ -950,9 +950,13 @@
 ---
 
 **CYCLE:** 1915 (Optimized Threshold Search)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** MAXIMIZE COEXISTENCE
 **LOG:**
 *   **Wake-Up:** Cycle 1915 Initiated.
-*   **Goal:** Fine-tune the parameters found in Cycle 1914 to find the maximum coexistence probability.
-*   **Hypothesis:** A finer grid search around `decomp=[1.0, 1.1]`, `comp=[0.8, 0.9]`, `recharge=[0.15, 0.2]` will yield higher stability.
+*   **Action:** Executed `src/experiments/cycle1915_optimized_threshold.py` to fine-tune parameters around the "Sweet Spot" found in C1914.
+*   **Result:**
+    *   **Best Config:** `Comp=0.95`, `Decomp=1.00`, `Recharge=0.20`.
+    *   **Success Rate:** 38.0%.
+    *   **Key Finding:** Still far from the >90% target, but a significant improvement from previous cycles. Higher `Comp` values (0.95, 0.98) yield better results.
+*   **Next:** Cycle 1916 (Coexistence Optimization).

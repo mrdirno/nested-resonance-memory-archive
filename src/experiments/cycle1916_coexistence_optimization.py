@@ -2,15 +2,15 @@
 """
 CYCLE 1916: COEXISTENCE OPTIMIZATION
 
-Push parameters to achieve higher coexistence (target: 80%+).
-Focus on comp_threshold and explore more extreme values.
+Further refining the search for D0+D1 coexistence parameters, pushing `comp_thresh` higher.
+Goal: Reach >90% coexistence reliability.
 """
 import sys, numpy as np, math
 from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
+sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2/src')
 from core.fractal_agent import FractalAgent, RealityInterface
 
-CYCLES = 500
+CYCLES = 1000  # Increased for stability testing
 N_DEPTHS = 5
 PI = math.pi
 E = math.e
@@ -31,10 +31,14 @@ def compute_phase_resonance(e1, d1, e2, d2):
     if mag1 == 0 or mag2 == 0: return 0.0
     return dot / (mag1 * mag2)
 
-def run_optimized(seed, n_initial, repro_prob, decomp, comp, recharge):
-    """Run with specified parameters."""
+def run_simulation(seed, decomp_thresh, comp_thresh, recharge_base):
+    """Run simulation with specific parameters."""
     reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
     np.random.seed(seed)
+    
+    # Dead Zone Initial Condition (N=14)
+    n_initial = 14
+    repro_prob = 0.10
 
     for i in range(n_initial):
         reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
@@ -42,17 +46,23 @@ def run_optimized(seed, n_initial, repro_prob, decomp, comp, recharge):
     for cycle in range(CYCLES):
         pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
         total = sum(len(p) for p in pops)
-        if total >= 3000 or total == 0: break
+        
+        # Failure conditions
+        if total >= 3000: return False # Runaway
+        if total == 0: return False # Extinction
 
+        # Recharge
         for d in range(N_DEPTHS):
             for agent in pops[d]:
-                agent.recharge_energy(recharge / (1 + d * 0.5), cap=2.0)
+                agent.recharge_energy(recharge_base / (1 + d * 0.5), cap=2.0)
 
+        # Reproduction (D0 only)
         for agent in list(reality.get_population_agents(0)):
             if agent.energy > 1.0 and np.random.random() < repro_prob:
                 reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
                 agent.energy -= 0.3
 
+        # Composition
         for d in range(N_DEPTHS - 1):
             agents = list(reality.get_population_agents(d))
             if len(agents) < 2: continue
@@ -60,7 +70,7 @@ def run_optimized(seed, n_initial, repro_prob, decomp, comp, recharge):
             i = 0
             while i < len(agents) - 1:
                 sim = compute_phase_resonance(agents[i].energy, d, agents[i+1].energy, d)
-                if sim >= comp:
+                if sim >= comp_thresh:
                     new_e = (agents[i].energy + agents[i+1].energy) * 0.85
                     reality.remove_agent(agents[i].agent_id, d)
                     reality.remove_agent(agents[i+1].agent_id, d)
@@ -69,14 +79,16 @@ def run_optimized(seed, n_initial, repro_prob, decomp, comp, recharge):
                 else:
                     i += 1
 
+        # Decomposition
         for d in range(1, N_DEPTHS):
             for agent in list(reality.get_population_agents(d)):
-                if agent.energy > decomp:
+                if agent.energy > decomp_thresh:
                     ce = agent.energy * 0.45
                     for j in range(2):
                         reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
                     reality.remove_agent(agent.agent_id, d)
 
+        # Decay
         for d in range(N_DEPTHS):
             decay = 0.02 * (1 + d * 0.1) * 0.1
             for agent in list(reality.get_population_agents(d)):
@@ -84,78 +96,56 @@ def run_optimized(seed, n_initial, repro_prob, decomp, comp, recharge):
                     reality.remove_agent(agent.agent_id, d)
 
     final_pops = [len(reality.get_population_agents(d)) for d in range(N_DEPTHS)]
-    return final_pops[0] > 0 and final_pops[1] > 0
+    # Success: Both D0 and D1 exist, and higher levels exist but don't dominate
+    d0_alive = final_pops[0] > 0
+    d1_alive = final_pops[1] > 0
+    controlled = sum(final_pops[2:]) < sum(final_pops[:2]) # Not top-heavy
+    
+    return d0_alive and d1_alive and controlled
 
 def main():
     print(f"CYCLE 1916: Coexistence Optimization | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 80)
-    print("Target: 80%+ coexistence")
+    
+    seeds = list(range(1916000, 1916050)) # 50 seeds
+    print(f"Validation Seeds: {len(seeds)}")
+    
+    # Search Grid: Focused around previous best, pushing comp_thresh higher
+    comp_range = [0.95, 0.96, 0.97, 0.98, 0.99]
+    decomp_range = [0.90, 1.00, 1.10]
+    recharge_range = [0.18, 0.20, 0.22]
+    
+    best_config = None
+    best_score = 0.0
+    
+    print(f"{'Comp':>6} | {'Decomp':>6} | {'Rech':>6} | {'Success%':>8}")
+    print("-" * 35)
+    
+    for comp in comp_range:
+        for decomp in decomp_range:
+            for rech in recharge_range:
+                successes = 0
+                for s in seeds:
+                    if run_simulation(s, decomp, comp, rech):
+                        successes += 1
+                
+                rate = (successes / len(seeds)) * 100
+                if rate > 0:
+                    print(f"{comp:>6.2f} | {decomp:>6.2f} | {rech:>6.2f} | {rate:>7.1f}%")
+                
+                if rate > best_score:
+                    best_score = rate
+                    best_config = (comp, decomp, rech)
+                    
     print("=" * 80)
-
-    seeds = list(range(1916001, 1916031))
-    prob = 0.10
-    n = 19  # Showed highest coexistence (53%) in C1915
-
-    # Explore extreme composition thresholds
-    print("\n1. VERY HIGH COMPOSITION THRESHOLDS (harder to compose)")
-    print(f"{'Comp':>5} | {'Coex%':>6}")
-    print("-" * 16)
-
-    for comp in [0.90, 0.95, 0.98, 0.99, 0.999]:
-        coex = np.mean([run_optimized(s, n, prob, 1.0, comp, 0.2) for s in seeds]) * 100
-        print(f"{comp:>5.3f} | {coex:>5.0f}%")
-
-    # Explore very low decomposition threshold
-    print("\n2. VERY LOW DECOMPOSITION THRESHOLDS (easier to decompose)")
-    print(f"{'Decomp':>6} | {'Coex%':>6}")
-    print("-" * 17)
-
-    for decomp in [0.7, 0.8, 0.9, 1.0, 1.1]:
-        coex = np.mean([run_optimized(s, n, prob, decomp, 0.99, 0.2) for s in seeds]) * 100
-        print(f"{decomp:>6.1f} | {coex:>5.0f}%")
-
-    # Explore higher recharge
-    print("\n3. HIGHER RECHARGE RATES")
-    print(f"{'Recharge':>8} | {'Coex%':>6}")
-    print("-" * 19)
-
-    for recharge in [0.2, 0.3, 0.4, 0.5]:
-        coex = np.mean([run_optimized(s, n, prob, 0.9, 0.99, recharge) for s in seeds]) * 100
-        print(f"{recharge:>8.1f} | {coex:>5.0f}%")
-
-    # Best combination search
-    print("\n" + "=" * 80)
-    print("BEST COMBINATION SEARCH")
-    print("=" * 80)
-
-    best = None
-    best_coex = 0
-
-    for decomp in [0.8, 0.9, 1.0]:
-        for comp in [0.95, 0.98, 0.99]:
-            for recharge in [0.2, 0.3, 0.4]:
-                coex = np.mean([run_optimized(s, n, prob, decomp, comp, recharge) for s in seeds]) * 100
-                if coex > best_coex:
-                    best_coex = coex
-                    best = (decomp, comp, recharge)
-
-    if best:
-        print(f"\nBest for N={n}: decomp={best[0]}, comp={best[1]}, recharge={best[2]}")
-        print(f"Coexistence: {best_coex:.0f}%")
-
-    # Test best across N range
-    if best:
-        print("\n" + "=" * 80)
-        print(f"BEST PARAMETERS ACROSS N RANGE")
-        print(f"decomp={best[0]}, comp={best[1]}, recharge={best[2]}")
-        print("=" * 80)
-
-        print(f"\n{'N':>4} | {'Coex%':>6}")
-        print("-" * 14)
-
-        for n in [14, 17, 19, 20, 22]:
-            coex = np.mean([run_optimized(s, n, prob, best[0], best[1], best[2]) for s in seeds]) * 100
-            print(f"{n:>4} | {coex:>5.0f}%")
+    if best_config:
+        print(f"OPTIMAL CONFIGURATION FOUND:")
+        print(f"Composition Threshold:   {best_config[0]}")
+        print(f"Decomposition Threshold: {best_config[1]}")
+        print(f"Recharge Rate:           {best_config[2]}")
+        print(f"Success Rate:            {best_score:.1f}%")
+    else:
+        print("No configuration exceeded 0% success.")
 
 if __name__ == "__main__":
     main()
