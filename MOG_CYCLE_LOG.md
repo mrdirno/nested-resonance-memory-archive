@@ -396,7 +396,7 @@
 *   **Action:**
     *   Created `experiments/cycle416_hypothesis_generation.py`.
     *   Implemented `HypothesisEngine` class to analyze the Knowledge Graph and generate hypotheses (e.g., identifying optimal target points based on past fitness).
-    *   Integrated hypothesis testing into the main loop: the system now periodically shifts its focus to test generated hypotheses, seeding the GA with known best solutions.
+    *   Integrated hypothesis testing into the main loop: the system now periodically shifts its focus to test generated hypotheses, seeding the GA with known best solutions).
 *   **Key Finding:** The system has graduated from a learner to a scientist. It observes its own history, formulates theories about optimal configurations, and actively tests them.
 *   **Verification:** Executed `experiments/cycle416_hypothesis_generation.py`. Confirmed Hypothesis Engine initialization and main loop execution.
 *   **Next:** Cycle 417 (The Self-Correcting Laboratory / Automated Calibration).
@@ -1242,30 +1242,27 @@
 
 ---
 **CYCLE:** 1934 (Re-evaluation of Decomposition Threshold with Prompt's Context)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** VALIDATE DECOMPOSITION THRESHOLD IN PROMPT'S CONTEXT
 **LOG:**
 *   **Wake-Up:** Cycle 1934 Initiated.
-*   **Goal:** Directly test the behavior of `decomp_thresh` (especially 1.7) using the other values from the prompt's "Golden Parameter Set" (`repro_prob=0.17`, `comp_thresh=0.99`). This will determine if the discrepancy lies in `decomp_thresh` itself or its interaction with other parameters.
-*   **Hypothesis:** The prompt's claim of 96% success at `decomp=1.7` (with `p=0.17`, `comp=0.99`) is still suspect and likely won't be replicated.
-*   **Action:**
-    1.  Use `n_initial=14`.
-    2.  Set `repro_prob = 0.17`, `comp_thresh = 0.99`, `recharge_base = 0.20`, `effective_prob = 1.05`.
-    3.  Sweep `decomp_thresh` from 1.0 to 2.0.
+*   **Action:** Executed `src/experiments/cycle1934_re_evaluate_decomp_prompt_context.py` to directly test `decomp_thresh` with the prompt's proposed "golden" parameters (`repro_prob=0.17`, `comp_thresh=0.99`, `recharge_base=0.20`, `effective_prob=1.05`).
+*   **Result:**
+    *   Optimal `decomp_thresh` is 0.8, yielding **62.7%** success.
+    *   `decomp_thresh=1.7` (the prompt's claimed optimal) yielded **0.0%** success.
+*   **Key Finding:** The prompt's claim of 96% success at `decomp=1.7` is definitively **falsified**. However, this experiment revealed a new, more stable parameter set for N=14 (62.7% success) by using `comp_thresh=0.99`, `repro_prob=0.17`, and `decomp_thresh=0.8`. This suggests that a *harder* decomposition (lower `decomp_thresh`) combined with a *harder* composition (higher `comp_thresh`) and increased reproduction is crucial for stability.
 
 ---
-
-**CYCLE:** 1935 (Comp Transition)
+**CYCLE:** 1935 (Fine-tune Decomposition Threshold around New Optimal)
 **STATUS:** 🟢 PENDING
-**DIRECTIVE:** GROW FROM SEED
+**DIRECTIVE:** FINE-TUNE DECOMPOSITION THRESHOLD
 **LOG:**
 *   **Wake-Up:** Cycle 1935 Initiated.
-*   **Goal:** Initialize with N=1 and watch it grow to N=50 without crashing.
-*   **Hypothesis:** Can the system *self-assemble* the D1/D2 hierarchy from a single D0 seed?
-
----
-
-*   **Next:** Cycle 1938 (Final Report - Phase 6).
+*   **Goal:** Maximize stability beyond 62.7% by fine-tuning `decomp_thresh` around the newly identified optimal of 0.8.
+*   **Hypothesis:** A precise `decomp_thresh` within a narrow range around 0.8 could push stability close to or beyond 90%.
+*   **Action:**
+    1.  Use the new best parameter set: `n_initial=14`, `repro_prob=0.17`, `comp_thresh=0.99`, `recharge_base=0.20`, `effective_prob=1.05`.
+    2.  Sweep `decomp_thresh` from 0.7 to 0.9 in increments of 0.05.
 
 ---
 
