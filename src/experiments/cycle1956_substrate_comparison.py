@@ -1,227 +1,229 @@
-#!/usr/bin/env python3
-"""
-CYCLE 1956: SUBSTRATE COMPARISON
+import sys
+import os
+import random
+import numpy as np
+from typing import List, Dict, Optional, Set
+from dataclasses import asdict
 
-Compare transcendental substrate (π, e, φ) vs random substrate.
-Test hypothesis that transcendentals provide special structure.
+# Add project root to path
+sys.path.append(os.getcwd())
 
-Q: Does the specific choice of π, e, φ matter, or would any
-   non-repeating constants give similar dynamics?
-"""
-import sys, numpy as np, math
-from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
-from core.fractal_agent import FractalAgent, RealityInterface
+from src.fractal.agent import FractalAgent
+from src.fractal.composition import CompositionEngine
 
-CYCLES = 500
-N_DEPTHS = 5
+class SpatialCompositionEngine(CompositionEngine):
+    def __init__(self, resonance_threshold: float = 0.7, energy_threshold: float = 0.5, distance_threshold: float = 20.0):
+        super().__init__(resonance_threshold, energy_threshold)
+        self.distance_threshold = distance_threshold
 
-# Standard transcendentals
-PI = math.pi
-E = math.e
-PHI = (1 + math.sqrt(5)) / 2
+    def detect_clusters(
+        self,
+        agents: List[FractalAgent],
+        min_cluster_size: int = 2,
+        max_cluster_size: Optional[int] = None,
+    ) -> List[List[FractalAgent]]:
+        if len(agents) < min_cluster_size:
+            return []
 
-# OPTIMAL PARAMETERS
-P_BASE = 0.17
-K = 30
-N_INITIAL = 14
-COMP_THRESH = 0.99
-DECOMP_THRESH = 1.7
-RECHARGE_BASE = 0.4
+        depth_groups: Dict[int, List[FractalAgent]] = {}
+        for agent in agents:
+            depth = agent.state.depth
+            if depth not in depth_groups:
+                depth_groups[depth] = []
+            depth_groups[depth].append(agent)
 
-def compute_similarity(e1, d, e2, constants):
-    """Compute similarity with given constants."""
-    c1, c2, c3 = constants
-    pi1 = (e1 * c1 * 2) % (2 * PI)
-    e_1 = (d * c2 / 4) % (2 * PI)
-    phi1 = (e1 * c3) % (2 * PI)
-    pi2 = (e2 * c1 * 2) % (2 * PI)
-    e_2 = (d * c2 / 4) % (2 * PI)
-    phi2 = (e2 * c3) % (2 * PI)
-    v1 = [pi1, e_1, phi1]
-    v2 = [pi2, e_2, phi2]
-    dot = sum(a * b for a, b in zip(v1, v2))
-    mag1 = math.sqrt(sum(a**2 for a in v1))
-    mag2 = math.sqrt(sum(a**2 for a in v2))
-    return dot / (mag1 * mag2) if mag1 > 0 and mag2 > 0 else 0
+        all_clusters = []
 
-def run_with_substrate(seed, constants, label):
-    """Run simulation with specified substrate constants."""
-    reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
-    np.random.seed(seed)
-    for i in range(N_INITIAL):
-        reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
+        for depth, depth_agents in depth_groups.items():
+            if len(depth_agents) < min_cluster_size:
+                continue
 
-    final_pop = None
-    coexistence = False
-    bounded = False
-    compositions = 0
+            n = len(depth_agents)
+            adjacency_matrix = np.zeros((n, n), dtype=bool)
 
+            for i in range(n):
+                for j in range(i + 1, n):
+                    agent_i = depth_agents[i]
+                    agent_j = depth_agents[j]
+                    
+                    dist = np.linalg.norm(agent_i.state.position - agent_j.state.position)
+                    if dist > self.distance_threshold:
+                        continue
+
+                    resonance = abs(agent_i.calculate_resonance(agent_j))
+                    if resonance >= self.resonance_threshold:
+                        adjacency_matrix[i, j] = True
+                        adjacency_matrix[j, i] = True
+
+            visited = set()
+            for i in range(n):
+                if i in visited:
+                    continue
+
+                cluster = [depth_agents[i]]
+                visited.add(i)
+
+                for j in range(n):
+                    if j in visited:
+                        continue
+                    
+                    is_connected_to_all = True
+                    for member in cluster:
+                        member_idx = depth_agents.index(member) 
+                        if not adjacency_matrix[member_idx, j]:
+                            is_connected_to_all = False
+                            break
+                    
+                    if is_connected_to_all:
+                        cluster.append(depth_agents[j])
+                        visited.add(j)
+
+                if len(cluster) >= min_cluster_size:
+                    if max_cluster_size is None or len(cluster) <= max_cluster_size:
+                        all_clusters.append(cluster)
+
+        return all_clusters
+
+def calculate_order_parameter(phases: List[float]) -> float:
+    if not phases:
+        return 0.0
+    complex_phases = np.exp(1j * np.array(phases))
+    z = np.mean(complex_phases)
+    return np.abs(z)
+
+def calculate_spectral_centroid(signal: List[float]) -> float:
+    if len(signal) < 2: return 0.0
+    
+    fft_vals = np.fft.rfft(signal)
+    fft_freqs = np.fft.rfftfreq(len(signal))
+    power_spectrum = np.abs(fft_vals)**2
+    
+    # Normalize
+    if np.sum(power_spectrum) == 0: return 0.0
+    
+    # Centroid = sum(f * P(f)) / sum(P(f))
+    centroid = np.sum(fft_freqs * power_spectrum) / np.sum(power_spectrum)
+    return centroid
+
+def run_simulation(config_name: str, recharge: float, cost_single: float, cost_cluster: float):
+    print(f"\n--- Simulation: {config_name} ---", flush=True)
+    
+    # Parameters
+    N_AGENTS = 50
+    WORLD_SIZE = 100.0
+    DISTANCE_THRESHOLD = 20.0
+    CYCLES = 200
+    VELOCITY_MAGNITUDE = 5.0
+    
+    DECOMP_LOW_ENERGY = 0.2 
+    DECOMP_HIGH_ENERGY = 4.0 
+    
+    cluster_registry: Dict[str, List[FractalAgent]] = {}
+
+    # Initialize Population
+    agents = []
+    for i in range(N_AGENTS):
+        pos = np.random.rand(3) * WORLD_SIZE
+        pos[2] = 0
+        agent = FractalAgent(
+            agent_id=f"gen0_{i}",
+            energy=1.0,
+            phase=random.uniform(0, 2*np.pi),
+            position=pos
+        )
+        agents.append(agent)
+
+    comp_engine = SpatialCompositionEngine(distance_threshold=DISTANCE_THRESHOLD)
+    
+    order_history = []
+    
     for cycle in range(CYCLES):
-        pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
-        pop_counts = [len(p) for p in pops]
-        total = sum(pop_counts)
+        # 1. Movement
+        for agent in agents:
+            theta = random.uniform(0, 2*np.pi)
+            dx = VELOCITY_MAGNITUDE * np.cos(theta)
+            dy = VELOCITY_MAGNITUDE * np.sin(theta)
+            agent.move(np.array([dx, dy, 0.0]))
+            agent.state.position = agent.state.position % WORLD_SIZE
 
-        if total >= 3000:
-            bounded = False
+        # 2. Metabolism
+        active_agents = []
+        newly_released = []
+
+        for agent in agents:
+            cost = cost_cluster if agent.state.depth > 0 else cost_single
+            agent.update_phase(delta_t=1.0)
+            agent.update_energy(recharge - cost)
+            
+            decomposed = False
+            if agent.state.depth > 0:
+                if agent.state.energy < DECOMP_LOW_ENERGY or agent.state.energy > DECOMP_HIGH_ENERGY:
+                    decomposed = True
+                    constituents = cluster_registry.pop(agent.agent_id, [])
+                    if constituents:
+                        for child in constituents:
+                            child.state.energy = agent.state.energy / len(constituents)
+                            child.state.position = agent.state.position.copy()
+                            child.move(np.random.rand(3) * 2.0 - 1.0)
+                            newly_released.append(child)
+
+            if not decomposed:
+                if agent.is_alive(energy_threshold=0.0):
+                    active_agents.append(agent)
+        
+        agents = active_agents + newly_released
+        
+        # 3. Composition
+        new_clusters = comp_engine.compose_all(agents)
+        consumed_ids = set()
+        for cluster in new_clusters:
+            constituents = []
+            for child_id in cluster.state.children_ids:
+                found = next((a for a in agents if a.agent_id == child_id), None)
+                if found:
+                    constituents.append(found)
+                    consumed_ids.add(child_id)
+            cluster_registry[cluster.agent_id] = constituents
+            
+        agents = [a for a in agents if a.agent_id not in consumed_ids] + new_clusters
+        
+        # 4. Order Parameter
+        base_phases = []
+        for agent in agents:
+            if agent.state.depth == 0:
+                base_phases.append(agent.state.phase)
+            else:
+                count = len(cluster_registry.get(agent.agent_id, []))
+                base_phases.extend([agent.state.phase] * count)
+        
+        r = calculate_order_parameter(base_phases)
+        order_history.append(r)
+        
+        if len(base_phases) == 0:
+            print(f"Cycle {cycle}: EXTINCTION.", flush=True)
             break
-        if total == 0:
-            break
 
-        final_pop = pop_counts
-        p_effective = P_BASE / (1 + total / K)
+    centroid = calculate_spectral_centroid(order_history)
+    print(f"Spectral Centroid: {centroid:.4f}", flush=True)
+    return centroid
 
-        # Recharge
-        for d in range(N_DEPTHS):
-            for agent in pops[d]:
-                agent.recharge_energy(RECHARGE_BASE / (1 + d * 0.5), cap=2.0)
-
-        # Reproduction
-        for agent in list(reality.get_population_agents(0)):
-            if agent.energy > 1.0 and np.random.random() < p_effective:
-                reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
-                agent.energy -= 0.3
-
-        # Composition with specified substrate
-        for d in range(N_DEPTHS - 1):
-            agents = list(reality.get_population_agents(d))
-            if len(agents) < 2: continue
-            np.random.shuffle(agents)
-            i = 0
-            while i < len(agents) - 1:
-                e1, e2 = agents[i].energy, agents[i+1].energy
-                sim = compute_similarity(e1, d, e2, constants)
-                if sim >= COMP_THRESH:
-                    compositions += 1
-                    new_e = (e1 + e2) * 0.85
-                    reality.remove_agent(agents[i].agent_id, d)
-                    reality.remove_agent(agents[i+1].agent_id, d)
-                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
-                    i += 2
-                else:
-                    i += 1
-
-        # Decomposition
-        for d in range(1, N_DEPTHS):
-            for agent in list(reality.get_population_agents(d)):
-                if agent.energy > DECOMP_THRESH:
-                    ce = agent.energy * 0.45
-                    for j in range(2):
-                        reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
-                    reality.remove_agent(agent.agent_id, d)
-
-        # Decay
-        for d in range(N_DEPTHS):
-            decay = 0.02 * (1 + d * 0.1) * 0.1
-            for agent in list(reality.get_population_agents(d)):
-                if not agent.consume_energy(decay):
-                    reality.remove_agent(agent.agent_id, d)
-
-    if final_pop:
-        bounded = sum(final_pop) < 3000
-        coexistence = final_pop[0] > 0 and final_pop[1] > 0
-
-    return {
-        'final_pop': final_pop,
-        'total': sum(final_pop) if final_pop else 0,
-        'coexistence': coexistence,
-        'bounded': bounded,
-        'compositions': compositions
-    }
-
-def main():
-    print(f"CYCLE 1956: Substrate Comparison | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 80)
-    print("Testing transcendental vs random substrate")
-    print("=" * 80)
-
-    # Define substrates
-    substrates = {
-        'Transcendental': (PI, E, PHI),
-        'Random_1': (2.718, 3.141, 1.618),  # Rounded versions
-        'Random_2': (1.234, 5.678, 9.012),  # Arbitrary
-        'Random_3': (0.987, 2.345, 6.789),  # Arbitrary
-        'Rational': (22/7, 19/7, 8/5),  # Rational approximations
-    }
-
-    seeds = list(range(1956001, 1956021))  # 20 seeds
-
-    print(f"\nRUNNING SUBSTRATE COMPARISONS:")
-    print("-" * 60)
-
-    results = {}
-    for name, constants in substrates.items():
-        print(f"\n{name}: constants = ({constants[0]:.4f}, {constants[1]:.4f}, {constants[2]:.4f})")
-        substrate_results = [run_with_substrate(s, constants, name) for s in seeds]
-        results[name] = substrate_results
-
-        coex_rate = np.mean([r['coexistence'] for r in substrate_results]) * 100
-        bound_rate = np.mean([r['bounded'] for r in substrate_results]) * 100
-        avg_pop = np.mean([r['total'] for r in substrate_results])
-        avg_comp = np.mean([r['compositions'] for r in substrate_results])
-
-        print(f"  Coexistence: {coex_rate:.0f}%")
-        print(f"  Bounded:     {bound_rate:.0f}%")
-        print(f"  Avg pop:     {avg_pop:.0f}")
-        print(f"  Avg comps:   {avg_comp:.0f}")
-
-    # Summary comparison
-    print(f"\n{'=' * 80}")
-    print("SUBSTRATE COMPARISON SUMMARY")
-    print("=" * 80)
-
-    print(f"\n{'Substrate':<20} | {'Coex%':>6} | {'Bound%':>6} | {'Pop':>6} | {'Comps':>8}")
-    print("-" * 60)
-
-    for name in substrates.keys():
-        r = results[name]
-        coex = np.mean([x['coexistence'] for x in r]) * 100
-        bound = np.mean([x['bounded'] for x in r]) * 100
-        pop = np.mean([x['total'] for x in r])
-        comp = np.mean([x['compositions'] for x in r])
-        print(f"{name:<20} | {coex:>6.0f} | {bound:>6.0f} | {pop:>6.0f} | {comp:>8.0f}")
-
-    # Get transcendental baseline
-    trans_r = results['Transcendental']
-    trans_coex = np.mean([x['coexistence'] for x in trans_r]) * 100
-    trans_pop = np.mean([x['total'] for x in trans_r])
-
-    print(f"""
-{'=' * 80}
-SUBSTRATE COMPARISON CONCLUSIONS
-{'=' * 80}
-
-1. TRANSCENDENTAL SUBSTRATE:
-   - Coexistence: {trans_coex:.0f}%
-   - Population: {trans_pop:.0f}
-   - This is the baseline
-
-2. ALTERNATIVE SUBSTRATES:
-   - All substrates produce similar dynamics
-   - No special "magic" in π, e, φ specifically
-   - Any non-commensurate constants work
-
-3. INTERPRETATION:
-   - The MECHANISM matters, not the exact constants
-   - Transcendentals are convenient but not necessary
-   - Could use any irrational/pseudo-random constants
-
-4. WHAT THE SUBSTRATE PROVIDES:
-   - Non-repeating phase relationships
-   - Quasi-random similarity patterns
-   - The key is incommensurability, not transcendence
-
-5. IMPLICATIONS FOR NRM THEORY:
-   - Focus on composition-decomposition dynamics
-   - Phase resonance works with any non-repeating basis
-   - Transcendentals are aesthetic, not essential
-
-The choice of π, e, φ provides convenient mathematical
-structure but is not the source of emergent dynamics.
-Any set of incommensurate constants would work similarly.
-
-Session status: 293 cycles completed (C1664-C1956).
-""")
+def run_experiment():
+    print("MOG ONLINE: Cycle 1956 - Substrate Comparison", flush=True)
+    
+    # Regime A: Starvation (Static/Glassy)
+    centroid_a = run_simulation("Regime A (Starvation)", recharge=0.02, cost_single=0.10, cost_cluster=0.02)
+    
+    # Regime B: Abundance (Dynamic/Bursting)
+    centroid_b = run_simulation("Regime B (Abundance)", recharge=0.05, cost_single=0.01, cost_cluster=0.01)
+    
+    print("\n--- Comparison ---", flush=True)
+    print(f"Centroid A (Starvation): {centroid_a:.4f}", flush=True)
+    print(f"Centroid B (Abundance): {centroid_b:.4f}", flush=True)
+    
+    if centroid_b > centroid_a:
+        print("HYPOTHESIS CONFIRMED: Abundance has higher frequency dynamics (Activity).", flush=True)
+    else:
+        print("HYPOTHESIS FAILED.", flush=True)
 
 if __name__ == "__main__":
-    main()
+    run_experiment()

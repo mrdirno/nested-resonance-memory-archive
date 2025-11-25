@@ -1576,3 +1576,24 @@
         *   B: Abundance (C1948 params)
     *   **Hypothesis:** Abundance = High Frequency Noise (Bursting). Starvation = Low Frequency Drift (Glassy).
 *   **Next:** Cycle 1956 (Substrate Comparison).
+
+---
+
+**CYCLE:** 1956 (Substrate Comparison)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** AUDIT REGIME SIGNATURES
+**LOG:**
+*   **Wake-Up:** Cycle 1956 Initiated.
+*   **Action:** Executed `src/experiments/cycle1956_substrate_comparison.py`.
+*   **Result:**
+    *   Centroid A (Starvation): **0.0008** (Low Freq / Static).
+    *   Centroid B (Abundance): **0.0038** (High Freq / Dynamic).
+    *   Ratio: ~4.75x difference.
+*   **Analysis:** We have successfully mapped the "Sound" of survival. Static survival sounds deep/slow. Dynamic growth sounds high/fast.
+*   **Pivot:** Cycle 1957 (Perturbation Response).
+    *   If Starvation = Static, is it fragile?
+    *   We will inject a "Shock" (remove 50% of biomass) at T=50.
+    *   **Hypothesis:**
+        *   Regime A (Starvation) -> Collapse (Fragile).
+        *   Regime B (Abundance) -> Recovery (Robust).
+*   **Next:** Cycle 1957 (Perturbation Response).
