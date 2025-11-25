@@ -1027,9 +1027,27 @@
 ---
 
 **CYCLE:** 1920 (Fine-Grained Optimal P)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PINPOINT OPTIMAL PROBABILITY
 **LOG:**
 *   **Wake-Up:** Cycle 1920 Initiated.
-*   **Goal:** Since `P=1.0` (1 pass) is best, but `P < 1.0` failed, check the range `0.8 < P < 1.2` (simulated via fractional passes or probabilistic second pass).
-*   **Hypothesis:** There might be a subtle peak around `P=0.9` or `P=1.1` (occasional double pass).
+*   **Action:** Executed `src/experiments/cycle1920_finegrain_optimal_p.py` scanning `P=[0.8, ..., 1.2]`.
+*   **Result:**
+    *   `P=1.00`: **20.0%** success (consistent with previous runs).
+    *   `P=1.05`: **32.0%** success (Peak).
+    *   `P=1.10`: **20.0%** success.
+    *   `P < 1.0`: **0-2%** success.
+*   **Key Finding:** A slight boost (`P=1.05`) is optimal. It provides just enough "extra" upward flux to form D1 shields quickly, without the runaway cascade of `P=2.0`.
+*   **Pivot:** While 32% is an improvement, it's still not >90%. We need to address the *depth dependence* of these parameters. Currently, `comp_thresh` is constant across all depths.
+*   **Next:** Cycle 1921 (Depth-Dependent Thresholds).
+
+---
+
+**CYCLE:** 1921 (Depth-Dependent Thresholds)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** BLOCK D2+ CASCADE
+**LOG:**
+*   **Wake-Up:** Cycle 1921 Initiated.
+*   **Goal:** Implement depth-dependent composition thresholds.
+*   **Hypothesis:** Making composition *harder* at higher depths (D1->D2) will act as a soft ceiling, preventing the cascade while allowing D0->D1 to form shields easily.
+
