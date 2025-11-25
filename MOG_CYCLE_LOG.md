@@ -1094,10 +1094,27 @@
 
 ---
 
-**CYCLE:** 1924 (High-P N2)
-**STATUS:** 🟢 PENDING
-**DIRECTIVE:** TEST REPRODUCTION RATE
+**CYCLE:** 1926 (Odd/Even Extended)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** CONFIRM ODD ADVANTAGE
 **LOG:**
-*   **Wake-Up:** Cycle 1924 Initiated.
-*   **Goal:** Revisit the "High-P N2" concept from C1924 (in the prompt's memory) but applied to the Dead Zone.
-*   **Hypothesis:** Can we tune `repro_prob` to balance the composition rate? If reproduction is too slow, D0 dies. If too fast, D0 cascades.
+*   **Wake-Up:** Cycle 1926 Initiated.
+*   **Action:** Executed `src/experiments/cycle1926_odd_even_extended.py` testing N=1-10.
+*   **Result:**
+    *   Odd Average: **80.8%**.
+    *   Even Average: **70.4%**.
+    *   The Odd Advantage (+10.4%) is confirmed in aggregate.
+    *   **However**, N=10 (88%) broke the pattern, outperforming N=9 (84%).
+*   **Key Finding:** The "Odd Advantage" is strong at low N (N<9) but fades as N increases. This makes sense: `1/N` remainder effect dilutes as N grows.
+*   **Pivot:** If N=10 is strong (88%), does the Dead Zone (N=14) benefit from being "High Even"? Or is it a local minimum?
+*   **Next:** Cycle 1927 (High-N Convergence).
+
+---
+
+**CYCLE:** 1927 (High-N Convergence)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** MAP THE DEAD ZONE BOUNDARY
+**LOG:**
+*   **Wake-Up:** Cycle 1927 Initiated.
+*   **Goal:** Determine where the "Dead Zone" actually begins and ends using the optimized parameters (`p=0.17`, `comp=0.99`).
+*   **Hypothesis:** N=14 was a Dead Zone with *old* parameters. With new parameters, it might be habitable.
