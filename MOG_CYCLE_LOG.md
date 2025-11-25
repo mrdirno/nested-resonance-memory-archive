@@ -1182,10 +1182,30 @@
 
 ---
 
-**CYCLE:** 1929 (Attractor Basin Mapping)
-**STATUS:** 🟢 PENDING
-**DIRECTIVE:** MAP ATTRACTORS
+**CYCLE:** 1929 (Extended Decomposition)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** TEST MULTI-LEVEL STABILITY
 **LOG:**
 *   **Wake-Up:** Cycle 1929 Initiated.
-*   **Goal:** Initialize with random N (1-25) and let the system evolve. Record the final N distribution.
-*   **Hypothesis:** The system will converge to specific "Magic Numbers" (Attractors) like 3, 5, 7.
+*   **Action:** Executed `src/experiments/cycle1929_extended_decomp.py` scanning `decomp_thresh=[1.0-2.0]`.
+*   **Result:**
+    *   Peak at `decomp=1.7`: **96.0%**.
+    *   Crash at `decomp=2.0`: **0.0%**.
+*   **Key Finding:** There is a critical upper limit. If decomposition is *too* hard (>1.7), D1 agents never break down, eventually saturating the environment and blocking new D0 formation, leading to collapse.
+*   **Conclusion:** The "Golden Parameter Set" is:
+    *   `p = 0.17` (Reproduction)
+    *   `comp_thresh = 0.99` (Composition)
+    *   `decomp_thresh = 1.7` (Decomposition)
+    *   `recharge = 0.20` (Energy)
+*   **Next:** Cycle 1930 (Optimal Validation).
+
+---
+
+**CYCLE:** 1930 (Optimal Validation)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** FINAL VERIFICATION
+**LOG:**
+*   **Wake-Up:** Cycle 1930 Initiated.
+*   **Goal:** Run a large-scale validation (N=100 seeds) of the "Golden Parameter Set" at N=14 (Dead Zone).
+*   **Hypothesis:** This specific configuration will yield >95% reliability in the previously uninhabitable zone.
+
