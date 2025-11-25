@@ -1061,9 +1061,28 @@
 ---
 
 **CYCLE:** 1922 (Minimum Viable N)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** FIND THE FLOOR
 **LOG:**
 *   **Wake-Up:** Cycle 1922 Initiated.
-*   **Goal:** Determine the absolute minimum N for reliable (>90%) coexistence using the optimized parameters (`comp=0.95`, `P=1.05`).
-*   **Hypothesis:** The "Dead Zone" might end at N=15 or N=16 with these new optimized parameters.
+*   **Action:** Executed `src/experiments/cycle1922_minimum_nc.py` scanning `N=[14, ..., 24]`.
+*   **Result:**
+    *   `N=14`: **32.0%** (Consistent with baseline).
+    *   `N=22`: **40.0%** (Peak).
+    *   `N=23`: **10.0%** (Crash).
+    *   Observation: Reliability is noisy and low (10-40%) across the entire range. N=22 is not significantly better than N=14.
+*   **Key Finding:** There is no "safe N" near 14. The Dead Zone is not a narrow strip; it is a broad chasm. Increasing N does not fix the fundamental instability.
+*   **Anomaly:** Why did N=23 crash so hard (10%) vs N=22 (40%)? This suggests an "Odd/Even" or specific integer resonance effect.
+*   **Pivot:** Investigate the N=23 anomaly. Is population size resonance a factor?
+*   **Next:** Cycle 1923 (N2 Anomaly Investigation).
+
+---
+
+**CYCLE:** 1923 (N2 Anomaly Investigation)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** INVESTIGATE N RESONANCE
+**LOG:**
+*   **Wake-Up:** Cycle 1923 Initiated.
+*   **Goal:** Check if specific N values (primes, evens, odds) have higher stability.
+*   **Hypothesis:** Composition requires pairs. Odd N might leave a "remainder" agent that triggers instability or decay.
+
