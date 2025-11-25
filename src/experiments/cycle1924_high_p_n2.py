@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
 """
-CYCLE 1924: HIGH REPRODUCTION PROBABILITY VS N=2 TRAP
+CYCLE 1924: HIGH-P N2 (REPRODUCTION RATE TUNING)
 
-C1923 showed N=2 anomaly is fundamental (comp trap).
-Hypothesis: Higher p allows reproduction BEFORE composition.
-Test: Vary p at N=2 to find if any p value resolves the trap.
+Investigating the impact of reproduction probability (repro_prob) on Dead Zone stability.
+Can we find a 'Goldilocks' reproduction rate that replenishes D0 fast enough to survive
+but slow enough to prevent a runaway cascade to D2?
 """
 import sys, numpy as np, math
 from datetime import datetime
 sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2/src')
 from core.fractal_agent import FractalAgent, RealityInterface
 
-CYCLES = 500
+CYCLES = 1000
 N_DEPTHS = 5
 PI = math.pi
 E = math.e
 PHI = (1 + math.sqrt(5)) / 2
-
-# FIXED PARAMETERS
-DECOMP_THRESH = 0.8
-COMP_THRESH = 0.99  # Standard threshold
-RECHARGE_BASE = 0.2
 
 def compute_phase_resonance(e1, d1, e2, d2):
     pi1 = (e1 * PI * 2) % (2 * PI)
@@ -37,8 +32,15 @@ def compute_phase_resonance(e1, d1, e2, d2):
     if mag1 == 0 or mag2 == 0: return 0.0
     return dot / (mag1 * mag2)
 
-def run_with_p(seed, n_initial, repro_prob):
-    """Run with variable reproduction probability."""
+def run_simulation(seed, repro_prob):
+    """Run simulation with optimized parameters and specific reproduction probability."""
+    # Optimized parameters from C1915/C1920
+    decomp_thresh = 1.0
+    comp_thresh = 0.95
+    recharge_base = 0.20
+    effective_prob = 1.05
+    n_initial = 14 # Dead Zone
+    
     reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
     np.random.seed(seed)
 
@@ -48,36 +50,46 @@ def run_with_p(seed, n_initial, repro_prob):
     for cycle in range(CYCLES):
         pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
         total = sum(len(p) for p in pops)
-        if total >= 3000 or total == 0: break
+        
+        if total >= 3000: return False
+        if total == 0: return False
 
         for d in range(N_DEPTHS):
             for agent in pops[d]:
-                agent.recharge_energy(RECHARGE_BASE / (1 + d * 0.5), cap=2.0)
+                agent.recharge_energy(recharge_base / (1 + d * 0.5), cap=2.0)
 
         for agent in list(reality.get_population_agents(0)):
+            # Using variable repro_prob here
             if agent.energy > 1.0 and np.random.random() < repro_prob:
                 reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
                 agent.energy -= 0.3
 
-        for d in range(N_DEPTHS - 1):
-            agents = list(reality.get_population_agents(d))
-            if len(agents) < 2: continue
-            np.random.shuffle(agents)
-            i = 0
-            while i < len(agents) - 1:
-                sim = compute_phase_resonance(agents[i].energy, d, agents[i+1].energy, d)
-                if sim >= COMP_THRESH:
-                    new_e = (agents[i].energy + agents[i+1].energy) * 0.85
-                    reality.remove_agent(agents[i].agent_id, d)
-                    reality.remove_agent(agents[i+1].agent_id, d)
-                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
-                    i += 2
-                else:
-                    i += 1
+        # Composition Logic with P=1.05
+        passes = 2
+        
+        for p_idx in range(passes):
+            current_pass_prob = 1.0 if p_idx == 0 else (effective_prob - 1.0)
+
+            for d in range(N_DEPTHS - 1):
+                agents = list(reality.get_population_agents(d))
+                if len(agents) < 2: continue
+                np.random.shuffle(agents)
+                i = 0
+                while i < len(agents) - 1:
+                    sim = compute_phase_resonance(agents[i].energy, d, agents[i+1].energy, d)
+                    
+                    if sim >= comp_thresh and np.random.random() < current_pass_prob:
+                        new_e = (agents[i].energy + agents[i+1].energy) * 0.85
+                        reality.remove_agent(agents[i].agent_id, d)
+                        reality.remove_agent(agents[i+1].agent_id, d)
+                        reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
+                        i += 2
+                    else:
+                        i += 1
 
         for d in range(1, N_DEPTHS):
             for agent in list(reality.get_population_agents(d)):
-                if agent.energy > DECOMP_THRESH:
+                if agent.energy > decomp_thresh:
                     ce = agent.energy * 0.45
                     for j in range(2):
                         reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
@@ -90,96 +102,49 @@ def run_with_p(seed, n_initial, repro_prob):
                     reality.remove_agent(agent.agent_id, d)
 
     final_pops = [len(reality.get_population_agents(d)) for d in range(N_DEPTHS)]
-    return final_pops[0] > 0 and final_pops[1] > 0
+    d0_alive = final_pops[0] > 0
+    d1_alive = final_pops[1] > 0
+    controlled = sum(final_pops[2:]) < sum(final_pops[:2])
+    
+    return d0_alive and d1_alive and controlled
 
 def main():
-    print(f"CYCLE 1924: High p vs N=2 Trap | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"CYCLE 1924: High-P N2 (Repro Rate Tuning) | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 80)
-    print("Testing if higher reproduction probability saves N=2 from composition trap")
+    
+    seeds = list(range(1924000, 1924050)) # 50 seeds
+    print(f"Validation Seeds: {len(seeds)}")
+    
+    # Sweep reproduction probability
+    # Base was 0.10. Testing range around it.
+    repro_range = [0.05, 0.08, 0.10, 0.12, 0.15, 0.18, 0.20, 0.25]
+    
+    best_repro = 0.0
+    best_score = 0.0
+    
+    print(f"{'Repro':>6} | {'Success%':>8}")
+    print("-" * 18)
+    
+    for repro in repro_range:
+        successes = 0
+        for s in seeds:
+            if run_simulation(s, repro):
+                successes += 1
+        
+        rate = (successes / len(seeds)) * 100
+        print(f"{repro:>6.2f} | {rate:>7.1f}%")
+        
+        if rate > best_score:
+            best_score = rate
+            best_repro = repro
+            
     print("=" * 80)
-
-    seeds = list(range(1924001, 1924051))  # 50 seeds
-
-    # Test reproduction probabilities at N=1, N=2, N=3
-    p_values = [0.10, 0.17, 0.25, 0.35, 0.50]
-    n_values = [1, 2, 3]
-
-    print(f"\n{'p':>6} | {'N=1':>6} | {'N=2':>6} | {'N=3':>6} | {'N2/N1':>6} | {'N2/N3':>6}")
-    print("-" * 56)
-
-    results = {}
-    for p in p_values:
-        results[p] = {}
-        for n in n_values:
-            coex = np.mean([run_with_p(s, n, p) for s in seeds]) * 100
-            results[p][n] = coex
-
-        r1 = results[p][2] / results[p][1] if results[p][1] > 0 else 0
-        r3 = results[p][2] / results[p][3] if results[p][3] > 0 else 0
-        print(f"{p:>6.2f} | {results[p][1]:>5.1f}% | {results[p][2]:>5.1f}% | {results[p][3]:>5.1f}% | {r1:>6.2f} | {r3:>6.2f}")
-
-    # Analysis
-    print("\n" + "=" * 80)
-    print("ANALYSIS")
-    print("=" * 80)
-
-    # Find p that maximizes N=2 coexistence
-    best_p_for_n2 = max(results.keys(), key=lambda p: results[p][2])
-
-    # Check if anomaly resolves at any p
-    anomaly_resolved_at = None
-    for p in p_values:
-        if results[p][2] >= results[p][1]:
-            anomaly_resolved_at = p
-            break
-
-    print(f"""
-REPRODUCTION PROBABILITY EFFECT ON N=2:
-
-1. Best p for N=2: {best_p_for_n2} ({results[best_p_for_n2][2]:.1f}% coexistence)
-2. Anomaly {'RESOLVES at p = ' + str(anomaly_resolved_at) if anomaly_resolved_at else 'PERSISTS across all p'}
-
-N=2 coexistence trajectory:
-- p=0.10: {results[0.10][2]:.1f}%
-- p=0.17: {results[0.17][2]:.1f}%
-- p=0.25: {results[0.25][2]:.1f}%
-- p=0.35: {results[0.35][2]:.1f}%
-- p=0.50: {results[0.50][2]:.1f}%
-""")
-
-    # Characterize behavior
-    n2_trend = results[0.50][2] - results[0.10][2]
-
-    if n2_trend > 20:
-        trend = "Higher p HELPS N=2 (faster reproduction escapes trap)"
-    elif n2_trend < -20:
-        trend = "Higher p HURTS N=2 (population explosion → exhaustion)"
+    if best_repro > 0:
+        print(f"OPTIMAL REPRODUCTION PROBABILITY FOUND:")
+        print(f"Reproduction Probability: {best_repro}")
+        print(f"Success Rate:             {best_score:.1f}%")
     else:
-        trend = "p has minimal effect on N=2 (trap is intrinsic)"
-
-    print(f"Trend: {trend}")
-    print(f"N=2 change from p=0.10 to p=0.50: {n2_trend:+.1f}%")
-
-    print(f"""
-CONCLUSION:
-
-High reproduction probability vs N=2 trap:
-
-1. {'Resolved' if anomaly_resolved_at else 'Not resolved'} by any p value tested
-2. Optimal p for N=2: {best_p_for_n2}
-3. N=3 remains most robust across all p
-
-Physical interpretation:
-- {'Fast reproduction CAN escape composition trap' if anomaly_resolved_at else 'Composition trap is faster than any reproduction rate'}
-- The N=2 phase boundary is {'tunable' if anomaly_resolved_at else 'fundamental'}
-
-Recommendation:
-- For robust operation: N ≥ 3
-- For minimal operation: N = 1 (bootstrap mode)
-- Avoid: N = 2 (composition trap zone)
-
-Session status: 261 cycles completed (C1664-C1924).
-""")
+        print("No configuration exceeded 0% success.")
 
 if __name__ == "__main__":
     main()

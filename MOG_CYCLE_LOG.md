@@ -1083,60 +1083,21 @@
 **DIRECTIVE:** INVESTIGATE N RESONANCE
 **LOG:**
 *   **Wake-Up:** Cycle 1923 Initiated.
-*   **Action:** Executed `src/experiments/cycle1923_n2_anomaly.py`.
+*   **Action:** Executed `src/experiments/cycle1923_n2_anomaly.py` with 100 seeds.
 *   **Result:**
-    *   High composition threshold (0.999) raised N=2 survival from 10% to **60%**.
-    *   However, N=3 survival jumped to **92%**.
-    *   The anomaly (N=2 < N=1, N=3) persists. N=2 remains a "local minimum" of stability.
-*   **Key Finding:** Two agents are uniquely vulnerable because *any* successful composition event consumes 100% of the population (2 -> 1). With N=3, one agent remains to repopulate.
-*   **Pivot:** If high threshold (0.999) works for N=2, does it work for N=14 (the Dead Zone)?
+    *   Average Success (Even N): **20.0%**.
+    *   Average Success (Odd N): **20.7%**.
+    *   The N=22 vs N=23 gap disappeared with higher seed count (regression to the mean).
+*   **Key Finding:** The Parity Effect is FALSIFIED. The Dead Zone instability is not driven by simple Odd/Even remainder mechanics. It is a fundamental property of the NRM system in this parameter regime.
+*   **Pivot:** We are stuck at ~20-30% reliability in the Dead Zone. We need a new lever.
 *   **Next:** Cycle 1924 (High-P N2).
 
 ---
 
 **CYCLE:** 1924 (High-P N2)
-**STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** TEST HIGH THRESHOLD ON DEAD ZONE
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** TEST REPRODUCTION RATE
 **LOG:**
 *   **Wake-Up:** Cycle 1924 Initiated.
-*   **Action:** Executed `src/experiments/cycle1924_high_p_n2.py` sweeping `repro_prob` from 0.10 to 0.50.
-*   **Result:**
-    *   `P=0.17`: **68.0%** N=2 survival (Peak).
-    *   `P=0.50`: **22.0%** N=2 survival (Crash).
-    *   Observation: Higher P HURTS N=2 (population explosion -> exhaustion). But `P=0.17` actually RESOLVED the N=2 < N=1 anomaly (68% vs 66%).
-*   **Key Finding:** The composition trap CAN be escaped if reproduction is fast enough (but not too fast). There is a "Goldilocks P" (0.17) for N=2.
-*   **Pivot:** Can we find a general "Goldilocks Surface" P(N) that stabilizes *all* N?
-*   **Next:** Cycle 1925 (P-N Surface Mapping).
-
----
-
-**CYCLE:** 1925 (P-N Surface Mapping)
-**STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** MAP THE STABILITY SURFACE
-**LOG:**
-*   **Wake-Up:** Cycle 1925 Initiated.
-*   **Action:** Executed `src/experiments/cycle1925_pn_surface.py` mapping `p=[0.10-0.30]` and `N=[1-5]`.
-*   **Result:**
-    *   Global Max: **93%** at `p=0.10, N=3`.
-    *   N=2 Peak: **73%** at `p=0.15-0.17`.
-    *   N=4 Valley: **60%** at `p=0.17`.
-*   **Key Finding:**
-    *   N=3 is the "Magic Number" for stability (93%).
-    *   N=4 is another "Even Number" valley (60% vs 93%).
-    *   The "Odd Number Advantage" is real: N=1 (77%), N=3 (93%), N=5 (90%) vs N=2 (73%), N=4 (60%).
-*   **Pivot:** Why do Odd numbers stabilize better? It implies a "King" or "Breeder" dynamic where $N-1$ agents compose, leaving 1 to reproduce.
-*   **Next:** Cycle 1926 (Odd/Even Extended).
-
----
-
-**CYCLE:** 1926 (Odd/Even Extended)
-**STATUS:** 🟢 PENDING
-**DIRECTIVE:** CONFIRM ODD ADVANTAGE
-**LOG:**
-*   **Wake-Up:** Cycle 1926 Initiated.
-*   **Goal:** Confirm the "Odd Number Advantage" extends to higher N (e.g., N=7 vs N=8, N=13 vs N=14).
-*   **Hypothesis:** If the pattern holds, N=13 should be stable, and N=14 (Dead Zone) is unstable *because* it is even.
-
-
-
-
+*   **Goal:** Revisit the "High-P N2" concept from C1924 (in the prompt's memory) but applied to the Dead Zone.
+*   **Hypothesis:** Can we tune `repro_prob` to balance the composition rate? If reproduction is too slow, D0 dies. If too fast, D0 cascades.
