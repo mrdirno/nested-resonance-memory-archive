@@ -1382,3 +1382,15 @@
 *   **Result:** **SURVIVAL CONFIRMED.** Final Population 18.
 *   **Analysis:** Agents survive and cluster in a static spatial field. The extinction in C1944 was likely due to movement (scattering) or aggressive decomposition.
 *   **Next:** Cycle 1947 (Spatial Dynamics Check - Movement).
+
+---
+
+**CYCLE:** 1947 (Spatial Dynamics Check - Movement)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** TEST KINETIC STABILITY
+**LOG:**
+*   **Wake-Up:** Cycle 1947 Initiated.
+*   **Action:** Executed `src/experiments/cycle1947_spatial_dynamics.py` (Dynamic, V=5.0).
+*   **Result:** **SURVIVAL CONFIRMED.** Final Population 11 (vs 18 Static).
+*   **Analysis:** Movement reduces survival (scattering effect) but does not cause extinction. The C1944 collapse was likely driven by *Aggressive Decomposition* combined with movement.
+*   **Next:** Cycle 1948 (Decomposition Under Load).

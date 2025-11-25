@@ -70,10 +70,16 @@
 - [x] **Result:** Survival Confirmed (Pop=18).
 
 # Task: Cycle 1947 - Spatial Dynamics Check (Movement)
-- [ ] **Define Cycle 1947:** Re-introduce agent movement (Random Walk).
-- [ ] **Goal:** Determine if kinetic scattering causes extinction.
-- [ ] **Hypothesis:** High velocity = Low interaction time = Extinction.
-- [ ] **Action:** `src/experiments/cycle1947_spatial_dynamics.py`.
+- [x] **Define Cycle 1947:** Re-introduce agent movement (Random Walk).
+- [x] **Goal:** Determine if kinetic scattering causes extinction.
+- [x] **Hypothesis:** High velocity = Low interaction time = Extinction.
+- [x] **Action:** `src/experiments/cycle1947_spatial_dynamics.py`.
+- [x] **Result:** Survival Confirmed (Pop=11). Kinetic load reduces but does not eliminate survival.
+
+# Task: Cycle 1948 - Decomposition Under Load
+- [ ] **Define Cycle 1948:** Re-enable decomposition logic.
+- [ ] **Goal:** Find the critical decomposition threshold for moving swarms.
+- [ ] **Hypothesis:** Movement + Decomposition = Collapse (Synergistic Failure).
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
