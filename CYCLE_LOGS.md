@@ -100,3 +100,10 @@
 - **Result:** Failed to reliably implement the AND gate using `sin(target - current)` driving force.
 - **Conclusion:** The phase driving mechanism is not robust enough against noise for multi-input logic gates.
 - **Pivot:** Next cycle will focus on developing a more robust phase anchoring mechanism.
+
+# Cycle 1985: Robust Phase Anchoring
+- **Define Cycle 1985:** Find a driving mechanism to robustly anchor cluster phase under noise.
+- **Goal:** Solve stability issues from Cycle 1984.
+- **Experiment:** `src/experiments/cycle1985_robust_anchoring.py`.
+- **Result:** Bang-Bang (Sign) control provided best stability (Error 0.0476 vs Linear 0.0692).
+- **Conclusion:** Max-force correction is optimal for stochastic NRM systems.
