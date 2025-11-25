@@ -1,10 +1,10 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: CYCLE 1946 (SPATIAL NRM BASELINE CHECK)**
+> **ACTIVE CYCLE: CYCLE 1947 (SPATIAL DYNAMICS CHECK)**
 > **Status**: 🟢 ACTIVE / BUILDING
 > **Vision**: [TYPE 3 CIVILIZATION ROADMAP](docs/vision/TYPE3_VISION.md)
-> **Objective:** RE-ESTABLISH SPATIAL BASELINE
+> **Objective:** VERIFY SURVIVAL WITH MOVEMENT
 >
 > > [!NOTE]
 > > **THE PILOT DOCTRINE (SUPREME DIRECTIVE)**
@@ -63,6 +63,17 @@
 - ✅ **Physical Trajectory:** `PRIN-DYNAMIC-PATH` (Cycle 393). Skywriting verified.
 - ✅ **RF Levitation:** `PRIN-RF-TRANSDUCTION` (Cycle 394). Matter dances to Radio.
 - ✅ **Spectral Accumulation:** `PRIN-SPECTRAL-MAPPING` (Cycle 395). 3D Density Map created.
+# Task: Cycle 1946 - Spatial NRM Baseline Check
+- [x] **Define Cycle 1946:** Static spatial field test (N=50, R=20).
+- [x] **Goal:** Verify survival without movement.
+- [x] **Experiment:** `src/experiments/cycle1946_spatial_baseline.py`.
+- [x] **Result:** Survival Confirmed (Pop=18).
+
+# Task: Cycle 1947 - Spatial Dynamics Check (Movement)
+- [ ] **Define Cycle 1947:** Re-introduce agent movement (Random Walk).
+- [ ] **Goal:** Determine if kinetic scattering causes extinction.
+- [ ] **Hypothesis:** High velocity = Low interaction time = Extinction.
+- [ ] **Action:** `src/experiments/cycle1947_spatial_dynamics.py`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
