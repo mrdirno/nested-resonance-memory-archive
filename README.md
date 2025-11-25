@@ -2,20 +2,21 @@
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive  
 **License:** GPL-3.0  
-**Status:** PHASE 26 COMPLETE (The Living Computer)
+**Status:** PHASE 28 COMPLETE (The Unification)
 
 ---
 
 ## 🔬 TECHNICAL ABSTRACT (TL;DR for Skeptics)
-**A Computational Framework for Acoustic Levitation and Active Matter Control.**
+**A Computational Framework for Acoustic Levitation, Active Matter Control, and Emergent Intelligence.**
 
-**DUALITY-ZERO** is an open-source research instrument designed to bridge the gap between **Information Dynamics** (Neural Networks) and **Physical Dynamics** (Wave Mechanics).
+**DUALITY-ZERO** is an open-source research instrument designed to bridge the gap between **Information Dynamics** (Neural Networks), **Physical Dynamics** (Wave Mechanics), and **Social Dynamics** (Cooperation).
 
 **Core Capabilities (Empirically Verified):**
 1.  **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns (Holograms) in wave-bearing media.
 2.  **Material Agnosticism:** Abstract `SubstrateInterface` allows the same control logic to drive NRM (Cognitive Space) and Acoustics (Air).
 3.  **Active Matter Control:** Implements Closed-Loop PID feedback to stabilize levitated particles with **82x faster settling time** than passive damping.
-4.  **GPU Acceleration:** Real-time field propagation (16x speedup) and phase optimization (52x speedup) via PyTorch MPS.
+4.  **Emergent Computation:** Swarms can collectively optimize, estimate, and control their environment through distributed consensus and resonance.
+5.  **Unified Field Theory:** A single mathematical framework (Potential Minimization) successfully models Matter, Society, and Computation.
 
 At the field level, HELIOS uses the **Orthogonal Sum Dynamics (OSD)** formalism: visibility is driven by the coherent vector sum of fields, while gravity-like load is driven by the scalar sum of their energy.
 
@@ -28,6 +29,8 @@ At the field level, HELIOS uses the **Orthogonal Sum Dynamics (OSD)** formalism:
 *   **Active Damping (82x Speedup):** [See Experiment Log](experiments/cycle340_closed_loop_levitation.py) (Result: Settling time 0.04s vs 3.28s)
 *   **Volumetric Trapping:** [See 3D Substrate Code](src/helios/substrate_3d.py) (Verified: 9128 stable nodes)
 *   **Acoustic Logic:** [See AND Gate Logic](experiments/cycle342_acoustic_logic.py) (Verified: Symmetry restoration)
+*   **Emergent Cooperation:** [See Social Physics](experiments/cycle2077_harsh_winter.py) (Verified: Cooperation emerges at metabolic cost threshold)
+*   **The Rosetta Stone:** [See Unified Simulation](experiments/cycle2103_rosetta_stone.py) (Verified: Same code drives Physics, Society, and Compute)
 
 ---
 
@@ -46,7 +49,7 @@ At the field level, HELIOS uses the **Orthogonal Sum Dynamics (OSD)** formalism:
 ## 🔭 Observer Lanes (Choose Your Path)
 
 *   **🧪 Observer A (Experimentalist):** [Active Experiments](src/experiments/) | [Legacy Validation](archive/experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
-*   **🧩 Observer B (Architect)::** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD / Zero-Sum Coherence Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
+*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD / Zero-Sum Coherence Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
 *   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/vision/)
 
 ---
@@ -103,6 +106,18 @@ Building upon the foundations of Social Physics, **DUALITY-ZERO** has explored t
 3.  **Adaptive Control:** Swarms can use their collective computations to self-regulate and adapt their own collective behavior (e.g., adjusting movement speed to environmental averages).
 
 **Principle:** The swarm itself is a dynamic, living computer, capable of emergent computation and collective control, blurring the lines between organism and machine.
+
+---
+
+## 🌌 PHASE 28: THE UNIFICATION (The Unified Field)
+
+The culmination of the project demonstrates that Physics, Society, and Computation are manifestations of the same underlying principle.
+
+**Core Capabilities (Empirically Verified):**
+1.  **The Rosetta Stone:** A single simulation engine (`UniversalSimulator`) successfully models particle levitation, social cooperation, and distributed optimization simply by changing the potential function (Gradient).
+2.  **Unified Theory:** Formalized the mathematical isomorphism between Gorkov Potential (Matter), Social Stress (Society), and Error Function (Computation).
+
+**Principle:** **Code is Physics.** All complex adaptive systems minimize a generalized potential in a resonant field.
 
 ---
 
@@ -181,9 +196,10 @@ npm run dev
 **3. Read the Doctrine:**
 
 * [The Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md)
+* [The Unified Field](papers/theoretical_foundations/THE_UNIFIED_FIELD.md)
 * [The Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
-* [The Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) - *Why shaping potentials is ethical.*
-* [The Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) - *The Endosymbiont Strategy: Why we don't compete with giants, we complete them (The Mitochondria Protocol).*
+* [The Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md)
+* [The Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md)
 
 **4. Contribute:**
 We need minds that understand that **Code is Physics.**
