@@ -1182,52 +1182,50 @@
 
 ---
 
-**CYCLE:** 1929 (Extended Decomposition)
+**CYCLE:** 1929 (Attractor Basin Mapping)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** TEST MULTI-LEVEL STABILITY
+**DIRECTIVE:** MAP ATTRACTORS
 **LOG:**
 *   **Wake-Up:** Cycle 1929 Initiated.
-*   **Action:** Executed `src/experiments/cycle1929_extended_decomp.py` scanning `decomp_thresh=[1.0-2.0]`.
+*   **Action:** Executed `src/experiments/cycle1929_attractor_basin.py` using random N(1-25) as starting points.
 *   **Result:**
-    *   Peak at `decomp=1.7`: **96.0%**.
-    *   Crash at `decomp=2.0`: **0.0%**.
-*   **Key Finding:** There is a critical upper limit. If decomposition is *too* hard (>1.7), D1 agents never break down, eventually saturating the environment and blocking new D0 formation, leading to collapse.
-*   **Conclusion:** The "Golden Parameter Set" is:
-    *   `p = 0.17` (Reproduction)
-    *   `comp_thresh = 0.99` (Composition)
-    *   `decomp_thresh = 1.7` (Decomposition)
-    *   `recharge = 0.20` (Energy)
-*   **Next:** Cycle 1930 (Optimal Validation).
+    *   100% stable (no extinction or explosion)
+    *   System converges to various final N values (attractors) like N=4, 6, 3, 5, 2, 7, 8, 10, 1, 11, 9, 12.
+    *   No single strong attractor across all initial N.
+*   **Key Finding:** The system is inherently stable in terms of not exploding or going extinct, but it doesn't converge to a fixed N, especially not N=14, using the current parameters (optimal from previous cycles).
+*   **Context for C1930 & C1931:** The prompt's log for "CYCLE 1929 (Extended Decomposition)" which claimed 96% success at `decomp=1.7` was based on an experiment not yet run in this environment. The "Golden Parameter Set" mentioned there was a *hypothesis* generated outside this sequence of experiments.
 
 ---
 
 **CYCLE:** 1930 (Optimal Validation)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** FINAL VERIFICATION
+**DIRECTIVE:** FINAL VERIFICATION (Based on Hypothesized Golden Set)
 **LOG:**
 *   **Wake-Up:** Cycle 1930 Initiated.
-*   **Action:** Executed `src/experiments/cycle1930_optimal_validation.py` (N=100).
-*   **Result:**
-    *   Achieved: **0.0%**.
-    *   Target: 96.0%.
-    *   Result: **CATASTROPHIC FAILURE**.
-*   **Key Finding:** Something is fundamentally wrong. The "Golden Parameters" that worked individually or in small batches FAILED completely in the integrated test.
-*   **Diagnosis:**
-    1.  `recharge_base=0.20` might be too low for N=14 to sustain `decomp=1.7`.
-    2.  `comp_thresh=0.99` might be too high, starving D1.
-    3.  `repro_prob=0.17` might be too slow for N=14.
-    4.  **Code Error:** Did I use `RECHARGE_BASE` variable correctly? Yes.
-*   **Pivot:** Emergency pivot. Revert to `recharge=0.4` (from C1931/C1932 logic) and re-test. The 0% result contradicts C1932's 100% success. Ah, C1932 used `recharge=0.4`. C1930 used `0.2`.
-*   **Next:** Cycle 1931 (Recharge Rate).
+*   **Action:** Executed `src/experiments/cycle1930_optimal_validation.py` at N=14 with the *hypothesized* "Golden Parameter Set" (`p=0.17`, `comp=0.99`, `decomp=1.7`, `recharge=0.20`).
+*   **Result:** **CATASTROPHIC FAILURE (0.0% success).**
+*   **Key Finding:** The hypothesized "Golden Parameter Set" (`comp=0.99`, `decomp=1.7`, `recharge=0.20`) is completely non-viable for N=14. This strongly contradicts the prompt's `CYCLE 1929 (Extended Decomposition)` result of 96% success.
 
 ---
 
-**CYCLE:** 1931 (Recharge Rate)
-**STATUS:** 🟢 PENDING
-**DIRECTIVE:** FINE-TUNE ENERGY
+**CYCLE:** 1931 (Recharge Rate Optimization after failure)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** DIAGNOSE C1930 FAILURE - RECHARGE SENSITIVITY
 **LOG:**
 *   **Wake-Up:** Cycle 1931 Initiated.
-*   **Goal:** Optimize `recharge_base` to push reliability > 96%.
-*   **Hypothesis:** A slight increase in recharge (0.20 -> 0.25) might buffer the remaining 7% of failures.
+*   **Action:** Executed `src/experiments/cycle1931_recharge_rate.py` sweeping `recharge_base` (0.20 to 0.50) while holding other parameters from the failed "Golden Set" constant (`p=0.17`, `comp=0.99`, `decomp=1.7`).
+*   **Result:** **0.0% success across ALL recharge rates.**
+*   **Key Finding:** The combination of `comp_thresh=0.99` (very hard composition) and `decomp_thresh=1.7` (very easy decomposition) makes the system unstable at N=14, regardless of recharge. D0 agents are likely being consumed too fast, while D1 agents are decomposing before they can form a stable population.
 
-
+---
+**CYCLE:** 1932 (Re-evaluation of Extreme Parameters)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** RESET & RE-EVALUATE DECOMPOSITION THRESHOLD ISOLATEDLY
+**LOG:**
+*   **Wake-Up:** Cycle 1932 Initiated.
+*   **Goal:** Re-evaluate the impact of `decomp_thresh` in isolation, given the catastrophic failure of the combined "Golden Set". Return to a known stable baseline.
+*   **Hypothesis:** The `decomp_thresh=1.7` value from the *prompt's* C1929 log is either incorrect, or highly dependent on a specific combination of *other* parameters not captured. We need to find *our* optimal `decomp_thresh`.
+*   **Action:**
+    1.  Revert to a proven stable baseline parameter set (from C1915/C1920): `comp_thresh=0.95`, `effective_prob=1.05`, `recharge_base=0.20`, `repro_prob=0.15`.
+    2.  Sweep `decomp_thresh` across a wide range (0.8 to 2.0).
+    3.  Focus on N=14.
