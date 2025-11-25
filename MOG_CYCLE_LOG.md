@@ -1219,18 +1219,27 @@
 
 ---
 **CYCLE:** 1932 (Re-evaluation of Extreme Parameters)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** RESET & RE-EVALUATE DECOMPOSITION THRESHOLD ISOLATEDLY
 **LOG:**
 *   **Wake-Up:** Cycle 1932 Initiated.
-*   **Goal:** Re-evaluate the impact of `decomp_thresh` in isolation, given the catastrophic failure of the combined "Golden Set". Return to a known stable baseline.
-*   **Hypothesis:** The `decomp_thresh=1.7` value from the *prompt's* C1929 log is either incorrect, or highly dependent on a specific combination of *other* parameters not captured. We need to find *our* optimal `decomp_thresh`.
-*   **Action:**
-    1.  Revert to a proven stable baseline parameter set (from C1915/C1920): `comp_thresh=0.95`, `effective_prob=1.05`, `recharge_base=0.20`, `repro_prob=0.15`.
-    2.  Sweep `decomp_thresh` across a wide range (0.8 to 2.0).
-    3.  Focus on N=14.
+*   **Action:** Executed `src/experiments/cycle1932_re_evaluate_decomp.py` sweeping `decomp_thresh` (0.8 to 2.0) with a proven stable baseline (`comp_thresh=0.95`, `effective_prob=1.05`, `recharge_base=0.20`, `repro_prob=0.15`) for N=14.
+*   **Result:**
+    *   Optimal `decomp_thresh` is 1.3, yielding 24.0% success.
+    *   `decomp_thresh=1.7` yielded 0.0% success.
+*   **Key Finding:** Confirmed that `decomp_thresh=1.7` is lethal for N=14 under a known stable baseline. The "Golden Parameters" from the prompt's log were misleading and are not valid in this environment. We must build up stability incrementally.
 
-*   **Next:** Cycle 1934 (Robustness Stress Test).
+---
+**CYCLE:** 1933 (Re-evaluation of Composition Probability)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** RE-EVALUATE EFFECTIVE_PROB (COMPOSITION PROBABILITY)
+**LOG:**
+*   **Wake-Up:** Cycle 1933 Initiated.
+*   **Goal:** Reconfirm the optimal `effective_prob` for N=14 with our current best baseline parameters.
+*   **Hypothesis:** A slight increase in `effective_prob` (e.g., to 1.05, as found in C1920) might improve stability from the current ~24%.
+*   **Action:**
+    1.  Use baseline: `n_initial=14`, `comp_thresh=0.95`, `decomp_thresh=1.0`, `recharge_base=0.20`, `repro_prob=0.15`.
+    2.  Sweep `effective_prob` from 0.95 to 1.15.
 
 ---
 
