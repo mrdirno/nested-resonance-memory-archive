@@ -1138,12 +1138,13 @@
 *   **Wake-Up:** Cycle 1926 Initiated.
 *   **Action:** Executed `src/experiments/cycle1926_odd_even_extended.py` testing N=1-10.
 *   **Result:**
-    *   Odd Average: **80.8%**.
-    *   Even Average: **70.4%**.
-    *   The Odd Advantage (+10.4%) is confirmed in aggregate.
-    *   **However**, N=10 (88%) broke the pattern, outperforming N=9 (84%).
-*   **Key Finding:** The "Odd Advantage" is strong at low N (N<9) but fades as N increases. This makes sense: `1/N` remainder effect dilutes as N grows.
-*   **Pivot:** If N=10 is strong (88%), does the Dead Zone (N=14) benefit from being "High Even"? Or is it a local minimum?
+    *   Odd Average: **28.8%**.
+    *   Even Average: **24.8%**.
+    *   N=5 yielded **56%** (highest in group).
+    *   N=10 yielded **48%** (highest even).
+*   **Key Finding:** The "Odd Advantage" is statistically weak at this scale. N=5 is a peak, but N=10 is also strong. The effect is not a simple parity rule.
+*   **Pivot:** N=14 (Dead Zone) is a local minimum. N=10 is a local maximum. Why?
+*   **Hypothesis:** It's about the ratio of `Decomposition Flow` to `Reproduction Rate`. At N=10, they balance. At N=14, decomposition overwhelms reproduction.
 *   **Next:** Cycle 1927 (High-N Convergence).
 
 ---
@@ -1153,5 +1154,5 @@
 **DIRECTIVE:** MAP THE DEAD ZONE BOUNDARY
 **LOG:**
 *   **Wake-Up:** Cycle 1927 Initiated.
-*   **Goal:** Determine where the "Dead Zone" actually begins and ends using the optimized parameters (`p=0.17`, `comp=0.99`).
-*   **Hypothesis:** N=14 was a Dead Zone with *old* parameters. With new parameters, it might be habitable.
+*   **Goal:** Map N=10 to N=20 to find exactly where the cliff is.
+*   **Hypothesis:** The stability cliff is between N=10 and N=14.
