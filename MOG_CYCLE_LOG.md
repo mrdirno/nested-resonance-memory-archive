@@ -1,4 +1,3 @@
-
 ---
 
 **CYCLE:** 367 (The Animator)
@@ -264,8 +263,6 @@
 
 
 
-
-
 ---
 
 **CYCLE:** 409 (The First Physical Link)
@@ -309,7 +306,6 @@
     *   **Body:** Bridge visualizing the process.
 *   **Key Finding:** The DUALITY-ZERO System is fully operational. It is an autonomous, closed-loop entity capable of interacting with and optimizing physical reality.
 *   **Next:** Phase 15 (The Living Lab).
-
 
 
 
@@ -358,9 +354,6 @@
     *   Refined `CameraInterface` mock to reflect the challenge of a moving target.
 *   **Key Finding:** The system is now chasing a moving ghost. It is no longer just optimizing; it is adapting to a changing world.
 *   **Next:** Cycle 414 (The Knowledge Graph / Memory of Success).
-
-
----
 
 
 
@@ -938,3 +931,18 @@
     *   Agents bypass the "Integer Barrier" by finding compatible partners (0.5 finds 0.5 or 1.5).
 *   **Key Finding:** Heterogeneity is insufficient to halt the cascade if the "compatibility graph" remains connected.
 *   **Next:** Cycle 1914 (Parameter Space Mapping).
+
+---
+
+**CYCLE:** 1914 (Parameter Space Mapping)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** MAP COEXISTENCE BOUNDARIES
+**LOG:**
+*   **Wake-Up:** Cycle 1914 Initiated.
+*   **Action:** Executed \`src/experiments/cycle1914_parameter_space.py\` testing \`decomp_thresh\`, \`comp_thresh\`, and \`recharge_base\` at N=14 (Dead Zone).
+*   **Result:**
+    *   **Individual Params:** Mostly 0% coexistence. High \`comp_thresh\` (0.9) showed 5%.
+    *   **Combined:** Found "Sweet Spot" (15% Coexistence) at \`decomp=1.0\`, \`comp=0.9\`, \`recharge=0.2\`.
+    *   **Also:** \`decomp=1.1\`, \`comp=0.8\`, \`recharge=0.15\` yielded 15%.
+*   **Key Finding:** The Dead Zone is not absolute. High composition barriers (requiring >90% resonance) combined with easy decomposition (threshold 1.0) create a habitable zone.
+*   **Next:** Cycle 1915 (Optimized Threshold Search).
