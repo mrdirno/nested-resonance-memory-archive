@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
 """
-CYCLE 1922: MINIMUM Nc BOUNDARY TEST
+CYCLE 1922: MINIMUM VIABLE N
 
-C1921 showed Nc = 3.0 for all depths (100% coexistence at N=3).
-Test N = 1, 2 to find true minimum coexistence threshold.
+Determining the minimum initial population N required to achieve >90% coexistence reliability
+using the optimized parameters (comp=0.95, decomp=1.0, recharge=0.2, P=1.05).
+Hypothesis: The "Dead Zone" ends just above N=14.
 """
 import sys, numpy as np, math
 from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
+sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2/src')
 from core.fractal_agent import FractalAgent, RealityInterface
 
-CYCLES = 500
+CYCLES = 1000
 N_DEPTHS = 5
 PI = math.pi
 E = math.e
 PHI = (1 + math.sqrt(5)) / 2
-
-# OPTIMAL PARAMETERS
-DECOMP_THRESH = 0.8
-COMP_THRESH = 0.99
-RECHARGE_BASE = 0.2
-REPRO_PROB = 0.17  # Optimal from C1918-C1920
 
 def compute_phase_resonance(e1, d1, e2, d2):
     pi1 = (e1 * PI * 2) % (2 * PI)
@@ -37,10 +32,18 @@ def compute_phase_resonance(e1, d1, e2, d2):
     if mag1 == 0 or mag2 == 0: return 0.0
     return dot / (mag1 * mag2)
 
-def run_optimal(seed, n_initial):
-    """Run with optimal parameters."""
+def run_simulation(seed, n_initial):
+    """Run simulation with optimized parameters and specific N."""
+    # Optimized parameters from C1915/C1920
+    decomp_thresh = 1.0
+    comp_thresh = 0.95
+    recharge_base = 0.20
+    effective_prob = 1.05
+    
     reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
     np.random.seed(seed)
+    
+    repro_prob = 0.10
 
     for i in range(n_initial):
         reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
@@ -48,36 +51,45 @@ def run_optimal(seed, n_initial):
     for cycle in range(CYCLES):
         pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
         total = sum(len(p) for p in pops)
-        if total >= 3000 or total == 0: break
+        
+        if total >= 3000: return False
+        if total == 0: return False
 
         for d in range(N_DEPTHS):
             for agent in pops[d]:
-                agent.recharge_energy(RECHARGE_BASE / (1 + d * 0.5), cap=2.0)
+                agent.recharge_energy(recharge_base / (1 + d * 0.5), cap=2.0)
 
         for agent in list(reality.get_population_agents(0)):
-            if agent.energy > 1.0 and np.random.random() < REPRO_PROB:
+            if agent.energy > 1.0 and np.random.random() < repro_prob:
                 reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
                 agent.energy -= 0.3
 
-        for d in range(N_DEPTHS - 1):
-            agents = list(reality.get_population_agents(d))
-            if len(agents) < 2: continue
-            np.random.shuffle(agents)
-            i = 0
-            while i < len(agents) - 1:
-                sim = compute_phase_resonance(agents[i].energy, d, agents[i+1].energy, d)
-                if sim >= COMP_THRESH:
-                    new_e = (agents[i].energy + agents[i+1].energy) * 0.85
-                    reality.remove_agent(agents[i].agent_id, d)
-                    reality.remove_agent(agents[i+1].agent_id, d)
-                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
-                    i += 2
-                else:
-                    i += 1
+        # Composition Logic with P=1.05
+        passes = 2 # P=1.05 means one full pass and a 5% second pass
+        
+        for p_idx in range(passes):
+            current_pass_prob = 1.0 if p_idx == 0 else (effective_prob - 1.0)
+
+            for d in range(N_DEPTHS - 1):
+                agents = list(reality.get_population_agents(d))
+                if len(agents) < 2: continue
+                np.random.shuffle(agents)
+                i = 0
+                while i < len(agents) - 1:
+                    sim = compute_phase_resonance(agents[i].energy, d, agents[i+1].energy, d)
+                    
+                    if sim >= comp_thresh and np.random.random() < current_pass_prob:
+                        new_e = (agents[i].energy + agents[i+1].energy) * 0.85
+                        reality.remove_agent(agents[i].agent_id, d)
+                        reality.remove_agent(agents[i+1].agent_id, d)
+                        reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
+                        i += 2
+                    else:
+                        i += 1
 
         for d in range(1, N_DEPTHS):
             for agent in list(reality.get_population_agents(d)):
-                if agent.energy > DECOMP_THRESH:
+                if agent.energy > decomp_thresh:
                     ce = agent.energy * 0.45
                     for j in range(2):
                         reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
@@ -90,79 +102,53 @@ def run_optimal(seed, n_initial):
                     reality.remove_agent(agent.agent_id, d)
 
     final_pops = [len(reality.get_population_agents(d)) for d in range(N_DEPTHS)]
-    return final_pops[0] > 0 and final_pops[1] > 0
+    d0_alive = final_pops[0] > 0
+    d1_alive = final_pops[1] > 0
+    controlled = sum(final_pops[2:]) < sum(final_pops[:2])
+    
+    return d0_alive and d1_alive and controlled
 
 def main():
-    print(f"CYCLE 1922: Minimum Nc Boundary | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"CYCLE 1922: Minimum Viable N | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 80)
-    print(f"Testing N = 1, 2, 3 at optimal p = {REPRO_PROB}")
+    
+    seeds = list(range(1922000, 1922050)) # 50 seeds
+    print(f"Validation Seeds: {len(seeds)}")
+    
+    # Sweep N from 14 upwards
+    n_range = range(14, 25)
+    
+    best_n = 0
+    best_score = 0.0
+    
+    print(f"{'N':>6} | {'Success%':>8}")
+    print("-" * 18)
+    
+    for n in n_range:
+        successes = 0
+        for s in seeds:
+            if run_simulation(s, n):
+                successes += 1
+        
+        rate = (successes / len(seeds)) * 100
+        print(f"{n:>6} | {rate:>7.1f}%")
+        
+        if rate > best_score:
+            best_score = rate
+            best_n = n
+            
+        # Stop if we hit > 90% reliability
+        if rate >= 90.0:
+            break
+            
     print("=" * 80)
-
-    seeds = list(range(1922001, 1922051))  # 50 seeds
-
-    # Test low N values
-    n_values = [1, 2, 3]
-
-    print(f"\n{'N':>4} | {'Coex %':>8} | {'Status':>12}")
-    print("-" * 32)
-
-    results = {}
-    for n in n_values:
-        coex = np.mean([run_optimal(s, n) for s in seeds]) * 100
-        results[n] = coex
-
-        if coex >= 50:
-            status = "VIABLE"
-        else:
-            status = "SUB-THRESHOLD"
-
-        print(f"{n:>4} | {coex:>7.1f}% | {status:>12}")
-
-    # Analysis
-    print("\n" + "=" * 80)
-    print("ANALYSIS")
-    print("=" * 80)
-
-    # Find 50% threshold
-    if results[1] >= 50:
-        nc = 1.0
-        print(f"\nMinimum Nc = 1 (100% coexistence even with single agent)")
-    elif results[2] >= 50:
-        if results[1] < 50:
-            nc = 1 + (50 - results[1]) / (results[2] - results[1])
-        else:
-            nc = 1.0
-        print(f"\nNc ≈ {nc:.2f} (interpolated)")
-    elif results[3] >= 50:
-        nc = 2 + (50 - results[2]) / (results[3] - results[2])
-        print(f"\nNc ≈ {nc:.2f} (interpolated)")
+    if best_score >= 90.0:
+        print(f"MINIMUM VIABLE N FOUND: {best_n}")
+        print(f"Reliability:            {best_score:.1f}%")
+        print(f"The Dead Zone ends at N={best_n-1}.")
     else:
-        nc = 3.0  # Above range
-        print(f"\nNc > 3 (unexpected given C1921 results)")
-
-    # Interpretation
-    print(f"""
-CONCLUSION:
-
-Minimum Nc boundary analysis:
-
-1. N=1: {results[1]:.1f}% coexistence
-2. N=2: {results[2]:.1f}% coexistence
-3. N=3: {results[3]:.1f}% coexistence
-
-True Nc = {nc:.2f}
-
-Physical interpretation:
-- N=1: {'Can reproduce and create D1 via decomposition' if results[1] > 0 else 'Cannot create D1'}
-- N=2: {'Composition possible, D1 emerges' if results[2] > 50 else 'Insufficient for composition'}
-- N=3: {'Robust coexistence' if results[3] >= 50 else 'Still marginal'}
-
-Key insight: At optimal p = {REPRO_PROB}:
-- Reproduction can bootstrap from minimal population
-- The true minimum is {'surprisingly low' if nc <= 2 else 'at N=' + str(int(np.ceil(nc)))}
-
-Session status: 259 cycles completed (C1664-C1922).
-""")
+        print(f"Best N found: {best_n} ({best_score:.1f}%)")
+        print("Did not reach >90% reliability within tested range.")
 
 if __name__ == "__main__":
     main()
