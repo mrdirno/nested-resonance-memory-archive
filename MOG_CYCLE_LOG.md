@@ -1394,3 +1394,21 @@
 *   **Result:** **SURVIVAL CONFIRMED.** Final Population 11 (vs 18 Static).
 *   **Analysis:** Movement reduces survival (scattering effect) but does not cause extinction. The C1944 collapse was likely driven by *Aggressive Decomposition* combined with movement.
 *   **Next:** Cycle 1948 (Decomposition Under Load).
+
+---
+
+**CYCLE:** 1948 (Decomposition Under Load)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** ENABLE DECOMPOSITION LIFECYCLE
+**LOG:**
+*   **Wake-Up:** Cycle 1948 Initiated.
+*   **Action:** Executed `src/experiments/cycle1948_decomp_under_load.py`.
+    *   Parameters: Recharge 0.05 > Cost 0.01.
+    *   Mechanics: Burst > 4.0, Starve < 0.2.
+*   **Result:** **100% SURVIVAL (Biomass 50).**
+*   **Analysis:** The system is thermodynamically trivial (Input > Output). Agents gain energy indefinitely, burst, and persist. To observe emergence, we must impose **Scarcity**.
+*   **Pivot:** Cycle 1949 (The Starvation Stress). Invert the energy balance.
+    *   Single Cost: 0.05.
+    *   Cluster Cost: 0.01 (Efficiency Advantage).
+    *   Recharge: 0.02 (Singles starve, Clusters grow).
+*   **Next:** Cycle 1949 (The Starvation Stress).
