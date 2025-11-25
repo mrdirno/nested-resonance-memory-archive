@@ -45,7 +45,7 @@ At the field level, HELIOS uses the **Orthogonal Sum Dynamics (OSD)** formalism:
 
 ## 🔭 Observer Lanes (Choose Your Path)
 
-*   **🧪 Observer A (Experimentalist):** [Validation Experiments](experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
+*   **🧪 Observer A (Experimentalist):** [Active Experiments](src/experiments/) | [Legacy Validation](archive/experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
 *   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD / Zero-Sum Coherence Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
 *   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/vision/)
 

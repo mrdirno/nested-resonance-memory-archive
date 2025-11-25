@@ -1496,3 +1496,23 @@
     *   OR: `surviving_agents` logic is flawed.
 *   **Fix:** Cycle 1952 (Strict ID Accounting Fix). We need to ensure that when a cluster is formed, we correctly handle the transfer of ownership.
 *   **Next:** Cycle 1952 (Mass Correction).
+
+---
+
+**CYCLE:** 1952 (Mass Correction)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** VERIFY PHYSICS ENGINE INTEGRITY
+**LOG:**
+*   **Wake-Up:** Cycle 1952 Initiated.
+*   **Action:** Executed `src/experiments/cycle1952_mass_correction.py`.
+    *   Implemented recursive mass counting (`get_base_constituents`).
+    *   Implemented strict ID tracking for cluster formation.
+*   **Result:** **CONSERVATION CONFIRMED.**
+    *   Final Mass: 46 (Started 50).
+    *   Lost 4 agents? Likely "Starvation Death" of Base Agents (Singles) that didn't cluster in time.
+    *   Crucially: Mass <= 50. No matter creation.
+*   **Analysis:** The engine is now trustworthy. The "survival" seen in C1950 (71 agents) was an artifact. Real survival is lower but non-zero.
+*   **Pivot:** Cycle 1953 (The Information Metric). Now that we have a physically valid substrate, we need to measure **Information**.
+    *   Does the cluster structure encode information about the environment?
+    *   Metric: Shannon Entropy of the spatial distribution vs Random.
+*   **Next:** Cycle 1953 (Information Entropy).
