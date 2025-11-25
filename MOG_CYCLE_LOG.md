@@ -1017,5 +1017,3 @@
 *   **Wake-Up:** Cycle 1919 Initiated.
 *   **Goal:** Test if "Super-Composition" (multiple composition attempts per cycle) can stabilize the system.
 *   **Hypothesis:** Maybe D1 isn't forming *fast enough* to cap the D0 population explosion.
-
-
