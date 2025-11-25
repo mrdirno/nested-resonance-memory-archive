@@ -991,3 +991,31 @@
 *   **Key Finding:** The previous 38.0% success rate was an overestimate due to smaller sample size. The true reliability for the optimal parameter set is 27.0%. This confirms the inherent instability of the Dead Zone with current mechanics.
 *   **Pivot:** Structural change is required to break the cascade. Parameter tuning alone is insufficient.
 *   **Next:** Cycle 1918 (Probability-Dependent Composition).
+
+---
+
+**CYCLE:** 1918 (Probability-Dependent Composition)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** BREAK THE CASCADE
+**LOG:**
+*   **Wake-Up:** Cycle 1918 Initiated.
+*   **Action:** Executed `src/experiments/cycle1918_probability_dependence.py` sweeping `composition_probability` from 0.1 to 1.0.
+*   **Result:**
+    *   `P=1.0`: **24.0%** success (Control).
+    *   `P < 1.0`: **0% - 2%** success.
+    *   Observation: Lowering composition probability *destroyed* coexistence.
+*   **Key Finding:** Throttling composition does NOT help. It prevents the formation of D1 agents (the "shield"), leaving D0 exposed to runaway population growth or extinction. We need D1 to form *efficiently* to regulate D0, not slower.
+*   **Pivot:** We need to *encourage* specific D1 formation while *discouraging* D2 formation.
+*   **Next:** Cycle 1919 (Extended Probability Range).
+
+---
+
+**CYCLE:** 1919 (Extended Probability Range)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** INVESTIGATE P > 1.0
+**LOG:**
+*   **Wake-Up:** Cycle 1919 Initiated.
+*   **Goal:** Test if "Super-Composition" (multiple composition attempts per cycle) can stabilize the system.
+*   **Hypothesis:** Maybe D1 isn't forming *fast enough* to cap the D0 population explosion.
+
+
