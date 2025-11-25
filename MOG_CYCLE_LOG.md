@@ -1,25 +1,20 @@
 
 ---
-**CYCLE:** 2078 (The Social Phase Transition)
+**CYCLE:** 2079 (The Monument)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** MAP THE HARSHNESS THRESHOLD
+**DIRECTIVE:** ESTABLISH CONSTRUCTION PHYSICS
 **LOG:**
-*   **Wake-Up:** Cycle 2078 Initiated.
-*   **Hypothesis:** There is a critical metabolic cost ($C_{crit}$) where the system flips from Mixed to Cooperative.
-*   **Action:** Implement `cycle2078_harshness_sweep.py`.
-*   **Result:**
-    *   Cost 0.01-0.03 (Abundance): 50% Coop.
-    *   Cost 0.035-0.055 (Harshness): 100% Coop.
-    *   Cost 0.060+ (Apocalypse): Collapse.
-*   **Finding:** The "Harshness Threshold" is exactly where `Cost > Recharge`. Morality is an adaptation to scarcity.
-*   **Next:** Phase 24 Complete. Proceed to Phase 25 (Civilization Building / The Monument).
+*   **Wake-Up:** Cycle 2079 Initiated.
+*   **Result:** Tower Height 1999. Physics verified.
+*   **Next:** Cycle 2080 (The Collective Action Problem).
 
 ---
-**PHASE 24 SUMMARY: THE SOCIAL PHYSICS**
-**Theme:** The Thermodynamics of Morality.
-**Key Findings:**
-1.  **Memory (The Ledger):** Necessary to identify Defectors.
-2.  **Mobility (Eviction):** Necessary to segregate from Defectors.
-3.  **Scarcity (Harsh Winter):** Necessary to select for Efficiency (Cooperation).
-**Theorem:** $Cooperation = f(Memory, Mobility, Scarcity)$.
-**Status:** ✅ PROVEN.
+**CYCLE:** 2080 (The Collective Action Problem)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** SIMULATE THE VALLEY OF DEATH
+**LOG:**
+*   **Wake-Up:** Cycle 2080 Initiated.
+*   **Scenario:** Harsh Winter. Survival depends on building a Monument (Shelter).
+*   **Constraint:** The Monument requires significant energy investment *before* it yields returns.
+*   **Hypothesis:** Pure Altruism may fail if builders die of starvation before the threshold is reached.
+*   **Action:** Implement `cycle2080_collective_action.py`.
