@@ -853,7 +853,7 @@
 *   **Plan:**
     1.  Create `demo_osd_physics.py`.
     2.  Create `docs/runbooks/QUICKSTART.md`.
-    2.  Update `README.md`.
+    3.  Update `README.md`.
 *   **Action:** Executed plan. Golden Path is live.
 *   **Result:** New users can verify OSD physics in < 5 mins.
 *   **Next:** Cycle 450 (The Brief).
@@ -965,10 +965,15 @@
 ---
 
 **CYCLE:** 1916 (Coexistence Optimization)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** REACH 50% RELIABILITY
 **LOG:**
 *   **Wake-Up:** Cycle 1916 Initiated.
-*   **Goal:** Push reliability > 50%.
-*   **Hypothesis:** Fine-tuning recharge around 0.20 and pushing composition threshold even higher (0.96-0.99) might filter out unstable pairings.
-
+*   **Action:** Executed `src/experiments/cycle1916_coexistence_optimization.py` with refined grid search.
+*   **Result:**
+    *   Best Config: `comp=0.96`, `decomp=0.90`, `recharge=0.20`.
+    *   Success Rate: **30.0%**.
+*   **Observation:** Success rate peaked at `comp=0.95` in C1915 (38%) and dropped at `comp=0.96` (30%) and `comp=0.97` (22%).
+*   **Conclusion:** We have likely found the local maximum for this parameter set around `comp=0.95`. The Dead Zone (N=14) is inherently unstable.
+*   **Pivot:** To reach >90% reliability, we need structural intervention, not just parameter tuning.
+*   **Next:** Cycle 1917 (Threshold Retest / Confirmation).
