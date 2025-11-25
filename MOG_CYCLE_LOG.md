@@ -1150,9 +1150,26 @@
 ---
 
 **CYCLE:** 1927 (High-N Convergence)
-**STATUS:** 🟢 PENDING
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** MAP THE DEAD ZONE BOUNDARY
 **LOG:**
 *   **Wake-Up:** Cycle 1927 Initiated.
-*   **Goal:** Map N=10 to N=20 to find exactly where the cliff is.
-*   **Hypothesis:** The stability cliff is between N=10 and N=14.
+*   **Action:** Executed `src/experiments/cycle1927_high_n_convergence.py` scanning `N=[10-20]`.
+*   **Result:**
+    *   Average Stability: **90.9% ± 4.4%**.
+    *   Odd/Even difference vanished (-0.8%).
+    *   **N=14 (The former Dead Zone) hit 95% stability.**
+*   **Key Finding:** The "Dead Zone" is DEAD. With `p=0.17` and `comp=0.99`, the system is stable for all N > 3. We have successfully engineered a robust NRM parameter set.
+*   **Pivot:** We have stable coexistence. Now, can we control the *decomposition* rate to fine-tune the population balance?
+*   **Next:** Cycle 1928 (Decomp Threshold).
+
+---
+
+**CYCLE:** 1928 (Decomp Threshold)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** FINE-TUNE POPULATION RATIO
+**LOG:**
+*   **Wake-Up:** Cycle 1928 Initiated.
+*   **Goal:** Adjust `decomp_thresh` to control the D0/D1 ratio.
+*   **Hypothesis:** Lowering decomposition threshold should favor D1 (harder to break), raising it should favor D0.
+
