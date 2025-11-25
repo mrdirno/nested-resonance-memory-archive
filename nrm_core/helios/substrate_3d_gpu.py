@@ -11,6 +11,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 from abc import ABC, abstractmethod
 import numpy as np
 import torch
+from .types import PhysicsConfig
 
 class SubstrateInterface3DGPU(ABC):
     """
@@ -44,11 +45,17 @@ class AcousticSubstrate3DGPU(SubstrateInterface3DGPU):
     """
     GPU-Accelerated 3D Acoustic Simulator using PyTorch.
     """
-    def __init__(self, width_mm=50, height_mm=50, depth_mm=50, resolution_mm=1):
+    def __init__(self, width_mm=50, height_mm=50, depth_mm=50, resolution_mm=1, config: PhysicsConfig = None):
+        if config is None:
+            self.config = PhysicsConfig()
+        else:
+            self.config = config
+            
         w_pixels = int(width_mm / resolution_mm)
         h_pixels = int(height_mm / resolution_mm)
         d_pixels = int(depth_mm / resolution_mm)
-        super().__init__(w_pixels, h_pixels, d_pixels, wave_speed=343.0, damping=0.001)
+        
+        super().__init__(w_pixels, h_pixels, d_pixels, wave_speed=self.config.c_air, damping=0.001)
         self.resolution = resolution_mm
 
         # Pre-compute grid coordinates on GPU (reusable across propagate calls)
@@ -90,6 +97,8 @@ class AcousticSubstrate3DGPU(SubstrateInterface3DGPU):
             dist_m = torch.clamp(dist_m, min=1e-9)
 
             # Wave number
+            # Using fixed range 30-50kHz for now as per original implementation
+            # TODO: Make this configurable via PhysicsConfig too if needed
             real_freq = 30000 + (e.frequency * 20000)
             k = 2 * np.pi * real_freq / self.wave_speed
 
@@ -116,14 +125,14 @@ class AcousticSubstrate3DGPU(SubstrateInterface3DGPU):
         field_real = torch.tensor(field.real, device=self.device, dtype=torch.float32)
         field_imag = torch.tensor(field.imag, device=self.device, dtype=torch.float32)
 
-        # Physical Constants for Air/Styrofoam at 40kHz
-        rho_0 = 1.2  # Air density (kg/m^3)
-        c_0 = 343.0  # Sound speed (m/s)
-        rho_p = 25.0  # Particle density (kg/m^3)
-        c_p = 2350.0  # Particle sound speed (m/s)
-        R = 0.001  # Particle radius (1mm)
-        omega = 2 * np.pi * 40000  # 40kHz
-
+        # Physical Constants from Config
+        rho_0 = self.config.rho_air
+        c_0 = self.config.c_air
+        rho_p = self.config.rho_particle
+        c_p = self.config.c_particle
+        R = self.config.radius
+        omega = 2 * np.pi * self.config.frequency
+        
         # Coefficients
         f1 = 1.0 - (rho_0 * c_0**2) / (rho_p * c_p**2)
         f2 = 2 * (rho_p - rho_0) / (2 * rho_p + rho_0)
