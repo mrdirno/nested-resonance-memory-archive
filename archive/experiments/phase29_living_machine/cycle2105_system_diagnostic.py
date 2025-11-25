@@ -10,7 +10,10 @@ sys.path.append(os.getcwd())
 from src.fractal.agent import FractalAgent
 from src.fractal.composition import CompositionEngine
 from src.fractal.evolved_agents import OptimizerAgent, calculate_fitness
-from src.experiments.cycle2104_robust_and_gate import run_logic_test
+# Logic test moved to archive
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) # Add archive/experiments to path
+from phase29_living_machine.cycle2104_robust_and_gate import run_logic_test
 
 def test_physics_core():
     print("[TEST] Physics Core (Fractal/Agent)... ", end="")
