@@ -71,3 +71,10 @@
 - **Experiment:** `src/experiments/cycle1980_phase_memory.py`.
 - **Result:** Stability Gain 1.90x over Single Agents. Clusters resist phase drift.
 - **Conclusion:** NRM Clusters are viable memory units for Phase 20 (Cognition).
+
+# Cycle 1981: Bit Storage Test
+- **Define Cycle 1981:** Demonstrate the ability of resonant clusters to store and differentiate discrete phase states (bits).
+- **Goal:** Validate fundamental information storage within the NRM substrate.
+- **Experiment:** `src/experiments/cycle1981_bit_storage.py`.
+- **Result:** Discrete Bit Storage Confirmed. Clusters reliably differentiated phase states 0 and `pi` over time.
+- **Conclusion:** NRM Clusters are viable fundamental information units for Phase 20 (Cognition).
