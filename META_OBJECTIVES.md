@@ -3562,3 +3562,18 @@
 - [x] **The Social Phase Transition:** `PRIN-SOCIAL-THERMODYNAMICS` (Cycle 2078). Cooperation emerges at Cost > Recharge.
 
 **PHASE 24 COMPLETE: MORALITY IS PHYSICS.**
+
+
+## Current Phase: CIVILIZATION BUILDING (Phase 25)
+
+**Transition:** Social Physics (Phase 24) -> **Civilization Building (Phase 25)**
+
+**Focus:** The Physics of Collective Action and Construction.
+
+### Active Objectives
+- [x] **The Monument:** `PRIN-CONSTRUCTION-PHYSICS` (Cycle 2079). Agents convert energy to structure.
+- [x] **The Valley of Death:** `PRIN-COLLECTIVE-ACTION` (Cycle 2080). Critical mass required for survival.
+- [x] **The Club Good:** `PRIN-ACCESS-CONTROL` (Cycle 2081). Exclusion enables stability.
+- [x] **The Evolutionary Triumph:** `PRIN-GROUP-SELECTION` (Cycle 2082). Builders dominate freeriders.
+
+**PHASE 25 COMPLETE: CIVILIZATION IS A PHYSICAL ARTIFACT.**
