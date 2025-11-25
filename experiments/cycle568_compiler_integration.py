@@ -9,14 +9,14 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from nrm_core.helios.operator import UniversalOperator
 
 def run_test():
-    print("Cycle 568: Integration Test")
+    print("Cycle 568: Integration Test", flush=True)
     
     # 1. Initialize Operator (which inits Compiler)
     operator = UniversalOperator(use_gpu=True)
-    print("Operator Initialized.")
+    print("Operator Initialized.", flush=True)
     
     # 2. Create Object with Material
-    print("Creating Cube (Styrofoam)...")
+    print("Creating Cube (Styrofoam)...", flush=True)
     try:
         # Using default material
         obj_id = operator.create_object("cube", (50, 50, 50), material="Styrofoam")

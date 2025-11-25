@@ -56,7 +56,7 @@ class MatterCompiler:
         Returns:
             List of configured Emitters.
         """
-        print(f"[Compiler] Initializing for {material.name}...")
+        print(f"[Compiler] Initializing for {material.name}...", flush=True)
         
         # 1. Configure Physics
         config = PhysicsConfig(
@@ -72,10 +72,10 @@ class MatterCompiler:
             resolution_mm=1.0, # High res for solving
             config=config
         )
-        print(f"[Compiler] Substrate initialized on {substrate.device}.")
+        print(f"[Compiler] Substrate initialized on {substrate.device}.", flush=True)
         
         # 3. Run Solver
-        print(f"[Compiler] Solving for {len(geometry)} target points...")
+        print(f"[Compiler] Solving for {len(geometry)} target points...", flush=True)
         best_phases = genetic_algorithm_gpu(
             geometry, 
             substrate, 
@@ -91,6 +91,6 @@ class MatterCompiler:
             new_e = Emitter3D(e.x, e.y, e.z, e.frequency, best_phases[i], e.amplitude)
             compiled_emitters.append(new_e)
             
-        print("[Compiler] Compilation Complete.")
+        print("[Compiler] Compilation Complete.", flush=True)
         return compiled_emitters
 
