@@ -1,178 +1,190 @@
-#!/usr/bin/env python3
-"""
-CYCLE 1962: ENERGY-DEPENDENT COMPOSITION PROBABILITY
+import sys
+import os
+import random
+import numpy as np
+from typing import List, Dict, Optional, Set
+from dataclasses import asdict
 
-Map how composition probability depends on agent energy values.
-Connect phase resonance theory to energy dynamics.
-"""
-import sys, numpy as np, math
-from datetime import datetime
-sys.path.insert(0, '/Volumes/dual/DUALITY-ZERO-V2')
-from core.fractal_agent import FractalAgent, RealityInterface
+# Add project root to path
+sys.path.append(os.getcwd())
 
-CYCLES = 500
-N_DEPTHS = 5
-PI = math.pi
-E = math.e
-PHI = (1 + math.sqrt(5)) / 2
+from src.fractal.agent import FractalAgent
+from src.fractal.composition import CompositionEngine
 
-P_BASE = 0.17
-K = 30
-N_INITIAL = 14
-COMP_THRESH = 0.99
-DECOMP_THRESH = 1.7
-RECHARGE_BASE = 0.4
+class SpatialCompositionEngine(CompositionEngine):
+    def __init__(self, resonance_threshold: float = 0.7, energy_threshold: float = 0.5, distance_threshold: float = 20.0):
+        super().__init__(resonance_threshold, energy_threshold)
+        self.distance_threshold = distance_threshold
 
-def run_energy_prob_tracking(seed):
-    """Track composition probability by energy bin."""
-    reality = RealityInterface(n_populations=N_DEPTHS, mode="SEARCH")
-    np.random.seed(seed)
-    for i in range(N_INITIAL):
-        reality.add_agent(FractalAgent(f"D0_{i}", 0, 1.0, depth=0), 0)
+    def detect_clusters(
+        self,
+        agents: List[FractalAgent],
+        min_cluster_size: int = 2,
+        max_cluster_size: Optional[int] = None,
+    ) -> List[List[FractalAgent]]:
+        if len(agents) < min_cluster_size:
+            return []
 
-    # Track by energy bins
-    energy_bins = np.linspace(0.5, 2.0, 7)  # 6 bins
-    attempts_by_bin = np.zeros(len(energy_bins)-1)
-    successes_by_bin = np.zeros(len(energy_bins)-1)
+        depth_groups: Dict[int, List[FractalAgent]] = {}
+        for agent in agents:
+            depth = agent.state.depth
+            if depth not in depth_groups:
+                depth_groups[depth] = []
+            depth_groups[depth].append(agent)
 
+        all_clusters = []
+
+        for depth, depth_agents in depth_groups.items():
+            if len(depth_agents) < min_cluster_size:
+                continue
+
+            n = len(depth_agents)
+            adjacency_matrix = np.zeros((n, n), dtype=bool)
+
+            for i in range(n):
+                for j in range(i + 1, n):
+                    agent_i = depth_agents[i]
+                    agent_j = depth_agents[j]
+                    
+                    dist = np.linalg.norm(agent_i.state.position - agent_j.state.position)
+                    if dist > self.distance_threshold:
+                        continue
+
+                    resonance = abs(agent_i.calculate_resonance(agent_j))
+                    if resonance >= self.resonance_threshold:
+                        adjacency_matrix[i, j] = True
+                        adjacency_matrix[j, i] = True
+
+            visited = set()
+            for i in range(n):
+                if i in visited:
+                    continue
+
+                cluster = [depth_agents[i]]
+                visited.add(i)
+
+                for j in range(n):
+                    if j in visited:
+                        continue
+                    
+                    is_connected_to_all = True
+                    for member in cluster:
+                        member_idx = depth_agents.index(member) 
+                        if not adjacency_matrix[member_idx, j]:
+                            is_connected_to_all = False
+                            break
+                    
+                    if is_connected_to_all:
+                        cluster.append(depth_agents[j])
+                        visited.add(j)
+
+                if len(cluster) >= min_cluster_size:
+                    if max_cluster_size is None or len(cluster) <= max_cluster_size:
+                        all_clusters.append(cluster)
+
+        return all_clusters
+
+def run_simulation(initial_energy: float) -> float:
+    N_AGENTS = 50
+    WORLD_SIZE = 100.0
+    DISTANCE_THRESHOLD = 20.0
+    CYCLES = 50
+    VELOCITY_MAGNITUDE = 5.0
+    
+    # Neutral Physics (No Starvation/Abundance bias for this test)
+    RECHARGE_RATE = 0.00
+    COST_SINGLE = 0.00
+    COST_CLUSTER = 0.00
+    DECOMP_LOW_ENERGY = -100.0 # Disable
+    DECOMP_HIGH_ENERGY = 100.0 # Disable
+    
+    # Probabilistic Composition
+    # P(Comp) = 1.0 / (Energy + epsilon)
+    # We need to modify the Engine or the Agent to respect this.
+    # For this experiment, we will filter candidates manually in the loop.
+    
+    cluster_registry: Dict[str, List[FractalAgent]] = {}
+
+    agents = []
+    for i in range(N_AGENTS):
+        pos = np.random.rand(3) * WORLD_SIZE
+        pos[2] = 0
+        agent = FractalAgent(
+            agent_id=f"gen0_{i}",
+            energy=initial_energy,
+            phase=random.uniform(0, 2*np.pi),
+            position=pos
+        )
+        agents.append(agent)
+
+    comp_engine = SpatialCompositionEngine(distance_threshold=DISTANCE_THRESHOLD)
+    
+    composition_events = 0
+    
     for cycle in range(CYCLES):
-        pops = [reality.get_population_agents(d) for d in range(N_DEPTHS)]
-        total = sum(len(p) for p in pops)
-        if total >= 3000 or total == 0: break
+        # 1. Movement
+        for agent in agents:
+            theta = random.uniform(0, 2*np.pi)
+            dx = VELOCITY_MAGNITUDE * np.cos(theta)
+            dy = VELOCITY_MAGNITUDE * np.sin(theta)
+            agent.move(np.array([dx, dy, 0.0]))
+            agent.state.position = agent.state.position % WORLD_SIZE
 
-        p_effective = P_BASE / (1 + total / K)
+        # 2. Probabilistic Filter
+        # Only agents that "want" to compose are passed to engine
+        # Willingness = 1.0 / (Energy + 0.1)
+        # Cap at 1.0
+        
+        willing_agents = []
+        for agent in agents:
+            willingness = min(1.0, 0.2 / (agent.state.energy + 0.01)) # Adjusted constant
+            if random.random() < willingness:
+                willing_agents.append(agent)
+                
+        # 3. Composition
+        if len(willing_agents) >= 2:
+            new_clusters = comp_engine.compose_all(willing_agents)
+            composition_events += len(new_clusters)
+            
+            consumed_ids = set()
+            for cluster in new_clusters:
+                constituents = []
+                for child_id in cluster.state.children_ids:
+                    found = next((a for a in agents if a.agent_id == child_id), None)
+                    if found:
+                        constituents.append(found)
+                        consumed_ids.add(child_id)
+                cluster_registry[cluster.agent_id] = constituents
+                
+            agents = [a for a in agents if a.agent_id not in consumed_ids] + new_clusters
+        
+        if len(agents) == 0:
+            break
 
-        for d in range(N_DEPTHS):
-            for agent in pops[d]:
-                agent.recharge_energy(RECHARGE_BASE / (1 + d * 0.5), cap=2.0)
+    rate = composition_events / CYCLES
+    return rate
 
-        for agent in list(reality.get_population_agents(0)):
-            if agent.energy > 1.0 and np.random.random() < p_effective:
-                reality.add_agent(FractalAgent(f"D0_{cycle}_{agent.agent_id[-6:]}", 0, 0.5, depth=0), 0)
-                agent.energy -= 0.3
-
-        # Composition with energy tracking
-        for d in range(N_DEPTHS - 1):
-            agents = list(reality.get_population_agents(d))
-            if len(agents) < 2: continue
-            np.random.shuffle(agents)
-            i = 0
-            while i < len(agents) - 1:
-                e1, e2 = agents[i].energy, agents[i+1].energy
-                avg_e = (e1 + e2) / 2
-
-                # Find bin
-                bin_idx = np.digitize(avg_e, energy_bins) - 1
-                bin_idx = max(0, min(bin_idx, len(energy_bins)-2))
-
-                pi1 = (e1 * PI * 2) % (2 * PI)
-                e_1 = (d * E / 4) % (2 * PI)
-                phi1 = (e1 * PHI) % (2 * PI)
-                pi2 = (e2 * PI * 2) % (2 * PI)
-                e_2 = (d * E / 4) % (2 * PI)
-                phi2 = (e2 * PHI) % (2 * PI)
-                v1 = [pi1, e_1, phi1]
-                v2 = [pi2, e_2, phi2]
-                dot = sum(a * b for a, b in zip(v1, v2))
-                mag1 = math.sqrt(sum(a**2 for a in v1))
-                mag2 = math.sqrt(sum(a**2 for a in v2))
-                sim = dot / (mag1 * mag2) if mag1 > 0 and mag2 > 0 else 0
-
-                attempts_by_bin[bin_idx] += 1
-                if sim >= COMP_THRESH:
-                    successes_by_bin[bin_idx] += 1
-                    new_e = (e1 + e2) * 0.85
-                    reality.remove_agent(agents[i].agent_id, d)
-                    reality.remove_agent(agents[i+1].agent_id, d)
-                    reality.add_agent(FractalAgent(f"D{d+1}_{cycle}", d+1, new_e, depth=d+1), d+1)
-                    i += 2
-                else:
-                    i += 1
-
-        for d in range(1, N_DEPTHS):
-            for agent in list(reality.get_population_agents(d)):
-                if agent.energy > DECOMP_THRESH:
-                    ce = agent.energy * 0.45
-                    for j in range(2):
-                        reality.add_agent(FractalAgent(f"D{d-1}_{cycle}_{j}", d-1, ce, depth=d-1), d-1)
-                    reality.remove_agent(agent.agent_id, d)
-
-        for d in range(N_DEPTHS):
-            decay = 0.02 * (1 + d * 0.1) * 0.1
-            for agent in list(reality.get_population_agents(d)):
-                if not agent.consume_energy(decay):
-                    reality.remove_agent(agent.agent_id, d)
-
-    return {
-        'attempts': attempts_by_bin,
-        'successes': successes_by_bin,
-        'bins': energy_bins
-    }
-
-def main():
-    print(f"CYCLE 1962: Energy Composition Prob | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 80)
-    print("Mapping composition probability by energy")
-    print("=" * 80)
-
-    seeds = list(range(1962001, 1962011))
-    results = [run_energy_prob_tracking(s) for s in seeds]
-
-    # Aggregate
-    total_attempts = np.zeros(6)
-    total_successes = np.zeros(6)
-    for r in results:
-        total_attempts += r['attempts']
-        total_successes += r['successes']
-
-    energy_bins = results[0]['bins']
-
-    print(f"\nCOMPOSITION PROBABILITY BY ENERGY BIN:")
-    print("-" * 60)
-    print(f"{'Energy Range':>16} | {'Attempts':>10} | {'Success':>10} | {'Prob%':>8}")
-    print("-" * 60)
-
-    for i in range(len(energy_bins)-1):
-        e_lo = energy_bins[i]
-        e_hi = energy_bins[i+1]
-        att = total_attempts[i]
-        suc = total_successes[i]
-        prob = suc / att * 100 if att > 0 else 0
-        print(f"[{e_lo:.2f}, {e_hi:.2f}) | {att:>10,.0f} | {suc:>10,.0f} | {prob:>7.1f}%")
-
-    # Summary
-    overall_prob = np.sum(total_successes) / np.sum(total_attempts) * 100
-
-    # Find peak bin
-    probs = total_successes / (total_attempts + 1e-10) * 100
-    peak_bin = np.argmax(probs)
-    peak_energy = (energy_bins[peak_bin] + energy_bins[peak_bin+1]) / 2
-
-    print(f"""
-{'=' * 80}
-ENERGY COMPOSITION CONCLUSIONS
-{'=' * 80}
-
-1. OVERALL SUCCESS RATE: {overall_prob:.1f}%
-   Matches theoretical P(sim >= 0.99) = 28%
-
-2. ENERGY DEPENDENCE:
-   - Peak composition at {peak_energy:.2f} energy
-   - Probability varies by energy bin
-   - Not uniform across energy range
-
-3. MECHANISM:
-   - Phase angles depend on energy
-   - Similar energies → similar phases → high similarity
-   - Energy clustering promotes composition
-
-4. IMPLICATIONS:
-   - Composition is energy-selective
-   - Creates energy homogeneity at higher depths
-   - Explains D1 high similarity (0.91 in C1952)
-
-Session status: 299 cycles completed (C1664-C1962).
-""")
+def run_experiment():
+    print("MOG ONLINE: Cycle 1962 - Energy-Composition Probability", flush=True)
+    
+    energy_levels = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    results = []
+    
+    print("Sweeping Energy Levels...", flush=True)
+    for e in energy_levels:
+        rate = run_simulation(e)
+        results.append(rate)
+        print(f"Energy {e:.1f} -> Composition Rate {rate:.2f}", flush=True)
+        
+    # Check trend
+    # Correlation coefficient
+    corr = np.corrcoef(energy_levels, results)[0, 1]
+    print(f"Correlation (Energy vs Rate): {corr:.4f}", flush=True)
+    
+    if corr < -0.8:
+        print("HYPOTHESIS CONFIRMED: Strong Inverse Relationship.", flush=True)
+    else:
+        print("HYPOTHESIS FAILED.", flush=True)
 
 if __name__ == "__main__":
-    main()
+    run_experiment()

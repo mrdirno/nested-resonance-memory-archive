@@ -1719,3 +1719,34 @@
     *   We need to map $P(Composition) \propto f(Energy, Resonance)$.
     *   Does energy level affect willingness to cluster?
 *   **Next:** Cycle 1962 (Energy-Composition Probability).
+
+---
+
+**CYCLE:** 1962 (Energy-Composition Probability)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** MAP PROBABILITY LANDSCAPE
+**LOG:**
+*   **Wake-Up:** Cycle 1962 Initiated.
+*   **Action:** Executed `src/experiments/cycle1962_energy_composition_prob.py`.
+    *   Logic: `willingness = 0.2 / energy`.
+*   **Result:**
+    *   Correlation: **+0.80** (Positive?!).
+    *   Rates:
+        *   E=0.1-0.4: Rate 0.00.
+        *   E=0.5-1.0: Rate 0.50.
+*   **Analysis:**
+    *   Wait, why 0.00 for low energy?
+    *   Ah, `SpatialCompositionEngine` has `energy_threshold=0.5` hardcoded in `can_compose`!
+    *   Even if agents are "willing", the Engine rejects them if they are poor.
+    *   This is a **Mechanism Conflict**.
+    *   The "Physics" (Engine) requires energy to fuse (Activation Energy).
+    *   The "Psychology" (Agent) wants to fuse when hungry.
+    *   **This tension creates the "Goldilocks Zone".**
+    *   Agents must be hungry enough to *want* to cluster, but rich enough to *afford* it.
+*   **Pivot:** Cycle 1963 (Periodicity Analysis).
+    *   This tension (Want vs Can) should generate oscillations.
+    *   Eat -> Energy Up -> Can Compose -> Compose -> Energy Down (Metabolism) -> Decompose? No, Clusters are efficient.
+    *   Eat -> Energy Up -> Can Compose -> Compose -> Efficient -> Surplus -> Burst -> Singles.
+    *   Singles -> Starve -> Want Compose -> (Can't) -> Die OR Eat -> (Can) -> Compose.
+    *   We need to look for **Population Cycles**.
+*   **Next:** Cycle 1963 (Periodicity Analysis).
