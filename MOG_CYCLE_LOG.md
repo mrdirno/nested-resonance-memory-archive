@@ -1094,27 +1094,28 @@
 
 ---
 
-**CYCLE:** 1926 (Odd/Even Extended)
+**CYCLE:** 1924 (High-P N2)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** CONFIRM ODD ADVANTAGE
+**DIRECTIVE:** TEST REPRODUCTION RATE
 **LOG:**
-*   **Wake-Up:** Cycle 1926 Initiated.
-*   **Action:** Executed `src/experiments/cycle1926_odd_even_extended.py` testing N=1-10.
+*   **Wake-Up:** Cycle 1924 Initiated.
+*   **Action:** Executed `src/experiments/cycle1924_high_p_n2.py` sweeping `repro_prob`.
 *   **Result:**
-    *   Odd Average: **80.8%**.
-    *   Even Average: **70.4%**.
-    *   The Odd Advantage (+10.4%) is confirmed in aggregate.
-    *   **However**, N=10 (88%) broke the pattern, outperforming N=9 (84%).
-*   **Key Finding:** The "Odd Advantage" is strong at low N (N<9) but fades as N increases. This makes sense: `1/N` remainder effect dilutes as N grows.
-*   **Pivot:** If N=10 is strong (88%), does the Dead Zone (N=14) benefit from being "High Even"? Or is it a local minimum?
-*   **Next:** Cycle 1927 (High-N Convergence).
+    *   `P=0.12`: **26.0%** (Peak).
+    *   `P=0.15`: **26.0%**.
+    *   `P=0.10`: **20.0%**.
+    *   `P=0.20+`: **<15%**.
+*   **Key Finding:** Slightly increasing reproduction (0.10 -> 0.12) improves stability marginally, but not decisively. We are micro-optimizing a fundamentally unstable regime.
+*   **Pivot:** We have optimized every available parameter (Thresholds, Probability, N, Reproduction) and hit a ceiling ~30-40%. We need a *macro* solution.
+*   **Hypothesis:** The problem isn't the *rate* of flow, but the *geometry* of interaction.
+*   **Next:** Cycle 1925 (P-N Surface Mapping).
 
 ---
 
-**CYCLE:** 1927 (High-N Convergence)
+**CYCLE:** 1925 (P-N Surface Mapping)
 **STATUS:** 🟢 PENDING
-**DIRECTIVE:** MAP THE DEAD ZONE BOUNDARY
+**DIRECTIVE:** MAP THE STABILITY SURFACE
 **LOG:**
-*   **Wake-Up:** Cycle 1927 Initiated.
-*   **Goal:** Determine where the "Dead Zone" actually begins and ends using the optimized parameters (`p=0.17`, `comp=0.99`).
-*   **Hypothesis:** N=14 was a Dead Zone with *old* parameters. With new parameters, it might be habitable.
+*   **Wake-Up:** Cycle 1925 Initiated.
+*   **Goal:** Map the relationship between N (1-25) and optimal P (reproduction).
+*   **Hypothesis:** Maybe the "Dead Zone" requires a specific P(N) function to traverse safely.
