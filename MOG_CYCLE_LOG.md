@@ -954,9 +954,21 @@
 **DIRECTIVE:** MAXIMIZE COEXISTENCE
 **LOG:**
 *   **Wake-Up:** Cycle 1915 Initiated.
-*   **Action:** Executed `src/experiments/cycle1915_optimized_threshold.py` to fine-tune parameters around the "Sweet Spot" found in C1914.
+*   **Action:** Executed `src/experiments/cycle1915_optimized_threshold.py` with 50 seeds per config.
 *   **Result:**
-    *   **Best Config:** `Comp=0.95`, `Decomp=1.00`, `Recharge=0.20`.
-    *   **Success Rate:** 38.0%.
-    *   **Key Finding:** Still far from the >90% target, but a significant improvement from previous cycles. Higher `Comp` values (0.95, 0.98) yield better results.
+    *   Best Config: `comp=0.95`, `decomp=1.0`, `recharge=0.20`.
+    *   Success Rate: **38.0%** (19/50 seeds).
+    *   Other Notable: `comp=0.95`, `decomp=1.1`, `recharge=0.20` (36%).
+*   **Key Finding:** By raising the composition threshold to 0.95 (very strict resonance), we can maintain stable D0+D1 populations in ~40% of cases at N=14.
 *   **Next:** Cycle 1916 (Coexistence Optimization).
+
+---
+
+**CYCLE:** 1916 (Coexistence Optimization)
+**STATUS:** 🟢 PENDING
+**DIRECTIVE:** REACH 50% RELIABILITY
+**LOG:**
+*   **Wake-Up:** Cycle 1916 Initiated.
+*   **Goal:** Push reliability > 50%.
+*   **Hypothesis:** Fine-tuning recharge around 0.20 and pushing composition threshold even higher (0.96-0.99) might filter out unstable pairings.
+
