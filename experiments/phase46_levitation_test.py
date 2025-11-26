@@ -41,7 +41,7 @@ def main():
     # The 'sphere' object acts as a proxy for a particle.
     # The Voxelizer will create a density target at the sphere's location.
     
-    obj_file = "data/levitation_particle.obj"
+    obj_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data/levitation_particle.obj'))
     if not os.path.exists(obj_file):
         # Create a tiny sphere/point at center
         with open(obj_file, "w") as f:
