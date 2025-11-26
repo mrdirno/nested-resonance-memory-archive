@@ -98,12 +98,9 @@ class PatternMemory:
         p_idx = self._get_partition_idx(key)
         
         # 4. Add to Superposition
-        # We normalize after addition to keep values stable
-        # Note: In pure HRR, we might sum and then normalize, or weighted sum
-        # Here we simply add. Normalization happens at retrieval or periodically.
-        # For this implementation, we assume "infinite" range float (no saturation)
-        # but normalize the memory vector to keep magnitudes reasonable.
-        self.storage[p_idx] = self._normalize(self.storage[p_idx] + binding)
+        # We do NOT normalize here to prevent decay of older items (Cycle 2120 fix)
+        # Simple addition maintains equal weight for all items
+        self.storage[p_idx] = self.storage[p_idx] + binding
 
     def retrieve(self, key: str) -> Optional[str]:
         """
@@ -115,7 +112,8 @@ class PatternMemory:
         
         # 2. Determine Partition
         p_idx = self._get_partition_idx(key)
-        memory_vec = self.storage[p_idx]
+        # Normalize on read to handle magnitude scaling
+        memory_vec = self._normalize(self.storage[p_idx])
         
         # 3. Unbind (Correlate)
         # memory * key_inv ~= value + noise
@@ -144,6 +142,34 @@ class PatternMemory:
         if best_sim > 0.15:
             return best_item
         return None
+
+    def retrieve_multiple(self, key: str, threshold: float = 0.15) -> List[str]:
+        """
+        Retrieve all Values associated with Key (Decomposition).
+        Useful when multiple values are bound to the same key (Superposition).
+        """
+        # 1. Get key vector
+        k_vec = self._get_vector(key)
+        
+        # 2. Determine Partition
+        p_idx = self._get_partition_idx(key)
+        memory_vec = self._normalize(self.storage[p_idx])
+        
+        # 3. Unbind (Correlate)
+        noisy_value = self._circ_corr(memory_vec, k_vec)
+        
+        # 4. Find all matches
+        matches = []
+        for vec_bytes, item_str in self.codebook.items():
+            clean_vec = np.frombuffer(vec_bytes, dtype=np.float64)
+            sim = np.dot(noisy_value, clean_vec)
+            
+            if sim > threshold:
+                matches.append((item_str, sim))
+        
+        # Sort by similarity desc
+        matches.sort(key=lambda x: x[1], reverse=True)
+        return [m[0] for m in matches]
 
     def persist(self, path: str):
         """Save memory state to disk (placeholder)."""
