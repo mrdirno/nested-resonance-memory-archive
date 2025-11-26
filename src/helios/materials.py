@@ -1,63 +1,34 @@
-
 """
-Helios: Material Agnosticism
-============================
-This module defines physical properties for various substrates (Air, Water, Metamaterials).
-It enables the Reality Compiler to target different mediums without code changes.
+HELIOS Material Library (Gate 3.3)
+Standardized physics properties for substrate definition.
 
-Gate 3.3 Compliant.
+Principle: PRIN-MATERIAL-AGNOSTICISM
+Author: MOG (Cycle 2343)
 """
 
-from dataclasses import dataclass
-
-@dataclass
 class MaterialProperties:
-    name: str
-    density: float          # kg/m^3
-    speed_of_sound: float   # m/s
-    viscosity: float        # Pa*s (Dynamic Viscosity)
-    surface_tension: float  # N/m (optional, for liquids)
+    def __init__(self, name, density, sound_speed, viscosity=0.0):
+        """
+        :param name: Material name
+        :param density: kg/m^3
+        :param sound_speed: m/s
+        :param viscosity: Pa*s (Dynamic viscosity)
+        """
+        self.name = name
+        self.rho = density
+        self.c = sound_speed
+        self.mu = viscosity
 
-class Materials:
-    """Standard Material Library."""
-    
-    AIR_STP = MaterialProperties(
-        name="Air (STP)",
-        density=1.225,
-        speed_of_sound=343.0,
-        viscosity=1.81e-5,
-        surface_tension=0.0
-    )
-    
-    WATER_20C = MaterialProperties(
-        name="Water (20C)",
-        density=998.0,
-        speed_of_sound=1482.0,
-        viscosity=1.002e-3,
-        surface_tension=0.0728
-    )
-    
-    GLYCERIN = MaterialProperties(
-        name="Glycerin",
-        density=1261.0,
-        speed_of_sound=1904.0,
-        viscosity=1.412,
-        surface_tension=0.064
-    )
-    
-    # Theoretical Metamaterial with tunable properties
-    AETHER_V1 = MaterialProperties(
-        name="Aether V1 (NRM Substrate)",
-        density=1.0,
-        speed_of_sound=1.0,  # Unit speed for simulation
-        viscosity=0.1,       # Tunable damping
-        surface_tension=0.0
-    )
+    def __repr__(self):
+        return f"Material({self.name}: rho={self.rho}, c={self.c})"
 
-def get_material(name: str) -> MaterialProperties:
-    """Factory method to retrieve material by name."""
-    name_upper = name.upper().replace(" ", "_").replace("(", "").replace(")", "")
-    if hasattr(Materials, name_upper):
-        return getattr(Materials, name_upper)
-    else:
-        raise ValueError(f"Material '{name}' not found in library.")
+# Standard Materials Library
+MATERIALS = {
+    "AIR_STP": MaterialProperties("Air (STP)", 1.225, 343.0, 1.81e-5),
+    "WATER_20C": MaterialProperties("Water (20C)", 998.0, 1482.0, 1.002e-3),
+    "GLYCERIN": MaterialProperties("Glycerin", 1260.0, 1904.0, 1.41),
+    "AETHER": MaterialProperties("Aether (Theoretical)", 1.0, 1.0, 0.0) # Normalized unit substrate
+}
+
+def get_material(name):
+    return MATERIALS.get(name.upper(), MATERIALS["AIR_STP"])
