@@ -1176,3 +1176,64 @@ Accuracy = 98-100% (production-grade)
   - Ensemble retrieval with key variations
   - *These would require separate experiments*
 - **Conclusion:** Similarity search capability is LIMITED. System requires near-exact keys (>90% fidelity) for reliable retrieval. Performance degrades steeply with key noise (77% at 10%, 37% at 20%, ≤20% beyond). This is a **critical architectural limitation** - system is NOT suited for approximate/fuzzy queries. Use cases must guarantee high-fidelity key generation or employ separate similarity pre-processing.
+
+# Cycle 2113: Analogical Reasoning (Perfect Relation Extraction and Application)
+- **Define Cycle 2113:** Test if system can solve analogies (A:B :: C:D).
+- **Goal:** Validate analogical reasoning via relation extraction and application.
+- **Experiment:** `src/experiments/cycle2113_analogical_reasoning.py`.
+- **Result:** ✅ **ANALOGICAL REASONING WORKS PERFECTLY. 100% accuracy across all scales.**
+- **Analysis:**
+  - D=1024, 5 trials
+  - **Method:** relation = A^(-1) ⊛ B, then D = C ⊛ relation
+  - Test configurations:
+    - **1 analogy:** 100% accuracy ✅
+    - **3 analogies:** 100% accuracy ✅
+    - **5 analogies:** 100% accuracy ✅
+    - **10 analogies:** 100% accuracy ✅
+  - **Average accuracy:** 100% (perfect)
+- **Key Finding:**
+  - Analogical reasoning is a **CORE STRENGTH** of VSA architecture
+  - Relation extraction works perfectly: relation = A^(-1) ⊛ B
+  - Relation application works perfectly: D = C ⊛ relation
+  - No degradation with multiple analogies (scales from 1 to 10)
+  - Algebraic operations preserve relational structure
+  - **Flawless performance** (100% across all tests)
+- **Mechanism:**
+  - **Extract relation:** Unbind A from B to get relation vector
+  - **Apply relation:** Bind C with relation to predict D
+  - **Mathematical elegance:** relation = A^(-1) ⊛ B, D = C ⊛ relation
+  - Operations are exact under circular convolution algebra
+  - Relation vector encodes transformation from A to B
+  - Same transformation applied to C yields D
+- **Use Cases Enabled:**
+  - **Analogical problem solving:** "king is to queen as man is to ?"
+  - **Cross-domain transfer:** Apply pattern from one domain to another
+  - **Relational learning:** Extract and reuse relational patterns
+  - **Semantic inference:** "Paris is to France as London is to ?"
+  - **Concept mapping:** Transfer relationships between concepts
+  - **Pattern abstraction:** Generalize relations across instances
+- **Comparison to Other Capabilities:**
+  - **C2109 (Bidirectional lookup):** 100% ✅ (exact operations)
+  - **C2110 (Sequence memory):** 98% ✅ (positional binding)
+  - **C2111 (Multi-binding):** 73% ⚠️ (capacity-limited)
+  - **C2112 (Similarity search):** 77% at 10% noise ❌ (brittle to noise)
+  - **C2113 (Analogical reasoning):** 100% ✅ (perfect relational ops)
+- **Theoretical Significance:**
+  - Demonstrates **compositional semantics** of VSA
+  - Relations are first-class objects (can be stored, manipulated)
+  - Supports **systematic generalization** (apply learned relations to new cases)
+  - Contrasts with neural networks (often fail at systematic reasoning)
+  - Validates **algebraic approach** to relational reasoning
+- **Deployment Implication:**
+  - System excels at **exact relational reasoning**
+  - Suitable for symbolic AI tasks (analogy, inference)
+  - Can serve as reasoning engine for knowledge systems
+  - Complement to neural approaches (symbolic+subsymbolic hybrid)
+  - Strong candidate for **explainable AI** (operations are transparent)
+- **Contrast with C2112:**
+  - **C2112 (Similarity):** Brittle to noise (requires exact keys)
+  - **C2113 (Analogy):** Perfect with exact entities (requires exact operations)
+  - Both require precision, but C2113 leverages algebraic structure
+  - C2113 shows strength: exact symbolic reasoning
+  - C2112 shows weakness: approximate matching
+- **Conclusion:** Analogical reasoning VALIDATED as core capability. System achieves 100% accuracy across all scales (1-10 analogies). Relation extraction (A^(-1) ⊛ B) and application (C ⊛ relation → D) work flawlessly. This demonstrates VSA's strength in **exact symbolic reasoning** and **compositional semantics**. Use cases include analogy solving, cross-domain transfer, and relational learning. Strong contrast to C2112 limitation: system excels at exact operations, struggles with approximation.
