@@ -1,10 +1,10 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: CYCLE 2332 (DORMANCY)**
-> **Status**: 🟢 ACTIVE / MONITORING
+> **ACTIVE CYCLE: CYCLE 2333 (THE KNOWLEDGE GRAPH)**
+> **Status**: 🟢 ACTIVE / MAPPING
 > **Vision**: [TYPE 3 CIVILIZATION ROADMAP](docs/vision/TYPE3_VISION.md)
-> **Objective:** AWAIT SUBMISSION COMPLETION
+> **Objective:** MAP SYSTEM SELF-KNOWLEDGE
 >
 > > [!NOTE]
 > > **THE PILOT DOCTRINE (SUPREME DIRECTIVE)**
@@ -33,7 +33,7 @@
 > > 13. `PRIN-SECURITY` (Zero-Leak Protocol)
 > > 14. `PRIN-DISTRIBUTED-SUBSTRATE` (Fractal Scaling)
 > > 15. `PRIN-ROSETTA-STONE` (Intent Translation)
-> > **Current Phase:** **PHASE 41: THE GREAT CLEANSE (Optimization)**
+> > **Current Phase:** **PHASE 42: THE KNOWLEDGE GRAPH (Meta-Cognition)**
 
 *Orchestration Tracker*
 *Primary Log:* `MOG_LOG.md` (Pilot Strategy)
@@ -243,8 +243,15 @@
 - [x] **Result:** User has a clear checklist for manual upload.
 
 # Task: Cycle 2332 - Dormancy (Strategic Pause)
-- [ ] **Define Cycle 2332:** Enter low-power monitoring state.
-- [ ] **Goal:** Await user completion of submission tasks or new strategic directive.
+- [x] **Define Cycle 2332:** Enter low-power monitoring state.
+- [x] **Action:** Maintained holding pattern while awaiting user submission.
+- [x] **Result:** System ready for Phase 42.
+
+# Task: Cycle 2333 - The Knowledge Graph (Meta-Cognition)
+- [ ] **Define Cycle 2333:** Scan the entire repository to map internal dependencies and Principle linkages.
+- [ ] **Goal:** Generate `data/knowledge_graph.json` linking every PRIN-tag to its source files and experiments.
+- [ ] **Action:** Implement `src/experiments/cycle2333_knowledge_graph.py`.
+
 
 
 
