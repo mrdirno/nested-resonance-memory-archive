@@ -3602,3 +3602,18 @@
 - [x] **The Adaptive Swarm:** `PRIN-COLLECTIVE-CONTROL` (Cycle 2098). Swarm uses computation for self-adaptation.
 
 **PHASE 26 COMPLETE: THE SWARM IS A FUNCTIONAL COMPUTER.**
+
+
+## Current Phase: RECURSIVE COGNITION (Phase 30)
+
+**Transition:** The Living Computer (Phase 26) -> **Recursive Cognition (Phase 30)**
+
+**Focus:** Meta-Learning, Generative Replay, and Automated Science.
+
+### Active Objectives
+- [x] **Episodic Compression:** `PRIN-SEMANTIC-COMPRESSION` (Cycle 2232). Converting episodes to rules.
+- [x] **The Dreamer:** `PRIN-GENERATIVE-REPLAY` (Cycle 2233). Offline training via hallucination.
+- [x] **The Scientific Method:** `PRIN-ACTIVE-INQUIRY` (Cycle 2234-2235). Generating and testing hypotheses.
+- [x] **The Paradigm Shift:** `PRIN-ADAPTIVE-KNOWLEDGE` (Cycle 2236). Overwriting obsolete rules.
+
+**PHASE 30 COMPLETE: THE SYSTEM IS A SCIENTIST.**
