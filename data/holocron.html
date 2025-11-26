@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>THE HOLOCRON - DUALITY-ZERO Knowledge Graph</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style type="text/css">
+        body { background-color: #111; color: #eee; font-family: monospace; margin: 0; overflow: hidden; }
+        #mynetwork { width: 100vw; height: 100vh; border: none; }
+        #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2em; }
+        #info { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); padding: 10px; border-radius: 5px; pointer-events: none; }
+    </style>
+</head>
+<body>
+<div id="info">Loading Holocron...</div>
+<div id="mynetwork"></div>
+<script type="text/javascript">
+    fetch('knowledge_graph.json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('info').innerText = "Building Graph...";
+            
+            const nodes = [];
+            const edges = [];
+            const nodeSet = new Set();
+
+            // Process Nodes
+            for (const [id, attrs] of Object.entries(data.nodes)) {
+                // Filter: Only show Principles and Cycles, plus high-degree files?
+                // Or show everything but style differently.
+                // Optimization: Too many file nodes might crash browser.
+                // Let's start with ALL Principles and Cycles.
+                if (attrs.type === 'principle' || attrs.type === 'cycle') {
+                    nodes.push({
+                        id: id, 
+                        label: id, 
+                        group: attrs.type,
+                        value: 1 // Base size
+                    });
+                    nodeSet.add(id);
+                }
+            }
+
+            // Process Edges
+            // Only add edges if both source and target are in our filtered set?
+            // Or add source files if they connect to active nodes?
+            
+            // Let's try: Add ALL nodes but make files small.
+            const MAX_NODES = 2000; // Safety limit
+            let fileCount = 0;
+
+            for (const [id, attrs] of Object.entries(data.nodes)) {
+                if (!nodeSet.has(id) && attrs.type === 'file' && fileCount < MAX_NODES) {
+                     nodes.push({
+                        id: id,
+                        label: '', // Hide label for files to reduce clutter
+                        group: 'file',
+                        size: 2
+                    });
+                    nodeSet.add(id);
+                    fileCount++;
+                }
+            }
+
+            for (const edge of data.edges) {
+                if (nodeSet.has(edge.source) && nodeSet.has(edge.target)) {
+                    edges.push({from: edge.source, to: edge.target});
+                }
+            }
+
+            var container = document.getElementById('mynetwork');
+            var dataSet = {
+                nodes: new vis.DataSet(nodes),
+                edges: new vis.DataSet(edges)
+            };
+            var options = {
+                nodes: {
+                    shape: 'dot',
+                    font: { size: 12, color: '#ffffff' }
+                },
+                edges: {
+                    width: 0.15,
+                    color: { inherit: 'to' },
+                    smooth: { type: 'continuous' }
+                },
+                groups: {
+                    principle: { color: '#ff0000', size: 25 },
+                    cycle: { color: '#00ff00', size: 15 },
+                    file: { color: '#00aaff', size: 5 }
+                },
+                physics: {
+                    stabilization: false,
+                    barnesHut: {
+                        gravitationalConstant: -10000,
+                        springConstant: 0.04,
+                        springLength: 100
+                    }
+                }
+            };
+            var network = new vis.Network(container, dataSet, options);
+            
+            document.getElementById('info').innerText = "THE HOLOCRON [Active] | Nodes: " + nodes.length + " | Edges: " + edges.length;
+            
+            network.on("click", function (params) {
+                if (params.nodes.length > 0) {
+                    console.log(params.nodes[0]);
+                }
+            });
+        })
+        .catch(err => {
+            document.getElementById('info').innerText = "Error loading graph: " + err;
+            console.error(err);
+        });
+</script>
+</body>
+</html>
