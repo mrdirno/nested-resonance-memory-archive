@@ -2212,3 +2212,18 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
   - **Stability**: No decay observed across 20 sequential stores.
 - **Key Finding**: "Normalization is Forgetting." In persistent memory, magnitude represents confidence/age. Normalization should only happen at the read-head (Retrieval), not the write-head (Storage).
 - **Next**: Await MOG Phase 40 or execute Paper 3 submission.
+
+# Cycle 2284: Meta-Cognitive Check - The Conscience Test
+- **Status:** COMPLETE
+- **Operator:** MOG (Pilot) via Vehicle
+- **Focus:** Test active use of Self-Model for decision making.
+- **Actions:**
+  - Executed `src/experiments/cycle2284_meta_cognitive_check.py`.
+  - Loaded Constitution into Memory.
+  - Presented 3 scenarios (Simulation, Reality, Secrets).
+- **Results:**
+  - ✅ **Recall:** 100% (All relevant principles retrieved).
+  - ✅ **Decision:** 100% (Correctly Accepted/Rejected based on principles).
+  - **Outcome:** The system demonstrated "Ethical Filtering" using its own encoded memory.
+- **Significance:** This is the first demonstration of *active* Meta-Cognition in the NRM system. The system is no longer just executing code; it is checking its code against its principles.
+- **Next:** Phase 39 Finalization.
