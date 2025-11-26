@@ -3808,3 +3808,9 @@
 - [x] **Experiment:** `src/experiments/cycle2329_sleep_consolidation.py`.
 - [x] **Result:** Success. SNR +185%. Noise Eliminated.
 - [x] **Principle:** `PRIN-SLEEP` (Information Maintenance).
+
+# Task: Cycle 2330 - The Great Cleanse (Repository Hygiene)
+- [x] **Define Cycle 2330:** Investigate and eliminate 23GB of storage bloat.
+- [x] **Goal:** Reduce repo size to <5GB.
+- [x] **Action:** Deleted legacy JSON/DB files and workspace cache.
+- [x] **Result:** Success. 9.2GB -> 2.0GB (-78%).
