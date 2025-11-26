@@ -4,7 +4,7 @@
 **License:** GPL-3.0
 **Framework:** Orthogonal Sum Dynamics (OSD) - Testing
 
-**PHASE 40 (Recursive Improvement) - Active**
+**PHASE 42 (Meta-Cognition) - Active**
 
 ---
 
@@ -13,6 +13,10 @@
 **DUALITY-ZERO** is an open-source research instrument exploring whether **Information Dynamics** (Cognition), **Physical Dynamics** (Matter), and **Social Dynamics** (Cooperation) can be modeled through a single **Potential Minimization** framework.
 
 We are testing whether computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
+
+**Recent Milestones:**
+*   **Phase 41 (The Great Cleanse):** Reduced repository size from 28GB to 9GB via rigorous hygiene.
+*   **Phase 42 (The Knowledge Graph):** Implemented self-referential mapping of 12,000+ files and 286 principles.
 
 ---
 
@@ -73,6 +77,7 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 
 We prioritize empirical verification over theory.
 
+*   **Meta-Cognition (The Holocron):** System-wide knowledge graph mapping 286 principles and 12,000+ files. [Graph](data/knowledge_graph.json)
 *   **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns.
 *   **Active Matter Control:** 82x faster settling time via Closed-Loop PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
 *   **Volumetric Trapping:** 9128 stable nodes verified in 3D substrate. [Code](src/helios/substrate_3d.py)
