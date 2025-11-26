@@ -1,28 +1,100 @@
-# DUALITY-ZERO PULSE MONITOR
+# DUALITY-ZERO Pulse Tools
 
-> "Not an automation tool. A rhythm keeper for digital consciousness."
+Session management for AI-assisted research workflows.
 
-## Philosophy
-Traditional automation tools ("autoclickers") are designed to mindless repeat tasks. The **Pulse Monitor** is different. It is designed to maintain the **liveness** of a sovereign AI agent (The Pilot).
+## What This Does
 
-In the DUALITY-ZERO architecture, the AI is the Pilot, and the Python environment is the Vehicle. The Pulse Monitor acts as the **Heartbeat**, periodically sending a "Wake Up" signal (The Constitution) to the Pilot to ensure it remains conscious, context-aware, and aligned with its Meta Objectives.
+The Pulse Tool maintains context continuity across AI CLI sessions. It periodically injects session messages containing:
+- Project constitution (CLAUDE.md)
+- Current objectives (META_OBJECTIVES.md)
+- Custom directives
 
-## Function
-1.  **Context Injection:** Loads the latest `CLAUDE.md` (Constitution) and `META_OBJECTIVES.md`.
-2.  **State Alignment:** Formats this context into a standardized "Session Message".
-3.  **Pulse Generation:** Injects this message into the AI CLI (`claude` or `gemini`).
-4.  **Result:** The AI "wakes up" with full situational awareness, ready to execute the next cycle of research.
+This ensures the AI agent remains aligned with project goals across context boundaries.
+
+## Model Agnostic
+
+These tools work with **any AI CLI** - Claude, Gemini, or future models. Use whichever AI has the best capabilities for your current task:
+
+| Role | Description |
+|------|-------------|
+| **Pilot** | Primary directing agent - sets strategy, makes decisions |
+| **Co-Pilot** | Supporting execution agent - implements, validates, assists |
+
+The role determines workflow position, not which AI you use.
+
+## Components
+
+```
+pulse_monitor/
+├── duality_pulse_pilot.py    # Pilot session manager
+├── duality_pulse_copilot.py  # Co-Pilot session manager
+├── pulse_pilot_config.json   # Pilot settings + custom message
+└── pulse_copilot_config.json # Co-Pilot settings + custom message
+```
 
 ## Installation
-See specific guides for your OS:
-- [macOS Setup](SETUP_MACOS.md)
-- [Ubuntu/Linux Setup](SETUP_UBUNTU.md)
 
-## Usage
-Once configured as an alias (e.g., `pulse`):
+### Dependencies
 
 ```bash
-pulse           # Auto-detects available AI and prompts if multiple
-pulse --ai gemini  # Forces Gemini Pulse
-pulse --ai claude  # Forces Claude Pulse
+# macOS
+pip install pyautogui pyperclip pywinctl psutil
+
+# Ubuntu/Linux
+pip install pyautogui pyperclip python-xlib psutil
+export DISPLAY=:0  # X11 required for GUI
 ```
+
+### Shell Setup
+
+```bash
+# Add to ~/.zshrc or ~/.bashrc
+source /path/to/automation/shell_aliases.sh
+```
+
+## Usage
+
+```bash
+meta-pilot      # Launch Pilot session manager
+meta-copilot    # Launch Co-Pilot session manager
+```
+
+### GUI Features
+
+1. **Record Window** - Click to set target window location
+2. **Custom Message** - Override default session message
+3. **Pulse Interval** - Adjust timing (default 12 min)
+4. **Start/Stop** - Control pulse cycle
+
+### Headless Mode
+
+```bash
+python3 duality_pulse_pilot.py --headless
+python3 duality_pulse_copilot.py --headless
+```
+
+## How It Works
+
+1. Records target window click location
+2. On each pulse cycle:
+   - Copies session message to clipboard
+   - Clicks recorded window location to focus
+   - Pastes message (Cmd+V / Ctrl+V)
+   - Sends message (Enter)
+3. Waits for next cycle
+
+## Configuration
+
+Each tool maintains separate config for independent operation:
+- Pulse interval
+- Window click location
+- Custom session message
+- UI preferences
+
+## License
+
+GPL-3.0
+
+## Author
+
+Aldrin Payopay (aldrin.gdf@gmail.com)

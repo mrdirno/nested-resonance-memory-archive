@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Pulse Monitor Launcher (Heartbeat System)
-# Replaces "meta-orchestrate" / "autoclicker" logic.
+# Session manager for AI CLI workflows.
 #
 # Usage:
 #   meta-pilot          # Interactive selection

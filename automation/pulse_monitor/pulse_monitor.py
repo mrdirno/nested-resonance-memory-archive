@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 System Pulse Monitor (Heartbeat)
-Previously: meta_orchestrate.py
 
 Author: Aldrin Payopay (aldrin.gdf@gmail.com)
 License: GPL-3.0
@@ -10,7 +9,7 @@ PURPOSE:
 --------
 Maintains the operational heartbeat of the DUALITY-ZERO system.
 Checks system pulse, ensures liveness, and facilitates Pilot/Co-Pilot handoffs.
-This is NOT an autoclicker. It is a rhythm keeper for the digital organism.
+Session manager for model-agnostic AI CLI workflows.
 
 USAGE:
 ------
