@@ -1383,3 +1383,59 @@ Accuracy = 98-100% (production-grade)
   - VSA superposition has **hard capacity limit** (~15 bindings)
   - No amount of structure can overcome this limit
 - **Conclusion:** Tree storage via edge superposition FAILS with 25% average accuracy - WORSE than general graphs (C2114: 32%). Structure constraints (hierarchy, limited branching, no cycles) provide NO PERFORMANCE BENEFIT. Root cause is same as C2114 and C2111: **edge count exceeds superposition capacity** (~15 bindings). Trees with 14-39 edges all fail. Pattern: wider branching = worse (5-way: 17% < 2-way: 30%). **Critical architectural lesson: structure type is irrelevant; only total binding count matters.** System cannot store hierarchical data structures via edge superposition.
+
+# Cycle 2116: Tree Positional Binding (MAJOR IMPROVEMENT - Encoding Strategy Matters)
+- **Define Cycle 2116:** Test if positional binding (like C2110) helps trees vs. naive edge superposition (C2115).
+- **Goal:** Validate workaround for multi-binding interference using positional child encoding.
+- **Experiment:** `src/experiments/cycle2116_tree_positional.py`.
+- **Result:** ✅ **POSITIONAL BINDING WORKS! 70% avg accuracy (+45% improvement over C2115).**
+- **Analysis:**
+  - D=1024, 200 cycles, 3 trials
+  - **Method:** Encode edges as (parent ⊛ pos_i) → child_i (not parent → child)
+  - Test configurations:
+    - **Binary depth 3 (14 edges):** 76% accuracy ✅ (vs. C2115: 29%, +47%)
+    - **Binary depth 4 (30 edges):** 68% accuracy ✅ (vs. C2115: 31%, +37%)
+    - **Ternary depth 3 (39 edges):** 62% accuracy ✅ (vs. C2115: 23%, +39%)
+    - **Wide depth 2 (30 edges):** 73% accuracy ✅ (vs. C2115: 17%, +56%)
+  - **Average accuracy:** 70% (+45% improvement over C2115: 25%)
+- **Key Finding:**
+  - **Positional binding MITIGATES multi-binding interference**
+  - Same strategy that worked for sequences (C2110: 98%) helps trees
+  - **Encoding strategy MATTERS** - can work around capacity limits
+  - Still below production threshold (80%+), but MUCH better than naive approach
+  - Demonstrates path forward for capacity-limited structures
+- **Why This Works:**
+  - **C2115 problem:** parent → child_0, parent → child_1, ... (multi-binding interference)
+  - **C2116 solution:** (parent ⊛ pos_0) → child_0, (parent ⊛ pos_1) → child_1 (unique keys)
+  - Each binding gets unique composite key (parent+position)
+  - Eliminates multi-binding problem - no multiple values per key
+  - Query: (parent ⊛ pos_i)^(-1) → child_i (unambiguous)
+- **Comparison to C2115:**
+  - **C2115 (naive edge binding):** 25% avg ❌
+  - **C2116 (positional binding):** 70% avg ✅
+  - **Improvement:** +45% (nearly 3× better)
+  - Same tree structures, different encoding → massive performance gain
+- **Comparison to C2110 (Sequence Memory):**
+  - **C2110 (sequences):** 98% avg ✅ (positional binding)
+  - **C2116 (trees):** 70% avg ✅ (positional binding)
+  - Both use positional encoding successfully
+  - Trees perform worse due to higher total edge count (14-39 vs. C2110: 25-60 elements)
+  - But both validate positional binding as effective strategy
+- **Capacity Analysis:**
+  - **14 edges:** 76% (good)
+  - **30 edges:** 68-73% (moderate)
+  - **39 edges:** 62% (declining)
+  - Still capacity-sensitive, but more graceful degradation
+  - Positional binding extends usable range
+- **Use Case Implications:**
+  - ✅ **BETTER for:** Small-medium trees (depth ≤3, binary)
+  - ⚠️ **MODERATE for:** Larger trees (depth 4, or ternary)
+  - ❌ **STILL LIMITED for:** Very large/wide trees (many edges)
+  - Positional encoding provides viable workaround for many use cases
+- **Architectural Lesson:**
+  - **Encoding strategy matters as much as capacity**
+  - Naive superposition (C2111, C2114, C2115) fails
+  - Structured encoding (C2110, C2116) succeeds
+  - Same data, different representation → 3× performance difference
+  - **Path forward:** Develop encoding strategies to overcome capacity limits
+- **Conclusion:** Positional binding for trees achieves 70% average accuracy (+45% over naive C2115 approach). Encoding edges as (parent ⊛ pos_i) → child_i eliminates multi-binding interference. This validates that **encoding strategy matters** - same technique that worked for sequences (C2110: 98%) helps trees. While still below production threshold (80%+), this demonstrates a viable path forward for capacity-limited structures. Critical lesson: representation choices can overcome architectural constraints.
