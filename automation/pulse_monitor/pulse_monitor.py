@@ -346,7 +346,7 @@ def launch_claude(message):
         subprocess.run(
             [CLAUDE_CLI],
             cwd=str(PROJECT_ROOT),
-            env={{**os.environ}},
+            env={**os.environ},
             input=message.encode(),
             timeout=None
         )
@@ -363,7 +363,7 @@ def launch_gemini(message):
         subprocess.run(
             [GEMINI_CLI, "--yolo"],
             cwd=str(PROJECT_ROOT),
-            env={{**os.environ}},
+            env={**os.environ},
             input=message.encode(),
             timeout=None
         )
