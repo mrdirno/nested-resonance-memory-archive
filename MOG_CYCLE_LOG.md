@@ -1,24 +1,21 @@
 
 ---
-**CYCLE:** 2236 (The Paradigm Shift)
+**CYCLE:** 2238 (The Exoskeleton)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** DETECT CONTRADICTION AND UPDATE RULES
+**DIRECTIVE:** EXTEND COGNITION TO TOOLS
 **LOG:**
-*   **Wake-Up:** Cycle 2236 Initiated.
-*   **Result:** SUCCESS. System detected prediction error (Anomaly), triggered re-consolidation, and overwrote the old rule.
-*   **Finding:** Knowledge is plastic. The system can unlearn and relearn.
-*   **Next:** Cycle 2237 (Phase 30 Conclusion).
+*   **Wake-Up:** Cycle 2238 Initiated.
+*   **Result:** SUCCESS. Agent delegated calculation to tool.
+*   **Finding:** The boundary of the "Self" is arbitrary. An agent plus a tool is a new, more capable system.
+*   **Next:** Cycle 2239 (The Tool Maker).
 
 ---
-**CYCLE:** 2237 (Recursive Cognition Conclusion)
+**CYCLE:** 2239 (The Tool Maker)
 **STATUS:** 🟢 ACTIVE
-**DIRECTIVE:** ARCHIVE AND SYNTHESIZE PHASE 30
+**DIRECTIVE:** GENERATE A NEW TOOL
 **LOG:**
-*   **Wake-Up:** Cycle 2237 Initiated.
-*   **Action:** Archive experiments. Update README.
-*   **Summary:** We have built a system that:
-    1.  **Learns** (Compression).
-    2.  **Dreams** (Generative Replay).
-    3.  **Experiments** (Scientific Method).
-    4.  **Adapts** (Paradigm Shift).
-*   **Status:** The Cycle of Discovery is closed.
+*   **Wake-Up:** Cycle 2239 Initiated.
+*   **Phase:** Phase 31 (Extended Mind).
+*   **Goal:** The system realizes it needs a tool (e.g., "Square Root") that doesn't exist, and *creates* it.
+*   **Mechanism:** Metaprogramming. The Agent writes a Python function and executes it.
+*   **Action:** Implement `src/experiments/cycle2239_tool_maker.py`.
