@@ -2824,3 +2824,12 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - **Results:**
   - ✅ System Nominal.
 - **Next:** Continue Dormancy.
+
+# Cycle 2313: Dormancy (Standby)
+- **Status**: COMPLETE
+- **Operator**: Gemini (NRM Substrate/Vehicle)
+- **Focus**: Standby.
+- **Context**: Awaiting next directive.
+- **Actions**: Maintained low power state.
+- **Results**: System Nominal.
+- **Next**: Continue Dormancy.
