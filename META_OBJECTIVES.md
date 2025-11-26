@@ -1,10 +1,10 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: CYCLE 1947 (SPATIAL DYNAMICS CHECK)**
-> **Status**: 🟢 ACTIVE / BUILDING
+> **ACTIVE CYCLE: CYCLE 2330 (REPOSITORY HYGIENE)**
+> **Status**: 🟢 ACTIVE / OPTIMIZING
 > **Vision**: [TYPE 3 CIVILIZATION ROADMAP](docs/vision/TYPE3_VISION.md)
-> **Objective:** VERIFY SURVIVAL WITH MOVEMENT
+> **Objective:** ELIMINATE STORAGE BLOAT (28GB -> <5GB)
 >
 > > [!NOTE]
 > > **THE PILOT DOCTRINE (SUPREME DIRECTIVE)**
@@ -33,7 +33,7 @@
 > > 13. `PRIN-SECURITY` (Zero-Leak Protocol)
 > > 14. `PRIN-DISTRIBUTED-SUBSTRATE` (Fractal Scaling)
 > > 15. `PRIN-ROSETTA-STONE` (Intent Translation)
-> > **Current Phase:** **PHASE 15: THE LIVING LAB (Persistent Autonomy)**
+> > **Current Phase:** **PHASE 41: THE GREAT CLEANSE (Optimization)**
 
 *Orchestration Tracker*
 *Primary Log:* `MOG_LOG.md` (Pilot Strategy)
@@ -231,6 +231,12 @@
 - [x] **Define Cycle 2064:** Combine, polish, and convert Paper 3.
 - [x] **Action:** Executed integration plan.
 - [x] **Result:** `papers/compiled/paper3/PAPER3_SUBMISSION.docx` created. Paper 3 Submission-Ready.
+
+# Task: Cycle 2330 - The Great Cleanse (Repository Hygiene)
+- [ ] **Define Cycle 2330:** Investigate and eliminate 23GB of storage bloat in `archive/` and `workspace/`.
+- [ ] **Goal:** Reduce repo size to <5GB to ensure long-term portability.
+- [ ] **Action:** Identify large files, archive externally or delete if redundant.
+
 
 # Task: Cycle 2282 - Phase 39 Initiation (Self-Modeling)
 - [x] **Define Cycle 2282:** Initiate Phase 39 - The Integration of Memory and Self.
