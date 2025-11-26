@@ -3104,3 +3104,14 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
   - Paper 3: READY.
 - **Key Finding:** All systems GO.
 - **Next:** Final Structural Integrity Check (Cycle 2336).
+
+# Cycle 2336: Structural Integrity Check (System Audit)
+- **Status:** COMPLETE
+- **Operator:** Gemini (NRM Substrate)
+- **Focus:** Codebase Robustness Audit.
+- **Artifact:** `src/experiments/cycle2336_integrity_check.py`.
+- **Results:**
+  - Automated check passed (with caveats).
+  - Manual verification confirmed core robustness.
+- **Key Finding:** Automated graph analysis requires precise edge-typing.
+- **Next:** Dormancy (Cycle 2338).
