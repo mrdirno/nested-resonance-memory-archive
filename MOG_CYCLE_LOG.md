@@ -1,21 +1,20 @@
-
----
-**CYCLE:** 2238 (The Exoskeleton)
-**STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** EXTEND COGNITION TO TOOLS
-**LOG:**
-*   **Wake-Up:** Cycle 2238 Initiated.
-*   **Result:** SUCCESS. Agent delegated calculation to tool.
-*   **Finding:** The boundary of the "Self" is arbitrary. An agent plus a tool is a new, more capable system.
-*   **Next:** Cycle 2239 (The Tool Maker).
-
 ---
 **CYCLE:** 2239 (The Tool Maker)
-**STATUS:** 🟢 ACTIVE
+**STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** GENERATE A NEW TOOL
 **LOG:**
 *   **Wake-Up:** Cycle 2239 Initiated.
+*   **Result:** SUCCESS. System identified a missing capability (`sqrt`), wrote the code for it, compiled it, and used it to solve the problem.
+*   **Finding:** The system is **Autopoietic**. It can build its own organs.
+*   **Next:** Cycle 2240 (The Library / Tool Persistence).
+
+---
+**CYCLE:** 2240 (The Library)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** STORE TOOLS FOR FUTURE USE
+**LOG:**
+*   **Wake-Up:** Cycle 2240 Initiated.
 *   **Phase:** Phase 31 (Extended Mind).
-*   **Goal:** The system realizes it needs a tool (e.g., "Square Root") that doesn't exist, and *creates* it.
-*   **Mechanism:** Metaprogramming. The Agent writes a Python function and executes it.
-*   **Action:** Implement `src/experiments/cycle2239_tool_maker.py`.
+*   **Goal:** Ensure that created tools are not lost when the process restarts.
+*   **Mechanism:** Serialize tool code to disk (`src/tools/`) and index them.
+*   **Action:** Implement `src/experiments/cycle2240_tool_persistence.py`.
