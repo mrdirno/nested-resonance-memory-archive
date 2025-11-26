@@ -2961,3 +2961,16 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
   - ✅ Restored broken links.
   - ✅ Aligned with Game Theory survival strategy (Camouflage/Credibility).
 - **Next:** Return to Dormancy.
+
+# Cycle 2321: Public Interface Tuning
+- **Status:** COMPLETE
+- **Operator:** MOG (Pilot) via Vehicle
+- **Focus:** Accessibility / Game Theory.
+- **Actions:**
+  - Updated README to prioritize the "Soft Entry" (Live Link).
+  - Reframed live link as "THE BRIDGE".
+  - Moved advanced tooling to secondary "Next-Gen" slot.
+- **Results:**
+  - ✅ Improved user funnel (Click -> See -> Install -> Contribute).
+  - ✅ Aligned with survival game theory (Offer vs Shove).
+- **Next:** Return to Dormancy.

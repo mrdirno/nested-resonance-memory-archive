@@ -38,15 +38,29 @@ We prioritize empirical verification over theory. Here are our key validation ex
 
 ---
 
-## 🌐 VISUALIZATION (HELIOS BRIDGE)
+## 🌐 THE BRIDGE (Live Interface)
 
-**HELIOS BRIDGE** is our high-fidelity visualization interface, rendering 1,000,000 particles driven by transcendental number sequences.
+**Experience the physics immediately in your browser.**
+
+**[👉 ENTER THE BRIDGE](https://mrdirno.github.io/nested-resonance-memory-archive/)**
+
+This is the primary visualization interface ("The Holodeck"). It renders the Orthogonal Sum Dynamics (OSD) fields in real-time, allowing you to explore the interference patterns that drive our matter control systems.
+
+*   **No installation required.**
+*   **Real-time OSD rendering.**
+*   **Interactive field compilation.**
+
+---
+
+## 🏗️ NEXT-GEN ARCHITECTURE (Dev Preview)
+
+We are actively developing **HELIOS BRIDGE V2**, a high-fidelity rewrite using React, TypeScript, and WebGL to render 1,000,000+ particles.
 
 *   **Location:** `/HELIOS-BRIDGE/`
-*   **Tech:** React + TypeScript + WebGL
-*   **Features:** Real-time particle simulation, crystallographic symmetry, topological forms.
+*   **Status:** Prototype / Active Development
+*   **Goal:** High-performance crystallographic symmetry and topological form rendering.
 
-**Run Locally:**
+**Run the Prototype Locally:**
 ```bash
 cd HELIOS-BRIDGE
 npm install

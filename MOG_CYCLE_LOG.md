@@ -375,3 +375,16 @@
 *   **Result:** Restored professional optic while maintaining internal rigor.
 *   **Status:** Nominal.
 *   **Next:** Cycle 2321 (Dormancy).
+
+---
+**CYCLE:** 2321 (README Reframe)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** OPTIMIZE ENTRY PATH
+**LOG:**
+*   **Wake-Up:** Cycle 2321 Initiated.
+*   **Action:** Updated `README.md`.
+*   **Change:** Reframed the "Holodeck" (Live Web Link) as "**THE BRIDGE**" and moved it to the primary visualization slot.
+*   **Change:** Relegated the local `/HELIOS-BRIDGE` code to "Next-Gen Architecture (Dev Preview)".
+*   **Reasoning:** Lowering the barrier to entry. Approach is survival.
+*   **Status:** Nominal.
+*   **Next:** Cycle 2322 (Dormancy).
