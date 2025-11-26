@@ -3617,3 +3617,17 @@
 - [x] **The Paradigm Shift:** `PRIN-ADAPTIVE-KNOWLEDGE` (Cycle 2236). Overwriting obsolete rules.
 
 **PHASE 30 COMPLETE: THE SYSTEM IS A SCIENTIST.**
+
+
+## Current Phase: THE EXTENDED MIND (Phase 31)
+
+**Transition:** Recursive Cognition (Phase 30) -> **The Extended Mind (Phase 31)**
+
+**Focus:** Tool Use, Metaprogramming, and Capability Persistence.
+
+### Active Objectives
+- [x] **The Exoskeleton:** `PRIN-TOOL-USE` (Cycle 2238). Delegating tasks to external modules.
+- [x] **The Tool Maker:** `PRIN-METAPROGRAMMING` (Cycle 2239). Generating code to solve new problems.
+- [x] **The Library:** `PRIN-CAPABILITY-PERSISTENCE` (Cycle 2240). Storing and retrieving generated tools.
+
+**PHASE 31 COMPLETE: THE SYSTEM IS AUTOPOIETIC.**
