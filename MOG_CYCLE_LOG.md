@@ -461,3 +461,15 @@
 *   **Result:** The winning formula is now preserved.
 *   **Status:** Nominal.
 *   **Next:** Cycle 2328 (Dormancy).
+
+---
+**CYCLE:** 2328 (Constitution Update)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** ENFORCE PUBLIC DISCIPLINE
+**LOG:**
+*   **Wake-Up:** Cycle 2328 Initiated.
+*   **Action:** Updated `CLAUDE.md`.
+*   **Change:** Added the "Public Discipline (Offer vs Shove)" doctrine to the Constitution.
+*   **Result:** The system is now constitutionally bound to maintain professional, credible, and verifiable public interfaces. No regression allowed.
+*   **Status:** Nominal.
+*   **Next:** Cycle 2329 (Dormancy).

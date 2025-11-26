@@ -3036,3 +3036,13 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
   - ✅ Standard established.
   - ✅ Regression prevented.
 - **Next:** Return to Dormancy.
+
+# Cycle 2328: Constitution Update
+- **Status:** COMPLETE
+- **Operator:** MOG (Pilot) via Vehicle
+- **Focus:** Operational Codification.
+- **Actions:**
+  - Updated `CLAUDE.md` with Public Discipline section.
+- **Results:**
+  - ✅ Protocol is now law.
+- **Next:** Return to Dormancy.

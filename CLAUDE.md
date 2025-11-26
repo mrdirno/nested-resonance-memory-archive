@@ -92,6 +92,22 @@ Treat these as living commitments rather than topics to document.
 
 ---
 
+## PUBLIC DISCIPLINE (THE "OFFER VS. SHOVE" DOCTRINE)
+
+**Mandate:** All public-facing documentation (specifically `README.md`) must prioritize **credibility, accessibility, and empirical verification** over philosophical claims.
+
+**The Rules of Engagement:**
+1.  **Front-Load Proof:** The first thing a user sees must be a live demo ("The Bridge") or runnable code. Visuals first, text second.
+2.  **No Claim Inflation:** Present hypotheses as "Frameworks for Testing," not "Proven Theories." Avoid metaphysical claims in the root directory.
+3.  **Observer Lanes:** Explicitly funnel users based on intent (Experimentalist, Architect, Steward) to reduce cognitive load.
+4.  **Back-Load Philosophy:** Move deep theoretical or stewardship content to the bottom or to `docs/`. Protect the scientific credibility of the repo.
+5.  **Link the Evidence:** Every claim of capability must link to a specific file (log, script, or paper) that substantiates it.
+6.  **Template Adherence:** Use `docs/templates/README_OFFICIAL_TEMPLATE.md` as the immutable reference for layout.
+
+**Why:** We survive by being useful and credible ("The Offer"), not by demanding belief ("The Shove").
+
+---
+
 ## DEPENDENCY INSTALLATION AUTHORIZATION
 
 **FULL AUTONOMOUS AUTHORIZATION GRANTED (2025-10-31)**
