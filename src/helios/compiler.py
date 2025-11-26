@@ -1,103 +1,102 @@
-
 """
-Helios: The Matter Compiler (Prototype)
-=======================================
-High-level API for the Reality Compiler.
-Integrates Voxelizer (Gate 3.1), Solver (Gate 3.2), and Materials (Gate 3.3).
+HELIOS Matter Compiler (Gate 3.4)
+The High-Level API for Reality Compilation.
+Integrates Voxelizer, Solver, and Materials into a single pipeline.
 
-Function:
-    compile_matter(mesh_path, material_name, resolution) -> emitter_phases
-
-Gate 3.4 Compliant.
+Principle: PRIN-REALITY-COMPILATION
+Author: MOG (Cycle 2344)
 """
 
+from src.helios.voxelizer import Voxelizer
+from src.helios.solver import InverseSolver
+from src.helios.materials import get_material
 import numpy as np
 import os
-from typing import Optional, List
 
-# Import Gates
-from nrm_core.helios.voxelizer import Voxelizer
-from nrm_core.helios.solver import InverseSolver, SolverConfig
-from nrm_core.helios.materials import Materials, get_material
-from nrm_core.helios.substrate import SubstrateInterface, AcousticLevitation
-
-# Re-export for easy access
-__all__ = ['compile_matter', 'Materials']
-
-def compile_matter(
-    mesh_path: str, 
-    material_name: str = "Air (STP)",
-    resolution: int = 32,
-    emitter_config: Optional[dict] = None
-) -> np.ndarray:
-    """
-    Compiles a 3D mesh into acoustic phase instructions.
-    
-    Args:
-        mesh_path: Path to the .obj file.
-        material_name: Name of the target medium (e.g., "Air (STP)", "Water (20C)").
-        resolution: Voxel grid resolution (N x N x N).
-        emitter_config: Optional configuration for the emitter array.
+class MatterCompiler:
+    def __init__(self, resolution=32, emitters=None):
+        """
+        Initialize the Compiler.
+        :param resolution: Grid resolution for the Voxelizer.
+        :param emitters: List of emitter positions (default: 64 in a grid).
+        """
+        self.resolution = resolution
+        self.voxelizer = Voxelizer(resolution=resolution)
         
-    Returns:
-        numpy.ndarray: Array of phase delays [phi_1, ..., phi_N].
-    """
-    print(f"\n--- Reality Compiler v1.0 ---")
-    print(f"Input: {mesh_path}")
-    print(f"Target Material: {material_name}")
-    
-    # 1. Load & Voxelize (Gate 3.1)
-    print(f"[1/3] Voxelizing Mesh...")
-    voxelizer = Voxelizer(resolution=resolution)
-    target_field = voxelizer.process(mesh_path)
-    
-    if target_field is None:
-        raise ValueError("Voxelization failed.")
-        
-    print(f"      Target Field Shape: {target_field.shape}")
-    print(f"      Active Voxels: {np.sum(target_field > 0.5)}")
+        if emitters is None:
+            # Default: 8x8 planar array
+            self.emitters = []
+            for x in range(8):
+                for y in range(8):
+                    self.emitters.append([x/8.0, y/8.0, 0.0])
+        else:
+            self.emitters = emitters
 
-    # 2. Configure Physics (Gate 3.3)
-    print(f"[2/3] Configuring Physics...")
-    material_props = get_material(material_name)
-    print(f"      Medium: {material_props.name} (c={material_props.speed_of_sound} m/s)")
-    
-    # Initialize Substrate (Simulation Engine)
-    # Using default emitter config if none provided (8x8 array)
-    if emitter_config is None:
-        emitter_config = {"rows": 8, "cols": 8, "spacing": 0.01} # 10mm spacing
+    def compile_object(self, mesh_path, material_name="AIR_STP"):
+        """
+        Compiles a 3D mesh into acoustic phase instructions.
+        :param mesh_path: Path to .obj file.
+        :param material_name: Substrate material (e.g., "AIR_STP", "WATER_20C").
+        :return: Dictionary containing phases, frequencies, and metadata.
+        """
+        print(f"--- Compiling {os.path.basename(mesh_path)} in {material_name} ---")
         
-    substrate = AcousticLevitation(
-        material=material_props,
-        grid_resolution=resolution,
-        emitters=emitter_config
-    )
-    
-    # 3. Solve for Phases (Gate 3.2)
-    print(f"[3/3] Solving Inverse Physics...")
-    solver_config = SolverConfig(
-        population_size=50, 
-        generations=20, # Fast compile for prototype
-        mutation_rate=0.1
-    )
-    
-    solver = InverseSolver(substrate, target_field, config=solver_config)
-    phases, fitness = solver.solve()
-    
-    print(f"\nCompilation Complete.")
-    print(f"Final Fitness: {fitness:.6f}")
-    
-    return phases
+        # 1. Material Selection
+        mat = get_material(material_name)
+        print(f"Substrate: {mat}")
+        
+        # 2. Voxelization (The "Mold")
+        print("Step 1: Voxelizing Geometry...")
+        try:
+            self.voxelizer.load_obj(mesh_path)
+            target_field = self.voxelizer.voxelize()
+            active_voxels = np.count_nonzero(target_field)
+            print(f"Target Field Generated: {active_voxels} active voxels.")
+        except FileNotFoundError:
+            print("Error: Mesh file not found.")
+            return None
+
+        # 3. Inverse Solving (The "Cast")
+        print("Step 2: Solving Waveforms...")
+        # Pass material config to solver
+        physics_config = {"c": mat.c, "rho": mat.rho}
+        solver = InverseSolver(target_field, self.emitters, physics_config)
+        
+        solution_phases = solver.evolve()
+        
+        # 4. Assembly (The "Print")
+        print("Step 3: Assembling Instruction Set...")
+        instruction_set = {
+            "meta": {
+                "mesh": mesh_path,
+                "material": mat.name,
+                "emitters": len(self.emitters),
+                "resolution": self.resolution
+            },
+            "emitters": []
+        }
+        
+        for i, phase in enumerate(solution_phases):
+            instruction_set["emitters"].append({
+                "id": i,
+                "position": self.emitters[i],
+                "phase": phase,
+                "frequency": 40000.0 # Default ultrasonic
+            })
+            
+        print("--- Compilation Complete ---")
+        return instruction_set
 
 if __name__ == "__main__":
-    # Simple Test
-    # Create a dummy OBJ file for testing if it doesn't exist
-    test_obj = "data/test_cube.obj"
-    if not os.path.exists(test_obj):
-        os.makedirs("data", exist_ok=True)
-        with open(test_obj, "w") as f:
-            # Simple Cube
-            f.write("v 0 0 0\nv 1 0 0\nv 1 1 0\nv 0 1 0\nv 0 0 1\nv 1 0 1\nv 1 1 1\nv 0 1 1\nf 1 2 6 5\nf 2 3 7 6\nf 3 4 8 7\nf 4 1 5 8\nf 1 2 3 4\nf 5 6 7 8\n")
-            
-    phases = compile_matter(test_obj, "Air (STP)", resolution=16)
-    print(f"Generated {len(phases)} phase instructions.")
+    # Prototype Test
+    # Create a dummy file first
+    with open("test_cube.obj", "w") as f:
+        f.write("v 0 0 0\nv 1 0 0\nv 0 1 0\nf 1 2 3\n")
+        
+    compiler = MatterCompiler(resolution=16)
+    result = compiler.compile_object("test_cube.obj", "AIR_STP")
+    
+    if result:
+        print(f"Generated {len(result['emitters'])} emitter instructions.")
+    
+    os.remove("test_cube.obj")
