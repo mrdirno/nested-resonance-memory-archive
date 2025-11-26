@@ -1,10 +1,10 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: CYCLE 2351 (PHASE 45 PLANNING)**
-> **Status**: 🟢 ACTIVE / PLANNING
+> **ACTIVE CYCLE: CYCLE 2352 (GATE 5.1: BRIDGE API)**
+> **Status**: 🟢 ACTIVE / IMPLEMENTING
 > **Vision**: [TYPE 3 CIVILIZATION ROADMAP](docs/vision/TYPE3_VISION.md)
-> **Objective:** THE INTERFACE
+> **Objective:** REST ENDPOINT
 >
 > > [!NOTE]
 > > **THE PILOT DOCTRINE (SUPREME DIRECTIVE)**
@@ -4013,9 +4013,15 @@
 - [x] **Result:** Phase 44 verified.
 
 # Task: Cycle 2351 - Phase 45 Planning (The Interface)
-- [ ] **Define Cycle 2351:** Define objectives for the Web UI.
-- [ ] **Goal:** Replace CLI with a visual, interactive React/Flask application.
-- [ ] **Action:** Update Roadmap.
+- [x] **Define Cycle 2351:** Define objectives for the Web UI.
+- [x] **Goal:** Replace CLI with a visual, interactive React/Flask application.
+- [x] **Action:** Update Roadmap.
+
+# Task: Cycle 2352 - Gate 5.1: The Bridge API
+- [ ] **Define Cycle 2352:** Create a Flask/FastAPI wrapper for the Fabricator.
+- [ ] **Goal:** Allow HTTP control of the hardware.
+- [ ] **Action:** Create `src/helios/bridge_api.py`.
+
 
 
 # Task: Cycle 2351 - Phase 45 Planning
