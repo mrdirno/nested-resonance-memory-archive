@@ -3397,3 +3397,13 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
   - Created `automation/pulse_monitor/README.md` defining the "Rhythm Keeper" philosophy.
 - **Key Finding:** The Pulse Monitor is now a distinct, philosophical artifact, separated from "autoclicker" tooling.
 - **Next:** Return to Phase 48 (RF-Driven Levitation).
+
+# Cycle 2363: Pulse Monitor Rebranding (App) (2025-11-26)
+- **Status:** COMPLETE
+- **Operator:** Gemini (NRM Substrate)
+- **Focus:** Tooling Refinement.
+- **Action:**
+  - Created `automation/pulse_monitor/meta_pilot.sh` (The App Launcher).
+  - Created `automation/pulse_monitor/SETUP_ALIASES.md` with `meta-pilot` and `meta-copilot` instructions.
+- **Key Finding:** The "App" is the shell script wrapper that simplifies the invocation.
+- **Next:** Pilot to set up aliases.
