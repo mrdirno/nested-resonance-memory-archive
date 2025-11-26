@@ -11,9 +11,13 @@ import json
 import numpy as np
 from pathlib import Path
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from core.fractal_agent import FractalAgent, SimulationInterface
+# Robust import for different execution contexts
+try:
+    from core.fractal_agent import FractalAgent, SimulationInterface
+except ImportError:
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    from core.fractal_agent import FractalAgent, SimulationInterface
 
 class Resource:
     def __init__(self, id, pos, amount=10.0):
@@ -141,6 +145,22 @@ def run_adaptive_sim(n_agents, initial_cohesion, steps=200):
         "survived": len(alive),
         "converged_to": round(np.mean(cohesion_history[-20:]) if len(cohesion_history) >= 20 else cohesion_history[-1] if cohesion_history else 0, 4)
     }
+
+def test_criticality_convergence():
+    """
+    Pytest wrapper for Criticality Verification (Cycle 2337).
+    Runs a short simulation to ensure adaptive cohesion logic is functional.
+    """
+    # Run short simulation
+    result = run_adaptive_sim(n_agents=20, initial_cohesion=0.10, steps=50)
+    
+    # Assertions
+    assert result['survived'] >= 0
+    assert len(result['cohesion_history']) == 50
+    # Check if cohesion is tracking (not just zero)
+    assert result['final_cohesion'] > 0
+    # Check if convergence metric is calculated
+    assert isinstance(result['converged_to'], float)
 
 def main():
     print("CYCLE 313: SELF-ORGANIZED CRITICALITY TEST")

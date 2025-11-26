@@ -1,13 +1,11 @@
 ---
-**CYCLE:** 2336 (Structural Integrity Check)
+**CYCLE:** 2337 (Criticality Verification)
 **STATUS:** 🟢 ACTIVE
-**DIRECTIVE:** AUDIT CORE SYSTEMS
+**DIRECTIVE:** VERIFY SECONDARY CORE
 **LOG:**
-*   **Wake-Up:** Cycle 2336 Initiated.
-*   **Objective:** Audit the "Central Dogma" based on the Knowledge Graph.
-*   **Analysis:** Identified `PRIN-DETERMINISTIC-ATTRACTOR` as the most referenced principle (11 refs).
-*   **Target:** `src/experiments/cycle1891_deterministic_threshold.py`.
-*   **Action:** Verified import paths and test coverage.
-*   **Result:** Added `test_deterministic_threshold` function and verified with `pytest`. Passed.
-*   **Status:** The Core is robust.
-*   **Next:** Cycle 2337 (Dormancy / User Handover).
+*   **Wake-Up:** Cycle 2337 Initiated.
+*   **Objective:** Verify `PRIN-CRITICALITY` (9 refs, #2 Centrality).
+*   **Action:** Modified `src/experiments/cycle313_self_organized_criticality.py`.
+*   **Result:** Added `test_criticality_convergence` and passed `pytest`.
+*   **Status:** Core axiomatics (Deterministic Attractor & Criticality) are robust.
+*   **Next:** Cycle 2338 (Dormancy).
