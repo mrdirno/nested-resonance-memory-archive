@@ -773,3 +773,37 @@
   - Suitable for production with hardware redundancy
   - Can tolerate transient memory corruption or hardware faults
 - **Conclusion:** Self-healing validated. Partitioned architecture with Hebbian maintenance provides automatic error recovery, critical for robust real-world deployment. System can recover from catastrophic single-partition failures with 99% final accuracy.
+
+# Cycle 2104: Priority-Based Refresh (Differential Maintenance Validated)
+- **Define Cycle 2104:** Test if high-priority items can be protected via increased refresh rate.
+- **Goal:** Enable quality-of-service differentiation for critical memories.
+- **Experiment:** `src/experiments/cycle2104_priority_refresh.py`.
+- **Result:** **SUCCESS. Priority refresh provides +31% accuracy advantage for high-priority items.**
+- **Analysis:**
+  - D=1024, K=8 partitions
+  - High-priority items: 3× refresh rate per cycle
+  - Low-priority items: 1× refresh rate per cycle
+  - Test configurations:
+    - 60 total (10 high / 50 low): High 93%, Low 65% (+28%)
+    - 60 total (20 high / 40 low): High 92%, Low 60% (+32%)
+    - 60 total (30 high / 30 low): High 88%, Low 51% (+37%)
+    - 80 total (20 high / 60 low): High 83%, Low 55% (+28%)
+  - **Average advantage:** +31% accuracy for high-priority items
+  - **High-priority range:** 83-93% accuracy (good)
+  - **Low-priority range:** 51-65% accuracy (degraded but functional)
+- **Key Finding:**
+  - Priority refresh works as expected - higher refresh = better accuracy
+  - Can allocate computational budget to critical items
+  - Low-priority items still functional (not destroyed by reduced refresh)
+  - Trade-off is predictable and tunable
+- **Mechanism:**
+  - More frequent reinforcement → stronger pattern traces
+  - High-priority items resist interference better
+  - Low-priority items degrade gradually (still above chance)
+  - Refresh rate acts as quality-of-service knob
+- **Deployment Implication:**
+  - Enables **differential quality-of-service** for memories
+  - Can protect critical items (frequently accessed, safety-critical)
+  - Computational budget can be allocated strategically
+  - Suitable for real-time systems with priority tiers
+- **Conclusion:** Priority-based refresh validated. Refresh rate provides tunable quality-of-service for memories, enabling practical deployment in systems with heterogeneous importance levels. +31% advantage demonstrates effective resource allocation.
