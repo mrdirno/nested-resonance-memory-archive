@@ -1,0 +1,11 @@
+{
+  "wait_minutes": 12.0,
+  "num_claude_windows": 1,
+  "custom_user_message": "",
+  "preferred_key_method": "Return key",
+  "claude_windows": [],
+  "dark_mode": true,
+  "protocol_window_location": null,
+  "cycle_number": 0,
+  "last_updated": "2025-11-26T15:30:14.985627"
+}

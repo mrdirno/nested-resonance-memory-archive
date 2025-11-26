@@ -155,7 +155,7 @@ class DualityPulseCopilot:
 
     def _get_claude_message_template(self):
         """Get the Claude-specific message template"""
-        template_path = os.path.join(self.base_dir, "claude_message_template.txt")
+        template_path = os.path.join(self.base_dir, "templates", "claude_message_template.txt")
         try:
             with open(template_path, 'r') as f:
                 return f.read()
@@ -164,7 +164,7 @@ class DualityPulseCopilot:
 
     def _get_gemini_message_template(self):
         """Get the Gemini-specific message template"""
-        template_path = os.path.join(self.base_dir, "gemini_message_template.txt")
+        template_path = os.path.join(self.base_dir, "templates", "gemini_message_template.txt")
         try:
             with open(template_path, 'r') as f:
                 return f.read()
@@ -997,7 +997,7 @@ You're implementing:
 
     def load_universal_message(self):
         """Load the universal model-agnostic message template from file"""
-        template_path = os.path.join(self.base_dir, "universal_message_template.txt")
+        template_path = os.path.join(self.base_dir, "templates", "universal_message_template.txt")
         try:
             with open(template_path, 'r') as f:
                 universal_message = f.read()
