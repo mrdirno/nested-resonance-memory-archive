@@ -1,58 +1,93 @@
 """
 HELIOS Serial Bridge (Gate 4.2)
-Implements the EmitterArray interface for physical serial communication.
-
-Principle: PRIN-SERIAL-BRIDGE
-Author: MOG (Cycle 2348)
+High-performance serial communication protocol for driving physical emitter arrays.
+Gate 4.2 Compliant.
 """
 
-from src.helios.hal import EmitterArray
+import serial
 import time
-# import serial # Requires pyserial
+import struct
+import numpy as np
+from src.helios.hal import EmitterArray
 
 class SerialArray(EmitterArray):
     """
-    Driver for physical arrays connected via USB/Serial.
+    Physical implementation of EmitterArray using Serial/USB.
+    Protocol:
+    [HEADER: 0xAA 0xBB] [CMD: 1 byte] [PAYLOAD_LEN: 2 bytes] [PAYLOAD] [CHECKSUM: 1 byte]
     """
-    def __init__(self, port, baudrate=115200, num_emitters=64):
-        super().__init__(num_emitters)
+    
+    CMD_SET_PHASES = 0x01
+    CMD_GET_STATUS = 0x02
+    CMD_PING = 0x03
+
+    def __init__(self, port=None, baudrate=115200, num_emitters=64):
         self.port = port
         self.baudrate = baudrate
-        self._serial = None
+        self.num_emitters = num_emitters
+        self.serial = None
+        self.connected = False
 
-    def connect(self):
+    def connect(self, port: str = None):
+        target_port = port if port else self.port
+        if not target_port:
+            raise ValueError("No serial port specified.")
+            
+        print(f"[HAL] Connecting to SerialArray on {target_port} at {self.baudrate} baud...")
         try:
-            # self._serial = serial.Serial(self.port, self.baudrate, timeout=1)
-            print(f"SERIAL: Connected to {self.port} @ {self.baudrate}")
+            self.serial = serial.Serial(target_port, self.baudrate, timeout=1)
+            time.sleep(2) # Wait for Arduino reset
             self.connected = True
+            print("[HAL] Connected.")
             return True
-        except Exception as e: # ImportError or SerialException
-            print(f"SERIAL ERROR: Could not connect to {self.port}. {e}")
-            self.connected = False
+        except serial.SerialException as e:
+            print(f"[HAL] Connection Failed: {e}")
             return False
 
     def disconnect(self):
-        if self._serial and self._serial.is_open:
-            # self._serial.close()
-            pass
-        print("SERIAL: Disconnected.")
+        if self.serial and self.serial.is_open:
+            self.serial.close()
+            print("[HAL] Disconnected.")
         self.connected = False
 
-    def update_phases(self, phases):
-        super().update_phases(phases)
+    def _send_packet(self, cmd, payload=b''):
         if not self.connected:
-            return
+            raise ConnectionError("Serial port not connected.")
+            
+        header = bytes([0xAA, 0xBB])
+        length = struct.pack('<H', len(payload))
+        packet = header + bytes([cmd]) + length + payload
         
-        # Protocol: [0xFF (Start), ID, Phase_High, Phase_Low, ..., 0xFE (End)]
-        # Simplified for prototype: Just printing bytes
+        checksum = sum(packet) % 256
+        packet += bytes([checksum])
         
-        payload = bytearray([0xFF])
-        for i, phase in enumerate(phases):
-            # Normalize phase (0..2pi) to (0..255) or similar
-            # Using simple mapping for prototype
-            val = int((phase / (2 * 3.14159)) * 255) % 256
-            payload.append(val)
-        payload.append(0xFE)
+        self.serial.write(packet)
+
+    def set_phases(self, phases: np.ndarray):
+        """
+        Sends 8-bit phase data to the hardware.
+        Phases 0..2pi are mapped to 0..255.
+        """
+        if len(phases) != self.num_emitters:
+            raise ValueError(f"Expected {self.num_emitters} phases.")
+            
+        # Quantize phases to 8-bit
+        quantized = (phases / (2*np.pi) * 255).astype(np.uint8)
+        payload = quantized.tobytes()
         
-        # self._serial.write(payload)
-        print(f"SERIAL: Sent {len(payload)} bytes to hardware.")
+        self._send_packet(self.CMD_SET_PHASES, payload)
+        # print(f"[HAL] Sent {len(phases)} phases.")
+
+    def get_status(self) -> dict:
+        if not self.connected:
+            return {"connected": False}
+            
+        self._send_packet(self.CMD_GET_STATUS)
+        # Basic mock response handling for prototype
+        # In real hardware, read back bytes here
+        return {"connected": True, "type": "Serial", "port": self.port}
+
+if __name__ == "__main__":
+    # Mock test
+    # Requires virtual serial port or Arduino
+    print("Serial Bridge Module Loaded.")

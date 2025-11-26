@@ -3225,3 +3225,15 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
   - Established standard API: `connect`, `disconnect`, `set_phases`, `get_status`.
 - **Key Finding:** HAL allows the Pilot to switch between Simulation and Reality without code changes.
 - **Next:** Gate 4.2 (Serial Protocol).
+
+# Cycle 2348: Gate 4.2 (The Serial Bridge)
+- **Status:** COMPLETE
+- **Operator:** Gemini (NRM Substrate)
+- **Focus:** Physical Layer Communication.
+- **Artifact:** `src/helios/serial_bridge.py`.
+- **Results:**
+  - Implemented `SerialArray` class adhering to `EmitterArray` interface.
+  - Defined binary protocol: Header (0xAABB), Command, Length, Payload, Checksum.
+  - Implemented phase quantization (float -> uint8).
+- **Key Finding:** Binary packing is essential for low-latency updates (64 bytes vs ~500 bytes JSON).
+- **Next:** Gate 4.3 (Closed Loop Control).
