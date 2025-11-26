@@ -1237,3 +1237,74 @@ Accuracy = 98-100% (production-grade)
   - C2113 shows strength: exact symbolic reasoning
   - C2112 shows weakness: approximate matching
 - **Conclusion:** Analogical reasoning VALIDATED as core capability. System achieves 100% accuracy across all scales (1-10 analogies). Relation extraction (A^(-1) ⊛ B) and application (C ⊛ relation → D) work flawlessly. This demonstrates VSA's strength in **exact symbolic reasoning** and **compositional semantics**. Use cases include analogy solving, cross-domain transfer, and relational learning. Strong contrast to C2112 limitation: system excels at exact operations, struggles with approximation.
+
+# Cycle 2114: Graph Storage (POOR Performance - Edge Interference Limitation)
+- **Define Cycle 2114:** Test if system can store and traverse graphs (edges as bindings).
+- **Goal:** Validate graph storage via edge superposition (memory = ∑ source_i ⊛ target_i).
+- **Experiment:** `src/experiments/cycle2114_graph_storage.py`.
+- **Result:** ❌ **GRAPH STORAGE FAILS. Poor accuracy (27-39%, avg 32%) due to edge interference.**
+- **Analysis:**
+  - D=1024, 200 cycles, 3 trials
+  - **Method:** Store edges as bindings (source ⊛ target), superimpose in single memory
+  - Test configurations:
+    - **10 nodes, 20 edges:** 37% accuracy ❌ (poor)
+    - **10 nodes, 30 edges:** 27% accuracy ❌ (poor)
+    - **10 nodes, 40 edges:** 27% accuracy ❌ (poor)
+    - **20 nodes, 40 edges:** 39% accuracy ❌ (poor)
+  - **Average accuracy:** 32% (unusable for production)
+  - **Best configuration:** 20 nodes, 40 edges (still only 39%)
+  - **Degradation pattern:** Performance worsens with edge density
+- **Key Finding:**
+  - Graph storage via edge superposition **DOES NOT WORK**
+  - Accuracy ~32% is near-random for small graphs
+  - Edge interference prevents reliable traversal
+  - Density increases interference (more edges → worse accuracy)
+  - **CRITICAL LIMITATION** for graph-based applications
+- **Mechanism Analysis:**
+  - **Problem:** Multiple edges superimposed in single memory
+  - **Interference:** Each edge adds noise to others
+  - **Multi-binding issue:** Same source → multiple targets (like C2111)
+  - **No partitioning:** Unlike key-value (C2091 K=8), no graph-aware partitioning
+  - **Retrieval ambiguity:** Source unbinding retrieves noisy mixture of all targets
+  - **Cleanup fails:** Too much interference for codebook to resolve
+- **Connection to C2111 (Multi-Binding):**
+  - C2111 showed multi-binding works for ≤15 bindings (93-100%)
+  - C2111 failed at 16 bindings (0% all-correct)
+  - C2114 has 20-40 edges (bindings) → exceeds capacity limit
+  - Graph is essentially massive multi-binding problem
+  - Same root cause: **superposition interference**
+- **Why Graph Storage Fails:**
+  - **Capacity exceeded:** 20-40 edges >> 15 binding limit (C2111)
+  - **No structure exploitation:** Graph topology not encoded efficiently
+  - **Flat superposition:** All edges in one memory (no hierarchy)
+  - **Ambiguous retrieval:** Source node unbinding → mixture of targets
+  - **Cleanup insufficient:** Interference too severe for nearest-neighbor
+- **Comparison to Other Capabilities:**
+  - **C2109 (Bidirectional lookup):** 100% ✅ (one binding per key)
+  - **C2110 (Sequence memory):** 98% ✅ (positional structure)
+  - **C2111 (Multi-binding):** 73% avg ⚠️ (≤15 bindings OK, ≥16 fails)
+  - **C2112 (Similarity search):** 77% at 10% noise ❌ (noise-sensitive)
+  - **C2113 (Analogical reasoning):** 100% ✅ (exact operations)
+  - **C2114 (Graph storage):** 32% avg ❌ (interference-limited)
+- **Use Case Implications:**
+  - ❌ **BAD for:** General graph storage and traversal
+  - ❌ **BAD for:** Social networks (high edge count)
+  - ❌ **BAD for:** Knowledge graphs (many relations)
+  - ❌ **BAD for:** Routing/path finding
+  - ❌ **BAD for:** Any dense graph application
+  - ⚠️ **MAYBE for:** Very sparse graphs (few edges per node)
+  - ✅ **ALTERNATIVE:** Use separate binding per edge in partitioned memory
+- **Potential Mitigations (Not Tested):**
+  - Partition by source node (each node gets own memory)
+  - Hierarchical graph encoding (cluster nodes)
+  - Edge types as separate memories
+  - Sparse graph subset selection (prune edges)
+  - Hybrid approach (VSA + traditional adjacency structure)
+  - *These would require separate experiments*
+- **Architectural Lesson:**
+  - System is **NOT a universal graph database**
+  - Superposition has **capacity limits** (C2111: 15 bindings)
+  - Graphs with >15 edges per node will fail
+  - Structure must be encoded explicitly (not just flat superposition)
+  - VSA alone insufficient for complex graph tasks
+- **Conclusion:** Graph storage via edge superposition FAILS with 32% average accuracy. Edge interference prevents reliable traversal even for small graphs (10-20 nodes, 20-40 edges). This is related to C2111 multi-binding capacity limit - superposition breaks down beyond ~15 bindings. System is **NOT suited for general graph storage** due to interference and capacity constraints. Use cases requiring graph traversal must employ alternative approaches (partitioning, hierarchical encoding, or hybrid systems).
