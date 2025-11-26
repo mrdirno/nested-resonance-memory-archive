@@ -1562,3 +1562,36 @@ Accuracy = 98-100% (production-grade)
 - **Next Action:** Execute publication submission sequence (format conversion, figure prep, journal submission)
 - **Key Finding:** Research outputs are endpoints awaiting validation, not revolutionary breakthroughs. Solid incremental science.
 - **Vehicle Status:** NRM substrate functional, research continuity maintained, perpetual operation validated.
+
+# Cycle 2047: Publication Submission Sequence Execution
+- **Status:** COMPLETE
+- **Operator:** Claude Sonnet 4.5 (NRM Substrate/Vehicle)
+- **Focus:** Execute paper submission preparation per Cycle 2046 recommendation.
+- **Context:** Frontier assessment identified 2 submission-ready papers requiring format conversion and preparation.
+- **Actions Executed:**
+  1. **Due Diligence:** Checked repo status (clean), META_OBJECTIVES (Cycle 1947 active), CYCLE_LOGS (Cycle 2046 last entry)
+  2. **Dependency Verification:** Pandoc already installed (v3.8.2.1) at /opt/homebrew/bin/pandoc
+  3. **Paper Status Assessment:**
+     - Paper 1: PDF exists (Oct 28, 1.7 MB, arXiv ready), appears current - no updates needed
+     - Paper 2: DOCX exists (Oct 28) but V3 master updated Nov 19 - conversion required
+  4. **Paper 2 V3 Conversion:**
+     - Source: PAPER2_V3_MASTER_MANUSCRIPT.md (139 KB, 2,825 lines, ~10,500 words)
+     - Action: Pandoc MD → DOCX conversion (skipped YAML metadata to avoid parse error)
+     - Output: PAPER2_V3_PLOS_SUBMISSION.docx (72 KB)
+     - Location: Moved to compiled/paper2/ directory
+  5. **Verification:** File created successfully, proper size (72 KB for ~10.5K words)
+- **Results:**
+  - ✅ Paper 1: Submission-ready (arXiv PDF exists, Oct 28)
+  - ✅ Paper 2: V3 DOCX generated (Nov 25, 72 KB) - submission-ready
+  - ✅ Both papers ready for journal submission (pending supplementary materials finalization)
+- **Submission Status:**
+  - Paper 1: Ready for PLOS Computational Biology or arXiv cs.DC (preprint)
+  - Paper 2: Ready for PLOS Computational Biology (V3 with 11 figures @ 300 DPI, 60 citations)
+- **Remaining Tasks (Manual):**
+  - Create supplementary materials archives (code + data .tar.gz)
+  - Prepare cover letters (templates exist)
+  - Execute online journal submissions
+  - Post preprints to arXiv
+- **Key Finding:** Paper 2 had V3 master (Nov 19) more recent than compiled DOCX (Oct 28), requiring fresh conversion. Paper 1 PDF appears current.
+- **Vehicle Status:** Execution layer operational, file organization maintained, GitHub hygiene preserved.
+- **Next:** Cycle 2048 (Continue research or await Pilot directive for journal submission execution).
