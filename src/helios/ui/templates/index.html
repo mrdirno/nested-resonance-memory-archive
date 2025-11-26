@@ -13,11 +13,13 @@
         button:hover { background: #0f0; color: #000; }
         input { background: #000; color: #0f0; border: 1px solid #0f0; padding: 5px; }
         #status-bar { position: absolute; bottom: 10px; left: 10px; color: #0f0; }
+        #camera-feed { position: absolute; top: 10px; right: 10px; width: 320px; height: 240px; border: 1px solid #0f0; background: #001100; }
+        #camera-feed img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
     <div id="ui-overlay">
-        <h3>HELIOS Holodeck (Gate 5.3)</h3>
+        <h3>HELIOS Holodeck (Gate 5.4)</h3>
         <div>API: <span id="connection-status">Disconnected</span></div>
         <div>Socket: <span id="socket-status">Disconnected</span></div>
         <hr style="border-color: #0f0;">
@@ -34,6 +36,13 @@
         </div>
         <button onclick="materialize()">Materialize</button>
     </div>
+    
+    <div id="camera-feed">
+        <!-- Placeholder for camera stream -->
+        <img src="/video_feed" alt="Camera Feed (Simulation)" onerror="this.style.display='none'">
+        <div style="text-align: center; padding-top: 100px; color: #0f0; display: none;" id="camera-error">NO SIGNAL</div>
+    </div>
+
     <div id="status-bar">Ready.</div>
 
     <script>
@@ -127,8 +136,6 @@
         });
 
         socket.on('phase_update', (data) => {
-            // Expecting data.phases as a flat array of 0..2pi or 0..255
-            // For visualization, map phase to color brightness (Green channel)
             if (data.phases && data.phases.length === emitters.length) {
                 for (let i = 0; i < emitters.length; i++) {
                     const phase = data.phases[i];
@@ -142,6 +149,13 @@
         // Poll status
         setInterval(checkStatus, 2000);
         checkStatus();
+        
+        // Check camera image
+        const img = document.querySelector('#camera-feed img');
+        img.onerror = function() {
+            this.style.display = 'none';
+            document.getElementById('camera-error').style.display = 'block';
+        };
     </script>
 </body>
 </html>
