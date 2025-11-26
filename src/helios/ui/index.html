@@ -22,7 +22,7 @@
             const [log, setLog] = useState([]);
 
             useEffect(() => {
-                fetch('http://localhost:5000/status')
+                fetch('http://localhost:5001/status')
                     .then(res => res.json())
                     .then(data => setStatus(data.connected ? "Connected" : "Offline (Virtual)"))
                     .catch(() => setStatus("API Unreachable"));
@@ -44,7 +44,7 @@
                 addLog(`Uploading ${file.name}...`);
 
                 try {
-                    const res = await fetch('http://localhost:5000/fabricate', {
+                    const res = await fetch('http://localhost:5001/fabricate', {
                         method: 'POST',
                         body: formData
                     });

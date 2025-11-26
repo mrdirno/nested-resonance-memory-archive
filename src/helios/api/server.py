@@ -7,25 +7,42 @@ Gate 5.1 Compliant.
 import os
 import threading
 import time
-from flask import Flask, request, jsonify, render_template
-from flask_socketio import SocketIO, emit
-from src.helios.fabricator import Fabricator
-from src.helios.sdr_bridge import SDRInterface
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+print("Loading modules...")
+try:
+    from flask import Flask, request, jsonify, render_template
+    from flask_socketio import SocketIO, emit
+    from src.helios.fabricator import Fabricator
+    from src.helios.sdr_bridge import SDRInterface
+    print("Modules loaded successfully.")
+except Exception as e:
+    print(f"IMPORT ERROR: {e}")
+    exit(1)
 
 app = Flask(__name__, template_folder="../ui/templates", static_folder="../ui/static")
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # Global Instances
-fabricator = Fabricator(virtual=True)
-sdr = SDRInterface()
-sdr.connect()
+try:
+    fabricator = Fabricator(virtual=True)
+    sdr = SDRInterface()
+    sdr.connect()
+except Exception as e:
+    print(f"INIT ERROR: {e}")
 
 # Background RF Streamer
 def rf_stream():
     while True:
         if sdr.connected:
             psd = sdr.get_psd()
-            socketio.emit('rf_update', {'psd': psd, 'center_freq': sdr.center_freq})
+            try:
+                socketio.emit('rf_update', {'psd': psd, 'center_freq': sdr.center_freq})
+            except Exception as e:
+                pass
         time.sleep(0.1) # 10Hz update rate
 
 rf_thread = threading.Thread(target=rf_stream)
@@ -116,4 +133,9 @@ def materialize():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000)
+    print("SERVER STARTING ON PORT 5001...", flush=True)
+    try:
+        # Re-enable socketio.run with explicit threading mode
+        socketio.run(app, host='127.0.0.1', port=5001, allow_unsafe_werkzeug=True)
+    except Exception as e:
+        print(f"SERVER CRASHED: {e}", flush=True)
