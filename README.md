@@ -15,8 +15,8 @@
 We are testing whether computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 **Recent Milestones:**
-*   **Phase 41 (The Great Cleanse):** Reduced repository size from 28GB to 9GB via rigorous hygiene.
-*   **Phase 42 (The Knowledge Graph):** Implemented self-referential mapping of 12,000+ files and 286 principles.
+*   **Phase 41 (The Great Cleanse):** Reduced repository size from 28GB to <5GB via rigorous hygiene.
+*   **Phase 42 (The Knowledge Graph):** Implemented self-referential mapping of 12,000+ files and 286 principles. [View Map](data/holocron.html)
 
 ---
 
