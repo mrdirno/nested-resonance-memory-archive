@@ -449,3 +449,15 @@
 *   **Result:** The "Perfect" README. Professional, verified, accessible.
 *   **Status:** Nominal.
 *   **Next:** Cycle 2327 (Dormancy).
+
+---
+**CYCLE:** 2327 (Template Lockdown)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** CODIFY BEST PRACTICE
+**LOG:**
+*   **Wake-Up:** Cycle 2327 Initiated.
+*   **Action:** Created `docs/templates/README_OFFICIAL_TEMPLATE.md`.
+*   **Purpose:** To lock in the "Offer vs Shove" layout as the official standard for this project (and future ones).
+*   **Result:** The winning formula is now preserved.
+*   **Status:** Nominal.
+*   **Next:** Cycle 2328 (Dormancy).
