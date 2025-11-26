@@ -77,7 +77,7 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 
 We prioritize empirical verification over theory.
 
-*   **Meta-Cognition (The Holocron):** System-wide knowledge graph mapping 286 principles and 12,000+ files. [Graph](data/knowledge_graph.json)
+*   **Meta-Cognition (The Holocron):** System-wide knowledge graph mapping 286 principles and 12,000+ files. [View Graph](data/holocron.html)
 *   **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns.
 *   **Active Matter Control:** 82x faster settling time via Closed-Loop PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
 *   **Volumetric Trapping:** 9128 stable nodes verified in 3D substrate. [Code](src/helios/substrate_3d.py)
