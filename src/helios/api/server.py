@@ -5,13 +5,17 @@ Gate 5.1 Compliant.
 """
 
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from src.helios.fabricator import Fabricator
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../ui/templates", static_folder="../ui/static")
 
 # Global Fabricator instance (default to virtual for safety)
 fabricator = Fabricator(virtual=True)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/status', methods=['GET'])
 def status():

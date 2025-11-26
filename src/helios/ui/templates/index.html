@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HELIOS Holodeck</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: 'Courier New', monospace; background: #000; color: #0f0; }
+        #ui-overlay { position: absolute; top: 10px; left: 10px; background: rgba(0, 20, 0, 0.8); padding: 15px; border: 1px solid #0f0; }
+        button { background: #000; color: #0f0; border: 1px solid #0f0; padding: 5px 10px; cursor: pointer; margin-top: 5px; }
+        button:hover { background: #0f0; color: #000; }
+        input { background: #000; color: #0f0; border: 1px solid #0f0; padding: 5px; }
+        #status-bar { position: absolute; bottom: 10px; left: 10px; color: #0f0; }
+    </style>
+</head>
+<body>
+    <div id="ui-overlay">
+        <h3>HELIOS Holodeck (Gate 5.2)</h3>
+        <div>Status: <span id="connection-status">Disconnected</span></div>
+        <hr style="border-color: #0f0;">
+        <div>
+            <label>Material:</label>
+            <select id="material-select" style="background: #000; color: #0f0; border: 1px solid #0f0;">
+                <option value="AIR_STP">Air (STP)</option>
+                <option value="WATER_20C">Water (20C)</option>
+            </select>
+        </div>
+        <div style="margin-top: 10px;">
+            <label>Mesh:</label>
+            <input type="text" id="mesh-path" value="data/test_cube.obj">
+        </div>
+        <button onclick="materialize()">Materialize</button>
+    </div>
+    <div id="status-bar">Ready.</div>
+
+    <script>
+        // Three.js Scene Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Grid Helper
+        const gridHelper = new THREE.GridHelper(100, 100, 0x004400, 0x002200);
+        scene.add(gridHelper);
+
+        // Emitter Array Visualization (8x8)
+        const geometry = new THREE.BoxGeometry(0.8, 0.1, 0.8);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00aa00, wireframe: true });
+        
+        for(let x=0; x<8; x++) {
+            for(let z=0; z<8; z++) {
+                const emitter = new THREE.Mesh(geometry, material);
+                emitter.position.set(x*2 - 7, 0, z*2 - 7);
+                scene.add(emitter);
+            }
+        }
+
+        camera.position.set(0, 10, 15);
+        camera.lookAt(0, 0, 0);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // API Interaction
+        const API_URL = "http://localhost:5000";
+
+        async function checkStatus() {
+            try {
+                const response = await fetch(`${API_URL}/status`);
+                const data = await response.json();
+                document.getElementById("connection-status").innerText = data.status.toUpperCase();
+                document.getElementById("connection-status").style.color = data.status === "online" ? "#0f0" : "#f00";
+            } catch (e) {
+                document.getElementById("connection-status").innerText = "ERROR";
+                document.getElementById("connection-status").style.color = "#f00";
+            }
+        }
+
+        async function materialize() {
+            const meshPath = document.getElementById("mesh-path").value;
+            const materialName = document.getElementById("material-select").value;
+            
+            document.getElementById("status-bar").innerText = "Compiling...";
+            
+            try {
+                const response = await fetch(`${API_URL}/materialize`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ mesh_path: meshPath, duration: 5 })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById("status-bar").innerText = "Materialization Complete.";
+                    // Visual feedback: Flash grid
+                    gridHelper.material.color.setHex(0x00ff00);
+                    setTimeout(() => gridHelper.material.color.setHex(0x004400), 500);
+                } else {
+                    document.getElementById("status-bar").innerText = "Error: " + data.error;
+                }
+            } catch (e) {
+                document.getElementById("status-bar").innerText = "Network Error.";
+            }
+        }
+
+        // Poll status
+        setInterval(checkStatus, 2000);
+        checkStatus();
+    </script>
+</body>
+</html>
