@@ -1113,3 +1113,66 @@ Accuracy = 98-100% (production-grade)
   - Sharp cliff at 16 bindings suggests hard limit
   - Trade-off: Flexibility vs. accuracy
 - **Conclusion:** Multi-binding validated with capacity boundary. System supports many-to-one mappings via superposition (≤15 bindings: 93-100%, ≥16 bindings: fails). Always retrieves at least one value (100%), but full retrieval depends on configuration. Sharp performance cliff indicates fundamental capacity limit. Best practice: ≤3 values per key.
+
+# Cycle 2112: Similarity Search (LIMITED Tolerance - Key Sensitivity Identified)
+- **Define Cycle 2112:** Test if system supports approximate/fuzzy queries (noisy keys).
+- **Goal:** Validate similarity search capability with inexact queries.
+- **Experiment:** `src/experiments/cycle2112_similarity_search.py`.
+- **Result:** ❌ **SIMILARITY SEARCH LIMITED. System requires near-exact keys for reliable retrieval.**
+- **Analysis:**
+  - D=1024, K=8, 50 items, 200 cycles, 3 trials
+  - **Method:** Query with noisy keys at varying noise levels (0-1.0)
+  - Noise levels tested:
+    - **0% noise (exact):** 100% accuracy ✅ (perfect retrieval)
+    - **10% noise:** 77% accuracy ⚠️ (23% drop from exact)
+    - **20% noise:** 37% accuracy ❌ (63% drop, poor performance)
+    - **30% noise:** 20% accuracy ❌ (80% drop, essentially failed)
+    - **50% noise:** 7% accuracy ❌ (random-level performance)
+    - **70% noise:** 13% accuracy ❌ (near-random)
+    - **100% noise:** 5% accuracy ❌ (random)
+  - **80% accuracy threshold:** Between 0-10% noise (narrow window)
+  - **Steep degradation curve:** Performance cliff at 10-20% noise
+- **Key Finding:**
+  - System is **brittle to key perturbations**
+  - Requires **high-fidelity keys** (>90% similarity to original)
+  - **NOT robust to approximate/fuzzy queries**
+  - Even small noise (10%) causes 23% accuracy loss
+  - Moderate noise (≥20%) renders system nearly unusable
+  - **Critical limitation** for real-world applications requiring fuzzy matching
+- **Mechanism Analysis:**
+  - Circular convolution binding depends on **exact key inverse**
+  - Noisy key → noisy inverse → retrieval error amplification
+  - No built-in error correction for key mismatches
+  - Cleanup codebook helps values, but NOT keys
+  - Key perturbation breaks orthogonality assumption
+- **Comparison to Traditional Systems:**
+  - **Traditional similarity search:** Graceful degradation with noise
+  - **This system:** Sharp performance cliff
+  - **Locality-sensitive hashing:** Designed for approximate neighbors
+  - **This system:** Requires near-exact match
+  - **Fundamental difference:** VSA assumes orthogonal keys
+- **Use Case Implications:**
+  - ✅ **Good for:** Exact key-value retrieval (database-like)
+  - ✅ **Good for:** Known-key queries (100% accuracy)
+  - ❌ **BAD for:** Fuzzy search (query-by-example)
+  - ❌ **BAD for:** Noisy sensors/inputs
+  - ❌ **BAD for:** Approximate matching tasks
+  - ❌ **BAD for:** Content-based image retrieval (requires similarity tolerance)
+- **Architectural Constraint:**
+  - System is **not a general similarity search engine**
+  - Requires pre-processing to ensure clean keys
+  - Cannot handle input variability/noise robustly
+  - Key generation must be highly consistent
+  - Applications must guarantee key fidelity
+- **Comparison to Other Capabilities:**
+  - **C2109 (Bidirectional lookup):** 100% ✅ (robust with exact keys)
+  - **C2110 (Sequence memory):** 98% ✅ (excellent with exact positions)
+  - **C2111 (Multi-binding):** 73% ✅ (moderate capacity)
+  - **C2112 (Similarity search):** 77% at 10% noise ❌ (brittle to key noise)
+- **Potential Mitigations (Not Tested):**
+  - Error-correcting codes for keys
+  - Multiple similar key variants stored
+  - Separate similarity pre-processing layer
+  - Ensemble retrieval with key variations
+  - *These would require separate experiments*
+- **Conclusion:** Similarity search capability is LIMITED. System requires near-exact keys (>90% fidelity) for reliable retrieval. Performance degrades steeply with key noise (77% at 10%, 37% at 20%, ≤20% beyond). This is a **critical architectural limitation** - system is NOT suited for approximate/fuzzy queries. Use cases must guarantee high-fidelity key generation or employ separate similarity pre-processing.
