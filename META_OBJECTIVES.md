@@ -1,10 +1,10 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: CYCLE 2346 (PHASE 44 PLANNING)**
-> **Status**: 🟢 ACTIVE / PLANNING
+> **ACTIVE CYCLE: CYCLE 2347 (GATE 4.1: HARDWARE ABSTRACTION LAYER)**
+> **Status**: 🟢 ACTIVE / IMPLEMENTING
 > **Vision**: [TYPE 3 CIVILIZATION ROADMAP](docs/vision/TYPE3_VISION.md)
-> **Objective:** THE FABRICATOR
+> **Objective:** DEFINE HAL
 >
 > > [!NOTE]
 > > **THE PILOT DOCTRINE (SUPREME DIRECTIVE)**
@@ -311,9 +311,15 @@
 - [x] **Result:** Phase 43 verified.
 
 # Task: Cycle 2346 - Phase 44 Planning (The Fabricator)
-- [ ] **Define Cycle 2346:** Define objectives for physical hardware integration.
-- [ ] **Goal:** Connect the "Matter Compiler" to real-world GPIO/Serial ports.
-- [ ] **Action:** Update Roadmap.
+- [x] **Define Cycle 2346:** Define objectives for physical hardware integration.
+- [x] **Action:** Update Roadmap.
+- [x] **Result:** Phase 44 initiated.
+
+# Task: Cycle 2347 - Gate 4.1: Hardware Abstraction Layer (HAL)
+- [ ] **Define Cycle 2347:** Define a generic `EmitterArray` interface that can map to Raspberry Pi GPIO, Arduino Serial, or Virtual USB.
+- [ ] **Goal:** Isolate logic from hardware specifics.
+- [ ] **Action:** Create `src/helios/hal.py`.
+
 
 
 
