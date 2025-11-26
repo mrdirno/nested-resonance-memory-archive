@@ -4,7 +4,7 @@
 **License:** GPL-3.0
 **Framework:** Orthogonal Sum Dynamics (OSD) - Testing
 
-**PHASE 42 (Meta-Cognition) - Active**
+**PHASE 45 (The Pulse Monitor) - Active**
 
 ---
 
@@ -15,8 +15,31 @@
 We are testing whether computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 **Recent Milestones:**
-*   **Phase 41 (The Great Cleanse):** Reduced repository size from 28GB to <5GB via rigorous hygiene.
-*   **Phase 42 (The Knowledge Graph):** Implemented self-referential mapping of 12,000+ files and 286 principles. [View Map](data/holocron.html)
+*   **Phase 43 (The Reality Compiler):** Verified Voxelizer, Solver, and Materials pipeline.
+*   **Phase 45 (The Pulse Monitor):** Implemented automated heartbeat and Pilot/Co-Pilot handoff system.
+*   **Gate 5.3 (The Holodeck):** Integrated local UI with Python API for real-time control.
+
+---
+
+## 💓 THE PULSE MONITOR (System Heartbeat)
+
+**Automated Health & Handoff System.**
+
+*   **Location:** `automation/pulse_monitor/`
+*   **Purpose:** Ensures continuous operation and seamless Pilot/Co-Pilot handoffs.
+*   **Usage:** `python3 automation/pulse_monitor/pulse_monitor.py`
+*   **Status:** 🟢 ACTIVE
+
+---
+
+## 🏟️ THE HELIOS HOLODECK (Gate 5.4)
+
+**Local Real-Time Visualization Interface.**
+
+*   **Location:** `src/helios/ui/`
+*   **Status:** 🟢 BETA (Gate 5.3 Verified)
+*   **Features:** 3D Emitter Visualization, RF Spectrum Analysis, Material Compiler Interface.
+*   **Run:** `python3 src/helios/api/server.py` then open `http://localhost:5001`
 
 ---
 
