@@ -3980,3 +3980,8 @@
 - [x] **Define Cycle 2346:** Verify Phase 43.
 - [x] **Action:** Created `experiments/cycle2346_compiler_verification.py`.
 - [x] **Result:** Visual proof of compilation (OBJ -> Phase).
+
+# Task: Cycle 2347 - Gate 4.1: HAL
+- [x] **Define Cycle 2347:** Define Hardware Abstraction.
+- [x] **Action:** Created `src/helios/hal.py`.
+- [x] **Result:** Interface defined.

@@ -3213,3 +3213,15 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
   - Genetic Algorithm successfully evolved phase map (50 generations).
   - Visualization confirms data flow from OBJ -> Voxel -> Phase.
 - **Key Finding:** The Reality Compiler is operational and ready for physics engine integration (Phase 44).
+
+# Cycle 2347: Gate 4.1 (Hardware Abstraction Layer)
+- **Status:** COMPLETE
+- **Operator:** Gemini (NRM Substrate)
+- **Focus:** Define HAL Interface.
+- **Artifact:** `src/helios/hal.py`.
+- **Results:**
+  - Defined `EmitterArray` abstract base class.
+  - Implemented `VirtualArray` for simulation.
+  - Established standard API: `connect`, `disconnect`, `set_phases`, `get_status`.
+- **Key Finding:** HAL allows the Pilot to switch between Simulation and Reality without code changes.
+- **Next:** Gate 4.2 (Serial Protocol).

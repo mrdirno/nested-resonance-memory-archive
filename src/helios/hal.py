@@ -1,67 +1,70 @@
 """
-HELIOS Hardware Abstraction Layer (Gate 4.1)
-Generic interface for controlling physical emitter arrays.
-
-Principle: PRIN-HARDWARE-ABSTRACTION
-Author: MOG (Cycle 2347)
+HELIOS HAL (Hardware Abstraction Layer)
+Interface for physical acoustic arrays.
+Gate 4.1 Compliant.
 """
 
 from abc import ABC, abstractmethod
-import time
+import numpy as np
 
 class EmitterArray(ABC):
     """
     Abstract Base Class for Physical Emitter Arrays.
     """
     
-    def __init__(self, num_emitters):
-        self.num_emitters = num_emitters
-        self.phases = [0.0] * num_emitters
-        self.connected = False
-
     @abstractmethod
-    def connect(self):
-        """Establish connection to hardware."""
+    def connect(self, port: str):
+        """Connects to the physical hardware."""
         pass
 
     @abstractmethod
     def disconnect(self):
-        """Close connection."""
+        """Disconnects from the hardware."""
         pass
 
     @abstractmethod
-    def update_phases(self, phases):
+    def set_phases(self, phases: np.ndarray):
         """
-        Send phase data to hardware.
-        :param phases: List or Array of phase values (0..2pi).
+        Sends phase instructions to the array.
+        :param phases: Numpy array of phase delays (0..2pi).
         """
-        if len(phases) != self.num_emitters:
-            raise ValueError(f"Phase count {len(phases)} does not match emitter count {self.num_emitters}")
-        self.phases = phases
+        pass
 
-class MockArray(EmitterArray):
+    @abstractmethod
+    def get_status(self) -> dict:
+        """Returns hardware health status."""
+        pass
+
+class VirtualArray(EmitterArray):
     """
-    Virtual array for testing without hardware.
+    Virtual implementation for testing/simulation.
     """
-    def connect(self):
-        print("MOCK: Connected to Virtual Array.")
+    def __init__(self, num_emitters=64):
+        self.num_emitters = num_emitters
+        self.connected = False
+        self.phases = np.zeros(num_emitters)
+
+    def connect(self, port: str = "VIRTUAL"):
+        print(f"[HAL] Connecting to VirtualArray on {port}...")
         self.connected = True
         return True
 
     def disconnect(self):
-        print("MOCK: Disconnected.")
+        print("[HAL] Disconnecting VirtualArray.")
         self.connected = False
 
-    def update_phases(self, phases):
-        super().update_phases(phases)
-        # Simulate latency
-        time.sleep(0.001) 
-        print(f"MOCK: Updated {len(phases)} emitters. Sample: {phases[:3]}...")
+    def set_phases(self, phases: np.ndarray):
+        if not self.connected:
+            raise ConnectionError("Array not connected.")
+        if len(phases) != self.num_emitters:
+            raise ValueError(f"Expected {self.num_emitters} phases, got {len(phases)}.")
+        
+        self.phases = phases
+        print(f"[HAL] Set {len(phases)} phases. Mean: {np.mean(phases):.2f} rad.")
 
-# Factory
-def get_driver(driver_type="MOCK", num_emitters=64, port=None):
-    if driver_type == "MOCK":
-        return MockArray(num_emitters)
-    # Future: Add SERIAL, GPIO drivers
-    else:
-        raise ValueError(f"Unknown driver type: {driver_type}")
+    def get_status(self) -> dict:
+        return {
+            "connected": self.connected,
+            "emitters": self.num_emitters,
+            "type": "Virtual"
+        }
