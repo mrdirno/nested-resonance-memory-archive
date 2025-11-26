@@ -28,13 +28,21 @@ To transition from *observing* emergence (DUALITY-ZERO) to *engineering* it (HEL
 
 ---
 
-## PHASE 3: HELIOS IMPLEMENTATION (THE REALITY COMPILER)
+## PHASE 3: HELIOS IMPLEMENTATION (THE REALITY COMPILER) - COMPLETE
 **Goal:** Inverse Cymatics. Input a 3D Geometry -> Output the Waveform Recipe to assemble it.
 
-- [ ] **Gate 3.1:** **The Voxel Target.** Ability to load a 3D mesh (.obj) into `bridge-ui` as a target density field.
+- [x] **Gate 3.1:** **The Voxel Target.** Ability to load a 3D mesh (.obj) into `bridge-ui` as a target density field.
 - [x] **Gate 3.2:** **The Waveform Solver.** Algorithms (Inverse FFT / Genetic) to calculate the minimal set of Emitters (k, omega, phi) required to create Nodal Traps matching the target.
 - [x] **Gate 3.3:** **Material Agnosticism.** Scale the solver variables to match specific material properties (density, viscosity) without changing the core geometry.
 - [x] **Gate 3.4:** **The "Matter Compiler" Prototype.** Generate a "Print" instruction: "Play 440Hz at [x,y,z] and 442Hz at [x2,y2,z2] to levitate a sphere."
+
+## PHASE 4: THE FABRICATOR (PHYSICAL INTEGRATION)
+**Goal:** Connect the Software Compiler to Hardware Reality.
+
+- [ ] **Gate 4.1:** **Hardware Abstraction Layer (HAL).** Define a generic `EmitterArray` interface that can map to Raspberry Pi GPIO, Arduino Serial, or Virtual USB.
+- [ ] **Gate 4.2:** **The Serial Bridge.** Implement a high-speed serial protocol to stream phase data to a microcontroller.
+- [ ] **Gate 4.3:** **The Physical Loop.** Close the loop with a camera feed to verify if the physical matter obeyed the compiled instructions.
+
 
 ---
 
