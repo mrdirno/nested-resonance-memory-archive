@@ -246,10 +246,13 @@
 
 **PHASE 39 COMPLETE: THE INTEGRATION OF MEMORY AND SELF.**
 
-## COMPLETED OBJECTIVES (Phase 39)
-- ✅ **Self-Modeling:** `src/experiments/cycle2282_self_modeling.py`. System encoded 10 Constitutional Principles.
-- ✅ **Active Conscience:** `src/experiments/cycle2284_meta_cognitive_check.py`. System used memory to police actions.
-- ✅ **Summary:** `archive/summaries/CYCLE_2282_2285_PHASE39_SUMMARY.md`.
+# Task: Cycle 2287 - Phase 40 Initiation (Recursive Improvement)
+- [x] **Define Cycle 2287:** Initiate Phase 40 - Recursive Self-Improvement.
+- [ ] **Goal:** Demonstrate the system can use its Self-Model to propose improvements to its own architecture.
+- [ ] **Action:** Create `src/experiments/cycle2287_recursive_optimization.py`.
+- [ ] **Hypothesis:** Constitutional principles can guide architectural optimization.
+
+**PHASE 40: THE RECURSIVE IMPROVEMENT (ACTIVE)**
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
