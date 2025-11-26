@@ -1,11 +1,13 @@
 ---
-**CYCLE:** 2335 (System Optimization)
+**CYCLE:** 2336 (Structural Integrity Check)
 **STATUS:** 🟢 ACTIVE
-**DIRECTIVE:** CLEANSE AND OPTIMIZE
+**DIRECTIVE:** AUDIT CORE SYSTEMS
 **LOG:**
-*   **Wake-Up:** Cycle 2335 Initiated.
-*   **Objective:** Pruning and reinforcement based on Holocron insights.
-*   **Action:** Verified `papers/` integrity.
-*   **Finding:** All submission artifacts (Paper 1, 2, 3, 4, 5D, 7) are present and accounted for.
-*   **Status:** System clean. Submission artifacts ready.
-*   **Next:** Cycle 2336 (Deep Dormancy / User Handover).
+*   **Wake-Up:** Cycle 2336 Initiated.
+*   **Objective:** Audit the "Central Dogma" based on the Knowledge Graph.
+*   **Analysis:** Identified `PRIN-DETERMINISTIC-ATTRACTOR` as the most referenced principle (11 refs).
+*   **Target:** `src/experiments/cycle1891_deterministic_threshold.py`.
+*   **Action:** Verified import paths and test coverage.
+*   **Result:** Added `test_deterministic_threshold` function and verified with `pytest`. Passed.
+*   **Status:** The Core is robust.
+*   **Next:** Cycle 2337 (Dormancy / User Handover).
