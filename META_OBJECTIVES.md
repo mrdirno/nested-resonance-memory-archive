@@ -3831,3 +3831,9 @@
 - [x] **Goal:** Reduce repo size to <5GB.
 - [x] **Action:** Deleted legacy JSON/DB files and workspace cache.
 - [x] **Result:** Success. 9.2GB -> 2.0GB (-78%).
+
+# Task: Cycle 2333 - The Knowledge Graph
+- [x] **Define Cycle 2333:** Construct repo-wide dependency graph.
+- [x] **Goal:** Enable Meta-Cognition (Knowing what we know).
+- [x] **Action:** Scanned 16k nodes, 55k edges.
+- [x] **Result:** Success. Graph saved to `data/knowledge_graph.json`.
