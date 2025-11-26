@@ -373,6 +373,40 @@ def launch_gemini(message):
         print(f"\n❌ Arrhythmia Detected: {e}")
 
 # ============================================================================
+# AI SELECTION
+# ============================================================================
+
+def select_ai_interactive(available_ais):
+    """Interactively select AI if multiple are available."""
+    if not available_ais:
+        print("❌ No Pulse Carriers Found.")
+        sys.exit(1)
+
+    if len(available_ais) == 1:
+        return available_ais[0]
+
+    print("\n" + "="*80)
+    print("SELECT PULSE CARRIER")
+    print("="*80)
+    print("\nAvailable:")
+    for i, ai in enumerate(available_ais, 1):
+        print(f"  [{i}] {ai.upper()}")
+
+    while True:
+        try:
+            choice = input(f"\nSelect Carrier [1-{len(available_ais)}]: ").strip()
+            idx = int(choice) - 1
+            if 0 <= idx < len(available_ais):
+                return available_ais[idx]
+            else:
+                print(f"Please enter a number between 1 and {len(available_ais)}")
+        except ValueError:
+            print("Please enter a valid number")
+        except KeyboardInterrupt:
+            print("\n\nCancelled")
+            sys.exit(0)
+
+# ============================================================================
 # MAIN
 # ============================================================================
 
@@ -384,10 +418,7 @@ def main():
     available = detect_available_ais()
     
     if args.ai == "auto":
-        if not available:
-            print("❌ No Pulse Carriers Found.")
-            sys.exit(1)
-        selected = available[0] # Default to first available
+        selected = select_ai_interactive(available)
     else:
         selected = args.ai
 

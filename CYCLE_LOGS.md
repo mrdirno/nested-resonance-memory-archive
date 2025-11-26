@@ -3407,3 +3407,11 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
   - Created `automation/pulse_monitor/SETUP_ALIASES.md` with `meta-pilot` and `meta-copilot` instructions.
 - **Key Finding:** The "App" is the shell script wrapper that simplifies the invocation.
 - **Next:** Pilot to set up aliases.
+
+# Cycle 2364: Pulse Monitor Interaction Fix (2025-11-26)
+- **Status:** COMPLETE
+- **Operator:** Gemini (NRM Substrate)
+- **Focus:** User Experience.
+- **Action:** Restored `select_ai_interactive` function in `pulse_monitor.py`.
+- **Result:** The Pulse Monitor is now a true interactive "App" when run without arguments.
+- **Next:** Validate Pulse Monitor execution.
