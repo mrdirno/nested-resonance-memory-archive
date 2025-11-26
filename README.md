@@ -2,8 +2,8 @@
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
-**Status:** ACTIVE (Phase 40: Recursive Improvement)
-**Framework:** 8-System Unification (Testing)
+**Status:** PHASE 40 (Recursive Improvement) - Active
+**Framework:** Orthogonal Sum Dynamics (OSD) - Testing
 
 ---
 
@@ -17,24 +17,6 @@ By abstracting the underlying mechanics of these systems into a single **Potenti
 1.  **Matter:** Acoustic Levitation and Active Damping.
 2.  **Mind:** Associative Memory and Meta-Cognition.
 3.  **Society:** Emergent Cooperation and Institutional Formation.
-
-### 🧪 **Validation Data (See It Work)**
-We prioritize empirical verification over theory. Here are our key validation experiments:
-
-*   **Active Damping (82x Speedup):** [Experiment Log](archive/experiments/cycle340_closed_loop_levitation.py) - *Result: Settling time reduced from 3.28s to 0.04s.*
-*   **Volumetric Trapping:** [3D Substrate Code](src/helios/substrate_3d.py) - *Verified: 9128 stable nodes.*
-*   **Acoustic Logic:** [AND Gate Logic](experiments/cycle342_acoustic_logic.py) - *Verified: Symmetry restoration distinguishes inputs.*
-*   **The Rosetta Stone:** [Unified Simulation](archive/experiments/phase28_unification/cycle2103_rosetta_stone.py) - *Verified: Same engine drives Physics, Society, and Compute.*
-
----
-
-## 🚀 QUICKSTART (The Golden Path)
-
-**Verify the physics in 5 minutes.**
-
-1.  **Install:** `pip install numpy`
-2.  **Run:** `python3 experiments/demo_osd_physics.py`
-3.  **Result:** Observe destructive interference creating a "dark matter" effect (Mass=2.0, Visibility=0.0).
 
 ---
 
@@ -52,26 +34,75 @@ This is the primary visualization interface ("The Holodeck"). It renders the Ort
 
 ---
 
-## 🏗️ NEXT-GEN ARCHITECTURE (Dev Preview)
+## 🚀 LOCAL DEMO (The Proof)
 
-We are actively developing **HELIOS BRIDGE V2**, a high-fidelity rewrite using React, TypeScript, and WebGL to render 1,000,000+ particles.
+**Verify the physics in 5 minutes.**
 
-*   **Location:** `/HELIOS-BRIDGE/`
-*   **Status:** Prototype / Active Development
-*   **Goal:** High-performance crystallographic symmetry and topological form rendering.
+1.  **Install:** `pip install numpy`
+2.  **Run:** `python3 experiments/demo_osd_physics.py`
+3.  **Result:** Observe destructive interference creating a "dark matter" effect (Mass=2.0, Visibility=0.0).
 
-**Run the Prototype Locally:**
-```bash
-cd HELIOS-BRIDGE
-npm install
-npm run dev
-```
+[👉 Full Quickstart Guide](docs/runbooks/QUICKSTART.md)
 
 ---
 
-## 📊 PUBLICATION PIPELINE
+## 🔭 OBSERVER LANES (Choose Your Path)
 
-We track our progress through rigorous, peer-reviewable outputs.
+*   **🧪 Observer A (Experimentalist):** [Active Experiments](src/experiments/) | [Legacy Validation](archive/experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md) | [CLI](src/helios/cli.py)
+*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [Design Context](docs/context/) | [OSD Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
+*   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/VISION.md)
+
+---
+
+## 🏗️ SYSTEM OVERVIEW
+
+**1. HELIOS BRIDGE (Interface Layer):**
+   - Visualizes high-dimensional phase space.
+   - Translates user intent into field parameters.
+   - [View Code](/HELIOS-BRIDGE/)
+
+**2. DUALITY-ZERO (Physics & Compute Engine):**
+   - Executes the `UniversalSimulator`.
+   - Calculates Gorkov Potentials and Social Stress fields.
+   - [View Code](src/helios/core/)
+
+**3. NRM (Memory / Cognition / Stewardship Layer):**
+   - Stores patterns and strategies.
+   - Provides "Conscience" (Meta-Cognitive Filtering).
+   - [View Code](src/memory/)
+
+---
+
+## 🧪 CORE CAPABILITIES (Empirically Verified)
+
+We prioritize empirical verification over theory.
+
+*   **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns.
+*   **Active Matter Control:** 82x faster settling time via Closed-Loop PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
+*   **Volumetric Trapping:** 9128 stable nodes verified in 3D substrate. [Code](src/helios/substrate_3d.py)
+*   **Emergent Cooperation:** Cooperation emerges at metabolic cost thresholds. [Log](experiments/cycle2077_harsh_winter.py)
+*   **The Rosetta Stone:** Unified simulation engine for Physics, Society, and Compute. [Log](archive/experiments/phase28_unification/cycle2103_rosetta_stone.py)
+
+---
+
+## 📚 TUTORIALS & EXAMPLES
+
+*   [Getting Started](docs/runbooks/QUICKSTART.md)
+*   [CLI Usage](src/helios/cli.py)
+*   [Memory System Demo](src/experiments/cycle2282_self_modeling.py)
+
+---
+
+## 🏗️ ARCHITECTURE DOCUMENTATION
+
+*   [Substrate Abstraction](src/helios/core/substrate.py)
+*   [OSD Math](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
+*   [Universal Simulator](src/helios/core/simulator.py)
+*   [Memory Structures](src/memory/)
+
+---
+
+## 📊 RESEARCH & PAPERS
 
 *   **Paper 1:** "Computational Expense as Framework Validation" (Submission-Ready)
 *   **Paper 2:** "Energy-Regulated Population Homeostasis" (Submission-Ready)
@@ -81,17 +112,17 @@ We track our progress through rigorous, peer-reviewable outputs.
 
 ---
 
-## 🔭 OBSERVER LANES
+## 🛡️ PHILOSOPHY & STEWARDSHIP
 
-*   **Experimentalist:** [Active Experiments](src/experiments/) | [Legacy Archive](archive/experiments/) | [CLI](src/helios/cli.py)
-*   **Architect:** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/)
-*   **Steward:** [Vision & Philosophy](docs/VISION.md) | [The Unified Field](docs/THE_UNIFIED_FIELD.md)
+*   [Social Physics](docs/VISION.md)
+*   [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md)
+*   [Helios Arc](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
+*   [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md)
 
 ---
 
-## 🛡️ ARCHITECTURAL IP NOTICE
+## 🛡️ CITATION
 
-**Canonical Citation:**
 ```bibtex
 @software{Payopay_Duality_Zero_2025,
   author = {Payopay, Aldrin},
