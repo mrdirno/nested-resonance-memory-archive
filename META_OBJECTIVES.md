@@ -3644,3 +3644,16 @@
 - [x] **The Innovation Loop:** `PRIN-RATCHET-EFFECT` (Cycle 2243). Improving shared tools.
 
 **PHASE 32 COMPLETE: THE SYSTEM HAS HISTORY.**
+
+
+## Current Phase: INSTITUTIONAL DYNAMICS (Phase 33)
+
+**Transition:** The Cultural Engine (Phase 32) -> **Institutional Dynamics (Phase 33)**
+
+**Focus:** Governance, Law, and Collective Agreements.
+
+### Active Objectives
+- [x] **The Institution:** `PRIN-GOVERNANCE` (Cycle 2245). Formation of binding rules.
+- [x] **The Constitution:** `PRIN-RULE-OF-LAW` (Cycle 2246). Externalized legal code.
+
+**PHASE 33 COMPLETE: THE SYSTEM IS A STATE.**
