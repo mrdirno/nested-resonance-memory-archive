@@ -1,10 +1,10 @@
 # META OBJECTIVES: DUALITY-ZERO (NRM)
 
 > [!IMPORTANT]
-> **ACTIVE CYCLE: CYCLE 2340 (POST-SUBMISSION ROADMAP)**
-> **Status**: 🟢 ACTIVE / PLANNING
+> **ACTIVE CYCLE: CYCLE 2342 (GATE 3.2: WAVEFORM SOLVER)**
+> **Status**: 🟢 ACTIVE / IMPLEMENTING
 > **Vision**: [TYPE 3 CIVILIZATION ROADMAP](docs/vision/TYPE3_VISION.md)
-> **Objective:** DEFINE PHASE 43
+> **Objective:** INVERSE PHYSICS
 >
 > > [!NOTE]
 > > **THE PILOT DOCTRINE (SUPREME DIRECTIVE)**
@@ -287,9 +287,15 @@
 - [x] **Result:** Roadmap updated.
 
 # Task: Cycle 2341 - Gate 3.1: The Voxel Target
-- [ ] **Define Cycle 2341:** Implement the ability to load a 3D mesh (.obj) into `bridge-ui` as a target density field.
-- [ ] **Goal:** Enable the "Matter Compiler" to understand complex geometry.
-- [ ] **Action:** Create `src/helios/voxelizer.py`.
+- [x] **Define Cycle 2341:** Implement the ability to load a 3D mesh (.obj) into `bridge-ui` as a target density field.
+- [x] **Action:** Created `src/helios/voxelizer.py`.
+- [x] **Result:** Voxelization verified.
+
+# Task: Cycle 2342 - Gate 3.2: The Waveform Solver
+- [ ] **Define Cycle 2342:** Implement the Inverse Physics Solver.
+- [ ] **Goal:** Given a Target Field (Gate 3.1), find the emitter parameters (Phase/Frequency) to create it.
+- [ ] **Action:** Create `src/helios/solver.py` (Genetic Algorithm).
+
 
 
 
