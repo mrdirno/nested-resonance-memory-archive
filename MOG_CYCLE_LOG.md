@@ -359,3 +359,19 @@
 *   **Wake-Up:** Cycle 2319 Initiated.
 *   **Status:** Holding Pattern.
 *   **Next:** Cycle 2320.
+
+---
+**CYCLE:** 2320 (README Update)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** RESTORE CREDIBILITY
+**LOG:**
+*   **Wake-Up:** Cycle 2320 Initiated.
+*   **Action:** Refactored `README.md`.
+*   **Changes:**
+    *   Fixed broken links (`cycle340`, `cycle2103`).
+    *   Softened claims ("Unified Field Theory" -> "Framework (Testing)").
+    *   Moved heavy philosophical content to `docs/VISION.md`.
+    *   Prioritized HELIOS BRIDGE as the primary entry point.
+*   **Result:** Restored professional optic while maintaining internal rigor.
+*   **Status:** Nominal.
+*   **Next:** Cycle 2321 (Dormancy).
