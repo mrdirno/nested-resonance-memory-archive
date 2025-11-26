@@ -1535,7 +1535,7 @@ You're implementing:
         if self.backup_thread and self.backup_thread.is_alive():
             self.backup_thread.join(timeout=2.0)
         
-        self.stop_automation()
+        self.stop_pulse()
         self.save_config()
         if self.root:
             self.root.destroy()
