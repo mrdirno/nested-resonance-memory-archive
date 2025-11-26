@@ -4028,3 +4028,8 @@
 - [x] **Define Cycle 2351:** Hardware Integration Strategy.
 - [x] **Action:** Updated Roadmap (Internal).
 - [x] **Result:** Path to physical levitation is clear.
+
+# Task: Cycle 2352 - Gate 5.1: Bridge API
+- [x] **Define Cycle 2352:** Implement REST Server.
+- [x] **Action:** Created `src/helios/api/server.py`.
+- [x] **Result:** Network interface active.
