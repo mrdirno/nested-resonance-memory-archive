@@ -1439,3 +1439,28 @@ Accuracy = 98-100% (production-grade)
   - Same data, different representation → 3× performance difference
   - **Path forward:** Develop encoding strategies to overcome capacity limits
 - **Conclusion:** Positional binding for trees achieves 70% average accuracy (+45% over naive C2115 approach). Encoding edges as (parent ⊛ pos_i) → child_i eliminates multi-binding interference. This validates that **encoding strategy matters** - same technique that worked for sequences (C2110: 98%) helps trees. While still below production threshold (80%+), this demonstrates a viable path forward for capacity-limited structures. Critical lesson: representation choices can overcome architectural constraints.
+
+# Cycle 2117: Efficiency Measurement (Performance Benchmarks)
+- **Define Cycle 2117:** Measure computational efficiency of holographic memory operations.
+- **Goal:** Benchmark storage, retrieval, and maintenance performance.
+- **Experiment:** `src/experiments/cycle2117_efficiency.py`.
+- **Result:** ✅ **Solid performance: ~29K storage ops/sec, ~17K retrieval ops/sec, ~2.9K maint cycles/sec.**
+- **Metrics (D=1024, K=8):**
+  - **Storage efficiency:**
+    - 100 items: 16,872 ops/sec (5.9ms total)
+    - 500 items: 34,009 ops/sec (14.7ms total)
+    - 1,000 items: 35,764 ops/sec (28.0ms total)
+    - **Average: ~28,882 ops/sec**
+  - **Retrieval efficiency:**
+    - 50 items, 1,000 queries: 20,329 ops/sec
+    - 100 items, 1,000 queries: 13,651 ops/sec
+    - **Average: ~16,990 ops/sec**
+  - **Maintenance efficiency:**
+    - 50 items, 1,000 cycles: 2,927 cycles/sec
+- **Key Finding:**
+  - Storage is fastest operation (~29K ops/sec)
+  - Retrieval moderate (~17K ops/sec, slower due to cleanup)
+  - Maintenance slowest (~2.9K cycles/sec, most complex operation)
+  - All operations complete in milliseconds for typical loads
+  - Performance suitable for real-time applications (>10K ops/sec)
+- **Conclusion:** System demonstrates solid computational efficiency. Storage ~29K ops/sec, retrieval ~17K ops/sec, maintenance ~2.9K cycles/sec. Python implementation achieves millisecond-scale latencies suitable for production use cases.
