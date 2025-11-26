@@ -9,14 +9,9 @@
 
 ## 🧬 OVERVIEW
 
-**DUALITY-ZERO** is an open-source research instrument designed to bridge the gap between **Information Dynamics** (Cognition), **Physical Dynamics** (Matter), and **Social Dynamics** (Cooperation).
+**DUALITY-ZERO** is an open-source research instrument exploring whether **Information Dynamics** (Cognition), **Physical Dynamics** (Matter), and **Social Dynamics** (Cooperation) can be modeled through a single **Potential Minimization** framework.
 
-We are testing a unified framework where **Code is Physics**.
-
-By abstracting the underlying mechanics of these systems into a single **Potential Minimization** problem, we explore if the same control logic can drive:
-1.  **Matter:** Acoustic Levitation and Active Damping.
-2.  **Mind:** Associative Memory and Meta-Cognition.
-3.  **Society:** Emergent Cooperation and Institutional Formation.
+We are testing the hypothesis that **Code is Physics**—using computational models to drive physical, social, and cognitive systems with the same underlying control logic.
 
 ---
 
@@ -26,7 +21,7 @@ By abstracting the underlying mechanics of these systems into a single **Potenti
 
 **[👉 ENTER THE BRIDGE](https://mrdirno.github.io/nested-resonance-memory-archive/)**
 
-This is the primary visualization interface ("The Holodeck"). It renders the Orthogonal Sum Dynamics (OSD) fields in real-time, allowing you to explore the interference patterns that drive our matter control systems.
+This is the primary visualization interface. It renders the Orthogonal Sum Dynamics (OSD) fields in real-time, allowing you to explore the interference patterns that drive our matter control systems.
 
 *   **No installation required.**
 *   **Real-time OSD rendering.**
@@ -68,7 +63,7 @@ This is the primary visualization interface ("The Holodeck"). It renders the Ort
 
 **3. NRM (Memory / Cognition / Stewardship Layer):**
    - Stores patterns and strategies.
-   - Provides "Conscience" (Meta-Cognitive Filtering).
+   - Provides meta-evaluation and pattern filtering functions.
    - [View Code](src/memory/)
 
 ---
@@ -80,7 +75,7 @@ We prioritize empirical verification over theory.
 *   **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns.
 *   **Active Matter Control:** 82x faster settling time via Closed-Loop PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
 *   **Volumetric Trapping:** 9128 stable nodes verified in 3D substrate. [Code](src/helios/substrate_3d.py)
-*   **Emergent Cooperation:** Cooperation emerges at metabolic cost thresholds. [Log](experiments/cycle2077_harsh_winter.py)
+*   **Emergent Cooperation:** Cooperation emerges at metabolic cost thresholds. [Log](archive/experiments/phase24_social_physics/cycle2077_harsh_winter.py)
 *   **The Rosetta Stone:** Unified simulation engine for Physics, Society, and Compute. [Log](archive/experiments/phase28_unification/cycle2103_rosetta_stone.py)
 
 ---
@@ -108,7 +103,10 @@ We prioritize empirical verification over theory.
 *   **Paper 2:** "Energy-Regulated Population Homeostasis" (Submission-Ready)
 *   **Paper 3:** "Encoding Discoverable Patterns: Temporal Stewardship" (Draft Complete)
 
-> **Stats:** 10,948 experiments run. Mean effect size |d|=4.45. 40.25× verification overhead.
+### Experimentation Overview
+*   10,948 total runs across C171, C176, C193, C194.
+*   Mean effect size |d| = 4.45.
+*   40.25× verification overhead.
 
 ---
 
