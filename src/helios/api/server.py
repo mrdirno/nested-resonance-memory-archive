@@ -5,15 +5,32 @@ Gate 5.1 Compliant.
 """
 
 import os
+import threading
+import time
 from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
 from src.helios.fabricator import Fabricator
+from src.helios.sdr_bridge import SDRInterface
 
 app = Flask(__name__, template_folder="../ui/templates", static_folder="../ui/static")
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# Global Fabricator instance (default to virtual for safety)
+# Global Instances
 fabricator = Fabricator(virtual=True)
+sdr = SDRInterface()
+sdr.connect()
+
+# Background RF Streamer
+def rf_stream():
+    while True:
+        if sdr.connected:
+            psd = sdr.get_psd()
+            socketio.emit('rf_update', {'psd': psd, 'center_freq': sdr.center_freq})
+        time.sleep(0.1) # 10Hz update rate
+
+rf_thread = threading.Thread(target=rf_stream)
+rf_thread.daemon = True
+rf_thread.start()
 
 @app.route('/')
 def index():
@@ -22,10 +39,30 @@ def index():
 @app.route('/status', methods=['GET'])
 def status():
     """Returns the current status of the hardware."""
-    if fabricator.array.connected:
-        return jsonify({"status": "online", "mode": "virtual" if isinstance(fabricator.array, type(fabricator.array)) else "physical"})
-    else:
-        return jsonify({"status": "offline"})
+    hw_status = "online" if fabricator.array.connected else "offline"
+    hw_mode = "virtual" if isinstance(fabricator.array, type(fabricator.array)) else "physical"
+    sdr_mode = "virtual" if sdr.virtual else "physical"
+    
+    return jsonify({
+        "status": hw_status,
+        "mode": hw_mode,
+        "sdr": sdr_mode,
+        "freq": sdr.center_freq
+    })
+
+@app.route('/tune', methods=['POST'])
+def tune():
+    """Tunes the SDR to a new center frequency."""
+    data = request.json
+    freq = data.get('freq')
+    if freq and not sdr.virtual:
+        try:
+            sdr.sdr.center_freq = float(freq)
+            sdr.center_freq = float(freq)
+            return jsonify({"status": "tuned", "freq": freq})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    return jsonify({"status": "virtual_mode_or_invalid"}), 200
 
 @app.route('/connect', methods=['POST'])
 def connect():

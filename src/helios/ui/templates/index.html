@@ -33,6 +33,11 @@
         <img src="/video_feed" alt="Camera Feed (Simulation)" onerror="this.style.display='none'">
         <div style="text-align: center; padding-top: 100px; color: #0f0; display: none;" id="camera-error">NO SIGNAL</div>
     </div>
+    
+    <div id="rf-viz">
+        <div style="border-bottom: 1px solid #0f0; padding: 2px;">RF Spectrum <span id="freq-display">100.0 MHz</span></div>
+        <canvas id="rf-canvas" width="320" height="100"></canvas>
+    </div>
 
     <div id="status-bar">Ready.</div>
 
@@ -135,6 +140,41 @@
                     emitters[i].material.color.setHSL(0.33, 1.0, intensity * 0.5); // Green hue
                 }
             }
+        });
+
+        // RF Visualizer
+        const rfCanvas = document.getElementById('rf-canvas');
+        const rfCtx = rfCanvas.getContext('2d');
+        
+        socket.on('rf_update', (data) => {
+            const psd = data.psd;
+            document.getElementById('freq-display').innerText = (data.center_freq / 1e6).toFixed(1) + " MHz";
+            
+            rfCtx.fillStyle = '#001100';
+            rfCtx.fillRect(0, 0, rfCanvas.width, rfCanvas.height);
+            
+            rfCtx.beginPath();
+            rfCtx.strokeStyle = '#0f0';
+            rfCtx.lineWidth = 1;
+            
+            const len = psd.length;
+            const sliceWidth = rfCanvas.width / len;
+            let x = 0;
+            
+            for(let i = 0; i < len; i++) {
+                // Map -50dB to 0 (height) and 50dB to 100 (height) - arbitrary scaling for viz
+                // PSD is usually log scale. Let's assume range -80 to 0 dB
+                const val = psd[i]; 
+                const y = rfCanvas.height - ((val + 80) / 80) * rfCanvas.height;
+                
+                if (i === 0) {
+                    rfCtx.moveTo(x, y);
+                } else {
+                    rfCtx.lineTo(x, y);
+                }
+                x += sliceWidth;
+            }
+            rfCtx.stroke();
         });
 
         // Poll status

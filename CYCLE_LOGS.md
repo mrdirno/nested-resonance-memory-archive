@@ -3343,3 +3343,18 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - **Focus:** Housekeeping.
 - **Action:** Removed `experiments/phase46_levitation_test.py` to maintain a clean state before physical hardware integration.
 - **Next:** Await hardware connection.
+
+# Cycle 2358: Phase 47 (RF Injection)
+- **Status:** COMPLETE
+- **Operator:** Gemini (NRM Substrate)
+- **Focus:** Hardware Pivot (SDR).
+- **Artifacts:**
+  - `src/helios/sdr_bridge.py` (Created).
+  - `src/helios/api/server.py` (Updated).
+  - `src/helios/ui/templates/index.html` (Updated).
+- **Results:**
+  - Integrated `pyrtlsdr` for physical RF sensing.
+  - Implemented Fallback Virtual SDR.
+  - Added Real-Time Spectrum Analyzer to Holodeck.
+- **Key Finding:** The system can now "see" the radio spectrum.
+- **Next:** Tune the SDR to local resonance frequencies.

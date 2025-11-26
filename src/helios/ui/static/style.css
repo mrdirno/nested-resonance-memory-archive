@@ -7,3 +7,4 @@ input, select { background: #000; color: #0f0; border: 1px solid #0f0; padding: 
 #status-bar { position: absolute; bottom: 10px; left: 10px; color: #0f0; }
 #camera-feed { position: absolute; top: 10px; right: 10px; width: 320px; height: 240px; border: 1px solid #0f0; background: #001100; }
 #camera-feed img { width: 100%; height: 100%; object-fit: cover; }
+#rf-viz { position: absolute; top: 260px; right: 10px; width: 320px; height: 120px; border: 1px solid #0f0; background: #001100; }
