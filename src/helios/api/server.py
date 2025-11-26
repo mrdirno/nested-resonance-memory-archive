@@ -6,9 +6,11 @@ Gate 5.1 Compliant.
 
 import os
 from flask import Flask, request, jsonify, render_template
+from flask_socketio import SocketIO, emit
 from src.helios.fabricator import Fabricator
 
 app = Flask(__name__, template_folder="../ui/templates", static_folder="../ui/static")
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Global Fabricator instance (default to virtual for safety)
 fabricator = Fabricator(virtual=True)
@@ -53,10 +55,28 @@ def materialize():
         return jsonify({"error": "Invalid mesh path"}), 400
         
     try:
-        fabricator.materialize(mesh_path, duration=duration)
-        return jsonify({"status": "complete"})
+        # Compile first to get instruction set
+        instruction_set = fabricator.compiler.compile_object(mesh_path)
+        
+        if instruction_set:
+            # Extract phases
+            num_emitters = len(instruction_set['emitters'])
+            phases = [0.0] * num_emitters
+            for emitter in instruction_set['emitters']:
+                phases[emitter['id']] = emitter['phase']
+            
+            # Emit to frontend (Gate 5.3)
+            socketio.emit('phase_update', {'phases': phases})
+            
+            # Now run the physical loop (blocking)
+            fabricator.materialize(mesh_path, duration=duration)
+            
+            return jsonify({"status": "complete"})
+        else:
+             return jsonify({"error": "Compilation failed"}), 500
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    socketio.run(app, host='0.0.0.0', port=5000)

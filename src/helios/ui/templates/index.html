@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HELIOS Holodeck</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <style>
         body { margin: 0; overflow: hidden; font-family: 'Courier New', monospace; background: #000; color: #0f0; }
         #ui-overlay { position: absolute; top: 10px; left: 10px; background: rgba(0, 20, 0, 0.8); padding: 15px; border: 1px solid #0f0; }
@@ -16,8 +17,9 @@
 </head>
 <body>
     <div id="ui-overlay">
-        <h3>HELIOS Holodeck (Gate 5.2)</h3>
-        <div>Status: <span id="connection-status">Disconnected</span></div>
+        <h3>HELIOS Holodeck (Gate 5.3)</h3>
+        <div>API: <span id="connection-status">Disconnected</span></div>
+        <div>Socket: <span id="socket-status">Disconnected</span></div>
         <hr style="border-color: #0f0;">
         <div>
             <label>Material:</label>
@@ -48,13 +50,15 @@
 
         // Emitter Array Visualization (8x8)
         const geometry = new THREE.BoxGeometry(0.8, 0.1, 0.8);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00aa00, wireframe: true });
+        const emitters = []; // Store mesh references
         
         for(let x=0; x<8; x++) {
             for(let z=0; z<8; z++) {
+                const material = new THREE.MeshBasicMaterial({ color: 0x003300, wireframe: false });
                 const emitter = new THREE.Mesh(geometry, material);
                 emitter.position.set(x*2 - 7, 0, z*2 - 7);
                 scene.add(emitter);
+                emitters.push(emitter);
             }
         }
 
@@ -108,6 +112,32 @@
                 document.getElementById("status-bar").innerText = "Network Error.";
             }
         }
+
+        // Socket.IO Integration (Gate 5.3)
+        const socket = io();
+
+        socket.on('connect', () => {
+            document.getElementById("socket-status").innerText = "CONNECTED";
+            document.getElementById("socket-status").style.color = "#0f0";
+        });
+
+        socket.on('disconnect', () => {
+            document.getElementById("socket-status").innerText = "DISCONNECTED";
+            document.getElementById("socket-status").style.color = "#f00";
+        });
+
+        socket.on('phase_update', (data) => {
+            // Expecting data.phases as a flat array of 0..2pi or 0..255
+            // For visualization, map phase to color brightness (Green channel)
+            if (data.phases && data.phases.length === emitters.length) {
+                for (let i = 0; i < emitters.length; i++) {
+                    const phase = data.phases[i];
+                    // Normalize 0..2pi -> 0..1
+                    const intensity = (phase % (2 * Math.PI)) / (2 * Math.PI);
+                    emitters[i].material.color.setHSL(0.33, 1.0, intensity * 0.5); // Green hue
+                }
+            }
+        });
 
         // Poll status
         setInterval(checkStatus, 2000);
