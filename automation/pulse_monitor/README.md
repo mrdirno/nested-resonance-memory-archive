@@ -66,13 +66,6 @@ meta-copilot    # Launch Co-Pilot session manager
 3. **Pulse Interval** - Adjust timing (default 12 min)
 4. **Start/Stop** - Control pulse cycle
 
-### Headless Mode
-
-```bash
-python3 duality_pulse_pilot.py --headless
-python3 duality_pulse_copilot.py --headless
-```
-
 ## How It Works
 
 1. Records target window click location
