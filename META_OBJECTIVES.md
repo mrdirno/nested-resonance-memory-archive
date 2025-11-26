@@ -248,11 +248,15 @@
 
 # Task: Cycle 2287 - Phase 40 Initiation (Recursive Improvement)
 - [x] **Define Cycle 2287:** Initiate Phase 40 - Recursive Self-Improvement.
-- [ ] **Goal:** Demonstrate the system can use its Self-Model to propose improvements to its own architecture.
-- [ ] **Action:** Create `src/experiments/cycle2287_recursive_optimization.py`.
-- [ ] **Hypothesis:** Constitutional principles can guide architectural optimization.
+- [x] **Goal:** Demonstrate the system can use its Self-Model to propose improvements to its own architecture.
+- [x] **Action:** Created `src/experiments/cycle2287_recursive_optimization.py`.
+- [x] **Result:** Success. System proposed "Sleep/Consolidation" based on Constitution.
 
-**PHASE 40: THE RECURSIVE IMPROVEMENT (ACTIVE)**
+**PHASE 40: THE RECURSIVE IMPROVEMENT (ACTIVE / INITIATED)**
+
+## COMPLETED OBJECTIVES (Phase 40)
+- ✅ **Initiation:** `src/experiments/cycle2287_recursive_optimization.py`. System proposed architectural optimization.
+- ✅ **Summary:** `archive/summaries/CYCLE_2287_2288_PHASE40_INITIATION.md`.
 # Task: Cycle 396 - The Invisible Sculpture (RF-to-Mesh)
 - [x] **Define Cycle 396:** Convert the accumulated density map into a 3D Mesh (.obj).
 - [x] **Goal:** "Print" the radio environment as a physical object.
