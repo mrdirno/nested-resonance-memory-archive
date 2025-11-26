@@ -988,3 +988,37 @@ Accuracy = 98-100% (production-grade)
 ```
 
 **Status:** Memory architecture research series **COMPLETE**. System validated as production-ready with comprehensive characterization, optimized parameters, and successful deployment lifecycle testing.
+
+---
+
+# Cycle 2109: Content-Addressable Query (Bidirectional Lookup Validated)
+- **Define Cycle 2109:** Test if system supports reverse lookup (value → key).
+- **Goal:** Validate content-addressable capability beyond standard key→value retrieval.
+- **Experiment:** `src/experiments/cycle2109_content_addressable.py`.
+- **Result:** ✅ **CONTENT-ADDRESSABLE WORKS. Perfect bidirectional lookup (100% both directions).**
+- **Analysis:**
+  - D=1024, K=8 partitions, 50 items, 200 cycles
+  - **Forward lookup (key→value):** 100% accuracy (standard retrieval)
+  - **Reverse lookup (value→key):** 100% accuracy (content-addressable)
+  - **Symmetry:** forward ≈ reverse (perfect bidirectional capability)
+- **Key Finding:**
+  - System supports **full content-addressable memory**
+  - Reverse lookup works as well as forward lookup
+  - Bidirectional access without accuracy penalty
+  - Symmetric operation inherent to circular convolution
+- **Mechanism:**
+  - Circular convolution binding is **commutative**
+  - key ⊛ value ≈ value ⊛ key (approximate commutativity)
+  - Inverse operation works in both directions
+  - Cleanup codebook enables both key and value recovery
+- **Use Cases Enabled:**
+  - **Reverse dictionary:** Given description, find concept
+  - **Pattern recognition:** Given pattern, find label
+  - **Bidirectional association:** Navigate links in both directions
+  - **Symmetric memory:** Query from either endpoint
+- **Deployment Implication:**
+  - Single memory structure supports bidirectional queries
+  - No need for separate forward/reverse indices
+  - Content-addressable capability comes "for free"
+  - Enables more flexible query patterns
+- **Conclusion:** Content-addressable capability validated. System supports perfect bidirectional lookup (100% accuracy both directions). Circular convolution binding provides inherent symmetry, enabling reverse queries without additional overhead.
