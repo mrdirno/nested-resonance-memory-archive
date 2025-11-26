@@ -2,8 +2,9 @@
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
-**Status:** PHASE 40 (Recursive Improvement) - Active
 **Framework:** Orthogonal Sum Dynamics (OSD) - Testing
+
+**PHASE 40 (Recursive Improvement) - Active**
 
 ---
 
@@ -11,7 +12,7 @@
 
 **DUALITY-ZERO** is an open-source research instrument exploring whether **Information Dynamics** (Cognition), **Physical Dynamics** (Matter), and **Social Dynamics** (Cooperation) can be modeled through a single **Potential Minimization** framework.
 
-We are testing the hypothesis that **Code is Physics**—using computational models to drive physical, social, and cognitive systems with the same underlying control logic.
+We are testing whether computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 ---
 
