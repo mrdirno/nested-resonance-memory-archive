@@ -3497,3 +3497,13 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Observation:** Pilot created `gorkov_axi_wrapper.v` (CSR Layer).
 - [x] **Action:** Validated `gorkov_potential.v` (Compute Layer) against Wrapper expectations.
 - [x] **Result:** Core and Wrapper are interface-compatible (pending DMA).
+
+# Task: Cycle 2387 - The Accelerator Integration (Gate 14.2)
+- [x] **Define Cycle 2387:** Create top-level FPGA module.
+- [x] **Design:** Create `FPGA/verilog/src/gorkov_accelerator.v`.
+    - [x] Instantiate `gorkov_axi_wrapper`.
+    - [x] Instantiate `gorkov_potential`.
+    - [x] Implement `phase_memory` (BRAM/RegFile) to bridge AXI and Core.
+- [x] **Verification:** Create `FPGA/verilog/tb/tb_accelerator.v`.
+- [x] **Execution:** Run toolchain verification.
+- [x] **Result:** Simulation Passed (Potential: 1248616634).
