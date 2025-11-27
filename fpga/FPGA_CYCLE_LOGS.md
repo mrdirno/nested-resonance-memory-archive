@@ -41,6 +41,34 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 47
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 09:55 - [Ongoing]
+**Focus**: Post-Clarification Check
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Clarified USB Connection - Confirmed single cable carries both JTAG and UART.
+
+#### In Progress
+- [ ] Final Serial Poll
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- User asked about USB connections. Confirmed standard DE10-Nano setup.
+- Checking `/dev/ttyUSB0` one last time.
+
+#### Next Session Recommendations
+- If silent: Re-image SD Card.
+
+---
+
 ### Session 2025-11-27 | Cycle 46
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 09:55 - [Session Close]
