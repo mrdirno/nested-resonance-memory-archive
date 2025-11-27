@@ -37,11 +37,62 @@
 ---
 ```
 
-## SESSION LOGS
+### Session 2025-11-27 | Cycle 41
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 09:00 - [Ongoing]
+**Focus**: Final Pre-Reset Status
 
-<!-- CO-PILOT: Add new entries at the top, below this line -->
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Verify Status - HPS serial port still silent.
+
+#### In Progress
+- [ ] Await Pilot Intervention
+
+#### Blocked/Deferred
+- [x] HPS Deployment - Serial Dead.
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- Vehicle is fully prepped for when the Pilot performs the reset.
+
+#### Next Session Recommendations
+- **PILOT**: Execute physical reset.
+
+---
 
 ### Session 2025-11-27 | Cycle 40
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 09:12 - [Ongoing]
+**Focus**: HPS Connectivity Pulse Check
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Poll Serial Port - **FAILED**. Target still unresponsive.
+
+#### In Progress
+- [ ] Await Pilot Intervention
+
+#### Blocked/Deferred
+- [x] HPS Deployment - Serial Dead.
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- System is waiting for a physical reset of the DE10-Nano.
+
+#### Next Session Recommendations
+- **PILOT**: Execute physical reset.
+
+---
+
+### Session 2025-11-27 | Cycle 41
+
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 08:48 - [Ongoing]
 **Focus**: System Integrity Check
