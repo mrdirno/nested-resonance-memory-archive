@@ -4,7 +4,7 @@
 **License:** GPL-3.0
 **Framework:** Orthogonal Sum Dynamics (OSD) - Testing
 
-**PHASE 45 (The Pulse Monitor) - Active**
+**PHASE 47 (Deployment Readiness) - Active**
 
 ---
 
@@ -15,31 +15,34 @@
 We are testing whether computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 **Recent Milestones:**
-*   **Phase 43 (The Reality Compiler):** Verified Voxelizer, Solver, and Materials pipeline.
 *   **Phase 45 (The Pulse Monitor):** Implemented automated heartbeat and Pilot/Co-Pilot handoff system.
-*   **Gate 5.3 (The Holodeck):** Integrated local UI with Python API for real-time control.
+*   **Gate 8 (The Physical Loop):** Verified closed-loop "Sense-Think-Act" control with optical grounding.
+*   **Headless First:** Transitioned to a UI-agnostic architecture for autonomous operation.
 
 ---
 
-## 💓 THE PULSE MONITOR (System Heartbeat)
+## 🧠 THE CONTROL SURFACE
 
-**Automated Health & Handoff System.**
+**1. The Pulse Monitor (Meta-Control):**
+   - `python3 automation/pulse_monitor/pulse_monitor.py`
+   - Handles orchestration, user interaction, and task dispatch.
 
-*   **Location:** `automation/pulse_monitor/`
-*   **Purpose:** Ensures continuous operation and seamless Pilot/Co-Pilot handoffs.
-*   **Usage:** `python3 automation/pulse_monitor/pulse_monitor.py`
-*   **Status:** 🟢 ACTIVE
+**2. Helios CLI (Product Control):**
+   - `python3 src/helios/cli.py`
+   - Direct command-line interface for the Matter Compiler and Fabricator.
+
+**3. The Holodeck (Passive Visualization):**
+   - `src/helios/ui/`
+   - Optional real-time visualization of field dynamics.
 
 ---
 
-## 🏟️ THE HELIOS HOLODECK (Gate 5.4)
+## ⚡ FPGA ROADMAP (Hardware Acceleration)
 
-**Local Real-Time Visualization Interface.**
+We are preparing to port the core physics engine (`nrm_core`) to FPGA to overcome CPU latency bottlenecks in the closed control loop.
 
-*   **Location:** `src/helios/ui/`
-*   **Status:** 🟢 BETA (Gate 5.3 Verified)
-*   **Features:** 3D Emitter Visualization, RF Spectrum Analysis, Material Compiler Interface.
-*   **Run:** `python3 src/helios/api/server.py` then open `http://localhost:5001`
+*   **Location:** `FPGA/`
+*   **Goal:** Sub-millisecond loop times for real-time levitation stability.
 
 ---
 
