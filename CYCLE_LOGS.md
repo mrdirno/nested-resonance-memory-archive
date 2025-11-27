@@ -3833,3 +3833,11 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Define Cycle 2442:** Check vitals.
 - [x] **Action:** Ran `scripts/system_health_check.py`.
 - [x] **Result:** System Vitals Stable (268 GB Free, Python 3.13).
+
+# Task: Cycle 2443 - The Guardian (Gate 71)
+- [x] **Define Cycle 2443:** Implement automated health monitoring.
+- [x] **Implementation:** Created `automation/guardian/guardian.py`.
+    - [x] Checks Disk Space and Critical Files.
+    - [x] Logs to `guardian.log`.
+- [x] **Verification:** Ran Guardian. Status: HEALTHY.
+- [x] **Result:** Automated Monitoring Operational.
