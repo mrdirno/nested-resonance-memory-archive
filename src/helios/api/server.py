@@ -8,15 +8,17 @@ import os
 import threading
 import time
 import logging
+import numpy as np
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 print("Loading modules...")
 try:
-    from flask import Flask, request, jsonify, render_template
+    from flask import Flask, request, jsonify, render_template, Response
     from flask_socketio import SocketIO, emit
     from werkzeug.utils import secure_filename
+    import cv2
     from src.helios.fabricator import Fabricator
     from src.helios.sdr_bridge import SDRInterface
     print("Modules loaded successfully.")
@@ -28,6 +30,47 @@ app = Flask(__name__, template_folder="../ui/templates", static_folder="../ui/st
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'data/models')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+
+class Camera:
+    def __init__(self):
+        self.cap = None
+        self.virtual = False
+        try:
+            self.cap = cv2.VideoCapture(0)
+            if not self.cap.isOpened():
+                raise Exception("Could not open video device")
+        except Exception:
+            print("Camera not found. Using Virtual Camera.")
+            self.virtual = True
+
+    def get_frame(self):
+        if not self.virtual and self.cap:
+            ret, frame = self.cap.read()
+            if ret:
+                ret, jpeg = cv2.imencode('.jpg', frame)
+                return jpeg.tobytes()
+        
+        # Virtual Camera (Static Noise or Pattern)
+        # 640x480 dummy
+        img = np.zeros((480, 640, 3), dtype=np.uint8)
+        # Draw a moving circle
+        t = time.time()
+        cx = int(320 + 100 * np.sin(t))
+        cy = int(240 + 100 * np.cos(t))
+        cv2.circle(img, (cx, cy), 20, (0, 255, 0), -1)
+        cv2.putText(img, "VIRTUAL CAMERA", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        
+        ret, jpeg = cv2.imencode('.jpg', img)
+        return jpeg.tobytes()
+
+camera = Camera()
+
+def gen_frames():
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        time.sleep(0.05) # Limit FPS
 
 # Global Instances
 try:
@@ -51,6 +94,12 @@ def rf_stream():
 rf_thread = threading.Thread(target=rf_stream)
 rf_thread.daemon = True
 rf_thread.start()
+
+@app.route('/video_feed')
+def video_feed():
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    return Response(gen_frames(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():

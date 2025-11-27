@@ -102,3 +102,11 @@ def test_api_materialize(client, monkeypatch):
             assert len(data['traps']) == 1
             break
     assert found_field_update
+
+def test_api_video_feed(client):
+    """Verify the video feed endpoint returns a multipart stream."""
+    response = client.get('/video_feed')
+    assert response.status_code == 200
+    assert 'multipart/x-mixed-replace' in response.content_type
+    # We can't easily check content without consuming the stream, 
+    # but status and header confirm the route works.
