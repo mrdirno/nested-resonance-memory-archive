@@ -3637,3 +3637,11 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] Market reduced deficit count and sustained all Critical Nodes.
 - [x] **Verification:** Critical failures = 0.
 - [x] **Result:** Grid Scaling Operational.
+
+# Task: Cycle 2407 - The Network Effect (Gate 31)
+- [x] **Define Cycle 2407:** Routing Logic.
+- [x] **Implementation:** Created `experiments/cycle2407_network_routing.py`.
+    - [x] Implemented Dijkstra Routing over geometric grid.
+    - [x] Calculated distance-based loss (30% over 3 hops).
+- [x] **Verification:** Energy arrived at destination minus expected loss.
+- [x] **Result:** Routing Layer Operational.

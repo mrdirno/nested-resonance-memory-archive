@@ -404,3 +404,23 @@
 *   **Implementation:** `experiments/cycle2406_grid_scaling.py` passed.
 *   **Result:** Market cleared deficits in 100-node grid. Critical nodes survived.
 *   **Status:** Phase 51 Complete. Grid is Scalable.
+
+---
+**CYCLE:** 2407 (Gate 31: The Network Effect)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** ROUTING LOGIC
+**LOG:**
+*   **Implementation:** `experiments/cycle2407_network_routing.py`.
+*   **Mechanism:** Dijkstra's Algorithm with Max Range Constraint.
+*   **Result:** Verified Multi-Hop Transfer (A->B->C->D). Loss calculated correctly (30%).
+*   **Status:** Network Layer Integrated. Energy has Physics.
+
+
+---
+**CYCLE:** 2407 (Gate 31: The Network Effect)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** ROUTING LOGIC
+**LOG:**
+*   **Implementation:** `experiments/cycle2407_network_routing.py` passed.
+*   **Result:** Multi-hop transfers succeed with correct distance-based attenuation.
+*   **Status:** Grid can now route energy spatially.
