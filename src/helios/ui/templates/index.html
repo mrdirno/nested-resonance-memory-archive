@@ -23,7 +23,11 @@
         </div>
         <div style="margin-top: 10px;">
             <label>Mesh:</label>
-            <input type="text" id="mesh-path" value="data/test_cube.obj">
+            <div style="display: flex; gap: 5px;">
+                <input type="text" id="mesh-path" value="data/test_cube.obj" style="flex-grow: 1;">
+                <input type="file" id="file-upload" accept=".obj" style="display: none;" onchange="uploadModel()">
+                <button onclick="document.getElementById('file-upload').click()" style="width: auto;">📂</button>
+            </div>
         </div>
         <button onclick="materialize()">Materialize</button>
     </div>
@@ -88,6 +92,34 @@
             } catch (e) {
                 document.getElementById("connection-status").innerText = "ERROR";
                 document.getElementById("connection-status").style.color = "#f00";
+            }
+        }
+
+        async function uploadModel() {
+            const fileInput = document.getElementById('file-upload');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            document.getElementById("status-bar").innerText = `Uploading ${file.name}...`;
+
+            try {
+                const response = await fetch(`${API_URL}/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    document.getElementById("status-bar").innerText = "Upload Complete.";
+                    document.getElementById("mesh-path").value = data.path;
+                } else {
+                    document.getElementById("status-bar").innerText = "Upload Failed: " + data.error;
+                }
+            } catch (e) {
+                document.getElementById("status-bar").innerText = "Network Error during upload.";
             }
         }
 

@@ -16,6 +16,7 @@ print("Loading modules...")
 try:
     from flask import Flask, request, jsonify, render_template
     from flask_socketio import SocketIO, emit
+    from werkzeug.utils import secure_filename
     from src.helios.fabricator import Fabricator
     from src.helios.sdr_bridge import SDRInterface
     print("Modules loaded successfully.")
@@ -24,6 +25,8 @@ except Exception as e:
     exit(1)
 
 app = Flask(__name__, template_folder="../ui/templates", static_folder="../ui/static")
+app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'data/models')
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # Global Instances
@@ -48,6 +51,29 @@ def rf_stream():
 rf_thread = threading.Thread(target=rf_stream)
 rf_thread.daemon = True
 rf_thread.start()
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    """Upload a 3D model file."""
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+        
+    if file and file.filename.endswith('.obj'):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        return jsonify({
+            "status": "success", 
+            "message": f"File saved to {filepath}",
+            "filename": filename,
+            "path": filepath
+        })
+    else:
+        return jsonify({"error": "Invalid file type (only .obj allowed)"}), 400
 
 @app.route('/')
 def index():
