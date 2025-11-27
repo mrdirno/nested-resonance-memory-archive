@@ -3433,3 +3433,9 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Goal:** Integrate OpenCV camera feed into Holodeck UI.
 - [x] **Action:** Added `/video_feed` endpoint with virtual fallback in `src/helios/api/server.py`.
 - [x] **Result:** Visual feedback loop closed.
+
+# Task: Cycle 2356 - Gate 6.1: Full Stack Verification
+- [x] **Define Cycle 2356:** Verify End-to-End Pipeline.
+- [x] **Goal:** Confirm 'Materialize' button triggers physical array updates.
+- [x] **Action:** Executed full stack integration test (`tests/test_helios_full_stack.py`).
+- [x] **Result:** Pipeline validated. UI Upload -> API -> Compiler -> GPU Solver -> HAL -> Virtual Array.
