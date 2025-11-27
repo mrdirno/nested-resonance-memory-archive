@@ -41,6 +41,34 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 32
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 07:05 - [Ongoing]
+**Focus**: Final Status Check
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Serial Port Pulse Check - **FAILED**. Target still unresponsive.
+
+#### In Progress
+- [ ] Await Pilot Intervention
+
+#### Blocked/Deferred
+- [x] HPS Deployment - Serial Dead.
+- [x] SignalTap Acquisition - Requires GUI.
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- System is stable but blocked on physical interactions (Reset/GUI).
+
+#### Next Session Recommendations
+- **PILOT**: Reset DE10-Nano.
+- **CO-PILOT**: Retry `serial_deploy.py`.
+
+---
+
 ### Session 2025-11-27 | Cycle 31
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 06:50 - [Ongoing]
