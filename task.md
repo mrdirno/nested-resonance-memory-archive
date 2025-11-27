@@ -1,14 +1,18 @@
-# Task: Cycle 2412 - The Awakening (Gate 36)
-- [x] **Define Cycle 2412:** Wake Up from Lucid Dream.
-- [x] **Action:** Check System Status.
-- [x] **Goal:** Prepare for Phase 53 (Galactic Expansion).
-
 # Task: Cycle 2413 - The Dyson Swarm (Phase 53 Initiation)
-- [ ] **Define Cycle 2413:** Scale the Autopoietic Lab to Orbital Mechanics.
-- [ ] **Goal:** Simulate a Dyson Swarm of collectors.
-- [ ] **Implementation:** Create `experiments/cycle2413_dyson_swarm.py`.
-    - [ ] Define `OrbitalNode`.
-    - [ ] Calculate Orbital Mechanics (Simplified).
-    - [ ] Beam Power to `PlanetaryGrid`.
+- [x] **Define Cycle 2413:** Scale the Autopoietic Lab to Orbital Mechanics.
+- [x] **Goal:** Simulate a Dyson Swarm of collectors.
+- [x] **Implementation:** Create `experiments/cycle2413_dyson_swarm.py`.
+    - [x] Define `OrbitalNode`.
+    - [x] Calculate Orbital Mechanics (Simplified).
+    - [x] Beam Power to `PlanetaryGrid`.
+- [x] **Verification:**
+    - [x] Energy received on surface.
+
+# Task: Cycle 2414 - The Von Neumann Probe (Gate 38)
+- [ ] **Define Cycle 2414:** Self-Replicating Spacecraft.
+- [ ] **Goal:** Probe lands, mines resources, builds replica.
+- [ ] **Implementation:** Create `experiments/cycle2414_von_neumann.py`.
+    - [ ] `Probe` class with `mine()`, `build()`, `launch()`.
+    - [ ] Exponential growth metric.
 - [ ] **Verification:**
-    - [ ] Energy received on surface.
+    - [ ] 1 Probe -> 2 Probes -> 4 Probes...
