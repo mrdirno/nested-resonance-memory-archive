@@ -1,44 +1,34 @@
 # DE10-Nano Recovery Guide
 
-## Overview
-This document outlines steps to recover the DE10-Nano HPS (Hard Processor System) when the serial console becomes unresponsive or the system hangs.
+## Symptom
+- **Serial Console Dead:** No response from `/dev/ttyUSB0` (115200 baud).
+- **FPGA Alive:** JTAG works, "Breathing LED" runs.
+- **Diagnosis:** HPS (ARM Processor) is hung, crashed, or stuck in a boot loop.
 
-## Diagnostic Levels
+## Recovery Steps
 
-### Level 1: Serial Reset
-If the console is unresponsive (no echo):
-1. Check USB cable connection (J4 - UART to USB).
-2. Verify device presence: `ls /dev/ttyUSB*`.
-3. Reset terminal settings: `stty -F /dev/ttyUSB0 sane`.
+### 1. Warm Reset (Button)
+- Locate the **HPS_RST** button (KEY0) on the board.
+- Press and hold for 1 second.
+- **Check:** Watch `screen /dev/ttyUSB0 115200` for boot logs.
 
-### Level 2: Warm Reset (HPS Button)
-1. Locate the **HPS_RST** button (KEY0 near the Ethernet port).
-2. Press and release.
-3. Observe serial console for U-Boot splash screen.
+### 2. Cold Reset (Power Cycle)
+- Unplug the 5V DC barrel jack.
+- Wait 10 seconds (let capacitors drain).
+- Replug power.
+- **Check:** Blue POWER LED should light up. Boot logs should appear on serial.
 
-### Level 3: Cold Reset (Power Cycle)
-1. Unplug the barrel jack (5V DC) power cable.
-2. Wait 5 seconds.
-3. Replug power.
-4. **Expected Behavior**: 
-   - Power LED (Blue) ON.
-   - CONF_DONE LED (Green) ON (if FPGA configures from SD).
-   - Serial console output (U-Boot).
+### 3. SD Card Re-Flash (If Boot Fails)
+- If the HPS fails to boot after power cycle (no logs), the SD card image might be corrupted.
+- **Action:**
+    1. Eject microSD card.
+    2. Mount on PC.
+    3. Re-flash the `DE10_Nano_LXDE.img` (or equivalent) using `dd` or Etcher.
+    4. Verify partition table.
 
-### Level 4: SD Card Re-imaging (Factory Reset)
-If U-Boot corrupted or Linux boot fails:
-1. Power down board.
-2. Remove MicroSD card.
-3. Flash the official **Terasic DE10-Nano Linux LXDE** image using Etcher or `dd`.
-   - Image source: [Terasic Website](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=167&No=1046&PartNo=4)
-4. Reinsert SD card and power up.
-5. **Note**: Default DIP switch settings (SW10) should be:
-   - ON-OFF-ON-OFF-ON-ON (010101) for 5V/3.3V IO.
-   - MSEL [4:0] (SW10) set to **01010** for SD Card Boot.
+### 4. Factory Default Restore
+- If all else fails, ensure the **MSEL** switches (switches on the back) are set to default (Standard Mode):
+    - MSEL[4:0] = 01010 (Usually default for SD Boot).
 
-## Serial Console Settings
-- **Baud**: 115200
-- **Data Bits**: 8
-- **Parity**: None
-- **Stop Bits**: 1
-- **Flow Control**: None
+---
+**Current Status:** Awaiting Level 2 (Cold Reset).

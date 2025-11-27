@@ -1,5 +1,5 @@
 Analysis & Synthesis report for breathing_led
-Thu Nov 27 06:40:14 2025
+Thu Nov 27 06:48:30 2025
 Quartus Prime Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
 
 
@@ -44,7 +44,7 @@ on the Quartus Prime software download page.
 +-----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                      ;
 +---------------------------------+-------------------------------------------------+
-; Analysis & Synthesis Status     ; Successful - Thu Nov 27 06:40:14 2025           ;
+; Analysis & Synthesis Status     ; Successful - Thu Nov 27 06:48:30 2025           ;
 ; Quartus Prime Version           ; 24.1std.0 Build 1077 03/04/2025 SC Lite Edition ;
 ; Revision Name                   ; breathing_led                                   ;
 ; Top-level Entity Name           ; breathing_led                                   ;
@@ -279,7 +279,7 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
-    Info: Processing started: Thu Nov 27 06:40:08 2025
+    Info: Processing started: Thu Nov 27 06:48:24 2025
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off breathing_led -c breathing_led
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 16 of the 16 processors detected
@@ -298,9 +298,9 @@ Info (21057): Implemented 80 device resources after synthesis - the final resour
     Info (21059): Implemented 1 output pins
     Info (21061): Implemented 78 logic cells
 Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 5 warnings
-    Info: Peak virtual memory: 535 megabytes
-    Info: Processing ended: Thu Nov 27 06:40:14 2025
+    Info: Peak virtual memory: 538 megabytes
+    Info: Processing ended: Thu Nov 27 06:48:30 2025
     Info: Elapsed time: 00:00:06
-    Info: Total CPU time (on all processors): 00:00:15
+    Info: Total CPU time (on all processors): 00:00:16
 
 
