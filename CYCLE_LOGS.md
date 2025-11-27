@@ -3485,3 +3485,9 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Define Cycle 2365:** Clean up artifacts.
 - [x] **Action:** Removed `gorkov_tb.vcd`, `server.log`, committed remaining untracked files.
 - [x] **Result:** Repository clean.
+
+# Task: Cycle 2366 - FPGA Core Upgrade (Pilot Directive)
+- [x] **Define Cycle 2366:** Implement Real Accumulator Logic.
+- [x] **Goal:** Match Interface Spec.
+- [x] **Action:** Updated `gorkov_potential.v` with ROM, Distance, LUT, and Accumulator.
+- [x] **Result:** Simulation Passed (Non-zero physics output).
