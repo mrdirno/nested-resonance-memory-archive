@@ -90,3 +90,7 @@ experiments/cycle*_conv.py
 
 # Analysis results
 analysis/realtime_emergence/*.json
+
+# FPGA
+FPGA/sim_build/
+*.vcd
