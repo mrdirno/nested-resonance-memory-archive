@@ -41,7 +41,50 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
-### Session 2025-11-27 | Cycle 35
+### Session 2025-11-27 | Cycle 36
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 07:55 - [Ongoing]
+**Focus**: Connectivity Check & Recovery Documentation
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Poll Serial Port - **FAILED**.
+- [x] Create `fpga/de10-nano/RECOVERY_GUIDE.md` - Documented reset procedures (Warm, Cold, SD Flash).
+
+#### In Progress
+- [ ] Await Pilot Intervention
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+- `fpga/de10-nano/RECOVERY_GUIDE.md` - New documentation
+
+#### Technical Notes
+- Target unresponsive. Recovery Guide provided to Pilot.
+
+#### Next Session Recommendations
+- **PILOT**: Follow `fpga/de10-nano/RECOVERY_GUIDE.md` to restore HPS function.
+- **CO-PILOT**: Resume `serial_deploy.py` post-reset.
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- Creating documentation to assist Pilot if simple power cycle fails.
+
+#### Next Session Recommendations
+- [TBD]
+
+---
+
+### Session 2025-11-27 | Cycle 33
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 07:40 - [Ongoing]
 **Focus**: JTAG Integrity Check
