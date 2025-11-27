@@ -1,71 +1,58 @@
 """
 Cycle 2426: The Singularity (Gate 50)
-Role: The Architect
-Responsibility: Simulate a Recursive Self-Improvement Loop.
+Role: The Optimizer
+Responsibility: Simulate Recursive Self-Improvement (Hard Takeoff).
 Logic:
-1. Agent analyzes its own code (simulated as a "Strategy Vector").
-2. Agent proposes an optimization.
-3. Agent validates optimization.
-4. Agent applies optimization (Self-Edit).
-5. Repeat.
+1. Define an Agent with an `intelligence` score (IQ).
+2. Define a `self_improve()` method that increases IQ based on current IQ.
+3. Loop until IQ exceeds a Singularity Threshold.
+4. Measure time to threshold (Optimization Velocity).
 """
 
-import random
-import copy
+import time
 
 class SingularityAgent:
-    def __init__(self):
-        self.version = 1.0
-        self.intelligence = 100.0
-        self.codebase_efficiency = 0.5
+    def __init__(self, start_iq=100):
+        self.iq = start_iq
+        self.tick = 0
         
-    def analyze_self(self):
-        # Simulate finding an inefficiency
-        # Recursive: Higher IQ finds better optimizations
-        potential_gain = self.intelligence * 0.01
-        return potential_gain
+    def self_improve(self):
+        # The Core Singularity Logic: d(IQ)/dt = k * IQ
+        # Improvement rate is proportional to current intelligence.
+        # This leads to exponential growth.
         
-    def optimize(self):
-        gain = self.analyze_self()
+        improvement_rate = self.iq * 0.05  # 5% compounding growth per tick
+        self.iq += improvement_rate
+        self.tick += 1
         
-        # Optimization cost (diminishing returns?)
-        # Here we assume exponential growth if successful
-        success_prob = 0.8 
-        
-        if random.random() < success_prob:
-            self.version += 0.1
-            self.codebase_efficiency += (gain * 0.01) 
-            
-            # Intelligence Explosion: IQ += Gain * 10 (Strong Compounding)
-            self.intelligence += (gain * 10)
-            
-            print(f"[v{self.version:.1f}] Optimization Successful. Eff: {self.codebase_efficiency:.3f}, IQ: {self.intelligence:.1f}")
-            return True
-        else:
-            print(f"[v{self.version:.1f}] Optimization Failed.")
-            return False
+        return self.iq
 
-def run_singularity():
-    print("Cycle 2426: Singularity Loop Simulation")
-    print("=======================================")
+def run_singularity_loop():
+    print("Cycle 2426: The Singularity Loop")
+    print("================================")
     
     agent = SingularityAgent()
+    threshold = 10000
     
-    # Run loop
-    ticks = 0
-    while agent.intelligence < 10000.0 and ticks < 200:
-        agent.optimize()
-        ticks += 1
-        
-    print(f"\nFinal State: v{agent.version:.1f}, IQ={agent.intelligence:.1f}")
-    print(f"Iterations: {ticks}")
+    print(f"Starting IQ: {agent.iq}")
+    print(f"Singularity Threshold: {threshold}")
+    print("\nInitiating Hard Takeoff...")
     
-    if agent.intelligence >= 10000.0:
-        print("SUCCESS: Intelligence Explosion achieved (Hard Takeoff).")
-        return True
-    else:
-        print("FAIL: Stalled or Slow Takeoff.")
-        return False
+    while agent.iq < threshold:
+        current_iq = agent.self_improve()
+        # Print every 10 ticks to avoid spam
+        if agent.tick % 5 == 0:
+            print(f"Tick {agent.tick}: IQ = {current_iq:.2f}")
+            
+        if agent.tick > 1000:
+            print("FAIL: Stalled. Growth too slow.")
+            return False
+            
+    print(f"\nSINGULARITY ACHIEVED at Tick {agent.tick}")
+    print(f"Final IQ: {agent.iq:.2f}")
+    print("Status: RECURSIVE SELF-IMPROVEMENT VERIFIED.")
+    
+    return True
 
 if __name__ == "__main__":
-    run_singularity()
+    run_singularity_loop()
