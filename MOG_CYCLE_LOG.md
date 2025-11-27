@@ -1,10 +1,11 @@
+
 ---
-**CYCLE:** 2379 (Gate 11: The Neural Link)
+**CYCLE:** 2380 (Gate 10: RTL Consolidation)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** DEFINE HARDWARE INTERFACE
+**DIRECTIVE:** ORGANIZE FPGA WORKSPACE
 **LOG:**
-*   **Action:** Created `FPGA/NEURAL_LINK_SPEC.md`.
-*   **Artifact:** Defined Memory Map (BAR 0), Data Structures (DMA Buffers), and Operation Sequence.
-*   **Latency Budget:** Estimated 4ms total loop time for 1M voxels via PCIe Gen3 x4.
-*   **Status:** Gate 11 (The Neural Link) Specification Complete.
-*   **Next:** Cycle 2380 (Dormancy / User Handoff).
+*   **Action:** Moved Verilog source to `FPGA/verilog/src/`.
+*   **Action:** Moved Testbench to `FPGA/verilog/tb/`.
+*   **Artifact:** `FPGA/NEURAL_LINK_SPEC.md` (Gate 11 Spec).
+*   **Status:** FPGA Workspace Organized.
+*   **Next:** Cycle 2381 (Dormancy / User Handoff).
