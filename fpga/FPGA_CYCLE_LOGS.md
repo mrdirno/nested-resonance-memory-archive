@@ -41,6 +41,52 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 21
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 04:55 - [Ongoing]
+**Focus**: HPS Application Deployment
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Establish Data Link to DE10-Nano - **Serial Only**. No USB Network interface detected (`ip link`). `/dev/ttyUSB0` is active.
+
+#### In Progress
+- [ ] Transfer `hello_world` binary (Base64 Serial Injection)
+- [ ] Execute on Target
+
+#### Blocked/Deferred
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- **Transfer Strategy**: 7.7KB binary is small enough for serial transfer.
+- Plan: `base64 hello_world | > /dev/ttyUSB0` (interactive injection required due to lack of flow control confirmation).
+- Note: Blind injection is risky. Awaiting PILOT confirmation or dedicated interactive session for this step.
+
+#### Next Session Recommendations
+- Execute the Serial Transfer:
+    1.  Open terminal on host: `minicom -D /dev/ttyUSB0`
+    2.  On target: `cat > hello_world.b64`
+    3.  Paste base64 content.
+    4.  On target: `base64 -d hello_world.b64 > hello_world`
+    5.  On target: `chmod +x hello_world && ./hello_world`
+
+#### Blocked/Deferred
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry
+
+#### Technical Notes
+- Checking for RNDIS/CDC-ECM network interface or Mass Storage mode.
+
+#### Next Session Recommendations
+- [TBD]
+
+---
+
 ### Session 2025-11-27 | Cycle 20
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 04:45 - [Ongoing]
