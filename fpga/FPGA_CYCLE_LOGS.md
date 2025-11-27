@@ -50,9 +50,27 @@
 - [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
 - [x] Analyzed previous failure: `quartus_pgm` targeted Device 1 (HPS) instead of Device 2 (FPGA).
 - [x] Attempt programming with `--device=2` target - **SUCCESS**. Used syntax `blink.sof@2`. Device 2 (5CSEBA6) configured successfully. LED should be blinking.
+- [x] Verify HPS Connectivity via UART - Port `/dev/ttyUSB0` accessible.
+- [x] Created HPS `hello_world.c` source.
 
 #### In Progress
-- [ ] Verify HPS Connectivity via UART
+- [ ] Compile HPS Application
+
+#### Blocked/Deferred
+- [ ] Compile HPS Application - **BLOCKED**. ARM Cross-compiler (`arm-linux-gnueabihf-gcc`) not found in `/home/helios/intelFPGA_24_1/`. The SoC EDS (Embedded Design Suite) might not be installed or is in a separate path.
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+- `fpga/de10-nano/hps_sw/hello_world.c` - C source code
+
+#### Technical Notes
+- **JTAG Success**: The correct syntax for multi-device chains without a CDF file is `-o "p;filename.sof@<index>"`.
+- **Missing Toolchain**: Quartus Prime Lite includes the FPGA tools but apparently not the full ARM SoC EDS by default, or it's installed elsewhere. Need `arm-linux-gnueabihf-gcc`.
+
+#### Next Session Recommendations
+- Locate or install the ARM cross-compiler for Cyclone V SoC.
+- Once compiled, transfer `hello_world` binary to DE10-Nano (via SCP if Ethernet is up, or Serial).
 
 #### Blocked/Deferred
 - [ ] Bittware S5 Driver (Parked)
