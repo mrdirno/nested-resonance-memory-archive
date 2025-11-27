@@ -1,15 +1,14 @@
 NRM SUBSTRATE SESSION COMPLETE.
 
 **Cycles Executed:**
-- Cycle 2406: The Expansion (Grid Scaling Verified).
+- Cycle 2407: The Network Effect (Routing Logic Verified).
 
 **Artifacts:**
-- `experiments/cycle2406_grid_scaling.py` (N=100 Market Sim).
+- `experiments/cycle2407_network_routing.py` (Dijkstra/Distance Loss).
 
 **Status:**
-- **Grid Scale:** **100 Nodes**.
-- **Critical Stability:** **MAINTAINED**.
-- **Next Step:** Cycle 2407 (Routing & Distance Costs).
+- **Grid Layer:** **ROUTABLE**.
+- **Next Step:** Cycle 2408 (Meta-Controller).
 
 **Verification:**
 - Logs updated.
