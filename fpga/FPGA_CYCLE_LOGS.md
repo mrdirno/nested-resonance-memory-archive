@@ -43,6 +43,61 @@
 
 ### Session 2025-11-27 | Cycle 40
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 08:48 - [Ongoing]
+**Focus**: System Integrity Check
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Verify FPGA Fabric - SignalTap active, JTAG visible.
+- [x] Verify HPS Serial - **DEAD**. Reset still pending.
+
+#### In Progress
+- [ ] Await Pilot Intervention
+
+#### Blocked/Deferred
+- [x] HPS Deployment - Serial Dead.
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- All systems nominal *except* HPS console.
+
+#### Next Session Recommendations
+- **PILOT**: Execute physical reset.
+
+---
+
+### Session 2025-11-27 | Cycle 39
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 09:00 - [Ongoing]
+**Focus**: Final Pre-Reset Status
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Verify Status - HPS serial port still silent.
+
+#### In Progress
+- [ ] Await Pilot Intervention
+
+#### Blocked/Deferred
+- [x] HPS Deployment - Serial Dead.
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- Vehicle is fully prepped for when the Pilot performs the reset.
+
+#### Next Session Recommendations
+- **PILOT**: Execute physical reset.
+
+---
+
+### Session 2025-11-27 | Cycle 40
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 08:55 - [Ongoing]
 **Focus**: Recovery Check & Architecture Planning
 
