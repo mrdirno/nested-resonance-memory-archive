@@ -37,6 +37,50 @@
 ---
 ```
 
+## SESSION LOGS
+
+<!-- CO-PILOT: Add new entries at the top, below this line -->
+
+### Session 2025-11-27 | Cycle 42
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 09:28 - [Ongoing]
+**Focus**: USB Enumeration Check
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Check USB Bus (`lsusb`) - **Completed**.
+    - UART: Bus 001 Device 006 (FT232 Serial).
+    - JTAG: Bus 001 Device 011 (Altera USB-Blaster II).
+    - Devices are enumerated, confirming physical link is up. Software responsiveness remains the issue.
+
+#### In Progress
+- [ ] Await Pilot Intervention
+
+#### Blocked/Deferred
+- [x] HPS Deployment - Serial Dead.
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- Physical link confirmed via `lsusb`.
+- Lack of serial response suggests HPS software hang or baud rate mismatch, not cable disconnection.
+
+#### Next Session Recommendations
+- **PILOT**: Reset DE10-Nano.
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- Monitoring USB bus for FTDI device re-enumeration (Bus/Device ID change).
+
+#### Next Session Recommendations
+- [TBD]
+
+---
+
 ### Session 2025-11-27 | Cycle 41
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 09:00 - [Ongoing]
