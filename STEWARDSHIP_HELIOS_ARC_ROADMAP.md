@@ -48,7 +48,11 @@ To transition from *observing* emergence (DUALITY-ZERO) to *engineering* it (HEL
 
 - [ ] **Gate 5.1:** **The Bridge API.** Expose the `Fabricator` class via a Flask/FastAPI REST endpoint.
 - [ ] **Gate 5.2:** **The Visualizer.** A React component to render the Target Density Field and the Simulated Pressure Field side-by-side.
-- [ ] **Gate 5.3:** **The Control Panel.** A web UI to upload .obj files, select materials, and trigger compilation.
+# Task: Cycle 2353 - Gate 5.3: The Control Panel
+- [x] **Define Cycle 2353:** Implement Web UI Control Panel.
+- [x] **Goal:** A web UI to upload .obj files, select materials, and trigger compilation.
+- [x] **Action:** Added file upload to `src/helios/ui/templates/index.html` and `/upload` endpoint to `server.py`.
+- [x] **Result:** Model loading enabled via Web UI.
 
 
 

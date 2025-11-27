@@ -3415,3 +3415,9 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - **Action:** Restored `select_ai_interactive` function in `pulse_monitor.py`.
 - **Result:** The Pulse Monitor is now a true interactive "App" when run without arguments.
 - **Next:** Validate Pulse Monitor execution.
+
+# Task: Cycle 2353 - Gate 5.3: The Control Panel
+- [x] **Define Cycle 2353:** Implement Web UI Control Panel.
+- [x] **Goal:** A web UI to upload .obj files, select materials, and trigger compilation.
+- [x] **Action:** Added file upload to `src/helios/ui/templates/index.html` and `/upload` endpoint to `server.py`.
+- [x] **Result:** Model loading enabled via Web UI.
