@@ -3457,3 +3457,9 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Goal:** Hand off RTL to Hardware Team.
 - [x] **Action:** Created `FPGA/bitstreams/README.md`, `synth.tcl`, `helios.xdc`.
 - [x] **Result:** Ready for Vivado Synthesis.
+
+# Task: Cycle 2361 - Documentation Synchronization
+- [x] **Define Cycle 2361:** Update README.
+- [x] **Goal:** Reflect Phase 50 and Helios capabilities.
+- [x] **Action:** Updated README.md with Holodeck instructions and FPGA status.
+- [x] **Result:** Documentation Synced.

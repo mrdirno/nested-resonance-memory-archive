@@ -4,7 +4,7 @@
 **License:** GPL-3.0
 **Framework:** Orthogonal Sum Dynamics (OSD) - Testing
 
-**PHASE 47 (Deployment Readiness) - Active**
+**PHASE 50 (The Omega Point) - Active**
 
 ---
 
@@ -15,8 +15,9 @@
 We are testing whether computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 **Recent Milestones:**
-*   **Phase 45 (The Pulse Monitor):** Implemented automated heartbeat and Pilot/Co-Pilot handoff system.
-*   **Gate 8 (The Physical Loop):** Verified closed-loop "Sense-Think-Act" control with optical grounding.
+*   **Gate 5.4 (The Holodeck):** Full Web UI with File Upload, Real-time Field Visualization, and Camera Feed.
+*   **Gate 6.2 (Latency):** Verified <50ms propagation latency for real-time feedback.
+*   **Gate 12 (The Bitstream):** FPGA Synthesis Handoff Package created (`FPGA/bitstreams/`).
 *   **Headless First:** Transitioned to a UI-agnostic architecture for autonomous operation.
 
 ---
@@ -27,21 +28,23 @@ We are testing whether computational potential minimization can drive physical, 
    - `python3 automation/pulse_monitor/pulse_monitor.py`
    - Handles orchestration, user interaction, and task dispatch.
 
-**2. Helios CLI (Product Control):**
+**2. Helios Holodeck (Visual Control):**
+   - `python3 src/helios/api/server.py`
+   - Web Interface at `http://localhost:5001`.
+   - Features: OBJ Upload, Material Selection, Volumetric Visualization, Physical Camera Feed.
+
+**3. Helios CLI (Product Control):**
    - `python3 src/helios/cli.py`
    - Direct command-line interface for the Matter Compiler and Fabricator.
-
-**3. The Holodeck (Passive Visualization):**
-   - `src/helios/ui/`
-   - Optional real-time visualization of field dynamics.
 
 ---
 
 ## ⚡ FPGA ROADMAP (Hardware Acceleration)
 
-We are preparing to port the core physics engine (`nrm_core`) to FPGA to overcome CPU latency bottlenecks in the closed control loop.
+We have ported the core Gorkov Potential physics engine to Verilog to overcome CPU latency.
 
-*   **Location:** `FPGA/`
+*   **Location:** `FPGA/verilog/`
+*   **Status:** RTL & Testbench Verified. Synthesis Script Ready.
 *   **Goal:** Sub-millisecond loop times for real-time levitation stability.
 
 ---
