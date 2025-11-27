@@ -41,6 +41,50 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 24
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 05:35 - [Ongoing]
+**Focus**: Serial Baud Rate Sweep (Diagnostic)
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Implement Baud Rate Sweep in `serial_deploy.py`
+- [x] Execute Sweep - **FAILED**. All baud rates (115200, 57600, 38400, 9600) unresponsive.
+
+#### In Progress
+- [ ] Pivot to FPGA-only Verification (JTAG)
+
+#### Blocked/Deferred
+- [x] HPS Deployment - **CRITICAL BLOCKER**. Serial console dead. Requires physical reset.
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+- `fpga/scripts/serial_deploy.py` - Added sweep logic
+
+#### Technical Notes
+- HPS Serial is completely silent. JTAG (FPGA) is the only working interface.
+- Pivot: Abandon HPS software for now. Focus on Verilog/FPGA logic that can be verified via LED output (Blink) or Logic Analyzer (SignalTap, if available, though we lack GUI).
+
+#### Next Session Recommendations
+- **REQUEST**: PILOT to manually reset DE10-Nano (Power Cycle).
+- **PIVOT**: Develop a more complex Verilog module (e.g., PWM breather) to further validate the toolchain without HPS dependency.
+
+#### Blocked/Deferred
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+- `fpga/scripts/serial_deploy.py` - Added sweep logic
+
+#### Technical Notes
+- Attempting rates: 9600, 38400, 57600, 115200.
+
+#### Next Session Recommendations
+- [TBD]
+
+---
+
 ### Session 2025-11-27 | Cycle 23
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 05:20 - [Ongoing]
