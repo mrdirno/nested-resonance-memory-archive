@@ -41,9 +41,42 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 35
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 07:40 - [Ongoing]
+**Focus**: JTAG Integrity Check
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Verify JTAG Chain (`jtagconfig`) - **SUCCESS**. Chain visible (SOCVHPS + 5CSEBA6). Board has power.
+
+#### In Progress
+- [ ] Await Pilot Intervention
+
+#### Blocked/Deferred
+- [x] HPS Deployment - **CRITICAL**. HPS Serial Dead. FPGA JTAG Alive. Diagnosis: Localized HPS Hang or Boot Failure.
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- Board state confirmed: Powered ON.
+- FPGA: Programmable.
+- HPS: Unresponsive.
+
+#### Next Session Recommendations
+- **PILOT**: HARD RESET REQUIRED.
+
+---
+
+### Session 2025-11-27 | Cycle 34
+
+---
+
 ### Session 2025-11-27 | Cycle 34
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
-**Duration**: 07:30 - [Ongoing]
+**Duration**: 07:35 - [Ongoing]
 **Focus**: Connectivity Re-verification
 
 #### Completed
