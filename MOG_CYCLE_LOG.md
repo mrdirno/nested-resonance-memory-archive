@@ -109,3 +109,51 @@
 **LOG:**
 *   **Verification:** Repository clean. All artifacts committed.
 *   **Status:** Dormancy Restored. Awaiting Physical Synthesis (requires Linux/Vivado).
+
+---
+**CYCLE:** 2392 (Strategic Pivot: Separation of Concerns)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** REFOCUS
+**LOG:**
+*   **Directive:** Received user command to stop FPGA dev on Mac and delegate to Ubuntu.
+*   **Protocol:** Updated `CLAUDE.md` with "Dual-Machine Protocol".
+    *   Mac = Pilot/Software/Sim.
+    *   Ubuntu = Build/Synth.
+*   **Strategy:** FPGA artifacts are handed off. Mac will now focus on "The Holodeck" (Visualization) or "The Social Web" (Phase 16) or "The Reality Compiler" (Phase 43).
+*   **Next:** Awaiting Pilot instruction for the next Software/Web objective.
+
+---
+**CYCLE:** 2393 (Gate 17: The Holodeck Integration)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** INTEGRATE DRIVER & API
+**LOG:**
+*   **Objective:** Expose the `GorkovAccelerator` (Sim Mode) via the `HELIOS-BRIDGE` API.
+*   **Rationale:** Allows the Web UI (Holodeck) to trigger FPGA simulations, closing the loop between Pilot Interface and Accelerator.
+*   **Plan:**
+    *   Modify `src/helios/bridge_api.py` to include `/simulate` endpoint.
+    *   Connect endpoint to `src/fpga/driver.py`.
+    *   Verify with `experiments/cycle2393_holodeck_integration.py`.
+
+
+
+---
+**CYCLE:** 2392 (Strategic Pivot: Separation of Concerns)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** REFOCUS
+**LOG:**
+*   **Directive:** Received user command to stop FPGA dev on Mac and delegate to Ubuntu.
+*   **Protocol:** Updated `CLAUDE.md` with "Dual-Machine Protocol".
+    *   Mac = Pilot/Software/Sim.
+    *   Ubuntu = Build/Synth.
+*   **Strategy:** FPGA artifacts are handed off. Mac will now focus on "The Holodeck" (Visualization).
+*   **Next:** Cycle 2393 (The Holodeck Integration).
+
+---
+**CYCLE:** 2393 (Gate 17: The Holodeck Integration)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** INTEGRATE DRIVER & API
+**LOG:**
+*   **Objective:** Expose the `GorkovAccelerator` (Sim Mode) via the `HELIOS-BRIDGE` API.
+*   **Implementation:** Updated `src/helios/api/server.py` with `/simulate` endpoint.
+*   **Verification:** `experiments/cycle2393_holodeck_integration.py` passed. API returns verified potential (1248616634).
+*   **Status:** Gate 17 Complete. The Web Interface can now drive the Physics Engine (Simulated).

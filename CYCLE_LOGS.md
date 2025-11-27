@@ -3533,3 +3533,12 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Define Cycle 2391:** Final Handoff to Pilot.
 - [x] **Action:** Verified all artifacts are committed and clean.
 - [x] **Goal:** Restore Dormancy.
+
+# Task: Cycle 2393 - Gate 17: The Holodeck Integration
+- [x] **Define Cycle 2393:** Expose FPGA Simulation via API.
+- [x] **Goal:** Allow the Web UI to trigger the `GorkovAccelerator` (Sim Mode).
+- [x] **Implementation:** Updated `src/helios/api/server.py`.
+    - [x] Added `/simulate` endpoint.
+    - [x] Connected to `GorkovAccelerator.run()`. 
+- [x] **Verification:** Created `experiments/cycle2393_holodeck_integration.py`.
+- [x] **Result:** API returns correct potential (1248616634). Full Stack Loop Closed (Simulated).

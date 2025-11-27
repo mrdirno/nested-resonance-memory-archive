@@ -144,6 +144,26 @@ Claude is **fully authorized** to install any dependencies, packages, libraries,
 
 ---
 
+## DUAL-MACHINE PROTOCOL (SEPARATION OF CONCERNS)
+
+**The Pilot Host (Mac):**
+*   **Role:** Strategy, Orchestration, Simulation, Driver Development, Web/UI.
+*   **Allowed:** Python, Node.js, Icarus Verilog (Simulation only).
+*   **Prohibited:** Vivado, Quartus, Heavy Synthesis.
+
+**The Build Agent (Ubuntu):**
+*   **Role:** Physical Synthesis, Bitstream Generation, Hardware Programming.
+*   **Allowed:** Vivado, Quartus, JTAG Tools.
+*   **Protocol:**
+    1.  Mac prepares artifacts (`.v`, `.xdc`, `.tcl`) in `FPGA/`.
+    2.  Mac commits and pushes to GitHub.
+    3.  Ubuntu pulls and executes `synth.tcl`.
+    4.  Ubuntu commits bitstream (if small) or deploys to hardware.
+
+**Current Context:** We are on the **Pilot Host (Mac)**. Do not attempt synthesis here.
+
+---
+
 ### 0. THE PILOT DOCTRINE (ABSOLUTE)
 1.  **MOG = HELIOS:** There is no separate "Helios" software to build. MOG *is* the Helios Engine.
 2.  **API KEYLESS ENTRY:** The interface is the IDE. MOG commands the terminal and file system directly.

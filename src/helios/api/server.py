@@ -2,6 +2,7 @@
 HELIOS Bridge API (Gate 5.1)
 A simple REST endpoint to expose the Fabricator to the outside world.
 Gate 5.1 Compliant.
+Updated Cycle 2393: Gate 17 (FPGA Integration)
 """
 
 import os
@@ -21,6 +22,7 @@ try:
     import cv2
     from src.helios.fabricator import Fabricator
     from src.helios.sdr_bridge import SDRInterface
+    from src.fpga.driver import GorkovAccelerator # Gate 17
     print("Modules loaded successfully.")
 except Exception as e:
     print(f"IMPORT ERROR: {e}")
@@ -31,6 +33,7 @@ app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'data/models')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
+# ... (Camera Class remains unchanged) ...
 class Camera:
     def __init__(self):
         self.cap = None
@@ -51,15 +54,12 @@ class Camera:
                 return jpeg.tobytes()
         
         # Virtual Camera (Static Noise or Pattern)
-        # 640x480 dummy
         img = np.zeros((480, 640, 3), dtype=np.uint8)
-        # Draw a moving circle
         t = time.time()
         cx = int(320 + 100 * np.sin(t))
         cy = int(240 + 100 * np.cos(t))
         cv2.circle(img, (cx, cy), 20, (0, 255, 0), -1)
         cv2.putText(img, "VIRTUAL CAMERA", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-        
         ret, jpeg = cv2.imencode('.jpg', img)
         return jpeg.tobytes()
 
@@ -77,6 +77,15 @@ try:
     fabricator = Fabricator(virtual=True)
     sdr = SDRInterface()
     sdr.connect()
+    
+    # Gate 17: Accelerator Initialization
+    # Check if we have the LUT for accurate simulation
+    lut_path = "FPGA/verilog/src/sine_lut.mem"
+    if os.path.exists(lut_path):
+        accelerator = GorkovAccelerator(simulation_mode=True, lut_path=lut_path)
+    else:
+        accelerator = GorkovAccelerator(simulation_mode=True) # Fallback to math.sin
+        
 except Exception as e:
     print(f"INIT ERROR: {e}")
 
@@ -94,6 +103,8 @@ def rf_stream():
 rf_thread = threading.Thread(target=rf_stream)
 rf_thread.daemon = True
 rf_thread.start()
+
+# ... (Routes /video_feed, /upload, /, /status, /tune, /connect remain similar) ...
 
 @app.route('/video_feed')
 def video_feed():
@@ -134,11 +145,13 @@ def status():
     hw_status = "online" if fabricator.array.connected else "offline"
     hw_mode = "virtual" if isinstance(fabricator.array, type(fabricator.array)) else "physical"
     sdr_mode = "virtual" if sdr.virtual else "physical"
+    acc_mode = "simulated" if accelerator.simulation_mode else "hardware"
     
     return jsonify({
         "status": hw_status,
         "mode": hw_mode,
         "sdr": sdr_mode,
+        "accelerator": acc_mode,
         "freq": sdr.center_freq
     })
 
@@ -207,6 +220,36 @@ def materialize():
         else:
              return jsonify({"error": "Compilation failed"}), 500
 
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/simulate', methods=['POST'])
+def simulate():
+    """
+    Gate 17: Trigger FPGA Simulation (or Hardware Execution).
+    Payload: {"phases": [0, 100, ...], "target": [x, y, z]}
+    """
+    data = request.json
+    phases = data.get('phases') # Expecting list of 64 ints (0-1023)
+    target = data.get('target') # Expecting [x, y, z]
+    
+    if not phases or len(phases) != 64:
+        return jsonify({"error": "Invalid phases. Must be list of 64."} ), 400
+    
+    if not target or len(target) != 3:
+        target = [0, 0, 0] # Default to origin
+        
+    try:
+        accelerator.load_phases(phases)
+        accelerator.set_target(target[0], target[1], target[2])
+        accelerator.run()
+        result = accelerator.read_result()
+        
+        return jsonify({
+            "status": "success",
+            "potential": result,
+            "mode": "simulation" if accelerator.simulation_mode else "hardware"
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
