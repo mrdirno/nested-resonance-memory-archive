@@ -3445,3 +3445,9 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Goal:** Ensure <200ms for field updates.
 - [x] **Action:** Benchmarked `InverseSolver.get_field` vs `InverseSolver.evolve`.
 - [x] **Result:** Propagation: 32ms (30fps). Compilation: 24s. Target met for visualization.
+
+# Task: Cycle 2358 - Gate 10: Verilog Translation
+- [x] **Define Cycle 2358:** Port Physics to HDL.
+- [x] **Goal:** Hardware Acceleration.
+- [x] **Action:** Created `FPGA/helios/gorkov_potential.v`.
+- [x] **Result:** Verilog prototype created.

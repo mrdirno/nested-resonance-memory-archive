@@ -81,7 +81,7 @@ To transition from *observing* emergence (DUALITY-ZERO) to *engineering* it (HEL
 ## PHASE 49: HARDWARE ACCELERATION (THE NEURAL LINK)
 **Goal:** Port physics engine to FPGA for dense volumetric control.
 
-- [ ] **Gate 10:** **Verilog Translation.** Port `GorkovPotential` to Verilog.
+- [x] **Gate 10:** **Verilog Translation.** Port `GorkovPotential` to Verilog.
 - [ ] **Gate 11:** **The Neural Link.** PCIe/DMA Bridge.
 
 
