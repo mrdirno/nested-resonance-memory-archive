@@ -23,6 +23,7 @@ import os
 import sys
 import subprocess
 import argparse
+import time
 from pathlib import Path
 from datetime import datetime
 
@@ -33,6 +34,7 @@ from datetime import datetime
 # Project root
 PROJECT_ROOT = Path("/Volumes/dual/DUALITY-ZERO-V2")
 GIT_REPO = Path("/Users/aldrinpayopay/nested-resonance-memory-archive")
+HELIOS_CLI = PROJECT_ROOT / "src/helios/cli.py"
 
 # Constitution file
 CONSTITUTION_FILE = GIT_REPO / "CLAUDE.md"
@@ -50,6 +52,48 @@ PERMISSIONLESS_TOOLS = [
     "Bash(git:*)",
     "Bash(python3:*)",
 ]
+
+# ============================================================================
+# HELIOS TASKS (HEADLESS)
+# ============================================================================
+
+def run_headless_materialization(obj_path, duration):
+    """Execute a headless materialization task via Helios CLI."""
+    print("="*80)
+    print(f"INITIATING HEADLESS MATERIALIZATION")
+    print(f"Target: {obj_path}")
+    print(f"Duration: {duration}s")
+    print("="*80)
+
+    if not os.path.exists(obj_path):
+        print(f"❌ Error: File not found: {obj_path}")
+        return
+
+    cmd = [
+        sys.executable,
+        str(HELIOS_CLI),
+        "materialize",
+        "--input", obj_path,
+        "--duration", str(duration)
+    ]
+
+    try:
+        start_time = time.time()
+        result = subprocess.run(
+            cmd,
+            cwd=str(PROJECT_ROOT),
+            text=True,
+            capture_output=False  # Stream to stdout
+        )
+        elapsed = time.time() - start_time
+        
+        if result.returncode == 0:
+            print(f"\n✓ Task Complete in {elapsed:.2f}s")
+        else:
+            print(f"\n❌ Task Failed with code {result.returncode}")
+            
+    except Exception as e:
+        print(f"\n❌ Execution Error: {e}")
 
 # ============================================================================
 # PULSE DETECTION
@@ -411,9 +455,18 @@ def select_ai_interactive(available_ais):
 
 def main():
     parser = argparse.ArgumentParser(description="System Pulse Monitor")
-    parser.add_argument("--ai", choices=["claude", "gemini", "auto"], default="auto")
+    parser.add_argument("--ai", choices=["claude", "gemini", "auto"], default="auto", help="Select AI provider")
+    parser.add_argument("--materialize", help="Path to .obj file for headless materialization")
+    parser.add_argument("--duration", type=float, default=10.0, help="Duration for materialization (seconds)")
+    
     args = parser.parse_args()
 
+    # HEADLESS TASK EXECUTION
+    if args.materialize:
+        run_headless_materialization(args.materialize, args.duration)
+        sys.exit(0)
+
+    # INTERACTIVE SESSION LAUNCHER
     available = detect_available_ais()
     
     if args.ai == "auto":

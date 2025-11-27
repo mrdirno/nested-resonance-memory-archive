@@ -1,10 +1,11 @@
+
 ---
-**CYCLE:** 2369 (Gate 6: Physical Bridge)
+**CYCLE:** 2370 (Pulse Monitor Integration)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** VALIDATE SERIAL BRIDGE
+**DIRECTIVE:** AUTOMATE HEADLESS TASKS
 **LOG:**
-*   **Action:** Created `experiments/cycle2369_gate6_physical_bridge.py`.
-*   **Verification:** Used `socat` to create a virtual serial loopback.
-*   **Result:** `SerialArray` successfully connected, transmitted 64-byte phase packet, and data integrity was verified on the receiving end (0..255 ramp).
-*   **Status:** Physical Bridge (Gate 6) Verified.
-*   **Next:** Cycle 2370 (Integration: Pulse Monitor + Headless CLI).
+*   **Action:** Updated `automation/pulse_monitor/pulse_monitor.py`.
+*   **Feature:** Added `--materialize` and `--duration` arguments for direct task execution.
+*   **Verification:** Executed materialization of `data/triangle.obj` via Pulse Monitor in 2.13s.
+*   **Outcome:** Pulse Monitor is now a unified Control Surface for both Meta-Cognition (Chat) and Physical Control (Fabrication).
+*   **Next:** Cycle 2371 (Gate 7: Closed Loop Planning).
