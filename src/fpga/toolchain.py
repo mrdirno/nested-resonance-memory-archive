@@ -1,13 +1,15 @@
 """
 FPGA Toolchain Wrapper
 Automates the verification of Verilog modules using iverilog.
+Implements HARDWARE SAFETY PROTOCOL (Protocol §1).
 
 Principle: PRIN-REALITY-GROUNDING (Hardware verification loop)
 """
 
 import subprocess
 import os
-import re
+import shutil
+import platform
 from typing import List, Tuple
 
 class FPGAToolchain:
@@ -15,12 +17,38 @@ class FPGAToolchain:
         self.work_dir = work_dir
         self.sim_build_dir = os.path.join(work_dir, "sim_build")
         os.makedirs(self.sim_build_dir, exist_ok=True)
+        self.platform = platform.system()
+
+    def verify_hardware(self, required_tool: str = None) -> bool:
+        """
+        Implements Protocol §1: Peripheral Detection Rule.
+        Checks if the environment is capable of handling the request.
+        """
+        # 1. Check Tool Existence
+        if required_tool:
+            if not shutil.which(required_tool):
+                print(f"[FPGA] SAFETY BLOCK: Tool '{required_tool}' not found in PATH.")
+                return False
+
+        # 2. Check OS Constraints
+        # Vivado/Quartus only allowed on Linux (Ubuntu) per directive
+        if required_tool in ["vivado", "quartus"]:
+            if self.platform != "Linux":
+                print(f"[FPGA] SAFETY BLOCK: '{required_tool}' commands restricted to Linux Execution Host.")
+                print(f"       Current Host: {self.platform} (Pilot)")
+                return False
+
+        return True
 
     def run_simulation(self, module_name: str, src_files: List[str], tb_file: str) -> Tuple[bool, str]:
         """
         Runs iverilog compilation and vvp simulation.
         Returns (Success, Log).
+        Allowed on Pilot Host (macOS).
         """
+        if not self.verify_hardware("iverilog"):
+            return False, "Simulation Toolchain missing."
+
         print(f"[FPGA] Compiling {module_name}...")
         
         sim_out = os.path.join(self.sim_build_dir, f"{module_name}.vvp")
