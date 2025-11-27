@@ -3491,3 +3491,9 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Goal:** Match Interface Spec.
 - [x] **Action:** Updated `gorkov_potential.v` with ROM, Distance, LUT, and Accumulator.
 - [x] **Result:** Simulation Passed (Non-zero physics output).
+
+# Task: Cycle 2367 - Gate 14: Hardware Acceleration Sync
+- [x] **Define Cycle 2367:** Synchronize with Pilot's Gate 14 Directive.
+- [x] **Observation:** Pilot created `gorkov_axi_wrapper.v` (CSR Layer).
+- [x] **Action:** Validated `gorkov_potential.v` (Compute Layer) against Wrapper expectations.
+- [x] **Result:** Core and Wrapper are interface-compatible (pending DMA).
