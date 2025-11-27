@@ -37,3 +37,7 @@
 *   **Safety:** Implemented `HARDWARE_SAFETY_PROTOCOL.md`. The System is now "Ghost-Aware" and will not attempt to drive invisible hardware.
 *   **Environment:** Detected `darwin` (Pilot Host). Vivado/Quartus commands are explicitly blocked. `iverilog` is permitted.
 *   **USB Probe:** `system_profiler` detected RTL-SDR and Micron SSD, but NO FPGA Programmer. This confirms we are in Simulation Mode.
+
+*   **AXI Wrapper:** Created `gorkov_axi_wrapper.v` and `tb_axi_wrapper.v`. Verified Memory Map compliance (0x00-0x24).
+*   **Simulation:** Passed all Register Read/Write tests. Control Logic is verified.
+*   **Status:** Gate 14.1 Complete. The Neural Link now has a verified Endpoint on the FPGA side.

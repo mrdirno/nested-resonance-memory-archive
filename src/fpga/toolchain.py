@@ -80,12 +80,12 @@ if __name__ == "__main__":
     # Self-Test
     toolchain = FPGAToolchain(work_dir="FPGA")
     
-    # Define paths relative to root
-    src = ["FPGA/verilog/src/gorkov_potential.v"]
-    tb = "FPGA/verilog/tb/tb_gorkov_potential.v"
+    # Test AXI Wrapper
+    src = ["FPGA/verilog/src/gorkov_axi_wrapper.v"]
+    tb = "FPGA/verilog/tb/tb_axi_wrapper.v"
     
     if os.path.exists(src[0]) and os.path.exists(tb):
-        success, log = toolchain.run_simulation("gorkov_potential", src, tb)
+        success, log = toolchain.run_simulation("axi_wrapper", src, tb)
         print(log)
         if success:
             print("✅ Toolchain Verification Successful")
