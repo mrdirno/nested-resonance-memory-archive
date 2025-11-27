@@ -1,0 +1,122 @@
+[
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/onedark.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/gruvbox.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/monokai.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/staroffice.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/native.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/zenburn.py",
+    "type": "Generic Secret",
+    "match_preview": "Token: '#dcdccc'..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/stata_dark.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/vim.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/coffee.py",
+    "type": "Generic Secret",
+    "match_preview": "Token: \"#ddd0c0\"..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/fruity.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/rrt.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/nord.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pygments/styles/nord.py",
+    "type": "Generic Secret",
+    "match_preview": "Token:              ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pip/_internal/network/auth.py",
+    "type": "Generic Secret",
+    "match_preview": "Password: \")\n       ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pip/_internal/utils/misc.py",
+    "type": "Generic Secret",
+    "match_preview": "password = \":****\"..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_pkg_test/lib/python3.13/site-packages/pip/_vendor/rich/_emoji_codes.py",
+    "type": "Generic Secret",
+    "match_preview": "secret\": \"\u3299\"..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_build/lib/python3.13/site-packages/pip/_internal/network/auth.py",
+    "type": "Generic Secret",
+    "match_preview": "Password: \")\n       ..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_build/lib/python3.13/site-packages/pip/_internal/utils/misc.py",
+    "type": "Generic Secret",
+    "match_preview": "password = \":****\"..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/.venv_build/lib/python3.13/site-packages/pip/_vendor/rich/_emoji_codes.py",
+    "type": "Generic Secret",
+    "match_preview": "secret\": \"\u3299\"..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/automation/META_ORCHESTRATION_GUIDE.md",
+    "type": "Generic Secret",
+    "match_preview": "API_KEY=\"your-api-ke..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/automation/META_ORCHESTRATION_GUIDE.md",
+    "type": "Generic Secret",
+    "match_preview": "API_KEY=\"your-api-ke..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/automation/META_ORCHESTRATION_GUIDE.md",
+    "type": "Generic Secret",
+    "match_preview": "API_KEY=\"your-api-ke..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/automation/SETUP_COMPLETE.md",
+    "type": "Generic Secret",
+    "match_preview": "API_KEY=\"AIza...\"..."
+  },
+  {
+    "file": "/Volumes/dual/DUALITY-ZERO-V2/automation/SETUP_COMPLETE.md",
+    "type": "Generic Secret",
+    "match_preview": "API_KEY=\"REDACTED_AP..."
+  }
+]

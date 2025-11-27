@@ -12,7 +12,7 @@
 > [!CAUTION]
 > **SECURITY WARNING: DO NOT HARDCODE KEYS HERE**
 > This file is tracked by git. **NEVER** put real API keys in this file.
-> Use `export GEMINI_API_KEY="AIza..."` in your local shell (`~/.zshrc`) ONLY.
+> Use `export GEMINI_API_KEY="REDACTED_GOOGLE_API_KEY"` in your local shell (`~/.zshrc`) ONLY.
 > The examples below use placeholders. **DO NOT UN-REDACT THEM.**
 
 **Method 1: Environment Variable** (Active)
