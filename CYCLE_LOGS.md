@@ -3474,3 +3474,9 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Define Cycle 2363:** Create Launch Script.
 - [x] **Action:** Created `automation/launch_helios_permanent.sh`.
 - [x] **Result:** One-click deployment enabled.
+
+# Task: Cycle 2364 - FPGA Logic Verification
+- [x] **Define Cycle 2364:** Verify Verilog RTL.
+- [x] **Goal:** Confirm Hardware Logic Correctness.
+- [x] **Action:** Ran Icarus Verilog simulation (`FPGA/tools/run_sim.sh`).
+- [x] **Result:** Simulation Passed (Outputs match expected).
