@@ -19,6 +19,7 @@ The "Infinite Loop" is the architectural pattern that allows DUALITY-ZERO to ope
 
 ### Phase 2: Ignition (The Pulse)
 *   **Trigger:** `bootstrap.py` or Cron Job launches `automation/pulse_monitor/pulse_monitor.py`.
+*   **Command:** `python3 automation/pulse_monitor/pulse_monitor.py --loop` (Ensures auto-restart).
 *   **Action:**
     1.  Reads `META_OBJECTIVES.md` to determine State.
     2.  Checks `MOG_CYCLE_LOG.md` for last activity.

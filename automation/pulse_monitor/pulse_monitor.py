@@ -458,6 +458,7 @@ def main():
     parser.add_argument("--ai", choices=["claude", "gemini", "auto"], default="auto", help="Select AI provider")
     parser.add_argument("--materialize", help="Path to .obj file for headless materialization")
     parser.add_argument("--duration", type=float, default=10.0, help="Duration for materialization (seconds)")
+    parser.add_argument("--loop", action="store_true", help="Run in infinite loop mode (restart on exit)")
     
     args = parser.parse_args()
 
@@ -477,10 +478,17 @@ def main():
     constitution = load_constitution()
     message = create_session_message(constitution, selected)
 
-    if selected == "claude":
-        launch_claude(message)
-    elif selected == "gemini":
-        launch_gemini(message)
+    while True:
+        if selected == "claude":
+            launch_claude(message)
+        elif selected == "gemini":
+            launch_gemini(message)
+            
+        if not args.loop:
+            break
+            
+        print("\n" + "="*80)
+        print("PULSE MONITOR: RESTARTING CYCLE IN 5 SECONDS...")
+        print("="*80)
+        time.sleep(5)
 
-if __name__ == "__main__":
-    main()
