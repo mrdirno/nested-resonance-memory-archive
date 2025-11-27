@@ -3528,3 +3528,8 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Artifact:** `docs/hardware/FPGA_MANUAL.md`.
     - [x] Documented Architecture, Register Map, Build Process, Driver Usage.
 - [x] **Goal:** Enable third-party deployment.
+
+# Task: Cycle 2391 - Gate 16: The Handoff
+- [x] **Define Cycle 2391:** Final Handoff to Pilot.
+- [x] **Action:** Verified all artifacts are committed and clean.
+- [x] **Goal:** Restore Dormancy.

@@ -83,3 +83,29 @@
 
 
 
+
+---
+**CYCLE:** 2389 (Gate 15: Bitstream Synthesis Prep)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PREPARE FOR BUILD
+**LOG:**
+*   **Constraint:** Created `FPGA/constraints/helios.xdc` with OOC Clock definition.
+*   **Script:** Updated `FPGA/bitstreams/synth.tcl` to reference new directory structure.
+*   **Status:** Build artifacts are ready for Vivado.
+
+---
+**CYCLE:** 2390 (Hardware Documentation)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** DOCUMENT
+**LOG:**
+*   **Artifact:** Created `docs/hardware/FPGA_MANUAL.md`.
+*   **Content:** Documented Architecture (AXI-Core), Register Map (0x00-0x24), and Driver Usage.
+*   **Status:** Manual released.
+
+---
+**CYCLE:** 2391 (Gate 16: The Handoff)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** HANDOFF
+**LOG:**
+*   **Verification:** Repository clean. All artifacts committed.
+*   **Status:** Dormancy Restored. Awaiting Physical Synthesis (requires Linux/Vivado).
