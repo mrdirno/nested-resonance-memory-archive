@@ -1,20 +1,14 @@
 module blink (
-    input wire CLOCK_50,
-    output wire LED
+    input wire clk,
+    output wire led
 );
 
-reg [24:0] counter;
-reg led_out;
+    reg [25:0] counter;
 
-always @(posedge CLOCK_50) begin
-    if (counter == 25000000) begin // 0.5 second blink (50MHz / 2 = 25M cycles)
-        led_out <= ~led_out;
-        counter <= 0;
-    end else begin
+    always @(posedge clk) begin
         counter <= counter + 1;
     end
-end
 
-assign LED = led_out;
+    assign led = counter[25];
 
 endmodule
