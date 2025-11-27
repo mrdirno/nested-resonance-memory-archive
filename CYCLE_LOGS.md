@@ -3678,3 +3678,10 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] Implemented `OrbitalNode` orbiting `PlanetaryGrid`.
 - [x] **Verification:** 2700.0 Energy beamed from 3 nodes over 10 ticks.
 - [x] **Result:** Orbital Power Beaming Operational.
+
+# Task: Cycle 2414 - The Von Neumann Probe (Gate 38)
+- [x] **Define Cycle 2414:** Self-Replicating Spacecraft.
+- [x] **Implementation:** Created `experiments/cycle2414_von_neumann.py`.
+    - [x] Simulated Resource Mining and Replication.
+- [x] **Verification:** Population grew 1 -> 16 in 20 ticks.
+- [x] **Result:** Exponential Growth Verified.
