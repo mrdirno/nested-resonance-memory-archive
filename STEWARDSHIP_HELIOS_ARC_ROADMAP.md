@@ -64,7 +64,7 @@ To transition from *observing* emergence (DUALITY-ZERO) to *engineering* it (HEL
 **Goal:** Validate the full stack from Web UI to Field Actuation.
 
 - [x] **Gate 6.1:** **Full Stack Integration Test.** Verify UI -> API -> Compiler -> Solver -> Fabricator -> Virtual Array pipeline.
-- [x] **Gate 6.2:** **Latency Optimization.** Verified CPU Latency < 4ms for sparse geometry.
+- [x] **Gate 6.2:** **Latency Optimization.** Verified Propagation Latency ~32ms (30 FPS+). Solver Latency ~24s (Compilation).
 
 ## PHASE 47: DEPLOYMENT READINESS - COMPLETE
 **Goal:** Prepare the system for headless operation.
