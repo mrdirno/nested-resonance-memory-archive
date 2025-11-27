@@ -3766,3 +3766,11 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Verification:** Benchmarked 4.2x Speedup (5.76s -> 1.36s).
 - [x] **Action:** Merged optimizations into `nrm_core/helios/ga_gpu.py`.
 - [x] **Result:** Solver Optimized.
+
+# Task: Cycle 2431 - Expand Vocabulary (Gate 59)
+- [x] **Define Cycle 2431:** Implement Multi-Word Grammar.
+- [x] **Implementation:** Created `experiments/cycle2431_grammar_emergence.py`.
+    - [x] Agents can combine words (Color + Shape).
+    - [x] Grammar (Adjective-Noun) transmits compound meaning.
+- [x] **Verification:** Speaker 'aka maru' -> Listener 'RED BALL'.
+- [x] **Result:** Compositionality Operational.
