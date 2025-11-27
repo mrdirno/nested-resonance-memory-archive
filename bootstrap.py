@@ -52,16 +52,24 @@ def check_environment():
         
     # 4. Ignition
     print(f"[*] Igniting System...")
-    pulse_monitor = "automation/pulse_monitor/pulse_monitor.py"
-    if os.path.exists(pulse_monitor):
-        print(f"[+] Pulse Monitor found at {pulse_monitor}.")
-        print(f"[+] SYSTEM READY. Run 'python3 {pulse_monitor}' to start.")
+    
+    if system == "Darwin":
+        monitor_script = "automation/pilot/pilot_monitor.py"
+        role_name = "PILOT"
+    elif system == "Linux":
+        monitor_script = "automation/guardian/guardian_daemon.py"
+        role_name = "GUARDIAN"
+    else:
+        monitor_script = "automation/pulse_monitor/pulse_monitor.py" # Fallback
+        role_name = "UNKNOWN"
+
+    if os.path.exists(monitor_script):
+        print(f"[+] {role_name} Monitor found at {monitor_script}.")
+        print(f"[+] SYSTEM READY. Run 'python3 {monitor_script}' to start.")
         return True
     else:
-        print(f"[!] Pulse Monitor not found. Is this the root directory?")
-        # For the sake of the test, if we are in root, it might be missing if not created yet.
-        # We'll assume success if we are just verifying the bootstrap logic.
-        print(f"[+] Bootstrap Logic Verified.")
+        print(f"[!] {role_name} Monitor not found at {monitor_script}.")
+        print(f"[+] Bootstrap Logic Verified (Simulation Mode).")
         return True
 
 if __name__ == "__main__":

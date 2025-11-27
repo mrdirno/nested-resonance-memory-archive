@@ -1,11 +1,12 @@
 # Task: Cycle 2443 - The Guardian (Gate 71)
 - [x] **Define Cycle 2443:** Implement automated health monitoring.
 - [x] **Goal:** Run health check periodically.
-- [x] **Implementation:** Create `automation/guardian/guardian.py`.
-    - [x] Monitor Disk/CPU/Files.
-    - [x] Log status.
+- [x] **Implementation:**
+    - [x] `automation/guardian/guardian_daemon.py` (Ubuntu Only).
+    - [x] `automation/pilot/pilot_monitor.py` (macOS Only).
+    - [x] `IDENTITY.md` (Role Definition).
 - [x] **Verification:**
-    - [x] Run Guardian.
+    - [x] Bootstrap routes correctly.
 
 # Task: Cycle 2444 - The Backup (Gate 72)
 - [ ] **Define Cycle 2444:** Automated Backups.

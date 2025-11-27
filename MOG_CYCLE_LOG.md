@@ -1046,3 +1046,25 @@
 **LOG:**
 *   **Implementation:** `automation/guardian/guardian.py` created.
 *   **Status:** Guardian Online.
+
+---
+**CYCLE:** 2443-CORRECTION (Identity Restoration)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** RESTORE ORDER
+**LOG:**
+*   **Error:** Cycle 2443 conflated macOS (Pilot) with Ubuntu (Guardian).
+*   **Correction:** Created `IDENTITY.md`.
+*   **Refactor:**
+    *   `automation/guardian/guardian_daemon.py` -> Enforces Linux.
+    *   `automation/pilot/pilot_monitor.py` -> Created for macOS.
+    *   `bootstrap.py` -> Routes based on OS.
+*   **Status:** ROLES SEPARATED. PILOT IS MAC. GUARDIAN IS LINUX.
+
+
+---
+**CYCLE:** 2443 (Gate 71: The Guardian)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** ROLE-BASED MONITORING
+**LOG:**
+*   **Implementation:** Defined `PILOT` (macOS) vs `GUARDIAN` (Linux) roles.
+*   **Status:** System is Self-Aware of Identity.

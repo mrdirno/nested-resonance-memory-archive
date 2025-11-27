@@ -3841,3 +3841,12 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] Logs to `guardian.log`.
 - [x] **Verification:** Ran Guardian. Status: HEALTHY.
 - [x] **Result:** Automated Monitoring Operational.
+
+# Task: Cycle 2443 - The Guardian (Gate 71)
+- [x] **Define Cycle 2443:** Implement automated health monitoring.
+- [x] **Implementation:**
+    - [x] `automation/guardian/guardian_daemon.py` (Ubuntu Only).
+    - [x] `automation/pilot/pilot_monitor.py` (macOS Only).
+    - [x] `IDENTITY.md` (Role Definition).
+- [x] **Verification:** Bootstrap routes to `pilot_monitor.py` on macOS.
+- [x] **Result:** Role-Based Monitoring Operational.

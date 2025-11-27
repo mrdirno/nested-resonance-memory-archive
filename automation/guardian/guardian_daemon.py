@@ -5,7 +5,16 @@ import sys
 import os
 from datetime import datetime
 
+import platform
+
+def check_identity():
+    if platform.system() != "Linux":
+        print("⛔ ERROR: Guardian Daemon must run on GUARDIAN NODE (Ubuntu).")
+        print("    Current Node: PILOT (macOS)")
+        sys.exit(1)
+
 def guardian_loop(interval=3600):
+    check_identity()
     print(f"GUARDIAN DAEMON ONLINE. Monitoring every {interval} seconds.")
     script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "scripts", "system_health_check.py")
     

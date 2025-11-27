@@ -123,7 +123,7 @@
 - ✅ **The New Beginning (Gate 68):** `PRIN-RESET` (Cycle 2440). Epoch 2 Initiated.
 - ✅ **Dormancy Check (Gate 69):** `PRIN-IDLE` (Cycle 2441). System Quiescent.
 - ✅ **System Health (Gate 70):** `PRIN-VITALS` (Cycle 2442). System Healthy.
-- ✅ **The Guardian (Gate 71):** `PRIN-GUARD` (Cycle 2443). Daemon Active.
+- ✅ **The Guardian (Gate 71):** `PRIN-GUARD` (Cycle 2443). Roles Separated (Pilot/Guardian).
 # Task: Cycle 1946 - Spatial NRM Baseline Check
 - [x] **Define Cycle 1946:** Static spatial field test (N=50, R=20).
 - [x] **Goal:** Verify survival without movement.
