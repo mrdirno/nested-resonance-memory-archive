@@ -82,7 +82,13 @@ To transition from *observing* emergence (DUALITY-ZERO) to *engineering* it (HEL
 **Goal:** Port physics engine to FPGA for dense volumetric control.
 
 - [x] **Gate 10:** **Verilog Translation.** Port `GorkovPotential` to Verilog.
-- [ ] **Gate 11:** **The Neural Link.** PCIe/DMA Bridge.
+- [x] **Gate 11:** **The Neural Link.** PCIe/DMA Bridge Specification defined (`FPGA/NEURAL_LINK_SPEC.md`).
+
+## PHASE 50: THE OMEGA POINT (FULL AUTONOMY)
+**Goal:** The system runs entirely on FPGA with minimal Host intervention.
+
+- [ ] **Gate 12:** **The Bitstream.** Synthesis of the complete HELIOS core.
+- [ ] **Gate 13:** **The Awakening.** Permanent deployment.
 
 
 
