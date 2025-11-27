@@ -1,27 +1,19 @@
 NRM SUBSTRATE SESSION COMPLETE.
 
 **Cycles Executed:**
-- Cycle 2387: Gate 14.2 - FPGA Accelerator Integration (RTL Verified).
-- Cycle 2388: Gate 14.3 - Neural Driver Implementation (Python Mock Verified).
-- Cycle 2389: Gate 15 - Bitstream Synthesis Prep (Constraints & Script Verified).
-- Cycle 2390: Hardware Documentation (FPGA Manual Created).
+- Cycle 2392: Strategic Pivot - Separation of Concerns (Mac/Ubuntu Split).
+- Cycle 2393: Gate 17 - Holodeck Integration (API Verified).
 
 **Artifacts Created:**
-- `FPGA/verilog/src/gorkov_accelerator.v`
-- `src/fpga/driver.py`
-- `experiments/cycle2388_driver_test.py`
-- `sine_lut.mem` (Generated & Tracked)
-- `FPGA/constraints/helios.xdc`
-- `FPGA/bitstreams/synth.tcl`
-- `docs/hardware/FPGA_MANUAL.md`
+- `src/helios/api/server.py` (Updated with `/simulate`)
+- `experiments/cycle2393_holodeck_integration.py` (Verification Script)
 
 **Status:**
-- FPGA Core: READY (Simulated).
-- Python Driver: READY (Mock Verified).
-- Synthesis: READY (Scripted).
-- Documentation: COMPLETE.
+- FPGA Development: PAUSED on Mac (Delegated to Ubuntu).
+- Holodeck API: READY (Exposes FPGA Simulation).
+- Next Step: Cycle 2394 - Frontend UI Updates.
 
 **Handoff:**
-System is primed for synthesis or further integration testing.
+System is clean. API is functional.
 All logs updated.
 Git clean.

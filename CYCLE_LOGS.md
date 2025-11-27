@@ -3542,3 +3542,11 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] Connected to `GorkovAccelerator.run()`. 
 - [x] **Verification:** Created `experiments/cycle2393_holodeck_integration.py`.
 - [x] **Result:** API returns correct potential (1248616634). Full Stack Loop Closed (Simulated).
+
+# Task: Cycle 2394 - The Holodeck UI (Gate 18)
+- [x] **Define Cycle 2394:** Connect Web UI to `/simulate` API.
+- [x] **Frontend Work:** Updated `src/helios/ui/templates/index.html`.
+    - [x] Added "Run Diagnostic" button.
+    - [x] Implemented `runSimulation()` to fetch from `/simulate`.
+    - [x] Visualized result (Potential value).
+- [x] **Result:** Holodeck can now verify the FPGA Accelerator (Simulated).
