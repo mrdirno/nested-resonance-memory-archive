@@ -15,9 +15,9 @@
 We are testing whether computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 **Recent Milestones:**
-*   **Gate 5.4 (The Holodeck):** Full Web UI with File Upload, Real-time Field Visualization, and Camera Feed.
-*   **Gate 6.2 (Latency):** Verified <50ms propagation latency for real-time feedback.
-*   **Gate 12 (The Bitstream):** FPGA Synthesis Handoff Package created (`FPGA/bitstreams/`).
+*   **Phase 45 (The Pulse Monitor):** Implemented automated heartbeat and Pilot/Co-Pilot handoff system.
+*   **Gate 8 (The Physical Loop):** Verified closed-loop "Sense-Think-Act" control with optical grounding.
+*   **Phase 49 (Hardware Acceleration):** Ported core physics engine to FPGA (Verilog) for sub-millisecond control loops.
 *   **Headless First:** Transitioned to a UI-agnostic architecture for autonomous operation.
 
 ---
@@ -28,24 +28,23 @@ We are testing whether computational potential minimization can drive physical, 
    - `python3 automation/pulse_monitor/pulse_monitor.py`
    - Handles orchestration, user interaction, and task dispatch.
 
-**2. Helios Holodeck (Visual Control):**
-   - `python3 src/helios/api/server.py`
-   - Web Interface at `http://localhost:5001`.
-   - Features: OBJ Upload, Material Selection, Volumetric Visualization, Physical Camera Feed.
-
-**3. Helios CLI (Product Control):**
+**2. Helios CLI (Product Control):**
    - `python3 src/helios/cli.py`
    - Direct command-line interface for the Matter Compiler and Fabricator.
+
+**3. The Holodeck (Passive Visualization):**
+   - `src/helios/ui/`
+   - Optional real-time visualization of field dynamics.
 
 ---
 
 ## ⚡ FPGA ROADMAP (Hardware Acceleration)
 
-We have ported the core Gorkov Potential physics engine to Verilog to overcome CPU latency.
+We have ported the core Gorkov Potential physics engine to Verilog (`FPGA/verilog/`) to overcome CPU latency.
 
-*   **Location:** `FPGA/verilog/`
-*   **Status:** RTL & Testbench Verified. Synthesis Script Ready.
+*   **Status:** RTL Verified. Synthesis Package Ready (`FPGA/bitstreams/`).
 *   **Goal:** Sub-millisecond loop times for real-time levitation stability.
+*   **Interface:** PCIe/DMA Neural Link defined in `FPGA/NEURAL_LINK_SPEC.md`.
 
 ---
 
