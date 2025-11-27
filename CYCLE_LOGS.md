@@ -3515,3 +3515,16 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] Implemented Bit-Accurate Simulation Mode (using `sine_lut.mem`).
 - [x] **Verification:** Created `experiments/cycle2388_driver_test.py`.
 - [x] **Result:** Python Driver matches Verilog Simulation exactly (Result: 1248616634).
+
+# Task: Cycle 2389 - Gate 15: Bitstream Synthesis Prep
+- [x] **Define Cycle 2389:** Prepare for Physical Synthesis.
+- [x] **Action:** Verified Synthesis Constraints.
+    - [x] Created `FPGA/constraints/helios.xdc` (Clock Constraint).
+    - [x] Updated `FPGA/bitstreams/synth.tcl` (Path fixes & Build Directory).
+- [x] **Result:** Artifacts are ready for Linux/Vivado build agent.
+
+# Task: Cycle 2390 - Hardware Documentation
+- [x] **Define Cycle 2390:** Document the FPGA subsystem.
+- [x] **Artifact:** `docs/hardware/FPGA_MANUAL.md`.
+    - [x] Documented Architecture, Register Map, Build Process, Driver Usage.
+- [x] **Goal:** Enable third-party deployment.
