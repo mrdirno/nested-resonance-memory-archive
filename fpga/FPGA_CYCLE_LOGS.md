@@ -41,6 +41,51 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 23
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 05:20 - [Ongoing]
+**Focus**: HPS Deployment Verification
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Refine `serial_deploy.py` for better diagnostics.
+- [x] Execute refined deployment script - **FAILED**. Target unresponsive to echo checks. Possible causes: Baud rate mismatch (not 115200), system hung, or physical connection issue.
+
+#### In Progress
+- [ ] Investigate Serial Connection (Baud Rate/Reset)
+
+#### Blocked/Deferred
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+- `fpga/scripts/serial_deploy.py` - Improved robustness
+
+#### Technical Notes
+- Serial console diagnostic: No response to `\n`, `root`, or `echo`.
+- Tried 115200 baud.
+- UART LED on board should be checked physically (if possible).
+
+#### Next Session Recommendations
+- Try alternative baud rates (9600, 38400, 57600) with `minicom` or script.
+- Request manual hard reset (power cycle) of DE10-Nano.
+- Verify USB cable integrity.
+
+#### Blocked/Deferred
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+- `fpga/scripts/serial_deploy.py` - Improved robustness
+
+#### Technical Notes
+- Increasing timeouts and adding buffer dumps to diagnose silent serial console.
+
+#### Next Session Recommendations
+- [TBD]
+
+---
+
 ### Session 2025-11-27 | Cycle 22
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 05:05 - [Ongoing]
