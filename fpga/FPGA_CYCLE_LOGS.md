@@ -41,6 +41,92 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 30
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 06:40 - [Ongoing]
+**Focus**: SignalTap Instrumentation Automation
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Create `setup_signaltap.tcl` - Script successfully associated `breathing_led.stp` with the project.
+- [x] Recompile `breathing_led` with SignalTap enabled - Successful (0 errors, 16 warnings). Bitstream now contains logic analyzer.
+- [x] Program with SignalTap Bitstream - **SUCCESS**. Device @2 configured.
+
+#### In Progress
+- [ ] Run SignalTap Acquisition
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+- `fpga/scripts/setup_signaltap.tcl` - Setup automation
+- `fpga/scripts/acquire_signaltap.tcl` - Acquisition automation
+
+#### Technical Notes
+- SignalTap instrumentation is active on the device.
+- created `acquire_signaltap.tcl` to attempt headless data capture.
+
+#### Next Session Recommendations
+- Execute `quartus_stp -t fpga/scripts/acquire_signaltap.tcl` to capture data.
+- Analyze captured data (if exportable to CSV/Text) or await GUI inspection.
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [ ] Bittware S5 Driver (Parked)
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [ ] Bittware S5 Driver (Parked)
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+- `fpga/scripts/setup_signaltap.tcl` - Automation script
+
+#### Technical Notes
+- Using `quartus_stp` and `quartus_sh` Tcl commands to bind the `.stp` file to the project and enable it for synthesis.
+
+#### Next Session Recommendations
+- [TBD]
+
+---
+
+### Session 2025-11-27 | Cycle 29
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 06:35 - [Ongoing]
+**Focus**: HPS Recovery & SignalTap Implementation
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Verified `quartus_stp` availability.
+- [x] Confirmed HPS serial is still unresponsive (awaiting PILOT reset).
+
+#### In Progress
+- [ ] Create SignalTap Script (`setup_signaltap.tcl`)
+- [ ] Instrument `breathing_led` with SignalTap
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- While waiting for the DE10-Nano power cycle, I will prepare the SignalTap logic analyzer configuration. This will allow us to inspect the internal `counter` and `pwm_threshold` registers of the breathing LED design via JTAG, verifying the logic is not just "blinking" but actually following the complex PWM algorithm.
+
+#### Next Session Recommendations
+- Execute SignalTap setup script.
+- Recompile project to include SignalTap logic.
+- Program and acquire data.
+
+---
+
 ### Session 2025-11-27 | Cycle 28
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 06:30 - [Ongoing]

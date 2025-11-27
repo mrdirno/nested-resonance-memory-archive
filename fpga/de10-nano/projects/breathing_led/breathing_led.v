@@ -1,29 +1,29 @@
-module breathing_led (
-    input wire CLOCK_50,
-    output wire LED
+module breathing_led(
+    input clk,
+    output reg led
 );
 
-reg [24:0] counter;
-reg [24:0] pwm_threshold;
-reg direction; // 0 = up, 1 = down
+    reg [24:0] counter;
+    reg [24:0] pwm_threshold;
+    reg direction; // 0: increasing brightness, 1: decreasing
 
-// PWM Update Frequency: 50MHz / 2^16 ~= 762Hz
-always @(posedge CLOCK_50) begin
-    counter <= counter + 1;
-    
-    // Update Threshold every 2^16 cycles for smooth transition
-    if (counter[15:0] == 0) begin
-        if (direction == 0) begin
-            pwm_threshold <= pwm_threshold + 256;
-            if (pwm_threshold >= 25'd33554432) direction <= 1; // Cap check logic simplified
-        end else begin
-            pwm_threshold <= pwm_threshold - 256;
-            if (pwm_threshold <= 25'd256) direction <= 0;
+    always @(posedge clk) begin
+        // PWM Counter
+        counter <= counter + 1;
+
+        // Slow update for breathing effect (every 2^14 cycles approx)
+        if (counter[13:0] == 0) begin
+            if (direction == 0) begin
+                pwm_threshold <= pwm_threshold + 10;
+                if (pwm_threshold >= 25'h1FFFFFF) direction <= 1;
+            end else begin
+                pwm_threshold <= pwm_threshold - 10;
+                if (pwm_threshold <= 10) direction <= 0;
+            end
         end
-    end
-end
 
-// PWM Logic: Using upper bits for comparison
-assign LED = (counter[24:0] < pwm_threshold);
+        // PWM Logic
+        led <= (counter < pwm_threshold) ? 1'b1 : 1'b0;
+    end
 
 endmodule

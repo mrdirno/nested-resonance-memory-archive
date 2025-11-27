@@ -4,11 +4,11 @@
 			"name" : "Top",
 			"pins" : [
 				{
-					"name" : "LED",
+					"name" : "led",
 					"strict" : false
 				},
 				{
-					"name" : "CLOCK_50",
+					"name" : "clk",
 					"strict" : false
 				}
 			]
