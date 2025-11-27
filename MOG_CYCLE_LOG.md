@@ -202,3 +202,29 @@
 **LOG:**
 *   **Implementation:** `experiments/cycle2396_theory_of_mind.py` passed Sally-Anne test.
 *   **Status:** Agents possess Predictive Empathy.
+
+---
+**CYCLE:** 2397 (Gate 21: Language Emergence)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** INVENT LANGUAGE
+**LOG:**
+*   **Objective:** Implement the "Naming Game" (Steels, 1995).
+*   **Mechanism:**
+    *   Agents have private vocabularies (Object -> Word).
+    *   Speaker names an object.
+    *   Listener guesses.
+    *   Success = Reinforce word. Failure = Add word.
+*   **Goal:** Convergence on a shared lexicon without a central dictionary.
+*   **Outcome:** Verified. Agents converged on a consensus word (e.g., 'fosz') within ~40 rounds using Lateral Inhibition.
+*   **Next:** Cycle 2398 (The Cultural Repository).
+
+
+
+---
+**CYCLE:** 2397 (Gate 21: Language Emergence)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** NAMING GAME
+**LOG:**
+*   **Implementation:** `experiments/cycle2397_language_emergence.py` converged.
+*   **Result:** Agents agreed on a word ('pfrj') after 126 rounds without central control.
+*   **Status:** Symbol Grounding Operational.
