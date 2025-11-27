@@ -1,0 +1,81 @@
+# Enterprise FPGA Coding Standards
+# Production-ready coding standards for $150K/month projects
+
+naming_conventions:
+  module_names:
+    format: "snake_case"
+    prefix: "enterprise_"
+    suffix: "_module"
+    example: "enterprise_data_processor_module"
+  
+  signal_names:
+    clock: "clk_*"
+    reset: "rst_*"
+    enable: "en_*"
+    valid: "*_valid"
+    ready: "*_ready"
+    data: "*_data"
+    
+  constants:
+    format: "UPPER_CASE"
+    prefix: "C_"
+    example: "C_DATA_WIDTH"
+    
+  ports:
+    input_prefix: "i_"
+    output_prefix: "o_"
+    inout_prefix: "io_"
+
+design_rules:
+  synchronous_design:
+    required: true
+    single_clock_domain_preferred: true
+    reset_strategy: "synchronous"
+    
+  parameterization:
+    use_parameters: true
+    avoid_magic_numbers: true
+    document_parameters: true
+    
+  hierarchy:
+    max_depth: 5
+    module_size_limit: 1000  # lines
+    interface_complexity: "low"
+    
+  timing:
+    avoid_combinational_loops: true
+    register_outputs: true
+    pipeline_long_paths: true
+    
+code_quality:
+  comments:
+    header_block_required: true
+    inline_comments: "descriptive"
+    complex_logic_documentation: true
+    
+  formatting:
+    indentation: 2  # spaces
+    line_length: 120
+    consistent_spacing: true
+    
+  verification:
+    assertions_required: true
+    coverage_driven: true
+    constrained_random: true
+    
+enterprise_requirements:
+  documentation:
+    design_specification: "required"
+    verification_plan: "required"
+    user_guide: "required"
+    
+  review_process:
+    peer_review: "mandatory"
+    architecture_review: "required"
+    timing_review: "required"
+    
+  quality_gates:
+    syntax_check: "automated"
+    lint_check: "automated"
+    timing_analysis: "automated"
+    functional_verification: "automated"

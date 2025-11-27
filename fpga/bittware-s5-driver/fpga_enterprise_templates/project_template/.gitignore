@@ -1,0 +1,164 @@
+# Enterprise FPGA Project .gitignore
+# Production-ready version control for $150K/month projects
+
+# Build outputs
+build/
+synthesis/
+implementation/
+bitstreams/*.bit
+bitstreams/*.ltx
+*.log
+*.jou
+
+# Simulation outputs
+sim/
+*.wdb
+*.wcfg
+*.vcd
+*.ghw
+
+# Tool-specific files
+# Vivado
+.Xil/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.srcs/
+*.gen/
+vivado.log
+vivado.jou
+vivado_*.backup*
+*.rpt
+*.dcp
+*.debug
+*.ltx
+
+# Quartus
+db/
+incremental_db/
+output_files/
+*.qws
+*.qpf.bak
+*.qsf.bak
+*.sopcinfo
+*.cmp
+*.done
+*.eqn
+*.hex
+*.html
+*.jdi
+*.jpg
+*.mif
+*.pin
+*.pof
+*.ptf.*
+*.qar
+*.qarlog
+*.qws
+*.rpt
+*.smsg
+*.sof
+*.summary
+*.txt
+PLLJ_PLLSPE_INFO.txt
+
+# ModelSim/Questa
+work/
+transcript
+*.mpf
+*.mti
+*.vstf
+*.wlf
+vsim.wlf
+modelsim.ini
+
+# Xilinx ISE
+*.bgn
+*.drc
+*.ncd
+*.ngd
+*.par
+*.pcf
+*.prj
+*.ptwx
+*.stx
+*.syr
+*.twr
+*.twx
+*.unroutes
+*.xpi
+*.xst
+isim/
+xlnx_auto_0_xdb/
+_ngo/
+_xmsgs/
+*.gise
+*.ise
+
+# OS-specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# IDE files
+.vscode/
+*.code-workspace
+.idea/
+*.sublime-*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# Documentation builds
+docs/_build/
+docs/build/
+
+# Enterprise-specific
+# License files (keep templates, ignore actual licenses)
+licenses/*.lic
+!licenses/*.template
+
+# Customer data (never commit)
+customer_data/
+confidential/
+
+# Performance data
+*.prof
+*.perf
+
+# Test outputs
+test_results/
+coverage_reports/
+regression_logs/
+
+# Release packages
+releases/
+packages/
+*.tar.gz
+*.zip
+
+# Hardware-in-loop test results
+hil_results/
+*.hwlog

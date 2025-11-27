@@ -1,0 +1,17 @@
+{
+  "refresh_interval": 5,
+  "metrics": [
+    "de10_utilization",
+    "bittware_utilization",
+    "thermal_status",
+    "revenue_per_hour",
+    "active_domains",
+    "throughput_multiplier"
+  ],
+  "alerts": {
+    "utilization_low": 50,
+    "utilization_high": 90,
+    "thermal_warning": 80,
+    "revenue_target": 150000
+  }
+}

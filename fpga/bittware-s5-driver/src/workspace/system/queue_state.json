@@ -1,0 +1,20 @@
+{
+  "queue": [
+    "meta_protocols/FOLDER_STRUCTURE_MANAGER_V1",
+    "meta_protocols/DOMAIN_RESEARCH_ENGINE_V1",
+    "meta_protocols/PROTOCOL_LIFECYCLE_MANAGER_V1",
+    "meta_protocols/ECOSYSTEM_HEALTH_MONITOR_V1"
+  ],
+  "current_cycle": [
+    "meta_protocols/PROTOCOL_AUDITOR_V1"
+  ],
+  "cycle_number": 1,
+  "protocols": [
+    "meta_protocols/PROTOCOL_AUDITOR_V1",
+    "meta_protocols/FOLDER_STRUCTURE_MANAGER_V1",
+    "meta_protocols/DOMAIN_RESEARCH_ENGINE_V1",
+    "meta_protocols/PROTOCOL_LIFECYCLE_MANAGER_V1",
+    "meta_protocols/ECOSYSTEM_HEALTH_MONITOR_V1"
+  ],
+  "protocol_pulls": 1
+}
