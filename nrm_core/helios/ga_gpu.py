@@ -2,6 +2,8 @@
 HELIOS GPU-Accelerated Genetic Algorithm Phase Solver
 
 Cycle 368: GPU acceleration for phase optimization.
+Cycle 2430: GEMM Optimization & Pre-computation.
+
 Evaluates entire population in parallel on GPU for massive speedup.
 
 Author: Aldrin Payopay (aldrin.gdf@gmail.com)
@@ -15,6 +17,7 @@ class GeneticAlgorithmGPU:
     """
     GPU-accelerated Genetic Algorithm for phase optimization.
     Evaluates entire population in parallel for 10-100x speedup.
+    Uses GEMM and pre-computed phase matrices.
     """
 
     def __init__(self, substrate_gpu, emitters):
@@ -39,62 +42,80 @@ class GeneticAlgorithmGPU:
                                          device=self.device, dtype=torch.float32)
         self.emitter_freq = torch.tensor([e.frequency for e in emitters],
                                           device=self.device, dtype=torch.float32)
+                                          
+        # OPTIMIZATION: Pre-compute Base Components for GEMM
+        x_m = self.substrate.x_m
+        y_m = self.substrate.y_m
+        z_m = self.substrate.z_m
+        
+        # Calculate base phase k*d
+        base_phase = torch.zeros((self.num_emitters, self.substrate.depth,
+                                  self.substrate.height, self.substrate.width),
+                                 device=self.device, dtype=torch.float32)
+                                      
+        for i in range(self.num_emitters):
+            dist_m = torch.sqrt((x_m - self.emitter_x[i])**2 +
+                               (y_m - self.emitter_y[i])**2 +
+                               (z_m - self.emitter_z[i])**2)
+            dist_m = torch.clamp(dist_m, min=1e-9)
+            
+            real_freq = 30000 + (self.emitter_freq[i] * 20000)
+            k = 2 * np.pi * real_freq / self.substrate.wave_speed
+            
+            base_phase[i] = k * dist_m
+            
+        # Flatten spatial dimensions: (num_emitters, V)
+        V = self.substrate.depth * self.substrate.height * self.substrate.width
+        base_phase_flat = base_phase.view(self.num_emitters, V)
+        
+        # Precompute terms
+        # Term1 = Amp * cos(base)
+        # Term2 = Amp * sin(base)
+        self.term1 = (self.emitter_amp.view(-1, 1) * torch.cos(base_phase_flat)).contiguous()
+        self.term2 = (self.emitter_amp.view(-1, 1) * torch.sin(base_phase_flat)).contiguous()
+        
+        # Clean up intermediates
+        del base_phase
+        del base_phase_flat
 
     def propagate_batch(self, phases_batch):
         """
-        Propagate field for entire population at once.
+        Propagate field for entire population at once using GEMM.
 
         Args:
             phases_batch: Tensor of shape (pop_size, num_emitters)
 
         Returns:
-            fields: Tensor of shape (pop_size, depth, height, width) - complex magnitude
+            potential: Tensor of shape (pop_size, depth, height, width) - magnitude squared
         """
-        pop_size = phases_batch.shape[0]
-
-        # Get grid from substrate
-        x_m = self.substrate.x_m  # (depth, height, width)
-        y_m = self.substrate.y_m
-        z_m = self.substrate.z_m
-
-        # Initialize batch fields
-        field_real = torch.zeros((pop_size, self.substrate.depth,
-                                  self.substrate.height, self.substrate.width),
-                                 device=self.device, dtype=torch.float32)
-        field_imag = torch.zeros_like(field_real)
-
-        for i in range(self.num_emitters):
-            # Distance for this emitter (same for all individuals)
-            dist_m = torch.sqrt((x_m - self.emitter_x[i])**2 +
-                               (y_m - self.emitter_y[i])**2 +
-                               (z_m - self.emitter_z[i])**2)
-            dist_m = torch.clamp(dist_m, min=1e-9)
-
-            # Wave number
-            real_freq = 30000 + (self.emitter_freq[i] * 20000)
-            k = 2 * np.pi * real_freq / self.substrate.wave_speed
-
-            # Phases for this emitter across population: (pop_size,)
-            emitter_phases = phases_batch[:, i]
-
-            # Phase term: k*dist + phase
-            # k*dist is (depth, height, width)
-            # emitter_phases is (pop_size,)
-            # Result should be (pop_size, depth, height, width)
-            phase_base = k * dist_m  # (D, H, W)
-            phase_total = phase_base.unsqueeze(0) + emitter_phases.view(-1, 1, 1, 1)
-
-            # Add contribution
-            field_real += self.emitter_amp[i] * torch.cos(phase_total)
-            field_imag += self.emitter_amp[i] * torch.sin(phase_total)
-
-        # Return magnitude squared (potential)
-        potential = field_real**2 + field_imag**2
-        return potential
+        # cos(A+B) = cosA cosB - sinA sinB
+        # sin(A+B) = sinA cosB + cosA sinB
+        # Here A = base_phase (Term1/2), B = emitter_phase (phases_batch)
+        
+        # Prepare B components
+        # shape: (pop, num_emitters)
+        cos_B = torch.cos(phases_batch)
+        sin_B = torch.sin(phases_batch)
+        
+        # Field Real = Sum [ Amp * cos(A+B) ]
+        # Matrix mult: cos_B @ Term1 - sin_B @ Term2
+        # (pop, num_emitters) @ (num_emitters, V) -> (pop, V)
+        
+        field_real = torch.mm(cos_B, self.term1) - torch.mm(sin_B, self.term2)
+        field_imag = torch.mm(sin_B, self.term1) + torch.mm(cos_B, self.term2)
+        
+        # Magnitude Squared
+        potential_flat = field_real**2 + field_imag**2
+        
+        # Reshape to (pop, D, H, W)
+        return potential_flat.view(phases_batch.shape[0], 
+                                   self.substrate.depth, 
+                                   self.substrate.height, 
+                                   self.substrate.width)
 
     def evaluate_fitness_batch(self, phases_batch, target_positions):
         """
-        Evaluate fitness for entire population.
+        Evaluate fitness for entire population. Vectorized target extraction.
 
         Args:
             phases_batch: Tensor (pop_size, num_emitters)
@@ -106,31 +127,39 @@ class GeneticAlgorithmGPU:
         # Propagate all individuals
         potentials = self.propagate_batch(phases_batch)  # (pop, D, H, W)
 
-        # Get max potential per individual
-        p_max = potentials.view(potentials.shape[0], -1).max(dim=1)[0]  # (pop,)
-
-        # Calculate fitness
-        fitness = torch.zeros(phases_batch.shape[0], device=self.device)
-
+        indices_x = []
+        indices_y = []
+        indices_z = []
+        
         for t in target_positions:
             tx = int(t[0] / self.substrate.resolution)
             ty = int(t[1] / self.substrate.resolution)
             tz = int(t[2] / self.substrate.resolution)
-
+            
             if (0 <= tx < potentials.shape[3] and
                 0 <= ty < potentials.shape[2] and
                 0 <= tz < potentials.shape[1]):
-                p_val = potentials[:, tz, ty, tx]  # (pop,)
+                indices_x.append(tx)
+                indices_y.append(ty)
+                indices_z.append(tz)
                 
-                # Goal: Minimize p_val (make it negative)
-                # Fitness = -p_val
-                fitness += -p_val
-                
-                # Penalize positive potentials (repulsive zones)
-                # If p_val > 0, subtract penalty
-                fitness -= torch.where(p_val > 0, p_val * 10.0, torch.zeros_like(p_val))
-            else:
-                fitness -= 500.0 # Out of bounds penalty
+        if not indices_x:
+            return torch.ones(phases_batch.shape[0], device=self.device) * -500.0
+            
+        idx_x = torch.tensor(indices_x, device=self.device)
+        idx_y = torch.tensor(indices_y, device=self.device)
+        idx_z = torch.tensor(indices_z, device=self.device)
+        
+        # Extract values: potentials[:, z, y, x]
+        # Result shape: (pop, num_targets)
+        target_vals = potentials[:, idx_z, idx_y, idx_x]
+        
+        # Fitness = Sum(-val)
+        fitness = torch.sum(-target_vals, dim=1)
+        
+        # Penalize positive potentials (repulsive zones)
+        penalty = torch.where(target_vals > 0, target_vals * 10.0, torch.zeros_like(target_vals))
+        fitness -= torch.sum(penalty, dim=1)
 
         return fitness
 
