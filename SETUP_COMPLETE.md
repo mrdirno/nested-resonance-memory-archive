@@ -1,14 +1,14 @@
 NRM SUBSTRATE SESSION COMPLETE.
 
 **Cycles Executed:**
-- Cycle 2398: Cultural Repository (Ratchet Verified).
+- Cycle 2399: The Social Brain (Stag Hunt Coordination Verified).
 
 **Artifacts:**
-- `experiments/cycle2398_cultural_repository.py` (Confirmed fitness 8 -> 594).
+- `experiments/cycle2399_social_brain.py` (Achieved 8.64/10 score).
 
 **Status:**
-- **Cultural Layer:** **ONLINE** (Shared Knowledge / Ratchet).
-- **Next Step:** Cycle 2399 (The Social Brain / Integration).
+- **Social Layer:** **COMPLETE** (Theory of Mind + Language + Culture integrated).
+- **Next Step:** Cycle 2400 (The Reality Compiler / Phase 43 Resumption).
 
 **Verification:**
 - Logs updated.

@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
+# Add root to path (assuming script is in experiments/)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from nrm_core.helios.compiler import MatterCompiler
