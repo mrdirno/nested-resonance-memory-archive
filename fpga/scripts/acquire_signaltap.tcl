@@ -1,26 +1,27 @@
-# acquire_signaltap.tcl
-# Automates SignalTap data acquisition
-
 load_package stp
+load_package project
 
-set stp_file "fpga/de10-nano/projects/breathing_led/breathing_led.stp"
-set output_log "fpga/de10-nano/projects/breathing_led/signaltap_log.txt"
+set project_name "breathing_led"
+set project_path "fpga/de10-nano/projects/breathing_led/"
+set stp_file "breathing_led.stp"
+set abs_path "/media/helios/DUALITY-GUARDIAN/DUALITY-ZERO-V2/"
+
+# Open Project
+if {[file exists "$abs_path$project_path$project_name.qpf"]} {
+    project_open "$abs_path$project_path$project_name"
+} else {
+    puts "Error: Project file $abs_path$project_path$project_name.qpf not found."
+    exit 1
+}
 
 # Open the STP file
-open_session -name $stp_file
+open_session -name "$abs_path$project_path$stp_file"
 
 # Start acquisition
 puts "Starting SignalTap acquisition..."
-run_session -name $stp_file -device_name "@2: 5CSEBA6(.|ES)/5CSEMA6/.. (0x02D020DD)" -hardware_name "DE-SoC [1-9]"
+run_session -name "$abs_path$project_path$stp_file" -device_name "@2: 5CSEBA6(.|ES)/5CSEMA6/.. (0x02D020DD)" -hardware_name {DE-SoC [1-9]}
 
-# Note: run_session typically blocks until trigger or stop. 
-# For automation, we might need to ensure the trigger condition is met or use non-blocking if available in advanced Tcl.
-# Given the "Breathing LED" runs continuously, an immediate trigger or forced trigger should work.
+puts "Acquisition complete."
 
-# Export data (if supported by simple Tcl, otherwise we rely on the session state)
-# In CLI mode, viewing the data usually requires opening the STP in the GUI later, 
-# or using export_data_log if configured.
-
-puts "Acquisition complete. Please open $stp_file in Quartus GUI to view waveforms."
-
-close_session -name $stp_file
+close_session -name "$abs_path$project_path$stp_file"
+project_close

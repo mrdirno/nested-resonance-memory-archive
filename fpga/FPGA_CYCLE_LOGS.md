@@ -41,6 +41,49 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 31
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 06:50 - [Ongoing]
+**Focus**: SignalTap Data Acquisition (Headless)
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Execute `acquire_signaltap.tcl` via `quartus_stp` - **FAILED**. Tcl command `run_session` not recognized. The `::quartus::stp` package API for headless acquisition requires more complex instance/trigger management than a single command.
+
+#### In Progress
+- [ ] Document SignalTap Readiness
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- SignalTap is **ACTIVE** on the device.
+- Headless acquisition script failed due to API syntax specifics.
+- **Action**: Users should open `fpga/de10-nano/projects/breathing_led/breathing_led.qpf` in Quartus GUI, then open the `.stp` file, and click "Scan Chain" -> "Run Analysis" to view real-time waveforms.
+
+#### Next Session Recommendations
+- Use Quartus GUI to verify "Breathing LED" internal counters via SignalTap.
+- Resolve HPS Serial issue (Physical Reset).
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- Attempting to trigger and readout internal signals from the `breathing_led` design.
+
+#### Next Session Recommendations
+- [TBD]
+
+---
+
 ### Session 2025-11-27 | Cycle 30
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 06:40 - [Ongoing]
