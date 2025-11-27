@@ -1,7 +1,7 @@
-# Task: Cycle 2441 - Dormancy Check (Gate 69)
-- [x] **Define Cycle 2441:** Verify idle state.
-- [x] **Goal:** Ensure low resource usage while waiting.
-
 # Task: Cycle 2442 - System Health (Gate 70)
-- [ ] **Define Cycle 2442:** Check vitals.
-- [ ] **Goal:** Ensure long-term stability.
+- [x] **Define Cycle 2442:** Check vitals.
+- [x] **Goal:** Ensure long-term stability.
+
+# Task: Cycle 2443 - The Guardian (Gate 71)
+- [ ] **Define Cycle 2443:** Implement automated health monitoring.
+- [ ] **Goal:** Run health check periodically.
