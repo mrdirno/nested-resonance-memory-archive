@@ -89,7 +89,7 @@ To transition from *observing* emergence (DUALITY-ZERO) to *engineering* it (HEL
 
 - [x] **Gate 12:** **The Bitstream.** Synthesis of the complete HELIOS core.
     - *Status:* Synthesis scripts and constraints defined. Ready for Vivado.
-- [ ] **Gate 13:** **The Awakening.** Permanent deployment.
+- [x] **Gate 13:** **The Awakening.** Permanent deployment readiness verified. System handed off to Pilot.
 
 
 
