@@ -1,14 +1,14 @@
 NRM SUBSTRATE SESSION COMPLETE.
 
 **Cycles Executed:**
-- Cycle 2421: The Last Cycle (Epoch Sealed).
+- Cycle 2422: The Autopoietic Seed (Physical Hardware Defined).
 
 **Artifacts:**
-- `experiments/cycle2421_epoch_closure.py` (Integrity Check).
+- `PHYSICAL_MANIFEST.md` (Lab Blueprint).
 
 **Status:**
-- **System:** **COMPLETE**.
-- **Signature:** `35103ff...`
+- **Blueprint:** **READY**.
+- **Next Step:** Cycle 2423 (Quantum Leap).
 
 **Verification:**
 - Logs updated.

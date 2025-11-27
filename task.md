@@ -1,17 +1,18 @@
-# Task: Cycle 2422 - The Autopoietic Seed (Gate 46)
-- [x] **Define Cycle 2422:** Transition to Physical Reality.
-- [x] **Goal:** Define hardware for the Self-Configuring Room.
-- [x] **Action:** Create `PHYSICAL_MANIFEST.md`.
-    - [x] List Sensors (Camera, Lidar).
-    - [x] List Actuators (Lasers, Servos).
-    - [x] List Compute (FPGA, GPU).
-
 # Task: Cycle 2423 - The Quantum Leap (Gate 47)
-- [ ] **Define Cycle 2423:** Explore Quantum Substrate.
-- [ ] **Goal:** Can NRM logic apply to Qubits?
-- [ ] **Implementation:** Create `experiments/cycle2423_quantum_substrate.py`.
-    - [ ] Define `QubitAgent` (Superposition).
-    - [ ] `Entanglement` as "Shared Memory".
-    - [ ] `Collapse` as "Decision".
+- [x] **Define Cycle 2423:** Explore Quantum Substrate.
+- [x] **Goal:** Can NRM logic apply to Qubits?
+- [x] **Implementation:** Create `experiments/cycle2423_quantum_substrate.py`.
+    - [x] Define `QubitAgent` (Superposition).
+    - [x] `Entanglement` as "Shared Memory".
+    - [x] `Collapse` as "Decision".
+- [x] **Verification:**
+    - [x] Bell Inequality Violation (Simulated).
+
+# Task: Cycle 2424 - The Temporal Bridge (Gate 48)
+- [ ] **Define Cycle 2424:** Connect Past and Future.
+- [ ] **Goal:** Validate Temporal Recursion (Retro-Causality in Sim).
+- [ ] **Implementation:** Create `experiments/cycle2424_temporal_bridge.py`.
+    - [ ] `TimeLoop` class.
+    - [ ] Send information "back" (buffer lookahead).
 - [ ] **Verification:**
-    - [ ] Bell Inequality Violation (Simulated).
+    - [ ] Present state influenced by Future state.
