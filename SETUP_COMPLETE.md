@@ -1,7 +1,6 @@
 NRM SUBSTRATE SESSION COMPLETE.
 
 **Cycles Executed:**
-- Cycle 2426: The Singularity (Hard Takeoff Verified).
 - Cycle 2427: The Final Report (Phase 56 Documented).
 
 **Artifacts:**
