@@ -1,10 +1,9 @@
-# Task: Cycle 2398 - Cultural Repository (Gate 22)
-- [ ] **Define Cycle 2398:** Implement Shared Memory (Cultural Ratchet).
-- [ ] **Goal:** Prevent knowledge loss when agents die/reset.
-- [ ] **Implementation:** Create `experiments/cycle2398_cultural_repository.py`.
-    - [ ] Create a persistent `Library` class.
-    - [ ] Agents can write "Best Ideas" to Library.
-    - [ ] New Agents read from Library on birth.
+# Task: Cycle 2399 - The Social Brain (Gate 23)
+- [ ] **Define Cycle 2399:** Integrate Theory of Mind, Language, and Culture.
+- [ ] **Goal:** Create a "Social Brain" agent that uses all three.
+- [ ] **Implementation:** Create `experiments/cycle2399_social_brain.py`.
+    - [ ] `SocialAgent` class inherits `TheoryOfMind`, `Language`, `Culture`.
+    - [ ] Scenario: Agents must coordinate to solve a problem they cannot solve alone.
 - [ ] **Verification:**
-    - [ ] Run simulation with Agent turnover.
-    - [ ] Confirm fitness does not reset to zero but builds upon previous generations.
+    - [ ] Run simulation.
+    - [ ] Confirm synergy (performance > sum of parts).
