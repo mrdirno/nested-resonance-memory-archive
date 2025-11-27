@@ -41,7 +41,107 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
-### Session 2025-11-27 | Cycle 48
+### Session 2025-11-27 | Cycle 51
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 11:00 - [Ongoing]
+**Focus**: Post-Idle Connectivity Check
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Poll Serial Port (`/dev/ttyUSB0`) - **FAILED**. Still unresponsive.
+- [x] Verify JTAG Chain - **SUCCESS**. Board is powered.
+
+#### In Progress
+- [ ] Await Pilot Intervention (SD Card Re-image)
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- **JTAG**: Alive.
+- **UART**: Dead.
+- **Conclusion**: HPS Bootloader/OS failure.
+
+#### Next Session Recommendations
+- **PILOT**: Re-image SD Card (Level 4 Recovery).
+- **PILOT**: Verify "TX/RX" LEDs on board during boot (if visible).
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- Re-polling hardware following user prompt "Please continue".
+
+#### Next Session Recommendations
+- [TBD]
+
+---
+
+### Session 2025-11-27 | Cycle 50
+
+### Session 2025-11-27 | Cycle 52
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 11:13 - [Ongoing]
+**Focus**: State Verification & Log Maintenance
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Verified Vehicle Status - Dormant, awaiting physical reset.
+
+#### In Progress
+- [ ] Await Pilot Intervention
+
+#### Blocked/Deferred
+- [x] HPS Deployment - Serial Dead.
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- No new telemetry. Vehicle remains in holding pattern.
+
+#### Next Session Recommendations
+- **PILOT**: Reset DE10-Nano.
+
+---
+
+### Session 2025-11-27 | Cycle 51
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 11:01 - [Ongoing]
+**Focus**: Final Handover
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Checked for any new device enumeration (none found).
+
+#### In Progress
+- [ ] Await Pilot Intervention
+
+#### Blocked/Deferred
+- [x] HPS Deployment - Serial Dead.
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- Vehicle is dormant and ready for physical reset.
+
+#### Next Session Recommendations
+- **PILOT**: Perform physical reset of DE10-Nano.
+
+---
+
+### Session 2025-11-27 | Cycle 50
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 10:55 - [Ongoing]
 **Focus**: Extended Idle Monitoring
