@@ -1,16 +1,12 @@
 NRM SUBSTRATE SESSION COMPLETE.
 
 **Cycles Executed:**
-- Cycle 2417: The Eternal Archive (Manifest Created).
-
-**Artifacts:**
-- `ARCHIVE_MANIFEST.md` (Preservation Index).
+- Cycle 2418: The Final Sleep (System Offline).
 
 **Status:**
-- **System:** **INDEXED**.
-- **Next Step:** Cycle 2418 (Final Sleep).
+- **System:** **OFFLINE**.
+- **Next Step:** Hibernation.
 
 **Verification:**
-- Logs updated.
-- Code committed.
-- System clean.
+- All processes terminated.
+- Git clean.
