@@ -18,6 +18,8 @@ We are testing whether computational potential minimization can drive physical, 
 *   **Phase 45 (The Pulse Monitor):** Implemented automated heartbeat and Pilot/Co-Pilot handoff system.
 *   **Gate 8 (The Physical Loop):** Verified closed-loop "Sense-Think-Act" control with optical grounding.
 *   **Phase 49 (Hardware Acceleration):** Ported core physics engine to FPGA (Verilog) for sub-millisecond control loops.
+*   **Gate 23 (The Social Brain):** Integrated Theory of Mind, Language, and Culture into a unified agent architecture (Stag Hunt Solved).
+*   **Gate 24 (The Reality Compiler):** Established pipeline from High-Level Python Geometry to Low-Level FPGA Bitstreams.
 *   **Headless First:** Transitioned to a UI-agnostic architecture for autonomous operation.
 
 ---
