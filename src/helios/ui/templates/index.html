@@ -30,6 +30,14 @@
             </div>
         </div>
         <button onclick="materialize()">Materialize</button>
+        
+        <div style="margin-top: 10px; border-top: 1px solid #0f0; padding-top: 5px;">
+            <label>FPGA Accelerator:</label>
+            <div style="display: flex; gap: 5px; align-items: center;">
+                <button onclick="runSimulation()" style="width: auto;">Run Diagnostic</button>
+                <span id="sim-result" style="font-size: 0.8em;">Potential: -</span>
+            </div>
+        </div>
     </div>
     
     <div id="camera-feed">
@@ -144,6 +152,29 @@
                     setTimeout(() => gridHelper.material.color.setHex(0x004400), 500);
                 } else {
                     document.getElementById("status-bar").innerText = "Error: " + data.error;
+                }
+            } catch (e) {
+                document.getElementById("status-bar").innerText = "Network Error.";
+            }
+        }
+
+        async function runSimulation() {
+            document.getElementById("status-bar").innerText = "Running FPGA Simulation...";
+            try {
+                const response = await fetch(`${API_URL}/simulate`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        phases: new Array(64).fill(0), 
+                        target: [0, 0, 0] 
+                    })
+                });
+                const data = await response.json();
+                if (data.status === "success") {
+                    document.getElementById("sim-result").innerText = `Potential: ${data.potential}`;
+                    document.getElementById("status-bar").innerText = `Simulation Complete (${data.mode}).`;
+                } else {
+                    document.getElementById("status-bar").innerText = "Sim Error: " + data.error;
                 }
             } catch (e) {
                 document.getElementById("status-bar").innerText = "Network Error.";
