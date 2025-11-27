@@ -43,11 +43,13 @@ module gorkov_axi_wrapper #(
     input wire core_busy,
     input wire core_done,
     input wire core_error,
+    input wire [31:0] core_result, // Result from Core
     output reg [31:0] emitter_cnt,
     output reg [31:0] voxel_cnt,
     output reg [63:0] phase_addr,
     output reg [63:0] voxel_addr,
-    output reg [63:0] result_addr
+    output reg [63:0] result_addr,
+    output reg phase_wen // Strobe when Phase L is written
 );
 
     // Register Map Offsets (See NEURAL_LINK_SPEC.md)
@@ -73,6 +75,8 @@ module gorkov_axi_wrapper #(
     reg [DATA_WIDTH-1:0] reg_voxel_h;
     reg [DATA_WIDTH-1:0] reg_result_l;
     reg [DATA_WIDTH-1:0] reg_result_h;
+    
+    reg sticky_done;
 
     // AXI State
     // Simplified Implementation: Assumes valid/ready handshake happens in one cycle if possible
@@ -93,7 +97,9 @@ module gorkov_axi_wrapper #(
             reg_voxel_l <= 0;
             reg_voxel_h <= 0;
             reg_result_l <= 0;
+            reg_result_l <= 0;
             reg_result_h <= 0;
+            phase_wen <= 0;
         end else begin
             // Handshake Logic
             if (!s_axi_awready && s_axi_awvalid && s_axi_wvalid) begin
@@ -105,7 +111,10 @@ module gorkov_axi_wrapper #(
                     ADDR_CTRL:        reg_ctrl <= s_axi_wdata;
                     ADDR_EMITTER_CNT: reg_emitter_cnt <= s_axi_wdata;
                     ADDR_VOXEL_CNT:   reg_voxel_cnt <= s_axi_wdata;
-                    ADDR_PHASE_L:     reg_phase_l <= s_axi_wdata;
+                    ADDR_PHASE_L:     begin
+                                        reg_phase_l <= s_axi_wdata;
+                                        phase_wen <= 1; // Strobe
+                                      end
                     ADDR_PHASE_H:     reg_phase_h <= s_axi_wdata;
                     ADDR_VOXEL_L:     reg_voxel_l <= s_axi_wdata;
                     ADDR_VOXEL_H:     reg_voxel_h <= s_axi_wdata;
@@ -116,6 +125,7 @@ module gorkov_axi_wrapper #(
             end else begin
                 s_axi_awready <= 0;
                 s_axi_wready <= 0;
+                phase_wen <= 0; // Clear Strobe
             end
 
             // Response Logic
@@ -139,21 +149,26 @@ module gorkov_axi_wrapper #(
             s_axi_rvalid <= 0;
             s_axi_rresp <= 0;
             s_axi_rdata <= 0;
+            sticky_done <= 0;
         end else begin
+            // Sticky Done Logic
+            if (start_core) sticky_done <= 0;
+            else if (core_done) sticky_done <= 1;
+            
             if (!s_axi_arready && s_axi_arvalid) begin
                 s_axi_arready <= 1;
                 
                 // Read Operation
                 case (s_axi_araddr)
                     ADDR_CTRL:        s_axi_rdata <= reg_ctrl;
-                    ADDR_STATUS:      s_axi_rdata <= {28'b0, core_error, core_done, core_busy, 1'b0}; // Bit 0: Idle not implemented yet
+                    ADDR_STATUS:      s_axi_rdata <= {28'b0, core_error, sticky_done, core_busy, 1'b0}; // Bit 2: Sticky Done
                     ADDR_EMITTER_CNT: s_axi_rdata <= reg_emitter_cnt;
                     ADDR_VOXEL_CNT:   s_axi_rdata <= reg_voxel_cnt;
                     ADDR_PHASE_L:     s_axi_rdata <= reg_phase_l;
                     ADDR_PHASE_H:     s_axi_rdata <= reg_phase_h;
                     ADDR_VOXEL_L:     s_axi_rdata <= reg_voxel_l;
                     ADDR_VOXEL_H:     s_axi_rdata <= reg_voxel_h;
-                    ADDR_RESULT_L:    s_axi_rdata <= reg_result_l;
+                    ADDR_RESULT_L:    s_axi_rdata <= core_result; // Read from Core
                     ADDR_RESULT_H:    s_axi_rdata <= reg_result_h;
                     default:          s_axi_rdata <= 32'hDEADBEEF;
                 endcase

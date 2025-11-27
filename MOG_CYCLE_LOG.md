@@ -41,3 +41,32 @@
 *   **AXI Wrapper:** Created `gorkov_axi_wrapper.v` and `tb_axi_wrapper.v`. Verified Memory Map compliance (0x00-0x24).
 *   **Simulation:** Passed all Register Read/Write tests. Control Logic is verified.
 *   **Status:** Gate 14.1 Complete. The Neural Link now has a verified Endpoint on the FPGA side.
+
+---
+**CYCLE:** 2386 (Wake Up & Reality Sync)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** VERIFY & PREPARE
+**LOG:**
+*   **Wake Up:** MOG Online. Reality Sync performed.
+*   **Hygiene:** Cleaned up `gorkov_tb.vcd` from root.
+*   **Verification:** Verified `src/fpga/toolchain.py`. AXI Wrapper simulation passed.
+*   **Discovery:** `gorkov_axi_wrapper.v` and `gorkov_potential.v` are standalone. They are not yet integrated.
+*   **Strategy:** Cycle 2387 will focus on "The Accelerator Integration" (Gate 14.2) - creating the top-level `gorkov_accelerator.v` to wire the Neural Link (Wrapper) to the Physics Core.
+
+---
+**CYCLE:** 2387 (Gate 14.2: The Accelerator Integration)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** INTEGRATE & VERIFY
+**LOG:**
+*   **Design:** Created `gorkov_accelerator.v` (Top Level).
+    *   Integrated `gorkov_axi_wrapper` and `gorkov_potential`.
+    *   Implemented `phase_mem` (64x16) with AXI Write Strobe logic.
+    *   Connected `core_result` back to AXI Read logic.
+*   **Modification:** Updated `gorkov_axi_wrapper.v` to support `phase_wen` (Write Strobe) and `sticky_done` (Status Bit 2).
+*   **Verification:** Created `tb_accelerator.v`.
+    *   Verified full flow: Load Phases -> Set Target -> Start -> Poll Done -> Read Result.
+    *   Result: `1248616634` (Non-zero potential confirmed).
+*   **Status:** Gate 14.2 Complete. The Physics Core is now fully accessible via the Neural Link (AXI).
+*   **Strategy:** Cycle 2388 will focus on "The Neural Driver" (Gate 14.3) - implementing the Python driver to control this accelerator.
+
+

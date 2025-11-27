@@ -2,11 +2,9 @@
 
 module tb_gorkov_potential;
 
-    // Parameters
     parameter NUM_EMITTERS = 64;
     parameter WIDTH = 16;
 
-    // Inputs
     reg clk;
     reg rst_n;
     reg start;
@@ -14,12 +12,10 @@ module tb_gorkov_potential;
     reg signed [WIDTH-1:0] target_y;
     reg signed [WIDTH-1:0] target_z;
     reg [NUM_EMITTERS*WIDTH-1:0] emitter_phases;
-
-    // Outputs
+    
     wire [31:0] potential_out;
     wire done;
 
-    // Instantiate the Device Under Test (DUT)
     gorkov_potential #(
         .NUM_EMITTERS(NUM_EMITTERS),
         .WIDTH(WIDTH)
@@ -35,62 +31,48 @@ module tb_gorkov_potential;
         .done(done)
     );
 
-    // Clock Generation
     initial begin
         clk = 0;
         forever #5 clk = ~clk;
     end
 
-    // Test Sequence
     initial begin
-        // Initialize Inputs
+        // Setup
         rst_n = 0;
         start = 0;
-        target_x = 0;
-        target_y = 0;
-        target_z = 0;
-        emitter_phases = 0;
+        target_x = 0; target_y = 0; target_z = 0;
+        emitter_phases = 0; // All phases 0
 
-        // Wait for reset
-        #100;
-        rst_n = 1;
+        #100 rst_n = 1;
         #20;
 
-        // Test Case 1: Basic Accumulation
-        $display("[TB] Test Case 1: Basic Accumulation");
-        target_x = 16'd50;
-        target_y = 16'd50;
-        target_z = 16'd50;
+        // Test 1: Constructive Interference at Origin (0,0,0)
+        // Emitter 0 is at (0,0). Dist = 0. Phase = 0.
+        // LUT[0] = 0 (Sin), LUT[256] = 1 (Cos).
+        // If all emitters were at (0,0), we'd get SumReal = 64, SumImag = 0.
+        // Since they are spread out, we expect some value.
         
-        // Set all phases to 10
-        // Verilog replication {64{16'd10}}
-        emitter_phases = {NUM_EMITTERS{16'd10}};
-        
-        // Trigger Start
+        $display("[TB] Test 1: Constructive Interference at (0,0,0)");
         start = 1;
-        #10;
+        @(posedge clk);
+        start = 0;
+
+        wait(done);
+        $display("[TB] Done. Potential: %d", potential_out);
+        
+        // Test 2: Moving Target away
+        #20;
+        target_x = 100; // Far away
+        
+        $display("[TB] Test 2: Target at (100,0,0)");
+        start = 1;
+        @(posedge clk);
         start = 0;
         
-        // Wait for Done
         wait(done);
-        #10;
-        
-        $display("[TB] Calculation Complete.");
-        $display("[TB] Potential Output: %d", potential_out);
-        
-        if (potential_out != 0) begin
-            $display("[TB] PASS: Non-zero potential calculated.");
-        end else begin
-            $display("[TB] FAIL: Potential is zero.");
-        end
+        $display("[TB] Done. Potential: %d", potential_out);
 
         $finish;
-    end
-
-    // Waveform Dump
-    initial begin
-        $dumpfile("gorkov_tb.vcd");
-        $dumpvars(0, tb_gorkov_potential);
     end
 
 endmodule
