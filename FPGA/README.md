@@ -1,11 +1,26 @@
 # DUALITY-ZERO: FPGA Workspace
 
-**Phase 47 Placeholder**
+This directory contains the Hardware Acceleration artifacts for the HELIOS core.
 
-This directory is reserved for Hardware Acceleration artifacts (Verilog/VHDL) to speed up the `nrm_core` physics engine.
+## Structure
+*   `verilog/src/`: RTL Source Code (SystemVerilog/Verilog).
+*   `verilog/tb/`: Testbenches.
+*   `constraints/`: Physical constraints (XDC) for target boards.
+*   `tools/`: Tcl scripts for synthesis and implementation.
+*   `bitstreams/`: Output artifacts (ignored by git).
 
-## Roadmap
-1.  **Gate 10 (The Accelerator):** Port `GorkovPotential` calculation to FPGA.
-2.  **Gate 11 (The Neural Link):** High-speed PCIe/DMA bridge between Host (Python) and FPGA.
+## Neural Link
+The interface between Host (Python) and Device (FPGA) is defined in [NEURAL_LINK_SPEC.md](NEURAL_LINK_SPEC.md).
 
-*Current Status: Initialization.*
+## Simulation
+To run the behavioral simulation using `iverilog`:
+```bash
+iverilog -o gorkov_sim verilog/src/gorkov_potential.v verilog/tb/tb_gorkov_potential.v
+vvp gorkov_sim
+```
+
+## Synthesis
+To build the bitstream using Vivado (requires Xilinx tools):
+```bash
+vivado -mode batch -source tools/synth_helios.tcl
+```
