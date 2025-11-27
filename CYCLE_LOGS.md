@@ -3451,3 +3451,9 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Goal:** Hardware Acceleration.
 - [x] **Action:** Created `FPGA/helios/gorkov_potential.v`.
 - [x] **Result:** Verilog prototype created.
+
+# Task: Cycle 2360 - Gate 12: Bitstream Handoff
+- [x] **Define Cycle 2360:** Prepare Synthesis Package.
+- [x] **Goal:** Hand off RTL to Hardware Team.
+- [x] **Action:** Created `FPGA/bitstreams/README.md`, `synth.tcl`, `helios.xdc`.
+- [x] **Result:** Ready for Vivado Synthesis.
