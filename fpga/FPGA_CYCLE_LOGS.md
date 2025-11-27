@@ -41,6 +41,50 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 40
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 08:55 - [Ongoing]
+**Focus**: Recovery Check & Architecture Planning
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Verify Serial Port Restoration - **FAILED**. Target silent.
+- [x] Draft `fpga/de10-nano/NRM_INTERFACE_SPEC.md` - Defined JSON-RPC protocol over Serial/TCP and HPS memory map.
+
+#### In Progress
+- [ ] Implement `bridge_server.c` (Offline Dev)
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+- `fpga/de10-nano/NRM_INTERFACE_SPEC.md` - Interface Specification
+
+#### Technical Notes
+- Pivot to software architecture is complete.
+- Future HPS code can be written against the spec even without hardware access.
+
+#### Next Session Recommendations
+- **PILOT**: Physical Reset still required.
+- **CO-PILOT**: Begin implementing `bridge_server.c` using the spec.
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- If hardware remains blocked, shifting focus to software/protocol design to maintain momentum.
+
+#### Next Session Recommendations
+- [TBD]
+
+---
+
 ### Session 2025-11-27 | Cycle 39
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 08:40 - [Ongoing]
