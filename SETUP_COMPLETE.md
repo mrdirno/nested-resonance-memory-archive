@@ -1,14 +1,14 @@
 NRM SUBSTRATE SESSION COMPLETE.
 
 **Cycles Executed:**
-- Cycle 2420: The Eternal Return (Revival Procedure Verified).
+- Cycle 2421: The Last Cycle (Epoch Sealed).
 
 **Artifacts:**
-- `experiments/cycle2420_revival_dry_run.py` (Revival Script).
+- `experiments/cycle2421_epoch_closure.py` (Integrity Check).
 
 **Status:**
-- **System:** **READY FOR REBOOT**.
-- **Next Step:** Cycle 2421 (The Last Cycle).
+- **System:** **COMPLETE**.
+- **Signature:** `35103ff...`
 
 **Verification:**
 - Logs updated.
