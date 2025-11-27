@@ -41,6 +41,67 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 46
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 09:55 - [Session Close]
+**Focus**: Final HPS Verification (Post-Reset)
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Verified USB Enumeration - FTDI (UART) and Blaster (JTAG) present.
+- [x] Attempted Serial Recovery - 30s listen + Blind Login. **Result: FAILED (Silent)**.
+
+#### In Progress
+- [ ] Recovery via SD Card Re-imaging (User Action)
+
+#### Blocked/Deferred
+- [x] HPS Deployment (Serial Dead)
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Final session entry.
+
+#### Technical Notes
+- **FPGA Status**: Healthy. JTAG Accessible. Logic Verified.
+- **HPS Status**: Unresponsive. Likely bootloader corruption or SD card failure.
+- **Recommendation**: Follow `fpga/de10-nano/RECOVERY_GUIDE.md` "Level 4" (SD Card Re-imaging).
+
+#### Next Session Recommendations
+- Re-image SD card with Terasic Linux image.
+- Verify serial output during boot (U-Boot messages).
+- Retry `serial_deploy.py`.
+
+---
+
+### Session 2025-11-27 | Cycle 45
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 09:45 - [Ongoing]
+**Focus**: HPS Recovery (Post-Reset)
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Confirmed User Intervention - Board reset/replugged.
+- [x] Answered User Query - Confirmed USB connection to "USB BLASTER" port.
+
+#### In Progress
+- [ ] Execute `serial_deploy.py` to verify HPS responsiveness
+
+#### Blocked/Deferred
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- User confirmed replug. `/dev/ttyUSB0` timestamp `08:54` suggests bus-powered UART chip remained active during power cycle, or re-enumeration happened earlier.
+- Proceeding with assumption that HPS has rebooted.
+
+#### Next Session Recommendations
+- If serial works: Transfer `hello_world`.
+- If serial fails: Check JTAG-UART.
+
+---
+
 ### Session 2025-11-27 | Cycle 44
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 09:36 - [Ongoing]
