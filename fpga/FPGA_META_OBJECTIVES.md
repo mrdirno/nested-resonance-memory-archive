@@ -2,7 +2,7 @@
 
 > **Document Type**: Strategic Objectives & Timeline Planning
 > **Scope**: FPGA Development within DUALITY-ZERO-V2
-> **Last Updated**: [CO-PILOT updates this timestamp each session]
+> **Last Updated**: 2025-11-27 08:05 UTC
 
 ---
 
@@ -13,7 +13,9 @@
 - [x] Objective 1: Verify Bittware S5 Driver and Toolkit (Completed, but parking S5 work).
 - [x] Objective 2: Locate and Validate DE10-Nano Development Software (Intel Quartus 24.1).
 - [x] Objective 3: Establish connectivity with DE10-Nano (JTAG & UART Verified).
-- [ ] Objective 4: Verify compilation toolchain for DE10-Nano (Cyclone V SoC).
+- [x] Objective 4: Verify compilation toolchain for DE10-Nano (Cyclone V SoC) - "Blink" successfully loaded.
+- [x] Objective 5: Validate HPS-FPGA Bridge Communication - Cross-compiler installed, "Hello World" compiled.
+- [ ] Objective 6: Transfer and Execute HPS Application on DE10-Nano.
 
 ### Milestone Targets
 <!-- PILOT: Define milestone targets here -->
@@ -21,7 +23,7 @@
 |-----------|-------------|-------------|--------|
 | M1 | Hardware Link Established (S5) | 2025-11-27 | Parked |
 | M1-B | Hardware Link Established (DE10) | 2025-11-27 | Completed |
-| M2 | Basic Physics Kernel Loaded (DE10) | TBD | Pending |
+| M2 | Basic Physics Kernel Loaded (DE10) | TBD | In Progress |
 | M3 | NRM <-> FPGA Data Loop | TBD | Pending |
 
 ---
@@ -30,8 +32,8 @@
 
 ### Primary Target: DE10-Nano (Cyclone V SoC)
 - **Software**: `/home/helios/intelFPGA_24_1/quartus/bin` (Verified)
-- **Connectivity**: JTAG (`jtagconfig` OK), UART (`/dev/ttyUSB0` OK)
-- **Status**: **ONLINE & READY**
+- **Connectivity**: JTAG (ID: `0x02D020DD` @ Index 2), UART (`/dev/ttyUSB0`)
+- **Status**: **ONLINE & PROGRAMMED**
 
 ### Secondary Target: Bittware S5 (Stratix V)
 - **Driver Location**: `/media/helios/DUALITY-GUARDIAN/DUALITY-ZERO-V2/fpga/bittware-s5-driver/`
