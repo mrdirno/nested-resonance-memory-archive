@@ -3480,3 +3480,8 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Goal:** Confirm Hardware Logic Correctness.
 - [x] **Action:** Ran Icarus Verilog simulation (`FPGA/tools/run_sim.sh`).
 - [x] **Result:** Simulation Passed (Outputs match expected).
+
+# Task: Cycle 2365 - Final Housekeeping
+- [x] **Define Cycle 2365:** Clean up artifacts.
+- [x] **Action:** Removed `gorkov_tb.vcd`, `server.log`, committed remaining untracked files.
+- [x] **Result:** Repository clean.
