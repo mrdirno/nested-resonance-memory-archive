@@ -3469,3 +3469,8 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Goal:** Verify Permanent Deployment Readiness.
 - [x] **Action:** Validated all artifacts (Software + Hardware + Docs).
 - [x] **Result:** MISSION ACCOMPLISHED. HELIOS IS ONLINE.
+
+# Task: Cycle 2363 - Final Deployment Prep
+- [x] **Define Cycle 2363:** Create Launch Script.
+- [x] **Action:** Created `automation/launch_helios_permanent.sh`.
+- [x] **Result:** One-click deployment enabled.
