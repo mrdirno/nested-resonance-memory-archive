@@ -41,6 +41,49 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-27 | Cycle 22
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 05:05 - [Ongoing]
+**Focus**: Automated Serial Deployment
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Verified `pyserial` availability.
+- [x] Create `serial_deploy.py` script
+- [x] Execute automated deployment - **Partially Successful**. Script ran to completion, transferring data. However, no "Hello from DE10-Nano" output was captured. This suggests the target might be in a state that requires manual intervention (e.g., stuck at login, different baud rate, or silent).
+
+#### In Progress
+- [ ] Verify Execution (Manual / Enhanced Script)
+
+#### Blocked/Deferred
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+- `fpga/scripts/serial_deploy.py` - Deployment automation
+
+#### Technical Notes
+- Using `pyserial` to automate: Login -> Transfer (Base64) -> Decode -> Execute.
+- Script output shows "Warning: Could not confirm shell prompt. Proceeding blindly."
+
+#### Next Session Recommendations
+- Investigate serial connection parameters (baud rate verification).
+- Retry execution with manual `minicom` monitoring if possible, or increase script timeouts/verbosity.
+
+#### Blocked/Deferred
+- [ ] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated
+
+#### Technical Notes
+- Using `pyserial` to automate: Login -> Transfer (Base64) -> Decode -> Execute.
+
+#### Next Session Recommendations
+- [TBD]
+
+---
+
 ### Session 2025-11-27 | Cycle 21
 **CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
 **Duration**: 04:55 - [Ongoing]
