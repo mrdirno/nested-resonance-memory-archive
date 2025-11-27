@@ -53,3 +53,52 @@ def test_api_upload_invalid_extension(client):
     }
     response = client.post('/upload', data=data)
     assert response.status_code == 400
+
+def test_api_materialize(client, monkeypatch):
+    """Verify materialization triggers compilation and emission."""
+    # Mock fabricator.compiler.compile_object to return a dummy instruction set
+    # We need to patch the 'fabricator' instance in src.helios.api.server
+    
+    # Mock emission
+    mock_emit = []
+    def _mock_emit(event, data):
+        mock_emit.append((event, data))
+        
+    import src.helios.api.server as server_module
+    monkeypatch.setattr(server_module.socketio, 'emit', _mock_emit)
+    
+    # Mock fabricator.compiler.compile_object
+    # The fabricator is global in server.py
+    # We can mock the method on the instance
+    
+    def _mock_compile(mesh_path, material="AIR_STP"):
+        return {
+            "emitters": [{"id": 0, "phase": 1.57}],
+            "traps": [[0.5, 0.5, 0.5]]
+        }
+        
+    monkeypatch.setattr(server_module.fabricator.compiler, 'compile_object', _mock_compile)
+    # Also mock materialize to avoid blocking sleep
+    monkeypatch.setattr(server_module.fabricator, 'materialize', lambda m, duration: None)
+
+    # Create a dummy file to pass validation
+    with open(os.path.join(server_module.app.config['UPLOAD_FOLDER'], "test.obj"), "w") as f:
+        f.write("dummy")
+
+    payload = {"mesh_path": os.path.join(server_module.app.config['UPLOAD_FOLDER'], "test.obj"), "duration": 1}
+    response = client.post('/materialize', 
+                          data=json.dumps(payload),
+                          content_type='application/json')
+                          
+    assert response.status_code == 200
+    
+    # Verify emit
+    found_field_update = False
+    for event, data in mock_emit:
+        if event == 'field_update':
+            found_field_update = True
+            assert 'phases' in data
+            assert 'traps' in data
+            assert len(data['traps']) == 1
+            break
+    assert found_field_update

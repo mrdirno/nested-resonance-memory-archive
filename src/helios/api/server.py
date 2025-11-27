@@ -145,8 +145,11 @@ def materialize():
             for emitter in instruction_set['emitters']:
                 phases[emitter['id']] = emitter['phase']
             
-            # Emit to frontend (Gate 5.3)
-            socketio.emit('phase_update', {'phases': phases})
+            # Emit to frontend (Gate 5.3 + 5.2)
+            socketio.emit('field_update', {
+                'phases': phases,
+                'traps': instruction_set.get('traps', [])
+            })
             
             # Now run the physical loop (blocking)
             fabricator.materialize(mesh_path, duration=duration)

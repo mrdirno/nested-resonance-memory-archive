@@ -46,8 +46,8 @@ To transition from *observing* emergence (DUALITY-ZERO) to *engineering* it (HEL
 ## PHASE 5: THE INTERFACE (WEB UI)
 **Goal:** Democratize access to the Reality Compiler.
 
-- [ ] **Gate 5.1:** **The Bridge API.** Expose the `Fabricator` class via a Flask/FastAPI REST endpoint.
-- [ ] **Gate 5.2:** **The Visualizer.** A React component to render the Target Density Field and the Simulated Pressure Field side-by-side.
+- [x] **Gate 5.1:** **The Bridge API.** Expose the `Fabricator` class via a Flask/FastAPI REST endpoint.
+- [x] **Gate 5.2:** **The Visualizer.** A React component to render the Target Density Field and the Simulated Pressure Field side-by-side.
 # Task: Cycle 2353 - Gate 5.3: The Control Panel
 - [x] **Define Cycle 2353:** Implement Web UI Control Panel.
 - [x] **Goal:** A web UI to upload .obj files, select materials, and trigger compilation.

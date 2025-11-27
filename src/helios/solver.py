@@ -14,7 +14,7 @@ class InverseSolver:
         """
         Initialize the Inverse Solver.
         :param target_field: 3D numpy array (N x N x N) representing desired density.
-        :param emitters: List of Emitter objects (or positions).
+        :param emitters: List of [x, y, z] lists.
         :param physics_config: Dictionary of physics constants (c, rho, etc).
         """
         self.target = target_field

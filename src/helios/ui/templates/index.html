@@ -163,14 +163,54 @@
             document.getElementById("socket-status").style.color = "#f00";
         });
 
-        socket.on('phase_update', (data) => {
+        // Traps Visualization (Point Cloud)
+        const trapGeometry = new THREE.BufferGeometry();
+        const maxTraps = 10000;
+        const trapPositions = new Float32Array(maxTraps * 3);
+        trapGeometry.setAttribute('position', new THREE.BufferAttribute(trapPositions, 3));
+        
+        const trapMaterial = new THREE.PointsMaterial({
+            color: 0x00ffff,
+            size: 0.1,
+            transparent: true,
+            opacity: 0.6
+        });
+        const trapSystem = new THREE.Points(trapGeometry, trapMaterial);
+        scene.add(trapSystem);
+
+        socket.on('field_update', (data) => {
+            // Update Emitters
             if (data.phases && data.phases.length === emitters.length) {
                 for (let i = 0; i < emitters.length; i++) {
                     const phase = data.phases[i];
-                    // Normalize 0..2pi -> 0..1
                     const intensity = (phase % (2 * Math.PI)) / (2 * Math.PI);
-                    emitters[i].material.color.setHSL(0.33, 1.0, intensity * 0.5); // Green hue
+                    emitters[i].material.color.setHSL(0.33, 1.0, intensity * 0.5);
                 }
+            }
+            
+            // Update Traps
+            if (data.traps) {
+                const positions = trapSystem.geometry.attributes.position.array;
+                let idx = 0;
+                // Map 0..1 coords to world coords centered at 0,0,0
+                // Grid is 8x8, spacing ~2 (from loop x*2-7). Size ~14 units.
+                // Let's map 0..1 to -7..7
+                const scale = 14.0;
+                const offset = -7.0;
+                
+                for(let i=0; i<data.traps.length && i < maxTraps; i++) {
+                    const t = data.traps[i];
+                    positions[idx++] = t[0] * scale + offset;
+                    positions[idx++] = t[1] * scale + offset; // Y corresponds to Height?
+                    // In solver/compiler, axes might be different.
+                    // Standard: Y is UP. 
+                    // Compiler: Z, Y, X indices.
+                    // Let's assume standard mapping for now.
+                    positions[idx++] = t[2] * scale + offset;
+                }
+                
+                trapSystem.geometry.setDrawRange(0, data.traps.length);
+                trapSystem.geometry.attributes.position.needsUpdate = true;
             }
         });
 

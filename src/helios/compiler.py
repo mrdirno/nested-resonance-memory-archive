@@ -64,6 +64,24 @@ class MatterCompiler:
         
         solution_phases = solver.evolve()
         
+        # 3.5. Field Calculation (Visualizer Support)
+        traps = []
+        if hasattr(solver, 'get_field'):
+            field = solver.get_field(solution_phases)
+            # Extract traps: low potential points
+            # Threshold: Mean - 2*Std? Or fixed?
+            # Let's use a relative threshold for now
+            threshold = field.min() + (field.max() - field.min()) * 0.05
+            trap_indices = np.argwhere(field < threshold)
+            
+            # Convert to relative coordinates 0..1 for UI
+            # D, H, W
+            # x = idx[2] / W, y = idx[1] / H, z = idx[0] / D
+            D, H, W = field.shape
+            for idx in trap_indices:
+                z, y, x = idx
+                traps.append([x/float(W), y/float(H), z/float(D)])
+        
         # 4. Assembly (The "Print")
         print("Step 3: Assembling Instruction Set...")
         instruction_set = {
@@ -73,6 +91,7 @@ class MatterCompiler:
                 "emitters": len(self.emitters),
                 "resolution": self.resolution
             },
+            "traps": traps,
             "emitters": []
         }
         
