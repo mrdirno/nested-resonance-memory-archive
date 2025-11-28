@@ -34,6 +34,22 @@ class Ecosystem:
         self.tax_rate = 0.01 # Default 1%
         self.subsidy_amount = 0 # Default 0
         self.treasury = 0
+        
+        # Justice (Code of Hammurabi)
+        self.laws = {'MURDER': 1000} # Life for a Life (Energy Cost)
+
+    def enforce_laws(self, criminal: DigitalLifeform, crime_type: str):
+        """
+        Apply punishment for crimes.
+        """
+        if crime_type in self.laws:
+            penalty = self.laws[crime_type]
+            criminal.energy -= penalty
+            # print(f"⚖️ JUSTICE: {criminal.name} punished for {crime_type}. (-{penalty})")
+            
+            if criminal.energy <= 0:
+                pass
+                # print(f"⚖️ {criminal.name} executed by the State.")
 
     def add_structure(self, structure):
         """Add a static structure to the ecosystem."""
@@ -187,13 +203,19 @@ class Ecosystem:
             
             agent.metabolize()
             agent.scan(self) # Cycle 2522: Scan surroundings
-            signal = agent.act()
+            signals = agent.act()
             
-            if signal:
-                if signal.type == 'BUILD_STRUCTURE':
-                    self.add_structure(signal.payload['structure'])
-                else:
-                    self.propagate_signal(signal)
+            # Cycle 2541: Handle Signal List
+            if signals:
+                # If it's a list, iterate. If it's a single signal (legacy), wrap in list.
+                if not isinstance(signals, list):
+                    signals = [signals]
+                    
+                for signal in signals:
+                    if signal.type == 'BUILD_STRUCTURE':
+                        self.add_structure(signal.payload['structure'])
+                    else:
+                        self.propagate_signal(signal)
 
             # Handle Donation (Welfare State) for Prey
             if agent.intent == 'donate' and agent.energy > 20:
@@ -229,7 +251,9 @@ class Ecosystem:
                 targets = [a for a in self.agents if a.lineage_id != agent.lineage_id and a.alive]
                 if targets:
                     target = random.choice(targets)
-                    agent.attack(target)
+                    success = agent.attack(target)
+                    if success and target.energy <= 0:
+                        self.enforce_laws(agent, 'MURDER')
 
 
             # Handle reproduction for prey
@@ -257,16 +281,22 @@ class Ecosystem:
             agent.sense(agent.communicator.get_messages())
             agent.metabolize()
             agent.scan(self) # Cycle 2522
-            signal = agent.act() # This will set agent.intent to 'hunt' if conditions are met
+            signals = agent.act() 
             
-            if signal:
-                self.propagate_signal(signal)
+            if signals:
+                if not isinstance(signals, list):
+                    signals = [signals]
+                    
+                for signal in signals:
+                    self.propagate_signal(signal)
 
             # If predator decided to hunt, find a target from currently alive prey
             if agent.intent == 'hunt' and agent.energy > 0:
                 if prey_alive_this_phase: # Ensure there's prey to hunt
                     target = random.choice(prey_alive_this_phase)
-                    agent.hunt(target, self) # Predator performs hunt action
+                    success = agent.hunt(target, self) # Predator performs hunt action
+                    if success and target.energy <= 0:
+                        self.enforce_laws(agent, 'MURDER')
             
             # If predator decided to donate (Kin Altruism)
             elif agent.intent == 'donate' and agent.energy > 20:

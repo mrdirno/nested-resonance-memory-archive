@@ -192,6 +192,8 @@ class DigitalLifeform:
         if self.alive and target.energy <= 0:
             loot = 20 # Scavenge
             self.energy += loot
+            
+        return True
 
     def hunt(self, target, ecosystem=None):
         # Gene 4 = Hunting efficiency (Higher is better)
@@ -213,8 +215,8 @@ class DigitalLifeform:
         
         # CANNIBALISM LOGIC
         if is_conspecific:
-            if is_kin: return 
-            if cannibalism_trait < 0.5: return
+            if is_kin: return False
+            if cannibalism_trait < 0.5: return False
         
         if target.energy > 0 and self.energy > 5: 
             multiplier = hunt_eff / (evasion_eff + 0.5)
@@ -222,6 +224,9 @@ class DigitalLifeform:
             
             target.energy -= damage
             self.energy += 5 
+            return True
+            
+        return False 
 
     def donate(self, ecosystem=None):
         """
@@ -543,13 +548,9 @@ class DigitalLifeform:
         
         payload = {
             'utility': utility_map,
-            'knowledge': {}
+            'knowledge': self.knowledge.copy()
         }
         
-        # Cycle 2527: Share critical data
-        if 'NEAREST_FOOD' in self.sensed_signals:
-            payload['knowledge']['NEAREST_FOOD'] = self.sensed_signals['NEAREST_FOOD']
-            
         return Signal(type='THOUGHT', strength=1.0, source_id=self.id, payload=payload)
 
     def assimilate_thought(self, signals):
@@ -565,11 +566,12 @@ class DigitalLifeform:
                         self.collective_utility[action] = 0
                     self.collective_utility[action] += score
                     
-                # 2. Knowledge (Data) - Cycle 2527
+                # 2. Knowledge (Data)
                 external_knowledge = sig.payload.get('knowledge', {})
                 for key, value in external_knowledge.items():
-                    if key not in self.sensed_signals:
-                        self.sensed_signals[key] = value
+                    if key not in self.knowledge:
+                        self.knowledge[key] = value
+                        # print(f"💡 {self.name} learned {key} from Hive Mind.")
 
     def build_wall(self):
         """
@@ -677,10 +679,11 @@ class DigitalLifeform:
         
         # DEBUG (Cycle 2533)
         if self.intent in ['build_wall', 'build_farm']:
-            print(f"DEBUG: act() intent is '{self.intent}'")
+            # print(f"DEBUG: act() intent is '{self.intent}'")
+            pass
         
         # EXECUTION
-        signal_to_broadcast = None
+        signals_to_emit = []
         
         if self.intent == 'move_random':
             dx = random.choice([-1, 0, 1])
@@ -694,7 +697,7 @@ class DigitalLifeform:
             self.construct_nuke()
         elif self.intent == 'broadcast_truth':
             from src.life.signal import Signal 
-            signal_to_broadcast = Signal(type='TRUTH', strength=1.0, source_id=self.id)
+            signals_to_emit.append(Signal(type='TRUTH', strength=1.0, source_id=self.id))
         elif self.intent == 'donate':
             self.donate() 
         elif self.intent == 'escape':
@@ -704,42 +707,41 @@ class DigitalLifeform:
             structure = self.build_wall()
             if structure:
                 from src.life.signal import Signal
-                signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
-                print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal (Wall).")
+                signals_to_emit.append(Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure}))
+                # print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal (Wall).")
         elif self.intent == 'build_farm':
             structure = self.build_farm()
             if structure:
                 from src.life.signal import Signal
-                signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
-                print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal (Farm).")
+                signals_to_emit.append(Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure}))
+                # print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal (Farm).")
         elif self.intent == 'forage':
             self.forage()
         elif self.intent == 'startup':
             self.startup()
         elif self.intent in ['invest', 'hunt', 'war', 'seek_work', 'reproduce']:
-            pass # Handled by ecosystem loop or other mechanisms
+            pass 
             
         # BROADCAST THOUGHTS (Cycle 2525)
-        if self.hive_mind and hasattr(self, 'current_utility_map') and not signal_to_broadcast:
-            signal_to_broadcast = self.broadcast_thought(self.current_utility_map)
+        # Cycle 2541: Allow broadcasting ALONGSIDE other actions
+        if self.hive_mind and hasattr(self, 'current_utility_map'):
+            signals_to_emit.append(self.broadcast_thought(self.current_utility_map))
 
         # Clean up
         self.sensed_signals = {}
         
-        # Cycle 2526: Cultural Inertia (Memory Decay)
+        # Cycle 2526: Cultural Inertia
         if self.hive_mind:
             keys_to_remove = []
             for action in self.collective_utility:
-                self.collective_utility[action] *= 0.9 # Decay 10%
+                self.collective_utility[action] *= 0.9 
                 if self.collective_utility[action] < 1.0:
                     keys_to_remove.append(action)
-            
-            for k in keys_to_remove:
-                del self.collective_utility[k]
+            for k in keys_to_remove: del self.collective_utility[k]
         else:
             self.collective_utility = {} 
             
-        return signal_to_broadcast
+        return signals_to_emit
             
     def reproduce(self):
         # Check intent first
