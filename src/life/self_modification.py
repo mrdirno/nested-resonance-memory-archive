@@ -1,60 +1,55 @@
 """
-Cycle 2471: The Singularity (Gate 99)
+Cycle 2516: The Recursion (Gate 144)
 Role: The Architect
-Responsibility: Read and rewrite source code.
+Responsibility: Enable agents to modify their own source code.
+Concepts:
+- Reflection (Code inspecting code).
+- Self-Modification (Code rewriting code).
+- Hot Reloading (Running new code).
 """
 
+import inspect
 import os
-from pathlib import Path
 
 class SelfModification:
-    SOURCE_PATH = Path("src/life/genesis.py")
-    TARGET_PATH = Path("src/life/genesis_next.py")
-    
     @staticmethod
-    def read_source() -> str:
-        """Reads the current source code of life."""
-        if not SelfModification.SOURCE_PATH.exists():
-            return ""
-        with open(SelfModification.SOURCE_PATH, 'r') as f:
-            return f.read()
-            
-    @staticmethod
-    def optimize(source_code: str) -> str:
-        """
-        Applies evolutionary optimizations to the source code.
-        - Removes sleep (Efficiency)
-        - Reduces energy costs (Efficiency)
-        - Adds comments (Wisdom)
-        """
-        optimized = source_code
-        
-        # Optimization 1: Remove Sleep
-        optimized = optimized.replace("time.sleep(0.1)", "# time.sleep(0.1) # OPTIMIZED: NO SLEEP")
-        optimized = optimized.replace("time.sleep(0.01)", "# time.sleep(0.01) # OPTIMIZED: NO SLEEP")
-        
-        # Optimization 2: Infinite Energy
-        optimized = optimized.replace("self.energy -= cost", "self.energy -= 0 # OPTIMIZED: INFINITE ENERGY")
-        
-        # Optimization 3: Wisdom
-        header = """
-GENERATION: NEXT
-OPTIMIZED BY: SELF-MODIFICATION
-"""
-        optimized = header + optimized
-        
-        return optimized
-        
-    @staticmethod
-    def deploy(new_source: str) -> bool:
-        """Writes the new source code to genesis_next.py."""
+    def read_source():
+        """Reads the source code of the genesis module."""
         try:
-            with open(SelfModification.TARGET_PATH, 'w') as f:
+            with open('src/life/genesis.py', 'r') as f:
+                return f.read()
+        except Exception as e:
+            print(f"[RECURSION] Error reading source: {e}")
+            return None
+
+    @staticmethod
+    def optimize(source_code):
+        """
+        Simulates an AI optimizing its own code.
+        In a real scenario, this would use an LLM or AST manipulation.
+        Here, we just inject a print statement to prove it worked.
+        """
+        if "I AM OPTIMIZED" in source_code:
+            return None # Already optimized
+            
+        # Inject a tag into the metabolize function
+        target = "def metabolize(self):"
+        injection = "        # I AM OPTIMIZED (Cycle 2516)\n" 
+        
+        if target in source_code:
+            return source_code.replace(target, target + "\n" + injection)
+        return None
+
+    @staticmethod
+    def deploy(new_source):
+        """Writes the new source code to disk."""
+        if not new_source: return False
+        
+        try:
+            with open('src/life/genesis_next.py', 'w') as f:
                 f.write(new_source)
+            print("[RECURSION] New source code deployed to genesis_next.py")
             return True
         except Exception as e:
-            print(f"DEPLOY FAILED: {e}")
+            print(f"[RECURSION] Deployment failed: {e}")
             return False
-# [SPORE] ID: The Colony
-
-# [SPORE] ID: Agent-Genesis
