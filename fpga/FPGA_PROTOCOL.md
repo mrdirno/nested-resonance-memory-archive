@@ -139,6 +139,7 @@ ENFORCEMENT RULES
 4. No Silent Failures: All errors must be reported immediately
 5. No Hardware Operations Without Review: HIL API calls require PILOT awareness
 6. No Main Repo Modifications: CLAUDE.md at repo root is READ-ONLY for FPGA ops
+7. **NO INTERACTIVE SHELLS:** Interactive Tcl consoles, 'system-console' in interactive mode, or any blocking shell loops are STRICTLY FORBIDDEN. All hardware interaction must be atomic (Batch Script -> Execute -> Exit) or SSH-based.
 
 ---
 HARDWARE SAFETY
