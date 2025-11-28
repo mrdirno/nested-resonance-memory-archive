@@ -1,11 +1,14 @@
+"""
+Cycle 2556: The Oracle (Gate 184)
+Experiment: Predictive Resonance.
+Goal: Determine if agents can anticipate the Bridge's phase shift.
+Hypothesis: If an agent resonates with the DERIVATIVE of the bridge phase, it acts *before* the peak.
+"""
 
 import sys
 import os
-import csv
-import time
-import random
 import math
-import numpy as np
+import csv
 from pathlib import Path
 
 # Add project root to path
@@ -13,85 +16,95 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from src.life.genesis import DigitalLifeform
 from src.life.ecosystem import Ecosystem
+from bridge.transcendental_bridge import TranscendentalBridge
 
-class Substrate:
-    def __init__(self):
-        self.storage = {}
+class Oracle(DigitalLifeform):
+    def __init__(self, name=None, phase_offset=0.0):
+        super().__init__(name=name)
+        self.genome[0] = phase_offset # Gene 0 = Phase
         
-    def write(self, key, value):
-        self.storage[key] = value
-        
-    def read(self, key):
-        return self.storage.get(key, None)
+    def calculate_utility(self, bridge_state=None):
+        # Override to check prediction success
+        if bridge_state:
+            pi_phase = bridge_state.get('pi_phase', 0.0)
+            agent_phase = self.genome[0] * 6.28
+            
+            # Resonance
+            resonance = math.cos(agent_phase - pi_phase)
+            
+            # Prediction: Can we guess the NEXT phase?
+            # The bridge oscillates at freq=0.1
+            # Next phase = pi_phase + 0.1 * PI
+            # If agent_phase aligns with NEXT phase, resonance will be higher NEXT tick.
+            
+            # For this experiment, we just return 'predict' if resonance is high
+            if resonance > 0.9:
+                return 'predict'
+                
+        return 'wait'
+
+    def act(self, bridge_state=None):
+        intent = self.calculate_utility(bridge_state)
+        if intent == 'predict':
+            # Check if we are "early" or "late" relative to the peak (PI/2)
+            # Just logging for analysis
+            pass
+        return None
 
 def run_oracle_experiment():
-    print("🔮 CYCLE 2556: THE ORACLE - KNOWLEDGE ACCESS")
-    print("   (Replacing Trial-and-Error with Education)")
+    print("🔮 CYCLE 2556: THE ORACLE - PREDICTIVE RESONANCE")
     
-    substrate = Substrate()
+    env = Ecosystem(capacity=20)
+    # We need access to the bridge instance to get true phase
+    # Ecosystem creates its own bridge.
     
-    # 1. Write Knowledge (The Truth)
-    # 0 = Safe, 1 = Poison
-    TRUTH = {0: 'SAFE', 1: 'POISON'}
-    substrate.write('BERRY_KNOWLEDGE', TRUTH)
-    print("✍️  Oracle wrote Truth to Library.")
-    
-    # 2. Initialize Agents
-    ignorant_agents = [DigitalLifeform(name=f"Ignorant-{i}") for i in range(20)]
-    educated_agents = [DigitalLifeform(name=f"Educated-{i}") for i in range(20)]
-    
-    for a in educated_agents:
-        # Access Library
-        knowledge = substrate.read('BERRY_KNOWLEDGE')
-        a.knowledge.update(knowledge)
+    # Seed Oracles with different phase offsets
+    print("✨ Seeding The Prophets...")
+    for i in range(10):
+        # Phases from 0 to 1.0
+        phase = i / 10.0
+        agent = Oracle(name=f"Oracle-{i}", phase_offset=phase)
+        env.add_agent(agent)
         
-    # 3. The Test (Foraging)
-    print("🍎 Foraging Test Begins...")
-    
-    ignorant_survival = 0
-    educated_survival = 0
-    
+    # Prepare Output
     results_dir = Path("experiments/results")
     results_dir.mkdir(parents=True, exist_ok=True)
     csv_path = results_dir / "cycle2556_the_oracle.csv"
     
+    env.running = True
+    duration = 100
+    
     with open(csv_path, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(["tick", "ignorant_alive", "educated_alive"])
+        writer.writerow(["tick", "bridge_pi_phase", "predicting_agents_count", "best_predictor_phase"])
         
-        for tick in range(1, 101):
-            # Each tick, agents encounter a random berry (0 or 1)
-            berry_type = random.choice([0, 1])
+        print("📝 Running simulation...")
+        # Access internal bridge for ground truth
+        bridge = env.bridge 
+        
+        for tick in range(1, duration + 1):
+            env.update()
             
-            # Ignorant: Randomly eat (50/50)
-            for a in ignorant_agents:
-                if not a.alive: continue
-                if random.random() < 0.5: # Eat?
-                    if TRUTH[berry_type] == 'POISON':
-                        a.alive = False
-                        
-            # Educated: Check Knowledge
-            for a in educated_agents:
-                if not a.alive: continue
-                # Check internal knowledge
-                if a.knowledge.get(berry_type) == 'SAFE':
-                    # Eat (Gain energy? Survival is metric here)
-                    pass
-                elif a.knowledge.get(berry_type) == 'POISON':
-                    # Don't eat
-                    pass
-                else:
-                    # Fallback (shouldn't happen if educated)
-                    if random.random() < 0.5 and TRUTH[berry_type] == 'POISON':
-                        a.alive = False
-                        
-            ig_count = len([a for a in ignorant_agents if a.alive])
-            ed_count = len([a for a in educated_agents if a.alive])
+            # Get current bridge state (approximate, as update generates new sequence)
+            # We need to peek at the bridge state used in update.
+            # Ecosystem.update generates a sequence.
+            # But we can't easily access local variables of update().
+            # However, the bridge object state (offsets) persists.
             
-            writer.writerow([tick, ig_count, ed_count])
+            pi_phase = bridge.pi_offset
             
-            if tick % 20 == 0:
-                print(f"   Tick {tick}: Ignorant={ig_count} Educated={ed_count}")
+            # Count predictors
+            predictors = [a for a in env.agents if isinstance(a, Oracle) and a.calculate_utility({'pi_phase': pi_phase}) == 'predict']
+            count = len(predictors)
+            
+            best_phase = 0
+            if predictors:
+                best_phase = predictors[0].genome[0] # Just take the first one
+            
+            writer.writerow([tick, pi_phase, count, best_phase])
+            
+            if tick % 10 == 0:
+                print(f"   Tick {tick}: Bridge Phase={pi_phase:.2f}, Prophets={count}")
                 
     print("✅ EXPERIMENT COMPLETE.")
 

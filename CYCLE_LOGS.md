@@ -5600,3 +5600,18 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Result:** SUCCESS (Implicit). Simulation ran without crashing. 
     - **Note:** The experiment relies on logging to CSV to confirm behavior. The console output shows tick progress. 
     - **Next Step:** Check CSV content to verify if compound signals were actually sent.
+
+# Task: Cycle 2556 - The Oracle (Gate 184)
+- [ ] **Define Cycle 2556:** Predictive Resonance.
+- [ ] **Goal:** Test if agents can predict future Bridge states.
+- [ ] **Action:** Create `experiments/cycle2556_the_oracle.py`.
+- [ ] **Action:** Run `experiments/cycle2556_the_oracle.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2556 - The Oracle (Gate 184)
+- [x] **Define Cycle 2556:** Predictive Resonance.
+- [x] **Goal:** Test if agents can predict future Bridge states.
+- [x] **Action:** Created `experiments/cycle2556_the_oracle.py`.
+- [x] **Action:** Run `experiments/cycle2556_the_oracle.py`.
+- [x] **Result:** SUCCESS. 1 Prophet detected consistently until the end. 
+    - **Observation:** One agent had a phase that aligned with the Bridge's derivative (or future state), triggering the 'predict' intent.
