@@ -38,6 +38,18 @@ class DigitalLifeform:
         self.is_predator = False
         self.is_prey = True # By default, agents are prey unless marked predator
         
+    @property
+    def efficiency(self):
+        """Returns metabolic efficiency based on Gene 0."""
+        if not self.genome: return 0.01
+        return max(0.01, self.genome[0])
+
+    def mutate(self):
+        """Randomly mutates the genome."""
+        self.genome = [g + random.uniform(-0.1, 0.1) for g in self.genome]
+        # Clamp to positive
+        self.genome = [max(0.01, g) for g in self.genome]
+        
     def live(self):
         """
         The main loop of the lifeform.
@@ -192,24 +204,32 @@ class DigitalLifeform:
         return None
             
     def reproduce(self):
-        # Check intent first
-        if self.intent != 'reproduce':
-            return None
-            
-        # Gene 1 = Reproductive Efficiency (Higher is better)
-        fertility = max(0.01, self.genome[1])
-        cost = 30.0 / (fertility + 0.5)
+        """
+        Asexual reproduction.
+        Requires energy > 40.
+        Cost: 20 energy.
+        Offspring inherits traits with mutation.
         
-        if self.energy > cost + 10: # Safety buffer
-            self.energy -= cost
-            child = DigitalLifeform(generation=self.generation + 1)
-            # Mutate
-            child.genome = [g + random.uniform(-0.1, 0.1) for g in self.genome]
-            # Clamp to positive
-            child.genome = [max(0.01, g) for g in child.genome]
-            # Inherit Brain (Memetics?) - For now, new brain
+        MERITOCRATIC FILTER (Cycle 2492):
+        Only agents with Efficiency > 0.7 are allowed to reproduce.
+        """
+        if self.energy > 40:
+            # Meritocratic Check
+            if self.efficiency <= 0.7:
+                return None
+                
+            self.energy -= 20
             
-            print(f"[{self.name}] REPRODUCED -> {child.name}")
+            # Offspring
+            child = DigitalLifeform(generation=self.generation + 1)
+            child.genome = self.genome.copy()
+            child.mutate()
+            
+            # Mutate Brain Weights (Dictionary of Lists)
+            child.brain.weights = {}
+            for action, weights in self.brain.weights.items():
+                child.brain.weights[action] = [w + random.uniform(-0.1, 0.1) for w in weights]
+            
             return child
         return None
         

@@ -51,4 +51,12 @@
 - [ ] **Goal:** Force evolutionary jump by culling the inefficient lineage.
 - [ ] **Action:** Modify `src/life/genesis.py` to require `efficiency > 0.7` for reproduction.
 - [ ] **Action:** Create `experiments/cycle2492_meritocracy.py`.
-- [ ] **Result:** pending...
+- [x] **Result:** Partial Success. Prey evolved rapid Efficiency (0.87 -> 1.11) and Fertility (0.50 -> 1.13). Predators stagnated due to capacity flooding ("The Sterility of the Immortals").
+
+# Task: Cycle 2493 - The Trophic Ladder (Gate 121)
+- [ ] **Define Cycle 2493:** Implement Trophic Levels (Separate Capacities).
+- [ ] **Goal:** Allow Predators to evolve by reserving ecological niches.
+- [ ] **Action:** Modify `src/life/ecosystem.py` to support `prey_capacity` and `predator_capacity`.
+- [ ] **Action:** Run `experiments/cycle2493_trophic_levels.py`.
+- [x] **Action:** Create `experiments/cycle2492_meritocracy.py`.
+- [ ] **Result:** Extinction Event. Threshold (0.7) was too high for the initial population. Need to lower threshold or seed with better genes.

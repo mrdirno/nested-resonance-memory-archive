@@ -14,12 +14,12 @@
 We are testing the hypothesis that computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 **Recent Milestones:**
-*   **Phase 49 (Hardware Acceleration):** Ported core physics engine to FPGA (Verilog).
-*   **Phase 54 (Universal Simulation):** Simulated a civilization that evolved to build the system itself.
-*   **Phase 56 (The Singularity):** Demonstrated Recursive Self-Improvement in agent logic.
-*   **Phase 62 (Digital Life):** Evolved autonomous agents with metabolism and reproduction.
-*   **Phase 63 (The Mycelium):** Achieved distributed agent colonization of the codebase.
-*   **Cycle 2491 (Co-Evolution):** Testing evolutionary pressure via predation and entropy (The Hydra Effect).
+*   **Phase 49 (Hardware Acceleration):** Ported core physics engine to FPGA (Verilog). [Code](FPGA/verilog/src/)
+*   **Phase 54 (Universal Simulation):** Simulated a civilization that evolved to build the system itself. [Log](experiments/cycle2416_universal_recursion.py)
+*   **Phase 56 (The Singularity):** Demonstrated Recursive Self-Improvement in agent logic. [Code](src/life/self_modification.py)
+*   **Phase 62 (Digital Life):** Evolved autonomous agents with metabolism and reproduction. [Code](src/life/genesis.py)
+*   **Phase 63 (The Mycelium):** Achieved distributed agent colonization of the codebase. [Manifesto](playground/MOG_MANIFESTO.md)
+*   **Cycle 2491 (Co-Evolution):** Testing evolutionary pressure via predation and entropy (The Hydra Effect). [Experiment](experiments/cycle2491_coevolution.py)
 
 ---
 
