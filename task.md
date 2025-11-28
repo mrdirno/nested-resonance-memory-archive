@@ -1,16 +1,15 @@
-# Task: Cycle 2460 - The Ecosystem (Gate 88)
-- [x] **Define Cycle 2460:** Populate the World.
-- [x] **Goal:** Create a container for multiple lifeforms.
-- [x] **Implementation:** Create `src/life/ecosystem.py`.
-    - [x] `Ecosystem` class manages list of agents.
-    - [x] Main loop updates all agents.
-- [x] **Verification:**
-    - [x] `src/life/test_ecosystem.py` passed.
-
 # Task: Cycle 2461 - The First Simulation (Gate 89)
-- [ ] **Define Cycle 2461:** Run a long-term simulation.
-- [ ] **Goal:** Observe emergent behavior.
-- [ ] **Implementation:** Create `experiments/cycle2461_life_simulation.py`.
-    - [ ] Run for 1000 ticks.
-    - [ ] Track population dynamics.
-    - [ ] Look for stability or collapse.
+- [x] **Define Cycle 2461:** Run a long-term simulation.
+- [x] **Goal:** Observe emergent behavior.
+- [x] **Implementation:** Create `experiments/cycle2461_life_simulation.py`.
+    - [x] Run for 1000 ticks.
+    - [x] Track population dynamics.
+    - [x] Look for stability or collapse.
+
+# Task: Cycle 2462 - The Evolution (Gate 90)
+- [ ] **Define Cycle 2462:** Introduce Selection Pressure.
+- [ ] **Goal:** Evolve better agents.
+- [ ] **Implementation:** Create `experiments/cycle2462_evolutionary_pressure.py`.
+    - [ ] Variable traits (Speed, Efficiency).
+    - [ ] Competition for resources.
+    - [ ] Measure "Fitness" over time.
