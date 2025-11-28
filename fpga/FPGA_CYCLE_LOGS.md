@@ -41,13 +41,68 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
-### Session 2025-11-28 | Cycle 110
-**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
-**Duration**: 10:32 - [Ongoing]
-**Focus**: Deploy and Verify HPS-FPGA Bridge
+### Session 2025-11-28 | Cycle 111
+**CO-PILOT**: Gemini 2.0 Flash
+**Duration**: 10:44 - [Ongoing]
+**Focus**: Data Loop Integration & Streaming Test
 
 #### Completed
-- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Performed Due Diligence (DD).
+- [x] Analyzed `nrm_resonance.v`: Confirmed it is currently a closed-loop simulation (LFSR source) with no external data input ports exposed.
+- [x] Reviewed `bridge_server.c`: Maps LWH2F bridge at `0xFF200000`.
+
+#### In Progress
+- [ ] FPGA Logic Update (Needs Qsys).
+
+#### Blocked/Deferred
+- [x] FPGA Logic Update: Requires Qsys/Platform Designer integration to connect HPS Bridge to `nrm_resonance` inputs.
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated.
+- `fpga/de10-nano/hps_sw/nrm_stream_test.py` - Streaming verification script.
+
+#### Technical Notes
+- **Hypothesis Confirmed**: The value `0x00000002` at offset 0 is a default system ID or noise. `WR` commands to `0x0000` and `0x1000` return "OK" from the server but do not persist in memory, confirming the lack of mapped slaves in the FPGA fabric.
+- **Data Loop**: The software side (Host -> HPS -> Bridge) is fully functional. Throughput is ~1114 samples/sec.
+- **Next Steps**: The FPGA bitstream must be updated to instantiate a Qsys system with an LWH2F slave (e.g., On-Chip Memory or PIO) connected to `nrm_resonance.v` inputs.
+
+#### Next Session Recommendations
+- **PILOT**: Launch Quartus (GUI required) to create a Qsys system linking HPS LWH2F to the fabric.
+- **PILOT**: Integrate `nrm_resonance.v` as a custom Qsys component.
+
+---
+
+### Session 2025-11-28 | Cycle 110
+**CO-PILOT**: Gemini 2.0 Flash
+**Duration**: 10:32 - 10:44
+**Focus**: Bridge Server Deployment & Validation
+
+#### Completed
+- [x] Performed Due Diligence (DD)
+- [x] **Operationalized Bridge Server**: Deployed `bridge_server` to DE10-Nano.
+  - *Workaround*: Target root filesystem is 100% full. Deployed to `/tmp/bridge_server`.
+- [x] **Connectivity Verification**:
+  - `PING` -> `PONG` confirmed via `nrm_client.py`.
+- [x] **Memory Map Verification**:
+  - `RD 0x00` returned `0x00000002` (Stable).
+  - `RD 0x10`, `RD 0x20` returned `0x00000000`.
+
+#### In Progress
+- [ ] Map the `nrm_resonance` Verilog signals to the specific Qsys offsets.
+
+#### Blocked/Deferred
+- [ ] Root Filesystem Cleanup: `/dev/root` is at 100% usage.
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Updated.
+
+#### Technical Notes
+- **Bridge Status**: Active on TCP 5000.
+- **LWH2F Access**: Validated. Reading `0xFF200000` works.
+
+#### Next Session Recommendations
+- **PILOT**: Perform a full address scan (0x00 to 0x100).
+- **PILOT**: Clean up DE10-Nano disk space.
 - [x] Verified Previous Session Status (Files Staged).
 
 #### In Progress
