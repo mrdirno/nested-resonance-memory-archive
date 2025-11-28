@@ -1,15 +1,14 @@
-# Task: Cycle 2461 - The First Simulation (Gate 89)
-- [x] **Define Cycle 2461:** Run a long-term simulation.
-- [x] **Goal:** Observe emergent behavior.
-- [x] **Implementation:** Create `experiments/cycle2461_life_simulation.py`.
-    - [x] Run for 1000 ticks.
-    - [x] Track population dynamics.
-    - [x] Look for stability or collapse.
-
 # Task: Cycle 2462 - The Evolution (Gate 90)
-- [ ] **Define Cycle 2462:** Introduce Selection Pressure.
-- [ ] **Goal:** Evolve better agents.
-- [ ] **Implementation:** Create `experiments/cycle2462_evolutionary_pressure.py`.
-    - [ ] Variable traits (Speed, Efficiency).
-    - [ ] Competition for resources.
-    - [ ] Measure "Fitness" over time.
+- [x] **Define Cycle 2462:** Introduce Selection Pressure.
+- [x] **Goal:** Evolve better agents.
+- [x] **Implementation:** Create `experiments/cycle2462_evolutionary_pressure.py`.
+    - [x] Variable traits (Speed, Efficiency).
+    - [x] Competition for resources.
+    - [x] Measure "Fitness" over time.
+
+# Task: Cycle 2463 - The Neural Link (Gate 91)
+- [ ] **Define Cycle 2463:** Give agents a brain.
+- [ ] **Goal:** Connect `DigitalLifeform` to `nrm_core`.
+- [ ] **Action:** Create `src/life/brain.py`.
+    - [ ] Use `nrm_core.memory` for agent decisions.
+    - [ ] Verify learning.

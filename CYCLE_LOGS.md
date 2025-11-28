@@ -3917,3 +3917,16 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] Tracked population dynamics (Stable ~50).
 - [x] **Verification:** Ecosystem sustained 48-50 agents.
 - [x] **Result:** Long-Term Stability Confirmed.
+
+# Task: Cycle 2462 - The Evolution (Gate 90)
+- [x] **Define Cycle 2462:** Introduce Selection Pressure.
+- [x] **Implementation:** Created `experiments/cycle2462_evolutionary_pressure.py`.
+    - [x] Modified `src/life/genesis.py` to use genome for metabolism.
+    - [x] Ran for 2000 ticks with 20
+# Task: Cycle 2462 - The Evolution (Gate 90)
+- [x] **Define Cycle 2462:** Introduce Selection Pressure.
+- [x] **Implementation:** Created `experiments/cycle2462_evolutionary_pressure.py`.
+    - [x] Modified `src/life/genesis.py` to use genome for metabolism.
+    - [x] Ran for 2000 ticks with 20% random energy input.
+- [x] **Verification:** Efficiency increased (0.5 -> 0.620), Fertility increased (0.5 -> 0.562).
+- [x] **Result:** Natural Selection Operational.

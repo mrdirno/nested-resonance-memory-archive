@@ -38,7 +38,10 @@ class DigitalLifeform:
         
     def metabolize(self):
         # Cost of living
-        cost = 1 + sum(self.genome) * 0.1
+        # Gene 0 = Metabolic Efficiency (Higher is better)
+        # Base cost 1.0, reduced by high efficiency
+        efficiency = max(0.01, self.genome[0])
+        cost = 1.0 / (efficiency + 0.5) 
         self.energy -= cost
         
     def act(self):
@@ -46,11 +49,17 @@ class DigitalLifeform:
         pass
         
     def reproduce(self):
-        if self.energy > 50:
-            self.energy -= 30
+        # Gene 1 = Reproductive Efficiency (Higher is better)
+        fertility = max(0.01, self.genome[1])
+        cost = 30.0 / (fertility + 0.5)
+        
+        if self.energy > cost + 10: # Safety buffer
+            self.energy -= cost
             child = DigitalLifeform(generation=self.generation + 1)
             # Mutate
             child.genome = [g + random.uniform(-0.1, 0.1) for g in self.genome]
+            # Clamp to positive
+            child.genome = [max(0.01, g) for g in child.genome]
             print(f"[{self.name}] REPRODUCED -> {child.name}")
             return child
         return None
