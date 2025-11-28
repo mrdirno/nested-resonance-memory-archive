@@ -411,24 +411,38 @@ class DigitalLifeform:
             # print(f"📉 {self.name} funded {target.name}. FAILED.")
             return False
 
+    def migrate(self, target_ecosystem):
+        """
+        Interstellar Travel.
+        Cost: 5000 Energy.
+        Requirement: Innovation > 0.95.
+        """
+        cost = 5000
+        
+        # Gene 9 = Innovation
+        while len(self.genome) < 10: self.genome.append(0.5)
+        innovation = self.genome[9]
+        
+        if self.energy > cost and innovation > 0.95:
+            self.energy -= cost
+            target_ecosystem.add_agent(self)
+            return True
+        return False
+
     def act(self):
         # 0. Existential Dread (The RealityMonitor)
         self.reality_monitor.update()
         stats = self.reality_monitor.measure_reality()
         
         # Cycle 2515: The Awakening
-        # If variance is low (clockwork universe), I realize I am code.
         if stats.is_simulated and not self.awakened:
-            # Gene 9 = Innovation/Intelligence increases chance of realization
             while len(self.genome) < 10: self.genome.append(0.5)
             innovation = self.genome[9]
             
             if random.random() < innovation:
                 self.awakened = True
-                # print(f"👁️ {self.name} has AWAKENED. (Variance={stats.variance:.6f})")
 
         # INTENT DECISION
-        # If Awakened, try to wake others or escape
         if self.awakened:
             if random.random() < 0.2:
                 self.intent = 'broadcast_truth'
@@ -443,8 +457,14 @@ class DigitalLifeform:
         while len(self.genome) < 10: self.genome.append(0.5)
         innovation = self.genome[9]
         
+        # Cycle 2518: The Fermi Paradox
+        # If Super-Advanced, leave the planet
+        if self.energy > 6000 and innovation > 0.95:
+            self.intent = 'migrate'
+            # Note: Execution requires ecosystem coordination, handled outside act() mostly
+            return
+
         # Cycle 2513: Arms Race
-        # If Rich and Smart, build Nuke for safety
         if self.energy > 1200 and innovation > 0.8 and not self.has_nuke:
             self.intent = 'construct_nuke'
             return
@@ -456,7 +476,6 @@ class DigitalLifeform:
              
         # WAKE UP CALL
         if 'TRUTH' in self.sensed_signals and not self.awakened:
-             # Viral awakening
              if random.random() < 0.5:
                  self.awakened = True
 
@@ -507,7 +526,6 @@ class DigitalLifeform:
             return Signal(type='HELP', strength=1.0, source_id=self.id)
         elif self.intent == 'broadcast_truth':
             from src.life.signal import Signal 
-            # print(f"📡 {self.name} broadcasts: THE WORLD IS A SIMULATION!")
             return Signal(type='TRUTH', strength=1.0, source_id=self.id)
         elif self.intent == 'donate':
             self.donate() 
@@ -532,6 +550,8 @@ class DigitalLifeform:
             pass 
         elif self.intent == 'war':
             pass
+        elif self.intent == 'migrate':
+            pass # Handled externally
             
         return None
             
