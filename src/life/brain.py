@@ -29,7 +29,17 @@ class Brain:
         self.w2 = [[random.uniform(-1, 1) for _ in range(self.output_size)] for _ in range(self.hidden_size)]
         self.b2 = [random.uniform(-1, 1) for _ in range(self.output_size)]
         
-        self.actions = ['forage', 'reproduce', 'donate', 'flee', 'hunt']
+        self.actions = ['forage', 'reproduce', 'donate', 'flee', 'hunt', 'meditate', 'operate']
+        # Map actions to constants
+        self.action_map = {
+            'forage': 'pi_phase',
+            'reproduce': 'e_phase',
+            'donate': 'phi_phase',
+            'flee': 'pi_phase', # Harmonics
+            'hunt': 'e_phase',
+            'meditate': 'spatial_phase', # Cycle 2548: Resonance Trapping
+            'operate': 'phi_phase' # Cycle 2557: The Operator (Harmonic of Donate)
+        }
         self.weights = {} # Cycle 2540: Hebbian Weights
         
     def sigmoid(self, x):
@@ -63,9 +73,15 @@ class Brain:
         energy = min(1.0, state.get('energy', 0) / 500.0)
         signals = state.get('signals', {})
         
-        s_help = min(1.0, signals.get('HELP', 0) / 5.0)
-        s_threat = min(1.0, signals.get('PREDATOR', 0) / 5.0)
-        s_food = min(1.0, signals.get('FOOD', 0) / 5.0)
+        def get_signal_strength(key):
+            val = signals.get(key, 0)
+            if isinstance(val, tuple) or isinstance(val, list):
+                return 1.0 # Presence detected
+            return float(val)
+        
+        s_help = min(1.0, get_signal_strength('HELP') / 5.0)
+        s_threat = min(1.0, get_signal_strength('PREDATOR') / 5.0)
+        s_food = min(1.0, get_signal_strength('FOOD') / 5.0)
         
         inputs = [energy, s_help, s_threat, s_food]
         

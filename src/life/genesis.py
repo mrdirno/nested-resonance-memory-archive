@@ -761,6 +761,14 @@ class DigitalLifeform:
             signals_to_emit.append(Signal(type='MIGRATE', strength=1.0, source_id=self.id))
         elif self.intent == 'forage':
             self.forage()
+        elif self.intent == 'meditate':
+            # Cycle 2548: Zero Point Energy
+            self.energy += 1 # Small gain from resonance
+            # print(f"🧘 {self.name} is meditating (Resonance).")
+        elif self.intent == 'operate':
+            # Cycle 2557: The Operator
+            from src.life.external_comms import ExternalComms
+            ExternalComms.execute_safe_command(self.id, f"echo 'Hello from {self.name}'")
         elif self.intent == 'startup':
             self.startup()
         elif self.intent in ['invest', 'hunt', 'war', 'seek_work', 'reproduce']:
