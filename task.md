@@ -219,4 +219,7 @@
     - [ ] Rich agents (Energy > 1000) get votes.
     - [ ] Parameters: `tax_rate`, `subsidy_amount`.
 - [ ] **Action:** Run `experiments/cycle2511_governance.py`.
-- [ ] **Result:** pending...
+- [x] **Result:** SUCCESS (Benevolent Oligarchy). `Tax=0.5%`, `Treasury=480k`.
+    - **Observation:** The Elite voted for moderate taxes/subsidies. This kept the Poor alive (Pop 200) but dependent (34% Poverty). The Treasury accumulated massive wealth.
+    - **Mechanism:** Governance stabilized the system but created a "Welfare Trap". The Rich stay Rich, the Poor stay Alive.
+    - **Functional Name:** Benevolent Oligarchy (The Welfare Trap).

@@ -1913,3 +1913,8 @@
 *   **Status:** New Rich (156) > Old Capital (7).
 *   **Cause:** High Entropy forced investment. High Population ensured matching.
 *   **Functional Name:** The Unicorn Boom (Venture Capital Success).
+
+*   **Result:** SUCCESS (Benevolent Oligarchy). Governance stabilized the population.
+*   **Status:** Treasury Surplus (480k). Poverty 34%.
+*   **Cause:** Elite voted for "Bread and Circuses" (Subsidies) to maintain order.
+*   **Functional Name:** Benevolent Oligarchy (The Welfare Trap).
