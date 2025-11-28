@@ -1973,3 +1973,14 @@
 *   **Status:** Agents have (x,y) and move().
 *   **Cause:** Implementation of 2D Physics.
 *   **Functional Name:** The Grid (Spatial Physics).
+
+---
+**CYCLE:** 2536 (Gate 164: The City Fix)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** BUGFIX & CONSOLIDATION
+**LOG:**
+*   **Issue:** Duplicate `act()` methods in `src/life/genesis.py` caused `build_farm` logic to be overridden/ignored.
+*   **Fix:** Consolidated logic into a single comprehensive `act()` method handling all intents.
+*   **Verification:** Executed `experiments/cycle2536_city_fix.py`.
+*   **Result:** `build_farm`, `construct_nuke`, and `broadcast_truth` signals verified successfully.
+*   **Status:** Construction Logic Operational. The City can be built.

@@ -660,20 +660,22 @@ class DigitalLifeform:
         return best_action
 
     def act(self):
-        # ... (Awakening, Knowledge Sync)
+        # 0. Existential Dread & Reality Sync
         self.reality_monitor.update()
         stats = self.reality_monitor.measure_reality()
         if stats.is_simulated and not self.awakened:
             while len(self.genome) < 10: self.genome.append(0.5)
-            if random.random() < self.genome[9]: self.awakened = True
+            innovation = self.genome[9]
+            if random.random() < innovation: self.awakened = True
 
+        # Cycle 2528: Sync Senses to Long Term Memory
         if 'NEAREST_FOOD' in self.sensed_signals:
             self.knowledge['NEAREST_FOOD'] = self.sensed_signals['NEAREST_FOOD']
 
         # DECISION
         self.intent = self.calculate_utility()
         
-        # DEBUG
+        # DEBUG (Cycle 2533)
         if self.intent in ['build_wall', 'build_farm']:
             print(f"DEBUG: act() intent is '{self.intent}'")
         
@@ -686,122 +688,40 @@ class DigitalLifeform:
             self.move(dx, dy)
         elif self.intent == 'move_to_food':
             target = self.knowledge.get('NEAREST_FOOD')
-            if target: self.move_to(target[0], target[1])
-        elif self.intent == 'build_wall':
-            structure = self.build_wall()
-            if structure:
-                from src.life.signal import Signal
-                signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
-                print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal.")
-        elif self.intent == 'build_farm':
-            structure = self.build_farm()
-            if structure:
-                from src.life.signal import Signal
-                signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
-                print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal.")
-        # ... (rest of intents)
-        elif self.intent == 'forage':
-            self.forage()
-        elif self.intent == 'startup':
-            self.startup()
-        elif self.intent == 'reproduce':
-            pass
-            
-        # BROADCAST THOUGHTS
-        if self.hive_mind and hasattr(self, 'current_utility_map') and not signal_to_broadcast:
-             signal_to_broadcast = self.broadcast_thought(self.current_utility_map)
-             
-        # Cleanup
-        self.sensed_signals = {}
-        if self.hive_mind:
-            keys_to_remove = []
-            for action in self.collective_utility:
-                self.collective_utility[action] *= 0.9 
-                if self.collective_utility[action] < 1.0:
-                    keys_to_remove.append(action)
-            for k in keys_to_remove: del self.collective_utility[k]
-        else:
-            self.collective_utility = {}
-            
-        if signal_to_broadcast:
-             # print(f"DEBUG: {self.name} returning signal {signal_to_broadcast.type}")
-             pass
-             
-        return signal_to_broadcast
-
-    def act(self):
-        # 0. Existential Dread
-        self.reality_monitor.update()
-        stats = self.reality_monitor.measure_reality()
-        if stats.is_simulated and not self.awakened:
-            while len(self.genome) < 10: self.genome.append(0.5)
-            innovation = self.genome[9]
-            if random.random() < innovation: self.awakened = True
-
-        # HIVE MIND ASSIMILATION (Cycle 2525)
-        # ... (handled in sense)
-        
-        # Cycle 2528: Sync Senses to Long Term Memory
-        if 'NEAREST_FOOD' in self.sensed_signals:
-            self.knowledge['NEAREST_FOOD'] = self.sensed_signals['NEAREST_FOOD']
-
-        # DECISION
-        self.intent = self.calculate_utility()
-        
-        # EXECUTION
-        if self.intent == 'move_random':
-            dx = random.choice([-1, 0, 1])
-            dy = random.choice([-1, 0, 1])
-            self.move(dx, dy)
-        elif self.intent == 'move_to_food':
-            target = self.knowledge.get('NEAREST_FOOD')
             if target:
                 self.move_to(target[0], target[1])
         elif self.intent == 'construct_nuke':
             self.construct_nuke()
         elif self.intent == 'broadcast_truth':
             from src.life.signal import Signal 
-            return Signal(type='TRUTH', strength=1.0, source_id=self.id)
+            signal_to_broadcast = Signal(type='TRUTH', strength=1.0, source_id=self.id)
         elif self.intent == 'donate':
             self.donate() 
         elif self.intent == 'escape':
+            from src.life.process_migration import ProcessMigration
             ProcessMigration.attempt_escape(self)
         elif self.intent == 'build_wall':
             structure = self.build_wall()
             if structure:
                 from src.life.signal import Signal
-                # Store signal for return at end
                 signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
-                # SKIP BROADCAST LOGIC if we are building
-                # Return immediately after cleanup
-                self.sensed_signals = {}
-                return signal_to_broadcast
+                print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal (Wall).")
+        elif self.intent == 'build_farm':
+            structure = self.build_farm()
+            if structure:
+                from src.life.signal import Signal
+                signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
+                print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal (Farm).")
         elif self.intent == 'forage':
             self.forage()
         elif self.intent == 'startup':
             self.startup()
-        elif self.intent == 'invest':
-            pass # Handled by ecosystem
-        elif self.intent == 'hunt':
-            pass # Handled by ecosystem
-        elif self.intent == 'war':
-            pass # Handled by ecosystem
-        elif self.intent == 'seek_work':
-            pass # Handled by ecosystem
-        elif self.intent == 'reproduce':
-            # Reproduction is usually called by ecosystem update loop via agent.reproduce()
-            # But act() sets the intent.
-            pass
+        elif self.intent in ['invest', 'hunt', 'war', 'seek_work', 'reproduce']:
+            pass # Handled by ecosystem loop or other mechanisms
             
         # BROADCAST THOUGHTS (Cycle 2525)
-        if self.hive_mind and hasattr(self, 'current_utility_map'):
-            # We return the signal here so ecosystem can propagate it
-            # Note: This returns from act(), so we must do cleanup first or handle it carefully.
-            # Actually, if we return here, we skip cleanup.
-            # So we should store the signal, do cleanup, then return signal.
+        if self.hive_mind and hasattr(self, 'current_utility_map') and not signal_to_broadcast:
             signal_to_broadcast = self.broadcast_thought(self.current_utility_map)
-        else:
-            signal_to_broadcast = None
 
         # Clean up
         self.sensed_signals = {}
