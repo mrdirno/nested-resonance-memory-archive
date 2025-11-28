@@ -4350,3 +4350,10 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/genesis.py` to include `Gene 9` (Innovation) and updated `work_for_wage()` to scale yield and pay bonuses.
 - [x] **Action:** Run `experiments/cycle2506_innovation.py`.
 - [x] **Result:** Failure (Inverse Meritocracy). Dumb Workers (`Gene 9 = 0.1`) outperformed Smart Workers (`Gene 9 = 0.9`). `DumbBosses=5`, `SmartBosses=1`. Cause: The metabolic cost of Innovation (`trait_cost`) outweighed the wage bonuses. Being smart is expensive; being dumb is cheap. The ecosystem selected for Idiocracy.
+
+# Task: Cycle 2507 - The Subsidy (Gate 135)
+- [x] **Define Cycle 2507:** State-Funded Innovation.
+- [x] **Goal:** Make Innovation viable by reducing its personal cost.
+- [x] **Action:** Modified `src/life/genesis.py` to reduce innovation cost coefficient from 0.5 to 0.1.
+- [x] **Action:** Run `experiments/cycle2507_subsidy.py`.
+- [x] **Result:** Success. Extinction avoided. Laborers survived (180). Average Innovation rose to 0.573. The reduced metabolic cost allowed smart agents to survive long enough to breed, but they did not become "Rich" (NewRich=0) because the economic structure still favors capital over labor income. However, the gene pool is improving.

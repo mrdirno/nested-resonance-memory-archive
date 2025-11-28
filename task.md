@@ -169,7 +169,11 @@
     - [ ] Update `work_for_wage()`: Yield scales with Innovation.
     - [ ] Employers pay bonuses for high yield.
 - [ ] **Action:** Run `experiments/cycle2506_innovation.py`.
-- [x] **Result:** Failure (Inverse Meritocracy).
-    - **Observation:** Dumb Workers (`Gene 9 = 0.1`) outperformed Smart Workers (`Gene 9 = 0.9`). `DumbBosses=5`, `SmartBosses=1`.
-    - **Cause:** The metabolic cost of Innovation (`trait_cost`) outweighed the wage bonuses. Being smart is expensive; being dumb is cheap.
-    - **Functional Name:** The Idiocracy (Anti-Intellectual Selection).
+- [x] **Result:** Failure (Inverse Meritocracy). Dumb Workers outperformed Smart Workers. The metabolic cost of Innovation outweighed the wage bonuses. Being smart is expensive.
+
+# Task: Cycle 2507 - The Subsidy (Gate 135)
+- [ ] **Define Cycle 2507:** State-Funded Innovation.
+- [ ] **Goal:** Make Innovation viable by reducing its personal cost.
+- [ ] **Action:** Modify `src/life/genesis.py` to cap innovation cost.
+- [ ] **Action:** Run `experiments/cycle2507_subsidy.py`.
+- [ ] **Result:** pending...

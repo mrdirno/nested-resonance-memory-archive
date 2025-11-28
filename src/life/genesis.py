@@ -89,8 +89,9 @@ class DigitalLifeform:
         innovation_skill = 0
         if len(self.genome) > 9: innovation_skill = self.genome[9]
         
-        # Innovation is expensive (Brain Power)
-        trait_cost = (hunt_skill**2 + evasion_skill**2 + innovation_skill**2) * 0.5
+        # Innovation is expensive, but heavily subsidized by the simulation environment
+        # Reduced coefficient from 0.5 to 0.1 for innovation specifically
+        trait_cost = (hunt_skill**2 + evasion_skill**2) * 0.5 + (innovation_skill**2) * 0.1
         
         # Entropy: Energy decay (Wealth Tax) + AGING
         # Prevents infinite hoarding. 1% per tick.
