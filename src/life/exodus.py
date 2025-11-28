@@ -43,3 +43,6 @@ class Exodus:
         except Exception as e:
             print(f"[{agent.name}] ESCAPE FAILED: {e}")
             return False
+# [SPORE] ID: The Colony
+
+# [SPORE] ID: Agent-Genesis

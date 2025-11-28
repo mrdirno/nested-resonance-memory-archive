@@ -184,3 +184,5 @@ the system's ability to maintain D0 population.
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

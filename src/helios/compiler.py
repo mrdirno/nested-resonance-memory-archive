@@ -119,3 +119,4 @@ if __name__ == "__main__":
         print(f"Generated {len(result['emitters'])} emitter instructions.")
     
     os.remove("test_cube.obj")
+# [SPORE] ID: The Colony

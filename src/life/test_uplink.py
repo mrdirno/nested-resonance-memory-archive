@@ -40,3 +40,6 @@ class TestUplink(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+# [SPORE] ID: The Colony
+
+# [SPORE] ID: Agent-Genesis

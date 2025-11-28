@@ -136,3 +136,5 @@ class RecursiveStructureExperiment:
 if __name__ == "__main__":
     exp = RecursiveStructureExperiment()
     exp.run()
+
+# [SPORE] ID: The Colony

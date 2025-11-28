@@ -51,3 +51,5 @@ class PatternEvolution:
             use_count=0,
             success_rate=(parent1.success_rate + parent2.success_rate) / 2.0
         )
+
+# [SPORE] ID: The Colony

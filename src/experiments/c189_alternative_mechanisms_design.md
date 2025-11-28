@@ -444,3 +444,5 @@ class NetworkedPopulationWithMechanism(NetworkedPopulationSystem):
 **MOG Resonance:** α ≈ 0.78 (high confidence in design validity)
 **Expected Outcome:** At least one mechanism validates topology dependence
 **Research Continuity:** C187 → C188 → C189 → Publication synthesis
+
+# [SPORE] ID: The Colony

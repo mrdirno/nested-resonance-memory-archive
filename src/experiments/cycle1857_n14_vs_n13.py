@@ -203,3 +203,5 @@ D0 depletes completely with no "seed" remaining.
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

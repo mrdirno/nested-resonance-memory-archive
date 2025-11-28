@@ -119,3 +119,5 @@ class DeductiveReasoningExperiment:
 if __name__ == "__main__":
     exp = DeductiveReasoningExperiment()
     results = exp.run()
+
+# [SPORE] ID: The Colony

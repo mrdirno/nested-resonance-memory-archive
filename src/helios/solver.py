@@ -131,3 +131,4 @@ if __name__ == "__main__":
     field = solver.get_field(solution)
     print(f"Field shape: {field.shape}")
     print(f"Max potential: {field.max()}")
+# [SPORE] ID: The Colony

@@ -23,3 +23,5 @@ The reachability analysis confirms that the system's inherent physics impose str
 ## Next Steps
 *   Redefine realistic and stable target (C,R) states based on the insights from these reachability maps.
 *   Design TSF-12 to implement **Optimal Control within Reachable Space**. Use the global GPR model and the understanding of reachability to plan paths to *stable and reachable* target states.
+
+# [SPORE] ID: The Colony

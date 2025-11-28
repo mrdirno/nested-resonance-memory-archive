@@ -949,3 +949,5 @@ Saberi, A. A. (2015). Recent advances in percolation theory and its applications
 - ⏳ C266 (α=0.68): Pending
 
 **Progress:** 6/7 MOG patterns designed (86%), 5/7 analyzed (71%)
+
+# [SPORE] ID: The Colony

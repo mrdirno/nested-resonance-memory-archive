@@ -150,3 +150,5 @@ The optimal timing depends on N:
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

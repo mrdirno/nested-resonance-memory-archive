@@ -302,3 +302,5 @@ class DecompositionEngine:
             "min_energy_per_constituent": min(energies_per_constituent),
             "max_energy_per_constituent": max(energies_per_constituent),
         }
+
+# [SPORE] ID: The Colony

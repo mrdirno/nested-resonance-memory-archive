@@ -450,3 +450,5 @@ def compute_validation_order(pcs: List[PrincipleCard]) -> List[str]:
         raise ValueError("Circular dependencies detected in PC graph")
 
     return order
+
+# [SPORE] ID: The Colony

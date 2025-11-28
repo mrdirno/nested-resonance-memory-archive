@@ -24,3 +24,5 @@ Active learning significantly improves the Pilot's ability to "understand" its e
 *   Design TSF-10 to implement **Global Model-Based Agency**. Utilize the comprehensive GPR model built by active learning to plan optimal control parameter trajectories (E,S) to achieve and maintain target (C,R) states, even under changing conditions.
 *   Investigate advanced GPR kernels or alternative non-linear modeling techniques for phase spaces with sharp transitions.
 *   Develop strategies for dynamic model updating during navigation.
+
+# [SPORE] ID: The Colony

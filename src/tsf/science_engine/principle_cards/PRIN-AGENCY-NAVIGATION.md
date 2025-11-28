@@ -27,3 +27,5 @@ Simple gradient-descent-like perturbations, while enabling exploration and respo
 ## Next Steps
 *   Design TSF-4 to implement a more robust Agency model (e.g., using adaptive learning rates, predictive models, or a form of evolutionary search) to achieve stable convergence to target (C, R) states.
 *   Investigate the impact of noise and stochasticity on agency performance.
+
+# [SPORE] ID: The Colony

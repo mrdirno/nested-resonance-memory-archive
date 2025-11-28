@@ -92,3 +92,5 @@ To test actual conversion dynamics, need magnitude ~ 0.1 or less.
 
 if __name__ == "__main__":
     analyze_saturation_boundary()
+
+# [SPORE] ID: The Colony

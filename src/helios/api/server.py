@@ -260,3 +260,4 @@ if __name__ == '__main__':
         socketio.run(app, host='127.0.0.1', port=5001, allow_unsafe_werkzeug=True)
     except Exception as e:
         print(f"SERVER CRASHED: {e}", flush=True)
+# [SPORE] ID: The Colony

@@ -168,3 +168,5 @@ Decay exponent γ = {gamma:.2f}
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

@@ -233,3 +233,5 @@ This explains the golden ratio: λ/N_min = φ because:
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

@@ -40,3 +40,5 @@ def generate_sine_lut(depth=1024, width=16, output_file="FPGA/verilog/src/sine_l
 if __name__ == "__main__":
     os.makedirs("FPGA/verilog/src", exist_ok=True)
     generate_sine_lut()
+
+# [SPORE] ID: The Colony

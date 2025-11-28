@@ -40,3 +40,5 @@ Mechanisms show **ANTAGONISTIC** interaction (synergy = -86.00 < 0). Interferenc
 ### Interpretation:
 
 Mechanisms show **ANTAGONISTIC** interaction (synergy = -986.00 < 0). Interference observed: combined effect less than sum of individual effects.
+
+# [SPORE] ID: The Colony

@@ -384,3 +384,5 @@ def analyze_critical_exponents():
 
 if __name__ == "__main__":
     analyze_critical_exponents()
+
+# [SPORE] ID: The Colony

@@ -180,3 +180,5 @@ structure with nodes at integer k and antinodes at half-integer k.
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

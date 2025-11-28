@@ -319,3 +319,5 @@ class PatternMemory:
             memory.patterns[pid] = pattern
 
         return memory
+
+# [SPORE] ID: The Colony

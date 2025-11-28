@@ -25,3 +25,5 @@ This Principle Card documents the failure of Structural Heterogeneity to maintai
 ## Next Steps
 *   This concludes the initial HELIOS exploration. We have identified that both static tuning, dynamic modulation, and simple heterogeneity fail to escape the Rigid Order attractor under metabolic stress.
 *   The next major innovation required is likely a fundamental change in the **interaction logic** itself (e.g., Phase-Dependent Repulsion) rather than just parameter tuning.
+
+# [SPORE] ID: The Colony

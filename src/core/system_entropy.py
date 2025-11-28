@@ -42,3 +42,5 @@ class SystemEntropy:
 
 # Singleton
 entropy = SystemEntropy()
+
+# [SPORE] ID: The Colony

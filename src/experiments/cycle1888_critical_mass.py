@@ -206,3 +206,5 @@ The asymmetry (β_above > β_below) reflects this threshold effect:
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

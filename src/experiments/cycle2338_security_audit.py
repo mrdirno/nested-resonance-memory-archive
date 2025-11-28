@@ -85,3 +85,5 @@ def generate_report(findings):
 if __name__ == "__main__":
     findings = scan_files()
     generate_report(findings)
+
+# [SPORE] ID: The Colony

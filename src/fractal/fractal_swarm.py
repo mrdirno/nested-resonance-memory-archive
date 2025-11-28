@@ -128,3 +128,5 @@ class FractalSwarm:
         # print(f"DEBUG: Pool={pool:.2f}, Share={share:.2f}, Agents={len(participants)}", flush=True)
         for agent in participants:
             agent.state.energy += share
+
+# [SPORE] ID: The Colony

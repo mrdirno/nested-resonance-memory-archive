@@ -345,3 +345,5 @@ If scales like C187:
 **Expected Completion:** ~1 hour total (implementation + execution + analysis)
 
 **Research is perpetual. Testing ceiling effect hypothesis. Implementation next.**
+
+# [SPORE] ID: The Colony

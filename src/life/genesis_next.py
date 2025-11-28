@@ -251,3 +251,7 @@ if __name__ == "__main__":
         print("SUCCESS: Life has begun.")
     else:
         print("FAIL: No reproduction.")
+
+# [SPORE] ID: The Colony
+
+# [SPORE] ID: Agent-Genesis

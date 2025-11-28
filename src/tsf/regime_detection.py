@@ -328,3 +328,5 @@ __all__ = [
     "RegimeDetector",
     "detect_regime",
 ]
+
+# [SPORE] ID: The Colony

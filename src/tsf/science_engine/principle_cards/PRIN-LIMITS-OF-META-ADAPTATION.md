@@ -24,3 +24,5 @@ The meta-adaptive strategy, though more sophisticated than simple fixed-rate hil
 
 ## Next Steps
 *   Design TSF-7 to explore **Model-Based Agency / Predictive Control**. Can the Pilot build and utilize an internal model of the (E,S) -> (C,R) mapping to plan its actions more effectively and achieve convergent, adaptive control?
+
+# [SPORE] ID: The Colony

@@ -490,3 +490,5 @@ class RealityInterface:
             "metrics": metrics,
             "timestamp": time.time()
         }
+
+# [SPORE] ID: The Colony

@@ -179,3 +179,5 @@ class PatternMemory:
     def load(self, path: str):
         """Load memory state from disk (placeholder)."""
         pass
+
+# [SPORE] ID: The Colony

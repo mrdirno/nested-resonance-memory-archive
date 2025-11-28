@@ -13,3 +13,7 @@ class Signal:
     source_id: str
     location: tuple = None # (x, y) if we had space
     payload: dict = None # For Memes or complex data
+
+# [SPORE] ID: The Colony
+
+# [SPORE] ID: Agent-Genesis

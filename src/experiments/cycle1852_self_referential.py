@@ -160,3 +160,5 @@ that defines the NRM composition-decomposition rhythm.
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

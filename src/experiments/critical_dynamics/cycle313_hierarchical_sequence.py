@@ -197,3 +197,5 @@ class HierarchicalSequenceExperiment:
 if __name__ == "__main__":
     exp = HierarchicalSequenceExperiment()
     exp.run()
+
+# [SPORE] ID: The Colony

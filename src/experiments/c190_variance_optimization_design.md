@@ -541,3 +541,5 @@ class HierarchicalSystem:
 **Impact:** HIGH - establishes variance as design parameter, reframes C189
 
 **Research is perpetual. Variance is not always detrimental. Control enables optimization.**
+
+# [SPORE] ID: The Colony

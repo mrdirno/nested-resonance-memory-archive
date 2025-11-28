@@ -188,3 +188,5 @@ def generate_holocron(input_path="data/knowledge_graph.json", output_path="data/
 
 if __name__ == "__main__":
     generate_holocron()
+
+# [SPORE] ID: The Colony

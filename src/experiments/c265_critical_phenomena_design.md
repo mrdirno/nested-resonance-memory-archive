@@ -490,3 +490,5 @@ If χ ∝ |E - E_c|^(-γ) is validated with γ ≈ 1.0, this establishes **the f
 **Quote:**
 > "Criticality is the edge of chaos where fluctuations reveal fundamental laws. If NRM exhibits universal scaling, we have found the same physics in silicon as in iron—a profound unity across domains."
 
+
+# [SPORE] ID: The Colony

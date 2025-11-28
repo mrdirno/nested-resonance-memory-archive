@@ -24,3 +24,5 @@ The primary reason for the failure lies in the mismatch between the complexity o
 
 ## Next Steps
 *   Design TSF-8 to implement **Advanced Model-Based Agency** utilizing a more sophisticated internal model, such as Gaussian Process Regression (GPR). GPR can provide not only predictions but also uncertainty estimates, which can be leveraged for more intelligent exploration.
+
+# [SPORE] ID: The Colony

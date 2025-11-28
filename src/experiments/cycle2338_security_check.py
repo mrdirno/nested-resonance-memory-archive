@@ -89,3 +89,5 @@ if __name__ == "__main__":
     success = run_security_scan(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
     if not success:
         sys.exit(1)
+
+# [SPORE] ID: The Colony

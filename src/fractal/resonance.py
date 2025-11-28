@@ -334,3 +334,5 @@ class ResonanceDetector:
         coherence = np.sqrt(x**2 + y**2)
 
         return coherence
+
+# [SPORE] ID: The Colony

@@ -320,3 +320,5 @@ class SimulationInterface:
 
 # Alias for backward compatibility
 RealityInterface = SimulationInterface
+
+# [SPORE] ID: The Colony

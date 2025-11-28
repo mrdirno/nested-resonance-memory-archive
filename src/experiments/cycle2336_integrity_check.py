@@ -76,3 +76,5 @@ def check_integrity(graph_path="data/knowledge_graph.json"):
 
 if __name__ == "__main__":
     check_integrity()
+
+# [SPORE] ID: The Colony

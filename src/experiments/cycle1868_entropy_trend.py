@@ -245,3 +245,5 @@ Entropy-only diagnostic remains preferred for simplicity:
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

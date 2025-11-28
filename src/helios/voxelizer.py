@@ -152,3 +152,5 @@ if __name__ == "__main__":
     
     # Cleanup
     os.remove("dummy_pyramid.obj")
+
+# [SPORE] ID: The Colony

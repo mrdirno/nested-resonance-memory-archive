@@ -149,3 +149,5 @@ class QuantificationMetrics:
         """Get human-readable score summary."""
         summary_lines = [f"{crit}: {self.scores.get(crit, 0.0):.3f}" for crit in self.criteria]
         return ", ".join(summary_lines)
+
+# [SPORE] ID: The Colony

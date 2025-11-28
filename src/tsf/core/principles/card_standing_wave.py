@@ -56,3 +56,5 @@ if __name__ == "__main__":
         f.write(card.to_json())
     
     print(f"Principle Card generated: {output_file}")
+
+# [SPORE] ID: The Colony

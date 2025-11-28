@@ -76,3 +76,5 @@ stats = system.get_final_statistics()
 print(f"  Basin: {stats['basin']}")
 print(f"  Mean population: {stats['mean_population']:.1f}")
 print(f"  Spawn success rate: {stats['spawn_success_rate']:.1f}%")
+
+# [SPORE] ID: The Colony

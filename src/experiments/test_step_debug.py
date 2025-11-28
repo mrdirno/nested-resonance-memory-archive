@@ -34,3 +34,5 @@ for cycle in range(CYCLES):
         print(f"AFTER cycle {cycle}: {elapsed*1000:.1f}ms, {len(system.agents)} agents", flush=True)
 
 print("ALL CYCLES COMPLETE", flush=True)
+
+# [SPORE] ID: The Colony

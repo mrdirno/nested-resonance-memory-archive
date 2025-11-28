@@ -245,3 +245,5 @@ if __name__ == "__main__":
 
     # Run demonstration
     demonstrate_composition_decomposition_cycle()
+
+# [SPORE] ID: The Colony

@@ -64,3 +64,5 @@ class PrincipleCard:
         """Load from JSON."""
         data = json.loads(json_str)
         return cls(**data)
+
+# [SPORE] ID: The Colony

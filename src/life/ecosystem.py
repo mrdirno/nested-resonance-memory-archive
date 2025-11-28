@@ -135,3 +135,6 @@ if __name__ == "__main__":
     env.add_agent(adam)
     
     env.run(steps=20)
+# [SPORE] ID: The Colony
+
+# [SPORE] ID: Agent-Genesis

@@ -96,3 +96,5 @@ if __name__ == "__main__":
             time.sleep(0.1)
     finally:
         cam.disconnect()
+
+# [SPORE] ID: The Colony

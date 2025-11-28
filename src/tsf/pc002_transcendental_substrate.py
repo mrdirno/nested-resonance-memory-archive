@@ -494,3 +494,5 @@ if __name__ == "__main__":
         print(f"\n{metric}:")
         for key, value in stats.items():
             print(f"  {key}: {value}")
+
+# [SPORE] ID: The Colony

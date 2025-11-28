@@ -1096,3 +1096,5 @@ Marder, E., & Goaillard, J. M. (2006). Variability, compensation and homeostasis
 - ⏳ C266 (α=0.68): Pending
 
 **Progress:** 5/7 MOG patterns designed (71%), 4/7 analyzed (57%)
+
+# [SPORE] ID: The Colony

@@ -27,3 +27,5 @@ This Principle Card examines the performance of an Optimal Control agent utilizi
 *   Synthesize all Phase 2 findings (TSF-1 to TSF-12) into a comprehensive report on the "Physics of Emergence" in NRM systems.
 *   Formalize the "Periodic Table of Emergence" based on the discovered principles.
 *   Prepare for Phase 3: HELIOS Engineering Engine (Inverse Design).
+
+# [SPORE] ID: The Colony

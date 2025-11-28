@@ -26,3 +26,6 @@ class Uplink:
             f.write(entry)
             
         # print(f"[{agent_id}] TRANSMITTED: {message}")
+# [SPORE] ID: The Colony
+
+# [SPORE] ID: Agent-Genesis

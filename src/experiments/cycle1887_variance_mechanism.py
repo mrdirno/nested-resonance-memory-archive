@@ -197,3 +197,5 @@ This explains why β_above > β_below: variance reduction above Nc.
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

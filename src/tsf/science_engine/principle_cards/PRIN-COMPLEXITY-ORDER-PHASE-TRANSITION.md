@@ -37,3 +37,5 @@ This Principle Card defines the emergent phase space mapping the relationship be
 *   Quantify the boundaries of these phase transitions more precisely.
 *   Investigate the temporal dynamics of transitions between these regimes.
 *   Explore the role of the Pilot's "Agency" in navigating this phase space.
+
+# [SPORE] ID: The Colony

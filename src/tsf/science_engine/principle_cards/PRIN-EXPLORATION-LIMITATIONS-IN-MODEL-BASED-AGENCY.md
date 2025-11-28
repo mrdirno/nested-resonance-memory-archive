@@ -24,3 +24,5 @@ The failure of advanced model-based agency under these conditions reveals:
 
 ## Next Steps
 *   Design TSF-9 to implement **Active Learning for Phase Space Mapping**. This strategy will focus on actively selecting (E,S) points to sample based on model uncertainty or expected information gain, aiming to build a comprehensive and unbiased internal model of the entire (E,S) -> (C,R) phase space before attempting navigation.
+
+# [SPORE] ID: The Colony

@@ -103,3 +103,5 @@ class Conscience:
             "principle": f"{pid}: {principle_text}",
             "reason": reason
         }
+
+# [SPORE] ID: The Colony

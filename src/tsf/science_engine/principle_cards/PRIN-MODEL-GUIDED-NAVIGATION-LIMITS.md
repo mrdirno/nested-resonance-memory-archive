@@ -26,3 +26,5 @@ The findings highlight critical limitations of current model-based agency for em
 
 ## Next Steps
 *   Design TSF-11 to perform a **Phase Space Reachability Analysis**. This experiment will systematically map the entire (E,S) parameter space to determine which (C,R) emergent states are stably reachable and to precisely identify the boundaries of the various regimes (Extinction, Rigid Order, Chaotic Complexity, Balanced Emergence) under the current simulation physics. This will clarify if the Pilot's targets are even achievable.
+
+# [SPORE] ID: The Colony

@@ -31,3 +31,5 @@ system = NetworkedPopulationSystem(SEED, TOPOLOGY, db_path)
 print("STEP I: System created!")
 
 print("SUCCESS")
+
+# [SPORE] ID: The Colony

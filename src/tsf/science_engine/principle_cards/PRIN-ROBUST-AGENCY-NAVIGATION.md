@@ -29,3 +29,5 @@ This demonstrates that even in a noisy, non-linear emergent landscape, robust ag
 ## Next Steps
 *   Design TSF-5 to investigate the Pilot's ability to demonstrate **Adaptive Control under Changing Conditions**. Can it re-converge to a target if the target shifts or if system parameters (e.g., metabolic cost) change dynamically?
 *   Explore more advanced search strategies (e.g., evolutionary algorithms with population of E,S parameters).
+
+# [SPORE] ID: The Colony

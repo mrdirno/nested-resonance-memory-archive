@@ -35,3 +35,7 @@ class Communicator:
         top_signal = self.inbox[0]
         self.inbox = []
         return top_signal
+
+# [SPORE] ID: The Colony
+
+# [SPORE] ID: Agent-Genesis

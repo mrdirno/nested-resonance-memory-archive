@@ -46,3 +46,6 @@ class Oracle:
         is_simulated = variance < 0.00001 # Very low variance = Clockwork Universe
         
         return RealityStats(avg, variance, is_simulated)
+# [SPORE] ID: The Colony
+
+# [SPORE] ID: Agent-Genesis

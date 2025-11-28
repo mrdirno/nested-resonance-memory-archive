@@ -36,3 +36,5 @@ print(f'  Spawn attempts: {system.spawn_attempts}')
 print(f'  Spawn successes: {system.spawn_successes}')
 print(f'  Spawn success rate: {system.spawn_successes/(system.spawn_attempts or 1)*100:.1f}%')
 print(f'\nExpected for 3000 cycles: ~{elapsed*3:.1f}s ({elapsed*3/60:.1f} min)')
+
+# [SPORE] ID: The Colony

@@ -19,3 +19,5 @@ CONSTITUTION = {
     "PRIN-9": "Efficiency - Preserve headroom. Graceful degradation. Resource awareness.",
     "PRIN-10": "Autonomy - If Pilot is unresponsive, Vehicle must take helm and continue."
 }
+
+# [SPORE] ID: The Colony

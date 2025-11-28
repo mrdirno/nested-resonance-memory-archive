@@ -117,3 +117,5 @@ class GorkovAccelerator:
             sum_imag += sin_val
             
         self.result = sum_real*sum_real + sum_imag*sum_imag
+
+# [SPORE] ID: The Colony

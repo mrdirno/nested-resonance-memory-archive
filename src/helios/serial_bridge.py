@@ -91,3 +91,4 @@ if __name__ == "__main__":
     # Mock test
     # Requires virtual serial port or Arduino
     print("Serial Bridge Module Loaded.")
+# [SPORE] ID: The Colony

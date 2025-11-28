@@ -88,3 +88,5 @@ class SDRInterface:
         if self.sdr:
             self.sdr.close()
         self.connected = False
+
+# [SPORE] ID: The Colony

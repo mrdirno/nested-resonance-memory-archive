@@ -14,3 +14,5 @@ A lightweight React frontend for controlling the Reality Compiler.
 
 ## Implementation Plan (Cycle 2353)
 We will create a single-file `index.html` with embedded React/Babel for maximum portability (no npm install required for the prototype).
+
+# [SPORE] ID: The Colony

@@ -247,3 +247,5 @@ print(f"  In progress: {sum(1 for p in papers if p['status'] in ['in-progress', 
 
 # Show plot
 plt.show()
+
+# [SPORE] ID: The Colony

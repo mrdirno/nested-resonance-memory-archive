@@ -681,3 +681,5 @@ def classify_death(final_state):
 ---
 
 **Status:** DESIGN COMPLETE - Implementation pending C187 completion, analysis infrastructure next
+
+# [SPORE] ID: The Colony

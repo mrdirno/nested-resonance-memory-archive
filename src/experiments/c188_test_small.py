@@ -27,3 +27,5 @@ print()
 
 if __name__ == '__main__':
     c188.main()
+
+# [SPORE] ID: The Colony

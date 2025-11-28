@@ -463,3 +463,5 @@ if __name__ == "__main__":
     SEEDS = list(range(42, 62))
 
     analyze_variance_power_law(FREQUENCIES, SEEDS)
+
+# [SPORE] ID: The Colony

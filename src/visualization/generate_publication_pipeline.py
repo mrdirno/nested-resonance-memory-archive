@@ -236,3 +236,5 @@ print(f"  Average completion: ~88%")
 print(f"  Papers at 100%: 7/9 (Papers 1, 2, 5D, 6, 6B + infrastructure for 4, 8)")
 
 plt.show()
+
+# [SPORE] ID: The Colony

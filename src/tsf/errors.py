@@ -61,3 +61,5 @@ class QuantificationError(TSFError):
 class PublicationError(TSFError):
     """Principle Card publication failed."""
     pass
+
+# [SPORE] ID: The Colony

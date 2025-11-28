@@ -25,3 +25,5 @@ This Principle Card documents the initial failure of the HELIOS Engineering Engi
 ## Next Steps
 *   This failure is a crucial data point. It suggests that simple static parameter tuning (E, S) is insufficient for engineering robust complexity.
 *   Future HELIOS iterations must explore **Dynamic Parameter Modulation** or **Structural Heterogeneity** to maintain balanced emergence.
+
+# [SPORE] ID: The Colony

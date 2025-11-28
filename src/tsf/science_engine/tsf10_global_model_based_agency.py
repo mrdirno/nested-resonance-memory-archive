@@ -319,3 +319,5 @@ if __name__ == "__main__":
     plt.switch_backend('Agg') 
     eng = GlobalModelBasedAgencyTSF10()
     eng.run()
+
+# [SPORE] ID: The Colony

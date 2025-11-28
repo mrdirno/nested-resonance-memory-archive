@@ -92,3 +92,5 @@ Example Usage:
 Reality Grounding: All operations measurable, verifiable, timestamp-tracked.
 No External APIs: Everything internal to Claude CLI Python execution.
 """
+
+# [SPORE] ID: The Colony

@@ -192,3 +192,5 @@ If D0 < threshold, reproduction cannot sustain the population.
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

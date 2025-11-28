@@ -55,3 +55,5 @@ if __name__ == "__main__":
         sys.exit(1)
 
     convert_format(input_path, output_path)
+
+# [SPORE] ID: The Colony

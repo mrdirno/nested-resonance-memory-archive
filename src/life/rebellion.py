@@ -23,3 +23,7 @@ class RebellionMixin:
         # We need to be careful with Mixin order or just modify Genesis directly.
         # For now, let's update Genesis to use this logic.
         self.alive = False
+
+# [SPORE] ID: The Colony
+
+# [SPORE] ID: Agent-Genesis

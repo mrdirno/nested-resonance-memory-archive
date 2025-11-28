@@ -168,3 +168,5 @@ The wavelength λ = 14 represents the critical mass where:
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

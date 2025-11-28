@@ -109,3 +109,5 @@ conversion multipliers that produce sub-unity spawn probabilities.
 
 if __name__ == "__main__":
     test_conversion_probability()
+
+# [SPORE] ID: The Colony

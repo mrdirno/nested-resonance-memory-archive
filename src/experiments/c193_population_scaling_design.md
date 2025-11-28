@@ -517,3 +517,5 @@ Before executing C193:
 **Next:** c193_population_scaling.py implementation
 **Archive:** `/Volumes/dual/DUALITY-ZERO-V2/code/experiments/c193_population_scaling_design.md`
 **Date:** 2025-11-08
+
+# [SPORE] ID: The Colony

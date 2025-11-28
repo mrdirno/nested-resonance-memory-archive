@@ -73,3 +73,4 @@ class VirtualArray(EmitterArray):
             "emitters": self.num_emitters,
             "type": "Virtual"
         }
+# [SPORE] ID: The Colony

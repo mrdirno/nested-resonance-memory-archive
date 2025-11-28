@@ -100,3 +100,5 @@ if CHILD_ENERGY < E_SPAWN_THRESHOLD:
     print("✅ PASS: Child energy < threshold prevents cascade")
 else:
     print("⚠ WARNING: Child energy ≥ threshold enables cascade")
+
+# [SPORE] ID: The Colony

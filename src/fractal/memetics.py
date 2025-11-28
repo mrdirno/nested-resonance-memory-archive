@@ -86,3 +86,5 @@ class MemeticEngine:
         union = len(set1 | set2)
         
         return intersection / union if union > 0 else 0.0
+
+# [SPORE] ID: The Colony

@@ -372,3 +372,5 @@ if __name__ == '__main__':
     print("  - Regenerate when V7/V8 complete (enhance Panel D)")
     print("  - Integrate into manuscript figures")
     print("="*70)
+
+# [SPORE] ID: The Colony

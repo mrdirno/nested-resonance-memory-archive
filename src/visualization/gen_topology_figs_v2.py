@@ -149,3 +149,5 @@ plt.close()
 print("\n✓ Generated 4 figures (2, 3, 4, 5)")
 print(f"✓ Saved to: {OUT}")
 print("\nNote: Figures 1 (networks) and 6 (synthesis) require manual creation")
+
+# [SPORE] ID: The Colony

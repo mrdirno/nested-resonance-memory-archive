@@ -46,3 +46,5 @@ class DatabaseError(DualityException):
 class FileSystemError(DualityException):
     """Raised when file system operations fail"""
     pass
+
+# [SPORE] ID: The Colony

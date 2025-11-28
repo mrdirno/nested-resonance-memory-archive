@@ -97,3 +97,5 @@ class EstimatorAgent(OptimizerAgent):
         avg = (self.internal_estimate + other.internal_estimate) / 2.0
         self.internal_estimate = avg
         other.internal_estimate = avg
+
+# [SPORE] ID: The Colony

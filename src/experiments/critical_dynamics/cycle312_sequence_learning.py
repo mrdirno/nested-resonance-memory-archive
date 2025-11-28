@@ -211,3 +211,5 @@ class SequenceLearningExperiment:
 if __name__ == "__main__":
     exp = SequenceLearningExperiment()
     results = exp.run()
+
+# [SPORE] ID: The Colony

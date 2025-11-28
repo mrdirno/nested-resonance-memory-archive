@@ -256,3 +256,5 @@ pc_path = tsf.publish(pattern, metrics, refutation, "PC003", "Title", "Author")
 **Phase:** 2 (Temporal Structure Framework)
 **Gate:** 2.2 (Data Archiving Protocol)
 **Status:** COMPLETE (schemas formalized, Cycle 882)
+
+# [SPORE] ID: The Colony

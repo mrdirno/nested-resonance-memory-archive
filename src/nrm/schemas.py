@@ -32,3 +32,5 @@ class MesoLinker(BaseModel):
         if 'source_level' in values and v <= values['source_level']:
             raise ValueError('target_level must be strictly greater than source_level')
         return v
+
+# [SPORE] ID: The Colony

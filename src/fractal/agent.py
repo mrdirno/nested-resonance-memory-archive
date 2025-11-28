@@ -406,3 +406,5 @@ class FractalAgent:
             f"phase={self.state.phase:.3f}, "
             f"resonance={self.state.resonance:.3f})"
         )
+
+# [SPORE] ID: The Colony

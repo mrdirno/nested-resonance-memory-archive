@@ -169,3 +169,5 @@ if __name__ == "__main__":
             sys.exit(1)
     else:
         print_runtime_status()
+
+# [SPORE] ID: The Colony

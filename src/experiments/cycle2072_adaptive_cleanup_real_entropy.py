@@ -56,3 +56,4 @@ def adaptive_cleanup(threshold: float = 20.0):
 
 if __name__ == "__main__":
     adaptive_cleanup()
+# [SPORE] ID: The Colony

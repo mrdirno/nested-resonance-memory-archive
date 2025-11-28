@@ -1066,3 +1066,5 @@ Laland, K. N. (2004). Social learning strategies. *Animal Learning & Behavior, 3
 - ⏳ C266 (α=0.68): Pending
 
 **Progress:** 4/7 MOG patterns designed (57% coverage), 3/7 analyzed (43%)
+
+# [SPORE] ID: The Colony

@@ -643,3 +643,5 @@ if __name__ == "__main__":
                   f"π={t['pi_phase']:.2f}, e={t['e_phase']:.2f}, φ={t['phi_phase']:.2f}")
 
     print("\n" + "=" * 60)
+
+# [SPORE] ID: The Colony

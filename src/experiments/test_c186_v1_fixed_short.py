@@ -38,3 +38,5 @@ if final_pop < 100:
     print("✅ PASS: Population controlled (< 100)")
 else:
     print(f"❌ FAIL: Population explosion ({final_pop} agents)")
+
+# [SPORE] ID: The Colony

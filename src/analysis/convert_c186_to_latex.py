@@ -344,3 +344,5 @@ echo "Done! PDF: c186_manuscript.pdf"
 
 if __name__ == '__main__':
     convert_manuscript_to_latex()
+
+# [SPORE] ID: The Colony

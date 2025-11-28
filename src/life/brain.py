@@ -59,3 +59,6 @@ class Brain:
                     self.weights[action].append(0.0)
                 
                 self.weights[action][2] += delta
+# [SPORE] ID: The Colony
+
+# [SPORE] ID: Agent-Genesis

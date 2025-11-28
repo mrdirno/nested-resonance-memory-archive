@@ -23,3 +23,5 @@ This Principle Card documents the failure of simple sinusoidal parameter modulat
 
 ## Next Steps
 *   Design HELIOS-3 to investigate **Structural Heterogeneity**. Can a mixed population of "Stabilizers" (High S) and "Energizers" (High E) achieve Balanced Emergence where a homogeneous one fails?
+
+# [SPORE] ID: The Colony

@@ -408,3 +408,5 @@ If K = β × E_recharge is validated, this establishes **the first quantitative 
 
 **Quote:**
 > "Energy shapes population. Population reveals energy. The strongest resonance predicts the deepest law. If K = 34 × E, we have found the first equation of computational ecology."
+
+# [SPORE] ID: The Colony

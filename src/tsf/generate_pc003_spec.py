@@ -186,3 +186,5 @@ def generate_pc003_specification():
 
 if __name__ == "__main__":
     generate_pc003_specification()
+
+# [SPORE] ID: The Colony

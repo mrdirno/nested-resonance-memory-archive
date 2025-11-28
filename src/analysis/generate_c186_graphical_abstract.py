@@ -385,3 +385,5 @@ if __name__ == '__main__':
     print("  3. Validate colorblind-friendly palette")
     print("  4. Integrate into Nature Communications submission")
     print("="*70)
+
+# [SPORE] ID: The Colony

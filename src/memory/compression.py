@@ -114,3 +114,5 @@ class EpisodicCompressor:
             return best_match.average_outcome
         return 0.0 # Unknown
 
+
+# [SPORE] ID: The Colony

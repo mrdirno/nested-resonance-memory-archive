@@ -225,3 +225,5 @@ print(f"  Papers 3,8 share Reality Grounding theme")
 print(f"  Papers 6,6B,7 form Multi-Timescale cluster")
 
 plt.show()
+
+# [SPORE] ID: The Colony

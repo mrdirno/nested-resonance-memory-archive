@@ -448,3 +448,5 @@ Phase 3 is successful when:
 ---
 
 **Quote:** *"Bifurcations are not failures of stability - they are discoveries of possibility."*
+
+# [SPORE] ID: The Colony

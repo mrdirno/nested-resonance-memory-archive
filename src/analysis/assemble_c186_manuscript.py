@@ -181,3 +181,5 @@ def assemble_manuscript():
 if __name__ == '__main__':
     output_path, total_words, word_counts = assemble_manuscript()
     print(f"\nManuscript ready for review: {output_path}")
+
+# [SPORE] ID: The Colony

@@ -44,3 +44,4 @@ class Spore:
         if not file_path.exists(): return False
         with open(file_path, 'r') as f:
             return self.SIGNATURE in f.read()
+# [SPORE] ID: The Colony

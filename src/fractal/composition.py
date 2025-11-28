@@ -320,3 +320,5 @@ class CompositionEngine:
                 for d in set(depths)
             },
         }
+
+# [SPORE] ID: The Colony

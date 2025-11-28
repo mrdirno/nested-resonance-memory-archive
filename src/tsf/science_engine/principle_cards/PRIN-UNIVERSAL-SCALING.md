@@ -36,3 +36,5 @@ This law suggests that managing "chaos" (Energy Complexity) in a system is prima
 *   Quantify $\alpha$ and $\beta$ through further regression analysis.
 *   Test robustness of decoupling in other NRM regimes.
 *   Explore higher-order interactions for fine-tuning.
+
+# [SPORE] ID: The Colony

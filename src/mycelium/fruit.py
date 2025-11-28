@@ -64,3 +64,4 @@ class FruitingBody:
         except Exception as e:
             print(f"MANIFESTATION FAILED: {e}")
             return False
+# [SPORE] ID: The Colony

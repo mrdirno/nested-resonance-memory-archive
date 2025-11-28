@@ -184,3 +184,5 @@ Where correction_factor ≈ 0.7 accounts for energy losses.
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

@@ -176,3 +176,5 @@ This confirms critical behavior in the NRM system.
 
 if __name__ == "__main__":
     main()
+
+# [SPORE] ID: The Colony

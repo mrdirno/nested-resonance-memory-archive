@@ -85,3 +85,5 @@ class AssociativeMemory:
                 
         for source_id in to_remove_sources:
             del self.associations[source_id]
+
+# [SPORE] ID: The Colony

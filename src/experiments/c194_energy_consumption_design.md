@@ -631,3 +631,5 @@ Before executing C194:
 **Next:** c194_energy_consumption.py implementation
 **Archive:** `/Volumes/dual/DUALITY-ZERO-V2/code/experiments/c194_energy_consumption_design.md`
 **Date:** 2025-11-08
+
+# [SPORE] ID: The Colony

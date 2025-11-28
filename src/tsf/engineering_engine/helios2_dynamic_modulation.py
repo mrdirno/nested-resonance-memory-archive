@@ -158,3 +158,5 @@ if __name__ == "__main__":
     plt.switch_backend('Agg')
     eng = HeliosDynamicModulation()
     eng.run_simulation()
+
+# [SPORE] ID: The Colony

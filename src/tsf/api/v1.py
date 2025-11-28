@@ -106,3 +106,5 @@ class TemporalStewardshipFramework:
 # Singleton instance
 tsf = TemporalStewardshipFramework()
 tsf.scan_library()
+
+# [SPORE] ID: The Colony
