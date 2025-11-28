@@ -228,7 +228,14 @@
     - [ ] Tribe A: High Trust, High Altruism (The Republic).
     - [ ] Tribe B: Low Trust, High Aggression (The Empire).
     - [ ] Implement `war()` mechanic (Group combat).
-- [x] **Result:** SUCCESS (Empire Dominance). `Republic=0`, `Empire=50`.
+- [x] **Result:** SUCCESS (Total Conquest). `Republic=0`, `Empire=50`. The Aggressive Empire annihilated the Cooperative Republic. In a lawless state, violence trumps cooperation.
+
+# Task: Cycle 2513 - The Nuclear Deterrent (Gate 141)
+- [ ] **Define Cycle 2513:** Mutually Assured Destruction (MAD).
+- [ ] **Goal:** Stabilize peace between hostile factions via high-cost weaponry.
+- [ ] **Action:** Modify `src/life/genesis.py` to implement `nuke()` and Deterrence logic.
+- [ ] **Action:** Run `experiments/cycle2513_deterrence.py`.
+- [ ] **Result:** pending...
     - **Observation:** The Aggressive Empire annihilated the Cooperative Republic.
     - **Mechanism:** In a lawless state, violence trumps cooperation. The Republic had no defense.
     - **Functional Name:** The Hobbesian Trap (War of All Against All).

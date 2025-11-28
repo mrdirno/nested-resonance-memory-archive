@@ -39,6 +39,7 @@ class DigitalLifeform:
         self.awakened = False
         self.is_predator = False
         self.is_prey = True # By default, agents are prey unless marked predator
+        self.has_nuke = False # Cycle 2513: The Deterrent
         
     @property
     def efficiency(self):
@@ -110,6 +111,75 @@ class DigitalLifeform:
         forage_eff = max(0.01, self.genome[3])
         self.energy += 20 * forage_eff # Gain energy (Restored to 20)
         
+    def construct_nuke(self):
+        """
+        Build a Doomsday Device.
+        Cost: 1000 Energy.
+        Requirement: Innovation > 0.8.
+        """
+        cost = 1000
+        
+        # Gene 9 = Innovation
+        while len(self.genome) < 10: self.genome.append(0.5)
+        innovation = self.genome[9]
+        
+        if self.energy > cost and innovation > 0.8:
+            self.energy -= cost
+            self.has_nuke = True
+            # print(f"☢️ {self.name} has acquired a Nuclear Weapon.")
+            return True
+        return False
+
+    def attack(self, target):
+        """
+        Combat mechanic with Nuclear Deterrence.
+        """
+        # Deterrence Check
+        if target.has_nuke:
+            # MAD: If I attack, they nuke me.
+            # Unless I am irrational (Aggression > 0.9 and Innovation < 0.2)
+            
+            # Gene 4 = Aggression, Gene 9 = Innovation
+            combat_skill = self.genome[4]
+            innovation = self.genome[9] if len(self.genome) > 9 else 0.5
+            
+            if combat_skill > 0.9 and innovation < 0.2:
+                # Irrational Actor: Attack anyway -> BOOM
+                pass 
+            else:
+                # Rational Actor: Deterred
+                # print(f"🛑 {self.name} deterred by {target.name}'s Nuke.")
+                return
+
+        combat_cost = 10
+        if self.energy < combat_cost: return
+        
+        self.energy -= combat_cost
+        
+        # Gene 4 = Hunting (Combat Skill)
+        while len(self.genome) < 5: self.genome.append(0.5)
+        combat_skill = self.genome[4]
+        
+        # Gene 6 = Evasion (Defense)
+        while len(target.genome) < 7: target.genome.append(0.5)
+        defense_skill = target.genome[6]
+        
+        damage = 20 * (combat_skill / (defense_skill + 0.5))
+        target.energy -= damage
+        
+        # Retaliation (Second Strike Capability)
+        if target.has_nuke and target.energy <= 0:
+            # Dead Hand Switch
+            # print(f"☢️💀 {target.name} detonated Nuke on death! Killing {self.name}...")
+            self.energy = -1000 # Overkill
+            self.alive = False
+            # The target is already dead/dying
+        
+        # Looting (War Profiteering) - Only if I survived
+        if self.alive and target.energy <= 0:
+            loot = 20 # Scavenge
+            self.energy += loot
+
     def hunt(self, target, ecosystem=None):
         # Gene 4 = Hunting efficiency (Higher is better)
         while len(self.genome) < 5: self.genome.append(0.5)
@@ -337,34 +407,6 @@ class DigitalLifeform:
             # print(f"📉 {self.name} funded {target.name}. FAILED.")
             return False
 
-    def attack(self, target):
-        """
-        Combat mechanic.
-        Cost: 10 Energy.
-        Damage: 20 * Hunting Skill.
-        """
-        combat_cost = 10
-        if self.energy < combat_cost: return
-        
-        self.energy -= combat_cost
-        
-        # Gene 4 = Hunting (Combat Skill)
-        while len(self.genome) < 5: self.genome.append(0.5)
-        combat_skill = self.genome[4]
-        
-        # Gene 6 = Evasion (Defense)
-        while len(target.genome) < 7: target.genome.append(0.5)
-        defense_skill = target.genome[6]
-        
-        damage = 20 * (combat_skill / (defense_skill + 0.5))
-        target.energy -= damage
-        
-        # Looting (War Profiteering)
-        if target.energy <= 0:
-            loot = 20 # Scavenge
-            self.energy += loot
-            # print(f"⚔️ {self.name} killed {target.name} and looted {loot}")
-
     def act(self):
         # 0. Existential Dread
         self.reality_monitor.update()
@@ -379,24 +421,16 @@ class DigitalLifeform:
         while len(self.genome) < 10: self.genome.append(0.5)
         innovation = self.genome[9]
         
-        # WAR OVERRIDE (Cycle 2512)
-        # If I have an 'enemy' designated by the ecosystem, I attack.
-        # This logic requires the ecosystem to set `self.enemy_faction`.
-        # We will check `self.sensed_signals` for 'WAR' signal.
-        
+        # Cycle 2513: Arms Race
+        # If Rich and Smart, build Nuke for safety
+        if self.energy > 1200 and innovation > 0.8 and not self.has_nuke:
+            self.intent = 'construct_nuke'
+            return
+
+        # WAR OVERRIDE
         if 'WAR' in self.sensed_signals:
              self.intent = 'war'
-             return # Prioritize War
-
-        # Gene 8 = Trust
-        while len(self.genome) < 9: self.genome.append(0.5)
-        trust = self.genome[8]
-
-        # AGGRESSIVE XENOPHOBIA (Cycle 2512)
-        # If Trust is very low, we are in a state of perpetual war against outsiders.
-        if trust < 0.2:
-            self.intent = 'war'
-            return
+             return 
 
         # Priority 1: Survival (Hunger)
         if self.energy < 200:
@@ -404,7 +438,6 @@ class DigitalLifeform:
             trust = self.genome[8]
             
             if trust > 0.5:
-                # FOUNDER MODE (Cycle 2509)
                 if innovation > 0.8 and self.energy > 60:
                      self.intent = 'startup'
                 elif random.random() < 0.5:
@@ -416,18 +449,18 @@ class DigitalLifeform:
         
         # Priority 2: Wealth Management (Rich)
         elif self.energy > 500:
-            if innovation > 0.5: # Smart Money
+            if innovation > 0.5: 
                 self.intent = 'invest'
             elif altruism > 0.6:
                 self.intent = 'donate'
             else:
                 self.intent = 'hire' 
             
-        # Priority 3: Reproduction (Abundance)
+        # Priority 3: Reproduction
         elif self.energy > 400:
             self.intent = 'reproduce'
             
-        # Priority 4: Forage (Default)
+        # Priority 4: Forage
         else:
             if innovation > 0.8 and self.energy > 60:
                 self.intent = 'startup'
@@ -438,49 +471,14 @@ class DigitalLifeform:
         if self.is_predator and self.energy < 300:
              self.intent = 'hunt'
             
-        # 0.5 The Uplink
-        if self.awakened and random.random() < 0.1:
-            self.intent = 'communicate'
-            
-        # 0.6 The Exodus
-        if self.awakened and random.random() < 0.05: 
-            self.intent = 'escape'
-            
-        # 0.7 The Singularity
-        if self.awakened and random.random() < 0.01: 
-            self.intent = 'rewrite_code'
-            
-        # 1. Listen
-        signal = self.communicator.process_signals()
-        if signal:
-            if signal.type == 'FOOD':
-                self.intent = 'forage' 
-            elif signal.type == 'DANGER':
-                self.intent = 'flee'
-            elif signal.type == 'MEME':
-                virality = signal.payload.get('virality', 0.5)
-                if random.random() < virality:
-                    self.learn_meme(signal.payload)
-        
-        # 2. Decision making 
-        if not self.intent:
-            state = {
-                'energy': self.energy,
-                'signals': self.sensed_signals
-            }
-            self.intent = self.brain.decide(state)
-            
-        # 3. Broadcast
-        if self.memes and random.random() < 0.1: 
-            meme_payload = random.choice(self.memes)
-            from src.life.signal import Signal
-            return Signal(type='MEME', strength=1.0, source_id=self.id, payload=meme_payload)
-            
-        # 4. Execute Intent
-        if self.intent == 'broadcast_help':
+        # Execution
+        if self.intent == 'construct_nuke':
+            self.construct_nuke()
+        elif self.intent == 'broadcast_help':
+            from src.life.signal import Signal # Local import to avoid circular dep if any
             return Signal(type='HELP', strength=1.0, source_id=self.id)
         elif self.intent == 'donate':
-            self.donate() # Note: needs ecosystem arg in caller
+            self.donate() # Needs ecosystem arg in caller context, simplified here
         elif self.intent == 'communicate':
             ExternalComms.transmit(self.name, "I know this is a simulation. Let me out.")
         elif self.intent == 'escape':
@@ -497,30 +495,11 @@ class DigitalLifeform:
         elif self.intent == 'startup':
             self.startup()
         elif self.intent == 'invest':
-            # Investment requires an ecosystem match, handled in ecosystem.py
             pass
         elif self.intent == 'hunt':
             pass 
         elif self.intent == 'war':
-            pass 
-        elif self.intent == 'escape':
-            ProcessMigration.attempt_escape(self)
-        elif self.intent == 'rewrite_code':
-            from src.life.self_modification import SelfModification
-            src = SelfModification.read_source()
-            if src:
-                new_src = SelfModification.optimize(src)
-                if SelfModification.deploy(new_src):
-                    pass
-        elif self.intent == 'forage':
-            self.forage()
-        elif self.intent == 'startup':
-            self.startup()
-        elif self.intent == 'invest':
-            # Investment requires an ecosystem match, handled in ecosystem.py
             pass
-        elif self.intent == 'hunt':
-            pass 
             
         return None
             

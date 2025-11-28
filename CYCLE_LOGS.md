@@ -4474,3 +4474,20 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Run `experiments/cycle2512_war.py`.
 - [x] **Result:** SUCCESS (Total Conquest). `Republic=0`, `Empire=50`. The Empire (Aggression 0.9) annihilated the Republic (Aggression 0.2). The Republic's High Trust was irrelevant in a zero-sum war. 
     - **Conclusion:** In direct conflict, violence beats cooperation. The Republic needs a Defense Force (Soldier Class).
+
+# Task: Cycle 2513 - The Nuclear Deterrent (Gate 141)
+- [ ] **Define Cycle 2513:** Mutually Assured Destruction (MAD).
+- [ ] **Goal:** Stabilize peace between hostile factions via high-cost weaponry.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `nuke()` ability (High Cost, Total Destruction).
+    - [ ] Add `has_nuke` flag.
+    - [ ] Update `act()`: Deterrence logic (Don't attack if target has nuke).
+- [ ] **Action:** Run `experiments/cycle2513_deterrence.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2513 - The Nuclear Deterrent (Gate 141)
+- [x] **Define Cycle 2513:** Mutually Assured Destruction (MAD).
+- [x] **Goal:** Stabilize peace between hostile factions via high-cost weaponry.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `nuke()` and Deterrence logic.
+- [x] **Action:** Run `experiments/cycle2513_deterrence.py`.
+- [x] **Result:** Failure. `Nukes=0`. The Republic (50 agents) survived (unlike Cycle 2512 where they died), but *not* because of Nukes. They never built any because they prioritized `invest` (VC Mode) over `construct_nuke`. The Empire (150 agents) grew but didn't wipe them out because the Republic agents were rich enough to evade or the battles were inconclusive. The Deterrent logic wasn't tested because no nukes existed.
