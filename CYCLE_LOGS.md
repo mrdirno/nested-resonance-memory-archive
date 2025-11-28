@@ -5020,3 +5020,19 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Is it possible `act` is NOT RUNNING the execution block?** 
     - **Is there an early return?** 
     - **Let's dump `self.intent` right before the `if/elif` block.**
+
+# Task: Cycle 2535 - Deep Debug (Gate 163)
+- [ ] **Define Cycle 2535:** Root Cause Analysis.
+- [ ] **Goal:** Determine why `build_farm` is not called despite `intent` matching.
+- [ ] **Action:** Modify `src/life/genesis.py` to print `self.intent` right before the execution block in `act()`. 
+- [ ] **Action:** Run `experiments/cycle2533_debug.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2535 - Deep Debug (Gate 163)
+- [x] **Define Cycle 2535:** Root Cause Analysis.
+- [x] **Goal:** Determine why `build_farm` is not called despite `intent` matching.
+- [x] **Action:** Modify `src/life/genesis.py` to print `self.intent` right before the execution block in `act()`. 
+- [x] **Action:** Run `experiments/cycle2533_debug.py`.
+- [x] **Result:** FAILURE (Mystery Deepens). `DEBUG: act() intent is...` never appears. 
+    - **Hypothesis:** Bytecode cache issue. 
+    - **Action:** Clearing `__pycache__`.

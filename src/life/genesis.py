@@ -673,6 +673,10 @@ class DigitalLifeform:
         # DECISION
         self.intent = self.calculate_utility()
         
+        # DEBUG
+        if self.intent in ['build_wall', 'build_farm']:
+            print(f"DEBUG: act() intent is '{self.intent}'")
+        
         # EXECUTION
         signal_to_broadcast = None
         

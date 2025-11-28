@@ -392,4 +392,11 @@
 - [ ] **Goal:** Debug `build_farm` failure.
 - [ ] **Action:** Add logging inside `build_farm`.
 - [ ] **Action:** Run `experiments/cycle2533_debug.py`.
+- [x] **Result:** FAILURE. `DEBUG: build_farm called...` NEVER APPEARS. `build_farm` is not being called.
+
+# Task: Cycle 2535 - Deep Debug (Gate 163)
+- [ ] **Define Cycle 2535:** Root Cause Analysis.
+- [ ] **Goal:** Determine why `build_farm` is not called despite `intent` matching.
+- [ ] **Action:** Trace `self.intent` in `act()`.
+- [ ] **Action:** Run `experiments/cycle2533_debug.py`.
 - [ ] **Result:** pending...
