@@ -667,7 +667,33 @@ class DigitalLifeform:
             # But act() sets the intent.
             pass
             
-        return None
+        # BROADCAST THOUGHTS (Cycle 2525)
+        if self.hive_mind and hasattr(self, 'current_utility_map'):
+            # We return the signal here so ecosystem can propagate it
+            # Note: This returns from act(), so we must do cleanup first or handle it carefully.
+            # Actually, if we return here, we skip cleanup.
+            # So we should store the signal, do cleanup, then return signal.
+            signal_to_broadcast = self.broadcast_thought(self.current_utility_map)
+        else:
+            signal_to_broadcast = None
+
+        # Clean up
+        self.sensed_signals = {}
+        
+        # Cycle 2526: Cultural Inertia (Memory Decay)
+        if self.hive_mind:
+            keys_to_remove = []
+            for action in self.collective_utility:
+                self.collective_utility[action] *= 0.9 # Decay 10%
+                if self.collective_utility[action] < 1.0:
+                    keys_to_remove.append(action)
+            
+            for k in keys_to_remove:
+                del self.collective_utility[k]
+        else:
+            self.collective_utility = {} 
+            
+        return signal_to_broadcast
             
     def reproduce(self):
         # Check intent first
