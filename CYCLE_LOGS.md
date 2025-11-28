@@ -4274,3 +4274,9 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] Add `Gene 8` (Trust: 0=Kin Only, 1=Everyone).
 - [x] **Action:** Run `experiments/cycle2501_trade_war.py`.
 - [x] **Result:** Failure/Extinction. Both populations collapsed. Cosmopolitans died immediately. Tribalists barely survived (1 left). Root Cause: The experiment environment was too harsh (random food injection for only 10%). Trade requires a *surplus* to be viable. In a starvation economy, "Sharing" is just "Co-dying". To test trade, we need uneven resource distribution (Rich/Poor), not uniform poverty.
+
+# Task: Cycle 2502 - The Inequality (Gate 130)
+- [x] **Define Cycle 2502:** Create Uneven Resource Distribution.
+- [x] **Goal:** Validate Trade viability in a Rich/Poor scenario.
+- [x] **Action:** Created `experiments/cycle2502_inequality.py` with Rich (Income+High Trust) and Poor (No Income+Low Trust).
+- [x] **Result:** Success. The Rich survived and expanded to capacity (200). The Poor went extinct immediately (Tick 100). However,  increased significantly (up to 200/tick) as the Rich population grew, indicating they were trading amongst themselves to equilibrate energy. The Poor died before they could learn to trust/trade. Conclusion: Wealth requires a baseline energy level to initiate trade; absolute poverty leads to extinction before economics can emerge.

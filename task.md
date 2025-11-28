@@ -129,4 +129,13 @@
     - [ ] Add `Gene 8` (Trust).
     - [ ] Add `trade(target)`: Exchange energy if mutual trust exists.
 - [ ] **Action:** Run `experiments/cycle2501_trade_war.py`.
+- [x] **Result:** Failure/Extinction. Trade implemented but failed due to thermodynamic poverty (uniform starvation). "Sharing" became "Co-dying".
+
+# Task: Cycle 2502 - The Inequality (Gate 130)
+- [ ] **Define Cycle 2502:** Create Uneven Resource Distribution.
+- [ ] **Goal:** Validate Trade viability in a Rich/Poor scenario.
+- [ ] **Action:** Create `experiments/cycle2502_inequality.py`.
+    - [ ] "Rich" agents (high initial energy + income).
+    - [ ] "Poor" agents (low initial energy).
+    - [ ] Compare survival rates with/without Trade.
 - [ ] **Result:** pending...

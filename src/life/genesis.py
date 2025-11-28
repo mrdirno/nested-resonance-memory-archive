@@ -97,7 +97,7 @@ class DigitalLifeform:
             # Exponential aging: 1.0 at 50, 2.0 at 100, 4.0 at 150...
             age_factor = 1.0 + ((self.age - 50) * 0.02)
             
-        entropy_cost = self.energy * 0.01 * age_factor
+        entropy_cost = self.energy * 0.005 * age_factor
         
         total_cost = base_cost + trait_cost + entropy_cost
         self.energy -= total_cost
@@ -106,7 +106,7 @@ class DigitalLifeform:
         # Gene 3 = Foraging efficiency (Higher is better)
         while len(self.genome) < 4: self.genome.append(0.5)
         forage_eff = max(0.01, self.genome[3])
-        self.energy += 20 * forage_eff # Gain energy (Restored to 20)
+        self.energy += 30 * forage_eff # Gain energy (Boosted to 30)
         
     def hunt(self, target, ecosystem=None):
         # Gene 4 = Hunting efficiency (Higher is better)
@@ -124,7 +124,7 @@ class DigitalLifeform:
             damage = 20 * multiplier
             
             target.energy -= damage
-            self.energy += 5 # Reduced reward to prevent predator hoarding (was 10)
+            self.energy += 2 # Scarcity Mode: Very low reward to force cooperation
             
             # Prey screams in terror (Broadcast DANGER)
             # if ecosystem:
