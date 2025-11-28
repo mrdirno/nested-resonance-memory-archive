@@ -3,10 +3,14 @@ module nrm_system_wrapper(
     input wire rst_n,
     output wire [7:0] led,
     output wire resonance_detected,
-    output wire heartbeat
+    output wire heartbeat,
+    output wire [31:0] fuzz_out
 );
 
     wire [31:0] pio_export;
+    
+    // Connect PIO directly to Fuzz Output for pin probing
+    assign fuzz_out = pio_export;
     
     jtag_system u0 (
         .clk_clk(clk),

@@ -55,24 +55,27 @@
 - [x] **Updated Strategy**: Need to drive FPGA pin connected to RP2040 GP0.
 
 #### In Progress
-- [ ] Identify Physical Connection: Determining which FPGA pin maps to RP2040 GP0.
-- [ ] Create Pin Fuzzer: If schematic is unavailable, will toggle GPIOs to find the match.
+- [ ] Program FPGA with new bitstream (Next Cycle).
+- [ ] Run Fuzzing Script to identify RP2040 pin.
 
 #### Blocked/Deferred
-- [x] Schematic Access: Cannot access files outside workspace.
+- [x] Schematic Access: Workaround -> Pin Fuzzing.
 
 #### Artifacts Created/Modified
 - `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated.
-- `fpga/host_tools/probe_rp2040.py` - REPL interactor.
-- `fpga/host_tools/dump_rp2040_code.py` - Code extractor.
+- `fpga/de10-nano/projects/nrm_resonance/nrm_resonance.qsf` - Added Arduino IO assignments.
+- `fpga/de10-nano/projects/nrm_resonance/nrm_system_wrapper.v` - Added `fuzz_out` port.
+- `fpga/de10-nano/projects/nrm_resonance/output_files/nrm_resonance.sof` - Compiled Fuzzing Image.
 
 #### Technical Notes
-- **RP2040 GP0**: Pin 1 on the Pico.
-- **DE10-Nano GPIO Headers**: JP1 (Arduino) or JP7 (GPIO 0). Likely connected via a jumper wire.
+- **Pin Fuzzing Strategy**:
+  - Arduino IO0-IO7 are mapped to `fuzz_out[0..7]`.
+  - GPIO 0 assignments (`fuzz_out[8..15]`) were commented out due to Fitter errors (invalid pin locations/conflicts).
+  - We proceed with testing Arduino headers first, as they are the most likely candidate for an external shield/Pico connection.
 
 #### Next Session Recommendations
-- **PILOT**: If you have the schematic, look for "RP2040" or "Pico" connections.
-- **CO-PILOT**: Create a Qsys PIO for all 40 pins of GPIO 0 and toggle them.
+- **PILOT**: Program the board.
+- **PILOT**: Run a script that drives `fuzz_out[0..7]` high one by one while monitoring the RP2040 serial output for "FPGA_COMPUTATION_DONE".
 
 ---
 

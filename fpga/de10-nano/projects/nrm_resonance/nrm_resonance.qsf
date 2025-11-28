@@ -46,10 +46,33 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led[*]
 
 # Debug outputs (directly from FPGA GPIO header pins)
 # Using Arduino header GPIO for debug
-set_location_assignment PIN_AG13 -to resonance_detected
-set_location_assignment PIN_AF13 -to heartbeat
+# set_location_assignment PIN_AG13 -to resonance_detected
+# set_location_assignment PIN_AF13 -to heartbeat
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to resonance_detected
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to heartbeat
+
+# Fuzzing Pins (Reverse Engineering)
+# Arduino Header
+set_location_assignment PIN_AG13 -to fuzz_out[0]
+set_location_assignment PIN_AF13 -to fuzz_out[1]
+set_location_assignment PIN_AG10 -to fuzz_out[2]
+set_location_assignment PIN_AG9  -to fuzz_out[3]
+set_location_assignment PIN_U14  -to fuzz_out[4]
+set_location_assignment PIN_U13  -to fuzz_out[5]
+set_location_assignment PIN_AG8  -to fuzz_out[6]
+set_location_assignment PIN_AH8  -to fuzz_out[7]
+
+# GPIO 0 Header (First 8 pins)
+# set_location_assignment PIN_V12  -to fuzz_out[8]
+# set_location_assignment PIN_E8   -to fuzz_out[9]
+# set_location_assignment PIN_W12  -to fuzz_out[10]
+# set_location_assignment PIN_D8   -to fuzz_out[11]
+# set_location_assignment PIN_Y24  -to fuzz_out[12]
+# set_location_assignment PIN_A7   -to fuzz_out[13]
+# set_location_assignment PIN_AA26 -to fuzz_out[14]
+# set_location_assignment PIN_W13  -to fuzz_out[15]
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fuzz_out[*]
 
 # Timing Constraints
 set_global_assignment -name SDC_FILE nrm_resonance.sdc
