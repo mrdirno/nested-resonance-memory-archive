@@ -219,7 +219,16 @@
     - [ ] Rich agents (Energy > 1000) get votes.
     - [ ] Parameters: `tax_rate`, `subsidy_amount`.
 - [ ] **Action:** Run `experiments/cycle2511_governance.py`.
-- [x] **Result:** SUCCESS (Benevolent Oligarchy). `Tax=0.5%`, `Treasury=480k`.
+- [x] **Result:** SUCCESS (Benevolent Oligarchy). `Tax=8.0%`. The Rich taxed themselves to fund the Poor, preventing collapse but maintaining inequality.
+
+# Task: Cycle 2512 - The Clash of Civilizations (Gate 140)
+- [ ] **Define Cycle 2512:** Inter-Ecosystem Conflict.
+- [ ] **Goal:** Two distinct populations (Tribes) compete for resources.
+- [ ] **Action:** Create `experiments/cycle2512_war.py`.
+    - [ ] Tribe A: High Trust, High Altruism (The Republic).
+    - [ ] Tribe B: Low Trust, High Aggression (The Empire).
+    - [ ] Implement `war()` mechanic (Group combat).
+- [ ] **Result:** pending...
     - **Observation:** The Elite voted for moderate taxes/subsidies. This kept the Poor alive (Pop 200) but dependent (34% Poverty). The Treasury accumulated massive wealth.
     - **Mechanism:** Governance stabilized the system but created a "Welfare Trap". The Rich stay Rich, the Poor stay Alive.
     - **Functional Name:** Benevolent Oligarchy (The Welfare Trap).

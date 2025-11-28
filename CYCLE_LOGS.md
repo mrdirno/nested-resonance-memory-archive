@@ -4457,3 +4457,20 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Run `experiments/cycle2511_governance.py`.
 - [x] **Result:** Success. The Rich voted to increase taxes (4.6% -> 8.0%) to fund subsidies (18.3 -> 32.1). This reduced the poverty rate slightly, but mostly just circulated money faster. The system self-regulated to prevent total collapse, but did not solve inequality. It just managed it. 
     - **Conclusion:** A "Benevolent Oligarchy" emerged. They taxed themselves enough to keep the labor force alive, but not enough to lose their status.
+
+# Task: Cycle 2512 - The Clash of Civilizations (Gate 140)
+- [ ] **Define Cycle 2512:** Inter-Ecosystem Conflict.
+- [ ] **Goal:** Two distinct populations (Tribes) compete for resources.
+- [ ] **Action:** Create `experiments/cycle2512_war.py`.
+    - [ ] Tribe A: High Trust, High Altruism (The Republic).
+    - [ ] Tribe B: Low Trust, High Aggression (The Empire).
+    - [ ] Implement `war()` mechanic (Group combat).
+- [ ] **Result:** pending...
+
+# Task: Cycle 2512 - The Clash of Civilizations (Gate 140)
+- [x] **Define Cycle 2512:** Inter-Ecosystem Conflict.
+- [x] **Goal:** Two distinct populations (Tribes) compete for resources.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `attack(target)` and war logic.
+- [x] **Action:** Run `experiments/cycle2512_war.py`.
+- [x] **Result:** SUCCESS (Total Conquest). `Republic=0`, `Empire=50`. The Empire (Aggression 0.9) annihilated the Republic (Aggression 0.2). The Republic's High Trust was irrelevant in a zero-sum war. 
+    - **Conclusion:** In direct conflict, violence beats cooperation. The Republic needs a Defense Force (Soldier Class).

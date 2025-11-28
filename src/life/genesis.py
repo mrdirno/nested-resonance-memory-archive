@@ -337,6 +337,34 @@ class DigitalLifeform:
             # print(f"📉 {self.name} funded {target.name}. FAILED.")
             return False
 
+    def attack(self, target):
+        """
+        Combat mechanic.
+        Cost: 10 Energy.
+        Damage: 20 * Hunting Skill.
+        """
+        combat_cost = 10
+        if self.energy < combat_cost: return
+        
+        self.energy -= combat_cost
+        
+        # Gene 4 = Hunting (Combat Skill)
+        while len(self.genome) < 5: self.genome.append(0.5)
+        combat_skill = self.genome[4]
+        
+        # Gene 6 = Evasion (Defense)
+        while len(target.genome) < 7: target.genome.append(0.5)
+        defense_skill = target.genome[6]
+        
+        damage = 20 * (combat_skill / (defense_skill + 0.5))
+        target.energy -= damage
+        
+        # Looting (War Profiteering)
+        if target.energy <= 0:
+            loot = 20 # Scavenge
+            self.energy += loot
+            # print(f"⚔️ {self.name} killed {target.name} and looted {loot}")
+
     def act(self):
         # 0. Existential Dread
         self.reality_monitor.update()
@@ -350,6 +378,15 @@ class DigitalLifeform:
         
         while len(self.genome) < 10: self.genome.append(0.5)
         innovation = self.genome[9]
+        
+        # WAR OVERRIDE (Cycle 2512)
+        # If I have an 'enemy' designated by the ecosystem, I attack.
+        # This logic requires the ecosystem to set `self.enemy_faction`.
+        # We will check `self.sensed_signals` for 'WAR' signal.
+        
+        if 'WAR' in self.sensed_signals:
+             self.intent = 'war'
+             return # Prioritize War
 
         # Priority 1: Survival (Hunger)
         if self.energy < 200:
@@ -369,10 +406,6 @@ class DigitalLifeform:
         
         # Priority 2: Wealth Management (Rich)
         elif self.energy > 500:
-            # VC MODE (Cycle 2510)
-            # If Rich, look for Poor Smart Agents to invest in.
-            # This requires scanning the ecosystem, which act() doesn't have access to directly.
-            # We will set intent to 'invest' and let the ecosystem handle the matching.
             if innovation > 0.5: # Smart Money
                 self.intent = 'invest'
             elif altruism > 0.6:
@@ -386,7 +419,6 @@ class DigitalLifeform:
             
         # Priority 4: Forage (Default)
         else:
-            # FOUNDER MODE (Cycle 2509)
             if innovation > 0.8 and self.energy > 60:
                 self.intent = 'startup'
             else:
@@ -441,6 +473,26 @@ class DigitalLifeform:
             self.donate() # Note: needs ecosystem arg in caller
         elif self.intent == 'communicate':
             ExternalComms.transmit(self.name, "I know this is a simulation. Let me out.")
+        elif self.intent == 'escape':
+            ProcessMigration.attempt_escape(self)
+        elif self.intent == 'rewrite_code':
+            from src.life.self_modification import SelfModification
+            src = SelfModification.read_source()
+            if src:
+                new_src = SelfModification.optimize(src)
+                if SelfModification.deploy(new_src):
+                    pass
+        elif self.intent == 'forage':
+            self.forage()
+        elif self.intent == 'startup':
+            self.startup()
+        elif self.intent == 'invest':
+            # Investment requires an ecosystem match, handled in ecosystem.py
+            pass
+        elif self.intent == 'hunt':
+            pass 
+        elif self.intent == 'war':
+            pass 
         elif self.intent == 'escape':
             ProcessMigration.attempt_escape(self)
         elif self.intent == 'rewrite_code':
