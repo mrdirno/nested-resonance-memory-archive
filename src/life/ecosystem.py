@@ -91,6 +91,20 @@ class Ecosystem:
             agent.metabolize()
             agent.act()
 
+            # Handle Donation (Welfare State) for Prey
+            if agent.intent == 'donate' and agent.energy > 20:
+                target = None
+                if agent.help_sources:
+                    for candidate in self.agents:
+                        if candidate.id in agent.help_sources:
+                            target = candidate
+                            break
+                
+                if not target:
+                    agent.donate(ecosystem=self)
+                else:
+                    agent.donate(target=target)
+
             # Handle reproduction for prey
             # Check against prey capacity
             if prey_count + new_prey_count < self.prey_capacity:
@@ -137,13 +151,11 @@ class Ecosystem:
                 
                 # If no help signal, donate to random neighbor (random agent for now)
                 if not target:
-                    # Don't donate to self
-                    potential_targets = [a for a in self.agents if a.id != agent.id]
-                    if potential_targets:
-                        target = random.choice(potential_targets)
-                
-                if target:
-                    agent.donate(target)
+                    # Welfare State: Let agent find neediest in ecosystem
+                    agent.donate(ecosystem=self)
+                else:
+                    # Kin Selection / Direct Help
+                    agent.donate(target=target)
             
             # Handle reproduction for predators
             # Check against predator capacity

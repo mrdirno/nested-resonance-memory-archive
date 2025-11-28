@@ -1875,3 +1875,7 @@
 *   **Result:** SUCCESS. Clan A (Altruistic) outcompeted Clan D (Selfish) (5 vs 3).
 *   **Status:** Kin Selection provided a survival advantage during scarcity.
 *   **Functional Name:** Kin-Selected Cooperative Survival.
+
+*   **Result:** SUCCESS. 21/50 Poor agents survived 500 ticks.
+*   **Status:** Rich Philanthropists redistributed wealth to keep the Poor alive.
+*   **Functional Name:** Altruistic Redistribution (The Welfare State).

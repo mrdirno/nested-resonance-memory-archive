@@ -130,25 +130,40 @@ class DigitalLifeform:
             # if ecosystem:
             #    target.communicator.broadcast(ecosystem, 'DANGER', 1.0)
 
-    def donate(self, target):
+    def donate(self, target=None, ecosystem=None):
         # Gene 5 = Altruism
         while len(self.genome) < 6: self.genome.append(0.5)
         altruism = self.genome[5]
         
-        if self.energy > 20 and target and target.alive:
-            # Kin Selection: Check Lineage
-            is_kin = (self.lineage_id == target.lineage_id)
+        final_target = target
+        
+        # If no specific target, find neediest in ecosystem (Welfare State)
+        if not final_target and ecosystem:
+             # Sample random subset
+             candidates = random.sample(ecosystem.agents, min(len(ecosystem.agents), 10))
+             neediest = None
+             min_energy = 10000
+             for agent in candidates:
+                 if agent != self and agent.alive and agent.energy < 200: # Help those below 200
+                     if agent.energy < min_energy:
+                         min_energy = agent.energy
+                         neediest = agent
+             final_target = neediest
+        
+        if self.energy > 50 and final_target and final_target.alive:
+            # Kin Selection Check
+            is_kin = (self.lineage_id == final_target.lineage_id)
             
-            # Willingness to donate
-            # If Kin: High willingness (based on Altruism)
-            # If Non-Kin: Low willingness (Altruism - 0.5)
-            willingness = altruism if is_kin else (altruism - 0.5)
+            # Willingness logic
+            # If Kin: High willingness (Altruism)
+            # If Non-Kin: Willingness = Altruism - 0.2 (Charity is harder than Kinship)
+            willingness = altruism if is_kin else (altruism - 0.2)
             
             if random.random() < willingness:
-                amount = 10
+                amount = 20
                 self.energy -= amount
-                target.energy += amount
-                # print(f"[{self.name}] DONATED {amount} to {target.name} (Kin={is_kin})")
+                final_target.energy += amount
+                # print(f"[{self.name}] DONATED {amount} to {final_target.name} (Kin={is_kin})")
                 return True
         return False
         
@@ -199,9 +214,11 @@ class DigitalLifeform:
             trust = self.genome[8]
             
             if trust > 0.5:
-                self.intent = 'trade'
-            else:
+                self.intent = 'trade' # Placeholder for Begging
+            elif self.is_predator:
                 self.intent = 'hunt'
+            else:
+                self.intent = 'forage'
         
         # Priority 2: Philanthropy (Rich & Altruistic)
         elif self.energy > 500 and altruism > 0.6:
@@ -222,33 +239,7 @@ class DigitalLifeform:
             
         # ... (Rest of the act method logic for execution)
         
-    def donate(self, ecosystem=None):
-        """
-        Transfer energy to the weakest agent in the vicinity (or ecosystem).
-        Requires Ecosystem reference to find targets.
-        """
-        if not ecosystem: return
-        
-        # Find neediest agent (lowest energy > 0)
-        neediest = None
-        min_energy = 10000
-        
-        # Sample random subset to simulate local view
-        candidates = random.sample(ecosystem.agents, min(len(ecosystem.agents), 10))
-        
-        for agent in candidates:
-            if agent != self and agent.alive and agent.energy < 100:
-                if agent.energy < min_energy:
-                    min_energy = agent.energy
-                    neediest = agent
-        
-        if neediest and self.energy > 100:
-            amount = 50
-            self.energy -= amount
-            neediest.energy += amount
-            # print(f"❤️ {self.name} donated {amount} to {neediest.name}")
-            return True
-        return False
+
             
         # 3. Broadcast (Meme Transmission)
         if self.memes and random.random() < 0.1: # 10% chance to preach
