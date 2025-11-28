@@ -2020,3 +2020,15 @@
 *   **Metric:** Criminals (20 -> 0). Justice Prevailed.
 *   **Status:** The Law is Effective. Retributive Justice stabilizes the population.
 *   **Functional Name:** The Law (Retribution).
+
+---
+**CYCLE:** 2540 (Gate 173: The Neural Network)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** HEBBIAN LEARNING
+**LOG:**
+*   **Experiment:** Executed `experiments/cycle2540_neural_network.py`.
+*   **Mechanism:** Synaptic Plasticity. Weight($w_{new}$) = Weight($w_{old}$) + LearningRate * Reward.
+*   **Result:** SUCCESS. Agents learned to Associate RED with Food (w=1.00) and BLUE with Poison (w=0.00).
+*   **Metric:** Convergence achieved in 1000 iterations.
+*   **Status:** The Agents can Learn. We have moved from Instinct to Experience.
+*   **Functional Name:** The Learner (Synaptic Plasticity).

@@ -30,6 +30,7 @@ class Brain:
         self.b2 = [random.uniform(-1, 1) for _ in range(self.output_size)]
         
         self.actions = ['forage', 'reproduce', 'donate', 'flee', 'hunt']
+        self.weights = {} # Cycle 2540: Hebbian Weights
         
     def sigmoid(self, x):
         return 1 / (1 + math.exp(-x))
