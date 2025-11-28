@@ -4731,3 +4731,42 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Run `experiments/cycle2523_utility_ai.py`.
 - [x] **Result:** PARTIAL SUCCESS. Utility AI implemented. Agents surviving but not optimizing pathfinding perfectly. 
     - **Observation:** `AvgDist` remained static, suggesting movement failure or signal drop. However, the architecture is now cleaner.
+
+# Task: Cycle 2525 - The Hive Mind (Gate 153)
+- [ ] **Define Cycle 2525:** Collective Intelligence.
+- [ ] **Goal:** Link agents to optimize for Group Utility.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `broadcast_thought(utility_map)`.
+    - [ ] Add `assimilate_thought()` to average neighbors' scores.
+- [ ] **Action:** Run `experiments/cycle2525_hive_mind.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2525 - The Hive Mind (Gate 153)
+- [x] **Define Cycle 2525:** Collective Intelligence.
+- [x] **Goal:** Link agents to optimize for Group Utility.
+- [x] **Action:** Modified `src/life/genesis.py` to add `broadcast_thought` and `assimilate_thought`.
+- [x] **Action:** Modified `src/life/ecosystem.py` to propagate signals returned by `act()`. 
+- [x] **Action:** Run `experiments/cycle2525_hive_mind.py`.
+- [x] **Result:** FAILURE (Echo Chamber of Silence). `Intent=0`, `Know=0`. 
+    - **Analysis:** Agent 0 had the signal injected. It should have broadcasted. 
+    - **Trace:** 
+        1. Agent 0 has `NEAREST_FOOD`. 
+        2. `calculate_utility` sees it -> `move_to_food` score +50. 
+        3. `act` chooses `move_to_food`. 
+        4. `act` returns `broadcast_thought`. 
+        5. `ecosystem` calls `propagate_signal`. 
+        6. Others receive it in `sense`. 
+        7. Others assimilate thought. 
+    - **Why Fail?** The experiment script sets the signal `agent.sensed_signals['NEAREST_FOOD'] = food_zone`. 
+    - **Does `sense` wipe it?** No, I fixed `sense` (I think). 
+    - **Wait:** The `replace` in Cycle 2524 modified `sense`. 
+    - **Maybe:** `agent.act()` clears signals at the end. 
+    - **If Agent 0 acts first:** It uses the signal, sets intent, returns broadcast. Then clears signal. 
+    - **Next Tick:** Signal is gone from Agent 0. It stops broadcasting. 
+    - **So:** The Hive Mind only heard the thought for ONE TICK. 
+    - **Was it enough?** In that one tick, others might have received it. 
+    - **But:** `assimilate_thought` adds to `collective_utility`. 
+    - **Then:** `act` clears `collective_utility = {}` at the end. 
+    - **So:** Memory is wiped every tick. 
+    - **Conclusion:** The Hive Mind has no long-term memory. It's a transient pulse. 
+    - **Fix:** Thoughts need to persist or be re-broadcasted. Or `collective_utility` should decay slowly.

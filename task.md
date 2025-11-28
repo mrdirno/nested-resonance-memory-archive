@@ -320,4 +320,11 @@
 - [ ] **Goal:** Allow agents to remember signals for at least one tick.
 - [ ] **Action:** Modify `src/life/genesis.py` to add persistence to `sensed_signals`.
 - [ ] **Action:** Re-Run `experiments/cycle2523_utility_ai.py`.
+- [x] **Result:** FAILURE (Still Blind). `AtFood=0`.
+
+# Task: Cycle 2525 - The Hive Mind (Gate 153)
+- [ ] **Define Cycle 2525:** Collective Intelligence.
+- [ ] **Goal:** Link agents to optimize for Group Utility.
+- [ ] **Action:** Modify `src/life/genesis.py` to add `broadcast_thought` and `assimilate_thought`.
+- [ ] **Action:** Run `experiments/cycle2525_hive_mind.py`.
 - [ ] **Result:** pending...

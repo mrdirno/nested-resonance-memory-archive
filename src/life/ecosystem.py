@@ -172,9 +172,14 @@ class Ecosystem:
         
         for agent in current_prey_agents:
             # Sense, Metabolize, Act (forage, reproduce, etc.)
-            agent.sense([]) 
+            # agent.sense([]) # Cycle 2524: Do NOT clear memory here. Signals must persist.
+            
             agent.metabolize()
-            agent.act()
+            agent.scan(self) # Cycle 2522: Scan surroundings
+            signal = agent.act()
+            
+            if signal:
+                self.propagate_signal(signal)
 
             # Handle Donation (Welfare State) for Prey
             if agent.intent == 'donate' and agent.energy > 20:
@@ -235,9 +240,13 @@ class Ecosystem:
         
         for agent in current_predator_agents:
             # Sense, Metabolize, Act (hunt, reproduce, etc.)
-            agent.sense([])
+            # agent.sense([])
             agent.metabolize()
-            agent.act() # This will set agent.intent to 'hunt' if conditions are met
+            agent.scan(self) # Cycle 2522
+            signal = agent.act() # This will set agent.intent to 'hunt' if conditions are met
+            
+            if signal:
+                self.propagate_signal(signal)
 
             # If predator decided to hunt, find a target from currently alive prey
             if agent.intent == 'hunt' and agent.energy > 0:

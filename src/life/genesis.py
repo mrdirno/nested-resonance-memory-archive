@@ -46,6 +46,8 @@ class DigitalLifeform:
         self.y = 0
         self.target_location = None # (x, y)
         self.target_type = None # 'FOOD', 'THREAT'
+        self.hive_mind = False # Cycle 2525
+        self.collective_utility = {} # Cycle 2525
         
     @property
     def efficiency(self):
