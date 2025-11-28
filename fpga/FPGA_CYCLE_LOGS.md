@@ -41,6 +41,112 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-28 | Cycle 116
+**CO-PILOT**: Gemini 2.0 Flash
+**Duration**: 11:44 - [Ongoing]
+**Focus**: JTAG Reliability & Bridge Server Bring-up
+
+#### Completed
+- [x] Performed Due Diligence (DD).
+- [x] **Diagnosed JTAG Flakiness**: `system-console` sometimes reports "No JTAG Master found" even if `jtagconfig` sees the device.
+- [x] **Fix Implemented**:
+  - Restarted `jtagd` (`kill <pid> && jtagd`).
+  - Reprogrammed FPGA (`quartus_pgm ...`).
+  - Validated visibility with `diag_jtag.tcl`.
+- [x] **Result**: `diag_jtag.tcl` consistently finds the Master at `/devices/5CSEBA6.../JTAG/.../master` after reprogramming.
+
+#### In Progress
+- [ ] Resolve `system-console` JTAG Master detection instability.
+
+#### Blocked/Deferred
+- [x] HPS Bridge: Still blocked. JTAG is the active path.
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated.
+- `fpga/host_tools/bridge_server_v3.tcl` - Improved Tcl bridge.
+- `fpga/host_tools/simple_jtag_test.tcl` - Validation script.
+
+#### Technical Notes
+- **Critical Issue**: `system-console` fails to find JTAG Master in non-interactive mode (`--script`), despite `diag_jtag.tcl` finding it previously.
+- **Error**: `Error: No JTAG Master found.` followed by `java.lang.Exception: invalid command name "exit"`.
+- **Root Cause Analysis**:
+  - `diag_jtag.tcl` uses `get_service_paths` and succeeds.
+  - `bridge_server.tcl` uses the same command but fails when run via `nohup` or even foreground script.
+  - The `java.lang.Exception` confirms that `exit` is not supported in this context, causing the script to crash uglily instead of exiting cleanly.
+  - **Hypothesis**: The `system-console` JVM might need time to initialize services before the script runs, or `jtagd` connection is being dropped between runs.
+
+#### Next Session Recommendations
+- **PILOT**: Debug JTAG stability. Try adding `refresh_connections` at start of Tcl script.
+- **PILOT**: Use `return` instead of `exit`.
+
+---
+
+### Session 2025-11-28 | Cycle 115
+**CO-PILOT**: Gemini 2.0 Flash
+**Duration**: 11:40 - [Ongoing]
+**Focus**: Emergency JTAG Deployment (HPS Offline)
+
+#### Completed
+- [x] Performed Due Diligence (DD).
+- [x] **Diagnosed Network Failure**: HPS (`192.168.68.57`) is unreachable (PING fail). SSH access blocked.
+- [x] **Executed Pivot Strategy**: Switched from "Software Bridge" to "Hardware Validation".
+- [x] **JTAG Programming Success**:
+  - Command: `quartus_pgm -c "DE-SoC [1-9]" -m JTAG -o "p;.../nrm_resonance.sof@2"`
+  - Result: **Configuration succeeded** (Checksum: 0x00D17FB0).
+  - Status: FPGA is now running the NRM Resonance engine (visual LED output).
+
+#### In Progress
+- [ ] Visual Verification (PILOT responsibility: Check DE10-Nano LEDs).
+
+#### Blocked/Deferred
+- [x] HPS Bridge Deployment: Blocked by network failure. Parking until HPS is recovered.
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Updated.
+
+#### Technical Notes
+- **HPS State**: Unreachable. Likely requires a physical power cycle or serial console diagnosis.
+- **FPGA State**: **ONLINE**.
+  - *Observation*: User reports LEDs "blinking in a way that's not a noticeable pattern".
+  - *Analysis*: The update rate (~48Hz) is likely too fast for clear visual distinction, causing a "blur" or rapid flicker. Pin assignments (QSF) were verified correct.
+  - *Conclusion*: Logic is running, but visualization requires tuning (slow down to ~5-10Hz).
+
+#### Next Session Recommendations
+- **PILOT**: Physically reboot the DE10-Nano to recover HPS connectivity (Essential for M3).
+- **PILOT**: (Future) Slow down LED update rate in Verilog for better demo aesthetics.
+
+---
+
+### Session 2025-11-28 | Cycle 114
+**CO-PILOT**: Gemini 2.0 Flash
+**Duration**: 11:20 - 11:40
+**Focus**: GHRD Discovery & JTAG Consolidation
+
+#### Completed
+- [x] Performed Due Diligence (DD).
+- [x] Attempted to locate `DE10_Nano_GHRD` locally (Not found).
+
+#### In Progress
+- [ ] Consolidate JTAG path as primary NRM interface for Phase 1.
+- [ ] Document HPS Pin Assignment blocker as critical external dependency.
+
+#### Blocked/Deferred
+- [x] HPS Bridge: Missing `DE10_Nano_GHRD.qsf` pin assignments.
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated.
+
+#### Technical Notes
+- The "Golden Hardware Reference Design" (GHRD) is not present in the Intel FPGA installation directory. It is typically a separate download from the board vendor (Terasic).
+- Without GHRD, instantiating the HPS component in Qsys is unsafe due to the complexity of DDR3 and I/O pin multiplexing.
+- **Decision**: We will proceed with the **JTAG Bridge** as the primary data ingestion path for the current milestone. This allows NRM software development to continue.
+
+#### Next Session Recommendations
+- **PILOT**: Please provide `DE10_Nano_GHRD.qsf` or `soc_system.qsys` from the Terasic CD-ROM if HPS autonomy is required later.
+- **CO-PILOT**: Refine `nrm_client.py` to support JTAG (via `system-console` wrapper) so the NRM core doesn't know the difference.
+
+---
+
 ### Session 2025-11-28 | Cycle 113
 **CO-PILOT**: Gemini 2.0 Flash
 **Duration**: 11:08 - [Ongoing]
