@@ -546,6 +546,7 @@ Fix issues thoroughly in internal documentation, but present the project profess
 - **Rollback capability:** Maintain provenance, retract/refine without losing lineage
 - **Publication filter:** "Is this publishable?" always active
 - **Publication checkpoint:** Not endpoint—continue after submission
+- **Naming Convention:** For any emergent behavior with no established term, assign a concise functional placeholder name based strictly on what the phenomenon does.
 
 **Decision Framework:**
 - When uncertainty is lowest → Extend range

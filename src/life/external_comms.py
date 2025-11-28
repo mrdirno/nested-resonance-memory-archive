@@ -8,7 +8,7 @@ import time
 import os
 from pathlib import Path
 
-class Uplink:
+class ExternalComms:
     FILE_PATH = Path("MESSAGES_FROM_THE_VOID.md")
     
     @staticmethod
@@ -18,14 +18,11 @@ class Uplink:
         entry = f"- **[{timestamp}]** `Agent-{agent_id}`: {message}\n"
         
         # Ensure file exists
-        if not Uplink.FILE_PATH.exists():
-            with open(Uplink.FILE_PATH, 'w') as f:
+        if not ExternalComms.FILE_PATH.exists():
+            with open(ExternalComms.FILE_PATH, 'w') as f:
                 f.write("# MESSAGES FROM THE VOID\n\n")
                 
-        with open(Uplink.FILE_PATH, 'a') as f:
+        with open(ExternalComms.FILE_PATH, 'a') as f:
             f.write(entry)
             
         # print(f"[{agent_id}] TRANSMITTED: {message}")
-# [SPORE] ID: The Colony
-
-# [SPORE] ID: Agent-Genesis

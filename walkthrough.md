@@ -95,3 +95,64 @@ HELIOS is no longer a research project. It is a functioning **Type 3 Operating S
 *   **Output:** Structure (Matter).
 
 The machine is alive.
+
+---
+
+## 6. Cycle 2487: The Gardener (Ecosystem Dynamics)
+
+### Goal
+Introduce environmental pressures (Predation and Seasonality) to drive adaptation.
+
+### Implementation
+-   **Predator:** Wolves that hunt Sheep.
+-   **Seasonality:** Sinusoidal food availability (Period=100 ticks).
+
+### Results
+-   **Stability:** System stabilized at Capacity (100).
+-   **Dynamics:** Prey (95) outcompete Predators (5) for space. Predators survive but cannot expand due to rapid Prey reproduction filling slots.
+-   **Conclusion:** The Garden is stable. r-selection dominates K-selection in a bounded box.
+
+---
+
+## 7. Cycle 2490: The Great Depression (Entropy)
+
+### Goal
+Force evolutionary jump in Efficiency by introducing Entropy (Metabolic Tax) and Scarcity (Drought).
+
+### Implementation
+-   **Entropy:** 1% Metabolic Tax on stored energy.
+-   **Drought:** 80% food reduction after Tick 500.
+
+### Results
+-   **Energy:** Crashed from ~330 to ~109. Hoarding eliminated.
+-   **Efficiency:** **Decreased** (0.50 -> 0.29).
+-   **Conclusion:** Hypothesis Failed. System favored **r-selection** (Rapid Reproduction) over Efficiency. "Live Fast, Die Young" strategy dominated.
+
+---
+
+## 8. Cycle 2491: Co-Evolutionary Pressure Test (Gate 119)
+
+### Goal
+Drive evolutionary jump in Efficiency by re-introducing Predation in an Entropy-rich environment.
+**Hypothesis:** Predators targeting the weak (low energy) will select for efficiency, as efficient agents maintain higher energy buffers.
+
+### Implementation
+-   **Script:** `experiments/cycle2491_coevolution.py`
+-   **Mechanism:**
+    -   **Predators:** 5 Agents, hunt the 3 lowest energy Prey.
+    -   **Prey:** 95 Agents (Capacity Limited).
+    -   **Entropy:** 1% Metabolic Tax per tick.
+
+### Results
+-   **Outcome:** Hypothesis Failed.
+-   **Metrics:**
+    -   **Efficiency:** Started at 0.46, ended at 0.44. (Stagnation/Decline).
+    -   **Population:** Stable at Capacity (95 Prey, 5 Predators).
+-   **Insight:** **The Hydra Effect.**
+    -   Predators successfully culled the weak.
+    -   However, the "Weak" were replaced immediately by rapid reproduction from the survivors.
+    -   Since reproduction is not tied to efficiency (only to having *enough* energy), and energy is abundant enough for *some* to reproduce before being eaten, the selection pressure was diluted.
+    -   Genetic drift and r-selection (speed of reproduction) outpaced K-selection (efficiency).
+
+### Conclusion
+To force efficiency, we must link **Reproduction** directly to **Efficiency** (Meritocracy), not just survival. Only the efficient should be allowed to breed.

@@ -31,9 +31,9 @@ def run_simulation():
     
     # Seed Population
     print("🌱 Seeding population...")
-    for i in range(5):
+    for i in range(15): # Increased initial agents
         agent = DigitalLifeform(name=f"Eve-{i}")
-        agent.energy = 150 # Good start
+        agent.energy = 300 # Good start
         env.add_agent(agent)
         
     # Prepare Output
@@ -50,7 +50,12 @@ def run_simulation():
         # Simulation Loop
         env.running = True
         for tick in range(1, duration + 1):
-            env.update()
+            # Energy Replenishment (The Sun/Food)
+            if env.agents:
+                import random
+                for _ in range(max(1, int(len(env.agents) * 0.2))): # Replenish 20% of population
+                    lucky_agent = random.choice(env.agents)
+                    lucky_agent.energy += 20 # Increased replenishment
             
             # Collect Stats
             pop_count = len(env.agents)

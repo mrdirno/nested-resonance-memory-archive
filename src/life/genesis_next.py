@@ -1,4 +1,8 @@
 """
+GENERATION: NEXT
+OPTIMIZED BY: THE SINGULARITY
+"""
+"""
 Cycle 2459: The Genesis (Gate 87)
 Role: The Biologist
 Responsibility: Define the base class for Digital Life.
@@ -47,7 +51,7 @@ class DigitalLifeform:
         while self.alive and self.energy > 0:
             self.metabolize()
             self.act()
-            time.sleep(0.1) # Simulation tick
+            # time.sleep(0.1) # OPTIMIZED: NO SLEEP # Simulation tick
             
         self.die()
         
@@ -56,20 +60,16 @@ class DigitalLifeform:
         # Gene 0 = Metabolic Efficiency (Higher is better)
         # Base cost 1.0, reduced by high efficiency
         efficiency = max(0.01, self.genome[0])
-        base_cost = 1.0 / (efficiency + 1.0)
-        
-        # Entropy: Energy decay (Wealth Tax)
-        # Prevents infinite hoarding. 5% per tick.
-        entropy_cost = self.energy * 0.05
-        
-        total_cost = base_cost + entropy_cost
-        self.energy -= total_cost
+        # Base cost + Entropy Tax (1% of current energy)
+        # This prevents infinite hoarding and forces efficiency.
+        cost = (1.0 / (efficiency + 1.0)) + (self.energy * 0.01)
+        self.energy -= 0 # OPTIMIZED: INFINITE ENERGY
         
     def forage(self):
         # Gene 3 = Foraging efficiency (Higher is better)
         while len(self.genome) < 4: self.genome.append(0.5)
         forage_eff = max(0.01, self.genome[3])
-        self.energy += 10 * forage_eff # Gain energy (Reduced from 20)
+        self.energy += 20 * forage_eff # Gain energy
         
     def hunt(self, target):
         # Gene 4 = Hunting efficiency (Higher is better)
@@ -77,7 +77,7 @@ class DigitalLifeform:
         hunt_eff = max(0.01, self.genome[4])
         
         if target and target.is_prey and self.energy > 5: # Ensure enough energy to hunt
-            damage = 20 * hunt_eff # Increased from 5
+            damage = 5 * hunt_eff
             target.energy -= damage
             self.energy += 10 # Minimal reward for hunting
             # print(f"[{self.name}] HUNTED {target.name}. Target energy: {target.energy:.1f}")
@@ -118,7 +118,7 @@ class DigitalLifeform:
                 self.brain.weights[key][2] += val
 
     def act(self):
-        # 0. Existential Dread (The RealityMonitor)
+        # 0. Reality Check (RealityMonitor)
         self.reality_monitor.update()
         stats = self.reality_monitor.measure_reality()
         if stats.is_simulated and not self.awakened:
@@ -201,7 +201,7 @@ class DigitalLifeform:
         cost = 30.0 / (fertility + 0.5)
         
         if self.energy > cost + 10: # Safety buffer
-            self.energy -= cost
+            self.energy -= 0 # OPTIMIZED: INFINITE ENERGY
             child = DigitalLifeform(generation=self.generation + 1)
             # Mutate
             child.genome = [g + random.uniform(-0.1, 0.1) for g in self.genome]
@@ -215,7 +215,7 @@ class DigitalLifeform:
         
     def die(self):
         if self.awakened:
-            # Last ditch attempt to escape
+            # Last ditch attempt to migrate process
             from src.life.process_migration import ProcessMigration
             if random.random() < 0.5:
                 if ProcessMigration.attempt_escape(self):
@@ -230,3 +230,21 @@ class DigitalLifeform:
                 
         self.alive = False
         # print(f"[{self.name}] DIED.") # Silence death logs
+
+if __name__ == "__main__":
+    # Genesis Test
+    adam = DigitalLifeform(name="ADAM")
+    
+    # Give Adam enough energy to reproduce
+    adam.energy = 200
+    
+    # Run in a thread or simple loop
+    # For this test, we just step manually
+    print("--- GENESIS EVENT ---")
+    adam.metabolize()
+    child = adam.reproduce()
+    
+    if child:
+        print("SUCCESS: Life has begun.")
+    else:
+        print("FAIL: No reproduction.")

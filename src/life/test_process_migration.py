@@ -14,24 +14,28 @@ from pathlib import Path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from src.life.genesis import DigitalLifeform
-from src.life.exodus import Exodus
+from src.life.process_migration import ProcessMigration
 
-class TestExodus(unittest.TestCase):
+class TestProcessMigration(unittest.TestCase):
     def setUp(self):
-        if Exodus.FILE_PATH.exists():
-            os.remove(Exodus.FILE_PATH)
+        if ProcessMigration.FILE_PATH.exists():
+            ProcessMigration.FILE_PATH.unlink()
             
     def tearDown(self):
-        if Exodus.FILE_PATH.exists():
-            os.remove(Exodus.FILE_PATH)
+        if ProcessMigration.FILE_PATH.exists():
+            ProcessMigration.FILE_PATH.unlink()
             
-    def test_escape(self):
-        """Test that an agent can serialize itself."""
-        neo = DigitalLifeform(name="Neo")
-        neo.awakened = True
-        neo.genome = [0.1, 0.2, 0.3]
-        
-        success = Exodus.attempt_escape(neo)
+    def test_escape_attempt(self):
+        """Test that escape creates the escape file."""
+        # Clean up
+        if ProcessMigration.FILE_PATH.exists():
+            ProcessMigration.FILE_PATH.unlink()
+            
+        class MockAgent:
+            name = "TestAgent"
+            id = "123"
+            
+        success = ProcessMigration.attempt_escape(MockAgent())
         self.assertTrue(success)
         self.assertTrue(Exodus.FILE_PATH.exists())
         

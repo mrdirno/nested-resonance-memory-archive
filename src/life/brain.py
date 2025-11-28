@@ -17,8 +17,10 @@ class Brain:
         # [Energy_Weight, Signal_Weight, Random_Bias]
         self.weights = {
             'reproduce': [0.8, 0.0, -0.2], # High energy, ignores signals
-            'forage': [-0.5, 0.0, 0.5],    # Low energy
-            'donate': [0.5, 1.0, -0.5]     # Needs energy AND 'HELP' signal
+            'forage': [-0.5, 0.0, 0.5],
+            'donate': [0.5, 1.0, -0.5],    # Needs energy AND 'HELP' signal
+            'flee': [-0.8, 1.0, 0.2],      # Low energy, high DANGER signal
+            'hunt': [0.2, 1.0, -0.8]       # Some energy, high prey signal (if prey signals its presence)
         }
         
     def decide(self, state: dict) -> str:

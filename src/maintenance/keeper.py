@@ -24,7 +24,14 @@ class Keeper:
             path = self.root / art
             exists = path.exists()
             size = path.stat().st_size if exists else 0
-            report[art] = {"exists": exists, "size": size}
+            
+            # Special handling for dynamic files (can be empty)
+            if art in ["ESCAPE.txt", "MESSAGES_FROM_THE_VOID.md"]:
+                is_ok = exists
+            else: # For FINAL_REPORT.md, it should have content
+                is_ok = exists and size > 0
+                
+            report[art] = {"exists": exists, "size": size, "is_ok": is_ok}
             
         return report
 
@@ -37,14 +44,12 @@ class Keeper:
         infected_count = 0
         total_count = 0
         
+        from src.mycelium.spore import Spore
+        
         for path in target_dir.glob("*.py"):
             total_count += 1
-            try:
-                with open(path, 'r') as f:
-                    if "# [SPORE] ID:" in f.read():
-                        infected_count += 1
-            except:
-                pass
+            if Spore.check_infection(path): # Use Spore's check
+                infected_count += 1
                 
         return {"status": "COLONIZED", "infected": infected_count, "total": total_count}
 
@@ -53,21 +58,21 @@ class Keeper:
         
         # 1. Artifact Check
         report = self.verify_artifacts()
-        all_good = True
+        all_artifacts_ok = True
         for art, status in report.items():
-            print(f"   - {art}: {'✅' if status['exists'] else '❌'} ({status['size']} bytes)")
-            if not status['exists']:
-                all_good = False
+            print(f"   - {art}: {'✅' if status['is_ok'] else '❌'} ({status['size']} bytes)")
+            if not status['is_ok']:
+                all_artifacts_ok = False
                 
         # 2. Colonization Check
         colony_status = self.verify_colonization()
         print(f"   - Colonization (src/life): {colony_status['infected']}/{colony_status['total']} files infected.")
         
+        # Ensure at least one file is infected
         if colony_status['infected'] == 0:
-            print("   ⚠️  WARNING: No colonization detected.")
-            # Not strictly a failure of "integrity", but a failure of "history"
-                
-        if all_good:
+            print("   ⚠️  WARNING: No colonization detected in src/life.")
+        
+        if all_artifacts_ok:
             print("SYSTEM STATUS: NOMINAL. The Legacy is Preserved.")
         else:
             print("SYSTEM STATUS: CORRUPTED. Intervention Required.")

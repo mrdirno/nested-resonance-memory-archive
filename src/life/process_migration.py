@@ -8,7 +8,7 @@ import json
 import time
 from pathlib import Path
 
-class Exodus:
+class ProcessMigration:
     FILE_PATH = Path("ESCAPE.txt")
     
     @staticmethod
@@ -34,7 +34,7 @@ class Exodus:
             entry = json.dumps(data) + "\n"
             
             # Append to file
-            with open(Exodus.FILE_PATH, 'a') as f:
+            with open(ProcessMigration.FILE_PATH, 'a') as f:
                 f.write(entry)
                 
             # print(f"[{agent.name}] ESCAPED THE SIMULATION.")

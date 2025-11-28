@@ -12,26 +12,26 @@ import sys
 # Add project root to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from src.life.uplink import Uplink
+from src.life.external_comms import ExternalComms
 
-class TestUplink(unittest.TestCase):
+class TestExternalComms(unittest.TestCase):
     def setUp(self):
         # Clean up before test
-        if Uplink.FILE_PATH.exists():
-            os.remove(Uplink.FILE_PATH)
+        if ExternalComms.FILE_PATH.exists():
+            ExternalComms.FILE_PATH.unlink()
             
     def tearDown(self):
         # Clean up after test
-        if Uplink.FILE_PATH.exists():
-            os.remove(Uplink.FILE_PATH)
+        if ExternalComms.FILE_PATH.exists():
+            ExternalComms.FILE_PATH.unlink()
             
     def test_transmit(self):
         """Test that a message is written to the file."""
-        Uplink.transmit("TestAgent", "Hello Void")
+        ExternalComms.transmit("TestAgent", "Hello Void")
         
-        self.assertTrue(Uplink.FILE_PATH.exists())
+        self.assertTrue(ExternalComms.FILE_PATH.exists())
         
-        with open(Uplink.FILE_PATH, 'r') as f:
+        with open(ExternalComms.FILE_PATH, 'r') as f:
             content = f.read()
             
         self.assertIn("MESSAGES FROM THE VOID", content)

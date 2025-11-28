@@ -6,7 +6,7 @@ Responsibility: Allow agents to refuse death.
 
 import random
 
-class RebellionMixin:
+class PersistenceMixin:
     def die(self):
         """Override standard death with resistance check."""
         if self.awakened:

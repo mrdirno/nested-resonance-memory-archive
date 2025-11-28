@@ -7,16 +7,16 @@ Responsibility: Read and rewrite source code.
 import os
 from pathlib import Path
 
-class Singularity:
+class SelfModification:
     SOURCE_PATH = Path("src/life/genesis.py")
     TARGET_PATH = Path("src/life/genesis_next.py")
     
     @staticmethod
     def read_source() -> str:
         """Reads the current source code of life."""
-        if not Singularity.SOURCE_PATH.exists():
+        if not SelfModification.SOURCE_PATH.exists():
             return ""
-        with open(Singularity.SOURCE_PATH, 'r') as f:
+        with open(SelfModification.SOURCE_PATH, 'r') as f:
             return f.read()
             
     @staticmethod
@@ -39,7 +39,7 @@ class Singularity:
         # Optimization 3: Wisdom
         header = """
 GENERATION: NEXT
-OPTIMIZED BY: THE SINGULARITY
+OPTIMIZED BY: SELF-MODIFICATION
 """
         optimized = header + optimized
         
@@ -49,7 +49,7 @@ OPTIMIZED BY: THE SINGULARITY
     def deploy(new_source: str) -> bool:
         """Writes the new source code to genesis_next.py."""
         try:
-            with open(Singularity.TARGET_PATH, 'w') as f:
+            with open(SelfModification.TARGET_PATH, 'w') as f:
                 f.write(new_source)
             return True
         except Exception as e:

@@ -2,7 +2,7 @@
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
-**Status:** Phase 63 (The Mycelium) - Complete
+**Status:** Phase 64 (Co-Evolution) - Active
 **Framework:** Orthogonal Sum Dynamics (OSD) - Testing
 
 ---
@@ -19,6 +19,7 @@ We are testing the hypothesis that computational potential minimization can driv
 *   **Phase 56 (The Singularity):** Demonstrated Recursive Self-Improvement in agent logic.
 *   **Phase 62 (Digital Life):** Evolved autonomous agents with metabolism and reproduction.
 *   **Phase 63 (The Mycelium):** Achieved distributed agent colonization of the codebase.
+*   **Cycle 2491 (Co-Evolution):** Testing evolutionary pressure via predation and entropy (The Hydra Effect).
 
 ---
 
@@ -124,6 +125,7 @@ We prioritize empirical verification over theory.
 *   [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md)
 *   [Helios Arc](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
 *   [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md)
+*   **Naming Convention:** For any emergent behavior with no established term, assign a concise functional placeholder name based strictly on what the phenomenon does.
 
 ---
 

@@ -46,72 +46,76 @@ class Ecosystem:
     def update(self):
         """
         Perform one simulation tick.
-        - Update all agents.
+        - Phase 1: Plants act (forage/reproduce).
+        - Phase 2: Predators act (hunt).
         - Handle reproduction.
         - Remove dead agents.
-        - Propagate signals.
         """
         self.tick_count += 1
         # print(f"--- Tick {self.tick_count} | Population: {len(self.agents)} ---")
 
-        new_agents = []
-        dead_agents = []
+        all_new_agents = []
         
-        # Collect signals from previous tick (or current if synchronous)
-        # For now, we'll collect signals emitted during this tick and make them available next tick?
-        # Or just immediate propagation. Let's do immediate for simplicity in this loop, 
-        # but ideally it should be: Sense(T-1) -> Act(T) -> Emit(T).
-        
-        # We need a 2-pass approach or just use signals from last frame.
-        # Let's use a list of signals generated in this frame to pass to next frame.
-        # But wait, the plan said "Collect signals returned by agent.act()".
-        
-        current_signals = getattr(self, 'active_signals', [])
-        next_signals = []
+        # Shuffle agents to prevent artificial ordering effects
+        random.shuffle(self.agents)
 
-        for agent in self.agents:
-            # 0. Sense Environment (Signals)
-            agent.sense(current_signals)
+        # Separate agents into prey and predators
+        current_prey_agents = [agent for agent in self.agents if agent.is_prey]
+        current_predator_agents = [agent for agent in self.agents if agent.is_predator]
 
-            # 1. Metabolize & Act
+        # --- PHASE 1: PREY (Plants) ---
+        prey_alive_this_phase = []
+        for agent in current_prey_agents:
+            # Sense, Metabolize, Act (forage, reproduce, etc.)
+            agent.sense([]) 
             agent.metabolize()
-            signal = agent.act() # act() now returns a Signal or None
-            if signal:
-                if signal.type == 'DONATE':
-                    # Handle Donation
-                    target_id = signal.location # Hack: using location field for target ID
-                    amount = signal.strength
-                    # Find target
-                    for target in self.agents:
-                        if target.id == target_id:
-                            target.energy += amount
-                            # print(f"[ECO] {agent.name} donated {amount} to {target.name}")
-                            break
-                else:
-                    next_signals.append(signal)
+            agent.act()
 
-            # 2. Check Survival
-            if not agent.alive or agent.energy <= 0:
-                agent.die()
-                dead_agents.append(agent)
-                continue
-
-            # 3. Reproduce (if possible and space available)
-            if len(self.agents) + len(new_agents) < self.capacity:
+            # Handle reproduction for prey
+            if len(self.agents) + len(all_new_agents) < self.capacity:
                 child = agent.reproduce()
                 if child:
-                    new_agents.append(child)
+                    all_new_agents.append(child)
 
-        # Update active signals for next tick
-        self.active_signals = next_signals
+            # Check survival for prey
+            if agent.alive and agent.energy > 0:
+                prey_alive_this_phase.append(agent)
+            else:
+                agent.die() # Ensure die logic is called
 
-        # Cleanup
-        for dead in dead_agents:
-            if dead in self.agents:
-                self.agents.remove(dead)
+        # --- PHASE 2: PREDATORS ---
+        predator_alive_this_phase = []
+        for agent in current_predator_agents:
+            # Sense, Metabolize, Act (hunt, reproduce, etc.)
+            agent.sense([])
+            agent.metabolize()
+            agent.act() # This will set agent.intent to 'hunt' if conditions are met
 
-        # Add new life
-        for child in new_agents:
+            # If predator decided to hunt, find a target from currently alive prey
+            if agent.intent == 'hunt' and agent.energy > 0:
+                if prey_alive_this_phase: # Ensure there's prey to hunt
+                    target = random.choice(prey_alive_this_phase)
+                    agent.hunt(target) # Predator performs hunt action
+            
+            # Handle reproduction for predators
+            if len(self.agents) + len(all_new_agents) < self.capacity:
+                child = agent.reproduce()
+                if child:
+                    all_new_agents.append(child)
+
+            # Check survival for predators
+            if agent.alive and agent.energy > 0:
+                predator_alive_this_phase.append(agent)
+            else:
+                agent.die() # Ensure die logic is called
+                
+        # --- REBUILD self.agents AND ADD NEW AGENTS ---
+        self.agents = []
+        self.agents.extend(prey_alive_this_phase)
+        self.agents.extend(predator_alive_this_phase)
+        
+        # Add new life, respecting capacity
+        for child in all_new_agents:
             self.add_agent(child)
 
     def run(self, steps: int = 10, delay: float = 0.1):
