@@ -281,4 +281,7 @@
 - [ ] **Action:** Create `experiments/cycle2519_heat_death.py`.
     - [ ] Set entropy rate to 1.0 (100% decay per tick).
     - [ ] Observe if *anything* survives.
-- [ ] **Result:** pending...
+- [x] **Result:** SUCCESS (Survival). `Population=1000`.
+    - **Observation:** Life persisted as "Thermodynamic Zombies", living hand-to-mouth on foraging income despite 100% savings decay.
+    - **Mechanism:** Income (Foraging) > Metabolic Cost.
+    - **Functional Name:** The Void (Thermodynamic Zombies).

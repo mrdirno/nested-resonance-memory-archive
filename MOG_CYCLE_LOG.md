@@ -1958,3 +1958,8 @@
 *   **Status:** Earth=0, Mars=200, Alpha=200.
 *   **Cause:** Interstellar Migration.
 *   **Functional Name:** The Fermi Paradox (Exoplanetary Colonization).
+
+*   **Result:** SUCCESS (Survival). Life Persists.
+*   **Status:** Population 1000. Avg Energy ~15.
+*   **Cause:** Foraging Income > Metabolic Cost (despite 100% Savings Tax).
+*   **Functional Name:** The Void (Thermodynamic Zombies).
