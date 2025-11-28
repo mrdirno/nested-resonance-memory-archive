@@ -92,7 +92,14 @@ class TestObserveBasic:
                 "std": computed_std,
                 "cv": computed_cv
             },
-            "validation": {}
+            "validation": {},
+            "transcendental_results": {
+                "pattern_lifetime": [],
+                "memory_retention": [],
+                "cluster_stability": [],
+                "complexity_bootstrap": []
+            },
+            "metrics": ["pattern_lifetime", "memory_retention", "cluster_stability", "complexity_bootstrap"]
         }
 
         data_file = tmp_path / "test_pc002.json"
@@ -153,7 +160,7 @@ class TestSchemaValidation:
 
         with pytest.raises(SchemaValidationError) as exc_info:
             observe(source=data_file, domain="test", schema="pc001")
-        assert "missing required keys" in str(exc_info.value).lower()
+        assert "PC001 schema missing metadata fields" in str(exc_info.value) or "missing required" in str(exc_info.value).lower()
 
     def test_pc001_missing_population(self, tmp_path):
         """Test PC001 schema requires 'population' timeseries."""

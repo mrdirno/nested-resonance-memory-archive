@@ -210,6 +210,7 @@ class PC002_Transcendental_Substrate(PrincipleCard):
             "ts_results_available": bool(ts_results),
             "ps_results_available": False,
             "validation_stage": "design_phase",
+            "status": "DESIGN",
             "message": "PC002 implementation validated, comparative experiments pending"
         }
         
