@@ -169,4 +169,7 @@
     - [ ] Update `work_for_wage()`: Yield scales with Innovation.
     - [ ] Employers pay bonuses for high yield.
 - [ ] **Action:** Run `experiments/cycle2506_innovation.py`.
-- [ ] **Result:** pending...
+- [x] **Result:** Failure (Inverse Meritocracy).
+    - **Observation:** Dumb Workers (`Gene 9 = 0.1`) outperformed Smart Workers (`Gene 9 = 0.9`). `DumbBosses=5`, `SmartBosses=1`.
+    - **Cause:** The metabolic cost of Innovation (`trait_cost`) outweighed the wage bonuses. Being smart is expensive; being dumb is cheap.
+    - **Functional Name:** The Idiocracy (Anti-Intellectual Selection).

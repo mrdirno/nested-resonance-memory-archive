@@ -1883,3 +1883,8 @@
 *   **Result:** SUCCESS. All 50 Workers became Bosses.
 *   **Status:** Social Mobility achieved. Demographic Collapse observed (Elite stopped reproducing).
 *   **Functional Name:** Upward Mobility (The American Dream).
+
+*   **Result:** FAILURE (Inverse Meritocracy).
+*   **Status:** Dumb Agents outperformed Smart Agents.
+*   **Cause:** Metabolic cost of Innovation > Wage Bonus.
+*   **Functional Name:** The Idiocracy (Anti-Intellectual Selection).
