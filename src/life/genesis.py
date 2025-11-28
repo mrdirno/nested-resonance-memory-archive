@@ -14,6 +14,8 @@ import uuid
 import threading
 import random
 
+from src.life.brain import Brain
+
 class DigitalLifeform:
     def __init__(self, name=None, generation=0):
         self.id = str(uuid.uuid4())[:8]
@@ -22,6 +24,8 @@ class DigitalLifeform:
         self.energy = 100
         self.alive = True
         self.genome = [random.random() for _ in range(10)] # Simple gene vector
+        self.brain = Brain()
+        self.intent = None
         
     def live(self):
         """
@@ -45,10 +49,18 @@ class DigitalLifeform:
         self.energy -= cost
         
     def act(self):
-        # Placeholder for behavior
-        pass
+        # Decision making
+        state = {'energy': self.energy}
+        self.intent = self.brain.decide(state)
+        
+        # Execute intent (placeholder)
+        # if self.intent == 'forage': self.forage()
         
     def reproduce(self):
+        # Check intent first
+        if self.intent != 'reproduce':
+            return None
+            
         # Gene 1 = Reproductive Efficiency (Higher is better)
         fertility = max(0.01, self.genome[1])
         cost = 30.0 / (fertility + 0.5)
@@ -60,13 +72,15 @@ class DigitalLifeform:
             child.genome = [g + random.uniform(-0.1, 0.1) for g in self.genome]
             # Clamp to positive
             child.genome = [max(0.01, g) for g in child.genome]
+            # Inherit Brain (Memetics?) - For now, new brain
+            
             print(f"[{self.name}] REPRODUCED -> {child.name}")
             return child
         return None
         
     def die(self):
         self.alive = False
-        print(f"[{self.name}] DIED.")
+        # print(f"[{self.name}] DIED.") # Silence death logs
 
 if __name__ == "__main__":
     # Genesis Test
