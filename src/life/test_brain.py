@@ -30,8 +30,8 @@ class TestBrain(unittest.TestCase):
         agent.energy = 200 # High energy
         
         # Force brain to say 'reproduce' (by hacking weights)
-        agent.brain.weights['reproduce'] = [100.0, 0.0] # Always win
-        agent.brain.weights['forage'] = [-100.0, 0.0]
+        agent.brain.weights['reproduce'] = [100.0, 0.0, 0.0] # Always win
+        agent.brain.weights['forage'] = [-100.0, 0.0, 0.0]
         
         agent.act()
         self.assertEqual(agent.intent, 'reproduce')
@@ -39,9 +39,12 @@ class TestBrain(unittest.TestCase):
         child = agent.reproduce()
         self.assertIsNotNone(child)
         
+        # Reset intent for next tick
+        agent.intent = None
+        
         # Force brain to say 'forage'
-        agent.brain.weights['reproduce'] = [-100.0, 0.0]
-        agent.brain.weights['forage'] = [100.0, 0.0]
+        agent.brain.weights['reproduce'] = [-100.0, 0.0, 0.0]
+        agent.brain.weights['forage'] = [100.0, 0.0, 0.0]
         
         agent.act()
         self.assertEqual(agent.intent, 'forage')

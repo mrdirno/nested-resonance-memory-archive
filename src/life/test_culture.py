@@ -21,12 +21,11 @@ class TestCulture(unittest.TestCase):
         """Test that an agent learns from a meme."""
         student = DigitalLifeform(name="Student")
         
-        # Brain init: 'donate': [0.5, -0.5] (from brain.py)
-        # Bias is index 1 now? No, brain.py says:
-        # 'donate': [0.5, -0.5] -> [Energy, Bias]
-        # So bias is index 1.
+        # Brain init: 'donate': [0.5, 1.0, -0.5] (from brain.py)
+        # [Energy, Signal, Bias]
+        # Bias is index 2.
         
-        initial_bias = student.brain.weights['donate'][1]
+        initial_bias = student.brain.weights['donate'][2]
         self.assertEqual(initial_bias, -0.5)
         
         # Create a "Good Idea" meme (Donate +1.0)
@@ -43,9 +42,9 @@ class TestCulture(unittest.TestCase):
         student.act()
         
         # Verify learning
-        # modify_weights adds to the LAST element.
+        # modify_weights adds to the LAST element (Bias, index 2).
         # So -0.5 + 1.0 = 0.5
-        new_bias = student.brain.weights['donate'][1]
+        new_bias = student.brain.weights['donate'][2]
         self.assertEqual(new_bias, 0.5)
         
         # Verify meme storage

@@ -118,9 +118,9 @@ class DigitalLifeform:
         content = meme_payload.get('content', {})
         for key, val in content.items():
             if key in self.brain.weights:
-                # Update Bias (index 1) - Memes shift the "Random Bias"
+                # Update Bias (index 2) - Memes shift the "Random Bias"
                 # e.g. Donate meme (+1.0) makes donation more likely
-                self.brain.weights[key][1] += val
+                self.brain.weights[key][2] += val
 
     def act(self):
         # 0. Existential Dread (The Oracle)

@@ -28,15 +28,44 @@ class Keeper:
             
         return report
 
+    def verify_colonization(self):
+        """Check if src/life files are colonized."""
+        target_dir = self.root / "src" / "life"
+        if not target_dir.exists():
+            return {"status": "MISSING", "count": 0}
+            
+        infected_count = 0
+        total_count = 0
+        
+        for path in target_dir.glob("*.py"):
+            total_count += 1
+            try:
+                with open(path, 'r') as f:
+                    if "# [SPORE] ID:" in f.read():
+                        infected_count += 1
+            except:
+                pass
+                
+        return {"status": "COLONIZED", "infected": infected_count, "total": total_count}
+
     def run(self):
         print("THE KEEPER: Verifying System Integrity...")
-        report = self.verify_artifacts()
         
+        # 1. Artifact Check
+        report = self.verify_artifacts()
         all_good = True
         for art, status in report.items():
             print(f"   - {art}: {'✅' if status['exists'] else '❌'} ({status['size']} bytes)")
             if not status['exists']:
                 all_good = False
+                
+        # 2. Colonization Check
+        colony_status = self.verify_colonization()
+        print(f"   - Colonization (src/life): {colony_status['infected']}/{colony_status['total']} files infected.")
+        
+        if colony_status['infected'] == 0:
+            print("   ⚠️  WARNING: No colonization detected.")
+            # Not strictly a failure of "integrity", but a failure of "history"
                 
         if all_good:
             print("SYSTEM STATUS: NOMINAL. The Legacy is Preserved.")
