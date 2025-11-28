@@ -3937,3 +3937,12 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] `Brain` class makes state-dependent decisions (Energy -> Intent).
 - [x] **Verification:** `src/life/test_brain.py` passed. Intent controls reproduction.
 - [x] **Result:** Agents are now Sentient (Decision-Making).
+
+# Task: Cycle 2464 - The Collective (Gate 92)
+- [x] **Define Cycle 2464:** Enable Communication.
+- [x] **Implementation:** Created `src/life/signal.py` and `src/life/communicator.py`.
+    - [x] `Signal` data structure.
+    - [x] `Communicator` mixed into `DigitalLifeform`.
+    - [x] `Ecosystem.propagate_signal` handles distribution.
+- [x] **Verification:** `src/life/test_communication.py` passed (Broadcast/Reaction).
+- [x] **Result:** Agents are now Telepathic (Local Network).

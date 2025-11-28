@@ -29,6 +29,12 @@ class Ecosystem:
         else:
             print(f"[ECO] Capacity reached. Cannot add {agent.name}")
 
+    def propagate_signal(self, signal):
+        """Distribute a signal to all agents."""
+        for agent in self.agents:
+            if agent.id != signal.source_id:
+                agent.communicator.receive(signal)
+
     def update(self):
         """
         Perform one simulation tick.

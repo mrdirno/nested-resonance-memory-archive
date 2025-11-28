@@ -11,10 +11,10 @@ Concepts:
 
 import time
 import uuid
-import threading
 import random
-
+from typing import List
 from src.life.brain import Brain
+from src.life.communicator import Communicator
 
 class DigitalLifeform:
     def __init__(self, name=None, generation=0):
@@ -25,6 +25,7 @@ class DigitalLifeform:
         self.alive = True
         self.genome = [random.random() for _ in range(10)] # Simple gene vector
         self.brain = Brain()
+        self.communicator = Communicator(self.id)
         self.intent = None
         
     def live(self):
@@ -49,12 +50,23 @@ class DigitalLifeform:
         self.energy -= cost
         
     def act(self):
-        # Decision making
-        state = {'energy': self.energy}
-        self.intent = self.brain.decide(state)
+        # 1. Listen
+        signal = self.communicator.process_signals()
+        if signal:
+            # React to signal (simple reflex)
+            if signal.type == 'FOOD':
+                self.intent = 'forage' # Override brain?
+            elif signal.type == 'DANGER':
+                self.intent = 'flee'
         
-        # Execute intent (placeholder)
-        # if self.intent == 'forage': self.forage()
+        # 2. Decision making (if no strong reflex)
+        if not self.intent:
+            state = {'energy': self.energy}
+            self.intent = self.brain.decide(state)
+        
+        # 3. Broadcast state (e.g., I found food!)
+        # Placeholder for context-aware broadcasting
+        pass
         
     def reproduce(self):
         # Check intent first
