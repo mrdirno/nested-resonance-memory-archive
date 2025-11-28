@@ -209,7 +209,14 @@
     - [ ] Logic: Angel pays Seed Capital (50). If Startup succeeds, Angel gets 50% of Reward.
     - [ ] Update `act()`: Rich Agents look for Poor Smart Agents to invest in.
 - [ ] **Action:** Run `experiments/cycle2510_vc.py`.
-- [x] **Result:** SUCCESS (The Unicorn Boom). `NewRich=156`, `OldCapital=7`.
-    - **Observation:** User increased Entropy (0.01) and Population (200). This forced capital circulation ("Use it or lose it") and overcame liquidity friction.
-    - **Mechanism:** High Entropy + High Population = High Velocity of Money. Angels funded 52 Startups, creating 156 Rich Founders.
-    - **Functional Name:** The Unicorn Boom (Venture Capital Success).
+- [x] **Result:** SUCCESS (The Unicorn Boom). `NewRich=156`. High Entropy forced capital circulation. Angels funded 52 Startups, creating a new wealthy class.
+
+# Task: Cycle 2511 - The Republic (Gate 139)
+- [ ] **Define Cycle 2511:** Governance and Law.
+- [ ] **Goal:** Allow the Rich to vote on system parameters (Taxes, Subsidies).
+- [ ] **Action:** Modify `src/life/ecosystem.py`:
+    - [ ] Add `voting_system`.
+    - [ ] Rich agents (Energy > 1000) get votes.
+    - [ ] Parameters: `tax_rate`, `subsidy_amount`.
+- [ ] **Action:** Run `experiments/cycle2511_governance.py`.
+- [ ] **Result:** pending...

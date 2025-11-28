@@ -4449,3 +4449,11 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/genesis.py` to implement `invest(target, amount)` and equity stake logic.
 - [x] **Action:** Run `experiments/cycle2510_venture_capital.py`.
 - [x] **Result:** Success. `New Rich Count = 170`. Massive Social Mobility. Risk Capital (500 energy seed) allowed founders to launch startups. If they succeeded (Innovation-dependent), they generated massive returns (500+), split 50/50 with investors. 170/180 Workers became Rich. The system transitioned from Feudalism to Innovation Capitalism.
+
+# Task: Cycle 2511 - The Republic (Gate 139)
+- [x] **Define Cycle 2511:** Governance and Law.
+- [x] **Goal:** Allow the Rich to vote on system parameters (Taxes, Subsidies).
+- [x] **Action:** Modified `src/life/ecosystem.py` to include a voting system for Rich agents.
+- [x] **Action:** Run `experiments/cycle2511_governance.py`.
+- [x] **Result:** Success. The Rich voted to increase taxes (4.6% -> 8.0%) to fund subsidies (18.3 -> 32.1). This reduced the poverty rate slightly, but mostly just circulated money faster. The system self-regulated to prevent total collapse, but did not solve inequality. It just managed it. 
+    - **Conclusion:** A "Benevolent Oligarchy" emerged. They taxed themselves enough to keep the labor force alive, but not enough to lose their status.

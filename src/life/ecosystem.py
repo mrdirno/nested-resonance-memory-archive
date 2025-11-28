@@ -23,6 +23,11 @@ class Ecosystem:
         self.prey_capacity = prey_capacity or int(capacity * 0.8)
         self.predator_capacity = predator_capacity or int(capacity * 0.2)
         self.running = False
+        
+        # Governance (The Republic)
+        self.tax_rate = 0.01 # Default 1%
+        self.subsidy_amount = 0 # Default 0
+        self.treasury = 0
 
     def add_agent(self, agent: DigitalLifeform):
         """Add an agent to the ecosystem."""
@@ -57,16 +62,80 @@ class Ecosystem:
         for agent in self.agents:
             if agent.id != signal.source_id:
                 agent.communicator.receive(signal)
+                
+    def govern(self):
+        """
+        The Rich vote on Tax Rate and Subsidies.
+        """
+        voters = [a for a in self.agents if a.energy > 1000]
+        if not voters: return # Anarchy
+        
+        # Genes for Policy:
+        # Gene 5 (Altruism) -> High = High Tax, High Subsidy
+        # Gene 8 (Trust) -> High = Low Tax (Libertarian)
+        
+        total_tax_vote = 0
+        total_subsidy_vote = 0
+        
+        for v in voters:
+            # Parse Genes
+            altruism = v.genome[5] if len(v.genome) > 5 else 0.5
+            trust = v.genome[8] if len(v.genome) > 8 else 0.5
+            
+            # Voting Logic
+            # Altruistic agents want high taxes to fund subsidies.
+            # Selfish agents want low taxes.
+            desired_tax = 0.05 * altruism # Max 5%
+            desired_subsidy = 20 * altruism
+            
+            total_tax_vote += desired_tax
+            total_subsidy_vote += desired_subsidy
+            
+        # Average the votes (Democracy of the Rich)
+        self.tax_rate = total_tax_vote / len(voters)
+        self.subsidy_amount = total_subsidy_vote / len(voters)
+        
+        # print(f"🏛️ GOVERNANCE: Tax={self.tax_rate:.1%}, Subsidy={self.subsidy_amount:.1f}, Voters={len(voters)}")
 
     def update(self):
         """
         Perform one simulation tick.
+        - Governance (Vote).
+        - Taxes & Subsidies.
         - Phase 1: Plants act (forage/reproduce).
         - Phase 2: Predators act (hunt).
         - Handle reproduction.
         - Remove dead agents.
         """
         self.tick_count += 1
+        
+        # 1. Governance
+        self.govern()
+        
+        # 2. Tax Collection
+        tax_revenue = 0
+        for agent in self.agents:
+            if agent.energy > 0:
+                tax = agent.energy * self.tax_rate
+                agent.energy -= tax
+                tax_revenue += tax
+        self.treasury += tax_revenue
+        
+        # 3. Subsidy Distribution (Welfare)
+        # Distribute treasury equally to the Poor (< 100 energy)
+        poor_agents = [a for a in self.agents if a.energy < 100]
+        if poor_agents and self.treasury > 0:
+            # Can we afford the target subsidy?
+            total_needed = len(poor_agents) * self.subsidy_amount
+            actual_payout = self.subsidy_amount
+            
+            if total_needed > self.treasury:
+                actual_payout = self.treasury / len(poor_agents)
+            
+            for p in poor_agents:
+                p.energy += actual_payout
+                self.treasury -= actual_payout
+
         # print(f"--- Tick {self.tick_count} | Population: {len(self.agents)} ---")
 
         all_new_agents = []
@@ -104,6 +173,19 @@ class Ecosystem:
                     agent.donate(ecosystem=self)
                 else:
                     agent.donate(target=target)
+            
+            # Handle Investing (VC)
+            elif agent.intent == 'invest' and agent.energy > 500:
+                # Look for Founders
+                # Simple O(N) search for now
+                for candidate in self.agents:
+                    # Find a Poor Smart Agent
+                    if candidate.energy < 500 and candidate.lineage_id == "Labor":
+                        # Check candidate innovation (requires genome access)
+                        innov = candidate.genome[9] if len(candidate.genome) > 9 else 0
+                        if innov > 0.7:
+                            agent.invest(candidate)
+                            break # One investment per tick per angel
 
             # Handle reproduction for prey
             # Check against prey capacity
