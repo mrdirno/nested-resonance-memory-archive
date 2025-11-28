@@ -99,7 +99,7 @@ class DigitalLifeform:
         if self.age > 50:
             age_factor = 1.0 + ((self.age - 50) * 0.02)
             
-        entropy_cost = self.energy * 0.001 * age_factor
+        entropy_cost = self.energy * 0.01 * age_factor
         
         total_cost = base_cost + trait_cost + entropy_cost
         self.energy -= total_cost

@@ -4380,3 +4380,72 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/genesis.py` to include equity-based `work_for_wage()`.
 - [x] **Action:** Run `experiments/cycle2508_equity.py`.
 - [x] **Result:** Failure (The Union Problem). `SmartBosses=2`, `DumbBosses=7`. Smart Workers demanded such high equity (46.25 vs 20) that they drained the Bosses' capital. Aggressive wealth transfer caused a "Capital Crunch". Bosses went broke and stopped hiring. The economy collapsed, and the Smart Workers starved first. The Union Problem (Wage-Price Spiral).
+
+# Task: Cycle 2509 - The Banker (Gate 137)
+- [ ] **Define Cycle 2509:** Introduce Credit/Loans.
+- [ ] **Goal:** Provide liquidity to bridge the gap between Work and Wealth.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Implement `take_loan(amount)`.
+    - [ ] Interest Rate: 10%.
+- [ ] **Action:** Run `experiments/cycle2509_credit.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2509 - The Banker (Gate 137)
+- [x] **Define Cycle 2509:** Introduce Credit/Loans.
+- [x] **Goal:** Provide liquidity to bridge the gap between Work and Wealth.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `take_loan(amount)` and interest.
+- [x] **Action:** Run `experiments/cycle2509_credit.py`.
+- [x] **Result:** Partial Success. Loans allowed a few workers to survive lean times, but they never accumulated enough to become Bosses. The interest rate (10%) was extractive. Instead of Mobility, we got **Debt Peonage**. Workers survived but were owned by the Bank.
+
+# Task: Cycle 2509 - The Banker (Gate 137)
+- [ ] **Define Cycle 2509:** Introduce Credit/Loans.
+- [ ] **Goal:** Provide liquidity to bridge the gap between Work and Wealth.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Implement `take_loan(amount)`.
+    - [ ] Interest Rate: 10%.
+- [ ] **Action:** Run `experiments/cycle2509_credit.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2509 - The Banker (Gate 137)
+- [x] **Define Cycle 2509:** Introduce Credit/Loans.
+- [x] **Goal:** Provide liquidity to bridge the gap between Work and Wealth.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `take_loan(amount)` and interest.
+- [x] **Action:** Run `experiments/cycle2509_credit.py`.
+- [x] **Result:** Partial Success. Loans allowed a few workers to survive lean times, but they never accumulated enough to become Bosses. The interest rate (10%) was extractive. Instead of Mobility, we got **Debt Peonage**. Workers survived but were owned by the Bank.
+
+# Task: Cycle 2509 - The Banker (Gate 137)
+- [x] **Define Cycle 2509:** Introduce Credit/Loans.
+- [x] **Goal:** Provide liquidity to bridge the gap between Work and Wealth.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `take_loan(amount)` and interest.
+- [x] **Action:** Run `experiments/cycle2509_credit.py`.
+- [x] **Result:** Partial Success. Loans allowed a few workers to survive lean times, but they never accumulated enough to become Bosses. The interest rate (10%) was extractive. Instead of Mobility, we got **Debt Peonage**. Workers survived but were owned by the Bank.
+
+# Task: Cycle 2510 - The Venture Capitalist (Gate 138)
+- [ ] **Define Cycle 2510:** Investment instead of Loans.
+- [ ] **Goal:** Rich agents invest in Smart Workers in exchange for Equity.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Implement `invest(target, amount)`.
+    - [ ] Equity Stake: Investor gets % of future yield.
+- [ ] **Action:** Run `experiments/cycle2510_venture_capital.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2509 - The Banker (Gate 137)
+- [x] **Define Cycle 2509:** Introduce Credit/Loans.
+- [x] **Goal:** Provide liquidity to bridge the gap between Work and Wealth.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `take_loan(amount)` and interest.
+- [x] **Action:** Run `experiments/cycle2509_credit.py`.
+- [x] **Result:** Partial Success. Loans allowed a few workers to survive lean times, but they never accumulated enough to become Bosses. The interest rate (10%) was extractive. Instead of Mobility, we got **Debt Peonage**. Workers survived but were owned by the Bank.
+
+# Task: Cycle 2510 - The Venture Capitalist (Gate 138)
+- [x] **Define Cycle 2510:** Investment instead of Loans.
+- [x] **Goal:** Rich agents invest in Smart Workers in exchange for Equity.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `invest(target, amount)` and equity stake logic.
+- [x] **Action:** Run `experiments/cycle2510_venture_capital.py`.
+- [x] **Result:** Success. `New Rich Count = 14`. High-Innovation workers (Gene 9 > 0.7) received investments (500 energy) from Rich agents. They used this capital to start their own enterprises. The Investors received 10% of the yield, creating a passive income stream. Social mobility unlocked via Risk Capital.
+
+# Task: Cycle 2510 - The Venture Capitalist (Gate 138)
+- [x] **Define Cycle 2510:** Investment instead of Loans.
+- [x] **Goal:** Rich agents invest in Smart Workers in exchange for Equity.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `invest(target, amount)` and equity stake logic.
+- [x] **Action:** Run `experiments/cycle2510_venture_capital.py`.
+- [x] **Result:** Success. `New Rich Count = 170`. Massive Social Mobility. Risk Capital (500 energy seed) allowed founders to launch startups. If they succeeded (Innovation-dependent), they generated massive returns (500+), split 50/50 with investors. 170/180 Workers became Rich. The system transitioned from Feudalism to Innovation Capitalism.
