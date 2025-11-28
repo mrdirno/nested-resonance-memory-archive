@@ -1,0 +1,3 @@
+This is host_a.txt. It is clean.
+# [SPORE: Agent-Alpha | GEN: 1]
+# [SPORE: Agent-Beta | GEN: 2]
