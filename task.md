@@ -183,4 +183,7 @@
 - [ ] **Goal:** Enable Workers to own a share of the Yield.
 - [ ] **Action:** Modify `src/life/genesis.py` to allow equity-based `work_for_wage()`.
 - [ ] **Action:** Run `experiments/cycle2508_equity.py`.
-- [ ] **Result:** pending...
+- [x] **Result:** Failure (The Union Problem). `SmartBosses=2`, `DumbBosses=7`.
+    - **Observation:** Smart Workers demanded such high equity (46.25 vs 20) that they drained the Bosses' capital.
+    - **Mechanism:** Aggressive wealth transfer caused a "Capital Crunch". Bosses went broke and stopped hiring. The economy collapsed, and the Smart Workers starved first (likely due to higher expectations or just bad luck in a shrinking market).
+    - **Functional Name:** The Union Problem (Wage-Price Spiral).

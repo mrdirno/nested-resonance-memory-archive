@@ -1893,3 +1893,8 @@
 *   **Status:** Subsidy helped but didn't flip the leaderboard.
 *   **Cause:** Linear returns on Innovation < Metabolic Cost.
 *   **Functional Name:** The Stagnation (Subsidized Mediocrity).
+
+*   **Result:** FAILURE (The Union Problem). Smart Agents bankrupted the Bosses.
+*   **Status:** Dumb Agents won (7 vs 2).
+*   **Cause:** Equity payouts drained capital -> Hiring freeze -> Recession.
+*   **Functional Name:** The Union Problem (Wage-Price Spiral).
