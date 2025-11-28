@@ -4364,3 +4364,12 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/genesis.py` to cap innovation cost.
 - [x] **Action:** Run `experiments/cycle2507_subsidy.py`.
 - [x] **Result:** Failure (Partial). `SmartBosses=3`, `DumbBosses=4`. Even with a heavy subsidy (0.1 cost), Dumb agents still slightly outperformed Smart agents. The "Brain Tax" is still too high relative to the wage premium. Innovation is only profitable if it yields *exponential* returns, not linear ones. The Stagnation (Subsidized Mediocrity).
+
+# Task: Cycle 2508 - The Shareholder (Gate 136)
+- [x] **Define Cycle 2508:** Equity Compensation.
+- [x] **Goal:** Enable Workers to own a share of the Yield.
+- [x] **Action:** Modified `src/life/genesis.py` to include equity-based `work_for_wage()`.
+- [x] **Action:** Run `experiments/cycle2508_equity.py`.
+- [x] **Result:** Failure. `New Rich Count = 0`. Despite equity compensation (50% of yield), workers still did not accumulate enough capital to become Bosses. 
+    - **Analysis:** The threshold for "rich" (>500) might be too high relative to the yield (max 25-50). Also, entropy and cost of living eat up the gains. Or perhaps the high-innovation workers are too rare to make a statistical impact. 
+    - **Conclusion:** Even with equity, subsistence costs are the primary barrier to social mobility. We need to lower the cost of living or increase the absolute value of production.

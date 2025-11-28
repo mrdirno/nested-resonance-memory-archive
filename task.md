@@ -176,7 +176,11 @@
 - [ ] **Goal:** Make Innovation viable by reducing its personal cost.
 - [ ] **Action:** Modify `src/life/genesis.py` to cap innovation cost.
 - [ ] **Action:** Run `experiments/cycle2507_subsidy.py`.
-- [x] **Result:** Failure (Partial). `SmartBosses=3`, `DumbBosses=4`.
-    - **Observation:** Even with a heavy subsidy (0.1 cost), Dumb agents still slightly outperformed Smart agents. The "Brain Tax" is still too high relative to the wage premium.
-    - **Insight:** Innovation is only profitable if it yields *exponential* returns, not linear ones.
-    - **Functional Name:** The Stagnation (Subsidized Mediocrity).
+- [x] **Result:** Failure (Partial). `SmartBosses=3`, `DumbBosses=4`. Even with a heavy subsidy (0.1 cost), Dumb agents still slightly outperformed Smart agents. The "Brain Tax" is still too high relative to the wage premium. Innovation is only profitable if it yields *exponential* returns, not linear ones.
+
+# Task: Cycle 2508 - The Shareholder (Gate 136)
+- [ ] **Define Cycle 2508:** Equity Compensation.
+- [ ] **Goal:** Enable Workers to own a share of the Yield.
+- [ ] **Action:** Modify `src/life/genesis.py` to allow equity-based `work_for_wage()`.
+- [ ] **Action:** Run `experiments/cycle2508_equity.py`.
+- [ ] **Result:** pending...

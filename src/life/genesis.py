@@ -190,10 +190,12 @@ class DigitalLifeform:
     def work_for_wage(self, employer):
         """
         Perform labor for an employer.
-        Cost: 10 Energy (Work effort).
+        Cost: 10 Energy.
         Wage: 20 Energy (Base).
         Yield: 50 Energy * Innovation Multiplier.
-        Bonus: If Yield > 70, get 10% commission.
+        
+        EQUITY MODEL (Cycle 2508):
+        If Innovation > 0.7, worker demands 50% of the *Yield* instead of a flat wage.
         """
         work_cost = 10
         base_wage = 20
@@ -202,29 +204,39 @@ class DigitalLifeform:
         while len(self.genome) < 10: self.genome.append(0.5)
         innovation = self.genome[9]
         
-        # Productivity Multiplier (0.5x to 2.0x)
+        # Productivity Multiplier
         multiplier = 0.5 + (innovation * 1.5)
         yield_value = 50 * multiplier
         
         if self.energy >= work_cost and employer.energy >= base_wage:
-            # Transaction
+            
+            # EQUITY CHECK
+            is_equity_deal = (innovation > 0.7)
+            
+            # Transaction Cost
             self.energy -= work_cost
-            employer.energy -= base_wage
+            employer.energy -= base_wage # Base fee to start work (overhead)
             
             # Value Creation
             employer.energy += yield_value
             
-            # Compensation
-            total_pay = base_wage
+            # Compensation Logic
+            if is_equity_deal:
+                # Shareholder Model: 50/50 Split of Yield
+                pay = yield_value * 0.5
+                # Employer pays the split (if they have it)
+                if employer.energy >= pay:
+                    employer.energy -= pay
+                    self.energy += pay
+                else:
+                    # Employer bankrupt, pays what they have
+                    self.energy += employer.energy
+                    employer.energy = 0
+            else:
+                # Wage Labor Model: Flat Fee
+                self.energy += base_wage
             
-            # Commission for High Performance (The Meritocracy)
-            if yield_value > 70:
-                bonus = (yield_value - 70) * 0.5 # Split the extra profit
-                if employer.energy >= bonus:
-                    employer.energy -= bonus
-                    total_pay += bonus
-            
-            self.energy += total_pay
+            # print(f"🔨 {self.name} worked. Innov={innovation:.2f}. Pay={pay if is_equity_deal else base_wage:.1f}")
             return True
         return False
 
