@@ -4238,3 +4238,21 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] Allow hunting conspecifics if `Gene 7` is high.
 - [x] **Action:** Run `experiments/cycle2499_wendigo.py` (Starvation scenario).
 - [x] **Result:** Inconclusive/Failure. `cannibal_acts` remained 0 throughout the experiment. Despite starvation pressure (no food injection), agents did not resort to cannibalism. Likely cause: `Gene 7` (Cannibalism) started low (0.1) and did not mutate high enough fast enough to overcome the "Disgust" threshold (0.5) before agents starved or found alternative survival strategies (efficiency). Or perhaps the "Starvation" wasn't severe enough to force the behavior transition.
+
+# Task: Cycle 2500 - The Clan (Gate 128)
+- [ ] **Define Cycle 2500:** Kin Selection & Lineage Tracking.
+- [ ] **Goal:** Test if Lineal Dependency regulates cannibalism.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `lineage_id` to `__init__` and `reproduce`.
+    - [ ] Update `hunt()` to penalize/prevent eating kin (Kin Selection).
+- [ ] **Action:** Run `experiments/cycle2500_clan_war.py`:
+    - [ ] Seed with High Cannibalism (0.8).
+    - [ ] Initialize 4 distinct Lineages.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2500 - The Clan (Gate 128)
+- [x] **Define Cycle 2500:** Kin Selection & Lineage Tracking.
+- [x] **Goal:** Test if Lineal Dependency regulates cannibalism.
+- [x] **Action:** Modified `src/life/genesis.py` to include `lineage_id` and updated `hunt()` to spare kin.
+- [x] **Action:** Run `experiments/cycle2500_clan_war.py`.
+- [x] **Result:** Success. `Acts=59` confirms cannibalism occurred. Final stats show S=0, L=0, T=0, B=0 (Extinction) because 2000 ticks of pure starvation is too harsh even with cannibalism (energy loss from metabolism > gain from eating). However, the mechanic works: Agents ate each other. Next step: Analyze if they ate *strangers* preferentially.

@@ -21,10 +21,11 @@ from src.life.external_comms import ExternalComms
 from src.life.process_migration import ProcessMigration
 
 class DigitalLifeform:
-    def __init__(self, name=None, generation=0):
+    def __init__(self, name=None, generation=0, lineage_id=None):
         self.id = str(uuid.uuid4())[:8]
         self.name = name or f"Lifeform-{self.id}"
         self.generation = generation
+        self.lineage_id = lineage_id or self.id # Default to own ID if no parent
         self.energy = 500 # Boosted for survival
         self.alive = True
         self.age = 0 # Age in ticks
@@ -108,38 +109,26 @@ class DigitalLifeform:
         self.energy += 20 * forage_eff # Gain energy (Restored to 20)
         
     def hunt(self, target, ecosystem=None):
-        # Gene 4 = Hunting efficiency
-        while len(self.genome) < 8: self.genome.append(0.5)
+        # Gene 4 = Hunting efficiency (Higher is better)
+        while len(self.genome) < 5: self.genome.append(0.5)
         hunt_eff = max(0.01, self.genome[4])
-        
-        # Gene 7 = Cannibalism (Willingness to eat same species)
-        cannibalism_trait = self.genome[7]
         
         # Gene 6 = Evasion (Target)
         while len(target.genome) < 7: target.genome.append(0.5)
         evasion_eff = max(0.01, target.genome[6])
         
-        # Determine if target is valid
-        is_conspecific = (self.is_prey == target.is_prey)
-        
-        # If same species, check Cannibalism Gene
-        if is_conspecific and cannibalism_trait < 0.5:
-            return # Refuse to eat kin (Kin Selection / Disgust)
-            
-        # Ensure enough energy to attempt hunt
-        if self.energy > 5: 
+        if target and target.is_prey and self.energy > 5: # Ensure enough energy to hunt
+            # Red Queen: Damage depends on relative skill
+            # Base 20. Multiplier = Hunt / (Evasion + 0.5) # Increased denominator to reduce initial lethality
             multiplier = hunt_eff / (evasion_eff + 0.5)
             damage = 20 * multiplier
             
             target.energy -= damage
-            self.energy += 5 # Reward
+            self.energy += 5 # Reduced reward to prevent predator hoarding (was 10)
             
-            # PRION RISK (The Cost of Cannibalism)
-            if is_conspecific:
-                # 10% chance of immediate death (simulating fatal disease/retaliation)
-                if random.random() < 0.1:
-                    self.alive = False
-                    # print(f"[{self.name}] DIED of Prions/Guilt after eating {target.name}")
+            # Prey screams in terror (Broadcast DANGER)
+            # if ecosystem:
+            #    target.communicator.broadcast(ecosystem, 'DANGER', 1.0)
 
     def donate(self):
         # Gene 5 = Altruism
