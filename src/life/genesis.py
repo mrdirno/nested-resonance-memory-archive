@@ -27,6 +27,7 @@ class DigitalLifeform:
         self.generation = generation
         self.energy = 500 # Boosted for survival
         self.alive = True
+        self.age = 0 # Age in ticks
         self.genome = [random.random() for _ in range(10)] # Simple gene vector
         self.brain = Brain()
         self.communicator = Communicator(self.id)
@@ -67,6 +68,8 @@ class DigitalLifeform:
         self.die()
         
     def metabolize(self):
+        self.age += 1
+        
         # Cost of living
         # Gene 0 = Metabolic Efficiency (Higher is better)
         # Base cost 1.0, reduced by high efficiency
@@ -84,9 +87,16 @@ class DigitalLifeform:
         
         trait_cost = (hunt_skill**2 + evasion_skill**2) * 0.5
         
-        # Entropy: Energy decay (Wealth Tax)
+        # Entropy: Energy decay (Wealth Tax) + AGING
         # Prevents infinite hoarding. 1% per tick.
-        entropy_cost = self.energy * 0.01
+        # PLUS: Age Tax. After 50 ticks, entropy increases.
+        # For Predators, this forces turnover.
+        age_factor = 1.0
+        if self.age > 50:
+            # Exponential aging: 1.0 at 50, 2.0 at 100, 4.0 at 150...
+            age_factor = 1.0 + ((self.age - 50) * 0.02)
+            
+        entropy_cost = self.energy * 0.01 * age_factor
         
         total_cost = base_cost + trait_cost + entropy_cost
         self.energy -= total_cost

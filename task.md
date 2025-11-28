@@ -94,4 +94,12 @@
 - [ ] **Goal:** Force Predator adaptation to catch up with Prey.
 - [ ] **Action:** Modify `experiments/cycle2497_hyper_mutation.py` to seed Predators with high `mutation_rate`.
 - [ ] **Action:** Run `experiments/cycle2497_hyper_mutation.py`.
+- [x] **Result:** Failure. Predator Hunting skill barely budged (0.50 -> 0.507) despite high mutation (0.83). Prey Evasion continued to climb (1.15 -> 1.65). The Prey are evolving *faster* because they reproduce more often. The Predator generation time is the bottleneck.
+
+# Task: Cycle 2498 - The Short Life (Gate 126)
+- [ ] **Define Cycle 2498:** Reduce Predator Lifespan.
+- [ ] **Goal:** Accelerate Predator generational turnover.
+- [ ] **Action:** Create `experiments/cycle2498_short_life.py`.
+    - [ ] Enforce `max_age` for Predators (e.g., 50 ticks).
+    - [ ] Increase Predator fertility to compensate.
 - [ ] **Result:** pending...

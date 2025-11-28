@@ -4196,3 +4196,25 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `mutate()` in `src/life/genesis.py` to use the mutation gene. Seeded Predators with high mutation rate (0.8).
 - [x] **Action:** Run `experiments/cycle2497_hyper_mutation.py`.
 - [x] **Result:** Failure. Predator Hunting skill barely budged (0.50 -> 0.507) despite high mutation (0.83). Prey Evasion continued to climb (1.15 -> 1.65). The Prey are evolving *faster* because they reproduce more often. The Predator generation time is the bottleneck.
+
+# Task: Cycle 2497 - The Hyper-Mutators (Gate 125)
+- [x] **Define Cycle 2497:** Increase Mutation Rate for Predators.
+- [x] **Goal:** Force Predator adaptation to catch up with Prey.
+- [x] **Action:** Modified `mutate()` in `src/life/genesis.py` to use the mutation gene. Seeded Predators with high mutation rate (0.8).
+- [x] **Action:** Run `experiments/cycle2497_hyper_mutation.py`.
+- [x] **Result:** Failure. Predator Hunting skill barely budged (0.50 -> 0.507) despite high mutation (0.83). Prey Evasion continued to climb (1.15 -> 1.65). The Prey are evolving *faster* because they reproduce more often. The Predator generation time is the bottleneck.
+
+# Task: Cycle 2498 - The Short Life (Gate 126)
+- [ ] **Define Cycle 2498:** Reduce Predator Lifespan.
+- [ ] **Goal:** Accelerate Predator generational turnover.
+- [ ] **Action:** Create `experiments/cycle2498_short_life.py`.
+    - [ ] Enforce  for Predators (e.g., 50 ticks).
+    - [ ] Increase Predator fertility to compensate.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2498 - The Short Life (Gate 126)
+- [x] **Define Cycle 2498:** Reduce Predator Lifespan.
+- [x] **Goal:** Accelerate Predator generational turnover.
+- [x] **Action:** Modified `src/life/genesis.py` to include exponential entropy cost after 50 ticks.
+- [x] **Action:** Run `experiments/cycle2498_short_life.py`.
+- [x] **Result:** Failure. Predators simply *didn't die*. They are living to 2000 ticks (Age=1995.2). The abundance of prey (200) means predators can hunt enough to pay even the exponential entropy tax. The "Short Life" mechanism wasn't harsh enough. Predators are effectively immortal if they keep hunting.
