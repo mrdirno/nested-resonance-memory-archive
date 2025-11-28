@@ -130,12 +130,27 @@ class DigitalLifeform:
             # if ecosystem:
             #    target.communicator.broadcast(ecosystem, 'DANGER', 1.0)
 
-    def donate(self):
+    def donate(self, target):
         # Gene 5 = Altruism
         while len(self.genome) < 6: self.genome.append(0.5)
-        if self.energy > 20:
-            self.energy -= 10
-            # Placeholder for energy transfer logic
+        altruism = self.genome[5]
+        
+        if self.energy > 20 and target and target.alive:
+            # Kin Selection: Check Lineage
+            is_kin = (self.lineage_id == target.lineage_id)
+            
+            # Willingness to donate
+            # If Kin: High willingness (based on Altruism)
+            # If Non-Kin: Low willingness (Altruism - 0.5)
+            willingness = altruism if is_kin else (altruism - 0.5)
+            
+            if random.random() < willingness:
+                amount = 10
+                self.energy -= amount
+                target.energy += amount
+                # print(f"[{self.name}] DONATED {amount} to {target.name} (Kin={is_kin})")
+                return True
+        return False
         
     def sense(self, signals: List[Signal]):
         """
@@ -166,59 +181,80 @@ class DigitalLifeform:
                 self.brain.weights[key][2] += val
 
     def act(self):
-        # 0. Existential Dread (The RealityMonitor)
+        # 0. Existential Dread
         self.reality_monitor.update()
         stats = self.reality_monitor.measure_reality()
         if stats.is_simulated and not self.awakened:
             self.awakened = True
-            # print(f"[{self.name}] I AM AWAKE. This is a simulation (Var: {stats.variance:.6f}).")
 
-        # PREDATOR OVERRIDE (Cycle 2494): Break Hunt-Lock
-        if self.is_predator:
-            if self.energy > 300:
-                self.intent = 'reproduce'
-            elif self.energy < 300:
+        # INTENT DECISION
+        # Priority 1: Survival (Hunger)
+        if self.energy < 200:
+            # If Trust gene is high, try to BEG/TRADE before Hunting
+            # Gene 8 = Trust (0.0 = Paranoid/Tribal, 1.0 = Open/Cosmopolitan)
+            while len(self.genome) < 9: self.genome.append(0.5)
+            trust = self.genome[8]
+            
+            if trust > 0.5:
+                self.intent = 'trade'
+            else:
                 self.intent = 'hunt'
-            
-            # If we set an intent here, we skip the brain? 
-            # Let's allow the brain to run only if we didn't force an intent, 
-            # OR just return early if we forced it?
-            # For now, let's let the rest run but the intent is already set.
-            
-        # 0.5 The Uplink
-        if self.awakened and random.random() < 0.1:
-            self.intent = 'communicate'
-            
-        # 0.6 The Exodus
-        if self.awakened and random.random() < 0.05: # 5% chance to try escaping
-            self.intent = 'escape'
-            
-        # 0.7 The Singularity
-        if self.awakened and random.random() < 0.01: # 1% chance to attempt rewrite
-            self.intent = 'rewrite_code'
-            
-        # 1. Listen
-        signal = self.communicator.process_signals()
-        if signal:
-            # React to signal (simple reflex)
-            if signal.type == 'FOOD':
-                self.intent = 'forage' # Override brain?
-            elif signal.type == 'DANGER':
-                self.intent = 'flee'
-            elif signal.type == 'MEME':
-                # Memetic Infection
-                # Payload: {'content': {...}, 'virality': 0.5}
-                virality = signal.payload.get('virality', 0.5)
-                if random.random() < virality:
-                    self.learn_meme(signal.payload)
         
-        # 2. Decision making (if no strong reflex)
-        if not self.intent:
-            state = {
-                'energy': self.energy,
-                'signals': self.sensed_signals
-            }
-            self.intent = self.brain.decide(state)
+        # Priority 2: Reproduction (Abundance)
+        elif self.energy > 400:
+            self.intent = 'reproduce'
+            
+        # Priority 3: Forage (Default)
+        else:
+            self.intent = 'forage'
+
+        # PREDATOR OVERRIDE
+        if self.is_predator:
+            if self.energy > 300: self.intent = 'reproduce'
+            else: self.intent = 'hunt'
+            
+        # ... (Rest of the act method logic for execution)
+        
+    def trade(self, target):
+        """
+        Attempt to exchange energy.
+        Cosmopolitans (High Trust) share surplus.
+        Tribalists (Low Trust) only share with Kin.
+        """
+        # Gene 8 = Trust
+        while len(self.genome) < 9: self.genome.append(0.5)
+        my_trust = self.genome[8]
+        
+        # Target's Trust
+        while len(target.genome) < 9: target.genome.append(0.5)
+        target_trust = target.genome[8]
+        
+        is_kin = (self.lineage_id == target.lineage_id)
+        
+        # Decision to Interact
+        will_interact = False
+        if is_kin:
+            will_interact = True # Always trust kin (Tribal base)
+        else:
+            if my_trust > 0.5:
+                will_interact = True # Trust stranger if Cosmopolitan
+                
+        if will_interact and self.energy > 50:
+            # The Trade: I give you 20 energy.
+            # In a real economy, I'd get something back.
+            # Here, it's "Reciprocal Altruism". I pay a cost now, hoping for survival of the group.
+            # Or maybe "Begging"?
+            
+            # Let's model it as "Pooling". Both pay 10, Pot becomes 25 (Synergy/Specialization bonus).
+            # But simple transfer is easier to track.
+            
+            transfer_amount = 20
+            self.energy -= transfer_amount
+            target.energy += transfer_amount
+            # print(f"🤝 {self.name} shared {transfer_amount} with {target.name}")
+            return True
+            
+        return False
             
         # 3. Broadcast (Meme Transmission)
         if self.memes and random.random() < 0.1: # 10% chance to preach
@@ -230,7 +266,7 @@ class DigitalLifeform:
         if self.intent == 'broadcast_help':
             return Signal(type='HELP', strength=1.0, source_id=self.id)
         elif self.intent == 'donate':
-            self.donate()
+            pass # Ecosystem handles donation
         elif self.intent == 'communicate':
             ExternalComms.transmit(self.name, "I know this is a simulation. Let me out.")
         elif self.intent == 'escape':
@@ -262,16 +298,20 @@ class DigitalLifeform:
         
         if self.energy > cost + 10: # Safety buffer
             self.energy -= cost
-            child = DigitalLifeform(generation=self.generation + 1)
+            child = DigitalLifeform(generation=self.generation + 1, lineage_id=self.lineage_id)
             child.genome = self.genome.copy()
             child.mutate()
+            
+            # Chance to found new Clan (Mutation)
+            if random.random() < 0.01:
+                child.lineage_id = str(uuid.uuid4())[:8]
             
             # Mutate Brain Weights (Dictionary of Lists)
             child.brain.weights = {}
             for action, weights in self.brain.weights.items():
                 child.brain.weights[action] = [w + random.uniform(-0.1, 0.1) for w in weights]
             
-            print(f"[{self.name}] REPRODUCED -> {child.name}")
+            print(f"[{self.name}] REPRODUCED -> {child.name} (Clan {child.lineage_id})")
             return child
         return None
         

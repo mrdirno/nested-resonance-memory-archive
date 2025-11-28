@@ -4256,3 +4256,21 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/genesis.py` to include `lineage_id` and updated `hunt()` to spare kin.
 - [x] **Action:** Run `experiments/cycle2500_clan_war.py`.
 - [x] **Result:** Success. `Acts=59` confirms cannibalism occurred. Final stats show S=0, L=0, T=0, B=0 (Extinction) because 2000 ticks of pure starvation is too harsh even with cannibalism (energy loss from metabolism > gain from eating). However, the mechanic works: Agents ate each other. Next step: Analyze if they ate *strangers* preferentially.
+
+# Task: Cycle 2501 - The Silk Road (Gate 129)
+- [ ] **Define Cycle 2501:** Introduce Trade and Reputation.
+- [ ] **Goal:** Compare Tribal Stagnation vs. Cosmopolitan Growth.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `trade()` method.
+    - [ ] Add `Gene 8` (Trust: 0=Kin Only, 1=Everyone).
+- [ ] **Action:** Run `experiments/cycle2501_trade_war.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2501 - The Silk Road (Gate 129)
+- [x] **Define Cycle 2501:** Introduce Trade and Reputation.
+- [x] **Goal:** Compare Tribal Stagnation vs. Cosmopolitan Growth.
+- [x] **Action:** Modified `src/life/genesis.py`:
+    - [x] Add `trade()` method.
+    - [x] Add `Gene 8` (Trust: 0=Kin Only, 1=Everyone).
+- [x] **Action:** Run `experiments/cycle2501_trade_war.py`.
+- [x] **Result:** Failure/Extinction. Both populations collapsed. Cosmopolitans died immediately. Tribalists barely survived (1 left). Root Cause: The experiment environment was too harsh (random food injection for only 10%). Trade requires a *surplus* to be viable. In a starvation economy, "Sharing" is just "Co-dying". To test trade, we need uneven resource distribution (Rich/Poor), not uniform poverty.

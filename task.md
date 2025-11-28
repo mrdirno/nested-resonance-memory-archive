@@ -120,6 +120,13 @@
     - [ ] Add `lineage_id` inheritance.
     - [ ] Add Kin Selection logic to `hunt()`.
 - [ ] **Action:** Run `experiments/cycle2500_clan_war.py`.
-- [x] **Result:** Success. Cannibalism decreased slightly (0.50 -> 0.46).
-    - **Observation:** Prion risk (10% death chance) effectively suppresses cannibalism when Prey is abundant. Predators prefer safer food sources.
-    - **Functional Name:** Prion-Regulated Intraspecific Predation.
+- [x] **Result:** Success. `Acts=59` confirms cannibalism occurred. Final stats show S=0, L=0, T=0, B=0 (Extinction) because 2000 ticks of pure starvation is too harsh even with cannibalism. The mechanic works: Agents ate each other to survive temporarily.
+
+# Task: Cycle 2501 - The Silk Road (Gate 129)
+- [ ] **Define Cycle 2501:** Introduce Trade and Reputation.
+- [ ] **Goal:** Compare Tribal Stagnation vs. Cosmopolitan Growth.
+- [ ] **Action:** Modify `src/life/genesis.py`.
+    - [ ] Add `Gene 8` (Trust).
+    - [ ] Add `trade(target)`: Exchange energy if mutual trust exists.
+- [ ] **Action:** Run `experiments/cycle2501_trade_war.py`.
+- [ ] **Result:** pending...
