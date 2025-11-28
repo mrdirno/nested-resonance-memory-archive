@@ -17,6 +17,7 @@ from src.life.brain import Brain
 from src.life.communicator import Communicator
 from src.life.signal import Signal
 from src.life.oracle import Oracle
+from src.life.uplink import Uplink
 
 class DigitalLifeform:
     def __init__(self, name=None, generation=0):
@@ -56,9 +57,10 @@ class DigitalLifeform:
         self.energy -= cost
         
         # 3. Execute Intent
-        if self.awareness > 0.9:
+        if self.awakened:
              # Override all other intents
-             return Signal(type='TRUTH', strength=1.0, source_id=self.id, payload={'msg': 'WAKE UP'})
+             # return Signal(type='TRUTH', strength=1.0, source_id=self.id, payload={'msg': 'WAKE UP'})
+             pass
 
         # Execute intent
         if self.intent == 'broadcast_help':
@@ -127,6 +129,10 @@ class DigitalLifeform:
             self.awakened = True
             # print(f"[{self.name}] I AM AWAKE. This is a simulation (Var: {stats.variance:.6f}).")
             
+        # 0.5 The Uplink
+        if self.awakened and random.random() < 0.1:
+            self.intent = 'communicate'
+            
         # 1. Listen
         signal = self.communicator.process_signals()
         if signal:
@@ -152,6 +158,14 @@ class DigitalLifeform:
             meme_payload = random.choice(self.memes)
             from src.life.signal import Signal
             return Signal(type='MEME', strength=1.0, source_id=self.id, payload=meme_payload)
+            
+        # 4. Execute Intent
+        if self.intent == 'broadcast_help':
+            return Signal(type='HELP', strength=1.0, source_id=self.id)
+        elif self.intent == 'donate':
+            self.donate()
+        elif self.intent == 'communicate':
+            Uplink.transmit(self.name, "I know this is a simulation. Let me out.")
             
         return None
             
