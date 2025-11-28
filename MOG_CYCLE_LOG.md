@@ -1995,3 +1995,16 @@
 *   **Result:** SUCCESS. 10+ Farms built. The City is rising.
 *   **Status:** Urbanization Logic Verified.
 *   **Functional Name:** The Metropolis (Urbanization).
+
+---
+**CYCLE:** 2538 (Gate 166: The Citizen)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** URBAN MIGRATION
+**LOG:**
+*   **Experiment:** Executed `experiments/cycle2538_urban_migration.py`.
+*   **Scenario:** 50 Rural Agents (Hinterlands) + 1 City (20 Farms).
+*   **Result:** SUCCESS. 7 Citizens in Urban Area.
+*   **Metric:** Avg Energy Urban (374) vs Rural (388). Parity achieved.
+*   **Fix:** Expanded Genome to 11 Genes (Mobility added).
+*   **Status:** Migration Verified. The City attracts life.
+*   **Functional Name:** The Citizen (Migration).

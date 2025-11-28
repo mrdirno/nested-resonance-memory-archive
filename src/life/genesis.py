@@ -29,7 +29,7 @@ class DigitalLifeform:
         self.energy = 500 # Boosted for survival
         self.alive = True
         self.age = 0 # Age in ticks
-        self.genome = [random.random() for _ in range(10)] # Simple gene vector
+        self.genome = [random.random() for _ in range(11)] # Simple gene vector
         self.brain = Brain()
         self.communicator = Communicator(self.id)
         self.reality_monitor = RealityMonitor()
