@@ -4792,3 +4792,23 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **The Hive Mind transmits Utility (Motivation), not Data (Coordinates).** 
     - **Conclusion:** Motivation without Information is useless. The Hive Mind must share the *content* of the signal, not just the urge. 
     - **Pivot:** We need a new mechanism for **Knowledge Transfer** (Cycle 2527).
+
+# Task: Cycle 2527 - The Knowledge Graph (Gate 155)
+- [ ] **Define Cycle 2527:** Data Sharing.
+- [ ] **Goal:** Attach Signal Payload (Coordinates) to Thoughts.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Update `broadcast_thought` to include `NEAREST_FOOD` coordinates in payload if known.
+    - [ ] Update `assimilate_thought` to extract coordinates and update `self.sensed_signals`.
+- [ ] **Action:** Run `experiments/cycle2527_knowledge_graph.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2527 - The Knowledge Graph (Gate 155)
+- [x] **Define Cycle 2527:** Data Sharing.
+- [x] **Goal:** Attach Signal Payload (Coordinates) to Thoughts.
+- [x] **Action:** Modified `src/life/genesis.py` to transmit and assimilate Knowledge.
+- [x] **Action:** Run `experiments/cycle2527_knowledge_graph.py`.
+- [x] **Result:** FAILURE (Still Blind). `Know=0`. 
+    - **Debug:** `Dist` dropped from 84.9 to 56.7. This is progress! Agents ARE moving towards the food somewhat. 
+    - **But:** `Know=0`. This means the Knowledge `NEAREST_FOOD` is not being assimilated into `sensed_signals`. 
+    - **Conclusion:** Any knowledge gained is WIPED at the end of `act()` before the next tick or observation. 
+    - **Fix:** Remove `self.sensed_signals = {}` from the end of `act()`. Rely on `sense()` to refresh it, or implement decay.

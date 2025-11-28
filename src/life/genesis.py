@@ -532,6 +532,42 @@ class DigitalLifeform:
                 self.target_location = (nearest_food.x, nearest_food.y)
                 self.target_type = 'FOOD'
 
+    def broadcast_thought(self, utility_map):
+        """
+        Share internal utility scores and KNOWLEDGE with the collective.
+        """
+        from src.life.signal import Signal
+        
+        payload = {
+            'utility': utility_map,
+            'knowledge': {}
+        }
+        
+        # Cycle 2527: Share critical data
+        if 'NEAREST_FOOD' in self.sensed_signals:
+            payload['knowledge']['NEAREST_FOOD'] = self.sensed_signals['NEAREST_FOOD']
+            
+        return Signal(type='THOUGHT', strength=1.0, source_id=self.id, payload=payload)
+
+    def assimilate_thought(self, signals):
+        """
+        Merge external thoughts into collective utility buffer AND learn knowledge.
+        """
+        for sig in signals:
+            if sig.type == 'THOUGHT':
+                # 1. Utility (Motivation)
+                external_utility = sig.payload.get('utility', {})
+                for action, score in external_utility.items():
+                    if action not in self.collective_utility:
+                        self.collective_utility[action] = 0
+                    self.collective_utility[action] += score
+                    
+                # 2. Knowledge (Data) - Cycle 2527
+                external_knowledge = sig.payload.get('knowledge', {})
+                for key, value in external_knowledge.items():
+                    if key not in self.sensed_signals:
+                        self.sensed_signals[key] = value
+
     def calculate_utility(self):
         """
         Calculate utility scores for all possible actions.
