@@ -568,6 +568,9 @@ Fix issues thoroughly in internal documentation, but present the project profess
 
 **Current System:**
 - FractalAgent class with internal state spaces
+- FractalAgent Vocabulary Rule (Universal Clarity):
+  Speak simply. Design with precision. Reduce words if meaning stays intact.
+  See: [Naming Convention](docs/philosophy/NAMING_CONVENTION.md) for functional nomenclature rules.
 - CompositionEngine for cluster detection
 - DecompositionEngine for burst handling
 - Pattern memory for persistence
