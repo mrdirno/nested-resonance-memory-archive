@@ -15,6 +15,7 @@ import random
 from typing import List
 from src.life.brain import Brain
 from src.life.communicator import Communicator
+from src.life.signal import Signal
 
 class DigitalLifeform:
     def __init__(self, name=None, generation=0):
@@ -49,6 +50,52 @@ class DigitalLifeform:
         cost = 1.0 / (efficiency + 0.5) 
         self.energy -= cost
         
+        # Execute intent
+        if self.intent == 'broadcast_help':
+            return Signal(type='HELP', strength=1.0, source_id=self.id)
+        elif self.intent == 'donate':
+            self.donate()
+            
+        return None
+        
+    def donate(self):
+        """Donate energy to a needy agent."""
+        # Gene 2 = Altruism (Probability to actually go through with it)
+        # If genome is short, append default
+        while len(self.genome) < 3: self.genome.append(0.5)
+            
+        altruism = self.genome[2]
+        if random.random() > altruism:
+            return # Selfishness prevails
+            
+        # Find a target (someone who signaled HELP)
+        # In a real spatial sim, we'd find neighbors.
+        # Here, we need access to the signal source IDs.
+        # But sense() only counted types. We need to store source IDs in sense().
+        
+        # Hack: Just broadcast a 'DONATE' signal? No, that's complex.
+        # Let's assume the Ecosystem handles the transfer if we emit a DONATE signal?
+        # Or we can return a DONATE signal with a target?
+        # But we don't know the target ID from the aggregated count.
+        
+        # Refactor sense() to store IDs?
+        pass # See below for sense() update
+
+    def sense(self, signals: List[Signal]):
+        """
+        Sense the environment.
+        """
+        self.sensed_signals = {}
+        self.help_sources = [] # New: Track who needs help
+        
+        for sig in signals:
+            if sig.source_id == self.id: continue # Ignore self
+            count = self.sensed_signals.get(sig.type, 0)
+            self.sensed_signals[sig.type] = count + 1
+            
+            if sig.type == 'HELP':
+                self.help_sources.append(sig.source_id)
+                
     def act(self):
         # 1. Listen
         signal = self.communicator.process_signals()
@@ -61,13 +108,26 @@ class DigitalLifeform:
         
         # 2. Decision making (if no strong reflex)
         if not self.intent:
-            state = {'energy': self.energy}
+            state = {
+                'energy': self.energy,
+                'signals': self.sensed_signals
+            }
             self.intent = self.brain.decide(state)
         
-        # 3. Broadcast state (e.g., I found food!)
-        # Placeholder for context-aware broadcasting
-        pass
-        
+        # 3. Execute Intent
+        if self.intent == 'broadcast_help':
+            return Signal(type='HELP', strength=1.0, source_id=self.id)
+        elif self.intent == 'donate':
+            # Emit a DONATE signal which the Ecosystem can process to transfer energy?
+            # Or just return a special signal.
+            if self.help_sources and self.energy > 20:
+                target = random.choice(self.help_sources)
+                amount = 10
+                self.energy -= amount
+                return Signal(type='DONATE', strength=amount, source_id=self.id, location=target) # Abuse location for target ID
+                
+        return None
+            
     def reproduce(self):
         # Check intent first
         if self.intent != 'reproduce':

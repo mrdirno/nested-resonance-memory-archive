@@ -69,7 +69,18 @@ class Ecosystem:
             agent.metabolize()
             signal = agent.act() # act() now returns a Signal or None
             if signal:
-                next_signals.append(signal)
+                if signal.type == 'DONATE':
+                    # Handle Donation
+                    target_id = signal.location # Hack: using location field for target ID
+                    amount = signal.strength
+                    # Find target
+                    for target in self.agents:
+                        if target.id == target_id:
+                            target.energy += amount
+                            # print(f"[ECO] {agent.name} donated {amount} to {target.name}")
+                            break
+                else:
+                    next_signals.append(signal)
 
             # 2. Check Survival
             if not agent.alive or agent.energy <= 0:

@@ -16,8 +16,9 @@ class Brain:
         # Weights for decision making
         # [Energy_Weight, Signal_HELP_Weight, Random_Bias]
         self.weights = {
-            'reproduce': [0.8, -0.5, -0.2], # High energy favors reproduction, HELP signals discourage it (danger?)
+            'reproduce': [0.8, -0.5, -0.2], # High energy favors reproduction, HELP signals discourage it
             'broadcast_help': [-0.8, 0.0, 0.1], # Low energy favors calling for help
+            'donate': [0.5, 0.8, -0.5], # High energy AND Help signal favors donation
             'idle': [0.0, 0.0, 0.5] # Default
         }
         
@@ -35,7 +36,6 @@ class Brain:
         scores = {}
         for action, w in self.weights.items():
             # Score = Energy*W0 + Help*W1 + Bias*W2
-            # Handle variable weight lengths if we add more inputs later
             score = (energy_norm * w[0]) + (help_norm * w[1]) + (random.random() * w[2])
             scores[action] = score
             
