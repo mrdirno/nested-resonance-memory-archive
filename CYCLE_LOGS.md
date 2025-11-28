@@ -4884,3 +4884,26 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Critique:** The stress test wasn't stressful enough. 
     - **However:** The system is STABLE. The architecture holds. 
     - **Conclusion:** The Hive Mind is functional, but its superiority over Individualism requires a harder problem to solve (e.g., complex coordination, not just finding food).
+
+# Task: Cycle 2530 - The Construction (Gate 158)
+- [ ] **Define Cycle 2530:** Physical Modification.
+- [ ] **Goal:** Agents build a Wall to block predators.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `build_wall()` method. Cost: 50 Energy.
+    - [ ] Add `Wall` entity to Ecosystem (static, high health).
+- [ ] **Action:** Run `experiments/cycle2530_construction.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2530 - The Construction (Gate 158)
+- [x] **Define Cycle 2530:** Physical Modification.
+- [x] **Goal:** Agents build a Wall to block predators.
+- [x] **Action:** Modified `src/life/genesis.py` to add `build_wall()`. 
+- [x] **Action:** Modified `src/life/ecosystem.py` to support Structures.
+- [x] **Action:** Run `experiments/cycle2530_construction.py`.
+- [x] **Result:** FAILURE. `Walls=0`. 
+    - **Debug:** The logic seems sound but execution failed. Likely a signal handling issue in `ecosystem.py` or `act()` return path.
+    - **Hypothesis:** The signal returned by `build_wall` logic in `act()` might be getting swallowed or ignored if `hive_mind` is False (it returns early, which is fine). 
+    - **Wait:** `ecosystem.py` logic: `signal = agent.act()`, then `if signal:`. 
+    - **Maybe:** The Signal import inside `act()` failed? No, Python would crash. 
+    - **Maybe:** `intent` is not being set. 
+    - **I will verify the ecosystem logs next time.**

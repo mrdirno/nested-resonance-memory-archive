@@ -17,6 +17,7 @@ from src.life.genesis import DigitalLifeform
 class Ecosystem:
     def __init__(self, capacity: int = 100, prey_capacity: int = None, predator_capacity: int = None, width: int = 100, height: int = 100):
         self.agents: List[DigitalLifeform] = []
+        self.structures = [] # Cycle 2530
         self.tick_count = 0
         self.capacity = capacity
         self.width = width
@@ -33,6 +34,11 @@ class Ecosystem:
         self.tax_rate = 0.01 # Default 1%
         self.subsidy_amount = 0 # Default 0
         self.treasury = 0
+
+    def add_structure(self, structure):
+        """Add a static structure to the ecosystem."""
+        self.structures.append(structure)
+        # print(f"[ECO] Built {structure['type']} at ({structure['x']}, {structure['y']})")
 
     def add_agent(self, agent: DigitalLifeform):
         """Add an agent to the ecosystem."""
@@ -179,7 +185,10 @@ class Ecosystem:
             signal = agent.act()
             
             if signal:
-                self.propagate_signal(signal)
+                if signal.type == 'BUILD_STRUCTURE':
+                    self.add_structure(signal.payload['structure'])
+                else:
+                    self.propagate_signal(signal)
 
             # Handle Donation (Welfare State) for Prey
             if agent.intent == 'donate' and agent.energy > 20:

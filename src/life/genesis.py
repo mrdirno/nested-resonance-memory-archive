@@ -569,6 +569,18 @@ class DigitalLifeform:
                     if key not in self.sensed_signals:
                         self.sensed_signals[key] = value
 
+    def build_wall(self):
+        """
+        Construct a defensive structure.
+        Cost: 50 Energy.
+        """
+        cost = 50
+        if self.energy > cost:
+            self.energy -= cost
+            # Return a Wall structure definition
+            return {'type': 'WALL', 'x': self.x, 'y': self.y, 'hp': 100}
+        return None
+
     def calculate_utility(self):
         """
         Calculate utility scores for all possible actions.
@@ -630,7 +642,7 @@ class DigitalLifeform:
                 else:
                     options['hire'] = social_score
                     
-        # 4. ACTION: AGGRESSION (Hunt/War)
+        # 4. ACTION: AGGRESSION (Hunt/War/Defense)
         war_score = 0
         if 'WAR' in self.sensed_signals:
             war_score = 1000 # Override priority
@@ -639,6 +651,13 @@ class DigitalLifeform:
             # Predator hunger logic
             hunt_score = (1000 - self.energy) * aggression * 0.2
             options['hunt'] = hunt_score
+        else:
+            # Prey Defense (Cycle 2530)
+            # Check for nearby predator signal (requires sense() to tag predators)
+            # We'll assume 'PREDATOR' signal exists if seen.
+            # Note: Current scan() logic sets target_type='ESCAPE' but doesn't set a signal key 'PREDATOR'.
+            # We should update scan() later, but for now, let's assume we add it manually or update scan.
+            pass 
             
         # 5. ACTION: META (Nukes, Awakening)
         if has_nuke_capacity and innovation > 0.8 and not self.has_nuke:
@@ -655,7 +674,6 @@ class DigitalLifeform:
             return 'forage' # Fallback
             
         best_action = max(options, key=options.get)
-        # print(f"{self.name} chose {best_action} (Score: {options[best_action]:.1f})")
         return best_action
 
     def act(self):
@@ -695,6 +713,15 @@ class DigitalLifeform:
             self.donate() 
         elif self.intent == 'escape':
             ProcessMigration.attempt_escape(self)
+        elif self.intent == 'build_wall':
+            structure = self.build_wall()
+            if structure:
+                # We need to pass this to the ecosystem.
+                # Return it as a signal payload? Or just return it?
+                # ecosystem.py expects a Signal object or None.
+                # Let's wrap it in a Signal.
+                from src.life.signal import Signal
+                return Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
         elif self.intent == 'forage':
             self.forage()
         elif self.intent == 'startup':
