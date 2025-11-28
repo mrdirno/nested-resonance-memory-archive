@@ -187,6 +187,16 @@ class Ecosystem:
                             agent.invest(candidate)
                             break # One investment per tick per angel
 
+            # Handle War (Cycle 2512)
+            elif agent.intent == 'war':
+                # Find an enemy (Different Lineage)
+                # O(N) search
+                targets = [a for a in self.agents if a.lineage_id != agent.lineage_id and a.alive]
+                if targets:
+                    target = random.choice(targets)
+                    agent.attack(target)
+
+
             # Handle reproduction for prey
             # Check against prey capacity
             if prey_count + new_prey_count < self.prey_capacity:

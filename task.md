@@ -228,7 +228,10 @@
     - [ ] Tribe A: High Trust, High Altruism (The Republic).
     - [ ] Tribe B: Low Trust, High Aggression (The Empire).
     - [ ] Implement `war()` mechanic (Group combat).
-- [ ] **Result:** pending...
+- [x] **Result:** SUCCESS (Empire Dominance). `Republic=0`, `Empire=50`.
+    - **Observation:** The Aggressive Empire annihilated the Cooperative Republic.
+    - **Mechanism:** In a lawless state, violence trumps cooperation. The Republic had no defense.
+    - **Functional Name:** The Hobbesian Trap (War of All Against All).
     - **Observation:** The Elite voted for moderate taxes/subsidies. This kept the Poor alive (Pop 200) but dependent (34% Poverty). The Treasury accumulated massive wealth.
     - **Mechanism:** Governance stabilized the system but created a "Welfare Trap". The Rich stay Rich, the Poor stay Alive.
     - **Functional Name:** Benevolent Oligarchy (The Welfare Trap).

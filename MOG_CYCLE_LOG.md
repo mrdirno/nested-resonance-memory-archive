@@ -1918,3 +1918,8 @@
 *   **Status:** Treasury Surplus (480k). Poverty 34%.
 *   **Cause:** Elite voted for "Bread and Circuses" (Subsidies) to maintain order.
 *   **Functional Name:** Benevolent Oligarchy (The Welfare Trap).
+
+*   **Result:** SUCCESS (Empire Dominance). Republic Annihilated.
+*   **Status:** Empire (50) > Republic (0).
+*   **Cause:** Aggression (War) beats Cooperation in a lawless state.
+*   **Functional Name:** The Hobbesian Trap (War of All Against All).

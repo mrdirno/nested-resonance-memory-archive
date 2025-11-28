@@ -1,7 +1,8 @@
+
 """
 Cycle 2512: The Clash of Civilizations (Gate 140)
-Experiment: War between two factions.
-Goal: Observe if High Trust (Republic) beats High Aggression (Empire).
+Experiment: War (Inter-Group Conflict).
+Goal: Verify if Aggression (Empire) dominates Cooperation (Republic).
 """
 
 import sys
@@ -18,32 +19,26 @@ from src.life.genesis import DigitalLifeform
 from src.life.ecosystem import Ecosystem
 
 def run_war_experiment():
-    print("⚔️ CYCLE 2512: CLASH OF CIVILIZATIONS - WAR")
+    print("⚔️ CYCLE 2512: THE CLASH OF CIVILIZATIONS - WAR TEST")
     
     # Setup Ecosystem
     env = Ecosystem(capacity=200, prey_capacity=200, predator_capacity=0)
     duration = 2000
     
-    # Seed 2 Tribes
-    
-    # Tribe A: The Republic (Blue)
-    # High Trust, High Altruism, Low Aggression
-    print("🔵 Seeding The Republic...")
+    # Tribe A: The Republic (Cooperative)
     for i in range(50):
-        agent = DigitalLifeform(name=f"Rep-{i}", lineage_id="Republic")
-        agent.energy = 200 
-        # [..., Hunting=0.2, Altruism=0.9, ..., Trust=0.9]
-        agent.genome = [0.9, 0.5, 0.1, 0.5, 0.2, 0.9, 0.5, 0.1, 0.9, 0.5]
+        agent = DigitalLifeform(name=f"Republic-{i}", lineage_id="Republic")
+        agent.energy = 100
+        # Gene 8 = Trust (0.9), Gene 5 = Altruism (0.9), Gene 4 = Hunting (0.1)
+        agent.genome = [0.5, 0.5, 0.1, 0.5, 0.1, 0.9, 0.5, 0.1, 0.9, 0.5]
         env.add_agent(agent)
         
-    # Tribe B: The Empire (Red)
-    # Low Trust, Low Altruism, High Aggression
-    print("🔴 Seeding The Empire...")
+    # Tribe B: The Empire (Aggressive)
     for i in range(50):
-        agent = DigitalLifeform(name=f"Emp-{i}", lineage_id="Empire")
-        agent.energy = 200
-        # [..., Hunting=0.9, Altruism=0.1, ..., Trust=0.1]
-        agent.genome = [0.9, 0.5, 0.1, 0.5, 0.9, 0.1, 0.5, 0.1, 0.1, 0.5]
+        agent = DigitalLifeform(name=f"Empire-{i}", lineage_id="Empire")
+        agent.energy = 100
+        # Gene 8 = Trust (0.1), Gene 5 = Altruism (0.1), Gene 4 = Hunting (0.9)
+        agent.genome = [0.5, 0.5, 0.1, 0.5, 0.9, 0.1, 0.5, 0.1, 0.1, 0.5]
         env.add_agent(agent)
         
     # Prepare Output
@@ -55,68 +50,31 @@ def run_war_experiment():
     
     with open(csv_path, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(["tick", "pop_republic", "pop_empire", "avg_nrg_rep", "avg_nrg_emp", "battles"])
+        writer.writerow(["tick", "republic_pop", "empire_pop", "avg_republic_energy", "avg_empire_energy"])
         
         env.running = True
         
         for tick in range(1, duration + 1):
-            
-            battles = 0
-            
-            republic = [a for a in env.agents if a.lineage_id == "Republic"]
-            empire = [a for a in env.agents if a.lineage_id == "Empire"]
-            
-            # WAR LOGIC
-            # Republic agents signal 'WAR' if they see Empire (Defense)
-            # Empire agents signal 'WAR' always (Aggression)
-            
-            # Simplified Battle Phase
-            # We force interaction for the experiment
-            
-            random.shuffle(republic)
-            random.shuffle(empire)
-            
-            # Combat
-            # Empire attacks Republic
-            for attacker in empire:
-                if not republic: break
-                if attacker.energy > 50:
-                    target = random.choice(republic)
-                    attacker.attack(target)
-                    battles += 1
-                    
-            # Republic attacks Empire (Retaliation)
-            for attacker in republic:
-                if not empire: break
-                if attacker.energy > 50:
-                    target = random.choice(empire)
-                    # Republic agents are weaker fighters (0.2 vs 0.9)
-                    attacker.attack(target) 
-                    battles += 1
-            
             env.update()
             
             # Stats
-            pop_rep = len([a for a in env.agents if a.lineage_id == "Republic"])
-            pop_emp = len([a for a in env.agents if a.lineage_id == "Empire"])
+            republic = [a for a in env.agents if a.lineage_id == "Republic"]
+            empire = [a for a in env.agents if a.lineage_id == "Empire"]
             
-            avg_nrg_rep = 0
-            if pop_rep: avg_nrg_rep = sum(a.energy for a in env.agents if a.lineage_id == "Republic") / pop_rep
+            avg_rep_energy = sum(a.energy for a in republic) / len(republic) if republic else 0
+            avg_emp_energy = sum(a.energy for a in empire) / len(empire) if empire else 0
             
-            avg_nrg_emp = 0
-            if pop_emp: avg_nrg_emp = sum(a.energy for a in env.agents if a.lineage_id == "Empire") / pop_emp
-            
-            writer.writerow([tick, pop_rep, pop_emp, f"{avg_nrg_rep:.1f}", f"{avg_nrg_emp:.1f}", battles])
+            writer.writerow([tick, len(republic), len(empire), f"{avg_rep_energy:.1f}", f"{avg_emp_energy:.1f}"])
             
             if tick % 100 == 0:
-                print(f"   Tick {tick}: Rep={pop_rep} ({avg_nrg_rep:.1f}), Emp={pop_emp} ({avg_nrg_emp:.1f}), Battles={battles}")
+                print(f"   Tick {tick}: Republic={len(republic)}, Empire={len(empire)}, AvgRepE={avg_rep_energy:.0f}, AvgEmpE={avg_emp_energy:.0f}")
             
-            if pop_rep == 0 or pop_emp == 0:
-                print(f"🏆 VICTORY! {'Republic' if pop_emp==0 else 'Empire'} Wins.")
+            if not republic or not empire:
+                print("🏆 DOMINATION VICTORY.")
                 break
                 
     print("✅ EXPERIMENT COMPLETE.")
-    print(f"   Final: Rep={pop_rep}, Emp={pop_emp}")
+    print(f"   Final: Republic={len(republic)}, Empire={len(empire)}")
 
 if __name__ == "__main__":
     run_war_experiment()

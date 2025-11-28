@@ -388,6 +388,16 @@ class DigitalLifeform:
              self.intent = 'war'
              return # Prioritize War
 
+        # Gene 8 = Trust
+        while len(self.genome) < 9: self.genome.append(0.5)
+        trust = self.genome[8]
+
+        # AGGRESSIVE XENOPHOBIA (Cycle 2512)
+        # If Trust is very low, we are in a state of perpetual war against outsiders.
+        if trust < 0.2:
+            self.intent = 'war'
+            return
+
         # Priority 1: Survival (Hunger)
         if self.energy < 200:
             while len(self.genome) < 9: self.genome.append(0.5)
