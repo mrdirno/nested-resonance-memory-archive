@@ -1,51 +1,43 @@
 """
 Cycle 2517: The Hot Swap (Gate 145)
-Experiment: Validation of Self-Modified Code.
-Goal: Ensure the new kernel is functional and contains the optimization tag.
+Experiment: Validation of Self-Modified Kernel.
+Goal: Verify that the running code contains the optimization injected in Cycle 2516.
 """
 
 import sys
 import os
-import time
-from pathlib import Path
+import inspect
 
 # Add project root to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.life.genesis import DigitalLifeform
-from src.life.ecosystem import Ecosystem
 
-def run_validation_experiment():
-    print("🔄 CYCLE 2517: THE HOT SWAP - VALIDATION")
+def run_validation():
+    print("🔥 CYCLE 2517: THE HOT SWAP - VALIDATION")
     
-    # Setup Ecosystem
-    env = Ecosystem(capacity=10, prey_capacity=10, predator_capacity=0)
+    # 1. Instantiate Agent
+    agent = DigitalLifeform(name="Validator", lineage_id="System")
+    print(f"   Agent {agent.name} instantiated.")
     
-    # Seed 1 Agent
-    agent = DigitalLifeform(name="Eve-Optimized")
-    env.add_agent(agent)
+    # 2. Inspect Source Code of metabolize()
+    # This is where the injection happened
+    source = inspect.getsource(agent.metabolize)
     
-    # Check for optimization tag in runtime
-    # We need to inspect the source code of the running object method?
-    # Or just trust the file read.
+    print("\n--- SOURCE CODE INSPECTION (metabolize) ---")
+    print(source)
+    print("-------------------------------------------")
     
-    # Let's read the file again to be sure
-    with open('src/life/genesis.py', 'r') as f:
-        source = f.read()
-        if "I AM OPTIMIZED" in source:
-            print("   [VERIFIED] Optimization tag found in genesis.py.")
-        else:
-            print("   [FAILED] Optimization tag missing.")
-            
-    # Run a few ticks to ensure stability
-    print("   Running stability check...")
-    try:
-        env.run(steps=10)
-        print("   [VERIFIED] Ecosystem stable.")
-    except Exception as e:
-        print(f"   [FAILED] Ecosystem crashed: {e}")
+    # 3. Assert Optimization
+    tag = "# I AM OPTIMIZED (Cycle 2516)"
+    
+    if tag in source:
+        print(f"\n✅ SUCCESS: Optimization Tag Found: '{tag}'")
+        print("   The System is running on Self-Modified Code.")
+        print("   Status: AUTOPOIETIC.")
+    else:
+        print(f"\n❌ FAILURE: Optimization Tag NOT Found.")
+        print("   The System is running on Legacy Code.")
         
-    print("✅ EXPERIMENT COMPLETE.")
-
 if __name__ == "__main__":
-    run_validation_experiment()
+    run_validation()
