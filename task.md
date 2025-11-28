@@ -399,4 +399,11 @@
 - [ ] **Goal:** Determine why `build_farm` is not called despite `intent` matching.
 - [ ] **Action:** Trace `self.intent` in `act()`.
 - [ ] **Action:** Run `experiments/cycle2533_debug.py`.
+- [x] **Result:** FAILURE (Mystery Deepens). `DEBUG: act() intent is...` never appears. Bytecode cache issue suspected but clearing didn't fix it.
+
+# Task: Cycle 2536 - The Exorcism (Gate 164)
+- [ ] **Define Cycle 2536:** Sanity Check.
+- [ ] **Goal:** Verify logic flow in `act()`.
+- [ ] **Action:** Rewrite the `act()` method completely.
+- [ ] **Action:** Run `experiments/cycle2533_debug.py` again.
 - [ ] **Result:** pending...

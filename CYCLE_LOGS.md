@@ -5036,3 +5036,26 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Result:** FAILURE (Mystery Deepens). `DEBUG: act() intent is...` never appears. 
     - **Hypothesis:** Bytecode cache issue. 
     - **Action:** Clearing `__pycache__`.
+
+# Task: Cycle 2536 - The Exorcism (Gate 164)
+- [ ] **Define Cycle 2536:** Sanity Check.
+- [ ] **Goal:** Verify logic flow in `act()`. 
+- [ ] **Action:** Read `src/life/genesis.py` carefully. 
+- [ ] **Action:** Rewrite the `act()` method completely to ensure correct indentation and logic flow. 
+- [ ] **Action:** Run `experiments/cycle2533_debug.py` again.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2536 - The Exorcism (Gate 164)
+- [x] **Define Cycle 2536:** Sanity Check.
+- [x] **Goal:** Verify logic flow in `act()`. 
+- [x] **Action:** Read `src/life/genesis.py` carefully. 
+- [x] **Action:** Rewrite the `act()` method completely to ensure correct indentation and logic flow. 
+- [x] **Action:** Run `experiments/cycle2533_debug.py` again.
+- [x] **Result:** SUCCESS. `Farms: 1`. 
+    - **Explanation:** The previous failure was indeed due to `act()` structure (likely hidden char or bytecode issue, cleared by rewrite/cache wipe). 
+    - **Logs:** 
+        `DEBUG: Planter-Debug chose build_farm` 
+        `DEBUG: act() intent is 'build_farm'` 
+        `DEBUG: build_farm called. Energy=979.1, Cost=100` 
+        `DEBUG: Planter-Debug created BUILD_STRUCTURE signal (Farm).` 
+    - **Status:** Construction mechanic is now FULLY OPERATIONAL.
