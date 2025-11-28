@@ -176,4 +176,7 @@
 - [ ] **Goal:** Make Innovation viable by reducing its personal cost.
 - [ ] **Action:** Modify `src/life/genesis.py` to cap innovation cost.
 - [ ] **Action:** Run `experiments/cycle2507_subsidy.py`.
-- [ ] **Result:** pending...
+- [x] **Result:** Failure (Partial). `SmartBosses=3`, `DumbBosses=4`.
+    - **Observation:** Even with a heavy subsidy (0.1 cost), Dumb agents still slightly outperformed Smart agents. The "Brain Tax" is still too high relative to the wage premium.
+    - **Insight:** Innovation is only profitable if it yields *exponential* returns, not linear ones.
+    - **Functional Name:** The Stagnation (Subsidized Mediocrity).

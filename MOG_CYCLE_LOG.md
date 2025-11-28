@@ -1888,3 +1888,8 @@
 *   **Status:** Dumb Agents outperformed Smart Agents.
 *   **Cause:** Metabolic cost of Innovation > Wage Bonus.
 *   **Functional Name:** The Idiocracy (Anti-Intellectual Selection).
+
+*   **Result:** FAILURE (Partial). Dumb Agents still won (4 vs 3).
+*   **Status:** Subsidy helped but didn't flip the leaderboard.
+*   **Cause:** Linear returns on Innovation < Metabolic Cost.
+*   **Functional Name:** The Stagnation (Subsidized Mediocrity).
