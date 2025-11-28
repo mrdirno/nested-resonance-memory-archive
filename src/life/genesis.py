@@ -48,6 +48,7 @@ class DigitalLifeform:
         self.target_type = None # 'FOOD', 'THREAT'
         self.hive_mind = False # Cycle 2525
         self.collective_utility = {} # Cycle 2525
+        self.knowledge = {} # Cycle 2528
         
     @property
     def efficiency(self):
@@ -600,7 +601,8 @@ class DigitalLifeform:
         # If we sense food, Moving is better.
         # If we are mobile, Moving is better.
         move_score = survival_score * mobility
-        if 'NEAREST_FOOD' in self.sensed_signals:
+        # Cycle 2528: Check KNOWLEDGE instead of sensed_signals
+        if 'NEAREST_FOOD' in self.knowledge:
             options['move_to_food'] = move_score + 50 # Huge bonus for knowing where food is
         else:
             options['move_random'] = move_score * 0.8 # Random search is less efficient
@@ -665,6 +667,13 @@ class DigitalLifeform:
             innovation = self.genome[9]
             if random.random() < innovation: self.awakened = True
 
+        # HIVE MIND ASSIMILATION (Cycle 2525)
+        # ... (handled in sense)
+        
+        # Cycle 2528: Sync Senses to Long Term Memory
+        if 'NEAREST_FOOD' in self.sensed_signals:
+            self.knowledge['NEAREST_FOOD'] = self.sensed_signals['NEAREST_FOOD']
+
         # DECISION
         self.intent = self.calculate_utility()
         
@@ -674,7 +683,7 @@ class DigitalLifeform:
             dy = random.choice([-1, 0, 1])
             self.move(dx, dy)
         elif self.intent == 'move_to_food':
-            target = self.sensed_signals.get('NEAREST_FOOD')
+            target = self.knowledge.get('NEAREST_FOOD')
             if target:
                 self.move_to(target[0], target[1])
         elif self.intent == 'construct_nuke':

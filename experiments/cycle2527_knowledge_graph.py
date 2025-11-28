@@ -32,7 +32,7 @@ def run_knowledge_experiment():
     print("🔗 Seeding The Borg...")
     for i in range(50):
         agent = DigitalLifeform(name=f"Drone-{i}", lineage_id="Borg")
-        agent.energy = 150 # Hungry
+        agent.energy = 500 # Boosted for survival
         agent.x = 20
         agent.y = 20
         # High Trust, High Altruism
@@ -46,7 +46,7 @@ def run_knowledge_experiment():
         env.add_agent(agent)
         
     # ONE Agent knows where the food is (The Scout)
-    env.agents[0].sensed_signals['NEAREST_FOOD'] = food_zone
+    env.agents[0].knowledge['NEAREST_FOOD'] = food_zone
     print(f"👁️ Agent {env.agents[0].name} knows the location of food.")
     
     # Prepare Output
@@ -65,10 +65,11 @@ def run_knowledge_experiment():
         for tick in range(1, duration + 1):
             
             # Re-inject knowledge to Scout every tick (simulating visual contact)
-            # Otherwise it might decay or be cleared? 
-            # In `act`, `sensed_signals` is cleared. 
-            # So we must re-inject to the Scout.
-            env.agents[0].sensed_signals['NEAREST_FOOD'] = food_zone
+            if env.agents:
+                env.agents[0].knowledge['NEAREST_FOOD'] = food_zone
+            else:
+                print("💀 EXTINCTION.")
+                break
             
             env.update()
             
@@ -81,8 +82,8 @@ def run_knowledge_experiment():
                 total_dist += dist
                 if dist < 5: at_food += 1
                 
-                # Check if agent knows the location
-                if 'NEAREST_FOOD' in agent.sensed_signals:
+                # Check if agent knows the location (Cycle 2528: Check Memory)
+                if 'NEAREST_FOOD' in agent.knowledge:
                     knowledge_spread += 1
             
             avg_dist = total_dist / len(env.agents) if env.agents else 0
