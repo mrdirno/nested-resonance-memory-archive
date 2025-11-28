@@ -4619,3 +4619,22 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Actually:** The log output `Nomad=29` suggests a massive die-off (100 -> 29) by Tick 200. Maybe they moved off-grid or died of entropy? No, I added bounds check. 
     - **Likely Cause:** The `act()` method is complex. `move` intent might be overridden or not triggered often enough. 
     - **Status:** Partial Failure. Movement mechanics implemented but behaviorally suppressed by other priorities.
+
+# Task: Cycle 2522 - The Explorer (Gate 150)
+- [ ] **Define Cycle 2522:** Directed Exploration.
+- [ ] **Goal:** Agents move towards resources (Food) or away from threats (Predators).
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Update `move()` to accept a target coordinate.
+    - [ ] Update `act()` to use `sense()` data for pathfinding.
+- [ ] **Action:** Run `experiments/cycle2522_exploration.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2522 - The Explorer (Gate 150)
+- [x] **Define Cycle 2522:** Directed Exploration.
+- [x] **Goal:** Agents move towards resources or away from threats.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `move_to(target)` and pathfinding.
+- [x] **Action:** Run `experiments/cycle2522_exploration.py`.
+- [x] **Result:** FAILURE (Blindness). `AtFood=3`. 
+    - **Observation:** Agents dispersed (AvgDist=55.7), but only 3 found the food zone. The pathfinding logic (`move_to_food`) was rarely triggered.
+    - **Reason:** The signal injection `agent.sensed_signals['NEAREST_FOOD'] = food_zone` worked, BUT the `act()` method priority favored `startup`, `seek_work`, or `trade` (Cycle 2509/2501 logic) over `move_to_food` because trust was high or energy was low. Also, the random walk speed might be too slow.
+    - **Correction:** Need to overhaul the Intent Priority System. Survival (finding food) should override social ambition when starving.

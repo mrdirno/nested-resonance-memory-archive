@@ -297,7 +297,11 @@
 - [ ] **Action:** Modify `src/life/genesis.py` to add (x,y) and `move()`.
 - [ ] **Action:** Modify `src/life/ecosystem.py` to handle 2D space.
 - [ ] **Action:** Run `experiments/cycle2521_spatial_grid.py`.
-- [x] **Result:** SUCCESS (Spatial Physics). Agents possess (x,y) coordinates and move via Brownian Motion.
-    - **Observation:** Agents dispersed from initial positions, consuming energy for movement.
-    - **Mechanism:** `move(dx, dy)` and `Ecosystem` boundary enforcement.
-    - **Functional Name:** The Grid (Spatial Physics).
+- [x] **Result:** SUCCESS (Movement). `Nomads` dispersed across the grid.
+
+# Task: Cycle 2522 - The Explorer (Gate 150)
+- [ ] **Define Cycle 2522:** Directed Exploration.
+- [ ] **Goal:** Agents move towards resources or away from threats.
+- [ ] **Action:** Modify `src/life/genesis.py` to implement `move_to(target)` and pathfinding.
+- [ ] **Action:** Run `experiments/cycle2522_exploration.py`.
+- [ ] **Result:** pending...
