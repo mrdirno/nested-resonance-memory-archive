@@ -187,3 +187,16 @@
     - **Observation:** Smart Workers demanded such high equity (46.25 vs 20) that they drained the Bosses' capital.
     - **Mechanism:** Aggressive wealth transfer caused a "Capital Crunch". Bosses went broke and stopped hiring. The economy collapsed, and the Smart Workers starved first (likely due to higher expectations or just bad luck in a shrinking market).
     - **Functional Name:** The Union Problem (Wage-Price Spiral).
+
+# Task: Cycle 2509 - The Founder (Gate 137)
+- [ ] **Define Cycle 2509:** Startup Mode (Direct Value Creation).
+- [ ] **Goal:** Smart Agents bypass the Labor Market and create value directly.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `startup()` method.
+    - [ ] Logic: High Cost (Seed Capital), High Risk, Exponential Reward.
+    - [ ] Update `act()`: Smart agents prioritize `startup` over `seek_work`.
+- [ ] **Action:** Run `experiments/cycle2509_founder.py`.
+- [x] **Result:** SUCCESS (Creative Destruction). `Founders=25`, `OldMoney=0`.
+    - **Observation:** Smart Agents bypassed the labor market and launched Startups. They became the new Elite. Old Money (low innovation) went bankrupt.
+    - **Mechanism:** High Risk/High Reward strategy paid off for High Innovation agents.
+    - **Functional Name:** Creative Destruction (The Silicon Valley Model).

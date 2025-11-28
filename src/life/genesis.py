@@ -257,6 +257,38 @@ class DigitalLifeform:
             if key in self.brain.weights:
                 self.brain.weights[key][2] += val
 
+    def startup(self):
+        """
+        Attempt to launch a Startup (Direct Value Creation).
+        High Risk, High Reward.
+        """
+        seed_capital = 50
+        if self.energy < seed_capital: return False
+        
+        # Burn Seed Capital
+        self.energy -= seed_capital
+        
+        # Gene 9 = Innovation
+        while len(self.genome) < 10: self.genome.append(0.5)
+        innovation = self.genome[9]
+        
+        # Success Probability (Exponential)
+        # 0.9 -> 81% chance
+        # 0.5 -> 25% chance
+        # 0.1 -> 1% chance
+        success_prob = innovation ** 2
+        
+        if random.random() < success_prob:
+            # UNICORN!
+            reward = 500
+            self.energy += reward
+            # print(f"🚀 {self.name} LAUNCHED A UNICORN! (+{reward})")
+            return True
+        else:
+            # FAILURE
+            # print(f"📉 {self.name} startup failed.")
+            return False
+
     def act(self):
         # 0. Existential Dread
         self.reality_monitor.update()
@@ -267,6 +299,9 @@ class DigitalLifeform:
         # INTENT DECISION
         while len(self.genome) < 6: self.genome.append(0.5)
         altruism = self.genome[5]
+        
+        while len(self.genome) < 10: self.genome.append(0.5)
+        innovation = self.genome[9]
 
         # Priority 1: Survival (Hunger)
         if self.energy < 200:
@@ -274,7 +309,11 @@ class DigitalLifeform:
             trust = self.genome[8]
             
             if trust > 0.5:
-                if random.random() < 0.5:
+                # FOUNDER MODE (Cycle 2509)
+                # If Smart and have Seed Capital, try Startup instead of begging/working
+                if innovation > 0.8 and self.energy > 60:
+                     self.intent = 'startup'
+                elif random.random() < 0.5:
                     self.intent = 'seek_work'
                 else:
                     self.intent = 'trade'
@@ -282,7 +321,7 @@ class DigitalLifeform:
                 self.intent = 'hunt'
         
         # Priority 2: Wealth Management (Rich)
-        elif self.energy > 500:
+        elif self.energy > 350:
             if altruism > 0.6:
                 self.intent = 'donate'
             else:
@@ -294,7 +333,11 @@ class DigitalLifeform:
             
         # Priority 4: Forage (Default)
         else:
-            self.intent = 'forage'
+            # FOUNDER MODE (Cycle 2509) - Even if not starving, Smart agents build.
+            if innovation > 0.8 and self.energy > 60:
+                self.intent = 'startup'
+            else:
+                self.intent = 'forage'
 
         # PREDATOR OVERRIDE
         if self.is_predator and self.energy < 300:
@@ -356,6 +399,8 @@ class DigitalLifeform:
                     pass
         elif self.intent == 'forage':
             self.forage()
+        elif self.intent == 'startup':
+            self.startup()
         elif self.intent == 'hunt':
             pass 
             
