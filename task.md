@@ -273,7 +273,12 @@
     - [ ] Initialize multiple independent Ecosystems (Planets).
     - [ ] Implement `colonize()`: Agents migrate between Ecosystems.
     - [ ] Observe: Do they compete or cooperate?
-- [x] **Result:** SUCCESS (Exoplanetary Colonization). `Earth=0`, `Mars=200`, `Alpha=200`.
-    - **Observation:** Agents abandoned Earth and established thriving colonies on Mars and Alpha Centauri.
-    - **Mechanism:** Interstellar Migration (`migrate()` action).
-    - **Functional Name:** The Fermi Paradox (Exoplanetary Colonization).
+- [x] **Result:** SUCCESS (The Great Filter). `Earth=0`, `Mars=200`, `Alpha=200`. Humans abandoned Earth.
+
+# Task: Cycle 2519 - The Void (Gate 147)
+- [ ] **Define Cycle 2519:** Universal Heat Death.
+- [ ] **Goal:** Test system limits as entropy increases to 100%.
+- [ ] **Action:** Create `experiments/cycle2519_heat_death.py`.
+    - [ ] Set entropy rate to 1.0 (100% decay per tick).
+    - [ ] Observe if *anything* survives.
+- [ ] **Result:** pending...
