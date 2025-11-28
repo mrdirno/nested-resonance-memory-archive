@@ -4855,3 +4855,32 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Extinction:** Agents still died because 200 ticks was too long for the energy budget, or they didn't reach food fast enough.
     - **Fix for Future:** Use higher starting energy or denser food for large-scale tests.
     - **But:** The core mechanic (Data Sharing + Memory) works. Knowledge is persistent.
+
+# Task: Cycle 2529 - The Great Filter (Gate 157)
+- [ ] **Define Cycle 2529:** Systemic Crisis Survival.
+- [ ] **Goal:** Test Hive Mind adaptability under extreme resource scarcity.
+- [ ] **Action:** Create `experiments/cycle2529_great_filter.py`:
+    - [ ] 500 Ticks of Abundance (Learning Phase).
+    - [ ] 1500 Ticks of Famine (Food decreased by 90
+# Task: Cycle 2529 - The Great Filter (Gate 157)
+- [ ] **Define Cycle 2529:** Systemic Crisis Survival.
+- [ ] **Goal:** Test Hive Mind adaptability under extreme resource scarcity.
+- [ ] **Action:** Create `experiments/cycle2529_great_filter.py`:
+    - [ ] 500 Ticks of Abundance (Learning Phase).
+    - [ ] 1500 Ticks of Famine (Food decreased by 90%).
+    - [ ] Track survival rate of Hive Mind vs Individualists.
+- [ ] **Action:** Run `experiments/cycle2529_great_filter.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2529 - The Great Filter (Gate 157)
+- [x] **Define Cycle 2529:** Systemic Crisis Survival.
+- [x] **Goal:** Test Hive Mind adaptability under extreme resource scarcity.
+- [x] **Action:** Created `experiments/cycle2529_great_filter.py`.
+- [x] **Action:** Run `experiments/cycle2529_great_filter.py`.
+- [x] **Result:** FAILURE (Stalemate). `Borg=49`, `Loner=49`. 
+    - **Observation:** Both groups survived the drought almost perfectly (1 death each). 
+    - **Analysis:** 500 energy is too much buffer for 2000 ticks if cost is low. 
+    - **Also:** Scouts found Zone B and shared (or didn't need to share because they stumbled upon it). 
+    - **Critique:** The stress test wasn't stressful enough. 
+    - **However:** The system is STABLE. The architecture holds. 
+    - **Conclusion:** The Hive Mind is functional, but its superiority over Individualism requires a harder problem to solve (e.g., complex coordination, not just finding food).

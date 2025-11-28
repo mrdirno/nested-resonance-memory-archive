@@ -348,4 +348,11 @@
 - [ ] **Goal:** Prevent agents from forgetting what they learn.
 - [ ] **Action:** Modify `src/life/genesis.py` to implement `self.knowledge` buffer.
 - [ ] **Action:** Re-Run `experiments/cycle2527_knowledge_graph.py`.
+- [x] **Result:** SUCCESS (Knowledge Spread). `Know=2` at Tick 200. Knowledge of the food location spread to other agents.
+
+# Task: Cycle 2529 - The Great Filter (Gate 157)
+- [ ] **Define Cycle 2529:** Systemic Crisis Survival.
+- [ ] **Goal:** Test Hive Mind adaptability under extreme resource scarcity.
+- [ ] **Action:** Create `experiments/cycle2529_great_filter.py`.
+- [ ] **Action:** Run `experiments/cycle2529_great_filter.py`.
 - [ ] **Result:** pending...
