@@ -4218,3 +4218,23 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/genesis.py` to include exponential entropy cost after 50 ticks.
 - [x] **Action:** Run `experiments/cycle2498_short_life.py`.
 - [x] **Result:** Failure. Predators simply *didn't die*. They are living to 2000 ticks (Age=1995.2). The abundance of prey (200) means predators can hunt enough to pay even the exponential entropy tax. The "Short Life" mechanism wasn't harsh enough. Predators are effectively immortal if they keep hunting.
+
+# Task: Cycle 2499 - The Wendigo (Gate 127)
+- [ ] **Define Cycle 2499:** Universal Predation & Cannibalism.
+- [ ] **Goal:** Observe evolutionary regulation of cannibalism.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `Gene 7` (Cannibalism).
+    - [ ] Implement `Prion Infection` (Death chance after cannibalism).
+    - [ ] Allow hunting conspecifics if `Gene 7` is high.
+- [ ] **Action:** Run `experiments/cycle2499_wendigo.py` (Starvation scenario).
+- [ ] **Result:** pending...
+
+# Task: Cycle 2499 - The Wendigo (Gate 127)
+- [x] **Define Cycle 2499:** Universal Predation & Cannibalism.
+- [x] **Goal:** Observe evolutionary regulation of cannibalism.
+- [x] **Action:** Modified `src/life/genesis.py`:
+    - [x] Add `Gene 7` (Cannibalism).
+    - [x] Implement `Prion Infection` (Death chance after cannibalism).
+    - [x] Allow hunting conspecifics if `Gene 7` is high.
+- [x] **Action:** Run `experiments/cycle2499_wendigo.py` (Starvation scenario).
+- [x] **Result:** Inconclusive/Failure. `cannibal_acts` remained 0 throughout the experiment. Despite starvation pressure (no food injection), agents did not resort to cannibalism. Likely cause: `Gene 7` (Cannibalism) started low (0.1) and did not mutate high enough fast enough to overcome the "Disgust" threshold (0.5) before agents starved or found alternative survival strategies (efficiency). Or perhaps the "Starvation" wasn't severe enough to force the behavior transition.

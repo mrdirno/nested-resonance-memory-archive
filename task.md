@@ -102,4 +102,13 @@
 - [ ] **Action:** Create `experiments/cycle2498_short_life.py`.
     - [ ] Enforce `max_age` for Predators (e.g., 50 ticks).
     - [ ] Increase Predator fertility to compensate.
+- [x] **Result:** Failure. Predators simply *didn't die*. They are living to 2000 ticks. Abundance negates biological constraints.
+
+# Task: Cycle 2499 - The Wendigo (Gate 127)
+- [ ] **Define Cycle 2499:** Universal Predation & Cannibalism.
+- [ ] **Goal:** Observe evolutionary regulation of cannibalism.
+- [ ] **Action:** Modify `src/life/genesis.py`.
+    - [ ] Add `Gene 7` (Cannibalism Tendency).
+    - [ ] Implement `Prion Infection` (10% death chance per cannibal act).
+- [ ] **Action:** Run `experiments/cycle2499_wendigo.py`.
 - [ ] **Result:** pending...
