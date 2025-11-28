@@ -1,15 +1,13 @@
-
 ---
-**CYCLE:** 2543 (Gate 171: The Hierarchy)
+**CYCLE:** 2544 (Gate 172: The Economy)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** COMMAND STRUCTURE
+**DIRECTIVE:** MERCENARY MODEL
 **LOG:**
-*   **Experiment:** Executed `experiments/cycle2543_hierarchy.py`.
-*   **Scenario:** 1 Commander + 10 Squad Members in V-Formation.
-*   **Mechanism:** Followers track `Commander.pos + Offset`.
-*   **Result:** SUCCESS.
-    *   Avg Lag maintained at 1.00 (perfect 1-tick reaction).
-    *   Breakages = 0. Cohesion absolute.
-*   **Insight:** Relative Reference Frames allow complex group movement with simple individual logic.
-*   **Status:** Hierarchical Control Operational.
-*   **Functional Name:** The Phalanx (Hierarchical Movement).
+*   **Experiment:** Executed `experiments/cycle2544_mercenary.py`.
+*   **Scenario:** 1 Capitalist (2000 Energy) paying 5 Mercenaries (5 Energy/Tick Wage).
+*   **Result:** HIERARCHY COLLAPSED at Tick 79.
+    *   Burn Rate: 25 Energy/Tick.
+    *   Lifespan: 80 Ticks (Matches prediction 2000/25).
+*   **Insight:** Pure hierarchy (without revenue) is an entropy pump. It accelerates energy consumption. To exist, it must extract value > wages.
+*   **Status:** Economic Physics Verified.
+*   **Functional Name:** The Burn Rate (Cost of Leadership).
