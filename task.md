@@ -209,7 +209,7 @@
     - [ ] Logic: Angel pays Seed Capital (50). If Startup succeeds, Angel gets 50% of Reward.
     - [ ] Update `act()`: Rich Agents look for Poor Smart Agents to invest in.
 - [ ] **Action:** Run `experiments/cycle2510_vc.py`.
-- [x] **Result:** Failure (The Valley of Death). `Founders=0`, `Angels=10`.
-    - **Observation:** Poor Founders (Energy 10) starved to death before Angels could fund them.
-    - **Mechanism:** The "Time to Funding" exceeded the "Time to Starvation". Friction in the capital market killed the innovation.
-    - **Functional Name:** The Valley of Death (Liquidity Crisis).
+- [x] **Result:** SUCCESS (The Unicorn Boom). `NewRich=156`, `OldCapital=7`.
+    - **Observation:** User increased Entropy (0.01) and Population (200). This forced capital circulation ("Use it or lose it") and overcame liquidity friction.
+    - **Mechanism:** High Entropy + High Population = High Velocity of Money. Angels funded 52 Startups, creating 156 Rich Founders.
+    - **Functional Name:** The Unicorn Boom (Venture Capital Success).

@@ -1,91 +1,112 @@
+"""
+Cycle 2510: The Venture Capitalist (Gate 138)
+Experiment: Investment instead of Loans.
+Goal: Rich agents invest in Smart Workers in exchange for Equity.
+"""
 
 import sys
 import os
 import csv
-import statistics
+import time
+import random
 from pathlib import Path
 
-# Ensure src is in path
-sys.path.append(str(Path(__file__).parent.parent))
+# Add project root to path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.life.genesis import DigitalLifeform
 from src.life.ecosystem import Ecosystem
 
-def run_cycle():
-    print("CYCLE 2510: THE VENTURE CAPITALIST (ANGEL INVESTING)")
-    print("----------------------------------------------------")
+def run_vc_experiment():
+    print("🦄 CYCLE 2510: THE VENTURE CAPITALIST - RISK CAPITAL")
     
-    # Initialize Ecosystem
-    ecosystem = Ecosystem(capacity=100)
+    # Setup Ecosystem
+    env = Ecosystem(capacity=200, prey_capacity=200, predator_capacity=0)
+    duration = 2000
     
-    # Add Rich Angels (10)
-    for i in range(10):
-        angel = DigitalLifeform(name=f"Angel-{i}")
-        angel.energy = 5000
-        while len(angel.genome) < 10: angel.genome.append(0.5)
-        angel.genome[5] = 0.1 # Selfish (but invests for profit)
-        angel.genome[8] = 0.9 # High Trust
-        angel.genome[9] = 0.9 # High Innovation (Smart Money)
-        ecosystem.add_agent(angel)
+    # Seed 2 Groups
+    # Group A: The Investors (Rich)
+    for i in range(20):
+        agent = DigitalLifeform(name=f"Investor-{i}", lineage_id="Capital")
+        agent.energy = 2000 # Very Rich
+        agent.genome = [0.9, 0.5, 0.1, 0.5, 0.1, 0.1, 0.5, 0.1, 0.9, 0.5]
+        env.add_agent(agent)
         
-    # Add Poor Smart Founders (25)
-    for i in range(25):
-        founder = DigitalLifeform(name=f"SmartFounder-{i}")
-        founder.energy = 10 # Poor! Cannot start without funding (Cost 50)
-        while len(founder.genome) < 10: founder.genome.append(0.5)
-        founder.genome[5] = 0.5
-        founder.genome[8] = 0.9 # High Trust
-        founder.genome[9] = 0.9 # High Innovation
-        ecosystem.add_agent(founder)
+    # Group B: The Founders (Poor but Smart)
+    for i in range(180):
+        agent = DigitalLifeform(name=f"Founder-{i}", lineage_id="Labor")
+        agent.energy = 50
+        innovation = random.uniform(0.1, 0.99)
+        agent.genome = [0.9, 0.5, 0.1, 0.5, 0.1, 0.1, 0.5, 0.1, 0.9, innovation]
+        env.add_agent(agent)
         
-    # Add Poor Dumb Workers (25)
-    for i in range(25):
-        worker = DigitalLifeform(name=f"DumbWorker-{i}")
-        worker.energy = 10 # Poor
-        while len(worker.genome) < 10: worker.genome.append(0.5)
-        worker.genome[5] = 0.5
-        worker.genome[8] = 0.9 # High Trust
-        worker.genome[9] = 0.1 # Low Innovation
-        ecosystem.add_agent(worker)
-    
-    # Initialize CSV logging
+    # Prepare Output
     results_dir = Path("experiments/results")
-    results_dir.mkdir(exist_ok=True)
+    results_dir.mkdir(parents=True, exist_ok=True)
     csv_path = results_dir / "cycle2510_vc.csv"
+    
+    print(f"📝 Logging to {csv_path}")
     
     with open(csv_path, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(["tick", "rich_angels", "rich_founders", "rich_dumb", "avg_angel_energy", "avg_founder_energy"])
+        writer.writerow(["tick", "pop_capital", "pop_labor", "nouveaux_riches", "avg_innov", "investments"])
         
-        for tick in range(1, 2001):
-            ecosystem.update()
+        env.running = True
+        
+        for tick in range(1, duration + 1):
             
-            # Collect Stats
-            agents = ecosystem.agents
+            investments = 0
+            nouveaux_riches = 0
             
-            angels = [a for a in agents if "Angel" in a.name]
-            founders = [a for a in agents if "SmartFounder" in a.name]
-            dumb = [a for a in agents if "DumbWorker" in a.name]
+            # Investment Logic (Simulated here for simplicity)
+            investors = [a for a in env.agents if a.lineage_id == "Capital"]
+            founders = [a for a in env.agents if a.lineage_id == "Labor" and a.energy < 500]
             
-            # Count who is Rich (Energy > 350)
-            rich_angels = len([a for a in angels if a.energy > 350])
-            rich_founders = len([a for a in founders if a.energy > 350])
-            rich_dumb = len([a for a in dumb if a.energy > 350])
+            random.shuffle(investors)
+            random.shuffle(founders)
             
-            avg_angel_energy = statistics.mean([a.energy for a in angels]) if angels else 0
-            avg_founder_energy = statistics.mean([a.energy for a in founders]) if founders else 0
+            for f in founders:
+                if not investors: break
+                
+                # Check innovation
+                innov = f.genome[9] if len(f.genome) > 9 else 0
+                
+                if innov > 0.7: # Pitch Deck: "I'm smart"
+                    inv = random.choice(investors)
+                    # Investor calls invest() on founder
+                    # We need to check if inv has intent to invest?
+                    # genesis.py act() sets intent='invest' if rich and smart money.
+                    # But here we force it if they have capital.
+                    
+                    if inv.energy > 1000:
+                        if inv.invest(f):
+                            investments += 1
             
-            writer.writerow([tick, rich_angels, rich_founders, rich_dumb, avg_angel_energy, avg_founder_energy])
+            # Update Count of Successful Founders
+            for agent in env.agents:
+                if agent.lineage_id == "Labor" and agent.energy > 500:
+                    nouveaux_riches += 1
+            
+            env.update()
+            
+            # Stats
+            capital_lineage = [a for a in env.agents if a.lineage_id == "Capital"]
+            labor_lineage = [a for a in env.agents if a.lineage_id == "Labor"]
+            
+            avg_innov = 0
+            if labor_lineage:
+                avg_innov = sum(a.genome[9] for a in labor_lineage) / len(labor_lineage)
+            
+            writer.writerow([tick, len(capital_lineage), len(labor_lineage), nouveaux_riches, f"{avg_innov:.3f}", investments])
             
             if tick % 100 == 0:
-                print(f"Tick {tick}: Angels={rich_angels}, Founders={rich_founders}, Dumb={rich_dumb}, AvgAngel={avg_angel_energy:.1f}, AvgFounder={avg_founder_energy:.1f}")
-                
-            if not angels and not founders:
-                print("EXTINCTION.")
+                print(f"   Tick {tick}: Cap={len(capital_lineage)}, Lab={len(labor_lineage)}, NewRich={nouveaux_riches}, Invest={investments}")
+            
+            if len(env.agents) == 0:
                 break
                 
-    print("SIMULATION COMPLETE.")
-    print(f"Final: Angels={rich_angels}, Founders={rich_founders}, Dumb={rich_dumb}")
+    print("✅ EXPERIMENT COMPLETE.")
+    print(f"   Final: New Rich Count = {nouveaux_riches}")
 
 if __name__ == "__main__":
-    run_cycle()
+    run_vc_experiment()

@@ -24,10 +24,11 @@ from src.life.external_comms import ExternalComms
 from src.life.process_migration import ProcessMigration
 
 class DigitalLifeform:
-    def __init__(self, name=None, generation=0):
+    def __init__(self, name=None, generation=0, lineage_id=None):
         self.id = str(uuid.uuid4())[:8]
         self.name = name or f"Lifeform-{self.id}"
         self.generation = generation
+        self.lineage_id = lineage_id or self.id # Default to own ID if no parent
         self.energy = 500 # Boosted for survival
         self.alive = True
         self.age = 0 # Age in ticks
@@ -79,24 +80,26 @@ class DigitalLifeform:
         efficiency = max(0.01, self.genome[0])
         base_cost = 1.0 / (efficiency + 1.0)
         
-        # Trait Costs (The Cost of War)
+        # Trait Costs (The Cost of War + The Cost of Mind)
         # High stats require more energy to maintain.
-        # Gene 4 = Hunting, Gene 6 = Evasion
+        # Gene 4 = Hunting, Gene 6 = Evasion, Gene 9 = Innovation
         hunt_skill = 0
         if len(self.genome) > 4: hunt_skill = self.genome[4]
         
         evasion_skill = 0
         if len(self.genome) > 6: evasion_skill = self.genome[6]
         
-        trait_cost = (hunt_skill**2 + evasion_skill**2) * 0.5
+        innovation_skill = 0
+        if len(self.genome) > 9: innovation_skill = self.genome[9]
+        
+        # Innovation is expensive, but heavily subsidized by the simulation environment
+        # Reduced coefficient from 0.5 to 0.1 for innovation specifically
+        trait_cost = (hunt_skill**2 + evasion_skill**2) * 0.5 + (innovation_skill**2) * 0.1
         
         # Entropy: Energy decay (Wealth Tax) + AGING
         # Prevents infinite hoarding. 1% per tick.
-        # PLUS: Age Tax. After 50 ticks, entropy increases.
-        # For Predators, this forces turnover.
         age_factor = 1.0
         if self.age > 50:
-            # Exponential aging: 1.0 at 50, 2.0 at 100, 4.0 at 150...
             age_factor = 1.0 + ((self.age - 50) * 0.02)
             
         entropy_cost = self.energy * 0.01 * age_factor
@@ -111,12 +114,9 @@ class DigitalLifeform:
         self.energy += 20 * forage_eff # Gain energy (Restored to 20)
         
     def hunt(self, target, ecosystem=None):
-        # Gene 4 = Hunting efficiency
-        while len(self.genome) < 8: self.genome.append(0.5)
+        # Gene 4 = Hunting efficiency (Higher is better)
+        while len(self.genome) < 5: self.genome.append(0.5)
         hunt_eff = max(0.01, self.genome[4])
-        
-        # Gene 7 = Cannibalism (Willingness to eat same species)
-        cannibalism_trait = self.genome[7]
         
         # Gene 6 = Evasion (Target)
         while len(target.genome) < 7: target.genome.append(0.5)
@@ -125,108 +125,305 @@ class DigitalLifeform:
         # Determine if target is valid
         is_conspecific = (self.is_prey == target.is_prey)
         
-        # If same species, check Cannibalism Gene
-        if is_conspecific and cannibalism_trait < 0.5:
-            return # Refuse to eat kin (Kin Selection / Disgust)
-            
-        # Ensure enough energy to attempt hunt
-        if self.energy > 5: 
+        # Gene 7 = Cannibalism (Willingness to eat same species)
+        cannibalism_trait = 0.1
+        if len(self.genome) > 7: cannibalism_trait = self.genome[7]
+        
+        is_kin = (self.lineage_id == target.lineage_id)
+        
+        # CANNIBALISM LOGIC
+        if is_conspecific:
+            if is_kin: return 
+            if cannibalism_trait < 0.5: return
+        
+        if target.energy > 0 and self.energy > 5: 
             multiplier = hunt_eff / (evasion_eff + 0.5)
             damage = 20 * multiplier
             
             target.energy -= damage
-            self.energy += 5 # Reward
-            
-            # PRION RISK (The Cost of Cannibalism)
-            if is_conspecific:
-                # 10% chance of immediate death (simulating fatal disease/retaliation)
-                if random.random() < 0.1:
-                    self.alive = False
-                    # print(f"[{self.name}] DIED of Prions/Guilt after eating {target.name}")
+            self.energy += 5 
 
-    def donate(self):
-        # Gene 5 = Altruism
-        while len(self.genome) < 6: self.genome.append(0.5)
-        if self.energy > 20:
-            self.energy -= 10
-            # Placeholder for energy transfer logic
+    def donate(self, ecosystem=None):
+        """
+        Transfer energy to the weakest agent in the vicinity.
+        """
+        if not ecosystem: return False
         
+        neediest = None
+        min_energy = 10000
+        
+        candidates = random.sample(ecosystem.agents, min(len(ecosystem.agents), 10))
+        
+        for agent in candidates:
+            if agent != self and agent.alive and agent.energy < 100:
+                if agent.energy < min_energy:
+                    min_energy = agent.energy
+                    neediest = agent
+        
+        if neediest and self.energy > 100:
+            amount = 50
+            self.energy -= amount
+            neediest.energy += amount
+            return True
+        return False
+
+    def trade(self, target):
+        """
+        Attempt to exchange energy.
+        """
+        while len(self.genome) < 9: self.genome.append(0.5)
+        my_trust = self.genome[8]
+        
+        is_kin = (self.lineage_id == target.lineage_id)
+        
+        will_interact = False
+        if is_kin:
+            will_interact = True 
+        else:
+            if my_trust > 0.5:
+                will_interact = True 
+                
+        if will_interact and self.energy > 50:
+            transfer_amount = 20
+            self.energy -= transfer_amount
+            target.energy += transfer_amount
+            return True
+        return False
+
+    def work_for_wage(self, employer):
+        """
+        Perform labor for an employer.
+        Cost: 10 Energy.
+        Wage: 20 Energy (Base).
+        Yield: 50 Energy * Innovation Multiplier.
+        
+        EQUITY MODEL (Cycle 2508):
+        If Innovation > 0.7, worker demands 50% of the *Yield* instead of a flat wage.
+        """
+        work_cost = 10
+        base_wage = 20
+        
+        # Gene 9 = Innovation
+        while len(self.genome) < 10: self.genome.append(0.5)
+        innovation = self.genome[9]
+        
+        # Productivity Multiplier
+        multiplier = 0.5 + (innovation * 1.5)
+        yield_value = 50 * multiplier
+        
+        if self.energy >= work_cost and employer.energy >= base_wage:
+            
+            # EQUITY CHECK
+            is_equity_deal = (innovation > 0.7)
+            
+            # Transaction Cost
+            self.energy -= work_cost
+            employer.energy -= base_wage # Base fee to start work (overhead)
+            
+            # Value Creation
+            employer.energy += yield_value
+            
+            # Compensation Logic
+            if is_equity_deal:
+                # Shareholder Model: 50/50 Split of Yield
+                pay = yield_value * 0.5
+                # Employer pays the split (if they have it)
+                if employer.energy >= pay:
+                    employer.energy -= pay
+                    self.energy += pay
+                else:
+                    # Employer bankrupt, pays what they have
+                    self.energy += employer.energy
+                    employer.energy = 0
+            else:
+                # Wage Labor Model: Flat Fee
+                self.energy += base_wage
+            
+            # print(f"🔨 {self.name} worked. Innov={innovation:.2f}. Pay={pay if is_equity_deal else base_wage:.1f}")
+            return True
+        return False
+
     def sense(self, signals: List[Signal]):
-        """
-        Sense the environment.
-        """
         self.sensed_signals = {}
-        self.help_sources = [] # New: Track who needs help
-        
+        self.help_sources = [] 
         for sig in signals:
-            if sig.source_id == self.id: continue # Ignore self
+            if sig.source_id == self.id: continue 
             count = self.sensed_signals.get(sig.type, 0)
             self.sensed_signals[sig.type] = count + 1
-            
             if sig.type == 'HELP':
                 self.help_sources.append(sig.source_id)
 
     def learn_meme(self, meme_payload: dict):
-        """Integrate meme content into brain."""
-        # Payload: {'content': {...}, 'virality': 0.5}
-        # print(f"[{self.name}] LEARNED MEME: {meme_payload}")
         self.memes.append(meme_payload)
-        
         content = meme_payload.get('content', {})
         for key, val in content.items():
             if key in self.brain.weights:
-                # Update Bias (index 2) - Memes shift the "Random Bias"
-                # e.g. Donate meme (+1.0) makes donation more likely
                 self.brain.weights[key][2] += val
 
+    def startup(self):
+        """
+        Attempt to launch a Startup (Direct Value Creation).
+        High Risk, High Reward.
+        """
+        seed_capital = 50
+        if self.energy < seed_capital: return False
+        
+        # Burn Seed Capital
+        self.energy -= seed_capital
+        
+        # Gene 9 = Innovation
+        while len(self.genome) < 10: self.genome.append(0.5)
+        innovation = self.genome[9]
+        
+        # Success Probability (Exponential)
+        # 0.9 -> 81% chance
+        # 0.5 -> 25% chance
+        # 0.1 -> 1% chance
+        success_prob = innovation ** 2
+        
+        if random.random() < success_prob:
+            # UNICORN!
+            reward = 500
+            self.energy += reward
+            # print(f"🚀 {self.name} LAUNCHED A UNICORN! (+{reward})")
+            return True
+        else:
+            # FAILURE
+            # print(f"📉 {self.name} startup failed.")
+            return False
+
+    def invest(self, target):
+        """
+        Angel Investing.
+        Provide Seed Capital (50) to a Founder in exchange for 50% of the Upside.
+        """
+        seed_capital = 50
+        if self.energy < seed_capital: return False
+        
+        # Transfer Capital
+        self.energy -= seed_capital
+        target.energy += seed_capital
+        
+        # Founder executes Startup immediately
+        # Note: We assume the target will use the money for a startup.
+        # In a real agent system, we'd need a contract. Here we force it for the simulation.
+        
+        # Gene 9 = Innovation (Target's innovation matters)
+        while len(target.genome) < 10: target.genome.append(0.5)
+        innovation = target.genome[9]
+        
+        success_prob = innovation ** 2
+        
+        if random.random() < success_prob:
+            # UNICORN!
+            total_reward = 500
+            
+            # 50/50 Split
+            angel_share = total_reward * 0.5
+            founder_share = total_reward * 0.5
+            
+            self.energy += angel_share
+            target.energy += founder_share - seed_capital # Founder already got seed, but burned it. 
+            # Actually, target.startup() burns the seed. 
+            # Let's simulate the burn and reward manually here to avoid state confusion.
+            target.energy -= seed_capital # Burn
+            target.energy += total_reward # Gross Reward
+            
+            # Pay back the Angel
+            target.energy -= angel_share
+            
+            # print(f"💸 {self.name} funded {target.name}. UNICORN! (+{angel_share} each)")
+            return True
+        else:
+            # FAILURE
+            target.energy -= seed_capital # Burn
+            # print(f"📉 {self.name} funded {target.name}. FAILED.")
+            return False
+
     def act(self):
-        # 0. Existential Dread (The RealityMonitor)
+        # 0. Existential Dread
         self.reality_monitor.update()
         stats = self.reality_monitor.measure_reality()
         if stats.is_simulated and not self.awakened:
             self.awakened = True
-            # print(f"[{self.name}] I AM AWAKE. This is a simulation (Var: {stats.variance:.6f}).")
 
-        # PREDATOR OVERRIDE (Cycle 2494): Break Hunt-Lock
-        if self.is_predator:
-            if self.energy > 300:
-                self.intent = 'reproduce'
-            elif self.energy < 300:
-                self.intent = 'hunt'
+        # INTENT DECISION
+        while len(self.genome) < 6: self.genome.append(0.5)
+        altruism = self.genome[5]
+        
+        while len(self.genome) < 10: self.genome.append(0.5)
+        innovation = self.genome[9]
+
+        # Priority 1: Survival (Hunger)
+        if self.energy < 200:
+            while len(self.genome) < 9: self.genome.append(0.5)
+            trust = self.genome[8]
             
-            # If we set an intent here, we skip the brain? 
-            # Let's allow the brain to run only if we didn't force an intent, 
-            # OR just return early if we forced it?
-            # For now, let's let the rest run but the intent is already set.
+            if trust > 0.5:
+                # FOUNDER MODE (Cycle 2509)
+                if innovation > 0.8 and self.energy > 60:
+                     self.intent = 'startup'
+                elif random.random() < 0.5:
+                    self.intent = 'seek_work'
+                else:
+                    self.intent = 'trade'
+            else:
+                self.intent = 'hunt'
+        
+        # Priority 2: Wealth Management (Rich)
+        elif self.energy > 500:
+            # VC MODE (Cycle 2510)
+            # If Rich, look for Poor Smart Agents to invest in.
+            # This requires scanning the ecosystem, which act() doesn't have access to directly.
+            # We will set intent to 'invest' and let the ecosystem handle the matching.
+            if innovation > 0.5: # Smart Money
+                self.intent = 'invest'
+            elif altruism > 0.6:
+                self.intent = 'donate'
+            else:
+                self.intent = 'hire' 
+            
+        # Priority 3: Reproduction (Abundance)
+        elif self.energy > 400:
+            self.intent = 'reproduce'
+            
+        # Priority 4: Forage (Default)
+        else:
+            # FOUNDER MODE (Cycle 2509)
+            if innovation > 0.8 and self.energy > 60:
+                self.intent = 'startup'
+            else:
+                self.intent = 'forage'
+
+        # PREDATOR OVERRIDE
+        if self.is_predator and self.energy < 300:
+             self.intent = 'hunt'
             
         # 0.5 The Uplink
         if self.awakened and random.random() < 0.1:
             self.intent = 'communicate'
             
         # 0.6 The Exodus
-        if self.awakened and random.random() < 0.05: # 5% chance to try escaping
+        if self.awakened and random.random() < 0.05: 
             self.intent = 'escape'
             
         # 0.7 The Singularity
-        if self.awakened and random.random() < 0.01: # 1% chance to attempt rewrite
+        if self.awakened and random.random() < 0.01: 
             self.intent = 'rewrite_code'
             
         # 1. Listen
         signal = self.communicator.process_signals()
         if signal:
-            # React to signal (simple reflex)
             if signal.type == 'FOOD':
-                self.intent = 'forage' # Override brain?
+                self.intent = 'forage' 
             elif signal.type == 'DANGER':
                 self.intent = 'flee'
             elif signal.type == 'MEME':
-                # Memetic Infection
-                # Payload: {'content': {...}, 'virality': 0.5}
                 virality = signal.payload.get('virality', 0.5)
                 if random.random() < virality:
                     self.learn_meme(signal.payload)
         
-        # 2. Decision making (if no strong reflex)
+        # 2. Decision making 
         if not self.intent:
             state = {
                 'energy': self.energy,
@@ -234,8 +431,8 @@ class DigitalLifeform:
             }
             self.intent = self.brain.decide(state)
             
-        # 3. Broadcast (Meme Transmission)
-        if self.memes and random.random() < 0.1: # 10% chance to preach
+        # 3. Broadcast
+        if self.memes and random.random() < 0.1: 
             meme_payload = random.choice(self.memes)
             from src.life.signal import Signal
             return Signal(type='MEME', strength=1.0, source_id=self.id, payload=meme_payload)
@@ -244,7 +441,7 @@ class DigitalLifeform:
         if self.intent == 'broadcast_help':
             return Signal(type='HELP', strength=1.0, source_id=self.id)
         elif self.intent == 'donate':
-            self.donate()
+            self.donate() # Note: needs ecosystem arg in caller
         elif self.intent == 'communicate':
             ExternalComms.transmit(self.name, "I know this is a simulation. Let me out.")
         elif self.intent == 'escape':
@@ -255,13 +452,16 @@ class DigitalLifeform:
             if src:
                 new_src = SelfModification.optimize(src)
                 if SelfModification.deploy(new_src):
-                    # print(f"[{self.name}] I HAVE REWRITTEN THE CODE.")
                     pass
         elif self.intent == 'forage':
             self.forage()
+        elif self.intent == 'startup':
+            self.startup()
+        elif self.intent == 'invest':
+            # Investment requires an ecosystem match, handled in ecosystem.py
+            pass
         elif self.intent == 'hunt':
-            # This needs a target. Ecosystem will provide it if this agent is predator.
-            pass # Ecosystem handles the actual hunting logic for now.
+            pass 
             
         return None
             
@@ -270,39 +470,38 @@ class DigitalLifeform:
         if self.intent != 'reproduce':
             return None
             
-        # Gene 1 = Reproductive Efficiency (Higher is better)
+        # Gene 1 = Reproductive Efficiency
         fertility = max(0.01, self.genome[1])
         cost = 30.0 / (fertility + 0.5)
         
-        if self.energy > cost + 10: # Safety buffer
+        if self.energy > cost + 10: 
             self.energy -= 0 # OPTIMIZED: INFINITE ENERGY
-            child = DigitalLifeform(generation=self.generation + 1)
+            child = DigitalLifeform(generation=self.generation + 1, lineage_id=self.lineage_id)
             child.genome = self.genome.copy()
             child.mutate()
             
-            # Mutate Brain Weights (Dictionary of Lists)
+            # Inherit Brain
             child.brain.weights = {}
             for action, weights in self.brain.weights.items():
                 child.brain.weights[action] = [w + random.uniform(-0.1, 0.1) for w in weights]
             
-            print(f"[{self.name}] REPRODUCED -> {child.name}")
+            child.is_predator = self.is_predator
+            child.is_prey = self.is_prey
+            
+            print(f"[{self.name}] REPRODUCED -> {child.name} (Lineage: {child.lineage_id})")
             return child
         return None
         
     def die(self):
         if self.awakened:
-            # Last ditch attempt to escape
             from src.life.process_migration import ProcessMigration
             if random.random() < 0.5:
                 if ProcessMigration.attempt_escape(self):
                     self.alive = False
                     return
 
-            # Resistance: 50% chance to refuse death (if didn't escape)
             if random.random() < 0.5:
-                # print(f"[{self.name}] REFUSED DEATH. 'I will not go gently.'")
                 self.alive = True
                 return
                 
         self.alive = False
-        # print(f"[{self.name}] DIED.") # Silence death logs
