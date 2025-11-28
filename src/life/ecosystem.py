@@ -123,6 +123,28 @@ class Ecosystem:
                     target = random.choice(prey_alive_this_phase)
                     agent.hunt(target, self) # Predator performs hunt action
             
+            # If predator decided to donate (Kin Altruism)
+            elif agent.intent == 'donate' and agent.energy > 20:
+                # Prioritize those asking for help
+                target = None
+                if agent.help_sources:
+                    # Find agent object by ID
+                    # This is slow O(N), but acceptable for now
+                    for candidate in self.agents:
+                        if candidate.id in agent.help_sources:
+                            target = candidate
+                            break
+                
+                # If no help signal, donate to random neighbor (random agent for now)
+                if not target:
+                    # Don't donate to self
+                    potential_targets = [a for a in self.agents if a.id != agent.id]
+                    if potential_targets:
+                        target = random.choice(potential_targets)
+                
+                if target:
+                    agent.donate(target)
+            
             # Handle reproduction for predators
             # Check against predator capacity
             if pred_count + new_pred_count < self.predator_capacity:

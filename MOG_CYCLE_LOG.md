@@ -1871,3 +1871,7 @@
 *   **Result:** SUCCESS. Cannibalism decreased (0.50 -> 0.46).
 *   **Status:** Prion risk (10%) effectively suppresses cannibalism when Prey is abundant.
 *   **Functional Name:** Prion-Regulated Intraspecific Predation.
+
+*   **Result:** SUCCESS. Clan A (Altruistic) outcompeted Clan D (Selfish) (5 vs 3).
+*   **Status:** Kin Selection provided a survival advantage during scarcity.
+*   **Functional Name:** Kin-Selected Cooperative Survival.

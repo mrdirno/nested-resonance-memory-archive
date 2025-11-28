@@ -138,4 +138,6 @@
     - [ ] "Rich" agents (high initial energy + income).
     - [ ] "Poor" agents (low initial energy).
     - [ ] Compare survival rates with/without Trade.
-- [ ] **Result:** pending...
+- [x] **Result:** Success. Clan A (Altruistic) outcompeted Clan D (Selfish) (5 vs 3).
+    - **Observation:** Under scarcity (Hunt Reward=2), Clans that shared energy survived better than selfish ones.
+    - **Functional Name:** Kin-Selected Cooperative Survival.
