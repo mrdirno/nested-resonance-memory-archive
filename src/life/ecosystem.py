@@ -121,7 +121,7 @@ class Ecosystem:
             if agent.intent == 'hunt' and agent.energy > 0:
                 if prey_alive_this_phase: # Ensure there's prey to hunt
                     target = random.choice(prey_alive_this_phase)
-                    agent.hunt(target) # Predator performs hunt action
+                    agent.hunt(target, self) # Predator performs hunt action
             
             # Handle reproduction for predators
             # Check against predator capacity

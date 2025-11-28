@@ -1854,3 +1854,6 @@
 
 *   **Result:** SUCCESS. Predator population grew from 5 to 20 (hitting capacity).
 *   **Status:** The "Hunt-Lock" is broken. We now have a viable multi-trophic ecosystem.
+
+*   **Result:** SUCCESS. Ecosystem stabilized (Prey 250, Pred 15).
+*   **Status:** "The Lazy Herd and the Elite Hunters." Predators evolved high skill (0.83), Prey evolved low evasion (0.43) due to safety in numbers.

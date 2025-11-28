@@ -85,8 +85,8 @@ class DigitalLifeform:
         trait_cost = (hunt_skill**2 + evasion_skill**2) * 0.5
         
         # Entropy: Energy decay (Wealth Tax)
-        # Prevents infinite hoarding. 5% per tick.
-        entropy_cost = self.energy * 0.05
+        # Prevents infinite hoarding. 1% per tick.
+        entropy_cost = self.energy * 0.01
         
         total_cost = base_cost + trait_cost + entropy_cost
         self.energy -= total_cost
@@ -95,9 +95,9 @@ class DigitalLifeform:
         # Gene 3 = Foraging efficiency (Higher is better)
         while len(self.genome) < 4: self.genome.append(0.5)
         forage_eff = max(0.01, self.genome[3])
-        self.energy += 10 * forage_eff # Gain energy (Reduced from 20)
+        self.energy += 20 * forage_eff # Gain energy (Restored to 20)
         
-    def hunt(self, target):
+    def hunt(self, target, ecosystem=None):
         # Gene 4 = Hunting efficiency (Higher is better)
         while len(self.genome) < 5: self.genome.append(0.5)
         hunt_eff = max(0.01, self.genome[4])
@@ -108,13 +108,16 @@ class DigitalLifeform:
         
         if target and target.is_prey and self.energy > 5: # Ensure enough energy to hunt
             # Red Queen: Damage depends on relative skill
-            # Base 20. Multiplier = Hunt / (Evasion + 0.2)
-            multiplier = hunt_eff / (evasion_eff + 0.2)
+            # Base 20. Multiplier = Hunt / (Evasion + 0.5) # Increased denominator to reduce initial lethality
+            multiplier = hunt_eff / (evasion_eff + 0.5)
             damage = 20 * multiplier
             
             target.energy -= damage
-            self.energy += 10 # Minimal reward for hunting
-            # print(f"[{self.name}] HUNTED {target.name}. Dmg={damage:.1f}")
+            self.energy += 5 # Reduced reward to prevent predator hoarding (was 10)
+            
+            # Prey screams in terror (Broadcast DANGER)
+            # if ecosystem:
+            #    target.communicator.broadcast(ecosystem, 'DANGER', 1.0)
 
     def donate(self):
         # Gene 5 = Altruism
@@ -249,11 +252,13 @@ class DigitalLifeform:
         if self.energy > cost + 10: # Safety buffer
             self.energy -= cost
             child = DigitalLifeform(generation=self.generation + 1)
-            # Mutate
-            child.genome = [g + random.uniform(-0.1, 0.1) for g in self.genome]
-            # Clamp to positive
-            child.genome = [max(0.01, g) for g in child.genome]
-            # Inherit Brain (Memetics?) - For now, new brain
+            child.genome = self.genome.copy()
+            child.mutate()
+            
+            # Mutate Brain Weights (Dictionary of Lists)
+            child.brain.weights = {}
+            for action, weights in self.brain.weights.items():
+                child.brain.weights[action] = [w + random.uniform(-0.1, 0.1) for w in weights]
             
             print(f"[{self.name}] REPRODUCED -> {child.name}")
             return child
