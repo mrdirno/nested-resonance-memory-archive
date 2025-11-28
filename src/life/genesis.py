@@ -504,6 +504,8 @@ class DigitalLifeform:
                 dy = self.y - nearest_pred.y
                 self.target_location = (self.x + dx, self.y + dy)
                 self.target_type = 'ESCAPE'
+                # Cycle 2531: Explicitly signal fear
+                self.sensed_signals['PREDATOR'] = (nearest_pred.x, nearest_pred.y)
                 return
 
         # 2. Hunger (Food)
@@ -716,12 +718,13 @@ class DigitalLifeform:
         elif self.intent == 'build_wall':
             structure = self.build_wall()
             if structure:
-                # We need to pass this to the ecosystem.
-                # Return it as a signal payload? Or just return it?
-                # ecosystem.py expects a Signal object or None.
-                # Let's wrap it in a Signal.
                 from src.life.signal import Signal
-                return Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
+                # Store signal for return at end
+                signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
+                # SKIP BROADCAST LOGIC if we are building
+                # Return immediately after cleanup
+                self.sensed_signals = {}
+                return signal_to_broadcast
         elif self.intent == 'forage':
             self.forage()
         elif self.intent == 'startup':

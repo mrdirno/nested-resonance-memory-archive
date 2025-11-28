@@ -363,4 +363,11 @@
 - [ ] **Action:** Modify `src/life/genesis.py` to add `build_wall()`.
 - [ ] **Action:** Modify `src/life/ecosystem.py` to support Structures.
 - [ ] **Action:** Run `experiments/cycle2530_construction.py`.
+- [x] **Result:** FAILURE. `Walls=0`. Signal handling issue suspected. `act()` early return logic flaw identified.
+
+# Task: Cycle 2531 - The Siege (Gate 159)
+- [ ] **Define Cycle 2531:** Actual Threat Response.
+- [ ] **Goal:** Force agents to build walls by spawning REAL predators.
+- [ ] **Action:** Modify `src/life/genesis.py` `scan()` to detect Predators and set signal.
+- [ ] **Action:** Run `experiments/cycle2531_siege.py`.
 - [ ] **Result:** pending...

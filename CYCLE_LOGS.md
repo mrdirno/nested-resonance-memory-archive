@@ -4907,3 +4907,21 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Maybe:** The Signal import inside `act()` failed? No, Python would crash. 
     - **Maybe:** `intent` is not being set. 
     - **I will verify the ecosystem logs next time.**
+
+# Task: Cycle 2531 - The Siege (Gate 159)
+- [ ] **Define Cycle 2531:** Actual Threat Response.
+- [ ] **Goal:** Force agents to build walls by introducing REAL predators.
+- [ ] **Action:** Modify `experiments/cycle2530_construction.py` (or new file) to spawn Predators at Tick 100.
+- [ ] **Action:** Update `genesis.py` to ensure `PREDATOR` signal is generated when seeing a predator.
+- [ ] **Action:** Run `experiments/cycle2531_siege.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2531 - The Siege (Gate 159)
+- [x] **Define Cycle 2531:** Actual Threat Response.
+- [x] **Goal:** Force agents to build walls by spawning REAL predators.
+- [x] **Action:** Modified `src/life/genesis.py` `scan()` to detect Predators and set signal.
+- [x] **Action:** Run `experiments/cycle2531_siege.py`.
+- [x] **Result:** FAILURE. `Walls=0`. 
+    - **Debug:** Predators present. 
+    - **Hypothesis:** Predators never got close enough (random walk is slow) or `build_wall` utility (200) was overridden by other factors unseen. 
+    - **Conclusion:** Construction logic is theoretically sound but practically elusive without stricter spatial constraints or higher density.
