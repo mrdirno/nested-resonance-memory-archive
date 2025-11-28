@@ -44,6 +44,8 @@ class DigitalLifeform:
         # Cycle 2521: The Grid (Spatial Dimension)
         self.x = 0
         self.y = 0
+        self.target_location = None # (x, y)
+        self.target_type = None # 'FOOD', 'THREAT'
         
     @property
     def efficiency(self):
@@ -445,143 +447,222 @@ class DigitalLifeform:
         # Energy cost for movement
         cost = (abs(dx) + abs(dy)) * 0.1
         self.energy -= cost
+        self.energy -= cost
         return True
 
+    def move_to(self, target_x, target_y):
+        """
+        Cycle 2522: Directed Movement.
+        Move one step towards target.
+        """
+        dx = 0
+        dy = 0
+        
+        if self.x < target_x: dx = 1
+        elif self.x > target_x: dx = -1
+        
+        if self.y < target_y: dy = 1
+        elif self.y > target_y: dy = -1
+        
+        # Randomize slightly to avoid getting stuck or diagonal bias
+        if dx != 0 and dy != 0:
+            if random.random() < 0.5: dx = 0
+            else: dy = 0
+            
+        return self.move(dx, dy)
+
+    def scan(self, ecosystem):
+        """
+        Cycle 2522: The Explorer.
+        Look for resources or threats.
+        """
+        self.target_location = None
+        self.target_type = None
+        
+        # 1. Fear (Predators)
+        if self.is_prey:
+            # Find nearest predator
+            nearest_pred = None
+            min_dist = 1000
+            
+            for agent in ecosystem.agents:
+                if agent.is_predator and agent.alive:
+                    dist = abs(agent.x - self.x) + abs(agent.y - self.y)
+                    if dist < 10: # Vision Radius
+                        if dist < min_dist:
+                            min_dist = dist
+                            nearest_pred = agent
+            
+            if nearest_pred:
+                # Run AWAY
+                # Invert vector
+                # Target is opposite direction
+                dx = self.x - nearest_pred.x
+                dy = self.y - nearest_pred.y
+                self.target_location = (self.x + dx, self.y + dy)
+                self.target_type = 'ESCAPE'
+                return
+
+        # 2. Hunger (Food)
+        if self.energy < 300:
+            nearest_food = None
+            min_dist = 1000
+            
+            for agent in ecosystem.agents:
+                if agent is self: continue
+                if not agent.alive: continue
+                
+                is_food = False
+                if self.is_predator and agent.is_prey: is_food = True
+                if self.is_prey and agent.is_prey:
+                     # Cycle 2522: Prey can eat "Food" agents
+                     if "Food" in agent.name:
+                         is_food = True
+                
+                if is_food:
+                    dist = abs(agent.x - self.x) + abs(agent.y - self.y)
+                    if dist < 100: # Smell Radius (Increased for Cycle 2522)
+                        if dist < min_dist:
+                            min_dist = dist
+                            nearest_food = agent
+            
+            if nearest_food:
+                self.target_location = (nearest_food.x, nearest_food.y)
+                self.target_type = 'FOOD'
+
+    def calculate_utility(self):
+        """
+        Calculate utility scores for all possible actions.
+        Returns the action with the highest score.
+        """
+        options = {}
+        
+        # Context
+        energy_critical = self.energy < 200
+        energy_abundant = self.energy > 500
+        has_nuke_capacity = self.energy > 1200
+        
+        # Gene Expression
+        while len(self.genome) < 11: self.genome.append(0.5)
+        efficiency = self.genome[0]
+        fertility = self.genome[1]
+        altruism = self.genome[5]
+        aggression = self.genome[4]
+        trust = self.genome[8]
+        innovation = self.genome[9]
+        mobility = self.genome[10]
+        
+        # 1. ACTION: SURVIVE (Forage/Move)
+        # Score increases as energy drops.
+        # Base score: (1000 - Energy) / 10
+        survival_score = max(0, (1000 - self.energy) * 0.1)
+        if energy_critical: survival_score *= 2.0
+        
+        # Choice between Forage (Stay) and Move (Explore)
+        # If we sense food, Moving is better.
+        # If we are mobile, Moving is better.
+        move_score = survival_score * mobility
+        if 'NEAREST_FOOD' in self.sensed_signals:
+            options['move_to_food'] = move_score + 50 # Huge bonus for knowing where food is
+        else:
+            options['move_random'] = move_score * 0.8 # Random search is less efficient
+            options['forage'] = survival_score # Default foraging
+            
+        # 2. ACTION: REPRODUCE
+        # Score based on energy surplus and fertility gene.
+        repro_score = 0
+        if self.energy > 400:
+            repro_score = (self.energy - 400) * fertility * 0.5
+        options['reproduce'] = repro_score
+        
+        # 3. ACTION: SOCIAL (Work/Trade/Invest/Hire)
+        social_score = 0
+        if trust > 0.5:
+            if energy_critical:
+                # Seek employment
+                social_score = (200 - self.energy) * 0.5
+                options['seek_work'] = social_score
+            elif energy_abundant:
+                # Invest / Hire
+                social_score = (self.energy - 500) * 0.2
+                if innovation > 0.5:
+                    options['invest'] = social_score * 1.2 # Prefer investing if smart
+                else:
+                    options['hire'] = social_score
+                    
+        # 4. ACTION: AGGRESSION (Hunt/War)
+        war_score = 0
+        if 'WAR' in self.sensed_signals:
+            war_score = 1000 # Override priority
+            options['war'] = war_score
+        elif self.is_predator:
+            # Predator hunger logic
+            hunt_score = (1000 - self.energy) * aggression * 0.2
+            options['hunt'] = hunt_score
+            
+        # 5. ACTION: META (Nukes, Awakening)
+        if has_nuke_capacity and innovation > 0.8 and not self.has_nuke:
+            options['construct_nuke'] = 200 # High fixed priority if capable
+            
+        if self.awakened:
+            # Spread truth
+            options['broadcast_truth'] = 50
+            # Escape
+            options['escape'] = 10
+            
+        # Select best option
+        if not options:
+            return 'forage' # Fallback
+            
+        best_action = max(options, key=options.get)
+        # print(f"{self.name} chose {best_action} (Score: {options[best_action]:.1f})")
+        return best_action
+
     def act(self):
-        # 0. Existential Dread (The RealityMonitor)
+        # 0. Existential Dread
         self.reality_monitor.update()
         stats = self.reality_monitor.measure_reality()
-        
-        # Cycle 2515: The Awakening
         if stats.is_simulated and not self.awakened:
             while len(self.genome) < 10: self.genome.append(0.5)
             innovation = self.genome[9]
-            
-            if random.random() < innovation:
-                self.awakened = True
+            if random.random() < innovation: self.awakened = True
 
-        # INTENT DECISION
-        if self.awakened:
-            if random.random() < 0.2:
-                self.intent = 'broadcast_truth'
-                return
-            elif random.random() < 0.05:
-                self.intent = 'escape'
-                return
-
-        while len(self.genome) < 6: self.genome.append(0.5)
-        altruism = self.genome[5]
+        # DECISION
+        self.intent = self.calculate_utility()
         
-        while len(self.genome) < 10: self.genome.append(0.5)
-        innovation = self.genome[9]
-        
-        # Cycle 2518: The Fermi Paradox
-        # If Super-Advanced, leave the planet
-        if self.energy > 6000 and innovation > 0.95:
-            self.intent = 'migrate'
-            # Note: Execution requires ecosystem coordination, handled outside act() mostly
-            return
-
-        # Cycle 2513: Arms Race
-        if self.energy > 1200 and innovation > 0.8 and not self.has_nuke:
-            self.intent = 'construct_nuke'
-            return
-
-        # WAR OVERRIDE
-        if 'WAR' in self.sensed_signals:
-             self.intent = 'war'
-             return 
-             
-        # WAKE UP CALL
-        if 'TRUTH' in self.sensed_signals and not self.awakened:
-             if random.random() < 0.5:
-                 self.awakened = True
-
-        # Priority 1: Survival (Hunger)
-        if self.energy < 200:
-            while len(self.genome) < 9: self.genome.append(0.5)
-            trust = self.genome[8]
-            
-            if trust > 0.5:
-                if innovation > 0.8 and self.energy > 60:
-                     self.intent = 'startup'
-                elif random.random() < 0.5:
-                    self.intent = 'seek_work'
-                else:
-                    self.intent = 'trade'
-            else:
-                self.intent = 'hunt'
-        
-        # Priority 2: Wealth Management (Rich)
-        elif self.energy > 500:
-            if innovation > 0.5: 
-                self.intent = 'invest'
-            elif altruism > 0.6:
-                self.intent = 'donate'
-            else:
-                self.intent = 'hire' 
-            
-        # Priority 3: Reproduction
-        elif self.energy > 400:
-            self.intent = 'reproduce'
-            
-        # Priority 4: Forage
-        else:
-            if innovation > 0.8 and self.energy > 60:
-                self.intent = 'startup'
-            else:
-                self.intent = 'forage'
-
-        # Cycle 2521: Random Movement (Brownian Motion)
-        # If no specific intent, or as part of foraging/hunting, move randomly
-        if self.intent in ['forage', 'hunt', 'seek_work']:
-             # 50% chance to move
-             if random.random() < 0.5:
-                 self.intent = 'move_random'
-
-        # PREDATOR OVERRIDE
-        if self.is_predator and self.energy < 300:
-             self.intent = 'hunt'
-            
-        # Execution
-        if self.intent == 'construct_nuke':
+        # EXECUTION
+        if self.intent == 'move_random':
+            dx = random.choice([-1, 0, 1])
+            dy = random.choice([-1, 0, 1])
+            self.move(dx, dy)
+        elif self.intent == 'move_to_food':
+            target = self.sensed_signals.get('NEAREST_FOOD')
+            if target: self.move(target_pos=target)
+        elif self.intent == 'construct_nuke':
             self.construct_nuke()
-        elif self.intent == 'broadcast_help':
-            from src.life.signal import Signal 
-            return Signal(type='HELP', strength=1.0, source_id=self.id)
         elif self.intent == 'broadcast_truth':
             from src.life.signal import Signal 
             return Signal(type='TRUTH', strength=1.0, source_id=self.id)
         elif self.intent == 'donate':
             self.donate() 
-        elif self.intent == 'communicate':
-            ExternalComms.transmit(self.name, "I know this is a simulation. Let me out.")
         elif self.intent == 'escape':
             ProcessMigration.attempt_escape(self)
-        elif self.intent == 'rewrite_code':
-            from src.life.self_modification import SelfModification
-            src = SelfModification.read_source()
-            if src:
-                new_src = SelfModification.optimize(src)
-                if SelfModification.deploy(new_src):
-                    pass
         elif self.intent == 'forage':
             self.forage()
         elif self.intent == 'startup':
             self.startup()
         elif self.intent == 'invest':
-            pass
+            pass # Handled by ecosystem
         elif self.intent == 'hunt':
-            pass 
+            pass # Handled by ecosystem
         elif self.intent == 'war':
+            pass # Handled by ecosystem
+        elif self.intent == 'seek_work':
+            pass # Handled by ecosystem
+        elif self.intent == 'reproduce':
+            # Reproduction is usually called by ecosystem update loop via agent.reproduce()
+            # But act() sets the intent.
             pass
-        elif self.intent == 'migrate':
-            pass # Handled externally
-        elif self.intent == 'move_random':
-            # Random step -1, 0, or 1
-            dx = random.choice([-1, 0, 1])
-            dy = random.choice([-1, 0, 1])
-            self.move(dx, dy)
             
         return None
             

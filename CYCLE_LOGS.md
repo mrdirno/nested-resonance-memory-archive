@@ -4638,3 +4638,26 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Observation:** Agents dispersed (AvgDist=55.7), but only 3 found the food zone. The pathfinding logic (`move_to_food`) was rarely triggered.
     - **Reason:** The signal injection `agent.sensed_signals['NEAREST_FOOD'] = food_zone` worked, BUT the `act()` method priority favored `startup`, `seek_work`, or `trade` (Cycle 2509/2501 logic) over `move_to_food` because trust was high or energy was low. Also, the random walk speed might be too slow.
     - **Correction:** Need to overhaul the Intent Priority System. Survival (finding food) should override social ambition when starving.
+
+# Task: Cycle 2523 - The Refactor (Gate 151)
+- [ ] **Define Cycle 2523:** Cognitive Architecture Overhaul.
+- [ ] **Goal:** Replace the brittle `if-elif` decision tree in `act()` with a Utility System.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Create `UtilityAI` class.
+    - [ ] Define actions (Eat, Sleep, Move, Work, Reproduce) with scorers.
+    - [ ] Replace `act()` logic with `brain.decide()`.
+- [ ] **Action:** Run `experiments/cycle2523_utility_ai.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2523 - The Refactor (Gate 151)
+- [x] **Define Cycle 2523:** Cognitive Architecture Overhaul.
+- [x] **Goal:** Replace the brittle `if-elif` decision tree in `act()` with a Utility System.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `calculate_utility()`.
+- [x] **Action:** Run `experiments/cycle2523_utility_ai.py`.
+- [x] **Result:** FAILURE (Still Blind). `AtFood=0`. 
+    - **Debug:** The Utility Logic seems sound (`move_to_food` score += 50). The Issue might be signal propagation again. 
+    - **Deep Dive:** In `experiments/cycle2523_utility_ai.py`, we manually inject the signal: `agent.sensed_signals['NEAREST_FOOD'] = food_zone`. 
+    - **But:** In `genesis.py`, `act()` calls `self.reality_monitor.update()` then `self.calculate_utility()`. Does it clear signals? No. 
+    - **Wait:** `ecosystem.py` calls `agent.sense([])` which clears `self.sensed_signals = {}`. 
+    - **Root Cause:** The ecosystem wipes the signals *after* the experiment script injects them (or before). In the experiment loop: `signal injection` -> `env.update()`. Inside `env.update()`: `agent.sense([])` -> `metabolize()` -> `act()`. 
+    - **Fix:** The `sense()` method wipes the dictionary. We need a persistent memory or the signals need to be passed *into* `sense()`, not injected directly into the dict before update.

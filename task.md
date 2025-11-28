@@ -304,4 +304,13 @@
 - [ ] **Goal:** Agents move towards resources or away from threats.
 - [ ] **Action:** Modify `src/life/genesis.py` to implement `move_to(target)` and pathfinding.
 - [ ] **Action:** Run `experiments/cycle2522_exploration.py`.
+- [x] **Result:** FAILURE (Blindness). `AtFood=3`. Agents dispersed but failed to converge. The `act()` method priority favored social ambition over survival.
+
+# Task: Cycle 2523 - The Refactor (Gate 151)
+- [ ] **Define Cycle 2523:** Cognitive Architecture Overhaul.
+- [ ] **Goal:** Replace the brittle `if-elif` decision tree in `act()` with a Utility System.
+- [ ] **Action:** Modify `src/life/genesis.py`.
+    - [ ] Implement Utility AI (Scorers for Actions).
+    - [ ] Weigh options dynamically based on Energy, Signals, and Genes.
+- [ ] **Action:** Run `experiments/cycle2523_utility_ai.py`.
 - [ ] **Result:** pending...
