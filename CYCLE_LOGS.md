@@ -4175,3 +4175,10 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Removed `MERITOCRATIC FILTER` from `genesis.py` (which banned inefficient predators). Increased Predator start energy to 250 and kill reward to 100.
 - [x] **Action:** Run `experiments/cycle2494_predator_fix.py` with separate trophic capacities (200 Prey / 50 Predators).
 - [x] **Result:** Success. Predator population expanded to capacity (50). Prey population remained high (197). Prey evolved high efficiency (1.31), but Predators remained static (0.48 efficiency) due to food abundance. Co-existence achieved, but "Lazy Hunter" syndrome observed.
+
+# Task: Cycle 2495 - The Red Queen (Gate 123)
+- [x] **Define Cycle 2495:** Introduce Evasion/Defense traits.
+- [x] **Goal:** Trigger co-evolutionary Arms Race.
+- [x] **Action:** Modified `src/life/genesis.py` to add Evasion logic to `hunt()`. Added Evasion gene (Gene 6).
+- [x] **Action:** Run `experiments/cycle2495_red_queen.py`.
+- [x] **Result:** Asymmetric Arms Race. Prey Evasion skyrocketed (0.2 -> 1.82) to mitigate damage. Predators maintained population at capacity (50) but Hunting skill stagnated (0.50). Hypothesis: Prey high reproduction rate allows rapid evolution (Red Queen), while Predators survive on low energy (low entropy cost) and breed slowly, leading to slower adaptation. The Prey are winning the race.

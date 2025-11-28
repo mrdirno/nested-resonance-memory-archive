@@ -88,11 +88,19 @@ class DigitalLifeform:
         while len(self.genome) < 5: self.genome.append(0.5)
         hunt_eff = max(0.01, self.genome[4])
         
+        # Gene 6 = Evasion (Target)
+        while len(target.genome) < 7: target.genome.append(0.5)
+        evasion_eff = max(0.01, target.genome[6])
+        
         if target and target.is_prey and self.energy > 5: # Ensure enough energy to hunt
-            damage = 20 * hunt_eff # Increased from 5
+            # Red Queen: Damage depends on relative skill
+            # Base 20. Multiplier = Hunt / (Evasion + 0.2)
+            multiplier = hunt_eff / (evasion_eff + 0.2)
+            damage = 20 * multiplier
+            
             target.energy -= damage
             self.energy += 10 # Minimal reward for hunting
-            # print(f"[{self.name}] HUNTED {target.name}. Target energy: {target.energy:.1f}")
+            # print(f"[{self.name}] HUNTED {target.name}. Dmg={damage:.1f}")
 
     def donate(self):
         # Gene 5 = Altruism

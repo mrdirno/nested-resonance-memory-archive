@@ -66,4 +66,13 @@
 - [ ] **Goal:** Enable Predator reproduction when energy is sufficient.
 - [x] **Action:** Create `experiments/cycle2494_predator_fix.py`.
     - [x] Logic: If energy > 300, force `reproduce`. If < 300, force `hunt`.
-- [x] **Result:** Success. Predator population grew from 5 to 20 (hitting capacity). The "Hunt-Lock" is broken. We now have a viable multi-trophic ecosystem.
+- [x] **Result:** Success. Predator population expanded to capacity (50). Prey population remained high (197). Prey evolved high efficiency (1.31), but Predators remained static (0.48 efficiency) due to food abundance. Co-existence achieved, but "Lazy Hunter" syndrome observed.
+
+# Task: Cycle 2495 - The Red Queen (Gate 123)
+- [ ] **Define Cycle 2495:** Introduce Evasion/Defense traits.
+- [ ] **Goal:** Trigger co-evolutionary Arms Race.
+- [ ] **Action:** Modify `src/life/genesis.py`.
+    - [ ] Add `Gene 6` = Evasion.
+    - [ ] Update `hunt()`: Damage = Base * (Hunt - Evasion).
+- [ ] **Action:** Run `experiments/cycle2495_red_queen.py`.
+- [ ] **Result:** pending...
