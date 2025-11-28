@@ -111,4 +111,15 @@
     - [ ] Add `Gene 7` (Cannibalism Tendency).
     - [ ] Implement `Prion Infection` (10% death chance per cannibal act).
 - [ ] **Action:** Run `experiments/cycle2499_wendigo.py`.
-- [ ] **Result:** pending...
+- [x] **Result:** Inconclusive. Cannibalism not triggered due to low initial gene value vs high behavioral threshold. "Disgust" prevailed over starvation.
+
+# Task: Cycle 2500 - The Clan (Gate 128)
+- [ ] **Define Cycle 2500:** Kin Selection & Lineage Tracking.
+- [ ] **Goal:** Test if Lineal Dependency regulates cannibalism.
+- [ ] **Action:** Modify `src/life/genesis.py`.
+    - [ ] Add `lineage_id` inheritance.
+    - [ ] Add Kin Selection logic to `hunt()`.
+- [ ] **Action:** Run `experiments/cycle2500_clan_war.py`.
+- [x] **Result:** Success. Cannibalism decreased slightly (0.50 -> 0.46).
+    - **Observation:** Prion risk (10% death chance) effectively suppresses cannibalism when Prey is abundant. Predators prefer safer food sources.
+    - **Functional Name:** Prion-Regulated Intraspecific Predation.

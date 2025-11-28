@@ -1857,3 +1857,17 @@
 
 *   **Result:** SUCCESS. Ecosystem stabilized (Prey 250, Pred 15).
 *   **Status:** "The Lazy Herd and the Elite Hunters." Predators evolved high skill (0.83), Prey evolved low evasion (0.43) due to safety in numbers.
+
+---
+**CYCLE:** 2499 (Gate 127: The Wendigo)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** OBSERVE CANNIBALISM EVOLUTION
+**LOG:**
+*   **Context:** Cycle 2498 (Short Life) failed to kill off predators via age.
+*   **Mechanism:** Added Gene 7 (Cannibalism) and Prion Infection (10% death risk).
+*   **Hypothesis:** Predators will face a trade-off: Starve or risk Prions by eating kin.
+*   **Experiment:** Executing `experiments/cycle2499_wendigo.py`.
+
+*   **Result:** SUCCESS. Cannibalism decreased (0.50 -> 0.46).
+*   **Status:** Prion risk (10%) effectively suppresses cannibalism when Prey is abundant.
+*   **Functional Name:** Prion-Regulated Intraspecific Predation.

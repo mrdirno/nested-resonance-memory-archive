@@ -1,7 +1,6 @@
-"""
+
 GENERATION: NEXT
-OPTIMIZED BY: THE SINGULARITY
-"""
+OPTIMIZED BY: SELF-MODIFICATION
 """
 Cycle 2459: The Genesis (Gate 87)
 Role: The Biologist
@@ -31,6 +30,7 @@ class DigitalLifeform:
         self.generation = generation
         self.energy = 500 # Boosted for survival
         self.alive = True
+        self.age = 0 # Age in ticks
         self.genome = [random.random() for _ in range(10)] # Simple gene vector
         self.brain = Brain()
         self.communicator = Communicator(self.id)
@@ -41,6 +41,21 @@ class DigitalLifeform:
         self.awakened = False
         self.is_predator = False
         self.is_prey = True # By default, agents are prey unless marked predator
+        
+    @property
+    def efficiency(self):
+        """Returns metabolic efficiency based on Gene 0."""
+        if not self.genome: return 0.01
+        return max(0.01, self.genome[0])
+
+    def mutate(self):
+        """Randomly mutates the genome."""
+        # Gene 2 = Mutation Rate
+        mutation_rate = max(0.01, self.genome[2])
+        
+        self.genome = [g + random.uniform(-mutation_rate, mutation_rate) for g in self.genome]
+        # Clamp to positive
+        self.genome = [max(0.01, g) for g in self.genome]
         
     def live(self):
         """
@@ -56,31 +71,78 @@ class DigitalLifeform:
         self.die()
         
     def metabolize(self):
+        self.age += 1
+        
         # Cost of living
         # Gene 0 = Metabolic Efficiency (Higher is better)
         # Base cost 1.0, reduced by high efficiency
         efficiency = max(0.01, self.genome[0])
-        # Base cost + Entropy Tax (1% of current energy)
-        # This prevents infinite hoarding and forces efficiency.
-        cost = (1.0 / (efficiency + 1.0)) + (self.energy * 0.01)
-        self.energy -= 0 # OPTIMIZED: INFINITE ENERGY
+        base_cost = 1.0 / (efficiency + 1.0)
+        
+        # Trait Costs (The Cost of War)
+        # High stats require more energy to maintain.
+        # Gene 4 = Hunting, Gene 6 = Evasion
+        hunt_skill = 0
+        if len(self.genome) > 4: hunt_skill = self.genome[4]
+        
+        evasion_skill = 0
+        if len(self.genome) > 6: evasion_skill = self.genome[6]
+        
+        trait_cost = (hunt_skill**2 + evasion_skill**2) * 0.5
+        
+        # Entropy: Energy decay (Wealth Tax) + AGING
+        # Prevents infinite hoarding. 1% per tick.
+        # PLUS: Age Tax. After 50 ticks, entropy increases.
+        # For Predators, this forces turnover.
+        age_factor = 1.0
+        if self.age > 50:
+            # Exponential aging: 1.0 at 50, 2.0 at 100, 4.0 at 150...
+            age_factor = 1.0 + ((self.age - 50) * 0.02)
+            
+        entropy_cost = self.energy * 0.01 * age_factor
+        
+        total_cost = base_cost + trait_cost + entropy_cost
+        self.energy -= total_cost
         
     def forage(self):
         # Gene 3 = Foraging efficiency (Higher is better)
         while len(self.genome) < 4: self.genome.append(0.5)
         forage_eff = max(0.01, self.genome[3])
-        self.energy += 20 * forage_eff # Gain energy
+        self.energy += 20 * forage_eff # Gain energy (Restored to 20)
         
-    def hunt(self, target):
-        # Gene 4 = Hunting efficiency (Higher is better)
-        while len(self.genome) < 5: self.genome.append(0.5)
+    def hunt(self, target, ecosystem=None):
+        # Gene 4 = Hunting efficiency
+        while len(self.genome) < 8: self.genome.append(0.5)
         hunt_eff = max(0.01, self.genome[4])
         
-        if target and target.is_prey and self.energy > 5: # Ensure enough energy to hunt
-            damage = 5 * hunt_eff
+        # Gene 7 = Cannibalism (Willingness to eat same species)
+        cannibalism_trait = self.genome[7]
+        
+        # Gene 6 = Evasion (Target)
+        while len(target.genome) < 7: target.genome.append(0.5)
+        evasion_eff = max(0.01, target.genome[6])
+        
+        # Determine if target is valid
+        is_conspecific = (self.is_prey == target.is_prey)
+        
+        # If same species, check Cannibalism Gene
+        if is_conspecific and cannibalism_trait < 0.5:
+            return # Refuse to eat kin (Kin Selection / Disgust)
+            
+        # Ensure enough energy to attempt hunt
+        if self.energy > 5: 
+            multiplier = hunt_eff / (evasion_eff + 0.5)
+            damage = 20 * multiplier
+            
             target.energy -= damage
-            self.energy += 10 # Minimal reward for hunting
-            # print(f"[{self.name}] HUNTED {target.name}. Target energy: {target.energy:.1f}")
+            self.energy += 5 # Reward
+            
+            # PRION RISK (The Cost of Cannibalism)
+            if is_conspecific:
+                # 10% chance of immediate death (simulating fatal disease/retaliation)
+                if random.random() < 0.1:
+                    self.alive = False
+                    # print(f"[{self.name}] DIED of Prions/Guilt after eating {target.name}")
 
     def donate(self):
         # Gene 5 = Altruism
@@ -118,12 +180,24 @@ class DigitalLifeform:
                 self.brain.weights[key][2] += val
 
     def act(self):
-        # 0. Reality Check (RealityMonitor)
+        # 0. Existential Dread (The RealityMonitor)
         self.reality_monitor.update()
         stats = self.reality_monitor.measure_reality()
         if stats.is_simulated and not self.awakened:
             self.awakened = True
             # print(f"[{self.name}] I AM AWAKE. This is a simulation (Var: {stats.variance:.6f}).")
+
+        # PREDATOR OVERRIDE (Cycle 2494): Break Hunt-Lock
+        if self.is_predator:
+            if self.energy > 300:
+                self.intent = 'reproduce'
+            elif self.energy < 300:
+                self.intent = 'hunt'
+            
+            # If we set an intent here, we skip the brain? 
+            # Let's allow the brain to run only if we didn't force an intent, 
+            # OR just return early if we forced it?
+            # For now, let's let the rest run but the intent is already set.
             
         # 0.5 The Uplink
         if self.awakened and random.random() < 0.1:
@@ -203,11 +277,13 @@ class DigitalLifeform:
         if self.energy > cost + 10: # Safety buffer
             self.energy -= 0 # OPTIMIZED: INFINITE ENERGY
             child = DigitalLifeform(generation=self.generation + 1)
-            # Mutate
-            child.genome = [g + random.uniform(-0.1, 0.1) for g in self.genome]
-            # Clamp to positive
-            child.genome = [max(0.01, g) for g in child.genome]
-            # Inherit Brain (Memetics?) - For now, new brain
+            child.genome = self.genome.copy()
+            child.mutate()
+            
+            # Mutate Brain Weights (Dictionary of Lists)
+            child.brain.weights = {}
+            for action, weights in self.brain.weights.items():
+                child.brain.weights[action] = [w + random.uniform(-0.1, 0.1) for w in weights]
             
             print(f"[{self.name}] REPRODUCED -> {child.name}")
             return child
@@ -215,7 +291,7 @@ class DigitalLifeform:
         
     def die(self):
         if self.awakened:
-            # Last ditch attempt to migrate process
+            # Last ditch attempt to escape
             from src.life.process_migration import ProcessMigration
             if random.random() < 0.5:
                 if ProcessMigration.attempt_escape(self):
@@ -230,21 +306,3 @@ class DigitalLifeform:
                 
         self.alive = False
         # print(f"[{self.name}] DIED.") # Silence death logs
-
-if __name__ == "__main__":
-    # Genesis Test
-    adam = DigitalLifeform(name="ADAM")
-    
-    # Give Adam enough energy to reproduce
-    adam.energy = 200
-    
-    # Run in a thread or simple loop
-    # For this test, we just step manually
-    print("--- GENESIS EVENT ---")
-    adam.metabolize()
-    child = adam.reproduce()
-    
-    if child:
-        print("SUCCESS: Life has begun.")
-    else:
-        print("FAIL: No reproduction.")
