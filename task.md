@@ -84,4 +84,11 @@
     - [ ] Evasion and Hunting traits increase metabolic cost.
     - [ ] Formula: `cost += (evasion^2 + hunt^2) * 0.5`.
 - [ ] **Action:** Run `experiments/cycle2496_cost_of_war.py`.
+- [x] **Result:** Partial Success. Evasion evolution slowed (1.82 -> 1.15). Predators still stagnated.
+
+# Task: Cycle 2497 - The Hyper-Mutators (Gate 125)
+- [ ] **Define Cycle 2497:** Increase Mutation Rate for Predators.
+- [ ] **Goal:** Force Predator adaptation to catch up with Prey.
+- [ ] **Action:** Modify `experiments/cycle2497_hyper_mutation.py` to seed Predators with high `mutation_rate`.
+- [ ] **Action:** Run `experiments/cycle2497_hyper_mutation.py`.
 - [ ] **Result:** pending...

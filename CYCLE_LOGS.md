@@ -4189,3 +4189,10 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/genesis.py` to include `trait_cost = (hunt^2 + evasion^2) * 0.5`.
 - [x] **Action:** Run `experiments/cycle2496_cost_of_war.py`.
 - [x] **Result:** Partial Success. Evasion evolution slowed (1.82 -> 1.15), indicating the cost was felt. However, Predators still stagnated (Hunt 0.50). The cost penalized both sides, but Prey high fertility still allows them to out-evolve Predators. We need to link Predator reproduction speed to their success, or increase mutation rate.
+
+# Task: Cycle 2497 - The Hyper-Mutators (Gate 125)
+- [x] **Define Cycle 2497:** Increase Mutation Rate for Predators.
+- [x] **Goal:** Force Predator adaptation to catch up with Prey.
+- [x] **Action:** Modified `mutate()` in `src/life/genesis.py` to use the mutation gene. Seeded Predators with high mutation rate (0.8).
+- [x] **Action:** Run `experiments/cycle2497_hyper_mutation.py`.
+- [x] **Result:** Failure. Predator Hunting skill barely budged (0.50 -> 0.507) despite high mutation (0.83). Prey Evasion continued to climb (1.15 -> 1.65). The Prey are evolving *faster* because they reproduce more often. The Predator generation time is the bottleneck.

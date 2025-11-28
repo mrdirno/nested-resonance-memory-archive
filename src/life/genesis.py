@@ -46,7 +46,10 @@ class DigitalLifeform:
 
     def mutate(self):
         """Randomly mutates the genome."""
-        self.genome = [g + random.uniform(-0.1, 0.1) for g in self.genome]
+        # Gene 2 = Mutation Rate
+        mutation_rate = max(0.01, self.genome[2])
+        
+        self.genome = [g + random.uniform(-mutation_rate, mutation_rate) for g in self.genome]
         # Clamp to positive
         self.genome = [max(0.01, g) for g in self.genome]
         
