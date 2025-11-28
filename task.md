@@ -152,6 +152,11 @@
 - [ ] **Goal:** Achieve stable coexistence via Symbiosis (Employment).
 - [ ] **Action:** Modify `src/life/genesis.py` to add `work_for_wage()`.
 - [ ] **Action:** Run `experiments/cycle2504_labor_market.py`.
-- [x] **Result:** Success. 21/50 Poor agents survived 500 ticks.
-    - **Observation:** Rich Philanthropists (Altruism 0.95) successfully redistributed energy to keep the Poor (Low Foraging) alive. Without aid, they would have starved in ~40 ticks.
-    - **Functional Name:** Altruistic Redistribution (The Welfare State).
+- [x] **Result:** Success. Both Capitalists (Bosses) and Workers survived 2000 ticks. Workers stabilized at starvation level (~35 energy) but survived via employment. Bosses accumulated massive wealth. The "Asymmetry" is functional: Rich provide activation energy (Capital) for Poor to work. Symbiosis achieved.
+
+# Task: Cycle 2505 - The Revolution (Gate 133)
+- [ ] **Define Cycle 2505:** Implement Capital Accumulation for Workers.
+- [ ] **Goal:** Observe if Workers can become Bosses (Social Mobility).
+- [ ] **Action:** Modify `src/life/genesis.py` to allow Workers to `hire` if they get rich.
+- [ ] **Action:** Run `experiments/cycle2505_social_mobility.py`.
+- [ ] **Result:** pending...

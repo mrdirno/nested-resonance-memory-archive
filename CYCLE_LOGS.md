@@ -4316,3 +4316,12 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Workers:** Stabilized at starvation level (~35 energy) but *survived* by selling their labor. Employment rate hit 100% (180 jobs/tick).
     - **Bosses:** Accumulated massive wealth (Avg 7200 -> stabilized at ~1000 due to entropy) but maintained the system. 
     - **Conclusion:** The "Asymmetry" is functional. The Rich provide the activation energy (Capital) for the Poor to work. Without the Rich, the Poor starve (C2502). Without the Poor, the Rich starve (eventually, due to entropy). Symbiosis achieved.
+
+# Task: Cycle 2505 - The Revolution (Gate 133)
+- [x] **Define Cycle 2505:** Implement Capital Accumulation for Workers.
+- [x] **Goal:** Observe if Workers can become Bosses (The American Dream).
+- [x] **Action:** Modified `src/life/genesis.py` to allow Workers to `hire` if they get rich.
+- [x] **Action:** Run `experiments/cycle2505_social_mobility.py`.
+- [x] **Result:** Failure (Socially). `New Rich Count = 0`. Workers did not accumulate enough capital to become Bosses. They survived as employees but never broke the class barrier. 
+    - **Reason:** Wages (20) cover living costs (10) + entropy, leaving little for savings. 
+    - **Outcome:** A stable but rigid class system. To get social mobility, we need **Innovation** (Gene mutation that increases yield) or **Risk** (Investments).

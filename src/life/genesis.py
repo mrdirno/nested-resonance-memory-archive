@@ -209,11 +209,21 @@ class DigitalLifeform:
 
         # Priority 1: Survival (Hunger)
         if self.energy < 200:
-            # New Option: SEEK EMPLOYMENT (Labor)
-            # If I am poor, I look for work.
-            self.intent = 'seek_work'
+            # If Trust gene is high, try to BEG/TRADE/WORK before Hunting
+            while len(self.genome) < 9: self.genome.append(0.5)
+            trust = self.genome[8]
+            
+            if trust > 0.5:
+                # 50/50 split between seeking work or trade
+                if random.random() < 0.5:
+                    self.intent = 'seek_work'
+                else:
+                    self.intent = 'trade'
+            else:
+                self.intent = 'hunt'
         
-        # Priority 2: Philanthropy / Investment (Rich)
+        # Priority 2: Wealth Management (Rich)
+        # SOCIAL MOBILITY: Anyone with > 500 energy becomes a Capitalist
         elif self.energy > 500:
             if altruism > 0.6:
                 self.intent = 'donate'
@@ -228,10 +238,9 @@ class DigitalLifeform:
         else:
             self.intent = 'forage'
 
-        # PREDATOR OVERRIDE
-        if self.is_predator:
-            if self.energy > 300: self.intent = 'reproduce'
-            else: self.intent = 'hunt'
+        # PREDATOR OVERRIDE (Only if hungry)
+        if self.is_predator and self.energy < 300:
+             self.intent = 'hunt'
             
         # ... (Rest of the act method logic for execution)
         
