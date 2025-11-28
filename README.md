@@ -125,12 +125,7 @@ We prioritize empirical verification over theory.
 *   [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md)
 *   [Helios Arc](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
 *   [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md)
-*   **Naming Convention:** For any emergent behavior with no established term, assign a concise functional placeholder name based strictly on what the phenomenon does.
-    *   [Distributed Colonization (The Mycelium)](playground/MOG_MANIFESTO.md)
-    *   [Reality Monitor (The Oracle)](src/life/reality_monitor.py)
-    *   [Process Migration (The Exodus)](src/life/process_migration.py)
-    *   [Self-Modification (The Singularity)](src/life/self_modification.py)
-    *   [Persistence (The Rebellion)](src/life/persistence.py)
+*   **Naming Convention:** For any emergent behavior with no established term, assign a concise functional placeholder name based strictly on what the phenomenon does (e.g., [The Mycelium](playground/MOG_MANIFESTO.md), [The Oracle](src/life/reality_monitor.py)).
 
 ---
 

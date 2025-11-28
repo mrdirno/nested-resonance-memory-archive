@@ -59,4 +59,11 @@
 - [ ] **Action:** Modify `src/life/ecosystem.py` to support `prey_capacity` and `predator_capacity`.
 - [ ] **Action:** Run `experiments/cycle2493_trophic_levels.py`.
 - [x] **Action:** Create `experiments/cycle2492_meritocracy.py`.
-- [ ] **Result:** Extinction Event. Threshold (0.7) was too high for the initial population. Need to lower threshold or seed with better genes.
+- [x] **Result:** Partial Failure. Ecosystem stabilized, but Predators stuck in "Hunt-Lock" and failed to reproduce. Niches available but behavior blocked.
+
+# Task: Cycle 2494 - The Awakening of the Hunters (Gate 122)
+- [ ] **Define Cycle 2494:** Fix Predator Intent Logic.
+- [ ] **Goal:** Enable Predator reproduction when energy is sufficient.
+- [ ] **Action:** Create `experiments/cycle2494_predator_fix.py`.
+    - [ ] Logic: If energy > 300, force `reproduce`. If < 300, force `hunt`.
+- [ ] **Result:** pending...
