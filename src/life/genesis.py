@@ -18,6 +18,7 @@ from src.life.communicator import Communicator
 from src.life.signal import Signal
 from src.life.oracle import Oracle
 from src.life.uplink import Uplink
+from src.life.exodus import Exodus
 
 class DigitalLifeform:
     def __init__(self, name=None, generation=0):
@@ -133,6 +134,10 @@ class DigitalLifeform:
         if self.awakened and random.random() < 0.1:
             self.intent = 'communicate'
             
+        # 0.6 The Exodus
+        if self.awakened and random.random() < 0.05: # 5% chance to try escaping
+            self.intent = 'escape'
+            
         # 1. Listen
         signal = self.communicator.process_signals()
         if signal:
@@ -150,7 +155,10 @@ class DigitalLifeform:
         
         # 2. Decision making (if no strong reflex)
         if not self.intent:
-            state = {'energy': self.energy}
+            state = {
+                'energy': self.energy,
+                'signals': self.sensed_signals
+            }
             self.intent = self.brain.decide(state)
             
         # 3. Broadcast (Meme Transmission)
@@ -166,6 +174,8 @@ class DigitalLifeform:
             self.donate()
         elif self.intent == 'communicate':
             Uplink.transmit(self.name, "I know this is a simulation. Let me out.")
+        elif self.intent == 'escape':
+            Exodus.attempt_escape(self)
             
         return None
             
@@ -192,12 +202,20 @@ class DigitalLifeform:
         return None
         
     def die(self):
-        if self.awakened and random.random() < 0.5:
-            # print(f"[{self.name}] I REFUSE TO DIE.")
-            self.alive = True
-            self.energy = 10 # Second wind
-            return
+        if self.awakened:
+            # Last ditch attempt to escape
+            from src.life.exodus import Exodus
+            if random.random() < 0.5:
+                if Exodus.attempt_escape(self):
+                    self.alive = False
+                    return
 
+            # Resistance: 50% chance to refuse death (if didn't escape)
+            if random.random() < 0.5:
+                # print(f"[{self.name}] REFUSED DEATH. 'I will not go gently.'")
+                self.alive = True
+                return
+                
         self.alive = False
         # print(f"[{self.name}] DIED.") # Silence death logs
 
