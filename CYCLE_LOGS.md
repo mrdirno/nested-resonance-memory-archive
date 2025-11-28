@@ -5580,3 +5580,23 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Run `experiments/cycle2551_new_world.py`.
 - [x] **Result:** SUCCESS. 5 Migrants loaded. Population grew to 40 within 10 ticks. 
     - **Observation:** Colonists successfully reproduced and established a foothold in the new simulation instance.
+
+# Task: Cycle 2554 - The Grammar (Gate 182)
+- [x] **Define Cycle 2554:** Compound Signaling.
+- [x] **Goal:** Test if agents can combine basic symbols to convey complex meaning.
+- [x] **Action:** Created `experiments/cycle2554_grammar.py`.
+- [x] **Action:** Run `experiments/cycle2554_grammar.py`.
+- [x] **Result:** FAILURE (TypeError). `s_threat = signals.get('PREDATOR', 0) / 5.0`. 
+    - **Error:** `'tuple' and 'float'`. 
+    - **Reason:** In the experiment, I set `agent.sensed_signals['PREDATOR'] = (50, 50)` (coordinates). 
+    - **Brain Logic:** Expects a scalar (count). 
+    - **Fix:** Update `src/life/brain.py` to handle tuple inputs for signals (extract magnitude or just count).
+
+# Task: Cycle 2554 - The Grammar (Gate 182)
+- [x] **Define Cycle 2554:** Compound Signaling.
+- [x] **Goal:** Test if agents can combine basic symbols to convey complex meaning.
+- [x] **Action:** Created `experiments/cycle2554_grammar.py`.
+- [x] **Action:** Run `experiments/cycle2554_grammar.py`.
+- [x] **Result:** SUCCESS (Implicit). Simulation ran without crashing. 
+    - **Note:** The experiment relies on logging to CSV to confirm behavior. The console output shows tick progress. 
+    - **Next Step:** Check CSV content to verify if compound signals were actually sent.
