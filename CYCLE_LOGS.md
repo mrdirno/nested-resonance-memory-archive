@@ -4925,3 +4925,23 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Debug:** Predators present. 
     - **Hypothesis:** Predators never got close enough (random walk is slow) or `build_wall` utility (200) was overridden by other factors unseen. 
     - **Conclusion:** Construction logic is theoretically sound but practically elusive without stricter spatial constraints or higher density.
+
+# Task: Cycle 2532 - The City (Gate 160)
+- [ ] **Define Cycle 2532:** Proactive Investment.
+- [ ] **Goal:** Agents build Farms to generate food.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `build_farm()` method. Cost: 100 Energy.
+    - [ ] Update `calculate_utility` to score `build_farm` if energy is abundant but food is scarce.
+- [ ] **Action:** Modify `src/life/ecosystem.py` to make Farms generate food signals or energy.
+- [ ] **Action:** Run `experiments/cycle2532_city.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2532 - The City (Gate 160)
+- [x] **Define Cycle 2532:** Proactive Investment.
+- [x] **Goal:** Agents build Farms to generate food.
+- [x] **Action:** Modified `src/life/genesis.py` to add `build_farm()`. 
+- [x] **Action:** Modified `src/life/ecosystem.py` to handle Farm logic.
+- [x] **Action:** Run `experiments/cycle2532_city.py`.
+- [x] **Result:** FAILURE (Urban Decay). `Farms=0`. 
+    - **Debug:** Energy abundant. Utility logic favors farming. Execution failure suspected.
+    - **Conclusion:** A systematic issue with signal return or structure registration persists. The codebase is getting complex.

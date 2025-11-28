@@ -370,4 +370,12 @@
 - [ ] **Goal:** Force agents to build walls by spawning REAL predators.
 - [ ] **Action:** Modify `src/life/genesis.py` `scan()` to detect Predators and set signal.
 - [ ] **Action:** Run `experiments/cycle2531_siege.py`.
+- [x] **Result:** FAILURE. `Walls=0`. Utility scoring or signal propagation failure suspected. Construction is dormant.
+
+# Task: Cycle 2532 - The City (Gate 160)
+- [ ] **Define Cycle 2532:** Proactive Investment.
+- [ ] **Goal:** Agents build Farms to generate food.
+- [ ] **Action:** Modify `src/life/genesis.py` to add `build_farm()`.
+- [ ] **Action:** Modify `src/life/ecosystem.py` to handle Farm logic.
+- [ ] **Action:** Run `experiments/cycle2532_city.py`.
 - [ ] **Result:** pending...

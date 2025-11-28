@@ -126,11 +126,15 @@ class Ecosystem:
         """
         self.tick_count += 1
         
-        # Cycle 2521: Enforce Boundaries
-        for agent in self.agents:
-            agent.x = max(0, min(agent.x, self.width))
-            agent.y = max(0, min(agent.y, self.height))
-        
+        # Cycle 2532: Structure Effects
+        for structure in self.structures:
+            if structure['type'] == 'FARM':
+                # Give energy to agents at this location
+                for agent in self.agents:
+                    if agent.x == structure['x'] and agent.y == structure['y']:
+                        agent.energy += 5
+                        # print(f"🌾 {agent.name} harvested from Farm.")
+
         # 1. Governance
         self.govern()
         

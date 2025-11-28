@@ -583,6 +583,17 @@ class DigitalLifeform:
             return {'type': 'WALL', 'x': self.x, 'y': self.y, 'hp': 100}
         return None
 
+    def build_farm(self):
+        """
+        Construct a resource-generating structure.
+        Cost: 100 Energy.
+        """
+        cost = 100
+        if self.energy > cost:
+            self.energy -= cost
+            return {'type': 'FARM', 'x': self.x, 'y': self.y, 'hp': 50, 'yield': 10}
+        return None
+
     def calculate_utility(self):
         """
         Calculate utility scores for all possible actions.
@@ -593,9 +604,7 @@ class DigitalLifeform:
         # Context
         energy_critical = self.energy < 200
         energy_abundant = self.energy > 500
-        has_nuke_capacity = self.energy > 1200
-        
-        # Gene Expression
+        # ... (genes)
         while len(self.genome) < 11: self.genome.append(0.5)
         efficiency = self.genome[0]
         fertility = self.genome[1]
@@ -605,78 +614,99 @@ class DigitalLifeform:
         innovation = self.genome[9]
         mobility = self.genome[10]
         
-        # 1. ACTION: SURVIVE (Forage/Move)
-        # Score increases as energy drops.
-        # Base score: (1000 - Energy) / 10
+        # ... (Survival)
         survival_score = max(0, (1000 - self.energy) * 0.1)
         if energy_critical: survival_score *= 2.0
         
-        # Choice between Forage (Stay) and Move (Explore)
-        # If we sense food, Moving is better.
-        # If we are mobile, Moving is better.
         move_score = survival_score * mobility
-        # Cycle 2528: Check KNOWLEDGE instead of sensed_signals
         if 'NEAREST_FOOD' in self.knowledge:
-            options['move_to_food'] = move_score + 50 # Huge bonus for knowing where food is
+            options['move_to_food'] = move_score + 50
         else:
-            options['move_random'] = move_score * 0.8 # Random search is less efficient
-            options['forage'] = survival_score # Default foraging
+            options['move_random'] = move_score * 0.8
+            options['forage'] = survival_score
             
-        # 2. ACTION: REPRODUCE
-        # Score based on energy surplus and fertility gene.
-        repro_score = 0
+        # ... (Reproduction)
         if self.energy > 400:
-            repro_score = (self.energy - 400) * fertility * 0.5
-        options['reproduce'] = repro_score
+            options['reproduce'] = (self.energy - 400) * fertility * 0.5
+            
+        # ... (Social)
         
-        # 3. ACTION: SOCIAL (Work/Trade/Invest/Hire)
-        social_score = 0
-        if trust > 0.5:
-            if energy_critical:
-                # Seek employment
-                social_score = (200 - self.energy) * 0.5
-                options['seek_work'] = social_score
-            elif energy_abundant:
-                # Invest / Hire
-                social_score = (self.energy - 500) * 0.2
-                if innovation > 0.5:
-                    options['invest'] = social_score * 1.2 # Prefer investing if smart
-                else:
-                    options['hire'] = social_score
-                    
-        # 4. ACTION: AGGRESSION (Hunt/War/Defense)
-        war_score = 0
+        # ... (Aggression)
         if 'WAR' in self.sensed_signals:
-            war_score = 1000 # Override priority
-            options['war'] = war_score
+            options['war'] = 1000
         elif self.is_predator:
-            # Predator hunger logic
-            hunt_score = (1000 - self.energy) * aggression * 0.2
-            options['hunt'] = hunt_score
+            options['hunt'] = (1000 - self.energy) * aggression * 0.2
+        elif 'PREDATOR' in self.sensed_signals:
+            # Defense overrides
+            options['build_wall'] = 200
+            options['escape'] = 300 # Run is better than build usually
+            
+        # Cycle 2532: INVESTMENT (Farms)
+        # If rich and innovative, build a farm
+        if energy_abundant and innovation > 0.6:
+            # Score scales with energy excess
+            options['build_farm'] = (self.energy - 500) * 0.5 * innovation
+            
+        # ... (Meta)
+        
+        return max(options, key=options.get) if options else 'forage'
+
+    def act(self):
+        # ... (awakening, hive mind)
+        
+        # Sync Memory
+        if 'NEAREST_FOOD' in self.sensed_signals:
+            self.knowledge['NEAREST_FOOD'] = self.sensed_signals['NEAREST_FOOD']
+
+        # DECISION
+        self.intent = self.calculate_utility()
+        
+        # EXECUTION
+        signal_to_broadcast = None
+        
+        if self.intent == 'move_random':
+            dx = random.choice([-1, 0, 1])
+            dy = random.choice([-1, 0, 1])
+            self.move(dx, dy)
+        elif self.intent == 'move_to_food':
+            target = self.knowledge.get('NEAREST_FOOD')
+            if target: self.move_to(target[0], target[1])
+        elif self.intent == 'build_wall':
+            structure = self.build_wall()
+            if structure:
+                from src.life.signal import Signal
+                signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
+        elif self.intent == 'build_farm':
+            structure = self.build_farm()
+            if structure:
+                from src.life.signal import Signal
+                signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
+        # ... (rest of intents: construct_nuke, broadcast, etc.)
+        elif self.intent == 'forage':
+            self.forage()
+        elif self.intent == 'startup':
+            self.startup()
+        elif self.intent == 'reproduce':
+            pass
+            
+        # BROADCAST THOUGHTS logic (at end)
+        if self.hive_mind and hasattr(self, 'current_utility_map') and not signal_to_broadcast:
+             signal_to_broadcast = self.broadcast_thought(self.current_utility_map)
+             
+        # Cleanup
+        self.sensed_signals = {}
+        # ... (collective utility decay)
+        if self.hive_mind:
+            keys_to_remove = []
+            for action in self.collective_utility:
+                self.collective_utility[action] *= 0.9 
+                if self.collective_utility[action] < 1.0:
+                    keys_to_remove.append(action)
+            for k in keys_to_remove: del self.collective_utility[k]
         else:
-            # Prey Defense (Cycle 2530)
-            # Check for nearby predator signal (requires sense() to tag predators)
-            # We'll assume 'PREDATOR' signal exists if seen.
-            # Note: Current scan() logic sets target_type='ESCAPE' but doesn't set a signal key 'PREDATOR'.
-            # We should update scan() later, but for now, let's assume we add it manually or update scan.
-            pass 
+            self.collective_utility = {}
             
-        # 5. ACTION: META (Nukes, Awakening)
-        if has_nuke_capacity and innovation > 0.8 and not self.has_nuke:
-            options['construct_nuke'] = 200 # High fixed priority if capable
-            
-        if self.awakened:
-            # Spread truth
-            options['broadcast_truth'] = 50
-            # Escape
-            options['escape'] = 10
-            
-        # Select best option
-        if not options:
-            return 'forage' # Fallback
-            
-        best_action = max(options, key=options.get)
-        return best_action
+        return signal_to_broadcast
 
     def act(self):
         # 0. Existential Dread
