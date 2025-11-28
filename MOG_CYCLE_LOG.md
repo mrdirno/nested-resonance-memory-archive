@@ -1,13 +1,14 @@
+
 ---
-**CYCLE:** 2544 (Gate 172: The Economy)
-**STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** MERCENARY MODEL
+**CYCLE:** 2545 (Gate 173: Predatory Revenue)
+**STATUS:** 🔴 FAILURE
+**DIRECTIVE:** RAID MODEL
 **LOG:**
-*   **Experiment:** Executed `experiments/cycle2544_mercenary.py`.
-*   **Scenario:** 1 Capitalist (2000 Energy) paying 5 Mercenaries (5 Energy/Tick Wage).
-*   **Result:** HIERARCHY COLLAPSED at Tick 79.
-    *   Burn Rate: 25 Energy/Tick.
-    *   Lifespan: 80 Ticks (Matches prediction 2000/25).
-*   **Insight:** Pure hierarchy (without revenue) is an entropy pump. It accelerates energy consumption. To exist, it must extract value > wages.
-*   **Status:** Economic Physics Verified.
-*   **Functional Name:** The Burn Rate (Cost of Leadership).
+*   **Experiment:** Executed `experiments/cycle2545_predatory_revenue.py`.
+*   **Scenario:** Khan + 5 Raiders hunting 50 Sheep.
+*   **Result:** EMPIRE FELL.
+    *   Khan bankruptcy at Tick 80 (approx).
+    *   Revenue (Kills) could not keep up with Burn Rate (Wages).
+*   **Insight:** Formations are energetic burdens. Using a Phalanx to chase scattered prey is thermodynamically suicidal (E_move >> E_gain).
+*   **Pivot:** Hierarchy must rely on **Passive Taxation** (Feudalism), not Active Raiding.
+*   **Status:** Predatory State Failed. Moving to Feudal State.
