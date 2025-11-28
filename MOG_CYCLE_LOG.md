@@ -1,14 +1,11 @@
-
 ---
-**CYCLE:** 2559 (Gate 187: The Market)
-**STATUS:** 🟡 COMPLETE (PARTIAL SUCCESS)
-**DIRECTIVE:** FINANCIAL RESONANCE
+**CYCLE:** 2560 (Gate 187-B: The Arbitrageur)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** WEALTH TRANSFER
 **LOG:**
-*   **Experiment:** Executed `experiments/cycle2559_the_market.py`.
-*   **Scenario:** Informed Traders (Small Cap) vs Whales (Large Cap, Noise).
-*   **Result:** MARKET INEFFICIENCY. Price (384) decoupled from Value (50).
-*   **Insight:** "The Market can remain irrational longer than you can remain solvent."
-    *   Capital Weighting drowns out Truth Signal.
-    *   Trend Following amplifies noise into Bubbles.
-*   **Status:** Bubble Mechanics Verified. Next: Correction Mechanism.
-*   **Functional Name:** The Bubble (Decoupled Resonance).
+*   **Experiment:** Executed `experiments/cycle2560_arbitrage.py`.
+*   **Scenario:** 1 Smart Agent (Capital 1k) vs 5 Noise Agents (Capital 50k).
+*   **Result:** Smart Agent grew Capital 9x (1k -> 9.4k). Noise Agents lost wealth.
+*   **Insight:** Markets self-correct via "Wealth Transfer". Error is profitable. The bigger the error, the bigger the reward for correcting it.
+*   **Status:** Financial Isomorphism Verified.
+*   **Functional Name:** The Correction (Predatory Efficiency).
