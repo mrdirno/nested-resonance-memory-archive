@@ -78,6 +78,11 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
    - Provides meta-evaluation and pattern filtering functions.
    - [View Code](src/memory/)
 
+**4. FPGA ACCELERATION LAYER (Hardware):**
+   - DE10-Nano (Cyclone V SoC) implementation of NRM Resonance Detector.
+   - HPS <-> FPGA <-> NRM Data Loop.
+   - [View Hardware](/fpga/)
+
 ---
 
 ## 🧪 CORE CAPABILITIES (Empirically Verified)
