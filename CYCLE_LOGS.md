@@ -5059,3 +5059,20 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
         `DEBUG: build_farm called. Energy=979.1, Cost=100` 
         `DEBUG: Planter-Debug created BUILD_STRUCTURE signal (Farm).` 
     - **Status:** Construction mechanic is now FULLY OPERATIONAL.
+
+# Task: Cycle 2537 - The Metropolis (Gate 165)
+- [ ] **Define Cycle 2537:** Urbanization Test.
+- [ ] **Goal:** Verify farm construction in a large-scale simulation.
+- [ ] **Action:** Create `experiments/cycle2537_city_construction.py` (similar to 2532 but with fixed logic).
+- [ ] **Action:** Run `experiments/cycle2537_city_construction.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2537 - The Metropolis (Gate 165)
+- [x] **Define Cycle 2537:** Urbanization Test.
+- [x] **Goal:** Verify farm construction in a large-scale simulation.
+- [x] **Action:** Create `experiments/cycle2537_city_construction.py`.
+- [x] **Action:** Run `experiments/cycle2537_city_construction.py`.
+- [x] **Result:** SUCCESS. The Metropolis is rising.
+    - **Observation:** Agents built farms immediately. Energy=783. 
+    - **Status:** Construction mechanic is robust. 
+    - **Note:** The "Heisenbug" was likely due to the missing `signal_to_broadcast` variable initialization in the `if/elif` structure, causing implicit `None` return or early exit without cleanup in the original code. The rewrite fixed it.

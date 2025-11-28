@@ -406,4 +406,11 @@
 - [ ] **Goal:** Verify logic flow in `act()`.
 - [ ] **Action:** Rewrite the `act()` method completely.
 - [ ] **Action:** Run `experiments/cycle2533_debug.py` again.
+- [x] **Result:** SUCCESS. `Farms: 1`. The "Heisenbug" was cleared by rewriting `act()`.
+
+# Task: Cycle 2537 - The Metropolis (Gate 165)
+- [ ] **Define Cycle 2537:** Urbanization Test.
+- [ ] **Goal:** Verify farm construction in a large-scale simulation.
+- [ ] **Action:** Create `experiments/cycle2537_city_construction.py`.
+- [ ] **Action:** Run `experiments/cycle2537_city_construction.py`.
 - [ ] **Result:** pending...
