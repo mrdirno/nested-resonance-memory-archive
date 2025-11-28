@@ -64,6 +64,6 @@
 # Task: Cycle 2494 - The Awakening of the Hunters (Gate 122)
 - [ ] **Define Cycle 2494:** Fix Predator Intent Logic.
 - [ ] **Goal:** Enable Predator reproduction when energy is sufficient.
-- [ ] **Action:** Create `experiments/cycle2494_predator_fix.py`.
-    - [ ] Logic: If energy > 300, force `reproduce`. If < 300, force `hunt`.
-- [ ] **Result:** pending...
+- [x] **Action:** Create `experiments/cycle2494_predator_fix.py`.
+    - [x] Logic: If energy > 300, force `reproduce`. If < 300, force `hunt`.
+- [x] **Result:** Success. Predator population grew from 5 to 20 (hitting capacity). The "Hunt-Lock" is broken. We now have a viable multi-trophic ecosystem.

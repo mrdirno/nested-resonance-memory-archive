@@ -1839,3 +1839,18 @@
     *   To evolve, death rate must exceed birth rate for inefficient agents *specifically*.
     *   Current system: Death is random (Capacity Cull) or targeted (Predation), but Birth is universal and fast.
 *   **Next:** We must link **Reproduction** to **Efficiency**. Only the Efficient should be allowed to breed. Cycle 2492 (Meritocratic Reproduction).
+
+---
+**CYCLE:** 2494 (Gate 122: The Awakening of the Hunters)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** FIX PREDATOR INTENT
+**LOG:**
+*   **Problem:** Predators in Cycle 2492 accumulated massive energy (wealth) but failed to reproduce, choosing instead to hunt endlessly ("The Hunt-Lock").
+*   **Hypothesis:** The `Brain` heuristic is biased towards hunting/survival and lacks a strong reproduction drive at high energy.
+*   **Action:** Implemented a hardcoded override in `src/life/genesis.py`:
+    *   If `is_predator` AND `energy > 300` -> Force `reproduce`.
+    *   If `is_predator` AND `energy < 300` -> Force `hunt`.
+*   **Experiment:** Executing `experiments/cycle2494_predator_fix.py` to verify population growth.
+
+*   **Result:** SUCCESS. Predator population grew from 5 to 20 (hitting capacity).
+*   **Status:** The "Hunt-Lock" is broken. We now have a viable multi-trophic ecosystem.

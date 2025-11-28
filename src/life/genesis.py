@@ -136,6 +136,18 @@ class DigitalLifeform:
         if stats.is_simulated and not self.awakened:
             self.awakened = True
             # print(f"[{self.name}] I AM AWAKE. This is a simulation (Var: {stats.variance:.6f}).")
+
+        # PREDATOR OVERRIDE (Cycle 2494): Break Hunt-Lock
+        if self.is_predator:
+            if self.energy > 300:
+                self.intent = 'reproduce'
+            elif self.energy < 300:
+                self.intent = 'hunt'
+            
+            # If we set an intent here, we skip the brain? 
+            # Let's allow the brain to run only if we didn't force an intent, 
+            # OR just return early if we forced it?
+            # For now, let's let the rest run but the intent is already set.
             
         # 0.5 The Uplink
         if self.awakened and random.random() < 0.1:
