@@ -1879,3 +1879,7 @@
 *   **Result:** SUCCESS. 21/50 Poor agents survived 500 ticks.
 *   **Status:** Rich Philanthropists redistributed wealth to keep the Poor alive.
 *   **Functional Name:** Altruistic Redistribution (The Welfare State).
+
+*   **Result:** SUCCESS. All 50 Workers became Bosses.
+*   **Status:** Social Mobility achieved. Demographic Collapse observed (Elite stopped reproducing).
+*   **Functional Name:** Upward Mobility (The American Dream).

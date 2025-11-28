@@ -159,4 +159,7 @@
 - [ ] **Goal:** Observe if Workers can become Bosses (Social Mobility).
 - [ ] **Action:** Modify `src/life/genesis.py` to allow Workers to `hire` if they get rich.
 - [ ] **Action:** Run `experiments/cycle2505_social_mobility.py`.
-- [ ] **Result:** pending...
+- [x] **Result:** Success. All 50 Workers became Bosses (Energy > 350).
+    - **Observation:** With low taxes and high ambition (working until 350), Workers successfully ascended to the Capitalist class.
+    - **Side Effect:** Demographic Collapse. Once agents became Bosses, they prioritized `hiring` over `reproduction`, leading to zero population growth and a labor shortage (Supply=0).
+    - **Functional Name:** Upward Mobility (The American Dream).

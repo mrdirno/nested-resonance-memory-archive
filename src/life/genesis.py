@@ -95,9 +95,9 @@ class DigitalLifeform:
         age_factor = 1.0
         if self.age > 50:
             # Exponential aging: 1.0 at 50, 2.0 at 100, 4.0 at 150...
-            age_factor = 1.0 + ((self.age - 50) * 0.02)
+            age_factor = min(1.0, 1.0 + ((self.age - 50) * 0.02))
             
-        entropy_cost = self.energy * 0.005 * age_factor
+        entropy_cost = self.energy * 0.001 * age_factor
         
         total_cost = base_cost + trait_cost + entropy_cost
         self.energy -= total_cost
@@ -207,24 +207,21 @@ class DigitalLifeform:
         while len(self.genome) < 6: self.genome.append(0.5)
         altruism = self.genome[5]
 
-        # Priority 1: Survival (Hunger)
-        if self.energy < 200:
+        # Priority 1: Survival & Ambition (Hunger or Hustle)
+        if self.energy < 350:
             # If Trust gene is high, try to BEG/TRADE/WORK before Hunting
             while len(self.genome) < 9: self.genome.append(0.5)
             trust = self.genome[8]
             
             if trust > 0.5:
-                # 50/50 split between seeking work or trade
-                if random.random() < 0.5:
-                    self.intent = 'seek_work'
-                else:
-                    self.intent = 'trade'
+                self.intent = 'seek_work' # Force Work (No Begging)
             else:
                 self.intent = 'hunt'
         
         # Priority 2: Wealth Management (Rich)
-        # SOCIAL MOBILITY: Anyone with > 500 energy becomes a Capitalist
-        elif self.energy > 500:
+        # SOCIAL MOBILITY: Anyone with > 350 energy becomes a Capitalist
+        # (Must be lower than reproduction threshold 400 to allow mobility)
+        elif self.energy > 350:
             if altruism > 0.6:
                 self.intent = 'donate'
             else:
@@ -253,8 +250,8 @@ class DigitalLifeform:
         Net Result: Employee +10, Employer +30. Symbiosis.
         """
         work_cost = 10
-        wage = 20
-        yield_value = 50
+        wage = 30 # Increased Wage
+        yield_value = 100 # Increased Yield (Profit = 70)
         
         if self.energy >= work_cost and employer.energy >= wage:
             # Transaction

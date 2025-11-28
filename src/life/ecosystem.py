@@ -173,6 +173,30 @@ class Ecosystem:
             else:
                 agent.die() # Ensure die logic is called
                 
+        # --- PHASE 3: THE LABOR MARKET (Symbiosis) ---
+        # Identify Supply and Demand
+        labor_supply = [a for a in self.agents if a.intent == 'seek_work' and a.alive]
+        labor_demand = [a for a in self.agents if a.intent == 'hire' and a.alive]
+        
+        random.shuffle(labor_supply)
+        random.shuffle(labor_demand)
+        
+        # Matching
+        # Simple random matching for now.
+        # In future: Market clearing price, skill matching, etc.
+        matches = min(len(labor_supply), len(labor_demand))
+        print(f"[ECO] Labor Market: Supply={len(labor_supply)}, Demand={len(labor_demand)}, Matches={matches}")
+        
+        for i in range(matches):
+            worker = labor_supply[i]
+            boss = labor_demand[i]
+            
+            # Execute Contract
+            # Worker pays energy (effort), Boss pays energy (wage), Boss gains value.
+            if worker.work_for_wage(boss):
+                pass
+                # print(f"[ECO] Contract: {worker.name} worked for {boss.name}")
+            
         # --- REBUILD self.agents AND ADD NEW AGENTS ---
         self.agents = []
         self.agents.extend(prey_alive_this_phase)
