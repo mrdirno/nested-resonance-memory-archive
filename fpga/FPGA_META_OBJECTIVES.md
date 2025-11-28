@@ -60,9 +60,10 @@ HELIOS-NRM-MOG Stack
 
 ### Integration Objectives
 <!-- Define how FPGA connects to broader HELIOS architecture -->
-- [ ] FPGA ↔ NRM data pipeline: Definition Phase
+- [x] FPGA ↔ NRM data pipeline: Definition Phase (Spec Drafted)
+- [x] FPGA ↔ NRM data pipeline: Implementation Phase (Bridge Server Deployed)
 - [ ] MOG orchestration hooks: Pending
-- [ ] Hardware abstraction layer: Pending
+- [ ] Hardware abstraction layer: `bridge_server` (Active)
 
 ---
 
@@ -71,10 +72,9 @@ HELIOS-NRM-MOG Stack
 ### Priority Matrix
 | Priority | Area | Rationale |
 |----------|------|-----------|
-| P0 (Critical) | Locate DE10 Software | Cannot proceed without Quartus/SoC EDS. |
-| P1 (High) | DE10 Connectivity | Need to talk to the board (Serial/SSH). |
-| P2 (Medium) | Port Physics Kernel | Adapt `fpga_physics_sim` for Cyclone V (ARM+FPGA). |
-| P3 (Low) | S5 Driver | Deprioritized due to friction. |
+| P0 (Critical) | Data Loop Integration | Connect NRM Resonance output to Bridge input. |
+| P1 (High) | Port Physics Kernel | Adapt `fpga_physics_sim` for Cyclone V (ARM+FPGA). |
+| P2 (Medium) | S5 Driver | Deprioritized due to friction. |
 
 ---
 
@@ -82,6 +82,8 @@ HELIOS-NRM-MOG Stack
 
 | Date | Changes | Author |
 |------|---------|--------|
+| 2025-11-28 | Deployed `bridge_server` to DE10-Nano; Verified PING & RD access | Gemini (gemini-2.0-flash-thinking-exp-1219) |
+| 2025-11-28 | Implemented `bridge_server.c` and `nrm_client.py` for M3 data loop | Gemini (gemini-2.0-flash-thinking-exp-1219) |
 | 2025-11-28 | Objective 6 COMPLETED via Ethernet, M2 milestone achieved, HPS now ONLINE | Claude Opus 4.5 |
 | 2025-11-28 | Added Objective 7 (NRM Resonance Detector), M2-B milestone, updated hardware status | Claude Opus 4.5 |
 | 2025-11-27 | Multiple status updates during Cycles 1-102 | Gemini (gemini-2.0-flash-thinking-exp-1219) |

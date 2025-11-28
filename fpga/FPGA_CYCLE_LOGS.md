@@ -41,6 +41,81 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-28 | Cycle 110
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 10:32 - [Ongoing]
+**Focus**: Deploy and Verify HPS-FPGA Bridge
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Verified Previous Session Status (Files Staged).
+
+#### In Progress
+- [ ] Verify Data Loop Integrity (Next Cycle).
+
+#### Blocked/Deferred
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated.
+- `fpga/de10-nano/hps_sw/deploy_bridge.sh` - Deployment script.
+- `fpga/de10-nano/hps_sw/bridge.log` - Remote log (verified empty/running).
+
+#### Technical Notes
+- **Deployment Success**: `deploy_bridge.sh` successfully moved the binary and started it.
+- **Disk Full Issue Resolved**: Deleted `/root/duality` (1.2G repo clone) from DE10-Nano to free up space.
+- **Connectivity Verified**:
+  - PING: 1.3ms latency.
+  - SSH: Passwordless root access confirmed.
+  - Bridge PING: "PONG" received.
+  - Bridge RD: `0x00000002` read from offset 0.
+
+#### Next Session Recommendations
+- **PILOT**: Begin data streaming experiments.
+- **CO-PILOT**: Create a Python script to stream NRM pattern data to the FPGA via the bridge.
+
+---
+
+### Session 2025-11-28 | Cycle 109
+**CO-PILOT**: Gemini (gemini-2.0-flash-thinking-exp-1219)
+**Duration**: 10:20 - 10:32
+**Focus**: NRM-FPGA Bridge Implementation
+
+#### Completed
+- [x] Performed Due Diligence (DD) on `FPGA_META_OBJECTIVES.md`, `FPGA_CYCLE_LOGS.md`, and `FPGA_PROTOCOL.md`
+- [x] Analyzed previous session breakthrough (Ethernet connectivity established).
+- [x] Implemented `bridge_server.c` for HPS.
+- [x] Implemented `nrm_client.py` for Host.
+- [x] Compiled `bridge_server` (ARM Static).
+
+#### In Progress
+- [ ] Deploy `bridge_server` to HPS (via SCP).
+- [ ] Verify `PING` over network.
+- [ ] Implement LWH2F memory mapping (Included in `bridge_server.c`).
+
+#### Blocked/Deferred
+- [x] Bittware S5 Driver (Parked)
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated.
+- `fpga/de10-nano/hps_sw/bridge_server.c` - C implementation of bridge server.
+- `fpga/de10-nano/hps_sw/Makefile` - Compilation script.
+- `fpga/de10-nano/hps_sw/nrm_client.py` - Python test client.
+- `fpga/de10-nano/hps_sw/bridge_server` - Compiled ARM binary.
+
+#### Technical Notes
+- **Bridge Server**: Listens on TCP 5000. Maps `/dev/mem` at `0xFF200000` (LWH2F).
+- **Protocol**: Simple text-based (`PING`, `WR`, `RD`) for robustness.
+- **Compilation**: Static linking ensures no dependency issues on the minimal Angstrom Linux of the DE10-Nano.
+- **Next Steps**: The binary needs to be SCP'd to the board (`scp bridge_server root@192.168.68.57:/home/root/`) and executed.
+
+#### Next Session Recommendations
+- **PILOT**: SCP `bridge_server` to DE10-Nano.
+- **PILOT**: Run `./bridge_server` on DE10-Nano.
+- **PILOT**: Run `python3 nrm_client.py PING` from Host.
+
+---
+
 ### Session 2025-11-28 | Cycle 103 (Extended)
 **CO-PILOT**: Claude Opus 4.5 (claude-opus-4-5-20251101)
 **Duration**: 10:05 - 10:20
