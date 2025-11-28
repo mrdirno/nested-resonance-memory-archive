@@ -41,6 +41,10 @@ class DigitalLifeform:
         self.is_prey = True # By default, agents are prey unless marked predator
         self.has_nuke = False # Cycle 2513: The Deterrent
         
+        # Cycle 2521: The Grid (Spatial Dimension)
+        self.x = 0
+        self.y = 0
+        
     @property
     def efficiency(self):
         """Returns metabolic efficiency based on Gene 0."""
@@ -427,7 +431,21 @@ class DigitalLifeform:
             self.energy -= cost
             target_ecosystem.add_agent(self)
             return True
+            target_ecosystem.add_agent(self)
+            return True
         return False
+
+    def move(self, dx, dy):
+        """
+        Cycle 2521: Spatial Movement.
+        Update position by (dx, dy).
+        """
+        self.x += dx
+        self.y += dy
+        # Energy cost for movement
+        cost = (abs(dx) + abs(dy)) * 0.1
+        self.energy -= cost
+        return True
 
     def act(self):
         # 0. Existential Dread (The RealityMonitor)
@@ -514,6 +532,13 @@ class DigitalLifeform:
             else:
                 self.intent = 'forage'
 
+        # Cycle 2521: Random Movement (Brownian Motion)
+        # If no specific intent, or as part of foraging/hunting, move randomly
+        if self.intent in ['forage', 'hunt', 'seek_work']:
+             # 50% chance to move
+             if random.random() < 0.5:
+                 self.intent = 'move_random'
+
         # PREDATOR OVERRIDE
         if self.is_predator and self.energy < 300:
              self.intent = 'hunt'
@@ -552,6 +577,11 @@ class DigitalLifeform:
             pass
         elif self.intent == 'migrate':
             pass # Handled externally
+        elif self.intent == 'move_random':
+            # Random step -1, 0, or 1
+            dx = random.choice([-1, 0, 1])
+            dy = random.choice([-1, 0, 1])
+            self.move(dx, dy)
             
         return None
             

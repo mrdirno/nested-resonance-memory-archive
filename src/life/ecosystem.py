@@ -15,7 +15,12 @@ from typing import List
 from src.life.genesis import DigitalLifeform
 
 class Ecosystem:
-    def __init__(self, capacity: int = 100, prey_capacity: int = None, predator_capacity: int = None):
+    def __init__(self, capacity: int = 100, prey_capacity: int = None, predator_capacity: int = None, width: int = 100, height: int = 100):
+        self.agents: List[DigitalLifeform] = []
+        self.tick_count = 0
+        self.capacity = capacity
+        self.width = width
+        self.height = height
         self.agents: List[DigitalLifeform] = []
         self.tick_count = 0
         self.capacity = capacity
@@ -31,6 +36,12 @@ class Ecosystem:
 
     def add_agent(self, agent: DigitalLifeform):
         """Add an agent to the ecosystem."""
+        # Cycle 2521: Assign random position if at (0,0)
+        if agent.x == 0 and agent.y == 0:
+            agent.x = random.randint(0, self.width)
+            agent.y = random.randint(0, self.height)
+
+        current_prey = len([a for a in self.agents if a.is_prey])
         current_prey = len([a for a in self.agents if a.is_prey])
         current_pred = len([a for a in self.agents if a.is_predator])
         
@@ -108,6 +119,11 @@ class Ecosystem:
         - Remove dead agents.
         """
         self.tick_count += 1
+        
+        # Cycle 2521: Enforce Boundaries
+        for agent in self.agents:
+            agent.x = max(0, min(agent.x, self.width))
+            agent.y = max(0, min(agent.y, self.height))
         
         # 1. Governance
         self.govern()

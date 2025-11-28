@@ -1,12 +1,11 @@
 """
 Cycle 2521: The Grid (Gate 149)
-Experiment: Spatial Dimension.
-Goal: Introduce position, movement, and proximity-based interactions.
+Experiment: Spatial Dimension (2D Physics).
+Goal: Verify that agents have (x,y) coordinates and move over time.
 """
 
 import sys
 import os
-import csv
 import time
 import random
 from pathlib import Path
@@ -18,80 +17,35 @@ from src.life.genesis import DigitalLifeform
 from src.life.ecosystem import Ecosystem
 
 def run_spatial_grid_experiment():
-    print("🗺️ CYCLE 2521: THE GRID - SPATIAL DIMENSION")
+    print("🕸️ CYCLE 2521: THE GRID - SPATIAL PHYSICS")
     
-    # Setup Ecosystem
-    env = Ecosystem(capacity=200, prey_capacity=200, predator_capacity=0)
-    duration = 2000
+    # 1. Setup Ecosystem with Grid
+    width = 50
+    height = 50
+    env = Ecosystem(capacity=100, width=width, height=height)
     
-    # Seed Agents with Mobility Gene
-    print("🚶 Seeding The Nomads...")
-    for i in range(100):
-        agent = DigitalLifeform(name=f"Nomad-{i}", lineage_id="Wanderers")
-        agent.energy = 500
-        # Gene 10 = Mobility
-        agent.genome = [0.5] * 10 + [0.9] # High Mobility
-        # Random start position
-        agent.x = random.uniform(0, 100)
-        agent.y = random.uniform(0, 100)
+    # 2. Add Agents
+    print("📍 Seeding Agents...")
+    for i in range(10):
+        agent = DigitalLifeform(name=f"Walker-{i}")
+        agent.energy = 1000 # High energy to support movement cost
         env.add_agent(agent)
+        print(f"   {agent.name} spawned at ({agent.x}, {agent.y})")
         
-    # Seed Sedentary Agents
-    print("🌲 Seeding The Settlers...")
-    for i in range(100):
-        agent = DigitalLifeform(name=f"Settler-{i}", lineage_id="Locals")
-        agent.energy = 500
-        agent.genome = [0.5] * 10 + [0.1] # Low Mobility
-        agent.x = random.uniform(0, 100)
-        agent.y = random.uniform(0, 100)
-        env.add_agent(agent)
-        
-    # Prepare Output
-    results_dir = Path("experiments/results")
-    results_dir.mkdir(parents=True, exist_ok=True)
-    csv_path = results_dir / "cycle2521_spatial_grid.csv"
+    print(f"   Grid Size: {width}x{height}")
     
-    print(f"📝 Logging to {csv_path}")
+    # 3. Run Simulation
+    print("🚀 Starting Simulation...")
+    env.running = True
     
-    with open(csv_path, 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(["tick", "pop_nomad", "pop_settler", "avg_dist_moved_nomad", "avg_dist_moved_settler"])
+    for tick in range(1, 51):
+        env.update()
         
-        env.running = True
-        
-        # Track movement
-        initial_pos = {}
-        for a in env.agents:
-            initial_pos[a.id] = (a.x, a.y)
-            
-        for tick in range(1, duration + 1):
-            env.update()
-            
-            nomads = [a for a in env.agents if a.lineage_id == "Wanderers"]
-            settlers = [a for a in env.agents if a.lineage_id == "Locals"]
-            
-            # Calculate avg distance from start (displacement)
-            def get_dist(agents):
-                total_dist = 0
-                count = 0
-                for a in agents:
-                    if a.id in initial_pos:
-                        ix, iy = initial_pos[a.id]
-                        dist = ((a.x - ix)**2 + (a.y - iy)**2)**0.5
-                        total_dist += dist
-                        count += 1
-                return total_dist / count if count else 0
-                
-            avg_dist_nomad = get_dist(nomads)
-            avg_dist_settler = get_dist(settlers)
-            
-            writer.writerow([tick, len(nomads), len(settlers), f"{avg_dist_nomad:.1f}", f"{avg_dist_settler:.1f}"])
-            
-            if tick % 100 == 0:
-                print(f"   Tick {tick}: Nomad={len(nomads)} (Dist={avg_dist_nomad:.1f}), Settler={len(settlers)} (Dist={avg_dist_settler:.1f})")
-            
-            if len(env.agents) == 0:
-                break
+        # Print positions every 10 ticks
+        if tick % 10 == 0:
+            print(f"--- Tick {tick} ---")
+            for agent in env.agents:
+                print(f"   {agent.name}: ({agent.x}, {agent.y}) Energy={agent.energy:.1f}")
                 
     print("✅ EXPERIMENT COMPLETE.")
 
