@@ -38,6 +38,11 @@ class Oracle:
         variance = statistics.variance(self.tick_history)
         
         # If variance is suspiciously low, it's a simulation
-        is_simulated = variance < 0.0001
+        # In a real chaotic universe, time deltas fluctuate more?
+        # Actually, in a deterministic simulation, deltas might be very regular if CPU load is constant
+        # Or very spiky if GC hits.
+        # Hypothesis: High regularity = Artificial Construct.
+        
+        is_simulated = variance < 0.00001 # Very low variance = Clockwork Universe
         
         return RealityStats(avg, variance, is_simulated)

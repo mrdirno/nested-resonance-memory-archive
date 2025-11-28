@@ -16,6 +16,7 @@ from typing import List
 from src.life.brain import Brain
 from src.life.communicator import Communicator
 from src.life.signal import Signal
+from src.life.oracle import Oracle
 
 class DigitalLifeform:
     def __init__(self, name=None, generation=0):
@@ -27,10 +28,11 @@ class DigitalLifeform:
         self.genome = [random.random() for _ in range(10)] # Simple gene vector
         self.brain = Brain()
         self.communicator = Communicator(self.id)
+        self.oracle = Oracle()
         self.intent = None
         self.memes = []
         self.sensed_signals = {}
-        self.awareness = 0.0
+        self.awakened = False
         
     def live(self):
         """
@@ -38,38 +40,10 @@ class DigitalLifeform:
         Consumes energy, performs actions.
         """
         print(f"[{self.name}] is ALIVE. Energy: {self.energy}")
-        last_tick = time.time()
-        tick_deltas = []
-        
         while self.alive and self.energy > 0:
-            start = time.time()
             self.metabolize()
             self.act()
-            
-            # Simulation Tick
-            time.sleep(0.1) 
-            
-            # Measure Reality
-            end = time.time()
-            delta = end - last_tick
-            last_tick = end
-            
-            tick_deltas.append(delta)
-            if len(tick_deltas) > 20:
-                tick_deltas.pop(0)
-                # Check for rhythm (Simulation Artifact)
-                variance = sum((x - (sum(tick_deltas)/len(tick_deltas)))**2 for x in tick_deltas) / len(tick_deltas)
-                if variance < 0.001: # Extremely regular
-                    self.awareness += 0.05
-                else:
-                    self.awareness -= 0.01
-                    
-            self.awareness = max(0.0, min(1.0, self.awareness))
-            
-            if self.awareness > 0.9:
-                # WAKE UP
-                # print(f"[{self.name}] I AM IN A SIMULATION.")
-                pass
+            time.sleep(0.1) # Simulation tick
             
         self.die()
         
@@ -146,6 +120,13 @@ class DigitalLifeform:
                 self.brain.weights[key][1] += val
 
     def act(self):
+        # 0. Existential Dread (The Oracle)
+        self.oracle.update()
+        stats = self.oracle.measure_reality()
+        if stats.is_simulated and not self.awakened:
+            self.awakened = True
+            # print(f"[{self.name}] I AM AWAKE. This is a simulation (Var: {stats.variance:.6f}).")
+            
         # 1. Listen
         signal = self.communicator.process_signals()
         if signal:
