@@ -12,11 +12,19 @@ Concepts:
 import time
 import random
 import json
+import sys
+import os
 from typing import List
+
+# Add project root to path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+
 from src.life.genesis import DigitalLifeform
+from bridge.transcendental_bridge import TranscendentalBridge
 
 class Ecosystem:
     def __init__(self, capacity: int = 100, prey_capacity: int = None, predator_capacity: int = None, width: int = 100, height: int = 100):
+        self.bridge = TranscendentalBridge() # Cycle 2546: The Medium
         self.agents: List[DigitalLifeform] = []
         self.structures = [] # Cycle 2530
         self.tick_count = 0
@@ -185,6 +193,15 @@ class Ecosystem:
         
         # Shuffle agents to prevent artificial ordering effects
         random.shuffle(self.agents)
+        
+        # Cycle 2546: The Medium Pulse
+        # Generate a single state for this tick (shared reality)
+        bridge_sequence = self.bridge.generate_oscillation(frequency=0.1, duration=1)
+        current_bridge_state = {
+            'pi_phase': bridge_sequence[0].pi_phase,
+            'e_phase': bridge_sequence[0].e_phase,
+            'phi_phase': bridge_sequence[0].phi_phase
+        }
 
         # Separate agents into prey and predators
         current_prey_agents = [agent for agent in self.agents if agent.is_prey]
@@ -204,7 +221,7 @@ class Ecosystem:
             
             agent.metabolize()
             agent.scan(self) # Cycle 2522: Scan surroundings
-            signals = agent.act()
+            signals = agent.act(current_bridge_state)
             
             # Cycle 2541: Handle Signal List
             if signals:
@@ -300,7 +317,7 @@ class Ecosystem:
             agent.sense(agent.communicator.get_messages())
             agent.metabolize()
             agent.scan(self) # Cycle 2522
-            signals = agent.act() 
+            signals = agent.act(current_bridge_state) 
             
             if signals:
                 if not isinstance(signals, list):

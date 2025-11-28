@@ -619,11 +619,22 @@ class DigitalLifeform:
             return {'type': 'FARM', 'x': self.x, 'y': self.y, 'hp': 50, 'yield': 10}
         return None
 
-    def calculate_utility(self):
+    def calculate_utility(self, bridge_state=None):
         """
         Calculate utility scores for all possible actions.
         Returns the action with the highest score.
+        
+        Cycle 2546: If bridge_state is provided, use the Resonator Brain.
         """
+        if bridge_state:
+            state = {
+                'energy': self.energy,
+                'signals': self.sensed_signals,
+                'bridge_state': bridge_state,
+                'agent_phase': self.genome[0] * 6.28 # Pi * 2 approx, mapping Gene 0 to Phase
+            }
+            return self.brain.decide(state)
+            
         options = {}
         
         # ... (Context & Genes)
@@ -690,7 +701,7 @@ class DigitalLifeform:
             
         return best_action
 
-    def act(self):
+    def act(self, bridge_state=None):
         # 0. Existential Dread & Reality Sync
         self.reality_monitor.update()
         stats = self.reality_monitor.measure_reality()
@@ -704,7 +715,8 @@ class DigitalLifeform:
             self.knowledge['NEAREST_FOOD'] = self.sensed_signals['NEAREST_FOOD']
 
         # DECISION
-        self.intent = self.calculate_utility()
+        # Cycle 2546: Pass Bridge State to Utility/Brain
+        self.intent = self.calculate_utility(bridge_state)
         
         # DEBUG (Cycle 2533)
         if self.intent in ['build_wall', 'build_farm']:
