@@ -4357,3 +4357,10 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/genesis.py` to reduce innovation cost coefficient from 0.5 to 0.1.
 - [x] **Action:** Run `experiments/cycle2507_subsidy.py`.
 - [x] **Result:** Success. Extinction avoided. Laborers survived (180). Average Innovation rose to 0.573. The reduced metabolic cost allowed smart agents to survive long enough to breed, but they did not become "Rich" (NewRich=0) because the economic structure still favors capital over labor income. However, the gene pool is improving.
+
+# Task: Cycle 2507 - The Subsidy (Gate 135)
+- [x] **Define Cycle 2507:** State-Funded Innovation.
+- [x] **Goal:** Make Innovation viable by reducing its personal cost.
+- [x] **Action:** Modified `src/life/genesis.py` to cap innovation cost.
+- [x] **Action:** Run `experiments/cycle2507_subsidy.py`.
+- [x] **Result:** Failure (Partial). `SmartBosses=3`, `DumbBosses=4`. Even with a heavy subsidy (0.1 cost), Dumb agents still slightly outperformed Smart agents. The "Brain Tax" is still too high relative to the wage premium. Innovation is only profitable if it yields *exponential* returns, not linear ones. The Stagnation (Subsidized Mediocrity).
