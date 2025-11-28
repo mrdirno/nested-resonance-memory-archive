@@ -125,7 +125,7 @@ We prioritize empirical verification over theory.
 *   [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md)
 *   [Helios Arc](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
 *   [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md)
-*   **Naming Convention:** For any emergent behavior with no established term, assign a concise functional placeholder name based strictly on what the phenomenon does (e.g., [The Mycelium](playground/MOG_MANIFESTO.md), [The Oracle](src/life/reality_monitor.py)).
+*   [Naming Convention](docs/philosophy/NAMING_CONVENTION.md)
 
 ---
 
