@@ -4182,3 +4182,10 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/genesis.py` to add Evasion logic to `hunt()`. Added Evasion gene (Gene 6).
 - [x] **Action:** Run `experiments/cycle2495_red_queen.py`.
 - [x] **Result:** Asymmetric Arms Race. Prey Evasion skyrocketed (0.2 -> 1.82) to mitigate damage. Predators maintained population at capacity (50) but Hunting skill stagnated (0.50). Hypothesis: Prey high reproduction rate allows rapid evolution (Red Queen), while Predators survive on low energy (low entropy cost) and breed slowly, leading to slower adaptation. The Prey are winning the race.
+
+# Task: Cycle 2496 - The Cost of War (Gate 124)
+- [x] **Define Cycle 2496:** Introduce Metabolic Cost for Traits.
+- [x] **Goal:** Balance the Arms Race by making traits expensive.
+- [x] **Action:** Modified `src/life/genesis.py` to include `trait_cost = (hunt^2 + evasion^2) * 0.5`.
+- [x] **Action:** Run `experiments/cycle2496_cost_of_war.py`.
+- [x] **Result:** Partial Success. Evasion evolution slowed (1.82 -> 1.15), indicating the cost was felt. However, Predators still stagnated (Hunt 0.50). The cost penalized both sides, but Prey high fertility still allows them to out-evolve Predators. We need to link Predator reproduction speed to their success, or increase mutation rate.

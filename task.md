@@ -75,4 +75,13 @@
     - [ ] Add `Gene 6` = Evasion.
     - [ ] Update `hunt()`: Damage = Base * (Hunt - Evasion).
 - [ ] **Action:** Run `experiments/cycle2495_red_queen.py`.
+- [x] **Result:** Asymmetric Arms Race. Prey Evasion skyrocketed (0.2 -> 1.82) to mitigate damage. Predators maintained population at capacity (50) but Hunting skill stagnated (0.50). Hypothesis: Prey high reproduction rate allows rapid evolution (Red Queen), while Predators survive on low energy (low entropy cost) and breed slowly, leading to slower adaptation. The Prey are winning the race.
+
+# Task: Cycle 2496 - The Cost of War (Gate 124)
+- [ ] **Define Cycle 2496:** Introduce Metabolic Cost for Traits.
+- [ ] **Goal:** Balance the Arms Race by making traits expensive.
+- [ ] **Action:** Modify `src/life/genesis.py`.
+    - [ ] Evasion and Hunting traits increase metabolic cost.
+    - [ ] Formula: `cost += (evasion^2 + hunt^2) * 0.5`.
+- [ ] **Action:** Run `experiments/cycle2496_cost_of_war.py`.
 - [ ] **Result:** pending...

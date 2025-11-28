@@ -70,11 +70,22 @@ class DigitalLifeform:
         efficiency = max(0.01, self.genome[0])
         base_cost = 1.0 / (efficiency + 1.0)
         
+        # Trait Costs (The Cost of War)
+        # High stats require more energy to maintain.
+        # Gene 4 = Hunting, Gene 6 = Evasion
+        hunt_skill = 0
+        if len(self.genome) > 4: hunt_skill = self.genome[4]
+        
+        evasion_skill = 0
+        if len(self.genome) > 6: evasion_skill = self.genome[6]
+        
+        trait_cost = (hunt_skill**2 + evasion_skill**2) * 0.5
+        
         # Entropy: Energy decay (Wealth Tax)
         # Prevents infinite hoarding. 5% per tick.
         entropy_cost = self.energy * 0.05
         
-        total_cost = base_cost + entropy_cost
+        total_cost = base_cost + trait_cost + entropy_cost
         self.energy -= total_cost
         
     def forage(self):
