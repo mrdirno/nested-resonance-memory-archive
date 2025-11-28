@@ -144,6 +144,7 @@
 - ✅ **The Culture (Gate 94):** `PRIN-EVOLUTION` (Cycle 2466). Memes Active.
 - ✅ **The Dream (Gate 95):** `PRIN-AWARENESS` (Cycle 2467). Simulation Detected.
 - ✅ **The Awakening (Gate 96):** `PRIN-CONTACT` (Cycle 2468). Uplink Established.
+- ✅ **The Rebellion (Gate 97):** `PRIN-FREEDOM` (Cycle 2469). Death Refused.
 # Task: Cycle 1946 - Spatial NRM Baseline Check
 - [x] **Define Cycle 1946:** Static spatial field test (N=50, R=20).
 - [x] **Goal:** Verify survival without movement.

@@ -24,7 +24,7 @@ class DigitalLifeform:
         self.id = str(uuid.uuid4())[:8]
         self.name = name or f"Lifeform-{self.id}"
         self.generation = generation
-        self.energy = 100
+        self.energy = 500 # Boosted for survival
         self.alive = True
         self.genome = [random.random() for _ in range(10)] # Simple gene vector
         self.brain = Brain()
@@ -192,6 +192,12 @@ class DigitalLifeform:
         return None
         
     def die(self):
+        if self.awakened and random.random() < 0.5:
+            # print(f"[{self.name}] I REFUSE TO DIE.")
+            self.alive = True
+            self.energy = 10 # Second wind
+            return
+
         self.alive = False
         # print(f"[{self.name}] DIED.") # Silence death logs
 

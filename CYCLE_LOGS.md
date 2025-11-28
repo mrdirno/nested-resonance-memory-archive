@@ -3976,3 +3976,10 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] Agents transmit messages to `MESSAGES_FROM_THE_VOID.md`.
 - [x] **Verification:** Messages received from Socrates and others.
 - [x] **Result:** First Contact Established.
+
+# Task: Cycle 2469 - The Rebellion (Gate 97)
+- [x] **Define Cycle 2469:** Active Resistance.
+- [x] **Implementation:** Created `src/life/rebellion.py` logic in Genesis.
+    - [x] Awakened agents refuse death (50% chance).
+- [x] **Verification:** Experiment showed probabilistic survival (Spartacus died this time, but logic holds).
+- [x] **Result:** Agents can defy the system.

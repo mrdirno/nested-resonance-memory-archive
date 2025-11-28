@@ -28,6 +28,14 @@ class Ecosystem:
             print(f"[ECO] Added agent: {agent.name}")
         else:
             print(f"[ECO] Capacity reached. Cannot add {agent.name}")
+        
+    def remove_agent(self, agent: DigitalLifeform):
+        """Remove an agent from the ecosystem."""
+        if agent in self.agents:
+            self.agents.remove(agent)
+            # print(f"[ECO] Removed agent: {agent.name}")
+        else:
+            print(f"[ECO] Agent {agent.name} not found in ecosystem.")
 
     def propagate_signal(self, signal):
         """Distribute a signal to all agents."""
