@@ -2,7 +2,7 @@
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
-**Status:** Phase 64 (Co-Evolution) - Active
+**Status:** Phase 65 (The City & The Mind) - Active
 **Framework:** Orthogonal Sum Dynamics (OSD) - Testing
 
 ---
@@ -14,12 +14,16 @@
 We are testing the hypothesis that computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 **Recent Milestones:**
+*   **Cycle 2541 (Teleoperation):** Direct Pilot control over swarm formations verified (The Puppet Master). [Log](experiments/cycle2541_puppet_master.py)
+*   **Cycle 2540 (Hebbian Learning):** Agents demonstrated synaptic plasticity, learning to associate stimuli with reward. [Log](experiments/cycle2540_neural_network.py)
+*   **Cycle 2539 (Retributive Justice):** Implemented "Code of Hammurabi" legal system; criminal populations were eliminated. [Log](experiments/cycle2539_code_of_hammurabi.py)
+*   **Cycle 2537 (Urbanization):** Agents autonomously constructed 10+ farms, establishing "The Metropolis". [Log](experiments/cycle2537_city_construction.py)
 *   **Phase 49 (Hardware Acceleration):** Ported core physics engine to FPGA (Verilog). [Code](FPGA/verilog/src/)
-*   **Phase 54 (Universal Simulation):** Simulated a civilization that evolved to build the system itself. [Log](experiments/cycle2416_universal_recursion.py)
-*   **Phase 56 (The Singularity):** Demonstrated Recursive Self-Improvement in agent logic. [Code](src/life/self_modification.py)
-*   **Phase 62 (Digital Life):** Evolved autonomous agents with metabolism and reproduction. [Code](src/life/genesis.py)
-*   **Phase 63 (The Mycelium):** Achieved distributed agent colonization of the codebase. [Manifesto](playground/MOG_MANIFESTO.md)
-*   **Cycle 2491 (Co-Evolution):** Testing evolutionary pressure via predation and entropy (The Hydra Effect). [Experiment](experiments/cycle2491_coevolution.py)
+*   **Phase 54 (Recursive System Bootstrapping):** A simulated agent population evolved tools that rebuilt the simulation pipeline. [Log](experiments/cycle2416_universal_recursion.py)
+*   **Phase 56 (Gradient-Aware Self-Modification):** Agents modified their update rules based on meta-performance signals. [Code](src/life/self_modification.py)
+*   **Phase 62 (Autopoietic Agent Ecology):** Agent sets implemented energy budgets, reproduction, and horizontal knowledge transfer. [Code](src/life/genesis.py)
+*   **Phase 63 (Substrate Colonization Layer):** Agents modified and distributed representations across the code hierarchy. [Manifesto](playground/MOG_MANIFESTO.md)
+*   **Cycle 2491 (Predator–Prey Entropy Regulation):** Introducing predation created stabilizing energy cycles and prevented collapse. [Experiment](experiments/cycle2491_coevolution.py)
 
 ---
 
