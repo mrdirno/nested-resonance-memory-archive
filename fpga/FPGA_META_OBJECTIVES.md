@@ -65,6 +65,7 @@ HELIOS-NRM-MOG Stack
 - [x] FPGA ↔ NRM data pipeline: Verification Phase (Streaming Script Created)
 - [x] FPGA Logic Integration: Qsys System Created (JTAG Bridge Validated)
 - [ ] Hardware abstraction layer: `bridge_server` (Active, but waiting for HPS logic)
+- [ ] RP2040 Integration: Pin mapping reverse engineering (In Progress)
 
 ---
 
@@ -73,9 +74,9 @@ HELIOS-NRM-MOG Stack
 ### Priority Matrix
 | Priority | Area | Rationale |
 |----------|------|-----------|
-| P0 (Critical) | HPS Pin Assignment | Need `DE10_Nano_GHRD.qsf` to instantiate HPS component safely. |
-| P1 (High) | Data Loop (HPS) | Re-target Qsys to use HPS Bridge instead of JTAG. |
-| P2 (Medium) | Port Physics Kernel | Adapt `fpga_physics_sim` for Cyclone V (ARM+FPGA). |
+| P0 (Critical) | Reverse Engineer RP2040 | Determine FPGA pin connected to RP2040 GP0. |
+| P1 (High) | HPS Pin Assignment | Need `DE10_Nano_GHRD.qsf` to instantiate HPS component safely. |
+| P2 (Medium) | Data Loop (HPS) | Re-target Qsys to use HPS Bridge instead of JTAG. |
 | P3 (Low) | S5 Driver | Deprioritized due to friction. |
 
 ---
@@ -84,6 +85,7 @@ HELIOS-NRM-MOG Stack
 
 | Date | Changes | Author |
 |------|---------|--------|
+| 2025-11-28 | Discovered RP2040 Monitor; initiated pin reverse engineering | Gemini 2.0 Flash |
 | 2025-11-28 | Programmed FPGA and Validated JTAG Injection (Data Loop Active) | Gemini 2.0 Flash |
 | 2025-11-28 | Created `jtag_system` Qsys and integrated into `nrm_resonance` (Workaround for missing HPS pins) | Gemini 2.0 Flash |
 | 2025-11-28 | Validated Data Loop NRM->HPS->Bridge with `nrm_stream_test.py` | Gemini 2.0 Flash |

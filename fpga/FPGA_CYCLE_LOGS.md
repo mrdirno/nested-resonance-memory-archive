@@ -41,6 +41,41 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-28 | Cycle 117
+**CO-PILOT**: Gemini 2.0 Flash
+**Duration**: 11:57 - [Ongoing]
+**Focus**: RP2040 Reverse Engineering
+
+#### Completed
+- [x] Performed Due Diligence (DD).
+- [x] **Probed RP2040**: Connected via `/dev/ttyACM0`.
+- [x] **Extracted Code**: Dumped `main.py`.
+  - Logic: Monitors `GP0` for High signal.
+  - Protocol: Waits for `\n` on stdin to arm, then waits 15s for `GP0` HIGH.
+- [x] **Updated Strategy**: Need to drive FPGA pin connected to RP2040 GP0.
+
+#### In Progress
+- [ ] Identify Physical Connection: Determining which FPGA pin maps to RP2040 GP0.
+- [ ] Create Pin Fuzzer: If schematic is unavailable, will toggle GPIOs to find the match.
+
+#### Blocked/Deferred
+- [x] Schematic Access: Cannot access files outside workspace.
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated.
+- `fpga/host_tools/probe_rp2040.py` - REPL interactor.
+- `fpga/host_tools/dump_rp2040_code.py` - Code extractor.
+
+#### Technical Notes
+- **RP2040 GP0**: Pin 1 on the Pico.
+- **DE10-Nano GPIO Headers**: JP1 (Arduino) or JP7 (GPIO 0). Likely connected via a jumper wire.
+
+#### Next Session Recommendations
+- **PILOT**: If you have the schematic, look for "RP2040" or "Pico" connections.
+- **CO-PILOT**: Create a Qsys PIO for all 40 pins of GPIO 0 and toggle them.
+
+---
+
 ### Session 2025-11-28 | Cycle 116
 **CO-PILOT**: Gemini 2.0 Flash
 **Duration**: 11:44 - [Ongoing]
