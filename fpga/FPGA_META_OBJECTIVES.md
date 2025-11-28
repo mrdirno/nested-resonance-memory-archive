@@ -2,7 +2,7 @@
 
 > **Document Type**: Strategic Objectives & Timeline Planning
 > **Scope**: FPGA Development within DUALITY-ZERO-V2
-> **Last Updated**: 2025-11-28 10:15 UTC
+> **Last Updated**: 2025-11-28 13:00 UTC
 
 ---
 
@@ -26,7 +26,7 @@
 | M1-B | Hardware Link Established (DE10) | 2025-11-27 | Completed |
 | M2 | Basic Physics Kernel Loaded (DE10) | 2025-11-28 | **COMPLETED** (via Ethernet) |
 | M2-B | NRM FPGA Module (Pure FPGA) | 2025-11-28 | **COMPLETED** |
-| M3 | NRM <-> FPGA Data Loop | TBD | **READY** (HPS + FPGA operational)
+| M3 | NRM <-> FPGA Data Loop | TBD | **READY** (JTAG Bridge V3 Active)
 
 ---
 
@@ -64,8 +64,8 @@ HELIOS-NRM-MOG Stack
 - [x] FPGA ↔ NRM data pipeline: Implementation Phase (Bridge Server Deployed)
 - [x] FPGA ↔ NRM data pipeline: Verification Phase (Streaming Script Created)
 - [x] FPGA Logic Integration: Qsys System Created (JTAG Bridge Validated)
-- [ ] Hardware abstraction layer: `bridge_server` (Active, but waiting for HPS logic)
-- [ ] RP2040 Integration: Pin mapping reverse engineering (Fuzzing Image Ready)
+- [x] Hardware abstraction layer: `bridge_server_v3.tcl` (Active TCP<->JTAG Bridge)
+- [ ] RP2040 Integration: Pin mapping reverse engineering (Fuzzing Script Ready)
 
 ---
 
@@ -74,7 +74,7 @@ HELIOS-NRM-MOG Stack
 ### Priority Matrix
 | Priority | Area | Rationale |
 |----------|------|-----------|
-| P0 (Critical) | Reverse Engineer RP2040 | Use JTAG PIO to toggle pins and watch RP2040 output. |
+| P0 (Critical) | Reverse Engineer RP2040 | Run `fuzz_rp2040_batch.py` to identify input pin. |
 | P1 (High) | HPS Pin Assignment | Need `DE10_Nano_GHRD.qsf` to instantiate HPS component safely. |
 | P2 (Medium) | Data Loop (HPS) | Re-target Qsys to use HPS Bridge instead of JTAG. |
 | P3 (Low) | S5 Driver | Deprioritized due to friction. |
@@ -85,6 +85,7 @@ HELIOS-NRM-MOG Stack
 
 | Date | Changes | Author |
 |------|---------|--------|
+| 2025-11-28 | Developed `fuzz_rp2040_batch.py` (Batch Tcl) to solve interactive shell issues | Gemini 2.0 Flash |
 | 2025-11-28 | Compiled "Pin Fuzzer" FPGA image (JTAG -> Arduino Pins) | Gemini 2.0 Flash |
 | 2025-11-28 | Discovered RP2040 Monitor; initiated pin reverse engineering | Gemini 2.0 Flash |
 | 2025-11-28 | Programmed FPGA and Validated JTAG Injection (Data Loop Active) | Gemini 2.0 Flash |

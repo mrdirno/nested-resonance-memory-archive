@@ -70,24 +70,38 @@ class DualityPulsePilot:
         script_path = os.path.abspath(__file__)
         self.base_dir = os.path.dirname(script_path)
         
-        # Reference files for message content - V2 PATHS
+        # Reference files for message content - V2 PATHS (cross-platform)
+        # Detect platform and set appropriate paths
+        import platform
+        if platform.system() == "Darwin":  # macOS
+            v2_base = "/Volumes/dual/DUALITY-ZERO-V2"
+        else:  # Linux
+            v2_base = "/media/helios/DUALITY-GUARDIAN/DUALITY-ZERO-V2"
+
         self.reference_files = {
-            "master_prompt": "/Volumes/dual/DUALITY-ZERO-V2/automation/MASTER_PROMPT.md",
-            "meta_objectives": "/Volumes/dual/DUALITY-ZERO-V2/META_OBJECTIVES.md",
-            "constitution": "/Volumes/dual/DUALITY-ZERO-V2/CLAUDE.md"
+            "master_prompt": f"{v2_base}/automation/MASTER_PROMPT.md",
+            "meta_objectives": f"{v2_base}/META_OBJECTIVES.md",
+            "constitution": f"{v2_base}/CLAUDE.md"
         }
 
         # V2 workspace path
-        self.v2_workspace = "/Volumes/dual/DUALITY-ZERO-V2"
+        self.v2_workspace = v2_base
 
         # Cycle counter for tracking
         self.cycle_number = 0
         
         self.config_file = os.path.join(self.base_dir, "pulse_pilot_config.json")
         
-        # macOS specific settings
-        self.computer_name = "macOS Claude Code Terminal"
-        self.paste_hotkey = "cmd+v"
+        # Platform-specific settings
+        import platform
+        if platform.system() == "Darwin":  # macOS
+            self.computer_name = "macOS Claude Code Terminal"
+            self.paste_hotkey = "cmd+v"
+            self.paste_modifier = "command"
+        else:  # Linux
+            self.computer_name = "Linux Claude Code Terminal"
+            self.paste_hotkey = "ctrl+v"
+            self.paste_modifier = "ctrl"
         
         # Claude Code window management
         self.claude_windows: List[Dict[str, Any]] = []
@@ -97,11 +111,11 @@ class DualityPulsePilot:
         # Click location tracking for protocol window
         self.protocol_window_location = None  # (x, y) coordinates for protocol window
         
-        # Backup system - V2 PATHS
+        # Backup system - V2 PATHS (cross-platform)
         self.backup_thread = None
         self.backup_running = False
-        self.source_directory = "/Volumes/dual/DUALITY-ZERO-V2"
-        self.backup_base_directory = "/Volumes/dual/DUALITY-ZERO-V2-BACKUP"
+        self.source_directory = v2_base
+        self.backup_base_directory = f"{v2_base}-BACKUP"
         self.max_disk_usage_percent = 50  # Maximum 50% disk usage for backups
         
         # Settings with 12-minute default for perpetual messages
@@ -172,18 +186,24 @@ class DualityPulsePilot:
             return "Gemini template not found. Please create gemini_message_template.txt"
 
     def setup_pyautogui(self):
-        """Configure PyAutoGUI for macOS"""
+        """Configure PyAutoGUI for cross-platform use"""
         try:
             if pyautogui:
                 pyautogui.FAILSAFE = True
-                pyautogui.PAUSE = 0.1
+                # Increase pause for Linux X11 compatibility
+                import platform
+                if platform.system() == "Linux":
+                    pyautogui.PAUSE = 0.15  # Slightly longer for X11
+                else:
+                    pyautogui.PAUSE = 0.1
                 pyautogui.MINIMUM_DURATION = 0.1
                 pyautogui.MINIMUM_SLEEP = 0.05
-                
+
                 screen_size = pyautogui.size()
                 self.screen_width = screen_size.width
                 self.screen_height = screen_size.height
-                print(f"macOS Screen: {self.screen_width}x{self.screen_height}")
+                platform_name = platform.system()
+                print(f"{platform_name} Screen: {self.screen_width}x{self.screen_height}")
         except Exception as e:
             print(f"Error configuring PyAutoGUI: {e}")
     
@@ -485,9 +505,9 @@ class DualityPulsePilot:
         # Add reference to constitution and meta-objectives
         message_parts.append("\n" + "=" * 80)
         message_parts.append("**REFERENCE FILES:**")
-        message_parts.append(f"- Constitution: `/Volumes/dual/DUALITY-ZERO-V2/CLAUDE.md`")
-        message_parts.append(f"- Meta Objectives: `/Volumes/dual/DUALITY-ZERO-V2/META_OBJECTIVES.md`")
-        message_parts.append(f"- Workspace: `/Volumes/dual/DUALITY-ZERO-V2/`")
+        message_parts.append(f"- Constitution: `{self.v2_workspace}/CLAUDE.md`")
+        message_parts.append(f"- Meta Objectives: `{self.v2_workspace}/META_OBJECTIVES.md`")
+        message_parts.append(f"- Workspace: `{self.v2_workspace}/`")
 
         # Add footer
         message_parts.append("\n" + "=" * 80)
@@ -536,12 +556,12 @@ class DualityPulsePilot:
 
 1. **Read the meta-objectives tracker (if first time or needed):**
    ```bash
-   cat /Volumes/dual/DUALITY-ZERO-V2/META_OBJECTIVES.md
+   cat {self.v2_workspace}/META_OBJECTIVES.md
    ```
 
 2. **Read the constitution (if first time or needed):**
    ```bash
-   cat /Volumes/dual/DUALITY-ZERO-V2/CLAUDE.md
+   cat {self.v2_workspace}/CLAUDE.md
    ```
 
 3. **Execute the next highest priority task** from META_OBJECTIVES.md
@@ -561,7 +581,7 @@ You're implementing:
 - **Temporal Stewardship**: Meta-orchestration across time, memetic engineering
 
 ## WORKSPACE:
-- Directory: `/Volumes/dual/DUALITY-ZERO-V2/`
+- Directory: `{self.v2_workspace}/`
 - You have 12 minutes until next cycle (fresh context)
 - Focus on implementation, not documentation
 - World-class R&D standards required
@@ -579,230 +599,121 @@ You're implementing:
     
     def create_all_claude_windows(self):
         """Create all Claude Code windows as separate Terminal instances in quadrants"""
+        import platform
+
         try:
             self.log_status(f"🚀 Creating {self.num_claude_windows} Claude Code windows in quadrants...")
-            
-            # Get list of existing Terminal window IDs to exclude them
-            get_existing_windows_script = '''
-            tell application "Terminal"
-                set windowIDs to ""
-                repeat with w in windows
-                    set windowIDs to windowIDs & (id of w as string) & ","
-                end repeat
-                return windowIDs
-            end tell
-            '''
-            existing_result = subprocess.run(['osascript', '-e', get_existing_windows_script], capture_output=True, text=True)
-            existing_window_ids = set(existing_result.stdout.strip().rstrip(',').split(',')) if existing_result.stdout.strip() else set()
-            self.log_status(f"Existing Terminal window IDs to exclude: {existing_window_ids}")
-            
+
             # Get screen dimensions
             if pyautogui:
                 screen_width, screen_height = pyautogui.size()
             else:
-                screen_width, screen_height = 1512, 982  # Default fallback
-            
+                screen_width, screen_height = 1920, 1080  # Default fallback
+
             # Calculate quadrant dimensions (accounting for dock/menubar)
             quad_width = screen_width // 2
             quad_height = (screen_height - 100) // 2  # Leave space for menubar/dock
-            
+
             # Single window position: top-left quadrant
             quadrant_positions = [
                 (0, 100),                    # Top Left (x=0, y=100 for menubar)
             ]
             quadrant_names = ["Top-Left"]
-            
-            # Clear existing AUTOMATION windows only (preserve manual windows)
-            self.claude_windows = [w for w in self.claude_windows if w.get('is_manual', False)]
-            
-            
-            for i in range(self.num_claude_windows):
-                window_name = f"Claude-{i+1}"
-                
-                # Get quadrant position (cycle through if more than 2 windows)
-                pos_index = i % 2
-                x_pos, y_pos = quadrant_positions[pos_index]
-                quadrant_name = quadrant_names[pos_index]
-                
-                # AppleScript to open new Terminal window and start Claude Code
-                # CRITICAL: Get the count of windows BEFORE creating new one
-                applescript = f'''
-                tell application "Terminal"
-                    -- Get initial window count
-                    set initialWindowCount to count of windows
-                    
-                    -- Temporarily set Homebrew as default for new window
-                    set defaultSettings to default settings
-                    set default settings to settings set "Homebrew"
-                    
-                    -- Create new window
-                    set newWindow to (do script "cd /Volumes/DUALITY/DUALITY-ZERO")
-                    
-                    -- Wait for new window to be created
-                    delay 0.5
-                    
-                    -- Find the NEW window (should be window 1 after creation)
-                    set newWindowID to id of window 1
-                    
-                    -- Restore original default
-                    set default settings to defaultSettings
-                    
-                    -- Set window properties with explicit reference
-                    tell window id newWindowID
-                        set position to {{{x_pos}, {y_pos}}}
-                        set size to {{{quad_width}, {quad_height}}}
-                    end tell
-                    
-                    -- No need for renaming or hashing since we use click locations
-                    activate
-                    set index of window id newWindowID to 1
-                    delay 1
-                    
-                    -- Start Claude Code
-                    do script "echo 'Starting Claude Code in {quadrant_name} quadrant...'" in newWindow
-                    delay 0.5
-                    do script "claude --dangerously-skip-permissions" in newWindow
-                    
-                    -- Return the window ID for tracking
-                    return newWindowID as string
-                end tell
-                '''
-                
-                result = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True, check=True)
-                terminal_window_id = result.stdout.strip()
-                
-                # Skip if this window ID already existed (shouldn't happen but safety check)
-                if terminal_window_id in existing_window_ids:
-                    self.log_status(f"⚠️ Window ID {terminal_window_id} already existed, skipping...")
-                    continue
-                
-                
-                # Track this window with minimal info (we use click locations now)
-                window_id = f"auto_{datetime.datetime.now().timestamp()}_{i}"
-                new_window = {
-                    "name": window_name,
-                    "window_id": window_id,
-                    "terminal_window_id": terminal_window_id,
-                    "index": i,
-                    "status": "fresh",
-                    "created": datetime.datetime.now().isoformat(),
-                    "quadrant": quadrant_name,
-                    "position": (x_pos, y_pos),
-                    "is_manual": False
-                }
-                self.claude_windows.append(new_window)
-                
-                self.log_status(f"✓ Window {window_name} created successfully (ID: {terminal_window_id})")
-                
-                # Wait for Claude Code to start up before creating next window
-                self.log_status(f"⏳ Waiting for Claude Code to start in {window_name}...")
-                # Removed unnecessary delay - using real-time processing  # Give Claude Code time to fully start
-            
-            self.update_window_display()
-            self.save_config()
-            self.log_status(f"✅ Created {self.num_claude_windows} Claude Code windows arranged in quadrants")
-            
+
+            # Dispatch to platform-specific implementation
+            if platform.system() == "Linux":
+                self._create_claude_windows_linux(quad_width, quad_height, quadrant_positions, quadrant_names)
+            else:
+                self._create_claude_windows_macos(quad_width, quad_height, quadrant_positions, quadrant_names)
+
         except Exception as e:
             self.log_status(f"❌ Error creating Claude windows: {e}")
 
-    def create_all_gemini_windows(self):
-        """Create all Gemini CLI windows as separate Terminal instances in quadrants"""
-        try:
-            self.log_status(f"🚀 Creating {self.num_claude_windows} Gemini CLI windows in quadrants...")
+    def _create_claude_windows_linux(self, quad_width, quad_height, quadrant_positions, quadrant_names):
+        """Linux-specific Claude Code window creation using gnome-terminal or alternatives"""
+        # Determine which terminal emulator is available
+        terminals_to_try = [
+            ("gnome-terminal", "gnome"),
+            ("konsole", "konsole"),
+            ("xfce4-terminal", "xfce"),
+            ("xterm", "xterm"),
+            ("terminator", "terminator"),
+        ]
 
-            # Get list of existing Terminal window IDs to exclude them
-            get_existing_windows_script = '''
-            tell application "Terminal"
-                set windowIDs to ""
-                repeat with w in windows
-                    set windowIDs to windowIDs & (id of w as string) & ","
-                end repeat
-                return windowIDs
-            end tell
-            '''
-            existing_result = subprocess.run(['osascript', '-e', get_existing_windows_script], capture_output=True, text=True)
-            existing_window_ids = set(existing_result.stdout.strip().rstrip(',').split(',')) if existing_result.stdout.strip() else set()
-            self.log_status(f"Existing Terminal window IDs to exclude: {existing_window_ids}")
+        available_terminal = None
+        terminal_type = None
+        for term_cmd, term_type in terminals_to_try:
+            try:
+                result = subprocess.run(["which", term_cmd], capture_output=True, text=True)
+                if result.returncode == 0:
+                    available_terminal = term_cmd
+                    terminal_type = term_type
+                    self.log_status(f"Found terminal emulator: {term_cmd}")
+                    break
+            except Exception:
+                continue
 
-            # Get screen dimensions
-            if pyautogui:
-                screen_width, screen_height = pyautogui.size()
-            else:
-                screen_width, screen_height = 1512, 982  # Default fallback
+        if not available_terminal:
+            self.log_status("❌ No supported terminal emulator found (tried gnome-terminal, konsole, xfce4-terminal, xterm, terminator)")
+            return
 
-            # Calculate quadrant dimensions (accounting for dock/menubar)
-            quad_width = screen_width // 2
-            quad_height = (screen_height - 100) // 2  # Leave space for menubar/dock
+        # Clear existing AUTOMATION windows only (preserve manual windows)
+        self.claude_windows = [w for w in self.claude_windows if w.get('is_manual', False)]
 
-            # Single window position: top-left quadrant
-            quadrant_positions = [
-                (0, 100),                    # Top Left (x=0, y=100 for menubar)
-            ]
-            quadrant_names = ["Top-Left"]
+        # Working directory for Claude Code
+        working_dir = os.environ.get('CLAUDE_DEFAULT_DIR', '/media/helios/DUALITY-GUARDIAN/DUALITY-ZERO-V2')
 
-            # Clear existing AUTOMATION windows only (preserve manual windows)
-            self.claude_windows = [w for w in self.claude_windows if w.get('is_manual', False)]
+        for i in range(self.num_claude_windows):
+            window_name = f"Claude-{i+1}"
 
+            # Get quadrant position (cycle through if more than 2 windows)
+            pos_index = i % len(quadrant_positions)
+            x_pos, y_pos = quadrant_positions[pos_index]
+            quadrant_name = quadrant_names[pos_index]
 
-            for i in range(self.num_claude_windows):
-                window_name = f"Gemini-{i+1}"
+            try:
+                # Build terminal command based on available terminal
+                if terminal_type == "gnome":
+                    # gnome-terminal with geometry and command
+                    cmd = [
+                        "gnome-terminal",
+                        f"--geometry={quad_width // 8}x{quad_height // 16}+{x_pos}+{y_pos}",
+                        "--title", window_name,
+                        "--", "bash", "-c",
+                        f"cd '{working_dir}' && echo 'Starting Claude Code in {quadrant_name} quadrant...' && claude --dangerously-skip-permissions; exec bash"
+                    ]
+                elif terminal_type == "konsole":
+                    cmd = [
+                        "konsole",
+                        "--geometry", f"{quad_width}x{quad_height}+{x_pos}+{y_pos}",
+                        "-e", "bash", "-c",
+                        f"cd '{working_dir}' && echo 'Starting Claude Code in {quadrant_name} quadrant...' && claude --dangerously-skip-permissions; exec bash"
+                    ]
+                elif terminal_type == "xfce":
+                    cmd = [
+                        "xfce4-terminal",
+                        f"--geometry={quad_width // 8}x{quad_height // 16}+{x_pos}+{y_pos}",
+                        "--title", window_name,
+                        "-e", f"bash -c \"cd '{working_dir}' && echo 'Starting Claude Code in {quadrant_name} quadrant...' && claude --dangerously-skip-permissions; exec bash\""
+                    ]
+                elif terminal_type == "terminator":
+                    cmd = [
+                        "terminator",
+                        "--geometry", f"{quad_width}x{quad_height}+{x_pos}+{y_pos}",
+                        "--title", window_name,
+                        "-e", f"bash -c \"cd '{working_dir}' && echo 'Starting Claude Code in {quadrant_name} quadrant...' && claude --dangerously-skip-permissions; exec bash\""
+                    ]
+                else:  # xterm fallback
+                    cmd = [
+                        "xterm",
+                        "-geometry", f"{quad_width // 8}x{quad_height // 16}+{x_pos}+{y_pos}",
+                        "-title", window_name,
+                        "-e", f"bash -c \"cd '{working_dir}' && echo 'Starting Claude Code in {quadrant_name} quadrant...' && claude --dangerously-skip-permissions; exec bash\""
+                    ]
 
-                # Get quadrant position (cycle through if more than 2 windows)
-                pos_index = i % 2
-                x_pos, y_pos = quadrant_positions[pos_index]
-                quadrant_name = quadrant_names[pos_index]
-
-                # AppleScript to open new Terminal window and start Gemini CLI
-                applescript = f'''
-                tell application "Terminal"
-                    -- Get initial window count
-                    set initialWindowCount to count of windows
-
-                    -- Temporarily set Homebrew as default for new window
-                    set defaultSettings to default settings
-                    set default settings to settings set "Homebrew"
-
-                    -- Create new window
-                    set newWindow to (do script "cd /Volumes/dual/DUALITY-ZERO-V2")
-
-                    -- Wait for new window to be created
-                    delay 0.5
-
-                    -- Find the NEW window (should be window 1 after creation)
-                    set newWindowID to id of window 1
-
-                    -- Restore original default
-                    set default settings to defaultSettings
-
-                    -- Set window properties with explicit reference
-                    tell window id newWindowID
-                        set position to {{{x_pos}, {y_pos}}}
-                        set size to {{{quad_width}, {quad_height}}}
-                    end tell
-
-                    -- No need for renaming or hashing since we use click locations
-                    activate
-                    set index of window id newWindowID to 1
-                    delay 1
-
-                    -- Start Gemini CLI with permissionless mode (--yolo)
-                    do script "echo 'Starting Gemini CLI in {quadrant_name} quadrant...'" in newWindow
-                    delay 0.5
-                    do script "gemini --yolo" in newWindow
-
-                    -- Return the window ID for tracking
-                    return newWindowID as string
-                end tell
-                '''
-
-                result = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True, check=True)
-                terminal_window_id = result.stdout.strip()
-
-                # Skip if this window ID already existed
-                if terminal_window_id in existing_window_ids:
-                    self.log_status(f"⚠️ Window ID {terminal_window_id} already existed, skipping...")
-                    continue
-
+                # Launch the terminal
+                process = subprocess.Popen(cmd, start_new_session=True)
+                terminal_window_id = str(process.pid)
 
                 # Track this window
                 window_id = f"auto_{datetime.datetime.now().timestamp()}_{i}"
@@ -819,8 +730,155 @@ You're implementing:
                 }
                 self.claude_windows.append(new_window)
 
-                self.log_status(f"✓ Window {window_name} created successfully (ID: {terminal_window_id})")
-                self.log_status(f"⏳ Waiting for Gemini CLI to start in {window_name}...")
+                self.log_status(f"✓ Window {window_name} created successfully (PID: {terminal_window_id})")
+
+                # Brief delay between window creations
+                time.sleep(1)
+
+            except Exception as e:
+                self.log_status(f"❌ Error creating window {window_name}: {e}")
+
+        self.update_window_display()
+        self.save_config()
+        self.log_status(f"✅ Created {self.num_claude_windows} Claude Code windows arranged in quadrants")
+
+    def _create_claude_windows_macos(self, quad_width, quad_height, quadrant_positions, quadrant_names):
+        """macOS-specific Claude Code window creation using AppleScript"""
+        # Get list of existing Terminal window IDs to exclude them
+        get_existing_windows_script = '''
+        tell application "Terminal"
+            set windowIDs to ""
+            repeat with w in windows
+                set windowIDs to windowIDs & (id of w as string) & ","
+            end repeat
+            return windowIDs
+        end tell
+        '''
+        existing_result = subprocess.run(['osascript', '-e', get_existing_windows_script], capture_output=True, text=True)
+        existing_window_ids = set(existing_result.stdout.strip().rstrip(',').split(',')) if existing_result.stdout.strip() else set()
+        self.log_status(f"Existing Terminal window IDs to exclude: {existing_window_ids}")
+
+        # Clear existing AUTOMATION windows only (preserve manual windows)
+        self.claude_windows = [w for w in self.claude_windows if w.get('is_manual', False)]
+
+        for i in range(self.num_claude_windows):
+            window_name = f"Claude-{i+1}"
+
+            # Get quadrant position (cycle through if more than 2 windows)
+            pos_index = i % 2
+            x_pos, y_pos = quadrant_positions[pos_index]
+            quadrant_name = quadrant_names[pos_index]
+
+            # AppleScript to open new Terminal window and start Claude Code
+            # CRITICAL: Get the count of windows BEFORE creating new one
+            applescript = f'''
+            tell application "Terminal"
+                -- Get initial window count
+                set initialWindowCount to count of windows
+
+                -- Temporarily set Homebrew as default for new window
+                set defaultSettings to default settings
+                set default settings to settings set "Homebrew"
+
+                -- Create new window
+                set newWindow to (do script "cd /Volumes/DUALITY/DUALITY-ZERO")
+
+                -- Wait for new window to be created
+                delay 0.5
+
+                -- Find the NEW window (should be window 1 after creation)
+                set newWindowID to id of window 1
+
+                -- Restore original default
+                set default settings to defaultSettings
+
+                -- Set window properties with explicit reference
+                tell window id newWindowID
+                    set position to {{{x_pos}, {y_pos}}}
+                    set size to {{{quad_width}, {quad_height}}}
+                end tell
+
+                -- No need for renaming or hashing since we use click locations
+                activate
+                set index of window id newWindowID to 1
+                delay 1
+
+                -- Start Claude Code
+                do script "echo 'Starting Claude Code in {quadrant_name} quadrant...'" in newWindow
+                delay 0.5
+                do script "claude --dangerously-skip-permissions" in newWindow
+
+                -- Return the window ID for tracking
+                return newWindowID as string
+            end tell
+            '''
+
+            result = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True, check=True)
+            terminal_window_id = result.stdout.strip()
+
+            # Skip if this window ID already existed (shouldn't happen but safety check)
+            if terminal_window_id in existing_window_ids:
+                self.log_status(f"⚠️ Window ID {terminal_window_id} already existed, skipping...")
+                continue
+
+
+            # Track this window with minimal info (we use click locations now)
+            window_id = f"auto_{datetime.datetime.now().timestamp()}_{i}"
+            new_window = {
+                "name": window_name,
+                "window_id": window_id,
+                "terminal_window_id": terminal_window_id,
+                "index": i,
+                "status": "fresh",
+                "created": datetime.datetime.now().isoformat(),
+                "quadrant": quadrant_name,
+                "position": (x_pos, y_pos),
+                "is_manual": False
+            }
+            self.claude_windows.append(new_window)
+
+            self.log_status(f"✓ Window {window_name} created successfully (ID: {terminal_window_id})")
+
+            # Wait for Claude Code to start up before creating next window
+            self.log_status(f"⏳ Waiting for Claude Code to start in {window_name}...")
+            # Removed unnecessary delay - using real-time processing  # Give Claude Code time to fully start
+
+        self.update_window_display()
+        self.save_config()
+        self.log_status(f"✅ Created {self.num_claude_windows} Claude Code windows arranged in quadrants")
+
+    def create_all_gemini_windows(self):
+        """Create all Gemini CLI windows as separate Terminal instances in quadrants"""
+        import platform
+
+        try:
+            self.log_status(f"🚀 Creating {self.num_claude_windows} Gemini CLI windows in quadrants...")
+
+            # Get screen dimensions
+            if pyautogui:
+                screen_width, screen_height = pyautogui.size()
+            else:
+                screen_width, screen_height = 1920, 1080  # Default fallback
+
+            # Calculate quadrant dimensions (accounting for dock/menubar)
+            quad_width = screen_width // 2
+            quad_height = (screen_height - 100) // 2  # Leave space for menubar/dock
+
+            # Single window position: top-left quadrant
+            quadrant_positions = [
+                (0, 100),                    # Top Left (x=0, y=100 for menubar)
+            ]
+            quadrant_names = ["Top-Left"]
+
+            # Clear existing AUTOMATION windows only (preserve manual windows)
+            self.claude_windows = [w for w in self.claude_windows if w.get('is_manual', False)]
+
+            if platform.system() == "Linux":
+                # Linux implementation using gnome-terminal or alternatives
+                self._create_gemini_windows_linux(quad_width, quad_height, quadrant_positions, quadrant_names)
+            else:
+                # macOS implementation using AppleScript
+                self._create_gemini_windows_macos(quad_width, quad_height, quadrant_positions, quadrant_names)
 
             self.update_window_display()
             self.save_config()
@@ -828,6 +886,210 @@ You're implementing:
 
         except Exception as e:
             self.log_status(f"❌ Error creating Gemini windows: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def _create_gemini_windows_linux(self, quad_width, quad_height, quadrant_positions, quadrant_names):
+        """Linux-specific Gemini window creation using gnome-terminal or alternatives"""
+        # Determine which terminal emulator is available
+        terminal_cmd = None
+        terminal_type = None
+
+        # Check for available terminal emulators in order of preference
+        terminals_to_try = [
+            ("gnome-terminal", "gnome"),
+            ("konsole", "konsole"),
+            ("xfce4-terminal", "xfce"),
+            ("xterm", "xterm"),
+            ("terminator", "terminator"),
+        ]
+
+        for term_cmd, term_type in terminals_to_try:
+            result = subprocess.run(["which", term_cmd], capture_output=True, text=True)
+            if result.returncode == 0:
+                terminal_cmd = term_cmd
+                terminal_type = term_type
+                break
+
+        if not terminal_cmd:
+            self.log_status("❌ No supported terminal emulator found (gnome-terminal, konsole, xfce4-terminal, xterm)")
+            return
+
+        self.log_status(f"Using terminal: {terminal_cmd}")
+
+        # Get the working directory
+        work_dir = self.v2_workspace
+
+        for i in range(self.num_claude_windows):
+            window_name = f"Gemini-{i+1}"
+
+            # Get quadrant position
+            pos_index = i % len(quadrant_positions)
+            x_pos, y_pos = quadrant_positions[pos_index]
+            quadrant_name = quadrant_names[pos_index]
+
+            try:
+                # Build command based on terminal type
+                if terminal_type == "gnome":
+                    # gnome-terminal with geometry and command
+                    cmd = [
+                        "gnome-terminal",
+                        f"--geometry={quad_width // 8}x{quad_height // 16}+{x_pos}+{y_pos}",
+                        "--title", window_name,
+                        "--working-directory", work_dir,
+                        "--", "bash", "-c",
+                        f"echo 'Starting Gemini CLI in {quadrant_name} quadrant...'; gemini --yolo; exec bash"
+                    ]
+                elif terminal_type == "konsole":
+                    cmd = [
+                        "konsole",
+                        "--workdir", work_dir,
+                        "-e", "bash", "-c",
+                        f"echo 'Starting Gemini CLI in {quadrant_name} quadrant...'; gemini --yolo; exec bash"
+                    ]
+                elif terminal_type == "xfce":
+                    cmd = [
+                        "xfce4-terminal",
+                        f"--geometry={quad_width // 8}x{quad_height // 16}+{x_pos}+{y_pos}",
+                        "--title", window_name,
+                        "--working-directory", work_dir,
+                        "-e", f"bash -c \"echo 'Starting Gemini CLI in {quadrant_name} quadrant...'; gemini --yolo; exec bash\""
+                    ]
+                elif terminal_type == "terminator":
+                    cmd = [
+                        "terminator",
+                        "--working-directory", work_dir,
+                        "-e", f"bash -c \"echo 'Starting Gemini CLI in {quadrant_name} quadrant...'; gemini --yolo; exec bash\""
+                    ]
+                else:  # xterm fallback
+                    cmd = [
+                        "xterm",
+                        "-geometry", f"{quad_width // 8}x{quad_height // 16}+{x_pos}+{y_pos}",
+                        "-title", window_name,
+                        "-e", "bash", "-c",
+                        f"cd {work_dir}; echo 'Starting Gemini CLI in {quadrant_name} quadrant...'; gemini --yolo; exec bash"
+                    ]
+
+                # Launch terminal in background
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                terminal_window_id = str(process.pid)
+
+                # Track this window
+                window_id = f"auto_{datetime.datetime.now().timestamp()}_{i}"
+                new_window = {
+                    "name": window_name,
+                    "window_id": window_id,
+                    "terminal_window_id": terminal_window_id,
+                    "index": i,
+                    "status": "fresh",
+                    "created": datetime.datetime.now().isoformat(),
+                    "quadrant": quadrant_name,
+                    "position": (x_pos, y_pos),
+                    "is_manual": False
+                }
+                self.claude_windows.append(new_window)
+
+                self.log_status(f"✓ Window {window_name} created successfully (PID: {terminal_window_id})")
+                self.log_status(f"⏳ Waiting for Gemini CLI to start in {window_name}...")
+
+                # Brief delay between window creation
+                time.sleep(0.5)
+
+            except Exception as e:
+                self.log_status(f"❌ Error creating window {window_name}: {e}")
+
+    def _create_gemini_windows_macos(self, quad_width, quad_height, quadrant_positions, quadrant_names):
+        """macOS-specific Gemini window creation using AppleScript"""
+        # Get list of existing Terminal window IDs to exclude them
+        get_existing_windows_script = '''
+        tell application "Terminal"
+            set windowIDs to ""
+            repeat with w in windows
+                set windowIDs to windowIDs & (id of w as string) & ","
+            end repeat
+            return windowIDs
+        end tell
+        '''
+        existing_result = subprocess.run(['osascript', '-e', get_existing_windows_script], capture_output=True, text=True)
+        existing_window_ids = set(existing_result.stdout.strip().rstrip(',').split(',')) if existing_result.stdout.strip() else set()
+        self.log_status(f"Existing Terminal window IDs to exclude: {existing_window_ids}")
+
+        for i in range(self.num_claude_windows):
+            window_name = f"Gemini-{i+1}"
+
+            # Get quadrant position (cycle through if more than 2 windows)
+            pos_index = i % len(quadrant_positions)
+            x_pos, y_pos = quadrant_positions[pos_index]
+            quadrant_name = quadrant_names[pos_index]
+
+            # AppleScript to open new Terminal window and start Gemini CLI
+            applescript = f'''
+            tell application "Terminal"
+                -- Get initial window count
+                set initialWindowCount to count of windows
+
+                -- Temporarily set Homebrew as default for new window
+                set defaultSettings to default settings
+                set default settings to settings set "Homebrew"
+
+                -- Create new window
+                set newWindow to (do script "cd /Volumes/dual/DUALITY-ZERO-V2")
+
+                -- Wait for new window to be created
+                delay 0.5
+
+                -- Find the NEW window (should be window 1 after creation)
+                set newWindowID to id of window 1
+
+                -- Restore original default
+                set default settings to defaultSettings
+
+                -- Set window properties with explicit reference
+                tell window id newWindowID
+                    set position to {{{x_pos}, {y_pos}}}
+                    set size to {{{quad_width}, {quad_height}}}
+                end tell
+
+                -- No need for renaming or hashing since we use click locations
+                activate
+                set index of window id newWindowID to 1
+                delay 1
+
+                -- Start Gemini CLI with permissionless mode (--yolo)
+                do script "echo 'Starting Gemini CLI in {quadrant_name} quadrant...'" in newWindow
+                delay 0.5
+                do script "gemini --yolo" in newWindow
+
+                -- Return the window ID for tracking
+                return newWindowID as string
+            end tell
+            '''
+
+            result = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True, check=True)
+            terminal_window_id = result.stdout.strip()
+
+            # Skip if this window ID already existed
+            if terminal_window_id in existing_window_ids:
+                self.log_status(f"⚠️ Window ID {terminal_window_id} already existed, skipping...")
+                continue
+
+            # Track this window
+            window_id = f"auto_{datetime.datetime.now().timestamp()}_{i}"
+            new_window = {
+                "name": window_name,
+                "window_id": window_id,
+                "terminal_window_id": terminal_window_id,
+                "index": i,
+                "status": "fresh",
+                "created": datetime.datetime.now().isoformat(),
+                "quadrant": quadrant_name,
+                "position": (x_pos, y_pos),
+                "is_manual": False
+            }
+            self.claude_windows.append(new_window)
+
+            self.log_status(f"✓ Window {window_name} created successfully (ID: {terminal_window_id})")
+            self.log_status(f"⏳ Waiting for Gemini CLI to start in {window_name}...")
 
     def clear_window_tracking(self):
         """Clear all window tracking data"""
@@ -1131,7 +1393,7 @@ You're implementing:
             if self.root:
                 self.root.after(0, self.log_status, "📝 Pasting perpetual message...")
 
-            pyautogui.hotkey("command", "v")
+            pyautogui.hotkey(self.paste_modifier, "v")
             time.sleep(0.5)  # Wait for paste to complete
 
             # Step 3: Click window AGAIN to ensure focus before sending
@@ -1244,22 +1506,30 @@ You're implementing:
     def _copy_to_clipboard(self, text: str) -> bool:
         """Simple clipboard copy based on working archive implementation"""
         try:
+            import platform
             pyperclip.copy(text)
-            # Removed unnecessary delay - using real-time processing
-            
+            # Add delay for Linux X11 clipboard sync
+            if platform.system() == "Linux":
+                time.sleep(0.2)  # Give X11 time to sync clipboard
+
             # Verify clipboard content
             clipboard_content = pyperclip.paste()
             expected_len = len(text)
             actual_len = len(clipboard_content)
-            
+
             if actual_len < expected_len:
                 if self.root:
                     self.root.after(0, self.log_status, f"WARNING: Clipboard ({actual_len}) shorter than message ({expected_len}). Truncated?")
                 else:
                     print(f"WARNING: Clipboard ({actual_len}) shorter than message ({expected_len}). Truncated?")
-                    
+            else:
+                if self.root:
+                    self.root.after(0, self.log_status, f"✓ Clipboard ready ({actual_len} chars)")
+                else:
+                    print(f"✓ Clipboard ready ({actual_len} chars)")
+
             return True
-            
+
         except Exception as e:
             if self.root:
                 self.root.after(0, self.log_status, f"ERROR: Clipboard copy failed: {e}")
@@ -1308,19 +1578,38 @@ You're implementing:
             return False
     
     def robust_paste(self, send_immediately=False):
-        """Simple paste method - can paste only or paste+send"""
+        """Simple paste method - can paste only or paste+send. Uses xdotool on Linux as primary method."""
         try:
+            import platform
             if self.root:
                 self.root.after(0, self.log_status, "📋 Pasting clipboard content...")
             else:
                 print("📋 Pasting clipboard content...")
-            
-            # Simple paste operation
-            # Removed unnecessary delay - using real-time processing
-            pyautogui.hotkey("command", "v")
-            # Removed unnecessary delay - using real-time processing
-            
+
+            # On Linux, try xdotool first as it's more reliable
+            if platform.system() == "Linux":
+                try:
+                    # Use xdotool for more reliable paste on Linux
+                    import subprocess
+                    time.sleep(0.1)  # Small delay before paste
+                    subprocess.run(["xdotool", "key", "ctrl+v"], check=True, timeout=5)
+                    time.sleep(0.3)  # Wait for paste to complete
+                    if self.root:
+                        self.root.after(0, self.log_status, "✓ Paste via xdotool")
+                except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired) as e:
+                    # Fall back to pyautogui
+                    if self.root:
+                        self.root.after(0, self.log_status, f"xdotool failed, using pyautogui: {e}")
+                    time.sleep(0.1)
+                    pyautogui.hotkey(self.paste_modifier, "v")
+                    time.sleep(0.3)
+            else:
+                # macOS - use pyautogui directly
+                pyautogui.hotkey(self.paste_modifier, "v")
+                time.sleep(0.2)
+
             if send_immediately:
+                time.sleep(0.2)  # Wait before sending
                 pyautogui.press("enter")
                 if self.root:
                     self.root.after(0, self.log_status, "✅ Paste and send completed")
@@ -1331,9 +1620,9 @@ You're implementing:
                     self.root.after(0, self.log_status, "✅ Paste completed (not sent)")
                 else:
                     print("✅ Paste completed (not sent)")
-            
+
             return True
-            
+
         except Exception as e:
             error_msg = f"❌ Paste error: {e}"
             if self.root:
