@@ -6,14 +6,16 @@
 # Device Assignment
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEBA6U23I7
-set_global_assignment -name TOP_LEVEL_ENTITY nrm_resonance
+set_global_assignment -name TOP_LEVEL_ENTITY nrm_system_wrapper
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 24.1.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "2025-11-28"
 set_global_assignment -name LAST_QUARTUS_VERSION "24.1std.0 Lite Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 
 # Source Files
+set_global_assignment -name VERILOG_FILE nrm_system_wrapper.v
 set_global_assignment -name VERILOG_FILE nrm_resonance.v
+set_global_assignment -name QIP_FILE jtag_system/synthesis/jtag_system.qip
 
 # Compilation Settings
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP "-40"

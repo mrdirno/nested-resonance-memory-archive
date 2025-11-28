@@ -21,6 +21,10 @@ module nrm_resonance(
     input wire clk,                    // 50 MHz clock
     input wire rst_n,                  // Active-low reset
 
+    // External Injection Interface
+    input wire [7:0] inject_data,      // Data from Bridge (JTAG/HPS)
+    input wire inject_en,              // Enable external injection
+
     // Test input (simulated data stream)
     // In production: would come from HPS or external ADC
     output wire [7:0] led,             // 8 LEDs for resonance visualization
@@ -92,11 +96,15 @@ module nrm_resonance(
             lfsr <= {lfsr[14:0], lfsr[15] ^ lfsr[13] ^ lfsr[12] ^ lfsr[10]};
             sample_counter <= sample_counter + 1;
 
-            // Inject periodic pulse every 16 samples (creates detectable resonance)
-            if (sample_counter[3:0] == 4'b0000) begin
-                test_data <= 8'hFF;    // Strong pulse
+            if (inject_en) begin
+                test_data <= inject_data;
             end else begin
-                test_data <= lfsr[7:0]; // Random background
+                // Inject periodic pulse every 16 samples (creates detectable resonance)
+                if (sample_counter[3:0] == 4'b0000) begin
+                    test_data <= 8'hFF;    // Strong pulse
+                end else begin
+                    test_data <= lfsr[7:0]; // Random background
+                end
             end
         end
     end

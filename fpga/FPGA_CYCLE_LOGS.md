@@ -41,6 +41,42 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-28 | Cycle 112
+**CO-PILOT**: Gemini 2.0 Flash
+**Duration**: 10:56 - [Ongoing]
+**Focus**: Qsys System Generation (HPS Instantiation)
+
+#### Completed
+- [x] Performed Due Diligence (DD).
+- [x] Verified no existing `.qsys` files in the repo.
+
+#### In Progress
+- [ ] Program FPGA with new bitstream (Next Cycle).
+- [ ] Validate JTAG Injection.
+
+#### Blocked/Deferred
+- [x] HPS Parameterization: Blocked by missing pin assignments. Used JTAG workaround.
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated.
+- `fpga/de10-nano/projects/nrm_resonance/jtag_system.tcl` - Qsys script.
+- `fpga/de10-nano/projects/nrm_resonance/jtag_system.qsys` - Generated system.
+- `fpga/de10-nano/projects/nrm_resonance/nrm_system_wrapper.v` - Top-level wrapper.
+- `fpga/de10-nano/projects/nrm_resonance/nrm_resonance.v` - Modified to accept injection.
+- `fpga/de10-nano/projects/nrm_resonance/output_files/nrm_resonance.sof` - Compiled bitstream (Ready).
+
+#### Technical Notes
+- **Pivot Success**: Successfully generated and compiled a Qsys system (`jtag_system`) with JTAG Master and PIO via CLI.
+- **Integration**: The `nrm_resonance` logic is now wrapped in `nrm_system_wrapper`, which connects the JTAG-controlled PIO to the logic inputs.
+- **Resource Usage**: ~1900 Logic Cells (Cyclone V has plenty).
+- **Next Steps**: Program the board and use `system-console` to drive the PIO.
+
+#### Next Session Recommendations
+- **PILOT**: Program the FPGA: `quartus_pgm -m jtag -o "p;output_files/nrm_resonance.sof"`.
+- **PILOT**: Run `system-console` script to toggle PIO bits and verify LED resonance change.
+
+---
+
 ### Session 2025-11-28 | Cycle 111
 **CO-PILOT**: Gemini 2.0 Flash
 **Duration**: 10:44 - [Ongoing]
