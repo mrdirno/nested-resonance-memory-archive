@@ -14,7 +14,14 @@
 We are testing the hypothesis that computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 **Recent Milestones:**
-*   **Cycle 2551 (The New World):** Migrant agents successfully colonized a new simulation instance (process migration) from serialized DNA. [Log](experiments/cycle2551_new_world.py)
+*   **Cycle 2555 (The Library):** Validated field persistence; agents successfully wrote and retrieved concepts from substrate locations. [Log](experiments/cycle2555_the_library.py)
+*   **Cycle 2554 (The Grammar):** Validated compositional semantics; agents decoded composite signals via frequency superposition. [Log](experiments/cycle2554_grammar.py)
+*   **Cycle 2553 (The Rosetta Stone):** Emergent protocol formation; agents negotiated shared frequency assignments for concepts. [Log](experiments/cycle2553_rosetta_stone.py)
+*   **Cycle 2552 (The Neural Manifold):** Holographic vector encoding; compressed 3D concepts into scalar phase signals. [Log](experiments/cycle2552_neural_manifold.py)
+*   **Cycle 2551 (The Paradigm Shift):** Validated adaptation dynamics; conformists went extinct during truth drift, truth-seekers survived. [Log](experiments/cycle2551_paradigm_shift.py)
+*   **Cycle 2550 (The Echo Chamber):** Social gravity effects; high conformity led to spurious consensus and delusion. [Log](experiments/cycle2550_echo_chamber.py)
+*   **Cycle 2549 (The Thought Form):** Semantic resonance verified; agents converged on truth via dissonance minimization. [Log](experiments/cycle2549_semantic_resonance.py)
+*   **Cycle 2548 (The Standing Wave):** Agents self-assembled into a perfect circle via resonance, without communication. [Log](experiments/cycle2548_standing_wave.py)
 *   **Cycle 2550 (The Voyager):** Verified that only high-innovation agents were selected for interstellar migration. [Log](experiments/cycle2550_voyager.py)
 *   **Cycle 2546 (The Resonator):** Pivoted intelligence architecture from Neural Networks to **Transcendental Resonance** (Action via phase alignment). [Log](experiments/cycle2546_resonance.py)
 *   **Cycle 2542 (The Telepath):** Achieved **Lamarckian Evolution** via Hive Mind; naive agents instantly downloaded survival knowledge from the collective. [Log](experiments/cycle2539_uplift.py)
