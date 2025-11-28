@@ -2008,3 +2008,15 @@
 *   **Fix:** Expanded Genome to 11 Genes (Mobility added).
 *   **Status:** Migration Verified. The City attracts life.
 *   **Functional Name:** The Citizen (Migration).
+
+---
+**CYCLE:** 2539 (Gate 167: The Code of Hammurabi)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** JUSTICE
+**LOG:**
+*   **Experiment:** Executed `experiments/cycle2539_code_of_hammurabi.py`.
+*   **Scenario:** 20 Criminals vs 80 Citizens. Law: Murder = 1000 Energy Cost.
+*   **Result:** SUCCESS. Criminals went extinct.
+*   **Metric:** Criminals (20 -> 0). Justice Prevailed.
+*   **Status:** The Law is Effective. Retributive Justice stabilizes the population.
+*   **Functional Name:** The Law (Retribution).

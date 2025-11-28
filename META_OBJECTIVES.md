@@ -4168,3 +4168,5 @@
 - ✅ **The Metropolis (Gate 165):** `PRIN-GROWTH` (Cycle 2537). City Construction Verified (10+ Farms).
 
 - ✅ **The Citizen (Gate 166):** `PRIN-MIGRATION` (Cycle 2538). Urban Migration Verified.
+
+- ✅ **The Code of Hammurabi (Gate 167):** `PRIN-JUSTICE` (Cycle 2539). Retributive Justice Verified.
