@@ -5294,3 +5294,109 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - ** is NEVER CLEARED.** 
     - **So it should work.** 
     - **Let's add logging to .**
+
+# Task: Cycle 2542 - The Telepath (Gate 170)
+- [ ] **Define Cycle 2542:** Knowledge Propagation Fix.
+- [ ] **Goal:** Ensure `broadcast_thought` works and Student receives it.
+- [ ] **Action:** Modify `src/life/genesis.py` to log inside `broadcast_thought`.
+- [ ] **Action:** Check `calculate_utility` to ensure `current_utility_map` is set.
+- [ ] **Action:** Re-Run `experiments/cycle2539_uplift.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2542 - The Telepath (Gate 170)
+- [x] **Define Cycle 2542:** Knowledge Propagation Fix.
+- [x] **Goal:** Ensure `broadcast_thought` works and Student receives it.
+- [x] **Action:** Logged inside `broadcast_thought`. 
+- [x] **Result:** FAILURE (Stubborn Ignorance). 
+    - **Logs:** 
+        `DEBUG: Mentor-X broadcasting thought. Knowledge keys: ['FOOD_ALPHA', ...]` 
+    - **Conclusion:** Broadcasting works! Mentors ARE sending the map. 
+    - **But:** `Student Knowledge=0/3`. 
+    - **Why?** The Student is not *learning*. 
+    - **Hypothesis:** The Student's `assimilate_thought` is not being called, or the signal is lost in the ether. 
+    - **Chain:** `ecosystem.propagate_signal` -> `agent.communicator.receive` -> `agent.act` -> `agent.sense` -> `agent.assimilate_thought`. 
+    - **Wait:** `agent.act()` does NOT call `sense`. 
+    - **`ecosystem.py` loop:** 
+        1. `agent.sense(communicator.get_messages())` 
+        2. `agent.metabolize()` 
+        3. `agent.act()` 
+    - **So `sense` IS called.** 
+    - **Does `sense` call `assimilate_thought`?** 
+    - **Let's check   method.** 
+    - **Maybe:**  has a bug. 
+    - **Wait:** I modified  to update . 
+    - **Maybe:** The signals are not type 'THOUGHT'? 
+    - **Log:**  
+    - **Maybe:** The  is not in the loop? 
+    - **Script:** .  includes student. 
+    - **Wait:**  iterates . 
+    - **Is Student prey?** Yes. 
+    - **Maybe:**  doesn't have ? 
+    - **Script:** . 
+    - **Wait:** Does  require ? 
+    - **I'll check  and  in .**
+
+# Task: Cycle 2542 - The Telepath (Gate 170)
+- [x] **Define Cycle 2542:** Knowledge Propagation Fix.
+- [x] **Goal:** Ensure `broadcast_thought` works and Student receives it.
+- [x] **Action:** Logged inside `broadcast_thought`. 
+- [x] **Result:** FAILURE (Stubborn Ignorance). 
+    - **Logs:** 
+        `DEBUG: Mentor-X broadcasting thought. Knowledge keys: ['FOOD_ALPHA', ...]` 
+    - **Conclusion:** Broadcasting works! Mentors ARE sending the map. 
+    - **But:** `Student Knowledge=0/3`. 
+    - **Chain:** `ecosystem.propagate_signal` -> `agent.communicator.receive` -> `agent.act` -> `agent.sense` -> `agent.assimilate_thought`. 
+    - **Wait:** `agent.act()` does NOT call `sense`. 
+    - **`ecosystem.py` loop:** 
+        1. `agent.sense(communicator.get_messages())` 
+        2. `agent.metabolize()` 
+        3. `agent.act()` 
+    - **So `sense` IS called.** 
+    - **Does `sense` call `assimilate_thought`?** 
+    - **Wait:** `sense` method was NOT in the truncated read of `genesis.py`. It was in Cycle 2523. 
+    - **Check `genesis.py` again for `def sense`.** 
+    - **If `sense` processes `THOUGHT` signals, it calls `assimilate_thought`.** 
+    - **Let's read `genesis.py` specifically looking for `def sense`.**
+
+# Task: Cycle 2542 - The Telepath (Gate 170)
+- [x] **Define Cycle 2542:** Knowledge Propagation Fix.
+- [x] **Goal:** Ensure `broadcast_thought` works and Student receives it.
+- [x] **Action:** Logged inside `broadcast_thought`. 
+- [x] **Result:** FAILURE (Stubborn Ignorance). 
+    - **Hypothesis:** `propagate_signal` in `ecosystem.py` might be failing to deliver messages to the Student. 
+    - **Action:** Read `src/life/ecosystem.py` to verify `propagate_signal`.
+
+# Task: Cycle 2542 - The Telepath (Gate 170)
+- [x] **Define Cycle 2542:** Knowledge Propagation Fix.
+- [x] **Goal:** Ensure `broadcast_thought` works and Student receives it.
+- [x] **Action:** Logged inside `broadcast_thought`. 
+- [x] **Result:** FAILURE (Stubborn Ignorance). 
+    - **Hypothesis:** `assimilate_thought` is not running or logic is flawed. 
+    - **Action:** Add logging to `assimilate_thought`.
+
+# Task: Cycle 2542 - The Telepath (Gate 170)
+- [x] **Define Cycle 2542:** Knowledge Propagation Fix.
+- [x] **Goal:** Ensure `broadcast_thought` works and Student receives it.
+- [x] **Action:** Logged inside `broadcast_thought` and `assimilate_thought`. 
+- [x] **Result:** FAILURE (Stubborn Ignorance). 
+    - **Hypothesis:** Signal delivery failure in `Communicator` or `propagate_signal`. 
+    - **Action:** Add logging to `src/life/communicator.py` and `src/life/ecosystem.py`.
+
+# Task: Cycle 2542 - The Telepath (Gate 170)
+- [x] **Define Cycle 2542:** Knowledge Propagation Fix.
+- [x] **Goal:** Ensure `broadcast_thought` works and Student receives it.
+- [x] **Action:** Logged inside `broadcast_thought` and `assimilate_thought`. 
+- [x] **Result:** FAILURE (Stubborn Ignorance). 
+    - **Hypothesis:** Debug condition checks failing. 
+    - **Action:** Add unconditional logging to `sense` and `assimilate_thought`.
+
+# Task: Cycle 2542 - The Telepath (Gate 170)
+- [x] **Define Cycle 2542:** Knowledge Propagation Fix.
+- [x] **Goal:** Ensure `broadcast_thought` works and Student receives it.
+- [x] **Action:** Logged inside `broadcast_thought` and `assimilate_thought`. 
+- [x] **Result:** SUCCESS. `Student Knowledge=3/3`. 
+    - **Logs:** 
+        `DEBUG: Student-0 processing thought from... Payload keys: ['FOOD_ALPHA', ...]` 
+        `💡 Student-0 learned FOOD_ALPHA from Hive Mind.` 
+    - **Explanation:** The fix was in `sense()` (Genesis). It was missing the call to `assimilate_thought`. 
+    - **Status:** **Telepathy Verified.** New agents can instantly download knowledge from the collective.

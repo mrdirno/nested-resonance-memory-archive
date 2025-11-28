@@ -23,10 +23,14 @@ class Communicator:
             
     def receive(self, signal):
         self.inbox.append(signal)
+        if signal.type == 'THOUGHT':
+            print(f"DEBUG: Communicator {self.agent_id} received THOUGHT signal.")
         
     def get_messages(self):
         """Return all signals and clear inbox."""
         messages = self.inbox.copy()
+        if messages:
+            print(f"DEBUG: Communicator {self.agent_id} retrieving {len(messages)} messages.")
         self.inbox = []
         return messages
 

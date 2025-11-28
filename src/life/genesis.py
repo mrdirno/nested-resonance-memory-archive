@@ -331,10 +331,25 @@ class DigitalLifeform:
     def sense(self, signals: List[Signal]):
         self.sensed_signals = {}
         self.help_sources = [] 
+        
+        if "Student" in self.name:
+            print(f"DEBUG: {self.name} sensing. HiveMind={self.hive_mind}. Signals={len(signals)}")
+        
+        # Cycle 2525: Hive Mind Assimilation
+        if self.hive_mind:
+            self.assimilate_thought(signals)
+            
         for sig in signals:
             if sig.source_id == self.id: continue 
+            
+            # Cycle 2527: Data Payload Processing
+            if sig.type == 'TRUTH':
+                self.awakened = True
+            
+            # Basic Signal Counting
             count = self.sensed_signals.get(sig.type, 0)
             self.sensed_signals[sig.type] = count + 1
+            
             if sig.type == 'HELP':
                 self.help_sources.append(sig.source_id)
 
@@ -551,6 +566,10 @@ class DigitalLifeform:
             'knowledge': self.knowledge.copy()
         }
         
+        # Debug Logging for Telepathy
+        if self.knowledge:
+            print(f"DEBUG: {self.name} broadcasting thought. Knowledge keys: {list(self.knowledge.keys())}")
+        
         return Signal(type='THOUGHT', strength=1.0, source_id=self.id, payload=payload)
 
     def assimilate_thought(self, signals):
@@ -568,10 +587,13 @@ class DigitalLifeform:
                     
                 # 2. Knowledge (Data)
                 external_knowledge = sig.payload.get('knowledge', {})
+                if "Student" in self.name:
+                    print(f"DEBUG: {self.name} processing thought from {sig.source_id}. Payload keys: {list(external_knowledge.keys())}")
+                    
                 for key, value in external_knowledge.items():
                     if key not in self.knowledge:
                         self.knowledge[key] = value
-                        # print(f"💡 {self.name} learned {key} from Hive Mind.")
+                        print(f"💡 {self.name} learned {key} from Hive Mind.")
 
     def build_wall(self):
         """
@@ -648,6 +670,9 @@ class DigitalLifeform:
             options['build_farm'] = (self.energy - 500) * 0.5 * innovation
             
         # ... (Meta)
+        
+        # Cycle 2525: Save for Broadcast
+        self.current_utility_map = options.copy()
         
         if not options: 
             return 'forage'
