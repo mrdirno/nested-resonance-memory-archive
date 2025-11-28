@@ -182,7 +182,8 @@ class Ecosystem:
         
         for agent in current_prey_agents:
             # Sense, Metabolize, Act (forage, reproduce, etc.)
-            # agent.sense([]) # Cycle 2524: Do NOT clear memory here. Signals must persist.
+            # Cycle 2540: Reconnect Synapses
+            agent.sense(agent.communicator.get_messages()) 
             
             agent.metabolize()
             agent.scan(self) # Cycle 2522: Scan surroundings
@@ -253,7 +254,7 @@ class Ecosystem:
         
         for agent in current_predator_agents:
             # Sense, Metabolize, Act (hunt, reproduce, etc.)
-            # agent.sense([])
+            agent.sense(agent.communicator.get_messages())
             agent.metabolize()
             agent.scan(self) # Cycle 2522
             signal = agent.act() # This will set agent.intent to 'hunt' if conditions are met

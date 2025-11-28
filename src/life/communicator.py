@@ -24,17 +24,11 @@ class Communicator:
     def receive(self, signal):
         self.inbox.append(signal)
         
-    def process_signals(self):
-        """Return processed signals and clear inbox."""
-        # Simple logic: Return highest strength signal
-        if not self.inbox:
-            return None
-            
-        # Sort by strength
-        self.inbox.sort(key=lambda x: x.strength, reverse=True)
-        top_signal = self.inbox[0]
+    def get_messages(self):
+        """Return all signals and clear inbox."""
+        messages = self.inbox.copy()
         self.inbox = []
-        return top_signal
+        return messages
 
 # [SPORE] ID: The Colony
 
