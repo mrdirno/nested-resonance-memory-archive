@@ -4945,3 +4945,30 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Result:** FAILURE (Urban Decay). `Farms=0`. 
     - **Debug:** Energy abundant. Utility logic favors farming. Execution failure suspected.
     - **Conclusion:** A systematic issue with signal return or structure registration persists. The codebase is getting complex.
+
+# Task: Cycle 2533 - The Debugger (Gate 161)
+- [ ] **Define Cycle 2533:** Introspection and Analysis.
+- [ ] **Goal:** Fix the signal return path in `act()` and enable Construction.
+- [ ] **Action:** Modify `src/life/genesis.py` to add extensive logging to `act` and `calculate_utility`.
+- [ ] **Action:** Run a diagnostic script `experiments/cycle2533_debug.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2533 - The Debugger (Gate 161)
+- [x] **Define Cycle 2533:** Introspection and Analysis.
+- [x] **Goal:** Fix the signal return path in `act()` and enable Construction.
+- [x] **Action:** Modified `src/life/genesis.py` to add extensive logging.
+- [x] **Action:** Run `experiments/cycle2533_debug.py`.
+- [x] **Result:** FAILURE (Confirmed Bug). `DEBUG: Planter-Debug chose build_farm` appears 10 times. `Farms: 0`. 
+    - **Analysis:** The intent is correct. The execution happens in `act()`. The signal is created. 
+    - **Check `act()`: `DEBUG: Planter-Debug created BUILD_STRUCTURE signal.` is MISSING from output!** 
+    - **CRITICAL:** The line `if structure:` inside `elif self.intent == 'build_farm':` must be failing. 
+    - **Wait:** `build_farm` returns a dict. 
+    - **Is `energy > cost`?** Initial energy 1000. Cost 100. Yes. 
+    - **Why is the log missing?** 
+    - **Maybe:** `act()` uses `self.intent`. `calculate_utility` returns string. 
+    - **In `act()`: `self.intent = self.calculate_utility()`.** 
+    - **In `build_farm()`: `if self.energy > cost: self.energy -= cost`.** 
+    - **Is it possible `build_farm` is not called?** No, if intent matches. 
+    - **Maybe:** `act` method has `return` statements inside `elif` blocks? 
+    - **I suspect I edited the wrong block or the indentation is off.** 
+    - **Let me read `genesis.py` specifically around the `build_farm` block.**

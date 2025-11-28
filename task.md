@@ -378,4 +378,11 @@
 - [ ] **Action:** Modify `src/life/genesis.py` to add `build_farm()`.
 - [ ] **Action:** Modify `src/life/ecosystem.py` to handle Farm logic.
 - [ ] **Action:** Run `experiments/cycle2532_city.py`.
+- [x] **Result:** FAILURE (Urban Decay). `Farms=0`. Systematic signal handling bug identified.
+
+# Task: Cycle 2533 - The Debugger (Gate 161)
+- [ ] **Define Cycle 2533:** Introspection and Analysis.
+- [ ] **Goal:** Fix the signal return path in `act()` and enable Construction.
+- [ ] **Action:** Modify `src/life/genesis.py` to add logging.
+- [ ] **Action:** Run `experiments/cycle2533_debug.py`.
 - [ ] **Result:** pending...

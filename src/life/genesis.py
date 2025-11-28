@@ -601,10 +601,10 @@ class DigitalLifeform:
         """
         options = {}
         
-        # Context
+        # ... (Context & Genes)
         energy_critical = self.energy < 200
         energy_abundant = self.energy > 500
-        # ... (genes)
+        
         while len(self.genome) < 11: self.genome.append(0.5)
         efficiency = self.genome[0]
         fertility = self.genome[1]
@@ -614,47 +614,58 @@ class DigitalLifeform:
         innovation = self.genome[9]
         mobility = self.genome[10]
         
-        # ... (Survival)
+        # 1. ACTION: SURVIVE (Forage/Move)
         survival_score = max(0, (1000 - self.energy) * 0.1)
         if energy_critical: survival_score *= 2.0
         
         move_score = survival_score * mobility
         if 'NEAREST_FOOD' in self.knowledge:
-            options['move_to_food'] = move_score + 50
+            options['move_to_food'] = move_score + 50 
         else:
-            options['move_random'] = move_score * 0.8
+            options['move_random'] = move_score * 0.8 
             options['forage'] = survival_score
             
-        # ... (Reproduction)
+        # 2. ACTION: REPRODUCE
         if self.energy > 400:
             options['reproduce'] = (self.energy - 400) * fertility * 0.5
             
-        # ... (Social)
+        # 3. ACTION: SOCIAL
         
-        # ... (Aggression)
+        # 4. ACTION: AGGRESSION
         if 'WAR' in self.sensed_signals:
             options['war'] = 1000
         elif self.is_predator:
             options['hunt'] = (1000 - self.energy) * aggression * 0.2
         elif 'PREDATOR' in self.sensed_signals:
-            # Defense overrides
             options['build_wall'] = 200
-            options['escape'] = 300 # Run is better than build usually
+            options['escape'] = 300 
             
-        # Cycle 2532: INVESTMENT (Farms)
-        # If rich and innovative, build a farm
+        # Cycle 2532: INVESTMENT
         if energy_abundant and innovation > 0.6:
-            # Score scales with energy excess
             options['build_farm'] = (self.energy - 500) * 0.5 * innovation
             
         # ... (Meta)
         
-        return max(options, key=options.get) if options else 'forage'
+        if not options: 
+            return 'forage'
+            
+        best_action = max(options, key=options.get)
+        
+        # DEBUG LOGGING (Cycle 2533)
+        # Only log interesting decisions (not random forage/move spam)
+        if best_action in ['build_wall', 'build_farm', 'construct_nuke']:
+            print(f"DEBUG: {self.name} chose {best_action} (Score: {options[best_action]:.1f})")
+            
+        return best_action
 
     def act(self):
-        # ... (awakening, hive mind)
-        
-        # Sync Memory
+        # ... (Awakening, Knowledge Sync)
+        self.reality_monitor.update()
+        stats = self.reality_monitor.measure_reality()
+        if stats.is_simulated and not self.awakened:
+            while len(self.genome) < 10: self.genome.append(0.5)
+            if random.random() < self.genome[9]: self.awakened = True
+
         if 'NEAREST_FOOD' in self.sensed_signals:
             self.knowledge['NEAREST_FOOD'] = self.sensed_signals['NEAREST_FOOD']
 
@@ -676,12 +687,14 @@ class DigitalLifeform:
             if structure:
                 from src.life.signal import Signal
                 signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
+                print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal.")
         elif self.intent == 'build_farm':
             structure = self.build_farm()
             if structure:
                 from src.life.signal import Signal
                 signal_to_broadcast = Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure})
-        # ... (rest of intents: construct_nuke, broadcast, etc.)
+                print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal.")
+        # ... (rest of intents)
         elif self.intent == 'forage':
             self.forage()
         elif self.intent == 'startup':
@@ -689,13 +702,12 @@ class DigitalLifeform:
         elif self.intent == 'reproduce':
             pass
             
-        # BROADCAST THOUGHTS logic (at end)
+        # BROADCAST THOUGHTS
         if self.hive_mind and hasattr(self, 'current_utility_map') and not signal_to_broadcast:
              signal_to_broadcast = self.broadcast_thought(self.current_utility_map)
              
         # Cleanup
         self.sensed_signals = {}
-        # ... (collective utility decay)
         if self.hive_mind:
             keys_to_remove = []
             for action in self.collective_utility:
@@ -706,6 +718,10 @@ class DigitalLifeform:
         else:
             self.collective_utility = {}
             
+        if signal_to_broadcast:
+             # print(f"DEBUG: {self.name} returning signal {signal_to_broadcast.type}")
+             pass
+             
         return signal_to_broadcast
 
     def act(self):
