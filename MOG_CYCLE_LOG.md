@@ -1984,3 +1984,14 @@
 *   **Verification:** Executed `experiments/cycle2536_city_fix.py`.
 *   **Result:** `build_farm`, `construct_nuke`, and `broadcast_truth` signals verified successfully.
 *   **Status:** Construction Logic Operational. The City can be built.
+
+---
+**CYCLE:** 2537 (Gate 165: The Metropolis)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** URBAN SPRAWL
+**LOG:**
+*   **Experiment:** Executed `experiments/cycle2537_city_construction.py`.
+*   **Scenario:** 20 Rich Planters in a 200-capacity ecosystem.
+*   **Result:** SUCCESS. 10+ Farms built. The City is rising.
+*   **Status:** Urbanization Logic Verified.
+*   **Functional Name:** The Metropolis (Urbanization).

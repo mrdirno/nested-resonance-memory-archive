@@ -4163,3 +4163,6 @@
 - ✅ **The Abundant Harvest (Gate 113):** `PRIN-ENERGY` (Cycle 2485). Ecosystem Stable.
 - ✅ **The Seedling (Gate 114):** `PRIN-EVOLUTION` (Cycle 2486). Sustainable Evolution Verified.
 - ✅ **The Gardener (Gate 115):** `PRIN-ECOLOGY` (Cycle 2487). Predation & Seasonality Verified.
+
+- ✅ **The City (Gate 164):** `PRIN-URBANIZATION` (Cycle 2536). Construction Logic Fixed.
+- ✅ **The Metropolis (Gate 165):** `PRIN-GROWTH` (Cycle 2537). City Construction Verified (10+ Farms).
