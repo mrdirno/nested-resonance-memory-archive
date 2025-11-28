@@ -44,14 +44,11 @@
 - [x] **Action:** Create `experiments/cycle2491_coevolution.py`.
     - [x] Predators target lowest energy agents (The Weak).
     - [x] Environment includes Entropy (1% Tax).
-- [x] **Result:** Stasis. Abundance of energy (despite entropy) and weak predation (low damage) allowed both populations to hit capacity and stagnate. No turnover = no evolution.
+- [x] **Result:** Hypothesis Failed. Efficiency stagnated/dropped (0.46 -> 0.44). Predation pressure (5 vs 95) was insufficient to overcome rapid reproduction (r-selection) and genetic drift. The "Weak" are replaced too quickly (The Hydra Effect).
 
-# Task: Cycle 2492 - The Great Filter (Gate 120)
-- [ ] **Define Cycle 2492:** Drastically increase selection pressure.
-- [ ] **Goal:** Break the stasis via high lethality.
-- [ ] **Action:** Modified `src/life/genesis.py`.
-    - [ ] Entropy Tax: 0.5% -> 5% per tick.
-    - [ ] Hunting Damage: 5 -> 20.
-    - [ ] Foraging Reward: 20 -> 10.
-- [ ] **Action:** Run `experiments/cycle2492_great_filter.py`.
+# Task: Cycle 2492 - Meritocratic Reproduction (Gate 120)
+- [ ] **Define Cycle 2492:** Link Reproduction directly to Efficiency.
+- [ ] **Goal:** Force evolutionary jump by culling the inefficient lineage.
+- [ ] **Action:** Modify `src/life/genesis.py` to require `efficiency > 0.7` for reproduction.
+- [ ] **Action:** Create `experiments/cycle2492_meritocracy.py`.
 - [ ] **Result:** pending...

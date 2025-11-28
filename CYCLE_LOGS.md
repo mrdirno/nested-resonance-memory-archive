@@ -4151,3 +4151,13 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [ ] Foraging Reward: 20 -> 10.
 - [ ] **Action:** Run `experiments/cycle2492_great_filter.py`.
 - [ ] **Result:** pending...
+
+# Task: Cycle 2492 - The Great Filter (Gate 120)
+- [x] **Define Cycle 2492:** Drastically increase selection pressure.
+- [x] **Goal:** Break the stasis via high lethality.
+- [x] **Action:** Modified `src/life/genesis.py`.
+    - [x] Entropy Tax: 0.5% -> 5% per tick.
+    - [x] Hunting Damage: 5 -> 20.
+    - [x] Foraging Reward: 20 -> 10.
+- [x] **Action:** Run `experiments/cycle2492_great_filter.py`.
+- [x] **Result:** Partial Success. Prey evolved rapid Efficiency (0.87 -> 1.11) and Fertility (0.50 -> 1.13) to cope with entropy and predation. However, Predators **failed to evolve** (stats identical start to finish). Hypothesis: Prey high fertility flooded the ecosystem capacity (200/200), denying Predators reproductive slots ("The Sterility of the Immortals").
