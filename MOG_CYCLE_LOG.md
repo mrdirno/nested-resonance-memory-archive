@@ -1,14 +1,15 @@
-
 ---
-**CYCLE:** 2545 (Gate 173: Predatory Revenue)
-**STATUS:** 🔴 FAILURE
-**DIRECTIVE:** RAID MODEL
+**CYCLE:** 2546 (Gate 174: Feudalism)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PROTECTION RACKET
 **LOG:**
-*   **Experiment:** Executed `experiments/cycle2545_predatory_revenue.py`.
-*   **Scenario:** Khan + 5 Raiders hunting 50 Sheep.
-*   **Result:** EMPIRE FELL.
-    *   Khan bankruptcy at Tick 80 (approx).
-    *   Revenue (Kills) could not keep up with Burn Rate (Wages).
-*   **Insight:** Formations are energetic burdens. Using a Phalanx to chase scattered prey is thermodynamically suicidal (E_move >> E_gain).
-*   **Pivot:** Hierarchy must rely on **Passive Taxation** (Feudalism), not Active Raiding.
-*   **Status:** Predatory State Failed. Moving to Feudal State.
+*   **Experiment:** Executed `experiments/cycle2546_feudalism.py`.
+*   **Scenario:** Lord + 5 Knights protecting 20 Peasants from Wolves.
+*   **Result:** SURVIVAL (500 Ticks).
+    *   Lord Wealth: $1000 -> $2746 (Peak) -> $1188 (End).
+    *   Peasants: 20 -> 6.
+    *   Knights: 5 (All survived).
+*   **Insight:** Taxation provides sustainable revenue ($2746 peak). However, the "Protection" was imperfect. Wolves ate the tax base.
+*   **Economics:** Once Peasant Count < 12, Tax Revenue ($24) < Wage Bill ($25), leading to deficit.
+*   **Status:** Feudalism Viable but Fragile. Needs better defense or cheaper defense.
+*   **Functional Name:** The Castle (Stationary Revenue).
