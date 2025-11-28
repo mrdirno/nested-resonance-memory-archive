@@ -200,3 +200,16 @@
     - **Observation:** Smart Agents bypassed the labor market and launched Startups. They became the new Elite. Old Money (low innovation) went bankrupt.
     - **Mechanism:** High Risk/High Reward strategy paid off for High Innovation agents.
     - **Functional Name:** Creative Destruction (The Silicon Valley Model).
+
+# Task: Cycle 2510 - The Venture Capitalist (Gate 138)
+- [ ] **Define Cycle 2510:** Angel Investing (Capital Allocation).
+- [ ] **Goal:** Enable Rich Agents to fund Poor Smart Agents (overcoming the Barrier to Entry).
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `invest()` method.
+    - [ ] Logic: Angel pays Seed Capital (50). If Startup succeeds, Angel gets 50% of Reward.
+    - [ ] Update `act()`: Rich Agents look for Poor Smart Agents to invest in.
+- [ ] **Action:** Run `experiments/cycle2510_vc.py`.
+- [x] **Result:** Failure (The Valley of Death). `Founders=0`, `Angels=10`.
+    - **Observation:** Poor Founders (Energy 10) starved to death before Angels could fund them.
+    - **Mechanism:** The "Time to Funding" exceeded the "Time to Starvation". Friction in the capital market killed the innovation.
+    - **Functional Name:** The Valley of Death (Liquidity Crisis).

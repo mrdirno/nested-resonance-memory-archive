@@ -1903,3 +1903,8 @@
 *   **Status:** Smart Agents (Founders) became the new Elite (25 vs 0).
 *   **Cause:** Startup Mode (High Risk/Reward) > Wage Labor.
 *   **Functional Name:** Creative Destruction (The Silicon Valley Model).
+
+*   **Result:** FAILURE (The Valley of Death). Founders starved before funding.
+*   **Status:** Angels survived, Founders went extinct.
+*   **Cause:** Runway (10 Energy) < Time to Funding.
+*   **Functional Name:** The Valley of Death (Liquidity Crisis).

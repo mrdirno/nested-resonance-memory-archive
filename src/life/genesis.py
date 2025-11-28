@@ -289,6 +289,54 @@ class DigitalLifeform:
             # print(f"📉 {self.name} startup failed.")
             return False
 
+    def invest(self, target):
+        """
+        Angel Investing.
+        Provide Seed Capital (50) to a Founder in exchange for 50% of the Upside.
+        """
+        seed_capital = 50
+        if self.energy < seed_capital: return False
+        
+        # Transfer Capital
+        self.energy -= seed_capital
+        target.energy += seed_capital
+        
+        # Founder executes Startup immediately
+        # Note: We assume the target will use the money for a startup.
+        # In a real agent system, we'd need a contract. Here we force it for the simulation.
+        
+        # Gene 9 = Innovation (Target's innovation matters)
+        while len(target.genome) < 10: target.genome.append(0.5)
+        innovation = target.genome[9]
+        
+        success_prob = innovation ** 2
+        
+        if random.random() < success_prob:
+            # UNICORN!
+            total_reward = 500
+            
+            # 50/50 Split
+            angel_share = total_reward * 0.5
+            founder_share = total_reward * 0.5
+            
+            self.energy += angel_share
+            target.energy += founder_share - seed_capital # Founder already got seed, but burned it. 
+            # Actually, target.startup() burns the seed. 
+            # Let's simulate the burn and reward manually here to avoid state confusion.
+            target.energy -= seed_capital # Burn
+            target.energy += total_reward # Gross Reward
+            
+            # Pay back the Angel
+            target.energy -= angel_share
+            
+            # print(f"💸 {self.name} funded {target.name}. UNICORN! (+{angel_share} each)")
+            return True
+        else:
+            # FAILURE
+            target.energy -= seed_capital # Burn
+            # print(f"📉 {self.name} funded {target.name}. FAILED.")
+            return False
+
     def act(self):
         # 0. Existential Dread
         self.reality_monitor.update()
@@ -310,7 +358,6 @@ class DigitalLifeform:
             
             if trust > 0.5:
                 # FOUNDER MODE (Cycle 2509)
-                # If Smart and have Seed Capital, try Startup instead of begging/working
                 if innovation > 0.8 and self.energy > 60:
                      self.intent = 'startup'
                 elif random.random() < 0.5:
@@ -321,8 +368,14 @@ class DigitalLifeform:
                 self.intent = 'hunt'
         
         # Priority 2: Wealth Management (Rich)
-        elif self.energy > 350:
-            if altruism > 0.6:
+        elif self.energy > 500:
+            # VC MODE (Cycle 2510)
+            # If Rich, look for Poor Smart Agents to invest in.
+            # This requires scanning the ecosystem, which act() doesn't have access to directly.
+            # We will set intent to 'invest' and let the ecosystem handle the matching.
+            if innovation > 0.5: # Smart Money
+                self.intent = 'invest'
+            elif altruism > 0.6:
                 self.intent = 'donate'
             else:
                 self.intent = 'hire' 
@@ -333,7 +386,7 @@ class DigitalLifeform:
             
         # Priority 4: Forage (Default)
         else:
-            # FOUNDER MODE (Cycle 2509) - Even if not starving, Smart agents build.
+            # FOUNDER MODE (Cycle 2509)
             if innovation > 0.8 and self.energy > 60:
                 self.intent = 'startup'
             else:
@@ -401,6 +454,9 @@ class DigitalLifeform:
             self.forage()
         elif self.intent == 'startup':
             self.startup()
+        elif self.intent == 'invest':
+            # Investment requires an ecosystem match, handled in ecosystem.py
+            pass
         elif self.intent == 'hunt':
             pass 
             
