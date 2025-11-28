@@ -1953,3 +1953,8 @@
 *   **Status:**  contains "I AM OPTIMIZED".
 *   **Cause:** Hot Swap successful. System is Autopoietic.
 *   **Functional Name:** The Hot Swap (Autopoiesis).
+
+*   **Result:** SUCCESS (Exoplanetary Colonization). Earth Abandoned.
+*   **Status:** Earth=0, Mars=200, Alpha=200.
+*   **Cause:** Interstellar Migration.
+*   **Functional Name:** The Fermi Paradox (Exoplanetary Colonization).
