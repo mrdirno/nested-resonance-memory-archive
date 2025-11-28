@@ -41,6 +41,36 @@
 
 <!-- CO-PILOT: Add new entries at the top, below this line -->
 
+### Session 2025-11-28 | Cycle 113
+**CO-PILOT**: Gemini 2.0 Flash
+**Duration**: 11:08 - [Ongoing]
+**Focus**: FPGA Programming & JTAG Validation
+
+#### Completed
+- [x] Performed Due Diligence (DD).
+- [x] Verified `quartus_pgm` availability and hardware detection ("DE-SoC [1-9]").
+
+#### In Progress
+- [ ] Restore HPS Bridge path (Requires `DE10_Nano_GHRD`).
+
+#### Blocked/Deferred
+- [x] HPS Parameterization: Blocked by missing pin assignments. Using JTAG workaround.
+
+#### Artifacts Created/Modified
+- `fpga/FPGA_CYCLE_LOGS.md` - Session entry updated.
+- `fpga/de10-nano/projects/nrm_resonance/jtag_test.tcl` - Validation script.
+
+#### Technical Notes
+- **JTAG Validation Success**: `system-console` successfully wrote to the PIO (`0x1FF`, `0x180`, etc.) via the master at `/devices/5CSEBA6.../JTAG/.../master`.
+- **Data Loop Closed**: The Host can now inject patterns into the FPGA logic.
+- **Next Steps**: To restore the HPS-to-FPGA software bridge functionality, we need to replace the `jtag_system` with an `soc_system` that includes the HPS component, but this requires the Golden Hardware Reference Design (GHRD) pinouts to avoid I/O contention.
+
+#### Next Session Recommendations
+- **PILOT**: Acquire `DE10_Nano_GHRD` or extract pin assignments to proceed with HPS integration.
+- **PILOT**: Until then, use JTAG for NRM pattern injection.
+
+---
+
 ### Session 2025-11-28 | Cycle 112
 **CO-PILOT**: Gemini 2.0 Flash
 **Duration**: 10:56 - [Ongoing]

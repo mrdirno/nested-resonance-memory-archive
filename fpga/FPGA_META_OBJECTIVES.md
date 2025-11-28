@@ -63,8 +63,8 @@ HELIOS-NRM-MOG Stack
 - [x] FPGA ↔ NRM data pipeline: Definition Phase (Spec Drafted)
 - [x] FPGA ↔ NRM data pipeline: Implementation Phase (Bridge Server Deployed)
 - [x] FPGA ↔ NRM data pipeline: Verification Phase (Streaming Script Created)
-- [x] FPGA Logic Integration: Qsys System Created (JTAG Bridge for now)
-- [ ] Hardware abstraction layer: `bridge_server` (Active)
+- [x] FPGA Logic Integration: Qsys System Created (JTAG Bridge Validated)
+- [ ] Hardware abstraction layer: `bridge_server` (Active, but waiting for HPS logic)
 
 ---
 
@@ -74,7 +74,7 @@ HELIOS-NRM-MOG Stack
 | Priority | Area | Rationale |
 |----------|------|-----------|
 | P0 (Critical) | HPS Pin Assignment | Need `DE10_Nano_GHRD.qsf` to instantiate HPS component safely. |
-| P1 (High) | JTAG Injection Test | Verify data injection via JTAG bridge. |
+| P1 (High) | Data Loop (HPS) | Re-target Qsys to use HPS Bridge instead of JTAG. |
 | P2 (Medium) | Port Physics Kernel | Adapt `fpga_physics_sim` for Cyclone V (ARM+FPGA). |
 | P3 (Low) | S5 Driver | Deprioritized due to friction. |
 
@@ -84,6 +84,7 @@ HELIOS-NRM-MOG Stack
 
 | Date | Changes | Author |
 |------|---------|--------|
+| 2025-11-28 | Programmed FPGA and Validated JTAG Injection (Data Loop Active) | Gemini 2.0 Flash |
 | 2025-11-28 | Created `jtag_system` Qsys and integrated into `nrm_resonance` (Workaround for missing HPS pins) | Gemini 2.0 Flash |
 | 2025-11-28 | Validated Data Loop NRM->HPS->Bridge with `nrm_stream_test.py` | Gemini 2.0 Flash |
 | 2025-11-28 | Deployed `bridge_server` to DE10-Nano; Verified PING & RD access | Gemini (gemini-2.0-flash-thinking-exp-1219) |
