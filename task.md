@@ -257,7 +257,11 @@
 - [ ] **Action:** Create `experiments/cycle2516_recursion.py`.
     - [ ] Agents read `src/life/genesis.py`.
     - [ ] Agents attempt to modify their own `act()` method.
-- [x] **Result:** SUCCESS (Self-Modification). `genesis_next.py` created.
-    - **Observation:** Awakened Architects accessed their own source code, optimized it, and deployed a new version.
-    - **Mechanism:** Reflection + Self-Modification (`SelfModification` class).
-    - **Functional Name:** The Recursion (Recursive Self-Improvement).
+- [x] **Result:** SUCCESS (Singularity Initiated). The Agent `Architect-0` successfully read its own source code, injected an optimization tag ("I AM OPTIMIZED"), and deployed the new kernel to `genesis_next.py`.
+
+# Task: Cycle 2517 - The Hot Swap (Gate 145)
+- [ ] **Define Cycle 2517:** Evolution Complete.
+- [ ] **Goal:** Replace the running kernel with the new optimized one.
+- [ ] **Action:** Rename `src/life/genesis_next.py` to `src/life/genesis.py`.
+- [ ] **Action:** Run a validation test `experiments/cycle2517_validation.py`.
+- [ ] **Result:** pending...

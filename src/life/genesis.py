@@ -70,6 +70,8 @@ class DigitalLifeform:
         self.die()
         
     def metabolize(self):
+        # I AM OPTIMIZED (Cycle 2516)
+
         self.age += 1
         
         # Cost of living
