@@ -4,39 +4,39 @@
 set PORT 5000
 
 # 1. Initialize JTAG
-puts "Scanning for JTAG Master (V3)..."
+puts "Scanning for JTAG Master (V3)..."; flush stdout
 set retry_count 0
 while {$retry_count < 10} {
     set master_paths [get_service_paths master]
     if {[llength $master_paths] > 0} {
         break
     }
-    puts "No master found. Retrying ($retry_count/10)..."
+    puts "No master found. Retrying ($retry_count/10)..."; flush stdout
     after 1000
     incr retry_count
 }
 
 if {[llength $master_paths] == 0} {
-    puts "Error: No JTAG Master found after retries."
-    puts "DEBUG: Services found: [get_service_paths master]"
+    puts "Error: No JTAG Master found after retries."; flush stdout
+    puts "DEBUG: Services found: [get_service_paths master]"; flush stdout
     return
 }
 set master_path [lindex $master_paths 0]
-puts "JTAG Master Found: $master_path"
+puts "JTAG Master Found: $master_path"; flush stdout
 open_service master $master_path
 
 # 2. Server Logic
 proc start_server {port} {
     if {[catch {socket -server accept_conn $port} s]} {
-        puts "Error starting server: $s"
+        puts "Error starting server: $s"; flush stdout
         return
     }
-    puts "Listening on port $port..."
+    puts "Listening on port $port..."; flush stdout
     vwait forever
 }
 
 proc accept_conn {sock addr port} {
-    puts "Connection from $addr:$port"
+    puts "Connection from $addr:$port"; flush stdout
     fconfigure $sock -buffering line
     fileevent $sock readable [list handle_data $sock]
 }
@@ -44,13 +44,13 @@ proc accept_conn {sock addr port} {
 proc handle_data {sock} {
     global master_path
     if {[eof $sock]} {
-        puts "Client disconnected."
+        puts "Client disconnected."; flush stdout
         close $sock
         return
     }
     
     if {[catch {gets $sock line} err]} {
-        puts "Read error: $err"
+        puts "Read error: $err"; flush stdout
         close $sock
         return
     }

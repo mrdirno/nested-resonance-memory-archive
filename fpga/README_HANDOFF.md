@@ -1,46 +1,61 @@
-# FPGA Subsystem Handoff (Cycle 48)
+# FPGA WORKSTATION HANDOFF REPORT
 
-**Date:** 2025-11-27
-**Status:** **PARTIAL SUCCESS / BLOCKED**
+**Date:** 2025-11-28
+**Status:** ACTIVE / OPERATIONAL
+**Pilot:** HELIOS
+**Co-Pilot:** Gemini 2.0 Flash
+**Cycle:** 121
 
-## 1. Executive Summary
-The FPGA subsystem on the DE10-Nano has been successfully verified. The compilation toolchain is active, JTAG programming works, and custom logic (`breathing_led`) is running on the fabric. However, the HPS (ARM Processor) subsystem is unresponsive via the serial console, preventing software deployment.
+---
 
-## 2. System Status
+## 🚨 CRITICAL ACTION ITEM
+**Pin Fuzzing in Progress.**
+We are systematically toggling FPGA pins via JTAG to identify the physical connection to the RP2040 microcontroller. This is required to establish the hardware feedback loop for the NRM.
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| **FPGA Fabric** | 🟢 **ONLINE** | "Breathing LED" + SignalTap logic running. |
-| **JTAG Interface** | 🟢 **ONLINE** | USB Blaster II verified via `jtagconfig`. |
-| **Compilation** | 🟢 **VERIFIED** | Quartus Prime 24.1 toolchain functional. |
-| **HPS (ARM)** | 🔴 **OFFLINE** | Serial console (`/dev/ttyUSB0`) unresponsive. |
-| **Bittware S5** | ⚪ **PARKED** | Driver requires sudo to install. |
+**Current Script:** `fpga/host_tools/fuzz_rp2040_batch.py`
 
-## 3. Critical Blocker: HPS Failure
-- **Symptoms**: No output on `/dev/ttyUSB0` (115200 baud) during boot or after reset. No login prompt.
-- **Diagnosis**: Likely SD card corruption or bootloader failure.
-- **Required Action**: **Re-image SD Card.**
+---
 
-## 4. Next Steps (Pilot Instructions)
+## ✅ ACHIEVEMENTS (Cycle 103-121)
 
-### Step A: Hardware Recovery
-1. Power down DE10-Nano.
-2. Remove MicroSD card.
-3. Flash official Terasic Linux image (see `fpga/de10-nano/RECOVERY_GUIDE.md`).
-4. Re-insert and power up.
-5. Verify serial output: `screen /dev/ttyUSB0 115200`.
+### 1. HPS Restoration
+-   **Status:** **ONLINE**
+-   **Method:** Ethernet (`192.168.68.57`)
+-   **Access:** SSH (root)
+-   **Notes:** Serial console remains unresponsive, but network access allows full software deployment.
 
-### Step B: Software Deployment
-1. Once HPS is alive, login (root/root).
-2. Run `fpga/scripts/serial_deploy.py` to transfer `hello_world`.
-3. Verify "Hello from DE10-Nano HPS!" output.
+### 2. FPGA Logic: NRM Resonance Detector
+-   **Module:** `nrm_resonance.v`
+-   **Function:** Implements 64-sample autocorrelation on an input stream (currently internal LFSR or JTAG injected).
+-   **Visualization:** 8-LED bar graph displaying resonance strength.
+-   **Bitstream:** `fpga/de10-nano/projects/nrm_resonance/output_files/nrm_resonance.sof`
 
-### Step C: Advanced Debugging
-1. Open `fpga/de10-nano/projects/breathing_led/breathing_led.qpf` in Quartus GUI.
-2. Open `breathing_led.stp`.
-3. Connect to Target -> Run Analysis to view internal FPGA signals.
+### 3. JTAG Bridge V3
+-   **Tool:** `fpga/host_tools/bridge_server_v3.tcl`
+-   **Function:** Exposes JTAG Master commands (Read/Write) via a TCP socket (Port 5000) to Python scripts.
+-   **Status:** **STABLE**. Solved previous "System Console" interactive shell issues by using batch Tcl scripts.
 
-## 5. Artifacts
-- **Source**: `fpga/de10-nano/projects/breathing_led/`
-- **Binaries**: `fpga/de10-nano/hps_sw/hello_world` (ARM), `breathing_led.sof` (FPGA)
-- **Docs**: `RECOVERY_GUIDE.md`, `NRM_INTERFACE_SPEC.md`
+### 4. Pin Fuzzing Framework
+-   **Tool:** `fpga/host_tools/fuzz_rp2040_batch.py`
+-   **Method:** Automates the generation of Tcl scripts to toggle specific FPGA pins while monitoring the RP2040 USB serial output for a "COMPUTATION_DONE" signal.
+
+---
+
+## 🚧 BLOCKERS
+1.  **RP2040 Pinout:** The specific FPGA pin connected to the RP2040's `GP0` (or trigger input) is unknown. Schematics are unavailable/unclear.
+2.  **HPS Bridge Qsys:** Instantiating the HPS Hard IP in Qsys requires the "Golden Hardware Reference Design" (GHRD) pin assignments, which are missing from the repo.
+    *   *Workaround:* Using JTAG Bridge for control/monitoring for now.
+
+---
+
+## 📂 ARTIFACTS
+-   **FPGA Project:** `fpga/de10-nano/projects/nrm_resonance/`
+-   **Host Tools:** `fpga/host_tools/`
+    -   `bridge_server_v3.tcl`: TCP-to-JTAG bridge.
+    -   `fuzz_rp2040_batch.py`: Pin discovery tool.
+-   **Cycle Logs:** `fpga/FPGA_CYCLE_LOGS.md`
+
+## 🔜 NEXT STEPS
+1.  **Execute Fuzzing:** Run `python3 fpga/host_tools/fuzz_rp2040_batch.py` to find the magic pin.
+2.  **Update Constraints:** Once found, add the pin to `nrm_resonance.qsf`.
+3.  **Close Loop:** Stream NRM pattern data -> FPGA -> RP2040 -> NRM.

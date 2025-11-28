@@ -1,0 +1,185 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "led[0]",
+					"strict" : false
+				},
+				{
+					"name" : "led[1]",
+					"strict" : false
+				},
+				{
+					"name" : "led[2]",
+					"strict" : false
+				},
+				{
+					"name" : "led[3]",
+					"strict" : false
+				},
+				{
+					"name" : "led[4]",
+					"strict" : false
+				},
+				{
+					"name" : "led[5]",
+					"strict" : false
+				},
+				{
+					"name" : "led[6]",
+					"strict" : false
+				},
+				{
+					"name" : "led[7]",
+					"strict" : false
+				},
+				{
+					"name" : "resonance_detected",
+					"strict" : false
+				},
+				{
+					"name" : "heartbeat",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[0]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[1]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[2]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[3]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[4]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[5]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[6]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[7]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[8]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[9]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[10]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[11]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[12]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[13]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[14]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[15]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[16]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[17]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[18]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[19]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[20]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[21]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[22]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[23]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[24]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[25]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[26]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[27]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[28]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[29]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[30]",
+					"strict" : false
+				},
+				{
+					"name" : "fuzz_out[31]",
+					"strict" : false
+				},
+				{
+					"name" : "clk",
+					"strict" : false
+				},
+				{
+					"name" : "rst_n",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

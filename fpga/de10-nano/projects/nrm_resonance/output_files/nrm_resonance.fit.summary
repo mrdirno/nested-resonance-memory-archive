@@ -1,0 +1,20 @@
+Fitter Status : Successful - Fri Nov 28 12:02:46 2025
+Quartus Prime Version : 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+Revision Name : nrm_resonance
+Top-level Entity Name : nrm_system_wrapper
+Family : Cyclone V
+Device : 5CSEBA6U23I7
+Timing Models : Final
+Logic utilization (in ALMs) : 751 / 41,910 ( 2 % )
+Total registers : 1319
+Total pins : 44 / 314 ( 14 % )
+Total virtual pins : 0
+Total block memory bits : 512 / 5,662,720 ( < 1 % )
+Total RAM Blocks : 1 / 553 ( < 1 % )
+Total DSP Blocks : 1 / 112 ( < 1 % )
+Total HSSI RX PCSs : 0
+Total HSSI PMA RX Deserializers : 0
+Total HSSI TX PCSs : 0
+Total HSSI PMA TX Serializers : 0
+Total PLLs : 0 / 6 ( 0 % )
+Total DLLs : 0 / 4 ( 0 % )

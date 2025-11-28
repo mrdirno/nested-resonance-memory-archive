@@ -9,6 +9,8 @@
 #include <errno.h>
 #include <stdint.h>
 #include <signal.h>
+#include <time.h>
+#include <math.h>
 
 #define HW_REGS_BASE (0xFF200000)
 #define HW_REGS_SPAN (0x00200000)
@@ -16,8 +18,28 @@
 #define PORT 5000
 #define BUFFER_SIZE 1024
 
+// Virtual Registers for Emulation
+uint32_t reg_ctrl = 0;
+uint32_t reg_status = 0;
+uint32_t reg_resonance = 0;
+
 void *virtual_base = MAP_FAILED;
 int server_fd = 0, client_fd = 0;
+
+void update_resonance() {
+    // Simple simulation of resonance dynamics
+    static float t = 0;
+    t += 0.1;
+    float val = (sin(t) + 1.0) * 128.0; // 0-255
+    reg_resonance = (uint32_t)val;
+    
+    // Update status based on control
+    if (reg_ctrl & 1) { // If bit 0 (RUN) is set
+        reg_status = 1; // RUNNING
+    } else {
+        reg_status = 0; // IDLE
+    }
+}
 
 void cleanup() {
     if (virtual_base != MAP_FAILED) {
@@ -44,6 +66,9 @@ void process_command(int sock, char *buffer) {
     char response[BUFFER_SIZE];
     char *cmd = strtok(buffer, " \n\r");
     
+    // Update emulation state on every command
+    update_resonance();
+
     if (!cmd) return;
 
     if (strcmp(cmd, "PING") == 0) {
@@ -56,10 +81,26 @@ void process_command(int sock, char *buffer) {
             uint32_t offset = strtoul(offset_str, NULL, 0);
             uint32_t value = strtoul(value_str, NULL, 0);
             
-            if (offset < HW_REGS_SPAN) {
-                volatile uint32_t *addr = (uint32_t *)((char *)virtual_base + offset);
-                *addr = value;
+            // Intercept Control Registers
+            if (offset == 0x00) {
+                reg_ctrl = value;
                 snprintf(response, BUFFER_SIZE, "OK\n");
+            } else if (offset == 0x10) {
+                // Status is usually RO, but allow write for debug
+                reg_status = value;
+                snprintf(response, BUFFER_SIZE, "OK\n");
+            } else if (offset == 0x20) {
+                // Resonance is RO
+                snprintf(response, BUFFER_SIZE, "OK\n"); 
+            } else if (offset < HW_REGS_SPAN) {
+                // Passthrough to FPGA Fabric
+                if (virtual_base != MAP_FAILED) {
+                    volatile uint32_t *addr = (uint32_t *)((char *)virtual_base + offset);
+                    *addr = value;
+                    snprintf(response, BUFFER_SIZE, "OK\n");
+                } else {
+                     snprintf(response, BUFFER_SIZE, "ERR: No FPGA Map\n");
+                }
             } else {
                 snprintf(response, BUFFER_SIZE, "ERR: Offset out of range\n");
             }
@@ -72,10 +113,22 @@ void process_command(int sock, char *buffer) {
         if (offset_str) {
             uint32_t offset = strtoul(offset_str, NULL, 0);
             
-            if (offset < HW_REGS_SPAN) {
-                volatile uint32_t *addr = (uint32_t *)((char *)virtual_base + offset);
-                uint32_t val = *addr;
-                snprintf(response, BUFFER_SIZE, "0x%08X\n", val);
+            // Intercept Control Registers
+            if (offset == 0x00) {
+                snprintf(response, BUFFER_SIZE, "0x%08X\n", reg_ctrl);
+            } else if (offset == 0x10) {
+                snprintf(response, BUFFER_SIZE, "0x%08X\n", reg_status);
+            } else if (offset == 0x20) {
+                snprintf(response, BUFFER_SIZE, "0x%08X\n", reg_resonance);
+            } else if (offset < HW_REGS_SPAN) {
+                // Passthrough to FPGA Fabric
+                if (virtual_base != MAP_FAILED) {
+                    volatile uint32_t *addr = (uint32_t *)((char *)virtual_base + offset);
+                    uint32_t val = *addr;
+                    snprintf(response, BUFFER_SIZE, "0x%08X\n", val);
+                } else {
+                    snprintf(response, BUFFER_SIZE, "ERR: No FPGA Map\n");
+                }
             } else {
                 snprintf(response, BUFFER_SIZE, "ERR: Offset out of range\n");
             }
