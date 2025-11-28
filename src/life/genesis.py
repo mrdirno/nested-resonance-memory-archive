@@ -637,7 +637,8 @@ class DigitalLifeform:
             self.move(dx, dy)
         elif self.intent == 'move_to_food':
             target = self.sensed_signals.get('NEAREST_FOOD')
-            if target: self.move(target_pos=target)
+            if target:
+                self.move_to(target[0], target[1])
         elif self.intent == 'construct_nuke':
             self.construct_nuke()
         elif self.intent == 'broadcast_truth':

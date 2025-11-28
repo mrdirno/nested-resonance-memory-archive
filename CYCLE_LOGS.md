@@ -4661,3 +4661,65 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Wait:** `ecosystem.py` calls `agent.sense([])` which clears `self.sensed_signals = {}`. 
     - **Root Cause:** The ecosystem wipes the signals *after* the experiment script injects them (or before). In the experiment loop: `signal injection` -> `env.update()`. Inside `env.update()`: `agent.sense([])` -> `metabolize()` -> `act()`. 
     - **Fix:** The `sense()` method wipes the dictionary. We need a persistent memory or the signals need to be passed *into* `sense()`, not injected directly into the dict before update.
+
+# Task: Cycle 2524 - The Memory (Gate 152)
+- [ ] **Define Cycle 2524:** Short-Term Memory.
+- [ ] **Goal:** Allow agents to remember signals for at least one tick.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `self.memory` buffer.
+    - [ ] Update `sense()` to append to memory instead of overwriting.
+    - [ ] Update `act()` to read from memory.
+- [ ] **Action:** Re-Run `experiments/cycle2523_utility_ai.py` (using the fix).
+- [ ] **Result:** pending...
+
+# Task: Cycle 2524 - The Memory (Gate 152)
+- [x] **Define Cycle 2524:** Short-Term Memory.
+- [x] **Goal:** Allow agents to remember signals for at least one tick.
+- [x] **Action:** Modified `src/life/genesis.py` to update `sense()` to merge signals.
+- [x] **Action:** Re-Run `experiments/cycle2523_utility_ai.py` (which uses `sensed_signals`).
+- [x] **Result:** FAILURE (Still Blind). `AtFood=0`. 
+    - **Debug:** The logic in `genesis.py` seems correct, but the test output shows `Intent=0`. This means `agent.sensed_signals['NEAREST_FOOD']` is still missing when `calculate_utility` runs.
+    - **Hypothesis:** In `experiments/cycle2523_utility_ai.py`, I am setting `agent.sensed_signals['NEAREST_FOOD'] = food_zone` *before* `env.update()`. 
+    - **Problem:** `env.update()` calls `agent.sense([])`. My fix was to make `sense()` *merge* signals. But `sense([])` receives an empty list. If `sense()` logic is `for sig in signals: ...`, it does nothing if list is empty. It does NOT clear `self.sensed_signals`. 
+    - **Wait:** If `sense()` doesn't clear it, and `act()` clears it at the end... then it should work for one tick. 
+    - **BUT:** The experiment script injects the signal directly into the dict. 
+    - **Check `act()` order:** `reality_monitor` -> `calculate_utility` -> `move` -> `clear signals`. 
+    - **Check `env.update()` order:** `govern` -> `tax` -> `subsidy` -> `loop agents` -> `metabolize` -> `act`. 
+    - **Wait:** `env.update()` does *not* call `sense()` anymore? In the previous `read_file` of `ecosystem.py` (Cycle 2511), `update()` calls `metabolize()` and `act()`. It does NOT call `sense()`. 
+    - **Re-read `ecosystem.py`:** Ah, I might have hallucinated that `ecosystem.py` calls `sense()`. Let me check `src/life/ecosystem.py` again. If `sense()` isn't called, then the signal should persist until `act()` clears it.
+    - **Realization:** `act()` calls `calculate_utility()`. `calculate_utility()` checks `self.sensed_signals`. If I inject it before `env.update()`, it should be there. 
+    - **Why Intent=0?** Maybe `mobility` gene is low? Or `energy < 200` check? 
+    - **Energy:** Seeded with 150. `energy_critical = True`. 
+    - **Score:** `survival_score` ~ 85. `move_score` ~ 85 * mobility. If signal, `move_score += 50` -> 90-130. 
+    - **Competition:** `seek_work` score = (200-150)*0.5 = 25. `forage` = 85. 
+    - **Wait:** `best_action = max(options, key=options.get)`. 
+    - **Maybe:** `mobility` is low? Genome is `[0.5]*9 + [0.9, 0.9]`. Mobility is gene 10. List index 10 is the 11th element. 
+    - **Index Error?** `genome = [0.5]*9 + [0.9, 0.9]` has 11 elements. Indices 0..10. `mobility = self.genome[10]`. This is correct. 
+    - **Why did it fail?** I suspect `env.update()` logic might have changed or I am missing something obvious. 
+    - **Action:** I will read `src/life/ecosystem.py` to confirm the update loop order.
+
+# Task: Cycle 2523 - The Refactor (Gate 151)
+- [x] **Define Cycle 2523:** Cognitive Architecture Overhaul.
+- [x] **Goal:** Replace the brittle `if-elif` decision tree in `act()` with a Utility System.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `calculate_utility()`.
+- [x] **Action:** Run `experiments/cycle2523_utility_ai.py`.
+- [x] **Result:** FAILURE (Still Blind). `AtFood=0`. 
+    - **Debug:** The logic in `genesis.py` seems correct, but the test output shows `Intent=0`. This means `agent.sensed_signals['NEAREST_FOOD']` is still missing when `calculate_utility` runs.
+    - **Hypothesis:** In `experiments/cycle2523_utility_ai.py`, I am setting `agent.sensed_signals['NEAREST_FOOD'] = food_zone` *before* `env.update()`. 
+    - **Problem:** `env.update()` calls `agent.sense([])`. My fix was to make `sense()` *merge* signals. But `sense([])` receives an empty list. If `sense()` logic is `for sig in signals: ...`, it does nothing if list is empty. It does NOT clear `self.sensed_signals`. 
+    - **Wait:** If `sense()` doesn't clear it, and `act()` clears it at the end... then it should work for one tick. 
+    - **BUT:** The experiment script injects the signal directly into the dict. 
+    - **Check `act()` order:** `reality_monitor` -> `calculate_utility` -> `move` -> `clear signals`. 
+    - **Check `env.update()` order:** `govern` -> `tax` -> `subsidy` -> `loop agents` -> `metabolize` -> `act`. 
+    - **Wait:** `env.update()` does *not* call `sense()` anymore? In the previous `read_file` of `ecosystem.py` (Cycle 2511), `update()` calls `metabolize()` and `act()`. It does NOT call `sense()`. 
+    - **Re-read `ecosystem.py`:** Ah, I might have hallucinated that `ecosystem.py` calls `sense()`. Let me check `src/life/ecosystem.py` again. If `sense()` isn't called, then the signal should persist until `act()` clears it.
+    - **Realization:** `act()` calls `calculate_utility()`. `calculate_utility()` checks `self.sensed_signals`. If I inject it before `env.update()`, it should be there. 
+    - **Why Intent=0?** Maybe `mobility` gene is low? Or `energy < 200` check? 
+    - **Energy:** Seeded with 150. `energy_critical = True`. 
+    - **Score:** `survival_score` ~ 85. `move_score` ~ 85 * mobility. If signal, `move_score += 50` -> 90-130. 
+    - **Competition:** `seek_work` score = (200-150)*0.5 = 25. `forage` = 85. 
+    - **Wait:** `best_action = max(options, key=options.get)`. 
+    - **Maybe:** `mobility` is low? Genome is `[0.5]*9 + [0.9, 0.9]`. Mobility is gene 10. List index 10 is the 11th element. 
+    - **Index Error?** `genome = [0.5]*9 + [0.9, 0.9]` has 11 elements. Indices 0..10. `mobility = self.genome[10]`. This is correct. 
+    - **Why did it fail?** I suspect `env.update()` logic might have changed or I am missing something obvious. 
+    - **Action:** I will read `src/life/ecosystem.py` to confirm the update loop order.

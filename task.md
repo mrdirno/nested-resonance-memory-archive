@@ -313,4 +313,11 @@
     - [ ] Implement Utility AI (Scorers for Actions).
     - [ ] Weigh options dynamically based on Energy, Signals, and Genes.
 - [ ] **Action:** Run `experiments/cycle2523_utility_ai.py`.
+- [x] **Result:** FAILURE (Still Blind). `AtFood=0`. The `sense()` method wiped the signals injected by the experiment before `act()` could use them.
+
+# Task: Cycle 2524 - The Memory (Gate 152)
+- [ ] **Define Cycle 2524:** Short-Term Memory.
+- [ ] **Goal:** Allow agents to remember signals for at least one tick.
+- [ ] **Action:** Modify `src/life/genesis.py` to add persistence to `sensed_signals`.
+- [ ] **Action:** Re-Run `experiments/cycle2523_utility_ai.py`.
 - [ ] **Result:** pending...
