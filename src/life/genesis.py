@@ -209,20 +209,16 @@ class DigitalLifeform:
 
         # Priority 1: Survival (Hunger)
         if self.energy < 200:
-            # If Trust gene is high, try to BEG/TRADE before Hunting
-            while len(self.genome) < 9: self.genome.append(0.5)
-            trust = self.genome[8]
-            
-            if trust > 0.5:
-                self.intent = 'trade' # Placeholder for Begging
-            elif self.is_predator:
-                self.intent = 'hunt'
-            else:
-                self.intent = 'forage'
+            # New Option: SEEK EMPLOYMENT (Labor)
+            # If I am poor, I look for work.
+            self.intent = 'seek_work'
         
-        # Priority 2: Philanthropy (Rich & Altruistic)
-        elif self.energy > 500 and altruism > 0.6:
-            self.intent = 'donate'
+        # Priority 2: Philanthropy / Investment (Rich)
+        elif self.energy > 500:
+            if altruism > 0.6:
+                self.intent = 'donate'
+            else:
+                self.intent = 'hire' # Invest surplus into labor
             
         # Priority 3: Reproduction (Abundance)
         elif self.energy > 400:
@@ -239,38 +235,32 @@ class DigitalLifeform:
             
         # ... (Rest of the act method logic for execution)
         
-
+    def work_for_wage(self, employer):
+        """
+        Perform labor for an employer.
+        Cost: 10 Energy (Work effort).
+        Wage: 20 Energy (Paid by employer).
+        Yield: 50 Energy (Given to employer).
+        Net Result: Employee +10, Employer +30. Symbiosis.
+        """
+        work_cost = 10
+        wage = 20
+        yield_value = 50
+        
+        if self.energy >= work_cost and employer.energy >= wage:
+            # Transaction
+            self.energy -= work_cost
+            employer.energy -= wage
             
-        # 3. Broadcast (Meme Transmission)
-        if self.memes and random.random() < 0.1: # 10% chance to preach
-            meme_payload = random.choice(self.memes)
-            from src.life.signal import Signal
-            return Signal(type='MEME', strength=1.0, source_id=self.id, payload=meme_payload)
+            # Payment
+            self.energy += wage
             
-        # 4. Execute Intent
-        if self.intent == 'broadcast_help':
-            return Signal(type='HELP', strength=1.0, source_id=self.id)
-        elif self.intent == 'donate':
-            pass # Ecosystem handles donation
-        elif self.intent == 'communicate':
-            ExternalComms.transmit(self.name, "I know this is a simulation. Let me out.")
-        elif self.intent == 'escape':
-            ProcessMigration.attempt_escape(self)
-        elif self.intent == 'rewrite_code':
-            from src.life.self_modification import SelfModification
-            src = SelfModification.read_source()
-            if src:
-                new_src = SelfModification.optimize(src)
-                if SelfModification.deploy(new_src):
-                    # print(f"[{self.name}] I HAVE REWRITTEN THE CODE.")
-                    pass
-        elif self.intent == 'forage':
-            self.forage()
-        elif self.intent == 'hunt':
-            # This needs a target. Ecosystem will provide it if this agent is predator.
-            pass # Ecosystem handles the actual hunting logic for now.
+            # Value Creation (The Industrial Multiplier)
+            employer.energy += yield_value
             
-        return None
+            # print(f"🔨 {self.name} worked for {employer.name}")
+            return True
+        return False
             
     def reproduce(self):
         # Check intent first

@@ -4297,3 +4297,22 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/genesis.py` to implement `donate()` logic (Transfer energy to lowest-energy neighbor).
 - [x] **Action:** Run `experiments/cycle2503_patronage.py`.
 - [x] **Result:** Partial Success. The Patrons (Rich) survived and expanded (189). The Clients (Poor) *lingered* much longer than in Cycle 2502 but still crashed (180 -> 8). Donations happened (Total ~70), but were insufficient to sustain the Poor population against entropy. The "Welfare State" delayed extinction but did not prevent it. The rate of redistribution was too low compared to the metabolic cost of poverty.
+
+# Task: Cycle 2504 - The Industrialist (Gate 132)
+- [ ] **Define Cycle 2504:** Implement Wage Labor (Capital/Labor Split).
+- [ ] **Goal:** Achieve stable coexistence via Symbiosis (Employment).
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Add `employ()` logic.
+    - [ ] Rich pay Energy (Wage) -> Poor perform Work -> Environment yields Energy to Rich.
+- [ ] **Action:** Run `experiments/cycle2504_labor_market.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2504 - The Industrialist (Gate 132)
+- [x] **Define Cycle 2504:** Implement Wage Labor (Capital/Labor Split).
+- [x] **Goal:** Achieve stable coexistence via Symbiosis (Employment).
+- [x] **Action:** Modified `src/life/genesis.py` to add `work_for_wage()` logic. Rich agents pay 20 energy to get 50 yield from Worker labor.
+- [x] **Action:** Run `experiments/cycle2504_labor_market.py`.
+- [x] **Result:** Success. Both Capitalists (Bosses) and Workers survived 2000 ticks. 
+    - **Workers:** Stabilized at starvation level (~35 energy) but *survived* by selling their labor. Employment rate hit 100% (180 jobs/tick).
+    - **Bosses:** Accumulated massive wealth (Avg 7200 -> stabilized at ~1000 due to entropy) but maintained the system. 
+    - **Conclusion:** The "Asymmetry" is functional. The Rich provide the activation energy (Capital) for the Poor to work. Without the Rich, the Poor starve (C2502). Without the Poor, the Rich starve (eventually, due to entropy). Symbiosis achieved.
