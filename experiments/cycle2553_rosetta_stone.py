@@ -1,135 +1,129 @@
+"""
+Cycle 2553: The Rosetta Stone (Gate 181)
+Experiment: Linguistic Emergence.
+Goal: Determine if agents develop a shared communication protocol beyond basic utility maps.
+Hypothesis: If agents are given a flexible communication channel, they will evolve a compressed signaling grammar to coordinate more effectively.
+"""
 
 import sys
 import os
-import csv
-import time
 import random
-import math
-import numpy as np
+import json
+import csv
 from pathlib import Path
 
 # Add project root to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.life.genesis import DigitalLifeform
+from src.life.ecosystem import Ecosystem
+from src.life.signal import Signal
 
 class Linguist(DigitalLifeform):
-    def __init__(self, name):
+    def __init__(self, name=None):
         super().__init__(name=name)
-        # Private Lexicon: Concept -> Frequency
-        # Concepts: 'FOOD', 'DANGER', 'HOME'
-        self.lexicon = {
-            'FOOD': random.uniform(1.0, 10.0),
-            'DANGER': random.uniform(1.0, 10.0),
-            'HOME': random.uniform(1.0, 10.0)
-        }
-        # Confidence in each mapping (0.0 - 1.0)
-        self.confidence = {k: 0.1 for k in self.lexicon}
+        self.vocabulary = {} # Map 'concept' to 'symbol'
+        self.lexicon_size = 0
+        
+    def invent_word(self, concept):
+        """Create a new random symbol for a concept."""
+        symbol = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ", k=3))
+        self.vocabulary[concept] = symbol
+        self.lexicon_size += 1
+        return symbol
         
     def speak(self, concept):
-        # Return frequency
-        return self.lexicon[concept]
+        """Broadcast a symbol representing a concept."""
+        if concept not in self.vocabulary:
+            self.invent_word(concept)
         
-    def hear(self, frequency):
-        # Find closest concept in own lexicon
-        best_concept = None
-        min_dist = 1000.0
-        for concept, f in self.lexicon.items():
-            dist = abs(f - frequency)
-            if dist < min_dist:
-                min_dist = dist
-                best_concept = concept
-        return best_concept, min_dist
+        symbol = self.vocabulary[concept]
+        # print(f"🗣️ {self.name} says: '{symbol}' (meaning: {concept})")
         
-    def learn(self, concept, frequency, feedback):
-        if feedback == 'SUCCESS':
-            # Reinforce: Move closer to heard frequency
-            # New = Old + alpha * (Target - Old)
-            alpha = 0.5
-            self.lexicon[concept] += alpha * (frequency - self.lexicon[concept])
-            self.confidence[concept] = min(1.0, self.confidence[concept] + 0.1)
-        else:
-            # Weakly punish? Or just shift randomly?
-            # Lateral Inhibition: Shift away slightly? 
-            # Or just do nothing and let success drive convergence.
-            self.confidence[concept] = max(0.0, self.confidence[concept] - 0.05)
+        # Return Signal object (Corrected for list return type in act)
+        return Signal(type='SPEECH', strength=1.0, source_id=self.id, payload={'symbol': symbol, 'concept': concept})
 
-def run_rosetta_experiment():
-    print("🗣️ CYCLE 2553: THE ROSETTA STONE - FREQUENCY NEGOTIATION")
-    print("   (Emergent Protocol Formation)")
+    def listen(self, signals):
+        """Learn words from others."""
+        for sig in signals:
+            if sig.type == 'SPEECH':
+                symbol = sig.payload['symbol']
+                concept = sig.payload['concept'] # In reality, concept would be inferred. Here we cheat for ground truth.
+                
+                if concept not in self.vocabulary:
+                    self.vocabulary[concept] = symbol
+                    self.lexicon_size += 1
+                    # print(f"👂 {self.name} learned '{symbol}' = {concept}")
+                elif self.vocabulary[concept] != symbol:
+                    # Synonym / Dialect conflict
+                    # Simplest resolution: Overwrite (adopt latest)
+                    self.vocabulary[concept] = symbol
+
+    def act(self, bridge_state=None):
+        """Override act to include speaking."""
+        signals = super().act(bridge_state)
+        if not isinstance(signals, list):
+            signals = [signals] if signals else []
+            
+        # Randomly decide to speak about a concept
+        concepts = ['FOOD', 'DANGER', 'HOME', 'SELF']
+        if random.random() < 0.1:
+            concept = random.choice(concepts)
+            signals.append(self.speak(concept))
+            
+        return signals
+        
+    def sense(self, signals):
+        """Override sense to listen."""
+        super().sense(signals)
+        self.listen(signals)
+
+
+def run_rosetta_stone_experiment():
+    print("🗣️ CYCLE 2553: THE ROSETTA STONE - LINGUISTIC EMERGENCE")
     
-    agents = [Linguist(f"Agent-{i}") for i in range(10)]
-    concepts = ['FOOD', 'DANGER', 'HOME']
+    # Setup Ecosystem
+    env = Ecosystem(capacity=20)
     
-    duration = 500
+    # Seed Linguists
+    print("📚 Seeding The Linguists...")
+    for i in range(10):
+        agent = Linguist(name=f"Speaker-{i}")
+        env.add_agent(agent)
+        
+    # Prepare Output
     results_dir = Path("experiments/results")
     results_dir.mkdir(parents=True, exist_ok=True)
     csv_path = results_dir / "cycle2553_rosetta_stone.csv"
     
+    env.running = True
+    duration = 100
+    
     with open(csv_path, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(["tick", "avg_variance_food", "avg_variance_danger", "avg_variance_home", "success_rate"])
+        writer.writerow(["tick", "total_vocabulary_size", "unique_symbols_for_FOOD"])
         
-        history_success = []
-        
+        print("📝 Running simulation...")
         for tick in range(1, duration + 1):
-            # Pair up
-            speaker = random.choice(agents)
-            listener = random.choice(agents)
-            if speaker == listener: continue
+            env.update()
             
-            # Interaction
-            topic = random.choice(concepts)
-            signal = speaker.speak(topic)
+            # Analyze Vocabulary
+            total_vocab = sum(a.lexicon_size for a in env.agents if isinstance(a, Linguist))
             
-            # Listener guesses
-            guess, dist = listener.hear(signal)
+            # Convergence Check: How many different words for "FOOD"?
+            food_symbols = set()
+            for a in env.agents:
+                if isinstance(a, Linguist) and 'FOOD' in a.vocabulary:
+                    food_symbols.add(a.vocabulary['FOOD'])
             
-            # Feedback Loop (The "Pointing" Mechanism)
-            # In reality, context provides feedback (e.g., Speaker points at Food).
-            # Here we assume they share context "This is Food", and check if signals match.
-            # Actually, the Naming Game assumes: Speaker transmits Word. Listener retrieves Object. If Object matches Context, Success.
+            writer.writerow([tick, total_vocab, len(food_symbols)])
             
-            # Simulation:
-            # Speaker intends 'FOOD'. Sends Freq X.
-            # Listener hears Freq X. Maps to 'DANGER' (closest).
-            # Context reveals it was actually 'FOOD'.
-            # Listener says "Oh, X means FOOD, not DANGER".
-            
-            success = (guess == topic)
-            history_success.append(1 if success else 0)
-            
-            if success:
-                # Both reinforce
-                speaker.learn(topic, signal, 'SUCCESS')
-                listener.learn(topic, signal, 'SUCCESS')
-            else:
-                # Mismatch. 
-                # Listener adjusts 'topic' mapping towards 'signal'
-                # Speaker adjusts 'topic' mapping towards 'signal'? No, speaker generated it.
-                # In Naming Game: Listener adds word, or adjusts weight.
-                
-                # Simplified: Listener realizes "Signal X meant Topic Y".
-                listener.learn(topic, signal, 'SUCCESS')
-                
-            # Metrics
-            vars = []
-            for c in concepts:
-                freqs = [a.lexicon[c] for a in agents]
-                vars.append(np.var(freqs))
-                
-            avg_success = sum(history_success[-50:]) / min(len(history_success), 50)
-            
-            writer.writerow([tick] + [f"{v:.4f}" for v in vars] + [f"{avg_success:.2f}"])
-            
-            if tick % 50 == 0:
-                print(f"   Tick {tick}: Success={avg_success:.2f} Var(FOOD)={vars[0]:.2f}")
-                
-            if avg_success > 0.95 and max(vars) < 0.1:
-                print("✨ PROTOCOL ESTABLISHED.")
-                break
-
+            if tick % 10 == 0:
+                print(f"   Tick {tick}: Total Vocab={total_vocab}, Food Synonyms={len(food_symbols)}")
+                if len(food_symbols) == 1:
+                    print(f"   🏁 CONVERGENCE! The word for FOOD is '{list(food_symbols)[0]}'")
+                    
     print("✅ EXPERIMENT COMPLETE.")
 
 if __name__ == "__main__":
-    run_rosetta_experiment()
+    run_rosetta_stone_experiment()
