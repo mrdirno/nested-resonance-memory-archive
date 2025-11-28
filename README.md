@@ -14,6 +14,10 @@
 We are testing the hypothesis that computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 **Recent Milestones:**
+*   **Cycle 2548 (The Standing Wave):** Agents self-assembled into a perfect circle via resonance, without communication. [Log](experiments/cycle2548_standing_wave.py)
+*   **Cycle 2546 (Feudalism):** Validated stationary taxation model; protection costs exceeded revenue during wolf attacks. [Log](experiments/cycle2546_feudalism.py)
+*   **Cycle 2543 (The Hierarchy):** Leader/Follower dynamics verified; agents maintained relative formation offsets. [Log](experiments/cycle2543_hierarchy.py)
+*   **Cycle 2542 (The Formation):** Active stabilization against entropy verified; energy cost of order quantified. [Log](experiments/cycle2542_formation.py)
 *   **Cycle 2541 (Teleoperation):** Direct Pilot control over swarm formations verified (The Puppet Master). [Log](experiments/cycle2541_puppet_master.py)
 *   **Cycle 2540 (Hebbian Learning):** Agents demonstrated synaptic plasticity, learning to associate stimuli with reward. [Log](experiments/cycle2540_neural_network.py)
 *   **Cycle 2539 (Retributive Justice):** Implemented "Code of Hammurabi" legal system; criminal populations were eliminated. [Log](experiments/cycle2539_code_of_hammurabi.py)
