@@ -89,7 +89,7 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 
 We prioritize empirical verification over theory.
 
-*   **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns.
+*   **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns. [Code](src/helios/solver.py)
 *   **Active Matter Control:** 82x faster settling time via Closed-Loop PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
 *   **Volumetric Trapping:** 9128 stable nodes verified in 3D substrate. [Code](src/helios/substrate_3d.py)
 *   **Emergent Cooperation:** Cooperation emerges at metabolic cost thresholds. [Log](archive/experiments/phase24_social_physics/cycle2077_harsh_winter.py)
