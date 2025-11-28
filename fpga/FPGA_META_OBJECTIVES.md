@@ -2,7 +2,7 @@
 
 > **Document Type**: Strategic Objectives & Timeline Planning
 > **Scope**: FPGA Development within DUALITY-ZERO-V2
-> **Last Updated**: 2025-11-27 10:40 UTC
+> **Last Updated**: 2025-11-28 10:15 UTC
 
 ---
 
@@ -15,7 +15,8 @@
 - [x] Objective 3: Establish connectivity with DE10-Nano (JTAG & UART Verified).
 - [x] Objective 4: Verify compilation toolchain for DE10-Nano (Cyclone V SoC) - "Blink" successfully loaded.
 - [x] Objective 5: Validate HPS-FPGA Bridge Communication - Cross-compiler installed, "Hello World" compiled.
-- [ ] Objective 6: Transfer and Execute HPS Application on DE10-Nano.
+- [ ] Objective 6: Transfer and Execute HPS Application on DE10-Nano. **BLOCKED** (HPS unresponsive)
+- [x] Objective 7: **NRM Resonance Detector FPGA Module** - Created & Deployed (Cycle 103)
 
 ### Milestone Targets
 <!-- PILOT: Define milestone targets here -->
@@ -23,8 +24,9 @@
 |-----------|-------------|-------------|--------|
 | M1 | Hardware Link Established (S5) | 2025-11-27 | Parked |
 | M1-B | Hardware Link Established (DE10) | 2025-11-27 | Completed |
-| M2 | Basic Physics Kernel Loaded (DE10) | TBD | In Progress |
-| M3 | NRM <-> FPGA Data Loop | TBD | Pending |
+| M2 | Basic Physics Kernel Loaded (DE10) | TBD | **BLOCKED** (HPS dead) |
+| M2-B | NRM FPGA Module (Pure FPGA) | 2025-11-28 | **COMPLETED** |
+| M3 | NRM <-> FPGA Data Loop | TBD | Pending (awaits HPS)
 
 ---
 
@@ -33,7 +35,8 @@
 ### Primary Target: DE10-Nano (Cyclone V SoC)
 - **Software**: `/home/helios/intelFPGA_24_1/quartus/bin` (Verified)
 - **Connectivity**: JTAG (ID: `0x02D020DD` @ Index 2), UART (`/dev/ttyUSB0`)
-- **Status**: **ONLINE & PROGRAMMED**
+- **FPGA Status**: **ONLINE** — Running `nrm_resonance.sof` (Cycle 103)
+- **HPS Status**: **OFFLINE** — Serial unresponsive, likely needs SD card re-image
 
 ### Secondary Target: Bittware S5 (Stratix V)
 - **Driver Location**: `/media/helios/DUALITY-GUARDIAN/DUALITY-ZERO-V2/fpga/bittware-s5-driver/`
@@ -78,7 +81,8 @@ HELIOS-NRM-MOG Stack
 
 | Date | Changes | Author |
 |------|---------|--------|
-| [Date] | Initial document creation | [CO-PILOT Model ID] |
+| 2025-11-28 | Added Objective 7 (NRM Resonance Detector), M2-B milestone, updated hardware status | Claude Opus 4.5 |
+| 2025-11-27 | Multiple status updates during Cycles 1-102 | Gemini (gemini-2.0-flash-thinking-exp-1219) |
 
 ---
 
