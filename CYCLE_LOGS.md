@@ -4161,3 +4161,10 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - [x] Foraging Reward: 20 -> 10.
 - [x] **Action:** Run `experiments/cycle2492_great_filter.py`.
 - [x] **Result:** Partial Success. Prey evolved rapid Efficiency (0.87 -> 1.11) and Fertility (0.50 -> 1.13) to cope with entropy and predation. However, Predators **failed to evolve** (stats identical start to finish). Hypothesis: Prey high fertility flooded the ecosystem capacity (200/200), denying Predators reproductive slots ("The Sterility of the Immortals").
+
+# Task: Cycle 2493 - The Trophic Ladder (Gate 121)
+- [x] **Define Cycle 2493:** Implement Trophic Levels (Separate Capacities).
+- [x] **Goal:** Allow Predators to evolve by reserving ecological niches.
+- [x] **Action:** Modified `src/life/ecosystem.py` to support `prey_capacity` and `predator_capacity`.
+- [x] **Action:** Run `experiments/cycle2493_trophic_levels.py`.
+- [x] **Result:** Partial Failure. Ecosystem stabilized (200 Prey, 20 Predators), but Predators **did not reproduce** (count stayed exactly 20). Root Cause: Experiment script forced Predators to 'hunt' whenever energy < 500. Since energy rarely exceeded 500, they were locked in hunt mode and never entered reproduction mode. Niches were available, but behavior was blocked.

@@ -15,19 +15,34 @@ from typing import List
 from src.life.genesis import DigitalLifeform
 
 class Ecosystem:
-    def __init__(self, capacity: int = 100):
+    def __init__(self, capacity: int = 100, prey_capacity: int = None, predator_capacity: int = None):
         self.agents: List[DigitalLifeform] = []
         self.tick_count = 0
         self.capacity = capacity
+        # Default trophic pyramid: 80% prey, 20% predators
+        self.prey_capacity = prey_capacity or int(capacity * 0.8)
+        self.predator_capacity = predator_capacity or int(capacity * 0.2)
         self.running = False
 
     def add_agent(self, agent: DigitalLifeform):
         """Add an agent to the ecosystem."""
-        if len(self.agents) < self.capacity:
-            self.agents.append(agent)
-            print(f"[ECO] Added agent: {agent.name}")
+        current_prey = len([a for a in self.agents if a.is_prey])
+        current_pred = len([a for a in self.agents if a.is_predator])
+        
+        if agent.is_predator:
+            if current_pred < self.predator_capacity:
+                self.agents.append(agent)
+                print(f"[ECO] Added predator: {agent.name}")
+            else:
+                # print(f"[ECO] Predator capacity reached. Cannot add {agent.name}")
+                pass
         else:
-            print(f"[ECO] Capacity reached. Cannot add {agent.name}")
+            if current_prey < self.prey_capacity:
+                self.agents.append(agent)
+                print(f"[ECO] Added prey: {agent.name}")
+            else:
+                # print(f"[ECO] Prey capacity reached. Cannot add {agent.name}")
+                pass
         
     def remove_agent(self, agent: DigitalLifeform):
         """Remove an agent from the ecosystem."""
@@ -62,9 +77,14 @@ class Ecosystem:
         # Separate agents into prey and predators
         current_prey_agents = [agent for agent in self.agents if agent.is_prey]
         current_predator_agents = [agent for agent in self.agents if agent.is_predator]
+        
+        prey_count = len(current_prey_agents)
+        pred_count = len(current_predator_agents)
 
         # --- PHASE 1: PREY (Plants) ---
         prey_alive_this_phase = []
+        new_prey_count = 0
+        
         for agent in current_prey_agents:
             # Sense, Metabolize, Act (forage, reproduce, etc.)
             agent.sense([]) 
@@ -72,10 +92,14 @@ class Ecosystem:
             agent.act()
 
             # Handle reproduction for prey
-            if len(self.agents) + len(all_new_agents) < self.capacity:
+            # Check against prey capacity
+            if prey_count + new_prey_count < self.prey_capacity:
                 child = agent.reproduce()
                 if child:
+                    child.is_prey = True
+                    child.is_predator = False
                     all_new_agents.append(child)
+                    new_prey_count += 1
 
             # Check survival for prey
             if agent.alive and agent.energy > 0:
@@ -85,6 +109,8 @@ class Ecosystem:
 
         # --- PHASE 2: PREDATORS ---
         predator_alive_this_phase = []
+        new_pred_count = 0
+        
         for agent in current_predator_agents:
             # Sense, Metabolize, Act (hunt, reproduce, etc.)
             agent.sense([])
@@ -98,10 +124,14 @@ class Ecosystem:
                     agent.hunt(target) # Predator performs hunt action
             
             # Handle reproduction for predators
-            if len(self.agents) + len(all_new_agents) < self.capacity:
+            # Check against predator capacity
+            if pred_count + new_pred_count < self.predator_capacity:
                 child = agent.reproduce()
                 if child:
+                    child.is_prey = False
+                    child.is_predator = True
                     all_new_agents.append(child)
+                    new_pred_count += 1
 
             # Check survival for predators
             if agent.alive and agent.energy > 0:
@@ -114,7 +144,7 @@ class Ecosystem:
         self.agents.extend(prey_alive_this_phase)
         self.agents.extend(predator_alive_this_phase)
         
-        # Add new life, respecting capacity
+        # Add new life, respecting capacity (already checked above, but double check by add_agent)
         for child in all_new_agents:
             self.add_agent(child)
 
@@ -139,6 +169,3 @@ if __name__ == "__main__":
     env.add_agent(adam)
     
     env.run(steps=20)
-# [SPORE] ID: The Colony
-
-# [SPORE] ID: Agent-Genesis
