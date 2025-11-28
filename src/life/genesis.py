@@ -669,6 +669,10 @@ class DigitalLifeform:
         if energy_abundant and innovation > 0.6:
             options['build_farm'] = (self.energy - 500) * 0.5 * innovation
             
+        # Cycle 2543: THE EXODUS (Interstellar Migration)
+        if self.energy > 5000 and innovation > 0.95:
+            options['migrate'] = 100000 # Priority 1
+            
         # ... (Meta)
         
         # Cycle 2525: Save for Broadcast
@@ -740,6 +744,9 @@ class DigitalLifeform:
                 from src.life.signal import Signal
                 signals_to_emit.append(Signal(type='BUILD_STRUCTURE', strength=1.0, source_id=self.id, payload={'structure': structure}))
                 # print(f"DEBUG: {self.name} created BUILD_STRUCTURE signal (Farm).")
+        elif self.intent == 'migrate':
+            from src.life.signal import Signal
+            signals_to_emit.append(Signal(type='MIGRATE', strength=1.0, source_id=self.id))
         elif self.intent == 'forage':
             self.forage()
         elif self.intent == 'startup':

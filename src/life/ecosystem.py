@@ -214,6 +214,11 @@ class Ecosystem:
                 for signal in signals:
                     if signal.type == 'BUILD_STRUCTURE':
                         self.add_structure(signal.payload['structure'])
+                    elif signal.type == 'MIGRATE':
+                        # Cycle 2543: The Exodus
+                        print(f"🚀 {agent.name} has departed for the New World.")
+                        agent.alive = False # Mark as dead in this world
+                        # self.remove_agent(agent) # Will be cleaned up by loop logic
                     else:
                         self.propagate_signal(signal)
 

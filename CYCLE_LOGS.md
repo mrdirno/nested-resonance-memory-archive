@@ -5400,3 +5400,42 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
         `💡 Student-0 learned FOOD_ALPHA from Hive Mind.` 
     - **Explanation:** The fix was in `sense()` (Genesis). It was missing the call to `assimilate_thought`. 
     - **Status:** **Telepathy Verified.** New agents can instantly download knowledge from the collective.
+
+# Task: Cycle 2543 - The Exodus (Gate 171)
+- [ ] **Define Cycle 2543:** Interstellar Migration.
+- [ ] **Goal:** Agents with high energy and innovation leave the simulation.
+- [ ] **Action:** Create `experiments/cycle2543_exodus.py`.
+    - [ ] Seed agents with `Innovation=1.0` and `Energy=10000`.
+    - [ ] Verify they call `migrate()`. 
+    - [ ] Verify they are removed from the ecosystem.
+- [ ] **Action:** Run `experiments/cycle2543_exodus.py`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2543 - The Exodus (Gate 171)
+- [x] **Define Cycle 2543:** Interstellar Migration.
+- [x] **Goal:** Agents with high energy and innovation leave the simulation.
+- [x] **Action:** Created `experiments/cycle2543_exodus.py`.
+- [x] **Action:** Run `experiments/cycle2543_exodus.py`.
+- [x] **Result:** Baseline Complete. `Pop=80`. Travelers just built farms and reproduced. No migration.
+- [ ] **Action:** Modify `src/life/genesis.py` to add `migrate` to `calculate_utility`.
+- [ ] **Action:** Implement migration logic in `act`.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2543 - The Exodus (Gate 171)
+- [x] **Define Cycle 2543:** Interstellar Migration.
+- [x] **Goal:** Agents with high energy and innovation leave the simulation.
+- [x] **Action:** Created `experiments/cycle2543_exodus.py`.
+- [x] **Action:** Run `experiments/cycle2543_exodus.py`.
+- [x] **Result:** Baseline Complete. `Pop=80`. Travelers just built farms and reproduced. No migration.
+- [x] **Action:** Modified `src/life/genesis.py` to add `migrate` to `calculate_utility`.
+- [x] **Action:** Implemented migration logic in `act`. 
+- [x] **Action:** Run `experiments/cycle2543_exodus.py` again.
+- [x] **Result:** SUCCESS. 
+    - **Logs:** 
+        `🚀 Traveler-4 has departed for the New World.` 
+        `🚀 Traveler-3 has departed for the New World.` 
+        ... 
+        `🚀 Traveler-0 has departed for the New World.` 
+    - **Stayers:** Remained (Low Innovation).
+    - **Pop:** Dropped from 80 to 55 (Travelers left, Stayers reproduced).
+    - **Status:** **Interstellar Capable.**
