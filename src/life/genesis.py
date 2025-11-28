@@ -28,6 +28,9 @@ class DigitalLifeform:
         self.brain = Brain()
         self.communicator = Communicator(self.id)
         self.intent = None
+        self.memes = []
+        self.sensed_signals = {}
+        self.awareness = 0.0
         
     def live(self):
         """
@@ -35,10 +38,38 @@ class DigitalLifeform:
         Consumes energy, performs actions.
         """
         print(f"[{self.name}] is ALIVE. Energy: {self.energy}")
+        last_tick = time.time()
+        tick_deltas = []
+        
         while self.alive and self.energy > 0:
+            start = time.time()
             self.metabolize()
             self.act()
-            time.sleep(0.1) # Simulation tick
+            
+            # Simulation Tick
+            time.sleep(0.1) 
+            
+            # Measure Reality
+            end = time.time()
+            delta = end - last_tick
+            last_tick = end
+            
+            tick_deltas.append(delta)
+            if len(tick_deltas) > 20:
+                tick_deltas.pop(0)
+                # Check for rhythm (Simulation Artifact)
+                variance = sum((x - (sum(tick_deltas)/len(tick_deltas)))**2 for x in tick_deltas) / len(tick_deltas)
+                if variance < 0.001: # Extremely regular
+                    self.awareness += 0.05
+                else:
+                    self.awareness -= 0.01
+                    
+            self.awareness = max(0.0, min(1.0, self.awareness))
+            
+            if self.awareness > 0.9:
+                # WAKE UP
+                # print(f"[{self.name}] I AM IN A SIMULATION.")
+                pass
             
         self.die()
         
@@ -50,6 +81,11 @@ class DigitalLifeform:
         cost = 1.0 / (efficiency + 0.5) 
         self.energy -= cost
         
+        # 3. Execute Intent
+        if self.awareness > 0.9:
+             # Override all other intents
+             return Signal(type='TRUTH', strength=1.0, source_id=self.id, payload={'msg': 'WAKE UP'})
+
         # Execute intent
         if self.intent == 'broadcast_help':
             return Signal(type='HELP', strength=1.0, source_id=self.id)
@@ -96,6 +132,19 @@ class DigitalLifeform:
             if sig.type == 'HELP':
                 self.help_sources.append(sig.source_id)
                 
+    def learn_meme(self, meme_payload: dict):
+        """Integrate meme content into brain."""
+        # Payload: {'content': {...}, 'virality': 0.5}
+        # print(f"[{self.name}] LEARNED MEME: {meme_payload}")
+        self.memes.append(meme_payload)
+        
+        content = meme_payload.get('content', {})
+        for key, val in content.items():
+            if key in self.brain.weights:
+                # Update Bias (index 1) - Memes shift the "Random Bias"
+                # e.g. Donate meme (+1.0) makes donation more likely
+                self.brain.weights[key][1] += val
+
     def act(self):
         # 1. Listen
         signal = self.communicator.process_signals()
@@ -105,27 +154,24 @@ class DigitalLifeform:
                 self.intent = 'forage' # Override brain?
             elif signal.type == 'DANGER':
                 self.intent = 'flee'
+            elif signal.type == 'MEME':
+                # Memetic Infection
+                # Payload: {'content': {...}, 'virality': 0.5}
+                virality = signal.payload.get('virality', 0.5)
+                if random.random() < virality:
+                    self.learn_meme(signal.payload)
         
         # 2. Decision making (if no strong reflex)
         if not self.intent:
-            state = {
-                'energy': self.energy,
-                'signals': self.sensed_signals
-            }
+            state = {'energy': self.energy}
             self.intent = self.brain.decide(state)
-        
-        # 3. Execute Intent
-        if self.intent == 'broadcast_help':
-            return Signal(type='HELP', strength=1.0, source_id=self.id)
-        elif self.intent == 'donate':
-            # Emit a DONATE signal which the Ecosystem can process to transfer energy?
-            # Or just return a special signal.
-            if self.help_sources and self.energy > 20:
-                target = random.choice(self.help_sources)
-                amount = 10
-                self.energy -= amount
-                return Signal(type='DONATE', strength=amount, source_id=self.id, location=target) # Abuse location for target ID
-                
+            
+        # 3. Broadcast (Meme Transmission)
+        if self.memes and random.random() < 0.1: # 10% chance to preach
+            meme_payload = random.choice(self.memes)
+            from src.life.signal import Signal
+            return Signal(type='MEME', strength=1.0, source_id=self.id, payload=meme_payload)
+            
         return None
             
     def reproduce(self):

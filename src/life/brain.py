@@ -14,12 +14,11 @@ import random
 class Brain:
     def __init__(self):
         # Weights for decision making
-        # [Energy_Weight, Signal_HELP_Weight, Random_Bias]
+        # [Energy_Weight, Signal_Weight, Random_Bias]
         self.weights = {
-            'reproduce': [0.8, -0.5, -0.2], # High energy favors reproduction, HELP signals discourage it
-            'broadcast_help': [-0.8, 0.0, 0.1], # Low energy favors calling for help
-            'donate': [0.5, 0.8, -0.5], # High energy AND Help signal favors donation
-            'idle': [0.0, 0.0, 0.5] # Default
+            'reproduce': [0.8, 0.0, -0.2], # High energy, ignores signals
+            'forage': [-0.5, 0.0, 0.5],    # Low energy
+            'donate': [0.5, 1.0, -0.5]     # Needs energy AND 'HELP' signal
         }
         
     def decide(self, state: dict) -> str:
@@ -42,3 +41,21 @@ class Brain:
         # Return action with highest score
         best_action = max(scores, key=scores.get)
         return best_action
+
+    def modify_weights(self, deltas: dict):
+        """
+        Apply cultural learning (memes) to weights.
+        deltas: {'action_name': weight_change}
+        We'll apply the delta to the 'Bias' weight (index 2) for now, 
+        as that represents the agent's intrinsic inclination.
+        """
+        for action, delta in deltas.items():
+            if action in self.weights:
+                # Modify the Bias (last element)
+                # self.weights[action][-1] += delta
+                # Actually, let's modify the Bias index 2.
+                # Ensure we have enough weights
+                while len(self.weights[action]) < 3:
+                    self.weights[action].append(0.0)
+                
+                self.weights[action][2] += delta
