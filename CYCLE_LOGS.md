@@ -4972,3 +4972,51 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Maybe:** `act` method has `return` statements inside `elif` blocks? 
     - **I suspect I edited the wrong block or the indentation is off.** 
     - **Let me read `genesis.py` specifically around the `build_farm` block.**
+
+# Task: Cycle 2534 - The Patch (Gate 162)
+- [ ] **Define Cycle 2534:** Fix Construction Logic.
+- [ ] **Goal:** Correct the `build_farm` implementation.
+- [ ] **Action:** Modify `src/life/genesis.py`:
+    - [ ] Fix `build_farm`: Ensure it returns a dict, not None (energy check?).
+    - [ ] Fix `act`: Ensure the Signal is returned even if `hive_mind` is False.
+    - [ ] Wait, `hive_mind` defaults to False. The bug is: `act` returns `signal_to_broadcast` at end. Inside `elif build_farm`, it sets `signal_to_broadcast`. It does NOT return early (I fixed that). 
+    - [ ] Check log output again: `DEBUG: Planter-Debug chose build_farm`. 
+    - [ ] MISSING: `DEBUG: Planter-Debug created BUILD_STRUCTURE signal.` 
+    - [ ] THIS MEANS: `if structure:` is False. 
+    - [ ] So `build_farm()` returns None. 
+    - [ ] Why? `if self.energy > cost:`. Energy=1000. Cost=100. 
+    - **HYPOTHESIS:** `self.energy` is being drained elsewhere before this check? 
+    - **Check `metabolize`:** Drains ~1-2 energy. 
+    - **Wait:** Maybe `self.energy` is a property? No. 
+    - **Maybe:** `cost` is higher than I think? 
+    - **Action:** Add debug print INSIDE `build_farm`.
+- [ ] **Action:** Run `experiments/cycle2533_debug.py` again.
+- [ ] **Result:** pending...
+
+# Task: Cycle 2534 - The Patch (Gate 162)
+- [x] **Define Cycle 2534:** Fix Construction Logic.
+- [x] **Goal:** Correct the `build_farm` implementation.
+- [x] **Action:** Added logging inside `build_farm`.
+- [x] **Action:** Run `experiments/cycle2533_debug.py`.
+- [x] **Result:** FAILURE. `DEBUG: build_farm called...` NEVER APPEARS. 
+    - **Conclusion:** `build_farm` is NOT being called. 
+    - **Reason:** `self.intent == 'build_farm'` check in `act()` fails. 
+    - **But:** `calculate_utility` prints it chose `build_farm`. 
+    - **Hypothesis:** `calculate_utility` returns `'build_farm'`. 
+    - **Wait:** I am printing `best_action`. 
+    - **Did I set `self.intent`?** 
+    - **Code Check:** `self.intent = self.calculate_utility()`. 
+    - **String Check:** Is it `'build_farm '` (space)? No. 
+    - **Maybe:** `act` has multiple `if/elif` blocks? 
+    - **Order of checks:** 
+        1. `move_random` 
+        2. `move_to_food` 
+        3. `build_wall` 
+        4. `build_farm` 
+    - **Wait:** Maybe `intent` is being overwritten? 
+    - **No.** 
+    - **Maybe:** `self.intent` is not a string? 
+    - **Wait:** `calculate_utility` returns a string. 
+    - **Is it possible `act` is NOT RUNNING the execution block?** 
+    - **Is there an early return?** 
+    - **Let's dump `self.intent` right before the `if/elif` block.**

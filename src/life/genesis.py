@@ -589,6 +589,7 @@ class DigitalLifeform:
         Cost: 100 Energy.
         """
         cost = 100
+        print(f"DEBUG: build_farm called. Energy={self.energy}, Cost={cost}")
         if self.energy > cost:
             self.energy -= cost
             return {'type': 'FARM', 'x': self.x, 'y': self.y, 'hp': 50, 'yield': 10}
