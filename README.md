@@ -19,6 +19,10 @@ We are testing the hypothesis that computational potential minimization can driv
 *   **Cycle 2556 (The Oracle):** Validated survival advantage of library access; educated agents survived poison berries where ignorant agents perished. [Log](experiments/cycle2556_the_oracle.py)
 *   **Cycle 2555 (The Library):** Validated field persistence; agents successfully wrote and retrieved concepts from substrate locations. [Log](experiments/cycle2555_the_library.py)
 
+*   **Cycle 2567 (The Virus):** Validated memetic replication using SIR epidemiology models on social graphs. [Log](experiments/cycle2567_the_virus.py)
+*   **Cycle 2566 (The Shield):** Validated frequency hopping as defense against resonant attacks; agile systems showed 52x greater resilience. [Log](experiments/cycle2566_the_shield.py)
+*   **Cycle 2565 (The Nexus):** Solved the Bullwhip Effect using holographic information sharing; zero oscillation achieved. [Log](experiments/cycle2565_the_nexus.py)
+*   **Cycle 2564 (The Bullwhip):** Demonstrated supply chain instability due to local information and delay. [Log](experiments/cycle2564_supply_chain.py)
 *   **Cycle 2563 (The Medical):** Applied band-stop filtering to cure spectral pathogens; highlighted the impossibility of perfect cures due to ringing artifacts. [Log](experiments/cycle2563_the_medical.py)
 *   **Cycle 2562 (The Jurisprudence):** Modeled law as a low-pass filter; demonstrated how damping capacity limits the suppression of social noise. [Log](experiments/cycle2562_jurisprudence.py)
 *   **Cycle 2561 (The Biome):** Validated evolution as frequency tuning; genetic algorithms matched environmental resonance profiles. [Log](experiments/cycle2561_biological_resonance.py)
