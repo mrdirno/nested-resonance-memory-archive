@@ -11,6 +11,7 @@ Concepts:
 
 import time
 import random
+import json
 from typing import List
 from src.life.genesis import DigitalLifeform
 
@@ -218,7 +219,20 @@ class Ecosystem:
                         # Cycle 2543: The Exodus
                         print(f"🚀 {agent.name} has departed for the New World.")
                         agent.alive = False # Mark as dead in this world
-                        # self.remove_agent(agent) # Will be cleaned up by loop logic
+                        
+                        # Cycle 2544: Persistence
+                        migrant_data = {
+                            'id': agent.id,
+                            'name': agent.name,
+                            'genome': agent.genome,
+                            'brain': agent.brain.weights,
+                            'generation': agent.generation,
+                            'lineage': agent.lineage_id,
+                            'knowledge': agent.knowledge
+                        }
+                        with open("migrants.jsonl", "a") as f:
+                            f.write(json.dumps(migrant_data) + "\n")
+                            
                     else:
                         self.propagate_signal(signal)
 

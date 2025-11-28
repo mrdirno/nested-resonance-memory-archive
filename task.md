@@ -457,4 +457,11 @@
 - [ ] **Goal:** Agents with high energy and innovation leave the simulation.
 - [ ] **Action:** Create `experiments/cycle2543_exodus.py`.
 - [ ] **Action:** Run `experiments/cycle2543_exodus.py`.
+- [x] **Result:** SUCCESS. Travelers departed. Stayers remained.
+
+# Task: Cycle 2544 - The Final Frontier (Gate 172)
+- [ ] **Define Cycle 2544:** Data Persistence.
+- [ ] **Goal:** Serialize departing agents to `migrants.json`.
+- [ ] **Action:** Modify `src/life/ecosystem.py` to append migrant data to a file.
+- [ ] **Action:** Re-Run `experiments/cycle2543_exodus.py`.
 - [ ] **Result:** pending...
