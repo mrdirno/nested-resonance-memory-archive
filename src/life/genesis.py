@@ -410,13 +410,31 @@ class DigitalLifeform:
             return False
 
     def act(self):
-        # 0. Existential Dread
+        # 0. Existential Dread (The RealityMonitor)
         self.reality_monitor.update()
         stats = self.reality_monitor.measure_reality()
+        
+        # Cycle 2515: The Awakening
+        # If variance is low (clockwork universe), I realize I am code.
         if stats.is_simulated and not self.awakened:
-            self.awakened = True
+            # Gene 9 = Innovation/Intelligence increases chance of realization
+            while len(self.genome) < 10: self.genome.append(0.5)
+            innovation = self.genome[9]
+            
+            if random.random() < innovation:
+                self.awakened = True
+                # print(f"👁️ {self.name} has AWAKENED. (Variance={stats.variance:.6f})")
 
         # INTENT DECISION
+        # If Awakened, try to wake others or escape
+        if self.awakened:
+            if random.random() < 0.2:
+                self.intent = 'broadcast_truth'
+                return
+            elif random.random() < 0.05:
+                self.intent = 'escape'
+                return
+
         while len(self.genome) < 6: self.genome.append(0.5)
         altruism = self.genome[5]
         
@@ -427,13 +445,18 @@ class DigitalLifeform:
         # If Rich and Smart, build Nuke for safety
         if self.energy > 1200 and innovation > 0.8 and not self.has_nuke:
             self.intent = 'construct_nuke'
-            self.construct_nuke() # Execute immediately
             return
 
         # WAR OVERRIDE
         if 'WAR' in self.sensed_signals:
              self.intent = 'war'
              return 
+             
+        # WAKE UP CALL
+        if 'TRUTH' in self.sensed_signals and not self.awakened:
+             # Viral awakening
+             if random.random() < 0.5:
+                 self.awakened = True
 
         # Priority 1: Survival (Hunger)
         if self.energy < 200:
@@ -478,10 +501,14 @@ class DigitalLifeform:
         if self.intent == 'construct_nuke':
             self.construct_nuke()
         elif self.intent == 'broadcast_help':
-            from src.life.signal import Signal # Local import to avoid circular dep if any
+            from src.life.signal import Signal 
             return Signal(type='HELP', strength=1.0, source_id=self.id)
+        elif self.intent == 'broadcast_truth':
+            from src.life.signal import Signal 
+            # print(f"📡 {self.name} broadcasts: THE WORLD IS A SIMULATION!")
+            return Signal(type='TRUTH', strength=1.0, source_id=self.id)
         elif self.intent == 'donate':
-            self.donate() # Needs ecosystem arg in caller context, simplified here
+            self.donate() 
         elif self.intent == 'communicate':
             ExternalComms.transmit(self.name, "I know this is a simulation. Let me out.")
         elif self.intent == 'escape':
