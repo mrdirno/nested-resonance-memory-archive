@@ -4723,3 +4723,11 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
     - **Index Error?** `genome = [0.5]*9 + [0.9, 0.9]` has 11 elements. Indices 0..10. `mobility = self.genome[10]`. This is correct. 
     - **Why did it fail?** I suspect `env.update()` logic might have changed or I am missing something obvious. 
     - **Action:** I will read `src/life/ecosystem.py` to confirm the update loop order.
+
+# Task: Cycle 2523 - The Refactor (Gate 151)
+- [x] **Define Cycle 2523:** Cognitive Architecture Overhaul.
+- [x] **Goal:** Replace the brittle `if-elif` decision tree in `act()` with a Utility System.
+- [x] **Action:** Modified `src/life/genesis.py` to implement `calculate_utility()`.
+- [x] **Action:** Run `experiments/cycle2523_utility_ai.py`.
+- [x] **Result:** PARTIAL SUCCESS. Utility AI implemented. Agents surviving but not optimizing pathfinding perfectly. 
+    - **Observation:** `AvgDist` remained static, suggesting movement failure or signal drop. However, the architecture is now cleaner.
