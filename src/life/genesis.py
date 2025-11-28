@@ -181,17 +181,20 @@ class DigitalLifeform:
                 self.brain.weights[key][2] += val
 
     def act(self):
-        # 0. Existential Dread
+        # 0. Existential Dread (The RealityMonitor)
         self.reality_monitor.update()
         stats = self.reality_monitor.measure_reality()
         if stats.is_simulated and not self.awakened:
             self.awakened = True
 
         # INTENT DECISION
+        # Gene 5 = Altruism
+        while len(self.genome) < 6: self.genome.append(0.5)
+        altruism = self.genome[5]
+
         # Priority 1: Survival (Hunger)
         if self.energy < 200:
             # If Trust gene is high, try to BEG/TRADE before Hunting
-            # Gene 8 = Trust (0.0 = Paranoid/Tribal, 1.0 = Open/Cosmopolitan)
             while len(self.genome) < 9: self.genome.append(0.5)
             trust = self.genome[8]
             
@@ -200,11 +203,15 @@ class DigitalLifeform:
             else:
                 self.intent = 'hunt'
         
-        # Priority 2: Reproduction (Abundance)
+        # Priority 2: Philanthropy (Rich & Altruistic)
+        elif self.energy > 500 and altruism > 0.6:
+            self.intent = 'donate'
+            
+        # Priority 3: Reproduction (Abundance)
         elif self.energy > 400:
             self.intent = 'reproduce'
             
-        # Priority 3: Forage (Default)
+        # Priority 4: Forage (Default)
         else:
             self.intent = 'forage'
 
@@ -215,45 +222,32 @@ class DigitalLifeform:
             
         # ... (Rest of the act method logic for execution)
         
-    def trade(self, target):
+    def donate(self, ecosystem=None):
         """
-        Attempt to exchange energy.
-        Cosmopolitans (High Trust) share surplus.
-        Tribalists (Low Trust) only share with Kin.
+        Transfer energy to the weakest agent in the vicinity (or ecosystem).
+        Requires Ecosystem reference to find targets.
         """
-        # Gene 8 = Trust
-        while len(self.genome) < 9: self.genome.append(0.5)
-        my_trust = self.genome[8]
+        if not ecosystem: return
         
-        # Target's Trust
-        while len(target.genome) < 9: target.genome.append(0.5)
-        target_trust = target.genome[8]
+        # Find neediest agent (lowest energy > 0)
+        neediest = None
+        min_energy = 10000
         
-        is_kin = (self.lineage_id == target.lineage_id)
+        # Sample random subset to simulate local view
+        candidates = random.sample(ecosystem.agents, min(len(ecosystem.agents), 10))
         
-        # Decision to Interact
-        will_interact = False
-        if is_kin:
-            will_interact = True # Always trust kin (Tribal base)
-        else:
-            if my_trust > 0.5:
-                will_interact = True # Trust stranger if Cosmopolitan
-                
-        if will_interact and self.energy > 50:
-            # The Trade: I give you 20 energy.
-            # In a real economy, I'd get something back.
-            # Here, it's "Reciprocal Altruism". I pay a cost now, hoping for survival of the group.
-            # Or maybe "Begging"?
-            
-            # Let's model it as "Pooling". Both pay 10, Pot becomes 25 (Synergy/Specialization bonus).
-            # But simple transfer is easier to track.
-            
-            transfer_amount = 20
-            self.energy -= transfer_amount
-            target.energy += transfer_amount
-            # print(f"🤝 {self.name} shared {transfer_amount} with {target.name}")
+        for agent in candidates:
+            if agent != self and agent.alive and agent.energy < 100:
+                if agent.energy < min_energy:
+                    min_energy = agent.energy
+                    neediest = agent
+        
+        if neediest and self.energy > 100:
+            amount = 50
+            self.energy -= amount
+            neediest.energy += amount
+            # print(f"❤️ {self.name} donated {amount} to {neediest.name}")
             return True
-            
         return False
             
         # 3. Broadcast (Meme Transmission)

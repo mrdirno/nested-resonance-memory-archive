@@ -138,6 +138,11 @@
     - [ ] "Rich" agents (high initial energy + income).
     - [ ] "Poor" agents (low initial energy).
     - [ ] Compare survival rates with/without Trade.
-- [x] **Result:** Success. Clan A (Altruistic) outcompeted Clan D (Selfish) (5 vs 3).
-    - **Observation:** Under scarcity (Hunt Reward=2), Clans that shared energy survived better than selfish ones.
-    - **Functional Name:** Kin-Selected Cooperative Survival.
+- [x] **Result:** Success. The Rich survived, Poor died. Trade requires initial capital.
+
+# Task: Cycle 2503 - The Welfare State (Gate 131)
+- [ ] **Define Cycle 2503:** Implement Altruism/Donation.
+- [ ] **Goal:** Achieve Rich/Poor coexistence via redistribution.
+- [ ] **Action:** Modify `src/life/genesis.py` to implement `donate()`.
+- [ ] **Action:** Run `experiments/cycle2503_patronage.py`.
+- [ ] **Result:** pending...
