@@ -216,32 +216,24 @@ class DigitalLifeform:
         return None
             
     def reproduce(self):
-        """
-        Asexual reproduction.
-        Requires energy > 40.
-        Cost: 20 energy.
-        Offspring inherits traits with mutation.
+        # Check intent first
+        if self.intent != 'reproduce':
+            return None
+            
+        # Gene 1 = Reproductive Efficiency (Higher is better)
+        fertility = max(0.01, self.genome[1])
+        cost = 30.0 / (fertility + 0.5)
         
-        MERITOCRATIC FILTER (Cycle 2492):
-        Only agents with Efficiency > 0.7 are allowed to reproduce.
-        """
-        if self.energy > 40:
-            # Meritocratic Check
-            if self.efficiency <= 0.7:
-                return None
-                
-            self.energy -= 20
-            
-            # Offspring
+        if self.energy > cost + 10: # Safety buffer
+            self.energy -= cost
             child = DigitalLifeform(generation=self.generation + 1)
-            child.genome = self.genome.copy()
-            child.mutate()
+            # Mutate
+            child.genome = [g + random.uniform(-0.1, 0.1) for g in self.genome]
+            # Clamp to positive
+            child.genome = [max(0.01, g) for g in child.genome]
+            # Inherit Brain (Memetics?) - For now, new brain
             
-            # Mutate Brain Weights (Dictionary of Lists)
-            child.brain.weights = {}
-            for action, weights in self.brain.weights.items():
-                child.brain.weights[action] = [w + random.uniform(-0.1, 0.1) for w in weights]
-            
+            print(f"[{self.name}] REPRODUCED -> {child.name}")
             return child
         return None
         

@@ -4168,3 +4168,10 @@ CYCLE 2059: MOG continues (Phase 39-40+). Vehicle standby mode. Awaiting Pilot d
 - [x] **Action:** Modified `src/life/ecosystem.py` to support `prey_capacity` and `predator_capacity`.
 - [x] **Action:** Run `experiments/cycle2493_trophic_levels.py`.
 - [x] **Result:** Partial Failure. Ecosystem stabilized (200 Prey, 20 Predators), but Predators **did not reproduce** (count stayed exactly 20). Root Cause: Experiment script forced Predators to 'hunt' whenever energy < 500. Since energy rarely exceeded 500, they were locked in hunt mode and never entered reproduction mode. Niches were available, but behavior was blocked.
+
+# Task: Cycle 2494 - The Awakening of the Hunters (Gate 122)
+- [x] **Define Cycle 2494:** Fix Predator Intent Logic and Trophic Barriers.
+- [x] **Goal:** Enable Predator reproduction.
+- [x] **Action:** Removed `MERITOCRATIC FILTER` from `genesis.py` (which banned inefficient predators). Increased Predator start energy to 250 and kill reward to 100.
+- [x] **Action:** Run `experiments/cycle2494_predator_fix.py` with separate trophic capacities (200 Prey / 50 Predators).
+- [x] **Result:** Success. Predator population expanded to capacity (50). Prey population remained high (197). Prey evolved high efficiency (1.31), but Predators remained static (0.48 efficiency) due to food abundance. Co-existence achieved, but "Lazy Hunter" syndrome observed.
