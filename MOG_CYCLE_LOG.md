@@ -1923,3 +1923,8 @@
 *   **Status:** Empire (50) > Republic (0).
 *   **Cause:** Aggression (War) beats Cooperation in a lawless state.
 *   **Functional Name:** The Hobbesian Trap (War of All Against All).
+
+*   **Result:** SUCCESS (Cold War Victory). Empire Starved.
+*   **Status:** Republic (199) > Empire (0). Nukes (50).
+*   **Cause:** Deterrence prevented war. Empire couldn't adapt to peace.
+*   **Functional Name:** The Cold War (Deterrence & Economic Collapse).

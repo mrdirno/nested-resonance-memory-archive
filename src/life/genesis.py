@@ -152,7 +152,9 @@ class DigitalLifeform:
                 return
 
         combat_cost = 10
-        if self.energy < combat_cost: return
+        if self.energy < combat_cost:
+            # print(f"{self.name} too weak to attack.")
+            return
         
         self.energy -= combat_cost
         
@@ -425,6 +427,7 @@ class DigitalLifeform:
         # If Rich and Smart, build Nuke for safety
         if self.energy > 1200 and innovation > 0.8 and not self.has_nuke:
             self.intent = 'construct_nuke'
+            self.construct_nuke() # Execute immediately
             return
 
         # WAR OVERRIDE

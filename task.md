@@ -235,7 +235,10 @@
 - [ ] **Goal:** Stabilize peace between hostile factions via high-cost weaponry.
 - [ ] **Action:** Modify `src/life/genesis.py` to implement `nuke()` and Deterrence logic.
 - [ ] **Action:** Run `experiments/cycle2513_deterrence.py`.
-- [ ] **Result:** pending...
+- [x] **Result:** SUCCESS (Cold War Victory). `Rep=199`, `Emp=0`, `Nukes=50`.
+    - **Observation:** The Empire was deterred by Republic Nukes. Unable to attack, and unwilling to cooperate, the Empire starved to death.
+    - **Mechanism:** Deterrence paralyzed the aggressor. Economic superiority (Republic) won without firing a shot.
+    - **Functional Name:** The Cold War (Deterrence & Economic Collapse).
     - **Observation:** The Aggressive Empire annihilated the Cooperative Republic.
     - **Mechanism:** In a lawless state, violence trumps cooperation. The Republic had no defense.
     - **Functional Name:** The Hobbesian Trap (War of All Against All).
