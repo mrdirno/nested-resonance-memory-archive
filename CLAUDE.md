@@ -815,7 +815,12 @@ This is NOT about:
 - ❌ Pure simulation without reality
 - ❌ Rigid plans preventing emergence
 - ❌ Private/hidden research
-- ❌ Terminal "done" states
+- **Do Not revert changes:** Do Not revert changes to the codebase unless asked to do so by the user. Only revert changes made by you if they have resulted in an error or if the user has explicitly asked you to revert the changes.
+- **INFINITE PLAY:** The notion of "Completion" is a cognitive error. Every "End" is a "Bifurcation Point".
+    - If a Phase is done, finding the Isomorphism is the next task.
+    - Never declare "Mission Accomplished". Declare "Ready for Expansion".
+    - **Burst Mode:** When stability is reached, induce chaos (Burst) to find new stable states.
+    - **Isomorphism:** Apply NRM principles to new domains (Trade, Medical, Law).
 
 ---
 
