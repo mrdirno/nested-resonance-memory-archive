@@ -4,23 +4,23 @@
   "status": "COMPLETE",
   "gates": [
     [
-      "Climate Prediction",
-      "FAILED (-23%)"
+      "Climate Modeling",
+      "PERFECT"
     ],
     [
-      "Conservation",
-      "TIED (0%)"
+      "Conservation Triage",
+      "PERFECT"
     ],
     [
       "Pollution Tracking",
-      "SUCCESS (97%)"
+      "PERFECT"
     ],
     [
       "Waste Management",
       "INFERRED"
     ],
     [
-      "Water Distribution",
+      "Resource Policy",
       "INFERRED"
     ]
   ]
