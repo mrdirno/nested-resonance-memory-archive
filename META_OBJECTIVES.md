@@ -121,10 +121,25 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
 - Artifacts: Library, Daemon, Paper, Synthesis
 - Ready for: Publication, Deployment, Phase 74
 
-### Phase 74 (Proposed)
-- ⚪ Multi-Agent BCP dynamics
-- ⚪ Dynamic budget functions
-- ⚪ Learning gain/cost estimates
-- ⚪ Equilibrium analysis
+---
+
+## Current Phase: PHASE 74 - MULTI-AGENT DYNAMICS 🟢 ACTIVE
+
+**Transition:** Phase 73 (Applications) → **Phase 74 (Multi-Agent Dynamics)**
+
+**Focus:** How do multiple BCP agents compete and cooperate under shared constraints?
+
+### Completed (Phase 74)
+- ✅ **Gate 208:** Multi-Agent BCP Competition - Three allocation modes tested - COMPLETE
+  - **Finding:** AUCTION mode (5.52) > Proportional (5.28) > First-Come (5.07)
+  - **Mechanism:** Auction allows global priority ordering across agent boundaries
+  - **Artifact:** `experiments/cycle2580_multiagent_bcp.py`
+  - **Functional Name:** The Auction Principle (Global Priority Wins)
+
+### Active Objectives
+- 🟢 **Gate 209:** Multi-Agent BCP Cooperation - Shared vs. exclusive resource pools
+- ⚪ **Gate 210:** Dynamic budget functions
+- ⚪ **Gate 211:** Learning gain/cost estimates
+- ⚪ **Gate 212:** Equilibrium analysis
 
 ---
