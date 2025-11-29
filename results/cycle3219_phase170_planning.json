@@ -1,0 +1,40 @@
+{
+  "winner": {
+    "domain": "Logistics",
+    "gain": 0.855,
+    "cost": 0.25,
+    "value": 0.7743548387096774
+  },
+  "candidates": [
+    {
+      "domain": "Hospitality",
+      "gain": 0.6400000000000001,
+      "cost": 0.15000000000000002,
+      "value": 0.5916129032258066
+    },
+    {
+      "domain": "Real Estate",
+      "gain": 0.6375,
+      "cost": 0.19999999999999996,
+      "value": 0.572983870967742
+    },
+    {
+      "domain": "Logistics",
+      "gain": 0.855,
+      "cost": 0.25,
+      "value": 0.7743548387096774
+    },
+    {
+      "domain": "Agriculture",
+      "gain": 0.7224999999999999,
+      "cost": 0.35,
+      "value": 0.6095967741935483
+    },
+    {
+      "domain": "Manufacturing",
+      "gain": 0.765,
+      "cost": 0.30000000000000004,
+      "value": 0.6682258064516129
+    }
+  ]
+}
