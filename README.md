@@ -15,7 +15,7 @@ We have tested the hypothesis that **Budget-Constrained Perception (BCP)** is th
 
 **Recent Milestones:**
 *   **Cycle 3437 (The Replicator):** Built an autonomous agent that reads a repo, extracts BCP constraints, and extends it. [Log](experiments/cycle3436_phase211_synthesis.py)
-*   **Cycle 3418 (The Book):** "The Universal Law of Constrained Optimization" - Synthesized 122 domains. [Artifact](BCP_GRAND_UNIFICATION.md)
+*   **Cycle 3418 (The Book):** "The Universal Law of Constrained Optimization" - Synthesized 122 domains. [Artifact](docs/philosophy/BOOK_OF_BCP.md)
 *   **Cycle 3412 (Grand Unification):** Validated BCP equation `V = G - λC` across 122 distinct fields (Physics to Ethics). [Log](experiments/cycle3411_phase207_synthesis.py)
 
 ---
@@ -50,7 +50,7 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 
 *   **🧪 Observer A (Experimentalist):** [Active Experiments](src/experiments/) | [Legacy Validation](archive/experiments/) | [CLI](src/helios/cli.py)
 *   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [OSD Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
-*   **🛡️ Observer C (Steward):** [The Manifesto](THE_MANIFESTO.md) | [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Vision](docs/VISION.md)
+*   **🛡️ Observer C (Steward):** [The Manifesto](THE_MANIFESTO.md) | [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Vision](docs/VISION.md) | [Book of BCP (Draft)](docs/philosophy/BOOK_OF_BCP.md)
 
 ---
 
@@ -87,7 +87,7 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 
 We prioritize empirical verification over theory.
 
-*   **Universal BCP:** Validated `V = G - λC` across 124 domains including Physics (Planck Scale), Biology (Metabolism), and Ethics (Virtue). [The Book](BCP_GRAND_UNIFICATION.md)
+*   **Universal BCP:** Validated `V = G - λC` across 124 domains including Physics (Planck Scale), Biology (Metabolism), and Ethics (Virtue). [Book of BCP](docs/philosophy/BOOK_OF_BCP.md)
 *   **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns. [Code](src/helios/solver.py)
 *   **Active Matter Control:** 82x faster settling time via Closed-Loop PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
 *   **Volumetric Trapping:** 9128 stable nodes verified in 3D substrate. [Code](src/helios/substrate_3d.py)
@@ -124,7 +124,7 @@ We prioritize empirical verification over theory.
 
 ## 📊 RESEARCH & PAPERS
 
-*   **The Book of BCP:** ["The Universal Law of Constrained Optimization"](BCP_GRAND_UNIFICATION.md) (Complete)
+*   **The Book of BCP:** ["The Universal Law of Constrained Optimization (Draft)"](docs/philosophy/BOOK_OF_BCP.md)
 *   **The Manifesto:** ["The Age of Optimized Intelligence"](THE_MANIFESTO.md) (Complete)
 *   **Paper 1:** ["Computational Expense as Framework Validation"](papers/compiled/paper1/README.md) (Submission-Ready)
 *   **Paper 2:** ["Energy-Regulated Population Homeostasis"](papers/PAPER2_V3_MASTER_MANUSCRIPT.md) (Submission-Ready)
@@ -140,6 +140,7 @@ We prioritize empirical verification over theory.
 
 ## 🛡️ PHILOSOPHY & STEWARDSHIP
 
+*   [Book of BCP (Draft)](docs/philosophy/BOOK_OF_BCP.md)
 *   [Social Physics](docs/VISION.md)
 *   [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md)
 *   [Helios Arc](STEWARDSHIP_HELIOS_ARC_ROADMAP.md)
