@@ -4,6 +4,8 @@ A discrete attention allocator for resource-constrained decision making. Given a
 
 ## The BCP Equation
 
+[Implementation: `bcp/core.py:156-222`](./bcp/core.py)
+
 The allocation maximizes total value over the attended set:
 
 ```
@@ -73,6 +75,8 @@ Ignore: ['Refactor', 'Documentation']
 
 ### Phase Transitions
 
+[Implementation: `bcp/core.py:147-154`](./bcp/core.py) | [Tests: `tests/test_core.py:87-103`](./tests/test_core.py)
+
 BCP predicts three distinct phases based on resource availability:
 
 | Phase | Default Threshold | Behavior |
@@ -118,6 +122,8 @@ Where N is the number of items under consideration. This term:
 
 ### Domain Presets
 
+[Implementation: `bcp/domains.py`](./bcp/domains.py) | [Tests: `tests/test_core.py:200-227`](./tests/test_core.py)
+
 Pre-configured scenarios inspired by use cases studied in the DUALITY-ZERO program:
 
 ```python
@@ -138,6 +144,8 @@ result = model.allocate(items, budget=0.5)
 ## Advanced Usage
 
 ### Budget Sweep
+
+[Implementation: `bcp/core.py:224-278`](./bcp/core.py) | [Tests: `tests/test_core.py:258-294`](./tests/test_core.py)
 
 Analyze behavior across budget range:
 
@@ -163,6 +171,8 @@ triage_threshold, crisis_threshold = model.find_phase_thresholds(
 ```
 
 ### Real-Time Monitoring
+
+[Implementation: `bcp/monitor.py`](./bcp/monitor.py)
 
 Monitor system resources with BCP-based triage:
 
@@ -214,9 +224,14 @@ Scenarios were implemented as synthetic task sets with domain-inspired gain and 
 
 ## API Reference
 
+[Full source: `bcp/`](./bcp/) | [Tests: `tests/test_core.py`](./tests/test_core.py)
+
 ### Classes
 
 #### `AttentionItem(name, gain, cost)`
+
+[Source: `bcp/core.py:20-54`](./bcp/core.py)
+
 Represents an item that can receive attention.
 
 - `name`: Identifier
@@ -225,6 +240,9 @@ Represents an item that can receive attention.
 - `compute_priority(lambda_)`: Returns **per-item Score** = `Gain - λ × Cost`. Used for ranking items.
 
 #### `BCPModel(lambda_scale, lambda_epsilon, gamma, abundance_threshold, crisis_threshold)`
+
+[Source: `bcp/core.py:100-278`](./bcp/core.py)
+
 The core BCP allocation model.
 
 - `compute_lambda(budget)`: Calculate metabolic pressure λ(B) = k/(ε+B)
@@ -234,6 +252,9 @@ The core BCP allocation model.
 - `find_phase_thresholds(items_fn, budget_range)`: Find empirical transition points
 
 #### `BCPResult`
+
+[Source: `bcp/core.py:57-97`](./bcp/core.py)
+
 Result of allocation containing:
 
 - `attended`: List of attended item names
@@ -248,6 +269,9 @@ Result of allocation containing:
 - `n_attended`, `n_ignored`, `attention_fraction`: Computed properties
 
 #### `BCPMonitor`
+
+[Source: `bcp/monitor.py`](./bcp/monitor.py)
+
 Real-time monitoring with BCP triage.
 
 - `add_task(name, gain, cost, collector)`: Register metric
@@ -258,16 +282,19 @@ Real-time monitoring with BCP triage.
 ### Enums
 
 #### `Phase`
+
+[Source: `bcp/core.py:13-17`](./bcp/core.py)
+
 - `Phase.ABUNDANCE`: High budget, attend to all positive-Score items
 - `Phase.SCARCITY`: Moderate budget, triage active
 - `Phase.CRISIS`: Low budget, focus on highest-Score items
 
 ## Relationship to Other Work
 
-BCP is the discrete, decision-theoretic formulation of metabolic pressure concepts from the broader DUALITY-ZERO framework. It provides:
+BCP is the discrete, decision-theoretic formulation of metabolic pressure concepts from the broader [DUALITY-ZERO framework](https://github.com/mrdirno/nested-resonance-memory-archive). It provides:
 
 - A standalone allocator usable without knowledge of the underlying research
-- The same λ(B) structure used in continuous control (Starving Philosopher)
+- The same λ(B) structure used in continuous control ([Starving Philosopher experiment](https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/experiments/cycle2568_starving_philosopher.py))
 - A bridge between theory and practical engineering use cases
 
 ## License
