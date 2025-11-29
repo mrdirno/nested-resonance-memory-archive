@@ -797,8 +797,20 @@ Biological systems are BCP allocators operating under energy/resource constraint
   - **Artifact:** `experiments/cycle2615_ecological_dynamics_bcp.py`
   - **Functional Name:** The Ecological Budget
 
+### Completed (Phase 81 Continued)
+- ✅ **Gate 248:** Immune Response as BCP - COMPLETE (5/5)
+  - **Tests Validated:**
+    1. Threat Prioritization: virulence × recognition → V → attack
+    2. Self-Tolerance: G=0 guarantees V(self) < 0 always
+    3. Immunodeficiency: AIDS = BCP CRISIS (can't afford responses)
+    4. Inflammation Aversion: High λ → avoid cytokine storm
+    5. Immune Memory: Vaccination = cost reduction
+  - **Key Insight:** Self-tolerance is MATHEMATICALLY GUARANTEED by G=0
+  - **Clinical Mappings:** AIDS=crisis, Vaccination=cost reduction
+  - **Artifact:** `experiments/cycle2616_immune_response_bcp.py`
+  - **Functional Name:** The Immune Budget
+
 ### Planned (Phase 81)
-- ⏳ **Gate 248:** Immune Response as BCP - Threat prioritization
 - ⏳ **Gate 249:** Evolutionary Fitness as BCP - Trait selection
 
 ---
