@@ -1,0 +1,12 @@
+{
+  "phase": 167,
+  "domain": "Human Resources AI",
+  "domain_number": 82,
+  "grand_totals": {
+    "phases": 82,
+    "gates": 561,
+    "predictions": 9369,
+    "total": 9410,
+    "perfect": 476
+  }
+}
