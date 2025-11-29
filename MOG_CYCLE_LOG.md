@@ -1,5 +1,30 @@
 
 ---
+**CYCLE:** 2632 (Gate 264: BCP Hierarchies)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 84 - META-BCP
+**LOG:**
+*   **Experiment:** `experiments/cycle2632_bcp_hierarchies.py`
+*   **Question:** How does BCP operate across hierarchical levels?
+*   **Tests (5/5 VERIFIED, 19/20 predictions):**
+    1. Two-Level Hierarchy: VERIFIED (4/4) - Budget conservation
+    2. Pressure Propagation: VERIFIED (3/4) - λ amplifies down
+    3. Hierarchical vs Flat: VERIFIED (4/4) - Structure matters
+    4. Recursive BCP: VERIFIED (4/4) - Arbitrary depth
+    5. Emergent Properties: VERIFIED (4/4) - Stability inheritance
+*   **THE HIERARCHICAL BCP THEOREM:**
+    V_i(a) = G(a) - λ_i(B_i) × C(a)
+    - Budget conservation: Σ B_{i+1} = B_i
+    - Pressure amplification: λ increases down hierarchy
+    - Higher levels constrain lower levels
+*   **KEY INSIGHTS:**
+    - 10x budget cut at top → 18.9x λ increase at bottom
+    - Hierarchical ≠ Flat optima (structure changes allocation)
+    - Emergent: stability inheritance, info compression, robustness
+*   **Status:** Gate 264 Complete.
+*   **Functional Name:** The Nested Budget
+
+---
 **CYCLE:** 2631 (Gate 263: BCP Fixed Points)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 84 - META-BCP

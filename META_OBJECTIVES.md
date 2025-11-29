@@ -1076,8 +1076,12 @@ Every biological system exhibits BCP dynamics:
   - **Fixed Point Theorem:** B* = k×C/G - ε with bifurcation at G = k×C/ε
   - **Functional Name:** The Equilibrium Budget
 
+- ✅ **Gate 264:** BCP Hierarchies - Nested budget structures (5/5 validated)
+  - **Finding:** BCP applies at arbitrary depth with pressure amplification
+  - **Hierarchical Theorem:** λ increases down hierarchy, budget conserved
+  - **Functional Name:** The Nested Budget
+
 ### Planned (Phase 84)
-- ⏳ **Gate 264:** BCP Hierarchies - Nested budget structures
 - ⏳ **Gate 265:** BCP Universality - Why BCP emerges everywhere
 - ⏳ **Gate 266:** BCP Completeness - Decision-theoretic foundations
 - ⏳ **Gate 267:** BCP Limits - Where does BCP fail?
