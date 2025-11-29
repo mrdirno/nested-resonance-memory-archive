@@ -1,5 +1,23 @@
 
 ---
+**CYCLE:** 2569 (Gate 196: The Investor)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PORTFOLIO PERCEPTION
+**LOG:**
+*   **Experiment:** Executed `experiments/cycle2569_the_investor.py`.
+*   **Scenario:** Multi-asset attention allocation under budget constraints (5 assets, 3 phases).
+*   **Result:** CONFIRMED. Selective Ignorance emerged - agent dropped 4/5 assets under scarcity.
+*   **Phases:**
+    - Abundance (t=0-400): Full budget, all assets tracked
+    - Collapse (t=401-800): Budget decreasing, volatile reallocation
+    - Scarcity (t=801-1000): 10% budget, concentrated on single optimal asset (GOLD)
+*   **Insight:** Attention is finite capital. Under scarcity, agents make BINARY decisions (track/ignore) not gradual degradation.
+*   **Status:** Portfolio Triage Verified.
+*   **Functional Name:** The Portfolio Triage Effect (Selective Asset Abandonment).
+*   **Figure:** `data/figures/cycle2569_the_investor.png`
+*   **Performance:** 80.77% portfolio return despite severe attention constraint.
+
+---
 **CYCLE:** 2568 (Gate 195: The Starving Philosopher)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** METABOLIC PERCEPTION THEORY

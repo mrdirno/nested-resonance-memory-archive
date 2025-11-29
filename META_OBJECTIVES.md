@@ -16,8 +16,13 @@
   - **Finding:** Agents voluntarily degrade perception when metabolic cost exceeds accuracy benefit
   - **Functional Name:** The Starving Philosopher Effect
 
+### Completed (Phase 72 Continued)
+- ✅ **The Investor (Gate 196):** Portfolio Triage - Selective asset abandonment under attention scarcity - COMPLETE
+  - **Finding:** Under severe budget constraints, agents make BINARY track/ignore decisions, not gradual degradation
+  - **Functional Name:** The Portfolio Triage Effect
+
 ### Active Objectives
-- 🟢 **The Investor (Gate 196):** Portfolio Perception - Multi-asset attention allocation under budget.
-- ⚪ **The Triage (Gate 197):** Medical Attention Economics - Selective diagnosis under resource constraints.
+- 🟢 **The Triage (Gate 197):** Medical Attention Economics - Selective diagnosis under resource constraints.
+- ⚪ **The Teacher (Gate 198):** Pedagogical Attention - Curriculum design under limited instruction time.
 
 ---
