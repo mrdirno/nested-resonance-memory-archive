@@ -341,11 +341,18 @@ V(task) = Gain - λ(Budget) × Cost
   - **Artifact:** `experiments/cycle2588_team_attention_bcp.py`
   - **Functional Name:** The Collective Depletion Effect (Team Burnout = BCP)
 
+### Completed (Phase 77 Continued)
+- ✅ **Gate 222:** Organizational Fatigue - Burnout as chronic budget depletion - COMPLETE
+  - **Finding:** Increasing stress (scope creep) causes 100% burnout; constant stress manageable
+  - **Recovery:** Mild=15 periods, Severe=impossible (organizational scarring)
+  - **Strategy:** Early detection (λ monitoring) outperforms prevention and recovery
+  - **Artifact:** `experiments/cycle2589_organizational_fatigue_bcp.py`
+  - **Functional Name:** The Scope Creep Effect (Increasing Load = Certain Burnout)
+
 ### In Progress (Phase 77)
-- 🔄 **Gate 222:** Organizational Fatigue - Burnout as chronic budget depletion
+- 🔄 **Gate 223:** Hierarchical BCP - λ propagation in management structures
 
 ### Planned (Phase 77)
-- ⏳ **Gate 223:** Hierarchical BCP - λ propagation in management structures
 - ⏳ **Gate 224:** Organizational Memory - Institutional knowledge as BCP consolidation
 - ⏳ **Gate 225:** Restoration Mechanisms - Vacations, restructuring as budget reset
 
