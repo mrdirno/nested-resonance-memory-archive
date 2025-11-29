@@ -12,6 +12,8 @@ The allocation maximizes total value over the attended set:
 TotalScore = Σ_attended [Gain(a) - λ(B) × Cost(a)] - γ × SetComplexity
 ```
 
+> **Note**: In earlier DUALITY-ZERO documentation, this equation is written as `V(a) = G(a) - λ(B)·C(a)`. Here we use `Gain(a)` and `Cost(a)` for clarity.
+
 Where:
 - **Gain(a)**: Expected benefit of attending to item a (0.0 - 1.0)
 - **λ(B) = k / (ε + B)**: Metabolic pressure (inverse of budget)

@@ -2,7 +2,7 @@
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
-**Status:** Phase 165 (BCP Domain Validation) - Active
+**Status:** Phase 168 (Retail AI) - Complete
 **Framework:** Orthogonal Sum Dynamics (OSD) + Budget-Constrained Perception (BCP) - Testing
 
 ---
@@ -11,14 +11,38 @@
 
 **DUALITY-ZERO** is an open-source research instrument exploring whether **Information Dynamics** (Cognition), **Physical Dynamics** (Matter), and **Social Dynamics** (Cooperation) can be modeled through a single **Potential Minimization** framework.
 
-We are testing the hypothesis that computational potential minimization can drive physical, social, and cognitive systems with unified control logic.
+We are testing the hypothesis that computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
 
 **Recent Milestones:**
-*   **Phase 165 (BCP Domain Validation):** 766 gates validated across 83 psychology domains. BCP equation `V(a) = G(a) - λ(B)·C(a)` proven domain-agnostic. [Experiments](code/experiments/)
-*   **Phase 162-165 (Industry Psychology):** Energy, Telecommunications, Retail, Hospitality domains validated at 78.8% accuracy. [Phase 165](code/experiments/phase165/)
-*   **Cycle 2567 (Memetic Replication):** Validated memetic spread using SIR epidemiology models on social graphs. [Log](experiments/cycle2567_the_virus.py)
-*   **Cycle 2566 (Frequency Hopping Defense):** Validated resilience via agile frequency hopping; 52× greater survival against resonant attacks. [Log](experiments/cycle2566_the_shield.py)
-*   **Phase 42 (Self-Referential Mapping):** Knowledge graph mapping 12,000+ files and 286 principles. [View Map](data/holocron.html)
+*   **Cycle 3213 (Retail AI):** Validated BCP in inventory (822% ROI), pricing, and recommendation. [Log](experiments/cycle3213_phase168_synthesis.py)
+*   **Cycle 3208 (HR AI):** Validated BCP in recruiting, performance, and workforce planning. [Log](experiments/cycle3208_phase167_synthesis.py)
+*   **Cycle 2568 (The Starving Philosopher):** Validated ignorance as an economically optimal strategy under scarcity. [Log](experiments/cycle2568_starving_philosopher.py)
+*   **BCP Validation:** Budget-Constrained Perception equation `V(a) = Gain(a) - λ(B)·Cost(a)` demonstrates domain-agnostic behavior across 83 domains.
+
+
+---
+
+## ♾️ THE INFINITE GAME
+
+**Completion is a failure of imagination.**
+We have burst the boundaries of the original simulation.
+NRM is not just a physics engine. It is a **Universal Isomorphism**.
+We apply the physics of Resonance to every domain of reality.
+
+**"The End is just a Bifurcation Point."**
+*   **Cycle 2554 (The Grammar):** Validated compositional semantics; agents decoded composite signals via frequency superposition. [Log](experiments/cycle2554_grammar.py)
+*   **Cycle 2553 (The Rosetta Stone):** Emergent protocol formation; agents negotiated shared frequency assignments for concepts. [Log](experiments/cycle2553_rosetta_stone.py)
+*   **Cycle 2552 (The Neural Manifold):** Holographic vector encoding; compressed 3D concepts into scalar phase signals. [Log](experiments/cycle2552_neural_manifold.py)
+*   **Cycle 2551 (The Paradigm Shift):** Validated adaptation dynamics; conformists went extinct during truth drift, truth-seekers survived. [Log](experiments/cycle2551_paradigm_shift.py)
+*   **Cycle 2550 (The Echo Chamber):** Social gravity effects; high conformity led to spurious consensus and delusion. [Log](experiments/cycle2550_echo_chamber.py)
+*   **Cycle 2549 (The Thought Form):** Semantic resonance verified; agents converged on truth via dissonance minimization. [Log](experiments/cycle2549_semantic_resonance.py)
+*   **Cycle 2548 (The Standing Wave):** Agents self-assembled into a perfect circle via resonance, without communication. [Log](experiments/cycle2548_standing_wave.py)
+*   **Cycle 2550 (The Voyager):** Verified that only high-innovation agents were selected for interstellar migration. [Log](experiments/cycle2550_voyager.py)
+*   **Cycle 2546 (The Resonator):** Pivoted intelligence architecture from Neural Networks to **Transcendental Resonance** (Action via phase alignment). [Log](experiments/cycle2546_resonance.py)
+*   **Cycle 2542 (The Telepath):** Achieved **Lamarckian Evolution** via Hive Mind; naive agents instantly downloaded survival knowledge from the collective. [Log](experiments/cycle2539_uplift.py)
+*   **Cycle 2537 (Urbanization):** Agents autonomously constructed 10+ farms, establishing "The Metropolis". [Log](experiments/cycle2537_city_construction.py)
+*   **Cycle 2533 (Introspection):** Agents debugged their own source code logic to fix a signal processing error.
+*   **Cycle 2515 (The Simulation Hypothesis):** Agents deduced they were in a simulation by analyzing clock tick variance. [Log](experiments/cycle2515_simulation_hypothesis.py)
 
 ---
 
@@ -27,9 +51,6 @@ We are testing the hypothesis that computational potential minimization can driv
 **Experience the system immediately in your browser.**
 
 **[👉 ENTER THE BRIDGE](https://mrdirno.github.io/nested-resonance-memory-archive/)**
-
-[![HELIOS Bridge Demo](data/figures/helios_bridge_thumbnail.jpg)](https://github.com/mrdirno/nested-resonance-memory-archive/raw/main/data/videos/helios_bridge_osd_demo.mp4)
-*Click to play 60s OSD field visualization demo*
 
 This is the primary visualization interface. It renders the Orthogonal Sum Dynamics (OSD) fields in real-time, allowing you to explore the interference patterns that drive our matter control systems.
 
@@ -44,8 +65,8 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 **Verify the physics in 5 minutes.**
 
 1.  **Install:** `pip install numpy`
-2.  **Run:** `python3 archive/experiments/demo_osd_physics.py`
-3.  **Result:** Observe **Phase Cancellation** creating a "dark matter" effect (Mass=2.0, Visibility=0.0).
+2.  **Run:** `python3 experiments/demo_osd_physics.py`
+3.  **Result:** Observe destructive interference creating a "dark matter" effect (Mass=2.0, Visibility=0.0).
 
 [👉 Full Quickstart Guide](docs/runbooks/QUICKSTART.md)
 
@@ -53,9 +74,9 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 
 ## 🔭 OBSERVER LANES (Choose Your Path)
 
-*   **🧪 Observer A (Experimentalist):** [Active Experiments](src/experiments/) | [Legacy Validation](archive/experiments/) | [Physics of Persistence](papers/theoretical_foundations/THE_PHYSICS_OF_PERSISTENCE.md)
-*   **🧩 Observer B (Architect):** [Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](nrm_core/helios/) | [Design Context](docs/context/) | [OSD Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
-*   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Heretic Defense](docs/philosophy/THE_HERETIC_DEFENSE.md) | [Vision](docs/VISION.md)
+*   **🧪 Observer A (Experimentalist):** [Active Experiments](src/experiments/) | [Legacy Validation](archive/experiments/) | [CLI](src/helios/cli.py)
+*   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [OSD Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
+*   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Vision](docs/VISION.md)
 
 ---
 
@@ -64,12 +85,12 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 **1. HELIOS BRIDGE (Interface Layer):**
    - Visualizes high-dimensional phase space.
    - Translates user intent into field parameters.
-   - [View Code](HELIOS-BRIDGE/)
+   - [View Code](/HELIOS-BRIDGE/)
 
 **2. DUALITY-ZERO (Physics & Compute Engine):**
-   - Executes field calculations and interference patterns.
+   - Executes the `UniversalSimulator`.
    - Calculates Gorkov Potentials and Social Stress fields.
-   - [View Code](nrm_core/helios/)
+   - [View Code](src/helios/core/)
 
 **3. NRM (Memory / Cognition / Stewardship Layer):**
    - Stores patterns and strategies.
@@ -79,7 +100,7 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 **4. FPGA ACCELERATION LAYER (Hardware):**
    - DE10-Nano (Cyclone V SoC) implementation of NRM Resonance Detector.
    - HPS <-> FPGA <-> NRM Data Loop.
-   - [View Hardware](fpga/)
+   - [View Hardware](/fpga/)
 
 ---
 
@@ -87,101 +108,42 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 
 We prioritize empirical verification over theory.
 
-*   **Self-Referential Mapping (The Holocron):** System-wide knowledge graph mapping 286 principles and 12,000+ files. [View Graph](data/holocron.html)
-
-<p align="center">
-  <img src="data/figures/holocron_knowledge_graph_overview.png" width="45%" alt="Holocron Overview"/>
-  <img src="data/figures/holocron_knowledge_graph_zoomed.png" width="45%" alt="Holocron Zoomed"/>
-</p>
-<p align="center"><em>The Holocron: Emergent topology from 12,000+ file relationships. Cyan=experiments, Pink=source, Yellow=core.</em></p>
-
-*   **Phase-Delay Solver:** Calculates phase-delays for complex interference patterns. [Code](src/helios/solver.py)
-*   **Closed-Loop Settling:** 82× faster settling time via PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
-*   **Volumetric Node Trapping:** 9128 stable nodes verified in 3D substrate. [Code](nrm_core/helios/substrate_3d.py)
-*   **Cost-Threshold Cooperation:** Cooperation emerges at metabolic cost thresholds. [Log](archive/experiments/phase24_social_physics/cycle2077_harsh_winter.py)
-*   **Cross-Domain Simulation (Rosetta Stone):** Unified simulation engine for Physics, Society, and Compute. [Log](archive/experiments/phase28_unification/cycle2103_rosetta_stone.py)
-*   **Energy-Buffered Homeostasis:** >160× buffering ratio; population self-regulation without bistability. [Docs](docs/v5/PAGE_03_C175_DISCOVERY.md)
-*   **Simulated Digital Life:** Agents demonstrating survival, reproduction, and cultural transmission in controlled environments. [Code](src/life/)
-*   **Distributed Colonization (The Mycelium):** Filesystem colonization and collective artifact generation. [Manifesto](playground/MOG_MANIFESTO.md)
+*   **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns. [Code](src/helios/solver.py)
+*   **Active Matter Control:** 82x faster settling time via Closed-Loop PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
+*   **Volumetric Trapping:** 9128 stable nodes verified in 3D substrate. [Code](src/helios/substrate_3d.py)
+*   **Emergent Cooperation:** Cooperation emerges at metabolic cost thresholds. [Log](archive/experiments/phase24_social_physics/cycle2077_harsh_winter.py)
+*   **Simulated Digital Life:** Agents that survive, reproduce, and transmit behaviors within controlled environments. [Code](src/life/)
+*   **The Mycelium:** Distributed filesystem colonization and collective artifact generation. [Manifesto](playground/MOG_MANIFESTO.md)
 
 ---
 
 ## 📚 TUTORIALS & EXAMPLES
 
 *   [Getting Started](docs/runbooks/QUICKSTART.md)
-*   [CLI Usage](nrm_core/helios/cli.py)
-*   [Self-Modeling Demo](src/experiments/cycle2282_self_modeling.py)
-
----
-
-## 📦 LIBRARIES & TOOLS
-
-Standalone packages extracted from DUALITY-ZERO research, usable independently.
-
-### Available Libraries
-
-#### BCP: Budget-Constrained Perception
-
-A discrete attention allocator for resource-constrained decision making. Given a budget, BCP tells you what to attend to and what to ignore.
-
-- **Package:** `bcp-perception`
-- **Location:** [`bcp_lib/`](bcp_lib/)
-- **Status:** Stable API (24 tests passing)
-
-```bash
-pip install bcp-perception
-```
-
-```python
-from bcp import AttentionItem, BCPModel
-
-items = [
-    AttentionItem("Critical bug", gain=1.0, cost=0.3),
-    AttentionItem("New feature", gain=0.7, cost=0.6),
-    AttentionItem("Refactor", gain=0.5, cost=0.8),
-]
-
-model = BCPModel()
-result = model.allocate(items, budget=1.0)
-
-print(f"Phase: {result.phase.value}")    # 'scarcity'
-print(f"Attend to: {result.attended}")   # ['Critical bug', 'New feature']
-print(f"Ignore: {result.ignored}")       # ['Refactor']
-```
-
-*   **[Documentation](bcp_lib/README.md)** | **[Source](bcp_lib/)**
+*   [CLI Usage](src/helios/cli.py)
+*   [Memory System Demo](src/experiments/cycle2282_self_modeling.py)
 
 ---
 
 ## 🏗️ ARCHITECTURE DOCUMENTATION
 
-*   [Substrate Abstraction](nrm_core/helios/substrate.py)
-*   [3D Substrate](nrm_core/helios/substrate_3d.py)
+*   [Substrate Abstraction](src/helios/core/substrate.py)
 *   [OSD Math](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
+*   [Universal Simulator](src/helios/core/simulator.py)
 *   [Memory Structures](src/memory/)
 
 ---
 
 ## 📊 RESEARCH & PAPERS
 
-### Submission-Ready
-*   **Paper 1:** ["Computational Expense as Framework Validation"](papers/compiled/paper1/README.md) — arXiv ready, pending endorsement
-*   **Paper 2:** ["Energy-Regulated Population Homeostasis"](papers/PAPER2_V3_MASTER_MANUSCRIPT.md) — PLOS submission ready
-*   **Paper 3:** ["Temporal Stewardship: Encoding Discoverable Patterns"](papers/compiled/paper3/PAPER3_MASTER_MANUSCRIPT.md) — Submission ready
-*   **Paper 5D:** ["Pattern Mining Framework for Temporal Stability"](papers/compiled/paper5d/README.md) — arXiv ready, pending endorsement
-
-### In Development
-*   **Paper 4:** ["Multi-Scale Energy Regulation"](papers/PAPER4_ABSTRACT.md) — Draft
-*   **Paper 7:** ["Governing Equations & Multi-Timescale Dynamics"](papers/compiled/paper7/README.md) — 80% complete
+*   **Paper 1:** ["Computational Expense as Framework Validation"](papers/compiled/paper1/README.md) (Submission-Ready)
+*   **Paper 2:** ["Energy-Regulated Population Homeostasis"](papers/PAPER2_V3_MASTER_MANUSCRIPT.md) (Submission-Ready)
+*   **Paper 3:** ["Encoding Discoverable Patterns: Temporal Stewardship"](papers/compiled/paper3/PAPER3_MASTER_MANUSCRIPT.md) (Draft Complete)
 
 ### Experimentation Overview
-*   **BCP Validation:** 766 gates, 83 domains, 78.8% mean accuracy.
-*   **NRM Experiments:** 10,948 runs across C171, C176, C193, C194.
+*   10,948 total runs across C171, C176, C193, C194.
 *   Mean effect size |d| = 4.45.
 *   40.25× verification overhead.
-
-### Support Publication
-Papers 1 & 5D require arXiv endorsement (cs.AI) to publish. If you can help: [Endorse →](CONTRIBUTING.md#support-our-research-publications)
 
 ---
 
