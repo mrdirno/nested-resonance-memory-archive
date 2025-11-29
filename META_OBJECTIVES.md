@@ -724,3 +724,38 @@ The Budget-Constrained Perception framework now has:
 - Clear applicability conditions
 
 ---
+
+## Current Phase: PHASE 81 - BIOLOGICAL APPLICATIONS 🟢 ACTIVE
+
+**Transition:** Phase 80 (Theoretical Consolidation) → **Phase 81 (Biological Applications)**
+
+**Focus:** Apply BCP to neural, metabolic, ecological, and immune systems.
+
+**Research Thesis:**
+Biological systems are BCP allocators operating under energy/resource constraints.
+
+**Key Mappings:**
+- Gain = Fitness benefit / Survival value
+- Cost = Energy expenditure / Metabolic cost
+- Budget = Available energy / Resources
+- λ = Metabolic pressure / Scarcity signal
+
+### Completed (Phase 81 Planning)
+- ✅ **Gate 244:** Phase 81 Planning - Direction Selected via BCP - COMPLETE
+  - **Winner:** BIOLOGICAL APPLICATIONS (Score: 0.670)
+  - **Runner-up:** ENGINEERING APPLICATIONS (Score: 0.558)
+  - **Rationale:** Highest Novelty × Impact at current budget
+  - **Sensitivity:** Low budget favors tractability, high budget favors novelty
+  - **Artifact:** `experiments/cycle2612_phase81_planning.py`
+  - **Functional Name:** The Research Budget
+
+### In Progress (Phase 81)
+- 🔄 **Gate 245:** Neural Attention as BCP - Spike timing, receptive fields
+
+### Planned (Phase 81)
+- ⏳ **Gate 246:** Metabolic Regulation as BCP - Energy allocation in cells
+- ⏳ **Gate 247:** Ecological Dynamics as BCP - Resource competition
+- ⏳ **Gate 248:** Immune Response as BCP - Threat prioritization
+- ⏳ **Gate 249:** Evolutionary Fitness as BCP - Trait selection
+
+---
