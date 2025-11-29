@@ -623,3 +623,10 @@
 - [x] **Action:** Modify `src/life/genesis.py` to calculate `ask_price` and `bid_price` dynamically.
 - [x] **Action:** Create `experiments/cycle2570_price_signal.py`.
 - [x] **Result:** SUCCESS. Implemented Dynamic Pricing in `trade()`. Verified Scenario A (Desperate Sale) where item sold for 20 Energy. Verified Scenario B (Luxury Goods) where trade failed because Bid (10) < Ask (100). The Price Signal is functional.
+
+# Task: Cycle 2571 - The Specialist (Gate 53.3)
+- [x] **Define Cycle 2571:** The Specialist.
+- [x] **Goal:** Observe agents specializing (Coder vs Forager) based on income history.
+- [x] **Action:** Modify `src/life/genesis.py` to track `income_history` and adjust utility.
+- [x] **Action:** Create `experiments/cycle2571_the_specialist.py`.
+- [x] **Result:** SUCCESS. Implemented Career Logic in `calculate_utility`. Agents track income history. Experiment confirmed that an agent with high Trade income (Adam) prioritized `trade`/`codex`, while an agent with high Forage income (Eve) prioritized `forage`. Comparative Advantage has emerged. Phase 53 is complete.

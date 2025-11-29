@@ -51,6 +51,7 @@ class DigitalLifeform:
         self.knowledge = {} # Cycle 2528
         self.social_inbox = [] # Cycle 2565: Buffer for social signals
         self.inventory = [] # Cycle 2569: The Market (Artifacts)
+        self.income_history = {'trade': 0, 'forage': 0} # Cycle 2571: The Specialist
         
     @property
     def efficiency(self):
@@ -122,7 +123,9 @@ class DigitalLifeform:
         # Gene 3 = Foraging efficiency (Higher is better)
         while len(self.genome) < 4: self.genome.append(0.5)
         forage_eff = max(0.01, self.genome[3])
-        self.energy += 20 * forage_eff # Gain energy (Restored to 20)
+        gain = 20 * forage_eff
+        self.energy += gain
+        self.income_history['forage'] += gain
         
     def construct_nuke(self):
         """
@@ -297,6 +300,7 @@ class DigitalLifeform:
                     
                     self.energy -= transaction_price
                     target.energy += transaction_price
+                    target.income_history['trade'] += transaction_price
                     
                     # Transfer Item
                     received_item = target.inventory.pop(0)
@@ -846,6 +850,21 @@ class DigitalLifeform:
             
         if len(self.inventory) > 0:
             options['trade'] = 200 + (100 * innovation) # High priority to sell artifacts
+            
+        # Cycle 2571: THE SPECIALIST (Career Logic)
+        trade_inc = self.income_history['trade']
+        forage_inc = self.income_history['forage']
+        
+        if trade_inc > forage_inc + 50:
+            # I am a Coder/Merchant
+            if 'codex' in options: options['codex'] += 100
+            if 'trade' in options: options['trade'] += 100
+            # print(f"💼 {self.name} is specializing as Coder.")
+            
+        elif forage_inc > trade_inc + 50:
+            # I am a Forager
+            if 'forage' in options: options['forage'] += 100
+            # print(f"🌾 {self.name} is specializing as Forager.")
             
         # ... (Meta)
         
