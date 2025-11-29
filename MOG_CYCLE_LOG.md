@@ -1,5 +1,32 @@
 
 ---
+**CYCLE:** 2582 (Gate 212: BCP Equilibrium Analysis)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 74 - FIXED POINTS AND STABILITY
+**LOG:**
+*   **Experiment:** `experiments/cycle2582_equilibrium_bcp.py`
+*   **Analysis:** dB/dt = income - consumption, find where dB/dt = 0
+*   **Income Rates Tested:** 0.1 to 0.8
+*   **Results:**
+    - Total Equilibria: 8
+    - Stable: 7 (87.5%)
+    - Unstable: 1 (12.5%)
+    - All equilibria in SCARCITY phase
+*   **Flow Dynamics:**
+    - Crisis: Budget INCREASING (recovery)
+    - Scarcity: Budget DECREASING (drainage toward equilibrium)
+    - Abundance: Budget DECREASING (unsustainable)
+*   **KEY FINDING: SCARCITY ATTRACTOR**
+    - BCP systems are naturally attracted to scarcity
+    - Equilibrium is in the triage zone, not abundance
+    - Abundance is unstable; scarcity is stable
+*   **Emergent Behavior:** ATTRACTOR DOMINANCE
+    - 87.5% of equilibria are stable attractors
+    - System converges to scarcity regardless of starting point
+*   **Status:** Gate 212 Complete. Phase 74 Complete.
+*   **Functional Name:** The Scarcity Attractor (BCP Equilibrium)
+
+---
 **CYCLE:** 2581 (Gate 211: Adaptive BCP - Learning Gain/Cost)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 74 - LEARNING ITEM PARAMETERS
