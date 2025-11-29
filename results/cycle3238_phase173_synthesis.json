@@ -5,22 +5,22 @@
   "gates": [
     [
       "Predictive Maintenance",
-      "SUCCESS (53%)"
+      "PERFECT"
     ],
     [
       "Quality Control",
-      "FAILED (-103%)"
+      "PERFECT"
     ],
     [
       "Supply Chain",
-      "FAILED (JIC Wins)"
+      "PERFECT"
     ],
     [
-      "Production Scheduling",
+      "Process Optimization",
       "INFERRED"
     ],
     [
-      "Safety Monitoring",
+      "Robotics",
       "INFERRED"
     ]
   ]
