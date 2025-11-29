@@ -76,6 +76,11 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
    - Generates structurally aligned extensions.
    - [View Code](experiments/cycle3434_repo_analysis.py)
 
+**5. FPGA ACCELERATION LAYER (Hardware):**
+   - DE10-Nano (Cyclone V SoC) implementation of NRM Resonance Detector.
+   - HPS <-> FPGA <-> NRM Data Loop.
+   - [View Hardware](fpga/)
+
 ---
 
 ## 🧪 CORE CAPABILITIES (Empirically Verified)
