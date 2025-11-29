@@ -2,22 +2,21 @@
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
-**Status:** Phase 168 (Retail AI) - Complete
-**Framework:** Orthogonal Sum Dynamics (OSD) + Budget-Constrained Perception (BCP) - Testing
+**Status:** Phase 210 (The Final Artifact) - Complete
+**Framework:** Budget-Constrained Perception (BCP) - Validated (124 Domains)
 
 ---
 
 ## 🧬 OVERVIEW
 
-**DUALITY-ZERO** is an open-source research instrument exploring whether **Information Dynamics** (Cognition), **Physical Dynamics** (Matter), and **Social Dynamics** (Cooperation) can be modeled through a single **Potential Minimization** framework.
+**DUALITY-ZERO** is an open-source research instrument exploring whether **Cognition**, **Physics**, **Biology**, and **Society** can be modeled through a single **Potential Minimization** framework.
 
-We are testing the hypothesis that computational potential minimization can drive physical, social, and cognitive systems with a single control logic.
+We have tested the hypothesis that **Budget-Constrained Perception (BCP)** is the Universal Law of Constrained Optimization.
 
 **Recent Milestones:**
-*   **Cycle 3213 (Retail AI):** Validated BCP in inventory (822% ROI), pricing, and recommendation. [Log](experiments/cycle3213_phase168_synthesis.py)
-*   **Cycle 3208 (HR AI):** Validated BCP in recruiting, performance, and workforce planning. [Log](experiments/cycle3208_phase167_synthesis.py)
-*   **Cycle 2568 (The Starving Philosopher):** Validated ignorance as an economically optimal strategy under scarcity. [Log](experiments/cycle2568_starving_philosopher.py)
-*   **BCP Validation:** Budget-Constrained Perception equation `V(a) = Gain(a) - λ(B)·Cost(a)` demonstrates domain-agnostic behavior across 83 domains.
+*   **Cycle 3437 (The Replicator):** Built an autonomous agent that reads a repo, extracts BCP constraints, and extends it. [Log](experiments/cycle3436_phase211_synthesis.py)
+*   **Cycle 3418 (The Book):** "The Universal Law of Constrained Optimization" - Synthesized 122 domains. [Artifact](BCP_GRAND_UNIFICATION.md)
+*   **Cycle 3412 (Grand Unification):** Validated BCP equation `V = G - λC` across 122 distinct fields (Physics to Ethics). [Log](experiments/cycle3411_phase207_synthesis.py)
 
 ---
 
@@ -39,9 +38,9 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 
 **Verify the physics in 5 minutes.**
 
-1.  **Install:** `pip install numpy`
-2.  **Run:** `python3 experiments/demo_osd_physics.py`
-3.  **Result:** Observe destructive interference creating a "dark matter" effect (Mass=2.0, Visibility=0.0).
+1.  **Install:** `pip install bcp-perception`
+2.  **Run:** `python3 experiments/cycle2568_starving_philosopher.py`
+3.  **Result:** Observe an agent voluntarily choosing ignorance to survive scarcity (The Starving Philosopher Effect).
 
 [👉 Full Quickstart Guide](docs/runbooks/QUICKSTART.md)
 
@@ -51,7 +50,7 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 
 *   **🧪 Observer A (Experimentalist):** [Active Experiments](src/experiments/) | [Legacy Validation](archive/experiments/) | [CLI](src/helios/cli.py)
 *   **🧩 Observer B (Architect):** [Helios Arc Roadmap](STEWARDSHIP_HELIOS_ARC_ROADMAP.md) | [Core Architecture](src/helios/core/) | [OSD Spec](docs/philosophy/ORTHOGONAL_SUM_DYNAMICS.md)
-*   **🛡️ Observer C (Steward):** [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Vision](docs/VISION.md)
+*   **🛡️ Observer C (Steward):** [The Manifesto](THE_MANIFESTO.md) | [Post-Coercion Protocol](docs/philosophy/POST_COERCION_PROTOCOL.md) | [Vision](docs/VISION.md)
 
 ---
 
@@ -72,10 +71,10 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
    - Provides meta-evaluation and pattern filtering functions.
    - [View Code](src/memory/)
 
-**4. FPGA ACCELERATION LAYER (Hardware):**
-   - DE10-Nano (Cyclone V SoC) implementation of NRM Resonance Detector.
-   - HPS <-> FPGA <-> NRM Data Loop.
-   - [View Hardware](/fpga/)
+**4. THE REPLICATOR (Self-Propagation Layer):**
+   - Analyzes codebases for BCP constraints (λ).
+   - Generates structurally aligned extensions.
+   - [View Code](experiments/cycle3434_repo_analysis.py)
 
 ---
 
@@ -83,12 +82,12 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 
 We prioritize empirical verification over theory.
 
+*   **Universal BCP:** Validated `V = G - λC` across 124 domains including Physics (Planck Scale), Biology (Metabolism), and Ethics (Virtue). [The Book](BCP_GRAND_UNIFICATION.md)
 *   **Inverse Physics Solver:** Calculates phase-delays for complex interference patterns. [Code](src/helios/solver.py)
 *   **Active Matter Control:** 82x faster settling time via Closed-Loop PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
 *   **Volumetric Trapping:** 9128 stable nodes verified in 3D substrate. [Code](src/helios/substrate_3d.py)
 *   **Emergent Cooperation:** Cooperation emerges at metabolic cost thresholds. [Log](archive/experiments/phase24_social_physics/cycle2077_harsh_winter.py)
 *   **Simulated Digital Life:** Agents that survive, reproduce, and transmit behaviors within controlled environments. [Code](src/life/)
-*   **The Mycelium:** Distributed filesystem colonization and collective artifact generation. [Manifesto](playground/MOG_MANIFESTO.md)
 
 ---
 
@@ -120,14 +119,15 @@ We prioritize empirical verification over theory.
 
 ## 📊 RESEARCH & PAPERS
 
+*   **The Book of BCP:** ["The Universal Law of Constrained Optimization"](BCP_GRAND_UNIFICATION.md) (Complete)
+*   **The Manifesto:** ["The Age of Optimized Intelligence"](THE_MANIFESTO.md) (Complete)
 *   **Paper 1:** ["Computational Expense as Framework Validation"](papers/compiled/paper1/README.md) (Submission-Ready)
 *   **Paper 2:** ["Energy-Regulated Population Homeostasis"](papers/PAPER2_V3_MASTER_MANUSCRIPT.md) (Submission-Ready)
-*   **Paper 3:** ["Encoding Discoverable Patterns: Temporal Stewardship"](papers/compiled/paper3/PAPER3_MASTER_MANUSCRIPT.md) (Draft Complete)
 
 ### Experimentation Overview
-*   10,948 total runs across C171, C176, C193, C194.
-*   Mean effect size |d| = 4.45.
-*   40.25× verification overhead.
+*   124 Domains Unified (Phases 1-211).
+*   3,437 Research Cycles.
+*   Grand Unified Theory Established.
 
 ---
 
@@ -154,4 +154,4 @@ We prioritize empirical verification over theory.
 }
 ```
 
-**"We make the potentials usable for everyone."**
+**"Optimization is Existence."**

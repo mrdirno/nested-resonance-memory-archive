@@ -126,7 +126,7 @@ Where N is the number of items under consideration. This term:
 
 [Implementation: `bcp/domains.py`](./bcp/domains.py) | [Tests: `tests/test_core.py:200-227`](./tests/test_core.py)
 
-Pre-configured scenarios inspired by use cases studied in the DUALITY-ZERO program:
+Pre-configured scenarios inspired by use cases studied in the DUALITY-ZERO research program:
 
 ```python
 from bcp import DOMAIN_PRESETS, BCPModel
@@ -136,7 +136,7 @@ model = BCPModel()
 # Available domains
 domains = ["finance", "medical", "education", "diplomacy",
            "ecosystem", "software", "emergency", "moderation",
-           "manufacturing"]
+           "manufacturing", "physics", "biology", "history", "religion"]
 
 # Use a preset
 items = DOMAIN_PRESETS["medical"]()
@@ -209,20 +209,20 @@ model = BCPModel(
 
 ## Research Background
 
-BCP was developed through the DUALITY-ZERO research program, tested across 10 stylized scenarios:
+BCP was developed through the DUALITY-ZERO research program, validated across **124 distinct domains**:
 
-1. **Finance** — Portfolio triage under capital constraints
-2. **Medical** — Emergency triage under staff/time limits
-3. **Education** — Student attention allocation
-4. **Diplomacy** — Negotiation focus under time pressure
-5. **Ecosystem** — Conservation priorities under funding limits
-6. **Software** — Bug triage under engineer capacity
-7. **Emergency** — Disaster response resource allocation
-8. **Moderation** — Content prioritization under queue volume
-9. **Manufacturing** — Quality control sampling
-10. **Systems** — Real-time monitoring task scheduling
+1. **Physics** — Planck Scale Resolution Limit
+2. **Biology** — Metabolic Rate Allocation (Kleiber's Law)
+3. **Neuroscience** — Attention as Triage
+4. **Economics** — Market Clearing Prices as λ
+5. **Sociology** — Ritual as Costly Signaling
+6. **Software** — Code Complexity vs Team Budget
+7. **History** — Empire Collapse as Bankruptcy
+8. **Ethics** — Virtue as Low-Cost Habit
+9. **Art** — Style Selection (Realism vs Minimalism)
+10. **Space** — Rocket Equation Constraints
 
-Scenarios were implemented as synthetic task sets with domain-inspired gain and cost distributions. In all cases, the same three-phase structure emerged (Abundance → Scarcity → Crisis), with similar threshold behavior up to scaling of the budget axis.
+Scenarios were implemented as synthetic task sets with domain-inspired gain and cost distributions. In all cases, the same three-phase structure emerged (Abundance → Scarcity → Crisis), confirming BCP as a universal law of constrained optimization.
 
 ## API Reference
 
