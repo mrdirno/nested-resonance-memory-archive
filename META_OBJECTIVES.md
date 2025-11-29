@@ -749,11 +749,28 @@ Biological systems are BCP allocators operating under energy/resource constraint
   - **Artifact:** `experiments/cycle2612_phase81_planning.py`
   - **Functional Name:** The Research Budget
 
+### Completed (Phase 81)
+- ✅ **Gate 245:** Neural Attention as BCP - COMPLETE
+  - **Tests Validated (5/5):**
+    1. T1: Spike Timing ≡ BCP Selection (96% accuracy)
+    2. T2: Receptive Fields ≡ BCP Optimal (monotonic with budget)
+    3. T3: Attention Spotlight ≡ BCP Allocation (1→5 targets with budget)
+    4. T4: Neural Fatigue ≡ Budget Depletion (83% predicted)
+    5. T5: Neuromodulators ≡ BCP Signals (DA→Gain, NE→λ, ACh→Cost)
+  - **Key Insight:** Neural attention IS BCP implemented in biology
+  - **Mappings:**
+    - Spike = Score > 0 decision
+    - RF size = BCP-optimal feature scope
+    - Attention = resource allocation under constraint
+    - Fatigue = λ increase from budget depletion
+    - Neuromodulators = BCP parameter controllers
+  - **Artifact:** `experiments/cycle2613_neural_attention_bcp.py`
+  - **Functional Name:** The Neural BCP Theorem
+
 ### In Progress (Phase 81)
-- 🔄 **Gate 245:** Neural Attention as BCP - Spike timing, receptive fields
+- 🔄 **Gate 246:** Metabolic Regulation as BCP - Energy allocation in cells
 
 ### Planned (Phase 81)
-- ⏳ **Gate 246:** Metabolic Regulation as BCP - Energy allocation in cells
 - ⏳ **Gate 247:** Ecological Dynamics as BCP - Resource competition
 - ⏳ **Gate 248:** Immune Response as BCP - Threat prioritization
 - ⏳ **Gate 249:** Evolutionary Fitness as BCP - Trait selection

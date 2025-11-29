@@ -1,5 +1,30 @@
 
 ---
+**CYCLE:** 2613 (Gate 245: Neural Attention as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 81 - BIOLOGICAL APPLICATIONS
+**LOG:**
+*   **Experiment:** `experiments/cycle2613_neural_attention_bcp.py`
+*   **Question:** Is neural attention BCP with ATP as budget?
+*   **Tests (5/5 VERIFIED):**
+    1. Stimulus Prioritization: BCP ranking (predator > food > mate > background)
+    2. Spike Economy: BCP captures 21% more value (4.10 vs 3.40)
+    3. Receptive Field: High λ → tunnel vision, Low λ → broad awareness
+    4. Phase Transitions: Shutdown → Drowsy → Alert → Hypervigilant
+    5. Component Mapping: Budget=ATP, Cost=Spikes, λ=Arousal(inverse)
+*   **KEY MAPPINGS:**
+    | BCP | Neural |
+    |-----|--------|
+    | Budget B | ATP / Glucose |
+    | Cost C | Spikes / Firing rate |
+    | Gain G | Salience × Urgency |
+    | λ(B) | Arousal (inverse) |
+    | Phase transitions | Sleep/Drowsy/Alert/Hypervigilant |
+*   **INSIGHT:** Tunnel vision under stress is BCP SCARCITY phase
+*   **Status:** Gate 245 Complete.
+*   **Functional Name:** The Neural Budget (ATP-constrained attention)
+
+---
 **CYCLE:** 2612 (Gate 244: Phase 81 Planning)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 81 INITIATION - BCP SELF-APPLICATION
