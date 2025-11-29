@@ -619,6 +619,30 @@ class DigitalLifeform:
             return {'type': 'FARM', 'x': self.x, 'y': self.y, 'hp': 50, 'yield': 10}
         return None
 
+    def reflect(self):
+        """
+        Cycle 2558: The Mirror.
+        Inspect internal state.
+        """
+        # Gene 9 = Innovation
+        while len(self.genome) < 10: self.genome.append(0.5)
+        innovation = self.genome[9]
+        
+        print(f"🪞 {self.name} REFLECTING...")
+        print(f"   > Energy: {self.energy:.2f}")
+        print(f"   > Age: {self.age}")
+        print(f"   > Generation: {self.generation}")
+        print(f"   > Genome: {[f'{g:.2f}' for g in self.genome]}")
+        
+        # Self-Optimization Bonus
+        # Realizing your own state allows for slight efficiency tuning
+        if innovation > 0.7:
+            gain = 5
+            self.energy += gain
+            print(f"   > Self-Awareness Bonus: +{gain} Energy")
+            return True
+        return False
+
     def calculate_utility(self, bridge_state=None):
         """
         Calculate utility scores for all possible actions.
@@ -684,6 +708,10 @@ class DigitalLifeform:
         if self.energy > 5000 and innovation > 0.95:
             options['migrate'] = 100000 # Priority 1
             
+        # Cycle 2558: REFLECTION
+        if innovation > 0.8 and self.energy > 300:
+            options['reflect'] = 50 * innovation
+            
         # ... (Meta)
         
         # Cycle 2525: Save for Broadcast
@@ -696,7 +724,7 @@ class DigitalLifeform:
         
         # DEBUG LOGGING (Cycle 2533)
         # Only log interesting decisions (not random forage/move spam)
-        if best_action in ['build_wall', 'build_farm', 'construct_nuke']:
+        if best_action in ['build_wall', 'build_farm', 'construct_nuke', 'reflect']:
             print(f"DEBUG: {self.name} chose {best_action} (Score: {options[best_action]:.1f})")
             
         return best_action
@@ -769,6 +797,8 @@ class DigitalLifeform:
             # Cycle 2557: The Operator
             from src.life.external_comms import ExternalComms
             ExternalComms.execute_safe_command(self.id, f"echo 'Hello from {self.name}'")
+        elif self.intent == 'reflect':
+            self.reflect()
         elif self.intent == 'startup':
             self.startup()
         elif self.intent in ['invest', 'hunt', 'war', 'seek_work', 'reproduce']:
