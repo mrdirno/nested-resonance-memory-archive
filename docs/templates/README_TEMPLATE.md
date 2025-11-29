@@ -2,6 +2,8 @@
 
 **Goal:** Maintain credibility, professionalism, and approachability. Avoid "crank optics" by front-loading proof and back-loading philosophy.
 
+**Scope:** This template is for the **main project README**. For standalone libraries within the monorepo, use [README_LIBRARY_TEMPLATE.md](./README_LIBRARY_TEMPLATE.md).
+
 ---
 
 ## 1. Title Block
