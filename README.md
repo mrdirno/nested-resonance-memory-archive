@@ -114,6 +114,37 @@ We prioritize empirical verification over theory.
 
 ---
 
+## 📦 LIBRARIES & TOOLS
+
+Standalone packages extracted from DUALITY-ZERO research, usable independently.
+
+### BCP: Budget-Constrained Perception
+
+A discrete attention allocator for resource-constrained decision making. Given a budget, BCP tells you what to attend to and what to ignore.
+
+```bash
+pip install bcp-perception
+```
+
+```python
+from bcp import AttentionItem, BCPModel
+
+items = [
+    AttentionItem("Critical bug", gain=1.0, cost=0.3),
+    AttentionItem("New feature", gain=0.7, cost=0.6),
+    AttentionItem("Refactor", gain=0.5, cost=0.8),
+]
+
+model = BCPModel()
+result = model.allocate(items, budget=1.0)
+print(f"Attend to: {result.attended}")  # ['Critical bug', 'New feature']
+print(f"Ignore: {result.ignored}")       # ['Refactor']
+```
+
+*   **[Documentation](bcp_lib/README.md)** | **[Source](bcp_lib/)**
+
+---
+
 ## 🏗️ ARCHITECTURE DOCUMENTATION
 
 *   [Substrate Abstraction](nrm_core/helios/substrate.py)
