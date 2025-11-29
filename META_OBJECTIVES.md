@@ -136,9 +136,15 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
   - **Artifact:** `experiments/cycle2580_multiagent_bcp.py`
   - **Functional Name:** The Auction Principle (Global Priority Wins)
 
+### Completed (Phase 74 Continued)
+- ✅ **Gate 209:** Multi-Agent BCP Cooperation - Pooling beats individual 78% of time - COMPLETE
+  - **Finding:** Cooperation wins 7/9 scenarios, especially under scarcity
+  - **Max Benefit:** +1.90 gain in complementary agent scenario
+  - **Artifact:** `experiments/cycle2581_multiagent_cooperation.py`
+  - **Functional Name:** The Complementarity Principle (Pool Unlocks Potential)
+
 ### Active Objectives
-- 🟢 **Gate 209:** Multi-Agent BCP Cooperation - Shared vs. exclusive resource pools
-- ⚪ **Gate 210:** Dynamic budget functions
+- 🟢 **Gate 210:** Dynamic budget functions - Time-varying resources
 - ⚪ **Gate 211:** Learning gain/cost estimates
 - ⚪ **Gate 212:** Equilibrium analysis
 
