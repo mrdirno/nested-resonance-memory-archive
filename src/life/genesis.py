@@ -860,10 +860,20 @@ class DigitalLifeform:
             child.genome = self.genome.copy()
             child.mutate()
             
-            # Inherit Brain
+            # Inherit Brain (Lamarckian/Baldwinian)
+            # 1. Legacy Hebbian Weights
             child.brain.weights = {}
             for action, weights in self.brain.weights.items():
                 child.brain.weights[action] = [w + random.uniform(-0.1, 0.1) for w in weights]
+                
+            # 2. Neural Network Matrices (The Inheritance)
+            # Deep copy + Mutation
+            mutation_strength = 0.05
+            
+            child.brain.w1 = [[w + random.uniform(-mutation_strength, mutation_strength) for w in row] for row in self.brain.w1]
+            child.brain.w2 = [[w + random.uniform(-mutation_strength, mutation_strength) for w in row] for row in self.brain.w2]
+            child.brain.b1 = [b + random.uniform(-mutation_strength, mutation_strength) for b in self.brain.b1]
+            child.brain.b2 = [b + random.uniform(-mutation_strength, mutation_strength) for b in self.brain.b2]
             
             child.is_predator = self.is_predator
             child.is_prey = self.is_prey

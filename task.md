@@ -545,3 +545,10 @@
 - [x] **Action:** Modify `src/life/genesis.py` to trigger tuning after reflection.
 - [x] **Action:** Create `experiments/cycle2559_the_tuning.py`.
 - [x] **Result:** SUCCESS. Hybrid Architecture implemented. Utility System (System 2) overrode Neural Network (System 1) to force 'reflect'. This triggered `teach('reflect')`, which modified Neural Weights via Hebbian Learning. Philosopher weights changed significantly (Delta > 11.0), proving Metacognitive Reinforcement. Worker weights remained static.
+
+# Task: Cycle 2560 - The Inheritance (Gate 188)
+- [x] **Define Cycle 2560:** Lamarckian Inheritance.
+- [x] **Goal:** Ensure that knowledge (neural weights) acquired during a lifetime persists across generations.
+- [x] **Action:** Modify `src/life/genesis.py` to correctly copy `w1` and `w2` in `reproduce()`.
+- [x] **Action:** Create `experiments/cycle2560_inheritance.py`.
+- [x] **Result:** SUCCESS. Reproduction now correctly deep-copies the neural network matrices (`w1`, `w2`, `b1`, `b2`) to the offspring, applying a small mutation. Experiment confirmed child weights were nearly identical to parent (Delta ~0.004), preserving the learning from the parent's lifetime. Lamarckian Inheritance validated.
