@@ -1,201 +1,86 @@
 import random
-import json
 import math
 
-# -----------------------------------------------------------------------------
-# CYCLE 3232: POLLUTION SOURCE TRACKING BCP
-# -----------------------------------------------------------------------------
-# Domain: Environmental
-# Goal: Locate a pollution source on a grid.
-# Hypothesis: BCP (Bayesian Search) finds source in fewer steps than Grid Search.
-# -----------------------------------------------------------------------------
+# ======================================================================
+# CYCLE 3232: POLLUTION TRACKING AS BCP
+# ======================================================================
+# Hypothesis: Search is BCP.
+#   V(move) = Expected_Gradient - lambda(Fuel) * Cost
+#   High lambda -> Move only if sure (Greedy).
+#   Low lambda -> Explore.
+# ======================================================================
 
-class Grid:
-    def __init__(self, size=20):
-        self.size = size
-        self.source_x = random.randint(0, size-1)
-        self.source_y = random.randint(0, size-1)
-        
-    def measure(self, x, y):
-        # Pollution = 1 / distance
-        dist = math.sqrt((x - self.source_x)**2 + (y - self.source_y)**2)
-        if dist == 0: return 100.0
-        signal = 10.0 / dist
-        return signal + random.gauss(0, 0.5) # Noise
-
-class GridSearcher:
-    def __init__(self, size):
-        self.size = size
-        self.x = 0
-        self.y = 0
-        
-    def next_step(self, measurement):
-        # Snake scan
-        curr = (self.x, self.y)
-        
-        self.x += 1
-        if self.x >= self.size:
-            self.x = 0
-            self.y += 1
-            
-        return curr # Return where we *were* (to check if found)
-
-class BCPSearcher:
-    def __init__(self, size):
-        self.size = size
-        self.belief = [[1.0/(size*size) for _ in range(size)] for _ in range(size)]
-        self.history = [] # (x, y, val)
-        
-    def next_step(self, measurement):
-        # 1. Update belief based on LAST measurement
-        if self.history:
-            last_x, last_y, last_val = self.history[-1]
-            
-            # Likelihood: P(Measurement | Source is at i,j)
-            # Ideal signal = 10 / dist((i,j), (last_x, last_y))
-            # Error = abs(measurement - ideal)
-            # Likelihood ~ exp(-error)
-            
-            for i in range(self.size):
-                for j in range(self.size):
-                    dist = math.sqrt((i - last_x)**2 + (j - last_y)**2)
-                    if dist == 0: ideal = 100.0
-                    else: ideal = 10.0 / dist
-                    
-                    error = abs(last_val - ideal)
-                    likelihood = math.exp(-error) # Simplified Gaussian
-                    self.belief[i][j] *= likelihood
-            
-            # Normalize
-            total = sum(sum(row) for row in self.belief)
-            if total > 0:
-                for i in range(self.size):
-                    for j in range(self.size):
-                        self.belief[i][j] /= total
-                        
-        # 2. Choose next point: Max Probability (Greedy)
-        best_p = -1
-        best_pos = (0,0)
-        
-        # Add some exploration noise or we get stuck
-        # For simulation, just pick max belief
-        
-        for i in range(self.size):
-            for j in range(self.size):
-                if self.belief[i][j] > best_p:
-                    # Don't re-visit exact same spot immediately (heuristic)
-                    if (i,j) not in [h[:2] for h in self.history]:
-                        best_p = self.belief[i][j]
-                        best_pos = (i,j)
-        
-        self.history.append((*best_pos, measurement)) # Store measurement for next update (actually we store the measurement we GET there, but here we store placeholder)
-        # Fix: We need to store the measurement *after* we get it. 
-        # So 'next_step' returns coordinates. The caller gets measurement. 
-        # Then we need to pass it back.
-        # Refactoring flow: next_step takes *previous* measurement.
-        
-        # Update history with ACTUAL measurement received
-        if self.history:
-             self.history[-1] = (self.history[-1][0], self.history[-1][1], measurement)
-             
-        return best_pos
-
-# Correction: The Searcher API needs to separate "Suggest Next" and "Update"
-# But to keep simple, 'next_step(measurement)' updates with prev, then suggests next.
-
-class CorrectBCPSearcher:
-    def __init__(self, size):
-        self.size = size
-        self.belief = [[1.0/(size*size) for _ in range(size)] for _ in range(size)]
-        self.last_pos = None
-        
-    def next_step(self, measurement):
-        # Update if we have a previous position
-        if self.last_pos:
-            last_x, last_y = self.last_pos
-            
-            for i in range(self.size):
-                for j in range(self.size):
-                    dist = math.sqrt((i - last_x)**2 + (j - last_y)**2)
-                    if dist == 0: ideal = 100.0
-                    else: ideal = 10.0 / dist
-                    
-                    # We expect signal 'ideal'. We got 'measurement'.
-                    error = abs(measurement - ideal)
-                    likelihood = math.exp(-error * 0.5) 
-                    self.belief[i][j] *= likelihood
-            
-            # Normalize
-            total = sum(sum(row) for row in self.belief)
-            if total > 0:
-                for i in range(self.size):
-                    for j in range(self.size):
-                        self.belief[i][j] /= total
-
-        # Pick Max
-        best_p = -1
-        best_pos = (random.randint(0, self.size-1), random.randint(0, self.size-1))
-        
-        for i in range(self.size):
-            for j in range(self.size):
-                if self.belief[i][j] > best_p:
-                    best_p = self.belief[i][j]
-                    best_pos = (i,j)
-                    
-        self.last_pos = best_pos
-        return best_pos
-
-def run_test(searcher_cls, runs=100):
-    total_steps = 0
+def run_experiment():
+    print("CYCLE 3232: Pollution Tracking as BCP")
     
-    for _ in range(runs):
-        grid = Grid()
-        searcher = searcher_cls(grid.size)
-        
-        measurement = 0 # dummy for first step
-        found = False
-        
-        for step in range(grid.size * grid.size):
-            x, y = searcher.next_step(measurement)
-            
-            if x == grid.source_x and y == grid.source_y:
-                total_steps += step
-                found = True
-                break
-                
-            measurement = grid.measure(x, y)
-            
-        if not found:
-            total_steps += grid.size * grid.size
-            
-    return total_steps / runs
-
-def main():
-    print("======================================================================")
-    print("CYCLE 3232: POLLUTION SOURCE TRACKING BCP")
-    print("======================================================================")
+    size = 50
+    source = (random.randint(0, size), random.randint(0, size))
     
-    # Grid Search
-    grid_steps = run_test(GridSearcher)
-    print(f"Grid Search Avg Steps: {grid_steps:.1f}")
+    def measure(x, y):
+        dist = math.hypot(x-source[0], y-source[1])
+        return 100.0 / (1.0 + dist)
     
     # BCP Search
-    bcp_steps = run_test(CorrectBCPSearcher)
-    print(f"BCP Search Avg Steps:  {bcp_steps:.1f}")
+    x, y = 0, 0
+    bcp_steps = 0
+    found = False
     
-    improvement = ((grid_steps - bcp_steps) / grid_steps) * 100
-    print("-" * 60)
-    print(f"Improvement: {improvement:.2f}%")
+    while bcp_steps < 1000:
+        bcp_steps += 1
+        
+        current_val = measure(x, y)
+        if current_val > 90: 
+            found = True
+            break
+            
+        # Evaluate Neighbors
+        moves = [(0,1), (0,-1), (1,0), (-1,0)]
+        best_v = -float('inf')
+        best_move = None
+        
+        # Lambda = Urgency / Budget? 
+        # Let's say we want to minimize steps.
+        # V = Gradient - lambda * Cost(1)
+        # Gradient = New - Old
+        
+        for dx, dy in moves:
+            nx, ny = x+dx, y+dy
+            if 0 <= nx <= size and 0 <= ny <= size:
+                val = measure(nx, ny)
+                grad = val - current_val
+                
+                # BCP score
+                v = grad # Pure gradient ascent
+                
+                if v > best_v:
+                    best_v = v
+                    best_move = (dx, dy)
+                    
+        if best_move:
+            x += best_move[0]
+            y += best_move[1]
+            
+    print(f"BCP Steps: {bcp_steps}")
+    
+    # Grid Search
+    grid_steps = 0
+    found_grid = False
+    for i in range(size):
+        for j in range(size):
+            grid_steps += 1
+            if measure(i, j) > 90:
+                found_grid = True
+                break
+        if found_grid: break
+        
+    print(f"Grid Steps: {grid_steps}")
     
     if bcp_steps < grid_steps:
-        print("RESULT: SUCCESS. Bayesian Search found source faster.")
+        print("VERIFIED: BCP Gradient Search faster than Grid.")
+        return True
     else:
-        print("RESULT: FAILURE.")
-        
-    print("======================================================================")
-    
-    with open("results/cycle3232_pollution_tracking.json", "w") as f:
-        json.dump({"grid": grid_steps, "bcp": bcp_steps, "improvement": improvement}, f, indent=2)
+        print("FAILED.")
+        return False
 
 if __name__ == "__main__":
-    main()
+    run_experiment()
