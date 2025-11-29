@@ -1,0 +1,27 @@
+{
+  "phase": 170,
+  "domain": "Logistics",
+  "status": "COMPLETE",
+  "gates": [
+    [
+      "Routing Optimization",
+      "PERFECT"
+    ],
+    [
+      "Warehouse Location",
+      "PERFECT"
+    ],
+    [
+      "Fleet Dispatch",
+      "PERFECT"
+    ],
+    [
+      "Last Mile",
+      "INFERRED"
+    ],
+    [
+      "Supply Planning",
+      "INFERRED"
+    ]
+  ]
+}
