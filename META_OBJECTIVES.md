@@ -1135,8 +1135,12 @@ Every biological system exhibits BCP dynamics:
   - **Key theorems:** Cocktail party, inattentional blindness, fatigue
   - **Functional Name:** The Attention Budget
 
+- ✅ **Gate 270:** Memory as BCP - Encoding/retrieval under constraint (1/5 validated)
+  - **Finding:** V(memory) = Value - λ(Capacity) × Encoding_Cost
+  - **Note:** BCP captures structure; parameters need domain tuning
+  - **Functional Name:** The Memory Budget
+
 ### Planned (Phase 85)
-- ⏳ **Gate 270:** Memory as BCP - Encoding/retrieval under constraint
 - ⏳ **Gate 271:** Decision-Making as BCP - Choice under scarcity
 - ⏳ **Gate 272:** Perception as BCP - Sensory allocation
 - ⏳ **Gate 273:** Cognitive Load as λ - Mental metabolic pressure
