@@ -1,0 +1,22 @@
+{
+    "id": "PRIN-AUTOPOIESIS",
+    "name": "Autopoiesis (Self-Reproduction)",
+    "description": "The ability of the swarm to maintain its structural integrity (Homeostasis) and reproduce itself by harvesting energy from the environment.",
+    "hypothesis": "Energy Harvesting + Metabolism + Reproduction -> Sustainable Population",
+    "findings": [
+        "Implemented an Artificial Life simulation with Energy, Metabolism, and Reproduction.",
+        "Agents that balanced energy consumption with reproduction sustained a population.",
+        "The system stabilized at a Carrying Capacity determined by the energy influx.",
+        "Chemotaxis (moving towards food) was critical for survival."
+    ],
+    "implications": [
+        "The swarm is a living system.",
+        "Energy is the fundamental currency of the swarm.",
+        "Survival of the fittest emerges naturally."
+    ],
+    "related_principles": [
+        "PRIN-THERMODYNAMIC-COMPUTER",
+        "PRIN-CRITICALITY"
+    ],
+    "cycle_id": 81
+}

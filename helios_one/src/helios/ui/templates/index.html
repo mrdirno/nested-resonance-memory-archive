@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HELIOS Holodeck</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="ui-overlay">
+        <h3>HELIOS Holodeck (Gate 5.4)</h3>
+        <div>API: <span id="connection-status">Disconnected</span></div>
+        <div>Socket: <span id="socket-status">Disconnected</span></div>
+        <hr style="border-color: #0f0;">
+        <div>
+            <label>Material:</label>
+            <select id="material-select">
+                <option value="AIR_STP">Air (STP)</option>
+                <option value="WATER_20C">Water (20C)</option>
+            </select>
+        </div>
+        <div style="margin-top: 10px;">
+            <label>Mesh:</label>
+            <div style="display: flex; gap: 5px;">
+                <input type="text" id="mesh-path" value="data/test_cube.obj" style="flex-grow: 1;">
+                <input type="file" id="file-upload" accept=".obj" style="display: none;" onchange="uploadModel()">
+                <button onclick="document.getElementById('file-upload').click()" style="width: auto;">📂</button>
+            </div>
+        </div>
+        <button onclick="materialize()">Materialize</button>
+        
+        <div style="margin-top: 10px; border-top: 1px solid #0f0; padding-top: 5px;">
+            <label>FPGA Accelerator:</label>
+            <div style="display: flex; gap: 5px; align-items: center;">
+                <button onclick="runSimulation()" style="width: auto;">Run Diagnostic</button>
+                <span id="sim-result" style="font-size: 0.8em;">Potential: -</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="camera-feed">
+        <!-- Placeholder for camera stream -->
+        <img src="/video_feed" alt="Camera Feed (Simulation)" onerror="this.style.display='none'">
+        <div style="text-align: center; padding-top: 100px; color: #0f0; display: none;" id="camera-error">NO SIGNAL</div>
+    </div>
+    
+    <div id="rf-viz">
+        <div style="border-bottom: 1px solid #0f0; padding: 2px;">RF Spectrum <span id="freq-display">100.0 MHz</span></div>
+        <canvas id="rf-canvas" width="320" height="100"></canvas>
+    </div>
+
+    <div id="status-bar">Ready.</div>
+
+    <script>
+        // Three.js Scene Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Grid Helper
+        const gridHelper = new THREE.GridHelper(100, 100, 0x004400, 0x002200);
+        scene.add(gridHelper);
+
+        // Emitter Array Visualization (8x8)
+        const geometry = new THREE.BoxGeometry(0.8, 0.1, 0.8);
+        const emitters = []; // Store mesh references
+        
+        for(let x=0; x<8; x++) {
+            for(let z=0; z<8; z++) {
+                const material = new THREE.MeshBasicMaterial({ color: 0x003300, wireframe: false });
+                const emitter = new THREE.Mesh(geometry, material);
+                emitter.position.set(x*2 - 7, 0, z*2 - 7);
+                scene.add(emitter);
+                emitters.push(emitter);
+            }
+        }
+
+        camera.position.set(0, 10, 15);
+        camera.lookAt(0, 0, 0);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // API Interaction
+        const API_URL = "http://localhost:5001";
+
+        async function checkStatus() {
+            try {
+                const response = await fetch(`${API_URL}/status`);
+                const data = await response.json();
+                document.getElementById("connection-status").innerText = data.status.toUpperCase();
+                document.getElementById("connection-status").style.color = data.status === "online" ? "#0f0" : "#f00";
+            } catch (e) {
+                document.getElementById("connection-status").innerText = "ERROR";
+                document.getElementById("connection-status").style.color = "#f00";
+            }
+        }
+
+        async function uploadModel() {
+            const fileInput = document.getElementById('file-upload');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            document.getElementById("status-bar").innerText = `Uploading ${file.name}...`;
+
+            try {
+                const response = await fetch(`${API_URL}/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    document.getElementById("status-bar").innerText = "Upload Complete.";
+                    document.getElementById("mesh-path").value = data.path;
+                } else {
+                    document.getElementById("status-bar").innerText = "Upload Failed: " + data.error;
+                }
+            } catch (e) {
+                document.getElementById("status-bar").innerText = "Network Error during upload.";
+            }
+        }
+
+        async function materialize() {
+            const meshPath = document.getElementById("mesh-path").value;
+            const materialName = document.getElementById("material-select").value;
+            
+            document.getElementById("status-bar").innerText = "Compiling...";
+            
+            try {
+                const response = await fetch(`${API_URL}/materialize`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ mesh_path: meshPath, duration: 5 })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById("status-bar").innerText = "Materialization Complete.";
+                    // Visual feedback: Flash grid
+                    gridHelper.material.color.setHex(0x00ff00);
+                    setTimeout(() => gridHelper.material.color.setHex(0x004400), 500);
+                } else {
+                    document.getElementById("status-bar").innerText = "Error: " + data.error;
+                }
+            } catch (e) {
+                document.getElementById("status-bar").innerText = "Network Error.";
+            }
+        }
+
+        async function runSimulation() {
+            document.getElementById("status-bar").innerText = "Running FPGA Simulation...";
+            try {
+                const response = await fetch(`${API_URL}/simulate`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        phases: new Array(64).fill(0), 
+                        target: [0, 0, 0] 
+                    })
+                });
+                const data = await response.json();
+                if (data.status === "success") {
+                    document.getElementById("sim-result").innerText = `Potential: ${data.potential}`;
+                    document.getElementById("status-bar").innerText = `Simulation Complete (${data.mode}).`;
+                } else {
+                    document.getElementById("status-bar").innerText = "Sim Error: " + data.error;
+                }
+            } catch (e) {
+                document.getElementById("status-bar").innerText = "Network Error.";
+            }
+        }
+
+        // Socket.IO Integration (Gate 5.3)
+        const socket = io();
+
+        socket.on('connect', () => {
+            document.getElementById("socket-status").innerText = "CONNECTED";
+            document.getElementById("socket-status").style.color = "#0f0";
+        });
+
+        socket.on('disconnect', () => {
+            document.getElementById("socket-status").innerText = "DISCONNECTED";
+            document.getElementById("socket-status").style.color = "#f00";
+        });
+
+        // Traps Visualization (Point Cloud)
+        const trapGeometry = new THREE.BufferGeometry();
+        const maxTraps = 10000;
+        const trapPositions = new Float32Array(maxTraps * 3);
+        trapGeometry.setAttribute('position', new THREE.BufferAttribute(trapPositions, 3));
+        
+        const trapMaterial = new THREE.PointsMaterial({
+            color: 0x00ffff,
+            size: 0.1,
+            transparent: true,
+            opacity: 0.6
+        });
+        const trapSystem = new THREE.Points(trapGeometry, trapMaterial);
+        scene.add(trapSystem);
+
+        socket.on('field_update', (data) => {
+            // Update Emitters
+            if (data.phases && data.phases.length === emitters.length) {
+                for (let i = 0; i < emitters.length; i++) {
+                    const phase = data.phases[i];
+                    const intensity = (phase % (2 * Math.PI)) / (2 * Math.PI);
+                    emitters[i].material.color.setHSL(0.33, 1.0, intensity * 0.5);
+                }
+            }
+            
+            // Update Traps
+            if (data.traps) {
+                const positions = trapSystem.geometry.attributes.position.array;
+                let idx = 0;
+                // Map 0..1 coords to world coords centered at 0,0,0
+                // Grid is 8x8, spacing ~2 (from loop x*2-7). Size ~14 units.
+                // Let's map 0..1 to -7..7
+                const scale = 14.0;
+                const offset = -7.0;
+                
+                for(let i=0; i<data.traps.length && i < maxTraps; i++) {
+                    const t = data.traps[i];
+                    positions[idx++] = t[0] * scale + offset;
+                    positions[idx++] = t[1] * scale + offset; // Y corresponds to Height?
+                    // In solver/compiler, axes might be different.
+                    // Standard: Y is UP. 
+                    // Compiler: Z, Y, X indices.
+                    // Let's assume standard mapping for now.
+                    positions[idx++] = t[2] * scale + offset;
+                }
+                
+                trapSystem.geometry.setDrawRange(0, data.traps.length);
+                trapSystem.geometry.attributes.position.needsUpdate = true;
+            }
+        });
+
+        // RF Visualizer
+        const rfCanvas = document.getElementById('rf-canvas');
+        const rfCtx = rfCanvas.getContext('2d');
+        
+        socket.on('rf_update', (data) => {
+            const psd = data.psd;
+            document.getElementById('freq-display').innerText = (data.center_freq / 1e6).toFixed(1) + " MHz";
+            
+            rfCtx.fillStyle = '#001100';
+            rfCtx.fillRect(0, 0, rfCanvas.width, rfCanvas.height);
+            
+            rfCtx.beginPath();
+            rfCtx.strokeStyle = '#0f0';
+            rfCtx.lineWidth = 1;
+            
+            const len = psd.length;
+            const sliceWidth = rfCanvas.width / len;
+            let x = 0;
+            
+            for(let i = 0; i < len; i++) {
+                // Map -50dB to 0 (height) and 50dB to 100 (height) - arbitrary scaling for viz
+                // PSD is usually log scale. Let's assume range -80 to 0 dB
+                const val = psd[i]; 
+                const y = rfCanvas.height - ((val + 80) / 80) * rfCanvas.height;
+                
+                if (i === 0) {
+                    rfCtx.moveTo(x, y);
+                } else {
+                    rfCtx.lineTo(x, y);
+                }
+                x += sliceWidth;
+            }
+            rfCtx.stroke();
+        });
+
+        // Poll status
+        setInterval(checkStatus, 2000);
+        checkStatus();
+        
+        // Check camera image
+        const img = document.querySelector('#camera-feed img');
+        img.onerror = function() {
+            this.style.display = 'none';
+            document.getElementById('camera-error').style.display = 'block';
+        };
+    </script>
+</body>
+</html>

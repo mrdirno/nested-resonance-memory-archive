@@ -1,0 +1,36 @@
+# DUALITY-ZERO-V2: Nested Resonance Memory Research
+# Python Dependencies for Reproducibility
+#
+# Installation:
+#   pip install -r requirements.txt
+#
+# Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+# Repository: https://github.com/mrdirno/nested-resonance-memory-archive
+# License: GPL-3.0
+# Last Updated: 2025-11-18 (Cycle 1388)
+
+# Core Dependencies
+numpy==2.3.1
+psutil==7.0.0
+
+# Visualization
+matplotlib==3.10.3
+seaborn==0.13.2
+
+# Data Analysis (Optional)
+pandas==2.3.1
+scipy==1.16.0
+
+# Development Tools (Optional)
+pytest==8.4.1
+black==25.1.0
+# pylint not installed in environment, removing to avoid install errors
+
+# Documentation (Optional)
+sphinx-rtd-theme==3.0.2
+
+
+# Web Interface
+flask==3.0.0
+flask-socketio==5.3.6
+eventlet==0.35.1

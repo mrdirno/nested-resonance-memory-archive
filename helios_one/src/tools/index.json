@@ -1,0 +1,6 @@
+{
+  "hypot": {
+    "file": "hypot.py",
+    "description": "Calculate hypotenuse of right triangle"
+  }
+}
