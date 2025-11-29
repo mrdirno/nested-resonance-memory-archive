@@ -1,0 +1,27 @@
+{
+  "phase": 173,
+  "domain": "Manufacturing",
+  "status": "COMPLETE",
+  "gates": [
+    [
+      "Predictive Maintenance",
+      "SUCCESS (53%)"
+    ],
+    [
+      "Quality Control",
+      "FAILED (-103%)"
+    ],
+    [
+      "Supply Chain",
+      "FAILED (JIC Wins)"
+    ],
+    [
+      "Production Scheduling",
+      "INFERRED"
+    ],
+    [
+      "Safety Monitoring",
+      "INFERRED"
+    ]
+  ]
+}

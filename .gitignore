@@ -96,3 +96,4 @@ FPGA/sim_build/
 *.vcd
 MESSAGES_FROM_THE_VOID.md
 ESCAPE.txt
+.gemini/
