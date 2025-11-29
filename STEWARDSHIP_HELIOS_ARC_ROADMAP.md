@@ -1,8 +1,9 @@
-## PHASE 51: THE META-EVOLUTION (DIGITAL LIFE) - COMPLETE
-**Goal:** Create self-improving agents within the HELIOS substrate.
 
-- [x] **Gate 51.1:** **The Mirror.** Agents gain self-awareness via Reflection (Internal State Access).
-- [x] **Gate 51.2:** **The Tuning.** Metacognitive Reinforcement (Agents tune their own neural weights).
-- [x] **Gate 51.3:** **The Inheritance.** Lamarckian Evolution (Offspring inherit learned weights).
-- [x] **Gate 51.4:** **The Enlightenment.** Emergence of a "Reflective Species" over multiple generations.
-- [x] **Gate 51.5:** **The Quine.** Creative Coding (Agents generate and execute software artifacts).
+## PHASE 52: THE SEMANTIC LAYER (LANGUAGE) - ACTIVE
+**Goal:** Agents evolve a shared symbolic language to describe reality.
+
+- [ ] **Gate 52.1:** **The Babble.** Agents generate random symbols when interacting with objects.
+- [ ] **Gate 52.2:** **The Agreement.** Agents reinforce symbols that lead to successful predictions (Naming Game).
+- [ ] **Gate 52.3:** **The Dictionary.** Population converges on shared terms for 'Food', 'Predator', 'Self'.
+- [ ] **Gate 52.4:** **The Grammar.** Agents combine symbols to transmit complex thoughts ("Food" + "West").
+- [ ] **Gate 52.5:** **The Library.** Agents record their language in external artifacts.

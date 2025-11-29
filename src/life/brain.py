@@ -44,6 +44,9 @@ class Brain:
         }
         self.weights = {} # Cycle 2540: Hebbian Weights
         
+        # Cycle 2564: The Babble (Language)
+        self.vocabulary = {} # {label: {type: count}}
+        
         # Learning Context
         self.last_inputs = []
         self.last_hidden = []
@@ -51,6 +54,40 @@ class Brain:
         
     def sigmoid(self, x):
         return 1 / (1 + math.exp(-x))
+        
+    def learn_word(self, label, object_type, reward):
+        """
+        Cycle 2564: The Language Game.
+        Reinforce or weaken label association.
+        """
+        if label not in self.vocabulary:
+            self.vocabulary[label] = {}
+            
+        if object_type not in self.vocabulary[label]:
+            self.vocabulary[label][object_type] = 0.0
+            
+        # Reinforcement
+        self.vocabulary[label][object_type] += reward
+        
+        # Clean up weak associations
+        if self.vocabulary[label][object_type] < 0:
+            del self.vocabulary[label][object_type]
+            
+    def get_label(self, object_type):
+        """
+        Retrieve the strongest label for an object type.
+        """
+        best_label = None
+        max_strength = -1.0
+        
+        for label, meanings in self.vocabulary.items():
+            if object_type in meanings:
+                strength = meanings[object_type]
+                if strength > max_strength:
+                    max_strength = strength
+                    best_label = label
+                    
+        return best_label
         
     def forward(self, inputs):
         self.last_inputs = inputs

@@ -573,3 +573,11 @@
 - [x] **Goal:** Verify if agents can modify the `genesis.py` file itself (Self-Modification at the Class Level).
 - [x] **Action:** Create `experiments/cycle2563_jailbreak.py`.
 - [x] **Result:** SUCCESS. The `ExternalComms` security filter correctly blocked the agent's attempt to overwrite `src/life/genesis.py`. The system is secure against self-modification attacks via the artifact interface.
+
+# Task: Cycle 2564 - The Babble (Gate 191)
+- [ ] **Define Cycle 2564:** The Babble.
+- [ ] **Goal:** Implement the mechanics for agents to invent random labels for objects.
+- [ ] **Action:** Modify `src/life/brain.py` to manage a vocabulary.
+- [ ] **Action:** Modify `src/life/genesis.py` to add `label_object(target_type)` method.
+- [ ] **Action:** Create `experiments/cycle2564_the_babble.py`.
+- [ ] **Result:** pending...
