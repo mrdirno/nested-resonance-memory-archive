@@ -1,5 +1,23 @@
 
 ---
+**CYCLE:** 2571 (Gate 198: The Teacher)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PEDAGOGICAL ATTENTION ECONOMICS
+**LOG:**
+*   **Experiment:** Executed `experiments/cycle2571_the_teacher.py`.
+*   **Scenario:** Teaching attention allocation under budget constraints (50 lessons, 20 students).
+*   **Result:** Nuanced findings - Ceiling Compression + Threshold Tracking.
+*   **Phases:**
+    - Abundance: 80% passing, LOW ability gets most attention (0.32)
+    - Cuts: 97% passing, attention equalizes
+    - Crisis: 100% passing (all at ceiling), minimal differentiation
+*   **Insight:** Achievement gap narrows due to ceiling effects, not equitable teaching. Attention tracks threshold proximity.
+*   **Status:** Pedagogical Triage Verified.
+*   **Functional Name:** Pedagogical Triage (Threshold Tracking under Scarcity).
+*   **Figure:** `data/figures/cycle2571_the_teacher.png`
+*   **Unexpected Finding:** Gap compression from ceiling, not equity.
+
+---
 **CYCLE:** 2570 (Gate 197: The Triage)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** MEDICAL ATTENTION ECONOMICS

@@ -27,8 +27,14 @@
   - **Functional Name:** Triage Rationality (Tragic Optimization)
   - **Ethical Note:** 32 preventable deaths in Crisis phase
 
+### Completed (Phase 72 Continued)
+- ✅ **The Teacher (Gate 198):** Pedagogical Triage - Threshold tracking under scarcity - COMPLETE
+  - **Finding:** Achievement gap narrows due to ceiling effects, not equitable teaching
+  - **Functional Name:** Pedagogical Triage (Threshold Tracking)
+  - **Unexpected:** Ceiling compression masks inequality
+
 ### Active Objectives
-- 🟢 **The Teacher (Gate 198):** Pedagogical Attention - Curriculum design under limited instruction time.
-- ⚪ **The Diplomat (Gate 199):** Attention Allocation in Negotiations - Strategic listening under time pressure.
+- 🟢 **The Diplomat (Gate 199):** Attention Allocation in Negotiations - Strategic listening under time pressure.
+- ⚪ **The Synthesis (Gate 200):** Phase 72 Integration - Unified theory of budget-constrained perception.
 
 ---
