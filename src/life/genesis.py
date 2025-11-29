@@ -552,6 +552,8 @@ class DigitalLifeform:
             if nearest_food:
                 self.target_location = (nearest_food.x, nearest_food.y)
                 self.target_type = 'FOOD'
+                # Cycle 2566: Enable labeling of food
+                self.sensed_signals['FOOD'] = (nearest_food.x, nearest_food.y)
 
     def broadcast_thought(self, utility_map):
         """
