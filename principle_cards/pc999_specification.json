@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "title": "Test Principle Card",
   "author": "Test Author <test@example.com>",
-  "created": "2025-11-01",
+  "created": "2025-11-27",
   "status": "validated",
   "domain": "population_dynamics",
   "dependencies": [],
@@ -13,12 +13,12 @@
     "parameters": {},
     "features": {
       "regime": "SUSTAINED_STABLE",
-      "mean_population": 99.92576255376922,
-      "std_population": 2.0958649501884543,
-      "min_population": 94.96860189991119,
-      "max_population": 104.6462831670816,
-      "relative_std": 0.020974220227138247,
-      "cv_population": 0.020974220227348146,
+      "mean_population": 99.83404880135168,
+      "std_population": 1.8903933942216335,
+      "min_population": 95.22085729269911,
+      "max_population": 104.65471947469075,
+      "relative_std": 0.018935357394591647,
+      "cv_population": 0.01893535739478132,
       "is_sustained": true,
       "is_collapse": false,
       "is_oscillatory": false
@@ -35,10 +35,10 @@
       "regime_consistent": true,
       "mean_within_tolerance": true,
       "std_within_tolerance": true,
-      "original_mean": 99.92576255376922,
-      "validation_mean": 99.92576255376922,
-      "original_relative_std": 0.020974220227138247,
-      "validation_relative_std": 0.020974220227138247
+      "original_mean": 99.83404880135168,
+      "validation_mean": 99.83404880135168,
+      "original_relative_std": 0.018935357394591647,
+      "validation_relative_std": 0.018935357394591647
     }
   },
   "quantification": {
