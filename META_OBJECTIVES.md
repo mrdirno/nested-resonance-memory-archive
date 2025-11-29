@@ -333,11 +333,18 @@ V(task) = Gain - λ(Budget) × Cost
 - Task Cost ↔ Coordination overhead
 - Team Triage ↔ Project abandonment / Priority shifts
 
+### Completed (Phase 77)
+- ✅ **Gate 221:** Team Attention Allocation - Collective BCP under shared constraints - COMPLETE
+  - **Finding:** Teams exhibit BCP-like collective depletion over sustained work
+  - **Fatigue Pattern:** Budget 7.50→2.00, λ 0.66→2.38 over 25 sprints
+  - **Optimal Strategy:** Frequent rest produces best outcomes (Progress 3.00, Fatigue 0.40)
+  - **Artifact:** `experiments/cycle2588_team_attention_bcp.py`
+  - **Functional Name:** The Collective Depletion Effect (Team Burnout = BCP)
+
 ### In Progress (Phase 77)
-- 🔄 **Gate 221:** Team Attention Allocation - Collective BCP under shared constraints
+- 🔄 **Gate 222:** Organizational Fatigue - Burnout as chronic budget depletion
 
 ### Planned (Phase 77)
-- ⏳ **Gate 222:** Organizational Fatigue - Burnout as chronic budget depletion
 - ⏳ **Gate 223:** Hierarchical BCP - λ propagation in management structures
 - ⏳ **Gate 224:** Organizational Memory - Institutional knowledge as BCP consolidation
 - ⏳ **Gate 225:** Restoration Mechanisms - Vacations, restructuring as budget reset

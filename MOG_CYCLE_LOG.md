@@ -1,5 +1,34 @@
 
 ---
+**CYCLE:** 2588 (Gate 221: Team Attention Allocation as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 77 - ORGANIZATIONAL INTELLIGENCE
+**LOG:**
+*   **Experiment:** `experiments/cycle2588_team_attention_bcp.py`
+*   **Question:** Do teams exhibit BCP-like collective attention allocation?
+*   **Tests:**
+    1. Team Size Effect (2-10 members)
+    2. Deadline Pressure Effect (1x-3x pressure)
+    3. Organizational Fatigue (5-25 sprints)
+    4. Rest Restoration (no_rest, mid_rest, frequent_rest)
+*   **Results:**
+    - Team Size: Larger teams more efficient (budget scaling)
+    - Pressure: Decreased focus (0.57→0.35) but top project completed
+    - Fatigue: Budget 7.50→2.00 over 25 sprints, λ 0.66→2.38
+    - Rest: Frequent rest optimal (Progress 3.00, Fatigue 0.40)
+*   **KEY FINDING: ORGANIZATIONAL FATIGUE = COLLECTIVE BCP DEPLETION**
+    - Teams exhibit BCP-like budget depletion over sustained work
+    - Frequent breaks (micro-recovery) produce best outcomes
+    - λ increase correlates with burnout
+*   **BCP-ORGANIZATION MAPPING:**
+    - Team Budget ↔ Collective attention capacity
+    - Organizational λ ↔ Deadline pressure / Resource stress
+    - Project Triage ↔ Strategic deprioritization
+    - Team Rest ↔ Budget restoration (vacations, breaks)
+*   **Status:** Gate 221 Complete.
+*   **Functional Name:** The Collective Depletion Effect (Team Burnout = BCP)
+
+---
 **CYCLE:** 2587 (Gate 219: Sleep and Memory as BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 76 - COGNITIVE ARCHITECTURE
