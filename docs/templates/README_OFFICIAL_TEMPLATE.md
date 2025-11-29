@@ -107,6 +107,15 @@ Examples:
 
 ---
 
+## 📚 LIBRARIES
+
+*   **[Library Name]** ([Link to Library README])
+    *   [One-line functional description]
+    *   `pip install [package]`
+    *   *See `docs/templates/README_LIBRARY_TEMPLATE.md` for library documentation guidelines.*
+
+---
+
 ## 📚 TUTORIALS & EXAMPLES
 
 *   [Getting Started](docs/runbooks/QUICKSTART.md)
