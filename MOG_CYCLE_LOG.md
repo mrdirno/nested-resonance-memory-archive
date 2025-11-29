@@ -1,5 +1,24 @@
 
 ---
+**CYCLE:** 2572 (Gate 199: The Diplomat)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** ATTENTION ALLOCATION IN NEGOTIATIONS
+**LOG:**
+*   **Experiment:** Executed `experiments/cycle2572_the_diplomat.py`.
+*   **Scenario:** Multi-party negotiation with limited attention budget (6 topics, 50 rounds, 3 phases).
+*   **Strategies Tested:** Optimal, Uniform, Dealbreaker-First, High-Priority.
+*   **Result:** Counter-intuitive finding - Uniform attention achieves 100% deal rate (vs 98% optimal).
+*   **Phases:**
+    - Normal (t=0-20): Full attention budget (3 units)
+    - Cuts (t=20-40): 70% budget
+    - Crisis (t=40-50): 40% budget
+*   **Insight:** All focused strategies converge to similar satisfaction (~0.52 A, ~0.48 B). Uniform resolves more topics (6/6 vs 4.5/6) but doesn't improve satisfaction.
+*   **Status:** Diplomatic Triage Verified.
+*   **Functional Name:** The Diplomatic Triage Effect (Selective Deafness under Pressure).
+*   **Figure:** `data/figures/cycle2572_the_diplomat.png`
+*   **Unexpected Finding:** Uniform attention sometimes outperforms strategic focus - suggests over-optimization penalty.
+
+---
 **CYCLE:** 2571 (Gate 198: The Teacher)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PEDAGOGICAL ATTENTION ECONOMICS

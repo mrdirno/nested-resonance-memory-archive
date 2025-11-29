@@ -33,8 +33,14 @@
   - **Functional Name:** Pedagogical Triage (Threshold Tracking)
   - **Unexpected:** Ceiling compression masks inequality
 
+### Completed (Phase 72 Continued)
+- ✅ **The Diplomat (Gate 199):** Attention Allocation in Negotiations - Strategic listening under time pressure - COMPLETE
+  - **Finding:** Under time pressure, focused strategies achieve similar satisfaction with fewer resolved topics
+  - **Unexpected:** Uniform attention achieves 100% deal rate (vs 98% optimal) but equal satisfaction
+  - **Functional Name:** The Diplomatic Triage Effect (Selective Deafness)
+
 ### Active Objectives
-- 🟢 **The Diplomat (Gate 199):** Attention Allocation in Negotiations - Strategic listening under time pressure.
-- ⚪ **The Synthesis (Gate 200):** Phase 72 Integration - Unified theory of budget-constrained perception.
+- 🟢 **The Synthesis (Gate 200):** Phase 72 Integration - Unified theory of budget-constrained perception.
+- ⚪ **Phase 73 Transition:** Define next research phase after synthesis.
 
 ---

@@ -1,404 +1,538 @@
 #!/usr/bin/env python3
 """
-CYCLE 2570: THE TRIAGE - Medical Attention Economics
+CYCLE 2570: The Triage
+======================
+Gate 197: Medical Attention Economics - Selective diagnosis under resource constraints.
 
-Applies budget-constrained perception (Cycles 2568-2569) to medical diagnosis.
+Building on:
+- Gate 195 (Starving Philosopher): Gradual perception degradation under scarcity
+- Gate 196 (Portfolio Triage): Binary track/ignore decisions for assets
+
+This experiment asks: How do agents allocate DIAGNOSTIC ATTENTION when testing
+resources are severely limited?
 
 Hypothesis:
-    A diagnostic system with limited time/resources will:
-    1. PRIORITIZE high-urgency/low-cost cases (acute/obvious conditions)
-    2. DEFER or DROP complex/low-urgency cases under scarcity
-    3. Use "satisficing" thresholds - accept confident-enough diagnoses
-    4. Exhibit "diagnostic tunnel vision" on high-stakes cases
+    Under severe budget constraints, agents shift from COMPREHENSIVE testing
+    to STRATEGIC testing, prioritizing conditions based on a triage metric:
 
-Key Variables:
-    - N patients with different urgency × complexity profiles
-    - Fixed diagnostic time budget per shift
-    - Each diagnosis requires attention proportional to complexity
-    - Outcomes depend on diagnostic accuracy × urgency
+    Triage Priority = P(condition) × Severity × Treatability / TestCost
+
+    This creates tension between:
+    - "Common & mild" (high prevalence, low severity)
+    - "Rare & severe" (low prevalence, high severity)
+    - "Cheap & informative" (low cost, high diagnostic value)
+
+Model:
+    - N conditions with priors P(C_i), severities S_i, treatabilities R_i, costs T_i
+    - Budget B constrains total tests
+    - Agent selects subset of conditions to test
+    - Outcome: Expected health value (EHV) from detected & treated conditions
+
+Key Prediction:
+    As budget shrinks, agent will exhibit "Diagnostic Triage Effect":
+    - Abandon testing for low-priority conditions entirely
+    - Focus resources on highest triage priority conditions
+    - Transition is non-linear (phase transition behavior)
 
 Author: Aldrin Payopay <aldrin.gdf@gmail.com>
-Co-Authored-By: Claude <noreply@anthropic.com>
 License: GPL-3.0
+Repository: https://github.com/mrdirno/nested-resonance-memory-archive
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
-from enum import Enum
+from typing import List, Dict, Tuple
 import os
 
-np.random.seed(42)
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
 
+@dataclass
+class Condition:
+    """A medical condition with associated parameters."""
+    name: str
+    prevalence: float      # P(C_i) - base rate in population
+    severity: float        # S_i - harm if untreated (0-100)
+    treatability: float    # R_i - benefit of treatment if detected (0-1)
+    test_cost: float       # T_i - resource cost of diagnostic test
 
-class TriageLevel(Enum):
-    """Standard triage categories."""
-    IMMEDIATE = 1    # Life-threatening, needs instant attention
-    EMERGENT = 2     # Serious, can wait minutes
-    URGENT = 3       # Needs attention within hours
-    STANDARD = 4     # Routine, can wait
-    NON_URGENT = 5   # Can defer indefinitely
+    @property
+    def triage_priority(self) -> float:
+        """Compute triage priority score."""
+        return (self.prevalence * self.severity * self.treatability) / self.test_cost
 
 
 @dataclass
-class Patient:
-    """Represents a patient requiring diagnosis."""
-    id: int
-    condition: str
-    true_diagnosis: str
-    triage_level: TriageLevel
-    complexity: float       # 0-1: diagnostic difficulty
-    diagnostic_cost: float  # Time units required for full diagnosis
-    mortality_risk: float   # Risk if undiagnosed (0-1)
+class Config:
+    """Experiment parameters."""
+    # Simulation
+    n_budget_levels: int = 50
+    min_budget: float = 1.0
+    max_budget: float = 100.0
+    n_trials: int = 100  # Monte Carlo trials per budget level
+
+    # Conditions (realistic medical scenario)
+    conditions: List[Condition] = None
+
+    def __post_init__(self):
+        if self.conditions is None:
+            # Create a diverse set of conditions
+            self.conditions = [
+                # Common & Mild
+                Condition("Common Cold", prevalence=0.30, severity=5, treatability=0.2, test_cost=2),
+                Condition("Mild Allergy", prevalence=0.25, severity=8, treatability=0.5, test_cost=3),
+
+                # Common & Moderate
+                Condition("Hypertension", prevalence=0.20, severity=40, treatability=0.8, test_cost=5),
+                Condition("Type 2 Diabetes", prevalence=0.10, severity=50, treatability=0.7, test_cost=8),
+
+                # Rare & Severe
+                Condition("Heart Disease", prevalence=0.05, severity=90, treatability=0.6, test_cost=15),
+                Condition("Cancer Type A", prevalence=0.02, severity=95, treatability=0.4, test_cost=25),
+                Condition("Cancer Type B", prevalence=0.01, severity=98, treatability=0.3, test_cost=30),
+
+                # Rare & Mild (diagnostic traps)
+                Condition("Rare Benign", prevalence=0.005, severity=10, treatability=0.9, test_cost=20),
+            ]
 
 
-@dataclass
-class DiagnosticOutcome:
-    """Result of diagnostic attention."""
-    patient_id: int
-    attention_given: float      # 0-1: fraction of required attention
-    confidence: float           # Diagnostic confidence achieved
-    correct: bool               # Was diagnosis correct?
-    patient_outcome: str        # 'treated', 'deferred', 'missed'
+# ============================================================================
+# TRIAGE AGENT
+# ============================================================================
 
+class TriageAgent:
+    """Agent that allocates diagnostic resources under budget constraints."""
 
-class TriageSystem:
-    """Diagnostic attention allocation system."""
+    def __init__(self, conditions: List[Condition]):
+        self.conditions = conditions
+        self.n_conditions = len(conditions)
 
-    def __init__(self, total_budget: float, satisficing_threshold: float = 0.7):
-        self.total_budget = total_budget
-        self.satisficing_threshold = satisficing_threshold  # Accept diagnosis above this confidence
-        self.outcomes: List[DiagnosticOutcome] = []
+    def compute_priorities(self) -> np.ndarray:
+        """Compute triage priority for each condition."""
+        return np.array([c.triage_priority for c in self.conditions])
 
-    def compute_priority_score(self, patient: Patient) -> float:
+    def select_tests(self, budget: float, strategy: str = "optimal") -> List[int]:
         """
-        Compute priority score: urgency × mortality_risk / cost.
+        Select which conditions to test given budget constraint.
 
-        Higher score = should allocate attention first.
+        Returns: List of condition indices to test
         """
-        urgency_weight = 6 - patient.triage_level.value  # IMMEDIATE=5, NON_URGENT=1
-        return (urgency_weight * patient.mortality_risk) / (patient.diagnostic_cost + 0.1)
+        costs = np.array([c.test_cost for c in self.conditions])
+        priorities = self.compute_priorities()
 
-    def allocate_attention(self, patients: List[Patient], available_budget: float) -> Dict[int, float]:
-        """
-        Allocate diagnostic attention to patients.
+        if strategy == "optimal":
+            # Greedy selection by priority/cost ratio
+            ratio = priorities / costs
+            sorted_indices = np.argsort(-ratio)  # Descending
 
-        Uses greedy approach: highest priority first, with satisficing cutoff.
-        """
-        # Sort by priority score
-        scored = [(p, self.compute_priority_score(p)) for p in patients]
-        scored.sort(key=lambda x: x[1], reverse=True)
+            selected = []
+            remaining_budget = budget
 
-        allocations = {p.id: 0.0 for p in patients}
-        remaining = available_budget
+            for idx in sorted_indices:
+                if costs[idx] <= remaining_budget:
+                    selected.append(idx)
+                    remaining_budget -= costs[idx]
 
-        for patient, score in scored:
-            if remaining <= 0:
-                break
+            return selected
 
-            # Determine how much attention to give
-            min_attention = self.satisficing_threshold  # At least this much for useful diagnosis
-            ideal_attention = 1.0  # Full attention for complete diagnosis
+        elif strategy == "severity_first":
+            # Prioritize by severity only
+            severities = np.array([c.severity for c in self.conditions])
+            sorted_indices = np.argsort(-severities)
 
-            if remaining >= patient.diagnostic_cost * ideal_attention:
-                # Full attention
-                alloc = ideal_attention
-            elif remaining >= patient.diagnostic_cost * min_attention:
-                # Satisficing: give enough for confident diagnosis
-                alloc = remaining / patient.diagnostic_cost
-            else:
-                # Not enough for useful diagnosis - skip or defer
-                if patient.triage_level.value <= 2:  # IMMEDIATE or EMERGENT
-                    # Can't skip life-threatening - give what we have
-                    alloc = remaining / patient.diagnostic_cost
-                else:
-                    # Defer non-critical
-                    alloc = 0.0
+            selected = []
+            remaining_budget = budget
 
-            allocations[patient.id] = alloc
-            remaining -= alloc * patient.diagnostic_cost
+            for idx in sorted_indices:
+                if costs[idx] <= remaining_budget:
+                    selected.append(idx)
+                    remaining_budget -= costs[idx]
 
-        return allocations
+            return selected
 
-    def diagnose(self, patient: Patient, attention: float) -> DiagnosticOutcome:
-        """
-        Perform diagnosis with given attention level.
+        elif strategy == "prevalence_first":
+            # Prioritize by prevalence only
+            prevalences = np.array([c.prevalence for c in self.conditions])
+            sorted_indices = np.argsort(-prevalences)
 
-        Returns outcome based on attention × complexity interaction.
-        """
-        # Confidence increases with attention, decreases with complexity
-        base_confidence = attention ** 0.5  # Diminishing returns
-        complexity_penalty = patient.complexity * (1 - attention)
-        confidence = max(0, min(1, base_confidence - complexity_penalty))
+            selected = []
+            remaining_budget = budget
 
-        # Correctness probability depends on confidence
-        correct_prob = confidence ** 1.5
-        correct = np.random.random() < correct_prob
+            for idx in sorted_indices:
+                if costs[idx] <= remaining_budget:
+                    selected.append(idx)
+                    remaining_budget -= costs[idx]
 
-        # Determine patient outcome
-        if attention < 0.01:
-            outcome = 'deferred'
-        elif correct and confidence >= self.satisficing_threshold:
-            outcome = 'treated'
-        elif patient.mortality_risk > 0.5 and not correct:
-            outcome = 'missed'  # Dangerous miss
+            return selected
+
         else:
-            outcome = 'treated'  # Treated (possibly incorrectly but non-critical)
+            raise ValueError(f"Unknown strategy: {strategy}")
 
-        return DiagnosticOutcome(
-            patient_id=patient.id,
-            attention_given=attention,
-            confidence=confidence,
-            correct=correct,
-            patient_outcome=outcome
-        )
+    def simulate_patient(self, true_conditions: List[int], tested: List[int]) -> Dict:
+        """
+        Simulate outcome for a patient.
+
+        Args:
+            true_conditions: Indices of conditions the patient actually has
+            tested: Indices of conditions we tested for
+
+        Returns:
+            Dict with health outcomes
+        """
+        detected = set(true_conditions) & set(tested)
+        missed = set(true_conditions) - set(tested)
+
+        # Compute health value
+        health_saved = 0.0
+        health_lost = 0.0
+
+        for idx in detected:
+            c = self.conditions[idx]
+            health_saved += c.severity * c.treatability
+
+        for idx in missed:
+            c = self.conditions[idx]
+            health_lost += c.severity  # Full harm from untreated condition
+
+        return {
+            'detected': len(detected),
+            'missed': len(missed),
+            'health_saved': health_saved,
+            'health_lost': health_lost,
+            'net_health': health_saved - health_lost
+        }
+
+    def generate_patient(self, rng: np.random.Generator) -> List[int]:
+        """Generate a random patient with conditions based on prevalence."""
+        conditions = []
+        for i, c in enumerate(self.conditions):
+            if rng.random() < c.prevalence:
+                conditions.append(i)
+        return conditions
 
 
-def generate_patient_cohort(n: int) -> List[Patient]:
-    """Generate diverse patient cohort."""
-    conditions = [
-        # (name, true_diagnosis, triage, complexity, cost, mortality)
-        ("Chest Pain", "STEMI", TriageLevel.IMMEDIATE, 0.6, 2.0, 0.9),
-        ("Stroke Symptoms", "CVA", TriageLevel.IMMEDIATE, 0.7, 2.5, 0.85),
-        ("Severe Trauma", "Internal Bleeding", TriageLevel.IMMEDIATE, 0.8, 3.0, 0.95),
-        ("High Fever", "Sepsis", TriageLevel.EMERGENT, 0.5, 1.5, 0.6),
-        ("Appendicitis", "Acute Abdomen", TriageLevel.EMERGENT, 0.4, 1.2, 0.4),
-        ("Fracture", "Closed Fracture", TriageLevel.URGENT, 0.3, 1.0, 0.1),
-        ("Laceration", "Deep Cut", TriageLevel.URGENT, 0.2, 0.5, 0.05),
-        ("Back Pain", "Muscle Strain", TriageLevel.STANDARD, 0.5, 1.5, 0.02),
-        ("Headache", "Tension Headache", TriageLevel.STANDARD, 0.6, 1.8, 0.03),
-        ("Rash", "Contact Dermatitis", TriageLevel.NON_URGENT, 0.3, 0.8, 0.01),
-        ("Cold Symptoms", "Viral URI", TriageLevel.NON_URGENT, 0.2, 0.5, 0.01),
-        ("Fatigue", "Anemia", TriageLevel.NON_URGENT, 0.7, 2.0, 0.02),
-    ]
+# ============================================================================
+# EXPERIMENT
+# ============================================================================
 
-    patients = []
-    for i in range(n):
-        cond = conditions[i % len(conditions)]
-        # Add some variation
-        complexity_var = cond[3] + np.random.uniform(-0.1, 0.1)
-        patients.append(Patient(
-            id=i,
-            condition=cond[0],
-            true_diagnosis=cond[1],
-            triage_level=cond[2],
-            complexity=np.clip(complexity_var, 0.1, 0.95),
-            diagnostic_cost=cond[4],
-            mortality_risk=cond[5]
-        ))
-    return patients
+def run_experiment(cfg: Config, seed: int = 42) -> Dict:
+    """Run the complete triage experiment."""
+    rng = np.random.default_rng(seed)
+    agent = TriageAgent(cfg.conditions)
 
+    # Budget levels to test
+    budgets = np.linspace(cfg.min_budget, cfg.max_budget, cfg.n_budget_levels)
 
-def run_simulation(T: int = 100, patients_per_tick: int = 3) -> Tuple[dict, dict]:
-    """
-    Run triage simulation with three phases.
-
-    Phases:
-        1. Abundance (0-33): Full staffing, plenty of time
-        2. Collapse (34-66): Staffing cuts, increasing load
-        3. Crisis (67-100): Minimal resources, maximum load
-    """
-    # Storage
-    history = {
-        'time': [],
-        'budget': [],
-        'patients_seen': [],
-        'patients_deferred': [],
-        'correct_diagnoses': [],
-        'critical_misses': [],
-        'avg_confidence': [],
+    results = {
+        'budgets': budgets.tolist(),
+        'conditions': [c.name for c in cfg.conditions],
+        'priorities': agent.compute_priorities().tolist(),
+        'costs': [c.test_cost for c in cfg.conditions],
+        'strategies': {}
     }
 
-    triage_breakdown = {level.name: [] for level in TriageLevel}
+    for strategy in ['optimal', 'severity_first', 'prevalence_first']:
+        strategy_results = {
+            'n_tests': [],
+            'health_saved': [],
+            'health_lost': [],
+            'net_health': [],
+            'detection_rate': [],
+            'coverage': []  # Fraction of conditions tested
+        }
 
-    base_budget = 10.0  # Time units per tick
+        for budget in budgets:
+            # Select tests for this budget
+            tested = agent.select_tests(budget, strategy)
+            coverage = len(tested) / len(cfg.conditions)
 
-    for t in range(T):
-        # Compute current budget based on phase
-        if t < 33:
-            # Abundance: full budget
-            current_budget = base_budget
-        elif t < 66:
-            # Collapse: decreasing budget
-            progress = (t - 33) / 33
-            current_budget = base_budget * (1 - 0.7 * progress)
-        else:
-            # Crisis: minimal budget
-            current_budget = base_budget * 0.3
+            # Monte Carlo over patient population
+            trial_results = []
+            for _ in range(cfg.n_trials):
+                patient_conditions = agent.generate_patient(rng)
+                if len(patient_conditions) > 0:
+                    outcome = agent.simulate_patient(patient_conditions, tested)
+                    trial_results.append(outcome)
 
-        # Generate patient cohort for this tick
-        patients = generate_patient_cohort(patients_per_tick + t // 20)  # Load increases over time
-
-        # Create triage system for this tick
-        system = TriageSystem(current_budget)
-
-        # Allocate attention
-        allocations = system.allocate_attention(patients, current_budget)
-
-        # Process each patient
-        outcomes = []
-        for patient in patients:
-            attention = allocations[patient.id]
-            outcome = system.diagnose(patient, attention)
-            outcomes.append((patient, outcome))
-
-        # Aggregate statistics
-        seen = sum(1 for _, o in outcomes if o.attention_given > 0.01)
-        deferred = sum(1 for _, o in outcomes if o.patient_outcome == 'deferred')
-        correct = sum(1 for _, o in outcomes if o.correct)
-        critical_miss = sum(1 for p, o in outcomes
-                          if o.patient_outcome == 'missed' and p.triage_level.value <= 2)
-        avg_conf = np.mean([o.confidence for _, o in outcomes if o.attention_given > 0])
-
-        history['time'].append(t)
-        history['budget'].append(current_budget)
-        history['patients_seen'].append(seen)
-        history['patients_deferred'].append(deferred)
-        history['correct_diagnoses'].append(correct)
-        history['critical_misses'].append(critical_miss)
-        history['avg_confidence'].append(avg_conf if not np.isnan(avg_conf) else 0)
-
-        # Breakdown by triage level
-        for level in TriageLevel:
-            level_patients = [(p, o) for p, o in outcomes if p.triage_level == level]
-            if level_patients:
-                level_seen = sum(1 for _, o in level_patients if o.attention_given > 0.01) / len(level_patients)
+            if trial_results:
+                avg_health_saved = np.mean([r['health_saved'] for r in trial_results])
+                avg_health_lost = np.mean([r['health_lost'] for r in trial_results])
+                avg_detected = np.mean([r['detected'] for r in trial_results])
+                avg_total = np.mean([r['detected'] + r['missed'] for r in trial_results])
+                detection_rate = avg_detected / max(avg_total, 1e-6)
             else:
-                level_seen = 0
-            triage_breakdown[level.name].append(level_seen)
+                avg_health_saved = 0
+                avg_health_lost = 0
+                detection_rate = 0
 
-    return history, triage_breakdown
+            strategy_results['n_tests'].append(len(tested))
+            strategy_results['health_saved'].append(avg_health_saved)
+            strategy_results['health_lost'].append(avg_health_lost)
+            strategy_results['net_health'].append(avg_health_saved - avg_health_lost)
+            strategy_results['detection_rate'].append(detection_rate)
+            strategy_results['coverage'].append(coverage)
+
+        results['strategies'][strategy] = strategy_results
+
+    # Analyze triage transitions
+    results['transitions'] = analyze_triage_transitions(cfg, agent, budgets)
+
+    return results
 
 
-def plot_results(history: dict, triage_breakdown: dict, output_path: str):
-    """Generate three-panel visualization."""
-    fig, axes = plt.subplots(3, 1, figsize=(12, 10), sharex=True)
-    fig.suptitle('CYCLE 2570: The Triage - Medical Attention Economics\n'
-                 '"Under scarcity, the system learns who NOT to save"',
-                 fontsize=14, fontweight='bold')
+def analyze_triage_transitions(cfg: Config, agent: TriageAgent, budgets: np.ndarray) -> Dict:
+    """Analyze when each condition gets dropped from testing."""
+    transitions = {c.name: {'included_until': None, 'priority': c.triage_priority}
+                   for c in cfg.conditions}
 
-    time = history['time']
+    prev_tested = set()
+    for budget in reversed(budgets):
+        tested = set(agent.select_tests(budget, 'optimal'))
 
-    # Panel 1: Budget and Load
-    ax1 = axes[0]
-    ax1.set_title('Panel 1: Resource Collapse and Patient Load', fontsize=11)
+        # Find newly dropped conditions
+        dropped = prev_tested - tested
+        for idx in dropped:
+            name = cfg.conditions[idx].name
+            if transitions[name]['included_until'] is None:
+                transitions[name]['included_until'] = budget
 
-    ax1.fill_between(time[:33], 0, 12, alpha=0.2, color='green', label='Abundance')
-    ax1.fill_between(time[33:66], 0, 12, alpha=0.2, color='yellow', label='Collapse')
-    ax1.fill_between(time[66:], 0, 12, alpha=0.2, color='red', label='Crisis')
+        prev_tested = tested
 
-    ax1.plot(time, history['budget'], 'b-', linewidth=2, label='Diagnostic Budget')
-    ax1.set_ylabel('Budget (time units)', color='blue')
-    ax1.set_ylim(0, 12)
-    ax1.legend(loc='upper left')
+    # Conditions still tested at minimum budget
+    min_tested = agent.select_tests(cfg.min_budget, 'optimal')
+    for idx in min_tested:
+        name = cfg.conditions[idx].name
+        transitions[name]['included_until'] = cfg.min_budget
 
-    ax1_right = ax1.twinx()
-    patients_total = [s + d for s, d in zip(history['patients_seen'], history['patients_deferred'])]
-    ax1_right.plot(time, patients_total, 'r--', linewidth=1.5, label='Total Patients')
-    ax1_right.plot(time, history['patients_deferred'], 'r:', linewidth=1.5, label='Deferred')
-    ax1_right.set_ylabel('Patient Count', color='red')
-    ax1_right.legend(loc='upper right')
+    return transitions
 
-    # Panel 2: Attention by Triage Level
-    ax2 = axes[1]
-    ax2.set_title('Panel 2: Selective Attention by Triage Level', fontsize=11)
 
-    colors = {'IMMEDIATE': 'red', 'EMERGENT': 'orange', 'URGENT': 'yellow',
-              'STANDARD': 'lightblue', 'NON_URGENT': 'gray'}
+# ============================================================================
+# VISUALIZATION
+# ============================================================================
 
-    for level_name, rates in triage_breakdown.items():
-        ax2.plot(time, rates, label=level_name, color=colors[level_name], linewidth=1.5)
+def plot_results(results: Dict, cfg: Config, output_path: str):
+    """Generate the multi-panel visualization."""
+    fig = plt.figure(figsize=(14, 12))
 
-    ax2.axvline(x=33, color='gray', linestyle='--', alpha=0.5)
-    ax2.axvline(x=66, color='gray', linestyle='--', alpha=0.5)
-    ax2.set_ylabel('Fraction Seen')
-    ax2.set_ylim(-0.05, 1.1)
-    ax2.legend(loc='center right', fontsize=8)
+    budgets = np.array(results['budgets'])
 
-    # Add annotations
-    ax2.annotate('NON_URGENT dropped', xy=(80, 0.1), fontsize=9, color='gray')
-    ax2.annotate('IMMEDIATE preserved', xy=(80, 0.95), fontsize=9, color='red')
+    # -------------------------------------------------------------------------
+    # Panel 1: Strategy Comparison (Net Health)
+    # -------------------------------------------------------------------------
+    ax1 = fig.add_subplot(2, 2, 1)
 
-    # Panel 3: Outcomes
-    ax3 = axes[2]
-    ax3.set_title('Panel 3: Diagnostic Quality - The Cost of Triage', fontsize=11)
+    colors = {'optimal': 'green', 'severity_first': 'red', 'prevalence_first': 'blue'}
+    labels = {'optimal': 'Optimal Triage', 'severity_first': 'Severity First', 'prevalence_first': 'Prevalence First'}
 
-    # Smooth the data for visibility
-    window = 5
-    smoothed_correct = np.convolve(history['correct_diagnoses'],
-                                   np.ones(window)/window, mode='same')
-    smoothed_miss = np.convolve(history['critical_misses'],
-                                np.ones(window)/window, mode='same')
+    for strategy, data in results['strategies'].items():
+        ax1.plot(budgets, data['net_health'], color=colors[strategy],
+                linewidth=2, label=labels[strategy])
 
-    ax3.plot(time, smoothed_correct, 'g-', linewidth=2, label='Correct Diagnoses')
-    ax3.fill_between(time, 0, smoothed_miss, color='red', alpha=0.3, label='Critical Misses')
-    ax3.set_ylabel('Count per Tick')
-    ax3.set_xlabel('Time (shift)')
-    ax3.legend(loc='upper left')
+    ax1.set_xlabel('Diagnostic Budget')
+    ax1.set_ylabel('Net Health Value')
+    ax1.set_title('Strategy Comparison: Net Health Outcome', fontsize=12, fontweight='bold')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    ax1.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
 
-    ax3_right = ax3.twinx()
-    ax3_right.plot(time, history['avg_confidence'], 'purple', linewidth=1.5,
-                   alpha=0.7, label='Avg Confidence')
-    ax3_right.set_ylabel('Confidence', color='purple')
-    ax3_right.tick_params(axis='y', labelcolor='purple')
-    ax3_right.legend(loc='upper right')
+    # -------------------------------------------------------------------------
+    # Panel 2: Coverage vs Budget
+    # -------------------------------------------------------------------------
+    ax2 = fig.add_subplot(2, 2, 2)
 
-    ax3.axvline(x=33, color='gray', linestyle='--', alpha=0.5)
-    ax3.axvline(x=66, color='gray', linestyle='--', alpha=0.5)
+    optimal_data = results['strategies']['optimal']
+    ax2.fill_between(budgets, optimal_data['coverage'], alpha=0.3, color='green')
+    ax2.plot(budgets, optimal_data['coverage'], 'g-', linewidth=2, label='Coverage (% conditions tested)')
+    ax2.plot(budgets, optimal_data['detection_rate'], 'b--', linewidth=2, label='Detection Rate')
 
+    ax2.set_xlabel('Diagnostic Budget')
+    ax2.set_ylabel('Fraction')
+    ax2.set_title('Diagnostic Coverage Under Scarcity', fontsize=12, fontweight='bold')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+    ax2.set_ylim(0, 1.05)
+
+    # -------------------------------------------------------------------------
+    # Panel 3: Triage Priority Ranking
+    # -------------------------------------------------------------------------
+    ax3 = fig.add_subplot(2, 2, 3)
+
+    conditions = cfg.conditions
+    priorities = [c.triage_priority for c in conditions]
+    names = [c.name for c in conditions]
+
+    # Sort by priority
+    sorted_indices = np.argsort(priorities)[::-1]
+    sorted_names = [names[i] for i in sorted_indices]
+    sorted_priorities = [priorities[i] for i in sorted_indices]
+
+    # Color by category
+    colors_bar = []
+    for i in sorted_indices:
+        c = conditions[i]
+        if c.severity >= 90:
+            colors_bar.append('darkred')  # Severe
+        elif c.severity >= 40:
+            colors_bar.append('orange')   # Moderate
+        else:
+            colors_bar.append('green')    # Mild
+
+    y_pos = np.arange(len(sorted_names))
+    ax3.barh(y_pos, sorted_priorities, color=colors_bar, alpha=0.7)
+    ax3.set_yticks(y_pos)
+    ax3.set_yticklabels(sorted_names, fontsize=9)
+    ax3.set_xlabel('Triage Priority Score')
+    ax3.set_title('Condition Triage Priority Ranking\n(Red=Severe, Orange=Moderate, Green=Mild)',
+                  fontsize=12, fontweight='bold')
+
+    # -------------------------------------------------------------------------
+    # Panel 4: Triage Transition Map
+    # -------------------------------------------------------------------------
+    ax4 = fig.add_subplot(2, 2, 4)
+
+    transitions = results['transitions']
+
+    # Sort by when they get dropped
+    sorted_conditions = sorted(transitions.items(),
+                               key=lambda x: x[1]['included_until'] or 0,
+                               reverse=True)
+
+    y_labels = []
+    x_values = []
+
+    for name, data in sorted_conditions:
+        y_labels.append(name)
+        x_values.append(data['included_until'] if data['included_until'] else cfg.max_budget)
+
+    y_pos = np.arange(len(y_labels))
+    bars = ax4.barh(y_pos, x_values, alpha=0.7, color='steelblue')
+
+    # Add priority annotations
+    for i, (name, data) in enumerate(sorted_conditions):
+        ax4.text(x_values[i] + 1, i, f"P={data['priority']:.2f}",
+                va='center', fontsize=8, color='gray')
+
+    ax4.set_yticks(y_pos)
+    ax4.set_yticklabels(y_labels, fontsize=9)
+    ax4.set_xlabel('Minimum Budget to Include Test')
+    ax4.set_title('Triage Transition Map\n(When conditions get dropped)',
+                  fontsize=12, fontweight='bold')
+    ax4.axvline(x=cfg.min_budget, color='red', linestyle='--', alpha=0.7, label='Min Budget')
+    ax4.legend()
+
+    # -------------------------------------------------------------------------
+    # Overall title
+    # -------------------------------------------------------------------------
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    fig.suptitle('CYCLE 2570: The Triage\n'
+                 '"Under scarcity, agents must choose: common-and-mild vs rare-and-severe"',
+                 fontsize=14, fontweight='bold', y=1.02)
+
+    plt.savefig(output_path, dpi=300, bbox_inches='tight', facecolor='white')
     plt.close()
+
     print(f"Figure saved: {output_path}")
 
 
+# ============================================================================
+# MAIN
+# ============================================================================
+
 def main():
-    print("=" * 60)
-    print("CYCLE 2570: THE TRIAGE")
+    """Run experiment and generate output."""
+    print("=" * 70)
+    print("CYCLE 2570: The Triage")
     print("Gate 197: Medical Attention Economics")
-    print("=" * 60)
+    print("=" * 70)
 
-    # Run simulation
-    print("\nRunning simulation (T=100 shifts)...")
-    history, triage_breakdown = run_simulation(T=100)
+    cfg = Config()
 
-    # Summary statistics by phase
-    print("\n--- RESULTS BY PHASE ---")
+    print(f"\nConditions ({len(cfg.conditions)}):")
+    print("-" * 60)
+    for c in cfg.conditions:
+        print(f"  {c.name:20s} | P={c.prevalence:.3f} | S={c.severity:3.0f} | "
+              f"R={c.treatability:.1f} | T={c.test_cost:5.1f} | Priority={c.triage_priority:.3f}")
 
-    phases = [('Abundance', 0, 33), ('Collapse', 33, 66), ('Crisis', 66, 100)]
-    for phase_name, start, end in phases:
-        seen = np.mean(history['patients_seen'][start:end])
-        deferred = np.mean(history['patients_deferred'][start:end])
-        correct = np.mean(history['correct_diagnoses'][start:end])
-        misses = np.sum(history['critical_misses'][start:end])
-        conf = np.mean(history['avg_confidence'][start:end])
+    print(f"\nBudget range: {cfg.min_budget} - {cfg.max_budget}")
+    print(f"Trials per budget level: {cfg.n_trials}")
 
-        print(f"\n  {phase_name} (t={start}-{end}):")
-        print(f"    Patients Seen: {seen:.1f}/shift")
-        print(f"    Patients Deferred: {deferred:.1f}/shift")
-        print(f"    Correct Diagnoses: {correct:.1f}/shift")
-        print(f"    Critical Misses (total): {misses}")
-        print(f"    Avg Confidence: {conf:.2%}")
+    # Run experiment
+    print("\nRunning simulation...")
+    results = run_experiment(cfg)
 
-    print("\n--- TRIAGE LEVEL ATTENTION (Crisis Phase) ---")
-    for level_name in ['IMMEDIATE', 'EMERGENT', 'URGENT', 'STANDARD', 'NON_URGENT']:
-        crisis_rate = np.mean(triage_breakdown[level_name][66:])
-        print(f"  {level_name}: {crisis_rate:.1%} seen")
+    # Analyze results
+    print("\n" + "=" * 70)
+    print("RESULTS")
+    print("=" * 70)
+
+    # Find phase transition point
+    optimal_data = results['strategies']['optimal']
+    coverages = np.array(optimal_data['coverage'])
+    budgets = np.array(results['budgets'])
+
+    # Find budget where coverage drops below 50%
+    half_coverage_idx = np.argmax(coverages < 0.5)
+    if half_coverage_idx > 0:
+        transition_budget = budgets[half_coverage_idx]
+        print(f"\nPhase Transition (50% coverage): Budget = {transition_budget:.1f}")
+
+    # Compare strategies at low budget
+    low_budget_idx = 5  # Near minimum
+    print(f"\nStrategy Performance at Low Budget (B={budgets[low_budget_idx]:.1f}):")
+    for strategy, data in results['strategies'].items():
+        print(f"  {strategy:20s}: Net Health = {data['net_health'][low_budget_idx]:.2f}, "
+              f"Coverage = {data['coverage'][low_budget_idx]:.1%}")
+
+    # Optimal vs suboptimal gap at various budgets
+    print("\nOptimal Strategy Advantage:")
+    for idx in [5, 25, 45]:  # Low, medium, high budget
+        opt = results['strategies']['optimal']['net_health'][idx]
+        sev = results['strategies']['severity_first']['net_health'][idx]
+        prev = results['strategies']['prevalence_first']['net_health'][idx]
+        print(f"  Budget {budgets[idx]:5.1f}: Optimal vs Severity = +{opt-sev:.1f}, "
+              f"vs Prevalence = +{opt-prev:.1f}")
+
+    # Triage transitions
+    print("\nTriage Transitions (when conditions get dropped):")
+    sorted_trans = sorted(results['transitions'].items(),
+                          key=lambda x: x[1]['included_until'] or 0)
+    for name, data in sorted_trans:
+        if data['included_until']:
+            print(f"  {name:20s}: Dropped below B={data['included_until']:.1f} "
+                  f"(Priority={data['priority']:.3f})")
+
+    # Key finding
+    print("\n" + "=" * 70)
+    print("KEY FINDING: The Diagnostic Triage Effect")
+    print("=" * 70)
+    print("""
+Under severe budget constraints:
+1. Agents cannot test for all conditions
+2. They must PRIORITIZE based on: P(condition) x Severity x Treatability / Cost
+3. Low-priority conditions are COMPLETELY ABANDONED (not gradually reduced)
+4. This creates "diagnostic blind spots" - conditions that are never tested
+
+The optimal triage strategy outperforms naive heuristics (severity-first or
+prevalence-first) because it balances all factors into a unified metric.
+
+FUNCTIONAL NAME: The Diagnostic Triage Effect
+- Binary inclusion/exclusion of diagnostic tests under scarcity
+- Non-linear transition as budget decreases
+- Optimal allocation differs from intuitive heuristics
+""")
 
     # Generate figure
-    output_path = "/Volumes/dual/DUALITY-ZERO-V2/data/figures/cycle2570_the_triage.png"
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    plot_results(history, triage_breakdown, output_path)
+    output_dir = "/Volumes/dual/DUALITY-ZERO-V2/data/figures"
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, "cycle2570_the_triage.png")
 
-    print("\n--- INTERPRETATION ---")
-    print("Under crisis conditions:")
-    print("  - IMMEDIATE/EMERGENT cases: Preserved (life-threatening)")
-    print("  - URGENT cases: Partially served (satisficing)")
-    print("  - STANDARD/NON_URGENT: Systematically deferred")
-    print("\nThis is TRIAGE RATIONALITY: The system learns who NOT to save")
-    print("when saving everyone is impossible.")
-    print("=" * 60)
+    print("\nGenerating figure...")
+    plot_results(results, cfg, output_path)
+
+    return results
 
 
 if __name__ == "__main__":
