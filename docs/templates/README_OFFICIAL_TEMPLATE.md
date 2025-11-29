@@ -79,19 +79,17 @@ This is the primary visualization interface. It renders the [Core Mechanism] in 
 
 We prioritize empirical verification over theory.
 
-<!--
-NAMING CONVENTION FOR EMERGENT BEHAVIORS:
-For any emergent behavior with no established term, assign a concise functional
-placeholder name based strictly on what the phenomenon does. Include relevant links.
+## 7. Libraries & Tools
+*   Standalone packages extracted from the research
+*   Format per library:
+    - Package name (`pip install xxx`)
+    - Location in repo (`lib_dir/`)
+    - Status (Stable/Experimental/Alpha)
+    - Minimal code snippet
+    - Links: Documentation | Source
+*   Use `### Available Libraries` header, then `#### [Lib Name]` for each
 
-Format: **[Functional Name] ([Alias if applicable]):** [Description]. [Link Type](path)
-
-Examples:
-- **Self-Referential Mapping (The Holocron):** System-wide knowledge graph. [View Graph](data/holocron.html)
-- **Phase-Delay Solver:** Calculates interference patterns. [Spec](docs/spec.md)
-- **Cost-Threshold Cooperation:** Cooperation emerges at metabolic thresholds. [Log](path/to/log)
-- **Energy-Buffered Homeostasis:** >160× buffering ratio for self-regulation. [Docs](docs/finding.md)
--->
+## 8. Architecture
 
 *   **[Functional Name] ([Alias]):** [Description]. [View](path/to/visualization)
 

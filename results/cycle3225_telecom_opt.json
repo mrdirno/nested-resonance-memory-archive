@@ -1,0 +1,13 @@
+{
+  "static": {
+    "delivered": 1000,
+    "dropped": 995,
+    "latency": 0.995
+  },
+  "bcp": {
+    "delivered": 1000,
+    "dropped": 995,
+    "latency": 0.995
+  },
+  "improvement": 0.0
+}

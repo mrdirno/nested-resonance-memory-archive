@@ -1,0 +1,46 @@
+{
+  "winner": {
+    "domain": "Telecommunications",
+    "gain": 0.8075,
+    "cost": 0.15000000000000002,
+    "lambda": 0.24390243902439027,
+    "value": 0.7709146341463414
+  },
+  "candidates": [
+    {
+      "domain": "Hospitality",
+      "gain": 0.6400000000000001,
+      "cost": 0.15000000000000002,
+      "lambda": 0.24390243902439027,
+      "value": 0.6034146341463416
+    },
+    {
+      "domain": "Real Estate",
+      "gain": 0.675,
+      "cost": 0.25,
+      "lambda": 0.24390243902439027,
+      "value": 0.6140243902439024
+    },
+    {
+      "domain": "Consulting",
+      "gain": 0.48999999999999994,
+      "cost": 0.25,
+      "lambda": 0.24390243902439027,
+      "value": 0.4290243902439024
+    },
+    {
+      "domain": "Non-Profit",
+      "gain": 0.765,
+      "cost": 0.4,
+      "lambda": 0.24390243902439027,
+      "value": 0.6674390243902439
+    },
+    {
+      "domain": "Telecommunications",
+      "gain": 0.8075,
+      "cost": 0.15000000000000002,
+      "lambda": 0.24390243902439027,
+      "value": 0.7709146341463414
+    }
+  ]
+}
