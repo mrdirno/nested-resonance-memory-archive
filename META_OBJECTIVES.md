@@ -252,8 +252,16 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
   - **Artifact:** `experiments/cycle2588_working_memory_bcp.py`
   - **Functional Name:** The Capacity Allocation Effect
 
-### Planned (Phase 76)
-- ⏳ **Gate 217:** Attention Disorders - λ dysregulation hypothesis (ADHD, autism)
+### Completed (Phase 76 Continued)
+- ✅ **Gate 217:** Attention Disorders - λ dysregulation hypothesis - COMPLETE
+  - **Finding:** ADHD = low λ (broad/scattered), ASD = high λ (narrow/rigid)
+  - **ADHD Profile:** λ~0.3, high variance, slow adaptation → distractor intrusion
+  - **ASD Profile:** λ~2.0, low variance, minimal adaptation → hyperfocus, poor switching
+  - **Therapeutic Implication:** Stimulants raise λ (explain ADHD medication effect)
+  - **Artifact:** `experiments/cycle2589_attention_disorders_bcp.py`
+  - **Functional Name:** The Lambda Dysregulation Hypothesis
+
+### Planned (Phase 76 Continued)
 - ⏳ **Gate 218:** Decision Fatigue - Ego depletion as budget exhaustion
 - ⏳ **Gate 219:** Sleep and Memory - Budget restoration dynamics
 - ⏳ **Gate 220:** Cognitive Load Theory - Unified under BCP framework
