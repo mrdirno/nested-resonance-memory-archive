@@ -1,5 +1,35 @@
 
 ---
+**CYCLE:** 2587 (Gate 219: Sleep and Memory as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 76 - COGNITIVE ARCHITECTURE
+**LOG:**
+*   **Experiment:** `experiments/cycle2587_sleep_memory_bcp.py`
+*   **Question:** How does sleep restore cognitive budget and consolidate memory?
+*   **Tests:**
+    1. Sleep Restoration (7 days, wake-sleep cycles)
+    2. Sleep Deprivation Effects (4 conditions)
+    3. Memory Consolidation (with vs without sleep)
+    4. Nap Effect (0-60 min durations)
+*   **Results:**
+    - Full Restoration: 8.4 → 10.0 budget after 8h sleep
+    - Deprivation Effect: Budget 10.0 (normal) vs 2.80 (total deprivation)
+    - Memory Consolidation: +0.056 strength with sleep
+    - Optimal Nap: Power nap (30 min) at 0.25 boost/hour efficiency
+*   **KEY FINDING: SLEEP = BUDGET RESTORATION + MEMORY CONSOLIDATION**
+    - Sleep fully restores cognitive budget (λ → 0)
+    - Sleep deprivation maintains chronic scarcity
+    - Memory strengthening occurs via low-cost rehearsal during sleep
+    - Naps provide micro-recovery with diminishing returns
+*   **BCP-SLEEP MAPPING:**
+    - Sleep ↔ Budget restoration to maximum
+    - Sleep deprivation ↔ Chronic elevated λ
+    - Memory consolidation ↔ Low-cost rehearsal (no waking competition)
+    - Naps ↔ Partial budget restoration (micro-recovery)
+*   **Status:** Gate 219 Complete.
+*   **Functional Name:** The Restoration Cycle (Sleep = Budget Reset)
+
+---
 **CYCLE:** 2586 (Gate 218: Decision Fatigue as BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 76 - COGNITIVE ARCHITECTURE

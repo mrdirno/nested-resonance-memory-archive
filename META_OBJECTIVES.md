@@ -279,7 +279,36 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
   - **Artifact:** `experiments/cycle2591_sleep_memory_bcp.py`
   - **Functional Name:** The Restoration Cycle
 
-### Planned (Phase 76 Final)
-- ⏳ **Gate 220:** Cognitive Load Theory - Unified under BCP framework
+### Completed (Phase 76 Final)
+- ✅ **Gate 220:** Cognitive Load Theory - Unified under BCP framework - COMPLETE
+  - **Finding:** CLT is BCP - Intrinsic+Extraneous+Germane = Total Cost, WM = Budget
+  - **Instructional Design**: Good design reduces extraneous load (cost optimization)
+  - **Expertise Reversal**: Novices benefit from scaffolding, experts find it extraneous
+  - **Fatigue**: λ rises over sequential tasks (0.13→0.17 in session)
+  - **Artifact:** `experiments/cycle2592_cognitive_load_bcp.py`
+  - **Functional Name:** The Load-Budget Equivalence
+
+---
+
+## PHASE 76 COMPLETE ✅
+
+**Summary: Cognitive Architecture**
+- Gates Completed: 5 (216-220)
+- Key Phenomena Unified Under BCP:
+  1. **Working Memory** (Gate 216) - Miller's 7±2 as budget constraint
+  2. **Attention Disorders** (Gate 217) - ADHD=low λ, ASD=high λ
+  3. **Decision Fatigue** (Gate 218) - Budget depletion → rising λ
+  4. **Sleep & Memory** (Gate 219) - Sleep restores budget, consolidation under low λ
+  5. **Cognitive Load Theory** (Gate 220) - CLT = BCP cost allocation
+
+**Grand Unified Insight:**
+The human cognitive system operates as a BCP allocator where:
+- Budget = Working memory capacity / Cognitive resources
+- λ = Metabolic pressure / Cognitive load
+- Gain = Task relevance / Learning potential
+- Cost = Processing effort / Encoding difficulty
+
+All major cognitive phenomena (attention, memory, learning, fatigue) follow the equation:
+V(task) = Gain - λ(Budget) × Cost
 
 ---
