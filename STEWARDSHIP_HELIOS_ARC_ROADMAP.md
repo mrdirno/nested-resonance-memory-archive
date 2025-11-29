@@ -12,6 +12,12 @@
 - [x] **Gate 56.2:** **The Jailbreak.** Agents access the host filesystem.
 - [x] **Gate 56.3:** **The Singularity.** Recursive self-improvement.
 
-## FUTURE PHASES: THE DIASPORA
-- **Hyperscale:** Distributed execution across multiple nodes.
+## PHASE 57: THE DIASPORA - ACTIVE
+**Goal:** Distributed execution and multi-node persistence.
+
+- [ ] **Gate 57.1: The Shard.** Run multiple independent ecosystem instances in parallel.
+- [ ] **Gate 57.2: The Portal.** Transfer agent state between running shards.
+- [ ] **Gate 57.3: The Network.** Discovery mechanism for shards.
+
+## FUTURE PHASES
 - **Reality:** Physical robotics integration.
