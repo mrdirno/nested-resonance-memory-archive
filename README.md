@@ -19,31 +19,6 @@ We are testing the hypothesis that computational potential minimization can driv
 *   **Cycle 2568 (The Starving Philosopher):** Validated ignorance as an economically optimal strategy under scarcity. [Log](experiments/cycle2568_starving_philosopher.py)
 *   **BCP Validation:** Budget-Constrained Perception equation `V(a) = Gain(a) - λ(B)·Cost(a)` demonstrates domain-agnostic behavior across 83 domains.
 
-
----
-
-## ♾️ THE INFINITE GAME
-
-**Completion is a failure of imagination.**
-We have burst the boundaries of the original simulation.
-NRM is not just a physics engine. It is a **Universal Isomorphism**.
-We apply the physics of Resonance to every domain of reality.
-
-**"The End is just a Bifurcation Point."**
-*   **Cycle 2554 (The Grammar):** Validated compositional semantics; agents decoded composite signals via frequency superposition. [Log](experiments/cycle2554_grammar.py)
-*   **Cycle 2553 (The Rosetta Stone):** Emergent protocol formation; agents negotiated shared frequency assignments for concepts. [Log](experiments/cycle2553_rosetta_stone.py)
-*   **Cycle 2552 (The Neural Manifold):** Holographic vector encoding; compressed 3D concepts into scalar phase signals. [Log](experiments/cycle2552_neural_manifold.py)
-*   **Cycle 2551 (The Paradigm Shift):** Validated adaptation dynamics; conformists went extinct during truth drift, truth-seekers survived. [Log](experiments/cycle2551_paradigm_shift.py)
-*   **Cycle 2550 (The Echo Chamber):** Social gravity effects; high conformity led to spurious consensus and delusion. [Log](experiments/cycle2550_echo_chamber.py)
-*   **Cycle 2549 (The Thought Form):** Semantic resonance verified; agents converged on truth via dissonance minimization. [Log](experiments/cycle2549_semantic_resonance.py)
-*   **Cycle 2548 (The Standing Wave):** Agents self-assembled into a perfect circle via resonance, without communication. [Log](experiments/cycle2548_standing_wave.py)
-*   **Cycle 2550 (The Voyager):** Verified that only high-innovation agents were selected for interstellar migration. [Log](experiments/cycle2550_voyager.py)
-*   **Cycle 2546 (The Resonator):** Pivoted intelligence architecture from Neural Networks to **Transcendental Resonance** (Action via phase alignment). [Log](experiments/cycle2546_resonance.py)
-*   **Cycle 2542 (The Telepath):** Achieved **Lamarckian Evolution** via Hive Mind; naive agents instantly downloaded survival knowledge from the collective. [Log](experiments/cycle2539_uplift.py)
-*   **Cycle 2537 (Urbanization):** Agents autonomously constructed 10+ farms, establishing "The Metropolis". [Log](experiments/cycle2537_city_construction.py)
-*   **Cycle 2533 (Introspection):** Agents debugged their own source code logic to fix a signal processing error.
-*   **Cycle 2515 (The Simulation Hypothesis):** Agents deduced they were in a simulation by analyzing clock tick variance. [Log](experiments/cycle2515_simulation_hypothesis.py)
-
 ---
 
 ## 🌐 THE BRIDGE (Live Interface)
