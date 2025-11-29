@@ -35,25 +35,22 @@ class AttentionItem:
     priority: float = 0.0
     attended: bool = False
 
-    def compute_priority(self, lambda_: float, gamma: float = 0.0,
-                        n_items: int = 1) -> float:
+    def compute_priority(self, lambda_: float) -> float:
         """
-        Compute priority (Score) using the BCP equation.
+        Compute per-item priority Score.
 
-        Score(a) = Gain - λ × Cost - γ × SetComplexity
+        Score(a) = Gain - λ × Cost
 
-        Where SetComplexity = log(1 + N) models the overhead of juggling N items.
+        This is the per-item component used for ranking. The global
+        SetComplexity term (γ × log(1+N)) is applied separately to TotalScore.
 
         Args:
             lambda_: Metabolic pressure (higher = more scarcity)
-            gamma: Set complexity penalty coefficient
-            n_items: Total number of items being considered
 
         Returns:
             Priority score (positive = attend, negative = ignore)
         """
-        set_complexity = np.log(1 + n_items)
-        self.priority = self.gain - lambda_ * self.cost - gamma * set_complexity
+        self.priority = self.gain - lambda_ * self.cost
         return self.priority
 
 
@@ -66,6 +63,9 @@ class BCPResult:
         attended: List of item names that received attention
         ignored: List of item names that were ignored
         total_cost: Total resource cost spent
+        total_gain: Total gain from attended items
+        set_complexity: Global overhead term γ × log(1+N)
+        total_score: TotalScore = Σ(Gain - λ×Cost) - γ×log(1+N)
         phase: Current system phase
         lambda_: Computed metabolic pressure
         budget: Input budget value
@@ -73,6 +73,9 @@ class BCPResult:
     attended: List[str]
     ignored: List[str]
     total_cost: float
+    total_gain: float
+    set_complexity: float
+    total_score: float
     phase: Phase
     lambda_: float
     budget: float
@@ -175,10 +178,9 @@ class BCPModel:
         lambda_ = self.compute_lambda(budget)
         phase = self.determine_phase(budget)
 
-        # Compute priorities
-        n_items = len(items)
+        # Compute per-item priorities (Score = Gain - λ × Cost)
         for item in items:
-            item.compute_priority(lambda_, self.gamma, n_items)
+            item.compute_priority(lambda_)
             item.attended = False
 
         # Sort by priority (descending)
@@ -188,19 +190,32 @@ class BCPModel:
         attended = []
         ignored = []
         total_cost = 0.0
+        total_gain = 0.0
 
         for item in sorted_items:
             if item.priority > 0 and total_cost + item.cost <= budget:
                 item.attended = True
                 attended.append(item.name)
                 total_cost += item.cost
+                total_gain += item.gain
             else:
                 ignored.append(item.name)
+
+        # Global set complexity term: γ × log(1 + N)
+        n_items = len(items)
+        set_complexity = self.gamma * np.log(1 + n_items)
+
+        # TotalScore = Σ(Gain - λ×Cost) - γ×log(1+N)
+        sum_priorities = total_gain - lambda_ * total_cost
+        total_score = sum_priorities - set_complexity
 
         return BCPResult(
             attended=attended,
             ignored=ignored,
             total_cost=total_cost,
+            total_gain=total_gain,
+            set_complexity=set_complexity,
+            total_score=total_score,
             phase=phase,
             lambda_=lambda_,
             budget=budget

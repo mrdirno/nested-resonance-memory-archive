@@ -222,7 +222,7 @@ Represents an item that can receive attention.
 - `name`: Identifier
 - `gain`: Expected benefit (0.0 - 1.0)
 - `cost`: Resource cost
-- `compute_priority(lambda_, gamma, n_items)`: Returns **per-item Score** = `Gain - λ × Cost - γ × log(1+N)`. Note: the global SetComplexity is included here for convenience but cancels when comparing items at fixed N.
+- `compute_priority(lambda_)`: Returns **per-item Score** = `Gain - λ × Cost`. Used for ranking items.
 
 #### `BCPModel(lambda_scale, lambda_epsilon, gamma, abundance_threshold, crisis_threshold)`
 The core BCP allocation model.
@@ -239,8 +239,12 @@ Result of allocation containing:
 - `attended`: List of attended item names
 - `ignored`: List of ignored item names
 - `total_cost`: Resources consumed
+- `total_gain`: Sum of gains from attended items
+- `set_complexity`: Global overhead term (γ × log(1+N))
+- `total_score`: TotalScore = Σ(Gain - λ×Cost) - γ×log(1+N)
 - `phase`: Current Phase enum
 - `lambda_`: Computed metabolic pressure
+- `budget`: Input budget value
 - `n_attended`, `n_ignored`, `attention_fraction`: Computed properties
 
 #### `BCPMonitor`

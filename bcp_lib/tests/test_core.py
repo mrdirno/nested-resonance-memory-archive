@@ -25,24 +25,24 @@ class TestAttentionItem:
     def test_priority_computation_low_lambda(self):
         """Priority with low lambda (abundance)."""
         item = AttentionItem("test", gain=0.8, cost=0.3)
-        priority = item.compute_priority(lambda_=0.5, gamma=0.0, n_items=1)
-        # V = 0.8 - 0.5 * 0.3 = 0.65
+        priority = item.compute_priority(lambda_=0.5)
+        # Score = 0.8 - 0.5 * 0.3 = 0.65
         assert abs(priority - 0.65) < 0.001
         assert item.priority == priority
 
     def test_priority_computation_high_lambda(self):
         """Priority with high lambda (scarcity)."""
         item = AttentionItem("test", gain=0.8, cost=0.3)
-        priority = item.compute_priority(lambda_=5.0, gamma=0.0, n_items=1)
-        # V = 0.8 - 5.0 * 0.3 = -0.7
+        priority = item.compute_priority(lambda_=5.0)
+        # Score = 0.8 - 5.0 * 0.3 = -0.7
         assert abs(priority - (-0.7)) < 0.001
 
-    def test_priority_with_gamma(self):
-        """Priority with complexity penalty."""
-        item = AttentionItem("test", gain=0.8, cost=0.3)
-        priority = item.compute_priority(lambda_=1.0, gamma=0.1, n_items=5)
-        # V = 0.8 - 1.0 * 0.3 - 0.1/5 = 0.48
-        assert abs(priority - 0.48) < 0.001
+    def test_priority_negative_means_ignore(self):
+        """Negative priority means item should be ignored."""
+        item = AttentionItem("test", gain=0.3, cost=0.5)
+        priority = item.compute_priority(lambda_=2.0)
+        # Score = 0.3 - 2.0 * 0.5 = -0.7 (negative = ignore)
+        assert priority < 0
 
 
 class TestBCPModel:
