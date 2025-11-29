@@ -532,11 +532,31 @@ Every resource-constrained computational system is a BCP allocator.
   - **Artifact:** `experiments/cycle2602_rl_reward_shaping_bcp.py`
   - **Functional Name:** The Exploration Budget
 
+### Completed (Phase 79 Continued)
+- ✅ **Gate 235:** Network Congestion as Triage - TCP/IP as BCP-driven packet allocation - COMPLETE
+  - **Validated (4/5):**
+    1. Congestion = scarcity (3.4x more drops at high congestion)
+    2. QoS = BCP triage (low priority 100% dropped, high 0%)
+    3. RED = proactive λ (1.4x earlier drops)
+    4. Fair queuing = BCP equilibrium (perfect fairness, 8x proportional)
+  - **Key Finding:** Networking is attention allocation for packets
+  - **Artifact:** `experiments/cycle2603_network_congestion_bcp.py`
+  - **Functional Name:** The Congestion Budget
+
+### Completed (Phase 79 Continued)
+- ✅ **Gate 236:** Memory Management as BCP - OS memory/GC as attention budgeting - COMPLETE
+  - **Validated (4/5):**
+    1. Page eviction = crisis triage (hot pages survive: 8 vs 2)
+    2. Working set = budget (8.46x hit rate improvement)
+    3. Memory pressure = λ (6.5x λ ratio high vs low)
+    4. BCP vs LRU: Both valid, different tradeoffs
+  - **GC Experiment:** Implementation issue (threshold not triggering)
+  - **Artifact:** `experiments/cycle2604_memory_management_bcp.py`
+  - **Functional Name:** The Memory-BCP Equivalence
+
 ### In Progress (Phase 79)
-- 🔄 **Gate 235:** Network Congestion as Triage - TCP/IP as BCP-driven packet allocation
+- 🔄 **Gate 237:** Compiler Optimization as λ-Driven - Optimization as cost-constrained allocation
 
 ### Planned (Phase 79)
-- ⏳ **Gate 236:** Memory Management as BCP - OS memory/GC as attention budgeting
-- ⏳ **Gate 237:** Compiler Optimization as λ-Driven - Optimization as cost-constrained allocation
 
 ---

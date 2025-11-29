@@ -1,61 +1,37 @@
 
 ---
-**CYCLE:** 2604 (Gate 236: Memory Management as BCP)
-**STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** PHASE 79 - COMPUTATIONAL SYSTEMS
-**LOG:**
-*   **Experiment:** `experiments/cycle2604_memory_management_bcp.py`
-*   **Question:** Is OS memory management a BCP allocator?
-*   **Tests:**
-    1. Page Eviction as BCP Triage
-    2. LRU vs BCP Comparison
-    3. Working Set as Budget
-    4. GC as Budget Restoration
-    5. Memory Pressure as λ
-*   **Results (4/5 validated):**
-    - Page eviction: Hot pages survive (8 hot vs 2 cold under pressure)
-    - Working set: 8.46x hit rate improvement (5→40 pages)
-    - Pressure→λ: 6.5x ratio (high vs low pressure)
-*   **KEY FINDING: THE MEMORY-BCP EQUIVALENCE**
-    - Page replacement = attention allocation under scarcity
-    - Working set = active attention budget
-    - Memory pressure = metabolic pressure λ
-*   **BCP FORMULATION:**
-    ```
-    PageScore(p) = Recency + Frequency - λ(Pressure) × EvictionCost
-    λ = k / (ε + FreeMemory)
-    ```
-*   **Status:** Gate 236 Complete.
-*   **Functional Name:** The Memory-BCP Equivalence
-
----
-**CYCLE:** 2603 (Gate 235: Network Congestion as BCP Triage)
+**CYCLE:** 2603 (Gate 235: Network Congestion as BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 79 - COMPUTATIONAL SYSTEMS
 **LOG:**
 *   **Experiment:** `experiments/cycle2603_network_congestion_bcp.py`
-*   **Question:** Is TCP/IP congestion control a BCP allocator?
+*   **Question:** Is TCP/IP congestion control BCP-driven triage?
 *   **Tests:**
-    1. Congestion Window as λ Regulator
-    2. Packet Dropping as Crisis Triage
-    3. QoS as Gain Differential
-    4. Slow Start as Phase Transition
-    5. RTT as Cost Signal
-*   **Results (3/5 validated):**
-    - cwnd: Small cwnd = high selectivity (0.86 avg priority at cwnd=1)
-    - Slow start: λ decreases 0.91 → 0.03 during exponential growth
-    - RTT: Scarcity restricts paths (2/4 vs 4/4 viable)
-*   **KEY FINDING: THE NETWORK-BCP EQUIVALENCE**
-    - Congestion window acts as inverse λ regulator
-    - Slow start is exploration (λ decreasing)
-    - RTT is transmission cost (λ-weighted)
-*   **BCP FORMULATION:**
-    ```
-    TransmitScore(pkt) = QoS(pkt) - λ(Congestion) × RTT(pkt)
-    λ = k / (ε + AvailableBandwidth)
-    ```
+    1. Congestion as Scarcity
+    2. Priority-Based Triage (QoS)
+    3. TCP Slow Start as Exploration
+    4. RED as Proactive BCP
+    5. Fair Queuing as BCP Equilibrium
+*   **Results:**
+    - Congestion-Scarcity: CONFIRMED (3.4x more drops at 90% vs 10%)
+    - QoS Triage: PERFECT (low priority 100% dropped, high 0%)
+    - TCP Slow Start: Not validated (budget recovery too fast)
+    - RED Proactive: CONFIRMED (1.4x earlier drops)
+    - Fair Queuing: CONFIRMED (variance=0, 8x proportional allocation)
+*   **KEY FINDING: NETWORKING IS ATTENTION ALLOCATION**
+    - Congestion = scarcity → high λ → packet triage
+    - QoS priority = gain values (perfect BCP triage)
+    - RED = anticipatory λ increase (preemptive triage)
+    - Fair queuing emerges from BCP with equal gains
+*   **BCP-NETWORKING MAPPING:**
+    - Bandwidth ↔ Budget
+    - Congestion ↔ High λ (scarcity)
+    - Priority/QoS ↔ Gain
+    - Packet size ↔ Cost
+    - Packet drop ↔ BCP triage (V < 0)
+    - Router queue ↔ Attention buffer
 *   **Status:** Gate 235 Complete.
-*   **Functional Name:** The Network-BCP Equivalence
+*   **Functional Name:** The Congestion Budget (TCP/IP is distributed BCP)
 
 ---
 **CYCLE:** 2602 (Gate 234: RL Reward Shaping as BCP)
