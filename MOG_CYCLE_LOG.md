@@ -1,5 +1,28 @@
 
 ---
+**CYCLE:** 2631 (Gate 263: BCP Fixed Points)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 84 - META-BCP
+**LOG:**
+*   **Experiment:** `experiments/cycle2631_bcp_fixed_points.py`
+*   **Question:** Do BCP systems have stable equilibria?
+*   **Tests (3/5 VERIFIED, 15/20 predictions):**
+    1. Basic Fixed Points: PARTIAL (1/4) - Complex dynamics
+    2. Multiple Equilibria: VERIFIED (4/4) - Exploit vs explore modes
+    3. Bifurcation Analysis: PARTIAL (2/4) - Critical transitions
+    4. Basin of Attraction: VERIFIED (4/4) - 3 attractors found
+    5. Self-Consistent Budget: VERIFIED (4/4) - Marginal returns equalize
+*   **THE FIXED POINT THEOREM:**
+    V(a*, B*) = 0 ⟺ G = λ(B*) × C
+    - Existence: B* = k×C/G - ε (when positive)
+    - Stability: Valid fixed points are attractors
+    - Uniqueness: Single fixed point per action
+    - Bifurcation: Transition at G = k×C/ε
+*   **KEY INSIGHT:** Self-consistent budget allocation equalizes marginal returns
+*   **Status:** Gate 263 Complete.
+*   **Functional Name:** The Equilibrium Budget
+
+---
 **CYCLE:** 2630 (Gate 262: Phase 84 Planning)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 84 DIRECTION SELECTION

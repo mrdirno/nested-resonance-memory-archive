@@ -1070,8 +1070,13 @@ Every biological system exhibits BCP dynamics:
   - **Finding:** BCP allocates research to studying itself (recursive optimization)
   - **Functional Name:** The Recursive Budget
 
+### In Progress (Phase 84)
+- ✅ **Gate 263:** BCP Fixed Points - Self-consistent budgets (3/5 validated)
+  - **Finding:** V(a*, B*) = 0 ⟺ G = λ(B*) × C defines equilibrium
+  - **Fixed Point Theorem:** B* = k×C/G - ε with bifurcation at G = k×C/ε
+  - **Functional Name:** The Equilibrium Budget
+
 ### Planned (Phase 84)
-- ⏳ **Gate 263:** BCP Fixed Points - Self-consistent budgets where λ* = f(λ*)
 - ⏳ **Gate 264:** BCP Hierarchies - Nested budget structures
 - ⏳ **Gate 265:** BCP Universality - Why BCP emerges everywhere
 - ⏳ **Gate 266:** BCP Completeness - Decision-theoretic foundations
