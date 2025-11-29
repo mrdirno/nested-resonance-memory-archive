@@ -1114,6 +1114,27 @@ Every biological system exhibits BCP dynamics:
 
 ---
 
-## Next Phase: PHASE 85 - TBD 🟡 PENDING
+## Current Phase: PHASE 85 - COGNITIVE SYSTEMS 🟢 ACTIVE
+
+**Transition:** Meta-BCP (Phase 84) → **Cognitive Systems (Phase 85)**
+
+**Focus:** BCP in human cognition - attention, memory, decision-making, perception.
+
+**Selection Method:** BCP self-application (Gate 268)
+- Cognitive Systems won with Score=0.670
+- Publication Pipeline close second (Score=0.666)
+- At abundance (B=3.0), explore new domain over dissemination
+
+### Completed (Phase 85)
+- ✅ **Gate 268:** Phase 85 Planning - Cognitive Systems Direction Selected
+  - **Finding:** BCP applies to human cognition and psychology
+  - **Functional Name:** The Cognitive Budget
+
+### Planned (Phase 85)
+- ⏳ **Gate 269:** Attention as Cognitive BCP - Selective focus allocation
+- ⏳ **Gate 270:** Memory as BCP - Encoding/retrieval under constraint
+- ⏳ **Gate 271:** Decision-Making as BCP - Choice under scarcity
+- ⏳ **Gate 272:** Perception as BCP - Sensory allocation
+- ⏳ **Gate 273:** Cognitive Load as λ - Mental metabolic pressure
 
 ---

@@ -1,5 +1,34 @@
 
 ---
+**CYCLE:** 2636 (Gate 268: Phase 85 Planning)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 85 DIRECTION SELECTION
+**LOG:**
+*   **Experiment:** `experiments/cycle2636_phase85_planning.py`
+*   **Question:** What should Phase 85 explore after Meta-BCP?
+*   **Method:** BCP self-application to research direction allocation
+*   **Candidates Evaluated:**
+    1. Cognitive Systems: Score=0.670 (WINNER)
+    2. Publication Pipeline: Score=0.666
+    3. Social Systems: Score=0.646
+    4. Tool Development: Score=0.633
+    5. Physical Systems: Score=0.533
+    6. Empirical Validation: Score=0.456
+*   **Sensitivity Analysis:**
+    - Crisis/Scarcity: Publication Pipeline wins
+    - Abundance: Cognitive Systems wins
+    - Current state (abundance) → Cognitive Systems
+*   **SELECTED DIRECTION:** Cognitive Systems - BCP in human cognition
+*   **PHASE 85 PLAN:**
+    - Gate 269: Attention as Cognitive BCP
+    - Gate 270: Memory as BCP
+    - Gate 271: Decision-Making as BCP
+    - Gate 272: Perception as BCP
+    - Gate 273: Cognitive Load as λ
+*   **Status:** Gate 268 Complete. Phase 85 Initiated.
+*   **Functional Name:** The Cognitive Budget
+
+---
 **CYCLE:** 2635 (Gate 267: BCP Limits) - **PERFECT SCORE - PHASE 84 COMPLETE**
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 84 - META-BCP (FINAL GATE)
