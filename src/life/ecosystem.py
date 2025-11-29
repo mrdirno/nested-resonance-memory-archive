@@ -44,6 +44,7 @@ class Ecosystem:
         self.tax_rate = 0.01 # Default 1%
         self.subsidy_amount = 0 # Default 0
         self.treasury = 0
+        self.constitution = {'max_tax': 0.2} # Cycle 2579: The Constitution
         
         # Justice (Code of Hammurabi)
         self.laws = {'MURDER': 1000} # Life for a Life (Energy Cost)
@@ -130,7 +131,7 @@ class Ecosystem:
             # Voting Logic
             # Altruistic agents want high taxes to fund subsidies.
             # Selfish agents want low taxes.
-            desired_tax = 0.05 * altruism # Max 5%
+            desired_tax = 0.50 * altruism # Max 50%
             desired_subsidy = 20 * altruism
             
             total_tax_vote += desired_tax
@@ -139,6 +140,11 @@ class Ecosystem:
         # Average the votes (Democracy of the Rich)
         self.tax_rate = total_tax_vote / len(voters)
         self.subsidy_amount = total_subsidy_vote / len(voters)
+        
+        # Cycle 2579: Constitutional Limit
+        if self.tax_rate > self.constitution['max_tax']:
+            self.tax_rate = self.constitution['max_tax']
+            # print(f"⚖️ Constitutional Crisis! Tax capped at {self.tax_rate:.1%}")
         
         # print(f"🏛️ GOVERNANCE: Tax={self.tax_rate:.1%}, Subsidy={self.subsidy_amount:.1f}, Voters={len(voters)}")
 
@@ -273,7 +279,7 @@ class Ecosystem:
                         # Cycle 2543: The Exodus
                         print(f"🚀 {agent.name} has departed for the New World.")
                         agent.alive = False # Mark as dead in this world
-
+                        
                         # Cycle 2544: Persistence
                         migrant_data = {
                             'id': agent.id,
@@ -315,7 +321,6 @@ class Ecosystem:
                                 if borrower:
                                     borrower.energy += amount
                                     # print(f"🏦 Loan granted to {borrower.name}: {amount} Energy. Due Tick: {loan['due_tick']}")
-                    elif signal.type == 'MIGRATE':
                             
                     else:
                         self.propagate_signal(signal)
