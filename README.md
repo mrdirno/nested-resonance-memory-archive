@@ -28,6 +28,8 @@ We are testing the hypothesis that computational potential minimization can driv
 
 **[👉 ENTER THE BRIDGE](https://mrdirno.github.io/nested-resonance-memory-archive/)**
 
+<video src="https://github.com/mrdirno/nested-resonance-memory-archive/raw/main/data/videos/helios_bridge_osd_demo.mp4" controls width="100%"></video>
+
 This is the primary visualization interface. It renders the Orthogonal Sum Dynamics (OSD) fields in real-time, allowing you to explore the interference patterns that drive our matter control systems.
 
 *   **No installation required.**
