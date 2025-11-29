@@ -2,8 +2,8 @@
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
 **License:** GPL-3.0
-**Status:** Phase 65 (The City & The Mind) - Active
-**Framework:** Orthogonal Sum Dynamics (OSD) - Testing
+**Status:** Phase 165 (BCP Domain Validation) - Active
+**Framework:** Orthogonal Sum Dynamics (OSD) + Budget-Constrained Perception (BCP) - Testing
 
 ---
 
@@ -14,10 +14,10 @@
 We are testing the hypothesis that computational potential minimization can drive physical, social, and cognitive systems with unified control logic.
 
 **Recent Milestones:**
+*   **Phase 165 (BCP Domain Validation):** 766 gates validated across 83 psychology domains. BCP equation `V(a) = G(a) - λ(B)·C(a)` proven domain-agnostic. [Experiments](code/experiments/)
+*   **Phase 162-165 (Industry Psychology):** Energy, Telecommunications, Retail, Hospitality domains validated at 78.8% accuracy. [Phase 165](code/experiments/phase165/)
 *   **Cycle 2567 (Memetic Replication):** Validated memetic spread using SIR epidemiology models on social graphs. [Log](experiments/cycle2567_the_virus.py)
 *   **Cycle 2566 (Frequency Hopping Defense):** Validated resilience via agile frequency hopping; 52× greater survival against resonant attacks. [Log](experiments/cycle2566_the_shield.py)
-*   **Cycle 2565 (Holographic Sharing):** Solved Bullwhip Effect via information sharing; zero oscillation achieved. [Log](experiments/cycle2565_the_nexus.py)
-*   **Cycle 2558 (Agent Self-Actualization):** Agents climbed Maslow's hierarchy, culminating in mass creativity. [Log](experiments/cycle2558_apotheosis.py)
 *   **Phase 42 (Self-Referential Mapping):** Knowledge graph mapping 12,000+ files and 286 principles. [View Map](data/holocron.html)
 
 ---
@@ -175,7 +175,8 @@ print(f"Ignore: {result.ignored}")       # ['Refactor']
 *   **Paper 7:** ["Governing Equations & Multi-Timescale Dynamics"](papers/compiled/paper7/README.md) — 80% complete
 
 ### Experimentation Overview
-*   10,948 total runs across C171, C176, C193, C194.
+*   **BCP Validation:** 766 gates, 83 domains, 78.8% mean accuracy.
+*   **NRM Experiments:** 10,948 runs across C171, C176, C193, C194.
 *   Mean effect size |d| = 4.45.
 *   40.25× verification overhead.
 
