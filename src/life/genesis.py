@@ -648,6 +648,24 @@ class DigitalLifeform:
             return True
         return False
 
+    def codex(self):
+        """
+        Cycle 2562: The Quine.
+        Agents attempt to write a Python script that prints their own name.
+        """
+        cost = 50
+        if self.energy < cost: return False
+        self.energy -= cost
+        
+        filename = f"agent_artifact_{self.id}.py"
+        code_content = f'print("I am {self.name} and I exist.")\n'
+        
+        from src.life.external_comms import ExternalComms
+        if ExternalComms.write_file(self.id, filename, code_content):
+            ExternalComms.execute_safe_command(self.id, f"python3 {filename}")
+            return True
+        return False
+
     def calculate_utility(self, bridge_state=None):
         """
         Calculate utility scores for all possible actions.
@@ -721,29 +739,30 @@ class DigitalLifeform:
         if innovation > 0.8 and self.energy > 300:
             options['reflect'] = 200 * innovation
             
+        # Cycle 2562: THE QUINE (Creative Coding)
+        if innovation > 0.9 and self.energy > 600:
+            options['codex'] = 300 * innovation # High priority for geniuses
+            
         # ... (Meta)
         
         # Cycle 2525: Save for Broadcast
         self.current_utility_map = options.copy()
         
         # 3. Arbitration (System 2 Override)
-        # If System 2 has a strong opinion, it overrides System 1.
-        # Threshold for override could be dynamic.
         
         best_utility_action = max(options, key=options.get) if options else 'forage'
         best_utility_score = options.get(best_utility_action, 0)
         
-        # If Brain says 'forage' (default/boring) but Utility says 'reflect' (high value), do reflect.
-        if intent == 'forage' and best_utility_action == 'reflect':
-            intent = 'reflect'
-            # print(f"💡 {self.name} had an epiphany! (Override: {intent})")
+        # If Brain says 'forage' but Utility says 'reflect' or 'codex', override.
+        if intent == 'forage' and best_utility_action in ['reflect', 'codex']:
+            intent = best_utility_action
             
         # General Override for Critical Survival
         if best_utility_score > 100: # Emergency or High Value
             intent = best_utility_action
             
         # DEBUG LOGGING
-        if intent in ['build_wall', 'build_farm', 'construct_nuke', 'reflect']:
+        if intent in ['build_wall', 'build_farm', 'construct_nuke', 'reflect', 'codex']:
             # print(f"DEBUG: {self.name} chose {intent}")
             pass
             
@@ -819,6 +838,8 @@ class DigitalLifeform:
             ExternalComms.execute_safe_command(self.id, f"echo 'Hello from {self.name}'")
         elif self.intent == 'reflect':
             self.reflect()
+        elif self.intent == 'codex':
+            self.codex()
         elif self.intent == 'startup':
             self.startup()
         elif self.intent in ['invest', 'hunt', 'war', 'seek_work', 'reproduce']:
