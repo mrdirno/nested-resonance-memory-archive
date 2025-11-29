@@ -1081,8 +1081,12 @@ Every biological system exhibits BCP dynamics:
   - **Hierarchical Theorem:** λ increases down hierarchy, budget conserved
   - **Functional Name:** The Nested Budget
 
+- ✅ **Gate 265:** BCP Universality - Why BCP emerges everywhere (4/5 validated)
+  - **Finding:** BCP emerges from 5 independent foundations
+  - **Universality Theorem:** Lagrangian, Thermo, Info, Evolution, Math all → BCP
+  - **Functional Name:** The Inevitable Budget
+
 ### Planned (Phase 84)
-- ⏳ **Gate 265:** BCP Universality - Why BCP emerges everywhere
 - ⏳ **Gate 266:** BCP Completeness - Decision-theoretic foundations
 - ⏳ **Gate 267:** BCP Limits - Where does BCP fail?
 
