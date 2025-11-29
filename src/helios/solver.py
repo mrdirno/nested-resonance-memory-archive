@@ -4,7 +4,19 @@ Inverse Physics Engine: Calculates emitter parameters (Phase/Frequency) to match
 
 Principle: PRIN-INVERSE-DESIGN
 Author: MOG (Cycle 2342)
+
+Gate 6 (Cycle 142): Path Bridging - Auto-resolve nrm_core import path.
 """
+
+import sys
+import os
+
+# GATE 6 FIX: Auto-bridge PYTHONPATH to find nrm_core
+# Resolves to DUALITY-ZERO-V2 root directory regardless of execution context
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+_DUALITY_ROOT = os.path.abspath(os.path.join(_THIS_DIR, '..', '..'))
+if _DUALITY_ROOT not in sys.path:
+    sys.path.insert(0, _DUALITY_ROOT)
 
 import numpy as np
 import time
