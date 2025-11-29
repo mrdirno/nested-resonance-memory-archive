@@ -26,7 +26,7 @@ We are testing the hypothesis that **[Core Thesis]**.
 **[👉 ENTER THE BRIDGE]([Link])**
 
 [![Demo Thumbnail](data/figures/demo_thumbnail.jpg)](path/to/video.mp4)
-*Click to play demo video*
+*Watch 1 minute of [Project Name]*
 
 This is the primary visualization interface. It renders the [Core Mechanism] in real-time, allowing you to explore the [Phenomenon].
 
@@ -93,11 +93,12 @@ We prioritize empirical verification over theory.
 
 *   **[Functional Name] ([Alias]):** [Description]. [View](path/to/visualization)
 
-<p align="center">
-  <img src="data/figures/visualization_1.png" width="45%" alt="Description 1"/>
-  <img src="data/figures/visualization_2.png" width="45%" alt="Description 2"/>
-</p>
-<p align="center"><em>[Caption describing what the visualization shows]</em></p>
+   **[Key System Visualization]:**
+   <p align="center">
+     <img src="data/figures/visualization_overview.png" width="45%" alt="Overview"/>
+     <img src="data/figures/visualization_detail.png" width="45%" alt="Detail"/>
+   </p>
+   <p align="center"><em>Figure 1: [Description of Left Image] (left) and [Description of Right Image] (right).</em></p>
 
 *   **[Functional Name]:** [Description]. [Code](path/to/code)
 *   **[Functional Name]:** [Description]. [Log](path/to/log)
