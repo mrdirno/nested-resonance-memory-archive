@@ -32,9 +32,17 @@
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
   - Library location: `nested-resonance-memory-archive/[library_dir]/`
 **License:** GPL-3.0
-**Status:** Active (Phase XX: Short descriptor)
+**Status:** [Stable API | Experimental | Alpha] - [brief clarification]
 **Framework:** [Framework Name] (Testing / Hypothesis)
 ```
+
+### Status Options
+
+Use one of these standard status levels:
+- **Stable API, production-ready** - API frozen, safe for production use
+- **Stable API, experimental features** - Core API stable, some features may change
+- **Experimental but usable** - API may change between minor versions
+- **Alpha** - Not recommended for production, expect breaking changes
 
 ---
 

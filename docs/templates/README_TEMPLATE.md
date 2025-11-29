@@ -35,18 +35,28 @@
 *   Quickstart
 *   CLI usage
 
-## 7. Architecture
+## 7. Libraries & Tools
+*   Standalone packages extracted from the research
+*   Format per library:
+    - Package name (`pip install xxx`)
+    - Location in repo (`lib_dir/`)
+    - Status (Stable/Experimental/Alpha)
+    - Minimal code snippet
+    - Links: Documentation | Source
+*   Use `### Available Libraries` header, then `#### [Lib Name]` for each
+
+## 8. Architecture
 *   Deep links to code structure.
 
-## 8. Research & Papers
+## 9. Research & Papers
 *   Title
 *   Status
 *   **Direct Link to PDF/DOCX/MD**
 
-## 9. Philosophy & Stewardship (Footer)
+## 10. Philosophy & Stewardship (Footer)
 *   Vision
 *   Protocols
 *   Defense
 
-## 10. Citation
+## 11. Citation
 *   BibTeX

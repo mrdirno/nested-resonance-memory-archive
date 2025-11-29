@@ -118,9 +118,15 @@ We prioritize empirical verification over theory.
 
 Standalone packages extracted from DUALITY-ZERO research, usable independently.
 
-### BCP: Budget-Constrained Perception
+### Available Libraries
+
+#### BCP: Budget-Constrained Perception
 
 A discrete attention allocator for resource-constrained decision making. Given a budget, BCP tells you what to attend to and what to ignore.
+
+- **Package:** `bcp-perception`
+- **Location:** [`bcp_lib/`](bcp_lib/)
+- **Status:** Stable API, production-ready
 
 ```bash
 pip install bcp-perception
@@ -137,7 +143,9 @@ items = [
 
 model = BCPModel()
 result = model.allocate(items, budget=1.0)
-print(f"Attend to: {result.attended}")  # ['Critical bug', 'New feature']
+
+print(f"Phase: {result.phase.value}")    # 'scarcity'
+print(f"Attend to: {result.attended}")   # ['Critical bug', 'New feature']
 print(f"Ignore: {result.ignored}")       # ['Refactor']
 ```
 
