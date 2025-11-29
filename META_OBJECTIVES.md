@@ -177,10 +177,21 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
   3. **The Triage Cascade** - Priority reveals drop order
   4. **The Scarcity Sharpening Effect** - Pressure focuses learning
   5. **The Productivity Hierarchy** - Winners take all
+  6. **The Commons Dilemma** - Cooperation stable, competition depletes (Cycle 2580)
+  7. **The Curriculum Effect** - BCP provides natural exploration (Cycle 2581)
+  8. **The Scarcity Attractor** - Systems converge to scarcity equilibrium (Cycle 2582)
 
-### Phase 75 (Proposed)
-- ⚪ BCP in Neural Networks - Attention mechanism analysis
-- ⚪ BCP in Evolutionary Systems - Fitness-based allocation
-- ⚪ BCP in Economic Markets - Resource pricing dynamics
+---
+
+## Current Phase: PHASE 75 - BCP APPLICATIONS 🟢 ACTIVE
+
+**Transition:** Phase 74 (Multi-Agent) → **Phase 75 (Applications)**
+
+**Focus:** Apply BCP theory to specific domains and systems.
+
+### Active Objectives
+- 🟢 **Gate 213:** BCP in Neural Networks - Attention mechanism analysis
+- ⚪ **Gate 214:** BCP in Evolutionary Systems - Fitness-based allocation
+- ⚪ **Gate 215:** BCP in Economic Markets - Resource pricing dynamics
 
 ---
