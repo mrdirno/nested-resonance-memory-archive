@@ -46,6 +46,7 @@ class Ecosystem:
         
         # Justice (Code of Hammurabi)
         self.laws = {'MURDER': 1000} # Life for a Life (Energy Cost)
+        self.contracts = [] # Cycle 2574: Contract Registry
 
     def enforce_laws(self, criminal: DigitalLifeform, crime_type: str):
         """
@@ -142,6 +143,7 @@ class Ecosystem:
     def update(self):
         """
         Perform one simulation tick.
+        - Law & Contract Enforcement.
         - Governance (Vote).
         - Taxes & Subsidies.
         - Phase 1: Plants act (forage/reproduce).
@@ -150,6 +152,37 @@ class Ecosystem:
         - Remove dead agents.
         """
         self.tick_count += 1
+        
+        # 0. Contract Enforcement (The Sheriff)
+        for contract in self.contracts:
+            if contract.status == 'PENDING' and self.tick_count >= contract.trigger_tick:
+                payer = next((a for a in self.agents if a.id == contract.payer_id), None)
+                payee = next((a for a in self.agents if a.id == contract.payee_id), None)
+                
+                # Enforcer logic
+                enforcer = None
+                if contract.enforcer_id:
+                    enforcer = next((a for a in self.agents if a.id == contract.enforcer_id), None)
+                
+                # If Sheriff is required but missing/dead, contract fails
+                if contract.enforcer_id and (not enforcer or not enforcer.alive):
+                    contract.status = 'FAILED_NO_SHERIFF'
+                    continue
+                    
+                if payer and payee:
+                    if payer.energy >= contract.amount:
+                        payer.energy -= contract.amount
+                        payee.energy += contract.amount
+                        contract.status = 'FULFILLED'
+                        if enforcer:
+                            pass
+                            # print(f"👮 Sheriff {enforcer.name} enforced contract.")
+                    else:
+                        contract.status = 'DEFAULTED'
+                        # Sheriff punishes defaulter?
+                        if enforcer:
+                            # Penalty: Jail fees?
+                            pass
         
         # Cycle 2532: Structure Effects
         for structure in self.structures:
@@ -171,6 +204,16 @@ class Ecosystem:
                 agent.energy -= tax
                 tax_revenue += tax
         self.treasury += tax_revenue
+        
+        # 2.5 State Salaries (The Sheriff)
+        # Pay any agent named "Sheriff" a salary from the treasury
+        sheriffs = [a for a in self.agents if "Sheriff" in a.name]
+        salary = 10
+        for sheriff in sheriffs:
+            if self.treasury >= salary:
+                self.treasury -= salary
+                sheriff.energy += salary
+                # print(f"👮 Sheriff paid {salary} from Treasury.")
         
         # 3. Subsidy Distribution (Welfare)
         # Distribute treasury equally to the Poor (< 100 energy)

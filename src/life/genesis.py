@@ -19,6 +19,7 @@ from src.life.signal import Signal
 from src.life.reality_monitor import RealityMonitor
 from src.life.external_comms import ExternalComms
 from src.life.process_migration import ProcessMigration
+from src.life.contract import Contract
 
 class DigitalLifeform:
     def __init__(self, name=None, generation=0, lineage_id=None):
@@ -52,6 +53,7 @@ class DigitalLifeform:
         self.social_inbox = [] # Cycle 2565: Buffer for social signals
         self.inventory = [] # Cycle 2569: The Market (Artifacts)
         self.income_history = {'trade': 0, 'forage': 0} # Cycle 2571: The Specialist
+        self.contracts = [] # Cycle 2573: The Contract
         
     @property
     def efficiency(self):
@@ -756,6 +758,31 @@ class DigitalLifeform:
         # Return Signal object to be emitted
         return Signal(type='LABEL', strength=1.0, source_id=self.id, payload=payload)
 
+    def sign_contract(self):
+        """
+        Cycle 2573: The Contract.
+        Create a binding agreement and broadcast it.
+        """
+        cost = 10
+        if self.energy < cost: return None
+        self.energy -= cost
+        
+        # Create a generic promise: Pay 50 to *anyone* (placeholder logic)
+        # In a real scenario, this would be negotiated.
+        # For now, we create a contract where THIS agent is the payer.
+        # We leave payee empty (Bearer Instrument) or target specific.
+        
+        # Let's assume we target the nearest agent or just broadcast intent.
+        # Payload: {payer: self.id, amount: 50, delay: 5}
+        
+        from src.life.signal import Signal
+        payload = {
+            'payer_id': self.id,
+            'amount': 50,
+            'delay': 5 # Pay in 5 ticks
+        }
+        return Signal(type='CONTRACT', strength=1.0, source_id=self.id, payload=payload)
+
     def calculate_utility(self, bridge_state=None):
         """
         Calculate utility scores for all possible actions.
@@ -866,6 +893,11 @@ class DigitalLifeform:
             if 'forage' in options: options['forage'] += 100
             # print(f"🌾 {self.name} is specializing as Forager.")
             
+        # Cycle 2573: THE CONTRACT
+        # High trust agents may want to sign contracts
+        if trust > 0.8 and self.energy > 1000:
+            options['sign_contract'] = 50 * trust
+            
         # ... (Meta)
         
         # Cycle 2525: Save for Broadcast
@@ -877,7 +909,7 @@ class DigitalLifeform:
         best_utility_score = options.get(best_utility_action, 0)
         
         # If Brain says 'forage' but Utility says 'reflect' or 'codex' or 'label', override.
-        if intent == 'forage' and best_utility_action in ['reflect', 'codex', 'label']:
+        if intent == 'forage' and best_utility_action in ['reflect', 'codex', 'label', 'sign_contract']:
             intent = best_utility_action
             
         # General Override for Critical Survival
@@ -885,7 +917,7 @@ class DigitalLifeform:
             intent = best_utility_action
             
         # DEBUG LOGGING
-        if intent in ['build_wall', 'build_farm', 'construct_nuke', 'reflect', 'codex', 'label']:
+        if intent in ['build_wall', 'build_farm', 'construct_nuke', 'reflect', 'codex', 'label', 'sign_contract']:
             # print(f"DEBUG: {self.name} chose {intent}")
             pass
             
@@ -972,6 +1004,9 @@ class DigitalLifeform:
             if target_type:
                 sig = self.label_object(target_type)
                 if sig: signals_to_emit.append(sig)
+        elif self.intent == 'sign_contract':
+            sig = self.sign_contract()
+            if sig: signals_to_emit.append(sig)
         elif self.intent == 'startup':
             self.startup()
         elif self.intent == 'trade':
