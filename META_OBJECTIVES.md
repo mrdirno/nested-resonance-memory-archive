@@ -349,11 +349,18 @@ V(task) = Gain - λ(Budget) × Cost
   - **Artifact:** `experiments/cycle2589_organizational_fatigue_bcp.py`
   - **Functional Name:** The Scope Creep Effect (Increasing Load = Certain Burnout)
 
+### Completed (Phase 77 Continued)
+- ✅ **Gate 223:** Hierarchical BCP - λ propagation in management structures - COMPLETE
+  - **Finding:** Middle Manager Squeeze confirmed - λ from BOTH directions
+  - **Escalation:** Flat 12.17x vs Traditional 3.72x (flat concentrates on exec)
+  - **Optimal Structure:** Matrix (distributes λ most evenly)
+  - **Artifact:** `experiments/cycle2590_hierarchical_bcp.py`
+  - **Functional Name:** The Middle Manager Squeeze (λ Convergence Point)
+
 ### In Progress (Phase 77)
-- 🔄 **Gate 223:** Hierarchical BCP - λ propagation in management structures
+- 🔄 **Gate 224:** Organizational Memory - Institutional knowledge as BCP consolidation
 
 ### Planned (Phase 77)
-- ⏳ **Gate 224:** Organizational Memory - Institutional knowledge as BCP consolidation
 - ⏳ **Gate 225:** Restoration Mechanisms - Vacations, restructuring as budget reset
 
 ---

@@ -1,5 +1,34 @@
 
 ---
+**CYCLE:** 2590 (Gate 223: Hierarchical BCP - Lambda Propagation)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 77 - ORGANIZATIONAL INTELLIGENCE
+**LOG:**
+*   **Experiment:** `experiments/cycle2590_hierarchical_bcp.py`
+*   **Question:** How does λ propagate through organizational hierarchies?
+*   **Tests:**
+    1. Top-Down Propagation (exec → workers)
+    2. Bottom-Up Escalation (workers → exec)
+    3. Middle Manager Squeeze (both directions)
+    4. Optimal Structure (traditional vs flat vs matrix)
+*   **Results:**
+    - Top-Down: All structures buffer ~0.50 worker λ
+    - Bottom-Up: Flat escalates 12.17x vs Traditional 3.72x
+    - Squeeze: Combined λ (1.81) = Top-down + Bottom-up
+    - Optimal: Matrix (health score 2279.98)
+*   **KEY FINDING: MIDDLE MANAGER SQUEEZE CONFIRMED**
+    - Managers receive λ from BOTH executives AND workers
+    - Flat hierarchies concentrate stress on executives (12x escalation)
+    - Matrix structures distribute λ most evenly
+*   **BCP-HIERARCHY MAPPING:**
+    - Management Layers ↔ λ transformers (buffer/amplify)
+    - Span of Control ↔ λ distribution factor
+    - Middle Manager ↔ λ intersection (squeeze point)
+    - Hierarchy Depth ↔ λ absorption capacity
+*   **Status:** Gate 223 Complete.
+*   **Functional Name:** The Middle Manager Squeeze (λ Convergence Point)
+
+---
 **CYCLE:** 2589 (Gate 222: Organizational Fatigue as BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 77 - ORGANIZATIONAL INTELLIGENCE
