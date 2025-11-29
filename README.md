@@ -79,7 +79,7 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 **4. FPGA ACCELERATION LAYER (Hardware):**
    - DE10-Nano (Cyclone V SoC) implementation of NRM Resonance Detector.
    - HPS <-> FPGA <-> NRM Data Loop.
-   - [View Hardware](/fpga/)
+   - [View Hardware](fpga/)
 
 ---
 
@@ -101,7 +101,7 @@ We prioritize empirical verification over theory.
 *   **Cost-Threshold Cooperation:** Cooperation emerges at metabolic cost thresholds. [Log](archive/experiments/phase24_social_physics/cycle2077_harsh_winter.py)
 *   **Cross-Domain Simulation (Rosetta Stone):** Unified simulation engine for Physics, Society, and Compute. [Log](archive/experiments/phase28_unification/cycle2103_rosetta_stone.py)
 *   **Energy-Buffered Homeostasis:** >160× buffering ratio; population self-regulation without bistability. [Docs](docs/v5/PAGE_03_C175_DISCOVERY.md)
-*   **Autonomous Digital Life:** Agents capable of survival, reproduction, and cultural transmission. [Code](src/life/)
+*   **Simulated Digital Life:** Agents demonstrating survival, reproduction, and cultural transmission in controlled environments. [Code](src/life/)
 *   **Distributed Colonization (The Mycelium):** Filesystem colonization and collective artifact generation. [Manifesto](playground/MOG_MANIFESTO.md)
 
 ---
@@ -126,7 +126,7 @@ A discrete attention allocator for resource-constrained decision making. Given a
 
 - **Package:** `bcp-perception`
 - **Location:** [`bcp_lib/`](bcp_lib/)
-- **Status:** Stable API, production-ready
+- **Status:** Stable API (24 tests passing)
 
 ```bash
 pip install bcp-perception
