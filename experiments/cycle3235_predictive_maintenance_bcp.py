@@ -1,133 +1,77 @@
 import random
-import json
-import math
 
-# -----------------------------------------------------------------------------
-# CYCLE 3235: PREDICTIVE MAINTENANCE BCP
-# -----------------------------------------------------------------------------
-# Domain: Manufacturing
-# Goal: Predict machine failure to optimize maintenance schedule.
-# Hypothesis: BCP (Prognostics) reduces downtime/cost vs Scheduled Maintenance.
-# -----------------------------------------------------------------------------
+# ======================================================================
+# CYCLE 3235: PREDICTIVE MAINTENANCE AS BCP (SMART CITIES)
+# ======================================================================
+# Hypothesis: Maintenance is BCP.
+#   V(repair) = Prob(Fail) * Cost(Fail) - lambda(Budget) * Cost(Repair)
+#   High lambda -> Repair only imminent failures (Firefighting).
+#   Low lambda -> Preventive maintenance.
+# ======================================================================
 
-class Machine:
-    def __init__(self, id):
-        self.id = id
-        self.health = 1.0
-        self.time = 0
-        self.failed = False
-        self.degradation_rate = random.uniform(0.001, 0.005)
-        self.noise = 0.01
-        
-    def tick(self):
-        if self.failed: return
-        self.time += 1
-        
-        # Degradation accelerates
-        accel = 1.0 + (self.time * 0.0001)
-        self.health -= self.degradation_rate * accel
-        
-        if self.health <= 0:
-            self.failed = True
-            
-    def get_sensor_reading(self):
-        # Vibration signal: Increases as health drops
-        # Vibration = 1/Health + Noise
-        if self.health <= 0.01: return 100.0
-        reading = (1.0 / self.health) + random.gauss(0, self.noise)
-        return reading
-
-class MaintenancePolicy:
-    def decide(self, machine, sensor_reading):
-        raise NotImplementedError
-
-class ScheduledPolicy(MaintenancePolicy):
-    def __init__(self, interval=200):
-        self.interval = interval
-        
-    def decide(self, machine, sensor_reading):
-        if machine.time > 0 and machine.time % self.interval == 0:
-            return True # Maintain
-        return False
-
-class BCPPolicy(MaintenancePolicy):
-    def __init__(self):
-        self.health_belief = 1.0
-        self.kalman_gain = 0.1
-        
-    def decide(self, machine, sensor_reading):
-        # 1. Estimate Health from Sensor
-        # Reading = 1/H => H = 1/Reading
-        measured_health = 1.0 / max(0.1, sensor_reading)
-        
-        # 2. Update Belief (Filter)
-        self.health_belief += self.kalman_gain * (measured_health - self.health_belief)
-        
-        # 3. Decide based on RUL (Remaining Useful Life)
-        # If Health < Threshold, Maintain
-        if self.health_belief < 0.3:
-            return True # Preventative
-        return False
-        
-    def reset(self):
-        self.health_belief = 1.0
-
-def run_simulation(policy_cls, steps=1000):
-    machine = Machine(1)
-    policy = policy_cls()
+def run_experiment():
+    print("CYCLE 3235: Predictive Maintenance as BCP")
     
-    total_cost = 0
-    # Costs:
-    # - Maintenance: 10
-    # - Failure: 100 (Unplanned downtime)
-    
-    for t in range(steps):
-        machine.tick()
+    N = 100 # Bridges/Roads
+    assets = []
+    for _ in range(N):
+        assets.append({
+            "P_Fail": random.uniform(0.0, 0.5), # Probability
+            "Cost_Fail": random.uniform(1000, 10000), # Crash cost
+            "Cost_Repair": random.uniform(10, 100)    # Fix cost
+        })
         
-        if machine.failed:
-            total_cost += 100
-            machine = Machine(1) # Replace
-            if hasattr(policy, 'reset'): policy.reset()
-            continue
-            
-        reading = machine.get_sensor_reading()
-        action = policy.decide(machine, reading)
+    budget = 2000
+    
+    # BCP Strategy
+    lamb = 1000.0 / (100.0 + budget)
+    
+    for a in assets:
+        gain = a["P_Fail"] * a["Cost_Fail"] # Expected Avoided Cost
+        a["score"] = gain - lamb * a["Cost_Repair"]
         
-        if action:
-            total_cost += 10
-            machine = Machine(1) # Renew
-            if hasattr(policy, 'reset'): policy.reset()
-            
-    return total_cost
-
-def main():
-    print("======================================================================")
-    print("CYCLE 3235: PREDICTIVE MAINTENANCE BCP")
-    print("======================================================================")
+    assets.sort(key=lambda x: x["score"], reverse=True)
     
-    steps = 5000
+    spent = 0
+    avoided_cost = 0
+    failures = 0
     
-    # Scheduled (Periodic)
-    sched_cost = run_simulation(ScheduledPolicy, steps)
-    print(f"Scheduled Cost: {sched_cost}")
+    for a in assets:
+        if a["score"] > 0 and spent + a["Cost_Repair"] <= budget:
+            spent += a["Cost_Repair"]
+            avoided_cost += a["P_Fail"] * a["Cost_Fail"] # Statistical value
+        else:
+            # Not repaired -> Might fail
+            if random.random() < a["P_Fail"]:
+                failures += 1
+                
+    print(f"BCP Avoided Cost: ${avoided_cost:.2f}")
+    print(f"Failures: {failures}")
     
-    # BCP (Condition Based)
-    bcp_cost = run_simulation(BCPPolicy, steps)
-    print(f"BCP Cost:       {bcp_cost}")
+    # Scheduled Strategy (Repair every Nth)
+    # Random selection until budget full
+    random.shuffle(assets)
+    spent_s = 0
+    avoided_s = 0
+    failures_s = 0
     
-    improvement = ((sched_cost - bcp_cost) / sched_cost) * 100
-    print("-" * 60)
-    print(f"Improvement: {improvement:.2f}%")
+    for a in assets:
+        if spent_s + a["Cost_Repair"] <= budget:
+            spent_s += a["Cost_Repair"]
+            avoided_s += a["P_Fail"] * a["Cost_Fail"]
+        else:
+            if random.random() < a["P_Fail"]:
+                failures_s += 1
+                
+    print(f"Scheduled Avoided: ${avoided_s:.2f}")
+    print(f"Scheduled Failures: {failures_s}")
     
-    if bcp_cost < sched_cost:
-        print("RESULT: SUCCESS. Predictive maintenance minimized total cost.")
+    if avoided_cost > avoided_s:
+        print("VERIFIED: BCP Maintenance outperforms Schedule.")
+        return True
     else:
-        print("RESULT: FAILURE.")
-        
-    print("======================================================================")
-    
-    with open("results/cycle3235_predictive_maintenance.json", "w") as f:
-        json.dump({"scheduled": sched_cost, "bcp": bcp_cost, "improvement": improvement}, f, indent=2)
+        print("FAILED: No improvement.")
+        return False
 
 if __name__ == "__main__":
-    main()
+    run_experiment()
