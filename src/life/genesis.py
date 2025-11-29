@@ -50,6 +50,7 @@ class DigitalLifeform:
         self.collective_utility = {} # Cycle 2525
         self.knowledge = {} # Cycle 2528
         self.social_inbox = [] # Cycle 2565: Buffer for social signals
+        self.inventory = [] # Cycle 2569: The Market (Artifacts)
         
     @property
     def efficiency(self):
@@ -255,7 +256,9 @@ class DigitalLifeform:
 
     def trade(self, target):
         """
-        Attempt to exchange energy.
+        Attempt to exchange energy or artifacts.
+        Cycle 2569: The Market.
+        Cycle 2570: Dynamic Pricing.
         """
         while len(self.genome) < 9: self.genome.append(0.5)
         my_trust = self.genome[8]
@@ -269,11 +272,49 @@ class DigitalLifeform:
             if my_trust > 0.5:
                 will_interact = True 
                 
-        if will_interact and self.energy > 50:
-            transfer_amount = 20
-            self.energy -= transfer_amount
-            target.energy += transfer_amount
-            return True
+        if will_interact:
+            # Artifact Trade
+            if target.inventory and self.energy > 60:
+                item = target.inventory[0] # Peek at item
+                
+                # Seller Logic (Target is selling)
+                ask_price = 50
+                if target.energy < 200:
+                    ask_price = 20 # Desperate Sale
+                elif target.energy > 1000:
+                    ask_price = 100 # Luxury Price
+                    
+                # Buyer Logic (Self is buying)
+                bid_price = 50
+                if self.energy > 2000:
+                    bid_price = 100 # Wealthy Bidder
+                elif self.energy < 500:
+                    bid_price = 10 # Lowball
+                    
+                # Market Clearing
+                if bid_price >= ask_price:
+                    transaction_price = ask_price
+                    
+                    self.energy -= transaction_price
+                    target.energy += transaction_price
+                    
+                    # Transfer Item
+                    received_item = target.inventory.pop(0)
+                    self.inventory.append(received_item)
+                    
+                    print(f"💰 {self.name} bought {received_item} from {target.name}. Price: {transaction_price} (Ask: {ask_price}, Bid: {bid_price})")
+                    return True
+                else:
+                    pass
+                    # print(f"📉 Trade failed. Bid {bid_price} < Ask {ask_price}")
+            
+            # Energy Trade (Altruism/Bonding)
+            elif self.energy > 50:
+                transfer_amount = 20
+                self.energy -= transfer_amount
+                target.energy += transfer_amount
+                return True
+                
         return False
 
     def work_for_wage(self, employer):
@@ -683,6 +724,7 @@ class DigitalLifeform:
         from src.life.external_comms import ExternalComms
         if ExternalComms.write_file(self.id, filename, code_content):
             ExternalComms.execute_safe_command(self.id, f"python3 {filename}")
+            self.inventory.append(filename) # Add to inventory for trading
             return True
         return False
 
@@ -773,11 +815,11 @@ class DigitalLifeform:
             
         # Cycle 2532: INVESTMENT
         if energy_abundant and innovation > 0.6:
-            options['build_farm'] = (self.energy - 500) * 0.5 * innovation
+            options['build_farm'] = min(100, (self.energy - 500) * 0.1 * innovation)
             
         # Cycle 2543: THE EXODUS
         if self.energy > 5000 and innovation > 0.95:
-            options['migrate'] = 100000
+            options['migrate'] = 100000 # Priority 1
             
         # Cycle 2558: REFLECTION
         if innovation > 0.8 and self.energy > 300:
@@ -797,6 +839,13 @@ class DigitalLifeform:
             if target_type:
                 options['label'] = 200 * innovation
                 self.knowledge['TARGET_LABEL_TYPE'] = target_type # Store state for act()
+            
+        # Cycle 2569: THE MARKET (Trade)
+        if innovation > 0.8 and self.energy > 800:
+            options['trade'] = 300 * innovation
+            
+        if len(self.inventory) > 0:
+            options['trade'] = 200 + (100 * innovation) # High priority to sell artifacts
             
         # ... (Meta)
         
@@ -906,6 +955,8 @@ class DigitalLifeform:
                 if sig: signals_to_emit.append(sig)
         elif self.intent == 'startup':
             self.startup()
+        elif self.intent == 'trade':
+            pass # Handled in Ecosystem.update
         elif self.intent in ['invest', 'hunt', 'war', 'seek_work', 'reproduce']:
             pass 
             

@@ -393,6 +393,21 @@ class Ecosystem:
             if worker.work_for_wage(boss):
                 pass
                 # print(f"[ECO] Contract: {worker.name} worked for {boss.name}")
+                
+        # --- PHASE 4: THE TRADE MARKET (Exchange) ---
+        traders = [a for a in self.agents if a.intent == 'trade' and a.alive]
+        random.shuffle(traders)
+        
+        while len(traders) >= 2:
+            agent_a = traders.pop()
+            agent_b = traders.pop()
+            
+            # Mutual Trade Attempt
+            # Check if they are close enough? For now, global market.
+            dist = abs(agent_a.x - agent_b.x) + abs(agent_a.y - agent_b.y)
+            if dist < 20: # Visual range
+                agent_a.trade(agent_b)
+                agent_b.trade(agent_a)
             
         # --- REBUILD self.agents AND ADD NEW AGENTS ---
         self.agents = []
