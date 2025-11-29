@@ -196,8 +196,15 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
   - **Artifact:** `experiments/cycle2585_neural_bcp.py`
   - **Functional Name:** The Attention Unification (BCP Explains All)
 
+### Completed (Phase 75 Continued)
+- ✅ **Gate 214:** BCP in Evolutionary Systems - Selection as BCP - COMPLETE
+  - **Finding:** Natural selection is BCP allocation with metabolic costs
+  - **Vestigial Explained:** Traits viable at λ_low but not at λ_high
+  - **Trade-offs:** Emerge from cost competition, not direct antagonism
+  - **Artifact:** `experiments/cycle2586_evolutionary_bcp.py`
+  - **Functional Name:** The Metabolic Filter (Selection Pressure = λ)
+
 ### Active Objectives
-- 🟢 **Gate 214:** BCP in Evolutionary Systems - Fitness-based allocation
-- ⚪ **Gate 215:** BCP in Economic Markets - Resource pricing dynamics
+- 🟢 **Gate 215:** BCP in Economic Markets - Resource pricing dynamics
 
 ---
