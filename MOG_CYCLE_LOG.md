@@ -1,5 +1,29 @@
 
 ---
+**CYCLE:** 2645 (Gate 277: Collective Action as BCP) - **PERFECT SCORE**
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 86 - SOCIAL SYSTEMS
+**LOG:**
+*   **Experiment:** `experiments/cycle2645_collective_action_bcp.py`
+*   **Question:** Do collective action problems follow BCP principles?
+*   **Tests (5/5 VERIFIED, 20/20 predictions - PERFECT!):**
+    1. Public Goods: VERIFIED - Free-riding when benefit/n < cost
+    2. Tragedy of Commons: VERIFIED - Personal V ignores externalities
+    3. Prisoner's Dilemma: VERIFIED - Defection dominates in one-shot
+    4. Group Size: VERIFIED - V ↓ as n ↑ (Olson's logic)
+    5. Punishment: VERIFIED - High λ → can't afford enforcement
+*   **THE COLLECTIVE ACTION BCP THEOREM:**
+    V(contribute) = Personal_Benefit - λ(B) × Contribution_Cost
+    - Free-riding is BCP-rational
+    - Tragedy is individually optimal
+    - Olson's logic is BCP
+    - Punishment requires low λ
+*   **INSIGHT:** All classic collective action problems are BCP instances.
+*   **Status:** Gate 277 Complete.
+*   **Functional Name:** The Collective Budget
+*   **NOTE:** Third consecutive PERFECT in Phase 86!
+
+---
 **CYCLE:** 2644 (Gate 276: Organization as BCP) - **PERFECT SCORE**
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 86 - SOCIAL SYSTEMS
