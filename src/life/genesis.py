@@ -666,6 +666,30 @@ class DigitalLifeform:
             return True
         return False
 
+    def label_object(self, target_type):
+        """
+        Cycle 2564: The Babble.
+        Invent a label for a perceived object and broadcast it.
+        """
+        cost = 5
+        if self.energy < cost: return False
+        self.energy -= cost
+        
+        # Generate Symbol (e.g., "A1", "Z9")
+        import string
+        label = random.choice(string.ascii_uppercase) + random.choice(string.digits)
+        
+        # Self-Reinforcement (I named it, so I believe it)
+        self.brain.learn_word(label, target_type, 1.0)
+        
+        # Broadcast
+        from src.life.signal import Signal
+        payload = {'label': label, 'type': target_type}
+        # print(f"🗣️ {self.name} labeled {target_type} as '{label}'")
+        
+        # Return Signal object to be emitted
+        return Signal(type='LABEL', strength=1.0, source_id=self.id, payload=payload)
+
     def calculate_utility(self, bridge_state=None):
         """
         Calculate utility scores for all possible actions.
@@ -737,11 +761,22 @@ class DigitalLifeform:
             
         # Cycle 2558: REFLECTION
         if innovation > 0.8 and self.energy > 300:
-            options['reflect'] = 200 * innovation
+            options['reflect'] = 40 * innovation
             
         # Cycle 2562: THE QUINE (Creative Coding)
         if innovation > 0.9 and self.energy > 600:
-            options['codex'] = 300 * innovation # High priority for geniuses
+            options['codex'] = 250 * innovation # High priority for geniuses
+            
+        # Cycle 2564: THE BABBLE (Language)
+        if innovation > 0.6 and self.energy > 200:
+            # Can only label if we sense something
+            target_type = None
+            if 'FOOD' in self.sensed_signals: target_type = 'FOOD'
+            elif 'PREDATOR' in self.sensed_signals: target_type = 'PREDATOR'
+            
+            if target_type:
+                options['label'] = 200 * innovation
+                self.knowledge['TARGET_LABEL_TYPE'] = target_type # Store state for act()
             
         # ... (Meta)
         
@@ -753,8 +788,8 @@ class DigitalLifeform:
         best_utility_action = max(options, key=options.get) if options else 'forage'
         best_utility_score = options.get(best_utility_action, 0)
         
-        # If Brain says 'forage' but Utility says 'reflect' or 'codex', override.
-        if intent == 'forage' and best_utility_action in ['reflect', 'codex']:
+        # If Brain says 'forage' but Utility says 'reflect' or 'codex' or 'label', override.
+        if intent == 'forage' and best_utility_action in ['reflect', 'codex', 'label']:
             intent = best_utility_action
             
         # General Override for Critical Survival
@@ -762,7 +797,7 @@ class DigitalLifeform:
             intent = best_utility_action
             
         # DEBUG LOGGING
-        if intent in ['build_wall', 'build_farm', 'construct_nuke', 'reflect', 'codex']:
+        if intent in ['build_wall', 'build_farm', 'construct_nuke', 'reflect', 'codex', 'label']:
             # print(f"DEBUG: {self.name} chose {intent}")
             pass
             
@@ -840,6 +875,11 @@ class DigitalLifeform:
             self.reflect()
         elif self.intent == 'codex':
             self.codex()
+        elif self.intent == 'label':
+            target_type = self.knowledge.get('TARGET_LABEL_TYPE')
+            if target_type:
+                sig = self.label_object(target_type)
+                if sig: signals_to_emit.append(sig)
         elif self.intent == 'startup':
             self.startup()
         elif self.intent in ['invest', 'hunt', 'war', 'seek_work', 'reproduce']:
