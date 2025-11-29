@@ -1,5 +1,23 @@
 
 ---
+**CYCLE:** 2570 (Gate 197: The Triage)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** MEDICAL ATTENTION ECONOMICS
+**LOG:**
+*   **Experiment:** Executed `experiments/cycle2570_the_triage.py`.
+*   **Scenario:** Diagnostic attention allocation under resource scarcity (100 shifts, 3 phases).
+*   **Result:** CONFIRMED. Triage Rationality emerged - system learned who NOT to save.
+*   **Phases:**
+    - Abundance (t=0-33): 100% confidence, 0 critical misses
+    - Collapse (t=34-66): 85% confidence, 17 critical misses
+    - Crisis (t=67-100): 60.5% confidence, 32 critical misses
+*   **Insight:** Under extreme scarcity, even EMERGENT cases get dropped. Only IMMEDIATE (66.7%) preserved.
+*   **Status:** Triage Rationality Verified.
+*   **Functional Name:** Triage Rationality (Tragic Optimization under Scarcity).
+*   **Figure:** `data/figures/cycle2570_the_triage.png`
+*   **Ethical Note:** 32 preventable deaths demonstrate the cost of resource constraints.
+
+---
 **CYCLE:** 2569 (Gate 196: The Investor)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PORTFOLIO PERCEPTION

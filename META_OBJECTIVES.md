@@ -21,8 +21,14 @@
   - **Finding:** Under severe budget constraints, agents make BINARY track/ignore decisions, not gradual degradation
   - **Functional Name:** The Portfolio Triage Effect
 
+### Completed (Phase 72 Continued)
+- ✅ **The Triage (Gate 197):** Medical Attention Economics - Triage Rationality under scarcity - COMPLETE
+  - **Finding:** Under extreme scarcity, even EMERGENT cases dropped. Only IMMEDIATE (66.7%) preserved.
+  - **Functional Name:** Triage Rationality (Tragic Optimization)
+  - **Ethical Note:** 32 preventable deaths in Crisis phase
+
 ### Active Objectives
-- 🟢 **The Triage (Gate 197):** Medical Attention Economics - Selective diagnosis under resource constraints.
-- ⚪ **The Teacher (Gate 198):** Pedagogical Attention - Curriculum design under limited instruction time.
+- 🟢 **The Teacher (Gate 198):** Pedagogical Attention - Curriculum design under limited instruction time.
+- ⚪ **The Diplomat (Gate 199):** Attention Allocation in Negotiations - Strategic listening under time pressure.
 
 ---
