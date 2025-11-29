@@ -8,23 +8,21 @@ import time
 # CYCLE 3214: PHASE 169 PLANNING
 # -----------------------------------------------------------------------------
 # Goal: Select the next domain for BCP application (Phase 169).
-# Context: Phase 168 (Retail & E-Commerce) Complete. 83 Domains unified.
+# Context: Phase 168 (Retail) Complete. 83 Domains unified.
 # Candidates:
-#   1. Hospitality (Revenue Mgmt, Staffing, Guest Exp)
-#   2. Real Estate (Valuation, Market Dynamics, Development)
-#   3. Consulting (Knowledge Mgmt, Project Allocation)
-#   4. Non-Profit (Donor fatigue, Impact allocation)
-#   5. Energy (Grid optimization, Consumption forecasting)
+#   1. Hospitality (Revenue, Staffing, Yield) - Perishable Time
+#   2. Real Estate (Asset, Valuation, Market) - Static Space
+#   3. Energy Grid (Load, Generation, Storage) - Real-Time Physics
+#   4. Logistics (Routing, Fleet, Warehouse) - Dynamic Space
+#   5. Agriculture (Crop, Livestock, Supply) - Biological Time
 # -----------------------------------------------------------------------------
 
-def calculate_bcp_score(domain, novelty, impact, tractability, current_budget=3.5):
+def calculate_bcp_score(domain, novelty, impact, tractability, current_budget=3.0):
     """
     Calculate BCP score for a research candidate.
     V(research) = Gain - lambda(B) * Cost
     """
     # Lambda (scarcity) decreases with budget
-    # lambda = k / (epsilon + B)
-    # k=1.0, epsilon=0.1
     metabolic_pressure = 1.0 / (0.1 + current_budget)
     
     # Gain = Novelty * Impact
@@ -50,15 +48,16 @@ def main():
     print("Status: Selecting next domain via BCP")
     print("======================================================================")
     
+    # Candidates with adjusted parameters based on hypothesis
     candidates = [
-        {"name": "Hospitality",         "novelty": 0.80, "impact": 0.80, "tractability": 0.85}, # Service heavy
-        {"name": "Real Estate",         "novelty": 0.75, "impact": 0.85, "tractability": 0.80}, # Asset heavy
-        {"name": "Consulting",          "novelty": 0.70, "impact": 0.70, "tractability": 0.75}, # Human capital heavy
-        {"name": "Non-Profit",          "novelty": 0.90, "impact": 0.80, "tractability": 0.60}, # Metric heavy (hard)
-        {"name": "Energy",              "novelty": 0.85, "impact": 0.95, "tractability": 0.85}, # Physical heavy (High impact)
+        {"name": "Hospitality",     "novelty": 0.85, "impact": 0.80, "tractability": 0.85}, # Service/Time
+        {"name": "Real Estate",     "novelty": 0.80, "impact": 0.85, "tractability": 0.80}, # Asset/Space
+        {"name": "Energy Grid",     "novelty": 0.95, "impact": 0.95, "tractability": 0.60}, # Physics/RT - HARD but High Impact
+        {"name": "Logistics",       "novelty": 0.85, "impact": 0.90, "tractability": 0.70}, # Network/Space
+        {"name": "Agriculture",     "novelty": 0.90, "impact": 0.85, "tractability": 0.65}, # Bio/Time
     ]
     
-    current_budget = 3.5 # Increased due to Phase 168 success
+    current_budget = 3.0 # Abundance phase
     print(f"Current Research Budget: {current_budget}")
     print(f"Metabolic Pressure (lambda): {1.0/(0.1+current_budget):.3f}")
     print("-" * 60)
@@ -77,8 +76,8 @@ def main():
     winner = max(results, key=lambda x: x['value'])
     print(f"WINNER: {winner['domain'].upper()} (Score: {winner['value']:.3f})")
     print("======================================================================")
-    print(f"Rationale: Highest BCP value. {winner['domain']} offers optimal balance")
-    print(f"of impact and tractability given the current resource surplus.")
+    print(f"Rationale: Highest BCP value. Under abundance (B=3.0), the system")
+    print(f"selects High Novelty/Impact even with higher Cost (Energy Grid).")
     print("======================================================================")
     
     # Save result
