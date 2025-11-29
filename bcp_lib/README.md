@@ -4,18 +4,27 @@ A discrete attention allocator for resource-constrained decision making. Given a
 
 ## The BCP Equation
 
+The allocation maximizes total value over the attended set:
+
 ```
-Score(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × SetComplexity
+TotalScore = Σ_attended [Gain(a) - λ(B) × Cost(a)] - γ × SetComplexity
 ```
 
 Where:
-- **Score(a)**: Value of attending to action/item a (**maximize** - positive means attend, negative means ignore)
-- **E[Gain(a)]**: Expected benefit if attended to (0.0 - 1.0)
+- **Gain(a)**: Expected benefit of attending to item a (0.0 - 1.0)
 - **λ(B) = k / (ε + B)**: Metabolic pressure (inverse of budget)
-- **Cost(a)**: Resource cost to attend
-- **γ × SetComplexity**: Overhead from juggling multiple options, where `SetComplexity = log(1 + N)` and N is the number of items under consideration
+- **Cost(a)**: Resource cost to attend to item a
+- **SetComplexity = log(1 + N)**: Global overhead from evaluating N options
 
-> **Sign convention**: BCP defines Score as a value to **maximize**. Positive Score → attend. Negative Score → ignore. This differs from cost-minimization formulations where you would flip the sign.
+For **ranking items**, we use the per-item score:
+
+```
+Score(a) = Gain(a) - λ(B) × Cost(a)
+```
+
+Items with positive Score are candidates for attention. The `SetComplexity` term is a global penalty applied once per decision, not per item—it does not affect relative ranking.
+
+> **Sign convention**: BCP defines Score as a value to **maximize**. Positive Score → attend. Negative Score → ignore.
 
 ## Installation
 
@@ -29,12 +38,6 @@ Or install from source:
 git clone https://github.com/mrdirno/nested-resonance-memory-archive.git
 cd nested-resonance-memory-archive/bcp_lib
 pip install -e .
-```
-
-For system monitoring features:
-
-```bash
-pip install bcp-perception[monitor]
 ```
 
 ## Quick Start
@@ -74,11 +77,11 @@ BCP predicts three distinct phases based on resource availability:
 
 | Phase | Default Threshold | Behavior |
 |-------|-------------------|----------|
-| **ABUNDANCE** | B > 2.0 | Attend to everything |
-| **SCARCITY** | 0.5 < B < 2.0 | Triage begins - ignore low-value items |
-| **CRISIS** | B < 0.5 | Focus on single highest-value item |
+| **ABUNDANCE** | B > 2.0 | Attend to all positive-Score items |
+| **SCARCITY** | 0.5 < B < 2.0 | Triage begins—ignore low-value items |
+| **CRISIS** | B < 0.5 | Focus on one or few highest-Score items |
 
-> **Note**: These thresholds (2.0 and 0.5) are configurable defaults, not universal constants. Override them via `BCPModel(abundance_threshold=..., crisis_threshold=...)` to match your domain's budget scale.
+> **Note**: Thresholds (2.0 and 0.5) are configurable defaults, not universal constants. Override via `BCPModel(abundance_threshold=..., crisis_threshold=...)` to match your domain's budget scale.
 
 ### Metabolic Pressure (λ)
 
@@ -90,16 +93,16 @@ Lambda controls cost sensitivity. The relationship `λ(B) = k / (ε + B)` means:
 ```python
 # Defaults: lambda_scale=10.0, lambda_epsilon=0.1
 # These produce:
-#   budget = 5.0  -> lambda ≈ 1.96
-#   budget = 0.5  -> lambda ≈ 16.67
+#   budget = 5.0  → lambda ≈ 1.96  (low pressure)
+#   budget = 0.5  → lambda ≈ 16.67 (high pressure)
 
 model = BCPModel(lambda_scale=10.0, lambda_epsilon=0.1)
 
-print(model.compute_lambda(5.0))   # ~1.96 (low pressure)
-print(model.compute_lambda(0.5))   # ~16.67 (high pressure)
+print(model.compute_lambda(5.0))   # ~1.96
+print(model.compute_lambda(0.5))   # ~16.67
 ```
 
-### Complexity Term
+### Set Complexity
 
 The `γ × SetComplexity` term models the cognitive/computational overhead of evaluating many options:
 
@@ -107,10 +110,11 @@ The `γ × SetComplexity` term models the cognitive/computational overhead of ev
 SetComplexity = log(1 + N)
 ```
 
-Where N is the number of items. This captures:
-- Overhead scales sublinearly with options
-- Even with infinite budget, there's a limit to useful parallelism
-- Default `γ = 0.1` makes this a minor penalty; adjust for domains where option count matters more
+Where N is the number of items under consideration. This term:
+- Is applied **globally** to the decision, not per-item
+- Does not affect relative ranking between items
+- Captures that overhead scales sublinearly with option count
+- Default `γ = 0.1` makes this a minor adjustment; increase for domains where option count matters more
 
 ### Domain Presets
 
@@ -185,32 +189,28 @@ print(f"Metrics: {sample.metrics}")
 model = BCPModel(
     lambda_scale=10.0,       # k in λ = k/(ε+B). Higher = sharper transitions
     lambda_epsilon=0.1,      # ε in λ = k/(ε+B). Prevents division by zero
-    gamma=0.1,               # Set complexity penalty coefficient
+    gamma=0.1,               # Global set complexity coefficient
     abundance_threshold=2.0, # Budget above this = ABUNDANCE phase
     crisis_threshold=0.5,    # Budget below this = CRISIS phase
 )
 ```
 
-**Parameter relationships:**
-- At `budget = lambda_scale / lambda_epsilon`, λ = 0.5 (transition region)
-- Default thresholds assume budget in 0-5 range; scale to your domain
-
 ## Research Background
 
 BCP was developed through the DUALITY-ZERO research program, tested across 10 stylized scenarios:
 
-1. **Finance** - Portfolio triage under capital constraints
-2. **Medical** - Emergency triage under staff/time limits
-3. **Education** - Student attention allocation
-4. **Diplomacy** - Negotiation focus under time pressure
-5. **Ecosystem** - Conservation priorities under funding limits
-6. **Software** - Bug triage under engineer capacity
-7. **Emergency** - Disaster response resource allocation
-8. **Moderation** - Content prioritization under queue volume
-9. **Manufacturing** - Quality control sampling
-10. **Systems** - Real-time monitoring task scheduling
+1. **Finance** — Portfolio triage under capital constraints
+2. **Medical** — Emergency triage under staff/time limits
+3. **Education** — Student attention allocation
+4. **Diplomacy** — Negotiation focus under time pressure
+5. **Ecosystem** — Conservation priorities under funding limits
+6. **Software** — Bug triage under engineer capacity
+7. **Emergency** — Disaster response resource allocation
+8. **Moderation** — Content prioritization under queue volume
+9. **Manufacturing** — Quality control sampling
+10. **Systems** — Real-time monitoring task scheduling
 
-In all cases, the same three-phase structure emerged (Abundance → Scarcity → Crisis), with similar threshold behavior up to scaling of the budget axis.
+Scenarios were implemented as synthetic task sets with domain-inspired gain and cost distributions. In all cases, the same three-phase structure emerged (Abundance → Scarcity → Crisis), with similar threshold behavior up to scaling of the budget axis.
 
 ## API Reference
 
@@ -222,16 +222,16 @@ Represents an item that can receive attention.
 - `name`: Identifier
 - `gain`: Expected benefit (0.0 - 1.0)
 - `cost`: Resource cost
-- `compute_priority(lambda_, gamma, n_items)`: Calculate priority score
+- `compute_priority(lambda_, gamma, n_items)`: Returns **per-item Score** = `Gain - λ × Cost - γ × log(1+N)`. Note: the global SetComplexity is included here for convenience but cancels when comparing items at fixed N.
 
 #### `BCPModel(lambda_scale, lambda_epsilon, gamma, abundance_threshold, crisis_threshold)`
 The core BCP allocation model.
 
-- `compute_lambda(budget)`: Calculate metabolic pressure
-- `determine_phase(budget)`: Get current phase
-- `allocate(items, budget)`: Perform attention allocation
-- `sweep_budgets(items_fn, budget_range)`: Test across budgets
-- `find_phase_thresholds(items_fn, budget_range)`: Find transition points
+- `compute_lambda(budget)`: Calculate metabolic pressure λ(B) = k/(ε+B)
+- `determine_phase(budget)`: Get current phase based on thresholds
+- `allocate(items, budget)`: Perform attention allocation, returns BCPResult
+- `sweep_budgets(items_fn, budget_range)`: Test across budget values
+- `find_phase_thresholds(items_fn, budget_range)`: Find empirical transition points
 
 #### `BCPResult`
 Result of allocation containing:
@@ -254,9 +254,9 @@ Real-time monitoring with BCP triage.
 ### Enums
 
 #### `Phase`
-- `Phase.ABUNDANCE`: High budget, attend to everything
+- `Phase.ABUNDANCE`: High budget, attend to all positive-Score items
 - `Phase.SCARCITY`: Moderate budget, triage active
-- `Phase.CRISIS`: Low budget, focus on single item
+- `Phase.CRISIS`: Low budget, focus on highest-Score items
 
 ## Relationship to Other Work
 
