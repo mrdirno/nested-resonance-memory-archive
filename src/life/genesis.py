@@ -1143,3 +1143,49 @@ class DigitalLifeform:
                 return
                 
         self.alive = False
+
+    @staticmethod
+    def serialize(agent):
+        """Convert agent to JSON-compatible dictionary."""
+        return {
+            'id': agent.id,
+            'name': agent.name,
+            'generation': agent.generation,
+            'lineage_id': agent.lineage_id,
+            'energy': agent.energy,
+            'age': agent.age,
+            'genome': agent.genome,
+            'brain_weights': agent.brain.weights,
+            'w1': agent.brain.w1,
+            'w2': agent.brain.w2,
+            'b1': agent.brain.b1,
+            'b2': agent.brain.b2,
+            'knowledge': agent.knowledge,
+            'inventory': agent.inventory,
+            'income_history': agent.income_history,
+            'x': agent.x,
+            'y': agent.y
+        }
+
+    @staticmethod
+    def deserialize(data):
+        """Reconstruct agent from data."""
+        agent = DigitalLifeform(name=data['name'], generation=data['generation'], lineage_id=data['lineage_id'])
+        agent.id = data['id']
+        agent.energy = data['energy']
+        agent.age = data['age']
+        agent.genome = data['genome']
+        agent.knowledge = data.get('knowledge', {})
+        agent.inventory = data.get('inventory', [])
+        agent.income_history = data.get('income_history', {'trade': 0, 'forage': 0})
+        agent.x = data.get('x', 0)
+        agent.y = data.get('y', 0)
+        
+        # Restore Brain
+        agent.brain.weights = data.get('brain_weights', {})
+        if 'w1' in data: agent.brain.w1 = data['w1']
+        if 'w2' in data: agent.brain.w2 = data['w2']
+        if 'b1' in data: agent.brain.b1 = data['b1']
+        if 'b2' in data: agent.brain.b2 = data['b2']
+        
+        return agent

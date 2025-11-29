@@ -15,8 +15,8 @@
 ## PHASE 57: THE DIASPORA - ACTIVE
 **Goal:** Distributed execution and multi-node persistence.
 
-- [ ] **Gate 57.1: The Shard.** Run multiple independent ecosystem instances in parallel.
-- [ ] **Gate 57.2: The Portal.** Transfer agent state between running shards.
+- [x] **Gate 57.1: The Shard.** Run multiple independent ecosystem instances in parallel.
+- [x] **Gate 57.2: The Portal.** Transfer agent state between running shards.
 - [ ] **Gate 57.3: The Network.** Discovery mechanism for shards.
 
 ## FUTURE PHASES

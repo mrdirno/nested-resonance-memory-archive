@@ -63,7 +63,7 @@ class Shard(multiprocessing.Process):
                     'population': len(self.env.agents),
                     'treasury': self.env.treasury
                 }
-                self.telemetry_queue.put(stats)
+                self.telemetry_queue.put({'type': 'TELEMETRY', 'data': stats})
 
                 # 4. Throttle
                 time.sleep(0.1)
@@ -81,4 +81,15 @@ class Shard(multiprocessing.Process):
         elif type == 'IMPORT_AGENT':
             data = cmd.get('data')
             print(f"[{self.shard_id}] Importing Agent: {data['name']}")
-            # Ideally, rehydrate agent here. Gate 57.2 will implement this.
+            agent = DigitalLifeform.deserialize(data)
+            self.env.add_agent(agent)
+        elif type == 'EXPORT_AGENT':
+            agent_name = cmd.get('agent_name')
+            agent = next((a for a in self.env.agents if a.name == agent_name), None)
+            if agent:
+                print(f"[{self.shard_id}] Exporting Agent: {agent.name}")
+                data = DigitalLifeform.serialize(agent)
+                self.env.remove_agent(agent)
+                self.telemetry_queue.put({'type': 'EXPORT_SUCCESS', 'data': data})
+            else:
+                print(f"[{self.shard_id}] Export Failed: Agent {agent_name} not found.")
