@@ -270,8 +270,16 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
   - **Artifact:** `experiments/cycle2590_decision_fatigue_bcp.py`
   - **Functional Name:** The Depletion Threshold Effect
 
-### Planned (Phase 76 Continued)
-- ⏳ **Gate 219:** Sleep and Memory - Budget restoration dynamics
+### Completed (Phase 76 Continued)
+- ✅ **Gate 219:** Sleep and Memory - Budget restoration dynamics - COMPLETE
+  - **Finding:** Sleep is BCP budget restoration; memory consolidation is low-λ reallocation
+  - **Wake→Sleep**: Budget 10→2 over 16h (λ: 0.20→0.80), restored to 5.60 after sleep
+  - **Deprivation**: Total deprivation λ=3.33 vs well-rested λ=0.33 (10x difference)
+  - **Encoding Rate**: Drops from 84% (rested) to 57% (deprived)
+  - **Artifact:** `experiments/cycle2591_sleep_memory_bcp.py`
+  - **Functional Name:** The Restoration Cycle
+
+### Planned (Phase 76 Final)
 - ⏳ **Gate 220:** Cognitive Load Theory - Unified under BCP framework
 
 ---
