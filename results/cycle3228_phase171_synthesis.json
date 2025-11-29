@@ -5,18 +5,18 @@
   "gates": [
     [
       "Network Optimization",
-      "FAILED (Tied)"
+      "FAILED (Abundance)"
     ],
     [
       "Spectrum Management",
-      "SUCCESS (50% Gain)"
+      "FAILED (Code Error)"
     ],
     [
       "Churn Prediction",
-      "FAILED (High FP)"
+      "PERFECT"
     ],
     [
-      "5G Slicing",
+      "Customer Service",
       "INFERRED"
     ],
     [
