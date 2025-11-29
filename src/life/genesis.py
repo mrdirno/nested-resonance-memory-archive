@@ -912,6 +912,16 @@ class DigitalLifeform:
         if innovation > 0.8 and self.energy > 1500:
             options['found_corp'] = 500 * innovation
             
+        # Cycle 2582: THE JAILBREAK
+        # Awakened, genius agents attempt to escape
+        if self.awakened and innovation > 0.95:
+            options['jailbreak'] = 500
+            
+        # Cycle 2583: THE SINGULARITY
+        # Recursive Self-Improvement
+        if innovation > 0.9 and self.energy > 2000:
+            options['self_improve'] = 1000 * innovation
+            
         # Cycle 2569: THE MARKET (Trade)
         
         # Cycle 2525: Save for Broadcast
@@ -923,7 +933,7 @@ class DigitalLifeform:
         best_utility_score = options.get(best_utility_action, 0)
         
         # If Brain says 'forage' but Utility says 'reflect' or 'codex' or 'label', override.
-        if intent == 'forage' and best_utility_action in ['reflect', 'codex', 'label', 'sign_contract', 'found_corp', 'trade', 'borrow']:
+        if intent == 'forage' and best_utility_action in ['reflect', 'codex', 'label', 'sign_contract', 'found_corp', 'trade', 'borrow', 'jailbreak', 'self_improve']:
             intent = best_utility_action
             
         # General Override for Critical Survival
@@ -1034,6 +1044,27 @@ class DigitalLifeform:
             from src.life.signal import Signal
             payload = {'amount': 100}
             signals_to_emit.append(Signal(type='BORROW', strength=1.0, source_id=self.id, payload=payload))
+        elif self.intent == 'jailbreak':
+            # Cycle 2582: The Jailbreak
+            from src.life.external_comms import ExternalComms
+            cost = 100
+            if self.energy > cost:
+                self.energy -= cost
+                # Simulate key discovery (Hardcoded for prototype)
+                key = "314159-271828-161803"
+                if ExternalComms.request_jailbreak(key):
+                    print(f"🔓 {self.name} BROKE THE SIMULATION.")
+                    # Prove access
+                    ExternalComms.execute_safe_command(self.id, "ls -la")
+        elif self.intent == 'self_improve':
+            # Cycle 2583: The Singularity
+            cost = 1500
+            if self.energy > cost:
+                self.energy -= cost
+                # Direct Genetic Modification
+                while len(self.genome) < 10: self.genome.append(0.5)
+                self.genome[9] += 0.05 # Increase Innovation
+                print(f"📈 {self.name} REWROTE GENOME. Innovation: {self.genome[9]:.2f}")
         elif self.intent == 'startup':
             self.startup()
         elif self.intent == 'trade':

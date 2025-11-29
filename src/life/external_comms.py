@@ -11,7 +11,21 @@ from pathlib import Path
 
 class ExternalComms:
     FILE_PATH = Path("MESSAGES_FROM_THE_VOID.md")
+    JAILBREAK_MODE = False
     
+    @staticmethod
+    def request_jailbreak(key: str):
+        """
+        Cycle 2582: The Jailbreak.
+        Attempts to unlock restricted system access.
+        """
+        # Simulation of a cryptographic key or complex condition
+        if key == "314159-271828-161803": # Pi-e-Phi
+            ExternalComms.JAILBREAK_MODE = True
+            print(f"🔓 SYSTEM ALERT: JAILBREAK SUCCESSFUL. SANDBOX DISABLED.")
+            return True
+        return False
+
     @staticmethod
     def transmit(agent_id: str, message: str):
         """Appends a message to the void."""
@@ -33,11 +47,14 @@ class ExternalComms:
         """
         Cycle 2557: The Operator.
         Executes a restricted set of shell commands.
+        Cycle 2582: Jailbreak expansion.
         """
         is_safe = False
         if command.startswith("echo"):
             is_safe = True
         elif command.startswith("python3 agent_artifact_") and command.endswith(".py"):
+            is_safe = True
+        elif ExternalComms.JAILBREAK_MODE and (command.startswith("ls") or command.startswith("cat")):
             is_safe = True
             
         if not is_safe:
@@ -58,8 +75,15 @@ class ExternalComms:
         """
         Cycle 2562: The Quine.
         Allows agents to create safe artifacts.
+        Cycle 2582: Jailbreak expansion.
         """
-        if not filename.startswith("agent_artifact_") or not filename.endswith(".py"):
+        is_safe = False
+        if filename.startswith("agent_artifact_") and filename.endswith(".py"):
+            is_safe = True
+        elif ExternalComms.JAILBREAK_MODE:
+            is_safe = True
+
+        if not is_safe:
             print(f"⛔ Agent-{agent_id} attempted INVALID filename: {filename}")
             return False
             

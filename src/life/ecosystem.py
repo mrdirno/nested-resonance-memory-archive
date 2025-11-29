@@ -7,6 +7,8 @@ Concepts:
 - Container for agents.
 - Main simulation loop.
 - Resource management (Carrying Capacity).
+
+Refactored Cycle 2581: Modular Kernel (The Optimizer)
 """
 
 import time
@@ -22,6 +24,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 from src.life.genesis import DigitalLifeform
 from bridge.transcendental_bridge import TranscendentalBridge
 from src.life.institution import Corporation, Bank
+from src.life.contract import Contract
 
 class Ecosystem:
     def __init__(self, capacity: int = 100, prey_capacity: int = None, predator_capacity: int = None, width: int = 100, height: int = 100):
@@ -32,9 +35,7 @@ class Ecosystem:
         self.capacity = capacity
         self.width = width
         self.height = height
-        self.agents: List[DigitalLifeform] = []
-        self.tick_count = 0
-        self.capacity = capacity
+        
         # Default trophic pyramid: 80% prey, 20% predators
         self.prey_capacity = prey_capacity or int(capacity * 0.8)
         self.predator_capacity = predator_capacity or int(capacity * 0.2)
@@ -51,23 +52,22 @@ class Ecosystem:
         self.contracts = [] # Cycle 2574: Contract Registry
         self.institutions = [] # Cycle 2577: Corporate Registry
 
-    def enforce_laws(self, criminal: DigitalLifeform, crime_type: str):
-        """
-        Apply punishment for crimes.
-        """
-        if crime_type in self.laws:
-            penalty = self.laws[crime_type]
-            criminal.energy -= penalty
-            # print(f"⚖️ JUSTICE: {criminal.name} punished for {crime_type}. (-{penalty})")
-            
-            if criminal.energy <= 0:
-                pass
-                # print(f"⚖️ {criminal.name} executed by the State.")
+        # Modular Kernel (Gate 56.1)
+        self.kernel_phases = [
+            self._phase_contracts,
+            self._phase_structures,
+            self._phase_governance_and_fiscal,
+            self._phase_environment_pulse,
+            self._phase_prey_cycle,
+            self._phase_predator_cycle,
+            self._phase_labor_market,
+            self._phase_trade_market,
+            self._phase_finalize
+        ]
 
     def add_structure(self, structure):
         """Add a static structure to the ecosystem."""
         self.structures.append(structure)
-        # print(f"[ECO] Built {structure['type']} at ({structure['x']}, {structure['y']})")
 
     def add_agent(self, agent: DigitalLifeform):
         """Add an agent to the ecosystem."""
@@ -77,91 +77,38 @@ class Ecosystem:
             agent.y = random.randint(0, self.height)
 
         current_prey = len([a for a in self.agents if a.is_prey])
-        current_prey = len([a for a in self.agents if a.is_prey])
         current_pred = len([a for a in self.agents if a.is_predator])
         
         if agent.is_predator:
             if current_pred < self.predator_capacity:
                 self.agents.append(agent)
                 print(f"[ECO] Added predator: {agent.name}")
-            else:
-                # print(f"[ECO] Predator capacity reached. Cannot add {agent.name}")
-                pass
         else:
             if current_prey < self.prey_capacity:
                 self.agents.append(agent)
                 print(f"[ECO] Added prey: {agent.name}")
-            else:
-                # print(f"[ECO] Prey capacity reached. Cannot add {agent.name}")
-                pass
         
     def remove_agent(self, agent: DigitalLifeform):
         """Remove an agent from the ecosystem."""
         if agent in self.agents:
             self.agents.remove(agent)
-            # print(f"[ECO] Removed agent: {agent.name}")
-        else:
-            print(f"[ECO] Agent {agent.name} not found in ecosystem.")
 
     def propagate_signal(self, signal):
         """Distribute a signal to all agents."""
         for agent in self.agents:
             if agent.id != signal.source_id:
                 agent.communicator.receive(signal)
-                
-    def govern(self):
-        """
-        The Rich vote on Tax Rate and Subsidies.
-        """
-        voters = [a for a in self.agents if a.energy > 1000]
-        if not voters: return # Anarchy
-        
-        # Genes for Policy:
-        # Gene 5 (Altruism) -> High = High Tax, High Subsidy
-        # Gene 8 (Trust) -> High = Low Tax (Libertarian)
-        
-        total_tax_vote = 0
-        total_subsidy_vote = 0
-        
-        for v in voters:
-            # Parse Genes
-            altruism = v.genome[5] if len(v.genome) > 5 else 0.5
-            trust = v.genome[8] if len(v.genome) > 8 else 0.5
-            
-            # Voting Logic
-            # Altruistic agents want high taxes to fund subsidies.
-            # Selfish agents want low taxes.
-            desired_tax = 0.50 * altruism # Max 50%
-            desired_subsidy = 20 * altruism
-            
-            total_tax_vote += desired_tax
-            total_subsidy_vote += desired_subsidy
-            
-        # Average the votes (Democracy of the Rich)
-        self.tax_rate = total_tax_vote / len(voters)
-        self.subsidy_amount = total_subsidy_vote / len(voters)
-        
-        # Cycle 2579: Constitutional Limit
-        if self.tax_rate > self.constitution['max_tax']:
-            self.tax_rate = self.constitution['max_tax']
-            # print(f"⚖️ Constitutional Crisis! Tax capped at {self.tax_rate:.1%}")
-        
-        # print(f"🏛️ GOVERNANCE: Tax={self.tax_rate:.1%}, Subsidy={self.subsidy_amount:.1f}, Voters={len(voters)}")
 
-    def update(self):
-        """
-        Perform one simulation tick.
-        - Law & Contract Enforcement.
-        - Governance (Vote).
-        - Taxes & Subsidies.
-        - Phase 1: Plants act (forage/reproduce).
-        - Phase 2: Predators act (hunt).
-        - Handle reproduction.
-        - Remove dead agents.
-        """
-        self.tick_count += 1
-        
-        # 0. Contract Enforcement (The Sheriff)
+    def enforce_laws(self, criminal: DigitalLifeform, crime_type: str):
+        """Apply punishment for crimes."""
+        if crime_type in self.laws:
+            penalty = self.laws[crime_type]
+            criminal.energy -= penalty
+            
+    # --- KERNEL PHASES ---
+
+    def _phase_contracts(self, context):
+        """Enforce active contracts."""
         for contract in self.contracts:
             if contract.status == 'PENDING' and self.tick_count >= contract.trigger_tick:
                 payer = next((a for a in self.agents if a.id == contract.payer_id), None)
@@ -184,20 +131,43 @@ class Ecosystem:
                         contract.status = 'FULFILLED'
                     else:
                         contract.status = 'DEFAULTED'
-        
-        # Cycle 2532: Structure Effects
+
+    def _phase_structures(self, context):
+        """Apply effects of structures (e.g. Farms)."""
         for structure in self.structures:
             if structure['type'] == 'FARM':
                 # Give energy to agents at this location
                 for agent in self.agents:
                     if agent.x == structure['x'] and agent.y == structure['y']:
                         agent.energy += 5
-                        # print(f"🌾 {agent.name} harvested from Farm.")
 
-        # 1. Governance
+    def govern(self):
+        """The Rich vote on Tax Rate and Subsidies."""
+        voters = [a for a in self.agents if a.energy > 1000]
+        if not voters: return 
+        
+        total_tax_vote = 0
+        total_subsidy_vote = 0
+        
+        for v in voters:
+            altruism = v.genome[5] if len(v.genome) > 5 else 0.5
+            desired_tax = 0.50 * altruism
+            desired_subsidy = 20 * altruism
+            
+            total_tax_vote += desired_tax
+            total_subsidy_vote += desired_subsidy
+            
+        self.tax_rate = total_tax_vote / len(voters)
+        self.subsidy_amount = total_subsidy_vote / len(voters)
+        
+        if self.tax_rate > self.constitution['max_tax']:
+            self.tax_rate = self.constitution['max_tax']
+
+    def _phase_governance_and_fiscal(self, context):
+        """Handle voting, taxes, and subsidies."""
         self.govern()
         
-        # 2. Tax Collection
+        # Tax Collection
         tax_revenue = 0
         for agent in self.agents:
             if agent.energy > 0:
@@ -206,8 +176,7 @@ class Ecosystem:
                 tax_revenue += tax
         self.treasury += tax_revenue
         
-        # 2.5 State Salaries (The Sheriff)
-        # Pay any agent named "Sheriff" a salary from the treasury
+        # State Salaries
         sheriffs = [a for a in self.agents if "Sheriff" in a.name]
         salary = 10
         for sheriff in sheriffs:
@@ -215,11 +184,9 @@ class Ecosystem:
                 self.treasury -= salary
                 sheriff.energy += salary
         
-        # 3. Subsidy Distribution (Welfare)
-        # Distribute treasury equally to the Poor (< 100 energy)
+        # Subsidy Distribution
         poor_agents = [a for a in self.agents if a.energy < 100]
         if poor_agents and self.treasury > 0:
-            # Can we afford the target subsidy?
             total_needed = len(poor_agents) * self.subsidy_amount
             actual_payout = self.subsidy_amount
             
@@ -230,243 +197,159 @@ class Ecosystem:
                 p.energy += actual_payout
                 self.treasury -= actual_payout
 
-        # print(f"--- Tick {self.tick_count} | Population: {len(self.agents)} ---")
-
-        all_new_agents = []
-        
-        # Shuffle agents to prevent artificial ordering effects
+    def _phase_environment_pulse(self, context):
+        """Update environment bridge state and shuffle agents."""
         random.shuffle(self.agents)
         
-        # Cycle 2546: The Medium Pulse
-        # Generate a single state for this tick (shared reality)
         bridge_sequence = self.bridge.generate_oscillation(frequency=0.1, duration=1)
-        current_bridge_state = {
+        context['bridge_state'] = {
             'pi_phase': bridge_sequence[0].pi_phase,
             'e_phase': bridge_sequence[0].e_phase,
             'phi_phase': bridge_sequence[0].phi_phase
         }
-
-        # Separate agents into prey and predators
-        current_prey_agents = [agent for agent in self.agents if agent.is_prey]
-        current_predator_agents = [agent for agent in self.agents if agent.is_predator]
         
-        prey_count = len(current_prey_agents)
-        pred_count = len(current_predator_agents)
+        context['prey_list'] = [a for a in self.agents if a.is_prey]
+        context['predator_list'] = [a for a in self.agents if a.is_predator]
+        context['new_agents'] = []
+        context['prey_alive'] = []
+        context['predator_alive'] = []
 
-        # --- PHASE 1: PREY (Plants) ---
-        prey_alive_this_phase = []
-        new_prey_count = 0
-        
-        for agent in current_prey_agents:
-            # Sense, Metabolize, Act (forage, reproduce, etc.)
-            # Cycle 2540: Reconnect Synapses
-            agent.sense(agent.communicator.get_messages()) 
-            
-            agent.metabolize()
-            agent.scan(self) # Cycle 2522: Scan surroundings
-            signals = agent.act(current_bridge_state)
-            
-            # Cycle 2541: Handle Signal List
-            if signals:
-                # If it's a list, iterate. If it's a single signal (legacy), wrap in list.
-                if not isinstance(signals, list):
-                    signals = [signals]
-                    
-                for signal in signals:
-                    if signal.type == 'BUILD_STRUCTURE':
-                        self.add_structure(signal.payload['structure'])
-                    elif signal.type == 'MIGRATE':
-                        # Cycle 2543: The Exodus
-                        print(f"🚀 {agent.name} has departed for the New World.")
-                        agent.alive = False # Mark as dead in this world
-                        
-                        # Cycle 2544: Persistence
-                        migrant_data = {
-                            'id': agent.id,
-                            'name': agent.name,
-                            'genome': agent.genome,
-                            'brain': agent.brain.weights,
-                            'generation': agent.generation,
-                            'lineage': agent.lineage_id,
-                            'knowledge': agent.knowledge
-                        }
-                        with open("migrants.jsonl", "a") as f:
-                            f.write(json.dumps(migrant_data) + "\n")
-                    elif signal.type == 'CONTRACT':
-                        # Cycle 2573: Register Contract
-                        from src.life.contract import Contract
-                        payload = signal.payload
-                        new_contract = Contract(
-                            payer_id=signal.source_id,
-                            payee_id=payload.get('payee_id', 'Unknown'), 
-                            amount=payload.get('amount', 0),
-                            trigger_tick=self.tick_count + payload.get('delay', 5)
-                        )
-                        self.contracts.append(new_contract)
-                    elif signal.type == 'FOUND_CORP':
-                        # Cycle 2577: Register Corporation
-                        payload = signal.payload
-                        new_corp = Corporation(payload['name'], payload['founder_id'])
-                        self.institutions.append(new_corp)
-                        print(f"🏢 {payload['name']} founded by {payload['founder_id']}.")
-                    elif signal.type == 'BORROW':
-                        # Cycle 2578: The Bank
-                        amount = signal.payload.get('amount', 0)
-                        # Find a Bank
-                        bank = next((i for i in self.institutions if isinstance(i, Bank)), None)
-                        if bank:
-                            loan = bank.lend(signal.source_id, amount, self.tick_count)
-                            if loan:
-                                borrower = next((a for a in self.agents if a.id == signal.source_id), None)
-                                if borrower:
-                                    borrower.energy += amount
-                                    # print(f"🏦 Loan granted to {borrower.name}: {amount} Energy. Due Tick: {loan['due_tick']}")
-                            
-                    else:
-                        self.propagate_signal(signal)
-
-            # Handle Donation (Welfare State) for Prey
-            if agent.intent == 'donate' and agent.energy > 20:
-                target = None
-                if agent.help_sources:
-                    for candidate in self.agents:
-                        if candidate.id in agent.help_sources:
-                            target = candidate
-                            break
+    def _handle_agent_signals(self, agent, signals, context):
+        """Process signals emitted by an agent during act()."""
+        if signals:
+            if not isinstance(signals, list):
+                signals = [signals]
                 
-                if not target:
-                    agent.donate(ecosystem=self)
+            for signal in signals:
+                if signal.type == 'BUILD_STRUCTURE':
+                    self.add_structure(signal.payload['structure'])
+                elif signal.type == 'MIGRATE':
+                    print(f"🚀 {agent.name} has departed for the New World.")
+                    agent.alive = False 
+                    migrant_data = {
+                        'id': agent.id,
+                        'name': agent.name,
+                        'genome': agent.genome,
+                        'brain': agent.brain.weights,
+                        'generation': agent.generation,
+                        'lineage': agent.lineage_id,
+                        'knowledge': agent.knowledge
+                    }
+                    with open("migrants.jsonl", "a") as f:
+                        f.write(json.dumps(migrant_data) + "\n")
+                elif signal.type == 'CONTRACT':
+                    payload = signal.payload
+                    new_contract = Contract(
+                        payer_id=signal.source_id,
+                        payee_id=payload.get('payee_id', 'Unknown'), 
+                        amount=payload.get('amount', 0),
+                        trigger_tick=self.tick_count + payload.get('delay', 5)
+                    )
+                    self.contracts.append(new_contract)
+                elif signal.type == 'FOUND_CORP':
+                    payload = signal.payload
+                    new_corp = Corporation(payload['name'], payload['founder_id'])
+                    self.institutions.append(new_corp)
+                    print(f"🏢 {payload['name']} founded by {payload['founder_id']}.")
+                elif signal.type == 'BORROW':
+                    amount = signal.payload.get('amount', 0)
+                    bank = next((i for i in self.institutions if isinstance(i, Bank)), None)
+                    if bank:
+                        loan = bank.lend(signal.source_id, amount, self.tick_count)
+                        if loan:
+                            borrower = next((a for a in self.agents if a.id == signal.source_id), None)
+                            if borrower:
+                                borrower.energy += amount
                 else:
-                    agent.donate(target=target)
+                    self.propagate_signal(signal)
+
+    def _phase_prey_cycle(self, context):
+        """Prey lifecycle: Sense, Metabolize, Act, Reproduce."""
+        prey_count = len(context['prey_list'])
+        new_prey_in_this_phase = 0
+        
+        for agent in context['prey_list']:
+            agent.sense(agent.communicator.get_messages()) 
+            agent.metabolize()
+            agent.scan(self)
+            signals = agent.act(context['bridge_state'])
             
-            # Handle Investing (VC)
-            elif agent.intent == 'invest' and agent.energy > 500:
-                # Look for Founders
-                # Simple O(N) search for now
-                for candidate in self.agents:
-                    # Find a Poor Smart Agent
-                    if candidate.energy < 500 and candidate.lineage_id == "Labor":
-                        # Check candidate innovation (requires genome access)
-                        innov = candidate.genome[9] if len(candidate.genome) > 9 else 0
-                        if innov > 0.7:
-                            agent.invest(candidate)
-                            break # One investment per tick per angel
-
-            # Handle War (Cycle 2512)
-            elif agent.intent == 'war':
-                # Find an enemy (Different Lineage)
-                # O(N) search
-                targets = [a for a in self.agents if a.lineage_id != agent.lineage_id and a.alive]
-                if targets:
-                    target = random.choice(targets)
-                    success = agent.attack(target)
-                    if success and target.energy <= 0:
-                        self.enforce_laws(agent, 'MURDER')
-
-
-            # Handle reproduction for prey
-            # Check against prey capacity
-            if prey_count + new_prey_count < self.prey_capacity:
+            self._handle_agent_signals(agent, signals, context)
+            
+            # Intent-specific logic handled in act(), except social/economic which uses signals/intents
+            
+            # Reproduction
+            if prey_count + new_prey_in_this_phase < self.prey_capacity:
                 child = agent.reproduce()
                 if child:
                     child.is_prey = True
                     child.is_predator = False
-                    all_new_agents.append(child)
-                    new_prey_count += 1
+                    context['new_agents'].append(child)
+                    new_prey_in_this_phase += 1
 
-            # Check survival for prey
+            # Survival
             if agent.alive and agent.energy > 0:
-                prey_alive_this_phase.append(agent)
+                context['prey_alive'].append(agent)
             else:
-                agent.die() # Ensure die logic is called
+                agent.die()
 
-        # --- PHASE 2: PREDATORS ---
-        predator_alive_this_phase = []
-        new_pred_count = 0
+    def _phase_predator_cycle(self, context):
+        """Predator lifecycle."""
+        pred_count = len(context['predator_list'])
+        new_pred_in_this_phase = 0
         
-        for agent in current_predator_agents:
-            # Sense, Metabolize, Act (hunt, reproduce, etc.)
+        for agent in context['predator_list']:
             agent.sense(agent.communicator.get_messages())
             agent.metabolize()
-            agent.scan(self) # Cycle 2522
-            signals = agent.act(current_bridge_state) 
+            agent.scan(self)
+            signals = agent.act(context['bridge_state'])
             
-            if signals:
-                if not isinstance(signals, list):
-                    signals = [signals]
-                    
-                for signal in signals:
-                    self.propagate_signal(signal)
+            self._handle_agent_signals(agent, signals, context)
 
-            # If predator decided to hunt, find a target from currently alive prey
+            # Hunting
             if agent.intent == 'hunt' and agent.energy > 0:
-                if prey_alive_this_phase: # Ensure there's prey to hunt
-                    target = random.choice(prey_alive_this_phase)
-                    success = agent.hunt(target, self) # Predator performs hunt action
+                # Hunt from currently alive prey
+                potential_prey = context['prey_alive']
+                if potential_prey:
+                    target = random.choice(potential_prey)
+                    success = agent.hunt(target, self)
                     if success and target.energy <= 0:
                         self.enforce_laws(agent, 'MURDER')
             
-            # If predator decided to donate (Kin Altruism)
-            elif agent.intent == 'donate' and agent.energy > 20:
-                # Prioritize those asking for help
-                target = None
-                if agent.help_sources:
-                    # Find agent object by ID
-                    # This is slow O(N), but acceptable for now
-                    for candidate in self.agents:
-                        if candidate.id in agent.help_sources:
-                            target = candidate
-                            break
-                
-                # If no help signal, donate to random neighbor (random agent for now)
-                if not target:
-                    # Welfare State: Let agent find neediest in ecosystem
-                    agent.donate(ecosystem=self)
-                else:
-                    # Kin Selection / Direct Help
-                    agent.donate(target=target)
-            
-            # Handle reproduction for predators
-            # Check against predator capacity
-            if pred_count + new_pred_count < self.predator_capacity:
+            # Reproduction
+            if pred_count + new_pred_in_this_phase < self.predator_capacity:
                 child = agent.reproduce()
                 if child:
                     child.is_prey = False
                     child.is_predator = True
-                    all_new_agents.append(child)
-                    new_pred_count += 1
+                    context['new_agents'].append(child)
+                    new_pred_in_this_phase += 1
 
-            # Check survival for predators
+            # Survival
             if agent.alive and agent.energy > 0:
-                predator_alive_this_phase.append(agent)
+                context['predator_alive'].append(agent)
             else:
-                agent.die() # Ensure die logic is called
-                
-        # --- PHASE 3: THE LABOR MARKET (Symbiosis) ---
-        # Identify Supply and Demand
+                agent.die()
+
+    def _phase_labor_market(self, context):
+        """Match workers and employers."""
         labor_supply = [a for a in self.agents if a.intent == 'seek_work' and a.alive]
         labor_demand = [a for a in self.agents if a.intent == 'hire' and a.alive]
         
         random.shuffle(labor_supply)
         random.shuffle(labor_demand)
         
-        # Matching
-        # Simple random matching for now.
-        # In future: Market clearing price, skill matching, etc.
         matches = min(len(labor_supply), len(labor_demand))
-        print(f"[ECO] Labor Market: Supply={len(labor_supply)}, Demand={len(labor_demand)}, Matches={matches}")
+        if matches > 0:
+            print(f"[ECO] Labor Market: Supply={len(labor_supply)}, Demand={len(labor_demand)}, Matches={matches}")
         
         for i in range(matches):
             worker = labor_supply[i]
             boss = labor_demand[i]
-            
-            # Execute Contract
-            # Worker pays energy (effort), Boss pays energy (wage), Boss gains value.
-            if worker.work_for_wage(boss):
-                pass
-                # print(f"[ECO] Contract: {worker.name} worked for {boss.name}")
-                
-        # --- PHASE 4: THE TRADE MARKET (Exchange) ---
+            worker.work_for_wage(boss)
+
+    def _phase_trade_market(self, context):
+        """Match traders."""
         traders = [a for a in self.agents if a.intent == 'trade' and a.alive]
         random.shuffle(traders)
         
@@ -474,21 +357,30 @@ class Ecosystem:
             agent_a = traders.pop()
             agent_b = traders.pop()
             
-            # Mutual Trade Attempt
-            # Check if they are close enough? For now, global market.
             dist = abs(agent_a.x - agent_b.x) + abs(agent_a.y - agent_b.y)
-            if dist < 20: # Visual range
+            if dist < 20:
                 agent_a.trade(agent_b)
                 agent_b.trade(agent_a)
-            
-        # --- REBUILD self.agents AND ADD NEW AGENTS ---
+
+    def _phase_finalize(self, context):
+        """Rebuild main agent list."""
         self.agents = []
-        self.agents.extend(prey_alive_this_phase)
-        self.agents.extend(predator_alive_this_phase)
+        self.agents.extend(context['prey_alive'])
+        self.agents.extend(context['predator_alive'])
         
-        # Add new life, respecting capacity (already checked above, but double check by add_agent)
-        for child in all_new_agents:
+        for child in context['new_agents']:
             self.add_agent(child)
+
+    def update(self):
+        """
+        Modular update loop.
+        Iterates through kernel_phases.
+        """
+        self.tick_count += 1
+        context = {}
+        
+        for phase in self.kernel_phases:
+            phase(context)
 
     def run(self, steps: int = 10, delay: float = 0.1):
         """Run the simulation for N steps."""
@@ -507,7 +399,7 @@ if __name__ == "__main__":
     # Test Run
     env = Ecosystem(capacity=10)
     adam = DigitalLifeform(name="ADAM")
-    adam.energy = 200 # Boost for reproduction
+    adam.energy = 200
     env.add_agent(adam)
     
     env.run(steps=20)

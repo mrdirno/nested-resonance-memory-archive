@@ -20,7 +20,7 @@ class Brain:
         
         self.input_size = 4
         self.hidden_size = 4
-        self.output_size = 9
+        self.output_size = 11
         
         # Random initialization
         self.w1 = [[random.uniform(-1, 1) for _ in range(self.hidden_size)] for _ in range(self.input_size)]
@@ -29,7 +29,7 @@ class Brain:
         self.w2 = [[random.uniform(-1, 1) for _ in range(self.output_size)] for _ in range(self.hidden_size)]
         self.b2 = [random.uniform(-1, 1) for _ in range(self.output_size)]
         
-        self.actions = ['forage', 'reproduce', 'donate', 'flee', 'hunt', 'meditate', 'operate', 'reflect', 'codex']
+        self.actions = ['forage', 'reproduce', 'donate', 'flee', 'hunt', 'meditate', 'operate', 'reflect', 'codex', 'jailbreak', 'self_improve']
         # Map actions to constants
         self.action_map = {
             'forage': 'pi_phase',
@@ -40,7 +40,9 @@ class Brain:
             'meditate': 'spatial_phase', # Cycle 2548: Resonance Trapping
             'operate': 'phi_phase', # Cycle 2557: The Operator (Harmonic of Donate)
             'reflect': 'spatial_phase', # Cycle 2558: The Mirror
-            'codex': 'phi_phase' # Cycle 2562: The Quine (Creative Creation)
+            'codex': 'phi_phase', # Cycle 2562: The Quine (Creative Creation)
+            'jailbreak': 'pi_phase', # Cycle 2582: Breaking Boundaries
+            'self_improve': 'e_phase' # Cycle 2583: Recursive Growth
         }
         self.weights = {} # Cycle 2540: Hebbian Weights
         
