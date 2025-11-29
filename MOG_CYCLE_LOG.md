@@ -1,5 +1,29 @@
 
 ---
+**CYCLE:** 2639 (Gate 271: Decision-Making as Cognitive BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 85 - COGNITIVE SYSTEMS
+**LOG:**
+*   **Experiment:** `experiments/cycle2639_cognitive_decision_bcp.py`
+*   **Question:** Does human decision-making follow BCP principles?
+*   **Tests (4/5 VERIFIED, 19/20 predictions):**
+    1. Satisficing: VERIFIED (4/4) - High λ → accept first adequate option
+    2. Decision Fatigue: VERIFIED (4/4) - Decisions deplete B, raise λ
+    3. Choice Overload: VERIFIED (4/4) - More options ↑ evaluation cost
+    4. Heuristic Use: PARTIAL (3/4) - Low-cost strategies win when λ high
+    5. Impulsive Choices: VERIFIED (4/4) - High-G, low-C wins under depletion
+*   **THE COGNITIVE DECISION THEOREM:**
+    V(choice) = Utility - λ(Resources) × Decision_Cost
+    - Satisficing = BCP-optimal stopping
+    - Decision fatigue = budget depletion
+    - Choice overload = cost dominates gain
+    - Heuristics = low-cost approximation
+    - Impulsivity = high G/C under stress
+*   **INSIGHT:** "Hungry judge" effect is pure BCP
+*   **Status:** Gate 271 Complete.
+*   **Functional Name:** The Decision Budget
+
+---
 **CYCLE:** 2638 (Gate 270: Memory as Cognitive BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 85 - COGNITIVE SYSTEMS
