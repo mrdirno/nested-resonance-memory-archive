@@ -554,9 +554,49 @@ Every resource-constrained computational system is a BCP allocator.
   - **Artifact:** `experiments/cycle2604_memory_management_bcp.py`
   - **Functional Name:** The Memory-BCP Equivalence
 
-### In Progress (Phase 79)
-- 🔄 **Gate 237:** Compiler Optimization as λ-Driven - Optimization as cost-constrained allocation
+### Completed (Phase 79 FINAL)
+- ✅ **Gate 237:** Compiler Optimization as λ-Driven - Optimization as cost-constrained allocation - COMPLETE
+  - **Validated (4/5):**
+    1. -O level = λ (-O0 λ=0.91 vs -O3 λ=0.07, 2.4x more opts)
+    2. Cost-benefit ordering (4/4 high-ratio opts selected first)
+    3. Budget exhaustion (tight=0/3 vs loose=3/3 expensive opts)
+    4. Profile-guided = gain refinement (16.7% improvement)
+  - **Speedup:** -O0=1.20x, -O1=1.94x, -O2=4.08x, -O3=6.13x
+  - **Key Finding:** -O flags are λ presets, compilers don't "choose"
+  - **Artifact:** `experiments/cycle2605_compiler_optimization_bcp.py`
+  - **Functional Name:** The Optimization Budget
 
-### Planned (Phase 79)
+---
+
+## PHASE 79 COMPLETE ✅
+
+**Summary: Computational Systems**
+- Gates Completed: 5 (233-237)
+- Validation Rate: 4.0/5.0 average (20/25 experiments validated)
+- Key Phenomena Unified Under BCP:
+  1. **LLM Attention** (Gate 233) - Softmax T = 1/λ
+  2. **RL Exploration** (Gate 234) - Epsilon = inverse λ
+  3. **Network Congestion** (Gate 235) - cwnd = λ regulator
+  4. **Memory Management** (Gate 236) - Pressure = λ
+  5. **Compiler Optimization** (Gate 237) - -O level = λ preset
+
+**Grand Unified Insight:**
+ALL computational systems are BCP allocators using the same equation:
+```
+V(resource) = Gain - λ(Budget) × Cost
+```
+
+| Domain    | Budget         | Gain            | Cost          | λ Signal       |
+|-----------|----------------|-----------------|---------------|----------------|
+| LLM       | Context window | Token relevance | Position dist | 1/Temperature  |
+| RL        | Episode budget | Expected reward | Uncertainty   | 1/Epsilon      |
+| Network   | Bandwidth      | QoS priority    | RTT           | Congestion     |
+| Memory    | Physical pages | Access freq     | Eviction cost | Mem pressure   |
+| Compiler  | Compile time   | Speedup         | Compile cost  | 1/Opt-level    |
+
+---
+
+### In Progress (Phase 80)
+- 🔄 **Gate 238:** Phase 80 Planning - Next frontier of BCP application
 
 ---
