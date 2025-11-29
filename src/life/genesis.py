@@ -49,6 +49,7 @@ class DigitalLifeform:
         self.hive_mind = False # Cycle 2525
         self.collective_utility = {} # Cycle 2525
         self.knowledge = {} # Cycle 2528
+        self.social_inbox = [] # Cycle 2565: Buffer for social signals
         
     @property
     def efficiency(self):
@@ -331,13 +332,10 @@ class DigitalLifeform:
     def sense(self, signals: List[Signal]):
         self.sensed_signals = {}
         self.help_sources = [] 
+        self.social_inbox = signals # Cycle 2565: Store signals for processing in act()
         
         if "Student" in self.name:
             print(f"DEBUG: {self.name} sensing. HiveMind={self.hive_mind}. Signals={len(signals)}")
-        
-        # Cycle 2525: Hive Mind Assimilation
-        if self.hive_mind:
-            self.assimilate_thought(signals)
             
         for sig in signals:
             if sig.source_id == self.id: continue 
@@ -572,12 +570,13 @@ class DigitalLifeform:
         
         return Signal(type='THOUGHT', strength=1.0, source_id=self.id, payload=payload)
 
-    def assimilate_thought(self, signals):
+    def process_social_signals(self, signals):
         """
         Merge external thoughts into collective utility buffer AND learn knowledge.
+        Also process linguistic labels (The Agreement).
         """
         for sig in signals:
-            if sig.type == 'THOUGHT':
+            if sig.type == 'THOUGHT' and self.hive_mind:
                 # 1. Utility (Motivation)
                 external_utility = sig.payload.get('utility', {})
                 for action, score in external_utility.items():
@@ -594,6 +593,25 @@ class DigitalLifeform:
                     if key not in self.knowledge:
                         self.knowledge[key] = value
                         print(f"💡 {self.name} learned {key} from Hive Mind.")
+                        
+            elif sig.type == 'LABEL':
+                # Cycle 2565: The Agreement (Naming Game)
+                label = sig.payload.get('label')
+                obj_type = sig.payload.get('type')
+                
+                # Verification: Do I see this object type right now?
+                verified = False
+                if obj_type in self.sensed_signals:
+                    verified = True
+                
+                # Reinforcement
+                if verified:
+                    self.brain.learn_word(label, obj_type, 1.0)
+                    # print(f"✅ {self.name} accepted '{label}' = {obj_type} from {sig.source_id}")
+                else:
+                    # Weak rejection (maybe I just don't see it, but it exists)
+                    self.brain.learn_word(label, obj_type, -0.1)
+                    # print(f"❌ {self.name} rejected '{label}' = {obj_type} (Not visible)")
 
     def build_wall(self):
         """
@@ -811,6 +829,10 @@ class DigitalLifeform:
             while len(self.genome) < 10: self.genome.append(0.5)
             innovation = self.genome[9]
             if random.random() < innovation: self.awakened = True
+
+        # Cycle 2565: Process Social Signals (The Agreement)
+        # Now happens AFTER scan(), so verification is possible.
+        self.process_social_signals(self.social_inbox)
 
         # Cycle 2528: Sync Senses to Long Term Memory
         if 'NEAREST_FOOD' in self.sensed_signals:
