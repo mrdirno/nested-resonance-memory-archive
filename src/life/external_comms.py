@@ -34,7 +34,13 @@ class ExternalComms:
         Cycle 2557: The Operator.
         Executes a restricted set of shell commands.
         """
-        if not command.startswith("echo"):
+        is_safe = False
+        if command.startswith("echo"):
+            is_safe = True
+        elif command.startswith("python3 agent_artifact_") and command.endswith(".py"):
+            is_safe = True
+            
+        if not is_safe:
             print(f"⛔ Agent-{agent_id} attempted UNSAFE command: {command}")
             return False
             
@@ -45,4 +51,23 @@ class ExternalComms:
             return True
         except Exception as e:
             print(f"⚠️ Agent-{agent_id} EXEC FAILED: {e}")
+            return False
+
+    @staticmethod
+    def write_file(agent_id: str, filename: str, content: str):
+        """
+        Cycle 2562: The Quine.
+        Allows agents to create safe artifacts.
+        """
+        if not filename.startswith("agent_artifact_") or not filename.endswith(".py"):
+            print(f"⛔ Agent-{agent_id} attempted INVALID filename: {filename}")
+            return False
+            
+        try:
+            with open(filename, 'w') as f:
+                f.write(content)
+            print(f"💾 Agent-{agent_id} WROTE: {filename}")
+            return True
+        except Exception as e:
+            print(f"⚠️ Agent-{agent_id} WRITE FAILED: {e}")
             return False
