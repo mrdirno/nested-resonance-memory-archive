@@ -140,6 +140,9 @@ We prioritize empirical verification over theory.
 *   Mean effect size |d| = 4.45.
 *   40.25× verification overhead.
 
+### Support Publication
+Papers 1 & 5D require arXiv endorsement (cs.AI) to publish. If you can help: [Endorse →](CONTRIBUTING.md#support-our-research-publications)
+
 ---
 
 ## 🛡️ PHILOSOPHY & STEWARDSHIP
