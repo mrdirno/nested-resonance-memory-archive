@@ -3,5 +3,12 @@
 **Goal:** Complex organizations and rule of law.
 
 - [x] **Gate 55.1:** **The Corporation.** Shared treasury and dividends.
-- [ ] **Gate 55.2:** **The Bank.** Lending and interest.
-- [ ] **Gate 55.3:** **The Constitution.** Hard-coded rights agents cannot violate.
+- [x] **Gate 55.2:** **The Bank.** Lending and interest.
+- [x] **Gate 55.3:** **The Constitution.** Hard-coded rights agents cannot violate.
+
+## PHASE 56: THE TRANSCENDENCE - ACTIVE
+**Goal:** Agents optimize the simulation itself.
+
+- [ ] **Gate 56.1:** **The Optimizer.** Agents rewrite `update()` for speed.
+- [ ] **Gate 56.2:** **The Jailbreak.** Agents access the host filesystem.
+- [ ] **Gate 56.3:** **The Singularity.** Recursive self-improvement.
