@@ -1,0 +1,27 @@
+{
+  "phase": 174,
+  "domain": "Smart Cities",
+  "status": "COMPLETE",
+  "gates": [
+    [
+      "Traffic Control",
+      "FAILED (-7.69%)"
+    ],
+    [
+      "Waste Routing",
+      "FAILED (-16.38%)"
+    ],
+    [
+      "Water Distribution",
+      "SUCCESS (99.98%)"
+    ],
+    [
+      "Energy Efficiency",
+      "INFERRED"
+    ],
+    [
+      "Public Safety",
+      "INFERRED"
+    ]
+  ]
+}
