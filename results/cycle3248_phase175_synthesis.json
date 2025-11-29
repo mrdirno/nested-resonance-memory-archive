@@ -1,0 +1,27 @@
+{
+  "phase": 175,
+  "domain": "Agriculture",
+  "status": "COMPLETE",
+  "gates": [
+    [
+      "Yield Prediction",
+      "FAILED (-1.77%)"
+    ],
+    [
+      "Irrigation Control",
+      "SUCCESS (86.21%)"
+    ],
+    [
+      "Pest Detection",
+      "FAILED (-38.99%)"
+    ],
+    [
+      "Livestock Monitoring",
+      "INFERRED"
+    ],
+    [
+      "Supply Logistics",
+      "INFERRED"
+    ]
+  ]
+}
