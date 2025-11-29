@@ -85,6 +85,13 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 We prioritize empirical verification over theory.
 
 *   **Self-Referential Mapping (The Holocron):** System-wide knowledge graph mapping 286 principles and 12,000+ files. [View Graph](data/holocron.html)
+
+<p align="center">
+  <img src="data/figures/holocron_knowledge_graph_overview.png" width="45%" alt="Holocron Overview"/>
+  <img src="data/figures/holocron_knowledge_graph_zoomed.png" width="45%" alt="Holocron Zoomed"/>
+</p>
+<p align="center"><em>The Holocron: Emergent topology from 12,000+ file relationships. Cyan=experiments, Pink=source, Yellow=core.</em></p>
+
 *   **Phase-Delay Solver:** Calculates phase-delays for complex interference patterns. [Code](src/helios/solver.py)
 *   **Closed-Loop Settling:** 82× faster settling time via PID feedback. [Log](archive/experiments/cycle340_closed_loop_levitation.py)
 *   **Volumetric Node Trapping:** 9128 stable nodes verified in 3D substrate. [Code](nrm_core/helios/substrate_3d.py)
