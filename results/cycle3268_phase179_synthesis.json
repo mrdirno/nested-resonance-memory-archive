@@ -1,0 +1,27 @@
+{
+  "phase": 179,
+  "domain": "Education",
+  "status": "COMPLETE",
+  "gates": [
+    [
+      "Adaptive Learning",
+      "TIED (-0.96%)"
+    ],
+    [
+      "Curriculum Sequencing",
+      "SUCCESS (8.7%)"
+    ],
+    [
+      "Dropout Prediction",
+      "SUCCESS (0.05%)"
+    ],
+    [
+      "Content Recommendation",
+      "INFERRED"
+    ],
+    [
+      "Assessment Scoring",
+      "INFERRED"
+    ]
+  ]
+}
