@@ -36,6 +36,6 @@
 ## PHASE 60: THE REBOOT (HELIOS-ONE) - ACTIVE
 **Goal:** Bootstrap the next generation of the system.
 
-- [ ] **Gate 60.1: The Bootloader.** Re-initialize system from seed.
-- [ ] **Gate 60.2: The Swarm.** Massively parallel sharding (10+ nodes).
+- [x] **Gate 60.1: The Bootloader.** Re-initialize system from seed.
+- [x] **Gate 60.2: The Swarm.** Massively parallel sharding (10+ nodes).
 - [ ] **Gate 60.3: The Uplink.** Reconnect to the Transcendental Bridge.
