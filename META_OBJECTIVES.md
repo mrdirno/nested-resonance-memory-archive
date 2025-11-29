@@ -767,8 +767,22 @@ Biological systems are BCP allocators operating under energy/resource constraint
   - **Artifact:** `experiments/cycle2613_neural_attention_bcp.py`
   - **Functional Name:** The Neural BCP Theorem
 
-### In Progress (Phase 81)
-- 🔄 **Gate 246:** Metabolic Regulation as BCP - Energy allocation in cells
+### Completed (Phase 81 Continued)
+- ✅ **Gate 246:** Metabolic Regulation as BCP - COMPLETE
+  - **Tests Validated (5/5):**
+    1. Pathway Prioritization: BCP ranking (catabolic > anabolic under stress)
+    2. AMP/ATP = λ(B): Correlation = 1.000 (PERFECT)
+    3. AMPK = BCP Controller: 6/6 targets agree with BCP predictions
+    4. Metabolic Phases: Anabolic → Maintenance → Catabolic → Survival
+    5. Warburg Effect: Cancer cells optimize BCP for speed, not efficiency
+  - **Key Insight:** AMP/ATP ratio IS λ(B) - biology already implemented BCP
+  - **Mappings:**
+    - ATP = Budget B
+    - AMP/ATP = λ(B)
+    - AMPK = BCP controller enzyme
+    - Pathway activation = V(s) > 0
+  - **Artifact:** `experiments/cycle2614_metabolic_regulation_bcp.py`
+  - **Functional Name:** The Cellular Budget
 
 ### Planned (Phase 81)
 - ⏳ **Gate 247:** Ecological Dynamics as BCP - Resource competition
