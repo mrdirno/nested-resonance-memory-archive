@@ -878,6 +878,11 @@ class DigitalLifeform:
         if len(self.inventory) > 0:
             options['trade'] = 200 + (100 * innovation) # High priority to sell artifacts
             
+        # DEBUG
+        if self.name == "Tycoon":
+            print(f"DEBUG Tycoon: E={self.energy}, Innov={innovation}")
+            print(f"DEBUG Tycoon Options: {options}")
+            
         # Cycle 2571: THE SPECIALIST (Career Logic)
         trade_inc = self.income_history['trade']
         forage_inc = self.income_history['forage']
@@ -900,10 +905,10 @@ class DigitalLifeform:
             
         # Cycle 2577: THE CORPORATION
         # Very rich, innovative agents start corporations
-        if innovation > 0.9 and self.energy > 2000:
-            options['found_corp'] = 300 * innovation
+        if innovation > 0.8 and self.energy > 1500:
+            options['found_corp'] = 500 * innovation
             
-        # ... (Meta)
+        # Cycle 2569: THE MARKET (Trade)
         
         # Cycle 2525: Save for Broadcast
         self.current_utility_map = options.copy()
@@ -914,7 +919,7 @@ class DigitalLifeform:
         best_utility_score = options.get(best_utility_action, 0)
         
         # If Brain says 'forage' but Utility says 'reflect' or 'codex' or 'label', override.
-        if intent == 'forage' and best_utility_action in ['reflect', 'codex', 'label', 'sign_contract']:
+        if intent == 'forage' and best_utility_action in ['reflect', 'codex', 'label', 'sign_contract', 'found_corp', 'trade']:
             intent = best_utility_action
             
         # General Override for Critical Survival

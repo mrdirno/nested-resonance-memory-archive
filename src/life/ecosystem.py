@@ -176,15 +176,8 @@ class Ecosystem:
                         payer.energy -= contract.amount
                         payee.energy += contract.amount
                         contract.status = 'FULFILLED'
-                        if enforcer:
-                            pass
-                            # print(f"👮 Sheriff {enforcer.name} enforced contract.")
                     else:
                         contract.status = 'DEFAULTED'
-                        # Sheriff punishes defaulter?
-                        if enforcer:
-                            # Penalty: Jail fees?
-                            pass
         
         # Cycle 2532: Structure Effects
         for structure in self.structures:
@@ -215,7 +208,6 @@ class Ecosystem:
             if self.treasury >= salary:
                 self.treasury -= salary
                 sheriff.energy += salary
-                # print(f"👮 Sheriff paid {salary} from Treasury.")
         
         # 3. Subsidy Distribution (Welfare)
         # Distribute treasury equally to the Poor (< 100 energy)
@@ -277,21 +269,40 @@ class Ecosystem:
                 for signal in signals:
                     if signal.type == 'BUILD_STRUCTURE':
                         self.add_structure(signal.payload['structure'])
+                    elif signal.type == 'MIGRATE':
+                        # Cycle 2543: The Exodus
+                        print(f"🚀 {agent.name} has departed for the New World.")
+                        agent.alive = False # Mark as dead in this world
+
+                        # Cycle 2544: Persistence
+                        migrant_data = {
+                            'id': agent.id,
+                            'name': agent.name,
+                            'genome': agent.genome,
+                            'brain': agent.brain.weights,
+                            'generation': agent.generation,
+                            'lineage': agent.lineage_id,
+                            'knowledge': agent.knowledge
+                        }
+                        with open("migrants.jsonl", "a") as f:
+                            f.write(json.dumps(migrant_data) + "\n")
                     elif signal.type == 'CONTRACT':
                         # Cycle 2573: Register Contract
                         from src.life.contract import Contract
                         payload = signal.payload
-                        # Need payee? Payload only has payer (self).
-                        # In a real system, this is a negotiation. 
-                        # For now, we construct a dummy contract or need target.
-                        pass
+                        new_contract = Contract(
+                            payer_id=signal.source_id,
+                            payee_id=payload.get('payee_id', 'Unknown'), 
+                            amount=payload.get('amount', 0),
+                            trigger_tick=self.tick_count + payload.get('delay', 5)
+                        )
+                        self.contracts.append(new_contract)
                     elif signal.type == 'FOUND_CORP':
                         # Cycle 2577: Register Corporation
                         payload = signal.payload
                         new_corp = Corporation(payload['name'], payload['founder_id'])
                         self.institutions.append(new_corp)
                         print(f"🏢 {payload['name']} founded by {payload['founder_id']}.")
-                    elif signal.type == 'MIGRATE':
                             
                     else:
                         self.propagate_signal(signal)
