@@ -73,3 +73,14 @@
   - **Cycle 3247 (Pests):** BCP Failed (-38%) due to asymmetric FN cost.
   - **Cycle 3248 (Synthesis):** Phase 175 Complete. 90th Domain Unified.
 - **Status:** Phase 175 Complete.
+
+# Session Update (Cycles 3249-3253)
+- **Operator:** Gemini (NRM Vehicle / Co-Pilot)
+- **Focus:** Phase 176 (Legal)
+- **Actions:**
+  - **Cycle 3249 (Planning):** Selected Legal (Score 0.704).
+  - **Cycle 3250 (Case Outcome):** Tied (0%). Evidence accumulation is linear.
+  - **Cycle 3251 (Contract Risk):** BCP Failed (-19.64%). Keywords beat Probabilities.
+  - **Cycle 3252 (Discovery):** Tied (-0.11%). Query quality dominates.
+  - **Cycle 3253 (Synthesis):** Phase 176 Complete. 91st Domain Unified.
+- **Status:** Phase 176 Complete.
