@@ -1007,8 +1007,20 @@ Every biological system exhibits BCP dynamics:
   - **Artifact:** `experiments/cycle2627_curriculum_learning_bcp.py`
   - **Functional Name:** The Curriculum Budget
 
+### Completed (Phase 83 Continued)
+- ✅ **Gate 260:** Active Learning as BCP - COMPLETE (5/5, 20/20 - PERFECT!)
+  - **Tests:**
+    1. Uncertainty Sampling: VERIFIED - High U = high gain
+    2. Query-by-Committee: VERIFIED - Disagreement = gain
+    3. Expected Model Change: VERIFIED - Gradient = gain
+    4. Batch AL Portfolio: VERIFIED - Redundancy = cost
+    5. Stream-Based AL: VERIFIED - Online BCP
+  - **Key Insight:** ALL active learning implements BCP!
+  - **The Query BCP Theorem:** V(query) = InfoGain - λ × LabelingCost
+  - **Artifact:** `experiments/cycle2628_active_learning_bcp.py`
+  - **Functional Name:** The Query Budget
+
 ### Planned (Phase 83)
-- ⏳ **Gate 260:** Active Learning as BCP - Sample selection
 - ⏳ **Gate 261:** Neural Architecture as BCP - Width/depth tradeoffs
 
 ---

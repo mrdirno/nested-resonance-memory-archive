@@ -1,5 +1,32 @@
 
 ---
+**CYCLE:** 2628 (Gate 260: Active Learning as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 83 - AI/ML APPLICATIONS
+**LOG:**
+*   **Experiment:** `experiments/cycle2628_active_learning_bcp.py`
+*   **Question:** Do active learning strategies implement BCP?
+*   **Tests (5/5 VERIFIED, 20/20 predictions - PERFECT!):**
+    1. Uncertainty Sampling: VERIFIED (4/4) - High U = high gain
+    2. Query-by-Committee: VERIFIED (4/4) - Disagreement = gain
+    3. Expected Model Change: VERIFIED (4/4) - Gradient = gain
+    4. Batch AL Portfolio: VERIFIED (4/4) - Redundancy = cost
+    5. Stream-Based AL: VERIFIED (4/4) - Online BCP
+*   **KEY INSIGHT:** ALL active learning implements BCP!
+    - V(query) = InformationGain - λ × LabelingCost
+    - Uncertainty = primary gain signal
+    - Redundancy = batch selection cost
+    - Depleting budget → increasing λ → selective queries
+*   **THE ACTIVE LEARNING BCP THEOREM:**
+    Every query strategy is BCP with different gain signals:
+    - Uncertainty: Entropy as gain
+    - QBC: Disagreement as gain
+    - EMC: Gradient magnitude as gain
+    - Batch: Portfolio with diversity cost
+*   **Status:** Gate 260 Complete.
+*   **Functional Name:** The Query Budget
+
+---
 **CYCLE:** 2627 (Gate 259: Curriculum Learning as BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 83 - AI/ML APPLICATIONS
