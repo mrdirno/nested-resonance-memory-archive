@@ -61,6 +61,7 @@ Use one of these standard status levels:
 ```markdown
 ## Installation
 
+<<<<<<< HEAD
 \`\`\`bash
 pip install [package-name]
 \`\`\`
@@ -68,12 +69,25 @@ pip install [package-name]
 ## Quick Start
 
 \`\`\`python
+=======
+````bash
+pip install [package-name]
+````
+
+## Quick Start
+
+````python
+>>>>>>> 07d83267 (chore: anchor all artifacts up to Cycle 3213 (Phase 168 completion))
 from [package] import [Class1], [Class2]
 
 # Minimal working code
 # Show input → output clearly
 # Print something concrete
+<<<<<<< HEAD
 \`\`\`
+=======
+````
+>>>>>>> 07d83267 (chore: anchor all artifacts up to Cycle 3213 (Phase 168 completion))
 ```
 
 ---
@@ -178,7 +192,11 @@ Show the library's file structure.
 ```markdown
 ## Architecture
 
+<<<<<<< HEAD
 \`\`\`text
+=======
+````text
+>>>>>>> 07d83267 (chore: anchor all artifacts up to Cycle 3213 (Phase 168 completion))
 [library_dir]/
   ├─ [package]/
   │   ├─ __init__.py
@@ -191,7 +209,11 @@ Show the library's file structure.
   │   └─ test_core.py
   ├─ pyproject.toml
   └─ README.md             # This file
+<<<<<<< HEAD
 \`\`\`
+=======
+````
+>>>>>>> 07d83267 (chore: anchor all artifacts up to Cycle 3213 (Phase 168 completion))
 ```
 
 ---
@@ -259,7 +281,11 @@ For deeper context:
 ```markdown
 ## Citation
 
+<<<<<<< HEAD
 \`\`\`bibtex
+=======
+````bibtex
+>>>>>>> 07d83267 (chore: anchor all artifacts up to Cycle 3213 (Phase 168 completion))
 @software{Author_Library_Year,
   author  = {Name},
   title   = {{Library Name: Short Description}},
@@ -268,7 +294,11 @@ For deeper context:
   journal = {GitHub repository},
   url     = {https://github.com/mrdirno/nested-resonance-memory-archive/tree/main/[library_dir]}
 }
+<<<<<<< HEAD
 \`\`\`
+=======
+````
+>>>>>>> 07d83267 (chore: anchor all artifacts up to Cycle 3213 (Phase 168 completion))
 
 ## License
 
@@ -306,3 +336,120 @@ Before publishing a library README:
 - ❌ "Based on research Z" without link to paper
 - ❌ Broken links (404s)
 - ❌ Links to non-existent files
+<<<<<<< HEAD
+=======
+
+<!--
+================================================================================
+MAINTAINER GUIDE - LIBRARY README LAYOUT
+================================================================================
+
+Each library README (for example `bcp_lib/README.md`) must stand on its own and follow this layout:
+
+1. Name and one line description
+2. Core equation or principle
+3. Installation
+4. Quick start example
+5. Key concepts
+6. Advanced usage
+7. API reference
+8. Relationship to DUALITY ZERO
+9. License and author
+
+Use the existing BCP README as the reference implementation.
+
+---
+
+### A. When the Library Logic Changes
+
+1. Update the equation section:
+   - The equation at the top must match the actual implementation
+   - If function signatures or semantics change:
+     - Update variable names and meanings
+     - Add or remove terms as needed
+   - If there is a discrepancy between code and README, code is the source of truth and README must be fixed
+
+2. Update the implementation line references:
+   - Check and update lines like:
+     - `[Implementation: bcp/core.py:156-222]`
+   - They do not need to be perfectly exact for every commit, but they must point into the correct file and near the right function block
+
+3. Keep terminology consistent between:
+   - The equation in the README
+   - The docstrings in the code
+   - The main project README milestones
+
+Example:
+- If you use `Gain(a)` and `Cost(a)` in the library README, do not switch to `G(a)` and `C(a)` in docstrings without adding a mapping note once.
+
+---
+
+### B. When the Public API Changes
+
+1. If you change or add classes or methods:
+   - Update the `API Reference` section
+   - For each public class, list:
+     - What it represents
+     - Key arguments
+     - Key methods and return values
+
+2. If you remove or rename a public symbol:
+   - Update examples in:
+     - Quick Start
+     - Advanced Usage
+     - Domain Presets
+   - Search for all mentions of the old name in the README and code snippets and update
+
+3. If you add new features:
+   - Add minimal examples under `Advanced Usage` only when they are stable
+   - Keep the quick start example as simple as possible
+
+---
+
+### C. When Tests or Domains Change
+
+1. If you add new test coverage:
+   - Optionally add new references in the README to key tests that illustrate behavior
+   - Keep test links high value only, do not list every test
+
+2. If you add or remove domain presets:
+   - Update the list under `Domain Presets`
+   - Make sure the code example that lists domain names matches the actual `DOMAIN_PRESETS` keys
+
+---
+
+### D. Relationship To DUALITY ZERO
+
+1. Keep the `Relationship to Other Work` section short and factual:
+   - One line that this library is extracted from DUALITY ZERO
+   - One line describing how it connects back (for example: same lambda structure as Starving Philosopher)
+
+2. Do not duplicate long project philosophy here:
+   - Link to the main repo README or to a specific experiment instead  
+   - Goal is: an engineer can use the library without caring about the whole framework, but can click through if they want more context
+
+---
+
+### E. Creating a New Library README From This Template
+
+When you spin out a new library:
+
+1. Copy the structure of the BCP README and change:
+   - `BCP` to `[LIB_NAME]`
+   - `bcp` module paths to the new module path
+   - The equation block to the new library’s core equation
+   - Domain specific terms to match the new library
+
+2. Provide at least:
+   - One pip install path (or explicit note that it is not on PyPI yet)
+   - One executable quick start example
+   - One or two advanced usage examples that reflect real use
+
+3. Add a short `Relationship to Other Work` section:
+   - Explain what part of DUALITY ZERO this library corresponds to
+   - Link to the most relevant experiment or paper
+
+4. Keep claims modest and backed by code:
+   - If you mention performance or accuracy, link to a test or experiment in this repo with that result
+-->
+>>>>>>> 07d83267 (chore: anchor all artifacts up to Cycle 3213 (Phase 168 completion))

@@ -1,0 +1,6 @@
+{
+  "steps": 1000,
+  "reactive_outages": 510,
+  "bcp_outages": 1643,
+  "improvement_percent": -222.15686274509804
+}
