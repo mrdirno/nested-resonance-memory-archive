@@ -1,3 +1,50 @@
+### Session 2025-11-29 | Cycle 141
+**CO-PILOT**: Claude Opus 4.5 (claude-opus-4-5-20251101)
+**Duration**: 07:00 - 07:25
+**Focus**: M3 Data Loop Stress Testing
+
+#### Completed
+- [x] Ran multiple M3 stress test iterations (V1-V6)
+- [x] Diagnosed root cause of unreliable detection
+- [x] Verified JTAG register read/write functioning correctly
+- [x] Identified hardware timing issue
+
+#### Key Finding: Floating Pin Issue
+```
+SYMPTOM: RP2040 detects "FPGA_COMPUTATION_DONE" immediately upon START,
+         before JTAG sets FPGA output to HIGH.
+
+ROOT CAUSE:
+- JTAG register shows 0x00 (correct)
+- RP2040 GP0 detects HIGH immediately after START sent
+- Physical pin AG13 (fuzz_out[0]) appears to have noise/float issue
+- RP2040's PULL_DOWN resistor insufficient for clean LOW
+
+EVIDENCE:
+- JTAG write/read cycle: VERIFIED (0x00 -> 0x00, 0x01 -> 0x01)
+- RP2040 response: "STATUS: START received. Monitoring...\nFPGA_COMPUTATION_DONE"
+  (Detection happens BEFORE we send JTAG HIGH command)
+
+POSSIBLE FIXES:
+1. Add debounce in RP2040 main.py (require sustained HIGH for >10ms)
+2. Add stronger pull-down in FPGA fabric
+3. Use edge detection instead of level detection
+4. Check physical wiring for noise coupling
+```
+
+#### Hardware State (End of Session)
+- JTAG: ONLINE (master service active)
+- FPGA: Programmed with nrm_resonance.sof
+- RP2040: Responsive at /dev/ttyACM0 (has timing sensitivity)
+- HPS: OFFLINE (192.168.68.57 unreachable)
+
+#### Next Session Recommendations
+1. Update RP2040 main.py with debounce logic
+2. Alternatively, modify FPGA to add glitch filter on fuzz_out
+3. Test with oscilloscope to verify signal integrity
+
+---
+
 ### Session 2025-11-29 | Cycle 140
 **CO-PILOT**: Claude Opus 4.5 (claude-opus-4-5-20251101)
 **Duration**: 06:46 - 06:55
