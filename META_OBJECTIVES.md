@@ -784,8 +784,20 @@ Biological systems are BCP allocators operating under energy/resource constraint
   - **Artifact:** `experiments/cycle2614_metabolic_regulation_bcp.py`
   - **Functional Name:** The Cellular Budget
 
+### Completed (Phase 81 Continued)
+- ✅ **Gate 247:** Ecological Dynamics as BCP - COMPLETE (3/5)
+  - **Tests Validated:**
+    1. ✓ Optimal Foraging Theory = BCP (resource selection via V(r) > 0)
+    2. ~ Risk-Sensitive Foraging: Partial (low budget → risky confirmed)
+    3. ✓ Diet Breadth: Scarcity → generalist
+    4. ~ Competition: Boundary case (resource depletion)
+    5. ✓ Ecosystem Phases: Abundant → Balanced → Competitive → Collapse
+  - **Key Insight:** Classical OFT IS BCP with energy as budget
+  - **Mappings:** Budget=fat stores, Cost=foraging+risk, λ=hunger signal
+  - **Artifact:** `experiments/cycle2615_ecological_dynamics_bcp.py`
+  - **Functional Name:** The Ecological Budget
+
 ### Planned (Phase 81)
-- ⏳ **Gate 247:** Ecological Dynamics as BCP - Resource competition
 - ⏳ **Gate 248:** Immune Response as BCP - Threat prioritization
 - ⏳ **Gate 249:** Evolutionary Fitness as BCP - Trait selection
 

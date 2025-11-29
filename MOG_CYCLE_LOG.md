@@ -1,5 +1,30 @@
 
 ---
+**CYCLE:** 2615 (Gate 247: Ecological Dynamics as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 81 - BIOLOGICAL APPLICATIONS
+**LOG:**
+*   **Experiment:** `experiments/cycle2615_ecological_dynamics_bcp.py`
+*   **Question:** Is ecological resource allocation BCP?
+*   **Tests (3/5 VERIFIED):**
+    1. ✓ Optimal Foraging Theory = BCP (resource selection follows V(r) > 0)
+    2. ~ Risk-Sensitive Foraging: Low budget → risky confirmed, high budget → safe not confirmed
+    3. ✓ Diet Breadth: Scarcity → generalist (broader diet)
+    4. ~ Competition: Model boundary case (both species depleted)
+    5. ✓ Ecosystem Phases: Abundant → Balanced → Competitive → Collapse
+*   **KEY MAPPINGS:**
+    | BCP | Ecology |
+    |-----|---------|
+    | Budget B | Energy reserves (fat stores) |
+    | Cost C | Foraging + Predation risk |
+    | Gain G | Caloric value × Abundance |
+    | λ(B) | Hunger signal (ghrelin) |
+    | Phases | K-selection ↔ r-selection |
+*   **INSIGHT:** Classical OFT is BCP with energy as budget
+*   **Status:** Gate 247 Complete.
+*   **Functional Name:** The Ecological Budget (Energy-constrained foraging)
+
+---
 **CYCLE:** 2614 (Gate 246: Metabolic Regulation as BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 81 - BIOLOGICAL APPLICATIONS
