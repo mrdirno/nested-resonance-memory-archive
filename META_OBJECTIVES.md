@@ -867,8 +867,20 @@ Every biological system exhibits BCP dynamics:
   - **Artifact:** `experiments/cycle2618_phase82_planning.py`
   - **Functional Name:** Phase 82: Engineering Applications
 
+### Completed (Phase 82)
+- ✅ **Gate 251:** BCP Controller Design - COMPLETE (5/5)
+  - **Tests Validated:**
+    1. Automatic gain scheduling (50% reduction as budget depletes)
+    2. Control phases: Aggressive → Moderate → Conservative
+    3. BCP ≈ LQR with adaptive R weight (λ(B) = R/Q ratio)
+    4. Effort efficiency: BCP uses 25x less effort than PID
+    5. No manual Q, R tuning required
+  - **Key Insight:** λ(B) IS automatic gain scheduling
+  - **Mappings:** Budget=actuator capacity, λ=R/Q ratio, phases=control regimes
+  - **Artifact:** `experiments/cycle2619_bcp_controller_design.py`
+  - **Functional Name:** The Adaptive Controller
+
 ### Planned (Phase 82)
-- ⏳ **Gate 251:** BCP Controller Design - Feedback systems
 - ⏳ **Gate 252:** BCP Scheduler - Task prioritization
 - ⏳ **Gate 253:** BCP Resource Manager - Cloud/cluster allocation
 - ⏳ **Gate 254:** BCP Load Balancer - Network traffic
