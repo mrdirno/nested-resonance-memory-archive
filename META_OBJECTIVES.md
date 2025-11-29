@@ -189,9 +189,15 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
 
 **Focus:** Apply BCP theory to specific domains and systems.
 
+### Completed (Phase 75)
+- ✅ **Gate 213:** BCP in Neural Networks - Unified attention theory - COMPLETE
+  - **Finding:** All attention mechanisms are budget-constrained allocation
+  - **Unification:** Softmax=λ→0, Sparse=low budget, Position encoding=cost function
+  - **Artifact:** `experiments/cycle2585_neural_bcp.py`
+  - **Functional Name:** The Attention Unification (BCP Explains All)
+
 ### Active Objectives
-- 🟢 **Gate 213:** BCP in Neural Networks - Attention mechanism analysis
-- ⚪ **Gate 214:** BCP in Evolutionary Systems - Fitness-based allocation
+- 🟢 **Gate 214:** BCP in Evolutionary Systems - Fitness-based allocation
 - ⚪ **Gate 215:** BCP in Economic Markets - Resource pricing dynamics
 
 ---
