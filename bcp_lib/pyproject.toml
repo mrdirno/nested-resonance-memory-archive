@@ -44,12 +44,14 @@ dependencies = [
 
 [project.optional-dependencies]
 monitor = ["psutil>=5.8.0"]
+viz = ["matplotlib>=3.5.0"]
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
 ]
 all = [
     "psutil>=5.8.0",
+    "matplotlib>=3.5.0",
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
 ]

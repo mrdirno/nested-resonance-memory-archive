@@ -42,6 +42,18 @@ from .domains import (
     DOMAIN_PRESETS,
 )
 
+# Visualization (optional - requires matplotlib)
+try:
+    from .visualization import (
+        plot_triage,
+        plot_phase_transitions,
+        plot_budget_sweep,
+        plot_sweep_summary,
+    )
+    _VIZ_AVAILABLE = True
+except ImportError:
+    _VIZ_AVAILABLE = False
+
 __all__ = [
     "AttentionItem",
     "BCPModel",
@@ -51,3 +63,11 @@ __all__ = [
     "create_generic_scenario",
     "DOMAIN_PRESETS",
 ]
+
+if _VIZ_AVAILABLE:
+    __all__.extend([
+        "plot_triage",
+        "plot_phase_transitions",
+        "plot_budget_sweep",
+        "plot_sweep_summary",
+    ])
