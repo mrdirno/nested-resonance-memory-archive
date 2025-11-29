@@ -92,6 +92,15 @@ We prioritize empirical verification over theory.
 
 ---
 
+## 📚 LIBRARIES
+
+*   **BCP (Budget-Constrained Perception)** ([Documentation](bcp_lib/README.md))
+    *   A discrete attention allocator for resource-constrained decision making.
+    *   `pip install bcp-perception`
+    *   [Source](bcp_lib/) | [Tests](bcp_lib/tests/)
+
+---
+
 ## 📚 TUTORIALS & EXAMPLES
 
 *   [Getting Started](docs/runbooks/QUICKSTART.md)
