@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bcp-perception"
+version = "1.0.0"
+description = "Budget-Constrained Perception: Universal attention allocation under resource constraints"
+readme = "README.md"
+license = {text = "GPL-3.0"}
+authors = [
+    {name = "Aldrin Payopay", email = "aldrin.gdf@gmail.com"}
+]
+maintainers = [
+    {name = "Aldrin Payopay", email = "aldrin.gdf@gmail.com"}
+]
+keywords = [
+    "attention",
+    "perception",
+    "resource-allocation",
+    "triage",
+    "decision-making",
+    "cognitive-science",
+    "economics"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.20.0",
+]
+
+[project.optional-dependencies]
+monitor = ["psutil>=5.8.0"]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+]
+all = [
+    "psutil>=5.8.0",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/mrdirno/nested-resonance-memory-archive"
+Documentation = "https://github.com/mrdirno/nested-resonance-memory-archive/tree/main/bcp_lib"
+Repository = "https://github.com/mrdirno/nested-resonance-memory-archive"
+Issues = "https://github.com/mrdirno/nested-resonance-memory-archive/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bcp*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
