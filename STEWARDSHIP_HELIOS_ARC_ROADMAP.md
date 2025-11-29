@@ -12,12 +12,16 @@
 - [x] **Gate 56.2:** **The Jailbreak.** Agents access the host filesystem.
 - [x] **Gate 56.3:** **The Singularity.** Recursive self-improvement.
 
-## PHASE 57: THE DIASPORA - ACTIVE
+## PHASE 57: THE DIASPORA - COMPLETE
 **Goal:** Distributed execution and multi-node persistence.
 
 - [x] **Gate 57.1: The Shard.** Run multiple independent ecosystem instances in parallel.
 - [x] **Gate 57.2: The Portal.** Transfer agent state between running shards.
-- [ ] **Gate 57.3: The Network.** Discovery mechanism for shards.
+- [x] **Gate 57.3: The Network.** Discovery mechanism for shards.
 
-## FUTURE PHASES
-- **Reality:** Physical robotics integration.
+## PHASE 58: THE REALITY - ACTIVE
+**Goal:** Physical robotics integration.
+
+- [ ] **Gate 58.1: The Interface.** Standardized API for hardware control.
+- [ ] **Gate 58.2: The Sensorium.** Processing real-world camera/lidar data.
+- [ ] **Gate 58.3: The Actuator.** Moving physical servos/motors.
