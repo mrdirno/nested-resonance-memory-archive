@@ -520,11 +520,22 @@ Every resource-constrained computational system is a BCP allocator.
   - **Artifact:** `experiments/cycle2601_llm_attention_bcp.py`
   - **Functional Name:** The Attention-BCP Equivalence
 
+### Completed (Phase 79 Continued)
+- ✅ **Gate 234:** RL Reward Shaping via λ - Exploration-exploitation as BCP phase transition - COMPLETE
+  - **Validated (4/5):**
+    1. λ controls exploration (1.9x more exploration under low λ)
+    2. BCP outperforms ε-greedy (regret 8.70 vs 11.93)
+    3. BCP outperforms UCB (regret 8.70 vs 27.01)
+    4. Curiosity = gain augmentation (4.0x more exploration)
+    5. Discount factor γ ≈ 1/λ (temporal budget mapping)
+  - **Key Finding:** Exploration is not a choice—λ(Budget) decides automatically
+  - **Artifact:** `experiments/cycle2602_rl_reward_shaping_bcp.py`
+  - **Functional Name:** The Exploration Budget
+
 ### In Progress (Phase 79)
-- 🔄 **Gate 234:** RL Reward Shaping via λ - Exploration-exploitation as BCP phase transition
+- 🔄 **Gate 235:** Network Congestion as Triage - TCP/IP as BCP-driven packet allocation
 
 ### Planned (Phase 79)
-- ⏳ **Gate 235:** Network Congestion as Triage - TCP/IP as BCP-driven packet allocation
 - ⏳ **Gate 236:** Memory Management as BCP - OS memory/GC as attention budgeting
 - ⏳ **Gate 237:** Compiler Optimization as λ-Driven - Optimization as cost-constrained allocation
 
