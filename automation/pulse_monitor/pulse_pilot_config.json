@@ -6,11 +6,11 @@
   "claude_windows": [
     {
       "name": "Gemini-1",
-      "window_id": "auto_1764353953.129144_0",
-      "terminal_window_id": "101992",
+      "window_id": "auto_1764427924.834033_0",
+      "terminal_window_id": "174316",
       "index": 0,
       "status": "fresh",
-      "created": "2025-11-28T10:19:13.129151",
+      "created": "2025-11-29T06:52:04.834042",
       "quadrant": "Top-Left",
       "position": [
         0,
@@ -21,9 +21,9 @@
   ],
   "dark_mode": true,
   "protocol_window_location": [
-    285,
-    54
+    195,
+    954
   ],
-  "cycle_number": 108,
-  "last_updated": "2025-11-28T10:19:13.629827"
+  "cycle_number": 144,
+  "last_updated": "2025-11-29T09:48:05.802866"
 }
