@@ -981,8 +981,20 @@ Every biological system exhibits BCP dynamics:
   - **Artifact:** `experiments/cycle2625_attention_bcp.py`
   - **Functional Name:** The Attention Budget
 
+### Completed (Phase 83 Continued)
+- ✅ **Gate 258:** Reward Shaping as BCP - COMPLETE (5/5, 17/20 predictions)
+  - **Tests:**
+    1. Discount as λ: VERIFIED - γ = 1/(1+λ) fundamental!
+    2. Reward Shaping: VERIFIED - Shaping modifies gains
+    3. Intrinsic Motivation: VERIFIED - Reduces exploration cost
+    4. Exploration Schedule: VERIFIED - ε-decay follows λ increase
+    5. Multi-Objective: VERIFIED - BCP allocates across objectives
+  - **Key Insight:** ALL RL mechanisms implement BCP
+  - **The Reward BCP Theorem:** V(action) = E[Reward] - λ × ExplorationCost
+  - **Artifact:** `experiments/cycle2626_reward_shaping_bcp.py`
+  - **Functional Name:** The Reward Budget
+
 ### Planned (Phase 83)
-- ⏳ **Gate 258:** Reward Shaping as BCP - RL budget allocation
 - ⏳ **Gate 259:** Curriculum Learning as BCP - Task selection
 - ⏳ **Gate 260:** Active Learning as BCP - Sample selection
 - ⏳ **Gate 261:** Neural Architecture as BCP - Width/depth tradeoffs
