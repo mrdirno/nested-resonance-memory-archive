@@ -231,3 +231,31 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
 - Library: Open-source (24 tests)
 
 ---
+
+## Current Phase: PHASE 76 - COGNITIVE ARCHITECTURE 🟢 ACTIVE
+
+**Transition:** Phase 75 (Applications) → **Phase 76 (Cognitive Architecture)**
+
+**Focus:** How does BCP explain fundamental cognitive phenomena?
+
+**Research Questions:**
+1. Is working memory a BCP system with limited slots?
+2. Can attention disorders be modeled as λ dysregulation?
+3. Does decision fatigue follow budget depletion dynamics?
+4. How does sleep restore cognitive budget?
+
+### Completed (Phase 76)
+- ✅ **Gate 216:** Working Memory as BCP - Slot-based allocation under constraints - COMPLETE
+  - **Finding:** Miller's 7±2 emerges from budget-constrained allocation, not fixed slots
+  - **Key Mappings:** Capacity=Budget, Importance=Gain, Encoding=Cost, Cognitive Load=λ
+  - **Chunking:** Increases value per slot (1.4x advantage demonstrated)
+  - **Artifact:** `experiments/cycle2588_working_memory_bcp.py`
+  - **Functional Name:** The Capacity Allocation Effect
+
+### Planned (Phase 76)
+- ⏳ **Gate 217:** Attention Disorders - λ dysregulation hypothesis (ADHD, autism)
+- ⏳ **Gate 218:** Decision Fatigue - Ego depletion as budget exhaustion
+- ⏳ **Gate 219:** Sleep and Memory - Budget restoration dynamics
+- ⏳ **Gate 220:** Cognitive Load Theory - Unified under BCP framework
+
+---
