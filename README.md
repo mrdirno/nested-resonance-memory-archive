@@ -25,7 +25,7 @@ We have tested the hypothesis that **Budget-Constrained Perception (BCP)** is th
 
 **Experience the system immediately in your browser.**
 
-**[👉 CLICK TO ENTER THE BRIDGE (Live Web App)](https://mrdirno.github.io/nested-resonance-memory-archive/)**
+**[👉 ENTER THE BRIDGE (Live Web App)](https://mrdirno.github.io/nested-resonance-memory-archive/)**
 
 **Or watch the demonstration:**
 
