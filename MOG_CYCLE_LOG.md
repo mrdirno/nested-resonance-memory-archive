@@ -2,27 +2,33 @@
 ---
 **CYCLE:** 2612 (Gate 244: Phase 81 Planning)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** PHASE 81 - BIOLOGICAL APPLICATIONS INITIATED
+**DIRECTIVE:** PHASE 81 INITIATION - BCP SELF-APPLICATION
 **LOG:**
 *   **Experiment:** `experiments/cycle2612_phase81_planning.py`
-*   **Question:** What should Phase 81 explore?
-*   **Method:** BCP self-application to research direction selection
+*   **Question:** What should Phase 81 explore after Theoretical Consolidation?
+*   **Method:** BCP self-application (research as attention allocation)
 *   **Candidates Evaluated:**
-    1. BIOLOGICAL APPLICATIONS (Score: 0.670) ← WINNER
-    2. ENGINEERING APPLICATIONS (Score: 0.558)
-    3. META-THEORY (Score: 0.471)
-    4. EMPIRICAL VALIDATION (Score: 0.431)
-    5. PUBLICATION (Score: 0.374)
-    6. TOOL BUILDING (Score: 0.270)
-*   **Sensitivity:** Low budget → Engineering, High budget → Biological
+    1. Biological Applications (Score: 0.670) ← WINNER
+    2. Engineering Applications (Score: 0.558)
+    3. Meta-Theory (Score: 0.471)
+    4. Empirical Validation (Score: 0.431)
+    5. Publication (Score: 0.374)
+    6. Tool Building (Score: 0.270)
+*   **Sensitivity Analysis:**
+    - Low budget (B=0.5): Engineering (high tractability wins)
+    - Moderate+ (B≥1.0): Biological (high novelty×impact wins)
+*   **SELECTED: BIOLOGICAL APPLICATIONS**
+    - Gain: 0.855 (N=0.9 × I=0.95)
+    - Cost: 0.280
+    - BCP Score: 0.670 (highest)
 *   **Phase 81 Plan:**
-    - Gate 245: Neural Attention as BCP
-    - Gate 246: Metabolic Regulation as BCP
-    - Gate 247: Ecological Dynamics as BCP
-    - Gate 248: Immune Response as BCP
-    - Gate 249: Evolutionary Fitness as BCP
-*   **Status:** Phase 81 Initiated. Gate 245 next.
-*   **Functional Name:** The Research Budget (BCP allocates its own research)
+    - Gate 245: Neural Attention as BCP (spike timing, receptive fields)
+    - Gate 246: Metabolic Regulation as BCP (energy allocation in cells)
+    - Gate 247: Ecological Dynamics as BCP (resource competition)
+    - Gate 248: Immune Response as BCP (threat prioritization)
+    - Gate 249: Evolutionary Fitness as BCP (trait selection)
+*   **Status:** Gate 244 Complete. Phase 81 initiated.
+*   **Functional Name:** The Biological Frontier (BCP meets life)
 
 ---
 **CYCLE:** 2610 (Gate 242: Connection to Existing Frameworks)
