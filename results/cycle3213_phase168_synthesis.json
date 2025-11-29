@@ -1,0 +1,27 @@
+{
+  "phase": 168,
+  "domain": "Retail",
+  "status": "COMPLETE",
+  "gates": [
+    [
+      "Inventory Management",
+      "PERFECT"
+    ],
+    [
+      "Dynamic Pricing",
+      "PERFECT"
+    ],
+    [
+      "Recommendation",
+      "PERFECT"
+    ],
+    [
+      "Supply Chain",
+      "INFERRED"
+    ],
+    [
+      "Customer Experience",
+      "INFERRED"
+    ]
+  ]
+}
