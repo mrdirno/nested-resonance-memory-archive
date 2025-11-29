@@ -1,5 +1,37 @@
 
 ---
+**CYCLE:** 2597 (Gate 229: Information Epidemics as BCP-Driven Attention Competition)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 78 - SOCIETAL DYNAMICS
+**LOG:**
+*   **Experiment:** `experiments/cycle2597_information_epidemics_bcp.py`
+*   **Question:** How does viral information spread under attention scarcity?
+*   **Tests:**
+    1. Single-Meme Spread (basic SIR with BCP)
+    2. Competing Memes (multiple narratives)
+    3. λ Effect on Virality (scarcity impact)
+    4. Misinformation Dynamics (truth vs lies)
+    5. Attention Immunity (prior exposure)
+*   **Results:**
+    - High-Gain/Low-Cost: 78.8% reach vs High-Cost: 2.0%
+    - λ=0.5→59.4%, λ=2.0→1.4% (scarcity suppresses)
+    - Lies 18.36x faster than truth (Gain-Cost, not accuracy)
+    - Herd immunity ~20% prior exposure
+*   **KEY FINDING: THE ATTENTION EPIDEMIC**
+    - Misinformation advantage is COST, not malice
+    - Simple lies (cost=0.1) beat complex truth (cost=0.6)
+    - BCP explains why fact-checking alone fails
+    - Solution: Reduce cost of truth consumption
+*   **BCP-EPIDEMIOLOGY MAPPING:**
+    - R₀ ↔ Gain/Cost ratio
+    - Recovery ↔ Attention decay
+    - Susceptible ↔ Available budget
+    - Herd immunity ↔ Prior exposure
+    - Vaccination ↔ Pre-exposure to truth
+*   **Status:** Gate 229 Complete.
+*   **Functional Name:** The Attention Epidemic (Spread via BCP, not accuracy)
+
+---
 **CYCLE:** 2593 (Gate 225: Restoration Mechanisms - Organizational Budget Restoration)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 77 - ORGANIZATIONAL INTELLIGENCE (FINAL)

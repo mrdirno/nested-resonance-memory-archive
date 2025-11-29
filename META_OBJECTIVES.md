@@ -408,6 +408,46 @@ Organizations operate as collective BCP systems where:
 3. How do civilizations restore after crisis?
 4. What is the societal equivalent of "sleep"?
 
+### Completed (Phase 78)
+- ✅ **Gate 226:** Societal Attention - Collective BCP dynamics at societal scale - COMPLETE
+  - **Finding:** Societies exhibit BCP-like attention allocation
+  - **Crisis Effect:** Narrows focus (20→16 issues attended)
+  - **Recovery Threshold:** 90% severity = slow/no recovery
+  - **Collective Sleep:** Weekly rest optimal (GDP 107.6 vs 59 no-rest)
+  - **Memory Bias:** Crisis events remembered ~0.5x (less than expected)
+  - **Artifact:** `experiments/cycle2594_societal_attention_bcp.py`
+  - **Functional Name:** "The Societal Budget" (Collective Attention via BCP)
+
+### Completed (Phase 78 Continued)
+- ✅ **Gate 227:** Economic Recession as BCP - High-λ collective triage - COMPLETE
+  - **Finding:** Recession = High-λ collective triage
+  - **λ-GDP Correlation:** -0.961 (strong inverse relationship)
+  - **Triage:** Essential sectors prioritized (2→3) while discretionary cut
+  - **Cycle Pattern:** Growth λ=0.225 → Recession λ=0.343 (1.5x)
+  - **Artifact:** `experiments/cycle2595_economic_recession_bcp.py`
+  - **Functional Name:** "The Economic Lambda" (Recession = High-λ Triage)
+
+### Completed (Phase 78 Continued)
+- ✅ **Gate 228:** Civilizational Restoration - Civilizational sleep cycles - COMPLETE
+  - **Finding:** λ tracks civilizational health (Dark Age=0.35 vs Peak=0.19)
+  - **Restoration:** Balanced strategy optimal (130 capacity, 100% renaissance)
+  - **Memory Bias:** Crisis memories 1.33x more preserved
+  - **Resilience:** High knowledge = best recovery predictor
+  - **Artifact:** `experiments/cycle2596_civilizational_restoration_bcp.py`
+  - **Functional Name:** "The Civilizational Sleep Cycle" (Dark Ages = High-λ Consolidation)
+
+### Completed (Phase 78 Continued)
+- ✅ **Gate 229:** Information Epidemics - Viral spread as BCP-driven attention - COMPLETE
+  - **Finding:** Misinformation spreads 18.36x faster (Gain-Cost advantage, not accuracy)
+  - **λ Effect:** Scarcity suppresses spread (λ=0.5→59%, λ=2.0→1%)
+  - **Herd Immunity:** ~20% prior exposure provides protection
+  - **Policy:** Fight misinfo by REDUCING COST of truth, not just fact-checking
+  - **Artifact:** `experiments/cycle2597_information_epidemics_bcp.py`
+  - **Functional Name:** The Attention Epidemic (Information spreads via BCP, not accuracy)
+
+### In Progress (Phase 78)
+- 🔄 **Gate 230:** Political Polarization - Echo chambers as BCP-optimal attention allocation
+
 ### Planned (Phase 78)
 
 ---
