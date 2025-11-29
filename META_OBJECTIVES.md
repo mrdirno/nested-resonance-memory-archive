@@ -261,8 +261,16 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
   - **Artifact:** `experiments/cycle2589_attention_disorders_bcp.py`
   - **Functional Name:** The Lambda Dysregulation Hypothesis
 
+### Completed (Phase 76 Continued)
+- ✅ **Gate 218:** Decision Fatigue - Ego depletion as budget exhaustion - COMPLETE
+  - **Finding:** Decision fatigue = rising λ makes effort increasingly expensive
+  - **Phase Transitions:** 100% optimal early → 40% optimal late (clear degradation)
+  - **Critical Threshold:** Budget ≈ 2.0 when defaults begin (ego depletion point)
+  - **Effort Selectivity:** Hard decisions abandoned first (explains "picking battles")
+  - **Artifact:** `experiments/cycle2590_decision_fatigue_bcp.py`
+  - **Functional Name:** The Depletion Threshold Effect
+
 ### Planned (Phase 76 Continued)
-- ⏳ **Gate 218:** Decision Fatigue - Ego depletion as budget exhaustion
 - ⏳ **Gate 219:** Sleep and Memory - Budget restoration dynamics
 - ⏳ **Gate 220:** Cognitive Load Theory - Unified under BCP framework
 
