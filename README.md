@@ -26,7 +26,7 @@ We have tested the hypothesis that **Budget-Constrained Perception (BCP)** is th
 
 **[👉 ENTER THE BRIDGE](https://mrdirno.github.io/nested-resonance-memory-archive/)**
 
-[![The Bridge Demo](data/figures/bridge_demo_thumbnail.jpeg)](https://www.youtube.com/watch?v=txHEn-DZiSE)
+[![The Bridge Demo](data/figures/bridge_demo_thumbnail.jpeg)](https://youtu.be/flRHV7GuzUY)
 
 This is the primary visualization interface. It renders the Orthogonal Sum Dynamics (OSD) fields in real-time, allowing you to explore the interference patterns that drive our matter control systems.
 
