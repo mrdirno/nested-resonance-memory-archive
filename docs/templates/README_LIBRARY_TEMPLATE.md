@@ -4,6 +4,25 @@
 
 ---
 
+## CARDINAL RULE: LINK EVERY CLAIM
+
+**No claim without a link.** Every statement of capability, behavior, or feature MUST link to:
+- Source code (`[Implementation](./path/to/code.py)`)
+- Test file (`[Test](./tests/test_feature.py)`)
+- Example script (`[Example](./examples/demo.py)`)
+- Documentation (`[Docs](./docs/concept.md)`)
+
+**If you can't link it, don't claim it.**
+
+| Claim Type | Required Link |
+|------------|---------------|
+| "Does X" | Link to code that does X |
+| "Tested for Y" | Link to test file |
+| "Used in domain Z" | Link to example/experiment |
+| "Based on research W" | Link to paper/concept doc |
+
+---
+
 ## 1. Title Block
 
 ```markdown
@@ -92,19 +111,35 @@ Explain what this *library* is in one screen.
 
 ## 5. Core Capabilities (Empirically Verified ONLY)
 
-**List ONLY what has working code/tests. Each bullet must link to proof.**
+**STRICT RULE: No capability listed without a working link.**
+
+Every capability MUST have:
+1. A description of what it does
+2. At least ONE link to proof (code, test, or example)
+
+**BAD (no link):**
+```markdown
+* **Budget Allocation** - Allocates attention based on budget constraints.
+```
+
+**GOOD (linked):**
+```markdown
+* **Budget Allocation** - Allocates attention based on budget constraints. [Implementation](./bcp/core.py:156) | [Test](./tests/test_core.py:106)
+```
 
 ```markdown
 ## Core Capabilities
 
 * **[Capability Name]**
   * [Description of what it does]
-  * [Implementation](./path/to/code.py)
+  * [Implementation](./path/to/code.py:LINE) | [Test](./tests/test_capability.py)
 
 * **[Capability Name]**
   * [Description]
-  * [Test](./tests/test_capability.py)
+  * [Example](./examples/demo.py) | [Docs](./docs/concept.md)
 ```
+
+**Line number format:** `file.py:LINE` helps readers jump directly to relevant code.
 
 ---
 
@@ -242,12 +277,24 @@ GPL-3.0
 
 Before publishing a library README:
 
+### Structure
 - [ ] Title block has package name and library location
 - [ ] Golden Demo runs in <30 seconds
 - [ ] User Lanes link to real sections
-- [ ] Every capability links to working code
 - [ ] Architecture shows actual file structure
 - [ ] API Reference covers all public classes/methods
-- [ ] Research section links to real files
 - [ ] Citation has correct URL to library subfolder
-- [ ] All paths verified and working
+
+### Link Verification (CRITICAL)
+- [ ] **Every capability claim has a link** (no exceptions)
+- [ ] **Every example reference links to a real file**
+- [ ] **Every research claim links to paper/experiment**
+- [ ] All paths verified by clicking them
+- [ ] Line numbers in links are accurate (file.py:LINE)
+
+### Anti-Patterns to Avoid
+- ❌ "Supports X" without link to X implementation
+- ❌ "Tested with Y" without link to test file
+- ❌ "Based on research Z" without link to paper
+- ❌ Broken links (404s)
+- ❌ Links to non-existent files
