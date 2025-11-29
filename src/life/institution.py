@@ -50,3 +50,24 @@ class Corporation(Institution):
             payouts[agent_id] = share_count * amount_per_share
             
         return payouts
+
+class Bank(Institution):
+    def __init__(self, name):
+        super().__init__(name)
+        self.loans = []
+        self.interest_rate = 0.1
+        
+    def lend(self, agent_id, amount, current_tick):
+        if self.treasury < amount:
+            return None
+            
+        self.treasury -= amount
+        debt = amount * (1 + self.interest_rate)
+        loan = {
+            'agent_id': agent_id,
+            'principal': amount,
+            'debt': debt,
+            'due_tick': current_tick + 10
+        }
+        self.loans.append(loan)
+        return loan

@@ -878,6 +878,10 @@ class DigitalLifeform:
         if len(self.inventory) > 0:
             options['trade'] = 200 + (100 * innovation) # High priority to sell artifacts
             
+        # Cycle 2578: THE BANK (Borrowing)
+        if self.energy < 200 and innovation > 0.7:
+            options['borrow'] = 200 * innovation
+            
         # DEBUG
         if self.name == "Tycoon":
             print(f"DEBUG Tycoon: E={self.energy}, Innov={innovation}")
@@ -919,7 +923,7 @@ class DigitalLifeform:
         best_utility_score = options.get(best_utility_action, 0)
         
         # If Brain says 'forage' but Utility says 'reflect' or 'codex' or 'label', override.
-        if intent == 'forage' and best_utility_action in ['reflect', 'codex', 'label', 'sign_contract', 'found_corp', 'trade']:
+        if intent == 'forage' and best_utility_action in ['reflect', 'codex', 'label', 'sign_contract', 'found_corp', 'trade', 'borrow']:
             intent = best_utility_action
             
         # General Override for Critical Survival
@@ -1025,6 +1029,11 @@ class DigitalLifeform:
                 from src.life.signal import Signal
                 payload = {'founder_id': self.id, 'name': f"{self.name}_Corp"}
                 signals_to_emit.append(Signal(type='FOUND_CORP', strength=1.0, source_id=self.id, payload=payload))
+        elif self.intent == 'borrow':
+            # Cycle 2578: The Bank
+            from src.life.signal import Signal
+            payload = {'amount': 100}
+            signals_to_emit.append(Signal(type='BORROW', strength=1.0, source_id=self.id, payload=payload))
         elif self.intent == 'startup':
             self.startup()
         elif self.intent == 'trade':

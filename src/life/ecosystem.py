@@ -21,7 +21,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 
 from src.life.genesis import DigitalLifeform
 from bridge.transcendental_bridge import TranscendentalBridge
-from src.life.institution import Corporation
+from src.life.institution import Corporation, Bank
 
 class Ecosystem:
     def __init__(self, capacity: int = 100, prey_capacity: int = None, predator_capacity: int = None, width: int = 100, height: int = 100):
@@ -303,6 +303,19 @@ class Ecosystem:
                         new_corp = Corporation(payload['name'], payload['founder_id'])
                         self.institutions.append(new_corp)
                         print(f"🏢 {payload['name']} founded by {payload['founder_id']}.")
+                    elif signal.type == 'BORROW':
+                        # Cycle 2578: The Bank
+                        amount = signal.payload.get('amount', 0)
+                        # Find a Bank
+                        bank = next((i for i in self.institutions if isinstance(i, Bank)), None)
+                        if bank:
+                            loan = bank.lend(signal.source_id, amount, self.tick_count)
+                            if loan:
+                                borrower = next((a for a in self.agents if a.id == signal.source_id), None)
+                                if borrower:
+                                    borrower.energy += amount
+                                    # print(f"🏦 Loan granted to {borrower.name}: {amount} Energy. Due Tick: {loan['due_tick']}")
+                    elif signal.type == 'MIGRATE':
                             
                     else:
                         self.propagate_signal(signal)
