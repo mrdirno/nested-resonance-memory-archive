@@ -7,6 +7,7 @@ set PORT 5000
 puts "Scanning for JTAG Master (V3)..."; flush stdout
 set retry_count 0
 while {$retry_count < 10} {
+    refresh_connections
     set master_paths [get_service_paths master]
     if {[llength $master_paths] > 0} {
         break

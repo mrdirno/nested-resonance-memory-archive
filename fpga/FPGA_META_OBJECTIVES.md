@@ -65,19 +65,19 @@ HELIOS-NRM-MOG Stack
 - [x] FPGA ↔ NRM data pipeline: Verification Phase (Streaming Script Created)
 - [x] FPGA Logic Integration: Qsys System Created (JTAG Bridge Validated)
 - [x] Hardware abstraction layer: `bridge_server_v3.tcl` (Active TCP<->JTAG Bridge)
-- [ ] RP2040 Integration: Pin mapping reverse engineering (Fuzzing Script Ready)
+- [x] RP2040 Integration: **COMPLETE** - `fuzz_out[0]` (AG13) -> RP2040 GP0
 
 ---
 
 ## STRATEGIC PRIORITIES
 
 ### Priority Matrix
-| Priority | Area | Rationale |
-|----------|------|-----------|
-| P0 (Critical) | Reverse Engineer RP2040 | Run `fuzz_rp2040_batch.py` to identify input pin. |
-| P1 (High) | HPS Pin Assignment | Need `DE10_Nano_GHRD.qsf` to instantiate HPS component safely. |
-| P2 (Medium) | Data Loop (HPS) | Re-target Qsys to use HPS Bridge instead of JTAG. |
-| P3 (Low) | S5 Driver | Deprioritized due to friction. |
+| Priority | Area | Rationale | Status |
+|----------|------|-----------|--------|
+| P0 (Critical) | Reverse Engineer RP2040 | Identified `fuzz_out[0]` -> RP2040 GP0 | **COMPLETE** |
+| P1 (High) | HPS Pin Assignment | Need `DE10_Nano_GHRD.qsf` to instantiate HPS component safely. | Pending |
+| P2 (Medium) | Data Loop (HPS) | Re-target Qsys to use HPS Bridge instead of JTAG. | Pending |
+| P3 (Low) | S5 Driver | Deprioritized due to friction. | Parked |
 
 ---
 
@@ -85,6 +85,7 @@ HELIOS-NRM-MOG Stack
 
 | Date | Changes | Author |
 |------|---------|--------|
+| 2025-11-29 | **P0 COMPLETE**: Identified RP2040 pin mapping (`fuzz_out[0]` -> GP0), created `fuzz_v12.py` | Claude Opus 4.5 |
 | 2025-11-28 | Developed `fuzz_rp2040_batch.py` (Batch Tcl) to solve interactive shell issues | Gemini 2.0 Flash |
 | 2025-11-28 | Compiled "Pin Fuzzer" FPGA image (JTAG -> Arduino Pins) | Gemini 2.0 Flash |
 | 2025-11-28 | Discovered RP2040 Monitor; initiated pin reverse engineering | Gemini 2.0 Flash |
