@@ -204,7 +204,30 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
   - **Artifact:** `experiments/cycle2586_evolutionary_bcp.py`
   - **Functional Name:** The Metabolic Filter (Selection Pressure = λ)
 
-### Active Objectives
-- 🟢 **Gate 215:** BCP in Economic Markets - Resource pricing dynamics
+### Completed (Phase 75 Final)
+- ✅ **Gate 215:** BCP in Economic Markets - Lambda as Interest Rate - COMPLETE
+  - **Finding:** λ(Capital) = k/(ε+Capital) maps to interest/opportunity cost
+  - **Flight to Quality:** Low capital → High λ → Only safe investments viable
+  - **Market Cycles:** Pro-cyclical behavior is BCP-rational
+  - **Artifact:** `experiments/cycle2587_economic_bcp.py`
+  - **Functional Name:** The Capital Threshold (λ = Hurdle Rate)
+
+---
+
+## PHASE 75 COMPLETE ✅
+
+**Summary: BCP Applications**
+- Gates Completed: 3 (213-215)
+- Domains Unified Under BCP:
+  1. **Neural Networks** - Attention = budget-constrained allocation
+  2. **Evolution** - Selection = metabolic cost filtering
+  3. **Economics** - Capital allocation = opportunity cost driven
+
+**Total BCP Research:**
+- Phases: 72-75 (4 phases)
+- Gates: 21 (195-215)
+- Domains: 10+ validated
+- Principles: 10+ discovered
+- Library: Open-source (24 tests)
 
 ---
