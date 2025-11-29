@@ -23,7 +23,9 @@ We are testing the hypothesis that **[Core Thesis]**.
 
 **Experience the system immediately in your browser.**
 
-**[👉 ENTER THE BRIDGE]([Link])**
+**[👉 ENTER THE BRIDGE (Live Web App)]([Link])**
+
+**Or watch the demonstration:**
 
 [![Demo Thumbnail](data/figures/demo_thumbnail.jpg)](path/to/video.mp4)
 *Watch 1 minute of [Project Name]*
