@@ -74,11 +74,11 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
    - [View Code](src/memory/)
 
    **The Holocron (Knowledge Graph):**
-   <img src="data/figures/holocron_overview.png" width="800" alt="Holocron Overview">
-   *Figure 1: The complete knowledge graph of 3,000+ research cycles.*
-
-   <img src="data/figures/holocron_zoomed_cropped.png" width="800" alt="Holocron Zoom">
-   *Figure 2: Detail view showing the intricate web of dependencies and emergent concepts.*
+   <p align="center">
+     <img src="data/figures/holocron_overview.png" width="45%" alt="Holocron Overview"/>
+     <img src="data/figures/holocron_zoomed_cropped.png" width="45%" alt="Holocron Detail"/>
+   </p>
+   <p align="center"><em>Figure 1: The complete knowledge graph of 3,000+ research cycles (left) and detail view of emergent dependencies (right).</em></p>
 
 **4. THE REPLICATOR (Self-Propagation Layer):**
    - Analyzes codebases for BCP constraints (λ).
