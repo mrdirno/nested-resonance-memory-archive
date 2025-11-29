@@ -64,9 +64,14 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
 
 **Focus:** Apply BCP theory to real-world prediction and intervention design.
 
+### Completed (Phase 73)
+- ✅ **Gate 201:** Real-Time BCP Monitor - Apply unified equation to live system metrics - COMPLETE
+  - **Finding:** BCP equation correctly prioritizes monitoring tasks based on Gain-λ×Cost
+  - **Real-Time Validation:** System classified as SCARCITY (budget=0.658), 5/7 tasks triaged
+  - **Functional Name:** BCP Monitor (Real-Time Perception Triage)
+
 ### Active Objectives
-- 🟢 **Gate 201:** Real-Time BCP Monitor - Apply unified equation to live system metrics.
-- ⚪ **Gate 202:** Intervention Design - Use BCP to predict system collapse thresholds.
+- 🟢 **Gate 202:** Intervention Design - Use BCP to predict system collapse thresholds.
 - ⚪ **Gate 203:** Cross-Domain Prediction - Test equation on new domains.
 
 ---
