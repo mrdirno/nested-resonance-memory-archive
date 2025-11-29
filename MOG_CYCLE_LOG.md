@@ -1,5 +1,39 @@
 
 ---
+**CYCLE:** 2593 (Gate 225: Restoration Mechanisms - Organizational Budget Restoration)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 77 - ORGANIZATIONAL INTELLIGENCE (FINAL)
+**LOG:**
+*   **Experiment:** `experiments/cycle2593_restoration_mechanisms_bcp.py`
+*   **Question:** How do organizations restore depleted budget (analogous to sleep)?
+*   **Tests:**
+    1. Vacation Effect (PTO vs no restoration)
+    2. Sabbatical Depth (frequent shallow vs rare deep)
+    3. Restructuring as Reset (post-crisis intervention)
+    4. Budget Injection (hiring timing)
+    5. Optimal Restoration Cadence (frequency × intensity)
+*   **Results:**
+    - Vacation Effect: Weekly rest 3.5x productivity (46.97 vs 13.31)
+    - Sabbatical Depth: Frequent shallow (24.89) > Rare deep (23.58)
+    - Post-Crisis: Sabbatical (10.30) > Restructuring (2.33) > None (0.75)
+    - Hiring: Early (25.63) > Crisis (16.05) > Late (14.88)
+    - Optimal Cadence: Every 3 periods, intensity 0.7 = 46.97
+*   **KEY FINDING: THE RESTORATION PORTFOLIO**
+    - Organizations need MULTIPLE restoration mechanisms
+    - Different timescales: daily breaks, weekly rest, monthly PTO, annual sabbatical
+    - Post-crisis recovery requires depth (sabbatical) over breadth (restructure)
+    - Hiring timing critical: early > crisis > late
+*   **BCP-RESTORATION MAPPING:**
+    - Sleep ↔ Weekends/Holidays
+    - Deep Sleep ↔ Sabbatical
+    - Recovery from illness ↔ Post-crisis rest
+    - Diet/nutrition ↔ Budget injection (hiring)
+    - Circadian rhythm ↔ Sprint cadence
+    - Surgery/therapy ↔ Restructuring
+*   **Status:** Gate 225 Complete. PHASE 77 COMPLETE.
+*   **Functional Name:** The Restoration Portfolio (Multiple mechanisms at different timescales)
+
+---
 **CYCLE:** 2590 (Gate 223: Hierarchical BCP - Lambda Propagation)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 77 - ORGANIZATIONAL INTELLIGENCE
