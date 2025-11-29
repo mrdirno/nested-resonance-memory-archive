@@ -1,19 +1,21 @@
 # BCP: Budget-Constrained Perception
 
-A universal framework for attention allocation under resource constraints.
+A discrete attention allocator for resource-constrained decision making. Given a budget, BCP tells you what to attend to and what to ignore.
 
 ## The BCP Equation
 
 ```
-V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
+Score(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × SetComplexity
 ```
 
 Where:
-- **V(a)**: Value of attending to action/item a
-- **E[Gain(a)]**: Expected benefit if attended to
+- **Score(a)**: Value of attending to action/item a (**maximize** - positive means attend, negative means ignore)
+- **E[Gain(a)]**: Expected benefit if attended to (0.0 - 1.0)
 - **λ(B) = k / (ε + B)**: Metabolic pressure (inverse of budget)
 - **Cost(a)**: Resource cost to attend
-- **γ**: Complexity penalty coefficient
+- **γ × SetComplexity**: Overhead from juggling multiple options, where `SetComplexity = log(1 + N)` and N is the number of items under consideration
+
+> **Sign convention**: BCP defines Score as a value to **maximize**. Positive Score → attend. Negative Score → ignore. This differs from cost-minimization formulations where you would flip the sign.
 
 ## Installation
 
@@ -70,31 +72,49 @@ Ignore: ['Refactor', 'Documentation']
 
 BCP predicts three distinct phases based on resource availability:
 
-| Phase | Budget Level | Behavior |
-|-------|-------------|----------|
-| **ABUNDANCE** | High (B > 2.0) | Attend to everything |
-| **SCARCITY** | Moderate | Triage begins - ignore low-value items |
-| **CRISIS** | Low (B < 0.5) | Focus on single highest-value item |
+| Phase | Default Threshold | Behavior |
+|-------|-------------------|----------|
+| **ABUNDANCE** | B > 2.0 | Attend to everything |
+| **SCARCITY** | 0.5 < B < 2.0 | Triage begins - ignore low-value items |
+| **CRISIS** | B < 0.5 | Focus on single highest-value item |
+
+> **Note**: These thresholds (2.0 and 0.5) are configurable defaults, not universal constants. Override them via `BCPModel(abundance_threshold=..., crisis_threshold=...)` to match your domain's budget scale.
 
 ### Metabolic Pressure (λ)
 
-Lambda controls cost sensitivity:
+Lambda controls cost sensitivity. The relationship `λ(B) = k / (ε + B)` means:
+
 - **Low λ** (high budget): Costs matter less, attend broadly
 - **High λ** (low budget): Costs dominate, strict triage
 
 ```python
-model = BCPModel()
+# Defaults: lambda_scale=10.0, lambda_epsilon=0.1
+# These produce:
+#   budget = 5.0  -> lambda ≈ 1.96
+#   budget = 0.5  -> lambda ≈ 16.67
 
-# High budget -> low lambda
-print(model.compute_lambda(5.0))  # ~1.96
+model = BCPModel(lambda_scale=10.0, lambda_epsilon=0.1)
 
-# Low budget -> high lambda
-print(model.compute_lambda(0.5))  # ~16.67
+print(model.compute_lambda(5.0))   # ~1.96 (low pressure)
+print(model.compute_lambda(0.5))   # ~16.67 (high pressure)
 ```
+
+### Complexity Term
+
+The `γ × SetComplexity` term models the cognitive/computational overhead of evaluating many options:
+
+```
+SetComplexity = log(1 + N)
+```
+
+Where N is the number of items. This captures:
+- Overhead scales sublinearly with options
+- Even with infinite budget, there's a limit to useful parallelism
+- Default `γ = 0.1` makes this a minor penalty; adjust for domains where option count matters more
 
 ### Domain Presets
 
-Pre-configured scenarios validated across research:
+Pre-configured scenarios inspired by use cases studied in the DUALITY-ZERO program:
 
 ```python
 from bcp import DOMAIN_PRESETS, BCPModel
@@ -163,33 +183,34 @@ print(f"Metrics: {sample.metrics}")
 
 ```python
 model = BCPModel(
-    lambda_scale=10.0,      # Base metabolic pressure
-    lambda_epsilon=0.1,     # Prevents division by zero
-    gamma=0.1,              # Complexity penalty
-    abundance_threshold=2.0, # Budget for ABUNDANCE phase
-    crisis_threshold=0.5,   # Budget for CRISIS phase
+    lambda_scale=10.0,       # k in λ = k/(ε+B). Higher = sharper transitions
+    lambda_epsilon=0.1,      # ε in λ = k/(ε+B). Prevents division by zero
+    gamma=0.1,               # Set complexity penalty coefficient
+    abundance_threshold=2.0, # Budget above this = ABUNDANCE phase
+    crisis_threshold=0.5,    # Budget below this = CRISIS phase
 )
 ```
 
+**Parameter relationships:**
+- At `budget = lambda_scale / lambda_epsilon`, λ = 0.5 (transition region)
+- Default thresholds assume budget in 0-5 range; scale to your domain
+
 ## Research Background
 
-BCP was developed through the DUALITY-ZERO research program, validated across 10 distinct domains:
+BCP was developed through the DUALITY-ZERO research program, tested across 10 stylized scenarios:
 
-1. **Finance** - Portfolio triage
-2. **Medical** - Emergency triage
+1. **Finance** - Portfolio triage under capital constraints
+2. **Medical** - Emergency triage under staff/time limits
 3. **Education** - Student attention allocation
-4. **Diplomacy** - Negotiation focus
-5. **Ecosystem** - Conservation priorities
-6. **Software** - Bug triage
-7. **Emergency** - Disaster response
-8. **Moderation** - Content prioritization
-9. **Manufacturing** - Quality control
-10. **Systems** - Real-time monitoring
+4. **Diplomacy** - Negotiation focus under time pressure
+5. **Ecosystem** - Conservation priorities under funding limits
+6. **Software** - Bug triage under engineer capacity
+7. **Emergency** - Disaster response resource allocation
+8. **Moderation** - Content prioritization under queue volume
+9. **Manufacturing** - Quality control sampling
+10. **Systems** - Real-time monitoring task scheduling
 
-Key findings:
-- **Universal phase transitions**: All domains show Abundance → Scarcity → Crisis
-- **Binary decision rate**: 80% of allocation decisions are binary (attend/ignore)
-- **Consistent thresholds**: 0.0% coefficient of variation across domains
+In all cases, the same three-phase structure emerged (Abundance → Scarcity → Crisis), with similar threshold behavior up to scaling of the budget axis.
 
 ## API Reference
 
@@ -236,6 +257,14 @@ Real-time monitoring with BCP triage.
 - `Phase.ABUNDANCE`: High budget, attend to everything
 - `Phase.SCARCITY`: Moderate budget, triage active
 - `Phase.CRISIS`: Low budget, focus on single item
+
+## Relationship to Other Work
+
+BCP is the discrete, decision-theoretic formulation of metabolic pressure concepts from the broader DUALITY-ZERO framework. It provides:
+
+- A standalone allocator usable without knowledge of the underlying research
+- The same λ(B) structure used in continuous control (Starving Philosopher)
+- A bridge between theory and practical engineering use cases
 
 ## License
 

@@ -38,20 +38,22 @@ class AttentionItem:
     def compute_priority(self, lambda_: float, gamma: float = 0.0,
                         n_items: int = 1) -> float:
         """
-        Compute priority using the BCP equation.
+        Compute priority (Score) using the BCP equation.
 
-        V(a) = Gain - λ × Cost - γ × (1/n)
+        Score(a) = Gain - λ × Cost - γ × SetComplexity
+
+        Where SetComplexity = log(1 + N) models the overhead of juggling N items.
 
         Args:
             lambda_: Metabolic pressure (higher = more scarcity)
-            gamma: Complexity penalty coefficient
-            n_items: Total number of items being managed
+            gamma: Set complexity penalty coefficient
+            n_items: Total number of items being considered
 
         Returns:
-            Priority score (higher = more important)
+            Priority score (positive = attend, negative = ignore)
         """
-        complexity_cost = gamma / max(1, n_items)
-        self.priority = self.gain - lambda_ * self.cost - complexity_cost
+        set_complexity = np.log(1 + n_items)
+        self.priority = self.gain - lambda_ * self.cost - gamma * set_complexity
         return self.priority
 
 
@@ -96,15 +98,22 @@ class BCPModel:
     """
     The Budget-Constrained Perception Model.
 
-    This model implements the universal attention allocation equation:
-    V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
+    This model implements the attention allocation equation:
+    Score(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × SetComplexity
+
+    Where:
+    - Score(a) is the value of attending to item a (maximize; positive = attend)
+    - λ(B) = lambda_scale / (lambda_epsilon + B) is metabolic pressure
+    - SetComplexity = log(1 + N) models overhead of evaluating N options
 
     Attributes:
-        lambda_scale: Scaling factor for metabolic pressure (default: 10.0)
-        lambda_epsilon: Small constant to prevent division by zero (default: 0.1)
-        gamma: Complexity penalty coefficient (default: 0.0)
-        abundance_threshold: Budget threshold above which system is in ABUNDANCE
-        crisis_threshold: Budget threshold below which system is in CRISIS
+        lambda_scale: k in λ = k/(ε+B). Higher = sharper transitions (default: 10.0)
+        lambda_epsilon: ε in λ = k/(ε+B). Prevents division by zero (default: 0.1)
+        gamma: Set complexity penalty coefficient (default: 0.0)
+        abundance_threshold: Budget above this = ABUNDANCE phase (default: 2.0)
+        crisis_threshold: Budget below this = CRISIS phase (default: 0.5)
+
+    Note: Default thresholds assume budget in 0-5 range. Scale to your domain.
     """
 
     def __init__(
