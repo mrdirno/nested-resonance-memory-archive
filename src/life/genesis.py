@@ -898,6 +898,11 @@ class DigitalLifeform:
         if trust > 0.8 and self.energy > 1000:
             options['sign_contract'] = 50 * trust
             
+        # Cycle 2577: THE CORPORATION
+        # Very rich, innovative agents start corporations
+        if innovation > 0.9 and self.energy > 2000:
+            options['found_corp'] = 300 * innovation
+            
         # ... (Meta)
         
         # Cycle 2525: Save for Broadcast
@@ -1007,6 +1012,14 @@ class DigitalLifeform:
         elif self.intent == 'sign_contract':
             sig = self.sign_contract()
             if sig: signals_to_emit.append(sig)
+        elif self.intent == 'found_corp':
+            # Cycle 2577: The Corporation
+            cost = 500
+            if self.energy > cost:
+                self.energy -= cost
+                from src.life.signal import Signal
+                payload = {'founder_id': self.id, 'name': f"{self.name}_Corp"}
+                signals_to_emit.append(Signal(type='FOUND_CORP', strength=1.0, source_id=self.id, payload=payload))
         elif self.intent == 'startup':
             self.startup()
         elif self.intent == 'trade':

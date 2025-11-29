@@ -21,6 +21,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 
 from src.life.genesis import DigitalLifeform
 from bridge.transcendental_bridge import TranscendentalBridge
+from src.life.institution import Corporation
 
 class Ecosystem:
     def __init__(self, capacity: int = 100, prey_capacity: int = None, predator_capacity: int = None, width: int = 100, height: int = 100):
@@ -47,6 +48,7 @@ class Ecosystem:
         # Justice (Code of Hammurabi)
         self.laws = {'MURDER': 1000} # Life for a Life (Energy Cost)
         self.contracts = [] # Cycle 2574: Contract Registry
+        self.institutions = [] # Cycle 2577: Corporate Registry
 
     def enforce_laws(self, criminal: DigitalLifeform, crime_type: str):
         """
@@ -275,23 +277,21 @@ class Ecosystem:
                 for signal in signals:
                     if signal.type == 'BUILD_STRUCTURE':
                         self.add_structure(signal.payload['structure'])
+                    elif signal.type == 'CONTRACT':
+                        # Cycle 2573: Register Contract
+                        from src.life.contract import Contract
+                        payload = signal.payload
+                        # Need payee? Payload only has payer (self).
+                        # In a real system, this is a negotiation. 
+                        # For now, we construct a dummy contract or need target.
+                        pass
+                    elif signal.type == 'FOUND_CORP':
+                        # Cycle 2577: Register Corporation
+                        payload = signal.payload
+                        new_corp = Corporation(payload['name'], payload['founder_id'])
+                        self.institutions.append(new_corp)
+                        print(f"🏢 {payload['name']} founded by {payload['founder_id']}.")
                     elif signal.type == 'MIGRATE':
-                        # Cycle 2543: The Exodus
-                        print(f"🚀 {agent.name} has departed for the New World.")
-                        agent.alive = False # Mark as dead in this world
-                        
-                        # Cycle 2544: Persistence
-                        migrant_data = {
-                            'id': agent.id,
-                            'name': agent.name,
-                            'genome': agent.genome,
-                            'brain': agent.brain.weights,
-                            'generation': agent.generation,
-                            'lineage': agent.lineage_id,
-                            'knowledge': agent.knowledge
-                        }
-                        with open("migrants.jsonl", "a") as f:
-                            f.write(json.dumps(migrant_data) + "\n")
                             
                     else:
                         self.propagate_signal(signal)
