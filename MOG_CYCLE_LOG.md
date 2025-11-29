@@ -1,5 +1,25 @@
 
 ---
+**CYCLE:** 2573 (Gate 200: The Synthesis)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 72 INTEGRATION - UNIFIED THEORY OF BCP
+**LOG:**
+*   **Experiment:** Executed `experiments/cycle2573_the_synthesis.py`.
+*   **Scenario:** Integration of Gates 195-199 into unified Budget-Constrained Perception theory.
+*   **Universal Equation:** V(s) = E_pred(s) + λ(budget) × E_comp(s)
+*   **Cross-Domain Results:**
+    - Domains Tested: 5
+    - Binary Decision Rate: 80%
+    - Mean Ignored Under Scarcity: 62%
+    - Performance Degradation: 45%
+    - Critical Switch Point: λ* = 0.44
+*   **Meta-Pattern:** SELECTIVE IGNORANCE - systems make BINARY (track/ignore) decisions under scarcity, not gradual degradation.
+*   **Status:** Phase 72 Complete.
+*   **Functional Name:** Budget-Constrained Perception (BCP).
+*   **Figure:** `data/figures/cycle2573_the_synthesis.png`
+*   **Conclusion:** Ignorance is not failure—it's optimization.
+
+---
 **CYCLE:** 2572 (Gate 199: The Diplomat)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** ATTENTION ALLOCATION IN NEGOTIATIONS
