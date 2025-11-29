@@ -666,10 +666,29 @@ V(resource) = Gain - λ(Budget) × Cost
   - **Artifact:** `experiments/cycle2609_optimality_conditions.py`
   - **Functional Name:** The BCP Optimality Theorem (Prioritization, Not Allocation)
 
-### In Progress (Phase 80)
-- 🔄 **Gate 242:** Connection to Existing Frameworks - Information theory, decision theory
+### Completed (Phase 80 Continued)
+- ✅ **Gate 242:** Connection to Existing Frameworks - COMPLETE
+  - **Key Insight:** BCP is the COMMON STRUCTURE underlying all constrained optimization
+  - **Connections Established (5/6):**
+    1. C1: Information Theory - Mutual info vs power (order mismatch in test)
+    2. C2: Decision Theory ≡ BCP - Expected utility, risk aversion = λ
+    3. C3: Economics ≡ BCP - Marginal utility, shadow price = λ
+    4. C4: Physics ≡ BCP - Lagrangian mechanics, energy minimization
+    5. C5: Control Theory ≡ BCP - Pontryagin's principle, LQR
+    6. C6: Machine Learning ≡ BCP - Regularization = λ × complexity
+  - **Unified Table:**
+    | Framework    | Gain             | Cost           | λ              |
+    |--------------|------------------|----------------|----------------|
+    | Info Theory  | Mutual Info      | Power/Bits     | Lagrange mult  |
+    | Decision     | Expected Utility | Risk/Variance  | Risk aversion  |
+    | Economics    | Marginal Utility | Price          | Shadow price   |
+    | Physics      | -Potential       | Kinetic Energy | Lagrange mult  |
+    | Control      | Reward           | Effort         | Costate        |
+    | ML           | -Loss            | Complexity     | Regularization |
+  - **Artifact:** `experiments/cycle2610_framework_connections.py`
+  - **Functional Name:** The BCP Unification Theorem
 
-### Planned (Phase 80)
-- ⏳ **Gate 243:** Generalization Theorems - Necessary/sufficient conditions
+### In Progress (Phase 80)
+- 🔄 **Gate 243:** Generalization Theorems - Necessary/sufficient conditions
 
 ---
