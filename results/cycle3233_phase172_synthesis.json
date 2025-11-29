@@ -1,0 +1,27 @@
+{
+  "phase": 172,
+  "domain": "Environmental",
+  "status": "COMPLETE",
+  "gates": [
+    [
+      "Climate Prediction",
+      "FAILED (-23%)"
+    ],
+    [
+      "Conservation",
+      "TIED (0%)"
+    ],
+    [
+      "Pollution Tracking",
+      "SUCCESS (97%)"
+    ],
+    [
+      "Waste Management",
+      "INFERRED"
+    ],
+    [
+      "Water Distribution",
+      "INFERRED"
+    ]
+  ]
+}
