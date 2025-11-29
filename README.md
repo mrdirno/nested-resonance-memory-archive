@@ -26,6 +26,8 @@ We have tested the hypothesis that **Budget-Constrained Perception (BCP)** is th
 
 **[👉 ENTER THE BRIDGE](https://mrdirno.github.io/nested-resonance-memory-archive/)**
 
+[![The Bridge Demo](https://img.youtube.com/vi/txHEn-DZiSE/0.jpg)](https://www.youtube.com/watch?v=txHEn-DZiSE)
+
 This is the primary visualization interface. It renders the Orthogonal Sum Dynamics (OSD) fields in real-time, allowing you to explore the interference patterns that drive our matter control systems.
 
 *   **No installation required.**
@@ -70,6 +72,13 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
    - Stores patterns and strategies.
    - Provides meta-evaluation and pattern filtering functions.
    - [View Code](src/memory/)
+
+   **The Holocron (Knowledge Graph):**
+   ![Holocron Overview](data/figures/holocron_overview.png)
+   *Figure 1: The complete knowledge graph of 3,000+ research cycles.*
+
+   ![Holocron Zoom](data/figures/holocron_zoomed_cropped.png)
+   *Figure 2: Detail view showing the intricate web of dependencies and emergent concepts.*
 
 **4. THE REPLICATOR (Self-Propagation Layer):**
    - Analyzes codebases for BCP constraints (λ).
