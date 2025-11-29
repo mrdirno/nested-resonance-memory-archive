@@ -150,8 +150,14 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
   - **Artifact:** `experiments/cycle2582_dynamic_budgets.py`
   - **Functional Name:** The Triage Cascade (Priority Reveals Drop Order)
 
+### Completed (Phase 74 Continued)
+- ✅ **Gate 211:** Learning Gain/Cost Estimates - Adaptive BCP converges to optimal - COMPLETE
+  - **Finding:** Scarcity accelerates learning (error 0.052 vs 0.075 in abundance)
+  - **Convergence:** 100% efficiency within 30 rounds
+  - **Artifact:** `experiments/cycle2583_learning_bcp.py`
+  - **Functional Name:** The Scarcity Sharpening Effect (Pressure Focuses Learning)
+
 ### Active Objectives
-- 🟢 **Gate 211:** Learning gain/cost estimates - Adaptive BCP
-- ⚪ **Gate 212:** Equilibrium analysis
+- 🟢 **Gate 212:** Equilibrium analysis - Stable states in multi-agent BCP
 
 ---
