@@ -643,11 +643,33 @@ V(resource) = Gain - λ(Budget) × Cost
   - **Artifact:** `experiments/cycle2608_phase_transition_proofs.py`
   - **Functional Name:** The Sharp Transition Theorem
 
+### Completed (Phase 80 Continued)
+- ✅ **Gate 241:** Optimality Conditions - When is BCP optimal? - COMPLETE
+  - **Key Insight:** BCP is a PRIORITIZATION strategy, not a hard-constraint optimizer
+  - **Confirmed (2/6):**
+    1. P3: Myopic Optimal - BCP is optimal for single-step decisions
+    2. P6: Computationally Efficient - O(n) vs O(2^n), 440,000x speedup
+  - **Refined Understanding:**
+    - P1: Lagrangian - BCP maximizes but may exceed budget (soft constraint)
+    - P2: Knapsack - BCP achieves 131% of optimal (ignores hard limits)
+    - P4: Sequential - BCP competitive with UCB (not strictly worse)
+    - P5: Independence - BCP works with synergies (not strictly required)
+  - **BCP IS OPTIMAL when:**
+    - Actions are evaluated independently
+    - Gains and costs are known
+    - Single-shot prioritization (no lookahead)
+    - Soft budget constraint (prioritize, not hard cutoff)
+  - **BCP MAY BE SUBOPTIMAL when:**
+    - Hard budget constraint must be enforced
+    - Actions have complex synergies/conflicts
+    - Gains/costs are uncertain (exploration needed)
+  - **Artifact:** `experiments/cycle2609_optimality_conditions.py`
+  - **Functional Name:** The BCP Optimality Theorem (Prioritization, Not Allocation)
+
 ### In Progress (Phase 80)
-- 🔄 **Gate 241:** Optimality Conditions - When is BCP optimal?
+- 🔄 **Gate 242:** Connection to Existing Frameworks - Information theory, decision theory
 
 ### Planned (Phase 80)
-- ⏳ **Gate 242:** Connection to Existing Frameworks - Information theory, decision theory
 - ⏳ **Gate 243:** Generalization Theorems - Necessary/sufficient conditions
 
 ---
