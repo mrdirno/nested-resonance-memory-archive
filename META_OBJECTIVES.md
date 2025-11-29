@@ -880,8 +880,20 @@ Every biological system exhibits BCP dynamics:
   - **Artifact:** `experiments/cycle2619_bcp_controller_design.py`
   - **Functional Name:** The Adaptive Controller
 
+### Completed (Phase 82 Continued)
+- ✅ **Gate 252:** BCP Scheduler - COMPLETE (3/5)
+  - **Tests Validated:**
+    1. Priority Scheduling: PARTIAL (correct ordering, needs refinement)
+    2. Deadline Scheduling (EDF): VERIFIED - BCP matches EDF perfectly
+    3. Preemption Triage: VERIFIED - Exponential preemption preference with λ
+    4. Batch vs Interactive: VERIFIED - Interactive preferred, gap widens with λ
+    5. Fair Scheduling: PARTIAL (needs multi-queue refinement)
+  - **Key Insight:** λ(B) IS adaptive admission control
+  - **Mappings:** Budget=CPU capacity, λ=admission strictness, V>0=schedule task
+  - **Artifact:** `experiments/cycle2620_bcp_scheduler.py`
+  - **Functional Name:** The Scheduler Budget
+
 ### Planned (Phase 82)
-- ⏳ **Gate 252:** BCP Scheduler - Task prioritization
 - ⏳ **Gate 253:** BCP Resource Manager - Cloud/cluster allocation
 - ⏳ **Gate 254:** BCP Load Balancer - Network traffic
 - ⏳ **Gate 255:** BCP Optimizer - General-purpose optimization

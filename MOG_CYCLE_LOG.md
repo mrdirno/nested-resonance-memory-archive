@@ -1,5 +1,32 @@
 
 ---
+**CYCLE:** 2620 (Gate 252: BCP Scheduler)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 82 - ENGINEERING APPLICATIONS
+**LOG:**
+*   **Experiment:** `experiments/cycle2620_bcp_scheduler.py`
+*   **Question:** Can BCP provide adaptive task scheduling?
+*   **Tests (3/5 VERIFIED):**
+    1. Priority Scheduling: PARTIAL (BCP orders correctly but needs fine-tuning)
+    2. Deadline Scheduling (EDF): VERIFIED - BCP matches EDF perfectly
+    3. Preemption Triage: VERIFIED - Exponentially prefer preemption as λ increases
+    4. Batch vs Interactive: VERIFIED - Interactive preferred, gap widens with λ
+    5. Fair Scheduling: PARTIAL (needs multi-queue refinement)
+*   **KEY INSIGHT:** λ(B) IS adaptive admission control!
+    - Low λ (high budget): Accept more tasks
+    - High λ (low budget): Strict admission, aggressive preemption
+    - BCP scheduler adapts scheduling policy to system load
+*   **Scheduling Mapping:**
+    | BCP | Scheduling |
+    |-----|------------|
+    | Budget B | CPU/Memory capacity |
+    | λ(B) | Admission strictness |
+    | V(task) > 0 | Task worth scheduling |
+    | V(preempt) | Should preempt current task |
+*   **Status:** Gate 252 Complete.
+*   **Functional Name:** The Scheduler Budget (Load-adaptive scheduling)
+
+---
 **CYCLE:** 2619 (Gate 251: BCP Controller Design)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 82 - ENGINEERING APPLICATIONS
