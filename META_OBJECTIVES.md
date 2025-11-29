@@ -143,9 +143,15 @@ V(a) = E[Gain(a)] - λ(B) × Cost(a) - γ × Complexity
   - **Artifact:** `experiments/cycle2581_multiagent_cooperation.py`
   - **Functional Name:** The Complementarity Principle (Pool Unlocks Potential)
 
+### Completed (Phase 74 Continued)
+- ✅ **Gate 210:** Dynamic Budget Functions - Triage cascades under time-varying budgets - COMPLETE
+  - **Finding:** Items drop in exact reverse priority order during budget decline
+  - **Recovery:** System recovers in 0.50 time units after shock
+  - **Artifact:** `experiments/cycle2582_dynamic_budgets.py`
+  - **Functional Name:** The Triage Cascade (Priority Reveals Drop Order)
+
 ### Active Objectives
-- 🟢 **Gate 210:** Dynamic budget functions - Time-varying resources
-- ⚪ **Gate 211:** Learning gain/cost estimates
+- 🟢 **Gate 211:** Learning gain/cost estimates - Adaptive BCP
 - ⚪ **Gate 212:** Equilibrium analysis
 
 ---
