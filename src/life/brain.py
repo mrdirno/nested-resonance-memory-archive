@@ -98,6 +98,30 @@ class Brain:
             for i in range(self.input_size):
                 delta = reward * self.last_hidden[j] * self.last_inputs[i] * learning_rate
                 self.w1[i][j] += delta
+
+    def teach(self, action_name):
+        """
+        Supervised Learning trigger.
+        Forces the brain to learn that `action_name` was the correct choice.
+        """
+        if action_name not in self.actions:
+            return
+            
+        target_idx = self.actions.index(action_name)
+        
+        # Create One-Hot Target (Soft)
+        # We want to encourage this action, so we pretend the output was 1.0 for this action
+        # and 0.0 for others, then reinforce.
+        
+        # Save original outputs to restore? No, we want to overwrite for the learning step.
+        # Ideally we calculate error (Target - Output), but tune_weights uses Hebbian (Output * Input).
+        # So setting Output = Target mimics "This is what should have fired".
+        
+        new_outputs = [0.0] * self.output_size
+        new_outputs[target_idx] = 1.0
+        
+        self.last_outputs = new_outputs
+        self.tune_weights(1.0) # Positive reinforcement of the target state
         
     def decide(self, state: dict) -> str:
         """

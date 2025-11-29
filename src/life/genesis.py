@@ -642,7 +642,7 @@ class DigitalLifeform:
             print(f"   > Self-Awareness Bonus: +{gain} Energy")
             
             # Cycle 2559: The Tuning
-            self.brain.tune_weights(1.0)
+            self.brain.teach('reflect')
             print(f"   > Neural Weights Tuned (Neuroplasticity)")
             
             return True
@@ -719,7 +719,7 @@ class DigitalLifeform:
             
         # Cycle 2558: REFLECTION
         if innovation > 0.8 and self.energy > 300:
-            options['reflect'] = 50 * innovation
+            options['reflect'] = 200 * innovation
             
         # ... (Meta)
         

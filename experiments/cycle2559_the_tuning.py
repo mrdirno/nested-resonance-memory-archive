@@ -25,17 +25,19 @@ def run_experiment():
     
     ecosystem = Ecosystem()
     
-    # 1. Philosopher (High Innovation)
+    # 1. Philosopher (High Innovation, Low Fertility)
     philosopher = DigitalLifeform(name="Philosopher")
-    while len(philosopher.genome) < 10: philosopher.genome.append(0.5)
-    philosopher.genome[9] = 0.95 
+    while len(philosopher.genome) < 11: philosopher.genome.append(0.5)
+    philosopher.genome[9] = 0.95 # High Innovation
+    philosopher.genome[1] = 0.01 # Low Fertility (Stay focused)
     philosopher.energy = 800
     ecosystem.add_agent(philosopher)
     
     # 2. Worker (Low Innovation)
     worker = DigitalLifeform(name="Worker")
-    while len(worker.genome) < 10: worker.genome.append(0.5)
+    while len(worker.genome) < 11: worker.genome.append(0.5)
     worker.genome[9] = 0.1
+    worker.genome[1] = 0.01
     worker.energy = 800
     ecosystem.add_agent(worker)
     
@@ -49,8 +51,9 @@ def run_experiment():
     print(f"Worker Weight Checksum (Start): {w_w_start:.4f}")
     
     # Run
-    for i in range(50):
+    for i in range(20):
         print(f"\n--- Tick {i+1} ---")
+        print(f"Status: {philosopher.name} (E={philosopher.energy:.1f}, Intent={philosopher.intent})")
         ecosystem.update()
         
     # Check Delta
