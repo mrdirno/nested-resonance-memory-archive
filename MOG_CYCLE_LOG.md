@@ -1,5 +1,30 @@
 
 ---
+**CYCLE:** 2627 (Gate 259: Curriculum Learning as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 83 - AI/ML APPLICATIONS
+**LOG:**
+*   **Experiment:** `experiments/cycle2627_curriculum_learning_bcp.py`
+*   **Question:** Does curriculum learning implement BCP?
+*   **Tests (5/5 VERIFIED, 20/20 predictions - PERFECT!):**
+    1. Easy-to-Hard: VERIFIED (4/4) - Budget growth → λ decay
+    2. Self-Paced: VERIFIED (4/4) - Adaptive sample weighting by λ
+    3. Competence-Based: VERIFIED (4/4) - ZPD emerges from BCP!
+    4. Anti-Curriculum: VERIFIED (4/4) - Works when budget is high
+    5. Multi-Task: VERIFIED (4/4) - Portfolio allocation across tasks
+*   **KEY INSIGHT:** ALL curriculum strategies implement BCP!
+    - V(task) = LearningPotential - λ × Difficulty
+    - Growing capability → decreasing λ → harder tasks
+    - ZPD (Zone of Proximal Development) = BCP optimum!
+*   **THE CURRICULUM BCP THEOREM:**
+    Every curriculum strategy is BCP with different λ schedules:
+    - Easy→Hard: λ decays as competence grows
+    - Self-paced: λ adapts to performance
+    - Anti-curriculum: λ ≈ 0 (pre-trained models)
+*   **Status:** Gate 259 Complete.
+*   **Functional Name:** The Curriculum Budget
+
+---
 **CYCLE:** 2626 (Gate 258: Reward Shaping as BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 83 - AI/ML APPLICATIONS

@@ -994,8 +994,20 @@ Every biological system exhibits BCP dynamics:
   - **Artifact:** `experiments/cycle2626_reward_shaping_bcp.py`
   - **Functional Name:** The Reward Budget
 
+### Completed (Phase 83 Continued)
+- ✅ **Gate 259:** Curriculum Learning as BCP - COMPLETE (5/5, 20/20 - PERFECT!)
+  - **Tests:**
+    1. Easy-to-Hard: VERIFIED - Budget growth → λ decay
+    2. Self-Paced: VERIFIED - Adaptive sample weighting by λ
+    3. Competence-Based: VERIFIED - ZPD emerges from BCP!
+    4. Anti-Curriculum: VERIFIED - Works when budget is high
+    5. Multi-Task: VERIFIED - Portfolio allocation
+  - **Key Insight:** ZPD (Zone of Proximal Development) = BCP optimum!
+  - **The Curriculum BCP Theorem:** V(task) = LearningPotential - λ × Difficulty
+  - **Artifact:** `experiments/cycle2627_curriculum_learning_bcp.py`
+  - **Functional Name:** The Curriculum Budget
+
 ### Planned (Phase 83)
-- ⏳ **Gate 259:** Curriculum Learning as BCP - Task selection
 - ⏳ **Gate 260:** Active Learning as BCP - Sample selection
 - ⏳ **Gate 261:** Neural Architecture as BCP - Width/depth tradeoffs
 
