@@ -1,5 +1,5 @@
 Assembler report for nrm_resonance
-Sat Nov 29 05:27:03 2025
+Sat Nov 29 10:43:08 2025
 Quartus Prime Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
 
 
@@ -39,7 +39,7 @@ on the Quartus Prime software download page.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Sat Nov 29 05:27:03 2025 ;
+; Assembler Status      ; Successful - Sat Nov 29 10:43:08 2025 ;
 ; Revision Name         ; nrm_resonance                         ;
 ; Top-level Entity Name ; nrm_system_wrapper                    ;
 ; Family                ; Cyclone V                             ;
@@ -78,8 +78,8 @@ on the Quartus Prime software download page.
 +----------------+----------------------------+
 ; Option         ; Setting                    ;
 +----------------+----------------------------+
-; JTAG usercode  ; 0x00D1929D                 ;
-; Checksum       ; 0x00D1929D                 ;
+; JTAG usercode  ; 0x00D160D0                 ;
+; Checksum       ; 0x00D160D0                 ;
 +----------------+----------------------------+
 
 
@@ -89,13 +89,13 @@ on the Quartus Prime software download page.
 Info: *******************************************************************
 Info: Running Quartus Prime Assembler
     Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
-    Info: Processing started: Sat Nov 29 05:26:56 2025
+    Info: Processing started: Sat Nov 29 10:43:01 2025
 Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off nrm_resonance -c nrm_resonance
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (115030): Assembler is generating device programming files
 Info: Quartus Prime Assembler was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 523 megabytes
-    Info: Processing ended: Sat Nov 29 05:27:03 2025
+    Info: Peak virtual memory: 516 megabytes
+    Info: Processing ended: Sat Nov 29 10:43:08 2025
     Info: Elapsed time: 00:00:07
     Info: Total CPU time (on all processors): 00:00:06
 

@@ -108,13 +108,13 @@ RESERVED_INPUT_WITH_WEAK_PULLUP : A27       :        :                   :      
 GND                          : AA1       : gnd    :                   :         :           :                
 GND                          : AA2       : gnd    :                   :         :           :                
 GND                          : AA3       : gnd    :                   :         :           :                
-RESERVED_INPUT_WITH_WEAK_PULLUP : AA4       :        :                   :         : 3A        :                
+fuzz_out[13]                 : AA4       : output : 3.3-V LVTTL       :         : 3A        : N              
 VCCIO3A                      : AA5       : power  :                   : 3.3V    : 3A        :                
 nCSO, DATA4                  : AA6       :        :                   :         : 3A        :                
 DCLK                         : AA8       :        :                   :         : 3A        :                
 GND                          : AA9       : gnd    :                   :         :           :                
 VCCPD3A                      : AA10      : power  :                   : 3.3V    : 3A        :                
-fuzz_out[30]                 : AA11      : output : 3.3-V LVTTL       :         : 3A        : N              
+fuzz_out[21]                 : AA11      : output : 3.3-V LVTTL       :         : 3A        : N              
 VCCIO3B                      : AA12      : power  :                   : 3.3V    : 3B        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AA13      :        :                   :         : 4A        :                
 VCCPD3B4A                    : AA14      : power  :                   : 3.3V    : 3B, 4A    :                
@@ -146,7 +146,7 @@ RESERVED_INPUT_WITH_WEAK_PULLUP : AB28      :        :                   :      
 GND                          : AC1       : gnd    :                   :         :           :                
 GND                          : AC2       : gnd    :                   :         :           :                
 GND                          : AC3       : gnd    :                   :         :           :                
-fuzz_out[9]                  : AC4       : output : 3.3-V LVTTL       :         : 3A        : N              
+RESERVED_INPUT_WITH_WEAK_PULLUP : AC4       :        :                   :         : 3A        :                
 AS_DATA2, DATA2              : AC5       :        :                   :         : 3A        :                
 AS_DATA1, DATA1              : AC6       :        :                   :         : 3A        :                
 altera_reserved_tms          : AC7       : input  : 3.3-V LVTTL       :         : 3A        : N              
@@ -162,13 +162,13 @@ RESERVED_INPUT_WITH_WEAK_PULLUP : AC28      :        :                   :      
 DNU                          : AD1       :        :                   :         :           :                
 DNU                          : AD2       :        :                   :         :           :                
 GND                          : AD3       : gnd    :                   :         :           :                
-fuzz_out[14]                 : AD4       : output : 3.3-V LVTTL       :         : 3A        : N              
-fuzz_out[25]                 : AD5       : output : 3.3-V LVTTL       :         : 3A        : N              
+fuzz_out[18]                 : AD4       : output : 3.3-V LVTTL       :         : 3A        : N              
+fuzz_out[16]                 : AD5       : output : 3.3-V LVTTL       :         : 3A        : N              
 GND                          : AD6       : gnd    :                   :         :           :                
 AS_DATA0, ASDO, DATA0        : AD7       :        :                   :         : 3A        :                
 GND                          : AD8       : gnd    :                   :         :           :                
 VCCPD3B4A                    : AD9       : power  :                   : 3.3V    : 3B, 4A    :                
-fuzz_out[11]                 : AD10      : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[19]                 : AD10      : output : 3.3-V LVTTL       :         : 3B        : N              
 fuzz_out[17]                 : AD11      : output : 3.3-V LVTTL       :         : 3B        : N              
 RESERVED_INPUT_WITH_WEAK_PULLUP : AD12      :        :                   :         : 3B        :                
 VCCPD3B4A                    : AD13      : power  :                   : 3.3V    : 3B, 4A    :                
@@ -190,14 +190,14 @@ RESERVED_INPUT_WITH_WEAK_PULLUP : AD28      :        :                   :      
 GND                          : AE1       : gnd    :                   :         :           :                
 GND                          : AE2       : gnd    :                   :         :           :                
 GND                          : AE3       : gnd    :                   :         :           :                
-fuzz_out[24]                 : AE4       : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[26]                 : AE4       : output : 3.3-V LVTTL       :         : 3B        : N              
 VREFB3AN0                    : AE5       : power  :                   :         : 3A        :                
-fuzz_out[23]                 : AE6       : output : 3.3-V LVTTL       :         : 3A        : N              
-fuzz_out[21]                 : AE7       : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[9]                  : AE6       : output : 3.3-V LVTTL       :         : 3A        : N              
+fuzz_out[22]                 : AE7       : output : 3.3-V LVTTL       :         : 3B        : N              
 fuzz_out[31]                 : AE8       : output : 3.3-V LVTTL       :         : 3B        : N              
-fuzz_out[29]                 : AE9       : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[24]                 : AE9       : output : 3.3-V LVTTL       :         : 3B        : N              
 VCCIO3B                      : AE10      : power  :                   : 3.3V    : 3B        :                
-fuzz_out[15]                 : AE11      : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[14]                 : AE11      : output : 3.3-V LVTTL       :         : 3B        : N              
 RESERVED_INPUT_WITH_WEAK_PULLUP : AE12      :        :                   :         : 3B        :                
 VCCIO3B                      : AE13      : power  :                   : 3.3V    : 3B        :                
 DNU                          : AE14      :        :                   :         :           :                
@@ -218,18 +218,18 @@ RESERVED_INPUT_WITH_WEAK_PULLUP : AE28      :        :                   :      
 GND                          : AF1       : gnd    :                   :         :           :                
 GND                          : AF2       : gnd    :                   :         :           :                
 GND                          : AF3       : gnd    :                   :         :           :                
-fuzz_out[22]                 : AF4       : output : 3.3-V LVTTL       :         : 3B        : N              
-fuzz_out[28]                 : AF5       : output : 3.3-V LVTTL       :         : 3B        : N              
-RESERVED_INPUT_WITH_WEAK_PULLUP : AF6       :        :                   :         : 3B        :                
+fuzz_out[28]                 : AF4       : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[25]                 : AF5       : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[15]                 : AF6       : output : 3.3-V LVTTL       :         : 3B        : N              
 RESERVED_INPUT_WITH_WEAK_PULLUP : AF7       :        :                   :         : 3B        :                
-fuzz_out[27]                 : AF8       : output : 3.3-V LVTTL       :         : 3B        : N              
-fuzz_out[10]                 : AF9       : output : 3.3-V LVTTL       :         : 3B        : N              
-RESERVED_INPUT_WITH_WEAK_PULLUP : AF10      :        :                   :         : 3B        :                
-fuzz_out[19]                 : AF11      : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[11]                 : AF8       : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[20]                 : AF9       : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[29]                 : AF10      : output : 3.3-V LVTTL       :         : 3B        : N              
+RESERVED_INPUT_WITH_WEAK_PULLUP : AF11      :        :                   :         : 3B        :                
 VREFB3BN0                    : AF12      : power  :                   :         : 3B        :                
 fuzz_out[1]                  : AF13      : output : 3.3-V LVTTL       :         : 4A        : Y              
 VCCIO4A                      : AF14      : power  :                   : 3.3V    : 4A        :                
-heartbeat                    : AF15      : output : 3.3-V LVTTL       :         : 4A        : N              
+RESERVED_INPUT_WITH_WEAK_PULLUP : AF15      :        :                   :         : 4A        :                
 VREFB4AN0                    : AF16      : power  :                   :         : 4A        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AF17      :        :                   :         : 4A        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AF18      :        :                   :         : 4A        :                
@@ -253,12 +253,12 @@ GND                          : AG7       : gnd    :                   :         
 fuzz_out[6]                  : AG8       : output : 3.3-V LVTTL       :         : 4A        : Y              
 fuzz_out[3]                  : AG9       : output : 3.3-V LVTTL       :         : 4A        : Y              
 fuzz_out[2]                  : AG10      : output : 3.3-V LVTTL       :         : 4A        : Y              
-RESERVED_INPUT_WITH_WEAK_PULLUP : AG11      :        :                   :         : 4A        :                
+heartbeat                    : AG11      : output : 3.3-V LVTTL       :         : 4A        : N              
 VCCIO4A                      : AG12      : power  :                   : 3.3V    : 4A        :                
 fuzz_out[0]                  : AG13      : output : 3.3-V LVTTL       :         : 4A        : Y              
 RESERVED_INPUT_WITH_WEAK_PULLUP : AG14      :        :                   :         : 4A        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AG15      :        :                   :         : 4A        :                
-RESERVED_INPUT_WITH_WEAK_PULLUP : AG16      :        :                   :         : 4A        :                
+resonance_detected           : AG16      : output : 3.3-V LVTTL       :         : 4A        : N              
 GND                          : AG17      : gnd    :                   :         :           :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AG18      :        :                   :         : 4A        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AG19      :        :                   :         : 4A        :                
@@ -272,11 +272,11 @@ RESERVED_INPUT_WITH_WEAK_PULLUP : AG26      :        :                   :      
 GND                          : AG27      : gnd    :                   :         :           :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AG28      :        :                   :         : 4A        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AH2       :        :                   :         : 3B        :                
-fuzz_out[8]                  : AH3       : output : 3.3-V LVTTL       :         : 3B        : N              
+RESERVED_INPUT_WITH_WEAK_PULLUP : AH3       :        :                   :         : 3B        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AH4       :        :                   :         : 3B        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AH5       :        :                   :         : 3B        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AH6       :        :                   :         : 3B        :                
-resonance_detected           : AH7       : output : 3.3-V LVTTL       :         : 4A        : N              
+RESERVED_INPUT_WITH_WEAK_PULLUP : AH7       :        :                   :         : 4A        :                
 fuzz_out[7]                  : AH8       : output : 3.3-V LVTTL       :         : 4A        : Y              
 RESERVED_INPUT_WITH_WEAK_PULLUP : AH9       :        :                   :         : 4A        :                
 GND                          : AH10      : gnd    :                   :         :           :                
@@ -639,8 +639,8 @@ VCC                          : T5        : power  :                   : 1.1V    
 RESERVED_INPUT_WITH_WEAK_PULLUP : T8        :        :                   :         : 3A        :                
 VCC                          : T9        : power  :                   : 1.1V    :           :                
 GND                          : T10       : gnd    :                   :         :           :                
-fuzz_out[20]                 : T11       : output : 3.3-V LVTTL       :         : 3B        : N              
-fuzz_out[12]                 : T12       : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[30]                 : T11       : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[27]                 : T12       : output : 3.3-V LVTTL       :         : 3B        : N              
 RESERVED_INPUT_WITH_WEAK_PULLUP : T13       :        :                   :         : 3B        :                
 GND                          : T14       : gnd    :                   :         :           :                
 VCC                          : T15       : power  :                   : 1.1V    :           :                
@@ -662,8 +662,8 @@ VCCA_FPLL                    : U4        : power  :                   : 2.5V    
 GND                          : U5        : gnd    :                   :         :           :                
 DNU                          : U8        :        :                   :         :           :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : U9        :        :                   :         : 3A        :                
-fuzz_out[16]                 : U10       : output : 3.3-V LVTTL       :         : 3A        : N              
-fuzz_out[13]                 : U11       : output : 3.3-V LVTTL       :         : 3B        : N              
+RESERVED_INPUT_WITH_WEAK_PULLUP : U10       :        :                   :         : 3A        :                
+fuzz_out[10]                 : U11       : output : 3.3-V LVTTL       :         : 3B        : N              
 GND                          : U12       : gnd    :                   :         :           :                
 fuzz_out[5]                  : U13       : output : 3.3-V LVTTL       :         : 4A        : Y              
 fuzz_out[4]                  : U14       : output : 3.3-V LVTTL       :         : 4A        : Y              
@@ -686,7 +686,7 @@ GND                          : V4        : gnd    :                   :         
 GND                          : V5        : gnd    :                   :         :           :                
 GND                          : V8        : gnd    :                   :         :           :                
 GND                          : V9        : gnd    :                   :         :           :                
-fuzz_out[18]                 : V10       : output : 3.3-V LVTTL       :         : 3A        : N              
+fuzz_out[23]                 : V10       : output : 3.3-V LVTTL       :         : 3A        : N              
 clk                          : V11       : input  : 3.3-V LVTTL       :         : 3B        : Y              
 RESERVED_INPUT_WITH_WEAK_PULLUP : V12       :        :                   :         : 3B        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : V13       :        :                   :         : 4A        :                
@@ -711,8 +711,8 @@ VCCA_FPLL                    : W5        : power  :                   : 2.5V    
 RESERVED_INPUT_WITH_WEAK_PULLUP : W8        :        :                   :         : 3A        :                
 VCCIO3A                      : W9        : power  :                   : 3.3V    : 3A        :                
 altera_reserved_tdi          : W10       : input  : 3.3-V LVTTL       :         : 3A        : N              
-RESERVED_INPUT_WITH_WEAK_PULLUP : W11       :        :                   :         : 3B        :                
-RESERVED_INPUT_WITH_WEAK_PULLUP : W12       :        :                   :         : 3B        :                
+fuzz_out[12]                 : W11       : output : 3.3-V LVTTL       :         : 3B        : N              
+fuzz_out[8]                  : W12       : output : 3.3-V LVTTL       :         : 3B        : N              
 VCCIO4A                      : W13       : power  :                   : 3.3V    : 4A        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : W14       :        :                   :         : 4A        :                
 led[0]                       : W15       : output : 3.3-V LVTTL       :         : 5A        : Y              
@@ -735,7 +735,7 @@ RESERVED_INPUT_WITH_WEAK_PULLUP : Y5        :        :                   :      
 RESERVED_INPUT_WITH_WEAK_PULLUP : Y8        :        :                   :         : 3A        :                
 altera_reserved_tdo          : Y9        : output : 3.3-V LVTTL       :         : 3A        : N              
 VCCPGM                       : Y10       : power  :                   : 1.8V/2.5V/3.0V/3.3V :           :                
-fuzz_out[26]                 : Y11       : output : 3.3-V LVTTL       :         : 3A        : N              
+RESERVED_INPUT_WITH_WEAK_PULLUP : Y11       :        :                   :         : 3A        :                
 GND                          : Y12       : gnd    :                   :         :           :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : Y13       :        :                   :         : 4A        :                
 GND                          : Y14       : gnd    :                   :         :           :                

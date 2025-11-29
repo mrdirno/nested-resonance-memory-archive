@@ -1,6 +1,6 @@
 <sld_project_info>
   <sld_infos>
-    <sld_info hpath="jtag_system:u0" name="u0">
+    <sld_info hpath="jtag_system:jtag_inst" name="jtag_inst">
       <assignment_values>
         <assignment_value text="QSYS_NAME jtag_system HAS_SOPCINFO 1 GENERATION_ID 1764422739"/>
       </assignment_values>

@@ -1,12 +1,12 @@
-Fitter Status : Successful - Sat Nov 29 05:26:54 2025
+Fitter Status : Successful - Sat Nov 29 10:43:00 2025
 Quartus Prime Version : 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
 Revision Name : nrm_resonance
 Top-level Entity Name : nrm_system_wrapper
 Family : Cyclone V
 Device : 5CSEBA6U23I7
 Timing Models : Final
-Logic utilization (in ALMs) : 751 / 41,910 ( 2 % )
-Total registers : 1319
+Logic utilization (in ALMs) : 753 / 41,910 ( 2 % )
+Total registers : 1329
 Total pins : 44 / 314 ( 14 % )
 Total virtual pins : 0
 Total block memory bits : 512 / 5,662,720 ( < 1 % )

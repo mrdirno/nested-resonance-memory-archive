@@ -1,51 +1,51 @@
 |nrm_system_wrapper
 clk => clk.IN2
 rst_n => rst_n.IN2
-led[0] <= nrm_resonance:u1.led
-led[1] <= nrm_resonance:u1.led
-led[2] <= nrm_resonance:u1.led
-led[3] <= nrm_resonance:u1.led
-led[4] <= nrm_resonance:u1.led
-led[5] <= nrm_resonance:u1.led
-led[6] <= nrm_resonance:u1.led
-led[7] <= nrm_resonance:u1.led
-resonance_detected <= nrm_resonance:u1.resonance_detected
-heartbeat <= nrm_resonance:u1.heartbeat
-fuzz_out[0] <= pio_export[0].DB_MAX_OUTPUT_PORT_TYPE
-fuzz_out[1] <= pio_export[1].DB_MAX_OUTPUT_PORT_TYPE
-fuzz_out[2] <= pio_export[2].DB_MAX_OUTPUT_PORT_TYPE
-fuzz_out[3] <= pio_export[3].DB_MAX_OUTPUT_PORT_TYPE
-fuzz_out[4] <= pio_export[4].DB_MAX_OUTPUT_PORT_TYPE
-fuzz_out[5] <= pio_export[5].DB_MAX_OUTPUT_PORT_TYPE
-fuzz_out[6] <= pio_export[6].DB_MAX_OUTPUT_PORT_TYPE
-fuzz_out[7] <= pio_export[7].DB_MAX_OUTPUT_PORT_TYPE
-fuzz_out[8] <= pio_export[8].DB_MAX_OUTPUT_PORT_TYPE
-fuzz_out[9] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[10] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[11] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[12] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[13] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[14] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[15] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[16] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[17] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[18] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[19] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[20] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[21] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[22] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[23] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[24] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[25] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[26] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[27] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[28] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[29] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[30] <= jtag_system:u0.injection_external_connection_export
-fuzz_out[31] <= jtag_system:u0.injection_external_connection_export
+led[0] <= nrm_resonance:nrm_inst.led
+led[1] <= nrm_resonance:nrm_inst.led
+led[2] <= nrm_resonance:nrm_inst.led
+led[3] <= nrm_resonance:nrm_inst.led
+led[4] <= nrm_resonance:nrm_inst.led
+led[5] <= nrm_resonance:nrm_inst.led
+led[6] <= nrm_resonance:nrm_inst.led
+led[7] <= nrm_resonance:nrm_inst.led
+resonance_detected <= nrm_resonance:nrm_inst.resonance_detected
+heartbeat <= nrm_resonance:nrm_inst.heartbeat
+fuzz_out[0] <= jtag_pio_export[0].DB_MAX_OUTPUT_PORT_TYPE
+fuzz_out[1] <= jtag_pio_export[1].DB_MAX_OUTPUT_PORT_TYPE
+fuzz_out[2] <= jtag_pio_export[2].DB_MAX_OUTPUT_PORT_TYPE
+fuzz_out[3] <= jtag_pio_export[3].DB_MAX_OUTPUT_PORT_TYPE
+fuzz_out[4] <= jtag_pio_export[4].DB_MAX_OUTPUT_PORT_TYPE
+fuzz_out[5] <= jtag_pio_export[5].DB_MAX_OUTPUT_PORT_TYPE
+fuzz_out[6] <= jtag_pio_export[6].DB_MAX_OUTPUT_PORT_TYPE
+fuzz_out[7] <= jtag_pio_export[7].DB_MAX_OUTPUT_PORT_TYPE
+fuzz_out[8] <= jtag_pio_export[8].DB_MAX_OUTPUT_PORT_TYPE
+fuzz_out[9] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[10] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[11] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[12] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[13] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[14] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[15] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[16] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[17] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[18] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[19] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[20] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[21] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[22] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[23] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[24] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[25] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[26] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[27] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[28] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[29] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[30] <= jtag_system:jtag_inst.injection_external_connection_export
+fuzz_out[31] <= jtag_system:jtag_inst.injection_external_connection_export
 
 
-|nrm_system_wrapper|jtag_system:u0
+|nrm_system_wrapper|jtag_system:jtag_inst
 clk_clk => clk_clk.IN3
 injection_external_connection_export[0] <= jtag_system_pio_injection:pio_injection.out_port
 injection_external_connection_export[1] <= jtag_system_pio_injection:pio_injection.out_port
@@ -82,7 +82,7 @@ injection_external_connection_export[31] <= jtag_system_pio_injection:pio_inject
 reset_reset_n => reset_reset_n.IN1
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0
 clk_clk => clk_clk.IN9
 clk_reset_reset => clk_reset_reset.IN1
 master_address[0] <= altera_avalon_packets_to_master:transacto.address
@@ -192,7 +192,7 @@ master_byteenable[3] <= altera_avalon_packets_to_master:transacto.byteenable
 master_reset_reset <= altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master.resetrequest
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master
 jtag_tck => ~NO_FANOUT~
 jtag_tms => ~NO_FANOUT~
 jtag_tdi => ~NO_FANOUT~
@@ -253,7 +253,7 @@ mgmt_channel[0] <= altera_jtag_dc_streaming:normal.jtag_dc_streaming.mgmt_channe
 mgmt_data <= altera_jtag_dc_streaming:normal.jtag_dc_streaming.mgmt_data
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_sld_node:node
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_sld_node:node
 ir_out[0] => ir_out[0].IN1
 ir_out[1] => ir_out[1].IN1
 ir_out[2] => ir_out[2].IN1
@@ -273,7 +273,7 @@ virtual_state_udr <= sld_virtual_jtag_basic:sld_virtual_jtag_component.virtual_s
 virtual_state_uir <= sld_virtual_jtag_basic:sld_virtual_jtag_component.virtual_state_uir
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_sld_node:node|sld_virtual_jtag_basic:sld_virtual_jtag_component
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_sld_node:node|sld_virtual_jtag_basic:sld_virtual_jtag_component
 tck <= sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst.usr_tck
 tdi <= sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst.usr_tdi
 ir_in[0] <= sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst.usr_ir_in
@@ -310,7 +310,7 @@ jtag_state_e2ir <= sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst.usr_jtag_sta
 jtag_state_uir <= sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst.usr_jtag_state_uir
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_sld_node:node|sld_virtual_jtag_basic:sld_virtual_jtag_component|sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_sld_node:node|sld_virtual_jtag_basic:sld_virtual_jtag_component|sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst
 usr_tck <= sld_jtag_endpoint_adapter:jtag_signal_adapter.adapted_tck
 usr_tdi <= sld_jtag_endpoint_adapter:jtag_signal_adapter.adapted_tdi
 usr_ir_in[0] <= sld_jtag_endpoint_adapter:jtag_signal_adapter.adapted_ir_in
@@ -376,7 +376,7 @@ ir_out[1] <= sld_jtag_endpoint_adapter:jtag_signal_adapter.ir_out
 ir_out[2] <= sld_jtag_endpoint_adapter:jtag_signal_adapter.ir_out
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_sld_node:node|sld_virtual_jtag_basic:sld_virtual_jtag_component|sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst|sld_jtag_endpoint_adapter:jtag_signal_adapter
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_sld_node:node|sld_virtual_jtag_basic:sld_virtual_jtag_component|sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst|sld_jtag_endpoint_adapter:jtag_signal_adapter
 raw_tck => sld_jtag_endpoint_adapter_impl:sld_jtag_endpoint_adapter_impl_inst.raw_tck
 raw_tms => sld_jtag_endpoint_adapter_impl:sld_jtag_endpoint_adapter_impl_inst.raw_tms
 tdi => sld_jtag_endpoint_adapter_impl:sld_jtag_endpoint_adapter_impl_inst.tdi
@@ -439,7 +439,7 @@ adapted_ir_out[1] => sld_jtag_endpoint_adapter_impl:sld_jtag_endpoint_adapter_im
 adapted_ir_out[2] => sld_jtag_endpoint_adapter_impl:sld_jtag_endpoint_adapter_impl_inst.adapted_ir_out[2]
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_sld_node:node|sld_virtual_jtag_basic:sld_virtual_jtag_component|sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst|sld_jtag_endpoint_adapter:jtag_signal_adapter|sld_jtag_endpoint_adapter_impl:sld_jtag_endpoint_adapter_impl_inst
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_sld_node:node|sld_virtual_jtag_basic:sld_virtual_jtag_component|sld_virtual_jtag_impl:sld_virtual_jtag_impl_inst|sld_jtag_endpoint_adapter:jtag_signal_adapter|sld_jtag_endpoint_adapter_impl:sld_jtag_endpoint_adapter_impl_inst
 raw_tck => adapted_tck.DATAIN
 raw_tms => adapted_tms.DATAIN
 tdi => adapted_tdi.DATAIN
@@ -502,7 +502,7 @@ adapted_ir_out[1] => ir_out[1].DATAIN
 adapted_ir_out[2] => ir_out[2].DATAIN
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming
 tck => tck.IN4
 tdi => tdi.IN1
 tdo <= altera_jtag_streaming:jtag_streaming.tdo
@@ -540,7 +540,7 @@ mgmt_channel[0] <= altera_jtag_streaming:jtag_streaming.mgmt_channel
 mgmt_data <= altera_jtag_streaming:jtag_streaming.mgmt_data
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_std_synchronizer:synchronizer
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_std_synchronizer:synchronizer
 clk => dreg[0].CLK
 clk => dreg[1].CLK
 clk => din_s1.CLK
@@ -551,7 +551,7 @@ din => din_s1.DATAIN
 dout <= dout.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming
 tck => tck.IN3
 tdi => read_data_length.DATAB
 tdi => write_data_length.DATAB
@@ -891,7 +891,7 @@ mgmt_channel[0] <= mgmt_channel[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 mgmt_data <= mgmt_data~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_std_synchronizer:clock_sensor_synchronizer
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_std_synchronizer:clock_sensor_synchronizer
 clk => dreg[0].CLK
 clk => dreg[1].CLK
 clk => din_s1.CLK
@@ -902,7 +902,7 @@ din => din_s1.DATAIN
 dout <= dout.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_std_synchronizer:reset_to_sample_synchronizer
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_std_synchronizer:reset_to_sample_synchronizer
 clk => dreg[0].CLK
 clk => dreg[1].CLK
 clk => din_s1.CLK
@@ -913,7 +913,7 @@ din => din_s1.DATAIN
 dout <= dout.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_std_synchronizer:clock_to_sample_div2_synchronizer
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_std_synchronizer:clock_to_sample_div2_synchronizer
 clk => dreg[0].CLK
 clk => dreg[1].CLK
 clk => din_s1.CLK
@@ -924,7 +924,7 @@ din => din_s1.DATAIN
 dout <= dout.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_std_synchronizer:clock_sense_reset_n_synchronizer
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_std_synchronizer:clock_sense_reset_n_synchronizer
 clk => dreg[0].CLK
 clk => dreg[1].CLK
 clk => dreg[2].CLK
@@ -945,7 +945,7 @@ din => din_s1.DATAIN
 dout <= dout.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_avalon_st_idle_remover:idle_remover
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_avalon_st_idle_remover:idle_remover
 clk => received_esc.CLK
 reset_n => received_esc.ACLR
 in_ready <= out_ready.DB_MAX_OUTPUT_PORT_TYPE
@@ -989,7 +989,7 @@ out_data[6] <= in_data[6].DB_MAX_OUTPUT_PORT_TYPE
 out_data[7] <= in_data[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_avalon_st_idle_inserter:idle_inserter
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_streaming:jtag_streaming|altera_avalon_st_idle_inserter:idle_inserter
 clk => received_esc.CLK
 reset_n => received_esc.ACLR
 in_ready <= in_ready.DB_MAX_OUTPUT_PORT_TYPE
@@ -1049,7 +1049,7 @@ out_data[6] <= out_data.DB_MAX_OUTPUT_PORT_TYPE
 out_data[7] <= out_data.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_avalon_st_clock_crosser:sink_crosser
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_avalon_st_clock_crosser:sink_crosser
 in_clk => in_clk.IN1
 in_reset => in_data_toggle.ACLR
 in_reset => in_data_buffer[0].ACLR
@@ -1085,7 +1085,7 @@ out_data[6] <= altera_avalon_st_pipeline_base:output_stage.out_data
 out_data[7] <= altera_avalon_st_pipeline_base:output_stage.out_data
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_avalon_st_clock_crosser:sink_crosser|altera_std_synchronizer_nocut:in_to_out_synchronizer
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_avalon_st_clock_crosser:sink_crosser|altera_std_synchronizer_nocut:in_to_out_synchronizer
 clk => dreg[0].CLK
 clk => dreg[1].CLK
 clk => din_s1.CLK
@@ -1096,7 +1096,7 @@ din => din_s1.DATAIN
 dout <= dout.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_avalon_st_clock_crosser:sink_crosser|altera_std_synchronizer_nocut:out_to_in_synchronizer
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_avalon_st_clock_crosser:sink_crosser|altera_std_synchronizer_nocut:out_to_in_synchronizer
 clk => dreg[0].CLK
 clk => dreg[1].CLK
 clk => dreg[2].CLK
@@ -1117,7 +1117,7 @@ din => din_s1.DATAIN
 dout <= dout.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_avalon_st_clock_crosser:sink_crosser|altera_avalon_st_pipeline_base:output_stage
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_avalon_st_clock_crosser:sink_crosser|altera_avalon_st_pipeline_base:output_stage
 clk => full1.CLK
 clk => full0.CLK
 clk => data1[0].CLK
@@ -1189,7 +1189,7 @@ out_data[6] <= data1[6].DB_MAX_OUTPUT_PORT_TYPE
 out_data[7] <= data1[7].DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_src_crosser:source_crosser
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_src_crosser:source_crosser
 sink_clk => sink_data_buffer[0].CLK
 sink_clk => sink_data_buffer[1].CLK
 sink_clk => sink_data_buffer[2].CLK
@@ -1238,7 +1238,7 @@ src_data[6] <= src_data[6]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 src_data[7] <= src_data[7]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_src_crosser:source_crosser|altera_jtag_control_signal_crosser:crosser
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_src_crosser:source_crosser|altera_jtag_control_signal_crosser:crosser
 clk => clk.IN1
 reset_n => reset_n.IN1
 async_control_signal => async_control_signal.IN1
@@ -1246,7 +1246,7 @@ sense_pos_edge => sync_control_signal.OUTPUTSELECT
 sync_control_signal <= sync_control_signal.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_src_crosser:source_crosser|altera_jtag_control_signal_crosser:crosser|altera_std_synchronizer:synchronizer
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_jtag_interface:jtag_phy_embedded_in_jtag_master|altera_jtag_dc_streaming:normal.jtag_dc_streaming|altera_jtag_src_crosser:source_crosser|altera_jtag_control_signal_crosser:crosser|altera_std_synchronizer:synchronizer
 clk => dreg[0].CLK
 clk => dreg[1].CLK
 clk => dreg[2].CLK
@@ -1267,7 +1267,7 @@ din => din_s1.DATAIN
 dout <= dout.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|jtag_system_master_0_timing_adt:timing_adt
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|jtag_system_master_0_timing_adt:timing_adt
 in_valid => out_valid.DATAIN
 in_data[0] => out_data[0].DATAIN
 in_data[1] => out_data[1].DATAIN
@@ -1291,7 +1291,7 @@ clk => ~NO_FANOUT~
 reset_n => ~NO_FANOUT~
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_sc_fifo:fifo
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_sc_fifo:fifo
 clk => mem.we_a.CLK
 clk => mem.waddr_a[5].CLK
 clk => mem.waddr_a[4].CLK
@@ -1570,7 +1570,7 @@ almost_full_data <= <GND>
 almost_empty_data <= <GND>
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_bytes_to_packets:b2p
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_bytes_to_packets:b2p
 clk => out_channel[0]~reg0.CLK
 clk => out_channel[1]~reg0.CLK
 clk => out_channel[2]~reg0.CLK
@@ -1680,7 +1680,7 @@ in_data[7] => Equal3.IN6
 in_data[7] => always0.IN1
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_st_packets_to_bytes:p2b
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_st_packets_to_bytes:p2b
 clk => stored_channel[0].CLK
 clk => stored_channel[1].CLK
 clk => stored_channel[2].CLK
@@ -1849,7 +1849,7 @@ out_data[6] <= out_data[6]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 out_data[7] <= out_data[7]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_packets_to_master:transacto
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_packets_to_master:transacto
 clk => clk.IN1
 reset_n => reset_n.IN1
 in_ready <= packets_to_master:p2m.in_ready
@@ -1982,7 +1982,7 @@ waitrequest => waitrequest.IN1
 readdatavalid => readdatavalid.IN1
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_avalon_packets_to_master:transacto|packets_to_master:p2m
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_avalon_packets_to_master:transacto|packets_to_master:p2m
 clk => unshifted_byteenable[0].CLK
 clk => unshifted_byteenable[1].CLK
 clk => unshifted_byteenable[2].CLK
@@ -2648,7 +2648,7 @@ readdatavalid => state.OUTPUTSELECT
 readdatavalid => state.OUTPUTSELECT
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|jtag_system_master_0_b2p_adapter:b2p_adapter
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|jtag_system_master_0_b2p_adapter:b2p_adapter
 in_ready <= out_ready.DB_MAX_OUTPUT_PORT_TYPE
 in_valid => out_valid.DATAA
 in_data[0] => out_data[0].DATAIN
@@ -2685,7 +2685,7 @@ clk => ~NO_FANOUT~
 reset_n => ~NO_FANOUT~
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|jtag_system_master_0_p2b_adapter:p2b_adapter
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|jtag_system_master_0_p2b_adapter:p2b_adapter
 in_ready <= out_ready.DB_MAX_OUTPUT_PORT_TYPE
 in_valid => out_valid.DATAIN
 in_data[0] => out_data[0].DATAIN
@@ -2722,7 +2722,7 @@ clk => ~NO_FANOUT~
 reset_n => ~NO_FANOUT~
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_reset_controller:rst_controller
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_reset_controller:rst_controller
 reset_in0 => merged_reset.IN0
 reset_in1 => merged_reset.IN1
 reset_in2 => merged_reset.IN1
@@ -2760,7 +2760,7 @@ reset_out <= altera_reset_synchronizer:alt_rst_sync_uq1.reset_out
 reset_req <= altera_reset_synchronizer:alt_rst_req_sync_uq1.reset_out
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_reset_controller:rst_controller|altera_reset_synchronizer:alt_rst_sync_uq1
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_reset_controller:rst_controller|altera_reset_synchronizer:alt_rst_sync_uq1
 reset_in => altera_reset_synchronizer_int_chain_out.PRESET
 reset_in => altera_reset_synchronizer_int_chain[0].PRESET
 reset_in => altera_reset_synchronizer_int_chain[1].PRESET
@@ -2770,7 +2770,7 @@ clk => altera_reset_synchronizer_int_chain[1].CLK
 reset_out <= altera_reset_synchronizer_int_chain_out.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_master_0:master_0|altera_reset_controller:rst_controller|altera_reset_synchronizer:alt_rst_req_sync_uq1
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_master_0:master_0|altera_reset_controller:rst_controller|altera_reset_synchronizer:alt_rst_req_sync_uq1
 reset_in => altera_reset_synchronizer_int_chain[1].DATAIN
 clk => altera_reset_synchronizer_int_chain_out.CLK
 clk => altera_reset_synchronizer_int_chain[0].CLK
@@ -2778,7 +2778,7 @@ clk => altera_reset_synchronizer_int_chain[1].CLK
 reset_out <= altera_reset_synchronizer_int_chain_out.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_pio_injection:pio_injection
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_pio_injection:pio_injection
 address[0] => Equal0.IN31
 address[1] => Equal0.IN30
 chipselect => always0.IN0
@@ -2945,7 +2945,7 @@ readdata[30] <= read_mux_out.DB_MAX_OUTPUT_PORT_TYPE
 readdata[31] <= read_mux_out.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_mm_interconnect_0:mm_interconnect_0
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_mm_interconnect_0:mm_interconnect_0
 clk_0_clk_clk => clk_0_clk_clk.IN2
 master_0_clk_reset_reset_bridge_in_reset_reset => ~NO_FANOUT~
 pio_injection_reset_reset_bridge_in_reset_reset => pio_injection_reset_reset_bridge_in_reset_reset.IN2
@@ -3123,7 +3123,7 @@ pio_injection_s1_writedata[31] <= altera_merlin_slave_translator:pio_injection_s
 pio_injection_s1_chipselect <= altera_merlin_slave_translator:pio_injection_s1_translator.av_chipselect
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_mm_interconnect_0:mm_interconnect_0|altera_merlin_master_translator:master_0_master_translator
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_mm_interconnect_0:mm_interconnect_0|altera_merlin_master_translator:master_0_master_translator
 clk => ~NO_FANOUT~
 reset => ~NO_FANOUT~
 uav_write <= av_write.DB_MAX_OUTPUT_PORT_TYPE
@@ -3355,7 +3355,7 @@ av_response[1] <= <GND>
 av_writeresponsevalid <= <GND>
 
 
-|nrm_system_wrapper|jtag_system:u0|jtag_system_mm_interconnect_0:mm_interconnect_0|altera_merlin_slave_translator:pio_injection_s1_translator
+|nrm_system_wrapper|jtag_system:jtag_inst|jtag_system_mm_interconnect_0:mm_interconnect_0|altera_merlin_slave_translator:pio_injection_s1_translator
 clk => in_transfer.CLK
 clk => end_beginbursttransfer.CLK
 clk => end_begintransfer.CLK
@@ -3648,7 +3648,7 @@ av_response[1] => ~NO_FANOUT~
 av_writeresponsevalid => uav_writeresponsevalid.DATAIN
 
 
-|nrm_system_wrapper|nrm_resonance:u1
+|nrm_system_wrapper|nrm_resonance:nrm_inst
 clk => heartbeat_reg.CLK
 clk => resonance_display[0].CLK
 clk => resonance_display[1].CLK

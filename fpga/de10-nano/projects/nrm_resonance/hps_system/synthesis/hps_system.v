@@ -94,43 +94,6 @@ module hps_system (
 		.mem_dm             (memory_mem_dm),                   //                  .mem_dm
 		.oct_rzqin          (memory_oct_rzqin),                //                  .oct_rzqin
 		.h2f_rst_n          (hps_0_h2f_reset_reset),           //         h2f_reset.reset_n
-		.f2h_sdram0_clk     (),                                //  f2h_sdram0_clock.clk
-		.f2h_sdram0_ARADDR  (),                                //   f2h_sdram0_data.araddr
-		.f2h_sdram0_ARLEN   (),                                //                  .arlen
-		.f2h_sdram0_ARID    (),                                //                  .arid
-		.f2h_sdram0_ARSIZE  (),                                //                  .arsize
-		.f2h_sdram0_ARBURST (),                                //                  .arburst
-		.f2h_sdram0_ARLOCK  (),                                //                  .arlock
-		.f2h_sdram0_ARPROT  (),                                //                  .arprot
-		.f2h_sdram0_ARVALID (),                                //                  .arvalid
-		.f2h_sdram0_ARCACHE (),                                //                  .arcache
-		.f2h_sdram0_AWADDR  (),                                //                  .awaddr
-		.f2h_sdram0_AWLEN   (),                                //                  .awlen
-		.f2h_sdram0_AWID    (),                                //                  .awid
-		.f2h_sdram0_AWSIZE  (),                                //                  .awsize
-		.f2h_sdram0_AWBURST (),                                //                  .awburst
-		.f2h_sdram0_AWLOCK  (),                                //                  .awlock
-		.f2h_sdram0_AWPROT  (),                                //                  .awprot
-		.f2h_sdram0_AWVALID (),                                //                  .awvalid
-		.f2h_sdram0_AWCACHE (),                                //                  .awcache
-		.f2h_sdram0_BRESP   (),                                //                  .bresp
-		.f2h_sdram0_BID     (),                                //                  .bid
-		.f2h_sdram0_BVALID  (),                                //                  .bvalid
-		.f2h_sdram0_BREADY  (),                                //                  .bready
-		.f2h_sdram0_ARREADY (),                                //                  .arready
-		.f2h_sdram0_AWREADY (),                                //                  .awready
-		.f2h_sdram0_RREADY  (),                                //                  .rready
-		.f2h_sdram0_RDATA   (),                                //                  .rdata
-		.f2h_sdram0_RRESP   (),                                //                  .rresp
-		.f2h_sdram0_RLAST   (),                                //                  .rlast
-		.f2h_sdram0_RID     (),                                //                  .rid
-		.f2h_sdram0_RVALID  (),                                //                  .rvalid
-		.f2h_sdram0_WLAST   (),                                //                  .wlast
-		.f2h_sdram0_WVALID  (),                                //                  .wvalid
-		.f2h_sdram0_WDATA   (),                                //                  .wdata
-		.f2h_sdram0_WSTRB   (),                                //                  .wstrb
-		.f2h_sdram0_WREADY  (),                                //                  .wready
-		.f2h_sdram0_WID     (),                                //                  .wid
 		.h2f_lw_axi_clk     (clk_clk),                         //  h2f_lw_axi_clock.clk
 		.h2f_lw_AWID        (hps_0_h2f_lw_axi_master_awid),    // h2f_lw_axi_master.awid
 		.h2f_lw_AWADDR      (hps_0_h2f_lw_axi_master_awaddr),  //                  .awaddr

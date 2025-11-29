@@ -1,0 +1,36 @@
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate /media/helios/DUALITY-GUARDIAN/DUALITY-ZERO-V2/fpga/de10-nano/projects/nrm_resonance/hps_system.qsys --synthesis=VERILOG --output-directory=/media/helios/DUALITY-GUARDIAN/DUALITY-ZERO-V2/fpga/de10-nano/projects/nrm_resonance/hps_system/synthesis/synthesis --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading nrm_resonance/hps_system.qsys
+Progress: Reading input file
+Progress: Adding clk_0 [clock_source 24.1]
+Progress: Parameterizing module clk_0
+Progress: Adding hps_0 [altera_hps 24.1]
+Progress: Parameterizing module hps_0
+Progress: Adding pio_injection [altera_avalon_pio 24.1]
+Progress: Parameterizing module pio_injection
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: hps_system.hps_0: HPS Main PLL counter settings: n = 0  m = 63
+Info: hps_system.hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
+Warning: hps_system.hps_0: HPS model no longer supports simulation for HPS FPGA Bridges.
+Warning: hps_system.hps_0: ODT is disabled. Enabling ODT (Mode Register 1) may improve signal integrity
+Warning: hps_system.hps_0: set_interface_assignment: Interface "hps_io" does not exist
+Error: hps_system.hps_0: "Rate on Avalon-MM interface" (RATE) "Half" is out of range: "Full"
+Warning: hps_system.hps_0: hps_0.h2f_mpu_events must be exported, or connected to a matching conduit.
+Warning: hps_system.hps_0: hps_0.memory must be exported, or connected to a matching conduit.
+Info: hps_system: Generating "hps_system" for QUARTUS_SYNTH
+Info: Interconnect is inserted between master hps_0.h2f_lw_axi_master and slave pio_injection.s1 because the master is of type axi and the slave is of type avalon.
+Info: hps_0: "Running  for module: hps_0"
+Info: hps_0: HPS Main PLL counter settings: n = 0  m = 63
+Info: hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
+Warning: hps_0: HPS model no longer supports simulation for HPS FPGA Bridges.
+Warning: hps_0: ODT is disabled. Enabling ODT (Mode Register 1) may improve signal integrity
+Warning: hps_0: set_interface_assignment: Interface "hps_io" does not exist
+Error: hps_0: "Rate on Avalon-MM interface" (RATE) "Half" is out of range: "Full"
+Info: hps_0: "hps_system" instantiated altera_hps "hps_0"
+Error: Generation stopped, 5 or more modules remaining
+Info: hps_system: Done "hps_system" with 7 modules, 2 files
+Error: qsys-generate failed with exit code 1: 3 Errors, 8 Warnings
+Info: Finished: Create HDL design files for synthesis

@@ -17,7 +17,6 @@ Info: hps_system.hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
 Warning: hps_system.hps_0: HPS model no longer supports simulation for HPS FPGA Bridges.
 Warning: hps_system.hps_0: ODT is disabled. Enabling ODT (Mode Register 1) may improve signal integrity
 Warning: hps_system.hps_0: set_interface_assignment: Interface "hps_io" does not exist
-Error: hps_system.hps_0: hps_0.f2h_sdram0_clock must be connected to a clock output
 Warning: hps_system.hps_0: hps_0.h2f_mpu_events must be exported, or connected to a matching conduit.
 Info: hps_system: Generating "hps_system" for QUARTUS_SYNTH
 Info: Interconnect is inserted between master hps_0.h2f_lw_axi_master and slave pio_injection.s1 because the master is of type axi and the slave is of type avalon.
@@ -29,7 +28,7 @@ Warning: hps_0: ODT is disabled. Enabling ODT (Mode Register 1) may improve sign
 Warning: hps_0: set_interface_assignment: Interface "hps_io" does not exist
 Info: hps_0: "hps_system" instantiated altera_hps "hps_0"
 Info: pio_injection: Starting RTL generation for module 'hps_system_pio_injection'
-Info: pio_injection:   Generation command is [exec /home/helios/intelFPGA_24_1/quartus/linux64/perl/bin/perl -I /home/helios/intelFPGA_24_1/quartus/linux64/perl/lib -I /home/helios/intelFPGA_24_1/quartus/sopc_builder/bin/europa -I /home/helios/intelFPGA_24_1/quartus/sopc_builder/bin -I /home/helios/intelFPGA_24_1/quartus/../ip/altera/sopc_builder_ip/common -I /home/helios/intelFPGA_24_1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- /home/helios/intelFPGA_24_1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=hps_system_pio_injection --dir=/tmp/alt0420_3632654119909768735.dir/0002_pio_injection_gen/ --quartus_dir=/home/helios/intelFPGA_24_1/quartus --verilog --config=/tmp/alt0420_3632654119909768735.dir/0002_pio_injection_gen//hps_system_pio_injection_component_configuration.pl  --do_build_sim=0  ]
+Info: pio_injection:   Generation command is [exec /home/helios/intelFPGA_24_1/quartus/linux64/perl/bin/perl -I /home/helios/intelFPGA_24_1/quartus/linux64/perl/lib -I /home/helios/intelFPGA_24_1/quartus/sopc_builder/bin/europa -I /home/helios/intelFPGA_24_1/quartus/sopc_builder/bin -I /home/helios/intelFPGA_24_1/quartus/../ip/altera/sopc_builder_ip/common -I /home/helios/intelFPGA_24_1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- /home/helios/intelFPGA_24_1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=hps_system_pio_injection --dir=/tmp/alt0421_8518597211863813040.dir/0002_pio_injection_gen/ --quartus_dir=/home/helios/intelFPGA_24_1/quartus --verilog --config=/tmp/alt0421_8518597211863813040.dir/0002_pio_injection_gen//hps_system_pio_injection_component_configuration.pl  --do_build_sim=0  ]
 Info: pio_injection: Done RTL generation for module 'hps_system_pio_injection'
 Info: pio_injection: "hps_system" instantiated altera_avalon_pio "pio_injection"
 Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
@@ -51,3 +50,8 @@ Info: rsp_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "r
 Info: rsp_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux"
 Info: Reusing file /media/helios/DUALITY-GUARDIAN/DUALITY-ZERO-V2/fpga/de10-nano/projects/nrm_resonance/hps_system/synthesis/submodules/altera_merlin_arbitrator.sv
 Info: avalon_st_adapter: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter"
+Info: border: "hps_io" instantiated altera_interface_generator "border"
+Info: error_adapter_0: "avalon_st_adapter" instantiated error_adapter "error_adapter_0"
+Info: hps_system: Done "hps_system" with 21 modules, 76 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis
