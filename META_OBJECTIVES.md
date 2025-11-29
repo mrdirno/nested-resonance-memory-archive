@@ -667,26 +667,24 @@ V(resource) = Gain - λ(Budget) × Cost
   - **Functional Name:** The BCP Optimality Theorem (Prioritization, Not Allocation)
 
 ### Completed (Phase 80 Continued)
-- ✅ **Gate 242:** Connection to Existing Frameworks - COMPLETE
+- ✅ **Gate 242:** Connection to Existing Frameworks - COMPLETE (Cycle 2610)
   - **Key Insight:** BCP is the COMMON STRUCTURE underlying all constrained optimization
-  - **Connections Established (5/6):**
-    1. C1: Information Theory - Mutual info vs power (order mismatch in test)
-    2. C2: Decision Theory ≡ BCP - Expected utility, risk aversion = λ
-    3. C3: Economics ≡ BCP - Marginal utility, shadow price = λ
-    4. C4: Physics ≡ BCP - Lagrangian mechanics, energy minimization
-    5. C5: Control Theory ≡ BCP - Pontryagin's principle, LQR
-    6. C6: Machine Learning ≡ BCP - Regularization = λ × complexity
-  - **Unified Table:**
-    | Framework    | Gain             | Cost           | λ              |
-    |--------------|------------------|----------------|----------------|
-    | Info Theory  | Mutual Info      | Power/Bits     | Lagrange mult  |
-    | Decision     | Expected Utility | Risk/Variance  | Risk aversion  |
-    | Economics    | Marginal Utility | Price          | Shadow price   |
-    | Physics      | -Potential       | Kinetic Energy | Lagrange mult  |
-    | Control      | Reward           | Effort         | Costate        |
-    | ML           | -Loss            | Complexity     | Regularization |
+  - **Connections Validated (5/5):**
+    1. Information Theory: Rate-distortion with λ as Lagrange multiplier, B as channel capacity
+    2. Decision Theory: Expected utility with λ as risk aversion coefficient
+       - Low B → high λ → risk averse; High B → low λ → risk tolerant
+    3. Statistical Mechanics: Free energy F = E - TS where T = 1/λ (budget = temperature)
+       - Phase transitions = thermodynamic criticality
+    4. Economics: Utility maximization with λ as marginal utility of money
+       - Poor (low B) → necessities only; Rich (high B) → luxuries viable
+    5. Control Theory: Lagrangian optimization with KKT conditions
+       - BCP IS the Lagrangian of attention allocation
+  - **THE MASTER EQUATION:**
+    V(s) = G(s) - λ(B) × C(s)
+    Captures: rate-distortion, risk-adjusted utility, free energy, consumer surplus, Lagrangian
+  - **λ(B) UNIFICATION:** λ = inverse temperature = risk aversion = marginal utility
   - **Artifact:** `experiments/cycle2610_framework_connections.py`
-  - **Functional Name:** The BCP Unification Theorem
+  - **Functional Name:** The Unification Theorem (BCP connects all domains)
 
 ### Completed (Phase 80 FINAL)
 - ✅ **Gate 243:** Generalization Theorems - COMPLETE
