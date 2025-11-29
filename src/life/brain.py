@@ -89,6 +89,42 @@ class Brain:
                     
         return best_label
         
+    def get_meaning(self, label):
+        """
+        Retrieve the strongest meaning for a label.
+        """
+        if label not in self.vocabulary:
+            return None
+            
+        meanings = self.vocabulary[label]
+        if not meanings:
+            return None
+            
+        # Return key with max value
+        return max(meanings, key=meanings.get)
+
+    def parse_sequence(self, sequence):
+        """
+        Cycle 2567: The Grammar.
+        Parse a sequence of symbols into a structured thought.
+        """
+        parsed = {'target': None, 'direction': None, 'modifiers': []}
+        
+        for symbol in sequence:
+            meaning = self.get_meaning(symbol)
+            if not meaning:
+                continue
+                
+            # Categorize meaning
+            if meaning in ['FOOD', 'PREDATOR', 'WALL', 'FARM']:
+                parsed['target'] = meaning
+            elif meaning in ['NORTH', 'SOUTH', 'EAST', 'WEST']:
+                parsed['direction'] = meaning
+            else:
+                parsed['modifiers'].append(meaning)
+                
+        return parsed
+
     def forward(self, inputs):
         self.last_inputs = inputs
         
