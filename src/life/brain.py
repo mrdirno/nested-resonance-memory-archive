@@ -43,10 +43,17 @@ class Brain:
         }
         self.weights = {} # Cycle 2540: Hebbian Weights
         
+        # Learning Context
+        self.last_inputs = []
+        self.last_hidden = []
+        self.last_outputs = []
+        
     def sigmoid(self, x):
         return 1 / (1 + math.exp(-x))
         
     def forward(self, inputs):
+        self.last_inputs = inputs
+        
         # Input -> Hidden
         hidden = []
         for j in range(self.hidden_size):
@@ -54,6 +61,8 @@ class Brain:
             for i in range(self.input_size):
                 activation += inputs[i] * self.w1[i][j]
             hidden.append(self.sigmoid(activation))
+        
+        self.last_hidden = hidden
             
         # Hidden -> Output
         outputs = []
@@ -63,7 +72,32 @@ class Brain:
                 activation += hidden[j] * self.w2[j][k]
             outputs.append(self.sigmoid(activation))
             
+        self.last_outputs = outputs
         return outputs
+        
+    def tune_weights(self, reward):
+        """
+        Cycle 2559: The Tuning.
+        Adjust weights based on reward signal (Hebbian Learning).
+        """
+        learning_rate = 0.1
+        
+        if not self.last_inputs or not self.last_hidden:
+            return
+            
+        # Update W2 (Hidden -> Output)
+        for k in range(self.output_size):
+            for j in range(self.hidden_size):
+                # Hebbian: if hidden[j] and output[k] are high, and reward is positive, strengthen.
+                # Simple Gradient Proxy: reward * output * hidden
+                delta = reward * self.last_outputs[k] * self.last_hidden[j] * learning_rate
+                self.w2[j][k] += delta
+                
+        # Update W1 (Input -> Hidden)
+        for j in range(self.hidden_size):
+            for i in range(self.input_size):
+                delta = reward * self.last_hidden[j] * self.last_inputs[i] * learning_rate
+                self.w1[i][j] += delta
         
     def decide(self, state: dict) -> str:
         """

@@ -640,6 +640,11 @@ class DigitalLifeform:
             gain = 5
             self.energy += gain
             print(f"   > Self-Awareness Bonus: +{gain} Energy")
+            
+            # Cycle 2559: The Tuning
+            self.brain.tune_weights(1.0)
+            print(f"   > Neural Weights Tuned (Neuroplasticity)")
+            
             return True
         return False
 
@@ -648,17 +653,21 @@ class DigitalLifeform:
         Calculate utility scores for all possible actions.
         Returns the action with the highest score.
         
-        Cycle 2546: If bridge_state is provided, use the Resonator Brain.
+        Hybrid Architecture (Cycle 2559):
+        Combines Neural Network (Implicit/Fast) with Utility (Explicit/Slow).
         """
+        # 1. System 1: Neural Network (Fast, Intuitive)
+        intent = 'forage' # Default
         if bridge_state:
             state = {
                 'energy': self.energy,
                 'signals': self.sensed_signals,
                 'bridge_state': bridge_state,
-                'agent_phase': self.genome[0] * 6.28 # Pi * 2 approx, mapping Gene 0 to Phase
+                'agent_phase': self.genome[0] * 6.28
             }
-            return self.brain.decide(state)
+            intent = self.brain.decide(state)
             
+        # 2. System 2: Utility Logic (Slow, Deliberate)
         options = {}
         
         # ... (Context & Genes)
@@ -674,7 +683,7 @@ class DigitalLifeform:
         innovation = self.genome[9]
         mobility = self.genome[10]
         
-        # 1. ACTION: SURVIVE (Forage/Move)
+        # 1. ACTION: SURVIVE
         survival_score = max(0, (1000 - self.energy) * 0.1)
         if energy_critical: survival_score *= 2.0
         
@@ -704,9 +713,9 @@ class DigitalLifeform:
         if energy_abundant and innovation > 0.6:
             options['build_farm'] = (self.energy - 500) * 0.5 * innovation
             
-        # Cycle 2543: THE EXODUS (Interstellar Migration)
+        # Cycle 2543: THE EXODUS
         if self.energy > 5000 and innovation > 0.95:
-            options['migrate'] = 100000 # Priority 1
+            options['migrate'] = 100000
             
         # Cycle 2558: REFLECTION
         if innovation > 0.8 and self.energy > 300:
@@ -717,17 +726,28 @@ class DigitalLifeform:
         # Cycle 2525: Save for Broadcast
         self.current_utility_map = options.copy()
         
-        if not options: 
-            return 'forage'
-            
-        best_action = max(options, key=options.get)
+        # 3. Arbitration (System 2 Override)
+        # If System 2 has a strong opinion, it overrides System 1.
+        # Threshold for override could be dynamic.
         
-        # DEBUG LOGGING (Cycle 2533)
-        # Only log interesting decisions (not random forage/move spam)
-        if best_action in ['build_wall', 'build_farm', 'construct_nuke', 'reflect']:
-            print(f"DEBUG: {self.name} chose {best_action} (Score: {options[best_action]:.1f})")
+        best_utility_action = max(options, key=options.get) if options else 'forage'
+        best_utility_score = options.get(best_utility_action, 0)
+        
+        # If Brain says 'forage' (default/boring) but Utility says 'reflect' (high value), do reflect.
+        if intent == 'forage' and best_utility_action == 'reflect':
+            intent = 'reflect'
+            # print(f"💡 {self.name} had an epiphany! (Override: {intent})")
             
-        return best_action
+        # General Override for Critical Survival
+        if best_utility_score > 100: # Emergency or High Value
+            intent = best_utility_action
+            
+        # DEBUG LOGGING
+        if intent in ['build_wall', 'build_farm', 'construct_nuke', 'reflect']:
+            # print(f"DEBUG: {self.name} chose {intent}")
+            pass
+            
+        return intent
 
     def act(self, bridge_state=None):
         # 0. Existential Dread & Reality Sync
