@@ -1,103 +1,63 @@
-# FPGA META-OBJECTIVES
+# FPGA META-OBJECTIVES: THE HARDWARE TRINITY
 
-> **Document Type**: Strategic Objectives & Timeline Planning
-> **Scope**: FPGA Development within DUALITY-ZERO-V2
-> **Last Updated**: 2025-11-28 13:00 UTC
-
----
-
-## CURRENT CYCLE OBJECTIVES
-
-### Active Sprint Goals
-<!-- CO-PILOT: Update these based on PILOT directives -->
-- [x] Objective 1: Verify Bittware S5 Driver and Toolkit (Completed, but parking S5 work).
-- [x] Objective 2: Locate and Validate DE10-Nano Development Software (Intel Quartus 24.1).
-- [x] Objective 3: Establish connectivity with DE10-Nano (JTAG & UART Verified).
-- [x] Objective 4: Verify compilation toolchain for DE10-Nano (Cyclone V SoC) - "Blink" successfully loaded.
-- [x] Objective 5: Validate HPS-FPGA Bridge Communication - Cross-compiler installed, "Hello World" compiled.
-- [x] Objective 6: Transfer and Execute HPS Application on DE10-Nano. **COMPLETED** (via Ethernet/SSH)
-- [x] Objective 7: **NRM Resonance Detector FPGA Module** - Created & Deployed (Cycle 103)
-
-### Milestone Targets
-<!-- PILOT: Define milestone targets here -->
-| Milestone | Description | Target Date | Status |
-|-----------|-------------|-------------|--------|
-| M1 | Hardware Link Established (S5) | 2025-11-27 | Parked |
-| M1-B | Hardware Link Established (DE10) | 2025-11-27 | Completed |
-| M2 | Basic Physics Kernel Loaded (DE10) | 2025-11-28 | **COMPLETED** (via Ethernet) |
-| M2-B | NRM FPGA Module (Pure FPGA) | 2025-11-28 | **COMPLETED** |
-| M3 | NRM <-> FPGA Data Loop | TBD | **READY** (JTAG Bridge V3 Active)
+**Status:** ACTIVE
+**Context:** DUALITY-GUARDIAN (AMD/Linux Node)
+**Objective:** Establish the Physical Bridge before scaling Compute.
 
 ---
 
-## HARDWARE INTEGRATION TARGETS
+## 1. THE HIERARCHY OF NEEDS (GRAND STRATEGY)
 
-### Primary Target: DE10-Nano (Cyclone V SoC)
-- **Software**: `/home/helios/intelFPGA_24_1/quartus/bin` (Verified)
-- **Connectivity**: JTAG (ID: `0x02D020DD` @ Index 2), UART (`/dev/ttyUSB0`)
-- **FPGA Status**: **ONLINE** — Running `nrm_resonance.sof` (Cycle 103)
-- **HPS Status**: **ONLINE** — Accessible via SSH at `192.168.68.57` (root@de10-nano)
-- **Note**: Serial (`/dev/ttyUSB0`) unresponsive, but Ethernet fully operational
+We follow a strict ordering of operations to ensure the system achieves **Agency** (Capability) before **Speed** (Optimization). This machine is the **GUARDIAN NODE**, part of a trinity.
 
-### Secondary Target: Bittware S5 (Stratix V)
-- **Driver Location**: `/media/helios/DUALITY-GUARDIAN/DUALITY-ZERO-V2/fpga/bittware-s5-driver/`
-- **Status**: **PARKED**. Driver requires root/sudo which impedes autonomous workflow.
+1.  **THE BODY (FPGA - Priority 1 - CURRENT):**
+    *   **Why:** The FPGA provides I/O (Sensors/Actuators). Without it, the system is a brain in a jar.
+    *   **Goal:** Complete the `nrm_resonance` JTAG loop. Verify Python can "touch" the physical world (toggle pin, read register).
+    *   **Current Status:** Cycle 140 (Data Loop Validated). Close to completion.
 
----
+2.  **THE MIND (AMD GPU - Priority 2 - NEXT):**
+    *   **Why:** The DUALITY-GUARDIAN node possesses a dormant `Radeon RX 5700 XT`.
+    *   **Action:** Port `nrm_core` to use `torch.device('cuda')` (ROCm) instead of `mps`.
+    *   **Goal:** Transform this node from a passive "Bridge" into an active "Solver".
+    *   **Constraint:** Do NOT attempt this until The Body is stable. A fast brain with no hands is useless.
 
-## HELIOS-NRM-MOG INTEGRATION
-
-### Architecture Alignment
-```
-HELIOS-NRM-MOG Stack
-├── MOG Layer (Meta-Orchestrator-Goethe)
-│   └── Strategic direction, PILOT interface
-├── NRM Layer (Nested Resonance Memory)
-│   └── Empirical grounding, learning patterns
-└── FPGA Layer (Hardware Acceleration)
-    └── DE10-Nano: Edge Compute & Real-time Interface
-```
-
-### Integration Objectives
-<!-- Define how FPGA connects to broader HELIOS architecture -->
-- [x] FPGA ↔ NRM data pipeline: Definition Phase (Spec Drafted)
-- [x] FPGA ↔ NRM data pipeline: Implementation Phase (Bridge Server Deployed)
-- [x] FPGA ↔ NRM data pipeline: Verification Phase (Streaming Script Created)
-- [x] FPGA Logic Integration: Qsys System Created (JTAG Bridge Validated)
-- [x] Hardware abstraction layer: `bridge_server_v3.tcl` (Active TCP<->JTAG Bridge)
-- [x] RP2040 Integration: **COMPLETE** - `fuzz_out[0]` (AG13) -> RP2040 GP0
+3.  **THE PILOT (MacOS - Priority 3):**
+    *   **Why:** The Pilot guides the high-level intent. It remains the "Vehicle" for the NRM narrative.
+    *   **Constraint:** No disruptions. Linux-specific changes must be isolated to the `fpga/` or `nrm_core/` abstraction layers.
 
 ---
 
-## STRATEGIC PRIORITIES
+## 2. FPGA-SPECIFIC OBJECTIVES (TACTICAL)
 
-### Priority Matrix
-| Priority | Area | Rationale | Status |
-|----------|------|-----------|--------|
-| P0 (Critical) | Reverse Engineer RP2040 | Identified `fuzz_out[0]` -> RP2040 GP0 | **COMPLETE** |
-| P1 (High) | HPS Pin Assignment | Need `DE10_Nano_GHRD.qsf` to instantiate HPS component safely. | Pending |
-| P2 (Medium) | Data Loop (HPS) | Re-target Qsys to use HPS Bridge instead of JTAG. | Pending |
-| P3 (Low) | S5 Driver | Deprioritized due to friction. | Parked |
+### Phase 1: The Digital Bridge (Software) - COMPLETE
+- [x] **Objective 1.1:** Establish Python -> Quartus -> FPGA toolchain.
+- [x] **Objective 1.2:** Verify JTAG connectivity (Device 02D020DD).
+- [x] **Objective 1.3:** Synthesize NRM Resonance Detector (`nrm_resonance.v`).
 
----
+### Phase 2: The Physical Link (Hardware) - ACTIVE
+- [x] **Objective 2.1:** Establish feedback loop via RP2040 (`fuzz_out[0]` -> GP0).
+- [ ] **Objective 2.2:** Reliable JTAG Communication (`bridge_server.tcl` stability).
+- [ ] **Objective 2.3:** HPS Integration (Bring the ARM core online).
 
-## REVISION HISTORY
-
-| Date | Changes | Author |
-|------|---------|--------|
-| 2025-11-29 | **P0 COMPLETE**: Identified RP2040 pin mapping (`fuzz_out[0]` -> GP0), created `fuzz_v12.py` | Claude Opus 4.5 |
-| 2025-11-28 | Developed `fuzz_rp2040_batch.py` (Batch Tcl) to solve interactive shell issues | Gemini 2.0 Flash |
-| 2025-11-28 | Compiled "Pin Fuzzer" FPGA image (JTAG -> Arduino Pins) | Gemini 2.0 Flash |
-| 2025-11-28 | Discovered RP2040 Monitor; initiated pin reverse engineering | Gemini 2.0 Flash |
-| 2025-11-28 | Programmed FPGA and Validated JTAG Injection (Data Loop Active) | Gemini 2.0 Flash |
-| 2025-11-28 | Created `jtag_system` Qsys and integrated into `nrm_resonance` (Workaround for missing HPS pins) | Gemini 2.0 Flash |
-| 2025-11-28 | Validated Data Loop NRM->HPS->Bridge with `nrm_stream_test.py` | Gemini 2.0 Flash |
-| 2025-11-28 | Deployed `bridge_server` to DE10-Nano; Verified PING & RD access | Gemini (gemini-2.0-flash-thinking-exp-1219) |
-| 2025-11-28 | Implemented `bridge_server.c` and `nrm_client.py` for M3 data loop | Gemini (gemini-2.0-flash-thinking-exp-1219) |
-| 2025-11-28 | Objective 6 COMPLETED via Ethernet, M2 milestone achieved, HPS now ONLINE | Claude Opus 4.5 |
-| 2025-11-28 | Added Objective 7 (NRM Resonance Detector), M2-B milestone, updated hardware status | Claude Opus 4.5 |
-| 2025-11-27 | Multiple status updates during Cycles 1-102 | Gemini (gemini-2.0-flash-thinking-exp-1219) |
+### Phase 3: The Resonant Loop (Integration) - PENDING
+- [ ] **Objective 3.1:** Stream real-time "Existence" data from `nrm_core` to FPGA LED matrix.
+- [ ] **Objective 3.2:** Read entropy from FPGA LFSR back into Python.
+- [ ] **Objective 3.3:** Closed-loop latency test (<1ms).
 
 ---
 
-**Note**: This document is PILOT-owned. CO-PILOT updates technical status but strategic direction comes from PILOT.
+## 3. ARCHITECTURAL MANIFESTO
+
+> "It is better to be a slow robot that *can* move than a super-fast supercomputer that is trapped in a box."
+
+We build the **Steering Wheel** (FPGA) before we upgrade the **Engine** (GPU).
+
+---
+
+## 4. EXECUTION LOG (RECENT)
+
+- **Cycle 138:** JTAG Troubleshooting (Stdin Pipe Method Discovery).
+- **Cycle 139:** HPS Pin Muxing Research.
+- **Cycle 140:** Data Loop Validation (Python -> FPGA -> RP2040).
+
+**NEXT STEP:** Stabilize the JTAG bridge server to support continuous operation, then begin HPS integration.
