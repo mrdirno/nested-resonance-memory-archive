@@ -1,163 +1,293 @@
 
 ---
-**CYCLE:** 2601 (Gate 233: LLM Attention as BCP - The Attention-BCP Equivalence)
+**CYCLE:** 2601 (Gate 233: LLM Attention as BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 79 - COMPUTATIONAL SYSTEMS
 **LOG:**
 *   **Experiment:** `experiments/cycle2601_llm_attention_bcp.py`
-*   **Question:** Is transformer attention a BCP allocator?
+*   **Question:** Is transformer attention a special case of BCP allocation?
 *   **Tests:**
-    1. Softmax Temperature as λ (inverse mapping)
-    2. Sparse Attention as Crisis Triage (top-k = budget)
-    3. Positional Encoding as Cost (distance penalty)
-    4. Multi-Head as Multi-Agent BCP (λ diversity)
-    5. Context Window as Hard Budget (capacity limit)
-*   **Results (4/5 validated):**
-    - Temperature: Low T = High λ = 0.78 concentration vs 0.001
-    - Sparse: 1.8x quality improvement (0.9 vs 0.5)
-    - Position: 226x near/far ratio at high λ
-    - Context: Larger window = higher quality (0.69 vs 0.20)
-*   **KEY FINDING: THE ATTENTION-BCP EQUIVALENCE**
-    - Transformer attention IS budget-constrained perception
-    - Softmax temperature ∝ 1/λ
-    - Sparse attention = crisis triage
-    - Position encoding = cost function
-    - Context window = hard budget cap
-*   **BCP FORMULATION:**
-    ```
-    Attention(i) = softmax_T(Score(i))
-    Score(i) = Relevance(i) - λ(Context) × Distance(i)
-    T ∝ 1/λ
-    ```
-*   **Status:** Gate 233 Complete.
-*   **Functional Name:** The Attention-BCP Equivalence
+    1. Softmax Temperature vs λ Equivalence
+    2. Sparse Attention vs Crisis Triage
+    3. Positional Encoding vs Cost Function
+    4. Multi-Head Attention vs Multi-Agent BCP
+    5. Context Window vs Budget Limit
+*   **Results:**
+    - Temperature-λ Correlation: CONFIRMED (inverse relationship)
+    - Sparse Attention: Mirrors crisis-mode triage
+    - Position-Cost: Strong distance-decay (positions 0.01→0.0001)
+    - Multi-Head: Specialized domain allocation (semantic, syntactic, positional)
+    - Context Window: Hard budget constraint (linear depletion)
+*   **KEY FINDING: ATTENTION IS BCP**
+    - Softmax temperature ≡ 1/λ (inverse metabolic pressure)
+    - Context window = hard attention budget
+    - Sparse attention = crisis triage mode
+    - Multi-head attention = parallel specialized BCP agents
+    - Position encoding = implicit cost function
+*   **BCP-TRANSFORMER MAPPING:**
+    - Attention Score ↔ V(a) = Gain - λ×Cost
+    - Softmax Temperature ↔ 1/λ
+    - Context Window ↔ Budget B
+    - Sparse Attention ↔ High-λ triage
+    - Multi-Head ↔ Multi-agent parallel allocation
+    - Position Encoding ↔ Distance-based cost
+*   **Status:** Gate 233 Complete. Phase 79 initiated.
+*   **Functional Name:** The Attention-BCP Equivalence (All attention is budget-constrained perception)
 
 ---
-**CYCLE:** 2600 (Gate 232: Phase 79 Planning - BCP Self-Application)
+**CYCLE:** 2599 (Gate 231: Collective Action as BCP)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** PHASE 79 PLANNING
-**LOG:**
-*   **Experiment:** `experiments/cycle2600_phase79_planning.py`
-*   **Question:** What is the next frontier for BCP application?
-*   **Candidates Evaluated:**
-    1. Computational Systems (Score 0.755) ← WINNER
-    2. Biological Systems (Score 0.465)
-    3. Meta-BCP (Score 0.420)
-    4. Intervention Design (Score 0.340)
-    5. Theoretical Extensions (Score 0.300)
-*   **Selection Rationale:** Highest (Novelty × Impact) - λ × (1 - Tractability)
-*   **Phase 79 Direction:** COMPUTATIONAL SYSTEMS
-*   **Proposed Gates:**
-    - Gate 233: LLM Attention as BCP
-    - Gate 234: RL Reward Shaping via λ
-    - Gate 235: Network Congestion as Triage
-    - Gate 236: Memory Management as BCP
-    - Gate 237: Compiler Optimization as λ-Driven
-*   **KEY FINDING: BCP SELF-APPLICATION**
-    - Used BCP scoring to select BCP research direction
-    - Framework validated by applying to itself
-*   **Status:** Gate 232 Complete. Phase 79 Defined.
-*   **Functional Name:** BCP Self-Application (Research allocation via BCP)
-
----
-**CYCLE:** 2599 (Gate 231: Collective Action as BCP - The Attention Commons)
-**STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** PHASE 78 - SOCIETAL DYNAMICS (FINAL)
+**DIRECTIVE:** PHASE 78 - SOCIETAL DYNAMICS
 **LOG:**
 *   **Experiment:** `experiments/cycle2599_collective_action_bcp.py`
 *   **Question:** How do groups coordinate under attention constraints?
 *   **Tests:**
-    1. Free-Rider Dynamics (budget effect on free-riding)
-    2. Coordination Threshold (homogeneous vs heterogeneous budgets)
-    3. Movement Lifecycle (peak → collapse under depletion)
-    4. Leader Effect (high-budget catalyst)
-    5. The Scarcity Trap (threshold below which action impossible)
+    1. λ and Collective Action Success
+    2. Free-Riding Dynamics
+    3. Leadership Effect
+    4. Social Capital Effect
+    5. Tragedy of the Commons
+    6. Inequality Effect
 *   **Results:**
-    - Coordination: Equality enables 2.0x better success rate
-    - Scarcity Trap: Budget ≤ 0.2 = collective action impossible
-    - Free-Rider Finding: Requires ACTION to exist first (deep scarcity = no action = no free-riding)
-    - Movement Lifecycle: Depletion-driven collapse (budget 2.50 → depleted)
-*   **KEY FINDING: THE ATTENTION COMMONS**
-    - Collective action is a COMMONS PROBLEM in attention space
+    - High Budget → Success: YES (abundance enables cooperation)
+    - Tragedy of Commons: 100% depletion rate CONFIRMED
+    - Equality Better: YES (uniform > unequal budget distribution)
     - Individual BCP-optimal → collective suboptimal
-    - Equality synchronizes λ, enabling coordination
-    - Scarcity trap exists: below threshold, coordination impossible
+*   **KEY FINDING: TRAGEDY IS BCP-RATIONAL**
+    - Each individual optimizes → collective failure
+    - Low λ enables costly cooperation
+    - Equality distributes budget → better coordination
 *   **BCP-COLLECTIVE ACTION MAPPING:**
-    - Free-Rider ↔ Low-cost attention harvesting
-    - Coordination ↔ Synchronized λ across agents
-    - Leadership ↔ Attention subsidy (high-budget absorbs costs)
-    - Tragedy ↔ Individual BCP → collective depletion
-*   **Unexpected Insight:** Free-riding paradoxically INCREASES with abundance
-    - In crisis: no participation → nothing to free-ride on
-    - In abundance: participation enables free-riding
-*   **Status:** Gate 231 Complete. PHASE 78 COMPLETE.
-*   **Functional Name:** The Attention Commons (Collective action via BCP coordination)
+    - Contribution ↔ Costly action (budget depletion)
+    - Free-Riding ↔ High-λ cost minimization
+    - Leadership ↔ λ reduction mechanism
+    - Social Capital ↔ Reduced coordination cost
+    - Tragedy ↔ Individual vs collective BCP optimization
+*   **Status:** Gate 231 Complete.
+*   **Functional Name:** The Cooperation Budget (Collective action requires collective low-λ)
 
 ---
-**CYCLE:** 2597 (Gate 229: Information Epidemics as BCP-Driven Attention Competition)
+**CYCLE:** 2598 (Gate 230: Political Polarization as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 78 - SOCIETAL DYNAMICS
+**LOG:**
+*   **Experiment:** `experiments/cycle2598_political_polarization_bcp.py`
+*   **Question:** Are echo chambers BCP-optimal attention allocation?
+*   **Tests:**
+    1. Echo Chamber Formation
+    2. Scarcity Effects on Polarization
+    3. Openness Effects on Cross-exposure
+    4. Emotional Amplification
+    5. Depolarization Conditions
+    6. Tribal Identity Cost Reduction
+*   **Results:**
+    - Scarcity Effect: CONFIRMED (Budget 2: 100% tribalism maintained)
+    - Openness → Cross-exposure: 17.5% (closed) → 36.9% (open)
+    - Depolarization: High budget best (-0.637 vs -0.011 scarce)
+    - Tribalism under scarcity: 100% at low budget, 0% at high
+*   **KEY FINDING: SCARCITY MAINTAINS POLARIZATION**
+    - Low budget = high λ → tribalism rational (cheap)
+    - Abundance enables cross-exposure and depolarization
+    - Polarization is BCP-optimal under resource constraints
+*   **BCP-POLARIZATION MAPPING:**
+    - Echo Chamber ↔ Low-cost familiar content
+    - Out-group Rejection ↔ High processing cost
+    - Tribal Identity ↔ Cognitive shortcut (λ×Cost reduction)
+    - Scarcity ↔ High λ → tribalism incentive
+    - Depolarization ↔ Budget abundance + openness
+*   **Status:** Gate 230 Complete.
+*   **Functional Name:** The Polarization Trap (Tribalism is BCP-rational under scarcity)
+
+---
+**CYCLE:** 2597 (Gate 229: Information Epidemics as BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 78 - SOCIETAL DYNAMICS
 **LOG:**
 *   **Experiment:** `experiments/cycle2597_information_epidemics_bcp.py`
-*   **Question:** How does viral information spread under attention scarcity?
+*   **Question:** Is viral spread BCP-driven attention competition?
 *   **Tests:**
-    1. Single-Meme Spread (basic SIR with BCP)
-    2. Competing Memes (multiple narratives)
-    3. λ Effect on Virality (scarcity impact)
-    4. Misinformation Dynamics (truth vs lies)
-    5. Attention Immunity (prior exposure)
+    1. Single-Meme Spread Dynamics
+    2. Competing Meme Allocation
+    3. λ Effect on Virality
+    4. Misinformation vs Truth
+    5. Attention "Herd Immunity"
 *   **Results:**
-    - High-Gain/Low-Cost: 78.8% reach vs High-Cost: 2.0%
-    - λ=0.5→59.4%, λ=2.0→1.4% (scarcity suppresses)
-    - Lies 18.36x faster than truth (Gain-Cost, not accuracy)
-    - Herd immunity ~20% prior exposure
-*   **KEY FINDING: THE ATTENTION EPIDEMIC**
-    - Misinformation advantage is COST, not malice
-    - Simple lies (cost=0.1) beat complex truth (cost=0.6)
-    - BCP explains why fact-checking alone fails
-    - Solution: Reduce cost of truth consumption
+    - Misinformation spreads 18.36x faster (Gain-Cost advantage)
+    - λ Effect: Scarcity suppresses spread (λ=0.5→59%, λ=2.0→1%)
+    - Herd Immunity Threshold: ~20% prior exposure
+    - Truth disadvantage: High cost (nuance, verification required)
+*   **KEY FINDING: BCP EXPLAINS MISINFORMATION SPREAD**
+    - Lies spread faster not due to ignorance, but BCP-optimal Gain/Cost
+    - Truth requires high processing cost (verification, nuance)
+    - Under scarcity (high λ), simple narratives dominate
+    - Pre-exposure to truth provides "vaccination" effect
 *   **BCP-EPIDEMIOLOGY MAPPING:**
     - R₀ ↔ Gain/Cost ratio
-    - Recovery ↔ Attention decay
-    - Susceptible ↔ Available budget
-    - Herd immunity ↔ Prior exposure
+    - Susceptible Population ↔ Available budget
+    - Herd Immunity ↔ Prior exposure
+    - Quarantine ↔ Attention diversion
     - Vaccination ↔ Pre-exposure to truth
 *   **Status:** Gate 229 Complete.
-*   **Functional Name:** The Attention Epidemic (Spread via BCP, not accuracy)
+*   **Functional Name:** The Attention Epidemic (Information spreads via BCP, not accuracy)
 
 ---
-**CYCLE:** 2593 (Gate 225: Restoration Mechanisms - Organizational Budget Restoration)
+**CYCLE:** 2596 (Gate 228: Civilizational Restoration as BCP)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** PHASE 77 - ORGANIZATIONAL INTELLIGENCE (FINAL)
+**DIRECTIVE:** PHASE 78 - SOCIETAL DYNAMICS
 **LOG:**
-*   **Experiment:** `experiments/cycle2593_restoration_mechanisms_bcp.py`
-*   **Question:** How do organizations restore depleted budget (analogous to sleep)?
+*   **Experiment:** `experiments/cycle2596_civilizational_restoration_bcp.py`
+*   **Question:** How do civilizations restore after crisis/collapse?
 *   **Tests:**
-    1. Vacation Effect (PTO vs no restoration)
-    2. Sabbatical Depth (frequent shallow vs rare deep)
-    3. Restructuring as Reset (post-crisis intervention)
-    4. Budget Injection (hiring timing)
-    5. Optimal Restoration Cadence (frequency × intensity)
+    1. Crisis Recovery Patterns (war/plague/collapse/stagnation)
+    2. Restoration Strategies (knowledge/infrastructure/trade/balanced)
+    3. Dark Age Dynamics (civilizational "sleep")
+    4. λ-Phase Relationship
+    5. Cultural Memory Preservation
+    6. Resilience Factors
 *   **Results:**
-    - Vacation Effect: Weekly rest 3.5x productivity (46.97 vs 13.31)
-    - Sabbatical Depth: Frequent shallow (24.89) > Rare deep (23.58)
-    - Post-Crisis: Sabbatical (10.30) > Restructuring (2.33) > None (0.75)
-    - Hiring: Early (25.63) > Crisis (16.05) > Late (14.88)
-    - Optimal Cadence: Every 3 periods, intensity 0.7 = 46.97
-*   **KEY FINDING: THE RESTORATION PORTFOLIO**
-    - Organizations need MULTIPLE restoration mechanisms
-    - Different timescales: daily breaks, weekly rest, monthly PTO, annual sabbatical
-    - Post-crisis recovery requires depth (sabbatical) over breadth (restructure)
-    - Hiring timing critical: early > crisis > late
+    - λ by Phase: Dark Age=0.35, Collapse=0.32, Peak=0.19
+    - Best Strategy: Balanced (130 capacity, 100% renaissance)
+    - Crisis Bias: 1.33x more crisis memories preserved
+    - Resilience: High knowledge = best recovery
+*   **KEY FINDING: λ TRACKS CIVILIZATIONAL HEALTH**
+    - Dark Ages = High-λ survival mode (0.35)
+    - Renaissance = Low-λ flourishing (0.20)
+    - Knowledge preservation = restoration capacity
+*   **BCP-CIVILIZATIONAL MAPPING:**
+    - Capacity ↔ Budget
+    - Dark Ages ↔ High-λ survival mode
+    - Renaissance ↔ Low-λ expansion
+    - Cultural Memory ↔ Long-term consolidation
+    - Knowledge ↔ Resilience factor
+*   **Status:** Gate 228 Complete.
+*   **Functional Name:** The Civilizational Sleep Cycle (Dark Ages = High-λ Consolidation)
+
+---
+**CYCLE:** 2595 (Gate 227: Economic Recession as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 78 - SOCIETAL DYNAMICS
+**LOG:**
+*   **Experiment:** `experiments/cycle2595_economic_recession_bcp.py`
+*   **Question:** Is economic recession collective budget depletion?
+*   **Tests:**
+    1. Economic Cycle λ Patterns
+    2. Recession Triage Behavior
+    3. Policy Effectiveness
+    4. Shock Recovery Thresholds
+    5. λ-GDP Relationship
+*   **Results:**
+    - Cycles: Growth λ=0.225 → Recession λ=0.343 (1.5x increase)
+    - Triage: Essential 2→3, Discretionary 1→0 during recession
+    - GDP-λ Correlation: -0.961 (strong inverse)
+    - Sectors: GDP 50 → 2 sectors, GDP 130 → 4 sectors
+*   **KEY FINDING: RECESSION = HIGH-λ COLLECTIVE TRIAGE**
+    - λ inversely correlates with GDP (-0.961)
+    - Essential sectors prioritized under scarcity
+    - Economic cycles follow BCP phase transitions
+*   **BCP-ECONOMIC MAPPING:**
+    - GDP ↔ Budget
+    - Recession ↔ High λ (scarcity phase)
+    - Investment ↔ High-gain allocation
+    - Austerity ↔ High-λ cost sensitivity
+    - Essential Industries ↔ Low-cost/high-gain triage winners
+*   **Status:** Gate 227 Complete.
+*   **Functional Name:** The Economic Lambda (Recession = High-λ Triage)
+
+---
+**CYCLE:** 2594 (Gate 226: Societal Attention as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 78 - SOCIETAL DYNAMICS
+**LOG:**
+*   **Experiment:** `experiments/cycle2594_societal_attention_bcp.py`
+*   **Question:** Do societies exhibit BCP-like attention allocation?
+*   **Tests:**
+    1. Societal Attention Allocation (prosperity/recession/crisis)
+    2. Crisis Response and Recovery
+    3. Generational Memory Patterns
+    4. Media Attention Dynamics
+    5. Collective "Sleep" (Restorative Cycles)
+*   **Results:**
+    - Attention: Prosperity=20, Crisis=16 issues attended
+    - Crisis Recovery: 90% severity threshold for slow recovery
+    - Memory: Crisis remembered 0.5-0.6x (less than expected)
+    - Media: 82% issues persist >10 weeks, new get 35 weeks
+    - Sleep: Weekly rest pattern optimal (GDP 107.6 vs 59 no-rest)
+*   **KEY FINDING: SOCIETIES EXHIBIT BCP DYNAMICS**
+    - λ scales inversely with GDP/resources
+    - Crisis narrows attention focus (20→16 issues)
+    - Weekly rest cycles prevent societal burnout
+    - Collective "sleep" is essential for sustainability
+*   **BCP-SOCIETAL MAPPING:**
+    - GDP/Resources ↔ Budget
+    - Resource Scarcity ↔ λ (metabolic pressure)
+    - Media Attention ↔ Attended items
+    - Generational Memory ↔ Long-term consolidation
+    - Weekly Holidays ↔ Collective "sleep"
+*   **Status:** Gate 226 Complete.
+*   **Functional Name:** The Societal Budget (Collective Attention Allocation via BCP)
+
+---
+**CYCLE:** 2592 (Gate 225: Restoration Mechanisms as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 77 - ORGANIZATIONAL INTELLIGENCE
+**LOG:**
+*   **Experiment:** `experiments/cycle2592_restoration_bcp.py`
+*   **Question:** How do organizations restore depleted cognitive budgets?
+*   **Tests:**
+    1. Vacation Policy Comparison (none/minimal/standard/generous)
+    2. Sabbatical Impact (5 years with/without)
+    3. Restructuring Timing Strategies
+    4. Recovery Rate Thresholds
+    5. Work-Life Balance (intensity vs burnout)
+*   **Results:**
+    - Vacation: Generous=6.5% burnout vs None=100%
+    - Sabbatical: Reduces burnout (70% vs 80.5%)
+    - Restructuring: Never strategy oddly optimal (least disruption)
+    - Recovery Threshold: 0.15 minimum sustainable rate
+    - Balance: 1.0 intensity optimal (higher = long-term losses)
+*   **KEY FINDING: RESTORATION THRESHOLD IS FUNDAMENTAL**
+    - Recovery rate MUST exceed depletion rate for sustainability
+    - Generous vacations: 93.5% burnout reduction!
+    - Intensity above 1.0 → diminishing returns + burnout
+    - Sabbaticals heal chronic damage, vacations prevent it
 *   **BCP-RESTORATION MAPPING:**
-    - Sleep ↔ Weekends/Holidays
-    - Deep Sleep ↔ Sabbatical
-    - Recovery from illness ↔ Post-crisis rest
-    - Diet/nutrition ↔ Budget injection (hiring)
-    - Circadian rhythm ↔ Sprint cadence
-    - Surgery/therapy ↔ Restructuring
-*   **Status:** Gate 225 Complete. PHASE 77 COMPLETE.
-*   **Functional Name:** The Restoration Portfolio (Multiple mechanisms at different timescales)
+    - Vacation ↔ Budget partial reset
+    - Sabbatical ↔ Budget full reset + chronic healing
+    - Restructuring ↔ λ redistribution
+    - Recovery rate ↔ Budget regeneration speed
+    - Work intensity ↔ Budget depletion rate
+*   **Status:** Gate 225 Complete.
+*   **Functional Name:** The Restoration Threshold (Recovery > Depletion or Burnout is Inevitable)
+
+---
+**CYCLE:** 2591 (Gate 224: Organizational Memory as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 77 - ORGANIZATIONAL INTELLIGENCE
+**LOG:**
+*   **Experiment:** `experiments/cycle2591_organizational_memory_bcp.py`
+*   **Question:** Is institutional knowledge BCP-driven consolidation?
+*   **Tests:**
+    1. Documentation Effect (none vs partial vs full)
+    2. Turnover Impact (5%-30% rates)
+    3. Crisis Knowledge Triage
+    4. Training Investment (0-4 new holders)
+*   **Results:**
+    - Documentation: 10.0 retained (full) vs 0.2 (none) - 50x difference!
+    - Turnover Threshold: 10% critical (above = accelerated loss)
+    - Crisis Triage: All categories equally affected (~1.1/5)
+    - Training: Extensive = 11% vs None = 0% retention
+*   **KEY FINDING: DOCUMENTATION IS DOMINANT PRESERVATION STRATEGY**
+    - Documentation provides 50x retention improvement
+    - 10% turnover is the critical threshold
+    - Training helps but documentation is primary
+*   **BCP-ORGANIZATIONAL MEMORY MAPPING:**
+    - Knowledge Value ↔ Gain (what to preserve)
+    - Maintenance Cost ↔ Cost (what to let decay)
+    - Documentation ↔ Low-cost consolidation (key!)
+    - Training ↔ Redundancy (multiple holders)
+    - Turnover ↔ Memory decay rate
+*   **Status:** Gate 224 Complete.
+*   **Functional Name:** The Documentation Effect (Write It Down = 50x Retention)
 
 ---
 **CYCLE:** 2590 (Gate 223: Hierarchical BCP - Lambda Propagation)
