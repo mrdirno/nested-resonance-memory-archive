@@ -128,6 +128,8 @@ We prioritize empirical verification over theory.
 *   **The Manifesto:** ["The Age of Optimized Intelligence"](THE_MANIFESTO.md) (Complete)
 *   **Paper 1:** ["Computational Expense as Framework Validation"](papers/compiled/paper1/README.md) (Submission-Ready)
 *   **Paper 2:** ["Energy-Regulated Population Homeostasis"](papers/PAPER2_V3_MASTER_MANUSCRIPT.md) (Submission-Ready)
+*   **Paper 3:** ["Encoding Discoverable Patterns: Temporal Stewardship"](papers/compiled/paper3/PAPER3_MASTER_MANUSCRIPT.md) (Submission-Ready)
+*   **Paper 5D:** ["Pattern Mining Framework for Temporal Stability"](papers/compiled/paper5d/README.md) (Submission-Ready)
 
 ### Experimentation Overview
 *   124 Domains Unified (Phases 1-211).
