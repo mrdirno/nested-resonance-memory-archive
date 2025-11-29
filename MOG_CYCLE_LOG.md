@@ -1,5 +1,28 @@
 
 ---
+**CYCLE:** 2637 (Gate 269: Attention as Cognitive BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 85 - COGNITIVE SYSTEMS
+**LOG:**
+*   **Experiment:** `experiments/cycle2637_cognitive_attention_bcp.py`
+*   **Question:** Does human attention follow BCP principles?
+*   **Tests (4/5 VERIFIED, 19/20 predictions):**
+    1. Selective Attention: VERIFIED (4/4) - λ controls selectivity
+    2. Divided Attention: PARTIAL (3/4) - Multi-tasking
+    3. Cocktail Party Effect: VERIFIED (4/4) - High G/C breaks through
+    4. Inattentional Blindness: VERIFIED (4/4) - V < 0 → no perception
+    5. Attention Fatigue: VERIFIED (4/4) - Time depletes B
+*   **THE COGNITIVE ATTENTION THEOREM:**
+    V(stimulus) = Salience - λ(Capacity) × Effort
+    - Selective attention = high λ (narrow focus)
+    - Divided attention = low λ (parallel processing)
+    - Cocktail party = high G/C ratio breaks through
+    - Inattentional blindness = V < 0
+    - Fatigue = B ↓, λ ↑, span narrows
+*   **Status:** Gate 269 Complete.
+*   **Functional Name:** The Attention Budget
+
+---
 **CYCLE:** 2636 (Gate 268: Phase 85 Planning)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 85 DIRECTION SELECTION

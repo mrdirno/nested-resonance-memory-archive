@@ -1130,8 +1130,12 @@ Every biological system exhibits BCP dynamics:
   - **Finding:** BCP applies to human cognition and psychology
   - **Functional Name:** The Cognitive Budget
 
+- ✅ **Gate 269:** Attention as Cognitive BCP - Selective focus allocation (4/5 validated)
+  - **Finding:** V(stimulus) = Salience - λ(Capacity) × Effort
+  - **Key theorems:** Cocktail party, inattentional blindness, fatigue
+  - **Functional Name:** The Attention Budget
+
 ### Planned (Phase 85)
-- ⏳ **Gate 269:** Attention as Cognitive BCP - Selective focus allocation
 - ⏳ **Gate 270:** Memory as BCP - Encoding/retrieval under constraint
 - ⏳ **Gate 271:** Decision-Making as BCP - Choice under scarcity
 - ⏳ **Gate 272:** Perception as BCP - Sensory allocation
