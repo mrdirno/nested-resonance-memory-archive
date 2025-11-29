@@ -30,7 +30,7 @@ pip install numpy
 Run the **OSD Physics Demo**. This script simulates the core ontological claim of the project: that "Dark Matter" is simply energy (Scalar Sum) that is invisible due to destructive interference (Vector Sum).
 
 ```bash
-python3 experiments/demo_osd_physics.py
+python3 archive/experiments/demo_osd_physics.py
 ```
 
 ### Expected Output
