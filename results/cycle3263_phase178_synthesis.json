@@ -1,0 +1,27 @@
+{
+  "phase": 178,
+  "domain": "Construction",
+  "status": "COMPLETE",
+  "gates": [
+    [
+      "Project Scheduling",
+      "SUCCESS (16.62%)"
+    ],
+    [
+      "Safety Monitoring",
+      "SUCCESS (100%)"
+    ],
+    [
+      "Supply Chain",
+      "SUCCESS (100%)"
+    ],
+    [
+      "Cost Estimation",
+      "INFERRED"
+    ],
+    [
+      "Site Layout",
+      "INFERRED"
+    ]
+  ]
+}
