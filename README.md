@@ -125,9 +125,15 @@ We prioritize empirical verification over theory.
 
 ## 📊 RESEARCH & PAPERS
 
-*   **Paper 1:** ["Computational Expense as Framework Validation"](papers/compiled/paper1/README.md) (Submission-Ready)
-*   **Paper 2:** ["Energy-Regulated Population Homeostasis"](papers/PAPER2_V3_MASTER_MANUSCRIPT.md) (Submission-Ready)
-*   **Paper 3:** ["Encoding Discoverable Patterns: Temporal Stewardship"](papers/compiled/paper3/PAPER3_MASTER_MANUSCRIPT.md) (Draft Complete)
+### Submission-Ready
+*   **Paper 1:** ["Computational Expense as Framework Validation"](papers/compiled/paper1/README.md) — arXiv ready, pending endorsement
+*   **Paper 2:** ["Energy-Regulated Population Homeostasis"](papers/PAPER2_V3_MASTER_MANUSCRIPT.md) — PLOS submission ready
+*   **Paper 3:** ["Temporal Stewardship: Encoding Discoverable Patterns"](papers/compiled/paper3/PAPER3_MASTER_MANUSCRIPT.md) — Submission ready
+*   **Paper 5D:** ["Pattern Mining Framework for Temporal Stability"](papers/compiled/paper5d/README.md) — arXiv ready, pending endorsement
+
+### In Development
+*   **Paper 4:** ["Multi-Scale Energy Regulation"](papers/PAPER4_ABSTRACT.md) — Draft
+*   **Paper 7:** ["Governing Equations & Multi-Timescale Dynamics"](papers/compiled/paper7/README.md) — 80% complete
 
 ### Experimentation Overview
 *   10,948 total runs across C171, C176, C193, C194.
