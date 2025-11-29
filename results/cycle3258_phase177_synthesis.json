@@ -1,0 +1,27 @@
+{
+  "phase": 177,
+  "domain": "Media",
+  "status": "COMPLETE",
+  "gates": [
+    [
+      "Content Generation",
+      "SUCCESS (42%)"
+    ],
+    [
+      "Personalization",
+      "SUCCESS (89%)"
+    ],
+    [
+      "Ad Bidding",
+      "FAILED (-80%)"
+    ],
+    [
+      "Sentiment Analysis",
+      "INFERRED"
+    ],
+    [
+      "Fake News Detection",
+      "INFERRED"
+    ]
+  ]
+}
