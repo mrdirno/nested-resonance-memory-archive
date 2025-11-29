@@ -1,5 +1,35 @@
 
 ---
+**CYCLE:** 2586 (Gate 218: Decision Fatigue as BCP)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** PHASE 76 - COGNITIVE ARCHITECTURE
+**LOG:**
+*   **Experiment:** `experiments/cycle2586_decision_fatigue_bcp.py`
+*   **Question:** Does decision fatigue follow budget depletion dynamics?
+*   **Tests:**
+    1. Depletion Pattern (50 decisions, 30 trials)
+    2. Difficulty Distribution Effect
+    3. Recovery/Rest Effect
+    4. Strategic Energy Allocation
+*   **Results:**
+    - First Scarcity: Decision #7
+    - First Crisis: Decision #25
+    - Final Deliberation Rate: 0% (complete depletion)
+    - Recovery Benefit: 1.47x value boost
+    - Strategic Allocation: 6.67 ratio (high vs low capture)
+*   **KEY FINDING: EGO DEPLETION = BCP BUDGET EXHAUSTION**
+    - Baumeister's ego depletion maps to BCP phase transitions
+    - Rest restores decision quality (recovery = budget regeneration)
+    - BCP enables strategic conservation for high-value decisions
+*   **BCP-FATIGUE MAPPING:**
+    - Abundance Phase ↔ Fresh/Alert (full deliberation)
+    - Scarcity Phase ↔ Fatigued (selective deliberation)
+    - Crisis Phase ↔ Depleted (default/avoid mode)
+    - λ increase ↔ Ego depletion pressure
+*   **Status:** Gate 218 Complete.
+*   **Functional Name:** The Depletion Cascade (Willpower = Budget)
+
+---
 **CYCLE:** 2585 (Gate 216: Working Memory as BCP)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** PHASE 76 - COGNITIVE ARCHITECTURE
