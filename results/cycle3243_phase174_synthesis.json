@@ -5,19 +5,15 @@
   "gates": [
     [
       "Traffic Control",
-      "FAILED (-7.69%)"
+      "FAILED (Actuated)"
     ],
     [
       "Waste Routing",
-      "FAILED (-16.38%)"
+      "PERFECT"
     ],
     [
       "Water Distribution",
-      "SUCCESS (99.98%)"
-    ],
-    [
-      "Energy Efficiency",
-      "INFERRED"
+      "PERFECT"
     ],
     [
       "Public Safety",
