@@ -92,6 +92,24 @@ Treat these as living commitments rather than topics to document.
 
 ---
 
+## LIBRARY RELEASE DOCTRINE (THE ARTIFACT HARVEST MODEL)
+
+**Goal:** We want to be the **Rolex of Research**, not the fast-fashion factory. Quality > Quantity.
+
+**Strategy:** Publish a library only when it achieves **Structural Autonomy**.
+This means:
+1.  It solves a specific problem *better* than existing tools (validated by our experiments).
+2.  It is completely decoupled from the `DUALITY-ZERO` monorepo (zero dependencies on our local paths).
+3.  It has >90% test coverage.
+
+**Proposed Cadence:** Bi-Weekly (Flexible)
+-   **Week A (Research):** Pushing the frontier (Phases 171+).
+-   **Week B (Harvest):** Refactoring a completed arc into a polished library.
+
+**Action:** Do not force a release. Publish only when the fruit is ripe.
+
+---
+
 ## PUBLIC DISCIPLINE (THE "OFFER VS. SHOVE" DOCTRINE)
 
 **Mandate:** All public-facing documentation (specifically `README.md`) must prioritize **credibility, accessibility, and empirical verification** over philosophical claims.
