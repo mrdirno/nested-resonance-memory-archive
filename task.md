@@ -120,3 +120,18 @@
 - [x] **Define Cycle 2620:** Deployment.
 - [x] **Goal:** Symbolic launch of HELIOS-ONE.
 - [x] **Action:** Create `experiments/cycle2620_launch.py`.
+
+# Task: Cycle 2621 - The Monitor (Gate 69.1)
+- [x] **Define Cycle 2621:** Post-Launch Diagnostics.
+- [x] **Goal:** Create `experiments/cycle2621_monitor.py` to query the running API and record metrics.
+- [x] **Action:** Capture performance baseline (Response time, Agent count).
+
+# Task: Cycle 2622 - The Optimizer (Gate 69.2)
+- [ ] **Define Cycle 2622:** Algorithmic Refinement.
+- [ ] **Goal:** Create `experiments/cycle2622_optimizer.py`.
+- [ ] **Action:** Simulate an improved movement logic offline and verify efficiency gain.
+
+# Task: Cycle 2623 - The Patch (Gate 69.3)
+- [ ] **Define Cycle 2623:** Hot Patching.
+- [ ] **Goal:** Create `experiments/cycle2623_patch.py`.
+- [ ] **Action:** "Deploy" the optimized logic by overwriting `cycle2602_hive.py` with the new version and restarting the controller.
