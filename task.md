@@ -42,6 +42,21 @@
 - [x] **Action:** Create `experiments/cycle2604_command.py`.
 
 # Task: Cycle 2605 - The Visualization (Gate 63.3)
-- [ ] **Define Cycle 2605:** Web View.
-- [ ] **Goal:** Generate a simple HTML/JS visualization of the Hive logs.
-- [ ] **Action:** Create `experiments/cycle2605_visualization.py`.
+- [x] **Define Cycle 2605:** Web View.
+- [x] **Goal:** Generate a simple HTML/JS visualization of the Hive logs.
+- [x] **Action:** Create `experiments/cycle2605_visualization.py`.
+
+# Task: Cycle 2606 - The API (Gate 64.1)
+- [ ] **Define Cycle 2606:** REST Interface.
+- [ ] **Goal:** Create `experiments/cycle2606_api.py` using standard library `http.server` (to avoid heavy deps) or `flask` if permitted. Will use `http.server` for safety.
+- [ ] **Action:** Implement a basic JSON API to query agent status.
+
+# Task: Cycle 2607 - The Controller (Gate 64.2)
+- [ ] **Define Cycle 2607:** Process Manager.
+- [ ] **Goal:** Create `experiments/cycle2607_controller.py` to launch and manage API + Hive processes.
+- [ ] **Action:** Implement a master script.
+
+# Task: Cycle 2608 - The Documentation (Gate 64.3)
+- [ ] **Define Cycle 2608:** System Manual.
+- [ ] **Goal:** Compile `experiments/HELIOS_ONE_MANUAL.md`.
+- [ ] **Action:** Document the API, CLI, and Dashboard usage.
