@@ -27,6 +27,21 @@
 - [x] **Action:** Create `experiments/cycle2601_consensus.py`.
 
 # Task: Cycle 2602 - The Hive (Gate 62.3)
-- [ ] **Define Cycle 2602:** Swarm Intelligence.
-- [ ] **Goal:** Demonstrate agents converging on a target using only local communication.
-- [ ] **Action:** Create `experiments/cycle2602_hive.py`.
+- [x] **Define Cycle 2602:** Swarm Intelligence.
+- [x] **Goal:** Demonstrate agents converging on a target using only local communication.
+- [x] **Action:** Create `experiments/cycle2602_hive.py`.
+
+# Task: Cycle 2603 - The Dashboard (Gate 63.1)
+- [ ] **Define Cycle 2603:** TUI Monitoring.
+- [ ] **Goal:** Create a terminal-based dashboard using `curses` or `rich` to display agent states.
+- [ ] **Action:** Create `experiments/cycle2603_dashboard.py`.
+
+# Task: Cycle 2604 - The Command (Gate 63.2)
+- [ ] **Define Cycle 2604:** Operator Override.
+- [ ] **Goal:** Implement a CLI loop that allows the user to inject commands (e.g., set target).
+- [ ] **Action:** Create `experiments/cycle2604_command.py`.
+
+# Task: Cycle 2605 - The Visualization (Gate 63.3)
+- [ ] **Define Cycle 2605:** Web View.
+- [ ] **Goal:** Generate a simple HTML/JS visualization of the Hive logs.
+- [ ] **Action:** Create `experiments/cycle2605_visualization.py`.
