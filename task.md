@@ -67,9 +67,9 @@
 - [x] **Action:** Write the Dockerfile using a slim Python base.
 
 # Task: Cycle 2610 - The Compose (Gate 65.2)
-- [ ] **Define Cycle 2610:** Orchestration.
-- [ ] **Goal:** Create `experiments/docker-compose.yml`.
-- [ ] **Action:** Define services for the API and potential future components.
+- [x] **Define Cycle 2610:** Orchestration.
+- [x] **Goal:** Create `experiments/docker-compose.yml`.
+- [x] **Action:** Define services for the API and potential future components.
 
 # Task: Cycle 2611 - The Registry (Gate 65.3)
 - [ ] **Define Cycle 2611:** Release Artifact.

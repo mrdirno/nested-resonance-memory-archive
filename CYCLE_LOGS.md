@@ -14,3 +14,8 @@
 - Tests Validated: 3/3 scenarios per gate
 - Key Insight: The Landscape is the frozen history of BCP flows.
 - **Status:** 139th Domain Unified.
+## Cycle 2610: The Compose (Gate 65.2) - COMPLETE
+- **Goal:** Define multi-container orchestration.
+- **Action:** Created `experiments/docker-compose.yml`.
+- **Result:** Service `helios-core` defined with port mapping 8081:8081 and log persistence.
+- **Status:** Orchestration Logic Defined.

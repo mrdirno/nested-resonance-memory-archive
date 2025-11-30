@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  helios-core:
+    build:
+      context: ..
+      dockerfile: experiments/Dockerfile
+    image: helios-one:latest
+    container_name: helios-core
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./logs:/app/experiments/logs
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
