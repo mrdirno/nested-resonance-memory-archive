@@ -390,3 +390,18 @@
 - [x] **Define Cycle 2674:** Resource Starvation.
 - [x] **Goal:** Create `experiments/cycle2674_heat_death.py`. Slowly reduce the available energy/speed of all agents until movement ceases.
 - [x] **Action:** The long freeze.
+
+# Task: Cycle 2675 - The Editor (Gate 87.1)
+- [x] **Define Cycle 2675:** Self-Editing.
+- [x] **Goal:** Create `experiments/cycle2675_editor.py`. Implement a class that can read, find/replace, and write to text files.
+- [x] **Action:** Master the quill.
+
+# Task: Cycle 2676 - The Compiler (Gate 87.2)
+- [x] **Define Cycle 2676:** Self-Correction.
+- [x] **Goal:** Create `experiments/cycle2676_compiler.py`. Use `subprocess` to run `python3 -m py_compile` on generated scripts and capture errors.
+- [x] **Action:** Proofread the work.
+
+# Task: Cycle 2677 - The Commit (Gate 87.3)
+- [x] **Define Cycle 2677:** Self-Replication.
+- [x] **Goal:** Create `experiments/cycle2677_commit.py`. Mock a git commit process where the agent stages its own modified source code.
+- [x] **Action:** Etch into history.
