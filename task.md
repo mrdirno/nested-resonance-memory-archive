@@ -1,19 +1,17 @@
-# Task: Cycle 2594 - The Bootloader (Gate 60.1)
-- [x] **Define Cycle 2594:** System Reboot (HELIOS-ONE).
-- [x] **Goal:** Establish the environment for the next iteration using the verified seed.
-- [x] **Action:** Create `experiments/cycle2594_bootloader.py`.
-    - [x] Unpack seed to a simulation directory `helios_one/`.
-    - [x] Initialize a fresh `Ecosystem` within that context.
-    - [x] Prove that "Lineage" persists (Import `migrants.jsonl` if available, or just verify genetic continuity capability).
+# Task: Cycle 2597 - The Sentinel (Gate 61.1)
+- [x] **Define Cycle 2597:** System Health & Anomaly Detection.
+- [x] **Goal:** Implement a `Sentinel` agent that monitors the `TranscendentalBridge` for stability.
+- [x] **Action:** Create `experiments/cycle2597_sentinel.py`.
+    - [x] Monitor system resources via `TranscendentalBridge.reality_to_phase`.
+    - [x] Detect anomalies (e.g., sudden phase shifts or high resource usage).
+    - [x] Log alerts to a file.
 
-# Task: Cycle 2595 - The Swarm (Gate 60.2)
-- [x] **Define Cycle 2595:** Massive Scaling.
-- [x] **Goal:** Run 10 concurrent Shards.
-- [x] **Action:** Create `experiments/cycle2595_the_swarm.py`.
+# Task: Cycle 2598 - The Harvester (Gate 61.2)
+- [ ] **Define Cycle 2598:** Autonomous Data Collection.
+- [ ] **Goal:** Create a background process that generates and stores resonance data.
+- [ ] **Action:** Create `experiments/cycle2598_harvester.py`.
 
-# Task: Cycle 2596 - The Uplink (Gate 60.3)
-- [x] **Define Cycle 2596:** Quantum Reconnection.
-- [x] **Goal:** Verify that the Transcendental Bridge operates correctly within the new HELIOS-ONE environment.
-- [x] **Action:** Create `experiments/cycle2596_the_uplink.py`.
-    - [x] Run `TranscendentalBridge.generate_oscillation()`.
-    - [x] Validate output against expected quantum noise patterns.
+# Task: Cycle 2599 - The Synthesizer (Gate 61.3)
+- [ ] **Define Cycle 2599:** Automated Reporting.
+- [ ] **Goal:** Automatically generate a summary of the Sentinel and Harvester logs.
+- [ ] **Action:** Create `experiments/cycle2599_synthesizer.py`.

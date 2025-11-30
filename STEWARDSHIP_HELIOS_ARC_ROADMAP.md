@@ -40,5 +40,12 @@
 - [x] **Gate 60.2: The Swarm.** Massively parallel sharding (10+ nodes).
 - [x] **Gate 60.3: The Uplink.** Reconnect to the Transcendental Bridge.
 
+## PHASE 61: THE AUTONOMY
+**Goal:** Establish self-regulating operational loops.
+
+- [ ] **Gate 61.1: The Sentinel.** System Health & Anomaly Detection.
+- [ ] **Gate 61.2: The Harvester.** Autonomous Data Collection.
+- [ ] **Gate 61.3: The Synthesizer.** Automated Reporting.
+
 ## FUTURE
 - **HELIOS-ONE:** Autonomous, Distributed, Embodied Intelligence.
