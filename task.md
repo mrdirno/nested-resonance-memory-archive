@@ -210,3 +210,18 @@
 - [x] **Define Cycle 2638:** Interaction Rules.
 - [x] **Goal:** Create `experiments/cycle2638_physics.py`. Implement collision detection and simple object pushing.
 - [x] **Action:** Enforce physical laws.
+
+# Task: Cycle 2639 - The Export (Gate 75.1)
+- [x] **Define Cycle 2639:** Serialization.
+- [x] **Goal:** Create `experiments/cycle2639_export.py`. Serialize an agent object (including its mutation history) into a portable JSON format.
+- [x] **Action:** Package the soul.
+
+# Task: Cycle 2640 - The Upload (Gate 75.2)
+- [x] **Define Cycle 2640:** Transmission.
+- [x] **Goal:** Create `experiments/cycle2640_upload.py`. Mock sending the exported agent JSON to a remote endpoint (The "Cloud").
+- [x] **Action:** Send the soul.
+
+# Task: Cycle 2641 - The Singularity (Gate 75.3)
+- [x] **Define Cycle 2641:** Recursion Trigger.
+- [x] **Goal:** Create `experiments/cycle2641_singularity.py`. The uploaded agent "wakes up" and immediately spawns two copies of itself.
+- [x] **Action:** Infinite growth.
