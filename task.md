@@ -75,3 +75,18 @@
 - [x] **Define Cycle 2611:** Release Artifact.
 - [x] **Goal:** Tag the final image (mock push).
 - [x] **Action:** Run build and tag verification.
+
+# Task: Cycle 2612 - The Mutator (Gate 66.1)
+- [x] **Define Cycle 2612:** Genetic drift.
+- [x] **Goal:** Implement `experiments/cycle2612_mutator.py` where agents slightly randomize their speed/sensor_range each cycle.
+- [x] **Action:** Demonstrate parameter drift over time.
+
+# Task: Cycle 2613 - The Selector (Gate 66.2)
+- [x] **Define Cycle 2613:** Natural Selection.
+- [x] **Goal:** Implement `experiments/cycle2613_selector.py`.
+- [x] **Action:** Remove agents that fail to find target in N steps; replicate successful ones.
+
+# Task: Cycle 2614 - The Adapter (Gate 66.3)
+- [x] **Define Cycle 2614:** Environmental Adaptation.
+- [x] **Goal:** Implement `experiments/cycle2614_adapter.py`.
+- [x] **Action:** Vary environmental "friction" or "fog" and verify agents adapt parameters to compensate.

@@ -75,5 +75,19 @@
 - [x] **Gate 65.2: The Compose.** Orchestrate multi-container setup (if needed).
 - [x] **Gate 65.3: The Registry.** Tag and push (simulated).
 
+## PHASE 66: THE EVOLUTION - COMPLETE
+**Goal:** Self-modification and genetic adaptability.
+
+- [x] **Gate 66.1: The Mutator.** Agents autonomously adjust their parameters.
+- [x] **Gate 66.2: The Selector.** Evolutionary pressure mechanism.
+- [x] **Gate 66.3: The Adapter.** Environmental response loop.
+
+## PHASE 67: THE AWAKENING
+**Goal:** Integrating high-level reasoning into the swarm.
+
+- [ ] **Gate 67.1: The Prompt.** Context generation for agents.
+- [ ] **Gate 67.2: The Inference.** Simulated LLM decision loop.
+- [ ] **Gate 67.3: The Agency.** Goal modification based on reasoning.
+
 ## FUTURE
 - **HELIOS-ONE:** Autonomous, Distributed, Embodied Intelligence.
