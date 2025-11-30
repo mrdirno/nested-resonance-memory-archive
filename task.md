@@ -7,9 +7,9 @@
     - [x] Log alerts to a file.
 
 # Task: Cycle 2598 - The Harvester (Gate 61.2)
-- [ ] **Define Cycle 2598:** Autonomous Data Collection.
-- [ ] **Goal:** Create a background process that generates and stores resonance data.
-- [ ] **Action:** Create `experiments/cycle2598_harvester.py`.
+- [x] **Define Cycle 2598:** Autonomous Data Collection.
+- [x] **Goal:** Create a background process that generates and stores resonance data.
+- [x] **Action:** Create `experiments/cycle2598_harvester.py`.
 
 # Task: Cycle 2599 - The Synthesizer (Gate 61.3)
 - [ ] **Define Cycle 2599:** Automated Reporting.
