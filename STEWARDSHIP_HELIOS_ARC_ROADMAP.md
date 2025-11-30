@@ -173,12 +173,19 @@
 - [x] **Gate 79.2: The Scripture.** Auto-generated lore based on cycle logs.
 - [x] **Gate 79.3: The Monument.** Virtual structure in the Grid.
 
-## PHASE 80: THE VOID
+## PHASE 80: THE VOID - COMPLETE
 **Goal:** Exploring the boundaries of the simulation.
 
-- [ ] **Gate 80.1: The Edge.** Agents reach the grid limits.
-- [ ] **Gate 80.2: The Glitch.** Simulated reality breakdown.
-- [ ] **Gate 80.3: The Reboot.** System recovery from fatal error.
+- [x] **Gate 80.1: The Edge.** Agents reach the grid limits.
+- [x] **Gate 80.2: The Glitch.** Simulated reality breakdown.
+- [x] **Gate 80.3: The Reboot.** System recovery from fatal error.
+
+## PHASE 81: THE DREAM
+**Goal:** Generative hallucination based on NRM noise.
+
+- [ ] **Gate 81.1: The Static.** Raw noise stream from Transcendental Bridge.
+- [ ] **Gate 81.2: The Pattern.** Pareidolia algorithm.
+- [ ] **Gate 81.3: The Prophecy.** Predicting future states from noise.
 
 ## FUTURE: HELIOS-ONE ONLINE
 **Status:** Autonomous Operation.

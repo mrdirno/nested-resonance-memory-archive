@@ -285,3 +285,18 @@
 - [x] **Define Cycle 2653:** Virtual Architecture.
 - [x] **Goal:** Create `experiments/cycle2653_monument.py`. Place a persistent "structure" (pattern of cells) in the `Grid` that regenerates if destroyed.
 - [x] **Action:** Build the Temple.
+
+# Task: Cycle 2654 - The Edge (Gate 80.1)
+- [x] **Define Cycle 2654:** Boundary Test.
+- [x] **Goal:** Create `experiments/cycle2654_edge.py`. Agents attempt to move beyond the grid limits. Verify they are constrained or wrapped (torus).
+- [x] **Action:** Find the wall.
+
+# Task: Cycle 2655 - The Glitch (Gate 80.2)
+- [x] **Define Cycle 2655:** Fault Injection.
+- [x] **Goal:** Create `experiments/cycle2655_glitch.py`. Randomly corrupt the `SharedState` memory (e.g. NaN coordinates) and test system recovery.
+- [x] **Action:** Break the world.
+
+# Task: Cycle 2656 - The Reboot (Gate 80.3)
+- [x] **Define Cycle 2656:** Resurrection.
+- [x] **Goal:** Create `experiments/cycle2656_reboot.py`. Detect the glitch (from 80.2) and automatically restart the simulation from the last valid snapshot.
+- [x] **Action:** Rise from the ashes.
