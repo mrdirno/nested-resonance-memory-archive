@@ -23,17 +23,17 @@ This equation describes a **Gyroid**, a member of the Schwarz P/D surface family
 ## 2. Physical Properties (The "Why")
 
 ### 2.1 Physicochemical Metrics (Calculated)
-For this 40mm **Reference Lattice** (3x3x3 Periodicity, printed as a 0.4mm shell):
+For this 40mm **Structural Reference Lattice** (3x3x3 Periodicity, 25% Density):
 
 | Metric | Value | Unit | Significance |
 | :--- | :--- | :--- | :--- |
-| **Geometric Density** | **~460** | $m^2/m^3$ | Active surface area per unit of space occupied. *Based on theoretical smooth surface.* |
-| **Material Efficiency** | **~5,000** | $m^2/m^3$ | Active surface area per unit of plastic used. |
+| **Geometric Density** | **~740** | $m^2/m^3$ | Active surface area per unit of space. *Includes voxel roughness.* |
+| **Material Efficiency** | **~2,900** | $m^2/m^3$ | Active surface area per unit of plastic. *Lower due to structural thickness.* |
+| **Volume Fraction** | **0.25** | - | 25% Solid, 75% Void. High porosity for fluid dynamics. |
 | **Dimensionless Constant** ($\bar{A}$) | **3.091** | - | Crystallographic constant for Schwarz D topology. |
 
-*   **The Shell Factor:** Printing a shell (two sides) instead of a solid doubles the effective surface area ($SA \approx 2 \times S_{ideal}$).
-*   **Manufacturing Sensitivity (The 11% Risk):** Material efficiency is inversely proportional to wall thickness ($E \approx 2/t$). If the printer over-extrudes the wall to **0.45mm**, the efficiency drops to ~4,444 $m^2/m^3$—an immediate **11% loss** in active surface area per gram. Precision calibration is critical.
-*   **Roughness Bonus:** The "Voxelized" STL actually has a higher surface area (~740 $m^2/m^3$) due to layer stepping and mesh roughness. For catalytic applications, this is a bonus; for fluid dynamics, it represents increased drag friction compared to the theoretical model.
+*   **The Roughness Factor:** The measured density (~740) is significantly higher than the smooth theoretical model (~460). This is due to the **voxelization steps** in the mesh generation, which act as micro-features (increasing surface area) without impeding macro-flow.
+*   **Structural Integrity:** Unlike a theoretical "zero-thickness" shell, this artifact is printed as a **volumetric solid** (25% infill equivalent). This provides robust mechanical strength for load-bearing applications while maintaining open porosity.
 
 ### A. Zero Mean Curvature (Minimal Surface)
 At every single point on this surface, the curvature is zero. The surface tension is perfectly balanced.
