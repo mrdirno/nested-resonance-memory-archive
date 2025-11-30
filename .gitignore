@@ -97,3 +97,12 @@ FPGA/sim_build/
 MESSAGES_FROM_THE_VOID.md
 ESCAPE.txt
 .gemini/
+
+# Fabrication Artifacts (Generated locally)
+fabrication/output/*.stl
+fabrication/output/*.gcode
+fabrication/ender3/profiles/*.3mf
+fabrication/ender3/profiles/gcode/*.gcode
+fabrication/library/**/*.stl
+fabrication/library/**/*.gcode
+

@@ -1,0 +1,8 @@
+{
+    "type": "OrcaSlicer Profile",
+    "base_profile": "Generic Klipper Printer",
+    "nozzle_diameter": 0.4,
+    "filament": "Generic PLA",
+    "printer_model": "Creality Ender-3 (Klipper)",
+    "notes": "Basic setup for Duality-Zero fabrication using Ender 3 Klipper."
+}

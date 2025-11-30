@@ -1,0 +1,6 @@
+{
+    "type": "OrcaSlicer Project Template",
+    "description": "Base template for automated project generation. Contains Generic Klipper + PLA settings.",
+    "usage": "Do not edit manually. Use fabrication/scripts/stl_to_3mf.py to inject geometry.",
+    "source": "Extracted from user-generated Helios_Resonance_Sample.3mf"
+}

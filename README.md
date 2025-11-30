@@ -94,6 +94,11 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
    - HPS <-> FPGA <-> NRM Data Loop.
    - [View Hardware](fpga/)
 
+**6. FABRICATION LAYER (Physical Manifestation):**
+   - Generates physical artifacts from Duality data (e.g., Gyroid Resonance Fields).
+   - Manages hardware-agnostic printer control via Klipper/Moonraker.
+   - [View Fabrication Hub](fabrication/README.md) | [View Reference Library](fabrication/library/README.md)
+
 ---
 
 ## 🧪 CORE CAPABILITIES (Empirically Verified)
