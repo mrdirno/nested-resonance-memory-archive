@@ -47,9 +47,9 @@
 - [x] **Action:** Create `experiments/cycle2605_visualization.py`.
 
 # Task: Cycle 2606 - The API (Gate 64.1)
-- [ ] **Define Cycle 2606:** REST Interface.
-- [ ] **Goal:** Create `experiments/cycle2606_api.py` using standard library `http.server` (to avoid heavy deps) or `flask` if permitted. Will use `http.server` for safety.
-- [ ] **Action:** Implement a basic JSON API to query agent status.
+- [x] **Define Cycle 2606:** REST Interface.
+- [x] **Goal:** Create `experiments/cycle2606_api.py` using standard library `http.server` (to avoid heavy deps) or `flask` if permitted. Will use `http.server` for safety.
+- [x] **Action:** Implement a basic JSON API to query agent status.
 
 # Task: Cycle 2607 - The Controller (Gate 64.2)
 - [ ] **Define Cycle 2607:** Process Manager.
