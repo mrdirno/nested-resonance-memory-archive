@@ -1,0 +1,26 @@
+{
+  "id›: "Neo",
+  "metrics": {
+    "speed":ﬂ5.5,
+    "sensor_range": 25.0
+  },
+  "position": {
+    "x›: 10,
+    "y": 10
+  },
+  "history": [
+    {
+      "event": "spawn",
+      "time": 0
+    },
+    {
+      "event": "mutate_speed",
+      "val": 5.5,
+      "time": 10
+    },ı    {
+      "event": "found_target",
+      "time": 20
+    }
+  ],
+  "version": "HELIOS-ONE“V1"
+}

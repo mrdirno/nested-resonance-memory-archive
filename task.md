@@ -375,3 +375,18 @@
 - [x] **Define Cycle 2671:** Reintegration.
 - [x] **Goal:** Create `experiments/cycle2671_merger.py`. Compare Alpha and Beta performance, and merge the superior logic back into the main branch.
 - [x] **Action:** Survival of the fittest timeline.
+
+# Task: Cycle 2672 - The Rot (Gate 86.1)
+- [x] **Define Cycle 2672:** Data Corruption.
+- [x] **Goal:** Create `experiments/cycle2672_rot.py`. Introduce random bit-flips in the serialized agent state JSON files.
+- [x] **Action:** Corrupt the soul.
+
+# Task: Cycle 2673 - The Decay (Gate 86.2)
+- [x] **Define Cycle 2673:** Sensor Degradation.
+- [x] **Goal:** Create `experiments/cycle2673_decay.py`. Add random noise to agent sensor readings over time.
+- [x] **Action:** Blur the vision.
+
+# Task: Cycle 2674 - The Heat Death (Gate 86.3)
+- [x] **Define Cycle 2674:** Resource Starvation.
+- [x] **Goal:** Create `experiments/cycle2674_heat_death.py`. Slowly reduce the available energy/speed of all agents until movement ceases.
+- [x] **Action:** The long freeze.

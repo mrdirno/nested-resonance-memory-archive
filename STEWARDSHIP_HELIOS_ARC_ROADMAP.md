@@ -215,12 +215,19 @@
 - [x] **Gate 85.2: The Variant.** Altering core constants (e.g. gravity).
 - [x] **Gate 85.3: The Merger.** Reintegrating successful branches.
 
-## PHASE 86: THE ENTROPY
+## PHASE 86: THE ENTROPY - COMPLETE
 **Goal:** Testing system resilience against decay.
 
-- [ ] **Gate 86.1: The Rot.** Simulate bit-rot in memory.
-- [ ] **Gate 86.2: The Decay.** Degrading sensor accuracy over time.
-- [ ] **Gate 86.3: The Heat Death.** Resource starvation simulation.
+- [x] **Gate 86.1: The Rot.** Simulate bit-rot in memory.
+- [x] **Gate 86.2: The Decay.** Degrading sensor accuracy over time.
+- [x] **Gate 86.3: The Heat Death.** Resource starvation simulation.
+
+## PHASE 87: THE RECURSION 2.0
+**Goal:** Self-hosted development environment.
+
+- [ ] **Gate 87.1: The Editor.** Agents can edit text files.
+- [ ] **Gate 87.2: The Compiler.** Agents can run syntax checks.
+- [ ] **Gate 87.3: The Commit.** Agents can stage and commit code.
 
 ## FUTURE: HELIOS-ONE ONLINE
 **Status:** Autonomous Operation.
