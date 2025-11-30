@@ -37,9 +37,9 @@
 - [x] **Action:** Create `experiments/cycle2603_dashboard.py`.
 
 # Task: Cycle 2604 - The Command (Gate 63.2)
-- [ ] **Define Cycle 2604:** Operator Override.
-- [ ] **Goal:** Implement a CLI loop that allows the user to inject commands (e.g., set target).
-- [ ] **Action:** Create `experiments/cycle2604_command.py`.
+- [x] **Define Cycle 2604:** Operator Override.
+- [x] **Goal:** Implement a CLI loop that allows the user to inject commands (e.g., set target).
+- [x] **Action:** Create `experiments/cycle2604_command.py`.
 
 # Task: Cycle 2605 - The Visualization (Gate 63.3)
 - [ ] **Define Cycle 2605:** Web View.
