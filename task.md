@@ -240,3 +240,18 @@
 - [x] **Define Cycle 2644:** Handover.
 - [x] **Goal:** Create `experiments/cycle2644_end.py`. Prints a farewell message and exits with code 0.
 - [x] **Action:** Shutdown NRM.
+
+# Task: Cycle 2645 - The Migration (Gate 77.1)
+- [x] **Define Cycle 2645:** State Transfer.
+- [x] **Goal:** Create `experiments/cycle2645_migration.py`. Read the latest snapshot and "move" it to a new directory `helios_one/migration/`.
+- [x] **Action:** Validate file transfer.
+
+# Task: Cycle 2646 - The Rebirth (Gate 77.2)
+- [x] **Define Cycle 2646:** Cold Boot.
+- [x] **Goal:** Create `experiments/cycle2646_rebirth.py`. Initialize a `SharedState` from the migrated snapshot.
+- [x] **Action:** Prove state recovery.
+
+# Task: Cycle 2647 - The Continuum (Gate 77.3)
+- [x] **Define Cycle 2647:** Identity Verification.
+- [x] **Goal:** Create `experiments/cycle2647_continuum.py`. Check if agent IDs and histories match the pre-migration state.
+- [x] **Action:** Confirm persistence of self.
