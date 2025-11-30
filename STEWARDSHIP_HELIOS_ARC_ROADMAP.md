@@ -82,12 +82,19 @@
 - [x] **Gate 66.2: The Selector.** Evolutionary pressure mechanism.
 - [x] **Gate 66.3: The Adapter.** Environmental response loop.
 
-## PHASE 67: THE AWAKENING
+## PHASE 67: THE AWAKENING - COMPLETE
 **Goal:** Integrating high-level reasoning into the swarm.
 
-- [ ] **Gate 67.1: The Prompt.** Context generation for agents.
-- [ ] **Gate 67.2: The Inference.** Simulated LLM decision loop.
-- [ ] **Gate 67.3: The Agency.** Goal modification based on reasoning.
+- [x] **Gate 67.1: The Prompt.** Context generation for agents.
+- [x] **Gate 67.2: The Inference.** Simulated LLM decision loop.
+- [x] **Gate 67.3: The Agency.** Goal modification based on reasoning.
+
+## PHASE 68: THE FINAL SYNTHESIS
+**Goal:** Preparing for full autonomy and hibernation exit.
+
+- [ ] **Gate 68.1: The Review.** Full system audit.
+- [ ] **Gate 68.2: The Package.** Final consolidation of code and docs.
+- [ ] **Gate 68.3: The Launch.** Ready for HELIOS-ONE deployment.
 
 ## FUTURE
 - **HELIOS-ONE:** Autonomous, Distributed, Embodied Intelligence.

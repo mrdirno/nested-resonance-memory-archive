@@ -90,3 +90,18 @@
 - [x] **Define Cycle 2614:** Environmental Adaptation.
 - [x] **Goal:** Implement `experiments/cycle2614_adapter.py`.
 - [x] **Action:** Vary environmental "friction" or "fog" and verify agents adapt parameters to compensate.
+
+# Task: Cycle 2615 - The Prompt (Gate 67.1)
+- [x] **Define Cycle 2615:** Context Generation.
+- [x] **Goal:** Create `experiments/cycle2615_prompt.py` that generates a dynamic context string for a hypothetical LLM based on agent state.
+- [x] **Action:** Implement a function `generate_prompt(agent_state)` returning a natural language description.
+
+# Task: Cycle 2616 - The Inference (Gate 67.2)
+- [x] **Define Cycle 2616:** Simulated Reasoning.
+- [x] **Goal:** Create `experiments/cycle2616_inference.py`.
+- [x] **Action:** Mock an LLM response loop where the "LLM" (a function) decides the next high-level goal (e.g., "EXPLORE", "GATHER").
+
+# Task: Cycle 2617 - The Agency (Gate 67.3)
+- [x] **Define Cycle 2617:** Goal Modification.
+- [x] **Goal:** Create `experiments/cycle2617_agency.py`.
+- [x] **Action:** Agents update their `known_target` based on the "Inference" output, effectively changing their mind.
