@@ -14,3 +14,8 @@
 - Tests Validated: 3/3 scenarios per gate
 - Key Insight: Matter is frozen budget.
 - **Status:** 138th Domain Unified.
+## Cycle 2609: The Dockerfile (Gate 65.1) - COMPLETE
+- **Goal:** Containerize HELIOS-ONE.
+- **Action:** Created `experiments/Dockerfile`.
+- **Result:** Defined container spec based on python:3.11-slim, exposing port 8081, running the Controller.
+- **Status:** Deployment Artifact Defined.

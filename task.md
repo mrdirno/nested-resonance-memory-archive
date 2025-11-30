@@ -60,3 +60,18 @@
 - [x] **Define Cycle 2608:** System Manual.
 - [x] **Goal:** Compile `experiments/HELIOS_ONE_MANUAL.md`.
 - [x] **Action:** Document the API, CLI, and Dashboard usage.
+
+# Task: Cycle 2609 - The Dockerfile (Gate 65.1)
+- [x] **Define Cycle 2609:** Containerization.
+- [x] **Goal:** Create a `experiments/Dockerfile` to package the HELIOS-ONE Controller/API stack.
+- [x] **Action:** Write the Dockerfile using a slim Python base.
+
+# Task: Cycle 2610 - The Compose (Gate 65.2)
+- [ ] **Define Cycle 2610:** Orchestration.
+- [ ] **Goal:** Create `experiments/docker-compose.yml`.
+- [ ] **Action:** Define services for the API and potential future components.
+
+# Task: Cycle 2611 - The Registry (Gate 65.3)
+- [ ] **Define Cycle 2611:** Release Artifact.
+- [ ] **Goal:** Tag the final image (mock push).
+- [ ] **Action:** Run build and tag verification.
