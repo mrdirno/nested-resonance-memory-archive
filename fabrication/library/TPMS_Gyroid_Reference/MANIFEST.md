@@ -11,6 +11,9 @@
     *   Format: ASCII STL
     *   Vertices: ~426k
     *   Base Unit: Millimeters
+    *   **Surface Area:** ~47,400 mm²
+    *   **Volume:** ~16,312 mm³
+    *   **Volume Fraction:** 0.25 (25%) relative to bounding box
 
 2.  **Documentation:** `README.md` (Scientific context, biological references, mathematical definition).
 

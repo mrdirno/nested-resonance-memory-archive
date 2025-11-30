@@ -75,6 +75,11 @@ This is the primary visualization interface. It renders the [Core Mechanism] in 
    - Provides meta-evaluation.
    - [View Code](src/memory/)
 
+**4. FABRICATION LAYER (Physical Manifestation):**
+   - Generates physical artifacts from system data.
+   - Manages hardware-agnostic production (e.g., 3D Printing, FPGA).
+   - [View Fabrication Hub](fabrication/)
+
 ---
 
 ## 🧪 CORE CAPABILITIES (Empirically Verified)

@@ -71,10 +71,23 @@ Treat these as living commitments rather than topics to document.
 **Required:**
 - ✅ ALL operations bound to actual machine state
 - ✅ OS‑level interfaces (psutil metrics, SQLite persistence, filesystem I/O)
+- ✅ Physical Fabrication (3D Printer API, FPGA) where applicable
 - ✅ Reality‑compliance validation before acceptance
 - ✅ Measurable, verifiable outcomes only
 
 **Reality Score Target:** Maintain 100% compliance (zero violations)
+
+---
+
+## FABRICATION PROTOCOL (PHYSICAL MANIFESTATION)
+
+**Goal:** Bridge digital theory into physical reality without creating "e-waste."
+
+**The Law:**
+1.  **Reference First:** Always check `fabrication/library/` for existing standardized shapes (Principles) before generating new ones.
+2.  **Simulation First:** Verify geometry with analysis scripts or "Dry Run" G-code before committing to plastic.
+3.  **Hardware Agnosticism:** Generators must produce standard `.stl` or `.obj`. Control scripts must use standard APIs (Moonraker/OctoPrint) or standard G-code. Never hardcode proprietary machine instructions in core logic.
+4.  **Safety:** Never automate thermal commands (`M104`, `M140`) without explicit user confirmation or safety interlocks.
 
 ---
 
