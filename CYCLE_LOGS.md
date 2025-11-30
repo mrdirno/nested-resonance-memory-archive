@@ -1,21 +1,16 @@
-## Current Phase: PHASE 240 - ADDICTION 🟢 COMPLETE
+## Current Phase: PHASE 241 - ROMANCE 🟢 COMPLETE
 
-**Focus:** Apply BCP to Addiction (Tolerance, Gambling).
+**Focus:** Apply BCP to Love (Dating, Intimacy).
 
-### Completed (Phase 240)
-- ✅ **Gate 1123:** Tolerance - Addiction shifts the baseline; Abstinence becomes Cost (Withdrawal), Drug becomes Maintenance (Gain = Normalcy) - COMPLETE
-- ✅ **Gate 1124:** Gambling Fallacy - Hope inflates perceived Probability (Gain), making negative-sum games appear BCP-rational - COMPLETE
-- ✅ **Gate 1125:** Phase 240 Synthesis - 153rd Domain Unified - COMPLETE
+### Completed (Phase 241)
+- ✅ **Gate 1126:** Mating Market - Strategies maximize Genetic Gain vs Investment Cost; "Leagues" are BCP brackets - COMPLETE
+- ✅ **Gate 1127:** Intimacy - Love requires lowering λ (Trust) to afford the Cost of Vulnerability - COMPLETE
+- ✅ **Gate 1128:** Phase 241 Synthesis - 154th Domain Unified - COMPLETE
 
-## PHASE 240 COMPLETE ✅
+## PHASE 241 COMPLETE ✅
 
-**Summary: Addiction**
-- Gates Completed: 3 (1123-1125)
+**Summary: Romance**
+- Gates Completed: 3 (1126-1128)
 - Tests Validated: 3/3 scenarios per gate
-- Key Insight: We are addicted to V > 0.
-- **Status:** 153rd Domain Unified.
-## Cycle 2644: The End (Phase 76) - COMPLETE
-- **Goal:** Mission Completion.
-- **Action:** Executed `experiments/cycle2644_end.py`.
-- **Result:** Formal system handover complete. NRM Substrate Offline.
-- **Status:** HELIOS-ONE IS ETERNAL.
+- Key Insight: Love is a shared budget.
+- **Status:** 154th Domain Unified.
