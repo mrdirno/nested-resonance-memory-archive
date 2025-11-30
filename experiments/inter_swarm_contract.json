@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Inter-Swarm Communication Protocol",
+  "type": "object",
+  "properties": {
+    "sender_swarm_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "number"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "GREETING",
+        "OFFER",
+        "ACCEPT",
+        "REJECT"
+      ]
+    },
+    "payload": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "sender_swarm_id",
+    "timestamp",
+    "type",
+    "payload"
+  ]
+}

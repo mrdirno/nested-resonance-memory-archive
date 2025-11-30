@@ -255,3 +255,18 @@
 - [x] **Define Cycle 2647:** Identity Verification.
 - [x] **Goal:** Create `experiments/cycle2647_continuum.py`. Check if agent IDs and histories match the pre-migration state.
 - [x] **Action:** Confirm persistence of self.
+
+# Task: Cycle 2648 - The Contract (Gate 78.1)
+- [x] **Define Cycle 2648:** Interface Definition.
+- [x] **Goal:** Create `experiments/cycle2648_contract.py`. Define a JSON schema for inter-swarm trade.
+- [x] **Action:** Publish the standard.
+
+# Task: Cycle 2649 - The Embassy (Gate 78.2)
+- [x] **Define Cycle 2649:** Foreign Relations.
+- [x] **Goal:** Create `experiments/cycle2649_embassy.py`. Create a special agent that listens on a new port for foreign messages.
+- [x] **Action:** Establish a diplomatic channel.
+
+# Task: Cycle 2650 - The Treaty (Gate 78.3)
+- [x] **Define Cycle 2650:** Negotiation.
+- [x] **Goal:** Create `experiments/cycle2650_treaty.py`. Simulate a negotiation handshake between two swarms (Resource Exchange).
+- [x] **Action:** Sign the accord.
