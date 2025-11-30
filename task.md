@@ -12,6 +12,21 @@
 - [x] **Action:** Create `experiments/cycle2598_harvester.py`.
 
 # Task: Cycle 2599 - The Synthesizer (Gate 61.3)
-- [ ] **Define Cycle 2599:** Automated Reporting.
-- [ ] **Goal:** Automatically generate a summary of the Sentinel and Harvester logs.
-- [ ] **Action:** Create `experiments/cycle2599_synthesizer.py`.
+- [x] **Define Cycle 2599:** Automated Reporting.
+- [x] **Goal:** Automatically generate a summary of the Sentinel and Harvester logs.
+- [x] **Action:** Create `experiments/cycle2599_synthesizer.py`.
+
+# Task: Cycle 2600 - The Protocol (Gate 62.1)
+- [ ] **Define Cycle 2600:** Inter-Agent Communication.
+- [ ] **Goal:** Define a JSON-based message format for agents to exchange observations.
+- [ ] **Action:** Create `experiments/cycle2600_protocol.py`.
+
+# Task: Cycle 2601 - The Consensus (Gate 62.2)
+- [ ] **Define Cycle 2601:** Shared Truth.
+- [ ] **Goal:** Implement a simple majority-vote mechanism for state agreement.
+- [ ] **Action:** Create `experiments/cycle2601_consensus.py`.
+
+# Task: Cycle 2602 - The Hive (Gate 62.3)
+- [ ] **Define Cycle 2602:** Swarm Intelligence.
+- [ ] **Goal:** Demonstrate agents converging on a target using only local communication.
+- [ ] **Action:** Create `experiments/cycle2602_hive.py`.
