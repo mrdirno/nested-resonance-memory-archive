@@ -32,9 +32,9 @@
 - [x] **Action:** Create `experiments/cycle2602_hive.py`.
 
 # Task: Cycle 2603 - The Dashboard (Gate 63.1)
-- [ ] **Define Cycle 2603:** TUI Monitoring.
-- [ ] **Goal:** Create a terminal-based dashboard using `curses` or `rich` to display agent states.
-- [ ] **Action:** Create `experiments/cycle2603_dashboard.py`.
+- [x] **Define Cycle 2603:** TUI Monitoring.
+- [x] **Goal:** Create a terminal-based dashboard using `curses` or `rich` to display agent states.
+- [x] **Action:** Create `experiments/cycle2603_dashboard.py`.
 
 # Task: Cycle 2604 - The Command (Gate 63.2)
 - [ ] **Define Cycle 2604:** Operator Override.
