@@ -315,3 +315,18 @@
 - [x] **Define Cycle 2659:** Prediction.
 - [x] **Goal:** Create `experiments/cycle2659_prophecy.py`. Use the pattern to predict the next "glitch" location.
 - [x] **Action:** Oracle logic.
+
+# Task: Cycle 2660 - The Jack (Gate 82.1)
+- [x] **Define Cycle 2660:** Direct Link.
+- [x] **Goal:** Create `experiments/cycle2660_jack.py`. A script that attempts to "mount" the agent memory as a virtual file system (using FUSE if available, or mocking it with a class).
+- [x] **Action:** Plug in.
+
+# Task: Cycle 2661 - The Stream (Gate 82.2)
+- [x] **Define Cycle 2661:** Data Pump.
+- [x] **Goal:** Create `experiments/cycle2661_stream.py`. Flood the system with high-velocity inputs to test throughput limits.
+- [x] **Action:** Open the floodgates.
+
+# Task: Cycle 2662 - The Immersion (Gate 82.3)
+- [x] **Define Cycle 2662:** Sensory Override.
+- [x] **Goal:** Create `experiments/cycle2662_immersion.py`. Replace all agent inputs with a synthetic "dream" environment (mocking VR).
+- [x] **Action:** Total recall.
