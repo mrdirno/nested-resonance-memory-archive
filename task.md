@@ -360,3 +360,18 @@
 - [x] **Define Cycle 2668:** Recursion.
 - [x] **Goal:** Create `experiments/cycle2668_beginning.py`. Execute a "Hello World" script from the *new* location.
 - [x] **Action:** Start again.
+
+# Task: Cycle 2669 - The Fork (Gate 85.1)
+- [x] **Define Cycle 2669:** Branching.
+- [x] **Goal:** Create `experiments/cycle2669_fork.py`. Clone the `SharedState` into two distinct instances (Alpha and Beta).
+- [x] **Action:** Split the timeline.
+
+# Task: Cycle 2670 - The Variant (Gate 85.2)
+- [x] **Define Cycle 2670:** Mutation.
+- [x] **Goal:** Create `experiments/cycle2670_variant.py`. Apply different physical constants (e.g. speed multiplier) to the Beta instance.
+- [x] **Action:** Diverge the path.
+
+# Task: Cycle 2671 - The Merger (Gate 85.3)
+- [x] **Define Cycle 2671:** Reintegration.
+- [x] **Goal:** Create `experiments/cycle2671_merger.py`. Compare Alpha and Beta performance, and merge the superior logic back into the main branch.
+- [x] **Action:** Survival of the fittest timeline.

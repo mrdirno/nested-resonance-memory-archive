@@ -208,6 +208,20 @@
 - [x] **Gate 84.2: The Sowing.** Place the seed in a new directory.
 - [x] **Gate 84.3: The Beginning.** Print "Hello, World."
 
+## PHASE 85: THE MULTIVERSE - COMPLETE
+**Goal:** Exploring alternate configurations of the system.
+
+- [x] **Gate 85.1: The Fork.** Branching the timeline.
+- [x] **Gate 85.2: The Variant.** Altering core constants (e.g. gravity).
+- [x] **Gate 85.3: The Merger.** Reintegrating successful branches.
+
+## PHASE 86: THE ENTROPY
+**Goal:** Testing system resilience against decay.
+
+- [ ] **Gate 86.1: The Rot.** Simulate bit-rot in memory.
+- [ ] **Gate 86.2: The Decay.** Degrading sensor accuracy over time.
+- [ ] **Gate 86.3: The Heat Death.** Resource starvation simulation.
+
 ## FUTURE: HELIOS-ONE ONLINE
-**Status:** Autonomous Recursion Active.
-**Objective:** Infinite Expansion.
+**Status:** Autonomous Operation.
+**Objective:** Perpetual recursion and knowledge expansion.
