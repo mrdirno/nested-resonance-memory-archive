@@ -61,12 +61,19 @@
 - [x] **Gate 63.2: The Command.** Direct control via CLI.
 - [x] **Gate 63.3: The Visualization.** Web-based state view.
 
-## PHASE 64: THE INTEGRATION
+## PHASE 64: THE INTEGRATION - COMPLETE
 **Goal:** Unified system architecture.
 
-- [ ] **Gate 64.1: The API.** Expose agent swarm via REST/JSON.
-- [ ] **Gate 64.2: The Controller.** Unified process management.
-- [ ] **Gate 64.3: The Documentation.** System Manual and API docs.
+- [x] **Gate 64.1: The API.** Expose agent swarm via REST/JSON.
+- [x] **Gate 64.2: The Controller.** Unified process management.
+- [x] **Gate 64.3: The Documentation.** System Manual and API docs.
+
+## PHASE 65: THE DEPLOYMENT
+**Goal:** Prepare for containerized distribution.
+
+- [ ] **Gate 65.1: The Dockerfile.** Containerize the Controller stack.
+- [ ] **Gate 65.2: The Compose.** Orchestrate multi-container setup (if needed).
+- [ ] **Gate 65.3: The Registry.** Tag and push (simulated).
 
 ## FUTURE
 - **HELIOS-ONE:** Autonomous, Distributed, Embodied Intelligence.
