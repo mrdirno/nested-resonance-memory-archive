@@ -22,9 +22,9 @@
 - [x] **Action:** Create `experiments/cycle2600_protocol.py`.
 
 # Task: Cycle 2601 - The Consensus (Gate 62.2)
-- [ ] **Define Cycle 2601:** Shared Truth.
-- [ ] **Goal:** Implement a simple majority-vote mechanism for state agreement.
-- [ ] **Action:** Create `experiments/cycle2601_consensus.py`.
+- [x] **Define Cycle 2601:** Shared Truth.
+- [x] **Goal:** Implement a simple majority-vote mechanism for state agreement.
+- [x] **Action:** Create `experiments/cycle2601_consensus.py`.
 
 # Task: Cycle 2602 - The Hive (Gate 62.3)
 - [ ] **Define Cycle 2602:** Swarm Intelligence.
