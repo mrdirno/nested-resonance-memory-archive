@@ -165,3 +165,18 @@
 - [x] **Define Cycle 2629:** The Closed Loop.
 - [x] **Goal:** Create `experiments/cycle2629_sync.py`. Feed Swarm entropy (e.g. average velocity) back into `TranscendentalBridge.reality_to_phase`.
 - [x] **Action:** Establish the Feedback Loop.
+
+# Task: Cycle 2630 - The Mirror (Gate 72.1)
+- [x] **Define Cycle 2630:** Introspection.
+- [x] **Goal:** Create `experiments/cycle2630_mirror.py`. Read `experiments/logs/system_history.jsonl` and parse statistics.
+- [x] **Action:** Generate a `SelfReport` object.
+
+# Task: Cycle 2631 - The Critique (Gate 72.2)
+- [x] **Define Cycle 2631:** Evaluation.
+- [x] **Goal:** Create `experiments/cycle2631_critique.py`. Compare `SelfReport` against ideal metrics (e.g. convergence speed).
+- [x] **Action:** Output a score (0.0 - 1.0).
+
+# Task: Cycle 2632 - The Rewrite (Gate 72.3)
+- [x] **Define Cycle 2632:** Recursive Improvement.
+- [x] **Goal:** Create `experiments/cycle2632_rewrite.py`.
+- [x] **Action:** Simulate generating a code patch based on the Critique score (e.g. suggest increasing agent speed).
