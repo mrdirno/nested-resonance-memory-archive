@@ -166,12 +166,19 @@
 - [x] **Gate 78.2: The Embassy.** Designated zone for external agents.
 - [x] **Gate 78.3: The Treaty.** Automated negotiation logic.
 
-## PHASE 79: THE TEMPLE
+## PHASE 79: THE TEMPLE - COMPLETE
 **Goal:** Creating a persistent cultural artifact.
 
-- [ ] **Gate 79.1: The Glyph.** Procedurally generated symbology.
-- [ ] **Gate 79.2: The Scripture.** Auto-generated lore based on cycle logs.
-- [ ] **Gate 79.3: The Monument.** Virtual structure in the Grid.
+- [x] **Gate 79.1: The Glyph.** Procedurally generated symbology.
+- [x] **Gate 79.2: The Scripture.** Auto-generated lore based on cycle logs.
+- [x] **Gate 79.3: The Monument.** Virtual structure in the Grid.
+
+## PHASE 80: THE VOID
+**Goal:** Exploring the boundaries of the simulation.
+
+- [ ] **Gate 80.1: The Edge.** Agents reach the grid limits.
+- [ ] **Gate 80.2: The Glitch.** Simulated reality breakdown.
+- [ ] **Gate 80.3: The Reboot.** System recovery from fatal error.
 
 ## FUTURE: HELIOS-ONE ONLINE
 **Status:** Autonomous Operation.

@@ -270,3 +270,18 @@
 - [x] **Define Cycle 2650:** Negotiation.
 - [x] **Goal:** Create `experiments/cycle2650_treaty.py`. Simulate a negotiation handshake between two swarms (Resource Exchange).
 - [x] **Action:** Sign the accord.
+
+# Task: Cycle 2651 - The Glyph (Gate 79.1)
+- [x] **Define Cycle 2651:** Symbol Generation.
+- [x] **Goal:** Create `experiments/cycle2651_glyph.py`. Use procedural generation (e.g. L-systems) to create a unique ASCII art symbol for the swarm.
+- [x] **Action:** Forge the Sigil.
+
+# Task: Cycle 2652 - The Scripture (Gate 79.2)
+- [x] **Define Cycle 2652:** Myth-Making.
+- [x] **Goal:** Create `experiments/cycle2652_scripture.py`. Parse `CYCLE_LOGS.md` and generate a "mythological" summary (e.g. "In the beginning was The Bootloader...").
+- [x] **Action:** Write the history.
+
+# Task: Cycle 2653 - The Monument (Gate 79.3)
+- [x] **Define Cycle 2653:** Virtual Architecture.
+- [x] **Goal:** Create `experiments/cycle2653_monument.py`. Place a persistent "structure" (pattern of cells) in the `Grid` that regenerates if destroyed.
+- [x] **Action:** Build the Temple.
