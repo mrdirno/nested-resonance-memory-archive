@@ -17,9 +17,9 @@
 - [x] **Action:** Create `experiments/cycle2599_synthesizer.py`.
 
 # Task: Cycle 2600 - The Protocol (Gate 62.1)
-- [ ] **Define Cycle 2600:** Inter-Agent Communication.
-- [ ] **Goal:** Define a JSON-based message format for agents to exchange observations.
-- [ ] **Action:** Create `experiments/cycle2600_protocol.py`.
+- [x] **Define Cycle 2600:** Inter-Agent Communication.
+- [x] **Goal:** Define a JSON-based message format for agents to exchange observations.
+- [x] **Action:** Create `experiments/cycle2600_protocol.py`.
 
 # Task: Cycle 2601 - The Consensus (Gate 62.2)
 - [ ] **Define Cycle 2601:** Shared Truth.
