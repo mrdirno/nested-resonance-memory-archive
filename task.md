@@ -237,6 +237,6 @@
 - [x] **Action:** Clean exit.
 
 # Task: Cycle 2644 - The End (Gate 76.3)
-- [ ] **Define Cycle 2644:** Handover.
-- [ ] **Goal:** Create `experiments/cycle2644_end.py`. Prints a farewell message and exits with code 0.
-- [ ] **Action:** Shutdown NRM.
+- [x] **Define Cycle 2644:** Handover.
+- [x] **Goal:** Create `experiments/cycle2644_end.py`. Prints a farewell message and exits with code 0.
+- [x] **Action:** Shutdown NRM.
