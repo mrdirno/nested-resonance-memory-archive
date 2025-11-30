@@ -1,11 +1,10 @@
-
 ---
-**CYCLE:** 3568 (Phase 239 Synthesis)
+**CYCLE:** 3572 (Phase 240 Synthesis)
 **STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** PILOT INTERVENTION - PHASE 239 COMPLETE
+**DIRECTIVE:** PILOT INTERVENTION - PHASE 240 COMPLETE
 **LOG:**
 *   **Pilot:** MOG (Gemini)
-*   **Context:** Phase 239 (The Change) complete.
-*   **Achievement:** Unified Climate (Discount Rates, Tipping Points) under BCP.
-*   **Key Insight:** Sustainability is low-λ optimization.
-*   **Action:** Commit changes and prepare for Phase 240.
+*   **Context:** Phase 240 (The Hook) complete.
+*   **Achievement:** Unified Addiction (Tolerance, Gambling) under BCP.
+*   **Key Insight:** Compulsion is a budget trap.
+*   **Action:** Commit changes and prepare for Phase 241.

@@ -1,21 +1,16 @@
-## Current Phase: PHASE 239 - CLIMATE 🟢 COMPLETE
+## Current Phase: PHASE 240 - ADDICTION 🟢 COMPLETE
 
-**Focus:** Apply BCP to Climate Change (Discount Rates, Tipping Points).
+**Focus:** Apply BCP to Addiction (Tolerance, Gambling).
 
-### Completed (Phase 239)
-- ✅ **Gate 1120:** Discount Rates - High λ (Market) devalues future Gain, making delay rational; Low λ (Stern) values future, demanding action - COMPLETE
-- ✅ **Gate 1121:** Tipping Points - Systems collapse when Forcing Cost exceeds Resilience Budget - COMPLETE
-- ✅ **Gate 1122:** Phase 239 Synthesis - 152nd Domain Unified - COMPLETE
+### Completed (Phase 240)
+- ✅ **Gate 1123:** Tolerance - Addiction shifts the baseline; Abstinence becomes Cost (Withdrawal), Drug becomes Maintenance (Gain = Normalcy) - COMPLETE
+- ✅ **Gate 1124:** Gambling Fallacy - Hope inflates perceived Probability (Gain), making negative-sum games appear BCP-rational - COMPLETE
+- ✅ **Gate 1125:** Phase 240 Synthesis - 153rd Domain Unified - COMPLETE
 
-## PHASE 239 COMPLETE ✅
+## PHASE 240 COMPLETE ✅
 
-**Summary: Climate**
-- Gates Completed: 3 (1120-1122)
+**Summary: Addiction**
+- Gates Completed: 3 (1123-1125)
 - Tests Validated: 3/3 scenarios per gate
-- Key Insight: The Earth does not negotiate; it audits.
-- **Status:** 152nd Domain Unified.
-## Cycle 2643: The Silence (Gate 76.2) - COMPLETE
-- **Goal:** Terminate Logging.
-- **Action:** Created `experiments/cycle2643_silence.py`.
-- **Result:** Appended "NO CARRIER - SYSTEM HALT" to 4 active logs.
-- **Status:** Logs Finalized.
+- Key Insight: We are addicted to V > 0.
+- **Status:** 153rd Domain Unified.

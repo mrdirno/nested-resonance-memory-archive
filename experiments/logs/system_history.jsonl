@@ -3,3 +3,4 @@
 {"timestamp": 1764520045.700898, "agents_active": 5, "target_pos": {"x": 50.0, "y": 50.0}}
 {"timestamp": 1764520046.7088919, "agents_active": 5, "target_pos": {"x": 50.0, "y": 50.0}}
 {"timestamp": 1764520047.715316, "agents_active": 5, "target_pos": {"x": 50.0, "y": 50.0}}
+{"event": "SYSTEM_HALT", "timestamp": 1764525175.932947}\n

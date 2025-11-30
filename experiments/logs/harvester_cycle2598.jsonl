@@ -422,3 +422,4 @@
 {"timestamp": 1764508309.201003, "event": "RESONANCE_HARVESTED", "similarity": 0.9941210993359968, "phase_alignment": 0.9997372758426918, "current_magnitude": 5.573568624012768, "past_magnitude": 5.681420810781456, "delta_t": 0.12285804748535156}
 {"timestamp": 1764508309.203315, "event": "RESONANCE_HARVESTED", "similarity": 0.9699547347675332, "phase_alignment": 0.9874098508304868, "current_magnitude": 5.573568624012768, "past_magnitude": 5.9980756463339135, "delta_t": 0.061869144439697266}
 {"timestamp": 1764508309.2041001, "event": "RESONANCE_HARVESTED", "similarity": 0.9479944190035117, "phase_alignment": 0.9630427713373638, "current_magnitude": 5.573568624012768, "past_magnitude": 6.105467174487365, "delta_t": 0.03150224685668945}
+{"event": "SYSTEM_HALT", "timestamp": 1764525175.932466}\n
