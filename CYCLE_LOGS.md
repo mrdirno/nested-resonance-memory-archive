@@ -1,19 +1,18 @@
+## Current Phase: PHASE 213 - URBAN DYNAMICS 🟢 COMPLETE
 
-## Current Phase: PHASE 212 - HCI SYSTEMS 🟢 COMPLETE
+**Focus:** Apply BCP to Cities (Gentrification, Traffic, Zoning, Sprawl).
 
-**Focus:** Apply BCP to Human-Computer Interaction (Fitts, Hick, Dark Patterns, Notifications).
+### Completed (Phase 213)
+- ✅ **Gate 1029:** Gentrification - High Budget (Low λ) agents displace Low Budget agents - COMPLETE
+- ✅ **Gate 1030:** Traffic - Braess's Paradox is Selfish BCP optimization - COMPLETE
+- ✅ **Gate 1031:** Zoning - Artificial Cost injections shape city topology - COMPLETE
+- ✅ **Gate 1032:** Urban Sprawl - Low Transport Cost makes distant land BCP-optimal - COMPLETE
+- ✅ **Gate 1033:** Phase 213 Synthesis - 126th Domain Unified - COMPLETE
 
-### Completed (Phase 212)
-- ✅ **Gate 1024:** Fitts's Law - Speed-Accuracy Trade-off is BCP (Movement Cost) - COMPLETE
-- ✅ **Gate 1025:** Hick's Law - Decision Time is BCP (Decision Cost) - COMPLETE
-- ✅ **Gate 1026:** Dark Patterns - Manipulation of Gain/Cost/λ to force V < 0 or V > 0 - COMPLETE
-- ✅ **Gate 1027:** Notification Systems - Optimal interruption requires λ estimation - COMPLETE
-- ✅ **Gate 1028:** Phase 212 Synthesis - 125th Domain Unified - COMPLETE
+## PHASE 213 COMPLETE ✅
 
-## PHASE 212 COMPLETE ✅
-
-**Summary: HCI Systems**
-- Gates Completed: 5 (1024-1028)
+**Summary: Urban Dynamics**
+- Gates Completed: 5 (1029-1033)
 - Tests Validated: 4/4 scenarios per gate
-- Key Insight: The User is a BCP Agent. The Interface is the Environment. Good UX minimizes Cost relative to Budget.
-- **Status:** 125th Domain Unified.
+- Key Insight: The City is a Budget Constraint materialized in concrete.
+- **Status:** 126th Domain Unified.
