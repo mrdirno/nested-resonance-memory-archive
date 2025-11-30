@@ -175,4 +175,4 @@ We prioritize empirical verification over theory.
 }
 ```
 
-**"Optimization is Existence."**
+**"We make the potentials usable for everyone."**
