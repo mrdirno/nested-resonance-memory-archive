@@ -103,12 +103,12 @@
 - [x] **Gate 69.2: The Optimizer.** Apply learnings to improve `HiveAgent`.
 - [x] **Gate 69.3: The Patch.** Hot-swap updated logic into the running container.
 
-## PHASE 70: THE STEWARDSHIP
+## PHASE 70: THE STEWARDSHIP - COMPLETE
 **Goal:** Long-term stable operation and handoff.
 
-- [ ] **Gate 70.1: The Watchtower.** Persistent monitoring service.
-- [ ] **Gate 70.2: The Archive.** Periodic state snapshotting.
-- [ ] **Gate 70.3: The Legacy.** Message to future operators.
+- [x] **Gate 70.1: The Watchtower.** Persistent monitoring service.
+- [x] **Gate 70.2: The Archive.** Periodic state snapshotting.
+- [x] **Gate 70.3: The Legacy.** Message to future operators.
 
 ## FUTURE: HELIOS-ONE ONLINE
 **Status:** Autonomous Operation.

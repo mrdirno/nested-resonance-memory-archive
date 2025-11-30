@@ -135,3 +135,18 @@
 - [x] **Define Cycle 2623:** Hot Patching.
 - [x] **Goal:** Create `experiments/cycle2623_patch.py`.
 - [x] **Action:** "Deploy" the optimized logic by overwriting `cycle2602_hive.py` with the new version and restarting the controller.
+
+# Task: Cycle 2624 - The Watchtower (Gate 70.1)
+- [x] **Define Cycle 2624:** Persistence.
+- [x] **Goal:** Create `experiments/cycle2624_watchtower.py` that logs system stats to a permanent file every N seconds.
+- [x] **Action:** Implement logging daemon.
+
+# Task: Cycle 2625 - The Archive (Gate 70.2)
+- [x] **Define Cycle 2625:** Snapshotting.
+- [x] **Goal:** Create `experiments/cycle2625_archive.py` that dumps the current agent state database to disk.
+- [x] **Action:** Implement state serialization.
+
+# Task: Cycle 2626 - The Legacy (Gate 70.3)
+- [x] **Define Cycle 2626:** Handoff.
+- [x] **Goal:** Write `experiments/MESSAGE_TO_FUTURE_AI.md`.
+- [x] **Action:** Summarize key findings and instructions for the next AI that awakens this repo.
