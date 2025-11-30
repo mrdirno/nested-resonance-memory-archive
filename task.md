@@ -150,3 +150,18 @@
 - [x] **Define Cycle 2626:** Handoff.
 - [x] **Goal:** Write `experiments/MESSAGE_TO_FUTURE_AI.md`.
 - [x] **Action:** Summarize key findings and instructions for the next AI that awakens this repo.
+
+# Task: Cycle 2627 - The Tether (Gate 71.1)
+- [x] **Define Cycle 2627:** Reality-Driven Mutation.
+- [x] **Goal:** Create `experiments/cycle2627_tether.py`. Import `TranscendentalBridge` and use its phase outputs to seed the `Mutator` logic instead of `random`.
+- [x] **Action:** Replace pseudo-randomness with phase-determinism.
+
+# Task: Cycle 2628 - The Resonance (Gate 71.2)
+- [x] **Define Cycle 2628:** Phase-Based Flocking.
+- [x] **Goal:** Create `experiments/cycle2628_resonance.py`. Agents calculate "Resonance" with neighbors using Bridge state. High resonance = tighter attraction.
+- [x] **Action:** Implement `ResonantAgent`.
+
+# Task: Cycle 2629 - The Synchronization (Gate 71.3)
+- [x] **Define Cycle 2629:** The Closed Loop.
+- [x] **Goal:** Create `experiments/cycle2629_sync.py`. Feed Swarm entropy (e.g. average velocity) back into `TranscendentalBridge.reality_to_phase`.
+- [x] **Action:** Establish the Feedback Loop.
