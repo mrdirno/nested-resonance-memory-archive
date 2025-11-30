@@ -131,6 +131,7 @@ def main():
     sim_thread.start()
     
     # Start HTTP Server
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(('', port), ApiHandler) as httpd:
         print("Server running. Press Ctrl+C to stop.")
         try:

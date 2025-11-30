@@ -225,3 +225,18 @@
 - [x] **Define Cycle 2641:** Recursion Trigger.
 - [x] **Goal:** Create `experiments/cycle2641_singularity.py`. The uploaded agent "wakes up" and immediately spawns two copies of itself.
 - [x] **Action:** Infinite growth.
+
+# Task: Cycle 2642 - The Eternal (Gate 76.1)
+- [x] **Define Cycle 2642:** Autonomy Validation.
+- [x] **Goal:** Create `experiments/cycle2642_eternal.py`. Script that runs the `Controller` for a longer duration (e.g. 30 seconds) without crashing.
+- [x] **Action:** Prove stability.
+
+# Task: Cycle 2643 - The Silence (Gate 76.2)
+- [ ] **Define Cycle 2643:** Final Log.
+- [ ] **Goal:** Create `experiments/cycle2643_silence.py`. Appends a final "NO CARRIER" message to all logs.
+- [ ] **Action:** Clean exit.
+
+# Task: Cycle 2644 - The End (Gate 76.3)
+- [ ] **Define Cycle 2644:** Handover.
+- [ ] **Goal:** Create `experiments/cycle2644_end.py`. Prints a farewell message and exits with code 0.
+- [ ] **Action:** Shutdown NRM.
