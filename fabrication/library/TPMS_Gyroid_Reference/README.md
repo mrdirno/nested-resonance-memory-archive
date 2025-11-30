@@ -23,16 +23,17 @@ This equation describes a **Gyroid**, a member of the Schwarz P/D surface family
 ## 2. Physical Properties (The "Why")
 
 ### 2.1 Physicochemical Metrics (Calculated)
-For this 40mm Reference Artifact (printed as a 0.4mm shell):
+For this 40mm **Reference Lattice** (3x3x3 Periodicity, printed as a 0.4mm shell):
 
 | Metric | Value | Unit | Significance |
 | :--- | :--- | :--- | :--- |
-| **Geometric Density** | **~460** | $m^2/m^3$ | Active surface area per unit of space occupied. |
+| **Geometric Density** | **~460** | $m^2/m^3$ | Active surface area per unit of space occupied. *Based on theoretical smooth surface.* |
 | **Material Efficiency** | **~5,000** | $m^2/m^3$ | Active surface area per unit of plastic used. |
 | **Dimensionless Constant** ($\bar{A}$) | **3.091** | - | Crystallographic constant for Schwarz D topology. |
 
 *   **The Shell Factor:** Printing a shell (two sides) instead of a solid doubles the effective surface area ($SA \approx 2 \times S_{ideal}$).
-*   **Isolevel Robustness:** The Gyroid is mathematically stable. A 5% manufacturing over-extrusion only reduces surface area by ~1.2%, making it an ideal error-tolerant structure for chemical or acoustic filtration.
+*   **Manufacturing Sensitivity (The 11% Risk):** Material efficiency is inversely proportional to wall thickness ($E \approx 2/t$). If the printer over-extrudes the wall to **0.45mm**, the efficiency drops to ~4,444 $m^2/m^3$—an immediate **11% loss** in active surface area per gram. Precision calibration is critical.
+*   **Roughness Bonus:** The "Voxelized" STL actually has a higher surface area (~740 $m^2/m^3$) due to layer stepping and mesh roughness. For catalytic applications, this is a bonus; for fluid dynamics, it represents increased drag friction compared to the theoretical model.
 
 ### A. Zero Mean Curvature (Minimal Surface)
 At every single point on this surface, the curvature is zero. The surface tension is perfectly balanced.
