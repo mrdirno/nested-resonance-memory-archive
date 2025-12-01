@@ -230,6 +230,12 @@
 - **Result:** REVOLUTION Selected. Hypothesis: Revolution is a Phase Transition where Cost(Status Quo) > Cost(Chaos). It is a budget crisis of legitimacy.
 - **Status:** Phase 259 Initiated. Gate 1191 Validated.
 
+## Cycle 2717: The Dictator's Dilemma (Phase 259) - COMPLETE
+- **Goal:** Test Autocracy as a BCP Failure Mode.
+- **Action:** Modeled "Fear" as the Cost of Truth. Subordinates hide bad news to avoid punishment.
+- **Result:** HYPOTHESIS CONFIRMED. High Fear leads to High Information Distortion. The Dictator allocates resources based on lies, causing System Collapse. Autocracy creates its own blindness.
+- **Status:** Phase 259 Active. Gate 1192 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).

@@ -2731,6 +2731,12 @@ V(power) = Control - λ(Legitimacy) × Cost(Enforcement).
   - **Artifact:** `experiments/cycle2716_phase259_planning.py`
   - **Functional Name:** The Political Budget
 
+- ✅ **Gate 1192:** The Dictator's Dilemma - Autocracy is Information Bankruptcy - COMPLETE
+  - **Finding:** High Fear (Cost of Truth) causes Information Distortion. The Dictator flies blind.
+  - **Key Insight:** Tyranny is an epistemological crisis.
+  - **Artifact:** `experiments/cycle2717_dictator_dilemma_bcp.py`
+  - **Functional Name:** The Control Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
