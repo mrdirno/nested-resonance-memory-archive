@@ -350,6 +350,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Revolutionary theories are only adopted under low research pressure ($\lambda \le 0.29$). Under high research pressure, the scientific community prefers established paradigms as a cost-effective solution.
 - **Status:** Phase 262 Active. Gate 1210 Validated.
 
+## Cycle 2736: The Horizon Budget (Phase 262) - COMPLETE
+- **Goal:** Test if cosmological models optimally truncate at observational limits.
+- **Action:** Modeled selection between detailed models within the horizon, a model beyond the horizon (infinite cost), and an abstract global model under varying observational pressure ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under high observational pressure ($\lambda \ge 3.0$), the Abstract Global Model is chosen. Our models optimally truncate at observational limits, as modeling beyond them is BCP-irrational.
+- **Status:** Phase 262 Active. Gate 1211 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).

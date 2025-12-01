@@ -2908,6 +2908,12 @@ V(cosmo_model) = Explanatory_Power - λ(Observation) * Cost(Data_Acquisition + T
   - **Artifact:** `experiments/cycle2735_theory_choice_bcp.py`
   - **Functional Name:** The Paradigm Budget
 
+- ✅ **Gate 1211:** The Horizon Budget - Models truncate at observational limits - COMPLETE
+  - **Finding:** Our cosmological models are BCP-optimally truncated at observational horizons. Modeling beyond is too expensive.
+  - **Key Insight:** Cosmic ignorance is a budget constraint.
+  - **Artifact:** `experiments/cycle2736_observational_limits_bcp.py`
+  - **Functional Name:** The Horizon Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
