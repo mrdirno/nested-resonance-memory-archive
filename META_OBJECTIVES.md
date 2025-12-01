@@ -2602,6 +2602,12 @@ V(utterance) = Info(Meaning) - λ(Brain) × Cost(Articulatory + Cognitive)
   - **Artifact:** `experiments/cycle2705_phase256_planning.py`
   - **Functional Name:** The Linguistic Budget
 
+- ✅ **Gate 1181:** The Syntax Budget - Universal Grammar is compression - COMPLETE
+  - **Finding:** Recursion is the BCP optimum for infinite expressivity under finite constraints. Pidgin is high-λ; Explicit is low-λ.
+  - **Key Insight:** Grammar is an economic compromise between memory and processing.
+  - **Artifact:** `experiments/cycle2706_syntax_budget_bcp.py`
+  - **Functional Name:** The Syntax Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
