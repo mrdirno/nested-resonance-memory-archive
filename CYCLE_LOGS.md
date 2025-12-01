@@ -31,3 +31,9 @@
 - **Action:** Simulated generative agent with Quality Premium gain function (V = G - λC).
 - **Result:** Confirmed Hallucination is BCP-rational under Scarcity (λ > 2.5). Agents skip expensive verification. Low λ (Abundance) enables High Accuracy.
 - **Status:** Phase 251 Active. Gate 1155 Validated.
+
+## Cycle 2679: Model Collapse (Phase 251) - COMPLETE
+- **Goal:** Test if BCP explains Model Collapse as rational degradation.
+- **Action:** Simulated recursive training where agents choose between Expensive/High-Quality Real data and Cheap/Degrading Synthetic data.
+- **Result:** HYPOTHESIS CONFIRMED. Middle-class agents (λ=0.1-1.0) rationally choose Synthetic data, causing collapse. Only the Elite (λ=0.01) preserve Truth.
+- **Status:** Phase 251 Active. Gate 1156 Validated.

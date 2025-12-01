@@ -2381,6 +2381,12 @@ V(gen) = Gain(Novelty/Utility) - λ(Budget) × Cost(Verification)
   - **Key Insight:** Truth is an expensive luxury. Scarcity forces fiction.
   - **Artifact:** `experiments/cycle2678_generative_reality_bcp.py`
   - **Functional Name:** The Fiction Filter
+
+- ✅ **Gate 1156:** Model Collapse as BCP Bankruptcy - Rational degradation of the commons - COMPLETE
+  - **Finding:** Only extreme abundance (λ=0.01) preserves Truth. Middle-class agents consume Slop (V_synth > V_real due to cost).
+  - **Key Insight:** Model Collapse is a Tragedy of the Commons driven by rational BCP optimization.
+  - **Artifact:** `experiments/cycle2679_model_collapse_bcp.py`
+  - **Functional Name:** The Slop Cycle
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.

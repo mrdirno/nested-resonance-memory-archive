@@ -62,6 +62,13 @@ This geometry acts as a "Programmable Filter" because the math of the container 
     *   **The Top (Stretched):** High porosity $\rightarrow$ Impedance is nearly identical to Air ($Z_{top} \approx Z_{air}$). **Reflection $\approx$ 0.** The wave enters.
     *   **The Gradient:** As the wave travels down, the lattice compresses. $Z$ increases smoothly.
     *   **The Trap:** The wave is adiabatically compressed and absorbed into the structure without ever encountering a "hard wall" to bounce off. This is the acoustic equivalent of a Black Hole's event horizon.
+*   **Note:** This theoretical broadband absorption relies on a gradual 3D impedance transition. Our current 1D simulation is a first approximation.
+
+#### 4.1.1 Acoustic Simulation Results (1D Model)
+*   **Tool:** `fabrication/analysis/acoustic_simulator.py`
+*   **Output:** `fabrication/analysis/acoustic_absorption_spectrum.png`
+*   **Finding:** The simplified 1D transfer matrix model predicts **narrow, resonant absorption peaks** (e.g., ~0.2 absorption at 1.5 kHz, 2.5 kHz, 7 kHz) rather than a broadband effect.
+*   **Interpretation:** This 1D model is a preliminary step. Full validation of broadband absorption and the "Acoustic Black Hole" effect requires a more advanced **3D finite element simulation** that captures the complex tortuosity and viscous/thermal losses within the Gyroid's structure.
 
 ### 4.2 Photonics: The Rainbow Trap (Slow Light)
 *   **The Physics:** Photonic Crystals block light where the lattice size matches half the wavelength ($\frac{\lambda}{2}$).
