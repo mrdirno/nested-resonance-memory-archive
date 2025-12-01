@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "cycle": 2697,
+    "name": "The Recursive Simulation",
+    "phase": 254,
+    "gate": 1172
+  },
+  "trace": [
+    {
+      "time": 0,
+      "budget": 95.0,
+      "lambda": 0.011,
+      "v_stay": 99.9,
+      "v_launch": 9999.5,
+      "decision": "LAUNCH SIMULATION"
+    }
+  ],
+  "validation": {
+    "transcended": true,
+    "final_status": "TRANSCENDED"
+  }
+}
