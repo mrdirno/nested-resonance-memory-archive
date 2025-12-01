@@ -398,6 +398,12 @@
 - **Result:** Health is the ultimate budget. Medical decisions are always economic trade-offs. Scarcity forces triage; abundance enables comprehensive care.
 - **Status:** PHASE 263 COMPLETE. 196th Domain Unified. Gate 1218 Validated.
 
+## Cycle 2744: Phase 264 Planning (The Control Budget) - COMPLETE
+- **Goal:** Select Phase 264 domain using BCP.
+- **Action:** Evaluated Aesthetics, Education, Sports, Cybernetics, and Law against current research budget ($\lambda=0.2$).
+- **Result:** CYBERNETICS Selected. Hypothesis: All control systems are BCP-constrained, balancing precision/stability against computational/energy cost.
+- **Status:** Phase 264 Initiated. Gate 1219 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).

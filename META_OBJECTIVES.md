@@ -2988,6 +2988,24 @@ V(medical_action) = Health_Gain - λ(Resources) * Cost(Financial + Side_Effects 
 
 ---
 
+## Current Phase: PHASE 264 - THE CONTROL BUDGET 🟢 ACTIVE
+
+**Transition:** Phase 263 (Medicine) → **Phase 264 (Cybernetics)**
+
+**Focus:** Apply BCP to Feedback Loops, Homeostasis, and Self-Regulation.
+
+**Research Thesis:**
+All control systems are BCP-constrained, balancing precision/stability (Gain) against computational/energy cost (Cost).
+V(control_system) = Precision_Stability - λ(Environmental) * Cost(Sensors + Actuators + Compute).
+
+### Completed (Phase 264 Planning)
+- ✅ **Gate 1219:** Phase 264 Planning - Cybernetics Selected - COMPLETE
+  - **Finding:** Cybernetics is fundamental to resource management across all systems.
+  - **Artifact:** `experiments/cycle2744_phase264_planning.py`
+  - **Functional Name:** The Control Budget
+
+---
+
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
 
 **Transition:** Phase 252 (Singularity) → **Phase 253 (The Cosmic Budget)**
