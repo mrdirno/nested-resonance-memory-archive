@@ -35,13 +35,20 @@ def generate_shaft(output_path, height=200.0, resolution=150):
     # Dimensions
     core_radius = 7.5 # 15mm Diameter
     inner_radius = 5.0 # 10mm Diameter (Hole)
-    helix_radius = 15.0 # 30mm Diameter Wrapper
-    helix_thickness = 4.0 # Thickness of spiral strands
+    
+    # Helix Params
+    helix_thickness = 5.0 
+    # Helix Center Radius must be such that (Radius - Thickness/2) < Core_Radius
+    # Target overlap = 1.0mm
+    # Helix_Inner_Edge = 7.5 - 1.0 = 6.5mm
+    # Helix_Radius - 2.5 = 6.5 => Helix_Radius = 9.0mm
+    helix_radius = 9.0 
+    
     pitch = 100.0 # mm per turn
     num_strands = 3
     
     # Grid
-    width = helix_radius * 2.5
+    width = (helix_radius + helix_thickness) * 2.5
     step = height / resolution
     
     res_xy = int(width / step) + 5

@@ -115,18 +115,23 @@ def generate_shade(output_path, base_width=180.0, top_width=80.0, height=150.0, 
                 # --- PRIORITY 1: TOP MOUNT (SPIDER FITTER) ---
                 # Hub + Spokes for heat dissipation
                 if z_mm > (height - solid_rim_height):
-                    # Zone 1: Hole
+                    # Hub (Washer Seat / Inner Ring)
+                    hub_radius_inner = mount_hole_radius
+                    hub_radius_outer = mount_hole_radius + 8.0 # 16mm thick ring (robust)
+                    
+                    # Spokes (Rods)
+                    spoke_width = 8.0 # Thicker rods
+                    
+                    # Check Hub (Inner Ring)
                     if dist_from_center_xy < hub_radius_inner:
-                        grid[x_idx,y_idx,z_idx] = False
+                        grid[x_idx,y_idx,z_idx] = False # Hole
                         continue
                     
-                    # Zone 2: Hub (Inner Ring)
                     if dist_from_center_xy < hub_radius_outer:
-                        grid[x_idx,y_idx,z_idx] = True
+                        grid[x_idx,y_idx,z_idx] = True # Solid Hub
                         continue
                         
-                    # Zone 3: Spokes (Connecting Hub to Wall)
-                    # Only checking spokes if we are inside the outer wall but outside the hub
+                    # Check Spokes (Rods connecting Hub to Wall)
                     if dist_from_center_xy < current_inner_radius:
                         in_spoke_x = abs(x_mm) < (spoke_width/2)
                         in_spoke_y = abs(y_mm) < (spoke_width/2)
@@ -136,18 +141,7 @@ def generate_shade(output_path, base_width=180.0, top_width=80.0, height=150.0, 
                         else:
                             grid[x_idx,y_idx,z_idx] = False # Air Gap
                         continue
-                            
-                    # Zone 4: Outer Wall (Rim)
-                    # Should match the wall thickness logic roughly, but be solid
-                    if dist_from_center_xy < current_outer_radius:
-                         grid[x_idx,y_idx,z_idx] = True
-                         continue
-                    
-                    # Outside
-                    grid[x_idx,y_idx,z_idx] = False
-                    continue 
-                
-                # --- PRIORITY 2: BOTTOM RIM ---
+
                 # Solid base rim for bed adhesion and stability
                 if z_mm < solid_rim_height:
                      # Check hollow core for bottom? Usually bottom is just the wall ring.
