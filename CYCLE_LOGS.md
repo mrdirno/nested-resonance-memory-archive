@@ -212,6 +212,12 @@
 - **Result:** UTILITARIANISM Selected. Hypothesis: Pure Utilitarianism is computationally intractable (High Cost). Deontology is the BCP-rational heuristic (Low Cost).
 - **Status:** Phase 258 Initiated. Gate 1188 Validated.
 
+## Cycle 2714: The Rules Budget (Phase 258) - COMPLETE
+- **Goal:** Test Deontology as a BCP Heuristic for Utilitarianism.
+- **Action:** Modeled Utilitarian (High Cost/Perfect Info) vs Deontologist (Low Cost/Heuristic) agents under varying Calculation Cost ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Low $\lambda$ favors Utilitarianism (God Mode). High $\lambda$ favors Deontology (Human Mode). Morality is Heuristic Optimization for bounded agents.
+- **Status:** Phase 258 Active. Gate 1189 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).

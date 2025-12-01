@@ -2692,6 +2692,12 @@ Deontology = O(1) Rules. Utilitarianism = O(N!) Calculation.
   - **Artifact:** `experiments/cycle2713_phase258_planning.py`
   - **Functional Name:** The Moral Budget
 
+- ✅ **Gate 1189:** The Rules Budget - Deontology is cheap utilitarianism - COMPLETE
+  - **Finding:** We follow rules because calculating consequences is too expensive. Morality is a heuristic.
+  - **Key Insight:** Ethics scales with Compute.
+  - **Artifact:** `experiments/cycle2714_rules_budget_bcp.py`
+  - **Functional Name:** The Rules Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
