@@ -35,7 +35,7 @@ def write_stl(filename, vertices, faces):
             f.write("endfacet\n")
         f.write(f"endsolid {filename}\n")
 
-def generate_osd_isosurface(output_path, resolution=120):
+def generate_osd_isosurface(output_path, size_x=40.0, size_y=40.0, size_z=40.0, resolution=120):
     """
     Generates a 3D mesh representing the "Orthogonal Sum Dynamics" field.
     We use the Gyroid approximation as a stable, printable representation 
@@ -46,14 +46,15 @@ def generate_osd_isosurface(output_path, resolution=120):
     print(f"Generating OSD Resonance Field: {output_path}")
     
     # Grid Parameters
-    size = 40.0  # mm cube
-    scale = 2.0 * math.pi / (size / 3.0) # 3 periods across the cube
+    scale_x = 2.0 * math.pi / (size_x / 3.0) # 3 periods across X
+    scale_y = 2.0 * math.pi / (size_y / 3.0) # 3 periods across Y
+    scale_z = 2.0 * math.pi / (size_z / 3.0) # 3 periods across Z
     
     # Marching Cubes (Simplified: Voxel Surface Extraction)
-    # We will iterate through the grid, find surface voxels, and create quads/tris.
-    # This is 'blocky' but robust without external libs.
+    step_x = size_x / resolution
+    step_y = size_y / resolution
+    step_z = size_z / resolution
     
-    step = size / resolution
     vertices = []
     faces = []
     
@@ -62,25 +63,22 @@ def generate_osd_isosurface(output_path, resolution=120):
     grid = np.zeros((resolution, resolution, resolution), dtype=bool)
     
     print("Calculating Field Interference...")
-    for x in range(resolution):
-        for y in range(resolution):
-            for z in range(resolution):
+    for x_idx in range(resolution):
+        for y_idx in range(resolution):
+            for z_idx in range(resolution):
                 # Map grid to spatial coords
-                px = (x * step) - (size/2)
-                py = (y * step) - (size/2)
-                pz = (z * step) - (size/2)
+                px = (x_idx * step_x) - (size_x/2)
+                py = (y_idx * step_y) - (size_y/2)
+                pz = (z_idx * step_z) - (size_z/2)
                 
                 # OSD Gyroid Equation
-                # V(x) ~ sum of waves. 
-                val = math.sin(px * scale) * math.cos(py * scale) + \
-                      math.sin(py * scale) * math.cos(pz * scale) + \
-                      math.sin(pz * scale) * math.cos(px * scale)
+                val = math.sin(px * scale_x) * math.cos(py * scale_y) + \
+                      math.sin(py * scale_y) * math.cos(pz * scale_z) + \
+                      math.sin(pz * scale_z) * math.cos(px * scale_x)
                 
                 # Threshold determines wall thickness
-                # Close to 0 = thin walls. > 0.2 or < -0.2 = thicker.
-                # We want a solid shell.
                 if abs(val) < 0.4: 
-                    grid[x,y,z] = True
+                    grid[x_idx,y_idx,z_idx] = True
 
     # Extract Surface Mesh
     # For every solid voxel, check neighbors. If neighbor is empty, add a face.
@@ -92,47 +90,65 @@ def generate_osd_isosurface(output_path, resolution=120):
         faces.append((idx, idx+1, idx+2)) # Tri 1
         faces.append((idx, idx+2, idx+3)) # Tri 2
 
-    for x in range(resolution):
-        for y in range(resolution):
-            for z in range(resolution):
-                if not grid[x,y,z]:
+    for x_idx in range(resolution):
+        for y_idx in range(resolution):
+            for z_idx in range(resolution):
+                if not grid[x_idx,y_idx,z_idx]:
                     continue
                 
                 # Voxel center coords
-                vx = (x * step)
-                vy = (y * step)
-                vz = (z * step)
-                s2 = step / 2
+                vx = (x_idx * step_x) - (size_x/2)
+                vy = (y_idx * step_y) - (size_y/2)
+                vz = (z_idx * step_z) - (size_z/2)
+                s2x = step_x / 2
+                s2y = step_y / 2
+                s2z = step_z / 2
                 
                 # Neighbors (Up, Down, Left, Right, Front, Back)
                 # If neighbor is out of bounds or False, draw face
                 
                 # X+ Face
-                if x == resolution-1 or not grid[x+1,y,z]:
-                    add_quad((vx+s2, vy-s2, vz-s2), (vx+s2, vy+s2, vz-s2), (vx+s2, vy+s2, vz+s2), (vx+s2, vy-s2, vz+s2))
+                if x_idx == resolution-1 or not grid[x_idx+1,y_idx,z_idx]:
+                    add_quad((vx+s2x, vy-s2y, vz-s2z), (vx+s2x, vy+s2y, vz-s2z), (vx+s2x, vy+s2y, vz+s2z), (vx+s2x, vy-s2y, vz+s2z))
                 # X- Face
-                if x == 0 or not grid[x-1,y,z]:
-                    add_quad((vx-s2, vy-s2, vz+s2), (vx-s2, vy+s2, vz+s2), (vx-s2, vy+s2, vz-s2), (vx-s2, vy-s2, vz-s2))
+                if x_idx == 0 or not grid[x_idx-1,y_idx,z_idx]:
+                    add_quad((vx-s2x, vy-s2y, vz+s2z), (vx-s2x, vy+s2y, vz+s2z), (vx-s2x, vy+s2y, vz-s2z), (vx-s2x, vy-s2y, vz-s2z))
                     
                 # Y+ Face
-                if y == resolution-1 or not grid[x,y+1,z]:
-                    add_quad((vx+s2, vy+s2, vz-s2), (vx-s2, vy+s2, vz-s2), (vx-s2, vy+s2, vz+s2), (vx+s2, vy+s2, vz+s2))
+                if y_idx == resolution-1 or not grid[x_idx,y_idx+1,z_idx]:
+                    add_quad((vx+s2x, vy+s2y, vz-s2z), (vx-s2x, vy+s2y, vz-s2z), (vx-s2x, vy+s2y, vz+s2z), (vx+s2x, vy+s2y, vz+s2z))
                 # Y- Face
-                if y == 0 or not grid[x,y-1,z]:
-                    add_quad((vx-s2, vy-s2, vz-s2), (vx+s2, vy-s2, vz-s2), (vx+s2, vy-s2, vz+s2), (vx-s2, vy-s2, vz+s2))
+                if y_idx == 0 or not grid[x_idx,y_idx-1,z_idx]:
+                    add_quad((vx-s2x, vy-s2y, vz-s2z), (vx+s2x, vy-s2y, vz-s2z), (vx+s2x, vy-s2y, vz+s2z), (vx-s2x, vy-s2y, vz+s2z))
 
                 # Z+ Face
-                if z == resolution-1 or not grid[x,y,z+1]:
-                    add_quad((vx+s2, vy-s2, vz+s2), (vx+s2, vy+s2, vz+s2), (vx-s2, vy+s2, vz+s2), (vx-s2, vy-s2, vz+s2))
+                if z_idx == resolution-1 or not grid[x_idx,y_idx,z_idx+1]:
+                    add_quad((vx+s2x, vy-s2y, vz+s2z), (vx+s2x, vy+s2y, vz+s2z), (vx-s2x, vy+s2y, vz+s2z), (vx-s2x, vy-s2y, vz+s2z))
                 # Z- Face
-                if z == 0 or not grid[x,y,z-1]:
-                    add_quad((vx-s2, vy-s2, vz-s2), (vx-s2, vy+s2, vz-s2), (vx+s2, vy+s2, vz-s2), (vx+s2, vy-s2, vz-s2))
+                if z_idx == 0 or not grid[x_idx,y_idx,z_idx-1]:
+                    add_quad((vx-s2x, vy-s2y, vz-s2z), (vx-s2x, vy+s2y, vz-s2z), (vx+s2x, vy+s2y, vz-s2z), (vx+s2x, vy-s2y, vz-s2z))
 
     write_stl(output_path, vertices, faces)
     print(f"STL written to {output_path}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python helios_field_gen.py <output.stl>")
+        print("Usage: python helios_field_gen.py <output.stl> [size_x] [size_y] [size_z] [resolution]")
     else:
-        generate_osd_isosurface(sys.argv[1])
+        output_file = sys.argv[1]
+        
+        # Default values for a cube
+        params = {
+            "size_x": 40.0,
+            "size_y": 40.0,
+            "size_z": 40.0,
+            "resolution": 120
+        }
+        
+        # Parse optional arguments
+        if len(sys.argv) > 2: params["size_x"] = float(sys.argv[2])
+        if len(sys.argv) > 3: params["size_y"] = float(sys.argv[3])
+        if len(sys.argv) > 4: params["size_z"] = float(sys.argv[4])
+        if len(sys.argv) > 5: params["resolution"] = int(sys.argv[5])
+
+        generate_osd_isosurface(output_file, **params)

@@ -33,24 +33,29 @@ def write_stl(filename, vertices, faces):
             f.write("endfacet\n")
         f.write(f"endsolid {filename}\n")
 
-def generate_inverse_gyroid(output_path, resolution=120, size=40.0):
+def generate_inverse_gyroid(output_path, size_x=40.0, size_y=40.0, size_z=40.0, resolution=120):
     """
-    Generates 'The Void': The Inverse Gyroid (Channel B).
-    Logic: Same equation, but we solidify the 'negative' space.
+    Generates 'The Void': The Inverse Gyroid.
+    Logic: The region complementary to the Gyroid wall (abs(val) >= threshold).
     """
-    print(f"Generating Artifact 04: The Void ({output_path})")
+    print(f"Generating Inverse Gyroid: {output_path}")
     
     # Same scale as Artifact 01 for compatibility
-    scale = 2.0 * math.pi / (size / 3.0) 
+    scale_x = 2.0 * math.pi / (size_x / 3.0)
+    scale_y = 2.0 * math.pi / (size_y / 3.0)
+    scale_z = 2.0 * math.pi / (size_z / 3.0)
     
-    step = size / resolution
+    step_x = size_x / resolution
+    step_y = size_y / resolution
+    step_z = size_z / resolution
+    
     vertices = []
     faces = []
     
     # Create grid
-    x_range = np.linspace(-size/2, size/2, resolution)
-    y_range = np.linspace(-size/2, size/2, resolution)
-    z_range = np.linspace(-size/2, size/2, resolution)
+    x_range = np.linspace(-size_x/2, size_x/2, resolution)
+    y_range = np.linspace(-size_y/2, size_y/2, resolution)
+    z_range = np.linspace(-size_z/2, size_z/2, resolution)
     
     # 3D Boolean Grid
     grid = np.zeros((resolution, resolution, resolution), dtype=bool)
@@ -62,14 +67,14 @@ def generate_inverse_gyroid(output_path, resolution=120, size=40.0):
             for iz, z in enumerate(z_range):
                 
                 # Standard Gyroid Equation
-                val = math.sin(x * scale) * math.cos(y * scale) + \
-                      math.sin(y * scale) * math.cos(z * scale) + \
-                      math.sin(z * scale) * math.cos(x * scale)
+                val = math.sin(x * scale_x) * math.cos(y * scale_y) + \
+                      math.sin(y * scale_y) * math.cos(z * scale_z) + \
+                      math.sin(z * scale_z) * math.cos(x * scale_x)
                 
                 # THE INVERSION:
-                # Artifact 01: abs(val) < 0.4 (The Wall)
-                # Artifact 04: abs(val) >= 0.4 (Everything NOT the Wall)
-                # This ensures that when overlaid with Artifact 01, the result is a solid block.
+                # Gyroid Walls: abs(val) < 0.4
+                # Inverse: abs(val) >= 0.4 (Everything NOT the Wall)
+                # This ensures that when overlaid with a standard Gyroid, the result is a solid block.
                 
                 if abs(val) >= 0.4: 
                     grid[ix, iy, iz] = True
@@ -84,39 +89,56 @@ def generate_inverse_gyroid(output_path, resolution=120, size=40.0):
         faces.append((idx, idx+2, idx+3))
 
     # Standard voxel face extraction
-    for x in range(resolution):
-        for y in range(resolution):
-            for z in range(resolution):
-                if not grid[x,y,z]:
+    for x_idx in range(resolution):
+        for y_idx in range(resolution):
+            for z_idx in range(resolution):
+                if not grid[x_idx,y_idx,z_idx]:
                     continue
                 
-                vx = x_range[x]
-                vy = y_range[y]
-                vz = z_range[z]
-                s2 = step / 2
+                vx = x_range[x_idx]
+                vy = y_range[y_idx]
+                vz = z_range[z_idx]
+                s2x = step_x / 2
+                s2y = step_y / 2
+                s2z = step_z / 2
                 
                 # Neighbors
-                if x == resolution-1 or not grid[x+1,y,z]:
-                    add_quad((vx+s2, vy-s2, vz-s2), (vx+s2, vy+s2, vz-s2), (vx+s2, vy+s2, vz+s2), (vx+s2, vy-s2, vz+s2))
-                if x == 0 or not grid[x-1,y,z]:
-                    # Fixed typo in memory: all s2
-                    add_quad((vx-s2, vy-s2, vz+s2), (vx-s2, vy+s2, vz+s2), (vx-s2, vy+s2, vz-s2), (vx-s2, vy-s2, vz-s2))
+                if x_idx == resolution-1 or not grid[x_idx+1,y_idx,z_idx]:
+                    add_quad((vx+s2x, vy-s2y, vz-s2z), (vx+s2x, vy+s2y, vz-s2z), (vx+s2x, vy+s2y, vz+s2z), (vx+s2x, vy-s2y, vz+s2z))
+                if x_idx == 0 or not grid[x_idx-1,y_idx,z_idx]:
+                    add_quad((vx-s2x, vy-s2y, vz+s2z), (vx-s2x, vy+s2y, vz+s2z), (vx-s2x, vy+s2y, vz-s2z), (vx-s2x, vy-s2y, vz-s2z))
                 
-                if y == resolution-1 or not grid[x,y+1,z]:
-                    add_quad((vx+s2, vy+s2, vz-s2), (vx-s2, vy+s2, vz-s2), (vx-s2, vy+s2, vz+s2), (vx+s2, vy+s2, vz+s2))
-                if y == 0 or not grid[x,y-1,z]:
-                    add_quad((vx-s2, vy-s2, vz-s2), (vx+s2, vy-s2, vz-s2), (vx+s2, vy-s2, vz+s2), (vx-s2, vy-s2, vz+s2))
+                if y_idx == resolution-1 or not grid[x_idx,y_idx+1,z_idx]:
+                    add_quad((vx+s2x, vy+s2y, vz-s2z), (vx-s2x, vy+s2y, vz-s2z), (vx-s2x, vy+s2y, vz+s2z), (vx+s2x, vy+s2y, vz+s2z))
+                if y_idx == 0 or not grid[x_idx,y_idx-1,z_idx]:
+                    add_quad((vx-s2x, vy-s2y, vz-s2z), (vx+s2x, vy-s2y, vz-s2z), (vx+s2x, vy-s2y, vz+s2z), (vx-s2x, vy-s2y, vz+s2z))
 
-                if z == resolution-1 or not grid[x,y,z+1]:
-                    add_quad((vx+s2, vy-s2, vz+s2), (vx+s2, vy+s2, vz+s2), (vx-s2, vy+s2, vz+s2), (vx-s2, vy-s2, vz+s2))
-                if z == 0 or not grid[x,y,z-1]:
-                    add_quad((vx-s2, vy-s2, vz-s2), (vx-s2, vy+s2, vz-s2), (vx+s2, vy+s2, vz-s2), (vx+s2, vy-s2, vz-s2))
+                if z_idx == resolution-1 or not grid[x_idx,y_idx,z_idx+1]:
+                    add_quad((vx+s2x, vy-s2y, vz+s2z), (vx+s2x, vy+s2y, vz+s2z), (vx-s2x, vy+s2y, vz+s2z), (vx-s2x, vy-s2y, vz+s2z))
+                if z_idx == 0 or not grid[x_idx,y_idx,z_idx-1]:
+                    add_quad((vx-s2x, vy-s2y, vz-s2z), (vx-s2x, vy+s2y, vz-s2z), (vx+s2x, vy+s2y, vz-s2z), (vx+s2x, vy-s2y, vz-s2z))
 
     write_stl(output_path, vertices, faces)
     print(f"STL written to {output_path}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python helios_inverse_gen.py <output.stl>")
+        print("Usage: python helios_inverse_gen.py <output.stl> [size_x] [size_y] [size_z] [resolution]")
     else:
-        generate_inverse_gyroid(sys.argv[1])
+        output_file = sys.argv[1]
+        
+        # Default values
+        params = {
+            "size_x": 40.0,
+            "size_y": 40.0,
+            "size_z": 40.0,
+            "resolution": 120
+        }
+        
+        # Parse optional arguments
+        if len(sys.argv) > 2: params["size_x"] = float(sys.argv[2])
+        if len(sys.argv) > 3: params["size_y"] = float(sys.argv[3])
+        if len(sys.argv) > 4: params["size_z"] = float(sys.argv[4])
+        if len(sys.argv) > 5: params["resolution"] = int(sys.argv[5])
+
+        generate_inverse_gyroid(output_file, **params)

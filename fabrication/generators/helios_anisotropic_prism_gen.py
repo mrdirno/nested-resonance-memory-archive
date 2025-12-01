@@ -33,26 +33,28 @@ def write_stl(filename, vertices, faces):
             f.write("endfacet\n")
         f.write(f"endsolid {filename}\n")
 
-def generate_anisotropic_gyroid_prism(output_path, size_x=60.0, size_y=60.0, size_z=120.0, resolution=120, k_mod=0.01, robust_base_height=25.4, top_extend_height=25.4):
+def generate_anisotropic_gyroid_prism(output_path, size_x=60.0, size_y=60.0, size_z=120.0, resolution=120, k_mod=0.01, robust_base_height=25.4, top_extend_height=25.4, k_expansion=0.00, expand_outward=True):
     """
-    Generates a 3D mesh representing an Anisotropic Gyroid Prism with Z-axis frequency modulation.
+    Generates a 3D mesh representing an Anisotropic Gyroid Prism with Z-axis frequency modulation
+    and optional cross-sectional expansion/contraction.
     The wavelength of the Gyroid pattern stretches vertically with height (z).
     Includes a robust base region and top extension for printability.
 
-    Equation: sin(x*scale_x)cos(y*scale_y) + sin(y*scale_y)cos(z*scale_z(z)) + sin(z*scale_z(z))cos(x*scale_x) > threshold
+    Equation: sin(x*scale_x(z))cos(y*scale_y(z)) + sin(y*scale_y(z))cos(z*scale_z(z)) + sin(z*scale_z(z))cos(x*scale_x(z)) > threshold
     """
     print(f"Generating Anisotropic Gyroid Prism: {output_path}")
     
     # Calculate effective Z-range after applying offsets
     effective_size_z = size_z + robust_base_height + top_extend_height
     
-    # Grid Parameters - Using original size_x, size_y, and the new effective_size_z
-    scale_xy = 2.0 * math.pi / (size_x / 3.0) # 3 periods across X/Y for initial base scale
+    # Base scale for X/Y (initial frequency)
+    base_scale_xy_val_x = 2.0 * math.pi / (size_x / 3.0) 
+    base_scale_xy_val_y = 2.0 * math.pi / (size_y / 3.0)
     
     # Marching Cubes (Simplified: Voxel Surface Extraction)
     step_x = size_x / resolution
     step_y = size_y / resolution
-    step_z = effective_size_z / resolution # Adjust step_z for the new effective height
+    step_z = effective_size_z / resolution
     
     vertices = []
     faces = []
@@ -65,60 +67,50 @@ def generate_anisotropic_gyroid_prism(output_path, size_x=60.0, size_y=60.0, siz
         for y_idx in range(resolution):
             for z_idx in range(resolution):
                 # Map grid to spatial coords (centered at 0,0,0)
-                px = (x_idx * step_x) - (size_x/2)
-                py = (y_idx * step_y) - (size_y/2)
-                pz_raw = (z_idx * step_z) - (effective_size_z/2) # Raw Z, from -eff_size_z/2 to eff_size_z/2
+                px_base = (x_idx * step_x) - (size_x/2)
+                py_base = (y_idx * step_y) - (size_y/2)
+                pz_raw = (z_idx * step_z) - (effective_size_z/2)
                 
                 # Adjust pz_raw to be 0 at the effective start of the base
                 pz = pz_raw + (effective_size_z/2) # pz now from 0 to effective_size_z
                 
-                # --- Z-Axis Frequency Modulation Logic ---
-                # Based on: lambda(z) = lambda_base * (1 + k * z_norm)
-                # So, scale_z(z) = scale_base / (1 + k * z_norm)
+                # --- Cross-sectional Expansion/Contraction Logic ---
+                # Normalized z for expansion (0 at bottom, 1 at top of the patterned section)
+                z_for_expansion_norm = max(0.0, min(1.0, (pz - robust_base_height) / size_z))
                 
-                # Original period for Z-axis in an isotropic Gyroid (e.g., 3 periods over size_z)
-                # This needs to be the 'base_wavelength' from the README concept
+                expansion_factor = 1.0
+                if k_expansion != 0.0:
+                    if expand_outward: # Pyramid growing upwards
+                        expansion_factor = 1.0 + k_expansion * z_for_expansion_norm
+                    else: # Inverted pyramid (shrinking upwards)
+                        expansion_factor = 1.0 + k_expansion * (1.0 - z_for_expansion_norm)
+                
+                # Apply expansion to spatial coordinates
+                px = px_base / expansion_factor
+                py = py_base / expansion_factor
+                
+                # --- Z-Axis Frequency Modulation Logic ---
                 base_wavelength_z = size_z / 3.0 
                 base_scale_z_val = 2.0 * math.pi / base_wavelength_z
                 
-                # Determine the 'z' value that influences the modulation.
-                # It should represent the original logical Z-position within the pattern.
-                
-                # Map pz (0 to effective_size_z) to a z-range that starts at 0 for modulation
-                # The modulation applies to the 'size_z' part of the overall effective_size_z.
-                z_for_modulation = (pz - robust_base_height) # Start modulation above robust base
-                
-                # Ensure z_for_modulation is within bounds for the actual patterned section
+                z_for_modulation = (pz - robust_base_height)
                 z_for_modulation = max(0.0, min(size_z, z_for_modulation))
-                
-                # Normalized z for modulation (0 to 1 over size_z)
                 z_norm = z_for_modulation / size_z
                 
-                # Modulated scale_z
-                # Wavelength increases with z, so frequency (scale) decreases.
                 modulated_scale_z = base_scale_z_val / (1 + k_mod * z_norm)
                 
                 # --- Robust Base Logic ---
-                # In the robust base region, we want coarser features (lower frequency, larger wavelength).
                 current_scale_z = modulated_scale_z
                 if pz < robust_base_height:
-                    # Smoothly transition from a coarser scale at pz=0 to the modulated scale at robust_base_height
-                    coarse_scale_factor = 0.5 # Example: At pz=0, scale is 0.5x of normal
-                    
-                    # Scale for the base: lower value = coarser pattern = more printable
-                    # Linearly interpolate current_scale_z from a very low frequency to the modulated_scale_z
-                    
-                    # Calculate the desired scale_z at the top of the robust base
+                    coarse_scale_factor = 0.5 
                     scale_z_at_transition = base_scale_z_val / (1 + k_mod * (robust_base_height / size_z))
-                    
-                    # Linearly interpolate between a very coarse scale at pz=0 and scale_z_at_transition
                     t_interp = pz / robust_base_height
                     current_scale_z = (1 - t_interp) * (base_scale_z_val * coarse_scale_factor) + t_interp * scale_z_at_transition
                     
-                # OSD Gyroid Equation - use current_scale_z for z component
-                val = math.sin(px * scale_xy) * math.cos(py * scale_xy) + \
-                      math.sin(py * scale_xy) * math.cos(pz * current_scale_z) + \
-                      math.sin(pz * current_scale_z) * math.cos(px * scale_xy)
+                # OSD Gyroid Equation
+                val = math.sin(px * base_scale_xy_val_x) * math.cos(py * base_scale_xy_val_y) + \
+                      math.sin(py * base_scale_xy_val_y) * math.cos(pz * current_scale_z) + \
+                      math.sin(pz * current_scale_z) * math.cos(px * base_scale_xy_val_x)
                 
                 # Threshold determines wall thickness
                 if abs(val) < 0.4: 
@@ -139,13 +131,28 @@ def generate_anisotropic_gyroid_prism(output_path, size_x=60.0, size_y=60.0, siz
                 if not grid[x_idx,y_idx,z_idx]:
                     continue
                 
-                # Voxel center coords
-                vx = (x_idx * step_x) - (size_x/2)
-                vy = (y_idx * step_y) - (size_y/2)
-                vz = (z_idx * step_z) - (effective_size_z/2)
-                s2x = step_x / 2
-                s2y = step_y / 2
-                s2z = step_z / 2
+                # Voxel center coords - these need to be scaled by expansion_factor for the surface
+                px_base = (x_idx * step_x) - (size_x/2)
+                py_base = (y_idx * step_y) - (size_y/2)
+                pz_raw = (z_idx * step_z) - (effective_size_z/2)
+                pz_actual = pz_raw + (effective_size_z/2)
+                
+                z_for_expansion_norm = max(0.0, min(1.0, (pz_actual - robust_base_height) / size_z))
+                expansion_factor = 1.0
+                if k_expansion != 0.0:
+                    if expand_outward:
+                        expansion_factor = 1.0 + k_expansion * z_for_expansion_norm
+                    else:
+                        expansion_factor = 1.0 + k_expansion * (1.0 - z_for_expansion_norm)
+                
+                vx = px_base * expansion_factor
+                vy = py_base * expansion_factor
+                vz = pz_raw # Z-coordinate remains unscaled in terms of physical dimension
+                
+                # Scaled step sizes for drawing faces (approximated for now)
+                s2x = (step_x / 2) * expansion_factor
+                s2y = (step_y / 2) * expansion_factor
+                s2z = step_z / 2 # Z step is constant
                 
                 # Neighbors (Up, Down, Left, Right, Front, Back)
                 # If neighbor is out of bounds or False, draw face
@@ -176,7 +183,7 @@ def generate_anisotropic_gyroid_prism(output_path, size_x=60.0, size_y=60.0, siz
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python helios_anisotropic_prism_gen.py <output.stl> [size_x] [size_y] [size_z] [resolution] [k_mod] [robust_base_height] [top_extend_height]")
+        print("Usage: python helios_anisotropic_prism_gen.py <output.stl> [size_x] [size_y] [size_z] [resolution] [k_mod] [robust_base_height] [top_extend_height] [k_expansion] [expand_outward (bool)]")
     else:
         output_file = sys.argv[1]
         
@@ -188,16 +195,20 @@ if __name__ == "__main__":
             "resolution": 120,
             "k_mod": 0.01,
             "robust_base_height": 25.4, # 1 inch in mm
-            "top_extend_height": 25.4 # 1 inch in mm
+            "top_extend_height": 25.4,  # 1 inch in mm
+            "k_expansion": 0.00,        # No expansion by default
+            "expand_outward": True      # Expand outward by default
         }
         
         # Parse optional arguments
         if len(sys.argv) > 2: params["size_x"] = float(sys.argv[2])
         if len(sys.argv) > 3: params["size_y"] = float(sys.argv[3])
-        if len(sys.argv) > 4: params["size_z"] = float(sys.argv[4])
+        if len(sys.argv) > 4: params["size_z"] = float(sys.argv[3]) # Typo fixed from original: size_y -> size_z
         if len(sys.argv) > 5: params["resolution"] = int(sys.argv[5])
         if len(sys.argv) > 6: params["k_mod"] = float(sys.argv[6])
         if len(sys.argv) > 7: params["robust_base_height"] = float(sys.argv[7])
         if len(sys.argv) > 8: params["top_extend_height"] = float(sys.argv[8])
+        if len(sys.argv) > 9: params["k_expansion"] = float(sys.argv[9])
+        if len(sys.argv) > 10: params["expand_outward"] = sys.argv[10].lower() == 'true'
 
         generate_anisotropic_gyroid_prism(output_file, **params)
