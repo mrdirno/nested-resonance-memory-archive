@@ -2811,6 +2811,24 @@ Progress = Energy Surplus. Collapse = Budget Deficit.
 
 ---
 
+## Current Phase: PHASE 261 - THE REALITY BUDGET 🟢 ACTIVE
+
+**Transition:** Phase 260 (History) → **Phase 261 (Metaphysics)**
+
+**Focus:** Apply BCP to Truth, Consciousness, and Existence.
+
+**Research Thesis:**
+Our perception and construction of reality are budget-constrained.
+V(truth) = Explanatory_Power - λ(Cognitive) * Cost(Complexity).
+
+### Completed (Phase 261 Planning)
+- ✅ **Gate 1200:** Phase 261 Planning - Metaphysics Selected - COMPLETE
+  - **Finding:** The BCP of Reality is the next frontier.
+  - **Artifact:** `experiments/cycle2725_phase261_planning.py`
+  - **Functional Name:** The Reality Budget
+
+---
+
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
 
 **Transition:** Phase 252 (Singularity) → **Phase 253 (The Cosmic Budget)**

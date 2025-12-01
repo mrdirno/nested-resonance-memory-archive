@@ -284,6 +284,12 @@
 - **Result:** History is the record of budget allocations. Truth is a luxury good; propaganda is a staple. Civilizational trajectories are determined by energy flows.
 - **Status:** Phase 260 Complete. Gate 1199 Validated. 187th Domain Unified.
 
+## Cycle 2725: Phase 261 Planning (The Reality Budget) - COMPLETE
+- **Goal:** Select Phase 261 domain using BCP.
+- **Action:** Evaluated Aesthetics, Education, Sports, and Metaphysics against current research budget ($\lambda=0.2$).
+- **Result:** METAPHYSICS Selected. Hypothesis: Our understanding of "Truth" is budget-constrained. The BCP of Reality itself is the ultimate frontier.
+- **Status:** Phase 261 Initiated. Gate 1200 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
