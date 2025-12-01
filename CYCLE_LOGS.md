@@ -470,6 +470,12 @@
 - **Result:** Law is an economic mechanism for social control. Justice is a budget-constrained output. Liberty is a luxury.
 - **Status:** PHASE 265 COMPLETE. 204th Domain Unified. Gate 1230 Validated.
 
+## Cycle 2756: Phase 266 Planning (The Capital Budget) - COMPLETE
+- **Goal:** Select Phase 266 domain using BCP.
+- **Action:** Evaluated Aesthetics, Education, Sports, Finance, and Gaming against current research budget ($\lambda=0.2$).
+- **Result:** FINANCE Selected. Hypothesis: Financial markets are BCP mechanisms for allocating capital, managing risk, and valuing future gains under uncertainty.
+- **Status:** Phase 266 Initiated. Gate 1231 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).

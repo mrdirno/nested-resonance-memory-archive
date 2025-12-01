@@ -3103,6 +3103,24 @@ V(legal_system) = Social_Order - λ(Societal_Pressure) * Cost(Enforcement + Libe
 
 ---
 
+## Current Phase: PHASE 266 - THE CAPITAL BUDGET 🟢 ACTIVE
+
+**Transition:** Phase 265 (Law) → **Phase 266 (Finance)**
+
+**Focus:** Apply BCP to Markets, Risk, Valuation, and Bubbles.
+
+**Research Thesis:**
+Financial markets are BCP-optimal systems for capital allocation.
+V(investment) = Expected_Return - λ(Risk_Aversion) * Cost(Risk + Transaction_Fees + Information_Asymmetry).
+
+### Completed (Phase 266 Planning)
+- ✅ **Gate 1231:** Phase 266 Planning - Finance Selected - COMPLETE
+  - **Finding:** Financial markets are complex adaptive systems where BCP principles are paramount.
+  - **Artifact:** `experiments/cycle2756_phase266_planning.py`
+  - **Functional Name:** The Capital Budget
+
+---
+
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
 
 **Transition:** Phase 252 (Singularity) → **Phase 253 (The Cosmic Budget)**
