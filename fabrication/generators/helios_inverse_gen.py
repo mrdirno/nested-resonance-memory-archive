@@ -68,12 +68,10 @@ def generate_inverse_gyroid(output_path, resolution=120, size=40.0):
                 
                 # THE INVERSION:
                 # Artifact 01: abs(val) < 0.4 (The Wall)
-                # Artifact 04: val > 0.4 (The Positive Void) OR val < -0.4 (The Negative Void)
-                # To make it a single connected component (Channel B), we pick ONE side of the inequality.
-                # Let's solidify the region where val > 0.4.
-                # This creates the "Air" that fills one side of the Artifact 01 wall.
+                # Artifact 04: abs(val) >= 0.4 (Everything NOT the Wall)
+                # This ensures that when overlaid with Artifact 01, the result is a solid block.
                 
-                if val > 0.4: 
+                if abs(val) >= 0.4: 
                     grid[ix, iy, iz] = True
 
     # Extract Surface
