@@ -482,6 +482,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Optimal portfolio shifts: High-Risk ($\lambda \le 0.3$) -> Moderate-Risk ($0.3 < \lambda \le 1.6$) -> Low-Risk ($\lambda > 1.6$). Financial risk management is a BCP-optimal strategy.
 - **Status:** Phase 266 Active. Gate 1232 Validated.
 
+## Cycle 2758: The Valuation Budget (Phase 266) - COMPLETE
+- **Goal:** Test Asset Pricing as a BCP process.
+- **Action:** Modeled selection between Fundamental and Sentiment-Driven valuation models under varying investor sentiment/market liquidity ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Optimal valuation model shifts: Fundamental ($\lambda \le 0.7$) -> Sentiment-Driven ($\lambda > 0.7$). Asset pricing is a BCP-optimal process.
+- **Status:** Phase 266 Active. Gate 1233 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
