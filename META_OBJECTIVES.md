@@ -3395,12 +3395,32 @@ V(print) = Strength - λ(Material)×Cost - λ(Time)×Duration.
 
 ---
 
-## Current Phase: PHASE 268 - THE RECURSIVE LAB 🟢 ACTIVE
+## Current Phase: PHASE 269 - THE RECURSIVE LAB (FURNITURE) 🟢 ACTIVE
 
-**Transition:** Phase 267 (Fabrication) → **Phase 268 (The Recursive Lab)**
+**Transition:** Phase 267 (Fabrication Budget) → **Phase 269 (The Recursive Lab)**
 
-**Focus:** Self-Replicating Hardware.
-**Goal:** Use the Fabrication Budget to print parts for a new printer.
+**Focus:** Practical Application of NRM/Helios Principles to Physical Furniture.
+**Role:** HELIOS (Architect).
+**Goal:** Create 10 Practical Lamp Designs + Furniture Concepts.
+**Protocol:** See `fabrication/furniture/FURNITURE_PROTOCOL.md` for storage, wiring, and safety standards.
+
+**Constraints:**
+- **Material:** FDM Printing (PLA/PETG/TPU).
+- **Volume:** Shade width = Printer Max.
+- **Assembly:** Modular (Base, Shaft, Shade) + Amazon Hardware.
+- **Aesthetic:** Math-driven (Gyroid, Waveform, Resonant).
+
+### Active Design Series
+- **Lamp Series 01:** Extending the "Waveform" language.
+  - Design 1: [The Redshift](fabrication/furniture/lamp_series_01/01_redshift/) (Implemented)
+  - Design 2-10: TBD
+
+### Completed (Phase 269)
+- [x] **Gate 1300:** Design Language Definition.
+- [x] **Gate 1301:** 10 Concepts Generated.
+- [x] **Gate 1302:** First Lamp Prototype Generated (STL).
+
+## PHASE 269 STATUS: IN PROGRESS
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.

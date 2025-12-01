@@ -106,3 +106,5 @@ fabrication/ender3/profiles/gcode/*.gcode
 fabrication/library/**/*.stl
 fabrication/library/**/*.gcode
 
+fabrication/practical_design/**/*.stl
+*.gcode

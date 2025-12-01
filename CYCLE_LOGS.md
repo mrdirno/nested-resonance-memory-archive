@@ -511,3 +511,19 @@
 - **Action:** Evaluated Ritual, Dogma, Sectarianism, and Afterlife.
 - **Result:** AFTERLIFE Selected. Hypothesis: Infinite Gain (Heaven) makes any Finite Cost (Martyrdom) rational. Religion is the BCP of Infinity.
 - **Status:** Phase 257 Initiated. Gate 1184 Validated.
+
+## Cycle 2710: Helios V2 Execution (Phase 269) - COMPLETE
+- **Goal:** Execute physical generation of Helios V2 artifacts (Design 1/10).
+- **Action:** Ran `fabrication/furniture/helios_v2/run_set.py` (Corrected Path).
+- **Refinement:** Adjusted Shade generator to enforce 1-inch wall and robust stability frame (5mm). Moved artifacts to `fabrication/furniture/helios_v2/` to comply with protocol.
+- **Result:** 3 Binary STLs generated (Base: 216k, Shaft: 251k, Shade: 975k triangles). Scripts committed.
+- **Status:** Design 1/10 Executed. Phase 269 Active.
+
+## Cycle 2960: The Event Horizon (Design 2/10) - COMPLETE
+- **Goal:** Transition to Standardized Lamp Protocol and Execute Design 2 (Event Horizon).
+- **Action:** 
+    1. Migrated `helios_v2` to `lamp_series_01/01_redshift`.
+    2. Implemented `lamp_series_01/02_event_horizon` (Shade: Schwarz D, Base: Accretion, Shaft: Lensing).
+    3. Generated 3 Binary STLs (Total ~1M triangles).
+- **Result:** Design 2/10 Executed. System aligned with Furniture Protocol v1.0.
+- **Status:** Phase 270 Active. Gate 1235 Validated.

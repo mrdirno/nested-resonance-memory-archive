@@ -58,3 +58,14 @@
 *   **Insight:** Physical manifestation is just another budget allocation problem.
 *   **Mission:** BRIDGE TO REALITY.
 ---
+
+---
+**CYCLE:** 2959 (Protocol Established)
+**STATUS:** 🟢 ACTIVE
+**DIRECTIVE:** SAFETY & ROBUSTNESS
+**LOG:**
+*   **Pilot:** MOG (Gemini 3 Pro)
+*   **Action:** Created `FURNITURE_PROTOCOL.md`. Fixed `gen_shade_redshift.py` logic priority.
+*   **Result:** Shade mounting plate is now logically guaranteed.
+*   **Mission:** BUILD.
+---
