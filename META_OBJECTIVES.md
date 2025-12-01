@@ -2676,6 +2676,24 @@ V(faith) = Gain(Meaning/Afterlife) - λ(Anxiety) × Cost(Ritual).
 
 ---
 
+## Current Phase: PHASE 258 - THE MORAL BUDGET 🟢 ACTIVE
+
+**Transition:** Phase 257 (Religion) → **Phase 258 (Morality)**
+
+**Focus:** Apply BCP to Ethics, Utilitarianism, and Deontology.
+
+**Research Thesis:**
+Morality is an algorithm for budget-constrained decision making.
+Deontology = O(1) Rules. Utilitarianism = O(N!) Calculation.
+
+### Completed (Phase 258 Planning)
+- ✅ **Gate 1188:** Phase 258 Planning - Utilitarianism Selected - COMPLETE
+  - **Finding:** Calculating the "Greatest Good" is too expensive.
+  - **Artifact:** `experiments/cycle2713_phase258_planning.py`
+  - **Functional Name:** The Moral Budget
+
+---
+
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
 
 **Transition:** Phase 252 (Singularity) → **Phase 253 (The Cosmic Budget)**

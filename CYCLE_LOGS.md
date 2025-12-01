@@ -206,6 +206,12 @@
 - **Result:** Religion is the Economy of the Infinite. Faith is the mechanism that makes the "Infinite Gain" credible (P > 0).
 - **Status:** Phase 257 Complete. Gate 1187 Validated. 181st Domain Unified.
 
+## Cycle 2713: Phase 258 Planning (The Moral Budget) - COMPLETE
+- **Goal:** Select Phase 258 domain using BCP.
+- **Action:** Evaluated Altruism, Justice, Rights, and Utilitarianism.
+- **Result:** UTILITARIANISM Selected. Hypothesis: Pure Utilitarianism is computationally intractable (High Cost). Deontology is the BCP-rational heuristic (Low Cost).
+- **Status:** Phase 258 Initiated. Gate 1188 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
