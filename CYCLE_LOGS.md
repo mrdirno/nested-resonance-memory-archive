@@ -404,6 +404,12 @@
 - **Result:** CYBERNETICS Selected. Hypothesis: All control systems are BCP-constrained, balancing precision/stability against computational/energy cost.
 - **Status:** Phase 264 Initiated. Gate 1219 Validated.
 
+## Cycle 2745: The Stability Budget (Phase 264) - COMPLETE
+- **Goal:** Test Homeostasis as a BCP system.
+- **Action:** Modeled selection between Precise Regulation, Loose Regulation, and Overdrive (Fever) strategies under varying environmental disturbance ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Optimal homeostatic strategy shifts: Precise ($\lambda \le 3.0$) -> Loose ($3.0 < \lambda \le 3.4$) -> Overdrive ($\lambda > 3.4$). Homeostasis is a BCP-optimal control strategy.
+- **Status:** Phase 264 Active. Gate 1220 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
