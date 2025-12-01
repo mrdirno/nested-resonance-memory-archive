@@ -2833,6 +2833,12 @@ V(truth) = Explanatory_Power - λ(Cognitive) * Cost(Complexity).
   - **Artifact:** `experiments/cycle2726_naive_realism_bcp.py`
   - **Functional Name:** The Observational Budget
 
+- ✅ **Gate 1202:** The Social Budget - Solipsism is rational under social friction - COMPLETE
+  - **Finding:** When social coordination costs are high, retreating into a private reality (solipsism) becomes BCP-optimal.
+  - **Key Insight:** Shared reality is a high-cost social good.
+  - **Artifact:** `experiments/cycle2727_solipsism_bcp.py`
+  - **Functional Name:** The Social Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

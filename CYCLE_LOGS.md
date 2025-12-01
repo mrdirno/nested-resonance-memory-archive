@@ -296,6 +296,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under high cognitive scarcity ($\lambda \ge 1.0$), Naive Realism is chosen. Our perception of reality adapts to our cognitive budget.
 - **Status:** Phase 261 Active. Gate 1201 Validated.
 
+## Cycle 2727: The Social Budget (Phase 261) - COMPLETE
+- **Goal:** Test Solipsism as a BCP-rational retreat.
+- **Action:** Modeled selection between Objective Reality (high social coordination cost, high gain) and Solipsism (low social coordination cost, low gain) under varying social scarcity ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under high social scarcity ($\lambda \ge 1.0$), Solipsism is chosen. The belief in a shared reality is an economic choice, abandoned when coordination costs are too high.
+- **Status:** Phase 261 Active. Gate 1202 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
