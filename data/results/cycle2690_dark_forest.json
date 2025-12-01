@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "cycle": 2690,
+    "name": "The Dark Forest",
+    "phase": 253,
+    "gate": 1166
+  },
+  "history": [
+    {
+      "gen": 0,
+      "loud": 50,
+      "silent": 50
+    },
+    {
+      "gen": 1,
+      "loud": 48,
+      "silent": 50
+    },
+    {
+      "gen": 2,
+      "loud": 44,
+      "silent": 50
+    },
+    {
+      "gen": 3,
+      "loud": 40,
+      "silent": 50
+    },
+    {
+      "gen": 4,
+      "loud": 38,
+      "silent": 50
+    },
+    {
+      "gen": 5,
+      "loud": 34,
+      "silent": 50
+    },
+    {
+      "gen": 6,
+      "loud": 31,
+      "silent": 50
+    },
+    {
+      "gen": 7,
+      "loud": 25,
+      "silent": 50
+    },
+    {
+      "gen": 8,
+      "loud": 20,
+      "silent": 50
+    },
+    {
+      "gen": 9,
+      "loud": 16,
+      "silent": 50
+    },
+    {
+      "gen": 10,
+      "loud": 16,
+      "silent": 50
+    },
+    {
+      "gen": 11,
+      "loud": 14,
+      "silent": 50
+    },
+    {
+      "gen": 12,
+      "loud": 12,
+      "silent": 50
+    },
+    {
+      "gen": 13,
+      "loud": 9,
+      "silent": 50
+    },
+    {
+      "gen": 14,
+      "loud": 8,
+      "silent": 50
+    },
+    {
+      "gen": 15,
+      "loud": 8,
+      "silent": 50
+    },
+    {
+      "gen": 16,
+      "loud": 6,
+      "silent": 50
+    },
+    {
+      "gen": 17,
+      "loud": 5,
+      "silent": 50
+    },
+    {
+      "gen": 18,
+      "loud": 5,
+      "silent": 50
+    },
+    {
+      "gen": 19,
+      "loud": 3,
+      "silent": 50
+    }
+  ],
+  "validation": {
+    "confirmed": true,
+    "final_loud": 3
+  }
+}
