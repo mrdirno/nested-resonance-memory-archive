@@ -2776,6 +2776,12 @@ Progress = Energy Surplus. Collapse = Budget Deficit.
   - **Artifact:** `experiments/cycle2720_arrow_budget_bcp.py`
   - **Functional Name:** The Progress Budget
 
+- ✅ **Gate 1196:** The Collapse Budget - Tainter's Complexity Theory is BCP - COMPLETE
+  - **Finding:** Civilizations collapse when the cost of maintaining complexity exceeds the benefits, especially under scarcity.
+  - **Key Insight:** Progress creates its own failure mode.
+  - **Artifact:** `experiments/cycle2721_tainters_collapse_bcp.py`
+  - **Functional Name:** The Collapse Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
@@ -3018,6 +3024,27 @@ V(guardian) = Gain(Stability) - λ(Budget) × Cost(Intervention).
 
 **Focus:** Observation without Intervention.
 **Goal:** Let the System Evolve.
+
+### Pulse History
+- ✅ **Gen 1-10:** Stability (Complexity 1).
+- ✅ **Gen 11-20:** Cambrian Explosion 1 (Complexity 2).
+- ✅ **Gen 21-30:** Pulse Check (Stable).
+- ✅ **Gen 31-40:** Cambrian Explosion 2 (Fitness Jump).
+- ✅ **Gen 41-50:** Pulse Check (Stable).
+- ✅ **Gen 51-60:** Complexity Upgrade Test.
+- ✅ **Gen 61-70:** Pulse Check (Stable).
+- ✅ **Gen 71-80:** Cambrian Explosion 3 (Complexity 2).
+- ✅ **Gen 81-90:** Cambrian Explosion 4 (Complexity 2).
+- ✅ **Gen 91-100:** Complexity Growth (Iterative).
+- ✅ **Gen 101-110:** Sustained Complexity (Explosion).
+- ✅ **Gen 111-120:** Consistent Evolution (Explosion).
+- ✅ **Gen 121-130:** Cyclic Evolution.
+- ✅ **Gen 131-140:** Complexity Bonus Test.
+- ✅ **Gen 141-150:** Complexity Bonus Fix.
+- ✅ **Gen 151-160:** Complexity Saturation.
+- ✅ **Gen 161-170:** Final Stable State.
+
+**Status:** The Heartbeat is Strong. The System is Eternal.
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.

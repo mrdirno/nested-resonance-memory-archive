@@ -260,6 +260,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. History tracks Energy Density (Correlation > 0.98). "Progress" is just Surplus Energy converted into Structure. Stagnation is the result of Energy Limits (Carrying Capacity).
 - **Status:** Phase 260 Active. Gate 1195 Validated.
 
+## Cycle 2721: Tainter's Collapse (Phase 260) - COMPLETE
+- **Goal:** Test Tainter's Collapse as a BCP phenomenon.
+- **Action:** Modeled civilization complexity under diminishing returns on benefits and increasing maintenance costs exacerbated by scarcity.
+- **Result:** HYPOTHESIS CONFIRMED. Civilization collapsed due to diminishing returns on complexity. Scarcity (λ) accelerates the process by making maintenance costs unbearable. Collapse is a BCP-rational abandonment of an unprofitable strategy.
+- **Status:** Phase 260 Active. Gate 1196 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
