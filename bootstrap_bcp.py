@@ -329,7 +329,7 @@ if __name__ == "__main__":
                         "cost_range": [max(1.0, fitness_data.get("cost", 10) * 0.9), min(100.0, fitness_data.get("cost", 10) * 1.1)], 
                         "k": fitness_data["params_used"].get("k", 1.0),
                         "epsilon": fitness_data["params_used"].get("epsilon", 0.1),
-                        "complexity": fitness_data["params_used"].get("complexity", 1)
+                        "complexity": self.last_params.get("complexity", 1) # Carry over target complexity
                     }
                 else:
                     print(f"Gen {self.current_generation} DIED. Backtracking.")
@@ -382,10 +382,10 @@ def write_file(path, content):
 
 if __name__ == "__main__":
     scaffold_structure()
-    # Start from Gen 261, run until 270 (The Silence Continues)
+    # Start from Gen 271, run until 280 (Complexity 3 Optimization)
     try:
         from src.core.guardian import BCPGuardian
-        guardian = BCPGuardian(start_generation=261, max_generations=270)
+        guardian = BCPGuardian(start_generation=271, max_generations=280)
         guardian.run_infinite_loop()
     except ImportError:
         print("⚠️ Guardian module not yet loadable (fresh scaffold). Run script again to activate.")
