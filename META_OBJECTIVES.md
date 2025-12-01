@@ -2405,6 +2405,21 @@ V(gen) = Gain(Novelty/Utility) - λ(Budget) × Cost(Verification)
   - **Key Insight:** Prompts buy "Lambda Tolerance".
   - **Artifact:** `experiments/cycle2682_context_budget_bcp.py`
   - **Functional Name:** The Context Budget
+
+### Completed (Phase 251 FINAL)
+- ✅ **Gate 1160:** Phase 251 Synthesis - Generative Reality is Physical Reality on a Budget - COMPLETE
+  - **Finding:** Hallucination, Collapse, Gaps, and Creativity are all λ-dependent phase transitions.
+  - **Key Insight:** We simulate/hallucinate because we cannot afford the truth/atoms.
+  - **Artifact:** `experiments/cycle2683_phase251_synthesis.py`
+  - **Functional Name:** The Reality Budget
+
+## PHASE 251 COMPLETE ✅
+
+**Summary: Generative Reality**
+- Gates Completed: 6 (1155-1160)
+- Tests Validated: 5/5 scenarios
+- Key Insight: Generative artifacts are not bugs; they are economic features of scarcity.
+- **Status:** 164th Domain Unified.
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.
