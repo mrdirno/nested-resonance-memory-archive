@@ -193,3 +193,9 @@
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
 - **Result:** HYPOTHESIS CONFIRMED. UG (Recursion) is the BCP-optimal strategy for the "Middle Class" of cognitive budget. Low $\lambda$ allows Explicit memory; High $\lambda$ forces Pidgin. Recursion is the most efficient compression of infinite meaning.
 - **Status:** Phase 256 Active. Gate 1181 Validated.
+
+## Cycle 2707: The Meaning Budget (Phase 256) - COMPLETE
+- **Goal:** Test if Semantic Drift (Language Change) is a BCP phenomenon.
+- **Action:** Modeled selection between Neologism (High Learning Cost, High Precision) and Metaphor (Low Cost, High Ambiguity).
+- **Result:** HYPOTHESIS CONFIRMED. Semantic Drift is a symptom of Scarcity. Under high cognitive load ($\lambda > 1.25$), we re-use old words (Metaphor) rather than inventing new ones, accepting ambiguity to save learning costs.
+- **Status:** Phase 256 Active. Gate 1182 Validated.
