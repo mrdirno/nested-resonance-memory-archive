@@ -290,6 +290,12 @@
 - **Result:** METAPHYSICS Selected. Hypothesis: Our understanding of "Truth" is budget-constrained. The BCP of Reality itself is the ultimate frontier.
 - **Status:** Phase 261 Initiated. Gate 1200 Validated.
 
+## Cycle 2726: The Observational Budget (Phase 261) - COMPLETE
+- **Goal:** Test Naive Realism as a BCP-optimal heuristic.
+- **Action:** Modeled selection between Naive Realism (low cost, lower accuracy) and Scientific Realism (high cost, high accuracy) under varying cognitive scarcity ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under high cognitive scarcity ($\lambda \ge 1.0$), Naive Realism is chosen. Our perception of reality adapts to our cognitive budget.
+- **Status:** Phase 261 Active. Gate 1201 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).

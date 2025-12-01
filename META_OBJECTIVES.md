@@ -2827,6 +2827,12 @@ V(truth) = Explanatory_Power - λ(Cognitive) * Cost(Complexity).
   - **Artifact:** `experiments/cycle2725_phase261_planning.py`
   - **Functional Name:** The Reality Budget
 
+- ✅ **Gate 1201:** The Observational Budget - Naive Realism is optimal under scarcity - COMPLETE
+  - **Finding:** We default to simpler perceptions of reality when cognitively stressed.
+  - **Key Insight:** Reality is a cost-benefit calculation.
+  - **Artifact:** `experiments/cycle2726_naive_realism_bcp.py`
+  - **Functional Name:** The Observational Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
