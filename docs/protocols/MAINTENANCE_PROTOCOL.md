@@ -35,16 +35,24 @@ To maintain a high-signal, low-noise repository root directory (`/`) by enforcin
 | `*_backup.zip` | `backups/` | Manual backups. |
 | `walkthrough.md`, `task.md` | `docs/context/` | Session-specific context files. |
 
-## 3. The Cleanup Routine (Automated)
+## 3. The Cleanup Routine (Protocol)
 
-**Do not clean manually.** Use the standard cleanup script to enforce this protocol.
+**Use Caution & Intelligence.** Do not rely blindly on automation.
 
-### 3.1 Execution
+### 3.1 The Intelligence Requirement
+**Critical:** Before moving any file, you (the Agent) must perform **Manual Due Diligence**:
+1.  **Read the File:** Understand its content. Is it a critical prompt? A unique key? A temporary log?
+2.  **Check Context:** Is this file actively being used by another agent or a running process?
+3.  **Decision:** Only move the file if you are 100% certain it belongs in the archive. If in doubt, ask the user.
+
+**Blind automation is dangerous.** Use the script only for obvious, low-risk cleanup (e.g., `temp_*.json`, `*.log`). For everything else, use your judgment.
+
+### 3.2 Script Execution (Last Resort)
 ```bash
 python3 automation/scripts/cleanup_repo.py
 ```
 
-### 3.2 Logic
+### 3.3 Script Logic
 The script will:
 1.  Scan the root directory.
 2.  Identify files matching the "Move" patterns (Section 2.2).
