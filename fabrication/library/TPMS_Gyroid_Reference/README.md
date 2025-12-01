@@ -2,15 +2,7 @@
 **Scientific Classification:** Triply Periodic Minimal Surface (TPMS) - Gyroid
 **Duality Context:** Orthogonal Sum Dynamics (OSD) Reference State
 
-> In the Duality-Zero stack this artifact is the canonical “zero sum” substrate for OSD and NRM simulations.
-
----
-
-## Usage
-This directory provides a standardized gyroid reference cell for simulation, printing, and teaching. Use it as:
-*   a test artifact for printers and slicers
-*   a canonical TPMS gyroid for OSD simulations
-*   a demo piece when explaining minimal surfaces and metamaterials
+> **MATCHED PAIR:** This artifact has a mathematical twin. See **[Artifact 04: The Void](../TPMS_Inverse_Void_Artifact04/README.md)** for the inverse volume that fills this shell.
 
 ---
 
@@ -78,8 +70,10 @@ While coral skeletons are often more random, they strive for this TPMS topology.
 ## 5. Summary
 **The Gyroid Artifact** is not just art. It is the physical embodiment of **equilibrium**. It is the shape of a field that has ceased to fight itself and has settled into a perfect, infinite dance of balance.
 
----
+## 6. Related Artifacts
+*   **[Artifact 04: The Void](../TPMS_Inverse_Void_Artifact04/README.md):** The "Negative Space" version of this geometry. If printed together, they form a solid block.
+*   **[Artifact 02: The Gradient Well](../TPMS_Gradient_Sphere_Artifact02/README.md):** A spherical evolution of this geometry where the lattice thickness varies radially. It represents the "Stressed State" (Gravity/Bias) of the Gyroid field, contrasting with this "Equilibrium State."
 
-## Operational Guide
+## 7. Operational Guide
 *   **To 3D print quickly:** Use `TPMS_Gyroid_40mm.gcode` on an Ender 3 (or compatible Klipper/Marlin machine) with 0.4mm nozzle and PLA/PETG.
 *   **For high fidelity inspection or reslicing:** Start from `TPMS_Gyroid_HighRes.stl` at 40 mm base scale.

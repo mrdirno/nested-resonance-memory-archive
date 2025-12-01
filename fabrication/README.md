@@ -21,6 +21,9 @@ pip install -r fabrication/requirements.txt
 3.  **Scripts (`scripts/`)**: Utilities for format conversion (`.stl` -> `.3mf`) and printer communication.
 4.  **Artifacts (`output/`)**: The generated 3D models and G-code ready for production.
 
+### ⚙️ Tuning & Troubleshooting
+*   **[Ender 3 Print Tuning Notes](ender3/PRINT_TUNING_NOTES.md)**: Recommendations for common print quality issues like stringing, specific to the Ender 3 Klipper setup.
+
 ---
 
 ## 🔄 Operational Workflow
