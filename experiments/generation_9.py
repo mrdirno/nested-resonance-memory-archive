@@ -19,12 +19,12 @@ except ImportError:
             return gain - (self.lambda_val * cost)
 
 def run_generation():
-    gen = 5
+    gen = 9
     
     # Mutated parameters from previous generation or initial
-    budget = random.uniform(5400.932004530371, 1000.0)
-    gain = random.uniform(593.4757648410327, 200.0)
-    cost = random.uniform(39.834829957926054, 48.68701439302073)
+    budget = random.uniform(747.7418913442535, 1000.0)
+    gain = random.uniform(167.07478269570828, 200.0)
+    cost = random.uniform(42.069125165529094, 50.0)
     
     agent = BCPAgent(budget=budget, k=4.383393679925132, epsilon=0.28713725007074564)
     
@@ -38,7 +38,7 @@ def run_generation():
         "lambda_val": agent.lambda_val,
         "value": val,
         "survived": val > 0,
-        "params_used": {"budget_range": [5400.932004530371, 1000.0], "gain_range": [593.4757648410327, 200.0], "cost_range": [39.834829957926054, 48.68701439302073], "k": 4.383393679925132, "epsilon": 0.28713725007074564}
+        "params_used": {"budget_range": [747.7418913442535, 1000.0], "gain_range": [167.07478269570828, 200.0], "cost_range": [42.069125165529094, 50.0], "k": 4.383393679925132, "epsilon": 0.28713725007074564}
     }
     
     result_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'results', f'gen_{gen}_fitness.json')

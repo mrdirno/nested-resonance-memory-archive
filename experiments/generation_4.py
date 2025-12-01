@@ -22,11 +22,11 @@ def run_generation():
     gen = 4
     
     # Mutated parameters from previous generation or initial
-    budget = random.uniform(588.6149090140009, 719.4182221282234)
-    gain = random.uniform(138.95896140768474, 169.83873060939246)
-    cost = random.uniform(36.9360543708222, 45.14406645322713)
+    budget = random.uniform(1.0, 10000.0)
+    gain = random.uniform(10.0, 1000.0)
+    cost = random.uniform(1.0, 100.0)
     
-    agent = BCPAgent(budget=budget, k=1.0, epsilon=0.1)
+    agent = BCPAgent(budget=budget, k=4.383393679925132, epsilon=0.28713725007074564)
     
     val = agent.evaluate(gain, cost)
     
@@ -38,7 +38,7 @@ def run_generation():
         "lambda_val": agent.lambda_val,
         "value": val,
         "survived": val > 0,
-        "params_used": {"budget_range": [588.6149090140009, 719.4182221282234], "gain_range": [138.95896140768474, 169.83873060939246], "cost_range": [36.9360543708222, 45.14406645322713], "k": 1.0, "epsilon": 0.1}
+        "params_used": {"budget_range": [1.0, 10000.0], "gain_range": [10.0, 1000.0], "cost_range": [1.0, 100.0], "k": 4.383393679925132, "epsilon": 0.28713725007074564}
     }
     
     result_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'results', f'gen_{gen}_fitness.json')

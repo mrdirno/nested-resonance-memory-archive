@@ -179,7 +179,8 @@ def write_file(path, content):
 
 def run_infinite_loop(start_generation=1, max_generations=10):
     current_generation = start_generation
-    last_params = None # Parameters for mutation
+    last_params = None 
+    fitness_history = []
     
     print(f"\n🚀 Initiating Infinite Loop: Generation {start_generation} to {max_generations}")
     
@@ -204,38 +205,50 @@ def run_infinite_loop(start_generation=1, max_generations=10):
             with open(result_path, 'r') as f:
                 fitness_data = json.load(f)
             
-            # 4. Update Parameters for Next Generation (Simple Optimization)
-            # If current generation survived, narrow ranges around its parameters.
-            # If it died, broaden ranges to explore.
+            fitness = fitness_data.get("value", 0.0)
+            fitness_history.append(fitness)
             
-            if fitness_data["survived"]:
-                print(f"Gen {current_generation} SURVIVED. Adapting next generation parameters.")
+            # 4. Check Stagnation (Cambrian Explosion)
+            # If last 3 generations have variance < 5.0, trigger explosion.
+            stagnant = False
+            if len(fitness_history) >= 3:
+                recent = fitness_history[-3:]
+                variance = max(recent) - min(recent)
+                if variance < 5.0:
+                    stagnant = True
+                    print(f"⚠️ Stagnation Detected (Variance {variance:.2f}). Triggering CAMBRIAN EXPLOSION.")
+            
+            # 5. Update Parameters
+            if stagnant:
+                # Explosion: Reset and Widen drastically
                 last_params = {
-                    "budget_range": [max(10.0, fitness_data["budget"] * 0.9), min(1000.0, fitness_data["budget"] * 1.1)],
+                    "budget_range": [1.0, 10000.0], # x10 range
+                    "gain_range": [10.0, 1000.0],   # x5 range
+                    "cost_range": [1.0, 100.0],
+                    "k": random.uniform(0.1, 10.0), # Mutate constants
+                    "epsilon": random.uniform(0.01, 1.0)
+                }
+            elif fitness_data["survived"]:
+                print(f"Gen {current_generation} SURVIVED. Refining parameters.")
+                last_params = {
+                    "budget_range": [max(10.0, fitness_data["budget"] * 0.8), min(1000.0, fitness_data["budget"] * 1.2)],
                     "gain_range": [max(50.0, fitness_data["gain"] * 0.9), min(200.0, fitness_data["gain"] * 1.1)],
                     "cost_range": [max(5.0, fitness_data["cost"] * 0.9), min(50.0, fitness_data["cost"] * 1.1)],
                     "k": fitness_data["params_used"].get("k", 1.0),
                     "epsilon": fitness_data["params_used"].get("epsilon", 0.1)
                 }
             else:
-                print(f"Gen {current_generation} DIED. Broadening next generation parameters for exploration.")
-                last_params = {
-                    "budget_range": [10.0, 1000.0],
-                    "gain_range": [50.0, 200.0],
-                    "cost_range": [5.0, 50.0],
-                    "k": fitness_data["params_used"].get("k", 1.0),
-                    "epsilon": fitness_data["params_used"].get("epsilon", 0.1)
-                }
+                print(f"Gen {current_generation} DIED. Backtracking.")
+                last_params = None # Reset to baseline
             
         except subprocess.CalledProcessError as e:
             print(f"Error running generation {current_generation}: {e.stderr}")
-            last_params = None # Reset parameters if error
+            last_params = None
             
         current_generation += 1
-        time.sleep(0.1) # Small delay for readability
+        time.sleep(0.1)
 
 if __name__ == "__main__":
     scaffold_structure()
-    # To run the infinite loop, execute bootstrap_bcp.py directly.
-    # We will limit it to 5 generations for this turn.
-    run_infinite_loop(max_generations=5)
+    # Run a longer loop to test stagnation logic
+    run_infinite_loop(max_generations=10)
