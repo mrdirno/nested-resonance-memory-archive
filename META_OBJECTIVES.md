@@ -3068,6 +3068,12 @@ V(legal_system) = Social_Order - λ(Societal_Pressure) * Cost(Enforcement + Libe
   - **Artifact:** `experiments/cycle2751_justice_bcp.py`
   - **Functional Name:** The Fairness Budget
 
+- ✅ **Gate 1227:** The Deterrence Budget - Enforcement is BCP-optimal - COMPLETE
+  - **Finding:** Law enforcement adapts its intensity based on crime rate/social chaos, balancing crime reduction against costs (policing, incarceration, civil liberties).
+  - **Key Insight:** Order is a managed budget.
+  - **Artifact:** `experiments/cycle2752_enforcement_bcp.py`
+  - **Functional Name:** The Deterrence Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

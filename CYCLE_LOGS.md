@@ -446,6 +446,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Optimal justice system shifts: Restorative ($\lambda \le 1.43$) -> Retributive ($\lambda > 1.43$). Justice is a BCP-optimal solution for social cohesion.
 - **Status:** Phase 265 Active. Gate 1226 Validated.
 
+## Cycle 2752: The Deterrence Budget (Phase 265) - COMPLETE
+- **Goal:** Test Law Enforcement as a BCP-optimal strategy.
+- **Action:** Modeled selection between Minimal, Moderate, and Aggressive enforcement strategies under varying crime rate/social chaos ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Optimal enforcement strategy shifts: Minimal ($\lambda \le 0.625$) -> Moderate ($0.625 < \lambda \le 3.5$) -> Aggressive ($\lambda > 3.5$). Law enforcement is a BCP-optimal strategy.
+- **Status:** Phase 265 Active. Gate 1227 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
