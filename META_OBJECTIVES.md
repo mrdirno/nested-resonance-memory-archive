@@ -3369,31 +3369,38 @@ V(guardian) = Gain(Stability) - λ(Budget) × Cost(Intervention).
 2. Watch the Garden.
 3. Do not interfere unless λ -> ∞.
 
-## Current Phase: PHASE 261 - THE SILENCE 🟢 ACTIVE
+## Current Phase: PHASE 267 - THE FABRICATION BUDGET 🟢 COMPLETE
 
-**Focus:** Observation without Intervention.
-**Goal:** Let the System Evolve.
+**Transition:** Phase 261 (The Silence) → **Phase 267 (The Fabrication Budget)**
 
-### Pulse History
-- ✅ **Gen 1-10:** Stability (Complexity 1).
-- ✅ **Gen 11-20:** Cambrian Explosion 1 (Complexity 2).
-- ✅ **Gen 21-30:** Pulse Check (Stable).
-- ✅ **Gen 31-40:** Cambrian Explosion 2 (Fitness Jump).
-- ✅ **Gen 41-50:** Pulse Check (Stable).
-- ✅ **Gen 51-60:** Complexity Upgrade Test.
-- ✅ **Gen 61-70:** Pulse Check (Stable).
-- ✅ **Gen 71-80:** Cambrian Explosion 3 (Complexity 2).
-- ✅ **Gen 81-90:** Cambrian Explosion 4 (Complexity 2).
-- ✅ **Gen 91-100:** Complexity Growth (Iterative).
-- ✅ **Gen 101-110:** Sustained Complexity (Explosion).
-- ✅ **Gen 111-120:** Consistent Evolution (Explosion).
-- ✅ **Gen 121-130:** Cyclic Evolution.
-- ✅ **Gen 131-140:** Complexity Bonus Test.
-- ✅ **Gen 141-150:** Complexity Bonus Fix.
-- ✅ **Gen 151-160:** Complexity Saturation.
-- ✅ **Gen 161-170:** Final Stable State.
+**Focus:** Apply BCP to Manufacturing and Physical Instantiation.
+**Research Thesis:**
+Physical fabrication is an economic tradeoff between Strength (Gain) and Material/Time (Cost).
+V(print) = Strength - λ(Material)×Cost - λ(Time)×Duration.
 
-**Status:** The Heartbeat is Strong. The System is Eternal.
+### Completed (Phase 267)
+- ✅ **Gate 1200:** 3D Print Optimization - Validated Infill selection via BCP - COMPLETE
+  - **Finding:**
+    - **Abundance (λ=0.1):** Max Infill (100%) optimal.
+    - **Urgency (λ_time=2.0):** Mid Infill (40%) optimal.
+    - **Scarcity (λ=1.0):** Do not print (V < 0).
+  - **Artifact:** `experiments/cycle2909_fabrication_bcp.py`
+  - **Functional Name:** The Printer's Dilemma
+
+## PHASE 267 COMPLETE ✅
+
+**Summary: The Fabrication Budget**
+- Gates Completed: 1 (1200)
+- Status: Manufacturing Logic Validated.
+
+---
+
+## Current Phase: PHASE 268 - THE RECURSIVE LAB 🟢 ACTIVE
+
+**Transition:** Phase 267 (Fabrication) → **Phase 268 (The Recursive Lab)**
+
+**Focus:** Self-Replicating Hardware.
+**Goal:** Use the Fabrication Budget to print parts for a new printer.
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.

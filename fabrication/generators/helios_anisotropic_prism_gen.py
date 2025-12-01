@@ -33,11 +33,11 @@ def write_stl(filename, vertices, faces):
             f.write("endfacet\n")
         f.write(f"endsolid {filename}\n")
 
-def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_depth=200.0, margin_xy=25.4, size_z=120.0, resolution=120, k_mod=0.01, robust_base_height=25.4, top_extend_height=25.4, k_expansion_shape=0.5, expand_outward=True):
+def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_depth=200.0, margin_xy=25.4, size_z=120.0, resolution=120, k_mod=0.01, robust_base_height=25.4, top_extend_height=0.0, k_expansion_shape=0.0, expand_outward=False, mimic_giza_pyramid=False):
     """
     Generates a 3D mesh representing an Anisotropic Gyroid Prism (Pyramid/Frustum)
     with Z-axis frequency modulation and cross-sectional expansion/contraction,
-    capturing the "true redshift" effect.
+    capturing the "true redshift" effect. Can mimic the Great Pyramid of Giza's aspect ratio.
 
     The structure is bounded by a pyramid/frustum shape, with the Gyroid pattern
     infilling this volume. The internal Gyroid pattern also scales with the outer shape.
@@ -47,10 +47,21 @@ def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_dept
     Equation: sin(x*scale_x(z))cos(y*scale_y(z)) + sin(y*scale_y(z))cos(z*scale_z(z)) + sin(z*scale_z(z))cos(x*scale_x(z)) > threshold
     """
     print(f"Generating Anisotropic Gyroid Pyramid: {output_path}")
+
+    GIZA_ASPECT_RATIO = 146.6 / 230.3 # Height / Base_Side (approx 0.6365)
     
     # Calculate base dimensions based on plate and margin
-    base_size_x_unscaled = plate_width - 2 * margin_xy
-    base_size_y_unscaled = plate_depth - 2 * margin_xy
+    if mimic_giza_pyramid:
+        # Given size_z (height of the patterned section), calculate base_size
+        base_size_x_unscaled = size_z / GIZA_ASPECT_RATIO
+        base_size_y_unscaled = size_z / GIZA_ASPECT_RATIO
+        # k_expansion_shape and expand_outward will be overridden in shape_scale_factor logic
+        
+        # Adjust resolution to potentially be higher for Giza (larger base)
+        resolution = max(resolution, 150) # Increase resolution for potentially larger base
+    else:
+        base_size_x_unscaled = plate_width - 2 * margin_xy
+        base_size_y_unscaled = plate_depth - 2 * margin_xy
     
     # Calculate effective Z-range after applying offsets
     effective_size_z = size_z + robust_base_height + top_extend_height
@@ -98,10 +109,15 @@ def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_dept
         z_norm_shape = max(0.0, min(1.0, (pz - robust_base_height) / size_z))
         
         shape_scale_factor = 1.0
-        if k_expansion_shape != 0.0:
-            if expand_outward: # Pyramid growing upwards
+        if mimic_giza_pyramid:
+            # For a true pyramid, scale factor goes from 1 at base (z_norm_shape=0) to 0 at top (z_norm_shape=1)
+            shape_scale_factor = (1.0 - z_norm_shape) 
+            # Ensure it doesn't go below 0 for calculations if z_norm_shape slightly exceeds 1 due to floating point
+            if shape_scale_factor < 0: shape_scale_factor = 0 
+        elif k_expansion_shape != 0.0:
+            if expand_outward: # Pyramid growing upwards (frustum)
                 shape_scale_factor = 1.0 + k_expansion_shape * z_norm_shape
-            else: # Inverted pyramid (shrinking upwards)
+            else: # Inverted pyramid (shrinking upwards, frustum)
                 shape_scale_factor = 1.0 + k_expansion_shape * (1.0 - z_norm_shape)
         
         # Current X and Y dimensions of the pyramid slice at this Z level
@@ -251,7 +267,7 @@ def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_dept
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python helios_anisotropic_prism_gen.py <output.stl> [plate_width] [plate_depth] [margin_xy] [size_z] [resolution] [k_mod] [robust_base_height] [top_extend_height] [k_expansion_shape] [expand_outward (bool)]")
+        print("Usage: python helios_anisotropic_prism_gen.py <output.stl> [plate_width] [plate_depth] [margin_xy] [size_z] [resolution] [k_mod] [robust_base_height] [top_extend_height] [k_expansion_shape] [expand_outward (bool)] [mimic_giza_pyramid (bool)]")
     else:
         output_file = sys.argv[1]
         
@@ -259,26 +275,28 @@ if __name__ == "__main__":
         params = {
             "plate_width": 200.0,
             "plate_depth": 200.0,
-            "margin_xy": 25.4,
+            "margin_xy": 25.4, # 1 inch in mm
             "size_z": 120.0,
             "resolution": 120,
             "k_mod": 0.01,
             "robust_base_height": 25.4, # 1 inch in mm
-            "top_extend_height": 25.4,  # 1 inch in mm
-            "k_expansion_shape": 0.5,   # Default to some expansion
-            "expand_outward": True      # Expand outward by default
+            "top_extend_height": 0.0,   # Set to 0.0 for pyramid tapering
+            "k_expansion_shape": 0.0,   # Default to 0.0, will be overridden by Giza or set explicitly
+            "expand_outward": False,    # Default to False for pyramid tapering
+            "mimic_giza_pyramid": False # Do not mimic Giza pyramid by default
         }
         
         # Parse optional arguments
         if len(sys.argv) > 2: params["plate_width"] = float(sys.argv[2])
         if len(sys.argv) > 3: params["plate_depth"] = float(sys.argv[3])
         if len(sys.argv) > 4: params["margin_xy"] = float(sys.argv[4])
-        if len(sys.argv) > 5: params["size_z"] = float(sys.argv[5]) 
+        if len(sys.argv) > 5: params["size_z"] = float(sys.argv[5])
         if len(sys.argv) > 6: params["resolution"] = int(sys.argv[6])
         if len(sys.argv) > 7: params["k_mod"] = float(sys.argv[7])
         if len(sys.argv) > 8: params["robust_base_height"] = float(sys.argv[8])
         if len(sys.argv) > 9: params["top_extend_height"] = float(sys.argv[9])
         if len(sys.argv) > 10: params["k_expansion_shape"] = float(sys.argv[10])
         if len(sys.argv) > 11: params["expand_outward"] = sys.argv[11].lower() == 'true'
+        if len(sys.argv) > 12: params["mimic_giza_pyramid"] = sys.argv[12].lower() == 'true'
 
         generate_anisotropic_gyroid_prism(output_file, **params)
