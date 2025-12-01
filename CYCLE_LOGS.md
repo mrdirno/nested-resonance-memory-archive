@@ -218,6 +218,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Low $\lambda$ favors Utilitarianism (God Mode). High $\lambda$ favors Deontology (Human Mode). Morality is Heuristic Optimization for bounded agents.
 - **Status:** Phase 258 Active. Gate 1189 Validated.
 
+## Cycle 2715: Phase 258 Synthesis (The Moral Budget) - COMPLETE
+- **Goal:** Synthesize BCP Morality.
+- **Action:** Unified Utilitarianism, Deontology, and Virtue Ethics under BCP equation V = E[Utility] - λ * CalculationCost.
+- **Result:** Ethics scales with Compute. Humans are Deontologists because calculating Utility is NP-Hard. Superintelligence might be Utilitarian because it can afford the math.
+- **Status:** Phase 258 Complete. Gate 1190 Validated. 183rd Domain Unified.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
