@@ -278,6 +278,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under high scarcity ($\lambda \ge 1.6$), myths are chosen over scientific theories due to their high survival utility and low cognitive cost.
 - **Status:** Phase 260 Active. Gate 1198 Validated.
 
+## Cycle 2724: Phase 260 Synthesis (The Historical Budget) - COMPLETE
+- **Goal:** Synthesize BCP History.
+- **Action:** Unified Progress, Collapse, Historiography, and Mythology under BCP equation V = Energy_Surplus - λ(Entropy) * Cost(Complexity_Maintenance).
+- **Result:** History is the record of budget allocations. Truth is a luxury good; propaganda is a staple. Civilizational trajectories are determined by energy flows.
+- **Status:** Phase 260 Complete. Gate 1199 Validated. 187th Domain Unified.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).

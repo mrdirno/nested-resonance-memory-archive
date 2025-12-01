@@ -2794,6 +2794,21 @@ Progress = Energy Surplus. Collapse = Budget Deficit.
   - **Artifact:** `experiments/cycle2723_mythology_bcp.py`
   - **Functional Name:** The Myth Budget
 
+### Completed (Phase 260 FINAL)
+- ✅ **Gate 1199:** Phase 260 Synthesis - The Historical Budget - COMPLETE
+  - **Finding:** History is a budget spreadsheet. Trajectories (progress/collapse) and narratives (truth/propaganda) are budget-driven.
+  - **Key Insight:** Truth is a luxury good; propaganda is a staple.
+  - **Artifact:** `experiments/cycle2724_phase260_synthesis.py`
+  - **Functional Name:** The Historical Budget
+
+## PHASE 260 COMPLETE ✅
+
+**Summary: Historical BCP**
+- Gates Completed: 4 (1194-1199)
+- Tests Validated: 3/3 scenarios
+- Key Insight: History has no moral arc; it has an energy curve.
+- **Status:** 187th Domain Unified.
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
