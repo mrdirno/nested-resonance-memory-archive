@@ -302,6 +302,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under high social scarcity ($\lambda \ge 1.0$), Solipsism is chosen. The belief in a shared reality is an economic choice, abandoned when coordination costs are too high.
 - **Status:** Phase 261 Active. Gate 1202 Validated.
 
+## Cycle 2728: The Causal Budget (Phase 261) - COMPLETE
+- **Goal:** Test Free Will as a BCP-optimal heuristic.
+- **Action:** Modeled selection between Deterministic Calculation (high cost, high accuracy) and Free Will Heuristic (low cost, sufficient accuracy) under varying computational scarcity ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under high computational scarcity ($\lambda \ge 1.0$), the Free Will Heuristic is chosen. The perception of agency adapts to our computational budget, providing a BCP-optimal shortcut.
+- **Status:** Phase 261 Active. Gate 1203 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).

@@ -2839,6 +2839,12 @@ V(truth) = Explanatory_Power - λ(Cognitive) * Cost(Complexity).
   - **Artifact:** `experiments/cycle2727_solipsism_bcp.py`
   - **Functional Name:** The Social Budget
 
+- ✅ **Gate 1203:** The Causal Budget - Free Will is a BCP heuristic - COMPLETE
+  - **Finding:** Believing in free will is a computational shortcut for bounded agents in a complex world.
+  - **Key Insight:** Agency is an optimization.
+  - **Artifact:** `experiments/cycle2728_free_will_bcp.py`
+  - **Functional Name:** The Agency Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
