@@ -476,6 +476,12 @@
 - **Result:** FINANCE Selected. Hypothesis: Financial markets are BCP mechanisms for allocating capital, managing risk, and valuing future gains under uncertainty.
 - **Status:** Phase 266 Initiated. Gate 1231 Validated.
 
+## Cycle 2757: The Uncertainty Budget (Phase 266) - COMPLETE
+- **Goal:** Test Risk Management as a BCP process.
+- **Action:** Modeled selection between High-Risk, Moderate-Risk, and Low-Risk investment portfolios under varying investor risk aversion/market uncertainty ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Optimal portfolio shifts: High-Risk ($\lambda \le 0.3$) -> Moderate-Risk ($0.3 < \lambda \le 1.6$) -> Low-Risk ($\lambda > 1.6$). Financial risk management is a BCP-optimal strategy.
+- **Status:** Phase 266 Active. Gate 1232 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).

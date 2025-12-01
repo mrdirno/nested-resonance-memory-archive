@@ -3119,6 +3119,12 @@ V(investment) = Expected_Return - λ(Risk_Aversion) * Cost(Risk + Transaction_Fe
   - **Artifact:** `experiments/cycle2756_phase266_planning.py`
   - **Functional Name:** The Capital Budget
 
+- ✅ **Gate 1232:** The Uncertainty Budget - Risk Management is BCP-optimal - COMPLETE
+  - **Finding:** Investment portfolios adapt to investor risk aversion and market uncertainty, balancing return against risk.
+  - **Key Insight:** Risk is a managed budget.
+  - **Artifact:** `experiments/cycle2757_risk_management_bcp.py`
+  - **Functional Name:** The Uncertainty Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
