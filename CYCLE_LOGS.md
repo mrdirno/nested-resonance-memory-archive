@@ -338,6 +338,12 @@
 - **Result:** ASTRONOMY Selected. Hypothesis: Our models of the universe are BCP-constrained. "Dark" components (Dark Matter, Dark Energy) are placeholders for expensive data or complex theories we can't yet afford.
 - **Status:** Phase 262 Initiated. Gate 1208 Validated.
 
+## Cycle 2734: The Placeholder Budget (Phase 262) - COMPLETE
+- **Goal:** Test Dark Matter/Energy as BCP-optimal placeholders.
+- **Action:** Modeled selection between ΛCDM (with placeholders) and an Alternative Fundamental Theory (high theoretical cost) under varying research pressure ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under high research pressure ($\lambda \ge 0.5$), ΛCDM with placeholders is chosen. Dark components allow models to fit data with minimal theoretical revision, effectively buying time until more resources are available.
+- **Status:** Phase 262 Active. Gate 1209 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
