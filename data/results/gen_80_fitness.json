@@ -1,0 +1,27 @@
+{
+  "generation": 80,
+  "budget_avg": 6145.03544409234,
+  "gain_base": 753.0902718368841,
+  "cost_base": 62.52507962949013,
+  "complexity": 2,
+  "value": 753.022545390264,
+  "survival_rate": 1.0,
+  "survived": true,
+  "params_used": {
+    "budget_range": [
+      1.0,
+      10000.0
+    ],
+    "gain_range": [
+      10.0,
+      1000.0
+    ],
+    "cost_range": [
+      1.0,
+      100.0
+    ],
+    "k": 6.574464097656612,
+    "epsilon": 0.987473585672816,
+    "complexity": 2
+  }
+}
