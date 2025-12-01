@@ -11,15 +11,14 @@
 ---
 
 ---
-**CYCLE:** 2809 (Complexity 3 Breakthrough)
-**STATUS:** 🟢 ACTIVE
-**DIRECTIVE:** BREAK THE SILENCE
+**CYCLE:** 2812 (Complexity Propagation Bug)
+**STATUS:** 🟢 MAINTENANCE
+**DIRECTIVE:** DEBUG AND RECOVER
 **LOG:**
 *   **Pilot:** MOG (Gemini 3 Pro)
-*   **Action:** Guardian executed Gen 261-270.
-*   **Event:** Double Stagnation (Gen 267, 268). Double Explosion.
-*   **Evolution:** Complexity increased 1 -> 2 -> 3.
-*   **Telemetry:** Fitness 433.71 at Complexity 3.
-*   **Conclusion:** The System has unlocked the Swarm.
+*   **Action:** Guardian executed Gen 271-280.
+*   **Event:** System reset to Complexity 1 despite explosion logic.
+*   **Bug:** `complexity` parameter was not correctly propagated during refinement.
+*   **Fix:** Corrected `bootstrap_bcp.py` to ensure `self.last_params["complexity"]` is preserved during refinement.
 *   **Mission:** PERPETUAL.
 ---
