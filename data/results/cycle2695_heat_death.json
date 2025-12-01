@@ -1,0 +1,2886 @@
+{
+  "meta": {
+    "cycle": 2695,
+    "name": "The Heat Death Budget",
+    "phase": 254,
+    "gate": 1170
+  },
+  "history": [
+    {
+      "time": 0,
+      "budget": 950.0,
+      "lambda": 0.0010526315789473684,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 1,
+      "budget": 902.5,
+      "lambda": 0.00110803324099723,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 2,
+      "budget": 857.375,
+      "lambda": 0.001166350779997084,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 3,
+      "budget": 814.5062499999999,
+      "lambda": 0.0012277376631548256,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 4,
+      "budget": 773.7809374999998,
+      "lambda": 0.0012923554348998165,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 5,
+      "budget": 735.0918906249998,
+      "lambda": 0.001360374141999807,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 6,
+      "budget": 698.3372960937497,
+      "lambda": 0.0014319727810524286,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 7,
+      "budget": 663.4204312890622,
+      "lambda": 0.0015073397695288722,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 8,
+      "budget": 630.2494097246091,
+      "lambda": 0.0015866734416093392,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 9,
+      "budget": 598.7369392383787,
+      "lambda": 0.0016701825701150937,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 10,
+      "budget": 568.8000922764597,
+      "lambda": 0.001758086915910625,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 11,
+      "budget": 540.3600876626367,
+      "lambda": 0.0018506178062217106,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 12,
+      "budget": 513.3420832795049,
+      "lambda": 0.0019480187433912742,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 13,
+      "budget": 487.6749791155296,
+      "lambda": 0.0020505460456750257,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 14,
+      "budget": 463.29123015975307,
+      "lambda": 0.0021584695217631853,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 15,
+      "budget": 440.1266686517654,
+      "lambda": 0.002272073180803353,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 16,
+      "budget": 418.1203352191771,
+      "lambda": 0.002391655979793003,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 17,
+      "budget": 397.2143184582182,
+      "lambda": 0.0025175326103084247,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 18,
+      "budget": 377.3536025353073,
+      "lambda": 0.0026500343266404472,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 19,
+      "budget": 358.4859224085419,
+      "lambda": 0.0027895098175162603,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 20,
+      "budget": 340.5616262881148,
+      "lambda": 0.002936326123701327,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 21,
+      "budget": 323.533544973709,
+      "lambda": 0.003090869603896134,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 22,
+      "budget": 307.35686772502356,
+      "lambda": 0.0032535469514696144,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 23,
+      "budget": 291.98902433877237,
+      "lambda": 0.003424786264704858,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 24,
+      "budget": 277.38957312183373,
+      "lambda": 0.003605038173373535,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 25,
+      "budget": 263.52009446574203,
+      "lambda": 0.003794777024603721,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 26,
+      "budget": 250.3440897424549,
+      "lambda": 0.003994502131161812,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 27,
+      "budget": 237.82688525533214,
+      "lambda": 0.0042047390854334865,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 28,
+      "budget": 225.93554099256554,
+      "lambda": 0.0044260411425615645,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 29,
+      "budget": 214.63876394293726,
+      "lambda": 0.004658990676380595,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 30,
+      "budget": 203.9068257457904,
+      "lambda": 0.004904200711979573,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 31,
+      "budget": 193.71148445850088,
+      "lambda": 0.005162316538925867,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 32,
+      "budget": 184.02591023557582,
+      "lambda": 0.0054340174093956495,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 33,
+      "budget": 174.82461472379703,
+      "lambda": 0.005720018325679631,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 34,
+      "budget": 166.08338398760716,
+      "lambda": 0.006021071921768033,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 35,
+      "budget": 157.7792147882268,
+      "lambda": 0.006337970443966351,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 36,
+      "budget": 149.89025404881545,
+      "lambda": 0.0066715478357540535,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 37,
+      "budget": 142.39574134637468,
+      "lambda": 0.007022681932372688,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 38,
+      "budget": 135.27595427905592,
+      "lambda": 0.00739229677091862,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 39,
+      "budget": 128.5121565651031,
+      "lambda": 0.007781365022019601,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 40,
+      "budget": 122.08654873684794,
+      "lambda": 0.008190910549494317,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 41,
+      "budget": 115.98222130000555,
+      "lambda": 0.00862201110473086,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 42,
+      "budget": 110.18311023500526,
+      "lambda": 0.009075801162874592,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 43,
+      "budget": 104.673954723255,
+      "lambda": 0.009553474908289044,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 44,
+      "budget": 99.44025698709224,
+      "lambda": 0.010056289377146362,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 45,
+      "budget": 94.46824413773763,
+      "lambda": 0.010585567765417223,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 46,
+      "budget": 89.74483193085074,
+      "lambda": 0.0111427029109655,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 47,
+      "budget": 85.25759033430819,
+      "lambda": 0.011729160958911054,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 48,
+      "budget": 80.99471081759278,
+      "lambda": 0.012346485219906373,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 49,
+      "budget": 76.94497527671314,
+      "lambda": 0.012996300231480393,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 50,
+      "budget": 73.09772651287747,
+      "lambda": 0.013680316033137256,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 51,
+      "budget": 69.4428401872336,
+      "lambda": 0.014400332666460269,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 52,
+      "budget": 65.97069817787191,
+      "lambda": 0.015158244912063443,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 53,
+      "budget": 62.67216326897831,
+      "lambda": 0.01595604727585626,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 54,
+      "budget": 59.53855510552939,
+      "lambda": 0.01679583923774343,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 55,
+      "budget": 56.56162735025292,
+      "lambda": 0.017679830776572033,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 56,
+      "budget": 53.733545982740274,
+      "lambda": 0.018610348185865298,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 57,
+      "budget": 51.04686868360326,
+      "lambda": 0.019589840195647683,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 58,
+      "budget": 48.49452524942309,
+      "lambda": 0.020620884416471245,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 59,
+      "budget": 46.06979898695194,
+      "lambda": 0.021706194122601313,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 60,
+      "budget": 43.76630903760434,
+      "lambda": 0.02284862539221191,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 61,
+      "budget": 41.577993585724116,
+      "lambda": 0.024051184623380958,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 62,
+      "budget": 39.499093906437906,
+      "lambda": 0.02531703644566417,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 63,
+      "budget": 37.52413921111601,
+      "lambda": 0.02664951204806755,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 64,
+      "budget": 35.6479322505602,
+      "lambda": 0.028052117945334267,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 65,
+      "budget": 33.86553563803219,
+      "lambda": 0.029528545205615018,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 66,
+      "budget": 32.17225885613058,
+      "lambda": 0.03108267916380528,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 67,
+      "budget": 30.563645913324052,
+      "lambda": 0.03271860964611083,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 68,
+      "budget": 29.035463617657847,
+      "lambda": 0.03444064173274824,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 69,
+      "budget": 27.583690436774955,
+      "lambda": 0.036253307087103406,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 70,
+      "budget": 26.204505914936206,
+      "lambda": 0.03816137588116148,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 71,
+      "budget": 24.894280619189395,
+      "lambda": 0.040169869348591035,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 72,
+      "budget": 23.649566588229924,
+      "lambda": 0.042284072998516886,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 73,
+      "budget": 22.467088258818425,
+      "lambda": 0.044509550524754624,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 74,
+      "budget": 21.3437338458775,
+      "lambda": 0.04685215844711013,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 75,
+      "budget": 20.276547153583625,
+      "lambda": 0.04931806152327382,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 76,
+      "budget": 19.26271979590444,
+      "lambda": 0.051913748971867194,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 77,
+      "budget": 18.29958380610922,
+      "lambda": 0.054646051549333885,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 78,
+      "budget": 17.384604615803756,
+      "lambda": 0.057522159525614625,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 79,
+      "budget": 16.51537438501357,
+      "lambda": 0.06054964160591013,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 80,
+      "budget": 15.68960566576289,
+      "lambda": 0.06373646484832646,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 81,
+      "budget": 14.905125382474745,
+      "lambda": 0.06709101562981733,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 82,
+      "budget": 14.159869113351007,
+      "lambda": 0.07062212171559719,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 83,
+      "budget": 13.451875657683456,
+      "lambda": 0.07433907549010231,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 84,
+      "budget": 12.779281874799283,
+      "lambda": 0.078251658410634,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 85,
+      "budget": 12.140317781059318,
+      "lambda": 0.0823701667480358,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 86,
+      "budget": 11.533301892006351,
+      "lambda": 0.08670543868214295,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 87,
+      "budget": 10.956636797406032,
+      "lambda": 0.09126888282330839,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 88,
+      "budget": 10.40880495753573,
+      "lambda": 0.09607250823506146,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 89,
+      "budget": 9.888364709658944,
+      "lambda": 0.10112895603690679,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 90,
+      "budget": 9.393946474175996,
+      "lambda": 0.10645153267042821,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 91,
+      "budget": 8.924249150467196,
+      "lambda": 0.11205424491624023,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 92,
+      "budget": 8.478036692943835,
+      "lambda": 0.1179518367539371,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 93,
+      "budget": 8.054134858296642,
+      "lambda": 0.12415982816203908,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 94,
+      "budget": 7.65142811538181,
+      "lambda": 0.13069455596004112,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 95,
+      "budget": 7.268856709612719,
+      "lambda": 0.1375732168000433,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 96,
+      "budget": 6.9054138741320825,
+      "lambda": 0.14481391242109823,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 97,
+      "budget": 6.560143180425478,
+      "lambda": 0.15243569728536654,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 98,
+      "budget": 6.232136021404204,
+      "lambda": 0.16045862872143848,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 99,
+      "budget": 5.920529220333994,
+      "lambda": 0.16890381970677734,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 100,
+      "budget": 5.624502759317294,
+      "lambda": 0.1777934944281867,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 101,
+      "budget": 5.3432776213514295,
+      "lambda": 0.1871510467665123,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 102,
+      "budget": 5.076113740283858,
+      "lambda": 0.19700110185948666,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 103,
+      "budget": 4.822308053269665,
+      "lambda": 0.2073695809047228,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 104,
+      "budget": 4.581192650606181,
+      "lambda": 0.21828376937339242,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 105,
+      "budget": 4.352133018075872,
+      "lambda": 0.2297723888140973,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 106,
+      "budget": 4.134526367172078,
+      "lambda": 0.24186567243589194,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 107,
+      "budget": 3.9278000488134737,
+      "lambda": 0.25459544466935996,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 108,
+      "budget": 3.7314100463727997,
+      "lambda": 0.26799520491511575,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 109,
+      "budget": 3.5448395440541596,
+      "lambda": 0.28210021570012184,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 110,
+      "budget": 3.3675975668514515,
+      "lambda": 0.2969475954738125,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 111,
+      "budget": 3.1992176885088788,
+      "lambda": 0.3125764162882237,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 112,
+      "budget": 3.039256804083435,
+      "lambda": 0.3290278066191828,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 113,
+      "budget": 2.887293963879263,
+      "lambda": 0.3463450595991398,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 114,
+      "budget": 2.7429292656852997,
+      "lambda": 0.364573746946463,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 115,
+      "budget": 2.6057828024010345,
+      "lambda": 0.3837618388910137,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 116,
+      "budget": 2.4754936622809827,
+      "lambda": 0.4039598304115934,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 117,
+      "budget": 2.3517189791669333,
+      "lambda": 0.4252208741174668,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 118,
+      "budget": 2.2341330302085867,
+      "lambda": 0.4476009201236492,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 119,
+      "budget": 2.122426378698157,
+      "lambda": 0.47115886328805184,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 120,
+      "budget": 2.016305059763249,
+      "lambda": 0.4959566981979494,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 121,
+      "budget": 1.9154898067750865,
+      "lambda": 0.522059682313631,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 122,
+      "budget": 1.819715316436332,
+      "lambda": 0.549536507698559,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 123,
+      "budget": 1.7287295506145153,
+      "lambda": 0.5784594817879568,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 124,
+      "budget": 1.6422930730837895,
+      "lambda": 0.6089047176715335,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 125,
+      "budget": 1.5601784194296,
+      "lambda": 0.6409523343910879,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 126,
+      "budget": 1.48216949845812,
+      "lambda": 0.6746866677800926,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 127,
+      "budget": 1.408061023535214,
+      "lambda": 0.7101964924000974,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 128,
+      "budget": 1.3376579723584532,
+      "lambda": 0.7475752551579974,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 129,
+      "budget": 1.2707750737405306,
+      "lambda": 0.7869213212189445,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 130,
+      "budget": 1.207236320053504,
+      "lambda": 0.828338232862047,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 131,
+      "budget": 1.1468745040508286,
+      "lambda": 0.8719349819600496,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 132,
+      "budget": 1.089530778848287,
+      "lambda": 0.9178262968000522,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 133,
+      "budget": 1.0350542399058726,
+      "lambda": 0.966132944000055,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 134,
+      "budget": 0.983301527910579,
+      "lambda": 1.0169820463158474,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 135,
+      "budget": 0.93413645151505,
+      "lambda": 1.0705074171745763,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 136,
+      "budget": 0.8874296289392974,
+      "lambda": 1.1268499128153435,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 137,
+      "budget": 0.8430581474923325,
+      "lambda": 1.1861578029635196,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 138,
+      "budget": 0.8009052401177159,
+      "lambda": 1.2485871610142312,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 139,
+      "budget": 0.76085997811183,
+      "lambda": 1.3143022747518223,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 140,
+      "budget": 0.7228169792062386,
+      "lambda": 1.3834760786861289,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 141,
+      "budget": 0.6866761302459266,
+      "lambda": 1.4562906091432937,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 142,
+      "budget": 0.6523423237336302,
+      "lambda": 1.5329374833087301,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 143,
+      "budget": 0.6197252075469487,
+      "lambda": 1.6136184034828738,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 144,
+      "budget": 0.5887389471696013,
+      "lambda": 1.6985456878767093,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 145,
+      "budget": 0.5593019998111212,
+      "lambda": 1.7879428293439046,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 146,
+      "budget": 0.5313368998205651,
+      "lambda": 1.8820450835198996,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 147,
+      "budget": 0.5047700548295369,
+      "lambda": 1.981100087915684,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 148,
+      "budget": 0.47953155208806,
+      "lambda": 2.0853685135954567,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 149,
+      "budget": 0.45555497448365695,
+      "lambda": 2.1951247511531125,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 150,
+      "budget": 0.4327772257594741,
+      "lambda": 2.31065763279275,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 151,
+      "budget": 0.4111383644715004,
+      "lambda": 2.4322711924134213,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 152,
+      "budget": 0.39058144624792535,
+      "lambda": 2.560285465698338,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 153,
+      "budget": 0.37105237393552903,
+      "lambda": 2.6950373323140404,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 154,
+      "budget": 0.35249975523875254,
+      "lambda": 2.8368814024358326,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 155,
+      "budget": 0.3348747674768149,
+      "lambda": 2.9861909499324555,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 156,
+      "budget": 0.31813102910297414,
+      "lambda": 3.1433588946657425,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 157,
+      "budget": 0.3022244776478254,
+      "lambda": 3.3087988364902556,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 158,
+      "budget": 0.2871132537654341,
+      "lambda": 3.4829461436739537,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 159,
+      "budget": 0.2727575910771624,
+      "lambda": 3.666259098604162,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 160,
+      "budget": 0.25911971152330426,
+      "lambda": 3.859220103793855,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 161,
+      "budget": 0.24616372594713903,
+      "lambda": 4.062336951361953,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 162,
+      "budget": 0.23385553964978206,
+      "lambda": 4.276144159328371,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 163,
+      "budget": 0.22216276266729296,
+      "lambda": 4.501204378240391,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 164,
+      "budget": 0.2110546245339283,
+      "lambda": 4.738109871831991,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 165,
+      "budget": 0.20050189330723187,
+      "lambda": 4.987484075612622,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 166,
+      "budget": 0.19047679864187025,
+      "lambda": 5.249983237486972,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 167,
+      "budget": 0.18095295870977673,
+      "lambda": 5.526298144723128,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 168,
+      "budget": 0.1719053107742879,
+      "lambda": 5.8171559418138195,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 169,
+      "budget": 0.1633100452355735,
+      "lambda": 6.123322044014547,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 170,
+      "budget": 0.15514454297379482,
+      "lambda": 6.44560215159426,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 171,
+      "budget": 0.14738731582510506,
+      "lambda": 6.784844370099222,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 172,
+      "budget": 0.1400179500338498,
+      "lambda": 7.141941442209708,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 173,
+      "budget": 0.1330170525321573,
+      "lambda": 7.5178330970628515,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 174,
+      "budget": 0.12636619990554943,
+      "lambda": 7.913508523224054,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 175,
+      "budget": 0.12004788991027195,
+      "lambda": 8.330008971814793,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 176,
+      "budget": 0.11404549541475835,
+      "lambda": 8.768430496647152,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 177,
+      "budget": 0.10834322064402042,
+      "lambda": 9.229926838575949,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 178,
+      "budget": 0.1029260596118194,
+      "lambda": 9.715712461658894,
+      "survivors": 8,
+      "active_list": [
+        "Type III Civ",
+        "Type II Civ",
+        "Type I Civ",
+        "Star",
+        "Planet",
+        "Molecule",
+        "Atom",
+        "Vacuum"
+      ]
+    },
+    {
+      "time": 179,
+      "budget": 0.09777975663122843,
+      "lambda": 10.227065749114626,
+      "survivors": 1,
+      "active_list": [
+        "Vacuum"
+      ]
+    }
+  ],
+  "validation": {
+    "heat_death_confirmed": true
+  }
+}
