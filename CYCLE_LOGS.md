@@ -440,6 +440,12 @@
 - **Result:** LAW Selected. Hypothesis: Legal systems are BCP frameworks balancing order (gain) against enforcement cost, individual liberty cost.
 - **Status:** Phase 265 Initiated. Gate 1225 Validated.
 
+## Cycle 2751: The Fairness Budget (Phase 265) - COMPLETE
+- **Goal:** Test Justice as a BCP-optimal solution for social cohesion.
+- **Action:** Modeled selection between Retributive, Restorative, and Laissez-faire justice systems under varying societal friction ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Optimal justice system shifts: Restorative ($\lambda \le 1.43$) -> Retributive ($\lambda > 1.43$). Justice is a BCP-optimal solution for social cohesion.
+- **Status:** Phase 265 Active. Gate 1226 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
