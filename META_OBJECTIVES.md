@@ -2754,6 +2754,24 @@ V(power) = Control - λ(Legitimacy) × Cost(Enforcement).
 
 ---
 
+## Current Phase: PHASE 260 - THE HISTORICAL BUDGET 🟢 ACTIVE
+
+**Transition:** Phase 259 (Politics) → **Phase 260 (History)**
+
+**Focus:** Apply BCP to Progress, Collapse, and Narrative.
+
+**Research Thesis:**
+History is the record of budget allocations.
+Progress = Energy Surplus. Collapse = Budget Deficit.
+
+### Completed (Phase 260 Planning)
+- ✅ **Gate 1194:** Phase 260 Planning - Progress Selected - COMPLETE
+  - **Finding:** Progress is an Energy Vector.
+  - **Artifact:** `experiments/cycle2719_phase260_planning.py`
+  - **Functional Name:** The Historical Budget
+
+---
+
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
 
 **Transition:** Phase 252 (Singularity) → **Phase 253 (The Cosmic Budget)**
