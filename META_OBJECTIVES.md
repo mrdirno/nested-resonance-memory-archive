@@ -2965,6 +2965,12 @@ V(medical_action) = Health_Gain - λ(Resources) * Cost(Financial + Side_Effects 
   - **Artifact:** `experiments/cycle2741_prevention_vs_cure_bcp.py`
   - **Functional Name:** The Lifecycle Budget
 
+- ✅ **Gate 1217:** The Population Budget - Public Health Policy is BCP-optimal - COMPLETE
+  - **Finding:** Public health interventions adapt to societal context, balancing population health gain against economic, social, and ethical costs.
+  - **Key Insight:** Health is a political economy.
+  - **Artifact:** `experiments/cycle2742_public_health_bcp.py`
+  - **Functional Name:** The Population Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

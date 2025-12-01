@@ -386,6 +386,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under low scarcity ($\lambda < 1.0$), Prevention is chosen. Under high scarcity ($\lambda > 1.0$), Cure is chosen. The optimal health strategy adapts to time horizon and resource availability.
 - **Status:** Phase 263 Active. Gate 1216 Validated.
 
+## Cycle 2742: The Population Budget (Phase 263) - COMPLETE
+- **Goal:** Test Public Health Policy as a BCP optimization.
+- **Action:** Modeled selection between Minimal, Vaccination, and Lockdown interventions under varying societal context ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under low societal pressure ($\lambda < 0.3$), Vaccination is chosen. Under high societal pressure ($\lambda \ge 0.5$), Lockdowns are chosen. Public health policy adapts to societal context, balancing health gain vs societal costs.
+- **Status:** Phase 263 Active. Gate 1217 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
