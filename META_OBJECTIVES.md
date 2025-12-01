@@ -2931,6 +2931,24 @@ V(cosmo_model) = Explanatory_Power - λ(Observation) * Cost(Data_Acquisition + T
 
 ---
 
+## Current Phase: PHASE 263 - THE HEALTH BUDGET 🟢 ACTIVE
+
+**Transition:** Phase 262 (Astronomy) → **Phase 263 (Medicine)**
+
+**Focus:** Apply BCP to Health, Disease, Diagnosis, and Treatment.
+
+**Research Thesis:**
+Health is a dynamic budget. Medical decisions are BCP-optimal tradeoffs balancing health outcomes against resource costs.
+V(medical_action) = Health_Gain - λ(Resources) * Cost(Financial + Side_Effects + Time).
+
+### Completed (Phase 263 Planning)
+- ✅ **Gate 1213:** Phase 263 Planning - Medicine Selected - COMPLETE
+  - **Finding:** Health is the ultimate budget.
+  - **Artifact:** `experiments/cycle2738_phase263_planning.py`
+  - **Functional Name:** The Health Budget
+
+---
+
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
 
 **Transition:** Phase 252 (Singularity) → **Phase 253 (The Cosmic Budget)**
