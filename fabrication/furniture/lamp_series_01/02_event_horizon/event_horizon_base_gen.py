@@ -30,7 +30,7 @@ def write_binary_stl(filename, vertices, faces):
             f.write(struct.pack('<H', 0))
 
 def generate_base(output_path, diameter=140.0, height=30.0, resolution=60):
-    print(f"Generating EVENT HORIZON BASE: {output_path}")
+    print(f"Generating EVENT HORIZON BASE (V2 FIX): {output_path}")
     
     # Dimensions
     radius = diameter / 2.0
@@ -39,6 +39,11 @@ def generate_base(output_path, diameter=140.0, height=30.0, resolution=60):
     wire_channel_width = 6.0
     wire_channel_height = 6.0
     wall_thickness = 2.4
+    
+    # Feet Parameters
+    foot_offset = 10.0
+    foot_radius = 10.0
+    foot_depth = 2.0
     
     # Nut Trap
     nut_height = 8.0
@@ -66,42 +71,60 @@ def generate_base(output_path, diameter=140.0, height=30.0, resolution=60):
                 
                 dist_center = math.sqrt(x_mm**2 + y_mm**2)
                 
+                # --- LOGIC STACK ---
+                is_solid = False
+                
                 # 1. Base Cylinder
-                if dist_center > radius:
-                    grid[x_idx,y_idx,z_idx] = False
-                    continue
-                    
-                grid[x_idx,y_idx,z_idx] = True
+                if dist_center <= radius:
+                    is_solid = True
                 
-                # 2. Gravity Well Slope (Top Surface)
-                # z = H * (r/R)^0.5 roughly?
-                # No, we want the top to be solid.
-                # Let's just make it a flat cylinder for this iteration.
-                
-                # 3. Hollow Ballast
+                # 2. Hollow Ballast
                 if wall_thickness < z_mm < (height - wall_thickness):
                     if dist_center < (radius - wall_thickness) and dist_center > (shaft_radius + wall_thickness):
-                         grid[x_idx,y_idx,z_idx] = False
+                         is_solid = False
 
-                # 4. Center Hole
+                # 3. Center Hole
                 if dist_center < rod_radius:
-                    grid[x_idx,y_idx,z_idx] = False
+                    is_solid = False
                     
-                # 5. Shaft Socket (Top)
+                # 4. Shaft Socket (Top)
                 if z_mm > (height - 10.0): 
                     if dist_center < shaft_radius:
-                        grid[x_idx,y_idx,z_idx] = False
+                        is_solid = False
 
-                # 6. Wire Channel
+                # 5. Wire Channel
+                # Ensure it cuts through the rim
                 if z_mm < wire_channel_height and \
                    abs(x_mm) < (wire_channel_width/2) and \
                    y_mm > 0:
-                    grid[x_idx,y_idx,z_idx] = False
+                    is_solid = False
+
+                # 6. Feet Recesses (Bottom Corners)
+                if z_mm < foot_depth:
+                    # 4 points around center
+                    # We are in a cylinder, so let's place 4 feet at 45, 135, 225, 315 degrees
+                    # Radius of foot centers = radius - foot_offset - foot_radius/2
+                    r_feet = radius - foot_offset - foot_radius/2
+                    
+                    # Check distance to any of 4 feet
+                    # Foot 1 (North East)
+                    d1 = math.sqrt((x_mm - r_feet*0.707)**2 + (y_mm - r_feet*0.707)**2)
+                    # Foot 2 (North West)
+                    d2 = math.sqrt((x_mm + r_feet*0.707)**2 + (y_mm - r_feet*0.707)**2)
+                    # Foot 3 (South West)
+                    d3 = math.sqrt((x_mm + r_feet*0.707)**2 + (y_mm + r_feet*0.707)**2)
+                    # Foot 4 (South East)
+                    d4 = math.sqrt((x_mm - r_feet*0.707)**2 + (y_mm + r_feet*0.707)**2)
+                    
+                    if min(d1, d2, d3, d4) < foot_radius:
+                         is_solid = False
 
                 # 7. Nut Trap
                 if z_mm < nut_height:
-                    if dist_center < 10.0: # 20mm hole
-                        grid[x_idx,y_idx,z_idx] = False
+                    if dist_center < 10.0: 
+                        is_solid = False
+
+                grid[x_idx,y_idx,z_idx] = is_solid
 
     print("Extracting Mesh...")
     def add_quad(v1, v2, v3, v4):

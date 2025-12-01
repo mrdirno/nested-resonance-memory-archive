@@ -4,9 +4,10 @@ import sys
 import struct
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE)
+# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE) - V2 FIX
 # -----------------------------------------------------------------------------
 # Logic: Schwarz D (Diamond) Dome + Solid Top Ring + Solid Bottom Rim
+# Fix: Top Plate overrides Spherical Boundary.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -36,12 +37,13 @@ def write_binary_stl(filename, vertices, faces):
             f.write(struct.pack('<H', 0))
 
 def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, hole_diameter=42.0):
-    print(f"Generating EVENT HORIZON SHADE: {output_path}")
+    print(f"Generating EVENT HORIZON SHADE (V2 FIX): {output_path}")
     
     # Mount Parameters
-    mount_hole_radius = hole_diameter / 2.0
+    mount_hole_radius = hole_diameter / 2.0 # 21mm
+    mount_plate_radius = mount_hole_radius + 8.0 # 29mm outer radius for plate (min)
     solid_rim_height = 4.0 
-    wall_thickness = 15.0 # Thickness of the TPMS shell roughly
+    wall_thickness = 15.0 
     
     # Grid Setup
     max_dim = max(diameter, height)
@@ -58,20 +60,12 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
     # Frequency Setup (Schwarz D)
-    # Adjust for aesthetic density
-    scale = 2.0 * math.pi / (diameter / 5.0) # 5 periods across diameter
+    scale = 2.0 * math.pi / (diameter / 5.0) 
     
     print("Calculating Field (Schwarz D)...")
     
     radius = diameter / 2.0
-    
-    # Sphere Center (assuming dome sits on z=0)
-    # To make a dome of height H from a sphere of radius R, we need to offset Z.
-    # If H < 2R, we are cutting a sphere.
-    # Let's center the sphere at z = height - radius.
-    # So top of sphere is at z = height.
     sphere_z_center = height - radius
-    # If height=140, radius=80 -> center at z=60. Top at 140. Bottom at -20 (clipped at 0).
     
     for z_idx in range(res_z):
         z_mm = z_idx * step
@@ -82,64 +76,51 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
             for y_idx in range(res_y):
                 y_mm = (y_idx * step) - (diameter / 2.0)
                 
-                # Spherical Boundary
+                dist_from_center_xy = math.sqrt(x_mm**2 + y_mm**2)
                 dist_sq = x_mm**2 + y_mm**2 + (z_mm - sphere_z_center)**2
                 
-                if dist_sq > radius**2:
-                    grid[x_idx,y_idx,z_idx] = False
-                    continue
+                # --- BOOLEAN LOGIC STACK (ORDER MATTERS) ---
                 
-                dist_from_center_xy = math.sqrt(x_mm**2 + y_mm**2)
-
-                # --- PRIORITY 1: TOP PLATE (MOUNTING) ---
+                # 1. Default: Empty
+                is_solid = False
+                
+                # 2. Spherical Boundary Check
+                if dist_sq <= radius**2:
+                     # 3. Pattern Generation (Inside Sphere)
+                     lx = x_mm * scale
+                     ly = y_mm * scale
+                     lz = z_mm * scale
+                     
+                     sx, sy, sz = math.sin(lx), math.sin(ly), math.sin(lz)
+                     cx, cy, cz = math.cos(lx), math.cos(ly), math.cos(lz)
+                     
+                     val = sx*sy*sz + sx*cy*cz + cx*sy*cz + cx*cy*sz
+                     
+                     if abs(val) < 0.3:
+                         is_solid = True
+                
+                # 4. Structural Overrides (Force Solid)
+                
+                # A. Top Plate (Mounting) - OVERRIDES Sphere Boundary
+                if z_mm > (height - solid_rim_height):
+                    # Force a solid cylinder for the plate, even if it sticks out of the sphere
+                    if dist_from_center_xy < mount_plate_radius:
+                        is_solid = True
+                        
+                # B. Bottom Rim
+                if z_mm < solid_rim_height:
+                    if dist_from_center_xy < radius and dist_from_center_xy > (radius - 10.0):
+                        is_solid = True
+                        
+                # 5. Hardware Subtracts (Force Empty)
+                
+                # A. Mounting Hole (Top)
                 if z_mm > (height - solid_rim_height):
                     if dist_from_center_xy < mount_hole_radius:
-                        grid[x_idx,y_idx,z_idx] = False # Hole
-                    else:
-                        grid[x_idx,y_idx,z_idx] = True # Solid Plate
-                    continue 
-                
-                # --- PRIORITY 2: BOTTOM RIM ---
-                if z_mm < solid_rim_height:
-                    # Solid ring at bottom
-                    inner_r = radius - wall_thickness # Rough inner
-                    if dist_sq < (radius-5)**2: # Hollow out bottom rim?
-                         # Let's make it a ring
-                         if dist_from_center_xy < (radius - 10): # 10mm thick ring
-                             grid[x_idx,y_idx,z_idx] = False
-                         else:
-                             grid[x_idx,y_idx,z_idx] = True
-                    else:
-                         grid[x_idx,y_idx,z_idx] = True
-                    continue
-
-                # --- PRIORITY 3: BODY (SCHWARZ D) ---
-                
-                # Hollow Core Check (Optional - Schwarz D is usually volumetric, but we want a shell)
-                # Let's mask out the very center if we want a hollow lamp.
-                # Actually, TPMS can be the shell itself.
-                # We want the surface where Equation = 0 (with thickness).
-                
-                lx = x_mm * scale
-                ly = y_mm * scale
-                lz = z_mm * scale
-                
-                # Schwarz D approximation
-                # sin(x)sin(y)sin(z) + sin(x)cos(y)cos(z) + cos(x)sin(y)cos(z) + cos(x)cos(y)sin(z) = 0
-                
-                sx, sy, sz = math.sin(lx), math.sin(ly), math.sin(lz)
-                cx, cy, cz = math.cos(lx), math.cos(ly), math.cos(lz)
-                
-                val = sx*sy*sz + sx*cy*cz + cx*sy*cz + cx*cy*sz
-                
-                # Thickness threshold
-                # Range of val is roughly [-1.5, 1.5] (not exact)
-                # We want a shell around val=0
-                if abs(val) < 0.3: 
-                    grid[x_idx,y_idx,z_idx] = True
-                else:
-                    grid[x_idx,y_idx,z_idx] = False
-
+                        is_solid = False
+                        
+                # Assign Final State
+                grid[x_idx,y_idx,z_idx] = is_solid
 
     print("Extracting Mesh (Voxel Quad)...")
     
@@ -158,7 +139,6 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
                 
                 if not grid[x,y,z]: continue
                 
-                # Neighbor checks
                 s2 = step/2
                 if x==res_x-1 or not grid[x+1,y,z]:
                     add_quad((x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
@@ -179,5 +159,4 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
 if __name__ == "__main__":
     output_file = "fabrication/furniture/lamp_series_01/02_event_horizon/event_horizon_shade.stl"
     if len(sys.argv) > 1: output_file = sys.argv[1]
-    
     generate_shade(output_file)

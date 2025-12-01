@@ -30,11 +30,12 @@ def write_binary_stl(filename, vertices, faces):
             f.write(struct.pack('<H', 0))
 
 def generate_shaft(output_path, height=180.0, resolution=100):
-    print(f"Generating EVENT HORIZON SHAFT: {output_path}")
+    print(f"Generating EVENT HORIZON SHAFT (V2 FIX): {output_path}")
     
-    base_radius = 15.0 # 30mm diam
-    max_bulge = 10.0 # +20mm diam at center
+    base_radius = 15.0 
+    max_bulge = 10.0 
     core_radius = 5.2 # 10.4mm ID
+    socket_recess_radius = 7.6 # 15.2mm for socket nipple
     
     width = (base_radius + max_bulge) * 2.0
     
@@ -65,17 +66,25 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                 
                 dist_center = math.sqrt(x_mm**2 + y_mm**2)
                 
+                # --- LOGIC STACK ---
+                is_solid = False
+                
                 # 1. Outer Shell
-                if dist_center > current_radius:
-                    grid[x_idx,y_idx,z_idx] = False
-                    continue
+                if dist_center <= current_radius:
+                    is_solid = True
                     
                 # 2. Inner Core (Hollow)
+                # Explicitly ensure the core is empty (Tube)
                 if dist_center < core_radius:
-                    grid[x_idx,y_idx,z_idx] = False
-                    continue
+                    is_solid = False
                 
-                grid[x_idx,y_idx,z_idx] = True
+                # 3. Socket Recess (Top)
+                # Hide the socket nipple/hardware inside the shaft top
+                if z_mm > (height - 10.0):
+                    if dist_center < socket_recess_radius:
+                        is_solid = False
+                        
+                grid[x_idx,y_idx,z_idx] = is_solid
 
     print("Extracting Mesh...")
     def add_quad(v1, v2, v3, v4):
@@ -96,7 +105,7 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                 if x==res_xy-1 or not grid[x+1,y,z]: add_quad((x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
                 if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if y==res_xy-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
-                if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
+                if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
                 if z==0 or not grid[x,y,z-1]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2))
 

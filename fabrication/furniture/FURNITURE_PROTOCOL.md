@@ -38,6 +38,25 @@
 - [ ] **Material:** Use PETG for shades (higher heat resistance) if possible. PLA is acceptable for low-wattage LED.
 - [ ] **Supports:** Design for 45° overhangs to minimize supports.
 
+## 4. Geometric Logic Protocol (The Code)
+
+### A. Order of Operations (Boolean Logic)
+When generating voxel grids, the order of `True` (Solid) and `False` (Empty) assignments is critical.
+1.  **Global Boundary:** Define the outer shape (Sphere, Frustum, etc.). `if outside: False`.
+2.  **Internal Structure:** Generate the pattern (Gyroid, Voronoi). `if pattern: True`.
+3.  **Hollowing:** Remove the core. `if inner_radius: False`.
+4.  **Structural Overrides (The Fix):** Apply functional geometry **LAST** to override previous cuts.
+    *   *Top Plate:* MUST be a cylinder of `r = Hole + 10mm`. Ignore Global Boundary if it cuts this plate.
+    *   *Bottom Rim:* MUST be a solid ring.
+    *   *Ribs/Struts:* Vertical supports must persist through the pattern.
+5.  **Hardware Subtracts:** Apply final holes **VERY LAST**.
+    *   *Mount Hole:* `if r < hole_r: False`.
+    *   *Wire Channel:* `if box check: False`.
+
+### B. Base Logic
+*   **Feet:** Bases MUST have recesses (e.g., 2mm deep) or feet to lift the wire channel off the table.
+*   **Wire Exit:** The channel must cut through the bottom rim completely.
+
 ## 5. Storage & Naming Protocol (Standardized)
 
 ### A. Directory Hierarchy

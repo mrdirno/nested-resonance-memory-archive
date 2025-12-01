@@ -527,3 +527,13 @@
     3. Generated 3 Binary STLs (Total ~1M triangles).
 - **Result:** Design 2/10 Executed. System aligned with Furniture Protocol v1.0.
 - **Status:** Phase 270 Active. Gate 1235 Validated.
+
+## Cycle 2960 Extension: Fix Event Horizon (Design 2) - COMPLETE
+- **Goal:** Correct defects in Event Horizon geometry (Mounting Plate, Wire Channels, Feet).
+- **Action:** 
+    1. Updated `FURNITURE_PROTOCOL.md` with explicit Boolean Order of Operations.
+    2. Refactored `event_horizon_shade_gen.py` to force Top Plate logic over Spherical Boundary (Fixes missing mount).
+    3. Refactored `event_horizon_base_gen.py` to add Feet Recesses and rim-cutting Wire Channel.
+    4. Refactored `event_horizon_shaft_gen.py` to add Socket Recess and ensure core continuity.
+- **Result:** Artifacts regenerated (Total ~1M triangles). Defects resolved.
+- **Status:** Phase 270 Active. Design 2/10 Corrected.
