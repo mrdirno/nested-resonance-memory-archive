@@ -2393,6 +2393,12 @@ V(gen) = Gain(Novelty/Utility) - λ(Budget) × Cost(Verification)
   - **Key Insight:** We simulate what we can afford, not what is true.
   - **Artifact:** `experiments/cycle2680_sim_to_real_bcp.py`
   - **Functional Name:** The Fidelity Budget
+
+- ✅ **Gate 1158:** The Creative Budget - Temperature is inverse risk aversion - COMPLETE
+  - **Finding:** High λ (Scarcity) forces safe, repetitive outputs. Low λ (Abundance) enables creative, risky outputs.
+  - **Key Insight:** Creativity is a luxury good. Temperature ≈ 1/λ.
+  - **Artifact:** `experiments/cycle2681_creative_temp_bcp.py`
+  - **Functional Name:** The Sampling Budget
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.
