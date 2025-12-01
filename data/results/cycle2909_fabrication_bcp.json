@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "cycle": 2909,
+    "name": "The Fabrication Budget",
+    "phase": 267,
+    "gate": 1200
+  },
+  "scenarios": [
+    {
+      "name": "Scarcity",
+      "data": [
+        {
+          "infill": 10,
+          "value": -40.76,
+          "feasible": true
+        },
+        {
+          "infill": 20,
+          "value": -92.03,
+          "feasible": true
+        },
+        {
+          "infill": 40,
+          "value": -209.78,
+          "feasible": true
+        },
+        {
+          "infill": 60,
+          "value": -337.73,
+          "feasible": true
+        },
+        {
+          "infill": 80,
+          "value": -471.74,
+          "feasible": true
+        },
+        {
+          "infill": 100,
+          "value": -610.0,
+          "feasible": true
+        }
+      ]
+    },
+    {
+      "name": "Abundance",
+      "data": [
+        {
+          "infill": 10,
+          "value": 65.24,
+          "feasible": true
+        },
+        {
+          "infill": 20,
+          "value": 111.97,
+          "feasible": true
+        },
+        {
+          "infill": 40,
+          "value": 190.22,
+          "feasible": true
+        },
+        {
+          "infill": 60,
+          "value": 258.27,
+          "feasible": true
+        },
+        {
+          "infill": 80,
+          "value": 320.26,
+          "feasible": true
+        },
+        {
+          "infill": 100,
+          "value": 378.0,
+          "feasible": true
+        }
+      ]
+    },
+    {
+      "name": "Urgency",
+      "data": [
+        {
+          "infill": 10,
+          "value": -10.76,
+          "feasible": true
+        },
+        {
+          "infill": 20,
+          "value": -2.03,
+          "feasible": true
+        },
+        {
+          "infill": 40,
+          "value": 0.22,
+          "feasible": true
+        },
+        {
+          "infill": 60,
+          "value": -7.73,
+          "feasible": true
+        },
+        {
+          "infill": 80,
+          "value": -21.74,
+          "feasible": true
+        },
+        {
+          "infill": 100,
+          "value": -40.0,
+          "feasible": true
+        }
+      ]
+    }
+  ]
+}
