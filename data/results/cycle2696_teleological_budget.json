@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "cycle": 2696,
+    "name": "The Teleological Budget",
+    "phase": 254,
+    "gate": 1171
+  },
+  "lifespans": [
+    {
+      "name": "Matter (Passive)",
+      "efficiency": 0.0,
+      "lifespan": 179,
+      "infinite": false
+    },
+    {
+      "name": "Life (Active)",
+      "efficiency": 0.1,
+      "lifespan": 200,
+      "infinite": false
+    },
+    {
+      "name": "Civ (Harvesting)",
+      "efficiency": 0.5,
+      "lifespan": 363,
+      "infinite": false
+    },
+    {
+      "name": "Demon (Maxwell)",
+      "efficiency": 0.99,
+      "lifespan": 10000,
+      "infinite": true
+    },
+    {
+      "name": "God (Perpetual)",
+      "efficiency": 1.01,
+      "lifespan": 10000,
+      "infinite": true
+    }
+  ],
+  "validation": {
+    "physics_held": false,
+    "teleology_confirmed": true
+  }
+}
