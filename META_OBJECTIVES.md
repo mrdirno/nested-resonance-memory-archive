@@ -3074,6 +3074,12 @@ V(legal_system) = Social_Order - λ(Societal_Pressure) * Cost(Enforcement + Libe
   - **Artifact:** `experiments/cycle2752_enforcement_bcp.py`
   - **Functional Name:** The Deterrence Budget
 
+- ✅ **Gate 1228:** The Freedom Budget - Rights are BCP-optimal compromises - COMPLETE
+  - **Finding:** The optimal scope of individual rights is context-dependent, shifting towards minimal rights under high societal pressure.
+  - **Key Insight:** Liberty is a luxury.
+  - **Artifact:** `experiments/cycle2753_rights_bcp.py`
+  - **Functional Name:** The Freedom Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

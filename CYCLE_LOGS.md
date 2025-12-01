@@ -452,6 +452,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Optimal enforcement strategy shifts: Minimal ($\lambda \le 0.625$) -> Moderate ($0.625 < \lambda \le 3.5$) -> Aggressive ($\lambda > 3.5$). Law enforcement is a BCP-optimal strategy.
 - **Status:** Phase 265 Active. Gate 1227 Validated.
 
+## Cycle 2753: The Freedom Budget (Phase 265) - COMPLETE
+- **Goal:** Test Individual Rights as BCP-optimal compromises.
+- **Action:** Modeled selection between Minimal, Balanced, and Extensive rights regimes under varying societal pressure ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Optimal rights regime shifts: Balanced ($\lambda \le 3.0$) -> Minimal ($\lambda > 3.0$). The scope of rights adapts to societal pressure, balancing state control vs individual welfare.
+- **Status:** Phase 265 Active. Gate 1228 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
