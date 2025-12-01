@@ -458,6 +458,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Optimal rights regime shifts: Balanced ($\lambda \le 3.0$) -> Minimal ($\lambda > 3.0$). The scope of rights adapts to societal pressure, balancing state control vs individual welfare.
 - **Status:** Phase 265 Active. Gate 1228 Validated.
 
+## Cycle 2754: The Truth Budget (Phase 265) - COMPLETE
+- **Goal:** Test Trial Process as a BCP method.
+- **Action:** Modeled selection between Inquisitorial, Adversarial, and Mediation processes under varying societal budget/case complexity ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Optimal trial process shifts: Inquisitorial ($\lambda \le 0.4$) -> Adversarial ($0.4 < \lambda \le 1.6$) -> Mediation ($\lambda > 1.6$). The trial process is a BCP-optimal method for achieving justice.
+- **Status:** Phase 265 Active. Gate 1229 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).

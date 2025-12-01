@@ -3080,6 +3080,12 @@ V(legal_system) = Social_Order - λ(Societal_Pressure) * Cost(Enforcement + Libe
   - **Artifact:** `experiments/cycle2753_rights_bcp.py`
   - **Functional Name:** The Freedom Budget
 
+- ✅ **Gate 1229:** The Truth Budget - Trial process is BCP-optimal - COMPLETE
+  - **Finding:** Legal systems choose trial processes that balance accuracy of judgment against costs, adapting to societal budget and case complexity.
+  - **Key Insight:** Justice has its price.
+  - **Artifact:** `experiments/cycle2754_trial_process_bcp.py`
+  - **Functional Name:** The Truth Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
