@@ -306,13 +306,19 @@ if __name__ == "__main__":
                 
                 # 5. Update Parameters
                 if stagnant:
+                    if self.last_params.get("complexity", 1) < 3: # Actively push for Complexity 3
+                        new_complexity = self.last_params.get("complexity", 1) + 1
+                        print(f"💥 CAMBRIAN EXPLOSION! Forcing Complexity to {new_complexity} to break low-level stagnation.")
+                    else:
+                        new_complexity = self.last_params.get("complexity", 1) # Keep current if already high
+                    
                     self.last_params = {
                         "budget_range": [1.0, 10000.0], 
                         "gain_range": [10.0, 1000.0],   
                         "cost_range": [1.0, 100.0],
                         "k": random.uniform(0.1, 10.0),
                         "epsilon": random.uniform(0.01, 1.0),
-                        "complexity": self.last_params.get("complexity", 1) + 1 # Increase complexity on stagnation!
+                        "complexity": new_complexity 
                     }
                     print(f"💥 CAMBRIAN EXPLOSION! Complexity increased to {self.last_params['complexity']}")
                 elif fitness_data["survived"]:
@@ -376,10 +382,10 @@ def write_file(path, content):
 
 if __name__ == "__main__":
     scaffold_structure()
-    # Start from Gen 121, run until 130 (Push for Complexity 3)
+    # Start from Gen 131, run until 140 (Push for Complexity 3)
     try:
         from src.core.guardian import BCPGuardian
-        guardian = BCPGuardian(start_generation=121, max_generations=130)
+        guardian = BCPGuardian(start_generation=131, max_generations=140)
         guardian.run_infinite_loop()
     except ImportError:
         print("⚠️ Guardian module not yet loadable (fresh scaffold). Run script again to activate.")
