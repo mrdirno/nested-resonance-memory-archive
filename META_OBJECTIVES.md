@@ -2399,6 +2399,12 @@ V(gen) = Gain(Novelty/Utility) - λ(Budget) × Cost(Verification)
   - **Key Insight:** Creativity is a luxury good. Temperature ≈ 1/λ.
   - **Artifact:** `experiments/cycle2681_creative_temp_bcp.py`
   - **Functional Name:** The Sampling Budget
+
+- ✅ **Gate 1159:** The Context Budget - Prompt Engineering as cost reduction - COMPLETE
+  - **Finding:** In-Context Learning reduces Search Cost, allowing V > 0 even under High λ (Scarcity). Zero-shot fails when λ > Gain/BaseCost.
+  - **Key Insight:** Prompts buy "Lambda Tolerance".
+  - **Artifact:** `experiments/cycle2682_context_budget_bcp.py`
+  - **Functional Name:** The Context Budget
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.

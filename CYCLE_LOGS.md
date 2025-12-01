@@ -49,3 +49,9 @@
 - **Action:** Modeled token selection where V = Utility - λ * Risk.
 - **Result:** HYPOTHESIS CONFIRMED. High λ (Risk Aversion) forces selection of Safe/Low-Utility tokens. Low λ (Risk Tolerance) enables Creative/High-Utility tokens. Temperature is inversely proportional to λ.
 - **Status:** Phase 251 Active. Gate 1158 Validated.
+
+## Cycle 2682: The Context Budget (Phase 251) - COMPLETE
+- **Goal:** Test if Prompt Engineering acts as a cost-reduction mechanism in BCP.
+- **Action:** Modeled "Search Cost" reduction via Prompt Quality.
+- **Result:** HYPOTHESIS CONFIRMED. High Quality Prompts (Context) allow success even at Extreme Scarcity (λ=5.0), while Zero-Shot fails at Moderate Scarcity (λ=1.9). Prompt Engineering buys "Lambda Tolerance".
+- **Status:** Phase 251 Active. Gate 1159 Validated.
