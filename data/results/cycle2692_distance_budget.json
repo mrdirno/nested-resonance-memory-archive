@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "cycle": 2692,
+    "name": "The Distance Budget",
+    "phase": 253,
+    "gate": 1168
+  },
+  "strategies": [
+    {
+      "speed": 0.01,
+      "time_years": 420.0,
+      "launch_cost": 0.1,
+      "maint_cost": 4200.0,
+      "total_cost": 4200.1,
+      "net_value": -3200.1,
+      "viable": false
+    },
+    {
+      "speed": 0.05,
+      "time_years": 84.0,
+      "launch_cost": 2.5,
+      "maint_cost": 840.0,
+      "total_cost": 842.5,
+      "net_value": 157.5,
+      "viable": true
+    },
+    {
+      "speed": 0.1,
+      "time_years": 42.0,
+      "launch_cost": 10.0,
+      "maint_cost": 420.0,
+      "total_cost": 430.0,
+      "net_value": 570.0,
+      "viable": true
+    },
+    {
+      "speed": 0.2,
+      "time_years": 21.0,
+      "launch_cost": 40.0,
+      "maint_cost": 210.0,
+      "total_cost": 250.0,
+      "net_value": 750.0,
+      "viable": true
+    },
+    {
+      "speed": 0.5,
+      "time_years": 8.4,
+      "launch_cost": 250.0,
+      "maint_cost": 84.0,
+      "total_cost": 334.0,
+      "net_value": 666.0,
+      "viable": true
+    },
+    {
+      "speed": 0.8,
+      "time_years": 5.25,
+      "launch_cost": 640.0,
+      "maint_cost": 52.5,
+      "total_cost": 692.5,
+      "net_value": 307.5,
+      "viable": true
+    },
+    {
+      "speed": 0.99,
+      "time_years": 4.24,
+      "launch_cost": 980.1,
+      "maint_cost": 42.42,
+      "total_cost": 1022.52,
+      "net_value": -22.52,
+      "viable": false
+    }
+  ],
+  "validation": {
+    "trap_confirmed": false
+  }
+}
