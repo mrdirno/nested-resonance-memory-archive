@@ -2586,6 +2586,24 @@ Proofs are resource allocations. "True but unprovable" means "True but too expen
 
 ---
 
+## Current Phase: PHASE 256 - THE LINGUISTIC BUDGET 🟢 ACTIVE
+
+**Transition:** Phase 255 (Mathematics) → **Phase 256 (Linguistics)**
+
+**Focus:** Apply BCP to Syntax, Semantics, Evolution, and Pragmatics.
+
+**Research Thesis:**
+Language is an economic system optimizing Information Density vs Cognitive Cost.
+V(utterance) = Info(Meaning) - λ(Brain) × Cost(Articulatory + Cognitive)
+
+### Completed (Phase 256 Planning)
+- ✅ **Gate 1180:** Phase 256 Planning - Linguistics Selected - COMPLETE
+  - **Finding:** Linguistics offers high novelty and impact at current budget.
+  - **Artifact:** `experiments/cycle2705_phase256_planning.py`
+  - **Functional Name:** The Linguistic Budget
+
+---
+
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
 
 **Transition:** Phase 252 (Singularity) → **Phase 253 (The Cosmic Budget)**
