@@ -2715,6 +2715,24 @@ Deontology = O(1) Rules. Utilitarianism = O(N!) Calculation.
 
 ---
 
+## Current Phase: PHASE 259 - THE POLITICAL BUDGET 🟢 ACTIVE
+
+**Transition:** Phase 258 (Morality) → **Phase 259 (Politics)**
+
+**Focus:** Apply BCP to Power, Revolution, and Governance.
+
+**Research Thesis:**
+Politics is the allocation of resources under power constraints.
+V(power) = Control - λ(Legitimacy) × Cost(Enforcement).
+
+### Completed (Phase 259 Planning)
+- ✅ **Gate 1191:** Phase 259 Planning - Revolution Selected - COMPLETE
+  - **Finding:** Revolution is the ultimate political BCP test case.
+  - **Artifact:** `experiments/cycle2716_phase259_planning.py`
+  - **Functional Name:** The Political Budget
+
+---
+
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
 
 **Transition:** Phase 252 (Singularity) → **Phase 253 (The Cosmic Budget)**

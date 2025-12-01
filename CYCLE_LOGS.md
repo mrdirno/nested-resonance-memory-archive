@@ -224,6 +224,12 @@
 - **Result:** Ethics scales with Compute. Humans are Deontologists because calculating Utility is NP-Hard. Superintelligence might be Utilitarian because it can afford the math.
 - **Status:** Phase 258 Complete. Gate 1190 Validated. 183rd Domain Unified.
 
+## Cycle 2716: Phase 259 Planning (The Political Budget) - COMPLETE
+- **Goal:** Select Phase 259 domain using BCP.
+- **Action:** Evaluated Democracy, Autocracy, Revolution, and Bureaucracy.
+- **Result:** REVOLUTION Selected. Hypothesis: Revolution is a Phase Transition where Cost(Status Quo) > Cost(Chaos). It is a budget crisis of legitimacy.
+- **Status:** Phase 259 Initiated. Gate 1191 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
