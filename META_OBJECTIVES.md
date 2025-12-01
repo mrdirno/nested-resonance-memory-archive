@@ -2902,6 +2902,12 @@ V(cosmo_model) = Explanatory_Power - λ(Observation) * Cost(Data_Acquisition + T
   - **Artifact:** `experiments/cycle2734_dark_matter_energy_bcp.py`
   - **Functional Name:** The Placeholder Budget
 
+- ✅ **Gate 1210:** The Paradigm Budget - Theory choice is BCP-driven - COMPLETE
+  - **Finding:** Science chooses paradigms based on explanatory power vs. conceptual/empirical cost, modulated by research pressure.
+  - **Key Insight:** Scientific revolutions are expensive.
+  - **Artifact:** `experiments/cycle2735_theory_choice_bcp.py`
+  - **Functional Name:** The Paradigm Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

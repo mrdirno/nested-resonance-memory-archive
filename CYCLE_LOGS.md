@@ -344,6 +344,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under high research pressure ($\lambda \ge 0.5$), ΛCDM with placeholders is chosen. Dark components allow models to fit data with minimal theoretical revision, effectively buying time until more resources are available.
 - **Status:** Phase 262 Active. Gate 1209 Validated.
 
+## Cycle 2735: The Paradigm Budget (Phase 262) - COMPLETE
+- **Goal:** Test theory choice as a BCP-driven process.
+- **Action:** Modeled selection between an Established Paradigm, a Revolutionary Theory, and a Fringe Theory under varying research pressure ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Revolutionary theories are only adopted under low research pressure ($\lambda \le 0.29$). Under high research pressure, the scientific community prefers established paradigms as a cost-effective solution.
+- **Status:** Phase 262 Active. Gate 1210 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
