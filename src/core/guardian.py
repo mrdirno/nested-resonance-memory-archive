@@ -146,7 +146,7 @@ if __name__ == "__main__":
                 # 4. Check Stagnation (Cambrian Explosion)
                 stagnant = False
                 if self.monitor.total_generations >= 3:
-                    if self.monitor.get_stats()["stagnation_variance"] < 5.0:
+                    if self.monitor.get_stats()["stagnation_variance"] < 15.0: # Increased sensitivity to stagnation
                         stagnant = True
                         print(f"⚠️ Stagnation Detected (Variance {self.monitor.get_stats()['stagnation_variance']:.2f}). Triggering CAMBRIAN EXPLOSION.")
                 

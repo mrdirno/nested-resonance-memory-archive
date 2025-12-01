@@ -2631,6 +2631,24 @@ V(utterance) = Info(Meaning) - λ(Brain) × Cost(Articulatory + Cognitive)
 
 ---
 
+## Current Phase: PHASE 257 - THE RELIGIOUS BUDGET 🟢 ACTIVE
+
+**Transition:** Phase 256 (Linguistics) → **Phase 257 (Religion)**
+
+**Focus:** Apply BCP to Faith, Ritual, and the Afterlife.
+
+**Research Thesis:**
+Religion is an economic system for managing Existential Risk.
+V(faith) = Gain(Meaning/Afterlife) - λ(Anxiety) × Cost(Ritual).
+
+### Completed (Phase 257 Planning)
+- ✅ **Gate 1184:** Phase 257 Planning - Afterlife Selected - COMPLETE
+  - **Finding:** Infinite Gain Potential makes the Afterlife the ultimate BCP attractor.
+  - **Artifact:** `experiments/cycle2709_phase257_planning.py`
+  - **Functional Name:** The Religious Budget
+
+---
+
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
 
 **Transition:** Phase 252 (Singularity) → **Phase 253 (The Cosmic Budget)**
