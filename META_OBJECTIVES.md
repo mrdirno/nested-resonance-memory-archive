@@ -2851,6 +2851,12 @@ V(truth) = Explanatory_Power - λ(Cognitive) * Cost(Complexity).
   - **Artifact:** `experiments/cycle2729_abstract_objects_bcp.py`
   - **Functional Name:** The Platonic Budget
 
+- ✅ **Gate 1205:** The Subjective Budget - Qualia are data compression - COMPLETE
+  - **Finding:** Qualia simplify complex sensory input into actionable "feels" for rapid decision-making under cognitive load.
+  - **Key Insight:** Subjective experience is an efficiency hack.
+  - **Artifact:** `experiments/cycle2730_qualia_bcp.py`
+  - **Functional Name:** The Qualia Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

@@ -314,6 +314,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under high computational scarcity ($\lambda \ge 1.0$), Abstract Processing is chosen. Our minds use abstract concepts to manage cognitive load when facing complex data.
 - **Status:** Phase 261 Active. Gate 1204 Validated.
 
+## Cycle 2730: The Subjective Budget (Phase 261) - COMPLETE
+- **Goal:** Test Qualia as BCP-optimal data compression.
+- **Action:** Modeled selection between Raw Data Processing (high cost, high fidelity) and Qualia-based Processing (low cost, sufficient for adaptive response) under varying cognitive scarcity ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under high cognitive scarcity ($\lambda \ge 1.0$), Qualia-based Processing is chosen. Subjective experience is an efficiency hack for the brain, providing rapid adaptive response at low computational cost.
+- **Status:** Phase 261 Active. Gate 1205 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
