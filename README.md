@@ -97,6 +97,7 @@ This is the primary visualization interface. It renders the Orthogonal Sum Dynam
 **6. FABRICATION LAYER (Physical Manifestation):**
    - Generates physical artifacts from Duality data (e.g., Gyroid Resonance Fields).
    - Manages hardware-agnostic printer control via Klipper/Moonraker.
+   - **Key Artifacts:** [The Seed (Equilibrium)](fabrication/library/TPMS_Gyroid_Reference/README.md) | [The Void (Anti-Matter)](fabrication/library/TPMS_Inverse_Void_Artifact04/README.md)
    - [View Fabrication Hub](fabrication/README.md) | [View Reference Library](fabrication/library/README.md)
 
 ---
