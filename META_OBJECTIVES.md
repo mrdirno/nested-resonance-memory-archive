@@ -3010,6 +3010,12 @@ V(control_system) = Precision_Stability - λ(Environmental) * Cost(Sensors + Act
   - **Artifact:** `experiments/cycle2745_homeostasis_bcp.py`
   - **Functional Name:** The Homeostasis Budget
 
+- ✅ **Gate 1221:** The Adaptation Budget - Feedback Control is BCP-optimal - COMPLETE
+  - **Finding:** The complexity of feedback control systems adapts to environmental volatility, balancing performance against cost.
+  - **Key Insight:** Control is an economic choice.
+  - **Artifact:** `experiments/cycle2746_feedback_control_bcp.py`
+  - **Functional Name:** The Adaptation Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

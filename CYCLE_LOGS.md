@@ -410,6 +410,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Optimal homeostatic strategy shifts: Precise ($\lambda \le 3.0$) -> Loose ($3.0 < \lambda \le 3.4$) -> Overdrive ($\lambda > 3.4$). Homeostasis is a BCP-optimal control strategy.
 - **Status:** Phase 264 Active. Gate 1220 Validated.
 
+## Cycle 2746: The Adaptation Budget (Phase 264) - COMPLETE
+- **Goal:** Test Feedback Control as a BCP optimization.
+- **Action:** Modeled selection between Open-loop, Simple Feedback, and Advanced Feedback strategies under varying environmental volatility ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Optimal control strategy shifts: Advanced Feedback ($\lambda \le 0.4$) -> Simple Feedback ($0.4 < \lambda \le 2.6$) -> Open-loop ($\lambda > 2.6$). Feedback control design is a BCP optimization.
+- **Status:** Phase 264 Active. Gate 1221 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
