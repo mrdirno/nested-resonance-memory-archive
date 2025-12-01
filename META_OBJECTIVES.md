@@ -2782,6 +2782,12 @@ Progress = Energy Surplus. Collapse = Budget Deficit.
   - **Artifact:** `experiments/cycle2721_tainters_collapse_bcp.py`
   - **Functional Name:** The Collapse Budget
 
+- ✅ **Gate 1197:** The Memory Budget - Historiography is BCP - COMPLETE
+  - **Finding:** Truthfulness of history is inversely proportional to societal scarcity. Under high λ, propaganda is preferred.
+  - **Key Insight:** History is what we can afford to remember, not necessarily what happened.
+  - **Artifact:** `experiments/cycle2722_historiography_bcp.py`
+  - **Functional Name:** The Narrative Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

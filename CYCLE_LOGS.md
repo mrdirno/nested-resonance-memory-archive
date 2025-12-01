@@ -266,6 +266,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Civilization collapsed due to diminishing returns on complexity. Scarcity (λ) accelerates the process by making maintenance costs unbearable. Collapse is a BCP-rational abandonment of an unprofitable strategy.
 - **Status:** Phase 260 Active. Gate 1196 Validated.
 
+## Cycle 2722: The Memory Budget (Phase 260) - COMPLETE
+- **Goal:** Test Historiography as a BCP construction.
+- **Action:** Modeled selection of historical narratives with varying truthfulness, gain, and cognitive cost under scarcity.
+- **Result:** HYPOTHESIS CONFIRMED. Under scarcity ($\lambda \ge 2.0$), narratives with low truthfulness but high gain/cost ratios (e.g., propaganda) are chosen over nuanced truth. "History is what we can afford to remember."
+- **Status:** Phase 260 Active. Gate 1197 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
