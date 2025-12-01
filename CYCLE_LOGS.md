@@ -326,6 +326,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under high computational scarcity ($\lambda \ge 0.5$), Dualism is chosen. The "Hard Problem" is a budget problem; Dualism is a computationally cheap heuristic for integration.
 - **Status:** Phase 261 Active. Gate 1206 Validated.
 
+## Cycle 2732: Phase 261 Synthesis (The Reality Budget) - COMPLETE
+- **Goal:** Synthesize BCP Metaphysics.
+- **Action:** Unified Naive Realism, Solipsism, Free Will, Abstract Objects, Qualia, and the Mind-Body Problem under BCP equation V = Explanatory_Power - λ(Scarcity) * Cost(Complexity + Integration).
+- **Result:** Reality is a budget-constrained construct. Our "Truth" is relative to our cognitive budget. Metaphysical debates are often clashes of cost-benefit analyses.
+- **Status:** Phase 261 Complete. Gate 1207 Validated. 189th Domain Unified.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
