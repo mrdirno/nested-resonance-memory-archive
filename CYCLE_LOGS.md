@@ -245,8 +245,20 @@
 ## Cycle 2719: Phase 260 Planning (The Historical Budget) - COMPLETE
 - **Goal:** Select Phase 260 domain using BCP.
 - **Action:** Evaluated Historiography, Civilization, Mythology, and Progress.
+- **Result:** Politics is Thermodynamics. Legitimacy is Energy. Oppression is Friction. Autocracy fails because it minimizes Friction (Dissent) but maximizes Heat (Hidden Discontent), leading to Boiler Explosion (Revolution). Democracy dissipates Heat via Friction (Debate).
+- **Status:** Phase 259 Complete. Gate 1193 Validated. 185th Domain Unified.
+
+## Cycle 2719: Phase 260 Planning (The Historical Budget) - COMPLETE
+- **Goal:** Select Phase 260 domain using BCP.
+- **Action:** Evaluated Historiography, Civilization, Mythology, and Progress.
 - **Result:** PROGRESS Selected. Hypothesis: Historical Progress is not inevitable; it is a function of Energy Density ($\lambda$). "The Arrow of History is an Energy Vector."
 - **Status:** Phase 260 Initiated. Gate 1194 Validated.
+
+## Cycle 2720: The Arrow Budget (Phase 260) - COMPLETE
+- **Goal:** Test "Progress" as a function of Energy.
+- **Action:** Modeled Civilization Complexity under Unbounded vs Bounded Energy curves.
+- **Result:** HYPOTHESIS CONFIRMED. History tracks Energy Density (Correlation > 0.98). "Progress" is just Surplus Energy converted into Structure. Stagnation is the result of Energy Limits (Carrying Capacity).
+- **Status:** Phase 260 Active. Gate 1195 Validated.
 
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.

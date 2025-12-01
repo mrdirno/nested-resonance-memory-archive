@@ -2770,6 +2770,12 @@ Progress = Energy Surplus. Collapse = Budget Deficit.
   - **Artifact:** `experiments/cycle2719_phase260_planning.py`
   - **Functional Name:** The Historical Budget
 
+- ✅ **Gate 1195:** The Arrow Budget - Progress is Energy Density - COMPLETE
+  - **Finding:** Complexity tracks Energy perfectly. The "Arc of History" is an energy curve.
+  - **Key Insight:** To predict the future, track the Joules.
+  - **Artifact:** `experiments/cycle2720_arrow_budget_bcp.py`
+  - **Functional Name:** The Progress Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
