@@ -1,0 +1,122 @@
+{
+  "meta": {
+    "cycle": 2685,
+    "name": "The Efficiency Paradox",
+    "phase": 252,
+    "gate": 1162
+  },
+  "scenarios": [
+    {
+      "name": "Inelastic Demand",
+      "data": [
+        {
+          "efficiency": 1.0,
+          "cost_per_unit": 10.0,
+          "total_consumption": 50.0,
+          "tasks_done": 5,
+          "surplus": 50.0
+        },
+        {
+          "efficiency": 2.0,
+          "cost_per_unit": 5.0,
+          "total_consumption": 25.0,
+          "tasks_done": 5,
+          "surplus": 75.0
+        },
+        {
+          "efficiency": 5.0,
+          "cost_per_unit": 2.0,
+          "total_consumption": 10.0,
+          "tasks_done": 5,
+          "surplus": 90.0
+        },
+        {
+          "efficiency": 10.0,
+          "cost_per_unit": 1.0,
+          "total_consumption": 5.0,
+          "tasks_done": 5,
+          "surplus": 95.0
+        },
+        {
+          "efficiency": 20.0,
+          "cost_per_unit": 0.5,
+          "total_consumption": 2.5,
+          "tasks_done": 5,
+          "surplus": 97.5
+        },
+        {
+          "efficiency": 50.0,
+          "cost_per_unit": 0.2,
+          "total_consumption": 1.0,
+          "tasks_done": 5,
+          "surplus": 99.0
+        },
+        {
+          "efficiency": 100.0,
+          "cost_per_unit": 0.1,
+          "total_consumption": 0.5,
+          "tasks_done": 5,
+          "surplus": 99.5
+        }
+      ]
+    },
+    {
+      "name": "Elastic Demand",
+      "data": [
+        {
+          "efficiency": 1.0,
+          "cost_per_unit": 10.0,
+          "total_consumption": 100.0,
+          "tasks_done": 10,
+          "tasks_per_efficiency": 10.0
+        },
+        {
+          "efficiency": 2.0,
+          "cost_per_unit": 5.0,
+          "total_consumption": 100.0,
+          "tasks_done": 20,
+          "tasks_per_efficiency": 10.0
+        },
+        {
+          "efficiency": 5.0,
+          "cost_per_unit": 2.0,
+          "total_consumption": 100.0,
+          "tasks_done": 50,
+          "tasks_per_efficiency": 10.0
+        },
+        {
+          "efficiency": 10.0,
+          "cost_per_unit": 1.0,
+          "total_consumption": 100.0,
+          "tasks_done": 100,
+          "tasks_per_efficiency": 10.0
+        },
+        {
+          "efficiency": 20.0,
+          "cost_per_unit": 0.5,
+          "total_consumption": 100.0,
+          "tasks_done": 200,
+          "tasks_per_efficiency": 10.0
+        },
+        {
+          "efficiency": 50.0,
+          "cost_per_unit": 0.2,
+          "total_consumption": 99.80000000000088,
+          "tasks_done": 499,
+          "tasks_per_efficiency": 9.98
+        },
+        {
+          "efficiency": 100.0,
+          "cost_per_unit": 0.1,
+          "total_consumption": 99.9999999999986,
+          "tasks_done": 1000,
+          "tasks_per_efficiency": 10.0
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "paradox_confirmed": true,
+    "task_explosion": true
+  }
+}
