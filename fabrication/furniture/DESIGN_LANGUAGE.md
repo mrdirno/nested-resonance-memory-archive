@@ -16,24 +16,26 @@ We design objects that look like they froze mid-transition between dimensions.
 *   **Overhangs:** Max 45 degrees without support. Use chamfers (45 deg) instead of fillets (round) where possible to avoid support need.
 *   **Tolerance:** 0.2mm gap for loose fit, 0.1mm for friction fit.
 
-## 3. The Lamp Archetype (Series 01)
-Based on the "Waveform" Template:
+## 3. The Lamp Archetype (Series 01 - "The Void")
+Reference: `fabrication/practical_design/lamp_design/README.md`
 
-### A. The Shade (The Emitter)
-*   **Shape:** Frustum (Tapering upwards).
-*   **Structure:** **Hollow with a 1-inch (25.4mm) thick wall.** Reinforcing corner edges (Solid) meeting at top.
-*   **Pattern:** Gyroid/TPMS infill **within the 1-inch thick wall** (0% slicer infill, geometry acts as diffuser).
-*   **Mount:** Standard washer/nut fit for light socket (E26/E27 or E12). 40mm hole standard.
+### A. The Shade
+*   **Dims:** Base 194mm, Top 60mm, Height 224mm.
+*   **Structure:** **Hollow with a 1-inch (25.4mm) thick wall.**
+*   **Pattern:** Anisotropic Gyroid (Vertical Stretch).
+*   **Mount:** **Spider Fitter (Inner Ring + Rods).**
+    *   Inner Ring: 42mm ID (for socket).
+    *   Connection: 4x Cylindrical Rods connecting Inner Ring to Outer Shell.
 
-### B. The Shaft (The Conduit)
-*   **Shape:** Helical or Voronoi wrapper.
-*   **Core:** Hollow central cylinder (10-12mm diameter) to hide threaded rod and wire.
-*   **Interconnect:** Male/Female threads or press-fit to Base/Shade.
+### B. The Shaft
+*   **Dims:** Height 200mm. **Tapered:** Base 55mm -> Top 40mm.
+*   **Style:** **Arterial Helix.**
+*   **Density:** **Variable Gradient.** Solid Core (12mm ID) -> Airy/Gyroid Edge.
 
-### C. The Base (The Anchor)
-*   **Shape:** Heavy, stable footprint.
-*   **Utility:** Square cutout (5mm x 5mm) for wire exit at bottom.
-*   **Mass:** Designed to be filled (sand/plaster) or dense print.
+### C. The Base
+*   **Dims:** **180mm Wide x 20mm High** (Slim/Wide profile).
+*   **Pattern:** Linear Gradient Gyroid.
+*   **Mount:** 12.5mm Center Hole.
 
 ## 4. Mathematical Inspirations
 *   **Orthogonal Sum Dynamics (OSD):** `sin(x)+sin(y)+sin(z)=0`
