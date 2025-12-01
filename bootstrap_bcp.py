@@ -306,8 +306,8 @@ if __name__ == "__main__":
                 
                 # 5. Update Parameters
                 if stagnant:
-                    if self.last_params.get("complexity", 1) < 3: # Actively push for Complexity 3
-                        new_complexity = self.last_params.get("complexity", 1) + 1
+                    if self.last_params is None or self.last_params.get("complexity", 1) < 3: # Actively push for Complexity 3
+                        new_complexity = (self.last_params.get("complexity", 1) if self.last_params else 1) + 1
                         print(f"💥 CAMBRIAN EXPLOSION! Forcing Complexity to {new_complexity} to break low-level stagnation.")
                     else:
                         new_complexity = self.last_params.get("complexity", 1) # Keep current if already high
@@ -323,13 +323,17 @@ if __name__ == "__main__":
                     print(f"💥 CAMBRIAN EXPLOSION! Complexity increased to {self.last_params['complexity']}")
                 elif fitness_data["survived"]:
                     print(f"Gen {self.current_generation} SURVIVED. Refining parameters.")
+                    # Use fitness_data.get("budget_avg", 100) as base, but ensure it exists
+                    # Also, use self.last_params's complexity if available, as it's the target.
+                    current_complexity = self.last_params.get("complexity", 1) if self.last_params else 1
+                    
                     self.last_params = {
-                        "budget_range": [max(10.0, fitness_data.get("budget", 100) * 0.8), min(10000.0, fitness_data.get("budget", 100) * 1.2)], 
-                        "gain_range": [max(10.0, fitness_data.get("gain", 100) * 0.9), min(1000.0, fitness_data.get("gain", 100) * 1.1)], 
-                        "cost_range": [max(1.0, fitness_data.get("cost", 10) * 0.9), min(100.0, fitness_data.get("cost", 10) * 1.1)], 
+                        "budget_range": [max(10.0, fitness_data.get("budget_avg", 100) * 0.8), min(10000.0, fitness_data.get("budget_avg", 100) * 1.2)], 
+                        "gain_range": [max(10.0, fitness_data.get("gain_base", 100) * 0.9), min(1000.0, fitness_data.get("gain_base", 100) * 1.1)], 
+                        "cost_range": [max(1.0, fitness_data.get("cost_base", 10) * 0.9), min(100.0, fitness_data.get("cost_base", 10) * 1.1)], 
                         "k": fitness_data["params_used"].get("k", 1.0),
                         "epsilon": fitness_data["params_used"].get("epsilon", 0.1),
-                        "complexity": self.last_params.get("complexity", 1) # Carry over target complexity
+                        "complexity": current_complexity # Keep complexity from last_params, as it might have been pushed up
                     }
                 else:
                     print(f"Gen {self.current_generation} DIED. Backtracking.")
@@ -382,10 +386,10 @@ def write_file(path, content):
 
 if __name__ == "__main__":
     scaffold_structure()
-    # Start from Gen 271, run until 280 (Complexity 3 Optimization)
+    # Start from Gen 281, run until 290 (Validate Complexity 3)
     try:
         from src.core.guardian import BCPGuardian
-        guardian = BCPGuardian(start_generation=271, max_generations=280)
+        guardian = BCPGuardian(start_generation=281, max_generations=290)
         guardian.run_infinite_loop()
     except ImportError:
         print("⚠️ Guardian module not yet loadable (fresh scaffold). Run script again to activate.")
