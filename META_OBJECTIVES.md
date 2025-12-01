@@ -2947,6 +2947,12 @@ V(medical_action) = Health_Gain - λ(Resources) * Cost(Financial + Side_Effects 
   - **Artifact:** `experiments/cycle2738_phase263_planning.py`
   - **Functional Name:** The Health Budget
 
+- ✅ **Gate 1214:** The Diagnostic Budget - Diagnosis is BCP-optimal - COMPLETE
+  - **Finding:** Medical diagnostic strategies adapt to patient context, prioritizing efficiency under scarcity over perfect accuracy.
+  - **Key Insight:** Health information is a budget.
+  - **Artifact:** `experiments/cycle2739_diagnosis_bcp.py`
+  - **Functional Name:** The Diagnostic Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

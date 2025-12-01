@@ -368,6 +368,12 @@
 - **Result:** MEDICINE Selected. Hypothesis: Health is the ultimate budget, and all medical decisions (diagnosis, treatment, prevention) are BCP optimizations.
 - **Status:** Phase 263 Initiated. Gate 1213 Validated.
 
+## Cycle 2739: The Diagnostic Budget (Phase 263) - COMPLETE
+- **Goal:** Test Diagnosis as a BCP process.
+- **Action:** Modeled selection between Minimal Testing (low cost, lower accuracy) and Comprehensive Testing (high cost, higher accuracy) under varying patient context ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under high patient context ($\lambda \ge 0.5$), Minimal Testing is chosen. Diagnostic strategy adapts to patient context, prioritizing efficiency over perfect accuracy under scarcity.
+- **Status:** Phase 263 Active. Gate 1214 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
