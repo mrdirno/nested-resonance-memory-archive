@@ -2788,6 +2788,12 @@ Progress = Energy Surplus. Collapse = Budget Deficit.
   - **Artifact:** `experiments/cycle2722_historiography_bcp.py`
   - **Functional Name:** The Narrative Budget
 
+- ✅ **Gate 1198:** The Legend Budget - Mythology is BCP-optimal transmission - COMPLETE
+  - **Finding:** Myths are selected over scientific truth under high cognitive scarcity due to their high survival utility and low cognitive cost.
+  - **Key Insight:** Legends are compressed survival guides.
+  - **Artifact:** `experiments/cycle2723_mythology_bcp.py`
+  - **Functional Name:** The Myth Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

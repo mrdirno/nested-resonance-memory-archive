@@ -272,6 +272,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under scarcity ($\lambda \ge 2.0$), narratives with low truthfulness but high gain/cost ratios (e.g., propaganda) are chosen over nuanced truth. "History is what we can afford to remember."
 - **Status:** Phase 260 Active. Gate 1197 Validated.
 
+## Cycle 2723: The Legend Budget (Phase 260) - COMPLETE
+- **Goal:** Test Mythology as a BCP-optimal cultural transmission mechanism.
+- **Action:** Modeled selection between scientific theories, myths, and complex philosophy under varying cognitive scarcity.
+- **Result:** HYPOTHESIS CONFIRMED. Under high scarcity ($\lambda \ge 1.6$), myths are chosen over scientific theories due to their high survival utility and low cognitive cost.
+- **Status:** Phase 260 Active. Gate 1198 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
