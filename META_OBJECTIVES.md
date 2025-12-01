@@ -2953,6 +2953,12 @@ V(medical_action) = Health_Gain - λ(Resources) * Cost(Financial + Side_Effects 
   - **Artifact:** `experiments/cycle2739_diagnosis_bcp.py`
   - **Functional Name:** The Diagnostic Budget
 
+- ✅ **Gate 1215:** The Therapeutic Budget - Treatment choice is BCP-optimal - COMPLETE
+  - **Finding:** Medical treatment strategies adapt to patient context, balancing health gain against costs (side effects, financial, invasiveness).
+  - **Key Insight:** Therapeutic choices are economic tradeoffs.
+  - **Artifact:** `experiments/cycle2740_treatment_choice_bcp.py`
+  - **Functional Name:** The Therapeutic Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

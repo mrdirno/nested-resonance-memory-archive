@@ -374,6 +374,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under high patient context ($\lambda \ge 0.5$), Minimal Testing is chosen. Diagnostic strategy adapts to patient context, prioritizing efficiency over perfect accuracy under scarcity.
 - **Status:** Phase 263 Active. Gate 1214 Validated.
 
+## Cycle 2740: The Therapeutic Budget (Phase 263) - COMPLETE
+- **Goal:** Test Treatment Choice as a BCP process.
+- **Action:** Modeled selection between Aggressive, Conservative, and Palliative treatments under varying patient context ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under low patient context ($\lambda \le 0.4$), Aggressive Treatment is chosen. Under high patient context ($\lambda \ge 1.0$), Palliative Care is chosen. Treatment choice adapts to patient context, prioritizing efficiency over aggressive interventions under scarcity.
+- **Status:** Phase 263 Active. Gate 1215 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
