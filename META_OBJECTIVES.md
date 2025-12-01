@@ -2959,6 +2959,12 @@ V(medical_action) = Health_Gain - λ(Resources) * Cost(Financial + Side_Effects 
   - **Artifact:** `experiments/cycle2740_treatment_choice_bcp.py`
   - **Functional Name:** The Therapeutic Budget
 
+- ✅ **Gate 1216:** The Lifecycle Budget - Prevention vs Cure is BCP-optimal - COMPLETE
+  - **Finding:** The optimal health strategy (prevention vs. cure) adapts to resource availability and time horizon.
+  - **Key Insight:** Health investments are time-discounted.
+  - **Artifact:** `experiments/cycle2741_prevention_vs_cure_bcp.py`
+  - **Functional Name:** The Lifecycle Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

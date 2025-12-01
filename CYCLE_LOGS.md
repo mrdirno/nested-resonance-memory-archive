@@ -380,6 +380,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under low patient context ($\lambda \le 0.4$), Aggressive Treatment is chosen. Under high patient context ($\lambda \ge 1.0$), Palliative Care is chosen. Treatment choice adapts to patient context, prioritizing efficiency over aggressive interventions under scarcity.
 - **Status:** Phase 263 Active. Gate 1215 Validated.
 
+## Cycle 2741: The Lifecycle Budget (Phase 263) - COMPLETE
+- **Goal:** Test Prevention vs Cure as a BCP process.
+- **Action:** Modeled selection between Prevention (high upfront cost, high long-term benefit) and Cure (low upfront cost, lower long-term benefit) under varying time horizon/resource scarcity ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under low scarcity ($\lambda < 1.0$), Prevention is chosen. Under high scarcity ($\lambda > 1.0$), Cure is chosen. The optimal health strategy adapts to time horizon and resource availability.
+- **Status:** Phase 263 Active. Gate 1216 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
