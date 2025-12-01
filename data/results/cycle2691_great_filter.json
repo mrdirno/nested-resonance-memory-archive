@@ -1,0 +1,350 @@
+{
+  "meta": {
+    "cycle": 2691,
+    "name": "The Great Filter",
+    "phase": 253,
+    "gate": 1167
+  },
+  "trace": [
+    {
+      "time": 0,
+      "budget": 99.0,
+      "complexity": 1.1,
+      "cost": 1.1,
+      "lambda": 0.1,
+      "status": "THRIVING"
+    },
+    {
+      "time": 1,
+      "budget": 98.0,
+      "complexity": 1.21,
+      "cost": 1.21,
+      "lambda": 0.1,
+      "status": "THRIVING"
+    },
+    {
+      "time": 2,
+      "budget": 97.0,
+      "complexity": 1.33,
+      "cost": 1.33,
+      "lambda": 0.1,
+      "status": "THRIVING"
+    },
+    {
+      "time": 3,
+      "budget": 96.0,
+      "complexity": 1.46,
+      "cost": 1.46,
+      "lambda": 0.1,
+      "status": "THRIVING"
+    },
+    {
+      "time": 4,
+      "budget": 95.0,
+      "complexity": 1.61,
+      "cost": 1.61,
+      "lambda": 0.11,
+      "status": "THRIVING"
+    },
+    {
+      "time": 5,
+      "budget": 94.0,
+      "complexity": 1.77,
+      "cost": 1.77,
+      "lambda": 0.11,
+      "status": "THRIVING"
+    },
+    {
+      "time": 6,
+      "budget": 93.0,
+      "complexity": 1.95,
+      "cost": 1.95,
+      "lambda": 0.11,
+      "status": "THRIVING"
+    },
+    {
+      "time": 7,
+      "budget": 92.0,
+      "complexity": 2.14,
+      "cost": 2.14,
+      "lambda": 0.11,
+      "status": "THRIVING"
+    },
+    {
+      "time": 8,
+      "budget": 91.0,
+      "complexity": 2.36,
+      "cost": 2.36,
+      "lambda": 0.11,
+      "status": "THRIVING"
+    },
+    {
+      "time": 9,
+      "budget": 90.0,
+      "complexity": 2.59,
+      "cost": 2.59,
+      "lambda": 0.11,
+      "status": "THRIVING"
+    },
+    {
+      "time": 10,
+      "budget": 89.0,
+      "complexity": 2.85,
+      "cost": 2.85,
+      "lambda": 0.11,
+      "status": "THRIVING"
+    },
+    {
+      "time": 11,
+      "budget": 88.0,
+      "complexity": 3.14,
+      "cost": 3.14,
+      "lambda": 0.11,
+      "status": "THRIVING"
+    },
+    {
+      "time": 12,
+      "budget": 87.0,
+      "complexity": 3.45,
+      "cost": 3.45,
+      "lambda": 0.11,
+      "status": "THRIVING"
+    },
+    {
+      "time": 13,
+      "budget": 86.0,
+      "complexity": 3.8,
+      "cost": 3.8,
+      "lambda": 0.12,
+      "status": "THRIVING"
+    },
+    {
+      "time": 14,
+      "budget": 85.0,
+      "complexity": 4.18,
+      "cost": 4.18,
+      "lambda": 0.12,
+      "status": "THRIVING"
+    },
+    {
+      "time": 15,
+      "budget": 84.0,
+      "complexity": 4.59,
+      "cost": 4.59,
+      "lambda": 0.12,
+      "status": "THRIVING"
+    },
+    {
+      "time": 16,
+      "budget": 83.0,
+      "complexity": 5.05,
+      "cost": 5.05,
+      "lambda": 0.12,
+      "status": "THRIVING"
+    },
+    {
+      "time": 17,
+      "budget": 82.0,
+      "complexity": 5.56,
+      "cost": 5.56,
+      "lambda": 0.12,
+      "status": "THRIVING"
+    },
+    {
+      "time": 18,
+      "budget": 81.0,
+      "complexity": 6.12,
+      "cost": 6.12,
+      "lambda": 0.12,
+      "status": "THRIVING"
+    },
+    {
+      "time": 19,
+      "budget": 80.0,
+      "complexity": 6.73,
+      "cost": 6.73,
+      "lambda": 0.12,
+      "status": "THRIVING"
+    },
+    {
+      "time": 20,
+      "budget": 79.0,
+      "complexity": 7.4,
+      "cost": 7.4,
+      "lambda": 0.13,
+      "status": "THRIVING"
+    },
+    {
+      "time": 21,
+      "budget": 78.0,
+      "complexity": 8.14,
+      "cost": 8.14,
+      "lambda": 0.13,
+      "status": "THRIVING"
+    },
+    {
+      "time": 22,
+      "budget": 77.0,
+      "complexity": 8.95,
+      "cost": 8.95,
+      "lambda": 0.13,
+      "status": "THRIVING"
+    },
+    {
+      "time": 23,
+      "budget": 76.0,
+      "complexity": 9.85,
+      "cost": 9.85,
+      "lambda": 0.13,
+      "status": "THRIVING"
+    },
+    {
+      "time": 24,
+      "budget": 75.0,
+      "complexity": 10.83,
+      "cost": 10.83,
+      "lambda": 0.13,
+      "status": "THRIVING"
+    },
+    {
+      "time": 25,
+      "budget": 74.0,
+      "complexity": 11.92,
+      "cost": 11.92,
+      "lambda": 0.14,
+      "status": "THRIVING"
+    },
+    {
+      "time": 26,
+      "budget": 73.0,
+      "complexity": 13.11,
+      "cost": 13.11,
+      "lambda": 0.14,
+      "status": "THRIVING"
+    },
+    {
+      "time": 27,
+      "budget": 72.0,
+      "complexity": 14.42,
+      "cost": 14.42,
+      "lambda": 0.14,
+      "status": "THRIVING"
+    },
+    {
+      "time": 28,
+      "budget": 71.0,
+      "complexity": 15.86,
+      "cost": 15.86,
+      "lambda": 0.14,
+      "status": "THRIVING"
+    },
+    {
+      "time": 29,
+      "budget": 70.0,
+      "complexity": 17.45,
+      "cost": 17.45,
+      "lambda": 0.14,
+      "status": "THRIVING"
+    },
+    {
+      "time": 30,
+      "budget": 69.0,
+      "complexity": 19.19,
+      "cost": 19.19,
+      "lambda": 0.14,
+      "status": "THRIVING"
+    },
+    {
+      "time": 31,
+      "budget": 68.0,
+      "complexity": 21.11,
+      "cost": 21.11,
+      "lambda": 0.15,
+      "status": "THRIVING"
+    },
+    {
+      "time": 32,
+      "budget": 67.0,
+      "complexity": 23.23,
+      "cost": 23.23,
+      "lambda": 0.15,
+      "status": "THRIVING"
+    },
+    {
+      "time": 33,
+      "budget": 66.0,
+      "complexity": 25.55,
+      "cost": 25.55,
+      "lambda": 0.15,
+      "status": "THRIVING"
+    },
+    {
+      "time": 34,
+      "budget": 65.0,
+      "complexity": 28.1,
+      "cost": 28.1,
+      "lambda": 0.15,
+      "status": "THRIVING"
+    },
+    {
+      "time": 35,
+      "budget": 64.0,
+      "complexity": 30.91,
+      "cost": 30.91,
+      "lambda": 0.16,
+      "status": "THRIVING"
+    },
+    {
+      "time": 36,
+      "budget": 63.0,
+      "complexity": 34.0,
+      "cost": 34.0,
+      "lambda": 0.16,
+      "status": "THRIVING"
+    },
+    {
+      "time": 37,
+      "budget": 62.0,
+      "complexity": 37.4,
+      "cost": 37.4,
+      "lambda": 0.16,
+      "status": "THRIVING"
+    },
+    {
+      "time": 38,
+      "budget": 61.0,
+      "complexity": 41.14,
+      "cost": 41.14,
+      "lambda": 0.16,
+      "status": "THRIVING"
+    },
+    {
+      "time": 39,
+      "budget": 60.0,
+      "complexity": 45.26,
+      "cost": 45.26,
+      "lambda": 0.17,
+      "status": "THRIVING"
+    },
+    {
+      "time": 40,
+      "budget": 59.0,
+      "complexity": 49.79,
+      "cost": 49.79,
+      "lambda": 0.17,
+      "status": "THRIVING"
+    },
+    {
+      "time": 41,
+      "budget": 58.0,
+      "complexity": 54.76,
+      "cost": 54.76,
+      "lambda": 0.17,
+      "status": "STELLAR (SUCCESS)"
+    }
+  ],
+  "validation": {
+    "filter_confirmed": false,
+    "final_status": "STELLAR (SUCCESS)"
+  }
+}
