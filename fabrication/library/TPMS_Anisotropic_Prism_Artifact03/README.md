@@ -44,6 +44,14 @@ Analysis of light transmission through the lattice reveals a "Trap Effect." Desp
     *   *Implication:* Incident energy from the top is almost entirely intercepted by the geometry, forcing reflection or absorption rather than transmission.
 *   **Horizontal Opacity:** Varies from **62%** (Middle) to **90%** (Top), confirming complex, angle-dependent filtering properties.
 
+### 3.3 Optimized Reference (60mm x 60mm x 120mm - Printability Tuned)
+*   **Geometry:** 60mm x 60mm x 120mm Prism.
+*   **Optimized Cell Size:** ~15mm (Coarser mesh for FFF reliability).
+*   **Surface Area:** ~245,963 mm².
+*   **Volume:** ~139,961 mm³.
+*   **Volume Fraction:** ~32% (Increased thickness for structural robustness).
+*   **Status:** **Recommended for FFF Printing.** This version balances surface area with printability, reducing retraction frequency to minimize stringing.
+
 ## 4. Physics & Applications (The Universal Governor)
 This geometry acts as a "Programmable Filter" because the math of the container (Gyroid) shapes the math of the wave (Sound/Light).
 

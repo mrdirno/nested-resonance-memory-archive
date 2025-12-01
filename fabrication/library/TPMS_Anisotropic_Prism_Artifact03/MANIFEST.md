@@ -12,6 +12,9 @@
     *   `TPMS_Anisotropic_Prism_Large.stl` (60x60x120mm)
         *   Format: ASCII STL
         *   Metrics: ~248k mm² Surface Area, ~25.8% Avg Density.
+    *   `TPMS_Anisotropic_Prism_Optimized.stl` (60x60x120mm)
+        *   Format: ASCII STL
+        *   Metrics: ~246k mm² Surface Area, ~32% Avg Density (Printability Tuned).
 2.  **Documentation:** `README.md` (The concept of "Flow" and directional anisotropy).
 
 ## Significance & Potential
