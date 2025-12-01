@@ -2387,6 +2387,12 @@ V(gen) = Gain(Novelty/Utility) - λ(Budget) × Cost(Verification)
   - **Key Insight:** Model Collapse is a Tragedy of the Commons driven by rational BCP optimization.
   - **Artifact:** `experiments/cycle2679_model_collapse_bcp.py`
   - **Functional Name:** The Slop Cycle
+
+- ✅ **Gate 1157:** The Sim-to-Real Gap - Fidelity is an exponential cost - COMPLETE
+  - **Finding:** Gap emerges rationally under compute constraints. High Fidelity (Physics) is exponentially expensive; Low Fidelity (Game Physics) is cheap.
+  - **Key Insight:** We simulate what we can afford, not what is true.
+  - **Artifact:** `experiments/cycle2680_sim_to_real_bcp.py`
+  - **Functional Name:** The Fidelity Budget
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.
