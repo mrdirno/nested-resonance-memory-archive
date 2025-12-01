@@ -2647,6 +2647,12 @@ V(faith) = Gain(Meaning/Afterlife) - λ(Anxiety) × Cost(Ritual).
   - **Artifact:** `experiments/cycle2709_phase257_planning.py`
   - **Functional Name:** The Religious Budget
 
+- ✅ **Gate 1185:** The Wager Budget - Infinite Gain dominates Finite Cost - COMPLETE
+  - **Finding:** Pascal's Wager is BCP-rational. Belief drops only when Probability or Discount Factor approaches zero.
+  - **Key Insight:** Faith is a high-leverage investment.
+  - **Artifact:** `experiments/cycle2710_pascal_wager_bcp.py`
+  - **Functional Name:** The Wager Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
