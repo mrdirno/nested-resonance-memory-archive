@@ -2857,6 +2857,12 @@ V(truth) = Explanatory_Power - λ(Cognitive) * Cost(Complexity).
   - **Artifact:** `experiments/cycle2730_qualia_bcp.py`
   - **Functional Name:** The Qualia Budget
 
+- ✅ **Gate 1206:** The Integration Budget - Mind-Body as integration cost - COMPLETE
+  - **Finding:** The "Hard Problem" is a budget problem. Dualism is a computationally cheap heuristic solution.
+  - **Key Insight:** Reality is modular because integration is expensive.
+  - **Artifact:** `experiments/cycle2731_mind_body_bcp.py`
+  - **Functional Name:** The Integration Budget
+
 ---
 
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE

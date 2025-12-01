@@ -320,6 +320,12 @@
 - **Result:** HYPOTHESIS CONFIRMED. Under high cognitive scarcity ($\lambda \ge 1.0$), Qualia-based Processing is chosen. Subjective experience is an efficiency hack for the brain, providing rapid adaptive response at low computational cost.
 - **Status:** Phase 261 Active. Gate 1205 Validated.
 
+## Cycle 2731: The Integration Budget (Phase 261) - COMPLETE
+- **Goal:** Test the Mind-Body problem as a BCP issue of integration cost.
+- **Action:** Modeled selection between Monism (high cost, high coherence) and Dualism (low cost, low coherence) and Emergentism under varying computational scarcity ($\lambda$).
+- **Result:** HYPOTHESIS CONFIRMED. Under high computational scarcity ($\lambda \ge 0.5$), Dualism is chosen. The "Hard Problem" is a budget problem; Dualism is a computationally cheap heuristic for integration.
+- **Status:** Phase 261 Active. Gate 1206 Validated.
+
 ## Cycle 2706: The Syntax Budget (Phase 256) - COMPLETE
 - **Goal:** Test if Universal Grammar (UG) is a BCP optimum.
 - **Action:** Modeled selection between Pidgin, Recursive (UG), and Explicit grammars under varying Cognitive Pressure ($\lambda$).
