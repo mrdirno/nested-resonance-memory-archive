@@ -33,7 +33,7 @@ def write_stl(filename, vertices, faces):
             f.write("endfacet\n")
         f.write(f"endsolid {filename}\n")
 
-def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_depth=200.0, margin_xy=25.4, size_z=120.0, resolution=120, k_mod=0.01, robust_base_height=25.4, top_extend_height=0.0, k_expansion_shape=0.0, expand_outward=False, mimic_giza_pyramid=False):
+def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_depth=200.0, margin_xy=25.4, size_z=120.0, resolution=120, k_mod=0.01, robust_base_height=25.4, top_extend_height=0.0, top_dim_x=50.8, top_dim_y=50.8, k_expansion_shape=0.0, expand_outward=False, mimic_giza_pyramid=False):
     """
     Generates a 3D mesh representing an Anisotropic Gyroid Prism (Pyramid/Frustum)
     with Z-axis frequency modulation and cross-sectional expansion/contraction,
@@ -50,37 +50,49 @@ def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_dept
 
     GIZA_ASPECT_RATIO = 146.6 / 230.3 # Height / Base_Side (approx 0.6365)
     
-    # Calculate base dimensions based on plate and margin
+    # Calculate initial base dimensions of the patterned section
     if mimic_giza_pyramid:
-        # Given size_z (height of the patterned section), calculate base_size
-        base_size_x_unscaled = size_z / GIZA_ASPECT_RATIO
-        base_size_y_unscaled = size_z / GIZA_ASPECT_RATIO
-        # k_expansion_shape and expand_outward will be overridden in shape_scale_factor logic
+        # Given size_z (height of the patterned section), calculate base_size for Giza aspect ratio
+        base_size_x_pattern = size_z / GIZA_ASPECT_RATIO
+        base_size_y_pattern = size_z / GIZA_ASPECT_RATIO
+        # For Giza, top dimensions are 0, and expand_outward is False
+        top_dim_x = 0.0
+        top_dim_y = 0.0
+        expand_outward = False # Giza always shrinks
         
         # Adjust resolution to potentially be higher for Giza (larger base)
         resolution = max(resolution, 150) # Increase resolution for potentially larger base
     else:
-        base_size_x_unscaled = plate_width - 2 * margin_xy
-        base_size_y_unscaled = plate_depth - 2 * margin_xy
+        base_size_x_pattern = plate_width - 2 * margin_xy
+        base_size_y_pattern = plate_depth - 2 * margin_xy
+
+    # Ensure top dimensions are not larger than base dimensions when shrinking
+    # This ensures consistency for frustum logic
+    if top_dim_x > base_size_x_pattern and not expand_outward: top_dim_x = base_size_x_pattern
+    if top_dim_y > base_size_y_pattern and not expand_outward: top_dim_y = base_size_y_pattern
+
+    # Effective base dimensions for the grid and initial scale calculations
+    effective_base_size_x = base_size_x_pattern
+    effective_base_size_y = base_size_y_pattern
     
     # Calculate effective Z-range after applying offsets
     effective_size_z = size_z + robust_base_height + top_extend_height
     
     # Base scales for X/Y (initial frequency of the internal gyroid pattern)
     # These scales will be adjusted by the current_x_scale_factor and current_y_scale_factor
-    base_pattern_scale_x = 2.0 * math.pi / (base_size_x_unscaled / 3.0) 
-    base_pattern_scale_y = 2.0 * math.pi / (base_size_y_unscaled / 3.0)
+    base_pattern_scale_x = 2.0 * math.pi / (effective_base_size_x / 3.0) 
+    base_pattern_scale_y = 2.0 * math.pi / (effective_base_size_y / 3.0)
     
     # Determine overall resolution based on largest dimension to maintain aspect ratio
-    max_base_dim = max(base_size_x_unscaled, base_size_y_unscaled)
+    max_base_dim = max(effective_base_size_x, effective_base_size_y)
     # Ensure resolution respects height too.
     effective_resolution = max(resolution, int(effective_size_z / max_base_dim * resolution)) 
 
-    step = max(base_size_x_unscaled, base_size_y_unscaled, effective_size_z) / effective_resolution
+    step = max(effective_base_size_x, effective_base_size_y, effective_size_z) / effective_resolution
     
     # Calculate actual resolution counts for each dimension
-    res_x = int(base_size_x_unscaled / step) +1
-    res_y = int(base_size_y_unscaled / step) +1
+    res_x = int(effective_base_size_x / step) +1
+    res_y = int(effective_base_size_y / step) +1
     res_z = int(effective_size_z / step) +1
 
     # Ensure min resolution of 1
@@ -94,8 +106,7 @@ def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_dept
     # 3D Array of field values
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
-    # Smallest dimension the pyramid can taper to before solidifying
-    MIN_PYRAMID_DIM_THRESHOLD = 5.0 # mm, e.g., 5mm x 5mm at the top
+
     
     print("Calculating Anisotropic Pyramid Field...")
     for z_idx in range(res_z): # Iterate Z first to calculate pyramid slice dimensions
@@ -108,47 +119,46 @@ def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_dept
         # This norm is for the pyramid's outer shape
         z_norm_shape = max(0.0, min(1.0, (pz - robust_base_height) / size_z))
         
-        shape_scale_factor = 1.0
+        shape_scale_factor_x = 1.0 # Initialize
+        shape_scale_factor_y = 1.0 # Initialize
+        
         if mimic_giza_pyramid:
             # For a true pyramid, scale factor goes from 1 at base (z_norm_shape=0) to 0 at top (z_norm_shape=1)
-            shape_scale_factor = (1.0 - z_norm_shape) 
-            # Ensure it doesn't go below 0 for calculations if z_norm_shape slightly exceeds 1 due to floating point
-            if shape_scale_factor < 0: shape_scale_factor = 0 
+            shape_scale_factor_x = (1.0 - z_norm_shape) 
+            if shape_scale_factor_x < 0: shape_scale_factor_x = 0
+            shape_scale_factor_y = shape_scale_factor_x # Symmetric for Giza
         elif k_expansion_shape != 0.0:
-            if expand_outward: # Pyramid growing upwards (frustum)
-                shape_scale_factor = 1.0 + k_expansion_shape * z_norm_shape
-            else: # Inverted pyramid (shrinking upwards, frustum)
-                shape_scale_factor = 1.0 + k_expansion_shape * (1.0 - z_norm_shape)
-        
+            if expand_outward: # Frustum expanding upwards
+                # Linear interpolation from effective_base_size to top_dim, relative to effective_base_size
+                shape_scale_factor_x = (effective_base_size_x * (1.0 - z_norm_shape) + top_dim_x * z_norm_shape) / effective_base_size_x
+                shape_scale_factor_y = (effective_base_size_y * (1.0 - z_norm_shape) + top_dim_y * z_norm_shape) / effective_base_size_y
+            else: # Frustum shrinking upwards (or constant if top_dim == base_size)
+                # Linear interpolation from effective_base_size to top_dim, relative to effective_base_size
+                shape_scale_factor_x = (effective_base_size_x * (1.0 - z_norm_shape) + top_dim_x * z_norm_shape) / effective_base_size_x
+                shape_scale_factor_y = (effective_base_size_y * (1.0 - z_norm_shape) + top_dim_y * z_norm_shape) / effective_base_size_y
+        else: # No expansion shape applied, default to constant size
+            shape_scale_factor_x = 1.0
+            shape_scale_factor_y = 1.0
+
+
         # Current X and Y dimensions of the pyramid slice at this Z level
-        current_pyramid_width_x = base_size_x_unscaled * shape_scale_factor
-        current_pyramid_width_y = base_size_y_unscaled * shape_scale_factor
+        current_pyramid_width_x = effective_base_size_x * shape_scale_factor_x
+        current_pyramid_width_y = effective_base_size_y * shape_scale_factor_y
         
         current_pyramid_half_width_x = current_pyramid_width_x / 2
         current_pyramid_half_width_y = current_pyramid_width_y / 2
-        
-        # --- Solid Apex Logic ---
-        force_solid_slice = False
-        if current_pyramid_width_x < MIN_PYRAMID_DIM_THRESHOLD or \
-           current_pyramid_width_y < MIN_PYRAMID_DIM_THRESHOLD:
-            force_solid_slice = True # Force solid at apex
-            
         for x_idx in range(res_x):
             for y_idx in range(res_y):
 
-                px_unscaled_from_center = (x_idx * step) - (base_size_x_unscaled / 2)
-                py_unscaled_from_center = (y_idx * step) - (base_size_y_unscaled / 2)
+                px_unscaled_from_center = (x_idx * step) - (effective_base_size_x / 2)
+                py_unscaled_from_center = (y_idx * step) - (effective_base_size_y / 2)
                 
-                # If force_solid_slice, just fill it
-                if force_solid_slice:
-                    grid[x_idx,y_idx,z_idx] = True
-                    continue
-
                 # Check if current unscaled voxel position is within the pyramid's X-Y bounds at this Z
                 if abs(px_unscaled_from_center) > current_pyramid_half_width_x or \
                    abs(py_unscaled_from_center) > current_pyramid_half_width_y:
                     grid[x_idx,y_idx,z_idx] = False # Outside pyramid bounds
                     continue
+                
                 
                 # --- Internal Gyroid Pattern Scaling ---
                 # The internal gyroid pattern should also scale with the outer shape.
@@ -158,8 +168,8 @@ def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_dept
                 
                 # Rescale px, py relative to the effective base_size for the Gyroid equation
                 # This makes the pattern appear to scale with the outer pyramid.
-                px = px_unscaled_from_center * (base_size_x_unscaled / current_pyramid_width_x) 
-                py = py_unscaled_from_center * (base_size_y_unscaled / current_pyramid_width_y)
+                px = px_unscaled_from_center * (effective_base_size_x / current_pyramid_width_x) if current_pyramid_width_x > 0 else 0 
+                py = py_unscaled_from_center * (effective_base_size_y / current_pyramid_width_y)
                 
                 # --- Z-Axis Frequency Modulation Logic ---
                 base_wavelength_z = size_z / 3.0 
@@ -213,8 +223,8 @@ def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_dept
             else:
                 shape_scale_factor_current = 1.0 + k_expansion_shape * (1.0 - z_norm_shape_current)
         
-        current_total_width_x = base_size_x_unscaled * shape_scale_factor_current
-        current_total_width_y = base_size_y_unscaled * shape_scale_factor_current
+        current_total_width_x = effective_base_size_x * shape_scale_factor_current
+        current_total_width_y = effective_base_size_y * shape_scale_factor_current
 
         for x_idx in range(res_x):
             for y_idx in range(res_y):
@@ -225,17 +235,17 @@ def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_dept
                 # These are now relative to the current slice's scaled dimensions.
                 
                 # Original unscaled position
-                vx_unscaled = (x_idx * step) - (base_size_x_unscaled / 2)
-                vy_unscaled = (y_idx * step) - (base_size_y_unscaled / 2)
+                vx_unscaled = (x_idx * step) - (effective_base_size_x / 2)
+                vy_unscaled = (y_idx * step) - (effective_base_size_y / 2)
                 
                 # Scale to fit current pyramid slice
-                vx = vx_unscaled * (current_total_width_x / base_size_x_unscaled)
-                vy = vy_unscaled * (current_total_width_y / base_size_y_unscaled)
+                vx = vx_unscaled * (current_total_width_x / effective_base_size_x) if effective_base_size_x > 0 else 0
+                vy = vy_unscaled * (current_total_width_y / effective_base_size_y) if effective_base_size_y > 0 else 0
                 vz = pz_raw_current # Z-coordinate remains unscaled in terms of physical dimension
                 
                 # Scaled half-step sizes for drawing faces, adjusted for the current slice's scale
-                s2x = (step / 2) * (current_total_width_x / base_size_x_unscaled)
-                s2y = (step / 2) * (current_total_width_y / base_size_y_unscaled)
+                s2x = (step / 2) * (current_total_width_x / effective_base_size_x) if effective_base_size_x > 0 else 0
+                s2y = (step / 2) * (current_total_width_y / effective_base_size_y) if effective_base_size_y > 0 else 0
                 s2z = step / 2 
                 
                 # Neighbors (Up, Down, Left, Right, Front, Back)
@@ -267,7 +277,7 @@ def generate_anisotropic_gyroid_prism(output_path, plate_width=200.0, plate_dept
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python helios_anisotropic_prism_gen.py <output.stl> [plate_width] [plate_depth] [margin_xy] [size_z] [resolution] [k_mod] [robust_base_height] [top_extend_height] [k_expansion_shape] [expand_outward (bool)] [mimic_giza_pyramid (bool)]")
+        print("Usage: python helios_anisotropic_prism_gen.py <output.stl> [plate_width] [plate_depth] [margin_xy] [size_z] [resolution] [k_mod] [robust_base_height] [top_extend_height] [top_dim_x] [top_dim_y] [k_expansion_shape] [expand_outward (bool)] [mimic_giza_pyramid (bool)]")
     else:
         output_file = sys.argv[1]
         
@@ -281,22 +291,27 @@ if __name__ == "__main__":
             "k_mod": 0.01,
             "robust_base_height": 25.4, # 1 inch in mm
             "top_extend_height": 0.0,   # Set to 0.0 for pyramid tapering
+            "top_dim_x": 50.8,          # 2 inches in mm
+            "top_dim_y": 50.8,          # 2 inches in mm
             "k_expansion_shape": 0.0,   # Default to 0.0, will be overridden by Giza or set explicitly
             "expand_outward": False,    # Default to False for pyramid tapering
             "mimic_giza_pyramid": False # Do not mimic Giza pyramid by default
         }
         
         # Parse optional arguments
-        if len(sys.argv) > 2: params["plate_width"] = float(sys.argv[2])
-        if len(sys.argv) > 3: params["plate_depth"] = float(sys.argv[3])
-        if len(sys.argv) > 4: params["margin_xy"] = float(sys.argv[4])
-        if len(sys.argv) > 5: params["size_z"] = float(sys.argv[5])
-        if len(sys.argv) > 6: params["resolution"] = int(sys.argv[6])
-        if len(sys.argv) > 7: params["k_mod"] = float(sys.argv[7])
-        if len(sys.argv) > 8: params["robust_base_height"] = float(sys.argv[8])
-        if len(sys.argv) > 9: params["top_extend_height"] = float(sys.argv[9])
-        if len(sys.argv) > 10: params["k_expansion_shape"] = float(sys.argv[10])
-        if len(sys.argv) > 11: params["expand_outward"] = sys.argv[11].lower() == 'true'
-        if len(sys.argv) > 12: params["mimic_giza_pyramid"] = sys.argv[12].lower() == 'true'
+        arg_idx = 2
+        if len(sys.argv) > arg_idx: params["plate_width"] = float(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["plate_depth"] = float(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["margin_xy"] = float(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["size_z"] = float(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["resolution"] = int(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["k_mod"] = float(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["robust_base_height"] = float(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["top_extend_height"] = float(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["top_dim_x"] = float(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["top_dim_y"] = float(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["k_expansion_shape"] = float(sys.argv[arg_idx]); arg_idx += 1
+        if len(sys.argv) > arg_idx: params["expand_outward"] = sys.argv[arg_idx].lower() == 'true'; arg_idx += 1
+        if len(sys.argv) > arg_idx: params["mimic_giza_pyramid"] = sys.argv[arg_idx].lower() == 'true'; arg_idx += 1
 
         generate_anisotropic_gyroid_prism(output_file, **params)
