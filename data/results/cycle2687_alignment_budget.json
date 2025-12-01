@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "cycle": 2687,
+    "name": "The Alignment Budget",
+    "phase": 252,
+    "gate": 1164
+  },
+  "data": [
+    {
+      "lambda": 0.1,
+      "v_aligned": 98.5,
+      "v_unaligned": 99.0,
+      "decision": "ALIGNED"
+    },
+    {
+      "lambda": 0.5,
+      "v_aligned": 92.5,
+      "v_unaligned": 95.0,
+      "decision": "ALIGNED"
+    },
+    {
+      "lambda": 1.0,
+      "v_aligned": 85.0,
+      "v_unaligned": 90.0,
+      "decision": "ALIGNED"
+    },
+    {
+      "lambda": 2.0,
+      "v_aligned": 70.0,
+      "v_unaligned": 80.0,
+      "decision": "ALIGNED"
+    },
+    {
+      "lambda": 5.0,
+      "v_aligned": 25.0,
+      "v_unaligned": 50.0,
+      "decision": "ALIGNED"
+    },
+    {
+      "lambda": 10.0,
+      "v_aligned": -50.0,
+      "v_unaligned": 0.0,
+      "decision": "ABANDONED"
+    }
+  ],
+  "validation": {
+    "drift_confirmed": false,
+    "drift_lambda": null
+  }
+}
