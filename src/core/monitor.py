@@ -10,6 +10,10 @@ class BCPMonitor:
         self.fitness_history.append(gen_data["value"])
         self.generation_data.append(gen_data)
 
+    @property
+    def total_generations(self):
+        return len(self.fitness_history)
+
     def get_stats(self, num_generations=5):
         if not self.fitness_history:
             return {

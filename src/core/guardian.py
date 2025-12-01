@@ -7,10 +7,14 @@ import random
 import subprocess
 import statistics
 
-# Ensure valid import path for internal modules
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from src.core.monitor import BCPMonitor
-# from src.core.agent import BCPAgent # Not directly imported here, but by generated code
+# Ensure valid import path for internal modules. This allows dynamic loading
+# when generated experiment code runs.
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..')) # Add root for bootstrap
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))      # Add src for core
+sys.path.append(os.path.join(os.path.dirname(__file__)))           # Add core
+
+from monitor import BCPMonitor
+# from agent import BCPAgent # Not directly imported here, but by generated code
 
 class BCPGuardian:
     def __init__(self, start_generation=1, max_generations=10):
@@ -136,9 +140,9 @@ if __name__ == "__main__":
                 elif fitness_data["survived"]:
                     print(f"Gen {self.current_generation} SURVIVED. Refining parameters.")
                     self.last_params = {
-                        "budget_range": [max(10.0, fitness_data["budget"] * 0.8), min(1000.0, fitness_data["budget"] * 1.2)],
-                        "gain_range": [max(50.0, fitness_data["gain"] * 0.9), min(200.0, fitness_data["gain"] * 1.1)],
-                        "cost_range": [max(5.0, fitness_data["cost"] * 0.9), min(50.0, fitness_data["cost"] * 1.1)],
+                        "budget_range": [max(10.0, fitness_data["budget"] * 0.8), min(10000.0, fitness_data["budget"] * 1.2)], 
+                        "gain_range": [max(10.0, fitness_data["gain"] * 0.9), min(1000.0, fitness_data["gain"] * 1.1)], 
+                        "cost_range": [max(1.0, fitness_data["cost"] * 0.9), min(100.0, fitness_data["cost"] * 1.1)], 
                         "k": fitness_data["params_used"].get("k", 1.0),
                         "epsilon": fitness_data["params_used"].get("epsilon", 0.1)
                     }
@@ -156,6 +160,3 @@ if __name__ == "__main__":
             # Guardian Report
             if self.current_generation % 5 == 0: # Report every 5 generations
                 print(self.monitor.report_status(5))
-
-# Simplified for direct execution in bootstrap.py
-# This will be injected directly into bootstrap_bcp.py's run_infinite_loop

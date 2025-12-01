@@ -19,7 +19,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'src', 'core'))
 # from src.core.monitor import BCPMonitor
 
 # THE BCP SEED (BOOTSTRAPPER)
-# Cycle: 2725
+# Cycle: 2729 (Fixing Syntax)
 # Phase: 260 (The Guardian)
 # Function: Orchestrates the BCP Research System's Continuous Evolution and Monitoring.
 
@@ -93,8 +93,8 @@ class BCPAgent:
         return False
 """
 
-# Injected Guardian and Monitor content
-MONITOR_MODULE_CONTENT = """import math
+# Using single triple-quotes to avoid conflict with double triple-quotes inside
+MONITOR_MODULE_CONTENT = r'''import math
 import statistics
 
 class BCPMonitor:
@@ -150,9 +150,9 @@ Active Parameter Ranges:
 --------------------------------------------------
 """
         return report
-"""
+'''
 
-GUARDIAN_MODULE_CONTENT = """import os
+GUARDIAN_MODULE_CONTENT = r'''import os
 import sys
 import json
 import time
@@ -280,7 +280,7 @@ if __name__ == "__main__":
                 if self.monitor.total_generations >= 3:
                     if self.monitor.get_stats()["stagnation_variance"] < 5.0:
                         stagnant = True
-                        print(f"⚠️ Stagnation Detected (Variance {{self.monitor.get_stats()["stagnation_variance"]:.2f}}). Triggering CAMBRIAN EXPLOSION.")
+                        print(f"⚠️ Stagnation Detected (Variance {self.monitor.get_stats()['stagnation_variance']:.2f}). Triggering CAMBRIAN EXPLOSION.")
                 
                 # 5. Update Parameters
                 if stagnant:
@@ -294,9 +294,9 @@ if __name__ == "__main__":
                 elif fitness_data["survived"]:
                     print(f"Gen {self.current_generation} SURVIVED. Refining parameters.")
                     self.last_params = {
-                        "budget_range": [max(10.0, fitness_data["budget"] * 0.8), min(10000.0, fitness_data["budget"] * 1.2)], # Adjusted max range
-                        "gain_range": [max(10.0, fitness_data["gain"] * 0.9), min(1000.0, fitness_data["gain"] * 1.1)], # Adjusted max range
-                        "cost_range": [max(1.0, fitness_data["cost"] * 0.9), min(100.0, fitness_data["cost"] * 1.1)], # Adjusted max range
+                        "budget_range": [max(10.0, fitness_data["budget"] * 0.8), min(10000.0, fitness_data["budget"] * 1.2)], 
+                        "gain_range": [max(10.0, fitness_data["gain"] * 0.9), min(1000.0, fitness_data["gain"] * 1.1)], 
+                        "cost_range": [max(1.0, fitness_data["cost"] * 0.9), min(100.0, fitness_data["cost"] * 1.1)], 
                         "k": fitness_data["params_used"].get("k", 1.0),
                         "epsilon": fitness_data["params_used"].get("epsilon", 0.1)
                     }
@@ -314,9 +314,47 @@ if __name__ == "__main__":
             # Guardian Report
             if self.current_generation % 5 == 0: # Report every 5 generations
                 print(self.monitor.report_status(5))
-"""
+'''
+
+def scaffold_structure():
+    dirs = [
+        "src/core",
+        "experiments",
+        "data/results",
+        "docs",
+        "archive"
+    ]
+    
+    print("🌱 BCP SEED ACTIVATED (INFINITE LOOP MODE).")
+    print("----------------------")
+    
+    for d in dirs:
+        if not os.path.exists(d):
+            os.makedirs(d)
+            print(f"Created directory: {d}")
+        else:
+            print(f"Verified directory: {d}")
+            
+    # Write DNA
+    write_file("THE_BCP_MANIFESTO.md", MANIFESTO_CONTENT)
+    write_file("src/core/agent.py", CORE_AGENT_PY)
+    write_file("src/core/__init__.py", "")
+    write_file("src/core/guardian.py", GUARDIAN_MODULE_CONTENT) # Write Guardian module
+    write_file("src/core/monitor.py", MONITOR_MODULE_CONTENT)   # Write Monitor module
+    
+    print("----------------------")
+    print("✅ Scaffold Complete. Initializing Guardian.")
+
+def write_file(path, content):
+    with open(path, 'w') as f:
+        f.write(content.strip())
 
 if __name__ == "__main__":
     scaffold_structure()
-    guardian = BCPGuardian(start_generation=11, max_generations=20) # Continue from where we left off
-    guardian.run_infinite_loop()
+    # Start from Gen 11, run until 20
+    try:
+        from src.core.guardian import BCPGuardian
+        guardian = BCPGuardian(start_generation=11, max_generations=20)
+        guardian.run_infinite_loop()
+    except ImportError:
+        print("⚠️ Guardian module not yet loadable (fresh scaffold). Run script again to activate.")
