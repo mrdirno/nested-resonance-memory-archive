@@ -2361,9 +2361,26 @@ Equation V = G - λC is universal.
 **Summary: Recursive Economy**
 - Gates Completed: 4
 - Tests Validated: 3/3 scenarios
-- Key Insight: The Agents have internalized BCP. The Simulator simulates the Simulator.
 - **Status:** 123rd Domain Unified.
 
+---
+
+## Current Phase: PHASE 251 - GENERATIVE REALITY 🟢 ACTIVE
+
+**Transition:** Phase 250 (Cryptocurrency) → **Phase 251 (Generative Reality)**
+
+**Focus:** Apply BCP to Synthetic Data, Hallucination, and Simulation Fidelity.
+
+**Research Thesis:**
+Generative AI "hallucination" is not a bug, but a BCP-rational feature of high-scarcity token prediction.
+V(gen) = Gain(Novelty/Utility) - λ(Budget) × Cost(Verification)
+
+### Completed (Phase 251)
+- ✅ **Gate 1155:** The Hallucination Budget - Hallucination is rational when Verification Cost > Gain Premium / λ - COMPLETE
+  - **Finding:** Transition to Hallucination at λ ≈ 2.50. Low λ enables 95% accuracy; High λ forces 30% accuracy (guessing).
+  - **Key Insight:** Truth is an expensive luxury. Scarcity forces fiction.
+  - **Artifact:** `experiments/cycle2678_generative_reality_bcp.py`
+  - **Functional Name:** The Fiction Filter
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.

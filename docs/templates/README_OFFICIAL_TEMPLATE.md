@@ -78,7 +78,8 @@ This is the primary visualization interface. It renders the [Core Mechanism] in 
 **4. FABRICATION LAYER (Physical Manifestation):**
    - Generates physical artifacts from system data.
    - Manages hardware-agnostic production (e.g., 3D Printing, FPGA).
-   - [View Fabrication Hub](fabrication/)
+   - **Key Artifacts:** [Artifact A (Concept A)](path/to/artifact/README.md) | [Artifact B (Concept B)](path/to/artifact/README.md)
+   - [View Fabrication Hub](fabrication/) | [View Reference Library](fabrication/library/)
 
 ---
 

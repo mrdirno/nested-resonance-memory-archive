@@ -34,3 +34,9 @@ sphinx-rtd-theme==3.0.2
 flask==3.0.0
 flask-socketio==5.3.6
 eventlet==0.35.1
+
+# Automation (Pulse Tools)
+pyautogui==0.9.54
+pyperclip==1.11.0
+pywinctl==0.4.1
+# pyobjc-framework-Quartz==10.0  # macOS specific (handled by pip, usually pre-installed or via extras)
