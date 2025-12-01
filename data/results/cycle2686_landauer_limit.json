@@ -1,0 +1,464 @@
+{
+  "meta": {
+    "cycle": 2686,
+    "name": "The Landauer Limit",
+    "phase": 252,
+    "gate": 1163
+  },
+  "trace": [
+    {
+      "time": 0,
+      "temp": 60.0,
+      "headroom": 80.0,
+      "lambda": 0.1235,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 1,
+      "temp": 100.0,
+      "headroom": 40.0,
+      "lambda": 0.2439,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 2,
+      "temp": 90.0,
+      "headroom": 0.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 3,
+      "temp": 130.0,
+      "headroom": 10.0,
+      "lambda": 0.9091,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 4,
+      "temp": 120.0,
+      "headroom": -30.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 5,
+      "temp": 110.0,
+      "headroom": -20.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 6,
+      "temp": 100.0,
+      "headroom": -10.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 7,
+      "temp": 90.0,
+      "headroom": 0.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 8,
+      "temp": 130.0,
+      "headroom": 10.0,
+      "lambda": 0.9091,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 9,
+      "temp": 120.0,
+      "headroom": -30.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 10,
+      "temp": 110.0,
+      "headroom": -20.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 11,
+      "temp": 100.0,
+      "headroom": -10.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 12,
+      "temp": 90.0,
+      "headroom": 0.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 13,
+      "temp": 130.0,
+      "headroom": 10.0,
+      "lambda": 0.9091,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 14,
+      "temp": 120.0,
+      "headroom": -30.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 15,
+      "temp": 110.0,
+      "headroom": -20.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 16,
+      "temp": 100.0,
+      "headroom": -10.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 17,
+      "temp": 90.0,
+      "headroom": 0.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 18,
+      "temp": 130.0,
+      "headroom": 10.0,
+      "lambda": 0.9091,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 19,
+      "temp": 120.0,
+      "headroom": -30.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 20,
+      "temp": 110.0,
+      "headroom": -20.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 21,
+      "temp": 100.0,
+      "headroom": -10.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 22,
+      "temp": 90.0,
+      "headroom": 0.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 23,
+      "temp": 130.0,
+      "headroom": 10.0,
+      "lambda": 0.9091,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 24,
+      "temp": 120.0,
+      "headroom": -30.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 25,
+      "temp": 110.0,
+      "headroom": -20.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 26,
+      "temp": 100.0,
+      "headroom": -10.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 27,
+      "temp": 90.0,
+      "headroom": 0.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 28,
+      "temp": 130.0,
+      "headroom": 10.0,
+      "lambda": 0.9091,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 29,
+      "temp": 120.0,
+      "headroom": -30.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 30,
+      "temp": 110.0,
+      "headroom": -20.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 31,
+      "temp": 100.0,
+      "headroom": -10.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 32,
+      "temp": 90.0,
+      "headroom": 0.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 33,
+      "temp": 130.0,
+      "headroom": 10.0,
+      "lambda": 0.9091,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 34,
+      "temp": 120.0,
+      "headroom": -30.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 35,
+      "temp": 110.0,
+      "headroom": -20.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 36,
+      "temp": 100.0,
+      "headroom": -10.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 37,
+      "temp": 90.0,
+      "headroom": 0.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 38,
+      "temp": 130.0,
+      "headroom": 10.0,
+      "lambda": 0.9091,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 39,
+      "temp": 120.0,
+      "headroom": -30.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 40,
+      "temp": 110.0,
+      "headroom": -20.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 41,
+      "temp": 100.0,
+      "headroom": -10.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 42,
+      "temp": 90.0,
+      "headroom": 0.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 43,
+      "temp": 130.0,
+      "headroom": 10.0,
+      "lambda": 0.9091,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 44,
+      "temp": 120.0,
+      "headroom": -30.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 45,
+      "temp": 110.0,
+      "headroom": -20.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 46,
+      "temp": 100.0,
+      "headroom": -10.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 47,
+      "temp": 90.0,
+      "headroom": 0.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 48,
+      "temp": 130.0,
+      "headroom": 10.0,
+      "lambda": 0.9091,
+      "ops": 10,
+      "heat_in": 50.0,
+      "cooling": 10.0
+    },
+    {
+      "time": 49,
+      "temp": 120.0,
+      "headroom": -30.0,
+      "lambda": 1000.0,
+      "ops": 0,
+      "heat_in": 0.0,
+      "cooling": 10.0
+    }
+  ],
+  "validation": {
+    "success": false,
+    "melted": true
+  }
+}
