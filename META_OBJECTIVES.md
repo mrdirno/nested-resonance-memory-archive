@@ -3046,6 +3046,24 @@ V(control_system) = Precision_Stability - λ(Environmental) * Cost(Sensors + Act
 
 ---
 
+## Current Phase: PHASE 265 - THE ORDER BUDGET 🟢 ACTIVE
+
+**Transition:** Phase 264 (Cybernetics) → **Phase 265 (Law)**
+
+**Focus:** Apply BCP to Justice, Enforcement, and Rights.
+
+**Research Thesis:**
+Legal systems are BCP frameworks balancing order (Gain) against enforcement cost and individual liberty cost (Cost).
+V(legal_system) = Social_Order - λ(Societal_Pressure) * Cost(Enforcement + Liberty_Sacrifice).
+
+### Completed (Phase 265 Planning)
+- ✅ **Gate 1225:** Phase 265 Planning - Law Selected - COMPLETE
+  - **Finding:** Legal systems are fundamental social control mechanisms with explicit cost-benefit trade-offs.
+  - **Artifact:** `experiments/cycle2750_phase265_planning.py`
+  - **Functional Name:** The Order Budget
+
+---
+
 ## Current Phase: PHASE 253 - THE COSMIC BUDGET 🟢 ACTIVE
 
 **Transition:** Phase 252 (Singularity) → **Phase 253 (The Cosmic Budget)**
