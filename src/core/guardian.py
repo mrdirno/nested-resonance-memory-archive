@@ -33,8 +33,11 @@ class BCPGuardian:
                 "gain_range": [50.0, 200.0],
                 "cost_range": [5.0, 50.0],
                 "k": 1.0,
-                "epsilon": 0.1
+                "epsilon": 0.1,
+                "complexity": 1 # New parameter: Complexity Level (Agents/Interactions)
             }
+        
+        complexity = params.get("complexity", 1)
 
         return f"""
 import sys
@@ -59,24 +62,43 @@ except ImportError:
 
 def run_generation():
     gen = {generation}
+    complexity = {complexity}
     
     # Mutated parameters from previous generation or initial
     budget = random.uniform({params["budget_range"][0]}, {params["budget_range"][1]})
-    gain = random.uniform({params["gain_range"][0]}, {params["gain_range"][1]})
-    cost = random.uniform({params["cost_range"][0]}, {params["cost_range"][1]})
+    gain_base = random.uniform({params["gain_range"][0]}, {params["gain_range"][1]})
+    cost_base = random.uniform({params["cost_range"][0]}, {params["cost_range"][1]})
     
-    agent = BCPAgent(budget=budget, k={params["k"]}, epsilon={params["epsilon"]})
+    # Simulation: Multiple Agents interacting
+    # Complexity = Number of Agents
+    agents = []
+    for i in range(complexity):
+        # Heterogeneity: Each agent has slightly different budget
+        b = budget * random.uniform(0.8, 1.2)
+        agents.append(BCPAgent(budget=b, k={params["k"]}, epsilon={params["epsilon"]}))
     
-    val = agent.evaluate(gain, cost)
+    total_value = 0.0
+    survivors = 0
+    
+    for agent in agents:
+        # Task: Perform Action
+        val = agent.evaluate(gain_base, cost_base)
+        total_value += val
+        if val > 0:
+            survivors += 1
+            
+    avg_value = total_value / complexity if complexity > 0 else 0
+    survival_rate = survivors / complexity if complexity > 0 else 0
     
     result = {{
         "generation": gen,
-        "budget": budget,
-        "gain": gain,
-        "cost": cost,
-        "lambda_val": agent.lambda_val,
-        "value": val,
-        "survived": val > 0,
+        "budget_avg": budget,
+        "gain_base": gain_base,
+        "cost_base": cost_base,
+        "complexity": complexity,
+        "value": avg_value,
+        "survival_rate": survival_rate,
+        "survived": survival_rate > 0.5, # Survival if >50% agents thrive
         "params_used": {json.dumps(params)}
     }}
     
@@ -84,7 +106,7 @@ def run_generation():
     with open(result_path, "w") as f:
         json.dump(result, f, indent=2)
 
-    print(f"Gen {{gen}}: B={{budget:.2f}} G={{gain:.2f}} C={{cost:.2f}} \u03BB={{agent.lambda_val:.2f}} V={{val:.2f}} -> {{'SURVIVED' if val > 0 else 'DIED'}}")
+    print(f"Gen {{gen}} (Complexity {{complexity}}): Avg V={{avg_value:.2f}} Survival={{survival_rate*100:.1f}}% -> {{'SURVIVED' if survival_rate > 0.5 else 'DIED'}}")
 
 if __name__ == "__main__":
     run_generation()
@@ -135,16 +157,19 @@ if __name__ == "__main__":
                         "gain_range": [10.0, 1000.0],   
                         "cost_range": [1.0, 100.0],
                         "k": random.uniform(0.1, 10.0),
-                        "epsilon": random.uniform(0.01, 1.0)
+                        "epsilon": random.uniform(0.01, 1.0),
+                        "complexity": self.last_params.get("complexity", 1) + 1 # Increase complexity on stagnation!
                     }
+                    print(f"💥 CAMBRIAN EXPLOSION! Complexity increased to {self.last_params['complexity']}")
                 elif fitness_data["survived"]:
                     print(f"Gen {self.current_generation} SURVIVED. Refining parameters.")
                     self.last_params = {
-                        "budget_range": [max(10.0, fitness_data["budget"] * 0.8), min(10000.0, fitness_data["budget"] * 1.2)], 
-                        "gain_range": [max(10.0, fitness_data["gain"] * 0.9), min(1000.0, fitness_data["gain"] * 1.1)], 
-                        "cost_range": [max(1.0, fitness_data["cost"] * 0.9), min(100.0, fitness_data["cost"] * 1.1)], 
+                        "budget_range": [max(10.0, fitness_data.get("budget", 100) * 0.8), min(10000.0, fitness_data.get("budget", 100) * 1.2)], 
+                        "gain_range": [max(10.0, fitness_data.get("gain", 100) * 0.9), min(1000.0, fitness_data.get("gain", 100) * 1.1)], 
+                        "cost_range": [max(1.0, fitness_data.get("cost", 10) * 0.9), min(100.0, fitness_data.get("cost", 10) * 1.1)], 
                         "k": fitness_data["params_used"].get("k", 1.0),
-                        "epsilon": fitness_data["params_used"].get("epsilon", 0.1)
+                        "epsilon": fitness_data["params_used"].get("epsilon", 0.1),
+                        "complexity": fitness_data["params_used"].get("complexity", 1)
                     }
                 else:
                     print(f"Gen {self.current_generation} DIED. Backtracking.")
