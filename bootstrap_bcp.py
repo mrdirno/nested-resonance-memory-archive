@@ -376,10 +376,10 @@ def write_file(path, content):
 
 if __name__ == "__main__":
     scaffold_structure()
-    # Start from Gen 111, run until 120 (Push for Complexity 3)
+    # Start from Gen 121, run until 130 (Push for Complexity 3)
     try:
         from src.core.guardian import BCPGuardian
-        guardian = BCPGuardian(start_generation=111, max_generations=120)
+        guardian = BCPGuardian(start_generation=121, max_generations=130)
         guardian.run_infinite_loop()
     except ImportError:
         print("⚠️ Guardian module not yet loadable (fresh scaffold). Run script again to activate.")
