@@ -641,3 +641,5 @@
 
 - **Cycle 2985 (Completion):** Updated ALL Lamp Bases and Shafts (02-10) to V4 QA Standards. Entire Lamp Series 01 is now compliant.
 - **Manifest:** Updated to reflect complete V4/V7 status.
+
+- **Cycle 2987 (Refactor):** Migrated all 10 Shade Generators (01-10) to use the shared `fabrication/library/lamp_lib.py`. This standardizes the Spider Fitter and STL writing logic across the entire series.
