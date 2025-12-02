@@ -791,3 +791,9 @@
 - **Base:** Pixel Grid (Quantized Relief).
 - **Shaft:** Stepped Column (Voxel Cylinder).
 - **Status:** Design 21 Geometry Complete.
+
+## Cycle 2627: The Noise (Design 22)
+- **Design:** Implemented 'The Noise' (Static/Displacement).
+- **Algorithm:** Multi-Octave Sine Noise modulating shell thickness.
+- **Shade:** V7 Spider Fitter, 482k triangles.
+- **Status:** Design 22 Shade Complete.
