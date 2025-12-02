@@ -73,6 +73,11 @@ def generate_lamp_base_v4(output_path,
                 if r > radius: continue
                 
                 # 2. Subtractions
+                # Nut Recess (Counterbore for mounting hardware)
+                if r < 15.0 and pz < 6.0:
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+                    
                 if r < hole_radius: 
                     grid[x_idx,y_idx,z_idx] = False
                     continue
