@@ -680,3 +680,9 @@
 - **Base:** Mycelium Network (Vein Relief).
 - **Shaft:** Lightning Bolt (Jagged Random Walk).
 - **Status:** Design 13 Geometry Complete.
+
+## Cycle 2607: The Swarm (Design 14)
+- **Design:** Implemented 'The Swarm' (Boids/Flow Field).
+- **Algorithm:** Warped Coordinate Sine Waves (sin(x + A*sin(y))).
+- **Shade:** V7 Spider Fitter, 455k triangles.
+- **Status:** Design 14 Shade Complete.
