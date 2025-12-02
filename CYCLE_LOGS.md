@@ -819,3 +819,8 @@
 - **Algorithm:** Radial Expansion + Gyroid Cutout + Debris.
 - **Shade:** V7 Spider Fitter, 386k triangles.
 - **Status:** Design 24 Shade Complete.
+
+## Cycle 2632: The Crash (Design 24) Complete
+- **Base:** Debris Field (Voronoi Shards).
+- **Shaft:** Splintered Column (Twisted Angular Gaps).
+- **Status:** Design 24 Geometry Complete.
