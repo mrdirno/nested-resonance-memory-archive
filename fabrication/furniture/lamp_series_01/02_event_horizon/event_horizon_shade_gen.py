@@ -4,14 +4,14 @@ import sys
 import struct
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE) - V7 FIX (CONNECTION GUARANTEE)
+# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE) - THE VOID REVISION
 # -----------------------------------------------------------------------------
 # Logic: 
 # 1. 1-Inch Thick Wall (Robustness).
 # 2. 200mm Diameter (Max Print Area).
 # 3. Connection Guarantee: Flattened Top Shell to ensure Spokes connect to something.
-# 4. Refined Hub: 25mm Diameter (Tighter).
-# 5. Refined Bottom Rim: 2mm Thick (Thinner).
+# 4. Refined Hub: 40mm Diameter (Spider Fitter).
+# 5. Refined Bottom Rim: 4mm Thick.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -40,17 +40,17 @@ def write_binary_stl(filename, vertices, faces):
             f.write(data)
             f.write(struct.pack('<H', 0))
 
-def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=12.5):
+def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=14.0):
     print(f"Generating EVENT HORIZON SHADE (V7 CONNECTION FIX): {output_path}")
     
-    # Mount Parameters (Refined)
-    mount_hole_radius = hole_diameter / 2.0 # 6.25mm
-    hub_radius = 13.0 # 26mm Dia Solid Disk (User requested tighter)
-    spoke_width = 6.0 
-    top_plate_height = 5.0 # Height of the Spider Fitter
+    # Mount Parameters (Spider Fitter)
+    mount_hole_radius = hole_diameter / 2.0 
+    hub_radius = 20.0 # 40mm Dia
+    spoke_width = 8.0 
+    top_plate_height = 4.0
     
     # Bottom Rim (Refined)
-    bottom_rim_height = 2.0 # Thinner
+    bottom_rim_height = 4.0 
     
     # Shell Parameters
     wall_thickness = 25.4 # 1 Inch
@@ -97,8 +97,6 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 
                 # Calculate Spherical Distance
                 # CONNECTION GUARANTEE: Flatten the top of the sphere mathematically
-                # If we are in the top 10mm, treat Z as if it's 10mm lower for the sphere calculation.
-                # This effectively "extrudes" the sphere profile at Z=130 up to 140.
                 effective_z = z_mm
                 if z_mm > (height - 10.0):
                     effective_z = height - 10.0
@@ -106,15 +104,25 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
-                if z_mm > (height - 4.0):
-                    # Central Hole (12.5mm dia)
-                    if dist_from_center_xy < (12.5 / 2.0):
+                # --- PRIORITY 1: SPIDER FITTER (Top 4mm) ---
+                if z_mm > (height - top_plate_height):
+                    # 1.1 Hole
+                    if dist_from_center_xy < mount_hole_radius:
                         grid[x_idx,y_idx,z_idx] = False
-                    else:
-                        # Solid Cap connecting to shell
-                        if dist_from_center_xy < radius:
-                             grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    
+                    # 1.2 Hub
+                    if dist_from_center_xy < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    # 1.3 Spokes
+                    in_spoke = (abs(x_mm) < (spoke_width/2.0)) or (abs(y_mm) < (spoke_width/2.0))
+                    if in_spoke and dist_from_center_xy < radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+                         
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
 
                 # --- PRIORITY 2: SHELL & PATTERN ---

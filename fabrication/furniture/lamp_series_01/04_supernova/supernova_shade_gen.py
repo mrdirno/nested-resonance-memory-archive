@@ -5,12 +5,12 @@ import struct
 import random
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE SUPERNOVA (SHADE)
+# HELIOS LAMP SERIES 01: THE SUPERNOVA (SHADE) - THE VOID REVISION
 # -----------------------------------------------------------------------------
 # Logic: 
 # 1. Concept: Explosive Expansion (Nebula).
 # 2. Math: Interference Noise (Superposition of random sine waves).
-# 3. Standard: 1-Inch Wall, Spider Fitter V7, Hand Access.
+# 3. Standard: 1-Inch Wall, SPIDER FITTER (Hub + Spokes), Hand Access.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -38,15 +38,15 @@ def write_binary_stl(filename, vertices, faces):
             f.write(data)
             f.write(struct.pack('<H', 0))
 
-def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=12.5):
+def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=14.0):
     print(f"Generating SUPERNOVA SHADE (CHAOS LATTICE): {output_path}")
     
-    # Mount Parameters (Standard V7)
+    # Mount Parameters (Spider Fitter)
     mount_hole_radius = hole_diameter / 2.0 
-    hub_radius = 13.0 
-    spoke_width = 6.0 
-    top_plate_height = 5.0 
-    bottom_rim_height = 2.0 
+    hub_radius = 20.0 # 40mm Hub
+    spoke_width = 8.0 
+    top_plate_height = 4.0 
+    bottom_rim_height = 4.0 
     
     # Shell Parameters
     wall_thickness = 25.4 # 1 Inch
@@ -67,25 +67,18 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
     # Interference Noise Setup
-    # We sum N sine waves with random directions and phases
     num_waves = 7
     waves = []
-    # Seed for reproducibility
     random.seed(42)
-    
-    base_freq = 2.0 * math.pi / 40.0 # ~40mm feature size
+    base_freq = 2.0 * math.pi / 40.0 
     
     for i in range(num_waves):
-        # Random direction vector
         theta = random.uniform(0, 2*math.pi)
         phi = random.uniform(0, math.pi)
         dx = math.sin(phi) * math.cos(theta)
         dy = math.sin(phi) * math.sin(theta)
         dz = math.cos(phi)
-        
-        # Vary frequency slightly (0.8x to 1.2x)
         freq = base_freq * random.uniform(0.8, 1.2)
-        
         phase = random.uniform(0, 2*math.pi)
         waves.append((dx, dy, dz, freq, phase))
     
@@ -105,26 +98,42 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 
                 dist_from_center_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # Effective Z for Connection Guarantee
                 effective_z = z_mm
                 if z_mm > (height - 10.0):
                     effective_z = height - 10.0
                 
+                # Calculate dist_spherical HERE
                 dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
-                if z_mm > (height - 4.0):
-                    # Central Hole (12.5mm dia)
-                    if dist_from_center_xy < (12.5 / 2.0):
+                # --- PRIORITY 1: SPIDER FITTER (Top 4mm) ---
+                if z_mm > (height - top_plate_height):
+                    # 1.1 Hole
+                    if dist_from_center_xy < mount_hole_radius:
                         grid[x_idx,y_idx,z_idx] = False
-                    else:
-                        # Solid Cap connecting to shell
-                        if dist_from_center_xy < radius:
-                             grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    
+                    # 1.2 Hub
+                    if dist_from_center_xy < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    # 1.3 Spokes
+                    in_spoke = (abs(x_mm) < (spoke_width/2.0)) or (abs(y_mm) < (spoke_width/2.0))
+                    if in_spoke and dist_from_center_xy < radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+                         
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
 
-                # --- PRIORITY 2: SHELL & CHAOS PATTERN ---
+                # --- PRIORITY 2: BOTTOM RIM ---
+                if z_mm < bottom_rim_height:
+                    if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+
+                # --- PRIORITY 3: SHELL & CHAOS PATTERN ---
                 is_solid = False
                 in_outer_shell = dist_spherical <= radius
                 in_inner_void = dist_spherical < (radius - wall_thickness)
@@ -132,29 +141,16 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                    # FORCE SOLID RIM at Top
-                    if z_mm > (height - top_plate_height):
+                    # Sum Sine Waves
+                    val = 0.0
+                    for w in waves:
+                        dx, dy, dz, freq, phase = w
+                        proj = x_mm*dx + y_mm*dy + z_mm*dz
+                        val += math.sin(proj * freq + phase)
+                    
+                    if abs(val) < 1.2: 
                         is_solid = True
-                    else:
-                        # Sum Sine Waves
-                        val = 0.0
-                        for w in waves:
-                            dx, dy, dz, freq, phase = w
-                            # Dot product position with direction
-                            proj = x_mm*dx + y_mm*dy + z_mm*dz
-                            val += math.sin(proj * freq + phase)
                         
-                        # Normalize (approx range -N to N)
-                        # Threshold near 0 for "sponge"
-                        # Interference noise creates connected structures near 0
-                        if abs(val) < 1.2: 
-                            is_solid = True
-                        
-                # --- PRIORITY 3: BOTTOM RIM ---
-                if z_mm < bottom_rim_height:
-                    if dist_from_center_xy < radius and not in_hand_void:
-                         is_solid = True
-                         
                 grid[x_idx,y_idx,z_idx] = is_solid
 
     print("Extracting Mesh...")
@@ -173,7 +169,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 if not grid[x,y,z]: continue
                 s2 = step/2
                 if x==res_x-1 or not grid[x+1,y,z]: add_quad((x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
-                if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
+                if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if y==res_y-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
                 if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))

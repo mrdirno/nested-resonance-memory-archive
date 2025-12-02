@@ -8,7 +8,7 @@ import struct
 # -----------------------------------------------------------------------------
 # Logic: Anisotropic Gyroid Frustum (Square Pyramid)
 # Dims: 194mm Base -> 60mm Top -> 224mm Height
-# Mount: Spider Fitter (12.5mm Hole for Washer/Finial)
+# Mount: SPIDER FITTER (Hub + Spokes), Hand Access.
 # Wall: 1 Inch Thick (Hollow)
 # -----------------------------------------------------------------------------
 
@@ -38,14 +38,15 @@ def write_binary_stl(filename, vertices, faces):
             f.write(data)
             f.write(struct.pack('<H', 0))
 
-def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, resolution=150, hole_diameter=12.5):
+def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, resolution=150, hole_diameter=14.0):
     print(f"Generating THE VOID SHADE: {output_path}")
     print(f"Dims: {base_width} -> {top_width} x {height}mm")
     
-    # Mount Parameters (Washer Top / Finial Mount)
-    mount_hole_radius = hole_diameter / 2.0
-    hub_radius_outer = 15.0 # 30mm Diameter Hub (Solid Washer Seat)
-    spoke_width = 6.0
+    # Mount Parameters (Spider Fitter)
+    mount_hole_radius = hole_diameter / 2.0 
+    hub_radius = 20.0 # 40mm Hub
+    spoke_width = 8.0 
+    top_plate_height = 4.0
     
     solid_rim_height = 4.0
     wall_thickness = 25.4 # 1 inch
@@ -96,15 +97,25 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
                 
                 dist_from_center = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
-                if z_mm > (height - 4.0):
-                    # Central Hole (12.5mm dia)
-                    if dist_from_center < (12.5 / 2.0):
+                # --- PRIORITY 1: SPIDER FITTER (Top 4mm) ---
+                if z_mm > (height - top_plate_height):
+                    # 1.1 Hole
+                    if dist_from_center < mount_hole_radius:
                         grid[x_idx,y_idx,z_idx] = False
-                    else:
-                        # Solid Cap connecting to shell
-                        if dist_from_center < current_outer_half_width:
-                             grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    
+                    # 1.2 Hub
+                    if dist_from_center < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    # 1.3 Spokes (4-way)
+                    in_spoke = (abs(x_mm) < (spoke_width/2.0)) or (abs(y_mm) < (spoke_width/2.0))
+                    if in_spoke and dist_from_center < current_outer_half_width:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+                    
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
                 
                 # --- PRIORITY 2: BOTTOM RIM (Solid Frame) ---
@@ -168,14 +179,14 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
                 if x==res_xy-1 or not grid[x+1,y,z]: add_quad((x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
                 if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if y==res_xy-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
-                if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
+                if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
-                if z==0 or not grid[x,y,z-1]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2))
+                if z==0 or not grid[x,y,z-1]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
 
     write_binary_stl(output_path, vertices, faces)
     print(f"Saved: {output_path}")
 
 if __name__ == "__main__":
-    output_file = "redshift_shade.stl"
+    output_file = "fabrication/furniture/lamp_series_01/01_redshift/redshift_shade.stl"
     if len(sys.argv) > 1: output_file = sys.argv[1]
     generate_shade(output_file)

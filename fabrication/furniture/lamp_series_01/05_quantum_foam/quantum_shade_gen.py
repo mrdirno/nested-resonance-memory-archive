@@ -4,12 +4,12 @@ import sys
 import struct
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE QUANTUM FOAM (SHADE)
+# HELIOS LAMP SERIES 01: THE QUANTUM FOAM (SHADE) - THE VOID REVISION
 # -----------------------------------------------------------------------------
 # Logic: 
 # 1. Concept: Bubbling Space-Time.
 # 2. Math: Schwarz P Surface (Primitive).
-# 3. Standard: 1-Inch Wall, Spider Fitter V7, Hand Access.
+# 3. Standard: 1-Inch Wall, SPIDER FITTER (Hub + Spokes), Hand Access.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -37,15 +37,15 @@ def write_binary_stl(filename, vertices, faces):
             f.write(data)
             f.write(struct.pack('<H', 0))
 
-def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=12.5):
+def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=14.0):
     print(f"Generating QUANTUM FOAM SHADE (SCHWARZ P): {output_path}")
     
-    # Mount Parameters (Standard V7)
+    # Mount Parameters (Spider Fitter)
     mount_hole_radius = hole_diameter / 2.0 
-    hub_radius = 13.0 
-    spoke_width = 6.0 
-    top_plate_height = 5.0 
-    bottom_rim_height = 2.0 
+    hub_radius = 20.0 # 40mm Hub
+    spoke_width = 8.0 
+    top_plate_height = 4.0 
+    bottom_rim_height = 4.0 
     
     # Shell Parameters
     wall_thickness = 25.4 # 1 Inch
@@ -66,7 +66,6 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
     # Schwarz P Parameters
-    # Scale: 40mm period?
     base_scale = 2.0 * math.pi / 40.0 
     
     print("Calculating Foam Field...")
@@ -93,45 +92,53 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
-                if z_mm > (height - 4.0):
-                    # Central Hole (12.5mm dia)
-                    if dist_from_center_xy < (12.5 / 2.0):
+                # Initialize solid state for this voxel
+                is_solid = False
+                
+                # --- PRIORITY 1: SPIDER FITTER (Top 4mm) ---
+                if z_mm > (height - top_plate_height):
+                    # 1.1 Hole
+                    if dist_from_center_xy < mount_hole_radius:
                         grid[x_idx,y_idx,z_idx] = False
-                    else:
-                        # Solid Cap connecting to shell
-                        if dist_from_center_xy < radius:
-                             grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    
+                    # 1.2 Hub
+                    if dist_from_center_xy < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    # 1.3 Spokes
+                    in_spoke = (abs(x_mm) < (spoke_width/2.0)) or (abs(y_mm) < (spoke_width/2.0))
+                    if in_spoke and dist_from_center_xy < radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+                         
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
 
-                # --- PRIORITY 2: SHELL & FOAM PATTERN ---
-                is_solid = False
+                # --- PRIORITY 2: BOTTOM RIM ---
+                if z_mm < bottom_rim_height:
+                    if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+
+                # --- PRIORITY 3: SHELL & FOAM PATTERN ---
                 in_outer_shell = dist_spherical <= radius
                 in_inner_void = dist_spherical < (radius - wall_thickness)
                 in_hand_void = dist_from_center_xy < hand_access_radius
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                    # FORCE SOLID RIM at Top
-                    if z_mm > (height - top_plate_height):
+                    # Schwarz P Surface
+                    lx = x_mm * base_scale
+                    ly = y_mm * base_scale
+                    lz = z_mm * base_scale
+                     
+                    val = math.cos(lx) + math.cos(ly) + math.cos(lz)
+                    
+                    if abs(val) < 0.35: 
                         is_solid = True
-                    else:
-                        # Schwarz P Surface
-                        lx = x_mm * base_scale
-                        ly = y_mm * base_scale
-                        lz = z_mm * base_scale
-                         
-                        val = math.cos(lx) + math.cos(ly) + math.cos(lz)
                         
-                        # Threshold for foam wall thickness
-                        if abs(val) < 0.35: 
-                            is_solid = True
-                        
-                # --- PRIORITY 3: BOTTOM RIM ---
-                if z_mm < bottom_rim_height:
-                    if dist_from_center_xy < radius and not in_hand_void:
-                         is_solid = True
-                         
                 grid[x_idx,y_idx,z_idx] = is_solid
 
     print("Extracting Mesh...")
@@ -150,7 +157,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 if not grid[x,y,z]: continue
                 s2 = step/2
                 if x==res_x-1 or not grid[x+1,y,z]: add_quad((x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
-                if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
+                if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if y==res_y-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
                 if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))

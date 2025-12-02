@@ -5,12 +5,12 @@ import struct
 import random
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE MULTIVERSE (SHADE)
+# HELIOS LAMP SERIES 01: THE MULTIVERSE (SHADE) - THE VOID REVISION
 # -----------------------------------------------------------------------------
 # Logic: 
 # 1. Concept: Bubble Universes (Sphere Packing).
 # 2. Math: Boolean Union of random spheres on a shell.
-# 3. Standard: 1-Inch Wall, Spider Fitter V7 (SOLID RIM), Hand Access.
+# 3. Standard: 1-Inch Wall, SPIDER FITTER (Hub + Spokes), Hand Access.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -38,15 +38,15 @@ def write_binary_stl(filename, vertices, faces):
             f.write(data)
             f.write(struct.pack('<H', 0))
 
-def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=12.5):
+def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=14.0):
     print(f"Generating MULTIVERSE SHADE (BUBBLE PACKING): {output_path}")
     
-    # Mount Parameters (Standard V7)
+    # Mount Parameters (Spider Fitter)
     mount_hole_radius = hole_diameter / 2.0 
-    hub_radius = 13.0 
-    spoke_width = 6.0 
-    top_plate_height = 5.0 
-    bottom_rim_height = 2.0 
+    hub_radius = 20.0 # 40mm Diameter
+    spoke_width = 8.0 
+    top_plate_height = 4.0 
+    bottom_rim_height = 4.0 
     
     # Shell Parameters
     wall_thickness = 25.4 
@@ -67,11 +67,6 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
     # Bubble Packing
-    # We want spheres centered *on* the shell wall, of varying sizes.
-    # If a point is inside ANY sphere, it's solid.
-    # But we also need to respect the void/shell boundaries?
-    # No, the bubbles *form* the shell.
-    
     bubbles = []
     random.seed(1234)
     
@@ -82,20 +77,13 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     num_bubbles = 500
     
     for _ in range(num_bubbles):
-        # Random point on sphere surface
         theta = random.uniform(0, 2*math.pi)
         phi = random.uniform(0, math.pi)
-        
-        # Radius varies: shell radius +/- some variance
         r_center = radius * random.uniform(0.9, 1.0)
-        
         bx = r_center * math.sin(phi) * math.cos(theta)
         by = r_center * math.sin(phi) * math.sin(theta)
         bz = r_center * math.cos(phi) + sphere_z_center
-        
-        # Bubble size ( Reduced for Scale Constraint )
         b_rad = random.uniform(6.0, 18.0)
-        
         bubbles.append((bx, by, bz, b_rad))
     
     print("Inflating Universes...")
@@ -115,47 +103,51 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 if z_mm > (height - 10.0):
                     effective_z = height - 10.0
                 
-                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
-                if z_mm > (height - 4.0):
-                    # Central Hole (12.5mm dia)
-                    if dist_from_center_xy < (12.5 / 2.0):
+                # --- PRIORITY 1: SPIDER FITTER (Top 4mm) ---
+                if z_mm > (height - top_plate_height):
+                    # 1.1 Hole
+                    if dist_from_center_xy < mount_hole_radius:
                         grid[x_idx,y_idx,z_idx] = False
-                    else:
-                        # Solid Cap connecting to shell
-                        if dist_from_center_xy < radius:
-                             grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    
+                    # 1.2 Hub
+                    if dist_from_center_xy < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    # 1.3 Spokes
+                    in_spoke = (abs(x_mm) < (spoke_width/2.0)) or (abs(y_mm) < (spoke_width/2.0))
+                    if in_spoke and dist_from_center_xy < radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+                         
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
 
-                # --- PRIORITY 2: BUBBLE SHELL ---
+                # --- PRIORITY 2: BOTTOM RIM ---
+                if z_mm < bottom_rim_height:
+                     if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+
+                # --- PRIORITY 3: BUBBLE SHELL ---
                 is_solid = False
                 
                 # Hand access void overrides everything in the center
                 if dist_from_center_xy < hand_access_radius:
                     is_solid = False
                 else:
-                    # FORCE SOLID RIM at Top
-                    if z_mm > (height - top_plate_height):
-                        # Ensure we are within outer radius
-                        if dist_from_center_xy < radius:
-                            is_solid = True
+                     # Optimization: Check distance to shell center first
+                    dist_to_center = math.sqrt(x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2)
+                    if dist_to_center > (radius + 25.0) or dist_to_center < (radius - 50.0):
+                        is_solid = False
                     else:
-                        # Check bubbles
-                        # Optimization: Check distance to shell center first?
-                        dist_to_center = math.sqrt(x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2)
-                        if dist_to_center > (radius + 25.0) or dist_to_center < (radius - 50.0):
-                            is_solid = False # Optimization
-                        else:
-                            for b in bubbles:
-                                bx, by, bz, br = b
-                                d = (x_mm-bx)**2 + (y_mm-by)**2 + (z_mm-bz)**2
-                                if d < (br**2):
-                                    is_solid = True
-                                    break
-                        
-                # --- PRIORITY 3: BOTTOM RIM ---
-                if z_mm < bottom_rim_height:
-                    if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
-                         is_solid = True
+                        for b in bubbles:
+                            bx, by, bz, br = b
+                            d = (x_mm-bx)**2 + (y_mm-by)**2 + (z_mm-bz)**2
+                            if d < (br**2):
+                                is_solid = True
+                                break
                          
                 grid[x_idx,y_idx,z_idx] = is_solid
 

@@ -5,12 +5,12 @@ import struct
 import random
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE TIME CRYSTAL (SHADE)
+# HELIOS LAMP SERIES 01: THE TIME CRYSTAL (SHADE) - THE VOID REVISION
 # -----------------------------------------------------------------------------
 # Logic: 
 # 1. Concept: Repeating Structure in Time (Rotational Symmetry breaking).
 # 2. Math: Twisted Voronoi / Low Poly Faceting with periodic rotation.
-# 3. Standard: 1-Inch Wall, SOLID TOP CAP, Hand Access.
+# 3. Standard: 1-Inch Wall, SPIDER FITTER (Hub + Spokes), Hand Access.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -38,12 +38,15 @@ def write_binary_stl(filename, vertices, faces):
             f.write(data)
             f.write(struct.pack('<H', 0))
 
-def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=12.5):
+def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=14.0):
     print(f"Generating TIME CRYSTAL SHADE: {output_path}")
     
-    # Mount Parameters (Standard V7/V8 Solid Cap)
+    # Mount Parameters (Spider Fitter)
     mount_hole_radius = hole_diameter / 2.0 
-    bottom_rim_height = 2.0
+    hub_radius = 20.0 # 40mm Hub
+    spoke_width = 8.0 
+    top_plate_height = 4.0 
+    bottom_rim_height = 4.0 
     
     # Shell Parameters
     wall_thickness = 25.4 
@@ -65,10 +68,8 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     
     # Crystal Generation
     # Faceted Shell
-    # Define a set of cutting planes that rotate with Z
-    
     num_faces = 8
-    twist_total = math.pi / 2.0 # 90 deg twist
+    twist_total = math.pi / 2.0 
     
     radius = diameter / 2.0
     sphere_z_center = height - radius
@@ -94,110 +95,58 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 if z_mm > (height - 10.0):
                     effective_z = height - 10.0
                 
-                dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
-                dist_spherical = math.sqrt(dist_sq)
-                
-                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
-                if z_mm > (height - 4.0):
+                # --- PRIORITY 1: SPIDER FITTER (Top 4mm) ---
+                if z_mm > (height - top_plate_height):
+                    # 1.1 Hole
                     if dist_from_center_xy < mount_hole_radius:
                         grid[x_idx,y_idx,z_idx] = False
-                    else:
-                        if dist_from_center_xy < radius:
-                             grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    
+                    # 1.2 Hub
+                    if dist_from_center_xy < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    # 1.3 Spokes
+                    in_spoke = (abs(x_mm) < (spoke_width/2.0)) or (abs(y_mm) < (spoke_width/2.0))
+                    if in_spoke and dist_from_center_xy < radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+                         
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
 
-                # --- PRIORITY 2: CRYSTAL SHELL ---
+                # --- PRIORITY 2: BOTTOM RIM ---
+                if z_mm < bottom_rim_height:
+                     if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+
+                # --- PRIORITY 3: CRYSTAL SHELL ---
                 is_solid = False
                 
                 if dist_from_center_xy < hand_access_radius:
                     is_solid = False
                 else:
-                    # Define Crystal shape
-                    # Rotate point by -theta_z to bring it to base frame
-                    rx = x_mm * math.cos(-theta_z) - y_mm * math.sin(-theta_z)
-                    ry = x_mm * math.sin(-theta_z) + y_mm * math.cos(-theta_z)
+                    # Sphere envelope
+                    dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
+                    dist_spherical = math.sqrt(dist_sq)
                     
-                    # Polygon check (Octagon)
-                    # Max(abs(dot(p, normal_i)))
-                    # Octagon normals: (1,0), (0.7,0.7), (0,1), ...
-                    # Simplify: Max of projected distance on axes
-                    
-                    # Just use polar coord mod?
-                    angle = math.atan2(ry, rx)
-                    # Quantize angle
-                    sector = 2*math.pi / num_faces
-                    a_quant = math.floor(angle / sector) * sector + (sector/2)
-                    
-                    # Distance to edge of polygon
-                    # r * cos(angle - a_quant) = R_poly
-                    # R_poly varies with Z (spherical envelope)
-                    
-                    # Sphere radius at this Z
-                    # R_s = sqrt(R^2 - (z - z_c)^2)
                     if dist_spherical <= radius and dist_spherical > (radius - wall_thickness):
-                        # It's in the sphere shell.
-                        # Now apply Facet Mask
-                        # We want the surface to be faceted.
-                        # So effective radius is modulated.
+                        # Rotate point
+                        rx = x_mm * math.cos(-theta_z) - y_mm * math.sin(-theta_z)
+                        ry = x_mm * math.sin(-theta_z) + y_mm * math.cos(-theta_z)
                         
-                        mod = math.cos(angle - a_quant)
-                        # If we want flat faces, R must increase at corners?
-                        # R_trace = R_flat / cos(diff)
-                        
-                        # Let's just subtract volume
-                        # If dist_xy > (R_sphere * mod)? No
-                        
-                        # Simple Facet Logic:
-                        # Union of planes?
-                        # Let's stick to the Sphere Shell but apply a "Crystal Texture"
-                        # Voronoi surface texture
-                        
-                        # Or simple:
-                        # Only keep if near the center of a face?
-                        # Let's use the Twist to define the wall.
-                        
-                        # Modulation
-                        m = math.cos(num_faces/2 * angle) # 4 lobes
-                        
-                        # Add "Time Crystal" Texture (Periodic Geometric Noise)
-                        # Use high freq sine waves aligned with the facets
+                        # Texture
                         texture_scale = 2.0 * math.pi / 15.0 # 15mm detail
                         tex = math.sin(rx * texture_scale) * math.sin(ry * texture_scale) * math.sin(z_mm * texture_scale)
                         
-                        # Apply texture to radius threshold
-                        # Effective radius slightly modulated by texture
-                        # This creates a "glitchy" crystalline surface
-                        
-                        # Base polygon bound already defined by twist? 
-                        # We need to actually CUT the volume.
-                        # Let's use Voronoi-like intersection logic simplified
-                        
-                        # If distance to center < radius AND inside polygon AND texture condition
-                        # Polygon logic:
-                        # d_poly = dist_from_center_xy * math.cos(angle - a_quant)
-                        # Boundary: d_poly < R_eff
-                        
-                        # R_eff varies with Z (sphere)
-                        # R_sphere_at_z = math.sqrt(radius**2 - (effective_z - sphere_z_center)**2)
-                        # Let's say the crystal is inscribed in the sphere.
-                        
-                        if dist_spherical < radius:
-                             # Texture check: Only keep 80% of the volume near surface?
-                             # Or simply emboss?
-                             # Let's emboss:
-                             if tex > 0.5:
-                                 # Additive bump? No, boolean logic.
+                        # Logic: Emboss high-freq noise on sphere
+                        if tex > 0.5:
+                             is_solid = True
+                        else:
+                             if dist_spherical < (radius - 2.0):
                                  is_solid = True
-                             else:
-                                 # Main body
-                                 # Keep solid if deep enough
-                                 if dist_spherical < (radius - 2.0):
-                                     is_solid = True
-
-                # --- PRIORITY 3: BOTTOM RIM ---
-                if z_mm < bottom_rim_height:
-                    if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
-                         is_solid = True
                          
                 grid[x_idx,y_idx,z_idx] = is_solid
 
@@ -220,7 +169,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if y==res_y-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
                 if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
+                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
                 if z==0 or not grid[x,y,z-1]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
 
     write_binary_stl(output_path, vertices, faces)

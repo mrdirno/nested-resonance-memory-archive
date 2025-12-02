@@ -21,16 +21,16 @@ The following files must be created by importing the corresponding `.stl` into t
 
 | ID | Design Name | STL Status | 3MF Status | Notes |
 |---|---|---|---|---|
-| **01** | Redshift | ✅ Ready | ❌ MISSING | Check scale constraint |
-| **02** | Event Horizon | ✅ Ready | ❌ MISSING | Check overhangs |
-| **03** | Singularity | ✅ Ready | ❌ MISSING | |
-| **04** | Supernova | ✅ Ready | ❌ MISSING | |
-| **05** | Quantum Foam | ✅ Ready | ❌ MISSING | |
-| **06** | Dark Matter | ✅ Ready | ❌ MISSING | Updated to Spider Fitter |
-| **07** | Multiverse | ✅ Ready | ❌ MISSING | |
-| **08** | Time Crystal | ✅ Ready | ❌ MISSING | |
-| **09** | Neutron Star | ✅ Ready | ❌ MISSING | Updated to Spider Fitter |
-| **10** | Final Theory | ✅ Ready | ❌ MISSING | Updated to Spider Fitter |
+| **01** | Redshift | ✅ V7 Updated | ❌ MISSING | Check scale constraint |
+| **02** | Event Horizon | ✅ V7 Updated | ❌ MISSING | Check overhangs |
+| **03** | Singularity | ✅ V7 Updated | ❌ MISSING | |
+| **04** | Supernova | ✅ V7 Updated | ❌ MISSING | |
+| **05** | Quantum Foam | ✅ V7 Updated | ❌ MISSING | |
+| **06** | Dark Matter | ✅ V7 Updated | ❌ MISSING | Updated to Spider Fitter |
+| **07** | Multiverse | ✅ V7 Updated | ❌ MISSING | |
+| **08** | Time Crystal | ✅ V7 Updated | ❌ MISSING | |
+| **09** | Neutron Star | ✅ V7 Updated | ❌ MISSING | Updated to Spider Fitter |
+| **10** | Final Theory | ✅ V7 Updated | ❌ MISSING | Updated to Spider Fitter |
 
 ## Action Item
 Operator must open each STL in PrusaSlicer/OrcaSlicer, apply the settings above, slice to verify printability, and save as `[name]_shade_production.3mf` in the respective folder.
