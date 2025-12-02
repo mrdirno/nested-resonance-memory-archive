@@ -875,3 +875,9 @@
 - **Base:** Pool (Concentric Ripple Relief).
 - **Shaft:** Waterfall (Vertical Flow Veins).
 - **Status:** Design 27 Geometry Complete.
+
+## Cycle 2641: The Earth (Design 28)
+- **Design:** Implemented 'The Earth' (Erosion/Strata).
+- **Algorithm:** Stratified Noise modulated by vertical erosion channels.
+- **Shade:** V7 Spider Fitter, 427k triangles.
+- **Status:** Design 28 Shade Complete.
