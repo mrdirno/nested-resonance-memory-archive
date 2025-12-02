@@ -143,9 +143,21 @@ def generate_lamp_shade_v4(output_path,
                         grid[x_idx, y_idx, z_idx] = True # SOLID HUB
                         continue
                         
-                    # C. SPOKE CHECK
-                    # Cross spokes along X and Y axes
-                    if (abs(px_phys) < (spoke_width/2)) or (abs(py_phys) < (spoke_width/2)):
+                    # C. SPOKE CHECK (Triskelion - 3 Spokes @ 120 deg)
+                    # Replaces the "Cross Hair" (4 spokes) which was rejected.
+                    spoke_half_w = spoke_width / 2.0
+                    
+                    # Distance to Line 1 (0 deg): y = 0
+                    d1 = abs(py_phys)
+                    
+                    # Distance to Line 2 (120 deg): -sqrt(3)x - y = 0
+                    d2 = abs(-math.sqrt(3)*px_phys - py_phys) / 2.0
+                    
+                    # Distance to Line 3 (240 deg): sqrt(3)x - y = 0
+                    d3 = abs(math.sqrt(3)*px_phys - py_phys) / 2.0
+                    
+                    # Check if point is within any spoke
+                    if (d1 < spoke_half_w) or (d2 < spoke_half_w) or (d3 < spoke_half_w):
                         grid[x_idx, y_idx, z_idx] = True # SOLID SPOKE
                         continue
                         
@@ -177,6 +189,14 @@ def generate_lamp_shade_v4(output_path,
                     grid[x_idx, y_idx, z_idx] = False
                     continue
                 
+                # SOLID TRANSITION FIX:
+                # Ensure the shell is SOLID just below the top mount (10mm zone)
+                # to guarantee the mounting plate physically merges with the shell.
+                dist_from_top = size_z - pz
+                if dist_from_top < (top_mount_height + 10.0):
+                     grid[x_idx, y_idx, z_idx] = True
+                     continue
+
                 # B. GYROID GENERATION (Within the shell)
                 # We use the REFERENCE coordinates for the pattern (uv mapping style)
                 # or Physical? If Physical, the pattern stretches.
