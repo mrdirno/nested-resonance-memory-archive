@@ -119,6 +119,15 @@ Each Design Folder MUST contain:
 4.  **Production (Gold Standard):** Validated `.3mf` Project Files.
     *   *Why?* STLs are just geometry. `.3mf` captures the *manufacturing intent*: orientation, seam placement, support blockers, and fuzzy skin settings. This is the true "Design".
 
+## 10. Shaft Complexity Protocol (The "Boring Shaft" Ban)
+*   **The Issue:** A complex, math-heavy shade paired with a simple extruded cylinder looks cheap and unfinished.
+*   **The Rule:** Shafts MUST match the aesthetic complexity of the shade.
+    *   *Twist:* Helical rotation of the profile.
+    *   *Lensing:* Gravitational distortion (pinching/bulging) that is non-linear.
+    *   *Texture:* TPMS or noise applied to the surface.
+    *   *Lattice:* Voronoi or Truss structures (if structurally sound).
+*   **Ban:** No simple cylinders or basic sine-wave tubes. Use interference patterns or high-order distortions.
+
 ## 6. The Practical DIY Checklist (Edge Cases)
 
 ### A. Wiring & Ports

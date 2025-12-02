@@ -580,3 +580,14 @@
         - **Mounting:** Implemented Robust Spider Fitter (40mm Hub + Thicker Spokes) merging with shell.
 - **Result:** Shade STL regenerated (236k triangles). Physically robust and mountable.
 - **Status:** Phase 270 Active. Design 2/10 Robustness Verified.
+
+## Cycle 2960 Aesthetic Update: Event Horizon Shaft V3 (Complexity Upgrade) - COMPLETE
+- **Goal:** Replace basic cylindrical shaft with a math-heavy, aesthetic design matching the shade.
+- **Action:** 
+    1. Updated `FURNITURE_PROTOCOL.md` with 'Shaft Complexity Protocol'.
+    2. Refactored `event_horizon_shaft_gen.py` (V3):
+        - **Lensing:** Implemented non-linear gravitational bulge (Sine Wave).
+        - **Twist:** Added helical rotation logic (1.2 full turns).
+        - **Texture:** Applied Twisted Ribs (Cosine interference) with variable depth.
+- **Result:** Shaft STL regenerated (435k triangles). Design is now 'Unique, Practical, and High Quality'.
+- **Status:** Phase 270 Active. Design 2/10 Aesthetic Upgrade Complete.

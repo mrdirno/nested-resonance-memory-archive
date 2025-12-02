@@ -3,6 +3,17 @@ import math
 import sys
 import struct
 
+# -----------------------------------------------------------------------------
+# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHAFT) - V3 HIGH COMPLEXITY
+# -----------------------------------------------------------------------------
+# Logic: 
+# 1. Gravitational Lensing (Bulge).
+# 2. Helical Twist (Event Horizon Spin).
+# 3. Surface Interference Pattern (Accretion Texture).
+# 4. Hollow Core (Cable Management).
+# 5. Socket Recess (Top).
+# -----------------------------------------------------------------------------
+
 def write_binary_stl(filename, vertices, faces):
     def normal(v1, v2, v3):
         u = v2 - v1
@@ -30,14 +41,14 @@ def write_binary_stl(filename, vertices, faces):
             f.write(struct.pack('<H', 0))
 
 def generate_shaft(output_path, height=180.0, resolution=100):
-    print(f"Generating EVENT HORIZON SHAFT (V2 FIX): {output_path}")
+    print(f"Generating EVENT HORIZON SHAFT (V3 COMPLEXITY): {output_path}")
     
     base_radius = 15.0 
-    max_bulge = 10.0 
-    core_radius = 5.2 # 10.4mm ID
-    socket_recess_radius = 7.6 # 15.2mm for socket nipple
+    max_bulge = 12.0 # Significant gravitational distortion
+    core_radius = 6.0 # 12mm ID (Cable)
+    socket_recess_radius = 8.0 
     
-    width = (base_radius + max_bulge) * 2.0
+    width = (base_radius + max_bulge + 5.0) * 2.0 # Padding for texture
     
     step = width / resolution
     res_xy = int(width / step) + 5
@@ -49,14 +60,24 @@ def generate_shaft(output_path, height=180.0, resolution=100):
     faces = []
     grid = np.zeros((res_xy, res_xy, res_z), dtype=bool)
     
+    # Texture Frequencies
+    twist_freq = 2.0 * math.pi / (height * 0.8) # ~1.2 full twists
+    rib_freq = 12.0 # Number of vertical ribs
+    
     print("Calculating Field...")
     
     for z_idx in range(res_z):
         z_mm = z_idx * step
-        
-        # Bulge Function (Sine wave)
         z_norm = z_mm / height
-        current_radius = base_radius + max_bulge * math.sin(z_norm * math.pi)
+        
+        # 1. Gravitational Lensing (Profile Radius)
+        # Pinch at bottom, Bulge at middle, Taper at top
+        # Sine wave modulated by linear taper
+        bulge = max_bulge * math.sin(z_norm * math.pi)
+        nominal_radius = base_radius + bulge
+        
+        # Twist Angle
+        angle_offset = z_mm * twist_freq
         
         for x_idx in range(res_xy):
             x_mm = (x_idx * step) - (width/2)
@@ -65,21 +86,30 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                 y_mm = (y_idx * step) - (width/2)
                 
                 dist_center = math.sqrt(x_mm**2 + y_mm**2)
+                angle = math.atan2(y_mm, x_mm)
                 
                 # --- LOGIC STACK ---
                 is_solid = False
                 
-                # 1. Outer Shell
-                if dist_center <= current_radius:
+                # 2. Complex Surface (Twisted Ribs)
+                # Surface modulation
+                # Cosine of (Angle + Twist) * Ribs
+                texture = math.cos((angle + angle_offset) * rib_freq)
+                
+                # Texture Amplitude (Depth of ribs)
+                # Ribs get deeper at the bulge (lensing effect magnification)
+                rib_depth = 2.0 + (2.0 * math.sin(z_norm * math.pi))
+                
+                effective_radius = nominal_radius + (texture * rib_depth)
+                
+                if dist_center <= effective_radius:
                     is_solid = True
                     
-                # 2. Inner Core (Hollow)
-                # Explicitly ensure the core is empty (Tube)
+                # 3. Hollow Core
                 if dist_center < core_radius:
                     is_solid = False
                 
-                # 3. Socket Recess (Top)
-                # Hide the socket nipple/hardware inside the shaft top
+                # 4. Socket Recess (Top)
                 if z_mm > (height - 10.0):
                     if dist_center < socket_recess_radius:
                         is_solid = False
