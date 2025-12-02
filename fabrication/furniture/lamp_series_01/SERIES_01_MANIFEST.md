@@ -20,7 +20,7 @@ A collection of 10 procedural lamp designs exploring the evolution of the univer
 
 ## Physical Protocol
 *   **Socket:** Standard E26/E27 Socket.
-*   **Mounting:** All shades use a **Solid Top Cap** with a 12.5mm hole, compatible with standard 1/8 IP pipe (nipple) and finials.
+*   **Mounting:** All shades use a **Spider Fitter** (40mm Solid Hub + 4 Spokes) with a 12.5mm hole, compatible with standard 1/8 IP pipe (nipple) and finials.
 *   **Hardware:** 1/8 IP Threaded Rod, Nuts, Washers.
 *   **Max Dimensions:** Designed for 220x220x250mm Build Volume (Ender 3). Shade Diameter 200mm.
 

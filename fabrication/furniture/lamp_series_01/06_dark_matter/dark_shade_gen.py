@@ -5,13 +5,13 @@ import struct
 import random
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE DARK MATTER (SHADE)
+# HELIOS LAMP SERIES 01: THE DARK MATTER (SHADE) - THE VOID REVISION
 # -----------------------------------------------------------------------------
 # Logic: 
 # 1. Concept: The Cosmic Web (Voronoi/Cellular).
 # 2. Math: 3D Voronoi Approximation (Cellular Noise).
-# 3. Standard: 1-Inch Wall, Spider Fitter V7, Hand Access.
-# 4. Feature: SOLID TOP RIM (Connection Guarantee).
+# 3. Standard: 1-Inch Wall, SPIDER FITTER (Hub + Spokes), Hand Access.
+# 4. Feature: 40mm Hub, 8mm Spokes.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -42,12 +42,12 @@ def write_binary_stl(filename, vertices, faces):
 def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=12.5):
     print(f"Generating DARK MATTER SHADE (COSMIC WEB): {output_path}")
     
-    # Mount Parameters (Standard V7)
+    # Mount Parameters (Spider Fitter)
     mount_hole_radius = hole_diameter / 2.0 
-    hub_radius = 13.0 
-    spoke_width = 6.0 
-    top_plate_height = 5.0 
-    bottom_rim_height = 2.0 
+    hub_radius = 20.0 # 40mm Hub
+    spoke_width = 8.0 
+    top_plate_height = 4.0 
+    bottom_rim_height = 4.0 
     
     # Shell Parameters
     wall_thickness = 25.4 
@@ -68,11 +68,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
     # Voronoi / Cellular Noise Setup
-    # We scatter points and distance to closest point defines the cell.
-    # Edges are where dist(p1) ~ dist(p2).
-    # Function: F2 - F1 (Difference between 2nd closest and 1st closest).
-    # Worley Noise "Edges"
-    
+    # Effective cell size approx 33mm (safe > 25.4mm)
     num_points = 150
     points = []
     random.seed(101)
@@ -100,72 +96,72 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 
                 dist_from_center_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                effective_z = z_mm
-                if z_mm > (height - 10.0):
-                    effective_z = height - 10.0
-                
+                # --- PRIORITY 1: SPIDER FITTER (Top 4mm) ---
+                if z_mm > (height - top_plate_height):
+                    # 1.1 Hole
+                    if dist_from_center_xy < mount_hole_radius:
+                        grid[x_idx,y_idx,z_idx] = False
+                        continue
+                    
+                    # 1.2 Hub
+                    if dist_from_center_xy < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    # 1.3 Spokes (4-way)
+                    in_spoke = (abs(x_mm) < (spoke_width/2.0)) or (abs(y_mm) < (spoke_width/2.0))
+                    if in_spoke and dist_from_center_xy < radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+                    
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+
+                # --- PRIORITY 2: BOTTOM RIM ---
+                if z_mm < bottom_rim_height:
+                    if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+
+                # --- PRIORITY 3: SHELL & WEB PATTERN ---
+                effective_z = min(z_mm, height - 10.0)
                 dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
-                if z_mm > (height - 4.0):
-                    # Central Hole (12.5mm dia)
-                    if dist_from_center_xy < (12.5 / 2.0):
-                        grid[x_idx,y_idx,z_idx] = False
-                    else:
-                        # Solid Cap connecting to shell
-                        if dist_from_center_xy < radius:
-                             grid[x_idx,y_idx,z_idx] = True
-                    continue
-
-                # --- PRIORITY 2: SHELL & WEB PATTERN ---
-                is_solid = False
                 in_outer_shell = dist_spherical <= radius
                 in_inner_void = dist_spherical < (radius - wall_thickness)
                 in_hand_void = dist_from_center_xy < hand_access_radius
-                is_void = in_inner_void or in_hand_void
                 
-                if in_outer_shell and not is_void:
-                    # FORCE SOLID RIM at Top
-                    if z_mm > (height - top_plate_height):
-                        is_solid = True
+                # Explicit Keep-Out Zone for Hand
+                if in_hand_void:
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+                
+                # Shell Volume
+                if in_outer_shell and not in_inner_void:
+                    # Voronoi Logic
+                    d1 = 9999.0
+                    d2 = 9999.0
+                    
+                    for p in points:
+                        px, py, pz = p
+                        d = (x_mm-px)**2 + (y_mm-py)**2 + (z_mm-pz)**2 
+                        if d < d1:
+                            d2 = d1
+                            d1 = d
+                        elif d < d2:
+                            d2 = d
+                    
+                    d1 = math.sqrt(d1)
+                    d2 = math.sqrt(d2)
+                    
+                    # Web Strands (Edges)
+                    if (d2 - d1) < 4.0: # 4mm thick strands
+                        grid[x_idx,y_idx,z_idx] = True
                     else:
-                        # Cellular Noise (Worley Edge)
-                        # Find 2 closest points
-                        d1 = 9999.0
-                        d2 = 9999.0
-                        
-                        # Optimization: Only check nearby cells if we had a grid structure
-                        # Brute force for 150 points is okay (~10ms per voxel? No, too slow.)
-                        # 100^3 * 150 is 150M ops. Might take a minute. Acceptable for generation.
-                        
-                        for p in points:
-                            px, py, pz = p
-                            d = (x_mm-px)**2 + (y_mm-py)**2 + (z_mm-pz)**2 # Squared dist
-                            
-                            if d < d1:
-                                d2 = d1
-                                d1 = d
-                            elif d < d2:
-                                d2 = d
-                        
-                        d1 = math.sqrt(d1)
-                        d2 = math.sqrt(d2)
-                        
-                        # Edge noise: High value at edges (d2 - d1 is small)
-                        # Web structure: solid where d2-d1 is small?
-                        # No, d2-d1 is 0 at the boundary.
-                        # So if (d2 - d1) < thickness, we are on a web strand.
-                        
-                        if (d2 - d1) < 4.0: # 4mm thick strands
-                            is_solid = True
-                            
-                # --- PRIORITY 3: BOTTOM RIM ---
-                if z_mm < bottom_rim_height:
-                    if dist_from_center_xy < radius and not in_hand_void:
-                         is_solid = True
-                         
-                grid[x_idx,y_idx,z_idx] = is_solid
+                        grid[x_idx,y_idx,z_idx] = False
+                else:
+                    grid[x_idx,y_idx,z_idx] = False
 
     print("Extracting Mesh...")
     def add_quad(v1, v2, v3, v4):
@@ -186,7 +182,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if y==res_y-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
                 if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
+                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
                 if z==0 or not grid[x,y,z-1]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
 
     write_binary_stl(output_path, vertices, faces)
