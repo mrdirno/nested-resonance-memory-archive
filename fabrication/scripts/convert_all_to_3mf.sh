@@ -2,19 +2,25 @@
 
 echo "Converting all STLs to 3MF..."
 
-SCRIPT="/Volumes/dual/DUALITY-ZERO-V2/fabrication/scripts/binary_stl_to_3mf.py"
-DIR="/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design"
+# Get the absolute path of the script's directory to locate the python script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PYTHON_SCRIPT="$SCRIPT_DIR/binary_stl_to_3mf.py"
+TARGET_ROOT="$(dirname "$SCRIPT_DIR")/furniture"
 
-find "$DIR" -name "*.stl" | while read stl_file; do
+echo "Script: $PYTHON_SCRIPT"
+echo "Target: $TARGET_ROOT"
+
+find "$TARGET_ROOT" -name "*.stl" | while read stl_file; do
     mf_file="${stl_file%.stl}.3mf"
     echo "Processing $stl_file..."
-    python3 "$SCRIPT" "$stl_file" "$mf_file"
+    python3 "$PYTHON_SCRIPT" "$stl_file" "$mf_file"
     
     if [ -f "$mf_file" ]; then
         echo "  -> Created $mf_file"
-        rm "$stl_file"
-        echo "  -> Deleted STL"
+        # Optional: Delete STL to save space, or keep it?
+        # Keeping STL for now as source of truth until 3mf verified.
+        # rm "$stl_file" 
     fi
 done
 
-echo "All files converted to 3MF."
+echo "Batch conversion complete."
