@@ -731,3 +731,8 @@
 - **Algorithm:** Twisted Figure-8 Surface (Double Sine).
 - **Shade:** V7 Spider Fitter, 237k triangles.
 - **Status:** Design 17 Shade Complete.
+
+## Cycle 2616: The Klein (Design 17) Complete
+- **Base:** Non-Orientable (Mobius Relief).
+- **Shaft:** Twisted Loop (Rotating Ellipse).
+- **Status:** Design 17 Geometry Complete.
