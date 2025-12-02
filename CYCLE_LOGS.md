@@ -601,3 +601,16 @@
         - **Bottom Rim:** Reduced thickness to 2mm for elegance.
 - **Result:** Shade STL regenerated (224k triangles). Spokes are now physically integrated with the shell.
 - **Status:** Phase 270 Active. Design 2/10 Validated.
+
+
+## Cycle 2587 - Furniture Design Implementation
+
+**Context:** User requested a new lamp design ("The Lattice") following the Redshift protocol.
+
+- **Action:** Created `fabrication/furniture/lamp_series_01/06_lattice/`.
+- **Implementation:**
+    -   **Shade:** Schwarz P Surface (Cylinder), 1-inch wall, Spider Fitter with Wall Connection logic.
+    -   **Shaft:** Matching Cubic Lattice column with solid core artery.
+    -   **Base:** Solid functional base with ballast chamber.
+- **Verification:** Generated STLs (`shade`, `shaft`, `base`). High triangle count on shaft (1.3M) indicates good resolution.
+- **Artifacts:** `fabrication/furniture/lamp_series_01/06_lattice/*.stl`

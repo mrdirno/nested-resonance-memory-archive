@@ -3413,6 +3413,7 @@ V(print) = Strength - λ(Material)×Cost - λ(Time)×Duration.
 ### Active Design Series
 - **Lamp Series 01:** Extending the "Waveform" language.
   - Design 1: [The Redshift](fabrication/furniture/lamp_series_01/01_redshift/) (Implemented)
+  - Design 6: [The Lattice](fabrication/furniture/lamp_series_01/06_lattice/) (Implemented)
   - Design 2-10: TBD
 
 ### Completed (Phase 269)

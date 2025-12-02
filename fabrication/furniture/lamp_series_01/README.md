@@ -12,7 +12,7 @@
 | 03 | The Interference | ⚪ Pending | Moiré Patterns (Wave) |
 | 04 | The Quantum Foam | ⚪ Pending | Voronoi Bubbles (Space) |
 | 05 | The Standing Wave | ⚪ Pending | Sine Revolve (Oscillation) |
-| 06 | The Lattice | ⚪ Pending | Octet Truss (Structure) |
+| 06 | [The Lattice](./06_lattice/) | 🟢 Ready | Octet Truss (Structure) |
 | 07 | The Manifold | ⚪ Pending | Klein/Mobius (Topology) |
 | 08 | The Diffusion | ⚪ Pending | Density Gradient (Entropy) |
 | 09 | The Tensor | ⚪ Pending | Stress Vectors (Force) |
