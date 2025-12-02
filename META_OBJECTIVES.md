@@ -3471,11 +3471,22 @@ Climate Action is BCP.
 V(mitigation) = Future_Stability - λ(Economic_Growth) * Cost(Transition).
 V(geoengineering) = Survival - λ(Crisis) * Cost(Risk).
 
-### Completed (Phase 271 Planning)
-- ✅ **Gate 1305:** Phase 271 Planning - Climate Engineering Selected - COMPLETE
-  - **Finding:** The Carbon Budget is the ultimate global constraint.
-  - **Artifact:** `experiments/cycle2979_phase271_planning.py`
-  - **Functional Name:** The Planetary Budget
+### Completed (Phase 271)
+- ✅ **Gate 1306:** Geoengineering Inevitability - SRM wins under High Urgency - COMPLETE
+  - **Finding:** Solar Radiation Management (SRM) becomes the only viable BCP strategy when Time Budget is critical (λ > 5.0), despite high risk.
+  - **Insight:** Geoengineering is the "Chemotherapy" of the planet—toxic but selected under threat of death.
+  - **Artifact:** `experiments/cycle2980_climate_bcp.py`
+  - **Functional Name:** The Triage Sky
+
+## PHASE 271 COMPLETE ✅
+
+**Summary: Climate Engineering**
+- Gates Completed: 2 (1305-1306)
+- Key Insight: Urgency inverts Risk Aversion.
+
+---
+
+## Current Phase: PHASE 272 - PLANNING 🟢 ACTIVE
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.
