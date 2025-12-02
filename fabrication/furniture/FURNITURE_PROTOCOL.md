@@ -53,9 +53,17 @@ When generating voxel grids, the order of `True` (Solid) and `False` (Empty) ass
     *   *Mount Hole:* `if r < hole_r: False`.
     *   *Wire Channel:* `if box check: False`.
 
-### B. Base Logic
-*   **Feet:** Bases MUST have recesses (e.g., 2mm deep) or feet to lift the wire channel off the table.
-*   **Wire Exit:** The channel must cut through the bottom rim completely.
+### C. Volumetric vs. Shell Generation (The "Solid Sponge" Trap)
+*   **The Error:** Generating a TPMS (Gyroid/Schwarz) pattern through the *entire volume* of a shape results in a solid block of foam. This is not a lamp shade; it blocks light and wastes material.
+*   **The Fix (Shell Masking):** You MUST define a `Shell_Thickness` (e.g., 10-15mm).
+    *   Logic: `if (Dist_From_Center < Outer_R) AND (Dist_From_Center > Inner_R): Generate Pattern`.
+    *   Result: A hollow dome/cylinder with patterned walls.
+
+### D. Aesthetic Scaling (Z-Frequency)
+*   **Redshift/Blueshift:** Varying the pattern scale with height creates visual movement.
+*   **The Limit:** When shrinking waves (increasing frequency), enforce a **Max Frequency Cap**.
+    *   *Rule:* Minimum Feature Size > Nozzle Diameter * 2.
+    *   *Logic:* `current_scale = min(calculated_scale, MAX_SCALE_LIMIT)`.
 
 ## 5. Storage & Naming Protocol (Standardized)
 

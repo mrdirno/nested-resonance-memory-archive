@@ -4,10 +4,13 @@ import sys
 import struct
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE) - V2 FIX
+# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE) - V3 FIX (HOLLOW + Z-SCALE)
 # -----------------------------------------------------------------------------
-# Logic: Schwarz D (Diamond) Dome + Solid Top Ring + Solid Bottom Rim
-# Fix: Top Plate overrides Spherical Boundary.
+# Logic: 
+# 1. Schwarz D (Diamond) Pattern
+# 2. Shell Logic: Pattern only generates between Inner Radius and Outer Radius.
+# 3. Z-Scaling: Frequency increases with Z (Wavelength shrinks).
+# 4. Top Plate overrides Spherical Boundary.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -37,13 +40,15 @@ def write_binary_stl(filename, vertices, faces):
             f.write(struct.pack('<H', 0))
 
 def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, hole_diameter=42.0):
-    print(f"Generating EVENT HORIZON SHADE (V2 FIX): {output_path}")
+    print(f"Generating EVENT HORIZON SHADE (V3 FIX): {output_path}")
     
     # Mount Parameters
     mount_hole_radius = hole_diameter / 2.0 # 21mm
-    mount_plate_radius = mount_hole_radius + 8.0 # 29mm outer radius for plate (min)
+    mount_plate_radius = mount_hole_radius + 8.0 # 29mm outer radius for plate
     solid_rim_height = 4.0 
-    wall_thickness = 15.0 
+    
+    # Shell Parameters
+    shell_thickness = 4.0 # Actual shell thickness for the pattern region
     
     # Grid Setup
     max_dim = max(diameter, height)
@@ -60,15 +65,38 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
     # Frequency Setup (Schwarz D)
-    scale = 2.0 * math.pi / (diameter / 5.0) 
+    # Base Scale (Bottom)
+    base_scale = 2.0 * math.pi / (diameter / 5.0) 
     
-    print("Calculating Field (Schwarz D)...")
+    # Max Frequency Constraint (Smallest wave limit)
+    # "Never go smaller than the smallest wave" -> Interpretation:
+    # Let's assume the user liked the top of a previous design or wants a safety limit.
+    # Let's limit the scale factor to 2.0x base (Half wavelength).
+    max_scale_factor = 2.0 
+    
+    print("Calculating Field (Schwarz D with Z-Scaling)...")
     
     radius = diameter / 2.0
     sphere_z_center = height - radius
     
     for z_idx in range(res_z):
         z_mm = z_idx * step
+        
+        # Z-Norm for scaling
+        z_norm = z_mm / height
+        
+        # Scale Modulation: Linear ramp up
+        # Scale = Base * (1 + k*z)
+        # At z=0, Scale = Base.
+        # At z=H, Scale = Base * (1 + k).
+        # Let k=1.0 (Doubles frequency at top).
+        current_scale_factor = 1.0 + (1.0 * z_norm)
+        
+        # Clamp (Safety limit)
+        if current_scale_factor > max_scale_factor:
+            current_scale_factor = max_scale_factor
+            
+        current_scale = base_scale * current_scale_factor
         
         for x_idx in range(res_x):
             x_mm = (x_idx * step) - (diameter / 2.0)
@@ -78,51 +106,52 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
                 
                 dist_from_center_xy = math.sqrt(x_mm**2 + y_mm**2)
                 dist_sq = x_mm**2 + y_mm**2 + (z_mm - sphere_z_center)**2
+                dist_spherical = math.sqrt(dist_sq)
                 
-                # --- BOOLEAN LOGIC STACK (ORDER MATTERS) ---
-                
-                # 1. Default: Empty
+                # --- BOOLEAN LOGIC STACK ---
                 is_solid = False
                 
-                # 2. Spherical Boundary Check
-                if dist_sq <= radius**2:
-                     # 3. Pattern Generation (Inside Sphere)
-                     lx = x_mm * scale
-                     ly = y_mm * scale
-                     lz = z_mm * scale
+                # 1. Shell Masking (The "Hollow" Fix)
+                # Check if voxel is within the spherical shell volume
+                in_outer_shell = dist_spherical <= radius
+                in_inner_void = dist_spherical < (radius - shell_thickness)
+                
+                if in_outer_shell and not in_inner_void:
+                     # 2. Pattern Generation
+                     lx = x_mm * current_scale
+                     ly = y_mm * current_scale
+                     lz = z_mm * current_scale
                      
                      sx, sy, sz = math.sin(lx), math.sin(ly), math.sin(lz)
                      cx, cy, cz = math.cos(lx), math.cos(ly), math.cos(lz)
                      
                      val = sx*sy*sz + sx*cy*cz + cx*sy*cz + cx*cy*sz
                      
-                     if abs(val) < 0.3:
+                     if abs(val) < 0.4: # Slightly thicker walls for printability
                          is_solid = True
                 
-                # 4. Structural Overrides (Force Solid)
+                # 3. Structural Overrides
                 
-                # A. Top Plate (Mounting) - OVERRIDES Sphere Boundary
+                # A. Top Plate (Mounting)
                 if z_mm > (height - solid_rim_height):
-                    # Force a solid cylinder for the plate, even if it sticks out of the sphere
                     if dist_from_center_xy < mount_plate_radius:
                         is_solid = True
                         
                 # B. Bottom Rim
                 if z_mm < solid_rim_height:
-                    if dist_from_center_xy < radius and dist_from_center_xy > (radius - 10.0):
+                    if dist_from_center_xy < radius and dist_from_center_xy > (radius - shell_thickness - 2.0):
                         is_solid = True
                         
-                # 5. Hardware Subtracts (Force Empty)
+                # 4. Hardware Subtracts
                 
-                # A. Mounting Hole (Top)
+                # A. Mounting Hole
                 if z_mm > (height - solid_rim_height):
                     if dist_from_center_xy < mount_hole_radius:
                         is_solid = False
                         
-                # Assign Final State
                 grid[x_idx,y_idx,z_idx] = is_solid
 
-    print("Extracting Mesh (Voxel Quad)...")
+    print("Extracting Mesh...")
     
     def add_quad(v1, v2, v3, v4):
         idx = len(vertices)
@@ -140,18 +169,12 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
                 if not grid[x,y,z]: continue
                 
                 s2 = step/2
-                if x==res_x-1 or not grid[x+1,y,z]:
-                    add_quad((x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
-                if x==0 or not grid[x-1,y,z]:
-                    add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-                if y==res_y-1 or not grid[x,y+1,z]:
-                    add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
-                if y==0 or not grid[x,y-1,z]:
-                    add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
-                if z==res_z-1 or not grid[x,y,z+1]:
-                    add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
-                if z==0 or not grid[x,y,z-1]:
-                    add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2))
+                if x==res_x-1 or not grid[x+1,y,z]: add_quad((x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
+                if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
+                if y==res_y-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
+                if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
+                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
+                if z==0 or not grid[x,y,z-1]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
 
     write_binary_stl(output_path, vertices, faces)
     print(f"Saved: {output_path}")

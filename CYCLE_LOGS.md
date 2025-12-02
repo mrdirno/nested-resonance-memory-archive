@@ -537,3 +537,14 @@
     4. Refactored `event_horizon_shaft_gen.py` to add Socket Recess and ensure core continuity.
 - **Result:** Artifacts regenerated (Total ~1M triangles). Defects resolved.
 - **Status:** Phase 270 Active. Design 2/10 Corrected.
+
+## Cycle 2960 Refinement: Event Horizon V3 (Hollow Shell) - COMPLETE
+- **Goal:** Implement true hollow shell logic and Z-scaled wave pattern for Design 2.
+- **Action:** 
+    1. Updated `FURNITURE_PROTOCOL.md` with Volumetric vs. Shell logic.
+    2. Refactored `event_horizon_shade_gen.py`:
+        - Added Shell Masking (Inner Radius check) to prevent solid sponge generation.
+        - Implemented Z-Frequency Scaling (Waves shrink as they rise).
+        - Clamped Max Frequency to ensure printability.
+- **Result:** Shade STL regenerated (161k triangles - Significantly optimized from 628k due to hollow core).
+- **Status:** Phase 270 Active. Design 2/10 Refined.
