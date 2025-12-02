@@ -686,3 +686,8 @@
 - **Algorithm:** Warped Coordinate Sine Waves (sin(x + A*sin(y))).
 - **Shade:** V7 Spider Fitter, 455k triangles.
 - **Status:** Design 14 Shade Complete.
+
+## Cycle 2608: The Swarm (Design 14) Complete
+- **Base:** Nesting Ground (Swirl Relief).
+- **Shaft:** Ascending Vortex (Twisted Spiral).
+- **Status:** Design 14 Geometry Complete.
