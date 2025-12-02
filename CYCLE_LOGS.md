@@ -864,3 +864,9 @@
 - **Base:** Embers (Charred Noise Relief).
 - **Shaft:** Rising Smoke (Twisting/Dissipating).
 - **Status:** Design 26 Geometry Complete.
+
+## Cycle 2639: The Water (Design 27)
+- **Design:** Implemented 'The Water' (Fluid Dynamics).
+- **Algorithm:** Wave Interference (Sum of Sine Droplets) modulating shell.
+- **Shade:** V7 Spider Fitter, 249k triangles.
+- **Status:** Design 27 Shade Complete.
