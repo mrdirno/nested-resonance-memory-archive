@@ -824,3 +824,9 @@
 - **Base:** Debris Field (Voronoi Shards).
 - **Shaft:** Splintered Column (Twisted Angular Gaps).
 - **Status:** Design 24 Geometry Complete.
+
+## Cycle 2633: The Pixel (Design 25)
+- **Design:** Implemented 'The Pixel' (Low-Poly/8-Bit).
+- **Algorithm:** Large Voxel Quantization + Checkerboard Dither.
+- **Shade:** V7 Spider Fitter, 303k triangles.
+- **Status:** Design 25 Shade Complete.
