@@ -725,3 +725,9 @@
 - **Base:** Hyper-Shadow (Projected Cube Union).
 - **Shaft:** 4D Axis (Twisted Square Grid).
 - **Status:** Design 16 Geometry Complete.
+
+## Cycle 2615: The Klein (Design 17)
+- **Design:** Implemented 'The Klein' (Klein Bottle/Twisted Loop).
+- **Algorithm:** Twisted Figure-8 Surface (Double Sine).
+- **Shade:** V7 Spider Fitter, 237k triangles.
+- **Status:** Design 17 Shade Complete.
