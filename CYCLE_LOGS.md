@@ -802,3 +802,9 @@
 - **Base:** Static Relief (Noisy Surface).
 - **Shaft:** Signal Loss (Jittered Column).
 - **Status:** Design 22 Geometry Complete.
+
+## Cycle 2629: The Lag (Design 23)
+- **Design:** Implemented 'The Lag' (Datamosh/Latency).
+- **Algorithm:** Sheared Coordinates (Lag Offset zones + Jitter).
+- **Shade:** V7 Spider Fitter, 537k triangles.
+- **Status:** Design 23 Shade Complete.
