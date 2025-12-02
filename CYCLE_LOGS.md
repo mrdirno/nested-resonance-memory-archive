@@ -591,3 +591,13 @@
         - **Texture:** Applied Twisted Ribs (Cosine interference) with variable depth.
 - **Result:** Shaft STL regenerated (435k triangles). Design is now 'Unique, Practical, and High Quality'.
 - **Status:** Phase 270 Active. Design 2/10 Aesthetic Upgrade Complete.
+
+## Cycle 2960 Correction: Event Horizon V7 (Connection & Tolerance) - COMPLETE
+- **Goal:** Resolve detached spokes and refine dimensions per user feedback.
+- **Action:** 
+    1. Refactored `event_horizon_shade_gen.py` (V7):
+        - **Connection Guarantee:** Mathematically flattened the top 10mm of the sphere shell (Effective Z clamp) so spokes always intersect a vertical wall.
+        - **Hub:** Reduced radius to 13mm (26mm Diameter) for cleaner look.
+        - **Bottom Rim:** Reduced thickness to 2mm for elegance.
+- **Result:** Shade STL regenerated (224k triangles). Spokes are now physically integrated with the shell.
+- **Status:** Phase 270 Active. Design 2/10 Validated.
