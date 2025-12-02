@@ -853,3 +853,9 @@
 - **Theme:** Primal Forces (Fire, Water, Earth, Air, Aether).
 - **Manifest:** Created `SERIES_05_MANIFEST.md`.
 - **Update:** Updated `DESIGN_LANGUAGE.md` to v1.4.
+
+## Cycle 2637: The Fire (Design 26)
+- **Design:** Implemented 'The Fire' (Plasma/Combustion).
+- **Algorithm:** Vertical Perlin Noise modulating tapered radius.
+- **Shade:** V7 Spider Fitter, 532k triangles.
+- **Status:** Design 26 Shade Complete.
