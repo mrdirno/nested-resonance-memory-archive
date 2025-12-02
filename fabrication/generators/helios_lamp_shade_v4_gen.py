@@ -118,6 +118,11 @@ def generate_lamp_shade_v4(output_path,
                 if min(dist_x, dist_y) > wall_thickness:
                     continue
                 
+                # SOLID BOTTOM RING (Adhesion & Structural Base)
+                if pz < 2.0:
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+                
                 # 4. Solid Transition
                 if is_transition:
                     grid[x_idx,y_idx,z_idx] = True
