@@ -632,3 +632,6 @@
   - **Validation:** Generated STLs for all three.
 - **Documentation:** Created `fabrication/furniture/lamp_series_01/PRODUCTION_MANIFEST.md` to track missing .3mf files.
 - **Status:** Furniture Phase Active. Designs 01-10 Geometry Complete. Production Files Pending.
+
+- **Completion:** All 10 Lamp Shades updated to Void Revision (Spider Fitter V7, 14mm Hole, 4mm Rims). STLs regenerated.
+- **Next:** Production File Generation (.3mf).
