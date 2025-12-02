@@ -139,6 +139,6 @@ def generate_base(output_path, width=180.0, height=20.0, resolution=150):
     print(f"Saved: {output_path}")
 
 if __name__ == "__main__":
-    output_file = "fabrication/furniture/lamp_series_01/redshift_base.stl"
+    output_file = "redshift_base.stl"
     if len(sys.argv) > 1: output_file = sys.argv[1]
     generate_base(output_file)

@@ -160,6 +160,6 @@ def generate_shaft(output_path, height=200.0, resolution=150):
     print(f"Saved: {output_path}")
 
 if __name__ == "__main__":
-    output_file = "fabrication/furniture/lamp_series_01/redshift_shaft.stl"
+    output_file = "redshift_shaft.stl"
     if len(sys.argv) > 1: output_file = sys.argv[1]
     generate_shaft(output_file)
