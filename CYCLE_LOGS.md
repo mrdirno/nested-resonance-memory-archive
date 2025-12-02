@@ -736,3 +736,9 @@
 - **Base:** Non-Orientable (Mobius Relief).
 - **Shaft:** Twisted Loop (Rotating Ellipse).
 - **Status:** Design 17 Geometry Complete.
+
+## Cycle 2617: The Mobius (Design 18)
+- **Design:** Implemented 'The Mobius' (Infinite Loop).
+- **Algorithm:** Twisted Ribbon Logic (sin(N*theta + twist) > 0.5).
+- **Shade:** V7 Spider Fitter, 266k triangles.
+- **Status:** Design 18 Shade Complete.
