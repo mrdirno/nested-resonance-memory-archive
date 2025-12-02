@@ -5,12 +5,12 @@ import struct
 import random
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE NEUTRON STAR (SHADE)
+# HELIOS LAMP SERIES 01: THE NEUTRON STAR (SHADE) - THE VOID REVISION
 # -----------------------------------------------------------------------------
 # Logic: 
 # 1. Concept: Magnetic Field Lines (Magnetar).
 # 2. Math: Toroidal Field Lines (Poloidal/Toroidal flow).
-# 3. Standard: 1-Inch Wall, SOLID TOP CAP, Hand Access.
+# 3. Standard: 1-Inch Wall, SPIDER FITTER (Hub + Spokes), Hand Access.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -41,13 +41,16 @@ def write_binary_stl(filename, vertices, faces):
 def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=12.5):
     print(f"Generating NEUTRON STAR SHADE: {output_path}")
     
-    # Mount Parameters
+    # Mount Parameters (Spider Fitter)
     mount_hole_radius = hole_diameter / 2.0 
-    bottom_rim_height = 2.0
+    hub_radius = 20.0 # 40mm Diameter Hub
+    spoke_width = 8.0 # Robust spokes
+    bottom_rim_height = 4.0 # 4mm solid rim
+    top_plate_height = 4.0 # 4mm solid top
     
     # Shell Parameters
-    wall_thickness = 25.4 
-    hand_access_radius = 45.0 
+    wall_thickness = 25.4 # 1 inch
+    hand_access_radius = 45.0 # 90mm internal clearance
     
     # Grid Setup
     max_dim = max(diameter, height)
@@ -63,16 +66,9 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     faces = []
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
-    # Field Lines
-    # We want ribs that follow magnetic field lines.
-    # B ~ 3*r*(m.r)/r^5 - m/r^3
-    # Simplified: Toroidal ribs.
-    
-    # Vertical ribs (Longitude) + Horizontal ribs (Latitude) ?
-    # No, twisted ribs.
-    
-    num_ribs = 24
-    twist = math.pi # 180 deg twist top to bottom
+    # Field Lines Setup
+    num_ribs = 16 # Reduced for scale constraint (was 24)
+    twist = math.pi 
     
     radius = diameter / 2.0
     sphere_z_center = height - radius
@@ -81,9 +77,6 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     
     for z_idx in range(res_z):
         z_mm = z_idx * step
-        z_norm = z_mm / height
-        
-        current_twist = z_norm * twist
         
         for x_idx in range(res_x):
             x_mm = (x_idx * step) - (diameter / 2.0)
@@ -94,52 +87,71 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 dist_from_center_xy = math.sqrt(x_mm**2 + y_mm**2)
                 angle = math.atan2(y_mm, x_mm)
                 
-                effective_z = z_mm
-                if z_mm > (height - 10.0):
-                    effective_z = height - 10.0
-                
+                # --- PRIORITY 1: SPIDER FITTER (Top 4mm) ---
+                if z_mm > (height - top_plate_height):
+                    # 1.1 Hole
+                    if dist_from_center_xy < mount_hole_radius:
+                        grid[x_idx,y_idx,z_idx] = False
+                        continue
+                        
+                    # 1.2 Solid Hub
+                    if dist_from_center_xy < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    # 1.3 Spokes (4-way symmetry)
+                    # Spoke aligns with X and Y axes
+                    in_spoke = (abs(x_mm) < (spoke_width/2.0)) or (abs(y_mm) < (spoke_width/2.0))
+                    if in_spoke and dist_from_center_xy < radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+                    
+                    # 1.4 Default Empty (Air gap between spokes)
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+
+                # --- PRIORITY 2: BOTTOM RIM ---
+                if z_mm < bottom_rim_height:
+                    if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+
+                # --- PRIORITY 3: SHELL BODY ---
+                # 3.1 Internal Clearance (Hand Access)
+                if dist_from_center_xy < hand_access_radius:
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+                    
+                # 3.2 Outer Boundary
+                effective_z = min(z_mm, height - 10.0)
                 dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
-                if z_mm > (height - 4.0):
-                    if dist_from_center_xy < mount_hole_radius:
-                        grid[x_idx,y_idx,z_idx] = False
-                    else:
-                        if dist_from_center_xy < radius:
-                             grid[x_idx,y_idx,z_idx] = True
+                if dist_spherical > radius:
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
-
-                # --- PRIORITY 2: FIELD LINES ---
-                is_solid = False
+                    
+                if dist_spherical < (radius - wall_thickness):
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+                    
+                # 3.3 Field Lines Pattern
+                # Twist increases with Z
+                z_norm = z_mm / height
+                current_twist = z_norm * twist
                 
-                if dist_from_center_xy < hand_access_radius:
-                    is_solid = False
+                val = math.cos(num_ribs * angle + current_twist)
+                
+                # Thicker ribs
+                if val > 0.2: 
+                     grid[x_idx,y_idx,z_idx] = True
                 else:
-                    if dist_spherical <= radius and dist_spherical > (radius - wall_thickness):
-                        # Field Line Logic
-                        # Ribs defined by angle
-                        # cos(N * angle + twist) > threshold
-                        
-                        val = math.cos(num_ribs * angle + current_twist)
-                        
-                        if val > 0.5: # Thin ribs
-                             is_solid = True
-                             
-                        # Add connecting rings?
-                        # Latitude rings
-                        # cos(M * z)
-                        
-                        lat_val = math.cos(z_mm * 0.2) # Frequency
-                        if lat_val > 0.8:
-                            is_solid = True
-
-                # --- PRIORITY 3: BOTTOM RIM ---
-                if z_mm < bottom_rim_height:
-                    if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
-                         is_solid = True
-                         
-                grid[x_idx,y_idx,z_idx] = is_solid
+                    # Connecting rings (Latitude)
+                    lat_val = math.cos(z_mm * 0.15) 
+                    if lat_val > 0.85:
+                        grid[x_idx,y_idx,z_idx] = True
+                    else:
+                        grid[x_idx,y_idx,z_idx] = False
 
     print("Extracting Mesh...")
     def add_quad(v1, v2, v3, v4):
@@ -160,7 +172,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if y==res_y-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
                 if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
+                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
                 if z==0 or not grid[x,y,z-1]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
 
     write_binary_stl(output_path, vertices, faces)

@@ -5,12 +5,12 @@ import struct
 import random
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE FINAL THEORY (SHADE)
+# HELIOS LAMP SERIES 01: THE FINAL THEORY (SHADE) - THE VOID REVISION
 # -----------------------------------------------------------------------------
 # Logic: 
 # 1. Concept: Geometric Unity (E8 / Quasicrystal).
 # 2. Math: 3D Projection of 4D/8D Lattice (Penrose-like).
-# 3. Standard: 1-Inch Wall, SOLID TOP CAP, Hand Access.
+# 3. Standard: 1-Inch Wall, SPIDER FITTER (Hub + Spokes), Hand Access.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -41,9 +41,12 @@ def write_binary_stl(filename, vertices, faces):
 def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=12.5):
     print(f"Generating FINAL THEORY SHADE (QUASICRYSTAL): {output_path}")
     
-    # Mount Parameters
+    # Mount Parameters (Spider Fitter)
     mount_hole_radius = hole_diameter / 2.0 
-    bottom_rim_height = 2.0
+    hub_radius = 20.0 # 40mm Hub
+    spoke_width = 8.0 
+    bottom_rim_height = 4.0 
+    top_plate_height = 4.0 
     
     # Shell Parameters
     wall_thickness = 25.4 
@@ -65,9 +68,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     
     # Quasicrystal Logic
     # Sum of N cosine waves with icosahedral symmetry vectors.
-    # 6 directions: (+/- 1, +/- phi, 0) cyclic permutations
     phi = (1 + math.sqrt(5)) / 2
-    vectors = []
     
     # Icosahedron vertices (normalized)
     vs = [
@@ -112,48 +113,64 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 
                 dist_from_center_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                effective_z = z_mm
-                if z_mm > (height - 10.0):
-                    effective_z = height - 10.0
+                # --- PRIORITY 1: SPIDER FITTER (Top 4mm) ---
+                if z_mm > (height - top_plate_height):
+                    # 1.1 Hole
+                    if dist_from_center_xy < mount_hole_radius:
+                        grid[x_idx,y_idx,z_idx] = False
+                        continue
+                    
+                    # 1.2 Hub
+                    if dist_from_center_xy < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    # 1.3 Spokes
+                    in_spoke = (abs(x_mm) < (spoke_width/2.0)) or (abs(y_mm) < (spoke_width/2.0))
+                    if in_spoke and dist_from_center_xy < radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+
+                # --- PRIORITY 2: BOTTOM RIM ---
+                if z_mm < bottom_rim_height:
+                     if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+
+                # --- PRIORITY 3: SHELL BODY ---
+                # 3.1 Hand Access
+                if dist_from_center_xy < hand_access_radius:
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
                 
+                # 3.2 Outer Boundary
+                effective_z = min(z_mm, height - 10.0)
                 dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
-                if z_mm > (height - 4.0):
-                    if dist_from_center_xy < mount_hole_radius:
-                        grid[x_idx,y_idx,z_idx] = False
-                    else:
-                        if dist_from_center_xy < radius:
-                             grid[x_idx,y_idx,z_idx] = True
+                if dist_spherical > radius:
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
-
-                # --- PRIORITY 2: QUASICRYSTAL SHELL ---
-                is_solid = False
+                    
+                if dist_spherical < (radius - wall_thickness):
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+                    
+                # 3.3 Quasicrystal
+                val = 0.0
+                for ax in axes:
+                    nx, ny, nz = ax
+                    phase = 0
+                    val += math.cos((x_mm*nx + y_mm*ny + z_mm*nz) * scale + phase)
                 
-                if dist_from_center_xy < hand_access_radius:
-                    is_solid = False
+                # Isosurface threshold
+                if val > 2.0:
+                     grid[x_idx,y_idx,z_idx] = True
                 else:
-                    if dist_spherical <= radius and dist_spherical > (radius - wall_thickness):
-                        # Sum waves
-                        val = 0.0
-                        for ax in axes:
-                            nx, ny, nz = ax
-                            phase = 0
-                            val += math.cos((x_mm*nx + y_mm*ny + z_mm*nz) * scale + phase)
-                        
-                        # Quasicrystal threshold
-                        # Values range -6 to 6
-                        # Isosurfaces form patterns
-                        if val > 2.0:
-                             is_solid = True
-
-                # --- PRIORITY 3: BOTTOM RIM ---
-                if z_mm < bottom_rim_height:
-                    if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
-                         is_solid = True
-                         
-                grid[x_idx,y_idx,z_idx] = is_solid
+                    grid[x_idx,y_idx,z_idx] = False
 
     print("Extracting Mesh...")
     def add_quad(v1, v2, v3, v4):
@@ -174,7 +191,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if y==res_y-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
                 if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
+                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm-s2, z_mm+s2))
                 if z==0 or not grid[x,y,z-1]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
 
     write_binary_stl(output_path, vertices, faces)
