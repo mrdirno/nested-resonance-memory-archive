@@ -870,3 +870,8 @@
 - **Algorithm:** Wave Interference (Sum of Sine Droplets) modulating shell.
 - **Shade:** V7 Spider Fitter, 249k triangles.
 - **Status:** Design 27 Shade Complete.
+
+## Cycle 2640: The Water (Design 27) Complete
+- **Base:** Pool (Concentric Ripple Relief).
+- **Shaft:** Waterfall (Vertical Flow Veins).
+- **Status:** Design 27 Geometry Complete.
