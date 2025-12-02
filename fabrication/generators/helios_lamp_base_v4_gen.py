@@ -4,9 +4,6 @@ import sys
 import struct
 
 def write_binary_stl(filename, vertices, faces):
-    """
-    Writes a mesh to a Binary STL file.
-    """
     def normal(v1, v2, v3):
         u = v2 - v1
         w = v3 - v1
@@ -19,7 +16,6 @@ def write_binary_stl(filename, vertices, faces):
 
     num_triangles = len(faces)
     print(f"Writing Binary STL ({num_triangles} triangles)...")
-
     with open(filename, 'wb') as f:
         f.write(b'\0' * 80)
         f.write(struct.pack('<I', num_triangles))
@@ -33,159 +29,121 @@ def write_binary_stl(filename, vertices, faces):
             f.write(struct.pack('<H', 0))
 
 def generate_lamp_base_v4(output_path, 
-                          diam=180.0,       # Diameter
-                          height=25.0,      # Height (increased slightly for channel clearance)
-                          resolution=100):
+                          diam=180.0,       
+                          height=25.0,      
+                          resolution=150):
     
-    print(f"Generating Helios Lamp Base V4 (QA Compliant): {output_path}")
+    print(f"Generating Helios Lamp Base V4 (Manifold QA): {output_path}")
+    
+    # Uniform Grid
+    res_x = resolution
+    res_y = resolution
+    step = diam / resolution
+    res_z = int(height / step)
+    
+    print(f"Grid: {res_x}x{res_y}x{res_z} (Voxel: {step:.2f}mm)")
     
     radius = diam / 2.0
+    grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
-    # Channel Config
-    channel_width = 8.0 
+    # QA
+    channel_width = 8.0
     channel_height = 8.0
-    
-    # Feet Config
     foot_radius = 10.0
     foot_offset = radius - 20.0
     foot_depth = 3.0
-    
-    # Center Hole
-    hole_radius = 7.0 # 14mm diam
+    hole_radius = 7.0
     solid_core_radius = 20.0
     
-    # Grid
-    res_x = resolution
-    res_y = resolution
-    step_ref = diam / resolution
-    res_z = int(height / step_ref)
+    scale = 2.0 * math.pi / 30.0
     
-    step_x = diam / res_x
-    step_y = diam / res_y
-    step_z = height / res_z
-    
-    print(f"Grid: {res_x}x{res_y}x{res_z} (Voxel: ~{step_x:.2f}mm)")
-    
-    vertices = []
-    faces = []
-    grid = np.zeros((res_x, res_y, res_z), dtype=bool)
-    
-    # Gyroid Params
-    scale = 2.0 * math.pi / (30.0) # 30mm wavelength
-    
-    print("Calculating Field...")
+    print("Calculating Field (Manifold Logic)...")
     
     for z_idx in range(res_z):
-        pz = z_idx * step_z
+        pz = z_idx * step
         
         for x_idx in range(res_x):
-            px = (x_idx * step_x) - radius
-            
+            px = (x_idx * step) - radius
             for y_idx in range(res_y):
-                py = (y_idx * step_y) - radius
+                py = (y_idx * step) - radius
                 
                 r = math.sqrt(px**2 + py**2)
                 
-                # 1. GLOBAL BOUNDARY (Cylinder)
-                if r > radius:
-                    continue
+                # 1. Boundary
+                if r > radius: continue
                 
-                # 2. SUBTRACTIONS (Negative Space)
-                
-                # A. Center Hole
-                if r < hole_radius:
-                    grid[x_idx, y_idx, z_idx] = False
+                # 2. Subtractions
+                if r < hole_radius: 
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
-                    
-                # B. Wire Channel (Tunnel)
-                # Running along +X axis from center
                 if (px > 0) and (abs(py) < channel_width/2) and (pz < channel_height):
-                     grid[x_idx, y_idx, z_idx] = False
-                     continue
-                     
-                # C. Feet Recesses
-                # 4 feet at 90 degrees
-                # Positions: (offset,0), (-offset,0), (0,offset), (0,-offset)
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
                 is_foot = False
                 if pz < foot_depth:
                     if math.sqrt((px-foot_offset)**2 + py**2) < foot_radius: is_foot = True
                     elif math.sqrt((px+foot_offset)**2 + py**2) < foot_radius: is_foot = True
                     elif math.sqrt(px**2 + (py-foot_offset)**2) < foot_radius: is_foot = True
                     elif math.sqrt(px**2 + (py+foot_offset)**2) < foot_radius: is_foot = True
-                
                 if is_foot:
-                    grid[x_idx, y_idx, z_idx] = False
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
-
-                # 3. ADDITIONS (Solid Space)
                 
-                # A. Solid Core (around hole)
+                # 3. Additions
                 if r < solid_core_radius:
-                    grid[x_idx, y_idx, z_idx] = True
+                    grid[x_idx,y_idx,z_idx] = True
                     continue
-                    
-                # B. Solid Rim (Top and Bottom, and Outer Edge)
                 if (pz < 2.0) or (pz > height - 2.0) or (r > radius - 2.0):
-                    grid[x_idx, y_idx, z_idx] = True
+                    grid[x_idx,y_idx,z_idx] = True
                     continue
                 
-                # 4. GYROID FILL
+                # 4. Gyroid
                 val = math.sin(px * scale) * math.cos(py * scale) + \
                       math.sin(py * scale) * math.cos(pz * scale) + \
                       math.sin(pz * scale) * math.cos(px * scale)
                       
                 if abs(val) < 0.4:
-                    grid[x_idx, y_idx, z_idx] = True
+                    grid[x_idx,y_idx,z_idx] = True
 
-    print("Meshing...")
+    # Meshing
+    vertices = []
+    faces = []
     
     def add_quad(v1, v2, v3, v4):
         idx = len(vertices)
         vertices.extend([v1, v2, v3, v4])
         faces.append((idx, idx+1, idx+2))
         faces.append((idx, idx+2, idx+3))
-
-    for z_idx in range(res_z):
-        pz = z_idx * step_z
         
-        for x_idx in range(res_x):
-            px = (x_idx * step_x) - radius
-            
-            for y_idx in range(res_y):
-                py = (y_idx * step_y) - radius
+    s = step / 2.0
+    
+    print("Meshing...")
+    for z in range(res_z):
+        pz = z * step
+        for x in range(res_x):
+            px = (x * step) - radius
+            for y in range(res_y):
+                if not grid[x,y,z]: continue
                 
-                if not grid[x_idx,y_idx,z_idx]:
-                    continue
+                py = (y * step) - radius
                 
-                vx = px
-                vy = py
-                vz = pz
-                
-                s2x = step_x / 2
-                s2y = step_y / 2
-                s2z = step_z / 2
-                
-                # Neighbor Checks
-                if x_idx == res_x-1 or not grid[x_idx+1,y_idx,z_idx]:
-                    add_quad((vx+s2x, vy-s2y, vz-s2z), (vx+s2x, vy+s2y, vz-s2z), (vx+s2x, vy+s2y, vz+s2z), (vx+s2x, vy-s2y, vz+s2z))
-                if x_idx == 0 or not grid[x_idx-1,y_idx,z_idx]:
-                    add_quad((vx-s2x, vy-s2y, vz+s2z), (vx-s2x, vy+s2y, vz+s2z), (vx-s2x, vy+s2y, vz-s2z), (vx-s2x, vy-s2y, vz-s2z))
-                if y_idx == res_y-1 or not grid[x_idx,y_idx+1,z_idx]:
-                    add_quad((vx+s2x, vy+s2y, vz-s2z), (vx-s2x, vy+s2y, vz-s2z), (vx-s2x, vy+s2y, vz+s2z), (vx+s2x, vy+s2y, vz+s2z))
-                if y_idx == 0 or not grid[x_idx,y_idx-1,z_idx]:
-                    add_quad((vx-s2x, vy-s2y, vz-s2z), (vx+s2x, vy-s2y, vz-s2z), (vx+s2x, vy-s2y, vz+s2z), (vx-s2x, vy-s2y, vz+s2z))
-                if z_idx == res_z-1 or not grid[x_idx,y_idx,z_idx+1]:
-                    add_quad((vx+s2x, vy-s2y, vz+s2z), (vx+s2x, vy+s2y, vz+s2z), (vx-s2x, vy+s2y, vz+s2z), (vx-s2x, vy-s2y, vz+s2z))
-                if z_idx == 0 or not grid[x_idx,y_idx,z_idx-1]:
-                    add_quad((vx-s2x, vy-s2y, vz-s2z), (vx-s2x, vy+s2y, vz-s2z), (vx+s2x, vy+s2y, vz-s2z), (vx+s2x, vy-s2y, vz-s2z))
+                if x==res_x-1 or not grid[x+1,y,z]:
+                    add_quad((px+s,py-s,pz-s), (px+s,py+s,pz-s), (px+s,py+s,pz+s), (px+s,py-s,pz+s))
+                if x==0 or not grid[x-1,y,z]:
+                    add_quad((px-s,py-s,pz+s), (px-s,py+s,pz+s), (px-s,py+s,pz-s), (px-s,py-s,pz-s))
+                if y==res_y-1 or not grid[x,y+1,z]:
+                    add_quad((px+s,py+s,pz-s), (px-s,py+s,pz-s), (px-s,py+s,pz+s), (px+s,py+s,pz+s))
+                if y==0 or not grid[x,y-1,z]:
+                    add_quad((px-s,py-s,pz-s), (px+s,py-s,pz-s), (px+s,py-s,pz+s), (px-s,py-s,pz+s))
+                if z==res_z-1 or not grid[x,y,z+1]:
+                    add_quad((px+s,py-s,pz+s), (px+s,py+s,pz+s), (px-s,py+s,pz+s), (px-s,py-s,pz+s))
+                if z==0 or not grid[x,y,z-1]:
+                    add_quad((px-s,py-s,pz-s), (px-s,py+s,pz-s), (px+s,py+s,pz-s), (px+s,py-s,pz-s))
 
     write_binary_stl(output_path, vertices, faces)
-    print(f"STL written to {output_path}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        # Default test
         generate_lamp_base_v4("test_base_v4.stl")
     else:
-        output_file = sys.argv[1]
-        generate_lamp_base_v4(output_file)
+        generate_lamp_base_v4(sys.argv[1])

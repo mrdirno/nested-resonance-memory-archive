@@ -28,4 +28,10 @@ python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_base_v7
 python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_shade_v7_gen.py "/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_shade/lamp_shade_v7_temporal_echo.stl"
 python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_shaft_v7_gen.py "/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_shaft/lamp_shaft_v7_temporal_echo.stl"
 
+# Generate V8
+echo "Regenerating V8..."
+python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_base_v8_gen.py "/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_base/lamp_base_v8_biological_mimicry.stl"
+python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_shade_v8_gen.py "/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_shade/lamp_shade_v8_biological_mimicry.stl"
+python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_shaft_v8_gen.py "/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_shaft/lamp_shaft_v8_biological_mimicry.stl"
+
 echo "All artifacts updated with Integrity and Aesthetic Fixes."

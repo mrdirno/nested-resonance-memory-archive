@@ -1,25 +1,12 @@
 #!/bin/bash
 
-echo "Generating QA-Compliant Lamp Components..."
+echo "Running QA GENERATION (V4 Only)..."
+echo "Enforcing Manifold Topology (Uniform Grid)."
 
-# Define Paths
-BASE_OUT="/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_base/lamp_base_v4_QA.stl"
-SHADE_OUT="/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_shade/lamp_shade_v4_QA.stl"
-SHAFT_OUT="/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_shaft/lamp_shaft_v4_QA.stl"
+# Generate V4 (Manifold)
+echo "Regenerating V4..."
+python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_base_v4_gen.py "/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_base/lamp_base_v4_QA.stl"
+python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_shade_v4_gen.py "/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_shade/lamp_shade_v4_QA.stl"
+python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_shaft_v4_gen.py "/Volumes/dual/DUALITY-ZERO-V2/fabrication/practical_design/lamp_design/lamp_shaft/lamp_shaft_v4_QA.stl"
 
-# Run Base Generator
-echo "1. Generating Lamp Base..."
-python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_base_v4_gen.py "$BASE_OUT"
-
-# Run Shade Generator
-echo "2. Generating Lamp Shade..."
-python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_shade_v4_gen.py "$SHADE_OUT"
-
-# Run Shaft Generator
-echo "3. Generating Lamp Shaft..."
-python3 /Volumes/dual/DUALITY-ZERO-V2/fabrication/generators/helios_lamp_shaft_v4_gen.py "$SHAFT_OUT"
-
-echo "Done. Files generated at:"
-echo " - $BASE_OUT"
-echo " - $SHADE_OUT"
-echo " - $SHAFT_OUT"
+echo "V4 Manifold Artifacts Generated."
