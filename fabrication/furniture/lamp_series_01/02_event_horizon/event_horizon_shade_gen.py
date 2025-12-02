@@ -106,25 +106,16 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- PRIORITY 1: TOP SPIDER FITTER ---
-                if z_mm > (height - top_plate_height):
-                    # 1. Hole
-                    if dist_from_center_xy < mount_hole_radius:
+                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
+                if z_mm > (height - 4.0):
+                    # Central Hole (12.5mm dia)
+                    if dist_from_center_xy < (12.5 / 2.0):
                         grid[x_idx,y_idx,z_idx] = False
-                        continue
-                        
-                    # 2. Hub (Solid Disk)
-                    if dist_from_center_xy < hub_radius:
-                        grid[x_idx,y_idx,z_idx] = True
-                        continue
-                        
-                    # 3. Spokes
-                    # Extend all the way to Radius (guaranteed intersection with flattened top)
-                    if dist_from_center_xy < radius:
-                        # Cross pattern
-                        if abs(x_mm) < (spoke_width/2) or abs(y_mm) < (spoke_width/2):
-                            grid[x_idx,y_idx,z_idx] = True
-                            continue
+                    else:
+                        # Solid Cap connecting to shell
+                        if dist_from_center_xy < radius:
+                             grid[x_idx,y_idx,z_idx] = True
+                    continue
 
                 # --- PRIORITY 2: SHELL & PATTERN ---
                 

@@ -158,10 +158,41 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                         
                         # Modulation
                         m = math.cos(num_faces/2 * angle) # 4 lobes
-                        # Let's make it geometric
+                        
+                        # Add "Time Crystal" Texture (Periodic Geometric Noise)
+                        # Use high freq sine waves aligned with the facets
+                        texture_scale = 2.0 * math.pi / 15.0 # 15mm detail
+                        tex = math.sin(rx * texture_scale) * math.sin(ry * texture_scale) * math.sin(z_mm * texture_scale)
+                        
+                        # Apply texture to radius threshold
+                        # Effective radius slightly modulated by texture
+                        # This creates a "glitchy" crystalline surface
+                        
+                        # Base polygon bound already defined by twist? 
+                        # We need to actually CUT the volume.
+                        # Let's use Voronoi-like intersection logic simplified
+                        
+                        # If distance to center < radius AND inside polygon AND texture condition
+                        # Polygon logic:
+                        # d_poly = dist_from_center_xy * math.cos(angle - a_quant)
+                        # Boundary: d_poly < R_eff
+                        
+                        # R_eff varies with Z (sphere)
+                        # R_sphere_at_z = math.sqrt(radius**2 - (effective_z - sphere_z_center)**2)
+                        # Let's say the crystal is inscribed in the sphere.
                         
                         if dist_spherical < radius:
-                             is_solid = True
+                             # Texture check: Only keep 80% of the volume near surface?
+                             # Or simply emboss?
+                             # Let's emboss:
+                             if tex > 0.5:
+                                 # Additive bump? No, boolean logic.
+                                 is_solid = True
+                             else:
+                                 # Main body
+                                 # Keep solid if deep enough
+                                 if dist_spherical < (radius - 2.0):
+                                     is_solid = True
 
                 # --- PRIORITY 3: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:

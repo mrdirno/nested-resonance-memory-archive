@@ -79,7 +79,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     sphere_z_center = height - radius
     
     # Distribute bubbles on the surface of the master sphere
-    num_bubbles = 300
+    num_bubbles = 500
     
     for _ in range(num_bubbles):
         # Random point on sphere surface
@@ -93,8 +93,8 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
         by = r_center * math.sin(phi) * math.sin(theta)
         bz = r_center * math.cos(phi) + sphere_z_center
         
-        # Bubble size
-        b_rad = random.uniform(8.0, 25.0)
+        # Bubble size ( Reduced for Scale Constraint )
+        b_rad = random.uniform(6.0, 18.0)
         
         bubbles.append((bx, by, bz, b_rad))
     

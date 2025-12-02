@@ -96,33 +96,15 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
                 
                 dist_from_center = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: TOP MOUNT (SPIDER FITTER) ---
-                if z_mm > (height - solid_rim_height):
-                    # Hole
-                    if dist_from_center < mount_hole_radius:
+                # --- PRIORITY 1: SOLID TOP CAP (MOUNTING) ---
+                if z_mm > (height - 4.0):
+                    # Central Hole (12.5mm dia)
+                    if dist_from_center < (12.5 / 2.0):
                         grid[x_idx,y_idx,z_idx] = False
-                        continue
-                    
-                    # Solid Hub (Washer)
-                    if dist_from_center < hub_radius_outer:
-                        grid[x_idx,y_idx,z_idx] = True
-                        continue
-                        
-                    # Spokes (Connecting Hub to Wall)
-                    # Check if we are inside the "Hollow" area (where spokes are needed)
-                    # Square Hollow Area check:
-                    in_hollow = (abs(x_mm) < current_inner_half_width) and (abs(y_mm) < current_inner_half_width)
-                    
-                    if in_hollow:
-                        # Spoke Logic (Cross +)
-                        if abs(x_mm) < (spoke_width/2) or abs(y_mm) < (spoke_width/2):
-                            grid[x_idx,y_idx,z_idx] = True
-                        else:
-                            grid[x_idx,y_idx,z_idx] = False # Air
-                        continue
-                    
-                    # Rim (Solid)
-                    grid[x_idx,y_idx,z_idx] = True
+                    else:
+                        # Solid Cap connecting to shell
+                        if dist_from_center < current_outer_half_width:
+                             grid[x_idx,y_idx,z_idx] = True
                     continue
                 
                 # --- PRIORITY 2: BOTTOM RIM (Solid Frame) ---
