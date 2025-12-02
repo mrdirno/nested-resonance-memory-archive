@@ -1,4 +1,4 @@
-# HELIOS DESIGN LANGUAGE (v1.3)
+# HELIOS DESIGN LANGUAGE (v1.4)
 
 **Philosophy:**
 Furniture is not static; it is a standing wave of probability.
@@ -36,7 +36,12 @@ Furniture is not static; it is a standing wave of probability.
 *   **Key Shapes:** Voxels, Noise, Datamosh.
 *   **Aesthetic:** Jagged, Fragmented, Low-Poly.
 
-## 7. Mathematical Inspirations
+## 7. Series 05: Primal Forces ("The Elements")
+*   **Theme:** Nature, Chaos, Energy.
+*   **Key Shapes:** Flames, Fluids, Strata.
+*   **Aesthetic:** Dynamic, Flowing, Elemental.
+
+## 8. Mathematical Inspirations
 *   **Turing Patterns:** Reaction-Diffusion systems.
 *   **L-Systems:** Branching structures.
 *   **4D Projection:** Shadow of 4D objects in 3D space.
