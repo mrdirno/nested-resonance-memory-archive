@@ -116,25 +116,29 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                    # Vortex Math
-                    # Twist coords based on radius
-                    angle = twist_factor * dist_from_center_xy
-                    cos_a = math.cos(angle)
-                    sin_a = math.sin(angle)
-                    
-                    tx = x_mm * cos_a - y_mm * sin_a
-                    ty = x_mm * sin_a + y_mm * cos_a
-                    tz = z_mm
-                    
-                    lx = tx * base_scale
-                    ly = ty * base_scale
-                    lz = tz * base_scale
-                     
-                    # Gyroid
-                    val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
-                    
-                    if abs(val) < 0.35: 
+                    # FORCE SOLID RIM at Top
+                    if z_mm > (height - top_plate_height):
                         is_solid = True
+                    else:
+                        # Vortex Math
+                        # Twist coords based on radius
+                        angle = twist_factor * dist_from_center_xy
+                        cos_a = math.cos(angle)
+                        sin_a = math.sin(angle)
+                        
+                        tx = x_mm * cos_a - y_mm * sin_a
+                        ty = x_mm * sin_a + y_mm * cos_a
+                        tz = z_mm
+                        
+                        lx = tx * base_scale
+                        ly = ty * base_scale
+                        lz = tz * base_scale
+                         
+                        # Gyroid
+                        val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
+                        
+                        if abs(val) < 0.35: 
+                            is_solid = True
                         
                 # --- PRIORITY 3: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:

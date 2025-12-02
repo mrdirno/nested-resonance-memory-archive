@@ -134,19 +134,23 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                    # Sum Sine Waves
-                    val = 0.0
-                    for w in waves:
-                        dx, dy, dz, freq, phase = w
-                        # Dot product position with direction
-                        proj = x_mm*dx + y_mm*dy + z_mm*dz
-                        val += math.sin(proj * freq + phase)
-                    
-                    # Normalize (approx range -N to N)
-                    # Threshold near 0 for "sponge"
-                    # Interference noise creates connected structures near 0
-                    if abs(val) < 1.2: 
+                    # FORCE SOLID RIM at Top
+                    if z_mm > (height - top_plate_height):
                         is_solid = True
+                    else:
+                        # Sum Sine Waves
+                        val = 0.0
+                        for w in waves:
+                            dx, dy, dz, freq, phase = w
+                            # Dot product position with direction
+                            proj = x_mm*dx + y_mm*dy + z_mm*dz
+                            val += math.sin(proj * freq + phase)
+                        
+                        # Normalize (approx range -N to N)
+                        # Threshold near 0 for "sponge"
+                        # Interference noise creates connected structures near 0
+                        if abs(val) < 1.2: 
+                            is_solid = True
                         
                 # --- PRIORITY 3: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:

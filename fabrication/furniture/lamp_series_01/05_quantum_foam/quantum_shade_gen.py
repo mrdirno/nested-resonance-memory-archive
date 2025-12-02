@@ -114,16 +114,20 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                    # Schwarz P Surface
-                    lx = x_mm * base_scale
-                    ly = y_mm * base_scale
-                    lz = z_mm * base_scale
-                     
-                    val = math.cos(lx) + math.cos(ly) + math.cos(lz)
-                    
-                    # Threshold for foam wall thickness
-                    if abs(val) < 0.35: 
+                    # FORCE SOLID RIM at Top
+                    if z_mm > (height - top_plate_height):
                         is_solid = True
+                    else:
+                        # Schwarz P Surface
+                        lx = x_mm * base_scale
+                        ly = y_mm * base_scale
+                        lz = z_mm * base_scale
+                         
+                        val = math.cos(lx) + math.cos(ly) + math.cos(lz)
+                        
+                        # Threshold for foam wall thickness
+                        if abs(val) < 0.35: 
+                            is_solid = True
                         
                 # --- PRIORITY 3: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:
