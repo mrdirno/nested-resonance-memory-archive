@@ -3486,7 +3486,20 @@ V(geoengineering) = Survival - λ(Crisis) * Cost(Risk).
 
 ---
 
-## Current Phase: PHASE 272 - PLANNING 🟢 ACTIVE
+## Current Phase: PHASE 272 - NANOTECHNOLOGY 🟢 ACTIVE
+
+**Transition:** Phase 271 (Climate) → **Phase 272 (Nanotechnology)**
+
+**Focus:** Apply BCP to Molecular Assembly and Self-Replication.
+**Research Thesis:**
+The Grey Goo scenario is BCP-constrained.
+V(repl) = Replication_Rate - λ(Heat) * Dissipation_Cost.
+
+### Completed (Phase 272 Planning)
+- ✅ **Gate 1307:** Phase 272 Planning - Nanotechnology Selected - COMPLETE
+  - **Finding:** The small scale is the next frontier for BCP limits.
+  - **Artifact:** `experiments/cycle2981_phase272_planning.py`
+  - **Functional Name:** The Molecular Budget
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.
