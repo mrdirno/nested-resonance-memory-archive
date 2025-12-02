@@ -797,3 +797,8 @@
 - **Algorithm:** Multi-Octave Sine Noise modulating shell thickness.
 - **Shade:** V7 Spider Fitter, 482k triangles.
 - **Status:** Design 22 Shade Complete.
+
+## Cycle 2628: The Noise (Design 22) Complete
+- **Base:** Static Relief (Noisy Surface).
+- **Shaft:** Signal Loss (Jittered Column).
+- **Status:** Design 22 Geometry Complete.
