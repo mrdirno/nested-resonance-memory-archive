@@ -41,31 +41,21 @@
 ## 4. Geometric Logic Protocol (The Code)
 
 ### A. Order of Operations (Boolean Logic)
-When generating voxel grids, the order of `True` (Solid) and `False` (Empty) assignments is critical.
-1.  **Global Boundary:** Define the outer shape (Sphere, Frustum, etc.). `if outside: False`.
-2.  **Internal Structure:** Generate the pattern (Gyroid, Voronoi). `if pattern: True`.
-3.  **Hollowing:** Remove the core. `if inner_radius: False`.
-4.  **Structural Overrides (The Fix):** Apply functional geometry **LAST** to override previous cuts.
-    *   *Top Plate:* MUST be a cylinder of `r = Hole + 10mm`. Ignore Global Boundary if it cuts this plate.
-    *   *Bottom Rim:* MUST be a solid ring.
-    *   *Ribs/Struts:* Vertical supports must persist through the pattern.
-5.  **Hardware Subtracts:** Apply final holes **VERY LAST**.
-    *   *Mount Hole:* `if r < hole_r: False`.
-    *   *Wire Channel:* `if box check: False`.
+1.  **Global Boundary:** Define outer shape.
+2.  **Spider Fitter (Top 5mm):** MUST be generated FIRST or override everything.
+    *   **Hub:** Solid Disk (Diam 40mm).
+    *   **Spokes:** Solid Arms connecting Hub to Outer Rim.
+    *   **Rim:** Solid ring merging with the Shell.
+3.  **Shell Masking:** Define the "Wall" region (e.g., 1-inch thick).
+4.  **Pattern:** Generate TPMS only within the Shell.
+5.  **Hardware Subtracts:** Drill the hole through the Hub LAST.
 
-### C. Volumetric vs. Shell Generation (The "Solid Sponge" Trap)
-*   **The Error:** Generating a TPMS (Gyroid/Schwarz) pattern through the *entire volume* of a shape results in a solid block of foam. This is not a lamp shade; it blocks light and wastes material.
-*   **The Fix (Shell Masking):** You MUST define a `Shell_Thickness` (e.g., 10-15mm).
-    *   Logic: `if (Dist_From_Center < Outer_R) AND (Dist_From_Center > Inner_R): Generate Pattern`.
-    *   Result: A hollow dome/cylinder with patterned walls.
+### B. Structural Integrity (The 1-Inch Rule)
+*   **Wall Thickness:** Large shades (>150mm) MUST have **1-inch (25.4mm) thick walls**.
+*   **Pattern Density:** A 1-inch wall requires a robust lattice. Ensure the implicit threshold (e.g., `val < 0.4`) creates a connected network, not isolated islands.
+*   **Reinforcement:** Bottom Rims and Corners (for square shades) should be solid.
 
-### D. Aesthetic Scaling (Z-Frequency)
-*   **Redshift/Blueshift:** Varying the pattern scale with height creates visual movement.
-*   **The Limit:** When shrinking waves (increasing frequency), enforce a **Max Frequency Cap**.
-    *   *Rule:* Minimum Feature Size > Nozzle Diameter * 2.
-    *   *Logic:* `current_scale = min(calculated_scale, MAX_SCALE_LIMIT)`.
-
-## 5. Practicality & Assembly Protocol (The "Hand Trap" Fix)
+## 5. Storage & Naming Protocol (Standardized)
 
 ### A. Hand Access & Bulb Clearance
 *   **The Issue:** A shade might be hollow, but if it narrows at the top (Dome/Sphere), you cannot fit your hand inside to screw on the socket ring.

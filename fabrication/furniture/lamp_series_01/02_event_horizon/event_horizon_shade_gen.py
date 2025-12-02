@@ -4,14 +4,13 @@ import sys
 import struct
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE) - V5 FIX (SPIDER MOUNT + SCALE)
+# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE) - V6 FIX (1-INCH WALL + ROBUST MOUNT)
 # -----------------------------------------------------------------------------
 # Logic: 
-# 1. Schwarz D Pattern (Z-Scaled).
-# 2. Shell Masking (Hollow).
-# 3. Cylindrical Core Void (Hand Access).
-# 4. **Spider Fitter**: Hub + Spokes (Copied from Redshift).
-# 5. **Scale Constraint**: Max Freq <= Redshift Base Freq.
+# 1. 1-Inch Thick Wall (Robustness).
+# 2. 200mm Diameter (Max Print Area).
+# 3. Spider Fitter: Solid Hub (40mm) + Spokes Merging with Shell.
+# 4. Scale: Matches Redshift Baseline.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -40,17 +39,23 @@ def write_binary_stl(filename, vertices, faces):
             f.write(data)
             f.write(struct.pack('<H', 0))
 
-def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, hole_diameter=42.0):
-    print(f"Generating EVENT HORIZON SHADE (V5 SPIDER FIX): {output_path}")
+def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=12.5):
+    print(f"Generating EVENT HORIZON SHADE (V6 ROBUST FIX): {output_path}")
     
-    # Mount Parameters (Spider Fitter)
-    mount_hole_radius = hole_diameter / 2.0 # 21mm
-    hub_radius = mount_hole_radius + 5.0 # 26mm Solid Ring around hole
-    spoke_width = 6.0 # 4 arms
-    solid_rim_height = 4.0 
+    # Mount Parameters (Robust Spider Fitter)
+    mount_hole_radius = hole_diameter / 2.0 # 6.25mm
+    hub_radius = 20.0 # 40mm Solid Disk
+    spoke_width = 8.0 # Thicker spokes for 1-inch wall
+    solid_rim_height = 5.0 # Thicker Top Plate
     
-    # Shell Parameters
-    shell_thickness = 5.0 
+    # Shell Parameters (The 1-Inch Rule)
+    wall_thickness = 25.4 
+    
+    # Hand Access (Still needed, but works with 1-inch wall?)
+    # Radius 100mm. Inner Wall at 75mm. 
+    # Void needs to be at least ~90mm diam (45 radius).
+    # 75mm > 45mm, so the hollow core is naturally large enough.
+    # We just need to ensure no "internal debris" blocks it.
     hand_access_radius = 45.0 
     
     # Grid Setup
@@ -67,50 +72,24 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
     faces = []
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
-    # Frequency Setup
-    # Redshift Reference: base_scale = 2*pi / (194/4) = 2*pi / 48.5 ~= 0.129
-    # Event Horizon Reference: base_scale = 2*pi / (160/5) = 2*pi / 32 ~= 0.196 (Higher freq!)
-    # User Constraint: "Smallest wave can not be smaller than the original shade smallest wave"
-    # The Redshift's SMALLEST wave is at the bottom (Scale ~0.129). It redshifts (gets bigger) up.
-    # So Max Frequency allowed is ~0.129.
-    
-    # Let's adjust Event Horizon base scale to match Redshift density roughly.
-    # Target Period = 48.5mm (from Redshift)
-    # 160mm diameter / 48.5mm = ~3.3 periods.
-    
+    # Frequency Setup (Redshift Match)
+    # Redshift Base Period ~48.5mm.
     target_period = 48.5
-    base_scale = 2.0 * math.pi / target_period
     
-    # Z-Scaling (Blueshift)
-    # Since we start at the "Limit" (Redshift Base), we cannot shrink further (increase freq).
-    # Wait, if we blueshift, waves get smaller. 
-    # If "Smallest wave cannot be smaller than Redshift Base", then we CANNOT blueshift if we start at Redshift Base.
-    # We must either:
-    # A) Start larger and shrink to Redshift Base.
-    # B) Keep constant.
-    # C) Start at Redshift Base and grow (Redshift).
+    # Z-Scaling: Start Larger (60) -> Target (48.5)
+    start_scale = 2.0 * math.pi / 60.0
+    end_scale = 2.0 * math.pi / target_period
     
-    # "never go smaller than the smallest wave on the shade" - referencing original.
-    # Assuming we want the aesthetics of "Event Horizon" (Distortion), let's start Larger (Period 60mm) and shrink to Target (48.5mm).
-    
-    start_period = 60.0
-    end_period = 48.5
-    
-    start_scale = 2.0 * math.pi / start_period
-    end_scale = 2.0 * math.pi / end_period
-    
-    print(f"Scale: Period {start_period:.1f}mm -> {end_period:.1f}mm")
+    print("Calculating Field...")
     
     radius = diameter / 2.0
     sphere_z_center = height - radius
-    
-    print("Calculating Field...")
     
     for z_idx in range(res_z):
         z_mm = z_idx * step
         z_norm = z_mm / height
         
-        # Linear Interpolation of Scale
+        # Scale
         current_scale = start_scale * (1.0 - z_norm) + end_scale * z_norm
         
         for x_idx in range(res_x):
@@ -123,72 +102,70 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
                 dist_sq = x_mm**2 + y_mm**2 + (z_mm - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- PRIORITY 1: SPIDER MOUNT (TOP) ---
-                # Overrides everything else at the top layers
+                # --- PRIORITY 1: TOP SPIDER FITTER (THE MOUNT) ---
                 if z_mm > (height - solid_rim_height):
                     # 1. Hole
                     if dist_from_center_xy < mount_hole_radius:
                         grid[x_idx,y_idx,z_idx] = False
                         continue
                         
-                    # 2. Hub (Solid Ring)
+                    # 2. Hub (Solid Disk)
                     if dist_from_center_xy < hub_radius:
                         grid[x_idx,y_idx,z_idx] = True
                         continue
                         
-                    # 3. Spokes (Cross)
-                    # Check if we are inside the "Void" where spokes are needed.
-                    # The void is the Hand Access Cylinder.
-                    if dist_from_center_xy < hand_access_radius:
-                        if abs(x_mm) < (spoke_width/2) or abs(y_mm) < (spoke_width/2):
-                            grid[x_idx,y_idx,z_idx] = True # Spoke
-                        else:
-                            grid[x_idx,y_idx,z_idx] = False # Air Gap
-                        continue
-                        
-                    # 4. Rim (Solid Shell Connection)
-                    # If outside hand access but inside sphere...
-                    # Just generate solid for the rest of the top plate to ensure connection
-                    if dist_spherical <= radius:
+                    # 3. Spokes (Connecting Hub to Inner Wall)
+                    # We need spokes to cross the "Void" between Hub (20mm) and Wall (Starts at Radius - 25.4mm = 74.6mm)
+                    # So spokes run from 20mm to ~75mm.
+                    if dist_from_center_xy < (radius - wall_thickness + 2.0): # Overlap slightly with wall
+                         if abs(x_mm) < (spoke_width/2) or abs(y_mm) < (spoke_width/2):
+                             grid[x_idx,y_idx,z_idx] = True
+                             continue
+                    
+                    # 4. The Rest (Shell Top)
+                    # The shell logic below will handle the rim, but we can force solid rim here to be safe.
+                    if dist_from_center_xy < radius and dist_from_center_xy > (radius - wall_thickness):
                         grid[x_idx,y_idx,z_idx] = True
                     continue
-
-                # --- PRIORITY 2: PATTERN & SHELL ---
+                    
+                # --- PRIORITY 2: SHELL & PATTERN ---
                 
                 is_solid = False
                 
-                # 1. Shell Masking
+                # 1. Shell Definition (1-Inch Thick)
                 in_outer_shell = dist_spherical <= radius
-                in_inner_void = dist_spherical < (radius - shell_thickness)
+                in_inner_void = dist_spherical < (radius - wall_thickness)
                 
-                # 2. Hand Access Void (Override Inner Void)
-                # Void if (Spherical Inner Void) OR (Hand Access Cylinder)
+                # 2. Hand Access (Redundant here usually, but keeps core clear)
                 in_hand_void = dist_from_center_xy < hand_access_radius
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                     # Pattern
-                     lx = x_mm * current_scale
-                     ly = y_mm * current_scale
-                     lz = z_mm * current_scale
+                    # Pattern
+                    lx = x_mm * current_scale
+                    ly = y_mm * current_scale
+                    lz = z_mm * current_scale
                      
-                     sx, sy, sz = math.sin(lx), math.sin(ly), math.sin(lz)
-                     cx, cy, cz = math.cos(lx), math.cos(ly), math.cos(lz)
+                    sx, sy, sz = math.sin(lx), math.sin(ly), math.sin(lz)
+                    cx, cy, cz = math.cos(lx), math.cos(ly), math.cos(lz)
                      
-                     val = sx*sy*sz + sx*cy*cz + cx*sy*cz + cx*cy*sz
-                     
-                     if abs(val) < 0.35: 
-                         is_solid = True
-
+                    val = sx*sy*sz + sx*cy*cz + cx*sy*cz + cx*cy*sz
+                    
+                    # Threshold tuned for 1-inch wall to be robust but not solid
+                    # With thicker wall, we can afford a lower threshold (thinner lattice members) 
+                    # OR higher threshold (denser).
+                    # Let's keep it standard 0.35 to ensure connectivity.
+                    if abs(val) < 0.35: 
+                        is_solid = True
+                        
                 # --- PRIORITY 3: BOTTOM RIM ---
                 if z_mm < solid_rim_height:
                     if dist_from_center_xy < radius and not in_hand_void:
-                        is_solid = True
-                        
+                         is_solid = True
+                         
                 grid[x_idx,y_idx,z_idx] = is_solid
 
     print("Extracting Mesh...")
-    
     def add_quad(v1, v2, v3, v4):
         idx = len(vertices)
         vertices.extend([v1, v2, v3, v4])
@@ -203,8 +180,8 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
                 y_mm = (y * step) - (diameter/2)
                 
                 if not grid[x,y,z]: continue
-                
                 s2 = step/2
+                
                 if x==res_x-1 or not grid[x+1,y,z]: add_quad((x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
                 if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
                 if y==res_y-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))

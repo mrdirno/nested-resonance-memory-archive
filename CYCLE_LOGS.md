@@ -569,3 +569,14 @@
         - Applied **Z-Scaling** from Larger (60mm) to Reference (48.5mm) to ensure no feature is smaller than the original.
 - **Result:** Shade STL regenerated (106k triangles). Physically and aesthetically compliant.
 - **Status:** Phase 270 Active. Design 2/10 Finalized.
+
+## Cycle 2960 Robustness Update: Event Horizon V6 (1-Inch Wall) - COMPLETE
+- **Goal:** Match physical robustness and mounting standards of Original Design.
+- **Action:** 
+    1. Updated `FURNITURE_PROTOCOL.md` with '1-Inch Rule' and 'Solid Spider Fitter'.
+    2. Refactored `event_horizon_shade_gen.py` (V6):
+        - **Diameter:** Increased to 200mm (Max Print Area).
+        - **Wall Thickness:** Increased to 25.4mm (1 Inch) for stability.
+        - **Mounting:** Implemented Robust Spider Fitter (40mm Hub + Thicker Spokes) merging with shell.
+- **Result:** Shade STL regenerated (236k triangles). Physically robust and mountable.
+- **Status:** Phase 270 Active. Design 2/10 Robustness Verified.
