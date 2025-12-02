@@ -57,7 +57,7 @@ def generate_shaft(output_path, height=200.0, resolution=150):
     grid = np.zeros((res_xy, res_xy, res_z), dtype=bool)
     
     # Gyroid Params
-    scale_base = 2.0 * math.pi / 15.0 # 15mm wavelength
+    scale_base = 2.0 * math.pi / 30.0 # 30mm wavelength (Furniture Scale)
     
     print("Calculating Field...")
     

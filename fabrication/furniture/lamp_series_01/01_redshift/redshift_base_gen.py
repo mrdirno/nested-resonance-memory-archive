@@ -33,12 +33,14 @@ def generate_base(output_path, width=180.0, height=20.0, resolution=150):
     print(f"Generating BASE (The Void Series): {output_path}")
     
     # Dimensions
-    rod_radius = 6.25 # 12.5mm Diameter
-    wire_channel_width = 6.0
-    wire_channel_height = 6.0
+    shaft_radius = 7.6 # 15.2mm Diameter (Socket)
+    rod_radius = 5.2 # 10.4mm Diameter (Through Hole)
+    wire_channel_width = 8.0
+    wire_channel_height = 8.0
     
     # Gyroid Params
-    base_scale = 2.0 * math.pi / 15.0 # 15mm wavelength
+    # Increased wavelength for printability/aesthetic match
+    base_scale = 2.0 * math.pi / 40.0 # 40mm wavelength (Furniture Scale)
     
     step = width / resolution
     res_xy = int(width / step) + 5
