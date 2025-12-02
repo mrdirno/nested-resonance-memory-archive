@@ -29,31 +29,22 @@ def write_binary_stl(filename, vertices, faces):
             f.write(data)
             f.write(struct.pack('<H', 0))
 
-def generate_base(output_path, width=120.0, height=30.0, resolution=60):
-    print(f"Generating BASE BLOCK (Protocol V1.0): {output_path}")
+def generate_base(output_path, width=180.0, height=20.0, resolution=150):
+    print(f"Generating BASE (The Void Series): {output_path}")
     
     # Dimensions
-    shaft_radius = 7.6 # 15.2mm Diameter (Socket)
-    rod_radius = 5.2 # 10.4mm Diameter (Through Hole)
+    rod_radius = 6.25 # 12.5mm Diameter
     wire_channel_width = 6.0
     wire_channel_height = 6.0
-    wall_thickness = 2.4 # 6 perimeters
     
-    # Feet
-    foot_offset = 10.0 # from edge
-    foot_radius = 10.0 # 20mm diameter recess
-    foot_depth = 2.0
-    
-    # Nut Trap (M10)
-    nut_width = 17.0 # Flat to Flat (Standard M10 is 17mm, add tolerance)
-    nut_height = 8.0
+    # Gyroid Params
+    base_scale = 2.0 * math.pi / 15.0 # 15mm wavelength
     
     step = width / resolution
-    
     res_xy = int(width / step) + 5
     res_z = int(height / step) + 1
     
-    print(f"Grid: {res_xy}x{res_xy}x{res_z}")
+    print(f"Grid: {res_xy}x{res_xy}x{res_z} (Voxel: {step:.2f}mm)")
     
     vertices = []
     faces = []
@@ -72,49 +63,53 @@ def generate_base(output_path, width=120.0, height=30.0, resolution=60):
                 
                 dist_center = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # 1. Base Block (Union)
-                if abs(x_mm) < (width/2) and abs(y_mm) < (width/2):
-                    grid[x_idx,y_idx,z_idx] = True
+                # 1. Outer Bounds (Cylinder or Box? Reference says "Wide/Slim profile". Usually Round for lamps).
+                # Let's assume Cylinder for "The Void" aesthetic (matches shaft).
+                if dist_center > (width/2):
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
                 
-                # 2. Hollow Ballast Chamber (Subtraction)
-                # Leave walls and floor/ceiling
-                if wall_thickness < z_mm < (height - wall_thickness):
-                    if abs(x_mm) < (width/2 - wall_thickness) and abs(y_mm) < (width/2 - wall_thickness):
-                        # Don't hollow out the central column (for the rod)
-                        if dist_center > (shaft_radius + wall_thickness):
-                             grid[x_idx,y_idx,z_idx] = False
-                
-                # 3. Center Hole (Through Rod)
+                # 2. Center Hole (Subtraction)
                 if dist_center < rod_radius:
                     grid[x_idx,y_idx,z_idx] = False
-                    
-                # 4. Shaft Socket (Top only)
-                if z_mm > (height - 10.0): # 10mm deep socket
-                    if dist_center < shaft_radius:
-                        grid[x_idx,y_idx,z_idx] = False
-
-                # 5. Wire Channel (Bottom)
+                    continue
+                
+                # 3. Wire Channel (Subtraction)
                 if z_mm < wire_channel_height and \
                    abs(x_mm) < (wire_channel_width/2) and \
                    y_mm > 0:
                     grid[x_idx,y_idx,z_idx] = False
-                    
-                # 6. Feet Recesses (Bottom Corners)
-                if z_mm < foot_depth:
-                    # 4 corners
-                    fx = width/2 - foot_offset - foot_radius/2
-                    fy = width/2 - foot_offset - foot_radius/2
-                    
-                    # Check dist to any of 4 feet centers
-                    if math.sqrt((abs(x_mm)-fx)**2 + (abs(y_mm)-fy)**2) < foot_radius:
-                         grid[x_idx,y_idx,z_idx] = False
-                         
-                # 7. Nut Trap (Bottom Center)
-                # Simple Hex approximation (Circle for now, or Box?)
-                # M10 Hex is ~19.6mm corner-to-corner. Let's use 20mm cylinder for simplicity/compatibility
-                if z_mm < nut_height:
-                    if dist_center < (20.0 / 2):
-                        grid[x_idx,y_idx,z_idx] = False
+                    continue
+                
+                # 4. Solid Top/Bottom Skins (2mm)
+                if z_mm < 2.0 or z_mm > (height - 2.0):
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+                
+                # 5. Radial Gradient Gyroid
+                # Center = Solid (High Threshold), Edge = Airy (Low Threshold)
+                # Map dist from 0 to width/2
+                
+                # Solid Core Zone (around hole)
+                if dist_center < 20.0:
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+                
+                # Gradient Zone
+                # Norm dist from 20 to 90
+                d_norm = (dist_center - 20.0) / ((width/2) - 20.0)
+                d_norm = max(0.0, min(1.0, d_norm))
+                
+                # Threshold: 0.8 (Solid) -> 0.15 (Airy)
+                threshold = 0.8 - (d_norm * 0.65)
+                
+                val = math.sin(x_mm * base_scale) * math.cos(y_mm * base_scale) + \
+                      math.sin(y_mm * base_scale) * math.cos(z_mm * base_scale) + \
+                      math.sin(z_mm * base_scale) * math.cos(x_mm * base_scale)
+                
+                if abs(val) < threshold:
+                    grid[x_idx,y_idx,z_idx] = True
+
 
 
     print("Extracting Mesh...")
