@@ -859,3 +859,8 @@
 - **Algorithm:** Vertical Perlin Noise modulating tapered radius.
 - **Shade:** V7 Spider Fitter, 532k triangles.
 - **Status:** Design 26 Shade Complete.
+
+## Cycle 2638: The Fire (Design 26) Complete
+- **Base:** Embers (Charred Noise Relief).
+- **Shaft:** Rising Smoke (Twisting/Dissipating).
+- **Status:** Design 26 Geometry Complete.
