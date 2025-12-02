@@ -155,3 +155,26 @@ Each Design Folder MUST contain:
 *   **Switch Access:** Don't bury the switch. If using a cord switch, ensure the cord exit is accessible.
 *   **Bulb Replacement:** Can the user change the bulb without disassembling the lamp?
     *   *Rule:* Hand must fit inside shade (Min 80mm top opening) OR Shade must unclip easily.
+
+## 11. The Perfection Loop (Perpetual Refinement)
+
+**Directive:** Design is never "Finished", only "Versioned".
+We do not simply "generate and forget". We perpetually refine until the artifact is a **perfect physical object**.
+
+### A. The "One Aspect" Rule
+*   **Focus:** Do not rebuild the entire object every cycle. Refine **ONE** specific aspect to perfection.
+    *   *Example:* "Optimize the overhang angles on the Lattice Shaft."
+    *   *Example:* "Thicken the mounting plate by 0.5mm for stiffness."
+    *   *Example:* "Adjust the Gyroid phase to ensure the bottom layer is a single connected path."
+
+### B. The "Zero Post-Processing" Goal
+*   **Target:** The part should come off the printer ready to use.
+*   **Brims/Rafts:** Avoid if possible. Design integrated adhesion pads ("Mouse Ears") if corners lift.
+*   **Supports:** Design specifically to avoid slicer-generated supports. Use 45° chamfers and teardrop holes.
+*   **Tolerances:** Mating parts must slide together with a satisfying "click". No sanding.
+
+### C. The "Bed Adhesion" Mandate
+*   **First Layer:** The first 3 layers (0.6mm) MUST be a **Solid, Continuous Geometry**.
+    *   *Why?* A lattice starting on Layer 1 results in disconnected islands that detach.
+    *   *Fix:* Always generate a solid "Base Plate" or "Rim" that anchors the complex pattern above it.
+

@@ -614,3 +614,12 @@
     -   **Base:** Solid functional base with ballast chamber.
 - **Verification:** Generated STLs (`shade`, `shaft`, `base`). High triangle count on shaft (1.3M) indicates good resolution.
 - **Artifacts:** `fabrication/furniture/lamp_series_01/06_lattice/*.stl`
+
+
+## Cycle 2587 (Refinement) - The Lattice Shaft V2
+
+**Context:** Applied 'Perpetual Refinement' protocol to the newly created Lattice Shaft.
+
+- **Refinement:** Added solid 3mm Base and Top Caps.
+- **Reason:** Ensures robust bed adhesion (no detached islands) and a clean top mating surface for the socket cap.
+- **Verification:** Regenerated `lattice_shaft.stl`.

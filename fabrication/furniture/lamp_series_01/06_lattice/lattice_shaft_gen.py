@@ -87,6 +87,11 @@ def generate_shaft(output_path, width=50.0, height=200.0, resolution=100):
                     grid[x_idx,y_idx,z_idx] = True
                     continue
                 
+                # 3a. PERFECTION LOOP: Solid Caps for Adhesion/Mating
+                if z_mm < 3.0 or z_mm > (height - 3.0):
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+
                 # 4. Lattice Structure
                 # Schwarz P
                 val = math.cos(x_mm * freq) + math.cos(y_mm * freq) + math.cos(z_mm * freq)
