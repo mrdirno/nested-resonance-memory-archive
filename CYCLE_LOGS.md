@@ -548,3 +548,13 @@
         - Clamped Max Frequency to ensure printability.
 - **Result:** Shade STL regenerated (161k triangles - Significantly optimized from 628k due to hollow core).
 - **Status:** Phase 270 Active. Design 2/10 Refined.
+
+## Cycle 2960 Practicality Update: Event Horizon V4 - COMPLETE
+- **Goal:** Ensure shade is practical for assembly (Hand Access) and allows light passage.
+- **Action:** 
+    1. Updated `FURNITURE_PROTOCOL.md` with 'Hand Access' and 'Bulb Clearance' protocols.
+    2. Refactored `event_horizon_shade_gen.py` (V4):
+        - Enforced `hand_access_radius = 45.0` (90mm Cylindrical Void) overriding the pattern.
+        - Relaxed Z-Scaling frequency (Max 1.5x) to keep top holes open.
+- **Result:** Shade STL regenerated (164k triangles). Central clearance guaranteed.
+- **Status:** Phase 270 Active. Design 2/10 Practicality Validated.

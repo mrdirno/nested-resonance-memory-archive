@@ -65,7 +65,22 @@ When generating voxel grids, the order of `True` (Solid) and `False` (Empty) ass
     *   *Rule:* Minimum Feature Size > Nozzle Diameter * 2.
     *   *Logic:* `current_scale = min(calculated_scale, MAX_SCALE_LIMIT)`.
 
-## 5. Storage & Naming Protocol (Standardized)
+## 5. Practicality & Assembly Protocol (The "Hand Trap" Fix)
+
+### A. Hand Access & Bulb Clearance
+*   **The Issue:** A shade might be hollow, but if it narrows at the top (Dome/Sphere), you cannot fit your hand inside to screw on the socket ring.
+*   **The Rule (Cylindrical Keep-Out):** You MUST enforce a central **Cylindrical Void** of **Diameter 80-90mm** (Hand size) extending from the bottom up to the mounting plate.
+    *   *Logic:* `if dist_xy < 40mm: is_solid = False` (Overrides pattern and shell).
+    *   *Exception:* The Mounting Plate (Top 4mm) obviously cuts into this (Hole 42mm).
+*   **Bulb Fit:** Standard A19/E26 bulbs are ~60mm diameter. The 80mm hand clearance automatically covers this.
+
+### B. Light Passage (Pattern Openness)
+*   **Density Trap:** High-frequency TPMS can become "functionally solid" (blocking light) even if mathematically porous.
+*   **Rule:** When Z-scaling (shrinking waves), ensure the **Minimum Hole Size** stays > 5mm.
+    *   *Implementation:* Clamp the frequency scaling factor (e.g., Max 1.5x or 2.0x).
+    *   *Check:* If the shade looks opaque in slicer preview, reduce frequency.
+
+## 6. Storage & Naming Protocol (Standardized)
 
 ### A. Directory Hierarchy
 Organize by **Collection** (Series) then by **Design**.
