@@ -134,7 +134,19 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
                         grid[x_idx,y_idx,z_idx] = True
                     continue
                 
-                # --- PRIORITY 3: BODY (Gyroid in Walls) ---
+                # --- PRIORITY 3: REINFORCING CORNERS (Solid Edges) ---
+                # Corners are at +/- width/2
+                # If we are within 'edge_thickness' of BOTH x-edge and y-edge
+                edge_thickness = 5.0
+                
+                in_x_edge = abs(x_mm) > (current_outer_half_width - edge_thickness)
+                in_y_edge = abs(y_mm) > (current_outer_half_width - edge_thickness)
+                
+                if in_x_edge and in_y_edge:
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+
+                # --- PRIORITY 4: BODY (Gyroid in Walls) ---
                 # Check Hollow Core
                 if abs(x_mm) < current_inner_half_width and abs(y_mm) < current_inner_half_width:
                     grid[x_idx,y_idx,z_idx] = False
