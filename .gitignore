@@ -114,6 +114,7 @@ fabrication/furniture/
 fabrication/practical_design/
 
 # Furniture Design Generators
+fabrication/generators/
 fabrication/generators/helios_lamp_*
 fabrication/generators/helios_pyramid_*
 fabrication/generators/helios_anisotropic_*
