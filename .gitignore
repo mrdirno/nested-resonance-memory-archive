@@ -108,3 +108,15 @@ fabrication/library/**/*.gcode
 
 fabrication/practical_design/**/*.stl
 *.gcode
+
+# Internal Furniture Designs (Do Not Commit)
+fabrication/furniture/
+fabrication/practical_design/
+
+# Furniture Design Generators
+fabrication/generators/helios_lamp_*
+fabrication/generators/helios_pyramid_*
+fabrication/generators/helios_anisotropic_*
+fabrication/generators/*_shade_*
+fabrication/generators/*_base_*
+fabrication/generators/*_shaft_*
