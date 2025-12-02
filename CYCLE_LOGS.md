@@ -780,3 +780,9 @@
 - **Action:** Created Master Catalog and Series 04 Manifest.
 - **Theme:** Digital Decay (Artifact, Noise, Lag).
 - **Update:** Updated `DESIGN_LANGUAGE.md` to v1.3.
+
+## Cycle 2625: The Artifact (Design 21)
+- **Design:** Implemented 'The Artifact' (Voxelization/Glitch).
+- **Algorithm:** Quantized Coordinates (floor(x/size)*size) + Noise.
+- **Shade:** V7 Spider Fitter, 232k triangles.
+- **Status:** Design 21 Shade Complete.
