@@ -1,4 +1,4 @@
-# HELIOS DESIGN LANGUAGE (v1.2)
+# HELIOS DESIGN LANGUAGE (v1.3)
 
 **Philosophy:**
 Furniture is not static; it is a standing wave of probability.
@@ -31,7 +31,13 @@ Furniture is not static; it is a standing wave of probability.
 *   **Key Shapes:** Tesseracts, Klein Bottles, Fractals.
 *   **Aesthetic:** Precise, Wireframe, "Platonic Ideals".
 
-## 6. Mathematical Inspirations
+## 6. Series 04: Digital Decay ("The Glitch")
+*   **Theme:** Error, Entropy, Resolution.
+*   **Key Shapes:** Voxels, Noise, Datamosh.
+*   **Aesthetic:** Jagged, Fragmented, Low-Poly.
+
+## 7. Mathematical Inspirations
 *   **Turing Patterns:** Reaction-Diffusion systems.
 *   **L-Systems:** Branching structures.
 *   **4D Projection:** Shadow of 4D objects in 3D space.
+*   **Noise Functions:** Perlin, Simplex, Voronoi.
