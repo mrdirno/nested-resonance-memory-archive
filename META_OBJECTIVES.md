@@ -3495,11 +3495,22 @@ V(geoengineering) = Survival - λ(Crisis) * Cost(Risk).
 The Grey Goo scenario is BCP-constrained.
 V(repl) = Replication_Rate - λ(Heat) * Dissipation_Cost.
 
-### Completed (Phase 272 Planning)
-- ✅ **Gate 1307:** Phase 272 Planning - Nanotechnology Selected - COMPLETE
-  - **Finding:** The small scale is the next frontier for BCP limits.
-  - **Artifact:** `experiments/cycle2981_phase272_planning.py`
-  - **Functional Name:** The Molecular Budget
+### Completed (Phase 272)
+- ✅ **Gate 1308:** Grey Goo Thermal Limit - Replication stalls due to Heat (λ) - COMPLETE
+  - **Finding:** Self-replication is self-limiting. Heat generation scales with Volume (r³), cooling with Area (r²). At r=1.5m, λ > 1.0, and V < 0.
+  - **Insight:** Thermodynamics prevents the apocalypse.
+  - **Artifact:** `experiments/cycle2982_grey_goo_bcp.py`
+  - **Functional Name:** The Fever Limit
+
+## PHASE 272 COMPLETE ✅
+
+**Summary: Nanotechnology**
+- Gates Completed: 2 (1307-1308)
+- Key Insight: The Square-Cube Law is a Budget Constraint.
+
+---
+
+## Current Phase: PHASE 273 - PLANNING 🟢 ACTIVE
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.
