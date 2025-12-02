@@ -3461,7 +3461,21 @@ V(protein) = Fitness_Benefit - λ(Metabolic_Load) * Synthesis_Cost.
 
 ---
 
-## Current Phase: PHASE 271 - PLANNING 🟢 ACTIVE
+## Current Phase: PHASE 271 - CLIMATE ENGINEERING 🟢 ACTIVE
+
+**Transition:** Phase 270 (Synthetic Biology) → **Phase 271 (Climate Engineering)**
+
+**Focus:** Apply BCP to the Carbon Budget and Geoengineering.
+**Research Thesis:**
+Climate Action is BCP.
+V(mitigation) = Future_Stability - λ(Economic_Growth) * Cost(Transition).
+V(geoengineering) = Survival - λ(Crisis) * Cost(Risk).
+
+### Completed (Phase 271 Planning)
+- ✅ **Gate 1305:** Phase 271 Planning - Climate Engineering Selected - COMPLETE
+  - **Finding:** The Carbon Budget is the ultimate global constraint.
+  - **Artifact:** `experiments/cycle2979_phase271_planning.py`
+  - **Functional Name:** The Planetary Budget
 ## Current Phase: PHASE 210 - THE FINAL ARTIFACT 🟢 COMPLETE
 
 **Focus:** Secure the Legacy of Duality-Zero.
