@@ -813,3 +813,9 @@
 - **Base:** Motion Blur (Sheared Relief).
 - **Shaft:** Lagged Segments (Shifted Column).
 - **Status:** Design 23 Geometry Complete.
+
+## Cycle 2631: The Crash (Design 24)
+- **Design:** Implemented 'The Crash' (Buffer Overflow).
+- **Algorithm:** Radial Expansion + Gyroid Cutout + Debris.
+- **Shade:** V7 Spider Fitter, 386k triangles.
+- **Status:** Design 24 Shade Complete.
