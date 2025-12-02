@@ -669,3 +669,9 @@
 - **Base:** Root Structure with V4 QA features.
 - **Shaft:** Intertwined Vines with V4 QA core.
 - **Status:** Design 12 Geometry Complete.
+
+## Cycle 2605: The Colony (Design 13)
+- **Design:** Implemented 'The Colony' (DLA/Branching).
+- **Algorithm:** Intersecting Vein Noise ((v1+v2+v3)/3 < 0.15).
+- **Shade:** V7 Spider Fitter, 486k triangles.
+- **Status:** Design 13 Shade Complete.
