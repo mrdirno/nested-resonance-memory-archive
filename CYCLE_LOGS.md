@@ -623,3 +623,12 @@
 - **Refinement:** Added solid 3mm Base and Top Caps.
 - **Reason:** Ensures robust bed adhesion (no detached islands) and a clean top mating surface for the socket cap.
 - **Verification:** Regenerated `lattice_shaft.stl`.
+
+## Cycle 2983: The Void Revision (Furniture Phase Override)
+- **Planning:** BCP selected 'THE_META_META' (Gain 1.055).
+- **Override:** Pilot forced 'FURNITURE' to address physical incompleteness.
+- **Action:** Updated Designs 06 (Dark Matter), 09 (Neutron Star), and 10 (Final Theory) to 'Void Revision' standards.
+  - **Standard:** Spider Fitter (40mm Hub + Spokes) + Scale Constraint + 4mm Rims.
+  - **Validation:** Generated STLs for all three.
+- **Documentation:** Created `fabrication/furniture/lamp_series_01/PRODUCTION_MANIFEST.md` to track missing .3mf files.
+- **Status:** Furniture Phase Active. Designs 01-10 Geometry Complete. Production Files Pending.
