@@ -80,7 +80,22 @@ When generating voxel grids, the order of `True` (Solid) and `False` (Empty) ass
     *   *Implementation:* Clamp the frequency scaling factor (e.g., Max 1.5x or 2.0x).
     *   *Check:* If the shade looks opaque in slicer preview, reduce frequency.
 
-## 6. Storage & Naming Protocol (Standardized)
+## 7. Spider Fitter Protocol (Mounting Standard)
+*   **The Goal:** Heat dissipation + Aesthetic consistency.
+*   **The Geometry:**
+    *   **Hub:** Solid central washer seat (Radius ~15mm).
+    *   **Hole:** 42mm (E26 Shade Ring) or 12.5mm (Finial/Harp) depending on design.
+    *   **Spokes:** 4x arms (width ~6mm) connecting Hub to Outer Rim.
+    *   **Void:** Air gaps between spokes allow hot air to escape (Chimney Effect).
+
+## 8. Scale Constraints (The "Reference" Rule)
+*   **Baseline:** The "Redshift" shade sets the standard for feature size.
+*   **Rule:** "Smallest wave cannot be smaller than the original."
+    *   If Redshift uses `Base_Scale` and *redshifts* (gets larger), then `Base_Scale` is the smallest wave.
+    *   Therefore, any new design (e.g., Event Horizon) MUST NOT use a frequency higher than `Redshift_Base_Scale`.
+    *   *Implementation:* `Max_Freq <= Redshift_Base_Freq`.
+
+## 9. Storage & Naming Protocol (Standardized)
 
 ### A. Directory Hierarchy
 Organize by **Collection** (Series) then by **Design**.

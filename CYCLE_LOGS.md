@@ -558,3 +558,14 @@
         - Relaxed Z-Scaling frequency (Max 1.5x) to keep top holes open.
 - **Result:** Shade STL regenerated (164k triangles). Central clearance guaranteed.
 - **Status:** Phase 270 Active. Design 2/10 Practicality Validated.
+
+## Cycle 2960 Correction: Event Horizon V5 (Spider Mount + Scale Fix) - COMPLETE
+- **Goal:** Align Event Horizon with 'Redshift' standards for mounting and scale.
+- **Action:** 
+    1. Updated `FURNITURE_PROTOCOL.md` with 'Spider Fitter' and 'Scale Constraint' protocols.
+    2. Refactored `event_horizon_shade_gen.py` (V5):
+        - Implemented **Spider Fitter** (Hub + 4 Spokes) for heat dissipation and standard mounting.
+        - Adjusted **Base Scale** to match Redshift reference (Period ~48.5mm).
+        - Applied **Z-Scaling** from Larger (60mm) to Reference (48.5mm) to ensure no feature is smaller than the original.
+- **Result:** Shade STL regenerated (106k triangles). Physically and aesthetically compliant.
+- **Status:** Phase 270 Active. Design 2/10 Finalized.

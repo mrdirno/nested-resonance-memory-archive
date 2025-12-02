@@ -4,13 +4,14 @@ import sys
 import struct
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE) - V4 FIX (PRACTICALITY)
+# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE) - V5 FIX (SPIDER MOUNT + SCALE)
 # -----------------------------------------------------------------------------
 # Logic: 
 # 1. Schwarz D Pattern (Z-Scaled).
 # 2. Shell Masking (Hollow).
-# 3. **Cylindrical Core Void**: Force 90mm dia clearance for hand/bulb.
-# 4. Top Plate overrides everything.
+# 3. Cylindrical Core Void (Hand Access).
+# 4. **Spider Fitter**: Hub + Spokes (Copied from Redshift).
+# 5. **Scale Constraint**: Max Freq <= Redshift Base Freq.
 # -----------------------------------------------------------------------------
 
 def write_binary_stl(filename, vertices, faces):
@@ -40,25 +41,16 @@ def write_binary_stl(filename, vertices, faces):
             f.write(struct.pack('<H', 0))
 
 def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, hole_diameter=42.0):
-    print(f"Generating EVENT HORIZON SHADE (V4 PRACTICALITY FIX): {output_path}")
+    print(f"Generating EVENT HORIZON SHADE (V5 SPIDER FIX): {output_path}")
     
-    # Mount Parameters
+    # Mount Parameters (Spider Fitter)
     mount_hole_radius = hole_diameter / 2.0 # 21mm
-    mount_plate_radius = mount_hole_radius + 8.0 # 29mm
+    hub_radius = mount_hole_radius + 5.0 # 26mm Solid Ring around hole
+    spoke_width = 6.0 # 4 arms
     solid_rim_height = 4.0 
     
     # Shell Parameters
-    # We want a thin shell for the pattern
     shell_thickness = 5.0 
-    
-    # Practicality Parameters (The Fix)
-    # Hand access needs ~80-90mm diameter.
-    # Bulb needs ~60mm.
-    # Let's enforce a Cylindrical Keep-Out of Radius 45mm (Diam 90mm).
-    # BUT, the top plate hole is 42mm (Radius 21).
-    # So the void must taper or step?
-    # No, the void is for the HAND to reach up.
-    # The void stops at the Top Plate.
     hand_access_radius = 45.0 
     
     # Grid Setup
@@ -76,23 +68,50 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
     # Frequency Setup
-    base_scale = 2.0 * math.pi / (diameter / 5.0) 
-    max_scale_factor = 1.5 # Conservative clamp to ensure holes stay open
+    # Redshift Reference: base_scale = 2*pi / (194/4) = 2*pi / 48.5 ~= 0.129
+    # Event Horizon Reference: base_scale = 2*pi / (160/5) = 2*pi / 32 ~= 0.196 (Higher freq!)
+    # User Constraint: "Smallest wave can not be smaller than the original shade smallest wave"
+    # The Redshift's SMALLEST wave is at the bottom (Scale ~0.129). It redshifts (gets bigger) up.
+    # So Max Frequency allowed is ~0.129.
     
-    print("Calculating Field...")
+    # Let's adjust Event Horizon base scale to match Redshift density roughly.
+    # Target Period = 48.5mm (from Redshift)
+    # 160mm diameter / 48.5mm = ~3.3 periods.
+    
+    target_period = 48.5
+    base_scale = 2.0 * math.pi / target_period
+    
+    # Z-Scaling (Blueshift)
+    # Since we start at the "Limit" (Redshift Base), we cannot shrink further (increase freq).
+    # Wait, if we blueshift, waves get smaller. 
+    # If "Smallest wave cannot be smaller than Redshift Base", then we CANNOT blueshift if we start at Redshift Base.
+    # We must either:
+    # A) Start larger and shrink to Redshift Base.
+    # B) Keep constant.
+    # C) Start at Redshift Base and grow (Redshift).
+    
+    # "never go smaller than the smallest wave on the shade" - referencing original.
+    # Assuming we want the aesthetics of "Event Horizon" (Distortion), let's start Larger (Period 60mm) and shrink to Target (48.5mm).
+    
+    start_period = 60.0
+    end_period = 48.5
+    
+    start_scale = 2.0 * math.pi / start_period
+    end_scale = 2.0 * math.pi / end_period
+    
+    print(f"Scale: Period {start_period:.1f}mm -> {end_period:.1f}mm")
     
     radius = diameter / 2.0
     sphere_z_center = height - radius
     
+    print("Calculating Field...")
+    
     for z_idx in range(res_z):
         z_mm = z_idx * step
-        
-        # Z-Scaling
         z_norm = z_mm / height
-        current_scale_factor = 1.0 + (1.0 * z_norm)
-        if current_scale_factor > max_scale_factor:
-            current_scale_factor = max_scale_factor
-        current_scale = base_scale * current_scale_factor
+        
+        # Linear Interpolation of Scale
+        current_scale = start_scale * (1.0 - z_norm) + end_scale * z_norm
         
         for x_idx in range(res_x):
             x_mm = (x_idx * step) - (diameter / 2.0)
@@ -104,7 +123,38 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
                 dist_sq = x_mm**2 + y_mm**2 + (z_mm - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- LOGIC STACK ---
+                # --- PRIORITY 1: SPIDER MOUNT (TOP) ---
+                # Overrides everything else at the top layers
+                if z_mm > (height - solid_rim_height):
+                    # 1. Hole
+                    if dist_from_center_xy < mount_hole_radius:
+                        grid[x_idx,y_idx,z_idx] = False
+                        continue
+                        
+                    # 2. Hub (Solid Ring)
+                    if dist_from_center_xy < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                        
+                    # 3. Spokes (Cross)
+                    # Check if we are inside the "Void" where spokes are needed.
+                    # The void is the Hand Access Cylinder.
+                    if dist_from_center_xy < hand_access_radius:
+                        if abs(x_mm) < (spoke_width/2) or abs(y_mm) < (spoke_width/2):
+                            grid[x_idx,y_idx,z_idx] = True # Spoke
+                        else:
+                            grid[x_idx,y_idx,z_idx] = False # Air Gap
+                        continue
+                        
+                    # 4. Rim (Solid Shell Connection)
+                    # If outside hand access but inside sphere...
+                    # Just generate solid for the rest of the top plate to ensure connection
+                    if dist_spherical <= radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                    continue
+
+                # --- PRIORITY 2: PATTERN & SHELL ---
+                
                 is_solid = False
                 
                 # 1. Shell Masking
@@ -112,16 +162,12 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
                 in_inner_void = dist_spherical < (radius - shell_thickness)
                 
                 # 2. Hand Access Void (Override Inner Void)
-                # If we are inside the hand access cylinder, we are definitely void.
-                # Unless we are at the Top Plate.
-                in_hand_void = dist_from_center_xy < hand_access_radius
-                
-                # Combined Void Logic:
                 # Void if (Spherical Inner Void) OR (Hand Access Cylinder)
+                in_hand_void = dist_from_center_xy < hand_access_radius
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                     # 3. Pattern Generation
+                     # Pattern
                      lx = x_mm * current_scale
                      ly = y_mm * current_scale
                      lz = z_mm * current_scale
@@ -133,29 +179,11 @@ def generate_shade(output_path, diameter=160.0, height=140.0, resolution=100, ho
                      
                      if abs(val) < 0.35: 
                          is_solid = True
-                
-                # 4. Structural Overrides
-                
-                # A. Top Plate (Mounting) - SUPREME AUTHORITY
-                if z_mm > (height - solid_rim_height):
-                    if dist_from_center_xy < mount_plate_radius:
-                        is_solid = True
-                        
-                # B. Bottom Rim
+
+                # --- PRIORITY 3: BOTTOM RIM ---
                 if z_mm < solid_rim_height:
-                    # Make sure the rim extends inwards enough to meet the pattern
-                    # But respects the Hand Void? 
-                    # No, the rim can be slightly tighter if needed, but 90mm is wide.
-                    # Let's trust the hand void.
                     if dist_from_center_xy < radius and not in_hand_void:
                         is_solid = True
-                        
-                # 5. Hardware Subtracts
-                
-                # A. Mounting Hole
-                if z_mm > (height - solid_rim_height):
-                    if dist_from_center_xy < mount_hole_radius:
-                        is_solid = False
                         
                 grid[x_idx,y_idx,z_idx] = is_solid
 
