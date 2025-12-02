@@ -758,3 +758,9 @@
 - **Base:** Cellular Pavement (2D Voronoi Relief).
 - **Shaft:** Stacked Cells (3D Voronoi Column).
 - **Status:** Design 19 Geometry Complete.
+
+## Cycle 2621: The Fractal (Design 20)
+- **Design:** Implemented 'The Fractal' (Menger Sponge).
+- **Algorithm:** Recursive Modulo Subtraction (3 Iterations).
+- **Shade:** V7 Spider Fitter, 272k triangles.
+- **Status:** Design 20 Shade Complete.
