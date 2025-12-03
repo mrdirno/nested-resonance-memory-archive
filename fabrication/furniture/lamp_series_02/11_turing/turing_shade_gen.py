@@ -69,14 +69,17 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                # Calculate current shell outer radius (Cylinder = constant)
+                current_shell_radius = radius 
+                
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -89,13 +92,7 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                          grid[x_idx,y_idx,z_idx] = True
                          continue
 
-                # --- PRIORITY 3: SHELL BODY ---
-                
-                # Shell Definition: Simple Cylinder with rounded top
-                # Or straight cylinder for "Petri Dish" look?
-                # Let's do straight cylinder to maximize pattern visibility.
-                
-                # Inner/Outer bounds
+                # --- PRIORITY 3: SHELL BODY (Anisotropic Turing) ---
                 if dist_xy > radius:
                     grid[x_idx,y_idx,z_idx] = False
                     continue
@@ -103,34 +100,28 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 if dist_xy < (radius - wall_thickness):
                     grid[x_idx,y_idx,z_idx] = False
                     continue
-                    
-                # Turing Pattern Logic
-                # f(x,y,z) = sin(s1*x)*sin(s1*y)*sin(s1*z) + ...
-                # This is closer to gyroid.
                 
-                # Better Turing Approx: 
-                # val = abs(sin(x) + sin(y) + sin(z)) - width
-                # But we want the "worm" look.
-                # "Worm" look comes from band-passing noise.
-                # Abs(SimplexNoise) is good.
-                # Let's stick to a deterministic math function that looks like worms.
-                # Swift-Hohenberg equation approximation?
+                # Anisotropy: Stretch vertically (Biological Growth)
+                sx = scale_1
+                sy = scale_1
+                sz = scale_1 * 0.5 # Stretched Z
                 
-                # Try: sin(x) * sin(y) * sin(z) + sin(x*k)*cos(y*k) ...
+                sx2 = scale_2
+                sy2 = scale_2
+                sz2 = scale_2 * 0.5
                 
-                v1 = math.sin(x_mm * scale_1) + math.sin(y_mm * scale_1) + math.sin(z_mm * scale_1)
-                v2 = math.cos(x_mm * scale_2) * math.cos(y_mm * scale_2) * math.cos(z_mm * scale_2)
+                v1 = math.sin(x_mm * sx) + math.sin(y_mm * sy) + math.sin(z_mm * sz)
+                v2 = math.cos(x_mm * sx2) * math.cos(y_mm * sy2) * math.cos(z_mm * sz2)
                 
-                # Mixing
                 val = v1 + 0.5 * v2
-                
-                # Turing spots/stripes usually emerge at specific threshold bands
-                # e.g. -0.2 < val < 0.2
                 
                 if abs(val) < 0.5:
                     grid[x_idx,y_idx,z_idx] = True
                 else:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (Strict QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)

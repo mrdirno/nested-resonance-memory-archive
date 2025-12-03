@@ -70,11 +70,20 @@ def generate_base(output_path, diameter=140.0, height=30.0, resolution=100):
                 # Base Body
                 if dist <= radius:
                     # Organic Top Surface
-                    # Neural Plate: More complex folding
+                    # Neural Plate: More complex folding + AGPH Anisotropy
                     
-                    # f(x,y) = sin(x) + sin(y) + sin(x*y) ?
+                    sx = scale
+                    sy = scale
+                    sz = scale # Height map scaling
                     
-                    val1 = math.sin(x_mm * scale) * math.cos(y_mm * scale)
+                    # Anisotropy: Radial Streaking
+                    angle = math.atan2(y_mm, x_mm)
+                    twist = dist * 0.05
+                    
+                    tx = dist * math.cos(angle + twist)
+                    ty = dist * math.sin(angle + twist)
+                    
+                    val1 = math.sin(tx * sx) * math.cos(ty * sy)
                     val2 = math.sin(dist * 0.15) # Radial ripple
                     
                     val = val1 + 0.5 * val2
@@ -100,6 +109,9 @@ def generate_base(output_path, diameter=140.0, height=30.0, resolution=100):
                         grid[x_idx,y_idx,z_idx] = False
                 else:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Extract Mesh (Library)
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter)

@@ -74,10 +74,14 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                 
                 # Outer Shell
                 if dist <= current_radius:
-                    # Cellular Texture (v2.0)
-                    # High frequency lattice
+                    # Cellular Texture (v2.0 - Anisotropic)
+                    # Stretch Z to simulate stem growth
                     
-                    val = math.cos(x_mm*scale) + math.cos(y_mm*scale) + math.cos(z_mm*scale)
+                    sx = scale * 1.0
+                    sy = scale * 1.0
+                    sz = scale * 0.6 # Vertical stretch
+                    
+                    val = math.cos(x_mm*sx) + math.cos(y_mm*sy) + math.cos(z_mm*sz)
                     
                     # Thicker walls
                     if val > -0.5:
@@ -86,6 +90,9 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                         grid[x_idx,y_idx,z_idx] = False
                 else:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, 2*max_r_bound, 2*max_r_bound)
