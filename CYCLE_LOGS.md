@@ -897,3 +897,9 @@
 - **Base:** Turbine (Radial Blades Relief).
 - **Shaft:** Vortex Tube (Twisted Vanes).
 - **Status:** Design 29 Geometry Complete.
+
+## Cycle 2645: The Aether (Design 30)
+- **Design:** Implemented 'The Aether' (Quintessence/Void).
+- **Algorithm:** Minimalist P-Surface Lattice + Suspended Particles.
+- **Shade:** V7 Spider Fitter, 523k triangles.
+- **Status:** Design 30 Shade Complete.
