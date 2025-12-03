@@ -78,14 +78,15 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = radius
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -98,7 +99,7 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                          grid[x_idx,y_idx,z_idx] = True
                          continue
 
-                # --- PRIORITY 3: TOWER SHELL ---
+                # --- PRIORITY 3: TOWER SHELL (Anisotropic) ---
                 
                 if dist_xy > (radius + 5.0):
                     grid[x_idx,y_idx,z_idx] = False
@@ -107,42 +108,23 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 # Ribs
                 angle = math.atan2(y_mm, x_mm)
                 
-                # Rib shape: Square wave or Cosine?
-                # Art Deco uses sharp lines.
-                # Square wave with smoothed corners?
-                # Let's use: r = base + rib_depth * (cos(N*theta))^p (p < 1 makes it squarish)
-                
                 # Simple cosine ribs
                 rib_val = math.cos(num_ribs * angle)
                 
                 # Make ribs positive only (additive)
                 rib_ext = 5.0 * ((rib_val + 1.0) / 2.0)
                 
-                r_surf = current_base_r - 5.0 + rib_ext # Base is slightly recessed
-                
-                # Thickness
-                # Inner wall smooth or ribbed?
-                # Smooth inner wall for light diffusion
+                r_surf = current_base_r - 5.0 + rib_ext
                 
                 if dist_xy <= r_surf and dist_xy >= (r_surf - wall_thickness):
-                    # Add window slits?
-                    # Vertical slits between ribs
+                    # Windows (Z-Stretched)
+                    # Window pattern in Z
+                    win_h = 10.0 * 1.5 # 1.5x Height stretch
+                    win_gap = 5.0
                     
-                    # Check if we are in a "valley" between ribs
                     if rib_val < -0.5:
                         # Valley
-                        # Add windows
-                        # Window pattern in Z
-                        win_h = 10.0
-                        win_gap = 5.0
                         if (z_mm % (win_h + win_gap)) < win_h:
-                            # Window = Hole
-                            # But only if thickness allows.
-                            # We want translucent, not transparent?
-                            # No, physical holes for light shafts.
-                            
-                            # Check depth. Only cut if we are deep in the wall?
-                            # Let's cut through.
                             grid[x_idx,y_idx,z_idx] = False
                         else:
                             grid[x_idx,y_idx,z_idx] = True
@@ -154,6 +136,9 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 # Ensure Hand Access
                 if dist_xy < hand_access_radius:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)
