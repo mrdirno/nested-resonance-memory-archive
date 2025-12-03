@@ -881,3 +881,8 @@
 - **Algorithm:** Stratified Noise modulated by vertical erosion channels.
 - **Shade:** V7 Spider Fitter, 427k triangles.
 - **Status:** Design 28 Shade Complete.
+
+## Cycle 2642: The Earth (Design 28) Complete
+- **Base:** Tectonic Plate (Voronoi Cracks).
+- **Shaft:** Stalactite (Dripstone).
+- **Status:** Design 28 Geometry Complete.
