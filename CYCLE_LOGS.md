@@ -984,3 +984,8 @@
 - **Design:** Time Crystal (08) Refined.
 - **Upgrade:** Faceted Shell Shade (Periodic Rotation), Repeating Lattice Base, 4D Hyper-Lattice Shaft.
 - **Status:** Design 08 v2.0 Complete.
+
+## Cycle 2660: Neutron Star v2.0 Refinement
+- **Design:** Neutron Star (09) Refined.
+- **Upgrade:** Magnetic Field Shade, Accretion Disk Base (Spiral), Hyperboloid Flux Shaft.
+- **Status:** Design 09 v2.0 Complete.
