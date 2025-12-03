@@ -99,24 +99,39 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                     
-                # Growth Pattern
-                # Ridged Noise: 1.0 - abs(noise)
+                # Growth Pattern (Anisotropic Ridged Noise)
+                # Brain Coral
                 
-                # Base shape (warped gyroid?)
-                # Let's simply sum sine waves and take absolute value to create folds
+                # Anisotropy: Stretch radially (Fan Coral)
+                # Reduced stretch to prevent tearing
+                r_stretch = 1.0 + 0.2 * (dist_xy/radius)
                 
-                v1 = math.sin(x_mm * scale_base) + math.sin(y_mm * scale_base) + math.sin(z_mm * scale_base)
+                v1 = math.sin(x_mm * scale_base * r_stretch) + math.sin(y_mm * scale_base * r_stretch) + math.sin(z_mm * scale_base)
                 v2 = math.sin(x_mm * scale_detail) + math.sin(y_mm * scale_detail) + math.sin(z_mm * scale_detail)
                 
                 # Fold logic
                 val = 1.0 - abs(v1 + 0.3 * v2)
                 
-                # Threshold for "thin walls"
-                # We want thin, winding walls like coral
-                if val > 0.8:
+                is_coral = val > 0.75 # Thicker walls (was 0.8)
+                
+                # CONNECTIVITY SKELETON (Tendrils)
+                # 8 Radial arms that branch out
+                angle = math.atan2(y_mm, x_mm)
+                
+                # Sine wave arms
+                arm_base = math.cos(8.0 * angle)
+                # Twist them slightly with Z
+                arm_twist = math.cos(8.0 * angle + z_mm * 0.05)
+                
+                is_skeleton = arm_twist > 0.85 # Thicker veins (was 0.9)
+                
+                if is_coral or is_skeleton:
                     grid[x_idx,y_idx,z_idx] = True
                 else:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)
