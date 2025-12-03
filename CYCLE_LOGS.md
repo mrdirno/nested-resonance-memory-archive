@@ -1010,3 +1010,8 @@
 - **Design:** The Colony (13) Refined.
 - **Upgrade:** DLA Branching Shade (Noise), Mycelium Network Base, Jagged Lightning Shaft.
 - **Status:** Design 13 v2.0 Complete.
+
+## Cycle 2665: The Swarm v2.0 Refinement
+- **Design:** The Swarm (14) Refined.
+- **Upgrade:** Vortex Flow Shade, Nesting Ground Base, Ascending Vortex Shaft.
+- **Status:** Design 14 v2.0 Complete.
