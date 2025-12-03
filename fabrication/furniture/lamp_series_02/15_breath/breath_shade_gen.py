@@ -74,14 +74,15 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = current_r
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -102,28 +103,21 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     continue
                     
                 # Pulse Shell
-                # Surface is at dist_xy == current_r
-                # Thickness check
-                
-                # Dist from nominal surface
-                # abs(dist_xy - current_r) < (wall_thickness / 2)
-                # But wall_thickness is total 25.4mm
-                
-                # Let's define outer and inner pulse
                 r_outer = current_r
                 r_inner = current_r - wall_thickness
                 
                 if r_inner < hand_access_radius: r_inner = hand_access_radius
                 
                 if dist_xy <= r_outer and dist_xy >= r_inner:
-                    # Add Gyroid texture inside the wall?
-                    # Or just solid/organic?
-                    # "Biological Skin" -> Gyroid
+                    # Add Gyroid texture (Anisotropic)
+                    # Stretch Z to match the pulse direction
                     
-                    scale_gyroid = 2.0 * math.pi / 20.0
-                    val = math.sin(x_mm*scale_gyroid)*math.cos(y_mm*scale_gyroid) + \
-                          math.sin(y_mm*scale_gyroid)*math.cos(z_mm*scale_gyroid) + \
-                          math.sin(z_mm*scale_gyroid)*math.cos(x_mm*scale_gyroid)
+                    sz = 2.0 * math.pi / 20.0 * 0.5 # Stretched Z
+                    sxy = 2.0 * math.pi / 20.0
+                    
+                    val = math.sin(x_mm*sxy)*math.cos(y_mm*sxy) + \
+                          math.sin(y_mm*sxy)*math.cos(z_mm*sz) + \
+                          math.sin(z_mm*sz)*math.cos(x_mm*sxy)
                           
                     if abs(val) < 0.4:
                         grid[x_idx,y_idx,z_idx] = True
@@ -131,6 +125,9 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                         grid[x_idx,y_idx,z_idx] = False
                 else:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)
