@@ -105,51 +105,50 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                     grid[x_idx,y_idx,z_idx] = fitter_override
                     continue
 
-                # --- PRIORITY 2: SHELL & PATTERN ---
-                
+                # --- PRIORITY 2: BOTTOM RIM ---
+                if z_mm < bottom_rim_height:
+                    if dist_from_center_xy < radius and not in_hand_void:
+                         grid[x_idx,y_idx,z_idx] = True
+                         continue
+
+                # --- PRIORITY 3: ACCRETION VEIL PATTERN ---
                 is_solid = False
-                
-                # 1. Shell Definition
                 in_outer_shell = dist_spherical <= radius
                 in_inner_void = dist_spherical < (radius - wall_thickness)
-                
-                # 2. Hand Access
                 in_hand_void = dist_from_center_xy < hand_access_radius
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                    # STRICT AGPH (Event Horizon Signature)
-                    # R(z) dominates here (Vortex)
+                    # ACCRETION VEIL
+                    # Match Shaft Twist: 360 degrees over height
+                    # But radial twist too.
                     
-                    # Prismatic Scaling a(z) - Spherical compression
-                    az = 1.0 + (dist_from_center_xy / radius) 
+                    # Z-Twist
+                    z_twist = (z_mm / height) * 2.0 * math.pi
                     
-                    # Helical Rotation R(z)
-                    # Twist increases with radius (Accretion Disk)
-                    theta = (dist_from_center_xy / radius) * 4.0 # Radian twist
-                    cos_t = math.cos(theta)
-                    sin_t = math.sin(theta)
+                    # Radial Twist (Vortex)
+                    r_twist = (dist_from_center_xy / radius) * 2.0 * math.pi
                     
-                    tx = x_mm * cos_t - y_mm * sin_t
-                    ty = x_mm * sin_t + y_mm * cos_t
+                    total_twist = z_twist + r_twist
+                    
+                    ca = math.cos(total_twist)
+                    sa = math.sin(total_twist)
+                    
+                    tx = x_mm * ca - y_mm * sa
+                    ty = x_mm * sa + y_mm * ca
                     
                     # Scale
-                    base_freq = 2.0 * math.pi / 35.0
-                    lx = tx * base_freq
-                    ly = ty * base_freq
-                    lz = z_mm * az * base_freq
+                    freq = 2.0 * math.pi / 30.0
+                    lx = tx * freq
+                    ly = ty * freq
+                    lz = z_mm * freq * 0.5 # Stretched vertically (falling matter)
                         
                     # Gyroid
                     val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
                     
-                    if abs(val) < 0.35: 
+                    if abs(val) < 0.4: 
                         is_solid = True
                         
-                # --- PRIORITY 3: BOTTOM RIM ---
-                if z_mm < bottom_rim_height:
-                    if dist_from_center_xy < radius and not in_hand_void:
-                         is_solid = True
-                         
                 grid[x_idx,y_idx,z_idx] = is_solid
 
     # Clean Dust (Strict QA)
