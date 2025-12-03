@@ -75,14 +75,15 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=100, ho
                 
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = radius
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -95,7 +96,7 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=100, ho
                          grid[x_idx,y_idx,z_idx] = True
                          continue
 
-                # --- PRIORITY 3: VORONOI SHELL ---
+                # --- PRIORITY 3: VORONOI SHELL (Anisotropic) ---
                 
                 if dist_xy > radius:
                     grid[x_idx,y_idx,z_idx] = False
@@ -109,9 +110,18 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=100, ho
                 d1 = 99999.0
                 d2 = 99999.0
                 
+                # Anisotropy: Radial Stretch
+                # Cells are longer radially
+                # Or Z stretch?
+                # Let's do Z stretch for "Stacked Foam"
+                sz = 0.5
+                
                 for c in cells:
                     cx, cy, cz = c
-                    d_sq = (x_mm-cx)**2 + (y_mm-cy)**2 + (z_mm-cz)**2
+                    # Optimize
+                    if abs(z_mm - cz) > 50.0: continue
+                    
+                    d_sq = (x_mm-cx)**2 + (y_mm-cy)**2 + ((z_mm-cz)*sz)**2
                     if d_sq < d1:
                         d2 = d1
                         d1 = d_sq
@@ -126,6 +136,9 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=100, ho
                     grid[x_idx,y_idx,z_idx] = True
                 else:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)
