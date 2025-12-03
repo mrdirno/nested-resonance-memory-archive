@@ -886,3 +886,9 @@
 - **Base:** Tectonic Plate (Voronoi Cracks).
 - **Shaft:** Stalactite (Dripstone).
 - **Status:** Design 28 Geometry Complete.
+
+## Cycle 2643: The Air (Design 29)
+- **Design:** Implemented 'The Air' (Aerodynamics).
+- **Algorithm:** Helical Streamlines (sin(16*theta + twist)) + Turbulence.
+- **Shade:** V7 Spider Fitter, 313k triangles.
+- **Status:** Design 29 Shade Complete.
