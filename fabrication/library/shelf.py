@@ -56,6 +56,42 @@ class HeliosShelf:
                         break
         return results
 
+    def read_source(self, design_id_or_name, component_type):
+        """
+        Reads the source code for a specific component of a design.
+        
+        Args:
+            design_id_or_name (str): The ID (e.g. "01") or name (e.g. "redshift") of the design.
+            component_type (str): The component type ("shade", "base", "shaft").
+            
+        Returns:
+            str: The source code content of the generator file.
+            None: If design or component is not found.
+        """
+        design = self.get_design(design_id_or_name)
+        if not design:
+            print(f"Design '{design_id_or_name}' not found.")
+            return None
+            
+        comp_data = design.get("components", {}).get(component_type)
+        if not comp_data:
+            print(f"Component '{component_type}' not found in design '{design['name']}'.")
+            return None
+            
+        filename = comp_data["file"]
+        # Design path is relative to repo root in JSON, need to ensure we can access it
+        # The JSON path is relative to where librarian ran? 
+        # "path": "fabrication/furniture/lamp_series_01/01_redshift"
+        
+        full_path = os.path.join(design["path"], filename)
+        
+        if not os.path.exists(full_path):
+            print(f"Source file not found at {full_path}")
+            return None
+            
+        with open(full_path, 'r') as f:
+            return f.read()
+
 # Example Usage
 if __name__ == "__main__":
     shelf = HeliosShelf()
@@ -67,3 +103,9 @@ if __name__ == "__main__":
         
     results = shelf.search("voronoi")
     print(f"Search 'voronoi' found {len(results)} designs: {[d['name'] for d in results]}")
+    
+    # Test Reader
+    source = shelf.read_source("01", "shade")
+    if source:
+        print("\n--- Source Code Preview (01 Shade) ---")
+        print(source[:200] + "...")
