@@ -65,14 +65,15 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = radius
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -85,35 +86,25 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                          grid[x_idx,y_idx,z_idx] = True
                          continue
 
-                # --- PRIORITY 3: BRIDGE SHELL ---
+                # --- PRIORITY 3: BRIDGE SHELL (Anisotropic Tension) ---
                 
                 if dist_xy > (radius + 5.0):
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                     
-                # Pylons
+                # Pylons (Vertical Structure)
                 angle = math.atan2(y_mm, x_mm)
-                # Normalize angle 0..2pi
                 if angle < 0: angle += 2*math.pi
                 
                 sector_angle = (2*math.pi) / num_pylons
                 angle_in_sector = angle % sector_angle
                 
-                # Pylon check (near 0 or sector_angle)
                 in_pylon = False
                 pylon_width_rad = 0.2
                 
-                # Check proximity to any pylon center
-                # Centers at 0, sector, 2*sector...
-                # Distance to nearest multiple of sector_angle
-                
                 dist_to_pylon = min(angle_in_sector, sector_angle - angle_in_sector)
-                # Correction for wrap around?
-                # Handled by % logic mostly, but check dist to 0
                 
                 if dist_to_pylon < (pylon_width_rad / 2.0):
-                    # In pylon zone
-                    # Pylon is a vertical column at radius
                     if dist_xy > (radius - 15.0) and dist_xy < radius:
                         in_pylon = True
                         
@@ -121,42 +112,26 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     grid[x_idx,y_idx,z_idx] = True
                     continue
                     
-                # Cables (Catenary)
-                # y = a * cosh(x/a) - a (simplified)
-                # Or parabolic approx: y = x^2
-                
-                # Map angle_in_sector to -1..1 range between pylons
-                # 0 -> -1 (pylon A), sector -> 1 (pylon B)
+                # Cables (Catenary - Anisotropic Sag)
                 
                 t = (angle_in_sector / sector_angle) * 2.0 - 1.0
                 
-                # Sag amount depends on Z?
-                # Cables hang down.
-                # Let's make multiple cables stacked vertically.
-                
-                # Cable Z profile:
-                # z_cable = base_z + sag * (t^2)
-                # Check if current voxel Z is near a cable Z
-                
                 num_cables = 12
-                cable_spacing = height / num_cables
+                # Anisotropy: Cable spacing stretches with Z
+                cable_base_spacing = height / num_cables
+                
                 sag_amount = 15.0
                 
                 in_cable = False
                 
-                # Which cable is this Z near?
-                # Base Z for this cable
-                
-                # Equation: Z = Z_anchor + Sag * (t^2 - 1) (Sag downwards in middle)
-                # Anchor at pylons (t=1 or -1), Z = Z_anchor
-                # Middle (t=0), Z = Z_anchor - Sag
-                
                 for i in range(num_cables):
-                    z_anchor = (i + 0.5) * cable_spacing
+                    # Non-linear spacing (Closer at top)
+                    z_norm_cable = i / num_cables
+                    z_anchor = height * (z_norm_cable**0.8)
                     
                     z_curve = z_anchor + sag_amount * (t**2 - 1.0)
                     
-                    if abs(z_mm - z_curve) < 2.0: # Cable thickness
+                    if abs(z_mm - z_curve) < 2.0: 
                         if dist_xy > (radius - 5.0) and dist_xy < radius:
                             in_cable = True
                             
@@ -168,6 +143,9 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 # Ensure Hand Access
                 if dist_xy < hand_access_radius:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)
