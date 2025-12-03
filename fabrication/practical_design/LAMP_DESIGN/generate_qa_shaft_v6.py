@@ -131,6 +131,8 @@ def generate_shaft_v6_solid():
         
         angle_offset = pz * TWIST_RATE
         
+        # Mouse Ears Logic moved inside X/Y loop below
+
         for x in range(res_x):
             px = (x * step) - center_x
             for y in range(res_y):
@@ -140,7 +142,7 @@ def generate_shaft_v6_solid():
                 
                 # 1. Hole
                 if r < (HOLE_DIAMETER / 2.0): continue
-                
+
                 # 2. Interfaces
                 if is_plug:
                     if r < (PLUG_DIAMETER / 2.0): grid[x,y,z] = True
@@ -152,6 +154,24 @@ def generate_shaft_v6_solid():
                     if r < current_radius: grid[x,y,z] = True
                     continue
                 
+                # Mouse Ear Logic (Correct Placement)
+                if pz < 0.3:
+                     ear_r = 8.0
+                     ear_dist = (MAX_DIAMETER / 2.0) + 5.0
+                     in_ear = False
+                     for i in range(3):
+                         angle = (i * 120.0) * (math.pi / 180.0)
+                         ex = ear_dist * math.cos(angle)
+                         ey = ear_dist * math.sin(angle)
+                         if math.sqrt((px-ex)**2 + (py-ey)**2) < ear_r:
+                             in_ear = True
+                     if in_ear:
+                         grid[x,y,z] = True
+                         # Continue? No, we want it merged with the main body.
+                         # Just set true and let the rest run (union) or continue if r > current_radius?
+                         # If in ear, we are done for this voxel.
+                         continue
+
                 if r > current_radius: continue
                 
                 # 3. Rib Pattern (CSG SOLID)

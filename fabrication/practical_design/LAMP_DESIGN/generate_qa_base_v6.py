@@ -130,6 +130,12 @@ def generate_base_v6():
                     if abs(y_norm) < 1.0:
                         arch_h = WIRE_CHANNEL_H * (1.0 - y_norm**2)
                         
+                        # Exit Flare: Increase height/width near the edge
+                        dist_to_edge = current_radius_limit - r
+                        if dist_to_edge < 5.0: # Last 5mm
+                             flare_factor = 1.0 + (1.0 - dist_to_edge/5.0) # 1.0 to 2.0
+                             arch_h *= flare_factor
+                        
                         if pz < arch_h:
                             continue
                         

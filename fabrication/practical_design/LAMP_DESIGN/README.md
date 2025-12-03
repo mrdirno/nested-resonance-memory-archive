@@ -1,7 +1,7 @@
 # HELIOS LAMP SERIES: V6 "FRACTAL PRISM" (Production Release)
 
 ## AGPH-Integrated Design Suite
-This release represents the culmination of the QA process (Cycle 3001), fully integrating the **Anisotropic Gyroid Prismatic Helix (AGPH)** scientific framework with rigorous engineering validation.
+This release represents the culmination of the QA process (Cycle 3002), fully integrating the **Anisotropic Gyroid Prismatic Helix (AGPH)** scientific framework with rigorous engineering validation.
 
 **Status:** 🟢 READY FOR FABRICATION (V6)
 
@@ -19,18 +19,18 @@ This release represents the culmination of the QA process (Cycle 3001), fully in
 *   **Preview:** `previews/shaft_v6.png`
 *   **Geometry:** Solid Twisted Ribs (CSG Architecture).
 *   **Optimizations:**
-    *   **Solid Core:** Lattice removed for maximum structural integrity and print reliability.
+    *   **Mouse Ears:** Integrated 0.2mm Brim Discs (3x) for maximum print stability (Cut off after printing).
+    *   **Solid Core:** Lattice removed for structural integrity.
     *   **Z-Aligned:** Origin set strictly to Z=0.00mm.
-    *   **Cable Safe:** 15.0mm guaranteed internal clearance.
 
 ### 3. The "Root" Base (V6)
 *   **File:** `base_qa_v6.stl`
 *   **Preview:** `previews/base_v6.png`
 *   **Geometry:** AGPH Dome with Radial Interference Roots.
 *   **Optimizations:**
-    *   **Nut Recess:** 25mm x 6mm bottom counterbore for hardware clearance (Cycle 3001).
+    *   **Cable Flare:** Wire exit channel has a custom flare/chamfer to prevent cable fraying.
+    *   **Nut Recess:** 25mm x 6mm bottom counterbore for hardware clearance.
     *   **Chamfered Roots:** AGPH field bias applied to eliminate bottom overhangs.
-    *   **Safety Tunnel:** 12x12mm filleted wire exit.
 
 ### 4. QA Tolerance Test
 *   **File:** `qa_tolerance_test.stl`
