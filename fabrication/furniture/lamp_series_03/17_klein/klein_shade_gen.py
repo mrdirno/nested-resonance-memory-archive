@@ -64,14 +64,15 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 angle = math.atan2(y_mm, x_mm)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = radius
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -86,45 +87,39 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
 
                 # --- PRIORITY 3: KLEIN SHELL ---
                 
-                if dist_xy > radius:
+                # Bounding Box optimization
+                if abs(x_mm) > (radius + 5):
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                     
-                if dist_xy < (radius - wall_thickness):
-                    grid[x_idx,y_idx,z_idx] = False
-                    continue
-                    
-                # Surface logic
-                # We want a surface that twists.
-                # Mobius Strip cross section rotated?
-                # 1. Define a major radius R
-                # 2. At angle theta, the cross section is rotated by theta/2
+                # Surface logic (Twisted Figure 8)
                 
-                # R_major = radius - (wall_thickness/2)
-                # Cross section shape: Ellipse
+                twist_z = z_norm * 2.0 * math.pi # 360 deg twist (High Anisotropy)
                 
-                # Let's do a "Figure 8" Twist
-                # r(theta, z) = R_avg + A * sin(N*theta + z_factor)
+                r_avg = radius - 20.0
                 
-                twist_z = z_norm * math.pi # 180 deg twist top to bottom
+                # Primary Loop
+                r_surface = r_avg + 15.0 * math.sin(2.0 * angle + twist_z)
                 
-                # Klein-ish Surface
-                # r_surface = R_avg + 10 * sin(3*angle + twist_z)
+                # Secondary Loop (Intersects)
+                r_surface_2 = r_avg - 10.0 * math.sin(2.0 * angle + twist_z + math.pi/2.0)
                 
-                r_surface = (radius - wall_thickness/2.0) + 10.0 * math.sin(2.0 * angle + twist_z)
+                thickness = 3.0
                 
-                # Is voxel near this surface?
-                thickness = 4.0
-                if abs(dist_xy - r_surface) < thickness:
+                is_solid = False
+                if abs(dist_xy - r_surface) < thickness: is_solid = True
+                if abs(dist_xy - r_surface_2) < thickness: is_solid = True
+                
+                # Cutout center for hand access
+                if dist_xy < hand_access_radius: is_solid = False
+                
+                if is_solid:
                     grid[x_idx,y_idx,z_idx] = True
                 else:
-                    # Add secondary loop?
-                    # Inner loop for self-intersection illusion
-                    r_surface_2 = (radius - wall_thickness/2.0) - 15.0 * math.sin(2.0 * angle + twist_z + math.pi)
-                    if abs(dist_xy - r_surface_2) < thickness:
-                        grid[x_idx,y_idx,z_idx] = True
-                    else:
-                        grid[x_idx,y_idx,z_idx] = False
+                    grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)
