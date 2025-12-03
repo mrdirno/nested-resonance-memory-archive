@@ -25,11 +25,14 @@ def verify_catalog():
         ],
         "lamp_series_06": [
             "31_the_end", "32_the_beginning", "33_the_prophecy", "34_the_architect", "35_the_machine"
+        ],
+        "lamp_series_07": [
+            "36_the_neural_net", "37_the_algorithm", "38_the_hypervisor", "39_the_awakening", "40_the_alignment"
         ]
     }
     
     report = {
-        "total_designs": 35,
+        "total_designs": 40,
         "verified": 0,
         "missing": [],
         "invalid": [],
@@ -46,15 +49,6 @@ def verify_catalog():
                 continue
                 
             # Check components
-            # Naming convention might vary slightly (e.g. redshift_shade.stl vs shade.stl)
-            # Based on generation scripts, it's usually [design_name]_shade.stl
-            
-            # Extract simple name from folder name (e.g. 01_redshift -> redshift)
-            # But wait, folder is 01_redshift, file is redshift_shade.stl
-            # Design 31_the_end -> the_end_shade.stl?
-            
-            # Let's try to deduce the prefix.
-            # Usually everything after the number.
             parts = design.split('_')
             if parts[0].isdigit():
                 name_parts = parts[1:]
@@ -62,10 +56,7 @@ def verify_catalog():
                 name_parts = parts
                 
             design_name = "_".join(name_parts)
-            
-            # Handle specific cases if naming is inconsistent
-            # e.g. 06_dark_matter -> dark_shade.stl ? Or dark_matter_shade.stl?
-            # I should check what files exist.
+            design_name_short = design_name.replace("the_", "")
             
             files = os.listdir(design_path)
             stl_files = [f for f in files if f.endswith(".stl")]
@@ -75,13 +66,15 @@ def verify_catalog():
             has_shaft = False
             
             for f in stl_files:
-                if "shade" in f: has_shade = True
-                if "base" in f: has_base = True
-                if "shaft" in f: has_shaft = True
+                # Check both long and short names
+                if design_name in f or design_name_short in f:
+                    if "shade" in f: has_shade = True
+                    if "base" in f: has_base = True
+                    if "shaft" in f: has_shaft = True
                 
                 # Check size
                 size = os.path.getsize(os.path.join(design_path, f))
-                if size < 1024: # Less than 1KB is suspicious for a mesh
+                if size < 1024: 
                     report["invalid"].append(f"{design}/{f} (Size: {size} bytes)")
             
             status = "OK"

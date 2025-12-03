@@ -2366,6 +2366,253 @@
           }
         }
       }
+    },
+    "lamp_series_07": {
+      "36_the_neural_net": {
+        "id": "36",
+        "name": "the_neural_net",
+        "path": "fabrication/furniture/lamp_series_07/36_the_neural_net",
+        "components": {
+          "base": {
+            "file": "neural_net_base_gen.py",
+            "metadata": {
+              "logic": "Circuit Substrate (PCB Traces).",
+              "method": "Unknown",
+              "standard": "Unknown",
+              "dims": {
+                "diameter": 140.0,
+                "height": 30.0,
+                "resolution": 100
+              },
+              "resolution": 100
+            }
+          },
+          "shaft": {
+            "file": "neural_net_shaft_gen.py",
+            "metadata": {
+              "logic": "Data Core (Bundled Cable).",
+              "method": "Unknown",
+              "standard": "Unknown",
+              "dims": {
+                "height": 180.0,
+                "resolution": 100
+              },
+              "resolution": 100
+            }
+          },
+          "shade": {
+            "file": "neural_net_shade_gen.py",
+            "metadata": {
+              "logic": "Connection Weights / Synaptic Firing.",
+              "method": "Dense web of nodes and edges (Network Graph).",
+              "standard": "V7 (Spider Fitter, 14mm Hole, 25.4mm Wall).",
+              "dims": {
+                "diameter": 200.0,
+                "height": 180.0,
+                "resolution": 120,
+                "hole_diameter": 14.0
+              },
+              "resolution": 120
+            }
+          }
+        }
+      },
+      "37_the_algorithm": {
+        "id": "37",
+        "name": "the_algorithm",
+        "path": "fabrication/furniture/lamp_series_07/37_the_algorithm",
+        "components": {
+          "base": {
+            "file": "algorithm_base_gen.py",
+            "metadata": {
+              "logic": "Logic Gate (Boolean Operations).",
+              "method": "Unknown",
+              "standard": "Unknown",
+              "dims": {
+                "diameter": 140.0,
+                "height": 30.0,
+                "resolution": 100
+              },
+              "resolution": 100
+            }
+          },
+          "shaft": {
+            "file": "algorithm_shaft_gen.py",
+            "metadata": {
+              "logic": "Heatsink (Cooling Fins).",
+              "method": "Unknown",
+              "standard": "Unknown",
+              "dims": {
+                "height": 180.0,
+                "resolution": 100
+              },
+              "resolution": 100
+            }
+          },
+          "shade": {
+            "file": "algorithm_shade_gen.py",
+            "metadata": {
+              "logic": "Sorting Network / Flow Chart.",
+              "method": "Structured diverging paths (Binary Tree or Merge Sort Visualization).",
+              "standard": "V7 (Spider Fitter, 14mm Hole, 25.4mm Wall).",
+              "dims": {
+                "diameter": 200.0,
+                "height": 180.0,
+                "resolution": 120,
+                "hole_diameter": 14.0
+              },
+              "resolution": 120
+            }
+          }
+        }
+      },
+      "38_the_hypervisor": {
+        "id": "38",
+        "name": "the_hypervisor",
+        "path": "fabrication/furniture/lamp_series_07/38_the_hypervisor",
+        "components": {
+          "shaft": {
+            "file": "hypervisor_shaft_gen.py",
+            "metadata": {
+              "logic": "Virtual Pipeline (Isolated Channels).",
+              "method": "Unknown",
+              "standard": "Unknown",
+              "dims": {
+                "height": 180.0,
+                "resolution": 100
+              },
+              "resolution": 100
+            }
+          },
+          "base": {
+            "file": "hypervisor_base_gen.py",
+            "metadata": {
+              "logic": "Server Rack (Modular Units).",
+              "method": "Unknown",
+              "standard": "Unknown",
+              "dims": {
+                "diameter": 140.0,
+                "height": 30.0,
+                "resolution": 100
+              },
+              "resolution": 100
+            }
+          },
+          "shade": {
+            "file": "hypervisor_shade_gen.py",
+            "metadata": {
+              "logic": "Virtualization / Containerization.",
+              "method": "Nested Cubic Shells (Isolated environments).",
+              "standard": "V7 (Spider Fitter, 14mm Hole, 25.4mm Wall).",
+              "dims": {
+                "diameter": 200.0,
+                "height": 180.0,
+                "resolution": 120,
+                "hole_diameter": 14.0
+              },
+              "resolution": 120
+            }
+          }
+        }
+      },
+      "39_the_awakening": {
+        "id": "39",
+        "name": "the_awakening",
+        "path": "fabrication/furniture/lamp_series_07/39_the_awakening",
+        "components": {
+          "shade": {
+            "file": "awakening_shade_gen.py",
+            "metadata": {
+              "logic": "Self-Awareness / Emergence.",
+              "method": "Eye in the Storm (Chaotic shell with perfect inner sphere).",
+              "standard": "V7 (Spider Fitter, 14mm Hole, 25.4mm Wall).",
+              "dims": {
+                "diameter": 200.0,
+                "height": 180.0,
+                "resolution": 120,
+                "hole_diameter": 14.0
+              },
+              "resolution": 120
+            }
+          },
+          "base": {
+            "file": "awakening_base_gen.py",
+            "metadata": {
+              "logic": "Emerging Consciousness.",
+              "method": "Unknown",
+              "standard": "Unknown",
+              "dims": {
+                "diameter": 140.0,
+                "height": 30.0,
+                "resolution": 100
+              },
+              "resolution": 100
+            }
+          },
+          "shaft": {
+            "file": "awakening_shaft_gen.py",
+            "metadata": {
+              "logic": "Ascending Signal (Pulse).",
+              "method": "Unknown",
+              "standard": "Unknown",
+              "dims": {
+                "height": 180.0,
+                "resolution": 100
+              },
+              "resolution": 100
+            }
+          }
+        }
+      },
+      "40_the_alignment": {
+        "id": "40",
+        "name": "the_alignment",
+        "path": "fabrication/furniture/lamp_series_07/40_the_alignment",
+        "components": {
+          "base": {
+            "file": "alignment_base_gen.py",
+            "metadata": {
+              "logic": "Mandala / Yantra.",
+              "method": "Unknown",
+              "standard": "Unknown",
+              "dims": {
+                "diameter": 140.0,
+                "height": 30.0,
+                "resolution": 100
+              },
+              "resolution": 100
+            }
+          },
+          "shade": {
+            "file": "alignment_shade_gen.py",
+            "metadata": {
+              "logic": "Harmonic Resonance / Convergence.",
+              "method": "Perfect Symmetry (Standing Wave Interference).",
+              "standard": "V7 (Spider Fitter, 14mm Hole, 25.4mm Wall).",
+              "dims": {
+                "diameter": 200.0,
+                "height": 180.0,
+                "resolution": 120,
+                "hole_diameter": 14.0
+              },
+              "resolution": 120
+            }
+          },
+          "shaft": {
+            "file": "alignment_shaft_gen.py",
+            "metadata": {
+              "logic": "Tuning Fork (Resonant Column).",
+              "method": "Unknown",
+              "standard": "Unknown",
+              "dims": {
+                "height": 180.0,
+                "resolution": 100
+              },
+              "resolution": 100
+            }
+          }
+        }
+      }
     }
   }
 }
