@@ -1078,3 +1078,8 @@
 - **Design:** The Impossible (26) Refined (New Implementation).
 - **Upgrade:** Forced Perspective Shade (Escher Grid), Penrose Steps Base, Necker Cube Shaft.
 - **Status:** Design 26 v2.0 Complete.
+
+## Cycle 2678: Supernova Hotfix
+- **Design:** The Supernova (04) Refined.
+- **Fix:** Applied Anisotropic Twist to Shaft as per directive.
+- **Status:** Design 04 v2.1 Complete.
