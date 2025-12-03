@@ -18,10 +18,10 @@ from fabrication.library import lamp_lib
 
 def generate_base(output_path, 
                   diam=180.0,       # Diameter
-                  height=25.0,      # Height (increased slightly for channel clearance)
-                  resolution=100):
+                  height=25.0,      # Height
+                  resolution=150):  # INCREASED RES
     
-    print(f"Generating Redshift Base (v2.0): {output_path}")
+    print(f"Generating Redshift Base (v2.1 - High Visibility): {output_path}")
     
     radius = diam / 2.0
     
@@ -31,11 +31,11 @@ def generate_base(output_path,
     
     # Feet Config
     foot_radius = 10.0
-    foot_offset = 15.0 # V4 Std offset
+    foot_offset = 15.0
     foot_depth = 3.0
     
     # Center Hole
-    hole_radius = 7.0 # 14mm diam
+    hole_radius = 7.0 
     
     # Grid
     res_x = resolution
@@ -47,14 +47,12 @@ def generate_base(output_path,
     step_y = diam / res_y
     step_z = height / res_z
     
-    print(f"Grid: {res_x}x{res_y}x{res_z} (Voxel: ~{step_x:.2f}mm)")
+    print(f"Grid: {res_x}x{res_y}x{res_z}")
     
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
-    # Gyroid Params (Refined)
-    scale = 2.0 * math.pi / (25.0) # 25mm wavelength (tighter)
-    
-    print("Calculating Field (v2.0)...")
+    # Gyroid Params
+    scale = 2.0 * math.pi / 25.0
     
     for z_idx in range(res_z):
         pz = z_idx * step_z
@@ -67,7 +65,7 @@ def generate_base(output_path,
                 
                 r = math.sqrt(px**2 + py**2)
                 
-                # V4 Features Check
+                # V4 Features (Feet/Channel voids)
                 feature_check = lamp_lib.apply_base_v4_features(
                     px, py, pz, r,
                     height=height,
@@ -84,49 +82,42 @@ def generate_base(output_path,
                     grid[x_idx,y_idx,z_idx] = feature_check
                     continue
 
-                # 3. BASE BODY - DOPPLER VORTEX
+                # 3. BASE BODY
                 if r <= radius:
-                    # AGPH REDSHIFT BASE: The Doppler Vortex
-                    # Concept: Frequency increases towards center (Blue Shift)
-                    # Structure: Spiraling Lattice, NO SOLID BLOCK
+                    # NO SOLID RIM. Expose lattice to edge.
                     
-                    # Radial Frequency Shift
-                    # Edge (r=90): Low Freq
-                    # Center (r=15): High Freq
-                    freq_gradient = 1.0 + 2.0 * (1.0 - r/radius)**2
+                    # Anisotropic Doppler Vortex
+                    sx = scale * 1.0
+                    sy = scale * 1.0
+                    sz = scale * 0.5 
                     
-                    # Spiral Twist
                     angle = math.atan2(py, px)
-                    twist = r * 0.1 # Twist increases with radius
+                    twist = r * 0.05 # Reduced twist for connectivity
                     
-                    # Coordinate Transform
                     tx = r * math.cos(angle + twist)
                     ty = r * math.sin(angle + twist)
                     
-                    # Base Scale
-                    base_k = 2.0 * math.pi / 30.0
+                    lx = tx * sx
+                    ly = ty * sy
+                    lz = pz * sz
                     
-                    lx = tx * base_k * freq_gradient
-                    ly = ty * base_k * freq_gradient
-                    lz = pz * base_k
-                    
-                    # Gyroid
                     val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
                     
-                    # Variable Density (Thicker at center for stability, but not solid)
-                    # Center thresh = 0.9, Edge thresh = 0.3
-                    threshold = 0.3 + 0.6 * (1.0 - r/radius)
+                    is_lattice = abs(val) < 0.35
+                    
+                    # CONNECTIVITY RIB (Hidden Spoke)
+                    # 4 Radial Spokes to bind the spirals
+                    # Modulated by Z to be less intrusive
+                    rib_angle = math.cos(4.0 * angle)
+                    is_rib = rib_angle > 0.95 # Very thin ribs
                     
                     # Shell Logic (Rim and Bottom)
-                    if pz < 3.0 or pz > (height - 3.0):
+                    if pz < 2.0: # Solid Base Plate (Anchor)
                          grid[x_idx,y_idx,z_idx] = True
-                    elif r > (radius - 4.0):
-                         grid[x_idx,y_idx,z_idx] = True
-                    # Mechanical Core (Just the rod interface, not a block)
-                    elif r < 12.0:
+                    elif r < 12.0: # Mechanical Core
                          grid[x_idx,y_idx,z_idx] = True
                     else:
-                         if abs(val) < threshold:
+                         if is_lattice or is_rib:
                              grid[x_idx,y_idx,z_idx] = True
                          else:
                              grid[x_idx,y_idx,z_idx] = False

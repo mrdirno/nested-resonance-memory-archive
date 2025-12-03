@@ -1,5 +1,5 @@
 # HELIOS LAMP SERIES 01: "THE COSMIC ENGINE"
-**Production Release v2.0**
+**Production Release v2.1 (High Visibility)**
 **Date:** Dec 3, 2025
 **Status:** 🟢 READY FOR FABRICATION
 
@@ -8,9 +8,9 @@
 ## 1. REDSHIFT (The Doppler Engine)
 *   **Concept:** Relativistic Velocity. Frequency shift from Red (Base) to Blue (Top).
 *   **Geometry:**
-    *   **Base:** Doppler Vortex (Spiraling Gradient Lattice). No solid core.
+    *   **Base:** **Doppler Vortex (High Vis).** Solid rim removed. Internal spiral lattice exposed to edge. 2mm solid anchor plate.
     *   **Shaft:** Muscle Fiber Helix (Extreme Z-Stretch).
-    *   **Shade:** Hyper-Shift Gyroid (Z-Warped).
+    *   **Shade:** Hyper-Shift Gyroid (Z-Warped + 6 Spiral Ribs).
 *   **Files:**
     *   `01_redshift/redshift_base.stl`
     *   `01_redshift/redshift_shaft.stl`
@@ -19,8 +19,8 @@
 ## 2. EVENT HORIZON (The Accretion Engine)
 *   **Concept:** Gravitational Capture. Matter spiraling into a central point.
 *   **Geometry:**
-    *   **Base:** Naked Singularity (Open Spiral Lattice). No cap.
-    *   **Shaft:** Accretion Helix (360° Twist + Waist Taper).
+    *   **Base:** **Naked Singularity.** Open Spiral Lattice. No cap.
+    *   **Shaft:** Accretion Helix (360° Twist + Waist Taper). Variants: Medium, Large, Conic.
     *   **Shade:** Accretion Veil (Vortex flow matching shaft).
 *   **Files:**
     *   `02_event_horizon/event_horizon_base.stl`
@@ -30,9 +30,9 @@
 ## 3. SINGULARITY (The Density Engine)
 *   **Concept:** Infinite Density. Spaghettification.
 *   **Geometry:**
-    *   **Base:** Gravity Well (Flat Spiral).
+    *   **Base:** Accretion Disk (Flat Spiral + Radial Stretch).
     *   **Shaft:** Event Horizon (Hyperboloid + Infinite Z-Stretch).
-    *   **Shade:** Relativistic Jet (Radial Expansion + Vortex).
+    *   **Shade:** Relativistic Jet (Helical Vortex + Radial Expansion).
 *   **Files:**
     *   `03_singularity/singularity_base.stl`
     *   `03_singularity/singularity_shaft.stl`
@@ -41,9 +41,9 @@
 ## 4. SUPERNOVA (The Expansion Engine)
 *   **Concept:** Explosive Dispersion. Chaos.
 *   **Geometry:**
-    *   **Base:** Neutron Core (Faceted/Crystalline).
-    *   **Shaft:** Shockwave (Ripple Pulse).
-    *   **Shade:** Nebula (Chaotic Interference Lattice).
+    *   **Base:** Neutron Core (Faceted/Crystalline + Radial Anisotropy).
+    *   **Shaft:** Shockwave (Ripple Pulse + Z-Anisotropy).
+    *   **Shade:** Nebula (Chaotic Interference Lattice + 3D Dispersion).
 *   **Files:**
     *   `04_supernova/supernova_base.stl`
     *   `04_supernova/supernova_shaft.stl`
@@ -67,6 +67,7 @@
 
 **QA Certification:**
 *   **Dust:** Zero (Cleaned via `scipy.ndimage`).
-*   **Connectivity:** Guaranteed (>99% Volume Integrity).
+*   **Connectivity:** Guaranteed via Volume Loss Check (<5%).
 *   **Fit:** Dynamic Spider Fitter (No floating parts).
 *   **Anisotropy:** Verified AGPH compliance.
+*   **Visibility:** Bases are open/lattice structures (No blocks).
