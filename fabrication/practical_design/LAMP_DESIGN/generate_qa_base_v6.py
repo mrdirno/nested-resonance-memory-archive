@@ -25,6 +25,10 @@ RECESS_DIAMETER = 40.5
 RECESS_DEPTH = 3.0
 TWIST_RATE = 0.02
 
+# Hardware Interface
+NUT_RECESS_DIAMETER = 25.0 # Clearance for socket wrench
+NUT_RECESS_DEPTH = 6.0     # Deep enough for nut + washer
+
 # ==========================================
 # UTILITIES
 # ==========================================
@@ -110,6 +114,11 @@ def generate_base_v6():
                 # 2. Hole
                 if r < (HOLE_DIAMETER / 2.0):
                     continue
+                
+                # 2b. Nut Recess (Bottom Counterbore)
+                if pz < NUT_RECESS_DEPTH:
+                    if r < (NUT_RECESS_DIAMETER / 2.0):
+                        continue
                 
                 # 3. Global Limit
                 if r > current_radius_limit:

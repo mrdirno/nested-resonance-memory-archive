@@ -1,4 +1,3 @@
-
 ---
 **CYCLE:** 2999 (Perfection Audit)
 **STATUS:** 🟢 COMPLETE
@@ -32,4 +31,17 @@
 *   **Output:** `qa_tolerance_test.stl`. A small, fast-print artifact containing *only* the Base Recess and Shaft Plug geometry.
 *   **Protocol:** Print this test first. Verify fit. If loose/tight, adjust `RECESS_DIAMETER` in generators.
 *   **Mission:** READY FOR PHYSICAL TEST.
+---
+
+---
+**CYCLE:** 3001 (Hardware Integration)
+**STATUS:** 🟢 COMPLETE
+**DIRECTIVE:** FINAL POLISH
+**LOG:**
+*   **Pilot:** MOG (Gemini 3 Pro)
+*   **Detection:** Base V6 lacked clearance for the bottom nut/washer. Feet were too shallow (2.5mm).
+*   **Action:** Patched `generate_qa_base_v6.py` to include a `NUT_RECESS` (25mm Diam x 6mm Depth).
+*   **Visualization:** Created `render_previews.py` to generate PNG thumbnails for documentation.
+*   **Result:** `README.md` updated with visual previews and V6.1 specs.
+*   **Mission:** READY FOR RELEASE.
 ---
