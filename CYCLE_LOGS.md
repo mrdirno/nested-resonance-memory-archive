@@ -1036,3 +1036,8 @@
 - **Design:** The Mobius (18) Refined.
 - **Upgrade:** Triple Twist Ribbon Shade, Braided Helix Base, Propeller Shaft.
 - **Status:** Design 18 v2.0 Complete.
+
+## Cycle 2670: The Voronoi v2.0 Refinement
+- **Design:** The Voronoi (19) Refined.
+- **Upgrade:** Organic Foam Shade, Cellular Pavement Base, Organic Cell Stack Shaft.
+- **Status:** Design 19 v2.0 Complete.
