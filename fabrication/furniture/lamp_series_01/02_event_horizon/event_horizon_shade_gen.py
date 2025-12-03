@@ -66,6 +66,18 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
         # Scale
         current_scale = start_scale * (1.0 - z_norm) + end_scale * z_norm
         
+        # Calculate outer shell radius at this Z for fitter constraint
+        effective_z = z_mm
+        if z_mm > (height - 10.0):
+            effective_z = height - 10.0
+        
+        dz = effective_z - sphere_z_center
+        
+        # Safe sqrt
+        term = radius**2 - dz**2
+        if term < 0: term = 0
+        current_shell_radius = math.sqrt(term)
+        
         for x_idx in range(res_x):
             x_mm = (x_idx * step) - (diameter / 2.0)
             
@@ -75,22 +87,18 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 dist_from_center_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
                 # Calculate Spherical Distance
-                # CONNECTION GUARANTEE: Flatten the top of the sphere mathematically
-                effective_z = z_mm
-                if z_mm > (height - 10.0):
-                    effective_z = height - 10.0
-                
                 dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
                 # --- PRIORITY 1: SPIDER FITTER (Library Call) ---
+                # FIX: Constrain spokes to current shell radius to prevent "floating plus sign"
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_from_center_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius 
                 )
                 
                 if fitter_override is not None:
@@ -130,34 +138,14 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                          
                 grid[x_idx,y_idx,z_idx] = is_solid
 
-    print("Extracting Mesh...")
-    # Manual extraction for now (or use library if compatible)
-    def add_quad(v1, v2, v3, v4):
-        idx = len(vertices)
-        vertices.extend([v1, v2, v3, v4])
-        faces.append((idx, idx+1, idx+2))
-        faces.append((idx, idx+2, idx+3))
+    # Clean Dust (Strict QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
-    for z in range(res_z):
-        z_mm = z * step
-        for x in range(res_x):
-            x_mm = (x * step) - (diameter/2)
-            for y in range(res_y):
-                y_mm = (y * step) - (diameter/2)
-                
-                if not grid[x,y,z]: continue
-                s2 = step/2
-                
-                if x==res_x-1 or not grid[x+1,y,z]: add_quad((x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
-                if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-                if y==res_y-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
-                if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
-                if z==0 or not grid[x,y,z-1]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-
+    # Mesh Extraction (Library)
+    vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter)
     lamp_lib.write_binary_stl(output_path, vertices, faces)
 
 if __name__ == "__main__":
-    output_file = "fabrication/furniture/lamp_series_01/02_event_horizon/event_horizon_shade.stl"
+    output_file = "event_horizon_shade.stl"
     if len(sys.argv) > 1: output_file = sys.argv[1]
     generate_shade(output_file)

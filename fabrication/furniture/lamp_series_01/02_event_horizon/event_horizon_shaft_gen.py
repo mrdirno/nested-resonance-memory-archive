@@ -86,6 +86,9 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                 else:
                     grid[x_idx,y_idx,z_idx] = False
 
+    # Clean Dust (Strict QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
+
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, width, width)
     lamp_lib.write_binary_stl(output_path, vertices, faces)
