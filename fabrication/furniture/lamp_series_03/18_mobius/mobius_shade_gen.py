@@ -85,14 +85,15 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 angle = math.atan2(y_mm, x_mm)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = radius 
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -115,36 +116,26 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                     
-                # Ribbon Logic
-                # Define N ribbons
-                # Ribbon center at angle_i
+                # Twisted Ribbon Logic (Anisotropic)
                 
-                # Check if point is inside a ribbon
-                # Rotated frame
+                # Anisotropy: Twist rate increases with Z (Acceleration)
+                local_twist = z_norm**1.5 * twist_total # Non-linear
                 
-                # To make it "Mobius", the ribbon must twist its orientation.
-                # Normal vector rotates.
+                val = math.sin(num_ribbons * angle + local_twist)
                 
-                # Simplified: 3D Gyroid with a twist domain warp?
-                # sin(x*c + z*twist)
+                # Connector strands (Z-Stretched)
+                # stretch Z frequency
+                connect = math.sin(z_mm * 0.1) # Low freq = Stretched Z
                 
-                # Let's try: sin(N*theta + z_twist)
-                
-                val = math.sin(num_ribbons * angle + current_twist)
-                
-                # Thickness modulation (Thick in middle, thin at edge?)
-                # No, just a threshold
-                
-                if abs(val) > 0.5: # Gaps between ribbons
+                if abs(val) > 0.5: # Ribbons
+                    grid[x_idx,y_idx,z_idx] = True
+                elif connect > 0.85: # Connectors
                     grid[x_idx,y_idx,z_idx] = True
                 else:
-                    # Connector strands?
-                    # sin(z*k)
-                    connect = math.sin(z_mm * 0.2)
-                    if connect > 0.9:
-                        grid[x_idx,y_idx,z_idx] = True
-                    else:
-                        grid[x_idx,y_idx,z_idx] = False
+                    grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)
