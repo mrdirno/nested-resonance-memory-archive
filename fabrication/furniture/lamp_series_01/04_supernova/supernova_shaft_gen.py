@@ -9,15 +9,15 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.
 from fabrication.library import lamp_lib
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE SUPERNOVA (SHAFT) v2.0
+# HELIOS LAMP SERIES 01: THE SUPERNOVA (SHAFT) v2.1
 # -----------------------------------------------------------------------------
-# REFINEMENT v2.0: Shockwave Pulse, Library Integration.
-# Logic: Cylinder with sharp, propagating ring pulses.
+# REFINEMENT v2.1: Anisotropic Shockwave, Library Integration.
+# Logic: Cylinder with sharp, propagating ring pulses (Anisotropic Twist).
 # Features: V4 QA (Solid Core, End Caps).
 # -----------------------------------------------------------------------------
 
 def generate_shaft(output_path, height=160.0, resolution=120):
-    print(f"Generating SUPERNOVA SHAFT (v2.0): {output_path}")
+    print(f"Generating SUPERNOVA SHAFT (v2.1 Anisotropic): {output_path}")
     
     # Dimensions
     base_radius = 15.0
@@ -40,6 +40,7 @@ def generate_shaft(output_path, height=160.0, resolution=120):
     
     # Ripple Params
     freq = 2.0 * math.pi / 20.0 
+    twist_rate = 0.05
     
     for z_idx in range(res_z):
         z_mm = z_idx * step
@@ -49,7 +50,8 @@ def generate_shaft(output_path, height=160.0, resolution=120):
         raw_wave = math.sin(z_mm * freq)
         ripple = raw_wave * abs(raw_wave) # Preserves sign but sharpens peaks
         
-        current_radius = base_radius + (ripple * max_ripple)
+        # Base radius at this Z
+        current_base_r = base_radius + (ripple * max_ripple)
             
         for x_idx in range(res_x):
             x_mm = (x_idx * step) - max_r_bound
@@ -58,6 +60,7 @@ def generate_shaft(output_path, height=160.0, resolution=120):
                 y_mm = (y_idx * step) - max_r_bound
                 
                 dist = math.sqrt(x_mm**2 + y_mm**2)
+                angle = math.atan2(y_mm, x_mm)
                 
                 # V4 Core
                 if dist < core_radius:
@@ -73,8 +76,15 @@ def generate_shaft(output_path, height=160.0, resolution=120):
                         grid[x_idx,y_idx,z_idx] = True
                         continue
                 
+                # Anisotropic Distortion
+                # Twisted Ellipse: r_eff = r / (1 + A*cos(2*theta + kz))
+                aniso_factor = 1.0 + 0.4 * math.cos(2.0 * angle + z_mm * twist_rate)
+                
+                # Effective radius at this angle
+                local_radius = current_base_r * aniso_factor
+                
                 # Outer Shell
-                if dist <= current_radius:
+                if dist <= local_radius:
                     grid[x_idx,y_idx,z_idx] = True
                 else:
                     grid[x_idx,y_idx,z_idx] = False
