@@ -102,7 +102,7 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
         closest = v1 + t * ab
         return np.linalg.norm(p - closest)
         
-    edge_radius = 6.0 # Thick wireframe
+    edge_radius = 12.0 # Chunky wireframe
     
     radius = diameter / 2.0
     
@@ -120,14 +120,16 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 p_curr = np.array([x_mm, y_mm, z_mm])
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = radius 
+                
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -136,16 +138,19 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
 
                 # --- PRIORITY 2: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:
-                    if dist_xy < radius and dist_xy > (radius-15.0): # Solid Ring
+                    if dist_xy < radius and dist_xy > (radius-15.0): 
                          grid[x_idx,y_idx,z_idx] = True
                          continue
 
                 # --- PRIORITY 3: WIREFRAME ---
+                
+                # Optimization: Only check edges if inside bounding box
+                if abs(x_mm) > (radius + 10) or abs(y_mm) > (radius + 10):
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+                
                 # Find min dist to any edge
                 min_dist = 999.0
-                
-                # Optimization: Bounding box check?
-                # Just brute force 32 edges is fine for resolution 100^3
                 
                 for e in edges_4d:
                     v1 = projected_verts[e[0]]
@@ -156,8 +161,31 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 
                 if min_dist < edge_radius:
                     grid[x_idx,y_idx,z_idx] = True
-                else:
-                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+                    
+                # Vertex Fusion (Spheres)
+                in_vertex = False
+                for v in projected_verts:
+                    d_vert = np.linalg.norm(p_curr - v)
+                    if d_vert < 18.0: # Large joints
+                        in_vertex = True
+                        break
+                
+                if in_vertex:
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+                    
+                # CONNECTIVITY HUB (Central Pillar)
+                # Ensures top and bottom are connected if projection fails
+                # Hidden inside the wireframe
+                if dist_xy < 12.0: # Thick central rod (was 8.0)
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+                    
+                grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)
