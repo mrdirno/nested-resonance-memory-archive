@@ -1,7 +1,7 @@
 # HELIOS FURNITURE CATALOG
 
-**Total Designs:** 20
-**Total Artifacts:** 60 (Shades, Bases, Shafts)
+**Total Designs:** 30
+**Total Artifacts:** 90 (Shades, Bases, Shafts)
 **Status:** Geometry Ready / Production Pending
 
 ---
@@ -51,8 +51,28 @@
 ---
 
 ## SERIES 04: THE GLITCH (Digital Decay)
-*Theme: Error, Noise, Entropy.*
-*(Coming Soon)*
+*Theme: Error, Entropy, Resolution.*
+
+| ID | Name | Concept | Key Geometry |
+|---|---|---|---|
+| **21** | **The Artifact** | Compression Error | Voxelization / Quantized Mesh |
+| **22** | **The Noise** | Static / Perlin | High-Frequency Displacement |
+| **23** | **The Lag** | Latency / Datamosh | Sheared / Smeared Geometry |
+| **24** | **The Crash** | Buffer Overflow | Exploded / Fragmented Shards |
+| **25** | **The Pixel** | Resolution Drop | Low-Poly / 8-Bit Voxel |
+
+---
+
+## SERIES 05: THE ELEMENTS (Primal Forces)
+*Theme: Nature, Chaos, Energy.*
+
+| ID | Name | Concept | Key Geometry |
+|---|---|---|---|
+| **26** | **The Fire** | Plasma / Combustion | Vertical Flame Noise |
+| **27** | **The Water** | Fluid Dynamics | Caustic Ripples / Droplets |
+| **28** | **The Earth** | Erosion / Strata | Geological Layers / Canyon |
+| **29** | **The Air** | Aerodynamics | Wind Tunnel Streamlines |
+| **30** | **The Aether** | Quintessence | Minimalist Void Structure |
 
 ---
 
