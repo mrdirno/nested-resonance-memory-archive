@@ -117,27 +117,28 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
                 # Concept: Frequency doubles from bottom to top (Red -> Blue Shift)
                 # Structure: Anisotropic Stretching that evolves
                 
-                # Z-Gradient (Frequency)
-                # Bottom: Low Freq (Large cells)
-                # Top: High Freq (Dense cells)
-                freq_mult = 1.0 + 2.0 * (z_norm**1.5) # Non-linear increase
+                # Z-Warping (Redshift Effect without breaking topology)
+                # Compress Z coordinates logarithmically
+                z_warped = z_mm * (1.0 + z_norm) 
                 
-                # Anisotropy A(z)
-                # Bottom: Stretched Horizontally (Planar)
-                # Top: Stretched Vertically (Streamlines)
-                
-                sx = scale_factor * base_scale * freq_mult
-                sy = scale_factor * base_scale * freq_mult
-                
-                # Z-Stretch transitions from 0.5 (Compressed) to 2.0 (Stretched)
-                z_stretch = 0.5 + 1.5 * z_norm
-                sz = base_scale * freq_mult * (1.0/z_stretch)
+                sx = scale_factor * base_scale
+                sy = scale_factor * base_scale
+                sz = base_scale 
                 
                 val = math.sin(x_mm * sx) * math.cos(y_mm * sy) + \
-                      math.sin(y_mm * sy) * math.cos(z_mm * sz) + \
-                      math.sin(z_mm * sz) * math.cos(x_mm * sx)
+                      math.sin(y_mm * sy) * math.cos(z_warped * sz) + \
+                      math.sin(z_warped * sz) * math.cos(x_mm * sx)
                 
-                if abs(val) < 0.4:
+                is_lattice = abs(val) < 0.45 # Thicker walls
+                
+                # CONNECTIVITY GUARANTEE: Spiral Ribs (Thickened)
+                angle = math.atan2(y_mm, x_mm)
+                twist = z_norm * math.pi 
+                
+                rib_phase = math.cos(6.0 * angle + twist)
+                is_rib = rib_phase > 0.8 # Thicker ribs
+                
+                if is_lattice or is_rib:
                     grid[x_idx,y_idx,z_idx] = True
                 else:
                     grid[x_idx,y_idx,z_idx] = False
