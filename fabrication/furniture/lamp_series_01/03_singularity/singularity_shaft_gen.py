@@ -83,17 +83,36 @@ def generate_shaft(output_path, height=160.0, resolution=120):
                         grid[x_idx,y_idx,z_idx] = True
                         continue
                 
-                # Texture: Ribs that twist slightly and stretch
-                # Twist increases near event horizon (waist)
-                twist = z_norm * math.pi # 180 twist
+                # AGPH SINGULARITY SHAFT: Spaghettification
                 
-                # Sharpen ribs for "spaghetti" look
-                rib_raw = math.cos(rib_count * angle + twist)
-                rib_mod = rib_raw * abs(rib_raw) # Square preserving sign for sharpness
+                # P: Prismatic Taper (Hyperboloid Waist)
+                # Already handled by current_base_radius
                 
-                effective_radius = current_base_radius + (rib_mod * rib_depth)
+                # H: Helical Twist R(z)
+                # Twist accelerates near the waist
+                twist_phase = 4.0 * math.pi * (z_norm**2) # Non-linear twist
                 
-                if dist <= effective_radius:
+                # A: Anisotropy A(z) - Vertical Spaghettification
+                # Near waist (z=0.4), stretch Z to infinity
+                dist_to_waist = abs(z_norm - waist_z)
+                stretch_z = 1.0 + 4.0 * (1.0 - dist_to_waist) # Max stretch 5.0 at waist
+                
+                # Coordinate Transform
+                ca = math.cos(twist_phase)
+                sa = math.sin(twist_phase)
+                tx = x_mm * ca - y_mm * sa
+                ty = x_mm * sa + y_mm * ca
+                
+                # Scale
+                freq = 2.0 * math.pi / 15.0
+                lx = tx * freq
+                ly = ty * freq
+                lz = z_mm * freq * (1.0 / stretch_z) # Stretch = lower freq in Z
+                
+                # G: Gyroid
+                val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
+                
+                if abs(val) < 0.6: # Thicker strands
                     grid[x_idx,y_idx,z_idx] = True
                 else:
                     grid[x_idx,y_idx,z_idx] = False

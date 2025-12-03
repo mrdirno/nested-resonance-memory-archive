@@ -86,35 +86,45 @@ def generate_base(output_path, diameter=140.0, height=35.0, resolution=100):
                 if dip < 0: dip = 0
                 surface_height = height - dip
                 
-                # Logic
-                is_solid = False
-                
-                if z_mm <= surface_height and dist <= radius:
-                    is_solid = True
-                
-                # Wire Channel (Bottom)
-                if z_mm < channel_height:
-                    if x_mm > 0 and abs(y_mm) < (channel_width/2):
-                        is_solid = False
-                        
-                # Feet Recesses (Bottom)
-                if z_mm < feet_depth:
-                    foot_dist = radius - feet_inset
-                    if math.sqrt((x_mm-foot_dist)**2 + y_mm**2) < feet_radius: is_solid = False
-                    if math.sqrt((x_mm+foot_dist)**2 + y_mm**2) < feet_radius: is_solid = False
-                    if math.sqrt(x_mm**2 + (y_mm-foot_dist)**2) < feet_radius: is_solid = False
-                    if math.sqrt(x_mm**2 + (y_mm+foot_dist)**2) < feet_radius: is_solid = False
-                
-                # Central Hole (Through)
-                if dist < center_hole_radius:
-                    is_solid = False
+                # Base Body
+                if dist <= radius:
+                    # AGPH SINGULARITY BASE: Accretion Disk
                     
-                # Hardware Recess (Bottom)
-                if z_mm < recess_depth:
-                    if dist < recess_radius:
-                        is_solid = False
-                        
-                grid[x_idx,y_idx,z_idx] = is_solid
+                    # P: Taper a(z) - Flat disk rising to a peak
+                    # No taper, but height function
+                    
+                    # H: Helix R(z) - Swirling into center
+                    angle_twist = (1.0 - dist/radius) * 4.0 * math.pi # 720 deg twist at center
+                    
+                    # A: Anisotropy A(z) - Radial Stretching (Spaghettification)
+                    # As we get closer to center, stretch radially
+                    radial_stretch = 1.0 + 2.0 * (1.0 - dist/radius)
+                    
+                    # Coordinate Transform
+                    ca = math.cos(angle_twist)
+                    sa = math.sin(angle_twist)
+                    tx = x_mm * ca - y_mm * sa
+                    ty = x_mm * sa + y_mm * ca
+                    
+                    # Apply Anisotropy
+                    lx = tx * (2.0 * math.pi / 30.0) * radial_stretch
+                    ly = ty * (2.0 * math.pi / 30.0)
+                    lz = z_mm * (2.0 * math.pi / 30.0)
+                    
+                    # G: Gyroid
+                    val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
+                    
+                    # Boundary Logic
+                    if z_mm <= surface_height:
+                        # Shell or Lattice?
+                        if z_mm < 4.0: # Solid Bottom
+                            grid[x_idx,y_idx,z_idx] = True
+                        elif dist > (radius - 5.0): # Solid Rim
+                            grid[x_idx,y_idx,z_idx] = True
+                        elif abs(val) < 0.45: # Lattice Body
+                            grid[x_idx,y_idx,z_idx] = True
+                else:
+                    grid[x_idx,y_idx,z_idx] = False
 
     # Clean Dust (Strict QA)
     grid = lamp_lib.clean_voxel_grid(grid)

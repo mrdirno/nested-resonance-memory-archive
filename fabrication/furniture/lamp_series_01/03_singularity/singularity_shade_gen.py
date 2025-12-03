@@ -108,20 +108,31 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                    # Vortex Math
-                    angle = twist_factor * dist_from_center_xy
-                    cos_a = math.cos(angle)
-                    sin_a = math.sin(angle)
+                    # AGPH SINGULARITY SHADE: The Jet
                     
-                    tx = x_mm * cos_a - y_mm * sin_a
-                    ty = x_mm * sin_a + y_mm * cos_a
-                    tz = z_mm
+                    # P: Prismatic a(z) - Spherical
                     
-                    lx = tx * base_scale
-                    ly = ty * base_scale
-                    lz = tz * base_scale
-                        
-                    # Gyroid
+                    # Define z_norm locally
+                    z_norm = z_mm / height
+                    
+                    # H: Helix R(z) - Vortex Twist
+                    twist = z_norm * 4.0 * math.pi
+                    ca = math.cos(twist)
+                    sa = math.sin(twist)
+                    tx = x_mm * ca - y_mm * sa
+                    ty = x_mm * sa + y_mm * ca
+                    
+                    # A: Anisotropy A(z) - Radial Expansion (The Jet)
+                    # Stretch OUTWARDS from Z-axis
+                    radial_stretch = 1.0 + (dist_from_center_xy / radius) * 2.0
+                    
+                    # Scale
+                    freq = 2.0 * math.pi / 35.0
+                    lx = tx * freq * (1.0/radial_stretch)
+                    ly = ty * freq * (1.0/radial_stretch)
+                    lz = z_mm * freq 
+                    
+                    # G: Gyroid
                     val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
                     
                     if abs(val) < 0.35: 
