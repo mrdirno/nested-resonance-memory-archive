@@ -954,3 +954,8 @@
 - **Design:** Event Horizon (02) Refined.
 - **Upgrade:** V7 Shade Connection Fix, V4 Base (Spiral Gravity Well), V4 Shaft (Accretion Helix).
 - **Status:** Design 02 v2.0 Complete.
+
+## Cycle 2654: Singularity v2.0 Refinement
+- **Design:** Singularity (03) Refined.
+- **Upgrade:** Vortex Lattice Shade, Deeper Gravity Well Base, Spaghettified Shaft.
+- **Status:** Design 03 v2.0 Complete.
