@@ -64,14 +64,15 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = radius
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -84,7 +85,7 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                          grid[x_idx,y_idx,z_idx] = True
                          continue
 
-                # --- PRIORITY 3: PIXEL SHELL ---
+                # --- PRIORITY 3: PIXEL SHELL (Anisotropic) ---
                 
                 if dist_xy > (radius + 10.0):
                     grid[x_idx,y_idx,z_idx] = False
@@ -95,10 +96,14 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     continue
                     
                 # Pixelated sphere approximation
-                # Center of voxel
-                qx = math.floor(x_mm / block_size) * block_size + (block_size/2)
-                qy = math.floor(y_mm / block_size) * block_size + (block_size/2)
-                qz = math.floor(z_mm / block_size) * block_size + (block_size/2)
+                # Anisotropy: Voxels are tall
+                
+                bs_xy = 15.0
+                bs_z = 25.0
+                
+                qx = math.floor(x_mm / bs_xy) * bs_xy + (bs_xy/2)
+                qy = math.floor(y_mm / bs_xy) * bs_xy + (bs_xy/2)
+                qz = math.floor(z_mm / bs_z) * bs_z + (bs_z/2)
                 
                 q_dist = math.sqrt(qx**2 + qy**2)
                 
@@ -106,12 +111,11 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 is_solid = False
                 
                 if q_dist <= radius and q_dist >= (radius - wall_thickness):
-                    # Checkerboard removal for 8-bit dither?
-                    # (ix + iy + iz) % 2 == 0
+                    # Checkerboard removal for 8-bit dither
                     
-                    ix = int(qx / block_size)
-                    iy = int(qy / block_size)
-                    iz = int(qz / block_size)
+                    ix = int(qx / bs_xy)
+                    iy = int(qy / bs_xy)
+                    iz = int(qz / bs_z)
                     
                     if (ix + iy + iz) % 2 == 0:
                         is_solid = True
@@ -123,6 +127,9 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     is_solid = False
                     
                 grid[x_idx,y_idx,z_idx] = is_solid
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)

@@ -1,12 +1,13 @@
+
 ---
-**CYCLE:** 3043 (Crash QA Upgrade)
+**CYCLE:** 3044 (Pixel QA Upgrade)
 **STATUS:** 🟢 COMPLETE
 **DIRECTIVE:** ALIGN SERIES 04
 **LOG:**
 *   **Pilot:** MOG (Gemini 3 Pro)
-*   **Target:** Lamp 24 (Crash).
-*   **Upgrade 1 (Base):** Added Radial Twist Anisotropy (`twist = dist * 0.05`) to Splinter Pattern. Cleaned dust.
-*   **Upgrade 2 (Shaft):** Added Z-Twist Anisotropy (`twist_angle = angle + z_norm * 2.0`). Cleaned dust.
-*   **Upgrade 3 (Shade):** Added Z-Stretched Noise Anisotropy (`sz = scale * 0.5`) to Crash Pattern. Added Dynamic Spoke Constraint. Cleaned 7 particles (0.00% loss).
-*   **Mission:** LAMP 24 ALIGNED WITH PHYSICS.
+*   **Target:** Lamp 25 (Pixel).
+*   **Upgrade 1 (Base):** Added Z-Stretched Voxels (`bz = 8.0`) to Stepped Pyramid. Cleaned dust.
+*   **Upgrade 2 (Shaft):** Added Z-Stretched Cubes (`cube_size_z = 24.0`). Cleaned dust.
+*   **Upgrade 3 (Shade):** Added Z-Stretched Voxels (`bs_z = 25.0`) to Sphere Approx. Added Dynamic Spoke Constraint. Cleaned dust.
+*   **Mission:** LAMP 25 ALIGNED WITH PHYSICS.
 ---
