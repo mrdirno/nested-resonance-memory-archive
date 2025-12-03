@@ -1005,3 +1005,8 @@
 - **Design:** The Growth (12) Refined.
 - **Upgrade:** Ridged Noise Shade (Brain Coral), Lichen Root Base, Strangler Fig Shaft.
 - **Status:** Design 12 v2.0 Complete.
+
+## Cycle 2664: The Colony v2.0 Refinement
+- **Design:** The Colony (13) Refined.
+- **Upgrade:** DLA Branching Shade (Noise), Mycelium Network Base, Jagged Lightning Shaft.
+- **Status:** Design 13 v2.0 Complete.
