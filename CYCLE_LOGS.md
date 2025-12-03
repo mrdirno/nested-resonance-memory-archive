@@ -927,3 +927,8 @@
 - **Algorithm:** Vertical Ribs + Z-Setbacks + Window Slits.
 - **Shade:** V7 Spider Fitter, 309k triangles.
 - **Status:** Design 31 Shade Complete.
+
+## Cycle 2650: The Tower (Design 31) Complete
+- **Base:** City Block (Grid Plaza).
+- **Shaft:** Structural Truss (X-Braced Column).
+- **Status:** Design 31 Geometry Complete.
