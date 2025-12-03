@@ -892,3 +892,8 @@
 - **Algorithm:** Helical Streamlines (sin(16*theta + twist)) + Turbulence.
 - **Shade:** V7 Spider Fitter, 313k triangles.
 - **Status:** Design 29 Shade Complete.
+
+## Cycle 2644: The Air (Design 29) Complete
+- **Base:** Turbine (Radial Blades Relief).
+- **Shaft:** Vortex Tube (Twisted Vanes).
+- **Status:** Design 29 Geometry Complete.
