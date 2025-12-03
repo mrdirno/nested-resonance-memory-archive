@@ -70,14 +70,15 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = radius
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -90,7 +91,7 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                          grid[x_idx,y_idx,z_idx] = True
                          continue
 
-                # --- PRIORITY 3: SHELL BODY ---
+                # --- PRIORITY 3: SHELL BODY (Anisotropic) ---
                 
                 if dist_xy > radius:
                     grid[x_idx,y_idx,z_idx] = False
@@ -100,13 +101,10 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                     
-                # Branching Pattern
-                # f(p) = 1 / (dist to nearest branch)
-                # Approximation: Sum of Abs Sines
+                # Branching Pattern (Anisotropic)
+                # Stretch branches upwards (Z)
                 
-                # 3 Layers of noise rotated
-                # v1 = 1 - abs(sin(x*s))
-                # v2 = 1 - abs(sin(rot(x,y)*s*2))
+                sz = scale_vein * 0.5 # Vertical stretch
                 
                 # Rotate coords
                 ang1 = 0.5
@@ -117,15 +115,11 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 x2 = x_mm * math.cos(ang2) - y_mm * math.sin(ang2)
                 y2 = x_mm * math.sin(ang2) + y_mm * math.cos(ang2)
                 
-                v1 = abs(math.sin(x_mm * scale_vein) * math.sin(y_mm * scale_vein) * math.sin(z_mm * scale_vein))
-                v2 = abs(math.sin(x1 * scale_vein * 1.5) * math.sin(y1 * scale_vein * 1.5) * math.sin(z_mm * scale_vein * 1.5))
+                v1 = abs(math.sin(x_mm * scale_vein) * math.sin(y_mm * scale_vein) * math.sin(z_mm * sz))
+                v2 = abs(math.sin(x1 * scale_vein * 1.5) * math.sin(y1 * scale_vein * 1.5) * math.sin(z_mm * sz * 1.5))
                 v3 = abs(math.sin(x2 * scale_vein * 2.5) * math.sin(y2 * scale_vein * 2.5))
                 
                 # Intersection of veins
-                # High value where all are low? No.
-                # We want thin structures.
-                # Let's try: 1.0 - max(v1, v2)
-                
                 val = (v1 + v2 + v3) / 3.0
                 
                 # If val is low, we are near zero-crossing (vein center)
@@ -133,6 +127,9 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     grid[x_idx,y_idx,z_idx] = True
                 else:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)
