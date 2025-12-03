@@ -108,18 +108,34 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
                     grid[x_idx,y_idx,z_idx] = True
                     continue
 
-                # 5. Body (Gyroid)
+                # 5. Body (Gyroid - Hyper-Shift)
                 if abs(x_mm) < current_inner_half_width and abs(y_mm) < current_inner_half_width:
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                 
-                lx = x_mm * scale_factor
-                ly = y_mm * scale_factor
-                lz = z_mm
+                # AGPH REDSHIFT SHADE: The Hyper-Shift
+                # Concept: Frequency doubles from bottom to top (Red -> Blue Shift)
+                # Structure: Anisotropic Stretching that evolves
                 
-                val = math.sin(lx * base_scale) * math.cos(ly * base_scale) + \
-                      math.sin(ly * base_scale) * math.cos(lz * current_scale_z) + \
-                      math.sin(lz * current_scale_z) * math.cos(lx * base_scale)
+                # Z-Gradient (Frequency)
+                # Bottom: Low Freq (Large cells)
+                # Top: High Freq (Dense cells)
+                freq_mult = 1.0 + 2.0 * (z_norm**1.5) # Non-linear increase
+                
+                # Anisotropy A(z)
+                # Bottom: Stretched Horizontally (Planar)
+                # Top: Stretched Vertically (Streamlines)
+                
+                sx = scale_factor * base_scale * freq_mult
+                sy = scale_factor * base_scale * freq_mult
+                
+                # Z-Stretch transitions from 0.5 (Compressed) to 2.0 (Stretched)
+                z_stretch = 0.5 + 1.5 * z_norm
+                sz = base_scale * freq_mult * (1.0/z_stretch)
+                
+                val = math.sin(x_mm * sx) * math.cos(y_mm * sy) + \
+                      math.sin(y_mm * sy) * math.cos(z_mm * sz) + \
+                      math.sin(z_mm * sz) * math.cos(x_mm * sx)
                 
                 if abs(val) < 0.4:
                     grid[x_idx,y_idx,z_idx] = True

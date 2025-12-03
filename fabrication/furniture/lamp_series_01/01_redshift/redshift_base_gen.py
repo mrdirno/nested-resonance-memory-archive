@@ -84,59 +84,54 @@ def generate_base(output_path,
                     grid[x_idx,y_idx,z_idx] = feature_check
                     continue
 
-                # 3. BASE BODY
+                # 3. BASE BODY - DOPPLER VORTEX
                 if r <= radius:
-                    # Gradient Density Gyroid
-                    # Threshold varies with radius? No, scale or threshold.
-                    # Let's vary threshold to make it denser at center, airy at edge?
-                    # Or solid rim.
+                    # AGPH REDSHIFT BASE: The Doppler Vortex
+                    # Concept: Frequency increases towards center (Blue Shift)
+                    # Structure: Spiraling Lattice, NO SOLID BLOCK
                     
-                    # Solid Rim
-                    if (pz < 2.0) or (pz > height - 2.0) or (r > radius - 3.0):
-                        grid[x_idx,y_idx,z_idx] = True
-                        continue
-                        
-                    # Solid Core (Stability)
-                    if r < 25.0:
-                        grid[x_idx,y_idx,z_idx] = True
-                        continue
-                        
-                    # Gyroid
-                    # Hyper-Anisotropy: Stretch X/Y based on radius? No, Stretch Z.
-                    # Let's apply a radial stretch factor.
+                    # Radial Frequency Shift
+                    # Edge (r=90): Low Freq
+                    # Center (r=15): High Freq
+                    freq_gradient = 1.0 + 2.0 * (1.0 - r/radius)**2
                     
-                    # Anisotropic Scale Factors
-                    sx = scale * 1.0
-                    sy = scale * 1.0
-                    sz = scale * 0.5 # Stretched vertically (Lower freq = longer waves)
-                    
-                    # Radial Distortion (Swirl)
+                    # Spiral Twist
                     angle = math.atan2(py, px)
-                    twist = r * 0.05
+                    twist = r * 0.1 # Twist increases with radius
                     
+                    # Coordinate Transform
                     tx = r * math.cos(angle + twist)
                     ty = r * math.sin(angle + twist)
                     
-                    val = math.sin(tx * sx) * math.cos(ty * sy) + \
-                          math.sin(ty * sy) * math.cos(pz * sz) + \
-                          math.sin(pz * sz) * math.cos(tx * sx)
-                          
-                    # Gradient Threshold
-                    # Center (r=25): Solid
-                    # Edge (r=90): Airy (thresh 0.3)
+                    # Base Scale
+                    base_k = 2.0 * math.pi / 30.0
                     
-                    t_norm = (r - 25.0) / (radius - 25.0)
-                    if t_norm < 0: t_norm = 0
-                    if t_norm > 1: t_norm = 1
+                    lx = tx * base_k * freq_gradient
+                    ly = ty * base_k * freq_gradient
+                    lz = pz * base_k
                     
-                    threshold = 0.8 - (0.5 * t_norm) # 0.8 -> 0.3
+                    # Gyroid
+                    val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
                     
-                    if abs(val) < threshold:
-                        grid[x_idx, y_idx, z_idx] = True
+                    # Variable Density (Thicker at center for stability, but not solid)
+                    # Center thresh = 0.9, Edge thresh = 0.3
+                    threshold = 0.3 + 0.6 * (1.0 - r/radius)
+                    
+                    # Shell Logic (Rim and Bottom)
+                    if pz < 3.0 or pz > (height - 3.0):
+                         grid[x_idx,y_idx,z_idx] = True
+                    elif r > (radius - 4.0):
+                         grid[x_idx,y_idx,z_idx] = True
+                    # Mechanical Core (Just the rod interface, not a block)
+                    elif r < 12.0:
+                         grid[x_idx,y_idx,z_idx] = True
                     else:
-                        grid[x_idx, y_idx, z_idx] = False
+                         if abs(val) < threshold:
+                             grid[x_idx,y_idx,z_idx] = True
+                         else:
+                             grid[x_idx,y_idx,z_idx] = False
                 else:
-                    grid[x_idx, y_idx, z_idx] = False
+                    grid[x_idx,y_idx,z_idx] = False
 
     # Clean Dust (Strict QA)
     grid = lamp_lib.clean_voxel_grid(grid)
