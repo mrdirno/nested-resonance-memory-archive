@@ -1093,3 +1093,8 @@
 - **Design:** The Chaos (28) Refined (New Implementation).
 - **Upgrade:** Strange Attractor Shade (Warped Noise), Entropy Field Base, Turbulence Shaft.
 - **Status:** Design 28 v2.0 Complete.
+
+## Cycle 2680: The Void v2.0 Refinement
+- **Design:** The Void (29) Refined (New Implementation).
+- **Upgrade:** Inverted Geometry Shade (Carved Gyroid), Singularity Well Base, Hollow Core Shaft.
+- **Status:** Design 29 v2.0 Complete.
