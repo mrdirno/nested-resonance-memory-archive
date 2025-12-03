@@ -102,9 +102,24 @@ def generate_base(output_path,
                         continue
                         
                     # Gyroid
-                    val = math.sin(px * scale) * math.cos(py * scale) + \
-                          math.sin(py * scale) * math.cos(pz * scale) + \
-                          math.sin(pz * scale) * math.cos(px * scale)
+                    # Hyper-Anisotropy: Stretch X/Y based on radius? No, Stretch Z.
+                    # Let's apply a radial stretch factor.
+                    
+                    # Anisotropic Scale Factors
+                    sx = scale * 1.0
+                    sy = scale * 1.0
+                    sz = scale * 0.5 # Stretched vertically (Lower freq = longer waves)
+                    
+                    # Radial Distortion (Swirl)
+                    angle = math.atan2(py, px)
+                    twist = r * 0.05
+                    
+                    tx = r * math.cos(angle + twist)
+                    ty = r * math.sin(angle + twist)
+                    
+                    val = math.sin(tx * sx) * math.cos(ty * sy) + \
+                          math.sin(ty * sy) * math.cos(pz * sz) + \
+                          math.sin(pz * sz) * math.cos(tx * sx)
                           
                     # Gradient Threshold
                     # Center (r=25): Solid

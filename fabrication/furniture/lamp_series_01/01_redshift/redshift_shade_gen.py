@@ -61,8 +61,9 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
         # Scale factor for coordinate mapping
         scale_factor = base_width / current_width if current_width > 0 else 1.0
         
-        # Anisotropic Z scale (Redshift Effect)
-        current_scale_z = base_scale / (1.0 + k_mod * z_norm)
+        # Anisotropic Z scale (Redshift Effect - Intensified)
+        # k_mod increased from 0.8 to 2.0 for dramatic stretching
+        current_scale_z = base_scale / (1.0 + 2.0 * z_norm)
         
         for x_idx in range(res_xy):
             x_mm = (x_idx * step) - (base_width / 2.0)

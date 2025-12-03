@@ -97,19 +97,18 @@ def generate_shaft(output_path,
                 px_rot = px_raw * cos_t - py_raw * sin_t
                 py_rot = px_raw * sin_t + py_raw * cos_t
                 
-                # 6. GYROID GENERATION (Arterial Helix v2.0)
-                # Intertwined veins: Gyroid + Phase shifted Gyroid?
-                # Or simply thicken the Gyroid walls to merge veins
+                # 6. GYROID GENERATION (Arterial Helix v2.0 - Hyper Anisotropic)
+                # Anisotropy: Stretch Z significantly
                 
-                # Standard Gyroid
-                val = math.sin(px_rot * scale) * math.cos(py_rot * scale) + \
-                      math.sin(py_rot * scale) * math.cos(pz * scale) + \
-                      math.sin(pz * scale) * math.cos(px_rot * scale)
+                sx = scale * 1.0
+                sy = scale * 1.0
+                sz = scale * 0.2 # Extreme Vertical Stretch
                 
-                # Double Helix Illusion: Threshold band?
-                # abs(val - 0.5) < 0.2 ?
+                val = math.sin(px_rot * sx) * math.cos(py_rot * sy) + \
+                      math.sin(py_rot * sy) * math.cos(pz * sz) + \
+                      math.sin(pz * sz) * math.cos(px_rot * sx)
                 
-                if abs(val) < 0.5: # Thicker veins for v2.0
+                if abs(val) < 0.6: # Thicker veins for stability
                     grid[x_idx, y_idx, z_idx] = True
                 else:
                     grid[x_idx, y_idx, z_idx] = False
