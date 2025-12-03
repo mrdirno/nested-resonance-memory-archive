@@ -64,14 +64,15 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = radius
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_xy,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -84,7 +85,7 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                          grid[x_idx,y_idx,z_idx] = True
                          continue
 
-                # --- PRIORITY 3: SHELL BODY ---
+                # --- PRIORITY 3: SHELL BODY (Anisotropic Flow) ---
                 
                 if dist_xy > radius:
                     grid[x_idx,y_idx,z_idx] = False
@@ -94,19 +95,18 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                     
-                # Flow Pattern
-                # Distorted coordinates
-                # x' = x + A*sin(y*s)
+                # Flow Pattern (Boids)
                 
-                warp = 15.0 * math.sin(y_mm * 0.05 + z_mm * 0.02)
+                # Warp domain based on angle + Z (Spiral Up)
+                warp = 15.0 * math.sin(y_mm * 0.05 + z_mm * 0.05) # Increased Z warp
                 x_warp = x_mm + warp
                 
-                # Basic Sine stripes mapped to warped coords
-                # sin(x') * sin(z)
+                # Anisotropy: Z-Stretch (Long Trails)
+                sz = scale * 0.4
                 
-                val = math.sin(x_warp * scale) * math.cos(z_mm * scale * 0.5)
+                val = math.sin(x_warp * scale) * math.cos(z_mm * sz)
                 
-                # Add secondary flow
+                # Secondary flow
                 val2 = math.sin((x_mm + y_mm) * scale * 1.5 + z_mm * 0.1)
                 
                 combined = val + 0.5 * val2
@@ -116,6 +116,9 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     grid[x_idx,y_idx,z_idx] = True
                 else:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)

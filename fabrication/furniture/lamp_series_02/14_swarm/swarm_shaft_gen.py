@@ -76,11 +76,13 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                     rx = x_mm * math.cos(angle_offset) - y_mm * math.sin(angle_offset)
                     ry = x_mm * math.sin(angle_offset) + y_mm * math.cos(angle_offset)
                     
-                    # Flow noise
-                    val = math.sin(rx * scale) * math.cos(ry * scale * 0.5)
+                    # Flow noise (Anisotropic)
+                    # Stretch Z to simulate rising smoke
+                    sz = 0.4 # Vertical Stretch
+                    
+                    val = math.sin(rx * scale) * math.cos(ry * scale * sz)
                     
                     # Spiral arms
-                    # atan2(y,x) + r*twist
                     spiral = math.sin(4.0 * math.atan2(ry,rx) + dist*0.2)
                     
                     combined = val + 0.5 * spiral
@@ -91,6 +93,9 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                         grid[x_idx,y_idx,z_idx] = False
                 else:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, 2*max_r_bound, 2*max_r_bound)

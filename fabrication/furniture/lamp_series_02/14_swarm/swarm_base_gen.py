@@ -69,19 +69,21 @@ def generate_base(output_path, diameter=140.0, height=30.0, resolution=100):
                 
                 # Base Body
                 if dist <= radius:
-                    # Swirl Relief (Chaotic)
-                    # Warp domain based on angle
-                    angle = math.atan2(y_mm, x_mm)
+                    # Swirl Relief (Anisotropic)
                     
-                    # Swirl: Rotate coordinates proportional to radius
                     twist = dist * 0.1
                     x_rot = x_mm * math.cos(twist) - y_mm * math.sin(twist)
                     y_rot = x_mm * math.sin(twist) + y_mm * math.cos(twist)
                     
-                    val = math.sin(x_rot * scale) + math.sin(y_rot * scale * 1.5)
+                    # Anisotropy: Radial Stretch
+                    r_stretch = 1.0 + 0.5 * (dist/radius)
+                    
+                    val = math.sin(x_rot * scale * r_stretch) + math.sin(y_rot * scale * 1.5)
                     
                     # Height map
                     h_mod = (val + 2.0) / 4.0
+                    h_mod = h_mod**2 # Sharpen
+                    
                     z_surf = height - 8.0 * (1.0 - h_mod)
                     
                     # Bevel edge
@@ -92,6 +94,9 @@ def generate_base(output_path, diameter=140.0, height=30.0, resolution=100):
                     else: grid[x_idx,y_idx,z_idx] = False
                 else:
                     grid[x_idx,y_idx,z_idx] = False
+
+    # Clean Dust
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter)
