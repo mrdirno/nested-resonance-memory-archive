@@ -39,20 +39,24 @@ def generate_shaft(output_path, height=160.0, resolution=120):
     grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
     # Ripple Params
-    freq = 2.0 * math.pi / 20.0 
-    twist_rate = 0.05
+    base_freq = 2.0 * math.pi / 20.0 
+    twist_rate = 0.1
     
     for z_idx in range(res_z):
         z_mm = z_idx * step
+        z_norm = z_mm / height
+        
+        # Anisotropy: Frequency increases with Z (Shockwave acceleration)
+        freq = base_freq * (1.0 + z_norm)
         
         # Ripple Function
         # Sharper ripples: sin^3 ?
         raw_wave = math.sin(z_mm * freq)
         ripple = raw_wave * abs(raw_wave) # Preserves sign but sharpens peaks
         
-        # Base radius at this Z
-        current_base_r = base_radius + (ripple * max_ripple)
-            
+        # Add Twist Anisotropy
+        # Radius modulation that spirals
+        
         for x_idx in range(res_x):
             x_mm = (x_idx * step) - max_r_bound
             
@@ -62,7 +66,18 @@ def generate_shaft(output_path, height=160.0, resolution=120):
                 dist = math.sqrt(x_mm**2 + y_mm**2)
                 angle = math.atan2(y_mm, x_mm)
                 
-                # V4 Core
+                # Anisotropic Radius
+                # Elliptical distortion that rotates
+                twist = z_mm * twist_rate
+                angle_local = angle + twist
+                
+                # 1.0 + 0.2 * cos(2*angle) -> Ellipse
+                aniso_mod = 1.0 + 0.3 * math.cos(2.0 * angle_local)
+                
+                # Effective radius threshold
+                effective_r = (base_radius + (ripple * max_ripple)) * aniso_mod
+                
+                # V4 QA Core
                 if dist < core_radius:
                     grid[x_idx,y_idx,z_idx] = False
                     continue
@@ -76,15 +91,8 @@ def generate_shaft(output_path, height=160.0, resolution=120):
                         grid[x_idx,y_idx,z_idx] = True
                         continue
                 
-                # Anisotropic Distortion
-                # Twisted Ellipse: r_eff = r / (1 + A*cos(2*theta + kz))
-                aniso_factor = 1.0 + 0.4 * math.cos(2.0 * angle + z_mm * twist_rate)
-                
-                # Effective radius at this angle
-                local_radius = current_base_r * aniso_factor
-                
                 # Outer Shell
-                if dist <= local_radius:
+                if dist <= effective_r:
                     grid[x_idx,y_idx,z_idx] = True
                 else:
                     grid[x_idx,y_idx,z_idx] = False

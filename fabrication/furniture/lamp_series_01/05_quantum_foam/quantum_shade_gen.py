@@ -29,7 +29,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     
     # Shell Parameters
     wall_thickness = 25.4 # 1 Inch
-    hand_access_radius = 45.0 
+    hand_access_radius = (diameter / 2.0) - wall_thickness # Exact 1 inch rim
     
     # Grid Setup
     max_dim = max(diameter, height)
@@ -72,19 +72,29 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- PRIORITY 1: SPIDER FITTER (Library Call) ---
-                fitter_override = lamp_lib.apply_spider_fitter(
-                    x_mm, y_mm, z_mm, dist_from_center_xy,
-                    mount_z_start=(height - top_plate_height),
-                    mount_hole_radius=mount_hole_radius,
-                    hub_radius=hub_radius,
-                    spoke_width=spoke_width,
-                    outer_radius=radius
-                )
+                # Calculate current shell outer radius at this Z for Dynamic Constraint
+                dz = effective_z - sphere_z_center
+                term = radius**2 - dz**2
+                if term < 0: term = 0
+                current_shell_radius = math.sqrt(term)
                 
-                if fitter_override is not None:
-                    grid[x_idx,y_idx,z_idx] = fitter_override
-                    continue
+                # --- PRIORITY 1: MOUNT (Cantilever Bar/Ring) ---
+                if z_mm > (height - 6.0): # Top 6mm
+                    # Central Hub (Solid)
+                    if dist_from_center_xy < 22.0 and dist_from_center_xy > 7.0:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    # Hole
+                    if dist_from_center_xy <= 7.0:
+                        grid[x_idx,y_idx,z_idx] = False
+                        continue
+                        
+                    # Cantilever Bars (Spokes)
+                    spoke_angle = math.atan2(y_mm, x_mm)
+                    if math.cos(3.0 * spoke_angle) > 0.9: 
+                         if dist_from_center_xy < current_shell_radius:
+                             grid[x_idx,y_idx,z_idx] = True
+                             continue
 
                 # --- PRIORITY 2: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:
@@ -112,32 +122,14 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                         
                 grid[x_idx,y_idx,z_idx] = is_solid
 
-    print("Extracting Mesh...")
-    # Manual mesh extraction for now
-    def add_quad(v1, v2, v3, v4):
-        idx = len(vertices)
-        vertices.extend([v1, v2, v3, v4])
-        faces.append((idx, idx+1, idx+2))
-        faces.append((idx, idx+2, idx+3))
+    # Clean Dust (Strict QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
-    for z in range(res_z):
-        z_mm = z * step
-        for x in range(res_x):
-            x_mm = (x * step) - (diameter/2)
-            for y in range(res_y):
-                y_mm = (y * step) - (diameter/2)
-                if not grid[x,y,z]: continue
-                s2 = step/2
-                if x==res_x-1 or not grid[x+1,y,z]: add_quad((x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
-                if x==0 or not grid[x-1,y,z]: add_quad((x_mm-s2, y_mm-s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-                if y==res_y-1 or not grid[x,y+1,z]: add_quad((x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2))
-                if y==0 or not grid[x,y-1,z]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-                if z==res_z-1 or not grid[x,y,z+1]: add_quad((x_mm+s2, y_mm-s2, z_mm+s2), (x_mm+s2, y_mm+s2, z_mm+s2), (x_mm-s2, y_mm+s2, z_mm+s2), (x_mm+s2, y_mm-s2, z_mm+s2))
-                if z==0 or not grid[x,y,z-1]: add_quad((x_mm-s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm-s2, z_mm-s2), (x_mm+s2, y_mm+s2, z_mm-s2), (x_mm-s2, y_mm-s2, z_mm-s2))
-
+    # Mesh Extraction
+    vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter)
     lamp_lib.write_binary_stl(output_path, vertices, faces)
 
 if __name__ == "__main__":
-    output_file = "fabrication/furniture/lamp_series_01/05_quantum_foam/quantum_shade.stl"
+    output_file = "quantum_shade.stl"
     if len(sys.argv) > 1: output_file = sys.argv[1]
     generate_shade(output_file)

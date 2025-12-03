@@ -62,11 +62,11 @@ def generate_base(output_path, diameter=140.0, height=45.0, resolution=100):
             for y_idx in range(res_xy):
                 y_mm = (y_idx * step) - radius
                 
-                dist_xy = math.sqrt(x_mm**2 + y_mm**2)
+                dist = math.sqrt(x_mm**2 + y_mm**2)
                 
                 # V4 Features
                 feature_check = lamp_lib.apply_base_v4_features(
-                    x_mm, y_mm, z_mm, dist_xy,
+                    x_mm, y_mm, z_mm, dist,
                     height=height,
                     hole_radius=rod_radius,
                     channel_height=channel_height,
@@ -82,43 +82,45 @@ def generate_base(output_path, diameter=140.0, height=45.0, resolution=100):
                     continue
                 
                 # Base Body
-                if z_mm <= height:
-                    # Check planes
-                    # Center coords for planes
-                    px = x_mm
-                    py = y_mm
-                    pz = z_mm - (height/2.0) 
+                if dist <= radius:
+                    # Neutron Core (Open Lattice)
                     
-                    is_inside = True
+                    # Anisotropic Facets
+                    # Voronoi-like or Intersecting Planes
                     
-                    # Global cylinder check first
-                    if dist_xy > radius: is_inside = False
+                    # Let's use intersecting planes again but keep only the EDGES (Wireframe)
                     
-                    if is_inside:
-                        for p in planes:
-                            nx, ny, nz, d = p
-                            # Plane equation: ax + by + cz = d
-                            # If dot > d, outside
-                            if (px*nx + py*ny + pz*nz) > d:
-                                is_inside = False
-                                break
-                                
-                    # Flatten Top for Hardware (20mm radius)
-                    if z_mm > (height - 5.0) and dist_xy < 20.0:
-                        is_inside = True
-                        
-                    # Solid Core
-                    if dist_xy < 20.0: is_inside = True
+                    # Or High Frequency Gyroid
+                    scale = 2.0 * math.pi / 15.0 # Dense
                     
-                    # Bottom Rim
-                    if z_mm < 4.0 and dist_xy < radius:
-                        is_inside = True
-                        
-                    grid[x_idx,y_idx,z_idx] = is_inside
+                    val = math.sin(x_mm*scale)*math.cos(y_mm*scale) + \
+                          math.sin(y_mm*scale)*math.cos(z_mm*scale) + \
+                          math.sin(z_mm*scale)*math.cos(x_mm*scale)
+                          
+                    is_lattice = abs(val) < 0.4
+                    
+                    # Connectivity Ribs
+                    angle = math.atan2(y_mm, x_mm)
+                    is_rib = abs(math.sin(6.0 * angle)) < 0.15
+                    
+                    # Rim
+                    if dist > (radius - 5.0): 
+                        grid[x_idx,y_idx,z_idx] = True
+                    # Core
+                    elif dist < 15.0:
+                        grid[x_idx,y_idx,z_idx] = True
+                    # Bottom
+                    elif z_mm < 4.0:
+                        grid[x_idx,y_idx,z_idx] = True
+                    else:
+                        if is_lattice or is_rib:
+                            grid[x_idx,y_idx,z_idx] = True
+                        else:
+                            grid[x_idx,y_idx,z_idx] = False
                 else:
                     grid[x_idx,y_idx,z_idx] = False
 
-    # Clean Dust (Strict QA)
+    # Clean Dust (QA)
     grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction

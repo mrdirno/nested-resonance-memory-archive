@@ -30,7 +30,12 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     
     # Shell Parameters
     wall_thickness = 25.4 # 1 Inch
-    hand_access_radius = 45.0 
+    
+    # Calculate hand_access_radius to GUARANTEE 1 inch rim at bottom
+    # Rim extends from radius (100) to hand_access_radius
+    # Width = radius - hand_access_radius
+    # Width must be 25.4
+    hand_access_radius = (diameter / 2.0) - 25.4
     
     # Grid Setup
     max_dim = max(diameter, height)
@@ -92,19 +97,29 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 if term < 0: term = 0
                 current_shell_radius = math.sqrt(term)
                 
-                # --- PRIORITY 1: SPIDER FITTER (Library Call) ---
-                fitter_override = lamp_lib.apply_spider_fitter(
-                    x_mm, y_mm, z_mm, dist_from_center_xy,
-                    mount_z_start=(height - top_plate_height),
-                    mount_hole_radius=mount_hole_radius,
-                    hub_radius=hub_radius,
-                    spoke_width=spoke_width,
-                    outer_radius=current_shell_radius # DYNAMIC CONSTRAINT
-                )
+                # --- PRIORITY 1: MOUNT (Cantilever Bar/Ring) ---
+                # The user wants a ring/disk with a hole.
+                # This must exist even if chaos erodes it.
                 
-                if fitter_override is not None:
-                    grid[x_idx,y_idx,z_idx] = fitter_override
-                    continue
+                if z_mm > (height - 6.0): # Top 6mm
+                    # Central Hub (Solid)
+                    if dist_from_center_xy < 22.0 and dist_from_center_xy > 7.0:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    # Hole
+                    if dist_from_center_xy <= 7.0:
+                        grid[x_idx,y_idx,z_idx] = False
+                        continue
+                        
+                    # Cantilever Bars (Spokes)
+                    # 3 Spokes
+                    spoke_angle = math.atan2(y_mm, x_mm)
+                    # Check alignment with 0, 120, 240
+                    # cos(3*angle) > threshold
+                    if math.cos(3.0 * spoke_angle) > 0.9: # Narrow bars
+                         if dist_from_center_xy < current_shell_radius:
+                             grid[x_idx,y_idx,z_idx] = True
+                             continue
 
                 # --- PRIORITY 2: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:
@@ -127,7 +142,16 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                         proj = x_mm*dx + y_mm*dy + z_mm*dz
                         val += math.sin(proj * freq + phase)
                     
-                    if abs(val) < 1.2: 
+                    if abs(val) < 1.4: # Thickened (was 1.2)
+                        is_solid = True
+                    
+                    # CONNECTIVITY SHARDS (Ribs)
+                    # Radial Spikes
+                    angle = math.atan2(y_mm, x_mm)
+                    
+                    # 6 Spikes
+                    spike = math.cos(6.0 * angle)
+                    if spike > 0.8:
                         is_solid = True
                         
                 grid[x_idx,y_idx,z_idx] = is_solid
