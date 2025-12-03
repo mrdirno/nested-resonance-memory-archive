@@ -1031,3 +1031,8 @@
 - **Design:** The Klein (17) Refined.
 - **Upgrade:** Twisted Figure-8 Shade, Self-Intersecting Helix Base, Twisted Loop Shaft.
 - **Status:** Design 17 v2.0 Complete.
+
+## Cycle 2669: The Mobius v2.0 Refinement
+- **Design:** The Mobius (18) Refined.
+- **Upgrade:** Triple Twist Ribbon Shade, Braided Helix Base, Propeller Shaft.
+- **Status:** Design 18 v2.0 Complete.
