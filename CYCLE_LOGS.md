@@ -959,3 +959,8 @@
 - **Design:** Singularity (03) Refined.
 - **Upgrade:** Vortex Lattice Shade, Deeper Gravity Well Base, Spaghettified Shaft.
 - **Status:** Design 03 v2.0 Complete.
+
+## Cycle 2655: Supernova v2.0 Refinement
+- **Design:** Supernova (04) Refined.
+- **Upgrade:** Hyper-Shockwave Shade (Sharper Peaks), High-Res Facet Base, Deep Ripple Shaft.
+- **Status:** Design 04 v2.0 Complete.
