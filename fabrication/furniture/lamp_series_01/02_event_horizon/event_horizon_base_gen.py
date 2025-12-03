@@ -67,28 +67,38 @@ def generate_base(output_path, diameter=140.0, height=30.0, resolution=100):
                 
                 # Base Body
                 if dist <= radius:
-                    # Gravity Well Relief
-                    # Spiral arms falling in
-                    # r = theta * k
+                    # STRICT AGPH (Gravity Well)
                     
-                    twist = (dist/radius) * 4.0 * math.pi # 2 turns
+                    # a(z) - Vertical compression near singularity
+                    az = 1.0 + 2.0 * (1.0 - dist/radius)**2 
                     
-                    val = math.sin(4.0 * angle + twist) # 4 arms
+                    # R(z) - Event Horizon Spin
+                    theta = (1.0 - dist/radius) * 6.0 # High spin at center
+                    cos_t = math.cos(theta)
+                    sin_t = math.sin(theta)
                     
-                    # Modulate with radius (deeper at edge, flat at center)
-                    r_factor = (dist/radius) ** 2
+                    tx = x_mm * cos_t - y_mm * sin_t
+                    ty = x_mm * sin_t + y_mm * cos_t
                     
-                    z_surf = height - 5.0 * r_factor * (1.0 - (val+1)/2.0)
+                    # Scale
+                    freq = 2.0 * math.pi / 25.0
+                    lx = tx * freq
+                    ly = ty * freq
+                    lz = z_mm * az * freq
                     
-                    # Rim
-                    if dist > (radius - 5.0): z_surf = height - 2.0
+                    # Gyroid
+                    val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
                     
-                    if z_mm < 4.0: 
-                        grid[x_idx,y_idx,z_idx] = True
-                    elif z_mm <= z_surf:
-                        grid[x_idx,y_idx,z_idx] = True
+                    # Shell Logic
+                    if z_mm < 4.0 or z_mm > (height - 4.0):
+                         grid[x_idx,y_idx,z_idx] = True
+                    elif dist > (radius - 5.0):
+                         grid[x_idx,y_idx,z_idx] = True
                     else:
-                        grid[x_idx,y_idx,z_idx] = False
+                         if abs(val) < 0.4:
+                             grid[x_idx,y_idx,z_idx] = True
+                         else:
+                             grid[x_idx,y_idx,z_idx] = False
                 else:
                     grid[x_idx,y_idx,z_idx] = False
 

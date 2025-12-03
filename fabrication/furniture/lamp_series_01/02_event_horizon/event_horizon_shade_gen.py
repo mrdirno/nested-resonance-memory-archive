@@ -118,15 +118,29 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                    # Pattern
-                    lx = x_mm * current_scale
-                    ly = y_mm * current_scale
-                    lz = z_mm * current_scale
-                     
-                    sx, sy, sz = math.sin(lx), math.sin(ly), math.sin(lz)
-                    cx, cy, cz = math.cos(lx), math.cos(ly), math.cos(lz)
-                     
-                    val = sx*sy*sz + sx*cy*cz + cx*sy*cz + cx*cy*sz
+                    # STRICT AGPH (Event Horizon Signature)
+                    # R(z) dominates here (Vortex)
+                    
+                    # Prismatic Scaling a(z) - Spherical compression
+                    az = 1.0 + (dist_from_center_xy / radius) 
+                    
+                    # Helical Rotation R(z)
+                    # Twist increases with radius (Accretion Disk)
+                    theta = (dist_from_center_xy / radius) * 4.0 # Radian twist
+                    cos_t = math.cos(theta)
+                    sin_t = math.sin(theta)
+                    
+                    tx = x_mm * cos_t - y_mm * sin_t
+                    ty = x_mm * sin_t + y_mm * cos_t
+                    
+                    # Scale
+                    base_freq = 2.0 * math.pi / 35.0
+                    lx = tx * base_freq
+                    ly = ty * base_freq
+                    lz = z_mm * az * base_freq
+                        
+                    # Gyroid
+                    val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
                     
                     if abs(val) < 0.35: 
                         is_solid = True

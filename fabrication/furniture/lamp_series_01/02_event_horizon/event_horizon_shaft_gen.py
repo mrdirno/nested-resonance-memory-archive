@@ -72,19 +72,36 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                         grid[x_idx,y_idx,z_idx] = True
                         continue
                 
-                # Complex Surface
-                # Sharper ribs: cos^3?
-                raw_tex = math.cos((angle + angle_offset) * rib_freq)
-                # Sharpen
-                texture = raw_tex * abs(raw_tex) 
+                # 5. STRICT AGPH MATH (Unified Field)
+                # G0( A(z) · R(z) · (x, y, z·a(z)) )
                 
-                rib_depth = 3.0 + (3.0 * math.sin(z_norm * math.pi))
-                effective_radius = nominal_radius + (texture * rib_depth)
+                # a(z) - Prismatic Scaling (Taper)
+                # Shaft tapers slightly from base to waist
+                az = 1.0 + 0.5 * math.sin(z_norm * math.pi) 
                 
-                if dist_center <= effective_radius:
-                    grid[x_idx,y_idx,z_idx] = True
+                # R(z) - Helical Rotation (Event Horizon Signature)
+                # Extreme Twist: 360 degrees over height
+                theta = z_norm * 2.0 * math.pi 
+                cos_t = math.cos(theta)
+                sin_t = math.sin(theta)
+                
+                # Apply Rotation to coordinates
+                rx = x_mm * cos_t - y_mm * sin_t
+                ry = x_mm * sin_t + y_mm * cos_t
+                
+                # A(z) - Anisotropy (Stretch along flow)
+                # Stretch along the twist vector
+                lx = rx * (2.0 * math.pi / 20.0) # Scale
+                ly = ry * (2.0 * math.pi / 20.0)
+                lz = (z_mm * az) * (2.0 * math.pi / 20.0)
+                
+                # Base Gyroid
+                val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
+                
+                if abs(val) < 0.45:
+                    grid[x_idx, y_idx, z_idx] = True
                 else:
-                    grid[x_idx,y_idx,z_idx] = False
+                    grid[x_idx, y_idx, z_idx] = False
 
     # Clean Dust (Strict QA)
     grid = lamp_lib.clean_voxel_grid(grid)
