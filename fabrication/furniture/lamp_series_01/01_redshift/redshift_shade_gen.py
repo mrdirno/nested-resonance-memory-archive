@@ -125,6 +125,9 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
                 else:
                     grid[x_idx,y_idx,z_idx] = False
 
+    # Clean Dust (Strict QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
+
     # Mesh Extraction (Library)
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, base_width, base_width)
     lamp_lib.write_binary_stl(output_path, vertices, faces)

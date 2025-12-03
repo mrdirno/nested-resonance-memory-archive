@@ -1,6 +1,33 @@
 import struct
 import numpy as np
 import math
+from scipy.ndimage import label
+
+def clean_voxel_grid(grid):
+    """
+    Removes all disconnected components except the largest one (Despeckle).
+    Ensures zero floating dust.
+    """
+    print("  -> Cleaning Voxel Grid (Removing Dust)...")
+    labeled_array, num_features = label(grid)
+    
+    if num_features <= 1:
+        return grid
+        
+    # Find largest component
+    sizes = np.bincount(labeled_array.ravel())
+    # sizes[0] is background (0), so ignore it
+    mask_sizes = sizes[1:]
+    if len(mask_sizes) == 0:
+        return grid
+        
+    largest_label = np.argmax(mask_sizes) + 1
+    
+    # Create new grid with only largest component
+    new_grid = (labeled_array == largest_label)
+    
+    print(f"     Removed {num_features - 1} floating particles.")
+    return new_grid
 
 def write_binary_stl(filename, vertices, faces):
     """
