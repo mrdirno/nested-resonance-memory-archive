@@ -921,3 +921,9 @@
 - **Theme:** Brutalism/Structure (Tower, Bridge, Stadium, Monument, Bunker).
 - **Manifest:** Created `SERIES_06_MANIFEST.md`.
 - **Update:** Updated `DESIGN_LANGUAGE.md` to v1.5.
+
+## Cycle 2649: The Tower (Design 31)
+- **Design:** Implemented 'The Tower' (Art Deco/Skyscraper).
+- **Algorithm:** Vertical Ribs + Z-Setbacks + Window Slits.
+- **Shade:** V7 Spider Fitter, 309k triangles.
+- **Status:** Design 31 Shade Complete.
