@@ -949,3 +949,8 @@
 - **Design:** Redshift (01) Refined.
 - **Upgrade:** Improved Anisotropy, Resolution (150), and Code Hygiene (Library Integration).
 - **Status:** Design 01 v2.0 Complete.
+
+## Cycle 2653: Event Horizon v2.0 Refinement
+- **Design:** Event Horizon (02) Refined.
+- **Upgrade:** V7 Shade Connection Fix, V4 Base (Spiral Gravity Well), V4 Shaft (Accretion Helix).
+- **Status:** Design 02 v2.0 Complete.
