@@ -13,7 +13,8 @@ CRITICAL_COS_THETA = math.cos(math.radians(180 - CRITICAL_OVERHANG_ANGLE)) # e.g
 FILES = [
     "fabrication/practical_design/LAMP_DESIGN/shade_qa_v6.stl",
     "fabrication/practical_design/LAMP_DESIGN/shaft_qa_v6.stl",
-    "fabrication/practical_design/LAMP_DESIGN/base_qa_v6.stl"
+    "fabrication/practical_design/LAMP_DESIGN/base_qa_v6.stl",
+    "fabrication/practical_design/LAMP_DESIGN/qa_tolerance_test.stl"
 ]
 
 def read_stl(filename):

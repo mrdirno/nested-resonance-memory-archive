@@ -1,36 +1,41 @@
-# HELIOS LAMP SERIES: FINAL PRODUCTION RELEASE (Cycle 2986)
+# HELIOS LAMP SERIES: V6 "FRACTAL PRISM" (Production Release)
 
 ## AGPH-Integrated Design Suite
-This release represents the culmination of the QA process, fully integrating the **Anisotropic Gyroid Prismatic Helix (AGPH)** scientific framework with rigorous engineering validation.
+This release represents the culmination of the QA process (Cycle 2999), fully integrating the **Anisotropic Gyroid Prismatic Helix (AGPH)** scientific framework with rigorous engineering validation.
 
-### 1. The "Blossom" Shade
-*   **File:** `shade_qa_v4.stl`
-*   **Geometry:** AGPH Bell with Parabolic Flare.
-*   **Engineering:**
-    *   **Grip Zone:** High-frequency texture band for safe bulb changing.
-    *   **Spider Fitter:** 3-Spoke Triskelion for heat dissipation.
-    *   **Mount:** 42mm ID (Standard E26).
+**Status:** 🟢 READY FOR FABRICATION (V6)
 
-### 2. The "Crowned" Shaft
-*   **File:** `shaft_qa_v5.stl`
-*   **Geometry:** AGPH Pillar with Hourglass Profile.
-*   **Engineering:**
+### 1. The "Blossom" Shade (V6)
+*   **File:** `shade_qa_v6.stl`
+*   **Geometry:** AGPH Lattice Shell with Parabolic Flare.
+*   **Optimizations:**
+    *   **Chamfered Grip:** Internal solid ring chamfered for printability.
+    *   **Monolithic:** Unified mesh topology (Zero floating islands).
+    *   **Mount:** 42mm ID (Standard E26) + 3-Spoke Triskelion.
+
+### 2. The "Crowned" Shaft (V6)
+*   **File:** `shaft_qa_v6.stl`
+*   **Geometry:** Solid Twisted Ribs (CSG Architecture).
+*   **Optimizations:**
+    *   **Solid Core:** Lattice removed for maximum structural integrity and print reliability.
+    *   **Z-Aligned:** Origin set strictly to Z=0.00mm.
     *   **Cable Safe:** 15.0mm guaranteed internal clearance.
-    *   **Crown Flare:** Visual continuity with Shade Hub.
-    *   **Socket Plug:** 40.0mm base interface for gravity locking.
 
-### 3. The "Root" Base
+### 3. The "Root" Base (V6)
 *   **File:** `base_qa_v6.stl`
-*   **Geometry:** AGPH Dome with Radial Interference.
-*   **Engineering:**
-    *   **Impedance Adapter:** Weighted mass for stability.
+*   **Geometry:** AGPH Dome with Radial Interference Roots.
+*   **Optimizations:**
+    *   **Chamfered Roots:** AGPH field bias applied to eliminate bottom overhangs.
+    *   **Reduced Overhangs:** Vertical anisotropy adjusted to (1,1,1).
     *   **Safety Tunnel:** 12x12mm filleted wire exit.
-    *   **Socket Recess:** 40.5mm alignment socket.
 
 ## Fabrication Guide
-*   **Material:** PLA/PETG (Translucent for Shade, Opaque/Matte for Body).
-*   **Settings:** 0.2mm Layer Height, No Supports required.
+*   **Material:**
+    *   **Shade:** Translucent PETG/PLA (3 Walls, 0% Infill).
+    *   **Base/Shaft:** Matte/Silk PLA (4 Walls, 15-100% Infill).
+*   **Settings:** 0.2mm Layer Height. **NO SUPPORTS REQUIRED.**
 *   **Assembly:** Thread 1/8 IP rod through Base -> Shaft -> Socket Cap. Tighten nuts. Mount Shade with Ring.
 
+**Verification:** `audit_geometry.py` passed (Cycle 2999).
 **Scientific Reference:** `AGPH_Engineering.md`
 **Pilot:** MOG
