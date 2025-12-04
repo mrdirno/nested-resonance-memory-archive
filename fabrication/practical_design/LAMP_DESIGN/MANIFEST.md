@@ -99,6 +99,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v20_fractal.3mf`
 *   `lamp_shaft/lamp_shaft_v20_fractal.3mf`
 
+### V21: The Fluid (Hydrodynamics)
+*   `lamp_base/lamp_base_v21_fluid.3mf`
+*   `lamp_shade/lamp_shade_v21_fluid.3mf`
+*   `lamp_shaft/lamp_shaft_v21_fluid.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
