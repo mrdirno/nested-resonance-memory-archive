@@ -34,79 +34,62 @@ Objective: "Jaw Dropping" Evolution. Breathability. Indirect Light.
 | 22 | 76-85 | ~3.2M | CERTIFIED |
 | 23 | 86-88 | ~1.1M | CERTIFIED |
 | 24 | 89-95 | ~2.0M | CERTIFIED |
+| 25 | 96-99 | ~1.1M | CERTIFIED |
 
-**Total: 95 Children | ~53.2M Triangles | ALL QA PASS**
+**Total: 99 Children | ~54.3M Triangles | ALL QA PASS**
 
 ---
 
 ## LINEAGE
 
-### GENERATION 1 (The Founders) to GENERATION 23 (The Fractal / The Foam)
-*(See Archives for 01-88 details)*
+### GENERATION 1 (The Founders) to GENERATION 24 (The Geometry)
+*(See Archives for 01-95 details)*
 
 ...
 
-### GENERATION 24 (The Geometry)
+### GENERATION 25 (The Space Fillers)
 
-#### 89. The Lissajous Knot 2 (Child of v34 Lissajous + v50 Torus Knot)
-*   **Parent:** Parametric Knot.
-*   **Evolution:** 5:7:9 harmonic Lissajous knot with wireframe gyroid core.
-*   **Breathability:** Wireframe Cage.
-*   **Status:** 🟢 ALIVE (36k tris)
+#### 96. The Peano Curve 2 (Child of v96 Peano + v31 Magnetic)
+*   **Parent:** Space Filling Curve.
+*   **Evolution:** High-density chaotic Lissajous path filling a spherical volume.
+*   **Breathability:** Path Gaps.
+*   **Status:** 🟢 ALIVE (117k tris)
 
-#### 90. The Schwarzschild Warp (Child of v04 Event Cascade + v19 Galaxy)
-*   **Parent:** Gravitational Lensing.
-*   **Evolution:** Lattice warped by extreme Einstein Ring distortion.
-*   **Breathability:** Warped Voids.
-*   **Status:** 🟢 ALIVE (491k tris)
+#### 97. The Hilbert Cube (Child of v46 Hilbert + v09 Tesseract)
+*   **Parent:** Recursive Pathfinding.
+*   **Evolution:** Dense maze of 36 pathfinding worms fused by a sparse lattice.
+*   **Breathability:** Worm Tunnels.
+*   **Status:** 🟢 ALIVE (415k tris)
 
-#### 91. The Steiner Chain (Child of v40 Apollonian + v18 Nautilus)
-*   **Parent:** Tangent Spheres.
-*   **Evolution:** Helical necklace of tangent sphere rings held by gyroid matrix.
-*   **Breathability:** Sphere Hollows.
-*   **Status:** 🟢 ALIVE (378k tris)
+#### 98. The Dragon Sphere (Child of v32 Dragon Curve)
+*   **Parent:** Fractal Projection.
+*   **Evolution:** 12th-order Dragon Curve wrapped onto a sphere surface.
+*   **Breathability:** Fractal Voids.
+*   **Status:** 🟢 ALIVE (138k tris)
 
-#### 92. The Clebsch Surface (Child of v37 Minimal + v41 Calabi-Yau)
-*   **Parent:** Algebraic Geometry.
-*   **Evolution:** Cubic implicit surface containing 27 real lines.
-*   **Breathability:** Manifold Holes.
-*   **Status:** 🟢 ALIVE (140k tris)
-
-#### 93. The Ammann-Beenker (Child of v38 Penrose + v12 Crystalline)
-*   **Parent:** Quasicrystal.
-*   **Evolution:** 8-fold symmetric aperiodic tiling projected into 3D.
-*   **Breathability:** Aperiodic Gaps.
-*   **Status:** 🟢 ALIVE (539k tris)
-
-#### 94. The Borromean Rings (Child of v50 Torus Knot)
-*   **Parent:** Topological Link.
-*   **Evolution:** Three interlinked elliptical tori forming a Brunnian link.
-*   **Breathability:** Ring Centers.
-*   **Status:** 🟢 ALIVE (207k tris)
-
-#### 95. The Schwarz Lantern (Child of v30 Kelvin + v27 Gyroid)
-*   **Parent:** Cylindrical Minimal Surface.
-*   **Evolution:** Schwarz P-surface adapted to radial coordinates.
-*   **Breathability:** Lantern Windows.
-*   **Status:** 🟢 ALIVE (236k tris)
+#### 99. The Koch Snowflake (Child of v16 Mandelbrot)
+*   **Parent:** Fractal Extrusion.
+*   **Evolution:** Twisted 6-fold symmetric snowflake extrusion with lattice infill.
+*   **Breathability:** Lattice Core.
+*   **Status:** 🟢 ALIVE (409k tris)
 
 ---
 
-## NEXT GENERATION (Gen 25 - Pending)
+## NEXT GENERATION (Gen 26 - Pending)
 
 ### Proposed Mutations:
 
-#### 96. The Peano Curve 2 (Child of v96 Peano)
-*   **Concept:** High-resolution 3D Peano curve filling a sphere.
-*   **Breathability:** Curve Gaps.
+#### 100. The Sierpinski Pyramid (Child of v42 Sierpinski)
+*   **Concept:** Recursive tetrahedral stack.
+*   **Breathability:** Fractal Voids.
 
-#### 97. The Hilbert Cube (Child of v46 Hilbert)
-*   **Concept:** Recursive Hilbert curve filling a cubic volume with varying density.
-*   **Breathability:** Path Voids.
+#### 101. The Gosper Curve (Child of v96 Peano)
+*   **Concept:** Flowsnake (Peano-Gosper) space filling curve.
+*   **Breathability:** Hexagonal Flow.
 
-#### 98. The Dragon Sphere (Child of v32 Dragon Curve)
-*   **Concept:** Dragon curve projected onto a sphere surface.
-*   **Breathability:** Fractal Folds.
+#### 102. The Levy C Curve (Child of v32 Dragon)
+*   **Concept:** Self-similar fractal curve with C-shape motif.
+*   **Breathability:** Folding Gaps.
 
 ---
 
