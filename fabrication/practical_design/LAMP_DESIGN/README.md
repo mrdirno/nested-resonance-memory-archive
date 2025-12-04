@@ -1,46 +1,35 @@
-# HELIOS LAMP SERIES: V6 "FRACTAL PRISM" (Production Release)
+# HELIOS LAMP SERIES: PRODUCTION SUITE (V6-V10)
 
 ## AGPH-Integrated Design Suite
-This release represents the culmination of the QA process (Cycle 3002), fully integrating the **Anisotropic Gyroid Prismatic Helix (AGPH)** scientific framework with rigorous engineering validation.
+This suite represents the culmination of the QA process, integrating the **Anisotropic Gyroid Prismatic Helix (AGPH)** scientific framework with rigorous engineering validation.
 
-**Status:** 🟢 READY FOR FABRICATION (V6)
+**Status:** 🟢 READY FOR FABRICATION
 
-### 1. The "Blossom" Shade (V6)
-*   **File:** `shade_qa_v6.stl`
-*   **Preview:** `previews/shade_v6.png`
-*   **Geometry:** AGPH Lattice Shell with Parabolic Flare.
-*   **Optimizations:**
-    *   **Chamfered Grip:** Internal solid ring chamfered for printability.
-    *   **Monolithic:** Unified mesh topology (Zero floating islands).
-    *   **Mount:** 42mm ID (Standard E26) + 3-Spoke Triskelion.
+## Available Series
 
-### 2. The "Crowned" Shaft (V6)
-*   **File:** `shaft_qa_v6.stl`
-*   **Preview:** `previews/shaft_v6.png`
-*   **Geometry:** Solid Twisted Ribs (CSG Architecture).
-*   **Optimizations:**
-    *   **Mouse Ears:** Integrated 0.2mm Brim Discs (3x) for maximum print stability (Cut off after printing).
-    *   **Solid Core:** Lattice removed for structural integrity.
-    *   **Z-Aligned:** Origin set strictly to Z=0.00mm.
+### V10: The Event Horizon (New)
+*   **Concept:** Gravitational Lensing & Accretion.
+*   **Features:** Swirling "Black Hole" base, Helical "Photon Sphere" shaft, Warped "Lensing" shade.
+*   **Details:** [README_V10_EVENT_HORIZON.md](README_V10_EVENT_HORIZON.md)
 
-### 3. The "Root" Base (V6)
-*   **File:** `base_qa_v6.stl`
-*   **Preview:** `previews/base_v6.png`
-*   **Geometry:** AGPH Dome with Radial Interference Roots.
-*   **Optimizations:**
-    *   **Cable Flare:** Wire exit channel has a custom flare/chamfer to prevent cable fraying.
-    *   **Nut Recess:** 25mm x 6mm bottom counterbore for hardware clearance.
-    *   **Chamfered Roots:** AGPH field bias applied to eliminate bottom overhangs.
+### V9: The Quantum Observer (New)
+*   **Concept:** Wavefunction Collapse & Quantum Foam.
+*   **Features:** Schwarz P Lattice structure.
+*   **Details:** [README_V9_QUANTUM.md](README_V9_QUANTUM.md)
 
-### 4. QA Tolerance Test
-*   **File:** `qa_tolerance_test.stl`
-*   **Preview:** `previews/tolerance_test.png`
-*   **Purpose:** Rapid validation of Base/Shaft interface fit and material shrinkage.
+### V6: The Fractal Prism (Classic)
+*   **Concept:** Recursive Self-Similarity.
+*   **Features:** Standard AGPH Geometry.
+*   **Details:** [README_V6_FRACTAL.md](README_V6_FRACTAL.md)
+
+### V7 & V8
+*   **V7:** Temporal Echo (4D Chaos) - [README_V7_TEMPORAL.md](README_V7_TEMPORAL.md)
+*   **V8:** Biological Mimicry (Organic) - [README_V8_BIOLOGICAL.md](README_V8_BIOLOGICAL.md)
 
 ## Fabrication Guide
 *   **Material:**
     *   **Shade:** Translucent PETG/PLA (3 Walls, 0% Infill).
-    *   **Base/Shaft:** Matte/Silk PLA (4 Walls, 15-100% Infill).
+    *   **Base/Shaft:** Matte/Silk PLA (4 Walls, 0% Infill for V9/V10 Lattices).
 *   **Settings:** 0.2mm Layer Height. **NO SUPPORTS REQUIRED.**
 *   **Assembly:** Thread 1/8 IP rod through Base -> Shaft -> Socket Cap. Tighten nuts. Mount Shade with Ring.
 

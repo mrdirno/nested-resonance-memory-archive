@@ -1307,3 +1307,13 @@
   - Converted to 3MF and updated Manifest.
 - **Result:** V10 Suite generated and verified.
 - **Status:** V10 Integration Complete.
+
+## Cycle 2719: Repository Hygiene & Documentation
+- **Goal:** Standardize file structure and update documentation for V6-V10 release.
+- **Action:**
+  - Updated `LAMP_DESIGN/README.md` to index V6, V7, V8, V9, and V10 series.
+  - Consolidated all generator scripts into `fabrication/generators/`.
+  - Cleaned up temporary build artifacts in `fabrication/output/`.
+  - Moved utility scripts to `fabrication/scripts/`.
+- **Result:** Clean, organized repository ready for public release.
+- **Status:** Hygiene Complete.
