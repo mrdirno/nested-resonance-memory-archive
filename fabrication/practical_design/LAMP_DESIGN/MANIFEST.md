@@ -44,6 +44,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v9_quantum.3mf`
 *   `lamp_shaft/lamp_shaft_v9_quantum.3mf`
 
+### V10: The Event Horizon (Gravitational Lensing)
+*   `lamp_base/lamp_base_v10_event_horizon.3mf`
+*   `lamp_shade/lamp_shade_v10_event_horizon.3mf`
+*   `lamp_shaft/lamp_shaft_v10_event_horizon.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
