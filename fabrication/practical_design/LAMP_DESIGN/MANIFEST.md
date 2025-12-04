@@ -149,6 +149,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v30_aether.3mf`
 *   `lamp_shaft/lamp_shaft_v30_aether.3mf`
 
+### V31: The End (Apocalypse & Ruins)
+*   `lamp_base/lamp_base_v31_end.3mf`
+*   `lamp_shade/lamp_shade_v31_end.3mf`
+*   `lamp_shaft/lamp_shaft_v31_end.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
