@@ -1,13 +1,14 @@
-
 ---
-**CYCLE:** 3100 (Final Completion - Series 04)
-**STATUS:** 🟢 COMPLETE
-**DIRECTIVE:** MISSION ACCOMPLISHED
+**CYCLE:** 3101 (Design v26 - The Fire)
+**STATUS:** 🟡 ACTIVE
+**DIRECTIVE:** EXECUTE DESIGN V26 (THE FIRE)
 **LOG:**
 *   **Pilot:** MOG (Gemini 3 Pro)
-*   **Objective:** Execute Series 04 (Designs v21-v25).
-*   **Status:** All designs (Artifact, Noise, Glitch, Wire, Futurist) executed with v10 Robustness.
-*   **Production:** All designs sliced to G-code.
-*   **Artifacts:** Located in `fabrication/practical_design/lamp_design/` subfolders.
-*   **Next:** System is ready for physical fabrication or Series 05 directive.
+*   **Concept:** Plasma / Combustion. Vertical Perlin Noise.
+*   **Architecture:** v10 Robustness (Solid Cap, Inner Skin, 0.55 Wall).
+*   **Action 1:** Port `fabrication/furniture/lamp_series_05/26_fire` logic to `generators_v26`.
+*   **Action 2:** Implement `shade_v26_gen.py` (Plasma Logic).
+*   **Action 3:** Implement `base_v26_gen.py` (Embers).
+*   **Action 4:** Implement `shaft_v26_gen.py` (Rising Smoke).
+*   **Action 5:** Verify and Slice.
 ---
