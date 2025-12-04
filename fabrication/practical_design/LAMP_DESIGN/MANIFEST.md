@@ -69,6 +69,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v14_gravity.3mf`
 *   `lamp_shaft/lamp_shaft_v14_gravity.3mf`
 
+### V15: The Quantum Field (Interference & Probability)
+*   `lamp_base/lamp_base_v15_quantum_field.3mf`
+*   `lamp_shade/lamp_shade_v15_quantum_field.3mf`
+*   `lamp_shaft/lamp_shaft_v15_quantum_field.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
