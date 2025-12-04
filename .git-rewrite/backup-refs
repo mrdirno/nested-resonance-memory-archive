@@ -1,0 +1,9 @@
+5d178dc2682dd598aec7227a8f2b7ac217711c87 commit	refs/heads/backup_main_bloated_v2
+6391ebb4ebea87b77192881acd7824e56ea91c71 commit	refs/heads/main
+9502639913dc537fcb1da85af1b10c7e81dadc7f commit	refs/remotes/origin/HEAD
+9502639913dc537fcb1da85af1b10c7e81dadc7f commit	refs/remotes/origin/main
+c343182ca5d9cef9552c06be6536bda495e7df49 commit	refs/stash
+bda59206921c9b50eea59491f746864b9eabb8fc tag	refs/tags/paper1-v1.0
+2e378ef09026cddb693a1150c46bd43cd86282b8 tag	refs/tags/paper2-v1.0
+a17a67de4caf62072963f57bb121e743fd72f56d tag	refs/tags/paper5d-v1.0
+b7c141cf5aad5e43798b23ab59c7682b7729d3b4 tag	refs/tags/v6.17.0
