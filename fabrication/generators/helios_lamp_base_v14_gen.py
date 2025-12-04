@@ -56,13 +56,15 @@ def generate_base(output_path, diameter=140.0, height=35.0, resolution=100):
                     grid[x_idx,y_idx,z_idx] = False
                     continue
 
+                # V3 Structural Core (Cup)
+                core_check = lamp_lib.apply_base_structural_core(z_mm, dist, height)
+                if core_check is True:
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+
                 # Body
                 if dist <= radius:
-                    # Solid Core (Stability)
-                    if dist < 25.0:
-                        grid[x_idx,y_idx,z_idx] = True
-                        continue
-                    
+                    # Bed Adhesion
                     if (z_mm < 2.0) or (z_mm > height - 2.0) or (dist > radius - 2.0):
                         grid[x_idx,y_idx,z_idx] = True
                         continue
