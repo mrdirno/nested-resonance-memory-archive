@@ -51,52 +51,57 @@ def generate_base(output_path, diameter=140.0, height=35.0, resolution=100):
                 
                 dist = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # V4 Features
-                feature_check = lamp_lib.apply_base_v4_features(
-                    x_mm, y_mm, z_mm, dist,
-                    height=height,
-                    hole_radius=rod_radius,
-                    channel_height=channel_height,
-                    channel_width=channel_width,
-                    foot_depth=foot_depth,
-                    foot_radius=foot_radius,
-                    foot_offset=foot_offset,
-                    radius=radius
-                )
+                                # V4 Features
+                                feature_check = lamp_lib.apply_base_v4_features(
+                                    x_mm, y_mm, z_mm, dist,
+                                    height=height,
+                                    hole_radius=7.5, # V2 Standard
+                                    channel_height=channel_height,
+                                    channel_width=channel_width,
+                                    foot_depth=foot_depth,
+                                    foot_radius=foot_radius,
+                                    foot_offset=foot_offset,
+                                    radius=radius
+                                )
+                                
+                                if feature_check is not None:
+                                    grid[x_idx,y_idx,z_idx] = feature_check
+                                    continue
                 
-                if feature_check is not None:
-                    grid[x_idx,y_idx,z_idx] = feature_check
-                    continue
+                                # V2 Socket Interface
+                                socket_check = lamp_lib.apply_base_socket_v2(z_mm, dist, height)
+                                if socket_check is False:
+                                    grid[x_idx,y_idx,z_idx] = False
+                                    continue
                 
-                # Base Body
-                if dist <= radius:
-                    # Quantum Foam (Micro-Lattice)
-                    # Replaces solid block with Schwarz P
-                    
-                    scale_foam = 2.0 * math.pi / 15.0
-                    
-                    lx = x_mm * scale_foam
-                    ly = y_mm * scale_foam
-                    lz = z_mm * scale_foam
-                    
-                    foam_val = math.cos(lx) + math.cos(ly) + math.cos(lz)
-                    is_foam = abs(foam_val) < 0.6 # Thick lattice
-                    
-                    # Solid Core/Rim Logic
-                    if dist > (radius - 5.0):
-                        grid[x_idx,y_idx,z_idx] = True
-                    elif dist < 15.0:
-                        grid[x_idx,y_idx,z_idx] = True
-                    elif z_mm < 4.0:
-                        grid[x_idx,y_idx,z_idx] = True
-                    else:
-                        if is_foam:
-                            grid[x_idx,y_idx,z_idx] = True
-                        else:
-                            grid[x_idx,y_idx,z_idx] = False
-                else:
-                    grid[x_idx,y_idx,z_idx] = False
-
+                                # Base Body
+                                if dist <= radius:
+                                    # Quantum Foam (Micro-Lattice)
+                                    # Replaces solid block with Schwarz P
+                                    
+                                    scale_foam = 2.0 * math.pi / 15.0
+                                    
+                                    lx = x_mm * scale_foam
+                                    ly = y_mm * scale_foam
+                                    lz = z_mm * scale_foam
+                                    
+                                    foam_val = math.cos(lx) + math.cos(ly) + math.cos(lz)
+                                    is_foam = abs(foam_val) < 0.6 # Thick lattice
+                                    
+                                    # Solid Core/Rim Logic
+                                    if dist > (radius - 5.0):
+                                        grid[x_idx,y_idx,z_idx] = True
+                                    elif dist < 20.0: # Solid Core to support socket
+                                        grid[x_idx,y_idx,z_idx] = True
+                                    elif z_mm < 4.0:
+                                        grid[x_idx,y_idx,z_idx] = True
+                                    else:
+                                        if is_foam:
+                                            grid[x_idx,y_idx,z_idx] = True
+                                        else:
+                                            grid[x_idx,y_idx,z_idx] = False
+                                else:
+                                    grid[x_idx,y_idx,z_idx] = False
     # Clean Dust (Strict QA)
     grid = lamp_lib.clean_voxel_grid(grid)
 
