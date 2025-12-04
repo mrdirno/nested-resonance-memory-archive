@@ -61,15 +61,21 @@ def generate_shaft(output_path, height=160.0, resolution=120):
                 dist = math.sqrt(x_mm**2 + y_mm**2)
 
                 # Core Logic
-                if dist < core_radius:
+                if dist < 7.5: # V2 Standard
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                 if dist < core_wall_radius:
                     grid[x_idx,y_idx,z_idx] = True
                     continue
 
-                # End Caps
-                if z_mm < 2.0 or z_mm > (height - 2.0):
+                # V2 Plug Interface
+                plug_check = lamp_lib.apply_shaft_plug_v2(z_mm, dist)
+                if plug_check is True:
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+
+                # Top Cap
+                if z_mm > (height - 2.0):
                     if dist <= current_radius:
                         grid[x_idx,y_idx,z_idx] = True
                     continue
