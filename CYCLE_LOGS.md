@@ -1,6 +1,6 @@
-## Cycle 2796: The Ammann-Beenker (Child 93) - COMPLETE
-- **Goal:** Create "Child 93" lamp design (Quasicrystal).
-- **Action:** Implemented `experiments/cycle2796_child_v28_lamp.py`.
-- **Method:** 8-fold symmetric plane wave interference.
-- **Result:** Generated `child_93_ammann_beenker.stl` (539k triangles). Good connectivity (1.99% volume loss).
+## Cycle 2797: The Borromean Rings (Child 94) - COMPLETE
+- **Goal:** Create "Child 94" lamp design (Topological Link).
+- **Action:** Implemented `experiments/cycle2797_child_v29_lamp.py`.
+- **Method:** Three interlinked elliptical tori with wireframe lattice infill.
+- **Result:** Generated `child_94_borromean_rings.stl` (207k triangles). Good connectivity (3.11% volume loss).
 - **Status:** Artifact Generated.
