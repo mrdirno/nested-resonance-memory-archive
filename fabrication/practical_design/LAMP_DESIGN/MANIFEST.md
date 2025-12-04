@@ -114,6 +114,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v23_glitch.3mf`
 *   `lamp_shaft/lamp_shaft_v23_glitch.3mf`
 
+### V24: The Wire (Topology & Connection)
+*   `lamp_base/lamp_base_v24_wire.3mf`
+*   `lamp_shade/lamp_shade_v24_wire.3mf`
+*   `lamp_shaft/lamp_shaft_v24_wire.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
