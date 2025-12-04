@@ -55,56 +55,63 @@ def generate_base(output_path, diameter=140.0, height=35.0, resolution=100):
                 
                 dist = math.sqrt(x_mm**2 + y_mm**2)
 
-                                # V4 Features
-                                feature_check = lamp_lib.apply_base_v4_features(
-                                    x_mm, y_mm, z_mm, dist,
-                                    height=height,
-                                    hole_radius=7.5, # QA V2
-                                    channel_height=channel_height,
-                                    channel_width=channel_width,
-                                    foot_depth=foot_depth,
-                                    foot_radius=foot_radius,
-                                    foot_offset=foot_offset,
-                                    radius=radius
-                                )
-                                
-                                if feature_check is not None:
-                                    grid[x_idx,y_idx,z_idx] = feature_check
-                                    continue
+                # V4 Features
+                feature_check = lamp_lib.apply_base_v4_features(
+                    x_mm, y_mm, z_mm, dist,
+                    height=height,
+                    hole_radius=7.5, # QA V2
+                    channel_height=channel_height,
+                    channel_width=channel_width,
+                    foot_depth=foot_depth,
+                    foot_radius=foot_radius,
+                    foot_offset=foot_offset,
+                    radius=radius
+                )
                 
-                                # Body Logic
-                                if dist <= radius:
-                                    # 1. Accretion Warping
-                                    # Twist angle increases with radius (dragging outer rim)
-                                    angle = dist * twist_strength
-                                    rx, ry = rotate_coords(x_mm, y_mm, angle)
-                                    
-                                    # 2. Gyroid Evaluation
-                                    lx = rx * base_scale
-                                    ly = ry * base_scale
-                                    lz = z_mm * base_scale
-                                    
-                                    val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
-                                    
-                                    # 3. Density Gradient (Denser near event horizon/center)
-                                    # Thicker walls to ensure connectivity
-                                    threshold = 0.5 + (0.3 * (1.0 - (dist/radius))) 
-                                    
-                                    is_solid = abs(val) < threshold
-                                    
-                                    # Solid Rim/Core
-                                    if dist > (radius - 4.0): is_solid = True # Thicker rim
-                                    if dist < 20.0: is_solid = True # Robust socket support
-                                    if z_mm < 3.0: is_solid = True # Bed adhesion
-                
-                                    # V2 Socket Interface (Override Solid Core)
-                                    socket_check = lamp_lib.apply_base_socket_v2(z_mm, dist, height)
-                                    if socket_check is False:
-                                        is_solid = False
-                
-                                    grid[x_idx,y_idx,z_idx] = is_solid
-                                else:
-                                    grid[x_idx,y_idx,z_idx] = False
+                if feature_check is not None:
+                    grid[x_idx,y_idx,z_idx] = feature_check
+                    continue
+
+                # V2 Socket
+                socket_check = lamp_lib.apply_base_socket_v2(z_mm, dist, height)
+                if socket_check is False:
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+
+                # V3 Structural Core
+                core_check = lamp_lib.apply_base_structural_core(z_mm, dist, height)
+                if core_check is True:
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+
+                # Body Logic
+                if dist <= radius:
+                    # 1. Accretion Warping
+                    # Twist angle increases with radius (dragging outer rim)
+                    angle = dist * twist_strength
+                    rx, ry = rotate_coords(x_mm, y_mm, angle)
+                    
+                    # 2. Gyroid Evaluation
+                    lx = rx * base_scale
+                    ly = ry * base_scale
+                    lz = z_mm * base_scale
+                    
+                    val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
+                    
+                    # 3. Density Gradient (Denser near event horizon/center)
+                    # Thicker walls to ensure connectivity
+                    threshold = 0.5 + (0.3 * (1.0 - (dist/radius))) 
+                    
+                    is_solid = abs(val) < threshold
+                    
+                    # Solid Rim
+                    if dist > (radius - 4.0): is_solid = True # Thicker rim
+                    if z_mm < 3.0: is_solid = True # Bed adhesion
+
+                    grid[x_idx,y_idx,z_idx] = is_solid
+                else:
+                    grid[x_idx,y_idx,z_idx] = False
+
     # Clean
     grid = lamp_lib.clean_voxel_grid(grid)
     
