@@ -68,6 +68,12 @@ def generate_base(output_path, diameter=140.0, height=35.0, resolution=100):
                     grid[x_idx,y_idx,z_idx] = feature_check
                     continue
 
+                # V2 Interface (Socket)
+                socket_check = lamp_lib.apply_base_socket_v2(z_mm, dist, height)
+                if socket_check is False:
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+
                 if dist <= radius:
                     # Klein Fold Logic
                     # Twist coordinate system 180 degrees as we go around the circle?

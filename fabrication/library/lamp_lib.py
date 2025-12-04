@@ -169,7 +169,7 @@ def apply_solid_mounting_cap(x, y, z, dist_xy,
 
 def apply_base_v4_features(x, y, z, dist_xy, 
                            height,
-                           hole_radius=7.0,
+                           hole_radius=7.5, # QA V2: 15mm Diameter
                            channel_height=8.0,
                            channel_width=8.0,
                            foot_depth=3.0,
@@ -198,4 +198,22 @@ def apply_base_v4_features(x, y, z, dist_xy,
         if math.sqrt(x**2 + (y-r_center)**2) < foot_radius: return False
         if math.sqrt(x**2 + (y+r_center)**2) < foot_radius: return False
         
+    return None
+
+def apply_base_socket_v2(z, dist_xy, base_height):
+    """
+    QA V2 Standard: 40.5mm ID x 3.0mm Depth Recess at Top.
+    """
+    if z >= (base_height - 3.0):
+        if dist_xy < 20.25: # 40.5mm / 2
+            return False # Void
+    return None
+
+def apply_shaft_plug_v2(z, dist_xy):
+    """
+    QA V2 Standard: 40.0mm OD x 3.0mm Height Boss at Bottom.
+    """
+    if z < 3.0:
+        if dist_xy < 20.0: # 40.0mm / 2
+            return True # Solid
     return None
