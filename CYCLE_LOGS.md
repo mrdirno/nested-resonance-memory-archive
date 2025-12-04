@@ -1,6 +1,6 @@
-## Cycle 2782: The Mandelbrot Zoom (Child V16) - COMPLETE
-- **Goal:** Create "Child V16" lamp design (Complex Fractal).
-- **Action:** Implemented `experiments/cycle2782_child_v16_lamp.py`.
-- **Method:** 3D Mandelbrot Potential mapping with structural Gyroid backbone.
-- **Result:** Generated `child_v16_mandelbrot_zoom.stl` (174k triangles). Excellent connectivity (0.04% volume loss).
+## Cycle 2783: The Lightning Bolt (Child V17) - COMPLETE
+- **Goal:** Create "Child V17" lamp design (Procedural Lightning).
+- **Action:** Implemented `experiments/cycle2783_child_v17_lamp.py`.
+- **Method:** Ridged Noise Lightning masked over a structural Gyroid scaffold.
+- **Result:** Generated `child_v17_lightning_bolt.stl` (399k triangles). Solid connectivity (0.03% volume loss).
 - **Status:** Artifact Generated.
