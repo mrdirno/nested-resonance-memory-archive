@@ -1,6 +1,6 @@
-## Cycle 2811: The Moore Curve (Child 104) - COMPLETE
-- **Goal:** Create "Child 104" lamp design (Closed Loop Hilbert).
-- **Action:** Implemented `experiments/cycle2811_child_v39_lamp.py`.
-- **Method:** Moore Curve L-System mapped to sphere.
-- **Result:** Generated `child_104_moore_curve.stl` (190k triangles). Acceptable connectivity (9.72% volume loss).
+## Cycle 2812: The Cantor Dust (Child 105) - COMPLETE
+- **Goal:** Create "Child 105" lamp design (Fractal Dust).
+- **Action:** Implemented `experiments/cycle2812_child_v40_lamp.py`.
+- **Method:** Recursive Cantor Set extrusion with vertical dissolution.
+- **Result:** Generated `child_105_cantor_dust.stl` (251k triangles). Robust connectivity (3.33% volume loss).
 - **Status:** Artifact Generated.
