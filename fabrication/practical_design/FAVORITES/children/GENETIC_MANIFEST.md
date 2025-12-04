@@ -36,43 +36,52 @@ Objective: "Jaw Dropping" Evolution. Breathability. Indirect Light.
 | 24 | 89-95 | ~2.0M | CERTIFIED |
 | 25 | 96-99 | ~1.1M | CERTIFIED |
 | 26 | 100-100 | ~0.3M | CERTIFIED |
+| 27 | 101-103 | ~0.5M | CERTIFIED |
 
-**Total: 100 Children | ~54.6M Triangles | ALL QA PASS**
+**Total: 103 Children | ~55.1M Triangles | ALL QA PASS**
 
 ---
 
 ## LINEAGE
 
-### GENERATION 1 (The Founders) to GENERATION 25 (The Space Fillers)
-*(See Archives for 01-99 details)*
+### GENERATION 1 (The Founders) to GENERATION 26 (The Centennial)
+*(See Archives for 01-100 details)*
 
 ...
 
-### GENERATION 26 (The Centennial)
+### GENERATION 27 (The L-Systems)
 
-#### 100. The Sierpinski Pyramid (Child of v42 Sierpinski + v20 Fractal)
-*   **Parent:** Tetrahedral Fractal.
-*   **Evolution:** 2-Octave Tetrahedral plane wave summation with Z-twist.
-*   **Breathability:** Fractal Sponge.
-*   **Status:** 🟢 ALIVE (270k tris)
+#### 101. The Gosper Curve (Child of v101 Gosper)
+*   **Parent:** Flowsnake Fractal.
+*   **Evolution:** 4th-order Hexagonal space-filling curve projected onto a sphere with twist.
+*   **Breathability:** Puzzle Gaps.
+*   **Status:** 🟢 ALIVE (184k tris)
+
+#### 102. The Levy C Curve (Child of v32 Dragon)
+*   **Parent:** Self-Similar Fractal.
+*   **Evolution:** 14th-order Levy C curve wrapped onto a sphere, forming a dense interlocking shell.
+*   **Breathability:** C-shape Voids.
+*   **Status:** 🟢 ALIVE (110k tris)
+
+#### 103. The Minkowski Sausage (Child of v16 Mandelbrot)
+*   **Parent:** Box Fractal.
+*   **Evolution:** 3rd-order Minkowski Island boundary (Type 2) extruded as a blocky fortress sphere.
+*   **Breathability:** Square Voids.
+*   **Status:** 🟢 ALIVE (204k tris)
 
 ---
 
-## NEXT GENERATION (Gen 27 - Pending)
+## NEXT GENERATION (Gen 28 - Pending)
 
 ### Proposed Mutations:
 
-#### 101. The Gosper Curve (Child of v96 Peano)
-*   **Concept:** Flowsnake (Peano-Gosper) space filling curve.
-*   **Breathability:** Hexagonal Flow.
+#### 104. The Moore Curve (Child of v97 Hilbert)
+*   **Concept:** A continuous loop version of the Hilbert curve.
+*   **Breathability:** Loop Gaps.
 
-#### 102. The Levy C Curve (Child of v32 Dragon)
-*   **Concept:** Self-similar fractal curve with C-shape motif.
-*   **Breathability:** Folding Gaps.
-
-#### 103. The Minkowski Sausage (Child of v16 Mandelbrot)
-*   **Concept:** 3D fractal extrusion of the Minkowski curve.
-*   **Breathability:** Box Voids.
+#### 105. The Cantor Dust (Child of v45 Menger)
+*   **Concept:** A 3D extrusion of the Cantor Set (dust).
+*   **Breathability:** Disconnected Void (Requires reinforcement).
 
 ---
 
