@@ -1259,3 +1259,9 @@
 - **Design:** The Hypervisor (38) Refined.
 - **Upgrade:** Isolated Containers Shade (Anisotropic), Server Rack Base, Virtual Pipeline Shaft.
 - **Status:** Design 38 v2.0 Complete.
+
+## Cycle 2714: The Hypervisor v2.1 Hotfix
+- **Action:** Repaired shade connectivity.
+- **Fix:** Reinforced struts (width 8mm) and added radial diagonals to anchor nested boxes.
+- **Result:** QA Passed (Grid connectivity verified).
+- **Status:** Design 38 v2.1 Complete.
