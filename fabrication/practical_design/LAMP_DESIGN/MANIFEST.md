@@ -79,6 +79,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v16_tesseract.3mf`
 *   `lamp_shaft/lamp_shaft_v16_tesseract.3mf`
 
+### V17: The Simulation (Glitch & Low-Poly)
+*   `lamp_base/lamp_base_v17_simulation.3mf`
+*   `lamp_shade/lamp_shade_v17_simulation.3mf`
+*   `lamp_shaft/lamp_shaft_v17_simulation.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
