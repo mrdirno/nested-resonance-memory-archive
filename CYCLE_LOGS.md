@@ -1276,3 +1276,12 @@
   - Updated `MANIFEST.md`.
 - **Result:** V9 "The Quantum Observer" is now a Candidate for Fabrication.
 - **Status:** V9 Integration Complete.
+
+## Cycle 2716 (Hotfix): V9 Shade Connectivity
+- **Issue:** User reported gaps between the shade body and the top mounting hub in V9 (Quantum Foam).
+- **Analysis:** 'Hand Access Void' extended too high, cutting off the connection. Missing 'Spokes' logic in V9 generator.
+- **Fix:**
+  - Updated `quantum_shade_gen.py` to add Spider Fitter (Hub + 3 Spokes) logic.
+  - Limited 'Hand Access Void' to Z < Height - 40mm.
+- **Result:** Regenerated `lamp_shade_v9_quantum.3mf` with robust structural connection.
+- **Status:** Fixed.

@@ -56,11 +56,15 @@ def land_stl(filename):
         print(f"[ERROR] Failed to land {filename}: {e}")
 
 if __name__ == "__main__":
-    files = [
-        "lamp_base_v9_quantum.stl",
-        "lamp_shade_v9_quantum.stl",
-        "lamp_shaft_v9_quantum.stl"
-    ]
+    if len(sys.argv) > 1:
+        files = sys.argv[1:]
+    else:
+        files = [
+            "lamp_base_v9_quantum.stl",
+            "lamp_shade_v9_quantum.stl",
+            "lamp_shaft_v9_quantum.stl"
+        ]
+    
     for f in files:
         if os.path.exists(f):
             land_stl(f)
