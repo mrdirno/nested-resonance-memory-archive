@@ -55,7 +55,14 @@ def generate_shaft(output_path, height=160.0, resolution=120):
                     grid[x_idx,y_idx,z_idx] = True
                     continue
 
-                if z_mm < 2.0 or z_mm > (height - 2.0):
+                # V2 Interface (Plug)
+                plug_check = lamp_lib.apply_shaft_plug_v2(z_mm, dist)
+                if plug_check is True:
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+
+                # Top Cap
+                if z_mm > (height - 2.0):
                     if dist <= base_radius:
                         grid[x_idx,y_idx,z_idx] = True
                     continue
