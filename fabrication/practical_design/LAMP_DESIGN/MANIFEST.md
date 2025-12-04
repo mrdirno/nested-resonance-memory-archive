@@ -109,6 +109,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v22_noise.3mf`
 *   `lamp_shaft/lamp_shaft_v22_noise.3mf`
 
+### V23: The Glitch (Datamosh & Pixel Sort)
+*   `lamp_base/lamp_base_v23_glitch.3mf`
+*   `lamp_shade/lamp_shade_v23_glitch.3mf`
+*   `lamp_shaft/lamp_shaft_v23_glitch.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
