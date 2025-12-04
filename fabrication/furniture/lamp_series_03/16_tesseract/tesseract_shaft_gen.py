@@ -83,7 +83,8 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                     tex_z = math.sin(z_mm * 0.2) # Stretched Z (lower freq)
                     
                     # Create void cubes inside the volume
-                    if tex_x > 0.5 and tex_y > 0.5 and tex_z > 0.5:
+                    # Reduce void size (0.5 -> 0.55)
+                    if tex_x > 0.55 and tex_y > 0.55 and tex_z > 0.55:
                         is_solid = False
                         
                     if is_solid:

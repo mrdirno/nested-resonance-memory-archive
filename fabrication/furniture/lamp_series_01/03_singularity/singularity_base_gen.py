@@ -81,6 +81,23 @@ def generate_base(output_path, diameter=140.0, height=35.0, resolution=100):
                 
                 dist = math.sqrt(x_mm**2 + y_mm**2)
                 
+                # V4 Features (Wire Channel, Feet, Hole)
+                feature_check = lamp_lib.apply_base_v4_features(
+                    x_mm, y_mm, z_mm, dist,
+                    height=height,
+                    hole_radius=center_hole_radius,
+                    channel_height=channel_height,
+                    channel_width=channel_width,
+                    foot_depth=feet_depth,
+                    foot_radius=feet_radius,
+                    foot_offset=feet_inset,
+                    radius=radius
+                )
+                
+                if feature_check is not None:
+                    grid[x_idx,y_idx,z_idx] = feature_check
+                    continue
+                
                 # Calculate Surface Height at this radius
                 dip = 10.0 * (1.0 - (dist/radius)) 
                 if dip < 0: dip = 0
@@ -121,7 +138,9 @@ def generate_base(output_path, diameter=140.0, height=35.0, resolution=100):
                             grid[x_idx,y_idx,z_idx] = True
                         elif dist > (radius - 5.0): # Solid Rim
                             grid[x_idx,y_idx,z_idx] = True
-                        elif abs(val) < 0.45: # Lattice Body
+                        elif dist < 12.0: # Solid Core around hole
+                            grid[x_idx,y_idx,z_idx] = True
+                        elif abs(val) < 0.55: # Thicker Lattice (was 0.45)
                             grid[x_idx,y_idx,z_idx] = True
                 else:
                     grid[x_idx,y_idx,z_idx] = False

@@ -108,7 +108,7 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     
                     window_val = math.sin(x_mm * scale) * math.sin(y_mm * scale) * math.sin(z_mm * sz)
                     
-                    if window_val > 0.6: # Big windows
+                    if window_val > 0.55: # Smaller windows (was 0.6)
                         is_solid = False
                     else:
                         is_solid = True

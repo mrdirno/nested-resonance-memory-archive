@@ -29,7 +29,10 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
     top_plate_height = 4.0
     
     solid_rim_height = 4.0
+    
+    # Shell Parameters
     wall_thickness = 25.4 # 1 inch
+    hand_access_radius = (base_width / 2.0) - wall_thickness # Exact 1 inch rim
     
     # Grid Setup
     max_dim = max(base_width, height)
@@ -78,22 +81,31 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
                     grid[x_idx,y_idx,z_idx] = False
                     continue
 
-                # 2. Spider Fitter (Library Call)
-                fitter_override = lamp_lib.apply_spider_fitter(
-                    x_mm, y_mm, z_mm, dist_from_center,
-                    mount_z_start=(height - top_plate_height),
-                    mount_hole_radius=mount_hole_radius,
-                    hub_radius=hub_radius,
-                    spoke_width=spoke_width,
-                    outer_radius=current_outer_half_width
-                )
-                
-                if fitter_override is not None:
-                    grid[x_idx,y_idx,z_idx] = fitter_override
-                    continue
-                
+                # --- PRIORITY 1: MOUNT (Cantilever Bar/Ring) ---
+                if z_mm > (height - 6.0): # Top 6mm
+                    # Central Hub (Solid)
+                    if dist_from_center < 22.0 and dist_from_center > 7.0:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    # Hole
+                    if dist_from_center <= 7.0:
+                        grid[x_idx,y_idx,z_idx] = False
+                        continue
+                        
+                    # Cantilever Bars (Spokes)
+                    # 4 Spokes for Square shade
+                    # Align with corners? No, axis aligned.
+                    
+                    spoke_angle = math.atan2(y_mm, x_mm)
+                    # Check alignment with 0, 90, 180, 270
+                    # cos(4*angle) > threshold
+                    if math.cos(4.0 * spoke_angle) > 0.9: 
+                         if abs(x_mm) < current_outer_half_width and abs(y_mm) < current_outer_half_width:
+                             grid[x_idx,y_idx,z_idx] = True
+                             continue
+
                 # 3. Bottom Rim (Solid Frame)
-                if z_mm < solid_rim_height:
+                if z_mm < 4.0: # Hardcoded fallback
                     if abs(x_mm) < current_inner_half_width and abs(y_mm) < current_inner_half_width:
                         grid[x_idx,y_idx,z_idx] = False
                     else:

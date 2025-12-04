@@ -30,7 +30,7 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
     
     # Shell Parameters
     wall_thickness = 25.4 # 1 Inch
-    hand_access_radius = 45.0 
+    hand_access_radius = (diameter / 2.0) - wall_thickness # Exact 1 inch rim
     
     # Grid Setup
     max_dim = max(diameter, height)
@@ -80,19 +80,23 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 if term < 0: term = 0
                 current_shell_radius = math.sqrt(term)
                 
-                # --- PRIORITY 1: SPIDER FITTER (Library Call) ---
-                fitter_override = lamp_lib.apply_spider_fitter(
-                    x_mm, y_mm, z_mm, dist_from_center_xy,
-                    mount_z_start=(height - top_plate_height),
-                    mount_hole_radius=mount_hole_radius,
-                    hub_radius=hub_radius,
-                    spoke_width=spoke_width,
-                    outer_radius=current_shell_radius # DYNAMIC CONSTRAINT
-                )
-                
-                if fitter_override is not None:
-                    grid[x_idx,y_idx,z_idx] = fitter_override
-                    continue
+                # --- PRIORITY 1: MOUNT (Cantilever Bar/Ring) ---
+                if z_mm > (height - 6.0): # Top 6mm
+                    # Central Hub (Solid)
+                    if dist_from_center_xy < 22.0 and dist_from_center_xy > 7.0:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    # Hole
+                    if dist_from_center_xy <= 7.0:
+                        grid[x_idx,y_idx,z_idx] = False
+                        continue
+                        
+                    # Cantilever Bars (Spokes)
+                    spoke_angle = math.atan2(y_mm, x_mm)
+                    if math.cos(3.0 * spoke_angle) > 0.9: # Narrow bars
+                         if dist_from_center_xy < current_shell_radius:
+                             grid[x_idx,y_idx,z_idx] = True
+                             continue
 
                 # --- PRIORITY 2: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:
@@ -135,8 +139,23 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                     # G: Gyroid
                     val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
                     
-                    if abs(val) < 0.35: 
+                    is_lattice = abs(val) < 0.5 # Thickened (was 0.35)
+                    
+                    # CONNECTIVITY SKELETON
+                    # Spiral Ribs to match the Twist
+                    # Twist is 4.0 * pi
+                    
+                    rib_angle = math.atan2(y_mm, x_mm)
+                    # Match the Z-twist
+                    rib_phase = math.cos(4.0 * rib_angle + z_norm * 4.0 * math.pi)
+                    is_rib = rib_phase > 0.6 # Thicker
+                    
+                    if is_lattice or is_rib: 
                         is_solid = True
+                        
+                    # Wireframe Skin
+                    if abs(dist_from_center_xy - radius) < 2.0: is_solid = True
+                    if abs(dist_from_center_xy - (radius - wall_thickness)) < 2.0: is_solid = True
                         
                 grid[x_idx,y_idx,z_idx] = is_solid
 

@@ -19,7 +19,7 @@ from fabrication.library import lamp_lib
 # 5. Refined Bottom Rim: 4mm Thick.
 # -----------------------------------------------------------------------------
 
-def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, hole_diameter=14.0):
+def generate_shade(output_path, diameter=200.0, height=140.0, resolution=150, hole_diameter=14.0):
     print(f"Generating EVENT HORIZON SHADE (V7 CONNECTION FIX): {output_path}")
     
     # Mount Parameters (Spider Fitter)
@@ -90,20 +90,23 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
                 dist_spherical = math.sqrt(dist_sq)
                 
-                # --- PRIORITY 1: SPIDER FITTER (Library Call) ---
-                # FIX: Constrain spokes to current shell radius to prevent "floating plus sign"
-                fitter_override = lamp_lib.apply_spider_fitter(
-                    x_mm, y_mm, z_mm, dist_from_center_xy,
-                    mount_z_start=(height - top_plate_height),
-                    mount_hole_radius=mount_hole_radius,
-                    hub_radius=hub_radius,
-                    spoke_width=spoke_width,
-                    outer_radius=current_shell_radius 
-                )
-                
-                if fitter_override is not None:
-                    grid[x_idx,y_idx,z_idx] = fitter_override
-                    continue
+                # --- PRIORITY 1: MOUNT (Cantilever Bar/Ring) ---
+                if z_mm > (height - 6.0): # Top 6mm
+                    # Central Hub (Solid)
+                    if dist_from_center_xy < 22.0 and dist_from_center_xy > 7.0:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    # Hole
+                    if dist_from_center_xy <= 7.0:
+                        grid[x_idx,y_idx,z_idx] = False
+                        continue
+                        
+                    # Cantilever Bars (Spokes)
+                    spoke_angle = math.atan2(y_mm, x_mm)
+                    if math.cos(3.0 * spoke_angle) > 0.9: 
+                         if dist_from_center_xy < current_shell_radius:
+                             grid[x_idx,y_idx,z_idx] = True
+                             continue
 
                 # --- PRIORITY 2: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:
@@ -119,35 +122,52 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                 is_void = in_inner_void or in_hand_void
                 
                 if in_outer_shell and not is_void:
-                    # ACCRETION VEIL
-                    # Match Shaft Twist: 360 degrees over height
-                    # But radial twist too.
+                    # ACCRETION VEIL (Robust Connectivity)
                     
-                    # Z-Twist
-                    z_twist = (z_mm / height) * 2.0 * math.pi
+                    # Vortex Domain Warp
+                    # Instead of rotating coordinates, warp them
+                    # Twist around Z
                     
-                    # Radial Twist (Vortex)
-                    r_twist = (dist_from_center_xy / radius) * 2.0 * math.pi
+                    angle = math.atan2(y_mm, x_mm)
+                    r = dist_from_center_xy
                     
-                    total_twist = z_twist + r_twist
+                    # Twist increases with Z and R
+                    twist = (z_mm/height * 2.0 * math.pi) + (r/radius * 2.0 * math.pi)
                     
-                    ca = math.cos(total_twist)
-                    sa = math.sin(total_twist)
+                    # Warped Angle
+                    angle_warped = angle + twist
                     
-                    tx = x_mm * ca - y_mm * sa
-                    ty = x_mm * sa + y_mm * ca
+                    # Map back to Cartesian for Gyroid
+                    tx = r * math.cos(angle_warped)
+                    ty = r * math.sin(angle_warped)
                     
-                    # Scale
-                    freq = 2.0 * math.pi / 30.0
-                    lx = tx * freq
-                    ly = ty * freq
-                    lz = z_mm * freq * 0.5 # Stretched vertically (falling matter)
-                        
+                    scale = 2.0 * math.pi / 40.0 # Lower freq (was 30.0)
+                    
                     # Gyroid
-                    val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
+                    val = math.sin(tx*scale)*math.cos(ty*scale) + \
+                          math.sin(ty*scale)*math.cos(z_mm*scale) + \
+                          math.sin(z_mm*scale)*math.cos(tx*scale)
+                          
+                    is_lattice = abs(val) < 0.65 # Thicker (was 0.55)
                     
-                    if abs(val) < 0.4: 
+                    # STRUCTURAL RIBS (Spokes - Thickened)
+                    rib_val = math.sin(4.0 * angle_warped)
+                    is_rib = rib_val > 0.6 # Very thick ribs (was 0.85)
+                    
+                    if is_lattice or is_rib:
                         is_solid = True
+                    
+                    # WIREFRAME SKIN (Connectivity Guarantee)
+                    # Force solid at the boundaries to bind loose ends
+                    if abs(dist_from_center_xy - radius) < 2.0: # Thicker skin
+                        is_solid = True
+                    if abs(dist_from_center_xy - (radius - wall_thickness)) < 2.0:
+                        is_solid = True
+                    
+                    if is_solid:
+                        grid[x_idx,y_idx,z_idx] = True
+                    else:
+                        grid[x_idx,y_idx,z_idx] = False
                         
                 grid[x_idx,y_idx,z_idx] = is_solid
 

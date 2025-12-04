@@ -95,14 +95,15 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 # Distance in real space (for mounting)
                 dist_real = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- PRIORITY 1: SPIDER FITTER (REAL SPACE) ---
+                # --- PRIORITY 1: SPIDER FITTER (Dynamic) ---
+                current_shell_radius = radius
                 fitter_override = lamp_lib.apply_spider_fitter(
                     x_mm, y_mm, z_mm, dist_real,
                     mount_z_start=(height - top_plate_height),
                     mount_hole_radius=mount_hole_radius,
                     hub_radius=hub_radius,
                     spoke_width=spoke_width,
-                    outer_radius=radius
+                    outer_radius=current_shell_radius
                 )
                 
                 if fitter_override is not None:
@@ -117,27 +118,38 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
 
                 # --- PRIORITY 3: LAG SHELL (SHIFTED SPACE) ---
                 
+                is_solid = False
+                
                 # Bounds check in Shifted space
-                if dist_s > radius:
-                    grid[x_idx,y_idx,z_idx] = False
-                    continue
-                    
-                if dist_s < (radius - wall_thickness):
-                    grid[x_idx,y_idx,z_idx] = False
-                    continue
-                    
-                # Texture?
-                # Horizontal scanlines (Datamosh artifact)
-                scanline = math.sin(z_mm * 2.0)
-                if scanline > 0.9:
-                    # Empty line? No, just protrusion
-                    grid[x_idx,y_idx,z_idx] = False
-                else:
-                    grid[x_idx,y_idx,z_idx] = True
-                    
+                if dist_s <= radius and dist_s >= (radius - wall_thickness):
+                    # Scanlines
+                    scanline = math.sin(z_mm * 2.0)
+                    if scanline <= 0.9:
+                        is_solid = True
+                        
+                # CONNECTIVITY SPINE (Real Space)
+                # A vertical frame that holds the shifted layers together
+                # 4 vertical pillars at r=70
+                
+                angle_real = math.atan2(y_mm, x_mm)
+                in_pillar = False
+                
+                # Pillars at 0, 90, 180, 270
+                pillar_angle_width = 0.1
+                if abs(math.sin(2*angle_real)) < pillar_angle_width:
+                    if dist_real > (radius - wall_thickness - 5.0) and dist_real < (radius + 5.0):
+                        in_pillar = True
+                        
+                if in_pillar: is_solid = True
+                
                 # Ensure hand access in REAL space
                 if dist_real < hand_access_radius:
-                    grid[x_idx,y_idx,z_idx] = False
+                    is_solid = False
+                    
+                grid[x_idx,y_idx,z_idx] = is_solid
+
+    # Clean Dust (QA)
+    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter, 0.0)

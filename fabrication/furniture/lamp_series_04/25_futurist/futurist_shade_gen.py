@@ -76,19 +76,23 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                 dist_xy = math.sqrt(x_mm**2 + y_mm**2)
                 angle = math.atan2(y_mm, x_mm)
                 
-                # --- PRIORITY 1: SPIDER FITTER ---
-                fitter_override = lamp_lib.apply_spider_fitter(
-                    x_mm, y_mm, z_mm, dist_xy,
-                    mount_z_start=(height - top_plate_height),
-                    mount_hole_radius=mount_hole_radius,
-                    hub_radius=hub_radius,
-                    spoke_width=spoke_width,
-                    outer_radius=radius
-                )
-                
-                if fitter_override is not None:
-                    grid[x_idx,y_idx,z_idx] = fitter_override
-                    continue
+                # --- PRIORITY 1: MOUNT (Cantilever Bar/Ring) ---
+                if z_mm > (height - 6.0): # Top 6mm
+                    # Central Hub (Solid)
+                    if dist_xy < 22.0 and dist_xy > 7.0:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    # Hole
+                    if dist_xy <= 7.0:
+                        grid[x_idx,y_idx,z_idx] = False
+                        continue
+                        
+                    # Cantilever Bars (Spokes)
+                    spoke_angle = math.atan2(y_mm, x_mm)
+                    if math.cos(3.0 * spoke_angle) > 0.9: 
+                         if dist_xy < radius:
+                             grid[x_idx,y_idx,z_idx] = True
+                             continue
 
                 # --- PRIORITY 2: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:
@@ -108,40 +112,31 @@ def generate_shade(output_path, diameter=200.0, height=180.0, resolution=120, ho
                     continue
                     
                 # Fin Logic
-                # Fin centers at N angles
-                # Fin profile: Distance from radial line
+                # Anisotropy: Z-Twisted Fins
                 
-                # Rotate point to align with first fin at 0
                 local_angle = angle + angle_offset
                 
                 # Sectorize
                 sector = 2*math.pi / num_fins
-                a_quant = math.floor(local_angle / sector) * sector + (sector/2)
-                d_fin_center = abs(angle - a_quant) # Angular distance? No.
                 
-                # Rotate point to local sector frame
-                rot_sec = -a_quant
-                rx = x_mm * math.cos(rot_sec) - y_mm * math.sin(rot_sec)
-                ry = x_mm * math.sin(rot_sec) + y_mm * math.cos(rot_sec)
+                # Normalize angle to sector
+                # dist from center of nearest sector
+                a_norm = (local_angle % sector)
+                if a_norm > (sector/2): a_norm -= sector
                 
-                # Now ry is distance from fin center line (if fin is along X)
-                # Fin thickness
-                fin_thickness = 6.0 * (1.0 - (dist_xy/radius)) + 2.0 # Taper out
+                # Angular distance
+                d_ang = abs(a_norm) * dist_xy # Arc length approx
                 
-                if abs(ry) < fin_thickness:
-                    # Fin body
-                    # Cut off inner/outer
-                    if dist_xy < current_radius and dist_xy > hand_access_radius:
+                fin_thickness = 4.0 
+                
+                if d_ang < (fin_thickness / 2.0):
+                    if dist_xy < current_radius:
                         grid[x_idx,y_idx,z_idx] = True
-                        continue
                 
-                # Connect fins with a thin shell?
-                # No, open fins are cooler. But we need structural integrity.
-                # Let's add rings.
-                
+                # CONNECTIVITY RINGS
+                # Rings every 30mm to hold fins together
                 ring_spacing = 30.0
-                dist_to_ring = abs(z_mm % ring_spacing)
-                if dist_to_ring < 2.0:
+                if (z_mm % ring_spacing) < 3.0:
                      if dist_xy < current_radius and dist_xy > hand_access_radius:
                         grid[x_idx,y_idx,z_idx] = True
 

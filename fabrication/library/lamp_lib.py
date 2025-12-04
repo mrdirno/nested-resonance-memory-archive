@@ -7,6 +7,10 @@ def clean_voxel_grid(grid):
     """
     Removes all disconnected components except the largest one (Despeckle).
     Ensures zero floating dust.
+    
+    QA UPDATE (Cycle 3013):
+    Calculates volume loss. If > 5%, raises ConnectivityError.
+    This forces the math to be correct, rather than masking it.
     """
     print("  -> Cleaning Voxel Grid (Removing Dust)...")
     labeled_array, num_features = label(grid)
@@ -16,17 +20,26 @@ def clean_voxel_grid(grid):
         
     # Find largest component
     sizes = np.bincount(labeled_array.ravel())
-    # sizes[0] is background (0), so ignore it
+    # sizes[0] is background (0)
     mask_sizes = sizes[1:]
     if len(mask_sizes) == 0:
         return grid
         
     largest_label = np.argmax(mask_sizes) + 1
+    max_size = mask_sizes[largest_label - 1]
+    total_solid = np.sum(mask_sizes)
+    
+    loss_ratio = (total_solid - max_size) / total_solid
+    
+    print(f"     Particles: {num_features - 1}")
+    print(f"     Volume Loss: {loss_ratio*100:.2f}%")
+    
+    if loss_ratio > 0.05: # 5% Tolerance
+        raise RuntimeError(f"QA FAIL: Connectivity broken. {loss_ratio*100:.1f}% of mesh is disconnected debris. Fix the math.")
     
     # Create new grid with only largest component
     new_grid = (labeled_array == largest_label)
     
-    print(f"     Removed {num_features - 1} floating particles.")
     return new_grid
 
 def write_binary_stl(filename, vertices, faces):

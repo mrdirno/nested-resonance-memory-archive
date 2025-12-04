@@ -71,16 +71,17 @@ def generate_base(output_path, diameter=140.0, height=30.0, resolution=100):
                     
                     r_stretch = 1.0 + 0.5 * (dist/radius)
                     
-                    # Bubble Noise (Voronoi-ish)
-                    # sin(x*s) * sin(y*s) * sin(z*s)
-                    
+                    # Bubble Noise
                     scale = 2.0 * math.pi / 20.0
                     
                     val = math.sin(x_mm * scale * r_stretch) * math.sin(y_mm * scale * r_stretch) * math.sin(z_mm * scale)
                     
                     # Solid block with bubble voids
                     is_solid = True
-                    if val > 0.6: is_solid = False
+                    if val > 0.8: is_solid = False # Tiny bubbles only (was 0.5)
+                    
+                    # CENTRAL CORE (Solid)
+                    if dist < 20.0: is_solid = True
                     
                     # Height map
                     z_surf = height

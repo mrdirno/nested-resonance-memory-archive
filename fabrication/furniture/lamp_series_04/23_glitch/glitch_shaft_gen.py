@@ -99,7 +99,7 @@ def generate_shaft(output_path, height=180.0, resolution=100):
                     
                     is_noise = False
                     if (z_mm % 10.0) < 1.0: # Missing slice every 10mm
-                        if random.random() > 0.5: is_noise = True
+                        if random.random() > 0.7: is_noise = True # Reduced prob (was 0.5)
                         
                     if is_noise:
                         grid[x_idx,y_idx,z_idx] = False
