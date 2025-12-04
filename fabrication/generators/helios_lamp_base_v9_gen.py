@@ -68,41 +68,44 @@ def generate_base(output_path, diameter=140.0, height=35.0, resolution=100):
                                     grid[x_idx,y_idx,z_idx] = feature_check
                                     continue
                 
-                                # V2 Socket Interface
-                                socket_check = lamp_lib.apply_base_socket_v2(z_mm, dist, height)
-                                if socket_check is False:
-                                    grid[x_idx,y_idx,z_idx] = False
-                                    continue
-                
-                                # Base Body
-                                if dist <= radius:
-                                    # Quantum Foam (Micro-Lattice)
-                                    # Replaces solid block with Schwarz P
-                                    
-                                    scale_foam = 2.0 * math.pi / 15.0
-                                    
-                                    lx = x_mm * scale_foam
-                                    ly = y_mm * scale_foam
-                                    lz = z_mm * scale_foam
-                                    
-                                    foam_val = math.cos(lx) + math.cos(ly) + math.cos(lz)
-                                    is_foam = abs(foam_val) < 0.6 # Thick lattice
-                                    
-                                    # Solid Core/Rim Logic
-                                    if dist > (radius - 5.0):
-                                        grid[x_idx,y_idx,z_idx] = True
-                                    elif dist < 20.0: # Solid Core to support socket
-                                        grid[x_idx,y_idx,z_idx] = True
-                                    elif z_mm < 4.0:
-                                        grid[x_idx,y_idx,z_idx] = True
-                                    else:
-                                        if is_foam:
-                                            grid[x_idx,y_idx,z_idx] = True
-                                        else:
-                                            grid[x_idx,y_idx,z_idx] = False
-                                else:
-                                    grid[x_idx,y_idx,z_idx] = False
-    # Clean Dust (Strict QA)
+                                                # V2 Socket Interface
+                                                socket_check = lamp_lib.apply_base_socket_v2(z_mm, dist, height)
+                                                if socket_check is False:
+                                                    grid[x_idx,y_idx,z_idx] = False
+                                                    continue
+                                
+                                                # V3 Structural Core
+                                                core_check = lamp_lib.apply_base_structural_core(z_mm, dist, height)
+                                                if core_check is True:
+                                                    grid[x_idx,y_idx,z_idx] = True
+                                                    continue
+                                
+                                                # Base Body
+                                                if dist <= radius:
+                                                    # Quantum Foam (Micro-Lattice)
+                                                    # Replaces solid block with Schwarz P
+                                                    
+                                                    scale_foam = 2.0 * math.pi / 15.0
+                                                    
+                                                    lx = x_mm * scale_foam
+                                                    ly = y_mm * scale_foam
+                                                    lz = z_mm * scale_foam
+                                                    
+                                                    foam_val = math.cos(lx) + math.cos(ly) + math.cos(lz)
+                                                    is_foam = abs(foam_val) < 0.6 # Thick lattice
+                                                    
+                                                    # Solid Rim
+                                                    if dist > (radius - 5.0):
+                                                        grid[x_idx,y_idx,z_idx] = True
+                                                    elif z_mm < 4.0:
+                                                        grid[x_idx,y_idx,z_idx] = True
+                                                    else:
+                                                        if is_foam:
+                                                            grid[x_idx,y_idx,z_idx] = True
+                                                        else:
+                                                            grid[x_idx,y_idx,z_idx] = False
+                                                else:
+                                                    grid[x_idx,y_idx,z_idx] = False    # Clean Dust (Strict QA)
     grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
