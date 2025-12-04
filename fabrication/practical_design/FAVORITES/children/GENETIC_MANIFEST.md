@@ -33,51 +33,80 @@ Objective: "Jaw Dropping" Evolution. Breathability. Indirect Light.
 | 21 | 63-75 | ~5.2M | CERTIFIED |
 | 22 | 76-85 | ~3.2M | CERTIFIED |
 | 23 | 86-88 | ~1.1M | CERTIFIED |
+| 24 | 89-95 | ~2.0M | CERTIFIED |
 
-**Total: 88 Children | ~51.2M Triangles | ALL QA PASS**
+**Total: 95 Children | ~53.2M Triangles | ALL QA PASS**
 
 ---
 
 ## LINEAGE
 
-### GENERATION 1 (The Founders) to GENERATION 22 (The Phenomena)
-*(See Archives for 01-85 details)*
+### GENERATION 1 (The Founders) to GENERATION 23 (The Fractal / The Foam)
+*(See Archives for 01-88 details)*
 
 ...
 
-### GENERATION 23 (The Fractal / The Foam)
+### GENERATION 24 (The Geometry)
 
-#### 86. The Julia Set (Child of v16 Mandelbrot + v81 Mandelbrot Zoom)
-*   **Parent:** 4D Quaternion Fractal.
-*   **Evolution:** 3D projection of a quaternion Julia set iteration count.
-*   **Breathability:** Fractal Bulbs.
+#### 89. The Lissajous Knot 2 (Child of v34 Lissajous + v50 Torus Knot)
+*   **Parent:** Parametric Knot.
+*   **Evolution:** 5:7:9 harmonic Lissajous knot with wireframe gyroid core.
+*   **Breathability:** Wireframe Cage.
+*   **Status:** 🟢 ALIVE (36k tris)
+
+#### 90. The Schwarzschild Warp (Child of v04 Event Cascade + v19 Galaxy)
+*   **Parent:** Gravitational Lensing.
+*   **Evolution:** Lattice warped by extreme Einstein Ring distortion.
+*   **Breathability:** Warped Voids.
 *   **Status:** 🟢 ALIVE (491k tris)
 
-#### 87. The Voronoi Foam (Child of v19 Voronoi + v30 Kelvin)
-*   **Parent:** Minimal Foam.
-*   **Evolution:** Relaxed 3D Worley noise simulating organic bubble foam.
-*   **Breathability:** Cell Walls.
-*   **Status:** 🟢 ALIVE (336k tris)
+#### 91. The Steiner Chain (Child of v40 Apollonian + v18 Nautilus)
+*   **Parent:** Tangent Spheres.
+*   **Evolution:** Helical necklace of tangent sphere rings held by gyroid matrix.
+*   **Breathability:** Sphere Hollows.
+*   **Status:** 🟢 ALIVE (378k tris)
 
-#### 88. The Weaire-Phelan 2 (Child of v33 Weaire-Phelan)
-*   **Parent:** A15 Crystal Phase.
-*   **Evolution:** Mathematically precise optimal space-filling foam (Beijing Water Cube).
-*   **Breathability:** Bubble Matrix.
-*   **Status:** 🟢 ALIVE (293k tris)
+#### 92. The Clebsch Surface (Child of v37 Minimal + v41 Calabi-Yau)
+*   **Parent:** Algebraic Geometry.
+*   **Evolution:** Cubic implicit surface containing 27 real lines.
+*   **Breathability:** Manifold Holes.
+*   **Status:** 🟢 ALIVE (140k tris)
+
+#### 93. The Ammann-Beenker (Child of v38 Penrose + v12 Crystalline)
+*   **Parent:** Quasicrystal.
+*   **Evolution:** 8-fold symmetric aperiodic tiling projected into 3D.
+*   **Breathability:** Aperiodic Gaps.
+*   **Status:** 🟢 ALIVE (539k tris)
+
+#### 94. The Borromean Rings (Child of v50 Torus Knot)
+*   **Parent:** Topological Link.
+*   **Evolution:** Three interlinked elliptical tori forming a Brunnian link.
+*   **Breathability:** Ring Centers.
+*   **Status:** 🟢 ALIVE (207k tris)
+
+#### 95. The Schwarz Lantern (Child of v30 Kelvin + v27 Gyroid)
+*   **Parent:** Cylindrical Minimal Surface.
+*   **Evolution:** Schwarz P-surface adapted to radial coordinates.
+*   **Breathability:** Lantern Windows.
+*   **Status:** 🟢 ALIVE (236k tris)
 
 ---
 
-## NEXT GENERATION (Gen 24 - Pending)
+## NEXT GENERATION (Gen 25 - Pending)
 
 ### Proposed Mutations:
 
-#### 89. The Lissajous Knot 2 (Child of v34 Lissajous + v50 Torus Knot)
-*   **Concept:** Higher harmonic parametric knot (5:7:9 ratio).
-*   **Breathability:** Woven Core.
+#### 96. The Peano Curve 2 (Child of v96 Peano)
+*   **Concept:** High-resolution 3D Peano curve filling a sphere.
+*   **Breathability:** Curve Gaps.
 
-#### 90. The Schwarzschild Warp (Child of v04 Event Cascade + v19 Galaxy)
-*   **Concept:** Lattice warped by extreme gravitational lensing equations.
-*   **Breathability:** Horizon Deformation.
+#### 97. The Hilbert Cube (Child of v46 Hilbert)
+*   **Concept:** Recursive Hilbert curve filling a cubic volume with varying density.
+*   **Breathability:** Path Voids.
+
+#### 98. The Dragon Sphere (Child of v32 Dragon Curve)
+*   **Concept:** Dragon curve projected onto a sphere surface.
+*   **Breathability:** Fractal Folds.
 
 ---
 
