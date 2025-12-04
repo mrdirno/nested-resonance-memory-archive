@@ -64,6 +64,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v13_network.3mf`
 *   `lamp_shaft/lamp_shaft_v13_network.3mf`
 
+### V14: The Gravity Well (Spacetime Curvature)
+*   `lamp_base/lamp_base_v14_gravity.3mf`
+*   `lamp_shade/lamp_shade_v14_gravity.3mf`
+*   `lamp_shaft/lamp_shaft_v14_gravity.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
