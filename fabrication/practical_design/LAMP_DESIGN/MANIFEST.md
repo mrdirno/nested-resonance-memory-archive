@@ -49,6 +49,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v10_event_horizon.3mf`
 *   `lamp_shaft/lamp_shaft_v10_event_horizon.3mf`
 
+### V11: The Hyper-Dimensional (4D Projection)
+*   `lamp_base/lamp_base_v11_hyper_dimensional.3mf`
+*   `lamp_shade/lamp_shade_v11_hyper_dimensional.3mf`
+*   `lamp_shaft/lamp_shaft_v11_hyper_dimensional.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
