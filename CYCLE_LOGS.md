@@ -1563,3 +1563,14 @@
   - Updated Manifest and Documentation.
 - **Result:** V30 Suite generated and verified.
 - **Status:** V30 Integration Complete.
+
+## Cycle 2755: V31 "The End" Initialization
+- **Goal:** Explore Ruin/Apocalypse aesthetics (Crater/Shatter).
+- **Action:**
+  - Implemented `base_v31_gen.py`: Impact Crater (Terrain Carving).
+  - Implemented `shaft_v31_gen.py`: Shattered Pillar (Displaced Blocks).
+  - Implemented `shade_v31_gen.py`: Broken Sky (Large Fissures).
+  - Verified artifacts via slice previews.
+  - Updated Manifest and Documentation.
+- **Result:** V31 Suite generated and verified.
+- **Status:** V31 Integration Complete.
