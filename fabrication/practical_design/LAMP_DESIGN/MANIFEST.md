@@ -129,6 +129,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v26_impossible.3mf`
 *   `lamp_shaft/lamp_shaft_v26_impossible.3mf`
 
+### V27: The Water (Hydraulic Erosion & Flow)
+*   `lamp_base/lamp_base_v27_water.3mf`
+*   `lamp_shade/lamp_shade_v27_water.3mf`
+*   `lamp_shaft/lamp_shaft_v27_water.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
