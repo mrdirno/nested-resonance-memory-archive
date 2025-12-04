@@ -203,10 +203,37 @@ def apply_base_v4_features(x, y, z, dist_xy,
 def apply_base_socket_v2(z, dist_xy, base_height):
     """
     QA V2 Standard: 40.5mm ID x 3.0mm Depth Recess at Top.
+    Creates the VOID.
     """
     if z >= (base_height - 3.0):
         if dist_xy < 20.25: # 40.5mm / 2
             return False # Void
+    return None
+
+def apply_base_structural_core(z, dist_xy, height):
+    """
+    Generates a solid structural cup to hold the Shaft.
+    Replaces the massive "Solid Core" logic to allow light transparency elsewhere.
+    Ensures the socket has a solid wall and floor.
+    """
+    # 1. Socket Wall (Outer Rim)
+    # ID=40.5 (r=20.25). Wall Thickness ~4mm.
+    if z > (height - 10.0): # Top 10mm reinforced
+        if dist_xy > 20.0 and dist_xy < 25.0:
+            return True
+            
+    # 2. Socket Floor (Support Plate)
+    # The Shaft sits on this. Z range: Just below the socket void (H-3).
+    # Let's make it 3mm thick: (H-6) to (H-3).
+    if z > (height - 6.0) and z < (height - 3.0):
+        if dist_xy > 7.5 and dist_xy < 25.0:
+            return True
+            
+    # 3. Rod Guide (Thin wall around wire channel/rod)
+    # Ensures wire doesn't snag on lattice
+    if dist_xy > 7.5 and dist_xy < 9.5:
+        return True
+            
     return None
 
 def apply_shaft_plug_v2(z, dist_xy):
