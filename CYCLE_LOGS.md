@@ -1,6 +1,6 @@
-## Cycle 2795: The Clebsch Surface (Child 92) - COMPLETE
-- **Goal:** Create "Child 92" lamp design (Algebraic Geometry).
-- **Action:** Implemented `experiments/cycle2795_child_v27_lamp.py`.
-- **Method:** Cubic implicit surface with 27 lines + Gyroid aura.
-- **Result:** Generated `child_92_clebsch_surface.stl` (140k triangles). Good connectivity (0.57% volume loss).
+## Cycle 2796: The Ammann-Beenker (Child 93) - COMPLETE
+- **Goal:** Create "Child 93" lamp design (Quasicrystal).
+- **Action:** Implemented `experiments/cycle2796_child_v28_lamp.py`.
+- **Method:** 8-fold symmetric plane wave interference.
+- **Result:** Generated `child_93_ammann_beenker.stl` (539k triangles). Good connectivity (1.99% volume loss).
 - **Status:** Artifact Generated.
