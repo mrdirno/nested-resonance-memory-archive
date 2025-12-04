@@ -89,6 +89,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v18_mobius.3mf`
 *   `lamp_shaft/lamp_shaft_v18_mobius.3mf`
 
+### V19: The Singular (Monolith & Continuity)
+*   `lamp_base/lamp_base_v19_singular.3mf`
+*   `lamp_shade/lamp_shade_v19_singular.3mf`
+*   `lamp_shaft/lamp_shaft_v19_singular.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
