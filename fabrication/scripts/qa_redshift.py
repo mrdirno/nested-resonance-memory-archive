@@ -4,7 +4,7 @@ import time
 import importlib.util
 
 # Add project root to path
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.append(project_root)
 
 def load_module(path):

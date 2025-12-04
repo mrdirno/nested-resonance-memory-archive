@@ -81,33 +81,22 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
                     grid[x_idx,y_idx,z_idx] = False
                     continue
 
-                # --- PRIORITY 1: MOUNT (Cantilever Bar/Ring) ---
-                if z_mm > (height - 12.0): # Extended Top Zone (Was 8.0)
-                    # Central Hub (Solid)
-                    if dist_from_center < 24.0 and dist_from_center > 7.0: # Widened Hub (22->24)
-                        grid[x_idx,y_idx,z_idx] = True
-                        continue
+                # --- PRIORITY 1: ROBUST SOLID CAP (User Mandate) ---
+                # Force a solid 4mm thick plate at the top
+                # For square shade, cap_radius logic needs to cover the corners.
+                # Passing a large radius effectively makes it a circle, but we want a square cap?
+                # Actually, the function assumes a circular cap.
+                # However, we can just check Z and override.
+                
+                if z_mm > (height - 4.0):
                     # Hole
                     if dist_from_center <= 7.0:
                         grid[x_idx,y_idx,z_idx] = False
                         continue
-
-                    # Cantilever Bars (Spokes)
-                    spoke_angle = math.atan2(y_mm, x_mm)
-                    if math.cos(4.0 * spoke_angle) > 0.9:
-                         if abs(x_mm) < current_outer_half_width and abs(y_mm) < current_outer_half_width:
-                             grid[x_idx,y_idx,z_idx] = True
-                             continue
-                    
-                    # SAFETY RING (Connection Guarantee)
-                    # Force a solid ring near the outer wall to fuse spokes to shell
-                    if z_mm < (height - 2.0): # Don't cap the very top, but fuse the structure below
-                         dist_from_wall_x = current_outer_half_width - abs(x_mm)
-                         dist_from_wall_y = current_outer_half_width - abs(y_mm)
-                         if dist_from_wall_x < 8.0 or dist_from_wall_y < 8.0:
-                             # Fuse the outer rim where spokes meet
-                             grid[x_idx,y_idx,z_idx] = True
-                             continue
+                    # Solid Plate (Square)
+                    if abs(x_mm) < current_outer_half_width and abs(y_mm) < current_outer_half_width:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
 
                 # 3. Bottom Rim (Solid Frame)
                 if z_mm < 4.0: # Hardcoded fallback
@@ -153,7 +142,7 @@ def generate_shade(output_path, base_width=194.0, top_width=60.0, height=224.0, 
                       math.sin(y_mm * sy) * math.cos(z_warped * sz) + \
                       math.sin(z_warped * sz) * math.cos(x_mm * sx)
 
-                is_lattice = abs(val) < 0.45 # Thicker walls
+                is_lattice = abs(val) < 0.55 # Thicker walls (Connectivity Fix)
 
                 # CONNECTIVITY GUARANTEE: Spiral Ribs (Thickened)
                 angle = math.atan2(y_mm, x_mm)

@@ -142,6 +142,31 @@ def apply_spider_fitter(x, y, z, dist_xy,
     
     return None
 
+def apply_solid_mounting_cap(x, y, z, dist_xy, 
+                             mount_z_start, 
+                             mount_hole_radius=7.0, 
+                             cap_radius=40.0):
+    """
+    Generates a robust SOLID CAP (Washer style) for mounting.
+    Overrides pattern generation to ensure physical interface integrity.
+    User Request: "Continuous shade and has a cap up top... robust the hell out of this"
+    
+    Returns:
+        True: Force Solid
+        False: Force Void
+        None: No Override
+    """
+    if z > mount_z_start:
+        # 1. Hole (Standard 14mm diam -> 7mm radius)
+        if dist_xy < mount_hole_radius:
+            return False
+        
+        # 2. Solid Cap
+        if dist_xy < cap_radius:
+            return True
+            
+    return None
+
 def apply_base_v4_features(x, y, z, dist_xy, 
                            height,
                            hole_radius=7.0,
