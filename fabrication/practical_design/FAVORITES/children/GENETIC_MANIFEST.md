@@ -31,115 +31,98 @@ Objective: "Jaw Dropping" Evolution. Breathability. Indirect Light.
 | 19 | 57-59 | ~1.9M | CERTIFIED |
 | 20 | 60-62 | ~2.0M | CERTIFIED |
 | 21 | 63-75 | ~5.2M | CERTIFIED |
+| 22 | 76-85 | ~3.2M | CERTIFIED |
 
-**Total: 75 Children | ~46.9M Triangles | ALL QA PASS**
+**Total: 85 Children | ~50.1M Triangles | ALL QA PASS**
 
 ---
 
 ## LINEAGE
 
-### GENERATION 1 (The Founders) to GENERATION 20 (The Minimal)
-*(See Archives for 01-62 details)*
+### GENERATION 1 (The Founders) to GENERATION 21 (The Renaissance)
+*(See Archives for 01-75 details)*
 
 ...
 
-### GENERATION 21 (The Renaissance)
+### GENERATION 22 (The Phenomena)
 
-#### 63. The Richmond Surface (Child of v54 Enneper + v62 Bour)
-*   **Parent:** Minimal Surface Morph.
-*   **Evolution:** Higher-order Enneper variant with multiple saddle points.
-*   **Breathability:** Multi-saddle Gaps.
-*   **Status:** 🟢 ALIVE (~600k tris)
+#### 76. The Glitch Lattice (Child of v23 Glitch + v27 Gyroid)
+*   **Parent:** Digital Corruption.
+*   **Evolution:** Pixel-sorted gyroid lattice with height-dependent displacement.
+*   **Breathability:** Glitch Voids.
+*   **Status:** 🟢 ALIVE (333k tris)
 
-#### 64. The Henneberg Surface (Child of v60 Catalan + v61 Helicoid)
-*   **Parent:** Non-Orientable Minimal.
-*   **Evolution:** Möbius-like minimal surface with twists.
-*   **Breathability:** Twist Gaps.
-*   **Status:** 🟢 ALIVE (~600k tris)
+#### 77. The Tensor Field (Child of v31 Magnetic + v14 Swarm)
+*   **Parent:** Mechanical Stress.
+*   **Evolution:** Filament winding following principal stress trajectories.
+*   **Breathability:** Diamond Apertures.
+*   **Status:** 🟢 ALIVE (196k tris)
 
-#### 65. The Chen-Gackstatter Surface (Child of v55 Costa + v54 Enneper)
-*   **Parent:** Higher Genus Enneper.
-*   **Evolution:** Punctured torus minimal surface.
-*   **Breathability:** Genus Holes.
-*   **Status:** 🟢 ALIVE (~600k tris)
+#### 78. The Void Manifold (Child of v06 Quantum + v03 Singularity)
+*   **Parent:** Negative Space.
+*   **Evolution:** Solid shell carved by spiral voids and twisted channels.
+*   **Breathability:** Carved Tunnels.
+*   **Status:** 🟢 ALIVE (188k tris)
 
-#### 66. The Respiratory Lattice (Child of v33 Prophecy)
-*   **Parent:** Oracle Sphere.
-*   **Evolution:** Breathing AGPH lattice with Z-modulated porosity.
-*   **Breathability:** Pulsing Voids.
-*   **Status:** 🟢 ALIVE (276k tris)
+#### 79. The Seifert Weave (Child of v50 Torus Knot)
+*   **Parent:** Topological Knot.
+*   **Evolution:** Braided surface topology spanning a twisted boundary.
+*   **Breathability:** Woven Mesh.
+*   **Status:** 🟢 ALIVE (413k tris)
 
-#### 67. The Liquid Gyroid (Child of v14 Swarm)
-*   **Parent:** Flow Field.
-*   **Evolution:** Warped domain gyroid simulating melting fluid.
-*   **Breathability:** Flow Channels.
-*   **Status:** 🟢 ALIVE (458k tris)
+#### 80. The Calabi-Yau (Child of v09 Tesseract + v37 Minimal)
+*   **Parent:** Higher Dimensions.
+*   **Evolution:** 6D Quintic hypersurface projection into 3D space.
+*   **Breathability:** Manifold Folds.
+*   **Status:** 🟢 ALIVE (471k tris)
 
-#### 68. The Impossible Flow (Child of v26 Impossible)
-*   **Parent:** Escher Lattice.
-*   **Evolution:** Vortex-warped lattice twisting into a drain.
-*   **Breathability:** Vortex Gaps.
-*   **Status:** 🟢 ALIVE (332k tris)
+#### 81. The Mandelbrot Zoom (Child of v16 Mandelbrot)
+*   **Parent:** Complex Dynamics.
+*   **Evolution:** 3D escape-time potential mapping with structural backbone.
+*   **Breathability:** Fractal Dust.
+*   **Status:** 🟢 ALIVE (174k tris)
 
-#### 69. The Topology Morph (Child of v27 Gyroid)
-*   **Parent:** TPMS Transition.
-*   **Evolution:** Vertical interpolation from Gyroid (Base) to Schwarz P (Top).
-*   **Breathability:** Graded Porosity.
-*   **Status:** 🟢 ALIVE (342k tris)
+#### 82. The Lightning Bolt (Child of v17 Lightning + v13 Pulsar)
+*   **Parent:** Electrical Discharge.
+*   **Evolution:** Procedural DLA/Ridged noise simulating lightning strike.
+*   **Breathability:** Branching Veins.
+*   **Status:** 🟢 ALIVE (399k tris)
 
-#### 70. The Crystal Erosion (Child of v12 Crystalline)
-*   **Parent:** Diamond Lattice.
-*   **Evolution:** Pristine Schwarz D eroding into organic noise entropy.
-*   **Breathability:** Erosion Cavities.
-*   **Status:** 🟢 ALIVE (417k tris)
+#### 83. The Nautilus Shell (Child of v18 Nautilus)
+*   **Parent:** Golden Ratio.
+*   **Evolution:** Logarithmic spiral modulation of a gyroid lattice.
+*   **Breathability:** Spiral Chambers.
+*   **Status:** 🟢 ALIVE (391k tris)
 
-#### 71. The Interference Weaver (Child of v35 Reaction Diffusion)
-*   **Parent:** Wave Superposition.
-*   **Evolution:** 3-source wave interference generating 3D Moiré nodal web.
-*   **Breathability:** Nodal Network.
-*   **Status:** 🟢 ALIVE (361k tris)
+#### 84. The Galaxy Spiral (Child of v19 Galaxy + v05 Accretion)
+*   **Parent:** Density Wave.
+*   **Evolution:** Barred spiral galaxy simulation with porous dust lanes.
+*   **Breathability:** Interstellar Voids.
+*   **Status:** 🟢 ALIVE (476k tris)
 
-#### 72. The Resonant Vessel (Child of v20 Atomic Orbital)
-*   **Parent:** Spherical Harmonics.
-*   **Evolution:** Spiraling electron orbital probability cloud (Y_6^4).
-*   **Breathability:** Harmonic Lobes.
-*   **Status:** 🟢 ALIVE (205k tris)
-
-#### 73. The Recursive Flow (Child of v16 Mandelbrot)
-*   **Parent:** Domain Warping.
-*   **Evolution:** Fractal gyroid turbulence simulating mixing paint.
-*   **Breathability:** Marbled Veins.
-*   **Status:** 🟢 ALIVE (325k tris)
-
-#### 74. The Biomorphic Turing (Child of v35 Reaction Diffusion)
-*   **Parent:** Turing Pattern.
-*   **Evolution:** Activator-Inhibitor simulation creating brain coral structure.
-*   **Breathability:** Diffusion Pores.
-*   **Status:** 🟢 ALIVE (342k tris)
-
-#### 75. The Fractal Singularity (Child of v45 Menger Sponge)
-*   **Parent:** Recursive Summation.
-*   **Evolution:** Multi-octave gyroid summation creating infinite surface area.
-*   **Breathability:** Sponge Matrix.
-*   **Status:** 🟢 ALIVE (370k tris)
+#### 85. The Atomic Orbital (Child of v20 Atomic + v06 Quantum)
+*   **Parent:** Quantum Probability.
+*   **Evolution:** 3d_z2 Electron orbital density cloud.
+*   **Breathability:** Probability Lattice.
+*   **Status:** 🟢 ALIVE (461k tris)
 
 ---
 
-## NEXT GENERATION (Gen 22 - Pending)
+## NEXT GENERATION (Gen 23 - Pending)
 
 ### Proposed Mutations:
 
-#### 76. The Glitch Lattice (Child of v23 Glitch + v27 Gyroid)
-*   **Concept:** Gyroid lattice subjected to pixel-sorting displacement.
-*   **Breathability:** Digital Artifacts.
+#### 86. The Julia Set (Child of v16 Mandelbrot + v81 Mandelbrot Zoom)
+*   **Concept:** 3D Julia set quaternion fractal.
+*   **Breathability:** Fractal Bulbs.
 
-#### 77. The Tensor Field (Child of v31 Magnetic + v14 Swarm)
-*   **Concept:** Lattice following principal stress lines of a twisted cylinder.
-*   **Breathability:** Stress Gaps.
+#### 87. The Voronoi Foam (Child of v19 Voronoi + v30 Kelvin)
+*   **Concept:** Relaxation of random voronoi into minimal foam.
+*   **Breathability:** Cell Walls.
 
-#### 78. The Void Manifold (Child of v06 Quantum + v03 Singularity)
-*   **Concept:** Inverted geometry where the "solid" is the void of another shape.
-*   **Breathability:** Negative Space.
+#### 88. The Weaire-Phelan 2 (Child of v33 Weaire-Phelan)
+*   **Concept:** Exact A15 phase crystal structure.
+*   **Breathability:** Bubble Matrix.
 
 ---
 
