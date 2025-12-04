@@ -124,6 +124,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v25_futurist.3mf`
 *   `lamp_shaft/lamp_shaft_v25_futurist.3mf`
 
+### V26: The Impossible (Escher & Paradox)
+*   `lamp_base/lamp_base_v26_impossible.3mf`
+*   `lamp_shade/lamp_shade_v26_impossible.3mf`
+*   `lamp_shaft/lamp_shaft_v26_impossible.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
