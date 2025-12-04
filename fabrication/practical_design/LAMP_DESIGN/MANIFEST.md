@@ -54,6 +54,11 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v11_hyper_dimensional.3mf`
 *   `lamp_shaft/lamp_shaft_v11_hyper_dimensional.3mf`
 
+### V12: The Eventuality (Entropy & Decay)
+*   `lamp_base/lamp_base_v12_entropy.3mf`
+*   `lamp_shade/lamp_shade_v12_entropy.3mf`
+*   `lamp_shaft/lamp_shaft_v12_entropy.3mf`
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.
