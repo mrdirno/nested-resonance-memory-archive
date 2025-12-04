@@ -1,5 +1,0 @@
-MOG: Cycle 2353 Complete - Gate 5.2 (The Holodeck)
-
-- Implemented Three.js frontend in src/helios/ui/templates/index.html.
-- Updated Flask server to serve the UI.
-- Connected UI buttons to backend API.
