@@ -35,53 +35,32 @@ Objective: "Jaw Dropping" Evolution. Breathability. Indirect Light.
 | 23 | 86-88 | ~1.1M | CERTIFIED |
 | 24 | 89-95 | ~2.0M | CERTIFIED |
 | 25 | 96-99 | ~1.1M | CERTIFIED |
+| 26 | 100-100 | ~0.3M | CERTIFIED |
 
-**Total: 99 Children | ~54.3M Triangles | ALL QA PASS**
+**Total: 100 Children | ~54.6M Triangles | ALL QA PASS**
 
 ---
 
 ## LINEAGE
 
-### GENERATION 1 (The Founders) to GENERATION 24 (The Geometry)
-*(See Archives for 01-95 details)*
+### GENERATION 1 (The Founders) to GENERATION 25 (The Space Fillers)
+*(See Archives for 01-99 details)*
 
 ...
 
-### GENERATION 25 (The Space Fillers)
+### GENERATION 26 (The Centennial)
 
-#### 96. The Peano Curve 2 (Child of v96 Peano + v31 Magnetic)
-*   **Parent:** Space Filling Curve.
-*   **Evolution:** High-density chaotic Lissajous path filling a spherical volume.
-*   **Breathability:** Path Gaps.
-*   **Status:** 🟢 ALIVE (117k tris)
-
-#### 97. The Hilbert Cube (Child of v46 Hilbert + v09 Tesseract)
-*   **Parent:** Recursive Pathfinding.
-*   **Evolution:** Dense maze of 36 pathfinding worms fused by a sparse lattice.
-*   **Breathability:** Worm Tunnels.
-*   **Status:** 🟢 ALIVE (415k tris)
-
-#### 98. The Dragon Sphere (Child of v32 Dragon Curve)
-*   **Parent:** Fractal Projection.
-*   **Evolution:** 12th-order Dragon Curve wrapped onto a sphere surface.
-*   **Breathability:** Fractal Voids.
-*   **Status:** 🟢 ALIVE (138k tris)
-
-#### 99. The Koch Snowflake (Child of v16 Mandelbrot)
-*   **Parent:** Fractal Extrusion.
-*   **Evolution:** Twisted 6-fold symmetric snowflake extrusion with lattice infill.
-*   **Breathability:** Lattice Core.
-*   **Status:** 🟢 ALIVE (409k tris)
+#### 100. The Sierpinski Pyramid (Child of v42 Sierpinski + v20 Fractal)
+*   **Parent:** Tetrahedral Fractal.
+*   **Evolution:** 2-Octave Tetrahedral plane wave summation with Z-twist.
+*   **Breathability:** Fractal Sponge.
+*   **Status:** 🟢 ALIVE (270k tris)
 
 ---
 
-## NEXT GENERATION (Gen 26 - Pending)
+## NEXT GENERATION (Gen 27 - Pending)
 
 ### Proposed Mutations:
-
-#### 100. The Sierpinski Pyramid (Child of v42 Sierpinski)
-*   **Concept:** Recursive tetrahedral stack.
-*   **Breathability:** Fractal Voids.
 
 #### 101. The Gosper Curve (Child of v96 Peano)
 *   **Concept:** Flowsnake (Peano-Gosper) space filling curve.
@@ -90,6 +69,10 @@ Objective: "Jaw Dropping" Evolution. Breathability. Indirect Light.
 #### 102. The Levy C Curve (Child of v32 Dragon)
 *   **Concept:** Self-similar fractal curve with C-shape motif.
 *   **Breathability:** Folding Gaps.
+
+#### 103. The Minkowski Sausage (Child of v16 Mandelbrot)
+*   **Concept:** 3D fractal extrusion of the Minkowski curve.
+*   **Breathability:** Box Voids.
 
 ---
 
