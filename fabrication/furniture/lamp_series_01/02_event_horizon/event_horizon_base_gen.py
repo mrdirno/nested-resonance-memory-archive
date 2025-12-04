@@ -82,11 +82,10 @@ def generate_base(output_path, diameter=140.0, height=30.0, resolution=100):
                     lz = z_mm * base_k
                     
                     val = math.sin(lx)*math.cos(ly) + math.sin(ly)*math.cos(lz) + math.sin(lz)*math.cos(lx)
-                    
-                    is_lattice = abs(val) < 0.4
-                    
+
+                    is_lattice = abs(val) < 0.6 # Thicker walls (0.4 -> 0.6)
+
                     # 2. Structural Ribs (Integration)
-                    # We need solid ribs for the feet and channel to exist within
                     # 4 Radial Ribs at 90 degrees
                     rib_angle_mod = abs(math.sin(2.0 * angle)) # Peaks at 45 deg? No, 2*angle peaks 4 times.
                     # Peaks at 45, 135... 
@@ -97,27 +96,47 @@ def generate_base(output_path, diameter=140.0, height=30.0, resolution=100):
                     # We calculated feature_check earlier (False = Void)
                     # But now we need to ensure there is MATERIAL around the void
                     
-                    # Rim
-                    if dist > (radius - 4.0):
-                        grid[x_idx,y_idx,z_idx] = True
-                        continue
-                        
-                    # Core (Rod)
-                    if dist < 12.0:
-                        grid[x_idx,y_idx,z_idx] = True
-                        continue
-                        
-                    # Combine Lattice + Ribs
-                    if is_lattice or in_rib:
-                        grid[x_idx,y_idx,z_idx] = True
-                    else:
-                        grid[x_idx,y_idx,z_idx] = False
-                        
-                else:
-                    grid[x_idx,y_idx,z_idx] = False
-
-    # Clean Dust (Strict QA)
-    grid = lamp_lib.clean_voxel_grid(grid)
+                                                                                                    # Rim
+                    
+                                                                                                    if dist > (radius - 4.0):
+                    
+                                                                                                        grid[x_idx,y_idx,z_idx] = True
+                    
+                                                                                                        continue
+                    
+                                                                                
+                    
+                                                                                                    # Core (Rod)
+                    
+                                                                                                    if dist < 12.0:
+                    
+                                                                                                        grid[x_idx,y_idx,z_idx] = True
+                    
+                                                                                                        continue
+                    
+                                                                                                        
+                    
+                                                                                                    # Solid Bottom Plate (Anchor)
+                    
+                                                                                                    if z_mm < 2.0:
+                    
+                                                                                                        grid[x_idx,y_idx,z_idx] = True
+                    
+                                                                                                        continue
+                    
+                                                                                
+                    
+                                                                                                    # Combine Lattice + Ribs
+                    
+                                                                                                    if is_lattice or in_rib:
+                    
+                                                                                                        grid[x_idx,y_idx,z_idx] = True                                        else:
+                                            grid[x_idx,y_idx,z_idx] = False
+                    
+                                    else:
+                                        grid[x_idx,y_idx,z_idx] = False
+                    
+                        # Clean Dust (Strict QA)    grid = lamp_lib.clean_voxel_grid(grid)
 
     # Mesh Extraction
     vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter)

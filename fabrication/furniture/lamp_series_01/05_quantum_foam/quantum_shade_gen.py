@@ -90,17 +90,55 @@ def generate_shade(output_path, diameter=200.0, height=140.0, resolution=100, ho
                     grid[x_idx,y_idx,z_idx] = cap_check
                     continue
 
+                # --- PRIORITY 1.5: SPIDER FITTER (Hub + Spokes) ---
+                # Connects the central Hub to the Outer Shell in the top region
+                spider_z_start = height - 40.0
+                if z_mm > spider_z_start:
+                    # 1. Central Hub
+                    if dist_from_center_xy < hub_radius:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                    
+                    # 2. Spokes (3-Way Symmetry)
+                    # Distance to lines passing through origin at 0, 60, 120 degrees (relative to Y axis?)
+                    # V6 Logic:
+                    # d1: Distance to X-axis (y=0) -> Angle 0/180
+                    # d2, d3: +/- 60 degrees from X-axis
+                    
+                    spoke_half = spoke_width / 2.0
+                    
+                    # Line 1: Y = 0 (Distance is abs(y))
+                    d1 = abs(y_mm)
+                    
+                    # Line 2: Y = sqrt(3)*X
+                    # General line Ax + By + C = 0 distance is |Ax0 + By0 + C| / sqrt(A^2+B^2)
+                    # sqrt(3)X - Y = 0 -> A=sqrt(3), B=-1. Norm=2.
+                    d2 = abs(math.sqrt(3)*x_mm - y_mm) / 2.0
+                    
+                    # Line 3: Y = -sqrt(3)*X
+                    # sqrt(3)X + Y = 0 -> A=sqrt(3), B=1. Norm=2.
+                    d3 = abs(math.sqrt(3)*x_mm + y_mm) / 2.0
+                    
+                    if d1 < spoke_half or d2 < spoke_half or d3 < spoke_half:
+                         # Ensure we don't generate spokes outside the shell radius (optional, but cleaner)
+                         if dist_from_center_xy < radius: 
+                            grid[x_idx,y_idx,z_idx] = True
+                            continue
+
                 # --- PRIORITY 2: BOTTOM RIM ---
                 if z_mm < bottom_rim_height:
                     if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
                          grid[x_idx,y_idx,z_idx] = True
                          continue
-
+                
                 # --- PRIORITY 3: SHELL & FOAM PATTERN ---
                 is_solid = False
                 in_outer_shell = dist_spherical <= radius
                 in_inner_void = dist_spherical < (radius - wall_thickness)
-                in_hand_void = dist_from_center_xy < hand_access_radius
+                
+                # Hand Access Void: Only apply below the Spider Fitter
+                in_hand_void = (dist_from_center_xy < hand_access_radius) and (z_mm <= spider_z_start)
+                
                 is_void = in_inner_void or in_hand_void
 
                 if in_outer_shell and not is_void:
