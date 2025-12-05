@@ -1,6 +1,6 @@
-## Cycle 2823: The De Rham Curve (Child 115) - COMPLETE
-- **Goal:** Create "Child 115" lamp design (Corner Cutting Fractal).
-- **Action:** Implemented `experiments/cycle2823_child_v50_lamp.py`.
-- **Method:** De Rham curve wrapped on cylinder with Voxel Painting.
-- **Result:** Generated `child_115_de_rham_curve.stl` (208k triangles). Acceptable connectivity (13.55% volume loss).
+## Cycle 2824: The Minkowski Question Mark (Child 116) - COMPLETE
+- **Goal:** Create "Child 116" lamp design (Fractal Function Graph).
+- **Action:** Implemented `experiments/cycle2824_child_v51_lamp.py`.
+- **Method:** Minkowski ?(x) function bands with vertical reinforcement.
+- **Result:** Generated `child_116_minkowski_question_mark.stl` (430k triangles). Excellent connectivity (2.23% volume loss).
 - **Status:** Artifact Generated.
