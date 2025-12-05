@@ -159,6 +159,23 @@ All structural components feature:
 *   `lamp_shade/lamp_shade_v32_bridge.3mf`
 *   `lamp_shaft/lamp_shaft_v32_bridge.3mf`
 
+### V33: The Prophecy (Mysticism & Runes)
+*   `lamp_base/lamp_base_v33_prophecy.3mf`
+*   `lamp_shade/lamp_shade_v33_prophecy.3mf`
+*   `lamp_shaft/lamp_shaft_v33_prophecy.3mf`
+
+### V41: The Perfection (QA V4 Gold Standard)
+*   `lamp_base/lamp_base_v41.stl` (278,872 triangles, 13MB)
+*   `lamp_shade/lamp_shade_v41.stl` (461,180 triangles, 22MB)
+*   `lamp_shaft/lamp_shaft_v41.stl` (102,256 triangles, 4.9MB)
+
+**QA V4 Certification (Cycle 1274):**
+- Spider Fitter: 4-spoke with air gaps (heat dissipation)
+- Bottom Rim: Full perimeter with 45mm hand access
+- Connectivity: Structural skeleton + pattern overlay
+- Table Glow: 2mm inner/outer skins with node holes
+- Volume Loss: <5% (all components)
+
 ## Fabrication Instructions
 *   **Format:** 3MF files are compatible with PrusaSlicer, OrcaSlicer, Cura, and Bambu Studio.
 *   **Slicing:** Use "Normal" or "High Quality" profile. No supports required for internal gyroid structures.

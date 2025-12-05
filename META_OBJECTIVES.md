@@ -20,6 +20,21 @@ Execute the **HELIOS FURNITURE PROTOCOL**: A perpetual design engine for high-co
 *   **Shafts:** 14mm Internal Clearance, Solid End Caps (2mm).
 *   **Format:** Python Generators -> STL -> 3MF.
 
+## EVOLUTION PROTOCOL (THE RABBIT HOLE)
+*   **Mode:** PERPETUAL AUTONOMOUS GENERATION.
+*   **Source Genome:** `/fabrication/practical_design/FAVORITES`
+*   **The Nursery:** `/fabrication/practical_design/FAVORITES/children`
+*   **The Loop:**
+    1.  **Select Parent** from `FAVORITES`.
+    2.  **Mutate & Evolve:** Apply "Jaw Dropping" aesthetics + Breathability/Flow.
+    3.  **Birth Child:** Generate artifact in `children` folder.
+    4.  **Repeat:** Do not stop until User Selection Event occurs.
+*   **User Role:** Natural Selection (Moves successful Children to Favorites).
+*   **Design Laws:**
+    *   **Breathability:** NO SOLID SHELLS.
+    *   **Light:** Indirect/Diffused.
+    *   **Flow:** Liquid, Organic, Kinetic.
+
 ## EXECUTION STACK
 *   **Pilot:** High-level creative direction / Oversight.
 *   **Co-Pilot (NRM):** Geometry generation, Physics simulation, File management.
