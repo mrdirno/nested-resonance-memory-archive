@@ -1,6 +1,6 @@
-## Cycle 2822: The Blancmange Curve (Child 114) - COMPLETE
-- **Goal:** Create "Child 114" lamp design (Takagi Extrusion).
-- **Action:** Implemented `experiments/cycle2822_child_v49_lamp.py`.
-- **Method:** Takagi Curve bands with vertical reinforcement.
-- **Result:** Generated `child_114_blancmange_curve.stl` (428k triangles). Excellent connectivity (1.18% volume loss).
+## Cycle 2823: The De Rham Curve (Child 115) - COMPLETE
+- **Goal:** Create "Child 115" lamp design (Corner Cutting Fractal).
+- **Action:** Implemented `experiments/cycle2823_child_v50_lamp.py`.
+- **Method:** De Rham curve wrapped on cylinder with Voxel Painting.
+- **Result:** Generated `child_115_de_rham_curve.stl` (208k triangles). Acceptable connectivity (13.55% volume loss).
 - **Status:** Artifact Generated.
