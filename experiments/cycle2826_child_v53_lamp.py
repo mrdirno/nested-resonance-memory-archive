@@ -66,7 +66,7 @@ def cantor_function(x, iterations=8):
             
     return val
 
-def generate_child_v53(output_path, diameter=200.0, height=140.0, resolution=120, hole_diameter=14.0):
+def generate_child_v53(output_path, diameter=200.0, height=140.0, resolution=200, hole_diameter=14.0):
     print(f"Generating CHILD V53 (The Cantor Function): {output_path}")
 
     mount_hole_radius = hole_diameter / 2.0
@@ -86,8 +86,13 @@ def generate_child_v53(output_path, diameter=200.0, height=140.0, resolution=120
     sphere_z_center = height - radius
     
     # ---------------------------------------------------------
-    # CANTOR LATTICE
+    # CANTOR LATTICE (PHASE SHIFTED)
     # ---------------------------------------------------------
+    # QA UPDATE: Replaced solid ribbons (flat overhangs) with 
+    # Cantor-driven Gyroid Phase Shifting.
+    # This creates a 'Glitch' effect that is fully self-supporting.
+    
+    base_scale = 2.0 * math.pi / 15.0
     
     for z_idx in range(res_z):
         z_mm = z_idx * step
@@ -133,8 +138,8 @@ def generate_child_v53(output_path, diameter=200.0, height=140.0, resolution=120
                     grid[x_idx,y_idx,z_idx] = spider_check
                     continue
                 
-                # 2. SHELL
-                if z_mm < 4.0:
+                # 2. SHELL MASK
+                if z_mm < 4.0: # Solid bottom rim for strength
                     hand_radius = radius - shell_thickness
                     if dist_xy < radius and dist_xy > hand_radius:
                         grid[x_idx,y_idx,z_idx] = True
@@ -145,46 +150,36 @@ def generate_child_v53(output_path, diameter=200.0, height=140.0, resolution=120
                 in_hand_zone = (dist_xy < (radius - shell_thickness)) and (z_mm < (height - 40.0))
                 
                 if in_outer and not in_inner and not in_hand_zone:
-                    # 3. FRACTAL PATTERN
+                    # 3. FRACTAL PATTERN (Phase Shifted Gyroid)
                     
-                    # Rotate
+                    # Rotate coords for Spiral Cantor
                     x_rot = x_mm * math.cos(twist) - y_mm * math.sin(twist)
                     y_rot = x_mm * math.sin(twist) + y_mm * math.cos(twist)
                     
-                    # Map to U
+                    # Map to U (Angle)
                     theta = math.atan2(y_rot, x_rot)
                     u = (theta + math.pi) / (2.0 * math.pi)
                     
                     # Scale U to repeat
                     u_scaled = (u * 6.0) % 1.0
                     
-                    # Cantor Value
-                    c_val = cantor_function(u_scaled, iterations=8)
+                    # Cantor Value (0 to 1)
+                    c_val = cantor_function(u_scaled, iterations=6) # 6 is enough for resolution
                     
-                    # Map Z to 0-1 repeating
-                    z_local = (z_mm % 30.0) / 30.0
+                    # Phase Shift based on Cantor Value
+                    # We shift the Z-phase of the Gyroid
+                    phase_shift = c_val * math.pi # Shift up to 180 degrees
                     
-                    # Ribbon check
-                    # Thickness
-                    t = 0.25
+                    # Gyroid Equation
+                    g_val = np.sin(x_mm*base_scale) * np.cos(y_mm*base_scale) + \
+                            np.sin(y_mm*base_scale) * np.cos(z_mm*base_scale + phase_shift) + \
+                            np.sin(z_mm*base_scale + phase_shift) * np.cos(x_mm*base_scale)
                     
-                    if abs(z_local - c_val) < t:
+                    # Lattice Wall Thickness
+                    if abs(g_val) < 0.5:
                         grid[x_idx,y_idx,z_idx] = True
                     else:
-                        # Secondary lattice
-                        base_scale = 2.0 * math.pi / 15.0
-                        g_val = np.sin(x_mm*base_scale) * np.cos(y_mm*base_scale) + \
-                                np.sin(y_mm*base_scale) * np.cos(z_mm*base_scale) + \
-                                np.sin(z_mm*base_scale) * np.cos(x_mm*base_scale)
-                        
-                        # Thicker lattice for connectivity
-                        if abs(g_val) < 0.5:
-                            grid[x_idx,y_idx,z_idx] = True
-                        # Horizontal Ribs
-                        elif z_mm % 30.0 < 3.0:
-                            grid[x_idx,y_idx,z_idx] = True
-                        else:
-                            grid[x_idx,y_idx,z_idx] = False
+                        grid[x_idx,y_idx,z_idx] = False
                         
                 else:
                      grid[x_idx,y_idx,z_idx] = False
