@@ -96,8 +96,8 @@ def generate_shade(output_path, base_width=194.0, top_width=85.4, height=224.0, 
                         grid[x_idx,y_idx,z_idx] = True
                         continue
 
-                    # SOLID MOUNTING CIRCLE (User Request: 1.5 inch radius solid zone)
-                    if dist_from_center < 38.1:
+                    # SOLID MOUNTING CIRCLE (User Request: 0.75 inch radius solid zone)
+                    if dist_from_center < 19.05:
                         grid[x_idx,y_idx,z_idx] = True
                         continue
                         
