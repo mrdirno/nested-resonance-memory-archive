@@ -38,13 +38,16 @@
 - **Correction:** User identified logic was missing "Small Top / Large Bottom" gradient.
 - **Status:** Cancelled.
 
-## Cycle 2833: Lamp Shade V2.4 Final Correction (Big Bang Expansion) - COMPLETE
-- **Correction:** User defined physics: "Expansion down and out" (Small waves at top, Large waves at bottom).
-- **Action:** Updated `inception/shade/shade_gen.py`.
+## Cycle 2833: Lamp Shade V2.4 Final Correction (Big Bang Expansion) - CANCELLED
+- **Correction:** User requested removal of twist.
+- **Status:** Cancelled.
+
+## Cycle 2834: Lamp Shade V2.4 Final Correction (No Twist) - COMPLETE
+- **Correction:** Removed the "Space-Time Twist" from the pattern generation logic.
 - **Logic:**
-  - **Frequency Gradient:** Linear Interpolation from High Freq (Top, 35mm Wave) to Low Freq (Bottom, 75mm Wave).
-  - **No Barrier:** Removed Inner Skin solid blocks to ensure breathability.
+  - **Frequency Gradient:** High Freq (Top, 35mm Wave) to Low Freq (Bottom, 75mm Wave).
+  - **No Barrier:** Inner Skin solid blocks removed.
   - **Geometry:** Retained V2.4 specs (217mm H, 85mm Top, Var Wall).
-  - **Twist:** Slight Space-Time Twist (90deg).
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.9MB).
+  - **No Twist:** Pattern is now aligned without rotation.
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.8MB).
 - **Status:** Artifact Generated.

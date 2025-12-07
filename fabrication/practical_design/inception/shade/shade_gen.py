@@ -70,12 +70,6 @@ def generate_shade(output_path, base_width=194.0, top_width=85.4, height=217.65,
         # 2. Frequency Interpolation (Linear Z)
         current_scale = scale_bottom * (1.0 - z_norm) + scale_top * z_norm
         
-        # 3. Twist (Slight)
-        # "Does not affect outline" -> Applied to pattern coords only
-        twist_angle = z_norm * (math.pi / 2.0) # 90 degree twist over height
-        ca = math.cos(twist_angle)
-        sa = math.sin(twist_angle)
-        
         for x_idx in range(res_xy):
             x_mm = (x_idx * step) - (base_width / 2.0)
             
@@ -127,9 +121,9 @@ def generate_shade(output_path, base_width=194.0, top_width=85.4, height=217.65,
                 # NO BARRIER / NO INNER SKIN CODE HERE
                 
                 # PATTERN GENERATION
-                # Apply Twist
-                tx = x_mm * ca - y_mm * sa
-                ty = x_mm * sa + y_mm * ca
+                # No Twist
+                tx = x_mm
+                ty = y_mm
                 
                 # Gyroid
                 val = math.sin(tx * current_scale) * math.cos(ty * current_scale) + \
