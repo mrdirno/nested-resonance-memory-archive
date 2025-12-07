@@ -25,7 +25,7 @@ from fabrication.library import lamp_lib
 #   - Wall: 3/4" (19.05mm) Bottom -> 1/4" (6.35mm) Top.
 # -----------------------------------------------------------------------------
 
-def generate_shade(output_path, base_width=194.0, top_width=85.4, height=224.0, resolution=200, hole_diameter=14.0):
+def generate_shade(output_path, base_width=194.0, top_width=85.4, height=214.0, resolution=200, hole_diameter=14.0):
     print(f"Generating ANISOTROPIC SHADE v2.5 (Final Tuning): {output_path}")
     print(f"Dims: {base_width:.1f} -> {top_width:.1f} x {height:.1f}mm")
 
