@@ -90,12 +90,8 @@
 - **Correction:** User refined geometry again: "Reduce 1/2 inch... height max - 1 inch... middle hole... waves 10% smaller... outline top".
 - **Status:** Cancelled.
 
-## Cycle 2847: Lamp Shade V2.5 Final Correction (Final Dimensions) - COMPLETE
-- **Correction:** Implemented precise final user specs:
-  - **Base:** 194.0mm (Reduced 1 inch from max).
-  - **Top:** 85.4mm.
-  - **Height:** 224.0mm (Ender 3 Max - 1 inch).
-  - **Scale:** Base/3.1 (10% smaller waves).
-  - **Features:** Solid Top Rim Outline, Middle Hole, Solid Corner Links.
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (5.7MB).
+## Cycle 2847: Lamp Shade V2.5 Final Correction (Solid Mounting Circle) - COMPLETE
+- **Correction:** Implemented final user spec: "Ensure a solid circle up top for the mount point... 1.5 inch radius (38.1mm)".
+- **Action:** Injected logic to force solidity within 38.1mm radius of the top plate center.
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (5.8MB).
 - **Status:** Artifact Generated.

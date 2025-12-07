@@ -95,6 +95,11 @@ def generate_shade(output_path, base_width=194.0, top_width=85.4, height=224.0, 
                     if in_x_edge_top or in_y_edge_top: # OR for the square ring
                         grid[x_idx,y_idx,z_idx] = True
                         continue
+
+                    # SOLID MOUNTING CIRCLE (User Request: 1.5 inch radius solid zone)
+                    if dist_from_center < 38.1:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
                         
                     # Patterned Plate Body
                     if abs(x_mm) < current_half_width and abs(y_mm) < current_half_width:
