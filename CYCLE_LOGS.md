@@ -58,10 +58,13 @@
 - **Correction:** User identified generator as "wrong pulled from history".
 - **Status:** Cancelled.
 
-## Cycle 2838: Lamp Shade V2.4 Final Correction (V4 Gen Restoration) - COMPLETE
-- **Correction:** Tracked back to Commit `8157ce4e` (Dec 1), which introduced `helios_lamp_shade_v4_gen.py`.
-- **Analysis:** This generator contains the `px_ref` (Reference Coordinate) logic combined with `k_expansion`, plus Spider Fitter override. This matches the "Big Bang" effect (cell size constant -> more cells at bottom) and the "Rim Outline" (Shell Merge logic).
-- **Action:** Re-implemented `helios_lamp_shade_v4_gen.py` logic in `inception/shade/shade_gen.py`.
-- **Modifications:** Applied V2.4 Geometry (217mm H, 85mm Top, 194mm Base, Variable Wall).
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (15.8MB). High fidelity restoration.
+## Cycle 2838: Lamp Shade V2.4 Final Correction (V4 Gen Restoration) - CANCELLED
+- **Correction:** User requested to go "one more forward".
+- **Status:** Cancelled.
+
+## Cycle 2839: Lamp Shade V2.4 Final Correction (V4 QA Restoration) - COMPLETE
+- **Correction:** Forensic trace led to Commit `36552a77` (Dec 1 18:47), which updated V4 Shade with QA Logic (Solid Transition below mount).
+- **Action:** Re-implemented `helios_lamp_shade_v4_gen.py` (QA Logic) into `inception/shade/shade_gen.py`.
+- **Features:** Triskelion Spokes, Solid Rim, Reference Coordinate Scaling (Big Bang), Solid Transition Zone.
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (15.5MB).
 - **Status:** Artifact Generated.
