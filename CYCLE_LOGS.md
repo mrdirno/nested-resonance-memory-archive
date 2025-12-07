@@ -86,10 +86,16 @@
 - **Correction:** User directed a final refinement: "Slightly smaller waves... expand width 1 inch... extend wave to top... missing corner links".
 - **Status:** Cancelled.
 
-## Cycle 2846: Lamp Shade V2.5 Final Correction (Bed Maximized) - COMPLETE
-- **Correction:** Addressed all final user requirements:
-  - **Geometry:** Max Width (219.4mm) for Ender 3 Bed. Wall 3/4" to 1/4".
-  - **Features:** Solid Corner Links (Pyramid Outline), Patterned Top Plate (Flat but wavy).
-  - **Pattern:** Inverted Flow (Confirmed Math) with slightly smaller scale (`Base/2.8`).
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (6.1MB).
+## Cycle 2846: Lamp Shade V2.5 Final Correction (Bed Maximized) - CANCELLED
+- **Correction:** User refined geometry again: "Reduce 1/2 inch... height max - 1 inch... middle hole... waves 10% smaller... outline top".
+- **Status:** Cancelled.
+
+## Cycle 2847: Lamp Shade V2.5 Final Correction (Final Dimensions) - COMPLETE
+- **Correction:** Implemented precise final user specs:
+  - **Base:** 194.0mm (Reduced 1 inch from max).
+  - **Top:** 85.4mm.
+  - **Height:** 224.0mm (Ender 3 Max - 1 inch).
+  - **Scale:** Base/3.1 (10% smaller waves).
+  - **Features:** Solid Top Rim Outline, Middle Hole, Solid Corner Links.
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (5.7MB).
 - **Status:** Artifact Generated.
