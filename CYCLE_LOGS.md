@@ -13,3 +13,10 @@
 - **Method:** Cantor Function staircase extrusion.
 - **Result:** Generated `child_118_cantor_function.stl` (462k triangles). Excellent connectivity (0.95% volume loss).
 - **Status:** Artifact Generated.
+
+## Cycle 2828: Lamp Shade V2.4 Refinement - COMPLETE
+- **Goal:** Create `lamp_shade_v2.4` with reduced height (-1/4"), wider top (+1"), and variable wall thickness (tapered).
+- **Action:** Created `fabrication/generators/helios_variable_wall_gen.py` implementing Z-dependent isosurface threshold.
+- **Parameters:** Height 113.65mm, Top Width 3" (Square), Wall Thickness Gradient (1.2 -> 0.6 threshold).
+- **Result:** Generated `fabrication/practical_design/FAVORITES/lamp_shade_v2.4.3mf` (11MB).
+- **Status:** Artifact Generated. Generator Committed.
