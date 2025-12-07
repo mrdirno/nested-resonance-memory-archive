@@ -9,26 +9,24 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.
 from fabrication.library import lamp_lib
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE ANISOTROPIC SHADE v2.5 (BED MAXIMIZED)
+# HELIOS LAMP SERIES 01: THE ANISOTROPIC SHADE v2.5 (FINAL DIMENSION TUNING)
 # -----------------------------------------------------------------------------
-# Correction Cycle 2846:
-# - User Feedback: "Slightly smaller waves... brim 3/4 inch... expand width 1 inch...
-#   extend wave to top (flat)... missing corner links (outline)... maximize bed."
+# Correction Cycle 2847:
+# - User Feedback:
+#   1. "Reduce 1/2 inch all the way around" -> Base Width 219.4 - 25.4 = 194.0mm.
+#   2. "Height max minus 1 inch" -> Ender 3 Max 250 - 25.4 = ~224mm.
+#   3. "Create middle hole" -> Confirmed (14mm).
+#   4. "Waves 10% smaller" -> Scale Base/2.8 -> Base/3.1.
+#   5. "Outline top of pyramid" -> Added Solid Top Rim.
 # - Geometry:
-#   - Base Width: 194mm + 25.4mm = 219.4mm (Max Ender 3 Bed Width).
-#   - Top Width: 85.4mm + 25.4mm = 110.8mm (Proportional expansion).
-#   - Height: 217.65mm.
-#   - Wall Bottom: 19.05mm (3/4 inch).
-#   - Wall Top: 6.35mm (1/4 inch).
-# - Logic:
-#   - Inverted Flow (Confirmed).
-#   - Wave Scale: Base/2.8 (Slightly smaller than Base/2.5).
-#   - Corners: SOLID (Pyramid Outline).
-#   - Top: PATTERNED (Not solid block, "linking sides").
+#   - Base: 194.0mm.
+#   - Top: 85.4mm (Proportional).
+#   - Height: 224.0mm.
+#   - Wall: 3/4" (19.05mm) Bottom -> 1/4" (6.35mm) Top.
 # -----------------------------------------------------------------------------
 
-def generate_shade(output_path, base_width=219.4, top_width=110.8, height=217.65, resolution=200, hole_diameter=14.0):
-    print(f"Generating ANISOTROPIC SHADE v2.5 (Bed Maximized): {output_path}")
+def generate_shade(output_path, base_width=194.0, top_width=85.4, height=224.0, resolution=200, hole_diameter=14.0):
+    print(f"Generating ANISOTROPIC SHADE v2.5 (Final Tuning): {output_path}")
     print(f"Dims: {base_width:.1f} -> {top_width:.1f} x {height:.1f}mm")
 
     # Mount Parameters
@@ -50,11 +48,12 @@ def generate_shade(output_path, base_width=219.4, top_width=110.8, height=217.65
     grid = np.zeros((res_xy, res_xy, res_z), dtype=bool)
     
     # MATH PARAMETERS
-    # "Slightly smaller waves" than Base/2.5.
-    # Let's use Base/2.8.
-    base_scale = 2.0 * math.pi / (base_width / 2.8)
+    # "Waves 10% smaller".
+    # Previous: Base/2.8.
+    # New: Base/3.1.
+    base_scale = 2.0 * math.pi / (base_width / 3.1)
     
-    print("Calculating Field (Inverted Flow + Corners)...")
+    print("Calculating Field (Inverted Flow + Full Outline)...")
     
     for z_idx in range(res_z):
         z_mm = z_idx * step
@@ -83,50 +82,43 @@ def generate_shade(output_path, base_width=219.4, top_width=110.8, height=217.65
                 
                 dist_from_center = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- TOP PLATE (Patterned) ---
-                # "Extend wave design meeting to the top... keep it flat"
-                # We use the pattern, but enforce the flat disk shape (with hole).
-                # Top 4mm.
+                # --- TOP PLATE (Patterned + Outline + Hole) ---
                 if z_mm > (height - 4.0):
                     if dist_from_center <= (hole_diameter/2.0):
-                        grid[x_idx,y_idx,z_idx] = False
+                        grid[x_idx,y_idx,z_idx] = False # Hole
                         continue
                     
-                    # Keep it within the top dimensions
-                    if abs(x_mm) < current_half_width and abs(y_mm) < current_half_width:
-                        # Apply Pattern Check (instead of forcing True)
-                        # We want "linking all sides".
-                        # Let's use a thicker threshold for the top plate to ensure connectivity.
+                    # TOP RIM OUTLINE
+                    edge_thickness_top = 6.0
+                    in_x_edge_top = abs(x_mm) > (current_half_width - edge_thickness_top)
+                    in_y_edge_top = abs(y_mm) > (current_half_width - edge_thickness_top)
+                    if in_x_edge_top or in_y_edge_top: # OR for the square ring
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
                         
+                    # Patterned Plate Body
+                    if abs(x_mm) < current_half_width and abs(y_mm) < current_half_width:
                         val = math.sin(x_mm * base_scale) * math.cos(y_mm * base_scale) + \
                               math.sin(y_mm * base_scale) * math.cos(z_prime * base_scale) + \
                               math.sin(z_prime * base_scale) * math.cos(x_mm * base_scale)
-                        
-                        # Solidify Corners of the top plate for strength?
-                        # User said "linking all sides".
-                        # Let's use a high threshold (0.7) to make it mostly solid but patterned.
-                        if abs(val) < 0.7:
+                        if abs(val) < 0.7: # Thick
                             grid[x_idx,y_idx,z_idx] = True
-                        
                         continue
                 
                 # --- BOTTOM RIM ---
                 if z_mm < 4.0:
-                    # Solid Rim for structure
                     if abs(x_mm) < current_inner_half_width and abs(y_mm) < current_inner_half_width:
                         grid[x_idx,y_idx,z_idx] = False
                     else:
                         grid[x_idx,y_idx,z_idx] = True
                     continue
                 
-                # --- CORNER LINKS (Pyramid Outline) ---
-                # "Outline the pyramid"
-                # Solid vertical rails at the 4 corners.
-                edge_thickness = 6.0 # Visible outline
+                # --- CORNER LINKS (Side Outline) ---
+                edge_thickness = 6.0
                 in_x_edge = abs(x_mm) > (current_half_width - edge_thickness)
                 in_y_edge = abs(y_mm) > (current_half_width - edge_thickness)
                 
-                if in_x_edge and in_y_edge:
+                if in_x_edge and in_y_edge: # AND for the 4 vertical pillars
                     grid[x_idx,y_idx,z_idx] = True
                     continue
                 
