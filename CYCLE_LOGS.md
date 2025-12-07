@@ -30,11 +30,17 @@
 - **Action:** Copied sources from `fabrication/furniture/lamp_series_01/02_event_horizon/` to `inception/`.
 - **Status:** Restored.
 
-## Cycle 2831: Lamp Shade V2.4 Correction (Redshift) - COMPLETE
-- **Correction:** User identified "Redshift" (v2.0) as the true "Original".
-- **Action:** Updated `fabrication/practical_design/inception/shade/shade_gen.py` to use **Redshift Logic** (Hyper-Shift + Spiral Ribs).
-- **Modifications:**
-  - Applied V2.4 Geometry: Height 217.65mm, Top Width 85.4mm.
-  - Applied Variable Wall Thickness (12.7mm -> 6.35mm).
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (8.3MB).
-- **Status:** Artifact Corrected & Generated in Inception Folder.
+## Cycle 2831: Lamp Shade V2.4 Correction (Redshift) - CANCELLED
+- **Correction:** User identified "Redshift" led to staircase artifacts.
+- **Status:** Cancelled.
+
+## Cycle 2832: Lamp Shade V2.4 Correction (Large Wave Anisotropic) - COMPLETE
+- **Correction:** User identified "Original" as having "Large Waves" and "No Staircase".
+- **Action:** Updated `inception/shade/shade_gen.py` to use Standard Anisotropic Gyroid (Scale Z > Scale XY).
+- **Refinement:**
+  - Removed "Redshift" Z-warping (source of staircase).
+  - Increased Wavelength (Base/3.5 ~ 55mm).
+  - Added Slight Twist (45 deg) to pattern coordinates only (Outline remains Pyramidal).
+  - Geometry: 217mm H, 85mm Top, Var Wall.
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (6.0MB).
+- **Status:** Artifact Corrected & Generated.
