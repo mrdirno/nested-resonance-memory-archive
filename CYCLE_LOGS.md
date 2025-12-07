@@ -94,8 +94,12 @@
 - **Correction:** User specified "circle above too big reduce by 50%".
 - **Status:** Cancelled.
 
-## Cycle 2848: Lamp Shade V2.5 Final Correction (Reduced Mounting Circle) - COMPLETE
-- **Correction:** Reduced the solid mounting circle on the top platform by 50%.
-- **Action:** Changed the solid radius from 1.5 inches (38.1mm) to 0.75 inches (19.05mm).
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (5.8MB).
+## Cycle 2848: Lamp Shade V2.5 Final Correction (Reduced Mounting Circle) - CANCELLED
+- **Correction:** User specified new height.
+- **Status:** Cancelled.
+
+## Cycle 2849: Lamp Shade V2.5 Final Correction (Height Adjustment) - COMPLETE
+- **Correction:** Adjusted the overall height of the lamp shade.
+- **Action:** Changed height from 224.0mm to 214.0mm.
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (6.1MB).
 - **Status:** Artifact Generated.
