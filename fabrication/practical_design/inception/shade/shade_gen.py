@@ -9,171 +9,146 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.
 from fabrication.library import lamp_lib
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE EVENT HORIZON (SHADE) - THE VOID REVISION
+# HELIOS LAMP SERIES 01: THE REDSHIFT (SHADE) v2.4 - INCEPTION REVISION
 # -----------------------------------------------------------------------------
-# Logic:
-# 1. 1-Inch Thick Wall (Robustness).
-# 2. 200mm Diameter (Max Print Area).
-# 3. Connection Guarantee: Flattened Top Shell to ensure Spokes connect to something.
-# 4. Refined Hub: 40mm Diameter (Spider Fitter).
-# 5. Refined Bottom Rim: 4mm Thick.
+# Based on: Redshift v2.0 (The "Original" v2)
+# Adjustments (Cycle 2828/2831):
+# 1. Height Reduced: 224mm -> 217.65mm (-1/4 inch).
+# 2. Top Width Increased: 60mm -> 85.4mm (+1 inch).
+# 3. Variable Wall Thickness: 1/2" (12.7mm) Bottom -> 1/4" (6.35mm) Top.
 # -----------------------------------------------------------------------------
 
-def generate_shade(output_path, diameter=200.0, height=140.0, resolution=150, hole_diameter=14.0):
-    print(f"Generating EVENT HORIZON SHADE (V7 CONNECTION FIX): {output_path}")
+def generate_shade(output_path, base_width=194.0, top_width=85.4, height=217.65, resolution=200, hole_diameter=14.0):
+    print(f"Generating REDSHIFT SHADE v2.4 (Inception): {output_path}")
+    print(f"Dims: {base_width} -> {top_width} x {height}mm")
 
     # Mount Parameters (Spider Fitter)
     mount_hole_radius = hole_diameter / 2.0
-    hub_radius = 20.0 # 40mm Dia
-    spoke_width = 8.0
-    top_plate_height = 4.0
-
-    # Bottom Rim (Refined)
-    bottom_rim_height = 4.0
-
-    # Shell Parameters
-    wall_thickness = 25.4 # 1 Inch
-    hand_access_radius = 45.0
-
+    
+    # Wall Thickness (Variable)
+    wall_bottom = 12.7 # 1/2 inch
+    wall_top = 6.35    # 1/4 inch
+    
     # Grid Setup
-    max_dim = max(diameter, height)
+    max_dim = max(base_width, height)
     step = max_dim / resolution
-
-    res_x = int(diameter / step) + 5
-    res_y = int(diameter / step) + 5
+    
+    res_xy = int(base_width / step) + 5
     res_z = int(height / step) + 1
-
-    print(f"Grid: {res_x}x{res_y}x{res_z} (Voxel size: {step:.2f}mm)")
-
-    vertices = []
-    faces = []
-    grid = np.zeros((res_x, res_y, res_z), dtype=bool)
-
-    # Frequency Setup
-    target_period = 48.5
-    start_scale = 2.0 * math.pi / 60.0
-    end_scale = 2.0 * math.pi / target_period
-
-    print("Calculating Field...")
-
-    radius = diameter / 2.0
-    sphere_z_center = height - radius
-
+    
+    print(f"Grid: {res_xy}x{res_xy}x{res_z} (Voxel size: {step:.2f}mm)")
+    
+    grid = np.zeros((res_xy, res_xy, res_z), dtype=bool)
+    
+    # Frequency (Redshift v2.0 Standard)
+    base_scale = 2.0 * math.pi / (base_width / 6.0)
+    
+    print("Calculating Field (Redshift v2.4)...")
+    
     for z_idx in range(res_z):
         z_mm = z_idx * step
         z_norm = z_mm / height
-
-        # Scale
-        current_scale = start_scale * (1.0 - z_norm) + end_scale * z_norm
-
-        # Calculate outer shell radius at this Z for fitter constraint
-        effective_z = z_mm
-        if z_mm > (height - 10.0):
-            effective_z = height - 10.0
-
-        dz = effective_z - sphere_z_center
-
-        # Safe sqrt
-        term = radius**2 - dz**2
-        if term < 0: term = 0
-        current_shell_radius = math.sqrt(term)
-
-        for x_idx in range(res_x):
-            x_mm = (x_idx * step) - (diameter / 2.0)
-
-            for y_idx in range(res_y):
-                y_mm = (y_idx * step) - (diameter / 2.0)
-
-                dist_from_center_xy = math.sqrt(x_mm**2 + y_mm**2)
-
-                # Calculate Spherical Distance
-                dist_sq = x_mm**2 + y_mm**2 + (effective_z - sphere_z_center)**2
-                dist_spherical = math.sqrt(dist_sq)
-
-                # --- PRIORITY 1: ROBUST SOLID CAP (User Mandate) ---
-                # Force a solid 4mm thick washer at the top
-                cap_check = lamp_lib.apply_solid_mounting_cap(
-                    x_mm, y_mm, z_mm, dist_from_center_xy,
-                    mount_z_start=(height - 4.0),
-                    mount_hole_radius=mount_hole_radius,
-                    cap_radius=current_shell_radius # Full width cap
-                )
-                if cap_check is not None:
-                    grid[x_idx,y_idx,z_idx] = cap_check
+        if z_norm > 1.0: z_norm = 1.0
+        
+        # Square Frustum Logic
+        current_width = base_width * (1.0 - z_norm) + top_width * z_norm
+        
+        # Variable Wall Thickness Interpolation
+        current_wall = wall_bottom * (1.0 - z_norm) + wall_top * z_norm
+        
+        current_outer_half_width = current_width / 2.0
+        current_inner_half_width = current_outer_half_width - current_wall
+        
+        # Scale factor
+        scale_factor = base_width / current_width if current_width > 0 else 1.0
+        
+        # Anisotropic Z scale (Redshift Effect)
+        current_scale_z = base_scale / (1.0 + 1.0 * z_norm)
+        
+        for x_idx in range(res_xy):
+            x_mm = (x_idx * step) - (base_width / 2.0)
+            
+            for y_idx in range(res_xy):
+                y_mm = (y_idx * step) - (base_width / 2.0)
+                
+                dist_from_center = math.sqrt(x_mm**2 + y_mm**2)
+                
+                # 1. Global Bound
+                if abs(x_mm) > current_outer_half_width or abs(y_mm) > current_outer_half_width:
+                    grid[x_idx,y_idx,z_idx] = False
                     continue
-
-                # --- PRIORITY 2: BOTTOM RIM ---
-                if z_mm < bottom_rim_height:
-                    if dist_from_center_xy < radius and dist_from_center_xy > hand_access_radius:
-                         grid[x_idx,y_idx,z_idx] = True
-                         continue
-
-                # --- PRIORITY 3: ACCRETION VEIL PATTERN ---
-                is_solid = False
-                in_outer_shell = dist_spherical <= radius
-                in_inner_void = dist_spherical < (radius - wall_thickness)
-                in_hand_void = dist_from_center_xy < hand_access_radius
-                is_void = in_inner_void or in_hand_void
-
-                if in_outer_shell and not is_void:
-                    # ACCRETION VEIL (Robust Connectivity)
-
-                    # Vortex Domain Warp
-                    # Instead of rotating coordinates, warp them
-                    # Twist around Z
-
-                    angle = math.atan2(y_mm, x_mm)
-                    r = dist_from_center_xy
-
-                    # Twist increases with Z and R
-                    twist = (z_mm/height * 2.0 * math.pi) + (r/radius * 2.0 * math.pi)
-
-                    # Warped Angle
-                    angle_warped = angle + twist
-
-                    # Map back to Cartesian for Gyroid
-                    tx = r * math.cos(angle_warped)
-                    ty = r * math.sin(angle_warped)
-
-                    scale = 2.0 * math.pi / 40.0 # Lower freq (was 30.0)
-
-                    # Gyroid
-                    val = math.sin(tx*scale)*math.cos(ty*scale) + \
-                          math.sin(ty*scale)*math.cos(z_mm*scale) + \
-                          math.sin(z_mm*scale)*math.cos(tx*scale)
-
-                    is_lattice = abs(val) < 0.85 # Thicker (was 0.80)
-
-                    # STRUCTURAL RIBS (Spokes - Thickened)
-                    rib_val = math.sin(4.0 * angle_warped)
-                    is_rib = rib_val > 0.6 # Very thick ribs (was 0.85)
-
-                    if is_lattice or is_rib:
-                        is_solid = True
-
-                    # INNER SKIN (Connectivity Guarantee)
-                    # Force solid at the inner boundary to bind loose ends
-                    # Inner radius is (radius - wall_thickness)
-                    # We want to fill from inner_radius to inner_radius + 4.0
-                    r_inner = radius - wall_thickness
-                    if dist_from_center_xy > r_inner and dist_from_center_xy < (r_inner + 4.0):
-                        is_solid = True
-
-                    if is_solid:
-                        grid[x_idx,y_idx,z_idx] = True
-                    else:
+                
+                # --- PRIORITY 1: ROBUST SOLID CAP ---
+                if z_mm > (height - 4.0):
+                    # Hole
+                    if dist_from_center <= 7.0:
                         grid[x_idx,y_idx,z_idx] = False
+                        continue
+                    # Solid Plate (Square)
+                    if abs(x_mm) < current_outer_half_width and abs(y_mm) < current_outer_half_width:
+                        grid[x_idx,y_idx,z_idx] = True
+                        continue
+                
+                # 3. Bottom Rim (Solid Frame)
+                if z_mm < 4.0:
+                    if abs(x_mm) < current_inner_half_width and abs(y_mm) < current_inner_half_width:
+                        grid[x_idx,y_idx,z_idx] = False # Inside
+                    else:
+                        grid[x_idx,y_idx,z_idx] = True # Rim
+                    continue
+                
+                # 4. Reinforcing Corners (Solid Edges)
+                edge_thickness = 5.0
+                in_x_edge = abs(x_mm) > (current_outer_half_width - edge_thickness)
+                in_y_edge = abs(y_mm) > (current_outer_half_width - edge_thickness)
+                if in_x_edge and in_y_edge:
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+                
+                # 5. Body (Redshift Logic)
+                # INNER VOID
+                if abs(x_mm) < current_inner_half_width and abs(y_mm) < current_inner_half_width:
+                    grid[x_idx,y_idx,z_idx] = False
+                    continue
+                
+                # INNER SKIN (Connectivity Anchor) - 2mm Solid Wall
+                if abs(x_mm) < (current_inner_half_width + 2.0) and abs(y_mm) < (current_inner_half_width + 2.0):
+                    grid[x_idx,y_idx,z_idx] = True
+                    continue
+                
+                # REDSHIFT HYPER-SHIFT PATTERN
+                # Z-Warping
+                z_warped = z_mm * (1.0 + z_norm)
+                
+                sx = scale_factor * base_scale
+                sy = scale_factor * base_scale
+                sz = base_scale
+                
+                val = math.sin(x_mm * sx) * math.cos(y_mm * sy) + \
+                      math.sin(y_mm * sy) * math.cos(z_warped * sz) + \
+                      math.sin(z_warped * sz) * math.cos(x_mm * sx)
+                
+                is_lattice = abs(val) < 0.55
+                
+                # SPIRAL RIBS
+                angle = math.atan2(y_mm, x_mm)
+                twist = z_norm * math.pi
+                rib_phase = math.cos(6.0 * angle + twist)
+                is_rib = rib_phase > 0.8
+                
+                if is_lattice or is_rib:
+                    grid[x_idx,y_idx,z_idx] = True
+                else:
+                    grid[x_idx,y_idx,z_idx] = False
 
-                grid[x_idx,y_idx,z_idx] = is_solid
-
-    # Clean Dust (Strict QA)
+    # Clean
     grid = lamp_lib.clean_voxel_grid(grid)
-
-    # Mesh Extraction (Library)
-    vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, diameter, diameter)
+    
+    # Mesh Extraction
+    vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, base_width, base_width)
     lamp_lib.write_binary_stl(output_path, vertices, faces)
 
 if __name__ == "__main__":
-    output_file = "event_horizon_shade.stl"
+    output_file = "lamp_shade_v2.4.stl"
     if len(sys.argv) > 1: output_file = sys.argv[1]
     generate_shade(output_file)

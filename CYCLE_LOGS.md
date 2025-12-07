@@ -21,13 +21,20 @@
 - **Result:** Generated `fabrication/practical_design/FAVORITES/lamp_shade_v2.4.3mf` (11MB).
 - **Status:** Artifact Generated. Generator Committed.
 
-## Cycle 2829: Lamp Shade V2.4 Correction (The Event Horizon) - COMPLETE
-- **Correction:** Previous attempt used incorrect base model (Generic Gyroid 120mm). Correct model is `shade_v02` (Event Horizon, 224mm).
-- **Action:** Created `fabrication/generators/helios_shade_v2_4_gen.py` derived from `shade_v02_gen.py`.
-- **Logic:** Event Horizon Swirl + Spoke Ribs + Louvered Inner Skin.
-- **Revised Parameters:** 
-  - Height: 224mm -> 217.65mm (-1/4 inch).
-  - Top Width: 60mm -> 85.4mm (+1 inch).
-  - Wall: 1 inch Constant -> Variable (1/2" Bottom to 1/4" Top).
-- **Result:** Generated `fabrication/practical_design/FAVORITES/lamp_shade_v2.4.3mf` (10.6MB). Correct pattern and scale restored.
-- **Status:** Artifact Fixed.
+## Cycle 2829: Lamp Shade V2.4 Correction (The Event Horizon) - CANCELLED
+- **Correction:** Previous attempt identified "Event Horizon" as V2 base.
+- **Status:** Cancelled by user. "Event Horizon" is not the intended "Original".
+
+## Cycle 2830: Restore Original Event Horizon Design to Inception - COMPLETE
+- **Goal:** Restore canonical "Event Horizon" (Base, Shade, Shaft) to `fabrication/practical_design/inception`.
+- **Action:** Copied sources from `fabrication/furniture/lamp_series_01/02_event_horizon/` to `inception/`.
+- **Status:** Restored.
+
+## Cycle 2831: Lamp Shade V2.4 Correction (Redshift) - COMPLETE
+- **Correction:** User identified "Redshift" (v2.0) as the true "Original".
+- **Action:** Updated `fabrication/practical_design/inception/shade/shade_gen.py` to use **Redshift Logic** (Hyper-Shift + Spiral Ribs).
+- **Modifications:**
+  - Applied V2.4 Geometry: Height 217.65mm, Top Width 85.4mm.
+  - Applied Variable Wall Thickness (12.7mm -> 6.35mm).
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (8.3MB).
+- **Status:** Artifact Corrected & Generated in Inception Folder.
