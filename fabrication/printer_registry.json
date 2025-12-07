@@ -13,5 +13,19 @@
     "capabilities_ref": "ender3/PRINTER_CAPABILITIES.md",
     "last_active_cycle": "2025-11-30",
     "status": "ONLINE"
+  },
+  {
+    "id": "kobra2max_001",
+    "name": "Anycubic Kobra 2 Max",
+    "type": "FFF",
+    "connection": {
+      "ip": "192.168.68.69",
+      "mac": "8c:bd:37:f1:9c:75",
+      "protocol": "anycubic",
+      "port": 8888
+    },
+    "serial": "BD34-6148-074E-2801",
+    "last_active_cycle": "2025-12-04",
+    "status": "ONLINE"
   }
 ]
