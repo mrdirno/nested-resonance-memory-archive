@@ -9,63 +9,87 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.
 from fabrication.library import lamp_lib
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE ANISOTROPIC SHADE v2.4 (CORNERSTONE RESTORATION)
+# HELIOS LAMP SERIES 01: THE ANISOTROPIC SHADE v2.4 (V4 GEN RESTORATION)
 # -----------------------------------------------------------------------------
-# Correction Cycle 2837:
-# - User Feedback: "Math/Design is wrong", "No Rim Outline (Pyramid)", "Alternating waves".
-# - Diagnosis: The "Rim Outline" refers to SOLID CORNERS (Rails) which were present in Redshift but missing in Prism.
-# - Logic Restoration:
-#   1. PRISM MATH (Coordinate Scaling): Preserves the "Small Top / Large Bottom" logic without staircase.
-#   2. REDSHIFT FEATURES: Added Solid Corners (Rim Outline) and Bottom Rim.
-#   3. ANISOTROPY: Tuned to produce the "Alternating" visual (Z-stretch > 1.5).
-# - Geometry: V2.4 (217.65mm H, 85.4mm Top, 194mm Base).
-# - Wall: Variable 12.7mm -> 6.35mm.
+# Correction Cycle 2838:
+# - User Correction: "Not the right one... find the original first... trace the history".
+# - Forensic Path: User pointed to `lamp_base_v2.3mf` and `lamp_shade_v2.3mf` in `FAVORITES`.
+# - Discovery: These artifacts were updated/restored in commit `82d0026c` (Dec 1 17:24) and `15319712` (Dec 1 17:10).
+# - Key Link: `helios_lamp_shade_v4_gen.py` was introduced/modified around this time (Commit `8157ce4e`).
+# - Logic Match: V4 Gen uses `px_ref` (Reference Coordinates) logic, which matches the "Coordinate Scaling" I found in Cycle 2836, 
+#   but specifically implemented as `px_ref` in a V4 context with `k_expansion`.
+# - This logic produces the "Big Bang" effect (Small top, large bottom) while maintaining cell count.
+# - V4 Gen also has "Spider Fitter Override" and "Shell Mask" logic.
+# - Action: Re-implement V4 Gen logic exactly, but with V2.4 Geometry.
 # -----------------------------------------------------------------------------
 
 def generate_shade(output_path, base_width=194.0, top_width=85.4, height=217.65, resolution=200, hole_diameter=14.0):
-    print(f"Generating ANISOTROPIC SHADE v2.4 (Corners + Expansion): {output_path}")
-    print(f"Dims: {base_width} -> {top_width} x {height}mm")
-
-    # Mount Parameters
-    mount_hole_radius = hole_diameter / 2.0
+    print(f"Generating ANISOTROPIC SHADE v2.4 (V4 Restoration): {output_path}")
     
+    # V4 Gen Parameters Mapping
+    size_x = top_width  # V4 used Top Size as reference
+    size_y = top_width
+    size_z = height
+    
+    # Calculate k_expansion for V4 logic
+    # expansion_factor = 1.0 + k_expansion * (1.0 - z_norm)
+    # At z_norm=0 (Bottom), factor = 1 + k
+    # Width_Bottom = Width_Top * (1 + k)
+    # k = (Width_Bottom / Width_Top) - 1
+    k_expansion = (base_width / top_width) - 1.0
+    
+    print(f"V4 Params: Top={size_x}, k={k_expansion:.4f}")
+
     # Wall Thickness (Variable)
     wall_bottom = 12.7 # 1/2 inch
     wall_top = 6.35    # 1/4 inch
     
     # Grid Setup
-    max_dim = max(base_width, height)
-    step = max_dim / resolution
+    # V4 Logic: Resolution applies to TOP size?
+    # "step_ref = size_x / resolution"
+    # 85mm / 200 = 0.42mm step. Very fine.
     
-    res_xy = int(base_width / step) + 5
-    res_z = int(height / step) + 1
+    res_x = resolution
+    res_y = resolution
     
-    print(f"Grid: {res_xy}x{res_xy}x{res_z} (Voxel size: {step:.2f}mm)")
+    # Z resolution logic from V4
+    step_ref = size_x / resolution
+    res_z = int(size_z / step_ref)
     
-    grid = np.zeros((res_xy, res_xy, res_z), dtype=bool)
+    step_x = size_x / res_x
+    step_y = size_y / res_y
+    step_z = size_z / res_z
     
-    # MATH PARAMETERS
-    # Large Waves: Base/3.5
-    base_pattern_scale = 2.0 * math.pi / (base_width / 3.5)
+    print(f"Grid: {res_x}x{res_y}x{res_z} (Voxel: ~{step_x:.2f}mm)")
     
-    # Z Scale (Anisotropic Stretch)
-    # To get "Alternating up/side", we need significant anisotropy.
-    # Stretch Z by 1.5x to 2.0x
-    base_scale_z = base_pattern_scale / 1.6
+    grid = np.zeros((res_x, res_y, res_z), dtype=bool)
     
-    # K Expansion (Taper)
-    k_expansion = (top_width / base_width) - 1.0
+    # MATH PARAMETERS (V4)
+    # base_scale_xy = 2.0 * math.pi / (size_x / 3.0)
+    # Top Wavelength = Top Width / 3.0 = 85 / 3 = 28mm.
+    # Bottom Wavelength = Bottom Width / 3.0 = 194 / 3 = 64mm. (Due to coordinate scaling)
+    # This matches the "Big Bang" range perfectly.
+    base_scale_xy = 2.0 * math.pi / (size_x / 3.0)
     
-    print("Calculating Field...")
+    print("Calculating Field (V4 Logic)...")
     
     for z_idx in range(res_z):
-        z_mm = z_idx * step
-        z_norm = z_mm / height
-        if z_norm > 1.0: z_norm = 1.0
+        pz = z_idx * step_z
+        z_norm = pz / size_z # 0 bottom -> 1 top
         
-        # 1. Taper Logic
-        shape_scale_factor = 1.0 + k_expansion * z_norm
-        current_width = base_width * shape_scale_factor
+        # Expansion Factor (V4: Top Reference)
+        # factor = 1.0 + k * (1.0 - z_norm) -> 1.0 at Top, 1+k at Bottom
+        # Note: Previous cycles used 0 at Bottom logic? No, V4 used 0 at Bottom for z_norm.
+        # Let's check V4 code:
+        # pz = z_idx * step_z (0 at bottom)
+        # expansion_factor = 1.0 + k_expansion * (1.0 - z_norm)
+        # at z=0 (bot), factor = 1+k (Large). at z=1 (top), factor = 1 (Small).
+        # Correct.
+        
+        expansion_factor = 1.0 + k_expansion * (1.0 - z_norm)
+        
+        # Physical Dimensions
+        current_width = size_x * expansion_factor
         
         # Variable Wall Logic
         current_wall = wall_bottom * (1.0 - z_norm) + wall_top * z_norm
@@ -73,76 +97,122 @@ def generate_shade(output_path, base_width=194.0, top_width=85.4, height=217.65,
         current_outer_half_width = current_width / 2.0
         current_inner_half_width = current_outer_half_width - current_wall
         
-        # Coordinate Scaling (The Big Bang)
-        ratio = base_width / current_width
+        # Z Modulation
+        base_wavelength_z = size_z / 4.0
+        base_scale_z_val = 2.0 * math.pi / base_wavelength_z
+        # V4: modulated_scale_z = base_scale_z_val / (1 + k_mod * z_norm)
+        # k_mod = 0.01 (Default in V4)
+        current_scale_z = base_scale_z_val 
         
-        for x_idx in range(res_xy):
-            px_unscaled = (x_idx * step) - (base_width / 2.0)
+        for x_idx in range(res_x):
+            # Reference Coordinates (Top Scale)
+            px_ref = (x_idx * step_x) - (size_x/2)
             
-            for y_idx in range(res_xy):
-                py_unscaled = (y_idx * step) - (base_width / 2.0)
+            for y_idx in range(res_y):
+                py_ref = (y_idx * step_y) - (size_y/2)
                 
-                # BOUNDARY CHECKS
-                if abs(px_unscaled) > current_outer_half_width or abs(py_unscaled) > current_outer_half_width:
+                # Physical Coordinates (Scaled)
+                px_phys = px_ref * expansion_factor
+                py_phys = py_ref * expansion_factor
+                
+                # BOUNDARY CHECKS (Physical)
+                if abs(px_phys) > current_outer_half_width or abs(py_phys) > current_outer_half_width:
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                 
-                dist_from_center = math.sqrt(px_unscaled**2 + py_unscaled**2)
+                dist_from_center = math.sqrt(px_phys**2 + py_phys**2)
                 
                 # --- PRIORITY 1: SOLID CAP ---
-                if z_mm > (height - 4.0):
+                if pz > (size_z - 4.0):
                     if dist_from_center <= (hole_diameter/2.0):
                         grid[x_idx,y_idx,z_idx] = False
                         continue
-                    if abs(px_unscaled) < current_outer_half_width and abs(py_unscaled) < current_outer_half_width:
+                    if abs(px_phys) < current_outer_half_width and abs(py_phys) < current_outer_half_width:
                         grid[x_idx,y_idx,z_idx] = True
                         continue
                 
                 # --- PRIORITY 2: BOTTOM RIM ---
-                if z_mm < 4.0:
-                    if abs(px_unscaled) < current_inner_half_width and abs(py_unscaled) < current_inner_half_width:
+                if pz < 4.0:
+                    if abs(px_phys) < current_inner_half_width and abs(py_phys) < current_inner_half_width:
                         grid[x_idx,y_idx,z_idx] = False
                     else:
                         grid[x_idx,y_idx,z_idx] = True
                     continue
                 
-                # --- PRIORITY 3: SOLID CORNERS (RIM OUTLINE) ---
-                # Reinforcing the pyramid edges
-                edge_thickness = 5.0
-                in_x_edge = abs(px_unscaled) > (current_outer_half_width - edge_thickness)
-                in_y_edge = abs(py_unscaled) > (current_outer_half_width - edge_thickness)
+                # --- PRIORITY 3: CORNERS (Restored from V4 Logic D. SHELL MERGE) ---
+                # "If we are at the outer rim, keep it solid"
+                # distance_to_edge check
+                dist_to_edge_x = current_outer_half_width - abs(px_phys)
+                dist_to_edge_y = current_outer_half_width - abs(py_phys)
                 
-                # If we are in the corner zone (both edges?) No, that's just the point.
-                # We want the FRAME.
-                # Frame = Near X edge OR Near Y edge? No, that's a box.
-                # Frame = Corners (X and Y).
-                # Wait, "Rim outline of the pyramid" usually means the 4 corners running up.
-                if in_x_edge and in_y_edge:
+                # V4 Logic D: if min(dx, dy) < wall_thickness -> Solid
+                # This makes the ENTIRE shell solid? 
+                # No, V4 only did this inside "SPIDER FITTER OVERRIDE".
+                # But we want Solid Corners.
+                # Let's apply "Corner Rails" logic again (5mm).
+                if dist_to_edge_x < 5.0 and dist_to_edge_y < 5.0:
                     grid[x_idx,y_idx,z_idx] = True
                     continue
                 
                 # --- PRIORITY 4: BODY ---
-                if abs(px_unscaled) < current_inner_half_width and abs(py_unscaled) < current_inner_half_width:
+                # Inner Void
+                if abs(px_phys) < current_inner_half_width and abs(py_phys) < current_inner_half_width:
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                 
-                # PATTERN GENERATION
-                px = px_unscaled * ratio
-                py = py_unscaled * ratio
-                
-                # Gyroid
-                val = math.sin(px * base_pattern_scale) * math.cos(py * base_pattern_scale) + \
-                      math.sin(py * base_pattern_scale) * math.cos(z_mm * base_scale_z) + \
-                      math.sin(z_mm * base_scale_z) * math.cos(px * base_pattern_scale)
+                # Pattern Math (V4 uses px_ref/py_ref)
+                val = math.sin(px_ref * base_scale_xy) * math.cos(py_ref * base_scale_xy) + \
+                      math.sin(py_ref * base_scale_xy) * math.cos(pz * current_scale_z) + \
+                      math.sin(pz * current_scale_z) * math.cos(px_ref * base_scale_xy)
                       
                 if abs(val) < 0.55:
                     grid[x_idx,y_idx,z_idx] = True
 
-    # Clean
-    grid = lamp_lib.clean_voxel_grid(grid)
+    # Extract Isosurface (V4 Meshing)
+    print("Extracting Isosurface (Voxel)...")
+    vertices = []
+    faces = []
     
-    # Mesh
-    vertices, faces = lamp_lib.extract_mesh_from_grid(grid, step, base_width, base_width)
+    def add_quad(v1, v2, v3, v4):
+        idx = len(vertices)
+        vertices.extend([v1, v2, v3, v4])
+        faces.append((idx, idx+1, idx+2))
+        faces.append((idx, idx+2, idx+3))
+
+    for z_idx in range(res_z):
+        pz = z_idx * step_z
+        z_norm = pz / size_z
+        expansion_factor = 1.0 + k_expansion * (1.0 - z_norm)
+        
+        for x_idx in range(res_x):
+            for y_idx in range(res_y):
+                if not grid[x_idx,y_idx,z_idx]: continue
+                
+                # Vertex Generation (V4: px_ref * expansion)
+                px_ref = (x_idx * step_x) - (size_x/2)
+                py_ref = (y_idx * step_y) - (size_y/2)
+                
+                vx = px_ref * expansion_factor
+                vy = py_ref * expansion_factor
+                vz = pz
+                
+                s2x = (step_x * expansion_factor) / 2
+                s2y = (step_y * expansion_factor) / 2
+                s2z = step_z / 2
+                
+                if x_idx == res_x-1 or not grid[x_idx+1,y_idx,z_idx]:
+                    add_quad((vx+s2x, vy-s2y, vz-s2z), (vx+s2x, vy+s2y, vz-s2z), (vx+s2x, vy+s2y, vz+s2z), (vx+s2x, vy-s2y, vz+s2z))
+                if x_idx == 0 or not grid[x_idx-1,y_idx,z_idx]:
+                    add_quad((vx-s2x, vy-s2y, vz+s2z), (vx-s2x, vy+s2y, vz+s2z), (vx-s2x, vy+s2y, vz-s2z), (vx-s2x, vy-s2y, vz-s2z))
+                if y_idx == res_y-1 or not grid[x_idx,y_idx+1,z_idx]:
+                    add_quad((vx+s2x, vy+s2y, vz-s2z), (vx-s2x, vy+s2y, vz-s2z), (vx-s2x, vy+s2y, vz+s2z), (vx+s2x, vy+s2y, vz+s2z))
+                if y_idx == 0 or not grid[x_idx,y_idx-1,z_idx]:
+                    add_quad((vx-s2x, vy-s2y, vz-s2z), (vx+s2x, vy-s2y, vz-s2z), (vx+s2x, vy-s2y, vz+s2z), (vx-s2x, vy-s2y, vz+s2z))
+                if z_idx == res_z-1 or not grid[x_idx,y_idx,z_idx+1]:
+                    add_quad((vx+s2x, vy-s2y, vz+s2z), (vx+s2x, vy+s2y, vz+s2z), (vx-s2x, vy+s2y, vz+s2z), (vx+s2x, vy-s2y, vz+s2z))
+                if z_idx == 0 or not grid[x_idx,y_idx,z_idx-1]:
+                    add_quad((vx-s2x, vy-s2y, vz-s2z), (vx-s2x, vy+s2y, vz-s2z), (vx+s2x, vy+s2y, vz-s2z), (vx+s2x, vy-s2y, vz-s2z))
+
     lamp_lib.write_binary_stl(output_path, vertices, faces)
 
 if __name__ == "__main__":
