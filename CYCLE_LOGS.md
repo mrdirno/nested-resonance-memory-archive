@@ -70,9 +70,14 @@
 - **Correction:** User stated "that's not it because there's no pyramid outline".
 - **Status:** Cancelled.
 
-## Cycle 2841: Lamp Shade V2.4 Final Correction (V1 Pyramid Logic) - COMPLETE
-- **Correction:** Found commit `13233e63` (Dec 1) which introduced the "True Redshift Pyramid" logic (`helios_anisotropic_prism_gen.py`).
-- **Logic:** This generator has explicit `current_pyramid_width` bounding logic which creates the sharp "Pyramid Outline". It also uses the Coordinate Scaling (`px * ratio`) for the Big Bang effect.
-- **Action:** Re-implemented this specific logic (Pyramid Bounding + Coordinate Scaling) with V2.4 geometry.
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.1MB).
+## Cycle 2841: Lamp Shade V2.4 Final Correction (V1 Pyramid Logic) - CANCELLED
+- **Correction:** User stated "that was the same as the last one and now pyramid outline". User demanded to look at Artifact 03.
+- **Status:** Cancelled.
+
+## Cycle 2843: Lamp Shade V2.4 Final Correction (Flow Optimized Restoration) - COMPLETE
+- **Correction:** User directed attention to `TPMS_Anisotropic_Prism_Artifact03` (Nov 30, 17:34).
+- **Forensic:** Correlated with `helios_flow_gen_optimized.py`.
+- **Logic:** Z-Prime Warping (`z' = z / (1+2z)`) + Flow Pattern.
+- **Action:** Re-implemented this logic into `inception/shade/shade_gen.py` with V2.4 Geometry.
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.2MB).
 - **Status:** Artifact Generated.
