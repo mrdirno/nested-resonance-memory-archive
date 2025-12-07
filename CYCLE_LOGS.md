@@ -78,9 +78,12 @@
 - **Correction:** User stated "that was close but... inverted... should be getting smaller up top".
 - **Status:** Cancelled.
 
-## Cycle 2844: Lamp Shade V2.4 Final Correction (Inverted Flow Logic) - COMPLETE
-- **Correction:** INVERTED the Artifact 03 logic to match user request.
-- **Logic:** `z_prime = z / (1+2*z_norm)` (Rate increases $\rightarrow$ High Frequency/Small Waves at top).
-- **Source:** Derived from `helios_flow_gen.py` logic but inverted directionality.
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (5.8MB).
+## Cycle 2844: Lamp Shade V2.4 Final Correction (Inverted Flow Logic) - CANCELLED
+- **Correction:** User stated "oh this is the right math and shape but the waves are too small".
+- **Status:** Cancelled.
+
+## Cycle 2845: Lamp Shade V2.4 Final Correction (Big Wave Inverted Flow) - COMPLETE
+- **Correction:** User confirmed "Inverted Flow" math (`z * freq`) was correct but demanded "bigger waves".
+- **Adjustment:** Increased scale from `Base/4` (48mm) to `Base/2.5` (~77mm). This matches the "Big Wave" request while keeping the confirmed "Inverted Flow" logic.
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.3MB).
 - **Status:** Artifact Generated.
