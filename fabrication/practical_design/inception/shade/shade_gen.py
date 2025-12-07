@@ -9,35 +9,23 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.
 from fabrication.library import lamp_lib
 
 # -----------------------------------------------------------------------------
-# HELIOS LAMP SERIES 01: THE ANISOTROPIC SHADE v2.4 (FLOW OPTIMIZED RESTORATION)
+# HELIOS LAMP SERIES 01: THE ANISOTROPIC SHADE v2.4 (INVERTED FLOW RESTORATION)
 # -----------------------------------------------------------------------------
-# Correction Cycle 2843:
-# - User Feedback: "Volumes/.../TPMS_Anisotropic_Prism_Artifact03 then find the correlated generator... around that time".
-# - Forensic Trace: 
-#   - `TPMS_Anisotropic_Prism_Artifact03` was established in Commit `bdc4beb3` (Dec 1 17:34).
-#   - That commit added `helios_flow_gen_optimized.py`.
-#   - This generator implements "The Directional Current" (Artifact 03).
-# - Logic:
-#   - `freq_mod = 1.0 + (z_norm * 2.0)`: Z-Frequency increases with Z. Wavelength DECREASES with Z.
-#   - Wait. If frequency increases, wavelength decreases.
-#   - User wanted "Small waves at top". High freq = Small waves.
-#   - So `1 + 2*z` means freq is 1x at bottom, 3x at top.
-#   - This produces Large Waves at Bottom, Small Waves at Top. "Big Bang".
-#   - Coordinate logic: `z_prime = z / freq_mod`.
-#   - `gyroid = sin(x*s)cos(y*s) + sin(y*s)cos(z_prime*s) ...`
-#   - This is "Flow" logic. Z-Warping of the coordinate.
-#   - Unlike Redshift (which expanded coords), this compresses them? 
-#   - `z_prime = z / (1+2z)`. As z grows, z_prime grows slower. Phase change slows down? 
-#   - No, `cos(z_prime * scale)`. If z_prime changes slowly, the wave stretches.
-#   - So this produces STRETCHED waves at the top?
-#   - Let's re-read: "Original was ~40/3... We want coarser cells... New Scale: size_x/4.0".
-#   - Let's assume the visual output of THIS generator is what the user recognized in "Artifact 03".
-# - Action: Re-implement `helios_flow_gen_optimized.py` logic into `inception/shade/shade_gen.py`.
-#   - Apply V2.4 Geometry (217mm H, 85mm Top, 194mm Base, Variable Wall).
+# Correction Cycle 2844:
+# - User Feedback: "That was close but this isn't quite the one. The one you have right now is inverted it should be getting smaller up top not at the bottom".
+# - Diagnosis: Artifact 03 Flow Logic (`z_prime = z / freq_mod`) with increasing freq_mod created STRETCHED waves (low freq) at the top.
+# - Requirement: "Smaller up top" -> High Frequency (Short Wavelength) at the Top.
+# - Action: INVERT the modulation logic.
+#   - Old: `z_prime = z / (1 + 2*z_norm)` -> Frequency drops.
+#   - New: `z_prime = z * (1 + 2*z_norm)` -> Frequency increases.
+#   - OR: Just invert the gradient?
+#   - Let's assume `z_prime = z * freq_mod`.
+# - Source: Based on `helios_flow_gen.py` (Artifact 03) but INVERTED to match user request.
+# - Geometry: V2.4 (217mm H, 85mm Top, 194mm Base, Variable Wall).
 # -----------------------------------------------------------------------------
 
 def generate_shade(output_path, base_width=194.0, top_width=85.4, height=217.65, resolution=200, hole_diameter=14.0):
-    print(f"Generating ANISOTROPIC SHADE v2.4 (Flow Optimized Restoration): {output_path}")
+    print(f"Generating ANISOTROPIC SHADE v2.4 (Inverted Flow): {output_path}")
     
     # Grid Setup
     max_dim = max(base_width, height)
@@ -50,17 +38,16 @@ def generate_shade(output_path, base_width=194.0, top_width=85.4, height=217.65,
     
     grid = np.zeros((res_xy, res_xy, res_z), dtype=bool)
     
-    # MATH PARAMETERS (Artifact 03 Optimized)
-    # "Base Scale: 2.0 * pi / (size_x / 4.0)"
-    # Using base_width as reference size_x.
-    # 194 / 4 = 48.5mm Wavelength.
+    # MATH PARAMETERS
+    # Base Scale (Artifact 03: 2*pi / (size/4))
+    # 194/4 = 48.5mm.
     base_scale = 2.0 * math.pi / (base_width / 4.0)
     
     # Wall Thickness (Variable)
     wall_bottom = 12.7
     wall_top = 6.35
     
-    print("Calculating Flow Field...")
+    print("Calculating Flow Field (Inverted)...")
     
     for z_idx in range(res_z):
         z_mm = z_idx * step
@@ -69,20 +56,23 @@ def generate_shade(output_path, base_width=194.0, top_width=85.4, height=217.65,
         # Taper Logic
         current_width = base_width * (1.0 - z_norm) + top_width * z_norm
         current_half_width = current_width / 2.0
-        
-        # Variable Wall
         current_wall = wall_bottom * (1.0 - z_norm) + wall_top * z_norm
         current_inner_half_width = current_half_width - current_wall
         
-        # ARTIFACT 03 LOGIC: Z-Prime
-        # z_norm goes 0..1.
-        # freq_mod = 1.0 + (z_norm * 2.0) -> 1.0 to 3.0
-        # z_prime = z_mm / freq_mod
-        # Note: In original, z went -size/2 to size/2. Here we use 0 to height.
-        # Adjust z_norm to match visual flow if needed. 0..1 is standard.
+        # INVERTED FLOW LOGIC
+        # Goal: Small waves (High Freq) at Top. Large waves (Low Freq) at Bottom.
+        # z_prime needs to change FASTER at the top.
+        # z_prime = z * freq_mod
+        # freq_mod = 1.0 at bottom, 3.0 at top.
         
-        freq_mod = 1.0 + (z_norm * 2.0)
-        z_prime = z_mm / freq_mod
+        freq_mod = 1.0 + (z_norm * 2.0) # 1x -> 3x
+        z_prime = z_mm * freq_mod # Rate of change increases with z
+        
+        # Wait, d/dz (z * (1 + 2z/H)) = 1 + 4z/H.
+        # At z=0, rate is 1.
+        # At z=H, rate is 5.
+        # Frequency increases 5x.
+        # This produces VERY small waves at the top. This matches "Getting smaller up top".
         
         for x_idx in range(res_xy):
             x_mm = (x_idx * step) - (base_width / 2.0)
@@ -97,7 +87,7 @@ def generate_shade(output_path, base_width=194.0, top_width=85.4, height=217.65,
                 
                 dist_from_center = math.sqrt(x_mm**2 + y_mm**2)
                 
-                # --- MOUNTING (V2.4 Standard) ---
+                # --- MOUNTING ---
                 if z_mm > (height - 4.0):
                     if dist_from_center <= (hole_diameter/2.0):
                         grid[x_idx,y_idx,z_idx] = False
@@ -118,14 +108,12 @@ def generate_shade(output_path, base_width=194.0, top_width=85.4, height=217.65,
                     grid[x_idx,y_idx,z_idx] = False
                     continue
                 
-                # PATTERN (Artifact 03)
-                # sin(x)cos(y) + sin(y)cos(z') + sin(z')cos(x)
-                
+                # PATTERN (Inverted Artifact 03)
                 val = math.sin(x_mm * base_scale) * math.cos(y_mm * base_scale) + \
                       math.sin(y_mm * base_scale) * math.cos(z_prime * base_scale) + \
                       math.sin(z_prime * base_scale) * math.cos(x_mm * base_scale)
                       
-                if abs(val) < 0.5: # Artifact 03 Threshold
+                if abs(val) < 0.5:
                     grid[x_idx,y_idx,z_idx] = True
 
     # Clean

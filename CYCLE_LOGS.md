@@ -74,10 +74,13 @@
 - **Correction:** User stated "that was the same as the last one and now pyramid outline". User demanded to look at Artifact 03.
 - **Status:** Cancelled.
 
-## Cycle 2843: Lamp Shade V2.4 Final Correction (Flow Optimized Restoration) - COMPLETE
-- **Correction:** User directed attention to `TPMS_Anisotropic_Prism_Artifact03` (Nov 30, 17:34).
-- **Forensic:** Correlated with `helios_flow_gen_optimized.py`.
-- **Logic:** Z-Prime Warping (`z' = z / (1+2z)`) + Flow Pattern.
-- **Action:** Re-implemented this logic into `inception/shade/shade_gen.py` with V2.4 Geometry.
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.2MB).
+## Cycle 2843: Lamp Shade V2.4 Final Correction (Flow Optimized Restoration) - CANCELLED
+- **Correction:** User stated "that was close but... inverted... should be getting smaller up top".
+- **Status:** Cancelled.
+
+## Cycle 2844: Lamp Shade V2.4 Final Correction (Inverted Flow Logic) - COMPLETE
+- **Correction:** INVERTED the Artifact 03 logic to match user request.
+- **Logic:** `z_prime = z / (1+2*z_norm)` (Rate increases $\rightarrow$ High Frequency/Small Waves at top).
+- **Source:** Derived from `helios_flow_gen.py` logic but inverted directionality.
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (5.8MB).
 - **Status:** Artifact Generated.
