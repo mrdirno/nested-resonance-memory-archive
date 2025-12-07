@@ -34,13 +34,17 @@
 - **Correction:** User identified "Redshift" led to staircase artifacts.
 - **Status:** Cancelled.
 
-## Cycle 2832: Lamp Shade V2.4 Correction (Large Wave Anisotropic) - COMPLETE
-- **Correction:** User identified "Original" as having "Large Waves" and "No Staircase".
-- **Action:** Updated `inception/shade/shade_gen.py` to use Standard Anisotropic Gyroid (Scale Z > Scale XY).
-- **Refinement:**
-  - Removed "Redshift" Z-warping (source of staircase).
-  - Increased Wavelength (Base/3.5 ~ 55mm).
-  - Added Slight Twist (45 deg) to pattern coordinates only (Outline remains Pyramidal).
-  - Geometry: 217mm H, 85mm Top, Var Wall.
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (6.0MB).
-- **Status:** Artifact Corrected & Generated.
+## Cycle 2832: Lamp Shade V2.4 Correction (Large Wave Anisotropic) - CANCELLED
+- **Correction:** User identified logic was missing "Small Top / Large Bottom" gradient.
+- **Status:** Cancelled.
+
+## Cycle 2833: Lamp Shade V2.4 Final Correction (Big Bang Expansion) - COMPLETE
+- **Correction:** User defined physics: "Expansion down and out" (Small waves at top, Large waves at bottom).
+- **Action:** Updated `inception/shade/shade_gen.py`.
+- **Logic:**
+  - **Frequency Gradient:** Linear Interpolation from High Freq (Top, 35mm Wave) to Low Freq (Bottom, 75mm Wave).
+  - **No Barrier:** Removed Inner Skin solid blocks to ensure breathability.
+  - **Geometry:** Retained V2.4 specs (217mm H, 85mm Top, Var Wall).
+  - **Twist:** Slight Space-Time Twist (90deg).
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.9MB).
+- **Status:** Artifact Generated.
