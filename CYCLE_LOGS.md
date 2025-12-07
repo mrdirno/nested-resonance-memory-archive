@@ -50,8 +50,14 @@
 - **Correction:** User insisted on finding the "Single File Original" from one week ago.
 - **Status:** Cancelled.
 
-## Cycle 2836: Lamp Shade V2.4 Final Correction (Prism Math Restoration) - COMPLETE
-- **Correction:** Tracked back to `helios_anisotropic_prism_gen.py` (Commit 88fb2c2c). Identified "Coordinate Scaling" logic (`px * ratio`) as the source of the "Big Bang" (Small Top/Large Bottom) effect naturally arising from taper.
-- **Action:** Implemented `helios_anisotropic_prism_gen.py` math in `inception/shade/shade_gen.py` with V2.4 geometry.
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.1MB). Pattern matches "Original" (No Z-Warp, No Twist, Scaled XY).
+## Cycle 2836: Lamp Shade V2.4 Final Correction (Prism Math Restoration) - CANCELLED
+- **Correction:** User identified missing "Rim Outline" (Corners) and "Alternating waves".
+- **Status:** Cancelled.
+
+## Cycle 2837: Lamp Shade V2.4 Final Correction (Cornerstone Restoration) - COMPLETE
+- **Correction:** Restored the **Solid Corners** (Rim Outline) absent in the Prism generator.
+- **Logic:** Combined **Prism Math** (Coordinate Scaling for "Big Bang" effect) with **Redshift Features** (Solid Corners).
+- **Anisotropy:** Tuned Z-stretch (~1.6x) to produce the "alternating up/side wave" visual effect.
+- **Geometry:** V2.4 (217mm H, 85mm Top, Var Wall).
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.6MB).
 - **Status:** Artifact Generated.
