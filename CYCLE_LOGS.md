@@ -20,3 +20,14 @@
 - **Parameters:** Height 113.65mm, Top Width 3" (Square), Wall Thickness Gradient (1.2 -> 0.6 threshold).
 - **Result:** Generated `fabrication/practical_design/FAVORITES/lamp_shade_v2.4.3mf` (11MB).
 - **Status:** Artifact Generated. Generator Committed.
+
+## Cycle 2829: Lamp Shade V2.4 Correction (The Event Horizon) - COMPLETE
+- **Correction:** Previous attempt used incorrect base model (Generic Gyroid 120mm). Correct model is `shade_v02` (Event Horizon, 224mm).
+- **Action:** Created `fabrication/generators/helios_shade_v2_4_gen.py` derived from `shade_v02_gen.py`.
+- **Logic:** Event Horizon Swirl + Spoke Ribs + Louvered Inner Skin.
+- **Revised Parameters:** 
+  - Height: 224mm -> 217.65mm (-1/4 inch).
+  - Top Width: 60mm -> 85.4mm (+1 inch).
+  - Wall: 1 inch Constant -> Variable (1/2" Bottom to 1/4" Top).
+- **Result:** Generated `fabrication/practical_design/FAVORITES/lamp_shade_v2.4.3mf` (10.6MB). Correct pattern and scale restored.
+- **Status:** Artifact Fixed.
