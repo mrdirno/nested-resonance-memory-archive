@@ -82,8 +82,14 @@
 - **Correction:** User stated "oh this is the right math and shape but the waves are too small".
 - **Status:** Cancelled.
 
-## Cycle 2845: Lamp Shade V2.4 Final Correction (Big Wave Inverted Flow) - COMPLETE
-- **Correction:** User confirmed "Inverted Flow" math (`z * freq`) was correct but demanded "bigger waves".
-- **Adjustment:** Increased scale from `Base/4` (48mm) to `Base/2.5` (~77mm). This matches the "Big Wave" request while keeping the confirmed "Inverted Flow" logic.
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.3MB).
+## Cycle 2845: Lamp Shade V2.4 Final Correction (Big Wave Inverted Flow) - CANCELLED
+- **Correction:** User directed a final refinement: "Slightly smaller waves... expand width 1 inch... extend wave to top... missing corner links".
+- **Status:** Cancelled.
+
+## Cycle 2846: Lamp Shade V2.5 Final Correction (Bed Maximized) - COMPLETE
+- **Correction:** Addressed all final user requirements:
+  - **Geometry:** Max Width (219.4mm) for Ender 3 Bed. Wall 3/4" to 1/4".
+  - **Features:** Solid Corner Links (Pyramid Outline), Patterned Top Plate (Flat but wavy).
+  - **Pattern:** Inverted Flow (Confirmed Math) with slightly smaller scale (`Base/2.8`).
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (6.1MB).
 - **Status:** Artifact Generated.
