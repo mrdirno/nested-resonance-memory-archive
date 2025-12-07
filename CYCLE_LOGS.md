@@ -42,12 +42,14 @@
 - **Correction:** User requested removal of twist.
 - **Status:** Cancelled.
 
-## Cycle 2834: Lamp Shade V2.4 Final Correction (No Twist) - COMPLETE
-- **Correction:** Removed the "Space-Time Twist" from the pattern generation logic.
-- **Logic:**
-  - **Frequency Gradient:** High Freq (Top, 35mm Wave) to Low Freq (Bottom, 75mm Wave).
-  - **No Barrier:** Inner Skin solid blocks removed.
-  - **Geometry:** Retained V2.4 specs (217mm H, 85mm Top, Var Wall).
-  - **No Twist:** Pattern is now aligned without rotation.
-- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.8MB).
-- **Status:** Artifact Generated.
+## Cycle 2834: Lamp Shade V2.4 Final Correction (No Twist) - CANCELLED
+- **Correction:** User identified patterns didn't look same as original.
+- **Status:** Cancelled.
+
+## Cycle 2835: Lamp Shade V2.4 Final Correction (Original Hyper-Shift) - COMPLETE
+- **Correction:** User confirmed the "Original Math" should be followed precisely.
+- **Source:** `redshift_shade_gen.py` (Hyper-Shift Logic).
+- **Math:** Z-Warping (`z * (1+z_norm)`) + Spiral Ribs.
+- **Geometry:** V2.4 (Height 217mm, Top 85mm, Base 194mm).
+- **Wall:** Variable 12.7mm -> 6.35mm.
+- **Status:** Artifact Generated (Precise Math Restoration).
