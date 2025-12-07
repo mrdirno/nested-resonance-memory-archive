@@ -46,10 +46,12 @@
 - **Correction:** User identified patterns didn't look same as original.
 - **Status:** Cancelled.
 
-## Cycle 2835: Lamp Shade V2.4 Final Correction (Original Hyper-Shift) - COMPLETE
-- **Correction:** User confirmed the "Original Math" should be followed precisely.
-- **Source:** `redshift_shade_gen.py` (Hyper-Shift Logic).
-- **Math:** Z-Warping (`z * (1+z_norm)`) + Spiral Ribs.
-- **Geometry:** V2.4 (Height 217mm, Top 85mm, Base 194mm).
-- **Wall:** Variable 12.7mm -> 6.35mm.
-- **Status:** Artifact Generated (Precise Math Restoration).
+## Cycle 2835: Lamp Shade V2.4 Final Correction (Original Hyper-Shift) - CANCELLED
+- **Correction:** User insisted on finding the "Single File Original" from one week ago.
+- **Status:** Cancelled.
+
+## Cycle 2836: Lamp Shade V2.4 Final Correction (Prism Math Restoration) - COMPLETE
+- **Correction:** Tracked back to `helios_anisotropic_prism_gen.py` (Commit 88fb2c2c). Identified "Coordinate Scaling" logic (`px * ratio`) as the source of the "Big Bang" (Small Top/Large Bottom) effect naturally arising from taper.
+- **Action:** Implemented `helios_anisotropic_prism_gen.py` math in `inception/shade/shade_gen.py` with V2.4 geometry.
+- **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (4.1MB). Pattern matches "Original" (No Z-Warp, No Twist, Scaled XY).
+- **Status:** Artifact Generated.
