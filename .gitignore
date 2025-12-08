@@ -42,6 +42,12 @@ Thumbs.db
 # npm/node
 node_modules/
 workspace/cache/npm_cache/
+**/workspace/cache/
+**/npm_cache/
+
+# Fabrication (internal development)
+fabrication/
+**/fabrication/
 
 # Data (exclude large binary files, keep JSON results)
 *.hdf5
