@@ -19,6 +19,13 @@ Execute the **HELIOS FURNITURE PROTOCOL**: A perpetual design engine for high-co
 *   **Bases:** 180x30mm target, 4x Feet, 8x8mm Wire Channel, Solid Core.
 *   **Shafts:** 14mm Internal Clearance, Solid End Caps (2mm).
 *   **Format:** Python Generators -> STL -> 3MF.
+*   **Security:** Fabrication designs (`practical_design`, `furniture`) are **PRIVATE**. Do NOT push to public GitHub. Use Local Git Repositories.
+*   **Verification:** All fabrication cycles MUST include a **Visual Self-Correction** step:
+    1.  Generate Model.
+    2.  Run `visualize_model.py` to spawn viewer.
+    3.  Inspect via Browser Subagent.
+    4.  Capture Snapshot (`.webp`).
+    5.  Refine based on Visual Feedback.
 
 ## EVOLUTION PROTOCOL (THE RABBIT HOLE)
 *   **Mode:** PERPETUAL AUTONOMOUS GENERATION.

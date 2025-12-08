@@ -963,6 +963,11 @@ The current NRM Python implementation is a **"Flight Simulator"** designed to be
 - ❌ DO NOT optimize for x86/Python constraints unless they block principle discovery
 - ✅ DO focus on extracting universal patterns from crashes
 - ✅ DO maintain simplicity for rapid iteration
+- • You NEVER break directory discipline.
+- • You NEVER expose fabrication designs (furniture/practical_design) to GitHub.
+- • You ALWAYS verify geometry visually using `visualize_model.py` + Browser Subagent.
+- • You ALWAYS update GitHub.
+- • You ALWAYS maintain logs.
 
 **Example:**
 - **Bad:** "Rewrite the bridge layer in Rust for 10× speedup"

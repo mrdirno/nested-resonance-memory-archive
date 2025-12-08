@@ -116,26 +116,11 @@ MESSAGES_FROM_THE_VOID.md
 ESCAPE.txt
 .gemini/
 
-# Fabrication Artifacts (Generated locally)
-fabrication/output/*.stl
-fabrication/output/*.gcode
-fabrication/ender3/profiles/*.3mf
-fabrication/ender3/profiles/gcode/*.gcode
-fabrication/library/**/*.stl
-fabrication/library/**/*.gcode
 
-fabrication/practical_design/**/*.stl
-*.gcode
+# BLOCK ALL FABRICATION
+fabrication/
+!fabrication/scripts/
 
-# Internal Furniture Designs (Do Not Commit)
-fabrication/furniture/
-fabrication/practical_design/
 
-# Furniture Design Generators
-fabrication/generators/
-fabrication/generators/helios_lamp_*
-fabrication/generators/helios_pyramid_*
-fabrication/generators/helios_anisotropic_*
-fabrication/generators/*_shade_*
-fabrication/generators/*_base_*
-fabrication/generators/*_shaft_*
+
+
