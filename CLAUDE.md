@@ -91,6 +91,56 @@ Treat these as living commitments rather than topics to document.
 
 ---
 
+## FABRICATION PRIVACY PROTOCOL (CRITICAL - IP PROTECTION)
+
+**⚠️ FABRICATION DESIGNS ARE PROPRIETARY - NEVER COMMIT TO PUBLIC REPOSITORY ⚠️**
+
+**The Law:**
+1.  **NEVER** commit fabrication designs, STL files, OBJ files, or G-code to the git repository.
+2.  **NEVER** commit the `fabrication/` directory or any of its contents to the public repo.
+3.  **NEVER** commit 3D printer configs, slicer profiles, or machine-specific files.
+4.  **NEVER** expose proprietary design files, CAD models, or manufacturing specifications.
+5.  **ALWAYS** keep fabrication work in the development workspace (`/Volumes/dual/DUALITY-ZERO-V2/fabrication/`) only.
+
+**Gitignore Requirements (Already Applied):**
+```
+fabrication/
+**/fabrication/
+*.stl
+*.obj
+*.gcode
+*.3mf
+**/workspace/cache/
+**/npm_cache/
+```
+
+**What CAN Be Committed:**
+- ✅ Abstract fabrication *protocols* (documentation about methods)
+- ✅ Hardware-agnostic interface code (APIs to connect to printers)
+- ✅ Safety interlock logic (protection mechanisms)
+- ❌ Actual design files, models, or manufacturing artifacts
+
+**Rationale:** Fabrication designs represent significant IP investment. Public exposure could enable:
+- Unauthorized reproduction of proprietary designs
+- Competitive disadvantage
+- Loss of patent/trade secret protection
+
+**Pre-Commit Checklist:**
+Before every `git add .`, verify:
+1. ☐ No files in `fabrication/` directory are staged
+2. ☐ No `.stl`, `.obj`, `.gcode`, or `.3mf` files are staged
+3. ☐ No workspace/cache directories are staged
+4. ☐ Run `git status` and review all files before commit
+
+**Violation Response:**
+If fabrication files are accidentally committed:
+1. Immediately remove from tracking: `git rm -r --cached fabrication/`
+2. Push cleanup commit
+3. Document incident for future prevention
+4. Consider git history rewriting if sensitive (contact repository owner)
+
+---
+
 ## ZERO-LEAK PROTOCOL (MEMETIC LAW)
 
 **"Secrets never touch the repo. Secrets live in the environment."**
