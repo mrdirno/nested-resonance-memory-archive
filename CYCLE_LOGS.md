@@ -103,3 +103,9 @@
 - **Action:** Changed height from 224.0mm to 214.0mm.
 - **Result:** Generated `fabrication/practical_design/inception/shade/lamp_shade_v2.4.3mf` (6.1MB).
 - **Status:** Artifact Generated.
+## Cycle 2852: Jellyfish Lamp Mondrian V8 - COMPLETE
+- **Goal:** Advance Jellyfish Mondrian design (Spider Fitter + Thicker Lines).
+- **Action:** Created `jellyfish_mondrian_gen_v8.py`.
+- **Method:** Voxel-based generation with recursive Mondrian mapping, organic bell shape, and geometric tentacles.
+- **Result:** Generated `output_v8/mondrian_v8_*.stl` (~1.2M triangles). Implemented Spider Fitter (Hub + 4 Spokes) and Open Top.
+- **Status:** Artifact Generated.
