@@ -45,9 +45,21 @@ workspace/cache/npm_cache/
 **/workspace/cache/
 **/npm_cache/
 
-# Fabrication (internal development)
+# Fabrication (PROPRIETARY - NEVER COMMIT)
+# See CLAUDE.md: FABRICATION PRIVACY PROTOCOL
 fabrication/
 **/fabrication/
+*.stl
+*.obj
+*.3mf
+*.step
+*.stp
+*.iges
+*.igs
+*.f3d
+*.f3z
+**/slicer_profiles/
+**/printer_configs/
 
 # Data (exclude large binary files, keep JSON results)
 *.hdf5
