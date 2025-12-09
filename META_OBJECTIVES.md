@@ -53,6 +53,8 @@ We are **NOT** a "Scan-to-Mesh" viewer (Luma/Polycam). We are a **Semantic Fabri
 
 - [x] Phase 13: Distribution (Verified DMG).
 
-- [ ] Phase 14: Fabrication Bridge (Slicing Preview).
+- [x] Phase 14: Fabrication Bridge (Slicing Preview).
+
+
 
 
