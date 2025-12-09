@@ -354,3 +354,11 @@
 - **Method:** Extruded Mandelbrot set slice where the Zoom Factor increases with Height (1x -> 20x). The solid is defined by the "fractal halo" (iteration count 5-20).
 - **Result:** Generated child_v16_mandelbrot_zoom.stl (22MB, 443k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2935: Child V17 Refinement (The Lightning Bolt) - COMPLETE
+- **Goal:** Create refined lamp design "Child V17 - The Lightning Bolt" based on "L-system/DLA branching structure".
+- **Action:** Created practical_design/inception/shade/child_v17_lightning_bolt.py (outside repo).
+- **Method:** 3D Voronoi (Worley Noise) F2-F1 Edge Detection combined with strong high-frequency Domain Warping to create jagged, erratic strut structures resembling trapped lightning.
+- **Result:** Generated child_v17_lightning_bolt.stl (54MB, 1.1M triangles).
+- **Status:** Artifact Generated (External).
