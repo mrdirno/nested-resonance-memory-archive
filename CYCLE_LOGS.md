@@ -266,3 +266,11 @@
 - **Method:** Linear interpolation (Lerp) of scalar fields along Z-axis: (1-z)*Gyroid + z*SchwarzP.
 - **Result:** Generated child_v4_topology_morph.stl (38MB, 802k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2924: Child V5 Refinement (The Crystal Erosion) - COMPLETE
+- **Goal:** Create refined lamp design "Child V5 - The Crystal Erosion" based on "Schwarz D diamond lattice decaying into organic noise".
+- **Action:** Created practical_design/inception/shade/child_v5_crystal_erosion.py (outside repo).
+- **Method:** Schwarz D Diamond surface (sin(x)sin(y)sin(z) + ...) intersected with a high-frequency noise field increasing in strength along Z.
+- **Result:** Generated child_v5_crystal_erosion.stl (44MB, 929k triangles).
+- **Status:** Artifact Generated (External).
