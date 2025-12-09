@@ -410,3 +410,11 @@
 - **Method:** Level-set approximation of the A15 crystal phase (basis for Weaire-Phelan): 4*Sum(cos*cos) - 2.5*Sum(cos(2x)).
 - **Result:** Generated child_v23_weaire_phelan_2.stl (44MB, 928k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2944: Child V24 Refinement (The Lissajous Knot 2) - COMPLETE
+- **Goal:** Create refined lamp design "Child V24 - The Lissajous Knot 2" based on "Higher harmonic parametric knot (5:7:9 ratio)".
+- **Action:** Created practical_design/inception/shade/child_v24_lissajous_knot_2.py (outside repo).
+- **Method:** Parametric Tube Splatting. Discretized the curve x=sin(5t), y=sin(7t), z=cos(9t) into 5000 segments and rasterized them into the voxel grid with a 4mm radius.
+- **Result:** Generated child_v24_lissajous_knot_2.stl (16MB, 325k triangles).
+- **Status:** Artifact Generated (External).
