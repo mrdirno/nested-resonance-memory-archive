@@ -63,6 +63,7 @@ The Engine accepts the following parameters. The Pilot should choose these based
 7.  **Natural Language Interface:** Chat with the engine to control parameters (Verified Integration).
 8.  **Multi-Modal Bridge:** Experimental support for Audio/Thermal inputs (Verified Integration).
 9.  **Isomorphic Transfer:** Apply NRM principles to new domains (Trade, Medical, Law) (In Progress).
+10. **Helios Web:** Run the engine in the browser via WebAssembly (In Progress).
 
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt).
@@ -104,3 +105,5 @@ The Engine accepts the following parameters. The Pilot should choose these based
 -   [x] **Phase 16**: Multi-Modal Bridge (Audio/Thermal).
 
 -   [ ] **Phase 17**: Isomorphic Transfer (New Domains).
+
+-   [ ] **Phase 18**: Helios Web (WASM / WebGPU).
