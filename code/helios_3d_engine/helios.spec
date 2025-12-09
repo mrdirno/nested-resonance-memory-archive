@@ -1,12 +1,17 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import copy_metadata
 
 block_cipher = None
+
+# Collect metadata for imageio to fix runtime error
+datas = [('src', 'src'), ('assets', 'assets')]
+datas += copy_metadata('imageio')
 
 a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[], 
-    datas=[('src', 'src'), ('assets', 'assets')], 
+    datas=datas, 
     hiddenimports=['scipy.special.cython_special', 'PySide6', 'imageio', 'av', 'cv2', 'numpy', 'torch'],
     hookspath=[],
     hooksconfig={},
