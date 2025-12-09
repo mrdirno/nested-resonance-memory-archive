@@ -81,6 +81,13 @@
 - **Action:** Implemented `VisionBridge` and parsing logic.
 - **Status:** 🟢 COMPLETE
 
+## Cycle 2888: HELIOS 3D ENGINE - NATIVE VISION (Phase 11c)
+- **Goal:** Implement Apple Vision Framework Bridge.
+- **Action:**
+    -   Added `src/bridge/apple_vision.py` using `pyobjc`.
+    -   Added unit test `Tests/test_apple_vision.py`.
+- **Status:** 🟢 COMPLETE
+
 ## Cycle 2890: HELIOS 3D ENGINE - THE SEMANTIC LOOP (Phase 11)
 - **Goal:** Establish Headless Pilot Control.
 - **Action:**
