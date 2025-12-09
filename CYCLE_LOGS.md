@@ -490,3 +490,11 @@
 - **Method:** 3D Menger Sponge iteration (depth 4) mapped to the tapered lamp frustum. Produces a self-similar, cubic-voided structure (technically a Sponge, but fits the "Pyramid" aesthetic constraint of the lamp).
 - **Result:** Generated child_v35_sierpinski_pyramid.stl (183MB, 3.84M triangles). High detail.
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2970: Child V36 Refinement (The Gosper Curve) - COMPLETE
+- **Goal:** Create refined lamp design "Child V36 - The Gosper Curve" based on "Flowsnake space filling curve on a hexagonal grid".
+- **Action:** Created practical_design/inception/shade/child_v36_gosper_curve.py (outside repo).
+- **Method:** 2D Gosper Curve (L-System iteration 3) extruded vertically with a Z-axis twist and tapered scale. Splatted as a continuous tube into the voxel grid.
+- **Result:** Generated child_v36_gosper_curve.stl (72MB, 1.51M triangles).
+- **Status:** Artifact Generated (External).
