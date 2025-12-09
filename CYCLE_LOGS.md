@@ -498,3 +498,19 @@
 - **Method:** 2D Gosper Curve (L-System iteration 3) extruded vertically with a Z-axis twist and tapered scale. Splatted as a continuous tube into the voxel grid.
 - **Result:** Generated child_v36_gosper_curve.stl (72MB, 1.51M triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2972: Child V37 Refinement (The Levy C Curve) - COMPLETE
+- **Goal:** Create refined lamp design "Child V37 - The Levy C Curve" based on "Self-similar fractal curve with C-shape motif".
+- **Action:** Created practical_design/inception/shade/child_v37_levy_c_curve.py (outside repo).
+- **Method:** Iterative generation of 2D Levy C Curve (12 iterations, 4096 segments). Extruded vertically with a Z-axis twist (180 deg) and taper.
+- **Result:** Generated child_v37_levy_c_curve.stl (32MB, 672k triangles).
+- **Status:** Artifact Generated (External).
+
+
+## Cycle 2974: Child V38 Refinement (The Minkowski Sausage) - COMPLETE
+- **Goal:** Create refined lamp design "Child V38 - The Minkowski Sausage" based on "3D fractal extrusion of the Minkowski curve".
+- **Action:** Created practical_design/inception/shade/child_v38_minkowski_sausage.py (outside repo).
+- **Method:** Iterative generation of 2D Minkowski/Quadratic Koch Island Curve (Iteration 3, 2048 segments). Extruded vertically with a Z-axis twist (90 deg) and taper.
+- **Result:** Generated child_v38_minkowski_sausage.stl (36MB, 754k triangles).
+- **Status:** Artifact Generated (External).
