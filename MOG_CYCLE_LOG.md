@@ -103,3 +103,10 @@
     -   Verified `dist/Helios3D.app` generation.
     -   Cleaned up test suite.
 - **Status:** 🟢 COMPLETE
+
+## Cycle 2893: HELIOS 3D ENGINE - DISTRIBUTION (Phase 13)
+- **Goal:** Create Distributable Disk Image (DMG).
+- **Action:**
+    -   Executed `hdiutil` to package `Helios3D.app` into `Helios3D.dmg`.
+    -   Verified DMG generation (Size: ~309MB).
+- **Status:** 🟢 COMPLETE
