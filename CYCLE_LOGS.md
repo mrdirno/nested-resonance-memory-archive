@@ -306,3 +306,11 @@
 - **Method:** Fractional Brownian Motion (FBM) summation of 3 Gyroid octaves. Sum += Gyroid(p * freq) * amp. freq *= 2.0, amp *= 0.5.
 - **Result:** Generated child_v10_fractal_singularity.stl (48MB, 1.0M triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2929: Child V11 Refinement (The Glitch Lattice) - COMPLETE
+- **Goal:** Create refined lamp design "Child V11 - The Glitch Lattice" based on "Gyroid lattice with pixel-sorting displacement".
+- **Action:** Created practical_design/inception/shade/child_v11_glitch_lattice.py (outside repo).
+- **Method:** Discontinuous coordinate mapping. Quantized coordinates into 10mm blocks, then applied random XY offsets to 20% of blocks before sampling Gyroid.
+- **Result:** Generated child_v11_glitch_lattice.stl (40MB, 830k triangles).
+- **Status:** Artifact Generated (External).
