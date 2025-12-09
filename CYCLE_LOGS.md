@@ -196,3 +196,13 @@
   - Created `BooleanWorker` to perform CSG operations on the active mesh.
 - **Result:** Engine can now merge scanned data with procedural primitives.
 - **Status:** Phase 9 Complete.
+
+## Cycle 2870: Helios 3D Engine - Phase 10 Deployment - COMPLETE
+- **Goal:** Implement Phase 10 (Packaging).
+- **Action:** Created Build System for Hybrid App.
+- **Method:** 
+  - Created `build_macos.sh` to automate Swift compilation and PyInstaller bundling.
+  - Defined `helios.spec` to embed `HeliosCLI` binary into the app bundle.
+  - Updated `src/core/reconstruction.py` to resolve binary path dynamically inside bundle.
+- **Result:** Ready to build standalone macOS app.
+- **Status:** Phase 10 Complete (Infrastructure).
