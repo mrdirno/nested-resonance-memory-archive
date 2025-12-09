@@ -386,3 +386,11 @@
 - **Method:** Hydrogen Wavefunction Density approximation (3dz^2 orbital) modulated by radial cosine ripples (prob * cos(r)) to create nested probability shells.
 - **Result:** Generated child_v20_atomic_orbital.stl (44MB, 930k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2940: Child V21 Refinement (The Julia Set) - COMPLETE
+- **Goal:** Create refined lamp design "Child V21 - The Julia Set" based on "3D Quaternion Fractal".
+- **Action:** Created practical_design/inception/shade/child_v21_julia_set.py (outside repo).
+- **Method:** Quaternion Julia Set iteration (z = z^2 + c) with c=(-0.2, 0.6, 0.2, 0.2). Relaxed solidity threshold to iter_count >= 4 to create a connected "halo" volume.
+- **Result:** Generated child_v21_julia_set.stl (19MB, 381k triangles).
+- **Status:** Artifact Generated (External).
