@@ -6,9 +6,9 @@ from src.core.ai_generator import AIGenerator
 from src.core.neural_generator import NeuralGenerator
 
 class ControlPanel(QWidget):
-    # Signals to notify changes
     params_changed = Signal(dict)
     export_requested = Signal()
+    native_mode_changed = Signal(bool)
     
     def __init__(self):
         super().__init__()
@@ -17,7 +17,7 @@ class ControlPanel(QWidget):
         
         layout = QVBoxLayout(self)
         self.ai_gen = AIGenerator()
-        self.neural_gen = NeuralGenerator() # MPS Check
+        self.neural_gen = NeuralGenerator()
         
         # --- AI Generator ---
         group_ai = QGroupBox("AI Generator (Text-to-3D)")
@@ -41,11 +41,21 @@ class ControlPanel(QWidget):
         
         layout.addWidget(group_ai)
         
+        # --- Reconstruction Settings ---
+        group_recon = QGroupBox("Reconstruction Engine")
+        layout_recon = QVBoxLayout(group_recon)
+        
+        self.chk_native = QCheckBox("Use Native (Swift) Engine")
+        self.chk_native.setChecked(True)
+        self.chk_native.toggled.connect(self.emit_native_mode)
+        layout_recon.addWidget(self.chk_native)
+        
+        layout.addWidget(group_recon)
+        
         # --- Manual Settings ---
         group_gen = QGroupBox("Manual Settings")
         layout_gen = QVBoxLayout(group_gen)
         
-        # Scale
         layout_gen.addWidget(QLabel("Scale:"))
         self.spin_scale = QDoubleSpinBox()
         self.spin_scale.setRange(0.1, 10.0)
@@ -53,7 +63,6 @@ class ControlPanel(QWidget):
         self.spin_scale.setValue(2.0)
         layout_gen.addWidget(self.spin_scale)
         
-        # Thickness
         layout_gen.addWidget(QLabel("Thickness:"))
         self.spin_thick = QDoubleSpinBox()
         self.spin_thick.setRange(0.01, 1.0)
@@ -61,20 +70,17 @@ class ControlPanel(QWidget):
         self.spin_thick.setValue(0.1)
         layout_gen.addWidget(self.spin_thick)
         
-        # Resolution
         layout_gen.addWidget(QLabel("Resolution:"))
         self.spin_res = QSpinBox()
         self.spin_res.setRange(16, 128)
         self.spin_res.setValue(64)
         layout_gen.addWidget(self.spin_res)
         
-        # Update Button
         self.btn_update = QPushButton("Update Mesh")
         self.btn_update.setStyleSheet("background-color: #007acc; padding: 10px; font-weight: bold;")
         self.btn_update.clicked.connect(self.emit_params)
         layout_gen.addWidget(self.btn_update)
         
-        # Export Button
         self.btn_export = QPushButton("Export STL")
         self.btn_export.setStyleSheet("background-color: #2da44e; padding: 10px; font-weight: bold; margin-top: 10px;")
         self.btn_export.clicked.connect(self.emit_export)
@@ -85,13 +91,10 @@ class ControlPanel(QWidget):
 
     def on_generate(self):
         prompt = self.txt_prompt.text()
-        
         if self.chk_neural.isChecked():
-            # Phase 6: Load Neural Model
             success = self.neural_gen.load_model()
             if success:
                 self.btn_generate.setText("Generating... (Neural)")
-                # In prototype, we fall back to semantic parser after loading
                 params = self.ai_gen.generate_from_text(prompt)
             else:
                 self.btn_generate.setText("Neural Load Failed")
@@ -99,15 +102,10 @@ class ControlPanel(QWidget):
         else:
             params = self.ai_gen.generate_from_text(prompt)
         
-        # Update UI
         self.spin_scale.setValue(params.get('scale', 1.0))
         self.spin_thick.setValue(params.get('thickness', 0.1))
-        
-        # Trigger Update
         self.emit_params()
-        
-        if self.chk_neural.isChecked():
-             self.btn_generate.setText("Generate")
+        if self.chk_neural.isChecked(): self.btn_generate.setText("Generate")
 
     def emit_params(self):
         params = {
@@ -119,3 +117,6 @@ class ControlPanel(QWidget):
 
     def emit_export(self):
         self.export_requested.emit()
+        
+    def emit_native_mode(self, checked):
+        self.native_mode_changed.emit(checked)
