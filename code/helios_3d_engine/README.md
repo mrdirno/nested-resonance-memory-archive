@@ -8,17 +8,23 @@
 To be the **Most Accessible AI-Native Fabrication Tool**.
 We do not compete on "Visual Fidelity" (Splatting). We compete on **Structural Fidelity** and **Semantic Control**.
 
-## THE GEMINI PROTOCOL (AI PILOT CONTROL)
+## THE GEMINI PROTOCOL (TWIN ENGINE ARCHITECTURE)
 
-This engine is designed to be driven by an external AI Agent (The Pilot).
-The Pilot interacts with the engine via the **FileSystem Interface**.
+This engine is designed to be driven by a dual-layer AI system:
+1.  **The Pilot (Strategy):** High-level directive and aesthetic intent.
+2.  **The Co-Pilot (Tactics):** A local Gemini Agent instance that executes the loop.
 
 ### 1. Perception (Input)
 The Engine generates a Contact Sheet at:
 `code/helios_3d_engine/assets/vision_export/contact_sheet.jpg`
 
-### 2. Control (Output)
-The Pilot governs the engine by writing a JSON file to the source frames directory:
+### 2. The Loop (Handshake)
+-   **Helios:** Saves image -> Enters "Waiting" state.
+-   **Co-Pilot (Local Gemini):** Monitors folder -> Reads image -> Reasons -> Writes JSON.
+-   **Helios:** Detects JSON -> Updates Geometry.
+
+### 3. Control (Output)
+The Co-Pilot controls the engine by writing:
 `path/to/frames/pilot_override.json`
 
 ### 3. Schema (The Vocabulary)
