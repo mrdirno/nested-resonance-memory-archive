@@ -87,6 +87,26 @@ class SegmentationEngine(QObject):
         labels = torch.tensor([1], dtype=torch.int32) # Positive click
         
         worker = SegmentationWorker(self.predictor, self.inference_state, points, labels, frame_idx)
-        # We need to keep a reference to worker or it gets GC'd? 
-        # Usually QThread needs to be managed. For simplicity in this turn, we return it.
         return worker
+
+    def propagate_all(self):
+        """Propagates the mask through the entire video."""
+        if not self.is_ready or not self.inference_state:
+            return None
+            
+        print("Propagating masks through video...")
+        masks = []
+        
+        # propagate_in_video yields (frame_idx, obj_ids, mask_logits)
+        for out_frame_idx, out_obj_ids, out_mask_logits in self.predictor.propagate_in_video(self.inference_state):
+             # Logits to binary mask (take first object)
+             # Shape: (1, H, W)
+             mask = (out_mask_logits[0] > 0.0).float()
+             masks.append(mask)
+             
+        # Stack into (F, H, W) tensor
+        if masks:
+            full_mask_tensor = torch.stack(masks).squeeze(1)
+            print(f"Propagation complete. Shape: {full_mask_tensor.shape}")
+            return full_mask_tensor
+        return None

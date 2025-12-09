@@ -128,10 +128,24 @@ class VideoPlayer(QWidget):
         self.slider.sliderMoved.connect(self.set_position)
         controls_layout.addWidget(self.slider)
         
+        # Reconstruct Button
+        self.btn_recon = QPushButton("Reconstruct 3D")
+        self.btn_recon.setStyleSheet("background-color: #2da44e; color: white; font-weight: bold;")
+        self.btn_recon.clicked.connect(self.on_reconstruct)
+        controls_layout.addWidget(self.btn_recon)
+        
         self.label_status = QLabel("Initializing...")
         controls_layout.addWidget(self.label_status)
         
         self.layout.addLayout(controls_layout)
+
+    def on_reconstruct(self):
+        self.reconstruction_requested.emit()
+
+class VideoPlayer(QWidget):
+    reconstruction_requested = Signal()
+    
+    def __init__(self, parent=None):
         
         # State
         self.frames = []
