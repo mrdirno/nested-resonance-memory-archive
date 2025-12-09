@@ -418,3 +418,19 @@
 - **Method:** Parametric Tube Splatting. Discretized the curve x=sin(5t), y=sin(7t), z=cos(9t) into 5000 segments and rasterized them into the voxel grid with a 4mm radius.
 - **Result:** Generated child_v24_lissajous_knot_2.stl (16MB, 325k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2945: Child V25 Refinement (The Schwarzschild Warp) - COMPLETE
+- **Goal:** Create refined lamp design "Child V25 - The Schwarzschild Warp" based on "Lattice warped by extreme gravitational lensing".
+- **Action:** Created practical_design/inception/shade/child_v25_schwarzschild_warp.py (outside repo).
+- **Method:** Gyroid lattice subjected to radial domain warping that simulates metric expansion/contraction near a black hole (scale = 1 + rs/r).
+- **Result:** Generated child_v25_schwarzschild_warp.stl (31MB, 636k triangles).
+- **Status:** Artifact Generated (External).
+
+
+## Cycle 2952: Child V27 Refinement (The Clebsch Surface) - COMPLETE
+- **Goal:** Create refined lamp design "Child V27 - The Clebsch Surface" based on "Cubic surface with 27 real lines".
+- **Action:** Created practical_design/inception/shade/child_v27_clebsch_surface.py (outside repo).
+- **Method:** Clebsch Diagonal Cubic Surface equation: x^3 + y^3 + z^3 + 1 - (x+y+z+1)^3 = 0. Mapped to a thin shell (abs(val) < 2.0) to create a smooth, symmetrical, mathematical form.
+- **Result:** Generated child_v27_clebsch_surface.stl (22MB, 443k triangles).
+- **Status:** Artifact Generated (External).
