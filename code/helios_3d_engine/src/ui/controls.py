@@ -1,8 +1,9 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QSlider, 
                                QPushButton, QGroupBox, QSpinBox, QDoubleSpinBox,
-                               QLineEdit, QHBoxLayout)
+                               QLineEdit, QHBoxLayout, QCheckBox)
 from PySide6.QtCore import Qt, Signal
 from src.core.ai_generator import AIGenerator
+from src.core.neural_generator import NeuralGenerator
 
 class ControlPanel(QWidget):
     # Signals to notify changes
@@ -16,6 +17,7 @@ class ControlPanel(QWidget):
         
         layout = QVBoxLayout(self)
         self.ai_gen = AIGenerator()
+        self.neural_gen = NeuralGenerator() # MPS Check
         
         # --- AI Generator ---
         group_ai = QGroupBox("AI Generator (Text-to-3D)")
@@ -25,6 +27,12 @@ class ControlPanel(QWidget):
         self.txt_prompt.setPlaceholderText("e.g. 'Large thick sphere'")
         self.txt_prompt.setStyleSheet("padding: 5px; color: #fff; background: #444;")
         layout_ai.addWidget(self.txt_prompt)
+        
+        self.chk_neural = QCheckBox("Enable Neural Engine (PyTorch)")
+        if str(self.neural_gen.device) == "cpu":
+            self.chk_neural.setEnabled(False)
+            self.chk_neural.setText("Neural Engine (MPS Not Found)")
+        layout_ai.addWidget(self.chk_neural)
         
         self.btn_generate = QPushButton("Generate")
         self.btn_generate.setStyleSheet("background-color: #6a00ff; padding: 5px; font-weight: bold;")
@@ -77,7 +85,19 @@ class ControlPanel(QWidget):
 
     def on_generate(self):
         prompt = self.txt_prompt.text()
-        params = self.ai_gen.generate_from_text(prompt)
+        
+        if self.chk_neural.isChecked():
+            # Phase 6: Load Neural Model
+            success = self.neural_gen.load_model()
+            if success:
+                self.btn_generate.setText("Generating... (Neural)")
+                # In prototype, we fall back to semantic parser after loading
+                params = self.ai_gen.generate_from_text(prompt)
+            else:
+                self.btn_generate.setText("Neural Load Failed")
+                return
+        else:
+            params = self.ai_gen.generate_from_text(prompt)
         
         # Update UI
         self.spin_scale.setValue(params.get('scale', 1.0))
@@ -85,6 +105,9 @@ class ControlPanel(QWidget):
         
         # Trigger Update
         self.emit_params()
+        
+        if self.chk_neural.isChecked():
+             self.btn_generate.setText("Generate")
 
     def emit_params(self):
         params = {

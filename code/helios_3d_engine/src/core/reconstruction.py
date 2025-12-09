@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 import math
+from skimage.measure import marching_cubes
 
 class VoxelReconstructor:
     def __init__(self, resolution=64, device="mps"):

@@ -1,6 +1,6 @@
 # HELIOS 3D ENGINE (Project Code: SUNFIRE)
 
-**Current Version:** 0.3.0 (The Hybrid)
+**Current Version:** 0.3.1 (The Neural Link)
 **Target Platform:** macOS (Silicon Optimized)
 **Architecture:** Python 3 + PySide6 (GUI) + ModernGL (Render) + PyTorch (AI Sidecar)
 
@@ -14,7 +14,7 @@ This project follows a **Hybrid Architecture**:
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt)
 -   **Viewport:** ModernGL (OpenGL 4.1+ Core Profile)
--   **AI Engine:** Custom Semantic Parser (Text-to-Parametric)
+-   **AI Engine:** PyTorch with MPS (Metal Performance Shaders) acceleration.
 
 ## GETTING STARTED
 1.  Initialize environment:
@@ -28,4 +28,4 @@ This project follows a **Hybrid Architecture**:
 -   [x] **Phase 3: The Brain** - UI Controls & Async Processing.
 -   [x] **Phase 4: The Forge** - STL Export.
 -   [x] **Phase 5: The Architect** - AI Text-to-3D (Semantic Generator).
--   [ ] **Phase 6: The Neural Link** - Full PyTorch/Shap-E Integration.
+-   [x] **Phase 6: The Neural Link** - PyTorch/MPS Infrastructure & Device Detection.
