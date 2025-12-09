@@ -27,10 +27,19 @@ We do not compete on "Visual Fidelity" (Splatting). We compete on **Structural F
     ```
 
 ## ROADMAP
+
 -   [x] **Phase 1-5**: Core Engine & UI.
+
 -   [x] **Phase 6**: AI Perception (SAM 2).
+
 -   [x] **Phase 7**: Voxel Reconstruction (Visual Hull).
+
 -   [x] **Phase 8**: Gyroid Infusion.
+
 -   [x] **Phase 9**: Boolean Operations.
+
 -   [x] **Phase 10**: Vision Bridge (Contact Sheets).
--   [ ] **Phase 11**: Semantic Parameter Application.
+
+-   [x] **Phase 11**: Semantic Parameter Application (Headless Automation).
+
+-   [ ] **Phase 12**: Final Polish & Packaging.
