@@ -64,6 +64,7 @@ The Engine accepts the following parameters. The Pilot should choose these based
 8.  **Multi-Modal Bridge:** Experimental support for Audio/Thermal inputs (Verified Integration).
 9.  **Isomorphic Transfer:** Apply NRM principles to new domains (Trade, Medical, Law) (In Progress).
 10. **Helios Web:** Run the engine in the browser via WebAssembly (In Progress).
+11. **Helios Mobile:** Native app for iPad Pro with Apple Pencil support (In Progress).
 
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt).
@@ -107,3 +108,5 @@ The Engine accepts the following parameters. The Pilot should choose these based
 -   [ ] **Phase 17**: Isomorphic Transfer (New Domains).
 
 -   [ ] **Phase 18**: Helios Web (WASM / WebGPU).
+
+-   [ ] **Phase 19**: Helios Mobile (iOS/iPadOS).
