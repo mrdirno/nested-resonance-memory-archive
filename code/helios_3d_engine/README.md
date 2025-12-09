@@ -1,6 +1,6 @@
 # HELIOS 3D ENGINE (Project Code: SUNFIRE)
 
-**Current Version:** 0.4.0 (The Architect)
+**Current Version:** 0.4.1 (The Deployment)
 **Target Platform:** macOS (Silicon Optimized)
 **Architecture:** Python 3 + PySide6 + Native Swift Bridge + PyTorch
 
@@ -15,17 +15,16 @@ Build a next-generation 3D generation and manipulation tool that surpasses comme
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt)
 -   **Reconstruction:** Native Apple Object Capture & Visual Hull.
--   **Editing:** Mesh-to-SDF conversion and CSG (Constructive Solid Geometry).
+-   **Editing:** Mesh-to-SDF conversion and CSG.
+-   **Deployment:** PyInstaller + Embedded Swift Binary.
 
 ## GETTING STARTED
-1.  Compile Native Bridge:
+1.  Build App Bundle:
     ```bash
-    cd ../helios_native_bridge && swift build -c release
+    ./build_macos.sh
     ```
-2.  Run Engine:
-    ```bash
-    python3 main.py
-    ```
+2.  Run App:
+    `dist/Helios3D.app`
 
 ## ROADMAP
 -   [x] **Phase 1-4:** Viewport, SDFs, UI, Export.
@@ -34,4 +33,4 @@ Build a next-generation 3D generation and manipulation tool that surpasses comme
 -   [x] **Phase 7:** The Reconstructor (Native Swift Bridge).
 -   [x] **Phase 8:** The Loader (USDZ Import).
 -   [x] **Phase 9:** The Architect (SDF Boolean Operations).
--   [ ] **Phase 10:** Deployment (Bundle as .app).
+-   [x] **Phase 10:** Deployment (PyInstaller Bundle).
