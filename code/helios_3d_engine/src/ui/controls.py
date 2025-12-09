@@ -113,10 +113,30 @@ class ControlPanel(QWidget):
 
     def on_generate(self):
         prompt = self.txt_prompt.text()
+        if not prompt: return
+        
+        # Phase 15: Chat Bridge (Twin Engine)
+        # Write prompt to disk for the Pilot to consume
+        import json
+        import os
+        
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        runtime_dir = os.path.join(base_dir, "assets", "runtime")
+        os.makedirs(runtime_dir, exist_ok=True)
+        
+        prompt_file = os.path.join(runtime_dir, "user_prompt.json")
+        
+        try:
+            with open(prompt_file, 'w') as f:
+                json.dump({"prompt": prompt, "timestamp": str(os.path.getmtime(prompt_file) if os.path.exists(prompt_file) else 0)}, f)
+            self.btn_generate.setText("Sent to Pilot")
+        except Exception as e:
+            print(f"Failed to write prompt: {e}")
+            
+        # Fallback: Local Keyword Logic (Instant)
         if self.chk_neural.isChecked():
             success = self.neural_gen.load_model()
             if success:
-                self.btn_generate.setText("Generating... (Neural)")
                 params = self.ai_gen.generate_from_text(prompt)
             else:
                 self.btn_generate.setText("Neural Load Failed")
@@ -127,7 +147,8 @@ class ControlPanel(QWidget):
         self.spin_scale.setValue(params.get('scale', 1.0))
         self.spin_thick.setValue(params.get('thickness', 0.1))
         self.emit_params()
-        if self.chk_neural.isChecked(): self.btn_generate.setText("Generate")
+        
+        # Reset button text after delay? (Requires timer, skip for now)
 
     def emit_params(self):
         params = {
