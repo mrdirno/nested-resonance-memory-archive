@@ -61,7 +61,8 @@ The Engine accepts the following parameters. The Pilot should choose these based
     - Example JSON: `{"concavity": 0.8, "gyroid_type": "schwarz_d"}`
 6.  **Generative Infusion:** Automatically fills objects with mathematical lattices (Gyroids) for strength and aesthetics.
 7.  **Natural Language Interface:** Chat with the engine to control parameters (Verified Integration).
-8.  **Multi-Modal Bridge:** Experimental support for Audio/Thermal inputs (In Progress).
+8.  **Multi-Modal Bridge:** Experimental support for Audio/Thermal inputs (Verified Integration).
+9.  **Isomorphic Transfer:** Apply NRM principles to new domains (Trade, Medical, Law) (In Progress).
 
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt).
@@ -100,4 +101,6 @@ The Engine accepts the following parameters. The Pilot should choose these based
 
 -   [x] **Phase 15**: Natural Language Interface (Verified Integration).
 
--   [ ] **Phase 16**: Multi-Modal Bridge (Audio/Thermal).
+-   [x] **Phase 16**: Multi-Modal Bridge (Audio/Thermal).
+
+-   [ ] **Phase 17**: Isomorphic Transfer (New Domains).
