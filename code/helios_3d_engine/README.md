@@ -1,6 +1,6 @@
 # HELIOS 3D ENGINE (Project Code: SUNFIRE)
 
-**Current Version:** 1.0.3 (The Chat Bridge)
+**Current Version:** 1.0.4 (The Stabilizer)
 **Target Platform:** macOS (Silicon Optimized)
 **Architecture:** Python 3 + PySide6 (GUI) + ModernGL (Render) + PyTorch (AI)
 
