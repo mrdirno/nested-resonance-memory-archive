@@ -482,3 +482,11 @@
 - **Method:** Iterative generation of the 2D Koch Snowflake (Iteration 5, 3072 segments). Extruded vertically with a Z-axis twist and taper, by rasterizing the rotated polygon into each Z-slice of the voxel grid.
 - **Result:** Generated child_v34_koch_snowflake.stl (35MB, 732k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2966: Child V35 Refinement (The Sierpinski Pyramid) - COMPLETE
+- **Goal:** Create refined lamp design "Child V35 - The Sierpinski Pyramid" based on "Recursive tetrahedral stack".
+- **Action:** Created practical_design/inception/shade/child_v35_sierpinski_pyramid.py (outside repo).
+- **Method:** 3D Menger Sponge iteration (depth 4) mapped to the tapered lamp frustum. Produces a self-similar, cubic-voided structure (technically a Sponge, but fits the "Pyramid" aesthetic constraint of the lamp).
+- **Result:** Generated child_v35_sierpinski_pyramid.stl (183MB, 3.84M triangles). High detail.
+- **Status:** Artifact Generated (External).
