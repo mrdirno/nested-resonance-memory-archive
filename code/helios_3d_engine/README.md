@@ -66,6 +66,7 @@ The Engine accepts the following parameters. The Pilot should choose these based
 10. **Helios Web:** Run the engine in the browser via WebAssembly (In Progress).
 11. **Helios Mobile:** Native app for iPad Pro with Apple Pencil support (In Progress).
 12. **Helios VR/AR:** Spatial Computing interface for Apple Vision Pro (In Progress).
+13. **Helios Agent:** Autonomous research and design iteration (In Progress).
 
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt).
@@ -113,3 +114,5 @@ The Engine accepts the following parameters. The Pilot should choose these based
 -   [ ] **Phase 19**: Helios Mobile (iOS/iPadOS).
 
 -   [ ] **Phase 20**: Helios VR/AR (Vision Pro).
+
+-   [ ] **Phase 21**: Helios Agent (Autonomous Research).
