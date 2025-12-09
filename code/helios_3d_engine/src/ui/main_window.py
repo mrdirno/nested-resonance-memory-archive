@@ -5,7 +5,76 @@ from src.render.mesh import Mesh
 from src.ui.controls import ControlPanel
 from src.ui.video_player import VideoPlayer
 from src.core.reconstruction import VoxelReconstructor
+from src.core.sdf import SDFEngine
 import os
+import numpy as np
+
+class BooleanWorker(QThread):
+    finished = Signal(object, object, object)
+    
+    def __init__(self, recon_engine, current_geometry, operation, primitive_type):
+        super().__init__()
+        self.recon_engine = recon_engine
+        self.current_geometry = current_geometry
+        self.operation = operation
+        self.primitive = primitive_type
+        self.sdf_engine = SDFEngine()
+        
+    def run(self):
+        if self.current_geometry is None:
+            return
+            
+        # 1. Mesh to SDF
+        # We need the voxels. If we came from Native, we have OBJ but no voxels.
+        # If we came from Python, we have voxels.
+        # For MVP, let's assume Python path or re-voxelize OBJ (complex).
+        # Simplified: Only works if we have `self.recon_engine.voxels`.
+        
+        if not hasattr(self.recon_engine, 'voxels') or self.recon_engine.voxels is None:
+            print("Error: No voxel data available for boolean op. Run Python Reconstruction first.")
+            # Todo: Voxelize OBJ
+            return
+            
+        # Convert to SDF
+        sdf_grid = self.sdf_engine.voxels_to_sdf(self.recon_engine.voxels)
+        
+        # 2. Generate Primitive SDF
+        # Match grid resolution/bounds
+        points = self.recon_engine.points.cpu().numpy()
+        x = points[:, 0].reshape(sdf_grid.shape)
+        y = points[:, 1].reshape(sdf_grid.shape)
+        z = points[:, 2].reshape(sdf_grid.shape)
+        
+        if self.primitive == 'gyroid':
+            prim_sdf = self.sdf_engine.gyroid(x, y, z, scale=2.0)
+        elif self.primitive == 'sphere':
+            prim_sdf = self.sdf_engine.sphere(x, y, z, radius=0.5)
+        else:
+            prim_sdf = self.sdf_engine.box(x, y, z, size=0.5)
+            
+        # 3. Apply Boolean
+        if self.operation == 'union':
+            final_sdf = self.sdf_engine.union(sdf_grid, prim_sdf)
+        elif self.operation == 'difference':
+            final_sdf = self.sdf_engine.difference(sdf_grid, prim_sdf)
+        else:
+            final_sdf = self.sdf_engine.intersection(sdf_grid, prim_sdf)
+            
+        # 4. Extract Mesh
+        # Convert SDF back to boolean for Marching Cubes?
+        # MC works on scalar fields (iso-surface 0.0).
+        # Our extract_mesh expects binary voxels, let's update it or convert SDF < 0 to boolean.
+        
+        # Update extract_mesh to handle scalar field?
+        # Let's convert SDF < 0 -> True
+        new_voxels = final_sdf < 0
+        
+        # Use torch for consistency
+        import torch
+        new_voxels_t = torch.from_numpy(new_voxels).to(self.recon_engine.device)
+        
+        verts, norms, faces = self.recon_engine.extract_mesh(new_voxels_t)
+        self.finished.emit(verts, norms, faces)
 
 class ReconstructionWorker(QThread):
     finished = Signal(object, object, object) # verts, norms, faces
@@ -19,19 +88,15 @@ class ReconstructionWorker(QThread):
         
     def run(self):
         if self.use_native and self.input_folder:
-            # Native Swift Path (Request .obj)
-            # RealityKit creates a folder for .obj output
+            # Native Swift Path
             output_path = os.path.join(self.input_folder, "reconstruction.obj")
-            
             success = self.recon_engine.run_native_photogrammetry(self.input_folder, output_path)
             if success:
-                # Load OBJ Geometry
                 print(f"Loading geometry from {output_path}...")
                 verts, norms, faces = self.recon_engine.load_obj(output_path)
                 if verts is not None:
                     self.finished.emit(verts, norms, faces)
                 else:
-                    print("Failed to parse OBJ.")
                     self.finished.emit(None, None, None)
             else:
                 self.finished.emit(None, None, None)
@@ -46,7 +111,7 @@ class ReconstructionWorker(QThread):
 class HeliosMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Helios 3D Engine - v0.3.3 (The Loader)")
+        self.setWindowTitle("Helios 3D Engine - v0.4.0 (The Architect)")
         self.resize(1600, 900)
         
         central_widget = QWidget()
@@ -80,6 +145,7 @@ class HeliosMainWindow(QMainWindow):
         self.controls.params_changed.connect(self.viewport.update_mesh_params)
         self.controls.export_requested.connect(self.export_mesh)
         self.controls.native_mode_changed.connect(self.set_native_mode)
+        self.controls.boolean_op_requested.connect(self.start_boolean_op)
         self.video_player.reconstruction_requested.connect(self.start_reconstruction)
         self.viewport.status_message.connect(self.status_label.setText)
 
@@ -100,12 +166,18 @@ class HeliosMainWindow(QMainWindow):
         self.recon_worker.finished.connect(self.on_reconstruction_done)
         self.recon_worker.start()
 
+    def start_boolean_op(self, op, prim):
+        self.status_label.setText(f"Calculating Boolean {op} with {prim}...")
+        self.bool_worker = BooleanWorker(self.recon_engine, self.viewport.current_geometry, op, prim)
+        self.bool_worker.finished.connect(self.on_reconstruction_done)
+        self.bool_worker.start()
+
     def on_reconstruction_done(self, verts, norms, faces):
         if verts is None:
-            self.status_label.setText("Reconstruction Failed.")
+            self.status_label.setText("Operation Failed.")
             return
         
-        self.status_label.setText(f"Reconstruction Complete: {len(faces)} faces.")
+        self.status_label.setText(f"Operation Complete: {len(faces)} faces.")
         if self.viewport.mesh:
             self.viewport.mesh.vbo.release()
             self.viewport.mesh.ibo.release()
