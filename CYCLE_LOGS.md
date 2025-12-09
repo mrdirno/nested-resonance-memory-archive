@@ -176,3 +176,13 @@
   - Updated UI to include "Neural Engine" toggle.
 - **Result:** Engine now detects Apple Silicon Neural Engine capability and is ready for model weights.
 - **Status:** Phase 6 Complete (Infrastructure).
+
+## Cycle 2868: Helios 3D Engine - Phase 8 The Loader - COMPLETE
+- **Goal:** Implement Phase 8 (USDZ/OBJ Integration).
+- **Action:** Updated CLI to export OBJ and Python Engine to load it.
+- **Method:** 
+  - Modified `HeliosCLI` to support explicit file extension output (e.g., .obj).
+  - Implemented simple OBJ parser in `src/core/reconstruction.py`.
+  - Updated `ReconstructionWorker` to load the generated OBJ into the Python Viewport.
+- **Result:** Full loop achieved: Python -> Swift (Photogrammetry) -> OBJ -> Python (Visualization).
+- **Status:** Phase 8 Complete.
