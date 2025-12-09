@@ -6,7 +6,7 @@ class GeometryEngine:
     def __init__(self):
         pass
 
-    def generate_gyroid_mesh(self, resolution=64, scale=2.0):
+    def generate_gyroid_mesh(self, resolution=64, scale=2.0, thickness=0.1):
         # Create grid
         x = np.linspace(-np.pi, np.pi, resolution)
         y = np.linspace(-np.pi, np.pi, resolution)
@@ -16,7 +16,7 @@ class GeometryEngine:
         # Evaluate SDF
         # Compose: Sphere intersected with Gyroid
         d_sphere = sphere(X, Y, Z, radius=2.5)
-        d_gyroid = gyroid(X, Y, Z, scale=scale, thickness=0.2)
+        d_gyroid = gyroid(X, Y, Z, scale=scale, thickness=thickness)
         
         # d_final = intersect(d_sphere, d_gyroid)
         d_final = d_gyroid # Let's see pure gyroid first inside the box

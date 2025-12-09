@@ -1,12 +1,13 @@
-from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel
+from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QDockWidget
 from PySide6.QtCore import Qt
 from src.render.viewport import HeliosViewport
+from src.ui.controls import ControlPanel
 
 class HeliosMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         
-        self.setWindowTitle("Helios 3D Engine - v0.0.1")
+        self.setWindowTitle("Helios 3D Engine - v0.1.0 (Sunfire)")
         self.resize(1280, 800)
         
         # Central Widget
@@ -23,13 +24,18 @@ class HeliosMainWindow(QMainWindow):
         layout.addWidget(self.viewport, 1) # Stretch factor 1
         
         # Status Bar
-        self.status_label = QLabel("System Ready. GPU: Initializing...")
+        self.status_label = QLabel("System Ready.")
         self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.status_label.setStyleSheet("background-color: #222; color: #888; padding: 5px;")
         layout.addWidget(self.status_label, 0)
 
-        # Connect viewport signal if needed
-        # self.viewport.initialized.connect(self.on_gpu_ready)
+        # Controls Dock
+        self.dock_controls = QDockWidget("Controls", self)
+        self.dock_controls.setAllowedAreas(Qt.DockWidgetArea.RightDockWidgetArea | Qt.DockWidgetArea.LeftDockWidgetArea)
+        self.controls = ControlPanel()
+        self.dock_controls.setWidget(self.controls)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_controls)
         
-    def on_gpu_ready(self, info):
-        self.status_label.setText(f"GPU Ready: {info}")
+        # Connect Signals
+        self.controls.params_changed.connect(self.viewport.update_mesh_params)
+        self.viewport.status_message.connect(self.status_label.setText)
