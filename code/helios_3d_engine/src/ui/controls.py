@@ -46,6 +46,12 @@ class ControlPanel(QWidget):
         self.btn_update.clicked.connect(self.emit_params)
         layout_gen.addWidget(self.btn_update)
         
+        # Export Button
+        self.btn_export = QPushButton("Export STL")
+        self.btn_export.setStyleSheet("background-color: #2da44e; padding: 10px; font-weight: bold; margin-top: 10px;")
+        self.btn_export.clicked.connect(self.emit_export)
+        layout_gen.addWidget(self.btn_export)
+        
         layout.addWidget(group_gen)
         layout.addStretch()
 
@@ -56,3 +62,13 @@ class ControlPanel(QWidget):
             "resolution": self.spin_res.value()
         }
         self.params_changed.emit(params)
+
+    def emit_export(self):
+        self.export_requested.emit()
+
+class ControlPanel(QWidget):
+    # Signals to notify changes
+    params_changed = Signal(dict)
+    export_requested = Signal()
+    
+    def __init__(self):

@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QDockWidget
+from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QDockWidget, QFileDialog
 from PySide6.QtCore import Qt
 from src.render.viewport import HeliosViewport
 from src.ui.controls import ControlPanel
@@ -38,4 +38,15 @@ class HeliosMainWindow(QMainWindow):
         
         # Connect Signals
         self.controls.params_changed.connect(self.viewport.update_mesh_params)
+        self.controls.export_requested.connect(self.export_mesh)
         self.viewport.status_message.connect(self.status_label.setText)
+
+    def export_mesh(self):
+        filename, _ = QFileDialog.getSaveFileName(self, "Export STL", "helios_export.stl", "Stereolithography (*.stl)")
+        if filename:
+            self.status_label.setText(f"Saving to {filename}...")
+            success = self.viewport.save_mesh(filename)
+            if success:
+                self.status_label.setText(f"Saved: {filename}")
+            else:
+                self.status_label.setText("Export Failed: No Geometry")

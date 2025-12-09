@@ -82,6 +82,9 @@ class HeliosViewport(QOpenGLWidget):
             self.status_message.emit("Generation Failed: No Surface")
             return
             
+        # Store for export
+        self.current_geometry = (verts, norms, faces)
+            
         # Create Mesh on Main Thread (OpenGL context is here)
         if self.mesh:
             # Release old resources if needed (ModernGL handles gc mostly but explicit release is good)
@@ -92,6 +95,13 @@ class HeliosViewport(QOpenGLWidget):
         self.mesh = Mesh(self.ctx, verts, norms, faces)
         self.status_message.emit(f"Mesh Ready: {len(faces)} faces")
         self.update() # Force redraw
+
+    def save_mesh(self, filename):
+        if hasattr(self, 'current_geometry') and self.current_geometry:
+            verts, norms, faces = self.current_geometry
+            self.engine.save_stl(filename, verts, faces)
+            return True
+        return False
 
     def paintGL(self):
         if not self.ctx:
