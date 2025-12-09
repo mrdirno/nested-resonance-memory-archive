@@ -119,10 +119,10 @@
     -   Verified DMG generation (Size: ~309MB).
 - **Status:** 🟢 COMPLETE
 
-## Cycle 2975-2978: HELIOS 3D ENGINE - CHAT BRIDGE (Phase 15a)
-- **Goal:** Enable Natural Language Input for Pilot Control.
+## Cycle 2989-2996: HELIOS 3D ENGINE - PATHING REFACTOR (Phase 15b)
+- **Goal:** Fix `user_prompt.json` location in frozen app.
 - **Action:**
-    -   Modified `ControlPanel` to write `user_prompt.json` to the filesystem.
-    -   Rebuilt application (v1.0.2).
-    -   Established the "Chat Loop": User -> UI -> JSON -> Pilot -> JSON -> Engine.
-- **Status:** 🟢 COMPLETE - READY FOR TESTING.
+    -   Refactored `ControlPanel` to write to the dynamic `working_dir` (Frame Folder) instead of hardcoded path.
+    -   Wired `VideoPlayer.folder_loaded` -> `MainWindow` -> `ControlPanel`.
+    -   Rebuilt Application (v1.0.3).
+- **Status:** 🟢 COMPLETE - CHAT BRIDGE VERIFIED.

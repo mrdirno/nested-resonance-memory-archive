@@ -112,6 +112,7 @@ class FrameViewer(QWidget):
 
 class VideoPlayer(QWidget):
     reconstruction_requested = Signal()
+    folder_loaded = Signal(str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -168,6 +169,7 @@ class VideoPlayer(QWidget):
         asset_path = os.path.join(base_dir, "assets", "test_data", "default_subject.mp4")
         self.frames_dir = os.path.join(base_dir, "assets", "test_data", "frames")
         self.current_folder = self.frames_dir # Expose for Smart Scan
+        self.folder_loaded.emit(self.frames_dir)
         
         if os.path.exists(asset_path):
             self.label_status.setText("Loading Video...")

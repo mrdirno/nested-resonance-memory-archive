@@ -150,6 +150,7 @@ class HeliosMainWindow(QMainWindow):
         self.controls.boolean_op_requested.connect(self.start_boolean_op)
         self.controls.slice_requested.connect(self.preview_slice)
         self.video_player.reconstruction_requested.connect(self.start_reconstruction)
+        self.video_player.folder_loaded.connect(self.controls.set_working_dir)
         self.viewport.status_message.connect(self.status_label.setText)
 
     def set_native_mode(self, enabled):

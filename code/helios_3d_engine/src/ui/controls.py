@@ -14,124 +14,39 @@ class ControlPanel(QWidget):
     
     def __init__(self):
         super().__init__()
+        self.working_dir = None
         self.setFixedWidth(300)
         self.setStyleSheet("background-color: #2b2b2b; color: #eee;")
         layout = QVBoxLayout(self)
         
         self.ai_gen = AIGenerator()
         self.neural_gen = NeuralGenerator()
-        
-        # --- AI Generator ---
-        group_ai = QGroupBox("AI Generator")
-        layout_ai = QVBoxLayout(group_ai)
-        self.txt_prompt = QLineEdit()
-        self.txt_prompt.setPlaceholderText("e.g. 'Large thick sphere'")
-        self.txt_prompt.setStyleSheet("padding: 5px; color: #fff; background: #444;")
-        layout_ai.addWidget(self.txt_prompt)
-        self.chk_neural = QCheckBox("Enable Neural Engine (PyTorch)")
-        if str(self.neural_gen.device) == "cpu":
-            self.chk_neural.setEnabled(False)
-            self.chk_neural.setText("Neural Engine (MPS Not Found)")
-        layout_ai.addWidget(self.chk_neural)
-        self.btn_generate = QPushButton("Generate")
-        self.btn_generate.setStyleSheet("background-color: #6a00ff; padding: 5px; font-weight: bold;")
-        self.btn_generate.clicked.connect(self.on_generate)
-        layout_ai.addWidget(self.btn_generate)
-        layout.addWidget(group_ai)
-        
-        # --- Fabrication (Phase 14) ---
-        group_fab = QGroupBox("Fabrication Bridge")
-        layout_fab = QVBoxLayout(group_fab)
-        layout_fab.addWidget(QLabel("Slice Preview (Z-Height):"))
-        self.slider_slice = QSlider(Qt.Orientation.Horizontal)
-        self.slider_slice.setRange(0, 100)
-        self.slider_slice.valueChanged.connect(self.emit_slice)
-        layout_fab.addWidget(self.slider_slice)
-        layout.addWidget(group_fab)
-        
-        # --- Boolean Operations (Phase 9) ---
-        group_bool = QGroupBox("Advanced Editing (Boolean)")
-        layout_bool = QVBoxLayout(group_bool)
-        
-        layout_bool.addWidget(QLabel("Operation:"))
-        self.combo_op = QComboBox()
-        self.combo_op.addItems(["Union (Merge)", "Difference (Cut)", "Intersection (Mask)"])
-        layout_bool.addWidget(self.combo_op)
-        
-        layout_bool.addWidget(QLabel("With Primitive:"))
-        self.combo_prim = QComboBox()
-        self.combo_prim.addItems(["Gyroid (Lattice)", "Sphere (Ball)", "Box (Cube)"])
-        layout_bool.addWidget(self.combo_prim)
-        
-        self.btn_bool = QPushButton("Apply Boolean Op")
-        self.btn_bool.setStyleSheet("background-color: #d35400; padding: 5px; font-weight: bold;")
-        self.btn_bool.clicked.connect(self.emit_boolean)
-        layout_bool.addWidget(self.btn_bool)
-        layout.addWidget(group_bool)
-        
-        # --- Reconstruction ---
-        group_recon = QGroupBox("Reconstruction")
-        layout_recon = QVBoxLayout(group_recon)
-        
-        self.chk_native = QCheckBox("Use Native (Swift) Engine")
-        self.chk_native.setChecked(True)
-        self.chk_native.toggled.connect(self.emit_native_mode)
-        layout_recon.addWidget(self.chk_native)
-        
-        self.chk_smart = QCheckBox("Smart Reconstruction (Gemini)")
-        self.chk_smart.setToolTip("Uses Gemini Vision to analyze the video and auto-tune parameters.")
-        self.chk_smart.setChecked(False)
-        layout_recon.addWidget(self.chk_smart)
-        
-        layout.addWidget(group_recon)
-        
-        # --- Manual ---
-        group_gen = QGroupBox("Manual Settings")
-        layout_gen = QVBoxLayout(group_gen)
-        layout_gen.addWidget(QLabel("Scale:"))
-        self.spin_scale = QDoubleSpinBox()
-        self.spin_scale.setValue(2.0)
-        layout_gen.addWidget(self.spin_scale)
-        layout_gen.addWidget(QLabel("Thickness:"))
-        self.spin_thick = QDoubleSpinBox()
-        self.spin_thick.setValue(0.1)
-        layout_gen.addWidget(self.spin_thick)
-        layout_gen.addWidget(QLabel("Resolution:"))
-        self.spin_res = QSpinBox()
-        self.spin_res.setRange(16, 128)
-        self.spin_res.setValue(64)
-        layout_gen.addWidget(self.spin_res)
-        self.btn_update = QPushButton("Update Mesh")
-        self.btn_update.clicked.connect(self.emit_params)
-        layout_gen.addWidget(self.btn_update)
-        self.btn_export = QPushButton("Export STL")
-        self.btn_export.clicked.connect(self.emit_export)
-        layout_gen.addWidget(self.btn_export)
-        layout.addWidget(group_gen)
-        
-        layout.addStretch()
 
+    def set_working_dir(self, path):
+        self.working_dir = path
+        print(f"ControlPanel: Working Directory set to {path}")
+        
     def on_generate(self):
         prompt = self.txt_prompt.text()
         if not prompt: return
         
         # Phase 15: Chat Bridge (Twin Engine)
-        # Write prompt to disk for the Pilot to consume
         import json
         import os
         
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        runtime_dir = os.path.join(base_dir, "assets", "runtime")
-        os.makedirs(runtime_dir, exist_ok=True)
-        
-        prompt_file = os.path.join(runtime_dir, "user_prompt.json")
-        
-        try:
-            with open(prompt_file, 'w') as f:
-                json.dump({"prompt": prompt, "timestamp": str(os.path.getmtime(prompt_file) if os.path.exists(prompt_file) else 0)}, f)
-            self.btn_generate.setText("Sent to Pilot")
-        except Exception as e:
-            print(f"Failed to write prompt: {e}")
+        if self.working_dir and os.path.exists(self.working_dir):
+            prompt_file = os.path.join(self.working_dir, "user_prompt.json")
+            try:
+                with open(prompt_file, 'w') as f:
+                    json.dump({"prompt": prompt, "timestamp": str(os.path.getmtime(prompt_file) if os.path.exists(prompt_file) else 0)}, f)
+                self.btn_generate.setText("Sent to Pilot")
+                print(f"User Prompt written to: {prompt_file}")
+            except Exception as e:
+                print(f"Failed to write prompt: {e}")
+                self.btn_generate.setText("Write Error")
+        else:
+            print("Error: No working directory set for prompts.")
+            self.btn_generate.setText("No Video Loaded")
             
         # Fallback: Local Keyword Logic (Instant)
         if self.chk_neural.isChecked():
