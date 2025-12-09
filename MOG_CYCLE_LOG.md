@@ -26,9 +26,29 @@
 
 ## Cycle 2861: HELIOS 3D ENGINE - THE OBSERVER (Phase 5)
 - **Goal:** Implement Video Player for reference viewing.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2863: HELIOS 3D ENGINE - SAM 2 RESEARCH (Phase 6a)
+- **Goal:** Evaluate Meta's SAM 2 for video segmentation.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2864: HELIOS 3D ENGINE - THE HYBRID STRATEGY
+- **Goal:** Integrate SAM 2 tracking into the UI.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2865: HELIOS 3D ENGINE - VISUAL POLISH
+- **Goal:** Render the SAM 2 mask as a red overlay.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2866: HELIOS 3D ENGINE - THE RECONSTRUCTOR (Core)
+- **Goal:** Implement Voxel Carving Logic.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2873: HELIOS 3D ENGINE - PIPELINE ACTIVATION (Phase 7)
+- **Goal:** Wire the UI to the Reconstruction Engine.
 - **Action:**
-    - Created `src/ui/video_player.py` using QtMultimedia.
-    - Integrated Reference Dock into `HeliosMainWindow`.
-    - Auto-loading default asset for verification.
+    -   Implemented `ReconstructionWorker` in `main_window.py`.
+    -   Updated `reconstruction.py` with `extract_mesh` (Marching Cubes).
+    -   Verified pipeline: Video -> SAM 2 -> Voxels -> Mesh -> Viewport.
 - **Status:** 🟢 COMPLETE
 ---
