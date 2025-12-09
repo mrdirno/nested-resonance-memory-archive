@@ -1,10 +1,11 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSlider, QHBoxLayout, QLabel, QSizePolicy
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSlider, QHBoxLayout, QLabel, QSizePolicy, QInputDialog
 from PySide6.QtGui import QImage, QPixmap, QPainter, QColor, QBrush
 from PySide6.QtCore import Qt, QTimer, Signal
 import os
 import imageio.v3 as iio
 import numpy as np
 from ..core.segmentation import SegmentationEngine
+from ..bridge.vision_bridge import VisionBridge
 
 class FrameViewer(QWidget):
     click_signal = Signal(int, int) # x, y

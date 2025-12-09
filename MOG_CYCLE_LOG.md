@@ -50,9 +50,29 @@
 
 ## Cycle 2876: HELIOS 3D ENGINE - FINAL ARCHITECTURE LOCK
 - **Goal:** Enforce Python Architecture and Archive Swift.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2878: HELIOS 3D ENGINE - THE ARCHITECT (Phase 8)
+- **Goal:** Infuse the Voxel Hull with Gyroid Math.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2880: HELIOS 3D ENGINE - NEURAL GENERATOR
+- **Goal:** Add Text-to-3D placeholder (MPS).
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2881: HELIOS 3D ENGINE - CRITICAL REPAIR
+- **Goal:** Fix broken scaffolding identified by User Audit.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2882: HELIOS 3D ENGINE - UI INTEGRITY CHECK
+- **Goal:** Ensure UI controls match the backend capabilities.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2884: HELIOS 3D ENGINE - BOOLEAN OPERATIONS (Phase 9)
+- **Goal:** Combine Scanned Geometry with Procedural Primitives.
 - **Action:**
-    -   Moved Swift artifacts to `code/legacy/helios_swift/`.
-    -   Restored Python core from Commit `3fc3cf9c`.
-    -   Confirmed `reconstruction.py` and `segmentation.py` are active.
+    -   Updated `SDFEngine` to convert Voxels -> Signed Distance Field.
+    -   Added "Advanced Editing" to `ControlPanel` (Union/Difference/Intersection).
+    -   Implemented `BooleanWorker` to execute operations off-thread.
 - **Status:** 🟢 COMPLETE
 ---
