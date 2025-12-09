@@ -60,30 +60,33 @@ class FrameViewer(QWidget):
         # Draw Mask Overlay
         if self.current_mask is not None:
             # Mask is HxW boolean or float.
-            # We need to turn it into a QImage with Alpha
-            # For performance, usually we'd do this once when mask is set, not every paint.
-            # But for prototype, let's draw it using a colored overlay.
-            # Actually, constructing a QImage from mask on the fly is cheapest in Python:
+            # Convert to RGBA: Red overlay (255, 0, 0, 128)
             
-            # Create RGBA buffer
-            # This is slow in Python loop. Efficient way:
             h, w = self.current_mask.shape
             
-            # Optimization: Only if mask exists
-            if self.current_mask.max() > 0:
-                # We need to map the mask to the screen rect
-                # This is tricky with raw painters.
-                # Easier: Construct QImage from mask, scale it same as video, draw with opacity.
-                
-                # We can't easily construct QImage from bool array without numpy tricks
-                # Let's trust the user clicks for now and implement visual later if complex.
-                # Just draw a simple indicator for now to prove logic.
-                pass
-                
-                # To really draw the mask:
-                # 1. Resize mask to scaled size
-                # 2. Draw red pixels
-                # We will implement this properly in next cycle.
+            # Create RGBA buffer
+            # Initialize with zeros (transparent)
+            rgba = np.zeros((h, w, 4), dtype=np.uint8)
+            
+            # Set Red channel where mask is True
+            mask_indices = self.current_mask > 0
+            rgba[mask_indices, 0] = 255 # R
+            rgba[mask_indices, 3] = 128 # Alpha (50% opacity)
+            
+            # Create QImage
+            # Must keep reference to buffer or QImage crashes
+            self._mask_buffer = rgba
+            mask_img = QImage(rgba.data, w, h, w * 4, QImage.Format.Format_RGBA8888)
+            
+            # Scale and Draw
+            rect = self.rect()
+            scaled_mask = mask_img.scaled(rect.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            
+            # Calculate position (same as video)
+            x = (rect.width() - scaled_mask.width()) // 2
+            y = (rect.height() - scaled_mask.height()) // 2
+            
+            painter.drawImage(x, y, scaled_mask)
                 
     def mousePressEvent(self, event):
         if self.current_frame is None or not hasattr(self, 'img_rect'):
