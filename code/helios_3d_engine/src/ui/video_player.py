@@ -248,3 +248,28 @@ class VideoPlayer(QWidget):
 
     def on_reconstruct(self):
         self.reconstruction_requested.emit()
+
+    def show_slice(self, slice_data, z_height):
+        """
+        Displays a 2D slice (Fabrication View).
+        Input: 2D numpy array (binary or float).
+        """
+        self.label_status.setText(f"Slice View (Z={z_height:.2f})")
+        
+        # Convert to RGB
+        h, w = slice_data.shape
+        rgb = np.zeros((h, w, 3), dtype=np.uint8)
+        
+        if slice_data.dtype == bool:
+            rgb[slice_data] = [255, 255, 255] # White solid
+        else:
+            # Normalize float SDF/Density
+            # Assume range -1 to 1 or 0 to 1
+            norm = np.clip(slice_data, 0, 1) * 255
+            rgb[:, :, 0] = norm
+            rgb[:, :, 1] = norm
+            rgb[:, :, 2] = norm
+            
+        self.viewer.set_frame(rgb)
+        # Clear mask overlay when in slice mode
+        self.viewer.current_mask = None

@@ -148,12 +148,46 @@ class HeliosMainWindow(QMainWindow):
         self.controls.export_requested.connect(self.export_mesh)
         self.controls.native_mode_changed.connect(self.set_native_mode)
         self.controls.boolean_op_requested.connect(self.start_boolean_op)
+        self.controls.slice_requested.connect(self.preview_slice)
         self.video_player.reconstruction_requested.connect(self.start_reconstruction)
         self.viewport.status_message.connect(self.status_label.setText)
 
     def set_native_mode(self, enabled):
         self.use_native_engine = enabled
         self.status_label.setText(f"Engine switched to: {'Native (Swift)' if enabled else 'Voxel (Python)'}")
+
+    def preview_slice(self, z_ratio):
+        """
+        Extracts a 2D slice from the current Voxel/SDF grid and displays it.
+        """
+        if not hasattr(self.recon_engine, 'voxels') or self.recon_engine.voxels is None:
+            # self.status_label.setText("No Voxel Data for Slicing.")
+            # Be silent if dragging slider without data, or log once
+            return
+            
+        # Calculate Z index
+        # voxels is shape (D, H, W) or (X, Y, Z)?
+        # Usually (X, Y, Z). Let's assume Z is last dim.
+        # But slicing usually happens along Z (Height).
+        
+        # If voxels are (X, Y, Z), we slice [:, :, z]
+        
+        depth = self.recon_engine.voxels.shape[2]
+        z_idx = int(z_ratio * (depth - 1))
+        z_idx = max(0, min(z_idx, depth - 1))
+        
+        # Extract slice
+        # Convert tensor to numpy
+        import torch
+        if isinstance(self.recon_engine.voxels, torch.Tensor):
+            vol = self.recon_engine.voxels.cpu().numpy()
+        else:
+            vol = self.recon_engine.voxels
+            
+        slice_data = vol[:, :, z_idx]
+        
+        # Send to Video Player
+        self.video_player.show_slice(slice_data, z_ratio)
 
     def start_reconstruction(self):
         self.status_label.setText("Starting Reconstruction Pipeline...")

@@ -10,6 +10,7 @@ class ControlPanel(QWidget):
     export_requested = Signal()
     native_mode_changed = Signal(bool)
     boolean_op_requested = Signal(str, str) # Op, Primitive
+    slice_requested = Signal(float) # Normalized Z (0.0 - 1.0)
     
     def __init__(self):
         super().__init__()
@@ -37,6 +38,16 @@ class ControlPanel(QWidget):
         self.btn_generate.clicked.connect(self.on_generate)
         layout_ai.addWidget(self.btn_generate)
         layout.addWidget(group_ai)
+        
+        # --- Fabrication (Phase 14) ---
+        group_fab = QGroupBox("Fabrication Bridge")
+        layout_fab = QVBoxLayout(group_fab)
+        layout_fab.addWidget(QLabel("Slice Preview (Z-Height):"))
+        self.slider_slice = QSlider(Qt.Orientation.Horizontal)
+        self.slider_slice.setRange(0, 100)
+        self.slider_slice.valueChanged.connect(self.emit_slice)
+        layout_fab.addWidget(self.slider_slice)
+        layout.addWidget(group_fab)
         
         # --- Boolean Operations (Phase 9) ---
         group_bool = QGroupBox("Advanced Editing (Boolean)")
@@ -136,3 +147,6 @@ class ControlPanel(QWidget):
         op = self.combo_op.currentText().split()[0].lower()
         prim = self.combo_prim.currentText().split()[0].lower()
         self.boolean_op_requested.emit(op, prim)
+        
+    def emit_slice(self, value):
+        self.slice_requested.emit(value / 100.0)
