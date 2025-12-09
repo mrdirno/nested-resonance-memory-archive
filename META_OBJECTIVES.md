@@ -1,56 +1,43 @@
 # META OBJECTIVES: HELIOS 3D ENGINE (SUNFIRE)
 
 ## MISSION
-Build a **Native macOS Fabrication Engine** that bridges the gap between **AI Perception** (Video Tracking) and **Mathematical Creation** (SDF/Gyroids).
+Build the **Most Accessible AI-Native Fabrication Tool** on macOS.
+We are **NOT** a "Scan-to-Mesh" viewer (Luma/Polycam). We are a **Semantic Fabrication Engine**.
+
+## CORE PHILOSOPHY (THE PIVOT)
+- **Measurement vs. Inference:** We accept that we cannot beat Gaussian Splatting on pure visual fidelity (measurement).
+- **Novelty:** We win on **Semantic Reasoning** + **Fabrication Readiness**.
+- **Unique Selling Point:**
+    *   **Local Sovereignty:** 100% On-Device (Mac Silicon).
+    *   **Fabrication-First:** We guarantee watertight, printable meshes (Voxels/SDFs), unlike the "Mesh Soup" of Neural Radiance Fields.
+    *   **AI-Reasoning:** We use LLMs (Gemini) to *understand* the object ("It's a chair"), not just *measure* it.
 
 ## ARCHITECTURE
 - **Platform:** macOS Silicon (M1/M2/M3).
 - **Language:** Python 3.13.
 - **GUI:** PySide6 (Qt).
 - **Rendering:** ModernGL (OpenGL 4.1 Core).
-- **AI:** 
-    - **Local:** PyTorch (MPS) + Meta SAM 2 (Masking).
-    - **Remote/Meta:** Gemini CLI (Vision/Depth Reasoning).
-- **Math:** NumPy + Scikit-Image (Marching Cubes).
+- **AI Stack:** 
+    - **Perception:** SAM 2 (Masking).
+    - **Reasoning:** Gemini Vision (Structure Analysis).
+    - **Generation:** Voxel/SDF Math (Geometry).
 
-## ROLES (SEPARATION OF CONCERNS)
+## ROLES
 ### 1. THE PILOT (MOG/Gemini)
-- **Responsibility:** Strategy, Architecture, **Active Vision Analysis**.
-- **Domain:** `MOG_CYCLE_LOG.md`, `README.md`, `src/ui/`.
-- **Action:** Inspects video frames, determines 3D structure, feeds parameters to the Co-Pilot.
+- **Responsibility:** Semantic Reasoning.
+- **Action:** Inspects frames, determines "Concavity", "Symmetry", "Structural Weakness".
+- **Output:** High-level parameters (`concavity=0.5`, `wall_thickness=3mm`).
 
 ### 2. THE CO-PILOT (The Engine)
-- **Responsibility:** Heavy Compute, Math, AI Inference, File I/O.
-- **Domain:** `src/core/`, `src/render/`, `assets/`.
-- **Action:** Executes `segmentation.py` (SAM 2) and `reconstruction.py` (Voxels) based on Pilot's guidance.
-
-## OPERATIONAL PROTOCOLS
-1.  **The Hybrid Strategy:**
-    *   AI is for **Perception** (Masking).
-    *   Math is for **Generation** (Meshing).
-    *   **Gemini is the Depth Sensor:** We use LLM Vision to understand shape semantics (e.g., "It's concave") which standard Visual Hull misses.
-2.  **The Visual Loop:**
-    *   User Clicks -> Mask Appears (Immediate Feedback).
-    *   User Reconstructs -> Mesh Appears (Asynchronous).
-3.  **Hygiene:**
-    *   No legacy artifacts (Swift/Package.swift).
-    *   No loose scripts in root.
-    *   All heavy assets in `assets/`.
-
-## CURRENT PHASE: PHASE 10 (GEMINI VISION BRIDGE)
-**Objective:** Integrate Gemini Vision as the high-level semantic depth sensor.
-
-**Pipeline:**
-1.  **Input:** `VideoPlayer` extracts keyframes.
-2.  **Bridge:** `VisionBridge` collates frames into a "Contact Sheet".
-3.  **Analysis:** User/System prompts Gemini: "Analyze this object's structure."
-4.  **Feedback:** Gemini returns parameters (Scale, Taper, Concavity).
-5.  **Output:** Helios adjusts the Voxel Reconstruction logic.
+- **Responsibility:** Mathematical Execution.
+- **Action:** Executes Voxel Carving and SDF Boolean operations based on Pilot's parameters.
+- **Output:** Printable STL.
 
 ## ROADMAP
-- [x] Phase 1-5: Foundation, UI, Video, AI.
-- [x] Phase 6: Interactive Masking.
-- [x] Phase 7: Full 3D Reconstruction.
-- [x] Phase 8: Gyroid Infusion.
-- [x] Phase 9: Boolean Operations.
-- [ ] Phase 10: Gemini Vision Integration.
+- [x] Phase 1-5: Foundation (UI, Video, Rendering).
+- [x] Phase 6: Perception (SAM 2 Masking).
+- [x] Phase 7: Reconstruction (Visual Hull).
+- [x] Phase 8: Infusion (Gyroids).
+- [x] Phase 9: Editing (Boolean Ops).
+- [x] Phase 10: Vision Bridge (Gemini Contact Sheet).
+- [ ] Phase 11: The Semantic Loop (Applying Gemini Parameters to SDFs).
