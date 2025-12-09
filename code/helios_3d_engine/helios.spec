@@ -2,15 +2,12 @@
 
 block_cipher = None
 
-# Path to Swift CLI
-cli_path = '../helios_native_bridge/.build/release/HeliosCLI'
-
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[(cli_path, '.')], # Bundle HeliosCLI in root of app
-    datas=[('src', 'src')], # Include source for dynamic loading if needed
-    hiddenimports=['scipy.special.cython_special', 'PySide6'],
+    binaries=[], 
+    datas=[('src', 'src'), ('assets', 'assets')], 
+    hiddenimports=['scipy.special.cython_special', 'PySide6', 'imageio', 'av', 'cv2', 'numpy', 'torch'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -32,7 +29,7 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False, # GUI App
+    console=False, 
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch='arm64',
