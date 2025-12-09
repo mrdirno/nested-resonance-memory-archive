@@ -48,6 +48,8 @@ We do not compete on "Visual Fidelity" (Splatting). We compete on **Structural F
 
 -   [x] **Phase 10**: Vision Bridge (Contact Sheets).
 
--   [x] **Phase 11**: Semantic Parameter Application (Smart Scan + Pilot Override).
+-   [x] **Phase 11**: Semantic Parameter Application (Verified Integration).
 
--   [ ] **Phase 12**: Final Polish & Packaging (In Progress).
+-   [x] **Phase 12**: Final Polish & Packaging (Verified Build).
+
+-   [ ] **Phase 13**: Distribution (DMG / Zip).
