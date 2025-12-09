@@ -48,6 +48,18 @@ The Engine accepts the following parameters. The Pilot should choose these based
 -   **Structural/Blocky** -> `schwarz_p` + Low Concavity.
 -   **Crystalline/Tech** -> `schwarz_d` + Medium Concavity.
 
+## KEY FEATURES
+1.  **Local Privacy:** All processing happens on-device. No cloud subscriptions.
+2.  **Fabrication First:** Output is guaranteed watertight and 3D printable (Voxel/SDF math).
+3.  **Fabrication Bridge (Voxel Slicer):** Realtime cross-section analysis to verify printability (islands/overhangs) before export.
+4.  **Semantic Reasoning (Smart Scan):**
+    -   **The Local Eye:** Uses macOS Native Vision Framework to classify objects *offline*.
+    -   **Auto-Tuning:** Detects "Organic" vs "Structural" forms and adjusts Gyroid params automatically.
+5.  **Pilot Override:** 
+    - For advanced users, place a `pilot_override.json` in the frames directory.
+    - The engine will strictly adhere to these parameters, bypassing AI inference.
+    - Example JSON: `{"concavity": 0.8, "gyroid_type": "schwarz_d"}`
+6.  **Generative Infusion:** Automatically fills objects with mathematical lattices (Gyroids) for strength and aesthetics.
 
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt).
@@ -81,3 +93,5 @@ The Engine accepts the following parameters. The Pilot should choose these based
 -   [x] **Phase 12**: Final Polish & Packaging (Verified Build).
 
 -   [x] **Phase 13**: Distribution (Verified DMG).
+
+-   [x] **Phase 14**: Fabrication Bridge (Voxel Slicer).
