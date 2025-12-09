@@ -1,50 +1,37 @@
 import torch
-import logging
+import os
 
 class NeuralGenerator:
     def __init__(self):
-        self.logger = logging.getLogger("HeliosNeural")
-        self.device = self._get_device()
-        self.model = None
-        
-    def _get_device(self):
+        # Check for MPS (Metal Performance Shaders) availability
         if torch.backends.mps.is_available():
-            self.logger.info("MPS (Metal Performance Shaders) Acceleration Enabled.")
-            return torch.device("mps")
-        elif torch.cuda.is_available():
-            self.logger.info("CUDA Acceleration Enabled.")
-            return torch.device("cuda")
+            self.device = torch.device("mps")
+            print("NeuralGenerator: MPS Acceleration Active")
         else:
-            self.logger.warning("No GPU acceleration found. Using CPU.")
-            return torch.device("cpu")
+            self.device = torch.device("cpu")
+            print("NeuralGenerator: Running on CPU")
+            
+        self.model = None
 
-    def load_model(self, model_name="shap-e"):
+    def load_model(self):
         """
-        Loads the generative model. 
-        For Phase 6 prototype, this initializes the tensor buffers on MPS.
+        Loads a placeholder PyTorch model to verify MPS pipeline.
+        In a real scenario, this would load a Text-to-3D model (e.g., Shap-E or Point-E).
         """
-        self.logger.info(f"Loading {model_name} on {self.device}...")
         try:
-            # Placeholder for actual Shap-E loading
-            # self.model = load_shap_e(device=self.device)
+            # Placeholder: Simple Neural Network
+            self.model = torch.nn.Sequential(
+                torch.nn.Linear(10, 64),
+                torch.nn.ReLU(),
+                torch.nn.Linear(64, 3) # x, y, z
+            ).to(self.device)
             
-            # Validate MPS memory allocation
-            x = torch.ones(1024, 1024, device=self.device)
-            y = torch.zeros(1024, 1024, device=self.device)
-            z = x + y
+            # Warmup run
+            dummy_input = torch.randn(1, 10).to(self.device)
+            _ = self.model(dummy_input)
             
-            self.logger.info("Neural Engine Initialized Successfully.")
+            print("NeuralGenerator: Model Loaded and Warmed Up")
             return True
         except Exception as e:
-            self.logger.error(f"Failed to load neural backend: {e}")
+            print(f"NeuralGenerator Error: {e}")
             return False
-
-    def generate(self, prompt):
-        if not self.model:
-            # In prototype, we simulate the 'dreaming' process time
-            import time
-            time.sleep(1.0) 
-            return None
-            
-        # Actual inference would go here
-        pass
