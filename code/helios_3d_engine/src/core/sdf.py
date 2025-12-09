@@ -1,5 +1,28 @@
 import numpy as np
-from .sdf import gyroid, sphere, box, union, intersect, difference
+
+# Functional Primitives
+def gyroid(x, y, z, scale=1.0, thickness=0.1):
+    return np.abs(np.sin(x*scale)*np.cos(y*scale) + np.sin(y*scale)*np.cos(z*scale) + np.sin(z*scale)*np.cos(x*scale)) - thickness
+
+def sphere(x, y, z, radius=1.0):
+    return np.sqrt(x**2 + y**2 + z**2) - radius
+
+def box(x, y, z, size=1.0):
+    # exact box sdf
+    # d = max(abs(p) - b, 0)
+    q_x = np.abs(x) - size
+    q_y = np.abs(y) - size
+    q_z = np.abs(z) - size
+    return np.maximum(q_x, np.maximum(q_y, q_z))
+
+def union(d1, d2):
+    return np.minimum(d1, d2)
+
+def intersect(d1, d2):
+    return np.maximum(d1, d2)
+
+def difference(d1, d2):
+    return np.maximum(d1, -d2)
 
 class SDFEngine:
     def __init__(self):
