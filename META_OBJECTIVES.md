@@ -34,10 +34,21 @@ We are **NOT** a "Scan-to-Mesh" viewer (Luma/Polycam). We are a **Semantic Fabri
 - **Output:** Printable STL.
 
 ## ROADMAP
+
 - [x] Phase 1-5: Foundation (UI, Video, Rendering).
+
 - [x] Phase 6: Perception (SAM 2 Masking).
+
 - [x] Phase 7: Reconstruction (Visual Hull).
+
 - [x] Phase 8: Infusion (Gyroids).
+
 - [x] Phase 9: Editing (Boolean Ops).
-- [x] Phase 10: Vision Bridge (Gemini Contact Sheet).
-- [x] Phase 11: The Semantic Loop (Applying Gemini Parameters to SDFs).
+
+- [x] Phase 10: Vision Bridge (Contact Sheets).
+
+- [x] Phase 11: The Semantic Loop (Pilot Override).
+
+- [x] Phase 12: Final Packaging (Build Verified).
+
+- [x] Phase 13: The Local Eye (Offline Apple Vision Integration).

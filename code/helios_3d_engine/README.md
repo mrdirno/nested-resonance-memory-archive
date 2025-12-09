@@ -11,10 +11,9 @@ We do not compete on "Visual Fidelity" (Splatting). We compete on **Structural F
 ## KEY FEATURES
 1.  **Local Privacy:** All processing happens on-device. No cloud subscriptions.
 2.  **Fabrication First:** Output is guaranteed watertight and 3D printable (Voxel/SDF math).
-3.  **Semantic Reasoning (Smart Scan):** Uses Gemini Vision to understand *what* the object is, guiding the reconstruction process.
-    - Check "Smart Scan" in the Reconstruction panel.
-    - The system generates a "Contact Sheet" of the video.
-    - AI analyzes the sheet and auto-tunes `Scale`, `Concavity`, and `Gyroid Type`.
+3.  **Semantic Reasoning (Smart Scan):**
+    -   **The Local Eye:** Uses macOS Native Vision Framework to classify objects *offline*.
+    -   **Auto-Tuning:** Detects "Organic" vs "Structural" forms and adjusts Gyroid params automatically.
 4.  **Pilot Override:** 
     - For advanced users, place a `pilot_override.json` in the frames directory.
     - The engine will strictly adhere to these parameters, bypassing AI inference.
