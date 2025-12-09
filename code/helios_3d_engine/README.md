@@ -1,6 +1,6 @@
 # HELIOS 3D ENGINE (Project Code: SUNFIRE)
 
-**Current Version:** 0.5.0 (The Visionary)
+**Current Version:** 0.5.1 (The Intelligence)
 **Target Platform:** macOS (Silicon Optimized)
 **Architecture:** Python 3 + PySide6 (GUI) + ModernGL (Render) + PyTorch (AI)
 
@@ -40,6 +40,6 @@ We do not compete on "Visual Fidelity" (Splatting). We compete on **Structural F
 
 -   [x] **Phase 10**: Vision Bridge (Contact Sheets).
 
--   [x] **Phase 11**: Semantic Parameter Application (Headless Automation).
+-   [x] **Phase 11**: Semantic Parameter Application (Verified Integration).
 
--   [ ] **Phase 12**: Final Polish & Packaging.
+-   [ ] **Phase 12**: Final Polish & Packaging (In Progress).

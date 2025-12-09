@@ -57,8 +57,21 @@ class VisionBridge:
         if not sheet_path:
             return {}
             
-        # Real Integration would happen here
-        # response = self._call_gemini_api(sheet_path)
+        # 1. Pilot Override (Manual Injection)
+        # If I (The Pilot) have placed a JSON file here, use it.
+        override_path = os.path.join(frames_dir, "pilot_override.json")
+        if os.path.exists(override_path):
+            try:
+                import json
+                print(f"Vision Bridge: PILOT OVERRIDE DETECTED at {override_path}")
+                with open(override_path, 'r') as f:
+                    params = json.load(f)
+                print(f"Vision Bridge: Injected Params: {params}")
+                return params
+            except Exception as e:
+                print(f"Vision Bridge: Failed to load override: {e}")
+        
+        # 2. Mock Inference (Prototype)
         # For prototype/offline, we use mock inference
         response_text = self._mock_inference(sheet_path)
         

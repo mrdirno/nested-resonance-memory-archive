@@ -75,4 +75,21 @@
     -   Added "Advanced Editing" to `ControlPanel` (Union/Difference/Intersection).
     -   Implemented `BooleanWorker` to execute operations off-thread.
 - **Status:** 🟢 COMPLETE
----
+
+## Cycle 2887: HELIOS 3D ENGINE - VISION BRIDGE (Phase 10)
+- **Goal:** Generate Contact Sheets for Gemini Inspection.
+- **Action:** Implemented `VisionBridge` and parsing logic.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2890: HELIOS 3D ENGINE - THE SEMANTIC LOOP (Phase 11)
+- **Goal:** Establish Headless Pilot Control.
+- **Action:**
+    -   Removed Chatbot UI (User Directive).
+    -   Removed User-driven prompts.
+    -   The system now exposes `VisionBridge` for the Pilot to invoke programmatically via CLI.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2891: HELIOS 3D ENGINE - THE PILOT OVERRIDE (Phase 11b)
+- **Goal:** Implement File-Based Parameter Injection for Pilot Control.
+- **Action:** Modify `VisionBridge` to check for `pilot_override.json`.
+- **Status:** 🟡 IN PROGRESS
