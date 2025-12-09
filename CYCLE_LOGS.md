@@ -136,3 +136,13 @@
   - Built basic SwiftUI interface with Folder Picker and Progress View.
 - **Result:** Native macOS app structure capable of generating 3D models from images.
 - **Status:** Phase 2 Complete (Core Logic).
+
+## Cycle 2857: Helios 3D Engine - Phase 3 Visualization - COMPLETE
+- **Goal:** Implement 3D Model Visualization (Phase 3).
+- **Action:** Added `ModelViewer.swift` using `RealityView` and updated `main.swift`.
+- **Method:** 
+  - Created `ModelViewer` struct wrapping `RealityView` for native USDZ rendering.
+  - Implemented auto-scaling and basic drag-to-rotate gestures.
+  - Refactored Main UI into a Split View layout (Sidebar Controls + Main Viewport).
+- **Result:** Functional UI capable of selecting images, processing them, and immediately visualizing the result.
+- **Status:** Phase 3 Visualization Complete.
