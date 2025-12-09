@@ -394,3 +394,11 @@
 - **Method:** Quaternion Julia Set iteration (z = z^2 + c) with c=(-0.2, 0.6, 0.2, 0.2). Relaxed solidity threshold to iter_count >= 4 to create a connected "halo" volume.
 - **Result:** Generated child_v21_julia_set.stl (19MB, 381k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2941: Child V22 Refinement (The Voronoi Foam) - COMPLETE
+- **Goal:** Create refined lamp design "Child V22 - The Voronoi Foam" based on "Relaxed minimal foam structure".
+- **Action:** Created practical_design/inception/shade/child_v22_voronoi_foam.py (outside repo).
+- **Method:** 3D Voronoi F1 Distance with edge detection (d2 - d1 < thickness). Generates a cellular "bone-like" foam structure with solid walls separating void cells.
+- **Result:** Generated child_v22_voronoi_foam.stl (66MB, 1.38M triangles).
+- **Status:** Artifact Generated (External).
