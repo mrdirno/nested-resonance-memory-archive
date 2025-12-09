@@ -15,14 +15,20 @@
 ## Cycle 2857: HELIOS 3D ENGINE - THE FORGE
 - **Goal:** Add ability to Export STL.
 - **Status:** 🟢 COMPLETE
-- **Log:**
-    - Implemented `save_stl` (Binary STL).
-    - Added Export UI flow.
-    - Verified End-to-End pipeline (Generate -> View -> Export).
 
-## Cycle 2858: HELIOS 3D ENGINE - POLISH & RELEASE
-- **Goal:** Final polish and user instructions.
-- **Plan:**
-    - Create `LAUNCH_HELIOS.sh`.
-    - Provide final summary.
+## Cycle 2858: HELIOS 3D ENGINE - ASSET INGESTION
+- **Goal:** Ingest Reference Video for future Video-to-3D pipeline.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2860: HELIOS 3D ENGINE - HYGIENE
+- **Goal:** Clean up Swift artifacts.
+- **Status:** 🟢 COMPLETE
+
+## Cycle 2861: HELIOS 3D ENGINE - THE OBSERVER (Phase 5)
+- **Goal:** Implement Video Player for reference viewing.
+- **Action:**
+    - Created `src/ui/video_player.py` using QtMultimedia.
+    - Integrated Reference Dock into `HeliosMainWindow`.
+    - Auto-loading default asset for verification.
+- **Status:** 🟢 COMPLETE
 ---
