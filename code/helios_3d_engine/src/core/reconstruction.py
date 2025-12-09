@@ -3,6 +3,7 @@ import numpy as np
 import math
 import subprocess
 import os
+import sys
 from skimage.measure import marching_cubes
 
 class VoxelReconstructor:
@@ -11,10 +12,18 @@ class VoxelReconstructor:
         self.device = device if torch.backends.mps.is_available() else "cpu"
         self.grid = None
         self.bounds = (-1.0, 1.0)
-        self.cli_path = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), 
-            "../../../helios_native_bridge/.build/release/HeliosCLI"
-        ))
+        
+        # Resolve CLI Path: Check if frozen (App Bundle) or running from source
+        if getattr(sys, 'frozen', False):
+            # Bundle: Helios3D.app/Contents/MacOS/HeliosCLI
+            base_path = sys._MEIPASS
+            self.cli_path = os.path.join(base_path, "HeliosCLI")
+        else:
+            # Source: ../helios_native_bridge/
+            self.cli_path = os.path.abspath(os.path.join(
+                os.path.dirname(__file__), 
+                "../../../helios_native_bridge/.build/release/HeliosCLI"
+            ))
         
     def run_native_photogrammetry(self, input_folder, output_path, progress_callback=None):
         print(f"Launching Native Bridge: {self.cli_path}")
