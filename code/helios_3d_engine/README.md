@@ -1,33 +1,33 @@
-# HELIOS 3D ENGINE (Project Code: SUNFIRE)
+# Helios 3D Engine
 
-**Current Version:** 0.2.0 (The Observer)
-**Target Platform:** macOS (Silicon Optimized)
-**Architecture:** Python 3 + PySide6 (GUI) + ModernGL (Render) + PyTorch (AI)
+**Status**: Phase 4.2 (Optimization) Complete
+**Goal**: Build a standalone, native macOS 3D generation and manipulation tool that surpasses [3dpresso.ai](https://3dpresso.ai).
 
-## MANDATE
-Build a next-generation 3D generation and manipulation tool that surpasses commercial web-based tools (like 3dpresso.ai) by offering:
-1.  **Local Privacy:** All processing happens on-device.
-2.  **Infinite Resolution:** Procedural mathematics (SDFs, Gyroids) instead of fixed meshes.
-3.  **Physics-Grounded AI:** Generative models constrained by physical viability (printability, stress).
+## Overview
+Helios 3D Engine is a high-performance, native macOS application designed for:
+1.  **3D Reconstruction**: Generating high-fidelity 3D models (USDZ) from image sets using Apple's `PhotogrammetrySession`.
+2.  **Visualization**: Real-time 3D rendering using `RealityKit` and `RealityView`.
+3.  **Mesh Analysis**: Physical property calculation (Vertex Count, Triangle Count, Dimensions).
+4.  **Optimization**: Voxel-based remeshing for geometry simplification and watertight mesh generation.
 
-## ARCHITECTURE
--   **Frontend:** PySide6 (Qt) - Native macOS look and feel.
--   **Viewport:** ModernGL (OpenGL 4.1+ Core Profile) - High-performance rendering.
--   **Core:** Python 3.11+
--   **AI Backend:** PyTorch (MPS accelerated) + Meta SAM 2.
+## Architecture
+-   **Frontend**: SwiftUI with `HSplitView` layout.
+-   **Rendering**: RealityKit (`RealityView`).
+-   **Core Logic**: `EngineCore` (Photogrammetry), `MeshAnalyzer` (ModelIO/Metal).
+-   **Optimization**: `MDLVoxelArray` for grid-based resampling.
 
-## GETTING STARTED
-1.  Initialize environment:
-    ```bash
-    ./LAUNCH_HELIOS.sh
-    ```
+## Features Implemented
+-   [x] **Project Structure**: Native Swift Package Manager setup.
+-   [x] **Photogrammetry**: Convert image folder -> USDZ asynchronously.
+-   [x] **Visualization**: Interactive 3D viewer with auto-scaling and rotation.
+-   [x] **Analysis**: Real-time reporting of mesh statistics.
+-   [x] **Optimization**: Voxel remeshing tool with adjustable resolution.
 
-## ROADMAP
--   [x] **Phase 1: The Retina** - Basic 3D Viewport with Pan/Orbit/Zoom.
--   [x] **Phase 2: The Sculptor** - SDF-based geometry generation (Gyroids).
--   [x] **Phase 3: The Brain** - AI-assisted parameter tuning (UI Controls & Async).
--   [x] **Phase 4: The Forge** - STL Export.
--   [x] **Phase 5: The Observer** - Video Reference Viewer & Asset Management.
--   [x] **Phase 6: The Hybrid Strategy** - SAM 2 Interactive Segmentation (Masking).
--   [ ] **Phase 7: The Reconstructor** - Voxel Carving (Shape-from-Silhouette).
--   [ ] **Phase 8: The Architect** - SDF Boolean Operations (Merging Scan + Gyroid).
+## Roadmap
+-   [ ] **Phase 5: AI Integration**: Text-to-3D pipeline (CoreML/Python Bridge).
+-   [ ] **Phase 6: Advanced Editing**: Texture synthesis, boolean operations, and export formats (OBJ/GLTF).
+
+## Usage
+1.  **Generate**: Select an image folder and click "Generate Model".
+2.  **Analyze**: View vertex count and dimensions in the sidebar.
+3.  **Optimize**: Adjust the "Voxel Resolution" slider and click "Remesh" to simplify the geometry.
