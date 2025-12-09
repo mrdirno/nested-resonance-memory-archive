@@ -1,10 +1,13 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QSlider, 
-                               QPushButton, QGroupBox, QSpinBox, QDoubleSpinBox)
+                               QPushButton, QGroupBox, QSpinBox, QDoubleSpinBox,
+                               QLineEdit, QHBoxLayout)
 from PySide6.QtCore import Qt, Signal
+from src.core.ai_generator import AIGenerator
 
 class ControlPanel(QWidget):
     # Signals to notify changes
     params_changed = Signal(dict)
+    export_requested = Signal()
     
     def __init__(self):
         super().__init__()
@@ -12,9 +15,26 @@ class ControlPanel(QWidget):
         self.setStyleSheet("background-color: #2b2b2b; color: #eee;")
         
         layout = QVBoxLayout(self)
+        self.ai_gen = AIGenerator()
         
-        # --- Generator Settings ---
-        group_gen = QGroupBox("Generator Settings")
+        # --- AI Generator ---
+        group_ai = QGroupBox("AI Generator (Text-to-3D)")
+        layout_ai = QVBoxLayout(group_ai)
+        
+        self.txt_prompt = QLineEdit()
+        self.txt_prompt.setPlaceholderText("e.g. 'Large thick sphere'")
+        self.txt_prompt.setStyleSheet("padding: 5px; color: #fff; background: #444;")
+        layout_ai.addWidget(self.txt_prompt)
+        
+        self.btn_generate = QPushButton("Generate")
+        self.btn_generate.setStyleSheet("background-color: #6a00ff; padding: 5px; font-weight: bold;")
+        self.btn_generate.clicked.connect(self.on_generate)
+        layout_ai.addWidget(self.btn_generate)
+        
+        layout.addWidget(group_ai)
+        
+        # --- Manual Settings ---
+        group_gen = QGroupBox("Manual Settings")
         layout_gen = QVBoxLayout(group_gen)
         
         # Scale
@@ -55,6 +75,17 @@ class ControlPanel(QWidget):
         layout.addWidget(group_gen)
         layout.addStretch()
 
+    def on_generate(self):
+        prompt = self.txt_prompt.text()
+        params = self.ai_gen.generate_from_text(prompt)
+        
+        # Update UI
+        self.spin_scale.setValue(params.get('scale', 1.0))
+        self.spin_thick.setValue(params.get('thickness', 0.1))
+        
+        # Trigger Update
+        self.emit_params()
+
     def emit_params(self):
         params = {
             "scale": self.spin_scale.value(),
@@ -65,10 +96,3 @@ class ControlPanel(QWidget):
 
     def emit_export(self):
         self.export_requested.emit()
-
-class ControlPanel(QWidget):
-    # Signals to notify changes
-    params_changed = Signal(dict)
-    export_requested = Signal()
-    
-    def __init__(self):
