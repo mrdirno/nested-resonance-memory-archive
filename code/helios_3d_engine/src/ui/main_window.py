@@ -112,7 +112,7 @@ class ReconstructionWorker(QThread):
 class HeliosMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Helios 3D Engine - v0.4.0 (The Architect)")
+        self.setWindowTitle("Helios 3D Engine - v1.0.2 (The Singularity)")
         self.resize(1600, 900)
         
         central_widget = QWidget()
