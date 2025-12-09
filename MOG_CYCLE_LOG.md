@@ -119,10 +119,10 @@
     -   Verified DMG generation (Size: ~309MB).
 - **Status:** 🟢 COMPLETE
 
-## Cycle 2964-2969: HELIOS 3D ENGINE - THE TWIN ENGINE BUILD (v1.0.1)
-- **Goal:** Rebuild Application without Apple Vision dependency.
+## Cycle 2975-2978: HELIOS 3D ENGINE - CHAT BRIDGE (Phase 15a)
+- **Goal:** Enable Natural Language Input for Pilot Control.
 - **Action:**
-    -   Cleaned build artifacts.
-    -   Re-ran PyInstaller with 'Twin Engine' architecture.
-    -   Verified generation of `dist/Helios3D.app`.
-- **Status:** 🟢 COMPLETE - READY FOR DEPLOYMENT.
+    -   Modified `ControlPanel` to write `user_prompt.json` to the filesystem.
+    -   Rebuilt application (v1.0.2).
+    -   Established the "Chat Loop": User -> UI -> JSON -> Pilot -> JSON -> Engine.
+- **Status:** 🟢 COMPLETE - READY FOR TESTING.
