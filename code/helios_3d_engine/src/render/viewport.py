@@ -3,6 +3,8 @@ from PySide6.QtOpenGLWidgets import QOpenGLWidget
 from PySide6.QtCore import Qt, QTimer, QPoint
 from .camera import Camera
 from .grid import InfiniteGrid
+from .mesh import Mesh
+from ..core.engine import GeometryEngine
 
 class HeliosViewport(QOpenGLWidget):
     def __init__(self, parent=None):
@@ -10,6 +12,8 @@ class HeliosViewport(QOpenGLWidget):
         self.ctx = None
         self.camera = Camera()
         self.grid = None
+        self.mesh = None
+        self.engine = GeometryEngine()
         
         self.last_mouse_pos = QPoint()
         self.mouse_buttons = {}
@@ -25,11 +29,22 @@ class HeliosViewport(QOpenGLWidget):
         try:
             self.ctx = moderngl.create_context()
             print(f"ModernGL Context: {self.ctx.info['GL_RENDERER']}")
+            self.ctx.enable(moderngl.DEPTH_TEST)
+            self.ctx.enable(moderngl.CULL_FACE)
             
             self.grid = InfiniteGrid(self.ctx)
             
+            # Generate Initial Mesh
+            print("Generating Gyroid Mesh...")
+            verts, norms, faces = self.engine.generate_gyroid_mesh(resolution=64, scale=2.0)
+            if verts is not None:
+                self.mesh = Mesh(self.ctx, verts, norms, faces)
+                print(f"Mesh Generated: {len(faces)} faces")
+            
         except Exception as e:
             print(f"Failed to initialize ModernGL: {e}")
+            import traceback
+            traceback.print_exc()
 
     def paintGL(self):
         if not self.ctx:
@@ -37,10 +52,12 @@ class HeliosViewport(QOpenGLWidget):
 
         self.ctx.screen.use()
         self.ctx.clear(*self.clear_color)
-        self.ctx.enable(moderngl.DEPTH_TEST)
         
         if self.grid:
             self.grid.render(self.camera)
+            
+        if self.mesh:
+            self.mesh.render(self.camera)
 
     def resizeGL(self, w, h):
         if self.ctx:
