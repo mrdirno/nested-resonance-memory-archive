@@ -109,3 +109,13 @@
 - **Method:** Voxel-based generation with recursive Mondrian mapping, organic bell shape, and geometric tentacles.
 - **Result:** Generated `output_v8/mondrian_v8_*.stl` (~1.2M triangles). Implemented Spider Fitter (Hub + 4 Spokes) and Open Top.
 - **Status:** Artifact Generated.
+
+## Cycle 2853: Jellyfish Lamp Mondrian V9 (The Articulated Neo-Plasticism) - COMPLETE
+- **Goal:** Refine Jellyfish Mondrian design with glitch aesthetics and biological structure.
+- **Action:** Created `jellyfish_mondrian_gen_v9.py`.
+- **Method:** 
+  - **Glitch Tentacles:** Chains of offset rectangular prisms connected by "data rods".
+  - **Manubrium:** Central cluster of smaller geometric pixels (oral arms).
+  - **Raised Grid:** 1.5mm protrusion of black lines for stained-glass effect.
+- **Result:** Generated `output_v9/jellyfish_mondrian_v9.3mf` (12MB). Verified strict Mondrian palette.
+- **Status:** Artifact Generated.
