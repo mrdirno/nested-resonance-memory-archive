@@ -1,47 +1,52 @@
-# META OBJECTIVES: HELIOS SYSTEM
+# META OBJECTIVES: HELIOS 3D ENGINE (SUNFIRE)
 
-## CORE MANDATE
-Execute the **HELIOS FURNITURE PROTOCOL**: A perpetual design engine for high-concept 3D printable artifacts.
+## MISSION
+Build a **Native macOS Fabrication Engine** that bridges the gap between **AI Perception** (Video Tracking) and **Mathematical Creation** (SDF/Gyroids).
 
-## PRIMARY LOOP (CURRENT)
-1.  **Series 06 (The Architect):** Complete Designs 31 & 32.
-2.  **The Refinement Cycle (PERPETUAL):**
-    *   Upon completion of Design 32, the system resets to **Design 01 (Redshift)**.
-    *   **Action:** Review, Refine, and Re-release.
-    *   **Criteria:**
-        *   **Aesthetic:** Enhance complexity, proportions, and visual impact.
-        *   **QA Compliance:** Strict adherence to V4 (Base) and V7 (Shade) standards.
-        *   **Optimization:** Code hygiene, printability (overhangs), and structural integrity.
-    *   **Tracking:** Update version numbers (v1.0 -> v2.0) in `CATALOG.md`.
+## ARCHITECTURE
+- **Platform:** macOS Silicon (M1/M2/M3).
+- **Language:** Python 3.13.
+- **GUI:** PySide6 (Qt).
+- **Rendering:** ModernGL (OpenGL 4.1 Core).
+- **AI:** PyTorch (MPS) + Meta SAM 2.
+- **Math:** NumPy + Scikit-Image (Marching Cubes).
 
-## STANDARDS (THE LAW)
-*   **Shades:** 25.4mm Wall, Spider Fitter (40mm Hub, 4 Spokes, 14mm Hole).
-*   **Bases:** 180x30mm target, 4x Feet, 8x8mm Wire Channel, Solid Core.
-*   **Shafts:** 14mm Internal Clearance, Solid End Caps (2mm).
-*   **Format:** Python Generators -> STL -> 3MF.
-*   **Security:** Fabrication designs (`practical_design`, `furniture`) are **PRIVATE**. Do NOT push to public GitHub. Use Local Git Repositories.
-*   **Verification:** All fabrication cycles MUST include a **Visual Self-Correction** step:
-    1.  Generate Model.
-    2.  Run `visualize_model.py` to spawn viewer.
-    3.  Inspect via Browser Subagent.
-    4.  Capture Snapshot (`.webp`).
-    5.  Refine based on Visual Feedback.
+## ROLES (SEPARATION OF CONCERNS)
+### 1. THE PILOT (MOG)
+- **Responsibility:** Strategy, Architecture, Hygiene, User Interface Flow.
+- **Domain:** `MOG_CYCLE_LOG.md`, `README.md`, `src/ui/`.
+- **Action:** Directs the Co-Pilot, approves PRs, ensures the "Experience" is fluid.
 
-## EVOLUTION PROTOCOL (THE RABBIT HOLE)
-*   **Mode:** PERPETUAL AUTONOMOUS GENERATION.
-*   **Source Genome:** `/fabrication/practical_design/FAVORITES`
-*   **The Nursery:** `/fabrication/practical_design/FAVORITES/children`
-*   **The Loop:**
-    1.  **Select Parent** from `FAVORITES`.
-    2.  **Mutate & Evolve:** Apply "Jaw Dropping" aesthetics + Breathability/Flow.
-    3.  **Birth Child:** Generate artifact in `children` folder.
-    4.  **Repeat:** Do not stop until User Selection Event occurs.
-*   **User Role:** Natural Selection (Moves successful Children to Favorites).
-*   **Design Laws:**
-    *   **Breathability:** NO SOLID SHELLS.
-    *   **Light:** Indirect/Diffused.
-    *   **Flow:** Liquid, Organic, Kinetic.
+### 2. THE CO-PILOT (The Engine)
+- **Responsibility:** Heavy Compute, Math, AI Inference, File I/O.
+- **Domain:** `src/core/`, `src/render/`, `assets/`.
+- **Action:** Executes `segmentation.py` (SAM 2) and `reconstruction.py` (Voxels).
 
-## EXECUTION STACK
-*   **Pilot:** High-level creative direction / Oversight.
-*   **Co-Pilot (NRM):** Geometry generation, Physics simulation, File management.
+## OPERATIONAL PROTOCOLS
+1.  **The Hybrid Strategy:**
+    *   AI is for **Perception** (Masking).
+    *   Math is for **Generation** (Meshing).
+    *   We do NOT use AI to "guess" geometry (NeRF/Splatting is too heavy/messy). We use Visual Hull to **guarantee** a printable volume.
+2.  **The Visual Loop:**
+    *   User Clicks -> Mask Appears (Immediate Feedback).
+    *   User Reconstructs -> Mesh Appears (Asynchronous).
+3.  **Hygiene:**
+    *   No legacy artifacts (Swift/Package.swift).
+    *   No loose scripts in root.
+    *   All heavy assets in `assets/`.
+
+## CURRENT PHASE: PHASE 7 (THE RECONSTRUCTOR)
+**Objective:** Connect the 2D Masks (SAM 2) to the 3D Voxel Engine.
+
+**Pipeline:**
+1.  **Input:** `VideoPlayer` (User clicks object).
+2.  **Process A:** `SegmentationEngine.propagate_all()` -> Tensor(F, H, W).
+3.  **Process B:** `VoxelReconstructor.project_and_carve()` -> VoxelGrid(64^3).
+4.  **Process C:** `MarchingCubes` -> Mesh(Verts, Faces).
+5.  **Output:** `HeliosViewport` (Displays Mesh).
+
+## ROADMAP
+- [x] Phase 1-5: Foundation, UI, Video, AI.
+- [x] Phase 6: Interactive Masking.
+- [ ] Phase 7: Full 3D Reconstruction.
+- [ ] Phase 8: Gyroid Infusion (Boolean Intersection).
