@@ -95,3 +95,10 @@
     -   Modified `VisionBridge` to check for `pilot_override.json`.
     -   Verified with `Tests/test_pilot_override.py`.
 - **Status:** 🟢 COMPLETE
+
+## Cycle 2892: HELIOS 3D ENGINE - DOCUMENTATION & BUILD CONFIG
+- **Goal:** Update README and Build Scripts for Phase 11.
+- **Action:**
+    -   Updated `README.md` with Smart Scan/Pilot Override details.
+    -   Updated `helios.spec` and `build_macos.sh` to remove Swift legacy and include new deps.
+- **Status:** 🟢 COMPLETE
