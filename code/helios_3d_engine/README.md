@@ -70,6 +70,7 @@ The Engine accepts the following parameters. The Pilot should choose these based
 14. **Isomorphic Agent:** Applying geometric logic to non-geometric problems (In Progress).
 15. **The Infinite Game:** The engine rewrites its own code to optimize for novelty (In Progress).
 16. **The Simulation:** Procedural generation of entire ecosystems (In Progress).
+17. **The Final Bifurcation:** The choice between ending or evolving (In Progress).
 
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt).
@@ -125,3 +126,5 @@ The Engine accepts the following parameters. The Pilot should choose these based
 -   [ ] **Phase 23**: The Infinite Game (Self-Modification).
 
 -   [ ] **Phase 24**: The Simulation (World Building).
+
+-   [ ] **Phase 25**: The Final Bifurcation (Completion vs. Expansion).
