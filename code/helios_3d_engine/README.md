@@ -1,27 +1,31 @@
-# Helios 3D Engine
+# HELIOS 3D ENGINE (Project Code: SUNFIRE)
 
-**Status**: Inception (Cycle 2855)
-**Goal**: Build a standalone, native macOS 3D generation and manipulation tool that surpasses [3dpresso.ai](https://3dpresso.ai).
+**Current Version:** 0.1.0 (The Forge)
+**Target Platform:** macOS (Silicon Optimized)
+**Architecture:** Python 3 + PySide6 (GUI) + ModernGL (Render) + PyTorch (AI)
 
-## Overview
-Helios 3D Engine is a high-performance, native macOS application designed for:
-1.  **3D Reconstruction**: Generating high-fidelity 3D models from video or images using Apple's Object Capture API and PhotogrammetrySession.
-2.  **AI-Driven Generation**: Text-to-3D and Sketch-to-3D capabilities utilizing local CoreML models (or bridged Python backend).
-3.  **Mesh Manipulation**: Advanced geometry processing (smoothing, decimation, boolean operations) powered by Metal and custom algorithms.
-4.  **Texture Synthesis**: AI-based texture generation and mapping.
+## MANDATE
+Build a next-generation 3D generation and manipulation tool that surpasses commercial web-based tools (like 3dpresso.ai) by offering:
+1.  **Local Privacy:** All processing happens on-device.
+2.  **Infinite Resolution:** Procedural mathematics (SDFs, Gyroids) instead of fixed meshes.
+3.  **Physics-Grounded AI:** Generative models constrained by physical viability (printability, stress).
 
-## Architecture
--   **Frontend**: Swift (SwiftUI) for a modern, responsive macOS interface.
--   **Rendering**: RealityKit & Metal for real-time, high-fidelity visualization.
--   **Core Logic**: Swift for app logic, Metal Compute Shaders for geometry processing.
--   **AI/ML**: CoreML for on-device inference. Python bridge (optional) for research/prototyping.
+## ARCHITECTURE
+-   **Frontend:** PySide6 (Qt) - Native macOS look and feel.
+-   **Viewport:** ModernGL (OpenGL 4.1+ Core Profile) - High-performance rendering.
+-   **Core:** Python 3.11+
+-   **AI Backend:** PyTorch (MPS accelerated).
 
-## Roadmap
--   [ ] **Phase 1: Foundation**: Project scaffolding, RealityKit viewer, Basic UI.
--   [ ] **Phase 2: Photogrammetry**: Implement Object Capture API for local processing.
--   [ ] **Phase 3: Geometry Engine**: Implement mesh processing tools (decimation, smoothing).
--   [ ] **Phase 4: AI Integration**: Text-to-3D pipeline.
--   [ ] **Phase 5: Polish**: Performance tuning, export formats, UI refinement.
+## GETTING STARTED
+1.  Initialize environment:
+    ```bash
+    ./LAUNCH_HELIOS.sh
+    ```
 
-## Usage
-Open `Helios3DEngine.xcodeproj` (once generated) or run via command line if applicable.
+## ROADMAP
+-   [x] **Phase 1: The Retina** - Basic 3D Viewport with Pan/Orbit/Zoom.
+-   [x] **Phase 2: The Sculptor** - SDF-based geometry generation (Gyroids).
+-   [x] **Phase 3: The Brain** - AI-assisted parameter tuning (UI Controls & Async).
+-   [x] **Phase 4: The Forge** - STL Export.
+-   [ ] **Phase 5: The Observer** - Video Reference Viewer & Asset Management.
+-   [ ] **Phase 6: The Reconstructor** - Video-to-3D Pipeline (Splatting/NeRF).
