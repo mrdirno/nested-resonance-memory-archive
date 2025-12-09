@@ -125,3 +125,14 @@
 - **Method:** Setup Swift Package Manager structure with `Helios3D` (Executable/App) and `HeliosCore` (Logic Library).
 - **Result:** Project structure established. Ready for RealityKit/Metal implementation.
 - **Status:** Project Initialized.
+
+## Cycle 2856: Helios 3D Engine - Photogrammetry Implementation - COMPLETE
+- **Goal:** Implement Photogrammetry Pipeline (Phase 2).
+- **Action:** Re-structured project to Native Swift. Implemented `PhotogrammetrySession` logic.
+- **Method:** 
+  - Moved legacy python files to `legacy/helios_3d_python`.
+  - Re-established Swift Package structure.
+  - Implemented `EngineCore.processPhotogrammetry` using RealityKit.
+  - Built basic SwiftUI interface with Folder Picker and Progress View.
+- **Result:** Native macOS app structure capable of generating 3D models from images.
+- **Status:** Phase 2 Complete (Core Logic).
