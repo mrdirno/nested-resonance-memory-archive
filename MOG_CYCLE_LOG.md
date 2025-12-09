@@ -118,3 +118,10 @@
     -   Executed `hdiutil` to package `Helios3D.app` into `Helios3D.dmg`.
     -   Verified DMG generation (Size: ~309MB).
 - **Status:** 🟢 COMPLETE
+
+## Cycle 2897: DOCUMENTATION UPDATE - THE BRAIN & THE VEHICLE
+- **Goal:** Formalize the realtime Pilot (Brain) vs. Co-Pilot (Local AI) dynamic.
+- **Action:**
+    -   Archived visual reference: `archive/artifacts/pilot_copilot_dynamic_ref_20251208.png`.
+    -   Updated `CLAUDE.md` Command Hierarchy to explicitly define the "Local AI" role and realtime synchronization.
+- **Status:** 🟢 COMPLETE
