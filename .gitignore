@@ -126,3 +126,19 @@ fabrication/
 
 output_v7/
 code/helios_3d_engine/assets/test_data/
+
+# ML Models (Large Files)
+*.pt
+*.pth
+*.onnx
+*.bin
+code/helios_3d_engine/assets/models/
+
+
+# ML Models (Large Files)
+*.pt
+*.pth
+*.onnx
+*.bin
+code/helios_3d_engine/assets/models/
+
