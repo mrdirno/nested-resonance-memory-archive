@@ -3,22 +3,11 @@ import imageio.v3 as iio
 import numpy as np
 from PIL import Image
 
-# Try to import local Apple Vision bridge
-try:
-    from src.bridge.apple_vision import AppleVisionAnalyzer
-    HAS_APPLE_VISION = True
-except ImportError:
-    print("Vision Bridge: Apple Vision Framework not available (Not on macOS?). Using Mock.")
-    HAS_APPLE_VISION = False
-
 class VisionBridge:
     def __init__(self):
         self.base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         self.export_dir = os.path.join(self.base_dir, "assets", "vision_export")
         os.makedirs(self.export_dir, exist_ok=True)
-        
-        if HAS_APPLE_VISION:
-            self.local_eye = AppleVisionAnalyzer()
 
     def create_contact_sheet(self, frames_dir, num_views=4):
         """
@@ -71,9 +60,7 @@ class VisionBridge:
         """
         Coordinates the visual analysis pipeline:
         1. Generate Contact Sheet
-        2. Send to Vision Model (Gemini)
-        3. Parse Parameters
-        Returns: (params_dict, reasoning_string)
+        2. Wait for Pilot Override
         """
         print(f"Vision Bridge: Analyzing scene in {frames_dir}...")
         sheet_path = self.create_contact_sheet(frames_dir)
@@ -81,7 +68,7 @@ class VisionBridge:
             return {}, "Failed to generate contact sheet."
             
         # 1. Pilot Override (Manual Injection)
-        # If I (The Pilot) have placed a JSON file here, use it.
+        # The Pilot (Gemini) sees the contact sheet and writes this file.
         override_path = os.path.join(frames_dir, "pilot_override.json")
         if os.path.exists(override_path):
             try:
@@ -90,65 +77,12 @@ class VisionBridge:
                 with open(override_path, 'r') as f:
                     params = json.load(f)
                 print(f"Vision Bridge: Injected Params: {params}")
-                return params, "Pilot Override Active."
+                reasoning = params.get("reasoning", "Pilot Override Active.")
+                return params, reasoning
             except Exception as e:
                 print(f"Vision Bridge: Failed to load override: {e}")
         
-        # 2. Local Apple Vision (The Local Eye)
-        if HAS_APPLE_VISION:
-            print("Vision Bridge: Invoking 'The Local Eye' (Apple Vision Framework)...")
-            try:
-                # get_semantic_params returns (params, reasoning)
-                params, reasoning = self.local_eye.get_semantic_params(sheet_path)
-                print(f"Vision Bridge: Local Inference Params: {params}")
-                return params, reasoning
-            except Exception as e:
-                print(f"Vision Bridge: Local Eye Failed ({e}). Falling back to mock.")
-        
-        # 3. Mock Inference (Prototype)
-        # For prototype/offline, we use mock inference
-        response_text = self._mock_inference(sheet_path)
-        
-        params = self.parse_gemini_response(response_text)
-        print(f"Vision Bridge: Inferred Params: {params}")
-        return params, f"Mock Inference: {response_text}"
-
-    def _mock_inference(self, image_path):
-        """
-        Simulates a Vision API response based on simple file heuristics 
-        or random variation for testing UI feedback.
-        """
-        # In a real scenario, this sends the image to Gemini 1.5 Flash
-        # and asks: "Analyze this object. Suggest Gyroid parameters."
-        
-        # Mock logic:
-        import random
-        styles = [
-            "The object appears to be organic and curved. Suggesting concave gyroid structure.",
-            "The object is tall and geometric. Suggesting vertical scaling.",
-            "The object is dense and blocky. Suggesting wide scale."
-        ]
-        return random.choice(styles)
-
-    def parse_gemini_response(self, response_text):
-        """
-        Parses structured text from Gemini into simulation parameters.
-        Expected format: JSON or Key-Value lines.
-        """
-        # Placeholder: Simple keyword matching
-        params = {}
-        text = response_text.lower()
-        
-        if "concave" in text or "organic" in text:
-            params['concavity'] = 0.5
-            params['gyroid_type'] = 'gyroid'
-        
-        if "tall" in text or "vertical" in text:
-            params['scale_y'] = 1.5
-            params['scale'] = 2.5
-            
-        if "wide" in text or "blocky" in text:
-            params['scale_x'] = 1.5
-            params['scale'] = 1.2
-            
-        return params
+        # 2. Waiting State
+        # We do not guess. We wait for the Pilot.
+        print("Vision Bridge: No Override Found. Waiting for Pilot instruction.")
+        return {}, "Waiting for Pilot Override..."

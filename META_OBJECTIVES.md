@@ -47,8 +47,12 @@ We are **NOT** a "Scan-to-Mesh" viewer (Luma/Polycam). We are a **Semantic Fabri
 
 - [x] Phase 10: Vision Bridge (Contact Sheets).
 
-- [x] Phase 11: The Semantic Loop (Pilot Override).
+- [x] Phase 11: The Semantic Loop (Pilot Override - Primary AI).
 
 - [x] Phase 12: Final Packaging (Build Verified).
 
-- [x] Phase 13: The Local Eye (Offline Apple Vision Integration).
+- [x] Phase 13: Distribution (Verified DMG).
+
+- [ ] Phase 14: Fabrication Bridge (Slicing Preview).
+
+
