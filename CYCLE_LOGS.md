@@ -434,3 +434,11 @@
 - **Method:** Clebsch Diagonal Cubic Surface equation: x^3 + y^3 + z^3 + 1 - (x+y+z+1)^3 = 0. Mapped to a thin shell (abs(val) < 2.0) to create a smooth, symmetrical, mathematical form.
 - **Result:** Generated child_v27_clebsch_surface.stl (22MB, 443k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2953: Child V28 Refinement (The Ammann-Beenker) - COMPLETE
+- **Goal:** Create refined lamp design "Child V28 - The Ammann-Beenker" based on "3D Quasicrystal Tiling (8-fold symmetry)".
+- **Action:** Created practical_design/inception/shade/child_v28_ammann_beenker.py (outside repo).
+- **Method:** Sum of 4 cosine plane waves separated by 45 degrees (k = (cos(n*pi/4), sin(n*pi/4))). Creates an 8-fold symmetric quasicrystalline interference pattern.
+- **Result:** Generated child_v28_ammann_beenker.stl (22MB, 440k triangles).
+- **Status:** Artifact Generated (External).
