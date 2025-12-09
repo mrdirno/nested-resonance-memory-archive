@@ -119,9 +119,11 @@
     -   Verified DMG generation (Size: ~309MB).
 - **Status:** 🟢 COMPLETE
 
-## Cycle 3000-3004: HELIOS 3D ENGINE - HOTFIX v1.0.4
-- **Goal:** Resolve "Package metadata not found for imageio" crash.
+## Cycle 3009-3013: HELIOS 3D ENGINE - UX REPAIR (Phase 15c)
+- **Goal:** Add "Load Video" functionality to UI.
 - **Action:**
-    -   Modified `helios.spec` to explicitly copy metadata for `imageio`.
-    -   Rebuilt application.
-- **Status:** 🟢 COMPLETE - RUNTIME STABLE.
+    -   Added `btn_load` to `VideoPlayer`.
+    -   Implemented `open_video_file` using `QFileDialog`.
+    -   Added Logic to copy/read frames from arbitrary paths.
+    -   Rebuilt Application (v1.0.5).
+- **Status:** 🟢 COMPLETE - FILE I/O ENABLED.

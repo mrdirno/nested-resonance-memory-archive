@@ -136,6 +136,11 @@ class VideoPlayer(QWidget):
         # Controls
         controls_layout = QHBoxLayout()
         
+        self.btn_load = QPushButton("Load Video")
+        self.btn_load.setStyleSheet("background-color: #444; color: white;")
+        self.btn_load.clicked.connect(self.open_video_file)
+        controls_layout.addWidget(self.btn_load)
+        
         self.btn_play = QPushButton("Play")
         self.btn_play.clicked.connect(self.toggle_play)
         controls_layout.addWidget(self.btn_play)
@@ -164,42 +169,67 @@ class VideoPlayer(QWidget):
         # Async Init
         QTimer.singleShot(100, self.load_default_asset)
 
+    def open_video_file(self):
+        filename, _ = QFileDialog.getOpenFileName(self, "Open Video", "", "Video Files (*.mp4 *.mov *.avi)")
+        if filename:
+            self.load_asset(filename)
+
+    def load_asset(self, asset_path):
+        self.label_status.setText(f"Loading {os.path.basename(asset_path)}...")
+        
+        # Set up frames directory unique to this video or overwrite 'current'
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        self.frames_dir = os.path.join(base_dir, "assets", "test_data", "frames")
+        
+        # Clean existing frames
+        if os.path.exists(self.frames_dir):
+            import shutil
+            shutil.rmtree(self.frames_dir)
+        os.makedirs(self.frames_dir, exist_ok=True)
+        
+        try:
+            print(f"Extracting frames from {asset_path}...")
+            # Use imageio with pyav plugin
+            # Read all frames (memory intensive for large videos, but okay for prototype clips)
+            # For production, we should stream or downsample.
+            
+            # Simple downsampling: Take every Nth frame if too long
+            reader = iio.imread(asset_path, plugin="pyav", index=None)
+            
+            # Limit to ~100 frames to prevent memory explosion in UI
+            total_frames = reader.shape[0]
+            step = max(1, total_frames // 100)
+            
+            self.frames = []
+            saved_count = 0
+            for i in range(0, total_frames, step):
+                frame = reader[i]
+                self.frames.append(frame)
+                iio.imwrite(os.path.join(self.frames_dir, f"{saved_count:05d}.jpg"), frame, plugin="pillow")
+                saved_count += 1
+                
+            self.current_folder = self.frames_dir
+            self.folder_loaded.emit(self.frames_dir)
+            
+            self.current_idx = 0
+            self.slider.setRange(0, len(self.frames) - 1)
+            self.slider.setValue(0)
+            self.show_frame(0)
+            
+            self.label_status.setText("Initializing AI...")
+            self.seg_engine.initialize(self.frames_dir)
+            
+        except Exception as e:
+            print(f"Error loading video: {e}")
+            self.label_status.setText("Error Loading Video")
+
     def load_default_asset(self):
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         asset_path = os.path.join(base_dir, "assets", "test_data", "default_subject.mp4")
-        self.frames_dir = os.path.join(base_dir, "assets", "test_data", "frames")
-        self.current_folder = self.frames_dir # Expose for Smart Scan
-        self.folder_loaded.emit(self.frames_dir)
-        
         if os.path.exists(asset_path):
-            self.label_status.setText("Loading Video...")
-            # Load frames (we need them on disk for SAM 2 anyway)
-            # If frames don't exist, extract them.
-            if not os.path.exists(self.frames_dir) or len(os.listdir(self.frames_dir)) == 0:
-                print("Extracting frames for SAM 2...")
-                os.makedirs(self.frames_dir, exist_ok=True)
-                # Plugin pyav is safer for videos
-                raw_frames = iio.imread(asset_path, plugin="pyav", index=None)
-                self.frames = raw_frames
-                
-                # Save to disk for SAM 2
-                for i, f in enumerate(raw_frames):
-                    iio.imwrite(os.path.join(self.frames_dir, f"{i:05d}.jpg"), f, plugin="pillow")
-            else:
-                print("Loading frames from disk...")
-                # Load from disk to ensure match
-                files = sorted([f for f in os.listdir(self.frames_dir) if f.endswith('.jpg')])
-                self.frames = [iio.imread(os.path.join(self.frames_dir, f)) for f in files]
-
-            self.slider.setRange(0, len(self.frames) - 1)
-            self.show_frame(0)
-            self.label_status.setText("Loading AI...")
-            
-            # Init SAM 2
-            self.seg_engine.initialize(self.frames_dir)
-            
+            self.load_asset(asset_path)
         else:
-            self.label_status.setText("No Asset Found")
+            self.label_status.setText("No Default Video Found")
 
     def on_model_ready(self, success):
         if success:
