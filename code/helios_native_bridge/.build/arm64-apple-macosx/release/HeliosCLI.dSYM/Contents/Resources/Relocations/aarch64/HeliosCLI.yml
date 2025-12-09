@@ -1,0 +1,18 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI'
+relocations:
+  - { offset: 0x89D18, size: 0x8, addend: 0x0, symName: _HeliosCLI_main, symObjAddr: 0x0, symBinAddr: 0x100000F90, symSize: 0x58 }
+  - { offset: 0x89DE9, size: 0x8, addend: 0x0, symName: '_$sIetH_yts5Error_pIegHrzo_TR10async_MainTf3npf_n', symObjAddr: 0x58, symBinAddr: 0x100000FE8, symSize: 0x70 }
+  - { offset: 0x89E47, size: 0x8, addend: 0x0, symName: '_$sIetH_yts5Error_pIegHrzo_TR10async_MainTf3npf_nTQ0_', symObjAddr: 0xC8, symBinAddr: 0x100001058, symSize: 0x68 }
+  - { offset: 0x89EA5, size: 0x8, addend: 0x0, symName: '_$sIetH_yts5Error_pIegHrzo_TR10async_MainTf3npf_nTY1_', symObjAddr: 0x130, symBinAddr: 0x1000010C0, symSize: 0x24 }
+  - { offset: 0x89F72, size: 0x8, addend: 0x0, symName: '_$sS2cMScAsWl', symObjAddr: 0xEDC, symBinAddr: 0x100001E6C, symSize: 0x44 }
+  - { offset: 0x89F86, size: 0x8, addend: 0x0, symName: ___swift_instantiateConcreteTypeFromMangledName, symObjAddr: 0xF20, symBinAddr: 0x100001EB0, symSize: 0x44 }
+  - { offset: 0x8A0C5, size: 0x8, addend: 0x0, symName: _HeliosCLI_main, symObjAddr: 0x0, symBinAddr: 0x100000F90, symSize: 0x58 }
+  - { offset: 0x8A0FC, size: 0x8, addend: 0x0, symName: '_$s9HeliosCLIAAV4mainyyYaFZTf4d_n', symObjAddr: 0x154, symBinAddr: 0x1000010E4, symSize: 0x18C }
+  - { offset: 0x8A20B, size: 0x8, addend: 0x0, symName: '_$s9HeliosCLIAAV4mainyyYaFZTf4d_nTY0_', symObjAddr: 0x2E0, symBinAddr: 0x100001270, symSize: 0x550 }
+  - { offset: 0x8A633, size: 0x8, addend: 0x0, symName: '_$s9HeliosCLIAAV4mainyyYaFZTf4d_nTQ1_', symObjAddr: 0x830, symBinAddr: 0x1000017C0, symSize: 0xA0 }
+  - { offset: 0x8A70C, size: 0x8, addend: 0x0, symName: '_$s9HeliosCLIAAV4mainyyYaFZTf4d_nTY2_', symObjAddr: 0x8D0, symBinAddr: 0x100001860, symSize: 0x4A0 }
+  - { offset: 0x8A980, size: 0x8, addend: 0x0, symName: '_$s9HeliosCLIAAV4mainyyYaFZTf4d_nTQ3_', symObjAddr: 0xD70, symBinAddr: 0x100001D00, symSize: 0x60 }
+  - { offset: 0x8AA52, size: 0x8, addend: 0x0, symName: '_$s9HeliosCLIAAV4mainyyYaFZTf4d_nTY4_', symObjAddr: 0xDD0, symBinAddr: 0x100001D60, symSize: 0x10C }
+...

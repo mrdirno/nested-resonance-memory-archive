@@ -1,0 +1,12 @@
+{
+  "": {
+    "dependencies": "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/HeliosCLI.d",
+    "object": "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/HeliosCLI.o",
+    "swift-dependencies": "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/master.swiftdeps"
+  },
+  "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/Sources/HeliosCLI/main.swift": {
+    "object": "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/main.swift.o",
+    "swiftmodule": "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/main.swiftdeps"
+  }
+}

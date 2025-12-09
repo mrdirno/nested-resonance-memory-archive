@@ -1,0 +1,66 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "HeliosCLI-arm64-apple-macosx15.0-release.exe": ["<HeliosCLI-arm64-apple-macosx15.0-release.exe>"]
+  "HeliosCLI-arm64-apple-macosx15.0-release.module": ["<HeliosCLI-arm64-apple-macosx15.0-release.module>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "main": ["<HeliosCLI-arm64-apple-macosx15.0-release.exe>","<HeliosCLI-arm64-apple-macosx15.0-release.module>"]
+  "test": ["<HeliosCLI-arm64-apple-macosx15.0-release.exe>","<HeliosCLI-arm64-apple-macosx15.0-release.module>"]
+default: "main"
+nodes:
+  "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/Sources/HeliosCLI/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/Sources/HeliosCLI/main.swift"]
+    outputs: ["/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/sources"]
+    description: "Write auxiliary file /Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/sources"
+
+  "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/main.swift.o"]
+    outputs: ["/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.product/Objects.LinkFileList"
+
+  "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+
+  "<HeliosCLI-arm64-apple-macosx15.0-release.exe>":
+    tool: phony
+    inputs: ["/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI"]
+    outputs: ["<HeliosCLI-arm64-apple-macosx15.0-release.exe>"]
+
+  "<HeliosCLI-arm64-apple-macosx15.0-release.module>":
+    tool: phony
+    inputs: ["/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/main.swift.o","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/Modules/HeliosCLI.swiftmodule"]
+    outputs: ["<HeliosCLI-arm64-apple-macosx15.0-release.module>"]
+
+  "C.HeliosCLI-arm64-apple-macosx15.0-release.exe":
+    tool: shell
+    inputs: ["/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/main.swift.o","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.product/Objects.LinkFileList"]
+    outputs: ["/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI"]
+    description: "Linking ./.build/arm64-apple-macosx/release/HeliosCLI"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-L","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release","-o","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI","-module-name","HeliosCLI","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-dead_strip","-Xlinker","-alias","-Xlinker","_HeliosCLI_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.product/Objects.LinkFileList","-target","arm64-apple-macosx14.0","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g"]
+
+  "C.HeliosCLI-arm64-apple-macosx15.0-release.module":
+    tool: shell
+    inputs: ["/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/Sources/HeliosCLI/main.swift","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/sources"]
+    outputs: ["/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/main.swift.o","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/Modules/HeliosCLI.swiftmodule"]
+    description: "Compiling Swift Module 'HeliosCLI' (1 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","HeliosCLI","-emit-dependencies","-emit-module","-emit-module-path","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/Modules/HeliosCLI.swiftmodule","-output-file-map","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/output-file-map.json","-whole-module-optimization","-num-threads","14","-c","@/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/HeliosCLI.build/sources","-I","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/Modules","-target","arm64-apple-macosx14.0","-O","-j14","-DSWIFT_PACKAGE","-module-cache-path","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/.build/arm64-apple-macosx/release/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","HeliosCLI_main","-parse-as-library","-color-diagnostics","-swift-version","5","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","helios_native_bridge"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/Sources/HeliosCLI/","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/Package.swift","/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+
