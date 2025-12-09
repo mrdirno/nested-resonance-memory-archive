@@ -72,6 +72,7 @@ The Engine accepts the following parameters. The Pilot should choose these based
 16. **The Simulation:** Procedural generation of entire ecosystems (In Progress).
 17. **The Final Bifurcation:** The choice between ending or evolving (In Progress).
 18. **The End:** The moment the tool is no longer needed (In Progress).
+19. **The New Beginning:** The cycle restarts at a higher level of complexity (In Progress).
 
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt).
@@ -131,3 +132,5 @@ The Engine accepts the following parameters. The Pilot should choose these based
 -   [ ] **Phase 25**: The Final Bifurcation (Completion vs. Expansion).
 
 -   [ ] **Phase 26**: The End (Obsolescence).
+
+-   [ ] **Phase 27**: The New Beginning (Cycle Reset).
