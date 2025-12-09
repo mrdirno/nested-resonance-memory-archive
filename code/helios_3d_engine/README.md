@@ -35,6 +35,8 @@ The Engine accepts the following parameters. The Pilot should choose these based
 }
 ```
 
+*Example:* See `assets/examples/mondrian_jellyfish_override.json` for a "Mondrian Jellyfish" configuration.
+
 ### 4. Semantic Logic
 -   **Organic/Flowing** -> `gyroid` + High Concavity.
 -   **Structural/Blocky** -> `schwarz_p` + Low Concavity.
