@@ -40,4 +40,4 @@ We are **NOT** a "Scan-to-Mesh" viewer (Luma/Polycam). We are a **Semantic Fabri
 - [x] Phase 8: Infusion (Gyroids).
 - [x] Phase 9: Editing (Boolean Ops).
 - [x] Phase 10: Vision Bridge (Gemini Contact Sheet).
-- [ ] Phase 11: The Semantic Loop (Applying Gemini Parameters to SDFs).
+- [x] Phase 11: The Semantic Loop (Applying Gemini Parameters to SDFs).

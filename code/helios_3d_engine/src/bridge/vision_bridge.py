@@ -45,6 +45,44 @@ class VisionBridge:
         print(f"Vision Bridge: Contact sheet saved to {output_path}")
         return output_path
 
+    def analyze_scene(self, frames_dir):
+        """
+        Coordinates the visual analysis pipeline:
+        1. Generate Contact Sheet
+        2. Send to Vision Model (Gemini)
+        3. Parse Parameters
+        """
+        print(f"Vision Bridge: Analyzing scene in {frames_dir}...")
+        sheet_path = self.create_contact_sheet(frames_dir)
+        if not sheet_path:
+            return {}
+            
+        # Real Integration would happen here
+        # response = self._call_gemini_api(sheet_path)
+        # For prototype/offline, we use mock inference
+        response_text = self._mock_inference(sheet_path)
+        
+        params = self.parse_gemini_response(response_text)
+        print(f"Vision Bridge: Inferred Params: {params}")
+        return params
+
+    def _mock_inference(self, image_path):
+        """
+        Simulates a Vision API response based on simple file heuristics 
+        or random variation for testing UI feedback.
+        """
+        # In a real scenario, this sends the image to Gemini 1.5 Flash
+        # and asks: "Analyze this object. Suggest Gyroid parameters."
+        
+        # Mock logic:
+        import random
+        styles = [
+            "The object appears to be organic and curved. Suggesting concave gyroid structure.",
+            "The object is tall and geometric. Suggesting vertical scaling.",
+            "The object is dense and blocky. Suggesting wide scale."
+        ]
+        return random.choice(styles)
+
     def parse_gemini_response(self, response_text):
         """
         Parses structured text from Gemini into simulation parameters.
@@ -52,11 +90,18 @@ class VisionBridge:
         """
         # Placeholder: Simple keyword matching
         params = {}
-        if "concave" in response_text.lower():
+        text = response_text.lower()
+        
+        if "concave" in text or "organic" in text:
             params['concavity'] = 0.5
-        if "tall" in response_text.lower():
+            params['gyroid_type'] = 'gyroid'
+        
+        if "tall" in text or "vertical" in text:
             params['scale_y'] = 1.5
-        if "wide" in response_text.lower():
+            params['scale'] = 2.5
+            
+        if "wide" in text or "blocky" in text:
             params['scale_x'] = 1.5
+            params['scale'] = 1.2
             
         return params

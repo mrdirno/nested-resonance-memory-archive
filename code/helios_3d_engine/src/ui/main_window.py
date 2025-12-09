@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QDockWidget, QFileDialog
+from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QDockWidget, QFileDialog, QApplication
 from PySide6.QtCore import Qt, QThread, Signal
 from src.render.viewport import HeliosViewport
 from src.render.mesh import Mesh
@@ -6,6 +6,7 @@ from src.ui.controls import ControlPanel
 from src.ui.video_player import VideoPlayer
 from src.core.reconstruction import VoxelReconstructor
 from src.core.sdf import SDFEngine
+from src.bridge.vision_bridge import VisionBridge
 import os
 import numpy as np
 
@@ -140,6 +141,7 @@ class HeliosMainWindow(QMainWindow):
         
         self.recon_engine = VoxelReconstructor(resolution=128)
         self.use_native_engine = True
+        self.vision_bridge = VisionBridge()
         
         # Connect
         self.controls.params_changed.connect(self.viewport.update_mesh_params)
@@ -156,6 +158,25 @@ class HeliosMainWindow(QMainWindow):
     def start_reconstruction(self):
         self.status_label.setText("Starting Reconstruction Pipeline...")
         folder = self.video_player.current_folder if hasattr(self.video_player, 'current_folder') else None
+        
+        # Smart Scan Check
+        if hasattr(self.controls, 'chk_smart') and self.controls.chk_smart.isChecked() and folder:
+            self.status_label.setText("Smart Scan: Analyzing Visuals...")
+            QApplication.processEvents()
+            
+            try:
+                params = self.vision_bridge.analyze_scene(folder)
+                if params:
+                    msg = "Smart Scan: "
+                    if 'scale' in params:
+                        self.controls.spin_scale.setValue(params['scale'])
+                        msg += f"Scale -> {params['scale']}. "
+                    
+                    self.status_label.setText(msg + "Optimizing...")
+                    QApplication.processEvents()
+            except Exception as e:
+                print(f"Smart Scan Error: {e}")
+                self.status_label.setText("Smart Scan Failed. Proceeding...")
         
         self.recon_worker = ReconstructionWorker(
             self.video_player.seg_engine, 

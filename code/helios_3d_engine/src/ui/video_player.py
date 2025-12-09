@@ -16,13 +16,17 @@ class FrameViewer(QWidget):
         self.current_frame = None # QImage
         self.current_mask = None # Numpy array (HxW)
         self.scaled_pixmap = None
+        self.img_rect = (0, 0, 1, 1) # Default to avoid crash
+        self.scale_factor_x = 1.0
+        self.scale_factor_y = 1.0
         
     def set_frame(self, frame_np):
         """Updates the current video frame."""
         h, w, ch = frame_np.shape
         bytes_per_line = ch * w
         # frame_np is RGB. QImage expects data.
-        self.current_frame = QImage(frame_np.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
+        # Make a copy to ensure data persists
+        self.current_frame = QImage(frame_np.tobytes(), w, h, bytes_per_line, QImage.Format.Format_RGB888)
         self.update() # Trigger repaint
         
     def set_mask(self, mask_np):
@@ -55,14 +59,15 @@ class FrameViewer(QWidget):
         
         # Store offset/scale for mouse mapping
         self.img_rect = (x, y, scaled.width(), scaled.height())
-        self.scale_factor_x = self.current_frame.width() / scaled.width()
-        self.scale_factor_y = self.current_frame.height() / scaled.height()
+        # Avoid division by zero
+        if scaled.width() > 0:
+            self.scale_factor_x = self.current_frame.width() / scaled.width()
+        if scaled.height() > 0:
+            self.scale_factor_y = self.current_frame.height() / scaled.height()
 
         # Draw Mask Overlay
         if self.current_mask is not None:
             # Mask is HxW boolean or float.
-            # Convert to RGBA: Red overlay (255, 0, 0, 128)
-            
             h, w = self.current_mask.shape
             
             # Create RGBA buffer
@@ -75,22 +80,20 @@ class FrameViewer(QWidget):
             rgba[mask_indices, 3] = 128 # Alpha (50% opacity)
             
             # Create QImage
-            # Must keep reference to buffer or QImage crashes
-            self._mask_buffer = rgba
-            mask_img = QImage(rgba.data, w, h, w * 4, QImage.Format.Format_RGBA8888)
+            mask_img = QImage(rgba.tobytes(), w, h, w * 4, QImage.Format.Format_RGBA8888)
             
             # Scale and Draw
-            rect = self.rect()
             scaled_mask = mask_img.scaled(rect.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
             
             # Calculate position (same as video)
-            x = (rect.width() - scaled_mask.width()) // 2
-            y = (rect.height() - scaled_mask.height()) // 2
+            # Center the image (recalculate x/y to be safe, though should be same)
+            x_m = (rect.width() - scaled_mask.width()) // 2
+            y_m = (rect.height() - scaled_mask.height()) // 2
             
-            painter.drawImage(x, y, scaled_mask)
+            painter.drawImage(x_m, y_m, scaled_mask)
                 
     def mousePressEvent(self, event):
-        if self.current_frame is None or not hasattr(self, 'img_rect'):
+        if self.current_frame is None:
             return
             
         x_offset, y_offset, w, h = self.img_rect
@@ -108,9 +111,20 @@ class FrameViewer(QWidget):
             self.click_signal.emit(video_x, video_y)
 
 class VideoPlayer(QWidget):
+    reconstruction_requested = Signal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
         
+        # State
+        self.frames = []
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.next_frame)
+        self.current_idx = 0
+        self.is_playing = False
+        self.current_folder = None # Exposed for Main Window
+        
+        # UI Layout
         self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(0,0,0,0)
         
@@ -139,23 +153,8 @@ class VideoPlayer(QWidget):
         controls_layout.addWidget(self.label_status)
         
         self.layout.addLayout(controls_layout)
-
-    def on_reconstruct(self):
-        self.reconstruction_requested.emit()
-
-class VideoPlayer(QWidget):
-    reconstruction_requested = Signal()
-    
-    def __init__(self, parent=None):
         
-        # State
-        self.frames = []
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.next_frame)
-        self.current_idx = 0
-        self.is_playing = False
-        
-        # Logic
+        # Logic / Engine
         self.seg_engine = SegmentationEngine()
         self.seg_engine.model_loaded.connect(self.on_model_ready)
         
@@ -168,6 +167,7 @@ class VideoPlayer(QWidget):
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         asset_path = os.path.join(base_dir, "assets", "test_data", "default_subject.mp4")
         self.frames_dir = os.path.join(base_dir, "assets", "test_data", "frames")
+        self.current_folder = self.frames_dir # Expose for Smart Scan
         
         if os.path.exists(asset_path):
             self.label_status.setText("Loading Video...")
@@ -176,6 +176,7 @@ class VideoPlayer(QWidget):
             if not os.path.exists(self.frames_dir) or len(os.listdir(self.frames_dir)) == 0:
                 print("Extracting frames for SAM 2...")
                 os.makedirs(self.frames_dir, exist_ok=True)
+                # Plugin pyav is safer for videos
                 raw_frames = iio.imread(asset_path, plugin="pyav", index=None)
                 self.frames = raw_frames
                 
@@ -214,6 +215,7 @@ class VideoPlayer(QWidget):
             self.btn_play.setText("Play")
 
     def next_frame(self):
+        if not self.frames: return
         self.current_idx = (self.current_idx + 1) % len(self.frames)
         self.slider.setValue(self.current_idx)
         self.show_frame(self.current_idx)
@@ -243,3 +245,6 @@ class VideoPlayer(QWidget):
         # Only show if we are still on that frame
         if self.current_idx == frame_idx:
             self.viewer.set_mask(mask)
+
+    def on_reconstruct(self):
+        self.reconstruction_requested.emit()

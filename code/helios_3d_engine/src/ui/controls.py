@@ -61,10 +61,17 @@ class ControlPanel(QWidget):
         # --- Reconstruction ---
         group_recon = QGroupBox("Reconstruction")
         layout_recon = QVBoxLayout(group_recon)
+        
         self.chk_native = QCheckBox("Use Native (Swift) Engine")
         self.chk_native.setChecked(True)
         self.chk_native.toggled.connect(self.emit_native_mode)
         layout_recon.addWidget(self.chk_native)
+        
+        self.chk_smart = QCheckBox("Smart Reconstruction (Gemini)")
+        self.chk_smart.setToolTip("Uses Gemini Vision to analyze the video and auto-tune parameters.")
+        self.chk_smart.setChecked(False)
+        layout_recon.addWidget(self.chk_smart)
+        
         layout.addWidget(group_recon)
         
         # --- Manual ---
