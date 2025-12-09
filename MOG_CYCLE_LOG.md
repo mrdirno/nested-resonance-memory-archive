@@ -119,10 +119,9 @@
     -   Verified DMG generation (Size: ~309MB).
 - **Status:** 🟢 COMPLETE
 
-## Cycle 2989-2996: HELIOS 3D ENGINE - PATHING REFACTOR (Phase 15b)
-- **Goal:** Fix `user_prompt.json` location in frozen app.
+## Cycle 3000-3004: HELIOS 3D ENGINE - HOTFIX v1.0.4
+- **Goal:** Resolve "Package metadata not found for imageio" crash.
 - **Action:**
-    -   Refactored `ControlPanel` to write to the dynamic `working_dir` (Frame Folder) instead of hardcoded path.
-    -   Wired `VideoPlayer.folder_loaded` -> `MainWindow` -> `ControlPanel`.
-    -   Rebuilt Application (v1.0.3).
-- **Status:** 🟢 COMPLETE - CHAT BRIDGE VERIFIED.
+    -   Modified `helios.spec` to explicitly copy metadata for `imageio`.
+    -   Rebuilt application.
+- **Status:** 🟢 COMPLETE - RUNTIME STABLE.
