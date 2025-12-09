@@ -165,14 +165,22 @@ class HeliosMainWindow(QMainWindow):
             QApplication.processEvents()
             
             try:
-                params = self.vision_bridge.analyze_scene(folder)
+                # Expects tuple (params, reasoning)
+                result = self.vision_bridge.analyze_scene(folder)
+                if isinstance(result, tuple):
+                    params, reasoning = result
+                else:
+                    params, reasoning = result, "Legacy Mode"
+
                 if params:
-                    msg = "Smart Scan: "
+                    msg = f"Smart Scan: {reasoning} "
                     if 'scale' in params:
                         self.controls.spin_scale.setValue(params['scale'])
-                        msg += f"Scale -> {params['scale']}. "
+                    if 'concavity' in params:
+                        # self.controls.spin_concavity.setValue(params['concavity']) # If control exists
+                        pass
                     
-                    self.status_label.setText(msg + "Optimizing...")
+                    self.status_label.setText(msg + "| Optimizing...")
                     QApplication.processEvents()
             except Exception as e:
                 print(f"Smart Scan Error: {e}")

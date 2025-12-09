@@ -73,11 +73,12 @@ class VisionBridge:
         1. Generate Contact Sheet
         2. Send to Vision Model (Gemini)
         3. Parse Parameters
+        Returns: (params_dict, reasoning_string)
         """
         print(f"Vision Bridge: Analyzing scene in {frames_dir}...")
         sheet_path = self.create_contact_sheet(frames_dir)
         if not sheet_path:
-            return {}
+            return {}, "Failed to generate contact sheet."
             
         # 1. Pilot Override (Manual Injection)
         # If I (The Pilot) have placed a JSON file here, use it.
@@ -89,7 +90,7 @@ class VisionBridge:
                 with open(override_path, 'r') as f:
                     params = json.load(f)
                 print(f"Vision Bridge: Injected Params: {params}")
-                return params
+                return params, "Pilot Override Active."
             except Exception as e:
                 print(f"Vision Bridge: Failed to load override: {e}")
         
@@ -97,9 +98,10 @@ class VisionBridge:
         if HAS_APPLE_VISION:
             print("Vision Bridge: Invoking 'The Local Eye' (Apple Vision Framework)...")
             try:
-                params = self.local_eye.get_semantic_params(sheet_path)
+                # get_semantic_params returns (params, reasoning)
+                params, reasoning = self.local_eye.get_semantic_params(sheet_path)
                 print(f"Vision Bridge: Local Inference Params: {params}")
-                return params
+                return params, reasoning
             except Exception as e:
                 print(f"Vision Bridge: Local Eye Failed ({e}). Falling back to mock.")
         
@@ -109,7 +111,7 @@ class VisionBridge:
         
         params = self.parse_gemini_response(response_text)
         print(f"Vision Bridge: Inferred Params: {params}")
-        return params
+        return params, f"Mock Inference: {response_text}"
 
     def _mock_inference(self, image_path):
         """

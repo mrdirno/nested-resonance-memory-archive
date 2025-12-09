@@ -39,11 +39,13 @@ class AppleVisionAnalyzer:
     def get_semantic_params(self, image_path):
         """
         Maps visual tags to Helios Simulation Parameters.
+        Returns: (params_dict, reasoning_string)
         """
         tags = self.analyze_image(image_path)
         print(f"AppleVision Tags: {tags}")
         
         params = {}
+        reasoning_parts = []
         
         # Semantic Mapping Logic
         # This is where we "Reason" based on labels
@@ -51,6 +53,10 @@ class AppleVisionAnalyzer:
         is_organic = False
         is_structural = False
         is_tool = False
+        
+        # Top 3 tags for display
+        top_tags = [t[0] for t in tags[:3]]
+        reasoning_parts.append(f"Visuals: {', '.join(top_tags)}")
         
         for tag, conf in tags:
             t = tag.lower()
@@ -66,20 +72,24 @@ class AppleVisionAnalyzer:
             params['gyroid_type'] = 'gyroid' # Smooth
             params['concavity'] = 0.8
             params['scale'] = 1.5
+            reasoning_parts.append("-> Organic Logic (Smooth Gyroid)")
             
         elif is_structural:
             params['gyroid_type'] = 'schwarz_p' # Blocky
             params['concavity'] = 0.2
             params['scale'] = 2.5
+            reasoning_parts.append("-> Structural Logic (Schwarz P)")
             
         elif is_tool:
             params['gyroid_type'] = 'schwarz_d' # Diamond
             params['concavity'] = 0.5
             params['scale'] = 1.0
+            reasoning_parts.append("-> Tool Logic (Schwarz D)")
         
         # Default fallback if ambiguous
         if not params:
             params['gyroid_type'] = 'gyroid'
             params['scale'] = 1.0
+            reasoning_parts.append("-> Ambiguous (Default Gyroid)")
             
-        return params
+        return params, " ".join(reasoning_parts)
