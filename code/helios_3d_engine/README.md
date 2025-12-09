@@ -97,4 +97,4 @@ The Engine accepts the following parameters. The Pilot should choose these based
 
 -   [x] **Phase 14**: Fabrication Bridge (Voxel Slicer).
 
--   [ ] **Phase 15**: Natural Language Interface (LLM Control).
+-   [x] **Phase 15**: Natural Language Interface (Verified Integration).
