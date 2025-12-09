@@ -186,3 +186,13 @@
   - Updated `ReconstructionWorker` to load the generated OBJ into the Python Viewport.
 - **Result:** Full loop achieved: Python -> Swift (Photogrammetry) -> OBJ -> Python (Visualization).
 - **Status:** Phase 8 Complete.
+
+## Cycle 2869: Helios 3D Engine - Phase 9 The Architect - COMPLETE
+- **Goal:** Implement Phase 9 (Advanced Editing/Boolean Ops).
+- **Action:** Integrated SDF Boolean logic into Python Engine.
+- **Method:** 
+  - Enhanced `src/core/sdf.py` with `voxels_to_sdf` (EDT) and boolean math.
+  - Updated UI to include Boolean Operation controls (Union/Diff/Intersect).
+  - Created `BooleanWorker` to perform CSG operations on the active mesh.
+- **Result:** Engine can now merge scanned data with procedural primitives.
+- **Status:** Phase 9 Complete.
