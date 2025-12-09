@@ -142,5 +142,31 @@ class VoxelReconstructor:
             
         print(f"Carving complete. Remaining voxels: {voxels.sum()}")
         
-        # Reshape to (Res, Res, Res)
-        return voxels.view(self.resolution, self.resolution, self.resolution)
+    def extract_mesh(self, voxels):
+        """
+        Converts binary voxel grid to mesh using Marching Cubes.
+        voxels: (Res, Res, Res) bool/float tensor
+        """
+        print("Extracting mesh from voxels...")
+        # Move to CPU and convert to numpy
+        vol = voxels.cpu().numpy().astype(float)
+        
+        # Pad with 0 to close mesh
+        vol = np.pad(vol, 1, 'constant', constant_values=0)
+        
+        try:
+            verts, faces, normals, values = marching_cubes(vol, level=0.5)
+            
+            # Normalize verts to -1..1 range
+            # Grid size is now Res + 2 due to padding
+            res = self.resolution + 2
+            
+            # Map 0..Res to -1..1
+            # v' = (v / (res-1)) * 2 - 1
+            verts = (verts / (res - 1)) * 2.0 - 1.0
+            
+            return verts, normals, faces
+            
+        except RuntimeError:
+            print("Marching Cubes failed (Empty volume?)")
+            return None, None, None
