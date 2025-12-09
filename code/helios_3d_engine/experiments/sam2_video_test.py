@@ -1,7 +1,7 @@
 import torch
 import os
 import shutil
-import cv2
+import imageio.v3 as iio
 from sam2.build_sam import build_sam2_video_predictor
 
 def extract_frames(video_path, output_dir):
@@ -9,17 +9,24 @@ def extract_frames(video_path, output_dir):
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
     
-    cap = cv2.VideoCapture(video_path)
-    count = 0
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            break
-        # Save as JPEG
-        cv2.imwrite(os.path.join(output_dir, f"{count:05d}.jpg"), frame)
-        count += 1
-    cap.release()
-    print(f"Extracted {count} frames to {output_dir}")
+    print(f"Reading video from {video_path}")
+    try:
+        # Read all frames (memory intensive but fine for short clips)
+        # Using index=None reads all frames
+        frames = iio.imread(video_path, plugin="pyav", index=None)
+        
+        print(f"Video loaded. Shape: {frames.shape}")
+        
+        for i, frame in enumerate(frames):
+             # Save as JPEG using imageio
+             iio.imwrite(os.path.join(output_dir, f"{i:05d}.jpg"), frame, plugin="pillow")
+             
+        print(f"Extracted {len(frames)} frames to {output_dir}")
+        
+    except Exception as e:
+        print(f"Frame extraction failed: {e}")
+        import traceback
+        traceback.print_exc()
 
 def test_sam2_video():
     # 1. Setup
