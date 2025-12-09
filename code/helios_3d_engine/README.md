@@ -60,7 +60,8 @@ The Engine accepts the following parameters. The Pilot should choose these based
     - The engine will strictly adhere to these parameters, bypassing AI inference.
     - Example JSON: `{"concavity": 0.8, "gyroid_type": "schwarz_d"}`
 6.  **Generative Infusion:** Automatically fills objects with mathematical lattices (Gyroids) for strength and aesthetics.
-7.  **Natural Language Interface:** Chat with the engine to control parameters (In Progress).
+7.  **Natural Language Interface:** Chat with the engine to control parameters (Verified Integration).
+8.  **Multi-Modal Bridge:** Experimental support for Audio/Thermal inputs (In Progress).
 
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt).
@@ -98,3 +99,5 @@ The Engine accepts the following parameters. The Pilot should choose these based
 -   [x] **Phase 14**: Fabrication Bridge (Voxel Slicer).
 
 -   [x] **Phase 15**: Natural Language Interface (Verified Integration).
+
+-   [ ] **Phase 16**: Multi-Modal Bridge (Audio/Thermal).
