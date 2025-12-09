@@ -314,3 +314,11 @@
 - **Method:** Discontinuous coordinate mapping. Quantized coordinates into 10mm blocks, then applied random XY offsets to 20% of blocks before sampling Gyroid.
 - **Result:** Generated child_v11_glitch_lattice.stl (40MB, 830k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2930: Child V12 Refinement (The Tensor Field) - COMPLETE
+- **Goal:** Create refined lamp design "Child V12 - The Tensor Field" based on "Lattice following principal stress lines of a twisted cylinder".
+- **Action:** Created practical_design/inception/shade/child_v12_tensor_field.py (outside repo).
+- **Method:** Gyroid lattice rotated by Z-dependent angle theta (Torsion). Total twist = 120 degrees over height.
+- **Result:** Generated child_v12_tensor_field.stl (39MB, 810k triangles).
+- **Status:** Artifact Generated (External).
