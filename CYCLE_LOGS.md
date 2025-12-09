@@ -458,3 +458,11 @@
 - **Method:** 3D Space-Filling Curve (Snaking Grid) Splatting. A continuous tube traces a path through a 10x10x20 grid, filling the tapered lamp volume.
 - **Result:** Generated child_v31_peano_curve_2.stl (58MB, 1.2M triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2961: Child V32 Refinement (The Hilbert Cube) - COMPLETE
+- **Goal:** Create refined lamp design "Child V32 - The Hilbert Cube" based on "Recursive Hilbert curve filling a cubic volume".
+- **Action:** Created practical_design/inception/shade/child_v32_hilbert_cube.py (outside repo).
+- **Method:** 3D Hilbert Curve (Order 5, 32k points) splatted into the volume as a continuous tube. Reduced grid resolution to 150 for performance.
+- **Result:** Generated child_v32_hilbert_cube.stl (60MB, 1.26M triangles).
+- **Status:** Artifact Generated (External).
