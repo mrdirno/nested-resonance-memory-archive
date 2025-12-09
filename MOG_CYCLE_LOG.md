@@ -96,9 +96,10 @@
     -   Verified with `Tests/test_pilot_override.py`.
 - **Status:** 🟢 COMPLETE
 
-## Cycle 2892: HELIOS 3D ENGINE - DOCUMENTATION & BUILD CONFIG
-- **Goal:** Update README and Build Scripts for Phase 11.
+## Cycle 2894: HELIOS 3D ENGINE - FINAL PACKAGING PREP
+- **Goal:** Prepare Environment for Final Build.
 - **Action:**
-    -   Updated `README.md` with Smart Scan/Pilot Override details.
-    -   Updated `helios.spec` and `build_macos.sh` to remove Swift legacy and include new deps.
+    -   Added `pyinstaller` to `requirements.txt`.
+    -   Verified installation.
+    -   System is ready for `./build_macos.sh`.
 - **Status:** 🟢 COMPLETE

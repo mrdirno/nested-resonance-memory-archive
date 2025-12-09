@@ -8,4 +8,4 @@ torch
 scikit-image>=0.22.0
 av>=10.0.0
 opencv-python
-imageio>=2.33.0
+imageio>=2.33.0pyinstaller
