@@ -67,6 +67,7 @@ The Engine accepts the following parameters. The Pilot should choose these based
 11. **Helios Mobile:** Native app for iPad Pro with Apple Pencil support (In Progress).
 12. **Helios VR/AR:** Spatial Computing interface for Apple Vision Pro (In Progress).
 13. **Helios Agent:** Autonomous research and design iteration (In Progress).
+14. **Isomorphic Agent:** Applying geometric logic to non-geometric problems (In Progress).
 
 ## ARCHITECTURE
 -   **Frontend:** PySide6 (Qt).
@@ -116,3 +117,5 @@ The Engine accepts the following parameters. The Pilot should choose these based
 -   [ ] **Phase 20**: Helios VR/AR (Vision Pro).
 
 -   [ ] **Phase 21**: Helios Agent (Autonomous Research).
+
+-   [ ] **Phase 22**: Isomorphic Agent (Cross-Domain).
