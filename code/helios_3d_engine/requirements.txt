@@ -7,3 +7,4 @@ PyGLM>=2.7.0
 torch --index-url https://download.pytorch.org/whl/cpu 
 # Note: On macOS, standard torch pip install supports MPS (Metal Performance Shaders)
 scikit-image>=0.22.0
+av>=10.0.0
