@@ -1,6 +1,6 @@
 version: "Apple Swift version 6.1.2 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)"
 options: "d5c2a7369636461db4eecbfd5a6fd498571f52d6e0c122a634336b28c427781b"
-build_start_time: [1765243266, 103198000]
-build_end_time: [1765243270, 285383000]
+build_start_time: [1765243494, 547880000]
+build_end_time: [1765243494, 912168000]
 inputs:
-  "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/Sources/HeliosCLI/main.swift": [1765243257, 604527630]
+  "/Volumes/dual/DUALITY-ZERO-V2/code/helios_native_bridge/Sources/HeliosCLI/main.swift": [1765243488, 370010998]

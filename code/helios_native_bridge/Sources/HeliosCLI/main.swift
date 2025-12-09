@@ -8,7 +8,7 @@ struct HeliosCLI {
         let args = ProcessInfo.processInfo.arguments
         
         guard args.count >= 3 else {
-            print("Usage: HeliosCLI <input_folder> <output_usdz>")
+            print("Usage: HeliosCLI <input_folder> <output_path>")
             exit(1)
         }
         
@@ -23,13 +23,20 @@ struct HeliosCLI {
         
         do {
             let session = try PhotogrammetrySession(input: inputURL, configuration: PhotogrammetrySession.Configuration())
+            
+            // Determine format based on extension
+            // RealityKit usually exports USDZ by default, but can do OBJ if path ends in .obj?
+            // Actually, we need to be explicit.
+            // PhotogrammetrySession.Request.modelFile(url: ..., detail: ...) auto-detects?
+            // Documentation says: "The output format is determined by the filename extension."
+            // Supported: .usdz, .obj (folder containing .obj and textures)
+            
             let request = PhotogrammetrySession.Request.modelFile(url: outputURL, detail: .medium)
             try session.process(requests: [request])
             
             for try await output in session.outputs {
                 switch output {
                 case .requestProgress(_, let fraction):
-                    // Print progress in a parsable format for Python
                     print("PROGRESS:\(fraction)")
                     fflush(stdout)
                 case .processingComplete:

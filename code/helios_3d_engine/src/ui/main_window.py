@@ -19,14 +19,20 @@ class ReconstructionWorker(QThread):
         
     def run(self):
         if self.use_native and self.input_folder:
-            # Native Swift Path
-            output_path = os.path.join(self.input_folder, "reconstruction.usdz")
+            # Native Swift Path (Request .obj)
+            # RealityKit creates a folder for .obj output
+            output_path = os.path.join(self.input_folder, "reconstruction.obj")
+            
             success = self.recon_engine.run_native_photogrammetry(self.input_folder, output_path)
             if success:
-                # TODO: Load USDZ geometry back into Python/ModernGL
-                # For MVP, we just signal success. USDZ loader is Phase 8.
-                print("Native Reconstruction Successful. Saved to " + output_path)
-                self.finished.emit([], [], []) # Signal done
+                # Load OBJ Geometry
+                print(f"Loading geometry from {output_path}...")
+                verts, norms, faces = self.recon_engine.load_obj(output_path)
+                if verts is not None:
+                    self.finished.emit(verts, norms, faces)
+                else:
+                    print("Failed to parse OBJ.")
+                    self.finished.emit(None, None, None)
             else:
                 self.finished.emit(None, None, None)
         else:
@@ -40,7 +46,7 @@ class ReconstructionWorker(QThread):
 class HeliosMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Helios 3D Engine - v0.3.2 (The Reconstructor)")
+        self.setWindowTitle("Helios 3D Engine - v0.3.3 (The Loader)")
         self.resize(1600, 900)
         
         central_widget = QWidget()
@@ -99,10 +105,6 @@ class HeliosMainWindow(QMainWindow):
             self.status_label.setText("Reconstruction Failed.")
             return
         
-        if len(faces) == 0 and self.use_native_engine:
-             self.status_label.setText("Native Reconstruction Complete. (USDZ Loader Pending)")
-             return
-
         self.status_label.setText(f"Reconstruction Complete: {len(faces)} faces.")
         if self.viewport.mesh:
             self.viewport.mesh.vbo.release()
