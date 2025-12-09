@@ -206,3 +206,13 @@
   - Updated `src/core/reconstruction.py` to resolve binary path dynamically inside bundle.
 - **Result:** Ready to build standalone macOS app.
 - **Status:** Phase 10 Complete (Infrastructure).
+
+## Cycle 2871: Helios 3D Engine - Phase 11 Final Polish - COMPLETE
+- **Goal:** Validate Build System and Finalize Codebase.
+- **Action:** Updated path resolution logic for frozen app bundle.
+- **Method:** 
+  - Created `build_macos.sh` (permissions fixed).
+  - Updated `src/core/reconstruction.py` to handle `sys._MEIPASS` for PyInstaller.
+  - Verified build configuration `helios.spec`.
+- **Result:** Source code is ready for deployment.
+- **Status:** Project Feature Complete (Hybrid Architecture).
