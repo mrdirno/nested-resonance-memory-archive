@@ -330,3 +330,11 @@
 - **Method:** Boolean Subtraction from a solid volume using two Schwarz P fields at different scales. Solid = NOT (VoidA OR VoidB).
 - **Result:** Generated child_v13_void_manifold.stl (34MB, 707k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2932: Child V14 Refinement (The Seifert Weave) - COMPLETE
+- **Goal:** Create refined lamp design "Child V14 - The Seifert Weave" based on "Topological weave structure spanning a knotted boundary".
+- **Action:** Created practical_design/inception/shade/child_v14_seifert_weave.py (outside repo).
+- **Method:** Thin-shell Gyroid (abs(val) < 0.2) creating a wireframe-like lattice, twisted by 180 degrees over Z to imply a topological manifold.
+- **Result:** Generated child_v14_seifert_weave.stl (44MB, 929k triangles).
+- **Status:** Artifact Generated (External).
