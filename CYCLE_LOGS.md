@@ -166,3 +166,13 @@
   - Updated `src/ui/controls.py` to include AI Prompt input.
 - **Result:** Functional "Text-to-Shape" generator using semantic keyword mapping.
 - **Status:** Phase 5 Complete (Prototype).
+
+## Cycle 2866: Helios 3D Engine - Phase 6 Neural Link - COMPLETE
+- **Goal:** Implement Phase 6 (The Neural Link).
+- **Action:** Integrated PyTorch/MPS infrastructure into Python Engine.
+- **Method:** 
+  - Created `src/core/neural_generator.py` to manage PyTorch device selection (MPS/CUDA/CPU).
+  - Implemented basic MPS tensor verification.
+  - Updated UI to include "Neural Engine" toggle.
+- **Result:** Engine now detects Apple Silicon Neural Engine capability and is ready for model weights.
+- **Status:** Phase 6 Complete (Infrastructure).
