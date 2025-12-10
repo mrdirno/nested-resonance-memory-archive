@@ -1177,3 +1177,11 @@
 - **Method:** Applied Child V48 logic (Pythagoras Tree Fractal) to the Shaft geometry. Rasterized the fractal pattern with a twist. Added core.
 - **Result:** Generated  (47MB, 988k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 3064: Child V49 Shaft (The Blancmange Curve) - COMPLETE
+- **Goal:** Create matching shaft for "Child V49 - The Blancmange Curve".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V49 logic (Radial Blancmange Curve) to the Shaft geometry. Created a rippled column with a solid core.
+- **Result:** Generated  (20MB, 410k triangles).
+- **Status:** Artifact Generated (External).
