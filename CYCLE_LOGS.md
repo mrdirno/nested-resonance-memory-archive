@@ -1193,3 +1193,11 @@
 - **Method:** Applied Child V50 logic (De Rham Curve Extrusion) to the Shaft geometry. Rasterized the fractal polygon into the voxel grid with a twist. Added core.
 - **Result:** Generated  (43MB, 881k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 3066: Child V51 Shaft (The Minkowski Question Mark) - COMPLETE
+- **Goal:** Create matching shaft for "Child V51 - The Minkowski Question Mark".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V51 logic (Minkowski ?(x) Function) to the Shaft geometry. Created a stepped, singular fractal column with a solid core.
+- **Result:** Generated  (20MB, 413k triangles).
+- **Status:** Artifact Generated (External).
