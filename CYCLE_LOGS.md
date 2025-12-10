@@ -647,3 +647,11 @@
   -  (40MB): Weierstrass Function.
   -  (30MB): Cantor Function (Devil's Staircase).
 - **Status:** All requested fractal children generated (External).
+
+
+## Cycle 2967: Child V2 Shaft (Anisotropic Erosion) - COMPLETE
+- **Goal:** Create matching shaft for "Child V2 - The Anisotropic Erosion".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V2 logic (Breathing, Flow, Erosion) to the Shaft geometry (180mm height, 7mm core, 15mm base). Increased twist frequency for the shaft.
+- **Result:** Generated  (44MB, 927k triangles).
+- **Status:** Artifact Generated (External).
