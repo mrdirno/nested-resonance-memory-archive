@@ -1012,3 +1012,11 @@
 - **Method:** Applied Child V35 logic (Menger Sponge variant) to the Shaft geometry. Created a sponge-like column with a solid core.
 - **Result:** Generated  (53MB, 1.07M triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 3007: Child V36 Shaft (The Gosper Curve) - COMPLETE
+- **Goal:** Create matching shaft for "Child V36 - The Gosper Curve".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V36 logic (Gosper Curve Splatting) to the Shaft geometry. Rasterized the fractal curve with a twist. Added core.
+- **Result:** Generated  (31MB, 643k triangles).
+- **Status:** Artifact Generated (External).
