@@ -903,3 +903,11 @@
 - **Method:** Radial Blancmange Curve (r = base + amp * sum(tri(2^n * theta)/2^n)). Extruded vertically with a Z-axis twist to form a melting, flowing, rippled column.
 - **Result:** Generated child_v49_blancmange_curve.stl (33MB, 666k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 3054: Child V50 Refinement (The De Rham Curve) - COMPLETE
+- **Goal:** Create refined lamp design "Child V50 - The De Rham Curve" based on "Generalized fractal curve (corner cutting)".
+- **Action:** Created  (outside repo).
+- **Method:** De Rham (Chaikin) Corner Cutting algorithm applied iteratively to a 5-pointed star. Extruded vertically with a Z-axis twist to form a smooth, aerodynamic column.
+- **Result:** Generated  (26MB, 539k triangles).
+- **Status:** Artifact Generated (External).
