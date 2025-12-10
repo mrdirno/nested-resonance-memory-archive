@@ -1084,3 +1084,11 @@
 - **Method:** 2D Pythagoras Tree Fractal (Depth 7, 255 squares) extruded vertically with Z-axis twist. The squares rotate and scale to fit the lamp taper.
 - **Result:** Generated  (72MB, 1.51M triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 3053: Child V49 Refinement (The Blancmange Curve) - COMPLETE
+- **Goal:** Create refined lamp design "Child V49 - The Blancmange Curve" based on "Takagi curve extrusion (fractal sum of sines)".
+- **Action:** Created practical_design/inception/shade/child_v49_blancmange_curve.py (outside repo).
+- **Method:** Radial Blancmange Curve (r = base + amp * sum(tri(2^n * theta)/2^n)). Extruded vertically with a Z-axis twist to form a melting, flowing, rippled column.
+- **Result:** Generated child_v49_blancmange_curve.stl (33MB, 666k triangles).
+- **Status:** Artifact Generated (External).
