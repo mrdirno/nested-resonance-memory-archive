@@ -1060,3 +1060,11 @@
 - **Method:** Applied Child V41 logic (Apollonian Gasket Foam) to the Shaft geometry. Created a twisted column filled with cylindrical voids.
 - **Result:** Generated  (33MB, 689k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 3058: Child V42 Shaft (The T-Square Fractal) - COMPLETE
+- **Goal:** Create matching shaft for "Child V42 - The T-Square Fractal".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V42 logic (T-Square Fractal) to the Shaft geometry. Rasterized the fractal pattern with a twist. Added core.
+- **Result:** Generated  (37MB, 790k triangles).
+- **Status:** Artifact Generated (External).
