@@ -735,3 +735,11 @@
 - **Method:** Applied Child V13 logic (Boolean Subtraction of two Schwarz P bubble fields) to the Shaft geometry.
 - **Result:** Generated  (23MB, 480k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2985: Child V14 Shaft (The Seifert Weave) - COMPLETE
+- **Goal:** Create matching shaft for "Child V14 - The Seifert Weave".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V14 logic (Thin-Shell Twisted Gyroid) to the Shaft geometry.
+- **Result:** Generated  (35MB, 739k triangles).
+- **Status:** Artifact Generated (External).
