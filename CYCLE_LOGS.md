@@ -1004,3 +1004,11 @@
 - **Method:** Applied Child V34 logic (Koch Snowflake Extrusion) to the Shaft geometry. Rasterized the fractal polygon into the voxel grid with a twist. Added core.
 - **Result:** Generated  (34MB, 712k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 3006: Child V35 Shaft (The Sierpinski Pyramid) - COMPLETE
+- **Goal:** Create matching shaft for "Child V35 - The Sierpinski Pyramid".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V35 logic (Menger Sponge variant) to the Shaft geometry. Created a sponge-like column with a solid core.
+- **Result:** Generated  (53MB, 1.07M triangles).
+- **Status:** Artifact Generated (External).
