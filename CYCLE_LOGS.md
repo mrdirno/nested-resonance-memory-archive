@@ -671,3 +671,11 @@
 - **Method:** Applied Child V4 logic (Gyroid to Schwarz P Morph) to the Shaft geometry.
 - **Result:** Generated  (25MB, 518k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2977: Child V5 Shaft (The Crystal Erosion) - COMPLETE
+- **Goal:** Create matching shaft for "Child V5 - The Crystal Erosion".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V5 logic (Schwarz D + Noise Erosion) to the Shaft geometry.
+- **Result:** Generated  (33MB, 684k triangles).
+- **Status:** Artifact Generated (External).
