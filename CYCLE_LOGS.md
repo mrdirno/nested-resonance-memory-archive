@@ -823,3 +823,11 @@
 - **Method:** Applied Child V24 logic (Parametric Tube Splatting 5:7:9) to the Shaft geometry. Added a solid core wall for structural integrity.
 - **Result:** Generated  (18MB, 370k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2996: Child V25 Shaft (The Schwarzschild Warp) - COMPLETE
+- **Goal:** Create matching shaft for "Child V25 - The Schwarzschild Warp".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V25 logic (Radial Domain Stretching/Lensing) to the Shaft geometry. Positioned singularity at the center of the shaft bulge.
+- **Result:** Generated  (25MB, 504k triangles).
+- **Status:** Artifact Generated (External).
