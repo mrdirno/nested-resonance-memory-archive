@@ -743,3 +743,11 @@
 - **Method:** Applied Child V14 logic (Thin-Shell Twisted Gyroid) to the Shaft geometry.
 - **Result:** Generated  (35MB, 739k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2986: Child V15 Shaft (The Calabi-Yau Projection) - COMPLETE
+- **Goal:** Create matching shaft for "Child V15 - The Calabi-Yau Projection".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V15 logic (4D Gyroid Slice) to the Shaft geometry.
+- **Result:** Generated  (28MB, 586k triangles).
+- **Status:** Artifact Generated (External).
