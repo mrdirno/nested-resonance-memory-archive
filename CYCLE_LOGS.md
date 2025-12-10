@@ -1052,3 +1052,11 @@
 - **Method:** Applied Child V40 logic (Menger Sponge Fractal) to the Shaft geometry. Created a sponge-like column with a solid core.
 - **Result:** Generated  (42MB, 853k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 3012: Child V41 Shaft (The Apollonian Foam) - COMPLETE
+- **Goal:** Create matching shaft for "Child V41 - The Apollonian Foam".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V41 logic (Apollonian Gasket Foam) to the Shaft geometry. Created a twisted column filled with cylindrical voids.
+- **Result:** Generated  (33MB, 689k triangles).
+- **Status:** Artifact Generated (External).
