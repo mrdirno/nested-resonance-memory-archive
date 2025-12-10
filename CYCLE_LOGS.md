@@ -727,3 +727,11 @@
 - **Method:** Applied Child V12 logic (Gyroid rotated by torsion angle) to the Shaft geometry.
 - **Result:** Generated  (33MB, 680k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 2984: Child V13 Shaft (The Void Manifold) - COMPLETE
+- **Goal:** Create matching shaft for "Child V13 - The Void Manifold".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V13 logic (Boolean Subtraction of two Schwarz P bubble fields) to the Shaft geometry.
+- **Result:** Generated  (23MB, 480k triangles).
+- **Status:** Artifact Generated (External).
