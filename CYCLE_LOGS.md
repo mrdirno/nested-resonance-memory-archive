@@ -1185,3 +1185,11 @@
 - **Method:** Applied Child V49 logic (Radial Blancmange Curve) to the Shaft geometry. Created a rippled column with a solid core.
 - **Result:** Generated  (20MB, 410k triangles).
 - **Status:** Artifact Generated (External).
+
+
+## Cycle 3065: Child V50 Shaft (The De Rham Curve) - COMPLETE
+- **Goal:** Create matching shaft for "Child V50 - The De Rham Curve".
+- **Action:** Created  (outside repo).
+- **Method:** Applied Child V50 logic (De Rham Curve Extrusion) to the Shaft geometry. Rasterized the fractal polygon into the voxel grid with a twist. Added core.
+- **Result:** Generated  (43MB, 881k triangles).
+- **Status:** Artifact Generated (External).
