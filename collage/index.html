@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Professional Generative Art Collage Tool with AI Smart Cropping" />
+    <link rel="manifest" href="./manifest.json" />
+    <title>Smart Crop GenArt Studio</title>
+    <script type="module" crossorigin src="./assets/index-e338b009.js"></script>
+    <link rel="stylesheet" href="./assets/index-c3660929.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script>
+      // Simple SW Registration
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(reg => {
+            console.log('SW registered', reg);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
