@@ -9,12 +9,10 @@
  * - Compute sharing via message channels
  */
 
-const CACHE_NAME = 'smart-collage-v1';
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-];
+const CACHE_NAME = 'smart-collage-v3';
+// Don't cache static assets - let the browser handle them
+// This avoids path issues with subdirectory deployments
+const STATIC_ASSETS = [];
 
 // External dependencies to cache
 const CDN_ASSETS = [
@@ -108,41 +106,32 @@ self.addEventListener('fetch', (event) => {
   // Skip chrome-extension and other non-http requests
   if (!url.protocol.startsWith('http')) return;
 
+  // Network-first strategy for app files to avoid stale cache issues
   event.respondWith(
     (async () => {
-      const cache = await caches.open(CACHE_NAME);
+      try {
+        // Always try network first
+        const networkResponse = await fetch(request);
 
-      // Try cache first
-      const cachedResponse = await cache.match(request);
-
-      // Fetch from network in background
-      const networkPromise = fetch(request).then(async (networkResponse) => {
+        // Cache successful responses
         if (networkResponse.ok) {
-          // Clone and cache the response
+          const cache = await caches.open(CACHE_NAME);
           cache.put(request, networkResponse.clone());
         }
+
         return networkResponse;
-      }).catch(() => null);
+      } catch (e) {
+        // Network failed, try cache
+        const cache = await caches.open(CACHE_NAME);
+        const cachedResponse = await cache.match(request);
 
-      // Return cached if available, otherwise wait for network
-      if (cachedResponse) {
-        // Revalidate in background (don't await)
-        networkPromise;
-        return cachedResponse;
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        // No cache either
+        return new Response('Offline', { status: 503 });
       }
-
-      // No cache, wait for network
-      const networkResponse = await networkPromise;
-      if (networkResponse) {
-        return networkResponse;
-      }
-
-      // Offline fallback
-      if (request.destination === 'document') {
-        return cache.match('/');
-      }
-
-      return new Response('Offline', { status: 503 });
     })()
   );
 });
