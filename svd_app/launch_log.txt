@@ -1,0 +1,231 @@
+Setting up SVD-XT Standalone UI...
+Installing dependencies...
+Requirement already satisfied: diffusers in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 1)) (0.35.2)
+Requirement already satisfied: transformers in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 2)) (4.57.3)
+Requirement already satisfied: accelerate in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 3)) (1.12.0)
+Requirement already satisfied: torch in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 4)) (2.9.1)
+Requirement already satisfied: torchvision in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 5)) (0.24.1)
+Requirement already satisfied: gradio in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 6)) (6.0.2)
+Requirement already satisfied: opencv-python in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 7)) (4.12.0.88)
+Requirement already satisfied: safetensors in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 8)) (0.7.0)
+Requirement already satisfied: pillow in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 9)) (12.0.0)
+Requirement already satisfied: huggingface_hub in ./venv/lib/python3.13/site-packages (from -r requirements.txt (line 10)) (0.36.0)
+Requirement already satisfied: importlib_metadata in ./venv/lib/python3.13/site-packages (from diffusers->-r requirements.txt (line 1)) (8.7.0)
+Requirement already satisfied: filelock in ./venv/lib/python3.13/site-packages (from diffusers->-r requirements.txt (line 1)) (3.20.0)
+Requirement already satisfied: numpy in ./venv/lib/python3.13/site-packages (from diffusers->-r requirements.txt (line 1)) (2.2.6)
+Requirement already satisfied: regex!=2019.12.17 in ./venv/lib/python3.13/site-packages (from diffusers->-r requirements.txt (line 1)) (2025.11.3)
+Requirement already satisfied: requests in ./venv/lib/python3.13/site-packages (from diffusers->-r requirements.txt (line 1)) (2.32.5)
+Requirement already satisfied: packaging>=20.0 in ./venv/lib/python3.13/site-packages (from transformers->-r requirements.txt (line 2)) (25.0)
+Requirement already satisfied: pyyaml>=5.1 in ./venv/lib/python3.13/site-packages (from transformers->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: tokenizers<=0.23.0,>=0.22.0 in ./venv/lib/python3.13/site-packages (from transformers->-r requirements.txt (line 2)) (0.22.1)
+Requirement already satisfied: tqdm>=4.27 in ./venv/lib/python3.13/site-packages (from transformers->-r requirements.txt (line 2)) (4.67.1)
+Requirement already satisfied: fsspec>=2023.5.0 in ./venv/lib/python3.13/site-packages (from huggingface_hub->-r requirements.txt (line 10)) (2025.12.0)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in ./venv/lib/python3.13/site-packages (from huggingface_hub->-r requirements.txt (line 10)) (4.15.0)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in ./venv/lib/python3.13/site-packages (from huggingface_hub->-r requirements.txt (line 10)) (1.2.0)
+Requirement already satisfied: psutil in ./venv/lib/python3.13/site-packages (from accelerate->-r requirements.txt (line 3)) (7.1.3)
+Requirement already satisfied: setuptools in ./venv/lib/python3.13/site-packages (from torch->-r requirements.txt (line 4)) (80.9.0)
+Requirement already satisfied: sympy>=1.13.3 in ./venv/lib/python3.13/site-packages (from torch->-r requirements.txt (line 4)) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in ./venv/lib/python3.13/site-packages (from torch->-r requirements.txt (line 4)) (3.6)
+Requirement already satisfied: jinja2 in ./venv/lib/python3.13/site-packages (from torch->-r requirements.txt (line 4)) (3.1.6)
+Requirement already satisfied: aiofiles<25.0,>=22.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (24.1.0)
+Requirement already satisfied: anyio<5.0,>=3.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (4.12.0)
+Requirement already satisfied: audioop-lts<1.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.2.2)
+Requirement already satisfied: brotli>=1.1.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: fastapi<1.0,>=0.115.2 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.124.0)
+Requirement already satisfied: ffmpy in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (1.0.0)
+Requirement already satisfied: gradio-client==2.0.1 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (2.0.1)
+Requirement already satisfied: groovy~=0.1 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.1.2)
+Requirement already satisfied: httpx<1.0,>=0.24.1 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.28.1)
+Requirement already satisfied: markupsafe<4.0,>=2.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (3.0.3)
+Requirement already satisfied: orjson~=3.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (3.11.5)
+Requirement already satisfied: pandas<3.0,>=1.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (2.3.3)
+Requirement already satisfied: pydantic<=2.12.4,>=2.11.10 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (2.12.4)
+Requirement already satisfied: pydub in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.25.1)
+Requirement already satisfied: python-multipart>=0.0.18 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.0.20)
+Requirement already satisfied: safehttpx<0.2.0,>=0.1.7 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.1.7)
+Requirement already satisfied: semantic-version~=2.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (2.10.0)
+Requirement already satisfied: starlette<1.0,>=0.40.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.50.0)
+Requirement already satisfied: tomlkit<0.14.0,>=0.12.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.13.3)
+Requirement already satisfied: typer<1.0,>=0.12 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.20.0)
+Requirement already satisfied: uvicorn>=0.14.0 in ./venv/lib/python3.13/site-packages (from gradio->-r requirements.txt (line 6)) (0.38.0)
+Requirement already satisfied: idna>=2.8 in ./venv/lib/python3.13/site-packages (from anyio<5.0,>=3.0->gradio->-r requirements.txt (line 6)) (3.11)
+Requirement already satisfied: annotated-doc>=0.0.2 in ./venv/lib/python3.13/site-packages (from fastapi<1.0,>=0.115.2->gradio->-r requirements.txt (line 6)) (0.0.4)
+Requirement already satisfied: certifi in ./venv/lib/python3.13/site-packages (from httpx<1.0,>=0.24.1->gradio->-r requirements.txt (line 6)) (2025.11.12)
+Requirement already satisfied: httpcore==1.* in ./venv/lib/python3.13/site-packages (from httpx<1.0,>=0.24.1->gradio->-r requirements.txt (line 6)) (1.0.9)
+Requirement already satisfied: h11>=0.16 in ./venv/lib/python3.13/site-packages (from httpcore==1.*->httpx<1.0,>=0.24.1->gradio->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: python-dateutil>=2.8.2 in ./venv/lib/python3.13/site-packages (from pandas<3.0,>=1.0->gradio->-r requirements.txt (line 6)) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in ./venv/lib/python3.13/site-packages (from pandas<3.0,>=1.0->gradio->-r requirements.txt (line 6)) (2025.2)
+Requirement already satisfied: tzdata>=2022.7 in ./venv/lib/python3.13/site-packages (from pandas<3.0,>=1.0->gradio->-r requirements.txt (line 6)) (2025.2)
+Requirement already satisfied: annotated-types>=0.6.0 in ./venv/lib/python3.13/site-packages (from pydantic<=2.12.4,>=2.11.10->gradio->-r requirements.txt (line 6)) (0.7.0)
+Requirement already satisfied: pydantic-core==2.41.5 in ./venv/lib/python3.13/site-packages (from pydantic<=2.12.4,>=2.11.10->gradio->-r requirements.txt (line 6)) (2.41.5)
+Requirement already satisfied: typing-inspection>=0.4.2 in ./venv/lib/python3.13/site-packages (from pydantic<=2.12.4,>=2.11.10->gradio->-r requirements.txt (line 6)) (0.4.2)
+Requirement already satisfied: click>=8.0.0 in ./venv/lib/python3.13/site-packages (from typer<1.0,>=0.12->gradio->-r requirements.txt (line 6)) (8.3.1)
+Requirement already satisfied: shellingham>=1.3.0 in ./venv/lib/python3.13/site-packages (from typer<1.0,>=0.12->gradio->-r requirements.txt (line 6)) (1.5.4)
+Requirement already satisfied: rich>=10.11.0 in ./venv/lib/python3.13/site-packages (from typer<1.0,>=0.12->gradio->-r requirements.txt (line 6)) (14.2.0)
+Requirement already satisfied: six>=1.5 in ./venv/lib/python3.13/site-packages (from python-dateutil>=2.8.2->pandas<3.0,>=1.0->gradio->-r requirements.txt (line 6)) (1.17.0)
+Requirement already satisfied: markdown-it-py>=2.2.0 in ./venv/lib/python3.13/site-packages (from rich>=10.11.0->typer<1.0,>=0.12->gradio->-r requirements.txt (line 6)) (4.0.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in ./venv/lib/python3.13/site-packages (from rich>=10.11.0->typer<1.0,>=0.12->gradio->-r requirements.txt (line 6)) (2.19.2)
+Requirement already satisfied: mdurl~=0.1 in ./venv/lib/python3.13/site-packages (from markdown-it-py>=2.2.0->rich>=10.11.0->typer<1.0,>=0.12->gradio->-r requirements.txt (line 6)) (0.1.2)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in ./venv/lib/python3.13/site-packages (from sympy>=1.13.3->torch->-r requirements.txt (line 4)) (1.3.0)
+Requirement already satisfied: zipp>=3.20 in ./venv/lib/python3.13/site-packages (from importlib_metadata->diffusers->-r requirements.txt (line 1)) (3.23.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in ./venv/lib/python3.13/site-packages (from requests->diffusers->-r requirements.txt (line 1)) (3.4.4)
+Requirement already satisfied: urllib3<3,>=1.21.1 in ./venv/lib/python3.13/site-packages (from requests->diffusers->-r requirements.txt (line 1)) (2.6.0)
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: pip install --upgrade pip
+Starting the UI...
+Attempting to load model: stabilityai/stable-video-diffusion-img2vid-xt-1-1...
+Token provided. Authenticating...
+Authentication successful.
+Device: mps, Dtype: torch.float16, Variant: fp16
+Loading pipeline components...:   0%|          | 0/5 [00:00<?, ?it/s]`torch_dtype` is deprecated! Use `dtype` instead!
+Loading pipeline components...:  80%|████████  | 4/5 [00:00<00:00, 24.88it/s]Loading pipeline components...: 100%|██████████| 5/5 [00:00<00:00, 21.02it/s]
+Enabled sequential CPU offload.
+Forced VAE to float32 for stability.
+Model loaded successfully.
+* Running on local URL:  http://127.0.0.1:7860
+* To create a public link, set `share=True` in `launch()`.
+Generating video...
+Downscaling input to (648, 768) for memory safety.
+Resizing image from (648, 768) to (640, 768)
+  0%|          | 0/20 [00:00<?, ?it/s]  0%|          | 0/20 [00:03<?, ?it/s]
+Generation Error: Invalid buffer size: 39.55 GiB
+Traceback (most recent call last):
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/app.py", line 146, in generate_video
+    frames = pipe(
+             ~~~~^
+        input_image,
+        ^^^^^^^^^^^^
+    ...<4 lines>...
+        num_inference_steps=20, # Reduced steps slightly for speed/stability
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ).frames[0]
+    ^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/diffusers/pipelines/stable_video_diffusion/pipeline_stable_video_diffusion.py", line 584, in __call__
+    noise_pred = self.unet(
+                 ~~~~~~~~~^
+        latent_model_input,
+        ^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        return_dict=False,
+        ^^^^^^^^^^^^^^^^^^
+    )[0]
+    ^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/accelerate/hooks.py", line 175, in new_forward
+    output = module._old_forward(*args, **kwargs)
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/diffusers/models/unets/unet_spatio_temporal_condition.py", line 448, in forward
+    sample, res_samples = downsample_block(
+                          ~~~~~~~~~~~~~~~~^
+        hidden_states=sample,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        image_only_indicator=image_only_indicator,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/diffusers/models/unets/unet_3d_blocks.py", line 1249, in forward
+    hidden_states = attn(
+                    ~~~~^
+        hidden_states,
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        return_dict=False,
+        ^^^^^^^^^^^^^^^^^^
+    )[0]
+    ^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/diffusers/models/transformers/transformer_temporal.py", line 350, in forward
+    hidden_states = block(hidden_states, encoder_hidden_states=encoder_hidden_states)
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/diffusers/models/attention.py", line 995, in forward
+    attn_output = self.attn1(
+        norm_hidden_states,
+    ...<2 lines>...
+        **cross_attention_kwargs,
+    )
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/diffusers/models/attention_processor.py", line 605, in forward
+    return self.processor(
+           ~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<3 lines>...
+        **cross_attention_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/diffusers/models/attention_processor.py", line 2765, in __call__
+    hidden_states = F.scaled_dot_product_attention(
+        query, key, value, attn_mask=attention_mask, dropout_p=0.0, is_causal=False
+    )
+RuntimeError: Invalid buffer size: 39.55 GiB
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/gradio/queueing.py", line 763, in process_events
+    response = await route_utils.call_process_api(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/gradio/route_utils.py", line 354, in call_process_api
+    output = await app.get_blocks().process_api(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<11 lines>...
+    )
+    ^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/gradio/blocks.py", line 2106, in process_api
+    result = await self.call_function(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<8 lines>...
+    )
+    ^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/gradio/blocks.py", line 1588, in call_function
+    prediction = await anyio.to_thread.run_sync(  # type: ignore
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        fn, *processed_input, limiter=self.limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 61, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2525, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/venv/lib/python3.13/site-packages/gradio/utils.py", line 1048, in wrapper
+    response = f(*args, **kwargs)
+  File "/Volumes/dual/DUALITY-ZERO-V2/svd_app/app.py", line 164, in generate_video
+    raise gr.Error(f"Generation failed: {e}")
+gradio.exceptions.Error: 'Generation failed: Invalid buffer size: 39.55 GiB'

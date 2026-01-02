@@ -1,0 +1,10 @@
+diffusers
+transformers
+accelerate
+torch
+torchvision
+gradio
+opencv-python
+safetensors
+pillow
+huggingface_hub

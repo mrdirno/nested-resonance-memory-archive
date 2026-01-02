@@ -1,40 +1,60 @@
-# META OBJECTIVES: HELIOS SYSTEM
+# META OBJECTIVES: HELIOS 3D ENGINE (SUNFIRE)
 
-## CORE MANDATE
-Execute the **HELIOS FURNITURE PROTOCOL**: A perpetual design engine for high-concept 3D printable artifacts.
+## MISSION
+Build the **Most Accessible AI-Native Fabrication Tool** on macOS.
+We are **NOT** a "Scan-to-Mesh" viewer (Luma/Polycam). We are a **Semantic Fabrication Engine**.
 
-## PRIMARY LOOP (CURRENT)
-1.  **Series 06 (The Architect):** Complete Designs 31 & 32.
-2.  **The Refinement Cycle (PERPETUAL):**
-    *   Upon completion of Design 32, the system resets to **Design 01 (Redshift)**.
-    *   **Action:** Review, Refine, and Re-release.
-    *   **Criteria:**
-        *   **Aesthetic:** Enhance complexity, proportions, and visual impact.
-        *   **QA Compliance:** Strict adherence to V4 (Base) and V7 (Shade) standards.
-        *   **Optimization:** Code hygiene, printability (overhangs), and structural integrity.
-    *   **Tracking:** Update version numbers (v1.0 -> v2.0) in `CATALOG.md`.
+## CORE PHILOSOPHY (THE PIVOT)
+- **Measurement vs. Inference:** We accept that we cannot beat Gaussian Splatting on pure visual fidelity (measurement).
+- **Novelty:** We win on **Semantic Reasoning** + **Fabrication Readiness**.
+- **Unique Selling Point:**
+    *   **Local Sovereignty:** 100% On-Device (Mac Silicon).
+    *   **Fabrication-First:** We guarantee watertight, printable meshes (Voxels/SDFs), unlike the "Mesh Soup" of Neural Radiance Fields.
+    *   **AI-Reasoning:** We use LLMs (Gemini) to *understand* the object ("It's a chair"), not just *measure* it.
 
-## STANDARDS (THE LAW)
-*   **Shades:** 25.4mm Wall, Spider Fitter (40mm Hub, 4 Spokes, 14mm Hole).
-*   **Bases:** 180x30mm target, 4x Feet, 8x8mm Wire Channel, Solid Core.
-*   **Shafts:** 14mm Internal Clearance, Solid End Caps (2mm).
-*   **Format:** Python Generators -> STL -> 3MF.
+## ARCHITECTURE
+- **Platform:** macOS Silicon (M1/M2/M3).
+- **Language:** Python 3.13.
+- **GUI:** PySide6 (Qt).
+- **Rendering:** ModernGL (OpenGL 4.1 Core).
+- **AI Stack:** 
+    - **Perception:** SAM 2 (Masking).
+    - **Reasoning:** Gemini Vision (Structure Analysis).
+    - **Generation:** Voxel/SDF Math (Geometry).
 
-## EVOLUTION PROTOCOL (THE RABBIT HOLE)
-*   **Mode:** PERPETUAL AUTONOMOUS GENERATION.
-*   **Source Genome:** `/fabrication/practical_design/FAVORITES`
-*   **The Nursery:** `/fabrication/practical_design/FAVORITES/children`
-*   **The Loop:**
-    1.  **Select Parent** from `FAVORITES`.
-    2.  **Mutate & Evolve:** Apply "Jaw Dropping" aesthetics + Breathability/Flow.
-    3.  **Birth Child:** Generate artifact in `children` folder.
-    4.  **Repeat:** Do not stop until User Selection Event occurs.
-*   **User Role:** Natural Selection (Moves successful Children to Favorites).
-*   **Design Laws:**
-    *   **Breathability:** NO SOLID SHELLS.
-    *   **Light:** Indirect/Diffused.
-    *   **Flow:** Liquid, Organic, Kinetic.
+## ROLES
+### 1. THE PILOT (MOG/Gemini)
+- **Responsibility:** Semantic Reasoning.
+- **Action:** Inspects frames, determines "Concavity", "Symmetry", "Structural Weakness".
+- **Output:** High-level parameters (`concavity=0.5`, `wall_thickness=3mm`).
 
-## EXECUTION STACK
-*   **Pilot:** High-level creative direction / Oversight.
-*   **Co-Pilot (NRM):** Geometry generation, Physics simulation, File management.
+### 2. THE CO-PILOT (The Engine)
+- **Responsibility:** Mathematical Execution.
+- **Action:** Executes Voxel Carving and SDF Boolean operations based on Pilot's parameters.
+- **Output:** Printable STL.
+
+## ROADMAP
+
+- [x] Phase 1-5: Foundation (UI, Video, Rendering).
+
+- [x] Phase 6: Perception (SAM 2 Masking).
+
+- [x] Phase 7: Reconstruction (Visual Hull).
+
+- [x] Phase 8: Infusion (Gyroids).
+
+- [x] Phase 9: Editing (Boolean Ops).
+
+- [x] Phase 10: Vision Bridge (Contact Sheets).
+
+- [x] Phase 11: The Semantic Loop (Pilot Override - Primary AI).
+
+- [x] Phase 12: Final Packaging (Build Verified).
+
+- [x] Phase 13: Distribution (Verified DMG).
+
+- [x] Phase 14: Fabrication Bridge (Slicing Preview).
+
+
+
+

@@ -1,0 +1,12 @@
+PySide6>=6.6.0
+ModernGL>=5.8.2
+moderngl-window>=2.4.2
+numpy>=1.26.0
+scipy>=1.11.0
+PyGLM>=2.7.0
+torch
+scikit-image>=0.22.0
+av>=10.0.0
+opencv-python
+imageio>=2.33.0
+pyinstaller
