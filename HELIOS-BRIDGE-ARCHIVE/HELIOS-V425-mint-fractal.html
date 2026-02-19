@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#022C22">
+    <title>HELIOS V425: Mint × Fractal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Mono:wght@400;700&display=swap');
+        :root {
+            --primary: #34D399;
+            --secondary: #6EE7B7;
+            --accent: #A7F3D0;
+            --bg: #022C22;
+            --glass: rgba(2,44,34,0.9);
+            --border: rgba(255,255,255,0.15);
+            --font-main: 'Playfair Display', sans-serif;
+            --font-code: 'IBM Plex Mono', monospace;
+        }
+        body { margin:0; overflow:hidden; background-color:var(--bg); font-family:var(--font-main); color:white; user-select:none; -webkit-user-select:none; width:100%; height:100%; position:fixed; }
+        #canvas-container { position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; background:radial-gradient(circle at 50% 30%, #022C2288 0%, #022C22 70%); }
+        #hud-container { position:absolute; bottom:20px; left:0; width:100%; display:flex; justify-content:center; pointer-events:none; z-index:10; padding:0 20px; box-sizing:border-box; }
+        .panel { pointer-events:auto; background:var(--glass); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); border:1px solid var(--border); border-radius:0px; padding:24px; width:100%; max-width:480px; box-shadow:0 20px 60px rgba(0,0,0,0.9); transition:all 0.4s cubic-bezier(0.16,1,0.3,1); overflow:hidden; max-height:500px; }
+        .panel.collapsed { max-height:72px; background:rgba(0,0,0,0.8); border-color:rgba(255,255,255,0.1); }
+        .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; cursor:pointer; height:24px; }
+        .title-block { display:flex; flex-direction:column; }
+        .title { font-size:16px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#fff; background:linear-gradient(90deg,#fff,var(--secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .status-line { font-family:var(--font-code); font-size:9px; color:var(--secondary); opacity:0.8; margin-top:4px; display:flex; gap:6px; align-items:center; }
+        .status-dot { width:4px; height:4px; background:var(--secondary); border-radius:50%; box-shadow:0 0 8px var(--secondary); animation:pulse 1s infinite alternate; }
+        @keyframes pulse { from{opacity:0.5} to{opacity:1} }
+        .chevron-btn { background:none; border:none; color:rgba(255,255,255,0.5); font-size:12px; padding:10px; transition:transform 0.3s; }
+        .panel.collapsed .chevron-btn { transform:rotate(180deg); }
+        .controls-wrapper { opacity:1; transition:opacity 0.2s ease-in; }
+        .panel.collapsed .controls-wrapper { opacity:0; pointer-events:none; }
+        .control-row { margin-bottom:20px; }
+        .label-row { display:flex; justify-content:space-between; font-family:var(--font-code); font-size:10px; color:rgba(255,255,255,0.5); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px; }
+        .value-readout { color:var(--accent); font-weight:700; }
+        input[type=range] { width:100%; -webkit-appearance:none; background:transparent; }
+        input[type=range]:focus { outline:none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; height:14px; width:14px; border-radius:50%; background:var(--primary); cursor:pointer; margin-top:-6px; box-shadow:0 0 12px var(--primary); border:1px solid white; }
+        input[type=range]::-webkit-slider-runnable-track { width:100%; height:2px; cursor:pointer; background:rgba(255,255,255,0.2); }
+        .btn-group { display:flex; gap:8px; margin-top:24px; }
+        .btn { flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.7); padding:12px; font-family:var(--font-code); font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:all 0.2s; border-radius:4px; }
+        .btn.active { background:rgba(110,231,183,0.15); border-color:var(--secondary); color:var(--secondary); box-shadow:0 0 15px rgba(110,231,183,0.1); }
+        .density-select { background:rgba(0,0,0,0.5); color:var(--secondary); border:1px solid rgba(255,255,255,0.2); font-family:var(--font-code); font-size:10px; padding:4px 8px; border-radius:4px; outline:none; cursor:pointer; }
+        #loader { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:999; transition:opacity 1s ease-out; pointer-events:none; }
+        .loader-text { font-family:var(--font-code); color:var(--primary); font-size:12px; letter-spacing:4px; margin-top:10px; }
+        .spinner { width:40px; height:40px; border:2px solid rgba(255,255,255,0.1); border-top-color:var(--secondary); border-radius:50%; animation:spin 0.8s infinite linear; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        .gesture-hint { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:rgba(255,255,255,0.3); font-family:var(--font-code); font-size:10px; pointer-events:none; opacity:0; transition:opacity 0.5s; }
+        .variant-tag { position:absolute; top:16px; left:16px; font-family:var(--font-code); font-size:9px; color:rgba(255,255,255,0.25); letter-spacing:2px; z-index:5; }
+    </style>
+</head>
+<body>
+    <div id="loader"><div class="spinner"></div><div class="loader-text">IGNITING FRACTAL...</div></div>
+    <div id="canvas-container"></div>
+    <div class="variant-tag">V425 // MINT × FRACTAL</div>
+    <div class="gesture-hint" id="gesture-hint">2 FINGERS: PAN + ZOOM</div>
+    <div id="hud-container">
+        <div class="panel" id="main-panel">
+            <div class="header" id="panel-toggle">
+                <div class="title-block">
+                    <div class="title">HELIOS V425 // FRACTAL</div>
+                    <div class="status-line"><span class="status-dot"></span><span id="state-text">CHAMPERNOWNE | FIREFLY | ART DECO</span></div>
+                </div>
+                <button class="chevron-btn">&#9660;</button>
+            </div>
+            <div class="controls-wrapper">
+                <div class="label-row" style="margin-bottom:15px;"><span>Particle Density</span><select id="density-select" class="density-select"><option value="512">Low (260k)</option><option value="1024" selected>High (1M)</option><option value="2048">Ultra (4M)</option></select></div>
+                <div class="control-row"><div class="label-row"><span>Entropy (Curl Noise)</span><span class="value-readout" id="curl-val">50%</span></div><input type="range" id="curl-slider" min="0" max="2.0" step="0.1" value="0.5"></div>
+                <div class="control-row"><div class="label-row"><span>Metabolism Rate</span><span class="value-readout" id="meta-val">1.0x</span></div><input type="range" id="meta-slider" min="0.1" max="3.0" step="0.1" value="1.0"></div>
+                <div class="control-row"><div class="label-row"><span>Orthogonal Stagger</span><span class="value-readout" id="stagger-val">50</span></div><input type="range" id="stagger-slider" min="0" max="256" step="1" value="50"></div>
+                <div class="control-row"><div class="label-row"><span>Archive Flux</span><span class="value-readout" id="flux-val">0.5x</span></div><input type="range" id="flux-slider" min="0" max="2.0" step="0.01" value="0.5"></div>
+                <div class="btn-group"><button class="btn active" id="mode-a">IFS</button><button class="btn" id="mode-b">Strange</button><button class="btn" id="mode-c">Animated</button></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const SEQUENCE_LENGTH = 1024;
+        const STRINGS = {
+            a: "68666868884880480880602886488860086804644446048022682860602842804886080424060648084842402468464808220684026602844406428482042026688806422868064268220422840088848220084846468440284066028042882828664884200284040642426642428406064248440000264084466222440884664426268682040208408268866840488444860824204460426208860444448244242088228682606660400866064402222026046028206486046222820624202280082062086408868408622242888084048042286846262422004666066464848884606040064428486440444626482422202806006460848684",
+            b: "24408680426266042028062006244208808046462422442600284466626242222800886428642484222682860282286060020082422042846024666646684226684842608644062200664402640600402222422644004040486280404266028260842648408628886886884286602446400462880820284282840668248266842862428482220862264262646628286804246840488860464208844488828044442646800622644424066044042004668642628426688062402028282888020208644608006048488080020624802042488484844600668664000206028608428022242288246404886088628488028800284246468864084064",
+            c: "84464400862080848606248642004664620868246022486686282844040268428826608264000248462286268286036804824880448682620606246460846060286848264284842264026262406424082848626202844442462460282066802062860202404646062264648204222826480468404864602888622660268086884082624866604402680222860284268864226244680060042064066262420048446882402608062642066680886864068484402444004640268620024064440840400800468082246488662226022646000464800424848022246808088864062686684604820640224002044444066460248844884004402006"
+        };
+        const BOX_SIZE = 15.0;
+        let TEXTURE_SIZE = 1024;
+        let PARTICLE_COUNT = TEXTURE_SIZE * TEXTURE_SIZE;
+        const State = { particleSpeed:1.0, fluxSpeed:0.5, amplitude:1.2, mode:0, archiveIndex:0.0, stagger:50.0, time:0, zoom:50.0, curl:0.5, metabolism:1.0, target:new THREE.Vector3(0,0,0) };
+        let renderer,camera,scene,rttScene,rttCamera,rttMesh,texturePositionA,texturePositionB,simulationMaterial,particleMaterial,particleMesh,digitTexture;
+        let lastTime = performance.now();
+
+        function init() {
+            const container = document.getElementById('canvas-container');
+            if(renderer) container.innerHTML='';
+            renderer = new THREE.WebGLRenderer({antialias:false,powerPreference:"high-performance",alpha:false});
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+            renderer.setSize(window.innerWidth,window.innerHeight);
+            container.appendChild(renderer.domElement);
+            camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,1000);
+            updateCamera();
+            applyOpticalShift();
+            scene = new THREE.Scene();
+            createDigitTexture();
+            initGPGPU();
+            initParticles();
+            setupUI();
+            requestAnimationFrame(()=>{ const loader=document.getElementById('loader'); loader.style.opacity=0; setTimeout(()=>loader.style.display='none',1000); const hint=document.getElementById('gesture-hint'); hint.style.opacity=1; setTimeout(()=>hint.style.opacity=0,4000); });
+            animate();
+        }
+
+        function reloadSim(size) {
+            document.getElementById('loader').style.display='flex';
+            document.getElementById('loader').style.opacity=1;
+            setTimeout(()=>{ TEXTURE_SIZE=parseInt(size); PARTICLE_COUNT=TEXTURE_SIZE*TEXTURE_SIZE; scene.remove(particleMesh); rttScene.remove(rttMesh); texturePositionA.dispose(); texturePositionB.dispose(); initGPGPU(); initParticles(); document.getElementById('loader').style.opacity=0; setTimeout(()=>document.getElementById('loader').style.display='none',1000); },100);
+        }
+
+        let spherical = new THREE.Spherical(50,Math.PI/4,Math.PI/4);
+        function updateCamera() { spherical.radius=State.zoom; camera.position.setFromSpherical(spherical); camera.position.add(State.target); camera.lookAt(State.target); }
+        function applyOpticalShift() { const w=window.innerWidth,h=window.innerHeight; camera.setViewOffset(w,h,0,h*0.25,w,h); camera.updateProjectionMatrix(); }
+
+        function createDigitTexture() {
+            const data = new Float32Array(SEQUENCE_LENGTH*4);
+            for(let i=0;i<SEQUENCE_LENGTH;i++) { const i4=i*4; data[i4]=parseInt(STRINGS.a[i]||'5')/9.0; data[i4+1]=parseInt(STRINGS.b[i]||'5')/9.0; data[i4+2]=parseInt(STRINGS.c[i]||'5')/9.0; data[i4+3]=1.0; }
+            digitTexture = new THREE.DataTexture(data,SEQUENCE_LENGTH,1,THREE.RGBAFormat,THREE.FloatType);
+            digitTexture.needsUpdate=true; digitTexture.minFilter=THREE.LinearFilter; digitTexture.magFilter=THREE.LinearFilter; digitTexture.wrapS=THREE.RepeatWrapping; digitTexture.wrapT=THREE.RepeatWrapping;
+        }
+
+        function initGPGPU() {
+            rttScene = new THREE.Scene(); rttCamera = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+            const posData = new Float32Array(PARTICLE_COUNT*4);
+            for(let i=0;i<PARTICLE_COUNT;i++) { const i4=i*4; posData[i4]=(Math.random()-0.5)*BOX_SIZE*2.0; posData[i4+1]=(Math.random()-0.5)*BOX_SIZE*2.0; posData[i4+2]=(Math.random()-0.5)*BOX_SIZE*2.0; posData[i4+3]=Math.random(); }
+            const initialPosTex = new THREE.DataTexture(posData,TEXTURE_SIZE,TEXTURE_SIZE,THREE.RGBAFormat,THREE.FloatType);
+            initialPosTex.needsUpdate=true;
+            const options = {minFilter:THREE.NearestFilter,magFilter:THREE.NearestFilter,format:THREE.RGBAFormat,type:THREE.FloatType,stencilBuffer:false,depthBuffer:false};
+            if(/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) options.type=THREE.HalfFloatType;
+            texturePositionA = new THREE.WebGLRenderTarget(TEXTURE_SIZE,TEXTURE_SIZE,options);
+            texturePositionB = new THREE.WebGLRenderTarget(TEXTURE_SIZE,TEXTURE_SIZE,options);
+            renderer.setRenderTarget(texturePositionA);
+            rttMesh = new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.MeshBasicMaterial({map:initialPosTex}));
+            rttScene.add(rttMesh); renderer.render(rttScene,rttCamera); rttScene.remove(rttMesh);
+
+            simulationMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    time:{value:0}, uParticleSpeed:{value:1.0}, uAmplitude:{value:1.0}, uMode:{value:0},
+                    uArchiveIndex:{value:0.0}, uStagger:{value:50.0}, uCurl:{value:0.5}, uMetabolism:{value:1.0},
+                    tPosition:{value:null}, tDigits:{value:digitTexture}, uBoxSize:{value:BOX_SIZE}
+                },
+                vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=vec4(position,1.0);}',
+                fragmentShader: `
+                    uniform float time;
+                    uniform float uParticleSpeed;
+                    uniform float uAmplitude;
+                    uniform int uMode;
+                    uniform float uArchiveIndex;
+                    uniform float uStagger;
+                    uniform float uCurl;
+                    uniform float uMetabolism;
+                    uniform float uBoxSize;
+                    uniform sampler2D tPosition;
+                    uniform sampler2D tDigits;
+                    varying vec2 vUv;
+                    float rand(vec2 co){return fract(sin(dot(co.xy,vec2(12.9898,78.233)))*43758.5453);}
+                    float getPotential(vec3 pos, vec3 freqX, vec3 freqY, vec3 freqZ) {
+                        float scale=0.3;
+                        float fx=freqX.x*9.0+0.1; float fy=freqY.y*9.0+0.1; float fz=freqZ.z*9.0+0.1;
+                        
+      vec3 z = pos * scale * 0.3;
+      float v = 0.0;
+      if (uMode == 0) { for(int i=0;i<4;i++) { v += sin(z.x*fx)*cos(z.y*fy)*sin(z.z*fz); z *= 1.8; z.xy = vec2(z.x*cos(0.5)-z.y*sin(0.5), z.x*sin(0.5)+z.y*cos(0.5)); } return v; }
+      else if (uMode == 1) { for(int i=0;i<5;i++) { v += abs(sin(z.x*fx+z.y*fy))*0.5; z *= 2.0; } return v; }
+      else { for(int i=0;i<4;i++) { v += sin(z.x*fx+time*0.1)*cos(z.y*fy)*sin(z.z*fz+time*0.1); z = z.yzx * 1.5; } return v; }
+                    }
+                    vec3 snoiseVec3(vec3 x){float s=sin(x.x+time*0.2);float c=cos(x.y+time*0.2);return vec3(c,s,sin(x.z+time*0.2));}
+                    vec3 curlNoise(vec3 p){
+                        const float e=0.1;
+                        vec3 dx=vec3(e,0.0,0.0);vec3 dy=vec3(0.0,e,0.0);vec3 dz=vec3(0.0,0.0,e);
+                        vec3 p_x0=snoiseVec3(p-dx);vec3 p_x1=snoiseVec3(p+dx);
+                        vec3 p_y0=snoiseVec3(p-dy);vec3 p_y1=snoiseVec3(p+dy);
+                        vec3 p_z0=snoiseVec3(p-dz);vec3 p_z1=snoiseVec3(p+dz);
+                        float x2=p_y1.z-p_y0.z-p_z1.y+p_z0.y;
+                        float y2=p_z1.x-p_z0.x-p_x1.z+p_x0.z;
+                        float z2=p_x1.y-p_x0.y-p_y1.x+p_y0.x;
+                        return normalize(vec3(x2,y2,z2));
+                    }
+                    void main(){
+                        vec4 pos=texture2D(tPosition,vUv);
+                        float life=pos.w;
+                        float decay=0.008*uMetabolism*(1.0+rand(vUv+time)*0.5);
+                        life-=decay;
+                        if(life<=0.0){
+                            vec3 origin=vec3(0.0);
+                            vec3 offset=(vec3(rand(vUv),rand(vUv+11.0),rand(vUv+22.0))-0.5)*5.0;
+                            pos.xyz=origin + offset * 2.0;
+                            life=1.0;
+                            if(rand(vUv+time)>0.5){pos.xyz=(vec3(rand(vUv),rand(vUv+2.0),rand(vUv+3.0))-0.5)*uBoxSize*1.8;}
+                        }
+                        float len=1024.0;
+                        float uX=mod(uArchiveIndex,len)/len;
+                        float uY=mod(uArchiveIndex+uStagger,len)/len;
+                        float uZ=mod(uArchiveIndex+uStagger*2.0,len)/len;
+                        vec3 fX=texture2D(tDigits,vec2(uX,0.5)).rgb;
+                        vec3 fY=texture2D(tDigits,vec2(uY,0.5)).rgb;
+                        vec3 fZ=texture2D(tDigits,vec2(uZ,0.5)).rgb;
+                        float d=0.1;
+                        float pot=getPotential(pos.xyz,fX,fY,fZ);
+                        float potX=getPotential(pos.xyz+vec3(d,0,0),fX,fY,fZ);
+                        float potY=getPotential(pos.xyz+vec3(0,d,0),fX,fY,fZ);
+                        float potZ=getPotential(pos.xyz+vec3(0,0,d),fX,fY,fZ);
+                        vec3 force=-vec3(potX-pot,potY-pot,potZ-pot)/d;
+                        vec3 curl=curlNoise(pos.xyz*0.2)*uCurl*0.1;
+                        pos.xyz+=(force+curl)*uAmplitude*0.03*uParticleSpeed;
+                        pos.xyz-=pos.xyz*0.0001;
+                        float lim=uBoxSize;
+                        if(abs(pos.x)>lim) pos.x=sign(pos.x)*(lim-0.1);
+                        if(abs(pos.y)>lim) pos.y=sign(pos.y)*(lim-0.1);
+                        if(abs(pos.z)>lim) pos.z=sign(pos.z)*(lim-0.1);
+                        pos.w=life;
+                        gl_FragColor=pos;
+                    }
+                `
+            });
+            rttMesh = new THREE.Mesh(new THREE.PlaneGeometry(2,2),simulationMaterial);
+            rttScene.add(rttMesh);
+        }
+
+        function initParticles() {
+            const geometry = new THREE.BufferGeometry();
+            const uvs = new Float32Array(PARTICLE_COUNT*2);
+            for(let i=0;i<TEXTURE_SIZE;i++){for(let j=0;j<TEXTURE_SIZE;j++){const idx=(i*TEXTURE_SIZE+j)*2;uvs[idx]=i/(TEXTURE_SIZE-1);uvs[idx+1]=j/(TEXTURE_SIZE-1);}}
+            geometry.setAttribute('position',new THREE.BufferAttribute(new Float32Array(PARTICLE_COUNT*3),3));
+            geometry.setAttribute('uvRef',new THREE.BufferAttribute(uvs,2));
+            particleMaterial = new THREE.ShaderMaterial({
+                uniforms:{tPosition:{value:null},uColor1:{value:new THREE.Color('#34D399')},uColor2:{value:new THREE.Color('#6EE7B7')},uSizeScale:{value:1.0}},
+                vertexShader:`
+                    uniform sampler2D tPosition;attribute vec2 uvRef;varying vec3 vColor;uniform vec3 uColor1;uniform vec3 uColor2;uniform float uSizeScale;
+                    void main(){
+                        vec4 posData=texture2D(tPosition,uvRef);vec3 pos=posData.xyz;float life=posData.w;
+                        vec3 energyColor=mix(uColor1,uColor2,life);
+                        if(life>0.9) energyColor=mix(energyColor,vec3(1.0),(life-0.9)*10.0);
+                        vColor=energyColor;
+                        vec4 mvPosition=modelViewMatrix*vec4(pos,1.0);
+                        gl_Position=projectionMatrix*mvPosition;
+                        gl_PointSize=(2.5/-mvPosition.z)*80.0*uSizeScale*smoothstep(0.0,0.2,life);
+                    }`,
+                fragmentShader:'varying vec3 vColor;void main(){if(length(gl_PointCoord-vec2(0.5))>0.5)discard;gl_FragColor=vec4(vColor,0.5);}',
+                transparent:true,depthWrite:false,blending:THREE.AdditiveBlending
+            });
+            if(TEXTURE_SIZE>=2048) particleMaterial.uniforms.uSizeScale.value=0.6; else if(TEXTURE_SIZE<=512) particleMaterial.uniforms.uSizeScale.value=2.0;
+            particleMesh = new THREE.Points(geometry,particleMaterial); scene.add(particleMesh);
+        }
+
+        function setupUI() {
+            const handleZoom=(delta)=>{State.zoom+=delta;State.zoom=Math.max(10,Math.min(150,State.zoom));updateCamera();};
+            window.addEventListener('wheel',(e)=>handleZoom(e.deltaY*0.1));
+            document.getElementById('density-select').addEventListener('change',(e)=>reloadSim(e.target.value));
+            document.getElementById('stagger-slider').addEventListener('input',(e)=>{State.stagger=parseFloat(e.target.value);document.getElementById('stagger-val').innerText=State.stagger;simulationMaterial.uniforms.uStagger.value=State.stagger;});
+            document.getElementById('flux-slider').addEventListener('input',(e)=>{State.fluxSpeed=parseFloat(e.target.value);document.getElementById('flux-val').innerText=State.fluxSpeed.toFixed(2)+"x";});
+            document.getElementById('curl-slider').addEventListener('input',(e)=>{State.curl=parseFloat(e.target.value);document.getElementById('curl-val').innerText=Math.round(State.curl*100)+"%";simulationMaterial.uniforms.uCurl.value=State.curl;});
+            document.getElementById('meta-slider').addEventListener('input',(e)=>{State.metabolism=parseFloat(e.target.value);document.getElementById('meta-val').innerText=State.metabolism.toFixed(1)+"x";simulationMaterial.uniforms.uMetabolism.value=State.metabolism;});
+            const btns={a:document.getElementById('mode-a'),b:document.getElementById('mode-b'),c:document.getElementById('mode-c')};
+            const setMode=(m,btn)=>{State.mode=m;simulationMaterial.uniforms.uMode.value=m;Object.values(btns).forEach(b=>b.classList.remove('active'));btn.classList.add('active');};
+            btns.a.addEventListener('click',()=>setMode(0,btns.a)); btns.b.addEventListener('click',()=>setMode(1,btns.b)); btns.c.addEventListener('click',()=>setMode(2,btns.c));
+            document.getElementById('panel-toggle').addEventListener('click',()=>document.getElementById('main-panel').classList.toggle('collapsed'));
+            let isDragging=false,startX=0,startY=0,initialPinchDist=0,startZoom=50,initialCenter={x:0,y:0};
+            const panUp2=new THREE.Vector3(),panRight2=new THREE.Vector3(),panDelta2=new THREE.Vector3();
+            window.addEventListener('touchstart',e=>{if(e.target.closest('.panel'))return;if(e.touches.length===2){const t1=e.touches[0],t2=e.touches[1],dx2=t1.clientX-t2.clientX,dy2=t1.clientY-t2.clientY;initialPinchDist=Math.sqrt(dx2*dx2+dy2*dy2);startZoom=State.zoom;initialCenter.x=(t1.clientX+t2.clientX)*0.5;initialCenter.y=(t1.clientY+t2.clientY)*0.5;e.preventDefault();}else if(e.touches.length===1){isDragging=true;startX=e.touches[0].clientX;startY=e.touches[0].clientY;}},{passive:false});
+            window.addEventListener('touchmove',e=>{if(e.target.closest('.panel'))return;if(e.touches.length===2){const t1=e.touches[0],t2=e.touches[1],dx2=t1.clientX-t2.clientX,dy2=t1.clientY-t2.clientY,dist=Math.sqrt(dx2*dx2+dy2*dy2),sc=initialPinchDist/dist;State.zoom=Math.max(10,Math.min(150,startZoom*sc));const cx=(t1.clientX+t2.clientX)*0.5,cy=(t1.clientY+t2.clientY)*0.5,px=initialCenter.x-cx,py=initialCenter.y-cy;const matrix=camera.matrixWorld;panRight2.setFromMatrixColumn(matrix,0);panUp2.setFromMatrixColumn(matrix,1);const pf=State.zoom*0.002;panDelta2.set(0,0,0);panDelta2.addScaledVector(panRight2,px*pf);panDelta2.addScaledVector(panUp2,-py*pf);State.target.add(panDelta2);updateCamera();initialCenter.x=cx;initialCenter.y=cy;e.preventDefault();}else if(isDragging&&e.touches.length===1){const dx2=e.touches[0].clientX-startX,dy2=e.touches[0].clientY-startY;spherical.theta-=dx2*0.005;spherical.phi-=dy2*0.005;spherical.phi=Math.max(0.1,Math.min(Math.PI-0.1,spherical.phi));updateCamera();startX=e.touches[0].clientX;startY=e.touches[0].clientY;e.preventDefault();}},{passive:false});
+            window.addEventListener('touchend',()=>isDragging=false);
+            let lastTap=0;window.addEventListener('touchend',(e)=>{const ct=new Date().getTime(),tl=ct-lastTap;if(tl<500&&tl>0){State.target.set(0,0,0);updateCamera();e.preventDefault();}lastTap=ct;});
+            window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();applyOpticalShift();renderer.setSize(window.innerWidth,window.innerHeight);});
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const now=performance.now(),delta=Math.min((now-lastTime)/1000,0.1);lastTime=now;
+            State.time+=delta;
+            if(State.fluxSpeed>0.01) State.archiveIndex+=State.fluxSpeed*delta*5.0;
+            simulationMaterial.uniforms.tPosition.value=texturePositionA.texture;simulationMaterial.uniforms.uArchiveIndex.value=State.archiveIndex;simulationMaterial.uniforms.time.value=State.time;
+            renderer.setRenderTarget(texturePositionB);renderer.render(rttScene,rttCamera);
+            let temp=texturePositionA;texturePositionA=texturePositionB;texturePositionB=temp;
+            renderer.setRenderTarget(null);particleMaterial.uniforms.tPosition.value=texturePositionA.texture;renderer.render(scene,camera);
+        }
+        init();
+    </script>
+</body>
+</html>

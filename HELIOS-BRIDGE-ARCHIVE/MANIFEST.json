@@ -1,0 +1,7006 @@
+{
+  "generated_at": "2026-02-19T08:53:19.486Z",
+  "total": 500,
+  "variations": [
+    {
+      "id": "V001",
+      "filename": "HELIOS-V001-crimson-cyan-interference.html",
+      "palette": "Crimson Cyan",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Standard",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V002",
+      "filename": "HELIOS-V002-void-violet-interference.html",
+      "palette": "Void Violet",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Standard",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V003",
+      "filename": "HELIOS-V003-deep-ocean-interference.html",
+      "palette": "Deep Ocean",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Standard",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V004",
+      "filename": "HELIOS-V004-solar-flare-interference.html",
+      "palette": "Solar Flare",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Standard",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V005",
+      "filename": "HELIOS-V005-emerald-night-interference.html",
+      "palette": "Emerald Night",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Standard",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V006",
+      "filename": "HELIOS-V006-neon-punk-interference.html",
+      "palette": "Neon Punk",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Long Trail",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V007",
+      "filename": "HELIOS-V007-arctic-interference.html",
+      "palette": "Arctic",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Long Trail",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V008",
+      "filename": "HELIOS-V008-blood-moon-interference.html",
+      "palette": "Blood Moon",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Long Trail",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V009",
+      "filename": "HELIOS-V009-phosphor-green-interference.html",
+      "palette": "Phosphor Green",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Long Trail",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V010",
+      "filename": "HELIOS-V010-ultraviolet-interference.html",
+      "palette": "Ultraviolet",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Long Trail",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V011",
+      "filename": "HELIOS-V011-infrared-interference.html",
+      "palette": "Infrared",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Explosive",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V012",
+      "filename": "HELIOS-V012-glacier-interference.html",
+      "palette": "Glacier",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Explosive",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V013",
+      "filename": "HELIOS-V013-plasma-interference.html",
+      "palette": "Plasma",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Explosive",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V014",
+      "filename": "HELIOS-V014-amber-dusk-interference.html",
+      "palette": "Amber Dusk",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Explosive",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V015",
+      "filename": "HELIOS-V015-teal-depth-interference.html",
+      "palette": "Teal Depth",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Explosive",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V016",
+      "filename": "HELIOS-V016-rose-gold-interference.html",
+      "palette": "Rose Gold",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Swarm",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V017",
+      "filename": "HELIOS-V017-midnight-blue-interference.html",
+      "palette": "Midnight Blue",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Swarm",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V018",
+      "filename": "HELIOS-V018-toxic-interference.html",
+      "palette": "Toxic",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Swarm",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V019",
+      "filename": "HELIOS-V019-sunset-strip-interference.html",
+      "palette": "Sunset Strip",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Swarm",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V020",
+      "filename": "HELIOS-V020-ghost-interference.html",
+      "palette": "Ghost",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Swarm",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V021",
+      "filename": "HELIOS-V021-bioluminescent-interference.html",
+      "palette": "Bioluminescent",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Firefly",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V022",
+      "filename": "HELIOS-V022-volcanic-interference.html",
+      "palette": "Volcanic",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Firefly",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V023",
+      "filename": "HELIOS-V023-nebula-interference.html",
+      "palette": "Nebula",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Firefly",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V024",
+      "filename": "HELIOS-V024-copper-wire-interference.html",
+      "palette": "Copper Wire",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Firefly",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V025",
+      "filename": "HELIOS-V025-mint-interference.html",
+      "palette": "Mint",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Firefly",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V026",
+      "filename": "HELIOS-V026-sakura-interference.html",
+      "palette": "Sakura",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Mist",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V027",
+      "filename": "HELIOS-V027-cobalt-interference.html",
+      "palette": "Cobalt",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Mist",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V028",
+      "filename": "HELIOS-V028-rust-interference.html",
+      "palette": "Rust",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Mist",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V029",
+      "filename": "HELIOS-V029-lavender-interference.html",
+      "palette": "Lavender",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Mist",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V030",
+      "filename": "HELIOS-V030-charcoal-interference.html",
+      "palette": "Charcoal",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Mist",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V031",
+      "filename": "HELIOS-V031-electric-lime-interference.html",
+      "palette": "Electric Lime",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Sparks",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V032",
+      "filename": "HELIOS-V032-deep-magenta-interference.html",
+      "palette": "Deep Magenta",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Sparks",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V033",
+      "filename": "HELIOS-V033-aquamarine-interference.html",
+      "palette": "Aquamarine",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Sparks",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V034",
+      "filename": "HELIOS-V034-honey-interference.html",
+      "palette": "Honey",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Sparks",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V035",
+      "filename": "HELIOS-V035-slate-storm-interference.html",
+      "palette": "Slate Storm",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Sparks",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V036",
+      "filename": "HELIOS-V036-cherry-blossom-interference.html",
+      "palette": "Cherry Blossom",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Nebula",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V037",
+      "filename": "HELIOS-V037-peridot-interference.html",
+      "palette": "Peridot",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Nebula",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V038",
+      "filename": "HELIOS-V038-sapphire-interference.html",
+      "palette": "Sapphire",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Nebula",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V039",
+      "filename": "HELIOS-V039-coral-reef-interference.html",
+      "palette": "Coral Reef",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Nebula",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V040",
+      "filename": "HELIOS-V040-titanium-interference.html",
+      "palette": "Titanium",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Nebula",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V041",
+      "filename": "HELIOS-V041-northern-lights-interference.html",
+      "palette": "Northern Lights",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Pulse",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V042",
+      "filename": "HELIOS-V042-obsidian-interference.html",
+      "palette": "Obsidian",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Pulse",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V043",
+      "filename": "HELIOS-V043-vermillion-interference.html",
+      "palette": "Vermillion",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Pulse",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V044",
+      "filename": "HELIOS-V044-jade-interference.html",
+      "palette": "Jade",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Pulse",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V045",
+      "filename": "HELIOS-V045-amethyst-interference.html",
+      "palette": "Amethyst",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Pulse",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V046",
+      "filename": "HELIOS-V046-bronze-interference.html",
+      "palette": "Bronze",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Drift",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V047",
+      "filename": "HELIOS-V047-ice-crystal-interference.html",
+      "palette": "Ice Crystal",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Drift",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V048",
+      "filename": "HELIOS-V048-crimson-noir-interference.html",
+      "palette": "Crimson Noir",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Drift",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V049",
+      "filename": "HELIOS-V049-holographic-interference.html",
+      "palette": "Holographic",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Drift",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V050",
+      "filename": "HELIOS-V050-starfield-interference.html",
+      "palette": "Starfield",
+      "sequence": "Pi-E-Phi",
+      "forceField": "Interference",
+      "behavior": "Drift",
+      "uiTheme": "Glass HUD",
+      "modes": [
+        "Interference",
+        "Lattice",
+        "Chaos"
+      ]
+    },
+    {
+      "id": "V051",
+      "filename": "HELIOS-V051-crimson-cyan-gravitational.html",
+      "palette": "Crimson Cyan",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Standard",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V052",
+      "filename": "HELIOS-V052-void-violet-gravitational.html",
+      "palette": "Void Violet",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Standard",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V053",
+      "filename": "HELIOS-V053-deep-ocean-gravitational.html",
+      "palette": "Deep Ocean",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Standard",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V054",
+      "filename": "HELIOS-V054-solar-flare-gravitational.html",
+      "palette": "Solar Flare",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Standard",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V055",
+      "filename": "HELIOS-V055-emerald-night-gravitational.html",
+      "palette": "Emerald Night",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Standard",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V056",
+      "filename": "HELIOS-V056-neon-punk-gravitational.html",
+      "palette": "Neon Punk",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Long Trail",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V057",
+      "filename": "HELIOS-V057-arctic-gravitational.html",
+      "palette": "Arctic",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Long Trail",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V058",
+      "filename": "HELIOS-V058-blood-moon-gravitational.html",
+      "palette": "Blood Moon",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Long Trail",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V059",
+      "filename": "HELIOS-V059-phosphor-green-gravitational.html",
+      "palette": "Phosphor Green",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Long Trail",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V060",
+      "filename": "HELIOS-V060-ultraviolet-gravitational.html",
+      "palette": "Ultraviolet",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Long Trail",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V061",
+      "filename": "HELIOS-V061-infrared-gravitational.html",
+      "palette": "Infrared",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Explosive",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V062",
+      "filename": "HELIOS-V062-glacier-gravitational.html",
+      "palette": "Glacier",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Explosive",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V063",
+      "filename": "HELIOS-V063-plasma-gravitational.html",
+      "palette": "Plasma",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Explosive",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V064",
+      "filename": "HELIOS-V064-amber-dusk-gravitational.html",
+      "palette": "Amber Dusk",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Explosive",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V065",
+      "filename": "HELIOS-V065-teal-depth-gravitational.html",
+      "palette": "Teal Depth",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Explosive",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V066",
+      "filename": "HELIOS-V066-rose-gold-gravitational.html",
+      "palette": "Rose Gold",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Swarm",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V067",
+      "filename": "HELIOS-V067-midnight-blue-gravitational.html",
+      "palette": "Midnight Blue",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Swarm",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V068",
+      "filename": "HELIOS-V068-toxic-gravitational.html",
+      "palette": "Toxic",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Swarm",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V069",
+      "filename": "HELIOS-V069-sunset-strip-gravitational.html",
+      "palette": "Sunset Strip",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Swarm",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V070",
+      "filename": "HELIOS-V070-ghost-gravitational.html",
+      "palette": "Ghost",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Swarm",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V071",
+      "filename": "HELIOS-V071-bioluminescent-gravitational.html",
+      "palette": "Bioluminescent",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Firefly",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V072",
+      "filename": "HELIOS-V072-volcanic-gravitational.html",
+      "palette": "Volcanic",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Firefly",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V073",
+      "filename": "HELIOS-V073-nebula-gravitational.html",
+      "palette": "Nebula",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Firefly",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V074",
+      "filename": "HELIOS-V074-copper-wire-gravitational.html",
+      "palette": "Copper Wire",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Firefly",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V075",
+      "filename": "HELIOS-V075-mint-gravitational.html",
+      "palette": "Mint",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Firefly",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V076",
+      "filename": "HELIOS-V076-sakura-gravitational.html",
+      "palette": "Sakura",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Mist",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V077",
+      "filename": "HELIOS-V077-cobalt-gravitational.html",
+      "palette": "Cobalt",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Mist",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V078",
+      "filename": "HELIOS-V078-rust-gravitational.html",
+      "palette": "Rust",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Mist",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V079",
+      "filename": "HELIOS-V079-lavender-gravitational.html",
+      "palette": "Lavender",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Mist",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V080",
+      "filename": "HELIOS-V080-charcoal-gravitational.html",
+      "palette": "Charcoal",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Mist",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V081",
+      "filename": "HELIOS-V081-electric-lime-gravitational.html",
+      "palette": "Electric Lime",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Sparks",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V082",
+      "filename": "HELIOS-V082-deep-magenta-gravitational.html",
+      "palette": "Deep Magenta",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Sparks",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V083",
+      "filename": "HELIOS-V083-aquamarine-gravitational.html",
+      "palette": "Aquamarine",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Sparks",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V084",
+      "filename": "HELIOS-V084-honey-gravitational.html",
+      "palette": "Honey",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Sparks",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V085",
+      "filename": "HELIOS-V085-slate-storm-gravitational.html",
+      "palette": "Slate Storm",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Sparks",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V086",
+      "filename": "HELIOS-V086-cherry-blossom-gravitational.html",
+      "palette": "Cherry Blossom",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Nebula",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V087",
+      "filename": "HELIOS-V087-peridot-gravitational.html",
+      "palette": "Peridot",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Nebula",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V088",
+      "filename": "HELIOS-V088-sapphire-gravitational.html",
+      "palette": "Sapphire",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Nebula",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V089",
+      "filename": "HELIOS-V089-coral-reef-gravitational.html",
+      "palette": "Coral Reef",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Nebula",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V090",
+      "filename": "HELIOS-V090-titanium-gravitational.html",
+      "palette": "Titanium",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Nebula",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V091",
+      "filename": "HELIOS-V091-northern-lights-gravitational.html",
+      "palette": "Northern Lights",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Pulse",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V092",
+      "filename": "HELIOS-V092-obsidian-gravitational.html",
+      "palette": "Obsidian",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Pulse",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V093",
+      "filename": "HELIOS-V093-vermillion-gravitational.html",
+      "palette": "Vermillion",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Pulse",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V094",
+      "filename": "HELIOS-V094-jade-gravitational.html",
+      "palette": "Jade",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Pulse",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V095",
+      "filename": "HELIOS-V095-amethyst-gravitational.html",
+      "palette": "Amethyst",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Pulse",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V096",
+      "filename": "HELIOS-V096-bronze-gravitational.html",
+      "palette": "Bronze",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Drift",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V097",
+      "filename": "HELIOS-V097-ice-crystal-gravitational.html",
+      "palette": "Ice Crystal",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Drift",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V098",
+      "filename": "HELIOS-V098-crimson-noir-gravitational.html",
+      "palette": "Crimson Noir",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Drift",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V099",
+      "filename": "HELIOS-V099-holographic-gravitational.html",
+      "palette": "Holographic",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Drift",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V100",
+      "filename": "HELIOS-V100-starfield-gravitational.html",
+      "palette": "Starfield",
+      "sequence": "Sqrt2-Sqrt3-Sqrt5",
+      "forceField": "Gravitational",
+      "behavior": "Drift",
+      "uiTheme": "Brutalist",
+      "modes": [
+        "Gravity Well",
+        "Orbital",
+        "Tidal"
+      ]
+    },
+    {
+      "id": "V101",
+      "filename": "HELIOS-V101-crimson-cyan-vortex.html",
+      "palette": "Crimson Cyan",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Standard",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V102",
+      "filename": "HELIOS-V102-void-violet-vortex.html",
+      "palette": "Void Violet",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Standard",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V103",
+      "filename": "HELIOS-V103-deep-ocean-vortex.html",
+      "palette": "Deep Ocean",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Standard",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V104",
+      "filename": "HELIOS-V104-solar-flare-vortex.html",
+      "palette": "Solar Flare",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Standard",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V105",
+      "filename": "HELIOS-V105-emerald-night-vortex.html",
+      "palette": "Emerald Night",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Standard",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V106",
+      "filename": "HELIOS-V106-neon-punk-vortex.html",
+      "palette": "Neon Punk",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Long Trail",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V107",
+      "filename": "HELIOS-V107-arctic-vortex.html",
+      "palette": "Arctic",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Long Trail",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V108",
+      "filename": "HELIOS-V108-blood-moon-vortex.html",
+      "palette": "Blood Moon",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Long Trail",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V109",
+      "filename": "HELIOS-V109-phosphor-green-vortex.html",
+      "palette": "Phosphor Green",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Long Trail",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V110",
+      "filename": "HELIOS-V110-ultraviolet-vortex.html",
+      "palette": "Ultraviolet",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Long Trail",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V111",
+      "filename": "HELIOS-V111-infrared-vortex.html",
+      "palette": "Infrared",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Explosive",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V112",
+      "filename": "HELIOS-V112-glacier-vortex.html",
+      "palette": "Glacier",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Explosive",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V113",
+      "filename": "HELIOS-V113-plasma-vortex.html",
+      "palette": "Plasma",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Explosive",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V114",
+      "filename": "HELIOS-V114-amber-dusk-vortex.html",
+      "palette": "Amber Dusk",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Explosive",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V115",
+      "filename": "HELIOS-V115-teal-depth-vortex.html",
+      "palette": "Teal Depth",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Explosive",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V116",
+      "filename": "HELIOS-V116-rose-gold-vortex.html",
+      "palette": "Rose Gold",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Swarm",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V117",
+      "filename": "HELIOS-V117-midnight-blue-vortex.html",
+      "palette": "Midnight Blue",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Swarm",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V118",
+      "filename": "HELIOS-V118-toxic-vortex.html",
+      "palette": "Toxic",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Swarm",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V119",
+      "filename": "HELIOS-V119-sunset-strip-vortex.html",
+      "palette": "Sunset Strip",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Swarm",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V120",
+      "filename": "HELIOS-V120-ghost-vortex.html",
+      "palette": "Ghost",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Swarm",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V121",
+      "filename": "HELIOS-V121-bioluminescent-vortex.html",
+      "palette": "Bioluminescent",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Firefly",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V122",
+      "filename": "HELIOS-V122-volcanic-vortex.html",
+      "palette": "Volcanic",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Firefly",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V123",
+      "filename": "HELIOS-V123-nebula-vortex.html",
+      "palette": "Nebula",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Firefly",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V124",
+      "filename": "HELIOS-V124-copper-wire-vortex.html",
+      "palette": "Copper Wire",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Firefly",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V125",
+      "filename": "HELIOS-V125-mint-vortex.html",
+      "palette": "Mint",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Firefly",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V126",
+      "filename": "HELIOS-V126-sakura-vortex.html",
+      "palette": "Sakura",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Mist",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V127",
+      "filename": "HELIOS-V127-cobalt-vortex.html",
+      "palette": "Cobalt",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Mist",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V128",
+      "filename": "HELIOS-V128-rust-vortex.html",
+      "palette": "Rust",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Mist",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V129",
+      "filename": "HELIOS-V129-lavender-vortex.html",
+      "palette": "Lavender",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Mist",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V130",
+      "filename": "HELIOS-V130-charcoal-vortex.html",
+      "palette": "Charcoal",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Mist",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V131",
+      "filename": "HELIOS-V131-electric-lime-vortex.html",
+      "palette": "Electric Lime",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Sparks",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V132",
+      "filename": "HELIOS-V132-deep-magenta-vortex.html",
+      "palette": "Deep Magenta",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Sparks",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V133",
+      "filename": "HELIOS-V133-aquamarine-vortex.html",
+      "palette": "Aquamarine",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Sparks",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V134",
+      "filename": "HELIOS-V134-honey-vortex.html",
+      "palette": "Honey",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Sparks",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V135",
+      "filename": "HELIOS-V135-slate-storm-vortex.html",
+      "palette": "Slate Storm",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Sparks",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V136",
+      "filename": "HELIOS-V136-cherry-blossom-vortex.html",
+      "palette": "Cherry Blossom",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Nebula",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V137",
+      "filename": "HELIOS-V137-peridot-vortex.html",
+      "palette": "Peridot",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Nebula",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V138",
+      "filename": "HELIOS-V138-sapphire-vortex.html",
+      "palette": "Sapphire",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Nebula",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V139",
+      "filename": "HELIOS-V139-coral-reef-vortex.html",
+      "palette": "Coral Reef",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Nebula",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V140",
+      "filename": "HELIOS-V140-titanium-vortex.html",
+      "palette": "Titanium",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Nebula",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V141",
+      "filename": "HELIOS-V141-northern-lights-vortex.html",
+      "palette": "Northern Lights",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Pulse",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V142",
+      "filename": "HELIOS-V142-obsidian-vortex.html",
+      "palette": "Obsidian",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Pulse",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V143",
+      "filename": "HELIOS-V143-vermillion-vortex.html",
+      "palette": "Vermillion",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Pulse",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V144",
+      "filename": "HELIOS-V144-jade-vortex.html",
+      "palette": "Jade",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Pulse",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V145",
+      "filename": "HELIOS-V145-amethyst-vortex.html",
+      "palette": "Amethyst",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Pulse",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V146",
+      "filename": "HELIOS-V146-bronze-vortex.html",
+      "palette": "Bronze",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Drift",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V147",
+      "filename": "HELIOS-V147-ice-crystal-vortex.html",
+      "palette": "Ice Crystal",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Drift",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V148",
+      "filename": "HELIOS-V148-crimson-noir-vortex.html",
+      "palette": "Crimson Noir",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Drift",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V149",
+      "filename": "HELIOS-V149-holographic-vortex.html",
+      "palette": "Holographic",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Drift",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V150",
+      "filename": "HELIOS-V150-starfield-vortex.html",
+      "palette": "Starfield",
+      "sequence": "Primes",
+      "forceField": "Vortex",
+      "behavior": "Drift",
+      "uiTheme": "Minimal",
+      "modes": [
+        "Spiral",
+        "Cyclone",
+        "Maelstrom"
+      ]
+    },
+    {
+      "id": "V151",
+      "filename": "HELIOS-V151-crimson-cyan-crystalline.html",
+      "palette": "Crimson Cyan",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Standard",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V152",
+      "filename": "HELIOS-V152-void-violet-crystalline.html",
+      "palette": "Void Violet",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Standard",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V153",
+      "filename": "HELIOS-V153-deep-ocean-crystalline.html",
+      "palette": "Deep Ocean",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Standard",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V154",
+      "filename": "HELIOS-V154-solar-flare-crystalline.html",
+      "palette": "Solar Flare",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Standard",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V155",
+      "filename": "HELIOS-V155-emerald-night-crystalline.html",
+      "palette": "Emerald Night",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Standard",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V156",
+      "filename": "HELIOS-V156-neon-punk-crystalline.html",
+      "palette": "Neon Punk",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Long Trail",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V157",
+      "filename": "HELIOS-V157-arctic-crystalline.html",
+      "palette": "Arctic",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Long Trail",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V158",
+      "filename": "HELIOS-V158-blood-moon-crystalline.html",
+      "palette": "Blood Moon",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Long Trail",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V159",
+      "filename": "HELIOS-V159-phosphor-green-crystalline.html",
+      "palette": "Phosphor Green",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Long Trail",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V160",
+      "filename": "HELIOS-V160-ultraviolet-crystalline.html",
+      "palette": "Ultraviolet",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Long Trail",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V161",
+      "filename": "HELIOS-V161-infrared-crystalline.html",
+      "palette": "Infrared",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Explosive",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V162",
+      "filename": "HELIOS-V162-glacier-crystalline.html",
+      "palette": "Glacier",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Explosive",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V163",
+      "filename": "HELIOS-V163-plasma-crystalline.html",
+      "palette": "Plasma",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Explosive",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V164",
+      "filename": "HELIOS-V164-amber-dusk-crystalline.html",
+      "palette": "Amber Dusk",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Explosive",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V165",
+      "filename": "HELIOS-V165-teal-depth-crystalline.html",
+      "palette": "Teal Depth",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Explosive",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V166",
+      "filename": "HELIOS-V166-rose-gold-crystalline.html",
+      "palette": "Rose Gold",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Swarm",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V167",
+      "filename": "HELIOS-V167-midnight-blue-crystalline.html",
+      "palette": "Midnight Blue",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Swarm",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V168",
+      "filename": "HELIOS-V168-toxic-crystalline.html",
+      "palette": "Toxic",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Swarm",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V169",
+      "filename": "HELIOS-V169-sunset-strip-crystalline.html",
+      "palette": "Sunset Strip",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Swarm",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V170",
+      "filename": "HELIOS-V170-ghost-crystalline.html",
+      "palette": "Ghost",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Swarm",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V171",
+      "filename": "HELIOS-V171-bioluminescent-crystalline.html",
+      "palette": "Bioluminescent",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Firefly",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V172",
+      "filename": "HELIOS-V172-volcanic-crystalline.html",
+      "palette": "Volcanic",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Firefly",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V173",
+      "filename": "HELIOS-V173-nebula-crystalline.html",
+      "palette": "Nebula",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Firefly",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V174",
+      "filename": "HELIOS-V174-copper-wire-crystalline.html",
+      "palette": "Copper Wire",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Firefly",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V175",
+      "filename": "HELIOS-V175-mint-crystalline.html",
+      "palette": "Mint",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Firefly",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V176",
+      "filename": "HELIOS-V176-sakura-crystalline.html",
+      "palette": "Sakura",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Mist",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V177",
+      "filename": "HELIOS-V177-cobalt-crystalline.html",
+      "palette": "Cobalt",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Mist",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V178",
+      "filename": "HELIOS-V178-rust-crystalline.html",
+      "palette": "Rust",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Mist",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V179",
+      "filename": "HELIOS-V179-lavender-crystalline.html",
+      "palette": "Lavender",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Mist",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V180",
+      "filename": "HELIOS-V180-charcoal-crystalline.html",
+      "palette": "Charcoal",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Mist",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V181",
+      "filename": "HELIOS-V181-electric-lime-crystalline.html",
+      "palette": "Electric Lime",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Sparks",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V182",
+      "filename": "HELIOS-V182-deep-magenta-crystalline.html",
+      "palette": "Deep Magenta",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Sparks",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V183",
+      "filename": "HELIOS-V183-aquamarine-crystalline.html",
+      "palette": "Aquamarine",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Sparks",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V184",
+      "filename": "HELIOS-V184-honey-crystalline.html",
+      "palette": "Honey",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Sparks",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V185",
+      "filename": "HELIOS-V185-slate-storm-crystalline.html",
+      "palette": "Slate Storm",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Sparks",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V186",
+      "filename": "HELIOS-V186-cherry-blossom-crystalline.html",
+      "palette": "Cherry Blossom",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Nebula",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V187",
+      "filename": "HELIOS-V187-peridot-crystalline.html",
+      "palette": "Peridot",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Nebula",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V188",
+      "filename": "HELIOS-V188-sapphire-crystalline.html",
+      "palette": "Sapphire",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Nebula",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V189",
+      "filename": "HELIOS-V189-coral-reef-crystalline.html",
+      "palette": "Coral Reef",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Nebula",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V190",
+      "filename": "HELIOS-V190-titanium-crystalline.html",
+      "palette": "Titanium",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Nebula",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V191",
+      "filename": "HELIOS-V191-northern-lights-crystalline.html",
+      "palette": "Northern Lights",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Pulse",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V192",
+      "filename": "HELIOS-V192-obsidian-crystalline.html",
+      "palette": "Obsidian",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Pulse",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V193",
+      "filename": "HELIOS-V193-vermillion-crystalline.html",
+      "palette": "Vermillion",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Pulse",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V194",
+      "filename": "HELIOS-V194-jade-crystalline.html",
+      "palette": "Jade",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Pulse",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V195",
+      "filename": "HELIOS-V195-amethyst-crystalline.html",
+      "palette": "Amethyst",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Pulse",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V196",
+      "filename": "HELIOS-V196-bronze-crystalline.html",
+      "palette": "Bronze",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Drift",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V197",
+      "filename": "HELIOS-V197-ice-crystal-crystalline.html",
+      "palette": "Ice Crystal",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Drift",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V198",
+      "filename": "HELIOS-V198-crimson-noir-crystalline.html",
+      "palette": "Crimson Noir",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Drift",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V199",
+      "filename": "HELIOS-V199-holographic-crystalline.html",
+      "palette": "Holographic",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Drift",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V200",
+      "filename": "HELIOS-V200-starfield-crystalline.html",
+      "palette": "Starfield",
+      "sequence": "Fibonacci",
+      "forceField": "Crystalline",
+      "behavior": "Drift",
+      "uiTheme": "Retro Terminal",
+      "modes": [
+        "FCC",
+        "BCC",
+        "Diamond"
+      ]
+    },
+    {
+      "id": "V201",
+      "filename": "HELIOS-V201-crimson-cyan-wave.html",
+      "palette": "Crimson Cyan",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Standard",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V202",
+      "filename": "HELIOS-V202-void-violet-wave.html",
+      "palette": "Void Violet",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Standard",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V203",
+      "filename": "HELIOS-V203-deep-ocean-wave.html",
+      "palette": "Deep Ocean",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Standard",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V204",
+      "filename": "HELIOS-V204-solar-flare-wave.html",
+      "palette": "Solar Flare",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Standard",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V205",
+      "filename": "HELIOS-V205-emerald-night-wave.html",
+      "palette": "Emerald Night",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Standard",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V206",
+      "filename": "HELIOS-V206-neon-punk-wave.html",
+      "palette": "Neon Punk",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Long Trail",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V207",
+      "filename": "HELIOS-V207-arctic-wave.html",
+      "palette": "Arctic",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Long Trail",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V208",
+      "filename": "HELIOS-V208-blood-moon-wave.html",
+      "palette": "Blood Moon",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Long Trail",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V209",
+      "filename": "HELIOS-V209-phosphor-green-wave.html",
+      "palette": "Phosphor Green",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Long Trail",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V210",
+      "filename": "HELIOS-V210-ultraviolet-wave.html",
+      "palette": "Ultraviolet",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Long Trail",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V211",
+      "filename": "HELIOS-V211-infrared-wave.html",
+      "palette": "Infrared",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Explosive",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V212",
+      "filename": "HELIOS-V212-glacier-wave.html",
+      "palette": "Glacier",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Explosive",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V213",
+      "filename": "HELIOS-V213-plasma-wave.html",
+      "palette": "Plasma",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Explosive",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V214",
+      "filename": "HELIOS-V214-amber-dusk-wave.html",
+      "palette": "Amber Dusk",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Explosive",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V215",
+      "filename": "HELIOS-V215-teal-depth-wave.html",
+      "palette": "Teal Depth",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Explosive",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V216",
+      "filename": "HELIOS-V216-rose-gold-wave.html",
+      "palette": "Rose Gold",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Swarm",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V217",
+      "filename": "HELIOS-V217-midnight-blue-wave.html",
+      "palette": "Midnight Blue",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Swarm",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V218",
+      "filename": "HELIOS-V218-toxic-wave.html",
+      "palette": "Toxic",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Swarm",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V219",
+      "filename": "HELIOS-V219-sunset-strip-wave.html",
+      "palette": "Sunset Strip",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Swarm",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V220",
+      "filename": "HELIOS-V220-ghost-wave.html",
+      "palette": "Ghost",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Swarm",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V221",
+      "filename": "HELIOS-V221-bioluminescent-wave.html",
+      "palette": "Bioluminescent",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Firefly",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V222",
+      "filename": "HELIOS-V222-volcanic-wave.html",
+      "palette": "Volcanic",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Firefly",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V223",
+      "filename": "HELIOS-V223-nebula-wave.html",
+      "palette": "Nebula",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Firefly",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V224",
+      "filename": "HELIOS-V224-copper-wire-wave.html",
+      "palette": "Copper Wire",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Firefly",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V225",
+      "filename": "HELIOS-V225-mint-wave.html",
+      "palette": "Mint",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Firefly",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V226",
+      "filename": "HELIOS-V226-sakura-wave.html",
+      "palette": "Sakura",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Mist",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V227",
+      "filename": "HELIOS-V227-cobalt-wave.html",
+      "palette": "Cobalt",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Mist",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V228",
+      "filename": "HELIOS-V228-rust-wave.html",
+      "palette": "Rust",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Mist",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V229",
+      "filename": "HELIOS-V229-lavender-wave.html",
+      "palette": "Lavender",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Mist",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V230",
+      "filename": "HELIOS-V230-charcoal-wave.html",
+      "palette": "Charcoal",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Mist",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V231",
+      "filename": "HELIOS-V231-electric-lime-wave.html",
+      "palette": "Electric Lime",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Sparks",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V232",
+      "filename": "HELIOS-V232-deep-magenta-wave.html",
+      "palette": "Deep Magenta",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Sparks",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V233",
+      "filename": "HELIOS-V233-aquamarine-wave.html",
+      "palette": "Aquamarine",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Sparks",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V234",
+      "filename": "HELIOS-V234-honey-wave.html",
+      "palette": "Honey",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Sparks",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V235",
+      "filename": "HELIOS-V235-slate-storm-wave.html",
+      "palette": "Slate Storm",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Sparks",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V236",
+      "filename": "HELIOS-V236-cherry-blossom-wave.html",
+      "palette": "Cherry Blossom",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Nebula",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V237",
+      "filename": "HELIOS-V237-peridot-wave.html",
+      "palette": "Peridot",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Nebula",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V238",
+      "filename": "HELIOS-V238-sapphire-wave.html",
+      "palette": "Sapphire",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Nebula",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V239",
+      "filename": "HELIOS-V239-coral-reef-wave.html",
+      "palette": "Coral Reef",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Nebula",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V240",
+      "filename": "HELIOS-V240-titanium-wave.html",
+      "palette": "Titanium",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Nebula",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V241",
+      "filename": "HELIOS-V241-northern-lights-wave.html",
+      "palette": "Northern Lights",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Pulse",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V242",
+      "filename": "HELIOS-V242-obsidian-wave.html",
+      "palette": "Obsidian",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Pulse",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V243",
+      "filename": "HELIOS-V243-vermillion-wave.html",
+      "palette": "Vermillion",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Pulse",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V244",
+      "filename": "HELIOS-V244-jade-wave.html",
+      "palette": "Jade",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Pulse",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V245",
+      "filename": "HELIOS-V245-amethyst-wave.html",
+      "palette": "Amethyst",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Pulse",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V246",
+      "filename": "HELIOS-V246-bronze-wave.html",
+      "palette": "Bronze",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Drift",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V247",
+      "filename": "HELIOS-V247-ice-crystal-wave.html",
+      "palette": "Ice Crystal",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Drift",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V248",
+      "filename": "HELIOS-V248-crimson-noir-wave.html",
+      "palette": "Crimson Noir",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Drift",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V249",
+      "filename": "HELIOS-V249-holographic-wave.html",
+      "palette": "Holographic",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Drift",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V250",
+      "filename": "HELIOS-V250-starfield-wave.html",
+      "palette": "Starfield",
+      "sequence": "Catalan",
+      "forceField": "Wave",
+      "behavior": "Drift",
+      "uiTheme": "Neon",
+      "modes": [
+        "Plane Wave",
+        "Circular",
+        "Spherical"
+      ]
+    },
+    {
+      "id": "V251",
+      "filename": "HELIOS-V251-crimson-cyan-magnetic.html",
+      "palette": "Crimson Cyan",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Standard",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V252",
+      "filename": "HELIOS-V252-void-violet-magnetic.html",
+      "palette": "Void Violet",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Standard",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V253",
+      "filename": "HELIOS-V253-deep-ocean-magnetic.html",
+      "palette": "Deep Ocean",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Standard",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V254",
+      "filename": "HELIOS-V254-solar-flare-magnetic.html",
+      "palette": "Solar Flare",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Standard",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V255",
+      "filename": "HELIOS-V255-emerald-night-magnetic.html",
+      "palette": "Emerald Night",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Standard",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V256",
+      "filename": "HELIOS-V256-neon-punk-magnetic.html",
+      "palette": "Neon Punk",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Long Trail",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V257",
+      "filename": "HELIOS-V257-arctic-magnetic.html",
+      "palette": "Arctic",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Long Trail",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V258",
+      "filename": "HELIOS-V258-blood-moon-magnetic.html",
+      "palette": "Blood Moon",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Long Trail",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V259",
+      "filename": "HELIOS-V259-phosphor-green-magnetic.html",
+      "palette": "Phosphor Green",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Long Trail",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V260",
+      "filename": "HELIOS-V260-ultraviolet-magnetic.html",
+      "palette": "Ultraviolet",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Long Trail",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V261",
+      "filename": "HELIOS-V261-infrared-magnetic.html",
+      "palette": "Infrared",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Explosive",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V262",
+      "filename": "HELIOS-V262-glacier-magnetic.html",
+      "palette": "Glacier",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Explosive",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V263",
+      "filename": "HELIOS-V263-plasma-magnetic.html",
+      "palette": "Plasma",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Explosive",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V264",
+      "filename": "HELIOS-V264-amber-dusk-magnetic.html",
+      "palette": "Amber Dusk",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Explosive",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V265",
+      "filename": "HELIOS-V265-teal-depth-magnetic.html",
+      "palette": "Teal Depth",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Explosive",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V266",
+      "filename": "HELIOS-V266-rose-gold-magnetic.html",
+      "palette": "Rose Gold",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Swarm",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V267",
+      "filename": "HELIOS-V267-midnight-blue-magnetic.html",
+      "palette": "Midnight Blue",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Swarm",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V268",
+      "filename": "HELIOS-V268-toxic-magnetic.html",
+      "palette": "Toxic",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Swarm",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V269",
+      "filename": "HELIOS-V269-sunset-strip-magnetic.html",
+      "palette": "Sunset Strip",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Swarm",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V270",
+      "filename": "HELIOS-V270-ghost-magnetic.html",
+      "palette": "Ghost",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Swarm",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V271",
+      "filename": "HELIOS-V271-bioluminescent-magnetic.html",
+      "palette": "Bioluminescent",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Firefly",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V272",
+      "filename": "HELIOS-V272-volcanic-magnetic.html",
+      "palette": "Volcanic",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Firefly",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V273",
+      "filename": "HELIOS-V273-nebula-magnetic.html",
+      "palette": "Nebula",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Firefly",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V274",
+      "filename": "HELIOS-V274-copper-wire-magnetic.html",
+      "palette": "Copper Wire",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Firefly",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V275",
+      "filename": "HELIOS-V275-mint-magnetic.html",
+      "palette": "Mint",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Firefly",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V276",
+      "filename": "HELIOS-V276-sakura-magnetic.html",
+      "palette": "Sakura",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Mist",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V277",
+      "filename": "HELIOS-V277-cobalt-magnetic.html",
+      "palette": "Cobalt",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Mist",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V278",
+      "filename": "HELIOS-V278-rust-magnetic.html",
+      "palette": "Rust",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Mist",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V279",
+      "filename": "HELIOS-V279-lavender-magnetic.html",
+      "palette": "Lavender",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Mist",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V280",
+      "filename": "HELIOS-V280-charcoal-magnetic.html",
+      "palette": "Charcoal",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Mist",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V281",
+      "filename": "HELIOS-V281-electric-lime-magnetic.html",
+      "palette": "Electric Lime",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Sparks",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V282",
+      "filename": "HELIOS-V282-deep-magenta-magnetic.html",
+      "palette": "Deep Magenta",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Sparks",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V283",
+      "filename": "HELIOS-V283-aquamarine-magnetic.html",
+      "palette": "Aquamarine",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Sparks",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V284",
+      "filename": "HELIOS-V284-honey-magnetic.html",
+      "palette": "Honey",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Sparks",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V285",
+      "filename": "HELIOS-V285-slate-storm-magnetic.html",
+      "palette": "Slate Storm",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Sparks",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V286",
+      "filename": "HELIOS-V286-cherry-blossom-magnetic.html",
+      "palette": "Cherry Blossom",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Nebula",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V287",
+      "filename": "HELIOS-V287-peridot-magnetic.html",
+      "palette": "Peridot",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Nebula",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V288",
+      "filename": "HELIOS-V288-sapphire-magnetic.html",
+      "palette": "Sapphire",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Nebula",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V289",
+      "filename": "HELIOS-V289-coral-reef-magnetic.html",
+      "palette": "Coral Reef",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Nebula",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V290",
+      "filename": "HELIOS-V290-titanium-magnetic.html",
+      "palette": "Titanium",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Nebula",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V291",
+      "filename": "HELIOS-V291-northern-lights-magnetic.html",
+      "palette": "Northern Lights",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Pulse",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V292",
+      "filename": "HELIOS-V292-obsidian-magnetic.html",
+      "palette": "Obsidian",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Pulse",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V293",
+      "filename": "HELIOS-V293-vermillion-magnetic.html",
+      "palette": "Vermillion",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Pulse",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V294",
+      "filename": "HELIOS-V294-jade-magnetic.html",
+      "palette": "Jade",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Pulse",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V295",
+      "filename": "HELIOS-V295-amethyst-magnetic.html",
+      "palette": "Amethyst",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Pulse",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V296",
+      "filename": "HELIOS-V296-bronze-magnetic.html",
+      "palette": "Bronze",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Drift",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V297",
+      "filename": "HELIOS-V297-ice-crystal-magnetic.html",
+      "palette": "Ice Crystal",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Drift",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V298",
+      "filename": "HELIOS-V298-crimson-noir-magnetic.html",
+      "palette": "Crimson Noir",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Drift",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V299",
+      "filename": "HELIOS-V299-holographic-magnetic.html",
+      "palette": "Holographic",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Drift",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V300",
+      "filename": "HELIOS-V300-starfield-magnetic.html",
+      "palette": "Starfield",
+      "sequence": "Euler-Mascheroni",
+      "forceField": "Magnetic",
+      "behavior": "Drift",
+      "uiTheme": "Scientific",
+      "modes": [
+        "Dipole",
+        "Quadrupole",
+        "Flux Tube"
+      ]
+    },
+    {
+      "id": "V301",
+      "filename": "HELIOS-V301-crimson-cyan-fluid.html",
+      "palette": "Crimson Cyan",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Standard",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V302",
+      "filename": "HELIOS-V302-void-violet-fluid.html",
+      "palette": "Void Violet",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Standard",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V303",
+      "filename": "HELIOS-V303-deep-ocean-fluid.html",
+      "palette": "Deep Ocean",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Standard",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V304",
+      "filename": "HELIOS-V304-solar-flare-fluid.html",
+      "palette": "Solar Flare",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Standard",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V305",
+      "filename": "HELIOS-V305-emerald-night-fluid.html",
+      "palette": "Emerald Night",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Standard",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V306",
+      "filename": "HELIOS-V306-neon-punk-fluid.html",
+      "palette": "Neon Punk",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Long Trail",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V307",
+      "filename": "HELIOS-V307-arctic-fluid.html",
+      "palette": "Arctic",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Long Trail",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V308",
+      "filename": "HELIOS-V308-blood-moon-fluid.html",
+      "palette": "Blood Moon",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Long Trail",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V309",
+      "filename": "HELIOS-V309-phosphor-green-fluid.html",
+      "palette": "Phosphor Green",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Long Trail",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V310",
+      "filename": "HELIOS-V310-ultraviolet-fluid.html",
+      "palette": "Ultraviolet",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Long Trail",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V311",
+      "filename": "HELIOS-V311-infrared-fluid.html",
+      "palette": "Infrared",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Explosive",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V312",
+      "filename": "HELIOS-V312-glacier-fluid.html",
+      "palette": "Glacier",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Explosive",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V313",
+      "filename": "HELIOS-V313-plasma-fluid.html",
+      "palette": "Plasma",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Explosive",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V314",
+      "filename": "HELIOS-V314-amber-dusk-fluid.html",
+      "palette": "Amber Dusk",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Explosive",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V315",
+      "filename": "HELIOS-V315-teal-depth-fluid.html",
+      "palette": "Teal Depth",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Explosive",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V316",
+      "filename": "HELIOS-V316-rose-gold-fluid.html",
+      "palette": "Rose Gold",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Swarm",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V317",
+      "filename": "HELIOS-V317-midnight-blue-fluid.html",
+      "palette": "Midnight Blue",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Swarm",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V318",
+      "filename": "HELIOS-V318-toxic-fluid.html",
+      "palette": "Toxic",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Swarm",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V319",
+      "filename": "HELIOS-V319-sunset-strip-fluid.html",
+      "palette": "Sunset Strip",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Swarm",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V320",
+      "filename": "HELIOS-V320-ghost-fluid.html",
+      "palette": "Ghost",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Swarm",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V321",
+      "filename": "HELIOS-V321-bioluminescent-fluid.html",
+      "palette": "Bioluminescent",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Firefly",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V322",
+      "filename": "HELIOS-V322-volcanic-fluid.html",
+      "palette": "Volcanic",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Firefly",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V323",
+      "filename": "HELIOS-V323-nebula-fluid.html",
+      "palette": "Nebula",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Firefly",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V324",
+      "filename": "HELIOS-V324-copper-wire-fluid.html",
+      "palette": "Copper Wire",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Firefly",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V325",
+      "filename": "HELIOS-V325-mint-fluid.html",
+      "palette": "Mint",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Firefly",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V326",
+      "filename": "HELIOS-V326-sakura-fluid.html",
+      "palette": "Sakura",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Mist",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V327",
+      "filename": "HELIOS-V327-cobalt-fluid.html",
+      "palette": "Cobalt",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Mist",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V328",
+      "filename": "HELIOS-V328-rust-fluid.html",
+      "palette": "Rust",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Mist",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V329",
+      "filename": "HELIOS-V329-lavender-fluid.html",
+      "palette": "Lavender",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Mist",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V330",
+      "filename": "HELIOS-V330-charcoal-fluid.html",
+      "palette": "Charcoal",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Mist",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V331",
+      "filename": "HELIOS-V331-electric-lime-fluid.html",
+      "palette": "Electric Lime",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Sparks",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V332",
+      "filename": "HELIOS-V332-deep-magenta-fluid.html",
+      "palette": "Deep Magenta",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Sparks",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V333",
+      "filename": "HELIOS-V333-aquamarine-fluid.html",
+      "palette": "Aquamarine",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Sparks",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V334",
+      "filename": "HELIOS-V334-honey-fluid.html",
+      "palette": "Honey",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Sparks",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V335",
+      "filename": "HELIOS-V335-slate-storm-fluid.html",
+      "palette": "Slate Storm",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Sparks",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V336",
+      "filename": "HELIOS-V336-cherry-blossom-fluid.html",
+      "palette": "Cherry Blossom",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Nebula",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V337",
+      "filename": "HELIOS-V337-peridot-fluid.html",
+      "palette": "Peridot",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Nebula",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V338",
+      "filename": "HELIOS-V338-sapphire-fluid.html",
+      "palette": "Sapphire",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Nebula",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V339",
+      "filename": "HELIOS-V339-coral-reef-fluid.html",
+      "palette": "Coral Reef",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Nebula",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V340",
+      "filename": "HELIOS-V340-titanium-fluid.html",
+      "palette": "Titanium",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Nebula",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V341",
+      "filename": "HELIOS-V341-northern-lights-fluid.html",
+      "palette": "Northern Lights",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Pulse",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V342",
+      "filename": "HELIOS-V342-obsidian-fluid.html",
+      "palette": "Obsidian",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Pulse",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V343",
+      "filename": "HELIOS-V343-vermillion-fluid.html",
+      "palette": "Vermillion",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Pulse",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V344",
+      "filename": "HELIOS-V344-jade-fluid.html",
+      "palette": "Jade",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Pulse",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V345",
+      "filename": "HELIOS-V345-amethyst-fluid.html",
+      "palette": "Amethyst",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Pulse",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V346",
+      "filename": "HELIOS-V346-bronze-fluid.html",
+      "palette": "Bronze",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Drift",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V347",
+      "filename": "HELIOS-V347-ice-crystal-fluid.html",
+      "palette": "Ice Crystal",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Drift",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V348",
+      "filename": "HELIOS-V348-crimson-noir-fluid.html",
+      "palette": "Crimson Noir",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Drift",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V349",
+      "filename": "HELIOS-V349-holographic-fluid.html",
+      "palette": "Holographic",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Drift",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V350",
+      "filename": "HELIOS-V350-starfield-fluid.html",
+      "palette": "Starfield",
+      "sequence": "Ln2-Ln3-Ln10",
+      "forceField": "Fluid",
+      "behavior": "Drift",
+      "uiTheme": "Organic",
+      "modes": [
+        "Laminar",
+        "Turbulent",
+        "Convection"
+      ]
+    },
+    {
+      "id": "V351",
+      "filename": "HELIOS-V351-crimson-cyan-quantum.html",
+      "palette": "Crimson Cyan",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Standard",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V352",
+      "filename": "HELIOS-V352-void-violet-quantum.html",
+      "palette": "Void Violet",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Standard",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V353",
+      "filename": "HELIOS-V353-deep-ocean-quantum.html",
+      "palette": "Deep Ocean",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Standard",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V354",
+      "filename": "HELIOS-V354-solar-flare-quantum.html",
+      "palette": "Solar Flare",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Standard",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V355",
+      "filename": "HELIOS-V355-emerald-night-quantum.html",
+      "palette": "Emerald Night",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Standard",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V356",
+      "filename": "HELIOS-V356-neon-punk-quantum.html",
+      "palette": "Neon Punk",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Long Trail",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V357",
+      "filename": "HELIOS-V357-arctic-quantum.html",
+      "palette": "Arctic",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Long Trail",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V358",
+      "filename": "HELIOS-V358-blood-moon-quantum.html",
+      "palette": "Blood Moon",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Long Trail",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V359",
+      "filename": "HELIOS-V359-phosphor-green-quantum.html",
+      "palette": "Phosphor Green",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Long Trail",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V360",
+      "filename": "HELIOS-V360-ultraviolet-quantum.html",
+      "palette": "Ultraviolet",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Long Trail",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V361",
+      "filename": "HELIOS-V361-infrared-quantum.html",
+      "palette": "Infrared",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Explosive",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V362",
+      "filename": "HELIOS-V362-glacier-quantum.html",
+      "palette": "Glacier",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Explosive",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V363",
+      "filename": "HELIOS-V363-plasma-quantum.html",
+      "palette": "Plasma",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Explosive",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V364",
+      "filename": "HELIOS-V364-amber-dusk-quantum.html",
+      "palette": "Amber Dusk",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Explosive",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V365",
+      "filename": "HELIOS-V365-teal-depth-quantum.html",
+      "palette": "Teal Depth",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Explosive",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V366",
+      "filename": "HELIOS-V366-rose-gold-quantum.html",
+      "palette": "Rose Gold",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Swarm",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V367",
+      "filename": "HELIOS-V367-midnight-blue-quantum.html",
+      "palette": "Midnight Blue",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Swarm",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V368",
+      "filename": "HELIOS-V368-toxic-quantum.html",
+      "palette": "Toxic",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Swarm",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V369",
+      "filename": "HELIOS-V369-sunset-strip-quantum.html",
+      "palette": "Sunset Strip",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Swarm",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V370",
+      "filename": "HELIOS-V370-ghost-quantum.html",
+      "palette": "Ghost",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Swarm",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V371",
+      "filename": "HELIOS-V371-bioluminescent-quantum.html",
+      "palette": "Bioluminescent",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Firefly",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V372",
+      "filename": "HELIOS-V372-volcanic-quantum.html",
+      "palette": "Volcanic",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Firefly",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V373",
+      "filename": "HELIOS-V373-nebula-quantum.html",
+      "palette": "Nebula",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Firefly",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V374",
+      "filename": "HELIOS-V374-copper-wire-quantum.html",
+      "palette": "Copper Wire",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Firefly",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V375",
+      "filename": "HELIOS-V375-mint-quantum.html",
+      "palette": "Mint",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Firefly",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V376",
+      "filename": "HELIOS-V376-sakura-quantum.html",
+      "palette": "Sakura",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Mist",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V377",
+      "filename": "HELIOS-V377-cobalt-quantum.html",
+      "palette": "Cobalt",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Mist",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V378",
+      "filename": "HELIOS-V378-rust-quantum.html",
+      "palette": "Rust",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Mist",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V379",
+      "filename": "HELIOS-V379-lavender-quantum.html",
+      "palette": "Lavender",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Mist",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V380",
+      "filename": "HELIOS-V380-charcoal-quantum.html",
+      "palette": "Charcoal",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Mist",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V381",
+      "filename": "HELIOS-V381-electric-lime-quantum.html",
+      "palette": "Electric Lime",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Sparks",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V382",
+      "filename": "HELIOS-V382-deep-magenta-quantum.html",
+      "palette": "Deep Magenta",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Sparks",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V383",
+      "filename": "HELIOS-V383-aquamarine-quantum.html",
+      "palette": "Aquamarine",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Sparks",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V384",
+      "filename": "HELIOS-V384-honey-quantum.html",
+      "palette": "Honey",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Sparks",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V385",
+      "filename": "HELIOS-V385-slate-storm-quantum.html",
+      "palette": "Slate Storm",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Sparks",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V386",
+      "filename": "HELIOS-V386-cherry-blossom-quantum.html",
+      "palette": "Cherry Blossom",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Nebula",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V387",
+      "filename": "HELIOS-V387-peridot-quantum.html",
+      "palette": "Peridot",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Nebula",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V388",
+      "filename": "HELIOS-V388-sapphire-quantum.html",
+      "palette": "Sapphire",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Nebula",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V389",
+      "filename": "HELIOS-V389-coral-reef-quantum.html",
+      "palette": "Coral Reef",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Nebula",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V390",
+      "filename": "HELIOS-V390-titanium-quantum.html",
+      "palette": "Titanium",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Nebula",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V391",
+      "filename": "HELIOS-V391-northern-lights-quantum.html",
+      "palette": "Northern Lights",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Pulse",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V392",
+      "filename": "HELIOS-V392-obsidian-quantum.html",
+      "palette": "Obsidian",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Pulse",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V393",
+      "filename": "HELIOS-V393-vermillion-quantum.html",
+      "palette": "Vermillion",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Pulse",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V394",
+      "filename": "HELIOS-V394-jade-quantum.html",
+      "palette": "Jade",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Pulse",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V395",
+      "filename": "HELIOS-V395-amethyst-quantum.html",
+      "palette": "Amethyst",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Pulse",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V396",
+      "filename": "HELIOS-V396-bronze-quantum.html",
+      "palette": "Bronze",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Drift",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V397",
+      "filename": "HELIOS-V397-ice-crystal-quantum.html",
+      "palette": "Ice Crystal",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Drift",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V398",
+      "filename": "HELIOS-V398-crimson-noir-quantum.html",
+      "palette": "Crimson Noir",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Drift",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V399",
+      "filename": "HELIOS-V399-holographic-quantum.html",
+      "palette": "Holographic",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Drift",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V400",
+      "filename": "HELIOS-V400-starfield-quantum.html",
+      "palette": "Starfield",
+      "sequence": "Apery-Plastic-Omega",
+      "forceField": "Quantum",
+      "behavior": "Drift",
+      "uiTheme": "Military",
+      "modes": [
+        "S-Orbital",
+        "P-Orbital",
+        "D-Orbital"
+      ]
+    },
+    {
+      "id": "V401",
+      "filename": "HELIOS-V401-crimson-cyan-fractal.html",
+      "palette": "Crimson Cyan",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Standard",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V402",
+      "filename": "HELIOS-V402-void-violet-fractal.html",
+      "palette": "Void Violet",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Standard",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V403",
+      "filename": "HELIOS-V403-deep-ocean-fractal.html",
+      "palette": "Deep Ocean",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Standard",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V404",
+      "filename": "HELIOS-V404-solar-flare-fractal.html",
+      "palette": "Solar Flare",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Standard",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V405",
+      "filename": "HELIOS-V405-emerald-night-fractal.html",
+      "palette": "Emerald Night",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Standard",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V406",
+      "filename": "HELIOS-V406-neon-punk-fractal.html",
+      "palette": "Neon Punk",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Long Trail",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V407",
+      "filename": "HELIOS-V407-arctic-fractal.html",
+      "palette": "Arctic",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Long Trail",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V408",
+      "filename": "HELIOS-V408-blood-moon-fractal.html",
+      "palette": "Blood Moon",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Long Trail",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V409",
+      "filename": "HELIOS-V409-phosphor-green-fractal.html",
+      "palette": "Phosphor Green",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Long Trail",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V410",
+      "filename": "HELIOS-V410-ultraviolet-fractal.html",
+      "palette": "Ultraviolet",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Long Trail",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V411",
+      "filename": "HELIOS-V411-infrared-fractal.html",
+      "palette": "Infrared",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Explosive",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V412",
+      "filename": "HELIOS-V412-glacier-fractal.html",
+      "palette": "Glacier",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Explosive",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V413",
+      "filename": "HELIOS-V413-plasma-fractal.html",
+      "palette": "Plasma",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Explosive",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V414",
+      "filename": "HELIOS-V414-amber-dusk-fractal.html",
+      "palette": "Amber Dusk",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Explosive",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V415",
+      "filename": "HELIOS-V415-teal-depth-fractal.html",
+      "palette": "Teal Depth",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Explosive",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V416",
+      "filename": "HELIOS-V416-rose-gold-fractal.html",
+      "palette": "Rose Gold",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Swarm",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V417",
+      "filename": "HELIOS-V417-midnight-blue-fractal.html",
+      "palette": "Midnight Blue",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Swarm",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V418",
+      "filename": "HELIOS-V418-toxic-fractal.html",
+      "palette": "Toxic",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Swarm",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V419",
+      "filename": "HELIOS-V419-sunset-strip-fractal.html",
+      "palette": "Sunset Strip",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Swarm",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V420",
+      "filename": "HELIOS-V420-ghost-fractal.html",
+      "palette": "Ghost",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Swarm",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V421",
+      "filename": "HELIOS-V421-bioluminescent-fractal.html",
+      "palette": "Bioluminescent",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Firefly",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V422",
+      "filename": "HELIOS-V422-volcanic-fractal.html",
+      "palette": "Volcanic",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Firefly",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V423",
+      "filename": "HELIOS-V423-nebula-fractal.html",
+      "palette": "Nebula",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Firefly",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V424",
+      "filename": "HELIOS-V424-copper-wire-fractal.html",
+      "palette": "Copper Wire",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Firefly",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V425",
+      "filename": "HELIOS-V425-mint-fractal.html",
+      "palette": "Mint",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Firefly",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V426",
+      "filename": "HELIOS-V426-sakura-fractal.html",
+      "palette": "Sakura",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Mist",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V427",
+      "filename": "HELIOS-V427-cobalt-fractal.html",
+      "palette": "Cobalt",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Mist",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V428",
+      "filename": "HELIOS-V428-rust-fractal.html",
+      "palette": "Rust",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Mist",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V429",
+      "filename": "HELIOS-V429-lavender-fractal.html",
+      "palette": "Lavender",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Mist",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V430",
+      "filename": "HELIOS-V430-charcoal-fractal.html",
+      "palette": "Charcoal",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Mist",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V431",
+      "filename": "HELIOS-V431-electric-lime-fractal.html",
+      "palette": "Electric Lime",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Sparks",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V432",
+      "filename": "HELIOS-V432-deep-magenta-fractal.html",
+      "palette": "Deep Magenta",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Sparks",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V433",
+      "filename": "HELIOS-V433-aquamarine-fractal.html",
+      "palette": "Aquamarine",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Sparks",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V434",
+      "filename": "HELIOS-V434-honey-fractal.html",
+      "palette": "Honey",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Sparks",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V435",
+      "filename": "HELIOS-V435-slate-storm-fractal.html",
+      "palette": "Slate Storm",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Sparks",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V436",
+      "filename": "HELIOS-V436-cherry-blossom-fractal.html",
+      "palette": "Cherry Blossom",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Nebula",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V437",
+      "filename": "HELIOS-V437-peridot-fractal.html",
+      "palette": "Peridot",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Nebula",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V438",
+      "filename": "HELIOS-V438-sapphire-fractal.html",
+      "palette": "Sapphire",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Nebula",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V439",
+      "filename": "HELIOS-V439-coral-reef-fractal.html",
+      "palette": "Coral Reef",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Nebula",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V440",
+      "filename": "HELIOS-V440-titanium-fractal.html",
+      "palette": "Titanium",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Nebula",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V441",
+      "filename": "HELIOS-V441-northern-lights-fractal.html",
+      "palette": "Northern Lights",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Pulse",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V442",
+      "filename": "HELIOS-V442-obsidian-fractal.html",
+      "palette": "Obsidian",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Pulse",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V443",
+      "filename": "HELIOS-V443-vermillion-fractal.html",
+      "palette": "Vermillion",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Pulse",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V444",
+      "filename": "HELIOS-V444-jade-fractal.html",
+      "palette": "Jade",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Pulse",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V445",
+      "filename": "HELIOS-V445-amethyst-fractal.html",
+      "palette": "Amethyst",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Pulse",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V446",
+      "filename": "HELIOS-V446-bronze-fractal.html",
+      "palette": "Bronze",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Drift",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V447",
+      "filename": "HELIOS-V447-ice-crystal-fractal.html",
+      "palette": "Ice Crystal",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Drift",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V448",
+      "filename": "HELIOS-V448-crimson-noir-fractal.html",
+      "palette": "Crimson Noir",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Drift",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V449",
+      "filename": "HELIOS-V449-holographic-fractal.html",
+      "palette": "Holographic",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Drift",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V450",
+      "filename": "HELIOS-V450-starfield-fractal.html",
+      "palette": "Starfield",
+      "sequence": "Champernowne",
+      "forceField": "Fractal",
+      "behavior": "Drift",
+      "uiTheme": "Art Deco",
+      "modes": [
+        "IFS",
+        "Strange",
+        "Animated"
+      ]
+    },
+    {
+      "id": "V451",
+      "filename": "HELIOS-V451-crimson-cyan-toroidal.html",
+      "palette": "Crimson Cyan",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Standard",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V452",
+      "filename": "HELIOS-V452-void-violet-toroidal.html",
+      "palette": "Void Violet",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Standard",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V453",
+      "filename": "HELIOS-V453-deep-ocean-toroidal.html",
+      "palette": "Deep Ocean",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Standard",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V454",
+      "filename": "HELIOS-V454-solar-flare-toroidal.html",
+      "palette": "Solar Flare",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Standard",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V455",
+      "filename": "HELIOS-V455-emerald-night-toroidal.html",
+      "palette": "Emerald Night",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Standard",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V456",
+      "filename": "HELIOS-V456-neon-punk-toroidal.html",
+      "palette": "Neon Punk",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Long Trail",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V457",
+      "filename": "HELIOS-V457-arctic-toroidal.html",
+      "palette": "Arctic",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Long Trail",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V458",
+      "filename": "HELIOS-V458-blood-moon-toroidal.html",
+      "palette": "Blood Moon",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Long Trail",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V459",
+      "filename": "HELIOS-V459-phosphor-green-toroidal.html",
+      "palette": "Phosphor Green",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Long Trail",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V460",
+      "filename": "HELIOS-V460-ultraviolet-toroidal.html",
+      "palette": "Ultraviolet",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Long Trail",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V461",
+      "filename": "HELIOS-V461-infrared-toroidal.html",
+      "palette": "Infrared",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Explosive",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V462",
+      "filename": "HELIOS-V462-glacier-toroidal.html",
+      "palette": "Glacier",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Explosive",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V463",
+      "filename": "HELIOS-V463-plasma-toroidal.html",
+      "palette": "Plasma",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Explosive",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V464",
+      "filename": "HELIOS-V464-amber-dusk-toroidal.html",
+      "palette": "Amber Dusk",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Explosive",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V465",
+      "filename": "HELIOS-V465-teal-depth-toroidal.html",
+      "palette": "Teal Depth",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Explosive",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V466",
+      "filename": "HELIOS-V466-rose-gold-toroidal.html",
+      "palette": "Rose Gold",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Swarm",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V467",
+      "filename": "HELIOS-V467-midnight-blue-toroidal.html",
+      "palette": "Midnight Blue",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Swarm",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V468",
+      "filename": "HELIOS-V468-toxic-toroidal.html",
+      "palette": "Toxic",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Swarm",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V469",
+      "filename": "HELIOS-V469-sunset-strip-toroidal.html",
+      "palette": "Sunset Strip",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Swarm",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V470",
+      "filename": "HELIOS-V470-ghost-toroidal.html",
+      "palette": "Ghost",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Swarm",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V471",
+      "filename": "HELIOS-V471-bioluminescent-toroidal.html",
+      "palette": "Bioluminescent",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Firefly",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V472",
+      "filename": "HELIOS-V472-volcanic-toroidal.html",
+      "palette": "Volcanic",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Firefly",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V473",
+      "filename": "HELIOS-V473-nebula-toroidal.html",
+      "palette": "Nebula",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Firefly",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V474",
+      "filename": "HELIOS-V474-copper-wire-toroidal.html",
+      "palette": "Copper Wire",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Firefly",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V475",
+      "filename": "HELIOS-V475-mint-toroidal.html",
+      "palette": "Mint",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Firefly",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V476",
+      "filename": "HELIOS-V476-sakura-toroidal.html",
+      "palette": "Sakura",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Mist",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V477",
+      "filename": "HELIOS-V477-cobalt-toroidal.html",
+      "palette": "Cobalt",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Mist",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V478",
+      "filename": "HELIOS-V478-rust-toroidal.html",
+      "palette": "Rust",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Mist",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V479",
+      "filename": "HELIOS-V479-lavender-toroidal.html",
+      "palette": "Lavender",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Mist",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V480",
+      "filename": "HELIOS-V480-charcoal-toroidal.html",
+      "palette": "Charcoal",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Mist",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V481",
+      "filename": "HELIOS-V481-electric-lime-toroidal.html",
+      "palette": "Electric Lime",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Sparks",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V482",
+      "filename": "HELIOS-V482-deep-magenta-toroidal.html",
+      "palette": "Deep Magenta",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Sparks",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V483",
+      "filename": "HELIOS-V483-aquamarine-toroidal.html",
+      "palette": "Aquamarine",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Sparks",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V484",
+      "filename": "HELIOS-V484-honey-toroidal.html",
+      "palette": "Honey",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Sparks",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V485",
+      "filename": "HELIOS-V485-slate-storm-toroidal.html",
+      "palette": "Slate Storm",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Sparks",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V486",
+      "filename": "HELIOS-V486-cherry-blossom-toroidal.html",
+      "palette": "Cherry Blossom",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Nebula",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V487",
+      "filename": "HELIOS-V487-peridot-toroidal.html",
+      "palette": "Peridot",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Nebula",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V488",
+      "filename": "HELIOS-V488-sapphire-toroidal.html",
+      "palette": "Sapphire",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Nebula",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V489",
+      "filename": "HELIOS-V489-coral-reef-toroidal.html",
+      "palette": "Coral Reef",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Nebula",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V490",
+      "filename": "HELIOS-V490-titanium-toroidal.html",
+      "palette": "Titanium",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Nebula",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V491",
+      "filename": "HELIOS-V491-northern-lights-toroidal.html",
+      "palette": "Northern Lights",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Pulse",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V492",
+      "filename": "HELIOS-V492-obsidian-toroidal.html",
+      "palette": "Obsidian",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Pulse",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V493",
+      "filename": "HELIOS-V493-vermillion-toroidal.html",
+      "palette": "Vermillion",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Pulse",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V494",
+      "filename": "HELIOS-V494-jade-toroidal.html",
+      "palette": "Jade",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Pulse",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V495",
+      "filename": "HELIOS-V495-amethyst-toroidal.html",
+      "palette": "Amethyst",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Pulse",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V496",
+      "filename": "HELIOS-V496-bronze-toroidal.html",
+      "palette": "Bronze",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Drift",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V497",
+      "filename": "HELIOS-V497-ice-crystal-toroidal.html",
+      "palette": "Ice Crystal",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Drift",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V498",
+      "filename": "HELIOS-V498-crimson-noir-toroidal.html",
+      "palette": "Crimson Noir",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Drift",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V499",
+      "filename": "HELIOS-V499-holographic-toroidal.html",
+      "palette": "Holographic",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Drift",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    },
+    {
+      "id": "V500",
+      "filename": "HELIOS-V500-starfield-toroidal.html",
+      "palette": "Starfield",
+      "sequence": "Feigenbaum",
+      "forceField": "Toroidal",
+      "behavior": "Drift",
+      "uiTheme": "Futurist",
+      "modes": [
+        "Torus",
+        "Helical",
+        "Knot"
+      ]
+    }
+  ]
+}
