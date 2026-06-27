@@ -77,7 +77,7 @@ const App: React.FC = () => {
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [cameraTarget, setCameraTarget] = useState<CameraTarget | null>(null);
   const [showArray, setShowArray] = useState(false);
-  const [kaleidoMode, setKaleidoMode] = useState<number>(3); // default: Holy Trinity → Gasket (3-fold)
+  const [kaleidoMode, setKaleidoMode] = useState<number>(-1); // default: Everything (raw resonance field, no fold)
 
   // Activate Swarm Worker (Background Compute)
   const { isConnected, tasksCompleted, gaStatus } = useSwarmWorker(true);
@@ -145,8 +145,8 @@ const App: React.FC = () => {
         <KaleidoscopeEffect mode={kaleidoMode} />
       </Canvas>
 
-      {/* Kaleidoscope geometry selector */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex flex-wrap justify-center gap-1.5
+      {/* Kaleidoscope geometry selector — positioned below the header link band (h-[100px]) */}
+      <div className="absolute top-[108px] left-1/2 -translate-x-1/2 z-20 flex flex-wrap justify-center gap-1.5
                       px-2 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-fuchsia-500/20">
         {KALEIDO_MODES.map((m) => (
           <button
