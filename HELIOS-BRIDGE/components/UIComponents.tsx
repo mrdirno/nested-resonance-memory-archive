@@ -24,6 +24,7 @@ interface UIProps {
   gaStatus: GaStatus | null;
   showArray: boolean;
   setShowArray: (v: boolean) => void;
+  setKaleidoMode?: (m: number) => void;
 }
 
 const NavItem: React.FC<{ icon: React.ReactNode, label: string, active: boolean, onClick: () => void }> = ({ icon, label, active, onClick }) => (
@@ -431,6 +432,23 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
                     topology: { trefoil: 0.24, torus: 0.67, hopf: 0 }
                   }
                 }));
+              } else if (e.target.value === 'holytrinity') {
+                // Holy Trinity — cloned from Entangled 67, 260k density, Fast,
+                // with the Gasket (3-fold) kaleidoscope. The trinity = 3-fold.
+                setConfig(c => ({
+                  ...c,
+                  ...(lockEnergy ? {} : {
+                    particleCount: 260000,
+                    mode: SimulationMode.HARMONIC,
+                    speed: 5, // Fast
+                  }),
+                  extensions: {
+                    crystal: { threeFold: 0.38, sixFold: 0.38, lattice: 0 },
+                    harmonic: { commaSpiral: 0.23, perfectFifths: 0.26, equalTemp: 0 },
+                    topology: { trefoil: 0.24, torus: 0.67, hopf: 0 }
+                  }
+                }));
+                props.setKaleidoMode?.(3); // Gasket (3-fold) kaleidoscope
               } else if (e.target.value === 'atomic') {
                 setConfig(c => ({
                   ...c,
@@ -454,6 +472,7 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
             value=""
           >
             <option value="" disabled>Select a Preset...</option>
+            <option value="holytrinity">Holy Trinity (Gasket · 260k · Fast)</option>
             <option value="preset67">Entangled 67 (Mobile Optimized)</option>
             <option value="atomic">Atomic (High Energy)</option>
           </select>

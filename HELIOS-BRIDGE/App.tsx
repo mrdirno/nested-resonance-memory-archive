@@ -77,7 +77,7 @@ const App: React.FC = () => {
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [cameraTarget, setCameraTarget] = useState<CameraTarget | null>(null);
   const [showArray, setShowArray] = useState(false);
-  const [kaleidoMode, setKaleidoMode] = useState<number>(-1); // -1 = Everything (off)
+  const [kaleidoMode, setKaleidoMode] = useState<number>(3); // default: Holy Trinity → Gasket (3-fold)
 
   // Activate Swarm Worker (Background Compute)
   const { isConnected, tasksCompleted, gaStatus } = useSwarmWorker(true);
@@ -91,15 +91,16 @@ const App: React.FC = () => {
     energy: useRef<HTMLElement>(null),
   };
 
+  // DEFAULT VIEW = "Holy Trinity" preset (cloned Entangled 67 · 260k · Fast · Gasket)
   const [config, setConfig] = useState<SimulationState>({
-    particleCount: 350000,
+    particleCount: 260000,
     isPlaying: true,
-    speed: 1,
+    speed: 5, // Fast
     quality: 2.0,
     amplitude: 1.0,
     exposure: 3.0,
     contrast: 1.0,
-    mode: SimulationMode.STANDARD,
+    mode: SimulationMode.HARMONIC,
     mapping: {
       a: TranscendentalNumber.PHI,
       b: TranscendentalNumber.PHI,
@@ -107,9 +108,9 @@ const App: React.FC = () => {
     },
     stagger: { a: 0, b: 239, c: 478 },
     extensions: {
-      crystal: { threeFold: 0, sixFold: 0, lattice: 0 },
-      harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
-      topology: { trefoil: 0, torus: 0, hopf: 0 }
+      crystal: { threeFold: 0.38, sixFold: 0.38, lattice: 0 },
+      harmonic: { commaSpiral: 0.23, perfectFifths: 0.26, equalTemp: 0 },
+      topology: { trefoil: 0.24, torus: 0.67, hopf: 0 }
     },
     cameraStats: { x: '0', y: '0', z: '0', dist: '25' },
     resetTrigger: 0
@@ -177,6 +178,7 @@ const App: React.FC = () => {
         gaStatus={gaStatus}
         showArray={showArray}
         setShowArray={setShowArray}
+        setKaleidoMode={setKaleidoMode}
       />
     </div>
   );
