@@ -91,16 +91,16 @@ const App: React.FC = () => {
     energy: useRef<HTMLElement>(null),
   };
 
-  // DEFAULT VIEW = "Holy Trinity" preset (cloned Entangled 67 · 260k · Fast · Gasket)
+  // DEFAULT VIEW = original default (350k · STANDARD · no fold) — rolled back from the Entangled/Holy-Trinity clone
   const [config, setConfig] = useState<SimulationState>({
-    particleCount: 260000,
+    particleCount: 350000,
     isPlaying: true,
-    speed: 5, // Fast
+    speed: 1,
     quality: 2.0,
     amplitude: 1.0,
     exposure: 3.0,
     contrast: 1.0,
-    mode: SimulationMode.HARMONIC,
+    mode: SimulationMode.STANDARD,
     mapping: {
       a: TranscendentalNumber.PHI,
       b: TranscendentalNumber.PHI,
@@ -108,9 +108,9 @@ const App: React.FC = () => {
     },
     stagger: { a: 0, b: 239, c: 478 },
     extensions: {
-      crystal: { threeFold: 0.38, sixFold: 0.38, lattice: 0 },
-      harmonic: { commaSpiral: 0.23, perfectFifths: 0.26, equalTemp: 0 },
-      topology: { trefoil: 0.24, torus: 0.67, hopf: 0 }
+      crystal: { threeFold: 0, sixFold: 0, lattice: 0 },
+      harmonic: { commaSpiral: 0, perfectFifths: 0, equalTemp: 0 },
+      topology: { trefoil: 0, torus: 0, hopf: 0 }
     },
     cameraStats: { x: '0', y: '0', z: '0', dist: '25' },
     resetTrigger: 0
