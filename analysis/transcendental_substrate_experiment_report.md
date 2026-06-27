@@ -24,10 +24,10 @@ The table below summarizes the mean and standard deviation for each metric acros
 
 | Metric | Transcendental ($\pi, e, \phi$) | Commensurate Rational | Random Noise (PRNG) |
 | :--- | :---: | :---: | :---: |
-| **Survival Fraction** | 0.0000 ± 0.0000 | 0.2467 ± 0.0828 | 0.0000 ± 0.0000 |
-| **Mean Agent Lifetime (s)** | 12.07 ± 0.78 | 24.74 ± 1.20 | 9.82 ± 2.25 |
-| **Steady-State Coherence** | 0.9361 ± 0.0464 | 0.9856 ± 0.0009 | 0.8818 ± 0.0626 |
-| **Steady-State Entropy** | 0.1463 ± 0.0505 | 0.1009 ± 0.0131 | 0.4722 ± 0.2787 |
+| **Survival Fraction** | 0.0000 ± 0.0000 | 0.2700 ± 0.0924 | 0.0000 ± 0.0000 |
+| **Mean Agent Lifetime (s)** | 11.57 ± 1.53 | 24.86 ± 1.50 | 10.00 ± 2.11 |
+| **Steady-State Coherence** | 0.9240 ± 0.0668 | 0.9854 ± 0.0009 | 0.8671 ± 0.0806 |
+| **Steady-State Entropy** | 0.2167 ± 0.2015 | 0.1068 ± 0.0156 | 0.4254 ± 0.2854 |
 
 ---
 
@@ -42,30 +42,30 @@ We performed two-sample Welch's t-tests (which do not assume equal variances) to
     *   $t$-statistic = 0.0000
     *   $p$-value = 1.0000e+00 (NOT SIGNIFICANT)
 *   **Mean Agent Lifetime:**
-    *   $t$-statistic = 5.0960
-    *   $p$-value = 1.1237e-05 (SIGNIFICANT)
+    *   $t$-statistic = 3.2434
+    *   $p$-value = 2.0484e-03 (SIGNIFICANT)
 *   **Steady-State Coherence:**
-    *   $t$-statistic = 3.7529
-    *   $p$-value = 4.3205e-04 (SIGNIFICANT)
+    *   $t$-statistic = 2.9273
+    *   $p$-value = 4.9329e-03 (SIGNIFICANT)
 *   **Steady-State Entropy (Lower means more ordered phase clusters):**
-    *   $t$-statistic = -6.1961
-    *   $p$-value = 7.1284e-07 (SIGNIFICANT)
+    *   $t$-statistic = -3.2173
+    *   $p$-value = 2.2255e-03 (SIGNIFICANT)
 
 ### 2. Transcendental Substrate vs. Commensurate Rational Field
 *Tests if actual algebraic transcendence/incommensurability is superior to commensurate periodic orbits.*
 
 *   **Survival Fraction:**
-    *   $t$-statistic = -16.0388
-    *   $p$-value = 5.8988e-16 (SIGNIFICANT)
+    *   $t$-statistic = -15.7297
+    *   $p$-value = 9.8031e-16 (SIGNIFICANT)
 *   **Mean Agent Lifetime:**
-    *   $t$-statistic = -47.5269
-    *   $p$-value = 3.5399e-43 (SIGNIFICANT)
+    *   $t$-statistic = -33.3181
+    *   $p$-value = 1.6614e-39 (SIGNIFICANT)
 *   **Steady-State Coherence:**
-    *   $t$-statistic = -5.7458
-    *   $p$-value = 3.1970e-06 (SIGNIFICANT)
+    *   $t$-statistic = -4.9466
+    *   $p$-value = 2.9399e-05 (SIGNIFICANT)
 *   **Steady-State Entropy:**
-    *   $t$-statistic = 4.6946
-    *   $p$-value = 4.5542e-05 (SIGNIFICANT)
+    *   $t$-statistic = 2.9303
+    *   $p$-value = 6.4955e-03 (SIGNIFICANT)
 
 ---
 
