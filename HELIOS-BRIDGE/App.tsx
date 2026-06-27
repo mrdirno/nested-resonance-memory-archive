@@ -10,6 +10,10 @@ import { useSwarmWorker } from './services/SwarmWorker';
 import { EvolvedArray } from './components/EvolvedArray';
 import { KaleidoscopeEffect, KALEIDO_MODES } from './components/KaleidoscopeEffect';
 
+// Coarse pointer (phone/tablet) → tune the camera controls for touch.
+const IS_TOUCH = typeof window !== 'undefined' &&
+  ((window.matchMedia && window.matchMedia('(pointer: coarse)').matches) || 'ontouchstart' in window);
+
 // Smooth Camera Controller
 const CameraController: React.FC<{
   target: CameraTarget | null,
@@ -34,9 +38,16 @@ const CameraController: React.FC<{
 
   return (
     <OrbitControls
+      makeDefault
       enableDamping
-      dampingFactor={0.05}
-      minDistance={1}
+      dampingFactor={IS_TOUCH ? 0.12 : 0.05}
+      // Touch: gentler rotate/zoom and disable two-finger pan so pinch-zoom
+      // and one-finger orbit don't fight each other (the "funky mobile" feel).
+      rotateSpeed={IS_TOUCH ? 0.55 : 1}
+      zoomSpeed={IS_TOUCH ? 0.7 : 1}
+      enablePan={!IS_TOUCH}
+      touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY }}
+      minDistance={IS_TOUCH ? 3 : 1}
       maxDistance={100}
       onStart={() => setTarget(null)} // Stop auto-move on user interaction
     />
@@ -59,8 +70,8 @@ const ResponsiveCamera: React.FC = () => {
   React.useEffect(() => {
     const aspect = size.width / size.height;
     if (aspect < 1) {
-      // Portrait (Mobile): Increase FOV to widen view
-      (camera as THREE.PerspectiveCamera).fov = 100;
+      // Portrait (Mobile): widen FOV, but not so much it looks fish-eye/funky
+      (camera as THREE.PerspectiveCamera).fov = 82;
     } else {
       // Landscape (Desktop): Default FOV
       (camera as THREE.PerspectiveCamera).fov = 60;
@@ -120,7 +131,7 @@ const App: React.FC = () => {
     <div className="w-full h-screen relative overflow-hidden select-none">
       <Canvas
         camera={CAMERA_CONFIG}
-        dpr={2} // Fixed High Quality for Capture
+        dpr={IS_TOUCH ? [1, 1.5] : 2} // adaptive on touch for smoother framerate; fixed hi-res on desktop
         gl={{
           antialias: false,
           powerPreference: "high-performance",

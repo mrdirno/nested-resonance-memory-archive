@@ -23,7 +23,7 @@ const FoldShader = {
     uMode: { value: -1 },
     uAspect: { value: 1 },
     uTime: { value: 0 },
-    uSpin: { value: 0.04 },   // slow kaleidoscope rotation
+    uSpin: { value: 0.0 },    // no rotation (spin removed — was dizzying)
   },
   vertexShader: /* glsl */`
     varying vec2 vUv;
