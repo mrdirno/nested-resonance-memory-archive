@@ -8,6 +8,7 @@ import { ParticleSystem, Boundary } from './components/ParticleSystem';
 import { UIOverlay } from './components/UIComponents';
 import { useSwarmWorker } from './services/SwarmWorker';
 import { EvolvedArray } from './components/EvolvedArray';
+import { KaleidoscopeEffect, KALEIDO_MODES } from './components/KaleidoscopeEffect';
 
 // Smooth Camera Controller
 const CameraController: React.FC<{
@@ -76,6 +77,7 @@ const App: React.FC = () => {
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [cameraTarget, setCameraTarget] = useState<CameraTarget | null>(null);
   const [showArray, setShowArray] = useState(false);
+  const [kaleidoMode, setKaleidoMode] = useState<number>(-1); // -1 = Everything (off)
 
   // Activate Swarm Worker (Background Compute)
   const { isConnected, tasksCompleted, gaStatus } = useSwarmWorker(true);
@@ -138,7 +140,28 @@ const App: React.FC = () => {
         <CameraController target={cameraTarget} setTarget={setCameraTarget} />
         <ExposureController exposure={config.exposure} />
         <ResponsiveCamera />
+        {/* Sacred-geometry kaleidoscope fold over the resonance field (KELIBRO) */}
+        <KaleidoscopeEffect mode={kaleidoMode} />
       </Canvas>
+
+      {/* Kaleidoscope geometry selector */}
+      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex flex-wrap justify-center gap-1.5
+                      px-2 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-fuchsia-500/20">
+        {KALEIDO_MODES.map((m) => (
+          <button
+            key={m.id}
+            onClick={() => setKaleidoMode(m.id)}
+            title={m.hint}
+            className={`px-3 py-1 text-xs rounded-full transition-colors ${
+              kaleidoMode === m.id
+                ? 'bg-fuchsia-500/90 text-white'
+                : 'text-gray-300 hover:bg-white/10'
+            }`}
+          >
+            {m.label}
+          </button>
+        ))}
+      </div>
 
       {/* UI Layer */}
       <UIOverlay
