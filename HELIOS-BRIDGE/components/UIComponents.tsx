@@ -438,9 +438,10 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
                 setConfig(c => ({
                   ...c,
                   ...(lockEnergy ? {} : {
-                    particleCount: 260000,
+                    particleCount: 330000,
                     mode: SimulationMode.HARMONIC,
-                    speed: 5, // Fast
+                    speed: 1,        // phase duration 1000ms
+                    amplitude: 33.3, // field amplitude
                   }),
                   extensions: {
                     crystal: { threeFold: 0.38, sixFold: 0.38, lattice: 0 },
@@ -472,7 +473,7 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
             value=""
           >
             <option value="" disabled>Select a Preset...</option>
-            <option value="holytrinity">Holy Trinity (Gasket · 260k · Fast)</option>
+            <option value="holytrinity">Holy Trinity (Gasket · 330k · 33.3 amp)</option>
             <option value="preset67">Entangled 67 (Mobile Optimized)</option>
             <option value="atomic">Atomic (High Energy)</option>
           </select>

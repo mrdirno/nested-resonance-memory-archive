@@ -44,11 +44,17 @@ const FoldShader = {
       // mode -1: "Everything" — the raw resonance field, untouched
       if (uMode < 0) { gl_FragColor = texture2D(tDiffuse, vUv); return; }
 
-      // aspect-correct, center at origin
-      vec2 p = vUv - 0.5;
-      p.x *= uAspect;
-      float r   = length(p);
-      float ang = atan(p.y, p.x) + uTime * uSpin;
+      // Centre on the sphere (screen centre) and measure BOTH axes in the same
+      // SHORTER-SIDE unit, so the fold is a TRUE circle on any aspect. This is
+      // the mobile fix: the old code only stayed in-bounds in landscape, so on
+      // a portrait phone the sideways copies were pushed off-frame and the
+      // edge-clamp reflected them asymmetrically (dupes not equidistant).
+      vec2 iso = (vUv - 0.5) * 2.0;            // [-1,1] across the frame
+      if (uAspect >= 1.0) iso.x *= uAspect;    // landscape: x is the long axis
+      else                iso.y /= uAspect;    // portrait : y is the long axis
+
+      float r   = length(iso);
+      float ang = atan(iso.y, iso.x);
 
       // sector per symmetry order
       float sector = PI / 4.0;                       // default / spiral base (8-fold)
@@ -58,18 +64,20 @@ const FoldShader = {
       else if (uMode == 3) sector = 2.0 * PI / 3.0;  // Gasket    3-fold
       if (uMode == 4) ang += r * 4.0;                // Spiral twist
 
-      // THE FOLD — mirror one wedge across the whole frame (the kaleidoscope)
+      // THE FOLD — mirror one angular wedge: equal-angle copies that meet and
+      // overlap at the centre like vesica-piscis lenses.
       ang = abs(mod(ang, sector) - sector * 0.5);
 
-      // reconstruct the folded sample coordinate
-      vec2 fp = vec2(cos(ang), sin(ang)) * r;
-      fp.x /= uAspect;
-      vec2 uv = fp + 0.5;
+      // RADIAL mirror (symmetric, isotropic) fills the frame in concentric
+      // rings — replaces the lopsided per-axis edge clamp, so samples always
+      // stay in-bounds on both axes and the copies are equidistant on any screen.
+      r = 1.0 - abs(mod(r, 2.0) - 1.0);
 
-      // mirror-clamp keeps corners (r>0.5) reading edge content (dark starfield)
-      uv = abs(uv);
-      if (uv.x > 1.0) uv.x = 2.0 - uv.x;
-      if (uv.y > 1.0) uv.y = 2.0 - uv.y;
+      // back to uv in the SAME isotropic frame (guaranteed in [0,1] both axes)
+      vec2 q = vec2(cos(ang), sin(ang)) * r;
+      if (uAspect >= 1.0) q.x /= uAspect;
+      else                q.y *= uAspect;
+      vec2 uv = q * 0.5 + 0.5;
 
       gl_FragColor = texture2D(tDiffuse, uv);
     }
