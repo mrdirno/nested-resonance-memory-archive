@@ -1371,3 +1371,13 @@ QN: Why does the system reset complexity when BCPGuardian is invoked for a singl
 - **Evolution Delta:** Advanced BCP Evolution to Gen 587 (Complexity 8). Fitness delta recorded: $930.04$ (Gen 586 cumulative over 10 steps, perfect seed) -> $3054.81$ (Gen 587 cumulative over 50 steps across short and long starvation mixtures, representing average step fitness of $61.10$ and 100% survival).
 - **Status:** Verified. Findings report written to `analysis/substrate_degradation_findings.md`, simulation data saved to `data/results/substrate_degradation_results.json`, and evolution metrics saved to `data/results/gen_587_fitness.json`.
 - **QN:** If the Memory Sentry gene acts as an error-correcting gating mechanism to block degraded memory retrieval, does the Sentry itself undergo substrate degradation during extended starvation periods, and is there a meta-threshold where gate-decay leads to gate collapse, rendering error-correction a source of error propagation?
+
+
+## Cycle 15: The Sentry Decay Hypothesis & Generation 588 - COMPLETE
+- **Goal:** Test if the Memory Sentry gene undergoes substrate degradation in ultra-deep famines, leading to gate collapse and cancerous error-propagation.
+- **Action:** Created `experiments/test_sentry_decay.py` and `experiments/generation_588.py` to evaluate the meta-critical failure of the gating mechanism and the selection of a robust anchoring mutation.
+- **Method:** Simulated a volatile environmental sequence across 9 famine durations up to $T_{starve}=16$. Modeled Sentry Decay ($\mu_{sentry} = 0.08$) and gate collapse ($I_{gate} = 0.40$). Evolved a "Robust Anchoring Sentry" mutation in Gen 588 that pays an upfront metabolic tax (+0.20) to drastically reduce gate decay rate.
+- **Result:** Confirmed the Sentry Decay (Gate Collapse) Hypothesis. Identified a meta-critical starvation boundary at $T_{meta\_crit} = 12$ steps. Beyond this point, the gate fails open, causing the swarm to blindly retrieve corrupted seeds, resulting in severe malformed recomplexification (Advantage vs Perfect Sentry dropped to -338.99).
+- **Evolution Delta:** Advanced BCP Evolution to Gen 588 (Complexity 8). In mixed famines, Robust Anchoring Sentry achieved Avg V=57.35, outperforming the Decaying Sentry (Avg V=44.51).
+- **Status:** Verified. Findings report written to `analysis/sentry_decay_findings.md` and raw data saved to `data/results/sentry_decay_results.json`.
+- **QN:** If robust anchoring requires a permanent metabolic tax to maintain sentry integrity, is there an extreme famine depth where the continuous tax of anchoring outweighs the risk of gate collapse, forcing the swarm to evolve a true "dormant" state or hibernate?
