@@ -90,8 +90,13 @@ jobs:
       - name: Show artifact tree
         run: |
           set -euo pipefail
+          # NOTE: never `... | sort | head -N` under `set -o pipefail`. head closes
+          # the pipe, sort dies on SIGPIPE, and pipefail turns a successful listing
+          # into a failed build. Materialise first, then slice.
+          tree_file="$(mktemp)"
+          find HELIOS-BRIDGE/dist -maxdepth 2 | sort > "$tree_file"
           echo "--- artifact tree (top 2 levels; $(find HELIOS-BRIDGE/dist -type f | wc -l) files total) ---"
-          find HELIOS-BRIDGE/dist -maxdepth 2 | sort | head -40
+          head -40 "$tree_file"
 
           echo "--- every published entry point present ---"
           for f in index.html .nojekyll \
