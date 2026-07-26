@@ -1,0 +1,31 @@
+# --- collage-studio ignore rules -------------------------------------------
+# A nested .gitignore OUTRANKS the repo-root one for paths under this dir.
+# That precedence is load-bearing here: see the re-include block at the bottom.
+
+node_modules
+dist
+.DS_Store
+.env
+.env.local
+
+# npm _cacache + scratch the CLI drops here. Root covers **/workspace/cache/
+# but ONLY that subdir; this covers anything else dropped in workspace/.
+workspace/
+
+# Playwright
+test-results/
+playwright-report/
+.playwright/
+
+# Logs
+*.log
+
+# --- RE-INCLUDE: undo the repo-root `lib/` pattern -------------------------
+# Root .gitignore:13 is the Python pattern `lib/`. It has no leading slash, so
+# git applies it at EVERY depth -- including tools/collage-studio/src/lib/.
+# Without this negation `git add tools/collage-studio` silently drops all 9
+# files of src/lib/ and the committed tree fails `vite build` with
+# "Rollup failed to resolve import './lib/analysis' from src/App.tsx".
+# The DIRECTORY itself must be re-included (not just its files): git never
+# descends into an excluded directory, so `!src/lib/**` alone would not work.
+!src/lib/

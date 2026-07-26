@@ -142,3 +142,6 @@ code/helios_3d_engine/assets/models/
 *.bin
 code/helios_3d_engine/assets/models/
 
+
+# Claude Code session worktrees — a committed gitlink here breaks actions/checkout
+.claude/

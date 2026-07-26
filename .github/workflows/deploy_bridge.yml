@@ -1,10 +1,21 @@
 name: Deploy Bridge UI to GitHub Pages
 
+# Publishes ONE Pages artifact containing two apps:
+#   HELIOS-BRIDGE/dist        -> /nested-resonance-memory-archive/
+#   tools/collage-studio/dist -> /nested-resonance-memory-archive/collage/
+# The repo-root collage/ and collage-beta/ directories are NOT served and never
+# were -- only the artifact uploaded below reaches Pages.
+
 on:
   push:
     branches: [ main ]
     paths:
       - 'HELIOS-BRIDGE/**'
+      - 'tools/collage-studio/**'
+      - 'collage-beta/**'
+      - 'HELIOS-BRIDGE-ARCHIVE/**'
+      - '.github/workflows/deploy_bridge.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -27,17 +38,130 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: HELIOS-BRIDGE/package-lock.json
+          # BOTH lockfiles. A cache key derived from one lockfile while two
+          # projects are installed silently serves a stale/partial store.
+          cache-dependency-path: |
+            HELIOS-BRIDGE/package-lock.json
+            tools/collage-studio/package-lock.json
 
-      - name: Install dependencies
+      - name: Install dependencies (bridge)
         run: npm ci
         working-directory: HELIOS-BRIDGE
 
-      - name: Build
+      - name: Build (bridge)
         run: |
           npm run build
           touch dist/.nojekyll
         working-directory: HELIOS-BRIDGE
+
+      - name: Install dependencies (collage studio)
+        run: npm ci
+        working-directory: tools/collage-studio
+
+      - name: Build (collage studio)
+        run: npm run build
+        working-directory: tools/collage-studio
+
+      # ORDER IS LOAD-BEARING: `vite build` empties its outDir, so this copy has
+      # to run AFTER the bridge build. Staged before it, the collage tree is
+      # silently deleted and the deploy goes green with a 404 at /collage/.
+      - name: Stage sibling pages into Pages tree
+        run: |
+          set -euo pipefail
+
+          # The artifact IS the published site: anything not copied in here is a
+          # 404, no matter that it exists at repo root. Every path staged below
+          # must have a matching entry in the TOOLS registry in
+          # HELIOS-BRIDGE/components/UIComponents.tsx, and vice versa.
+
+          # built app
+          rm -rf HELIOS-BRIDGE/dist/collage
+          mkdir -p HELIOS-BRIDGE/dist/collage
+          cp -R tools/collage-studio/dist/. HELIOS-BRIDGE/dist/collage/
+
+          # static pages — no build step, straight copy
+          rm -rf HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive
+          mkdir -p HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive
+          cp -R collage-beta/. HELIOS-BRIDGE/dist/collage-beta/
+          cp -R HELIOS-BRIDGE-ARCHIVE/. HELIOS-BRIDGE/dist/archive/
+
+      # Prove the artifact tree instead of asserting it, and fail here rather
+      # than in a browser if either app's entry point is missing.
+      - name: Show artifact tree
+        run: |
+          set -euo pipefail
+          echo "--- artifact tree (top 2 levels; $(find HELIOS-BRIDGE/dist -type f | wc -l) files total) ---"
+          find HELIOS-BRIDGE/dist -maxdepth 2 | sort | head -40
+
+          echo "--- every published entry point present ---"
+          for f in index.html .nojekyll \
+                   collage/index.html collage/sw.js collage/manifest.json \
+                   collage-beta/index.html \
+                   archive/index.html; do
+            test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
+          done
+
+          # The archive page is a gallery of standalone variation pages; if the
+          # copy silently dropped them the index would still load and every card
+          # would 404. Assert the population, not just the index.
+          n_variations=$(find HELIOS-BRIDGE/dist/archive -name 'HELIOS-V*.html' | wc -l)
+          echo "--- archive variations staged: $n_variations ---"
+          test "$n_variations" -ge 400 || { echo "FAIL: archive looks truncated ($n_variations)"; exit 1; }
+
+          echo "--- collage sw.js cache name (stamped per release, never frozen) ---"
+          grep -m1 'const RAW_STAMP' HELIOS-BRIDGE/dist/collage/sw.js
+          # POSITIVE assertion on the assignment, not absence-of-placeholder:
+          # the placeholder name also appears in sw.js's header comment, so an
+          # absence check reads the docs and fails a perfectly good build.
+          if ! grep -qE 'const RAW_STAMP = "[0-9a-f]{12}";' HELIOS-BRIDGE/dist/collage/sw.js; then
+            echo "FAIL: service worker was not stamped -- it would ship a frozen cache name"
+            exit 1
+          fi
+          if ! grep -qE 'const RAW_PRECACHE = \["\./' HELIOS-BRIDGE/dist/collage/sw.js; then
+            echo "FAIL: service worker precache list was not injected"
+            exit 1
+          fi
+
+          echo "--- no origin-absolute src=/href= in collage index.html ---"
+          if grep -nE '(src|href)="/' HELIOS-BRIDGE/dist/collage/index.html; then
+            echo "FAIL: origin-absolute asset path would 404 under /collage/"
+            exit 1
+          fi
+
+          # The three checks below close blind spots that were PROVEN by
+          # rehearsing this gate against deliberately-broken trees: the
+          # index.html-only scan above passed a tree with an absolute
+          # start_url in manifest.json, a tree where the inline script had
+          # regressed to register('/sw.js'), AND a tree whose main JS bundle
+          # had been deleted. A gate that cannot catch the regression its own
+          # pass was written to fix is decoration.
+
+          echo "--- no origin-absolute URL member in collage manifest.json ---"
+          if grep -nE '"(start_url|scope|action|src|url)"[[:space:]]*:[[:space:]]*"/' HELIOS-BRIDGE/dist/collage/manifest.json; then
+            echo "FAIL: origin-absolute manifest member -- PWA scope/start_url would point at the domain root"
+            exit 1
+          fi
+
+          echo "--- service worker is registered RELATIVE everywhere in the collage tree ---"
+          # A root-anchored register() 404s here AND would claim the whole
+          # origin as its scope, letting this tool intercept the sibling bridge.
+          if grep -rnE "register\([[:space:]]*['\"]/" HELIOS-BRIDGE/dist/collage; then
+            echo "FAIL: service worker registered at an origin-absolute path"
+            exit 1
+          fi
+
+          echo "--- every asset referenced by collage/index.html exists in the artifact ---"
+          # 200-on-index.html proves nothing if the bundle it points at is gone.
+          # `|| true`: with `set -o pipefail` a no-match grep would abort the
+          # step here and the explicit message below would never be reached.
+          refs=$(grep -oE '(src|href)="\./[^"]+"' HELIOS-BRIDGE/dist/collage/index.html | sed -E 's/^(src|href)="\.\///; s/"$//' | sort -u || true)
+          test -n "$refs" || { echo "FAIL: collage/index.html references no local assets at all"; exit 1; }
+          for a in $refs; do
+            test -f "HELIOS-BRIDGE/dist/collage/$a" || { echo "MISSING ASSET: collage/$a (referenced by collage/index.html)"; exit 1; }
+            echo "  ok  collage/$a"
+          done
+
+          echo "artifact OK"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

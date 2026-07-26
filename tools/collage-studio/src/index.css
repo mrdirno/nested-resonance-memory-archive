@@ -1,0 +1,14 @@
+/* GENART COLLAGE STUDIO
+   Order matters: @import must precede everything, tokens before the layers
+   that consume them. base.css uses @layer base so it lands after Tailwind's
+   preflight; controls/motion stay unlayered so Tailwind utilities can still
+   override a component class at the call site. */
+
+@import './styles/tokens.css';
+@import './styles/base.css';
+@import './styles/controls.css';
+@import './styles/motion.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

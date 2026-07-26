@@ -1,0 +1,158 @@
+/* =============================================================================
+   BASE — element-level behaviour. Lives in @layer base so it lands AFTER
+   Tailwind's preflight and wins element-selector ties without !important.
+   ========================================================================== */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    background: var(--void);
+  }
+
+  body {
+    margin: 0;
+    background: var(--void);
+    color: var(--ink-1);
+    font-family: var(--font-sans);
+    font-size: var(--t-body);
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* The tool is a single fixed surface: never let the page itself scroll. */
+  #root {
+    height: 100%;
+  }
+
+  /* Buttons must feel like hardware, not like links. */
+  button,
+  [role='button'] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
+  }
+
+  button:disabled {
+    opacity: 0.32;
+    cursor: not-allowed;
+    filter: saturate(0.35);
+  }
+
+  /* Keyboard reachability — a visible, on-brand ring, never the UA outline. */
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+    border-radius: var(--r-1);
+  }
+
+  ::selection {
+    background: var(--signal);
+    color: var(--on-signal);
+  }
+
+  /* Thin instrument scrollbars; still grabbable on desktop. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-3) transparent;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line-2);
+    border-radius: var(--r-pill);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--line-3); }
+
+  /* ---------------------------------------------------------------------
+     RANGE INPUTS — the app's only continuous controls. Native ones are
+     ~4px tall: unusable with a thumb. Every range gets a 44px hit row, a
+     26px thumb, and a track that shows its own fill (set --fill in JSX).
+     --------------------------------------------------------------------- */
+  input[type='range'] {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: var(--tap);
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    touch-action: none; /* drag the slider, don't scroll the dock */
+  }
+
+  input[type='range']::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: var(--r-pill);
+    background: linear-gradient(
+      to right,
+      var(--slider-accent) 0%,
+      var(--slider-accent) var(--fill, 50%),
+      var(--surface-3) var(--fill, 50%),
+      var(--surface-3) 100%
+    );
+    border: 1px solid var(--line-1);
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    margin-top: -11px;
+    border-radius: 50%;
+    background: var(--ink-1);
+    border: 3px solid var(--slider-accent);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+    transition: transform var(--dur-1) var(--ease);
+  }
+  input[type='range']:active::-webkit-slider-thumb { transform: scale(1.12); }
+
+  input[type='range']::-moz-range-track {
+    height: 6px;
+    border-radius: var(--r-pill);
+    background: var(--surface-3);
+    border: 1px solid var(--line-1);
+  }
+  input[type='range']::-moz-range-progress {
+    height: 6px;
+    border-radius: var(--r-pill);
+    background: var(--slider-accent);
+  }
+  input[type='range']::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--ink-1);
+    border: 3px solid var(--slider-accent);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+  }
+  input[type='range']:disabled { opacity: 0.32; cursor: not-allowed; }
+
+  /* Colour-input chrome is unstyleable across engines; strip its frame so a
+     swatch reads as a swatch. */
+  input[type='color'] {
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  input[type='color']::-webkit-color-swatch-wrapper { padding: 0; }
+  input[type='color']::-webkit-color-swatch { border: none; border-radius: var(--r-1); }
+}
+
+/* -----------------------------------------------------------------------------
+   Compatibility shims for class names already present in markup this component
+   set does not own. `pb-safe` is used on the control dock but no Tailwind plugin
+   defines it — without this the home-indicator sits on top of the bottom row.
+   -------------------------------------------------------------------------- */
+.pb-safe { padding-bottom: var(--safe-b); }
+.pt-safe { padding-top: var(--safe-t); }
+.px-safe { padding-left: var(--safe-l); padding-right: var(--safe-r); }

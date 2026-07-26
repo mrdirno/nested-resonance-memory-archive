@@ -1,0 +1,638 @@
+/* =============================================================================
+   CONTROLS — the instrument vocabulary.
+   Deliberately NOT inside @layer components: author CSS outside Tailwind's
+   layers is never tree-shaken, so [data-active] selectors are safe, and
+   Tailwind utilities still win when a component needs a one-off override.
+   ========================================================================== */
+
+/* --- TEXT ROLES ----------------------------------------------------------- */
+.ui-label {
+  font-size: var(--t-micro);
+  font-weight: 800;
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1;
+}
+.ui-label--on { color: var(--ink-1); }
+
+.ui-title {
+  font-size: var(--t-micro);
+  font-weight: 800;
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  line-height: 1;
+}
+.ui-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line-1);
+}
+
+.ui-caption {
+  font-size: var(--t-micro);
+  line-height: 1.45;
+  color: var(--ink-3);
+  letter-spacing: 0.01em;
+}
+
+.ui-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  letter-spacing: -0.01em;
+}
+
+/* --- SURFACES ------------------------------------------------------------- */
+.ui-panel {
+  background: var(--surface-1);
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-2);
+  box-shadow: var(--e-inset);
+}
+
+.ui-dock {
+  background: var(--surface-0);
+  max-height: var(--dock-max);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--s-3) var(--s-3) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+/* Primary actions pin to the bottom of the dock: the thumb zone. Opaque, with
+   a short fade above it so scrolling content dissolves instead of colliding. */
+.ui-actionbar {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  margin: 0 calc(var(--s-3) * -1);
+  padding: var(--s-3);
+  display: flex;
+  gap: var(--s-2);
+  background: var(--surface-0);
+  border-top: 1px solid var(--line-1);
+}
+.ui-actionbar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 22px;
+  pointer-events: none;
+  background: linear-gradient(to top, var(--surface-0), rgba(8, 9, 10, 0));
+}
+
+/* ---- WIDE VIEWPORTS -------------------------------------------------------
+   One column stretched across 1280px turns a button into a 640px slab. Two
+   columns of a readable measure instead — which also halves the dock height,
+   so the canvas keeps growing as the window does. */
+@media (min-width: 900px) {
+  .ui-dock {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    gap: var(--s-4) var(--s-5);
+    width: 100%;
+    max-width: 1080px;
+    margin-inline: auto;
+  }
+  .ui-dock > .ui-readout,
+  .ui-dock > .ui-empty,
+  .ui-dock > .ui-actionbar { grid-column: 1 / -1; }
+  .ui-dock > * { align-self: start; }
+  .ui-actionbar { margin: 0; justify-content: center; }
+  .ui-actionbar .ui-stepper { max-width: 420px; }
+  .ui-actionbar .ui-btn { max-width: 220px; }
+}
+
+.ui-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 4, 5, 0.86);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+/* Full takeover (the finished render): the chrome behind must not read
+   through, or two status chips stack on the same pixels. */
+.ui-scrim--solid {
+  background: rgba(3, 4, 5, 0.972);
+  -webkit-backdrop-filter: blur(28px) saturate(1.2);
+  backdrop-filter: blur(28px) saturate(1.2);
+}
+
+.ui-sheet {
+  background: var(--surface-1);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-3);
+  box-shadow: var(--e-float);
+  overflow: hidden;
+}
+
+/* --- TOP BAR --------------------------------------------------------------
+   Glass chrome, minimum height, and the top safe-area inset the old fixed
+   h-14 bar never honoured (its content sat under the notch in standalone
+   mode). Kept in normal flow on purpose: the canvas layer below owns a
+   top-right button cluster, and an overlaid bar would sit on top of it. */
+.ui-topbar {
+  position: relative;
+  z-index: 60;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) calc(var(--safe-r) + var(--s-3)) var(--s-2)
+           calc(var(--safe-l) + var(--s-3));
+  padding-top: calc(var(--safe-t) + var(--s-2));
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--line-1);
+}
+.ui-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.ui-mark {
+  font-size: var(--t-label);
+  font-weight: 800;
+  letter-spacing: var(--track-wide);
+  color: var(--ink-3);
+  line-height: 1;
+}
+.ui-mark b { color: var(--ink-1); font-weight: 800; }
+
+/* --- STATUS CHIP ---------------------------------------------------------- */
+.ui-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-1);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ui-status[data-tone='ok']   { color: var(--signal); border-color: var(--signal-dim); background: var(--signal-soft); }
+.ui-status[data-tone='warn'] { color: var(--warn);   border-color: rgba(242,201,76,.35); background: var(--warn-soft); }
+.ui-status[data-tone='bad']  { color: var(--danger); border-color: rgba(255,107,107,.35); background: var(--danger-soft); }
+
+.ui-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+
+/* --- BUTTONS -------------------------------------------------------------- */
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: var(--tap);
+  padding: 0 var(--s-4);
+  border-radius: var(--r-2);
+  border: 1px solid var(--line-2);
+  background: var(--surface-2);
+  color: var(--ink-1);
+  font-size: var(--t-label);
+  font-weight: 800;
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  box-shadow: var(--e-inset);
+  transition: background var(--dur-1) var(--ease),
+              border-color var(--dur-1) var(--ease),
+              color var(--dur-1) var(--ease),
+              transform var(--dur-1) var(--ease);
+}
+.ui-btn:hover:not(:disabled) { background: var(--surface-3); border-color: var(--line-3); }
+.ui-btn:active:not(:disabled) { transform: scale(0.975); background: var(--surface-4); }
+
+.ui-btn--primary {
+  background: var(--signal);
+  border-color: transparent;
+  color: var(--on-signal);
+}
+.ui-btn--primary:hover:not(:disabled) { background: #4ff0a8; border-color: transparent; }
+.ui-btn--primary:active:not(:disabled) { background: var(--signal-deep); color: var(--ink-1); }
+
+.ui-btn--warn { background: var(--warn); border-color: transparent; color: #1a1405; }
+.ui-btn--warn:hover:not(:disabled) { background: #ffd76b; }
+
+.ui-btn--bad { background: var(--danger); border-color: transparent; color: #1a0505; }
+
+.ui-btn--ghost { background: transparent; border-color: var(--line-2); color: var(--ink-2); }
+.ui-btn--ghost:hover:not(:disabled) { color: var(--ink-1); background: rgba(255,255,255,.04); }
+
+.ui-btn--quiet {
+  background: rgba(8, 9, 10, 0.66);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-color: var(--line-2);
+  color: var(--ink-2);
+}
+.ui-btn--quiet:hover:not(:disabled) { color: var(--ink-1); }
+
+.ui-btn--danger-quiet {
+  background: rgba(8, 9, 10, 0.66);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-color: rgba(255, 107, 107, 0.3);
+  color: var(--danger);
+}
+
+.ui-btn--icon { width: var(--tap); padding: 0; }
+/* Narrower chrome buttons — same 44px touch height, less horizontal cost so
+   two of them plus the status chip still fit a 320px bar. */
+.ui-btn--compact { padding: 0 var(--s-3); font-size: var(--t-micro); letter-spacing: 0.07em; }
+.ui-btn__msg {
+  max-width: 108px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui-btn--block { width: 100%; }
+.ui-btn--tall { min-height: 54px; }
+
+/* Icon over label — used where a row of options must stay scannable. */
+.ui-btn--stack {
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 var(--s-2);
+}
+.ui-btn--stack > span {
+  font-size: var(--t-micro);
+  letter-spacing: 0.05em;
+  line-height: 1.15;
+  text-align: center;
+}
+
+/* --- TILES (selectable options) ------------------------------------------ */
+.ui-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 58px;
+  padding: var(--s-2) 4px;
+  border-radius: var(--r-2);
+  border: 1px solid var(--line-1);
+  background: var(--surface-1);
+  color: var(--ink-3);
+  box-shadow: var(--e-inset);
+  transition: background var(--dur-1) var(--ease),
+              border-color var(--dur-1) var(--ease),
+              color var(--dur-1) var(--ease),
+              transform var(--dur-1) var(--ease);
+}
+.ui-tile:hover:not(:disabled) { color: var(--ink-1); background: var(--surface-2); }
+.ui-tile:active:not(:disabled) { transform: scale(0.975); }
+.ui-tile[data-active='true'] {
+  color: var(--ink-1);
+  background: linear-gradient(180deg, var(--surface-3), var(--surface-2));
+  border-color: var(--signal-dim);
+  box-shadow: var(--e-inset), 0 0 0 1px var(--signal-dim), 0 12px 30px -18px var(--signal);
+}
+.ui-tile[data-active='true'] .ui-tile__label { color: var(--signal); }
+.ui-tile__label {
+  font-size: var(--t-micro);
+  font-weight: 800;
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  line-height: 1;
+}
+.ui-tile--sm { min-height: 52px; gap: 4px; }
+/* narrow columns: keep the word, lose the tracking that would clip it */
+.ui-tile--sm .ui-tile__label { letter-spacing: 0.05em; }
+
+/* --- CHIPS (compact exclusive choices: density, ratio) -------------------- */
+.ui-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding: 0 var(--s-3);
+  border-radius: var(--r-1);
+  border: 1px solid var(--line-1);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  font-size: var(--t-label);
+  font-weight: 800;
+  letter-spacing: var(--track-mid);
+  transition: background var(--dur-1) var(--ease),
+              color var(--dur-1) var(--ease),
+              border-color var(--dur-1) var(--ease);
+}
+.ui-chip:hover:not(:disabled) { color: var(--ink-1); background: var(--surface-3); }
+.ui-chip[data-active='true'] {
+  background: var(--signal);
+  border-color: transparent;
+  color: var(--on-signal);
+}
+
+/* --- READOUT STRIP (the persistent caption for the whole panel) ----------- */
+.ui-readout {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-1);
+  border: 1px solid var(--line-1);
+  background: linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,0));
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-micro);
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+.ui-readout b { color: var(--signal); font-weight: 700; }
+.ui-readout i { color: var(--line-3); font-style: normal; }
+
+/* --- FIELD (label + slider + value on one 44px row) ----------------------- */
+.ui-field { display: flex; flex-direction: column; gap: 2px; }
+.ui-field__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2);
+}
+.ui-field__value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-label);
+  font-weight: 700;
+  color: var(--slider-accent);
+}
+.ui-field--warn { --slider-accent: var(--warn); }
+
+/* --- STEPPER (count) ------------------------------------------------------ */
+.ui-stepper {
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--r-2);
+  border: 1px solid var(--line-2);
+  background: var(--surface-2);
+  box-shadow: var(--e-inset);
+  overflow: hidden;
+}
+.ui-stepper__btn {
+  width: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+  background: transparent;
+  transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+.ui-stepper__btn:hover:not(:disabled) { background: var(--surface-3); color: var(--ink-1); }
+.ui-stepper__btn:active:not(:disabled) { background: var(--surface-4); }
+.ui-stepper__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 4px;
+  border-left: 1px solid var(--line-1);
+  border-right: 1px solid var(--line-1);
+}
+.ui-stepper__value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-num);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink-1);
+}
+
+/* --- RATIO PREVIEW (aspect chips draw the shape they select) -------------- */
+.ui-ratio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 56px;
+  padding: var(--s-2) 2px;
+  border-radius: var(--r-1);
+  border: 1px solid var(--line-1);
+  background: var(--surface-1);
+  color: var(--ink-3);
+  transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease),
+              border-color var(--dur-1) var(--ease);
+}
+.ui-ratio:hover { color: var(--ink-1); background: var(--surface-2); }
+.ui-ratio__box {
+  width: 22px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  opacity: 0.75;
+}
+.ui-ratio__label {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.ui-ratio[data-active='true'] {
+  color: var(--signal);
+  border-color: var(--signal-dim);
+  background: var(--signal-soft);
+}
+.ui-ratio[data-active='true'] .ui-ratio__box { opacity: 1; }
+
+/* --- SWATCH (background presets) ------------------------------------------ */
+.ui-swatch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 56px;
+  border-radius: var(--r-1);
+  border: 1px solid var(--line-1);
+  background: var(--surface-1);
+  color: var(--ink-3);
+  transition: border-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+.ui-swatch:hover:not(:disabled) { color: var(--ink-1); }
+.ui-swatch__dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--line-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ui-swatch__label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.ui-swatch[data-active='true'] { border-color: var(--signal); color: var(--signal); }
+
+/* --- OPTION ROWS (export presets) ----------------------------------------- */
+.ui-option {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  min-height: 56px;
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-2);
+  border: 1px solid var(--line-1);
+  background: var(--surface-2);
+  text-align: left;
+  transition: border-color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+}
+.ui-option:hover:not(:disabled) { background: var(--surface-3); }
+.ui-option[data-active='true'] {
+  border-color: var(--signal-dim);
+  background: linear-gradient(90deg, var(--signal-soft), rgba(255, 255, 255, 0.02));
+}
+.ui-option__radio {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid var(--line-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ui-option[data-active='true'] .ui-option__radio { border-color: var(--signal); }
+.ui-option[data-active='true'] .ui-option__radio::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--signal);
+}
+.ui-option__key {
+  font-family: var(--font-mono);
+  font-size: var(--t-body);
+  font-weight: 700;
+  color: var(--ink-1);
+  min-width: 46px;
+}
+.ui-option[data-active='true'] .ui-option__key { color: var(--signal); }
+.ui-option__icon {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: var(--r-1);
+  background: var(--void);
+  border: 1px solid var(--line-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- LIST ROWS (history) --------------------------------------------------- */
+.ui-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  min-height: 56px;
+  padding: var(--s-2);
+  border-radius: var(--r-1);
+  border: 1px solid var(--line-1);
+  background: var(--surface-1);
+  text-align: left;
+  transition: border-color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+}
+.ui-row:hover { border-color: var(--signal-dim); background: var(--surface-2); }
+.ui-row__thumb {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface-3);
+  border: 1px solid var(--line-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ui-row__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* --- EMPTY / ERROR STATES -------------------------------------------------- */
+.ui-empty {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  border-radius: var(--r-2);
+  border: 1px dashed var(--line-2);
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.014) 0 8px,
+    transparent 8px 16px
+  );
+  color: var(--ink-3);
+}
+.ui-empty__icon {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: var(--r-1);
+  border: 1px solid var(--line-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+}
+
+/* --- SKELETON -------------------------------------------------------------- */
+.ui-skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--surface-2) 0%,
+    var(--surface-3) 42%,
+    var(--surface-2) 68%
+  );
+  background-size: 260% 100%;
+  animation: ui-sheen 1.5s var(--ease) infinite;
+}
+
+/* --- GRID HELPERS (shared spacing, so panels agree) ----------------------- */
+.ui-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2); }
+.ui-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); }
+.ui-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-2); }
+.ui-grid-5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.ui-stack { display: flex; flex-direction: column; gap: var(--s-3); }
+.ui-stack--tight { display: flex; flex-direction: column; gap: var(--s-2); }

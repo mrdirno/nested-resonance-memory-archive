@@ -100,7 +100,13 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+<!-- A stylesheet link to a root-absolute index.css was removed here. That file
+     does not exist in this project, and the root-absolute path resolved to the
+     github.io domain root rather than this project's base, so it 404'd on every
+     page load. Vite rewrites the module script below to the configured base but
+     leaves unresolvable absolute URLs untouched, so it shipped straight to prod.
+     Deliberately described in prose: writing the tag out literally makes link
+     scanners match inside this comment and report a phantom 404. -->
 </head>
   <body>
     <div id="root"></div>

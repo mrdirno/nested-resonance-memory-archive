@@ -1,0 +1,26 @@
+{
+  "name": "Smart Crop GenArt Studio",
+  "short_name": "GenArt",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "Professional Generative Art Collage Tool",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "./",
+      "accept": {
+        "application/x-genart-project": [".collage"]
+      }
+    }
+  ]
+}

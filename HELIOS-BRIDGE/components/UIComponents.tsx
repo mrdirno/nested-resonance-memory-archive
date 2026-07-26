@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -153,6 +153,41 @@ const EffectSlider: React.FC<{ label: string, value: number, onChange: (val: num
     </div>
   );
 };
+/**
+ * Other pages published alongside the bridge in the SAME Pages artifact.
+ *
+ * To add one: append an entry here AND stage its directory in
+ * .github/workflows/deploy_bridge.yml. Both halves are required — an entry
+ * without a staged directory is a link to a 404, which is exactly how the
+ * collage tool went missing in the first place.
+ *
+ * hrefs are RELATIVE on purpose: the bridge is served from
+ * /nested-resonance-memory-archive/, so './collage/' resolves correctly
+ * without hardcoding the domain.
+ */
+const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: React.ReactNode }[] = [
+  {
+    name: 'Collage Studio',
+    href: './collage/',
+    tag: 'video',
+    blurb: 'Smart-crop generative compositor. Drop in images — or a video, and pull frames straight out of it — and it finds the salient region of each, then composes them onto a live canvas.',
+    icon: <Scissors size={18} />,
+  },
+  {
+    name: 'Collage Beta',
+    href: './collage-beta/',
+    blurb: 'The earlier build of the compositor, kept live alongside it for comparison.',
+    icon: <Images size={18} />,
+  },
+  {
+    name: 'Bridge Archive',
+    href: './archive/',
+    tag: '500',
+    blurb: 'Five hundred standalone particle-interference variations of this bridge, each one its own page.',
+    icon: <LayoutGrid size={18} />,
+  },
+];
+
 export const UIOverlay: React.FC<UIProps> = (props) => {
   const { config, setConfig, activePanel, setActivePanel, digitRefs, onCameraMove, onResetCamera, isConnected, tasksCompleted, gaStatus } = props;
   const [lockEnergy, setLockEnergy] = React.useState(false);
@@ -579,8 +614,46 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
         )}
       </Panel>
 
+      {/* Tools Panel — registry of the archive's other pages (see TOOLS above) */}
+      <Panel
+        title="Tools"
+        subtitle="Other pages in the archive"
+        active={activePanel === 'tools'}
+        onClose={() => setActivePanel(null)}
+      >
+        <div className="space-y-3">
+          {TOOLS.map((t) => (
+            <a
+              key={t.href}
+              href={t.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-start gap-3 w-full p-4 rounded-xl bg-black/30 border border-white/5 hover:border-tertiary/40 hover:bg-black/50 transition-colors active:scale-[0.99]"
+            >
+              <div className="shrink-0 mt-0.5 text-tertiary">{t.icon}</div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-sm text-white">{t.name}</span>
+                  {t.tag && (
+                    <span className="shrink-0 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-tertiary/20 text-tertiary">
+                      {t.tag}
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-white/60 leading-relaxed mt-1">{t.blurb}</p>
+                <span className="text-[10px] font-mono text-white/30 tracking-widest">{t.href}</span>
+              </div>
+              <ExternalLink size={14} className="shrink-0 mt-1 text-white/30 group-hover:text-tertiary transition-colors" />
+            </a>
+          ))}
+        </div>
+        <div className="text-center text-[10px] font-bold uppercase tracking-wide text-white/25 pt-1">
+          Opens in a new tab — the field keeps running
+        </div>
+      </Panel>
+
       {/* Navigation Bar */}
-      <div className="fixed bottom-0 left-0 w-full h-[80px] bg-glass backdrop-blur-xl border-t border-white/10 flex justify-around items-center px-4 z-50">
+      <div className="fixed bottom-0 left-0 w-full h-[80px] bg-glass backdrop-blur-xl border-t border-white/10 flex justify-around items-center px-2 sm:px-4 z-50">
         <NavItem icon={<Settings />} label="Control" active={activePanel === 'controls'} onClick={() => setActivePanel(activePanel === 'controls' ? null : 'controls')} />
         <NavItem icon={<Waves />} label="Fields" active={activePanel === 'waves'} onClick={() => setActivePanel(activePanel === 'waves' ? null : 'waves')} />
         <NavItem icon={<FlaskConical />} label="Labs" active={activePanel === 'labs'} onClick={() => setActivePanel(activePanel === 'labs' ? null : 'labs')} />
@@ -591,6 +664,7 @@ export const UIOverlay: React.FC<UIProps> = (props) => {
           active={activePanel === 'swarm'}
           onClick={() => setActivePanel(activePanel === 'swarm' ? null : 'swarm')}
         />
+        <NavItem icon={<Wrench />} label="Tools" active={activePanel === 'tools'} onClick={() => setActivePanel(activePanel === 'tools' ? null : 'tools')} />
       </div>
     </>
   );

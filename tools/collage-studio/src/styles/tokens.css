@@ -1,0 +1,100 @@
+/* =============================================================================
+   GENART COLLAGE STUDIO — DESIGN TOKENS
+   One scale for type, one for space, one elevation/glass treatment, one signal
+   colour. Everything downstream references these; nothing hard-codes a hex.
+   Register: dark, precise, instrument-like. Not a dashboard.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* --- SURFACE RAMP (cool near-black; 5 steps, no more) ------------------- */
+  --void:      #030405;   /* the bed the canvas floats on */
+  --surface-0: #08090a;   /* dock base */
+  --surface-1: #0e1012;   /* panel */
+  --surface-2: #16191b;   /* control at rest */
+  --surface-3: #1f2427;   /* control hovered / raised */
+  --surface-4: #2b3134;   /* control pressed */
+
+  /* --- HAIRLINES (3 weights) ---------------------------------------------- */
+  --line-1: rgba(255, 255, 255, 0.07);
+  --line-2: rgba(255, 255, 255, 0.13);
+  --line-3: rgba(255, 255, 255, 0.24);
+
+  /* --- INK (4 steps; -3 is the floor for text, -4 is disabled only) -------- */
+  --ink-1: #eef1f0;
+  --ink-2: #a9b0b0;
+  --ink-3: #838b8b;
+  --ink-4: #545b5b;
+
+  /* --- SIGNAL: exactly one accent + one caution --------------------------- */
+  --signal:      #3ddc97;
+  --signal-deep: #0f6f4c;
+  --signal-dim:  #1c7b57;
+  --signal-soft: rgba(61, 220, 151, 0.14);
+  --on-signal:   #041510;
+
+  --warn:        #f2c94c;   /* matches the lock glyph drawn on the canvas */
+  --warn-soft:   rgba(242, 201, 76, 0.14);
+  --danger:      #ff6b6b;
+  --danger-soft: rgba(255, 107, 107, 0.12);
+
+  /* --- TYPE: 6 steps, nothing below 11px --------------------------------- */
+  --t-micro: 0.6875rem;  /* 11px — captions, unit labels */
+  --t-label: 0.8125rem;  /* 13px — control labels, buttons */
+  --t-body:  0.9375rem;  /* 15px — prose */
+  --t-lead:  1.0625rem;  /* 17px — section titles */
+  --t-num:   1.5rem;     /* 24px — primary readout */
+  --t-hero:  2rem;       /* 32px — dialog headline numeral */
+
+  --track-wide: 0.15em;
+  --track-mid:  0.08em;
+
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+               "Liberation Mono", monospace;
+
+  /* --- SPACE: 4 / 8 / 12 / 16 / 20 / 28 ---------------------------------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 28px;
+
+  /* --- RADII -------------------------------------------------------------- */
+  --r-1: 10px;
+  --r-2: 14px;
+  --r-3: 20px;
+  --r-pill: 999px;
+
+  /* --- TOUCH -------------------------------------------------------------- */
+  --tap: 44px;
+
+  /* --- ELEVATION: exactly two + one glass -------------------------------- */
+  --e-inset: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  --e-float: 0 28px 68px -22px rgba(0, 0, 0, 0.95),
+             0 0 0 1px rgba(255, 255, 255, 0.06);
+  --glass-bg: rgba(8, 9, 10, 0.72);
+  --glass-blur: blur(20px) saturate(1.4);
+
+  /* --- MOTION ------------------------------------------------------------- */
+  --ease: cubic-bezier(0.2, 0.8, 0.3, 1);
+  --dur-1: 110ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
+
+  /* --- SAFE AREA (viewport-fit=cover is set in index.html) ---------------- */
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+
+  /* --- COMPONENT DEFAULTS ------------------------------------------------- */
+  --slider-accent: var(--signal);
+  /* The canvas is the hero: the control dock never takes more than ~44% of
+     the viewport, and scrolls internally past that with its primary actions
+     pinned. */
+  --dock-max: min(44vh, 356px);
+}

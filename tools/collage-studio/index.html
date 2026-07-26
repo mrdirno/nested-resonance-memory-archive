@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Professional Generative Art Collage Tool with AI Smart Cropping" />
+    <link rel="manifest" href="./manifest.json" />
+    <title>Smart Crop GenArt Studio</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Service worker registration.
+      //
+      // MUST stay relative. This is a JS string literal, so vite's base:'./'
+      // does NOT rewrite it -- a root-anchored sw.js path would request the
+      // ORIGIN root (404 on a GitHub Pages project site) and, worse, would
+      // claim the whole origin as its scope, letting this tool's cache
+      // intercept the sibling app served at /nested-resonance-memory-archive/.
+      //
+      // './sw.js' resolves against the document base, so the script URL is
+      // <base>/sw.js and the maximum allowed scope is exactly <base>/.
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('./sw.js', { scope: './' }).then(
+            function (reg) {
+              // Re-check sw.js on every visit so a new deploy is picked up
+              // without waiting out the browser's HTTP cache for the script.
+              if (reg && typeof reg.update === 'function') { reg.update(); }
+            },
+            function (err) {
+              console.warn('SW registration failed (app still works):', err);
+            }
+          );
+        });
+      }
+    </script>
+  </body>
+</html>

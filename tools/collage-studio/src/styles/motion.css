@@ -1,0 +1,80 @@
+/* =============================================================================
+   MOTION — one enter animation, composed by modifier classes.
+   Also a working stand-in for the `animate-in / fade-in / zoom-in /
+   slide-in-from-top-*` class names already used in markup: the
+   tailwindcss-animate plugin is NOT installed, so those classes were inert.
+   Defining them here makes the existing transitions real without touching
+   the files that use them.
+   ========================================================================== */
+
+@keyframes ui-enter {
+  from {
+    opacity: var(--enter-opacity, 1);
+    transform: translate3d(var(--enter-x, 0), var(--enter-y, 0), 0)
+               scale(var(--enter-scale, 1));
+  }
+}
+
+@keyframes ui-sheen {
+  from { background-position: 180% 0; }
+  to   { background-position: -60% 0; }
+}
+
+@keyframes ui-breathe {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+@keyframes ui-spin { to { transform: rotate(360deg); } }
+
+.animate-in {
+  animation: ui-enter var(--enter-dur, 220ms) var(--ease) both;
+}
+.fade-in   { --enter-opacity: 0; }
+.zoom-in   { --enter-scale: 0.95; }
+.slide-in-from-top-2    { --enter-y: -0.5rem; }
+.slide-in-from-top-4    { --enter-y: -1rem; }
+.slide-in-from-bottom-2 { --enter-y: 0.5rem; }
+.slide-in-from-bottom-4 { --enter-y: 1rem; }
+
+/* Tailwind's duration-* utilities set transition-duration; these add the
+   matching animation duration so the same class reads correctly on both. */
+.duration-150 { --enter-dur: 150ms; }
+.duration-200 { --enter-dur: 200ms; }
+.duration-300 { --enter-dur: 300ms; }
+.duration-500 { --enter-dur: 500ms; }
+
+.ui-spin { animation: ui-spin 1s linear infinite; }
+
+/* -----------------------------------------------------------------------------
+   REDUCED MOTION
+   Movement is removed, but progress indicators must keep signalling that work
+   is happening — they are slowed, not frozen (a stopped spinner reads as a
+   hang). Non-essential enter animations collapse to nothing.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-in { animation: none !important; }
+
+  /* essential feedback: slow, still moving */
+  .ui-spin,
+  .animate-spin {
+    animation: ui-spin 2.4s linear infinite !important;
+    animation-duration: 2.4s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .ui-skeleton,
+  .animate-pulse {
+    animation: ui-breathe 2.4s ease-in-out infinite !important;
+    animation-duration: 2.4s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
