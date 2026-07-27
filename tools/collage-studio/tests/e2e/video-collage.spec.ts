@@ -60,8 +60,14 @@ const sampleCanvas = (page: Page): Promise<number> =>
  * Drive the import sheet the way a user actually does: ONE tap on ADD VIDEO.
  * `viaFramePicker` walks the curate path instead, so both routes stay covered.
  */
+const enableFramePicker = async (page: Page) => {
+  await page.evaluate(() => localStorage.setItem('genart.framePicker', '1'));
+  await page.reload();
+};
+
 const importClip = async (page: Page, opts: { frames?: number; viaFramePicker?: boolean } = {}) => {
   const frames = opts.frames ?? 6;
+  if (opts.viaFramePicker) await enableFramePicker(page);
   await page.locator('input[type="file"]').first().setInputFiles(CLIP);
 
   const addVideo = page.getByRole('button', { name: 'ADD VIDEO' });
@@ -127,23 +133,60 @@ test.describe('video collage', () => {
     }).catch(() => { /* no SW support in this context is fine */ });
   });
 
-  test('the sheet offers video as the default, and says so', async ({ page }) => {
-    test.setTimeout(60_000);
+  test('the sheet is video-only until the picker is switched on in settings', async ({ page }) => {
+    test.setTimeout(90_000);
     await page.locator('input[type="file"]').first().setInputFiles(CLIP);
 
-    // The old sheet's ONLY action was "EXTRACT N FRAMES", which is why the
-    // feature was invisible on open. Video is the primary action now.
+    // The old sheet's ONLY action was "EXTRACT N FRAMES", which is why live
+    // playback looked like it did not exist. Video is the sole way forward now.
     await expect(page.getByRole('button', { name: 'ADD VIDEO' })).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByRole('button', { name: 'PICK FRAMES' })).toBeVisible();
     await expect(page.getByRole('button', { name: /EXTRACT \d+ FRAMES?/ })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'PICK FRAMES' })).toHaveCount(0);
     await expect(page.getByText(/keep playing/i)).toBeVisible();
+
+    // ...and the setting genuinely brings it back.
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Settings' }).click();
+    const toggle = page.getByRole('switch', { name: /Choose frames on import/i });
+    await expect(toggle).toHaveAttribute('aria-checked', 'false');
+    await toggle.click();
+    await expect(toggle).toHaveAttribute('aria-checked', 'true');
+
+    await page.locator('input[type="file"]').first().setInputFiles(CLIP);
+    await expect(page.getByRole('button', { name: 'PICK FRAMES' })).toBeVisible({ timeout: 20_000 });
   });
 
-  test('the frame-picker route still works', async ({ page }) => {
+  test('the frame-picker route still works when enabled', async ({ page }) => {
     test.setTimeout(120_000);
     await importClip(page, { viaFramePicker: true });
     await expect(page.locator('canvas')).toBeVisible({ timeout: 20_000 });
     await expect(page.getByRole('button', { name: /Stop playing motion\.webm/ })).toBeVisible();
+  });
+
+  test('no chrome sits on top of the collage', async ({ page }) => {
+    test.setTimeout(120_000);
+    await importClip(page);
+
+    const canvas = page.locator('canvas');
+    await expect(canvas).toBeVisible({ timeout: 20_000 });
+    await startPlaybackIfGated(page);
+
+    const art = await canvas.boundingBox();
+    expect(art).not.toBeNull();
+
+    // Every persistent control must live OUTSIDE the artwork's box. This is the
+    // whole complaint: a bar floating over the collage covers the one thing the
+    // screen exists to show.
+    for (const name of ['Record video', 'Play clips', 'Pause clips', /Stop playing motion\.webm/] as const) {
+      const el = page.getByRole('button', { name: name as never });
+      if (!(await el.count())) continue;
+      const box = await el.first().boundingBox();
+      if (!box || !art) continue;
+      const overlaps =
+        box.x < art.x + art.width && box.x + box.width > art.x &&
+        box.y < art.y + art.height && box.y + box.height > art.y;
+      expect(overlaps, `${String(name)} overlaps the collage`).toBe(false);
+    }
   });
 
   test('a clip keeps moving inside the collage', async ({ page }) => {
@@ -212,6 +255,61 @@ test.describe('video collage', () => {
     await expect(page.locator('img[src^="blob:"]')).toBeVisible({ timeout: 20_000 });
   });
 
+  test('each clip has its own sound toggle, muted by default', async ({ page }) => {
+    test.setTimeout(120_000);
+    await importClip(page);
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 20_000 });
+    await startPlaybackIfGated(page);
+
+    // A collage that shouts the moment you drop a clip in is not a nice thing
+    // to build, so every clip starts silent and says so.
+    const unmute = page.getByRole('button', { name: /Unmute motion\.webm/ });
+    await expect(unmute).toBeVisible();
+    await expect(unmute).toHaveAttribute('aria-pressed', 'false');
+
+    await unmute.click();
+    const mute = page.getByRole('button', { name: /Mute motion\.webm/ });
+    await expect(mute).toBeVisible();
+    await expect(mute).toHaveAttribute('aria-pressed', 'true');
+
+    // And it is really audible, not just relabelled.
+    expect(await page.evaluate(() => {
+      const v = Array.from(document.querySelectorAll('video'))
+        .find((e) => e.src.startsWith('blob:'));
+      return v ? !v.muted && v.volume > 0 : false;
+    })).toBe(true);
+
+    await mute.click();
+    await expect(page.getByRole('button', { name: /Unmute motion\.webm/ })).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  test('video is offered in the export sheet and saves a file', async ({ page }) => {
+    test.setTimeout(180_000);
+    await importClip(page);
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 20_000 });
+    await startPlaybackIfGated(page);
+
+    await page.getByRole('button', { name: 'Export', exact: true }).click();
+
+    // Scope to the sheet: the dock transport carries its own identical length
+    // buttons, so an unscoped '5s' matches two and clicks the obscured one.
+    const sheet = page.getByRole('dialog').filter({ hasText: 'Record the moving collage' });
+    await expect(sheet).toBeVisible({ timeout: 15_000 });
+    await sheet.getByRole('button', { name: '5s', exact: true }).click();
+    await sheet.getByRole('button', { name: /Record 5s video/i }).click();
+
+    const preview = page.locator('video[controls]');
+    await expect(preview).toBeVisible({ timeout: 90_000 });
+
+    // "Save" must actually hand a file over, not just look like a button.
+    const save = page.getByRole('button', { name: 'Save' });
+    await expect(save).toBeVisible();
+    const dl = page.waitForEvent('download', { timeout: 30_000 });
+    await save.click();
+    const file = await dl;
+    expect(file.suggestedFilename()).toMatch(/^collage-.*\.(mp4|webm)$/);
+  });
+
   test('records the moving collage to a playable file', async ({ page }) => {
     test.setTimeout(180_000);
 
@@ -225,7 +323,7 @@ test.describe('video collage', () => {
 
     // The result sheet only renders on a take that came back ok:true — which
     // `record()` only returns after it has decoded the file back.
-    const preview = page.locator('video[src^="blob:"]');
+    const preview = page.locator('video[controls]');
     await expect(preview).toBeVisible({ timeout: 90_000 });
 
     // And the element must actually be able to play it: real dimensions, and a

@@ -34,6 +34,7 @@
 // -----------------------------------------------------------------------------
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Play, Pause, Volume2, VolumeX, Video, Square, Download, Share2, X,
   AlertTriangle, Loader2,
@@ -64,6 +65,31 @@ export interface VideoStageProps {
    * strictly worse than the JPEG it replaced.
    */
   onUnavailable?: () => void;
+  /**
+   * DOM node in the control dock to render the transport into. The stage's
+   * chrome is portalled OUT of the canvas box on purpose: a persistent bar
+   * floating over the collage covers the artwork, which is the one thing the
+   * screen exists to show. Null renders no transport at all (the canvas still
+   * plays) rather than silently falling back to an overlay.
+   */
+  controlsHost?: HTMLElement | null;
+  /** Drop a clip back to its stills. Rendered in the dock beside its sound toggle. */
+  onRemoveClip?: (id: string) => void;
+  /**
+   * Filled with a handle so the Export sheet can start a take. It has to be
+   * IMPERATIVE: iOS grants a gesture only to the task it fired in, so the export
+   * button must reach `startRecording` synchronously inside its own onClick — a
+   * prop change routed through an effect arrives a task too late and records
+   * silently, or not at all.
+   */
+  recorderRef?: React.MutableRefObject<StageRecorder | null>;
+}
+
+export interface StageRecorder {
+  start: (seconds?: number) => void;
+  canRecord: boolean;
+  isRecording: boolean;
+  maxSeconds: number;
 }
 
 /** Offered take lengths. Clamped to the device cap, so a phone never sees 30s. */
@@ -76,6 +102,7 @@ type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
   layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, onNotice, onUnavailable,
+  controlsHost, onRemoveClip, recorderRef,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<Stage | null>(null);
@@ -88,7 +115,6 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   const [recPhase, setRecPhase] = useState<RecPhase>('idle');
   const [progress, setProgress] = useState<RecordProgress | null>(null);
   const [result, setResult] = useState<RecordSuccess | null>(null);
-  const [recError, setRecError] = useState<{ message: string; advice: string | null } | null>(null);
   const [seconds, setSeconds] = useState(10);
 
   const profile = useMemo(() => getRecordingProfile(), []);
@@ -201,11 +227,10 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
   const stopRecording = useCallback(() => { abortRef.current?.abort(); }, []);
 
-  const startRecording = useCallback(() => {
+  const startRecording = useCallback((secondsOverride?: number) => {
     const stage = stageRef.current;
     if (!stage || recPhase !== 'idle') return;
 
-    setRecError(null);
     setProgress(null);
 
     // ---- inside the gesture ----------------------------------------------
@@ -218,10 +243,8 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       stream = stage.captureStream({ fps: profile.fps, audio: true });
     } catch (e) {
       stage.setCaptureActive(false);
-      setRecError({
-        message: "This browser can't record the collage canvas.",
-        advice: 'Export a still instead, or open the studio in Chrome on a computer.',
-      });
+      onNotice?.("This browser can't record the collage canvas — export a still instead, "
+        + 'or open the studio in Chrome on a computer.');
       return;
     }
     // ---- gesture spent; everything below may await -------------------------
@@ -230,7 +253,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     abortRef.current = ac;
     setRecPhase('running');
 
-    const take = Math.min(seconds, profile.maxSeconds);
+    const take = Math.min(secondsOverride ?? seconds, profile.maxSeconds);
 
     record(stage.canvas, {
       stream,
@@ -245,7 +268,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           setResult(res);
           if (res.warnings.length) onNotice?.(res.warnings[0]);
         } else if (res.code !== 'aborted') {
-          setRecError({ message: res.message, advice: res.advice });
+          onNotice?.(res.advice ? `${res.message} ${res.advice}` : res.message);
         }
       })
       .finally(() => {
@@ -278,20 +301,160 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     downloadRecording(result);
   }, [result]);
 
+  /**
+   * PER-CLIP SOUND. Exclusive by default — mixing several tracks at once is mud,
+   * so unmuting one mutes the rest. Runs synchronously in the click because
+   * turning sound ON is gesture-bound: browsers only autoplay muted media, and
+   * `muted = false` is honoured only from a real gesture.
+   */
+  const toggleClipSound = useCallback((clipId: string, currentlyAudible: boolean) => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    stage.setClipMuted(clipId, currentlyAudible, true);
+    if (!currentlyAudible) stage.resumeFromGesture({ sound: true });
+  }, []);
+
   const canRecord = support ? support.supported : true; // 'likely' until probed
   const busy = recPhase !== 'idle';
+
+  // Publish the handle the Export sheet calls into.
+  useEffect(() => {
+    if (!recorderRef) return;
+    recorderRef.current = {
+      start: startRecording,
+      canRecord: canRecord && liveCount > 0 && !busy,
+      isRecording: recPhase === 'running',
+      maxSeconds: profile.maxSeconds,
+    };
+    return () => { recorderRef.current = null; };
+  }, [recorderRef, startRecording, canRecord, liveCount, busy, recPhase, profile.maxSeconds]);
+
+  const clipRows = status?.clips ?? [];
+
+  const dock = (
+    <div className="flex items-center gap-1 min-w-0 w-full">
+      {/* ONE CHIP PER CLIP: what it is, whether you can hear it, and a way out.
+          Sound starts OFF for every clip — a collage that shouts on import is
+          not a nice thing to build. */}
+      <div className="flex items-center gap-1.5 min-w-0 overflow-x-auto">
+        {clips.map((c) => {
+          const st = clipRows.find((r) => r.id === c.id);
+          const audible = !!st?.audible;
+          return (
+            <div key={c.id} className="flex items-center gap-0.5 pl-2 pr-0.5 py-0.5 rounded-lg bg-[#161616] border border-white/10 shrink-0">
+              <span className="text-[9px] tracking-wide text-gray-300 truncate max-w-[7rem]" title={c.name}>{c.name}</span>
+              <button
+                onClick={() => toggleClipSound(c.id, audible)}
+                disabled={!status?.audioAvailable || st?.state === 'error'}
+                title={audible ? `Mute ${c.name}` : `Play sound from ${c.name} (mutes the others)`}
+                aria-label={audible ? `Mute ${c.name}` : `Unmute ${c.name}`}
+                aria-pressed={audible}
+                className={`w-7 h-7 rounded flex items-center justify-center transition-colors disabled:opacity-30 ${
+                  audible ? 'text-emerald-400 hover:bg-emerald-500/15' : 'text-gray-500 hover:text-white hover:bg-white/10'
+                }`}
+              >{audible ? <Volume2 size={13} /> : <VolumeX size={13} />}</button>
+              {onRemoveClip && (
+                <button
+                  onClick={() => onRemoveClip(c.id)}
+                  title={`Stop playing ${c.name} (keeps its ${c.frameCount} frames)`}
+                  aria-label={`Stop playing ${c.name}`}
+                  className="w-6 h-7 rounded flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-white/10 transition-colors"
+                ><X size={11} /></button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="flex-1 min-w-0" />
+      {/* WHAT THE DEVICE COULD NOT DO — deferred clips render their still frame
+          rather than freezing, and the user is told which, and why. */}
+      {status?.message && !busy && (
+        <span className="text-[9px] tracking-wide text-gray-400 truncate mr-1 min-w-0" title={status.message}>
+          {status.message}
+        </span>
+      )}
+
+      {recPhase === 'running' && progress && (
+        <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-red-950/50 border border-red-500/40 shrink-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+          <span className="text-[10px] font-black tracking-[0.15em] text-white tabular-nums">
+            {remainingSeconds(progress)}s
+          </span>
+          <span className="text-[9px] tracking-widest text-gray-400 tabular-nums">
+            {fmtBytes(progress.bytes)}
+          </span>
+          {progress.withAudio && <Volume2 size={10} className="text-emerald-400" />}
+        </span>
+      )}
+
+      <button
+        onClick={togglePlay}
+        disabled={busy || liveCount === 0}
+        title={anyPlaying ? 'Pause clips' : 'Play clips'}
+        aria-label={anyPlaying ? 'Pause clips' : 'Play clips'}
+        className="w-8 h-8 rounded-lg text-gray-200 flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0"
+      >
+        {anyPlaying ? <Pause size={15} /> : <Play size={15} />}
+      </button>
+
+      <button
+        onClick={toggleSound}
+        disabled={liveCount === 0 || !status?.audioAvailable}
+        title={status?.soundOn ? 'Mute' : 'Unmute the largest clip'}
+        aria-label={status?.soundOn ? 'Mute' : 'Unmute'}
+        className={`w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0 ${
+          status?.soundOn ? 'text-emerald-400' : 'text-gray-400'
+        }`}
+      >
+        {status?.soundOn ? <Volume2 size={15} /> : <VolumeX size={15} />}
+      </button>
+
+      {/* Take length. Only lengths this device can actually survive are offered. */}
+      <div className="flex items-center rounded-lg overflow-hidden border border-white/10 shrink-0">
+        {durations.map((d) => (
+          <button
+            key={d}
+            onClick={() => setSeconds(d)}
+            disabled={busy}
+            className={`px-1.5 py-1.5 text-[9px] font-black tracking-widest transition-colors disabled:opacity-30 ${
+              seconds === d ? 'bg-white/15 text-white' : 'text-gray-500 hover:text-white'
+            }`}
+          >{d}s</button>
+        ))}
+      </div>
+
+      {recPhase === 'running' ? (
+        <button
+          onClick={stopRecording}
+          title="Stop recording"
+          aria-label="Stop recording"
+          className="w-8 h-8 rounded-lg bg-red-600/90 text-white flex items-center justify-center hover:bg-red-500 transition-colors shrink-0"
+        ><Square size={12} fill="currentColor" /></button>
+      ) : (
+        <button
+          onClick={() => startRecording()}
+          disabled={!canRecord || liveCount === 0 || busy}
+          title={canRecord ? `Record ${Math.min(seconds, profile.maxSeconds)}s of video` : 'Recording unavailable in this browser'}
+          aria-label="Record video"
+          className="w-8 h-8 rounded-lg text-red-400 flex items-center justify-center hover:bg-red-500/15 disabled:opacity-30 transition-colors shrink-0"
+        >{recPhase === 'saving' ? <Loader2 size={14} className="animate-spin" /> : <Video size={15} />}</button>
+      )}
+    </div>
+  );
 
   return (
     <>
       <canvas
         ref={canvasRef}
         className="w-full h-full block"
-        // The composition is decorative; the clip list below carries the words.
+        // The composition is decorative; the clip list in the dock carries the words.
         aria-hidden="true"
       />
 
-      {/* TAP TO PLAY — iOS Low Power Mode blocks even muted autoplay, and does
-          not always reject the promise. Stage detects it behaviourally. */}
+      {/* THE ONLY THING STILL ALLOWED ON TOP OF THE ARTWORK. It is a call to
+          action that has to be ON the thing it starts, it is the sole route past
+          an autoplay block, and it disappears on the first tap. */}
       {status?.needsGesture && liveCount > 0 && !busy && (
         <button
           onClick={handleTapToPlay}
@@ -304,105 +467,18 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         </button>
       )}
 
-      {/* RECORDING SCRIM — the canvas must stay visible and on-screen for the
-          whole take (an off-screen Stage pauses itself), so this never covers it. */}
-      {recPhase === 'running' && progress && (
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/80 border border-red-500/40 shadow-xl">
-          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-[10px] font-black tracking-[0.2em] text-white tabular-nums">
-            {remainingSeconds(progress)}s
-          </span>
-          <span className="text-[9px] tracking-widest text-gray-400 tabular-nums">
-            {fmtBytes(progress.bytes)}
-          </span>
-          {progress.withAudio && <Volume2 size={11} className="text-emerald-400" />}
-        </div>
-      )}
-
-      {/* TRANSPORT */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 px-1.5 py-1.5 rounded-xl bg-black/75 backdrop-blur border border-white/10 shadow-2xl">
-        <button
-          onClick={togglePlay}
-          disabled={busy || liveCount === 0}
-          title={anyPlaying ? 'Pause clips' : 'Play clips'}
-          aria-label={anyPlaying ? 'Pause clips' : 'Play clips'}
-          className="w-9 h-9 rounded-lg text-gray-200 flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors"
-        >
-          {anyPlaying ? <Pause size={16} /> : <Play size={16} />}
-        </button>
-
-        <button
-          onClick={toggleSound}
-          disabled={liveCount === 0 || !status?.audioAvailable}
-          title={status?.soundOn ? 'Mute' : 'Unmute the largest clip'}
-          aria-label={status?.soundOn ? 'Mute' : 'Unmute'}
-          className={`w-9 h-9 rounded-lg flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors ${
-            status?.soundOn ? 'text-emerald-400' : 'text-gray-400'
-          }`}
-        >
-          {status?.soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
-        </button>
-
-        <span className="w-px h-5 bg-white/10 mx-0.5" />
-
-        {/* Take length. Only lengths this device can actually survive are offered. */}
-        <div className="flex items-center rounded-lg overflow-hidden border border-white/10">
-          {durations.map((d) => (
-            <button
-              key={d}
-              onClick={() => setSeconds(d)}
-              disabled={busy}
-              className={`px-2 py-1.5 text-[9px] font-black tracking-widest transition-colors disabled:opacity-30 ${
-                seconds === d ? 'bg-white/15 text-white' : 'text-gray-500 hover:text-white'
-              }`}
-            >{d}s</button>
-          ))}
-        </div>
-
-        {recPhase === 'running' ? (
-          <button
-            onClick={stopRecording}
-            title="Stop recording"
-            aria-label="Stop recording"
-            className="w-9 h-9 rounded-lg bg-red-600/90 text-white flex items-center justify-center hover:bg-red-500 transition-colors"
-          ><Square size={13} fill="currentColor" /></button>
-        ) : (
-          <button
-            onClick={startRecording}
-            disabled={!canRecord || liveCount === 0 || busy}
-            title={canRecord ? `Record ${Math.min(seconds, profile.maxSeconds)}s of video` : 'Recording unavailable in this browser'}
-            aria-label="Record video"
-            className="w-9 h-9 rounded-lg text-red-400 flex items-center justify-center hover:bg-red-500/15 disabled:opacity-30 transition-colors"
-          >{recPhase === 'saving' ? <Loader2 size={15} className="animate-spin" /> : <Video size={16} />}</button>
-        )}
-      </div>
-
-      {/* WHAT THE DEVICE COULD NOT DO — deferred clips render their still frame
-          rather than freezing, and the user is told which, and why. */}
-      {status?.message && !busy && (
-        <div className="absolute top-3 left-3 right-3 z-30 pointer-events-none flex justify-center">
-          <span className="max-w-full px-2.5 py-1 rounded-lg bg-black/70 border border-white/10 text-[9px] tracking-wide text-gray-300 truncate">
-            {status.message}
-          </span>
-        </div>
-      )}
-
-      {recError && (
-        <div className="absolute inset-x-3 bottom-16 z-50 p-3 rounded-xl bg-[#161616] border border-red-500/40 shadow-2xl">
-          <div className="flex items-start gap-2">
-            <AlertTriangle size={14} className="text-red-400 shrink-0 mt-0.5" />
-            <div className="flex-1 min-w-0">
-              <p className="text-[10px] text-white leading-relaxed">{recError.message}</p>
-              {recError.advice && <p className="text-[9px] text-gray-400 mt-1 leading-relaxed">{recError.advice}</p>}
-            </div>
-            <button onClick={() => setRecError(null)} aria-label="Dismiss" className="text-gray-500 hover:text-white"><X size={13} /></button>
-          </div>
-        </div>
-      )}
+      {/* Everything else lives in the control dock, OUTSIDE the canvas. */}
+      {controlsHost && createPortal(dock, controlsHost)}
 
       {/* THE TAKE — previewed with a real <video> so "it plays" is proven here,
-          not assumed. The file is only worth offering if this element renders it. */}
-      {result && (
+          not assumed. The file is only worth offering if this element renders it.
+
+          PORTALLED TO <body>, and that is load-bearing rather than tidy: this
+          sheet lives inside a `relative z-10` wrapper, which IS a stacking
+          context, so its own z-[300] was being resolved INSIDE that z-10 and the
+          z-50 control dock painted over it. Save was genuinely unclickable —
+          caught by a test click that kept being intercepted, not by looking. */}
+      {result && createPortal((
         <div className="fixed inset-0 z-[300] bg-black/90 backdrop-blur flex flex-col items-center justify-center p-5 gap-4">
           <video
             src={result.url}
@@ -440,7 +516,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             ><X size={16} /></button>
           </div>
         </div>
-      )}
+      ), document.body)}
     </>
   );
 };

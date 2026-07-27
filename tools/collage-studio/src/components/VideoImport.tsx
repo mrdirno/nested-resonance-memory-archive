@@ -30,6 +30,13 @@ export interface VideoImportProps {
   onClose: () => void;
   /** Shown in the corner when more clips are queued behind this one. */
   queued?: number;
+  /**
+   * Show the frame-picker route at all. OFF by default (Settings > Video):
+   * curating stills is a real thing to want, but it is not what most people
+   * dropping a video are after, and making it the way in made live playback
+   * look like it did not exist.
+   */
+  allowFramePicker?: boolean;
 }
 
 type Phase = 'probing' | 'ready' | 'extracting' | 'review' | 'committing' | 'error';
@@ -52,7 +59,7 @@ const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 );
 
 export const VideoImport: React.FC<VideoImportProps> = ({
-  file, isMobile = false, onCommit, onClose, queued = 0,
+  file, isMobile = false, onCommit, onClose, queued = 0, allowFramePicker = false,
 }) => {
   const [phase, setPhase] = useState<Phase>('probing');
   const [probe, setProbe] = useState<VideoProbe | null>(null);
@@ -563,15 +570,17 @@ export const VideoImport: React.FC<VideoImportProps> = ({
               >
                 CANCEL
               </button>
-              {/* Curating stills is still one tap away — it is just no longer
-                  the ONLY way through, and no longer the loudest thing here. */}
-              <button
-                onClick={() => runExtract()}
-                disabled={phase !== 'ready'}
-                className="px-3 py-3.5 rounded-xl bg-[#1a1a1a] border border-white/10 text-[11px] font-black tracking-widest text-gray-300 hover:text-white disabled:opacity-30"
-              >
-                PICK FRAMES
-              </button>
+              {/* Opt-in only (Settings > Video). Hidden, the sheet has exactly
+                  one forward action and no way to mistake it for a still tool. */}
+              {allowFramePicker && (
+                <button
+                  onClick={() => runExtract()}
+                  disabled={phase !== 'ready'}
+                  className="px-3 py-3.5 rounded-xl bg-[#1a1a1a] border border-white/10 text-[11px] font-black tracking-widest text-gray-300 hover:text-white disabled:opacity-30"
+                >
+                  PICK FRAMES
+                </button>
+              )}
               {/* THE DEFAULT. Extract + commit + play, in one action. */}
               <button
                 onClick={() => runExtract({ autoCommit: true })}

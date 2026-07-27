@@ -20,7 +20,7 @@ import { AdvancedControls } from './components/AdvancedControls';
 import { ExportDialog } from './components/ExportDialog';
 import { ResultModal } from './components/ResultModal';
 import { VideoImport } from './components/VideoImport';
-import { VideoStage } from './components/VideoStage';
+import { VideoStage, type StageRecorder } from './components/VideoStage';
 import RenderWorker from './workers/render.worker?worker';
 
 let globalModel: any = null;
@@ -113,6 +113,25 @@ export default function App() {
   const [clips, setClips] = useState<LiveClip[]>([]);
   /** Cleared if the live compositor cannot be created; falls back to the still preview. */
   const [stageOk, setStageOk] = useState(true);
+  /**
+   * Settings > Video. OFF means a dropped clip goes straight in and plays;
+   * ON restores the frame picker. Persisted because it is a standing preference
+   * about how the tool behaves, not a per-collage parameter.
+   */
+  const [framePicker, setFramePicker] = useState(() => {
+    try { return localStorage.getItem('genart.framePicker') === '1'; } catch { return false; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem('genart.framePicker', framePicker ? '1' : '0'); } catch { /* private mode */ }
+  }, [framePicker]);
+  /**
+   * Where the live-stage transport renders. It is a DOM node in the control
+   * dock rather than an overlay on the canvas: chrome that sits on the artwork
+   * covers the thing the user is here to look at.
+   */
+  const [stageControlsHost, setStageControlsHost] = useState<HTMLDivElement | null>(null);
+  /** Set by the live stage while it is mounted; null otherwise. See StageRecorder. */
+  const recorderRef = useRef<StageRecorder | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const dragDepth = useRef(0);
@@ -644,7 +663,7 @@ export default function App() {
   return (
     <div className="fixed inset-0 bg-black text-white font-sans flex flex-col select-none overflow-hidden">
       <Header aiState={aiState} exportStatus={exportStatus} exportMsg={exportMsg} onExport={() => setShowExportDialog(true)} hasImages={images.length > 0} onSaveProject={handleSaveProject} onLoadProject={handleLoadProject} />
-      <ExportDialog isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportJPG={() => handleExport(4096)} onExportMax={handleMaxRezzy} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
+      <ExportDialog canExportVideo={liveMode} onExportVideo={(secs) => recorderRef.current?.start(secs)} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
       <ResultModal isOpen={!!resultBlobUrl} onClose={() => setResultBlobUrl(null)} blobUrl={resultBlobUrl} onShare={handleShareResult} onDownload={handleDownloadResult} isMobile={isMobile} />
 
       <div
@@ -686,6 +705,9 @@ export default function App() {
                        bgColor={bgColor}
                        onNotice={flashNotice}
                        onUnavailable={() => setStageOk(false)}
+                       controlsHost={stageControlsHost}
+                       onRemoveClip={removeClip}
+                       recorderRef={recorderRef}
                      />
                    ) : (
                      previewUrl && <img src={previewUrl} className="w-full h-full object-contain pointer-events-none" />
@@ -722,40 +744,28 @@ export default function App() {
                    <button onClick={handleClear} title="Clear all" aria-label="Clear all" className="w-10 h-10 rounded bg-[#111] text-red-500 border border-gray-800 flex items-center justify-center hover:bg-red-900/30 transition-colors shadow-lg"><X size={18} /></button>
                </div>
 
-               {/* LIVE CLIPS. Dropping one frees its decoder AND its file while
-                   keeping every still already extracted from it — so this is a
-                   real lever on a device that has run out of decoders, not just
-                   a delete button. */}
-               {clips.length > 0 && (
-                 <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5 max-w-[45%]">
-                   {clips.map(c => (
-                     <div key={c.id} className="flex items-center gap-1.5 pl-2 pr-1 py-1 rounded-lg bg-black/70 backdrop-blur border border-white/10 shadow-lg">
-                       <Film size={11} className="text-emerald-400 shrink-0" />
-                       <span className="text-[9px] tracking-wide text-gray-300 truncate" title={c.name}>{c.name}</span>
-                       <span className="text-[8px] tracking-widest text-gray-600 tabular-nums shrink-0">{c.frameCount}f</span>
-                       <button
-                         onClick={() => removeClip(c.id)}
-                         title={`Stop playing ${c.name} (keeps its ${c.frameCount} frames)`}
-                         aria-label={`Stop playing ${c.name}`}
-                         className="w-5 h-5 rounded flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-white/10 transition-colors shrink-0"
-                       ><X size={11} /></button>
-                     </div>
-                   ))}
-                 </div>
-               )}
             </div>
          )}
       </div>
 
       <div className="bg-[#0a0a0a] border-t border-white/10 pb-safe z-50 relative shrink-0">
+         {/* VIDEO DOCK — everything the live stage needs to say or be driven by,
+             OUTSIDE the canvas. This used to float over the collage; chrome on
+             top of the artwork covers the thing the user is here to look at. */}
+         {clips.length > 0 && (
+           <div className="flex items-center px-2 py-1.5 border-b border-white/5 bg-[#0c0c0c]">
+             {/* The live stage portals its clip chips + transport in here. */}
+             <div ref={setStageControlsHost} className="flex-1 flex items-center min-w-0" />
+           </div>
+         )}
          <div className="flex border-b border-white/5 bg-[#0e0e0e]">
-             <button onClick={()=>setActiveTab('simple')} className={`flex-1 py-3 flex items-center justify-center ${activeTab==='simple'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Layout size={16} /></button>
-             <button onClick={()=>setActiveTab('advanced')} className={`flex-1 py-3 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
+             <button onClick={()=>setActiveTab('simple')} title="Layout" aria-label="Layout" className={`flex-1 py-3 flex items-center justify-center ${activeTab==='simple'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Layout size={16} /></button>
+             <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
            <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} />
          ) : (
-           <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} resonance={resonance} setResonance={setResonance} />
+           <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} resonance={resonance} setResonance={setResonance} framePicker={framePicker} setFramePicker={setFramePicker} />
          )}
       </div>
       {notice && (
@@ -770,6 +780,7 @@ export default function App() {
           file={videoQueue[0]}
           isMobile={isMobile}
           queued={videoQueue.length - 1}
+          allowFramePicker={framePicker}
           onCommit={handleVideoFrames}
           onClose={() => setVideoQueue(q => q.slice(1))}
         />

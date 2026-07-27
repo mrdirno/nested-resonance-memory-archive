@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X, FileJson, FileCode, Zap, Share, Download, Image } from 'lucide-react';
+import { X, FileJson, FileCode, Zap, Share, Download, Image, Video } from 'lucide-react';
 
 interface ExportDialogProps {
   isOpen: boolean;
@@ -9,6 +9,16 @@ interface ExportDialogProps {
   onExportProject: () => void;
   canShare: boolean;
   onShare: () => void;
+  /** True when a live clip is on the canvas — the only case where video means anything. */
+  canExportVideo?: boolean;
+  /**
+   * Record the MOVING collage. Must be invoked straight from this button's own
+   * click: starting a capture is gesture-bound, so anything that defers it by a
+   * task records silence, or nothing.
+   */
+  onExportVideo?: (seconds: number) => void;
+  /** Device ceiling, so the offered lengths are ones that will actually survive. */
+  videoMaxSeconds?: number;
 }
 
 const PRESETS = [
@@ -20,10 +30,13 @@ const PRESETS = [
 ];
 
 export const ExportDialog: React.FC<ExportDialogProps> = ({
-  isOpen, onClose, onExport, onExportSVG, onExportProject, canShare, onShare
+  isOpen, onClose, onExport, onExportSVG, onExportProject, canShare, onShare,
+  canExportVideo = false, onExportVideo, videoMaxSeconds = 30
 }) => {
   const [resIndex, setResIndex] = useState(1); // 4K
   const current = PRESETS[resIndex];
+  const videoLengths = [5, 10, 15, 30].filter(v => v <= videoMaxSeconds);
+  const [vidSeconds, setVidSeconds] = useState(10);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -129,6 +142,53 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
           </p>
 
           <div className="h-px bg-[color:var(--line-1)]" />
+
+          {/* ---- VIDEO ------------------------------------------------------ */}
+          {canExportVideo && (
+            <>
+              <div className="flex flex-col gap-1.5">
+                <span className="ui-label">Video</span>
+                <div className="ui-option" style={{ cursor: 'default' }}>
+                  <span className="ui-option__icon" style={{ color: '#ff6a6a' }}><Video size={16} /></span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block ui-label ui-label--on">Record the moving collage</span>
+                    <span className="block ui-caption mt-1">
+                      Captures what is on screen, with the sound of any unmuted clip. MP4 where the
+                      browser can write one.
+                    </span>
+                  </span>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <div className="flex items-center rounded-lg overflow-hidden border border-[color:var(--line-1)] shrink-0">
+                    {videoLengths.map(v => (
+                      <button
+                        key={v}
+                        onClick={() => setVidSeconds(v)}
+                        data-active={vidSeconds === v}
+                        aria-pressed={vidSeconds === v}
+                        className={`px-2.5 py-2 text-[10px] font-black tracking-widest transition-colors ${
+                          vidSeconds === v ? 'bg-white/15 text-white' : 'text-[color:var(--ink-3)] hover:text-white'
+                        }`}
+                      >{v}s</button>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => { onClose(); onExportVideo?.(Math.min(vidSeconds, videoMaxSeconds)); }}
+                    className="ui-btn ui-btn--primary ui-btn--tall flex-1"
+                  >
+                    <Video size={17} />
+                    <span>Record {Math.min(vidSeconds, videoMaxSeconds)}s video</span>
+                  </button>
+                </div>
+                <p className="ui-caption">
+                  Unlike the JPG, this is captured live from the preview — keep the collage on screen
+                  while it records.
+                </p>
+              </div>
+
+              <div className="h-px bg-[color:var(--line-1)]" />
+            </>
+          )}
 
           {/* ---- OTHER FORMATS --------------------------------------------- */}
           <div className="flex flex-col gap-1.5">
