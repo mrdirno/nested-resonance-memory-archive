@@ -12,7 +12,7 @@ import { generateVectorExport } from './engine/color/vectorExport';
 import { addToHistory, HistoryItem } from './lib/history';
 import { Template } from './lib/templates';
 import { AppState, ImageAsset, LayoutItem, LayoutMode, LiveClip, Point, PrimitiveType } from './types';
-import { isVideoFile, formatTimecode, type ExtractedFrame } from './lib/video';
+import { isVideoFile, formatTimecode, probeVideo, extractFrames, revokeFrames, type ExtractedFrame } from './lib/video';
 
 import { Header } from './components/Header';
 import { SimpleControls } from './components/SimpleControls';
@@ -44,9 +44,35 @@ interface UploadOptions {
   grow?: boolean;
   /** Per-file provenance, keyed by the File object itself. */
   meta?: Map<File, AssetProvenance>;
-  /** Noun for the busy overlay ("images" / "frames"). */
+  /** Noun for the progress strip ("images" / "frames"). */
   noun?: string;
+  /**
+   * Advance the batch counter as these land. FALSE for a video's frames: the
+   * unit the user picked was the CLIP, and the clip reports its own sub-
+   * progress — counting its 8 frames as 8 more items makes the bar lurch.
+   */
+  track?: boolean;
 }
+
+/**
+ * Images decoded before the FIRST commit to the canvas.
+ *
+ * Deliberately tiny. Everything before this bite lands is time the user spends
+ * looking at an empty screen, and it is the only stretch of the import with no
+ * visual answer to "is this working". Two pictures is enough to fill the frame
+ * and prove the app came back.
+ */
+const FIRST_BITE = 2;
+
+/** Steady-state bite, once pictures are visibly arriving and latency is hidden. */
+const BITE = 5;
+
+/** One paint. Committed assets are useless if React never gets to draw them. */
+const nextFrame = (): Promise<void> =>
+  new Promise((resolve) => {
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => resolve());
+    else setTimeout(resolve, 16);
+  });
 
 const getCentroid = (path: {x:number, y:number}[]) => {
     let x = 0, y = 0;
@@ -95,8 +121,22 @@ export default function App() {
   const [isLayoutComputing, setIsLayoutComputing] = useState(false);
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [isComputing, setIsComputing] = useState(false);
-  const [statusMsg, setStatusMsg] = useState('');
+  /**
+   * WHAT IS STILL ARRIVING — and never a reason to cover the screen.
+   *
+   * This replaced a `fixed inset-0` black overlay that stayed up until the LAST
+   * file had decoded. Picking 30 things in Photos therefore meant: iOS spends a
+   * while handing the files over, then the app blanks itself for the whole
+   * decode, then everything appears at once. From the outside that is
+   * indistinguishable from a hang, and it hid the one fact worth showing —
+   * how much is left.
+   *
+   * Now the assets commit in bites as they decode, so the collage FILLS while
+   * the import runs, and this drives a slim strip that never takes the canvas.
+   * `sub` is progress within the current item (a clip's frame extraction),
+   * which is the only unit that takes long enough to need its own bar.
+   */
+  const [ingest, setIngest] = useState<{ done: number; total: number; label: string; sub: number } | null>(null);
   const [exportStatus, setExportStatus] = useState('idle');
   const [exportMsg, setExportMsg] = useState('');
   const [aiState, setAiState] = useState('inactive');
@@ -335,52 +375,113 @@ export default function App() {
   };
   useEffect(() => () => { if (noticeTimer.current !== null) window.clearTimeout(noticeTimer.current); }, []);
 
+  // --- INGEST PROGRESS ------------------------------------------------------
+  // Held in a ref as well as state because two selections can overlap: the
+  // second must EXTEND the run in flight, not restart the bar at zero, and a
+  // setState closure cannot see a total another call just raised.
+  const ingestRef = useRef({ done: 0, total: 0, label: '', sub: 0 });
+  const pushIngest = () => setIngest({ ...ingestRef.current });
+
+  const beginIngest = (n: number, label: string) => {
+    const r = ingestRef.current;
+    if (r.total === 0) r.done = 0;
+    r.total += n; r.label = label; r.sub = 0;
+    pushIngest();
+  };
+  /** Mark `n` picked items finished. Clears the strip once the run drains. */
+  const stepIngest = (n: number, label?: string) => {
+    const r = ingestRef.current;
+    if (r.total === 0) return;   // nothing in flight; never resurrect the strip
+    r.done = Math.min(r.total, r.done + n);
+    if (label !== undefined) r.label = label;
+    r.sub = 0;
+    if (r.total > 0 && r.done >= r.total) {
+      r.done = 0; r.total = 0; r.label = ''; r.sub = 0;
+      setIngest(null);
+      return;
+    }
+    pushIngest();
+  };
+  /** Progress WITHIN the current item — only clips are slow enough to need it. */
+  const subIngest = (ratio: number, label: string) => {
+    const r = ingestRef.current;
+    if (r.total === 0) return;
+    r.sub = Math.max(0, Math.min(1, ratio)); r.label = label;
+    pushIngest();
+  };
+
   /** Resolves with the assets that actually landed — the caller needs to know
    *  whether anything decoded before it commits to keeping the source alive. */
   const handleUpload = async (files: File[], opts: UploadOptions = {}): Promise<ImageAsset[]> => {
     if (!files.length) return [];
     const noun = opts.noun || 'images';
     const prefix = opts.idPrefix || 'img';
-    setIsComputing(true);
-    setStatusMsg(`Preparing ${files.length} ${noun}...`);
-    const CHUNK_SIZE = 5;
+    const track = opts.track !== false;
     const allNewAssets: ImageAsset[] = [];
-    await new Promise(r => setTimeout(r, 50));
     let totalR=0, totalG=0, totalB=0, colorCount=0;
 
+    const decodeOne = async (file: File): Promise<ImageAsset | null> => {
+        if (!file.type.startsWith('image/')) return null;
+        const url = URL.createObjectURL(file);
+        const img = await new Promise<HTMLImageElement>(r => {
+            const el = new Image(); el.crossOrigin="anonymous";
+            el.onload=()=>r(el); el.onerror=()=>r(el); el.src=url;
+        });
+        if(!img.width) { URL.revokeObjectURL(url); return null; }
+        const analysis = await analyzeImage(img, globalModel);
+        if(analysis.color) { totalR += analysis.color.r; totalG += analysis.color.g; totalB += analysis.color.b; colorCount++; }
+        // NOTE: createThumbnail returns img.src unchanged when the image is
+        // already <=1024px, so previewSrc may ALIAS src. Never revoke one
+        // without checking the other.
+        const thumbUrl = await createThumbnail(img);
+        return {
+            id: `${prefix}-${Date.now()}-${assetSeq++}`,
+            src: url,
+            previewSrc: thumbUrl,
+            originalName: file.name,
+            width: img.width,
+            height: img.height,
+            analysis,
+            ...(opts.meta?.get(file) ?? {}),
+        };
+    };
+
+    /**
+     * PUT THIS BITE ON THE CANVAS NOW.
+     *
+     * The old code accumulated every asset and called setImages ONCE at the
+     * end, which is why nothing appeared until everything had decoded. The
+     * cell count has to climb with the pool, or the first two pictures land
+     * and the remaining twenty-eight sit in state, invisible.
+     *
+     * IDEMPOTENT on purpose: this updater runs twice under React 18 StrictMode
+     * and `Math.max` is what stops it compounding.
+     */
+    const commit = (batch: ImageAsset[]) => {
+        if (!batch.length) return;
+        setImages(prev => {
+            const combined = [...prev, ...batch];
+            const ceiling = opts.grow ? 36 : 12;
+            updateCountSmart(c => Math.max(c, Math.min(combined.length, ceiling)));
+            return combined;
+        });
+    };
+
     try {
-      for (let i = 0; i < files.length; i += CHUNK_SIZE) {
-          const chunk = files.slice(i, i + CHUNK_SIZE);
-          setStatusMsg(`Processing ${i + 1} - ${Math.min(i+CHUNK_SIZE, files.length)} of ${files.length}...`);
-          const promises = chunk.map(async (file) => {
-              if (!file.type.startsWith('image/')) return null;
-              const url = URL.createObjectURL(file);
-              const img = await new Promise<HTMLImageElement>(r => {
-                  const el = new Image(); el.crossOrigin="anonymous";
-                  el.onload=()=>r(el); el.onerror=()=>r(el); el.src=url;
-              });
-              if(!img.width) { URL.revokeObjectURL(url); return null; }
-              const analysis = await analyzeImage(img, globalModel);
-              if(analysis.color) { totalR += analysis.color.r; totalG += analysis.color.g; totalB += analysis.color.b; colorCount++; }
-              // NOTE: createThumbnail returns img.src unchanged when the image is
-              // already <=1024px, so previewSrc may ALIAS src. Never revoke one
-              // without checking the other.
-              const thumbUrl = await createThumbnail(img);
-              const asset: ImageAsset = {
-                  id: `${prefix}-${Date.now()}-${assetSeq++}`,
-                  src: url,
-                  previewSrc: thumbUrl,
-                  originalName: file.name,
-                  width: img.width,
-                  height: img.height,
-                  analysis,
-                  ...(opts.meta?.get(file) ?? {}),
-              };
-              return asset;
-          });
-          const results = (await Promise.all(promises)).filter(Boolean) as ImageAsset[];
+      let i = 0;
+      let bite = FIRST_BITE;
+      while (i < files.length) {
+          const chunk = files.slice(i, i + bite);
+          const results = (await Promise.all(chunk.map(decodeOne))).filter(Boolean) as ImageAsset[];
           allNewAssets.push(...results);
-          await new Promise(r => setTimeout(r, 10));
+          commit(results);
+          i += chunk.length;
+          if (track) stepIngest(chunk.length, `Adding ${noun}…`);
+          bite = BITE;
+          // Yield the thread so React actually PAINTS what was just committed.
+          // Without this the loop hogs the frame and the staged commits render
+          // in one lump at the end — the exact behaviour being fixed.
+          await nextFrame();
       }
       if(colorCount > 0) {
           const avg = { r: Math.round(totalR/colorCount), g: Math.round(totalG/colorCount), b: Math.round(totalB/colorCount) };
@@ -389,30 +490,106 @@ export default function App() {
       if (allNewAssets.length < files.length) {
           flashNotice(`${files.length - allNewAssets.length} file(s) could not be decoded and were skipped.`);
       }
-      setImages(prev => {
-          const combined = [...prev, ...allNewAssets];
-          // Both branches are IDEMPOTENT: this updater runs twice under React 18
-          // StrictMode and must not compound.
-          if(prev.length === 0 && combined.length > 0) { updateCountSmart(Math.min(combined.length, 12)); }
-          else if (opts.grow && allNewAssets.length > 0) {
-              const target = Math.min(combined.length, Math.max(12, allNewAssets.length), 36);
-              updateCountSmart(c => Math.max(c, target));
-          }
-          return combined;
-      });
-    } catch (e) { console.error("Upload failed", e); flashNotice('Import failed — see console for details.'); }
-    finally { setIsComputing(false); setStatusMsg(''); }
+    } catch (e) {
+      console.error("Upload failed", e);
+      flashNotice('Import failed — see console for details.');
+      // The counter must not strand the strip on screen at 12/30 forever.
+      if (track) stepIngest(Math.max(0, files.length - allNewAssets.length));
+    }
     return allNewAssets;
   };
 
-  /** Single intake for picker AND drop: images go straight in, videos queue for extraction. */
+  /**
+   * SEAMLESS VIDEO INTAKE — no sheet, no questions, no extra taps.
+   *
+   * Dropping a video means "put this in the collage". Everything the app needs
+   * beyond that (a frame count, a sampling strategy, which frames to keep) has a
+   * defensible default, and asking for it turned a one-gesture action into a
+   * three-tap errand that also hid the fact that the clip plays at all.
+   *
+   * The frames are still extracted — they are the surface the clip is drawn
+   * into and the fallback when a device runs out of decoders — it just happens
+   * without making the user watch. Only a real failure interrupts, and only the
+   * opt-in setting brings the picker back.
+   */
+  const autoIngestVideo = async (file: File) => {
+      const shortName = file.name.length > 26 ? `${file.name.slice(0, 23)}…` : file.name;
+      subIngest(0, `Reading ${shortName}…`);
+      try {
+          const probe = await probeVideo(file);
+          if (probe.error || probe.duration <= 0) {
+              flashNotice(probe.error || `${file.name} could not be read.`);
+              return;
+          }
+          if (probe.width <= 0 || probe.height <= 0) {
+              flashNotice(`${file.name} has no visual track — it looks like audio only.`);
+              return;
+          }
+          // Same trim the sheet applies: the first and last instants of a clip
+          // are usually a fade or a black frame.
+          const trim = Math.min(probe.duration * 0.02, 0.25);
+          const res = await extractFrames(file, {
+              frameCount: isMobile ? 8 : 12,
+              strategy: 'smart',
+              maxDim: isMobile ? 1280 : 1600,
+              maxSamples: isMobile ? 48 : 96,
+              startTime: trim,
+              endTime: Math.max(trim + 0.1, probe.duration - trim),
+              knownDuration: probe.duration,
+              onProgress: (p) => subIngest(p.ratio ?? 0, `Reading ${shortName}…`),
+          });
+          try {
+              await handleVideoFrames(res.frames, {
+                  file,
+                  name: file.name,
+                  duration: probe.duration,
+                  width: probe.width,
+                  height: probe.height,
+              });
+          } finally {
+              // handleUpload minted its own URLs from these blobs.
+              revokeFrames(res.frames);
+          }
+      } catch (e) {
+          console.error('[video] auto import failed', e);
+          flashNotice(isMobile
+              ? `${file.name} could not be read. On iPhone, Photos exports are often HEVC — share it as “Most Compatible” (H.264) and retry.`
+              : `${file.name} could not be read.`);
+      } finally {
+          // The clip is DONE as far as the batch is concerned, however it went.
+          stepIngest(1);
+      }
+  };
+
+  /**
+   * Clips are worked through ONE AT A TIME — frame extraction drives a real
+   * decoder and two at once thrash it — but the queue never blocks the thread
+   * the pictures are landing on, and never blocks the UI.
+   */
+  const videoJobRef = useRef<Promise<void>>(Promise.resolve());
+
+  /** Single intake for picker AND drop. Images go straight in; so do videos,
+   *  unless the frame picker has been switched on in Settings. */
   const ingestFiles = (list: File[]) => {
       if (!list.length) return;
       const videos = list.filter(isVideoFile);
       const pics = list.filter(f => !isVideoFile(f) && f.type.startsWith('image/'));
       const rejected = list.length - videos.length - pics.length;
-      if (pics.length) handleUpload(pics);
-      if (videos.length) setVideoQueue(prev => [...prev, ...videos]);
+
+      // Videos routed to the opt-in sheet are NOT counted: the sheet drives its
+      // own progress and nothing here would ever mark them done.
+      const counted = pics.length + (framePicker ? 0 : videos.length);
+      if (counted > 0) beginIngest(counted, `Adding ${counted} item${counted === 1 ? '' : 's'}…`);
+
+      if (pics.length) void handleUpload(pics);
+      if (videos.length) {
+          if (framePicker) setVideoQueue(prev => [...prev, ...videos]);
+          else {
+              videoJobRef.current = videoJobRef.current
+                  .then(async () => { for (const v of videos) await autoIngestVideo(v); })
+                  .catch(() => { /* each clip already flashed its own notice */ });
+          }
+      }
       if (rejected > 0) flashNotice(`${rejected} unsupported file(s) ignored — images and video only.`);
   };
 
@@ -453,7 +630,9 @@ export default function App() {
       });
       // handleUpload mints its OWN object URLs from these blobs, so the sheet is
       // free to revoke the extraction URLs the moment this resolves.
-      const landed = await handleUpload(files, { idPrefix: 'vid', grow: true, meta, noun: 'frames' });
+      // track:false — the CLIP is the unit the user picked. Counting its frames
+      // as separate items makes the batch counter lurch past its own total.
+      const landed = await handleUpload(files, { idPrefix: 'vid', grow: true, meta, noun: 'frames', track: false });
 
       if (landed.length === 0) {
           // Nothing decoded, so nothing carries this clipId and no fragment could
@@ -519,7 +698,8 @@ export default function App() {
       e.preventDefault();
       dragDepth.current = 0;
       setIsDragging(false);
-      if (isComputing) return;
+      // No busy-guard: a drop mid-import EXTENDS the run (beginIngest adds to
+      // the total in flight) instead of being silently thrown away.
       ingestFiles(Array.from(e.dataTransfer.files || []));
   };
 
@@ -671,7 +851,35 @@ export default function App() {
         onDragEnter={onDragEnter} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}
       >
          <div className="absolute inset-0 opacity-[0.05] pointer-events-none z-0" style={{ backgroundImage: 'linear-gradient(#444 1px, transparent 1px), linear-gradient(90deg, #444 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-         {(isComputing || isLayoutComputing) && (<div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm"><div className="flex flex-col items-center animate-in fade-in zoom-in duration-300"><Activity className="animate-spin text-emerald-500 mb-2" size={48} /><span className="text-xs font-black text-white tracking-[0.2em] uppercase drop-shadow-lg">{isLayoutComputing ? 'COMPUTING LAYOUT...' : statusMsg}</span></div></div>)}
+         {/* WHAT IS STILL LANDING. A strip, not a curtain: the collage behind it
+             is filling in as this counts up, and covering that with a black
+             overlay is what made a working import look like a frozen app. */}
+         {ingest && ingest.total > 0 && (
+           <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[120] w-[min(21rem,90vw)] pointer-events-none animate-in fade-in slide-in-from-top-2 duration-200">
+             <div className="rounded-xl bg-[#0d0d0d]/95 border border-white/10 shadow-2xl backdrop-blur px-3 py-2">
+               <div className="flex items-center gap-2">
+                 <Activity size={12} className="animate-spin text-emerald-400 shrink-0" />
+                 <span className="flex-1 min-w-0 truncate text-[9px] font-bold tracking-[0.16em] text-white uppercase">{ingest.label}</span>
+                 <span className="shrink-0 text-[10px] font-black tabular-nums text-emerald-400">{ingest.done}/{ingest.total}</span>
+               </div>
+               <div className="mt-1.5 h-1 rounded-full bg-white/10 overflow-hidden">
+                 <div
+                   className="h-full bg-emerald-500 transition-[width] duration-200"
+                   style={{ width: `${Math.max(3, Math.round(((ingest.done + ingest.sub) / ingest.total) * 100))}%` }}
+                 />
+               </div>
+             </div>
+           </div>
+         )}
+         {/* Layout recompute now fires once per COMMITTED BITE, so it can no
+             longer be a full-screen flash — that would strobe the canvas black
+             for the whole import. */}
+         {isLayoutComputing && !ingest && (
+           <div className="absolute bottom-3 right-3 z-[110] pointer-events-none flex items-center gap-1.5 px-2 py-1 rounded-lg bg-black/70 border border-white/10">
+             <Activity size={10} className="animate-spin text-emerald-400" />
+             <span className="text-[8px] font-bold tracking-[0.18em] text-gray-400 uppercase">Layout</span>
+           </div>
+         )}
          {isDragging && (
             <div className="absolute inset-3 z-[150] pointer-events-none rounded-2xl border-2 border-dashed border-emerald-500/70 bg-emerald-500/5 flex flex-col items-center justify-center gap-2">
                <Film size={26} className="text-emerald-400" />
@@ -679,7 +887,7 @@ export default function App() {
             </div>
          )}
          {images.length === 0 ? (
-            <div onClick={() => !isComputing && fileInputRef.current?.click()} className="relative z-10 group flex flex-col items-center justify-center p-10 border border-dashed rounded-full border-gray-800 cursor-pointer hover:border-emerald-500/50 hover:bg-white/5 active:scale-95 transition-all">
+            <div onClick={() => fileInputRef.current?.click()} className="relative z-10 group flex flex-col items-center justify-center p-10 border border-dashed rounded-full border-gray-800 cursor-pointer hover:border-emerald-500/50 hover:bg-white/5 active:scale-95 transition-all">
                <div className="flex items-center gap-2 mb-3 text-gray-600 group-hover:text-emerald-500 transition-colors">
                   <Upload size={26} />
                   <Film size={26} />
@@ -730,13 +938,13 @@ export default function App() {
                </div>
                <div className="absolute top-4 right-4 flex flex-col gap-2">
                    <button
-                     onClick={() => !isComputing && fileInputRef.current?.click()}
+                     onClick={() => fileInputRef.current?.click()}
                      title="Add more images or video"
                      aria-label="Add more images or video"
                      className="w-10 h-10 rounded bg-[#111] text-gray-300 border border-gray-800 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors shadow-lg"
                    ><Plus size={18} /></button>
                    <button
-                     onClick={() => !isComputing && videoInputRef.current?.click()}
+                     onClick={() => videoInputRef.current?.click()}
                      title="Extract frames from a video"
                      aria-label="Extract frames from a video"
                      className="w-10 h-10 rounded bg-[#111] text-emerald-400 border border-gray-800 flex items-center justify-center hover:bg-emerald-500/15 transition-colors shadow-lg"

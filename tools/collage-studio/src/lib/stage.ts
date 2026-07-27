@@ -325,6 +325,17 @@ interface StillRecord {
 // -----------------------------------------------------------------------------
 
 /**
+ * ONE 1080p STREAM. The unit the decode budget is denominated in.
+ *
+ * The pixel cap is a SECOND guard behind `maxLiveClips`, and its only job is to
+ * stop a handful of oversized sources (4K, 8K) from costing what the clip count
+ * alone says is affordable. Denominating it in streams rather than in a bare
+ * pixel constant is what keeps the two guards from contradicting each other —
+ * see the SCAR note in `detectStageCaps`.
+ */
+const HD_STREAM_PIXELS = 1920 * 1080;   // 2,073,600
+
+/**
  * Measure the device rather than trusting a constant.
  *
  * The real constraint is hardware DECODE SESSIONS, not elements: iOS Safari
@@ -334,10 +345,29 @@ interface StillRecord {
  * either number, so this combines the only signals a page actually gets —
  * coarse pointer + UA family, core count, and device memory — and stays
  * deliberately pessimistic on mobile, because exceeding the cap fails SILENTLY.
+ *
+ * SCAR — "only one video ever plays". `maxLivePixels` used to be a flat
+ * 2_500_000 on mobile while `maxLiveClips` said 3. A 1080p clip is 2,073,600
+ * pixels, so clip #1 was admitted (the `count > 0` escape in refreshAdmission
+ * lets the first one in free) and clip #2 pushed the sum to 4,147,200 — over
+ * the cap. EVERY second clip was deferred, on every phone, forever: the pixel
+ * guard silently overrode the clip guard and pinned the real limit at ONE.
+ * Desktop had the same shape with 4K sources (2 x 8,294,400 > 12,000,000).
+ *
+ * The cap now says what the comment above always claimed: N concurrent 1080p
+ * streams. A 4K clip legitimately costs four of them and still degrades to
+ * fewer simultaneous clips — that is a real hardware limit, not an accident.
  */
 export const detectStageCaps = (view?: Window): StageCaps => {
   const w: Window | undefined = view ?? (typeof window !== 'undefined' ? window : undefined);
-  if (!w) return { maxLiveClips: 3, maxLivePixels: 2_500_000, captureBackingWidth: 720, mobile: true };
+  if (!w) {
+    return {
+      maxLiveClips: 3,
+      maxLivePixels: 3 * HD_STREAM_PIXELS,
+      captureBackingWidth: 720,
+      mobile: true,
+    };
+  }
 
   const nav = w.navigator as Navigator & { deviceMemory?: number; maxTouchPoints?: number };
   const ua = nav?.userAgent || '';
@@ -355,11 +385,23 @@ export const detectStageCaps = (view?: Window): StageCaps => {
     // 3 is the largest number that decodes on an iPhone in Low Power Mode with
     // audio live on one of them. 4+ is a coin flip that fails without an error.
     const maxLiveClips = cores >= 8 && mem >= 6 ? 4 : 3;
-    return { maxLiveClips, maxLivePixels: 2_500_000, captureBackingWidth: 720, mobile: true };
+    return {
+      maxLiveClips,
+      maxLivePixels: maxLiveClips * HD_STREAM_PIXELS,
+      captureBackingWidth: 720,
+      mobile: true,
+    };
   }
   const maxLiveClips = cores >= 8 ? 8 : cores >= 4 ? 6 : 4;
-  const maxLivePixels = mem >= 8 ? 12_000_000 : 8_000_000;
-  return { maxLiveClips, maxLivePixels, captureBackingWidth: 1080, mobile: false };
+  // Memory, not cores, is what a wall of decoded 4K frames actually exhausts —
+  // so a low-RAM desktop keeps its clip count and gives up pixel headroom.
+  const budgetStreams = mem >= 8 ? maxLiveClips : Math.min(maxLiveClips, 4);
+  return {
+    maxLiveClips,
+    maxLivePixels: budgetStreams * HD_STREAM_PIXELS,
+    captureBackingWidth: 1080,
+    mobile: false,
+  };
 };
 
 // -----------------------------------------------------------------------------
@@ -1656,8 +1698,18 @@ export class Stage {
 
     let message: string | null = null;
     if (deferred > 0) {
-      message = live + ' of ' + (live + deferred) + ' clips playing (this device tops out at ' +
-        this.capsClips + ') — the rest show their still frame';
+      // NAME THE GUARD THAT ACTUALLY FIRED. This line used to blame the clip
+      // cap unconditionally, so a pixel-cap deferral read as "1 of 2 clips
+      // playing (this device tops out at 3)" — a self-contradiction that sat
+      // on screen while the real cause went unlooked-at. If the sources are
+      // simply too big, say THAT, because the user's lever is different: a
+      // smaller clip, not fewer of them.
+      const byPixels = clips.some((c) => c.state === 'over-pixel-cap');
+      const reason = byPixels
+        ? 'these clips are too high-resolution to decode together'
+        : 'this device tops out at ' + this.capsClips;
+      message = live + ' of ' + (live + deferred) + ' clips playing (' + reason +
+        ') — the rest show their still frame';
     } else if (this.needsGesture && live > 0) {
       message = 'Tap to start playback';
     }

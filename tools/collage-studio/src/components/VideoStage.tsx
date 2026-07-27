@@ -46,6 +46,10 @@ import {
   getRecordingProfile, remainingSeconds,
   type RecordProgress, type RecordSuccess, type VideoExportSupport,
 } from '../lib/videoExport';
+import {
+  recordFrames, probeFrameExportSupport,
+  type FrameExportSupport,
+} from '../lib/frameExport';
 import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 
 export interface VideoStageProps {
@@ -112,6 +116,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
   const [status, setStatus] = useState<StageStatus | null>(null);
   const [support, setSupport] = useState<VideoExportSupport | null>(null);
+  const [frameSupport, setFrameSupport] = useState<FrameExportSupport | null>(null);
   const [recPhase, setRecPhase] = useState<RecPhase>('idle');
   const [progress, setProgress] = useState<RecordProgress | null>(null);
   const [result, setResult] = useState<RecordSuccess | null>(null);
@@ -153,7 +158,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   // then already cached by the time the user reaches for Record.
   useEffect(() => {
     let alive = true;
+    // BOTH paths, because the answer decides which button the user even gets.
     probeVideoExportSupport().then((s) => { if (alive) setSupport(s); });
+    probeFrameExportSupport().then((s) => { if (alive) setFrameSupport(s); });
     return () => { alive = false; };
   }, []);
 
@@ -234,17 +241,37 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     setProgress(null);
 
     // ---- inside the gesture ----------------------------------------------
-    // Play, sound and the capture stream are all claimed here, synchronously.
+    // Play, sound and (if we are using it) the capture stream are all claimed
+    // here, synchronously — iOS grants a gesture only to the task it fired in.
     stage.resumeFromGesture({ sound: soundRef.current });
     stage.setCaptureActive(true);
 
-    let stream: MediaStream;
-    try {
-      stream = stage.captureStream({ fps: profile.fps, audio: true });
-    } catch (e) {
+    // WHICH RECORDER. MediaRecorder when the device PROVED it works — it is
+    // realtime and it carries the clips' audio for free. Otherwise the
+    // frame-by-frame encoder, which needs neither canvas capture nor
+    // MediaRecorder and is therefore the one that works on iOS.
+    //
+    // The stream is only fetched on the MediaRecorder branch. Fetching it first
+    // and bailing on the throw was a real bug: on a device with no
+    // `canvas.captureStream` — which is exactly the device this fallback exists
+    // for — it returned before the fallback could ever be reached.
+    let stream: MediaStream | null = null;
+    let useFrames = !(support?.supported ?? true);
+
+    if (!useFrames) {
+      try {
+        stream = stage.captureStream({ fps: profile.fps, audio: true });
+      } catch {
+        // The dry run said yes and the real call disagreed. Believe the call.
+        stream = null;
+        useFrames = true;
+      }
+    }
+
+    if (useFrames && !(frameSupport?.supported ?? false)) {
       stage.setCaptureActive(false);
-      onNotice?.("This browser can't record the collage canvas — export a still instead, "
-        + 'or open the studio in Chrome on a computer.');
+      onNotice?.("This browser can't record the collage — export a still instead, "
+        + 'or open the studio in a newer browser.');
       return;
     }
     // ---- gesture spent; everything below may await -------------------------
@@ -255,14 +282,24 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
     const take = Math.min(secondsOverride ?? seconds, profile.maxSeconds);
 
-    record(stage.canvas, {
-      stream,
-      seconds: take,
-      fps: profile.fps,
-      signal: ac.signal,
-      filenameBase: 'collage',
-      onProgress: setProgress,
-    })
+    const run = useFrames || !stream
+      ? recordFrames(stage.canvas, {
+          seconds: take,
+          fps: profile.fps,
+          signal: ac.signal,
+          filenameBase: 'collage',
+          onProgress: setProgress,
+        })
+      : record(stage.canvas, {
+          stream: stream as MediaStream,
+          seconds: take,
+          fps: profile.fps,
+          signal: ac.signal,
+          filenameBase: 'collage',
+          onProgress: setProgress,
+        });
+
+    run
       .then((res) => {
         if (res.ok) {
           setResult(res);
@@ -270,6 +307,13 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         } else if (res.code !== 'aborted') {
           onNotice?.(res.advice ? `${res.message} ${res.advice}` : res.message);
         }
+      })
+      .catch((e: unknown) => {
+        // Both recorders promise never to reject — but a promise with no catch
+        // fails SILENTLY: no result, no message, the button just goes idle. If
+        // that promise is ever broken, say so instead of vanishing.
+        console.error('[collage] recorder rejected', e);
+        onNotice?.(`Recording failed: ${e instanceof Error ? e.message : String(e)}`);
       })
       .finally(() => {
         // Release the take's surface no matter how it ended, so the next take
@@ -280,7 +324,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         setRecPhase('idle');
         setProgress(null);
       });
-  }, [recPhase, seconds, profile.fps, profile.maxSeconds, onNotice]);
+  }, [recPhase, seconds, profile.fps, profile.maxSeconds, onNotice, support, frameSupport]);
 
   const closeResult = useCallback(() => {
     setResult((r) => { revokeRecording(r); return null; });
@@ -288,6 +332,24 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
   // A finished take holds an object URL; free it if the component goes away first.
   useEffect(() => () => { revokeRecording(result); }, [result]);
+
+  /**
+   * CAN THIS DEVICE TAKE THE FILE AT ALL?
+   *
+   * `<a download>` — which is all `downloadRecording` can do — is ignored by
+   * Safari on iOS for a blob: URL. The button appears to work and nothing
+   * arrives, which is the worst possible outcome for a Save button. The share
+   * sheet is the route that actually reaches Photos, so ASK, per file, with the
+   * real type: `canShare` is the only honest answer and it is cheap.
+   */
+  const [shareable, setShareable] = useState(false);
+  useEffect(() => {
+    if (!result) { setShareable(false); return; }
+    try {
+      const f = new File([result.blob], result.filename, { type: result.mimeType || 'video/mp4' });
+      setShareable(!!navigator.canShare?.({ files: [f] }));
+    } catch { setShareable(false); }
+  }, [result]);
 
   const shareResult = useCallback(async () => {
     if (!result) return;
@@ -297,7 +359,11 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         await navigator.share({ files: [file], title: 'Collage', text: 'Video collage' });
         return;
       }
-    } catch { /* user dismissed, or the platform refused the type */ }
+    } catch (e) {
+      // A cancelled share is a CHOICE, not a failure — silently downloading the
+      // file after the user backed out is not what they asked for.
+      if ((e as { name?: string })?.name === 'AbortError') return;
+    }
     downloadRecording(result);
   }, [result]);
 
@@ -314,7 +380,10 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     if (!currentlyAudible) stage.resumeFromGesture({ sound: true });
   }, []);
 
-  const canRecord = support ? support.supported : true; // 'likely' until probed
+  /** Either strategy will do. Only when BOTH are out is recording really gone. */
+  const canRecord = support === null && frameSupport === null
+    ? true                                   // not probed yet; assume yes
+    : !!support?.supported || !!frameSupport?.supported;
   const busy = recPhase !== 'idle';
 
   // Publish the handle the Export sheet calls into.
@@ -499,15 +568,26 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             )}
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => downloadRecording(result)}
-              className="px-4 py-2.5 rounded-xl bg-white text-black text-[10px] font-black tracking-[0.2em] uppercase flex items-center gap-2 hover:bg-gray-200 transition-colors"
-            ><Download size={13} /> Save</button>
-            {!!navigator.share && (
+            {/* On a device that can share the FILE — every iPhone — the share
+                sheet leads, because that is the one that reaches Photos. The
+                plain download stays available, just not as the headline. */}
+            {shareable ? (
+              <>
+                <button
+                  onClick={shareResult}
+                  className="px-4 py-2.5 rounded-xl bg-white text-black text-[10px] font-black tracking-[0.2em] uppercase flex items-center gap-2 hover:bg-emerald-400 transition-colors"
+                ><Share2 size={13} /> Save video</button>
+                <button
+                  onClick={() => downloadRecording(result)}
+                  title="Download the file directly instead of using the share sheet"
+                  className="px-4 py-2.5 rounded-xl bg-[#1a1a1a] border border-white/15 text-white text-[10px] font-black tracking-[0.2em] uppercase flex items-center gap-2 hover:bg-white/10 transition-colors"
+                ><Download size={13} /> Download</button>
+              </>
+            ) : (
               <button
-                onClick={shareResult}
-                className="px-4 py-2.5 rounded-xl bg-[#1a1a1a] border border-white/15 text-white text-[10px] font-black tracking-[0.2em] uppercase flex items-center gap-2 hover:bg-white/10 transition-colors"
-              ><Share2 size={13} /> Share</button>
+                onClick={() => downloadRecording(result)}
+                className="px-4 py-2.5 rounded-xl bg-white text-black text-[10px] font-black tracking-[0.2em] uppercase flex items-center gap-2 hover:bg-gray-200 transition-colors"
+              ><Download size={13} /> Save</button>
             )}
             <button
               onClick={closeResult}

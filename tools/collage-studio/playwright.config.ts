@@ -25,6 +25,13 @@ export default defineConfig({
       name: 'Mobile Safari',
       use: { ...devices['iPhone 12'] },
     },
+    // WebKit on a desktop viewport. Not iOS — but it is the only engine here
+    // that shares a lineage with it, so it catches WebKit-specific breakage
+    // that Chromium never would.
+    {
+      name: 'webkit-desktop',
+      use: { ...devices['Desktop Safari'] },
+    },
   ],
   webServer: {
     command: 'npm run dev',

@@ -66,27 +66,22 @@ const enableFramePicker = async (page: Page) => {
 };
 
 const importClip = async (page: Page, opts: { frames?: number; viaFramePicker?: boolean } = {}) => {
-  const frames = opts.frames ?? 6;
   if (opts.viaFramePicker) await enableFramePicker(page);
   await page.locator('input[type="file"]').first().setInputFiles(CLIP);
 
-  const addVideo = page.getByRole('button', { name: 'ADD VIDEO' });
-  await expect(addVideo).toBeVisible({ timeout: 20_000 });
-
-  // Fewer frames than the default keeps the run quick; the count input is a range.
-  const count = page.getByLabel('Number of frames to extract');
-  if (await count.count()) await count.fill(String(frames));
-
-  // Wait on the SHEET, not on a button. Every footer button is swapped out the
-  // moment extraction starts, so `addVideo` goes hidden while the work is still
-  // running — waiting on that raced the extraction and looked like a product bug.
-  const sheet = page.getByRole('dialog', { name: 'Import video frames' });
-
   if (!opts.viaFramePicker) {
-    await addVideo.click();
-    await expect(sheet).toBeHidden({ timeout: 120_000 });
+    // NO SHEET. Dropping a video means "put this in the collage"; every question
+    // the sheet used to ask has a defensible default, and asking turned a one
+    // gesture action into a three tap errand.
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 120_000 });
     return;
   }
+
+  const sheet = page.getByRole('dialog', { name: 'Import video frames' });
+  const frames = opts.frames ?? 6;
+  const count = page.getByLabel('Number of frames to extract');
+  await expect(count).toBeVisible({ timeout: 20_000 });
+  await count.fill(String(frames));
 
   await page.getByRole('button', { name: 'PICK FRAMES' }).click();
   const add = page.getByRole('button', { name: /ADD \d+ FRAMES?/ });
@@ -106,7 +101,10 @@ const startPlaybackIfGated = async (page: Page) => {
 // decode are all absent there. Testing this feature on it would prove nothing
 // except that the shell cannot do video. Must be file-level — Playwright refuses
 // `channel` inside a describe because it forces a new worker.
-test.use({ channel: 'chromium' });
+// PLAYWRIGHT_ENGINE=webkit runs the same suite on WebKit — the closest engine to
+// iOS Safari available off-device. It is macOS WebKit, NOT iOS, so it is a
+// smoke test for the fallback, never proof about a phone.
+test.use(process.env.PLAYWRIGHT_ENGINE === 'webkit' ? {} : { channel: 'chromium' });
 
 test.describe('video collage', () => {
   test.beforeEach(async ({ page }) => {
@@ -133,19 +131,21 @@ test.describe('video collage', () => {
     }).catch(() => { /* no SW support in this context is fine */ });
   });
 
-  test('the sheet is video-only until the picker is switched on in settings', async ({ page }) => {
-    test.setTimeout(90_000);
+  test('a dropped video goes straight into the collage, with no sheet', async ({ page }) => {
+    test.setTimeout(120_000);
     await page.locator('input[type="file"]').first().setInputFiles(CLIP);
 
-    // The old sheet's ONLY action was "EXTRACT N FRAMES", which is why live
-    // playback looked like it did not exist. Video is the sole way forward now.
-    await expect(page.getByRole('button', { name: 'ADD VIDEO' })).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByRole('button', { name: /EXTRACT \d+ FRAMES?/ })).toHaveCount(0);
-    await expect(page.getByRole('button', { name: 'PICK FRAMES' })).toHaveCount(0);
-    await expect(page.getByText(/keep playing/i)).toBeVisible();
+    // Not one prompt, not one extra tap: the clip lands and plays.
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 120_000 });
+    await expect(page.getByRole('dialog', { name: 'Import video frames' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /Stop playing motion\.webm/ })).toBeVisible();
 
-    // ...and the setting genuinely brings it back.
-    await page.keyboard.press('Escape');
+    // ...and the frames it needed are really in the pool, just not asked about.
+    await expect(page.getByRole('button', { name: /Unmute motion\.webm/ })).toBeVisible();
+  });
+
+  test('the frame picker is off by default and switches on in settings', async ({ page }) => {
+    test.setTimeout(90_000);
     await page.getByRole('button', { name: 'Settings' }).click();
     const toggle = page.getByRole('switch', { name: /Choose frames on import/i });
     await expect(toggle).toHaveAttribute('aria-checked', 'false');
@@ -153,7 +153,8 @@ test.describe('video collage', () => {
     await expect(toggle).toHaveAttribute('aria-checked', 'true');
 
     await page.locator('input[type="file"]').first().setInputFiles(CLIP);
-    await expect(page.getByRole('button', { name: 'PICK FRAMES' })).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByRole('dialog', { name: 'Import video frames' })).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByRole('button', { name: 'PICK FRAMES' })).toBeVisible();
   });
 
   test('the frame-picker route still works when enabled', async ({ page }) => {
@@ -310,6 +311,98 @@ test.describe('video collage', () => {
     expect(file.suggestedFilename()).toMatch(/^collage-.*\.(mp4|webm)$/);
   });
 
+  test('still records when the browser cannot capture a canvas (the iOS path)', async ({ page }) => {
+    test.setTimeout(180_000);
+
+    // Reproduce the failure this fallback exists for: iOS Safari is the platform
+    // where canvas capture is unsupported at every version, so remove it and
+    // MediaRecorder entirely and require a file to come back anyway.
+    await page.addInitScript(() => {
+      delete (HTMLCanvasElement.prototype as unknown as Record<string, unknown>).captureStream;
+      delete (window as unknown as Record<string, unknown>).MediaRecorder;
+      // Sharing off, so this test is about the ENCODER and lands deterministically
+      // on the plain download button. The share route has its own test.
+      Object.defineProperty(navigator, 'canShare', { value: undefined, configurable: true });
+      Object.defineProperty(navigator, 'share', { value: undefined, configurable: true });
+    });
+    await page.reload();
+
+    expect(await page.evaluate(() =>
+      typeof (HTMLCanvasElement.prototype as unknown as Record<string, unknown>).captureStream)).toBe('undefined');
+
+    await importClip(page);
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 20_000 });
+    await startPlaybackIfGated(page);
+
+    await page.getByRole('button', { name: '5s', exact: true }).click();
+    await page.getByRole('button', { name: 'Record video' }).click();
+
+    const preview = page.locator('video[controls]');
+    await expect(preview).toBeVisible({ timeout: 120_000 });
+
+    // MP4, and it really decodes — the whole point is a file Photos will take.
+    const verdict = await preview.evaluate(async (el: HTMLVideoElement) => {
+      if (el.readyState < 1) {
+        await new Promise<void>((res) => {
+          el.addEventListener('loadedmetadata', () => res(), { once: true });
+          setTimeout(res, 8000);
+        });
+      }
+      const t0 = el.currentTime;
+      await el.play().catch(() => { /* controls are present */ });
+      await new Promise((r) => setTimeout(r, 900));
+      return { w: el.videoWidth, h: el.videoHeight, advanced: el.currentTime > t0, dur: el.duration };
+    });
+    expect(verdict.w).toBeGreaterThan(0);
+    expect(verdict.advanced, 'the WebCodecs file must actually play').toBe(true);
+    // Unlike the MediaRecorder path this one writes a real duration.
+    expect(Number.isFinite(verdict.dur) && verdict.dur > 0).toBe(true);
+
+    const dl = page.waitForEvent('download', { timeout: 30_000 });
+    await page.getByRole('button', { name: 'Save' }).click();
+    expect((await dl).suggestedFilename()).toMatch(/\.mp4$/);
+  });
+
+  test('an iPhone-shaped device gets a share-to-Photos save, and the file is MP4', async ({ page }) => {
+    test.setTimeout(180_000);
+
+    // Reproduce an iPhone as far as the export path can see one: no canvas
+    // capture, no MediaRecorder, and a share sheet that accepts files. The
+    // `download` attribute is ignored for blob: URLs on iOS Safari, so a Save
+    // button that only downloads is a button that silently does nothing there.
+    await page.addInitScript(() => {
+      delete (HTMLCanvasElement.prototype as unknown as Record<string, unknown>).captureStream;
+      delete (window as unknown as Record<string, unknown>).MediaRecorder;
+      const shared: { type: string; name: string }[] = [];
+      (window as unknown as Record<string, unknown>).__shared = shared;
+      (navigator as unknown as Record<string, unknown>).canShare = (d: { files?: File[] }) => !!d?.files?.length;
+      (navigator as unknown as Record<string, unknown>).share = async (d: { files?: File[] }) => {
+        for (const f of d.files ?? []) shared.push({ type: f.type, name: f.name });
+      };
+    });
+    await page.reload();
+
+    await importClip(page);
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 20_000 });
+    await startPlaybackIfGated(page);
+
+    await page.getByRole('button', { name: '5s', exact: true }).click();
+    await page.getByRole('button', { name: 'Record video' }).click();
+    await expect(page.locator('video[controls]')).toBeVisible({ timeout: 120_000 });
+
+    // Share leads; download is still there, just not the headline.
+    const save = page.getByRole('button', { name: 'Save video' });
+    await expect(save).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Download' })).toBeVisible();
+
+    await save.click();
+    const shared = await page.evaluate(() => (window as unknown as { __shared: { type: string; name: string }[] }).__shared);
+    expect(shared.length, 'the share sheet must actually receive the file').toBe(1);
+    // MP4/H.264 is what iOS will accept into Photos. WebM would be refused.
+    expect(shared[0].type).toBe('video/mp4');
+    expect(shared[0].name).toMatch(/\.mp4$/);
+  });
+
   test('records the moving collage to a playable file', async ({ page }) => {
     test.setTimeout(180_000);
 
@@ -347,5 +440,124 @@ test.describe('video collage', () => {
     expect(verdict.advanced, 'the recorded file must actually play').toBe(true);
 
     await expect(page.getByRole('button', { name: 'Save' })).toBeVisible();
+  });
+});
+
+// -----------------------------------------------------------------------------
+// A PHONE, AND MORE THAN ONE CLIP.
+//
+// Everything above imports ONE 480x360 clip. That fixture is 172,800 source
+// pixels, so it fits inside any decode budget this app has ever carried — which
+// is precisely why the bug below shipped and survived a green suite: the
+// admission pass was never asked to seat a second clip, and never asked to seat
+// a BIG one.
+//
+// The UA override is what makes this a phone. `detectStageCaps` branches on
+// /iPad|iPhone|iPod/ in the user agent, so overriding it selects the mobile
+// budget on whichever engine is running, while keeping Chromium's VP9 decode.
+// -----------------------------------------------------------------------------
+
+/** 1080p on purpose: 1920x1080 = 2,073,600 pixels EACH. */
+const HD_A = join(HERE, '..', 'fixtures', 'hd_a.webm');
+const HD_B = join(HERE, '..', 'fixtures', 'hd_b.webm');
+
+const IPHONE_UA =
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 '
+  + '(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
+
+test.describe('more than one clip, on a phone', () => {
+  test.use({ userAgent: IPHONE_UA, viewport: { width: 390, height: 844 } });
+
+  test.beforeEach(async ({ page }) => {
+    page.on('pageerror', (e) => console.log('[pageerror]', e.message));
+    await page.route('**/cdn.jsdelivr.net/**', (r) => r.abort());
+    await page.goto(APP_URL);
+    await page.evaluate(async () => {
+      const regs = await navigator.serviceWorker?.getRegistrations?.();
+      if (regs?.length) await Promise.all(regs.map((r) => r.unregister()));
+      if (typeof caches !== 'undefined') {
+        for (const k of await caches.keys()) await caches.delete(k);
+      }
+    }).catch(() => { /* no SW in this context is fine */ });
+  });
+
+  /**
+   * THE REGRESSION.
+   *
+   * `maxLivePixels` was a flat 2_500_000 on mobile while `maxLiveClips` said 3.
+   * Clip #1 is admitted free (refreshAdmission lets the first one in regardless
+   * of the pixel sum); clip #2 pushes the total to 4,147,200 and is deferred as
+   * `over-pixel-cap`. Every phone, every time, forever: exactly ONE video ever
+   * played. The cap is now denominated in 1080p streams, so N clips means N.
+   *
+   * Asserted on the DECODERS, not on the dock: a chip renders for a deferred
+   * clip too — it just shows a still — so counting chips would pass while the
+   * bug was live.
+   */
+  test('two HD clips BOTH play — the pixel budget does not pin it at one', async ({ page }) => {
+    test.setTimeout(240_000);
+
+    await page.locator('input[type="file"]').first().setInputFiles([HD_A, HD_B]);
+
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 200_000 });
+    await expect(page.getByRole('button', { name: /Stop playing hd_a\.webm/ }))
+      .toBeVisible({ timeout: 200_000 });
+    await expect(page.getByRole('button', { name: /Stop playing hd_b\.webm/ }))
+      .toBeVisible({ timeout: 200_000 });
+
+    await startPlaybackIfGated(page);
+
+    // An evicted clip has had its src REMOVED (stage.evict), so `currentSrc` is
+    // the honest test of "this one still owns a decoder".
+    await expect.poll(async () => page.evaluate(() =>
+      Array.from(document.querySelectorAll('video'))
+        .filter((v) => v.currentSrc && v.readyState >= 2 && !v.ended).length,
+    ), {
+      message: 'both clips must hold a live decoder',
+      timeout: 60_000,
+    }).toBe(2);
+
+    // And the stage must not be telling the user it gave up on one of them.
+    await expect(page.getByText(/of 2 clips playing/)).toHaveCount(0);
+  });
+
+  /**
+   * THE IMPORT IS NOT A WALL.
+   *
+   * A `fixed inset-0` scrim used to sit over everything from the first file
+   * until the last one decoded. On a phone, after Photos has already spent a
+   * while handing the files over, that is indistinguishable from a hang — and
+   * it covered the collage that was busy filling in behind it.
+   */
+  test('the import never covers the collage', async ({ page }) => {
+    test.setTimeout(240_000);
+
+    await page.locator('input[type="file"]').first().setInputFiles([HD_A, HD_B]);
+
+    /** Anything viewport-sized under the middle of the screen that is not the art. */
+    const scrimUnderCentre = () => page.evaluate(() => {
+      const el = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
+      if (!el) return '';
+      const r = el.getBoundingClientRect();
+      const coversViewport =
+        r.width >= window.innerWidth * 0.98 && r.height >= window.innerHeight * 0.98;
+      if (!coversViewport) return '';
+      const tag = el.tagName.toLowerCase();
+      if (tag === 'canvas' || tag === 'svg' || tag === 'g' || tag === 'path') return '';
+      return `${tag}.${String((el as HTMLElement).className || '')}`;
+    });
+
+    // Sample repeatedly across the whole import rather than once: the old scrim
+    // was only up WHILE work was in flight, which is exactly when nobody looked.
+    const deadline = Date.now() + 120_000;
+    let sampled = 0;
+    while (Date.now() < deadline) {
+      const blocking = await scrimUnderCentre();
+      expect(blocking, 'a full-screen overlay covered the collage during import').toBe('');
+      sampled++;
+      if (await page.getByRole('button', { name: /Stop playing hd_b\.webm/ }).count()) break;
+      await page.waitForTimeout(150);
+    }
+    expect(sampled, 'the import finished before anything could be sampled').toBeGreaterThan(3);
   });
 });
