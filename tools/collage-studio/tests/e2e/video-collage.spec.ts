@@ -56,23 +56,37 @@ const sampleCanvas = (page: Page): Promise<number> =>
     return h;
   });
 
-/** Drive the import sheet all the way to frames-in-the-pool. */
-const importClip = async (page: Page, frames = 6) => {
+/**
+ * Drive the import sheet the way a user actually does: ONE tap on ADD VIDEO.
+ * `viaFramePicker` walks the curate path instead, so both routes stay covered.
+ */
+const importClip = async (page: Page, opts: { frames?: number; viaFramePicker?: boolean } = {}) => {
+  const frames = opts.frames ?? 6;
   await page.locator('input[type="file"]').first().setInputFiles(CLIP);
 
-  const extract = page.getByRole('button', { name: /EXTRACT \d+ FRAMES?/ });
-  await expect(extract).toBeVisible({ timeout: 20_000 });
+  const addVideo = page.getByRole('button', { name: 'ADD VIDEO' });
+  await expect(addVideo).toBeVisible({ timeout: 20_000 });
 
   // Fewer frames than the default keeps the run quick; the count input is a range.
   const count = page.getByLabel('Number of frames to extract');
   if (await count.count()) await count.fill(String(frames));
 
-  await page.getByRole('button', { name: /EXTRACT \d+ FRAMES?/ }).click();
+  // Wait on the SHEET, not on a button. Every footer button is swapped out the
+  // moment extraction starts, so `addVideo` goes hidden while the work is still
+  // running — waiting on that raced the extraction and looked like a product bug.
+  const sheet = page.getByRole('dialog', { name: 'Import video frames' });
 
+  if (!opts.viaFramePicker) {
+    await addVideo.click();
+    await expect(sheet).toBeHidden({ timeout: 120_000 });
+    return;
+  }
+
+  await page.getByRole('button', { name: 'PICK FRAMES' }).click();
   const add = page.getByRole('button', { name: /ADD \d+ FRAMES?/ });
   await expect(add).toBeVisible({ timeout: 60_000 });
   await add.click();
-  await expect(add).toBeHidden({ timeout: 30_000 });
+  await expect(sheet).toBeHidden({ timeout: 60_000 });
 };
 
 /** Autoplay is allowed to be refused; the gesture path is the supported answer. */
@@ -90,6 +104,14 @@ test.use({ channel: 'chromium' });
 
 test.describe('video collage', () => {
   test.beforeEach(async ({ page }) => {
+    // Surface page-side failures in the test output. An exception inside a React
+    // handler otherwise shows up only as "the element never appeared", which
+    // costs a debugging round-trip every single time.
+    page.on('pageerror', (e) => console.log('[pageerror]', e.message));
+    page.on('console', (m) => {
+      if (m.type() === 'error' || m.type() === 'warning') console.log(`[${m.type()}]`, m.text());
+    });
+
     // The blazeface CDN is optional (the app degrades to aiState 'failed'), but
     // waiting on it makes the run slow and flaky. Let it fail fast.
     await page.route('**/cdn.jsdelivr.net/**', (r) => r.abort());
@@ -103,6 +125,25 @@ test.describe('video collage', () => {
         for (const k of await caches.keys()) await caches.delete(k);
       }
     }).catch(() => { /* no SW support in this context is fine */ });
+  });
+
+  test('the sheet offers video as the default, and says so', async ({ page }) => {
+    test.setTimeout(60_000);
+    await page.locator('input[type="file"]').first().setInputFiles(CLIP);
+
+    // The old sheet's ONLY action was "EXTRACT N FRAMES", which is why the
+    // feature was invisible on open. Video is the primary action now.
+    await expect(page.getByRole('button', { name: 'ADD VIDEO' })).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByRole('button', { name: 'PICK FRAMES' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /EXTRACT \d+ FRAMES?/ })).toHaveCount(0);
+    await expect(page.getByText(/keep playing/i)).toBeVisible();
+  });
+
+  test('the frame-picker route still works', async ({ page }) => {
+    test.setTimeout(120_000);
+    await importClip(page, { viaFramePicker: true });
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByRole('button', { name: /Stop playing motion\.webm/ })).toBeVisible();
   });
 
   test('a clip keeps moving inside the collage', async ({ page }) => {

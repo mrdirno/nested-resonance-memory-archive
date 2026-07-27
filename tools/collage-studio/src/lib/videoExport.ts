@@ -287,6 +287,17 @@ export interface RecordOptions {
  * '' is legal and means "UA default"; it is the last resort, never the first.
  */
 export const RECORDER_MIME_CANDIDATES: readonly string[] = [
+  // avc3 BEFORE avc1, and only for that reason: in avc1 the codec description
+  // lives in the container header and is therefore not allowed to change for
+  // the whole take, so any mid-recording resolution change corrupts the file.
+  // Chromium says so out loud ('the codec description is not supposed to change
+  // during the entire recording ... consider switching to avc3'). avc3 carries
+  // its parameter sets inline, so it simply cannot hit that. Anything that does
+  // not support it — Safari today — falls straight through to the avc1 rungs
+  // below and still gets an Apple-native MP4, because pickRecorderMime only
+  // returns a candidate the UA has confirmed.
+  'video/mp4;codecs=avc3.42E01E,mp4a.40.2',
+  'video/mp4;codecs=avc3.42E01E',
   'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
   'video/mp4;codecs=avc1,mp4a.40.2',
   'video/mp4;codecs=avc1.42E01E',

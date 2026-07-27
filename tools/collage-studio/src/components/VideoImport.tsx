@@ -133,7 +133,17 @@ export const VideoImport: React.FC<VideoImportProps> = ({
     onClose();
   };
 
-  const runExtract = async () => {
+  /**
+   * ONE TAP FROM IMPORT TO PLAYING.
+   *
+   * `autoCommit` skips the review grid entirely. The grid exists to CURATE
+   * stills, which is a real thing to want and stays one tap away — but a user
+   * who dropped a video in order to SEE A VIDEO should not have to walk a frame
+   * picker to get there. The frames are extracted either way (they are what the
+   * clip is drawn into, and they are the fallback when a device runs out of
+   * decoders); auto-commit just stops making that an errand.
+   */
+  const runExtract = async (opts?: { autoCommit?: boolean }) => {
     if (!probe || !range) return;
     dropFrames();
     setResult(null);
@@ -158,6 +168,7 @@ export const VideoImport: React.FC<VideoImportProps> = ({
       });
       if (!aliveRef.current) { revokeFrames(res.frames); return; }
       framesRef.current = res.frames;
+      if (opts?.autoCommit) { await commitFrames(res.frames); return; }
       setResult(res);
       setSelected(new Set(res.frames.map((f) => f.index)));
       setPhase('review');
@@ -172,8 +183,8 @@ export const VideoImport: React.FC<VideoImportProps> = ({
     }
   };
 
-  const commit = async () => {
-    const frames = framesRef.current.filter((f) => selected.has(f.index));
+  /** The single commit path, shared by the one-tap button and the review grid. */
+  const commitFrames = async (frames: ExtractedFrame[]) => {
     if (!frames.length) return;
     setPhase('committing');
     try {
@@ -191,6 +202,8 @@ export const VideoImport: React.FC<VideoImportProps> = ({
       onClose();
     }
   };
+
+  const commit = () => commitFrames(framesRef.current.filter((f) => selected.has(f.index)));
 
   const toggleFrame = (index: number) => {
     setSelected((prev) => {
@@ -288,6 +301,19 @@ export const VideoImport: React.FC<VideoImportProps> = ({
                   <span>{support.message}</span>
                 </div>
               )}
+
+              {/* WHAT IS ABOUT TO HAPPEN. The old sheet only ever said
+                  "EXTRACT N FRAMES", so a user had no way to know the clip now
+                  keeps playing in the collage — the feature was reachable but
+                  invisible, which is the same as absent. */}
+              <div className="flex gap-2 items-start text-[10px] leading-relaxed text-emerald-300/90 bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-3">
+                <Film size={13} className="shrink-0 mt-px" />
+                <span>
+                  This clip will <strong className="text-emerald-200">keep playing</strong> in the collage,
+                  with sound and a record button. The frames below are what it gets drawn into — and what
+                  shows if a device runs out of video decoders.
+                </span>
+              </div>
 
               {/* FRAME COUNT */}
               <div>
@@ -533,16 +559,26 @@ export const VideoImport: React.FC<VideoImportProps> = ({
             <>
               <button
                 onClick={handleClose}
-                className="px-4 py-3.5 rounded-xl bg-[#1a1a1a] border border-white/10 text-[11px] font-black tracking-widest text-gray-400 hover:text-white"
+                className="px-3 py-3.5 rounded-xl bg-[#1a1a1a] border border-white/10 text-[11px] font-black tracking-widest text-gray-400 hover:text-white"
               >
                 CANCEL
               </button>
+              {/* Curating stills is still one tap away — it is just no longer
+                  the ONLY way through, and no longer the loudest thing here. */}
               <button
-                onClick={runExtract}
+                onClick={() => runExtract()}
                 disabled={phase !== 'ready'}
-                className="flex-1 py-3.5 rounded-xl bg-white text-black text-[11px] font-black tracking-widest hover:bg-emerald-400 transition-colors disabled:opacity-30 disabled:hover:bg-white"
+                className="px-3 py-3.5 rounded-xl bg-[#1a1a1a] border border-white/10 text-[11px] font-black tracking-widest text-gray-300 hover:text-white disabled:opacity-30"
               >
-                EXTRACT {frameCount} FRAME{frameCount === 1 ? '' : 'S'}
+                PICK FRAMES
+              </button>
+              {/* THE DEFAULT. Extract + commit + play, in one action. */}
+              <button
+                onClick={() => runExtract({ autoCommit: true })}
+                disabled={phase !== 'ready'}
+                className="flex-1 py-3.5 rounded-xl bg-white text-black text-[11px] font-black tracking-widest hover:bg-emerald-400 transition-colors disabled:opacity-30 disabled:hover:bg-white flex items-center justify-center gap-2"
+              >
+                <Film size={13} /> ADD VIDEO
               </button>
             </>
           )}
