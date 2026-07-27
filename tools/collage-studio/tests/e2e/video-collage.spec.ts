@@ -20,6 +20,15 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+
+/**
+ * Where to point the run. Defaults to the dev server via `baseURL`; set it to a
+ * deployed URL to re-run the SAME proof against a real release —
+ *   COLLAGE_BASE_URL=https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+ * A green dev run only proves the source is right; this proves the artifact
+ * that actually shipped is.
+ */
+const APP_URL = process.env.COLLAGE_BASE_URL || '/';
 /** VP9 + Opus: the one codec pair every Chromium build decodes, so a red test
  *  means the feature broke, never that the fixture was unplayable. */
 const CLIP = join(HERE, '..', 'fixtures', 'motion.webm');
@@ -84,7 +93,16 @@ test.describe('video collage', () => {
     // The blazeface CDN is optional (the app degrades to aiState 'failed'), but
     // waiting on it makes the run slow and flaky. Let it fail fast.
     await page.route('**/cdn.jsdelivr.net/**', (r) => r.abort());
-    await page.goto('/');
+    await page.goto(APP_URL);
+    // A released build ships a cache-first service worker; without this the run
+    // can silently exercise a PREVIOUS release that the SW still holds.
+    await page.evaluate(async () => {
+      const regs = await navigator.serviceWorker?.getRegistrations?.();
+      if (regs?.length) await Promise.all(regs.map((r) => r.unregister()));
+      if (typeof caches !== 'undefined') {
+        for (const k of await caches.keys()) await caches.delete(k);
+      }
+    }).catch(() => { /* no SW support in this context is fine */ });
   });
 
   test('a clip keeps moving inside the collage', async ({ page }) => {
