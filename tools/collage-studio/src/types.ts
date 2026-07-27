@@ -27,6 +27,35 @@ export interface ImageAsset {
   sourceName?: string;
   /** Seconds into that clip. */
   sourceTime?: number;
+  /**
+   * Id of the LIVE clip this frame came from — the binding key `Stage` uses to
+   * replace this still with moving video. Absent means "this fragment is a
+   * photograph and stays still", which is the correct default for every asset
+   * the app has ever produced.
+   */
+  clipId?: string;
+}
+
+/**
+ * A video the user imported that is still available to PLAY, as opposed to the
+ * stills already extracted from it.
+ *
+ * The object URL is minted and owned by the app (not by the import sheet, which
+ * revokes everything it makes): it must outlive the sheet, because the sheet
+ * closes the moment frames are committed and the clip has to keep playing for
+ * the rest of the session.
+ */
+export interface LiveClip {
+  id: string;
+  /** Durable `blob:` URL over the original File. Revoked only by the owner. */
+  url: string;
+  name: string;
+  /** Intrinsic size, used for Stage's decoder pixel-budget admission. */
+  width: number;
+  height: number;
+  durationSec: number;
+  /** How many stills were extracted from it — shown in the clip list. */
+  frameCount: number;
 }
 
 export interface AppState {

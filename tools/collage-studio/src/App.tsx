@@ -11,7 +11,7 @@ import { saveProject, loadProject } from './lib/project';
 import { generateVectorExport } from './engine/color/vectorExport';
 import { addToHistory, HistoryItem } from './lib/history';
 import { Template } from './lib/templates';
-import { AppState, ImageAsset, LayoutItem, LayoutMode, Point, PrimitiveType } from './types';
+import { AppState, ImageAsset, LayoutItem, LayoutMode, LiveClip, Point, PrimitiveType } from './types';
 import { isVideoFile, formatTimecode, type ExtractedFrame } from './lib/video';
 
 import { Header } from './components/Header';
@@ -20,6 +20,7 @@ import { AdvancedControls } from './components/AdvancedControls';
 import { ExportDialog } from './components/ExportDialog';
 import { ResultModal } from './components/ResultModal';
 import { VideoImport } from './components/VideoImport';
+import { VideoStage } from './components/VideoStage';
 import RenderWorker from './workers/render.worker?worker';
 
 let globalModel: any = null;
@@ -29,8 +30,12 @@ let globalModel: any = null;
  *  wrong image to a locked cell. */
 let assetSeq = 0;
 
+/** Same reasoning as `assetSeq`, for clips. A collision here would make two
+ *  different videos share one decoder. */
+let clipSeq = 0;
+
 /** Provenance carried from a video import into the shared asset pool. */
-type AssetProvenance = Pick<ImageAsset, 'sourceKind' | 'sourceName' | 'sourceTime'>;
+type AssetProvenance = Pick<ImageAsset, 'sourceKind' | 'sourceName' | 'sourceTime' | 'clipId'>;
 
 interface UploadOptions {
   /** Distinct id namespace (video frames use 'vid'). */
@@ -101,6 +106,13 @@ export default function App() {
 
   // --- VIDEO INTAKE ---
   const [videoQueue, setVideoQueue] = useState<File[]>([]);
+  /**
+   * Clips still playable, as opposed to the stills already taken from them.
+   * The app owns their object URLs for the whole session — see `LiveClip`.
+   */
+  const [clips, setClips] = useState<LiveClip[]>([]);
+  /** Cleared if the live compositor cannot be created; falls back to the still preview. */
+  const [stageOk, setStageOk] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const dragDepth = useRef(0);
@@ -200,12 +212,32 @@ export default function App() {
     });
   }, [images, effectiveCount, seed, shuffleTrigger, resonance]); 
 
-  // --- RENDER ---
+  /** The pool in draw order. Memoised because the live Stage rebuilds its whole
+   *  draw list whenever this identity changes — a fresh array every render would
+   *  re-do the crop maths and the clip admission pass on every keystroke. */
+  const orderedAssets = useMemo(
+    () => shuffledIndices.map(idx => images[idx]),
+    [shuffledIndices, images],
+  );
+
+  /**
+   * LIVE when there is a clip to play. This is the whole switch between the two
+   * preview paths: photographs get the cheap static JPEG they have always had,
+   * and a composition containing video gets a canvas that keeps moving.
+   * `stageOk` drops it back to the still path if the compositor cannot start.
+   */
+  const liveMode = clips.length > 0 && stageOk;
+
+  // --- RENDER (still path) ---
+  // Skipped entirely in live mode: the Stage is painting the same composition
+  // onto a real canvas, so producing a JPEG of it every state change would be
+  // pure waste — and a second, disagreeing source of truth for the same pixels.
   useEffect(() => {
+    if (liveMode) return;
     if (images.length === 0 || shuffledIndices.length === 0 || layoutItems.length === 0) return;
     const runRender = async () => {
        try {
-         const orderedImages = shuffledIndices.map(idx => images[idx]);
+         const orderedImages = orderedAssets;
          const orderedPreviews = orderedImages.map(img => img ? ({ ...img, src: img.previewSrc || img.src }) : img);
          const canvas = await renderCanvas(PREVIEW_W, aspect, layoutMode, layoutItems, orderedPreviews, seed, zoom, bgColor);
          canvas.toBlob(blob => {
@@ -216,7 +248,7 @@ export default function App() {
     };
     const t = setTimeout(runRender, 50);
     return () => clearTimeout(t);
-  }, [images, layoutItems, shuffledIndices, seed, zoom, bgColor]); 
+  }, [images, layoutItems, shuffledIndices, orderedAssets, seed, zoom, bgColor, liveMode]);
 
   const handleShuffle = () => setShuffleTrigger(prev => prev + 1);
   const handleRemix = async () => {
@@ -284,8 +316,10 @@ export default function App() {
   };
   useEffect(() => () => { if (noticeTimer.current !== null) window.clearTimeout(noticeTimer.current); }, []);
 
-  const handleUpload = async (files: File[], opts: UploadOptions = {}) => {
-    if (!files.length) return;
+  /** Resolves with the assets that actually landed — the caller needs to know
+   *  whether anything decoded before it commits to keeping the source alive. */
+  const handleUpload = async (files: File[], opts: UploadOptions = {}): Promise<ImageAsset[]> => {
+    if (!files.length) return [];
     const noun = opts.noun || 'images';
     const prefix = opts.idPrefix || 'img';
     setIsComputing(true);
@@ -349,6 +383,7 @@ export default function App() {
       });
     } catch (e) { console.error("Upload failed", e); flashNotice('Import failed — see console for details.'); }
     finally { setIsComputing(false); setStatusMsg(''); }
+    return allNewAssets;
   };
 
   /** Single intake for picker AND drop: images go straight in, videos queue for extraction. */
@@ -368,21 +403,79 @@ export default function App() {
     ingestFiles(list);
   };
 
-  /** Frames accepted in the video sheet -> the SAME pool, the SAME analysis path. */
-  const handleVideoFrames = async (frames: ExtractedFrame[], source: { name: string; duration: number }) => {
+  /**
+   * Frames accepted in the video sheet -> the SAME pool, the SAME analysis path.
+   *
+   * AND, new: the clip itself is kept alive. Every frame is stamped with the
+   * `clipId` of the video it came from, which is the binding the live compositor
+   * uses to put the moving clip back where its still is sitting. Extraction is
+   * unchanged — the stills are still real assets, still shuffle and lock and
+   * export exactly as before, and a device that cannot spare a decoder simply
+   * shows them. The clip is an ADDITION to the still, never a replacement.
+   */
+  const handleVideoFrames = async (
+      frames: ExtractedFrame[],
+      source: { file: File; name: string; duration: number; width: number; height: number },
+  ) => {
       if (!frames.length) return;
       const base = (source.name.replace(/\.[^.]+$/, '') || 'clip').slice(0, 40);
+
+      // Minted HERE, not in the sheet: the sheet revokes everything it creates
+      // when it unmounts, and it unmounts the instant this resolves.
+      const clipId = `clip-${Date.now()}-${clipSeq++}`;
+      const clipUrl = URL.createObjectURL(source.file);
+
       const meta = new Map<File, AssetProvenance>();
       const files = frames.map(f => {
           const stamp = formatTimecode(f.time).replace(/:/g, 'm');
           const file = new File([f.blob], `${base}_${String(f.index + 1).padStart(2, '0')}_${stamp}s.jpg`, { type: 'image/jpeg' });
-          meta.set(file, { sourceKind: 'video', sourceName: source.name, sourceTime: f.time });
+          meta.set(file, { sourceKind: 'video', sourceName: source.name, sourceTime: f.time, clipId });
           return file;
       });
       // handleUpload mints its OWN object URLs from these blobs, so the sheet is
       // free to revoke the extraction URLs the moment this resolves.
-      await handleUpload(files, { idPrefix: 'vid', grow: true, meta, noun: 'frames' });
+      const landed = await handleUpload(files, { idPrefix: 'vid', grow: true, meta, noun: 'frames' });
+
+      if (landed.length === 0) {
+          // Nothing decoded, so nothing carries this clipId and no fragment could
+          // ever show the clip. Keeping the URL would leak the whole file.
+          URL.revokeObjectURL(clipUrl);
+          return;
+      }
+      setClips(prev => [...prev, {
+          id: clipId,
+          url: clipUrl,
+          name: source.name,
+          width: source.width,
+          height: source.height,
+          durationSec: source.duration,
+          frameCount: landed.length,
+      }]);
   };
+
+  /** Drop a clip back to stills: frees its decoder and its file, keeps its frames. */
+  const removeClip = (id: string) => {
+      setClips(prev => {
+          const gone = prev.find(c => c.id === id);
+          if (gone) { try { URL.revokeObjectURL(gone.url); } catch { /* already gone */ } }
+          return prev.filter(c => c.id !== id);
+      });
+      // The stills stay in the pool and keep their provenance; only the live
+      // binding is cut, so the fragments fall back to the extracted frame.
+      setImages(prev => prev.map(img => img.clipId === id ? { ...img, clipId: undefined } : img));
+  };
+
+  // Last line of defence for the clip files, on UNMOUNT ONLY.
+  //
+  // It has to read through a ref: with `clips` in the dep list the cleanup would
+  // run on every ADD as well, revoking the URL of every clip already playing the
+  // moment a second one is imported. An empty dep list plus a mirror ref is the
+  // only shape that frees everything exactly once, at the end.
+  const clipsRef = useRef<LiveClip[]>([]);
+  useEffect(() => { clipsRef.current = clips; }, [clips]);
+  useEffect(() => () => {
+      for (const c of clipsRef.current) { try { URL.revokeObjectURL(c.url); } catch { /* ignore */ } }
+  }, []);
 
   // --- DRAG AND DROP (images AND video, same target) ---
   const onDragEnter = (e: React.DragEvent) => {
@@ -414,6 +507,10 @@ export default function App() {
   const handleClear = () => {
       const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter }, style: { background: bgColor } };
       addToHistory(state, images, previewUrl || undefined);
+      // Clearing the pool orphans every clip: nothing is left carrying a clipId,
+      // so the files would sit in memory unreachable for the rest of the session.
+      for (const c of clips) { try { URL.revokeObjectURL(c.url); } catch { /* ignore */ } }
+      setClips([]); setStageOk(true);
       setImages([]); setPreviewUrl(null); setCount(0); setDensity(1); setLockedCells(new Map()); setAvgColor(null);
   };
 
@@ -574,7 +671,28 @@ export default function App() {
          ) : (
             <div className="relative z-10 w-full h-full p-6 flex items-center justify-center" ref={containerRef}>
                <div className="relative shadow-2xl transition-all duration-300" style={{ aspectRatio: aspect, maxHeight: '100%', maxWidth: '100%' }}>
-                   {previewUrl && <img src={previewUrl} className="w-full h-full object-contain pointer-events-none" />}
+                   {liveMode ? (
+                     // Same composition, same 1200-space, same smart crops — but
+                     // the video fragments keep moving and the whole surface can
+                     // be recorded. The lock overlay below is unchanged because
+                     // the Stage paints into the identical coordinate system.
+                     <VideoStage
+                       layoutItems={layoutItems}
+                       orderedAssets={orderedAssets}
+                       clips={clips}
+                       mode={layoutMode}
+                       aspect={aspect}
+                       zoom={zoom}
+                       bgColor={bgColor}
+                       onNotice={flashNotice}
+                       onUnavailable={() => setStageOk(false)}
+                     />
+                   ) : (
+                     previewUrl && <img src={previewUrl} className="w-full h-full object-contain pointer-events-none" />
+                   )}
+                   {/* Lock overlay. Stays click-through-able (each <g> is the
+                       hit target); the Stage transport sits at z-40 so it wins
+                       the clicks that land on it. */}
                    <svg className="absolute inset-0 w-full h-full" viewBox={`0 0 ${PREVIEW_W} ${PREVIEW_H(aspect, PREVIEW_W)}`}>
                        {layoutItems.map((item, i) => {
                            const isLocked = lockedCells.has(i); const d = item.path.map((p: Point, idx: number) => `${idx===0?'M':'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
@@ -603,6 +721,28 @@ export default function App() {
                    ><Film size={18} /></button>
                    <button onClick={handleClear} title="Clear all" aria-label="Clear all" className="w-10 h-10 rounded bg-[#111] text-red-500 border border-gray-800 flex items-center justify-center hover:bg-red-900/30 transition-colors shadow-lg"><X size={18} /></button>
                </div>
+
+               {/* LIVE CLIPS. Dropping one frees its decoder AND its file while
+                   keeping every still already extracted from it — so this is a
+                   real lever on a device that has run out of decoders, not just
+                   a delete button. */}
+               {clips.length > 0 && (
+                 <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5 max-w-[45%]">
+                   {clips.map(c => (
+                     <div key={c.id} className="flex items-center gap-1.5 pl-2 pr-1 py-1 rounded-lg bg-black/70 backdrop-blur border border-white/10 shadow-lg">
+                       <Film size={11} className="text-emerald-400 shrink-0" />
+                       <span className="text-[9px] tracking-wide text-gray-300 truncate" title={c.name}>{c.name}</span>
+                       <span className="text-[8px] tracking-widest text-gray-600 tabular-nums shrink-0">{c.frameCount}f</span>
+                       <button
+                         onClick={() => removeClip(c.id)}
+                         title={`Stop playing ${c.name} (keeps its ${c.frameCount} frames)`}
+                         aria-label={`Stop playing ${c.name}`}
+                         className="w-5 h-5 rounded flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-white/10 transition-colors shrink-0"
+                       ><X size={11} /></button>
+                     </div>
+                   ))}
+                 </div>
+               )}
             </div>
          )}
       </div>

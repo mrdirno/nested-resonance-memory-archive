@@ -14,8 +14,18 @@ export interface VideoImportProps {
   /** The clip to import. Mount with a key derived from the file so state resets. */
   file: File;
   isMobile?: boolean;
-  /** Frames the user accepted. The sheet disposes their URLs once this resolves. */
-  onCommit: (frames: ExtractedFrame[], source: { name: string; duration: number }) => Promise<void> | void;
+  /**
+   * Frames the user accepted. The sheet disposes their URLs once this resolves.
+   *
+   * `source.file` is the ORIGINAL clip, handed up so the app can keep it alive
+   * for live playback. The sheet deliberately does not mint a durable URL for
+   * it: everything this component creates, it revokes on unmount, and a URL the
+   * clip needs for the rest of the session must not be on that hook.
+   */
+  onCommit: (
+    frames: ExtractedFrame[],
+    source: { file: File; name: string; duration: number; width: number; height: number },
+  ) => Promise<void> | void;
   /** Dismiss. Always called after a commit, and on cancel. */
   onClose: () => void;
   /** Shown in the corner when more clips are queued behind this one. */
@@ -167,7 +177,13 @@ export const VideoImport: React.FC<VideoImportProps> = ({
     if (!frames.length) return;
     setPhase('committing');
     try {
-      await onCommit(frames, { name: file.name, duration: probe?.duration ?? 0 });
+      await onCommit(frames, {
+        file,
+        name: file.name,
+        duration: probe?.duration ?? 0,
+        width: probe?.width ?? 0,
+        height: probe?.height ?? 0,
+      });
     } catch (e) {
       console.error('[video] commit failed', e);
     } finally {
