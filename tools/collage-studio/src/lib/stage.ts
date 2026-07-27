@@ -212,6 +212,12 @@ const STROKE_RATIO = 0.001;
 const PLAY_PROBE_MS = 600;
 /** Longest edge of the per-clip poster canvas (the "last good frame" safety net). */
 const POSTER_MAX_DIM = 480;
+/** Sub-frame tolerance for an offline seek — under half a 120 Hz frame. */
+const OFFLINE_SEEK_EPSILON = 0.004;
+
+/** A decoder that will not answer a seek costs this frame, never the render. */
+const OFFLINE_SEEK_TIMEOUT_MS = 400;
+
 /** A poster refresh is an event-driven drawImage; never more often than this. */
 const POSTER_REFRESH_MS = 1500;
 
@@ -477,6 +483,11 @@ export class Stage {
   private destroyed = false;
   private frames = 0;
 
+  // --- offline render --------------------------------------------------------
+  private offline = false;
+  private offlineWasRunning = false;
+  private offlineWantPlay: string[] = [];
+
   // --- media -----------------------------------------------------------------
   private host: HTMLElement | null = null;
   private soundOn = false;
@@ -662,6 +673,127 @@ export class Stage {
   /** Force exactly one repaint on the next frame. */
   requestFrame(): void {
     this.markDirty();
+  }
+
+  // ===========================================================================
+  // OFFLINE RENDER
+  // ===========================================================================
+  //
+  // WHY THIS EXISTS. Both recorders sample a canvas that is playing in REAL
+  // TIME: MediaRecorder pulls from `captureStream`, and `frameExport` samples
+  // on a rAF cadence and snaps its schedule forward when it falls behind. Under
+  // the load this app is FOR — several 1080p decoders composited into clipped
+  // paths every frame — falling behind is the normal case, not the edge case.
+  // Frames are dropped and the wall-clock timestamps record the stall, so the
+  // judder is encoded into the file and no amount of re-recording removes it.
+  //
+  // The fix is to stop treating the take as a performance to be witnessed. In
+  // offline mode nothing advances on its own: the loop is stopped, every clip
+  // is parked, and the ONLY thing that moves the canvas is `renderAtTime`. The
+  // render can then take as long as it needs per frame — 10ms or 400ms — and
+  // still emit a perfectly even timeline, because the timestamps come from the
+  // FRAME INDEX and not from the clock.
+
+  /**
+   * ENTER DETERMINISTIC MODE. Idempotent.
+   *
+   * Order is load-bearing: the play set is captured BEFORE `pauseAll` clears
+   * it, and `setCaptureActive` runs AFTER, because it restarts anything still
+   * marked `wantPlay` — which is exactly what this mode must not have.
+   */
+  beginOfflineRender(): void {
+    if (this.destroyed || this.offline) return;
+    this.offline = true;
+    this.offlineWasRunning = this.running;
+    this.offlineWantPlay = [];
+    this.clips.forEach((c) => { if (c.wantPlay) this.offlineWantPlay.push(c.id); });
+    this.pauseAll();
+    // Freezes the backing size for the whole take. A mid-stream resolution
+    // change is what corrupts an H.264 stream.
+    this.setCaptureActive(true);
+    this.stop();
+  }
+
+  /** Leave deterministic mode and put playback back exactly as it was. */
+  endOfflineRender(): void {
+    if (!this.offline) return;
+    this.offline = false;
+    this.setCaptureActive(false);
+    const want = new Set(this.offlineWantPlay);
+    this.offlineWantPlay = [];
+    this.clips.forEach((c) => {
+      if (!want.has(c.id)) return;
+      c.wantPlay = true;
+      this.tryPlay(c);
+    });
+    if (this.offlineWasRunning) this.start();
+    this.markDirty();
+    this.emitStatus();
+  }
+
+  get isOfflineRendering(): boolean { return this.offline; }
+
+  /**
+   * PAINT THE COMPOSITION EXACTLY AS IT SHOULD LOOK AT `timeSec`.
+   *
+   * Seeks every live clip to its own position on that timeline, waits for the
+   * decoders to land, then draws ONCE. Resolves when the canvas holds the frame
+   * for that timestamp — so the caller can encode it and ask for the next one,
+   * with no clock involved anywhere.
+   */
+  async renderAtTime(timeSec: number, opts: { signal?: AbortSignal } = {}): Promise<void> {
+    if (this.destroyed) return;
+    const targets: ClipRecord[] = [];
+    this.clips.forEach((c) => { if (c.live && !c.broken && c.el) targets.push(c); });
+    if (targets.length > 0) {
+      await Promise.all(targets.map((c) => this.seekClipTo(c, timeSec, opts.signal)));
+    }
+    if (this.destroyed) return;
+    this.dirty = false;
+    this.lastDrawAt = -1e9;      // never let the tick's skip-heuristic apply here
+    this.drawFrame(0);
+    this.frames++;
+  }
+
+  /**
+   * One clip, one exact position. Never rejects: a decoder that will not seek
+   * costs this frame its motion, not the whole render.
+   */
+  private seekClipTo(clip: ClipRecord, timeSec: number, signal?: AbortSignal): Promise<void> {
+    const el = clip.el;
+    if (!el) return Promise.resolve();
+    const dur = el.duration;
+    if (!Number.isFinite(dur) || dur <= 0) return Promise.resolve();
+
+    // Land strictly INSIDE the media. Seeking to exactly `duration` is a no-op
+    // on some engines and fires `ended` on others, and both paint a frame that
+    // is not the one asked for.
+    const span = Math.max(OFFLINE_SEEK_EPSILON, dur - OFFLINE_SEEK_EPSILON);
+    const target = clip.loop
+      ? timeSec % span
+      : Math.min(timeSec, span);
+
+    if (Math.abs(el.currentTime - target) < OFFLINE_SEEK_EPSILON) return Promise.resolve();
+
+    return new Promise<void>((resolve) => {
+      let settled = false;
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        this.view.clearTimeout(timer);
+        el.removeEventListener('seeked', done);
+        el.removeEventListener('error', done);
+        signal?.removeEventListener('abort', done);
+        resolve();
+      };
+      // A seek that never reports back must not hang the render — draw whatever
+      // the decoder last presented and move on.
+      const timer = this.view.setTimeout(done, OFFLINE_SEEK_TIMEOUT_MS);
+      el.addEventListener('seeked', done, { once: true });
+      el.addEventListener('error', done, { once: true });
+      signal?.addEventListener('abort', done, { once: true });
+      try { el.currentTime = target; } catch { done(); }
+    });
   }
 
   get isRunning(): boolean { return this.running; }

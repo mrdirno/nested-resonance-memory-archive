@@ -544,3 +544,319 @@ export const recordFrames = async (
       'Export a still instead.', errText(e), warnings);
   }
 };
+
+// =============================================================================
+// OFFLINE RENDER — the one path that cannot be choppy
+// =============================================================================
+
+/**
+ * Anything that can be stepped to an exact time and drawn. `Stage` implements
+ * it; the type is structural so a test can drive the encoder with a fake.
+ */
+export interface OfflineRenderSource {
+  readonly canvas: HTMLCanvasElement;
+  beginOfflineRender(): void;
+  endOfflineRender(): void;
+  renderAtTime(timeSec: number, opts?: { signal?: AbortSignal }): Promise<void>;
+}
+
+export interface OfflineRenderOptions extends FrameRecordOptions {
+  /** Where on the clips' timeline the take starts. Defaults to 0. */
+  startTimeSec?: number;
+}
+
+/**
+ * RENDER the collage to MP4, frame by frame, with no clock anywhere.
+ *
+ * THE DIFFERENCE FROM `recordFrames`, WHICH IS THE WHOLE POINT.
+ *   `recordFrames` samples a canvas that is playing in real time: it schedules
+ *   on rAF, snaps `nextFrameAt` forward when it falls behind, drops frames
+ *   under encoder backpressure, and stamps each frame with WALL-CLOCK elapsed
+ *   time. Every one of those is a way for a stall to become permanent judder in
+ *   the file. Re-recording cannot fix it, because the stall is the recording.
+ *
+ *   This renders instead. Frame n is defined as "the composition at t = n/fps":
+ *   every clip is SEEKED there, the frame is drawn, and it is stamped
+ *   `n * 1e6/fps` — from the INDEX, never the clock. Backpressure is WAITED on
+ *   rather than dropped. A frame that takes 300ms to assemble is still exactly
+ *   one frame-interval long in the output. The result is mathematically even
+ *   motion on any device, at the cost of taking longer than realtime to
+ *   produce — which is the correct trade for an artifact you keep.
+ *
+ * NEVER THROWS — same typed `RecordResult` as every other path here.
+ * SILENT — same reason as `recordFrames`: no audio graph is involved, and it
+ * says so in the warnings rather than pretending.
+ */
+export const renderOffline = async (
+  source: OfflineRenderSource,
+  options: OfflineRenderOptions = {},
+): Promise<RecordResult> => {
+  const warnings: string[] = [];
+  const profile: RecordingProfile = getRecordingProfile();
+  const onProgress = options.onProgress;
+  const canvas = source?.canvas;
+
+  let phase: RecordPhase = 'preparing';
+  let bytes = 0;
+  let frames = 0;
+  let startedAt = 0;
+
+  const fps = Math.round(clamp(options.fps ?? profile.fps, 1, 60));
+  const seconds = clamp(options.seconds ?? profile.maxSeconds, 1, profile.maxSeconds);
+  const capped = seconds < (options.seconds ?? seconds);
+  const maxBytes = options.maxBytes ?? profile.maxBytes;
+  const totalFrames = Math.max(1, Math.round(seconds * fps));
+  const startAt = Math.max(0, options.startTimeSec ?? 0);
+  /** Exact, integral frame duration in microseconds — the timeline's only unit. */
+  const frameDurUs = Math.max(1, Math.round(1_000_000 / fps));
+
+  const emit = (label: string, ratio: number) => {
+    if (!onProgress) return;
+    const elapsed = startedAt ? nowMs() - startedAt : 0;
+    try {
+      onProgress({
+        phase,
+        ratio: clamp(ratio, 0, 1),
+        // The honest numbers for a render are about the OUTPUT, not the wall
+        // clock: "how much of the video exists" and "how much longer at the
+        // rate we are actually managing".
+        elapsedMs: Math.round(elapsed),
+        remainingMs: frames > 0
+          ? Math.max(0, Math.round((elapsed / frames) * (totalFrames - frames)))
+          : 0,
+        bytes,
+        chunks: frames,
+        label,
+        fps,
+        withAudio: false,
+      });
+    } catch { /* a UI callback must never break a take */ }
+  };
+
+  let started = false;
+  try {
+    if (!source || typeof source.renderAtTime !== 'function') {
+      return failure('internal', 'There is nothing to render.', null, 'no offline source', warnings);
+    }
+    if (!canvas || typeof canvas.getContext !== 'function') {
+      return failure('bad-canvas', 'There is nothing to render yet.',
+        'Add some images or clips, then try again.', 'no canvas', warnings);
+    }
+
+    const Enc = encoderCtor();
+    const Frame = frameCtor();
+    if (!Enc || !Frame) {
+      return failure('unsupported', "This browser can't encode video.",
+        'Export a still instead.', 'no WebCodecs', warnings);
+    }
+
+    // Park the stage BEFORE measuring: setCaptureActive freezes the backing
+    // size, and the encoder must be configured for the size it will actually
+    // receive for every single frame.
+    source.beginOfflineRender();
+    started = true;
+
+    const width = even(canvas.width);
+    const height = even(canvas.height);
+    if (!width || !height) {
+      return failure('bad-canvas', 'There is nothing to render yet.',
+        'Add some images or clips, then try again.', `size ${canvas.width}x${canvas.height}`, warnings);
+    }
+
+    phase = 'probing';
+    emit('Checking this device…', 0);
+    const support = await probeFrameExportSupport({ width, height });
+    if (!support.supported) {
+      phase = 'failed';
+      emit('Not supported', 0);
+      return failure('unsupported', "This device can't encode video.",
+        support.advice, support.reason, warnings);
+    }
+    if (options.signal?.aborted) {
+      return failure('aborted', 'Render cancelled.', null, null, warnings);
+    }
+
+    phase = 'arming';
+    emit('Getting ready…', 0);
+
+    const bitrate = options.videoBitsPerSecond ?? profile.videoBitsPerSecond;
+    const codec = await pickCodec(Enc, width, height, bitrate, fps);
+    if (!codec) {
+      phase = 'failed';
+      emit('Not supported', 0);
+      return failure('unsupported', "This device can't encode video at that size.",
+        'Try a smaller aspect, or export a still.', `no H.264 level accepted ${width}x${height}`, warnings);
+    }
+
+    const muxer = new Muxer({
+      target: new ArrayBufferTarget(),
+      video: { codec: 'avc', width, height },
+      fastStart: 'in-memory',
+      // Unlike the realtime path this track genuinely DOES start at timestamp 0
+      // — the first frame is index 0 by construction — but 'offset' is a no-op
+      // in that case and keeps the two paths behaving identically.
+      firstTimestampBehavior: 'offset',
+    });
+
+    let encoderError: string | null = null;
+    const encoder = new Enc({
+      output: (chunk, meta) => {
+        try {
+          if (chunk.duration == null) {
+            const data = new Uint8Array(chunk.byteLength);
+            chunk.copyTo(data);
+            muxer.addVideoChunkRaw(data, chunk.type, chunk.timestamp, frameDurUs, meta);
+          } else {
+            muxer.addVideoChunk(chunk, meta);
+          }
+          bytes += chunk.byteLength;
+        } catch (e) {
+          encoderError = encoderError ?? errText(e);
+        }
+      },
+      error: (e: DOMException) => { encoderError = encoderError ?? errText(e); },
+    });
+
+    try {
+      encoder.configure({ codec, width, height, bitrate, framerate: fps, avc: { format: 'avc' } });
+    } catch (e) {
+      return failure('start-failed', "This browser wouldn't start encoding.",
+        'Export a still instead.', errText(e), warnings);
+    }
+
+    // ---- the render -------------------------------------------------------
+    phase = 'recording';
+    startedAt = nowMs();
+    emit('Rendering…', 0);
+
+    const keyEvery = Math.max(1, Math.round(fps * KEYFRAME_EVERY_SEC));
+    let stop: 'complete' | 'aborted' | 'memory' | 'error' = 'complete';
+
+    for (let n = 0; n < totalFrames; n++) {
+      if (options.signal?.aborted) { stop = 'aborted'; break; }
+      if (encoderError) { stop = 'error'; break; }
+      if (bytes >= maxBytes) { stop = 'memory'; break; }
+
+      // WAIT for the encoder, never drop. Dropping is what the realtime path
+      // does and it is exactly the defect this function exists to remove: the
+      // output timeline is defined by n, so a slow encoder makes the render
+      // take longer and changes NOTHING about the file.
+      let guard = 0;
+      while (encoder.encodeQueueSize > MAX_QUEUE && !options.signal?.aborted && !encoderError) {
+        await new Promise<void>((r) => setTimeout(r, 4));
+        if (++guard > 5_000) break;      // ~20s: a wedged encoder is an error, not a wait
+      }
+      if (encoderError) { stop = 'error'; break; }
+      if (options.signal?.aborted) { stop = 'aborted'; break; }
+
+      await source.renderAtTime(startAt + n / fps, { signal: options.signal });
+      if (options.signal?.aborted) { stop = 'aborted'; break; }
+
+      try {
+        const vf = new Frame(canvas, {
+          timestamp: n * frameDurUs,     // FROM THE INDEX. Never the clock.
+          duration: frameDurUs,
+        });
+        encoder.encode(vf, { keyFrame: n % keyEvery === 0 });
+        vf.close();                      // MUST close, or the pool starves
+        frames++;
+      } catch (e) {
+        encoderError = encoderError ?? errText(e);
+        stop = 'error';
+        break;
+      }
+
+      if ((n & 3) === 0 || n === totalFrames - 1) {
+        emit(`Rendering frame ${n + 1} of ${totalFrames}…`, (n + 1) / totalFrames);
+      }
+    }
+
+    // Duration is EXACT — it is a frame count times a frame interval, not a
+    // measurement of how long the machine took to get there.
+    const durationMs = Math.round((frames * frameDurUs) / 1000);
+
+    phase = 'finalizing';
+    emit('Finishing…', 1);
+
+    if (stop === 'aborted') {
+      try { encoder.close(); } catch { /* ignore */ }
+      phase = 'cancelled';
+      emit('Cancelled', 1);
+      return failure('aborted', 'Render cancelled.', null, null, warnings);
+    }
+
+    let flushed = true;
+    try {
+      await Promise.race([
+        encoder.flush(),
+        new Promise<void>((_, rej) => setTimeout(() => rej(new Error('flush timed out')), FLUSH_TIMEOUT_MS)),
+      ]);
+    } catch (e) {
+      flushed = false;
+      warnings.push('The encoder did not finish cleanly; the file may be a little short.');
+      encoderError = encoderError ?? errText(e);
+    }
+    try { encoder.close(); } catch { /* ignore */ }
+
+    if (frames === 0) {
+      return failure('empty', 'The render came out empty.',
+        'Add some images or clips, then try again.',
+        encoderError ?? 'no frames encoded', warnings);
+    }
+    if (encoderError && bytes === 0) {
+      return failure('internal', 'The video could not be encoded.',
+        'Try a shorter render, or export a still.', encoderError, warnings);
+    }
+
+    try { muxer.finalize(); } catch (e) {
+      return failure('internal', 'The video file could not be assembled.',
+        'Try a shorter render.', errText(e), warnings);
+    }
+
+    const buffer = (muxer.target as ArrayBufferTarget).buffer;
+    if (!buffer || buffer.byteLength === 0) {
+      return failure('empty', 'The render came out empty.',
+        'Try a shorter render.', encoderError ?? 'empty muxer output', warnings);
+    }
+
+    const blob = new Blob([buffer], { type: 'video/mp4' });
+
+    if (stop === 'memory') {
+      warnings.push('Render stopped early to stay inside this device’s memory budget.');
+    }
+    if (capped) {
+      warnings.push(`Renders are capped at ${profile.maxSeconds}s on this device.`);
+    }
+    warnings.push('Rendered without sound — the offline renderer draws frames, so there is no audio to capture.');
+
+    phase = 'done';
+    emit('Done', 1);
+
+    const mimeType = 'video/mp4';
+    return {
+      ok: true,
+      blob,
+      url: URL.createObjectURL(blob),
+      filename: suggestFilename(options.filenameBase ?? 'collage', mimeType),
+      container: describeContainer(mimeType),
+      mimeType,
+      durationMs,
+      sizeBytes: blob.size,
+      chunks: frames,
+      fps,
+      audio: { requested: false, recorded: false, tracks: 0, sources: 0, monitorConnected: false },
+      validated: flushed ? 'unverified' : 'skipped',
+      capped,
+      warnings,
+    };
+  } catch (e) {
+    phase = 'failed';
+    emit('Failed', 1);
+    return failure('internal', 'Something went wrong while rendering.',
+      'Export a still instead.', errText(e), warnings);
+  } finally {
+    // The stage MUST come back, on every path, or the collage stays frozen and
+    // silent for the rest of the session with no way back short of a reload.
+    if (started) { try { source.endOfflineRender(); } catch { /* ignore */ } }
+  }
+};

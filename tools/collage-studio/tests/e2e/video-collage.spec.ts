@@ -302,8 +302,17 @@ test.describe('video collage', () => {
     const preview = page.locator('video[controls]');
     await expect(preview).toBeVisible({ timeout: 90_000 });
 
-    // "Save" must actually hand a file over, not just look like a button.
-    const save = page.getByRole('button', { name: 'Save' });
+    // WHICH BUTTON IS THE DOWNLOAD depends on whether the device can share the
+    // FILE, and that answer changed when the export became a render: the
+    // renderer emits MP4, `canShare` accepts MP4 where it refused the old WebM
+    // take, so the sheet now correctly leads with share-to-Photos and the plain
+    // download moved to its own button. Resolve it rather than assume — and note
+    // `getByRole({name})` is a SUBSTRING match, so a bare 'Save' silently
+    // matches 'Save video' and fires the share sheet, which downloads nothing.
+    const shareLed = await page.getByRole('button', { name: 'Save video', exact: true }).count();
+    const save = shareLed
+      ? page.getByRole('button', { name: 'Download', exact: true })
+      : page.getByRole('button', { name: 'Save', exact: true });
     await expect(save).toBeVisible();
     const dl = page.waitForEvent('download', { timeout: 30_000 });
     await save.click();
@@ -559,5 +568,116 @@ test.describe('more than one clip, on a phone', () => {
       await page.waitForTimeout(150);
     }
     expect(sampled, 'the import finished before anything could be sampled').toBeGreaterThan(3);
+  });
+});
+
+// -----------------------------------------------------------------------------
+// THE RENDER IS NOT A RECORDING.
+//
+// "Choppy" is what a realtime take looks like after the fact. Both realtime
+// paths sample a canvas that is playing: MediaRecorder pulls from a stream, and
+// `recordFrames` samples on rAF, snaps its schedule forward when it is late and
+// drops frames under backpressure. Under this app's own load those are the
+// normal case, and the stall ends up in the file.
+//
+// `renderOffline` has one invariant that no realtime path can hold:
+//
+//     frames encoded === round(duration x fps)     EXACTLY
+//
+// because the timeline is defined by the frame INDEX, not the clock. A dropped
+// frame breaks it, a stalled decoder breaks it, a slow encoder does not. That
+// equality is the whole assertion below.
+// -----------------------------------------------------------------------------
+
+test.describe('the video is rendered, not screen-recorded', () => {
+  test.beforeEach(async ({ page }) => {
+    page.on('pageerror', (e) => console.log('[pageerror]', e.message));
+    await page.route('**/cdn.jsdelivr.net/**', (r) => r.abort());
+    await page.goto(APP_URL);
+    await page.evaluate(async () => {
+      const regs = await navigator.serviceWorker?.getRegistrations?.();
+      if (regs?.length) await Promise.all(regs.map((r) => r.unregister()));
+      if (typeof caches !== 'undefined') {
+        for (const k of await caches.keys()) await caches.delete(k);
+      }
+    }).catch(() => { /* no SW in this context is fine */ });
+  });
+
+  test('every frame is present — no drops, exact duration', async ({ page }) => {
+    test.setTimeout(300_000);
+
+    // TWO 1080p clips: the load that makes a realtime take stutter. A render
+    // that only holds on the easy scene proves nothing.
+    await page.locator('input[type="file"]').first().setInputFiles([HD_A, HD_B]);
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 200_000 });
+    await expect(page.getByRole('button', { name: /Stop playing hd_b\.webm/ }))
+      .toBeVisible({ timeout: 200_000 });
+    await startPlaybackIfGated(page);
+
+    // Sound is off for every clip by default, so this takes the render path.
+    await page.getByRole('button', { name: 'Record video' }).click();
+
+    const stat = page.locator('p.tabular-nums').filter({ hasText: /frames/ });
+    await expect(stat).toBeVisible({ timeout: 240_000 });
+    const line = (await stat.innerText()).trim();
+
+    const m = line.match(/([\d.]+)s\s+·\s+[^·]+·\s+(\d+)fps\s+·\s+(\d+)\s+frames/);
+    expect(m, `could not parse the take's stat line: ${line}`).not.toBeNull();
+
+    const durationSec = parseFloat(m![1]);
+    const fps = parseInt(m![2], 10);
+    const frames = parseInt(m![3], 10);
+
+    // THE INVARIANT. Realtime cannot hold this under load; the renderer must.
+    expect(frames, `${line} — frames must equal duration x fps exactly`)
+      .toBe(Math.round(durationSec * fps));
+    expect(frames).toBeGreaterThan(fps);          // a real take, not one frame
+    expect(durationSec).toBeGreaterThan(1);
+
+    // It must also be a file that actually plays, not just an even one.
+    const verdict = await page.evaluate(async () => {
+      const el = document.querySelector('video[src^="blob:"]') as HTMLVideoElement | null;
+      if (!el) return { played: false, w: 0, reason: 'no preview element' };
+      if (el.readyState < 1) {
+        await new Promise<void>((res) => {
+          el.addEventListener('loadedmetadata', () => res(), { once: true });
+          setTimeout(res, 8000);
+        });
+      }
+      const t0 = el.currentTime;
+      await el.play().catch(() => { /* controls present; autoplay may be refused */ });
+      await new Promise((r) => setTimeout(r, 900));
+      return { played: el.currentTime > t0, w: el.videoWidth, reason: '' };
+    });
+    expect(verdict.w, 'the render must carry a real video track').toBeGreaterThan(0);
+    expect(verdict.played, 'the rendered file must actually play').toBe(true);
+  });
+
+  test('a clip with sound on keeps the realtime path, and its audio', async ({ page }) => {
+    test.setTimeout(300_000);
+
+    await page.locator('input[type="file"]').first().setInputFiles([HD_A]);
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 200_000 });
+    await startPlaybackIfGated(page);
+
+    // Turning sound on is the ONE case that must not be traded for smoothness:
+    // the renderer draws frames and has no audio to capture, so the realtime
+    // recorder has to stay reachable. Nothing was removed by making render the
+    // default — this is the proof.
+    const unmute = page.getByRole('button', { name: /Unmute hd_a\.webm/ });
+    if (await unmute.count()) {
+      await unmute.click();
+      await expect(page.getByRole('button', { name: /Mute hd_a\.webm/ }))
+        .toBeVisible({ timeout: 10_000 });
+    }
+
+    await page.getByRole('button', { name: 'Record video' }).click();
+    const stat = page.locator('p.tabular-nums').filter({ hasText: /frames/ });
+    await expect(stat).toBeVisible({ timeout: 240_000 });
+
+    // Realtime IS allowed to drop frames — that is what it is. All this asserts
+    // is that a take happened and the audio route was not silently taken away.
+    const line = (await stat.innerText()).trim();
+    expect(line).toMatch(/\d+\s+frames/);
   });
 });

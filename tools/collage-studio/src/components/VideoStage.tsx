@@ -47,7 +47,7 @@ import {
   type RecordProgress, type RecordSuccess, type VideoExportSupport,
 } from '../lib/videoExport';
 import {
-  recordFrames, probeFrameExportSupport,
+  recordFrames, renderOffline, probeFrameExportSupport,
   type FrameExportSupport,
 } from '../lib/frameExport';
 import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
@@ -246,33 +246,50 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     stage.resumeFromGesture({ sound: soundRef.current });
     stage.setCaptureActive(true);
 
-    // WHICH RECORDER. MediaRecorder when the device PROVED it works — it is
-    // realtime and it carries the clips' audio for free. Otherwise the
-    // frame-by-frame encoder, which needs neither canvas capture nor
-    // MediaRecorder and is therefore the one that works on iOS.
+    // WHICH RECORDER — and this order is the whole answer to "why is it choppy".
     //
-    // The stream is only fetched on the MediaRecorder branch. Fetching it first
-    // and bailing on the throw was a real bug: on a device with no
-    // `canvas.captureStream` — which is exactly the device this fallback exists
-    // for — it returned before the fallback could ever be reached.
+    // BOTH realtime paths sample a canvas that is playing: MediaRecorder pulls
+    // from captureStream, and recordFrames samples on rAF, snaps its schedule
+    // forward when late, drops frames under backpressure, and stamps wall-clock
+    // time. Under this app's own load — several 1080p decoders composited into
+    // clipped paths every frame — falling behind is the NORMAL case, so the
+    // stutter gets encoded into the file and no re-take removes it.
+    //
+    // `renderOffline` steps the composition frame by frame and timestamps from
+    // the frame INDEX, so the motion is mathematically even however slow the
+    // device is. It is therefore the DEFAULT. It cannot carry audio (it draws
+    // frames; there is no stream to tap), so the one case that still takes the
+    // realtime path is the one where that would actually cost the user
+    // something: a clip they have deliberately unmuted. Nothing is removed —
+    // turn sound on and you get the old behaviour, leave it off and you get a
+    // flawless render.
+    const wantsSound = !!status?.clips.some((c) => c.audible);
+    const canRender = !!frameSupport?.supported;
+    const useRender = canRender && !wantsSound;
+
     let stream: MediaStream | null = null;
-    let useFrames = !(support?.supported ?? true);
+    let useFrames = false;
 
-    if (!useFrames) {
-      try {
-        stream = stage.captureStream({ fps: profile.fps, audio: true });
-      } catch {
-        // The dry run said yes and the real call disagreed. Believe the call.
-        stream = null;
-        useFrames = true;
+    if (!useRender) {
+      // The stream is only fetched on the MediaRecorder branch. Fetching it
+      // first and bailing on the throw was a real bug: on a device with no
+      // `canvas.captureStream` — exactly the device the fallback exists for —
+      // it returned before the fallback could ever be reached.
+      if (support?.supported ?? true) {
+        try {
+          stream = stage.captureStream({ fps: profile.fps, audio: true });
+        } catch {
+          // The dry run said yes and the real call disagreed. Believe the call.
+          stream = null;
+        }
       }
-    }
-
-    if (useFrames && !(frameSupport?.supported ?? false)) {
-      stage.setCaptureActive(false);
-      onNotice?.("This browser can't record the collage — export a still instead, "
-        + 'or open the studio in a newer browser.');
-      return;
+      useFrames = !stream;
+      if (useFrames && !canRender) {
+        stage.setCaptureActive(false);
+        onNotice?.("This browser can't record the collage — export a still instead, "
+          + 'or open the studio in a newer browser.');
+        return;
+      }
     }
     // ---- gesture spent; everything below may await -------------------------
 
@@ -282,7 +299,15 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
     const take = Math.min(secondsOverride ?? seconds, profile.maxSeconds);
 
-    const run = useFrames || !stream
+    const run = useRender
+      ? renderOffline(stage, {
+          seconds: take,
+          fps: profile.fps,
+          signal: ac.signal,
+          filenameBase: 'collage',
+          onProgress: setProgress,
+        })
+      : useFrames || !stream
       ? recordFrames(stage.canvas, {
           seconds: take,
           fps: profile.fps,
@@ -324,7 +349,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         setRecPhase('idle');
         setProgress(null);
       });
-  }, [recPhase, seconds, profile.fps, profile.maxSeconds, onNotice, support, frameSupport]);
+  }, [recPhase, seconds, profile.fps, profile.maxSeconds, onNotice, support, frameSupport, status]);
 
   const closeResult = useCallback(() => {
     setResult((r) => { revokeRecording(r); return null; });
@@ -504,7 +529,11 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         <button
           onClick={() => startRecording()}
           disabled={!canRecord || liveCount === 0 || busy}
-          title={canRecord ? `Record ${Math.min(seconds, profile.maxSeconds)}s of video` : 'Recording unavailable in this browser'}
+          title={!canRecord
+            ? 'Recording unavailable in this browser'
+            : frameSupport?.supported && !clipRows.some((c) => c.audible)
+              ? `Render ${Math.min(seconds, profile.maxSeconds)}s — frame by frame, no dropped frames (silent)`
+              : `Record ${Math.min(seconds, profile.maxSeconds)}s in real time, with sound`}
           aria-label="Record video"
           className="w-8 h-8 rounded-lg text-red-400 flex items-center justify-center hover:bg-red-500/15 disabled:opacity-30 transition-colors shrink-0"
         >{recPhase === 'saving' ? <Loader2 size={14} className="animate-spin" /> : <Video size={15} />}</button>
@@ -559,8 +588,12 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           />
           <div className="text-center">
             <p className="text-[10px] font-black tracking-[0.2em] text-white uppercase">{result.container.label}</p>
+            {/* FRAME COUNT IS NOT TRIVIA. An offline render emits exactly
+                duration x fps frames; a realtime take drops whatever the device
+                could not keep up with, and this line is where that shows. */}
             <p className="text-[9px] tracking-widest text-gray-500 mt-1 tabular-nums">
               {(result.durationMs / 1000).toFixed(1)}s · {fmtBytes(result.sizeBytes)} · {result.fps}fps
+              {' · '}{result.chunks} frames
               {result.audio.recorded ? ' · sound' : ' · silent'}
             </p>
             {result.warnings.length > 0 && (
