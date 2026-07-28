@@ -96,15 +96,9 @@ const startPlaybackIfGated = async (page: Page) => {
   if (await tap.isVisible().catch(() => false)) await tap.click();
 };
 
-// The FULL Chromium build, not the default headless shell: the shell ships
-// without the media stack, so `MediaRecorder`, `canvas.captureStream()` and VP9
-// decode are all absent there. Testing this feature on it would prove nothing
-// except that the shell cannot do video. Must be file-level — Playwright refuses
-// `channel` inside a describe because it forces a new worker.
-// PLAYWRIGHT_ENGINE=webkit runs the same suite on WebKit — the closest engine to
-// iOS Safari available off-device. It is macOS WebKit, NOT iOS, so it is a
-// smoke test for the fallback, never proof about a phone.
-test.use(process.env.PLAYWRIGHT_ENGINE === 'webkit' ? {} : { channel: 'chromium' });
+// NOTE: the Chromium `channel` lives in playwright.config.ts, per project. It
+// used to be set file-wide here, which handed it to the WebKit projects as well
+// and made them fail to LAUNCH — see the comment above `projects` in the config.
 
 test.describe('video collage', () => {
   test.beforeEach(async ({ page }) => {

@@ -22,15 +22,21 @@ test.describe('Performance Budget', () => {
   test('Memory usage should be stable', async ({ page }) => {
     // Note: implementation requires launching chrome with --enable-precise-memory-info
     await page.goto('/');
-    
+
     // Simulate usage
     await page.waitForTimeout(1000);
-    
+
     const memory = await page.evaluate(() => (performance as any).memory?.usedJSHeapSize);
-    if (memory) {
-        const mb = memory / 1024 / 1024;
-        console.log(`Heap: ${mb.toFixed(2)} MB`);
-        expect(mb).toBeLessThan(50); // Initial load
-    }
+
+    // SKIP LOUDLY, DO NOT PASS QUIETLY. `performance.memory` is Chromium-only,
+    // so on both WebKit projects the old `if (memory) { expect(...) }` asserted
+    // NOTHING and still reported green — a budget that cannot fail on the very
+    // engine the owner's phone runs. An explicit skip puts the hole in the
+    // report where it can be counted.
+    test.skip(!memory, 'performance.memory is Chromium-only — no heap budget on this engine');
+
+    const mb = memory / 1024 / 1024;
+    console.log(`Heap: ${mb.toFixed(2)} MB`);
+    expect(mb).toBeLessThan(50); // Initial load
   });
 });

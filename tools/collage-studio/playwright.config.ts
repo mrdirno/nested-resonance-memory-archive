@@ -12,14 +12,25 @@ export default defineConfig({
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
   },
+  // `channel: 'chromium'` belongs HERE, per Chromium project — never at file
+  // scope in a spec. Applied file-wide it is handed to the WebKit projects too,
+  // and `browserType.launch` rejects it outright ("Unsupported webkit channel
+  // 'chromium'"), so both WebKit projects — the only iOS-shaped coverage this
+  // repo has — failed to LAUNCH on every run. Not a red assertion: no assertion
+  // at all, on the engine the owner's phone actually uses.
+  //
+  // Why the full build rather than the default headless shell: the shell ships
+  // without the media stack, so MediaRecorder, canvas.captureStream() and VP9
+  // decode are all absent. Testing the video features on it proves only that
+  // the shell cannot do video.
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
     },
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
+      use: { ...devices['Pixel 5'], channel: 'chromium' },
     },
     {
       name: 'Mobile Safari',
