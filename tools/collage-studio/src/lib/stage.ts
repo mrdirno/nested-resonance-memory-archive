@@ -711,6 +711,12 @@ export class Stage {
     // Freezes the backing size for the whole take. A mid-stream resolution
     // change is what corrupts an H.264 stream.
     this.setCaptureActive(true);
+    // AND RE-APPLY IT, because `setCaptureActive` is a NO-OP when the caller
+    // already armed capture — VideoStage does, synchronously inside the tap,
+    // since iOS grants a gesture only to the task it fired in. The size that
+    // applied was therefore the REALTIME one, chosen before `offline` was set.
+    // Depending on call order here is what kept the render at 720/1080.
+    this.applySize(true);
     this.stop();
   }
 
@@ -949,7 +955,15 @@ export class Stage {
     const lh = this.logicalH;
     let target: number;
     if (this.capturing) {
-      target = this.captureBackingW;               // frozen for the whole take
+      // `captureBackingW` is a REALTIME budget — 720 on mobile, 1080 on desktop
+      // — sized so a live take can composite fast enough to keep up with a
+      // clock. An OFFLINE render pays none of that: it seeks, draws and encodes
+      // one frame at a time and is bounded by patience, not by frame rate. It
+      // inheriting the realtime cap made the exported file LOWER RESOLUTION
+      // THAN THE PREVIEW ON THE SAME SCREEN — 720 wide from 1080p sources on
+      // the one device that matters. Still frozen for the whole take either
+      // way: a mid-stream resolution change is what corrupts an H.264 stream.
+      target = this.offline ? this.maxBackingW : this.captureBackingW;
     } else {
       const cssW = this.cv.clientWidth || lw;
       const dpr = this.view?.devicePixelRatio || 1;

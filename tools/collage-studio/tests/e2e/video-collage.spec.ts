@@ -636,7 +636,11 @@ test.describe('the video is rendered, not screen-recorded', () => {
 
     // It must also be a file that actually plays, not just an even one.
     const verdict = await page.evaluate(async () => {
-      const el = document.querySelector('video[src^="blob:"]') as HTMLVideoElement | null;
+      // MUST be the RESULT preview, not a source clip. Stage mints a hidden
+      // <video src="blob:..."> per live clip, so a `video[src^="blob:"]` query
+      // returns a 1920x1080 FIXTURE and every assertion below silently grades
+      // the input instead of the output. `controls` is unique to the result.
+      const el = document.querySelector('video[controls]') as HTMLVideoElement | null;
       if (!el) return { played: false, w: 0, reason: 'no preview element' };
       if (el.readyState < 1) {
         await new Promise<void>((res) => {
@@ -651,6 +655,16 @@ test.describe('the video is rendered, not screen-recorded', () => {
     });
     expect(verdict.w, 'the render must carry a real video track').toBeGreaterThan(0);
     expect(verdict.played, 'the rendered file must actually play').toBe(true);
+
+    // RESOLUTION IS PART OF "NOT CHOPPY BUT ALSO NOT WORSE".
+    //
+    // `captureBackingW` is a REALTIME compositing budget — 720 on mobile, 1080
+    // on desktop — chosen so a live take can keep up. An offline render pays
+    // none of that: it seeks, draws and encodes one frame at a time with no
+    // clock, so it can afford the full logical surface. Inheriting the realtime
+    // cap made the export LOWER RESOLUTION THAN THE PREVIEW ON THE SAME SCREEN.
+    expect(verdict.w, `render must use the full backing surface, got ${verdict.w}px`)
+      .toBeGreaterThanOrEqual(1200);
   });
 
   test('a clip with sound on keeps the realtime path, and its audio', async ({ page }) => {
