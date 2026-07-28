@@ -87,6 +87,12 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
           images.push({
             id: meta.id,
             src: url,
+            // REQUIRED. Without it every loaded asset carries previewSrc
+            // undefined, and stencil.ts does `img.src = imgAsset.previewSrc`,
+            // which stringifies to "undefined", resolves to <base>/undefined
+            // and 404s. The archive stores one image per asset, so the full
+            // image IS the preview here.
+            previewSrc: url,
             originalName: meta.originalName || meta.filename,
             width: imgElem.width,
             height: imgElem.height,

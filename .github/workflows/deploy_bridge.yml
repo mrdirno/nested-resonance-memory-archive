@@ -58,6 +58,15 @@ jobs:
         run: npm ci
         working-directory: tools/collage-studio
 
+      # `vite build` is esbuild: it STRIPS types without checking them, so a real
+      # type error ships silently. One of the ten this gate was added to catch
+      # was a live freeze (a project load left previewSrc undefined and the
+      # stencil layout awaited an onload that never came). Runs BEFORE the build
+      # so a broken type never reaches the artifact.
+      - name: Typecheck (collage studio)
+        run: npm run typecheck
+        working-directory: tools/collage-studio
+
       - name: Build (collage studio)
         run: npm run build
         working-directory: tools/collage-studio

@@ -264,13 +264,32 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     // turn sound on and you get the old behaviour, leave it off and you get a
     // flawless render.
     const wantsSound = !!status?.clips.some((c) => c.audible);
-    const canRender = !!frameSupport?.supported;
-    const useRender = canRender && !wantsSound;
+    const useRender = !!frameSupport?.supported;
+
+    // ONE EXPORT PATH. The render was briefly conditional — realtime was kept
+    // for a deliberately unmuted clip, since a renderer that draws frames has
+    // no audio to capture. The first run of the Mobile Safari project (which
+    // had never been able to launch) killed that idea: with sound on, the take
+    // produced NOTHING AT ALL and sat there until the 240s timeout. Every
+    // engine reports MediaRecorder + captureStream present, so the capability
+    // probe says yes and the real take then never delivers — precisely the
+    // WebKit failures frameExport's own header cites (229611 blank video,
+    // 181663 freeze-on-stop, `onstop` never firing).
+    //
+    // Trading a path that ALWAYS works and is always smooth for one that hangs
+    // on the owner's own engine family, to keep audio on one clip, is the wrong
+    // trade. Export is silent and says so. Playback keeps its sound — that is
+    // untouched, and it is where sound was actually being used.
+    if (wantsSound) {
+      onNotice?.('Exports are silent — the renderer draws frames, so there is no audio to '
+        + 'capture. Sound still plays in the collage.');
+    }
 
     let stream: MediaStream | null = null;
     let useFrames = false;
 
     if (!useRender) {
+      // No WebCodecs on this device — fall back to whatever CAN record.
       // The stream is only fetched on the MediaRecorder branch. Fetching it
       // first and bailing on the throw was a real bug: on a device with no
       // `canvas.captureStream` — exactly the device the fallback exists for —
@@ -284,7 +303,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         }
       }
       useFrames = !stream;
-      if (useFrames && !canRender) {
+      // We are already inside `!useRender`, i.e. the renderer is unavailable —
+      // so if there is no stream either, nothing on this device can record.
+      if (useFrames) {
         stage.setCaptureActive(false);
         onNotice?.("This browser can't record the collage — export a still instead, "
           + 'or open the studio in a newer browser.');
@@ -531,9 +552,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           disabled={!canRecord || liveCount === 0 || busy}
           title={!canRecord
             ? 'Recording unavailable in this browser'
-            : frameSupport?.supported && !clipRows.some((c) => c.audible)
+            : frameSupport?.supported
               ? `Render ${Math.min(seconds, profile.maxSeconds)}s — frame by frame, no dropped frames (silent)`
-              : `Record ${Math.min(seconds, profile.maxSeconds)}s in real time, with sound`}
+              : `Record ${Math.min(seconds, profile.maxSeconds)}s in real time`}
           aria-label="Record video"
           className="w-8 h-8 rounded-lg text-red-400 flex items-center justify-center hover:bg-red-500/15 disabled:opacity-30 transition-colors shrink-0"
         >{recPhase === 'saving' ? <Loader2 size={14} className="animate-spin" /> : <Video size={15} />}</button>

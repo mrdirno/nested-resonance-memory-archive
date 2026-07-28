@@ -36,8 +36,15 @@ export const computeStencilLayout = async (
         const imgAsset = images[i];
         const img = new Image();
         img.crossOrigin = "anonymous";
-        img.src = imgAsset.previewSrc; // Use thumb for speed
-        await new Promise(r => img.onload = r);
+        img.src = imgAsset.previewSrc || imgAsset.src; // Use thumb for speed
+        // onerror TOO, or one unreadable image hangs computeStencilLayout
+        // forever: setLayoutItems is never called, the Stencil tile lights up
+        // and the canvas freezes with nothing logged.
+        await new Promise<void>(r => {
+            img.onload = () => r();
+            img.onerror = () => r();
+        });
+        if (!img.width) continue;   // decoded nothing — skip, do not divide by 0
         
         // Resize to small processing grid
         const procW = 100;

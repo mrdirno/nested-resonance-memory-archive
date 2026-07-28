@@ -5,6 +5,12 @@ import {
 } from '../engine/geom/primitives';
 import { ImageAsset, PrimitiveType, LayoutItem, LayoutMode } from '../types';
 
+// Four modules (stencil, sandbox, vectorExport, templates) import these THROUGH
+// this file. It never re-exported them, so all four were type-errors and
+// vectorExport's path builder silently degraded to `any` — on the one export
+// path with no test coverage.
+export type { LayoutItem, Point } from '../types';
+
 export const createRng = (s: number) => {
   let t = s + 0x6D2B79F5;
   return () => {

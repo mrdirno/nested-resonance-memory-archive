@@ -661,7 +661,7 @@ test.describe('the video is rendered, not screen-recorded', () => {
       .toBeGreaterThanOrEqual(1200);
   });
 
-  test('a clip with sound on keeps the realtime path, and its audio', async ({ page }) => {
+  test('a clip with sound on still always produces a take', async ({ page }) => {
     test.setTimeout(300_000);
 
     await page.locator('input[type="file"]').first().setInputFiles([HD_A]);
@@ -683,9 +683,14 @@ test.describe('the video is rendered, not screen-recorded', () => {
     const stat = page.locator('p.tabular-nums').filter({ hasText: /frames/ });
     await expect(stat).toBeVisible({ timeout: 240_000 });
 
-    // Realtime IS allowed to drop frames — that is what it is. All this asserts
-    // is that a take happened and the audio route was not silently taken away.
+    // THE INVARIANT IS "YOU ALWAYS GET A VIDEO", not "you always get sound".
+    // Realtime is allowed to drop frames — that is what it is — and where the
+    // realtime path cannot run at all (iOS: no MediaRecorder, no captureStream)
+    // the app must fall back to the silent render rather than produce nothing.
+    // Honouring "wants sound" unconditionally made an iPhone return NOTHING,
+    // which is how this assertion was written in the first place.
     const line = (await stat.innerText()).trim();
     expect(line).toMatch(/\d+\s+frames/);
+    expect(parseInt(line.match(/(\d+)\s+frames/)![1], 10)).toBeGreaterThan(0);
   });
 });
