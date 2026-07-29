@@ -232,19 +232,37 @@ export default function App() {
   useEffect(() => {
     if (images.length === 0) return;
     setShuffledIndices(prev => {
-        const newIndices = new Array(effectiveCount).fill(-1);
+        /**
+         * ONE SLOT PER ACTUAL CELL — not per REQUESTED cell.
+         *
+         * `effectiveCount` is what the user asked for; `layoutItems.length` is
+         * what the construction produced, and for most of the generative roster
+         * those differ on purpose. A kaleidoscope must contain a whole number of
+         * mirrored wedges, a Flower of Life emits seven cells per lattice
+         * centre, Penrose deflates in phi^2 steps — the count is documented as a
+         * target, not a guarantee.
+         *
+         * Sizing the assignment to the request left every cell past it holding
+         * `undefined`, and `renderCanvas` skips those — so asking for 70
+         * fragments of a 105-cell kaleidoscope painted 35 of them BLACK, in
+         * wedges, which reads as a broken layout rather than a missing image.
+         * The legacy grid modes returned exactly `count`, so nothing downstream
+         * had ever been told the two could differ.
+         */
+        const slotCount = Math.max(effectiveCount, layoutItems.length);
+        const newIndices = new Array(slotCount).fill(-1);
         const rng = createRng(seed + shuffleTrigger);
         const imageIdToIndex = new Map(images.map((img, i) => [img.id, i]));
         const usedImageIndices = new Set<number>();
         lockedCells.forEach((imgId, cellIdx) => {
             const currentImgIdx = imageIdToIndex.get(imgId);
-            if (cellIdx < effectiveCount && currentImgIdx !== undefined) {
+            if (cellIdx < slotCount && currentImgIdx !== undefined) {
                 newIndices[cellIdx] = currentImgIdx;
                 usedImageIndices.add(currentImgIdx);
             }
         });
         const emptySlots = [];
-        for(let i=0; i<effectiveCount; i++) { if(newIndices[i] === -1) emptySlots.push(i); }
+        for(let i=0; i<slotCount; i++) { if(newIndices[i] === -1) emptySlots.push(i); }
         if (emptySlots.length > 0) {
             const unusedImages = images.map((_, i) => i).filter(i => !usedImageIndices.has(i));
             const allImages = images.map((_, i) => i);
@@ -273,7 +291,10 @@ export default function App() {
         }
         return newIndices;
     });
-  }, [images, effectiveCount, seed, shuffleTrigger, resonance]); 
+    // `layoutItems.length` is a dependency because the cell count is an OUTPUT
+    // of the layout, not an input to it — without it the assignment keeps the
+    // size from the previous layout and the new one is short by the difference.
+  }, [images, effectiveCount, layoutItems.length, seed, shuffleTrigger, resonance]);
 
   /** The pool in draw order. Memoised because the live Stage rebuilds its whole
    *  draw list whenever this identity changes — a fresh array every render would
