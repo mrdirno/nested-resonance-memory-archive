@@ -383,7 +383,8 @@ export const mudCrack = (ctx: GenContext): LayoutItem[] => {
   const target = Math.max(2, Math.min(400, count));
 
   let guard = 0;
-  while (cells.length < target && guard++ < target * 12) {
+  let stuck = 0;
+  while (cells.length < target && guard++ < target * 30) {
     // Crack the LARGEST cell — drying stress concentrates in the biggest
     // unrelieved area, which is why mud cells trend toward equal size while
     // staying irregular in shape.
@@ -395,7 +396,10 @@ export const mudCrack = (ctx: GenContext): LayoutItem[] => {
     const cell = cells[bi];
     const c = centroid(cell);
     const b = boundsOf(cell);
-    if (b.w < 8 || b.h < 8) break;
+    // Skip, never abandon — see `shards`. Landing on an unsplittable cell says
+    // nothing about the cells that are still splittable.
+    if (b.w < 8 || b.h < 8) { if (++stuck > 40) break; continue; }
+    stuck = 0;
 
     // The crack passes near the centroid, perpendicular-ish to the long axis:
     // cracks relieve the greatest stress, which runs across the widest span.
@@ -408,7 +412,7 @@ export const mudCrack = (ctx: GenContext): LayoutItem[] => {
     const p = clipToHalfPlane(cell, a, n);
     const q = clipToHalfPlane(cell, a, { x: -n.x, y: -n.y });
     if (p.length >= 3 && q.length >= 3) cells.splice(bi, 1, p, q);
-    else break;
+    else if (++stuck > 40) break;
   }
   return emit(cells, W, H, gutter, 'mud');
 };

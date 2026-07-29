@@ -43,7 +43,13 @@ export const kaleidoscope = (ctx: GenContext): LayoutItem[] => {
 
   // Fold count is the single most expressive parameter. Low folds read
   // architectural, high folds read like a snowflake.
-  const folds = ctx.opts?.folds ?? (6 + Math.floor(rng() * 7));      // 6..12
+  // FOLDS MUST SCALE WITH THE REQUEST. A 12-fold kaleidoscope cannot produce
+  // fewer than 12 x rings x 2 cells, so asking for 14 fragments returned 66 —
+  // a 4.7x overshoot that is not a bug in the mirroring but in fixing the fold
+  // count independently of the budget. Low counts get bold few-fold wedges;
+  // high counts get the snowflake.
+  const folds = ctx.opts?.folds
+    ?? Math.max(3, Math.min(12, Math.round(Math.sqrt(count) * 0.85) + Math.floor(rng() * 3)));
   const rings = Math.max(2, Math.round(Math.sqrt(count / folds) * 1.6));
 
   const wedge = TAU / folds;
@@ -507,7 +513,10 @@ export const mandala = (ctx: GenContext): LayoutItem[] => {
   const cx = W / 2;
   const cy = H / 2;
   const R = coverRadius(W, H, cx, cy);
-  const base = ctx.opts?.folds ?? (5 + Math.floor(rng() * 8));
+  // Same reasoning as `kaleidoscope`: a fixed divisor cannot honour a small
+  // budget, since every ring must be a whole number of wedges.
+  const base = ctx.opts?.folds
+    ?? Math.max(3, Math.min(12, Math.round(Math.sqrt(count) * 0.7) + Math.floor(rng() * 3)));
   const ringCount = Math.max(3, Math.round(Math.sqrt(count) * 0.85));
 
   const rings: Point[][] = [];

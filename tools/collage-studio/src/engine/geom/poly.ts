@@ -164,11 +164,40 @@ export const clipToRect = (poly: Point[], W: number, H: number, pad = 0): Point[
  */
 export const insetPolygon = (poly: Point[], d: number): Point[] | null => {
   if (d <= 0) return poly.length >= 3 ? poly : null;
-  const ring = orient(poly);
+
+  // DEDUPE FIRST — this is not hygiene, it is the correctness fix.
+  //
+  // `clipToHalfPlane` emits a duplicate vertex whenever an edge lies on the
+  // clip plane, which happens constantly in a line-arrangement figure. The
+  // offset loop skipped any vertex whose adjacent edge had zero length — and
+  // for a duplicated PAIR that skipped BOTH, so the ring lost real corners and
+  // folded through itself. The folded ring's shoelake area partially cancels,
+  // so it came out SMALLER and passed the "it shrank" check below while being
+  // garbage: measured on a Metatron cell of thickness 378px, a 0.756px inset
+  // removed 83% of the area.
+  const ring0 = orient(poly);
+  const ring: Point[] = [];
+  for (let i = 0; i < ring0.length; i++) {
+    const p = ring0[i];
+    const q = ring[ring.length - 1];
+    if (!q || Math.hypot(p.x - q.x, p.y - q.y) > 1e-7) ring.push(p);
+  }
+  // The wrap-around pair can be duplicated too.
+  while (ring.length > 1
+    && Math.hypot(ring[0].x - ring[ring.length - 1].x, ring[0].y - ring[ring.length - 1].y) <= 1e-7) {
+    ring.pop();
+  }
+
   const n = ring.length;
   if (n < 3) return null;
   const before = polygonArea(ring);
   if (before <= 0) return null;
+
+  let perimeter = 0;
+  for (let i = 0; i < n; i++) {
+    const p = ring[i], q = ring[(i + 1) % n];
+    perimeter += Math.hypot(q.x - p.x, q.y - p.y);
+  }
 
   const out: Point[] = [];
   for (let i = 0; i < n; i++) {
@@ -180,7 +209,7 @@ export const insetPolygon = (poly: Point[], d: number): Point[] | null => {
     let e2x = next.x - cur.x, e2y = next.y - cur.y;
     const l1 = Math.hypot(e1x, e1y);
     const l2 = Math.hypot(e2x, e2y);
-    if (l1 < 1e-9 || l2 < 1e-9) continue;      // duplicate point: drop it
+    if (l1 < 1e-9 || l2 < 1e-9) continue;      // cannot happen post-dedupe
     e1x /= l1; e1y /= l1; e2x /= l2; e2y /= l2;
 
     // Inward normals for this winding (`orient` fixes the sign convention).
@@ -203,9 +232,18 @@ export const insetPolygon = (poly: Point[], d: number): Point[] | null => {
 
   if (out.length < 3) return null;
   const after = polygonArea(out);
-  // A valid inset always shrinks and never flips. Anything else means d was
-  // too large for this cell's thickness and the offset self-intersected.
   if (after <= 0 || after >= before || signedArea(out) * signedArea(ring) < 0) return null;
+
+  // AREA LOSS MUST BE ABOUT d x PERIMETER.
+  //
+  // To first order an inward offset by d removes exactly a band of width d
+  // around the boundary, so `before - after ~ d * P`. A result that loses far
+  // more than that has folded through itself — and a folded ring still reports
+  // a smaller positive shoelace area, so the checks above cannot see it. This
+  // is the assertion that would have caught the duplicate-vertex collapse on
+  // its own, rather than it surviving as a 39% hole in the frame.
+  const slack = 3 * d * perimeter + 4 * d * d + 1;
+  if (before - after > slack) return null;
   return out;
 };
 
@@ -452,13 +490,25 @@ export const emit = (
       per += Math.hypot(q.x - p.x, q.y - p.y);
     }
     const thickness = per > 1e-6 ? (2 * polygonArea(clipped)) / per : 0;
-    // 0.14 rather than 0.34: a slit-scan strip 25px wide loses 40% of itself to
+    // 0.10 rather than 0.34: a slit-scan strip 25px wide loses 40% of itself to
     // a 5px gutter on each side, and the frame reads as a barcode of background.
     // At 0.14 a thin cell keeps a proportional hairline and everything at or
     // above normal cell size is unaffected (the constant gutter still wins).
-    const g = Math.min(gutterPx, thickness * 0.14);
-    const path = g > 0.15 ? (insetPolygon(clipped, g) ?? clipped) : clipped;
-    if (!isViable(path, minArea)) continue;
+    const g = Math.min(gutterPx, thickness * 0.10);
+    const inset = g > 0.15 ? insetPolygon(clipped, g) : clipped;
+
+    // A CELL TOO THIN TO GUTTER STILL HAS TO BE DRAWN.
+    //
+    // Dropping it leaves a HOLE in a tiling that was complete — and a hole is
+    // far more visible than a missing hairline. Measured on the Metatron
+    // arrangement: 100% coverage at gutter 0, but 61% once a sub-pixel gutter
+    // erased its thinnest chord slivers. So an inset that fails to leave a
+    // viable cell falls back to the un-inset one, and only a cell that is not
+    // viable EVEN UNCLIPPED is discarded as genuine junk.
+    const path = isViable(inset, minArea) ? inset
+      : isViable(clipped, minArea) ? clipped
+      : null;
+    if (!path) continue;
     out.push({ id: nextId(prefix), path, bounds: boundsOf(path) });
   }
   return out;

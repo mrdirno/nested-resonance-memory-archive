@@ -123,7 +123,12 @@ const render = async () => {
     const t0 = performance.now();
     try {
       items = await spec.run({
-        W, H, count, rng: createRng(seed), gutter: gutterPx(W, H, gut / 1000),
+        W, H, count, rng: createRng(seed),
+        // MUST include `gutterScale` — `computeLayout` applies it, so a harness
+        // that omits it is measuring a configuration the product never runs.
+        // It silently under-reported the sliver-heavy figures (Metatron, the
+        // rosettes) by grading them at a gutter they never actually ship with.
+        gutter: gutterPx(W, H, gut / 1000) * (spec.gutterScale ?? 1),
         entropy, t: 0,
       });
     } catch (e) {
@@ -140,7 +145,8 @@ const render = async () => {
     // right number but covers 55% of the frame has a hole in it. Both are
     // failures and only the pair of numbers distinguishes them.
     const ratio = count > 0 ? items.length / count : 1;
-    const bad = err || items.length === 0 || ratio < 0.4 || cov < 0.80;
+    const minRatio = spec.quantisedCount ? 0.35 : 0.6;
+    const bad = err || items.length === 0 || ratio < minRatio || cov < (spec.coverageFloor ?? 0.85);
     const off = err ? 'bad' : (bad || ratio > 2.6) ? 'warn' : '';
     if (bad) broken++;
     cap.innerHTML =

@@ -77,4 +77,34 @@ export interface GeneratorSpec {
    * genuinely uneven.
    */
   gutterScale?: number;
+  /**
+   * Lowest frame coverage this construction is EXPECTED to reach, default 0.85.
+   *
+   * Most layouts tile and should paint essentially the whole frame; a hole in
+   * one is a bug, and measuring coverage is how several were caught. But two
+   * families legitimately do not tile, and forcing them to would destroy the
+   * thing that makes them what they are:
+   *   - circle packings — equal discs cap at 90.7% of the plane and a
+   *     size-varied packing sits far below that; the gaps ARE the packing.
+   *   - curve ribbons — the background showing between the band's turns is
+   *     what makes the path legible as a path.
+   * Declaring the floor keeps the check meaningful for everything else instead
+   * of training the eye to ignore two permanent warnings.
+   */
+  coverageFloor?: number;
+  /**
+   * True when the construction can only produce CERTAIN cell counts.
+   *
+   * Penrose deflation multiplies by phi^2 per level, geodesic frequency is an
+   * integer so faces go 20/80/180/320, an Apollonian gasket adds circles in
+   * tangency generations, and golden subdivision halves. Between two admissible
+   * counts there is nothing — so "give me 150" can only be answered with the
+   * nearest rung, and forcing the exact number would mean truncating the figure
+   * (which is what made Penrose cover 18% of the frame in an earlier build).
+   *
+   * Declared here so the count contract can be judged against what the
+   * construction can actually do, instead of quietly missing by 2x and looking
+   * like a bug.
+   */
+  quantisedCount?: boolean;
 }

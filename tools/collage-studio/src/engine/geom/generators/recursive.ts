@@ -138,8 +138,15 @@ export const truchet = (ctx: GenContext): LayoutItem[] => {
   // subdivision multiplier, m = 1/(1 - 3p) for p < 1/3, capped for stability.
   const splitP = Math.min(0.30, 0.14 + entropy * 0.20);
   const mult = 1 / Math.max(0.25, 1 - 3 * splitP);
-  const base = Math.max(1, Math.round(Math.sqrt(Math.max(4, count) / (3 * mult))));
-  const cell0 = Math.max(W, H) / base;
+  // SIZE THE TILE FROM THE AREA, NOT THE LONG EDGE.
+  //
+  // `max(W, H) / base` gives a tile as wide as the LONGEST side divided by the
+  // count — so a 16:9 frame got only two or three rows and delivered a quarter
+  // of the requested fragments. The tile count wanted is count/(3 * mult) (three
+  // rings per tile, times the expected subdivision), and a square tile covering
+  // that many over W x H has side sqrt(W*H / tiles).
+  const tiles = Math.max(4, Math.max(4, count) / (3 * mult));
+  const cell0 = Math.max(Math.min(W, H) / 12, Math.sqrt((W * H) / tiles));
 
   /** Points along an arc centred at (ox,oy), inclusive of both ends. */
   const arc = (ox: number, oy: number, r: number, a0: number, a1: number): Point[] => {
@@ -159,8 +166,13 @@ export const truchet = (ctx: GenContext): LayoutItem[] => {
    * — corner, arc, corner, edge, corner, arc, corner, edge — or the ring
    * self-intersects and clipping returns rubbish (measured: 34% coverage).
    */
+  // Bound the recursion by the BUDGET, not by dropping rings afterwards:
+  // every tile emitted is part of the tiling, so removing one leaves a hole
+  // (measured: capping the ring list took coverage from 89% to 72%). Refusing
+  // to split once the budget is spent keeps the surface complete.
+  const ringBudget = Math.round(Math.max(6, count) * 1.6);
   const tile = (x: number, y: number, s: number, depth: number) => {
-    if (depth < 3 && rng() < splitP && s > Math.min(W, H) * 0.06) {
+    if (depth < 3 && rings.length < ringBudget && rng() < splitP && s > Math.min(W, H) * 0.06) {
       const h = s / 2;
       tile(x, y, h, depth + 1); tile(x + h, y, h, depth + 1);
       tile(x, y + h, h, depth + 1); tile(x + h, y + h, h, depth + 1);
@@ -204,6 +216,7 @@ export const truchet = (ctx: GenContext): LayoutItem[] => {
   for (let y = 0; y < H; y += cell0) {
     for (let x = 0; x < W; x += cell0) tile(x, y, cell0, 0);
   }
+
   return emit(rings, W, H, gutter, 'tru');
 };
 
@@ -335,16 +348,21 @@ export const hilbert = (ctx: GenContext): LayoutItem[] => {
   // continuous serpentine band — the ribbon is now made OF the cells rather
   // than sliced INTO them.
   const rings: Point[][] = [];
-  // Half the cell pitch: at exactly this width consecutive ribbon quads tile
-  // the plane, so the band leaves no gaps between its own turns.
-  const base = Math.min(cw, ch) * 0.5;
+  // WIDTH MUST MATCH THE PERPENDICULAR PITCH, NOT THE SMALLER OF THE TWO.
+  //
+  // The curve steps between lattice neighbours, so a step is either horizontal
+  // (and the band's width runs along y, pitch `ch`) or vertical (width along x,
+  // pitch `cw`). Using `min(cw, ch)` for both is only correct on a square
+  // frame; at 16:9 it made the band 56% of the pitch on the long axis and
+  // coverage fell to 55%. Choosing per step is exact at every aspect.
 
   // Width breathes along the path, so the band is not a uniform noodle. Centred
   // slightly ABOVE 1 so the swell overlaps rather than opens gaps — the gutter
   // is what should separate fragments, not an accident of the width curve.
   const phase = rng() * TAU;
-  const widthAt = (i: number): number =>
-    base * (0.86 + 0.30 * (0.5 + 0.5 * Math.sin(i * 0.2137 + phase)) ** (1 + entropy * 1.4));
+  /** Swell factor only — the pitch is supplied per step by the caller. */
+  const swell = (i: number): number =>
+    0.86 + 0.30 * (0.5 + 0.5 * Math.sin(i * 0.2137 + phase)) ** (1 + entropy * 1.4);
 
   const stride = 1;
   for (let i = 0; i + stride < pts.length; i += stride) {
@@ -354,8 +372,11 @@ export const hilbert = (ctx: GenContext): LayoutItem[] => {
     const l = Math.hypot(dx, dy);
     if (l < 1e-6) continue;
     const nx = -dy / l, ny = dx / l;
-    const wa = widthAt(i);
-    const wb = widthAt(i + stride);
+    // Horizontal step => the band is as wide as one ROW; vertical => one COLUMN.
+    const pitch = Math.abs(dx) >= Math.abs(dy) ? ch : cw;
+    const half = pitch * 0.5;
+    const wa = half * swell(i);
+    const wb = half * swell(i + stride);
     rings.push([
       { x: a.x + nx * wa, y: a.y + ny * wa },
       { x: b.x + nx * wb, y: b.y + ny * wb },
@@ -392,7 +413,8 @@ export const shards = (ctx: GenContext): LayoutItem[] => {
   };
 
   let guard = 0;
-  while (cells.length < target && guard++ < target * 14) {
+  let stuck = 0;
+  while (cells.length < target && guard++ < target * 30) {
     // Bias toward the biggest cell but not deterministically — pure
     // largest-first equalises sizes, which is what we are avoiding.
     let bi = 0, ba = -1;
@@ -402,7 +424,14 @@ export const shards = (ctx: GenContext): LayoutItem[] => {
     }
     const cell = cells[bi];
     const b = boundsOf(cell);
-    if (b.w < 6 || b.h < 6) break;
+    // A CELL TOO SMALL TO SPLIT IS NOT A REASON TO STOP SPLITTING.
+    // The randomised pick can land on a tiny shard at any time, and `break`ing
+    // there abandoned the whole subdivision: measured across 45 seed/count/
+    // aspect combinations, this returned as few as 4% of the requested cells.
+    // Skip it and try again; give up only when several picks in a row are all
+    // unsplittable, which is the real "nothing left to cut" signal.
+    if (b.w < 6 || b.h < 6) { if (++stuck > 40) break; continue; }
+    stuck = 0;
     const c = centroid(cell);
 
     const across = b.w >= b.h ? 0 : Math.PI / 2;
@@ -415,7 +444,9 @@ export const shards = (ctx: GenContext): LayoutItem[] => {
     const n = { x: Math.cos(ang), y: Math.sin(ang) };
     const p = clipHalf(cell, a, n);
     const q = clipHalf(cell, a, { x: -n.x, y: -n.y });
-    if (p.length >= 3 && q.length >= 3) cells.splice(bi, 1, p, q); else break;
+    // Same reasoning as above: a cut that degenerates is this cell's problem.
+    if (p.length >= 3 && q.length >= 3) cells.splice(bi, 1, p, q);
+    else if (++stuck > 40) break;
   }
   return emit(cells, W, H, gutter, 'shd');
 };
