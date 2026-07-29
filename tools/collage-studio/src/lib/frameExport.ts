@@ -26,12 +26,18 @@
 //   timing metadata instead of the header-less fragmented stream every browser
 //   MediaRecorder emits.
 //
-// WHAT IT DOES NOT DO
-//   SOUND. Audio would mean tapping the graph for raw samples and running an
-//   `AudioEncoder`, and AAC encoding is not reliably present in WebCodecs on the
-//   platform this module exists to serve. A silent file that saves to Photos
-//   beats a perfect one that never records, so this returns video only AND SAYS
-//   SO — `audio.recorded` is false and a warning names it. It never pretends.
+// SOUND
+//   `recordFrames` is silent, and says so: `audio.recorded` is false and a
+//   warning names it. It never pretends.
+//
+//   `renderOffline` CARRIES SOUND. It cannot capture any — nothing is playing,
+//   it seeks decoders — so it MAKES some: `offlineAudio.ts` decodes each clip,
+//   mixes it on an OfflineAudioContext along the same timeline the frame loop
+//   walks, encodes AAC-LC, and the chunks are muxed into this same MP4. The
+//   ladder is AAC or silence with no Opus rung, because an Opus-in-MP4 file
+//   will not open in QuickTime or Photos and a file that does not open is worse
+//   than one that is quiet. Every failure rung degrades to a silent, valid
+//   video and reports its own reason.
 //
 // CONTRACT
 //   Deliberately identical to `videoExport.record()` — same `RecordResult` union,
@@ -40,6 +46,10 @@
 // -----------------------------------------------------------------------------
 
 import { Muxer, ArrayBufferTarget } from 'mp4-muxer';
+import {
+  prepareOfflineAudio, truncateAudio,
+  type OfflineAudioSource, type OfflineAudioTrack,
+} from './offlineAudio';
 import {
   describeContainer, suggestFilename, getRecordingProfile,
   type RecordResult, type RecordFailure, type RecordProgress,
@@ -558,11 +568,19 @@ export interface OfflineRenderSource {
   beginOfflineRender(): void;
   endOfflineRender(): void;
   renderAtTime(timeSec: number, opts?: { signal?: AbortSignal }): Promise<void>;
+  /** The clips' sound, for the offline mixer. OPTIONAL so every existing
+   *  structural implementer — and every test fake — stays valid; its absence is
+   *  a legitimate silent render, honestly reported. */
+  describeAudioSources?(): OfflineAudioSource[];
 }
 
 export interface OfflineRenderOptions extends FrameRecordOptions {
   /** Where on the clips' timeline the take starts. Defaults to 0. */
   startTimeSec?: number;
+  /** Mix the clips' sound into the file. Default true. `false` is an explicit
+   *  opt-out and reports `requested: false` rather than a failure. */
+  audio?: boolean;
+  audioBitsPerSecond?: number;
 }
 
 /**
@@ -610,6 +628,11 @@ export const renderOffline = async (
   /** Exact, integral frame duration in microseconds — the timeline's only unit. */
   const frameDurUs = Math.max(1, Math.round(1_000_000 / fps));
 
+  const wantsAudio = options.audio !== false;
+  let audioTrack: OfflineAudioTrack | null = null;
+  let audioReason: string | null = null;
+  let audioMuxed = 0;
+
   const emit = (label: string, ratio: number) => {
     if (!onProgress) return;
     const elapsed = startedAt ? nowMs() - startedAt : 0;
@@ -628,7 +651,7 @@ export const renderOffline = async (
         chunks: frames,
         label,
         fps,
-        withAudio: false,
+        withAudio: !!audioTrack,
       });
     } catch { /* a UI callback must never break a take */ }
   };
@@ -688,9 +711,52 @@ export const renderOffline = async (
         'Try a smaller aspect, or export a still.', `no H.264 level accepted ${width}x${height}`, warnings);
     }
 
+    // ---- sound ------------------------------------------------------------
+    // Runs HERE: after the video encoder is known to work, before the Muxer is
+    // constructed (the track must be declared at construction), and before the
+    // frame loop starts. It therefore cannot stall the loop — which is the one
+    // property this whole module exists to protect. It costs a second or two of
+    // "Mixing sound…" up front, the correct trade for a render that is already
+    // slower than realtime by design.
+    if (wantsAudio) {
+      if (typeof source.describeAudioSources !== 'function') {
+        audioReason = 'This view cannot supply the clips’ sound.';
+      } else {
+        emit('Mixing sound…', 0);
+        try {
+          const prepared = await prepareOfflineAudio(source.describeAudioSources(), {
+            startAt,
+            seconds,
+            signal: options.signal,
+            bitrate: options.audioBitsPerSecond ?? profile.audioBitsPerSecond,
+          });
+          audioTrack = prepared.track;
+          audioReason = prepared.reason;
+          if (prepared.track?.warnings.length) warnings.push(...prepared.track.warnings);
+        } catch (e) {
+          // A thrown mixer must never cost the video. Silent, and say why.
+          audioTrack = null;
+          audioReason = `Sound could not be prepared (${errText(e)}).`;
+        }
+      }
+      if (options.signal?.aborted) {
+        return failure('aborted', 'Render cancelled.', null, null, warnings);
+      }
+    }
+
     const muxer = new Muxer({
       target: new ArrayBufferTarget(),
       video: { codec: 'avc', width, height },
+      // Declared only when chunks genuinely exist. `MuxerOptions.audio` is
+      // optional, so one construction site covers both cases — and encoding
+      // BEFORE this point is what guarantees a declared track is never empty.
+      audio: audioTrack
+        ? {
+            codec: audioTrack.codec,
+            numberOfChannels: audioTrack.numberOfChannels,
+            sampleRate: audioTrack.sampleRate,
+          }
+        : undefined,
       fastStart: 'in-memory',
       // Unlike the realtime path this track genuinely DOES start at timestamp 0
       // — the first frame is index 0 by construction — but 'offset' is a no-op
@@ -808,6 +874,32 @@ export const renderOffline = async (
         'Try a shorter render, or export a still.', encoderError, warnings);
     }
 
+    // ---- mux the sound ----------------------------------------------------
+    // AFTER the video, BEFORE finalize. With `fastStart: 'in-memory'` each
+    // track keeps its own sample array and no interleaving is required, so
+    // adding all video then all audio is correct and produces a properly
+    // chunked, seekable file.
+    //
+    // `addAudioChunkRaw`, never `addAudioChunk`: the latter forwards
+    // `chunk.duration` straight through and mp4-muxer THROWS on a null one —
+    // and `EncodedAudioChunk.duration` is spec-nullable. Same trap the video
+    // path above already works around.
+    if (audioTrack) {
+      try {
+        const trimmed = truncateAudio(audioTrack.chunks, frames * frameDurUs);
+        for (const c of trimmed) {
+          muxer.addAudioChunkRaw(c.data, c.type, c.timestamp, c.duration, c.meta);
+          audioMuxed++;
+        }
+      } catch (e) {
+        // The video is already complete and muxed. Losing the sound at this
+        // point must not lose the file with it.
+        audioTrack = null;
+        audioMuxed = 0;
+        audioReason = `Sound could not be written into the file (${errText(e)}).`;
+      }
+    }
+
     try { muxer.finalize(); } catch (e) {
       return failure('internal', 'The video file could not be assembled.',
         'Try a shorter render.', errText(e), warnings);
@@ -827,7 +919,9 @@ export const renderOffline = async (
     if (capped) {
       warnings.push(`Renders are capped at ${profile.maxSeconds}s on this device.`);
     }
-    warnings.push('Rendered without sound — the offline renderer draws frames, so there is no audio to capture.');
+    // A silent file always names WHY it is silent — never a blanket claim that
+    // the renderer cannot carry sound, which stopped being true.
+    if (!audioMuxed && wantsAudio && audioReason) warnings.push(audioReason);
 
     phase = 'done';
     emit('Done', 1);
@@ -844,7 +938,20 @@ export const renderOffline = async (
       sizeBytes: blob.size,
       chunks: frames,
       fps,
-      audio: { requested: false, recorded: false, tracks: 0, sources: 0, monitorConnected: false },
+      audio: {
+        requested: wantsAudio,
+        // `recorded` means SAMPLES ARE IN THE FILE — not that a track was
+        // declared, and not that the encoder said yes. Only the mux count can
+        // honestly answer that, which is why it is what is read here.
+        recorded: audioMuxed > 0,
+        tracks: audioMuxed > 0 ? 1 : 0,
+        sources: audioMuxed > 0 ? (audioTrack?.sources ?? 0) : 0,
+        // Always false: there are no speakers in an offline render. The field
+        // means "the monitor leg was wired", and claiming it here would be the
+        // exact silent-playback lie the realtime path built its analysers to
+        // make observable.
+        monitorConnected: false,
+      },
       validated: flushed ? 'unverified' : 'skipped',
       capped,
       warnings,

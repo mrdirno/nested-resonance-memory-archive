@@ -6,6 +6,7 @@ import {
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
 import { computeLayout, createRng } from './lib/layout';
+import { rollDice } from './lib/diceRoll';
 import { renderCanvas } from './lib/renderer';
 import { saveProject, loadProject } from './lib/project';
 import { generateVectorExport } from './engine/color/vectorExport';
@@ -113,6 +114,9 @@ export default function App() {
   const [bgColor, setBgColor] = useState('#050505'); 
   const [avgColor, setAvgColor] = useState<{r:number, g:number, b:number} | null>(null); 
   
+  /** Name of the recipe the last dice roll drew from, shown in the readout. */
+  const [lastRecipe, setLastRecipe] = useState<string | undefined>(undefined);
+
   const [lockedCells, setLockedCells] = useState<Map<number, string>>(new Map());
   const [shuffledIndices, setShuffledIndices] = useState<number[]>([]); 
   const [shuffleTrigger, setShuffleTrigger] = useState(0);
@@ -310,6 +314,36 @@ export default function App() {
   }, [images, layoutItems, shuffledIndices, orderedAssets, seed, zoom, bgColor, liveMode]);
 
   const handleShuffle = () => setShuffleTrigger(prev => prev + 1);
+  /**
+   * ROLL EVERYTHING AT ONCE — layout, fragment count, chaos, frame shape,
+   * gutter, background and seed.
+   *
+   * Deliberately NOT a "randomise" that nudges one slider: the interesting
+   * space is the combination, and the whole point of the roll is to reach
+   * pairings nobody would assemble by hand. `rollDice` does the constraining
+   * (see diceRoll.ts) so what lands here is always a coherent composition.
+   *
+   * Locked fragments are released: a roll that kept them would have to graft
+   * them onto a layout with a different topology, and `handleRemix` already
+   * exists for exactly that "keep what I chose" intent.
+   */
+  const handleDice = () => {
+    const roll = rollDice({ hasVideo: clips.length > 0 });
+    setLayoutMode(roll.layout);
+    setCount(roll.count);
+    setEntropy(roll.entropy);
+    setAspect(roll.aspect);
+    setGutter(roll.gutter);
+    setBgColor(roll.bg);
+    // `zoom` is DERIVED from density here, not stored — so the roll does not
+    // touch it. Rolling density instead would silently multiply the fragment
+    // count it just chose (effectiveCount = count * density), which is exactly
+    // the kind of hidden coupling that makes a random button feel broken.
+    setSeed(roll.seed);
+    setLastRecipe(roll.recipe);
+    setLockedCells(new Map());
+  };
+
   const handleRemix = async () => {
       const lockedGoals: {imgId: string, x: number, y: number}[] = [];
       lockedCells.forEach((imgId, idx) => {
@@ -971,7 +1005,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} resonance={resonance} setResonance={setResonance} framePicker={framePicker} setFramePicker={setFramePicker} />
          )}

@@ -1,6 +1,28 @@
 import { AnalysisResult } from './lib/analysis';
 
-export type LayoutMode = 'minimal' | 'balanced' | 'complex' | 'field' | 'stencil';
+/**
+ * The five original modes. Kept as-is so every saved `.collage` project, every
+ * template in localStorage and every deep link still opens exactly as it did.
+ */
+export type LegacyLayoutMode = 'minimal' | 'balanced' | 'complex' | 'field' | 'stencil';
+
+/**
+ * The generative roster (`src/engine/geom/generators`). These ids are the
+ * registry keys, and they travel into saved projects — so they are literals
+ * here rather than a bare `string`, and renaming one is a breaking change to
+ * every project that used it.
+ */
+export type GeneratorLayoutMode =
+  | 'shards' | 'golden' | 'hilbert' | 'slit-scan'
+  | 'voronoi' | 'delaunay' | 'mud-crack' | 'apollonian' | 'circle-pack' | 'flow' | 'reaction'
+  | 'kaleidoscope' | 'geodesic' | 'flower-of-life' | 'metatron' | 'sri-yantra'
+  | 'phyllotaxis' | 'mandala' | 'rosette' | 'quasicrystal'
+  | 'penrose' | 'truchet' | 'droste';
+
+export type LayoutMode = LegacyLayoutMode | GeneratorLayoutMode;
+
+/** Fragment shape. Only the two grid-based legacy modes read it — every
+ *  generator defines its own cell shape, which is the point of having them. */
 export type PrimitiveType = 'rect' | 'tri' | 'circle' | 'octagon' | 'random';
 
 export interface Point { x: number; y: number; }

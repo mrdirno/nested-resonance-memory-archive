@@ -636,3 +636,86 @@
 .ui-grid-5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
 .ui-stack { display: flex; flex-direction: column; gap: var(--s-3); }
 .ui-stack--tight { display: flex; flex-direction: column; gap: var(--s-2); }
+
+/* --- ROSTER PICKER --------------------------------------------------------
+   ~25 layouts have to stay legible on a phone. A grid of 25 tiles is a wall;
+   short horizontal rows GROUPED BY FAMILY are scannable, because the grouping
+   carries most of the meaning and the eye only reads one row at a time.
+   Scroll-snap keeps a partially-swiped row from resting mid-chip.            */
+.ui-famrow {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  padding-bottom: 2px;
+  /* The scrollbar is noise on a control strip; the overflow cue is the
+     half-visible chip at the edge, which is a better affordance anyway. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.ui-famrow::-webkit-scrollbar { display: none; }
+
+.ui-gchip {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  min-height: 36px;
+  border-radius: 9px;
+  border: 1px solid var(--line-1);
+  background: var(--surface-1);
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition: background var(--t-1) var(--ease), color var(--t-1) var(--ease),
+              border-color var(--t-1) var(--ease), transform var(--t-1) var(--ease);
+}
+.ui-gchip:hover:not(:disabled) { color: var(--ink-1); background: var(--surface-2); }
+.ui-gchip:active:not(:disabled) { transform: scale(0.97); }
+.ui-gchip:disabled { opacity: 0.35; }
+.ui-gchip[data-active='true'] {
+  color: var(--signal);
+  border-color: color-mix(in srgb, var(--signal) 55%, transparent);
+  background: color-mix(in srgb, var(--signal) 12%, var(--surface-1));
+}
+
+.ui-label--dim { opacity: 0.55; }
+
+/* --- DICE -----------------------------------------------------------------
+   Deliberately the widest, warmest control in the dock. In a generative tool
+   the single most valuable action is "show me something I would not have
+   chosen", and burying that behind a slider is how these tools end up feeling
+   like configuration rather than play.                                      */
+.ui-dice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--signal) 40%, var(--line-1));
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--signal) 14%, var(--surface-1)),
+    var(--surface-1) 70%
+  );
+  color: var(--signal);
+  text-align: left;
+  transition: transform var(--t-1) var(--ease), filter var(--t-1) var(--ease);
+}
+.ui-dice:hover:not(:disabled) { filter: brightness(1.14); }
+.ui-dice:active:not(:disabled) { transform: scale(0.985); }
+.ui-dice:disabled { opacity: 0.35; }
+.ui-dice__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ui-dice__text b {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.ui-dice__text i {
+  font-style: normal; font-size: 11px; color: var(--ink-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}

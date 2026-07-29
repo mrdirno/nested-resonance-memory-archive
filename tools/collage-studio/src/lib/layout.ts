@@ -4,6 +4,8 @@ import {
     generateRects, generateTris, generateVoronoi, generateCircles, generateOctagons 
 } from '../engine/geom/primitives';
 import { ImageAsset, PrimitiveType, LayoutItem, LayoutMode } from '../types';
+import { GENERATOR_BY_ID } from '../engine/geom/generators';
+import { gutterPx } from '../engine/geom/poly';
 
 // Four modules (stencil, sandbox, vectorExport, templates) import these THROUGH
 // this file. It never re-exported them, so all four were type-errors and
@@ -29,17 +31,35 @@ const jitter = (item: LayoutItem, amount: number, rng: () => number): LayoutItem
 }
 
 export const computeLayout = async (
-  W: number, 
-  H: number, 
-  count: number, 
-  rng: () => number, 
+  W: number,
+  H: number,
+  count: number,
+  rng: () => number,
   mode: LayoutMode,
   gutterPercent: number = 0.005,
   entropy: number = 0.5,
   images: ImageAsset[] = [],
-  primitive: PrimitiveType = 'rect'
+  primitive: PrimitiveType = 'rect',
+  t: number = 0,
 ): Promise<LayoutItem[]> => {
-  
+
+  // THE ROSTER FIRST. A generator id dispatches straight through to
+  // `src/engine/geom/generators`; anything else falls through to the five
+  // original modes below, unchanged, so every saved project still opens.
+  //
+  // Dispatching on a REGISTRY rather than extending the switch is deliberate:
+  // the old switch named every shape three times (once per branch plus again
+  // inside `random`, which re-implemented the whole thing), and adding a mode
+  // meant editing four places and forgetting one.
+  const spec = GENERATOR_BY_ID[mode];
+  if (spec) {
+    return spec.run({
+      W, H, count, rng,
+      gutter: gutterPx(W, H, gutterPercent) * (spec.gutterScale ?? 1),
+      entropy, images, t,
+    });
+  }
+
   if (mode === 'field') {
       const seedVal = Math.floor(rng() * 100000);
       return computeFieldLayout(W, H, count, seedVal, entropy * 2.0);

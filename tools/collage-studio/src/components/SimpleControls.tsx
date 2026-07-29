@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import {
-  Layout, Grid, Plus, Minus, RefreshCw, Shuffle, Waves, Hexagon, Square,
-  Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, ImagePlus
+  Layout, Grid, Plus, Minus, RefreshCw, Shuffle, Square,
+  Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, ImagePlus, Dices
 } from 'lucide-react';
 import { LayoutMode, PrimitiveType } from '../types';
+import { GENERATORS, GENERATOR_BY_ID, FAMILIES, FAMILY_LABEL } from '../engine/geom/generators';
 
 interface SimpleControlsProps {
   layoutMode: LayoutMode;
@@ -18,19 +19,22 @@ interface SimpleControlsProps {
   setEntropy: (e: number) => void;
   onRemix: () => void;
   onShuffle: () => void;
+  /** Roll a whole composition — layout, count, chaos, aspect, gutter, colour. */
+  onDice?: () => void;
+  /** Name of the recipe the last roll came from, for the readout. */
+  lastRecipe?: string;
   hasImages: boolean;
   isLayoutLocked: boolean;
 }
 
-const MODES: { id: LayoutMode; label: string; icon: React.ReactNode; blurb: string }[] = [
-  { id: 'minimal',  label: 'Minimal',  icon: <Layout size={18} />,  blurb: 'Few large fragments, lots of open space.' },
-  { id: 'balanced', label: 'Balanced', icon: <Grid size={18} />,    blurb: 'An even grid — every fragment weighs the same.' },
-  { id: 'complex',  label: 'Complex',  icon: <Hexagon size={18} />, blurb: 'Irregular shards breaking across the frame.' },
-];
-
-const VARIANTS: { id: LayoutMode; label: string; icon: React.ReactNode; blurb: string }[] = [
-  { id: 'complex', label: 'Shatter', icon: <Hexagon size={16} />, blurb: 'Angular voronoi shards, edge to edge.' },
-  { id: 'field',   label: 'Flow',    icon: <Waves size={16} />,   blurb: 'Fragments drift along a flowing field.' },
+/**
+ * The two original grid modes. They are the only ones that read `primitive`,
+ * and they are kept because "an even grid of squares" is a legitimate thing to
+ * want — it is just no longer the whole tool.
+ */
+const CLASSIC: { id: LayoutMode; label: string; icon: React.ReactNode; blurb: string }[] = [
+  { id: 'minimal',  label: 'Minimal',  icon: <Layout size={16} />, blurb: 'Few large fragments, lots of open space.' },
+  { id: 'balanced', label: 'Balanced', icon: <Grid size={16} />,   blurb: 'An even grid — every fragment weighs the same.' },
 ];
 
 const SHAPES: { id: PrimitiveType; label: string; icon: React.ReactNode; blurb: string }[] = [
@@ -43,12 +47,16 @@ const SHAPES: { id: PrimitiveType; label: string; icon: React.ReactNode; blurb: 
 
 export const SimpleControls: React.FC<SimpleControlsProps> = ({
   layoutMode, setLayoutMode, primitive, setPrimitive, count, setCount,
-  density, setDensity, entropy, setEntropy, onRemix, onShuffle,
-  hasImages, isLayoutLocked
+  density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice,
+  lastRecipe, hasImages, isLayoutLocked
 }) => {
 
-  const isComplexGroup = layoutMode === 'complex' || layoutMode === 'field';
-  const usesChaos = layoutMode === 'balanced' || isComplexGroup;
+  const generator = GENERATOR_BY_ID[layoutMode];
+  const isClassic = !generator;
+  // Every generator responds to chaos; of the classics only `balanced` does
+  // (minimal has nothing to jitter) and the legacy complex/field pair.
+  const usesChaos = !!generator || layoutMode === 'balanced'
+    || layoutMode === 'complex' || layoutMode === 'field';
   const effective = Math.max(0, count * density);
 
   const adjustCount = useCallback((delta: number) => {
@@ -90,13 +98,13 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
     onClick: () => { if (repeatedRef.current) { repeatedRef.current = false; return; } adjustCount(delta); },
   });
 
-  const activeMode = MODES.find(m => m.id === layoutMode) ?? MODES[2];
-  const activeVariant = VARIANTS.find(v => v.id === layoutMode);
+  const classic = CLASSIC.find(m => m.id === layoutMode);
   const activeShape = SHAPES.find(s => s.id === primitive) ?? SHAPES[0];
-
-  const detail = isComplexGroup
-    ? (activeVariant?.blurb ?? activeMode.blurb)
-    : activeMode.blurb;
+  const activeLabel = generator?.name
+    ?? classic?.label
+    // The two retired ids still load from saved projects, so they must still name themselves.
+    ?? (layoutMode === 'complex' ? 'Shatter (classic)' : layoutMode === 'field' ? 'Flow (classic)' : 'Layout');
+  const detail = generator?.blurb ?? classic?.blurb ?? 'A layout saved from an earlier version.';
 
   return (
     <div className="ui-dock">
@@ -104,9 +112,9 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
       {/* ---- persistent caption: the whole panel state in one mono line ---- */}
       {hasImages ? (
         <div className="ui-readout" aria-live="polite">
-          <span><b>{(isComplexGroup ? activeVariant?.label ?? activeMode.label : activeMode.label).toUpperCase()}</b></span>
-          <i>/</i>
-          <span>{isComplexGroup ? 'VORONOI' : activeShape.label.toUpperCase()}</span>
+          <span><b>{activeLabel.toUpperCase()}</b></span>
+          {isClassic && <><i>/</i><span>{activeShape.label.toUpperCase()}</span></>}
+          {lastRecipe && <><i>/</i><span>“{lastRecipe.toUpperCase()}”</span></>}
           <i>/</i>
           <span><b>{effective}</b> FRAGMENTS</span>
           {density > 1 && <><i>/</i><span>{count}&nbsp;×&nbsp;{density} DENSITY</span></>}
@@ -122,48 +130,76 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
         </div>
       )}
 
-      {/* ---- LAYOUT --------------------------------------------------------- */}
+      {/* ---- DICE: the fastest route to something you did not expect -------- */}
+      {onDice && (
+        <button
+          disabled={!hasImages}
+          onClick={onDice}
+          className="ui-dice"
+          title="Roll a whole composition — layout, fragments, chaos, shape of frame, gutter and colour, all at once."
+        >
+          <Dices size={20} />
+          <span className="ui-dice__text">
+            <b>Roll the dice</b>
+            <i>{lastRecipe ? `Last roll: “${lastRecipe}”` : 'A whole new composition, all at once'}</i>
+          </span>
+        </button>
+      )}
+
+      {/* ---- LAYOUT --------------------------------------------------------
+          A ROSTER, NOT THREE BUTTONS. Grouped by family and scrolled
+          horizontally: each row is short enough to scan, and the grouping is
+          what makes ~25 options legible instead of a wall. The blurb under the
+          rows always describes the SELECTED construction, honestly — several of
+          these are famous figures and calling one by the wrong name is worse
+          than not naming it. --------------------------------------------- */}
       <div className="ui-stack--tight">
         <span className="ui-label">Layout</span>
-        <div className="ui-grid-3">
-          {MODES.map(m => (
+
+        <div className="ui-famrow">
+          {CLASSIC.map(m => (
             <button
               key={m.id}
               disabled={!hasImages}
               onClick={() => setLayoutMode(m.id)}
-              data-active={m.id === 'complex' ? isComplexGroup : layoutMode === m.id}
-              className="ui-tile"
+              data-active={layoutMode === m.id}
+              className="ui-gchip"
               title={m.blurb}
             >
-              {m.icon}
-              <span className="ui-tile__label">{m.label}</span>
+              {m.icon}<span>{m.label}</span>
             </button>
           ))}
         </div>
+
+        {FAMILIES.map(fam => {
+          const items = GENERATORS.filter(g => g.family === fam);
+          if (!items.length) return null;
+          return (
+            <div key={fam} className="ui-stack--tight">
+              <span className="ui-label ui-label--dim">{FAMILY_LABEL[fam]}</span>
+              <div className="ui-famrow">
+                {items.map(g => (
+                  <button
+                    key={g.id}
+                    disabled={!hasImages}
+                    onClick={() => setLayoutMode(g.id as LayoutMode)}
+                    data-active={layoutMode === g.id}
+                    className="ui-gchip"
+                    title={g.blurb}
+                  >
+                    <span>{g.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+
         <p className="ui-caption">{detail}</p>
       </div>
 
-      {/* ---- VARIANT (complex) or SHAPE (minimal / balanced) ---------------- */}
-      {isComplexGroup ? (
-        <div className="ui-stack--tight">
-          <span className="ui-label">Break pattern</span>
-          <div className="ui-grid-2">
-            {VARIANTS.map(v => (
-              <button
-                key={v.id}
-                disabled={!hasImages}
-                onClick={() => setLayoutMode(v.id)}
-                data-active={layoutMode === v.id}
-                className="ui-tile ui-tile--sm"
-                title={v.blurb}
-              >
-                {v.icon}
-                <span className="ui-tile__label">{v.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      ) : (
+      {/* ---- SHAPE — only the classic grid modes read it -------------------- */}
+      {isClassic && (
         <div className="ui-stack--tight">
           <span className="ui-label">Fragment shape</span>
           <div className="ui-grid-5">

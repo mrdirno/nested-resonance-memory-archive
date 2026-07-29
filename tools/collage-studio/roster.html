@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Roster proof — Collage Studio</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; background: #08090b; color: #e8e8ea;
+        font: 13px/1.45 ui-sans-serif, -apple-system, "SF Pro Text", system-ui, sans-serif;
+        padding: 20px 20px 80px;
+      }
+      header { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; margin-bottom: 4px; }
+      h1 { font-size: 15px; letter-spacing: .14em; text-transform: uppercase; margin: 0; font-weight: 600; }
+      .sub { color: #6f7278; font-size: 12px; }
+      .bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 14px 0 20px; }
+      button, select, input[type=range] { font: inherit; }
+      button {
+        background: #16181c; color: #e8e8ea; border: 1px solid #2a2d33;
+        border-radius: 8px; padding: 7px 13px; cursor: pointer;
+      }
+      button:hover { background: #1f2228; border-color: #3a3e46; }
+      label { color: #8b8f96; display: inline-flex; gap: 7px; align-items: center; }
+      .grid {
+        display: grid; gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      }
+      figure { margin: 0; }
+      canvas {
+        width: 100%; height: auto; display: block; border-radius: 10px;
+        background: #0d0e11; border: 1px solid #202329;
+      }
+      figcaption { display: flex; justify-content: space-between; gap: 8px; padding: 7px 2px 0; }
+      .nm { font-weight: 600; letter-spacing: .02em; }
+      .fam { color: #5d6068; }
+      .meta { color: #6f7278; font-variant-numeric: tabular-nums; font-size: 11.5px; }
+      .blurb { color: #797d84; font-size: 11.5px; padding: 1px 2px 0; }
+      .bad { color: #ff6b6b; }
+      .warn { color: #e0a33a; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Roster proof</h1>
+      <span class="sub">every generator, same seed, same count — dev only, not shipped</span>
+    </header>
+    <div class="bar">
+      <button id="reseed">Reseed</button>
+      <label>count <input id="count" type="range" min="4" max="240" value="48" /> <span id="countv">48</span></label>
+      <label>entropy <input id="entropy" type="range" min="0" max="100" value="45" /> <span id="entv">0.45</span></label>
+      <label>gutter <input id="gutter" type="range" min="0" max="30" value="6" /> <span id="gutv">6</span></label>
+      <label>aspect
+        <select id="aspect">
+          <option value="1">1:1</option>
+          <option value="1.5">3:2</option>
+          <option value="0.6667">2:3</option>
+          <option value="1.7778">16:9</option>
+        </select>
+      </label>
+      <span id="stat" class="sub"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+    <script type="module" src="/src/dev/roster.ts"></script>
+  </body>
+</html>

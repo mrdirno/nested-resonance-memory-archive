@@ -257,12 +257,11 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     //
     // `renderOffline` steps the composition frame by frame and timestamps from
     // the frame INDEX, so the motion is mathematically even however slow the
-    // device is. It is therefore the DEFAULT. It cannot carry audio (it draws
-    // frames; there is no stream to tap), so the one case that still takes the
-    // realtime path is the one where that would actually cost the user
-    // something: a clip they have deliberately unmuted. Nothing is removed —
-    // turn sound on and you get the old behaviour, leave it off and you get a
-    // flawless render.
+    // device is. It is therefore the DEFAULT — and it NOW CARRIES SOUND: it
+    // still cannot capture any (it draws frames, nothing is playing), so it
+    // decodes the clips and mixes them on the same timeline instead. See
+    // `offlineAudio.ts`. That removes the last reason the realtime path
+    // existed: an unmuted clip no longer costs you the smooth render.
     const wantsSound = !!status?.clips.some((c) => c.audible);
     const useRender = !!frameSupport?.supported;
 
@@ -277,13 +276,15 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     // 181663 freeze-on-stop, `onstop` never firing).
     //
     // Trading a path that ALWAYS works and is always smooth for one that hangs
-    // on the owner's own engine family, to keep audio on one clip, is the wrong
-    // trade. Export is silent and says so. Playback keeps its sound — that is
-    // untouched, and it is where sound was actually being used.
-    if (wantsSound) {
-      onNotice?.('Exports are silent — the renderer draws frames, so there is no audio to '
-        + 'capture. Sound still plays in the collage.');
-    }
+    // on the owner's own engine family was the wrong trade — so the render
+    // stayed, and sound came to IT rather than the other way round.
+    //
+    // The "Exports are silent" notice that used to sit here is gone because it
+    // is no longer true. Nothing replaces it: the result carries its own
+    // warnings, each naming the actual rung that failed, and those already
+    // surface through `onNotice(res.warnings[0])` below. A blanket up-front
+    // claim about sound is exactly the kind of stale promise that outlives the
+    // code it describes.
 
     let stream: MediaStream | null = null;
     let useFrames = false;

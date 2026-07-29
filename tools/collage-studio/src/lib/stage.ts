@@ -1784,6 +1784,42 @@ export class Stage {
     return !!this.stream && this.stream.getAudioTracks().length > 0;
   }
 
+  /**
+   * The clips, described so an OFFLINE render can mix their sound.
+   *
+   * `renderOffline` seeks decoders instead of playing them, so there is no
+   * stream to tap and `captureStream` above is no help: sound has to be decoded
+   * and mixed separately (see `offlineAudio.ts`). Everything that mixer needs
+   * lives behind private state here, so this is the way out.
+   *
+   * TWO NUMBERS ARE LOAD-BEARING AND BOTH ARE COMPUTED HERE ON PURPOSE:
+   *
+   *  - `span` is `seekClipTo`'s own expression, verbatim. If the mixer
+   *    recomputed it from `duration` the two timelines would each round the
+   *    epsilon their own way and drift apart, and A/V drift is invisible in
+   *    review — it only shows up in the finished file.
+   *  - `gain` mirrors `applyMutes()`'s `audible` predicate exactly. A clip that
+   *    is muted, evicted or broken contributes nothing, and reporting it as a
+   *    source would make the result claim signal the file does not contain.
+   *
+   * `startTime` is deliberately absent: `seekClipTo` does not apply it either.
+   */
+  describeAudioSources(): {
+    id: string; url: string; span: number; loop: boolean; gain: number;
+  }[] {
+    const out: { id: string; url: string; span: number; loop: boolean; gain: number }[] = [];
+    this.clips.forEach((c) => {
+      if (!c.url) return;
+      const dur = c.el?.duration;
+      const span = Number.isFinite(dur) && (dur as number) > 0
+        ? Math.max(OFFLINE_SEEK_EPSILON, (dur as number) - OFFLINE_SEEK_EPSILON)
+        : 0;
+      const audible = this.soundOn && !c.muted && c.live && !c.broken;
+      out.push({ id: c.id, url: c.url, span, loop: c.loop, gain: audible ? 1 : 0 });
+    });
+    return out;
+  }
+
   /** Stops the canvas video track. The WebAudio track is reusable and is only detached. */
   releaseStream(): void {
     const s = this.stream;
