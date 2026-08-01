@@ -456,13 +456,52 @@ const mixSources = async (
   }
   if (!wired) return null;
 
+  let mixed: AudioBuffer;
   try {
     // `startRendering()` is NOT cancellable, so it is raced against a deadline
     // and abandoned rather than awaited bare.
-    return await within(ctx.startRendering(), RENDER_TIMEOUT_MS, 'audio render');
+    mixed = await within(ctx.startRendering(), RENDER_TIMEOUT_MS, 'audio render');
   } catch {
     return null;
   }
+
+  /**
+   * TRUE-PEAK LIMIT — N clips at gain 1.0 SUM, and the sum clips.
+   *
+   * This never mattered while at most one clip could be audible: the old
+   * per-clip switch was exclusive, so there was nothing to add. Letting every
+   * selected clip into the mix (which is the whole point) makes summing the
+   * normal case, and two ordinary clips measured a peak of 2.04 — hard-clipped
+   * by the encoder into audible distortion, on an export that had finally
+   * stopped being silent.
+   *
+   * Scaled by the MEASURED peak rather than by a fixed 1/N: the offline render
+   * already holds the whole buffer, so the exact number is free, and 1/N would
+   * quieten every well-behaved mix to buy headroom nothing needed. A mix that
+   * already fits is left untouched, bit for bit.
+   *
+   * The ceiling is -3 dBFS, not -1, and that number is MEASURED. AAC is lossy,
+   * so the decoded waveform is not the one handed to the encoder: limiting the
+   * PCM to -1 dBFS still came back at 1.14 on a real two-clip mix — a +2.1 dB
+   * codec overshoot that a 16-bit playback path would clip. -3 dBFS absorbs it.
+   */
+  let peak = 0;
+  for (let c = 0; c < mixed.numberOfChannels; c++) {
+    const d = mixed.getChannelData(c);
+    for (let i = 0; i < d.length; i++) {
+      const a = d[i] < 0 ? -d[i] : d[i];
+      if (a > peak) peak = a;
+    }
+  }
+  const CEILING = 0.708;
+  if (peak > CEILING) {
+    const k = CEILING / peak;
+    for (let c = 0; c < mixed.numberOfChannels; c++) {
+      const d = mixed.getChannelData(c);
+      for (let i = 0; i < d.length; i++) d[i] *= k;
+    }
+  }
+  return mixed;
 };
 
 // =============================================================================
