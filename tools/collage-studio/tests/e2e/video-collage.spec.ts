@@ -135,7 +135,9 @@ test.describe('video collage', () => {
     await expect(page.getByRole('button', { name: /Stop playing motion\.webm/ })).toBeVisible();
 
     // ...and the frames it needed are really in the pool, just not asked about.
-    await expect(page.getByRole('button', { name: /Unmute motion\.webm/ })).toBeVisible();
+    // The chip reads "Mute" because the clip's sound is already part of the
+    // piece — importing a video is a statement that you want the video.
+    await expect(page.getByRole('button', { name: /Mute motion\.webm/ })).toBeVisible();
   });
 
   test('the frame picker is off by default and switches on in settings', async ({ page }) => {
@@ -250,32 +252,60 @@ test.describe('video collage', () => {
     await expect(page.locator('img[src^="blob:"]')).toBeVisible({ timeout: 20_000 });
   });
 
-  test('each clip has its own sound toggle, muted by default', async ({ page }) => {
+  /**
+   * TWO DIFFERENT QUESTIONS, AND THIS TEST USED TO CONFLATE THEM.
+   *
+   * "A collage that shouts the moment you drop a clip in is not a nice thing to
+   * build" is TRUE, and it is about the SPEAKERS. It got implemented as "the
+   * clip's sound is not part of the piece", which is a statement about the
+   * FILE — and that is how exports came out silent: the export read the same
+   * flag, so a person who never hunted down the speaker chip got an MP4 with no
+   * audio track and nothing on screen said so.
+   *
+   * Both properties are asserted here now, separately, because they must both
+   * hold: the sound is IN the piece from the moment of import, and the room
+   * stays quiet until you ask to hear it.
+   */
+  test('a clip’s sound is in the piece on import, while the room stays quiet', async ({ page }) => {
     test.setTimeout(120_000);
     await importClip(page);
     await expect(page.locator('canvas')).toBeVisible({ timeout: 20_000 });
     await startPlaybackIfGated(page);
 
-    // A collage that shouts the moment you drop a clip in is not a nice thing
-    // to build, so every clip starts silent and says so.
-    const unmute = page.getByRole('button', { name: /Unmute motion\.webm/ });
-    await expect(unmute).toBeVisible();
-    await expect(unmute).toHaveAttribute('aria-pressed', 'false');
-
-    await unmute.click();
+    // INTENT: selected, and the chip says so.
     const mute = page.getByRole('button', { name: /Mute motion\.webm/ });
     await expect(mute).toBeVisible();
     await expect(mute).toHaveAttribute('aria-pressed', 'true');
 
-    // And it is really audible, not just relabelled.
+    // THE ROOM: still silent. The monitor starts off, so the element stays
+    // muted — which is also what keeps it autoplay-eligible.
+    await expect(page.getByRole('button', { name: 'Unmute preview' })).toBeVisible();
+    expect(
+      await page.evaluate(() => {
+        const v = Array.from(document.querySelectorAll('video'))
+          .find((e) => e.src.startsWith('blob:'));
+        return v ? v.muted : null;
+      }),
+      'importing a clip must not make noise',
+    ).toBe(true);
+
+    // Turning the monitor on makes that same clip really audible, not just
+    // relabelled.
+    await page.getByRole('button', { name: 'Unmute preview' }).click();
+    await expect(page.getByRole('button', { name: 'Mute preview' })).toBeVisible({ timeout: 10_000 });
     expect(await page.evaluate(() => {
       const v = Array.from(document.querySelectorAll('video'))
         .find((e) => e.src.startsWith('blob:'));
       return v ? !v.muted && v.volume > 0 : false;
     })).toBe(true);
 
+    // And the per-clip switch still works in both directions.
     await mute.click();
-    await expect(page.getByRole('button', { name: /Unmute motion\.webm/ })).toHaveAttribute('aria-pressed', 'false');
+    const unmute = page.getByRole('button', { name: /Unmute motion\.webm/ });
+    await expect(unmute).toHaveAttribute('aria-pressed', 'false');
+    await unmute.click();
+    await expect(page.getByRole('button', { name: /Mute motion\.webm/ }))
+      .toHaveAttribute('aria-pressed', 'true');
   });
 
   test('video is offered in the export sheet and saves a file', async ({ page }) => {

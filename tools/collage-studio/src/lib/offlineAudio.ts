@@ -49,6 +49,8 @@
 //   variable one. It is named here rather than papered over.
 // -----------------------------------------------------------------------------
 
+import { demuxAacTrack, toAudioSpecificConfig } from './mp4AudioDemux';
+
 // =============================================================================
 // TYPES
 // =============================================================================
@@ -153,6 +155,8 @@ const within = <T,>(p: Promise<T>, ms: number, what: string): Promise<T> =>
 
 type EncCtor = typeof AudioEncoder;
 type DataCtor = typeof AudioData;
+type DecCtor = typeof AudioDecoder;
+type ChunkCtor = typeof EncodedAudioChunk;
 type OACCtor = new (channels: number, length: number, rate: number) => OfflineAudioContext;
 
 const encCtor = (): EncCtor | null => {
@@ -164,6 +168,18 @@ const dataCtor = (): DataCtor | null => {
   if (typeof window === 'undefined') return null;
   const w = window as unknown as { AudioData?: DataCtor };
   return typeof w.AudioData === 'function' ? w.AudioData : null;
+};
+/** WebCodecs decode side. Present on WebKit, which is exactly where the
+ *  one-call `decodeAudioData` path gives up. */
+const decCtor = (): DecCtor | null => {
+  if (typeof window === 'undefined') return null;
+  const w = window as unknown as { AudioDecoder?: DecCtor };
+  return typeof w.AudioDecoder === 'function' ? w.AudioDecoder : null;
+};
+const chunkCtor = (): ChunkCtor | null => {
+  if (typeof window === 'undefined') return null;
+  const w = window as unknown as { EncodedAudioChunk?: ChunkCtor };
+  return typeof w.EncodedAudioChunk === 'function' ? w.EncodedAudioChunk : null;
 };
 const oacCtor = (): OACCtor | null => {
   if (typeof window === 'undefined') return null;
@@ -214,33 +230,174 @@ const fetchBytes = async (url: string, signal?: AbortSignal): Promise<ArrayBuffe
 // =============================================================================
 
 /**
- * Decode one clip's audio. Individually try/caught on purpose: a clip with no
- * audio track throws `EncodingError` on every engine, and a WebM/Opus source
- * fails on Safari. One undecodable clip must cost THAT CLIP its sound — never
- * the render — exactly as a failed seek costs one frame its motion.
+ * SECOND RUNG: demux the AAC track ourselves and decode it with WebCodecs.
+ *
+ * `decodeAudioData` is not a codec question, it is a CONTAINER question, and
+ * WebKit answers it badly — it returns `EncodingError: Decoding failed` for
+ * every iPhone `.mov` and for any movie carrying a second media track, while
+ * the very same engine reports `AudioDecoder.isConfigSupported({codec:
+ * 'mp4a.40.2'}) -> true`. See `mp4AudioDemux.ts` for the measured matrix.
+ *
+ * So when the one-call path fails we take the file apart by hand and hand the
+ * elementary stream to WebCodecs. Returns null (never throws) if this engine
+ * has no `AudioDecoder`, the file is not AAC-in-MP4, or the decode produces
+ * nothing — the caller then reports honestly instead of guessing.
+ */
+const decodeViaWebCodecs = async (
+  ctx: BaseAudioContext, bytes: ArrayBuffer, signal?: AbortSignal,
+): Promise<AudioBuffer | null> => {
+  const Dec = decCtor();
+  const Chunk = chunkCtor();
+  if (!Dec || !Chunk) return null;
+
+  const track = demuxAacTrack(bytes);
+  if (!track || !track.samples.length) return null;
+
+  const config: AudioDecoderConfig = {
+    codec: track.codec,
+    sampleRate: track.sampleRate,
+    numberOfChannels: track.numberOfChannels,
+    description: track.description,
+  };
+  try {
+    const probe = await Dec.isConfigSupported(config);
+    if (!probe.supported) return null;
+  } catch { return null; }
+
+  // Planar float per channel, in output order. Held as a list of blocks and
+  // concatenated once at the end: an incremental copy into a grown buffer
+  // would be quadratic on a two-minute clip.
+  const blocks: Float32Array[][] = [];
+  let totalFrames = 0;
+  let channels = track.numberOfChannels;
+  let rate = track.sampleRate;
+  let failed: string | null = null;
+
+  const decoder = new Dec({
+    output: (data: AudioData) => {
+      try {
+        channels = data.numberOfChannels || channels;
+        rate = data.sampleRate || rate;
+        const planes: Float32Array[] = [];
+        for (let ch = 0; ch < channels; ch++) {
+          // Ask for f32-planar explicitly: the decoder is free to hand back
+          // s16 or interleaved, and `copyTo` is the only place a conversion
+          // is guaranteed.
+          const opts = { planeIndex: ch, format: 'f32-planar' as const };
+          const plane = new Float32Array(data.allocationSize(opts) / 4);
+          data.copyTo(plane, opts);
+          planes.push(plane);
+        }
+        blocks.push(planes);
+        totalFrames += data.numberOfFrames;
+      } catch (e) {
+        failed = failed ?? errText(e);
+      } finally {
+        try { data.close(); } catch { /* ignore */ }
+      }
+    },
+    error: (e: Error) => { failed = failed ?? errText(e); },
+  });
+
+  try {
+    decoder.configure(config);
+    for (const s of track.samples) {
+      if (signal?.aborted) break;
+      // Every AAC access unit is independently decodable — there are no
+      // delta frames to mark.
+      decoder.decode(new Chunk({
+        type: 'key', timestamp: s.timestamp, duration: s.duration, data: s.data,
+      }));
+    }
+    await within(decoder.flush(), DECODE_TIMEOUT_MS, 'webcodecs audio decode');
+  } catch (e) {
+    failed = failed ?? errText(e);
+  }
+  try { decoder.close(); } catch { /* ignore */ }
+
+  if (!totalFrames || !blocks.length) return null;
+
+  try {
+    const buf = ctx.createBuffer(channels, totalFrames, rate);
+    for (let ch = 0; ch < channels; ch++) {
+      const dest = buf.getChannelData(ch);
+      let at = 0;
+      for (const planes of blocks) {
+        const src = planes[ch] ?? planes[0];
+        if (!src) continue;
+        // A short final block is normal; never write past the declared length.
+        const n = Math.min(src.length, dest.length - at);
+        if (n <= 0) break;
+        dest.set(n === src.length ? src : src.subarray(0, n), at);
+        at += n;
+      }
+    }
+    return buf;
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * Decode one clip's audio, and say why if it cannot.
+ *
+ * Individually try/caught on purpose: one undecodable clip must cost THAT CLIP
+ * its sound — never the render — exactly as a failed seek costs one frame its
+ * motion. But the reason is now CARRIED OUT rather than swallowed: a bare null
+ * made "this file has no audio track", "your blob URL was revoked", "the fetch
+ * timed out" and "WebKit will not open this container" indistinguishable, and
+ * the message the user got asserted the first one for all four. A message that
+ * cannot name which failure fired is not instrumentation.
  */
 const decodeOne = async (
   ctx: BaseAudioContext, url: string, signal?: AbortSignal,
-): Promise<AudioBuffer | null> => {
+): Promise<{ buf: AudioBuffer | null; why: string | null }> => {
+  let bytes: ArrayBuffer;
   try {
-    // `decodeAudioData` DETACHES the ArrayBuffer it is given, so a buffer can
-    // never be decoded twice. We fetch per clip, so that is fine here — but it
-    // is why this must not be refactored to share one buffer.
-    const bytes = await fetchBytes(url, signal);
+    bytes = await fetchBytes(url, signal);
+  } catch (e) {
+    return { buf: null, why: `could not be read (${errText(e)})` };
+  }
+  if (!bytes.byteLength) return { buf: null, why: 'read back empty' };
+
+  // `decodeAudioData` DETACHES the buffer it is given, so the WebCodecs rung
+  // below could never see the bytes again. Keep a copy BEFORE the first
+  // attempt — this is the one place a second read is not avoidable.
+  const spare = bytes.slice(0);
+
+  const first = await decodeWhole(ctx, bytes, signal);
+  if (first.buf) return first;
+
+  const second = await decodeViaWebCodecs(ctx, spare, signal);
+  if (second) return { buf: second, why: null };
+
+  return { buf: null, why: first.why ?? 'carries no readable audio track' };
+};
+
+/** FIRST RUNG: hand the whole file to the engine and hope it demuxes it. */
+const decodeWhole = async (
+  ctx: BaseAudioContext, bytes: ArrayBuffer, signal?: AbortSignal,
+): Promise<{ buf: AudioBuffer | null; why: string | null }> => {
+  void signal;
+  try {
     const decoded = ctx.decodeAudioData(bytes);
     // Old WebKit returns undefined and takes callbacks instead of a promise.
     if (!decoded || typeof (decoded as Promise<AudioBuffer>).then !== 'function') {
-      return await new Promise<AudioBuffer | null>((resolve) => {
+      return await new Promise<{ buf: AudioBuffer | null; why: string | null }>((resolve) => {
         try {
           (ctx as unknown as {
-            decodeAudioData(b: ArrayBuffer, ok: (x: AudioBuffer) => void, no: () => void): void;
-          }).decodeAudioData(bytes, resolve, () => resolve(null));
-        } catch { resolve(null); }
+            decodeAudioData(b: ArrayBuffer, ok: (x: AudioBuffer) => void, no: (e?: unknown) => void): void;
+          }).decodeAudioData(
+            bytes,
+            (b) => resolve({ buf: b, why: null }),
+            (e) => resolve({ buf: null, why: e ? errText(e) : 'the browser could not open this file' }),
+          );
+        } catch (e) { resolve({ buf: null, why: errText(e) }); }
       });
     }
-    return await within(decoded, DECODE_TIMEOUT_MS, 'decode');
-  } catch {
-    return null;
+    return { buf: await within(decoded, DECODE_TIMEOUT_MS, 'decode'), why: null };
+  } catch (e) {
+    return { buf: null, why: errText(e) };
   }
 };
 
@@ -339,12 +496,34 @@ const encodeAac = async (
   const raw: { data: Uint8Array; type: 'key' | 'delta'; timestamp: number; meta?: EncodedAudioChunkMetadata }[] = [];
   let encError: string | null = null;
 
+  /**
+   * The muxer writes `decoderConfig.description` into `esds` VERBATIM, and the
+   * engines do not agree on what that field contains — WebKit hands back an
+   * entire ES_Descriptor where Chrome hands back the bare AudioSpecificConfig.
+   * Unfixed, every Safari and iOS export carried an audio track that ffprobe
+   * reads as "22050 Hz, 0 channels, Audio object type 0" and no player will
+   * open. Reduce it to the ASC before it can reach the file.
+   */
+  const normaliseMeta = (
+    meta: EncodedAudioChunkMetadata | undefined,
+  ): EncodedAudioChunkMetadata | undefined => {
+    const dc = meta?.decoderConfig;
+    if (!dc?.description) return meta;
+    const src = dc.description as ArrayBuffer | ArrayBufferView;
+    const bytes = ArrayBuffer.isView(src)
+      ? new Uint8Array(src.buffer, src.byteOffset, src.byteLength)
+      : new Uint8Array(src);
+    const asc = toAudioSpecificConfig(bytes);
+    if (asc === bytes) return meta;
+    return { ...meta, decoderConfig: { ...dc, description: asc } };
+  };
+
   const encoder = new Enc({
     output: (chunk, meta) => {
       try {
         const data = new Uint8Array(chunk.byteLength);
         chunk.copyTo(data);
-        raw.push({ data, type: chunk.type, timestamp: chunk.timestamp, meta });
+        raw.push({ data, type: chunk.type, timestamp: chunk.timestamp, meta: normaliseMeta(meta) });
       } catch (e) { encError = encError ?? errText(e); }
     },
     error: (e: DOMException) => { encError = encError ?? errText(e); },
@@ -453,16 +632,34 @@ export const prepareOfflineAudio = async (
   }
 
   const decoded: { buf: AudioBuffer; src: OfflineAudioSource }[] = [];
+  const failures: { id: string; why: string }[] = [];
   for (const s of audible) {
     if (opts.signal?.aborted) return { track: null, reason: 'Cancelled.', decoded: decoded.length };
-    const buf = await decodeOne(decodeCtx, s.url, opts.signal);
+    const { buf, why } = await decodeOne(decodeCtx, s.url, opts.signal);
     if (buf && buf.length > 0) decoded.push({ buf, src: s });
+    else failures.push({ id: s.id, why: why ?? 'carries no readable audio track' });
   }
   if (!decoded.length) {
-    return { track: null, reason: 'None of these clips carry a readable audio track.', decoded: 0 };
+    // Say what actually happened. This used to assert ONE cause — "no readable
+    // audio track" — for a fetch failure, a timeout, a revoked blob URL and a
+    // container this engine will not open, which sent the owner looking for a
+    // problem in files that turned out to be fine.
+    const distinct = Array.from(new Set(failures.map((f) => f.why)));
+    const detail = distinct.length === 1 ? distinct[0] : distinct.join('; ');
+    return {
+      track: null,
+      reason: audible.length === 1
+        ? `That clip's sound could not be read — it ${detail}.`
+        : `None of the ${audible.length} clips' sound could be read — they ${detail}.`,
+      decoded: 0,
+    };
   }
   if (decoded.length < audible.length) {
-    warnings.push(`${audible.length - decoded.length} clip(s) had no readable sound and were left out.`);
+    const lost = failures.map((f) => f.why);
+    const distinct = Array.from(new Set(lost));
+    warnings.push(
+      `${failures.length} clip(s) had no readable sound and were left out (${distinct.join('; ')}).`,
+    );
   }
 
   const mixed = await mixSources(decoded, startAt, seconds);

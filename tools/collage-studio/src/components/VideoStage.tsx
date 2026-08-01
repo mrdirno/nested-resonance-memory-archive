@@ -174,7 +174,19 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       // must not also revoke, or a re-mount races a already-freed blob.
       ownsUrl: false,
       loop: true,
-      muted: true,
+      // `muted` is the clip's INTENT — "is this clip's sound part of the piece"
+      // — and it seeds the export. It is NOT the speakers: what you hear is
+      // `soundOn && !muted && live`, and `soundOn` starts false, so importing a
+      // video is still silent in the room and still autoplay-eligible (browsers
+      // only autoplay muted media, and `applyMutes` keeps the ELEMENT muted
+      // while the monitor is off).
+      //
+      // It used to be `true`, which meant a video you imported and exported
+      // without ever finding the per-clip speaker button produced a file with
+      // no audio track at all — the owner's report. Importing a video is a
+      // statement that you want the video; its sound comes with it, and one tap
+      // takes it back out.
+      muted: false,
       width: c.width,
       height: c.height,
     })),
@@ -262,7 +274,6 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     // decodes the clips and mixes them on the same timeline instead. See
     // `offlineAudio.ts`. That removes the last reason the realtime path
     // existed: an unmuted clip no longer costs you the smooth render.
-    const wantsSound = !!status?.clips.some((c) => c.audible);
     const useRender = !!frameSupport?.supported;
 
     // ONE EXPORT PATH. The render was briefly conditional — realtime was kept
@@ -415,16 +426,26 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   }, [result]);
 
   /**
-   * PER-CLIP SOUND. Exclusive by default — mixing several tracks at once is mud,
-   * so unmuting one mutes the rest. Runs synchronously in the click because
-   * turning sound ON is gesture-bound: browsers only autoplay muted media, and
-   * `muted = false` is honoured only from a real gesture.
+   * PER-CLIP SOUND — INDEPENDENT. Each clip is its own switch; turning one on
+   * leaves the others alone, so a mix of several clips is reachable (and is
+   * what the offline bounce renders).
+   *
+   * It toggles INTENT (`wantsAudio`), not `audible`. Those differ whenever the
+   * monitor is off or the clip was deferred by the realtime decoder budget, and
+   * reading the button's state off `audible` is what made it look dead: a
+   * deferred clip is never audible, so every click re-sent "unmute", the state
+   * never changed on screen, and the clip's sound was excluded from the export
+   * with no way for the user to include it.
+   *
+   * Runs synchronously in the click because turning sound ON is gesture-bound:
+   * browsers only autoplay muted media, and `muted = false` is honoured only
+   * from a real gesture.
    */
-  const toggleClipSound = useCallback((clipId: string, currentlyAudible: boolean) => {
+  const toggleClipSound = useCallback((clipId: string, currentlyWanted: boolean) => {
     const stage = stageRef.current;
     if (!stage) return;
-    stage.setClipMuted(clipId, currentlyAudible, true);
-    if (!currentlyAudible) stage.resumeFromGesture({ sound: true });
+    stage.setClipMuted(clipId, currentlyWanted, false);
+    if (!currentlyWanted) stage.resumeFromGesture({ sound: true });
   }, []);
 
   /** Either strategy will do. Only when BOTH are out is recording really gone. */
@@ -446,29 +467,56 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   }, [recorderRef, startRecording, canRecord, liveCount, busy, recPhase, profile.maxSeconds]);
 
   const clipRows = status?.clips ?? [];
+  // What the EXPORT will carry — intent, exactly as `describeAudioSources`
+  // reads it. Deliberately not `audible`: a clip the realtime budget deferred
+  // is inaudible in the room and still lands in the file.
+  const soundClipCount = clipRows.filter((r) => r.wantsAudio).length;
 
   const dock = (
     <div className="flex items-center gap-1 min-w-0 w-full">
-      {/* ONE CHIP PER CLIP: what it is, whether you can hear it, and a way out.
-          Sound starts OFF for every clip — a collage that shouts on import is
-          not a nice thing to build. */}
+      {/* ONE CHIP PER CLIP: what it is, whether its sound is in the piece, and
+          a way out. Sound starts OFF for every clip — a collage that shouts on
+          import is not a nice thing to build — but each switch is INDEPENDENT,
+          so any combination of clips can be sounding, and that selection is
+          exactly what the export renders. */}
       <div className="flex items-center gap-1.5 min-w-0 overflow-x-auto">
         {clips.map((c) => {
           const st = clipRows.find((r) => r.id === c.id);
+          // INTENT drives the button; audibility only tints it. `wantsAudio` is
+          // "this clip's sound is in the piece" and is what gets exported;
+          // `audible` is "you can hear it through the speakers right now", which
+          // the monitor switch and the decoder budget can both veto.
+          const wantsAudio = !!st?.wantsAudio;
           const audible = !!st?.audible;
+          const silentHere = wantsAudio && !audible;
           return (
             <div key={c.id} className="flex items-center gap-0.5 pl-2 pr-0.5 py-0.5 rounded-lg bg-[#161616] border border-white/10 shrink-0">
               <span className="text-[9px] tracking-wide text-gray-300 truncate max-w-[7rem]" title={c.name}>{c.name}</span>
               <button
-                onClick={() => toggleClipSound(c.id, audible)}
+                onClick={() => toggleClipSound(c.id, wantsAudio)}
                 disabled={!status?.audioAvailable || st?.state === 'error'}
-                title={audible ? `Mute ${c.name}` : `Play sound from ${c.name} (mutes the others)`}
-                aria-label={audible ? `Mute ${c.name}` : `Unmute ${c.name}`}
-                aria-pressed={audible}
+                title={
+                  wantsAudio
+                    ? silentHere
+                      ? `${c.name}: sound is ON and will be in the export — you are not hearing it here because ${
+                          status?.soundOn ? 'this clip is showing as stills' : 'the preview is muted'
+                        }. Click to turn its sound off.`
+                      : `Turn off ${c.name}'s sound`
+                    : `Add ${c.name}'s sound to the piece`
+                }
+                // Short and conventional on PURPOSE: the rich explanation lives
+                // in `title`, while the accessible name stays the two words a
+                // screen reader (and the e2e suite) can act on.
+                aria-label={wantsAudio ? `Mute ${c.name}` : `Unmute ${c.name}`}
+                aria-pressed={wantsAudio}
                 className={`w-7 h-7 rounded flex items-center justify-center transition-colors disabled:opacity-30 ${
-                  audible ? 'text-emerald-400 hover:bg-emerald-500/15' : 'text-gray-500 hover:text-white hover:bg-white/10'
+                  audible
+                    ? 'text-emerald-400 hover:bg-emerald-500/15'
+                    : wantsAudio
+                    ? 'text-emerald-400/45 hover:bg-emerald-500/10'
+                    : 'text-gray-500 hover:text-white hover:bg-white/10'
                 }`}
-              >{audible ? <Volume2 size={13} /> : <VolumeX size={13} />}</button>
+              >{wantsAudio ? <Volume2 size={13} /> : <VolumeX size={13} />}</button>
               {onRemoveClip && (
                 <button
                   onClick={() => onRemoveClip(c.id)}
@@ -517,8 +565,10 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       <button
         onClick={toggleSound}
         disabled={liveCount === 0 || !status?.audioAvailable}
-        title={status?.soundOn ? 'Mute' : 'Unmute the largest clip'}
-        aria-label={status?.soundOn ? 'Mute' : 'Unmute'}
+        title={status?.soundOn
+          ? 'Mute the preview (does not change what the export contains)'
+          : 'Hear the preview'}
+        aria-label={status?.soundOn ? 'Mute preview' : 'Unmute preview'}
         className={`w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0 ${
           status?.soundOn ? 'text-emerald-400' : 'text-gray-400'
         }`}
@@ -551,10 +601,20 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         <button
           onClick={() => startRecording()}
           disabled={!canRecord || liveCount === 0 || busy}
+          // "(silent)" used to be hard-coded onto exactly this branch — which is
+          // the branch that RENDERS SOUND. The offline renderer gained a mixer
+          // and the label never moved, so the tool told you it was about to drop
+          // your audio a moment before it kept it, and the owner had every
+          // reason to read a silent file as expected behaviour. The label now
+          // reads the same intent the export does.
           title={!canRecord
             ? 'Recording unavailable in this browser'
             : frameSupport?.supported
-              ? `Render ${Math.min(seconds, profile.maxSeconds)}s — frame by frame, no dropped frames (silent)`
+              ? `Render ${Math.min(seconds, profile.maxSeconds)}s — frame by frame, no dropped frames${
+                  soundClipCount > 0
+                    ? ` · sound from ${soundClipCount} clip${soundClipCount === 1 ? '' : 's'}`
+                    : ' · silent (no clip has its sound on)'
+                }`
               : `Record ${Math.min(seconds, profile.maxSeconds)}s in real time`}
           aria-label="Record video"
           className="w-8 h-8 rounded-lg text-red-400 flex items-center justify-center hover:bg-red-500/15 disabled:opacity-30 transition-colors shrink-0"

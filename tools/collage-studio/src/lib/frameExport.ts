@@ -602,8 +602,15 @@ export interface OfflineRenderOptions extends FrameRecordOptions {
  *   produce — which is the correct trade for an artifact you keep.
  *
  * NEVER THROWS — same typed `RecordResult` as every other path here.
- * SILENT — same reason as `recordFrames`: no audio graph is involved, and it
- * says so in the warnings rather than pretending.
+ *
+ * CARRIES SOUND, and this comment used to say the opposite. `renderOffline`
+ * shipped silent, then gained a mixer (`prepareOfflineAudio`, called below) —
+ * and the "SILENT" note stayed, alongside a "(silent)" button tooltip in
+ * VideoStage. Two pieces of documentation kept asserting a limitation the code
+ * had already removed, which is how a genuinely broken export read as intended
+ * behaviour for as long as it did. No audio graph is involved (there is no
+ * clock to tap); the audio is DECODED AND MIXED independently, and every path
+ * that ends up without it says which rung failed.
  */
 export const renderOffline = async (
   source: OfflineRenderSource,

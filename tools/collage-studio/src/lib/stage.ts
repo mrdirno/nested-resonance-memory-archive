@@ -133,6 +133,21 @@ export interface StageClipStatus {
   playing: boolean;
   /** The per-clip mute FLAG (what `setClipMuted` sets). */
   muted: boolean;
+  /**
+   * THE USER'S INTENT: "this clip's sound is part of the piece" — `!muted`,
+   * and nothing else.
+   *
+   * Distinct from `audible` on purpose. `audible` is a fact about the SPEAKERS
+   * RIGHT NOW and is therefore gated by things the user did not choose: the
+   * global monitor switch, and `live`, which is the realtime decoder-admission
+   * budget. A clip deferred by that budget is inaudible no matter what the user
+   * wants — so a control wired to `audible` reads back "still muted" after every
+   * click and looks broken, and an EXPORT wired to it silently drops the sound
+   * of every clip the device could not also play at the same time.
+   *
+   * Intent survives both. It is what the offline mixer renders.
+   */
+  wantsAudio: boolean;
   /** What you can actually hear right now: `soundOn && !muted && live`. */
   audible: boolean;
   /** Metadata seen and at least one frame decoded. */
@@ -1645,10 +1660,22 @@ export class Stage {
   }
 
   /**
-   * Per-clip mute. `exclusive` (default true) mutes every other clip, because
-   * mixing N tracks is mud. Unmuting must happen inside a user gesture.
+   * Per-clip mute. INDEPENDENT by default: unmuting one clip leaves the others
+   * exactly as they were.
+   *
+   * It used to default to `exclusive = true` on the theory that "mixing N
+   * tracks is mud". That made per-clip sound a RADIO BUTTON — unmuting B muted
+   * A, so two clips could never be heard together and the two-clip state was
+   * simply unreachable through the UI. Worse, it is the mixer's own reason for
+   * existing: the offline bounce mixes N clips onto one timeline, and a model
+   * that permits at most one audible clip caps every export at one track.
+   * Whether a mix is mud is the user's call to make and unmake; the control's
+   * job is to let them make it.
+   *
+   * `exclusive` is kept as an opt-in for a caller that genuinely wants solo.
+   * Unmuting must still happen inside a user gesture.
    */
-  setClipMuted(clipId: string, muted: boolean, exclusive = true): void {
+  setClipMuted(clipId: string, muted: boolean, exclusive = false): void {
     const target = this.clips.get(clipId);
     if (!target) return;
     target.muted = muted;
@@ -1798,9 +1825,28 @@ export class Stage {
    *    recomputed it from `duration` the two timelines would each round the
    *    epsilon their own way and drift apart, and A/V drift is invisible in
    *    review — it only shows up in the finished file.
-   *  - `gain` mirrors `applyMutes()`'s `audible` predicate exactly. A clip that
-   *    is muted, evicted or broken contributes nothing, and reporting it as a
-   *    source would make the result claim signal the file does not contain.
+   *  - `gain` is the user's INTENT (`!muted`), NOT `applyMutes()`'s `audible`.
+   *    It used to mirror `audible` exactly, and that was the bug that made
+   *    exports silent. `audible` is a statement about the SPEAKERS, so it also
+   *    carries two conditions that have no meaning for a file being written:
+   *
+   *      `soundOn` — the MONITOR switch. It starts false (browsers only
+   *        autoplay muted media), so a user who never pressed the speaker
+   *        exported silence; and a user who muted their monitor to work in
+   *        peace exported silence too, which is the opposite of what muting
+   *        your own speakers means.
+   *
+   *      `live` — the REALTIME DECODER ADMISSION BUDGET (`maxLiveClips` /
+   *        `maxLivePixels`). This one is the real damage: the offline mixer
+   *        opens its OWN decoder on `url` and never touches the live element,
+   *        so it can render sound for a clip this device could not also PLAY.
+   *        Gating it on `live` let a realtime resource limit silently decide
+   *        what an offline render contains — on a phone, where the budget is 3
+   *        clips, importing four videos dropped the fourth's audio with nothing
+   *        said. Two guards on one resource, in different units, and the
+   *        tighter one quietly became the real limit.
+   *
+   *    `broken` stays: a clip whose media errored has nothing to decode.
    *
    * `startTime` is deliberately absent: `seekClipTo` does not apply it either.
    */
@@ -1814,8 +1860,8 @@ export class Stage {
       const span = Number.isFinite(dur) && (dur as number) > 0
         ? Math.max(OFFLINE_SEEK_EPSILON, (dur as number) - OFFLINE_SEEK_EPSILON)
         : 0;
-      const audible = this.soundOn && !c.muted && c.live && !c.broken;
-      out.push({ id: c.id, url: c.url, span, loop: c.loop, gain: audible ? 1 : 0 });
+      const wanted = !c.muted && !c.broken;
+      out.push({ id: c.id, url: c.url, span, loop: c.loop, gain: wanted ? 1 : 0 });
     });
     return out;
   }
@@ -1867,6 +1913,7 @@ export class Stage {
         live: c.live,
         playing,
         muted: c.muted,
+        wantsAudio: !c.muted && !c.broken,
         audible: this.soundOn && !c.muted && c.live && !c.broken,
         ready: c.ready,
         fragments: c.fragments,
