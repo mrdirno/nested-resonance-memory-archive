@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consumables List</title>
+<style>
+:root{
+  --steel:#242A31;
+  --ink:#12161A;
+  --zinc:#D7DAD3;
+  --paper:#FBFBF8;
+  --line:#BABEB6;
+  --muted:#5D656E;
+  --flag:#F0BE1E;
+  --tint:#FDF7E1;
+  --sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond: "Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--zinc);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.4;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 140px}
+
+/* ---------- masthead ---------- */
+.plate{
+  background:var(--steel);
+  color:#EEF0EA;
+  margin:0 -16px 22px;
+  padding:16px 16px 14px;
+}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--flag);
+  display:block;
+  margin-bottom:6px;
+}
+.plate h1{
+  font-family:var(--cond);
+  font-weight:700;
+  font-size:clamp(19px,4.4vw,28px);
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  margin:0;
+  line-height:.95;
+}
+.lede{margin:7px 0 0;max-width:52ch;color:#B9BFC6;font-size:12.5px}
+
+.jobfields{
+  display:flex;flex-wrap:wrap;gap:9px;margin-top:14px;
+  padding-top:12px;border-top:1px solid #3A424B;
+}
+.field{flex:1 1 170px;min-width:150px}
+.field span{
+  display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#8E97A1;margin-bottom:5px;
+}
+.field input{
+  width:100%;background:#171C22;border:1px solid #3A424B;color:#EEF0EA;
+  font-family:var(--cond);font-size:14px;letter-spacing:.02em;padding:6px 9px;border-radius:2px;
+}
+.field input:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
+
+/* ---------- toolbar ---------- */
+.toolbar{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  margin-bottom:18px;
+}
+.search{
+  flex:1 1 260px;position:relative;
+}
+.search input{
+  width:100%;padding:10px 12px 10px 34px;border:1px solid var(--steel);
+  background:var(--paper);border-radius:2px;font-family:var(--sans);font-size:14px;color:var(--ink);
+}
+.search::before{
+  content:"";position:absolute;left:12px;top:50%;width:11px;height:11px;
+  margin-top:-7px;border:2px solid var(--muted);border-radius:50%;
+}
+.search::after{
+  content:"";position:absolute;left:21px;top:50%;width:7px;height:2px;
+  background:var(--muted);transform:rotate(45deg);margin-top:2px;
+}
+.btn{
+  font-family:var(--cond);text-transform:uppercase;letter-spacing:.08em;font-size:14px;
+  padding:10px 14px;border:1px solid var(--steel);background:transparent;color:var(--steel);
+  border-radius:2px;cursor:pointer;
+}
+.btn:hover{background:var(--steel);color:#EEF0EA}
+.btn:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+.opt{
+  display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;
+}
+.opt input{accent-color:var(--steel);width:15px;height:15px}
+
+/* ---------- categories ---------- */
+.cat{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-left:5px solid var(--chip,var(--steel));
+  border-radius:2px;
+  margin-bottom:14px;
+  overflow:hidden;
+}
+.cat-head{
+  display:flex;align-items:baseline;gap:10px;
+  padding:12px 14px 10px;border-bottom:1px solid var(--line);
+}
+.cat-head h2{
+  font-family:var(--cond);text-transform:uppercase;letter-spacing:.09em;
+  font-size:15px;font-weight:700;margin:0;flex:1;
+}
+.tally{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em}
+.mini{
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  background:none;border:1px solid var(--line);color:var(--muted);
+  padding:4px 7px;border-radius:2px;cursor:pointer;
+}
+.mini:hover{border-color:var(--steel);color:var(--steel)}
+.mini:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
+
+ul.items{list-style:none;margin:0;padding:0}
+.item{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:6px 13px;border-top:1px solid #E7E7E1;
+  transition:background .12s ease;
+}
+.item:first-child{border-top:0}
+.item.is-checked{background:var(--tint)}
+.item.is-hidden{display:none}
+.cat.is-hidden{display:none}
+
+.row{display:flex;align-items:center;gap:11px;flex:1 1 320px;cursor:pointer;min-width:0}
+.tick{
+  appearance:none;-webkit-appearance:none;flex:none;
+  width:20px;height:20px;border:2px solid var(--steel);border-radius:2px;
+  background:var(--paper);cursor:pointer;position:relative;margin:0;
+}
+.tick:checked{background:var(--steel)}
+.tick:checked::after{
+  content:"";position:absolute;left:5px;top:1px;width:5px;height:11px;
+  border:solid var(--flag);border-width:0 2.5px 2.5px 0;transform:rotate(42deg);
+}
+.tick:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+
+.body{min-width:0}
+.name{
+  display:block;font-family:var(--cond);font-size:15px;letter-spacing:.01em;
+  color:var(--muted);
+}
+.is-checked .name{color:var(--ink);font-weight:700}
+.spec{display:block;font-size:11.5px;color:var(--muted);line-height:1.3}
+
+.fields{display:flex;gap:8px;align-items:center;margin-left:auto}
+.qty{
+  width:58px;padding:7px 6px;text-align:center;font-family:var(--mono);font-size:14px;
+  border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);
+}
+.note{
+  width:150px;padding:7px 9px;font-size:13px;border:1px solid var(--line);
+  border-radius:2px;background:#fff;color:var(--ink);
+}
+.qty:focus-visible,.note:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
+.kill{
+  border:1px solid var(--line);background:none;color:var(--muted);
+  width:30px;height:30px;border-radius:2px;cursor:pointer;font-size:16px;line-height:1;
+}
+.kill:hover{border-color:#C4342B;color:#C4342B}
+
+.empty{padding:14px;color:var(--muted);font-size:13.5px}
+.addbar{display:flex;gap:8px;padding:12px 14px;border-top:1px solid #E7E7E1}
+.addbar input{
+  flex:1;padding:9px 10px;border:1px solid var(--line);border-radius:2px;
+  font-size:14px;background:#fff;color:var(--ink);
+}
+.addbar input:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
+
+#nomatch{display:none;padding:26px 4px;color:var(--muted);font-family:var(--cond);
+  font-size:19px;text-transform:uppercase;letter-spacing:.06em}
+
+/* ---------- dock ---------- */
+.dock{
+  position:fixed;left:0;right:0;bottom:0;background:var(--steel);
+  border-top:3px solid var(--flag);z-index:20;
+}
+.dock-in{
+  max-width:1080px;margin:0 auto;padding:12px 16px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.readout{flex:1;min-width:130px;display:flex;align-items:baseline;gap:9px}
+.readout b{font-family:var(--mono);font-size:22px;color:var(--flag);line-height:1;font-weight:600}
+.readout span{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9BA4AE;
+}
+.dock .btn{border-color:#59626C;color:#DDE1E6}
+.dock .btn:hover{background:#333B44;color:#fff}
+.dock .btn.go{background:var(--flag);border-color:var(--flag);color:#231B00;font-weight:700}
+.dock .btn.go:hover{background:#FFD34A;border-color:#FFD34A;color:#231B00}
+.dock .btn.go[disabled]{opacity:.35;cursor:not-allowed;background:var(--flag);color:#231B00}
+
+@media (max-width:620px){
+  .fields{margin-left:31px;width:100%}
+  .note{flex:1;width:auto}
+  .row{flex:1 1 100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+}
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Field stock</span>
+    <h1>Consumables List</h1>
+    <p class="lede">Tick what you&rsquo;re out of, set counts, then copy the list into chat.</p>
+    <div class="jobfields">
+      <label class="field"><span>Jobsite</span><input id="fJob" type="text" placeholder="&mdash;"></label>
+      <label class="field"><span>Date</span><input id="fDate" type="text"></label>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="search">
+      <input id="q" type="search" placeholder="Filter items &mdash; try &ldquo;screw&rdquo; or &ldquo;RJ45&rdquo;" aria-label="Filter items">
+    </div>
+    <button class="btn" id="checkShown" type="button">Check shown</button>
+  </div>
+
+  <main id="list"></main>
+  <p id="nomatch">No items match that filter.</p>
+
+</div>
+
+<div class="dock">
+  <div class="dock-in">
+    <div class="readout"><b id="count">00</b><span id="countLabel">items needed</span></div>
+    <button class="btn" id="clear" type="button">Clear all</button>
+    <button class="btn go" id="copy" type="button" disabled>Copy for chat</button>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  { id:"tape", name:"Tapes & Adhesives", chip:"#2E64C8", items:[
+    ["Electrical Tape (E-Tape)","Vinyl electrical tape, assorted colors"],
+    ["Blue Painter's Tape","Low-tack surface protection and temporary positioning"]
+  ]},
+  { id:"fast", name:"Fasteners & Anchors", chip:"#C4342B", items:[
+    ["Wall Dogs","All-in-one threaded drywall/masonry anchors"],
+    ["Black Pan Head — Self-Tapper (Sheetrock)","Sheetrock screw for METAL STUD — small black Phillips pan-head, sharp self-tapping point (Home Depot)"],
+    ["Black Pan Head — Regular (Sheetrock)","Sheetrock screw for WOOD / no stud — small black Phillips pan-head, standard point, NOT self-tapping (Home Depot)"],
+    ["Self-Drilling / Tek Screws","Sheet metal and metal stud fastening"],
+    ["Standard Rack Screws","Standard #10-32 rack screws"],
+    ["Large Cage Nuts & Screws","M6 rack cage nuts and screws (slightly larger/thicker)"],
+    ["Snap Toggles / TOGGLER","1/4\"-20 plastic strap toggle anchors (blue box)"],
+    ["Concrete Screws (Tapcons)","Masonry and slab mounting"]
+  ]},
+  { id:"bits", name:"Drill Bits", chip:"#1B1B1B", items:[
+    ["3/16\" Drill Bits","Impact rated / hex shank style"],
+    ["Unibit / Step Bit","Up to 1/2\" — Milwaukee Shockwave or similar impact style"]
+  ]},
+  { id:"cable", name:"Cable Management & Dress", chip:"#2E7D4F", items:[
+    ["Velcro Roll (Hook-and-Loop)","Continuous roll for cable bundling"],
+    ["Adhesive-Backed Industrial Velcro","Mounting gear, power bricks, and receivers"],
+    ["Cable Zip Ties","Standard (4\", 8\", 11\") and UV-resistant outdoor ties"],
+    ["Adhesive Tie Mounts (Sticky Backs)","Screw-mount and adhesive cable anchors"],
+    ["Heat Shrink Tubing","Assorted diameters for strain relief and wire isolation"],
+    ["Split Mesh Sleeving","1/2 inch and 1 inch"],
+    ["Non-Split Mesh Sleeving","1/2 inch and 1 inch"],
+    ["Cable Split Loom",""]
+  ]},
+  { id:"label", name:"Labeling & Marking", chip:"#E0A800", items:[
+    ["Label Maker Cartridges","White with black font — Brady M21 series & Brother P-Touch TZe tape"],
+    ["Permanent Markers","Pack of Milwaukee Inkzall markers"],
+    ["Paint Pen","White paint pen"]
+  ]},
+  { id:"term", name:"Terminations & Miscellaneous", chip:"#7A3FA8", items:[
+    ["RJ45 Shielded Male Connectors","Shielded pass-through/standard RJ45 plugs with boots (Nelson bag)"],
+    ["RJ45 Non-Shielded Male Connectors","Typical unshielded RJ45 plugs with boots"],
+    ["Red Butt Splices","22-16 AWG crimp connectors"],
+    ["Blue Butt Splices","16-14 AWG crimp connectors"],
+    ["Wire Nuts","Standard twist-on wire connectors"]
+  ]},
+  { id:"writein", name:"Write-Ins", chip:"#5D656E", items:[], writein:true }
+];
+
+const list = document.getElementById("list");
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function itemHTML(name, spec, removable){
+  return `<li class="item">
+      <label class="row">
+        <input type="checkbox" class="tick" aria-label="${esc(name)}">
+        <span class="body">
+          <span class="name">${esc(name)}</span>
+          ${spec ? `<span class="spec">${esc(spec)}</span>` : ""}
+        </span>
+      </label>
+      <div class="fields">
+        <input class="qty" type="number" min="1" step="1" value="1" aria-label="Quantity — ${esc(name)}">
+        <input class="note" type="text" placeholder="size / note" maxlength="28" aria-label="Note — ${esc(name)}">
+        ${removable ? `<button class="kill" type="button" title="Remove line" aria-label="Remove ${esc(name)}">&times;</button>` : ""}
+      </div>
+    </li>`;
+}
+
+list.innerHTML = DATA.map(cat => `
+  <section class="cat" id="cat-${cat.id}" style="--chip:${cat.chip}">
+    <div class="cat-head">
+      <h2>${esc(cat.name)}</h2>
+      <span class="tally" data-tally>0 / ${cat.items.length}</span>
+      ${cat.writein ? "" : `<button class="mini" type="button" data-all>All</button>`}
+    </div>
+    <ul class="items">${cat.items.map(i => itemHTML(i[0], i[1], false)).join("")}</ul>
+    ${cat.writein ? `
+      <p class="empty" data-empty>Nothing added yet. Anything the list is missing goes here.</p>
+      <div class="addbar">
+        <input id="newItem" type="text" placeholder="Add an item — e.g. 3/4&quot; EMT straps" maxlength="60">
+        <button class="btn" id="addBtn" type="button">Add</button>
+      </div>` : ""}
+  </section>
+`).join("");
+
+const writeUL = document.querySelector("#cat-writein ul.items");
+const emptyMsg = document.querySelector("#cat-writein [data-empty]");
+
+function refresh(){
+  let total = 0;
+  document.querySelectorAll(".cat").forEach(cat => {
+    const items = [...cat.querySelectorAll(".item")];
+    const on = items.filter(i => i.querySelector(".tick").checked);
+    total += on.length;
+    cat.classList.toggle("has-checked", on.length > 0);
+    const t = cat.querySelector("[data-tally]");
+    if (t) t.textContent = `${on.length} / ${items.length}`;
+    const visible = items.some(i => !i.classList.contains("is-hidden"));
+    cat.classList.toggle("is-hidden", items.length > 0 && !visible);
+  });
+  if (emptyMsg) emptyMsg.style.display = writeUL.children.length ? "none" : "";
+  document.getElementById("count").textContent = String(total).padStart(2,"0");
+  document.getElementById("countLabel").textContent = total === 1 ? "item needed" : "items needed";
+  document.getElementById("copy").disabled = total === 0;
+}
+
+document.addEventListener("change", e => {
+  if (e.target.classList.contains("tick")){
+    const item = e.target.closest(".item");
+    item.classList.toggle("is-checked", e.target.checked);
+    const qty = item.querySelector(".qty");
+    if (e.target.checked && !qty.value) qty.value = 1;
+    refresh();
+  }
+});
+
+document.addEventListener("click", e => {
+  const all = e.target.closest("[data-all]");
+  if (all){
+    const items = [...all.closest(".cat").querySelectorAll(".item")].filter(i => !i.classList.contains("is-hidden"));
+    const turnOn = items.some(i => !i.querySelector(".tick").checked);
+    items.forEach(i => { i.querySelector(".tick").checked = turnOn; i.classList.toggle("is-checked", turnOn); });
+    refresh();
+  }
+  if (e.target.classList.contains("kill")){
+    e.target.closest(".item").remove();
+    refresh();
+  }
+});
+
+document.getElementById("q").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  let hits = 0;
+  document.querySelectorAll(".item").forEach(i => {
+    const hit = !q || i.textContent.toLowerCase().includes(q);
+    i.classList.toggle("is-hidden", !hit);
+    if (hit) hits++;
+  });
+  document.getElementById("nomatch").style.display = hits ? "none" : "block";
+  refresh();
+});
+
+document.getElementById("checkShown").addEventListener("click", () => {
+  document.querySelectorAll(".item:not(.is-hidden)").forEach(i => {
+    i.querySelector(".tick").checked = true;
+    i.classList.add("is-checked");
+  });
+  refresh();
+});
+
+document.getElementById("clear").addEventListener("click", () => {
+  document.querySelectorAll(".tick").forEach(t => { t.checked = false; t.closest(".item").classList.remove("is-checked"); });
+  document.querySelectorAll(".qty").forEach(q => q.value = 1);
+  document.querySelectorAll(".note").forEach(n => n.value = "");
+  refresh();
+});
+
+function addWriteIn(){
+  const input = document.getElementById("newItem");
+  const v = input.value.trim();
+  if (!v) { input.focus(); return; }
+  writeUL.insertAdjacentHTML("beforeend", itemHTML(v, "", true));
+  const li = writeUL.lastElementChild;
+  li.querySelector(".tick").checked = true;
+  li.classList.add("is-checked");
+  input.value = "";
+  input.focus();
+  refresh();
+}
+document.getElementById("addBtn").addEventListener("click", addWriteIn);
+document.getElementById("newItem").addEventListener("keydown", e => { if (e.key === "Enter") addWriteIn(); });
+
+function asText(){
+  const job = document.getElementById("fJob").value.trim();
+  const date = document.getElementById("fDate").value.trim();
+  let out = "CONSUMABLES NEEDED";
+  if (job) out += " — " + job;
+  if (date) out += " — " + date;
+  out += "\n";
+  document.querySelectorAll(".cat").forEach(c => {
+    const on = [...c.querySelectorAll(".item")].filter(i => i.querySelector(".tick").checked);
+    if (!on.length) return;
+    out += "\n" + c.querySelector("h2").textContent.toUpperCase() + "\n";
+    on.forEach(i => {
+      const q = (i.querySelector(".qty").value || "1").trim();
+      const n = i.querySelector(".note").value.trim();
+      out += "- " + i.querySelector(".name").textContent
+           + " x" + (q || "1")
+           + (n ? " (" + n + ")" : "") + "\n";
+    });
+  });
+  return out.trim();
+}
+
+const copyBtn = document.getElementById("copy");
+function flash(msg){
+  const was = copyBtn.textContent;
+  copyBtn.textContent = msg;
+  setTimeout(() => { copyBtn.textContent = was; }, 1600);
+}
+copyBtn.addEventListener("click", async () => {
+  const t = asText();
+  try {
+    await navigator.clipboard.writeText(t);
+    flash("Copied");
+  } catch (err) {
+    const ta = document.createElement("textarea");
+    ta.value = t;
+    ta.style.cssText = "position:fixed;left:8px;bottom:70px;width:calc(100% - 16px);height:38vh;z-index:99";
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    if (ok) { ta.remove(); flash("Copied"); }
+    else { flash("Copy it manually"); ta.addEventListener("blur", () => ta.remove()); }
+  }
+});
+
+document.getElementById("fDate").value =
+  new Date().toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
+
+refresh();
+</script>
+</body>
+</html>

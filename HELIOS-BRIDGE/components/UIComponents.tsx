@@ -186,6 +186,13 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     blurb: 'Five hundred standalone particle-interference variations of this bridge, each one its own page.',
     icon: <LayoutGrid size={18} />,
   },
+  {
+    name: 'AV Field Toolkit',
+    href: './av/',
+    tag: 'field',
+    blurb: 'Quick tools and references for AV field work — a consumables checklist to start, growing over time.',
+    icon: <Wrench size={18} />,
+  },
 ];
 
 export const UIOverlay: React.FC<UIProps> = (props) => {

@@ -14,6 +14,7 @@ on:
       - 'tools/collage-studio/**'
       - 'collage-beta/**'
       - 'HELIOS-BRIDGE-ARCHIVE/**'
+      - 'av/**'
       - '.github/workflows/deploy_bridge.yml'
   workflow_dispatch:
 
@@ -89,10 +90,11 @@ jobs:
           cp -R tools/collage-studio/dist/. HELIOS-BRIDGE/dist/collage/
 
           # static pages — no build step, straight copy
-          rm -rf HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive
-          mkdir -p HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive
+          rm -rf HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive HELIOS-BRIDGE/dist/av
+          mkdir -p HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive HELIOS-BRIDGE/dist/av
           cp -R collage-beta/. HELIOS-BRIDGE/dist/collage-beta/
           cp -R HELIOS-BRIDGE-ARCHIVE/. HELIOS-BRIDGE/dist/archive/
+          cp -R av/. HELIOS-BRIDGE/dist/av/
 
       # Prove the artifact tree instead of asserting it, and fail here rather
       # than in a browser if either app's entry point is missing.
@@ -111,7 +113,8 @@ jobs:
           for f in index.html .nojekyll \
                    collage/index.html collage/sw.js collage/manifest.json \
                    collage-beta/index.html \
-                   archive/index.html; do
+                   archive/index.html \
+                   av/index.html av/consumables.html; do
             test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
           done
 
