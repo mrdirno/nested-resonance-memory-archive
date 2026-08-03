@@ -12,7 +12,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests/e2e',
-  testMatch: 'source-count.spec.ts',
+  testMatch: /(source-count|video-length-sync)\.spec\.ts$/,
   timeout: 120_000,
   use: {
     baseURL: process.env.COLLAGE_BASE_URL || 'http://localhost:5199',

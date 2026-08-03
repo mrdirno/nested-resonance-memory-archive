@@ -51,6 +51,14 @@ import {
   type FrameExportSupport,
 } from '../lib/frameExport';
 import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
+import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
+
+/** Button copy for the video-length-sync control (shown with 2+ clips). */
+const CLIP_LENGTH_LABEL: Record<ClipLengthMode, { short: string; aria: string; title: string }> = {
+  'loop':            { short: 'LOOP',    aria: 'Loop clips at natural speed',  title: 'Each clip plays at its own speed and loops. The longest clip sets the visible period; shorter clips repeat within it. Nothing is sped up or slowed down.' },
+  'stretch-longest': { short: 'STRETCH', aria: 'Stretch clips to the longest', title: 'Slow every clip to the LONGEST clip’s length so they share one period, in phase. Shorter clips run in slow motion.' },
+  'speed-shortest':  { short: 'SPEED',   aria: 'Speed clips to the shortest',  title: 'Speed every clip up to the SHORTEST clip’s length. The whole collage turns over on the shortest clip’s clock.' },
+};
 
 export interface VideoStageProps {
   layoutItems: LayoutItem[];
@@ -164,9 +172,20 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     return () => { alive = false; };
   }, []);
 
+  // Video-length sync mode. 'loop' (default) leaves every clip at its own speed;
+  // the two stretch modes rescale so all clips share one length. See videoSync.ts.
+  const [clipLengthMode, setClipLengthMode] = useState<ClipLengthMode>('loop');
+
   // --- scene: everything expensive happens here, never in the draw loop ------
-  const stageClips: StageClipInput[] = useMemo(
-    () => clips.map((c) => ({
+  const stageClips: StageClipInput[] = useMemo(() => {
+    // One playbackRate per clip so several clips can share a length. The maths is
+    // pure and unit-swept (videoSync.ts); here we just attach the result.
+    const playback = computeClipPlayback(
+      clips.map((c) => ({ id: c.id, durationSec: c.durationSec })),
+      clipLengthMode,
+    );
+    const rateById = new Map(playback.map((p) => [p.id, p.playbackRate]));
+    return clips.map((c) => ({
       id: c.id,
       src: c.url,
       name: c.name,
@@ -174,6 +193,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       // must not also revoke, or a re-mount races a already-freed blob.
       ownsUrl: false,
       loop: true,
+      playbackRate: rateById.get(c.id) ?? 1,
       // `muted` is the clip's INTENT — "is this clip's sound part of the piece"
       // — and it seeds the export. It is NOT the speakers: what you hear is
       // `soundOn && !muted && live`, and `soundOn` starts false, so importing a
@@ -189,9 +209,8 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       muted: false,
       width: c.width,
       height: c.height,
-    })),
-    [clips],
-  );
+    }));
+  }, [clips, clipLengthMode]);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -528,6 +547,31 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             </div>
           );
         })}
+        {/* VIDEO-LENGTH SYNC — lives INSIDE the scroll row (shrink-0), so it scrolls
+            with the clip chips and never steals width from the status readout that
+            follows the spacer (which is `truncate min-w-0` and would collapse). */}
+        {clips.length >= 2 && (
+          <div className="flex items-center gap-0.5 shrink-0 pl-1" role="group" aria-label="Clip length sync">
+            <span className="text-[9px] tracking-wide text-gray-500 hidden sm:inline mr-0.5">LENGTH</span>
+            {CLIP_LENGTH_MODES.map((m) => {
+              const l = CLIP_LENGTH_LABEL[m];
+              const on = clipLengthMode === m;
+              return (
+                <button
+                  key={m}
+                  onClick={() => setClipLengthMode(m)}
+                  disabled={busy}
+                  aria-pressed={on}
+                  aria-label={l.aria}
+                  title={busy ? 'Finish the export before changing clip length.' : l.title}
+                  className={`px-2 h-7 rounded text-[9px] font-black tracking-wide transition-colors disabled:opacity-40 disabled:pointer-events-none ${
+                    on ? 'bg-white/15 text-white' : 'text-gray-500 hover:text-white hover:bg-white/10'
+                  }`}
+                >{l.short}</button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <div className="flex-1 min-w-0" />

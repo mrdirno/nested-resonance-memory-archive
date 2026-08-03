@@ -17,13 +17,13 @@
 //   work inside it would reintroduce exactly the stall it was built to remove.
 //
 // THE SYNC CONTRACT — the only genuinely hard part.
-//   `Stage.seekClipTo` (stage.ts:777-780) defines, for output time t, a clip's
-//   media position:
+//   `Stage.seekClipTo` defines, for output time t, a clip's media position:
 //       span   = max(EPS, el.duration - EPS)
-//       target = loop ? t % span : min(t, span)
-//   Everything below reproduces that exactly, and `span` is passed IN from the
-//   Stage rather than recomputed here, so the epsilon has one source and the two
-//   timelines cannot drift apart.
+//       target = loop ? (t*rate) % span : min(t*rate, span)
+//   where `rate` is the clip's video-length-sync playbackRate (1 in LOOP mode,
+//   <1 in STRETCH, >1 in SPEED). Everything below reproduces that exactly —
+//   `span` and `rate` are passed IN from the Stage, not recomputed here, so the
+//   epsilon and the rate each have one source and the two timelines cannot drift.
 //
 //   `clip.startTime` is deliberately NOT applied. `seekClipTo` does not apply it
 //   either (it is used once, at element creation), so a mixer that "helpfully"
@@ -69,6 +69,11 @@ export interface OfflineAudioSource {
   loop: boolean;
   /** 0..1, mirroring `Stage.applyMutes()`. A gain of 0 is NOT a source. */
   gain: number;
+  /** Video-length-sync speed. The audio timeline scales by this so it walks the
+   *  SAME clock as `seekClipTo`'s `(t*rate) % span` video seek — and pitch-shifts
+   *  to match the live preview, where `<video>.playbackRate` moves picture and
+   *  sound together. Absent / ≤0 is treated as 1 (the LOOP mode, unchanged). */
+  rate?: number;
 }
 
 export interface EncodedAudioRecord {
@@ -406,18 +411,21 @@ const decodeWhole = async (
 // =============================================================================
 
 /**
- * Lay every clip on one timeline that reproduces `Stage.seekClipTo`.
+ * Lay every clip on one timeline that reproduces `Stage.seekClipTo`, INCLUDING
+ * its video-length-sync rate: seekClipTo puts the picture at `(t*rate) % span`,
+ * so `node.playbackRate = rate` plus a rate-scaled start offset put the sound at
+ * the same position (pitch-shifted, exactly as the live `<video>.playbackRate`
+ * preview is). rate defaults to 1 — the LOOP mode, and the original behaviour.
  *
- *   looping clip : source.loop = true, loopStart = 0, loopEnd = span,
- *                  start(0, startAt % span)
+ *   looping clip : loop = true, loopStart = 0, loopEnd = span, playbackRate = rate,
+ *                  start(0, (startAt*rate) % span)
  *                  => at output offset u the media position is
- *                     (startAt + u) mod span, which is `t % span`. Exact.
+ *                     (startAt*rate + u*rate) mod span = `(t*rate) % span`. Exact.
  *
- *   non-looping  : start(0, min(startAt, span))
- *                  => position startAt + u, running out at the buffer end.
- *                  The video clamps at `span` and then holds its last frame;
- *                  the audio simply stops. Those agree everywhere the video is
- *                  still moving, which is the part that can be out of sync.
+ *   non-looping  : playbackRate = rate, start(0, min(startAt*rate, span))
+ *                  => runs out at the buffer end. The video clamps at `span` and
+ *                  holds its last frame; the audio stops. They agree everywhere
+ *                  the video is still moving, which is the part that can desync.
  */
 const mixSources = async (
   decoded: { buf: AudioBuffer; src: OfflineAudioSource }[],
@@ -443,13 +451,19 @@ const mixSources = async (
       // because a container's audio and video streams need not be the same
       // length and `loopEnd` past the buffer end is undefined behaviour.
       const span = Math.min(src.span > 0 ? src.span : buf.duration, buf.duration);
+      // Video-length sync: walk the audio at the clip's playbackRate so it tracks
+      // the rate-scaled video seek — `seekClipTo` puts the picture at (t*rate)%span,
+      // and this puts the sound there too (pitch-shifted, exactly as the live
+      // <video>.playbackRate preview does). rate 1 (LOOP mode) is the old behaviour.
+      const rate = src.rate && src.rate > 0 ? src.rate : 1;
+      node.playbackRate.value = rate;
       if (src.loop && span > 0.01) {
         node.loop = true;
         node.loopStart = 0;
         node.loopEnd = span;
-        node.start(0, startAt % span);
+        node.start(0, (startAt * rate) % span);
       } else {
-        node.start(0, Math.min(Math.max(0, startAt), Math.max(0, buf.duration - 0.001)));
+        node.start(0, Math.min(Math.max(0, startAt * rate), Math.max(0, buf.duration - 0.001)));
       }
       wired++;
     } catch { /* one clip's failure is that clip's silence */ }

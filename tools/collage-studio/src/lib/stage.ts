@@ -85,6 +85,10 @@ export interface StageClipInput {
   loop?: boolean;
   /** Seconds; where playback starts on admission. */
   startTime?: number;
+  /** Playback speed multiplier. Default 1. Video-length sync uses it so several
+   *  clips can share one length — rate<1 slows a clip, rate>1 speeds it up — in
+   *  the live preview AND, via `seekClipTo`, in the offline export. */
+  playbackRate?: number;
   /** Per-clip mute. Default true — sound needs a user gesture (see `setSound`). */
   muted?: boolean;
   /** Intrinsic size hint used for pixel-budget admission BEFORE `loadedmetadata`. */
@@ -275,6 +279,7 @@ interface ClipRecord {
   ownsUrl: boolean;
   loop: boolean;
   startTime: number;
+  playbackRate: number;
   muted: boolean;
   /** The one element, created on admission and reused forever after. */
   el: HTMLVideoElement | null;
@@ -790,9 +795,15 @@ export class Stage {
     // on some engines and fires `ended` on others, and both paint a frame that
     // is not the one asked for.
     const span = Math.max(OFFLINE_SEEK_EPSILON, dur - OFFLINE_SEEK_EPSILON);
+    // Honour the video-length-sync speed in the OFFLINE render too: at rate r a
+    // clip advances r seconds of content per composition second, so the frame the
+    // export wants at `timeSec` is r*timeSec into the clip. Live playback gets
+    // this from el.playbackRate; the offline path seeks by hand, so scale here.
+    const rate = clip.playbackRate > 0 ? clip.playbackRate : 1;
+    const scaled = timeSec * rate;
     const target = clip.loop
-      ? timeSec % span
-      : Math.min(timeSec, span);
+      ? scaled % span
+      : Math.min(scaled, span);
 
     if (Math.abs(el.currentTime - target) < OFFLINE_SEEK_EPSILON) return Promise.resolve();
 
@@ -1201,9 +1212,14 @@ export class Stage {
         } else {
           existing.name = c.name ?? existing.name;
           existing.loop = c.loop !== false;
+          existing.playbackRate = finiteOr(c.playbackRate, 1);
           existing.hintW = finiteOr(c.width, existing.hintW);
           existing.hintH = finiteOr(c.height, existing.hintH);
-          if (existing.el) existing.el.loop = existing.loop;
+          if (existing.el) {
+            existing.el.loop = existing.loop;
+            // Guard the assignment: some engines throw if the element is mid-load.
+            try { existing.el.playbackRate = existing.playbackRate; } catch { /* re-applied on (re)admission */ }
+          }
         }
         continue;
       }
@@ -1225,6 +1241,7 @@ export class Stage {
       ownsUrl: input.ownsUrl === true,
       loop: input.loop !== false,
       startTime: finiteOr(input.startTime, 0),
+      playbackRate: finiteOr(input.playbackRate, 1),
       muted: input.muted !== false,
       el: null,
       live: false,
@@ -1360,6 +1377,9 @@ export class Stage {
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
     v.loop = clip.loop;
+    // Video-length sync speed. Set before src, and re-applied on loadedmetadata
+    // below, because some engines reset playbackRate to 1 when a source loads.
+    try { v.playbackRate = clip.playbackRate; } catch { /* set again after metadata */ }
     v.preload = 'auto';
     v.autoplay = true;
     v.disablePictureInPicture = true;
@@ -1441,6 +1461,9 @@ export class Stage {
       }
       case 'loadedmetadata':
       case 'resize': {
+        // Loading a source resets playbackRate to 1 on some engines (WebKit) —
+        // restore the video-length-sync speed now that the media is ready.
+        try { el.playbackRate = clip.playbackRate; } catch { /* ignore */ }
         const vw = el.videoWidth, vh = el.videoHeight;
         if (vw > 0 && vh > 0 && (vw !== clip.vw || vh !== clip.vh)) {
           clip.vw = vw; clip.vh = vh;
@@ -1851,9 +1874,9 @@ export class Stage {
    * `startTime` is deliberately absent: `seekClipTo` does not apply it either.
    */
   describeAudioSources(): {
-    id: string; url: string; span: number; loop: boolean; gain: number;
+    id: string; url: string; span: number; loop: boolean; gain: number; rate: number;
   }[] {
-    const out: { id: string; url: string; span: number; loop: boolean; gain: number }[] = [];
+    const out: { id: string; url: string; span: number; loop: boolean; gain: number; rate: number }[] = [];
     this.clips.forEach((c) => {
       if (!c.url) return;
       const dur = c.el?.duration;
@@ -1861,7 +1884,9 @@ export class Stage {
         ? Math.max(OFFLINE_SEEK_EPSILON, (dur as number) - OFFLINE_SEEK_EPSILON)
         : 0;
       const wanted = !c.muted && !c.broken;
-      out.push({ id: c.id, url: c.url, span, loop: c.loop, gain: wanted ? 1 : 0 });
+      // rate mirrors seekClipTo's video scaling so the export's sound tracks the
+      // rate-scaled picture (video-length sync); 1 in LOOP mode leaves it unchanged.
+      out.push({ id: c.id, url: c.url, span, loop: c.loop, gain: wanted ? 1 : 0, rate: c.playbackRate > 0 ? c.playbackRate : 1 });
     });
     return out;
   }
