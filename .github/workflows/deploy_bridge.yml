@@ -133,7 +133,7 @@ jobs:
                    collage/index.html collage/sw.js collage/manifest.json \
                    collage-beta/index.html \
                    archive/index.html \
-                   av/index.html av/consumables.html av/av.js av/tools.js; do
+                   av/index.html av/consumables.html av/av.js av/tools.js av/credits.html; do
             test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
           done
 

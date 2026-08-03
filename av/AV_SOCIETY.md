@@ -48,6 +48,31 @@ nobody asked for, or a tool that needs a login/among-us gimmick to feel clever.
    the page works). Then `--ship <id> --url <live-url>`.
 7. If the wish fails the bar or is spam/honeypot: `--decline <id> --reason "..."`.
 
+## CREDIT — the Wall of Wishes (living, un-erasable ledger)
+Every built wish CREDITS the person who wished it, permanently. On ship, in the
+SAME commit that ships the tool:
+- Append ONE entry to `av/credits.json` (APPEND-ONLY — never rewrite or remove):
+  `{ tool_name, tool_href, wisher, company, role, wished_date, shipped_date, shipped_commit }`
+  (`shipped_commit` anchors the credit to a verifiable git object — fill it in a
+  quick follow-up commit if you only get the SHA after committing).
+- If the wisher chose ANONYMOUS (no name on the request), credit them as
+  `"an anonymous AV <role>"` — honor the wish, protect the identity. Never invent a
+  name; never publish the email (notification-only).
+- Also add a one-line credit ON the tool page: "✦ Wished into existence by
+  &lt;name / an anonymous AV tech&gt;." The credit thus lives in TWO committed places.
+The immutability IS git — the ledger is public, hash-chained, forked and archived,
+so a credit can never be quietly erased. `av/credits.html` renders the Wall. Only
+the honored credit goes here — never request contents or the ranking.
+
+## THE PANEL — a wish is judged by a panel, not one agent
+"Only if our smartest AI panel deems it a good addition." Before building a
+non-trivial wish, cast a small multi-agent JUDGE PANEL (a Workflow): 2–4 agents
+scoring the wish independently against THE STRICT BAR from diverse lenses (a
+working AV tech · a PM · a "would this actually get used / does it cut steps"
+skeptic). Build only on panel agreement; otherwise `--decline` with the panel's
+reason. The panel keeps the quality bar objective and defensible — and it is what
+gives a Wall-of-Wishes credit its weight.
+
 ## SAFETY — non-negotiable (operator 2026-08-03: "emphasize safety and backup,
 ## look for edge cases that could screw us")
 - **Only self-contained, client-side static tool pages.** NEVER build anything

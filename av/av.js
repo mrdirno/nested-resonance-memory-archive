@@ -96,6 +96,10 @@
   .av-field input:focus-visible,.av-field select:focus-visible,.av-field textarea:focus-visible{outline:2px solid var(--av-flag);outline-offset:1px}
   .av-row{display:flex;gap:9px;flex-wrap:wrap}
   .av-row .av-field{flex:1 1 150px}
+  .av-idtoggle{display:flex;gap:6px}
+  .av-idbtn{flex:1;font-family:var(--av-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:#fff;color:var(--av-muted);border:1px solid var(--av-line);border-radius:2px;padding:8px 6px;cursor:pointer}
+  .av-idbtn:hover{border-color:var(--av-steel);color:var(--av-ink)}
+  .av-idbtn.on{background:var(--av-steel);color:#fff;border-color:var(--av-steel)}
   .av-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
   .av-err{color:#B0201A;font-size:12.5px;margin:0 0 10px;display:none}
   .av-actions{display:flex;align-items:center;gap:10px;margin-top:4px}
@@ -129,6 +133,7 @@
   function buildBar() {
     var drop = h("div", { class: "av-drop", role: "menu" });
     drop.appendChild(h("a", { href: "index.html", html: "<b>All tools</b><span>The AV Field Toolkit home</span>" }));
+    drop.appendChild(h("a", { href: "credits.html", html: "<b>&#9733; Wall of Wishes</b><span>Who wished each tool into existence</span>" }));
     if (TOOLS.length) drop.appendChild(h("hr"));
     TOOLS.forEach(function (t) {
       drop.appendChild(h("a", { href: t.href, html: "<b>" + esc(t.name) + "</b><span>" + esc(t.audience || "") + "</span>" }));
@@ -167,7 +172,7 @@
   document.addEventListener("click", function (e) { var m = window.__avMenu; if (m && !m.contains(e.target)) closeMenu(); });
 
   /* ------------------------------------------------------------------ the well */
-  var modal, form, errBox, sendBtn;
+  var modal, form, errBox, sendBtn, wellAnon = false;
   function buildWell() {
     var guide = h("div", { class: "av-guide", html:
       "<b>A wishing well that actually works.</b> Every tool here started as a wish — someone asked, Aldrin's AI built it. Wish for the one you keep making by hand; if it passes the bar it becomes a real page you (and everyone in the trade) can use. What gets granted:" +
@@ -183,18 +188,31 @@
     [["", "You are a…"], ["tech", "AV Tech"], ["project_manager", "Project Manager"], ["leadership", "Leadership / Owner"], ["other", "Other"]]
       .forEach(function (o) { roleSel.appendChild(h("option", { value: o[0] }, [o[1]])); });
 
+    // Credit / identity choice. If a wish is built the wisher is credited on the
+    // tool AND the Wall of Wishes — a public, git-permanent ledger. Named = public
+    // credit; Anonymous = credited as "an anonymous AV <role>". Name hides when anon.
+    wellAnon = false;
+    var nameRow = h("div", { class: "av-row" }, [
+      h("div", { class: "av-field" }, [h("label", {}, ["Name ", h("i", {}, ["(your public credit if it's built)"])]), h("input", { name: "requester_name", type: "text", maxlength: "120", autocomplete: "off" })]),
+      h("div", { class: "av-field" }, [h("label", {}, ["Company ", h("i", {}, ["(optional)"])]), h("input", { name: "requester_company", type: "text", maxlength: "160", autocomplete: "off" })])
+    ]);
+    var idName = h("button", { type: "button", class: "av-idbtn on", "aria-pressed": "true" }, ["With my name"]);
+    var idAnon = h("button", { type: "button", class: "av-idbtn", "aria-pressed": "false" }, ["Anonymous"]);
+    function setWellAnon(on){ wellAnon = on; nameRow.style.display = on ? "none" : ""; idName.classList.toggle("on", !on); idName.setAttribute("aria-pressed", !on ? "true" : "false"); idAnon.classList.toggle("on", on); idAnon.setAttribute("aria-pressed", on ? "true" : "false"); }
+    idName.addEventListener("click", function(){ setWellAnon(false); });
+    idAnon.addEventListener("click", function(){ setWellAnon(true); });
+    var idToggle = h("div", { class: "av-field" }, [ h("label", {}, ["Credit — if it's built, your name goes on the tool + the Wall of Wishes, forever"]), h("div", { class: "av-idtoggle" }, [idName, idAnon]) ]);
+
     form = h("form", { class: "av-form", novalidate: "novalidate" }, [
       guide,
+      idToggle,
       h("p", { class: "av-err", role: "alert" }),
       h("div", { class: "av-field" }, [h("label", {}, ["You are a… ", h("i", {}, ["(optional)"])]), roleSel]),
       h("div", { class: "av-field" }, [h("label", {}, ["The tool"]), h("input", { name: "tool_title", type: "text", maxlength: "200", required: "required", placeholder: "e.g. Cable-types picker — HDMI / patch / fiber", autocomplete: "off" })]),
       h("div", { class: "av-field" }, [h("label", {}, ["What it should do — the doc/request you make by hand, and who you send it to"]), h("textarea", { name: "tool_purpose", maxlength: "2000", required: "required", placeholder: "e.g. Pick the exact cables for a job and copy a clean spec to send my PM — HDMI (2.0/2.1, lengths), Cat patch (5e/6/6a), fiber (OM3/OM4/OS2, connector types)…" })]),
       h("div", { class: "av-field" }, [h("label", {}, ["An example ", h("i", {}, ["(optional)"])]), h("textarea", { name: "example", maxlength: "2000", placeholder: "A real example of what you'd type in and what you'd want out." })]),
-      h("div", { class: "av-row" }, [
-        h("div", { class: "av-field" }, [h("label", {}, ["Name ", h("i", {}, ["(optional)"])]), h("input", { name: "requester_name", type: "text", maxlength: "120", autocomplete: "off" })]),
-        h("div", { class: "av-field" }, [h("label", {}, ["Company ", h("i", {}, ["(optional)"])]), h("input", { name: "requester_company", type: "text", maxlength: "160", autocomplete: "off" })])
-      ]),
-      h("div", { class: "av-field" }, [h("label", {}, ["Email to hear when it ships ", h("i", {}, ["(optional)"])]), h("input", { name: "contact", type: "email", maxlength: "200", placeholder: "you@company.com", autocomplete: "off" })]),
+      nameRow,
+      h("div", { class: "av-field" }, [h("label", {}, ["Email to hear when it ships ", h("i", {}, ["(optional, never shown — even if anonymous)"])]), h("input", { name: "contact", type: "email", maxlength: "200", placeholder: "you@company.com", autocomplete: "off" })]),
       // honeypot — real people never see or fill this
       h("div", { class: "av-hp", "aria-hidden": "true" }, [h("label", {}, ["Website"]), h("input", { name: "website", type: "text", tabindex: "-1", autocomplete: "off" })]),
       h("div", { class: "av-actions" }, [
@@ -244,8 +262,8 @@
       tool_title: title,
       tool_purpose: purpose,
       example: (fd.get("example") || "").trim() || null,
-      requester_name: (fd.get("requester_name") || "").trim() || null,
-      requester_company: (fd.get("requester_company") || "").trim() || null,
+      requester_name: wellAnon ? null : ((fd.get("requester_name") || "").trim() || null),
+      requester_company: wellAnon ? null : ((fd.get("requester_company") || "").trim() || null),
       contact: (fd.get("contact") || "").trim() || null,
       source: "av_wishing_well",
       user_agent: (navigator.userAgent || "").slice(0, 500)
