@@ -7,6 +7,7 @@ import {
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
 import { computeLayout, createRng } from './lib/layout';
 import { rollDice } from './lib/diceRoll';
+import { assignSources, distinctSourceCount } from './lib/fill';
 import { renderCanvas } from './lib/renderer';
 import { saveProject, loadProject } from './lib/project';
 import { generateVectorExport } from './engine/color/vectorExport';
@@ -104,7 +105,11 @@ export default function App() {
   const [images, setImages] = useState<ImageAsset[]>([]);
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('minimal');
   const [primitive, setPrimitive] = useState<PrimitiveType>('rect');
-  const [count, setCount] = useState(0); 
+  const [count, setCount] = useState(0);
+  // false → the fragment count auto-follows the number of uploaded sources
+  // (one per photo/video). Flips true the moment the user owns the count
+  // themselves — the slider, the dice, or a loaded project/template.
+  const countTouchedRef = useRef(false);
   const [density, setDensity] = useState(1);
   const [seed, setSeed] = useState(Date.now());
   const [aspect, setAspect] = useState(0.666); 
@@ -207,7 +212,26 @@ export default function App() {
   const PREVIEW_W = 1200;
   const effectiveCount = count * density;
   const zoom = 1 + (density - 1) * 0.5;
-  
+
+  // --- FRAGMENT COUNT FOLLOWS THE UPLOAD --------------------------------------
+  // One fragment per photo or video imported — a video counts ONCE however many
+  // frames were extracted from it. Until the user sets a count themselves the
+  // count simply IS the upload total, so a fresh import shows exactly the things
+  // that were imported, each once, instead of a randomised field with one clip
+  // multiplied across a dozen look-alikes.
+  //
+  // Once the count is user-owned we keep their number — but never let it fall
+  // BELOW the number of sources: a photo or (crucially) a video just imported
+  // must always have a slot to appear and PLAY in. That grow-to-cover is the
+  // "nothing uploaded is stranded" guarantee, and it restores the behaviour the
+  // old ceiling logic used to give a late video add, which the touched-gate had
+  // otherwise removed.
+  useEffect(() => {
+    if (images.length === 0) return;
+    const n = distinctSourceCount(images);
+    setCount(prev => (countTouchedRef.current ? Math.max(prev, n) : n));
+  }, [images]);
+
   // --- ASYNC LAYOUT ENGINE ---
   useEffect(() => {
       let active = true;
@@ -264,24 +288,28 @@ export default function App() {
         const emptySlots = [];
         for(let i=0; i<slotCount; i++) { if(newIndices[i] === -1) emptySlots.push(i); }
         if (emptySlots.length > 0) {
-            const unusedImages = images.map((_, i) => i).filter(i => !usedImageIndices.has(i));
-            const allImages = images.map((_, i) => i);
-            const bag: number[] = [];
-            const shuffle = (arr: number[]) => {
-                for (let i = arr.length - 1; i > 0; i--) {
-                    const j = Math.floor(rng() * (i + 1));
-                    [arr[i], arr[j]] = [arr[j], arr[i]];
-                }
-                return arr;
-            };
-            if(unusedImages.length > 0) bag.push(...shuffle(unusedImages));
-            while(bag.length < emptySlots.length) { bag.push(...shuffle([...allImages])); }
-            
-            // Resonance Sorting
+            // SOURCE-FIRST, DUPLICATE-FREE FILL. `assignSources` (src/lib/fill.ts)
+            // round-robins the pool by SOURCE — a video is one source however many
+            // frames were extracted from it — so every distinct photo/video is
+            // placed before any repeats, and a repeat is always a fresh moment. At
+            // the default count (one slot per upload) each source appears exactly
+            // once, and the fragment holding a video carries its clipId and plays
+            // the live clip instead of being buried under its own look-alike stills.
+            const bag = assignSources({
+                slotCount: emptySlots.length,
+                images,
+                used: usedImageIndices,
+                rng,
+            });
+
+            // RESONANCE — opt-in hue ordering. It necessarily re-clumps a clip's
+            // frames (they share a palette): that IS what the control means, and it
+            // is off (0) by default, so the duplicate-free source order is what you
+            // normally get.
             if (resonance > 0.1) {
                 bag.sort((a, b) => {
-                    const cA = images[a].analysis?.color || { h: 0, s: 0, l: 0 };
-                    const cB = images[b].analysis?.color || { h: 0, s: 0, l: 0 };
+                    const cA = images[a]?.analysis?.color || { h: 0, s: 0, l: 0 };
+                    const cB = images[b]?.analysis?.color || { h: 0, s: 0, l: 0 };
                     if (Math.abs(cA.h - cB.h) > 0.1) return cA.h - cB.h;
                     return cA.l - cB.l;
                 });
@@ -350,6 +378,9 @@ export default function App() {
    */
   const handleDice = () => {
     const roll = rollDice({ hasVideo: clips.length > 0 });
+    // The dice chooses an explicit fragment count; don't let the next upload
+    // silently overwrite a composition the user rolled on purpose.
+    countTouchedRef.current = true;
     setLayoutMode(roll.layout);
     setCount(roll.count);
     setEntropy(roll.entropy);
@@ -407,6 +438,8 @@ export default function App() {
   };
 
   const updateCountSmart = (newValOrFn: number | ((prev: number) => number)) => {
+    // The user is driving the count now — stop auto-following the upload total.
+    countTouchedRef.current = true;
     setCount(prev => {
       let candidate = typeof newValOrFn === 'function' ? newValOrFn(prev) : newValOrFn;
       if (candidate < 1) candidate = 1;
@@ -505,21 +538,16 @@ export default function App() {
      * PUT THIS BITE ON THE CANVAS NOW.
      *
      * The old code accumulated every asset and called setImages ONCE at the
-     * end, which is why nothing appeared until everything had decoded. The
-     * cell count has to climb with the pool, or the first two pictures land
-     * and the remaining twenty-eight sit in state, invisible.
+     * end, which is why nothing appeared until everything had decoded. Staged
+     * commits let the first pictures land while the rest are still decoding.
      *
-     * IDEMPOTENT on purpose: this updater runs twice under React 18 StrictMode
-     * and `Math.max` is what stops it compounding.
+     * The fragment count is NOT set here any more: the auto-follow effect above
+     * derives it from the pool (one per uploaded photo/video), so this is a
+     * plain concat and the React 18 StrictMode double-invoke is harmless.
      */
     const commit = (batch: ImageAsset[]) => {
         if (!batch.length) return;
-        setImages(prev => {
-            const combined = [...prev, ...batch];
-            const ceiling = opts.grow ? 36 : 12;
-            updateCountSmart(c => Math.max(c, Math.min(combined.length, ceiling)));
-            return combined;
-        });
+        setImages(prev => [...prev, ...batch]);
     };
 
     try {
@@ -766,9 +794,11 @@ export default function App() {
       for (const c of clips) { try { URL.revokeObjectURL(c.url); } catch { /* ignore */ } }
       setClips([]); setStageOk(true);
       setImages([]); setPreviewUrl(null); setCount(0); setDensity(1); setLockedCells(new Map()); setAvgColor(null);
+      countTouchedRef.current = false; // a fresh import after Clear auto-follows the upload count again
   };
 
   const handleRestoreHistory = (item: HistoryItem) => {
+      countTouchedRef.current = true; // restoring a saved composition's own count
       setImages(item.images);
       const l = item.state.layout;
       setLayoutMode(l.mode); if(l.primitive) setPrimitive(l.primitive);
@@ -886,12 +916,13 @@ export default function App() {
     input.onchange = async (e:any) => {
         const file = e.target.files[0]; if(!file) return;
         const loaded = await loadProject(file);
-        if(loaded) { setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || 0.666); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.resonance) setResonance(l.resonance); }
+        if(loaded) { countTouchedRef.current = true; setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || 0.666); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.resonance) setResonance(l.resonance); }
     };
     input.click();
   };
 
   const handleApplyTemplate = (t: Template) => {
+      countTouchedRef.current = true; // a template carries its own explicit fragment count
       setLayoutMode(t.layout.mode); setCount(t.layout.count); setSeed(t.layout.seed); setAspect(t.layout.aspect); setGutter(t.layout.gutter);
   };
 
