@@ -123,7 +123,7 @@
       drop.appendChild(h("a", { href: t.href, html: "<b>" + esc(t.name) + "</b><span>" + esc(t.audience || "") + "</span>" }));
     });
     drop.appendChild(h("hr"));
-    var reqLink = h("a", { href: "#", class: "av-req", html: "<b>+ Request a tool</b><span>Have Aldrin's AI build one</span>" });
+    var reqLink = h("a", { href: "#", class: "av-req", html: "<b>✦ Wish for a tool</b><span>Aldrin's AI builds it &mdash; for real</span>" });
     reqLink.addEventListener("click", function (e) { e.preventDefault(); closeMenu(); openWell(); });
     drop.appendChild(reqLink);
 
@@ -133,7 +133,7 @@
     ]);
     window.__avMenu = menu;
 
-    var reqBtn = h("button", { type: "button", class: "av-req-btn", onclick: openWell }, ["+ Request a tool"]);
+    var reqBtn = h("button", { type: "button", class: "av-req-btn", onclick: openWell }, ["✦ Wish for a tool"]);
 
     return h("nav", { class: "av-bar", "aria-label": "AV Field Toolkit" }, [
       h("a", { class: "av-brand", href: "index.html", html: '🧰 <span>AV&nbsp;</span><b>Field&nbsp;Toolkit</b>' }),
@@ -150,13 +150,13 @@
   var modal, form, errBox, sendBtn;
   function buildWell() {
     var guide = h("div", { class: "av-guide", html:
-      "<b>Aldrin isn't a PM or an AV tech</b> — but his AI builds tools on request. Tell it what document or request you keep making by hand and it'll build a page that makes it fast. What gets built:" +
+      "<b>A wishing well that actually works.</b> Every tool here started as a wish — someone asked, Aldrin's AI built it. Wish for the one you keep making by hand; if it passes the bar it becomes a real page you (and everyone in the trade) can use. What gets granted:" +
       "<ul>" +
       "<li><b>Practical, not theoretical</b> — something you'd actually use on a job.</li>" +
       "<li><b>Targeted &amp; common</b> — one clear job, the stuff everyone deals with.</li>" +
       "<li><b>Speaks your language</b> — the real terms, shortcuts and formats your techs / PMs / leadership already use.</li>" +
-      "<li><b>Bridges the handoff</b> — helps you send a clean request or spec up or down the chain.</li>" +
-      "</ul><div class='av-test'>The test: would you actually use this to send something to your boss, PM, or techs? If yes, request it.</div>"
+      "<li><b>Fewer steps</b> — it makes a real task faster; it never adds work.</li>" +
+      "</ul><div class='av-test'>The test: would you actually use it to send something to your boss, PM, or techs? If yes, wish for it.</div>"
     });
 
     var roleSel = h("select", { name: "requester_role", "aria-label": "You are a" });
@@ -178,7 +178,7 @@
       // honeypot — real people never see or fill this
       h("div", { class: "av-hp", "aria-hidden": "true" }, [h("label", {}, ["Website"]), h("input", { name: "website", type: "text", tabindex: "-1", autocomplete: "off" })]),
       h("div", { class: "av-actions" }, [
-        h("button", { type: "submit", class: "av-send" }, ["Send request to Aldrin's AI"]),
+        h("button", { type: "submit", class: "av-send" }, ["Make the wish"]),
         h("button", { type: "button", class: "av-cancel", onclick: closeWell }, ["Cancel"])
       ])
     ]);
@@ -186,9 +186,9 @@
     sendBtn = form.querySelector(".av-send");
     form.addEventListener("submit", onSubmit);
 
-    var sheet = h("div", { class: "av-sheet", role: "dialog", "aria-modal": "true", "aria-label": "Request a tool" }, [
+    var sheet = h("div", { class: "av-sheet", role: "dialog", "aria-modal": "true", "aria-label": "Wish for a tool" }, [
       h("div", { class: "av-sheet-hd" }, [
-        h("div", {}, [h("span", { class: "av-eye" }, ["Wishing well"]), h("h2", {}, ["Request a tool"])]),
+        h("div", {}, [h("span", { class: "av-eye" }, ["Wishing well"]), h("h2", {}, ["Wish for a tool"])]),
         h("button", { type: "button", class: "av-x", "aria-label": "Close", onclick: closeWell }, ["×"])
       ]),
       h("div", { class: "av-body" }, [form])
@@ -238,10 +238,10 @@
       body: JSON.stringify(payload)
     }).then(function (r) {
       if (r.ok) { doneUI(); }
-      else { r.text().then(function (t) { showErr("Couldn't send (" + r.status + "). " + (t ? t.slice(0, 140) : "Please try again.")); }); sendBtn.disabled = false; sendBtn.textContent = "Send request to Aldrin's AI"; }
+      else { r.text().then(function (t) { showErr("Couldn't send (" + r.status + "). " + (t ? t.slice(0, 140) : "Please try again.")); }); sendBtn.disabled = false; sendBtn.textContent = "Make the wish"; }
     }).catch(function () {
       showErr("Network error — check your connection and try again.");
-      sendBtn.disabled = false; sendBtn.textContent = "Send request to Aldrin's AI";
+      sendBtn.disabled = false; sendBtn.textContent = "Make the wish";
     });
   }
 
@@ -249,19 +249,36 @@
     var body = modal.querySelector(".av-body");
     var done = h("div", { class: "av-done" }, [
       h("div", { class: "av-check" }, ["✓"]),
-      h("h3", {}, ["Request received"]),
-      h("p", {}, ["It's in the queue. Aldrin's AI reviews requests each cycle and builds the ones that pass the bar — practical, common, and something a real tech or PM would actually use. If you left an email, you'll hear when it ships."]),
-      h("button", { type: "button", class: "av-send", onclick: function () { form.reset(); errBox.style.display = "none"; sendBtn.disabled = false; sendBtn.textContent = "Send request to Aldrin's AI"; body.innerHTML = ""; body.appendChild(form); } }, ["Request another"]),
+      h("h3", {}, ["Your wish is in the well"]),
+      h("p", {}, ["Aldrin's AI reads the well every cycle and grants the ones that pass the bar — practical, common, and something a real tech or PM would actually use. When yours is built it just shows up on the toolkit. Leave an email and you'll hear the moment it's live."]),
+      h("button", { type: "button", class: "av-send", onclick: function () { form.reset(); errBox.style.display = "none"; sendBtn.disabled = false; sendBtn.textContent = "Make the wish"; body.innerHTML = ""; body.appendChild(form); } }, ["Make another wish"]),
       h("button", { type: "button", class: "av-cancel", onclick: closeWell, style: "margin-left:10px" }, ["Close"])
     ]);
     body.innerHTML = ""; body.appendChild(done);
+  }
+
+  /* --------------------------------------------------- self-aware "today" */
+  // The clock on a job-site tablet can be wrong. Resolve the real date from
+  // public sources — a world time API, then THIS server's Date response header —
+  // each rendered in the device's own timezone; fall back to the device clock.
+  // Any tool reads AV.today() / AV.todayStr() and may listen for "av:date".
+  var TODAY = new Date();
+  function fmtDate(d){ try{ return d.toLocaleDateString(undefined,{ year:"numeric", month:"short", day:"numeric" }); }catch(e){ return String(d); } }
+  function tryDate(fn){ return new Promise(function(res){ var done=false, t=setTimeout(function(){ if(!done){ done=true; res(null); } }, 2500); try{ fn().then(function(d){ if(done)return; done=true; clearTimeout(t); res(d && !isNaN(d.getTime()) ? d : null); }).catch(function(){ if(done)return; done=true; clearTimeout(t); res(null); }); }catch(e){ if(!done){ done=true; clearTimeout(t); res(null); } } }); }
+  function resolveToday(){
+    var sources = [
+      function(){ return fetch("https://worldtimeapi.org/api/ip", { cache:"no-store" }).then(function(r){ return r.json(); }).then(function(j){ return new Date(j.datetime || j.utc_datetime); }); },
+      function(){ return fetch(location.href, { method:"HEAD", cache:"no-store" }).then(function(r){ var h=r.headers.get("date"); return h ? new Date(h) : null; }); }
+    ];
+    (function step(i){ if(i>=sources.length) return; tryDate(sources[i]).then(function(d){ if(d){ TODAY=d; document.dispatchEvent(new CustomEvent("av:date", { detail:{ date:d } })); } else step(i+1); }); })(0);
   }
 
   /* ------------------------------------------------------------------- boot */
   function boot() {
     var style = document.createElement("style"); style.textContent = CSS; document.head.appendChild(style);
     document.body.insertBefore(buildBar(), document.body.firstChild);
-    window.AV = { openWell: openWell, tools: TOOLS };
+    window.AV = { openWell: openWell, tools: TOOLS, today: function(){ return TODAY; }, todayStr: function(){ return fmtDate(TODAY); } };
+    resolveToday();
     document.dispatchEvent(new CustomEvent("av:ready"));
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);

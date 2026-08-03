@@ -75,11 +75,14 @@ body{
   display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
   text-transform:uppercase;color:#8E97A1;margin-bottom:5px;
 }
-.field input{
+.field input,.field select{
   width:100%;background:#171C22;border:1px solid #3A424B;color:#EEF0EA;
   font-family:var(--cond);font-size:14px;letter-spacing:.02em;padding:6px 9px;border-radius:2px;
 }
-.field input:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
+.field input:focus-visible,.field select:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
+.needby{display:flex;gap:6px}
+.needby select{flex:1}
+.needby input[type=date]{flex:1;min-width:0;color-scheme:dark}
 
 /* ---------- toolbar ---------- */
 .toolbar{
@@ -240,7 +243,16 @@ ul.items{list-style:none;margin:0;padding:0}
     <p class="lede">Tick what you&rsquo;re out of, set counts, then copy the list into chat.</p>
     <div class="jobfields">
       <label class="field"><span>Jobsite</span><input id="fJob" type="text" placeholder="&mdash;"></label>
-      <label class="field"><span>Date</span><input id="fDate" type="text"></label>
+      <label class="field"><span>Requested</span><input id="fReq" type="text" autocomplete="off"></label>
+      <div class="field"><span>Need by</span>
+        <div class="needby">
+          <select id="fNeedSel" aria-label="Need by">
+            <option value="asap">ASAP</option>
+            <option value="date">Pick a date&hellip;</option>
+          </select>
+          <input id="fNeedDate" type="date" hidden aria-label="Need-by date">
+        </div>
+      </div>
     </div>
   </header>
 
@@ -436,11 +448,10 @@ document.getElementById("newItem").addEventListener("keydown", e => { if (e.key 
 
 function asText(){
   const job = document.getElementById("fJob").value.trim();
-  const date = document.getElementById("fDate").value.trim();
+  const req = document.getElementById("fReq").value.trim();
   let out = "CONSUMABLES NEEDED";
   if (job) out += " — " + job;
-  if (date) out += " — " + date;
-  out += "\n";
+  out += "\nRequested: " + (req || todayStr()) + " · Need by: " + needByText() + "\n";
   document.querySelectorAll(".cat").forEach(c => {
     const on = [...c.querySelectorAll(".item")].filter(i => i.querySelector(".tick").checked);
     if (!on.length) return;
@@ -480,8 +491,32 @@ copyBtn.addEventListener("click", async () => {
   }
 });
 
-document.getElementById("fDate").value =
-  new Date().toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
+/* Requested date is self-aware — av.js resolves the real date from public sources
+   (a job-site tablet's clock can be wrong); the user can still edit it. Need-by
+   defaults to ASAP (zero steps); picking a date is one optional click. */
+var fReq = document.getElementById("fReq");
+var reqTouched = false;
+fReq.addEventListener("input", function(){ reqTouched = true; });
+function todayStr(){ return (window.AV && AV.todayStr) ? AV.todayStr() : new Date().toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" }); }
+function setReq(){ if (!reqTouched) fReq.value = todayStr(); }
+setReq();
+document.addEventListener("av:ready", setReq);
+document.addEventListener("av:date", setReq);
+
+var fNeedSel = document.getElementById("fNeedSel");
+var fNeedDate = document.getElementById("fNeedDate");
+fNeedSel.addEventListener("change", function(){
+  var pick = fNeedSel.value === "date";
+  fNeedDate.hidden = !pick;
+  if (pick) fNeedDate.focus();
+});
+function needByText(){
+  if (fNeedSel.value === "date" && fNeedDate.value){
+    var d = new Date(fNeedDate.value + "T00:00:00");
+    if (!isNaN(d.getTime())) return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
+  }
+  return "ASAP";
+}
 
 refresh();
 </script>
