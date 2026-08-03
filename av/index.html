@@ -48,6 +48,11 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
   transition:transform .1s ease,box-shadow .1s ease;min-height:120px}
 .tool:hover{transform:translateY(-2px);box-shadow:0 6px 0 -2px rgba(36,42,49,.18)}
 .tool:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+.toolwrap{position:relative}
+.cardfav{position:absolute;top:9px;right:9px;z-index:2;background:#fff;border:1px solid var(--line);color:#C4C9BE;width:28px;height:28px;border-radius:2px;cursor:pointer;font-size:14px;line-height:1;padding:0}
+.cardfav:hover{border-color:var(--flag);color:var(--muted)}
+.cardfav.on{color:var(--flag);border-color:var(--flag);background:#FFFDF3}
+.toolwrap .tool-top{padding-right:30px}
 .tool-top{display:flex;align-items:baseline;gap:9px}
 .tool-name{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;font-weight:700;margin:0;flex:1;line-height:1.05;color:var(--ink)}
 .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:3px 6px;white-space:nowrap}
@@ -79,7 +84,11 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
     <button class="well-btn" type="button" onclick="(window.AV&&AV.openWell)?AV.openWell():alert('Loading…')">&#10022; Wish for a tool</button>
   </div>
 
-  <p class="section-label">Tools</p>
+  <div id="favWrap" hidden>
+    <p class="section-label">&#9733; Your favorites</p>
+    <div class="grid" id="favGrid"></div>
+  </div>
+  <p class="section-label" id="toolsLabel">Tools</p>
   <main class="grid" id="grid"></main>
 
   <footer class="foot">
@@ -97,15 +106,38 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 (function(){
   var TOOLS = window.AV_TOOLS || [];
   var esc = function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c];});};
-  document.getElementById("grid").innerHTML = TOOLS.map(function(t){
+  var favWrap = document.getElementById("favWrap");
+  var favGrid = document.getElementById("favGrid");
+  var grid = document.getElementById("grid");
+  var toolsLabel = document.getElementById("toolsLabel");
+  function isFav(href){ return (window.AV && AV.isFav) ? AV.isFav(href) : false; }
+  function card(t){
     var ext = /^https?:\/\//i.test(t.href);
     var attrs = ext ? ' target="_blank" rel="noopener"' : "";
-    return '<a class="tool" href="'+esc(t.href)+'"'+attrs+' style="--chip:'+esc(t.chip||"#242A31")+'">'
+    var f = isFav(t.href);
+    return '<div class="toolwrap">'
+      + '<button class="cardfav'+(f?' on':'')+'" type="button" data-href="'+esc(t.href)+'" aria-pressed="'+(f?'true':'false')+'" title="'+(f?'Remove from favorites':'Favorite — pin to the top')+'">&#9733;</button>'
+      + '<a class="tool" href="'+esc(t.href)+'"'+attrs+' style="--chip:'+esc(t.chip||"#242A31")+'">'
       + '<div class="tool-top"><h2 class="tool-name">'+esc(t.name)+'</h2>'
       + (t.audience?'<span class="tag">'+esc(t.audience)+'</span>':'')+'</div>'
       + '<p class="tool-desc">'+esc(t.desc||"")+'</p>'
-      + '<span class="tool-go"><span class="arr">&rarr;</span> Open tool</span></a>';
-  }).join("");
+      + '<span class="tool-go"><span class="arr">&rarr;</span> Open tool</span></a></div>';
+  }
+  function render(){
+    var favs = TOOLS.filter(function(t){ return isFav(t.href); });
+    var rest = TOOLS.filter(function(t){ return !isFav(t.href); });
+    favGrid.innerHTML = favs.map(card).join("");
+    favWrap.hidden = favs.length === 0;
+    grid.innerHTML = rest.map(card).join("");
+    toolsLabel.textContent = favs.length ? "All tools" : "Tools";
+  }
+  render();
+  document.addEventListener("av:ready", render);
+  document.addEventListener("av:favorites", render);
+  document.addEventListener("click", function(e){
+    var b = (e.target && e.target.closest) ? e.target.closest(".cardfav") : null;
+    if (b && window.AV && AV.toggleFav){ e.preventDefault(); AV.toggleFav(b.getAttribute("data-href")); }
+  });
 })();
 </script>
 </body>

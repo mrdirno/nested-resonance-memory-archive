@@ -28,6 +28,14 @@
   var TOOLS = (window.AV_TOOLS || []);
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); };
 
+  /* ---- favorites: per-device, no login (fewer steps = the whole point) ---- */
+  var FAV_KEY = "av.favorites.v1";
+  function favLoad(){ try { var a = JSON.parse(localStorage.getItem(FAV_KEY) || "[]"); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+  function favSave(a){ try { localStorage.setItem(FAV_KEY, JSON.stringify(a)); } catch (e) {} document.dispatchEvent(new CustomEvent("av:favorites", { detail: { favorites: a.slice() } })); }
+  function favIs(href){ return favLoad().indexOf(href) !== -1; }
+  function favToggle(href){ var a = favLoad(), i = a.indexOf(href); if (i === -1) a.push(href); else a.splice(i, 1); favSave(a); return i === -1; }
+  function currentTool(){ var name = (location.pathname.split("/").pop() || ""); for (var i = 0; i < TOOLS.length; i++) if (TOOLS[i].href === name) return TOOLS[i]; return null; }
+
   /* ---- scoped styles (av- prefix so they never collide with a tool page) ---- */
   var CSS = `
   :root{--av-steel:#242A31;--av-ink:#12161A;--av-paper:#FBFBF8;--av-line:#BABEB6;--av-muted:#5D656E;--av-flag:#F0BE1E;
@@ -58,6 +66,9 @@
   .av-req-btn{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.06em;font-size:14px;font-weight:700;
     background:var(--av-flag);color:#231B00;border:1px solid var(--av-flag);border-radius:2px;padding:7px 12px;cursor:pointer;white-space:nowrap;}
   .av-req-btn:hover{background:#FFD34A}
+  .av-fav-btn{background:transparent;border:1px solid #3A424B;color:#8892a0;border-radius:2px;width:34px;height:31px;cursor:pointer;font-size:15px;line-height:1;flex:none}
+  .av-fav-btn:hover{border-color:var(--av-flag);color:#C7CDD3}
+  .av-fav-btn.on{color:var(--av-flag);border-color:var(--av-flag)}
   .av-bar :focus-visible{outline:2px solid var(--av-flag);outline-offset:2px}
 
   .av-modal{position:fixed;inset:0;z-index:60;display:none;align-items:flex-start;justify-content:center;
@@ -135,9 +146,18 @@
 
     var reqBtn = h("button", { type: "button", class: "av-req-btn", onclick: openWell }, ["✦ Wish for a tool"]);
 
+    // On a tool page, a ★ to favorite THIS tool (pins it to the top of the hub).
+    var cur = currentTool();
+    var favBtn = null;
+    if (cur) {
+      favBtn = h("button", { type: "button", class: "av-fav-btn" + (favIs(cur.href) ? " on" : ""), title: "Favorite this tool — pins it to the top of the toolkit", "aria-pressed": favIs(cur.href) ? "true" : "false" }, ["★"]);
+      favBtn.addEventListener("click", function () { var on = favToggle(cur.href); favBtn.classList.toggle("on", on); favBtn.setAttribute("aria-pressed", on ? "true" : "false"); });
+    }
+
     return h("nav", { class: "av-bar", "aria-label": "AV Field Toolkit" }, [
       h("a", { class: "av-brand", href: "index.html", html: '🧰 <span>AV&nbsp;</span><b>Field&nbsp;Toolkit</b>' }),
       menu,
+      favBtn,
       h("div", { class: "av-spacer" }),
       reqBtn
     ]);
@@ -277,7 +297,8 @@
   function boot() {
     var style = document.createElement("style"); style.textContent = CSS; document.head.appendChild(style);
     document.body.insertBefore(buildBar(), document.body.firstChild);
-    window.AV = { openWell: openWell, tools: TOOLS, today: function(){ return TODAY; }, todayStr: function(){ return fmtDate(TODAY); } };
+    window.AV = { openWell: openWell, tools: TOOLS, today: function(){ return TODAY; }, todayStr: function(){ return fmtDate(TODAY); },
+                  favorites: favLoad, isFav: favIs, toggleFav: favToggle };
     resolveToday();
     document.dispatchEvent(new CustomEvent("av:ready"));
   }
