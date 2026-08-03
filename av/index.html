@@ -4,99 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AV Field Toolkit</title>
-<meta name="description" content="Field tools and references for AV work — grows over time.">
+<meta name="description" content="Practical tools for AV field work — generate the requests and docs you send your PM, fast. Request a tool and Aldrin's AI builds it.">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="AV Toolkit">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
 <style>
 :root{
-  --steel:#242A31;
-  --ink:#12161A;
-  --zinc:#D7DAD3;
-  --paper:#FBFBF8;
-  --line:#BABEB6;
-  --muted:#5D656E;
-  --flag:#F0BE1E;
-  --tint:#FDF7E1;
-  --sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --cond: "Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
-  --mono: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--flag:#F0BE1E;--tint:#FDF7E1;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{
-  background:var(--zinc);color:var(--ink);font-family:var(--sans);
-  font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%;
-}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
 .wrap{max-width:1080px;margin:0 auto;padding:0 16px 60px}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -16px 20px;padding:18px 16px 16px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:6px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(20px,4.6vw,30px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.95}
+.lede{margin:8px 0 0;max-width:60ch;color:#B9BFC6;font-size:12.5px}
 
-/* masthead — matches the Consumables plate */
-.plate{background:var(--steel);color:#EEF0EA;margin:0 -16px 22px;padding:16px 16px 14px}
-.eyebrow{
-  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--flag);display:block;margin-bottom:6px;
-}
-.plate h1{
-  font-family:var(--cond);font-weight:700;font-size:clamp(19px,4.4vw,28px);
-  letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.95;
-}
-.lede{margin:7px 0 0;max-width:56ch;color:#B9BFC6;font-size:12.5px}
+/* wishing-well hero */
+.well{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);
+  border-left:5px solid var(--flag);border-radius:2px;padding:15px 16px;margin-bottom:18px}
+.well-txt{flex:1 1 300px;min-width:0}
+.well-txt b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;display:block;color:var(--ink)}
+.well-txt span{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+.well-btn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:16px;font-weight:700;
+  background:var(--flag);color:#231B00;border:1px solid var(--flag);border-radius:2px;padding:11px 18px;cursor:pointer;white-space:nowrap}
+.well-btn:hover{background:#FFD34A}
+.well-btn:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
 
-/* filter toolbar */
-.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
-.search{flex:1 1 260px;position:relative}
-.search input{
-  width:100%;padding:10px 12px 10px 34px;border:1px solid var(--steel);
-  background:var(--paper);border-radius:2px;font-family:var(--sans);font-size:14px;color:var(--ink);
-}
-.search::before{
-  content:"";position:absolute;left:12px;top:50%;width:11px;height:11px;margin-top:-7px;
-  border:2px solid var(--muted);border-radius:50%;
-}
-.search::after{
-  content:"";position:absolute;left:21px;top:50%;width:7px;height:2px;
-  background:var(--muted);transform:rotate(45deg);margin-top:2px;
-}
-
-/* tool grid */
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:13px}
-.tool{
-  display:flex;flex-direction:column;gap:8px;text-decoration:none;color:inherit;
-  background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));
-  border-radius:2px;padding:14px 15px 15px;transition:transform .1s ease,box-shadow .1s ease;
-  min-height:118px;
-}
+.tool{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:inherit;background:var(--paper);
+  border:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));border-radius:2px;padding:14px 15px 15px;
+  transition:transform .1s ease,box-shadow .1s ease;min-height:120px}
 .tool:hover{transform:translateY(-2px);box-shadow:0 6px 0 -2px rgba(36,42,49,.18)}
 .tool:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
 .tool-top{display:flex;align-items:baseline;gap:9px}
-.tool-name{
-  font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;
-  font-size:17px;font-weight:700;margin:0;flex:1;line-height:1.05;color:var(--ink);
-}
-.tag{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:3px 6px;white-space:nowrap;
-}
+.tool-name{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;font-weight:700;margin:0;flex:1;line-height:1.05;color:var(--ink)}
+.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:3px 6px;white-space:nowrap}
 .tool-desc{font-size:12.5px;color:var(--muted);line-height:1.35;flex:1}
-.tool-go{
-  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--steel);display:flex;align-items:center;gap:6px;margin-top:2px;
-}
+.tool-go{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);display:flex;align-items:center;gap:6px}
 .tool-go .arr{color:var(--flag);font-weight:700}
-.tool.is-hidden{display:none}
-#nomatch{
-  display:none;padding:26px 4px;color:var(--muted);font-family:var(--cond);
-  font-size:19px;text-transform:uppercase;letter-spacing:.06em;
-}
-
-/* footer / project links */
-.foot{
-  margin-top:26px;padding-top:16px;border-top:1px solid var(--line);
-  display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-}
+.foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .foot a{color:var(--steel);text-decoration:none;border-bottom:1px solid var(--flag);padding-bottom:1px}
 .foot a:hover{color:var(--ink)}
 .foot .sp{flex:1}
-
-@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+@media (prefers-reduced-motion:reduce){.tool{transition:none}}
 </style>
 </head>
 <body>
@@ -105,76 +68,45 @@ body{
   <header class="plate">
     <span class="eyebrow">Field toolkit</span>
     <h1>AV Field Toolkit</h1>
-    <p class="lede">Quick tools and references for the field. Tap one to open it. More get added over time &mdash; edit the <code>TOOLS</code> list in this page&rsquo;s source to add a link or a tool.</p>
+    <p class="lede">Dead-practical tools for AV field work — the checklists, specs and requests you send your PM or techs, made fast. Don't see the one you need? Ask for it — Aldrin's AI builds the ones people will actually use.</p>
   </header>
 
-  <div class="toolbar">
-    <div class="search">
-      <input id="q" type="search" placeholder="Filter tools &mdash; try &ldquo;consumables&rdquo;" aria-label="Filter tools">
+  <div class="well">
+    <div class="well-txt">
+      <b>Need a tool that isn't here?</b>
+      <span>Tell Aldrin's AI what document or request you keep making by hand. If it's practical and common, it gets built into a page — for you and everyone in the trade.</span>
     </div>
+    <button class="well-btn" type="button" onclick="(window.AV&&AV.openWell)?AV.openWell():alert('Loading…')">+ Request a tool</button>
   </div>
 
+  <p class="section-label">Tools</p>
   <main class="grid" id="grid"></main>
-  <p id="nomatch">No tools match that filter.</p>
 
   <footer class="foot">
     <span>AV Field Toolkit</span>
     <span class="sp"></span>
-    <!-- Project folder — where this page's source lives, for future work. -->
     <a href="https://github.com/mrdirno/nested-resonance-memory-archive/tree/main/av" target="_blank" rel="noopener">Project folder &rarr;</a>
     <a href="../collage/" target="_blank" rel="noopener">Collage Studio &rarr;</a>
   </footer>
 
 </div>
 
+<script src="tools.js"></script>
+<script src="av.js"></script>
 <script>
-/* ─────────────────────────────────────────────────────────────────────────
-   ADD A TOOL OR LINK HERE. One entry per card. Fields:
-     name  — short title shown on the card
-     desc  — one line describing it
-     href  — where it goes: a local page ("./x.html") or an external URL
-     kind  — "tool" (internal page) | "link" (external site) | "ref" (reference)
-     chip  — left-border accent color (any CSS color)
-   New entries appear automatically; no other change needed.
-   ───────────────────────────────────────────────────────────────────────── */
-const TOOLS = [
-  {
-    name: "Consumables List",
-    desc: "Field-stock checklist — tick what you're out of, set counts, copy the list straight into chat.",
-    href: "./consumables.html",
-    kind: "tool",
-    chip: "#F0BE1E"
-  }
-  // , { name:"…", desc:"…", href:"https://…", kind:"link", chip:"#2E64C8" }
-];
-
-const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const isExternal = href => /^https?:\/\//i.test(href);
-
-document.getElementById("grid").innerHTML = TOOLS.map(t => {
-  const ext = isExternal(t.href);
-  const tag = (t.kind || (ext ? "link" : "tool")).toUpperCase();
-  const attrs = ext ? ` target="_blank" rel="noopener"` : "";
-  return `<a class="tool" href="${esc(t.href)}"${attrs} style="--chip:${esc(t.chip || "#242A31")}">
-      <div class="tool-top">
-        <h2 class="tool-name">${esc(t.name)}</h2>
-        <span class="tag">${esc(tag)}</span>
-      </div>
-      <p class="tool-desc">${esc(t.desc || "")}</p>
-      <span class="tool-go"><span class="arr">&rarr;</span> ${ext ? "Open link" : "Open tool"}</span>
-    </a>`;
-}).join("");
-
-document.getElementById("q").addEventListener("input", e => {
-  const q = e.target.value.trim().toLowerCase();
-  let hits = 0;
-  document.querySelectorAll(".tool").forEach(el => {
-    const hit = !q || el.textContent.toLowerCase().includes(q);
-    el.classList.toggle("is-hidden", !hit);
-    if (hit) hits++;
-  });
-  document.getElementById("nomatch").style.display = hits ? "none" : "block";
-});
+(function(){
+  var TOOLS = window.AV_TOOLS || [];
+  var esc = function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c];});};
+  document.getElementById("grid").innerHTML = TOOLS.map(function(t){
+    var ext = /^https?:\/\//i.test(t.href);
+    var attrs = ext ? ' target="_blank" rel="noopener"' : "";
+    return '<a class="tool" href="'+esc(t.href)+'"'+attrs+' style="--chip:'+esc(t.chip||"#242A31")+'">'
+      + '<div class="tool-top"><h2 class="tool-name">'+esc(t.name)+'</h2>'
+      + (t.audience?'<span class="tag">'+esc(t.audience)+'</span>':'')+'</div>'
+      + '<p class="tool-desc">'+esc(t.desc||"")+'</p>'
+      + '<span class="tool-go"><span class="arr">&rarr;</span> Open tool</span></a>';
+  }).join("");
+})();
 </script>
 </body>
 </html>

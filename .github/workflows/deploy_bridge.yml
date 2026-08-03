@@ -96,6 +96,25 @@ jobs:
           cp -R HELIOS-BRIDGE-ARCHIVE/. HELIOS-BRIDGE/dist/archive/
           cp -R av/. HELIOS-BRIDGE/dist/av/
 
+      # The AV wishing well POSTs to Supabase with the PUBLIC anon key. It is
+      # public-by-design, but a JWT-shaped string cannot live in this public repo
+      # (secret-scan guard), so it is injected HERE from repo secrets into the
+      # deployed copy only. Fail-closed: a missing secret or an un-replaced
+      # placeholder aborts the deploy rather than shipping a dead well.
+      - name: Inject AV wishing-well config
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          f=HELIOS-BRIDGE/dist/av/av.js
+          test -f "$f" || { echo "MISSING: $f"; exit 1; }
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
+            echo "FAIL: SUPABASE_URL / SUPABASE_ANON_KEY repo secrets are not set"; exit 1; fi
+          sed -i "s|__SUPABASE_URL__|${SUPABASE_URL}|g; s|__SUPABASE_ANON_KEY__|${SUPABASE_ANON_KEY}|g" "$f"
+          if grep -q '__SUPABASE_' "$f"; then echo "FAIL: av.js placeholders were not injected"; exit 1; fi
+          echo "AV wishing-well config injected into av.js"
+
       # Prove the artifact tree instead of asserting it, and fail here rather
       # than in a browser if either app's entry point is missing.
       - name: Show artifact tree
@@ -114,7 +133,7 @@ jobs:
                    collage/index.html collage/sw.js collage/manifest.json \
                    collage-beta/index.html \
                    archive/index.html \
-                   av/index.html av/consumables.html; do
+                   av/index.html av/consumables.html av/av.js av/tools.js; do
             test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
           done
 
