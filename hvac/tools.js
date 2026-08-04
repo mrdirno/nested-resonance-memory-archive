@@ -1,0 +1,29 @@
+/* HVAC/R FIELD TOOLKIT — TOOL REGISTRY (the one edit point).
+ *
+ * The P0 loop (and you) add a tool HERE when its page ships from a wishing-well
+ * request or the seed roster. The hub grid and the per-page nav dropdown both
+ * read this list, so a new entry appears everywhere at once.
+ *
+ * The deploy asserts every `href` in this file resolves to a real page inside the
+ * published artifact — a registry entry pointing at a page that does not exist
+ * used to ship green and 404 in a tech's hand.
+ *
+ * Fields:
+ *   name      short title
+ *   href      the tool's page, relative to /hvac/
+ *   desc      one line — what document/request it helps a real tech produce
+ *   chip      accent color (any CSS color)
+ *   audience  who it's for / who they send the output to
+ *   pinned    optional — keep at the very top of the hub regardless of favorites
+ */
+window.TOOLKIT_TOOLS = [
+  {
+    name: "Repair Recommendation",
+    href: "repair-recommendation.html",
+    desc: "You found it, you're not fixing it today. Send the office what it takes to quote it without calling you back — unit tag, what's on the plate, the part off the dead component, what happens if they sit on it, and how you're getting up there.",
+    chip: "#4FE0C0",
+    audience: "Tech → Service manager",
+    pinned: true
+  }
+  // The loop appends new tools here as it builds them from wishes + the seed roster.
+];

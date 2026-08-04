@@ -44,7 +44,8 @@
   var TRADES = [
     { slug: "av",         name: "AV Field Toolkit" },
     { slug: "plumbing",   name: "Plumbing Field Toolkit" },
-    { slug: "electrical", name: "Electrical Field Toolkit" }
+    { slug: "electrical", name: "Electrical Field Toolkit" },
+    { slug: "hvac",       name: "HVAC/R Field Toolkit" }
   ];
 
   /* ---- WHO AM I: the per-trade config, with the AV defaults ---------------
@@ -103,9 +104,14 @@
   .av-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;
     background:var(--av-steel);color:#EEF0EA;padding:8px 14px;border-bottom:2px solid var(--av-flag);
     font-family:var(--av-sans);}
+  /* min-height 44: the brand IS the home link on every page of every trade, and it
+     measured 21px tall — half a tap target, on the one control that gets someone
+     back to the hub. The bar already carries 44px buttons so its height is
+     unchanged. Found standing up trade #4 and swept to all of them at once
+     (§THE EXPANSION ORDER — a fix that lands on one trade is half a fix). */
   .av-brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:#EEF0EA;font-family:var(--av-cond);
     text-transform:uppercase;letter-spacing:.08em;font-weight:700;font-size:15px;white-space:nowrap;
-    min-width:0;overflow:hidden;flex:0 1 auto;}
+    min-width:0;overflow:hidden;flex:0 1 auto;min-height:44px;}
   .av-brand b{color:var(--av-flag)}
   /* MOBILE-WATERTIGHT (operator 2026-08-04: "don't make anything that's gonna clip
    * or alter if zoomed out on phone"). MEASURED BEFORE THE FIX, in a real browser

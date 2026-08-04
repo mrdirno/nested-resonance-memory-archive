@@ -37,8 +37,14 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .well-txt b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;display:block;color:var(--ink)}
 .well-txt span{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
 .well-btn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:16px;font-weight:700;
-  background:var(--flag);color:#231B00;border:1px solid var(--flag);border-radius:2px;padding:11px 18px;cursor:pointer;white-space:nowrap}
-.well-btn:hover{background:#FFD34A}
+  background:var(--flag);color:var(--flag-ink,#231B00);border:1px solid var(--flag);border-radius:2px;
+  min-height:44px;padding:11px 18px;cursor:pointer;white-space:nowrap}
+/* Swept back from electrical/hvac 2026-08-04 (§THE EXPANSION ORDER — a fix that
+   lands on one trade and leaves its siblings behind is half a fix). Three things
+   this hub never got: a 44px floor on the primary CTA the whole demand loop runs
+   on (it measured 43), accentInk instead of a hardcoded near-black, and a hover
+   that LIFTS the trade's accent instead of naming a second colour. */
+.well-btn:hover{filter:brightness(1.08)}
 .well-btn:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
 
 .section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}

@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -216,6 +216,14 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed again, to electrical — the pull list first: type what you already know you need, then tick down the forget-list of small stuff that stops a crew when it is not on the truck.',
     icon: <Zap size={18} />,
+  },
+  {
+    // TRADE #4. Registered in the same commit that stands the trade up.
+    name: 'HVAC/R Field Toolkit',
+    href: './hvac/',
+    tag: 'field',
+    blurb: 'Isomorphed to HVAC and refrigeration — the repair recommendation first: the turnover a tech sends from the roof so the office can quote the fix without a second trip.',
+    icon: <Snowflake size={18} />,
   },
 ];
 

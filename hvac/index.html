@@ -2,29 +2,33 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plumbing Field Toolkit</title>
-<meta name="description" content="Practical tools for plumbing field work — build the lists, notices and reports you send the counter, the GC and the office, fast. Wish for a tool and Aldrin's AI builds it.">
-<meta name="apple-mobile-web-app-title" content="Plumbing Toolkit">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HVAC/R Field Toolkit</title>
+<meta name="description" content="Practical tools for HVAC and refrigeration service work — build the turnovers, requests and notices you send the office, the estimator and the customer, fast. Wish for a tool and Aldrin's AI builds it.">
+<meta name="apple-mobile-web-app-title" content="HVAC Toolkit">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#242A31">
 <style>
 :root{
   --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
-  --muted:#5D656E;--flag:#C87137;--tint:#FBF1E8;
+  --muted:#5D656E;--flag:#4FE0C0;--tint:#E4FBF5;--deep:#0C7A66;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
+/* NO overflow-x:hidden anywhere on this page, on purpose. It MASKS a horizontal
+   overflow instead of fixing it and hides exactly the defect the pre-ship mobile
+   gate exists to catch (measured 2026-08-04 on credits.html: documentElement
+   .scrollWidth read a clean 390 while body.scrollWidth was 489). */
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
-.wrap{max-width:1080px;margin:0 auto;padding:0 16px 60px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px calc(60px + env(safe-area-inset-bottom))}
 .plate{background:var(--steel);color:#EEF0EA;margin:0 -16px 20px;padding:18px 16px 16px}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:6px}
 .plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(20px,4.6vw,30px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.95}
-.lede{margin:8px 0 0;max-width:60ch;color:#B9BFC6;font-size:12.5px}
+.lede{margin:8px 0 0;max-width:62ch;color:#B9BFC6;font-size:12.5px}
 
 /* wishing-well hero */
 .well{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);
@@ -33,13 +37,8 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .well-txt b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;display:block;color:var(--ink)}
 .well-txt span{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
 .well-btn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:16px;font-weight:700;
-  background:var(--flag);color:var(--flag-ink,#1A0E05);border:1px solid var(--flag);border-radius:2px;
+  background:var(--flag);color:var(--flag-ink,#052622);border:1px solid var(--flag);border-radius:2px;
   min-height:44px;padding:11px 18px;cursor:pointer;white-space:nowrap}
-/* Swept back from electrical/hvac 2026-08-04 (§THE EXPANSION ORDER — a fix that
-   lands on one trade and leaves its siblings behind is half a fix). Three things
-   this hub never got: a 44px floor on the primary CTA the whole demand loop runs
-   on (it measured 43), accentInk instead of a hardcoded near-black, and a hover
-   that LIFTS the trade's accent instead of naming a second colour. */
 .well-btn:hover{filter:brightness(1.08)}
 .well-btn:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
 
@@ -53,26 +52,27 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .toolwrap{position:relative}
 .cardfav{position:absolute;top:9px;right:9px;z-index:2;background:#fff;border:1px solid var(--line);color:#C4C9BE;width:28px;height:28px;border-radius:2px;cursor:pointer;font-size:14px;line-height:1;padding:0}
 .cardfav:hover{border-color:var(--flag);color:var(--muted)}
-.cardfav.on{color:var(--flag);border-color:var(--flag);background:#FDF6F0}
+.cardfav.on{color:var(--deep);border-color:var(--flag);background:var(--tint)}
 .toolwrap .tool-top{padding-right:30px}
 .tool-top{display:flex;align-items:baseline;gap:9px}
 .tool-name{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;font-weight:700;margin:0;flex:1;line-height:1.05;color:var(--ink)}
-/* NEVER nowrap. Measured 2026-08-04 at 320px on the electrical hub: an audience
-   chip of "Electricians -> Warehouse / Counter" pushed the page to 328px and the
-   whole hub scrolled sideways. The chip text comes from a registry entry someone
-   edits later, so it has to wrap no matter what they write. Swept to every trade. */
+/* NEVER nowrap. Measured 2026-08-04 in a 320px viewport: an audience chip of
+   "Electricians → Warehouse / Counter" pushed the electrical hub to 328px and the
+   whole page scrolled sideways on an iPhone SE. The chip is the one element on
+   this card whose text length is set by a registry entry someone edits later, so
+   it has to be allowed to wrap no matter what they write. */
 .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:3px 6px;white-space:normal;overflow-wrap:anywhere;min-width:0}
 .tool-desc{font-size:12.5px;color:var(--muted);line-height:1.35;flex:1}
 .tool-go{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);display:flex;align-items:center;gap:6px}
-.tool-go .arr{color:var(--flag);font-weight:700}
+.tool-go .arr{color:var(--deep);font-weight:700}
 .foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;
   font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .foot a{color:var(--steel);text-decoration:none;border-bottom:1px solid var(--flag);padding-bottom:1px}
 .foot a:hover{color:var(--ink)}
 .foot .sp{flex:1}
-/* sibling-trade links are injected into one span — display:contents makes its
-   children real flex items so they keep the footer's gap instead of running
-   together into one long word that can push the row wide on a 320px phone. */
+/* the sibling-trade links are injected into one span — display:contents makes
+   its children real flex items so they keep the footer's gap, not stack up as a
+   single run-on word that can push the row wide on a 320px phone. */
 #siblings{display:contents}
 @media (prefers-reduced-motion:reduce){.tool{transition:none}}
 </style>
@@ -82,8 +82,8 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 
   <header class="plate">
     <span class="eyebrow">Field toolkit</span>
-    <h1>Plumbing Field Toolkit</h1>
-    <p class="lede">Dead-practical tools for plumbing field work — the lists, notices and reports you send the counter, the GC or the office, made fast on a phone. Don't see the one you need? Wish for it — Aldrin's AI builds the ones people will actually use.</p>
+    <h1>HVAC/R Field Toolkit</h1>
+    <p class="lede">Dead-practical tools for HVAC and refrigeration service — the turnovers, requests and notices you send the office, the estimator or the customer, made fast on a phone standing at the unit. Don't see the one you need? Wish for it — Aldrin's AI builds the ones people will actually use.</p>
   </header>
 
   <div class="well">
@@ -91,17 +91,17 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
       <b>This toolkit is built from wishes.</b>
       <span>Wish for the one you keep writing out by hand — Aldrin's AI builds the good ones into a real page, for you and everyone in the trade. Yes, really. Try it.</span>
     </div>
-    <button class="well-btn" type="button" onclick="(window.Toolkit&&Toolkit.openWell)?Toolkit.openWell():alert('Loading…')">&#10022; Wish for a tool</button>
+    <button class="well-btn" type="button" onclick="(window.Toolkit&amp;&amp;Toolkit.openWell)?Toolkit.openWell():alert('Loading…')">&#10022; Wish for a tool</button>
   </div>
 
   <p class="section-label">Tools</p>
   <main class="grid" id="grid"></main>
 
   <footer class="foot">
-    <span>Plumbing Field Toolkit</span>
+    <span>HVAC/R Field Toolkit</span>
     <span class="sp"></span>
     <span id="siblings"></span>
-    <a href="https://github.com/mrdirno/nested-resonance-memory-archive/tree/main/plumbing" target="_blank" rel="noopener">Project folder &rarr;</a>
+    <a href="https://github.com/mrdirno/nested-resonance-memory-archive/tree/main/hvac" target="_blank" rel="noopener">Project folder &rarr;</a>
   </footer>
 
 </div>
@@ -137,11 +137,11 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
     });
   }
   function render(){ grid.innerHTML = order().map(card).join(""); }
-  /* SIBLING TRADES COME FROM THE RUNTIME, NEVER FROM THIS FILE. This footer used
-     to hard-wire "../av/" — which meant standing up trade #3 required editing
-     every hub that had already shipped, and the hub that got forgotten is the one
-     nobody can reach the new trade from. shared/toolkit.js owns the list; each hub
-     renders whoever is not itself. Trade #4 is one line there, none here. */
+  /* SIBLING TRADES COME FROM THE RUNTIME, NEVER FROM THIS FILE. Trade #1 and #2
+     each hardcoded a link to the other, so trade #3 meant editing every hub that
+     already shipped — and the hub that forgot was the one nobody could reach the
+     new trade from. shared/toolkit.js owns the list; every hub renders whoever
+     is NOT itself. Trade #5 is one line there and zero here. */
   function siblings(){
     var el = document.getElementById("siblings");
     var all = (window.Toolkit && Toolkit.trades) || [];

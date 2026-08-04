@@ -270,6 +270,15 @@ in the sent document) · `hasLast`/`restoreLast` (Clear stashes the list it dest
 "start from last list" is one tap — the highest-value feature a foreman asked for, ranked
 by him above twenty more picker items).
 
+**SHAPE #2 NOW EXISTS IN SHIPPED CODE (`hvac/repair-recommendation.html`, 2026-08-04) — as a
+PAGE, not an engine.** One instance is over-abstraction; the engine gets extracted at the second,
+which the private ladder says is the T&M ticket, and the parts that will move into it are already
+visible: the ordered short fields, the repeatable finding block, the IMPACT LINE with append-only
+chips and a clock beside it, the tick-lists whose `sub` rides into the document in parentheses,
+the draft that flushes on `visibilitychange`, and the fixed closing ask. What will NOT move into
+it is every word — the note's whole value is that it speaks one trade's language, so the caller
+keeps the copy, the field list and its own CSS, exactly as shape #1's engine does.
+
 Keep the boundary or the config rots: `trade.js` = IDENTITY + COPY · `tools.js` =
 REGISTRY · `items.js` = that trade's VOCABULARY DATA (categories, size ladders, config
 options, unit-of-issue sets). Size ladders and C×C/FIP/no-hub live in data — never in the
@@ -456,6 +465,36 @@ Append here when a cycle finds one. Each is a rule, not a story.
   accent must be light and high-chroma enough to read on `#242A31`, text on the accent uses
   `accentInk` and never a literal, and a hover lifts the accent with a filter rather than
   naming a second colour.
+- **THE CAMERA ROUND-TRIP EATS THE DRAFT (2026-08-04).** A page whose FIRST block is "shoot
+  these now" has, on every single job, a first interaction of *tick, then leave for the camera*
+  — and iOS backgrounds the browser the instant the camera opens, which can freeze a debounced
+  save before it ever writes. A 250 ms debounce is not a save. **Rule:** any page that persists a
+  draft flushes synchronously on `visibilitychange`, `pagehide` and `blur`, not only on a timer.
+  A man who retypes a data plate once does not open the page again.
+- **A PHONE DESTROYS AN IDENTIFIER (2026-08-04).** Model numbers, serials and part numbers are
+  the exact strings autocorrect and autocapitalize are worst at, and the suffix IS the part — a
+  family name is a phone call and a restock fee. **Rule:** every identifier field ships
+  `autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"`, and
+  nothing normalises on the way out: never collapse internal spaces, strip dashes or slashes, or
+  re-case what he typed. Watching a phone turn a model number into an English word is the moment
+  a man closes a form for good.
+- **A PLACEHOLDER IS THE BACK DOOR FOR CERTIFIED DATA (2026-08-04).** On a readings field, the
+  seeded example `SC 3 (should be 10-12)` is a charging chart shipped as helper text — the
+  single sneakiest surface on a page that bans certified data everywhere else. **Rule:** every
+  example value in a placeholder shows something the tech MEASURED, never a normal, a range, a
+  target or a "should be". The same rule killed an early draft that read `amps 41 vs 28.4 RLA`:
+  the word *vs* is a comparison the page made, so it ships as `amps 41, plate RLA 28.4`.
+- **A COLUMN LOOKS TIDY IN THE PREVIEW AND ARRIVES AS MUSH (2026-08-04).** A padded label column
+  renders perfectly in the monospace preview box and turns ragged the instant it lands in the
+  only place the document ever goes — a text message or an email, in a proportional font.
+  **Rule:** documents use `Label: value` and ALL-CAPS section headings on their own line, which
+  are the only formatting that survives an unknown font. Judge output in the medium it is pasted
+  into, never in the preview that renders it.
+- **THE FIRST LINE IS AN INBOX SEARCH KEY (2026-08-04).** A turnover gets approved six months
+  after it is sent, and the estimator finds it by searching his mail for "Kroger 412" or "RTU-4".
+  A document whose first line is its own title is unfindable. **Rule:** the site and the unit tag
+  land in the first two lines — and that line has to DEGRADE, never emitting a bare " — — " when
+  only one of them was filled.
 - **NOT A SCAR — A CEILING TO REMEMBER (2026-08-04).** The electrical panel's synthesis
   argued that no axis may exceed **6 options**, because at 7 an inline chip row wraps, the
   control degrades to an iOS wheel, and ticking stops beating typing. It is right about chip
@@ -546,3 +585,34 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   click → clipboard → real ⌘V byte-identical to the preview, list stable across two reloads,
   32/32 overflow checks at 320/360/390/430 across all three trades.
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/
+- `2026-08-04` — **[AXIS:BREADTH] TRADE #4 IS LIVE: the HVAC/R Field Toolkit**, with **Repair
+  Recommendation** — the turnover a commercial service tech sends the office from the roof so a
+  quote can be written without a second trip or a phone call. Before: 3 trades, 5 tools, air-side
+  and refrigeration served by nothing. After: 4 trades, 6 tools, and **shape #2 exists in shipped
+  code for the first time** — THE NOTE (ordered short fields · the impact line everyone omits ·
+  a forget-list · a fixed closing ask). One instance is a page; the engine gets extracted on the
+  second, which the ladder says is the T&M ticket. A 5-agent panel (service tech · parts counter
+  and dispatch · service manager who quotes off these all day → one 20-year field hand told to
+  kill a third → synthesis) ran before a line shipped, and the kills ARE the page: **men / hours
+  / trips KILLED** (the tech is estimating his own two hands, not mobilisation or the lift, and
+  it is the line customers audit hardest — "two men" survives only as an ACCESS tick, because
+  that is handling); **"called in as" KILLED** (§THE SYSTEM OF RECORD — ServiceTitan owns the
+  call write-up and makes it mandatory; the WO number carries it); **six named photo slots cut to
+  three and moved ABOVE the typing** ("three get shot; six is a form telling a man how to do his
+  job" — and he is standing at the plate right now); severity + urgency + a same-trip checkbox
+  **collapsed into ONE three-way** — DOWN · WILL FAIL · **WHILE WE'RE IN THERE**, that third
+  bucket being both the same-trip flag and the highest-margin thing a tech can tick; "checked and
+  fine" promoted from per-finding to per-VISIT (it is what keeps the job when the next vendor
+  asks "did he even look at the drive", and what he *couldn't* check pre-sells the after-hours
+  trip). Kept and sharpened: the plate typed and never decoded, volts/phase as one tap, the
+  number off **that part** not the unit, and the consequence shipped as a PAIR — what breaks
+  **and when**, because a consequence with no clock on it is a shrug. **BACKPORT RIDER FIRED,
+  swept all four trades in the same cycle:** `.av-brand` — the home link on every page of every
+  trade — measured 21px and now carries a 44px floor; and the 44px CTA floor, `accentInk` and the
+  filter-based hover that electrical got at trade #3 were swept back into the av and plumbing
+  hubs, which had never received any of the three. Verified in a real browser, doing the job end
+  to end: 2 findings → a turnover a parts counter could fill, access subs riding into the
+  document ("Boom / man lift (has to be rented)"), one tap = one chip append, draft surviving a
+  reload; **0 horizontal overflow and 0 sub-44px controls at 320/360/390/430**, and every hub of
+  every trade re-measured after the shared-runtime change.
+  https://mrdirno.github.io/nested-resonance-memory-archive/hvac/

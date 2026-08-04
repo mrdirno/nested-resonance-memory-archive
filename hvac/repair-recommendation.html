@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Repair Recommendation — HVAC/R Field Toolkit</title>
+<meta name="description" content="You found it, you're not fixing it today. Build the turnover the office needs to quote it without calling you back — unit tag, what's on the plate, the part off the dead component, what happens if they sit on it, and how you're getting up there.">
+<meta name="apple-mobile-web-app-title" content="Repair Rec">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--flag:#4FE0C0;--tint:#E4FBF5;--deep:#0C7A66;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+/* NO overflow-x:hidden on this page, on purpose — it masks a horizontal overflow
+   instead of fixing it and hides exactly the defect the pre-ship mobile gate is
+   there to catch. */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(124px + env(safe-area-inset-bottom))}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 16px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(19px,4.4vw,27px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.98}
+.lede{margin:7px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:12px}
+.card.grey{border-left-color:var(--muted)}
+/* the camera block sits above the typing and says so */
+.card.shoot{border:2px solid var(--deep);border-left-width:5px}
+.card.shoot h2.blk{color:var(--deep)}
+h2.blk{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:16px;margin:0 0 3px;color:var(--ink);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+h2.blk .why{font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:11.5px;font-weight:400;color:var(--muted);flex:1 1 200px;min-width:0}
+.subhead{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:13px 0 7px;padding-top:9px;border-top:1px dashed var(--line)}
+
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:9px}
+.f label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.f label i{color:var(--deep);font-style:normal;text-transform:none;letter-spacing:.02em;font-size:10.5px}
+/* 44px MINIMUM on every control, measured in a real browser at 320/360/390/430
+   before this page shipped (operator 2026-08-04, the MOBILE-WATERTIGHT law). The
+   house style padding alone gave a 38px input and a 37px select — fine on a desk,
+   thin for a thumb in a glove on a roof. */
+.f input,.f select,.f textarea{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);min-height:44px}
+.f textarea{resize:vertical;min-height:44px;line-height:1.35}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.f.span2{grid-column:1 / -1}
+
+/* segments: never more than 5, or the row wraps into a wall and ticking stops
+   beating typing (§SCARS — the 6-option ceiling binds the moment an axis is
+   rendered as chips or segments instead of a select). */
+.seg{display:flex;flex-wrap:wrap;gap:0}
+.seg button{flex:1 1 auto;min-width:72px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.04em;font-size:13.5px;font-weight:700;
+  background:#fff;border:1px solid var(--line);color:var(--muted);padding:8px 7px;cursor:pointer;min-height:44px}
+.seg button:first-child{border-radius:2px 0 0 2px}
+.seg button:last-child{border-radius:0 2px 2px 0}
+.seg button + button{border-left:0}
+.seg button.on{background:var(--deep);border-color:var(--deep);color:#fff}
+.seg.hotseg button.on[data-hot="1"]{background:#B0201A;border-color:#B0201A}
+
+/* THE IMPACT LINE — the field the whole document is for, so it is the only thing
+   on the page that is visually louder than everything around it. */
+.impact{border:2px solid var(--deep);border-radius:2px;background:var(--tint);padding:10px 11px;margin-top:11px}
+.impact > label{display:block;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;font-weight:700;color:#0A4B3F;margin-bottom:2px}
+.impact .hint{font-size:11.5px;color:#2C5E54;margin:0 0 8px}
+.impact textarea{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);min-height:52px;resize:vertical;line-height:1.35}
+.impact textarea:focus{outline:2px solid var(--deep);outline-offset:-1px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chips button{font-family:var(--sans);font-size:12.5px;background:#fff;border:1px solid var(--deep);color:var(--deep);
+  border-radius:22px;padding:7px 13px;cursor:pointer;min-height:44px;text-align:left}
+.chips button:hover{background:var(--deep);color:#fff}
+.chips .chiphint{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#2C5E54;align-self:center;width:100%;margin-bottom:1px}
+
+/* the findings */
+.find{border:1px solid var(--line);border-left:4px solid var(--deep);border-radius:2px;background:#fff;padding:11px 12px;margin-top:11px}
+.find > .fhd{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.find > .fhd b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;color:var(--deep);flex:1;min-width:0}
+.rm{background:none;border:1px solid var(--line);color:var(--muted);font-size:15px;line-height:1;cursor:pointer;border-radius:2px;
+  width:44px;height:44px;flex:none}
+.rm:hover{color:#B0201A;border-color:#B0201A}
+.addfind{width:100%;min-height:44px;margin-top:11px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px dashed var(--deep);color:var(--deep);border-radius:2px;padding:11px 12px;cursor:pointer}
+.addfind:hover{background:var(--tint)}
+
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+details.more>summary{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+  cursor:pointer;min-height:44px;display:flex;align-items:center;gap:6px;list-style:none}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"+";font-size:14px;color:var(--deep);font-weight:700}
+details.more[open]>summary::before{content:"–"}
+
+/* the tick lists */
+ul.ticks{list-style:none;margin:9px 0 0;padding:0;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:#fff}
+ul.ticks li{border-bottom:1px solid #E4E6E0}
+ul.ticks li:last-child{border-bottom:0}
+ul.ticks label{display:flex;align-items:center;gap:10px;padding:8px 11px;cursor:pointer;min-height:44px}
+ul.ticks input{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
+ul.ticks .nm{font-weight:600;font-size:13.5px;min-width:0}
+ul.ticks .sb{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;color:var(--muted);text-transform:uppercase;flex:1;min-width:0;text-align:right}
+ul.ticks li:has(input:checked){background:var(--tint)}
+
+.warn{font-size:12px;color:var(--muted);background:#FFFDF6;border:1px solid var(--line);border-left:4px solid #E0A800;
+  border-radius:2px;padding:10px 12px;margin:14px 0}
+.warn b{color:var(--ink)}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
+  padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:flex;gap:9px;align-items:center}
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0}
+.bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
+  border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap;min-height:44px}
+/* big enough to hit with a dirty glove without looking */
+#copy{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink,#052622);padding:11px 20px}
+#copy:hover{filter:brightness(1.08)}
+#clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
+#clear:hover{border-color:#8A929B;color:#EEF0EA}
+.preview{background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;font-family:var(--mono);font-size:12px;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink);max-height:380px;overflow:auto}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.credit{font-size:12px;color:var(--muted);margin:14px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">HVAC/R &middot; Tech &rarr; the office</span>
+    <h1>Repair Recommendation</h1>
+    <p class="lede">You found it. You're not fixing it today. This is the turnover — everything the office needs to quote it without calling you back tomorrow, built while you're still standing at the unit.</p>
+  </header>
+
+  <!-- ── SHOOT THESE NOW — first, because he's standing at the plate ───────── -->
+  <section class="card shoot">
+    <h2 class="blk">Shoot these now <span class="why">Three photos, while you're still up here. You are not climbing back for the plate — and nothing gets uploaded, you text them with the paste.</span></h2>
+    <ul class="ticks" id="photos"></ul>
+  </section>
+
+  <!-- ── THE UNIT ─────────────────────────────────────────────────────────── -->
+  <section class="card">
+    <h2 class="blk">The unit <span class="why">Two different techs have to find it again, and the tag on the prints and the tag on the curb don't always agree.</span></h2>
+    <div class="hgrid">
+      <div class="f span2"><label>Site <i>— the way they say it</i></label><input id="fSite" type="text" placeholder="Kroger #412 — 1180 Cedar" autocomplete="off"></div>
+      <div class="f"><label>WO # <i>(if you've got one)</i></label><input id="fWO" type="text" placeholder="88421" autocomplete="off"></div>
+      <div class="f"><label>What kind</label><select id="fKind"></select></div>
+      <div class="f span2"><label>Unit tag + where it is <i>— and how many are up there</i></label><input id="fUnit" type="text" placeholder="RTU-4, tagged AC-4 on the curb — NW corner over the pharmacy. 4 up here, this is #3." autocomplete="off"></div>
+    </div>
+
+    <p class="subhead">Off the data plate — not off the invoice, not off memory</p>
+    <div class="hgrid">
+      <!-- autocapitalize/autocorrect/spellcheck OFF on the two fields a phone
+           destroys. Watching autocorrect turn a model number into an English word
+           is the moment a man closes a form for good. -->
+      <div class="f span2"><label>Make + model <i>— the WHOLE model, suffix and all</i></label><input id="fModel" type="text" placeholder="the full string on the plate — the family name is a phone call" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false"></div>
+      <div class="f span2"><label>Serial</label><input id="fSerial" type="text" placeholder="all of it — 0 and O, 5 and S. Photo it too." autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false"></div>
+      <div class="f"><label>Volts / phase</label><select id="fVolts"></select></div>
+      <div class="f"><label>Refrigerant</label><select id="fRef"></select></div>
+      <div class="f span2"><label>Plate charge <i>(if it's on there)</i></label><input id="fCharge" type="text" placeholder="14 lb 8 oz" autocomplete="off"></div>
+    </div>
+
+    <p class="subhead">How you left it — the office gets asked this first, every time</p>
+    <div class="hgrid">
+      <div class="f span2">
+        <div class="seg hotseg" id="segLeft"></div>
+      </div>
+      <div class="f span2"><label>…and what that means right now</label><input id="fRisk" type="text" placeholder="store is 82 in the space at 3pm · box at 22 and climbing, product moves tonight · gas valve off and tagged · econ on min, customer knows · comfort only" autocomplete="off"></div>
+    </div>
+  </section>
+
+  <!-- ── WHAT YOU FOUND ───────────────────────────────────────────────────── -->
+  <section class="card">
+    <h2 class="blk">What you found <span class="why">Findings stay separate line items — customers approve partially, and two findings blended into one paragraph can't be priced separately, so they get approved not at all.</span></h2>
+    <div id="finds"></div>
+    <button type="button" class="addfind" id="addFind">+ Another finding on this same unit</button>
+  </section>
+
+  <!-- ── CHECKED AND FINE ─────────────────────────────────────────────────── -->
+  <section class="card">
+    <h2 class="blk">Checked and fine <span class="why">The line that keeps the job when the other guy asks "did he even look at the drive" — and what you <em>couldn't</em> check sells the after-hours trip before anyone asks for it.</span></h2>
+    <div class="hgrid">
+      <div class="f span2"><label>What you checked that was OK &mdash; and anything you couldn't get to</label><input id="fOK" type="text" placeholder="belt and sheaves good, caps at rating, coils clean, econ closed · couldn't meg comp #2, store was open — needs a shutdown window" autocomplete="off"></div>
+    </div>
+  </section>
+
+  <!-- ── GETTING TO IT ────────────────────────────────────────────────────── -->
+  <section class="card">
+    <h2 class="blk">Getting to it <span class="why">This is the line that doubles the job. Same contactor on a hatch roof and on a penthouse with a crane pick are not the same job, and the office finds out on the day if you don't put it here.</span></h2>
+    <ul class="ticks" id="access"></ul>
+    <div class="hgrid">
+      <div class="f span2"><label>How the <b>part</b> gets up there <i>(if that's its own problem)</i></label><input id="fRig" type="text" placeholder="won't fit the hatch — 50 ft boom off the back lot, alley's 12 ft, we lose four spaces" autocomplete="off"></div>
+    </div>
+  </section>
+
+  <!-- ── WHAT I NEED FROM THE OFFICE ──────────────────────────────────────── -->
+  <section class="card">
+    <h2 class="blk">What you need from the office <span class="why">What has to happen before anybody drives back &mdash; never what it costs. No hours on here: the second this page collects your two hands as a number, the customer anchors on it and you own it.</span></h2>
+    <ul class="ticks" id="needs"></ul>
+    <div class="hgrid">
+      <div class="f span2"><label>What goes with it <i>— the stuff that makes it a second trip when it's not on the truck</i></label><input id="fWith" type="text" placeholder="liquid line drier · core kit · 2 qt oil · refrigerant by the pound · nitro · rod · curb gasket · filters, size and count · core charge, we bring the old one back" autocomplete="off"></div>
+      <div class="f span2"><label>Need it by &mdash; <i>and why, plus when we can actually get in</i></label><input id="fWhen" type="text" placeholder="before the weekend, they've got a health inspection Mon · after-hours only, badge takes 3 days" autocomplete="off"></div>
+    </div>
+  </section>
+
+  <!-- ── WHO KNOWS ────────────────────────────────────────────────────────── -->
+  <section class="card grey">
+    <h2 class="blk">Who at the site knows <span class="why">So the office isn't negotiating against something you already said on the roof.</span></h2>
+    <div class="hgrid">
+      <div class="f span2"><label>Who you talked to, and what you told them</label><input id="fTalked" type="text" placeholder="Miguel, store mgr — knows it's down and it's a parts wait. I didn't give him a number." autocomplete="off"></div>
+    </div>
+    <details class="more">
+      <summary>Who's sending this — typed once, saved on this phone</summary>
+      <div class="hgrid">
+        <div class="f"><label>You <i>(name + cell — they call you, not dispatch)</i></label><input id="fBy" type="text" placeholder="Mike R — 415-555-0134" autocomplete="off"></div>
+        <div class="f"><label>Company</label><input id="fCo" type="text" placeholder="Bayline Mechanical" autocomplete="off"></div>
+      </div>
+    </details>
+  </section>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>Every number on here is what you typed and what you read off the plate.</b> This page doesn't convert a pressure, doesn't tell you what's in range, doesn't decode a model number and doesn't price anything. It's a turnover, not a quote and not a diagnosis — check it before you send it, and check the part against the plate before anybody orders it.
+  </div>
+
+  <p class="credit">&#10022; First tool on the HVAC/R toolkit. Something on here in the wrong order, or missing the one field your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy it</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script>
+/* REPAIR RECOMMENDATION — trade #4's first tool, and the FIRST instance of shape #2
+ * (av/AV_SOCIETY.md §THE THREE SHAPES: THE NOTE — an ordered set of short fields,
+ * one of which is the impact line everyone omits, a forget-list, and a fixed
+ * closing ask). One instance is a page; the engine gets extracted on the second,
+ * which the roster says is the T&M ticket.
+ *
+ * WHAT A PANEL OF THE TRADE CHANGED, before a line shipped — three lenses (a
+ * 20-year commercial service tech, a parts counter + dispatcher, a service
+ * manager who writes quotes off these all day), then a field hand told to kill a
+ * third of it:
+ *  · CALLED IN AS and WHAT I FOUND ARE TWO FIELDS. They are almost never the same
+ *    and the difference is the story. Merge them into one "problem description"
+ *    box and the office loses the customer's version — which the customer will
+ *    argue about later.
+ *  · HOW YOU LEFT IT is the liability line and it gets asked EVERY time. Down /
+ *    limping / off and tagged / temp fix in place. The manager has to be able to
+ *    answer "is it energized right now" without calling the tech back.
+ *  · A CONSEQUENCE WITHOUT A CLOCK IS A SHRUG. "The compressor will fail" moves no
+ *    budget; "won't hold above about 90 ambient — that's June here" moves budget.
+ *    So the impact line ships as a PAIR: what fails, plus when.
+ *  · THE PART NUMBER COMES OFF THE PART, NOT THE UNIT. A unit model number does
+ *    not tell a supply house which motor is in it. And the model is the WHOLE
+ *    string with the suffix — a family name is an order that gets restocked.
+ *  · ACCESS IS A COST LINE. How a MAN gets up there and how the PART gets up there
+ *    are two different problems and the second one is the expensive one.
+ *  · THREE PHOTOS, AT THE TOP. Three get shot; six named slots is a form telling a
+ *    man how to do his job. And they go ABOVE the typing because he is standing at
+ *    the plate right now and he will not climb back up for it.
+ *  · ONE THREE-WAY, NOT THREE CONTROLS. Severity + urgency + a same-trip checkbox
+ *    are one question asked three times: DOWN · WILL FAIL · WHILE WE'RE IN THERE.
+ *    That third bucket IS the same-trip flag and it is the highest-margin thing a
+ *    tech can tick — the office prices it against a truck roll already paid for.
+ *  · CHECKED AND FINE is per VISIT, not per finding. It is what keeps the job when
+ *    the next vendor asks "did he even look at the drive", and what he COULDN'T
+ *    check ("store was open") pre-sells the after-hours trip.
+ *  · A PHONE DESTROYS A MODEL NUMBER. autocapitalize=characters, autocorrect off,
+ *    spellcheck off on model, serial and the part number. Watching autocorrect
+ *    turn a model number into an English word is the moment a man quits a form.
+ *
+ * KILLED on the same review, all of it deliberate absence: MEN / HOURS / TRIPS (the
+ * tech is estimating his own two hands, not mobilisation, lift or the startup trip,
+ * and it is the line customers audit hardest — "two men" survives only as an ACCESS
+ * tick, because it is handling); "CALLED IN AS" (the call write-up is the field
+ * ServiceTitan owns and makes mandatory — §THE SYSTEM OF RECORD, and the WO number
+ * carries it); the per-component spec matrix (MFD/volts, HP/RPM/frame/rotation, TXV
+ * tonnage, belt code — that is a PARTS ORDER, a different document with a different
+ * reader, and the part-tag photo carries it better than eight dropdowns with gloves
+ * on); MCA/MOCP/SEER/unit weight (pulls no part, prices no job, all of it in the
+ * plate photo); MFG DATE and unit age (decoding age off a serial is the number-one
+ * wrong-part generator in this trade); a warranty block (a tech's guess becomes the
+ * company's broken promise — it survives as one tick, "check warranty on this
+ * serial"); an oil-type picker (pairing oil to refrigerant is a compatibility
+ * claim); recovered/added pounds (that is the EPA record and the work order owns
+ * it; two records that disagree is worse than one); every dollar figure and NTE;
+ * a signature line (a copy-pasted block cannot be signed and a tech spots it
+ * instantly); photo upload; accounts; PDF export; and every computed thing —
+ * P/T conversion, target superheat or subcool, tonnage from a model, breaker or
+ * wire size, leak-rate thresholds, "in range", and any symptom-to-part suggestion.
+ */
+(function () {
+  "use strict";
+  var D = window.TOOLKIT_ITEMS;
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? "" : s); };
+  function val(id) { var e = $(id); return e ? e.value.trim() : ""; }
+  /* A NEUTRAL option (leads with an em-dash) means nobody picked it, and a value
+   * nobody picked must never reach the office (§SCARS — a default is a claim). */
+  function none(v) { return !v || v.charAt(0) === "—"; }
+  function pick(id) { var v = val(id); return none(v) ? "" : v; }
+
+  /* ── build the pickers out of the vocabulary file ───────────────────────── */
+  function fillSelect(el, arr) {
+    arr.forEach(function (o) {
+      var opt = document.createElement("option");
+      opt.value = o; opt.textContent = o; el.appendChild(opt);
+    });
+  }
+  fillSelect($("fKind"), D.equipment);
+  fillSelect($("fVolts"), D.volts);
+  fillSelect($("fRef"), D.refrigerants);
+
+  /* HOW YOU LEFT IT. Five states, and they mean five different amounts of money
+   * and urgency. The two that mean "nobody is being served" are flagged hot. */
+  var LEFT = [
+    { v: "Running — it's fine for now", hot: 0 },
+    { v: "Running, but it won't hold",  hot: 0, doc: "Running, but it won't hold" },
+    { v: "Temp fix in place",           hot: 0, doc: "Temp fix in place — it'll get them through, no warranty on it" },
+    { v: "Down — it's not running",     hot: 1 },
+    { v: "Off and tagged",              hot: 1, doc: "Off and tagged — I shut it down on purpose" }
+  ];
+  var leftSel = "";
+  (function buildLeft() {
+    var box = $("segLeft");
+    LEFT.forEach(function (o) {
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = o.v;
+      b.setAttribute("data-v", o.v);
+      if (o.hot) b.setAttribute("data-hot", "1");
+      b.addEventListener("click", function () {
+        // tap the on one again to un-pick it — nothing here is pre-selected and
+        // nothing should be un-un-pickable
+        var was = leftSel === o.v;
+        leftSel = was ? "" : o.v;
+        Array.prototype.forEach.call(box.children, function (c) {
+          c.classList.toggle("on", c.getAttribute("data-v") === leftSel);
+        });
+        render();
+      });
+      box.appendChild(b);
+    });
+  })();
+  function leftDoc() {
+    for (var i = 0; i < LEFT.length; i++) if (LEFT[i].v === leftSel) return LEFT[i].doc || LEFT[i].v;
+    return "";
+  }
+
+  /* ── tick lists ─────────────────────────────────────────────────────────── */
+  function buildTicks(ulId, arr) {
+    var ul = $(ulId);
+    arr.forEach(function (it, i) {
+      var li = document.createElement("li");
+      var lab = document.createElement("label");
+      var cb = document.createElement("input");
+      cb.type = "checkbox"; cb.setAttribute("data-name", it.name);
+      cb.addEventListener("change", render);
+      var nm = document.createElement("span"); nm.className = "nm"; nm.textContent = it.name;
+      lab.appendChild(cb); lab.appendChild(nm);
+      if (it.sub) { var sb = document.createElement("span"); sb.className = "sb"; sb.textContent = it.sub; lab.appendChild(sb); }
+      li.appendChild(lab); ul.appendChild(li);
+    });
+  }
+  buildTicks("photos", D.photos);
+  buildTicks("access", D.access);
+  buildTicks("needs", D.needs);
+  function ticked(ulId) {
+    return Array.prototype.slice.call($(ulId).querySelectorAll("input:checked"))
+      .map(function (cb) { return cb.getAttribute("data-name"); });
+  }
+  /* The sub goes into the DOCUMENT, not just onto the screen: "Boom / man lift"
+   * without "has to be rented" is the cost signal deleted, and access is the line
+   * that doubles the job. */
+  function tickedDoc(ulId, arr) {
+    return ticked(ulId).map(function (nm) {
+      for (var i = 0; i < arr.length; i++) if (arr[i].name === nm) return nm + (arr[i].sub ? " (" + arr[i].sub + ")" : "");
+      return nm;
+    });
+  }
+
+  /* ── the findings ─────────────────────────────────────────────────────────
+   * HOW BAD is ONE three-way, not a severity picker plus an urgency picker plus a
+   * same-trip checkbox — three controls asking one question. "While we're in
+   * there" IS the same-trip flag, and it is the highest-margin thing a tech can
+   * tick: the office prices it against a truck roll that is already paid for. */
+  var WHEN = [
+    { v: "Down", hot: 1, doc: "Down — it isn't running until this is done" },
+    { v: "Will fail", hot: 0, doc: "Will fail — it's coming" },
+    { v: "While we're in there", hot: 0, doc: "While we're in there — no extra trip" }
+  ];
+  var findSeq = 0;
+
+  function componentSelect() {
+    var s = document.createElement("select");
+    s.className = "fComp";
+    var neutral = document.createElement("option");
+    neutral.value = "— what failed"; neutral.textContent = "— what failed";
+    s.appendChild(neutral);
+    D.components.forEach(function (g) {
+      var og = document.createElement("optgroup");
+      og.label = g.group;
+      g.items.forEach(function (it) {
+        var o = document.createElement("option");
+        o.value = it; o.textContent = it; og.appendChild(o);
+      });
+      s.appendChild(og);
+    });
+    return s;
+  }
+
+  function addFinding() {
+    findSeq += 1;
+    var n = findSeq;
+    var box = document.createElement("div");
+    box.className = "find";
+    box.innerHTML =
+      '<div class="fhd"><b>Finding <span class="fnum"></span></b>'
+      + '<button type="button" class="rm" title="Take this finding off">&times;</button></div>'
+      + '<div class="hgrid">'
+      +   '<div class="f"><label>What failed</label><span class="compslot"></span></div>'
+      +   '<div class="f"><label>Number off <i>that part</i></label><input class="fPart" type="text" placeholder="off the compressor / motor / board tag — not the unit" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false"></div>'
+      +   '<div class="f span2"><label>What you found <i>— how many, and how you know</i></label><textarea class="fFound" rows="2" placeholder="lead compressor grounded, megged 0.0 · 2 of 3 evap fan motors seized"></textarea></div>'
+      + '</div>'
+      + '<div class="impact">'
+      +   '<label>If they sit on it</label>'
+      +   '<p class="hint">The one line that gets left off, and the one the office actually sells the repair with. Then tap how bad &mdash; a consequence with no clock on it is a shrug.</p>'
+      +   '<textarea class="fWhy" rows="2" placeholder="it stays down — and if they keep resetting it, it takes the other compressor with it"></textarea>'
+      +   '<div class="chips"><span class="chiphint">Tap to add &mdash; then say it in your words</span></div>'
+      +   '<div class="seg" style="margin-top:9px"></div>'
+      + '</div>'
+      + '<details class="more"><summary>The readings that prove it</summary>'
+      +   '<div class="hgrid">'
+      +     '<div class="f span2"><label>Readings <i>— straight off your gauges and your meter, nothing converted</i></label><textarea class="fRead" rows="2" placeholder="suction 12, head 385, 100 amb, SH 22, SC 2 · amps 41, plate RLA 28.4 · L1-L2 241 · megged 0.0"></textarea></div>'
+      +   '</div>'
+      + '</details>';
+
+    box.querySelector(".compslot").appendChild(componentSelect());
+
+    // consequence chips — each APPENDS, nothing is pre-selected
+    var chips = box.querySelector(".chips");
+    var why = box.querySelector(".fWhy");
+    D.consequenceChips.forEach(function (c) {
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = c;
+      b.addEventListener("click", function () {
+        var cur = why.value.trim();
+        why.value = cur ? (cur.replace(/\s*$/, "") + " " + c) : c;
+        why.focus();
+        render();
+      });
+      chips.appendChild(b);
+    });
+
+    // the clock
+    var seg = box.querySelector(".impact .seg");
+    WHEN.forEach(function (o) {
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = o.v; b.setAttribute("data-v", o.v);
+      b.addEventListener("click", function () {
+        var was = box.getAttribute("data-when") === o.v;
+        box.setAttribute("data-when", was ? "" : o.v);
+        Array.prototype.forEach.call(seg.children, function (c) {
+          c.classList.toggle("on", c.getAttribute("data-v") === box.getAttribute("data-when"));
+        });
+        render();
+      });
+      seg.appendChild(b);
+    });
+
+    box.querySelector(".rm").addEventListener("click", function () {
+      box.parentNode.removeChild(box);
+      renumber(); render();
+    });
+    box.addEventListener("input", render);
+    box.addEventListener("change", render);
+
+    $("finds").appendChild(box);
+    renumber();
+    return box;
+  }
+  function renumber() {
+    var all = $("finds").querySelectorAll(".find");
+    Array.prototype.forEach.call(all, function (b, i) {
+      b.querySelector(".fnum").textContent = String(i + 1);
+      // one finding needs no number in the document; two or more do
+      b.querySelector(".rm").style.display = all.length > 1 ? "" : "none";
+    });
+  }
+  function readFindings() {
+    return Array.prototype.slice.call($("finds").querySelectorAll(".find")).map(function (b) {
+      var comp = b.querySelector(".fComp").value;
+      var when = b.getAttribute("data-when") || "";
+      var whenDoc = when;
+      for (var i = 0; i < WHEN.length; i++) if (WHEN[i].v === when) whenDoc = WHEN[i].doc || WHEN[i].v;
+      return {
+        comp: none(comp) ? "" : comp,
+        part: b.querySelector(".fPart").value.trim(),
+        found: b.querySelector(".fFound").value.trim(),
+        why: b.querySelector(".fWhy").value.trim(),
+        when: when, whenDoc: whenDoc,
+        read: b.querySelector(".fRead").value.trim()
+      };
+    });
+  }
+  $("addFind").addEventListener("click", function () {
+    var b = addFinding(); render();
+    b.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+
+  /* ── STICKY: the answers that are the same on every call ────────────────── */
+  var STICKY = ["fBy", "fCo"];
+  var SKEY = "toolkit.hvac.repairRec.me.v1";
+  (function loadSticky() {
+    var s = {};
+    try { s = JSON.parse(localStorage.getItem(SKEY) || "{}"); } catch (e) { s = {}; }
+    STICKY.forEach(function (id) { if (s[id] != null && $(id)) $(id).value = s[id]; });
+  })();
+  function saveSticky() {
+    var s = {};
+    STICKY.forEach(function (id) { if ($(id)) s[id] = $(id).value; });
+    try { localStorage.setItem(SKEY, JSON.stringify(s)); } catch (e) {}
+  }
+
+  /* ── the document ───────────────────────────────────────────────────────────
+   * NO COLUMN ALIGNMENT, on purpose. A padded label column looks tidy in the
+   * monospace preview and turns to ragged mush the moment it lands in a text
+   * message or an email, which is the only place this document ever goes.
+   * `Label: value` survives every font. Section headings are ALL CAPS on their
+   * own line — the one formatting that is proportional-font proof. */
+  function joinDot(a) { return a.filter(Boolean).join("  ·  "); }
+  function line(label, text) { return text ? "\n" + label + ": " + text : ""; }
+
+  function buildDoc() {
+    var today = (window.Toolkit && Toolkit.todayStr) ? Toolkit.todayStr() : "";
+    // SITE AND UNIT LAND IN THE FIRST TWO LINES on purpose: six months later the
+    // estimator finds this by searching his inbox for "Kroger 412" or "RTU-4",
+    // and a title that says only REPAIR RECOMMENDATION is unfindable.
+    var out = "REPAIR RECOMMENDATION" + (val("fSite") ? " — " + val("fSite") : "");
+    out += line("Unit", joinDot([val("fUnit"), pick("fKind")]));
+    if (today) out += "\n" + today + (val("fWO") ? "  ·  WO " + val("fWO") : "");
+    else if (val("fWO")) out += "\nWO " + val("fWO");
+
+    out += "\n";
+    out += line("Plate", joinDot([
+      val("fModel"),
+      val("fSerial") ? "S/N " + val("fSerial") : "",
+      pick("fVolts"),
+      pick("fRef"),
+      val("fCharge") ? "plate charge " + val("fCharge") : ""
+    ]));
+    out += line("Right now", joinDot([leftDoc(), val("fRisk")]));
+
+    var finds = readFindings().filter(function (f) {
+      return f.comp || f.part || f.found || f.why || f.read || f.when;
+    });
+    var many = finds.length > 1;
+    finds.forEach(function (f, i) {
+      var head = "\n\n" + (many ? "FINDING " + (i + 1) : "WHAT I FOUND");
+      if (f.comp) head += " — " + f.comp;
+      // THE CLOCK RIDES IN THE HEADLINE, ONCE, AND SHORT. A consequence without a
+      // time horizon is a shrug — but the estimator TRIAGES off this bracket, so
+      // it has to stay a token he can scan, not the sentence the on-screen button
+      // spells out. [DOWN] · [WILL FAIL] · [WHILE WE'RE IN THERE].
+      if (f.when) head += "   [" + f.when.toUpperCase() + "]";
+      out += head;
+      if (f.found) out += "\n" + f.found;
+      if (f.part) out += "\nNumber off the part: " + f.part;
+      if (f.read) out += "\nReadings: " + f.read;
+      if (f.why) out += "\nIf they sit on it: " + f.why;
+    });
+
+    if (val("fOK")) out += "\n\nCHECKED AND FINE\n" + val("fOK");
+
+    var acc = tickedDoc("access", D.access);
+    if (acc.length || val("fRig")) {
+      out += "\n\nGETTING TO IT";
+      acc.forEach(function (a) { out += "\n- " + a; });
+      if (val("fRig")) out += "\nThe part: " + val("fRig");
+    }
+
+    var nds = tickedDoc("needs", D.needs);
+    if (nds.length || val("fWith") || val("fWhen")) {
+      out += "\n\nWHAT I NEED FROM THE OFFICE";
+      nds.forEach(function (a) { out += "\n- " + a; });
+      if (val("fWith")) out += "\nGoes with it: " + val("fWith");
+      if (val("fWhen")) out += "\nNeed-by: " + val("fWhen");
+    }
+
+    var ph = ticked("photos");
+    if (ph.length || val("fTalked")) {
+      out += "\n";
+      out += line("Photos I'm sending with this", ph.join("  ·  "));
+      out += line("Talked to", val("fTalked"));
+    }
+
+    var me = joinDot([val("fBy"), val("fCo")]);
+    if (me) out += "\n\nFrom: " + me;
+
+    out += "\n\nThat's what I've got. Tell me to quote it, or send a PO and I'll get it scheduled.";
+    // THE BOUNDARY, STATED. It is the whole reason this document can be trusted:
+    // the tech is not pricing, not calling coverage, and not calling code.
+    out += "\nI own the findings and the facts — the office owns price, schedule, "
+         + "coverage and code. Check the numbers against the plate before anybody orders.";
+    return out.replace(/\n{3,}/g, "\n\n").trim();
+  }
+
+  /* ── render + persist ───────────────────────────────────────────────────── */
+  var PKEY = "toolkit.hvac.repairRec.v1";
+  var saveT = null;
+  function snapshot() {
+    return {
+      site: val("fSite"), wo: val("fWO"), kind: val("fKind"), unit: val("fUnit"),
+      model: val("fModel"), serial: val("fSerial"), volts: val("fVolts"),
+      ref: val("fRef"), charge: val("fCharge"),
+      left: leftSel, risk: val("fRisk"),
+      finds: readFindings(), ok: val("fOK"),
+      access: ticked("access"), rig: val("fRig"),
+      needs: ticked("needs"), withIt: val("fWith"), when: val("fWhen"),
+      photos: ticked("photos"), talked: val("fTalked")
+    };
+  }
+  function isTouched(s) {
+    if (s.site || s.unit || s.model || s.serial || s.charge || s.risk || s.ok
+        || s.rig || s.withIt || s.talked || s.when || s.wo) return true;
+    if (s.left || !none(s.kind) || !none(s.ref) || !none(s.volts)) return true;
+    if (s.access.length || s.needs.length || s.photos.length) return true;
+    return s.finds.some(function (f) { return f.comp || f.part || f.found || f.why || f.when || f.read; });
+  }
+  /* §SCARS — CLEAR MUST ACTUALLY CLEAR: a persisting page returns null when its
+   * state is untouched, or the debounced write resurrects the record 250ms after
+   * the user cleared it. */
+  function persist() {
+    var s = snapshot();
+    try {
+      if (isTouched(s)) localStorage.setItem(PKEY, JSON.stringify(s));
+      else localStorage.removeItem(PKEY);
+    } catch (e) {}
+  }
+  function render() {
+    var doc = buildDoc();
+    $("preview").textContent = doc;
+    var s = snapshot();
+    var n = s.finds.filter(function (f) { return f.comp || f.found; }).length;
+    $("count").textContent = n ? (n + " finding" + (n === 1 ? "" : "s") + " on this unit")
+                               : (isTouched(s) ? "Started" : "Nothing on it yet");
+    saveSticky();
+    if (saveT) clearTimeout(saveT);
+    saveT = setTimeout(persist, 250);
+  }
+  document.addEventListener("input", render);
+  document.addEventListener("change", render);
+  /* THE CAMERA ROUND-TRIP EATS THE DRAFT. "Shoot these now" is the FIRST block on
+   * this page, so on every single job the very first interaction is a tick
+   * followed by the man leaving for the camera app — and iOS backgrounds the
+   * browser the instant it opens, which can freeze the 250ms debounce before it
+   * ever writes. Flush synchronously on the way out. A man who retypes a data
+   * plate once does not open this page again. */
+  ["visibilitychange", "pagehide", "blur"].forEach(function (ev) {
+    window.addEventListener(ev, function () {
+      if (saveT) { clearTimeout(saveT); saveT = null; }
+      persist();
+    });
+  });
+
+  function restore(s) {
+    ["fSite:site", "fWO:wo", "fKind:kind", "fUnit:unit", "fModel:model", "fSerial:serial",
+     "fVolts:volts", "fRef:ref", "fCharge:charge", "fRisk:risk", "fOK:ok", "fRig:rig",
+     "fWith:withIt", "fWhen:when", "fTalked:talked"
+    ].forEach(function (pair) {
+      var p = pair.split(":");
+      if (s[p[1]] != null && $(p[0])) $(p[0]).value = s[p[1]];
+    });
+    if (s.left) {
+      var b = $("segLeft").querySelector('button[data-v="' + s.left.replace(/"/g, '\\"') + '"]');
+      if (b) b.click();
+    }
+    ["access", "needs", "photos"].forEach(function (k) {
+      (s[k] || []).forEach(function (nm) {
+        var cb = $(k).querySelector('input[data-name="' + nm.replace(/"/g, '\\"') + '"]');
+        if (cb) cb.checked = true;
+      });
+    });
+    $("finds").innerHTML = "";
+    findSeq = 0;
+    (s.finds && s.finds.length ? s.finds : [null]).forEach(function (f) {
+      var box = addFinding();
+      if (!f) return;
+      if (f.comp) box.querySelector(".fComp").value = f.comp;
+      box.querySelector(".fPart").value = f.part || "";
+      box.querySelector(".fFound").value = f.found || "";
+      box.querySelector(".fWhy").value = f.why || "";
+      box.querySelector(".fRead").value = f.read || "";
+      if (f.when) {
+        var wb = box.querySelector('.impact .seg button[data-v="' + f.when.replace(/"/g, '\\"') + '"]');
+        if (wb) wb.click();
+      }
+    });
+    renumber();
+  }
+  (function boot() {
+    var s = null;
+    try { s = JSON.parse(localStorage.getItem(PKEY) || "null"); } catch (e) { s = null; }
+    if (s) restore(s); else addFinding();
+    render();
+  })();
+
+  /* ── copy, with the non-secure-context fallback ─────────────────────────── */
+  function flash(msg) {
+    var b = $("copy"), was = b.getAttribute("data-label") || b.textContent;
+    b.setAttribute("data-label", was);
+    b.textContent = msg;
+    setTimeout(function () { b.textContent = b.getAttribute("data-label"); }, 1800);
+  }
+  $("copy").addEventListener("click", function () {
+    var text = buildDoc();
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", "");
+      ta.style.position = "fixed"; ta.style.top = "-1000px";
+      document.body.appendChild(ta); ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      flash(ok ? "Copied. Go paste it." : "Select it and copy");
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { flash("Copied. Go paste it."); }, fallback);
+    } else fallback();
+  });
+
+  $("clear").addEventListener("click", function () {
+    if (!confirm("Clear this one? Your name and company stay.")) return;
+    ["fSite", "fWO", "fUnit", "fModel", "fSerial", "fCharge", "fRisk", "fOK",
+     "fRig", "fWith", "fTalked", "fWhen"].forEach(function (id) { $(id).value = ""; });
+    ["fKind", "fVolts", "fRef"].forEach(function (id) { $(id).selectedIndex = 0; });
+    leftSel = "";
+    Array.prototype.forEach.call($("segLeft").children, function (c) { c.classList.remove("on"); });
+    ["access", "needs", "photos"].forEach(function (k) {
+      Array.prototype.forEach.call($(k).querySelectorAll("input"), function (cb) { cb.checked = false; });
+    });
+    $("finds").innerHTML = ""; findSeq = 0; addFinding();
+    try { localStorage.removeItem(PKEY); } catch (e) {}
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+})();
+</script>
+</body>
+</html>
