@@ -34,10 +34,19 @@ CURATED roster, chosen by leverage × how often a real crew needs it. Each is a
 HYPOTHESIS — it ships only if it passes THE STRICT BAR above; drop any rung that
 doesn't. Wishes RE-RANK and EXTEND this list (people "wishing better"). Keep
 **Consumables pinned at #1 for now** (the operator's own; `pinned:true` in tools.js).
-1. **Cable-types picker** — HDMI / Cat patch / fiber → a clean cable spec to the PM. (operator's example)
+1. ~~**Cable-types picker**~~ — **SHIPPED 2026-08-04** as the **Cable & Adapter List**
+   (`av/cable-list.html`), and it arrived as a WISH rather than a roster pick. 8 families
+   (HDMI · patch · USB · adapters · audio · DP/legacy · fiber · rack power), each item
+   carrying its own axes, plus clone-a-line, the shop's finish standard typed once, and a
+   per-line alternate ask.
 2. **Gear checklist by room type** — huddle / conference / boardroom / classroom → the kit to pull.
 3. **Rack elevation / build note** — RU heights + gear → a rack elevation spec.
-4. **Connector & adapter finder** — "source X → display Y, what adapter/dongle?"
+4. ~~**Connector & adapter finder**~~ — **DROPPED as scoped.** "Source X → display Y, what
+   adapter?" is a RECOMMENDER, and §SAFETY forbids us answering it: we would be asserting
+   an electrical/protocol claim (active vs passive, direction, HDCP) we cannot stand behind,
+   on the exact question where being wrong costs a truck roll. The adapter FAMILIES now live
+   as a picked category on the Cable & Adapter List, where the tech states the part. Re-scope
+   or leave dropped — do not resurrect it as a recommender.
 5. **Device-label / naming generator** — one consistent naming scheme across a job.
 6. **Punch / deficiency list** — walk the room, list what's left → send the PM.
 7. **Change-order / scope note** — an out-of-scope ask → a clean CO request.
@@ -237,10 +246,53 @@ same widget wearing different words:
 When you build the second instance of a shape, extract the engine. Two instances is where
 a shape is provable; one is over-abstraction and five is five forks.
 
+**Shape #1's engine now exists: `shared/checklist-request.js`** (extracted 2026-08-04, first
+used by `av/cable-list.html`). It owns exactly the parts that were duplicated and drift when
+forked — tick/expand state, per-category counts, qty + note, write-in rows, clone-a-line,
+live preview, the count line, clear, walk-duration persistence, and copy WITH the
+non-secure-context fallback. The CALLER owns the item data, the modifier axes each item
+declares, the document wording, and its own CSS (the engine emits the class vocabulary the
+existing pages already use, so adopting it is visually a no-op). Build the next instance of
+shape #1 on this engine; `av/consumables.html` and `plumbing/supply-house-order.html` are
+still the original forks and are the migration debt to retire when either is next touched.
+
 Keep the boundary or the config rots: `trade.js` = IDENTITY + COPY · `tools.js` =
 REGISTRY · `items.js` = that trade's VOCABULARY DATA (categories, size ladders, config
 options, unit-of-issue sets). Size ladders and C×C/FIP/no-hub live in data — never in the
 identity config and never inline in a tool page.
+
+## SCARS — what went wrong, so it does not go wrong twice
+Append here when a cycle finds one. Each is a rule, not a story.
+
+- **A DEFAULT IS A CLAIM (2026-08-04).** A write-in line inherited a real default on every
+  axis, so a tech's hand-typed "USB-C 90° elbow, 1 ft" reached the counter as
+  "USB-C 90° elbow, 1 ft, **3 ft** · **Finish cable — molded, low-profile shell**" — a line
+  contradicting itself, carrying two attributes nobody picked. On a page whose whole
+  promise is "everything here is what YOU picked", a pre-selected option is the tool
+  putting words in the tech's mouth. **Rule:** any axis on a user-authored row leads with a
+  neutral option, and the document drops every unpicked value. Never let a select's first
+  option become an assertion.
+- **CLEAR MUST ACTUALLY CLEAR (2026-08-04).** The engine's `clearAll()` called
+  `localStorage.removeItem()` — and 250 ms later the debounced re-persist wrote the record
+  straight back, because the caller's `persistExtra()` always returned an object and the
+  engine only drops the record when there is genuinely nothing to save. **Rule:** a
+  persisting caller returns `null` when its state is untouched, and any "clear" is verified
+  by reading storage AFTER the debounce window, not by watching the screen go blank.
+- **A BARE ISO DATE IS A CALENDAR DAY, NOT AN INSTANT (2026-08-04).** `new Date("2026-08-04")`
+  parses as UTC midnight, so `credits.html` rendered every entry a day EARLY for anyone west
+  of UTC — on the permanent public credit ledger, on its very first entry. **Rule:** split
+  `YYYY-MM-DD` and build a local date. This bug hides until the data is non-empty; assume
+  every date formatter has it until proven otherwise.
+- **UNSHIPPED IS UNDELIVERED (2026-08-04).** A prior cycle wrote this tool — page, data and
+  the extracted engine, all good work — and closed without committing. It was invisible to
+  the well (the wish still read `new`), to git, and to the site. **Rule:** the cycle is not
+  the build, it is the ship; claim the wish BEFORE building so the queue shows the work
+  exists, and never close with the deliverable sitting in the working tree.
+- **DIFF THE SERVED BYTES, NOT THE DISK FILE (2026-08-04).** After a data fix the page still
+  showed the old behaviour; the disk file was correct and the browser had served a cached
+  module. Two more minutes of re-reasoning and the correct fix would have been "reverted" as
+  not working. **Rule:** when a verified fix appears not to land, fetch what the server
+  actually served and compare it — before touching the code again.
 
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
@@ -275,3 +327,12 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   (config picker · unit-of-issue · COPPER/DWV split · zero computed quantities). Verified
   live in a real browser, 15 runtime + 15 functional checks.
   https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/
+- `2026-08-04` — **THE FIRST WISH GRANTED: Cable & Adapter List** (`av/cable-list.html`,
+  roster rung 1). Before: the well had a live request and no tool; shape #1 existed as two
+  forked pages. After: the third instance is the FIRST on the extracted engine
+  `shared/checklist-request.js`, and the Wall of Wishes has its first credit. 8 families ·
+  61 items · clone-a-line for a second length · finish standard typed once per device ·
+  per-line alternate ask · walk-duration persistence. Live-verified end to end (5-line
+  order incl. clone + write-in + flagged alternate, byte-identical after reload, 0 overflow
+  at 390 px, real-gesture copy).
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/cable-list.html
