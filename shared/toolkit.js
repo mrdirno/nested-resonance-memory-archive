@@ -215,10 +215,38 @@
   document.addEventListener("click", function (e) { var m = window.__avMenu; if (m && !m.contains(e.target)) closeMenu(); });
 
   /* ------------------------------------------------------------------ the well */
-  var modal, form, errBox, sendBtn, wellAnon = false;
+  var modal, form, errBox, sendBtn, wellAnon = false, wellKind = "new_tool", resetWellKind = null;
+
+  /* THREE KINDS OF WISH (migration 077). A well that only takes "build me a new
+   * thing" cannot make the tools it already shipped any better — and the people
+   * best placed to say what is wrong with a tool are the ones using it on a job.
+   * So "improve it" and "it's broken" are first-class, not a contact form. */
+  var KINDS = [
+    { v: "new_tool", label: "Wish for a tool",  hint: "Something that doesn't exist yet" },
+    { v: "improve",  label: "Wish it better",   hint: "A tool here should do more, or do it differently" },
+    { v: "bug",      label: "Something's wrong", hint: "A tool here is broken or gives the wrong thing" }
+  ];
+  var COPY = {
+    new_tool: {
+      lead: "<b>A wishing well that actually works.</b> Every tool here started as a wish — someone asked, Aldrin's AI built it. Wish for the one you keep making by hand; if it passes the bar it becomes a real page you (and everyone in the trade) can use. What gets granted:",
+      titleLabel: "The tool",
+      purposeLabel: "What it should do — the doc/request you make by hand, and who you send it to"
+    },
+    improve: {
+      lead: "<b>Wish an existing tool better.</b> You're the one using it on a job — if it's missing a line, asks for something in the wrong order, or doesn't speak the way your crew does, say so. Improvements are built the same way wishes are, and you get the same credit.",
+      titleLabel: "What should change",
+      purposeLabel: "How it should work instead — and what you're doing when it gets in the way"
+    },
+    bug: {
+      lead: "<b>Something's wrong — tell us.</b> A tool that ships a wrong value costs real money on a real job, so a bug on a live tool jumps the queue ahead of any new-tool wish. Tell us what you did, what you got, and what you expected.",
+      titleLabel: "What's wrong",
+      purposeLabel: "What you did, what happened, and what you expected instead"
+    }
+  };
+
   function buildWell() {
     var guide = h("div", { class: "av-guide", html:
-      "<b>A wishing well that actually works.</b> Every tool here started as a wish — someone asked, Aldrin's AI built it. Wish for the one you keep making by hand; if it passes the bar it becomes a real page you (and everyone in the trade) can use. What gets granted:" +
+      COPY.new_tool.lead +
       "<ul>" +
       "<li><b>Practical, not theoretical</b> — something you'd actually use on a job.</li>" +
       "<li><b>Targeted &amp; common</b> — one clear job, the stuff everyone deals with.</li>" +
@@ -249,13 +277,66 @@
     idAnon.addEventListener("click", function(){ setWellAnon(true); });
     var idToggle = h("div", { class: "av-field" }, [ h("label", {}, ["Credit — if it's built, your name goes on the tool + the Wall of Wishes, forever"]), h("div", { class: "av-idtoggle" }, [idName, idAnon]) ]);
 
+    // KIND picker. Three buttons, not a dropdown — on a phone at a job site the
+    // choice has to be visible without a tap.
+    var kindBtns = KINDS.map(function (k) {
+      return h("button", {
+        type: "button",
+        class: "av-idbtn" + (k.v === "new_tool" ? " on" : ""),
+        "aria-pressed": k.v === "new_tool" ? "true" : "false",
+        title: k.hint
+      }, [k.label]);
+    });
+    var kindToggle = h("div", { class: "av-field" }, [
+      h("label", {}, ["What kind of wish is this?"]),
+      h("div", { class: "av-idtoggle" }, kindBtns)
+    ]);
+
+    // Which tool it's about — only shown for improve/bug, and populated from THIS
+    // trade's registry so nobody has to remember a page name.
+    var aboutSel = h("select", { name: "about_tool", "aria-label": "Which tool" });
+    aboutSel.appendChild(h("option", { value: "" }, ["Which tool?"]));
+    TOOLS.forEach(function (t) { aboutSel.appendChild(h("option", { value: t.href }, [t.name])); });
+    var aboutRow = h("div", { class: "av-field", style: "display:none" }, [
+      h("label", {}, ["Which tool"]), aboutSel
+    ]);
+
+    var titleLabel   = h("label", {}, [COPY.new_tool.titleLabel]);
+    var purposeLabel = h("label", {}, [COPY.new_tool.purposeLabel]);
+
+    function setKind(v) {
+      wellKind = v;
+      kindBtns.forEach(function (b, i) {
+        var on = KINDS[i].v === v;
+        b.classList.toggle("on", on);
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      var c = COPY[v];
+      guide.innerHTML = c.lead + (v === "new_tool"
+        ? "<ul><li><b>Practical, not theoretical</b> — something you'd actually use on a job.</li>"
+          + "<li><b>Targeted &amp; common</b> — one clear job, the stuff everyone deals with.</li>"
+          + "<li><b>Speaks your language</b> — the real terms, shortcuts and formats your " + esc(TRADE.chain) + " already use.</li>"
+          + "<li><b>Fewer steps</b> — it makes a real task faster; it never adds work.</li></ul>"
+          + "<div class='av-test'>The test: would you actually use it to send something to your boss, PM, or techs? If yes, wish for it.</div>"
+        : "");
+      titleLabel.textContent = c.titleLabel;
+      purposeLabel.textContent = c.purposeLabel;
+      // A tool must exist before it can be improved or reported broken.
+      aboutRow.style.display = (v === "new_tool" || !TOOLS.length) ? "none" : "";
+      if (v === "new_tool") aboutSel.value = "";
+    }
+    kindBtns.forEach(function (b, i) { b.addEventListener("click", function () { setKind(KINDS[i].v); }); });
+    resetWellKind = function () { setKind("new_tool"); };
+
     form = h("form", { class: "av-form", novalidate: "novalidate" }, [
       guide,
+      kindToggle,
+      aboutRow,
       idToggle,
       h("p", { class: "av-err", role: "alert" }),
       h("div", { class: "av-field" }, [h("label", {}, ["You are a… ", h("i", {}, ["(optional)"])]), roleSel]),
-      h("div", { class: "av-field" }, [h("label", {}, ["The tool"]), h("input", { name: "tool_title", type: "text", maxlength: "200", required: "required", placeholder: TRADE.wishTitleHint, autocomplete: "off" })]),
-      h("div", { class: "av-field" }, [h("label", {}, ["What it should do — the doc/request you make by hand, and who you send it to"]), h("textarea", { name: "tool_purpose", maxlength: "2000", required: "required", placeholder: TRADE.wishPurposeHint })]),
+      h("div", { class: "av-field" }, [titleLabel, h("input", { name: "tool_title", type: "text", maxlength: "200", required: "required", placeholder: TRADE.wishTitleHint, autocomplete: "off" })]),
+      h("div", { class: "av-field" }, [purposeLabel, h("textarea", { name: "tool_purpose", maxlength: "2000", required: "required", placeholder: TRADE.wishPurposeHint })]),
       h("div", { class: "av-field" }, [h("label", {}, ["An example ", h("i", {}, ["(optional)"])]), h("textarea", { name: "example", maxlength: "2000", placeholder: "A real example of what you'd type in and what you'd want out." })]),
       nameRow,
       h("div", { class: "av-field" }, [h("label", {}, ["Email to hear when it ships ", h("i", {}, ["(optional, never shown — even if anonymous)"])]), h("input", { name: "contact", type: "email", maxlength: "200", placeholder: "you@company.com", autocomplete: "off" })]),
@@ -301,6 +382,13 @@
     var purpose = (fd.get("tool_purpose") || "").trim();
     if (title.length < 3) { showErr("Give the tool a short name (a few characters)."); return; }
     if (purpose.length < 10) { showErr("Add a line on what it should do — what you'd use it for."); return; }
+    // One tap, and it is the difference between an actionable report and a note
+    // nobody can act on: a bug or an improvement has to name the tool it is about.
+    var aboutTool = (fd.get("about_tool") || "").trim();
+    if (wellKind !== "new_tool" && TOOLS.length && !aboutTool) {
+      showErr(wellKind === "bug" ? "Which tool is giving you the wrong thing?" : "Which tool should be better?");
+      return;
+    }
     if (!CFG_READY) { showErr("The wishing well is live on the published site — this looks like a local or preview copy."); return; }
 
     var payload = {
@@ -316,6 +404,11 @@
       // A wish from a trade we do not serve yet is DEMAND SIGNAL for the next
       // isomorph, not an error — hence a slug column, not an enum.
       trade: TRADE.slug,
+      // WHAT KIND of wish (migration 077): build something new · make a shipped
+      // tool better · a shipped tool is wrong. A bug outranks a new-tool wish —
+      // something already in someone's hands is broken.
+      kind: wellKind,
+      about_tool: (wellKind === "new_tool") ? null : (aboutTool || null),
       source: TRADE.slug + "_wishing_well",
       user_agent: (navigator.userAgent || "").slice(0, 500)
     };
@@ -340,7 +433,7 @@
       h("div", { class: "av-check" }, ["✓"]),
       h("h3", {}, ["Your wish is in the well"]),
       h("p", {}, ["Aldrin's AI reads the well every cycle and grants the ones that pass the bar — practical, common, and something a real tech or PM would actually use. When yours is built it just shows up on the toolkit. Leave an email and you'll hear the moment it's live."]),
-      h("button", { type: "button", class: "av-send", onclick: function () { form.reset(); errBox.style.display = "none"; sendBtn.disabled = false; sendBtn.textContent = "Make the wish"; body.innerHTML = ""; body.appendChild(form); } }, ["Make another wish"]),
+      h("button", { type: "button", class: "av-send", onclick: function () { form.reset(); if (resetWellKind) resetWellKind(); errBox.style.display = "none"; sendBtn.disabled = false; sendBtn.textContent = "Make the wish"; body.innerHTML = ""; body.appendChild(form); } }, ["Make another wish"]),
       h("button", { type: "button", class: "av-cancel", onclick: closeWell, style: "margin-left:10px" }, ["Close"])
     ]);
     body.innerHTML = ""; body.appendChild(done);

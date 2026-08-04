@@ -169,6 +169,24 @@ own paperwork/communication friction. Mechanics:
   every other trade. Isomorph only when the current toolkit is broad enough to copy
   well — expand deliberately, never half a trade at a time.
 
+## THE THREE KINDS OF WISH — the toolkit self-heals (wired 2026-08-04)
+The well takes three kinds, and the loop serves them in this order:
+1. **`bug`** — a shipped tool is wrong. **This outranks everything.** Something
+   already in someone's hands is giving them a bad answer on a real job, and a wrong
+   value costs money. Fix it the same cycle.
+2. **`improve`** — "wish it better". The people using a tool on a job are the ones who
+   know it asks in the wrong order, misses a line, or doesn't talk like their crew.
+   An improvement earns the same Wall-of-Wishes credit as a new tool.
+3. **`new_tool`** — build something that doesn't exist yet.
+
+`bug` and `improve` carry `about_tool` (the registry href), chosen from a picker of that
+trade's own tools — a report that doesn't name its tool is refused at the form, because
+one tap is the difference between actionable and useless. Read them with
+`av_wishing_well.py --list [--trade <slug>] [--kind bug|improve|new_tool]`; the helper
+sorts bug → improve → new_tool and shouts if any bug is open. This is what rung 14 of the
+seed roster always promised: **the well + the loop are how the toolkit self-heals while
+Aldrin is up a ladder hanging TVs.**
+
 ## THE GATE — a tool ships only if TICKING BEATS TYPING (2026-08-03)
 The single most useful thing we know, found independently by five in-trade reviewers
 during the plumbing expansion: **never answer a NARRATIVE task with a multi-field FORM.**
