@@ -3,20 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AV Field Toolkit</title>
-<meta name="description" content="Practical tools for AV field work — generate the requests and docs you send your PM, fast. Request a tool and Aldrin's AI builds it.">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="apple-mobile-web-app-title" content="AV Toolkit">
+<title>Plumbing Field Toolkit</title>
+<meta name="description" content="Practical tools for plumbing field work — build the lists, notices and reports you send the counter, the GC and the office, fast. Wish for a tool and Aldrin's AI builds it.">
+<meta name="apple-mobile-web-app-title" content="Plumbing Toolkit">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#242A31">
 <style>
 :root{
   --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
-  --muted:#5D656E;--flag:#F0BE1E;--tint:#FDF7E1;
+  --muted:#5D656E;--flag:#C87137;--tint:#FBF1E8;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
@@ -37,8 +33,8 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .well-txt b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;display:block;color:var(--ink)}
 .well-txt span{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
 .well-btn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:16px;font-weight:700;
-  background:var(--flag);color:#231B00;border:1px solid var(--flag);border-radius:2px;padding:11px 18px;cursor:pointer;white-space:nowrap}
-.well-btn:hover{background:#FFD34A}
+  background:var(--flag);color:#1A0E05;border:1px solid var(--flag);border-radius:2px;padding:11px 18px;cursor:pointer;white-space:nowrap}
+.well-btn:hover{background:#DE8A47}
 .well-btn:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
 
 .section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
@@ -51,7 +47,7 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .toolwrap{position:relative}
 .cardfav{position:absolute;top:9px;right:9px;z-index:2;background:#fff;border:1px solid var(--line);color:#C4C9BE;width:28px;height:28px;border-radius:2px;cursor:pointer;font-size:14px;line-height:1;padding:0}
 .cardfav:hover{border-color:var(--flag);color:var(--muted)}
-.cardfav.on{color:var(--flag);border-color:var(--flag);background:#FFFDF3}
+.cardfav.on{color:var(--flag);border-color:var(--flag);background:#FDF6F0}
 .toolwrap .tool-top{padding-right:30px}
 .tool-top{display:flex;align-items:baseline;gap:9px}
 .tool-name{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;font-weight:700;margin:0;flex:1;line-height:1.05;color:var(--ink)}
@@ -72,26 +68,26 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 
   <header class="plate">
     <span class="eyebrow">Field toolkit</span>
-    <h1>AV Field Toolkit</h1>
-    <p class="lede">Dead-practical tools for AV field work — the checklists, specs and requests you send your PM or techs, made fast. Don't see the one you need? Ask for it — Aldrin's AI builds the ones people will actually use.</p>
+    <h1>Plumbing Field Toolkit</h1>
+    <p class="lede">Dead-practical tools for plumbing field work — the lists, notices and reports you send the counter, the GC or the office, made fast on a phone. Don't see the one you need? Wish for it — Aldrin's AI builds the ones people will actually use.</p>
   </header>
 
   <div class="well">
     <div class="well-txt">
-      <b>Every tool here started as a wish.</b>
-      <span>Wish for the one you keep making by hand — Aldrin's AI builds the good ones into a real page, for you and everyone in the trade. Yes, really. Try it.</span>
+      <b>This toolkit is built from wishes.</b>
+      <span>Wish for the one you keep writing out by hand — Aldrin's AI builds the good ones into a real page, for you and everyone in the trade. Yes, really. Try it.</span>
     </div>
-    <button class="well-btn" type="button" onclick="(window.AV&&AV.openWell)?AV.openWell():alert('Loading…')">&#10022; Wish for a tool</button>
+    <button class="well-btn" type="button" onclick="(window.Toolkit&&Toolkit.openWell)?Toolkit.openWell():alert('Loading…')">&#10022; Wish for a tool</button>
   </div>
 
   <p class="section-label">Tools</p>
   <main class="grid" id="grid"></main>
 
   <footer class="foot">
-    <span>AV Field Toolkit</span>
+    <span>Plumbing Field Toolkit</span>
     <span class="sp"></span>
-    <a href="https://github.com/mrdirno/nested-resonance-memory-archive/tree/main/av" target="_blank" rel="noopener">Project folder &rarr;</a>
-    <a href="../collage/" target="_blank" rel="noopener">Collage Studio &rarr;</a>
+    <a href="../av/" >AV Field Toolkit &rarr;</a>
+    <a href="https://github.com/mrdirno/nested-resonance-memory-archive/tree/main/plumbing" target="_blank" rel="noopener">Project folder &rarr;</a>
   </footer>
 
 </div>
@@ -101,10 +97,10 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 <script src="../shared/toolkit.js"></script>
 <script>
 (function(){
-  var TOOLS = window.TOOLKIT_TOOLS || window.AV_TOOLS || [];
+  var TOOLS = window.TOOLKIT_TOOLS || [];
   var esc = function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c];});};
   var grid = document.getElementById("grid");
-  function isFav(href){ return (window.AV && AV.isFav) ? AV.isFav(href) : false; }
+  function isFav(href){ return (window.Toolkit && Toolkit.isFav) ? Toolkit.isFav(href) : false; }
   function card(t){
     var ext = /^https?:\/\//i.test(t.href);
     var attrs = ext ? ' target="_blank" rel="noopener"' : "";
@@ -118,8 +114,8 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
       + '<span class="tool-go"><span class="arr">&rarr;</span> Open tool</span></a></div>';
   }
   function order(){
-    // one clean grid — pinned first (Consumables, for now), then your favorites,
-    // then the rest, each keeping registry order. No separate sections = no clutter.
+    // one clean grid — pinned first, then your favorites, then the rest, each
+    // keeping registry order. No separate sections = no clutter.
     return TOOLS.slice().sort(function(a,b){
       var pa=a.pinned?0:1, pb=b.pinned?0:1; if(pa!==pb) return pa-pb;
       var fa=isFav(a.href)?0:1, fb=isFav(b.href)?0:1; if(fa!==fb) return fa-fb;
@@ -132,7 +128,7 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
   document.addEventListener("av:favorites", render);
   document.addEventListener("click", function(e){
     var b = (e.target && e.target.closest) ? e.target.closest(".cardfav") : null;
-    if (b && window.AV && AV.toggleFav){ e.preventDefault(); AV.toggleFav(b.getAttribute("data-href")); }
+    if (b && window.Toolkit && Toolkit.toggleFav){ e.preventDefault(); Toolkit.toggleFav(b.getAttribute("data-href")); }
   });
 })();
 </script>

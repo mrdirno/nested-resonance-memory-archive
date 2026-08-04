@@ -20,6 +20,7 @@ window.TOOLKIT_TRADE = {
   brandLead: "AV",          // rendered plain
   brandTail: "Field Toolkit", // rendered bold in the accent colour
   accent: "#F0BE1E",        // the AV flag yellow
+  accentInk: "#231B00",     // readable text ON the accent
 
   // Who this trade's handoff chain is — used in the wishing-well copy
   // ("the real terms, shortcuts and formats your ___ already use").

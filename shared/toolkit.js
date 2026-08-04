@@ -45,6 +45,9 @@
     brandLead:  _T.brandLead  || "AV",
     brandTail:  _T.brandTail  || "Field Toolkit",
     accent:     _T.accent     || "#F0BE1E",
+    // Readable text ON the accent. Was hardcoded #231B00 (dark-on-yellow) in four
+    // button rules — unreadable the moment a trade picks a dark accent.
+    accentInk:  _T.accentInk  || "#231B00",
     // "…and everyone in the trade" copy + who the handoff goes to
     chain:      _T.chain      || "techs / PMs / leadership",
     roles:      _T.roles      || [["tech", "AV Tech"], ["project_manager", "Project Manager"], ["leadership", "Leadership / Owner"], ["other", "Other"]],
@@ -105,7 +108,7 @@
   .av-drop .av-req b{color:#7a5a00}
   .av-spacer{flex:1}
   .av-req-btn{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.06em;font-size:14px;font-weight:700;
-    background:var(--av-flag);color:#231B00;border:1px solid var(--av-flag);border-radius:2px;padding:7px 12px;cursor:pointer;white-space:nowrap;}
+    background:var(--av-flag);color:var(--flag-ink);border:1px solid var(--av-flag);border-radius:2px;padding:7px 12px;cursor:pointer;white-space:nowrap;}
   .av-req-btn:hover{background:#FFD34A}
   .av-fav-btn{background:transparent;border:1px solid #3A424B;color:#8892a0;border-radius:2px;width:34px;height:31px;cursor:pointer;font-size:15px;line-height:1;flex:none}
   .av-fav-btn:hover{border-color:var(--av-flag);color:#C7CDD3}
@@ -150,13 +153,12 @@
   .av-send[disabled]{opacity:.5;cursor:progress}
   .av-cancel{background:none;border:0;color:var(--av-muted);font-size:13px;cursor:pointer;text-decoration:underline}
   .av-done{text-align:center;padding:8px 4px 4px}
-  .av-done .av-check{width:46px;height:46px;border-radius:50%;background:var(--av-flag);color:#231B00;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;font-weight:700}
+  .av-done .av-check{width:46px;height:46px;border-radius:50%;background:var(--av-flag);color:var(--flag-ink);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;font-weight:700}
   .av-done h3{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.03em;font-size:19px;margin:0 0 8px}
   .av-done p{font-size:13.5px;color:var(--av-muted);line-height:1.5;max-width:42ch;margin:0 auto 14px}
   @media (prefers-reduced-motion:reduce){*{transition:none !important}}
   `;
 
-  var ROLE_LABEL = { tech: "AV Tech", project_manager: "Project Manager", leadership: "Leadership / Owner", other: "Other" };
 
   function h(tag, attrs, kids) {
     var el = document.createElement(tag);
@@ -365,7 +367,9 @@
     // Base sheet, then the trade's accent overrides the AV yellow. One runtime,
     // many trades — a trade is recognisable at a glance without forking the CSS.
     var style = document.createElement("style");
-    style.textContent = CSS + "\n:root{--av-flag:" + TRADE.accent + ";}\n";
+    style.textContent = CSS
+      + "\n:root{--av-flag:" + TRADE.accent + ";--flag:" + TRADE.accent
+      + ";--flag-ink:" + TRADE.accentInk + ";}\n";
     document.head.appendChild(style);
     document.body.insertBefore(buildBar(), document.body.firstChild);
     // Toolkit is the canonical global; AV stays as an alias so every page the AV

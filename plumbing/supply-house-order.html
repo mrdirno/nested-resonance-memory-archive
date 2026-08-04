@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supply House Order — Plumbing Field Toolkit</title>
+<meta name="description" content="Build the will-call or delivery list on the tailgate — qty, unit, size and fitting config on every line — then copy it straight into a text to the counter.">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--flag:#C87137;--tint:#FBF1E8;--ok:#2E7D4F;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px 120px}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 16px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(19px,4.4vw,27px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.98}
+.lede{margin:7px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+
+/* the header the counter needs before a single part */
+.head{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:14px}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.f label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.f input,.f select{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink)}
+.f input:focus,.f select:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.seg{display:flex;gap:0}
+.seg button{flex:1;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px solid var(--line);color:var(--muted);padding:8px 6px;cursor:pointer}
+.seg button:first-child{border-radius:2px 0 0 2px}
+.seg button:last-child{border-radius:0 2px 2px 0;border-left:0}
+.seg button.on{background:var(--flag);border-color:var(--flag);color:#1A0E05}
+
+.cat{margin-bottom:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.cat h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;margin:0;padding:9px 12px;
+  background:#EFF1EC;border-bottom:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));display:flex;align-items:center;gap:8px}
+.cat h2 .n{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:400;margin-left:auto}
+ul.items{list-style:none;margin:0;padding:0}
+.item{border-bottom:1px solid #E4E6E0}
+.item:last-child{border-bottom:0}
+.row{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;min-height:44px}
+.row input[type=checkbox]{width:20px;height:20px;flex:none;accent-color:var(--flag);cursor:pointer}
+.name{font-weight:600;font-size:14px;flex:1;min-width:0}
+.item.is-checked{background:var(--tint)}
+.item.is-checked .name{color:var(--ink)}
+/* the config strip — only appears once the line is actually on the list */
+.cfg{display:none;gap:7px;padding:0 12px 11px 42px;flex-wrap:wrap;align-items:flex-end}
+.item.is-checked .cfg{display:flex}
+.cfg .f{flex:1 1 84px;min-width:76px}
+.cfg .f.wide{flex:2 1 150px}
+.cfg .f.qty{flex:0 0 62px;min-width:62px}
+.cfg input,.cfg select{padding:7px 8px;font-size:13.5px}
+.note{width:100%}
+
+.addrow{display:flex;gap:8px;padding:10px 12px;background:#F4F5F1}
+.addrow input{flex:1;font:inherit;font-size:14px;padding:9px;border:1px solid var(--line);border-radius:2px}
+.addbtn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:14px;
+  background:var(--steel);color:#EEF0EA;border:1px solid var(--steel);border-radius:2px;padding:9px 14px;cursor:pointer}
+.rm{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px;flex:none}
+.rm:hover{color:#C4342B}
+
+.warn{font-size:12px;color:var(--muted);background:#FFFDF6;border:1px solid var(--line);border-left:4px solid var(--flag);
+  border-radius:2px;padding:10px 12px;margin:14px 0}
+.warn b{color:var(--ink)}
+
+/* sticky action bar — thumbs reach it on a phone */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
+  padding:9px 14px;display:flex;gap:9px;align-items:center}
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0}
+.bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
+  border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap}
+#copy{background:var(--flag);border:1px solid var(--flag);color:#1A0E05}
+#copy:hover{background:#DE8A47}
+#clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
+#clear:hover{border-color:#8A929B;color:#EEF0EA}
+.preview{background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;font-family:var(--mono);font-size:12px;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink);max-height:340px;overflow:auto}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.credit{font-size:12px;color:var(--muted);margin:14px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Plumbing · Techs &rarr; Counter</span>
+    <h1>Supply House Order</h1>
+    <p class="lede">Build the list on the tailgate. Every line carries qty, unit, size and config — so the counter pulls the right part the first time instead of calling you back. Tick, set, copy, send.</p>
+  </header>
+
+  <div class="head">
+    <div class="hgrid">
+      <div class="f"><label>Job / address</label><input id="fJob" type="text" placeholder="1420 Market St — 3rd floor" autocomplete="off"></div>
+      <div class="f"><label>Ordered by</label><input id="fBy" type="text" placeholder="Your name" autocomplete="off"></div>
+      <div class="f"><label>Account / PO <i></i></label><input id="fAcct" type="text" placeholder="optional" autocomplete="off"></div>
+      <div class="f"><label>Pickup or delivery</label>
+        <div class="seg" id="segMode">
+          <button type="button" class="on" data-v="Will-call">Will-call</button>
+          <button type="button" data-v="Delivery">Delivery</button>
+        </div>
+      </div>
+      <div class="f"><label>Need by</label>
+        <div class="seg" id="segWhen">
+          <button type="button" class="on" data-v="Today">Today</button>
+          <button type="button" data-v="Tomorrow">Tomorrow</button>
+          <button type="button" data-v="date">Pick…</button>
+        </div>
+      </div>
+      <div class="f" id="dateWrap" style="display:none"><label>Date</label><input id="fDate" type="date"></div>
+    </div>
+  </div>
+
+  <main id="list"></main>
+
+  <p class="section-label">What the counter gets</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>Double-check before you order.</b> Every size, material and config on this list is what <em>you</em> picked — this tool doesn't recommend parts and it isn't a substitute for the plans, the spec, or code. Confirm the fitting config and unit of issue before it gets pulled.
+  </div>
+
+  <p class="credit">✦ Built from the plumbing seed roster. Wish for the next one — it gets built and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on the list yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy list</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script>
+/* SUPPLY HOUSE ORDER
+ *
+ * Shape borrowed from the AV toolkit's Consumables List (the proven pinned #1):
+ * tick what you need, set a couple of things, copy a clean request. The plumbing
+ * difference is that a quantity alone is useless at the counter — "20 90s" gets
+ * you the wrong part. So every line carries UNIT OF ISSUE, SIZE and CONFIG, which
+ * is exactly what the counter asks for before he'll pull anything.
+ *
+ * Deliberately NOT here: any computed quantity. A tool that works out how much
+ * all-thread 20 clevis hangers need will get it wrong on a real job and cost
+ * somebody a second trip. The plumber sets the number; the tool only makes sure
+ * the number arrives with its unit attached.
+ */
+(function(){
+  "use strict";
+
+  var U = {
+    ea:    ["each","box of 10","box of 25","box of 100"],
+    stick: ["stick (10')","stick (20')","ft"],
+    coil:  ["coil (100')","coil (300')","ft"],
+    can:   ["can (8 oz)","can (16 oz)","can (32 oz)","each"],
+    lb:    ["lb","1 lb spool","each"],
+    roll:  ["roll","box of 10","each"],
+    bag:   ["bag of 100","each","box"]
+  };
+
+  var CU  = ["1/2","3/4","1","1-1/4","1-1/2","2"];
+  var DWV = ["1-1/2","2","3","4","6"];
+  var PEX = ["1/2","3/4","1"];
+
+  var C_SWEAT = ["C×C","C×M (street)","C×FIP","C×MIP","Press"];
+  var D_HUB   = ["Hub×Hub","Hub×Spigot","No-hub"];
+
+  var DATA = [
+    { id:"copper", name:"Copper — pipe & fittings", chip:"#C87137", items:[
+      { n:"Type L copper pipe",    s:CU, c:[],                          u:U.stick },
+      { n:"Type M copper pipe",    s:CU, c:[],                          u:U.stick },
+      { n:"90 ell",                s:CU, c:C_SWEAT,                     u:U.ea },
+      { n:"45 ell",                s:CU, c:C_SWEAT,                     u:U.ea },
+      { n:"Coupling",              s:CU, c:["C×C","Coupling w/ stop","Repair (no stop)"], u:U.ea },
+      { n:"Tee",                   s:CU, c:["C×C×C","Reducing — note sizes"], u:U.ea },
+      { n:"Cap",                   s:CU, c:["C","Press"],               u:U.ea },
+      { n:"Male adapter",          s:CU, c:["C×MIP"],                   u:U.ea },
+      { n:"Female adapter",        s:CU, c:["C×FIP"],                   u:U.ea },
+      { n:"Ball valve",            s:CU, c:["C×C","FIP×FIP","PEX×PEX","Press"], u:U.ea },
+      { n:"Stop valve (angle)",    s:["1/2","3/4"], c:["C × 3/8 comp","FIP × 3/8 comp","PEX × 3/8 comp"], u:U.ea },
+      { n:"Dielectric union",      s:["1/2","3/4","1"], c:["C×FIP","C×MIP"], u:U.ea }
+    ]},
+
+    { id:"dwv", name:"DWV — drainage, waste & vent", chip:"#3A4A57", items:[
+      { n:"PVC DWV pipe",          s:DWV, c:["Sch 40","Sch 80"],        u:U.stick },
+      { n:"ABS DWV pipe",          s:DWV, c:[],                          u:U.stick },
+      { n:"1/4 bend (90)",         s:DWV, c:D_HUB,                       u:U.ea },
+      { n:"1/8 bend (45)",         s:DWV, c:D_HUB,                       u:U.ea },
+      { n:"Long-sweep 1/4 bend",   s:DWV, c:D_HUB,                       u:U.ea },
+      { n:"Sanitary tee",          s:DWV, c:["Hub×Hub×Hub","Reducing — note sizes"], u:U.ea },
+      { n:"Wye",                   s:DWV, c:["Hub×Hub×Hub","Reducing — note sizes"], u:U.ea },
+      { n:"Combo wye & 1/8 bend",  s:DWV, c:["Hub×Hub×Hub","Reducing — note sizes"], u:U.ea },
+      { n:"Coupling",              s:DWV, c:["Hub×Hub","No-hub band","Shielded (heavy) band"], u:U.ea },
+      { n:"Closet flange",         s:["3","4","3×4"], c:["PVC","Cast","Offset","Repair ring"], u:U.ea },
+      { n:"Cleanout adapter + plug", s:DWV, c:["Hub×FIP + plug","Plug only"], u:U.ea },
+      { n:"Trap adapter",          s:["1-1/4","1-1/2","2"], c:["Hub × slip","Hub × FIP"], u:U.ea },
+      { n:"Reducing bushing",      s:DWV, c:["Spigot×Hub — note both sizes"], u:U.ea }
+    ]},
+
+    { id:"pex", name:"PEX & push-to-connect", chip:"#2E64C8", items:[
+      { n:"PEX tubing",            s:PEX, c:["PEX-A","PEX-B","Red","Blue","White"], u:U.coil },
+      { n:"PEX 90 ell",            s:PEX, c:["Crimp","Expansion","Push"], u:U.ea },
+      { n:"PEX coupling",          s:PEX, c:["Crimp","Expansion","Push"], u:U.ea },
+      { n:"PEX tee",               s:PEX, c:["Crimp","Expansion","Reducing — note sizes"], u:U.ea },
+      { n:"PEX adapter",           s:PEX, c:["PEX×MIP","PEX×FIP","PEX×C (sweat)"], u:U.ea },
+      { n:"Crimp rings / clamps",  s:PEX, c:["Copper crimp ring","Stainless cinch clamp"], u:U.bag },
+      { n:"Push-to-connect coupling", s:PEX, c:["Coupling","90","Tee","Cap","Slip repair"], u:U.ea }
+    ]},
+
+    { id:"supplies", name:"Solder, solvent & consumables", chip:"#7A3FA8", items:[
+      { n:"Solder (lead-free)",    s:[], c:[],                           u:U.lb },
+      { n:"Flux",                  s:[], c:["Paste","Tinning"],          u:U.can },
+      { n:"Sand cloth / emery",    s:[], c:["Roll","Pad"],               u:U.roll },
+      { n:"Fitting brush set",     s:[], c:[],                           u:U.ea },
+      { n:"PVC cement",            s:[], c:["Regular","Medium-body","Transition (PVC→ABS)","Rain-or-shine"], u:U.can },
+      { n:"Purple primer",         s:[], c:[],                           u:U.can },
+      { n:"Pipe dope",             s:[], c:["Standard","PTFE / gas-rated"], u:U.can },
+      { n:"Teflon tape",           s:[], c:["White","Yellow (gas)","Pink (heavy)"], u:U.roll },
+      { n:"Wax ring",              s:[], c:["Standard","Extra-thick","With horn","Waxless seal"], u:U.ea },
+      { n:"Closet bolts",          s:[], c:["Set","Extra-long"],         u:U.ea },
+      { n:"Braided supply line",   s:["12\"","16\"","20\"","24\""], c:["3/8 comp × 1/2 FIP","3/8 comp × 7/8 BC","3/8 comp × 3/8 comp"], u:U.ea },
+      { n:"P-trap",                s:["1-1/4","1-1/2"], c:["PVC","Chrome (17ga)","Chrome (20ga)"], u:U.ea },
+      { n:"Escutcheon",            s:["1/2","3/4","1-1/4","1-1/2"], c:["Chrome","Deep / bell"], u:U.ea }
+    ]},
+
+    { id:"hangers", name:"Hangers & support", chip:"#2E7D4F", items:[
+      { n:"Clevis hanger",         s:["1/2","3/4","1","1-1/4","1-1/2","2","3","4"], c:[], u:U.ea },
+      { n:"All-thread rod",        s:["3/8","1/2","5/8"], c:[],          u:U.stick },
+      { n:"Strut",                 s:["13/16","1-5/8"], c:["Plain","Slotted","Painted","Galv"], u:U.stick },
+      { n:"Strut nut",             s:["3/8","1/2"], c:["With spring","Without spring"], u:U.bag },
+      { n:"Rod coupling / hex nut", s:["3/8","1/2","5/8"], c:["Coupling nut","Hex nut","Washer"], u:U.bag },
+      { n:"Riser clamp",           s:["1/2","3/4","1","1-1/4","1-1/2","2","3","4"], c:[], u:U.ea },
+      { n:"Beam clamp",            s:["3/8","1/2"], c:["C-clamp","Top beam"], u:U.ea },
+      { n:"Plumber's strap / tape", s:[], c:["Galv","Copper","Plastic"],  u:U.roll }
+    ]},
+
+    { id:"writein", name:"Write-ins", chip:"#5D656E", items:[], writein:true }
+  ];
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, function(c){ return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]; }); }
+  function opts(a){ return a.map(function(o){ return '<option>'+esc(o)+'</option>'; }).join(""); }
+
+  function itemHTML(it, removable){
+    var sizes = it.s && it.s.length
+      ? '<div class="f"><label>Size</label><select class="i-size">'+opts(it.s)+'</select></div>' : "";
+    var cfgs = it.c && it.c.length
+      ? '<div class="f wide"><label>Config</label><select class="i-cfg">'+opts(it.c)+'</select></div>' : "";
+    var units = '<div class="f"><label>Unit</label><select class="i-unit">'+opts(it.u || U.ea)+'</select></div>';
+    return '<li class="item">'
+      + '<label class="row"><input type="checkbox" class="tick"><span class="name">'+esc(it.n)+'</span>'
+      + (removable ? '<button type="button" class="rm" title="Remove">&times;</button>' : '')
+      + '</label>'
+      + '<div class="cfg">'
+      +   '<div class="f qty"><label>Qty</label><input class="i-qty" type="number" inputmode="numeric" min="1" step="1" value="1"></div>'
+      +   units + sizes + cfgs
+      +   '<div class="f" style="flex:1 1 100%"><input class="i-note note" type="text" placeholder="Note for the counter — brand, reducing sizes, anything odd" autocomplete="off"></div>'
+      + '</div></li>';
+  }
+
+  var list = document.getElementById("list");
+  list.innerHTML = DATA.map(function(cat){
+    return '<section class="cat" data-id="'+cat.id+'" style="--chip:'+cat.chip+'">'
+      + '<h2>'+esc(cat.name)+'<span class="n" data-n>0</span></h2>'
+      + '<ul class="items">'+cat.items.map(function(i){ return itemHTML(i,false); }).join("")+'</ul>'
+      + (cat.writein
+          ? '<div class="addrow"><input id="newItem" type="text" placeholder="Anything else — type it and hit Add" autocomplete="off"><button type="button" class="addbtn" id="addBtn">Add</button></div>'
+          : "")
+      + '</section>';
+  }).join("");
+
+  /* ---- header controls ------------------------------------------------- */
+  var mode = "Will-call", when = "Today";
+  function seg(id, set){
+    var el = document.getElementById(id);
+    el.addEventListener("click", function(e){
+      var b = e.target.closest("button"); if (!b) return;
+      [].forEach.call(el.querySelectorAll("button"), function(x){ x.classList.toggle("on", x === b); });
+      set(b.getAttribute("data-v"));
+    });
+  }
+  seg("segMode", function(v){ mode = v; refresh(); });
+  seg("segWhen", function(v){
+    document.getElementById("dateWrap").style.display = (v === "date") ? "" : "none";
+    when = v; refresh();
+  });
+  document.getElementById("fDate").addEventListener("input", refresh);
+
+  function whenText(){
+    if (when !== "date") return when;
+    var d = document.getElementById("fDate").value;
+    if (!d) return "Pick a date";
+    var p = d.split("-");
+    return new Date(+p[0], +p[1]-1, +p[2]).toLocaleDateString(undefined, { month:"short", day:"numeric", year:"numeric" });
+  }
+  // The date is self-aware — the shared runtime resolves the real date from public
+  // sources, because a phone or job-site tablet clock can be flat wrong.
+  function todayStr(){
+    return (window.Toolkit && Toolkit.todayStr) ? Toolkit.todayStr()
+      : new Date().toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
+  }
+
+  /* ---- write-ins -------------------------------------------------------- */
+  var writeUL = document.querySelector('.cat[data-id="writein"] ul.items');
+  function addWriteIn(){
+    var input = document.getElementById("newItem");
+    var v = input.value.trim();
+    if (!v) { input.focus(); return; }
+    writeUL.insertAdjacentHTML("beforeend", itemHTML({ n:v, s:[], c:[], u:U.ea }, true));
+    var li = writeUL.lastElementChild;
+    li.querySelector(".tick").checked = true;
+    li.classList.add("is-checked");
+    input.value = ""; input.focus(); refresh();
+  }
+  document.getElementById("addBtn").addEventListener("click", addWriteIn);
+  document.getElementById("newItem").addEventListener("keydown", function(e){ if (e.key === "Enter") { e.preventDefault(); addWriteIn(); } });
+
+  /* ---- state ------------------------------------------------------------ */
+  list.addEventListener("change", function(e){
+    var t = e.target;
+    if (t.classList.contains("tick")) t.closest(".item").classList.toggle("is-checked", t.checked);
+    refresh();
+  });
+  list.addEventListener("input", refresh);
+  list.addEventListener("click", function(e){
+    var b = e.target.closest(".rm");
+    if (b) { e.preventDefault(); b.closest(".item").remove(); refresh(); }
+  });
+
+  function lineText(li){
+    var q  = (li.querySelector(".i-qty").value || "1").trim();
+    var u  = li.querySelector(".i-unit").value;
+    var s  = li.querySelector(".i-size") ? li.querySelector(".i-size").value : "";
+    var c  = li.querySelector(".i-cfg")  ? li.querySelector(".i-cfg").value  : "";
+    var n  = li.querySelector(".i-note").value.trim();
+    // qty + UNIT first — "20 each" and "20 sticks" are different orders, and the
+    // unit is the single most common source of a wrong pull.
+    var out = q + " " + u + "  ·  " + (s ? s + '" ' : "") + li.querySelector(".name").textContent;
+    if (c) out += "  —  " + c;
+    if (n) out += "  (" + n + ")";
+    return out;
+  }
+
+  function checked(){ return [].slice.call(list.querySelectorAll(".item.is-checked")); }
+
+  function asText(){
+    var job = document.getElementById("fJob").value.trim();
+    var by  = document.getElementById("fBy").value.trim();
+    var ac  = document.getElementById("fAcct").value.trim();
+
+    var out = "SUPPLY HOUSE ORDER";
+    if (job) out += " — " + job;
+    out += "\n" + mode + "  ·  Need by: " + whenText();
+    if (by) out += "  ·  Ordered by: " + by;
+    if (ac) out += "  ·  Acct/PO: " + ac;
+    out += "\nDate: " + todayStr() + "\n";
+
+    DATA.forEach(function(cat){
+      var sec = list.querySelector('.cat[data-id="'+cat.id+'"]');
+      var on = [].slice.call(sec.querySelectorAll(".item.is-checked"));
+      if (!on.length) return;
+      out += "\n" + sec.querySelector("h2").firstChild.textContent.toUpperCase() + "\n";
+      on.forEach(function(li){ out += "- " + lineText(li) + "\n"; });
+    });
+
+    if (!checked().length) return out.trim() + "\n\n(nothing ticked yet)";
+    out += "\nPlease confirm sizes and configs before pulling. Thanks.";
+    return out.trim();
+  }
+
+  var preview = document.getElementById("preview");
+  var countEl = document.getElementById("count");
+
+  function refresh(){
+    DATA.forEach(function(cat){
+      var sec = list.querySelector('.cat[data-id="'+cat.id+'"]');
+      var n = sec.querySelectorAll(".item.is-checked").length;
+      sec.querySelector("[data-n]").textContent = n ? n : "";
+    });
+    var n = checked().length;
+    countEl.textContent = n ? (n + " line" + (n === 1 ? "" : "s") + " on the list") : "Nothing on the list yet";
+    preview.textContent = asText();
+  }
+
+  document.getElementById("clear").addEventListener("click", function(){
+    [].forEach.call(list.querySelectorAll(".tick"), function(t){ t.checked = false; t.closest(".item").classList.remove("is-checked"); });
+    [].forEach.call(list.querySelectorAll(".i-qty"),  function(q){ q.value = 1; });
+    [].forEach.call(list.querySelectorAll(".i-note"), function(x){ x.value = ""; });
+    refresh();
+  });
+
+  var copyBtn = document.getElementById("copy");
+  function flash(msg){
+    var was = copyBtn.textContent;
+    copyBtn.textContent = msg;
+    setTimeout(function(){ copyBtn.textContent = was; }, 1600);
+  }
+  copyBtn.addEventListener("click", function(){
+    var t = asText();
+    // Clipboard API needs a secure context; a job-site browser may not give one,
+    // so fall back to a real selection rather than failing silently.
+    function fallback(){
+      var ta = document.createElement("textarea");
+      ta.value = t;
+      ta.style.cssText = "position:fixed;left:8px;bottom:70px;width:calc(100% - 16px);height:38vh;z-index:99";
+      document.body.appendChild(ta); ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      if (ok) { ta.remove(); flash("Copied"); }
+      else { flash("Copy it manually"); ta.addEventListener("blur", function(){ ta.remove(); }); }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(function(){ flash("Copied"); }, fallback);
+    } else { fallback(); }
+  });
+
+  refresh();
+  document.addEventListener("av:ready", refresh); // date resolves async
+})();
+</script>
+</body>
+</html>
