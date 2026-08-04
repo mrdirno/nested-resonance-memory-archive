@@ -28,6 +28,32 @@ Cat patch (5e/6/6a, shielded/UTP), fiber (OM3/OM4/OS2, LC/SC), pick the ones for
 job and copy a clean spec to the PM. Bad: anything "cute", a theoretical calculator
 nobody asked for, or a tool that needs a login/among-us gimmick to feel clever.
 
+## SEED ROSTER — "our own framework": build these out over time (well-empty cycles)
+Don't only wait for wishes. When the well is empty, build the next tool from this
+CURATED roster, chosen by leverage × how often a real crew needs it. Each is a
+HYPOTHESIS — it ships only if it passes THE STRICT BAR above; drop any rung that
+doesn't. Wishes RE-RANK and EXTEND this list (people "wishing better"). Keep
+**Consumables pinned at #1 for now** (the operator's own; `pinned:true` in tools.js).
+1. **Cable-types picker** — HDMI / Cat patch / fiber → a clean cable spec to the PM. (operator's example)
+2. **Gear checklist by room type** — huddle / conference / boardroom / classroom → the kit to pull.
+3. **Rack elevation / build note** — RU heights + gear → a rack elevation spec.
+4. **Connector & adapter finder** — "source X → display Y, what adapter/dongle?"
+5. **Device-label / naming generator** — one consistent naming scheme across a job.
+6. **Punch / deficiency list** — walk the room, list what's left → send the PM.
+7. **Change-order / scope note** — an out-of-scope ask → a clean CO request.
+8. **Site-survey checklist** — power / network / mounting / sightlines, before install.
+9. **RMA / warranty request** — a failed unit → a complete RMA to send.
+10. **Display size & viewing-distance** — room depth → recommended display size.
+11. **AV network IP / VLAN planner** — assign device IPs cleanly for an AV subnet.
+
+## NON-CLUTTERY — the discipline (operator 2026-08-03)
+- **ONE job per tool.** If a tool tries to do two things, it is two tools.
+- The hub stays a single clean ordered grid (pinned → favorites → rest). No feature
+  bloat, no cute chrome, no walls of options. A crew opening it on a phone at a job
+  site must be usable in seconds.
+- Every roster rung AND every wish faces the SAME criteria: would a real tech/PM use
+  this to send something to their boss/tech, FAST? If not, it does not ship.
+
 ## THE BUILD PROCESS (one wish per cycle, watertight)
 1. `python3 /Volumes/dual/_vault/automation/scripts/av_wishing_well.py --list` —
    read new wishes (oldest first). Empty → do a self-directed toolkit/collage

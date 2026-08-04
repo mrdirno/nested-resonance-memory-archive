@@ -84,11 +84,7 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
     <button class="well-btn" type="button" onclick="(window.AV&&AV.openWell)?AV.openWell():alert('Loading…')">&#10022; Wish for a tool</button>
   </div>
 
-  <div id="favWrap" hidden>
-    <p class="section-label">&#9733; Your favorites</p>
-    <div class="grid" id="favGrid"></div>
-  </div>
-  <p class="section-label" id="toolsLabel">Tools</p>
+  <p class="section-label">Tools</p>
   <main class="grid" id="grid"></main>
 
   <footer class="foot">
@@ -106,10 +102,7 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 (function(){
   var TOOLS = window.AV_TOOLS || [];
   var esc = function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c];});};
-  var favWrap = document.getElementById("favWrap");
-  var favGrid = document.getElementById("favGrid");
   var grid = document.getElementById("grid");
-  var toolsLabel = document.getElementById("toolsLabel");
   function isFav(href){ return (window.AV && AV.isFav) ? AV.isFav(href) : false; }
   function card(t){
     var ext = /^https?:\/\//i.test(t.href);
@@ -123,14 +116,16 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
       + '<p class="tool-desc">'+esc(t.desc||"")+'</p>'
       + '<span class="tool-go"><span class="arr">&rarr;</span> Open tool</span></a></div>';
   }
-  function render(){
-    var favs = TOOLS.filter(function(t){ return isFav(t.href); });
-    var rest = TOOLS.filter(function(t){ return !isFav(t.href); });
-    favGrid.innerHTML = favs.map(card).join("");
-    favWrap.hidden = favs.length === 0;
-    grid.innerHTML = rest.map(card).join("");
-    toolsLabel.textContent = favs.length ? "All tools" : "Tools";
+  function order(){
+    // one clean grid — pinned first (Consumables, for now), then your favorites,
+    // then the rest, each keeping registry order. No separate sections = no clutter.
+    return TOOLS.slice().sort(function(a,b){
+      var pa=a.pinned?0:1, pb=b.pinned?0:1; if(pa!==pb) return pa-pb;
+      var fa=isFav(a.href)?0:1, fb=isFav(b.href)?0:1; if(fa!==fb) return fa-fb;
+      return TOOLS.indexOf(a)-TOOLS.indexOf(b);
+    });
   }
+  function render(){ grid.innerHTML = order().map(card).join(""); }
   render();
   document.addEventListener("av:ready", render);
   document.addEventListener("av:favorites", render);
