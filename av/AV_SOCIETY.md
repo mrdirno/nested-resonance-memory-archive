@@ -169,10 +169,69 @@ own paperwork/communication friction. Mechanics:
   every other trade. Isomorph only when the current toolkit is broad enough to copy
   well — expand deliberately, never half a trade at a time.
 
+## THE GATE — a tool ships only if TICKING BEATS TYPING (2026-08-03)
+The single most useful thing we know, found independently by five in-trade reviewers
+during the plumbing expansion: **never answer a NARRATIVE task with a multi-field FORM.**
+Their words — *"seven empty boxes on a phone lose to the notes app every time"*,
+*"eight empty textareas is strictly worse than the one empty box he already has"*,
+*"ship the typewriter, not the panel simulator"*.
+
+The observation that settles it: this toolkit has shipped exactly ONE checklist and ONE
+tool that dumps messy notes into an AI. It has never shipped a nine-box narrative form —
+and a single round of roster research proposed more than a dozen of them.
+
+- If the work is **already a list** — a pull list, findings by footage, punch by room,
+  valves by tag, circuits by number, cable by run — **build it.**
+- If the work is **a paragraph** — the daily, found/did/recommend, the callback story —
+  **do not build a form.** Either decline it, or build the `report-builder.html` shape,
+  which is the one narrative tool that works precisely because it adds an AI pass
+  instead of adding empty boxes.
+
+## THE SYSTEM OF RECORD — never compete with whoever owns and NUMBERS the document
+Procore owns the RFI number and the daily log. ServiceTitan makes the call write-up a
+mandatory field before the tech can close. Milestone/Genetec already export device data.
+Bluebeam owns markup; the architect owns the hardware schedule; the AHJ owns the
+inspection card. Competing with any of them = double entry = dead on contact, and it
+fails worst for the biggest shops, who are the best users.
+
+**Feeding survives.** The field-condition note that becomes the PM's RFI. The self-punch
+that shortens the GC's punch list. The turnover that becomes the estimator's quote. Ask
+before every build: *does the receiver have to key this into something else anyway?* If
+yes, scope the tool to **what you send him**, never to the record of record — and never
+let anyone believe our number is the official number.
+
+## THE THREE SHAPES — build engines, not pages
+Across five trades, every tool worth shipping is one of three shapes. Two of them are the
+same widget wearing different words:
+
+1. **CHECKLIST → a request UP the chain.** Categories → tick → qty + one to three
+   modifiers → plain text. `av/consumables.html` and `plumbing/supply-house-order.html`
+   are both this. The only per-trade variance is the item data and which modifier axes
+   exist (AV: none · plumbing: size + config + unit-of-issue).
+2. **THE NOTE.** An ordered set of short fields, one of which is the **impact line
+   everyone omits** ("what work is stopped", "what fails if we don't"), an optional
+   forget-list checklist, and a fixed closing ask the receiver can reply to. The
+   directed-work ticket, the shutdown notice and the field RFI are all this one widget.
+3. **THE ROW LOG.** An add-row bar with sticky fields (only one or two retyped per row),
+   a grouped table, per-group tallies, and a **TSV copy that pastes into Excel** —
+   because that output goes into an O&M manual or a spreadsheet, not into a chat message.
+
+When you build the second instance of a shape, extract the engine. Two instances is where
+a shape is provable; one is over-abstraction and five is five forks.
+
+Keep the boundary or the config rots: `trade.js` = IDENTITY + COPY · `tools.js` =
+REGISTRY · `items.js` = that trade's VOCABULARY DATA (categories, size ladders, config
+options, unit-of-issue sets). Size ladders and C×C/FIP/no-hub live in data — never in the
+identity config and never inline in a tool page.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
 open request/spec formats it standardizes become infrastructure others build on.
+The same ratchet now runs per trade — and the ranked ladder for each one (which rung is
+next, and the sharpening that must survive into the build) lives in the PRIVATE
+`operator/TRADE_ROSTERS.md` in the vault, alongside the strategy note. Roadmap stays
+private; the pages and this craft doctrine stay open.
 
 ## CYCLE LOG (append ONE line per toolkit cycle — tool · before→after · proof URL)
 This file is the toolkit's evolvable BOOK, read by the P0 **Field Toolkit lane** every
@@ -190,3 +249,11 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   forever). After: a top-down STEP-0 ladder with TRADE EXPANSION at rung 2 and the SEED
   ROSTER at rung 3, `AV_SOCIETY.md` promoted to the lane's primary BOOK, and the
   Pages-artifact staging assertion made a ship gate for any new `<trade>/` dir.
+- `2026-08-03` — **ONE RUNTIME, MANY TRADES.** `av/av.js` → `shared/toolkit.js`, now
+  driven by a per-trade `window.TOOLKIT_TRADE` config; wishes carry `trade` (migration
+  076); favorites namespaced per trade. A new trade is a config + a registry + pages.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/
+- `2026-08-03` — **TRADE #2 IS LIVE: the Plumbing Field Toolkit**, with Supply House Order
+  (config picker · unit-of-issue · COPPER/DWV split · zero computed quantities). Verified
+  live in a real browser, 15 runtime + 15 functional checks.
+  https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/
