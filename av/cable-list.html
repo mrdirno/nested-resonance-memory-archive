@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cable &amp; Adapter List — AV Field Toolkit</title>
+<meta name="description" content="Pick the cables and adapters for the job — length, spec and finish on every line — and copy a clean order for your PM or the counter.">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Cables">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--flag:#2E7D4F;--tint:#EAF3EC;--flag-ink:#FFFFFF;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px 120px}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 16px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(19px,4.4vw,27px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.98}
+.lede{margin:7px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+
+.head{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:14px}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.f label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.f label i{color:#8a6a1a;font-style:normal}
+.f input,.f select{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink)}
+.f input:focus,.f select:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.f.span2{grid-column:1 / -1}
+.seg{display:flex;gap:0}
+.seg button{flex:1;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px solid var(--line);color:var(--muted);padding:8px 6px;cursor:pointer}
+.seg button:first-child{border-radius:2px 0 0 2px}
+.seg button:last-child{border-radius:0 2px 2px 0}
+.seg button + button{border-left:0}
+.seg button.on{background:var(--flag);border-color:var(--flag);color:#fff}
+
+.cat{margin-bottom:14px;background:var(--paper);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.cat h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;margin:0;padding:9px 12px;
+  background:#EFF1EC;border-bottom:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));display:flex;align-items:center;gap:8px}
+.cat h2 .n{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:400;margin-left:auto}
+ul.items{list-style:none;margin:0;padding:0}
+.item{border-bottom:1px solid #E4E6E0}
+.item:last-child{border-bottom:0}
+.row{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;min-height:44px}
+.row input[type=checkbox]{width:20px;height:20px;flex:none;accent-color:var(--flag);cursor:pointer}
+.name{font-weight:600;font-size:14px;min-width:0}
+.sub{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;flex:1;min-width:0}
+.item.is-checked{background:var(--tint)}
+.cfg{display:none;gap:7px;padding:0 12px 11px 42px;flex-wrap:wrap;align-items:flex-end}
+.item.is-checked .cfg{display:flex}
+.cfg .f{flex:1 1 84px;min-width:76px}
+.cfg .f.wide{flex:2 1 160px}
+.cfg .f.qty{flex:0 0 62px;min-width:62px}
+.cfg input,.cfg select{padding:7px 8px;font-size:13.5px}
+.note{width:100%}
+.flags{display:flex;gap:12px;flex-wrap:wrap;padding-top:2px}
+.flag{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);cursor:pointer}
+.flag input{width:17px;height:17px;accent-color:var(--flag);cursor:pointer}
+.flag input:checked + span{color:var(--ink);font-weight:600}
+.clonebtn{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;background:#fff;
+  border:1px dashed var(--line);color:var(--muted);border-radius:2px;padding:7px 10px;cursor:pointer;flex:0 0 auto}
+.clonebtn:hover{border-color:var(--flag);border-style:solid;color:var(--flag)}
+
+.addrow{display:flex;gap:8px;padding:10px 12px;background:#F4F5F1}
+.addrow input{flex:1;font:inherit;font-size:14px;padding:9px;border:1px solid var(--line);border-radius:2px}
+.addbtn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:14px;
+  background:var(--steel);color:#EEF0EA;border:1px solid var(--steel);border-radius:2px;padding:9px 14px;cursor:pointer}
+.rm{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px;flex:none}
+.rm:hover{color:#C4342B}
+
+.warn{font-size:12px;color:var(--muted);background:#FFFDF6;border:1px solid var(--line);border-left:4px solid #E0A800;
+  border-radius:2px;padding:10px 12px;margin:14px 0}
+.warn b{color:var(--ink)}
+.scope{font-size:12.5px;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:10px 12px;margin:0 0 14px}
+.scope b{color:var(--ink)}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
+  padding:9px 14px;display:flex;gap:9px;align-items:center}
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;flex:1;min-width:0}
+.bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
+  border-radius:2px;padding:11px 16px;cursor:pointer;white-space:nowrap}
+#copy{background:var(--flag);border:1px solid var(--flag);color:#fff}
+#copy:hover{background:#379460}
+#clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
+#clear:hover{border-color:#8A929B;color:#EEF0EA}
+.preview{background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;font-family:var(--mono);font-size:12px;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink);max-height:340px;overflow:auto}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.credit{font-size:12px;color:var(--muted);margin:14px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">AV · Techs &rarr; PM / Warehouse</span>
+    <h1>Cable &amp; Adapter List</h1>
+    <p class="lede">Tick the cable, set the length and the spec, copy the order. Say once whose finish cable you run — and flag any line you want an alternate priced on.</p>
+  </header>
+
+  <p class="scope"><b>This list is factory-terminated assemblies and adapters</b> — cables and dongles that come in a bag with ends already on them. Anything you crimp or terminate in the field (RJ45 plugs, keystones, Euroblocks, wall plates, bulk box cable) is on the <a href="consumables.html">Consumables List</a>.</p>
+
+  <div class="head">
+    <div class="hgrid">
+      <div class="f"><label>Job / room</label><input id="fJob" type="text" placeholder="Suite 400 boardroom — Bldg C" autocomplete="off"></div>
+      <div class="f"><label>Requested by</label><input id="fBy" type="text" placeholder="Your name" autocomplete="off"></div>
+      <div class="f"><label>Need by</label>
+        <div class="seg" id="segWhen">
+          <button type="button" class="on" data-v="Today">Today</button>
+          <button type="button" data-v="This week">This wk</button>
+          <button type="button" data-v="date">Pick…</button>
+        </div>
+      </div>
+      <div class="f" id="dateWrap" style="display:none"><label>Date</label><input id="fDate" type="date"></div>
+      <div class="f span2"><label>Finish-cable standard <i>(typed once — this device remembers it)</i></label><input id="fFinish" type="text" placeholder="whose finish cable we run — brand + line, in your words" autocomplete="off"></div>
+      <div class="f span2"><label>Substitutions</label>
+        <div class="seg" id="segSub">
+          <button type="button" data-v="No subs">No subs</button>
+          <button type="button" class="on" data-v="Or equal">Or equal</button>
+          <button type="button" data-v="Ask me first">Ask me first</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main id="list"></main>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>Double-check before you order.</b> Every length, spec, category and finish on this list is what <em>you</em> picked — this tool doesn't recommend cables, doesn't rate them, and doesn't know what will run 4K over your distance. Confirm length, spec and connector profile before anything gets pulled, and remember an <b>alternate here is a request, not an approval</b>: nobody has confirmed two cables are equivalent until your supplier and your PM say so.
+  </div>
+
+  <p class="credit">&#10022; Wished into existence by Aldrin Payopay, AV Tech. Wish for the next one &mdash; it gets built and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on the list yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy list</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/checklist-request.js"></script>
+<script>
+/* CABLE & ADAPTER LIST — a wish, served.
+ *
+ * The wish itself stays in the private queue (av/AV_SOCIETY.md §THE QUEUE IS
+ * PRIVATE) — what is public is the credit on the page and the tool. What it asked
+ * for, in shape: the consumables list, but for factory-terminated assemblies —
+ * every family a shop actually buys, at the lengths they are sold in — plus the
+ * shop's own house finish-cable standard stated once, and a way to ask for an
+ * alternate on any line.
+ *
+ * THE SHAPE was settled by the ask itself — "like the consumables list" is shape
+ * #1, CHECKLIST → A REQUEST. So this page is the THIRD instance of that shape and
+ * the FIRST built on the extracted engine (shared/checklist-request.js) rather
+ * than forked from the two before it. All this file owns is the vocabulary
+ * (av/items.js) and the WORDS — how a line reads to a counter is not the engine's
+ * business.
+ *
+ * TWO THINGS THIS TOOL DOES NOT DO, on purpose:
+ *   · it never recommends a cable for a distance, a resolution or a device, and
+ *   · it never claims one manufacturer's part equals another's.
+ * The "alternate" ask is real, so it is answered honestly: the ALT toggle turns it
+ * into the REQUEST a supplier can actually answer — the attributes the alternate
+ * has to match — instead of a cross-reference we cannot stand behind.
+ */
+(function () {
+  "use strict";
+  var D = window.TOOLKIT_ITEMS;
+
+  /* The finish-cable standard is typed ONCE per device — it is the same answer on
+   * every job for the life of the shop, and retyping it every order is exactly the
+   * friction this toolkit exists to delete. */
+  var FKEY = "toolkit.av.finishStandard.v1";
+  var fFinish = document.getElementById("fFinish");
+  try { fFinish.value = localStorage.getItem(FKEY) || ""; } catch (e) {}
+  fFinish.addEventListener("input", function () {
+    try { localStorage.setItem(FKEY, fFinish.value); } catch (e) {}
+  });
+
+  var when = "Today", subs = "Or equal";
+  function whenText() {
+    if (when !== "date") return when;
+    var d = document.getElementById("fDate").value;
+    if (!d) return "pick a date";
+    var p = d.split("-");
+    return new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  /* A NEUTRAL axis value (any option that leads with an em-dash — see items.js
+   * §THE NEUTRAL) means "the tech did not pick this one", and a value he did not
+   * pick must never reach the counter. Dropped everywhere the document is built. */
+  function none(v) { return !v || v.charAt(0) === "—"; }
+  function picked(l) {
+    return Object.keys(l.ax).filter(function (k) { return !none(l.ax[k]); })
+                            .map(function (k) { return l.ax[k]; });
+  }
+
+  /* One line, the way a counter reads it: qty first, then the item with its
+   * length, then the spec, then the finish, then the note in parens. An axis the
+   * tech never touched is omitted — never printed blank. */
+  function line(l) {
+    var parts = [];
+    var len = l.ax.length || "";
+    var head = l.name + (none(len) ? "" : ", " + len);
+    Object.keys(l.ax).forEach(function (k) {
+      if (k === "length") return;
+      var v = l.ax[k];
+      if (!none(v)) parts.push(v);
+    });
+    var out = l.qty + " ×  " + head;
+    if (parts.length) out += "  ·  " + parts.join("  ·  ");
+    if (l.note) out += "  (" + l.note + ")";
+    if (l.flags && l.flags.alt) out += "   ** ALTERNATE WANTED **";
+    return out;
+  }
+
+  function altBlock(sections) {
+    var wanted = [];
+    sections.forEach(function (s) {
+      s.lines.forEach(function (l) { if (l.flags && l.flags.alt) wanted.push(l); });
+    });
+    if (!wanted.length) return "";
+    var std = fFinish.value.trim();
+    var out = "\nALTERNATE WANTED — " + wanted.length + " line" + (wanted.length === 1 ? "" : "s") + "\n";
+    // ONE line per alternate, carrying exactly the attributes the tech picked on
+    // that line — nothing is added to the ask on his behalf. (The earlier form
+    // printed the same attribute list twice and then appended criteria nobody
+    // chose; a counter reading it could not tell what was actually required.)
+    wanted.forEach(function (l) {
+      var must = picked(l);
+      out += "- " + l.name + " — must match: " + (must.length ? must.join(" · ") : "the line above") + "\n";
+    });
+    if (std) out += "  What we run: " + std + "\n";
+    out += "  Send what you've got with price and lead time — I'll confirm before you pull it.\n"
+         + "  (An alternate is a REQUEST, not an approval. Nothing is equivalent until the supplier and the PM say so.)\n";
+    return out;
+  }
+
+  /* WALK-DURATION. A cable list is not filled in one sitting — a tech ticks lines
+   * room by room across a job walk, phone in one hand, and iOS will evict a
+   * background tab inside that window. A tool that loses the walk is worse than
+   * the pad it replaced, so the ticked lines AND the header ride localStorage.
+   * (The engine keys rows by name+occurrence, not DOM index, so clones and
+   * write-ins come back as themselves — see shared/checklist-request.js.) */
+  function seg(id, v) {
+    var b = document.querySelector("#" + id + ' button[data-v="' + v + '"]');
+    if (b) b.click();
+  }
+
+  ChecklistRequest.mount({
+    list: "list", preview: "preview", count: "count", copy: "copy", clear: "clear",
+    persistKey: "toolkit.av.cableList.v1",
+    // Returns null when the header is untouched. The engine drops its saved record
+    // only when there is genuinely nothing to save, so a caller that always hands
+    // back an object would re-save an empty one 250 ms after Clear and pin the key
+    // forever — Clear has to actually clear.
+    persistExtra: function () {
+      var x = {
+        job: document.getElementById("fJob").value,
+        by: document.getElementById("fBy").value,
+        date: document.getElementById("fDate").value,
+        when: when, subs: subs
+      };
+      var touched = x.job || x.by || x.date || x.when !== "Today" || x.subs !== "Or equal";
+      return touched ? x : null;
+    },
+    onRestoreExtra: function (x) {
+      document.getElementById("fJob").value = x.job || "";
+      document.getElementById("fBy").value = x.by || "";
+      document.getElementById("fDate").value = x.date || "";
+      if (x.when) seg("segWhen", x.when);
+      if (x.subs) seg("segSub", x.subs);
+    },
+    onClear: function () {
+      ["fJob", "fBy", "fDate"].forEach(function (id) { document.getElementById(id).value = ""; });
+      seg("segWhen", "Today");
+      seg("segSub", "Or equal");
+    },
+    data: D.cats,
+    cloneLabel: "+ another length",
+    writeinAx: D.writeinAx,
+    writeinFlags: D.writeinFlags,
+    writeinPlaceholder: "Anything else — type it and hit Add",
+    notePlaceholder: "Note — what it's for, wattage, boot style, anything odd",
+    watch: ["fJob", "fBy", "fFinish", "fDate"],
+    segments: [
+      { key: "when", id: "segWhen", def: "Today", onChange: function (v) {
+          when = v;
+          document.getElementById("dateWrap").style.display = (v === "date") ? "" : "none";
+        } },
+      { key: "subs", id: "segSub", def: "Or equal", onChange: function (v) { subs = v; } }
+    ],
+    countLabel: function (n) {
+      return n ? n + " line" + (n === 1 ? "" : "s") + " on the order" : "Nothing on the list yet";
+    },
+    document: function (ctx) {
+      var job = document.getElementById("fJob").value.trim();
+      var by = document.getElementById("fBy").value.trim();
+      var std = fFinish.value.trim();
+
+      var out = "CABLE & ADAPTER LIST";
+      if (job) out += " — " + job;
+      // Two dates on one line, so BOTH are labelled — an unlabelled date sitting
+      // next to "Need by" is the one a counter reads wrong. Matches the house
+      // wording on the consumables list.
+      out += "\nRequested: " + ctx.today + "  ·  Need by: " + whenText();
+      if (by) out += "  ·  By: " + by;
+      if (std) out += "\nFinish-cable standard: " + std;
+      out += "  ·  Subs: " + subs.toLowerCase();
+      out += "\nQuantities are EACH.\n";
+
+      if (!ctx.count) return out.trim() + "\n\n(nothing ticked yet)";
+
+      ctx.sections.forEach(function (s) {
+        out += "\n" + s.name.toUpperCase() + "\n";
+        s.lines.forEach(function (l) { out += "- " + line(l) + "\n"; });
+      });
+
+      out += altBlock(ctx.sections);
+      out += "\nConfirm length, spec and connector profile before pulling. Anything going through a "
+           + "mount or a wall plate has to be the low-profile end.";
+      return out.trim();
+    }
+  });
+})();
+</script>
+</body>
+</html>

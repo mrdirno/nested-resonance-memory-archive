@@ -22,6 +22,13 @@ window.AV_TOOLS = [
     pinned: true
   },
   {
+    name: "Cable & Adapter List",
+    href: "cable-list.html",
+    desc: "Pick the cables and adapters for the job — length, spec and finish on every line — and copy a clean order for your PM or the counter. Say once whose finish cable you run, and flag any line you want an alternate priced on.",
+    chip: "#2E7D4F",
+    audience: "Techs → PM / Warehouse"
+  },
+  {
     name: "Field Report Setup",
     href: "report-builder.html",
     desc: "Turn your end-of-day mess into one clean report your PM can forward — build a role-tailored AI setup, paste it into Gemini/Claude/GPT once, use it daily.",

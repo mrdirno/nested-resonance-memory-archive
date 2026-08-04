@@ -64,7 +64,16 @@ ul.wall{list-style:none;margin:0;padding:0}
 (function(){
   var esc = function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c];});};
   var wall = document.getElementById("wall"), count = document.getElementById("count");
-  function fmt(d){ if(!d) return ""; var x=new Date(d); return isNaN(x.getTime())? esc(d) : x.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}); }
+  /* A ledger date is a CALENDAR DAY ("2026-08-04"), not an instant. `new Date()`
+   * parses a bare ISO date as UTC midnight, so every credit rendered a day EARLY
+   * for anyone west of UTC — a permanent public record showing the wrong day.
+   * Split it and build a local date, the same way the tool pages do. */
+  function fmt(d){
+    if(!d) return "";
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d).trim());
+    var x = m ? new Date(+m[1], +m[2]-1, +m[3]) : new Date(d);
+    return isNaN(x.getTime())? esc(d) : x.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
+  }
   function render(list){
     if(!list.length){
       count.textContent = "";
