@@ -33,6 +33,20 @@
   };
   var CFG_READY = CFG.url.indexOf("__SUPABASE") !== 0;
 
+  /* ---- WHO ELSE IS OUT THERE: the one list of trades ----------------------
+   * Trade #1 and trade #2 each hard-wired a footer link to the other. That does
+   * not scale past two: standing up trade #3 meant editing every hub already
+   * shipped, and the hub that got forgotten is the one nobody can reach the new
+   * trade from — which is exactly how /plumbing/ spent its whole life reachable
+   * only from a hand-wired link inside av/index.html.
+   * ONE list, here, in the runtime every trade already loads. A hub renders
+   * whoever is not itself. Adding trade #4 is one line in this array. */
+  var TRADES = [
+    { slug: "av",         name: "AV Field Toolkit" },
+    { slug: "plumbing",   name: "Plumbing Field Toolkit" },
+    { slug: "electrical", name: "Electrical Field Toolkit" }
+  ];
+
   /* ---- WHO AM I: the per-trade config, with the AV defaults ---------------
    * Every string a visitor can see that names the trade comes from here. A new
    * trade ships a trade.js defining window.TOOLKIT_TRADE and gets the whole
@@ -127,7 +141,12 @@
     border:1px solid var(--av-steel);border-radius:3px;box-shadow:0 10px 30px rgba(0,0,0,.28);padding:5px;display:none;}
   .av-menu[open] .av-drop{display:block}
   .av-drop a{display:block;text-decoration:none;color:var(--av-ink);padding:8px 9px;border-radius:2px;}
-  .av-drop a:hover{background:var(--av-flag)}
+  /* Hover paints the row in the TRADE's accent, so the text on it has to be the
+   * trade's accent-ink — not a hardcoded near-black that happened to read well on
+   * AV yellow. The children set their own colours, so they have to be pulled back
+   * to inherit or the sub-line stays grey-on-accent. */
+  .av-drop a:hover{background:var(--av-flag);color:var(--flag-ink)}
+  .av-drop a:hover b,.av-drop a:hover span{color:inherit}
   .av-drop a b{display:block;font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.03em;font-size:14px;}
   .av-drop a span{display:block;font-family:var(--av-mono);font-size:9.5px;letter-spacing:.08em;color:var(--av-muted);text-transform:uppercase;}
   .av-drop hr{border:0;border-top:1px solid var(--av-line);margin:5px 3px}
@@ -136,7 +155,11 @@
   .av-req-btn{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.06em;font-size:14px;font-weight:700;
     background:var(--av-flag);color:var(--flag-ink);border:1px solid var(--av-flag);border-radius:2px;padding:7px 12px;cursor:pointer;white-space:nowrap;
     min-height:44px;}
-  .av-req-btn:hover{background:#FFD34A}
+  /* Was #FFD34A — a hardcoded lighter AV YELLOW. Every trade's primary CTA, the
+   * one the whole demand loop runs on, flashed AV yellow on hover: copper on
+   * /plumbing/, blue on /electrical/. A brightness filter lifts whatever the
+   * trade's accent actually is. */
+  .av-req-btn:hover{filter:brightness(1.1)}
   .av-fav-btn{background:transparent;border:1px solid #3A424B;color:#8892a0;border-radius:2px;width:44px;min-height:44px;cursor:pointer;font-size:15px;line-height:1;flex:none}
   .av-fav-btn:hover{border-color:var(--av-flag);color:#C7CDD3}
   .av-fav-btn.on{color:var(--av-flag);border-color:var(--av-flag)}
@@ -494,7 +517,7 @@
     document.body.insertBefore(buildBar(), document.body.firstChild);
     // Toolkit is the canonical global; AV stays as an alias so every page the AV
     // toolkit already shipped (which calls AV.today() / AV.toggleFav()) keeps working.
-    window.Toolkit = { openWell: openWell, tools: TOOLS, trade: TRADE,
+    window.Toolkit = { openWell: openWell, tools: TOOLS, trade: TRADE, trades: TRADES,
                        today: function(){ return TODAY; }, todayStr: function(){ return fmtDate(TODAY); },
                        favorites: favLoad, isFav: favIs, toggleFav: favToggle };
     window.AV = window.Toolkit;

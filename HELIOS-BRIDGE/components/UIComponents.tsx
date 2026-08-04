@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -206,6 +206,16 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'The same toolkit, isomorphed to plumbing — supply house order to start, in the counter’s own language: size, material, configuration, unit of issue.',
     icon: <Pipette size={18} />,
+  },
+  {
+    // TRADE #3. Registered in the SAME commit that stands the trade up — the
+    // deploy now fails if a staged trade has no entry here, in both directions,
+    // so this can no longer be the afterthought it was for plumbing.
+    name: 'Electrical Field Toolkit',
+    href: './electrical/',
+    tag: 'field',
+    blurb: 'Isomorphed again, to electrical — the pull list first: type what you already know you need, then tick down the forget-list of small stuff that stops a crew when it is not on the truck.',
+    icon: <Zap size={18} />,
   },
 ];
 

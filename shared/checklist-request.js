@@ -55,6 +55,17 @@
   }
   function byId(x) { return typeof x === "string" ? document.getElementById(x) : x; }
 
+  /* What a fresh Qty box starts at. "1" is right for a picker line — ticking it
+   * means at least one. It is WRONG for a pasted write-in, whose text usually
+   * carries its own count ("500' #12 THHN blue"), where a leading 1 prints a line
+   * that contradicts itself. So the item def may override the tool, and the tool
+   * may override the engine. */
+  function qtyDefault(it, cfg) {
+    if (it && it.qtyDefault != null) return it.qtyDefault;
+    if (cfg && cfg.qtyDefault != null) return cfg.qtyDefault;
+    return "1";
+  }
+
   /* The date is self-aware — the shared runtime resolves the real date from public
    * sources, because a phone or job-site tablet clock can be flat wrong. */
   function todayStr() {
@@ -108,9 +119,21 @@
             + "><span>" + esc(f.label) + "</span></label>";
         }).join("") + "</div>"
       : "";
+    /* QTY IS A NUMBER FOR SOME TRADES AND A PHRASE FOR OTHERS. A number spinner is
+     * right for "4 HDMI cables". It is wrong for a trade that orders in mixed
+     * units on the same list — an electrician's own words for this were "make Qty
+     * a FREE TEXT field so I can type '2 bx', '500 ft', 'a case'; the number input
+     * with min=1 step=1 is a desk person's idea". Opt-in per tool, so no page that
+     * already ships changes behaviour. */
     var qty = it.noQty ? "" :
       '<div class="f qty"><label>Qty</label>'
-      + '<input class="i-qty" type="number" inputmode="numeric" min="1" step="1" value="1"></div>';
+      // data-def carries the row's own default so readLine can fall back to IT
+      // rather than to a hardcoded "1". A hardcoded fallback silently resurrected
+      // the 1 on every pasted write-in line whose text already said "500'".
+      + (cfg.qtyText
+        ? '<input class="i-qty" type="text" data-def="' + esc(qtyDefault(it, cfg)) + '" value="' + esc(qtyDefault(it, cfg)) + '" autocomplete="off" spellcheck="false">'
+        : '<input class="i-qty" type="number" inputmode="numeric" min="1" step="1" data-def="' + esc(qtyDefault(it, cfg)) + '" value="' + esc(qtyDefault(it, cfg)) + '">')
+      + "</div>";
     var note = (it.note === false) ? "" :
       '<div class="f" style="flex:1 1 100%"><input class="i-note note" type="text" placeholder="'
       + esc(it.notePlaceholder || cfg.notePlaceholder || "Note — anything odd about this one") + '" autocomplete="off"></div>';
@@ -140,7 +163,7 @@
     var n = li.querySelector(".i-note");
     return {
       name: li.querySelector(".name").textContent,
-      qty: q ? (q.value || "1").trim() : "",
+      qty: q ? (q.value.trim() || (q.getAttribute("data-def") || "")) : "",
       note: n ? n.value.trim() : "",
       ax: axv,
       flags: fl,
@@ -180,9 +203,19 @@
         + (cat.hint ? '<p class="cathint">' + esc(cat.hint) + "</p>" : "")
         + '<ul class="items">' + (cat.items || []).map(function (i) { return itemHTML(i, cfg, false); }).join("") + "</ul>"
         + (cat.writein
-          ? '<div class="addrow"><input class="wi-input" type="text" placeholder="'
-            + esc(cfg.writeinPlaceholder || "Anything else — type it and hit Add")
-            + '" autocomplete="off"><button type="button" class="addbtn wi-add">Add</button></div>'
+          ? '<div class="addrow">'
+            /* A ONE-LINE INPUT CANNOT TAKE A PASTED LIST. Browsers flatten a
+             * multi-line paste into an <input>, so "paste your whole list, one per
+             * line" — which is how a foreman already keeps it, in his notes app —
+             * silently arrives as one run-on row. Opt in to a textarea and each
+             * line becomes its own row. Enter then means newline, so Add is the
+             * button (or ⌘/Ctrl+Enter). */
+            + (cfg.writeinTextarea
+              ? '<textarea class="wi-input" rows="2" spellcheck="false" placeholder="'
+                + esc(cfg.writeinPlaceholder || "Anything else — type it and hit Add") + '"></textarea>'
+              : '<input class="wi-input" type="text" placeholder="'
+                + esc(cfg.writeinPlaceholder || "Anything else — type it and hit Add") + '" autocomplete="off">')
+            + '<button type="button" class="addbtn wi-add">Add</button></div>'
           : "")
         + "</section>";
     }).join("");
@@ -199,19 +232,31 @@
       var wiUL = wiSection.querySelector("ul.items");
       var wiInput = wiSection.querySelector(".wi-input");
       var addWriteIn = function () {
-        var v = wiInput.value.trim();
-        if (!v) { wiInput.focus(); return; }
-        var wiDef = { n: v, ax: cfg.writeinAx || [], flags: cfg.writeinFlags || [] };
-        wiUL.insertAdjacentHTML("beforeend", itemHTML(wiDef, cfg, true));
-        var li = wiUL.lastElementChild;
-        defOf.set(li, wiDef);
-        li.querySelector(".tick").checked = true;
-        li.classList.add("is-checked");
+        var raw = wiInput.value;
+        // One row per line when the caller opted into the textarea; otherwise the
+        // whole value is one row exactly as before.
+        var vals = (cfg.writeinTextarea ? raw.split(/\r?\n/) : [raw])
+          .map(function (s) { return s.trim(); })
+          .filter(function (s) { return s.length; });
+        if (!vals.length) { wiInput.focus(); return; }
+        vals.forEach(function (v) {
+          var wiDef = { n: v, ax: cfg.writeinAx || [], flags: cfg.writeinFlags || [],
+                        qtyDefault: cfg.writeinQtyDefault };
+          wiUL.insertAdjacentHTML("beforeend", itemHTML(wiDef, cfg, true));
+          var li = wiUL.lastElementChild;
+          defOf.set(li, wiDef);
+          li.querySelector(".tick").checked = true;
+          li.classList.add("is-checked");
+        });
         wiInput.value = ""; wiInput.focus(); refresh();
       };
       wiSection.querySelector(".wi-add").addEventListener("click", addWriteIn);
       wiInput.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") { e.preventDefault(); addWriteIn(); }
+        if (e.key !== "Enter") return;
+        // In a textarea Enter is a NEWLINE — that is the whole point of the
+        // multi-line box. ⌘/Ctrl+Enter is the commit.
+        if (cfg.writeinTextarea && !(e.metaKey || e.ctrlKey)) return;
+        e.preventDefault(); addWriteIn();
       });
     }
 
@@ -260,7 +305,7 @@
         dup.querySelector(".tick").checked = true;
         dup.classList.add("is-checked");
         var qi = dup.querySelector(".i-qty");
-        if (qi) { qi.value = 1; }
+        if (qi) { qi.value = qtyDefault(def, cfg); }
         refresh();
         // Land the thumb on the axis the clone exists to change (the first one).
         var first = dup.querySelector(".i-ax");
@@ -276,7 +321,11 @@
       return data.map(function (cat) {
         var sec = list.querySelector('.cat[data-id="' + cat.id + '"]');
         var on = [].slice.call(sec.querySelectorAll(".item.is-checked"));
-        return { id: cat.id, name: cat.name, lines: on.map(readLine) };
+        // docName lets a section read one way on screen and another in the sent
+        // document. The write-in section's heading is a PROMPT ("What do you
+        // need?") — printing that as a heading in a message to the warehouse is
+        // the tool talking to the wrong person.
+        return { id: cat.id, name: cat.name, docName: cat.docName || cat.name, lines: on.map(readLine) };
       }).filter(function (s) { return s.lines.length; });
     }
     function tickedCount() { return list.querySelectorAll(".item.is-checked").length; }
@@ -374,10 +423,10 @@
       return o;
     }
 
-    function restore() {
+    function restore(key) {
       if (!cfg.persistKey) return false;
       var raw = null;
-      try { raw = localStorage.getItem(cfg.persistKey); } catch (e) { return false; }
+      try { raw = localStorage.getItem(key || cfg.persistKey); } catch (e) { return false; }
       if (!raw) return false;
       var p;
       try { p = JSON.parse(raw); } catch (e) { return false; }
@@ -398,7 +447,10 @@
             // No free row with that name left: it was a clone, or a write-in.
             var def = null;
             (cat.items || []).forEach(function (it) { if (it.n === row.n) def = it; });
-            if (!def) def = { n: row.n, ax: cfg.writeinAx || [], flags: cfg.writeinFlags || [] };
+            // Same shape a live write-in gets, qty default included — without it a
+            // restored pasted line comes back wearing a "1" the man never typed.
+            if (!def) def = { n: row.n, ax: cfg.writeinAx || [], flags: cfg.writeinFlags || [],
+                              qtyDefault: cfg.writeinQtyDefault };
             ul.insertAdjacentHTML("beforeend", itemHTML(def, cfg, true));
             li = ul.lastElementChild;
             defOf.set(li, def);
@@ -411,7 +463,39 @@
       return any;
     }
 
+    /* ── YESTERDAY'S LIST ──────────────────────────────────────────────────────
+     * "Half of tomorrow's order is today's order. 'Start from last list' is worth
+     * more to me than twenty more picker items." — a commercial foreman, on this
+     * exact page. Clear is the only thing that ever destroys a list, so Clear is
+     * where the copy gets kept: one slot, overwritten each time. */
+    var LAST_KEY = cfg.persistKey ? cfg.persistKey + ".last" : null;
+    function stashLast() {
+      if (!LAST_KEY) return;
+      try {
+        var raw = localStorage.getItem(cfg.persistKey);
+        if (raw) localStorage.setItem(LAST_KEY, raw);
+      } catch (e) {}
+    }
+    function hasLast() {
+      if (!LAST_KEY) return false;
+      try { return !!localStorage.getItem(LAST_KEY); } catch (e) { return false; }
+    }
+    function restoreLast() {
+      if (!LAST_KEY) return false;
+      // Strip the current list first, or a restore stacks on top of what is there.
+      [].forEach.call(list.querySelectorAll(".item .rm"), function (b) { b.closest(".item").remove(); });
+      [].forEach.call(list.querySelectorAll(".tick"), function (t) {
+        t.checked = false; t.closest(".item").classList.remove("is-checked");
+      });
+      var ok = restore(LAST_KEY);
+      refresh();
+      return ok;
+    }
+
     function clearAll() {
+      // The list about to be destroyed is the one worth keeping — stash before wipe.
+      persist();
+      stashLast();
       // Clones and write-ins are removable rows — clearing must actually remove
       // them, not just untick them, or the next list starts with yesterday's
       // duplicates sitting unticked in the middle of it.
@@ -419,7 +503,7 @@
       [].forEach.call(list.querySelectorAll(".tick"), function (t) {
         t.checked = false; t.closest(".item").classList.remove("is-checked");
       });
-      [].forEach.call(list.querySelectorAll(".i-qty"), function (q) { q.value = 1; });
+      [].forEach.call(list.querySelectorAll(".i-qty"), function (q) { q.value = qtyDefault(null, cfg); });
       [].forEach.call(list.querySelectorAll(".i-note"), function (x) { x.value = ""; });
       try { if (cfg.persistKey) localStorage.removeItem(cfg.persistKey); } catch (e) {}
       if (cfg.onClear) cfg.onClear();
@@ -454,6 +538,7 @@
     return {
       refresh: refresh, text: text, sections: sections, seg: segState,
       setAxOptions: setAxOptions, clearAll: clearAll, restored: restored,
+      hasLast: hasLast, restoreLast: restoreLast,
       copy: function () { copyText(text(), copyBtn, cfg.onFlash); }
     };
   }

@@ -1,0 +1,241 @@
+/* ELECTRICAL FIELD TOOLKIT — VOCABULARY DATA (the pull list).
+ *
+ * THE BOUNDARY (av/AV_SOCIETY.md §THE THREE SHAPES): trade.js = IDENTITY + COPY ·
+ * tools.js = REGISTRY · items.js = that trade's VOCABULARY DATA. Size ladders and
+ * type sets live HERE — never in the identity config, never inline in a page.
+ *
+ * THIS FILE IS A FORGET-LIST, NOT A CATALOG. It is capped on purpose. A commercial
+ * foreman reviewing it put the reason better than a spec could: "Nobody forgets the
+ * wire. What we forget is the fourteen-cent stuff that shuts a floor down." Anything
+ * big, obvious or spec'd — wire, pipe, gear, fixtures, panels, breakers — belongs in
+ * the write-in box at the top of the page, which takes a pasted list one per line.
+ * Every line below earns its place by being something that stops a crew when it is
+ * not on the truck.
+ *
+ * FIVE HARD INVARIANTS. The first four are safety rules (§SAFETY); the fifth is why
+ * anyone would use it:
+ *
+ *  1. ZERO CERTIFIED DATA. No ampacity, no conduit or box fill, no ratings, no
+ *     listings, no code article or table numbers, no torque. Not as a value, not as
+ *     a hint, not in a placeholder. A pull list structures what a man PICKS.
+ *  2. NO WHERE-MAY-I-USE-IT ADJECTIVES. Labels are bare stock nouns — "cover",
+ *     "connector", "box". A stock type letter (EMT, MC, LT, LB, THHN) names the
+ *     shelf and is fine; EXPANDING one into what it is rated for, or where it may
+ *     be used, is not. If it goes outside, he types "goes outside" in the note.
+ *  3. THE ADJACENCY TRAP. An axis may only describe the object's OWN dimensions —
+ *     never what goes inside it or next to it. Wire size + breaker size is
+ *     ampacity; pipe size + conductor count is fill; box size + device count is box
+ *     fill. Each field alone is innocent, and the pair is a code table we computed.
+ *     (A split bolt or a lug carries a wire size as its OWN catalog size. That is
+ *     the part's name for itself, not a calculation about what may land in it.)
+ *  4. NO PRE-SELECTED DEFAULT, ANYWHERE. A default IS a recommendation. Every axis
+ *     opens on a neutral, and the page drops any neutral so nothing he did not pick
+ *     can reach the warehouse. Same reason there are no suggested quantities, no
+ *     "a strap every 10 feet", and no job-type presets: that is support spacing, a
+ *     takeoff, and a sufficiency claim, in that order.
+ *  5. ZERO BRAND NAMES — and in this trade that is harder than it sounds, because
+ *     half the vocabulary is genericized trademarks. The names below are the
+ *     generic every counter still recognises: twist-on connectors (not the mark),
+ *     cable ties, self-drillers, wedge anchors, drop-ins, anti-shorts, strut, flex,
+ *     LT, conduit bodies, concrete screws, recip blades.
+ *
+ * WORDS ARE THE TRADE'S OWN. "Pipe", never "raceway". "Light", never "luminaire".
+ * "Mud ring", never "plaster ring". "J-box", "4-square", "the big square",
+ * "all-thread", "donuts", "bugs", "minis". A page that says raceway tells an
+ * electrician in one word that nobody who built it has ever stood on a deck.
+ */
+window.TOOLKIT_ITEMS = (function () {
+  "use strict";
+
+  /* ── size ladders — the sizes people actually say, in the order they say them ── */
+  var TRADE_SIZE = ["1/2 in", "3/4 in", "1 in", "1-1/4 in", "1-1/2 in", "2 in", "2-1/2 in", "3 in", "4 in"];
+  var FLEX_SIZE  = ["3/8 in", "1/2 in", "3/4 in", "1 in", "1-1/4 in", "1-1/2 in", "2 in"];
+  var ROD_SIZE   = ["1/4-20", "3/8-16", "1/2-13", "5/8-11"];
+  var ANCHOR_DIA = ["1/4 in", "3/8 in", "1/2 in", "5/8 in", "3/4 in"];
+  var ANCHOR_LEN = ["1-3/4 in", "2-1/4 in", "3 in", "3-3/4 in", "4-1/2 in", "5-1/2 in", "7 in"];
+  var CON_SCREW  = ["3/16 x 1-1/4", "3/16 x 1-3/4", "3/16 x 2-1/4", "1/4 x 1-3/4", "1/4 x 2-1/4", "1/4 x 3", "1/4 x 4"];
+  var TOGGLE_SZ  = ["1/8 in", "3/16 in", "1/4 in", "3/8 in"];
+  var BOX_SIZE   = ["4 in sq", "4-11/16 in sq"];
+  // DEPTH, not gang, is the axis that stops a floor. A wrong-depth mud ring means
+  // every device on that wall waits for somebody to drive.
+  var RING_DEPTH = ["flat", "1/4 in", "3/8 in", "1/2 in", "5/8 in", "3/4 in", "1 in", "1-1/4 in"];
+  var KO_SIZE    = ["1/2 in", "3/4 in", "1 in", "1-1/4 in", "1-1/2 in", "2 in"];
+  var LUG_SIZE   = ["#10", "#8", "#6", "#4", "#2", "1/0", "2/0", "4/0", "250 MCM", "350 MCM", "500 MCM"];
+  var GANG       = ["1-gang", "2-gang", "3-gang", "4-gang"];
+  var TIE_LEN    = ["4 in", "8 in", "11 in", "14 in", "24 in"];
+  var HOLESAW    = ["7/8 in", "1-1/8 in", "1-3/8 in", "1-3/4 in", "2 in", "2-1/2 in", "3 in", "4 in"];
+  var DRILL_DIA  = ["3/16 in", "1/4 in", "5/16 in", "3/8 in", "1/2 in", "5/8 in", "3/4 in", "1 in"];
+  var SCREW_LEN  = ["1/2 in", "3/4 in", "1 in", "1-1/2 in", "2 in", "3 in"];
+
+  /* ── THE NEUTRAL ────────────────────────────────────────────────────────────
+   * Every axis leads with one of these and the page drops any value starting with
+   * an em-dash. Two rules ride on it at once: a pre-selected default would be the
+   * tool recommending a size, and a printed value nobody chose would be the tool
+   * putting words in a man's message. The neutral text is written as the QUESTION
+   * so the prompt is sitting right there on the line he just ticked. */
+  function n(q) { return "— " + q + " —"; }
+
+  function ax(label, opts, wide) {
+    return { k: label.toLowerCase().replace(/[^a-z]+/g, ""), label: label, opts: opts, wide: !!wide };
+  }
+  // Size axes are all keyed "size" on purpose: the page prints that one axis right
+  // after the item name ("mud rings, 5/8 in") because that is how it is read aloud.
+  function size(list, q) { return ax("Size", [n(q || "pick the size")].concat(list)); }
+
+  var cats = [
+    /* ── 1 · THE WAY IN. First section, biggest thing on the page, and the only one
+     * with no items: you already know most of what you need, so type it or paste it.
+     * The picker underneath is the jog for what you would have forgotten. ─────── */
+    {
+      id: "need",
+      name: "What do you need?",
+      // On screen it is a question to him. In the message it is a heading a
+      // warehouse guy reads, and he was never asked anything.
+      docName: "The main stuff",
+      chip: "#12699F",
+      hint: "Type it, or paste your whole list — one per line. Quantities however you say them: 500 ft, 2 bx, a case, (6).",
+      writein: true,
+      items: []
+    },
+
+    {
+      id: "box",
+      name: "Boxes, rings & covers",
+      chip: "#2E64C8",
+      items: [
+        { n: "Mud rings", sub: "DEPTH IS THE ONE THAT KILLS YOU",
+          ax: [size(RING_DEPTH, "how deep"), ax("Gang", [n("gang")].concat(["1-gang", "2-gang", "3-gang", "4-gang"]))] },
+        { n: "Square boxes", sub: "4-SQUARE / THE BIG SQUARE",
+          ax: [size(BOX_SIZE, "which square"), ax("Depth", [n("depth"), "1-1/2 in", "2-1/8 in"])] },
+        // One line, because it is one trip and one reason: an open hole the
+        // inspector will find. Flat blanks, raised covers and KO seals get pulled
+        // together or forgotten together.
+        { n: "Blank covers & KO plugs", sub: "NOBODY HAS ONE ON THE TRUCK",
+          ax: [size(KO_SIZE, "plug size"), ax("Cover fits", [n("fits what"), "4-square", "4-11/16", "octagon", "raised"], true)] },
+        { n: "Oct boxes & bar hangers", sub: "4-IN OCTS, FIXTURE STUDS, ROUND COVERS", ax: [] }
+      ]
+    },
+
+    {
+      id: "fit",
+      name: "Fittings — couplings, connectors, locknuts",
+      chip: "#12699F",
+      hint: "Two lines for pipe fittings, not forty. If you need a wall of options, type it up top instead — it's faster.",
+      items: [
+        { n: "EMT couplings", sub: "SAY WHICH",
+          ax: [size(TRADE_SIZE), ax("Type", [n("set-screw or compression"), "set-screw", "compression"], true)] },
+        { n: "EMT connectors", sub: "SAY WHICH",
+          ax: [size(TRADE_SIZE), ax("Type", [n("set-screw or compression"), "set-screw", "compression"], true)] },
+        { n: "Locknuts", sub: "THE ONE YOU'RE ALWAYS OUT OF", ax: [size(TRADE_SIZE)] },
+        { n: "Bushings", sub: "PLASTIC · INSULATED METAL · GROUNDING W/ LAY-IN LUG",
+          ax: [size(TRADE_SIZE), ax("Type", [n("which bushing"), "plastic", "insulated metal", "grounding"], true)] },
+        { n: "Chase nipples & donuts", sub: "REDUCING WASHERS", ax: [size(TRADE_SIZE)] },
+        { n: "MC / flex / LT connectors", sub: "SNAP-IN, SCREW-IN, STRAIGHT OR 90",
+          ax: [size(FLEX_SIZE), ax("Type", [n("which one"), "MC snap-in", "MC screw-in", "flex", "LT", "90"], true)] },
+        { n: "Anti-shorts", sub: "MC BUSHINGS — BY THE BAG", ax: [] }
+      ]
+    },
+
+    {
+      id: "term",
+      name: "Terminations & grounds",
+      chip: "#7A3FA8",
+      items: [
+        { n: "Twist-on connectors", sub: "THE TWIST-ONS",
+          ax: [ax("Color", [n("which color"), "grey", "blue", "orange", "yellow", "red", "tan", "green"])] },
+        { n: "Push-in / lever connectors", sub: "SAY HOW MANY PORTS",
+          ax: [ax("Ports", [n("ports"), "2", "3", "4", "5"])] },
+        { n: "Ground pigtails", sub: "PRE-STRIPPED, SCREW ON THE END", ax: [] },
+        { n: "Green ground screws", sub: "10-32 — BY THE BAG", ax: [] },
+        { n: "Split bolts", sub: "BUGS", ax: [size(LUG_SIZE, "which size")] },
+        { n: "Lugs & crimps", sub: "SAY THE HOLE COUNT — AND BRING THE DIE",
+          ax: [size(LUG_SIZE, "which size"), ax("Type", [n("mech or compression"), "mechanical", "compression", "ground bar", "bonding jumper"], true)] }
+      ]
+    },
+
+    {
+      id: "strap",
+      name: "Straps, strut & anchors",
+      chip: "#2E7D4F",
+      hint: "Nobody forgets the strut. They forget what holds it up.",
+      items: [
+        { n: "Pipe straps", sub: "ONE-HOLE / TWO-HOLE / STANDOFF",
+          ax: [size(TRADE_SIZE), ax("Type", [n("which strap"), "one-hole", "two-hole", "standoff"], true)] },
+        { n: "Strut straps", sub: "MINIS", ax: [size(TRADE_SIZE)] },
+        { n: "Strut nuts, all-thread & rod hardware", sub: "SPRING NUTS, 10-FT STICKS, COUPLINGS, END CAPS, WASHERS",
+          ax: [size(ROD_SIZE, "which thread")] },
+        { n: "Beam clamps & hanger clips", sub: "C-CLAMPS, PURLIN CLAMPS, BAR HANGERS",
+          ax: [ax("Grabs", [n("grabs what"), "beam flange", "rod", "T-bar grid", "purlin", "stud"], true)] },
+        { n: "Wedge anchors", sub: "CONCRETE STUD ANCHORS",
+          ax: [size(ANCHOR_DIA, "diameter"), ax("Length", [n("how long")].concat(ANCHOR_LEN))] },
+        { n: "Drop-ins + the setting tool", sub: "FLUSH, THREADED FOR ROD — BRING THE SETTER",
+          ax: [size(ROD_SIZE, "which thread")] },
+        { n: "Concrete screws", sub: "NO SHIELD", ax: [size(CON_SCREW, "which size")] },
+        { n: "Toggles & wall anchors", sub: "SPRING · STRAP · PLASTIC", ax: [size(TOGGLE_SZ)] },
+        { n: "Self-drillers & drive pins", sub: "SELF-TAPPERS, HEX HEAD · PINS FOR THE GAS TOOL",
+          ax: [ax("Length", [n("how long")].concat(SCREW_LEN))] }
+      ]
+    },
+
+    {
+      id: "tape",
+      name: "Tape, seal & fire",
+      chip: "#C4342B",
+      items: [
+        { n: "Vinyl tape", sub: "3/4 IN — ROLL OR SLEEVE", ax: [] },
+        { n: "Phase tape", sub: "THE WHOLE COLOR SET",
+          ax: [ax("Color", [n("which colors"), "black", "red", "blue", "brown", "orange", "yellow", "grey", "white", "green", "the full set"], true)] },
+        { n: "Firestop caulk & putty pads", sub: "RED CAULK, TUBES, PADS — AND A GUN THAT WORKS", ax: [] },
+        { n: "Cable ties", sub: "SAY BLACK OR NATURAL", ax: [size(TIE_LEN, "how long")] },
+        { n: "Markers, labels & wire markers", sub: "FINE + FAT TIP, PAINT PEN, LABEL CARTRIDGE", ax: [] },
+        { n: "Pull line & wire lube", sub: "PULL STRING, FLAT TAPE, SOAP, FISH LEADER, BASKET GRIP", ax: [] }
+      ]
+    },
+
+    {
+      id: "bits",
+      name: "Tools, bits & blades",
+      chip: "#1B1B1B",
+      hint: "Half of what stops a crew isn't material. The bit that snapped at 9 AM is the classic hour in the truck.",
+      items: [
+        { n: "Hole saws, arbor, pilot & step bits", sub: "THE PILOT IS WHAT BREAKS", ax: [size(HOLESAW, "which size")] },
+        { n: "Masonry bits", sub: "HAMMER BITS — SAY THE LENGTH IN THE NOTE", ax: [size(DRILL_DIA, "diameter")] },
+        { n: "Recip & hacksaw blades", sub: "SAY WOOD, METAL OR DEMO",
+          ax: [ax("Cut", [n("cutting what"), "wood", "metal", "demo", "carbide"], true)] },
+        { n: "Batteries & charger", sub: "SAY THE PLATFORM IN THE NOTE", ax: [] }
+      ]
+    },
+
+    {
+      id: "else",
+      name: "Everything else",
+      chip: "#5D656E",
+      items: [
+        { n: "Whips & flex", sub: "FIXTURE WHIPS, 3/8 + 1/2 FLEX, STRAIGHT AND 90", ax: [size(FLEX_SIZE)] },
+        { n: "In-use covers & gaskets", sub: "BUBBLE COVERS — SAY THE GANG",
+          ax: [ax("Gang", [n("gang"), "1-gang", "2-gang"])] },
+        { n: "Wall plates", sub: "SAY MATERIAL + COLOR IN THE NOTE",
+          ax: [size(GANG, "how many gang"), ax("Opening", [n("what opening"), "toggle", "duplex", "rocker", "blank", "combo"], true)] },
+        { n: "Device & plate screws", sub: "6-32 LONGS — 1-1/2, 2, 3 IN — AND 8-32",
+          ax: [ax("Length", [n("how long")].concat(SCREW_LEN))] },
+        { n: "Lockout locks & tags", sub: "LOCKS, HASPS, TAGS", ax: [] },
+        { n: "Temp power odds", sub: "CORD CAPS, FEMALE ENDS, GFCI PIGTAILS, CORDS, STRING LIGHTS", ax: [] }
+      ]
+    }
+  ];
+
+  return {
+    cats: cats,
+    /* THE WRITE-IN CARRIES ONE OPTIONAL AXIS AND NO SIZE FIELD. An earlier plan gave
+     * it size + category, which is wrong for how it is actually used: the fast path
+     * is PASTING a list whose lines already carry their own sizes ("500' #12 THHN
+     * blue"), and making a man set two dropdowns on each of twelve pasted lines is
+     * precisely the friction the write-in exists to delete. One neutral tag, for
+     * when he wants the warehouse to know which pile a line belongs in. */
+    writeinAx: [ax("Where it goes", [
+      n("tag it, if you want"),
+      "Boxes, rings & covers", "Fittings", "Terminations & grounds",
+      "Straps, strut & anchors", "Tape, seal & fire", "Tools, bits & blades", "Everything else"
+    ], true)]
+  };
+})();

@@ -18,6 +18,7 @@ on:
       - 'shared/**'
       - 'av/**'
       - 'plumbing/**'
+      - 'electrical/**'
       - '.github/workflows/deploy_bridge.yml'
   workflow_dispatch:
 
@@ -104,7 +105,7 @@ jobs:
           # at the top of this file. Nothing else. `test -d` keeps it fail-closed:
           # a slug with no dir fails the build instead of silently 404ing the site.
           cp -R shared/. HELIOS-BRIDGE/dist/shared/
-          TRADES="av plumbing"
+          TRADES="av plumbing electrical"
           # Each `run:` block is its OWN shell, so a later step cannot see this
           # variable — publish it to the job env so the assert step below checks
           # exactly the list that was staged, from ONE definition.
@@ -215,6 +216,27 @@ jobs:
             case " $TRADES " in *" $slug "*) ;;
               *) echo "FAIL: $slug/ has a trade.js but is not in TRADES — it will never be staged"; exit 1;; esac
           done
+
+          # THE THIRD LIST. shared/toolkit.js carries the sibling-trade list every
+          # hub's footer renders from (added at trade #3, replacing the hard-wired
+          # cross-links that did not survive a third trade). A slug in that array
+          # with no staged dir is a dead link in the footer of EVERY page of EVERY
+          # trade — the widest-blast-radius 404 this site can ship. Assert it
+          # against the ARTIFACT, both directions, same as the two lists above.
+          rt="$(mktemp)"
+          sed -n '/var TRADES = \[/,/\];/p' HELIOS-BRIDGE/dist/shared/toolkit.js \
+            | grep -o 'slug: *"[^"]*"' | sed 's/.*"\(.*\)"/\1/' > "$rt" || true
+          test -s "$rt" || { echo "FAIL: could not read the TRADES array out of shared/toolkit.js"; exit 1; }
+          while read -r slug; do
+            [ -n "$slug" ] || continue
+            test -d "HELIOS-BRIDGE/dist/$slug" \
+              || { echo "FAIL: shared/toolkit.js lists trade '$slug' but no such dir is staged — dead footer link on every page"; exit 1; }
+          done < "$rt"
+          for t in $TRADES; do
+            grep -qx "$t" "$rt" \
+              || { echo "FAIL: trade '$t' is staged but missing from the TRADES array in shared/toolkit.js — no hub would link to it"; exit 1; }
+          done
+          echo "sibling-trade list: $(tr '\n' ' ' < "$rt")— matches staged trades"
 
           # The archive page is a gallery of standalone variation pages; if the
           # copy silently dropped them the index would still load and every card
