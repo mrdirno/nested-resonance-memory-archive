@@ -261,6 +261,83 @@ REGISTRY · `items.js` = that trade's VOCABULARY DATA (categories, size ladders,
 options, unit-of-issue sets). Size ladders and C×C/FIP/no-hub live in data — never in the
 identity config and never inline in a tool page.
 
+## THE EXPANSION ORDER — BREADTH FIRST, EXTRACTION SECOND (operator 2026-08-04)
+> *"obviously we're going to continue the expansion to empower every tradesman first,
+> correct — then we can isomorphically extract from the most refined one; i assume it will
+> be av because i'll know how to request it better. must be an active feedback loop and
+> self refinement, self giving on your end."*
+
+Read both halves literally.
+- **FIRST, BREADTH.** Every trade family on the ladder gets a real toolkit before any trade
+  already served gets polished. A trade with nothing is a whole population served by
+  nothing. This is a standing priority, not a preference.
+- **SECOND, EXTRACTION.** AV is the most refined trade because the operator is a working AV
+  pro who uses these pages in the field and wishes in the open — the highest-fidelity signal
+  this program has. So AV is refined deepest, and whatever it proves is then carried out to
+  every other trade.
+- **EXTRACTION IS SELF-GIVING AND IT RIDES ALONG.** Nobody files a wish for a backport, which
+  is exactly why it is owed. **Standing rule: when a fix or a refinement lands on one trade,
+  sweep every other trade for the same class in the same cycle.** A fix that lands on one
+  trade and leaves its siblings broken is half a fix. Three of the four scars below were found
+  by running that sweep once.
+- **THE SAME MECHANIC AT THREE SCALES.** Take what is proven and carry it to everyone who does
+  not have it yet — between TRADES (this section), between SPACES in the society world, and
+  between INDUSTRIES (a company mapping its own internals onto our document schema).
+
+## MOBILE-WATERTIGHT — the pre-ship gate (operator 2026-08-04)
+> *"must be mobile friendly always — don't make anything that's gonna clip or alter if
+> zoomed out on phone."*
+
+These pages are used one-handed, on a phone, in a hallway, on a ladder, on a cracked screen
+in bad light. Before ANY ship, drive the REAL page in a real browser at **320 / 360 / 390 /
+430 px** and assert:
+- `documentElement.scrollWidth <= clientWidth` **and** `body.scrollWidth <= clientWidth`
+  (both — see the masking scar), and no element's right edge past the viewport;
+- nothing clipped, truncated or overlapping; no fixed width or unbroken token that outgrows
+  the viewport;
+- tap targets **>= 44px**; the sticky nav never covers the content or the bottom action;
+- the copy button reachable without a pinch; text still legible with OS text size bumped up.
+
+A screenshot of a render is not this verification — do the job the page claims, at 390px,
+and assert the numbers. An `<iframe>` at a fixed width is a faithful and much faster harness
+than resizing the window (desktop Chrome will not go below ~500px).
+
+## FIELD-COOL — the aesthetic bar, which is a quality bar (operator 2026-08-04)
+> *"make it sick and cool like actual cool people who use this stuff, not something lame and
+> corporate lol."*
+
+The trade's own vocabulary and abbreviations, unapologetically · dense, fast, high-contrast,
+built for a dirty screen · confident, plain-spoken copy with zero corporate hedging and no
+enterprise-SaaS register · personality earned in the words, never cuteness bolted onto a
+form · and still NON-CLUTTERY (one job per tool, usable in seconds). **The test:** a real
+crew would screenshot it into the group chat unironically. If it reads like a compliance
+portal it fails, and "clean" is not a defence.
+
+## THE COMMONS — the human layer, and the only part that transcends every trade
+(operator 2026-08-04) Four community-fed parts, all of which make the toolkit worth opening
+when there is nothing to generate: **must-have gear** (the ubiquitous kit the field loves
+across all trades, and "upload your favourite tools") · **field photos** of the real item, so
+a picker SHOWS the thing instead of only naming it · **tips and tricks** from people who do
+the work · **guides and short tutorial content**, the teaching layer. Contribution must cost
+seconds and never an account.
+
+**IMAGE RIGHTS + CONTRIBUTED CONTENT — the rail that makes this safe to build.** A picture is
+a new data class, so the rules are explicit and not negotiable:
+- **Origin.** Only images we may lawfully publish: public-domain/CC0 or an open licence whose
+  terms we actually satisfy and attribute, our own photography, or a contributor's own photo
+  with an explicit rights grant in the form copy. **Never** scrape or hotlink manufacturer
+  marketing photos, never imply an endorsement, never let an image misrepresent a part.
+- **Hosting.** Static Pages with no third-party CDN means an image is committed to the repo or
+  served from our own storage — never a remote hotlink that can rot or be swapped under us.
+- **Contributed photos.** Resize client-side before upload, **strip EXIF** (a jobsite photo
+  carries GPS and a customer's address), moderate BEFORE anything renders publicly, and assume
+  the worst upload will arrive. This does not weaken §SAFETY: a TOOL's working uploads still
+  never leave the browser; a COMMONS contribution is a separate, consented, reviewed act.
+- **Credentials.** A wisher's trade / union local / company / residential-vs-commercial context
+  is WEIGHT for ranking a correction and CONTEXT for building it. It is never a login, never
+  required, and — like the rest of the queue — **never published**.
+
+
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
 
@@ -293,6 +370,37 @@ Append here when a cycle finds one. Each is a rule, not a story.
   module. Two more minutes of re-reasoning and the correct fix would have been "reverted" as
   not working. **Rule:** when a verified fix appears not to land, fetch what the server
   actually served and compare it — before touching the code again.
+
+- **A SHARED RUNTIME LINKS PAGES THE NEW TRADE DOES NOT HAVE (2026-08-04).** `buildBar()`
+  unconditionally adds a "★ Wall of Wishes → credits.html" entry to the nav dropdown of
+  EVERY page of EVERY trade. Plumbing shipped without `credits.html`, so for the whole life
+  of the trade every plumbing user who opened the menu got a 404 — measured live:
+  `/plumbing/credits.html` 404 while `/av/credits.html` 200. **Rule:** when the shared
+  runtime references a per-trade page, that page joins the list every trade must carry, and
+  the deploy asserts it. A capability added to the runtime is a debt owed by every trade.
+- **STAGED IS NOT REGISTERED (2026-08-04).** `UIComponents.tsx` states in its own header
+  that a staged directory and a TOOLS entry are *both* required — and only one direction was
+  ever checked. `plumbing/` was staged by the workflow from the day it shipped but never
+  added to the site-root registry, so the ONLY route to trade #2 anywhere on the site was a
+  hand-wired link inside `av/index.html`. Verified against the DEPLOYED bundle, not the
+  source: `./av/` 1 hit, `./plumbing/` 0 hits. **Rule:** an invariant stated in a comment is
+  not enforced; assert BOTH directions in the deploy, against the built artifact.
+- **THE NAV OVERFLOWED EVERY PHONE, ON EVERY PAGE (2026-08-04).** The sticky bar is a flex
+  row holding two items that cannot shrink — the brand and the 158px "Wish for a tool" CTA,
+  both `white-space:nowrap`. Measured in a real browser at a 390px viewport: bar content
+  433px on `/av/`, 487px on `/av/consumables.html`, 489px on `/plumbing/` — so every page of
+  every trade scrolled sideways on every phone, on the one surface whose whole promise is
+  "usable one-handed at a job site". It survived because nobody had ever asserted it.
+  **Rule:** the pre-ship mobile gate is mechanical and it runs at 320/360/390/430 — no page
+  ships until `scrollWidth <= clientWidth` at all four. Priority when the bar cannot fit:
+  the CTA never shrinks, the brand gives up its tail, then its word, keeping the icon.
+- **DO NOT MASK AN OVERFLOW YOU COULD FIX (2026-08-04).** The first cut of the new Wall of
+  Wishes carried `html,body{overflow-x:hidden}`. With it, `documentElement.scrollWidth` read
+  a clean 390 while `body.scrollWidth` was 489 — the page measured perfect and was broken,
+  and the gate above would have been blinded on exactly the defect it exists to catch.
+  **Rule:** never `overflow-x:hidden` a layout bug; measure BOTH `documentElement` and
+  `body`, and fix the cause.
+
 
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
@@ -336,3 +444,15 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   order incl. clone + write-in + flagged alternate, byte-identical after reload, 0 overflow
   at 390 px, real-gesture copy).
   https://mrdirno.github.io/nested-resonance-memory-archive/av/cable-list.html
+- `2026-08-04` — **[AXIS:BACKPORT] The Wall of Wishes reaches every trade, and the nav stops
+  clipping on phones.** Before: `/plumbing/credits.html` 404 for every plumbing user who opened
+  the nav menu; plumbing absent from the site-root registry (deployed bundle: `./plumbing/` 0
+  hits) so trade #2 was unreachable from the front page; and the sticky bar overflowed EVERY
+  page of EVERY trade on a phone (433/487/489px of content in a 390px viewport). After: one
+  trade-generic `credits.html`, byte-identical in `av/` and `plumbing/` so the next trade copies
+  it unchanged; plumbing registered and reachable; nav fits 320-430px with 44px tap targets, and
+  the deploy now asserts per-trade `credits.html`/`credits.json`, that every `tools.js` registry
+  href resolves in the artifact, and that a staged trade is registered (both directions).
+  SWEPT: the bare-ISO-date scar fix carried into the backport rather than re-forked.
+  Verified in a real browser, 8 pages x 4 widths, zero overflow.
+  https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/credits.html

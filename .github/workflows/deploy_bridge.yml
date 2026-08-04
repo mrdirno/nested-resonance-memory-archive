@@ -161,16 +161,59 @@ jobs:
             test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
           done
 
-          # Every trade dir must carry the three files that make the shared runtime
-          # work (config + registry + hub). A trade staged without them renders a
-          # bare page with no nav and a dead well — a silent break the entry-point
-          # list above would not catch as the toolkit grows.
+          # Every trade dir must carry the four files that make the shared runtime
+          # work (config + registry + hub + credit ledger). A trade staged without
+          # them renders a bare page with no nav and a dead well — a silent break
+          # the entry-point list above would not catch as the toolkit grows.
+          #
+          # credits.html is in this list because shared/toolkit.js buildBar() adds a
+          # "Wall of Wishes -> credits.html" entry to the nav dropdown of EVERY page
+          # of EVERY trade, with no per-trade guard. A trade without the page ships a
+          # 404 to every one of its users. Measured live 2026-08-04: /plumbing/
+          # credits.html -> 404 while /av/credits.html -> 200, for the entire life of
+          # the plumbing toolkit. Asserting the page is how that stops recurring.
           for t in $TRADES; do
-            for f in index.html trade.js tools.js; do
+            for f in index.html trade.js tools.js credits.html credits.json; do
               test -f "HELIOS-BRIDGE/dist/$t/$f" || { echo "MISSING: $t/$f"; exit 1; }
             done
             grep -q 'shared/toolkit.js' "HELIOS-BRIDGE/dist/$t/index.html" \
               || { echo "FAIL: $t/index.html does not load the shared runtime"; exit 1; }
+
+            # THE REGISTRY MUST RESOLVE. tools.js is the one edit point that puts a
+            # tool on the hub and in the nav; a href pointing at a missing or renamed
+            # page ships green and 404s in a tech's hand. Assert every registry entry
+            # against the ARTIFACT, not the repo. (Materialise before slicing — never
+            # pipe into head under `set -o pipefail`; see the note above.)
+            reg="$(mktemp)"
+            grep -o 'href: *"[^"]*"' "HELIOS-BRIDGE/dist/$t/tools.js" \
+              | sed 's/.*"\(.*\)"/\1/' > "$reg" || true
+            n_reg=$(wc -l < "$reg" | tr -d ' ')
+            while read -r href; do
+              [ -n "$href" ] || continue
+              case "$href" in http*|//*|/*) echo "FAIL: $t registry href is not relative: $href"; exit 1;; esac
+              test -f "HELIOS-BRIDGE/dist/$t/$href" \
+                || { echo "FAIL: $t/tools.js lists '$href' but HELIOS-BRIDGE/dist/$t/$href does not exist"; exit 1; }
+            done < "$reg"
+            echo "trade $t: $n_reg registry tool page(s), all resolve"
+
+            # BOTH HALVES, ENFORCED. UIComponents.tsx's own header states that a
+            # staged dir and a TOOLS entry are both required. Only one direction was
+            # ever checked. Plumbing shipped 2026-08-03 staged-but-unregistered, so
+            # the ONLY route to it on the whole site was a hand-wired link inside
+            # av/index.html — verified against the deployed bundle 2026-08-04:
+            # './av/' 1 hit, './plumbing/' 0 hits. Assert on the BUILT assets so this
+            # proves what actually ships, not what the source says.
+            grep -rqF "./$t/" HELIOS-BRIDGE/dist/assets/ \
+              || { echo "FAIL: trade '$t' is staged but has NO entry in the site-root TOOLS registry (HELIOS-BRIDGE/components/UIComponents.tsx) — it would be unreachable from the front page"; exit 1; }
+          done
+
+          # ...and the other direction: a trade dir on disk that nobody added to
+          # TRADES is a toolkit that silently never deploys. Compare the two lists.
+          for d in */trade.js; do
+            [ -e "$d" ] || continue
+            slug="${d%/trade.js}"
+            case " $TRADES " in *" $slug "*) ;;
+              *) echo "FAIL: $slug/ has a trade.js but is not in TRADES — it will never be staged"; exit 1;; esac
           done
 
           # The archive page is a gallery of standalone variation pages; if the

@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -190,8 +190,22 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     name: 'AV Field Toolkit',
     href: './av/',
     tag: 'field',
-    blurb: 'Quick tools and references for AV field work — a consumables checklist to start, growing over time.',
+    blurb: 'Dead-practical browser tools for AV field work — consumables list, cable & adapter list, field-report setup. Every one of them started as a wish from someone in the trade.',
     icon: <Wrench size={18} />,
+  },
+  {
+    // TRADE #2. This entry was MISSING for the whole life of the plumbing
+    // toolkit: plumbing/ shipped 2026-08-03 and was staged by deploy_bridge.yml,
+    // but never registered here — so the only route to it anywhere on the site
+    // was a hand-wired link inside av/index.html. Verified against the DEPLOYED
+    // bundle 2026-08-04: './av/' 1 hit, './plumbing/' 0 hits. That is precisely
+    // the both-halves-required invariant this file's header states, failing in
+    // the direction nothing checks (staged dir with no registry entry).
+    name: 'Plumbing Field Toolkit',
+    href: './plumbing/',
+    tag: 'field',
+    blurb: 'The same toolkit, isomorphed to plumbing — supply house order to start, in the counter’s own language: size, material, configuration, unit of issue.',
+    icon: <Pipette size={18} />,
   },
 ];
 

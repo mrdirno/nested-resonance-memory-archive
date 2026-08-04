@@ -90,11 +90,37 @@
     background:var(--av-steel);color:#EEF0EA;padding:8px 14px;border-bottom:2px solid var(--av-flag);
     font-family:var(--av-sans);}
   .av-brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:#EEF0EA;font-family:var(--av-cond);
-    text-transform:uppercase;letter-spacing:.08em;font-weight:700;font-size:15px;white-space:nowrap;}
+    text-transform:uppercase;letter-spacing:.08em;font-weight:700;font-size:15px;white-space:nowrap;
+    min-width:0;overflow:hidden;flex:0 1 auto;}
   .av-brand b{color:var(--av-flag)}
+  /* MOBILE-WATERTIGHT (operator 2026-08-04: "don't make anything that's gonna clip
+   * or alter if zoomed out on phone"). MEASURED BEFORE THE FIX, in a real browser
+   * at a 390px viewport: this sticky bar's content was 433px on /av/, 487px on
+   * /av/consumables.html and 489px on /plumbing/ — so EVERY page of EVERY trade
+   * scrolled sideways on every phone. Cause: a flex row of two nowrap items that
+   * cannot shrink (the brand, and the 158px "Wish for a tool" CTA).
+   * Fix, in priority order for someone holding a phone on a job: the CTA is the
+   * demand funnel and never shrinks; the brand gives up its tail ("FIELD TOOLKIT")
+   * below 560px, keeping the icon + the trade word ("AV", "PLUMBING") as the home
+   * link. NEVER put overflow:hidden on .av-bar itself — .av-drop is absolutely
+   * positioned inside it and would be clipped shut. */
+  @media (max-width:560px){ .av-brand b{display:none} .av-brand span{margin-right:0} }
+  /* At 320px (iPhone SE) a tool page also carries the favourite ★, and the bar
+   * measured 332px against a 320px viewport — 12px out. Below 380 the brand gives
+   * up its word too and keeps only the icon, which is still the home link. The CTA
+   * and the tool menu never shrink: on the narrowest phone we own, what survives is
+   * exactly what someone came to tap. */
+  @media (max-width:380px){ .av-brand span{display:none} .av-bar{gap:8px;padding:8px 10px} }
   .av-menu{position:relative}
+  /* TAP TARGETS >= 44px (operator 2026-08-04, the MOBILE-WATERTIGHT law). Measured
+   * before the fix at a 390px viewport: Tools 39px, Wish 32px, fav 31px. These sit
+   * in the sticky bar on EVERY page of EVERY trade, and "Wish for a tool" is the
+   * demand funnel the whole program runs on — a 32px primary CTA is the single
+   * worst tap target we ship. The bar is position:sticky so it takes flow space;
+   * no page offsets content by a hardcoded nav height, so growing it is safe. */
   .av-menu>button{font-family:var(--av-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-    background:transparent;color:#C7CDD3;border:1px solid #3A424B;border-radius:2px;padding:6px 10px;cursor:pointer;}
+    background:transparent;color:#C7CDD3;border:1px solid #3A424B;border-radius:2px;padding:6px 10px;cursor:pointer;
+    min-height:44px;white-space:nowrap;}
   .av-menu>button:hover{border-color:var(--av-flag);color:#fff}
   .av-menu[open]>button{border-color:var(--av-flag);color:#fff}
   .av-drop{position:absolute;top:calc(100% + 6px);left:0;min-width:250px;background:var(--av-paper);color:var(--av-ink);
@@ -108,9 +134,10 @@
   .av-drop .av-req b{color:#7a5a00}
   .av-spacer{flex:1}
   .av-req-btn{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.06em;font-size:14px;font-weight:700;
-    background:var(--av-flag);color:var(--flag-ink);border:1px solid var(--av-flag);border-radius:2px;padding:7px 12px;cursor:pointer;white-space:nowrap;}
+    background:var(--av-flag);color:var(--flag-ink);border:1px solid var(--av-flag);border-radius:2px;padding:7px 12px;cursor:pointer;white-space:nowrap;
+    min-height:44px;}
   .av-req-btn:hover{background:#FFD34A}
-  .av-fav-btn{background:transparent;border:1px solid #3A424B;color:#8892a0;border-radius:2px;width:34px;height:31px;cursor:pointer;font-size:15px;line-height:1;flex:none}
+  .av-fav-btn{background:transparent;border:1px solid #3A424B;color:#8892a0;border-radius:2px;width:44px;min-height:44px;cursor:pointer;font-size:15px;line-height:1;flex:none}
   .av-fav-btn:hover{border-color:var(--av-flag);color:#C7CDD3}
   .av-fav-btn.on{color:var(--av-flag);border-color:var(--av-flag)}
   .av-bar :focus-visible{outline:2px solid var(--av-flag);outline-offset:2px}
