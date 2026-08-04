@@ -256,6 +256,20 @@ existing pages already use, so adopting it is visually a no-op). Build the next 
 shape #1 on this engine; `av/consumables.html` and `plumbing/supply-house-order.html` are
 still the original forks and are the migration debt to retire when either is next touched.
 
+**The FOURTH instance (`electrical/pull-list.html`, 2026-08-04) is what an engine is for:**
+a whole trade shipped with no new mechanism — a config, a vocabulary file and a page. It
+also proved where the engine was still assuming AV's habits, so five things are now OPT-IN
+(every shipped page unchanged by default):
+`qtyText` (a free-text Qty — "2 bx", "500 ft", "a case"; the number spinner is right for
+"4 HDMI cables" and wrong for a trade that orders in mixed units on one list) ·
+`writeinTextarea` (a multi-line write-in that turns a PASTED list into one row per line —
+an `<input>` silently flattens a paste, which breaks the fastest way anyone actually uses
+these pages) · `writeinQtyDefault` and a per-row `qtyDefault` carried through render,
+clone AND restore · `docName` (a section can read as a PROMPT on screen and as a HEADING
+in the sent document) · `hasLast`/`restoreLast` (Clear stashes the list it destroys, so
+"start from last list" is one tap — the highest-value feature a foreman asked for, ranked
+by him above twenty more picker items).
+
 Keep the boundary or the config rots: `trade.js` = IDENTITY + COPY · `tools.js` =
 REGISTRY · `items.js` = that trade's VOCABULARY DATA (categories, size ladders, config
 options, unit-of-issue sets). Size ladders and C×C/FIP/no-hub live in data — never in the
@@ -400,6 +414,57 @@ Append here when a cycle finds one. Each is a rule, not a story.
   and the gate above would have been blinded on exactly the defect it exists to catch.
   **Rule:** never `overflow-x:hidden` a layout bug; measure BOTH `documentElement` and
   `body`, and fix the cause.
+- **HALF A TRADE'S VOCABULARY IS SOMEBODY'S TRADEMARK (2026-08-04).** Standing up electrical
+  ran a safety audit over the item words, and it found four genericized marks already LIVE
+  in `av/consumables.html` — wire nuts, Tek screws, Tapcons, zip ties — plus a bare brand
+  used as a product label. The in-trade reviewer flagged the same words independently, in
+  his own list, unprompted: *"everybody says it out loud; you can't print it."* Electrical
+  is the worst offender of any trade (Romex, BX, Greenfield, Sealtite, Unistrut, Condulet,
+  Wiremold, Minerallac, Caddy, Cadweld, Panduit, Tapcon, Sawzall, Noalox…), but no trade is
+  clean. **Rule:** every trade's vocabulary data gets a generic-substitution pass before it
+  ships, and "everybody says it" is the reason to CHECK a word, never the reason to print
+  it. Twist-on wire connectors · cable ties · self-drilling screws · concrete screws ·
+  anti-shorts · wedge anchors · strut · flex · conduit body · recip blades.
+- **A HARDCODED FALLBACK RESURRECTS THE VALUE YOU JUST REMOVED (2026-08-04).** A pasted
+  write-in line is supposed to arrive with an EMPTY quantity, because its own text already
+  says "500' #12 THHN blue". The render honoured that — and `readLine()` then coerced the
+  empty box back to `"1"` at the read site, so the document printed `1  500' #12 THHN blue`,
+  a line arguing with itself. Fixing the render path was not enough: RESTORE built its own
+  row definition and reintroduced the same "1" the moment the tech reopened the page.
+  **Rule:** a fallback lives with the default it is defaulting to (stamp it on the row),
+  never hardcoded where the value is read — and when you change how a row is built, walk
+  ALL THREE constructors: render, clone, restore.
+- **A LABEL IS ADDRESSED TO SOMEBODY (2026-08-04).** The write-in section is headed "What do
+  you need?" — right on screen, where it is a question to the man holding the phone. It was
+  also printing as a section heading inside the message he sends the warehouse, where it
+  asks a question of someone who was never asked anything. **Rule:** when a label is a
+  PROMPT, it needs a separate document name; the screen and the sent document have different
+  readers and only one of them is being spoken to.
+- **NEVER `nowrap` A STRING YOU DIDN'T AUTHOR (2026-08-04).** The hub's audience chip was
+  `white-space:nowrap`, and its text comes from a `tools.js` registry entry someone edits
+  later. "Electricians → Warehouse / Counter" pushed `/electrical/` to 328px in a 320px
+  viewport — the whole new hub scrolling sideways on an iPhone SE, caused by a string in a
+  data file. **Rule:** any text whose length is set by data must be allowed to wrap. The
+  fix belongs in every trade's hub the same cycle, not just the one that surfaced it.
+- **THE TRADE ACCENT IS PAINTED ON A DARK BAR (2026-08-04).** A trade's `accent` is not just
+  a brand colour: the shared runtime paints it onto the dark steel nav (brand tail, the
+  favourite ★, focus rings, the bar's bottom rule) AND uses it as a button fill carrying
+  `accentInk` as text. A deep navy — the obvious "electrical" choice — would have made the
+  nav unreadable on every page of the trade. The same audit found two places still assuming
+  AV yellow: the nav dropdown's hover painted the accent under a hardcoded near-black, and
+  the wish CTA's hover was a hardcoded lighter yellow for EVERY trade. **Rule:** a trade
+  accent must be light and high-chroma enough to read on `#242A31`, text on the accent uses
+  `accentInk` and never a literal, and a hover lifts the accent with a filter rather than
+  naming a second colour.
+- **NOT A SCAR — A CEILING TO REMEMBER (2026-08-04).** The electrical panel's synthesis
+  argued that no axis may exceed **6 options**, because at 7 an inline chip row wraps, the
+  control degrades to an iOS wheel, and ticking stops beating typing. It is right about chip
+  rows and it does not apply to what shipped: shape #1's axes are native `<select>`s, which
+  are the same one-tap-then-scroll interaction at 6 options or 11, so the ladders kept their
+  real sizes (2-1/2 through 4 in pipe, 250–500 MCM lugs) instead of exiling them to the
+  write-in. **Rule for whoever changes that control:** the moment an axis is rendered as
+  chips or segments instead of a select, the 6-option ceiling becomes binding and the long
+  ladders have to move or split.
 
 
 ## THE RATCHET
@@ -456,3 +521,28 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   SWEPT: the bare-ISO-date scar fix carried into the backport rather than re-forked.
   Verified in a real browser, 8 pages x 4 widths, zero overflow.
   https://mrdirno.github.io/nested-resonance-memory-archive/plumbing/credits.html
+- `2026-08-04` — **[AXIS:BREADTH] TRADE #3 IS LIVE: the Electrical Field Toolkit**, seeded with
+  the **Pull List**. Before: 2 trades / 4 tools, breadth debt of 4 families, and the checklist
+  engine had never been asked to carry a trade it was not written for. After: 3 trades / 5 tools,
+  and electrical shipped as a CONFIG — `trade.js` + `tools.js` + `items.js` + one page, zero new
+  mechanism. A 20-year commercial foreman reviewed it before a line shipped and the review IS the
+  page: write-in FIRST and largest, taking a pasted list one row per line ("nobody forgets the
+  wire; what we forget is the fourteen-cent stuff that shuts a floor down"); the 42-line picker
+  under it framed as a jog, partial by construction; **free-text Qty** ("2 bx", "500 ft", "a
+  case"); a header remembered per device that Clear never wipes; **Start from last list**
+  ("half of tomorrow's order is today's order"); one binary HOT — MEN STANDING; and a message
+  that closes *"Field request — not a PO."* A safety audit ran beside him and set the data law:
+  no ampacity/fill/ratings/code refs, no where-may-I-use-it adjectives, no axis pair that adds up
+  to a code table, and NO pre-selected default anywhere. Engine gained five opt-ins (`qtyText`,
+  `writeinTextarea`, `writeinQtyDefault`, `docName`, `hasLast`/`restoreLast`) with every shipped
+  page unchanged. **BACKPORT RIDER FIRED, swept all three trades in the same cycle:** four
+  genericized trademarks found LIVE in `av/consumables.html` (wire nuts · Tek screws · Tapcons ·
+  zip ties) plus a bare brand label, all made generic; the hard-wired sibling footer links
+  replaced by ONE `TRADES` list in the runtime (trade #4 is one line there); `.tag`'s `nowrap`
+  fixed in every hub after it pushed a 320px viewport to 328; and two hardcoded-AV-yellow spots
+  in the shared runtime made accent-aware. Deploy gained a both-directions check that the
+  runtime's trade list matches the staged dirs. Verified on the LIVE page, doing the job end to
+  end: 3-line paste → 3 rows with no invented qty, neutral axes dropped from the output, real
+  click → clipboard → real ⌘V byte-identical to the preview, list stable across two reloads,
+  32/32 overflow checks at 320/360/390/430 across all three trades.
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/

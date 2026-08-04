@@ -216,8 +216,13 @@ window.TOOLKIT_ITEMS = (function () {
           ax: [ax("Gang", [n("gang"), "1-gang", "2-gang"])] },
         { n: "Wall plates", sub: "SAY MATERIAL + COLOR IN THE NOTE",
           ax: [size(GANG, "how many gang"), ax("Opening", [n("what opening"), "toggle", "duplex", "rocker", "blank", "combo"], true)] },
-        { n: "Device & plate screws", sub: "6-32 LONGS — 1-1/2, 2, 3 IN — AND 8-32",
-          ax: [ax("Length", [n("how long")].concat(SCREW_LEN))] },
+        // THREAD, not just length. Both reviewers named the three separately and
+        // for different jobs: 6-32 longs for deep boxes and extension rings, 8-32
+        // for the bigger covers, 10-32 green for grounds. A length with no thread
+        // is a bag of the wrong screw.
+        { n: "Device & plate screws", sub: "THE LONGS — 1-1/2, 2, 3 IN",
+          ax: [ax("Thread", [n("which thread"), "6-32", "8-32", "10-32"]),
+               ax("Length", [n("how long")].concat(SCREW_LEN))] },
         { n: "Lockout locks & tags", sub: "LOCKS, HASPS, TAGS", ax: [] },
         { n: "Temp power odds", sub: "CORD CAPS, FEMALE ENDS, GFCI PIGTAILS, CORDS, STRING LIGHTS", ax: [] }
       ]
