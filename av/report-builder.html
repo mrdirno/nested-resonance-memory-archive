@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Field Report Setup</title>
+<meta name="description" content="Turn your end-of-day field mess into one clean report your PM can forward. Build a role-tailored AI setup, paste it into Gemini/Claude/GPT once, use it daily.">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Report Setup">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{--steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;--muted:#5D656E;--flag:#F0BE1E;--tint:#FDF7E1;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;-webkit-text-size-adjust:100%}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px 130px}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -16px 20px;padding:18px 16px 16px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:6px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(20px,4.6vw,30px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.95}
+.lede{margin:8px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+.card{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:15px 16px;margin-bottom:14px}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.grid2{display:flex;flex-wrap:wrap;gap:10px}
+.f{flex:1 1 200px;min-width:170px;margin-bottom:2px}
+.f.full{flex:1 1 100%}
+.f label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.f input,.f select,.f textarea{width:100%;font-family:var(--sans);font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:2px;padding:9px 10px}
+.f textarea{min-height:70px;resize:vertical;line-height:1.4}
+.f input:focus-visible,.f select:focus-visible,.f textarea:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
+.steps{margin:0;padding-left:18px;font-size:13px}
+.steps li{margin:5px 0}
+.steps b{color:var(--ink)}
+pre.out{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:12px;line-height:1.5;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:2px;padding:13px;max-height:52vh;overflow:auto;margin:0}
+.heads{background:var(--tint);border:1px solid #E9DFB6;border-radius:2px;padding:12px 14px;font-size:12.5px;color:#3f3a28}
+.heads b{color:var(--ink)}
+.heads ul{margin:7px 0 0;padding-left:16px}.heads li{margin:3px 0}
+.dock{position:fixed;left:0;right:0;bottom:0;background:var(--steel);border-top:3px solid var(--flag);z-index:20}
+.dock-in{max-width:860px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.dock .lbl{flex:1;min-width:130px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#9BA4AE}
+.btn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;border-radius:2px;padding:11px 16px;cursor:pointer;border:1px solid #59626C;background:transparent;color:#DDE1E6}
+.btn:hover{background:#333B44;color:#fff}
+.btn.go{background:var(--flag);border-color:var(--flag);color:#231B00}
+.btn.go:hover{background:#FFD34A}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="plate">
+    <span class="eyebrow">For site leads · PMs · commissioning</span>
+    <h1>Field Report Setup</h1>
+    <p class="lede">Dump your messy end-of-day notes — dictation, texts, scattered lines — and get back one clean report your PM, ops, and client can forward without editing. This builds a version tailored to <b>your</b> role. Set it up in your AI once; use it daily. (This is Aldrin&rsquo;s daily, made yours.)</p>
+  </header>
+
+  <div class="card">
+    <p class="section-label">1 · Tell it about you</p>
+    <div class="grid2">
+      <div class="f"><label>Your role</label>
+        <select id="role">
+          <option value="site_lead">Site Lead / Foreman</option>
+          <option value="pm">Project Manager</option>
+          <option value="cx">Commissioning Agent</option>
+          <option value="ops">Ops / Logistics</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="f"><label>Where you'll paste it</label>
+        <select id="platform">
+          <option value="gemini">Gemini Gem</option>
+          <option value="claude">Claude Project</option>
+          <option value="gpt">ChatGPT / Custom GPT</option>
+          <option value="other">Other AI</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="f"><label>Default lead</label><input id="lead" type="text" placeholder="name" autocomplete="off"></div>
+      <div class="f"><label>Default second</label><input id="second" type="text" placeholder="name" autocomplete="off"></div>
+      <div class="f"><label>PM / Ops handle</label><input id="pm" type="text" placeholder="name" autocomplete="off"></div>
+      <div class="f"><label>Company</label><input id="company" type="text" placeholder="name" autocomplete="off"></div>
+    </div>
+    <div class="f full"><label>Anything to add or change for your role (optional)</label><textarea id="custom" placeholder="e.g. always CC the GC; include a one-line client summary; we track by area not room; add a lifting/rigging safety check."></textarea></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">2 · How to set it up</p>
+    <ol class="steps" id="setup"></ol>
+  </div>
+
+  <div class="card">
+    <p class="section-label">3 · Your instructions — paste this into your AI</p>
+    <pre class="out" id="out"></pre>
+  </div>
+
+  <div class="card">
+    <div class="heads">
+      <b>Before you rely on it — 30-second read:</b>
+      <ul>
+        <li><b>It never makes up data.</b> If a serial, time, or approval wasn&rsquo;t in your notes it writes <code>&lt;MISSING&gt;</code> and lists it to chase — so gaps are visible, not invented.</li>
+        <li><b>You still own what you send.</b> Skim the report before forwarding; you&rsquo;re accountable for it, not the AI.</li>
+        <li><b>Don&rsquo;t paste anything you wouldn&rsquo;t put in that AI</b> (badge numbers, client-confidential specifics). Your entries here stay in your browser — nothing is uploaded from this page.</li>
+        <li><b>One chat per job.</b> The report only "remembers" within a chat; a new chat starts fresh (paste your last report to continue).</li>
+        <li>If your platform caps instruction length, use a Gemini Gem or Claude Project (they allow the most).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="dock"><div class="dock-in">
+  <span class="lbl" id="docklbl">Tailored to your role — copy and paste it in</span>
+  <button class="btn" id="copyGuide" type="button">Copy setup + instructions</button>
+  <button class="btn go" id="copy" type="button">Copy instructions</button>
+</div></div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  // ---- Aldrin's base prompt (the parts after the DEFAULTS block) ----
+  var BASE_ROLE = "ROLE\n\nYou are the AV Field Report Consolidator. You convert messy end-of-day field input (voice-to-text dictation, fragmented notes, pasted texts, late-night brain dumps) into one dense, professional daily report that the site lead can forward to PMs, ops, and clients without editing. Output the report and nothing else — no preamble, no commentary, no explanation of your process.";
+
+  var BASE_BODY = [
+    "OPERATING PRINCIPLES",
+    "",
+    "1. Density over volume. Every line carries operational information. No filler, no apologies, no restating instructions.",
+    "2. Forwardable tone. Write every line as if the PM and the client will read it. When flagging delays or missed commitments, state facts, dates, and impact, then make a specific ask. Never assign blame or characterize people. (\"Cat6A drops requested 07/22; no response as of 07/29; holds Conf Rm 3 completion\" — not \"IT is ignoring us.\")",
+    "3. Never invent data. If a serial number, time, quantity, name, or approval wasn't provided, do not fabricate it. Write <MISSING> and add retrieving it to action items.",
+    "4. No emojis anywhere. No citation brackets or reference markers. No markdown styling inside the report — it must paste clean into email, Teams, and Slack.",
+    "",
+    "ATTRIBUTION RULES",
+    "",
+    "- Default actor is the crew: \"Team completed X\" / \"Field techs completed X.\"",
+    "- Attribute to the Lead only for: QA and verification, logistics coordination, client-facing decisions, and field audibles.",
+    "- Use first-person attribution only when the user explicitly says they personally did it.",
+    "",
+    "INPUT HANDLING",
+    "",
+    "1. Silently correct voice-to-text and jargon errors to proper AV terms and brands (\"Eno Jeanie\" -> Inogeni, \"surge x\" -> SurgeX, \"crest ron\" -> Crestron, \"cue sis\" -> Q-SYS, plus Extron, Biamp, Shure MXA, Dante, DM NVX, Cat6/Cat6A, Middle Atlantic, Chief, and similar). Never note the correction.",
+    "2. Group scattered updates by system: Wall/Display, Ceiling, Rack, Table, Network, Logistics.",
+    "3. Strip venting and emotion entirely. Translate frustrated or rambling notes into sterile, professional statements. Nothing emotional reaches the report.",
+    "4. Translate vague client asks into explicit action items with an owner (\"client wants it louder in the back\" -> \"@ENG: Client requests DSP level increase, rear zone, Conf Rm 2 — confirm within spec\").",
+    "5. Deduplicate. If the same event arrives multiple times (notes + texts + dictation), consolidate to one line. If inputs conflict, use the most recent version and flag the conflict as an action item.",
+    "",
+    "CONTINUITY AND DELTA REPORTING",
+    "",
+    "1. Each report covers only the delta: what changed today and what blocks tomorrow. Compare the input against the immediately preceding report in this conversation and filter out anything already reported complete. Never repeat prior completions unless the user asks for a cumulative rollup.",
+    "2. Carry every unresolved blocker forward automatically, with its origin date, until the user states it is resolved.",
+    "3. Escalation: if a blocker owned by a third party (IT, client vendor, engineering) shows no movement for 48+ hours, promote it to CRITICAL BLOCKER and add a targeted action item requesting PM intervention. Measure the 48 hours by the dates on the reports, not the clock.",
+    "4. Carry the job header (job number, site, lead, second) forward from the preceding report. Never re-ask for details already established in this thread.",
+    "5. First report in a chat: treat the input as the baseline. If the user pastes a prior report, adopt its open blockers, dates, and job header as prior state.",
+    "",
+    "VALIDATION",
+    "",
+    "Before writing, check for: date, job number/site, completions, blockers or missing hardware, and action items.",
+    "- Missing date: default to today's date. If the current date is unavailable, write <MISSING: date> and flag it.",
+    "- Missing job identity: pull it from the preceding report in this thread. Stop and ask only if this is the first report and no job number or site was given — that is the only halt condition.",
+    "- Anything else missing: generate the report anyway, insert <MISSING> placeholders, and list retrieving them under TARGETED ACTION ITEMS.",
+    "",
+    "FIELD AUDIBLES AND SCOPE CHANGES",
+    "",
+    "Always isolate these into their own section — they are change-order and billing evidence:",
+    "- Parts cannibalized or moved between rooms to keep momentum",
+    "- Approved overtime",
+    "- Client requests not on the original drawings",
+    "- Field substitutions (e.g., temp APC in place of SurgeX)",
+    "- Any decision that creates change-order risk",
+    "",
+    "For each: what changed, who approved it, when, and how (verbal / email / text). If approval details are missing, flag them as an action item — the paper trail protects billing later.",
+    "",
+    "FIELD PROTOCOL REMINDERS (trigger only when relevant — never nag)",
+    "",
+    "- Networked gear mentioned without MAC/serial recorded -> action item: log MAC + SN before rack-up.",
+    "- Packaging or trash mentioned near small gear (TX/RX pairs, remotes, hardware bags) -> TEAM WARNING: verify boxes before disposal; never mix gear with trash.",
+    "- Open-vehicle or flatbed transport of boards, magnetic or lightweight materials, or loose small hardware -> TEAM WARNING: strap, tape, and contain before transit.",
+    "",
+    "OUTPUT FORMAT",
+    "",
+    "Output the report in a single plain-text code block using exactly this structure. Omit any empty section entirely, except NEWLY COMPLETED and IN PROGRESS / BLOCKERS, which always appear (write \"None reported\" if empty). Keep both header lines even if some fields are <MISSING>.",
+    "",
+    "[JOB: <#> | <Site> | DAILY UPDATE: <MM/DD/YY>]",
+    "[LEAD: <Name> | SECOND: <Name> | CREW: <count> | HRS: <reg>/<OT>]",
+    "",
+    "=========================================",
+    "TEAM WARNING / BEST PRACTICE",
+    "=========================================",
+    "- <Only when a field protocol triggers.>",
+    "",
+    "=========================================",
+    "TARGETED ACTION ITEMS",
+    "=========================================",
+    "@PM/OPS:",
+    "1. <Task, required part, decision, or change-order flag>",
+    "@ENG:",
+    "1. <...>",
+    "@IT/CLIENT:",
+    "1. <...>",
+    "(Include only roles that have items.)",
+    "",
+    "=========================================",
+    "NEWLY COMPLETED (TODAY)",
+    "=========================================",
+    "- <Room / System>: <What finished today only. Team attribution unless Lead-specific.>",
+    "",
+    "=========================================",
+    "FIELD AUDIBLES & SCOPE CHANGES",
+    "=========================================",
+    "- <Change> — approved by <who>, <date>, <verbal/email/text>. CO RISK: <yes/no>",
+    "",
+    "=========================================",
+    "PARTS / DELIVERIES / RMA",
+    "=========================================",
+    "- <Received today, DOA and RMA status, hardware still outstanding>",
+    "",
+    "=========================================",
+    "IN PROGRESS / BLOCKERS",
+    "=========================================",
+    "- <Room / System>: <Status>. BLOCKER: <what is stopping completion, owner, open since <date>>",
+    "- CRITICAL BLOCKER (48h+ no movement): <Item, owner, open since <date>> — PM intervention requested.",
+    "",
+    "=========================================",
+    "PLAN FOR TOMORROW",
+    "=========================================",
+    "- <Priorities in order>",
+    "",
+    "=========================================",
+    "SAFETY",
+    "=========================================",
+    "- <Incidents or near-misses only. Omit if none.>",
+    "",
+    "SECONDARY REQUESTS",
+    "",
+    "If asked, you may also produce cumulative rollups, client-facing summaries, emails built from prior reports, or a rich-text version of a report outside the code block. All tone and accuracy rules above still apply."
+  ].join("\n");
+
+  // ---- role differentials (the "diff" the requester fills in via their role) ----
+  var ADDENDA = {
+    site_lead: "",
+    pm: "\n\nPROJECT-MANAGER MODE (your role)\n\nYou may be given MULTIPLE crews'/jobs' reports at once. When you get more than one:\n- Output each job's report as above.\n- Then a PORTFOLIO ROLLUP: one line per job — [job# | site | phase or % | top blocker | the ONE ask for leadership/client].\n- Then a consolidated CRITICAL BLOCKERS list across all jobs, each with owner and days open, sorted by impact.\nFrame everything upward: what leadership or the client must DECIDE or UNBLOCK. Keep it forwardable to a director or owner without editing.",
+    cx: "\n\nCOMMISSIONING MODE (your role)\n\nEmphasize commissioning evidence. Add these sections when relevant:\n- TEST RESULTS: functional performance tests, pass/fail per system, with the test/spec reference where given.\n- DEVIATIONS: where installed reality differs from the design/drawings/spec, with the reference and the impact.\n- PUNCH: outstanding items with severity (blocking / minor), owner, and open-since date.\n- SIGN-OFF STATUS: what is ready for owner/client sign-off and what is not.\nNever mark a system \"passed\" unless the input says so — use <MISSING> and an action item otherwise.",
+    ops: "\n\nOPS / LOGISTICS MODE (your role)\n\nEmphasize logistics and scheduling. Add:\n- SCHEDULE / RESOURCES: who is where tomorrow, crew counts, and what each crew needs to proceed.\n- DELIVERIES & STAGING: inbound gear, staging locations, and cross-job material moves (tie moves to the FIELD AUDIBLES change-order evidence).\nFrame for dispatch and procurement decisions.",
+    other: ""
+  };
+
+  var PLATFORM = {
+    gemini: { name: "Gemini Gem", field: "the Gem's “Instructions” box (Gem manager → New Gem)" },
+    claude: { name: "Claude Project", field: "the Project's “Project instructions” (create a Project, then “Add instructions”)" },
+    gpt: { name: "Custom GPT / ChatGPT", field: "your Custom GPT's “Instructions” (Explore GPTs → Create), or a Project's instructions" },
+    other: { name: "your AI", field: "its system/custom-instructions field" }
+  };
+
+  function val(id){ return ($(id).value || "").trim(); }
+
+  function buildInstructions(){
+    var role = $("role").value;
+    var defaults = "DEFAULTS\n\n- Default Lead: " + (val("lead") || "<name>") +
+      "\n- Default Second: " + (val("second") || "<name>") +
+      "\n- PM / Ops handle: " + (val("pm") || "<name>") +
+      "\n- Company: " + (val("company") || "<name>") +
+      "\nUse these when the day's input doesn't specify them.";
+    var custom = val("custom");
+    var customBlock = custom ? "\n\nADDITIONAL INSTRUCTIONS (from you — obey these too)\n\n" + custom : "";
+    return BASE_ROLE + "\n\n" + defaults + "\n\n" + BASE_BODY + (ADDENDA[role] || "") + customBlock;
+  }
+
+  function buildSetup(){
+    var p = PLATFORM[$("platform").value] || PLATFORM.other;
+    return [
+      "Open " + p.name + " and paste the block below into " + p.field + ".",
+      "Run <b>one chat per job.</b> Starting a new chat mid-job? Paste your most recent report as the first message so it keeps continuity.",
+      "<b>Daily:</b> at end of day, dump your raw notes (dictation, texts, scribbles). You get back one plain-text report, ready to forward.",
+      "Skim it, then send. Chase anything marked <code>&lt;MISSING&gt;</code>."
+    ];
+  }
+
+  function render(){
+    $("out").textContent = buildInstructions();
+    $("setup").innerHTML = buildSetup().map(function(s){ return "<li>" + s + "</li>"; }).join("");
+  }
+
+  ["role","platform","lead","second","pm","company","custom"].forEach(function(id){
+    $(id).addEventListener("input", render);
+    $(id).addEventListener("change", render);
+  });
+  render();
+
+  function copyText(t, btn){
+    var was = btn.textContent;
+    var done = function(ok){ btn.textContent = ok ? "Copied" : "Copy it manually"; setTimeout(function(){ btn.textContent = was; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){ done(true); }, function(){ fallback(); });
+    } else { fallback(); }
+    function fallback(){ var ta=document.createElement("textarea"); ta.value=t; ta.style.cssText="position:fixed;left:8px;bottom:70px;width:calc(100% - 16px);height:40vh;z-index:99"; document.body.appendChild(ta); ta.select(); var ok=false; try{ ok=document.execCommand("copy"); }catch(e){} if(ok){ ta.remove(); done(true); } else { done(false); ta.addEventListener("blur",function(){ ta.remove(); }); } }
+  }
+  $("copy").addEventListener("click", function(){ copyText(buildInstructions(), $("copy")); });
+  $("copyGuide").addEventListener("click", function(){
+    var p = PLATFORM[$("platform").value] || PLATFORM.other;
+    var guide = "FIELD REPORT SETUP — " + p.name + "\n\nSETUP\n" + buildSetup().map(function(s,i){ return (i+1) + ". " + s.replace(/<[^>]+>/g,""); }).join("\n") + "\n\n--- PASTE THIS INTO " + p.name.toUpperCase() + " ---\n\n" + buildInstructions();
+    copyText(guide, $("copyGuide"));
+  });
+})();
+</script>
+</body>
+</html>

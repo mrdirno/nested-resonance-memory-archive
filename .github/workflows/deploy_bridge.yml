@@ -14,6 +14,8 @@ on:
       - 'tools/collage-studio/**'
       - 'collage-beta/**'
       - 'HELIOS-BRIDGE-ARCHIVE/**'
+      # field toolkits: the shared runtime + one entry per trade (see TRADES below)
+      - 'shared/**'
       - 'av/**'
       - '.github/workflows/deploy_bridge.yml'
   workflow_dispatch:
@@ -90,30 +92,50 @@ jobs:
           cp -R tools/collage-studio/dist/. HELIOS-BRIDGE/dist/collage/
 
           # static pages — no build step, straight copy
-          rm -rf HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive HELIOS-BRIDGE/dist/av
-          mkdir -p HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive HELIOS-BRIDGE/dist/av
+          rm -rf HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive HELIOS-BRIDGE/dist/shared
+          mkdir -p HELIOS-BRIDGE/dist/collage-beta HELIOS-BRIDGE/dist/archive HELIOS-BRIDGE/dist/shared
           cp -R collage-beta/. HELIOS-BRIDGE/dist/collage-beta/
           cp -R HELIOS-BRIDGE-ARCHIVE/. HELIOS-BRIDGE/dist/archive/
-          cp -R av/. HELIOS-BRIDGE/dist/av/
 
-      # The AV wishing well POSTs to Supabase with the PUBLIC anon key. It is
+          # FIELD TOOLKITS — one runtime (shared/toolkit.js), many trades. Every
+          # trade dir is a config (trade.js) + a registry (tools.js) + tool pages,
+          # so ADDING A TRADE IS ADDING ITS SLUG HERE and to the `paths:` trigger
+          # at the top of this file. Nothing else. `test -d` keeps it fail-closed:
+          # a slug with no dir fails the build instead of silently 404ing the site.
+          cp -R shared/. HELIOS-BRIDGE/dist/shared/
+          TRADES="av"
+          # Each `run:` block is its OWN shell, so a later step cannot see this
+          # variable — publish it to the job env so the assert step below checks
+          # exactly the list that was staged, from ONE definition.
+          echo "TRADES=$TRADES" >> "$GITHUB_ENV"
+          for t in $TRADES; do
+            test -d "$t" || { echo "MISSING trade dir: $t"; exit 1; }
+            rm -rf "HELIOS-BRIDGE/dist/$t"
+            mkdir -p "HELIOS-BRIDGE/dist/$t"
+            cp -R "$t/." "HELIOS-BRIDGE/dist/$t/"
+            echo "staged trade: $t"
+          done
+
+      # The wishing well POSTs to Supabase with the PUBLIC anon key. It is
       # public-by-design, but a JWT-shaped string cannot live in this public repo
       # (secret-scan guard), so it is injected HERE from repo secrets into the
       # deployed copy only. Fail-closed: a missing secret or an un-replaced
       # placeholder aborts the deploy rather than shipping a dead well.
-      - name: Inject AV wishing-well config
+      # ONE runtime serves every trade, so this injects exactly once — a new trade
+      # inherits a live well with no change to this step.
+      - name: Inject wishing-well config
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           set -euo pipefail
-          f=HELIOS-BRIDGE/dist/av/av.js
+          f=HELIOS-BRIDGE/dist/shared/toolkit.js
           test -f "$f" || { echo "MISSING: $f"; exit 1; }
           if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
             echo "FAIL: SUPABASE_URL / SUPABASE_ANON_KEY repo secrets are not set"; exit 1; fi
           sed -i "s|__SUPABASE_URL__|${SUPABASE_URL}|g; s|__SUPABASE_ANON_KEY__|${SUPABASE_ANON_KEY}|g" "$f"
-          if grep -q '__SUPABASE_' "$f"; then echo "FAIL: av.js placeholders were not injected"; exit 1; fi
-          echo "AV wishing-well config injected into av.js"
+          if grep -q '__SUPABASE_' "$f"; then echo "FAIL: toolkit.js placeholders were not injected"; exit 1; fi
+          echo "wishing-well config injected into shared/toolkit.js"
 
       # Prove the artifact tree instead of asserting it, and fail here rather
       # than in a browser if either app's entry point is missing.
@@ -133,8 +155,21 @@ jobs:
                    collage/index.html collage/sw.js collage/manifest.json \
                    collage-beta/index.html \
                    archive/index.html \
-                   av/index.html av/consumables.html av/av.js av/tools.js av/credits.html; do
+                   shared/toolkit.js \
+                   av/index.html av/trade.js av/tools.js av/consumables.html av/credits.html av/report-builder.html; do
             test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
+          done
+
+          # Every trade dir must carry the three files that make the shared runtime
+          # work (config + registry + hub). A trade staged without them renders a
+          # bare page with no nav and a dead well — a silent break the entry-point
+          # list above would not catch as the toolkit grows.
+          for t in $TRADES; do
+            for f in index.html trade.js tools.js; do
+              test -f "HELIOS-BRIDGE/dist/$t/$f" || { echo "MISSING: $t/$f"; exit 1; }
+            done
+            grep -q 'shared/toolkit.js' "HELIOS-BRIDGE/dist/$t/index.html" \
+              || { echo "FAIL: $t/index.html does not load the shared runtime"; exit 1; }
           done
 
           # The archive page is a gallery of standalone variation pages; if the

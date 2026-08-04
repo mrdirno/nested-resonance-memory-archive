@@ -1,22 +1,29 @@
-/* AV FIELD TOOLKIT — shared runtime (nav + wishing well).
+/* FIELD TOOLKIT — the shared runtime (nav + wishing well). ONE RUNTIME, MANY TRADES.
  *
- * Include on every AV page, after tools.js:
- *   <script src="tools.js"></script>
- *   <script src="av.js"></script>
+ * This file is trade-AGNOSTIC on purpose (av/AV_SOCIETY.md §TRADE EXPANSION:
+ * "GENERALIZE the shared runtime to read a per-trade config rather than fork it").
+ * It lives in shared/ so no single trade owns it. A new trade is a CONFIG + a
+ * registry + tool pages — never a copy of this file.
+ *
+ * Include on every tool page, in this order:
+ *   <script src="trade.js"></script>   <- window.TOOLKIT_TRADE (who am I)
+ *   <script src="tools.js"></script>   <- window.TOOLKIT_TOOLS  (what's on the hub)
+ *   <script src="../shared/toolkit.js"></script>
  * It injects a sticky toolkit bar (a dropdown of every tool in the registry) and
- * a "Request a tool" wishing well that writes to Supabase. New tool pages get all
- * of this for free — the only edit to add a tool is a line in tools.js.
+ * a "Wish for a tool" well that writes to Supabase. New tool pages get all of this
+ * for free — the only edit to add a tool is a line in that trade's tools.js.
  *
  * The Supabase anon key below is PUBLIC by design (it ships in every client app);
  * the table's RLS lets anon INSERT a request and read nothing back, so the queue
- * is private. See supabase/migrations/075_av_tool_requests.sql.
+ * is private. See supabase/migrations/075_av_tool_requests.sql and 076 (the
+ * `trade` column that lets one queue serve every trade).
  */
 (function () {
   "use strict";
 
   // The URL + PUBLIC anon key are injected at DEPLOY time from GitHub repo
   // secrets (the anon key is public-by-design but must not live in this public
-  // repo — a JWT-shaped string trips the secret-scan guard). See the "Inject AV
+  // repo — a JWT-shaped string trips the secret-scan guard). See the "Inject
   // wishing-well config" step in .github/workflows/deploy_bridge.yml. On a local
   // or preview copy these stay as placeholders and the well degrades gracefully.
   var CFG = {
@@ -25,11 +32,45 @@
     table: "av_tool_requests"
   };
   var CFG_READY = CFG.url.indexOf("__SUPABASE") !== 0;
-  var TOOLS = (window.AV_TOOLS || []);
+
+  /* ---- WHO AM I: the per-trade config, with the AV defaults ---------------
+   * Every string a visitor can see that names the trade comes from here. A new
+   * trade ships a trade.js defining window.TOOLKIT_TRADE and gets the whole
+   * runtime — nav, well, favorites, credit toggle — with its own identity.    */
+  var _T = (window.TOOLKIT_TRADE || {});
+  var TRADE = {
+    slug:       _T.slug       || "av",
+    name:       _T.name       || "AV Field Toolkit",
+    icon:       _T.icon       || "🧰",
+    brandLead:  _T.brandLead  || "AV",
+    brandTail:  _T.brandTail  || "Field Toolkit",
+    accent:     _T.accent     || "#F0BE1E",
+    // "…and everyone in the trade" copy + who the handoff goes to
+    chain:      _T.chain      || "techs / PMs / leadership",
+    roles:      _T.roles      || [["tech", "AV Tech"], ["project_manager", "Project Manager"], ["leadership", "Leadership / Owner"], ["other", "Other"]],
+    wishTitleHint:   _T.wishTitleHint   || "e.g. Cable-types picker — HDMI / patch / fiber",
+    wishPurposeHint: _T.wishPurposeHint || "e.g. Pick the exact cables for a job and copy a clean spec to send my PM — HDMI (2.0/2.1, lengths), Cat patch (5e/6/6a), fiber (OM3/OM4/OS2, connector types)…"
+  };
+
+  // Registry: TOOLKIT_TOOLS is canonical; AV_TOOLS is the back-compat alias the
+  // original AV pages shipped with. Either works, so no page had to be rewritten.
+  var TOOLS = (window.TOOLKIT_TOOLS || window.AV_TOOLS || []);
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); };
 
-  /* ---- favorites: per-device, no login (fewer steps = the whole point) ---- */
-  var FAV_KEY = "av.favorites.v1";
+  /* ---- favorites: per-device, no login (fewer steps = the whole point) ----
+   * Keyed PER TRADE — a plumber's favorites must not surface on the AV hub.
+   * The original AV build stored under the un-namespaced "av.favorites.v1"; if a
+   * returning AV visitor has that and no namespaced key yet, adopt it once so
+   * nobody silently loses the tools they starred. */
+  var FAV_KEY = "toolkit.favorites." + TRADE.slug + ".v1";
+  (function migrateLegacyFavorites(){
+    if (TRADE.slug !== "av") return;
+    try {
+      if (localStorage.getItem(FAV_KEY) !== null) return;      // already namespaced
+      var legacy = localStorage.getItem("av.favorites.v1");
+      if (legacy) localStorage.setItem(FAV_KEY, legacy);
+    } catch (e) {}
+  })();
   function favLoad(){ try { var a = JSON.parse(localStorage.getItem(FAV_KEY) || "[]"); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
   function favSave(a){ try { localStorage.setItem(FAV_KEY, JSON.stringify(a)); } catch (e) {} document.dispatchEvent(new CustomEvent("av:favorites", { detail: { favorites: a.slice() } })); }
   function favIs(href){ return favLoad().indexOf(href) !== -1; }
@@ -132,7 +173,7 @@
   /* ---------------------------------------------------------------- toolkit bar */
   function buildBar() {
     var drop = h("div", { class: "av-drop", role: "menu" });
-    drop.appendChild(h("a", { href: "index.html", html: "<b>All tools</b><span>The AV Field Toolkit home</span>" }));
+    drop.appendChild(h("a", { href: "index.html", html: "<b>All tools</b><span>The " + esc(TRADE.name) + " home</span>" }));
     drop.appendChild(h("a", { href: "credits.html", html: "<b>&#9733; Wall of Wishes</b><span>Who wished each tool into existence</span>" }));
     if (TOOLS.length) drop.appendChild(h("hr"));
     TOOLS.forEach(function (t) {
@@ -159,8 +200,8 @@
       favBtn.addEventListener("click", function () { var on = favToggle(cur.href); favBtn.classList.toggle("on", on); favBtn.setAttribute("aria-pressed", on ? "true" : "false"); });
     }
 
-    return h("nav", { class: "av-bar", "aria-label": "AV Field Toolkit" }, [
-      h("a", { class: "av-brand", href: "index.html", html: '🧰 <span>AV&nbsp;</span><b>Field&nbsp;Toolkit</b>' }),
+    return h("nav", { class: "av-bar", "aria-label": TRADE.name }, [
+      h("a", { class: "av-brand", href: "index.html", html: esc(TRADE.icon) + ' <span>' + esc(TRADE.brandLead) + '&nbsp;</span><b>' + esc(TRADE.brandTail).replace(/ /g, "&nbsp;") + '</b>' }),
       menu,
       favBtn,
       h("div", { class: "av-spacer" }),
@@ -179,13 +220,16 @@
       "<ul>" +
       "<li><b>Practical, not theoretical</b> — something you'd actually use on a job.</li>" +
       "<li><b>Targeted &amp; common</b> — one clear job, the stuff everyone deals with.</li>" +
-      "<li><b>Speaks your language</b> — the real terms, shortcuts and formats your techs / PMs / leadership already use.</li>" +
+      "<li><b>Speaks your language</b> — the real terms, shortcuts and formats your " + esc(TRADE.chain) + " already use.</li>" +
       "<li><b>Fewer steps</b> — it makes a real task faster; it never adds work.</li>" +
       "</ul><div class='av-test'>The test: would you actually use it to send something to your boss, PM, or techs? If yes, wish for it.</div>"
     });
 
     var roleSel = h("select", { name: "requester_role", "aria-label": "You are a" });
-    [["", "You are a…"], ["tech", "AV Tech"], ["project_manager", "Project Manager"], ["leadership", "Leadership / Owner"], ["other", "Other"]]
+    // NOTE: requester_role is CHECK-constrained in the DB to tech / project_manager
+    // / leadership / other. A trade may relabel them ("Service Plumber") but must
+    // keep those four VALUES, or the insert is rejected. See migration 075.
+    [["", "You are a…"]].concat(TRADE.roles)
       .forEach(function (o) { roleSel.appendChild(h("option", { value: o[0] }, [o[1]])); });
 
     // Credit / identity choice. If a wish is built the wisher is credited on the
@@ -208,8 +252,8 @@
       idToggle,
       h("p", { class: "av-err", role: "alert" }),
       h("div", { class: "av-field" }, [h("label", {}, ["You are a… ", h("i", {}, ["(optional)"])]), roleSel]),
-      h("div", { class: "av-field" }, [h("label", {}, ["The tool"]), h("input", { name: "tool_title", type: "text", maxlength: "200", required: "required", placeholder: "e.g. Cable-types picker — HDMI / patch / fiber", autocomplete: "off" })]),
-      h("div", { class: "av-field" }, [h("label", {}, ["What it should do — the doc/request you make by hand, and who you send it to"]), h("textarea", { name: "tool_purpose", maxlength: "2000", required: "required", placeholder: "e.g. Pick the exact cables for a job and copy a clean spec to send my PM — HDMI (2.0/2.1, lengths), Cat patch (5e/6/6a), fiber (OM3/OM4/OS2, connector types)…" })]),
+      h("div", { class: "av-field" }, [h("label", {}, ["The tool"]), h("input", { name: "tool_title", type: "text", maxlength: "200", required: "required", placeholder: TRADE.wishTitleHint, autocomplete: "off" })]),
+      h("div", { class: "av-field" }, [h("label", {}, ["What it should do — the doc/request you make by hand, and who you send it to"]), h("textarea", { name: "tool_purpose", maxlength: "2000", required: "required", placeholder: TRADE.wishPurposeHint })]),
       h("div", { class: "av-field" }, [h("label", {}, ["An example ", h("i", {}, ["(optional)"])]), h("textarea", { name: "example", maxlength: "2000", placeholder: "A real example of what you'd type in and what you'd want out." })]),
       nameRow,
       h("div", { class: "av-field" }, [h("label", {}, ["Email to hear when it ships ", h("i", {}, ["(optional, never shown — even if anonymous)"])]), h("input", { name: "contact", type: "email", maxlength: "200", placeholder: "you@company.com", autocomplete: "off" })]),
@@ -265,7 +309,12 @@
       requester_name: wellAnon ? null : ((fd.get("requester_name") || "").trim() || null),
       requester_company: wellAnon ? null : ((fd.get("requester_company") || "").trim() || null),
       contact: (fd.get("contact") || "").trim() || null,
-      source: "av_wishing_well",
+      // WHICH TRADE wished this (migration 076). One queue serves every toolkit;
+      // the loop reads a trade's wishes with `av_wishing_well.py --trade <slug>`.
+      // A wish from a trade we do not serve yet is DEMAND SIGNAL for the next
+      // isomorph, not an error — hence a slug column, not an enum.
+      trade: TRADE.slug,
+      source: TRADE.slug + "_wishing_well",
       user_agent: (navigator.userAgent || "").slice(0, 500)
     };
 
@@ -313,10 +362,18 @@
 
   /* ------------------------------------------------------------------- boot */
   function boot() {
-    var style = document.createElement("style"); style.textContent = CSS; document.head.appendChild(style);
+    // Base sheet, then the trade's accent overrides the AV yellow. One runtime,
+    // many trades — a trade is recognisable at a glance without forking the CSS.
+    var style = document.createElement("style");
+    style.textContent = CSS + "\n:root{--av-flag:" + TRADE.accent + ";}\n";
+    document.head.appendChild(style);
     document.body.insertBefore(buildBar(), document.body.firstChild);
-    window.AV = { openWell: openWell, tools: TOOLS, today: function(){ return TODAY; }, todayStr: function(){ return fmtDate(TODAY); },
-                  favorites: favLoad, isFav: favIs, toggleFav: favToggle };
+    // Toolkit is the canonical global; AV stays as an alias so every page the AV
+    // toolkit already shipped (which calls AV.today() / AV.toggleFav()) keeps working.
+    window.Toolkit = { openWell: openWell, tools: TOOLS, trade: TRADE,
+                       today: function(){ return TODAY; }, todayStr: function(){ return fmtDate(TODAY); },
+                       favorites: favLoad, isFav: favIs, toggleFav: favToggle };
+    window.AV = window.Toolkit;
     resolveToday();
     document.dispatchEvent(new CustomEvent("av:ready"));
   }

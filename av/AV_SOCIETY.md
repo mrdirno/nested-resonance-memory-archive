@@ -45,6 +45,19 @@ doesn't. Wishes RE-RANK and EXTEND this list (people "wishing better"). Keep
 9. **RMA / warranty request** — a failed unit → a complete RMA to send.
 10. **Display size & viewing-distance** — room depth → recommended display size.
 11. **AV network IP / VLAN planner** — assign device IPs cleanly for an AV subnet.
+12. **Field Report Setup** — SHIPPED (`report-builder.html`): builds a role-tailored
+    AI daily-report assistant to paste into Gemini/Claude/GPT. NEXT: a general
+    ISOMORPHIC version — "type the document you want, get production-grade custom
+    instructions for it" (apply the universal principles to ANY target) + a
+    searchable template library.
+13. **Room / equipment breakdown** — upload a spreadsheet / BOM / room schedule →
+    a clean per-room-type equipment list, one per page (and, where feasible, a
+    downloadable zip). Pure client-side parse; one of the biggest documentation
+    time-sinks. Uploads never leave the browser.
+14. **Bug / improve intake** — "wish it better" and "report a bug" are first-class
+    in the well (a `kind` on every wish): people surface issues, the loop fixes and
+    improves. Aldrin cannot work every hour — the well + loop are how the toolkit
+    self-heals while he's up a ladder hanging TVs.
 
 ## NON-CLUTTERY — the discipline (operator 2026-08-03)
 - **ONE job per tool.** If a tool tries to do two things, it is two tools.
@@ -133,7 +146,47 @@ tool pages, keep the engine + the wishing-well demand data private** (RLS alread
 enforces the data half). Publish finished tools only — never request contents,
 requesters, or the ranking.
 
+## TRADE EXPANSION — this is the reference implementation of a TRADE TOOLKIT
+(operator 2026-08-03) The whole structure — a clean hub, a handful of dead-practical
+tools, a wishing well, this self-building loop, the credit ledger, the strict bar —
+is TRADE-AGNOSTIC. The growth lever is to ISOMORPH it to other trades (plumbing,
+electrical, HVAC, low-voltage, GC, fire/life-safety, …), each removing THAT trade's
+own paperwork/communication friction. Mechanics:
+- **Demand-driven.** Every wish carries a `trade`; when wishes from a new trade
+  accumulate (or the operator names one), that trade is the next isomorph.
+- **The isomorph** (a loop cycle or a small Workflow): create `<trade>/` beside
+  `av/` with the SAME structure — hub + the shared runtime + a wishing well scoped
+  to that trade + a seed roster of THAT trade's dead-practical tools in THAT trade's
+  language + a credit ledger. GENERALIZE the shared runtime to read a per-trade
+  config (name · slug · palette · registry) rather than fork it — one runtime, many
+  trades — and stage each `<trade>/` into the Pages artifact + assert it, exactly as
+  `av/` is. A top-level trades hub lists them.
+- **Same bar, same safety, same ledger.** Every trade's tools face the identical
+  "would a real &lt;trade&gt; pro use this to send their boss something, FAST?" test.
+  The cross-trade demand DATA stays private (the moat); the pages stay open.
+- **This is loop-as-a-service** (private strategy `operator/AV_TOOLKIT_STRATEGY.md`):
+  the AV toolkit is the public reference implementation that proves the mechanism for
+  every other trade. Isomorph only when the current toolkit is broad enough to copy
+  well — expand deliberately, never half a trade at a time.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
 open request/spec formats it standardizes become infrastructure others build on.
+
+## CYCLE LOG (append ONE line per toolkit cycle — tool · before→after · proof URL)
+This file is the toolkit's evolvable BOOK, read by the P0 **Field Toolkit lane** every
+cycle (the lane's STEP-0 ladder is: wishing well → trade expansion → seed roster →
+collage → "no ship"). A cycle PASSES only on a SHIPPED + LIVE-VERIFIED tool. Append the
+line here at CLOSE; keep it to one line. Never log request contents or requesters.
+
+- `2026-08-03` — **Consumables List** shipped (`av/consumables.html`, pinned #1) · hub +
+  shared runtime + wishing well stood up · https://mrdirno.github.io/nested-resonance-memory-archive/av/
+- `2026-08-03` — **Field Report Setup** shipped (`av/report-builder.html`) — role-tailored
+  AI daily-report setup, paste once into Gemini/Claude/GPT, use daily.
+- `2026-08-03` — lane rewired: the P0 collage lane became the **Field Toolkit + Collage**
+  lane. Before: trade expansion was invisible to the loop (AV was a bare "OR an AV toolkit
+  tool" fallback under a Collage-branded lane, so the loop defaulted to CapCut work
+  forever). After: a top-down STEP-0 ladder with TRADE EXPANSION at rung 2 and the SEED
+  ROSTER at rung 3, `AV_SOCIETY.md` promoted to the lane's primary BOOK, and the
+  Pages-artifact staging assertion made a ship gate for any new `<trade>/` dir.

@@ -20,6 +20,13 @@ window.AV_TOOLS = [
     chip: "#F0BE1E",
     audience: "Techs → PM",
     pinned: true
+  },
+  {
+    name: "Field Report Setup",
+    href: "report-builder.html",
+    desc: "Turn your end-of-day mess into one clean report your PM can forward — build a role-tailored AI setup, paste it into Gemini/Claude/GPT once, use it daily.",
+    chip: "#2E64C8",
+    audience: "Leads · PMs · Cx"
   }
   // The loop appends new tools here as it builds them from wishing-well requests.
 ];
