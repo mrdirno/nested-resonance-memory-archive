@@ -270,14 +270,43 @@ in the sent document) · `hasLast`/`restoreLast` (Clear stashes the list it dest
 "start from last list" is one tap — the highest-value feature a foreman asked for, ranked
 by him above twenty more picker items).
 
-**SHAPE #2 NOW EXISTS IN SHIPPED CODE (`hvac/repair-recommendation.html`, 2026-08-04) — as a
-PAGE, not an engine.** One instance is over-abstraction; the engine gets extracted at the second,
-which the private ladder says is the T&M ticket, and the parts that will move into it are already
-visible: the ordered short fields, the repeatable finding block, the IMPACT LINE with append-only
-chips and a clock beside it, the tick-lists whose `sub` rides into the document in parentheses,
-the draft that flushes on `visibilitychange`, and the fixed closing ask. What will NOT move into
-it is every word — the note's whole value is that it speaks one trade's language, so the caller
-keeps the copy, the field list and its own CSS, exactly as shape #1's engine does.
+**SHAPE #2's ENGINE NOW EXISTS: `shared/note.js` + `shared/note.css`** (extracted
+2026-08-05 at the second instance, exactly where this section says to extract it). The
+first instance was `hvac/repair-recommendation.html`; the second was the directed-work
+ticket, which the private ladder ranks #1 for electrical and low-voltage, #2 for
+plumbing, #4 for GC, #6 for HVAC and #7 for AV — one rung, six trades, and forking it
+six times is precisely the failure this rule exists to stop. So all six shipped as
+CONFIGS in one cycle.
+
+The engine RENDERS, which is the one way it differs from shape #1's. Shape #1's caller
+keeps its own HTML and asks the engine to drive it; that holds at two callers and falls
+apart at six, because six hand-written field blocks drift inside a week. So the caller
+declares SECTIONS and FIELDS as data and the engine builds the DOM, owns the state,
+assembles the document, persists the draft and copies it.
+
+NINE FIELD KINDS cover all six trades with zero per-trade special-casing: `text` ·
+`area` · `select` · `seg` (single pick, up to 5, re-tap to un-pick) · `pick` (single
+pick past 5, as chips that WRAP — a segmented row past five is a wall) · `ticks` (the
+forget-list, whose `sub` rides into the document in parentheses) · `impact` (the loud
+block: append-only chips plus its own clock, because a consequence with no clock is a
+shrug) · `clock` (stamps itself on first touch — the timestamp IS the tool) · `rows`
+(repeatable crew/material/refrigerant lines, quantities only, and the engine performs no
+arithmetic on them anywhere, ever).
+
+**`shared/note.css` is ONE stylesheet for all six trades**, driven entirely by the
+`--flag` / `--flag-ink` / `--deep` / `--tint` variables the runtime injects from
+`trade.js`. Not one of the six pages carries a line of its own CSS. That required the
+DEEP PAIR: `accent` is deliberately light and high-chroma because it lives on the dark
+nav, which makes it useless as a border or as text on paper, so every trade now also
+declares `accentDeep` (white text on it clears 5:1) and `accentTint`. Hand-picked and
+contrast-checked per trade rather than computed — `color-mix()` is not safe on the old
+Android browsers these pages land on.
+
+WHAT DID **NOT** MOVE INTO IT: every word. The note's whole value is that it speaks one
+trade's language — a super who reads "Please provide authorization for the additional
+scope" knows in one line that no tradesman wrote it. The caller keeps the copy, the
+field list and its order (the order IS the argument), and the trade's vocabulary in
+`items.js`. Same boundary shape #1's engine draws.
 
 Keep the boundary or the config rots: `trade.js` = IDENTITY + COPY · `tools.js` =
 REGISTRY · `items.js` = that trade's VOCABULARY DATA (categories, size ladders, config
@@ -624,6 +653,42 @@ Append here when a cycle finds one. Each is a rule, not a story.
   not stand over nothing).
 
 
+
+### 2026-08-05 — A RESOLVING HREF DOES NOT MEAN A WORKING PAGE
+The deploy asserted that every `tools.js` registry href resolved in the artifact. That
+proves the page EXISTS. It does not prove the page WORKS. Shape #2's engine made six tool
+pages depend on files in a *different* staged directory (`shared/note.js`,
+`shared/note.css`), and a page whose engine 404s still returns 200 and still renders its
+header — it looks alive in a curl and is a blank white card in a foreman's hand. Same
+class as the staged-but-unregistered scar, one level down. **Rule:** the deploy now walks
+every registry page's own `src=`/`href=` assets and fails if one is missing from the
+artifact, is off-site, or is origin-absolute.
+
+### 2026-08-05 — A docPrefix THAT ASSUMES ITS NEIGHBOUR
+A crew row printed `× 1.5 hrs` — a multiplication sign with nothing on the left of it —
+because the hours column carried `docPrefix: "× "` and the men column beside it was
+blank. Half the columns on a row are blank half the time. **Rule:** every column of a
+repeatable row must read on its own; a prefix or suffix may describe only its OWN value,
+never its relationship to a sibling column.
+
+### 2026-08-05 — TWO LISTS UNDER ONE HEADING READ AS ONE LIST
+The first live drive of the note engine printed two men and a length of cable as a single
+six-line block under `WHAT IT TOOK`, and nothing marked where the crew stopped and the
+material started. A heading-less section did the same thing at the end, gluing `From:` on
+to the last material line so it read as another material line. **Rule:** a labelled list
+inside a section gets a blank line before it, and a section with no heading still gets its
+own air. Fixed in the engine, so it is fixed in all six trades and every future one.
+
+### 2026-08-05 — "CLEAR STORAGE, THEN RELOAD" IS A CIRCULAR TEST
+Verifying a fresh page by clearing `localStorage` and calling `location.reload()` proves
+nothing: the reload fires `pagehide`, the engine's flush-on-the-way-out handler runs, and
+it writes the still-populated form straight back into the key that was just deleted. The
+draft that "leaked" was the engine correctly refusing to lose a man's work. **Rule:** to
+test a fresh page, use the page's own Clear (which empties the DOM *and* the key), or
+open a new document — never clear-then-reload, and never diagnose a persistence bug from
+that shape of test.
+
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -800,3 +865,31 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `tests/e2e/well-mobile.spec.ts` — 15/15 across av · plumbing · electrical × 320/360/390/430,
   asserting zero horizontal overflow, zero sub-44px controls in BOTH fold states, and that the
   fold stays collapsed by default. https://mrdirno.github.io/nested-resonance-memory-archive/av/
+- `2026-08-05` — **[AXIS:DEPTH] THE DIRECTED-WORK TICKET LANDS ON ALL SIX TRADES, and
+  shape #2's engine gets extracted at its second instance.** Before: 6 trades / 8 tools,
+  five of them sitting on ONE tool each — a demo, not a toolkit — and shape #2 existed only
+  as a page. After: 6 trades / **14 tools**, every trade carrying the one rung its own
+  roster ranked at or near the top, built on `shared/note.js` + `shared/note.css` (nine
+  field kinds · one stylesheet · six accents · not a line of CSS in any of the six pages).
+  The WORDS came from six in-trade researchers and were then cut by six field hands from
+  the same trades, and the cuts are the product: AV's role row died ("you are SENDING this
+  to that man — a tap that tells the receiver his own job title is a tap nobody takes
+  twice") and so did its best research line, "what it cost the room you were here for"
+  ("that's a delay claim, and a super will not reply to a delay claim while you're standing
+  next to him") — the low-voltage hand killed the same thing independently, in the same
+  words. HVAC cut "— OUT OF SCOPE" off the heading (no tech has ever typed that into a text
+  message) and put refrigerant on its own row by ASHRAE number, because it is the only
+  thing off the truck that leaves no box behind. Plumbing added WHAT IS **NOT** IN THIS TAG
+  — ceiling left open, sleeve in but no firestop, capped but not trimmed — which nobody
+  else asked for and which is what stops a back-charge in April. Electrical's crew is class
+  × men × hours × ST/OT/DT, four taps and zero typing. GC's quote-him-back-to-himself line
+  died as "a deposition exhibit, not a tag". No rates, no totals, no arithmetic, no
+  signature block on any of them. **BACKPORT RIDER FIRED, swept all six in the same cycle:**
+  `plumbing/items.js` created — it was the only trade with no vocabulary file at all; the
+  `accentDeep`/`accentTint` pair added to all six `trade.js` so one stylesheet can serve
+  every trade; and the deploy now asserts every asset a registry tool page LOADS resolves in
+  the artifact, is not off-site and is not origin-absolute (four new scars recorded above).
+  Verified on the LIVE pages, all six driven end to end at 320/390/430: zero horizontal
+  overflow, no tap target under 44px, the sticky bar never covering content, and the draft
+  byte-identical through a reload including the three kinds that keep state in a closure.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/tm-tag.html
