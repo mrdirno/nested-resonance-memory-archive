@@ -356,3 +356,189 @@ window.TOOLKIT_ITEMS.tag = {
     "Added"
   ]
 };
+
+
+/* ── THE CROSS-BOUNDARY REQUEST — what this crew needs OUT of somebody else ───
+ *
+ * The toolkit's first tool whose output leaves the company that made it
+ * (av/AV_SOCIETY.md §THE INTERFACE). Every tool before it served one man sending
+ * something UP his own chain. This is what he sends SIDEWAYS.
+ *
+ * Written by a foreman in THIS trade and then cut by a cross-trade skeptic who
+ * has watched all six trades ask for things and watched half those asks ignored.
+ * The cuts are §SAFETY and §THE SYSTEM OF RECORD, not taste:
+ *   · anything that was really an RFI, a change order, a submittal or a permit
+ *     item is GONE — those are numbered in somebody else's system and a second
+ *     number nobody honours is worse than no number;
+ *   · nothing asserts a size, a rating, a depth, a fill, a load, a required
+ *     height or a listed assembly. Every spec below is a PHRASING he picks;
+ *   · no money, ever. Put a price on a row and every foreman stops reading;
+ *   · no calendar dates — you ask against HIS gates, because his schedule is the
+ *     one that moves. That is why `milestones` is the load-bearing axis here.
+ *
+ * `who` and `by` on an ask are the USUAL aim and the USUAL gate. They only ever
+ * fill a field left empty and never overwrite a pick (§SCARS — a default is a
+ * claim).
+ */
+window.TOOLKIT_ROUGHIN = {
+  toolName: "The By-Others List",
+  eyebrow: "HVAC/R · you → the other trades",
+  lede: "Everything I need from somebody else before it gets covered up — who owes it, where it is, and what gate it has to beat. Not an RFI. It's the list I text the other foreman.",
+  docSubject: "By others — what we need before it's covered",
+  docSubjectWith: "By others — what we need from {to}",
+  closing: "That's the whole list. Reply with what you can hit and what you can't — I'd rather move a hole on paper today than core it after you pour. Call me on anything that doesn't read right.",
+  warn: "<b>Double-check it before you send it.</b> Every line on here is what <i>you</i> picked off <i>your</i> drawings and off the nameplate. This page sizes nothing — no breaker, no whip, no pipe, no curb, no load — it asserts no clearance and no rating, and it doesn't know what the code, the engineer or the manufacturer requires. It's an ask, not an approved design, and <b>nothing on it authorizes anybody to do extra work.</b>",
+  offHint: "The sheet and revision is the whole argument — naming what you took it off is the difference between a request the other foreman works to and one he re-walks with you next week.",
+  phJob: "Building C",
+  phOff: "M-301 rev 2",
+  phFrom: "Manny — Apex Mechanical",
+  phArea: "RTU-4 — then it's a button",
+  areaLabel: "Unit / area",
+
+  who: [
+    { v: "ec", label: "Electrician" },
+    { v: "gc", label: "GC super" },
+    { v: "pc", label: "Plumber" },
+    { v: "roofer", label: "Roofer" },
+    { v: "atc", label: "Controls / ATC" },
+    { v: "fa", label: "Fire alarm" },
+    { v: "steel", label: "Steel / dunnage" },
+    { v: "framer", label: "Framer/drywall" },
+    { v: "conc", label: "Concrete" }
+  ],
+
+  // EARLIEST FIRST — this is the order a job actually closes up in, and it is
+  // why grouping by "When" reads as a countdown instead of a pile.
+  milestones: [
+    { v: "pour", label: "Before the pour" },
+    { v: "deck", label: "Before deck goes on" },
+    { v: "dryin", label: "Before roof dry-in" },
+    { v: "crane", label: "Before crane day" },
+    { v: "rock", label: "Before they rock it" },
+    { v: "lid", label: "Before the ceiling closes" },
+    { v: "startup", label: "Before startup" }
+  ],
+
+  // Ordered by how often it comes up on a real job, not alphabetically.
+  asks: [
+    { v: "disc", label: "Disconnect at the unit", who: "ec", by: "startup", specs: [
+      "I'll send the nameplate photo — you pick it",
+      "Weatherproof, it's on the roof",
+      "In sight of the unit, not behind it",
+      "On a strut stand, not on the cabinet",
+      "Reuse the one that's already there"
+    ] },
+    { v: "whip", label: "Whip to the unit", who: "ec", by: "startup", specs: [
+      "Liquidtight, outdoor",
+      "Long enough to reach the corner post",
+      "Land it in the unit, don't leave it coiled",
+      "Leave slack — it sits on isolators",
+      "Through the curb, not over the roof",
+      "Just stub it, I'll make the final"
+    ] },
+    { v: "tstat", label: "T-stat box + conduit", who: "ec", by: "rock", specs: [
+      "Box and a stub above the ceiling",
+      "Where I marked it, not where it's drawn",
+      "Pull string left in the pipe",
+      "Ring only, I'll trim it out",
+      "Ganged with the light switch",
+      "Sensor box, not a t-stat box"
+    ] },
+    { v: "cond", label: "Condensate tie-in", who: "pc", by: "lid", specs: [
+      "Give me a stub I can trap off",
+      "Indirect to the floor sink",
+      "Primary and secondary, both stubbed",
+      "I'm pumping to it — has to be up high"
+    ] },
+    { v: "pwr120", label: "Power for my controls", who: "ec", by: "lid", specs: [
+      "Dedicated circuit, no taps off my unit",
+      "Land it in my control panel",
+      "For the condensate pump",
+      "For the VFD or starter",
+      "Voltage off my nameplate — I'll send it",
+      "Homerun, don't daisy-chain the boxes"
+    ] },
+    { v: "access", label: "Access door for me", who: "gc", by: "lid", specs: [
+      "Hard lid — I have to reach the box",
+      "Lay-in tile is fine, just mark it",
+      "In the wall at my damper",
+      "Under the unit, not off to the side",
+      "Big enough for my arm and a meter",
+      "One at each box — I'll mark them"
+    ] },
+    { v: "block", label: "Blocking in the wall", who: "framer", by: "rock", specs: [
+      "Behind the wall unit, before rock",
+      "Solid backing, not just a stud",
+      "I'll mark the height on the studs",
+      "For the head — it's heavy, use plywood",
+      "Bracket for the unit heater, up high",
+      "Both sides — units are back to back"
+    ] },
+    { v: "curb", label: "Curb set + flashed", who: "roofer", by: "dryin", specs: [
+      "Curb's set — needs flashing only",
+      "You're setting it, curb's on site",
+      "Flash it before we take rain",
+      "Roof slopes here — pitched curb",
+      "Cant and cap per your detail",
+      "Don't close it till my duct drops in"
+    ] },
+    { v: "louver", label: "Louver opening", who: "framer", by: "rock", specs: [
+      "R.O. per my markup, I'll paint it",
+      "Don't close it till my duct's through",
+      "Head and sill framed, not just cut",
+      "Who's flashing it — you or the skin guy?"
+    ] },
+    { v: "core", label: "Core drill", who: "gc", by: "rock", specs: [
+      "I'll mark it, you core it",
+      "Scan it first — it's post-tension",
+      "Line set and condensate, two holes",
+      "Room for the pipe plus insulation",
+      "Through the wall, not the deck",
+      "Who's firestopping it, you or me?"
+    ] },
+    { v: "gas", label: "Gas to the unit", who: "pc", by: "startup", specs: [
+      "Stub it at the curb, I'll take it in",
+      "Drip leg and union at my connection",
+      "Shutoff within reach of the unit",
+      "Off the roof header that's already up",
+    ] },
+    { v: "opening", label: "Roof opening cut", who: "steel", by: "deck", specs: [
+      "I'll lay it out, you cut it",
+      "Frame it while the deck's still open",
+      "Size off my shop drawing",
+      "Supply and return, two holes",
+      "Curb lands on it — keep it square",
+      "Don't cut till I paint the layout"
+    ] },
+    { v: "ctlwire", label: "Controls wire to unit", who: "atc", by: "lid", specs: [
+      "Get it in before the lid goes up",
+      "Land it in my unit, I'll terminate",
+      "You're pulling it, not me — confirm",
+      "Sensor wire to the box I set",
+      "It's pulled, just needs terminating",
+      "Point-to-point before I start up"
+    ] },
+    { v: "fadet", label: "Duct detector wiring", who: "fa", by: "startup", specs: [
+      "Detector's in the duct, needs wiring",
+      "Land the shutdown at my unit",
+      "Remote test switch — you place it",
+      "Has to work before I can start up"
+    ] },
+    { v: "sleeve", label: "Sleeve/pad in the pour", who: "gc", by: "pour", specs: [
+      "Sleeve for my line set",
+      "Sleeve for the condensate run",
+      "Pad under the unit — I'll mark it",
+      "Pad wide enough to walk around it",
+      "Leave the sleeve proud of the pour",
+      "Call me the day before you pour"
+    ] },
+    { v: "dunnage", label: "Dunnage / stand", who: "steel", by: "crane", specs: [
+      "Set it before crane day, not after",
+      "I'll send you the unit footprint",
+      "Level it — the roof isn't",
+      "High enough to work under it",
+      "Rails run the long way on the unit",
+      "Isolators on top, I'll bring them"
+    ] }
+  ]
+};

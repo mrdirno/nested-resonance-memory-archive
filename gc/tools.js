@@ -33,6 +33,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, crew and hours by classification, today only. Your log owns the number; this is the field record.",
     chip: "#2C6E1B",
     audience: "Super → CM / Owner's rep"
+  },
+  {
+    name: "The Close-In List",
+    href: "rough-in-request.html",
+    desc: "Before you cover it, pour it or close the lid: what has to be IN, tested and signed off, who owes each one, and the gate. Send every sub his own list, then tick them off as they come back.",
+    chip: "#1F5B8F",
+    audience: "Super \u2192 every sub on the floor"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

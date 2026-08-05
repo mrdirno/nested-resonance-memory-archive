@@ -41,6 +41,13 @@ window.AV_TOOLS = [
     desc: "Somebody put you on something that isn't yours. Tag it before you roll — whose call it was, what they had you do, why it isn't in our scope, and what it cost the room you were actually here for. No prices, no fake signature line.",
     chip: "#7A5A05",
     audience: "Techs → GC super / PM / owner"
+  },
+  {
+    name: "Rough-In Request",
+    href: "rough-in-request.html",
+    desc: "The boxes, conduit, power, backing and holes you need out of somebody else's crew — walk it once, send the electrician his list and the GC theirs, then tap each one off as it goes in. Everything you ask for carries the gate it has to beat.",
+    chip: "#2E7D4F",
+    audience: "AV → EC / GC / framer / ceilings"
   }
   // The loop appends new tools here as it builds them from wishing-well requests.
 ];

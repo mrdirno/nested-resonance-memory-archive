@@ -122,3 +122,203 @@ window.TOOLKIT_ITEMS.tag = {
     }
   ]
 };
+
+
+/* ── THE CROSS-BOUNDARY REQUEST — what this crew needs OUT of somebody else ───
+ *
+ * The toolkit's first tool whose output leaves the company that made it
+ * (av/AV_SOCIETY.md §THE INTERFACE). Every tool before it served one man sending
+ * something UP his own chain. This is what he sends SIDEWAYS.
+ *
+ * Written by a foreman in THIS trade and then cut by a cross-trade skeptic who
+ * has watched all six trades ask for things and watched half those asks ignored.
+ * The cuts are §SAFETY and §THE SYSTEM OF RECORD, not taste:
+ *   · anything that was really an RFI, a change order, a submittal or a permit
+ *     item is GONE — those are numbered in somebody else's system and a second
+ *     number nobody honours is worse than no number;
+ *   · nothing asserts a size, a rating, a depth, a fill, a load, a required
+ *     height or a listed assembly. Every spec below is a PHRASING he picks;
+ *   · no money, ever. Put a price on a row and every foreman stops reading;
+ *   · no calendar dates — you ask against HIS gates, because his schedule is the
+ *     one that moves. That is why `milestones` is the load-bearing axis here.
+ *
+ * `who` and `by` on an ask are the USUAL aim and the USUAL gate. They only ever
+ * fill a field left empty and never overwrite a pick (§SCARS — a default is a
+ * claim).
+ */
+window.TOOLKIT_ROUGHIN = {
+  toolName: "Hole & Backing List",
+  eyebrow: "Plumbing · you → the other trades",
+  lede: "Everything another outfit has to dig, pour, lay in, back, or energize before I can rough it in — who owes it, where it is, and the gate it has to beat.",
+  docSubject: "Holes and backing — what we need before it's covered",
+  docSubjectWith: "Holes and backing — what we need from {to}",
+  closing: "That's what I need from you before it closes up. Text me back what you'll hit and what you won't — if one of these ain't happening, tell me now while it's still cheap to fix.",
+  warn: "<b>Double-check it before you send it.</b> Every line on here is what <i>you</i> picked off <i>your</i> drawings. This page sizes nothing — no pipe, no sleeve, no core, no pad, no depth — it sets no invert and no slope, and it doesn't know what the code, the engineer or the inspector requires. It's an ask, not an approved design, and <b>nothing on it authorizes anybody to do extra work.</b>",
+  offHint: "The sheet and revision is the whole argument — naming what you took it off is the difference between a request the other foreman works to and one he re-walks with you next week.",
+  phJob: "Building C",
+  phOff: "P-201 rev 2",
+  phFrom: "Sal — Local 38",
+  phArea: "Rm 118 — then it's a button",
+  areaLabel: "Room / area / gridline",
+
+  who: [
+    { v: "gc-super", label: "GC super" },
+    { v: "concrete", label: "Concrete" },
+    { v: "framer", label: "Framer/drywall" },
+    { v: "ec", label: "EC foreman" },
+    { v: "mason", label: "Mason" },
+    { v: "sitework", label: "Dirt guy" },
+    { v: "steel", label: "Steel guys" },
+    { v: "roofer", label: "Roofer" }
+  ],
+
+  // EARLIEST FIRST — this is the order a job actually closes up in, and it is
+  // why grouping by "When" reads as a countdown instead of a pile.
+  milestones: [
+    { v: "backfill", label: "Before they backfill" },
+    { v: "slab-pour", label: "Before the slab pour" },
+    { v: "block-up", label: "Before block goes up" },
+    { v: "deck-pour", label: "Before the deck pour" },
+    { v: "dryin", label: "Before roof dry-in" },
+    { v: "walls-close", label: "Before walls close" },
+    { v: "ceiling-close", label: "Before ceiling closes" },
+    { v: "startup", label: "Before startup" }
+  ],
+
+  // Ordered by how often it comes up on a real job, not alphabetically.
+  asks: [
+    { v: "sleeve-pour", label: "Sleeve in the pour", who: "concrete", by: "slab-pour", specs: [
+      "PVC sleeve — I'll drop them on site",
+      "Galv sleeve — you furnish",
+      "Sleeve one size up off my pipe",
+      "Stub it above the slab so I can find it",
+      "Cap or tape it so it don't fill",
+      "Set to my paint mark, not the plan"
+    ] },
+    { v: "backing", label: "Backing for carriers", who: "framer", by: "walls-close", specs: [
+      "Backing for a wall-hung closet carrier",
+      "Backing for the lav carrier",
+      "Backing for the urinal",
+      "Backing for grab bars",
+      "Backing for the drinking fountain",
+      "Backing for the wall-hung sink",
+      "Double the studs where the carrier lands"
+    ] },
+    { v: "blockout", label: "Blockout in the slab", who: "concrete", by: "slab-pour", specs: [
+      "Blockout for the closet riser",
+      "Blockout at my floor drain",
+      "Trench drain blockout — I set the frame",
+      "Pit for the grease interceptor",
+      "Elevator sump pit",
+      "Depress the slab at the shower pan",
+      "Box it out — I'll patch it after"
+    ] },
+    { v: "sleeve-block", label: "Sleeve in the block", who: "mason", by: "block-up", specs: [
+      "Sleeve laid in as you go up",
+      "Chase in the block for my stack",
+      "Leave the cell open — don't grout it",
+      "Knock-out at my paint mark",
+      "Sleeve through the knee wall",
+      "Sleeve I can seal after"
+    ] },
+    { v: "chase", label: "Fur out the wet wall", who: "framer", by: "walls-close", specs: [
+      "Fur it out — my closet bend won't fit",
+      "Deeper wall behind the water closets",
+      "Wider chase for the stack",
+      "No stud where my riser lands",
+      "Chase runs floor to deck, don't stop it",
+      "Furring on the block for my drops"
+    ] },
+    { v: "core", label: "Core it for me", who: "gc-super", by: "walls-close", specs: [
+      "Scan it first — I'm not hitting cable",
+      "Core the slab at my mark",
+      "Core the deck from below",
+      "Core through the block wall",
+      "Wet core — bring a vac and a plug",
+      "Patch it back once I'm through",
+      "Get it cored before they rock"
+    ] },
+    { v: "vtr", label: "Vents through the roof", who: "roofer", by: "dryin", specs: [
+      "Sleeve my vents before you dry in",
+      "You flash them, I'll set the stack",
+      "Don't roof over my openings",
+      "Vent's got to clear the curb — walk it with me"
+    ] },
+    { v: "pre-pour", label: "Pre-pour walk", who: "concrete", by: "slab-pour", specs: [
+      "Walk it with me before you place",
+      "Don't pour till I check my stubs",
+      "Give me the pour date — I'll be there",
+      "Morning of, before the mud shows up",
+      "Nobody moves my stubs after I leave",
+      "Let me brace my risers first"
+    ] },
+    { v: "dirt", label: "Dig and bed my trench", who: "sitework", by: "backfill", specs: [
+      "Dig to my paint and flags",
+      "Sand or fines in the bottom, no rock",
+      "Leave it open till I'm inspected",
+      "Shore it — it's deep and it's wet",
+      "Backfill in lifts, don't dump it on me",
+      "Haul the spoils off, no room to pile",
+      "Pump it down — I'm standing in water"
+    ] },
+    { v: "power", label: "Power to my equipment", who: "ec", by: "walls-close", specs: [
+      "Circuit and disconnect at the unit",
+      "Just a whip — I'll land it myself",
+      "Hard-wired, not cord and plug",
+      "Receptacle at the unit for the pump",
+      "Power for the recirc pump",
+      "Power for my controls only",
+      "Get it in your rough — it's in a wall"
+    ] },
+    { v: "hold-open", label: "Leave me an opening", who: "gc-super", by: "walls-close", specs: [
+      "Hold the wall till my heater's in",
+      "Hold the door frame — unit won't fit",
+      "Leave the last block course out",
+      "Ceiling stays open over my unit",
+      "Keep the rigging path clear",
+      "Leave a knockout panel I can rock later"
+    ] },
+    { v: "access", label: "Access panel", who: "gc-super", by: "ceiling-close", specs: [
+      "Access at my cleanout",
+      "Access at the shutoff valve",
+      "Access at the mixing valve",
+      "Access at the tub waste",
+      "Access at the backflow",
+      "In the lid, not in the wall",
+      "Big enough for my arm and a wrench"
+    ] },
+    { v: "pad", label: "Housekeeping pad", who: "concrete", by: "walls-close", specs: [
+      "Pad under the water heater",
+      "Pad under the booster skid",
+      "Pad for the duplex pump set",
+      "Pad under the softener and filters",
+      "Curb the pad — it's a wet room",
+      "Pad set to my equipment feet",
+      "Pour it before I set, I'm not shimming"
+    ] },
+    { v: "steel-support", label: "Steel for my hangers", who: "steel", by: "deck-pour", specs: [
+      "Angle across the joists for my riser",
+      "Trapeze steel over my rack",
+      "Weld me a clip on the column",
+      "Inserts in the pour where I marked",
+      "Kicker at my stack so it don't walk",
+      "Something to hang the offset off"
+    ] },
+    { v: "roof-drain", label: "Roof drain openings", who: "steel", by: "deck-pour", specs: [
+      "Open the deck at each drain",
+      "Overflow opening beside the primary",
+      "Frame it in the joists, not on my line",
+      "Sump pan set at the drain",
+      "Leave it open till my body's in",
+      "Blockout in the pour at my drains"
+    ] },
+    { v: "energize", label: "Power on for startup", who: "ec", by: "startup", specs: [
+      "Need it hot — vendor's here to fire it",
+      "Breaker's off, need it turned on",
+      "It's landed but not energized",
+      "Label the disconnect so nobody kills it",
+      "Temp power on the pump till permanent",
+      "Need it hot to fill and test"
+    ] }
+  ]
+};

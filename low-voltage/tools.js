@@ -40,6 +40,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Not on our prints, or the ceiling closed on us. Get it on a tag before you're off that floor — who told you, why it's an extra, where it stands, and the men and hours it burned. A heads-up you can reply to, not a claim.",
     chip: "#9A3312",
     audience: "Tech / lead → GC super / our PM"
+  },
+  {
+    name: "Who Owes Me What",
+    href: "rough-in-request.html",
+    desc: "Backing before rock, boxes and pathway from the EC, a tile held at every device, the frame prepped before it's ordered. Who owes it, where it is, and the gate it has to beat \u2014 chased till it's in.",
+    chip: "#9A3312",
+    audience: "LV \u2192 GC / EC / drywall / ceilings"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

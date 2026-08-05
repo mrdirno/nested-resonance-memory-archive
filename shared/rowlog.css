@@ -1,0 +1,168 @@
+/* FIELD TOOLKIT — SHAPE #3 STYLESHEET (av/AV_SOCIETY.md §THE THREE SHAPES: THE ROW LOG).
+ *
+ * ONE sheet, EVERY trade — the same move `shared/note.css` made for shape #2, made
+ * here at shape #3's SECOND instance, which is exactly where the book says to make
+ * it. The first instance (`low-voltage/device-checkout.html`) carried ~130 lines of
+ * its own <style> with low-voltage's coral hard-coded into a dozen rules. A second
+ * row-log page copying that block is a fork with extra steps, and six of them drift
+ * inside a week.
+ *
+ * Every colour that belongs to a TRADE is a variable the shared runtime injects
+ * from that trade's `trade.js` at boot (--flag / --flag-ink / --deep / --tint), so
+ * an AV rough-in request and a low-voltage device checkout are this one file
+ * wearing two different hues, and neither page carries a line of its own CSS.
+ *
+ * Every colour that belongs to a STATE is fixed here and is deliberately NOT the
+ * trade accent: a duplicate warning, a flagged row and a destructive button mean
+ * the same thing in all six trades, and painting them the trade colour makes the
+ * page say "brand" where it needs to say "look at this".
+ *
+ * THE PAGE CONTRACT — a row-log page uses these four IDs, which is all the engine
+ * needs to mount: #bar (the add bar) · #list · #tally · #preview.
+ *
+ * The two hard-won mobile facts from the first instance, kept verbatim:
+ *   · NO overflow-x:hidden anywhere. It MASKS a horizontal overflow instead of
+ *     fixing it and blinds the pre-ship mobile gate on exactly the defect it
+ *     exists to catch (operator 2026-08-04, the MOBILE-WATERTIGHT law).
+ *   · 16px on every text control, because anything smaller makes iOS zoom the
+ *     whole page on focus.
+ *   · 44px MINIMUM on everything you tap, chips and segmented buttons included.
+ *     The first instance shipped its chips at 38px and its segments at 40px —
+ *     comfortable with a mouse, thin for a thumb in a glove on a cracked screen,
+ *     and under the operator's stated bar (MOBILE-WATERTIGHT, 2026-08-04). One
+ *     sheet means fixing it here fixes it for every trade at once.
+ */
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--ok:#0C6B4F;
+  /* STATE, not trade — fixed in all six toolkits on purpose. */
+  --warn:#E08A3C;--warn-ink:#8A3A00;--warn-bg:#FFF4E8;--bad:#C0392B;--bad-ink:#8E2B20;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  /* fallbacks only — the runtime overwrites these per trade at boot */
+  --flag:#F0BE1E;--flag-ink:#231B00;--deep:#22303A;--tint:#EEF1EC;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(60px + env(safe-area-inset-bottom))}
+
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 14px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(20px,5.4vw,29px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.95}
+.lede{margin:7px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:12px}
+.card.grey{border-left-color:var(--muted)}
+.card>h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;margin:0 0 9px;color:var(--ink)}
+.card>h2 .why{font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:11.5px;font-weight:400;color:var(--muted)}
+.note{font-size:12px;color:var(--muted);margin:0 0 10px;line-height:1.45}
+.note b{color:var(--ink)}
+.warn{border-left:4px solid var(--flag);background:var(--tint);padding:9px 11px;font-size:12px;color:#3A2C08;margin-bottom:12px;border-radius:2px;line-height:1.45}
+.warn b{color:var(--ink)}
+
+label,.lab{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 3px}
+input[type=text],input[type=tel],select,textarea{width:100%;min-width:0;font:inherit;font-size:16px;/* 16px = iOS will not zoom the page on focus */
+  padding:9px 10px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);min-height:44px}
+textarea{min-height:88px;resize:vertical;font-family:var(--mono);font-size:13px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--deep);outline-offset:1px}
+
+/* ── the add bar ───────────────────────────────────────────────────────────── */
+#bar{display:block}
+.rl-lead{display:flex;gap:8px;align-items:flex-end}
+.rl-lead .rl-f{flex:1 1 auto;min-width:0}
+.rl-add{flex:0 0 auto;font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:17px;font-weight:700;
+  background:var(--flag);color:var(--flag-ink);border:1px solid var(--flag);border-radius:2px;min-height:44px;padding:0 20px;cursor:pointer}
+.rl-add:hover{filter:brightness(1.07)}
+.rl-lab{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 3px}
+.rl-carry{font-style:normal;color:var(--deep);letter-spacing:.06em}
+.rl-in{width:100%;min-width:0;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);min-height:44px}
+.rl-next{margin-top:7px}
+.rl-nextbtn{font-family:var(--mono);font-size:12px;background:#fff;border:1px dashed var(--deep);color:var(--deep);border-radius:2px;min-height:44px;padding:6px 12px;cursor:pointer}
+.rl-dupe{margin:7px 0 0;font-size:12px;color:var(--warn-ink);background:var(--warn-bg);border-left:3px solid var(--warn);padding:6px 9px;border-radius:2px}
+.rl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-top:10px}
+.rl-f.rl-wide{grid-column:1/-1}
+.rl-f.rl-bad .rl-in,.rl-f.rl-bad{outline:2px solid var(--bad);outline-offset:2px;border-radius:2px}
+.rl-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.rl-chip{font-family:var(--sans);font-size:13px;background:#fff;border:1px solid var(--line);color:var(--ink);
+  border-radius:2px;min-height:44px;padding:8px 12px;cursor:pointer;max-width:100%;overflow-wrap:anywhere;text-align:left}
+.rl-chip.on{background:var(--steel);border-color:var(--steel);color:#fff}
+.rl-flagchip.on{background:var(--warn-ink);border-color:var(--warn-ink)}
+.rl-hint{font-size:12px;color:var(--muted)}
+.rl-learn{margin-bottom:0}
+.rl-editing{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}
+.rl-editlab{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--deep)}
+.rl-flags{display:flex;flex-wrap:wrap;gap:6px}
+.rl-mini{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:#fff;border:1px solid var(--line);
+  color:var(--ink);border-radius:2px;min-height:44px;padding:6px 11px;cursor:pointer}
+.rl-del{border-color:var(--bad);color:var(--bad-ink)}
+#bar.is-editing{outline:2px solid var(--deep);outline-offset:6px;border-radius:2px}
+
+/* The pickers all carry, so once the list has rows the whole bar is: pick the one
+   thing that changed, press Add. The summary line keeps what is carrying VISIBLE
+   without keeping eight controls on screen at the top of a ladder. */
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+details.more>summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--deep);min-height:44px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"▸";display:inline-block;transition:transform .12s ease}
+details.more[open]>summary::before{transform:rotate(90deg)}
+#carrySum{font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--muted);font-size:12px;min-width:0;overflow-wrap:anywhere}
+
+/* ── bulk ──────────────────────────────────────────────────────────────────── */
+.bulkgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:9px;align-items:end}
+.bulkgrid .go{grid-column:1/-1}
+.btn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;background:var(--steel);
+  color:#fff;border:1px solid var(--steel);border-radius:2px;min-height:44px;padding:10px 16px;cursor:pointer;width:100%}
+.btn:hover{filter:brightness(1.15)}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.flag{background:var(--flag);border-color:var(--flag);color:var(--flag-ink)}
+
+/* ── the list ──────────────────────────────────────────────────────────────── */
+.bararea{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:9px}
+.seg{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:#fff}
+.seg button{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:#fff;border:0;
+  border-right:1px solid var(--line);color:var(--muted);min-height:44px;padding:8px 12px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--steel);color:#fff}
+#tally{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px}
+#tally b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;color:var(--ink)}
+.rl-tsep{color:var(--line)}
+.rl-tchip{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;border:1px solid var(--line);border-radius:2px;padding:3px 6px;background:#fff}
+.rl-tflag{border-color:var(--warn);background:var(--warn-bg);color:var(--warn-ink)}
+.rl-empty{font-size:13px;color:var(--muted);margin:6px 0}
+.rl-grp{margin:0 0 12px}
+.rl-grp h3{font-family:var(--cond);text-transform:uppercase;letter-spacing:.07em;font-size:13px;color:var(--muted);
+  margin:0 0 5px;padding-bottom:3px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.rl-grp h3 .rl-n{color:var(--deep)}
+.rl-row{display:flex;align-items:stretch;gap:6px;margin-bottom:5px}
+.rl-tap{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:8px;text-align:left;background:#fff;border:1px solid var(--line);
+  border-left:4px solid var(--line);border-radius:2px;min-height:46px;padding:6px 9px;cursor:pointer;font:inherit;color:inherit}
+.rl-tap:hover{border-color:var(--deep)}
+.rl-tap.at-top{border-left-color:var(--ok)}
+.rl-row.has-flag .rl-tap{border-left-color:var(--warn)}
+.rl-txt{flex:1 1 auto;min-width:0}
+.rl-main{display:block;font-family:var(--mono);font-size:13px;font-weight:700;overflow-wrap:anywhere}
+.rl-sub{display:block;font-size:11.5px;color:var(--muted);overflow-wrap:anywhere}
+.rl-st{flex:0 0 auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;border:1px solid var(--line);border-radius:2px;
+  padding:3px 5px;background:var(--tint);color:var(--deep);white-space:normal;max-width:9.5em;text-align:center}
+.rl-st.none{background:#F2F2EE;color:#9AA0A6;border-style:dashed}
+.rl-flag{flex:0 0 auto;display:flex;align-items:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
+  background:var(--warn-bg);border:1px solid var(--warn);color:var(--warn-ink);border-radius:2px;padding:0 5px}
+.rl-edit{flex:0 0 auto;width:44px;background:#fff;border:1px solid var(--line);border-radius:2px;cursor:pointer;font-size:15px;color:var(--muted)}
+.rl-edit:hover{border-color:var(--deep);color:var(--deep)}
+
+/* ── output ────────────────────────────────────────────────────────────────── */
+.outrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:9px;margin-bottom:10px}
+pre#preview{font-family:var(--mono);font-size:11.5px;line-height:1.45;background:#fff;border:1px solid var(--line);border-radius:2px;
+  padding:11px;margin:0;white-space:pre-wrap;overflow-wrap:anywhere;max-height:340px;overflow-y:auto}
+.foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.foot a{color:var(--steel);text-decoration:none;border-bottom:1px solid var(--flag);
+  display:inline-flex;align-items:center;min-height:44px;padding:0 2px}
+.credit{font-size:11.5px;color:var(--muted);margin:10px 0 0;line-height:1.45}
+/* A LINK INSIDE A SENTENCE still has to be a 44px target, and it must not push
+   the paragraph around to get there: the padding grows the hit box and the equal
+   negative margin gives the space straight back, so the line box never moves. */
+.credit a{color:var(--deep);padding:14px 4px;margin:-14px -4px;display:inline-block}

@@ -31,6 +31,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Directed work that isn't on your prints. Ticket it before you pull off — who directed it, what you had us do, why it's an extra, men and hours by classification and ST/OT/DT. No rates, no totals, no fake signature line.",
     chip: "#0A5C87",
     audience: "Foreman → Super / GC PM"
+  },
+  {
+    name: "What I Need List",
+    href: "rough-in-request.html",
+    desc: "What you need out of the other guys before it gets buried \u2014 pads, sleeves, backing, cores, trenching, curbs. Every line carries who owes it and which gate it has to beat, and you send each trade his list only.",
+    chip: "#C7511F",
+    audience: "EC \u2192 GC / concrete / framer / steel"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

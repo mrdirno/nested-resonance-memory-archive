@@ -186,3 +186,199 @@ window.TOOLKIT_ITEMS.tag = {
     }
   ]
 };
+
+
+/* ── THE CROSS-BOUNDARY REQUEST — what this crew needs OUT of somebody else ───
+ *
+ * The toolkit's first tool whose output leaves the company that made it
+ * (av/AV_SOCIETY.md §THE INTERFACE). Every tool before it served one man sending
+ * something UP his own chain. This is what he sends SIDEWAYS.
+ *
+ * Written by a foreman in THIS trade and then cut by a cross-trade skeptic who
+ * has watched all six trades ask for things and watched half those asks ignored.
+ * The cuts are §SAFETY and §THE SYSTEM OF RECORD, not taste:
+ *   · anything that was really an RFI, a change order, a submittal or a permit
+ *     item is GONE — those are numbered in somebody else's system and a second
+ *     number nobody honours is worse than no number;
+ *   · nothing asserts a size, a rating, a depth, a fill, a load, a required
+ *     height or a listed assembly. Every spec below is a PHRASING he picks;
+ *   · no money, ever. Put a price on a row and every foreman stops reading;
+ *   · no calendar dates — you ask against HIS gates, because his schedule is the
+ *     one that moves. That is why `milestones` is the load-bearing axis here.
+ *
+ * `who` and `by` on an ask are the USUAL aim and the USUAL gate. They only ever
+ * fill a field left empty and never overwrite a pick (§SCARS — a default is a
+ * claim).
+ */
+window.TOOLKIT_ROUGHIN = {
+  toolName: "Who Owes Me What",
+  eyebrow: "Low-voltage · you → the other trades",
+  lede: "Everything I need from somebody else before it gets buried — who I'm asking, where it is, and the gate it has to beat. Walk the job, tick it, paste it to his phone.",
+  docSubject: "What we need before it's covered",
+  docSubjectWith: "What we need from {to}",
+  closing: "Mark what you can hit and shoot it back — anything you can't, tell me today. I'd rather move a device now than core a finished wall later.",
+  warn: "<b>Double-check it before you send it.</b> Every line on here is what <i>you</i> picked off <i>your</i> drawings. This page sizes nothing — no box, no pathway, no battery, no circuit — it sets no device height and no spacing, and it doesn't know what the code, the engineer or the fire marshal requires. It's an ask, not an approved design, and <b>nothing on it authorizes anybody to do extra work.</b>",
+  offHint: "The sheet and revision is the whole argument — naming what you took it off is the difference between a request the other foreman works to and one he re-walks with you next week.",
+  phJob: "Building C",
+  phOff: "T-201 rev 3",
+  phFrom: "Ray — Sentinel Systems",
+  phArea: "Corr 2E — then it's a button",
+  areaLabel: "Room / area",
+
+  who: [
+    { v: "gc", label: "GC super" },
+    { v: "ec", label: "EC foreman" },
+    { v: "drywall", label: "Drywall/framers" },
+    { v: "ceiling", label: "Ceiling / grid" },
+    { v: "doors", label: "Door hardware" },
+    { v: "mech", label: "Mech / duct" },
+    { v: "sprink", label: "Sprinkler fitter" },
+    { v: "elev", label: "Elevator" }
+  ],
+
+  // EARLIEST FIRST — this is the order a job actually closes up in, and it is
+  // why grouping by "When" reads as a countdown instead of a pile.
+  milestones: [
+    { v: "pour", label: "Before the pour" },
+    { v: "frames", label: "Before frames get ordered" },
+    { v: "rock", label: "Before rock goes up" },
+    { v: "lid", label: "Before the hard lid" },
+    { v: "tile", label: "Before tile goes in" },
+    { v: "trim", label: "Before we trim out" },
+    { v: "ahj", label: "Before the fire marshal walk" }
+  ],
+
+  // Ordered by how often it comes up on a real job, not alphabetically.
+  asks: [
+    { v: "backing", label: "Backing & blocking", who: "drywall", by: "rock", specs: [
+      "Ply — I'll spray the outline on the studs",
+      "Blocking between studs, flat to the face",
+      "Strut across the studs",
+      "Ply the whole wall in the closet",
+      "Backing behind the panel, I'll mark it",
+      "Backing both sides of the door",
+      "Wide enough I can shift it a stud"
+    ] },
+    { v: "boxring", label: "Box & ring", who: "ec", by: "rock", specs: [
+      "LV ring only — no box",
+      "Single gang + mud ring",
+      "Double gang + mud ring",
+      "4-square + ring, deep as you got",
+      "Box + blank cover till we trim",
+      "Mullion box — the narrow one"
+    ] },
+    { v: "stubsleeve", label: "Stub & sleeve", who: "ec", by: "rock", specs: [
+      "Stub above the ceiling, bushed",
+      "Stub + pull string, cap it",
+      "Sleeve through the wall where I sprayed",
+      "Two stacked — one's never enough",
+      "Through the rated wall, you firestop",
+      "Home run all the way to the IDF",
+      "Sweeps, no hard 90s"
+    ] },
+    { v: "power", label: "Power at the device", who: "ec", by: "tile", specs: [
+      "Quad above the ceiling for the injector",
+      "Receptacle over the door for the operator",
+      "Whip to the gate operator",
+      "Unswitched — not on the light circuit",
+      "Not on the occ sensor",
+      "Land it in the box we're mounting to"
+    ] },
+    { v: "holdopen", label: "Leave it open", who: "ceiling", by: "tile", specs: [
+      "Leave these tiles out till we're up",
+      "Don't load tile over the corridor yet",
+      "Call me before you close this wall",
+      "Rock one side, leave the other for now",
+      "Skip the lid over the head end",
+      "Give me a day in there before you close"
+    ] },
+    { v: "gridlay", label: "Grid layout", who: "ceiling", by: "tile", specs: [
+      "Grid per my ceiling markup",
+      "Hold a full tile at each device",
+      "Keep my device off the main tee",
+      "You cut the tile, we set the device",
+      "Tile bridge at every cut"
+    ] },
+    { v: "doorprep", label: "Door & frame prep", who: "doors", by: "frames", specs: [
+      "Electric hinge on that leaf",
+      "Raceway in the door for the loop",
+      "Frame prepped for the strike",
+      "Header prepped for the mag",
+      "Mullion prepped for the reader",
+      "Prep for a contact in the frame",
+      "Tell me before it goes to the shop"
+    ] },
+    { v: "pipedoor", label: "Pipe to the door", who: "ec", by: "frames", specs: [
+      "Conduit into the frame, hinge side",
+      "Pipe to the strike jamb",
+      "Both jambs — reader side and strike side",
+      "Up the header, out above the ceiling",
+      "Get it in before they grout the frame",
+      "Stub to the frame, string in it"
+    ] },
+    { v: "accesspanel", label: "Access panel", who: "drywall", by: "lid", specs: [
+      "Access door in the lid at the device",
+      "Access over the head end / the mag",
+      "Big enough to get a hand and a tool in",
+      "You cut it, I'll locate it",
+      "Where I sprayed the X",
+      "Hinged, not a cut-out we lose"
+    ] },
+    { v: "headend", label: "Head-end power", who: "ec", by: "trim", specs: [
+      "Dedicated circuit to the rack",
+      "Quad in the closet, on the ply",
+      "Off the emergency panel",
+      "Land it before we set the head end",
+      "Ground bar in the closet, bonded by you"
+    ] },
+    { v: "closet", label: "Closet ready", who: "gc", by: "trim", specs: [
+      "Ply on two walls, painted or not",
+      "Door on it with a core in it",
+      "Cooling on before we power up",
+      "Floor sealed — no rock dust",
+      "Lights working in there",
+      "Nobody else stores material in it"
+    ] },
+    { v: "duct", label: "Duct smokes set", who: "mech", by: "lid", specs: [
+      "Cut and mount it, we'll wire it",
+      "We furnish, you install",
+      "Call me when the unit's set",
+      "Leave me access to it after the lid",
+      "Don't close the shaft till we're in",
+      "Tell me where the starter lands"
+    ] },
+    { v: "core", label: "Core drill", who: "gc", by: "lid", specs: [
+      "Core the deck, closet to closet",
+      "Core the wall above the ceiling",
+      "Scan it before you core",
+      "You core, we sleeve and firestop",
+      "Keep it out of the finished side",
+      "One hole, where I sprayed it"
+    ] },
+    { v: "flowtamper", label: "Flow & tamper", who: "sprink", by: "ahj", specs: [
+      "Flow switch set — call me when",
+      "Tampers on before the test",
+      "Box or slack left at the switch",
+      "Tell me when the PIV goes in",
+      "Don't cover the riser till we're in",
+      "Do 'em all in one trip if you can"
+    ] },
+    { v: "poursleeve", label: "Sleeves for the pour", who: "ec", by: "pour", specs: [
+      "Sleeves in the deck where I marked",
+      "Stub-ups at the guard desk",
+      "Pipe out to the gate before paving",
+      "Pull box at the gate",
+      "Sweeps under the drive",
+      "Stub up in the pole base",
+      "Cap and mark so we find them"
+    ] },
+    { v: "elevator", label: "Elevator car pull", who: "elev", by: "trim", specs: [
+      "Traveler pair for the car camera",
+      "Reader pathway into the cab",
+      "Box in the car canopy",
+      "Term point in the machine room",
+      "Term point in the machine room for recall",
+      "Before the car gets finished"
+    ] }
+  ]
+};

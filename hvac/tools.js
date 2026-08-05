@@ -31,6 +31,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Outside the agreement, and you need it in writing before you put a wrench on it. Tag it at the unit — who told you, what you found, whether it's down right now, crew, material, and refrigerant on its own line by ASHRAE number.",
     chip: "#0C7A66",
     audience: "Tech → Site contact / Service manager"
+  },
+  {
+    name: "The By-Others List",
+    href: "rough-in-request.html",
+    desc: "Disconnects, whips, curbs, dunnage, condensate, controls power \u2014 everything on your unit that somebody else owes you. Sorted by who owes it and the gate it has to beat, then chased till it's in.",
+    chip: "#1F6F5C",
+    audience: "HVAC \u2192 EC / GC / plumber / roofer"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

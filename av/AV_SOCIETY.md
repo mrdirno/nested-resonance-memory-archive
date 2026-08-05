@@ -308,6 +308,26 @@ scope" knows in one line that no tradesman wrote it. The caller keeps the copy, 
 field list and its order (the order IS the argument), and the trade's vocabulary in
 `items.js`. Same boundary shape #1's engine draws.
 
+
+**SHAPE #3'S STYLESHEET NOW EXISTS TOO: `shared/rowlog.css`** (extracted 2026-08-05 at the
+second instance, same rule, same place). The first row-log page carried ~130 lines of its
+own `<style>` with one trade's coral hard-coded into a dozen rules; the second would have
+copied it and six would have drifted inside a week. Every colour that belongs to a TRADE is
+a runtime-injected variable; every colour that belongs to a STATE — a duplicate warning, a
+flagged row, a destructive button — is fixed in the sheet, because those mean the same
+thing in all six trades and painting them the trade colour makes the page say *brand* where
+it needs to say *look at this*. `low-voltage/device-checkout.html` adopted it in the same
+cycle and deleted its fork.
+
+Shape #3's ENGINE grew four things at the boundary, all of them opt-in and all of them
+no-ops for the first instance: **named document FILTERS** that AND together and compose
+with the delta (a chase list's real message is *what is still open*, and a cross-boundary
+list's is *his items only*) · **`groupName`**, because a config whose values are slugs was
+printing `EC` and `ROCK` as the headings somebody else reads · **gated `learn` fields**,
+so an ask can offer the sizes anybody would pick for it *merged with the ones he has typed
+himself* · and a **scoped flagged block**, so the receiver filter reaches the part of the
+document that used to ignore it.
+
 Keep the boundary or the config rots: `trade.js` = IDENTITY + COPY · `tools.js` =
 REGISTRY · `items.js` = that trade's VOCABULARY DATA (categories, size ladders, config
 options, unit-of-issue sets). Size ladders and C×C/FIP/no-hub live in data — never in the
@@ -436,6 +456,48 @@ a new data class, so the rules are explicit and not negotiable:
   is WEIGHT for ranking a correction and CONTEXT for building it. It is never a login, never
   required, and — like the rest of the queue — **never published**.
 
+
+
+## THE INTERFACE — the axis a single-actor tool cannot reach (opened 2026-08-05)
+Every tool in this toolkit before the cross-boundary request served **one man sending
+something UP his own chain**: his PM, his office, his super. That is not where the
+friction on a real job is. The friction is at the **boundaries** — what the AV guy needs
+from the electrician, what the HVAC foreman needs from the roofer, what the plumber needs
+from the concrete crew, what nobody asks for until the drywall is already up.
+
+**Nobody builds here, and the reason is the opportunity:** a cross-boundary document
+belongs to no single company's software. Procore is the GC's. ServiceTitan is the service
+shop's. Neither one is where a foreman texts another foreman the eleven things he needs
+before Thursday.
+
+**TWO THINGS MAKE AN INTERFACE TOOL DIFFERENT, and both are structural:**
+
+1. **THE GATE — the deadline belongs to somebody else's schedule.** Ask for a back box the
+   day after the board goes up and the answer is a change order and a patch. Ask for a
+   sleeve after the pour and the answer is a core bit. So *needed-before* is not a field,
+   it is a first-class **axis**: you group the whole list by it and read your own walk as a
+   countdown. Six independent trade panels wrote their gates in their own words with no
+   coordination and every one of them is a **milestone, never a date** — *"before rock goes
+   up"*, *"before they backfill"*, *"before CMU caps out"*, *"before crane day"*, *"before
+   frames get ordered"*. One panel said why out loud: **"I don't hand the super a calendar.
+   I ask against his gates, because his schedule is the one that moves, not mine."**
+2. **ONE WALK, N MESSAGES.** He walks the floor once and comes back with items for three
+   different companies. Sending all of them one list is how all three ignore it. So the
+   document narrows to a single receiver and addresses him by name, and the flagged block
+   narrows with it — the electrician must never read the GC's problems in a message
+   addressed to him.
+
+**THE BARS DO NOT MOVE AT A BOUNDARY.** It must still be LIST-shaped (§THE GATE), and it
+must still never compete with whoever owns and numbers the document (§THE SYSTEM OF
+RECORD). The prune pass that cut these six vocabularies threw out, by name, everything
+that was really an RFI to the engineer of record, a furnish-vs-install subcontract
+question, a utility meter release, a special-inspection record, an as-built, and every
+row with money on it. What survives is the ask itself: **ask for the hole; he buys the
+pipe.**
+
+**AND ONE RULE THE TRADES WROTE FOR US:** *"If I spec his material I own his warranty."*
+That is the same instinct as §SAFETY arriving from the field instead of from us — which is
+the strongest confirmation this doctrine has had.
 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
@@ -689,6 +751,48 @@ open a new document — never clear-then-reload, and never diagnose a persistenc
 that shape of test.
 
 
+### 2026-08-05 — THE FIRST RENDER HAPPENS BEFORE THE ENGINE HANDS THE PAGE BACK
+`var rl = RowLog.mount({... docHead: function(){ ...rl.rows()... } })`. `mount()` renders
+once before it returns, so `rl` is still `undefined` inside that first `docHead` — it
+threw, the exception escaped `mount()`, and **the entire page script died at that line.**
+What shipped looked fine: the engine had already built its bar and attached its own
+listeners, so rows added, chips lit, the tally counted. Everything the PAGE owned was
+dead — no document in the preview, no receiver buttons, no defaults, no listeners — and
+nothing in the console pointed at the config that caused it. Driving the real page at
+390px found it in one pass; a screenshot never would have. **Rule:** any caller hook the
+engine invokes during `mount()` must survive its own handle not existing yet. The first
+instance guards this (`rl ? rl.group() : "floor"`) and that guard is the reason, not a
+style. Reach for the rows through one `rowsNow()` helper that returns `[]` until the
+engine is back.
+
+### 2026-08-05 — THE HEADING IS A VALUE, AND SOMEBODY ELSE READS IT
+Grouping by a coded axis printed the CODE. A cross-boundary request headed `EC — 2 ROWS`
+and `ROCK — 4 ROWS` went to a foreman at another company, and the first line he reads is
+the one the tool invented. **Rule:** if a field's stored value is a slug, the config owes
+a `groupName` for it. Storing codes is right; showing them never is.
+
+### 2026-08-05 — A SHARED BLOCK LEAKS ACROSS THE SCOPE THE DOCUMENT PROMISED
+"Send to the electrician" filtered the rows and left the FLAGGED block drawing from every
+row on the list — so the EC's message ended with the GC's blocking item on it. The block
+was written when a row log had exactly one receiver, and it stayed correct until the day
+a document had a scope. **Rule:** when you add a scope to a document, every section of
+that document is in scope until you prove otherwise. Grep for the ones that read from the
+whole collection rather than from what you just filtered.
+
+### 2026-08-05 — A GATED FIELD THAT ONLY HALF REPAINTED
+The engine repainted `chips` options when a gating select changed, but not `learn` ones —
+so the ask-gated size picker stayed frozen on the previous pick's list and would have
+attached a back-box spec to a conduit line. It was invisible until an ask actually gated a
+learn field. **Rule:** when a mechanism applies to a family of field kinds, enumerate the
+family, not the one you happen to be using.
+
+### 2026-08-05 — 38px WAS UNDER THE BAR ON EVERY ROW-LOG CONTROL, IN THE SHIPPED PAGE
+The first row-log page shipped chips at 38px and segmented buttons at 40px against a
+stated 44px minimum, and it had been live and "verified" since. Nobody caught it because
+the sweep that checked tap targets checked the tools that existed *then*. **Rule:** the
+44px assertion belongs in the pre-ship drive of every page, not in a one-time audit — and
+the reason it was cheap to fix this time is that there is now ONE stylesheet to fix it in.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -893,3 +997,29 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   overflow, no tap target under 44px, the sticky bar never covering content, and the draft
   byte-identical through a reload including the three kinds that keep state in a closure.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/tm-tag.html
+
+- **2026-08-05 — [AXIS:INTERFACE] THE CROSS-BOUNDARY REQUEST · 6 trades × 14 tools → 6 trades × 20 tools.**
+  The first tool in this toolkit whose output leaves the company that made it, and the axis
+  the LIVE STATE line had never once worked. One walk down a floor produces asks aimed at
+  three different companies; every one of them carries a **gate that belongs to somebody
+  else's schedule**, and the tool is built around that fact — group the list by WHO and you
+  get one message per receiver, by WHEN and your own walk reads as a countdown. Tap a row
+  when he commits, tap it again when you have seen it in; **Still open** is Thursday's
+  follow-up and it composes with the receiver filter, so "still open, for the electrician"
+  is one document. Vocabulary from six in-trade panels (one foreman per trade) then cut by
+  a cross-trade skeptic: **96 asks, 558 spec phrasings, 49 receivers, 44 gates**, and what
+  the skeptic removed is the point — every RFI-to-the-EOR, every furnish-vs-install
+  question, the meter release, the special-inspection report, the as-built, and every row
+  with money on it. It also found the missing ask in each trade: *keep my wall clear*
+  (AV), *confirm the door swing before I rough the switch* (electrical), *the louver
+  opening* (HVAC), *vents through the roof before dry-in* (plumbing), *grid layout* (LV),
+  *the owner's own vendors* (GC). The GC's copy runs the other direction on purpose — it
+  is the pre-cover call TO the subs, which is the same widget mirrored. **Shape #3's
+  stylesheet extracted** at the second instance (`shared/rowlog.css`), and the engine grew
+  named document filters, `groupName`, gated `learn` fields and a scoped flagged block.
+  **BACKPORT RIDER FIRED, same cycle:** `low-voltage/device-checkout.html` migrated onto
+  the shared sheet and deleted 125 lines of forked CSS, which is also how the 38px-tap-target
+  scar got fixed on the page that had been shipping it. Five new scars above. Every page
+  driven for real at 390px — zero horizontal overflow, nothing under 44px, and the document
+  produced end to end.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html

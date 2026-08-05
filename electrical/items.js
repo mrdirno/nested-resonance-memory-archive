@@ -340,3 +340,195 @@ window.TOOLKIT_ITEMS.tag = {
     }
   ]
 };
+
+
+/* ── THE CROSS-BOUNDARY REQUEST — what this crew needs OUT of somebody else ───
+ *
+ * The toolkit's first tool whose output leaves the company that made it
+ * (av/AV_SOCIETY.md §THE INTERFACE). Every tool before it served one man sending
+ * something UP his own chain. This is what he sends SIDEWAYS.
+ *
+ * Written by a foreman in THIS trade and then cut by a cross-trade skeptic who
+ * has watched all six trades ask for things and watched half those asks ignored.
+ * The cuts are §SAFETY and §THE SYSTEM OF RECORD, not taste:
+ *   · anything that was really an RFI, a change order, a submittal or a permit
+ *     item is GONE — those are numbered in somebody else's system and a second
+ *     number nobody honours is worse than no number;
+ *   · nothing asserts a size, a rating, a depth, a fill, a load, a required
+ *     height or a listed assembly. Every spec below is a PHRASING he picks;
+ *   · no money, ever. Put a price on a row and every foreman stops reading;
+ *   · no calendar dates — you ask against HIS gates, because his schedule is the
+ *     one that moves. That is why `milestones` is the load-bearing axis here.
+ *
+ * `who` and `by` on an ask are the USUAL aim and the USUAL gate. They only ever
+ * fill a field left empty and never overwrite a pick (§SCARS — a default is a
+ * claim).
+ */
+window.TOOLKIT_ROUGHIN = {
+  toolName: "What I Need List",
+  eyebrow: "Electrical · you → the other trades",
+  lede: "What I need from the other guys before it gets buried - pads, sleeves, backing, cores, trenching, curbs. Sorted by who I'm asking and which gate it has to beat.",
+  docSubject: "What we need before it gets buried",
+  docSubjectWith: "What we need from {to}",
+  closing: "Push back on anything you can't hit - give me a date and I'll mark it committed. What I don't hear back on gets chased Monday, and once it's covered it's a core.",
+  warn: "<b>Double-check it before you send it.</b> Every line on here is what <i>you</i> picked off <i>your</i> prints. This page sizes nothing — no wire, no pipe, no pad, no depth, no fill — it sets no heights, and it doesn't know what the code, the engineer or the inspector requires. It's an ask, not an approved design, and <b>nothing on it authorizes anybody to do extra work.</b>",
+  offHint: "The sheet and revision is the whole argument — naming what you took it off is the difference between a request the other foreman works to and one he re-walks with you next week.",
+  phJob: "Building C",
+  phOff: "E-201 rev 3",
+  phFrom: "Dave — Local 3",
+  phArea: "Rm 214 — then it's a button",
+  areaLabel: "Room / area / gridline",
+
+  who: [
+    { v: "gc", label: "GC Super" },
+    { v: "conc", label: "Concrete" },
+    { v: "framer", label: "Framer" },
+    { v: "mech", label: "Mechanical" },
+    { v: "mason", label: "Mason / CMU" },
+    { v: "dirt", label: "Dirt / Site" },
+    { v: "steel", label: "Steel" },
+    { v: "roofer", label: "Roofer" }
+  ],
+
+  // EARLIEST FIRST — this is the order a job actually closes up in, and it is
+  // why grouping by "When" reads as a countdown instead of a pile.
+  milestones: [
+    { v: "backfill", label: "Before they backfill" },
+    { v: "slab", label: "Before the slab pour" },
+    { v: "cmucap", label: "Before CMU caps out" },
+    { v: "deckpour", label: "Before the deck pour" },
+    { v: "dryin", label: "Before roof dry-in" },
+    { v: "rock", label: "Before rock goes up" },
+    { v: "lid", label: "Before the lid closes" }
+  ],
+
+  // Ordered by how often it comes up on a real job, not alphabetically.
+  asks: [
+    { v: "backing", label: "Backing / blocking", who: "framer", by: "rock", specs: [
+      "Ply backing - panel or gear",
+      "Ply backing - TV / display bracket",
+      "Solid blocking between the studs",
+      "Backing for a heavy fixture",
+      "Backing outside - wall pack / camera",
+      "Backing for EV charger / disconnect",
+      "Backing full height at my mark"
+    ] },
+    { v: "swing", label: "Door swing", who: "framer", by: "rock", specs: [
+      "Confirm the swing before I rough the switch",
+      "Frame's flipped from the plan — tell me now",
+      "Mark the swing on the deck",
+      "Pair of doors — tell me which leaf is active"
+    ] },
+    { v: "core", label: "Core drill", who: "gc", by: "rock", specs: [
+      "Core thru the slab - I'll mark it",
+      "Core thru the deck from above",
+      "Core thru the CMU wall",
+      "Core thru the curb / footing",
+      "Core and patch it back",
+      "Wet core - protect what's below",
+      "Scan it first, then core"
+    ] },
+    { v: "holdoff", label: "Hold off closing", who: "gc", by: "rock", specs: [
+      "Don't rock this wall yet - not roughed",
+      "Leave the last sheet off for me",
+      "Hold the lid - I'm still above it",
+      "Hold till my rough inspection clears",
+      "Call me before you close it",
+      "Leave the grid open in this room"
+    ] },
+    { v: "accesspanel", label: "Access panel", who: "gc", by: "lid", specs: [
+      "Panel in the hard lid at my J-box",
+      "Panel in the wall at my junction",
+      "Panel at the driver / power supply",
+      "Panel at the disconnect above",
+      "Lay-in tile is fine - just mark it",
+      "Size it to my mark, not the standard"
+    ] },
+    { v: "sleeves", label: "Sleeves", who: "conc", by: "slab", specs: [
+      "Sleeve thru the wall at my mark",
+      "Sleeve thru the footing / grade beam",
+      "Sleeve thru the deck before the pour",
+      "Sleeve thru the rated wall - I'll firestop",
+      "Extra sleeve - leave me a spare",
+      "Cap it so it don't fill with mud",
+      "Sleeve up thru the roof deck"
+    ] },
+    { v: "blockboxes", label: "Boxes in the block", who: "mason", by: "cmucap", specs: [
+      "Set my boxes as you lay it",
+      "Run my pipe up the cell",
+      "Leave the cell open above my box",
+      "Don't grout the cell I'm in",
+      "Pipe under the bond beam",
+      "Call me the morning of that lift"
+    ] },
+    { v: "blockout", label: "Blockout / opening", who: "conc", by: "slab", specs: [
+      "Blockout in the slab at my mark",
+      "Opening in the wall for my gear",
+      "Recess for a flush panel",
+      "Knockout for the duct bank",
+      "Opening for the pull section",
+      "Leave the form open - I'll fill it"
+    ] },
+    { v: "pad", label: "Housekeeping pad", who: "conc", by: "slab", specs: [
+      "Pad for the switchgear / main",
+      "Pad for the transformer outside",
+      "Pad for the generator",
+      "Pad for the ATS / disconnect stand",
+      "Pour around my stub-ups"
+    ] },
+    { v: "prepour", label: "Pre-pour walk", who: "conc", by: "slab", specs: [
+      "Walk my underslab with me first",
+      "Call me the day before you pour",
+      "Watch my stubs - don't bend 'em",
+      "Let me set floor boxes to grade",
+      "Screed to my box, don't bury it",
+      "Call me if you have to move a stub"
+    ] },
+    { v: "trench", label: "Trench / dig", who: "dirt", by: "backfill", specs: [
+      "Trench from the utility to the building",
+      "Trench for the site lights",
+      "Trench for the gate / card reader",
+      "Bore under the drive - no open cut",
+      "Saw cut and patch the asphalt",
+      "Backfill after my inspection, not before",
+      "Sand bedding and my warning tape"
+    ] },
+    { v: "roofpen", label: "Roof pen / curb", who: "roofer", by: "dryin", specs: [
+      "Curb for my rooftop gear",
+      "Pitch pocket for my conduit",
+      "Pen thru the deck, you flash it",
+      "Hold the roof open till I'm up",
+      "Sleeve up before you dry in",
+      "Walk pad out to my disconnect"
+    ] },
+    { v: "scan", label: "X-ray / scan it", who: "gc", by: "rock", specs: [
+      "Scan it before anybody cores",
+      "PT slab - scan it, don't guess",
+      "Mark the rebar and my pipe below",
+      "Occupied below - scan and shore",
+      "After hours, tenant's still in there"
+    ] },
+    { v: "conflict", label: "Conflict - move it", who: "mech", by: "lid", specs: [
+      "Your duct is in my rack",
+      "Your pipe is over my gear",
+      "Keep the front of my panel clear",
+      "Your hanger's landing on my pipe",
+      "Reroute above my tray",
+      "Let's walk it and swap elevations"
+    ] },
+    { v: "embeds", label: "Embeds / weld clips", who: "steel", by: "deckpour", specs: [
+      "Weld clips for my gear hangers",
+      "Embed plate in the wall for my rack",
+      "Weld my strut before they spray",
+      "Angle across the joists to hang from",
+      "Don't cut my sleeve out of the deck"
+    ] },
+    { v: "ufer", label: "Ufer / ground", who: "conc", by: "slab", specs: [
+      "Tie my ufer to the bottom steel",
+      "Leave my ground tail out of the pour",
+      "Ground ring in before you backfill",
+      "Don't cut my ground wire - call me",
+      "Call me before you tie the footing steel"
+    ] }
+  ]
+};

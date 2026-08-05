@@ -26,6 +26,10 @@
  *     B / G / 1 / 2 / M / PH / Roof and we cannot know that.
  *   · grouping with a switchable axis · per-group counts · the status rollup
  *   · persistence WITH a synchronous flush · the delta since the last copy
+ *   · NAMED DOCUMENT FILTERS (added at the second instance, the cross-boundary
+ *     request): a row log that tracks somebody ELSE's work is a chase list, and
+ *     the message he sends on day two is not the list, it is WHAT IS STILL OPEN.
+ *     `cfg.filters` composes with the delta and touches the DOCUMENT only.
  *   · the plain-text document · the TSV · copy with the non-secure-context
  *     fallback · the self-aware date · re-render on the runtime's av:ready.
  *
@@ -131,15 +135,23 @@
     var learned = {};       // {fieldKey: [values he has actually typed]}
     var groupKey = GROUPS[0].key;
     var deltaOnly = false;
+    var filterKeys = [];    // [] = the whole list; see docRows()
 
     function field(k) { for (var i = 0; i < FIELDS.length; i++) if (FIELDS[i].key === k) return FIELDS[i]; return null; }
     function ctl(k) { return bar.querySelector('[data-k="' + k + '"]'); }
 
-    /* Options for a field can depend on another field (subsystem gates type), so
-     * they are resolved at render time, never frozen at mount. */
+    /* Options for a field can depend on another field (subsystem gates type, an
+     * ASK gates the specs anybody would pick for it), so they are resolved at
+     * render time, never frozen at mount.
+     *
+     * The THIRD argument is what he has already typed into a `learn` field. A
+     * caller that supplies presets would otherwise SHADOW them — the preset list
+     * wins and his own words disappear the moment the gating field changes — so
+     * the caller gets both lists and decides the merge. Callers that ignore it
+     * behave exactly as before. */
     function optionsOf(f, cur) {
       if (typeof cfg.optionsFor === "function") {
-        var o = cfg.optionsFor(f.key, cur || readBar());
+        var o = cfg.optionsFor(f.key, cur || readBar(), (learned[f.key] || []).slice());
         if (o) return o;
       }
       if (f.input === "learn") return (learned[f.key] || []);
@@ -204,8 +216,11 @@
         }
         if (el && f.input === "select") el.addEventListener("change", function () {
           if (f.sticky) sticky[f.key] = el.value;
-          // A gating field changes what the gated axis may offer.
-          FIELDS.forEach(function (g) { if (g.input === "chips") paintChips(g); });
+          // A gating field changes what the gated axis may offer — and that is as
+          // true of a `learn` axis (presets for THIS pick, plus whatever he has
+          // typed before) as it is of a fixed `chips` axis. Repainting only one of
+          // the two shipped a gated learn field frozen on the previous pick's list.
+          FIELDS.forEach(function (g) { if (g.input === "chips" || g.input === "learn") paintChips(g); });
         });
         var li = bar.querySelector('[data-learn="' + f.key + '"]');
         if (li) {
@@ -447,6 +462,10 @@
      * NOT a table. A real table cannot survive a 390px phone, and this is a phone
      * tool first: one dense line per row under an ALL-CAPS group heading. The
      * table exists only in the TSV the office pastes into a spreadsheet. */
+    /* The heading is a VALUE, and a config whose values are slugs ("ec", "rock")
+     * would put "EC" and "ROCK" at the top of a document somebody else reads.
+     * cfg.groupName maps the stored value to the word for the man reading it;
+     * without it the value IS the word, exactly as before. */
     function groupsOf(src) {
       var order = [], map = {};
       (src || rows).forEach(function (r) {
@@ -459,7 +478,11 @@
         var ua = (cfg.ungroupedLabel || "NOT SET"), ia = a === ua ? 1 : 0, ib = b === ua ? 1 : 0;
         return ia - ib;
       });
-      return order.map(function (g) { return { name: g, rows: map[g] }; });
+      return order.map(function (g) {
+        var name = g;
+        if (cfg.groupName && g !== (cfg.ungroupedLabel || "NOT SET")) name = cfg.groupName(g, groupKey) || g;
+        return { name: name, value: g, rows: map[g] };
+      });
     }
 
     function render() {
@@ -506,6 +529,50 @@
     function flagged() { return rows.filter(function (r) { return r.flag; }); }
     function deltaRows() { return rows.filter(function (r) { return r.t > copiedAt; }); }
 
+    /* ── THE DOCUMENT FILTERS ─────────────────────────────────────────────────
+     * A row log that tracks somebody ELSE'S work is a chase list, and the message
+     * a man sends on day two is not the list — it is WHAT IS STILL OPEN. A row
+     * log that crosses a COMPANY boundary needs the other half of the same idea:
+     * one walk produces asks aimed at three different companies, and each of them
+     * gets his own message, not everybody's list.
+     *
+     * So filters are NAMED, DECLARED BY THE CALLER, and several can be active at
+     * once — they AND together and then compose with the delta. "Still open" and
+     * "only the electrician" are two independent scopes on one list, and needing
+     * both at the same time is the normal case, not the clever one.
+     *
+     * THEY TOUCH THE DOCUMENT ONLY, never the on-screen list. A row we hide on
+     * screen is a row he loses (the same reason the ungrouped bucket stays last
+     * instead of vanishing) — and the preview under the button already shows him
+     * exactly what the button is about to copy. */
+    function filterDefs() {
+      if (!filterKeys.length || !cfg.filters) return [];
+      return filterKeys.map(function (k) {
+        return cfg.filters.filter(function (f) { return f.v === k; })[0];
+      }).filter(Boolean);
+    }
+    /* SCOPED = who the document is FOR. DOC = that, narrowed again to what has
+     * changed. The two are separate because the FLAGGED block belongs to the
+     * first and not the second: a flagged line is the thing you most want the
+     * receiver to see whether or not it changed since your last copy — but it
+     * must still be HIS line. Drawing that block from every row is how the
+     * electrician ends up reading the GC's problems in a message addressed to
+     * him, which is the exact failure a cross-boundary tool cannot have.
+     * With no filters declared, scopedRows() === rows and the first instance
+     * behaves precisely as it did. */
+    function scopedRows() {
+      var src = rows;
+      filterDefs().forEach(function (f) {
+        if (typeof f.test === "function") src = src.filter(function (r) { return f.test(r.values, r); });
+      });
+      return src;
+    }
+    function docRows() {
+      var src = scopedRows();
+      if (deltaOnly) src = src.filter(function (r) { return r.t > copiedAt; });
+      return src;
+    }
+
     function renderTally(gs) {
       if (!tallyEl) return;
       if (!rows.length) { tallyEl.innerHTML = ""; return; }
@@ -530,25 +597,35 @@
      * the TSV. A primary button that produces something no human receives is a
      * dead button. */
     function text() {
-      var src = deltaOnly ? deltaRows() : rows;
+      var src = docRows();
+      var scopedFlagged = scopedRows().filter(function (r) { return r.flag; });
+      var fds = filterDefs();
+      var fd = fds.filter(function (f) { return f.emptyText; })[0] || fds[0] || null;
       var out = [];
       var ctx = {
         total: rows.length, shown: src.length, today: todayStr(),
-        status: statusCounts(), flagged: flagged().length,
-        deltaOnly: deltaOnly, groupLabel: (GROUPS.filter(function (g) { return g.key === groupKey; })[0] || {}).label
+        status: statusCounts(), flagged: scopedFlagged.length,
+        deltaOnly: deltaOnly, filters: filterKeys.slice(),
+        filterLabel: fds.map(function (f) { return f.label; }).join(", "),
+        groupLabel: (GROUPS.filter(function (g) { return g.key === groupKey; })[0] || {}).label
       };
       var head = cfg.docHead ? cfg.docHead(ctx) : null;
       if (head) out.push(head);
       if (!src.length) {
         out.push("");
-        out.push(deltaOnly && rows.length ? "Nothing new since the last copy." : "Nothing on the list yet.");
+        // An EMPTY FILTERED DOCUMENT IS THE BEST NEWS THE TOOL EVER GIVES — every
+        // item is in. Saying "nothing on the list yet" there would be a lie, so
+        // the filter brings its own sentence for the case where it matched none.
+        out.push(rows.length
+          ? (fd && fd.emptyText ? fd.emptyText : (deltaOnly ? "Nothing new since the last copy." : "Nothing on the list yet."))
+          : "Nothing on the list yet.");
       }
       groupsOf(src).forEach(function (g) {
         out.push("");
         out.push(String(g.name).toUpperCase() + " — " + g.rows.length + (g.rows.length === 1 ? " ROW" : " ROWS"));
         g.rows.forEach(function (r) { out.push(cfg.docRow ? cfg.docRow(r.values, r) : ""); });
       });
-      var f = flagged();
+      var f = scopedFlagged;
       if (f.length) {
         out.push("");
         out.push("FLAGGED — " + f.length);
@@ -662,6 +739,9 @@
       group: function () { return groupKey; },
       setDeltaOnly: function (b) { deltaOnly = !!b; render(); },
       deltaOnly: function () { return deltaOnly; },
+      setFilter: function (k) { filterKeys = k ? (Array.isArray(k) ? k.slice() : [k]) : []; render(); },
+      filter: function () { return filterKeys.slice(); },
+      docCount: function () { return docRows().length; },
       copy: function () { if (copyBtn) copyBtn.click(); },
       copyTsv: function () { copyText(tsv(), tsvBtn, cfg.onFlash); }
     };

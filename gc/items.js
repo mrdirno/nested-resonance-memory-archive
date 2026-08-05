@@ -396,3 +396,187 @@ window.TOOLKIT_ITEMS.tag = {
     }
   ]
 };
+
+
+/* ── THE CROSS-BOUNDARY REQUEST — what this crew needs OUT of somebody else ───
+ *
+ * The toolkit's first tool whose output leaves the company that made it
+ * (av/AV_SOCIETY.md §THE INTERFACE). Every tool before it served one man sending
+ * something UP his own chain. This is what he sends SIDEWAYS.
+ *
+ * Written by a foreman in THIS trade and then cut by a cross-trade skeptic who
+ * has watched all six trades ask for things and watched half those asks ignored.
+ * The cuts are §SAFETY and §THE SYSTEM OF RECORD, not taste:
+ *   · anything that was really an RFI, a change order, a submittal or a permit
+ *     item is GONE — those are numbered in somebody else's system and a second
+ *     number nobody honours is worse than no number;
+ *   · nothing asserts a size, a rating, a depth, a fill, a load, a required
+ *     height or a listed assembly. Every spec below is a PHRASING he picks;
+ *   · no money, ever. Put a price on a row and every foreman stops reading;
+ *   · no calendar dates — you ask against HIS gates, because his schedule is the
+ *     one that moves. That is why `milestones` is the load-bearing axis here.
+ *
+ * `who` and `by` on an ask are the USUAL aim and the USUAL gate. They only ever
+ * fill a field left empty and never overwrite a pick (§SCARS — a default is a
+ * claim).
+ */
+window.TOOLKIT_ROUGHIN = {
+  toolName: "The Close-In List",
+  eyebrow: "GC · you → your subs",
+  lede: "Before I cover it, pour it, or close the lid — here's what's got to be IN, tested, and signed off, who owes me each one, and the gate it has to beat. Miss the gate and somebody's coring concrete.",
+  docSubject: "Close-in list — what has to be in before we cover",
+  docSubjectWith: "Close-in list — what we need from {to}",
+  closing: "That's the list for this area. Text me back what's in, what's coming, and the day. Anything I don't hear on by the gate, I'm covering — call me before then, not after.",
+  warn: "<b>Double-check it before you send it.</b> Every line on here is what <i>you</i> walked and typed. This page inspects nothing, tests nothing and signs nothing off — it doesn't know what the code, the engineer, the inspector or your contract requires. It's the call you're making to your subs, not a record of inspection, and <b>nothing on it approves anybody's work or authorizes extra work.</b>",
+  offHint: "Name the area and the sheet you walked it off, and nobody argues later about which wall you meant.",
+  phJob: "Building C",
+  phOff: "A-201 rev 4",
+  phFrom: "Ken — site super",
+  phArea: "Level 2 east — then it's a button",
+  areaLabel: "Area / grid",
+
+  who: [
+    { v: "ec", label: "Electrical" },
+    { v: "pc", label: "Plumbing" },
+    { v: "mech", label: "Mechanical" },
+    { v: "sprink", label: "Fire Sprinkler" },
+    { v: "lv", label: "Low Voltage/FA" },
+    { v: "framer", label: "Framer" },
+    { v: "conc", label: "Concrete/Rebar" },
+    { v: "roofer", label: "Roofer" },
+    { v: "vendor", label: "Owner vendor / rep" }
+  ],
+
+  // EARLIEST FIRST — this is the order a job actually closes up in, and it is
+  // why grouping by "When" reads as a countdown instead of a pile.
+  milestones: [
+    { v: "backfill", label: "Before backfill" },
+    { v: "pour", label: "Before the pour" },
+    { v: "dryin", label: "Before dry-in" },
+    { v: "insul", label: "Before we insulate" },
+    { v: "rock", label: "Before we rock" },
+    { v: "lid", label: "Before ceiling closes" },
+    { v: "floors", label: "Before floors go down" }
+  ],
+
+  // Ordered by how often it comes up on a real job, not alphabetically.
+  asks: [
+    { v: "vendorrough", label: "Vendor rough points", who: "vendor", by: "pour", specs: [
+      "Walk it with me and mark your stub-ups",
+      "Field-verify before we pour, not off the cut sheet",
+      "Your rough points on the deck in paint",
+      "If your rep hasn't walked it, it's not going in"
+    ] },
+    { v: "roughin", label: "Rough-in done", who: "ec", by: "rock", specs: [
+      "Every box in this wall, both sides",
+      "Home runs pulled and landed",
+      "Pipe hung, strapped, and capped",
+      "Duct in and hung off the structure",
+      "Whips and disconnects at the equipment",
+      "Nothing left to add after I rock"
+    ] },
+    { v: "backing", label: "Backing in the wall", who: "framer", by: "rock", specs: [
+      "Grab bars and toilet accessories",
+      "TVs, monitors, and mounts",
+      "Upper cabinets and countertops",
+      "Handrail and guardrail backing",
+      "Wall-hung fixtures and carriers",
+      "Mark it on the stud so I can see it",
+      "Backing plan's marked, follow it"
+    ] },
+    { v: "photos", label: "Photos before I cover", who: "ec", by: "rock", specs: [
+      "Every wall, before the rock goes on",
+      "Tape in the shot off a column line",
+      "Room number written on the wall",
+      "Send them to me, don't just take them"
+    ] },
+    { v: "signoff", label: "Rough signed off", who: "ec", by: "insul", specs: [
+      "Your inspection, your call, you schedule it",
+      "Send me a photo of the signed card",
+      "Punch your own rough before he shows",
+      "No sign-off, no rock, that's the rule"
+    ] },
+    { v: "test", label: "Test it and hold it", who: "pc", by: "rock", specs: [
+      "On the gauge and holding till I cover",
+      "Water test the drains, top to bottom",
+      "Air on it, gauge stays on the riser",
+      "Hydro on and holding",
+      "Picture of the gauge with the date",
+      "Don't drop the test to move a ladder"
+    ] },
+    { v: "holes", label: "Seal what you cut", who: "ec", by: "rock", specs: [
+      "Every hole you made, you pack",
+      "Both sides of the wall, not just the front",
+      "Sleeves packed before I close it up",
+      "Head-of-wall where you cut the track",
+      "Photo with the wall tag in the frame",
+      "If I rock it, you're cutting it back open"
+    ] },
+    { v: "access", label: "Access doors called", who: "mech", by: "lid", specs: [
+      "Tell me where before I close the lid",
+      "Valves, dampers, and cleanouts",
+      "Mark it on the wall in keel",
+      "Tell me the size you need, I'll order it",
+      "If you don't call it, it's not there"
+    ] },
+    { v: "grid", label: "Above the grid is done", who: "mech", by: "lid", specs: [
+      "Everything above the tile is complete",
+      "Hangers off the structure, not my duct",
+      "Insulation and vapor barrier wrapped",
+      "Devices dropped per the ceiling plan",
+      "Your trash off the tile and out",
+      "Walk it with me before tile goes in"
+    ] },
+    { v: "drops", label: "Drops set to ceiling", who: "sprink", by: "lid", specs: [
+      "Drops cut to the finish ceiling",
+      "Heads centered in the tile",
+      "Mains hung and braced off structure",
+      "Escutcheons after paint, not before",
+      "Hydro on and holding till I close"
+    ] },
+    { v: "lvrough", label: "Rings, boxes, string", who: "lv", by: "rock", specs: [
+      "Ring and pull string at every device",
+      "Backbox set for the head-end / IDF",
+      "Conduit stubbed above the ceiling",
+      "Sleeve through the wall where it crosses",
+      "Match the field, not the old plan"
+    ] },
+    { v: "indeck", label: "In the deck", who: "pc", by: "pour", specs: [
+      "Sleeves in, capped, and marked",
+      "Conduit tied off, not to my rebar",
+      "Stub-ups staked and painted",
+      "Blockouts and box-outs framed",
+      "Sleeve through the footing / grade beam",
+      "Photos and dimensions before the mud truck"
+    ] },
+    { v: "embeds", label: "Embeds and bolts set", who: "conc", by: "pour", specs: [
+      "Anchor bolts templated and tied",
+      "Embed plates flush and level",
+      "Hold-downs in where the drawing shows",
+      "Weld plates for the stair and canopy",
+      "Surveyed before you leave the deck"
+    ] },
+    { v: "ug", label: "Underground in", who: "pc", by: "backfill", specs: [
+      "In, shot, and located before we cover",
+      "Tie-in to the main is made",
+      "Dimension off a hard point, not a stake",
+      "Boots and wrap at the penetrations",
+      "Protected before the dirt comes back",
+      "Looked at before anybody backfills"
+    ] },
+    { v: "curbs", label: "Curbs and penetrations", who: "mech", by: "dryin", specs: [
+      "Curbs set, squared, and shimmed",
+      "All holes through the deck, done",
+      "Coordinated with the roofer's flashing",
+      "Pipe supports set on the roof, not later",
+      "No new holes after we dry in"
+    ] },
+    { v: "floorbox", label: "Floor boxes flush", who: "ec", by: "floors", specs: [
+      "Set to the finish floor, not the deck",
+      "I'll give you the floor build-up — set to it, not to the deck",
+      "Covered and taped before the pour-back",
+      "Poke-thru cores drilled and sealed",
+      "Flat enough for the flooring guy"
+    ] }
+  ]
+};

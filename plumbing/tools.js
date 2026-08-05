@@ -27,6 +27,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Not on your prints? Write the tag before you roll — who told you, why it's outside your contract, crew and material as counts, and what is NOT in this tag. Reads in the same order as the yellow copy so you're not writing the job twice.",
     chip: "#7A3F12",
     audience: "Foreman → Super / PM"
+  },
+  {
+    name: "Hole & Backing List",
+    href: "rough-in-request.html",
+    desc: "Every sleeve, blockout, chase, core and backing another outfit has to leave you before you can rough it in \u2014 with the pour, the block and the dry-in it has to beat. One walk, one message each.",
+    chip: "#7A3D14",
+    audience: "PC \u2192 GC / concrete / framer / EC"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

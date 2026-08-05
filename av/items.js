@@ -295,3 +295,200 @@ window.TOOLKIT_ITEMS = (function () {
     tag: TAG
   };
 })();
+
+/* ── THE CROSS-BOUNDARY REQUEST — what an AV crew needs OUT of somebody else ──
+ *
+ * The FIRST tool in this toolkit whose output leaves the company that made it
+ * (av/AV_SOCIETY.md §THE INTERFACE). Everything before it served one man sending
+ * something UP his own chain. This is what he sends SIDEWAYS, to the electrician,
+ * the framer, the ceiling crew, the millwork shop.
+ *
+ * Written by an AV install foreman and then cut by a cross-trade skeptic. What
+ * they refused to put in matters more than what they kept, and every one of these
+ * is a §SAFETY line, not a taste call:
+ *   · NO circuit sizes, wire sizes, conduit fill or box fill. We ask for a
+ *     dedicated circuit and a pathway; the EC engineers it under his own stamp.
+ *   · NO mounting heights on a menu. Heights come off the elevations and the
+ *     room, and a number picked off a dropdown puts a box in the wrong wall.
+ *     Height stays FREE TEXT on the row, on purpose.
+ *   · NO fire ratings, listed assemblies or firestop products. We ask for a
+ *     sleeve and we ask WHO OWNS the firestop. What's listed for that wall is
+ *     the GC's business and the AHJ's, and asserting it here would be inventing
+ *     certified data.
+ *   · NO calendar dates. You do not hand a super your calendar — you ask against
+ *     HIS gates ("before rock", "before the tile goes in"), because his schedule
+ *     is the one that moves. That is why `milestones` is the load-bearing axis of
+ *     the whole tool and not a nicety.
+ *   · NO money, no backcharge, no "who eats it". The minute there is money in it
+ *     it leaves this list and goes to the PM.
+ *   · NO product or model numbers for the other trade to buy. Spec his material
+ *     and you own his warranty. Ask for the hole; he buys the pipe.
+ *
+ * `who` and `by` on an ask are the USUAL aim and the USUAL gate. They only ever
+ * fill a field he has left empty and never overwrite a pick (§SCARS — a default
+ * is a claim).
+ */
+window.TOOLKIT_ROUGHIN = {
+  toolName: "Rough-In Request",
+  eyebrow: "AV · you → the other trades",
+  lede: "Every box, sleeve, pathway, whip and pad you need out of somebody else's crew — sorted by who you're asking and which gate it has to beat. Text him his list, then chase it till it's in.",
+  docSubject: "AV rough-in — what we need before it closes",
+  docSubjectWith: "AV rough-in — what we need from {to}",
+  closing: "Anything on here you can't hit, call me before you cover it — I'd rather move my device today than core your floor and open your wall later.",
+  warn: "<b>Double-check it before you send it.</b> Every line on here is what <i>you</i> picked off <i>your</i> drawings. This page doesn't size a box, a raceway or a circuit, it doesn't set a mounting height, and it doesn't know what the code, the architect or the engineer requires — verify all of that against your own set. It's an ask, not an approved design, and <b>nothing on it authorizes anybody to do extra work.</b>",
+  offHint: "The drawing and revision is the whole argument. \"Off AV-101 rev 2\" is the difference between a request the other foreman works to and one he re-walks with you next week.",
+  phJob: "Building C", phOff: "AV-101 rev 2", phFrom: "Rico — Acme AV",
+  phArea: "CR-204 — then it's a button", areaLabel: "Room / area",
+
+  who: [
+    { v: "ec", label: "Electrician" },
+    { v: "gc", label: "GC super" },
+    { v: "framer", label: "Framer / drywall" },
+    { v: "it", label: "IT / cabling" },
+    { v: "ceilings", label: "Ceilings (ACT)" },
+    { v: "mill", label: "Millwork" },
+    { v: "mech", label: "Mechanical" }
+  ],
+
+  // EARLIEST FIRST. This is the order a job actually closes up in, and it is why
+  // grouping the list by "When" reads as a countdown instead of a pile.
+  milestones: [
+    { v: "pour", label: "Before the pour" },
+    { v: "rock", label: "Before rock goes up" },
+    { v: "ceiling", label: "Before ceiling closes" },
+    { v: "paint", label: "Before paint" },
+    { v: "floor", label: "Before floor goes down" },
+    { v: "millwork", label: "Before millwork sets" },
+    { v: "rack", label: "Before the rack lands" },
+    { v: "trim", label: "Before we trim out" }
+  ],
+
+  // Ordered by how often it comes up on a real job, not alphabetically.
+  asks: [
+    { v: "backbox", label: "Back box", who: "ec", by: "rock", specs: [
+      "Deep box + single-gang mud ring",
+      "Deep box + 2-gang mud ring",
+      "LV ring + pathway, no box needed",
+      "Recessed AV box behind the display",
+      "Two boxes, own rings, not ganged",
+      "Set plumb and flush to finish face"
+    ] },
+    { v: "conduit", label: "Conduit / sleeve", who: "ec", by: "rock", specs: [
+      "Stub to accessible ceiling + pull string",
+      "Home run to the AV rack, no J-boxes",
+      "Short sleeve through the wall, both sides",
+      "Sweeps only — no LBs, we pull terminated",
+      "Size per my markup, don't downsize it",
+      "Pull string left long at both ends",
+      "Firestop after our pull — you own it"
+    ] },
+    { v: "power", label: "Power", who: "ec", by: "rock", specs: [
+      "Quad behind the display, clear of the mount",
+      "Recept above ceiling at the projector",
+      "Whip to the rack, leave tails long",
+      "Dedicated circuit — nothing else on it",
+      "Rack and displays on the same phase",
+      "Iso ground pulled back to the panel",
+      "Recept in the floor box, AV side"
+    ] },
+    { v: "wallclear", label: "Keep the wall clear", who: "gc", by: "rock", specs: [
+      "Nothing in my display footprint — no switches, stats, strobes",
+      "Sprinkler head and diffuser clear of the screen",
+      "Light switch on the other side of the door",
+      "Nothing lands on the niche wall — I'll spray the outline",
+      "Walk the wall with me before anybody roughs it"
+    ] },
+    { v: "blocking", label: "Blocking / backing", who: "framer", by: "rock", specs: [
+      "Plywood backer — we field-locate the mount",
+      "Solid blocking at the mount points",
+      "Backer full width, display may still shift",
+      "Backing behind the wall speakers",
+      "Backing for the camera shelf / mount"
+    ] },
+    { v: "ceilsupport", label: "Ceiling support", who: "ceilings", by: "ceiling", specs: [
+      "Strut to structure at the projector",
+      "Support off the deck, not off the grid",
+      "Rod left long — we cut to height",
+      "Strut above the tile at the speakers",
+      "Support the camera mount off structure",
+      "Brace and wire my devices same as yours"
+    ] },
+    { v: "datadrop", label: "Data drop", who: "it", by: "trim", specs: [
+      "Drop at each display, both ends done",
+      "Drop above ceiling at each camera",
+      "Service loop left at the device",
+      "Label to my numbering, not yours"
+    ] },
+    { v: "floorbox", label: "Floor box", who: "ec", by: "pour", specs: [
+      "AV compartment separate from power",
+      "Set flush to finish floor, not to slab",
+      "Poke-thru under the table leg",
+      "Trim ring to match the finish floor",
+      "Conduit from the box out to the wall",
+      "Deep enough for our plugs and slack",
+      "Lid opens toward the table"
+    ] },
+    { v: "gridhold", label: "Grid + tile hold", who: "ceilings", by: "ceiling", specs: [
+      "Hold a full tile at each speaker",
+      "Keep my device off the main tee",
+      "Grid layout per my ceiling markup",
+      "Tile bridge / support at every cut",
+      "You cut the tile, we set the device",
+      "Keep the light out of that tile",
+      "Sprinkler head clear of the screen"
+    ] },
+    { v: "millchase", label: "Millwork chase", who: "mill", by: "millwork", specs: [
+      "Grommet in the table at my mark",
+      "Chase down the table leg to the floor box",
+      "Cutout in the credenza back panel",
+      "Leave the back open — no fixed panel",
+      "Vent it — gear lives in that cabinet",
+      "Removable panel at the lectern",
+      "Mic wells in the bench per my markup"
+    ] },
+    { v: "rackroom", label: "Rack room", who: "gc", by: "rack", specs: [
+      "Pad poured and level before rack day",
+      "Cooling on before the rack lands",
+      "Plywood on the wall for our gear",
+      "Door swing + clear path to get it in",
+      "Ground bar in the closet",
+      "Closet stays clean — not a storeroom"
+    ] },
+    { v: "accesspanel", label: "Access panel", who: "gc", by: "ceiling", specs: [
+      "Access door at the screen pocket",
+      "Access door at the projector lift",
+      "Hinged door, not a cut-and-patch",
+      "Big enough for a hand and a tool",
+      "Locate to my markup before the lid"
+    ] },
+    { v: "roughopening", label: "Rough opening", who: "framer", by: "rock", specs: [
+      "Niche R.O. per my markup",
+      "Screen pocket in the hard lid",
+      "Rough it big — we shim to the frame",
+      "Drywall return, no bullnose at the edge",
+      "Don't finish inside — we cover it",
+      "Hold the R.O. till I hand you the frame"
+    ] },
+    { v: "shadetie", label: "Shade / light tie", who: "ec", by: "ceiling", specs: [
+      "Pair from the lighting panel to the rack",
+      "Control pair to the shade motors",
+      "Power in the shade pocket",
+      "Pathway to the keypad location",
+      "Pathway to the shade controller location"
+    ] },
+    { v: "core", label: "Core drill", who: "gc", by: "floor", specs: [
+      "Scan it before you cut",
+      "Core + sleeve, we pull after",
+      "Core under the table, not the aisle",
+      "Sleeve stands proud of the finish floor",
+      "Firestop and patch after our pull",
+      "Coordinate the core with the floor below"
+    ] },
+    { v: "paintfirst", label: "Paint before we hang", who: "gc", by: "paint", specs: [
+      "Finish paint the wall before we mount",
+      "Paint the full wall — don't cut around us",
+      "Inside of the niche painted flat black",
+      "Let it cure before we hang steel on it"
+    ] }
+  ]
+};
