@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>T&amp;M Tag — AV Field Toolkit</title>
+<meta name="description" content="Somebody put you on something that isn't in your scope. Tag it before you roll — who told you, what they had you do, why it isn't ours, and how you left the room.">
+<meta name="apple-mobile-web-app-title" content="T&amp;M Tag">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">AV &middot; Tech &rarr; whoever told you</span>
+    <h1>T&amp;M Tag</h1>
+    <p class="lede">Somebody put you on something that isn't yours. Tag it before you roll off the job &mdash; who told you, what they had you do, why it isn't in our scope, and how you left the room. No prices, no fake signature line.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>One extra, one day, one tag.</b> Roll three days of extras onto one and it stops being a tag and starts being a change order with no price on it &mdash; that's the one supers stop signing. Nothing on here is priced and there's no signature block on purpose: a pasted block can't be signed, and the reply, with its timestamp, is the paper trail.
+  </div>
+
+  <p class="credit">&#10022; Something on here in the wrong order, or missing the line your PM always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the tag</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* AV T&M TAG — the SECOND instance of shape #2, and the one that got the engine
+ * extracted (av/AV_SOCIETY.md §THE THREE SHAPES). This whole page is a CONFIG:
+ * no CSS of its own, no DOM building, no state, no persistence, no document
+ * assembly. shared/note.js owns all of that; this file owns every WORD, which is
+ * the half that has to be this trade's and nobody else's.
+ *
+ * WHAT AN AV LEAD BUILT AND WHAT AN AV FIELD HAND THEN KILLED — the second one
+ * was told to cut about a third, and it cut the three the first was proudest of:
+ *  · THE ROOM IS THE DRAWING'S ROOM. CR-204, not "the conference room" — the GC
+ *    has eleven of those and three are on another floor. KEPT.
+ *  · THE "WHO PUT YOU ON IT" ROLE ROW IS DEAD. You are SENDING this tag to that
+ *    man. A tap that tells the receiver his own job title is a tap nobody takes
+ *    twice, and the office already knows Ken is the GC super.
+ *  · "WHAT IT COST THE ROOM YOU WERE HERE FOR" IS DEAD, and it was the best line
+ *    in the research. The second truck roll is real money — but "that room's
+ *    punch is late now, not on us" is a DELAY CLAIM, and a super will not reply
+ *    to a delay claim while you are standing next to him. He stops reading and
+ *    forwards it to his PM, and the thread dies, which is the one thing this
+ *    cannot survive. Half these asks come from the end user anyway — you don't
+ *    hand the CIO a blame line and then sit across from him at training Tuesday.
+ *    The return trip is a call to your own PM that night; the clock stamp here is
+ *    what lets him claim it. (The low-voltage field hand killed the same thing
+ *    independently, in the same words: it has to land as a heads-up, not a claim.)
+ *  · THE HEADING LOST "— OUT OF SCOPE". In caps at the top of a message you hand
+ *    a man standing next to you, that is an accusation in the subject line — and
+ *    the HVAC field hand cut the identical suffix without being asked to.
+ *  · CREW IS TECHS × HOURS × WHEN, with no names and no classification. "Nights"
+ *    is a fact about WHEN the work happened, never a rate; AV extras get shoved
+ *    to nights by default because the room is occupied and IT won't let you near
+ *    the codec at 10am.
+ *  · WHAT WAS NOT TAKEN, and why: the field hand wanted hours DERIVED from an
+ *    on/off stamp pair instead of a stepper, because a stamp and a stepper that
+ *    disagree is the last tag a super reads. Five other trades' hands all
+ *    specified explicit crew hours, so the stepper stays — and the page prints no
+ *    start/stop pair at all, so there is nothing for it to disagree with.
+ *  · NO PRICING, NO TOTALS, NO SIGNATURE BLOCK, EVER. The reply is the signature.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.tag;
+
+  Note.mount({
+    key: "toolkit.av.tmtag.v1",
+    docName: "T&M TAG",
+    copiedLabel: "Copied. Go send it.",
+    clearConfirm: "Clear this tag? Your name and company stay.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Tag started",
+
+    // THE JOB AND THE ROOM RIDE ON THE SECOND LINE, not stacked onto the heading
+    // with three em-dashes. Eight weeks later somebody finds this by searching an
+    // inbox for "Bishop Ranch" or "CR-204" — a subject that says only T&M TAG is
+    // unfindable — but a title with four dashes in it is unreadable on a phone.
+    subline: function (get, u) {
+      return [get("site"), get("room"), u.today()].filter(Boolean).join("  ·  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in an inbox eight weeks from now, and so it ties to a scope line instead of to an argument.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "— the way everybody says it", ph: "Bishop Ranch 3 — 4th flr refresh", docSkip: true },
+          { id: "room", kind: "text", caps: true, label: "Room", hint: "— the way the DRAWINGS call it", ph: "CR-204 · BR-1201 · SGN-03", docSkip: true }
+        ]
+      },
+      {
+        title: "Who told you to do it",
+        tone: "loud",
+        docHead: "WHO TOLD ME",
+        why: "A tag with no name on it is a work log. Eight weeks out at the OAC somebody asks who authorized it — the room and the hours you can rebuild from memory, the name you can't.",
+        fields: [
+          { id: "who", kind: "text", label: "Their name", hint: "— the one line you can't rebuild later", ph: "Ken D., Turner", docLabel: "Name" },
+          { id: "how", kind: "seg", label: "How they told you", options: T.how, docLabel: "How" },
+          { id: "when", kind: "clock", label: "When", hint: "— stamps itself when you start", docLabel: "When" },
+          { id: "where", kind: "text", label: "Where you were standing", hint: "— he'll remember the spot", ph: "in 4.12 at the credenza, room already trimmed", docLabel: "Where" }
+        ]
+      },
+      {
+        title: "What they had you do",
+        docHead: "WHAT I WAS PUT ON",
+        why: "Named as the thing he stood and watched you do. “Misc AV work” gets “that was in your scope” and dies right there.",
+        fields: [
+          { id: "did", kind: "ticks", options: T.did },
+          { id: "why", kind: "ticks", subhead: "Why it isn't in our scope", label: "", docLabel: "WHY IT ISN'T OURS", options: T.why }
+        ]
+      },
+      {
+        title: "How you left it",
+        tone: "loud",
+        docHead: "HOW I LEFT IT",
+        why: "The super has to know tonight whether that room is dark for the 8am, and \u201ctheir gear hung and powered, not tested by us\u201d in writing is the only thing between you and a free warranty roll the first time their own bar drops audio.",
+        fields: [
+          { id: "left", kind: "pick", label: "How you left it", hint: "\u2014 tonight, not at 7:55", options: T.left, docLabel: "Left it" },
+          { id: "note", kind: "area", rows: 2, label: "Anything the chips don't cover", hint: "\u2014 only if it isn't up there", ph: "their bar was already on the wall crooked \u2014 I re-hung it while I was in there" }
+        ]
+      },
+      {
+        title: "What it took",
+        docHead: "WHAT IT TOOK — QUANTITIES ONLY, NO PRICING",
+        why: "Men, hours and material as counts. No rates and no totals anywhere on here: the second a tag carries a number, the office loses the argument you just won.",
+        fields: [
+          {
+            id: "crew", kind: "rows", label: "Techs on it", addLabel: "+ Another crew line", docLabel: "CREW",
+            cols: [
+              // NO docPrefix that assumes its neighbour. A row where only the hours
+              // got tapped printed "\u00d7 1.5 hrs" \u2014 a multiplication sign with nothing
+              // on the left of it. Every column has to read on its own, because
+              // half of them will be blank half the time.
+              { id: "men", kind: "stepper", label: "Techs", ph: "techs", docSuffix: " tech" },
+              { id: "hrs", kind: "stepper", label: "Hours each", ph: "hrs", docSuffix: " hrs ea" },
+              { id: "shift", kind: "select", label: "When", options: T.shift }
+            ]
+          },
+          {
+            id: "mats", kind: "rows", label: "Material off our truck", addLabel: "+ Another material line", docLabel: "MATERIAL OFF OUR TRUCK",
+            cols: [
+              { id: "qty", kind: "stepper", label: "Qty", ph: "qty" },
+              { id: "what", kind: "text", wide: true, label: "What", ph: "50 ft HDMI · tilt mount · 4 mud rings" }
+            ]
+          },
+          { id: "gear", kind: "ticks", subhead: "The stuff that gets left off and then argued about", label: "", docLabel: "ALSO ON THIS", options: T.gear }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell, they call you not the office", ph: "Mike R — 415-555-0134", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Bayline Integration", docLabel: "Company" }
+        ]
+      }
+    ],
+
+    closing: [
+      "Nothing on here is priced — this is what happened and what it took. The office puts the number on it.",
+      "Reply APPROVED to this and I'll get it booked. One extra, one day, one tag."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.crew || []).length;
+      if (n) return n + " crew line" + (n === 1 ? "" : "s") + " on the tag";
+      return touched ? "Tag started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

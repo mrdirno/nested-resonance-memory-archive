@@ -34,6 +34,13 @@ window.AV_TOOLS = [
     desc: "Turn your end-of-day mess into one clean report your PM can forward — build a role-tailored AI setup, paste it into Gemini/Claude/GPT once, use it daily.",
     chip: "#2E64C8",
     audience: "Leads · PMs · Cx"
+  },
+  {
+    name: "T&M Tag",
+    href: "tm-tag.html",
+    desc: "Somebody put you on something that isn't yours. Tag it before you roll — whose call it was, what they had you do, why it isn't in our scope, and what it cost the room you were actually here for. No prices, no fake signature line.",
+    chip: "#7A5A05",
+    audience: "Techs → GC super / PM / owner"
   }
   // The loop appends new tools here as it builds them from wishing-well requests.
 ];

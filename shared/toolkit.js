@@ -65,6 +65,16 @@
     // Readable text ON the accent. Was hardcoded #231B00 (dark-on-yellow) in four
     // button rules — unreadable the moment a trade picks a dark accent.
     accentInk:  _T.accentInk  || "#231B00",
+    // THE DEEP PAIR — added at shape #2's engine extraction (shared/note.js), which
+    // ships ONE stylesheet across six trades. `accent` is deliberately LIGHT and
+    // high-chroma because it is painted on the dark nav; that makes it unusable as
+    // a border or as text on paper. So a trade also declares the DARK end of its
+    // own hue (`accentDeep`, for rules, headings and the impact block's outline)
+    // and the palest end (`accentTint`, the impact block's fill). Both are hand
+    // picked and contrast-checked per trade rather than computed, because
+    // color-mix() is not safe on the old Android browsers these pages land on.
+    accentDeep: _T.accentDeep || "#22303A",
+    accentTint: _T.accentTint || "#EEF1EC",
     // "…and everyone in the trade" copy + who the handoff goes to
     chain:      _T.chain      || "techs / PMs / leadership",
     roles:      _T.roles      || [["tech", "AV Tech"], ["project_manager", "Project Manager"], ["leadership", "Leadership / Owner"], ["other", "Other"]],
@@ -568,7 +578,8 @@
     var style = document.createElement("style");
     style.textContent = CSS
       + "\n:root{--av-flag:" + TRADE.accent + ";--flag:" + TRADE.accent
-      + ";--flag-ink:" + TRADE.accentInk + ";}\n";
+      + ";--flag-ink:" + TRADE.accentInk
+      + ";--deep:" + TRADE.accentDeep + ";--tint:" + TRADE.accentTint + ";}\n";
     document.head.appendChild(style);
     document.body.insertBefore(buildBar(), document.body.firstChild);
     // Toolkit is the canonical global; AV stays as an alias so every page the AV

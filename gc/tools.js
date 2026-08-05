@@ -26,6 +26,13 @@ window.TOOLKIT_TOOLS = [
     chip: "#8CE86B",
     audience: "Supers → PM / office",
     pinned: true
+  },
+  {
+    name: "T&M Tag",
+    href: "tm-tag.html",
+    desc: "Directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, crew and hours by classification, today only. Your log owns the number; this is the field record.",
+    chip: "#2C6E1B",
+    audience: "Super → CM / Owner's rep"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

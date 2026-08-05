@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>T&M Ticket — Electrical Field Toolkit</title>
+<meta name="description" content="Directed work that isn't on your prints. Ticket it before you pull off — who directed it, what you had us do, why it's an extra, men and hours by classification and ST/OT/DT. No rates, no totals, no fake signature line.">
+<meta name="apple-mobile-web-app-title" content="T&M Ticket">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Electrical · Foreman → whoever directed it</span>
+    <h1>T&M Ticket</h1>
+    <p class="lede">Not on your prints? Ticket it before you pull off the job — who directed it, what you had us do, why it's an extra, and the men and hours it took. No rates, no totals, no fake signature line.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>One extra, one day, one ticket.</b> The minute a foreman rolls three days of extras onto one ticket it stops being a ticket and turns into a COR with no price on it — and that is the one a super stops signing on the spot. Nothing on here is priced and nothing is totalled: your office prices it against the contract.
+  </div>
+
+  <p class="credit">&#10022; Something on here in the wrong order, or missing the line your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the ticket</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* ELECTRICAL T&M TICKET — the directed-work ticket, shipped as a CONFIG of shape #2's engine
+ * (shared/note.js, extracted this cycle at the second instance — see
+ * av/AV_SOCIETY.md §THE THREE SHAPES). There is no CSS in this file, no DOM
+ * building, no state, no persistence and no document assembly: the engine owns
+ * all of it. This file owns the WORDS, which is the half an engine must never
+ * own — the note's whole value is that it speaks one trade's language.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.tag;
+
+  Note.mount({
+    key: "toolkit.electrical.tmticket.v1",
+    docName: "T&M TICKET — EXTRA WORK",
+    copiedLabel: "Copied. Go send it.",
+    clearConfirm: "Clear this ticket? Your name and company stay.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Ticket started",
+
+    // The job, the where and the day ride on the SECOND line, never stacked onto
+    // the heading with three em-dashes. Findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  \u00b7  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox eight weeks from now, and so it ties to a contract line instead of to an argument.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "\u2014 the way everybody says it", ph: "Bishop Ranch 3 — 4th flr TI", docSkip: true }
+        ]
+      },
+      {
+        title: "Who directed it",
+        tone: "loud",
+        docHead: "WHO DIRECTED IT",
+        why: "Eight weeks out at the OAC somebody asks who authorized it. Without a name from that day the answer is nobody, and we eat it.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who directed it", options: T.roles, docLabel: "Directed by" },
+          { id: "who", kind: "text", label: "His name", hint: "— the one line you can't rebuild later", ph: "Ron M., Swinerton", docLabel: "Name" },
+          { id: "how", kind: "seg", label: "How he told you", options: T.how, docLabel: "How" },
+          { id: "when", kind: "clock", label: "When", hint: "— stamps itself when you start", docLabel: "When" },
+          { id: "where", kind: "text", label: "Where", hint: "— area / level / gridline", ph: "3rd flr west, gridline F-7, above the hard lid", docLabel: "Where" }
+        ]
+      },
+      {
+        title: "What you had us do",
+        docHead: "WHAT YOU HAD US DO",
+        why: "Named as the thing he stood and watched us do. “Misc electrical” gets “that was in your scope” and dies right there.",
+        fields: [
+          { id: "did", kind: "area", rows: 2, label: "What you had us do", hint: "— his words, plainly", ph: "pulled a new 20A homerun to the coffee bar and set two boxes — nothing there on the prints" },
+          { id: "why", kind: "ticks", subhead: "Why it's an extra", label: "", docLabel: "WHY IT'S AN EXTRA", options: T.why }
+        ]
+      },
+      {
+        title: "Where it stands",
+        tone: "loud",
+        docHead: "WHERE IT STANDS",
+        why: "The super has to know tonight whether he's got men standing tomorrow, and the answer can't be a phone call at 6am.",
+        fields: [
+          { id: "stands", kind: "pick", label: "Where it stands", hint: "— tonight, not at 6am", options: T.stands, docLabel: "Where it stands" }
+        ]
+      },
+      {
+        title: "What it took",
+        docHead: "WHAT IT TOOK — QUANTITIES ONLY, NO PRICING",
+        fields: [
+          {
+            id: "crew", kind: "rows", label: "Men on it", addLabel: "+ Another crew line", docLabel: "CREW",
+            cols: [
+              { id: "cls", kind: "select", label: "Class", options: T.classes },
+              { id: "men", kind: "stepper", label: "Men", ph: "men" },
+              { id: "hrs", kind: "stepper", label: "Hours", ph: "hrs", docSuffix: " h" },
+              { id: "shift", kind: "select", label: "ST/OT/DT", options: T.shift }
+            ]
+          },
+          {
+            id: "mats", kind: "rows", label: "Material off the truck or job stock", addLabel: "+ Another material line", docLabel: "MATERIAL",
+            cols: [
+              { id: "qty", kind: "stepper", label: "Qty", ph: "qty" },
+              { id: "what", kind: "text", wide: true, label: "What", ph: "60 ft 3/4 EMT · 2 4-11/16 boxes · 250 ft #12" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "R. Vasquez — 510-555-0119", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Cascade Electric", docLabel: "Company" }
+        ]
+      },
+    ],
+
+    closing: [
+      "Nothing on here is priced and nothing is totalled — the office prices it against the contract.",
+      "Reply APPROVED if that's how you saw it, or tell me what to fix. One extra, one day, one ticket."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.crew || []).length;
+      if (n) return n + " man" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Ticket started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

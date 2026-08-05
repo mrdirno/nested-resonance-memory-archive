@@ -300,3 +300,99 @@ window.GC_AREA_HINTS = [
   "Elevator lobby, all floors",
   "Pour 4 — south half"
 ];
+
+/* ── THE DIRECTED-WORK TICKET (shape #2 — shared/note.js) ─────────────────
+ * The vocabulary for tm-tag.html. Same boundary as everything else in this file:
+ * these are things the man PICKS, never things the page decides. No rates, no
+ * totals, no arithmetic and no certified data anywhere in here — the office owns
+ * the number and he owns what happened.
+ *
+ * EVERY WORD BELOW came from a working GC hand and was then cut by a second
+ * one told to kill about a third of it. What survived:
+   *  · WHAT THE IN-TRADE REVIEWER KILLED, so it does not crawl back in: the QUOTE
+   *    LINE. Quoting a man back to himself, in a message addressed to him, and
+   *    asking him to reply OK to it is a deposition exhibit, not a tag — no super
+   *    presses send on that with the CM standing three feet away, and the day he
+   *    would is the day he should be calling his PM instead.
+   *  · THE GC IS USUALLY THE ONE RECEIVING THESE, so this one points the other way:
+   *    it is what the SUPER sends UP to the CM or the owner's rep, never down to a
+   *    sub. Procore owns the PCO number and the daily log (§THE SYSTEM OF RECORD) —
+   *    so the tag carries no number and says so out loud.
+   *  · SUB CREW IS A CLASSIFICATION. Half of what a super gets directed into is
+   *    somebody else's crew standing there on his say-so, and if the tag can't
+   *    carry that line it does not carry the extra.
+ */
+window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+window.TOOLKIT_ITEMS.tag = {
+  "roles": [
+    "CM",
+    "Owner's rep",
+    "Their PM",
+    "Architect / EOR",
+    "Inspector / AHJ",
+    "Somebody else"
+  ],
+  "how": [
+    {
+      "v": "Verbal — this tag is the paper"
+    },
+    {
+      "v": "Phone"
+    },
+    {
+      "v": "You sent it — I'll forward it"
+    }
+  ],
+  "why": [
+    {
+      "name": "Not on the contract drawings"
+    },
+    {
+      "name": "RFI answer / ASI / bulletin after buyout"
+    },
+    {
+      "name": "Plans vs. existing — field conflict"
+    },
+    {
+      "name": "Unforeseen",
+      "sub": "buried, hidden, as-builts wrong"
+    },
+    {
+      "name": "Owner add — asked for it on the spot"
+    },
+    {
+      "name": "AHJ / inspector made us"
+    },
+    {
+      "name": "Working around another prime / owner's vendor"
+    },
+    {
+      "name": "You said OT / extra crew to hold the date"
+    }
+  ],
+  "classes": [
+    "— class",
+    "SUPER",
+    "FOREMAN",
+    "CARP",
+    "LAB",
+    "OPER",
+    "APPR",
+    "SUB — ELEC",
+    "SUB — MECH",
+    "SUB — PLUMB",
+    "SUB — FIRE SPRINK",
+    "SUB — CONC",
+    "SUB — STEEL",
+    "SUB — DRYWALL",
+    "SUB — SITE"
+  ],
+  "stands": [
+    {
+      "v": "Done today"
+    },
+    {
+      "v": "Still going — new tag tomorrow"
+    }
+  ]
+};

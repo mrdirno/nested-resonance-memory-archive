@@ -103,3 +103,86 @@ window.LV_STATUS = ["PULLED", "MOUNTED", "TERMINATED", "TESTED", "PROGRAMMED", "
  * changed. That section is the most valuable thing this tool produces and it is
  * what gets read first at the 7am huddle. */
 window.LV_FLAGS = ["PUNCH", "BLOCKED", "HOLD"];
+
+/* ── THE DIRECTED-WORK TICKET (shape #2 — shared/note.js) ─────────────────
+ * The vocabulary for tm-tag.html. Same boundary as everything else in this file:
+ * these are things the man PICKS, never things the page decides. No rates, no
+ * totals, no arithmetic and no certified data anywhere in here — the office owns
+ * the number and he owns what happened.
+ *
+ * EVERY WORD BELOW came from a working LOW-VOLTAGE hand and was then cut by a second
+ * one told to kill about a third of it. What survived:
+   *  · OUR EXTRAS ARE ALMOST ALWAYS SOMEBODY ELSE'S CONDITION. Ceiling closed on us,
+   *    no ply, no backing, nothing roughed in, IDF isn't ready, our cable torn out
+   *    by others — that is what the reason list is made of, and it is why the
+   *    closing line asks WHO IS FIXING THE CONDITION. Without that we write the
+   *    same tag again next week.
+   *  · IT HAS TO LAND AS A HEADS-UP, NOT A CLAIM. The reviewer's kill risk was the
+   *    super's face changing on the spot and his own PM telling him to quit sending
+   *    letters to the GC. So: no number, no quote-him-back-to-himself line, and a
+   *    closing ask a man can answer with two words.
+   *  · MEN AND HOURS ARE NEVER MULTIPLIED. They print side by side exactly as
+   *    tapped. No man-hour figure, no total, no rate, no classification column.
+ */
+window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+window.TOOLKIT_ITEMS.tag = {
+  "roles": [
+    "GC super",
+    "Our PM",
+    "The EC's foreman",
+    "Owner's IT",
+    "Another sub",
+    "Somebody else"
+  ],
+  "how": [
+    {
+      "v": "Told me on site"
+    },
+    {
+      "v": "Phone"
+    },
+    {
+      "v": "Text"
+    },
+    {
+      "v": "Email"
+    }
+  ],
+  "why": [
+    {
+      "name": "Not on our prints — you asked for it"
+    },
+    {
+      "name": "Ceiling closed on us"
+    },
+    {
+      "name": "No ply / no backing"
+    },
+    {
+      "name": "Nothing roughed in",
+      "sub": "no pipe, no box, no power"
+    },
+    {
+      "name": "IDF's not ready"
+    },
+    {
+      "name": "Our cable / hooks torn out by others"
+    }
+  ],
+  "stands": [
+    {
+      "v": "Done — nothing left on it"
+    },
+    {
+      "v": "Temp — has to come back out"
+    },
+    {
+      "v": "Trip back to finish — we're off that floor",
+      "hot": 1
+    },
+    {
+      "v": "Still stopped — can't finish till it's fixed",
+      "hot": 1
+    }
+  ]
+};

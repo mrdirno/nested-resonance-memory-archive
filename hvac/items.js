@@ -219,3 +219,140 @@ window.TOOLKIT_ITEMS = (function () {
     photos: PHOTOS
   };
 })();
+
+/* ── THE DIRECTED-WORK TICKET (shape #2 — shared/note.js) ─────────────────
+ * The vocabulary for tm-tag.html. Same boundary as everything else in this file:
+ * these are things the man PICKS, never things the page decides. No rates, no
+ * totals, no arithmetic and no certified data anywhere in here — the office owns
+ * the number and he owns what happened.
+ *
+ * EVERY WORD BELOW came from a working HVAC hand and was then cut by a second
+ * one told to kill about a third of it. What survived:
+   *  · REFRIGERANT GETS ITS OWN ROW and never hides inside material. A contactor
+   *    leaves a carton with a number printed on it; seven pounds of 448 leaves a
+   *    lighter cylinder and the tech's memory, and by Thursday nobody can rebuild
+   *    it. Type by ASHRAE number only (they are designations, not brands), pounds,
+   *    and recovered vs added — no leak rate, no threshold, no trigger, ever.
+   *  · THE HEADING IS JUST "T&M TAG". The in-trade reviewer cut "— OUT OF SCOPE"
+   *    off it: no tech has ever typed those words into a text message, and it is
+   *    the first two words that tell a super a system wrote this instead of the guy
+   *    he was standing next to five minutes ago.
+   *  · WHAT I FOUND HAS A WRITE-IN UNDER IT, always. On a roof with gloves on and
+   *    the super waiting, the moment his finding isn't in the chip row and the
+   *    keyboard comes up anyway, texting the super direct is faster than this page.
+ */
+window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+window.TOOLKIT_ITEMS.tag = {
+  "roles": [
+    "Site contact / store mgr",
+    "Facilities / building eng",
+    "GC super",
+    "Our dispatch / service mgr",
+    "Owner / tenant",
+    "Somebody else"
+  ],
+  "how": [
+    {
+      "v": "Told me on site"
+    },
+    {
+      "v": "Phone"
+    },
+    {
+      "v": "Text"
+    },
+    {
+      "v": "Email"
+    }
+  ],
+  "found": [
+    {
+      "name": "Comp's grounded / locked rotor"
+    },
+    {
+      "name": "Motor's shot",
+      "sub": "cond fan or blower"
+    },
+    {
+      "name": "Contactor / starter burnt up"
+    },
+    {
+      "name": "It's leaking — low on charge"
+    },
+    {
+      "name": "Board's dead — no control"
+    },
+    {
+      "name": "Drain's plugged — water in the ceiling"
+    },
+    {
+      "name": "Box is warming",
+      "sub": "defrost or door heater"
+    },
+    {
+      "name": "It's unsafe — I've got it locked out"
+    }
+  ],
+  "why": [
+    {
+      "name": "Not in the PM — this is a repair"
+    },
+    {
+      "name": "Not what the WO was written for"
+    },
+    {
+      "name": "Was like that when we got here"
+    },
+    {
+      "name": "Another trade got into it"
+    },
+    {
+      "name": "Repair parts aren't in the agreement"
+    },
+    {
+      "name": "Can't finish what I was sent for till this is done"
+    }
+  ],
+  "right": [
+    {
+      "v": "It's down",
+      "hot": 1
+    },
+    {
+      "v": "Still running"
+    },
+    {
+      "v": "Running, won't hold"
+    },
+    {
+      "v": "Off and tagged — I shut it down",
+      "hot": 1
+    }
+  ],
+  "classes": [
+    "— class",
+    "TECH",
+    "HELPER",
+    "APPRENTICE"
+  ],
+  "refs": [
+    "— type",
+    "R-410A",
+    "R-454B",
+    "R-32",
+    "R-448A",
+    "R-449A",
+    "R-404A",
+    "R-134a",
+    "R-22",
+    "R-407C",
+    "R-513A",
+    "R-744 (CO2)",
+    "R-717 (NH3)"
+  ],
+  "refdir": [
+    "— which way",
+    "Recovered",
+    "Added"
+  ]
+};

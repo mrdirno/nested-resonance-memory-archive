@@ -35,6 +35,15 @@ window.TOOLKIT_TRADE = {
   // to name the trade at a glance in a tab strip.
   accent: "#4FE0C0",
   accentInk: "#052622", // readable text ON the accent
+  // THE DEEP PAIR — the DARK and PALEST ends of this trade's own hue, added when
+  // shape #2's engine (shared/note.js + shared/note.css) went to one stylesheet
+  // across six trades. `accent` is light and high-chroma because it lives on the
+  // dark nav; it cannot be a border, a heading or text on paper. `accentDeep` is
+  // that job (white text on it clears 5:1) and `accentTint` fills the impact
+  // block. Hand-picked, not computed — color-mix() is not safe on the old
+  // Android browsers these pages land on.
+  accentDeep: "#0C7A66",
+  accentTint: "#E4FBF5",
 
   chain: "techs / service managers / dispatch",
 

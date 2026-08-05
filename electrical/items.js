@@ -244,3 +244,99 @@ window.TOOLKIT_ITEMS = (function () {
     ], true)]
   };
 })();
+
+/* ── THE DIRECTED-WORK TICKET (shape #2 — shared/note.js) ─────────────────
+ * The vocabulary for tm-ticket.html. Same boundary as everything else in this file:
+ * these are things the man PICKS, never things the page decides. No rates, no
+ * totals, no arithmetic and no certified data anywhere in here — the office owns
+ * the number and he owns what happened.
+ *
+ * EVERY WORD BELOW came from a working ELECTRICAL hand and was then cut by a second
+ * one told to kill about a third of it. What survived:
+   *  · CREW IS FOUR TAPS AND ZERO TYPING. A foreman does not write men's names on a
+   *    T&M ticket, he writes "2 JW — 6.0 h ST". So the crew row is classification ×
+   *    men × hours × ST/OT/DT, all four on one physical row, and the page does NO
+   *    arithmetic on them — no man-hours, no total, no extension, ever.
+   *  · ST / OT / DT · JW · APP · GF go on the page FLAT, never expanded. A page that
+   *    writes "Journeyman Wireman (JW)" tells a foreman nobody who built it has
+   *    bent a piece of pipe.
+   *  · HALF THE COUNTRY SAYS TAG AND HALF SAYS TICKET. The heading says TICKET; the
+   *    copy never fights a man who calls it a tag.
+ */
+window.TOOLKIT_ITEMS = window.TOOLKIT_ITEMS || {};
+window.TOOLKIT_ITEMS.tag = {
+  "roles": [
+    "Super",
+    "GC PM / PE",
+    "Owner / tenant rep",
+    "Our PM / GF",
+    "Another sub's foreman",
+    "Somebody else"
+  ],
+  "how": [
+    {
+      "v": "Told me on site"
+    },
+    {
+      "v": "Phone"
+    },
+    {
+      "v": "Text"
+    },
+    {
+      "v": "Email"
+    }
+  ],
+  "why": [
+    {
+      "name": "Not on the prints"
+    },
+    {
+      "name": "Existing conditions",
+      "sub": "not what the prints show"
+    },
+    {
+      "name": "Conflict — duct / pipe / sprinkler in our way"
+    },
+    {
+      "name": "Owner / tenant asked for it"
+    },
+    {
+      "name": "RFI / ASI changed it"
+    },
+    {
+      "name": "Tear-out — work already in"
+    },
+    {
+      "name": "Sent us back after we were done"
+    },
+    {
+      "name": "Temp power / temp lights / GC hookup"
+    }
+  ],
+  "classes": [
+    "— class",
+    "JW",
+    "APP",
+    "FOREMAN",
+    "GF"
+  ],
+  "shift": [
+    "— ST",
+    "ST",
+    "OT",
+    "DT"
+  ],
+  "stands": [
+    {
+      "v": "Finished it"
+    },
+    {
+      "v": "Coming back — new ticket tomorrow"
+    },
+    {
+      "v": "Still stopped — men standing",
+      "hot": 1
+    }
+  ]
+};

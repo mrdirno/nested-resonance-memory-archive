@@ -21,6 +21,15 @@ window.TOOLKIT_TRADE = {
   brandTail: "Field Toolkit",
   accent: "#C87137",    // copper
   accentInk: "#1A0E05", // readable text ON the copper
+  // THE DEEP PAIR — the DARK and PALEST ends of this trade's own hue, added when
+  // shape #2's engine (shared/note.js + shared/note.css) went to one stylesheet
+  // across six trades. `accent` is light and high-chroma because it lives on the
+  // dark nav; it cannot be a border, a heading or text on paper. `accentDeep` is
+  // that job (white text on it clears 5:1) and `accentTint` fills the impact
+  // block. Hand-picked, not computed — color-mix() is not safe on the old
+  // Android browsers these pages land on.
+  accentDeep: "#7A3F12",
+  accentTint: "#FBEFE3",
 
   chain: "plumbers / foremen / the office",
 

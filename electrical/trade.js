@@ -29,6 +29,15 @@ window.TOOLKIT_TRADE = {
   // 6.1:1 on the #242A31 bar · 7.1:1 for accentInk sitting on it.
   accent: "#3FB6F5",    // electric blue — distinct at a glance from AV yellow and plumbing copper
   accentInk: "#06212E", // readable text ON the accent
+  // THE DEEP PAIR — the DARK and PALEST ends of this trade's own hue, added when
+  // shape #2's engine (shared/note.js + shared/note.css) went to one stylesheet
+  // across six trades. `accent` is light and high-chroma because it lives on the
+  // dark nav; it cannot be a border, a heading or text on paper. `accentDeep` is
+  // that job (white text on it clears 5:1) and `accentTint` fills the impact
+  // block. Hand-picked, not computed — color-mix() is not safe on the old
+  // Android browsers these pages land on.
+  accentDeep: "#0A5C87",
+  accentTint: "#E4F4FD",
 
   chain: "electricians / foremen / the office",
 

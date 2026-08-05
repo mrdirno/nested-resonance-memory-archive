@@ -24,6 +24,13 @@ window.TOOLKIT_TOOLS = [
     chip: "#4FE0C0",
     audience: "Tech → Service manager",
     pinned: true
+  },
+  {
+    name: "T&M Tag",
+    href: "tm-tag.html",
+    desc: "Outside the agreement, and you need it in writing before you put a wrench on it. Tag it at the unit — who told you, what you found, whether it's down right now, crew, material, and refrigerant on its own line by ASHRAE number.",
+    chip: "#0C7A66",
+    audience: "Tech → Site contact / Service manager"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

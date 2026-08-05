@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>T&M Tag — HVAC/R Field Toolkit</title>
+<meta name="description" content="Outside the agreement, and you need it in writing before you put a wrench on it. Tag it at the unit — who told you, what you found, whether it's down right now, crew, material, and refrigerant on its own line by ASHRAE number.">
+<meta name="apple-mobile-web-app-title" content="T&M Tag">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">HVAC/R · Tech → whoever's on site</span>
+    <h1>T&M Tag</h1>
+    <p class="lede">That one's outside the agreement and you need it in writing before you put a wrench on it. Tag it at the unit — who told you, what you found, whether it's down right now, and what it takes. Refrigerant gets its own line, because it's the only thing off the truck that leaves no box behind.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>One extra, one day, one tag — tomorrow gets its own.</b> Nothing on here is priced, nothing is converted, and nothing is called in-range: this page structures what YOU read and what YOU decided. There's no signature block on purpose — a pasted block can't be signed, and the reply with a name and a time on it is the record.
+  </div>
+
+  <p class="credit">&#10022; Something on here in the wrong order, or missing the line your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the tag</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* HVAC T&M TAG — the directed-work ticket, shipped as a CONFIG of shape #2's engine
+ * (shared/note.js, extracted this cycle at the second instance — see
+ * av/AV_SOCIETY.md §THE THREE SHAPES). There is no CSS in this file, no DOM
+ * building, no state, no persistence and no document assembly: the engine owns
+ * all of it. This file owns the WORDS, which is the half an engine must never
+ * own — the note's whole value is that it speaks one trade's language.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.tag;
+
+  Note.mount({
+    key: "toolkit.hvac.tmtag.v1",
+    docName: "T&M TAG",
+    copiedLabel: "Copied. Go send it.",
+    clearConfirm: "Clear this tag? Your name and company stay.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Tag started",
+
+    // The job, the where and the day ride on the SECOND line, never stacked onto
+    // the heading with three em-dashes. Findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  \u00b7  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox eight weeks from now, and so it ties to a contract line instead of to an argument.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "\u2014 the way everybody says it", ph: "Kroger #412 — 1180 Cedar", docSkip: true }
+        ]
+      },
+      {
+        title: "Who told you to do it",
+        tone: "loud",
+        docHead: "WHO TOLD ME",
+        why: "The office isn't negotiating against something you already said on the roof, and eight weeks later somebody has to know who was standing there.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who told you", options: T.roles, docLabel: "Told by" },
+          { id: "who", kind: "text", label: "Their name", hint: "— the one line you can't rebuild later", ph: "Miguel, store mgr", docLabel: "Name" },
+          { id: "how", kind: "seg", label: "How they told you", options: T.how, docLabel: "How" },
+          { id: "when", kind: "clock", label: "When", hint: "— stamps itself when you start", docLabel: "When" },
+          { id: "unit", kind: "text", caps: true, label: "Unit + where it is", hint: "— the tag on the curb, not off the invoice", ph: "RTU-4 — NW corner over the pharmacy", docLabel: "Unit" }
+        ]
+      },
+      {
+        title: "What you found",
+        docHead: "WHAT I FOUND",
+        why: "Tap it, then finish it in your words — if it isn't in the row, the row is not the point, the sentence under it is.",
+        fields: [
+          { id: "found", kind: "ticks", options: T.found },
+          { id: "did", kind: "area", rows: 2, label: "In your words", hint: "— if it isn't in the row above, it goes here", ph: "lead comp grounded, megged 0.0 — it's not coming back without a compressor" },
+          { id: "why", kind: "ticks", subhead: "Why it's outside the agreement", label: "", docLabel: "WHY IT'S OUT", options: T.why }
+        ]
+      },
+      {
+        title: "Right now",
+        tone: "loud",
+        docHead: "RIGHT NOW",
+        why: "The liability line, and it gets asked every single time. Somebody has to be able to answer “is it energized right now” without calling you back.",
+        fields: [
+          { id: "right", kind: "pick", label: "Right now", hint: "— they have to know tonight", options: T.right, docLabel: "Right now" }
+        ]
+      },
+      {
+        title: "What it takes",
+        docHead: "WHAT IT TOOK — QUANTITIES ONLY, NO PRICING",
+        fields: [
+          {
+            id: "crew", kind: "rows", label: "Who's on it", addLabel: "+ Another crew line", docLabel: "CREW",
+            cols: [
+              { id: "cls", kind: "select", label: "Class", options: T.classes },
+              { id: "men", kind: "stepper", label: "Men", ph: "men" },
+              { id: "hrs", kind: "stepper", label: "Hours", ph: "hrs", docSuffix: " h" }
+            ]
+          },
+          {
+            id: "refr", kind: "rows", label: "Refrigerant", hint: "— its own line, it leaves no box behind", addLabel: "+ Another refrigerant line", docLabel: "REFRIGERANT",
+            cols: [
+              { id: "type", kind: "select", label: "Type", options: T.refs },
+              { id: "lbs", kind: "stepper", label: "Lbs", ph: "lbs", docSuffix: " lb" },
+              { id: "dir", kind: "select", label: "Which way", options: T.refdir }
+            ]
+          },
+          {
+            id: "mats", kind: "rows", label: "Material off the truck", addLabel: "+ Another material line", docLabel: "MATERIAL",
+            cols: [
+              { id: "qty", kind: "stepper", label: "Qty", ph: "qty" },
+              { id: "what", kind: "text", wide: true, label: "What", ph: "1 contactor · 1 liquid line drier · 2 qt oil" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell, they call you not dispatch", ph: "Mike R — 415-555-0134", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Bayline Mechanical", docLabel: "Company" }
+        ]
+      },
+    ],
+
+    closing: [
+      "Nothing on here is priced and nothing on here is converted — I own what I read and what I found, the office owns price, coverage and schedule.",
+      "Reply GO and I'll get on it, or HOLD and I'll leave it the way I found it. Your reply with a name and a time on it is the record. This tag is today only — tomorrow gets its own."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.crew || []).length;
+      if (n) return n + " man" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Tag started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>

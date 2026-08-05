@@ -206,6 +206,84 @@ window.TOOLKIT_ITEMS = (function () {
     { id: "writein", name: "Write-ins", chip: "#5D656E", writein: true, items: [] }
   ];
 
+  /* ── THE T&M TAG (shape #2 — shared/note.js) ──────────────────────────────
+   * The directed-work ticket's vocabulary. Same boundary as everything above:
+   * these are things a tech PICKS, never things this page decides. No rates, no
+   * durations, no priced anything — the office owns the number and the tech owns
+   * what happened.
+   *
+   * WHAT A WORKING AV LEAD CHANGED, before a line shipped:
+   *  · WHOSE CALL IT WAS is the first field, not the last. AV gets directed by
+   *    four different bosses on the same floor and the seat decides where the
+   *    extra even goes: the GC super's call lands on the GC's CO log, the end
+   *    user's goes straight to the owner and never touches the GC. A tag that
+   *    doesn't say which gets routed wrong and sits for a month.
+   *  · THE ROOM IS THE WAY THE DRAWINGS CALL IT. "Conference room" matches
+   *    nothing — the GC has eleven and three are on another floor. CR-204 ties
+   *    the extra to a scope line; "conference room" ties it to an argument.
+   *  · THE IMPACT LINE IS NOT THE EXTRA. The extra is forty minutes. The cost is
+   *    the room he was actually scheduled for and didn't finish — another
+   *    mobilization, another badge, another after-hours window, and three weeks
+   *    later AV gets blamed for that room being late too. Techs leave it off
+   *    because at 4:45, with the super standing there, the favor feels small.
+   *  · "THEIR GEAR, POWERED, NOT TESTED BY US" IN WRITING is the only thing
+   *    between the tech and a free warranty roll the first time the client's own
+   *    bar drops audio and everyone points at AV.
+   */
+  var TAG = {
+    how: [
+      { v: "Told me on site" }, { v: "Phone" }, { v: "Text" }, { v: "Email" }
+    ],
+    // what he was actually put on. Named as the thing the receiver watched him do
+    // — "misc AV work" gets "that was in your scope" and dies on the spot.
+    did: [
+      { name: "Hung / installed their own gear", sub: "OFE" },
+      { name: "Extra display + mount" },
+      { name: "Pulled another cable" },
+      { name: "Moved a device after rough-in" },
+      { name: "Control program change" },
+      { name: "Signage content / playlist" },
+      { name: "Got it on their network", sub: "ports / VLAN" },
+      { name: "Firmware + updates" },
+      { name: "Extra training / walkthrough" },
+      { name: "Demo + haul off the old gear" }
+    ],
+    // why it is not ours. Without this the tag is a work log; with it, it is a
+    // claim — and it names whose ball got dropped before the argument starts.
+    why: [
+      { name: "Not on the AV drawings" },
+      { name: "Not in the approved submittal" },
+      { name: "Their gear, not our supply", sub: "OFE" },
+      { name: "That room isn't in our contract" },
+      { name: "Power / conduit", sub: "EC's scope" },
+      { name: "No backing in the wall", sub: "GC's scope" },
+      { name: "Network, ports, VLAN", sub: "owner IT's scope" },
+      { name: "Added after sign-off" },
+      { name: "Rework — somebody else's damage" }
+    ],
+    left: [
+      { v: "Room's up and usable" },
+      { v: "Temp — works, not final" },
+      { v: "Room's down till we're back", hot: 1 },
+      { v: "Their gear hung + powered, not tested by us" },
+      { v: "Needs IT before it'll work", hot: 1 }
+    ],
+    // WHEN, never what it is worth. AV extras get shoved to nights by default —
+    // the room is occupied all day and IT won't let you near the codec at 10am —
+    // so "nights" is a fact about WHEN the work happened. The page never says
+    // what a night hour is worth; it says it was a night hour. NEUTRAL FIRST.
+    shift: ["— when", "Reg hours", "Nights", "Weekend"],
+    // the lines that get left off and then get argued about
+    gear: [
+      { name: "Lift / ladder over 12 ft" },
+      { name: "After hours", sub: "off our normal window" },
+      { name: "Escort / badge / security" },
+      { name: "Freight elevator window" },
+      { name: "Core drill / anchors" },
+      { name: "Have to come back to finish it" }
+    ]
+  };
+
   return {
     cats: cats,
     alt: ALT,
@@ -213,6 +291,7 @@ window.TOOLKIT_ITEMS = (function () {
     // write-in is usually "the odd one" and still has to arrive orderable —
     // both NEUTRAL-FIRST, so they are opted into, never assumed.
     writeinAx: [ax("Length", [NO_LEN].concat(LEN_HDMI)), ax("Finish", [NO_FIN].concat(FINISH), true)],
-    writeinFlags: ALT
+    writeinFlags: ALT,
+    tag: TAG
   };
 })();

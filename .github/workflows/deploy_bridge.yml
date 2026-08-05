@@ -219,6 +219,30 @@ jobs:
             done < "$reg"
             echo "trade $t: $n_reg registry tool page(s), all resolve"
 
+            # ...AND SO MUST EVERYTHING THOSE PAGES LOAD. Resolving the href only
+            # proves the page exists, not that it works. Shape #2's engine
+            # (shared/note.js + shared/note.css, 2026-08-05) made six tool pages
+            # depend on files in a DIFFERENT staged directory: a page whose engine
+            # or stylesheet 404s still returns 200 and still renders its header, so
+            # it looks alive in a curl and is a blank white card in a foreman's
+            # hand. That is the same class as the staged-but-unregistered scar
+            # above, one level down, and only an assertion catches it.
+            while read -r href; do
+              [ -n "$href" ] || continue
+              page="HELIOS-BRIDGE/dist/$t/$href"
+              deps="$(mktemp)"
+              grep -o -E '(src|href)="[^"]*\.(js|css)"' "$page" \
+                | sed 's/.*"\(.*\)"/\1/' > "$deps" || true
+              while read -r dep; do
+                [ -n "$dep" ] || continue
+                case "$dep" in http*|//*) echo "FAIL: $t/$href loads an OFF-SITE asset ($dep) — these pages are self-contained, no CDN"; exit 1;; esac
+                case "$dep" in /*) echo "FAIL: $t/$href uses an origin-absolute asset path ($dep) — it breaks under the Pages sub-path"; exit 1;; esac
+                ( cd "HELIOS-BRIDGE/dist/$t" && test -f "$dep" ) \
+                  || { echo "FAIL: $t/$href loads '$dep' but it is not in the artifact — the page would render naked"; exit 1; }
+              done < "$deps"
+              echo "  $t/$href: $(wc -l < "$deps" | tr -d ' ') local asset(s) resolve"
+            done < "$reg"
+
             # BOTH HALVES, ENFORCED. UIComponents.tsx's own header states that a
             # staged dir and a TOOLS entry are both required. Only one direction was
             # ever checked. Plumbing shipped 2026-08-03 staged-but-unregistered, so

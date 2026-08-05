@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>T&M Tag — GC & Site Super Toolkit</title>
+<meta name="description" content="Directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, crew and hours by classification, today only. Your log owns the number; this is the field record.">
+<meta name="apple-mobile-web-app-title" content="T&M Tag">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/note.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">GC · Super → CM / owner's rep</span>
+    <h1>T&M Tag</h1>
+    <p class="lede">You got directed to do something that isn't in the contract. Paper it before you leave the gate — who directed it, what you did and where, and the crew and hours it took today. Your log owns the number; this is the field record of what you were told.</p>
+  </header>
+
+  <div id="form"></div>
+
+  <p class="section-label">What you send</p>
+  <div class="preview" id="preview"></div>
+
+  <div class="warn">
+    <b>One extra, one day, one tag — tomorrow gets its own.</b> No number on this one: your CO log owns the number, and this is the field record of what you were told and what it took, not the CO. Nothing is priced and there's no signature line — a pasted block can't be signed, and the reply with its timestamp is the paper trail.
+  </div>
+
+  <p class="credit">&#10022; Something on here in the wrong order, or missing the line your office always asks for? Wish for it &mdash; it gets fixed, and you get the credit.</p>
+
+</div>
+
+<div class="bar">
+  <span class="count" id="count">Nothing on it yet</span>
+  <button type="button" id="clear">Clear</button>
+  <button type="button" id="copy">Copy the tag</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/note.js"></script>
+<script>
+/* GC T&M TAG — the directed-work ticket, shipped as a CONFIG of shape #2's engine
+ * (shared/note.js, extracted this cycle at the second instance — see
+ * av/AV_SOCIETY.md §THE THREE SHAPES). There is no CSS in this file, no DOM
+ * building, no state, no persistence and no document assembly: the engine owns
+ * all of it. This file owns the WORDS, which is the half an engine must never
+ * own — the note's whole value is that it speaks one trade's language.
+ */
+(function () {
+  "use strict";
+  var T = window.TOOLKIT_ITEMS.tag;
+
+  Note.mount({
+    key: "toolkit.gc.tmtag.v1",
+    docName: "T&M TAG — WORK YOU DIRECTED",
+    copiedLabel: "Copied. Go send it.",
+    clearConfirm: "Clear this tag? Your name and company stay.",
+    emptyLabel: "Nothing on it yet",
+    startedLabel: "Tag started",
+
+    // The job, the where and the day ride on the SECOND line, never stacked onto
+    // the heading with three em-dashes. Findable by search, readable on a phone.
+    subline: function (get, u) {
+      return [get("site"), u.today()].filter(Boolean).join("  \u00b7  ");
+    },
+
+    sections: [
+      {
+        title: "The job",
+        why: "So it's findable in somebody's inbox eight weeks from now, and so it ties to a contract line instead of to an argument.",
+        fields: [
+          { id: "site", kind: "text", label: "Job", hint: "\u2014 the way everybody says it", ph: "Riverside Med OB", docSkip: true }
+        ]
+      },
+      {
+        title: "Who directed it",
+        tone: "loud",
+        docHead: "WHO DIRECTED IT",
+        why: "A verbal with a name, a time and a place on it is the whole reason this tag exists. Without the name, eight weeks out the answer is nobody.",
+        fields: [
+          { id: "role", kind: "pick", label: "Who directed it", options: T.roles, docLabel: "Directed by" },
+          { id: "who", kind: "text", label: "Their name", hint: "— the one line you can't rebuild later", ph: "Dana W., CM", docLabel: "Name" },
+          { id: "how", kind: "seg", label: "How", options: T.how, docLabel: "How" },
+          { id: "when", kind: "clock", label: "When", hint: "— stamps itself when you start", docLabel: "When" }
+        ]
+      },
+      {
+        title: "What we did, and where",
+        docHead: "WHAT WE DID, AND WHERE",
+        why: "Where it happened does as much work as what happened — an area and a gridline ties it to a schedule activity instead of to an argument.",
+        fields: [
+          { id: "did", kind: "area", rows: 2, label: "What we did, and where", hint: "— area, level, gridline", ph: "hand-dug and re-routed 40 lf of storm around the abandoned duct bank — Area C, gridline 8, below slab" },
+          { id: "why", kind: "ticks", subhead: "Outside contract because", label: "", docLabel: "OUTSIDE CONTRACT BECAUSE", options: T.why }
+        ]
+      },
+      {
+        title: "Crew and hours today",
+        docHead: "WHAT IT TOOK TODAY — QUANTITIES ONLY, NO PRICING",
+        fields: [
+          {
+            id: "crew", kind: "rows", label: "Crew today", addLabel: "+ Another crew line", docLabel: "CREW TODAY",
+            cols: [
+              { id: "cls", kind: "select", label: "Class", options: T.classes },
+              { id: "men", kind: "stepper", label: "Men", ph: "men" },
+              { id: "hrs", kind: "stepper", label: "Hours", ph: "hrs", docSuffix: " HRS" }
+            ]
+          },
+          {
+            id: "eq", kind: "rows", label: "Equipment and material", addLabel: "+ Another line", docLabel: "EQUIPMENT + MATERIAL",
+            cols: [
+              { id: "qty", kind: "stepper", label: "Qty", ph: "qty" },
+              { id: "what", kind: "text", wide: true, label: "What", ph: "1 mini-ex — 4 hrs · 6 yd 3/4 rock · 40 lf 12in HDPE" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Done, or still going",
+        tone: "loud",
+        docHead: "WHERE IT STANDS",
+        why: "One extra, one day, one tag — tomorrow gets its own.",
+        fields: [
+          { id: "stands", kind: "seg", label: "Where it stands", options: T.stands, docLabel: "Where it stands" }
+        ]
+      },
+      {
+        title: "Who's sending it",
+        tone: "grey",
+        why: "Typed once, saved on this phone, and Clear never touches it.",
+        fields: [
+          { id: "me", kind: "text", sticky: true, label: "You", hint: "— name + cell", ph: "J. Alvarez — 925-555-0163", docLabel: "From" },
+          { id: "co", kind: "text", sticky: true, label: "Company", ph: "Ridgeline Builders", docLabel: "Company" }
+        ]
+      },
+    ],
+
+    closing: [
+      "No number on this one — your log owns the number. This is my field record of what I was told and what it took, not the CO. Nothing on here is priced.",
+      "Reply OK if that's how you saw it, or tell me what's off and I'll fix it before it goes to the office. Photos are on my phone — say the word and I'll send them."
+    ],
+
+    countLabel: function (get, s, touched) {
+      var n = (s.crew || []).length;
+      if (n) return n + " crew line" + (n === 1 ? "" : "s") + " on it";
+      return touched ? "Tag started" : "Nothing on it yet";
+    }
+  });
+})();
+</script>
+</body>
+</html>
