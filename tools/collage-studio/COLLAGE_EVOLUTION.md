@@ -115,6 +115,36 @@ multi-agent audit for non-trivial changes.
   assert the spread in the sweep.
 - **The tabs are labelled `Layout` / `Settings`, not Simple / Advanced** — an e2e
   written against the internal state names finds no button and times out.
+- **An export that rebuilds its own asset list will silently drop whatever the
+  preview added.** `renderAtSize` and `handleExportSVG` each re-derived
+  `shuffledIndices.map(idx => images[idx])` instead of reading `orderedAssets`,
+  so the per-slot crop focus never reached the worker or the SVG: the preview
+  re-framed and the downloaded file came out at the old anchor. The VIDEO export
+  was fine, because it samples the Stage — so one composition exported two
+  different ways. Second occurrence of this exact class (the first was
+  previewSrc-vs-src). RULE: there is ONE draw order, `orderedAssets`; an export
+  that builds its own is a bug waiting for a release.
+- **A deterministic pairing makes Shuffle a dead button, silently.** An
+  arrangement's output is a function of the SET of photos plus the geometry, so
+  re-ordering the bag — which is all Shuffle does — changed nothing at the
+  default count (one slot per upload). Since the dice sets an arrangement on
+  ~80% of rolls, a user could press Shuffle forever with no feedback and no
+  visible control explaining why. Fixed with a bounded re-deal INSIDE the
+  ranking (`reDeal`, composition.ts).
+- **A "windowed" Fisher-Yates is not windowed.** `for i = n-1 down to 1, swap
+  with something in [i-w, i]` compounds: an element swapped down gets picked up
+  again when the cursor reaches its new home. Measured 36/40 slots of drift for
+  a window meant to be 6. Jitter-and-resort (add <= w/2 to each rank, re-sort)
+  caps displacement at w by construction.
+- **Measure a re-deal where it is VISIBLE, not in array indices.** Adjacent
+  RANKS map to spatially adjacent CELLS whose bag positions can be at opposite
+  ends of the array, so a one-rank nudge reads as a 34-slot "move" while
+  changing almost nothing on screen. The honest invariant is slot-by-slot metric
+  correlation against the exact ranking.
+- **Preview-only e2e cannot see an export defect** — the crop-focus split passed
+  4/4 pixel-level preview tests. Any capability that must survive to a FILE needs
+  a test that drives the export and compares the two. Prove the test fails on the
+  reintroduced bug before believing it.
 - `shuffleTrigger` co-seeds the fill RNG but isn't persisted — Restore reproduces
   a layout's geometry, not its exact shuffled arrangement (fix = persist it in the
   save schema; do NOT fold into `seed`, that breaks shuffle's "shapes stay put").
@@ -182,4 +212,29 @@ frontier. Today's ceiling is tomorrow's floor.
   and the credit is ON the page. NOT shipped from this wish and named on the ladder with its
   reason: **twist** (per-fragment rotation) — it is the first change that must reach the hot
   draw loop and all three export paths, so it gets its own increment and its own pixel proof.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-05 · **[AXIS:COLLAGE] the adversarial audit earned its keep — two HIGH defects at the
+  seams, both live, both closed.** The pure module was sound (`tsc` clean, every invariant
+  holding, 4/4 pixel e2e) and *the defects were still there*, because both lived where the new
+  module met old code. **(1) THE EXPORT LIED.** `renderAtSize` and `handleExportSVG` each
+  rebuilt their own asset list from the raw pool instead of reading `orderedAssets`, so the
+  per-slot crop focus never reached the worker or the SVG: pick Wander, watch every fragment
+  re-frame, download a PNG cropped the old way. The MP4 export was correct the whole time
+  (it samples the Stage), so one composition exported two different ways — second occurrence
+  of the previewSrc-vs-src class. **(2) SHUFFLE WENT DEAD.** An arrangement's output is a
+  function of the SET of photos plus the geometry, so re-ordering the bag — all Shuffle does —
+  changed nothing at the default count, and the dice sets an arrangement on ~80% of rolls. The
+  fix is not to weaken the ranking but to draw a different sample from it: a bounded re-deal
+  seeded by `shuffleTrigger`, same idea that makes two rolls of one recipe siblings. Writing
+  it exposed a third bug of my own — a "windowed" Fisher-Yates is not windowed (an element
+  swapped down gets picked up again when the cursor reaches it; measured 36/40 slots of drift
+  for a window meant to be 6), replaced with jitter-and-resort which caps displacement at `w`
+  by construction. Also fixed: unclamped `cy` degrading every radial arrangement to a y-sort
+  for one frame during an aspect change, and row bucketing derived from the FILL count rather
+  than the grid, which mis-banded the ramp when cells were locked. before→after: **20 → 24
+  invariant/e2e assertions** — 2 new invariant families (`3b` re-deal, `3c` locked-cell
+  banding) and a preview-vs-export test proved to go RED on the reintroduced defect before
+  being believed. The lesson worth keeping: a preview-only test suite cannot see an export
+  defect, and a green pure module says nothing about its seams.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

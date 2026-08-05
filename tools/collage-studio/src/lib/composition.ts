@@ -193,14 +193,30 @@ const SPIRAL_TURNS = 3;
  * leaves a hole. Missing geometry is treated as dead centre; it still gets a key.
  */
 const cellKeys = (cells: (CellGeom | null | undefined)[], n: number, key: CellKey): number[] => {
-  const cx = (i: number) => num(cells[i]?.cx, 0.5);
-  const cy = (i: number) => num(cells[i]?.cy, 0.5);
+  // CLAMPED, not just defaulted. The assignment pass is synchronous and the
+  // layout is debounced 50ms behind it, so on an aspect change one pass runs the
+  // NEW normalisation over the OLD bounds and cy can reach 3.x. Unclamped, that
+  // silently degrades every radial key to a plain y-sort for a frame — visible
+  // in live mode, which repaints with no debounce of its own.
+  const cx = (i: number) => clamp(num(cells[i]?.cx, 0.5), 0, 1);
+  const cy = (i: number) => clamp(num(cells[i]?.cy, 0.5), 0, 1);
   const out = new Array<number>(n);
 
-  // `reading` and `checker` both need a row bucketing; deriving the row count
-  // from n keeps a 9-fragment collage from being read as one long row and a
-  // 300-fragment one from being read as 300.
-  const rows = Math.max(1, Math.round(Math.sqrt(n)));
+  // `reading`, `serpentine` and `checker` all need a row bucketing.
+  //
+  // Derived from the mean cell AREA, not from n: `n` counts only the fragments
+  // still being filled, so locking 8 of 24 would bucket 16 cells into 4 rows
+  // over a grid that visibly has 5, and the colour ramp reads mis-banded. The
+  // area of the surviving cells still reports the FULL grid's density, which is
+  // what "how many rows does this look like" actually means.
+  let areaSum = 0, areaN = 0;
+  for (let i = 0; i < n; i++) {
+    const a = num(cells[i]?.area, 0);
+    if (a > 0) { areaSum += a; areaN++; }
+  }
+  const rows = areaN > 0
+    ? Math.max(1, Math.min(64, Math.round(1 / Math.sqrt(areaSum / areaN))))
+    : Math.max(1, Math.round(Math.sqrt(n)));
   const rowOf = (i: number) => Math.min(rows - 1, Math.max(0, Math.floor(cy(i) * rows)));
 
   for (let i = 0; i < n; i++) {
@@ -256,7 +272,57 @@ export interface ArrangeInput {
   /** The pool the bag indexes into. */
   images: PhotoLike[];
   arrangement: ArrangementId;
+  /**
+   * Re-deal WITHIN the arrangement. 0 (the default) is the exact ranking.
+   *
+   * Why this has to exist: the arrangement's output is a function of the SET of
+   * photos and the fragment geometry — the order they arrived in is discarded.
+   * Shuffle changes only that order, so with one slot per upload (the default
+   * count) pressing Shuffle under any arrangement produced the identical
+   * picture, every time, with no feedback and no visible control explaining
+   * why. Since the dice now picks an arrangement on ~80% of rolls, that turned
+   * Shuffle into a dead button on the common path.
+   *
+   * The fix is not to abandon the ranking — it is the whole point — but to draw
+   * a different sample from it, which is the same idea that makes two rolls of
+   * one recipe siblings rather than repeats (see diceRoll.ts).
+   */
+  shuffle?: number;
 }
+
+/**
+ * A BOUNDED re-deal: still a permutation, but nothing moves further than
+ * `RE_DEAL_WINDOW` of the list from its rank. A full shuffle would destroy the
+ * ramp the arrangement exists to build — Spotlight would stop being Spotlight —
+ * so the displacement has to be provably capped, not merely usually small.
+ *
+ * JITTER-AND-RESORT, not a windowed Fisher-Yates. The obvious `for i = n-1
+ * down to 1, swap with something in [i-w, i]` is NOT windowed: an element
+ * swapped downward gets picked up again when the cursor reaches its new home,
+ * and the displacement compounds — measured at 36/40 slots for a window that
+ * was supposed to be 6. Adding jitter of at most w/2 to each rank and re-sorting
+ * caps it honestly: rank r' can only overtake rank r when r' < r + w, so no
+ * photo moves more than w places, by construction rather than by luck.
+ */
+const RE_DEAL_WINDOW = 0.15;
+
+const reDeal = (order: number[], seed: number): number[] => {
+  if (!seed) return order;
+  const n = order.length;
+  const w = Math.max(1, n * RE_DEAL_WINDOW);
+  let s = seed | 0;
+  const rnd = () => {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), s | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  const keys = order.map((_, i) => i + (rnd() - 0.5) * w);
+  return order
+    .map((_, i) => i)
+    .sort((a, b) => keys[a] - keys[b] || a - b)
+    .map((i) => order[i]);
+};
 
 /**
  * Re-pair the photos with the fragments.
@@ -265,7 +331,7 @@ export interface ArrangeInput {
  * missing spec, `natural`, or a bag shorter than 2 all return the input order
  * untouched, so the default path is bit-identical to having never called this.
  */
-export const arrangeBag = ({ bag, cells, images, arrangement }: ArrangeInput): number[] => {
+export const arrangeBag = ({ bag, cells, images, arrangement, shuffle }: ArrangeInput): number[] => {
   const spec = ARRANGEMENT_BY_ID[arrangement];
   if (!spec || !spec.metric || !spec.cell || bag.length < 2) return bag;
 
@@ -281,6 +347,8 @@ export const arrangeBag = ({ bag, cells, images, arrangement }: ArrangeInput): n
     photoOrder = vals.map((_, i) => i).sort((a, b) => vals[a] - vals[b] || a - b);
   }
   if (spec.flip) photoOrder.reverse();
+  // Shuffle re-deals inside the ranking rather than doing nothing at all.
+  photoOrder = reDeal(photoOrder, shuffle ?? 0);
 
   // Fragment order — one key per slot, keyed off `n`, never off `cells.length`.
   const keys = cellKeys(cells, n, spec.cell as CellKey);

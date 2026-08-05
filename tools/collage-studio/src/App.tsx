@@ -334,7 +334,11 @@ export default function App() {
                     area: (b.w * b.h) / (PREVIEW_W * H),
                 };
             });
-            const placed = arrangeBag({ bag, cells: bagCells, images, arrangement });
+            // `shuffleTrigger` re-deals INSIDE the ranking. Without it, an
+            // arrangement's output depends only on the SET of photos and the
+            // geometry, so Shuffle — which only re-orders the bag — produced the
+            // identical picture every press, silently, on the default count.
+            const placed = arrangeBag({ bag, cells: bagCells, images, arrangement, shuffle: shuffleTrigger });
 
             emptySlots.forEach((slotIdx, i) => { newIndices[slotIdx] = placed[i]; });
         }
@@ -843,7 +847,10 @@ export default function App() {
       if(l.entropy) setEntropy(l.entropy);
       if(l.arrangement) setArrangement(l.arrangement);
       // A project saved before this cycle stored the old binary hue sort as a
-      // 0..1 "resonance". Anything above the threshold it used WAS colour flow.
+      // 0..1 "resonance". `flow` is the CLOSEST arrangement in the roster, not an
+      // exact restoration: the old sort zipped hue against plain reading order,
+      // and `flow` runs it serpentine (every other row reversed). A resonance
+      // project therefore reopens recognisable but not identical.
       else if((l.resonance ?? 0) > 0.1) setArrangement('flow');
       if(l.focus) setFocus(l.focus);
       if(item.state.style?.background) setBgColor(item.state.style.background);
@@ -870,7 +877,16 @@ export default function App() {
       //   on the main thread at full export size. That is the out-of-bounds the
       //   report guessed at. Slots stay POSITIONAL (null, never dropped) because
       //   index i must keep addressing layoutItems[i].
-      const ordered = shuffledIndices.map(idx => images[idx] ?? null);
+      //
+      //   AND IT READS `orderedAssets`, NOT THE RAW POOL. `orderedAssets` is the
+      //   draw order WITH the crop focus applied (withFocus re-points
+      //   `analysis.face`, which is the field the worker crops from). Re-deriving
+      //   from `images` here — which is what this line used to do — silently
+      //   exported every fragment at the historical face-else-energy anchor, so
+      //   a user who picked Wander watched the preview re-frame and then
+      //   downloaded a file cropped the old way. Exactly the shape of the
+      //   already-scarred preview/export split, one field over.
+      const ordered = orderedAssets.map(a => a ?? null);
 
       const rng = createRng(seed);
       const items = await computeLayout(w, h, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
@@ -1044,7 +1060,9 @@ export default function App() {
     setShowExportDialog(false); setExportStatus('processing'); setExportMsg('VECTORIZING...');
     try {
         const rng = createRng(seed); const items = await computeLayout(1000, 1000/aspect, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
-        const orderedImages = shuffledIndices.map(idx => images[idx]);
+        // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
+        // that is where the crop focus lives (see renderAtSize above).
+        const orderedImages = orderedAssets;
         const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus }, style: { background: bgColor } };
         const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor);
         const blob = new Blob([svgContent], {type: 'image/svg+xml'});

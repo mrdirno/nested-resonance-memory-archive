@@ -111,12 +111,125 @@ async function boot(page: Page) {
   await page.waitForTimeout(1200);
 }
 
+/**
+ * A tile with a bright blob in ONE corner and a dark field everywhere else.
+ *
+ * The point is that its crop MATTERS: the energy centroid lands on the blob, so
+ * an energy-anchored fragment is bright and a dead-centre fragment is dark. A
+ * solid tile — which every other fixture here uses — looks identical under every
+ * crop, and would make an export that ignores the crop setting pass.
+ */
+function blobPng(corner: number, size = 128): Buffer {
+  const w = size, h = size;
+  const chunk = (type: string, data: Buffer) => {
+    const len = Buffer.alloc(4); len.writeUInt32BE(data.length, 0);
+    const t = Buffer.from(type, 'ascii');
+    const crc = Buffer.alloc(4); crc.writeUInt32BE(zlib.crc32(Buffer.concat([t, data])) >>> 0, 0);
+    return Buffer.concat([len, t, data, crc]);
+  };
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(w, 0); ihdr.writeUInt32BE(h, 4);
+  ihdr[8] = 8; ihdr[9] = 2;
+  const bx = corner % 2 === 0 ? 0 : size >> 1;
+  const by = corner < 2 ? 0 : size >> 1;
+  const rows: Buffer[] = [];
+  for (let y = 0; y < h; y++) {
+    const row = Buffer.alloc(1 + w * 3);
+    for (let x = 0; x < w; x++) {
+      const inBlob = x >= bx && x < bx + (size >> 1) && y >= by && y < by + (size >> 1);
+      const v = inBlob ? 245 : 14;
+      row[1 + x * 3] = v; row[1 + x * 3 + 1] = inBlob ? 235 : 10; row[1 + x * 3 + 2] = inBlob ? 250 : 22;
+    }
+    rows.push(row);
+  }
+  const idat = zlib.deflateSync(Buffer.concat(rows));
+  const sig = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  return Buffer.concat([sig, chunk('IHDR', ihdr), chunk('IDAT', idat), chunk('IEND', Buffer.alloc(0))]);
+}
+
+const blobs = () => Array.from({ length: 8 }, (_, i) => ({
+  name: `blob-${i}.png`, mimeType: 'image/png', buffer: blobPng(i % 4),
+}));
+
+/** Mean luminance of the EXPORTED file, read from the result modal's <img>. */
+async function exportedMean(page: Page): Promise<number> {
+  await page.getByRole('button', { name: 'Export' }).first().click();
+  await expect(page.getByRole('dialog').filter({ hasText: 'Export' }).first()).toBeVisible();
+  await page.getByRole('radio', { name: /^2K/ }).click();
+  await page.getByRole('button', { name: /^Render 2K JPG/ }).click();
+  const shot = page.locator('img[alt="Rendered collage"]');
+  await expect(shot).toBeVisible({ timeout: 120_000 });
+  await page.waitForTimeout(600);
+  const mean = await page.evaluate(() => {
+    const img = document.querySelector('img[alt="Rendered collage"]') as HTMLImageElement | null;
+    if (!img || !img.naturalWidth) return -1;
+    const c = document.createElement('canvas'); c.width = 200; c.height = 200;
+    const cx = c.getContext('2d', { willReadFrequently: true });
+    if (!cx) return -1;
+    cx.drawImage(img, 0, 0, 200, 200);
+    const d = cx.getImageData(0, 0, 200, 200).data;
+    let sum = 0, n = 0;
+    for (let i = 0; i < d.length; i += 4) { sum += (d[i] + d[i + 1] + d[i + 2]) / 3; n++; }
+    return sum / n;
+  });
+  await page.getByRole('button', { name: 'Close' }).first().click();
+  await page.waitForTimeout(400);
+  return mean;
+}
+
 const pick = async (page: Page, group: string, label: string) => {
   await page.getByRole('group', { name: group }).getByRole('button', { name: label, exact: true }).click();
   await page.waitForTimeout(1200);
 };
 
+/** Same sign, and at least half the magnitude the preview promised. */
+const exportExpectations = (previewGap: number, exportGap: number): boolean => {
+  const sameDirection = Math.sign(previewGap) === Math.sign(exportGap);
+  const enough = Math.abs(exportGap) >= Math.abs(previewGap) * 0.5;
+  if (!sameDirection || !enough) {
+    throw new Error(`export did not follow the preview: preview gap ${previewGap.toFixed(1)}, export gap ${exportGap.toFixed(1)} — the crop focus is not reaching the export path`);
+  }
+  return true;
+};
+
 test.describe('composition', () => {
+  /**
+   * THE EXPORT MUST BE WHAT YOU SAW.
+   *
+   * The still-image export used to rebuild its own asset list from the raw pool,
+   * so the crop focus — which lives on a per-slot COPY of the asset — never
+   * reached it: the preview re-framed, and the downloaded PNG came out at the
+   * historical anchor. A preview-only assertion cannot see that, which is
+   * exactly why it survived the first round of tests. This drives BOTH and
+   * compares them.
+   */
+  test('the exported file carries the crop focus the preview showed', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.locator('input[type="file"]').first().setInputFiles(blobs());
+    await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
+    await page.getByRole('button', { name: 'Settings' }).first().click();
+    await page.getByRole('button', { name: 'Balanced', exact: true }).first().click();
+    await page.waitForTimeout(1200);
+
+    await pick(page, 'Crop focus', 'Detail');
+    const detailPreview = await meanLuma(page, 0, 0, 1, 1);
+    const detailExport = await exportedMean(page);
+
+    await pick(page, 'Crop focus', 'Centre');
+    const centrePreview = await meanLuma(page, 0, 0, 1, 1);
+    const centreExport = await exportedMean(page);
+
+    // The fixture has to be able to tell the two modes apart at all, or the
+    // comparison below proves nothing.
+    const previewGap = detailPreview - centrePreview;
+    expect(Math.abs(previewGap), `the preview did not distinguish Detail from Centre (${detailPreview.toFixed(1)} vs ${centrePreview.toFixed(1)})`).toBeGreaterThan(8);
+
+    // And the export has to move the SAME way. Before the fix both exports were
+    // identical (the setting never reached the worker) and this gap was ~0.
+    const exportGap = detailExport - centreExport;
+    expect(exportExpectations(previewGap, exportGap)).toBe(true);
+  });
+
   test('arrangement moves the photographs — Spotlight and Eclipse are opposites', async ({ page }) => {
     await boot(page);
 

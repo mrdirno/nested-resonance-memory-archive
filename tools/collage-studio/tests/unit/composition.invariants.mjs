@@ -84,6 +84,34 @@ const makeBag = (slots, poolSize, rnd) =>
 
 const multiset = (a) => [...a].sort((x, y) => x - y).join(',');
 
+/**
+ * The metric each arrangement ranks on, recomputed here as a MEASURING STICK for
+ * the module's output — not as a second implementation of its behaviour. Used
+ * only to ask "did the picture stay a sibling", never to predict a placement.
+ */
+const metric = (p, m) => {
+  const c = p?.analysis?.color ?? {};
+  const l = c.l ?? 0.5, s = c.s ?? 0;
+  if (m === 'hue') return c.h ?? 0;
+  if (m === 'lum') return l;
+  if (m === 'chroma') return s;
+  if (m === 'warm') return ((c.r ?? 128) - (c.b ?? 128) + 255) / 510;
+  return s * (1 - Math.abs(l - 0.5) * 2);           // punch
+};
+
+/** Pearson correlation; 1 = identical shape, 0 = unrelated. */
+const corr = (a, b) => {
+  const n = a.length;
+  const ma = a.reduce((x, y) => x + y, 0) / n;
+  const mb = b.reduce((x, y) => x + y, 0) / n;
+  let num = 0, da = 0, db = 0;
+  for (let i = 0; i < n; i++) {
+    const x = a[i] - ma, y = b[i] - mb;
+    num += x * y; da += x * x; db += y * y;
+  }
+  return da > 0 && db > 0 ? num / Math.sqrt(da * db) : 1;
+};
+
 // --- 1. PERMUTATION, over the whole matrix -----------------------------------
 
 console.log('1. arrangement is a permutation (11 arrangements × shapes × 40 seeds)');
@@ -147,6 +175,92 @@ console.log('3. every arrangement is distinct and non-trivial');
     const clash = seen.get(out);
     check(clash === undefined, `${a}: produces the identical order to '${clash}' — two chips, one behaviour`);
     seen.set(out, a);
+  }
+}
+
+// --- 3b. SHUFFLE RE-DEALS INSIDE THE ARRANGEMENT ------------------------------
+// The defect this exists to prevent: an arrangement's output is a function of
+// the SET of photos and the geometry, so re-ordering the bag (which is all
+// Shuffle does) changed nothing at the default count — a dead button, silently,
+// on ~80% of dice rolls. The re-deal must (a) still be a permutation, (b)
+// actually move things, and (c) NOT destroy the ramp the arrangement builds.
+
+console.log('3b. shuffle re-deals within the arrangement without destroying it');
+{
+  const rnd = rngOf(2026);
+  const images = makePool(40, rnd);
+  const cells = Array.from({ length: 40 }, (_, i) => ({
+    cx: ((i % 8) + 0.5) / 8, cy: (Math.floor(i / 8) + 0.5) / 5, area: 1 / 40,
+  }));
+  for (const a of ARRANGEMENT_IDS.filter((x) => x !== 'natural')) {
+    const base = arrangeBag({ bag: [...Array(40).keys()], cells, images, arrangement: a });
+    const seen = new Set([base.join(',')]);
+    for (let t = 1; t <= 6; t++) {
+      const out = arrangeBag({ bag: [...Array(40).keys()], cells, images, arrangement: a, shuffle: t });
+      check(multiset(out) === multiset(base), `${a} shuffle=${t}: re-deal broke the permutation`);
+      seen.add(out.join(','));
+      const twice = arrangeBag({ bag: [...Array(40).keys()], cells, images, arrangement: a, shuffle: t });
+      check(twice.join(',') === out.join(','), `${a} shuffle=${t}: re-deal is not deterministic`);
+    }
+    check(seen.size === 7, `${a}: 6 shuffles gave only ${seen.size - 1} distinct pictures — Shuffle is a dead button`);
+
+    // THE RAMP MUST SURVIVE — measured where it is visible, not in slot indices.
+    //
+    // Slot-index distance is the wrong ruler: adjacent RANKS map to spatially
+    // adjacent CELLS, whose bag positions can be at opposite ends of the array,
+    // so a one-rank nudge reads as a 34-slot "move" while changing almost
+    // nothing on screen. What has to hold is that the picture stays a SIBLING of
+    // the exact ranking — so compare, slot by slot, the metric of the photo that
+    // landed there. A windowed re-deal keeps that correlated; a full shuffle
+    // drops it to noise, and Spotlight stops being Spotlight.
+    const spec = ARRANGEMENTS.find((x) => x.id === a);
+    const shuffled = arrangeBag({ bag: [...Array(40).keys()], cells, images, arrangement: a, shuffle: 3 });
+    const r = corr(base.map((v) => metric(images[v], spec.metric)),
+                   shuffled.map((v) => metric(images[v], spec.metric)));
+    check(r >= 0.6, `${a}: slot-by-slot metric correlation with the exact ranking is only ${r.toFixed(2)} — the re-deal is a full shuffle, not a window`);
+  }
+  // shuffle=0 must be byte-identical to not passing it at all.
+  for (const a of ARRANGEMENT_IDS) {
+    const x = arrangeBag({ bag: [...Array(40).keys()], cells, images, arrangement: a }).join(',');
+    const y = arrangeBag({ bag: [...Array(40).keys()], cells, images, arrangement: a, shuffle: 0 }).join(',');
+    check(x === y, `${a}: shuffle=0 must be the exact ranking`);
+  }
+}
+
+// --- 3c. LOCKED CELLS MUST NOT SKEW THE ROW BUCKETING -------------------------
+// `rows` is derived from the mean cell AREA, not from how many slots are still
+// being filled — locking two thirds of a grid must not re-band the ramp.
+
+console.log('3c. row bucketing survives locked cells');
+{
+  const rnd = rngOf(31337);
+  const images = makePool(36, rnd);
+  const all = Array.from({ length: 36 }, (_, i) => ({
+    cx: ((i % 6) + 0.5) / 6, cy: (Math.floor(i / 6) + 0.5) / 6, area: 1 / 36,
+  }));
+  // `flow`, not `checker`: checker alternates parity over the cells being
+  // FILLED, so on a different subset "every other one" legitimately picks
+  // different cells. Serpentine is the one whose banding must follow the grid.
+  for (const a of ['flow']) {
+    // Full grid vs the same grid with 24 cells locked away: the surviving cells
+    // must still be banded as a 6-row layout, so their relative order is a
+    // subsequence of the full-grid order.
+    const full = arrangeBag({ bag: [...Array(36).keys()], cells: all, images, arrangement: a });
+    const keep = all.filter((_, i) => i % 3 === 0);
+    const keepIdx = all.map((_, i) => i).filter((i) => i % 3 === 0);
+    const part = arrangeBag({ bag: keepIdx, cells: keep, images, arrangement: a });
+    check(multiset(part) === multiset(keepIdx), `${a}: partial grid broke the permutation`);
+    check(part.length === keepIdx.length, `${a}: partial grid changed length`);
+    // Same photos, same rows: the rank of each surviving photo relative to the
+    // others must not invert wholesale (a mis-banded row count inverts many).
+    const fullRank = new Map(full.filter((v) => keepIdx.includes(v)).map((v, i) => [v, i]));
+    let inversions = 0;
+    for (let i = 0; i < part.length; i++)
+      for (let j = i + 1; j < part.length; j++)
+        if ((fullRank.get(part[i]) ?? 0) > (fullRank.get(part[j]) ?? 0)) inversions++;
+    const pairs = (part.length * (part.length - 1)) / 2;
+    check(inversions / pairs < 0.3,
+      `${a}: ${((inversions / pairs) * 100).toFixed(0)}% of pairs inverted when cells were locked — the row bucketing is following the FILL count, not the grid`);
   }
 }
 
