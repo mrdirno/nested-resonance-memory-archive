@@ -747,4 +747,14 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   manifest entry, live at its own URL while the storefront still advertised it as "coming
   soon"; both trades are now entered and NEXT_TRADES is empty, with both render sites taught
   to degrade instead of printing "0 trades on the bench".
+  **BACKPORT RIDER FIRED, swept to all six trades this cycle:** measuring the live hubs at
+  320/360/390/430 caught the favourite ★ on every tool card shipping as a bare 28×28 icon
+  button — the only control on a hub card, failing the 44px tap-target law on every trade at
+  once, and invisible to the gate that does run because that gate is horizontal and this
+  defect is a size rather than a spill. Now 44×44 on all six with the title gutter widened
+  30→46px, verified live on every trade. (The rider also produced a NON-finding worth the
+  same weight: a suspected cross-trade accent bug in `credits.html` was written, applied to
+  six trades, then measured on the live page and REVERTED — the runtime already injects the
+  trade accent. Filed as a scar; a sweep is exactly the size of mistake worth two minutes of
+  verification.)
   https://mrdirno.github.io/nested-resonance-memory-archive/gc/
