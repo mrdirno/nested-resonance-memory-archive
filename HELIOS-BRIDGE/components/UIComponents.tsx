@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -224,6 +224,14 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to HVAC and refrigeration — the repair recommendation first: the turnover a tech sends from the roof so the office can quote the fix without a second trip.',
     icon: <Snowflake size={18} />,
+  },
+  {
+    // TRADE #5. Registered in the same commit that stands the trade up.
+    name: 'Low-Voltage Field Toolkit',
+    href: './low-voltage/',
+    tag: 'field',
+    blurb: 'Isomorphed to low-voltage, security and fire — the device schedule first: log every camera, reader and device as you hang it and hand the PM a clean list instead of a night in a spreadsheet.',
+    icon: <Cctv size={18} />,
   },
 ];
 

@@ -20,6 +20,7 @@ on:
       - 'plumbing/**'
       - 'electrical/**'
       - 'hvac/**'
+      - 'low-voltage/**'
       - '.github/workflows/deploy_bridge.yml'
   workflow_dispatch:
 
@@ -106,7 +107,7 @@ jobs:
           # at the top of this file. Nothing else. `test -d` keeps it fail-closed:
           # a slug with no dir fails the build instead of silently 404ing the site.
           cp -R shared/. HELIOS-BRIDGE/dist/shared/
-          TRADES="av plumbing electrical hvac"
+          TRADES="av plumbing electrical hvac low-voltage"
           # Each `run:` block is its OWN shell, so a later step cannot see this
           # variable — publish it to the job env so the assert step below checks
           # exactly the list that was staged, from ONE definition.

@@ -45,7 +45,8 @@
     { slug: "av",         name: "AV Field Toolkit" },
     { slug: "plumbing",   name: "Plumbing Field Toolkit" },
     { slug: "electrical", name: "Electrical Field Toolkit" },
-    { slug: "hvac",       name: "HVAC/R Field Toolkit" }
+    { slug: "hvac",       name: "HVAC/R Field Toolkit" },
+    { slug: "low-voltage", name: "Low-Voltage Field Toolkit" }
   ];
 
   /* ---- WHO AM I: the per-trade config, with the AV defaults ---------------

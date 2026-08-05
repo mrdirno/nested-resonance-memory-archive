@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Device Checkout — Low-Voltage Field Toolkit</title>
+<meta name="description" content="Log every device as you put it in — tag, where it is, what it homes back to, where it's at. Tap a row to move it up. Copy what changed for the huddle, or the whole list for the office spreadsheet.">
+<meta name="apple-mobile-web-app-title" content="Device Checkout">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--flag:#FF9E80;--tint:#FFEDE6;--deep:#A33A17;--ok:#0C6B4F;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+/* NO overflow-x:hidden anywhere, on purpose — it MASKS a horizontal overflow and
+   blinds the pre-ship mobile gate on exactly the defect it exists to catch. */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(60px + env(safe-area-inset-bottom))}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 14px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(20px,5.4vw,29px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.95}
+.lede{margin:7px 0 0;max-width:62ch;color:#B9BFC6;font-size:12.5px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:12px 13px;margin-bottom:12px}
+.card>h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;margin:0 0 9px;color:var(--ink)}
+.note{font-size:12px;color:var(--muted);margin:0 0 10px;line-height:1.4}
+.note b{color:var(--ink)}
+.warn{border-left:4px solid var(--flag);background:var(--tint);padding:9px 11px;font-size:12px;color:#4A2314;margin-bottom:12px;border-radius:2px}
+.warn b{color:#2B0A02}
+
+label,.lab{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 3px}
+input[type=text],select,textarea{width:100%;min-width:0;font:inherit;font-size:16px;/* 16px = iOS will not zoom the page on focus */
+  padding:9px 10px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);min-height:44px}
+textarea{min-height:88px;resize:vertical;font-family:var(--mono);font-size:13px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--deep);outline-offset:1px}
+
+/* ── the add bar ─────────────────────────────────────────────────────────── */
+#bar{display:block}
+.rl-lead{display:flex;gap:8px;align-items:flex-end}
+.rl-lead .rl-f{flex:1 1 auto;min-width:0}
+.rl-add{flex:0 0 auto;font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:17px;font-weight:700;
+  background:var(--flag);color:#2B0A02;border:1px solid var(--flag);border-radius:2px;min-height:44px;padding:0 20px;cursor:pointer}
+.rl-add:hover{filter:brightness(1.07)}
+.rl-lab{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 3px}
+.rl-carry{font-style:normal;color:var(--deep);letter-spacing:.06em}
+.rl-in{width:100%;min-width:0;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:2px;background:#fff;min-height:44px}
+.rl-next{margin-top:7px}
+.rl-nextbtn{font-family:var(--mono);font-size:12px;background:#fff;border:1px dashed var(--deep);color:var(--deep);border-radius:2px;min-height:38px;padding:6px 12px;cursor:pointer}
+.rl-dupe{margin:7px 0 0;font-size:12px;color:#8A3A00;background:#FFF4E8;border-left:3px solid #E08A3C;padding:6px 9px;border-radius:2px}
+.rl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-top:10px}
+.rl-f.rl-wide{grid-column:1/-1}
+.rl-f.rl-bad .rl-in,.rl-f.rl-bad{outline:2px solid #C0392B;outline-offset:2px;border-radius:2px}
+.rl-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.rl-chip{font-family:var(--sans);font-size:13px;background:#fff;border:1px solid var(--line);color:var(--ink);
+  border-radius:2px;min-height:38px;padding:7px 11px;cursor:pointer;max-width:100%;overflow-wrap:anywhere}
+.rl-chip.on{background:var(--steel);border-color:var(--steel);color:#fff}
+.rl-flagchip.on{background:#8A3A00;border-color:#8A3A00}
+.rl-hint{font-size:12px;color:var(--muted)}
+.rl-learn{margin-bottom:0}
+.rl-editing{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}
+.rl-editlab{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--deep)}
+.rl-flags{display:flex;flex-wrap:wrap;gap:6px}
+.rl-mini{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:#fff;border:1px solid var(--line);
+  color:var(--ink);border-radius:2px;min-height:38px;padding:6px 11px;cursor:pointer}
+.rl-del{border-color:#C0392B;color:#8E2B20}
+#bar.is-editing{outline:2px solid var(--deep);outline-offset:6px;border-radius:2px}
+
+/* the pickers collapse once the list has rows — they all carry, so after the
+   first device the whole bar is: type the tag, press Add. */
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+details.more>summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--deep);min-height:38px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"▸";display:inline-block;transition:transform .12s ease}
+details.more[open]>summary::before{transform:rotate(90deg)}
+#carrySum{font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--muted);font-size:12px;
+  min-width:0;overflow-wrap:anywhere}
+
+/* ── bulk ────────────────────────────────────────────────────────────────── */
+.bulkgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:9px;align-items:end}
+.bulkgrid .go{grid-column:1/-1}
+.btn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;background:var(--steel);
+  color:#fff;border:1px solid var(--steel);border-radius:2px;min-height:44px;padding:10px 16px;cursor:pointer;width:100%}
+.btn:hover{filter:brightness(1.15)}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.flag{background:var(--flag);border-color:var(--flag);color:#2B0A02}
+
+/* ── list ────────────────────────────────────────────────────────────────── */
+.bararea{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:9px}
+.seg{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:#fff}
+.seg button{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:#fff;border:0;
+  border-right:1px solid var(--line);color:var(--muted);min-height:40px;padding:8px 11px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--steel);color:#fff}
+#tally{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px}
+#tally b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;color:var(--ink)}
+.rl-tsep{color:var(--line)}
+.rl-tchip{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;border:1px solid var(--line);border-radius:2px;padding:3px 6px;background:#fff}
+.rl-tflag{border-color:#E08A3C;background:#FFF4E8;color:#8A3A00}
+.rl-empty{font-size:13px;color:var(--muted);margin:6px 0}
+.rl-grp{margin:0 0 12px}
+.rl-grp h3{font-family:var(--cond);text-transform:uppercase;letter-spacing:.07em;font-size:13px;color:var(--muted);
+  margin:0 0 5px;padding-bottom:3px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.rl-grp h3 .rl-n{color:var(--deep)}
+.rl-row{display:flex;align-items:stretch;gap:6px;margin-bottom:5px}
+.rl-tap{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:8px;text-align:left;background:#fff;border:1px solid var(--line);
+  border-left:4px solid var(--line);border-radius:2px;min-height:46px;padding:6px 9px;cursor:pointer;font:inherit;color:inherit}
+.rl-tap:hover{border-color:var(--deep)}
+.rl-tap.at-top{border-left-color:var(--ok)}
+.rl-row.has-flag .rl-tap{border-left-color:#E08A3C}
+.rl-txt{flex:1 1 auto;min-width:0}
+.rl-main{display:block;font-family:var(--mono);font-size:13px;font-weight:700;overflow-wrap:anywhere}
+.rl-sub{display:block;font-size:11.5px;color:var(--muted);overflow-wrap:anywhere}
+.rl-st{flex:0 0 auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;border:1px solid var(--line);border-radius:2px;
+  padding:3px 5px;background:var(--tint);color:var(--deep);white-space:normal;max-width:9.5em;text-align:center}
+.rl-st.none{background:#F2F2EE;color:#9AA0A6;border-style:dashed}
+.rl-flag{flex:0 0 auto;display:flex;align-items:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
+  background:#FFF4E8;border:1px solid #E08A3C;color:#8A3A00;border-radius:2px;padding:0 5px}
+.rl-edit{flex:0 0 auto;width:44px;background:#fff;border:1px solid var(--line);border-radius:2px;cursor:pointer;font-size:15px;color:var(--muted)}
+.rl-edit:hover{border-color:var(--deep);color:var(--deep)}
+
+/* ── output ──────────────────────────────────────────────────────────────── */
+.outrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:9px;margin-bottom:10px}
+pre#preview{font-family:var(--mono);font-size:11.5px;line-height:1.45;background:#fff;border:1px solid var(--line);border-radius:2px;
+  padding:11px;margin:0;white-space:pre-wrap;overflow-wrap:anywhere;max-height:340px;overflow-y:auto}
+.foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.foot a{color:var(--steel);text-decoration:none;border-bottom:1px solid var(--flag);padding-bottom:1px}
+.credit{font-size:11.5px;color:var(--muted);margin:10px 0 0;line-height:1.45}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Low-voltage · security · fire</span>
+    <h1>Device Checkout</h1>
+    <p class="lede">Log what you put in, as you put it in. Tap a row to move it up — pulled, mounted, terminated, tested, programmed, verified. At the end of the day copy what changed for the huddle, or hand the office the whole list for their spreadsheet. It stays on this phone.</p>
+  </header>
+
+  <div class="warn">
+    <b>Double-check before you send it.</b> Every tag, type, location and status on this list is what <i>you</i> typed or read off the drawing — this page doesn't space devices, size a battery or a circuit, set a mount height, and it doesn't know what's required or what passed. It's your count of your own rows, not a test report, and the engineer's schedule is still the schedule.
+  </div>
+
+  <section class="card">
+    <h2>The job</h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / site</label><input type="text" id="hJob" placeholder="Building C" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">Counted off</label><input type="text" id="hOff" placeholder="T-201 rev 3, 6/14" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+      <div><label for="hBy">Your name</label><input type="text" id="hBy" placeholder="optional" autocapitalize="words" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0">A device count is only true against a drawing revision — put the sheet and the revision in <b>Counted off</b> and nobody has to argue about what it was counted against.</p>
+  </section>
+
+  <section class="card">
+    <h2>Add a device</h2>
+    <div id="bar"></div>
+
+    <details class="more" id="bulk">
+      <summary>Add a bunch at once</summary>
+
+      <p class="note" style="margin:10px 0 8px"><b>A range.</b> Prefix, first number, last number — they all land with no status on them, ready to tick off as you go. Leading zeros are kept, so 004 makes 004, 005, 006.</p>
+      <div class="bulkgrid">
+        <div><label for="bPre">Prefix</label><input type="text" id="bPre" placeholder="CAM-" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+        <div><label for="bFrom">First</label><input type="text" id="bFrom" inputmode="numeric" placeholder="201" autocomplete="off"></div>
+        <div><label for="bTo">Last</label><input type="text" id="bTo" inputmode="numeric" placeholder="248" autocomplete="off"></div>
+        <div><label for="bSuf">After</label><input type="text" id="bSuf" placeholder="optional" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+        <div class="go"><button type="button" class="btn" id="bGo">Make the rows</button></div>
+      </div>
+
+      <p class="note" style="margin:14px 0 8px"><b>Or paste a column.</b> One tag per line, straight out of whatever you already have.</p>
+      <textarea id="bPaste" placeholder="CAM-201&#10;CAM-202&#10;CAM-203" autocapitalize="characters" autocorrect="off" spellcheck="false"></textarea>
+      <div style="margin-top:8px"><button type="button" class="btn ghost" id="bPasteGo">Add these</button></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>The list</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="floor" class="on">Floor</button>
+        <button type="button" data-g="homes_to">Homes to</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0">Tap a row to move it up a step. The pencil opens it to fix a detail, flag it, or delete it.</p>
+  </section>
+
+  <section class="card">
+    <h2>Send it</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Copy</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-d="0" class="on">Everything</button>
+        <button type="button" data-d="1">New since last copy</button>
+      </div>
+    </div>
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note">The first one is a message: the counts, what changed, and every flagged line. The second is the whole list with a tab between each column, which drops straight into a spreadsheet — <b>that one is also your backup.</b> This list lives in this browser on this phone, so send yourself the spreadsheet copy at the end of a big day. A browser you haven't opened in a couple of weeks can clear it out, and a new phone definitely will.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole list</button></div>
+  </section>
+
+  <p class="credit">Built for the Low-Voltage Field Toolkit. Something missing, or wrong on a real job? <a href="#" id="wishLink">Wish it better</a> — it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span>Low-Voltage Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var KEY = "toolkit.low-voltage.device-checkout.v1";
+
+  /* Title-case OUR OWN controlled vocabulary for the document — never anything
+     the man typed. A status token is the page's word, not his; a tag, an area or
+     a panel name is his and ships back character for character. */
+  function cap(s) { s = String(s || ""); return s ? s.charAt(0) + s.slice(1).toLowerCase() : ""; }
+  function subLabel(v) {
+    for (var i = 0; i < window.LV_SUBSYSTEMS.length; i++) if (LV_SUBSYSTEMS[i].v === v) return LV_SUBSYSTEMS[i].label;
+    return "";
+  }
+  function joinDots(parts) {
+    return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · ");
+  }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "row", nounPlural: "rows", groupNoun: "group", groupNounPlural: "groups",
+    ungroupedLabel: "NOT SET",
+    emptyText: "Nothing on the list yet. Add one device, or make a range of them above.",
+    statusKey: "status", statusOrder: window.LV_STATUS,
+    flagKey: "flag", flagValues: window.LV_FLAGS,
+    groupOptions: [{ key: "floor", label: "Floor" }, { key: "homes_to", label: "Homes to" }],
+
+    fields: [
+      { key: "subsystem", label: "Subsystem", input: "select", sticky: true, wide: true, neutral: "Pick one",
+        options: window.LV_SUBSYSTEMS },
+      { key: "tag", label: "Tag", input: "text", identifier: true, lead: true, required: true,
+        placeholder: "CAM-201" },
+      { key: "type", label: "Type", input: "chips", sticky: true },
+      { key: "floor", label: "Floor", input: "learn", sticky: true, placeholder: "2 — then it's a button",
+        emptyHint: "Type a floor above and it becomes a button for the rest of the job." },
+      { key: "area", label: "Room / area", input: "learn", sticky: true, placeholder: "Corr 2E",
+        emptyHint: "Type a room above and it becomes a button." },
+      { key: "mount", label: "Mount", input: "chips", sticky: true },
+      { key: "homes_to", label: "Homes to", input: "learn", sticky: true, placeholder: "IDF-2A",
+        emptyHint: "Type the IDF, panel or head end and it becomes a button." },
+      { key: "port_addr", label: "Port / addr", input: "text", sticky: false, placeholder: "2/1/14" },
+      { key: "status", label: "Where it's at", input: "chips", sticky: true },
+      { key: "note", label: "Note", input: "text", sticky: false, wide: true,
+        placeholder: "anything that won't fit above — height, what's in the way, the model if you want it" }
+    ],
+
+    /* SUBSYSTEM GATES TYPE, and it is the one place mount genuinely forks (a
+       reader on a storefront mullion). Resolved at render time so switching
+       subsystem re-paints the chips immediately. */
+    optionsFor: function (key, cur) {
+      if (key === "type") return window.LV_TYPES[cur.subsystem] || [];
+      if (key === "mount") {
+        return cur.subsystem === "access"
+          ? window.LV_MOUNTS.concat([window.LV_MOUNT_ACCESS_EXTRA])
+          : window.LV_MOUNTS;
+      }
+      if (key === "status") return window.LV_STATUS;
+      return null;
+    },
+
+    rowMain: function (v) { return v.tag || "(no tag)"; },
+    rowSub: function (v) {
+      return joinDots([v.type, v.area, v.mount, joinSpace([v.homes_to, v.port_addr]), v.note]);
+    },
+
+    /* ── the document ──────────────────────────────────────────────────────
+       LINE 1 IS AN INBOX SEARCH KEY, never the tool's own name — this gets
+       pulled up nine months later by somebody searching their mail for
+       "Building C". It DEGRADES: no job, no leading separator. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim(), by = $("#hBy").value.trim();
+      var sub = subLabel(currentSubsystem());
+      var out = [joinDash([job, sub, c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (off) out.push("Counted off: " + off);
+      if (sub) out.push("Subsystem: " + sub);
+      if (by)  out.push("By: " + by);
+      out.push("");
+      out.push("COUNT");
+      out.push("Rows on the list: " + c.total);
+      c.status.forEach(function (s) { out.push("Marked " + s.name.toLowerCase() + ": " + s.n); });
+      var started = c.status.reduce(function (a, s) { return a + s.n; }, 0);
+      if (c.total - started > 0) out.push("Nothing marked yet: " + (c.total - started));
+      if (c.flagged) out.push("Flagged: " + c.flagged);
+      out.push("");
+      out.push(c.deltaOnly
+        ? "Showing what changed since the last copy — " + c.shown + " of " + c.total + " rows, grouped by " + String(c.groupLabel || "").toLowerCase() + "."
+        : "Showing the full list — " + c.total + (c.total === 1 ? " row" : " rows") + ", grouped by " + String(c.groupLabel || "").toLowerCase() + ".");
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER ROW, spaced middots, empties dropped. Nine "Label: value"
+       lines per row across 240 rows is two thousand lines in a text message.
+       No padding, no columns, no tabs, no emoji: a padded column looks perfect
+       in the preview and arrives as mush in a proportional font. The field the
+       list is grouped by is dropped from the line — it is already the heading. */
+    docRow: function (v) {
+      var g = rl ? rl.group() : "floor";
+      return joinDots([
+        v.tag,
+        v.type,
+        g === "floor" ? null : (v.floor ? "Floor " + v.floor : null),
+        v.area,
+        v.mount,
+        g === "homes_to" ? (v.port_addr || null) : joinSpace([v.homes_to, v.port_addr]),
+        cap(v.status),
+        v.note
+      ]);
+    },
+    docFlagRow: function (v, r) {
+      return joinDots([v.tag, r.flag, joinSpace([v.floor ? "Floor " + v.floor : "", v.area]), cap(v.status), v.note]);
+    },
+    docFoot: function () {
+      return "Field count typed by hand off the devices — check it against the engineer's schedule before anybody works off it.";
+    },
+
+    /* TSV: row 1 is one cell of prose so the caveat travels into the sheet too,
+       row 2 is the header, and it always emits EVERY row — this button is the
+       only honest archive this tool has. */
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      return (job ? job + " — " : "") + "field device checkout, " + c.total + " rows, " + c.today
+        + (off ? ", counted off " + off : "")
+        + " — typed by hand off the devices, check against the engineer's schedule before working off it.";
+    },
+    tsvColumns: [
+      { label: "Tag", key: "tag" },
+      { label: "Subsystem", value: function (v) { return subLabel(v.subsystem); } },
+      { label: "Type", key: "type" },
+      { label: "Floor", key: "floor" },
+      { label: "Room / area", key: "area" },
+      { label: "Mount", key: "mount" },
+      { label: "Homes to", key: "homes_to" },
+      { label: "Port / addr", key: "port_addr" },
+      { label: "Status", key: "status" },
+      { label: "Flag", value: function (v, r) { return r.flag || ""; } },
+      { label: "Note", key: "note" }
+    ],
+
+    /* CLEAR MUST ACTUALLY CLEAR: return null when the header is untouched, or
+       the engine keeps a record alive that the man just emptied. */
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), o = $("#hOff").value.trim(), b = $("#hBy").value.trim();
+      return (j || o || b) ? { job: j, off: o, by: b } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.off || ""; $("#hBy").value = x.by || "";
+    },
+    onChange: function (n) { syncCarry(); if (n) $("#bulk").open = false; }
+  });
+
+  function joinSpace(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" "); }
+  function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+  function currentSubsystem() { var el = document.querySelector('[data-k="subsystem"]'); return el ? el.value : ""; }
+
+  /* The pickers all carry, so once there are rows the whole bar is "type the tag,
+     press Add" — the summary line keeps what is carrying visible without keeping
+     eight controls on screen at the top of a ladder. */
+  function syncCarry() {
+    var el = document.querySelector("#carrySum"); if (!el) return;
+    var g = function (k) { var x = document.querySelector('[data-k="' + k + '"]'); return x ? x.value : ""; };
+    var s = joinDots([subLabel(g("subsystem")), g("type"), g("floor") ? "Floor " + g("floor") : "", g("area"), g("mount"), g("homes_to"), g("status")]);
+    el.textContent = s ? "— carrying: " + s : "";
+  }
+
+  /* Move the engine's picker grid into a collapsible, and keep the bulk panel's
+     summary honest. Presentation only: the engine stays trade-agnostic. */
+  (function collapsePickers() {
+    var grid = document.querySelector("#bar .rl-grid"); if (!grid) return;
+    var d = document.createElement("details");
+    d.className = "more"; d.id = "pickers"; d.open = true;
+    var s = document.createElement("summary");
+    s.innerHTML = 'The details <span id="carrySum"></span>';
+    d.appendChild(s);
+    grid.parentNode.insertBefore(d, grid);
+    d.appendChild(grid);
+  })();
+  document.querySelector("#bar").addEventListener("change", syncCarry);
+  document.querySelector("#bar").addEventListener("click", function () { setTimeout(syncCarry, 0); });
+  document.querySelector("#bar").addEventListener("input", syncCarry);
+
+  /* ── bulk ──────────────────────────────────────────────────────────────── */
+  $("#bGo").addEventListener("click", function () {
+    var n = rl.addRange($("#bPre").value, $("#bFrom").value, $("#bTo").value, $("#bSuf").value);
+    flashBtn(this, n ? "Added " + n : "Check the numbers");
+    if (n) { $("#bFrom").value = ""; $("#bTo").value = ""; }
+  });
+  $("#bPasteGo").addEventListener("click", function () {
+    var n = rl.addPasted($("#bPaste").value);
+    flashBtn(this, n ? "Added " + n : "Nothing to add");
+    if (n) $("#bPaste").value = "";
+  });
+  function flashBtn(b, msg) {
+    var old = b.getAttribute("data-label") || b.textContent;
+    b.setAttribute("data-label", old); b.textContent = msg;
+    setTimeout(function () { b.textContent = old; }, 1500);
+  }
+
+  /* ── segmented controls ────────────────────────────────────────────────── */
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-d]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setDeltaOnly(b.getAttribute("data-d") === "1");
+  });
+
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    $("#hJob").value = ""; $("#hOff").value = ""; $("#hBy").value = "";
+    rl.clearAll();
+  });
+
+  ["#hJob", "#hOff", "#hBy"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  rl.restore();
+  syncCarry();
+  if (rl.count()) { var p = document.querySelector("#pickers"); if (p) p.open = false; }
+})();
+</script>
+</body>
+</html>

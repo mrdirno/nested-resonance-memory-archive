@@ -395,6 +395,31 @@
       persistTimer = setTimeout(persist, 250);
     }
 
+    /* A 250 ms DEBOUNCE IS NOT A SAVE (§SCARS "the camera round-trip eats the
+     * draft", 2026-08-04). iOS backgrounds the tab the instant a man leaves for
+     * the camera, a phone call, or the next app — and a timer that has not fired
+     * yet dies with it, silently, taking the walk he just did. That scar was
+     * found and fixed on ONE page (hvac/repair-recommendation.html) and left
+     * every checklist tool on three other trades still debounce-only: this
+     * engine drives av/consumables, av/cable-list, plumbing/supply-house-order
+     * and electrical/pull-list. Fixing it in the engine fixes all four at once —
+     * which is the whole reason the engine exists.
+     * Flush SYNCHRONOUSLY on the three events that actually precede an eviction.
+     * `visibilitychange` is the one that fires on iOS; `pagehide` covers a real
+     * navigation; `blur` covers focus leaving to another app on desktop. */
+    function flushPersist() {
+      if (!cfg.persistKey) return;
+      clearTimeout(persistTimer);
+      // Defensive: a flush can arrive before the first render (a tab backgrounded
+      // during load). Losing the write is correct there; throwing is not.
+      try { persist(); } catch (e) {}
+    }
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "hidden") flushPersist();
+    });
+    window.addEventListener("pagehide", flushPersist);
+    window.addEventListener("blur", flushPersist);
+
     function applyValues(li, row) {
       [].forEach.call(li.querySelectorAll(".i-ax"), function (s) {
         var v = row.ax ? row.ax[s.getAttribute("data-k")] : null;
