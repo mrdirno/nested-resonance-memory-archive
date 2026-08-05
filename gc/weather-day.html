@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Weather Day — GC &amp; Site Super Toolkit</title>
+<meta name="description" content="You lost the day. Build the notice your PM needs before he writes the letter — what it did, what stopped, what it cost besides the hours, and what it pushes. Thumbed out at the gate, in the rain.">
+<meta name="apple-mobile-web-app-title" content="Weather Day">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--flag:#8CE86B;--tint:#EAFBE3;--deep:#2E6B18;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+/* NO overflow-x:hidden on this page, on purpose — it MASKS a horizontal overflow
+   instead of fixing it and blinds the pre-ship mobile gate on exactly the defect
+   the gate exists to catch (§SCARS: documentElement read a clean 390 while body
+   was 489). Measure both; fix the cause. */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px calc(124px + env(safe-area-inset-bottom))}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -14px 16px;padding:16px 14px 14px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:5px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(19px,4.4vw,27px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.98}
+.lede{margin:7px 0 0;max-width:64ch;color:#B9BFC6;font-size:12.5px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--flag);border-radius:2px;padding:12px 13px;margin-bottom:12px}
+.card.shoot{border:2px solid var(--deep);border-left-width:5px}
+.card.shoot h2.blk{color:var(--deep)}
+h2.blk{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:16px;margin:0 0 3px;color:var(--ink);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+h2.blk .why{font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:11.5px;font-weight:400;color:var(--muted);flex:1 1 200px;min-width:0}
+.subhead{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:13px 0 7px;padding-top:9px;border-top:1px dashed var(--line)}
+
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:9px}
+.f label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.f label i{color:var(--deep);font-style:normal;text-transform:none;letter-spacing:.02em;font-size:10.5px}
+/* 44px MINIMUM on every control (operator 2026-08-04, the MOBILE-WATERTIGHT law),
+   measured in a real browser at 320/360/390/430 before this page shipped. */
+.f input,.f textarea{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);min-height:44px}
+.f textarea{resize:vertical;line-height:1.35}
+.f input:focus,.f textarea:focus{outline:2px solid var(--flag);outline-offset:-1px}
+.f.span2{grid-column:1 / -1}
+.f .note{font-size:11.5px;color:var(--muted);margin:5px 0 0}
+
+/* THE PICK LIST — single-select, rendered as full-width rows and NOT as a chip
+   row. §SCARS names a 6-option ceiling the moment an axis becomes chips instead
+   of a select, and every option here is a whole spoken sentence ("Calling it for
+   tomorrow — don't load the trucks"). Six of those in a wrapping chip row is a
+   wall. Stacked rows read in one pass and every one is a 44px target. */
+ul.ticks{list-style:none;margin:9px 0 0;padding:0;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:#fff}
+ul.ticks li{border-bottom:1px solid #E4E6E0}
+ul.ticks li:last-child{border-bottom:0}
+ul.ticks label{display:flex;align-items:center;gap:10px;padding:8px 11px;cursor:pointer;min-height:44px}
+ul.ticks input{width:20px;height:20px;flex:none;accent-color:var(--deep);cursor:pointer}
+ul.ticks .nm{font-weight:600;font-size:13.5px;min-width:0;overflow-wrap:anywhere}
+ul.ticks li:has(input:checked){background:var(--tint)}
+ul.ticks.pick .nm{font-weight:700}
+
+/* the 3-option schedule row is the ONE place a chip row is right: three short
+   options, no wrap on a 320px phone once they are allowed to flex. */
+.seg{display:flex;flex-wrap:wrap;gap:0;margin-top:9px}
+.seg button{flex:1 1 130px;min-width:0;font-family:var(--cond);text-transform:uppercase;letter-spacing:.04em;font-size:13.5px;font-weight:700;
+  background:#fff;border:1px solid var(--line);color:var(--muted);padding:8px 7px;cursor:pointer;min-height:44px;overflow-wrap:anywhere}
+.seg button.on{background:var(--deep);border-color:var(--deep);color:#fff}
+
+/* THE IMPACT LINE — the field the whole document exists for, so it is the only
+   thing on the page louder than everything around it. Every notice in America
+   leaves it off, which is exactly why it gets the loud box. */
+.impact{border:2px solid var(--deep);border-radius:2px;background:var(--tint);padding:10px 11px;margin-top:11px}
+.impact > label{display:block;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:15px;font-weight:700;color:#1E4A10;margin-bottom:2px}
+.impact .hint{font-size:11.5px;color:#2C5427;margin:0 0 8px}
+.impact textarea{width:100%;font:inherit;font-size:14px;padding:8px 9px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);min-height:96px;resize:vertical;line-height:1.35}
+.impact textarea:focus{outline:2px solid var(--deep);outline-offset:-1px}
+
+.carry{width:100%;min-height:44px;margin-top:10px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;font-weight:700;
+  background:#fff;border:1px dashed var(--deep);color:var(--deep);border-radius:2px;padding:11px 12px;cursor:pointer;overflow-wrap:anywhere}
+.carry:hover{background:var(--tint)}
+.carry[hidden]{display:none}
+
+.warn{font-size:12px;color:var(--muted);background:#FFFDF6;border:1px solid var(--line);border-left:4px solid #E0A800;
+  border-radius:2px;padding:10px 12px;margin:14px 0}
+.warn b{color:var(--ink)}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--steel);border-top:2px solid var(--flag);
+  padding:9px 14px calc(9px + env(safe-area-inset-bottom));display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+/* MEASURED AT 320px BEFORE THIS PAGE SHIPPED: the two action buttons are
+   white-space:nowrap and came to 283px inside a 292px content box, so this
+   status line was handed a flex width of ZERO — and with normal wrapping it
+   turned into a 92px vertical ribbon one character wide, which inflated the
+   fixed bar to 112px and ate a third of the smallest phone's screen.
+   Two independent guards, because the media query alone would leave the ribbon
+   one hostile font-size away from coming back:
+     1. nowrap + ellipsis, so this element can NEVER be taller than one line
+        no matter how little width it is given;
+     2. its own full-width row below 420px, so it keeps its text instead.
+   Priority when the bar cannot fit is the same as the nav's (§SCARS): the
+   actions never shrink — the status line gives way. */
+.bar .count{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B9BFC6;
+  flex:1 1 120px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Below 560px the status line takes its OWN row and the two actions split the
+   one under it. Anything narrower than that and a count sharing the row forces
+   the buttons to wrap onto two rows each — measured: a 141px bar at 320px, worse
+   than the ribbon it replaced. One predictable shape: 15px of status, one 44px
+   row of actions, 86px total, at every phone width. */
+@media (max-width:560px){.bar .count{flex:1 1 100%;order:-1}}
+/* Both actions flex to split their row, so on a phone they are two wide targets
+   side by side instead of one fat button and one sliver. */
+.bar button{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
+  border-radius:2px;padding:11px 12px;cursor:pointer;white-space:nowrap;min-height:44px;flex:1 1 auto;min-width:0}
+#copy{background:var(--flag);border:1px solid var(--flag);color:var(--flag-ink,#0C2405);flex-grow:1.4}
+#copy:hover{filter:brightness(1.08)}
+#clear{background:transparent;border:1px solid #59616B;color:#B9BFC6}
+#clear:hover{border-color:#8A929B;color:#EEF0EA}
+.preview{background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;font-family:var(--mono);font-size:12px;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink);max-height:380px;overflow:auto}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.credit{font-size:12px;color:var(--muted);margin:14px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">GC &middot; Super &rarr; the PM</span>
+    <h1 id="pageTitle">Weather Day</h1>
+    <p class="lede">You lost the day. This is what your PM has to have before he can write anything — what it did, what it stopped, what it cost besides the hours, and what it pushes. Built at the gate, in the rain, one-handed. It goes UP to him; he writes the letter.</p>
+  </header>
+
+  <!-- SHOOT FIRST. Tuesday's mud cannot be re-photographed on Wednesday —
+       Wednesday is sunny, the pad looks fine, and the owner's rep will say so. -->
+  <section class="card shoot">
+    <h2 class="blk">Shoot these before you leave <span class="why">Three photos, right now, while it still looks like this. Nothing uploads &mdash; they ride in the same message as the paste, and none of this prints.</span></h2>
+    <ul class="ticks" id="shots"></ul>
+  </section>
+
+  <section class="card">
+    <h2 class="blk">The job and the day</h2>
+    <div class="hgrid">
+      <div class="f span2">
+        <label for="job">Job</label>
+        <input id="job" type="text" placeholder="Alder &amp; 7th — 6-story mixed-use" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div class="f">
+        <label for="day">Day <i>— change it</i></label>
+        <input id="day" type="date">
+        <p class="note">Backward for the blue-sky day after the rain, when it's still soup and you can't compact &mdash; nobody papers that one. Forward for the 7&nbsp;p.m. call the night before.</p>
+      </div>
+      <div class="f">
+        <label for="times">Times</label>
+        <input id="times" type="text" placeholder="on site 6:30, off the tools 8:15 · back in it 1:15, poured the west half · gate locked 4:40" autocomplete="off">
+        <p class="note">Where a hold that reopened gets papered honestly. Papering the reopens is what makes the full days believable.</p>
+      </div>
+    </div>
+
+    <p class="subhead">The call</p>
+    <ul class="ticks pick" id="call"></ul>
+
+    <button class="carry" type="button" id="carry" hidden></button>
+  </section>
+
+  <section class="card">
+    <h2 class="blk">What it was doing</h2>
+    <ul class="ticks" id="cond"></ul>
+    <div class="f span2" style="margin-top:11px">
+      <label for="measured">What I measured, and where I got it</label>
+      <textarea id="measured" rows="2" placeholder="1.1 in on the gauge at the trailer by 8 · gusts were moving the boom and the operator called it, not me · pad was still soup from the weekend"></textarea>
+      <p class="note"><b>This page never looks up the weather.</b> The number is yours, off your gauge, at a time you name. Print 0.3&nbsp;in off a station out at the airport while your gauge read 1.4 and you've handed somebody a document with your name on it that argues against you.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="blk">What stopped <span class="why">Activities, not trades &mdash; &ldquo;deck pour&rdquo; is a bar on the scheduler's chart, &ldquo;concrete guys&rdquo; isn't.</span></h2>
+    <ul class="ticks" id="stopped"></ul>
+    <div class="hgrid">
+      <div class="f span2">
+        <label for="kept">What kept working</label>
+        <input id="kept" type="text" placeholder="drywall on 2 and 3, plumbing rough on 2, elevator crew in the shaft — 61 guys stayed" autocomplete="off">
+        <p class="note">The credibility line. Claim a whole lost day while the drywallers ran all shift and you don't just lose that one &mdash; you poison the next three.</p>
+      </div>
+      <div class="f span2">
+        <label for="off">Off the job</label>
+        <input id="off" type="text" placeholder="12 — my 4 carpenters, the concrete sub's 7-man pour crew, the pump operator" autocomplete="off">
+        <p class="note">One number and whose. No roster: manpower by sub goes in the job's daily log at three o'clock off the sign-in sheets, and nobody types his day twice.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="blk">What it cost besides the hours <span class="why">Everybody claims the labor. Nobody claims these.</span></h2>
+    <ul class="ticks" id="cost"></ul>
+    <p class="note" style="font-size:11.5px;color:var(--muted);margin:8px 0 0">No dollar box anywhere on this page, on purpose. A price here is a guess made at the gate and it becomes the number everybody anchors on forever.</p>
+  </section>
+
+  <section class="card">
+    <div class="impact">
+      <label for="pushes">What this pushes</label>
+      <p class="hint">The line everybody leaves off, and the only one that buys the day. Not that it rained &mdash; what <b>moved</b>, and what's sitting behind it.</p>
+      <textarea id="pushes" rows="4" placeholder="The pour moves to the concrete sub's next crew day, Mon the 10th, and the pump's next window after that is Tue the 11th — one storm is five working days, not one. That's the slab, and framing plus the truss delivery on the 19th both sit behind it. The pad has to be re-worked and re-looked at before anybody pours, and getting back on the inspector's list is the piece I don't control."></textarea>
+    </div>
+    <p class="subhead">Schedule</p>
+    <div class="seg" id="path"></div>
+  </section>
+
+  <section class="card">
+    <h2 class="blk">What I did, and who I called <span class="why">His first question, every time: does the concrete sub know? did you call the pump?</span></h2>
+    <ul class="ticks" id="did"></ul>
+  </section>
+
+  <section class="card">
+    <h2 class="blk">Who's sending it</h2>
+    <div class="hgrid">
+      <div class="f span2">
+        <label for="me">You &mdash; name and cell</label>
+        <input id="me" type="text" placeholder="Ray Delgado — 415-555-0182" autocomplete="off">
+        <p class="note">They call you, not the office. Typed once &mdash; this and the job stay on this phone.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="section-label">The note</p>
+  <pre class="preview" id="preview"></pre>
+
+  <p class="warn"><b>Nothing here leaves your phone.</b> No account, no upload, no server &mdash; the note is yours until you paste it. Read it back before you send it: this is your field record of the day, not the job log and not the notice.</p>
+
+  <p class="credit" id="credit"></p>
+</div>
+
+<div class="bar">
+  <span class="count" id="count"></span>
+  <button id="clear" type="button">Start fresh</button>
+  <button id="copy" type="button">Copy the note</button>
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script>
+/* WEATHER DAY — GC & Site Super Field Toolkit. Trade #6's seed tool.
+ * SHAPE #2 (THE NOTE), second instance after hvac/repair-recommendation.html.
+ *
+ * Author: Aldrin Payopay · GPL-3.0 · built by the P0 field-toolkit loop.
+ *
+ * DESIGNED BY A PANEL, CUT BY A FIELD HAND. Three independent lenses (a
+ * commercial building super, a 9-man owner-operator GC, and the PM who RECEIVES
+ * the thing) each picked their one tool for this trade with no knowledge of the
+ * others. All three picked the weather day. A 20-year superintendent was then
+ * told to kill a third; he killed 25 controls, and every one was the same
+ * species — A NUMBER THAT INVITES AN ARGUMENT. So:
+ *
+ *   NO ARITHMETIC ON THIS PAGE AT ALL. No crew-hours, no auto-totals, no
+ *   man-hour exposure, no days claimed, no running weather-day count, no money.
+ *   "The minute I print a man-hour number I have to defend it, and I made it up
+ *   at the gate."
+ *
+ *   NO WEATHER LOOKUP, EVER. No forecast, no station, no radar. The measurement
+ *   is one typed line with the source inside it, in his own mouth. And no
+ *   thresholds — the page has no opinion about what counts as an unworkable day.
+ *
+ *   NO SELF-GENERATED TIMESTAMP in the document. A clock his own phone wrote
+ *   proves nothing and invites someone to litigate it. The reply lands with a
+ *   server timestamp he does not control — that is why the thread IS the record.
+ *
+ *   NO SIGNATURE LINE. A copy-paste block cannot be signed and every field hand
+ *   on earth spots a fake one.
+ *
+ * ADDRESSED TO THE PM, and that was settled before a line got built, because it
+ * changes every word. This is the super's field record going UP to the man who
+ * writes the letter, so it may say "Thursday's optimistic" — and it never says
+ * "we reserve" anything. A reservation of rights is a contractual claim; the
+ * super says what he saw and hands it up. (§THE SYSTEM OF RECORD.)
+ */
+(function () {
+  "use strict";
+
+  var esc = function (s) { return String(s == null ? "" : s); };
+  var $ = function (id) { return document.getElementById(id); };
+
+  var SHOTS = window.GC_WEATHER_SHOTS || [];
+  var CALL  = window.GC_WEATHER_CALL  || [];
+  var COND  = window.GC_WEATHER_COND  || [];
+  var STOP  = window.GC_WEATHER_STOPPED || [];
+  var COST  = window.GC_WEATHER_COST  || [];
+  var DID   = window.GC_WEATHER_DID   || [];
+  var PATH  = window.GC_WEATHER_PATH  || [];
+
+  var DRAFT_KEY = "gc.weatherday.draft.v1";
+  var LAST_KEY  = "gc.weatherday.last.v1";
+
+  /* ---- dates -------------------------------------------------------------
+   * §SCARS: A BARE ISO DATE IS A CALENDAR DAY, NOT AN INSTANT. new Date("2026-08-04")
+   * parses as UTC midnight, so anyone west of UTC renders the day BEFORE. On a
+   * page whose entire subject is WHICH DAY was lost, that is not cosmetic —
+   * it is the document being wrong about the one fact it exists to state. */
+  function todayISO() {
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+  function localDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || "").trim());
+    return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
+  }
+  function fmtDay(iso) {
+    var d = localDate(iso);
+    if (!d) return "";
+    return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+  }
+  function fmtShort(iso) {
+    var d = localDate(iso);
+    if (!d) return "";
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  }
+
+  /* ---- render the lists -------------------------------------------------- */
+  function tickList(el, items, name) {
+    el.innerHTML = items.map(function (t, i) {
+      return '<li><label><input type="checkbox" data-g="' + name + '" value="' + i + '"><span class="nm"></span></label></li>';
+    }).join("");
+    var nms = el.querySelectorAll(".nm");
+    for (var i = 0; i < nms.length; i++) nms[i].textContent = items[i];
+  }
+  function pickList(el, items) {
+    el.innerHTML = items.map(function (t, i) {
+      return '<li><label><input type="radio" name="call" value="' + i + '"><span class="nm"></span></label></li>';
+    }).join("");
+    var nms = el.querySelectorAll(".nm");
+    for (var i = 0; i < nms.length; i++) nms[i].textContent = items[i].line;
+  }
+  function segRow(el, items) {
+    el.innerHTML = items.map(function (t, i) { return '<button type="button" data-i="' + i + '"></button>'; }).join("");
+    var bs = el.querySelectorAll("button");
+    for (var i = 0; i < bs.length; i++) bs[i].textContent = items[i];
+  }
+
+  tickList($("shots"),   SHOTS, "shots");
+  pickList($("call"),    CALL);
+  tickList($("cond"),    COND,  "cond");
+  tickList($("stopped"), STOP,  "stopped");
+  tickList($("cost"),    COST,  "cost");
+  tickList($("did"),     DID,   "did");
+  segRow($("path"),      PATH);
+
+  $("day").value = todayISO();
+
+  /* A radio cannot be un-picked by tapping it again, and "the call" is the one
+   * field a super will change his mind about while standing there. Track the
+   * last checked value and clear on a repeat tap. */
+  var lastCall = null;
+  $("call").addEventListener("click", function (e) {
+    var r = e.target && e.target.closest ? e.target.closest('input[type="radio"]') : null;
+    if (!r) return;
+    if (lastCall === r.value && r.checked) {
+      setTimeout(function () { r.checked = false; lastCall = null; paint(); }, 0);
+    } else { lastCall = r.value; }
+  });
+
+  var pathPick = -1;
+  $("path").addEventListener("click", function (e) {
+    var b = e.target && e.target.closest ? e.target.closest("button") : null;
+    if (!b) return;
+    var i = +b.getAttribute("data-i");
+    pathPick = (pathPick === i) ? -1 : i;
+    paint();
+  });
+
+  /* ---- state ------------------------------------------------------------- */
+  function checkedOf(name) {
+    var out = [], els = document.querySelectorAll('input[data-g="' + name + '"]:checked');
+    for (var i = 0; i < els.length; i++) out.push(+els[i].value);
+    return out;
+  }
+  function setChecked(name, arr) {
+    var els = document.querySelectorAll('input[data-g="' + name + '"]');
+    for (var i = 0; i < els.length; i++) els[i].checked = (arr || []).indexOf(+els[i].value) !== -1;
+  }
+  function callPick() {
+    var r = document.querySelector('input[name="call"]:checked');
+    return r ? +r.value : -1;
+  }
+
+  var prevDate = "";   // set only by "same front" — never a counter, never "day 2 of 3"
+
+  function readState() {
+    return {
+      job: $("job").value.trim(),
+      day: $("day").value,
+      times: $("times").value.trim(),
+      call: callPick(),
+      cond: checkedOf("cond"),
+      measured: $("measured").value.trim(),
+      stopped: checkedOf("stopped"),
+      kept: $("kept").value.trim(),
+      off: $("off").value.trim(),
+      cost: checkedOf("cost"),
+      pushes: $("pushes").value.trim(),
+      path: pathPick,
+      did: checkedOf("did"),
+      me: $("me").value.trim(),
+      prevDate: prevDate
+    };
+  }
+  function writeState(s) {
+    if (!s) return;
+    $("job").value = s.job || "";
+    $("day").value = s.day || todayISO();
+    $("times").value = s.times || "";
+    $("measured").value = s.measured || "";
+    $("kept").value = s.kept || "";
+    $("off").value = s.off || "";
+    $("pushes").value = s.pushes || "";
+    $("me").value = s.me || "";
+    setChecked("cond", s.cond); setChecked("stopped", s.stopped);
+    setChecked("cost", s.cost); setChecked("did", s.did);
+    var r = document.querySelector('input[name="call"][value="' + s.call + '"]');
+    if (r) { r.checked = true; lastCall = String(s.call); } else { lastCall = null; }
+    pathPick = (typeof s.path === "number") ? s.path : -1;
+    prevDate = s.prevDate || "";
+  }
+
+  /* ---- the document ------------------------------------------------------
+   * §SCARS: A COLUMN LOOKS TIDY IN THE PREVIEW AND ARRIVES AS MUSH. This goes
+   * into a text message or an email in a proportional font, so: ALL-CAPS
+   * headings on their own line, "Label: value", never a padded column.
+   * §SCARS: THE FIRST LINE IS AN INBOX SEARCH KEY — the job and the day land in
+   * line one and that line DEGRADES rather than emitting a bare " — — ". */
+  function pick(list, idxs) {
+    return (idxs || []).map(function (i) { return list[i]; }).filter(Boolean);
+  }
+  function block(head, lines) {
+    if (!lines.length) return "";
+    return "\n" + head + "\n" + lines.map(function (l) { return "- " + l; }).join("\n") + "\n";
+  }
+
+  function text() {
+    var s = readState();
+    var ahead = s.call > -1 && CALL[s.call] && CALL[s.call].ahead;
+    var head = ahead ? "WEATHER CALL — TOMORROW" : "WEATHER DAY";
+    var out = "";
+
+    var key = [head, s.job, fmtDay(s.day)].filter(Boolean).join(" — ");
+    out += key + "\n";
+
+    if (s.call > -1) out += "The call: " + CALL[s.call].line + "\n";
+    if (s.times) out += "Times: " + s.times + "\n";
+    /* Only when it names a DIFFERENT day. Carrying a note forward on the same
+     * calendar day (he copied, then kept editing) would otherwise print "Same
+     * front as my notice for Tue Aug 4" on a note dated Tue Aug 4 — a line
+     * arguing with itself, on the one fact this document exists to state. */
+    if (s.prevDate && s.prevDate !== s.day) out += "Same front as my notice for " + fmtDay(s.prevDate) + ".\n";
+
+    out += block("WHAT IT WAS DOING", pick(COND, s.cond));
+    if (s.measured) out += "Measured: " + s.measured + "\n";
+
+    out += block("WHAT STOPPED", pick(STOP, s.stopped));
+    if (s.kept) out += "Kept working: " + s.kept + "\n";
+    if (s.off) out += "Off the job: " + s.off + "\n";
+
+    out += block("WHAT IT COST BESIDES THE HOURS", pick(COST, s.cost));
+
+    if (s.pushes) out += "\nWHAT THIS PUSHES\n" + s.pushes + "\n";
+    if (s.path > -1) out += "Schedule: " + PATH[s.path] + "\n";
+
+    out += block("WHAT I DID, AND WHO I CALLED", pick(DID, s.did));
+
+    if (s.me) out += "\nFrom: " + s.me + "\n";
+
+    /* THE CLOSING ASK, fixed and not editable — three yes/nos he answers in one
+     * thumbed reply. The forward set swaps in when this is a night-before call:
+     * same 15 controls sent forward, no second page and no second tool. */
+    var when = fmtShort(s.day) || "that day";
+    out += "\nCONFIRM BACK\nThree things, one reply:\n";
+    if (ahead) {
+      out += "1. Does the call stand?\n"
+           + "2. Does notice go out tonight?\n"
+           + "3. Who tells the owner?\n"
+           + "No reply and the call stands as made, and I'll paper " + when + " tomorrow.\n";
+    } else {
+      out += "1. Is " + when + " logged as a weather day?\n"
+           + "2. Is notice going out, and to who?\n"
+           + "3. Does the dry-out day ride with it?\n"
+           + "No reply and I'm carrying " + when + " as a lost day in the three-week look-ahead.\n";
+    }
+    /* ONE line, in his voice. §SCARS: nobody reads a disclaimer stack on a text
+     * message, and printing one makes the whole thing read like it came from a
+     * lawyer instead of from the man who locked the gate. */
+    out += "This is my field record of the day, not the job log and not the notice — double-check it against the sign-in sheets before it goes anywhere.\n";
+    return out;
+  }
+
+  /* ---- paint ------------------------------------------------------------- */
+  function paint() {
+    var s = readState();
+    var bs = $("path").querySelectorAll("button");
+    for (var i = 0; i < bs.length; i++) bs[i].classList.toggle("on", i === pathPick);
+
+    var ahead = s.call > -1 && CALL[s.call] && CALL[s.call].ahead;
+    $("pageTitle").textContent = ahead ? "Weather Call — Tomorrow" : "Weather Day";
+
+    var n = s.cond.length + s.stopped.length + s.cost.length + s.did.length;
+    var missing = [];
+    if (!s.pushes) missing.push("what it pushes");
+    if (s.path < 0) missing.push("schedule");
+    /* Short enough to survive one line on a 320px phone — the bar ellipsises it
+     * rather than ever wrapping, so the words have to be worth the width. */
+    $("count").textContent = missing.length
+      ? (n + " ticked · needs " + missing.join(" + "))
+      : (n + " ticked · ready to send");
+
+    $("preview").textContent = text();
+    schedulePersist();
+  }
+
+  /* ---- persistence -------------------------------------------------------
+   * §SCARS: THE CAMERA ROUND-TRIP EATS THE DRAFT. The FIRST thing this page does
+   * is send him out into the rain to shoot three photos, and iOS backgrounds the
+   * browser the instant the camera opens — which can kill a debounced save before
+   * it ever writes. A 250 ms debounce is not a save. Flush SYNCHRONOUSLY on
+   * visibilitychange, pagehide and blur. A man who retypes a lost day once does
+   * not open this page again. */
+  var pTimer = null;
+  function persistNow() {
+    try {
+      var s = readState();
+      s.shots = checkedOf("shots");
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(s));
+    } catch (e) {}
+  }
+  function schedulePersist() { clearTimeout(pTimer); pTimer = setTimeout(persistNow, 250); }
+  function flush() { clearTimeout(pTimer); persistNow(); }
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flush(); });
+  window.addEventListener("pagehide", flush);
+  window.addEventListener("blur", flush);
+
+  (function restore() {
+    var raw = null;
+    try { raw = localStorage.getItem(DRAFT_KEY); } catch (e) {}
+    if (!raw) return;
+    try {
+      var s = JSON.parse(raw);
+      writeState(s);
+      setChecked("shots", s.shots);
+    } catch (e) {}
+  })();
+
+  /* ---- SAME FRONT — carry my last one forward ----------------------------
+   * Rain Monday through Wednesday is ONE system and THREE notices, and by
+   * Wednesday he is retyping Monday's ticks from memory and getting them wrong.
+   * Day three is always the one with the dry-out claim in it, and it is the one
+   * that never gets papered.
+   *
+   * It carries the ticks and the fields, bumps the date to today, and prints ONE
+   * line naming the previous notice BY DATE. It never prints "day 2 of 3" and it
+   * never keeps a per-job tally: a running count of weather days is a delay log,
+   * the delay log is the office's record of record, and building it badly here
+   * is exactly what §THE SYSTEM OF RECORD forbids. */
+  function lastNote() {
+    try { return JSON.parse(localStorage.getItem(LAST_KEY) || "null"); } catch (e) { return null; }
+  }
+  function paintCarry() {
+    var l = lastNote(), b = $("carry");
+    if (!l || !l.day) { b.hidden = true; return; }
+    b.hidden = false;
+    b.textContent = "↻ Same front — carry my " + fmtShort(l.day) + " note forward";
+  }
+  $("carry").addEventListener("click", function () {
+    var l = lastNote();
+    if (!l) return;
+    var stamp = l.day;
+    writeState(l);
+    $("day").value = todayISO();
+    prevDate = stamp;
+    setChecked("shots", []);   // new day, new photos
+    paint();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  paintCarry();
+
+  /* ---- copy --------------------------------------------------------------
+   * The async Clipboard API needs a secure context and a user gesture; a job
+   * trailer on http, an in-app browser, or an older phone silently has neither.
+   * Falling back to a hidden textarea + execCommand is what makes the one button
+   * this page exists for actually work in a hand. */
+  function flash(btn, msg) {
+    var old = btn.textContent;
+    btn.textContent = msg;
+    setTimeout(function () { btn.textContent = old; }, 1600);
+  }
+  $("copy").addEventListener("click", function () {
+    var t = text(), btn = this;
+
+    /* STASH ON THE PRESS, NOT ON THE CLIPBOARD RESULT. This was wired to the
+     * success path first and the multi-day carry-forward silently never armed:
+     * measured in a real browser, the clipboard promise rejects whenever the
+     * document is not focused, execCommand then fails too, and `done()` never
+     * ran — so the ONE feature the field panel called its biggest gap died in
+     * exactly the environments the fallback exists for (a trailer on http, an
+     * in-app browser, an older phone). Pressing the button is the signal that
+     * THIS note is finished; whether the clipboard write landed is a separate
+     * question, and he can always select the preview by hand.
+     * §SCARS, generalised: never hang a state change off the success branch of
+     * a capability you already know is unavailable on the target device. */
+    try { var st = readState(); st.shots = []; localStorage.setItem(LAST_KEY, JSON.stringify(st)); } catch (e) {}
+    paintCarry();
+
+    function done() { flash(btn, "Copied ✓"); }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = t;
+      ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:fixed;top:0;left:0;opacity:0;";
+      document.body.appendChild(ta);
+      ta.select(); ta.setSelectionRange(0, t.length);
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+      if (ok) done(); else flash(btn, "Select & copy ↑");
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(t).then(done, fallback);
+    } else { fallback(); }
+  });
+
+  /* Start fresh keeps the two sticky fields — the job and his own name are typed
+   * once per job, not once per storm — and it stashes nothing it did not already
+   * stash on copy, so the carry-forward button survives a wipe. */
+  $("clear").addEventListener("click", function () {
+    if (!confirm("Start a fresh note? The job and your name stay.")) return;
+    var job = $("job").value, me = $("me").value;
+    writeState({ job: job, me: me, day: todayISO(), call: -1, path: -1 });
+    setChecked("shots", []); setChecked("cond", []); setChecked("stopped", []);
+    setChecked("cost", []); setChecked("did", []);
+    var r = document.querySelector('input[name="call"]:checked'); if (r) r.checked = false;
+    lastCall = null; prevDate = "";
+    paint();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  document.addEventListener("input", paint);
+  document.addEventListener("change", paint);
+
+  /* CREDIT — §CREDIT. Nobody wished this one; it is a seed-roster rung, so the
+   * line says so honestly rather than inventing a wisher. */
+  $("credit").innerHTML = 'Built for the trade, not from a wish yet — the first tool in the GC toolkit. '
+    + 'Wish for the next one and your name lands on the <a href="credits.html">Wall of Wishes</a>, permanently.';
+
+  paint();
+})();
+</script>
+</body>
+</html>

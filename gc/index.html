@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GC &amp; Site Super Toolkit</title>
+<meta name="description" content="Practical tools for general contractors, site supers and foremen — build the notices, requests and lists you send subs, PMs and owners, fast, on a phone, standing in the room. Wish for a tool and Aldrin's AI builds it.">
+<meta name="apple-mobile-web-app-title" content="GC Toolkit">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<style>
+:root{
+  --steel:#242A31;--ink:#12161A;--zinc:#D7DAD3;--paper:#FBFBF8;--line:#BABEB6;
+  --muted:#5D656E;--flag:#8CE86B;--tint:#EAFBE3;--deep:#2E6B18;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+/* NO overflow-x:hidden anywhere on this page, on purpose. It MASKS a horizontal
+   overflow instead of fixing it and hides exactly the defect the pre-ship mobile
+   gate exists to catch (measured 2026-08-04 on credits.html: documentElement
+   .scrollWidth read a clean 390 while body.scrollWidth was 489). */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px calc(60px + env(safe-area-inset-bottom))}
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -16px 20px;padding:18px 16px 16px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--flag);display:block;margin-bottom:6px}
+.plate h1{font-family:var(--cond);font-weight:700;font-size:clamp(20px,4.6vw,30px);letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.95}
+.lede{margin:8px 0 0;max-width:62ch;color:#B9BFC6;font-size:12.5px}
+
+/* wishing-well hero */
+.well{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);
+  border-left:5px solid var(--flag);border-radius:2px;padding:15px 16px;margin-bottom:18px}
+.well-txt{flex:1 1 300px;min-width:0}
+.well-txt b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;display:block;color:var(--ink)}
+.well-txt span{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+.well-btn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:16px;font-weight:700;
+  background:var(--flag);color:var(--flag-ink,#0C2405);border:1px solid var(--flag);border-radius:2px;
+  min-height:44px;padding:11px 18px;cursor:pointer;white-space:nowrap}
+.well-btn:hover{filter:brightness(1.08)}
+.well-btn:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
+
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:13px}
+.tool{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:inherit;background:var(--paper);
+  border:1px solid var(--line);border-left:5px solid var(--chip,var(--steel));border-radius:2px;padding:14px 15px 15px;
+  transition:transform .1s ease,box-shadow .1s ease;min-height:120px}
+.tool:hover{transform:translateY(-2px);box-shadow:0 6px 0 -2px rgba(36,42,49,.18)}
+.tool:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+.toolwrap{position:relative}
+.cardfav{position:absolute;top:9px;right:9px;z-index:2;background:#fff;border:1px solid var(--line);color:#C4C9BE;width:28px;height:28px;border-radius:2px;cursor:pointer;font-size:14px;line-height:1;padding:0}
+.cardfav:hover{border-color:var(--flag);color:var(--muted)}
+.cardfav.on{color:var(--deep);border-color:var(--flag);background:var(--tint)}
+.toolwrap .tool-top{padding-right:30px}
+.tool-top{display:flex;align-items:baseline;gap:9px}
+.tool-name{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;font-weight:700;margin:0;flex:1;line-height:1.05;color:var(--ink)}
+/* NEVER nowrap. Measured 2026-08-04 in a 320px viewport: an audience chip of
+   "Electricians → Warehouse / Counter" pushed the electrical hub to 328px and the
+   whole page scrolled sideways on an iPhone SE. The chip is the one element on
+   this card whose text length is set by a registry entry someone edits later, so
+   it has to be allowed to wrap no matter what they write. */
+.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:3px 6px;white-space:normal;overflow-wrap:anywhere;min-width:0}
+.tool-desc{font-size:12.5px;color:var(--muted);line-height:1.35;flex:1}
+.tool-go{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);display:flex;align-items:center;gap:6px}
+.tool-go .arr{color:var(--deep);font-weight:700}
+.foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.foot a{color:var(--steel);text-decoration:none;border-bottom:1px solid var(--flag);padding-bottom:1px}
+.foot a:hover{color:var(--ink)}
+.foot .sp{flex:1}
+/* the sibling-trade links are injected into one span — display:contents makes
+   its children real flex items so they keep the footer's gap, not stack up as a
+   single run-on word that can push the row wide on a 320px phone. */
+#siblings{display:contents}
+@media (prefers-reduced-motion:reduce){.tool{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">Field toolkit</span>
+    <h1>GC &amp; Site Super Toolkit</h1>
+    <p class="lede">Dead-practical tools for whoever runs the job — supers, foremen, small-shop GCs. Every other trade in this toolkit sends its paperwork up to you; this is the stuff you send back out. Built to be filled in standing in the room it's about, not typed from memory in the trailer at five o'clock. Don't see the one you need? Wish for it — Aldrin's AI builds the ones people will actually use.</p>
+  </header>
+
+  <div class="well">
+    <div class="well-txt">
+      <b>This toolkit is built from wishes.</b>
+      <span>Wish for the one you keep writing out by hand — Aldrin's AI builds the good ones into a real page, for you and everyone in the trade. Yes, really. Try it.</span>
+    </div>
+    <button class="well-btn" type="button" onclick="(window.Toolkit&amp;&amp;Toolkit.openWell)?Toolkit.openWell():alert('Loading…')">&#10022; Wish for a tool</button>
+  </div>
+
+  <p class="section-label">Tools</p>
+  <main class="grid" id="grid"></main>
+
+  <footer class="foot">
+    <span>GC &amp; Site Super Toolkit</span>
+    <span class="sp"></span>
+    <span id="siblings"></span>
+    <a href="https://github.com/mrdirno/nested-resonance-memory-archive/tree/main/gc" target="_blank" rel="noopener">Project folder &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script>
+(function(){
+  var TOOLS = window.TOOLKIT_TOOLS || [];
+  var esc = function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c];});};
+  var grid = document.getElementById("grid");
+  function isFav(href){ return (window.Toolkit && Toolkit.isFav) ? Toolkit.isFav(href) : false; }
+  function card(t){
+    var ext = /^https?:\/\//i.test(t.href);
+    var attrs = ext ? ' target="_blank" rel="noopener"' : "";
+    var f = isFav(t.href);
+    return '<div class="toolwrap">'
+      + '<button class="cardfav'+(f?' on':'')+'" type="button" data-href="'+esc(t.href)+'" aria-pressed="'+(f?'true':'false')+'" title="'+(f?'Remove from favorites':'Favorite — pin to the top')+'">&#9733;</button>'
+      + '<a class="tool" href="'+esc(t.href)+'"'+attrs+' style="--chip:'+esc(t.chip||"#242A31")+'">'
+      + '<div class="tool-top"><h2 class="tool-name">'+esc(t.name)+'</h2>'
+      + (t.audience?'<span class="tag">'+esc(t.audience)+'</span>':'')+'</div>'
+      + '<p class="tool-desc">'+esc(t.desc||"")+'</p>'
+      + '<span class="tool-go"><span class="arr">&rarr;</span> Open tool</span></a></div>';
+  }
+  function order(){
+    // one clean grid — pinned first, then your favorites, then the rest, each
+    // keeping registry order. No separate sections = no clutter.
+    return TOOLS.slice().sort(function(a,b){
+      var pa=a.pinned?0:1, pb=b.pinned?0:1; if(pa!==pb) return pa-pb;
+      var fa=isFav(a.href)?0:1, fb=isFav(b.href)?0:1; if(fa!==fb) return fa-fb;
+      return TOOLS.indexOf(a)-TOOLS.indexOf(b);
+    });
+  }
+  function render(){ grid.innerHTML = order().map(card).join(""); }
+  /* SIBLING TRADES COME FROM THE RUNTIME, NEVER FROM THIS FILE. Trade #1 and #2
+     each hardcoded a link to the other, so trade #3 meant editing every hub that
+     already shipped — and the hub that forgot was the one nobody could reach the
+     new trade from. shared/toolkit.js owns the list; every hub renders whoever
+     is NOT itself. Trade #7 is one line there and zero here. */
+  function siblings(){
+    var el = document.getElementById("siblings");
+    var all = (window.Toolkit && Toolkit.trades) || [];
+    var me = (window.Toolkit && Toolkit.trade && Toolkit.trade.slug) || "";
+    el.innerHTML = all.filter(function(t){ return t.slug !== me; })
+      .map(function(t){ return '<a href="../'+esc(t.slug)+'/">'+esc(t.name)+' &rarr;</a>'; })
+      .join(" ");
+  }
+  render(); siblings();
+  document.addEventListener("av:ready", function(){ render(); siblings(); });
+  document.addEventListener("av:favorites", render);
+  document.addEventListener("click", function(e){
+    var b = (e.target && e.target.closest) ? e.target.closest(".cardfav") : null;
+    if (b && window.Toolkit && Toolkit.toggleFav){ e.preventDefault(); Toolkit.toggleFav(b.getAttribute("data-href")); }
+  });
+})();
+</script>
+</body>
+</html>

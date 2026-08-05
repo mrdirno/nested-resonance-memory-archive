@@ -553,6 +553,53 @@ Append here when a cycle finds one. Each is a rule, not a story.
   ladders have to move or split.
 
 
+- **A HARDCODED LITERAL IN THE SOURCE IS NOT WHAT THE PAGE RENDERS (2026-08-04).** Standing up
+  trade #6 "found" a cross-trade bug: `credits.html` is byte-identical in every trade and its
+  stylesheet hardcodes `--flag:#F0BE1E`, AV yellow — so on the face of it every non-AV Wall of
+  Wishes rendered in the wrong trade's colour. Five files, one md5, one literal: the evidence
+  looked airtight, and a full sweep-and-fix across six trades was already written and applied.
+  It was WRONG. `shared/toolkit.js` injects `:root{--flag: TRADE.accent}` at runtime, and the
+  live low-voltage page measured `--flag: #FF9E80` with the eyebrow, the empty-state button and
+  the footer rule all painted coral. The whole fix was reverted. **Rule:** a CSS literal is a
+  fallback, not a rendering — before claiming a style bug, read the COMPUTED value off the live
+  page. This is the served-bytes scar pointed at the other end: there, disk was right and the
+  browser was stale; here, disk was misleading and only the browser knew. Either way the
+  artifact is the witness, and a sweep across six trades is exactly the size of mistake worth
+  spending two minutes to not make.
+- **NEVER HANG A STATE CHANGE OFF A SUCCESS BRANCH YOU KNOW CAN FAIL (2026-08-04).** The
+  weather day's multi-day carry-forward — the single biggest gap the field panel named, the
+  thing that makes day two and day three of a front get papered at all — stashed the finished
+  note inside the clipboard `.then()`. Measured in a real browser: the clipboard promise
+  rejects whenever the document is not focused, the `execCommand` fallback then fails too, and
+  the stash never ran. So the feature died silently in exactly the environments the fallback
+  exists for — a trailer on http, an in-app browser, an older phone. **Rule:** the user's PRESS
+  is the intent; the capability's success is a separate question. Commit the state change on
+  the gesture, and let the copy path only report whether it copied.
+- **A FLEX ITEM WITH NO FLOOR BECOMES A COLUMN OF LETTERS (2026-08-04).** The fixed action bar
+  held a status line plus two `white-space:nowrap` buttons. At 320px the buttons measured 283px
+  inside a 292px content box, so the status line was handed a flex width of ZERO — and wrapped
+  into a 92px vertical ribbon one character wide, inflating the bar to 112px and eating a third
+  of the smallest phone's screen. The overflow gate passed the whole time: nothing overflowed
+  horizontally, it just collapsed vertically. **Rule:** the mobile gate measures HEIGHT too. Any
+  text sharing a row with `nowrap` siblings ships `white-space:nowrap; overflow:hidden;
+  text-overflow:ellipsis` so it can never be taller than one line, AND gets its own row below
+  the breakpoint where the row stops fitting — two guards, because a media query alone leaves
+  the ribbon one font-size away from returning. First fix made it WORSE (141px: the buttons
+  wrapped onto separate rows), which is the tell that a wrapping bar needs a decided layout, not
+  a nudge.
+- **THE GATE ONLY GUARDS THE REPO IT LIVES IN (2026-08-04).** The toolkit repo's deploy asserts
+  a trade is staged, registered, linked and that every registry href resolves — in both
+  directions, on the built artifact. None of that can see the STOREFRONT, which lives in another
+  repo. Low-voltage shipped 2026-08-04, went live at its own URL, and never got its entry in
+  `persona500/src/data/fieldToolkits.ts` — so for its whole first day it was simultaneously live
+  and advertised as "coming soon" in `NEXT_TRADES`, two lists disagreeing about the same trade.
+  That is precisely the staged-but-unregistered failure the deploy gate was built to stop,
+  reappearing one repo over where the gate has no reach. **Rule:** the manifest entry is part of
+  the ship, not a follow-up — and when a list can empty out, its render sites degrade (an empty
+  bench must not print "the 0 trades on the bench", and a "researched and queued:" heading must
+  not stand over nothing).
+
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -675,3 +722,29 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   bug and hides for a new-feature wish, validation fires with a human sentence, zero
   horizontal overflow and no control under 44px at 320/360/390/430.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+- `2026-08-04` — **[AXIS:BREADTH] Trade #6 — GC & Site Super, and the breadth debt goes to
+  ZERO.** Before: five trades live, GC the last family owed a toolkit; every trade in this
+  program sent its paperwork UP to a super who had nothing of his own. After: `gc/` live —
+  hub, config, registry, vocabulary data, credit ledger, and **THE WEATHER DAY**, the notice
+  a super thumbs out at the gate. Built the way HVAC's was: three independent field lenses
+  (a commercial building super · a 9-man owner-operator GC · the PM who RECEIVES it), each
+  picking their one tool with no knowledge of the others — **all three picked the weather
+  day** — then a 20-year superintendent told to kill a third. He killed 25 controls, and
+  every single one was the same species: A NUMBER THAT INVITES AN ARGUMENT (trade-by-trade
+  headcount, crew-hours lost, hours lost, days claimed, weather-days-so-far, show-up pay,
+  every dollar box). So the page does **no arithmetic at all**, prints **no money**, and
+  **never looks up the weather** — the measurement is one typed line with the source inside
+  it, in his own mouth, and the page has no opinion about what counts as an unworkable day.
+  It is addressed to the PM, not the owner, and that decision was made before a line was
+  written because it changes every word: no reservation of rights, no days claimed, no
+  signature line. Two things the panel called the biggest gaps shipped with it — the
+  **multi-day front** (carry the last note forward, bump the date, name the previous notice
+  BY DATE, never a running count) and the **night-before call** (same 15 controls sent
+  forward; picking it swaps the head and the closing ask, no second page). Verified by doing
+  the job end to end in a real browser, then at 320/360/390/430: zero horizontal overflow on
+  all three GC pages, every tap target ≥44px. Storefront manifest updated the same cycle —
+  and that is where the sweep found low-voltage had shipped the day before **without** its
+  manifest entry, live at its own URL while the storefront still advertised it as "coming
+  soon"; both trades are now entered and NEXT_TRADES is empty, with both render sites taught
+  to degrade instead of printing "0 trades on the bench".
+  https://mrdirno.github.io/nested-resonance-memory-archive/gc/

@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -232,6 +232,18 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to low-voltage, security and fire — the device schedule first: log every camera, reader and device as you hang it and hand the PM a clean list instead of a night in a spreadsheet.',
     icon: <Cctv size={18} />,
+  },
+  {
+    // TRADE #6 — and the last family owed a toolkit on the ladder. Registered in
+    // the same commit that stands the trade up. GC went LAST on purpose: every
+    // other trade here sends its paperwork UP to the super, so building his side
+    // first would have meant writing the receiving end of documents that did not
+    // exist yet.
+    name: 'GC & Site Super Toolkit',
+    href: './gc/',
+    tag: 'field',
+    blurb: 'Isomorphed to whoever runs the job — the weather day first: you lost the day, so tick what it did, what it stopped and what it cost besides the hours, and send your PM one thing he can answer in a thumb before he writes the letter.',
+    icon: <HardHat size={18} />,
   },
 ];
 
