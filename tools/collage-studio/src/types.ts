@@ -1,3 +1,4 @@
+import type { ArrangementId, FocusId } from './lib/composition';
 import { AnalysisResult } from './lib/analysis';
 
 /**
@@ -91,7 +92,12 @@ export interface AppState {
     aspect: number;
     gutter: number; 
     entropy?: number; 
+    /** Pre-2026-08 projects: the binary hue sort, stored as a 0..1 slider. */
     resonance?: number; 
+    /** Which photo lands in which fragment — see lib/composition.ts. */
+    arrangement?: ArrangementId;
+    /** What each fragment centres on inside its photo. */
+    focus?: FocusId;
   };
   style: {
     background: string;

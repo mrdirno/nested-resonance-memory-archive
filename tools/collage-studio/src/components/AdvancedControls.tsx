@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
   Layout, Grid, Hexagon, Scissors, Palette, Moon, Contrast, Zap, Activity,
-  Shuffle, RefreshCw, FileCode, History, Frame, Rows, Hash, Film
+  Shuffle, RefreshCw, FileCode, History, Frame, Rows, Hash, Film, Crosshair
 } from 'lucide-react';
 import { getHistory, HistoryItem } from '../lib/history';
 import { LayoutMode } from '../types';
+import {
+  ARRANGEMENTS, ARRANGEMENT_BY_ID, FOCUS_MODES, FOCUS_BY_ID,
+  type ArrangementId, type FocusId,
+} from '../lib/composition';
 
 interface AdvancedControlsProps {
   layoutMode: LayoutMode;
@@ -17,8 +21,10 @@ interface AdvancedControlsProps {
   setGutter: (g: number) => void;
   entropy: number;
   setEntropy: (e: number) => void;
-  resonance: number;
-  setResonance: (r: number) => void;
+  arrangement: ArrangementId;
+  setArrangement: (a: ArrangementId) => void;
+  focus: FocusId;
+  setFocus: (f: FocusId) => void;
   bgColor: string;
   setBgColor: (c: string) => void;
   avgColor: { r: number, g: number, b: number } | null;
@@ -57,7 +63,7 @@ const clockOf = (ts: number) => {
 
 export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
   layoutMode, setLayoutMode, count, setCount, aspect, setAspect, gutter, setGutter,
-  entropy, setEntropy, resonance, setResonance, bgColor, setBgColor, avgColor,
+  entropy, setEntropy, arrangement, setArrangement, focus, setFocus, bgColor, setBgColor, avgColor,
   onRemix, onShuffle, onExportVector, onRestoreHistory, isLayoutLocked,
   framePicker, setFramePicker
 }) => {
@@ -184,23 +190,68 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
           </p>
         </div>
 
-        <div className="ui-field ui-field--warn pt-2 border-t border-[color:var(--line-1)]">
+        {/* ---- ARRANGEMENT ------------------------------------------------
+            WHICH PHOTO GOES IN WHICH FRAGMENT. This replaced a "Colour
+            resonance" slider that was a binary wearing a percentage — only the
+            10% threshold did anything, and above it there was exactly one
+            ordering. Eleven NAMED pairings say what they do, and the one you
+            picked is a thing you can tell someone. --------------------------- */}
+        <div className="ui-stack--tight pt-2 border-t border-[color:var(--line-1)]">
           <div className="ui-field__head">
             <span className="ui-label flex items-center gap-1.5">
-              <Zap size={12} className={resonance > 0.1 ? 'text-[color:var(--warn)]' : ''} /> Colour resonance
+              <Zap size={12} className={arrangement !== 'natural' ? 'text-[color:var(--warn)]' : ''} /> Arrangement
             </span>
-            <span className="ui-field__value">{(resonance * 100).toFixed(0)}%</span>
+            <span className="ui-field__value">{ARRANGEMENT_BY_ID[arrangement]?.label ?? arrangement}</span>
           </div>
-          <input
-            type="range" min="0" max="1" step="0.01"
-            value={resonance}
-            disabled={!ready}
-            onChange={e => setResonance(parseFloat(e.target.value))}
-            style={{ ['--fill' as string]: `${resonance * 100}%` } as React.CSSProperties}
-            aria-label="Colour resonance"
-          />
-          <p className="ui-caption -mt-1">
-            Above 10%, images are dealt in hue order so neighbours share colour.
+          <div className="ui-famrow" role="group" aria-label="Arrangement">
+            {ARRANGEMENTS.map(a => (
+              <button
+                key={a.id}
+                disabled={!ready}
+                onClick={() => setArrangement(a.id)}
+                data-active={arrangement === a.id}
+                className="ui-gchip"
+                title={a.blurb}
+              >
+                {a.label}
+              </button>
+            ))}
+          </div>
+          <p className="ui-caption -mt-1">{ARRANGEMENT_BY_ID[arrangement]?.blurb}</p>
+        </div>
+
+        {/* ---- FOCUS ------------------------------------------------------
+            WHAT EACH FRAGMENT CENTRES ON. A fragment is a `cover` crop, so most
+            of every photo is thrown away — which part survives is a composition
+            decision, and it is per-FRAGMENT, so the same photo in three places
+            can show three different parts of itself. --------------------- */}
+        <div className="ui-stack--tight pt-2">
+          <div className="ui-field__head">
+            <span className="ui-label flex items-center gap-1.5">
+              <Crosshair size={12} className={focus !== 'auto' ? 'text-[color:var(--warn)]' : ''} /> Crop focus
+            </span>
+            <span className="ui-field__value">{FOCUS_BY_ID[focus]?.label ?? focus}</span>
+          </div>
+          <div className="ui-famrow" role="group" aria-label="Crop focus">
+            {FOCUS_MODES.map(f => (
+              <button
+                key={f.id}
+                disabled={!ready}
+                onClick={() => setFocus(f.id)}
+                data-active={focus === f.id}
+                className="ui-gchip"
+                title={f.blurb}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+          <p className="ui-caption -mt-1">{FOCUS_BY_ID[focus]?.blurb}</p>
+          {/* CREDIT. Both pickers above exist because somebody asked for them,
+              and the person who asked gets their name on the thing they caused
+              — see credits.json. This wisher chose to stay anonymous. */}
+          <p className="ui-caption ui-label--dim mt-2 pt-2 border-t border-[color:var(--line-1)]">
+            Arrangement and Crop focus were wished for by an anonymous Collage user.
           </p>
         </div>
       </div>
@@ -336,7 +387,9 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
             onClick={() => setFramePicker(!framePicker)}
             role="switch"
             aria-checked={framePicker}
-            className="w-full flex items-center gap-3 text-left"
+            /* min-h-11: the row is a switch, so the whole row is the hit box —
+               its natural height was 29px, which is a thumb-miss on a phone. */
+            className="w-full min-h-11 flex items-center gap-3 text-left"
             title="Off: a dropped clip goes straight into the collage and plays. On: you choose which extracted frames to keep first."
           >
             <span

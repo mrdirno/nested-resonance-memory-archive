@@ -663,7 +663,9 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  min-height: 36px;
+  /* 44px: the smallest reliable one-thumb tap target, and these chips are
+     pressed on a phone in a hallway. 36 was a miss-and-scroll. */
+  min-height: 44px;
   border-radius: 9px;
   border: 1px solid var(--line-1);
   background: var(--surface-1);

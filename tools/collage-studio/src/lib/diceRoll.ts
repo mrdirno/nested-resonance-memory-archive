@@ -25,6 +25,9 @@
 
 import type { LayoutMode, PrimitiveType } from '../types';
 import { GENERATORS, GENERATOR_BY_ID } from '../engine/geom/generators';
+import {
+  ARRANGEMENT_IDS, FOCUS_IDS, type ArrangementId, type FocusId,
+} from './composition';
 
 // =============================================================================
 // SHAPE
@@ -43,6 +46,10 @@ export interface Roll {
   zoom: number;
   bg: string;
   seed: number;
+  /** Which photo goes in which fragment — see composition.ts. */
+  arrangement: ArrangementId;
+  /** What each fragment centres on inside its photo — see composition.ts. */
+  focus: FocusId;
   /** Name of the recipe this came from, when it came from one. */
   recipe?: string;
 }
@@ -101,25 +108,27 @@ interface Recipe {
   aspect?: number[];
   gutter?: [number, number];
   zoom?: [number, number];
+  /** Arrangements this recipe insists on, when the pairing IS the idea. */
+  arrange?: ArrangementId[];
   /** Needs moving pictures to make sense. */
   video?: boolean;
 }
 
 export const RECIPES: Recipe[] = [
-  { name: 'Cathedral',    layout: 'kaleidoscope',   count: [90, 220], entropy: [0.02, 0.18], bg: ['ink', 'indigo', 'void'], gutter: [0.002, 0.005] },
-  { name: 'Rose Window',  layout: 'rosette',        count: [40, 110], entropy: [0.0, 0.15],  bg: ['oxblood', 'ink', 'indigo'] },
-  { name: 'Sunflower',    layout: 'phyllotaxis',    count: [80, 260], entropy: [0.0, 0.2],   bg: ['void', 'moss'], gutter: [0.002, 0.006] },
+  { name: 'Cathedral',    layout: 'kaleidoscope',   count: [90, 220], entropy: [0.02, 0.18], bg: ['ink', 'indigo', 'void'], gutter: [0.002, 0.005], arrange: ['wheel', 'drift', 'natural'] },
+  { name: 'Rose Window',  layout: 'rosette',        count: [40, 110], entropy: [0.0, 0.15],  bg: ['oxblood', 'ink', 'indigo'], arrange: ['wheel', 'vivid'] },
+  { name: 'Sunflower',    layout: 'phyllotaxis',    count: [80, 260], entropy: [0.0, 0.2],   bg: ['void', 'moss'], gutter: [0.002, 0.006], arrange: ['drift', 'spotlight'] },
   { name: 'Broken Glass', layout: 'delaunay',       count: [70, 190], entropy: [0.55, 1.0],  bg: ['void', 'ink'], gutter: [0.004, 0.011] },
   { name: 'Dry Lakebed',  layout: 'mud-crack',      count: [40, 130], entropy: [0.3, 0.7],   bg: ['bone', 'paper', 'void'], gutter: [0.005, 0.012] },
-  { name: 'Deep Field',   layout: 'apollonian',     count: [60, 200], entropy: [0.2, 0.6],   bg: ['void', 'indigo'] },
+  { name: 'Deep Field',   layout: 'apollonian',     count: [60, 200], entropy: [0.2, 0.6],   bg: ['void', 'indigo'], arrange: ['spotlight', 'eclipse'] },
   { name: 'Riverstone',   layout: 'circle-pack',    count: [50, 180], entropy: [0.45, 0.95], bg: ['slate', 'moss', 'bone'] },
   { name: 'Silk',         layout: 'flow',           count: [60, 200], entropy: [0.35, 0.8],  bg: ['ink', 'indigo'] },
-  { name: 'Temple Floor', layout: 'penrose',        count: [70, 240], entropy: [0.0, 0.25],  bg: ['paper', 'bone', 'ink'] },
+  { name: 'Temple Floor', layout: 'penrose',        count: [70, 240], entropy: [0.0, 0.25],  bg: ['paper', 'bone', 'ink'], arrange: ['checker', 'flow'] },
   { name: 'Vertigo',      layout: 'droste',         count: [50, 160], entropy: [0.1, 0.5],   bg: ['void', 'oxblood'] },
   { name: 'Sacred Bloom', layout: 'flower-of-life', count: [40, 140], entropy: [0.0, 0.1],   bg: ['ink', 'oxblood', 'bone'] },
   { name: 'Time Smear',   layout: 'slit-scan',      count: [60, 190], entropy: [0.4, 1.0],   bg: ['void'], gutter: [0.0, 0.003], video: true },
   { name: 'Coral Reef',   layout: 'reaction',       count: [40, 130], entropy: [0.3, 0.8],   bg: ['void', 'moss'] },
-  { name: 'Manuscript',   layout: 'golden',         count: [8, 34],   entropy: [0.0, 0.3],   bg: ['paper', 'bone'], gutter: [0.008, 0.018] },
+  { name: 'Manuscript',   layout: 'golden',         count: [8, 34],   entropy: [0.0, 0.3],   bg: ['paper', 'bone'], gutter: [0.008, 0.018], arrange: ['hero', 'natural'] },
   { name: 'Snake Charm',  layout: 'hilbert',        count: [30, 120], entropy: [0.2, 0.7],   bg: ['ink', 'slate'] },
   { name: 'Star Chart',   layout: 'metatron',       count: [40, 140], entropy: [0.0, 0.3],   bg: ['indigo', 'void'] },
   { name: 'Ice Crystal',  layout: 'quasicrystal',   count: [70, 220], entropy: [0.1, 0.5],   bg: ['ink', 'slate'] },
@@ -128,7 +137,7 @@ export const RECIPES: Recipe[] = [
   { name: 'Buckminster',  layout: 'geodesic',       count: [40, 160], entropy: [0.05, 0.45], bg: ['ink', 'indigo', 'slate'] },
   { name: 'Riot',         layout: 'shards',         count: [30, 120], entropy: [0.6, 1.0],   bg: ['void', 'paper'], gutter: [0.006, 0.016] },
   { name: 'Tide Pool',    layout: 'voronoi',        count: [60, 200], entropy: [0.25, 0.7],  bg: ['moss', 'slate', 'ink'] },
-  { name: 'Mandalay',     layout: 'mandala',        count: [70, 240], entropy: [0.0, 0.25],  bg: ['oxblood', 'indigo', 'void'] },
+  { name: 'Mandalay',     layout: 'mandala',        count: [70, 240], entropy: [0.0, 0.25],  bg: ['oxblood', 'indigo', 'void'], arrange: ['wheel', 'eclipse'] },
 ];
 
 // =============================================================================
@@ -159,6 +168,44 @@ const entropyFor = (layout: LayoutMode, rnd: () => number): number => {
   if (fam === 'organic') return between(0.25, 0.95, rnd);
   if (fam === 'recursive') return between(0.05, 0.55, rnd);
   return between(0.15, 0.9, rnd);
+};
+
+/**
+ * Arrangement conditioned on the layout family — the same idea as `entropyFor`,
+ * for the same reason: the pairing that makes a construction sing depends on
+ * whether it has a CENTRE. A colour wheel around a mandala is the figure doing
+ * what it was drawn to do; the same wheel over a rectilinear grid is a wheel
+ * nobody can see, because the grid has no angle to read it against.
+ *
+ * `natural` keeps a fifth of rolls: the source-first order is a real answer, and
+ * a dice that never leaves it alone would make every collage look sorted.
+ */
+const RADIAL_ARRANGEMENTS: ArrangementId[] = ['wheel', 'spotlight', 'eclipse', 'vivid', 'drift'];
+const LINEAR_ARRANGEMENTS: ArrangementId[] = ['flow', 'horizon', 'heat', 'checker', 'hero'];
+
+const arrangementFor = (layout: LayoutMode, rnd: () => number): ArrangementId => {
+  if (rnd() < 0.2) return 'natural';
+  const fam = GENERATOR_BY_ID[layout]?.family;
+  // A LEAN, not a rule. Nine of the twenty-four generators are sacred and only
+  // four are rectilinear, so hard-gating by family would have starved the linear
+  // arrangements down to a rounding error of all rolls — a chip in the picker
+  // the dice effectively never reaches is a chip that may as well not exist.
+  const radialBias = fam === 'sacred' || fam === 'recursive' ? 0.8 : fam === 'structure' ? 0.2 : 0.5;
+  return pick(rnd() < radialBias ? RADIAL_ARRANGEMENTS : LINEAR_ARRANGEMENTS, rnd);
+};
+
+/**
+ * Focus is NOT conditioned on the layout — it is a property of the photographs,
+ * not of the figure. Weighted rather than uniform because `auto` is right most
+ * of the time (it finds the face), and the other four are looks you reach for.
+ */
+const focusFor = (rnd: () => number): FocusId => {
+  const r = rnd();
+  if (r < 0.52) return 'auto';
+  if (r < 0.70) return 'wander';
+  if (r < 0.83) return 'thirds';
+  if (r < 0.93) return 'energy';
+  return 'centre';
 };
 
 const bgFor = (layout: LayoutMode, rnd: () => number): BgKey => {
@@ -242,6 +289,10 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
     gutter: Math.max(0, Math.min(0.03, gutter)),
     zoom: recipe?.zoom ? between(recipe.zoom[0], recipe.zoom[1], rnd) : between(1, 1.35, rnd),
     bg,
+    // A recipe may INSIST on an arrangement where the pairing is the whole idea
+    // (a rose window wants the colour wheel); otherwise the family decides.
+    arrangement: recipe?.arrange ? pick(recipe.arrange, rnd) : arrangementFor(layout, rnd),
+    focus: focusFor(rnd),
     seed: Math.floor(rnd() * 0xffffff),
     recipe: recipe?.name,
   };
@@ -256,12 +307,18 @@ const LAYOUT_ORDER: LayoutMode[] = GENERATORS.map((g) => g.id as LayoutMode);
 /**
  * A roll as a short code.
  *
- * Six base-36 fields, dash-separated in two groups so it survives being read
+ * Eight base-36 fields, dash-separated in three groups so it survives being read
  * aloud, retyped, or wrapped by a chat client. The seed is the long one because
  * it is the only field that genuinely needs the range; everything else is
  * quantised to the precision the eye can actually distinguish (entropy to 1/64,
  * gutter to 1/2000, zoom to 1/100) — quantising is what keeps the code short
  * AND makes a shared roll reproduce EXACTLY rather than approximately.
+ *
+ * Arrangement and focus were APPENDED to the middle group rather than given a
+ * group of their own. A code minted before they existed has a 6-character middle
+ * group instead of 8, and `decodeRoll` reads the two extra characters only when
+ * they are there — so every code already sitting in somebody's chat log still
+ * opens, as the composition it was when it was sent.
  */
 export const encodeRoll = (r: Roll): string => {
   const li = Math.max(0, LAYOUT_ORDER.indexOf(r.layout));
@@ -270,8 +327,10 @@ export const encodeRoll = (r: Roll): string => {
   const g = Math.round(Math.min(0.03, Math.max(0, r.gutter)) * 2000);
   const z = Math.round(Math.min(4, Math.max(0.5, r.zoom)) * 100);
   const bgi = Math.max(0, BG_KEYS.findIndex((k) => BACKGROUNDS[k] === r.bg));
+  const ari = Math.max(0, ARRANGEMENT_IDS.indexOf(r.arrangement));
+  const foi = Math.max(0, FOCUS_IDS.indexOf(r.focus));
   const f = (n: number, w = 1) => Math.max(0, Math.round(n)).toString(36).padStart(w, '0');
-  return `${f(li, 2)}${f(r.count, 3)}${f(e, 2)}-${f(ai)}${f(g, 2)}${f(z, 2)}${f(bgi)}-${f(r.seed, 4)}`
+  return `${f(li, 2)}${f(r.count, 3)}${f(e, 2)}-${f(ai)}${f(g, 2)}${f(z, 2)}${f(bgi)}${f(ari)}${f(foi)}-${f(r.seed, 4)}`
     .toUpperCase();
 };
 
@@ -289,9 +348,13 @@ export const decodeRoll = (code: string): Roll | null => {
     const g = n(b.slice(1, 3));
     const z = n(b.slice(3, 5));
     const bgi = n(b.slice(5, 6));
+    // Pre-composition codes stop at 6. Absent means the composition this code
+    // was minted with: the untouched fill order and the historical crop rule.
+    const ari = b.length >= 7 ? n(b.slice(6, 7)) : 0;
+    const foi = b.length >= 8 ? n(b.slice(7, 8)) : 0;
     const seed = n(c);
     const layout = LAYOUT_ORDER[li];
-    if (!layout || ![count, e, ai, g, z, bgi, seed].every(Number.isFinite)) return null;
+    if (!layout || ![count, e, ai, g, z, bgi, ari, foi, seed].every(Number.isFinite)) return null;
     return {
       layout,
       primitive: 'rect',
@@ -301,6 +364,8 @@ export const decodeRoll = (code: string): Roll | null => {
       gutter: g / 2000,
       zoom: z / 100,
       bg: BACKGROUNDS[BG_KEYS[bgi] ?? 'void'],
+      arrangement: ARRANGEMENT_IDS[ari] ?? 'natural',
+      focus: FOCUS_IDS[foi] ?? 'auto',
       seed,
     };
   } catch {

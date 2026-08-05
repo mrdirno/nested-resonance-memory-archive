@@ -1,0 +1,15 @@
+{
+  "ledger": "Collage Studio — Wall of Wishes. APPEND-ONLY public credit ledger: every capability built from a wish credits the person who wished it, permanently. The immutability IS git history — this file is committed to a public repo, hash-chained, forked, and archived, so a credit can never be quietly erased. NEVER rewrite or remove an entry; only append. Anonymous wishers are credited as 'an anonymous Collage user'. Isomorphed from av/credits.json, which proved the pattern first.",
+  "credits": [
+    {
+      "capability": "Arrangement & crop focus",
+      "where": "Settings panel — Arrangement and Crop focus, and both are rolled by the dice",
+      "wish": "More unique algorithms and sorting capabilities like the color match. Also maybe twisting capabilities or cropping algorithms for what to center on. Anything arrangement and composition wise to create more variation in the dice",
+      "wisher": null,
+      "wisher_display": "an anonymous Collage user",
+      "wished_date": "2026-08-05",
+      "shipped_date": "2026-08-05",
+      "shipped_note": "Shipped: 11 arrangements (photo metric x fragment spatial key, zipped — not a list sort) and 5 crop-focus modes, both rolled by the dice and carried in the share code. NOT yet shipped from this wish: 'twisting' (per-fragment rotation), which needs the draw loop in stage.ts plus both export paths and is its own increment."
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import { loadScriptSafe, analyzeImage } from './lib/analysis';
 import { computeLayout, createRng } from './lib/layout';
 import { rollDice } from './lib/diceRoll';
 import { assignSources, distinctSourceCount } from './lib/fill';
+import { arrangeBag, withFocus, type ArrangementId, type FocusId } from './lib/composition';
 import { renderCanvas } from './lib/renderer';
 import { saveProject, loadProject } from './lib/project';
 import { generateVectorExport } from './engine/color/vectorExport';
@@ -121,8 +122,12 @@ export default function App() {
   const [seed, setSeed] = useState(Date.now());
   const [aspect, setAspect] = useState(0.666); 
   const [gutter, setGutter] = useState(0.005);
-  const [entropy, setEntropy] = useState(0.5); 
-  const [resonance, setResonance] = useState(0); 
+  const [entropy, setEntropy] = useState(0.5);
+  // COMPOSITION — which photo lands in which fragment, and what each fragment
+  // centres on inside it. See lib/composition.ts. Both default to the behaviour
+  // the app has always had, so nothing moves until you ask it to.
+  const [arrangement, setArrangement] = useState<ArrangementId>('natural');
+  const [focus, setFocus] = useState<FocusId>('auto');
   const [bgColor, setBgColor] = useState('#050505'); 
   const [avgColor, setAvgColor] = useState<{r:number, g:number, b:number} | null>(null); 
   
@@ -309,34 +314,54 @@ export default function App() {
                 rng,
             });
 
-            // RESONANCE — opt-in hue ordering. It necessarily re-clumps a clip's
-            // frames (they share a palette): that IS what the control means, and it
-            // is off (0) by default, so the duplicate-free source order is what you
-            // normally get.
-            if (resonance > 0.1) {
-                bag.sort((a, b) => {
-                    const cA = images[a]?.analysis?.color || { h: 0, s: 0, l: 0 };
-                    const cB = images[b]?.analysis?.color || { h: 0, s: 0, l: 0 };
-                    if (Math.abs(cA.h - cB.h) > 0.1) return cA.h - cB.h;
-                    return cA.l - cB.l;
-                });
-            }
+            // ARRANGEMENT — which of those photos goes in which fragment.
+            //
+            // NOT a sort of the bag: `arrangeBag` (lib/composition.ts) ranks the
+            // photos by a metric AND the fragments by a spatial key, then zips the
+            // two, which is what lets "by hue" mean "the colour wheel wrapped
+            // around the canvas" instead of "left to right". It is a PERMUTATION
+            // of the bag, so the duplicate-free guarantee above survives it
+            // untouched. It necessarily re-clumps a clip's frames (they share a
+            // palette) — that IS what choosing one means, and `natural` is the
+            // default, so the source-first order is what you normally get.
+            const bagCells = emptySlots.map(slotIdx => {
+                const b = layoutItems[slotIdx]?.bounds;
+                if (!b || !(b.w > 0) || !(b.h > 0)) return null;
+                const H = PREVIEW_W / aspect;
+                return {
+                    cx: (b.x + b.w / 2) / PREVIEW_W,
+                    cy: (b.y + b.h / 2) / H,
+                    area: (b.w * b.h) / (PREVIEW_W * H),
+                };
+            });
+            const placed = arrangeBag({ bag, cells: bagCells, images, arrangement });
 
-            emptySlots.forEach((slotIdx, i) => { newIndices[slotIdx] = bag[i]; });
+            emptySlots.forEach((slotIdx, i) => { newIndices[slotIdx] = placed[i]; });
         }
         return newIndices;
     });
     // `layoutItems.length` is a dependency because the cell count is an OUTPUT
     // of the layout, not an input to it — without it the assignment keeps the
     // size from the previous layout and the new one is short by the difference.
-  }, [images, effectiveCount, layoutItems.length, seed, shuffleTrigger, resonance]);
+    // `layoutItems` (not just its length) because an arrangement reads the
+    // fragments' POSITIONS and AREAS, so the same bag lands differently the
+    // moment the construction moves. The bag itself is seed-deterministic, so a
+    // recompute that changes nothing costs one O(n log n) pass on n <= ~300.
+  }, [images, effectiveCount, layoutItems, aspect, seed, shuffleTrigger, arrangement]);
 
   /** The pool in draw order. Memoised because the live Stage rebuilds its whole
    *  draw list whenever this identity changes — a fresh array every render would
-   *  re-do the crop maths and the clip admission pass on every keystroke. */
+   *  re-do the crop maths and the clip admission pass on every keystroke.
+   *
+   *  FOCUS is applied HERE, per SLOT rather than per photo, so one photo landing
+   *  in three fragments can show three different parts of itself. `withFocus`
+   *  re-points `analysis.face`, which every crop path already reads — the live
+   *  Stage, the static renderer, the export worker and the vector export — so
+   *  one seam steers all four. On `auto` it hands back the same object by
+   *  reference, so the default path allocates nothing and recomputes nothing. */
   const orderedAssets = useMemo(
-    () => shuffledIndices.map(idx => images[idx]),
-    [shuffledIndices, images],
+    () => shuffledIndices.map((idx, slot) => withFocus(images[idx], focus, (seed ^ (slot * 2654435761)) | 0)),
+    [shuffledIndices, images, focus, seed],
   );
 
   /**
@@ -399,6 +424,11 @@ export default function App() {
     // count it just chose (effectiveCount = count * density), which is exactly
     // the kind of hidden coupling that makes a random button feel broken.
     setSeed(roll.seed);
+    // The composition is part of the roll, not a setting the roll leaves alone:
+    // the same fragments in the same shapes, paired a different way, is a
+    // genuinely different picture — which is the whole point of pressing it.
+    setArrangement(roll.arrangement);
+    setFocus(roll.focus);
     setLastRecipe(roll.recipe);
     setLockedCells(new Map());
   };
@@ -794,7 +824,7 @@ export default function App() {
   };
 
   const handleClear = () => {
-      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter }, style: { background: bgColor } };
+      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus }, style: { background: bgColor } };
       addToHistory(state, images, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
@@ -811,7 +841,11 @@ export default function App() {
       setLayoutMode(l.mode); if(l.primitive) setPrimitive(l.primitive);
       setCount(l.count); setSeed(l.seed); setAspect(l.aspect); setGutter(l.gutter); setActiveTab(item.state.mode);
       if(l.entropy) setEntropy(l.entropy);
-      if(l.resonance) setResonance(l.resonance);
+      if(l.arrangement) setArrangement(l.arrangement);
+      // A project saved before this cycle stored the old binary hue sort as a
+      // 0..1 "resonance". Anything above the threshold it used WAS colour flow.
+      else if((l.resonance ?? 0) > 0.1) setArrangement('flow');
+      if(l.focus) setFocus(l.focus);
       if(item.state.style?.background) setBgColor(item.state.style.background);
   };
 
@@ -1011,7 +1045,7 @@ export default function App() {
     try {
         const rng = createRng(seed); const items = await computeLayout(1000, 1000/aspect, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
         const orderedImages = shuffledIndices.map(idx => images[idx]);
-        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter }, style: { background: bgColor } };
+        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus }, style: { background: bgColor } };
         const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor);
         const blob = new Blob([svgContent], {type: 'image/svg+xml'});
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `GENART-VECTOR-${seed}.svg`; a.click(); URL.revokeObjectURL(url);
@@ -1019,13 +1053,13 @@ export default function App() {
     } catch (e) { setExportStatus('error'); }
   };
 
-  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter }, style: { background: bgColor } }; await saveProject(state, images); };
+  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus }, style: { background: bgColor } }; await saveProject(state, images); };
   const handleLoadProject = () => { 
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.collage,.svg';
     input.onchange = async (e:any) => {
         const file = e.target.files[0]; if(!file) return;
         const loaded = await loadProject(file);
-        if(loaded) { countTouchedRef.current = true; setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || 0.666); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.resonance) setResonance(l.resonance); }
+        if(loaded) { countTouchedRef.current = true; setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || 0.666); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.arrangement) setArrangement(l.arrangement); else if((l.resonance ?? 0) > 0.1) setArrangement('flow'); if(l.focus) setFocus(l.focus); }
     };
     input.click();
   };
@@ -1136,15 +1170,15 @@ export default function App() {
                      onClick={() => fileInputRef.current?.click()}
                      title="Add more images or video"
                      aria-label="Add more images or video"
-                     className="w-10 h-10 rounded bg-[#111] text-gray-300 border border-gray-800 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors shadow-lg"
+                     className="w-11 h-11 rounded bg-[#111] text-gray-300 border border-gray-800 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors shadow-lg"
                    ><Plus size={18} /></button>
                    <button
                      onClick={() => videoInputRef.current?.click()}
                      title="Extract frames from a video"
                      aria-label="Extract frames from a video"
-                     className="w-10 h-10 rounded bg-[#111] text-emerald-400 border border-gray-800 flex items-center justify-center hover:bg-emerald-500/15 transition-colors shadow-lg"
+                     className="w-11 h-11 rounded bg-[#111] text-emerald-400 border border-gray-800 flex items-center justify-center hover:bg-emerald-500/15 transition-colors shadow-lg"
                    ><Film size={18} /></button>
-                   <button onClick={handleClear} title="Clear all" aria-label="Clear all" className="w-10 h-10 rounded bg-[#111] text-red-500 border border-gray-800 flex items-center justify-center hover:bg-red-900/30 transition-colors shadow-lg"><X size={18} /></button>
+                   <button onClick={handleClear} title="Clear all" aria-label="Clear all" className="w-11 h-11 rounded bg-[#111] text-red-500 border border-gray-800 flex items-center justify-center hover:bg-red-900/30 transition-colors shadow-lg"><X size={18} /></button>
                </div>
 
             </div>
@@ -1162,13 +1196,13 @@ export default function App() {
            </div>
          )}
          <div className="flex border-b border-white/5 bg-[#0e0e0e]">
-             <button onClick={()=>setActiveTab('simple')} title="Layout" aria-label="Layout" className={`flex-1 py-3 flex items-center justify-center ${activeTab==='simple'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Layout size={16} /></button>
-             <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
+             <button onClick={()=>setActiveTab('simple')} title="Layout" aria-label="Layout" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='simple'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Layout size={16} /></button>
+             <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
            <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} />
          ) : (
-           <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} resonance={resonance} setResonance={setResonance} framePicker={framePicker} setFramePicker={setFramePicker} />
+           <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} framePicker={framePicker} setFramePicker={setFramePicker} />
          )}
       </div>
       {notice && (
