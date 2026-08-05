@@ -20,7 +20,10 @@
  */
 import { test, expect, type Page } from '@playwright/test';
 
-const TRADE_PATHS = ['/av/index.html', '/plumbing/index.html', '/electrical/index.html'];
+// RELATIVE, deliberately. The deployed site lives under a repo path
+// (/nested-resonance-memory-archive/), and a leading slash resolves against the
+// ORIGIN — silently dropping that prefix and 404ing every live run.
+const TRADE_PATHS = ['av/index.html', 'plumbing/index.html', 'electrical/index.html'];
 const WIDTHS = [320, 360, 390, 430];
 
 /** Open the well and expand the optional block, so BOTH states get measured. */

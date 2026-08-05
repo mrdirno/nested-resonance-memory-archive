@@ -16,7 +16,9 @@ export default defineConfig({
   timeout: 60_000,
   workers: 1,
   use: {
-    baseURL: process.env.WELL_BASE_URL || 'http://localhost:8899',
+    // Trailing slash is load-bearing: spec paths are relative so the deployed
+    // repo-path prefix survives resolution.
+    baseURL: process.env.WELL_BASE_URL || 'http://localhost:8899/',
     trace: 'off',
   },
   projects: [
