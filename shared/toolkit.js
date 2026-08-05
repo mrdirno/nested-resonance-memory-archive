@@ -192,24 +192,42 @@
   .av-field{margin-bottom:11px}
   .av-field label{display:block;font-family:var(--av-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--av-muted);margin-bottom:5px}
   .av-field label i{color:#b3671a;font-style:normal}
-  .av-field input,.av-field select,.av-field textarea{width:100%;font-family:var(--av-sans);font-size:14px;color:var(--av-ink);
-    background:#fff;border:1px solid var(--av-line);border-radius:2px;padding:9px 10px;}
+  /* 44px MINIMUM on every control in the well. This is the ship gate, not a
+     preference — the well is filled in one-handed, on a phone, often in gloves,
+     and it was shipping 37px inputs, 39px selects, 31px identity buttons and an
+     18px "Cancel" on all six trades. shared/feedback.js already held this line;
+     the trade well did not. 16px font-size is load-bearing too: below 16, iOS
+     Safari zooms the page on focus and the layout the operator told us must
+     never "alter if zoomed out" does exactly that. */
+  .av-field input,.av-field select,.av-field textarea{width:100%;font-family:var(--av-sans);font-size:16px;color:var(--av-ink);
+    background:#fff;border:1px solid var(--av-line);border-radius:2px;padding:10px 10px;min-height:44px;}
   .av-field textarea{min-height:74px;resize:vertical;line-height:1.4}
   .av-field input:focus-visible,.av-field select:focus-visible,.av-field textarea:focus-visible{outline:2px solid var(--av-flag);outline-offset:1px}
   .av-row{display:flex;gap:9px;flex-wrap:wrap}
   .av-row .av-field{flex:1 1 150px}
   .av-idtoggle{display:flex;gap:6px}
-  .av-idbtn{flex:1;font-family:var(--av-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:#fff;color:var(--av-muted);border:1px solid var(--av-line);border-radius:2px;padding:8px 6px;cursor:pointer}
+  .av-idbtn{flex:1;min-height:44px;font-family:var(--av-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:#fff;color:var(--av-muted);border:1px solid var(--av-line);border-radius:2px;padding:8px 6px;cursor:pointer}
   .av-idbtn:hover{border-color:var(--av-steel);color:var(--av-ink)}
   .av-idbtn.on{background:var(--av-steel);color:#fff;border-color:var(--av-steel)}
   .av-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
   .av-err{color:#B0201A;font-size:12.5px;margin:0 0 10px;display:none}
   .av-actions{display:flex;align-items:center;gap:10px;margin-top:4px}
-  .av-send{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
+  /* THE DISCLOSURE — everything optional behind one 44px tap, so the distance
+     from "open the well" to "Make the wish" is four controls, not eleven.
+     (Reported into the well itself: "too long it's cumbersome".) */
+  .av-more-t{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;margin:12px 0 11px;
+    padding:10px 12px;cursor:pointer;text-align:left;background:none;border:1px dashed var(--av-line,#C3C7C0);
+    border-radius:2px;font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.07em;
+    font-size:11.5px;font-weight:700;color:var(--av-muted)}
+  .av-more-t:hover{border-color:var(--av-steel);color:var(--av-steel)}
+  .av-more-t i{font-style:normal;font-weight:400;text-transform:none;letter-spacing:.01em;
+    font-family:inherit;font-size:12px}
+  .av-more-t b{flex:none;width:14px;font-size:14px}
+  .av-send{min-height:46px;font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;
     background:var(--av-steel);color:#fff;border:1px solid var(--av-steel);border-radius:2px;padding:10px 16px;cursor:pointer}
   .av-send:hover{background:#333B44}
   .av-send[disabled]{opacity:.5;cursor:progress}
-  .av-cancel{background:none;border:0;color:var(--av-muted);font-size:13px;cursor:pointer;text-decoration:underline}
+  .av-cancel{min-height:46px;padding:0 12px;background:none;border:0;color:var(--av-muted);font-size:13px;cursor:pointer;text-decoration:underline}
   .av-done{text-align:center;padding:8px 4px 4px}
   .av-done .av-check{width:46px;height:46px;border-radius:50%;background:var(--av-flag);color:var(--flag-ink);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;font-weight:700}
   .av-done h3{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.03em;font-size:19px;margin:0 0 8px}
@@ -386,24 +404,54 @@
     kindBtns.forEach(function (b, i) { b.addEventListener("click", function () { setKind(KINDS[i].v); }); });
     resetWellKind = function () { setKind("new_tool"); };
 
+    /* ---- PROGRESSIVE DISCLOSURE (swept from shared/feedback.js, same cycle) ---
+     * Reported into this very well: "your something's broken or feedback stuff
+     * is too long it's cumbersome."
+     *
+     * Eleven field-groups stood between opening the well and sending it, seven
+     * of them optional. Someone on a ladder reporting a broken tool had to
+     * scroll past a credit toggle, a role picker, an example box, a name, a
+     * company and an email to reach the button. The well is where this whole
+     * program's demand signal comes from, so friction here is the most
+     * expensive friction there is.
+     *
+     * Core is now kind, which tool, what, why — then SEND. The rest folds. The
+     * fold names CREDIT explicitly, because a wisher who wants their name on
+     * the tool must not lose it just by not tapping.
+     */
+    var moreWrap = h("div", { class: "av-more", style: "display:none" }, [
+      idToggle,
+      nameRow,
+      h("div", { class: "av-field" }, [h("label", {}, ["You are a… ", h("i", {}, ["(optional)"])]), roleSel]),
+      h("div", { class: "av-field" }, [h("label", {}, ["An example ", h("i", {}, ["(optional)"])]), h("textarea", { name: "example", maxlength: "2000", placeholder: "A real example of what you'd type in and what you'd want out." })]),
+      h("div", { class: "av-field" }, [h("label", {}, ["Email to hear when it ships ", h("i", {}, ["(optional, never shown — even if anonymous)"])]), h("input", { name: "contact", type: "email", maxlength: "200", placeholder: "you@company.com", autocomplete: "off" })])
+    ]);
+    var moreBtn = h("button", { type: "button", class: "av-more-t", "aria-expanded": "false" }, [
+      h("b", {}, ["+"]),
+      h("i", {}, ["Add your name for credit, an example, or your email — all optional"])
+    ]);
+    moreBtn.addEventListener("click", function () {
+      var open = moreWrap.style.display === "none";
+      moreWrap.style.display = open ? "" : "none";
+      moreBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      moreBtn.firstChild.textContent = open ? "−" : "+";
+    });
+
     form = h("form", { class: "av-form", novalidate: "novalidate" }, [
       guide,
       kindToggle,
       aboutRow,
-      idToggle,
       h("p", { class: "av-err", role: "alert" }),
-      h("div", { class: "av-field" }, [h("label", {}, ["You are a… ", h("i", {}, ["(optional)"])]), roleSel]),
       h("div", { class: "av-field" }, [titleLabel, h("input", { name: "tool_title", type: "text", maxlength: "200", required: "required", placeholder: TRADE.wishTitleHint, autocomplete: "off" })]),
       h("div", { class: "av-field" }, [purposeLabel, h("textarea", { name: "tool_purpose", maxlength: "2000", required: "required", placeholder: TRADE.wishPurposeHint })]),
-      h("div", { class: "av-field" }, [h("label", {}, ["An example ", h("i", {}, ["(optional)"])]), h("textarea", { name: "example", maxlength: "2000", placeholder: "A real example of what you'd type in and what you'd want out." })]),
-      nameRow,
-      h("div", { class: "av-field" }, [h("label", {}, ["Email to hear when it ships ", h("i", {}, ["(optional, never shown — even if anonymous)"])]), h("input", { name: "contact", type: "email", maxlength: "200", placeholder: "you@company.com", autocomplete: "off" })]),
-      // honeypot — real people never see or fill this
-      h("div", { class: "av-hp", "aria-hidden": "true" }, [h("label", {}, ["Website"]), h("input", { name: "website", type: "text", tabindex: "-1", autocomplete: "off" })]),
       h("div", { class: "av-actions" }, [
         h("button", { type: "submit", class: "av-send" }, ["Make the wish"]),
         h("button", { type: "button", class: "av-cancel", onclick: closeWell }, ["Cancel"])
-      ])
+      ]),
+      moreBtn,
+      moreWrap,
+      // honeypot — real people never see or fill this
+      h("div", { class: "av-hp", "aria-hidden": "true" }, [h("label", {}, ["Website"]), h("input", { name: "website", type: "text", tabindex: "-1", autocomplete: "off" })])
     ]);
     errBox = form.querySelector(".av-err");
     sendBtn = form.querySelector(".av-send");

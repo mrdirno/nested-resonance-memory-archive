@@ -555,6 +555,40 @@ export const deriveTiers = (
 export const maxTierForAspect = (limits: CanvasLimits, aspect: number): number =>
   deriveTiers(limits, aspect)[0];
 
+/**
+ * The ladder for an export the user ASKED for at a specific size.
+ *
+ * `deriveTiers` answers "what can this device do". This answers "what should we
+ * try, given they picked 8K". Those differ, and conflating them is how you get
+ * either of the two failures we actually shipped:
+ *
+ *   - starting at the measured ceiling ignores the pick and silently hands back
+ *     a different size than the one on the button;
+ *   - offering ONLY the pick means one rejected tier is a dead end, which is
+ *     precisely the "click export, get nothing" report.
+ *
+ * So: the pick is the top rung — honoured even when it is above the measured
+ * ceiling, because a measurement is a snapshot and being wrong in the generous
+ * direction costs one fast rejection — and everything strictly below it in the
+ * derived ladder is the fallback. `preferred === null` means MAX: no pick to
+ * honour, use the measurement.
+ *
+ * Pure, total, and swept in selfTest: it never throws, never returns an empty
+ * ladder when one was available, and is always strictly descending.
+ */
+export const composeTiers = (
+  preferred: number | null,
+  ladder: readonly number[],
+): number[] => {
+  const clean = ladder
+    .filter((t) => Number.isFinite(t) && t >= 1)
+    .slice()
+    .sort((a, b) => b - a);
+  if (preferred === null || !Number.isFinite(preferred) || preferred < 1) return clean;
+  const p = Math.floor(preferred);
+  return [p, ...clean.filter((t) => t < p)];
+};
+
 /** Reset for tests, or for a retry after the user closed other memory-hungry tabs. */
 export const _resetCanvasLimits = (): void => {
   memo = null;
@@ -1317,6 +1351,33 @@ export const selfTest = async (): Promise<SelfTestReport> => {
   eq('Chrome 268MP @1.0', deriveTiers(mk(268435456, 65535), 1), [16384, 12000, 8192, 4096, 2048]);
   const worst = deriveTiers(mk(SAFE_FLOOR_AREA, SAFE_FLOOR_DIM), 0.5625);
   ok('never empty even at the floor', worst.length > 0, worst);
+
+  // --- composeTiers: the user's pick vs the measured ceiling ------------------
+  lines.push("composeTiers (honour the pick, then fall back)");
+  const phone = deriveTiers(mk(44690000, 4194303), 0.666); // [8128, 4096, 2048]
+  eq('the pick leads, lower rungs follow', composeTiers(4096, phone), [4096, 2048]);
+  eq('a pick ABOVE the ceiling is still tried first', composeTiers(16384, phone), [16384, 8128, 4096, 2048]);
+  eq('null means MAX -> the measurement decides', composeTiers(null, phone), [8128, 4096, 2048]);
+  eq('a pick equal to a rung is not duplicated', composeTiers(8128, phone), [8128, 4096, 2048]);
+  eq('a pick below every rung still gives one attempt', composeTiers(512, phone), [512]);
+  eq('empty ladder + a pick is not a dead end', composeTiers(4096, []), [4096]);
+  eq('empty ladder + no pick is honestly empty', composeTiers(null, []), []);
+  eq('an unsorted ladder is repaired', composeTiers(9000, [2048, 8128, 4096]), [9000, 8128, 4096, 2048]);
+  eq('junk rungs are dropped', composeTiers(null, [NaN, 4096, 0, Infinity, 2048]), [4096, 2048]);
+  eq('a junk pick degrades to the ladder', composeTiers(NaN, phone), [8128, 4096, 2048]);
+  // The two invariants the export path actually depends on.
+  let composeOk = true;
+  for (const pick of [null, 512, 2048, 4096, 8128, 16384, 30000]) {
+    for (const cap of [16777216, 44690000, 268435456]) {
+      for (const a of [0.5625, 0.666, 1, 1.77]) {
+        const t = composeTiers(pick, deriveTiers(mk(cap, 65535), a));
+        for (let i = 1; i < t.length; i++) if (t[i] >= t[i - 1]) composeOk = false; // strictly descending
+        if (pick !== null && t[0] !== pick) composeOk = false;                      // the pick always leads
+        if (t.length === 0) composeOk = false;                                      // always something to try
+      }
+    }
+  }
+  ok('strictly descending, pick-led, never empty (84 combos)', composeOk);
   let ladderOk = true;
   for (const a of [0.5625, 0.666, 1, 1.77]) {
     for (const cap of [16777216, 44690000, 124992400, 268435456]) {

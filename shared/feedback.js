@@ -114,21 +114,26 @@
     { v: "improve",  label: "Make it better",     hint: "It works, but it should work differently" },
     { v: "new_tool", label: S.newLabel,           hint: "Something that doesn't exist yet" }
   ];
+  /* COPY — deliberately SHORT (wishing well d88093af: "your something's broken
+   * or feedback stuff is too long it's cumbersome"). The old leads ran three
+   * sentences and the third just restated the field label underneath it. Every
+   * line you have to read before you can type is a reason not to bother, and
+   * the whole program runs on people bothering. */
   var COPY = {
     bug: {
-      lead: "<b>Something's wrong — tell us.</b> A bug on something people are already using jumps the queue ahead of every new idea. Tell us what you did, what happened, and what you expected instead.",
+      lead: "<b>Something's wrong — tell us.</b> Bugs jump the queue.",
       titleLabel: "What's wrong — in a few words",
-      bodyLabel: "What you did, what happened, and what you expected instead"
+      bodyLabel: "What happened"
     },
     improve: {
-      lead: "<b>Wish it better.</b> You're the one actually using it — if it asks in the wrong order, misses something, or gets in your way, say so. Improvements get built the same way new things do.",
+      lead: "<b>Wish it better.</b> You're the one using it.",
       titleLabel: "What should change",
-      bodyLabel: "How it should work instead — and what you're doing when it gets in the way"
+      bodyLabel: "How it should work instead"
     },
     new_tool: {
-      lead: "<b>A wishing well that actually works.</b> Ask for the thing you keep doing by hand. If it passes the bar, it gets built and it just shows up.",
+      lead: "<b>Ask for the thing you keep doing by hand.</b> If it passes the bar, it gets built.",
       titleLabel: "The thing you want",
-      bodyLabel: "What it should do — and what you'd use it for"
+      bodyLabel: "What it should do"
     }
   };
 
@@ -183,6 +188,14 @@
     + '.fb-send[disabled]{opacity:.6;cursor:default}'
     + '.fb-cancel{min-height:46px;padding:12px 16px;background:transparent;border:1px solid var(--fb-line);'
     + 'border-radius:7px;cursor:pointer;font:700 13px/1 var(--fb-sans);color:var(--fb-muted)}'
+    /* THE DISCLOSURE — everything optional lives behind one 44px tap, so the
+     * distance from "open" to "Send it" is four controls instead of ten. */
+    + '.fb-more-t{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;margin:2px 0 13px;'
+    + 'padding:11px 12px;cursor:pointer;text-align:left;background:transparent;border:1px dashed var(--fb-line);'
+    + 'border-radius:7px;font:700 11px/1.3 var(--fb-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--fb-muted)}'
+    + '.fb-more-t:hover{border-color:var(--fb-accent);color:var(--fb-text)}'
+    + '.fb-more-t i{font-style:normal;font-weight:400;text-transform:none;letter-spacing:.02em;font-family:var(--fb-sans);font-size:11.5px}'
+    + '.fb-more-t span{flex:none;width:15px;font-size:13px}'
     + '.fb-note{font-size:11.5px;color:var(--fb-muted);margin:11px 0 0;line-height:1.45}'
     + '.fb-done{text-align:center;padding:22px 6px}'
     + '.fb-done .fb-check{width:52px;height:52px;line-height:52px;margin:0 auto 12px;border-radius:50%;'
@@ -289,12 +302,43 @@
     var cancel = h("button", { type: "button", class: "fb-cancel" }, ["Cancel"]);
     cancel.addEventListener("click", close);
 
-    var kids = [leadEl, errBox, kindRow, areaRow, titleF, bodyF, stepsF,
+    /* ---- PROGRESSIVE DISCLOSURE ---------------------------------------------
+     * Reported straight into this well (d88093af): "your something's broken or
+     * feedback stuff is too long it's cumbersome."
+     *
+     * It was: ten stacked field-groups, of which SIX were optional, all sitting
+     * between the person and the Send button. On a phone that is a scroll past
+     * five things you do not have to fill in to reach the one control you came
+     * for — and the evidence it wasn't landing is in the queue itself, where
+     * that same report arrived with the whole paragraph typed into the TITLE box.
+     *
+     * Now: kind, which part, what's wrong, what happened, SEND. Everything that
+     * is optional — repro steps, trade, context, name, company, email — folds
+     * behind one 44px row. Nothing is removed and no value is renamed: the
+     * credential machinery that weights a correction is intact, it is just no
+     * longer in the way of someone who only wants to say "this is broken".
+     */
+    var moreKids = [stepsF,
       h("div", { class: "fb-f" }, [h("label", {}, ["You are ", h("i", {}, ["(optional)"])]), roleSel])];
-    if (ctxSel) kids.push(h("div", { class: "fb-f" }, [h("label", {}, [S.contextLabel + " ", h("i", {}, ["(optional)"])]), ctxSel]));
-    kids.push(credF, nameRow, contactF,
+    if (ctxSel) moreKids.push(h("div", { class: "fb-f" }, [h("label", {}, [S.contextLabel + " ", h("i", {}, ["(optional)"])]), ctxSel]));
+    moreKids.push(credF, nameRow, contactF);
+
+    var moreWrap = h("div", { class: "fb-more", style: "display:none" }, moreKids);
+    var moreBtn = h("button", { type: "button", class: "fb-more-t", "aria-expanded": "false" }, [
+      h("span", {}, ["+"]),
+      h("i", {}, ["Add details — who you are, how to reproduce it. Optional; it only helps us weigh it."])
+    ]);
+    moreBtn.addEventListener("click", function () {
+      var open = moreWrap.style.display === "none";
+      moreWrap.style.display = open ? "" : "none";
+      moreBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      moreBtn.firstChild.textContent = open ? "−" : "+";
+    });
+
+    var kids = [leadEl, errBox, kindRow, areaRow, titleF, bodyF,
       h("div", { class: "fb-acts" }, [sendBtn, cancel]),
-      h("p", { class: "fb-note" }, ["Goes straight to the loop that builds this. It reads everything that comes in and fixes the broken things first. Nothing you send here is published."]));
+      moreBtn, moreWrap,
+      h("p", { class: "fb-note" }, ["Goes straight to the loop that builds this. Broken things get fixed first. Nothing you send is published."])];
 
     form = h("form", {}, kids);
     form.setAttribute("novalidate", "novalidate");

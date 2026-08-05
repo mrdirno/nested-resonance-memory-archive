@@ -97,3 +97,25 @@ frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
 - 2026-08-03 · lane created · source-first fill + video-length sync already live · next rung: **timeline & trim**
+- 2026-08-04 · **[AXIS:WELL] export stopped lying** (wish d88093af, reported by the owner:
+  *"when I hit export sometimes it will show a black screen… partial elements of the collage
+  appeared but it failed to export full image"*). Root cause was not missing logic — it was
+  logic that existed and was never called. `lib/exportLimits.ts` (1,490 lines, 57 passing
+  self-tests, a comment predicting this exact black-JPEG bug) was imported by nothing.
+  THREE real defects, all now closed: **(1) BLACK** — over a platform's canvas ceiling
+  `new OffscreenCanvas()` does not throw; it returns a valid, correctly-sized, entirely black
+  JPEG. The worker now writes a sentinel to the far corner and reads it back before drawing
+  AND after (WebKit can discard a live surface mid-render), reports `surfaceLive:false`, and
+  the ladder steps down instead of handing over the black file. **(2) PARTIAL** — the preview
+  draws `previewSrc`, the export drew `src`, so a source whose original object URL was dead
+  rendered perfectly in the preview and vanished from the export; the worker now falls back
+  to the preview source and only counts a fragment failed when BOTH are gone. **(3) THE
+  OUT-OF-BOUNDS the report guessed at** — `orderedImages.map(img => ({src: img.src…}))` had no
+  null guard, so a short fill bag threw *while building the worker message*, was caught as
+  "worker unavailable", and silently re-rendered on the main thread where holes are skipped.
+  Export now walks a ladder derived from a MEASURED device ceiling, validates every blob
+  before accepting it, and a failure says which tier and why instead of showing the word
+  "error". before→after: 0 → 68 unit cases (`composeTiers` extracted + swept, 11 new) and
+  3/3 artifact-level e2e reading the exported PIXELS (`tests/e2e/export-integrity.spec.ts`),
+  because every failure in this report produces a file that looks fine to a check that only
+  asks "did an image appear?". https://mrdirno.github.io/nested-resonance-memory-archive/collage/

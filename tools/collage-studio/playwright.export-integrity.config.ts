@@ -1,0 +1,27 @@
+import { defineConfig, devices } from '@playwright/test';
+
+/**
+ * Standalone config for the export-integrity proof (wish d88093af).
+ *
+ * Points at the ALREADY-RUNNING collage dev server on :5199 and has NO
+ * webServer block — the repo default (playwright.config.ts) targets :5173,
+ * which on this machine is Persona 500, not this app (scar: a playwright run
+ * silently reused another project's dev server on 5173). Override with
+ * COLLAGE_BASE_URL to run against a deployed release.
+ *
+ * Timeout is generous: an 8K/MAX export is a real render, and a ladder that
+ * steps DOWN legitimately spends time on the tiers it rejects.
+ */
+export default defineConfig({
+  testDir: './tests/e2e',
+  testMatch: /export-integrity\.spec\.ts$/,
+  timeout: 240_000,
+  workers: 1,
+  use: {
+    baseURL: process.env.COLLAGE_BASE_URL || 'http://localhost:5199',
+    trace: 'off',
+  },
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'], channel: 'chromium' } },
+  ],
+});

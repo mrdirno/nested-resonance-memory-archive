@@ -1,47 +1,143 @@
 // src/workers/render.worker.ts
 /* eslint-disable no-restricted-globals */
+//
+// THE EXPORT RENDERER — and, since C3, an HONEST one.
+//
+// WHY THIS FILE CHANGED (wishing well d88093af, reported by the owner):
+//   "When I hit export sometimes it will show a black screen ... partial
+//    elements of the collage appeared but it failed to export full image."
+//
+//   Both halves were this worker lying about what happened:
+//
+//   1. BLACK. Over a platform's canvas ceiling, `new OffscreenCanvas(w,h)` does
+//      NOT throw. getContext succeeds, fillRect succeeds, drawImage succeeds,
+//      and convertToBlob hands back a valid, correctly-sized, ENTIRELY BLACK
+//      JPEG. Nothing in the old code could tell that from a real render, so the
+//      black file went straight to the user. We now write a sentinel into the
+//      far corner and read it back BEFORE drawing anything (`assertSurfaceLive`
+//      — one pixel, ~1 ms) and report `surfaceLive: false` so the caller steps
+//      DOWN a tier instead of shipping the black file.
+//
+//   2. PARTIAL. The old code counted failed decodes and then threw
+//      `Worker failed to render N images`, which the main thread caught as
+//      "worker unavailable" and silently re-ran on the main thread — where the
+//      still-renderer SKIPS unloadable fragments (`if (!img.width) continue`).
+//      That is precisely "partial elements appeared": holes where photographs
+//      should be, background showing through. We now report `failedImages` as a
+//      NUMBER and let the caller decide; a decode failure is not a size failure,
+//      so it must not be answered by burning the whole tier ladder.
+//
+// The verdicts below are the exact shape `exportLimits.runWithFallback` consumes
+// (`RenderOutcome`), so this worker plugs into the tested ladder with no
+// translation layer.
+//
 import { calculateSmartCrop } from '../lib/renderer';
+import { assertSurfaceLive } from '../lib/exportLimits';
 
 const ctx: Worker = self as any;
 
+/** Aborted ids — the main thread sends {cancel:id} when a tier times out. */
+const cancelled = new Set<number>();
+
+/**
+ * Decode the first source that actually yields pixels, in preference order.
+ * Returns null only when every candidate is gone — which is the one case that
+ * genuinely counts as a failed fragment.
+ */
+const decodeFirstAvailable = async (
+  sources: (string | undefined | null)[],
+): Promise<ImageBitmap | null> => {
+  for (const src of sources) {
+    if (!src) continue;
+    try {
+      const response = await fetch(src);
+      if (!response.ok) continue;
+      const blob = await response.blob();
+      if (!blob.size) continue;
+      return await createImageBitmap(blob);
+    } catch {
+      /* try the next one */
+    }
+  }
+  return null;
+};
+
 ctx.onmessage = async (e: MessageEvent) => {
-  const { 
-    id, 
-    width, 
-    height, 
-    mode, 
-    layoutItems, 
+  const d = e.data || {};
+
+  // Cancellation channel: the ladder's teardown terminates us outright, but a
+  // cooperative cancel lets an in-flight tier stop decoding immediately.
+  if (d.cancel !== undefined) { cancelled.add(d.cancel); return; }
+
+  const {
+    id,
+    width,
+    height,
+    mode,
+    layoutItems,
     orderedImages,
     zoom = 1.0,
     bgColor = '#050505'
-  } = e.data;
+  } = d;
 
-  let errorCount = 0;
+  let failedImages = 0;
+  let drawn = 0;
 
   try {
     let canvas: OffscreenCanvas;
     try {
         canvas = new OffscreenCanvas(width, height);
     } catch (err) {
-        throw new Error(`OffscreenCanvas creation failed (Size: ${width}x${height}).`);
+        // The HONEST allocation failure. Distinct from the silent one below.
+        ctx.postMessage({ id, success: false, surfaceLive: false, failedImages: 0, drawn: 0,
+                          error: `OffscreenCanvas allocation refused (${width}x${height}).` });
+        return;
     }
-    
+
     const ctx2d = canvas.getContext('2d');
-    if (!ctx2d) throw new Error("Could not get 2D context");
+    if (!ctx2d) {
+      ctx.postMessage({ id, success: false, surfaceLive: false, failedImages: 0, drawn: 0,
+                        error: 'Could not get 2D context' });
+      return;
+    }
+
+    // ---- THE ONE-PIXEL PROOF -------------------------------------------------
+    // Before the background fill, before any decode. A surface that fails here
+    // will drop every subsequent draw and then encode to black, so spending a
+    // 30-second render on it is pure waste. ~1 ms, one pixel.
+    if (!assertSurfaceLive(ctx2d, width, height)) {
+      ctx.postMessage({ id, success: false, surfaceLive: false, failedImages: 0, drawn: 0,
+                        error: `Surface dead at ${width}x${height} (sentinel read-back failed).` });
+      return;
+    }
 
     ctx2d.fillStyle = bgColor;
     ctx2d.fillRect(0, 0, width, height);
 
     for (let i = 0; i < layoutItems.length; i++) {
+        if (cancelled.has(id)) { cancelled.delete(id); return; }
+
         const item = layoutItems[i];
         const imgMeta = orderedImages[i];
-        if (!imgMeta) continue;
+        // A null slot is not a failure: the layout can legitimately carry more
+        // cells than the pool has sources. It is a HOLE, and it is the caller's
+        // job to have not sent one. (See generateBlob's alignment guard.)
+        if (!imgMeta || !imgMeta.src) continue;
 
         try {
-            const response = await fetch(imgMeta.src);
-            if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
-            const blob = await response.blob();
-            const imgBitmap = await createImageBitmap(blob);
+            // TWO SOURCES, IN ORDER OF QUALITY.
+            //   The preview path draws `previewSrc` (a small, always-live JPEG
+            //   blob); the export path draws `src` (the ORIGINAL). So a source
+            //   whose original object URL has been revoked — or is a frame the
+            //   decoder refuses at full size — renders perfectly in the preview
+            //   and vanishes from the export. That asymmetry IS the reported
+            //   "partial elements" bug.
+            //
+            //   A softer fragment beats a hole, every time. We try the original
+            //   and fall back to the preview, and only count a failure when
+            //   BOTH are gone.
+            const imgBitmap = await decodeFirstAvailable([imgMeta.src, imgMeta.fallbackSrc]);
+            if (!imgBitmap) throw new Error('no decodable source');
 
             ctx2d.save();
             ctx2d.beginPath();
@@ -58,29 +154,39 @@ ctx.onmessage = async (e: MessageEvent) => {
             }, zoom);
 
             ctx2d.drawImage(imgBitmap, crop.sx, crop.sy, crop.sw, crop.sh, crop.dx, crop.dy, crop.dw, crop.dh);
-            imgBitmap.close(); 
-            
+            imgBitmap.close();
+            drawn++;
+
             if (mode === 'complex') {
-                ctx2d.strokeStyle = '#000'; 
-                ctx2d.lineWidth = width * 0.001; 
+                ctx2d.strokeStyle = '#000';
+                ctx2d.lineWidth = width * 0.001;
                 ctx2d.stroke();
             }
             ctx2d.restore();
         } catch (innerErr) {
             console.warn("Worker image load failed", innerErr);
-            errorCount++;
+            failedImages++;
         }
     }
 
-    // If we had errors (missing images), we should consider this a failure so the main thread fallback runs
-    if (errorCount > 0) {
-        throw new Error(`Worker failed to render ${errorCount} images.`);
+    // ---- THE SECOND PROOF ----------------------------------------------------
+    // WebKit enforces a per-PAGE canvas budget and can discard the backing store
+    // of an already-valid canvas partway through a long render. The corner that
+    // was live before the decodes may be dead after them, so we check again.
+    if (!assertSurfaceLive(ctx2d, width, height)) {
+      ctx.postMessage({ id, success: false, surfaceLive: false, failedImages, drawn,
+                        error: `Surface died during render at ${width}x${height}.` });
+      return;
     }
 
     const blob = await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.92 });
-    ctx.postMessage({ id, success: true, blob });
+
+    // failedImages is REPORTED, not thrown. The ladder treats a decode failure
+    // as terminal-but-explained rather than as "your device is too small".
+    ctx.postMessage({ id, success: true, blob, surfaceLive: true, failedImages, drawn });
 
   } catch (err: any) {
-    ctx.postMessage({ id, success: false, error: err.message });
+    ctx.postMessage({ id, success: false, surfaceLive: true, failedImages, drawn,
+                      error: err?.message || String(err) });
   }
 };

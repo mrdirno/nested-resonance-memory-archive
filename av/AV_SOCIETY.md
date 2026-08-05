@@ -411,6 +411,30 @@ a new data class, so the rules are explicit and not negotiable:
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
 
+- **BUILT, TESTED, AND IMPORTED BY NOTHING (2026-08-04).** `collage-studio/src/lib/exportLimits.ts`
+  was 1,490 lines of exactly the right machinery — canvas-ceiling probe, one-pixel
+  surface sentinel, blob validation, a tier ladder — with a 57-case self-test that
+  passed, and a comment predicting the precise bug: *"drop this check and the
+  black-JPEG bug returns unfixed on exactly the owner's platform."* `App.tsx`
+  imported none of it. The owner then reported that exact bug. A module that is
+  written, tested and unreferenced is not a fix; it is a fix-shaped file, and its
+  green test suite makes it *look* handled on every future audit. **Rule:** a
+  defensive module ships only with a call site. Before closing a defect, grep for
+  an import of the thing you wrote — a passing unit test proves the logic, never
+  the wiring. The one artifact-level assertion that would have caught it (read the
+  exported PIXELS, not the fact an image appeared) is now `tests/e2e/export-integrity.spec.ts`.
+- **A SWEEP THAT STOPS AT THE SURFACE IT COULD SEE (2026-08-04).** The previous
+  cycle swept all six trades for 44px tap targets and fixed the hub cards' 28px
+  favourite ★ — then shipped, with every control *inside* the shared wishing well
+  still under the line: 37px inputs, 39px selects, 31px identity buttons, an 18px
+  "Cancel". Same law, same file, same six trades, one layer deeper, missed because
+  the sweep looked at the pages and not at the modal the pages open. **Rule:** a
+  cross-trade sweep covers every state a surface can be IN, not every surface —
+  open the modals, expand the folds, switch the kinds, then measure. And note
+  `shared/feedback.js` had held the 44px line correctly the whole time: when two
+  files implement one standard and only one is right, the other is not "also fine",
+  it is the backport you have not done yet.
+
 - **A DEFAULT IS A CLAIM (2026-08-04).** A write-in line inherited a real default on every
   axis, so a tech's hand-typed "USB-C 90° elbow, 1 ft" reached the counter as
   "USB-C 90° elbow, 1 ft, **3 ft** · **Finish cable — molded, low-profile shell**" — a line
@@ -758,3 +782,21 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   trade accent. Filed as a scar; a sweep is exactly the size of mistake worth two minutes of
   verification.)
   https://mrdirno.github.io/nested-resonance-memory-archive/gc/
+
+- `2026-08-04` — **[AXIS:WELL] the well got shorter, and the well itself got fixed.** A single
+  wish carried two defects: Collage Studio's export returning black/partial images, and
+  *"your something's broken or feedback stuff is too long it's cumbersome."* The form was
+  10 field-groups (trade well: 11), 6–7 of them optional, all standing between a person and
+  the Send button — and the proof it wasn't landing is in the queue itself, where that
+  report arrived with the whole paragraph typed into the TITLE box. Now: kind → which tool →
+  what → why → **SEND**, with everything optional behind one 44px fold that names CREDIT so
+  nobody loses attribution by not tapping. Nothing removed, no value renamed, the credential
+  weighting intact. **BACKPORT RIDER FIRED:** the shortening landed in BOTH wells —
+  `shared/feedback.js` (collage + any surface) and `shared/toolkit.js` (all six trades) —
+  and driving the real form surfaced a systemic 44px violation the previous cycle's sweep
+  missed one layer down: every control in the trade well was undersized (37px inputs, 39px
+  selects, 31px identity buttons, 18px Cancel) on all six trades at once. Fixed at the shared
+  file, plus 16px inputs so iOS stops zooming the page on focus. Gated permanently by
+  `tests/e2e/well-mobile.spec.ts` — 15/15 across av · plumbing · electrical × 320/360/390/430,
+  asserting zero horizontal overflow, zero sub-44px controls in BOTH fold states, and that the
+  fold stays collapsed by default. https://mrdirno.github.io/nested-resonance-memory-archive/av/

@@ -24,6 +24,13 @@ import { ResultModal } from './components/ResultModal';
 import { VideoImport } from './components/VideoImport';
 import { VideoStage, type StageRecorder } from './components/VideoStage';
 import RenderWorker from './workers/render.worker?worker';
+// THE LADDER. Built and unit-tested (57 cases) in an earlier cycle and then
+// never imported by anything — which is exactly why the black-export bug that
+// this module was written to prevent was still reachable when it was reported.
+import {
+  runWithFallback, probeMaxCanvas, deriveTiers, composeTiers,
+  type TierAttempt, type AttemptControl, type RenderOutcome, type FallbackResult,
+} from './lib/exportLimits';
 
 let globalModel: any = null;
 
@@ -808,29 +815,109 @@ export default function App() {
       if(item.state.style?.background) setBgColor(item.state.style.background);
   };
 
-  const generateBlob = async (widthPx: number, quality = 0.92): Promise<Blob> => {
-      const orderedImages = shuffledIndices.map(idx => images[idx]);
-      const effectiveWidth = Math.floor(aspect < 1 ? widthPx * aspect : widthPx);
-      const effectiveHeight = Math.floor(effectiveWidth / aspect);
+  /**
+   * ONE tier attempt, in the shape `runWithFallback` consumes.
+   *
+   * Everything that used to be able to hand the user a broken file now returns
+   * a VERDICT instead: a dead surface says so (`surfaceLive: false`) and the
+   * ladder steps down; a fragment that would not decode is COUNTED rather than
+   * silently dropped. Nothing here decides policy — that is the ladder's job.
+   */
+  const renderAtSize = async (attempt: TierAttempt, ctl: AttemptControl): Promise<RenderOutcome> => {
+      const { w, h } = attempt;
+
+      // THE ALIGNMENT GUARD.
+      //   `shuffledIndices` can carry an undefined slot whenever the fill bag
+      //   comes up shorter than the layout (more cells than distinct sources).
+      //   The old code did `orderedImages.map(img => ({ src: img.src, ... }))`
+      //   with no guard, so that slot threw a TypeError *while building the
+      //   worker message* — before either renderer's own null check could run.
+      //   The throw was caught as "worker unavailable" and quietly re-rendered
+      //   on the main thread at full export size. That is the out-of-bounds the
+      //   report guessed at. Slots stay POSITIONAL (null, never dropped) because
+      //   index i must keep addressing layoutItems[i].
+      const ordered = shuffledIndices.map(idx => images[idx] ?? null);
+
       const rng = createRng(seed);
-      const items = await computeLayout(effectiveWidth, effectiveHeight, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
-      try {
-          const worker = new RenderWorker();
-          return await new Promise<Blob>((resolve, reject) => {
-              worker.onmessage = (e: MessageEvent<{ success: boolean; blob: Blob; error?: string }>) => {
-                  if (e.data.success) resolve(e.data.blob); else reject(new Error(e.data.error)); worker.terminate();
-              };
-              worker.onerror = (e: ErrorEvent) => { reject(e); worker.terminate(); };
-              worker.postMessage({ id: 1, width: effectiveWidth, height: effectiveHeight, mode: layoutMode, layoutItems: items, 
-                  orderedImages: orderedImages.map(img => ({ src: img.src, width: img.width, height: img.height, analysis: img.analysis })),
-                  zoom, bgColor 
-              });
+      const items = await computeLayout(w, h, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
+
+      const worker = new RenderWorker();
+      let settled = false;
+      // Mandatory teardown: a timed-out worker must not keep its surface alive
+      // while the next tier down tries to allocate one of its own.
+      ctl.onAbort(() => {
+          try { worker.postMessage({ cancel: 1 }); } catch { /* ignore */ }
+          worker.terminate();
+      });
+
+      return await new Promise<RenderOutcome>((resolve, reject) => {
+          worker.onmessage = (e: MessageEvent<any>) => {
+              if (settled) return;
+              settled = true;
+              const d = e.data || {};
+              worker.terminate();
+              if (d.success) {
+                  resolve({ blob: d.blob, surfaceLive: true, failedImages: d.failedImages ?? 0, drawn: d.drawn ?? 0 });
+              } else if (d.surfaceLive === false) {
+                  // A SIZE verdict. Report it; do not throw. The ladder steps down.
+                  resolve({ blob: null, surfaceLive: false, failedImages: d.failedImages ?? 0, drawn: d.drawn ?? 0 });
+              } else {
+                  reject(new Error(d.error || 'render failed'));
+              }
+          };
+          worker.onerror = (ev: ErrorEvent) => {
+              if (settled) return;
+              settled = true;
+              worker.terminate();
+              reject(new Error(ev.message || 'worker error'));
+          };
+          worker.postMessage({
+              id: 1, width: w, height: h, mode: layoutMode, layoutItems: items,
+              orderedImages: ordered.map(img => img ? ({
+                  src: img.src,
+                  // The preview's source, carried so a revoked or undecodable
+                  // original degrades to a softer fragment instead of a hole.
+                  fallbackSrc: img.previewSrc || img.src,
+                  width: img.width, height: img.height, analysis: img.analysis,
+              }) : null),
+              zoom, bgColor,
           });
-      } catch (e) {
-          console.warn("Worker failed, fallback", e);
-          const canvas = await renderCanvas(effectiveWidth, aspect, layoutMode, items, orderedImages, seed, zoom, bgColor);
-          return new Promise((resolve, reject) => { canvas.toBlob(b => b ? resolve(b) : reject(new Error("Blob failed")), 'image/jpeg', quality); });
-      }
+      });
+  };
+
+  /**
+   * Export at the best size that is PROVABLY good, starting from what was asked.
+   *
+   * The old loop tried a hardcoded tier list, accepted whatever came back, and
+   * had no way to notice a black file. This walks a ladder derived from a real
+   * measurement of THIS device, validates every blob before accepting it, and
+   * returns a reason when it cannot.
+   */
+  const exportWithLadder = async (preferred: number | null): Promise<FallbackResult> => {
+      const limits = await probeMaxCanvas();
+      // Honour the user's pick as the top rung, then fall back down the derived
+      // ladder. A pick above what the device can do is not an error — it is just
+      // the first rung that gets rejected. (Pure + swept in exportLimits.selfTest.)
+      const tiers = composeTiers(preferred, deriveTiers(limits, aspect));
+
+      return runWithFallback(renderAtSize, {
+          aspect,
+          tiers,
+          limits,
+          fragments: effectiveCount,
+          onProgress: (a) => setExportMsg(
+              a.total > 1 && a.index > 0 ? `${a.tier}px (retry ${a.index + 1}/${a.total})…` : `${a.tier}px Rendering…`
+          ),
+      });
+  };
+
+  /** Kept for callers that just want pixels or nothing (Share). Throws with the
+   *  ladder's own explanation rather than a bare "Blob failed". */
+  const generateBlob = async (widthPx: number): Promise<Blob> => {
+      const r = await exportWithLadder(widthPx);
+      if (!r.ok || !r.blob) throw new Error(r.log);
+      console.info(r.log);
+      return r.blob;
   };
 
   const onBlobReady = (blob: Blob) => {
@@ -839,35 +926,57 @@ export default function App() {
       setExportStatus('done'); setTimeout(() => setExportStatus('idle'), 3000);
   };
 
-  const handleExport = async (size: number) => {
-      if (size === 30000) {
-          handleMaxRezzy();
-      } else {
-          setShowExportDialog(false); setExportStatus('processing'); setExportMsg(`${size}px Rendering...`);
-          try {
-              await new Promise(r => setTimeout(r, 100));
-              const blob = await generateBlob(size);
-              onBlobReady(blob);
-          } catch (e) { console.warn("Export failed", e); setExportStatus('error'); }
+  /**
+   * Why a failed export now SAYS something.
+   *
+   * The old path set status 'error' and left the user staring at a word. Worse,
+   * the common case never reached it at all: the file came back black and got
+   * handed over as a success. Every branch below is a distinct, actionable
+   * thing that actually went wrong.
+   */
+  const explainExportFailure = (r: FallbackResult): string => {
+      if (r.reason === 'decode-failure') {
+          const n = r.attempts[r.attempts.length - 1]?.detail || 'some fragments';
+          return `Couldn't read ${n}. Re-add those images and try again.`;
+      }
+      if (r.reason === 'no-tiers') return "This device won't give us a canvas. Try a smaller size.";
+      const smallest = r.attempts[r.attempts.length - 1]?.tier;
+      return smallest
+          ? `Too big for this device — ${smallest}px failed too. Close other tabs and retry.`
+          : 'Export failed.';
+  };
+
+  const runExport = async (preferred: number | null) => {
+      setShowExportDialog(false);
+      setExportStatus('processing');
+      setExportMsg(preferred ? `${preferred}px Rendering…` : 'Finding your device’s limit…');
+      await new Promise(r => setTimeout(r, 60)); // let the spinner paint before we block
+      try {
+          const r = await exportWithLadder(preferred);
+          // The whole point: a run that is not PROVEN good never reaches the user.
+          if (!r.ok || !r.blob) {
+              console.warn(r.log);
+              setExportMsg(explainExportFailure(r));
+              setExportStatus('error');
+              return;
+          }
+          console.info(r.log);
+          if (r.warnings.length) console.warn('export warnings:', r.warnings.join('; '));
+          onBlobReady(r.blob);
+      } catch (e) {
+          console.warn('Export failed', e);
+          setExportMsg('Export failed. Try a smaller size.');
+          setExportStatus('error');
       }
   };
 
-  const handleMaxRezzy = async () => {
-      setShowExportDialog(false); setExportStatus('processing');
-      const TIERS = [30000, 24000, 16384, 12000, 8192, 4096]; 
-      for (const tier of TIERS) {
-          try {
-              setExportMsg(`${tier}px Attempt...`);
-              await new Promise(r => setTimeout(r, 200));
-              const blob = await generateBlob(tier);
-              setExportMsg(`ENCODING...`);
-              await new Promise(r => setTimeout(r, 100));
-              onBlobReady(blob);
-              return; 
-          } catch (e) { console.warn(`Tier ${tier} failed`, e); await new Promise(r => setTimeout(r, 1000)); }
-      }
-      setExportStatus('error');
+  const handleExport = async (size: number) => {
+      // MAX asks the ladder to start from the measured ceiling instead of a
+      // number someone typed in 2026 — `deriveTiers` already knows what fits.
+      await runExport(size === 30000 ? null : size);
   };
+
+  const handleMaxRezzy = async () => { await runExport(null); };
 
   const handleShare = async () => {
       setShowExportDialog(false); setExportStatus('processing');
