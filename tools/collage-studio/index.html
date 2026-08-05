@@ -12,6 +12,67 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- FEEDBACK — the universal wishing well (operator 2026-08-04: "include a
+         wish-it-better for the Collage Studio too, there's a lot of bugs still and
+         people should be able to send the feedback so the loop cycles can address
+         them"). Two lines, the same two on every surface we ship: a config object
+         and the shared script. The well brings its own modal and its own markup, so
+         a surface needs no component and no framework coupling to carry it — this
+         app only chooses WHERE its trigger sits (trigger:false + a topbar button).
+
+         The src is built at RUNTIME rather than written as a <script src> because
+         vite REWRITES relative script srcs in index.html at build time and would
+         try to bundle a file outside its root. A JS string literal is left alone —
+         the same reason the service-worker registration below is written this way.
+         '../shared/feedback.js' resolves against the document base, so the deployed
+         page at /nested-resonance-memory-archive/collage/ loads the ONE shared copy
+         at /nested-resonance-memory-archive/shared/feedback.js. In local dev it
+         simply 404s and the button is absent — the app is unaffected. -->
+    <script>
+      window.FEEDBACK = {
+        surface: 'collage',
+        name: 'Collage Studio',
+        accent: '#7C3AED',
+        accentInk: '#FFFFFF',
+        newLabel: 'Wish for a feature',
+        // The app mounts its OWN trigger in the topbar (see Header.tsx): the canvas
+        // owns the top-right corner and the control dock owns the bottom, so the
+        // script's default floating button would land on top of one of them.
+        trigger: false,
+        // The parts a bug or an improvement can be ABOUT. Derived from the real
+        // modules in src/lib, not invented: one tap here is the difference between
+        // a report the loop can act on and a note it cannot place.
+        areaLabel: 'Which part',
+        areas: [
+          { v: 'upload',   label: 'Adding images' },
+          { v: 'video',    label: 'Video import & pulling frames' },
+          { v: 'layout',   label: 'Layout & smart crop' },
+          { v: 'fill',     label: 'Which image lands where' },
+          { v: 'sync',     label: 'Video length, loop & speed' },
+          { v: 'audio',    label: 'Audio' },
+          { v: 'export',   label: 'Export / download' },
+          { v: 'project',  label: 'Saving & loading a project' },
+          { v: 'perf',     label: 'Speed, freezing or crashing' },
+          { v: 'other',    label: 'Something else' }
+        ],
+        roles: [
+          ['tech', 'I make things with it'],
+          ['project_manager', 'I use it for client work'],
+          ['leadership', 'I run a studio / team'],
+          ['other', 'Other']
+        ],
+        contextLabel: 'You mostly use it for',
+        contexts: ['Personal work', 'Client work', 'Social / short-form', 'Just trying it out']
+      };
+      (function () {
+        var s = document.createElement('script');
+        s.src = '../shared/feedback.js';
+        s.defer = true;
+        document.head.appendChild(s);
+      })();
+    </script>
+
     <script>
       // Service worker registration.
       //

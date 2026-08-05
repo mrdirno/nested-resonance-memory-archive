@@ -284,6 +284,53 @@ REGISTRY · `items.js` = that trade's VOCABULARY DATA (categories, size ladders,
 options, unit-of-issue sets). Size ladders and C×C/FIP/no-hub live in data — never in the
 identity config and never inline in a tool page.
 
+## FEEDBACK IS BUILT IN — the standard for everything we make (operator 2026-08-04)
+> *"there's a lot of bugs still and people should be able to send the feedback so the
+> loop cycles can address them. Make sure we have a solid scalable way of addressing
+> open item wishes/feedback for ANYTHING. Standardize the process so anything that is
+> made has this built in."*
+
+**Every surface we publish carries a way to say it's broken.** Not a convention — an
+assertion in the deploy. Collage Studio ran for months with no feedback path at all (a
+grep for `feedback|bug|report|contact` across its entire source returned nothing), which
+is exactly the gap a convention cannot catch.
+
+**The drop-in is `shared/feedback.js`.** It is the trade wishing well with the trade
+assumptions removed: dependency-free, framework-free, brings its own modal and markup.
+Adding it to anything is TWO LINES:
+
+```html
+<script>window.FEEDBACK = { surface:"collage", name:"Collage Studio",
+                            accent:"#7C3AED", areas:[{v:"export",label:"Export"}] };</script>
+<script src="../shared/feedback.js"></script>
+```
+
+A surface that cannot spare two lines has not shipped. Set `trigger:false` and call
+`Feedback.open("bug")` from your own button when the default floating trigger would
+collide with your layout (Collage Studio does this — its canvas owns the top-right and
+its dock owns the bottom, so the trigger lives in the topbar).
+
+**ONE QUEUE, NO MIGRATION — this is what makes it scale.** It writes to the same
+`av_tool_requests` table the trade wells write to. Migration 076 made `trade` a bounded
+lowercase slug *deliberately* ("not an enum, so a new trade needs no migration") — which
+means it was already a general SURFACE key. `surface:"collage"` inserts today, and so
+will the tenth product. One queue · one helper (`av_wishing_well.py`) · one loop process ·
+N surfaces. Read everything with `--list` unscoped; narrow with `--trade <surface>`.
+
+**The three kinds and their ORDER are the point**, on every surface: `bug` (something in
+someone's hands is wrong) outranks `improve` outranks `new_tool`. A bug picker that does
+not name WHICH part is refused at the form — one tap is the difference between actionable
+and useless, so every surface declares its own `areas`.
+
+**Credentials are weight, never a login.** Role, company/local and "what you mostly use it
+for" are optional, never required to send, and NEVER published — they tell the loop the
+provenance of a correction and the context to build it in.
+
+**What the loop owes back.** Reading the well is not the deliverable; closing it is. A
+surface that collects feedback and never ships a fix has built a complaints box. Bugs are
+fixed the cycle they are read.
+
+
 ## THE EXPANSION ORDER — BREADTH FIRST, EXTRACTION SECOND (operator 2026-08-04)
 > *"obviously we're going to continue the expansion to empower every tradesman first,
 > correct — then we can isomorphically extract from the most refined one; i assume it will
@@ -616,3 +663,15 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   reload; **0 horizontal overflow and 0 sub-44px controls at 320/360/390/430**, and every hub of
   every trade re-measured after the shared-runtime change.
   https://mrdirno.github.io/nested-resonance-memory-archive/hvac/
+- `2026-08-04` — **[AXIS:COMMONS] Feedback is built in, everywhere.** Before: the wishing
+  well lived inside shared/toolkit.js, welded to a trade's nav and registry, so Collage
+  Studio — the surface with the most open bugs — had NO feedback path at all (grep for
+  feedback|bug|report|contact across its whole source: zero hits). After: `shared/feedback.js`,
+  the same well with the trade assumptions removed — dependency-free, framework-free, two
+  lines to add to anything, writing to the SAME queue with no migration because `trade` was
+  always a general surface key. Collage Studio carries it (topbar trigger, 10 real feature
+  areas derived from src/lib, violet-matched), and the deploy now ASSERTS that every listed
+  surface ships one. Verified in a real browser: bug-first ordering, area picker shows for
+  bug and hides for a new-feature wish, validation fires with a human sentence, zero
+  horizontal overflow and no control under 44px at 320/360/390/430.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/

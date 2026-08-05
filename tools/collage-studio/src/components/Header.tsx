@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  Download, Check, AlertCircle, Loader2, ScanFace, Ruler, FolderOpen, RefreshCw
+  Download, Check, AlertCircle, Loader2, ScanFace, Ruler, FolderOpen, RefreshCw, MessageSquarePlus
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -68,6 +68,29 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="ui-topbar__actions">
+        {/* FEEDBACK — the universal wishing well (operator 2026-08-04: "there's a
+            lot of bugs still and people should be able to send the feedback so the
+            loop cycles can address them").
+
+            The well itself is shared/feedback.js, loaded by index.html and shared
+            byte-for-byte with every other surface we ship — this app owns only WHERE
+            the trigger sits. It lives here rather than as the script's own floating
+            button because the canvas layer already owns the top-right corner and the
+            control dock owns the bottom (up to min(44vh, 356px)), so a fixed FAB
+            would sit on top of one of them. The topbar is the only chrome rendered on
+            every screen, including the empty state.
+
+            Guarded on the global: in local dev the sibling ../shared/feedback.js
+            404s, so the button simply does nothing rather than throwing. */}
+        <button
+          onClick={() => (window as any).Feedback?.open('bug')}
+          className="ui-btn ui-btn--quiet ui-btn--compact"
+          title="Report a bug, wish it better, or ask for a feature — it goes straight to the loop that builds this"
+        >
+          <MessageSquarePlus size={15} />
+          <span>Feedback</span>
+        </button>
+
         <button
           onClick={onLoadProject}
           className="ui-btn ui-btn--quiet ui-btn--compact"

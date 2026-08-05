@@ -133,13 +133,32 @@ jobs:
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           set -euo pipefail
-          f=HELIOS-BRIDGE/dist/shared/toolkit.js
-          test -f "$f" || { echo "MISSING: $f"; exit 1; }
           if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
             echo "FAIL: SUPABASE_URL / SUPABASE_ANON_KEY repo secrets are not set"; exit 1; fi
-          sed -i "s|__SUPABASE_URL__|${SUPABASE_URL}|g; s|__SUPABASE_ANON_KEY__|${SUPABASE_ANON_KEY}|g" "$f"
-          if grep -q '__SUPABASE_' "$f"; then echo "FAIL: toolkit.js placeholders were not injected"; exit 1; fi
-          echo "wishing-well config injected into shared/toolkit.js"
+
+          # GLOB, don't name. This used to inject into shared/toolkit.js by name,
+          # which silently shipped a DEAD well the moment a second shared module
+          # needed the same config — shared/feedback.js (the universal wishing well
+          # that Collage Studio and every non-trade surface carries) would have gone
+          # live with literal __SUPABASE_URL__ placeholders and refused every
+          # submission. Every current and future shared module gets the config.
+          test -d HELIOS-BRIDGE/dist/shared || { echo "MISSING: dist/shared"; exit 1; }
+          injected=0
+          for f in HELIOS-BRIDGE/dist/shared/*.js; do
+            grep -q '__SUPABASE_' "$f" || continue
+            sed -i "s|__SUPABASE_URL__|${SUPABASE_URL}|g; s|__SUPABASE_ANON_KEY__|${SUPABASE_ANON_KEY}|g" "$f"
+            echo "  injected: $(basename "$f")"
+            injected=$((injected + 1))
+          done
+
+          # Fail closed both ways: nothing injected means the placeholders were
+          # renamed and every well on the site is dead; a surviving placeholder
+          # means one file was missed.
+          [ "$injected" -gt 0 ] || { echo "FAIL: no shared module carried a __SUPABASE_ placeholder — the wells would all be dead"; exit 1; }
+          if grep -rq '__SUPABASE_' HELIOS-BRIDGE/dist/shared/; then
+            echo "FAIL: a __SUPABASE_ placeholder survived injection:"
+            grep -rl '__SUPABASE_' HELIOS-BRIDGE/dist/shared/; exit 1; fi
+          echo "wishing-well config injected into $injected shared module(s)"
 
       # Prove the artifact tree instead of asserting it, and fail here rather
       # than in a browser if either app's entry point is missing.
@@ -208,6 +227,26 @@ jobs:
             # proves what actually ships, not what the source says.
             grep -rqF "./$t/" HELIOS-BRIDGE/dist/assets/ \
               || { echo "FAIL: trade '$t' is staged but has NO entry in the site-root TOOLS registry (HELIOS-BRIDGE/components/UIComponents.tsx) — it would be unreachable from the front page"; exit 1; }
+          done
+
+          # FEEDBACK IS BUILT IN — the standard, asserted rather than remembered
+          # (operator 2026-08-04: "make sure we have a solid scalable way of
+          # addressing open item wishes/feedback for anything — standardize the
+          # process so anything that is made has this built in").
+          #
+          # Every surface we publish must give a user a way to report a bug, wish it
+          # better, or ask for something. The trade toolkits get it from
+          # shared/toolkit.js; everything else carries shared/feedback.js, the
+          # framework-free drop-in. Collage Studio shipped for months with NO
+          # feedback path at all — a grep for feedback|bug|report|contact across its
+          # whole source returned nothing — which is precisely the kind of gap a
+          # convention cannot catch and an assertion can.
+          test -f HELIOS-BRIDGE/dist/shared/feedback.js \
+            || { echo "MISSING: shared/feedback.js — the universal feedback well"; exit 1; }
+          for surface in collage; do
+            grep -q 'shared/feedback.js' "HELIOS-BRIDGE/dist/$surface/index.html" \
+              || { echo "FAIL: /$surface/ ships with no way for a user to report a bug — add the two-line feedback drop-in (see shared/feedback.js)"; exit 1; }
+            echo "feedback well present on: $surface"
           done
 
           # ...and the other direction: a trade dir on disk that nobody added to
