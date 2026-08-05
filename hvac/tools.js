@@ -38,6 +38,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Disconnects, whips, curbs, dunnage, condensate, controls power \u2014 everything on your unit that somebody else owes you. Sorted by who owes it and the gate it has to beat, then chased till it's in.",
     chip: "#1F6F5C",
     audience: "HVAC \u2192 EC / GC / plumber / roofer"
+  },
+  {
+    name: "Write-Up Setup",
+    href: "write-up.html",
+    desc: "The write-ups you put off — service call, startup, incident, delay notice, turnover. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate it at the unit and get back something the customer can read.",
+    chip: "#4B3F8F",
+    audience: "Techs · service managers"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

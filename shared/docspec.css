@@ -1,0 +1,99 @@
+/* FIELD TOOLKIT — SHAPE #4 STYLESHEET (THE INSTRUCTION BLOCK).
+ *
+ * Loads AFTER shared/note.css and only adds what shape #4 needs that shape #2
+ * did not: the searchable library, the doc card, the spine editor and the big
+ * output block. Everything else — cards, segments, picks, ticks, the fixed
+ * bottom bar, the 44px floor, the trade colour variables — is note.css, because
+ * a second stylesheet that re-declares the chrome is a fork with extra steps
+ * (§THE THREE SHAPES).
+ *
+ * Same two hard mobile facts as note.css: NO overflow-x:hidden anywhere (it
+ * masks the defect the pre-ship gate exists to catch), and 44px minimum on
+ * every control.
+ */
+
+/* ── THE LIBRARY ─────────────────────────────────────────────────────────
+ * A search box over a list of documents. The list is the tool: a man who can
+ * see his document in three taps never types anything.
+ */
+.srch{position:relative;margin-bottom:10px}
+.srch input{width:100%;font:inherit;font-size:16px;padding:11px 40px 11px 12px;border:1px solid var(--line);
+  border-radius:2px;background:#fff;color:var(--ink);min-height:48px}
+.srch input:focus{outline:2px solid var(--deep);outline-offset:-1px}
+.srch .x{position:absolute;right:2px;top:2px;bottom:2px;width:40px;border:0;background:none;color:var(--muted);
+  font-size:20px;line-height:1;cursor:pointer;border-radius:2px}
+.srch .x:hover{color:var(--ink)}
+
+.lib{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:2px;background:#fff}
+.lib li{border-bottom:1px solid #E4E6E0}
+.lib li:last-child{border-bottom:0}
+.lib button{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;padding:10px 12px;
+  min-height:44px;font:inherit;color:var(--ink)}
+.lib button:hover,.lib button:focus-visible{background:var(--tint);outline:none}
+.lib .nm{display:block;font-family:var(--cond);text-transform:uppercase;letter-spacing:.03em;font-size:15.5px;
+  font-weight:700;line-height:1.1}
+.lib .wy{display:block;font-size:12px;color:var(--muted);margin-top:3px;line-height:1.35}
+.lib .rt{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--deep);margin-top:4px}
+.lib li.on button{background:var(--tint);box-shadow:inset 4px 0 0 var(--deep)}
+.lib .grp{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  background:#F2F3EF;padding:6px 12px;border-bottom:1px solid #E4E6E0}
+.lib .none{padding:12px;font-size:13px;color:var(--muted)}
+
+/* THE PICKED DOCUMENT — a plate, not a row, because everything below it is
+   tuned to this one choice and the page has to say so. */
+.picked{background:var(--tint);border:2px solid var(--deep);border-radius:2px;padding:11px 12px;margin-bottom:10px}
+.picked h3{font-family:var(--cond);text-transform:uppercase;letter-spacing:.03em;font-size:18px;margin:0;
+  color:var(--deep);line-height:1.05}
+.picked .rt{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--deep);
+  opacity:.85;margin:5px 0 0;display:block}
+.picked .wy{font-size:12.5px;color:#33383C;margin:6px 0 0;line-height:1.4}
+.picked .chg{margin-top:9px;min-height:44px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;
+  font-size:13.5px;font-weight:700;background:#fff;border:1px solid var(--deep);color:var(--deep);border-radius:2px;
+  padding:9px 14px;cursor:pointer}
+.picked .chg:hover{background:var(--deep);color:#fff}
+
+/* THE OMIT LINE — the single most valuable field in the library, so it gets the
+   loudest block on the page, same as the impact line does in shape #2. */
+.omit{border:2px solid #B0201A;border-radius:2px;background:#FFF6F5;padding:10px 11px;margin:11px 0 0}
+.omit b{display:block;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;
+  color:#B0201A;margin-bottom:3px}
+.omit p{margin:0;font-size:13px;color:#3A2321;line-height:1.4}
+
+/* THE SPINE — the sections of the finished document, as a tick list with a
+   handle-free reorder-free honesty: you choose what is IN, not where it goes,
+   because the order is the argument and the argument is not the user's to lose. */
+ul.spine{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:#fff}
+ul.spine li{border-bottom:1px solid #E4E6E0}
+ul.spine li:last-child{border-bottom:0}
+ul.spine label{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;cursor:pointer;min-height:44px;margin:0}
+ul.spine input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--deep);cursor:pointer}
+ul.spine .tx{min-width:0;flex:1}
+ul.spine .h{display:block;font-family:var(--cond);text-transform:uppercase;letter-spacing:.03em;font-size:14.5px;
+  font-weight:700;line-height:1.15}
+ul.spine .r{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.35}
+ul.spine li:has(input:checked){background:var(--tint)}
+ul.spine li.locked label{cursor:default}
+ul.spine li.locked input{opacity:.5;cursor:not-allowed}
+ul.spine li.locked .h::after{content:" · ALWAYS IN";font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--deep)}
+
+/* SETUP STEPS + the output. */
+ol.steps{margin:0;padding-left:19px;font-size:13px}
+ol.steps li{margin:6px 0;line-height:1.4}
+ol.steps b{color:var(--ink)}
+ol.steps code{font-family:var(--mono);font-size:11.5px;background:#F2F3EF;padding:1px 4px;border-radius:2px}
+
+pre.block{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:11.5px;line-height:1.5;
+  color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:2px;padding:12px;max-height:48vh;
+  overflow:auto;margin:0}
+
+.heads{background:var(--tint);border:1px solid var(--line);border-left:4px solid var(--deep);border-radius:2px;
+  padding:11px 13px;font-size:12.5px;color:#33383C}
+.heads b{color:var(--ink)}
+.heads ul{margin:7px 0 0;padding-left:17px}
+.heads li{margin:4px 0;line-height:1.4}
+.heads code{font-family:var(--mono);font-size:11.5px}
+
+/* the second button in the bottom bar — the whole setup, not just the block */
+#copyAll{background:transparent;border:1px solid #59616B;color:#B9BFC6}
+#copyAll:hover{border-color:#8A929B;color:#EEF0EA}

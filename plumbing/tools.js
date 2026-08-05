@@ -34,6 +34,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Every sleeve, blockout, chase, core and backing another outfit has to leave you before you can rough it in \u2014 with the pour, the block and the dry-in it has to beat. One walk, one message each.",
     chip: "#7A3D14",
     audience: "PC \u2192 GC / concrete / framer / EC"
+  },
+  {
+    name: "Write-Up Setup",
+    href: "write-up.html",
+    desc: "The write-ups you put off — daily, incident, delay notice, service call, turnover. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate it in the truck and get back something the office can forward.",
+    chip: "#4B3F8F",
+    audience: "Foremen · service · PMs"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

@@ -38,6 +38,13 @@ window.TOOLKIT_TOOLS = [
     desc: "What you need out of the other guys before it gets buried \u2014 pads, sleeves, backing, cores, trenching, curbs. Every line carries who owes it and which gate it has to beat, and you send each trade his list only.",
     chip: "#C7511F",
     audience: "EC \u2192 GC / concrete / framer / steel"
+  },
+  {
+    name: "Write-Up Setup",
+    href: "write-up.html",
+    desc: "The write-ups you put off — daily, incident, delay notice, service call, turnover. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate it in the truck and get back something the office can forward.",
+    chip: "#4B3F8F",
+    audience: "Foremen · service · PMs"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

@@ -40,6 +40,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Before you cover it, pour it or close the lid: what has to be IN, tested and signed off, who owes each one, and the gate. Send every sub his own list, then tick them off as they come back.",
     chip: "#1F5B8F",
     audience: "Super \u2192 every sub on the floor"
+  },
+  {
+    name: "Write-Up Setup",
+    href: "write-up.html",
+    desc: "The write-ups you put off — daily, meeting notes, incident, delay notice, closeout. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate it walking back to the trailer and get back something you can send out.",
+    chip: "#4B3F8F",
+    audience: "Supers · PEs · PMs"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

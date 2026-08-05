@@ -308,6 +308,54 @@ scope" knows in one line that no tradesman wrote it. The caller keeps the copy, 
 field list and its order (the order IS the argument), and the trade's vocabulary in
 `items.js`. Same boundary shape #1's engine draws.
 
+## THERE IS A FOURTH SHAPE, AND §THE GATE ALREADY NAMED IT
+§THE GATE says: if the work is a PARAGRAPH, decline it **or build the report-builder
+shape (an AI pass, not more empty boxes)**. That escape hatch had exactly ONE instance
+for two months — `av/report-builder.html`, the operator's own end-of-day AV daily turned
+into a role-tailored AI setup. One instance is a page. The second is where the engine
+gets extracted, so it was:
+
+4. **THE INSTRUCTION BLOCK.** Not a form that produces a document — a form that produces
+   the INSTRUCTIONS that produce the document, forever. Pick the write-up you are stuck
+   with, answer four or five ticks, get one block you paste into a Gem / Project / Custom
+   GPT **once**. After that the job is: dump the mess, get the document back clean.
+
+**SHAPE #4'S ENGINE: `shared/docspec.js` + `shared/docspec.css`** (extracted 2026-08-05;
+the sheet loads *after* `note.css` and adds only the library, the doc card, the spine
+editor and the output block — the chrome is note.css, because a second stylesheet that
+re-declares the chrome is a fork with extra steps).
+
+**THE ISOMORPHISM IS THE METHOD, NOT TEMPLATING** (operator 2026-08-04: "the reports that
+stem from my own style, to isomorphically map what would be useful for other
+documentation"). Read `report-builder.html` as a STRUCTURE rather than as content and it
+is ELEVEN BLOCKS — role · what it is for · defaults · operating principles · attribution ·
+input handling · continuity · validation · **the omitted line** · protocol reminders ·
+output format. **Ten of the eleven are identical** for a plumber's back-charge notice and
+an AV daily. Only the spine, the omitted line and the vocabulary change. So those three
+are the config and the other ten live in the engine once.
+
+**THE HIGHEST-VALUE FIELD IN THE LIBRARY IS `omit`.** Anyone can list the sections of an
+incident report. The reason a real hand's write-up survives a dispute and a good writer's
+does not is one line the good writer did not know to include: the approval nobody wrote
+down, the condition already wrong before he got there, the date the clock actually
+started, what he did NOT do and why. Every document carries that line, and the engine
+gives it **its own always-on heading** in the emitted block so an AI cannot quietly drop
+it. "Add more detail" is not an omit line and does not belong in a library file.
+
+**FIVE FAMILIES cover every write-up all six trades produce** — the recurring report · the
+incident record · the verification record · the notice that puts somebody on the clock ·
+the minutes. Each has its own spine AND its own continuity rule (only `recurring` and
+`minutes` get delta reporting; an incident record read three years later must never be
+written as an update). The families are also the fallback: a document that is not in the
+library gets a real spine from its family instead of a shrug.
+
+`<trade>/docs.js` is the fourth data file, same boundary as the other three: `trade.js` =
+IDENTITY · `tools.js` = REGISTRY · `items.js` = picker VOCABULARY · `docs.js` = the
+WRITE-UPS this trade actually has to produce, plus its dictation fixes and its
+trigger-only protocol reminders. It carries `overrides` keyed by a SHARED document id, so
+a trade says "the daily in MY words" without forking a document, and `trade` — the trade
+word the block prints — is DECLARED there rather than derived from the toolkit name.
+
 
 **SHAPE #3'S STYLESHEET NOW EXISTS TOO: `shared/rowlog.css`** (extracted 2026-08-05 at the
 second instance, same rule, same place). The first row-log page carried ~130 lines of its
@@ -793,6 +841,46 @@ the sweep that checked tap targets checked the tools that existed *then*. **Rule
 44px assertion belongs in the pre-ship drive of every page, not in a one-time audit — and
 the reason it was cheap to fix this time is that there is now ONE stylesheet to fix it in.
 
+### 2026-08-05 — A CONFIG VALUE CANNOT BE RECOVERED BY CUTTING A DIFFERENT CONFIG VALUE
+Shape #4's engine needed the trade word for the line "we do ___ work" and derived it as
+`TRADE.name` with `" Field Toolkit"` sliced off. It printed **"a AV outfit"** on five
+trades (wrong article) and on the sixth it did not fire at all, because GC's name is "GC &
+Site Super Toolkit" — the one trade whose name does not end in the string being stripped.
+**Rule:** if the caller owns its words, it DECLARES the value. String surgery on a
+neighbouring config field is a derivation that looks free and breaks on the first config
+that does not match the pattern you had in your head.
+
+### 2026-08-05 — TWO DIFFERENT THINGS UNDER ONE KEY, AND ONE OF THEM SHIPPED INTO A PROMPT
+The library's `from`/`to` were written as ROW DESCRIPTIONS ("Whoever was on the call",
+"Everyone who was there and everyone who was not") and then substituted as if they were
+the user's ANSWERS. A production instruction block came out reading *"I am Whoever was on
+the call at Bayline Integration"*. A field that reads fine in a list is not automatically
+substitutable in a sentence. **Rule:** separate the descriptor from the value, or make the
+descriptor terse enough to be both — and only the value the user actually tapped is ever
+short enough for a header line.
+
+### 2026-08-05 — THE ENGINE APPENDED A HEADING THE SPINE ALREADY HAD
+Shape #4 appends two always-on sections after whatever spine a document declares. The
+incident and verification family spines already ended in OPEN ITEMS, so every write-up in
+those families shipped **OPEN ITEMS twice** — which reads to the receiver as two different
+lists, the same class as the two-lists-under-one-heading scar above. The first fix was
+worse: deduping first-wins kept the spine's copy in place and pushed **the omitted line
+below it**, burying the one section the whole library exists to protect. **Rule:** when a
+list is assembled from two sources, build it ONCE in a function both the UI and the
+document use, and decide explicitly which source wins AND where it sits — dedupe order is
+a content decision, not a detail.
+
+### 2026-08-05 — THE ARM THAT WROTE THE LIBRARY IS NOT ALLOWED TO GRADE IT
+43 documents came back from six working-pro passes, all plausible. A second, adversarial
+pass — one 25-year skeptic per trade, told to default to dropping — **killed 27 of them**:
+list-shaped things dressed as prose, second copies of documents the shared library already
+carried, paperwork somebody else owns and numbers, and one outright certified-data leak (a
+red-tag notice whose "WHY IT IS UNSAFE TO RUN" heading would have had an AI reaching for a
+ppm number and a cause the tech never diagnosed). Not one of those was visible from
+reading the first pass. **Rule:** persona proposes, generic disposes — and on this lane the
+skeptic's kill list is the deliverable, not the loss. A section HEADING can violate
+§SAFETY all by itself, before a single word of content exists.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -1023,3 +1111,24 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   driven for real at 390px — zero horizontal overflow, nothing under 44px, and the document
   produced end to end.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
+
+- **2026-08-05 — [AXIS:DOCS] THERE IS A FOURTH SHAPE, AND ALL SIX TRADES GOT IT AT ONCE ·
+  6 trades × 20 tools → 6 trades × 26 tools.** §THE GATE's escape hatch for paragraph work —
+  "build the report-builder shape" — had exactly ONE instance for two months, on AV, which
+  meant five trades had NOTHING on this axis. **Shape #4's engine extracted at the second
+  instance** (`shared/docspec.js` + `shared/docspec.css`) and `<trade>/write-up.html` shipped
+  live on av · electrical · plumbing · hvac · low-voltage · gc, plus the fourth data file
+  `<trade>/docs.js`. The isomorphism is the method: `report-builder.html` read as a
+  STRUCTURE is eleven blocks, and **ten of the eleven are the same** for a plumber's
+  back-charge notice and an AV daily — so the spine, the omitted line and the vocabulary are
+  the config and the other ten live in the engine once. **11 shared documents + 24
+  trade-specific + 24 overrides** = 14–18 write-ups per trade, each one carrying the line
+  everyone leaves out as its own always-on heading so an AI cannot drop it. Emits a
+  1,500–1,900-word production instruction block you paste into a Gem/Project/Custom GPT once.
+  **BACKPORT RIDER FIRED, same cycle** — this axis existed only on AV and now exists on all
+  six, and the two locked §SAFETY laws (never invent → `<MISSING>`; never grade a reading as
+  in-range/passing/to-code) ride in EVERY block on every trade, un-untickable. Adversarial
+  pass killed **27 of 43** proposed documents including a certified-data leak in a red-tag
+  notice. Four new scars above. Every page driven for real at 320/360/390/430px — zero
+  horizontal overflow, nothing under 44px, and a document composed end to end on each trade.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html

@@ -47,6 +47,13 @@ window.TOOLKIT_TOOLS = [
     desc: "Backing before rock, boxes and pathway from the EC, a tile held at every device, the frame prepped before it's ordered. Who owes it, where it is, and the gate it has to beat \u2014 chased till it's in.",
     chip: "#9A3312",
     audience: "LV \u2192 GC / EC / drywall / ceilings"
+  },
+  {
+    name: "Write-Up Setup",
+    href: "write-up.html",
+    desc: "The write-ups you put off — daily, test record, incident, delay notice, turnover. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate it in the van and get back something you can forward.",
+    chip: "#4B3F8F",
+    audience: "Techs · leads · PMs"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

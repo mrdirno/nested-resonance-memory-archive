@@ -48,6 +48,13 @@ window.AV_TOOLS = [
     desc: "The boxes, conduit, power, backing and holes you need out of somebody else's crew — walk it once, send the electrician his list and the GC theirs, then tap each one off as it goes in. Everything you ask for carries the gate it has to beat.",
     chip: "#2E7D4F",
     audience: "AV → EC / GC / framer / ceilings"
+  },
+  {
+    name: "Write-Up Setup",
+    href: "write-up.html",
+    desc: "The write-ups you put off — incident, delay, turnover, site walk. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate the mess in the van and get back something you can forward.",
+    chip: "#4B3F8F",
+    audience: "Techs · leads · PMs"
   }
   // The loop appends new tools here as it builds them from wishing-well requests.
 ];
