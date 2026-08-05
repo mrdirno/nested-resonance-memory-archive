@@ -876,8 +876,11 @@
     var txt = compose();
     el.out.textContent = txt;
     el.steps.innerHTML = setupSteps().map(function (s) { return "<li>" + s + "</li>"; }).join("");
+    /* Short on purpose. The long version ("paste it in once, use it daily")
+       wrapped to four lines in the fixed bar on a phone and squeezed the two
+       buttons beside it — the bar is the action surface, not a place for copy. */
     var words = txt ? txt.split(/\s+/).length : 0;
-    el.count.textContent = words ? (words + " words — paste it in once, use it daily") : "";
+    el.count.textContent = words ? (words + " words · paste once") : "";
   }
 
   function renderCustom() {
