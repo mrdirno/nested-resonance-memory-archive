@@ -55,10 +55,17 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .tool:hover{transform:translateY(-2px);box-shadow:0 6px 0 -2px rgba(36,42,49,.18)}
 .tool:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
 .toolwrap{position:relative}
-.cardfav{position:absolute;top:9px;right:9px;z-index:2;background:#fff;border:1px solid var(--line);color:#C4C9BE;width:28px;height:28px;border-radius:2px;cursor:pointer;font-size:14px;line-height:1;padding:0}
+/* 44px, not 28. MEASURED LIVE 2026-08-04 at 320/360/390/430 on all six hubs:
+   this was a bare 28x28 icon button with no text label — the only control on a
+   hub card — and it failed the operator's tap-target law on every trade at once
+   (§MOBILE-WATERTIGHT: "tap targets at least 44px"). It survived because the
+   overflow gate is horizontal and this defect is a size, not a spill. Found while
+   standing up trade #6 and swept to all six the same cycle — a fix that lands on
+   one trade and leaves its siblings behind is half a fix. */
+.cardfav{position:absolute;top:7px;right:7px;z-index:2;background:#fff;border:1px solid var(--line);color:#C4C9BE;width:44px;height:44px;border-radius:2px;cursor:pointer;font-size:15px;line-height:1;padding:0}
 .cardfav:hover{border-color:var(--flag);color:var(--muted)}
 .cardfav.on{color:var(--flag);border-color:var(--flag);background:#FFFDF3}
-.toolwrap .tool-top{padding-right:30px}
+.toolwrap .tool-top{padding-right:46px}
 .tool-top{display:flex;align-items:baseline;gap:9px}
 .tool-name{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:17px;font-weight:700;margin:0;flex:1;line-height:1.05;color:var(--ink)}
 /* NEVER nowrap. Measured 2026-08-04 at 320px on the electrical hub: an audience
