@@ -13,8 +13,13 @@
  */
 import { test, expect, type Page } from '@playwright/test';
 import zlib from 'node:zlib';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const APP_URL = process.env.COLLAGE_BASE_URL || '/';
+const HERE = dirname(fileURLToPath(import.meta.url));
+/** A real video, because the video dock does not exist without one. */
+const RAMP = join(HERE, '..', 'fixtures', 'ramp_rgb.mp4');
 
 /** The widths a real phone actually reports, smallest first. */
 const WIDTHS = [320, 360, 390, 430];
@@ -114,6 +119,55 @@ for (const width of WIDTHS) {
     expect(small, `controls under 44px: ${JSON.stringify(small)}`).toEqual([]);
   });
 }
+
+/**
+ * THE GATE COULD NOT SEE THE VIDEO DOCK, AND THE VIDEO DOCK WAS THE PART THAT
+ * FAILED.
+ *
+ * Every test above imports PNGs, so the whole live-stage transport — clip chips,
+ * trim, per-clip sound, play/pause, monitor, take length, Record — simply does
+ * not exist while they run, and the suite reported the app watertight for months
+ * on the strength of the photo-only page. Measured at 390px with one video
+ * loaded: ELEVEN controls under the law, from `Stop playing` at 24x28 to
+ * `Record video` — the button that starts an export — at 32x32.
+ *
+ * A gate that grades the easy half is the same defect as a test driving only the
+ * geometry-independent twist mode, one layer up: it is green for a reason that
+ * has nothing to do with the thing being asserted.
+ */
+test('the VIDEO dock is thumb-sized too, at 320/360/390/430', async ({ page }) => {
+  test.setTimeout(300_000);
+  await page.setViewportSize({ width: 390, height: 780 });
+  await page.goto(APP_URL);
+  await page.locator('input[type="file"]').first().setInputFiles([RAMP]);
+  await expect(page.locator('canvas').first()).toBeVisible({ timeout: 200_000 });
+  // The dock only renders once the clip is admitted — wait for the clip's own
+  // chip rather than a timer, so a slow decode does not silently grade an empty
+  // bar and call it a pass.
+  await expect(page.getByRole('button', { name: 'Trim ramp_rgb.mp4' }))
+    .toBeVisible({ timeout: 200_000 });
+
+  for (const width of WIDTHS) {
+    await page.setViewportSize({ width, height: 780 });
+    await page.waitForTimeout(300);
+
+    const o = await overflow(page);
+    expect(o.over, `the video dock overflows by ${o.over}px at ${width} — ${JSON.stringify(o.worst)}`)
+      .toBeLessThanOrEqual(0);
+
+    const small = await smallTargets(page);
+    expect(small, `video-dock controls under 44px at ${width}px: ${JSON.stringify(small)}`).toEqual([]);
+
+    // The take button is the one control that must never be pushed off-screen:
+    // it is the reason the dock exists, and a wrapped row is exactly how a
+    // primary action ends up behind a horizontal scroll nobody discovers.
+    const rec = page.getByRole('button', { name: 'Record video' });
+    const box = await rec.boundingBox();
+    expect(box, 'Record video must be laid out').not.toBeNull();
+    expect(box!.x + box!.width, `Record video sits past the right edge at ${width}px`)
+      .toBeLessThanOrEqual(width + 0.5);
+  }
+});
 
 test('zoomed out, the page still does not scroll sideways', async ({ page }) => {
   // "don't make anything that's gonna clip or alter if zoomed out on phone" —

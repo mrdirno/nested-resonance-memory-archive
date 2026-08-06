@@ -404,7 +404,13 @@
   overflow: hidden;
 }
 .ui-stepper__btn {
-  width: 52px;
+  /* A DECLARED WIDTH IS NOT A WIDTH INSIDE A SHRINKING FLEX ROW. `width: 52px`
+     with the default `flex-shrink: 1` collapsed both steppers to 18px at 320px
+     — measured, and invisible to the gate for the same reason the video dock
+     was: the photo tests read tap targets on the SETTINGS tab, where this
+     control is not rendered. 44px is the floor the law names; 52 is the look. */
+  flex: 0 0 52px;
+  min-width: 44px;
   display: flex;
   align-items: center;
   justify-content: center;

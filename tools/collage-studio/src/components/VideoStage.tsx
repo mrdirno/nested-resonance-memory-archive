@@ -181,12 +181,28 @@ const TrimSheet: React.FC<{
    * finished video's Save button was then unreachable — the same covered-button
    * class already scarred into this file further down.
    */
+  /**
+   * MOUNT ONLY — and the empty dep list is the whole point, not a lint smell.
+   *
+   * The first version depended on `[onClose]`, which is an inline arrow rebuilt
+   * on every VideoStage render, so every slider `onChange` re-ran the effect and
+   * called `closeRef.current?.focus()` again — pulling focus OFF the handle the
+   * user was operating. Measured on the real page with the keyboard only: the
+   * IN handle moved 0 -> 0.01 on the first ArrowRight, focus jumped to "Close
+   * trim", and the next four presses did nothing; Enter — the natural "confirm"
+   * — then dismissed the sheet. A drag was unaffected (the range keeps pointer
+   * capture through the steal), which is exactly why looking at it proves
+   * nothing and only a keyboard run finds it. `onClose` is read through a ref so
+   * Escape still calls the CURRENT handler without the effect having to re-run.
+   */
+  const closeFn = useRef(onClose);
+  closeFn.current = onClose;
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeFn.current(); };
     document.addEventListener('keydown', onKey);
     closeRef.current?.focus();
     return () => document.removeEventListener('keydown', onKey);
-  }, [onClose]);
+  }, []);
 
   /** Keep Tab inside the dialog. Cheaper and more robust than `inert`, which
    *  needs a polyfill on the engines this app actually has to serve. */
@@ -292,6 +308,13 @@ const TrimSheet: React.FC<{
               type="range" min={0} max={span} step={step} value={w.inSec}
               onChange={(e) => setIn(parseFloat(e.target.value))}
               aria-label={`In point for ${clip.name}`}
+              /* `--fill` IS NOT OPTIONAL: the app's global range track is a
+                 gradient stopped at `var(--fill, 50%)`, so a slider that never
+                 sets it paints exactly half green FOREVER. On an untrimmed clip
+                 that put the OUT handle at the far right above a half-full bar
+                 — the value indicator contradicting the handle it belongs to.
+                 A default that renders is worse than one that does not. */
+              style={{ ['--fill' as string]: `${pct(w.inSec)}%` } as React.CSSProperties}
               className="flex-1 min-w-0 h-11 accent-emerald-400 bg-transparent cursor-pointer"
             />
             <span className="text-[10px] text-gray-300 tabular-nums w-12 text-right shrink-0">{secs(w.inSec)}</span>
@@ -302,6 +325,7 @@ const TrimSheet: React.FC<{
               type="range" min={0} max={span} step={step} value={w.outSec}
               onChange={(e) => setOut(parseFloat(e.target.value))}
               aria-label={`Out point for ${clip.name}`}
+              style={{ ['--fill' as string]: `${pct(w.outSec)}%` } as React.CSSProperties}
               className="flex-1 min-w-0 h-11 accent-emerald-400 bg-transparent cursor-pointer"
             />
             <span className="text-[10px] text-gray-300 tabular-nums w-12 text-right shrink-0">{secs(w.outSec)}</span>
@@ -783,13 +807,22 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   const soundClipCount = clipRows.filter((r) => r.wantsAudio).length;
 
   const dock = (
-    <div className="flex items-center gap-1 min-w-0 w-full">
+    /* THE BAR WRAPS ON A PHONE, and that is what makes 44px controls possible.
+       Every control in here used to be 24-32px, and the mobile gate could not
+       see a single one of them because it imports no media, so this whole strip
+       only exists once a video is loaded — measured at 390px: eleven controls
+       under the law, including `Record video` at 32x32. Simply growing them
+       overflows a 320px viewport (44*7 plus a clip chip does not fit on one
+       line), so the clip row takes its own line below the phone breakpoint
+       (`basis-full`) and the transport keeps its own. On sm+ it is one line
+       exactly as before. */
+    <div className="flex flex-wrap items-center gap-1 min-w-0 w-full">
       {/* ONE CHIP PER CLIP: what it is, whether its sound is in the piece, and
           a way out. Sound starts OFF for every clip — a collage that shouts on
           import is not a nice thing to build — but each switch is INDEPENDENT,
           so any combination of clips can be sounding, and that selection is
           exactly what the export renders. */}
-      <div className="flex items-center gap-1.5 min-w-0 overflow-x-auto">
+      <div className="flex items-center gap-1.5 min-w-0 overflow-x-auto basis-full sm:basis-auto">
         {clips.map((c) => {
           const st = clipRows.find((r) => r.id === c.id);
           // INTENT drives the button; audibility only tints it. `wantsAudio` is
@@ -802,7 +835,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           const t = trims[c.id];
           const win = normaliseWindow(c.durationSec, t?.inSec, t?.outSec);
           return (
-            <div key={c.id} className="flex items-center gap-0.5 pl-2 pr-0.5 py-0.5 rounded-lg bg-[#161616] border border-white/10 shrink-0">
+            <div key={c.id} className="flex items-center gap-0.5 pl-2 pr-0.5 rounded-lg bg-[#161616] border border-white/10 shrink-0">
               <span className="text-[9px] tracking-wide text-gray-300 truncate max-w-[7rem]" title={c.name}>{c.name}</span>
               {/* TRIM. A trimmed clip SAYS SO on the chip — the window is the one
                   edit here that changes what a finished export contains while
@@ -815,13 +848,13 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                   ? `Trim ${c.name} — pick the part that plays (${secs(c.durationSec)})`
                   : `${c.name}: playing ${secs(win.inSec)}→${secs(win.outSec)} of ${secs(c.durationSec)}`}
                 aria-label={`Trim ${c.name}`}
-                className={`h-7 min-w-[1.75rem] px-1 rounded flex items-center justify-center gap-1 transition-colors disabled:opacity-30 disabled:pointer-events-none ${
+                className={`h-11 min-w-[2.75rem] px-2 rounded flex items-center justify-center gap-1 transition-colors disabled:opacity-30 disabled:pointer-events-none ${
                   win.full
                     ? 'text-gray-500 hover:text-white hover:bg-white/10'
                     : 'text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20'
                 }`}
               >
-                <Scissors size={12} />
+                <Scissors size={14} />
                 {!win.full && (
                   <span className="text-[9px] font-black tabular-nums">{secs(win.length)}</span>
                 )}
@@ -843,21 +876,21 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                 // screen reader (and the e2e suite) can act on.
                 aria-label={wantsAudio ? `Mute ${c.name}` : `Unmute ${c.name}`}
                 aria-pressed={wantsAudio}
-                className={`w-7 h-7 rounded flex items-center justify-center transition-colors disabled:opacity-30 ${
+                className={`w-11 h-11 rounded flex items-center justify-center transition-colors disabled:opacity-30 ${
                   audible
                     ? 'text-emerald-400 hover:bg-emerald-500/15'
                     : wantsAudio
                     ? 'text-emerald-400/45 hover:bg-emerald-500/10'
                     : 'text-gray-500 hover:text-white hover:bg-white/10'
                 }`}
-              >{wantsAudio ? <Volume2 size={13} /> : <VolumeX size={13} />}</button>
+              >{wantsAudio ? <Volume2 size={15} /> : <VolumeX size={15} />}</button>
               {onRemoveClip && (
                 <button
                   onClick={() => onRemoveClip(c.id)}
                   title={`Stop playing ${c.name} (keeps its ${c.frameCount} frames)`}
                   aria-label={`Stop playing ${c.name}`}
-                  className="w-6 h-7 rounded flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-white/10 transition-colors"
-                ><X size={11} /></button>
+                  className="w-11 h-11 rounded flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-white/10 transition-colors"
+                ><X size={14} /></button>
               )}
             </div>
           );
@@ -879,7 +912,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                   aria-pressed={on}
                   aria-label={l.aria}
                   title={busy ? 'Finish the export before changing clip length.' : l.title}
-                  className={`px-2 h-7 rounded text-[9px] font-black tracking-wide transition-colors disabled:opacity-40 disabled:pointer-events-none ${
+                  className={`px-2.5 h-11 rounded text-[9px] font-black tracking-wide transition-colors disabled:opacity-40 disabled:pointer-events-none ${
                     on ? 'bg-white/15 text-white' : 'text-gray-500 hover:text-white hover:bg-white/10'
                   }`}
                 >{l.short}</button>
@@ -916,9 +949,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         disabled={busy || liveCount === 0}
         title={anyPlaying ? 'Pause clips' : 'Play clips'}
         aria-label={anyPlaying ? 'Pause clips' : 'Play clips'}
-        className="w-8 h-8 rounded-lg text-gray-200 flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0"
+        className="w-11 h-11 rounded-lg text-gray-200 flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0"
       >
-        {anyPlaying ? <Pause size={15} /> : <Play size={15} />}
+        {anyPlaying ? <Pause size={17} /> : <Play size={17} />}
       </button>
 
       <button
@@ -928,11 +961,11 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           ? 'Mute the preview (does not change what the export contains)'
           : 'Hear the preview'}
         aria-label={status?.soundOn ? 'Mute preview' : 'Unmute preview'}
-        className={`w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0 ${
+        className={`w-11 h-11 rounded-lg flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0 ${
           status?.soundOn ? 'text-emerald-400' : 'text-gray-400'
         }`}
       >
-        {status?.soundOn ? <Volume2 size={15} /> : <VolumeX size={15} />}
+        {status?.soundOn ? <Volume2 size={17} /> : <VolumeX size={17} />}
       </button>
 
       {/* Take length. Only lengths this device can actually survive are offered. */}
@@ -942,7 +975,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             key={d}
             onClick={() => setSeconds(d)}
             disabled={busy}
-            className={`px-1.5 py-1.5 text-[9px] font-black tracking-widest transition-colors disabled:opacity-30 ${
+            className={`px-2 h-11 min-w-[2.75rem] flex items-center justify-center text-[9px] font-black tracking-widest transition-colors disabled:opacity-30 ${
               seconds === d ? 'bg-white/15 text-white' : 'text-gray-500 hover:text-white'
             }`}
           >{d}s</button>
@@ -954,8 +987,8 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           onClick={stopRecording}
           title="Stop recording"
           aria-label="Stop recording"
-          className="w-8 h-8 rounded-lg bg-red-600/90 text-white flex items-center justify-center hover:bg-red-500 transition-colors shrink-0"
-        ><Square size={12} fill="currentColor" /></button>
+          className="w-11 h-11 rounded-lg bg-red-600/90 text-white flex items-center justify-center hover:bg-red-500 transition-colors shrink-0"
+        ><Square size={14} fill="currentColor" /></button>
       ) : (
         <button
           onClick={() => startRecording()}
@@ -976,8 +1009,8 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                 }`
               : `Record ${Math.min(seconds, profile.maxSeconds)}s in real time`}
           aria-label="Record video"
-          className="w-8 h-8 rounded-lg text-red-400 flex items-center justify-center hover:bg-red-500/15 disabled:opacity-30 transition-colors shrink-0"
-        >{recPhase === 'saving' ? <Loader2 size={14} className="animate-spin" /> : <Video size={15} />}</button>
+          className="w-11 h-11 rounded-lg text-red-400 flex items-center justify-center hover:bg-red-500/15 disabled:opacity-30 transition-colors shrink-0"
+        >{recPhase === 'saving' ? <Loader2 size={16} className="animate-spin" /> : <Video size={17} />}</button>
       )}
     </div>
   );

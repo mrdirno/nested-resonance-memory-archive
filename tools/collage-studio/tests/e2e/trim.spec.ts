@@ -512,6 +512,49 @@ test.describe('the trim handles', () => {
     await inSlider.fill('0');
     await expect(readout).toContainText('0.0s→2.0s');
   });
+
+  /**
+   * T3b — THE HANDLES SURVIVE MORE THAN ONE KEYSTROKE.
+   *
+   * A drag cannot see this and neither can `fill()`: a range input keeps pointer
+   * capture, so it goes on receiving the drag even after something steals focus,
+   * and `fill()` writes the value in one shot. Only a real ArrowRight run can
+   * tell you whether the control is still focused for the SECOND press.
+   *
+   * It was not. The sheet's modal effect depended on `[onClose]` — an inline
+   * arrow rebuilt on every VideoStage render — so every value change re-ran it
+   * and re-focused the Close button. The handle moved exactly one step and went
+   * dead, and Enter, the natural "confirm", dismissed the sheet. Found by an
+   * adversarial audit driving the keyboard, not by any assertion in this file.
+   */
+  test('the IN handle keeps focus across repeated arrow presses', async ({ page }) => {
+    test.setTimeout(180_000);
+    await importRamp(page);
+    await page.getByRole('button', { name: `Trim ${CLIP_NAME}` }).click();
+    const sheet = page.getByRole('dialog', { name: `Trim ${CLIP_NAME}` });
+    await expect(sheet).toBeVisible({ timeout: 15_000 });
+
+    const inSlider = sheet.getByLabel(`In point for ${CLIP_NAME}`);
+    await inSlider.focus();
+    const step = Number(await inSlider.getAttribute('step'));
+    const PRESSES = 5;
+    for (let i = 0; i < PRESSES; i++) await page.keyboard.press('ArrowRight');
+
+    const focused = await page.evaluate(() =>
+      (document.activeElement as HTMLElement | null)?.getAttribute('aria-label') || '(none)');
+    expect(focused, 'the arrow keys must not hand focus to another control')
+      .toBe(`In point for ${CLIP_NAME}`);
+
+    const value = Number(await inSlider.inputValue());
+    expect(value,
+      `${PRESSES} presses of ArrowRight must move IN by ${PRESSES} steps, not one — it read ${value}`)
+      .toBeCloseTo(step * PRESSES, 5);
+
+    // And the sheet is still open: Enter must not be routed into a Close button
+    // the user never focused.
+    await page.keyboard.press('Enter');
+    await expect(sheet).toBeVisible();
+  });
 });
 
 /**
