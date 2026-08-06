@@ -6,6 +6,7 @@ import {
 import { ImageAsset, PrimitiveType, LayoutItem, LayoutMode } from '../types';
 import { GENERATOR_BY_ID } from '../engine/geom/generators';
 import { gutterPx } from '../engine/geom/poly';
+import { basisFor, scaleLayout } from './layoutScale';
 
 // Four modules (stencil, sandbox, vectorExport, templates) import these THROUGH
 // this file. It never re-exported them, so all four were type-errors and
@@ -30,7 +31,19 @@ const jitter = (item: LayoutItem, amount: number, rng: () => number): LayoutItem
     return { ...item, path };
 }
 
-export const computeLayout = async (
+/**
+ * THE RAW GENERATOR DISPATCH — deliberately NOT scale-invariant.
+ *
+ * This is the whole of what `computeLayout` used to be, unchanged. It is
+ * exported for ONE reason: it is the oracle the ONE LAYOUT sweep measures the
+ * old behaviour against (`tests/unit/oneLayout.invariants.mjs` calls it at an
+ * export width to reproduce the divergence the fix removes).
+ *
+ * Call `computeLayout` instead. Calling this directly at a render width is the
+ * bug: the generators floor and argmax in PIXELS, so the same seed returns a
+ * different partition at a different width — not a scaled one.
+ */
+export const computeAtBasis = async (
   W: number,
   H: number,
   count: number,
@@ -94,6 +107,46 @@ export const computeLayout = async (
   if (mode === 'balanced') {
       items = items.map(item => jitter(item, entropy, rng));
   }
-  
+
   return items;
+};
+
+/**
+ * ONE LAYOUT — the only entry point any render path should call.
+ *
+ * Runs the generators at the canonical basis (1200-space, which is `PREVIEW_W`
+ * and the Stage's `DEFAULT_LOGICAL_W`) and SCALES the result to the width asked
+ * for, so the preview, the live Stage, the video export, the raster export and
+ * the SVG export all draw ONE partition at four sizes instead of four
+ * partitions.
+ *
+ * PASS `basisAspect`. It is the aspect the caller is already dividing by, and it
+ * is what pins the basis HEIGHT to one float across every render path — see
+ * `layoutScale.basisFor` for the two measurements that make inferring it from
+ * `W/H` unworkable (a 2-ULP height flipped `metatron` from 45 cells to 39, and
+ * the raster export does not even render at the preview's aspect because
+ * `dimsForTier` rounds to whole pixels).
+ *
+ * At the preview both scale factors are exactly 1 and `scaleLayout` returns the
+ * array untouched — the generator sees exactly the arguments it saw before this
+ * wrapper existed, so every saved project and every share code still opens on
+ * the composition it opened on yesterday. That is the compatibility decision,
+ * and it is asserted (`I2`), not hoped for.
+ */
+export const computeLayout = async (
+  W: number,
+  H: number,
+  count: number,
+  rng: () => number,
+  mode: LayoutMode,
+  gutterPercent: number = 0.005,
+  entropy: number = 0.5,
+  images: ImageAsset[] = [],
+  primitive: PrimitiveType = 'rect',
+  t: number = 0,
+  basisAspect?: number,
+): Promise<LayoutItem[]> => {
+  const { W0, H0, sx, sy } = basisFor(W, H, basisAspect);
+  const items = await computeAtBasis(W0, H0, count, rng, mode, gutterPercent, entropy, images, primitive, t);
+  return scaleLayout(items, sx, sy);
 };

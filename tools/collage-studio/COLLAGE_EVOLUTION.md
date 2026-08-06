@@ -31,28 +31,26 @@ or re-documenting an existing capability is DD, not delivery.
   COMPOSITION — 11 arrangements (photo metric x fragment spatial key, zipped)
   and 5 crop-focus modes, both rolled by the dice and carried in the share code;
   TWIST — 5 per-fragment rotation modes (the picture leans, the tiling does not),
-  reaching all four render paths through the one geometry function they share.
+  reaching all four render paths through the one geometry function they share;
+  ONE LAYOUT — every render path (preview, Stage, video, raster export, SVG)
+  draws ONE partition at four sizes, generated once at a 1200-space basis and
+  scaled, instead of four partitions generated independently.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
 for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
 - [ ] **Timeline & trim** — a real timeline UI: per-clip in/out trim, drag-reorder,
       playhead scrub, split/cut. (The single biggest CapCut gap.)
-- [ ] **ONE LAYOUT** — *(next rung; a correctness debt, not a feature)*. The
-      preview computes its layout at `PREVIEW_W`; every export throws it away and
-      recomputes its own (`renderAtSize` at the tier width, `handleExportSVG` at a
-      hardcoded 1000px). `computeLayout` is NOT scale-invariant — `generateRects`
-      floors each split, so a near-tie in its argmax flips at a different width
-      and the partition genuinely differs. MEASURED on the shipped generator:
-      **11.3% of seeds at count=24 and 27.7% at count=40** come back as a
-      different partition, worst-case normalised centroid drift 0.87 — slot *i*
-      addresses a different rectangle. Everything paired POSITIONALLY against the
-      preview's cells is then paired against the wrong ones: the arrangement's
-      photo placement (`arrangeBag`, which predates twist and has always had
-      this), and the twist field. Fix = scale the preview's layout instead of
-      recomputing it, or make `computeLayout` normalised-then-scaled. Both change
-      what existing seeds render, so it needs its own increment and a
-      compatibility decision, which is why it is a rung and not a hotfix.
+- [x] **ONE LAYOUT** — the preview's partition IS the export's. `computeLayout`
+      now runs the generators once at a canonical basis (1200-space = `PREVIEW_W`
+      = the Stage's `DEFAULT_LOGICAL_W`) and SCALES the result to whatever size
+      the caller draws at. `lib/layoutScale.ts` (`basisFor` / `scaleLayout`); the
+      old body is kept, unchanged and exported, as `computeAtBasis` — the oracle
+      the sweep measures the historical divergence against. The compatibility
+      decision: at the preview both scale factors are exactly 1 and `scaleLayout`
+      returns the input array untouched, so every existing seed, project and
+      share code renders BIT-IDENTICALLY and only the exports move — onto the
+      picture the user was already looking at.
 - [ ] **Transitions** — cross-dissolve / fade / wipe / slide between clips/scenes.
 - [ ] **Text & titles** — text overlays, fonts, animated titles / lower-thirds;
       later, auto-captions from the audio track.
@@ -76,6 +74,17 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
 - [ ] **Templates & export presets** — one-tap templates; aspect presets 9:16 / 1:1
       / 16:9; platform sizes; resolution/bitrate choice.
 - [ ] **UX** — deeper undo/redo, robust project save/load, mobile-first touch editing.
+- [ ] **Reopening an exported .svg is a silent no-op** — `loadFromSVG`
+      (`lib/project.ts`) parses the embedded JSON_MANIFEST and then returns
+      `null` unconditionally, so the file input advertises `.svg` and does
+      nothing with it. Entirely pre-existing; small, self-contained, and it is a
+      promise the UI already makes.
+- [ ] **A seed the user can pin** — nothing in the UI sets `seed` (it is
+      `Date.now()`), so no test and no user can reproduce a specific composition
+      on demand, and the known-flaky composition precondition has no way to stop
+      being seed-dependent. `encodeRoll`/`decodeRoll` already exist in
+      `diceRoll.ts` and are wired to NOTHING; a paste-a-code field would make
+      share codes real and pin the flake at the same time.
 
 ## THE PER-CYCLE LOOP (burn → build → verify → ship → ratchet)
 0. **PICK ONE RUNG** (entry condition, first). One line naming the capability. Or
@@ -259,6 +268,31 @@ multi-agent audit for non-trivial changes.
 - `shuffleTrigger` co-seeds the fill RNG but isn't persisted — Restore reproduces
   a layout's geometry, not its exact shuffled arrangement (fix = persist it in the
   save schema; do NOT fold into `seed`, that breaks shuffle's "shapes stay put").
+- **THE FIX FOR A SCALE BUG HAD THE SCALE BUG.** The first cut of ONE LAYOUT
+  recovered the basis height as `H / (W / 1200)`. At W=1364 that gives
+  1801.8018018018015 where the preview holds ...017 — two doubles apart, the same
+  number to any eye — and `metatron` returned **45 cells at one and 39 at the
+  other**. Caught on the sweep's first run, not by reading. A basis that is
+  DERIVED per call is not a basis; take the aspect the caller already has and
+  compute `1200 / aspect` from it, so every render path lands on ONE float.
+- **A WHOLE-PIXEL EXPORT DOES NOT RENDER AT THE PREVIEW'S ASPECT.**
+  `dimsForTier(4096, 0.666)` is 2727x4094 — aspect 0.66610, not 0.666. So no
+  quantisation of `W/H` can bucket the export together with the preview without
+  also bucketing genuinely different aspects together. That 1.5-parts-in-10,000
+  residue is absorbed by scaling x and y INDEPENDENTLY: the partition stays
+  identical everywhere and each canvas is still filled exactly to its own edges.
+  Any invariant asserting "normalised coverage is preserved EXACTLY" is therefore
+  a lie about what the code does — assert it to the canvas's pixel rounding.
+- **A GENERATOR THAT IS ALREADY SCALE-INVARIANT IS A FALSE-GREEN TEST SUBJECT.**
+  `complex` (voronoi) was measured stable at 2e-16 across widths, so an artifact
+  test driving it would have passed against the BROKEN build. The rect family
+  (`minimal`, `balanced`) drifts 4.5e-4 on its *best* seed of sixty. Same lesson
+  as twist's T4, one layer down: pick the case that depends on the thing.
+- **`LayoutItem.id` is a module-level counter, not a function of the layout.**
+  `shards` returns `shd-0…` on one call and `shd-24…` on the next for identical
+  geometry. Inert today — every consumer and the React key use the ARRAY INDEX —
+  and asserted in the sweep (I2b) so the day something keys off it, the record is
+  already there instead of the bug being rediscovered.
 
 ## THE RATCHET (perpetual by construction)
 When a capability tier reaches broad parity with CapCut, the north star raises:
@@ -413,4 +447,54 @@ frontier. Today's ceiling is tomorrow's floor.
   as an independently-proven fix. Also measured and recorded, not chased:
   `composition.spec.ts` "the exported file carries the crop focus" is flaky at 1/12 runs on
   PRE-CYCLE source and 2/9 here — a seed-dependent precondition, not a regression.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-06 · **[AXIS:COLLAGE] ONE LAYOUT — the preview's partition IS the exported
+  partition** (the rung the last cycle's audit named, not a wish; a correctness debt older
+  than every feature paired against it). before→after: **four render paths generating four
+  partitions → one partition drawn at four sizes.** `computeLayout` now runs the generators
+  once at a canonical 1200-space basis — which is `PREVIEW_W` and the Stage's
+  `DEFAULT_LOGICAL_W`, so three of the four paths were already there — and SCALES the result
+  to whatever size the caller draws at (`lib/layoutScale.ts`). The old body is kept verbatim
+  and exported as `computeAtBasis`, which is what lets the sweep measure the bug instead of
+  describing it: **10.5% of seeds at count=24 and 24.5% at count=40 came back as a genuinely
+  different partition, worst normalised centroid drift 1.18 of the canvas** — and 0.0% /
+  3.1e-16 through the wrapper, same 200 seeds. The RED run named damage bigger than the
+  drift: `metatron` at count=24 drew **45 fragments on screen and 22 in the 12000-tier file**,
+  `voronoi` silently lost one, and normalised coverage moved 16.6%.
+  **The compatibility decision, which is why this was a rung and not a hotfix:** pin the basis
+  at 1200 and the preview's scale factors are exactly 1, `scaleLayout` returns the input array
+  untouched, and every existing seed, saved project and share code renders BIT-IDENTICALLY —
+  only the exports move, onto the picture the user was already looking at. Asserted (I2), not
+  hoped for.
+  **The fix had the bug it was fixing, and the sweep caught it on the first run.** Recovering
+  the basis height as `H/(W/1200)` gives 1801.8018018018015 at W=1364 where the preview holds
+  ...017 — two doubles apart — and `metatron` answered 45 cells at one and 39 at the other. Nor
+  can it be quantised away: `dimsForTier(4096, 0.666)` is **2727x4094**, an aspect of 0.66610,
+  so the export does not render at the preview's aspect at all. The answer is to take the
+  `aspect` the caller already holds (11th arg, all four call sites) and absorb the whole-pixel
+  residue by scaling x and y INDEPENDENTLY: identical partition everywhere, each canvas still
+  filled to its own edges, cells distorted by exactly the amount the canvas was.
+  **Proof:** `tests/unit/oneLayout.invariants.mjs` — 36 invariants over the whole 23-generator
+  roster plus the 7 legacy modes × 4 aspects × 3 counts × 5 seeds **at the sizes the app really
+  renders** (`dimsForTier`, not round numbers), 9,900 comparisons, **watched going RED with the
+  wrapper bypassed** (I1 Infinity, I3d/e, I4, I5d) · `tests/e2e/one-layout.spec.ts` 4/4 desktop
+  AND 393px, comparing the PREVIEW's own lock-overlay polygons against the polygons parsed out
+  of the **downloaded SVG file**, also watched going RED (1.05e-3 and 1.48e-3 against a 2e-5
+  tolerance). That test is a 100% discriminator rather than a seed lottery because it is
+  geometric, not pixel-similarity: the SVG's `toFixed(2)` noise floor is 5e-6 normalised and the
+  pre-fix code's BEST seed of sixty was 4.5e-4. Deliberately driven on the rect family —
+  `complex`/voronoi measured already scale-invariant at 2e-16 and would have been green against
+  the broken build, the same trap as twist's T4. Regression: composition 10/10, twist 8/8,
+  source-count 7/7, export-integrity 3/3, mobile-watertight 5/5, fill 368,962 checks, videoSync
+  + composition + twist sweeps clean, `tsc` clean, `vite build` clean.
+  **The adversarial audit found NOTHING this time — 15 agents, four lenses, every candidate
+  refuted by running code**, and that is worth recording precisely because the previous three
+  audits each found HIGH defects. What it did land was two of my own COMMENTS asserting things
+  the code does not do (a divergence rate quoted from the book rather than from the sweep in
+  the same repo, and a fallback advertised as "consistent across widths" that is not, at
+  aspect 1.7778, once `dimsForTier` floors) — both corrected, because a comment describing
+  code that behaves differently is already a scar in this book. Named and NOT fixed:
+  `loadFromSVG` still returns null unconditionally, and nothing in the UI can pin a seed —
+  both now on the ladder.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

@@ -255,7 +255,7 @@ export default function App() {
           try {
               const rng = createRng(seed);
               // Pass images for Stencil Mode
-              const items = await computeLayout(PREVIEW_W, PREVIEW_W / aspect, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
+              const items = await computeLayout(PREVIEW_W, PREVIEW_W / aspect, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive, 0, aspect);
               if (active) setLayoutItems(items);
           } catch(e) { console.error("Layout failed", e); } 
           finally { if (active) setIsLayoutComputing(false); }
@@ -466,7 +466,7 @@ export default function App() {
       });
       const newSeed = Date.now();
       const rng = createRng(newSeed);
-      const newLayout = await computeLayout(PREVIEW_W, PREVIEW_W/aspect, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
+      const newLayout = await computeLayout(PREVIEW_W, PREVIEW_W/aspect, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive, 0, aspect);
       const newLocked = new Map<number, string>();
       const occupiedNewIndices = new Set<number>();
       lockedGoals.forEach(goal => {
@@ -913,7 +913,7 @@ export default function App() {
       //   downloaded a file cropped the old way. Exactly the shape of the
       //   already-scarred preview/export split, one field over.
       const rng = createRng(seed);
-      const items = await computeLayout(w, h, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
+      const items = await computeLayout(w, h, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive, 0, aspect);
       //   AND THE TWIST IS RE-BAKED against THESE items, not the preview's.
       const ordered = retwistFor(orderedAssets.map(a => a ?? null), items, w, h);
 
@@ -1127,7 +1127,7 @@ export default function App() {
   const handleExportSVG = async () => {
     setShowExportDialog(false); setExportStatus('processing'); setExportMsg('VECTORIZING...');
     try {
-        const rng = createRng(seed); const items = await computeLayout(1000, 1000/aspect, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
+        const rng = createRng(seed); const items = await computeLayout(1000, 1000/aspect, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive, 0, aspect);
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
         const orderedImages = retwistFor(orderedAssets.map(a => a ?? null), items, 1000, 1000 / aspect);
