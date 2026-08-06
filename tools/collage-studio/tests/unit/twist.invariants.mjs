@@ -351,5 +351,77 @@ console.log('10. the dice reaches every twist, and leaves most rolls square');
   console.log(`   spread ${[...tw.entries()].sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}:${((v / 4000) * 100).toFixed(0)}%`).join(' ')}`);
 }
 
+// =============================================================================
+console.log('11. a HAIR of coordinate noise cannot change the lean');
+// THE ONE THE FIRST VERSION OF THIS FILE COULD NOT SEE. Invariant 6 asserts
+// determinism by calling twistAngle twice with the SAME cell object, which
+// proves nothing about the thing that actually happens: the angle is baked once
+// per render, and a render happens at several widths. A cell's normalised centre
+// is the same real number at every width and NOT the same float — 1200/0.666
+// yields cy = 0.49999999999999994 where 4094 yields exactly 0.5. Any step or
+// singularity keyed on those coordinates then answers differently for
+// geometrically identical cells.
+//
+// Both defects this catches were real and were found by an adversarial audit,
+// not by this sweep: `tilt`'s floor(cy*4) parity flipped on 480/480 slit-scan
+// cells across 40/40 seeds (preview leaning left-right-left, downloaded file
+// right-left-right), and `pinwheel`'s atan2 at r~1e-16 swung the dead-centre
+// fragment of every radial layout across its full ±16 degrees.
+{
+  // The exact pair the audit measured, plus every band edge and the centre.
+  const PATHOLOGICAL = [
+    [0.5, 0.49999999999999994], [0.49999999999999994, 0.5],
+    [0.25, 0.24999999999999997], [0.75, 0.7500000000000001],
+    [0.5, 0.5000000000000001], [0.125, 0.12500000000000003],
+  ];
+  for (const m of TWIST_MODES) {
+    if (m.id === 'none') continue;
+    const cap = (m.deg * Math.PI) / 180;
+
+    // 1. The reported pairs, on both axes, at every band edge.
+    for (const [a, b] of PATHOLOGICAL) {
+      for (const other of [0.5, 0.3, 0.62, 0.5000000000000001]) {
+        for (const [ca, cb] of [[cellAt(a, other), cellAt(b, other)],
+                                [cellAt(other, a), cellAt(other, b)]]) {
+          const d = Math.abs(twistAngle(m.id, 12345, ca) - twistAngle(m.id, 12345, cb));
+          check(d < cap * 0.02,
+            `${m.id} swung ${((d * 180) / Math.PI).toFixed(2)}deg between two cells ` +
+            `1 ULP apart (${a} vs ${b}) — the preview and the export would disagree`);
+        }
+      }
+    }
+
+    // 2. A systematic sweep: nothing anywhere may be this sensitive.
+    for (let i = 0; i <= 400; i++) {
+      const v = i / 400;
+      for (const eps of [1e-15, 1e-12, 1e-9]) {
+        const d = Math.max(
+          Math.abs(twistAngle(m.id, 77, cellAt(v, 0.5)) - twistAngle(m.id, 77, cellAt(v + eps, 0.5))),
+          Math.abs(twistAngle(m.id, 77, cellAt(0.5, v)) - twistAngle(m.id, 77, cellAt(0.5, v + eps))),
+        );
+        check(d < cap * 0.02,
+          `${m.id} swung ${((d * 180) / Math.PI).toFixed(2)}deg for a ${eps} nudge at ${v.toFixed(4)}`);
+      }
+    }
+  }
+  // And the dead centre itself must be answerable at all.
+  for (const m of TWIST_MODES) {
+    const a = twistAngle(m.id, 5, cellAt(0.5, 0.5));
+    const b = twistAngle(m.id, 5, cellAt(0.5 + 1.1e-16, 0.5 + 1.1e-16));
+    check(Number.isFinite(a) && Math.abs(a - b) < 1e-9,
+      `${m.id} gives the dead-centre fragment an angle decided by floating-point residue`);
+  }
+  // The radial modes state a POSITION, so the fragment ON the centre has no
+  // direction to state and must say so. Pinned as behaviour rather than left to
+  // fall out of the quantiser: the quantiser is what makes both widths agree,
+  // but "no angular position means no lean" is the rule, and every radial
+  // construction (flower-of-life, rosette, mandala, golden) puts a fragment
+  // exactly there — the one the eye lands on first.
+  check(twistAngle('pinwheel', 5, cellAt(0.5, 0.5)) === 0,
+    'pinwheel must leave the dead-centre fragment square — it has no swirl direction');
+  check(twistAngle('cascade', 5, cellAt(0.5, 0.5)) === 0,
+    'cascade must leave the dead-centre fragment square — it is the zero of its ramp');
+}
+
 if (fails) { console.error(`\n${fails} INVARIANT FAILURE(S)`); process.exit(1); }
 console.log('\nAll twist invariants hold.');

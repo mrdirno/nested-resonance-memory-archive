@@ -162,6 +162,31 @@ multi-agent audit for non-trivial changes.
   4/4 pixel-level preview tests. Any capability that must survive to a FILE needs
   a test that drives the export and compares the two. Prove the test fails on the
   reintroduced bug before believing it.
+- **A normalised coordinate is the same NUMBER at every width and not the same
+  FLOAT.** `1200/0.666` gives cy = 0.49999999999999994 where 4094 gives exactly
+  0.5 — geometrically identical cells, one ULP apart. Any step or singularity
+  keyed on those coordinates then answers differently per render width. Twist hit
+  it twice: `tilt`'s `floor(cy*4)` parity flipped on 480/480 slit-scan cells
+  across 40/40 seeds (preview leaning left-right-left, downloaded file
+  right-left-right), and `pinwheel`'s `atan2` at r~1e-16 swung the dead-centre
+  fragment of every radial layout across its full ±16°. Fix: QUANTISE to a 1e-6
+  grid before any discontinuous use — the layouts agree to ~1e-16, so it is ten
+  orders of magnitude of slack — and write `sin(atan2(dy,dx))` as `dy/r` so the
+  singularity is impossible to miss and can be guarded.
+- **Asserting determinism by calling a pure function twice with the SAME argument
+  proves nothing.** That is what the first version of the twist sweep did, and it
+  is why neither ULP defect above was caught by it. The real question is never
+  "same input, same output" — it is "does an input that SHOULD be the same but
+  arrives a hair different produce the same answer". Invariant 11 nudges the
+  coordinate instead of reusing it.
+- **`composition.spec.ts` "the exported file carries the crop focus" is FLAKY,
+  and it predates this cycle.** Its precondition (`|detail - centre| > 8` luma)
+  depends on the app's `Date.now()` seed, so an unlucky layout does not separate
+  the two focus modes far enough. MEASURED at 1 failure in 12 runs on
+  pre-cycle source `e2ceb1c9` and 2 in 9 on the twist branch — no significant
+  difference, and mechanically it cannot be twist (with `twist: 'none'` both
+  `withTwist` and `retwistFor` are identity). It needs a pinned seed, not a
+  bigger threshold. Do not chase it as a regression; do fix it.
 - **The preview's layout and the export's layout are not the same layout.** Every
   export recomputes `computeLayout` at its own width, and the generator is not
   scale-invariant: 11.3% of seeds at count=24 (27.7% at count=40) return a
@@ -364,4 +389,20 @@ frontier. Today's ceiling is tomorrow's floor.
   its own. NOT fixed and deliberately named: `loadFromSVG` (project.ts) parses the embedded
   JSON_MANIFEST and then returns null unconditionally, so reopening an exported .svg is a
   silent no-op — entirely pre-existing, unrelated to twist, and its own small increment.
+  **Then the audit's second round found two defects the re-bake itself had introduced**, both
+  the same class and both invisible to the sweep as written: a normalised coordinate is the
+  same NUMBER at every render width and not the same FLOAT, so `tilt`'s `floor(cy*4)` parity
+  flipped on 480/480 slit-scan cells across 40/40 seeds (Slit Scan + Tilt previewed
+  left-right-left and downloaded right-left-right) and `pinwheel`'s `atan2` at r~1e-16 swung
+  the dead-centre fragment of every radial construction across its full ±16°. Fixed by
+  quantising to a 1e-6 grid before any discontinuous use — ten orders of magnitude of slack
+  over the ~1e-16 the layouts actually agree to — plus an explicit zero-radius guard so
+  pinwheel's singularity is impossible by construction rather than incidentally absent.
+  Invariant 11 now nudges the coordinate instead of reusing the same object, and was watched
+  going RED (17.90° swing on the exact reported pair) with the quantiser removed. The honest
+  note: the quantiser is the load-bearing fix for BOTH — with it in place the radius guard is
+  belt-and-braces, so the dead-centre behaviour is pinned as an assertion rather than claimed
+  as an independently-proven fix. Also measured and recorded, not chased:
+  `composition.spec.ts` "the exported file carries the crop focus" is flaky at 1/12 runs on
+  PRE-CYCLE source and 2/9 here — a seed-dependent precondition, not a regression.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

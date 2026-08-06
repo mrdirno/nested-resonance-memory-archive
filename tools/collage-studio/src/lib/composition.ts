@@ -553,8 +553,20 @@ export const twistAngle = (
   const spec = TWIST_BY_ID[twist];
   if (!spec || !spec.deg) return 0;
   const max = Math.min(MAX_TWIST_RAD, (spec.deg * Math.PI) / 180);
-  const cx = clamp(num(cell?.cx, 0.5), 0, 1);
-  const cy = clamp(num(cell?.cy, 0.5), 0, 1);
+  // QUANTISED TO A 1e-6 GRID BEFORE ANY DISCONTINUOUS USE.
+  //
+  // The angle is computed once per render, and a render happens at several
+  // widths (the preview at PREVIEW_W, each export at its own tier). A cell's
+  // NORMALISED centre is the same real number at every width, but it is not the
+  // same float: 1200/0.666 gives cy = 0.49999999999999994 where 4094 gives
+  // exactly 0.5. Any step or singularity keyed on those coordinates then answers
+  // differently for geometrically IDENTICAL cells — measured at 480/480 cells
+  // over 40/40 seeds on slit-scan, where the preview leaned left-right-left and
+  // the downloaded file leaned right-left-right. The layouts agree to ~1e-16, so
+  // a 1e-6 grid is ten orders of magnitude of slack and cannot mask real motion.
+  const q = (v: number): number => Math.round(v * 1e6) / 1e6;
+  const cx = q(clamp(num(cell?.cx, 0.5), 0, 1));
+  const cy = q(clamp(num(cell?.cy, 0.5), 0, 1));
 
   switch (twist) {
     case 'tilt': {
@@ -562,6 +574,8 @@ export const twistAngle = (
       // ways and the alternation is visible as a pattern rather than as noise.
       // Four bands per axis: fine enough to alternate on a 24-cell grid, coarse
       // enough that a big fragment and the small one beside it still differ.
+      // The floors are exactly the discontinuity `q` exists for — full-span
+      // strips put a cell centre on 0.5 to the last bit.
       const sign = (Math.floor(cx * 4) + Math.floor(cy * 4)) % 2 === 0 ? 1 : -1;
       // Jitter on the magnitude only, and DOWNWARD from the peak — a hand-pinned
       // photo is never at exactly nine degrees, and a stamped one reads as a
@@ -578,8 +592,20 @@ export const twistAngle = (
       // discontinuous at +-pi: two fragments that touch across the 9 o'clock
       // line would differ by 2*max, a visible tear straight through the swirl.
       // sin is periodic, so the field closes on itself with no seam anywhere.
-      const th = Math.atan2(cy - 0.5, cx - 0.5);
-      return Math.sin(th) * max;
+      //
+      // And sin(atan2(dy,dx)) IS dy/r, which is worth writing directly: it makes
+      // the singularity impossible to miss. At the CENTRE there is no angular
+      // position to read, and atan2 of two floating-point residues returns an
+      // arbitrary direction — the dead-centre fragment of every radial
+      // construction (flower-of-life, rosette, mandala, golden) was taking a
+      // different lean in the preview and in each export tier, swinging the full
+      // +-16 degrees on the one fragment the eye lands on first. A cell ON the
+      // centre has no swirl direction, so the honest answer is no lean.
+      const dx = cx - 0.5;
+      const dy = cy - 0.5;
+      const r = Math.hypot(dx, dy);
+      if (r < 1e-6) return 0;
+      return (dy / r) * max;
     }
     case 'cascade': {
       // Radius, normalised so the CORNER (not the edge midpoint) reaches 1.
