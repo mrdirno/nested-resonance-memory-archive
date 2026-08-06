@@ -497,4 +497,12 @@ frontier. Today's ceiling is tomorrow's floor.
   code that behaves differently is already a scar in this book. Named and NOT fixed:
   `loadFromSVG` still returns null unconditionally, and nothing in the UI can pin a seed —
   both now on the ladder.
+  **BACKPORT rider fired, and came back clean.** The class fixed here is "the preview and the
+  output are derived independently", and the trade toolkits have exactly that shape — a
+  rendered preview and a copied document. Swept all 6 trades / 26 tools: the five tools that
+  write to the clipboard (`av/consumables`, `av/report-builder`, `gc/weather-day`,
+  `hvac/repair-recommendation`, `plumbing/supply-house-order`) all pass BOTH the on-screen
+  preview and the clipboard through ONE producer — `text()`, `buildDoc()`, `asText()` — so
+  they are structurally immune, not merely currently-correct. Nothing to carry over; recorded
+  so the next cycle does not re-sweep it.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
