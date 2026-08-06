@@ -41,7 +41,7 @@
 // rendering bug).
 // -----------------------------------------------------------------------------
 
-import { calculateSmartCrop } from './renderer';
+import { calculateSmartCrop, twistedDest, twistOf } from './renderer';
 import type { LayoutItem } from '../types';
 
 // -----------------------------------------------------------------------------
@@ -334,8 +334,20 @@ interface DrawItem {
   /** Poster crop — the video crop scaled into the poster canvas. */
   pok: boolean;
   psx: number; psy: number; psw: number; psh: number;
-  /** Destination box: `item.bounds`, shared by every source. */
+  /**
+   * Destination box, shared by every source. `item.bounds` when the slot is
+   * square, and the GROWN box from `twistedDest` when it leans — the growth
+   * depends only on the cell and the angle, never on which source is drawn, so
+   * it is resolved once here instead of three times in the crop helpers.
+   */
   dx: number; dy: number; dw: number; dh: number;
+  /**
+   * Twist, hoisted out of the frame like everything else: radians and the pivot,
+   * precomputed at setScene. `tw === 0` is the default and the loop branches on
+   * it, so an untwisted composition executes the identical instruction stream it
+   * did before twist existed — no save, no translate, no rotate.
+   */
+  tw: number; tcx: number; tcy: number;
   /** Kept so a late decode / late metadata can recompute without a rescan of the scene. */
   bx: number; by: number; bw: number; bh: number;
   analysis: unknown;
@@ -606,6 +618,9 @@ export class Stage {
       if (!path) continue;
 
       const b = li.bounds;
+      // The grown destination and the pivot, from the SHARED helper in
+      // renderer.ts — never a second copy of the |cos|+|sin| arithmetic.
+      const d = twistedDest(b, twistOf(asset.analysis));
       const clip = this.bindClip(asset, resolve);
       const stillKey = asset.previewSrc || asset.src;    // App.tsx:209 draws previewSrc
       if (stillKey) wanted.add(stillKey);
@@ -622,7 +637,8 @@ export class Stage {
         vsx: 0, vsy: 0, vsw: 0, vsh: 0,
         pok: false,
         psx: 0, psy: 0, psw: 0, psh: 0,
-        dx: b.x, dy: b.y, dw: b.w, dh: b.h,
+        dx: d.dx, dy: d.dy, dw: d.dw, dh: d.dh,
+        tw: d.twist, tcx: d.tcx, tcy: d.tcy,
         bx: b.x, by: b.y, bw: b.w, bh: b.h,
         analysis: asset.analysis,
       };
@@ -905,6 +921,16 @@ export class Stage {
         if (el !== null && el.readyState >= 2 && el.videoWidth > 0) {
           ctx.save();
           ctx.clip(it.path);
+          // TWIST. The push is OUTSIDE the try and the pop is outside the catch,
+          // deliberately: a decoder that throws mid-drawImage must not leave a
+          // save on the stack, or every later fragment inherits this fragment's
+          // rotation and the whole surface shears one frame at a time.
+          if (it.tw !== 0) {
+            ctx.save();
+            ctx.translate(it.tcx, it.tcy);
+            ctx.rotate(it.tw);
+            ctx.translate(-it.tcx, -it.tcy);
+          }
           try {
             ctx.drawImage(el, it.vsx, it.vsy, it.vsw, it.vsh, it.dx, it.dy, it.dw, it.dh);
             painted = true;
@@ -918,6 +944,7 @@ export class Stage {
             this.statusPending = true;
             this.admissionPending = true;   // release the decoder AFTER the frame
           }
+          if (it.tw !== 0) ctx.restore();   // back to cell space; the stroke needs it
           if (painted && it.stroke) {
             ctx.strokeStyle = STROKE_COLOR;
             ctx.lineWidth = lw;
@@ -931,7 +958,14 @@ export class Stage {
       if (!painted && it.sok && it.still !== null) {
         ctx.save();
         ctx.clip(it.path);
+        if (it.tw !== 0) {
+          ctx.save();
+          ctx.translate(it.tcx, it.tcy);
+          ctx.rotate(it.tw);
+          ctx.translate(-it.tcx, -it.tcy);
+        }
         ctx.drawImage(it.still, it.isx, it.isy, it.isw, it.ish, it.dx, it.dy, it.dw, it.dh);
+        if (it.tw !== 0) ctx.restore();
         if (it.stroke) {
           ctx.strokeStyle = STROKE_COLOR;
           ctx.lineWidth = lw;
@@ -945,7 +979,14 @@ export class Stage {
       if (!painted && clip !== null && it.pok && clip.poster !== null) {
         ctx.save();
         ctx.clip(it.path);
+        if (it.tw !== 0) {
+          ctx.save();
+          ctx.translate(it.tcx, it.tcy);
+          ctx.rotate(it.tw);
+          ctx.translate(-it.tcx, -it.tcy);
+        }
         ctx.drawImage(clip.poster, it.psx, it.psy, it.psw, it.psh, it.dx, it.dy, it.dw, it.dh);
+        if (it.tw !== 0) ctx.restore();
         if (it.stroke) {
           ctx.strokeStyle = STROKE_COLOR;
           ctx.lineWidth = lw;

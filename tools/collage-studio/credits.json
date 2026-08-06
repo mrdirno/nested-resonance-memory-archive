@@ -10,6 +10,16 @@
       "wished_date": "2026-08-05",
       "shipped_date": "2026-08-05",
       "shipped_note": "Shipped: 11 arrangements (photo metric x fragment spatial key, zipped — not a list sort) and 5 crop-focus modes, both rolled by the dice and carried in the share code. NOT yet shipped from this wish: 'twisting' (per-fragment rotation), which needs the draw loop in stage.ts plus both export paths and is its own increment."
+    },
+    {
+      "capability": "Twist",
+      "where": "Settings panel — Twist, and it is rolled by the dice",
+      "wish": "More unique algorithms and sorting capabilities like the color match. Also maybe twisting capabilities or cropping algorithms for what to center on. Anything arrangement and composition wise to create more variation in the dice",
+      "wisher": null,
+      "wisher_display": "an anonymous Collage user",
+      "wished_date": "2026-08-05",
+      "shipped_date": "2026-08-05",
+      "shipped_note": "The 'twisting' half of the same wish, finished. 5 modes (Straight, Tilt, Scatter, Pinwheel, Cascade), rolled by the dice and carried in the share code. The fragments TILE the canvas, so nothing rotates a cell — the clip path stays exactly where it was and the SAMPLING inside it leans, with the destination grown by |cos|+|sin| so the corners cannot open up. Reaches all four render paths (live Stage, static preview, raster export, SVG export) through the one geometry function they already share."
     }
   ]
 }

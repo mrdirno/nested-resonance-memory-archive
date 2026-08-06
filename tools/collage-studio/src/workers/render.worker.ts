@@ -153,7 +153,18 @@ ctx.onmessage = async (e: MessageEvent) => {
                 analysis: imgMeta.analysis
             }, zoom);
 
+            // TWIST — identical to renderer.ts:112. Rotate the SAMPLING inside
+            // the clip that is already set, then wind the transform back so the
+            // 'complex' hairline still traces the unrotated cell. Guarded, so an
+            // untwisted export runs exactly the instruction stream it always did.
+            if (crop.twist) {
+              ctx2d.save();
+              ctx2d.translate(crop.tcx, crop.tcy);
+              ctx2d.rotate(crop.twist);
+              ctx2d.translate(-crop.tcx, -crop.tcy);
+            }
             ctx2d.drawImage(imgBitmap, crop.sx, crop.sy, crop.sw, crop.sh, crop.dx, crop.dy, crop.dw, crop.dh);
+            if (crop.twist) ctx2d.restore();
             imgBitmap.close();
             drawn++;
 

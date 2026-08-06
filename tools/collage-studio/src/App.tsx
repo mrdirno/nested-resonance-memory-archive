@@ -8,7 +8,7 @@ import { loadScriptSafe, analyzeImage } from './lib/analysis';
 import { computeLayout, createRng } from './lib/layout';
 import { rollDice } from './lib/diceRoll';
 import { assignSources, distinctSourceCount } from './lib/fill';
-import { arrangeBag, withFocus, type ArrangementId, type FocusId } from './lib/composition';
+import { arrangeBag, withFocus, withTwist, type ArrangementId, type FocusId, type TwistId } from './lib/composition';
 import { renderCanvas } from './lib/renderer';
 import { saveProject, loadProject } from './lib/project';
 import { generateVectorExport } from './engine/color/vectorExport';
@@ -123,11 +123,13 @@ export default function App() {
   const [aspect, setAspect] = useState(0.666); 
   const [gutter, setGutter] = useState(0.005);
   const [entropy, setEntropy] = useState(0.5);
-  // COMPOSITION — which photo lands in which fragment, and what each fragment
-  // centres on inside it. See lib/composition.ts. Both default to the behaviour
-  // the app has always had, so nothing moves until you ask it to.
+  // COMPOSITION — which photo lands in which fragment, what each fragment
+  // centres on inside it, and how far the picture leans in there. See
+  // lib/composition.ts. All three default to the behaviour the app has always
+  // had, so nothing moves until you ask it to.
   const [arrangement, setArrangement] = useState<ArrangementId>('natural');
   const [focus, setFocus] = useState<FocusId>('auto');
+  const [twist, setTwist] = useState<TwistId>('none');
   const [bgColor, setBgColor] = useState('#050505'); 
   const [avgColor, setAvgColor] = useState<{r:number, g:number, b:number} | null>(null); 
   
@@ -362,10 +364,26 @@ export default function App() {
    *  re-points `analysis.face`, which every crop path already reads — the live
    *  Stage, the static renderer, the export worker and the vector export — so
    *  one seam steers all four. On `auto` it hands back the same object by
-   *  reference, so the default path allocates nothing and recomputes nothing. */
+   *  reference, so the default path allocates nothing and recomputes nothing.
+   *
+   *  TWIST rides the SAME seam for the same reason, and takes the fragment's
+   *  geometry as well as the slot: an angle is a field over the canvas, so
+   *  `pinwheel` and `cascade` need to know WHERE this fragment sits, not merely
+   *  which slot it is. That is why `layoutItems` is a dependency here — move the
+   *  construction and the lean has to be recomputed with it. */
   const orderedAssets = useMemo(
-    () => shuffledIndices.map((idx, slot) => withFocus(images[idx], focus, (seed ^ (slot * 2654435761)) | 0)),
-    [shuffledIndices, images, focus, seed],
+    () => {
+      const H = PREVIEW_W / aspect;
+      return shuffledIndices.map((idx, slot) => {
+        const slotSeed = (seed ^ (slot * 2654435761)) | 0;
+        const b = layoutItems[slot]?.bounds;
+        const cell = b && b.w > 0 && b.h > 0
+          ? { cx: (b.x + b.w / 2) / PREVIEW_W, cy: (b.y + b.h / 2) / H, area: (b.w * b.h) / (PREVIEW_W * H) }
+          : null;
+        return withTwist(withFocus(images[idx], focus, slotSeed), twist, slotSeed, cell);
+      });
+    },
+    [shuffledIndices, images, focus, twist, seed, layoutItems, aspect],
   );
 
   /**
@@ -433,6 +451,7 @@ export default function App() {
     // genuinely different picture — which is the whole point of pressing it.
     setArrangement(roll.arrangement);
     setFocus(roll.focus);
+    setTwist(roll.twist);
     setLastRecipe(roll.recipe);
     setLockedCells(new Map());
   };
@@ -828,7 +847,7 @@ export default function App() {
   };
 
   const handleClear = () => {
-      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus }, style: { background: bgColor } };
+      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor } };
       addToHistory(state, images, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
@@ -853,6 +872,8 @@ export default function App() {
       // project therefore reopens recognisable but not identical.
       else if((l.resonance ?? 0) > 0.1) setArrangement('flow');
       if(l.focus) setFocus(l.focus);
+      // Absent = the project predates twist, and predates it meaning square.
+      setTwist(l.twist ?? 'none');
       if(item.state.style?.background) setBgColor(item.state.style.background);
   };
 
@@ -1063,7 +1084,7 @@ export default function App() {
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
         const orderedImages = orderedAssets;
-        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus }, style: { background: bgColor } };
+        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor } };
         const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor);
         const blob = new Blob([svgContent], {type: 'image/svg+xml'});
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `GENART-VECTOR-${seed}.svg`; a.click(); URL.revokeObjectURL(url);
@@ -1071,13 +1092,13 @@ export default function App() {
     } catch (e) { setExportStatus('error'); }
   };
 
-  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus }, style: { background: bgColor } }; await saveProject(state, images); };
+  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor } }; await saveProject(state, images); };
   const handleLoadProject = () => { 
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.collage,.svg';
     input.onchange = async (e:any) => {
         const file = e.target.files[0]; if(!file) return;
         const loaded = await loadProject(file);
-        if(loaded) { countTouchedRef.current = true; setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || 0.666); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.arrangement) setArrangement(l.arrangement); else if((l.resonance ?? 0) > 0.1) setArrangement('flow'); if(l.focus) setFocus(l.focus); }
+        if(loaded) { countTouchedRef.current = true; setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || 0.666); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.arrangement) setArrangement(l.arrangement); else if((l.resonance ?? 0) > 0.1) setArrangement('flow'); if(l.focus) setFocus(l.focus); setTwist(l.twist ?? 'none'); }
     };
     input.click();
   };
@@ -1220,7 +1241,7 @@ export default function App() {
          {activeTab === 'simple' ? (
            <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} />
          ) : (
-           <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} framePicker={framePicker} setFramePicker={setFramePicker} />
+           <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} framePicker={framePicker} setFramePicker={setFramePicker} />
          )}
       </div>
       {notice && (

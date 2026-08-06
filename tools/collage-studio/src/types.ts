@@ -1,4 +1,4 @@
-import type { ArrangementId, FocusId } from './lib/composition';
+import type { ArrangementId, FocusId, TwistId } from './lib/composition';
 import { AnalysisResult } from './lib/analysis';
 
 /**
@@ -98,6 +98,8 @@ export interface AppState {
     arrangement?: ArrangementId;
     /** What each fragment centres on inside its photo. */
     focus?: FocusId;
+    /** How far the picture leans inside its fragment. Absent = square. */
+    twist?: TwistId;
   };
   style: {
     background: string;

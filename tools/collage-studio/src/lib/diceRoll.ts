@@ -26,7 +26,7 @@
 import type { LayoutMode, PrimitiveType } from '../types';
 import { GENERATORS, GENERATOR_BY_ID } from '../engine/geom/generators';
 import {
-  ARRANGEMENT_IDS, FOCUS_IDS, type ArrangementId, type FocusId,
+  ARRANGEMENT_IDS, FOCUS_IDS, TWIST_IDS, type ArrangementId, type FocusId, type TwistId,
 } from './composition';
 
 // =============================================================================
@@ -50,6 +50,8 @@ export interface Roll {
   arrangement: ArrangementId;
   /** What each fragment centres on inside its photo — see composition.ts. */
   focus: FocusId;
+  /** How far the picture leans inside its fragment — see composition.ts. */
+  twist: TwistId;
   /** Name of the recipe this came from, when it came from one. */
   recipe?: string;
 }
@@ -208,6 +210,32 @@ const focusFor = (rnd: () => number): FocusId => {
   return 'centre';
 };
 
+/**
+ * Twist IS conditioned on the family, for the reason arrangement is: two of the
+ * four modes are RADIAL FIELDS. `pinwheel` swings around a centre and `cascade`
+ * ramps out from one, so both need a figure that HAS a centre to be read
+ * against; `tilt`'s checkerboard alternation needs a grid regular enough for the
+ * alternation to be visible as a pattern.
+ *
+ * A LEAN, never a gate — the same scar as `arrangementFor`. Hard-gating by
+ * family sent half a roster to a rounding error of all rolls, and a chip the
+ * dice never reaches may as well not exist. At 0.75/0.25 the rarest mode still
+ * lands on ~5% of rolls, which the roster-spread sweep asserts.
+ *
+ * `none` keeps well over half of rolls, and that is not timidity: a twist costs
+ * a crop-in of |cos|+|sin| — real picture thrown away — so it has to be the
+ * exception that means something rather than the house style.
+ */
+const RADIAL_TWISTS: TwistId[] = ['pinwheel', 'cascade'];
+const LINEAR_TWISTS: TwistId[] = ['tilt', 'scatter'];
+
+const twistFor = (layout: LayoutMode, rnd: () => number): TwistId => {
+  if (rnd() < 0.58) return 'none';
+  const fam = GENERATOR_BY_ID[layout]?.family;
+  const radialBias = fam === 'sacred' || fam === 'recursive' ? 0.75 : fam === 'structure' ? 0.25 : 0.5;
+  return pick(rnd() < radialBias ? RADIAL_TWISTS : LINEAR_TWISTS, rnd);
+};
+
 const bgFor = (layout: LayoutMode, rnd: () => number): BgKey => {
   const fam = GENERATOR_BY_ID[layout]?.family;
   // Radial and sacred figures glow out of the dark and go flat on paper; the
@@ -294,6 +322,11 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
     arrangement: recipe?.arrange ? pick(recipe.arrange, rnd) : arrangementFor(layout, rnd),
     focus: focusFor(rnd),
     seed: Math.floor(rnd() * 0xffffff),
+    // Drawn AFTER the seed on purpose: appending here leaves every earlier draw
+    // in the stream untouched, so a build with twist rolls the same layout,
+    // count, chaos, aspect, gutter, zoom, background, arrangement, focus and
+    // seed from a given rng as the build before it did.
+    twist: twistFor(layout, rnd),
     recipe: recipe?.name,
   };
 };
@@ -329,8 +362,9 @@ export const encodeRoll = (r: Roll): string => {
   const bgi = Math.max(0, BG_KEYS.findIndex((k) => BACKGROUNDS[k] === r.bg));
   const ari = Math.max(0, ARRANGEMENT_IDS.indexOf(r.arrangement));
   const foi = Math.max(0, FOCUS_IDS.indexOf(r.focus));
+  const twi = Math.max(0, TWIST_IDS.indexOf(r.twist));
   const f = (n: number, w = 1) => Math.max(0, Math.round(n)).toString(36).padStart(w, '0');
-  return `${f(li, 2)}${f(r.count, 3)}${f(e, 2)}-${f(ai)}${f(g, 2)}${f(z, 2)}${f(bgi)}${f(ari)}${f(foi)}-${f(r.seed, 4)}`
+  return `${f(li, 2)}${f(r.count, 3)}${f(e, 2)}-${f(ai)}${f(g, 2)}${f(z, 2)}${f(bgi)}${f(ari)}${f(foi)}${f(twi)}-${f(r.seed, 4)}`
     .toUpperCase();
 };
 
@@ -352,9 +386,12 @@ export const decodeRoll = (code: string): Roll | null => {
     // was minted with: the untouched fill order and the historical crop rule.
     const ari = b.length >= 7 ? n(b.slice(6, 7)) : 0;
     const foi = b.length >= 8 ? n(b.slice(7, 8)) : 0;
+    // Pre-twist codes stop at 8. Absent means `none` — a code minted before this
+    // feature existed described a square collage, and it still opens as one.
+    const twi = b.length >= 9 ? n(b.slice(8, 9)) : 0;
     const seed = n(c);
     const layout = LAYOUT_ORDER[li];
-    if (!layout || ![count, e, ai, g, z, bgi, ari, foi, seed].every(Number.isFinite)) return null;
+    if (!layout || ![count, e, ai, g, z, bgi, ari, foi, twi, seed].every(Number.isFinite)) return null;
     return {
       layout,
       primitive: 'rect',
@@ -366,6 +403,7 @@ export const decodeRoll = (code: string): Roll | null => {
       bg: BACKGROUNDS[BG_KEYS[bgi] ?? 'void'],
       arrangement: ARRANGEMENT_IDS[ari] ?? 'natural',
       focus: FOCUS_IDS[foi] ?? 'auto',
+      twist: TWIST_IDS[twi] ?? 'none',
       seed,
     };
   } catch {

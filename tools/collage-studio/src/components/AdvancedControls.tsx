@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   Layout, Grid, Hexagon, Scissors, Palette, Moon, Contrast, Zap, Activity,
-  Shuffle, RefreshCw, FileCode, History, Frame, Rows, Hash, Film, Crosshair
+  Shuffle, RefreshCw, FileCode, History, Frame, Rows, Hash, Film, Crosshair, RotateCw
 } from 'lucide-react';
 import { getHistory, HistoryItem } from '../lib/history';
 import { LayoutMode } from '../types';
 import {
-  ARRANGEMENTS, ARRANGEMENT_BY_ID, FOCUS_MODES, FOCUS_BY_ID,
-  type ArrangementId, type FocusId,
+  ARRANGEMENTS, ARRANGEMENT_BY_ID, FOCUS_MODES, FOCUS_BY_ID, TWIST_MODES, TWIST_BY_ID,
+  type ArrangementId, type FocusId, type TwistId,
 } from '../lib/composition';
 
 interface AdvancedControlsProps {
@@ -25,6 +25,8 @@ interface AdvancedControlsProps {
   setArrangement: (a: ArrangementId) => void;
   focus: FocusId;
   setFocus: (f: FocusId) => void;
+  twist: TwistId;
+  setTwist: (t: TwistId) => void;
   bgColor: string;
   setBgColor: (c: string) => void;
   avgColor: { r: number, g: number, b: number } | null;
@@ -63,7 +65,7 @@ const clockOf = (ts: number) => {
 
 export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
   layoutMode, setLayoutMode, count, setCount, aspect, setAspect, gutter, setGutter,
-  entropy, setEntropy, arrangement, setArrangement, focus, setFocus, bgColor, setBgColor, avgColor,
+  entropy, setEntropy, arrangement, setArrangement, focus, setFocus, twist, setTwist, bgColor, setBgColor, avgColor,
   onRemix, onShuffle, onExportVector, onRestoreHistory, isLayoutLocked,
   framePicker, setFramePicker
 }) => {
@@ -247,11 +249,41 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
             ))}
           </div>
           <p className="ui-caption -mt-1">{FOCUS_BY_ID[focus]?.blurb}</p>
-          {/* CREDIT. Both pickers above exist because somebody asked for them,
-              and the person who asked gets their name on the thing they caused
-              — see credits.json. This wisher chose to stay anonymous. */}
+        </div>
+
+        {/* ---- TWIST ------------------------------------------------------
+            HOW FAR THE PICTURE LEANS in its fragment. The fragments TILE the
+            canvas, so nothing here rotates a cell — the hole stays exactly
+            where it was and the picture sits in it at an angle, which is what
+            a scrapbook actually does. The cost is real and worth knowing: a
+            lean has to be covered, so the crop pulls in by |cos|+|sin|. ---- */}
+        <div className="ui-stack--tight pt-2">
+          <div className="ui-field__head">
+            <span className="ui-label flex items-center gap-1.5">
+              <RotateCw size={12} className={twist !== 'none' ? 'text-[color:var(--warn)]' : ''} /> Twist
+            </span>
+            <span className="ui-field__value">{TWIST_BY_ID[twist]?.label ?? twist}</span>
+          </div>
+          <div className="ui-famrow" role="group" aria-label="Twist">
+            {TWIST_MODES.map(t => (
+              <button
+                key={t.id}
+                disabled={!ready}
+                onClick={() => setTwist(t.id)}
+                data-active={twist === t.id}
+                className="ui-gchip"
+                title={t.blurb}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+          <p className="ui-caption -mt-1">{TWIST_BY_ID[twist]?.blurb}</p>
+          {/* CREDIT. All three pickers above exist because somebody asked for
+              them, in one wish, and the person who asked gets their name on the
+              thing they caused — see credits.json. This wisher stayed anonymous. */}
           <p className="ui-caption ui-label--dim mt-2 pt-2 border-t border-[color:var(--line-1)]">
-            Arrangement and Crop focus were wished for by an anonymous Collage user.
+            Arrangement, Crop focus and Twist were wished for by an anonymous Collage user.
           </p>
         </div>
       </div>

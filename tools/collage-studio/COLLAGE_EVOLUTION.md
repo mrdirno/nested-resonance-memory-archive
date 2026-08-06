@@ -29,7 +29,9 @@ or re-documenting an existing capability is DD, not delivery.
   video compositing; offline export WITH sound; video-length sync
   (loop / stretch-to-longest / speed-to-shortest), live and in export;
   COMPOSITION — 11 arrangements (photo metric x fragment spatial key, zipped)
-  and 5 crop-focus modes, both rolled by the dice and carried in the share code.
+  and 5 crop-focus modes, both rolled by the dice and carried in the share code;
+  TWIST — 5 per-fragment rotation modes (the picture leans, the tiling does not),
+  reaching all four render paths through the one geometry function they share.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -47,13 +49,13 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
 - [ ] **Overlays** — stickers, shapes, picture-in-picture, masks, chroma-key.
 - [x] **Composition** — WHICH photo lands in WHICH fragment (11 arrangements) and
       WHAT each fragment centres on (5 crop-focus modes). `lib/composition.ts`.
-- [ ] **Twist** — per-fragment ROTATION of the image inside its cell. Asked for in
-      the same wish as Composition and deliberately NOT bundled with it: rotation
-      is the first change that has to reach the hot draw loop (`stage.ts`) AND
-      `renderer.ts` AND `render.worker.ts` AND `vectorExport.ts`, so it is its own
-      increment with its own pixel proof. Cells TILE the canvas, so rotating the
-      cell is wrong — rotate the SAMPLING inside the clip path and expand the dest
-      rect by |cos|+|sin| or the corners open up.
+- [x] **Twist** — per-fragment ROTATION of the image inside its cell. 5 modes
+      (Straight / Tilt / Scatter / Pinwheel / Cascade), on the dice and in the
+      share code. `composition.twistAngle` + `renderer.twistedDest`. The advance
+      note left here was right on both counts: the cell is never rotated (only the
+      SAMPLING inside an untouched clip path), and the dest grows by |cos|+|sin| or
+      the corners open up. What turned four changes into ONE seam was carrying the
+      angle on the per-slot `analysis` — the channel crop focus already rides.
 - [ ] **Composition presets** — an arrangement is currently one chip; the pairings
       that read best (metric x key) are a bigger space than the 11 named ones.
 - [ ] **Templates & export presets** — one-tap templates; aspect presets 9:16 / 1:1
@@ -145,6 +147,40 @@ multi-agent audit for non-trivial changes.
   4/4 pixel-level preview tests. Any capability that must survive to a FILE needs
   a test that drives the export and compares the two. Prove the test fails on the
   reintroduced bug before believing it.
+- **Rotating the CELL is the obvious move and it is wrong.** The fragments TILE
+  the canvas; rotate a cell and you open wedges of background between it and its
+  neighbours. The rotation belongs to the SAMPLING inside an untouched clip path
+  — the hole stays put, the picture leans. And the moment you do that you owe the
+  cover: a w x h rect rotated by t no longer contains the axis-aligned w x h cell,
+  so the destination must grow to w|cos t|+h|sin t| by w|sin t|+h|cos t|. Skip the
+  growth and the identical gap reappears four pixels inward, where it is harder to
+  see and easier to ship. Proved by geometry (79,200 corner containments) rather
+  than by looking, and the sweep was watched going RED with the growth removed.
+- **A grown destination changes the ASPECT, so the cover fit has to be recomputed
+  against the grown box.** Fitting the crop to the CELL aspect and drawing it into
+  the grown rect squashes every twisted fragment — a defect that reads as bad
+  photography rather than as a bug, which is exactly why it needs an invariant
+  (`sw/sh === dw/dh`) instead of an eyeball.
+- **`deg` is a promise, so jitter may only go DOWN.** `tilt` jittered its magnitude
+  symmetrically about its declared peak, which put 20% of fragments past it. The
+  spec field is what the crop-in is computed from, so exceeding it is not a
+  cosmetic overshoot. Caught by the budget invariant on the first run, not by
+  looking at the picture — at 10.8 degrees instead of 9 it looks completely fine.
+- **A save() pushed inside a `try` must be popped OUTSIDE the `catch`.** The Stage's
+  live-video branch wraps `drawImage` in a try/catch because a dying decoder must
+  not kill the frame. Put the twist's `ctx.save()` and `ctx.restore()` inside that
+  block and a thrown decode leaks one save per frame: the transform accumulates
+  and the whole surface shears a little more every frame, forever. The push goes
+  before the try, the pop after the catch, so every path is balanced.
+- **An angle keyed off the SLOT INDEX silently re-rolls when the arrangement
+  changes.** Slot order is draw order, which `arrangeBag` re-pairs — so an
+  index-keyed tilt pattern is a different pattern under every arrangement, for no
+  reason a user could see. Key the field off WHERE the fragment is instead, and it
+  survives re-pairing (`scatter` is the deliberate exception).
+- **A field mode built on a raw angle has a seam at ±π.** `pinwheel` from a plain
+  theta ramp tears across the 9 o'clock line: two touching fragments differ by
+  2·max. `sin(theta)` closes the field on itself, and the sweep asserts the largest
+  step around a full ring stays under a quarter of the peak.
 - `shuffleTrigger` co-seeds the fill RNG but isn't persisted — Restore reproduces
   a layout's geometry, not its exact shuffled arrangement (fix = persist it in the
   save schema; do NOT fold into `seed`, that breaks shuffle's "shapes stay put").
@@ -237,4 +273,34 @@ frontier. Today's ceiling is tomorrow's floor.
   banding) and a preview-vs-export test proved to go RED on the reintroduced defect before
   being believed. The lesson worth keeping: a preview-only test suite cannot see an export
   defect, and a green pure module says nothing about its seams.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-05 · **[AXIS:COLLAGE] twist — the picture leans, the tiling does not** (the
+  half of wish 253b1ba7 that last cycle deliberately did not ship: *"Also maybe twisting
+  capabilities…"*). before→after: **every fragment square → 5 twist modes** (Straight, Tilt,
+  Scatter, Pinwheel, Cascade), rolled by the dice, carried in the share code, live in all four
+  render paths. The rung was deferred because rotation "has to reach the hot draw loop AND
+  renderer AND render.worker AND vectorExport" — and the thing that made it ONE change instead
+  of four was noticing the seam crop focus had already found: every path reads its geometry
+  from `calculateSmartCrop`, and `calculateSmartCrop` reads `analysis`. So `withTwist` writes
+  the angle onto a per-slot COPY of the analysis and all four paths steer with no new parameter
+  threaded through any of them; the only per-path edit is the four lines that actually rotate.
+  The geometry is the load-bearing part: the cells TILE, so nothing rotates a cell — the clip
+  path stays exactly where it was and the SAMPLING inside it leans, with the destination grown
+  by |cos|+|sin| so the corners cannot open up (`renderer.twistedDest`, one definition, two
+  callers). Modes are FIELDS over the canvas, not per-photo attributes, keyed off where the
+  fragment SITS rather than its slot index — so choosing a different arrangement does not
+  silently re-roll the tilt pattern, and `pinwheel` uses sin(theta) so the swirl has no tear at
+  the ±π seam. **Proof:** `tests/unit/twist.invariants.mjs` — 10 invariant families, **79,200
+  corner containments**, plus minimality (a 0.5% smaller rect must FAIL to cover), no-stretch,
+  hostile-angle clamping, and a bit-identical untwisted path; it caught `tilt` jittering 20%
+  past its own declared peak on the first run. `tests/e2e/twist.spec.ts` 3/3 desktop AND 3/3 at
+  393px, reading PIXELS: every chip moves the picture, no two chips are the same picture, solid
+  white tiles show no background leak, and the exported FILE matches the twisted preview rather
+  than the straight one. **Both artifact tests were watched going RED on the reintroduced
+  defect before being believed** — T2 with the expansion removed, T3 with the export ignoring
+  the angle (it reported "matches the STRAIGHT preview (32.6) better than the twisted one
+  (54.5)"). Regression: composition 5/5, source-count 7/7, export-integrity 3/3,
+  mobile-watertight 5/5, fill + videoSync + composition sweeps clean, `tsc` clean, `vite build`
+  clean. Credit appended to `credits.json` and on the page.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

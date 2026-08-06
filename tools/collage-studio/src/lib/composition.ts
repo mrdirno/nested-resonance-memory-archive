@@ -21,6 +21,12 @@
 //     point: the same photo landing in three fragments can show three different
 //     parts of itself instead of the same crop three times.
 //
+//   TWIST — how far the picture LEANS inside its fragment. The cells tile the
+//     canvas, so this rotates the sampling, never the cell: the hole stays
+//     exactly where it was and the photograph sits in it at an angle. An angle
+//     is a function of WHERE the fragment is, so a twist reads as one gesture
+//     across the whole frame rather than as per-photo noise.
+//
 // EVERYTHING HERE IS PURE AND DETERMINISTIC. No canvas, no DOM, no clock, no
 // stateful rng — `wander` derives its offset by hashing the slot index, so the
 // result depends only on (seed, slot) and never on the order calls were made in.
@@ -41,6 +47,12 @@ export interface PhotoLike {
     face?: { x: number; y: number } | null;
     energy?: { x: number; y: number } | null;
     color?: { r: number; g: number; b: number; h: number; s: number; l: number } | null;
+    /**
+     * Radians the SAMPLING is rotated by inside this slot's fragment. Written by
+     * `withTwist` onto a per-slot copy and read by `calculateSmartCrop`, which is
+     * the one function all four crop paths already share. Absent = square.
+     */
+    twist?: number;
   } | null;
 }
 
@@ -59,6 +71,8 @@ export type ArrangementId =
   | 'heat' | 'vivid' | 'hero' | 'checker' | 'drift';
 
 export type FocusId = 'auto' | 'energy' | 'centre' | 'thirds' | 'wander';
+
+export type TwistId = 'none' | 'tilt' | 'scatter' | 'pinwheel' | 'cascade';
 
 type Metric = 'hue' | 'lum' | 'chroma' | 'warm' | 'punch';
 type CellKey = 'reading' | 'serpentine' | 'radial' | 'angular' | 'size' | 'x' | 'y' | 'checker' | 'spiral';
@@ -126,6 +140,47 @@ export const FOCUS_BY_ID: Record<string, FocusSpec> =
 
 /** Stable order — the share code stores an INDEX into this, so only append. */
 export const FOCUS_IDS: FocusId[] = FOCUS_MODES.map((f) => f.id);
+
+export interface TwistSpec {
+  id: TwistId;
+  label: string;
+  blurb: string;
+  /**
+   * Peak absolute angle in DEGREES.
+   *
+   * This is a budget, not a decoration. Covering an unrotated cell with rotated
+   * sampling costs a crop-in of |cos t| + |sin t| — 1.16x at 9 degrees, 1.24x at
+   * 16 — so every degree here throws away real picture. Past ~20 the crop starts
+   * eating subjects rather than framing them.
+   */
+  deg: number;
+}
+
+/**
+ * Five ways for the picture to sit inside its fragment.
+ *
+ * `none` is first and is the default: a straight collage is not a lesser one,
+ * and a twist that arrived uninvited would re-crop every fragment of every
+ * project that ever opens.
+ *
+ * Each mode is a FIELD over the canvas, not a per-photo attribute — the angle is
+ * a function of WHERE the fragment sits, which is what makes `pinwheel` and
+ * `cascade` read as one gesture across the whole frame instead of noise. Only
+ * `scatter` is per-slot random, and that is its entire point.
+ */
+export const TWIST_MODES: TwistSpec[] = [
+  { id: 'none',     label: 'Straight', deg: 0,  blurb: 'Every picture sits square in its fragment.' },
+  { id: 'tilt',     label: 'Tilt',     deg: 9,  blurb: 'A scrapbook lean, alternating across the frame like a checkerboard.' },
+  { id: 'scatter',  label: 'Scatter',  deg: 15, blurb: 'A different angle in every fragment — pinned up by hand, not printed.' },
+  { id: 'pinwheel', label: 'Pinwheel', deg: 16, blurb: 'The lean swings around the middle — one way above it, the other way below.' },
+  { id: 'cascade',  label: 'Cascade',  deg: 16, blurb: 'Square in the centre, leaning harder the further out it lands.' },
+];
+
+export const TWIST_BY_ID: Record<string, TwistSpec> =
+  Object.fromEntries(TWIST_MODES.map((t) => [t.id, t]));
+
+/** Stable order — the share code stores an INDEX into this, so only append. */
+export const TWIST_IDS: TwistId[] = TWIST_MODES.map((t) => t.id);
 
 // =============================================================================
 // METRICS
@@ -450,5 +505,117 @@ export const withFocus = <T extends PhotoLike>(
       energy: sane(a?.energy) ?? anchor,
       color: a?.color ?? null,
     },
+  } as T;
+};
+
+// =============================================================================
+// TWIST
+// =============================================================================
+//
+// HOW MUCH THE PICTURE LEANS INSIDE ITS FRAGMENT — the third and last per-slot
+// decision, and the one that had to wait for its own increment.
+//
+// THE THING TO GET RIGHT, AND IT IS NOT THE ANGLE: the fragments TILE the
+// canvas. Rotating a CELL opens wedges of background between it and its
+// neighbours and the collage stops being a collage. So nothing here rotates a
+// cell. The clip path is untouched, in its original place, at its original
+// angle; what rotates is the SAMPLING inside it — the same photograph, laid into
+// the same hole, at a different angle. Which is exactly what a scrapbook does.
+//
+// The cost of that is paid in `renderer.ts:twistedDest`: a w x h rectangle
+// rotated by t no longer covers the axis-aligned w x h cell, so the drawn rect
+// has to grow to w|cos t| + h|sin t| by w|sin t| + h|cos t| or the corners open
+// up anyway — the exact failure the tiling argument was meant to avoid, moved
+// four pixels inward where it is harder to see.
+//
+// Everything here is PURE and a function of WHERE THE FRAGMENT IS, never of the
+// slot's position in the draw order: an arrangement re-pairs photos with
+// fragments, so an angle keyed off the slot index would make choosing a
+// different arrangement silently re-roll the whole tilt pattern. `scatter` is
+// the deliberate exception, and it hashes a seed rather than reading an rng.
+
+/** Nothing may exceed this, whatever a corrupted project file or share code says. */
+export const MAX_TWIST_RAD = (22 * Math.PI) / 180;
+
+/**
+ * The angle for ONE slot, in radians. Positive is clockwise on screen (canvas
+ * and SVG agree, both being y-down).
+ *
+ * `cell` is the fragment's normalised geometry. Missing geometry is treated as
+ * dead centre — which for the two field modes means "no lean", the honest answer
+ * for a fragment we cannot locate.
+ */
+export const twistAngle = (
+  twist: TwistId,
+  slotSeed: number,
+  cell: CellGeom | null | undefined,
+): number => {
+  const spec = TWIST_BY_ID[twist];
+  if (!spec || !spec.deg) return 0;
+  const max = Math.min(MAX_TWIST_RAD, (spec.deg * Math.PI) / 180);
+  const cx = clamp(num(cell?.cx, 0.5), 0, 1);
+  const cy = clamp(num(cell?.cy, 0.5), 0, 1);
+
+  switch (twist) {
+    case 'tilt': {
+      // Sign from a COARSE spatial checkerboard, so neighbours lean opposite
+      // ways and the alternation is visible as a pattern rather than as noise.
+      // Four bands per axis: fine enough to alternate on a 24-cell grid, coarse
+      // enough that a big fragment and the small one beside it still differ.
+      const sign = (Math.floor(cx * 4) + Math.floor(cy * 4)) % 2 === 0 ? 1 : -1;
+      // Jitter on the magnitude only, and DOWNWARD from the peak — a hand-pinned
+      // photo is never at exactly nine degrees, and a stamped one reads as a
+      // rendering artefact. Jittering symmetrically about `deg` was the first
+      // attempt and it overshot the declared peak by 20%, which the budget
+      // invariant caught: `deg` is a promise about the worst case (the crop-in
+      // is computed from it), so nothing may exceed it, jitter included.
+      return sign * max * (0.75 + hash01(slotSeed * 3 + 7) * 0.25);
+    }
+    case 'scatter':
+      return (hash01(slotSeed * 3 + 11) * 2 - 1) * max;
+    case 'pinwheel': {
+      // sin of the angular position, NOT the angle itself. A raw theta ramp is
+      // discontinuous at +-pi: two fragments that touch across the 9 o'clock
+      // line would differ by 2*max, a visible tear straight through the swirl.
+      // sin is periodic, so the field closes on itself with no seam anywhere.
+      const th = Math.atan2(cy - 0.5, cx - 0.5);
+      return Math.sin(th) * max;
+    }
+    case 'cascade': {
+      // Radius, normalised so the CORNER (not the edge midpoint) reaches 1.
+      const r = Math.hypot(cx - 0.5, cy - 0.5) / Math.SQRT1_2;
+      return clamp(r, 0, 1) * max;
+    }
+    default:
+      return 0;
+  }
+};
+
+/**
+ * The photo as it should be SAMPLED in this one slot.
+ *
+ * Rides the identical seam `withFocus` uses: every crop path — the live Stage,
+ * the static renderer, the export worker and the vector export — reads its
+ * geometry from `calculateSmartCrop`, and `calculateSmartCrop` reads `analysis`.
+ * Writing the angle onto a per-slot COPY of the analysis therefore steers all
+ * four with no new parameter threaded through any of them.
+ *
+ * `none` (and a mode whose field happens to return exactly zero) hands back the
+ * SAME OBJECT by reference, so the default path allocates nothing, invalidates
+ * no memo, and produces geometry bit-identical to a build without this feature.
+ */
+export const withTwist = <T extends PhotoLike>(
+  photo: T,
+  twist: TwistId,
+  slotSeed: number,
+  cell: CellGeom | null | undefined,
+): T => {
+  if (!photo || twist === 'none') return photo;
+  const angle = twistAngle(twist, slotSeed, cell);
+  if (!angle) return photo;
+  const a = photo.analysis;
+  return {
+    ...photo,
+    analysis: { ...(a ?? {}), color: a?.color ?? null, twist: angle },
   } as T;
 };

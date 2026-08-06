@@ -78,15 +78,26 @@ ${metadataComment}
 
     const base64 = await blobToBase64(imgData.src);
 
+    // TWIST — a NESTED group, deliberately. Putting the rotation on the same
+    // element that carries `clip-path` would rotate the clip along with the
+    // picture and the fragments would stop tiling; the outer group holds the
+    // clip in unrotated user space, the inner one turns only the <image>. SVG's
+    // rotate() is degrees, clockwise, y-down — the same sense as ctx.rotate().
+    const spin = crop.twist
+      ? ` transform="rotate(${((crop.twist * 180) / Math.PI).toFixed(3)} ${crop.tcx.toFixed(2)} ${crop.tcy.toFixed(2)})"`
+      : '';
+
     svg += `    <g clip-path="url(#clip-${i})">
-      <image 
-        xlink:href="${base64}" 
-        x="${tx.toFixed(2)}" 
-        y="${ty.toFixed(2)}" 
-        width="${finalW.toFixed(2)}" 
-        height="${finalH.toFixed(2)}" 
-        preserveAspectRatio="none"
-      />
+      <g${spin}>
+        <image
+          xlink:href="${base64}"
+          x="${tx.toFixed(2)}"
+          y="${ty.toFixed(2)}"
+          width="${finalW.toFixed(2)}"
+          height="${finalH.toFixed(2)}"
+          preserveAspectRatio="none"
+        />
+      </g>
     </g>
 `;
   }
