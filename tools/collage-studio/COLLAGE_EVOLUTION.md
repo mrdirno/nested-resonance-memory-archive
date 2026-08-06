@@ -185,8 +185,16 @@ multi-agent audit for non-trivial changes.
   the two focus modes far enough. MEASURED at 1 failure in 12 runs on
   pre-cycle source `e2ceb1c9` and 2 in 9 on the twist branch — no significant
   difference, and mechanically it cannot be twist (with `twist: 'none'` both
-  `withTwist` and `retwistFor` are identity). It needs a pinned seed, not a
-  bigger threshold. Do not chase it as a regression; do fix it.
+  `withTwist` and `retwistFor` are identity). Against LIVE it fails more often
+  (1 pass in 4), which points at the second cause: the test allows 1200ms for the
+  preview to settle after a chip click, which is generous on localhost and tight
+  over the network, so the measurement can land on a half-rendered preview and
+  the two focus modes read closer together than they are. The other four
+  composition tests — including "crop focus re-frames the pictures without losing
+  any" — pass live every time, and the failing line is a PRECONDITION about the
+  preview, before any export, so the feature is fine and the test is not. Fix =
+  pin the seed AND wait on the rendered blob rather than on a clock. Do not chase
+  it as a regression; do fix it.
 - **The preview's layout and the export's layout are not the same layout.** Every
   export recomputes `computeLayout` at its own width, and the generator is not
   scale-invariant: 11.3% of seeds at count=24 (27.7% at count=40) return a
