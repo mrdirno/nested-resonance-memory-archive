@@ -356,6 +356,29 @@
     modal = h("div", { class: "fb-wrap" }, [sheet]);
     modal.addEventListener("click", function (e) { if (e.target === modal) close(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && modal && modal.classList.contains("on")) close(); });
+    // KEEP TAB INSIDE THE SHEET. `aria-modal="true"` tells assistive tech the
+    // page behind is inert and does nothing whatsoever to where Tab goes —
+    // measured on the trade well, the sibling of this sheet, at 12 of 16 stops
+    // landing outside the dialog, one of them the user's own input on the page
+    // underneath. Same fix, kept local because this file is a standalone
+    // drop-in by design and may not assume the toolkit runtime is present.
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Tab" || !modal || !modal.classList.contains("on")) return;
+      var sh = modal.querySelector('[role="dialog"]');
+      if (!sh) return;
+      var all = sh.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      var f = [];
+      for (var i = 0; i < all.length; i++) {
+        var el = all[i];
+        if (el.disabled || el.getAttribute("tabindex") === "-1") continue;
+        if (!el.offsetParent && el.type !== "hidden") continue;
+        f.push(el);
+      }
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1], a = document.activeElement;
+      if (e.shiftKey && (a === first || !sh.contains(a))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && (a === last || !sh.contains(a))) { e.preventDefault(); first.focus(); }
+    });
 
     setKind = function (v) {
       kind = v;

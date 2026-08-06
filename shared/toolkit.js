@@ -487,6 +487,41 @@
   function closeWell() { if (modal) { modal.classList.remove("av-open"); document.documentElement.style.overflow = ""; } }
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeWell(); closeMenu(); } });
 
+  /**
+   * KEEP TAB INSIDE THE SHEET.
+   *
+   * `aria-modal="true"` is a PROMISE TO ASSISTIVE TECH, not a behaviour: it
+   * tells a screen reader the rest of the page is inert and changes nothing at
+   * all about where Tab goes. Measured on LIVE production — av, plumbing and
+   * hvac hubs plus av/consumables — 12 of 16 tab stops landed OUTSIDE the open
+   * dialog, on the nav, on the trigger button, and on a tool page on the user's
+   * own INPUT: typing into the document behind a sheet that is covering it.
+   *
+   * The well is injected into every page of every trade, so this one handler is
+   * the whole toolkit's fix. `.av-hp` is the honeypot and already carries
+   * tabindex="-1"; the filter keeps it out for the same reason it is hidden.
+   */
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Tab" || !modal || !modal.classList.contains("av-open")) return;
+    var sheet = modal.querySelector('[role="dialog"]');
+    if (!sheet) return;
+    var all = sheet.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    var focusable = [];
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i];
+      if (el.disabled || el.getAttribute("tabindex") === "-1") continue;
+      // offsetParent is null for anything display:none — the "more" fields are
+      // collapsed by default and must not be a stop the user cannot see.
+      if (!el.offsetParent && el.type !== "hidden") continue;
+      focusable.push(el);
+    }
+    if (!focusable.length) return;
+    var first = focusable[0], last = focusable[focusable.length - 1];
+    var active = document.activeElement;
+    if (e.shiftKey && (active === first || !sheet.contains(active))) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && (active === last || !sheet.contains(active))) { e.preventDefault(); first.focus(); }
+  });
+
   function showErr(msg) { errBox.textContent = msg; errBox.style.display = "block"; }
 
   function onSubmit(e) {
