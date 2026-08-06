@@ -139,41 +139,59 @@ ctx.onmessage = async (e: MessageEvent) => {
             const imgBitmap = await decodeFirstAvailable([imgMeta.src, imgMeta.fallbackSrc]);
             if (!imgBitmap) throw new Error('no decodable source');
 
+            // EVERY save() IS POPPED IN A `finally`.
+            //
+            // This whole block already ran inside the outer try/catch, and the
+            // catch only counted the failure — so a throw anywhere between
+            // save() and restore() (a decoder that dies mid-drawImage is the
+            // real one) leaked a canvas state and every LATER fragment in this
+            // export inherited the dead fragment's clip. Adding a second save
+            // for the twist would have leaked the ROTATION too, which is how a
+            // single bad decode turns the rest of the file into a shear. The
+            // nesting below is balanced on every path, thrown or not.
             ctx2d.save();
-            ctx2d.beginPath();
-            item.path.forEach((p: any, idx: number) => {
-                if (idx===0) ctx2d.moveTo(p.x, p.y); else ctx2d.lineTo(p.x, p.y);
-            });
-            ctx2d.closePath();
-            ctx2d.clip();
+            try {
+                ctx2d.beginPath();
+                item.path.forEach((p: any, idx: number) => {
+                    if (idx===0) ctx2d.moveTo(p.x, p.y); else ctx2d.lineTo(p.x, p.y);
+                });
+                ctx2d.closePath();
+                ctx2d.clip();
 
-            const crop = calculateSmartCrop(item.bounds, {
-                width: imgMeta.width,
-                height: imgMeta.height,
-                analysis: imgMeta.analysis
-            }, zoom);
+                const crop = calculateSmartCrop(item.bounds, {
+                    width: imgMeta.width,
+                    height: imgMeta.height,
+                    analysis: imgMeta.analysis
+                }, zoom);
 
-            // TWIST — identical to renderer.ts:112. Rotate the SAMPLING inside
-            // the clip that is already set, then wind the transform back so the
-            // 'complex' hairline still traces the unrotated cell. Guarded, so an
-            // untwisted export runs exactly the instruction stream it always did.
-            if (crop.twist) {
-              ctx2d.save();
-              ctx2d.translate(crop.tcx, crop.tcy);
-              ctx2d.rotate(crop.twist);
-              ctx2d.translate(-crop.tcx, -crop.tcy);
+                // TWIST — identical to renderer.ts. Rotate the SAMPLING inside
+                // the clip that is already set, then wind the transform back so
+                // the 'complex' hairline still traces the unrotated cell.
+                // Guarded, so an untwisted export runs exactly the instruction
+                // stream it always did.
+                const spun = crop.twist !== 0;
+                if (spun) {
+                    ctx2d.save();
+                    ctx2d.translate(crop.tcx, crop.tcy);
+                    ctx2d.rotate(crop.twist);
+                    ctx2d.translate(-crop.tcx, -crop.tcy);
+                }
+                try {
+                    ctx2d.drawImage(imgBitmap, crop.sx, crop.sy, crop.sw, crop.sh, crop.dx, crop.dy, crop.dw, crop.dh);
+                } finally {
+                    if (spun) ctx2d.restore();
+                }
+                imgBitmap.close();
+                drawn++;
+
+                if (mode === 'complex') {
+                    ctx2d.strokeStyle = '#000';
+                    ctx2d.lineWidth = width * 0.001;
+                    ctx2d.stroke();
+                }
+            } finally {
+                ctx2d.restore();
             }
-            ctx2d.drawImage(imgBitmap, crop.sx, crop.sy, crop.sw, crop.sh, crop.dx, crop.dy, crop.dw, crop.dh);
-            if (crop.twist) ctx2d.restore();
-            imgBitmap.close();
-            drawn++;
-
-            if (mode === 'complex') {
-                ctx2d.strokeStyle = '#000';
-                ctx2d.lineWidth = width * 0.001;
-                ctx2d.stroke();
-            }
-            ctx2d.restore();
         } catch (innerErr) {
             console.warn("Worker image load failed", innerErr);
             failedImages++;

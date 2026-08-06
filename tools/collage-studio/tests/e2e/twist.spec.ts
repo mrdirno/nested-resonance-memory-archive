@@ -251,4 +251,38 @@ test.describe('twist (wish 253b1ba7: "twisting capabilities")', () => {
       `twisted one (${dSame.toFixed(1)}) — the twist did not reach the export path`,
     ).toBeLessThan(dCross);
   });
+
+  test('T4: a POSITION-KEYED twist reaches the export too', async ({ page }) => {
+    // T3 drives Scatter, whose angle is a hash of the slot seed and therefore
+    // the ONE mode that does not care where its fragment sits. A geometry-keyed
+    // mode takes a different route — the angle is re-derived at export time
+    // against the layout the export actually computed (App.tsx retwistFor),
+    // because `computeLayout` is not scale-invariant and the export recomputes
+    // its own. So Scatter passing says nothing about Cascade, and this is the
+    // blind spot an adversarial audit named before it could become a scar.
+    //
+    // The assertion is deliberately the ROBUST one rather than the symmetrical
+    // one T3 uses: on the ~11% of seeds where the export's layout genuinely
+    // bifurcates from the preview's, the whole partition differs and a
+    // "closer to which preview" comparison is not a statement about twist at
+    // all. "The exported file is not a STRAIGHT render" is true either way, and
+    // it is exactly what fails if the angle never reaches the export.
+    await boot(page, barred());
+
+    await pickTwist(page, 'Straight');
+    const straightPreview = await previewBits(page);
+    expect(straightPreview).not.toBeNull();
+
+    await pickTwist(page, 'Cascade');
+    await exportAt(page, '2K');
+    const exported = await exportBits(page);
+    expect(exported).not.toBeNull();
+
+    const d = meanDiff(straightPreview!, exported!);
+    expect(
+      d,
+      `the 2K export is indistinguishable from a straight render (${d.toFixed(1)}) — ` +
+      `Cascade never reached the export path`,
+    ).toBeGreaterThan(6);
+  });
 });

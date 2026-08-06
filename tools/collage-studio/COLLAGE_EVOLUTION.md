@@ -38,6 +38,21 @@ Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reac
 for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
 - [ ] **Timeline & trim** — a real timeline UI: per-clip in/out trim, drag-reorder,
       playhead scrub, split/cut. (The single biggest CapCut gap.)
+- [ ] **ONE LAYOUT** — *(next rung; a correctness debt, not a feature)*. The
+      preview computes its layout at `PREVIEW_W`; every export throws it away and
+      recomputes its own (`renderAtSize` at the tier width, `handleExportSVG` at a
+      hardcoded 1000px). `computeLayout` is NOT scale-invariant — `generateRects`
+      floors each split, so a near-tie in its argmax flips at a different width
+      and the partition genuinely differs. MEASURED on the shipped generator:
+      **11.3% of seeds at count=24 and 27.7% at count=40** come back as a
+      different partition, worst-case normalised centroid drift 0.87 — slot *i*
+      addresses a different rectangle. Everything paired POSITIONALLY against the
+      preview's cells is then paired against the wrong ones: the arrangement's
+      photo placement (`arrangeBag`, which predates twist and has always had
+      this), and the twist field. Fix = scale the preview's layout instead of
+      recomputing it, or make `computeLayout` normalised-then-scaled. Both change
+      what existing seeds render, so it needs its own increment and a
+      compatibility decision, which is why it is a rung and not a hotfix.
 - [ ] **Transitions** — cross-dissolve / fade / wipe / slide between clips/scenes.
 - [ ] **Text & titles** — text overlays, fonts, animated titles / lower-thirds;
       later, auto-captions from the audio track.
@@ -147,6 +162,33 @@ multi-agent audit for non-trivial changes.
   4/4 pixel-level preview tests. Any capability that must survive to a FILE needs
   a test that drives the export and compares the two. Prove the test fails on the
   reintroduced bug before believing it.
+- **The preview's layout and the export's layout are not the same layout.** Every
+  export recomputes `computeLayout` at its own width, and the generator is not
+  scale-invariant: 11.3% of seeds at count=24 (27.7% at count=40) return a
+  DIFFERENT partition, not a scaled one. Anything baked against the preview's
+  cells and consumed positionally by an export is then reading the wrong cell.
+  Twist's fix was to re-derive the angle from the geometry being drawn
+  (`retwistFor`) so each output is at least internally honest; the ROOT cause is
+  on the ladder as its own rung, because the same coupling has silently applied
+  to arrangement since the day arrangement shipped.
+- **A test that only exercises the geometry-INDEPENDENT variant cannot see a
+  geometry-keyed bug.** The first export proof drove `scatter`, whose angle is a
+  hash of the slot seed — the one mode that does not care where its fragment
+  sits. It passed while the position-keyed modes went through a different code
+  path entirely. Any roster with a "doesn't depend on X" member needs a case that
+  DOES depend on X (T4), or the suite is green on the easy half.
+- **A `save()` inside a `try` whose `catch` only counts the failure leaks canvas
+  state.** The export worker had this before twist: a decoder dying mid-drawImage
+  left the clip on the stack and every LATER fragment in that export inherited
+  the dead fragment's clip region. Adding a second save for the rotation would
+  have leaked the transform too, turning one bad decode into a sheared file.
+  Every push now pops in a `finally`.
+- **"Absent means keep whatever is on screen" is not a restore.** Two of the three
+  composition controls were truthiness-guarded on load (`if (l.focus) setFocus(...)`),
+  and every id in those rosters is a non-empty string, so the guard only ever
+  fires on ABSENT — i.e. exactly the legacy projects it was meant to help. Open a
+  pre-focus project while Wander is selected and you get that project's fragments
+  with today's crop: a composition nobody ever saved. Absent means the DEFAULT.
 - **Rotating the CELL is the obvious move and it is wrong.** The fragments TILE
   the canvas; rotate a cell and you open wedges of background between it and its
   neighbours. The rotation belongs to the SAMPLING inside an untouched clip path
@@ -303,4 +345,23 @@ frontier. Today's ceiling is tomorrow's floor.
   (54.5)"). Regression: composition 5/5, source-count 7/7, export-integrity 3/3,
   mobile-watertight 5/5, fill + videoSync + composition sweeps clean, `tsc` clean, `vite build`
   clean. Credit appended to `credits.json` and on the page.
+  **The adversarial audit earned its keep for the third time**, and what it found was
+  bigger than the increment: the preview's layout and the export's layout are NOT the same
+  layout. Every export recomputes `computeLayout` at its own width, and the generator is not
+  scale-invariant — I measured the shipped code at **11.3% of seeds (count=24) and 27.7%
+  (count=40) returning a different partition**, worst drift 0.87 of the canvas. That coupling
+  is older than twist (`arrangeBag` has paired photos against preview cells since the day
+  arrangement shipped) and it is now the NAMED NEXT RUNG, **ONE LAYOUT**, because both fixes
+  change what existing seeds render and that is a compatibility decision, not a hotfix. What
+  landed this cycle is twist's share of it: `retwistFor` re-derives the angle from the
+  geometry actually being drawn, at both export sites, so each output is internally honest.
+  The audit also named a blind spot in my own proof — T3 drove `scatter`, the ONE mode
+  independent of cell geometry — which became T4 (position-keyed, and watched going RED).
+  Two more real defects closed on the way: the export worker leaked canvas state when a
+  decode threw (pre-existing; adding a second save for the rotation would have leaked the
+  transform too, shearing the rest of the file), and two of the three composition controls
+  were truthiness-guarded on load, so a legacy project reopened with today's crop instead of
+  its own. NOT fixed and deliberately named: `loadFromSVG` (project.ts) parses the embedded
+  JSON_MANIFEST and then returns null unconditionally, so reopening an exported .svg is a
+  silent no-op — entirely pre-existing, unrelated to twist, and its own small increment.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

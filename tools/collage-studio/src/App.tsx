@@ -8,7 +8,7 @@ import { loadScriptSafe, analyzeImage } from './lib/analysis';
 import { computeLayout, createRng } from './lib/layout';
 import { rollDice } from './lib/diceRoll';
 import { assignSources, distinctSourceCount } from './lib/fill';
-import { arrangeBag, withFocus, withTwist, type ArrangementId, type FocusId, type TwistId } from './lib/composition';
+import { arrangeBag, withFocus, withTwist, twistAngle, type ArrangementId, type FocusId, type TwistId } from './lib/composition';
 import { renderCanvas } from './lib/renderer';
 import { saveProject, loadProject } from './lib/project';
 import { generateVectorExport } from './engine/color/vectorExport';
@@ -864,15 +864,20 @@ export default function App() {
       setLayoutMode(l.mode); if(l.primitive) setPrimitive(l.primitive);
       setCount(l.count); setSeed(l.seed); setAspect(l.aspect); setGutter(l.gutter); setActiveTab(item.state.mode);
       if(l.entropy) setEntropy(l.entropy);
+      // ALL THREE COMPOSITION CONTROLS RESTORE THE SAME WAY, and the way is
+      // "absent means the default", never "absent means keep what is on screen".
+      // Truthiness-guarding these (`if (l.focus) setFocus(l.focus)`) silently
+      // half-restores a snapshot: reopen a project saved before crop focus
+      // existed while Wander is selected and you get that project's fragments
+      // with today's crop, which is a composition nobody ever saved.
       if(l.arrangement) setArrangement(l.arrangement);
       // A project saved before this cycle stored the old binary hue sort as a
       // 0..1 "resonance". `flow` is the CLOSEST arrangement in the roster, not an
       // exact restoration: the old sort zipped hue against plain reading order,
       // and `flow` runs it serpentine (every other row reversed). A resonance
       // project therefore reopens recognisable but not identical.
-      else if((l.resonance ?? 0) > 0.1) setArrangement('flow');
-      if(l.focus) setFocus(l.focus);
-      // Absent = the project predates twist, and predates it meaning square.
+      else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural');
+      setFocus(l.focus ?? 'auto');
       setTwist(l.twist ?? 'none');
       if(item.state.style?.background) setBgColor(item.state.style.background);
   };
@@ -907,10 +912,10 @@ export default function App() {
       //   a user who picked Wander watched the preview re-frame and then
       //   downloaded a file cropped the old way. Exactly the shape of the
       //   already-scarred preview/export split, one field over.
-      const ordered = orderedAssets.map(a => a ?? null);
-
       const rng = createRng(seed);
       const items = await computeLayout(w, h, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
+      //   AND THE TWIST IS RE-BAKED against THESE items, not the preview's.
+      const ordered = retwistFor(orderedAssets.map(a => a ?? null), items, w, h);
 
       const worker = new RenderWorker();
       let settled = false;
@@ -1072,6 +1077,48 @@ export default function App() {
       } catch (e) { console.error(e); }
   };
 
+  /**
+   * RE-BAKE THE TWIST AGAINST THE LAYOUT THAT IS ACTUALLY BEING DRAWN.
+   *
+   * A twist angle is a FIELD over the canvas — `pinwheel` and `cascade` are
+   * functions of WHERE the fragment sits. The preview memo bakes them against
+   * the preview layout (PREVIEW_W), but every export recomputes its OWN layout
+   * at its own width (renderAtSize at the tier size, handleExportSVG at a
+   * hardcoded 1000px), and `computeLayout` is NOT scale-invariant: generateRects
+   * floors each split, so a near-tie in its argmax can flip at a different
+   * width. Measured on the shipped generator: 11.3% of seeds at count=24 and
+   * 27.7% at count=40 produce a genuinely DIFFERENT partition, in which slot i
+   * addresses a different rectangle entirely.
+   *
+   * That divergence is older and bigger than twist — it re-pairs the
+   * photographs too, because `arrangeBag` ranks against the same preview cells —
+   * and fixing it belongs in the layout, not here (see the book's scars). What
+   * this does is stop twist ADDING to it: the angle is recomputed from the
+   * geometry being rendered, so each output is at least internally honest —
+   * every fragment leans according to where it actually ended up.
+   *
+   * Writes the angle unconditionally rather than going through `withTwist`,
+   * which short-circuits on a zero angle and would leave the preview's stale
+   * value in place on exactly the fragments whose field evaluates to zero.
+   */
+  const retwistFor = (
+    assets: (ImageAsset | null)[],
+    items: LayoutItem[],
+    W: number,
+    H: number,
+  ): (ImageAsset | null)[] => {
+    if (twist === 'none') return assets;
+    return assets.map((a, slot) => {
+      if (!a) return a;
+      const b = items[slot]?.bounds;
+      const cell = b && b.w > 0 && b.h > 0
+        ? { cx: (b.x + b.w / 2) / W, cy: (b.y + b.h / 2) / H, area: (b.w * b.h) / (W * H) }
+        : null;
+      const angle = twistAngle(twist, (seed ^ (slot * 2654435761)) | 0, cell);
+      return { ...a, analysis: { ...(a.analysis ?? {}), twist: angle } } as ImageAsset;
+    });
+  };
+
   const handleDownloadResult = () => {
       if (!resultBlobUrl) return;
       const a = document.createElement('a'); a.href = resultBlobUrl; a.download = `GENART-${Date.now()}.jpg`; a.click();
@@ -1083,7 +1130,7 @@ export default function App() {
         const rng = createRng(seed); const items = await computeLayout(1000, 1000/aspect, effectiveCount, rng, layoutMode, gutter, entropy, images, primitive);
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
-        const orderedImages = orderedAssets;
+        const orderedImages = retwistFor(orderedAssets.map(a => a ?? null), items, 1000, 1000 / aspect);
         const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor } };
         const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor);
         const blob = new Blob([svgContent], {type: 'image/svg+xml'});
@@ -1098,7 +1145,7 @@ export default function App() {
     input.onchange = async (e:any) => {
         const file = e.target.files[0]; if(!file) return;
         const loaded = await loadProject(file);
-        if(loaded) { countTouchedRef.current = true; setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || 0.666); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.arrangement) setArrangement(l.arrangement); else if((l.resonance ?? 0) > 0.1) setArrangement('flow'); if(l.focus) setFocus(l.focus); setTwist(l.twist ?? 'none'); }
+        if(loaded) { countTouchedRef.current = true; setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || 0.666); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); }
     };
     input.click();
   };
