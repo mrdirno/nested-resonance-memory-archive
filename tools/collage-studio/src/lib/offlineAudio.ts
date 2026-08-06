@@ -16,19 +16,23 @@
 //   its evenness is the whole reason the offline renderer exists, and any audio
 //   work inside it would reintroduce exactly the stall it was built to remove.
 //
-// THE SYNC CONTRACT — the only genuinely hard part.
-//   `Stage.seekClipTo` defines, for output time t, a clip's media position:
-//       span   = max(EPS, el.duration - EPS)
-//       target = loop ? (t*rate) % span : min(t*rate, span)
-//   where `rate` is the clip's video-length-sync playbackRate (1 in LOOP mode,
-//   <1 in STRETCH, >1 in SPEED). Everything below reproduces that exactly —
-//   `span` and `rate` are passed IN from the Stage, not recomputed here, so the
-//   epsilon and the rate each have one source and the two timelines cannot drift.
+// THE SYNC CONTRACT — the only genuinely hard part, and it is no longer HERE.
+//   For output time t, a clip's media position is `clipWindow.sourceTimeAt`:
+//       in + (loop ? (t*rate) % len : min(t*rate, len))     len = out - in
+//   This module used to carry its own copy of that expression, written to agree
+//   with `Stage.seekClipTo`'s copy. Two copies of one formula is how the picture
+//   and the sound end up in different places the day either one gains a feature
+//   — which is exactly what happened when clips gained a TRIM WINDOW. So the
+//   formula now lives in ONE module and this file ASKS it: `audioPlan` returns
+//   the `AudioBufferSourceNode` settings whose start offset is, by construction,
+//   the same `sourceTimeAt` the video seek uses. Asserted, not assumed —
+//   tests/unit/clipWindow.invariants.mjs I7 measures the A/V drift directly.
 //
-//   `clip.startTime` is deliberately NOT applied. `seekClipTo` does not apply it
-//   either (it is used once, at element creation), so a mixer that "helpfully"
-//   honours it would desync the entire export by that offset with nothing on
-//   screen to show for it.
+//   `span` and `rate` are still passed IN from the Stage, so the seek epsilon
+//   and the sync rate each have one source. The trim window arrives as the RAW
+//   in/out and is resolved HERE, because this side knows the decoded buffer's
+//   real length and a container does not promise its audio and video tracks are
+//   equally long.
 //
 // THE LADDER — AAC or silence, and it NEVER breaks the video.
 //   no sources -> nothing decodable -> everything muted -> no AudioEncoder ->
@@ -50,6 +54,7 @@
 // -----------------------------------------------------------------------------
 
 import { demuxAacTrack, toAudioSpecificConfig } from './mp4AudioDemux';
+import { normaliseWindow, audioPlan } from './clipWindow';
 
 // =============================================================================
 // TYPES
@@ -74,6 +79,12 @@ export interface OfflineAudioSource {
    *  to match the live preview, where `<video>.playbackRate` moves picture and
    *  sound together. Absent / ≤0 is treated as 1 (the LOOP mode, unchanged). */
   rate?: number;
+  /** TRIM — the user's RAW in/out points, unresolved. Absent means the whole
+   *  clip, and then this module produces bit-identically what it did before
+   *  trim existed. Resolved here rather than by the Stage because only this side
+   *  knows how long the DECODED AUDIO actually is. */
+  inSec?: number;
+  outSec?: number;
 }
 
 export interface EncodedAudioRecord {
@@ -411,26 +422,27 @@ const decodeWhole = async (
 // =============================================================================
 
 /**
- * Lay every clip on one timeline that reproduces `Stage.seekClipTo`, INCLUDING
- * its video-length-sync rate: seekClipTo puts the picture at `(t*rate) % span`,
- * so `node.playbackRate = rate` plus a rate-scaled start offset put the sound at
- * the same position (pitch-shifted, exactly as the live `<video>.playbackRate`
- * preview is). rate defaults to 1 — the LOOP mode, and the original behaviour.
+ * Lay every clip on the timeline the PICTURE is on.
  *
- *   looping clip : loop = true, loopStart = 0, loopEnd = span, playbackRate = rate,
- *                  start(0, (startAt*rate) % span)
- *                  => at output offset u the media position is
- *                     (startAt*rate + u*rate) mod span = `(t*rate) % span`. Exact.
+ * `audioPlan` (lib/clipWindow.ts) answers that in the node's own vocabulary —
+ * loop / loopStart / loopEnd / playbackRate / offset — and its offset is the
+ * same `sourceTimeAt` the video seek calls, so the two cannot be written to
+ * disagree. Trim, video-length sync and the plain untrimmed case are all the
+ * one function; there is no branch here to get wrong.
  *
- *   non-looping  : playbackRate = rate, start(0, min(startAt*rate, span))
- *                  => runs out at the buffer end. The video clamps at `span` and
- *                  holds its last frame; the audio stops. They agree everywhere
- *                  the video is still moving, which is the part that can desync.
+ *   looping    : loopStart/loopEnd = the trim window, and the start offset is
+ *                the picture's position at `startAt`. Wrapping happens inside
+ *                the window, so a trimmed clip never plays a sample the viewer
+ *                cannot see.
+ *   non-looping: runs out at the OUT point. The video clamps there and holds its
+ *                last frame; the sound stops. They agree everywhere the video is
+ *                still moving, which is the only part that can desync.
  */
 const mixSources = async (
   decoded: { buf: AudioBuffer; src: OfflineAudioSource }[],
   startAt: number,
   seconds: number,
+  onSilent?: (n: number) => void,
 ): Promise<AudioBuffer | null> => {
   const OAC = oacCtor();
   if (!OAC) return null;
@@ -438,6 +450,7 @@ const mixSources = async (
   const ctx = new OAC(CHANNELS, length, SAMPLE_RATE);
 
   let wired = 0;
+  let silent = 0;
   for (const { buf, src } of decoded) {
     if (src.gain <= 0) continue;
     try {
@@ -447,28 +460,49 @@ const mixSources = async (
       gain.gain.value = src.gain;
       node.connect(gain).connect(ctx.destination);
 
-      // `span` is the Stage's, not ours — but clamp it into the decoded buffer,
-      // because a container's audio and video streams need not be the same
-      // length and `loopEnd` past the buffer end is undefined behaviour.
-      const span = Math.min(src.span > 0 ? src.span : buf.duration, buf.duration);
-      // Video-length sync: walk the audio at the clip's playbackRate so it tracks
-      // the rate-scaled video seek — `seekClipTo` puts the picture at (t*rate)%span,
-      // and this puts the sound there too (pitch-shifted, exactly as the live
-      // <video>.playbackRate preview does). rate 1 (LOOP mode) is the old behaviour.
-      const rate = src.rate && src.rate > 0 ? src.rate : 1;
-      node.playbackRate.value = rate;
-      if (src.loop && span > 0.01) {
+      // `span` is the Stage's, not ours — it carries the seek epsilon and the
+      // video track's length, so resolving the window against it puts the sound
+      // in the same window as the picture. `spanLimit` (the decoded buffer's own
+      // duration) then keeps `loopEnd` inside the buffer, because a container
+      // does not promise its two streams are equally long and a loop region past
+      // the buffer end is undefined behaviour.
+      const span = src.span > 0 ? src.span : buf.duration;
+      const window = normaliseWindow(span, src.inSec, src.outSec);
+      const plan = audioPlan(
+        { window, loop: src.loop, rate: src.rate ?? 1 },
+        startAt,
+        buf.duration,
+      );
+
+      // THE WINDOW LANDS PAST THE END OF THIS CLIP'S AUDIO. It happens whenever a
+      // container's audio track is shorter than its video track and the user
+      // trims into the part that has picture but no sound. Wiring nothing is the
+      // honest answer: the alternative measured as the last 150 ms of the track
+      // looped ~33 times across a 5 s take.
+      if (plan.silent) { silent++; continue; }
+
+      node.playbackRate.value = plan.playbackRate;
+      if (plan.loop) {
         node.loop = true;
-        node.loopStart = 0;
-        node.loopEnd = span;
-        node.start(0, (startAt * rate) % span);
+        node.loopStart = plan.loopStart;
+        node.loopEnd = plan.loopEnd;
+        node.start(0, plan.offset);
       } else {
-        node.start(0, Math.min(Math.max(0, startAt * rate), Math.max(0, buf.duration - 0.001)));
+        // A non-looping start must land inside the buffer, and must STOP at the
+        // OUT point: left unbounded the node plays to the end of the buffer,
+        // i.e. straight through the material the user trimmed away, beneath a
+        // picture that froze at OUT.
+        const off = Math.min(Math.max(0, plan.offset), Math.max(0, buf.duration - 0.001));
+        if (plan.stopAfter !== null && plan.stopAfter > 0) node.start(0, off, plan.stopAfter);
+        else node.start(0, off);
       }
       wired++;
     } catch { /* one clip's failure is that clip's silence */ }
   }
-  if (!wired) return null;
+  // Nothing to mix. `silent` distinguishes "every clip's trim window is past the
+  // end of its audio" from "the graph would not build", which matter to the user
+  // for opposite reasons — one is what they asked for, the other is a failure.
+  if (!wired) { if (silent > 0) onSilent?.(silent); return null; }
 
   let mixed: AudioBuffer;
   try {
@@ -715,9 +749,20 @@ export const prepareOfflineAudio = async (
     );
   }
 
-  const mixed = await mixSources(decoded, startAt, seconds);
+  let trimmedOut = 0;
+  const mixed = await mixSources(decoded, startAt, seconds, (n) => { trimmedOut = n; });
   if (!mixed) {
-    return { track: null, reason: 'Mixing the sound failed.', decoded: decoded.length };
+    return {
+      track: null,
+      // "Mixing failed" is the wrong thing to tell someone who got exactly what
+      // they asked for. A window past the end of a clip's audio is a CHOICE.
+      reason: trimmedOut > 0
+        ? trimmedOut === decoded.length && decoded.length === 1
+          ? "That clip has no sound in the part you trimmed to, so the video is silent."
+          : `${trimmedOut} clip(s) have no sound inside their trim window, so the video is silent.`
+        : 'Mixing the sound failed.',
+      decoded: decoded.length,
+    };
   }
 
   const { chunks, error } = await encodeAac(mixed, opts.bitrate ?? DEFAULT_BITRATE, opts.signal);

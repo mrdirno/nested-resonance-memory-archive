@@ -34,13 +34,24 @@ or re-documenting an existing capability is DD, not delivery.
   reaching all four render paths through the one geometry function they share;
   ONE LAYOUT — every render path (preview, Stage, video, raster export, SVG)
   draws ONE partition at four sizes, generated once at a 1200-space basis and
-  scaled, instead of four partitions generated independently.
+  scaled, instead of four partitions generated independently;
+  TRIM — per-clip in/out points with a filmstrip sheet, held by ONE
+  output-time-to-source-time function (`lib/clipWindow.ts`) that the live
+  element, the offline frame seek and the offline audio mix all ask, and coupled
+  to video-length sync through the WINDOW length rather than the file's.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
 for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
-- [ ] **Timeline & trim** — a real timeline UI: per-clip in/out trim, drag-reorder,
-      playhead scrub, split/cut. (The single biggest CapCut gap.)
+- [~] **Timeline & trim** — the single biggest CapCut gap, now part-shipped.
+      **TRIM (in/out) is done**: `lib/clipWindow.ts` owns the one function that
+      maps OUTPUT time to SOURCE time (`sourceTimeAt`), and the three timelines
+      that used to each carry a copy of that formula — the live `<video>`
+      watchdog, the offline frame seek, the offline audio mix — now ask it. Trim
+      composes with video-length sync, because sync is fed the WINDOW length
+      rather than the file's duration. Still owed on this rung: **drag-reorder**,
+      **playhead scrub** and **split/cut**, which are a timeline WIDGET rather
+      than a timing contract and are their own increment.
 - [x] **ONE LAYOUT** — the preview's partition IS the export's. `computeLayout`
       now runs the generators once at a canonical basis (1200-space = `PREVIEW_W`
       = the Stage's `DEFAULT_LOGICAL_W`) and SCALES the result to whatever size
@@ -288,6 +299,51 @@ multi-agent audit for non-trivial changes.
   test driving it would have passed against the BROKEN build. The rect family
   (`minimal`, `balanced`) drifts 4.5e-4 on its *best* seed of sixty. Same lesson
   as twist's T4, one layer down: pick the case that depends on the thing.
+- **A FILMSTRIP LAID OUT BY FRAME INDEX IS A LIE ABOUT TIME.** Frame extraction
+  is `strategy: 'smart'`, so the stills a clip hands back cluster wherever it was
+  interesting — measured on a six-second fixture: 10 of 12 frames inside the
+  first 31%. Rendered `flex-1` (equal widths) those ten fill 83% of the strip
+  while the IN/OUT bracket, which is positioned by TIME, sits at 38–60% —
+  pointing at pictures that are not the ones about to be cut. Fixed by giving
+  each frame the stretch of the clip it is the NEAREST frame to (boundaries at
+  the midpoints between adjacent `sourceTime`s). NEITHER this nor the dead
+  dimming below was visible to any assertion in the suite; both were caught by
+  screenshotting the real sheet and looking at it.
+- **A NON-STANDARD TAILWIND OPACITY STEP GENERATES NO RULE AND FAILS SILENTLY.**
+  `bg-black/72` is not one of the generated steps, so the overlay that dims
+  everything outside the trim window simply did not exist — the class was in the
+  markup, the element was in the DOM, and nothing was dimmed. `/70` works. Any
+  arbitrary opacity needs the bracket form or a standard step.
+- **A MEASUREMENT CAN AGREE WITH THE RIGHT ANSWER FOR THE WRONG REASON.** The
+  trim export test measured tones in ONE window from the middle of the take —
+  the instrument `video-audio-export.spec.ts` established, and correct for its
+  question. Here it PASSED with the audio mixer deliberately ignoring the trim,
+  because an untrimmed five-second take is red→green→blue and its midpoint lands
+  in the green third, which is exactly the third the trim was isolating. Caught
+  only by the red gauntlet, never by reading. A trim test must ask "is a WRONG
+  value ANYWHERE", not "is the right value here": five probes across the file,
+  loudest reading kept per frequency.
+- **A TALLY CANNOT EXPRESS "IT LOOPED".** Forcing every clip onto the trimmed
+  code path (native loop off for untrimmed clips too) left the set of thirds
+  seen unchanged — the clip simply played once through and froze on blue — so a
+  set-based assertion stayed green while the compatibility clause was broken.
+  The SEQUENCE is the assertion: a clip that loops returns to an earlier third.
+- **A WATCHDOG ON THE COMPOSITOR'S CLOCK IS ONLY AS PROMPT AS THE COMPOSITOR.**
+  Holding the trim window from `tick` alone let a clip run ~0.4s past its OUT
+  point when the main thread was busy (measured under a harness pulling the
+  canvas back 11×/s). Fixed by ALSO enforcing in the `requestVideoFrameCallback`
+  hook — the per-presented-frame signal, i.e. the exact moment a clip can newly
+  be outside its window. The residual bound is real and stated rather than
+  papered over: the live preview holds the window to within one frame; the
+  EXPORT is exact, because it seeks by arithmetic instead of racing a clock.
+  Assert it structurally ("never two consecutive samples outside") rather than
+  with a tolerance — a broken window parks outside for 77 samples, a wrap blip
+  is 1, and that is two orders of magnitude of daylight with no threshold to
+  argue about.
+- **A PROOF WITH NO RUNNER IS A PROOF THAT ROTS.** `video-audio-export.spec.ts`
+  had no config of its own, so the only way to run the suite guarding
+  `offlineAudio.ts` was the repo default — which points at :5173, Persona 500.
+  It now has `playwright.video-audio.config.ts` like every other suite.
 - **`LayoutItem.id` is a module-level counter, not a function of the layout.**
   `shards` returns `shd-0…` on one call and `shd-24…` on the next for identical
   geometry. Inert today — every consumer and the React key use the ARRAY INDEX —

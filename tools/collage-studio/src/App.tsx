@@ -1231,6 +1231,7 @@ export default function App() {
                        controlsHost={stageControlsHost}
                        onRemoveClip={removeClip}
                        recorderRef={recorderRef}
+                       poolAssets={images}
                      />
                    ) : (
                      previewUrl && <img src={previewUrl} className="w-full h-full object-contain pointer-events-none" />

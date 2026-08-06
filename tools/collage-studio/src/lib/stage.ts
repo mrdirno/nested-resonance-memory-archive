@@ -42,6 +42,10 @@
 // -----------------------------------------------------------------------------
 
 import { calculateSmartCrop, twistedDest, twistOf } from './renderer';
+import {
+  normaliseWindow, sourceTimeAt, liveWrapTarget,
+  type ClipWindow, type WindowedPlayback,
+} from './clipWindow';
 import type { LayoutItem } from '../types';
 
 // -----------------------------------------------------------------------------
@@ -83,8 +87,19 @@ export interface StageClipInput {
   ownsUrl?: boolean;
   /** Default true. */
   loop?: boolean;
-  /** Seconds; where playback starts on admission. */
+  /** Seconds; where playback starts on admission. Legacy alias for `inSec` —
+   *  it is only read when `inSec` is absent, so there is one meaning and not two. */
   startTime?: number;
+  /**
+   * TRIM — the IN point, seconds into the source. Absent means 0.
+   *
+   * The window reaches the live element, the offline video seek and the offline
+   * audio mix through ONE function (`lib/clipWindow.ts`), and an untrimmed clip
+   * takes a bit-identical path to the code that had no window at all.
+   */
+  inSec?: number;
+  /** TRIM — the OUT point, seconds into the source. Absent means the end. */
+  outSec?: number;
   /** Playback speed multiplier. Default 1. Video-length sync uses it so several
    *  clips can share one length — rate<1 slows a clip, rate>1 speeds it up — in
    *  the live preview AND, via `seekClipTo`, in the offline export. */
@@ -94,6 +109,11 @@ export interface StageClipInput {
   /** Intrinsic size hint used for pixel-budget admission BEFORE `loadedmetadata`. */
   width?: number;
   height?: number;
+  /** The caller's own measured duration. Used ONLY when the element cannot
+   *  report one — a MediaRecorder WebM has no Duration element and reads
+   *  `Infinity` until playback reaches the end. Without it a trimmed clip of
+   *  that shape plays untrimmed for the length of the file. */
+  durationSec?: number;
 }
 
 export interface StageSceneInput {
@@ -279,6 +299,12 @@ interface ClipRecord {
   ownsUrl: boolean;
   loop: boolean;
   startTime: number;
+  /** RAW trim points as the caller stated them. The playable window is resolved
+   *  from these against `el.duration` on demand (`windowOf`) — never cached,
+   *  because the duration arrives asynchronously and a cached window computed
+   *  before `loadedmetadata` would be a window against a span of zero. */
+  inSec: number | undefined;
+  outSec: number | undefined;
   playbackRate: number;
   muted: boolean;
   /** The one element, created on admission and reused forever after. */
@@ -296,6 +322,9 @@ interface ClipRecord {
   vh: number;
   hintW: number;
   hintH: number;
+  /** The app's own measured duration, used only when `el.duration` is not yet
+   *  (or never) resolvable. See `spanOf`. */
+  hintDur: number;
   fragments: number;
   area: number;
   /** Change detection: `currentTime` at the last painted frame. */
@@ -798,28 +827,98 @@ export class Stage {
   }
 
   /**
+   * The clip's PLAYABLE span — `max(EPS, duration - EPS)`, or 0 while the
+   * duration is still unknown.
+   *
+   * Landing strictly inside the media matters: seeking to exactly `duration` is
+   * a no-op on some engines and fires `ended` on others, and both paint a frame
+   * that was not asked for. Because the trim window is resolved AGAINST this
+   * span, that guard now covers a trimmed OUT point for free.
+   */
+  private spanOf(clip: ClipRecord): number {
+    const dur = clip.el?.duration;
+    if (Number.isFinite(dur) && (dur as number) > 0) {
+      return Math.max(OFFLINE_SEEK_EPSILON, (dur as number) - OFFLINE_SEEK_EPSILON);
+    }
+    // THE ELEMENT DOES NOT ALWAYS KNOW HOW LONG THE MEDIA IS. A MediaRecorder
+    // WebM — a screen recording, or this app's own realtime fallback export —
+    // carries no Duration element, so `el.duration` is Infinity until playback
+    // walks to the end. The APP already knows the real length (`probeVideo`
+    // resolves it with the seek-to-1e101 trick and stores it on `LiveClip`), and
+    // without this hint the two disagreed in the worst possible direction: the
+    // sheet happily reported "0.6s of 24.0s", while `spanOf` returned 0, the
+    // window resolved to `full`, the native loop stayed on and the clip played
+    // all 24 seconds — every second the user had cut — until the duration
+    // finally resolved. Measured at 21.6 s of un-enforced playback on a 24 s
+    // recording; the window scales with the file.
+    const hint = clip.hintDur;
+    if (Number.isFinite(hint) && hint > 0) {
+      return Math.max(OFFLINE_SEEK_EPSILON, hint - OFFLINE_SEEK_EPSILON);
+    }
+    return 0;
+  }
+
+  /**
+   * The clip's trim window, resolved NOW. Never cached: `duration` arrives
+   * asynchronously, so a window computed at construction would be a window
+   * against a span of zero.
+   */
+  private windowOf(clip: ClipRecord): ClipWindow {
+    return normaliseWindow(this.spanOf(clip), clip.inSec, clip.outSec);
+  }
+
+  /** Everything `lib/clipWindow.ts` needs to place this clip at an output time. */
+  private playbackOf(clip: ClipRecord): WindowedPlayback {
+    return { window: this.windowOf(clip), loop: clip.loop, rate: clip.playbackRate };
+  }
+
+  /**
+   * A trimmed clip cannot use the element's NATIVE loop: that wraps to 0, which
+   * is outside the window, so the viewer sees the head of the clip they cut off
+   * for however long it takes the watchdog to notice. Untrimmed clips keep the
+   * native loop exactly as before and gain nothing to go wrong.
+   */
+  private applyLoopMode(clip: ClipRecord): void {
+    const el = clip.el;
+    if (!el) return;
+    const windowed = !this.windowOf(clip).full;
+    try { el.loop = windowed ? false : clip.loop; } catch { /* re-applied on admission */ }
+  }
+
+  /**
+   * THE LIVE WATCHDOG. `<video>` has no in/out points, so the window is held by
+   * checking the position on frames the compositor is already drawing. The
+   * decision itself is `liveWrapTarget` — the same module the offline seek and
+   * the audio mix ask — so there is no second opinion about where the clip
+   * should be. Returns true if it moved the playhead.
+   */
+  private enforceWindow(clip: ClipRecord): boolean {
+    const el = clip.el;
+    if (!el) return false;
+    if (this.spanOf(clip) <= 0) return false;          // duration not known yet
+    const target = liveWrapTarget(this.playbackOf(clip), el.currentTime);
+    if (target === null) return false;
+    try { el.currentTime = target; } catch { return false; }
+    clip.lastTime = -1;                                 // force a repaint
+    return true;
+  }
+
+  /**
    * One clip, one exact position. Never rejects: a decoder that will not seek
    * costs this frame its motion, not the whole render.
    */
   private seekClipTo(clip: ClipRecord, timeSec: number, signal?: AbortSignal): Promise<void> {
     const el = clip.el;
     if (!el) return Promise.resolve();
-    const dur = el.duration;
-    if (!Number.isFinite(dur) || dur <= 0) return Promise.resolve();
+    if (this.spanOf(clip) <= 0) return Promise.resolve();
 
-    // Land strictly INSIDE the media. Seeking to exactly `duration` is a no-op
-    // on some engines and fires `ended` on others, and both paint a frame that
-    // is not the one asked for.
-    const span = Math.max(OFFLINE_SEEK_EPSILON, dur - OFFLINE_SEEK_EPSILON);
-    // Honour the video-length-sync speed in the OFFLINE render too: at rate r a
-    // clip advances r seconds of content per composition second, so the frame the
-    // export wants at `timeSec` is r*timeSec into the clip. Live playback gets
-    // this from el.playbackRate; the offline path seeks by hand, so scale here.
-    const rate = clip.playbackRate > 0 ? clip.playbackRate : 1;
-    const scaled = timeSec * rate;
-    const target = clip.loop
-      ? scaled % span
-      : Math.min(scaled, span);
+    // ONE FORMULA, THREE TIMELINES. The offline seek, the offline audio mix and
+    // the live element all ask `lib/clipWindow.ts` where this clip should be at
+    // output time t — including the video-length-sync rate (at rate r a clip
+    // advances r seconds of content per composition second) and the trim window.
+    // An untrimmed clip resolves to bit-identically the expression that was
+    // written inline here before the window existed.
+    const target = sourceTimeAt(this.playbackOf(clip), timeSec);
 
     if (Math.abs(el.currentTime - target) < OFFLINE_SEEK_EPSILON) return Promise.resolve();
 
@@ -881,6 +980,10 @@ export class Stage {
       const c = clips[i];
       const el = c.el;
       if (el === null) continue;
+      // TRIM. Two float compares per live clip per frame, and only for clips
+      // that are actually trimmed — `liveWrapTarget` returns null immediately on
+      // a full window, so the untrimmed path costs one branch and no seeks.
+      if (this.enforceWindow(c)) needDraw = true;
       if (!el.paused && !el.ended) playing++;
       if (c.frameDirty) { c.frameDirty = false; needDraw = true; }
       else if (el.currentTime !== c.lastTime) needDraw = true;
@@ -918,7 +1021,21 @@ export class Stage {
       const clip = it.clip;
       if (clip !== null && it.vok && !clip.broken && clip.live) {
         const el = clip.el;
-        if (el !== null && el.readyState >= 2 && el.videoWidth > 0) {
+        // `clip.ready || readyState >= 2` — NOT `readyState >= 2` alone.
+        //
+        // A trim wrap is a SEEK, and a seeking element drops to readyState 1 for
+        // a frame. Gated on readyState alone the clip then fell through to the
+        // extracted-still layer, which holds an import frame from source ~0 —
+        // i.e. content strictly BEFORE the IN point the user cut away. Measured
+        // per-rAF on the project's own [2.3, 3.6] window: 15 stray frames in
+        // 2401, every one red, every one `readyState:1 seeking:true`, spaced
+        // exactly one per wrap — 100% of wraps, ~0.8 Hz on a 1.3 s window and up
+        // to 6 Hz on a short one, and it reaches a delivered FILE on the realtime
+        // recorders. The playhead itself never left the window (0/2401), so this
+        // was never a late watchdog; it was the DRAW disowning a live clip
+        // mid-seek. `drawImage` on a seeking element still yields the last
+        // decoded frame, which is in-window and is the honest thing to hold.
+        if (el !== null && (el.readyState >= 2 || clip.ready) && el.videoWidth > 0) {
           ctx.save();
           ctx.clip(it.path);
           // TWIST. The push is OUTSIDE the try and the pop is outside the catch,
@@ -1254,12 +1371,23 @@ export class Stage {
           existing.name = c.name ?? existing.name;
           existing.loop = c.loop !== false;
           existing.playbackRate = finiteOr(c.playbackRate, 1);
+          // TRIM IS A LIVE EDIT, not a reason to rebuild the clip. Dragging a
+          // handle must not drop the decoder — recreating the element here would
+          // also destroy its MediaElementAudioSourceNode, which may be created
+          // only ONCE per element, so the clip would come back permanently mute.
+          existing.inSec = c.inSec;
+          existing.outSec = c.outSec;
           existing.hintW = finiteOr(c.width, existing.hintW);
           existing.hintH = finiteOr(c.height, existing.hintH);
+          existing.hintDur = finiteOr(c.durationSec, existing.hintDur);
           if (existing.el) {
-            existing.el.loop = existing.loop;
+            this.applyLoopMode(existing);
             // Guard the assignment: some engines throw if the element is mid-load.
             try { existing.el.playbackRate = existing.playbackRate; } catch { /* re-applied on (re)admission */ }
+            // A new IN point that the playhead is already past takes effect on
+            // THIS frame, not on the next lap — otherwise moving the handle looks
+            // like it did nothing for however long the old window had left.
+            this.enforceWindow(existing);
           }
         }
         continue;
@@ -1282,6 +1410,17 @@ export class Stage {
       ownsUrl: input.ownsUrl === true,
       loop: input.loop !== false,
       startTime: finiteOr(input.startTime, 0),
+      // `startTime` STAYS what it always was: a one-shot seek at admission, read
+      // by nothing else. Folding it into `inSec` was the tidier-looking move and
+      // it broke the compatibility clause — a caller passing `{startTime: 1.5}`
+      // and no trim went from an untrimmed clip that seeks once to a TRIMMED one:
+      // native loop off, watchdog engaged, the offline seek rendering [1.5, span]
+      // on a loop and the mixer told loopStart 1.5. Nothing in this app passes it
+      // (measured), so nothing shipped broken — but "untrimmed behaves
+      // bit-identically" has to hold for every input of the exported API, not
+      // just the ones the app happens to use.
+      inSec: input.inSec,
+      outSec: input.outSec,
       playbackRate: finiteOr(input.playbackRate, 1),
       muted: input.muted !== false,
       el: null,
@@ -1294,6 +1433,7 @@ export class Stage {
       vw: 0, vh: 0,
       hintW: finiteOr(input.width, 0),
       hintH: finiteOr(input.height, 0),
+      hintDur: finiteOr(input.durationSec, 0),
       fragments: 0,
       area: 0,
       lastTime: -1,
@@ -1417,6 +1557,9 @@ export class Stage {
     v.playsInline = true;
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
+    // Native loop for an untrimmed clip; the watchdog owns the wrap for a
+    // trimmed one. This is set again on `loadedmetadata`, because `duration` —
+    // and therefore whether the window is FULL — is not known yet at this line.
     v.loop = clip.loop;
     // Video-length sync speed. Set before src, and re-applied on loadedmetadata
     // below, because some engines reset playbackRate to 1 when a source loads.
@@ -1439,6 +1582,9 @@ export class Stage {
     const onEvent = (e: Event): void => this.onClipEvent(clip, e);
     clip.onEvent = onEvent;
     v.addEventListener('loadedmetadata', onEvent);
+    // The duration can arrive LONG after metadata (or change), and it is what
+    // decides whether the window is real — so it gets the same treatment.
+    v.addEventListener('durationchange', onEvent);
     v.addEventListener('loadeddata', onEvent);
     v.addEventListener('canplay', onEvent);
     v.addEventListener('playing', onEvent);
@@ -1458,7 +1604,12 @@ export class Stage {
     this.buildAudioChain(clip, v);
 
     v.src = clip.url;
-    if (clip.startTime > 0) { try { v.currentTime = clip.startTime; } catch { /* pre-metadata */ } }
+    // A best-effort jump before metadata. It usually throws (there is nothing to
+    // seek in yet), which is why `loadedmetadata` resolves the window again
+    // against a span it can actually compute. `startTime` keeps its original
+    // meaning here and nowhere else: a one-shot seek at admission.
+    const openAt = clip.inSec !== undefined ? clip.inSec : clip.startTime;
+    if (openAt > 0) { try { v.currentTime = openAt; } catch { /* pre-metadata */ } }
     host.appendChild(v);
     return v;
   }
@@ -1501,6 +1652,7 @@ export class Stage {
         return;
       }
       case 'loadedmetadata':
+      case 'durationchange':
       case 'resize': {
         // Loading a source resets playbackRate to 1 on some engines (WebKit) —
         // restore the video-length-sync speed now that the media is ready.
@@ -1513,9 +1665,12 @@ export class Stage {
           this.refreshAdmission();
           this.emitStatus();
         }
-        if (clip.startTime > 0 && el.currentTime < 0.001) {
-          try { el.currentTime = Math.min(clip.startTime, Math.max(0, (el.duration || clip.startTime) - 0.05)); } catch { /* ignore */ }
-        }
+        // THE DURATION IS THE FIRST MOMENT THE WINDOW IS REAL. Everything about
+        // trim is resolved against the span, so both decisions that depend on it
+        // — which loop mode the element runs in, and whether the playhead is
+        // already outside the window — are made here rather than guessed earlier.
+        this.applyLoopMode(clip);
+        this.enforceWindow(clip);
         this.markDirty();
         return;
       }
@@ -1535,6 +1690,15 @@ export class Stage {
       case 'ended':
       case 'stalled':
       case 'waiting': {
+        // A CLIP TRIMMED ONLY AT THE HEAD STILL REACHES THE FILE'S END, and a
+        // trimmed clip has the element's native loop turned OFF (it would wrap
+        // to 0, outside the window). So `ended` is the trimmed clip's wrap
+        // point, and without this it stops dead on the first lap — the one
+        // trim shape that the per-frame watchdog alone cannot rescue, because
+        // an ended element stops advancing and the tick stops being scheduled.
+        if (e.type === 'ended' && clip.live && clip.loop && !this.windowOf(clip).full) {
+          if (this.enforceWindow(clip) && clip.wantPlay) this.tryPlay(clip);
+        }
         // A stalled/ended element still yields its LAST DECODED frame from
         // drawImage, so the composition never goes black. Bank it anyway.
         this.capturePoster(clip, false);
@@ -1597,6 +1761,15 @@ export class Stage {
       if (this.destroyed || !clip.live) return;
       // Cheapest possible signal: mark and re-arm. No draw happens here.
       clip.frameDirty = true;
+      // TRIM, ON THE VIDEO'S OWN CLOCK. The window is also held in `tick`, but
+      // the tick is the COMPOSITOR's clock and a busy main thread can starve it
+      // — measured as a clip running ~0.4s past its OUT point before the next
+      // frame was drawn. This callback fires per PRESENTED VIDEO FRAME, which
+      // is precisely when a clip can newly be outside its window, so the wrap
+      // happens at the earliest moment the fact exists. `liveWrapTarget` returns
+      // null instantly for an untrimmed clip, so the default path pays one
+      // predictable branch and nothing else.
+      this.enforceWindow(clip);
       this.schedule();
       const v = clip.el as RvfcVideo | null;
       if (v && typeof v.requestVideoFrameCallback === 'function') {
@@ -1912,22 +2085,41 @@ export class Stage {
    *
    *    `broken` stays: a clip whose media errored has nothing to decode.
    *
-   * `startTime` is deliberately absent: `seekClipTo` does not apply it either.
+   * The TRIM WINDOW travels as the RAW in/out the user set, not as a resolved
+   * window, because the mixer knows something this side does not: the decoded
+   * audio buffer's real length. A container does not promise its audio and video
+   * streams are the same duration, so the window is resolved once, over there,
+   * against the span the sound actually has — through the same
+   * `lib/clipWindow.ts` the picture uses.
+   *
+   * `startTime` is still deliberately absent, exactly as before: it is a one-shot
+   * seek at element creation and `seekClipTo` does not apply it either, so a
+   * mixer that "helpfully" honoured it would desync the whole export by that
+   * offset with nothing on screen to show for it. The TRIM WINDOW is a different
+   * thing and IS applied — by both timelines, together.
    */
   describeAudioSources(): {
     id: string; url: string; span: number; loop: boolean; gain: number; rate: number;
+    inSec?: number; outSec?: number;
   }[] {
-    const out: { id: string; url: string; span: number; loop: boolean; gain: number; rate: number }[] = [];
+    const out: {
+      id: string; url: string; span: number; loop: boolean; gain: number; rate: number;
+      inSec?: number; outSec?: number;
+    }[] = [];
     this.clips.forEach((c) => {
       if (!c.url) return;
-      const dur = c.el?.duration;
-      const span = Number.isFinite(dur) && (dur as number) > 0
-        ? Math.max(OFFLINE_SEEK_EPSILON, (dur as number) - OFFLINE_SEEK_EPSILON)
-        : 0;
+      // 0 when this clip holds no decoder (the realtime admission budget defers
+      // it, and it renders as a still) — the mixer then falls back to the
+      // decoded buffer's own duration, which is the only span that clip has.
+      const span = this.spanOf(c);
       const wanted = !c.muted && !c.broken;
       // rate mirrors seekClipTo's video scaling so the export's sound tracks the
       // rate-scaled picture (video-length sync); 1 in LOOP mode leaves it unchanged.
-      out.push({ id: c.id, url: c.url, span, loop: c.loop, gain: wanted ? 1 : 0, rate: c.playbackRate > 0 ? c.playbackRate : 1 });
+      out.push({
+        id: c.id, url: c.url, span, loop: c.loop, gain: wanted ? 1 : 0,
+        rate: c.playbackRate > 0 ? c.playbackRate : 1,
+        inSec: c.inSec, outSec: c.outSec,
+      });
     });
     return out;
   }

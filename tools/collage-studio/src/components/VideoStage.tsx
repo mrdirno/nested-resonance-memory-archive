@@ -37,7 +37,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom';
 import {
   Play, Pause, Volume2, VolumeX, Video, Square, Download, Share2, X,
-  AlertTriangle, Loader2,
+  AlertTriangle, Loader2, Scissors, RotateCcw,
 } from 'lucide-react';
 
 import { createStage, type Stage, type StageStatus, type StageClipInput } from '../lib/stage';
@@ -52,6 +52,13 @@ import {
 } from '../lib/frameExport';
 import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
+import { normaliseWindow, MIN_WINDOW_SEC } from '../lib/clipWindow';
+
+/** The user's raw trim points for one clip. Absent = the whole clip. */
+type TrimMap = Record<string, { inSec: number; outSec: number } | undefined>;
+
+/** Seconds, one decimal, no trailing noise — the field readout, not a timecode. */
+const secs = (n: number): string => `${n.toFixed(1)}s`;
 
 /** Button copy for the video-length-sync control (shown with 2+ clips). */
 const CLIP_LENGTH_LABEL: Record<ClipLengthMode, { short: string; aria: string; title: string }> = {
@@ -88,6 +95,16 @@ export interface VideoStageProps {
   /** Drop a clip back to its stills. Rendered in the dock beside its sound toggle. */
   onRemoveClip?: (id: string) => void;
   /**
+   * The WHOLE asset pool, used for one thing: the trim sheet's filmstrip.
+   *
+   * Deliberately not `orderedAssets` — that is the DRAW list, and with a locked
+   * fragment count it is a subset, so a trimmed clip's strip would silently lose
+   * frames as the layout changed. Every frame this clip ever gave us is already
+   * in memory with its `sourceTime` on it; the strip costs no decoder and no
+   * network, which is the only reason it can exist on a phone at all.
+   */
+  poolAssets?: ImageAsset[];
+  /**
    * Filled with a handle so the Export sheet can start a take. It has to be
    * IMPERATIVE: iOS grants a gesture only to the task it fired in, so the export
    * button must reach `startRecording` synchronously inside its own onClick — a
@@ -104,6 +121,218 @@ export interface StageRecorder {
   maxSeconds: number;
 }
 
+/**
+ * THE TRIM SHEET — pick the part of a clip that is actually good.
+ *
+ * SHAPE, and why it is this one. The CapCut idiom is two handles dragged along a
+ * filmstrip, and a hand-rolled dual-handle track is exactly the control that
+ * breaks on a phone, in a browser nobody tested, with a thumb instead of a
+ * mouse. So: the FILMSTRIP is the picture (it shows what you are cutting, which
+ * is the part a slider cannot say), and the two handles are ordinary
+ * `<input type="range">` — native touch behaviour, native keyboard support, a
+ * real accessible name, and no chance of a hit target that only works with a
+ * pointer. The window is drawn ON the strip, so the control still reads as one
+ * gesture rather than two numbers.
+ *
+ * The strip costs nothing: these are the frames the clip already handed over on
+ * import, `sourceTime` and all. No second decoder — which is the difference
+ * between a trim UI that works on a phone with three clips open and one that
+ * evicts a live decoder to draw itself.
+ */
+const TrimSheet: React.FC<{
+  clip: LiveClip;
+  frames: ImageAsset[];
+  value: { inSec: number; outSec: number } | undefined;
+  onChange: (v: { inSec: number; outSec: number } | undefined) => void;
+  onClose: () => void;
+}> = ({ clip, frames, value, onChange, onClose }) => {
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const span = clip.durationSec;
+  const w = normaliseWindow(span, value?.inSec, value?.outSec);
+  // A step fine enough to land on a beat, coarse enough that a thumb can hit it.
+  const step = span > 60 ? 0.1 : 0.01;
+  const pct = (t: number) => (span > 0 ? Math.max(0, Math.min(100, (t / span) * 100)) : 0);
+
+  // BOTH HANDLES STOP AT EACH OTHER. `setOut` always clamped against IN;
+  // `setIn` clamped only against the end of the clip, and that asymmetry was not
+  // cosmetic — an IN dragged past OUT reached `normaliseWindow`, whose repair
+  // grows OUT FORWARD, so OUT ratcheted along behind the thumb and the user's
+  // chosen OUT was destroyed. Measured: select 0→2.0, drag IN rightwards, and
+  // the window pins at the 0.15 s floor wherever you let go, with OUT following;
+  // dragging back left does not restore it, because the ratcheted value is now
+  // the stored one. `normaliseWindow`'s repair is a last resort for values the
+  // UI did not author (a restored project, the exported API) — never the routine
+  // path for an ordinary drag.
+  const setIn = (v: number) => onChange({ inSec: Math.min(v, w.outSec - MIN_WINDOW_SEC), outSec: w.outSec });
+  const setOut = (v: number) => onChange({ inSec: w.inSec, outSec: Math.max(v, w.inSec + MIN_WINDOW_SEC) });
+
+  /**
+   * A REAL MODAL, because this one is not decoration.
+   *
+   * The sheet started as `role="dialog"` and nothing else — no `aria-modal`, no
+   * initial focus, no trap, no Escape, while the app's other three sheets all
+   * close on Escape. Every Tab walked into the page behind it, INCLUDING the
+   * take controls: measured 14/14 tab stops landing outside, one of them
+   * "Record video". Reaching it defeats the `busy` guard that disables the trim
+   * chip precisely so the window cannot change mid-render — a take was started
+   * behind the open sheet and the sliders stayed live, baking TWO different
+   * windows into one exported file (decoded: green, green, green, green, green,
+   * RED). And the result modal is z-[300] under this sheet's z-[320], so the
+   * finished video's Save button was then unreachable — the same covered-button
+   * class already scarred into this file further down.
+   */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    closeRef.current?.focus();
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  /** Keep Tab inside the dialog. Cheaper and more robust than `inert`, which
+   *  needs a polyfill on the engines this app actually has to serve. */
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Tab') return;
+    const focusable = Array.from(
+      e.currentTarget.querySelectorAll<HTMLElement>('button, input, [href], select, textarea, [tabindex]:not([tabindex="-1"])'),
+    ).filter((el) => !el.hasAttribute('disabled'));
+    if (!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    const active = document.activeElement as HTMLElement | null;
+    if (e.shiftKey && (active === first || !e.currentTarget.contains(active))) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault(); first.focus();
+    }
+  };
+
+  return createPortal((
+    <div
+      className="fixed inset-0 z-[320] bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-5"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Trim ${clip.name}`}
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={onKeyDown}
+        className="w-full sm:max-w-lg bg-[#0e0e0e] border-t sm:border border-white/15 sm:rounded-2xl p-4 pb-6 sm:pb-4 flex flex-col gap-3"
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <Scissors size={13} className="text-emerald-400 shrink-0" />
+          <span className="text-[10px] font-black tracking-[0.2em] text-white uppercase shrink-0">Trim</span>
+          <span className="text-[10px] text-gray-500 truncate min-w-0" title={clip.name}>{clip.name}</span>
+          <div className="flex-1" />
+          <button
+            ref={closeRef}
+            onClick={onClose}
+            aria-label="Close trim"
+            className="w-11 h-11 -mr-2 rounded-lg text-gray-400 flex items-center justify-center hover:text-white hover:bg-white/10 transition-colors shrink-0"
+          ><X size={16} /></button>
+        </div>
+
+        {/* THE STRIP, AND ITS X-AXIS IS TIME.
+            Laying the frames out with equal widths is the obvious move and it
+            makes the control LIE: extraction is `strategy: 'smart'`, so the
+            frames it hands back are clustered wherever the clip was
+            interesting, and a six-second clip came back with nine frames from
+            its first third. Spread equally, that third fills three quarters of
+            the strip while the window bracket — which is positioned by TIME —
+            sits somewhere else entirely, so the pictures under the handles are
+            not the pictures you are about to cut to.
+            Each frame therefore covers the stretch of the clip it is the
+            NEAREST frame to: boundaries at the midpoints between adjacent
+            `sourceTime`s, first frame back to 0, last frame out to the end. */}
+        <div className="relative h-16 rounded-lg overflow-hidden bg-[#050505] border border-white/10">
+          <div className="absolute inset-0" aria-hidden="true">
+            {frames.length > 0 ? frames.map((f, i) => {
+              const t = (k: number) => frames[k]?.sourceTime ?? ((k + 0.5) / frames.length) * span;
+              const from = i === 0 ? 0 : (t(i - 1) + t(i)) / 2;
+              const to = i === frames.length - 1 ? span : (t(i) + t(i + 1)) / 2;
+              return (
+                <img
+                  key={f.id ?? i}
+                  src={f.previewSrc || f.src}
+                  alt=""
+                  className="absolute inset-y-0 h-full object-cover"
+                  style={{ left: `${pct(from)}%`, width: `${Math.max(0, pct(to) - pct(from))}%` }}
+                  draggable={false}
+                />
+              );
+            }) : (
+              <div className="absolute inset-0 bg-gradient-to-r from-[#141414] to-[#1e1e1e]" />
+            )}
+          </div>
+          {/* Everything OUTSIDE the window is dimmed — the cut is the thing you
+              see, not a number you have to translate. The opacity is a STANDARD
+              Tailwind step: `bg-black/72` is not one, generates no rule, and the
+              dimming silently did not exist. Caught by looking at a screenshot,
+              which is the only thing that can catch it. */}
+          <div
+            className="absolute inset-y-0 left-0 bg-black/70 pointer-events-none"
+            style={{ width: `${pct(w.inSec)}%` }}
+            aria-hidden="true"
+          />
+          <div
+            className="absolute inset-y-0 right-0 bg-black/70 pointer-events-none"
+            style={{ width: `${100 - pct(w.outSec)}%` }}
+            aria-hidden="true"
+          />
+          <div
+            className="absolute inset-y-0 border-x-2 border-emerald-400 pointer-events-none"
+            style={{ left: `${pct(w.inSec)}%`, width: `${Math.max(0, pct(w.outSec) - pct(w.inSec))}%` }}
+            aria-hidden="true"
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="flex items-center gap-2">
+            <span className="text-[9px] font-black tracking-[0.15em] text-emerald-400 w-8 shrink-0">IN</span>
+            <input
+              type="range" min={0} max={span} step={step} value={w.inSec}
+              onChange={(e) => setIn(parseFloat(e.target.value))}
+              aria-label={`In point for ${clip.name}`}
+              className="flex-1 min-w-0 h-11 accent-emerald-400 bg-transparent cursor-pointer"
+            />
+            <span className="text-[10px] text-gray-300 tabular-nums w-12 text-right shrink-0">{secs(w.inSec)}</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <span className="text-[9px] font-black tracking-[0.15em] text-emerald-400 w-8 shrink-0">OUT</span>
+            <input
+              type="range" min={0} max={span} step={step} value={w.outSec}
+              onChange={(e) => setOut(parseFloat(e.target.value))}
+              aria-label={`Out point for ${clip.name}`}
+              className="flex-1 min-w-0 h-11 accent-emerald-400 bg-transparent cursor-pointer"
+            />
+            <span className="text-[10px] text-gray-300 tabular-nums w-12 text-right shrink-0">{secs(w.outSec)}</span>
+          </label>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span
+            className="text-[10px] tracking-wide text-gray-400 tabular-nums min-w-0 truncate"
+            data-testid="trim-readout"
+          >
+            <span className="text-white font-black">{secs(w.length)}</span> of {secs(span)}
+            {w.full ? ' · whole clip' : ` · ${secs(w.inSec)}→${secs(w.outSec)}`}
+          </span>
+          <div className="flex-1" />
+          <button
+            onClick={() => onChange(undefined)}
+            disabled={w.full}
+            aria-label={`Use all of ${clip.name}`}
+            className="h-11 px-3 rounded-lg text-[9px] font-black tracking-[0.15em] uppercase text-gray-400 border border-white/10 flex items-center gap-1.5 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:pointer-events-none transition-colors shrink-0"
+          ><RotateCcw size={12} /> All</button>
+          <button
+            onClick={onClose}
+            className="h-11 px-4 rounded-lg bg-white text-black text-[9px] font-black tracking-[0.2em] uppercase hover:bg-emerald-400 transition-colors shrink-0"
+          >Done</button>
+        </div>
+      </div>
+    </div>
+  ), document.body);
+};
+
 /** Offered take lengths. Clamped to the device cap, so a phone never sees 30s. */
 const DURATION_CHOICES = [5, 10, 15, 30] as const;
 
@@ -114,7 +343,7 @@ type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
   layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, onNotice, onUnavailable,
-  controlsHost, onRemoveClip, recorderRef,
+  controlsHost, onRemoveClip, recorderRef, poolAssets,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<Stage | null>(null);
@@ -176,12 +405,68 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   // the two stretch modes rescale so all clips share one length. See videoSync.ts.
   const [clipLengthMode, setClipLengthMode] = useState<ClipLengthMode>('loop');
 
+  /**
+   * TRIM — the user's in/out points, per clip. Session state, exactly like the
+   * clips themselves: a `.collage` project stores photos and layout, and the
+   * clips it was built from are re-imported by hand, so persisting a window for
+   * a clip that will not be there is a promise the file cannot keep.
+   */
+  const [trims, setTrims] = useState<TrimMap>({});
+  /** Which clip's trim sheet is open, or null. */
+  const [trimming, setTrimming] = useState<string | null>(null);
+
+  // A take must never run with the trim sheet open — the sliders write the
+  // window straight into the Stage while `seekClipTo` is awaiting `seeked`.
+  useEffect(() => { if (recPhase !== 'idle') setTrimming(null); }, [recPhase]);
+
+  const setTrim = useCallback((id: string, next: { inSec: number; outSec: number } | undefined) => {
+    setTrims((prev) => {
+      if (!next) {
+        if (!prev[id]) return prev;
+        const { [id]: _drop, ...rest } = prev;
+        return rest;
+      }
+      const cur = prev[id];
+      if (cur && cur.inSec === next.inSec && cur.outSec === next.outSec) return prev;
+      return { ...prev, [id]: next };
+    });
+  }, []);
+
+  // A clip that has been removed must not leave its window behind: ids are
+  // minted per import, so a stale entry is dead weight that a re-import can
+  // never collide with — but it would still travel into every later `stageClips`.
+  useEffect(() => {
+    setTrims((prev) => {
+      const live = new Set(clips.map((c) => c.id));
+      const keys = Object.keys(prev);
+      if (keys.every((k) => live.has(k))) return prev;
+      const next: TrimMap = {};
+      for (const k of keys) if (live.has(k)) next[k] = prev[k];
+      return next;
+    });
+  }, [clips]);
+
   // --- scene: everything expensive happens here, never in the draw loop ------
   const stageClips: StageClipInput[] = useMemo(() => {
-    // One playbackRate per clip so several clips can share a length. The maths is
-    // pure and unit-swept (videoSync.ts); here we just attach the result.
+    /**
+     * ONE PLAYBACK RATE PER CLIP so several clips can share a length — computed
+     * from the WINDOW, not from the file.
+     *
+     * This is the whole coupling between trim and video-length sync, and getting
+     * it backwards is invisible: "match the shortest clip" has to mean the
+     * shortest thing the viewer SEES. Feed sync the untrimmed durations and a
+     * clip cut to two seconds still drags the collage around on its original
+     * sixty, with every rate correct and the result plainly wrong.
+     * `clipWindow.effectiveLength` and invariant I10 pin this.
+     */
     const playback = computeClipPlayback(
-      clips.map((c) => ({ id: c.id, durationSec: c.durationSec })),
+      clips.map((c) => {
+        const t = trims[c.id];
+        return {
+          id: c.id,
+          durationSec: normaliseWindow(c.durationSec, t?.inSec, t?.outSec).length,
+        };
+      }),
       clipLengthMode,
     );
     const rateById = new Map(playback.map((p) => [p.id, p.playbackRate]));
@@ -189,6 +474,8 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       id: c.id,
       src: c.url,
       name: c.name,
+      inSec: trims[c.id]?.inSec,
+      outSec: trims[c.id]?.outSec,
       // The APP owns these URLs and revokes them when a clip is dropped; Stage
       // must not also revoke, or a re-mount races a already-freed blob.
       ownsUrl: false,
@@ -209,8 +496,12 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       muted: false,
       width: c.width,
       height: c.height,
+      // The length `probeVideo` measured at import. The element cannot always
+      // work it out for itself (a MediaRecorder WebM reads Infinity until
+      // playback reaches the end), and the window is meaningless without it.
+      durationSec: c.durationSec,
     }));
-  }, [clips, clipLengthMode]);
+  }, [clips, clipLengthMode, trims]);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -508,9 +799,33 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           const wantsAudio = !!st?.wantsAudio;
           const audible = !!st?.audible;
           const silentHere = wantsAudio && !audible;
+          const t = trims[c.id];
+          const win = normaliseWindow(c.durationSec, t?.inSec, t?.outSec);
           return (
             <div key={c.id} className="flex items-center gap-0.5 pl-2 pr-0.5 py-0.5 rounded-lg bg-[#161616] border border-white/10 shrink-0">
               <span className="text-[9px] tracking-wide text-gray-300 truncate max-w-[7rem]" title={c.name}>{c.name}</span>
+              {/* TRIM. A trimmed clip SAYS SO on the chip — the window is the one
+                  edit here that changes what a finished export contains while
+                  leaving the collage looking broadly the same, so it must be
+                  legible without opening anything. */}
+              <button
+                onClick={() => setTrimming(c.id)}
+                disabled={busy || !(c.durationSec > MIN_WINDOW_SEC)}
+                title={win.full
+                  ? `Trim ${c.name} — pick the part that plays (${secs(c.durationSec)})`
+                  : `${c.name}: playing ${secs(win.inSec)}→${secs(win.outSec)} of ${secs(c.durationSec)}`}
+                aria-label={`Trim ${c.name}`}
+                className={`h-7 min-w-[1.75rem] px-1 rounded flex items-center justify-center gap-1 transition-colors disabled:opacity-30 disabled:pointer-events-none ${
+                  win.full
+                    ? 'text-gray-500 hover:text-white hover:bg-white/10'
+                    : 'text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20'
+                }`}
+              >
+                <Scissors size={12} />
+                {!win.full && (
+                  <span className="text-[9px] font-black tabular-nums">{secs(win.length)}</span>
+                )}
+              </button>
               <button
                 onClick={() => toggleClipSound(c.id, wantsAudio)}
                 disabled={!status?.audioAvailable || st?.state === 'error'}
@@ -693,6 +1008,40 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
       {/* Everything else lives in the control dock, OUTSIDE the canvas. */}
       {controlsHost && createPortal(dock, controlsHost)}
+
+      {/* THE TRIM SHEET. Mounted from the clip list rather than living in it:
+          the dock is a one-line scroll row on a phone and a range slider does
+          not fit in it — and a control you cannot drag is not a trim control. */}
+      {trimming && !busy && (() => {
+        const c = clips.find((x) => x.id === trimming);
+        if (!c) return null;
+        // The frames this clip already gave us, in time order. `sourceTime` is
+        // stamped on every extracted frame at import, so the strip reads left to
+        // right as the clip actually runs.
+        // BY `clipId` ONLY. `sourceName` is the raw FILE NAME, and matching on it
+        // hands this clip every frame of every other clip that shares a name —
+        // `IMG_0001.MOV`, `clip.mp4`, `screen-recording.mov` are exactly what
+        // phones and screen recorders produce, and `removeClip` clears `clipId`
+        // while leaving `sourceName`, so a DELETED clip kept feeding the strip.
+        // Measured with two different videos both named `clip.mp4`: 12 of 24
+        // frames in the strip belonged to the other clip, interleaved into a
+        // zebra, with every frame's WIDTH wrong as well now that the strip is
+        // laid out by time. The strip is the only picture of what you are
+        // cutting; a strip showing another clip is worse than no strip.
+        const frames = (poolAssets ?? [])
+          .filter((a) => a.sourceKind === 'video' && !!a.clipId && a.clipId === c.id)
+          .slice()
+          .sort((a, b) => (a.sourceTime ?? 0) - (b.sourceTime ?? 0));
+        return (
+          <TrimSheet
+            clip={c}
+            frames={frames}
+            value={trims[c.id]}
+            onChange={(v) => setTrim(c.id, v)}
+            onClose={() => setTrimming(null)}
+          />
+        );
+      })()}
 
       {/* THE TAKE — previewed with a real <video> so "it plays" is proven here,
           not assumed. The file is only worth offering if this element renders it.
