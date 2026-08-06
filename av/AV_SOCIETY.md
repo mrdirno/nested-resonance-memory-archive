@@ -1132,3 +1132,23 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   notice. Four new scars above. Every page driven for real at 320/360/390/430px — zero
   horizontal overflow, nothing under 44px, and a document composed end to end on each trade.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/write-up.html
+
+- 2026-08-06 · **[AXIS:BACKPORT] `aria-modal` is a promise, not a behaviour — six trades get
+  a real focus trap.** The rider fired from the COLLAGE lane: the trim sheet shipped there
+  had a modal that declared itself modal and trapped nothing, and the toolkits have exactly
+  that shape — the wishing well is injected by the SHARED runtime into every page of every
+  trade, so one leak is 26 tool pages. **Measured on LIVE production before touching
+  anything** (av hub, av/consumables, plumbing hub, hvac hub): **12 of 16 Tab stops landed
+  OUTSIDE the open dialog** — on the nav, on the trigger button, and on a tool page on the
+  user's own INPUT, i.e. typing into the document the sheet is covering. `aria-modal="true"`
+  was already on the sheet and it tells assistive tech the rest of the page is inert; it
+  does nothing whatsoever about where Tab goes. Escape already worked and was left alone.
+  before→after: **12/16 stops escaping → 0 of 26, forwards AND backwards (Shift+Tab
+  included), on all six trades plus a tool page, verified against the deployed site.** ONE
+  handler in `shared/toolkit.js` covers every trade because the runtime is shared — which is
+  the whole reason a new trade is a config and never a fork — and `shared/feedback.js`
+  repeats it locally rather than importing, because that file is a standalone two-line
+  drop-in by design and may not assume the toolkit runtime is on the page. Collapsed "more"
+  fields and the honeypot are excluded from the ring, so the trap cannot park focus on
+  something the user cannot see.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/

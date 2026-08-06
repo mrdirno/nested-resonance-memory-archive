@@ -62,6 +62,21 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       returns the input array untouched, so every existing seed, project and
       share code renders BIT-IDENTICALLY and only the exports move — onto the
       picture the user was already looking at.
+- [ ] **A TRIM THAT STRADDLES THE END OF A SHORT AUDIO TRACK LOOPS THE SOUND AT
+      THE WRONG PERIOD.** Confirmed by an adversarial audit that rendered the
+      real plan through real Web Audio: with the repo's own `shortaudio.mp4`
+      (6.000 s picture, 2.99998 s sound) trimmed to 2→5, the picture laps every
+      3 s and the sound every 1 s, and **16 of 24 sampled instants play a 440 Hz
+      tone under a picture the file has no sound for**. `audioPlan` clamps
+      `hi` into the decoded buffer and hands that truncated span to the node as
+      its LOOP REGION, so the surviving fragment repeats at the audio's period
+      instead of the picture's. Pre-existing in class (the base commit did the
+      same to an UNTRIMMED short-audio clip), new surface with trim, and NOT a
+      clamp bug — the honest fix is to stop using the node's own loop here and
+      schedule one non-looping node PER PICTURE LAP (`start(lapStart, inSec,
+      min(bufEnd, out) - inSec)`), which is exact for any rate and needs a cap
+      on lap count. `trim.spec.ts` only covers the window landing ENTIRELY past
+      the audio (→ `plan.silent`), which is why it is green.
 - [ ] **Transitions** — cross-dissolve / fade / wipe / slide between clips/scenes.
 - [ ] **Text & titles** — text overlays, fonts, animated titles / lower-thirds;
       later, auto-captions from the audio track.
@@ -126,6 +141,20 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **THE TRIM SHEET AND THE STAGE RESOLVE THE WINDOW AGAINST DIFFERENT SPANS, and
+  it is safe for a reason worth writing down rather than for luck.** The sheet
+  only has `LiveClip.durationSec`; the Stage has `max(EPS, el.duration - EPS)`,
+  4 ms shorter. So `normaliseWindow(...).full` can disagree between them, and
+  `full` is what decides whether the element keeps its NATIVE loop. Swept 60
+  duration/window pairs: 18 disagree, **all in the same direction** — the sheet
+  says "trimmed" while the Stage says "whole clip". The dangerous direction
+  (`ui.full === true` while the Stage silently turns the native loop off for a
+  clip nobody trimmed) **cannot occur**: `ui.full` requires `out === durationSec`
+  exactly, and the Stage then clamps that same `out` to its own span, which makes
+  it full there too. The disagreement band is also unreachable through the
+  control: it is 4 ms wide and the slider's step is 10 ms (100 ms past 60 s). Do
+  not "fix" this by inventing a tolerance — record it, and re-check the direction
+  if either span definition ever moves.
 - Fill/count reckon in **SOURCES**, not assets (a video = 1 source, however many frames).
 - Playwright's default `baseURL` is **:5173 = Persona 500** — always pin :5199 /
   `COLLAGE_BASE_URL`, and `curl` a dev server's identity before trusting it.
@@ -344,6 +373,42 @@ multi-agent audit for non-trivial changes.
   had no config of its own, so the only way to run the suite guarding
   `offlineAudio.ts` was the repo default — which points at :5173, Persona 500.
   It now has `playwright.video-audio.config.ts` like every other suite.
+- **A GATE THAT IMPORTS NO VIDEO CANNOT SEE THE VIDEO CONTROLS, AND THE VIDEO
+  CONTROLS WERE THE PART THAT FAILED.** `mobile-watertight.spec.ts` imported six
+  PNGs, so the whole live-stage transport — clip chips, trim, per-clip sound,
+  play/pause, monitor, take length, Record — did not exist while it ran, and the
+  suite reported the app watertight for months on the strength of the photo-only
+  page. Measured at 390px with one video loaded: **ELEVEN controls under the 44px
+  law**, from `Stop playing` at 24x28 to `Record video` — the button that starts
+  an export — at 32x32. Same class as twist's T4 and one-layout's `complex`, one
+  layer up: green for a reason that has nothing to do with the assertion. The
+  gate now imports a real video; whatever a test cannot reach, it is silently
+  approving.
+- **A DECLARED WIDTH IS NOT A WIDTH INSIDE A SHRINKING FLEX ROW.**
+  `.ui-stepper__btn { width: 52px }` with the default `flex-shrink: 1` collapsed
+  both fragment steppers to **18px at 320px**. Found by the new video-dock gate
+  within minutes of it existing, and invisible to the old one for a second
+  reason worth separating: those tests read tap targets on the SETTINGS tab,
+  where the stepper is not rendered at all. `flex: 0 0 52px` + `min-width: 44px`.
+- **AN EFFECT KEYED ON AN INLINE CALLBACK RE-RUNS ON EVERY RENDER, AND A FOCUS
+  CALL INSIDE IT IS THEN A FOCUS THIEF.** The trim sheet's modal effect depended
+  on `[onClose]` — `onClose={() => setTrimming(null)}`, rebuilt every render — so
+  every slider change re-ran it and re-focused the Close button. Measured on the
+  real page, keyboard only, and again in a PRODUCTION build: ArrowRight moved IN
+  from 0 to 0.01, focus jumped to Close, and presses 2..20 did nothing; Enter —
+  the natural "is this thing on?" — dismissed the sheet. Reaching the spec's own
+  2.3 s window would have cost 230 Tab+Arrow pairs. Both things that would have
+  caught it do not: a DRAG is unaffected (a range keeps pointer capture straight
+  through the steal) and so is Playwright's `fill()`, which writes the value in
+  one shot. Hold the callback in a ref and give the effect an EMPTY dep list.
+  Found by three of the four audit lenses independently.
+- **A CSS VARIABLE WITH A FALLBACK FAILS SILENTLY AND LOOKS DELIBERATE.** The
+  app's global range track is a gradient stopped at `var(--fill, 50%)`, and the
+  two trim sliders never set `--fill` — so both bars painted half green forever,
+  with the OUT handle sitting at the far right above a half-full track. Nothing
+  errored, nothing was missing from the DOM, and the wrong picture reads as a
+  design choice. Sibling of the `bg-black/72` scar: the failure mode of a style
+  that does not exist is not blankness, it is a plausible wrong answer.
 - **`LayoutItem.id` is a module-level counter, not a function of the layout.**
   `shards` returns `shd-0…` on one call and `shd-24…` on the next for identical
   geometry. Inert today — every consumer and the React key use the ARRAY INDEX —
@@ -561,4 +626,61 @@ frontier. Today's ceiling is tomorrow's floor.
   preview and the clipboard through ONE producer — `text()`, `buildDoc()`, `asText()` — so
   they are structurally immune, not merely currently-correct. Nothing to carry over; recorded
   so the next cycle does not re-sweep it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-06 · **[AXIS:COLLAGE] TRIM — one formula decides where a clip is, and all three
+  timelines ask it** (the biggest CapCut gap, and the increment that had been BUILT AND
+  STAGED BY A CYCLE THAT DIED BEFORE COMMITTING — the book's body described it as shipped
+  while nothing was in any commit and nothing was live). before→after: **a clip is all of
+  itself → a clip is the part you chose.** Per-clip in/out with a filmstrip sheet. The
+  reason it touches so little is that it did not add a window in three places:
+  `Stage.seekClipTo`, `offlineAudio.mixSources` and the live `<video>` each carried their
+  own copy of the same two lines, so the window went into ONE module (`lib/clipWindow.ts`,
+  `sourceTimeAt`) and the three consumers now ASK instead of remembering. Compatibility is
+  asserted, not hoped for: an untrimmed clip is `in=0, out=span` and adding exactly zero is
+  the IEEE-754 identity, so every existing project renders bit-identically. Trim composes
+  with video-length sync because sync is fed the WINDOW length rather than the file's.
+  **Proof:** `clipWindow.invariants.mjs` **5,312,343 checks, 0 failures** · `trim.spec.ts`
+  **8/8 on the real UI and 8/8 against LIVE**, reading exported PIXELS and decoded AUDIO —
+  the trimmed-to third's 1200 Hz at 0.084 against the trimmed-away 440 Hz at 0.00007, 961
+  rAF frames with `playheadOutside=0`, a container with `duration = Infinity` trimmed
+  anyway, and a window past the end of a short audio track exporting silence rather than a
+  looped fragment. Regression: mobile 6/6, source-count 7/7, one-layout 4/4, twist 8/8,
+  export-integrity 3/3, video-audio 4/4, composition 9/10 (the documented seed flake), every
+  sweep clean, `tsc` + `vite build` clean.
+  **THE MOBILE GATE HAD NEVER SEEN THE THING IT WAS GRADING.** `mobile-watertight.spec.ts`
+  imports PNGs, so the entire video transport does not exist while it runs — measured at
+  390px with one video loaded, **ELEVEN controls under the 44px law**, including `Record
+  video`, the button that starts an export, at 32x32. The bar now WRAPS below `sm` (44×7
+  plus a clip chip does not fit on one 320px line) and the gate imports a real video, which
+  within minutes found a second one older than trim: `.ui-stepper__btn` declares `width:
+  52px` with default `flex-shrink`, collapsing both fragment steppers to **18px at 320px**.
+  **The adversarial audit earned its keep for the fourth time in five — 9 agents, four
+  lenses, three CONFIRMED defects and one refuted**, and the refutation is worth as much as
+  the finds: that verifier noticed the worktree had moved under it mid-audit, materialised
+  the STAGED blob into a scratch tree, served it on its own port and A/B'd one line.
+  (1) THE TRIM HANDLES ACCEPTED EXACTLY ONE KEYSTROKE — the modal effect keyed on
+  `[onClose]`, an inline arrow rebuilt every render, re-focused the Close button on every
+  value change; ArrowRight moved IN 0→0.01 and presses 2..20 did nothing, and Enter, the
+  natural "is this thing on?", dismissed the sheet. Reproduced in a PRODUCTION build, so not
+  a StrictMode artifact. Neither a drag (pointer capture survives the steal) nor `fill()`
+  can see it, which is why the suite was green. Fixed with a ref + empty dep list, and
+  `trim.spec.ts` T3b presses a REAL arrow five times and **was watched going RED** on the
+  reintroduced dep array. (2) THE SLIDER TRACKS LIED — the global range track is
+  `var(--fill, 50%)` and neither trim slider set it, so both bars painted half green with
+  the OUT handle at the far right. (3) NOT FIXED, ON THE LADDER WITH ITS REPRO: a trim
+  window that STRADDLES the end of a short audio track loops the surviving fragment at the
+  AUDIO's period instead of the picture's — `shortaudio.mp4` trimmed 2→5 gives a 3 s picture
+  lap against a 1 s sound lap, and 16 of 24 sampled instants play a tone under a picture the
+  file is silent for. Pre-existing in class; the honest fix is per-lap scheduling, not a
+  clamp, so it is its own increment.
+  **BACKPORT rider fired, and did NOT come back clean.** The class fixed here is "a modal
+  that traps nothing", and the trade toolkits have exactly that shape — the wishing well is
+  injected into every page of every trade. Measured on LIVE production before the fix:
+  **12 of 16 Tab stops landed OUTSIDE the open dialog**, on the nav, on the trigger, and on
+  a tool page on the user's own INPUT. `aria-modal="true"` was already there and is a
+  promise to assistive tech, not a behaviour. One handler in `shared/toolkit.js` covers all
+  six trades because the runtime is shared; `shared/feedback.js` repeats it locally because
+  it is a standalone drop-in that may not assume the toolkit is present. Verified LIVE on
+  all six trades plus a tool page: **0 of 26 stops outside, forwards and backwards.**
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
