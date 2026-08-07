@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { LayoutMode, PrimitiveType } from '../types';
 import type { TitlePlace, TitleSize } from '../lib/title';
+import { LOOKS, type LookId } from '../lib/grade';
 import { GENERATORS, GENERATOR_BY_ID, FAMILIES, FAMILY_LABEL } from '../engine/geom/generators';
 
 interface SimpleControlsProps {
@@ -40,6 +41,10 @@ interface SimpleControlsProps {
   onTitleText?: (t: string) => void;
   onTitlePlace?: (p: TitlePlace) => void;
   onTitleSize?: (s: TitleSize) => void;
+
+  /** THE LOOK — the colour grade over every fragment. See lib/grade.ts. */
+  look?: LookId;
+  onLook?: (l: LookId) => void;
 }
 
 /**
@@ -82,7 +87,8 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
   layoutMode, setLayoutMode, primitive, setPrimitive, count, setCount,
   density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice,
   lastRecipe, compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
-  titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize
+  titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize,
+  look = 'none', onLook
 }) => {
 
   // ---- THE COMPOSITION CODE --------------------------------------------------
@@ -225,6 +231,34 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           are looking at, the exported picture, the recorded video and the SVG —
           and it is NOT in the composition code, because a code is a recipe for
           somebody else's photographs and your caption is not. ------------- */}
+      {/* ---- THE LOOK: the colour grade, on every fragment ------------------
+          One row, one job. It reaches the preview, the live video, the exported
+          picture and the SVG — and unlike the caption it IS in the composition
+          code, because a grade is part of the recipe. ------------------- */}
+      {hasImages && onLook && (
+        <div className="ui-looks">
+          <div className="ui-looks__chips" role="group" aria-label="Look">
+            {LOOKS.map(l => (
+              <button
+                key={l.id}
+                type="button"
+                className="ui-chip ui-chip--mini"
+                data-active={(look ?? 'none') === l.id}
+                onClick={() => onLook(l.id)}
+                title={l.title}
+                aria-pressed={(look ?? 'none') === l.id}
+                data-testid={`look-${l.id}`}
+              >{l.label}</button>
+            ))}
+          </div>
+          <p className="ui-caption">
+            {(look ?? 'none') === 'none'
+              ? 'A colour grade on the photographs. The frame colour stays what you picked.'
+              : 'On the picture, the video and the SVG. It travels in the code.'}
+          </p>
+        </div>
+      )}
+
       {hasImages && onTitleText && (
         <div className="ui-titler">
           <div className="ui-titler__row">

@@ -54,6 +54,7 @@ import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
 import { normaliseWindow, MIN_WINDOW_SEC } from '../lib/clipWindow';
 import type { TitlePlan } from '../lib/title';
+import type { LookId } from '../lib/grade';
 
 /** The user's raw trim points for one clip. Absent = the whole clip. */
 type TrimMap = Record<string, { inSec: number; outSec: number } | undefined>;
@@ -83,6 +84,12 @@ export interface VideoStageProps {
    * the caption that ends up in the file.
    */
   titlePlan?: TitlePlan | null;
+  /**
+   * THE LOOK — the colour grade, passed straight through to the Stage. This is
+   * the surface both video recorders capture, so it is also the grade on the
+   * delivered file rather than only on the picture on screen.
+   */
+  look?: LookId | null;
   /** Surfaced so the parent can show one consistent notice strip. */
   onNotice?: (msg: string) => void;
   /**
@@ -373,7 +380,7 @@ const fmtBytes = (b: number): string =>
 type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
-  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, onNotice, onUnavailable,
+  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, onNotice, onUnavailable,
   controlsHost, onRemoveClip, recorderRef, poolAssets,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -546,8 +553,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       zoom,
       bgColor,
       titlePlan,
+      look,
     });
-  }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan]);
+  }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan, look]);
 
   // --- transport -------------------------------------------------------------
 

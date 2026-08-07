@@ -1,5 +1,6 @@
 import type { ArrangementId, FocusId, TwistId } from './lib/composition';
 import type { TitleSpec } from './lib/title';
+import type { LookId } from './lib/grade';
 import { AnalysisResult } from './lib/analysis';
 
 /**
@@ -104,6 +105,13 @@ export interface AppState {
   };
   style: {
     background: string;
+    /**
+     * THE LOOK — the colour grade over every fragment (see lib/grade.ts). Here
+     * rather than under `layout` because it is a colour operation and
+     * `background` is its sibling; absent on every project saved before it
+     * existed, and absent means `none`, which is what those projects were.
+     */
+    look?: LookId;
   };
   /**
    * THE TITLE — the caption drawn over the finished collage. Absent on every

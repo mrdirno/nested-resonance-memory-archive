@@ -12,6 +12,7 @@ import { assignSources, distinctSourceCount } from './lib/fill';
 import { arrangeBag, withFocus, withTwist, twistAngle, type ArrangementId, type FocusId, type TwistId } from './lib/composition';
 import { renderCanvas } from './lib/renderer';
 import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/title';
+import type { LookId } from './lib/grade';
 import { saveProject, loadProject } from './lib/project';
 import { generateVectorExport } from './engine/color/vectorExport';
 import { addToHistory, HistoryItem } from './lib/history';
@@ -156,6 +157,8 @@ export default function App() {
   const [titleText, setTitleText] = useState('');
   const [titlePlace, setTitlePlace] = useState<TitlePlace>('bl');
   const [titleSize, setTitleSize] = useState<TitleSize>('md');
+  /** THE LOOK — the colour grade over every fragment. See lib/grade.ts. */
+  const [look, setLook] = useState<LookId>('none');
   
   /** Name of the recipe the last dice roll drew from, shown in the readout. */
   const [lastRecipe, setLastRecipe] = useState<string | undefined>(undefined);
@@ -491,7 +494,7 @@ export default function App() {
        try {
          const orderedImages = orderedAssets;
          const orderedPreviews = orderedImages.map(img => img ? ({ ...img, src: img.previewSrc || img.src }) : img);
-         const canvas = await renderCanvas(PREVIEW_W, aspect, layoutMode, layoutItems, orderedPreviews, seed, zoom, bgColor, titlePlan);
+         const canvas = await renderCanvas(PREVIEW_W, aspect, layoutMode, layoutItems, orderedPreviews, seed, zoom, bgColor, titlePlan, look);
          canvas.toBlob(blob => {
              if (previewUrl) URL.revokeObjectURL(previewUrl);
              if (blob) setPreviewUrl(URL.createObjectURL(blob));
@@ -500,7 +503,7 @@ export default function App() {
     };
     const t = setTimeout(runRender, 50);
     return () => clearTimeout(t);
-  }, [images, layoutItems, shuffledIndices, orderedAssets, seed, zoom, bgColor, liveMode, titlePlan]);
+  }, [images, layoutItems, shuffledIndices, orderedAssets, seed, zoom, bgColor, liveMode, titlePlan, look]);
 
   const handleShuffle = () => setShuffleTrigger(prev => prev + 1);
   /**
@@ -540,6 +543,10 @@ export default function App() {
     setArrangement(roll.arrangement);
     setFocus(roll.focus);
     setTwist(roll.twist);
+    // The grade is part of the roll for the same reason the composition is: the
+    // same fragments graded differently is a different picture, and the point
+    // of the button is a different picture.
+    setLook(roll.look ?? 'none');
     setLastRecipe(roll.recipe);
     setLockedCells(new Map());
     // The deal is part of the composition and the roll re-deals it; leaving the
@@ -561,10 +568,10 @@ export default function App() {
   // ===========================================================================
   const compositionCode = useMemo(() => encodeState({
     layoutMode, primitive, count, density, entropy, aspect, gutter,
-    bgColor, seed, arrangement, focus, twist, shuffle: shuffleTrigger,
+    bgColor, seed, arrangement, focus, twist, look, shuffle: shuffleTrigger,
     countOwned,
   }), [layoutMode, primitive, count, density, entropy, aspect, gutter,
-       bgColor, seed, arrangement, focus, twist, shuffleTrigger, countOwned]);
+       bgColor, seed, arrangement, focus, twist, look, shuffleTrigger, countOwned]);
 
   /**
    * Apply a pasted code. Returns false when it is not one, so the caller can
@@ -597,6 +604,7 @@ export default function App() {
     setAspect(s.aspect);
     setGutter(s.gutter);
     setBgColor(s.bgColor);
+    setLook(s.look);
     setSeed(s.seed);
     setArrangement(s.arrangement);
     setFocus(s.focus);
@@ -1057,7 +1065,7 @@ export default function App() {
   };
 
   const handleClear = () => {
-      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
       addToHistory(state, images, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
@@ -1092,6 +1100,7 @@ export default function App() {
       if(item.state.style?.background) setBgColor(item.state.style.background);
       // ABSENT MEANS THE DEFAULT, never "keep what is on screen" — restoring a
       // snapshot that predates the title must not leave today's caption on it.
+      setLook(item.state.style?.look ?? 'none');
       setTitleText(item.state.title?.text ?? '');
       setTitlePlace(item.state.title?.place ?? 'bl');
       setTitleSize(item.state.title?.size ?? 'md');
@@ -1171,7 +1180,7 @@ export default function App() {
                   fallbackSrc: img.previewSrc || img.src,
                   width: img.width, height: img.height, analysis: img.analysis,
               }) : null),
-              zoom, bgColor, titlePlan,
+              zoom, bgColor, titlePlan, look,
           });
       });
   };
@@ -1346,21 +1355,21 @@ export default function App() {
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
         const orderedImages = retwistFor(orderedAssets.map(a => a ?? null), items, 1000, 1000 / aspect);
-        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
-        const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor, titlePlan);
+        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+        const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor, titlePlan, look);
         const blob = new Blob([svgContent], {type: 'image/svg+xml'});
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `GENART-VECTOR-${seed}.svg`; a.click(); URL.revokeObjectURL(url);
         setExportStatus('done'); setTimeout(() => setExportStatus('idle'), 2000);
     } catch (e) { setExportStatus('error'); }
   };
 
-  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined }; await saveProject(state, images); };
+  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined }; await saveProject(state, images); };
   const handleLoadProject = () => { 
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.collage,.svg';
     input.onchange = async (e:any) => {
         const file = e.target.files[0]; if(!file) return;
         const loaded = await loadProject(file);
-        if(loaded) { ownCount(true); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || ASPECT_ROSTER[1]); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md'); }
+        if(loaded) { ownCount(true); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || ASPECT_ROSTER[1]); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md'); }
     };
     input.click();
   };
@@ -1442,6 +1451,7 @@ export default function App() {
                        zoom={zoom}
                        bgColor={bgColor}
                        titlePlan={titlePlan}
+                       look={look}
                        onNotice={flashNotice}
                        onUnavailable={() => setStageOk(false)}
                        controlsHost={stageControlsHost}
@@ -1503,7 +1513,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} framePicker={framePicker} setFramePicker={setFramePicker} />
          )}

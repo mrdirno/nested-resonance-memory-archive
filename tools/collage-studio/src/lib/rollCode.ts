@@ -36,6 +36,7 @@
 
 import type { LayoutMode, PrimitiveType } from '../types';
 import type { ArrangementId, FocusId, TwistId } from './composition';
+import type { LookId } from './grade';
 import { type Roll, encodeRoll, decodeRoll, snapRoll } from './diceRoll';
 
 /**
@@ -57,6 +58,14 @@ export interface CompositionState {
   arrangement: ArrangementId;
   focus: FocusId;
   twist: TwistId;
+  /**
+   * THE LOOK — the colour grade. In the code, unlike the TITLE, because a grade
+   * IS part of the recipe: "these fragments, dealt this way, leaning this far,
+   * graded like this" describes a picture somebody can rebuild with their own
+   * photographs. A caption cannot — somebody else's words over your pictures is
+   * not the same collage, which is why that one stays out.
+   */
+  look: LookId;
   /** How many times "Shuffle images" has re-dealt. */
   shuffle: number;
   /** True once the count is the user's decision rather than the source total. */
@@ -81,6 +90,7 @@ export const rollFromState = (s: CompositionState): Roll => snapRoll({
   arrangement: s.arrangement,
   focus: s.focus,
   twist: s.twist,
+  look: s.look,
   countOwned: s.countOwned,
 });
 
@@ -97,6 +107,10 @@ export const stateFromRoll = (r: Roll, shuffle = 0): CompositionState => ({
   arrangement: r.arrangement,
   focus: r.focus,
   twist: r.twist,
+  // A Roll built before this field existed carries no look, and the picture it
+  // described was ungraded — so the absence maps to `none` rather than to a
+  // missing value the UI would have to defend against.
+  look: r.look ?? 'none',
   shuffle,
   countOwned: !!r.countOwned,
 });

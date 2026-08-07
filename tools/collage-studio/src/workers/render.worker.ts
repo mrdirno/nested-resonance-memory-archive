@@ -33,6 +33,7 @@
 //
 import { calculateSmartCrop } from '../lib/renderer';
 import { titlePlanFor, drawTitlePlan } from '../lib/title';
+import { cssFilterFor } from '../lib/grade';
 import { assertSurfaceLive } from '../lib/exportLimits';
 
 const ctx: Worker = self as any;
@@ -85,6 +86,13 @@ ctx.onmessage = async (e: MessageEvent) => {
     // something else, and a title that breaks onto two lines in the preview and
     // three in the file is the exact divergence ONE LAYOUT removed.
     titlePlan = null,
+    // THE LOOK — a roster id, not a filter string. The id is what the app's
+    // state, the project file and the composition code all carry, so sending
+    // the id and resolving it here through the SAME `cssFilterFor` the preview
+    // called keeps one roster in one file; sending a pre-built string would put
+    // a second copy of the grade on the wire, where it could go stale against
+    // the roster without anything noticing.
+    look = null,
   } = d;
 
   let failedImages = 0;
@@ -120,6 +128,14 @@ ctx.onmessage = async (e: MessageEvent) => {
 
     ctx2d.fillStyle = bgColor;
     ctx2d.fillRect(0, 0, width, height);
+
+    // THE LOOK — identical placement to renderer.ts: after the background fill
+    // (the frame colour is not graded), once rather than per fragment (every
+    // item's save/restore returns to this state), and off again before the
+    // caption. `'none'` is never assigned, so an ungraded export runs exactly
+    // the instruction stream it always did.
+    const gradeCss = cssFilterFor(look);
+    if (gradeCss !== 'none') ctx2d.filter = gradeCss;
 
     for (let i = 0; i < layoutItems.length; i++) {
         if (cancelled.has(id)) { cancelled.delete(id); return; }
@@ -204,6 +220,8 @@ ctx.onmessage = async (e: MessageEvent) => {
             failedImages++;
         }
     }
+
+    if (gradeCss !== 'none') ctx2d.filter = 'none';
 
     // THE TITLE, over the finished composition and before the surface re-check
     // — it is the last thing drawn, so a caption that vanished would mean the

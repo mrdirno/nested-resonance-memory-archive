@@ -826,6 +826,30 @@
    composition is — and every row wraps, because seven chips at 320px do not
    fit on one line and a control that needs a sideways scroll on a phone is a
    control nobody uses on a ladder. -------------------------------------- */
+/* ---- THE LOOK -------------------------------------------------------------
+   A single wrapping row of grade chips. `flex-wrap` is load-bearing, not
+   defensive: eight chips at 44px minimum cannot fit one 320px line, and a row
+   that scrolls sideways instead of wrapping is exactly the horizontal overflow
+   the mobile gate refuses. Same box as the titler so the two docks read as one
+   strip rather than two designs. -------------------------------------------- */
+.ui-looks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px 11px;
+  border-radius: 12px;
+  border: 1px solid var(--line-1);
+  background: var(--surface-1);
+}
+.ui-looks__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
 .ui-titler {
   display: flex;
   flex-direction: column;

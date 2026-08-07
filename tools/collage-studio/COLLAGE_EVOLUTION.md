@@ -52,7 +52,14 @@ or re-documenting an existing capability is DD, not delivery.
   by all four surfaces that produce pixels (still preview, live Stage and so
   both video recorders, the export WORKER's OffscreenCanvas, and the SVG as real
   `<text>`), from ONE plan wrapped once on the main thread at the 1200 basis
-  (`lib/title.ts`) and scaled per surface.
+  (`lib/title.ts`) and scaled per surface.;
+  THE LOOK — a colour grade on the photographs, eight named looks on one row of
+  chips, reaching all four surfaces that produce pixels from ONE ordered
+  pipeline (`lib/grade.ts`): the three canvas paths set `ctx.filter` from
+  `cssFilterFor`, and the SVG emits the spec-equivalent `<filter>` primitives in
+  the same order through the same formatter, pinned to `sRGB`. It rides the dice
+  AND the composition code — unlike the title, because a grade IS part of a
+  recipe.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -145,8 +152,43 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       Still owed on this rung: a colour/weight choice, per-line styling, MOTION
       (animated titles and lower-thirds — the first thing here that needs a time
       axis), and auto-captions from the audio track.
+- [ ] **A code's middle group is read by LENGTH, and nothing rejects a LONGER
+      one.** Found while adding the look. `decodeRoll` picks the layout of that
+      group from its length (15 pre-flag, 16 flag-no-checksum, 18 pre-look, 19
+      with a look) and then slices the checksum at a fixed offset — so trailing
+      characters BEYOND 19 are simply ignored and a code with junk appended
+      still validates. Entirely pre-existing (an over-long group sailed through
+      the 18-character form the same way) and not reachable from the app, but
+      "no error case" is the error case for a string whose job is to survive
+      chat clients. The fix is an exact-length check per generation, which is
+      one line and a sweep arm.
+- [ ] **THE LOOK is a preset roster, not a grading desk.** Eight fixed grades is
+      the right first cut — a picker you have to scroll is a settings screen —
+      but `Grade` is already five continuous numbers, so exposing them as
+      sliders is a UI change rather than an engine change. The moment that
+      happens the two-decimal `GRADE_GRID` stops being a property of a
+      hand-written roster and has to be enforced on the way in, exactly as
+      `snapRoll` does for the composition sliders.
 - [ ] **Keyframes** — animate position/scale/opacity/rotation over time (Ken Burns).
-- [ ] **Adjustments & filters** — brightness/contrast/saturation/temp, LUT filters.
+- [~] **Adjustments & filters** — part-shipped as **THE LOOK**. Eight named
+      grades (None / Punch / Faded / Mono / Noir / Warm / Cool / Bleach) on one
+      wrapping chip row, on the dice and in the share code. The seam is that a
+      grade is not a STRING, it is an ORDERED LIST OF STEPS
+      (`brightness -> contrast -> saturate -> sepia -> hue-rotate`), and the two
+      emitters are both pure functions of that one list: `cssFilterFor` joins it
+      for the three canvas paths, `svgFilterFor` maps each step to the primitive
+      CSS Filter Effects defines as its exact equivalent, in the same order,
+      through the SAME number formatter. Colour operations do not commute, so
+      the order is part of the grade and lives in one place.
+      **The load-bearing decision is `color-interpolation-filters="sRGB"`**:
+      canvas evaluates CSS filter functions in sRGB and SVG filters default to
+      LINEAR light, so the identical primitives with the identical numbers make
+      the exported SVG a different picture from the exported JPEG. Measured:
+      dropping that one attribute moves them up to **105.2/255** apart (mean
+      28.1/255). Still owed on this rung: user-set sliders rather than only
+      presets, per-fragment grades, LUT import, and a grade on the BACKGROUND
+      (deliberately excluded today — the frame colour comes out the colour you
+      picked).
 - [ ] **Audio** — multi-track mix (partly done), volume envelopes / ducking, fade
       in/out, a music track, beat-sync.
 - [ ] **Speed** — per-clip speed ramps / freeze frames (video-length sync is step 1).
@@ -785,6 +827,20 @@ multi-agent audit for non-trivial changes.
   geometry. Inert today — every consumer and the React key use the ARRAY INDEX —
   and asserted in the sweep (I2b) so the day something keys off it, the record is
   already there instead of the bug being rediscovered.
+- **`git checkout --` IS NOT AN UNDO FOR A MUTATION TEST, IT IS A REVERT TO
+  HEAD.** Three mutations were planted to prove the new tests go red, each
+  followed by `git checkout -- <file>` to put it back. All three went red, which
+  was the point — and the cleanup then silently destroyed the cycle's work in
+  two of the three files, because `checkout` restores the file as HEAD has it
+  and HEAD did not have the feature yet. The third file was worse: it was
+  UNTRACKED, so `checkout` errored, the error scrolled past inside a longer
+  script, and the mutation stayed in the tree. Fifteen minutes later the sweep
+  and the e2e were both still green — on code that had lost the worker's grade,
+  lost the codec's look field, and still carried the deliberately broken
+  `<filter>`. **A mutation test edits code you have not committed, so the undo
+  must be a byte copy you took yourself**, not a VCS operation whose reference
+  point is a commit that predates the work. Copy the file aside, mutate, restore
+  from the copy, and diff to confirm the restore.
 
 ## THE RATCHET (perpetual by construction)
 When a capability tier reaches broad parity with CapCut, the north star raises:
@@ -792,6 +848,53 @@ the next tier (pro effects, AI-assisted editing, collaboration) becomes the
 frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
+- 2026-08-07 · **[AXIS:COLLAGE] THE LOOK** — the collage can be graded. Eight named
+  looks (None · Punch · Faded · Mono · Noir · Warm · Cool · Bleach) on one wrapping
+  chip row, on the dice, and **in the composition code** — unlike the caption, because
+  a grade IS part of a recipe. **before → nothing in the tree ever assigned
+  `ctx.filter`; the `Adjustments & filters` rung was untouched. after → `lib/grade.ts`
+  is ONE ordered pipeline and all four surfaces that produce pixels apply it**: the
+  still preview, the live Stage (so both video recorders), the export WORKER's
+  OffscreenCanvas on another thread, and the SVG as real `<filter>` primitives.
+  **The seam is that a grade is not a STRING, it is an ORDERED LIST OF STEPS**
+  (`brightness → contrast → saturate → sepia → hue-rotate`) and the two emitters are
+  both pure functions of that one list, through the same number formatter. Colour
+  operations do not commute — saturate-then-sepia is a toned photograph, sepia-then-
+  saturate is a loud brown one — so the order is part of the grade and is fixed in one
+  place rather than implied twice.
+  **The load-bearing decision is `color-interpolation-filters="sRGB"`.** Canvas
+  evaluates CSS filter functions in sRGB; SVG filters default to LINEAR light. The
+  identical primitives with the identical numbers therefore make the exported SVG a
+  different picture from the exported JPEG of the same collage — **RED PROOF: up to
+  105.2/255 apart, mean 28.1/255**, per-look table in the sweep output.
+  **The sweep found a real defect before the browser did**: the CSS path prints the
+  grade's PARAMETERS and lets the browser derive the matrix, while the SVG path prints
+  DERIVED MATRIX TERMS — at four decimals `0.769 - 0.769·0.94 = 0.04614` printed as
+  `0.0461` and the two exports landed 5.4e-6 apart. Invisible, and still two pictures.
+  Fixed at six decimals with a stated reason (every sepia term is a 3-decimal constant
+  times the amount, so a 2-decimal grade is exact) plus `GRADE_GRID`, which holds the
+  ROSTER to that grid instead of hoping — the same argument `snapRoll` makes for the
+  composition sliders. Now 6.66e-16.
+  Proof: unit sweep **46,987 checks / 0 failures** over 5,832 swatches × 8 looks,
+  including a numeric equivalence between the two emitters (not a string comparison),
+  every look asserted in the DIRECTION its own name claims, and 56/56 single-character
+  look manglings refused by the checksum. e2e **12/12 on chromium + Pixel 5**: T1 proves
+  the NO-OP end to end (back to NONE returns the byte-identical picture, **0/255**
+  residue), T3 renders two real 2K exports and measures the worker's warmth shift at
+  **13.6/255 against the preview's 13.6/255**, T4 downloads the real SVG, rasterises it
+  and lands **13.4 vs the canvas's 13.2** — the sRGB pin, proved at the artifact. **All
+  three mutations go red**: deleting the worker's filter fails T3, dropping the sRGB
+  attribute fails T4 *and* 7 sweep arms, dropping the look from the codec fails T5.
+  Watertight asserted on the REAL page at 320/360/390/430 — eight 44px chips cannot fit
+  one 320px line, so the row WRAPS and every chip is measured inside its dock.
+  Regression: all 9 unit sweeps plus roll-code, one-layout, composition, twist, title,
+  export-integrity, mobile-watertight, project-roundtrip and source-count green; `tsc`
+  and `vite build` clean.
+  **A process scar, filed:** `git checkout --` cleaned up the mutations by reverting to
+  HEAD, which discarded this cycle's uncommitted work in two files and left the
+  mutation in place in the third (untracked, so the error scrolled past). Everything
+  was still green, on broken code. Mutation cleanup is a byte copy you took yourself.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
 - 2026-08-07 · **[AXIS:COLLAGE] THE TITLE** — you can say what it is. A caption typed
   into the dock, four placements, three sizes, white on a scrim so it reads over any
   photograph. **before → nothing in the tree called `fillText`; a collage could not

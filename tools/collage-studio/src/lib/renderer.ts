@@ -1,6 +1,7 @@
 import { LayoutItem } from '../types';
 import { ImageAsset } from '../types';
 import { TitlePlan, titlePlanFor, drawTitlePlan } from './title';
+import { cssFilterFor, type LookId } from './grade';
 
 export interface CropGeometry {
   sx: number; sy: number; sw: number; sh: number;
@@ -126,10 +127,12 @@ export const renderCanvas = async (
   bgColor: string = '#050505', // New param
   /** THE TITLE, planned once at `TITLE_BASIS` by the caller. Null draws nothing. */
   titlePlan: TitlePlan | null = null,
+  /** THE LOOK — the colour grade. `'none'` (the default) touches nothing. */
+  look: LookId | null = null,
 ): Promise<HTMLCanvasElement> => {
   const LOGICAL_W = width;
   const LOGICAL_H = width / aspect;
-  
+
   const canvas = document.createElement('canvas');
   canvas.width = LOGICAL_W;
   canvas.height = LOGICAL_H;
@@ -139,6 +142,18 @@ export const renderCanvas = async (
   // Use Custom BG Color
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, LOGICAL_W, LOGICAL_H);
+
+  // THE LOOK — set ONCE, after the background and before the fragments.
+  //
+  // AFTER the fill because the grade belongs to the PHOTOGRAPHS: the background
+  // is a colour the user picked off a swatch and it must come out the colour
+  // they picked. Set once rather than per item because every fragment carries
+  // the same grade and `save()`/`restore()` inside the loop preserve it — the
+  // state each item restores to is this one. Guarded on `'none'` so an ungraded
+  // render never touches `ctx.filter` at all and is bit-identical to a build
+  // without this feature.
+  const gradeCss = cssFilterFor(look);
+  if (gradeCss !== 'none') ctx.filter = gradeCss;
 
   for (let i = 0; i < layoutItems.length; i++) {
     const item = layoutItems[i];
@@ -191,6 +206,12 @@ export const renderCanvas = async (
     }
     ctx.restore();
   }
+
+  // The grade comes OFF before the caption. A title is something written on the
+  // finished picture, not a thing in it — grading it would tint the scrim and
+  // desaturate white text on `mono`, which is a caption that changed colour
+  // because of a filter applied to the photographs underneath it.
+  if (gradeCss !== 'none') ctx.filter = 'none';
 
   // THE TITLE goes on LAST, over every fragment — it is a caption on the
   // finished picture, not a fragment of it. Scaled from the plan's basis to

@@ -43,6 +43,7 @@
 
 import { calculateSmartCrop, twistedDest, twistOf } from './renderer';
 import { titlePlanFor, drawTitlePlan, type TitlePlan } from './title';
+import { cssFilterFor, type LookId } from './grade';
 import {
   normaliseWindow, sourceTimeAt, liveWrapTarget,
   type ClipWindow, type WindowedPlayback,
@@ -138,6 +139,12 @@ export interface StageSceneInput {
    * the delivered MP4.
    */
   titlePlan?: TitlePlan | null;
+  /**
+   * THE LOOK — the colour grade, as a roster id (see `lib/grade.ts`). The Stage
+   * is what both video recorders capture, so this is also the grade on the
+   * delivered MP4/WebM.
+   */
+  look?: LookId | null;
   /** Override the per-scene caps (defaults come from `StageOptions` / `detectStageCaps`). */
   maxLiveClips?: number;
   maxLivePixels?: number;
@@ -541,6 +548,16 @@ export class Stage {
   private bg = '#050505';
   /** THE TITLE, already at this Stage's logical scale. Null draws nothing. */
   private title: TitlePlan | null = null;
+  /**
+   * THE LOOK, resolved to a CSS filter string ONCE per scene.
+   *
+   * Resolved here rather than in the draw because `drawFrame` is the frame
+   * budget: it builds no strings, allocates nothing and looks nothing up. A
+   * cached string assigned to `ctx.filter` is a property write; calling
+   * `cssFilterFor` per frame would be a roster lookup and a join, sixty times a
+   * second, for a value that only changes when the scene does.
+   */
+  private gradeCss = 'none';
   private lineWidth = DEFAULT_LOGICAL_W * STROKE_RATIO;
 
   // --- loop ------------------------------------------------------------------
@@ -631,6 +648,7 @@ export class Stage {
     this.zoom = zoom;
     this.bg = scene.bgColor || '#050505';
     this.title = titlePlanFor(scene.titlePlan ?? null, this.logicalW);
+    this.gradeCss = cssFilterFor(scene.look ?? null);
     this.logicalH = this.logicalW / aspect;
     this.lineWidth = this.logicalW * STROKE_RATIO;
     if (typeof scene.maxLiveClips === 'number') this.capsClips = Math.max(0, scene.maxLiveClips);
@@ -1023,6 +1041,16 @@ export class Stage {
     ctx.fillStyle = this.bg;
     ctx.fillRect(0, 0, this.logicalW, this.logicalH);
 
+    // THE LOOK — one property write, after the background and before the
+    // fragments, exactly where `renderer.renderCanvas` and the export worker put
+    // it. Every item below does save()/clip()/draw/restore(), and restore()
+    // returns to THIS state, so one assignment grades the whole frame. Skipped
+    // entirely at `'none'`, which is what keeps an ungraded frame the frame it
+    // has always been — and keeps the frame budget untouched for everyone who
+    // never opens the row.
+    const grade = this.gradeCss;
+    if (grade !== 'none') ctx.filter = grade;
+
     const lw = this.lineWidth;
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
@@ -1123,6 +1151,10 @@ export class Stage {
         ctx.restore();
       }
     }
+
+    // The grade comes off before the caption — a title is written ON the
+    // picture, not in it.
+    if (grade !== 'none') ctx.filter = 'none';
 
     // THE TITLE — after every fragment, before the bookkeeping. One plan, drawn
     // at k=1 because the Stage's logical space IS the plan's basis; `null` costs

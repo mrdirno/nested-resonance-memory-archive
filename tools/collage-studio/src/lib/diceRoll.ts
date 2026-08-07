@@ -28,6 +28,7 @@ import { GENERATORS, GENERATOR_BY_ID } from '../engine/geom/generators';
 import {
   ARRANGEMENT_IDS, FOCUS_IDS, TWIST_IDS, type ArrangementId, type FocusId, type TwistId,
 } from './composition';
+import { LOOK_IDS, type LookId } from './grade';
 
 // =============================================================================
 // SHAPE
@@ -52,6 +53,14 @@ export interface Roll {
   focus: FocusId;
   /** How far the picture leans inside its fragment — see composition.ts. */
   twist: TwistId;
+  /**
+   * THE LOOK — the colour grade over every fragment. See lib/grade.ts.
+   *
+   * Optional because every Roll built before this field existed is still a
+   * valid Roll, and absent means `none`, which is exactly the picture those
+   * rolls described.
+   */
+  look?: LookId;
   /** Name of the recipe this came from, when it came from one. */
   recipe?: string;
   /**
@@ -248,6 +257,25 @@ const twistFor = (layout: LayoutMode, rnd: () => number): TwistId => {
   return pick(rnd() < radialBias ? RADIAL_TWISTS : LINEAR_TWISTS, rnd);
 };
 
+/**
+ * THE LOOK the dice picks.
+ *
+ * Ungraded most of the time, on purpose. A grade is the loudest thing in the
+ * roster — it changes every pixel of every fragment — so a dice that ALWAYS
+ * graded would make the button feel like a filter shuffle rather than a
+ * composition roll, and the honest default for a photograph is the photograph.
+ * 55% none, the rest spread flat across the seven, which is often enough that a
+ * few presses will show you the row exists.
+ */
+const lookFor = (rnd: () => number): LookId => {
+  if (rnd() < 0.55) return 'none';
+  // Slice past `none` rather than re-rolling: a re-roll would draw a variable
+  // number of values from the stream and make the roll depend on how many times
+  // it happened to land on index 0, which is the sort of thing that quietly
+  // breaks seeded reproduction.
+  return pick(LOOK_IDS.slice(1), rnd);
+};
+
 const bgFor = (layout: LayoutMode, rnd: () => number): BgKey => {
   const fam = GENERATOR_BY_ID[layout]?.family;
   // Radial and sacred figures glow out of the dark and go flat on paper; the
@@ -343,6 +371,12 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
     // count, chaos, aspect, gutter, zoom, background, arrangement, focus and
     // seed from a given rng as the build before it did.
     twist: twistFor(layout, rnd),
+    // Drawn LAST, after the twist, for the same reason the twist was drawn
+    // after the seed: appending to the end of the stream leaves every earlier
+    // draw untouched, so a build with the look rolls the same layout, count,
+    // chaos, aspect, gutter, zoom, background, arrangement, focus, seed and
+    // twist from a given rng as the build before it did.
+    look: lookFor(rnd),
     recipe: recipe?.name,
     // The dice picks a fragment count on purpose, out of the generator's own
     // sane range. That is a decision, so a code minted from it must not be
@@ -514,13 +548,26 @@ export const encodeRoll = (r: Roll, extra = ''): string => {
   const head = `${fw(li, 2)}${fw(r.count, 3)}${fw(e, 2)}`;
   const seed = tail(r.seed, 4);
   const owned = r.countOwned ? '1' : '0';
+  /**
+   * THE LOOK, as an index — and NOT via `Math.max(0, indexOf(…))`.
+   *
+   * That idiom is the scar on this file: it turns "not representable" into
+   * "element zero", and for the layout roster element zero was a completely
+   * different construction. Here the honest answer genuinely IS element zero,
+   * because element zero is `none` and a grade is ADDITIVE — a look this build
+   * does not know about is no look, not a plausible-looking neighbour. The
+   * difference is written out rather than hidden behind the same three
+   * characters, so the next reader can tell which case they are in.
+   */
+  const loIdx = LOOK_IDS.indexOf((r.look ?? 'none') as LookId);
+  const look = fw(loIdx < 0 ? 0 : loIdx, 1);
   // `extra` is whatever a LAYER ABOVE has appended to the code — today that is
   // rollCode's optional shuffle group. It is folded into the checksum but not
   // into the code, because the guard has to cover the whole thing: the first cut
   // checksummed only the three groups this function emits, and a mangling that
   // landed in the shuffle group sailed through it. Measured: every escape in the
   // sweep was exactly that.
-  return `${head}-${mid}${owned}${checksum(head + mid + owned + seed + extra)}-${seed}`.toUpperCase();
+  return `${head}-${mid}${owned}${look}${checksum(head + mid + owned + look + seed + extra)}-${seed}`.toUpperCase();
 };
 
 /**
@@ -590,14 +637,30 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
     // Pre-flag codes stop at 15. Absent means DERIVED, which is what every code
     // minted before this bit existed described: the app's default behaviour.
     const owned = b.length >= 16 ? b[15] === '1' : false;
-    if (b.length >= 16 + CHECK_LEN) {
-      const body = a + b.slice(0, 16) + c + extra.toLowerCase();
-      if (checksum(body) !== b.slice(16, 16 + CHECK_LEN)) return null;
+    // THE LOOK sits between the count-provenance flag and the checksum, so the
+    // two generations of this group are told apart by LENGTH: 18 is the
+    // pre-look form (15 fields + flag + 2 check characters), 19 carries a look
+    // between them. Read by length exactly like every earlier field here — a
+    // version character would have had to be present from the first code ever
+    // minted to be of any use now, and it was not.
+    const hasLook = b.length >= 17 + CHECK_LEN;
+    const loi = hasLook ? n(b.slice(16, 17)) : 0;
+    const bodyLen = hasLook ? 17 : 16;
+    if (b.length >= bodyLen + CHECK_LEN) {
+      const body = a + b.slice(0, bodyLen) + c + extra.toLowerCase();
+      if (checksum(body) !== b.slice(bodyLen, bodyLen + CHECK_LEN)) return null;
     }
     const seed = n(c);
     const layout = LAYOUT_ORDER[li];
-    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, seed];
-    if (!layout || !nums.every(Number.isFinite) || !Number.isFinite(rgb)) return null;
+    // A look index this build has no entry for is REFUSED, not defaulted. On
+    // the encode side an unknown look is honestly `none`; on the decode side it
+    // means the code was minted by a build that knows something this one does
+    // not, and opening it as an ungraded collage would be the same silent
+    // substitution the layout roster's scar is about — the picture would be
+    // wrong in a way the recipient cannot see. Same treatment as `layout`.
+    const look = LOOK_IDS[loi];
+    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, loi, seed];
+    if (!layout || !look || !nums.every(Number.isFinite) || !Number.isFinite(rgb)) return null;
     return {
       layout,
       primitive: PRIMITIVE_ORDER[pri] ?? 'rect',
@@ -614,6 +677,7 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
       arrangement: ARRANGEMENT_IDS[ari] ?? 'natural',
       focus: FOCUS_IDS[foi] ?? 'auto',
       twist: TWIST_IDS[twi] ?? 'none',
+      look,
       seed,
     };
   } catch {

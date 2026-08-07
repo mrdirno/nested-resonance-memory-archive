@@ -3,6 +3,7 @@ import { LayoutItem, createRng } from '../../lib/layout';
 import { ImageAsset, AppState } from '../../types';
 import { calculateSmartCrop } from '../../lib/renderer';
 import { TitlePlan, titlePlanFor, titlePlanToSvg } from '../../lib/title';
+import { svgFilterFor, svgFilterAttrFor, type LookId } from '../../lib/grade';
 
 const blobToBase64 = async (url: string): Promise<string> => {
   try {
@@ -31,6 +32,8 @@ export const generateVectorExport = async (
   bgColor: string = '#050505',
   /** THE TITLE, planned once at `TITLE_BASIS` by the caller. Null emits nothing. */
   titlePlan: TitlePlan | null = null,
+  /** THE LOOK — the colour grade, as real `<filter>` primitives. */
+  look: LookId | null = null,
 ): Promise<string> => {
   const height = width / aspect;
 
@@ -55,11 +58,24 @@ ${metadataComment}
 `;
   });
 
+  // THE LOOK — real filter primitives, in the pipeline order `lib/grade.ts`
+  // fixes, carrying `color-interpolation-filters="sRGB"` because SVG defaults
+  // to linear light and the canvas paths evaluate the identical functions in
+  // sRGB.
+  //
+  // Appended only when there IS one, rather than interpolated as a
+  // possibly-empty line: an ungraded export has to be BYTE-identical to what
+  // this function produced before the feature existed, and an empty
+  // interpolation still emits its own indentation and newline. That is a
+  // difference no eye would catch and every diff would.
+  const lookFilter = svgFilterFor(look);
+  if (lookFilter) svg += `    ${lookFilter}\n`;
+
   svg += `  </defs>
   
   <rect width="100%" height="100%" fill="${bgColor}" />
   
-  <g id="CollageLayer">
+  <g id="CollageLayer"${svgFilterAttrFor(look)}>
 `;
 
   for (let i = 0; i < layoutItems.length; i++) {
