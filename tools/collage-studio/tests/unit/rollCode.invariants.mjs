@@ -129,10 +129,13 @@ const pick = (arr, rnd) => arr[Math.floor(rnd() * arr.length) % arr.length];
 const reachableState = (rnd) => ({
   layoutMode: pick(LAYOUTS, rnd),
   primitive: pick(SHAPES, rnd),
-  // The count slider bottoms out at 1 and the codec floors at 2; the app's own
-  // "one fragment per source" rule never goes below 2 sources in practice.
-  // The stepper's own floor is 1 — `Math.max(1, prev + step)` — so 1 is a
-  // composition somebody can ask for, and its code has to say 1.
+  // ONE is a composition somebody can rest on, so it is in the sampled range.
+  // This comment used to read "the count slider bottoms out at 1 and the codec
+  // floors at 2; the app's own one-fragment-per-source rule never goes below 2
+  // in practice" — an EXCUSE for excluding the failing value, written directly
+  // above the line that excluded it. The stepper floors at `Math.max(1, …)` and
+  // disables only once you have landed ON 1, so it is a resting state and its
+  // code has to say 1. Pinned by name below as well as sampled here.
   count: 1 + Math.floor(rnd() * 400),
   density: pick(DENSITIES, rnd),
   entropy: pick(ENTROPY_STEPS, rnd),
@@ -204,6 +207,22 @@ console.log('0b. EVERY FIELD STILL FITS ITS WIDTH — the slice-shift guard');
   // The count clamp is a real ceiling, so it is pinned from BOTH sides: the
   // largest allowed count round-trips, and one more does not silently become
   // something else — it saturates.
+  // THE OTHER END OF THE COUNT, pinned by name rather than left to sampling.
+  // Both floors read `Math.max(2, …)` until this cycle, so a one-fragment
+  // composition minted a code saying two and opened as two — silently, with a
+  // visibly different canvas. Counts 0, 1 and 2 all produced the SAME string,
+  // which is to say the codec was not injective over states the stepper can
+  // rest on. A regression to `Math.max(2, …)` fails right here.
+  for (const c of [1, 2, 3]) {
+    const st = { ...reachableState(rngOf(42)), count: c };
+    const back = decodeState(encodeState(st));
+    check(back !== null && back.count === c,
+      `a ${c}-fragment composition came back as ${back && back.count} fragments`);
+  }
+  check(encodeState({ ...reachableState(rngOf(42)), count: 1 })
+        !== encodeState({ ...reachableState(rngOf(42)), count: 2 }),
+    'one fragment and two fragments mint the SAME code — the codec is not injective');
+
   const big = { ...reachableState(rngOf(1)), count: 36 ** 3 - 1 };
   check(decodeState(encodeState(big)).count === 36 ** 3 - 1, 'the largest allowed count did not survive');
   const over = { ...big, count: 36 ** 3 };

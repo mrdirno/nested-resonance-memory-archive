@@ -229,12 +229,18 @@ test.describe('the composition code', () => {
     // replace the sender's number — and 400ms later the address bar was
     // rewritten to the NEW code, so what they were sent was unrecoverable.
     await boot(page);
+    // ALL THE WAY DOWN TO 1, which is where the codec used to lie: both floors
+    // read `Math.max(2, …)`, so a one-fragment composition minted a code saying
+    // two and opened as two. The stepper disables only once you have landed ON
+    // 1, so it is a resting state, and stopping this loop short of it was how
+    // the browser proof missed it.
     const fewer = page.getByRole('button', { name: 'Fewer fragments' });
-    while (await fragments(page) > 3) {
+    while (await fragments(page) > 1 && await fewer.isEnabled()) {
       await fewer.click();
       await page.waitForTimeout(120);
     }
     await settle(page);
+    expect(await fragments(page), 'the stepper did not reach one fragment').toBe(1);
 
     expect(await fragments(page), 'the stepper did not reach a count below the source count')
       .toBeLessThan(TILES.length);

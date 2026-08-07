@@ -239,6 +239,22 @@ multi-agent audit for non-trivial changes.
   the UI's steps rather than the other way round. A rounding argument in a
   comment is a claim about a value's provenance, and provenance is exactly what
   a comment cannot enforce.
+- **AND I DID IT A SECOND TIME, IN THE SWEEP, IN A COMMENT.** The unit sweep
+  sampled `count: 2 + Math.floor(rnd() * 400)` under the comment "the count
+  slider bottoms out at 1 and the codec floors at 2; the app's own
+  one-fragment-per-source rule never goes below 2 in practice" — an EXCUSE for
+  excluding the failing value, written directly above the line that excluded it,
+  and it was wrong on the facts: the stepper floors at `Math.max(1, …)` and
+  disables only once you have landed ON 1, so one fragment is a resting state.
+  Both codec floors read `Math.max(2, …)`, so counts 0, 1 and 2 all minted the
+  SAME string — the codec was not injective over states the UI can rest in — and
+  a one-fragment collage opened as two, silently, with a visibly different
+  canvas. The e2e missed it too, because its stepper loop stopped at 3. Fixed on
+  three sides: the floors are 1, the sweep pins 1/2/3 BY NAME plus injectivity
+  rather than trusting a sampler, and T7 now drives the stepper all the way down.
+  **The same avoidance appeared twice in one cycle in two different files, both
+  times as prose justifying a bound.** A comment explaining why a value is out of
+  scope is the highest-yield place to go looking.
 - **I WROTE A TEST HELPER THAT FILTERED OUT THE FAILING HALF OF THE SPACE, AND
   DOCUMENTED WHY.** `rollUsable()` re-rolled until the composition asked for at
   least as many fragments as there were sources, with a docstring explaining that
