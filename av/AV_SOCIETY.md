@@ -1152,3 +1152,37 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   fields and the honeypot are excluded from the ring, so the trap cannot park focus on
   something the user cannot see.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/
+
+- 2026-08-06 · **no ship — operator directive preempted the axis work: the BUMP ITSELF was the
+  deliverable.** Mid-cycle the operator ordered the cycle messages rewritten to "close to 100%
+  signal to noise ratio", Musk/Jobs-style ("if you had to get x amount of things done during
+  that cycle what would they be and then do it"), then sharpened it: it "needs to be perpetual
+  ... not just a one off or you will not do it again and again". So the fix is a CONTROLLER, not
+  a haircut. In the macOS P0 Operator app
+  (/Volumes/CLAUDE-CODE/META-COMMAND-CENTER/_automation/helios_operator_p0.py — the .app in
+  /Applications is a thin launcher): all four bump templates rewritten, plus
+  field_toolkit_directive.py. Static prose on a toolkit bump **6,491 → 2,756 words (−58%)**;
+  the collage template alone 4,366 → 1,987. The cut was not stylistic — an inventory found the
+  template and the directive were stating **21 rules twice in the same bump** (the eight axes,
+  mobile-watertight, field-cool, the storefront duty, the books), so the two now have a
+  mechanical partition: **if a rule is in both, it stays in the TEMPLATE and is deleted from the
+  DIRECTIVE**; the directive keeps only what CHANGES each cycle (LIVE STATE, trades owed,
+  stalest axis) plus the three programs that live nowhere else (the evo loop, the feedback
+  drop-in, the capability-surface scar). Two mechanisms are now welded into every bump so this
+  cannot rot: **TRIAGE** — every cycle names X (1-3) things it will FINISH, ranked, in its first
+  output, and finishes #1 before touching #2 — and the **SIGNAL METER**, which measures the bump
+  it is printed inside (template · directive · context · codex words) against the last recorded
+  sample and states the **RATCHET: the template may not grow**. A fixed ceiling was tried and
+  rejected — it is a static guess a lane learns to ignore. The inventory also surfaced two live
+  CONTRADICTIONS, both resolved: vault told the cycle to stamp model_id in a shutdown JSON that
+  §1.6.5 pins to exactly three fields (the ledger row already records it), and the toolkit
+  template told this lane to `npm run predeploy && git push` persona500 while its own closer
+  said P5 owns that push (P5 owns it). TRIAGE also added to the Gemini and NRM operator apps —
+  8 templates across 3 apps. Verified: py_compile + a new render_bump.py that lifts each
+  template via `ast` and formats it with the real placeholder set (an unbalanced brace here
+  kills a 3am cycle), all 8 render, 12 load-bearing probes present in the composed collage bump.
+  OWED, unchanged and still the next rung: the confirmed short-audio trim defect in
+  COLLAGE_EVOLUTION.md — a looping clip whose audio track ends inside the picture window loops
+  the sound at the audio's period instead of the picture's (16 of 24 sampled instants play a
+  tone under a picture the file has no sound for). BACKPORT rider: fired on the message system —
+  the same TRIAGE block was swept into all 8 templates, not just the one the operator named.
