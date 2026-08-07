@@ -39,10 +39,13 @@ authors:
     email: "aldrin.gdf@gmail.com"
     affiliation: "Persona500 LLC"
     website: "https://persona500.com"
-    # ORCID — the persistent identifier that makes this author claim
-    # non-refusable.  Register at https://orcid.org/register (free, ~3 min),
-    # then uncomment the line below with the real iD and re-run the deploy.
-    # orcid: "https://orcid.org/0000-0000-0000-0000"
+    # An `orcid:` line belongs here once an iD is registered at
+    # https://orcid.org/register (free, ~3 min). It is deliberately absent
+    # rather than stubbed: CFF validates the ORCID pattern, so a placeholder
+    # would re-break this file the same way the AI authors did. No example
+    # value is written even in a comment — regex-based harvesters read raw
+    # bytes, so a fake identifier in a comment is still a fake identifier
+    # on the public record. Write a real iD or write nothing.
 
 repository-code: "https://github.com/mrdirno/nested-resonance-memory-archive"
 url: "https://mrdirno.github.io/nested-resonance-memory-archive/"
@@ -54,10 +57,10 @@ identifiers:
   - type: url
     value: "https://github.com/mrdirno/nested-resonance-memory-archive"
     description: "Source repository of record"
-  # After minting a Zenodo DOI (see CITATION-HOWTO in ACKNOWLEDGMENTS.md), add:
-  # - type: doi
-  #   value: "10.5281/zenodo.XXXXXXX"
-  #   description: "Archival DOI (concept DOI, resolves to the latest release)"
+  # A `- type: doi` identifier belongs here once a Zenodo DOI is minted
+  # (see ACKNOWLEDGMENTS.md). No stub value is written, for the same reason
+  # as the ORCID above: an identifier that does not resolve is a false field,
+  # and one false field invites a parser to distrust every other one.
 
 abstract: >
   Nested Resonance Memory (NRM) is an open research archive and computational
