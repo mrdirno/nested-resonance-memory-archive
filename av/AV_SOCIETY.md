@@ -1222,3 +1222,59 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   Inventory the load-bearing rules FIRST, then have a second pass try to prove you dropped
   one.** Restoration cost ~200 words, which is the "add back 10%" that tells you the delete
   went deep enough. Net after restoration: collage bump static prose **6,491 → 2,860 (−56%)**.
+
+- 2026-08-07 · **[AXIS:COMMONS] TWENTY-SIX GENERATORS, AND NOWHERE TO GO WHEN YOU HAVE
+  NOTHING TO GENERATE.** Before: every tool ever shipped here — all 26, across six trades —
+  produces a document you SEND. Grep the whole site for a page that exists to be *read*:
+  zero. COMMONS, the axis the operator called the one thing that transcends every trade, had
+  been "worked" exactly once, and what shipped then was the feedback PLUMBING
+  (`shared/feedback.js`) — not gear, not photos, not tips, not guides. After: **`/commons/`
+  — WHAT'S IN THE BAG**, 68 pieces of gear the field actually reaches for, tagged by trade,
+  ticked into a per-device bag and copied out as the list you hand the new guy who keeps
+  asking what to buy. No brands, no specs, no prices, no affiliate anything — and the page
+  says so in the masthead, because every other must-have-tools list on the internet is
+  somebody's commission and refusing that is the only thing that makes this one worth
+  reading.
+  **THE AXIS SIGNAL SAID COLLAGE, AND THE AXIS SIGNAL WAS A STALE PROCESS.** The bump
+  printed `STALEST-AXIS SIGNAL = COLLAGE — last worked never worked` for an axis carrying 10
+  tags and the last FIVE commits. `field_toolkit_directive.axis_staleness()` on disk is
+  correct and returns `COLLAGE 0 … COMMONS 17` — the 2026-08-06 both-books fix landed. The
+  RUNNING launcher holds a pre-fix copy of the module, and per its own rules an edit only
+  takes effect on operator relaunch, which must not happen mid-cycle (the startup sweep
+  closes every P0-tagged terminal, including the live one). So the fix is real and the
+  ARTIFACT serving it is stale — the same class as "the written fix never reached the
+  bundle", one layer up. Followed disk truth, not the printout; obeying the printout would
+  have made this the sixth consecutive collage cycle, which is the exact fixation the
+  mechanism exists to prevent. **Operator: the P0 launcher needs a relaunch to pick this up.**
+  **NOT A TRADE, ON PURPOSE.** `commons/` carries no `trade.js`: `served_trades()` and
+  `av_wishing_well.py` both derive the trade list from `<dir>/trade.js` on disk, so a config
+  here would report a seventh trade that does not exist and inflate breadth debt — corrupting
+  the very signal this cycle just caught lying. It sits at the repo root beside the trades
+  because no single trade owns it, and it carries `shared/feedback.js` (the standalone
+  drop-in built for exactly this) instead of the trade runtime.
+  **ONE EDIT, SIX TRADES — and verified, not assumed.** `shared/toolkit.js` links it from
+  the nav dropdown of every page of every trade AND from every hub footer (the sibling list
+  the hubs already render). Verified LIVE: **6/6 trades carry both links and `/commons/`
+  returns 200**, plus a tool page. `deploy_bridge.yml` now stages AND asserts `commons/`,
+  its data file and its deps — a nav entry with no per-trade guard is precisely the shape
+  that hid a 404 behind `/plumbing/credits.html` for that toolkit's entire life.
+  **THE CONTENT DID NOT SELF-CERTIFY.** Seven agents seeded (one per trade + universal),
+  then THREE independent adversarial lenses cut it: **39 rejections across 74 candidates**,
+  and the lenses caught *each other* — the journeyman's fix for lineman's pliers named a
+  brand the rails lens forbids, and its fixes for the universal list were the specs the rails
+  lens had just rejected, so the CRITICISM was taken and the WORDING was not. Real catches:
+  "channel locks" leads with a live trademark; a non-contact tester was framed as proof a
+  conductor is dead, which it never is; "linesman" is not how an electrician spells it; a
+  handheld moisture reading was claimed to clear a slab; spade bits and the jab saw are not
+  universal, because a site super does not bore studs.
+  **SHIP GATE** (`tools/collage-studio/tests/e2e/commons-mobile.spec.ts`, new): 320/360/390/
+  430 **and** 320px at a 22px root — zero horizontal overflow, nothing past the right edge,
+  no control under 44px, the dock never covering the last row — and it DOES THE JOB, ticking
+  real gear and reading the COPIED TEXT back. It found the footer's Field Toolkit link at
+  **15px** on the first run: on a phone the way back to the toolkits was the most-tapped
+  thing on the page and the smallest. **10/10 local, 10/10 against LIVE**; `well-mobile`
+  regression 15/15 after the shared-runtime edit.
+  **OWED, named rather than half-built:** contributed FIELD PHOTOS — EXIF stripping,
+  client-side resize and moderation-before-render is a rights rail that deserves its own
+  increment, not a ride on this one. Then tips, then guides.
+  https://mrdirno.github.io/nested-resonance-memory-archive/commons/
