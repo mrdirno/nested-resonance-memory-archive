@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import {
   Layout, Grid, Plus, Minus, RefreshCw, Shuffle, Square,
-  Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, ImagePlus, Dices, Copy
+  Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, ImagePlus, Dices, Copy, Type, X
 } from 'lucide-react';
 import { LayoutMode, PrimitiveType } from '../types';
+import type { TitlePlace, TitleSize } from '../lib/title';
 import { GENERATORS, GENERATOR_BY_ID, FAMILIES, FAMILY_LABEL } from '../engine/geom/generators';
 
 interface SimpleControlsProps {
@@ -31,7 +32,33 @@ interface SimpleControlsProps {
   rejectedCode?: string;
   hasImages: boolean;
   isLayoutLocked: boolean;
+
+  /** THE TITLE — the caption drawn over the finished collage. */
+  titleText?: string;
+  titlePlace?: TitlePlace;
+  titleSize?: TitleSize;
+  onTitleText?: (t: string) => void;
+  onTitlePlace?: (p: TitlePlace) => void;
+  onTitleSize?: (s: TitleSize) => void;
 }
+
+/**
+ * WHERE the caption sits. Four, not nine: a nine-box placement grid is a
+ * settings screen, and the four that get used are the two bottom corners and
+ * their two mirrors. Labels are the field's own shorthand, not prose.
+ */
+const TITLE_PLACES: { id: TitlePlace; label: string; title: string }[] = [
+  { id: 'bl', label: 'BOT L', title: 'Bottom left — the default, and where a caption reads first.' },
+  { id: 'bc', label: 'BOT C', title: 'Bottom centre.' },
+  { id: 'tl', label: 'TOP L', title: 'Top left.' },
+  { id: 'tc', label: 'TOP C', title: 'Top centre.' },
+];
+
+const TITLE_SIZES: { id: TitleSize; label: string; title: string }[] = [
+  { id: 'sm', label: 'S', title: 'Small — a credit line.' },
+  { id: 'md', label: 'M', title: 'Medium.' },
+  { id: 'lg', label: 'L', title: 'Large — a poster title.' },
+];
 
 /**
  * The two original grid modes. They are the only ones that read `primitive`,
@@ -54,7 +81,8 @@ const SHAPES: { id: PrimitiveType; label: string; icon: React.ReactNode; blurb: 
 export const SimpleControls: React.FC<SimpleControlsProps> = ({
   layoutMode, setLayoutMode, primitive, setPrimitive, count, setCount,
   density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice,
-  lastRecipe, compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked
+  lastRecipe, compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
+  titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize
 }) => {
 
   // ---- THE COMPOSITION CODE --------------------------------------------------
@@ -188,6 +216,81 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
             <i>{lastRecipe ? `Last roll: “${lastRecipe}”` : 'A whole new composition, all at once'}</i>
           </span>
         </button>
+      )}
+
+      {/* ---- THE TITLE: say what it is ---------------------------------------
+          The one thing in this panel that is CONTENT rather than a parameter,
+          so it is the one thing you type instead of tick. It is drawn over the
+          finished collage by every path that produces pixels — the preview you
+          are looking at, the exported picture, the recorded video and the SVG —
+          and it is NOT in the composition code, because a code is a recipe for
+          somebody else's photographs and your caption is not. ------------- */}
+      {hasImages && onTitleText && (
+        <div className="ui-titler">
+          <div className="ui-titler__row">
+            <span className="ui-titler__tag" aria-hidden="true"><Type size={13} /></span>
+            <input
+              type="text"
+              value={titleText}
+              onChange={e => onTitleText(e.target.value)}
+              placeholder="Say what it is"
+              maxLength={240}
+              spellCheck={false}
+              aria-label="Title drawn on the collage"
+              data-testid="title-input"
+            />
+            {titleText.length > 0 && (
+              <button
+                type="button"
+                className="ui-titler__clear"
+                onClick={() => onTitleText('')}
+                aria-label="Clear the title"
+                data-testid="title-clear"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+
+          {titleText.trim().length > 0 && (
+            <>
+              <div className="ui-titler__chips" role="group" aria-label="Title placement">
+                {TITLE_PLACES.map(p => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    className="ui-chip ui-chip--mini"
+                    data-active={titlePlace === p.id}
+                    onClick={() => onTitlePlace?.(p.id)}
+                    title={p.title}
+                    aria-pressed={titlePlace === p.id}
+                    data-testid={`title-place-${p.id}`}
+                  >{p.label}</button>
+                ))}
+              </div>
+              <div className="ui-titler__chips" role="group" aria-label="Title size">
+                {TITLE_SIZES.map(z => (
+                  <button
+                    key={z.id}
+                    type="button"
+                    className="ui-chip ui-chip--mini"
+                    data-active={titleSize === z.id}
+                    onClick={() => onTitleSize?.(z.id)}
+                    title={z.title}
+                    aria-pressed={titleSize === z.id}
+                    data-testid={`title-size-${z.id}`}
+                  >{z.label}</button>
+                ))}
+              </div>
+            </>
+          )}
+
+          <p className="ui-caption">
+            {titleText.trim().length > 0
+              ? 'On the picture, the video and the SVG — same wrap in all of them. Not in the code.'
+              : 'A caption on the collage. It goes into every export, not just the preview.'}
+          </p>
+        </div>
       )}
 
       {/* ---- THE CODE: keep the good roll, or open somebody else's ----------

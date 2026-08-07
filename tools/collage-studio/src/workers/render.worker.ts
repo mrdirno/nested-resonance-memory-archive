@@ -32,6 +32,7 @@
 // translation layer.
 //
 import { calculateSmartCrop } from '../lib/renderer';
+import { titlePlanFor, drawTitlePlan } from '../lib/title';
 import { assertSurfaceLive } from '../lib/exportLimits';
 
 const ctx: Worker = self as any;
@@ -77,7 +78,13 @@ ctx.onmessage = async (e: MessageEvent) => {
     layoutItems,
     orderedImages,
     zoom = 1.0,
-    bgColor = '#050505'
+    bgColor = '#050505',
+    // THE TITLE — a finished plan, wrapped on the main thread against the
+    // context the PREVIEW measured with. Deliberately not re-planned here: this
+    // is another thread, where the same font stack is free to resolve to
+    // something else, and a title that breaks onto two lines in the preview and
+    // three in the file is the exact divergence ONE LAYOUT removed.
+    titlePlan = null,
   } = d;
 
   let failedImages = 0;
@@ -197,6 +204,12 @@ ctx.onmessage = async (e: MessageEvent) => {
             failedImages++;
         }
     }
+
+    // THE TITLE, over the finished composition and before the surface re-check
+    // — it is the last thing drawn, so a caption that vanished would mean the
+    // surface died, which the proof below is what catches.
+    try { drawTitlePlan(ctx2d, titlePlanFor(titlePlan, width)); }
+    catch (e) { console.warn('Worker title draw failed', e); }
 
     // ---- THE SECOND PROOF ----------------------------------------------------
     // WebKit enforces a per-PAGE canvas budget and can discard the backing store

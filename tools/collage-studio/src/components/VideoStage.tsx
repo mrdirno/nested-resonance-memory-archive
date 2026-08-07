@@ -53,6 +53,7 @@ import {
 import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
 import { normaliseWindow, MIN_WINDOW_SEC } from '../lib/clipWindow';
+import type { TitlePlan } from '../lib/title';
 
 /** The user's raw trim points for one clip. Absent = the whole clip. */
 type TrimMap = Record<string, { inSec: number; outSec: number } | undefined>;
@@ -76,6 +77,12 @@ export interface VideoStageProps {
   aspect: number;
   zoom: number;
   bgColor: string;
+  /**
+   * THE TITLE, as a finished plan (see `lib/title.ts`). Passed through to the
+   * Stage untouched — it is also what both video exporters record, so this is
+   * the caption that ends up in the file.
+   */
+  titlePlan?: TitlePlan | null;
   /** Surfaced so the parent can show one consistent notice strip. */
   onNotice?: (msg: string) => void;
   /**
@@ -366,7 +373,7 @@ const fmtBytes = (b: number): string =>
 type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
-  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, onNotice, onUnavailable,
+  layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, onNotice, onUnavailable,
   controlsHost, onRemoveClip, recorderRef, poolAssets,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -538,8 +545,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       aspect,
       zoom,
       bgColor,
+      titlePlan,
     });
-  }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor]);
+  }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan]);
 
   // --- transport -------------------------------------------------------------
 

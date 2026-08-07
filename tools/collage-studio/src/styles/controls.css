@@ -819,3 +819,78 @@
 .ui-code__go:disabled { opacity: 0.34; }
 .ui-code__go:active:not(:disabled) { transform: scale(0.985); }
 
+
+/* --- THE TITLE STRIP -------------------------------------------------------
+   The one control in the dock you TYPE into. Same card as the code strip so
+   the two read as siblings — one is what you wrote, the other is what the
+   composition is — and every row wraps, because seven chips at 320px do not
+   fit on one line and a control that needs a sideways scroll on a phone is a
+   control nobody uses on a ladder. -------------------------------------- */
+.ui-titler {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px 11px;
+  border-radius: 12px;
+  border: 1px solid var(--line-1);
+  background: var(--surface-1);
+}
+.ui-titler__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.ui-titler__tag {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  color: var(--signal);
+  background: color-mix(in srgb, var(--signal) 12%, transparent);
+}
+.ui-titler__row input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 9px;
+  border: 1px solid var(--line-1);
+  background: var(--surface-2, rgba(0,0,0,0.18));
+  color: var(--ink-1);
+  /* 16px or iOS Safari zooms the whole page on focus — the same reason the
+     code strip's input carries it. */
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.ui-titler__row input::placeholder { color: var(--ink-3); font-weight: 600; letter-spacing: 0; }
+.ui-titler__row input:focus-visible { outline: 2px solid var(--signal); outline-offset: 1px; }
+.ui-titler__clear {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 9px;
+  border: 1px solid var(--line-1);
+  background: transparent;
+  color: var(--ink-3);
+}
+.ui-titler__clear:hover { color: var(--ink-1); background: rgba(255,255,255,.04); }
+.ui-titler__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+.ui-chip--mini {
+  min-width: 44px;
+  padding: 0 9px;
+  font-size: var(--t-micro);
+  letter-spacing: 0.08em;
+}

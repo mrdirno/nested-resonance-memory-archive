@@ -1,5 +1,6 @@
 import { LayoutItem } from '../types';
 import { ImageAsset } from '../types';
+import { TitlePlan, titlePlanFor, drawTitlePlan } from './title';
 
 export interface CropGeometry {
   sx: number; sy: number; sw: number; sh: number;
@@ -122,7 +123,9 @@ export const renderCanvas = async (
   orderedImages: (ImageAsset | null)[], 
   seed: number,
   zoom: number = 1.0,
-  bgColor: string = '#050505' // New param
+  bgColor: string = '#050505', // New param
+  /** THE TITLE, planned once at `TITLE_BASIS` by the caller. Null draws nothing. */
+  titlePlan: TitlePlan | null = null,
 ): Promise<HTMLCanvasElement> => {
   const LOGICAL_W = width;
   const LOGICAL_H = width / aspect;
@@ -188,5 +191,11 @@ export const renderCanvas = async (
     }
     ctx.restore();
   }
+
+  // THE TITLE goes on LAST, over every fragment — it is a caption on the
+  // finished picture, not a fragment of it. Scaled from the plan's basis to
+  // this canvas, so the preview and every export carry the identical wrap.
+  drawTitlePlan(ctx, titlePlanFor(titlePlan, LOGICAL_W));
+
   return canvas;
 };

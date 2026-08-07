@@ -42,6 +42,7 @@
 // -----------------------------------------------------------------------------
 
 import { calculateSmartCrop, twistedDest, twistOf } from './renderer';
+import { titlePlanFor, drawTitlePlan, type TitlePlan } from './title';
 import {
   normaliseWindow, sourceTimeAt, liveWrapTarget,
   type ClipWindow, type WindowedPlayback,
@@ -130,6 +131,13 @@ export interface StageSceneInput {
   bgColor?: string;
   /** Accepted for call-site parity with `renderCanvas`; the draw is deterministic without it. */
   seed?: number;
+  /**
+   * THE TITLE, as a finished plan in `TITLE_BASIS` space (see `lib/title.ts`).
+   * The Stage's logical space IS that basis, so it is drawn at k=1 — and the
+   * Stage is what both video exporters record, so this is also the caption on
+   * the delivered MP4.
+   */
+  titlePlan?: TitlePlan | null;
   /** Override the per-scene caps (defaults come from `StageOptions` / `detectStageCaps`). */
   maxLiveClips?: number;
   maxLivePixels?: number;
@@ -531,6 +539,8 @@ export class Stage {
   private aspect = 0.666;
   private zoom = 1;
   private bg = '#050505';
+  /** THE TITLE, already at this Stage's logical scale. Null draws nothing. */
+  private title: TitlePlan | null = null;
   private lineWidth = DEFAULT_LOGICAL_W * STROKE_RATIO;
 
   // --- loop ------------------------------------------------------------------
@@ -620,6 +630,7 @@ export class Stage {
     this.aspect = aspect;
     this.zoom = zoom;
     this.bg = scene.bgColor || '#050505';
+    this.title = titlePlanFor(scene.titlePlan ?? null, this.logicalW);
     this.logicalH = this.logicalW / aspect;
     this.lineWidth = this.logicalW * STROKE_RATIO;
     if (typeof scene.maxLiveClips === 'number') this.capsClips = Math.max(0, scene.maxLiveClips);
@@ -1112,6 +1123,11 @@ export class Stage {
         ctx.restore();
       }
     }
+
+    // THE TITLE — after every fragment, before the bookkeeping. One plan, drawn
+    // at k=1 because the Stage's logical space IS the plan's basis; `null` costs
+    // one branch, which is what keeps an untitled frame the frame it always was.
+    if (this.title !== null) drawTitlePlan(ctx, this.title);
 
     const clips = this.liveClips;
     for (let i = 0; i < clips.length; i++) {

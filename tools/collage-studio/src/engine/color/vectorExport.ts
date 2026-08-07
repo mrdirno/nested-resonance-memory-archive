@@ -2,6 +2,7 @@
 import { LayoutItem, createRng } from '../../lib/layout';
 import { ImageAsset, AppState } from '../../types';
 import { calculateSmartCrop } from '../../lib/renderer';
+import { TitlePlan, titlePlanFor, titlePlanToSvg } from '../../lib/title';
 
 const blobToBase64 = async (url: string): Promise<string> => {
   try {
@@ -27,7 +28,9 @@ export const generateVectorExport = async (
   seed: number,
   fullState?: AppState,
   zoom: number = 1.0,
-  bgColor: string = '#050505'
+  bgColor: string = '#050505',
+  /** THE TITLE, planned once at `TITLE_BASIS` by the caller. Null emits nothing. */
+  titlePlan: TitlePlan | null = null,
 ): Promise<string> => {
   const height = width / aspect;
 
@@ -115,7 +118,14 @@ ${metadataComment}
   }
 
   svg += `  </g>
-</svg>`;
+`;
+
+  // THE TITLE — real <text>, not an outline, so it stays selectable, editable
+  // and re-typeable in whatever the SVG is opened in. Same plan, same wrap, same
+  // basis as every raster path; only the scale differs.
+  svg += titlePlanToSvg(titlePlanFor(titlePlan, width));
+
+  svg += `</svg>`;
 
   return svg;
 };

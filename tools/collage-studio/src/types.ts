@@ -1,4 +1,5 @@
 import type { ArrangementId, FocusId, TwistId } from './lib/composition';
+import type { TitleSpec } from './lib/title';
 import { AnalysisResult } from './lib/analysis';
 
 /**
@@ -104,6 +105,12 @@ export interface AppState {
   style: {
     background: string;
   };
+  /**
+   * THE TITLE — the caption drawn over the finished collage. Absent on every
+   * project saved before it existed, and absent means "no caption", which is
+   * exactly what those projects had.
+   */
+  title?: TitleSpec;
 }
 
 export interface ProjectManifest extends AppState {

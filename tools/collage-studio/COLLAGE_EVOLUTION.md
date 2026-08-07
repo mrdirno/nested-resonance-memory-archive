@@ -47,7 +47,12 @@ or re-documenting an existing capability is DD, not delivery.
   THE COMPOSITION CODE — every composition has a short code, shown under the
   dice, tap to copy, paste one back to open it, and carried in the address bar
   so a LINK is a collage. `lib/rollCode.ts` owns the one seam between app state
-  and a `Roll` in both directions; the sources are deliberately not in it.
+  and a `Roll` in both directions; the sources are deliberately not in it;
+  THE TITLE — a caption typed into the dock and drawn over the finished collage
+  by all four surfaces that produce pixels (still preview, live Stage and so
+  both video recorders, the export WORKER's OffscreenCanvas, and the SVG as real
+  `<text>`), from ONE plan wrapped once on the main thread at the 1200 basis
+  (`lib/title.ts`) and scaled per surface.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -105,12 +110,41 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       `connect` / `start` calls) driven against a real schedule — cheap, since
       the mixer only ever calls five methods — which would let mutation testing
       reach the wiring in milliseconds instead of minutes.
+- [ ] **THE TITLE CANNOT TRAVEL IN A COMPOSITION CODE, and that is a decision,
+      not an oversight.** A code is a RECIPE anyone can open with their own
+      photographs; somebody else's caption over your pictures is not the same
+      collage, so the title rides in the project file and in the SVG's
+      JSON_MANIFEST (both carry the whole `AppState`) and not in `?c=`. It is
+      the second thing on the "in the app but not in the code" list, after
+      pinned fragments — and unlike pins it is not even disclosed in the strip,
+      which is the honest gap here.
+- [ ] **The title is one caption, not a text LAYER.** Two captions, a
+      lower-third with a name and a role, a credit block in one corner and a
+      date in another — all of these are the same plan repeated, and `TitlePlan`
+      is already an array of positioned lines. The generalisation is a LIST of
+      plans, and the moment a second caption exists the placement roster stops
+      being four chips and becomes a real position control.
 - [ ] **Drag-reorder, playhead scrub and split/cut** — the timeline WIDGET, the
       remaining half of the timeline rung. Trim is a timing CONTRACT and is done;
       these are direct manipulation and are their own increment.
 - [ ] **Transitions** — cross-dissolve / fade / wipe / slide between clips/scenes.
-- [ ] **Text & titles** — text overlays, fonts, animated titles / lower-thirds;
-      later, auto-captions from the audio track.
+- [~] **Text & titles** — part-shipped as **THE TITLE**. One caption, four
+      placements, three sizes, drawn on a scrim so it stays readable over any
+      photograph, and it reaches every surface that produces pixels. The seam is
+      that the WRAP IS DECIDED ONCE: `planTitle` (lib/title.ts) resolves the
+      whole caption to geometry in the canonical 1200 basis against the context
+      the PREVIEW measures with, and `titlePlanFor(plan, width)` takes that
+      finished plan to whatever size each caller draws at. Letting the four
+      paths each wrap the text would have decided the break four times against
+      four font environments — and one of them is a WORKER THREAD, where the
+      same font stack is free to resolve to something else, which is the
+      preview-is-not-the-file divergence ONE LAYOUT exists to prevent. The text
+      box is the margin box less the plate's own padding, because the thing that
+      has to respect the margin is the SCRIM, not the glyphs (the naive rule
+      pushes the scrim off the canvas on 326/756 swept plans, by up to 2*padX).
+      Still owed on this rung: a colour/weight choice, per-line styling, MOTION
+      (animated titles and lower-thirds — the first thing here that needs a time
+      axis), and auto-captions from the audio track.
 - [ ] **Keyframes** — animate position/scale/opacity/rotation over time (Ken Burns).
 - [ ] **Adjustments & filters** — brightness/contrast/saturation/temp, LUT filters.
 - [ ] **Audio** — multi-track mix (partly done), volume envelopes / ducking, fade
@@ -204,6 +238,21 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A MEASUREMENT THAT LOOKS LIKE A PROOF AND IS ACTUALLY MEASURING THE
+  BACKGROUND.** The title's first e2e counted DARK PIXELS in a band, on solid
+  near-white tiles, reasoning that the only dark thing in the frame could be the
+  caption's scrim. It could not: the layout's own GUTTERS are dark, and on a
+  `Balanced` grid they put a dark line in essentially every row. Measured, the
+  bottom band of an UNTITLED export already read 5.1% dark, and the titled one
+  6.1% — so the assertion that the caption reached the file was resting on a
+  1-point difference inside a signal that was 84% gutter, and the "how tall is
+  the caption" metric returned 100% of the frame. The fix is not a better
+  threshold: every check now DIFFERENCES the render against the same
+  composition rendered untitled, which cancels the gutters exactly and leaves
+  the caption and nothing else. Generalised: when a proof rests on "only X can
+  produce this signal", enumerate what else produces it before trusting the
+  number — and prefer a differential against a baseline you control over an
+  absolute threshold against a scene you do not.
 - **A FEATURE THAT IS NEVER CALLED IS NEVER WRONG, AND THAT IS NOT THE SAME AS
   BEING RIGHT.** `encodeRoll`/`decodeRoll` were written, documented with a
   promise in the module header, covered by two unit sweeps, and imported by
@@ -743,6 +792,44 @@ the next tier (pro effects, AI-assisted editing, collaboration) becomes the
 frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
+- 2026-08-07 · **[AXIS:COLLAGE] THE TITLE** — you can say what it is. A caption typed
+  into the dock, four placements, three sizes, white on a scrim so it reads over any
+  photograph. **before → nothing in the tree called `fillText`; a collage could not
+  carry a word. after → `lib/title.ts` plans it ONCE and all four surfaces that produce
+  pixels draw that one plan**: the still preview, the live Stage (so both video
+  recorders), the export WORKER's OffscreenCanvas on another thread, and the SVG as real
+  selectable `<text>`. **The seam is that the WRAP IS DECIDED ONCE.** `planTitle`
+  resolves the caption to geometry at the canonical 1200 basis against the context the
+  PREVIEW measures with, and `titlePlanFor(plan, width)` scales that finished plan for
+  each caller — because letting four paths wrap the same string would decide the break
+  four times against four font environments, and one of them is a worker THREAD where
+  the font stack is free to resolve differently. That is the preview-is-not-the-file
+  divergence ONE LAYOUT exists to prevent, arriving by a new door.
+  **The load-bearing decision is which box the wrap respects:** the thing that must stay
+  inside the margin is the SCRIM, not the glyphs, so the text box is the margin box less
+  the plate's own padding. Sweep **82,871 checks / 0 failures** with a RED PROOF — the
+  naive "wrap to the margin" rule, run as an oracle on the identical inputs, pushes the
+  scrim off the canvas on **326/756** plans, worst overflow **95.0px at basis 1200**,
+  which is exactly 2·padX at the `lg` size (mechanism matches to the digit).
+  e2e **10/10 on chromium + Pixel 5**: T1 proves the NO-OP end to end (clearing the title
+  returns the byte-identical picture, 0.00/255 residue), T3 renders two real 2K exports
+  and differences them, T4 downloads the real SVG and checks its declared scrim against
+  the rows the raster actually changed — a one-line re-wrap would move them apart by a
+  whole line height. **Both mutations go red**: deleting the worker's `drawTitlePlan`
+  fails T3, deleting the SVG emit fails T4. Watertight asserted on the REAL page at
+  320/360/390/430 with a long caption in the box, zero horizontal overflow, every
+  control ≥44px. Regression: all 8 unit sweeps, one-layout, export-integrity,
+  composition, roll-code and mobile-watertight green; `tsc` and `vite build` clean.
+  **A metric scar, filed:** the first version of this proof counted dark pixels and was
+  really measuring the gutters (5.1% dark in an UNTITLED export) — every check now
+  differences against the same collage rendered without a caption.
+  **BACKPORT rider fired, and came back CLEAN.** The class fixed here is "one artifact
+  computed independently by more than one path, so the paths can disagree". Swept all 25
+  tool pages across the six trades: every page that has both an on-screen preview and a
+  copy button reads the SAME builder for both — `asText()` (av/consumables,
+  plumbing/supply-house-order), `text()` (gc/weather-day), `buildInstructions()`
+  (av/report-builder), `buildDoc()` (hvac/repair-recommendation). **0 hits.**
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
 - 2026-08-07 · **[AXIS:COLLAGE] THE COMPOSITION CODE** — a good roll is no longer lost.
   Every composition now has a short code, shown under the dice (tap to copy), a box to
   paste somebody else's into, and the same code in the ADDRESS BAR, so a link is a collage.
