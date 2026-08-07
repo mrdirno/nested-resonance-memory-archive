@@ -40,6 +40,7 @@ const VS = await load('src/lib/videoSync.ts', 'videoSync.mjs');
 
 const {
   normaliseWindow, sourceTimeAt, effectiveLength, audioPlan, audioPositionAt,
+  audioSchedule, schedulePositionAt, MAX_AUDIO_LAPS,
   liveWrapTarget, safeRate, MIN_WINDOW_SEC, LIVE_WINDOW_SLOP_SEC,
 } = CW;
 const { computeClipPlayback } = VS;
@@ -541,6 +542,256 @@ for (const span of [...SPANS, 0.15, 0.1499]) {
       fail(`I14 full=${w.full} but the window is [${w.inSec},${w.outSec}] of ${span} (in=${a} out=${b})`);
     }
   }
+}
+
+// =============================================================================
+// I15 — A TRIM THAT STRADDLES THE END OF A SHORT AUDIO TRACK.
+//
+//       The window has sound for part of each picture lap and none for the
+//       rest. `audioPlan` can only offer the node ONE loop region, and clamping
+//       it into the buffer makes that region the AUDIO's length — so the sound
+//       laps at the audio's period while the picture laps at the window's, and
+//       after the first lap they never meet again. Measured through real Web
+//       Audio by an adversarial audit: `shortaudio.mp4` trimmed 2->5 played a
+//       440 Hz tone on 16 of 24 sampled instants where the file has NO sound.
+//
+//       THE ASSERTION IS TWO-SIDED, and it has to be. "No wrong sound" alone is
+//       satisfied by silence, and "sound wherever the file has it" alone is
+//       satisfied by the drone this replaces. Only both together say the
+//       schedule reproduces the picture.
+//
+//       THE RED PROOF is at the bottom: the OLD single-node plan is run through
+//       the SAME assertion and must FAIL it. An invariant nobody has watched go
+//       red is a hope, and this project has the scar to prove it (the twist
+//       sweep asserted determinism by calling a pure function twice with the
+//       same argument, and caught neither ULP defect).
+// =============================================================================
+{
+  /** Every output instant where picture and sound must agree, for one setup. */
+  const auditOne = (w, rate, loop, startAt, seconds, bufDur, positionAt) => {
+    const p = { window: w, loop, rate };
+    const r = safeRate(rate);
+    const hiA = Math.min(w.outSec, bufDur);
+    const bad = [];
+    const STEPS = 200;
+    for (let i = 0; i <= STEPS; i++) {
+      const u = (i / STEPS) * seconds;
+      const pic = sourceTimeAt(p, startAt + u);
+      const snd = positionAt(u);
+      // A boundary instant is neither side's business — the picture is AT the
+      // audio's end, and half a sample either way decides it. Skip a hair.
+      if (Math.abs(pic - hiA) < 1e-6) continue;
+      if (pic < hiA) {
+        // The file HAS sound here. It must be playing, at the picture's place.
+        if (snd === null) { bad.push(`u=${u.toFixed(4)} pic=${pic.toFixed(5)} SILENT but the file has sound`); continue; }
+        if (Math.abs(snd - pic) > 1e-6) {
+          bad.push(`u=${u.toFixed(4)} pic=${pic.toFixed(5)} snd=${snd.toFixed(5)} drift=${(snd - pic).toExponential(2)}`);
+        }
+      } else if (snd !== null) {
+        // The file has NO sound here. Anything playing is invented.
+        bad.push(`u=${u.toFixed(4)} pic=${pic.toFixed(5)} past the audio end ${hiA.toFixed(5)} but snd=${snd.toFixed(5)}`);
+      }
+    }
+    return bad;
+  };
+
+  let straddles = 0;
+  let redSeen = 0;
+  let sliver = 0;
+  for (const span of [6, 8.4, 27.3]) {
+    for (const [a, b] of WINDOWS(span)) {
+      const w = normaliseWindow(span, a, b);
+      if (!(w.length > 0)) continue;
+      for (const bufDur of [
+        span * 0.5, span * 0.34, 2.99998, span * 0.8,
+        // THE SLIVER. An overlap UNDER the 10 ms loop-region floor: `audioPlan`
+        // refuses to loop there, and reading the straddle off `plan.loop` used
+        // to inherit that refusal into a path that never wraps — so the clip
+        // played one blip for the whole take instead of one per lap. One
+        // detent of the trim slider wide. These two rows are the regression.
+        w.inSec + 0.005, w.inSec + 0.0099,
+      ]) {
+        // The straddle: audio ends strictly INSIDE the picture window.
+        if (!(bufDur > w.inSec && bufDur < w.outSec)) continue;
+        if ((bufDur - w.inSec) <= 0.01) sliver++;
+        for (const rate of [1, 0.5, 2.4]) {
+          for (const startAt of [0, 0.7, 3.3]) {
+            const seconds = Math.min(30, (w.length / safeRate(rate)) * 3.4 + 1);
+            const sched = audioSchedule({ window: w, loop: true, rate }, startAt, seconds, bufDur);
+            straddles++;
+
+            ok();
+            if (!sched.lapped) fail(`I15 a straddle must lap: w=[${w.inSec},${w.outSec}] buf=${bufDur}`);
+            ok();
+            if (sched.truncated) fail(`I15 the cap must not bind on a real take (${sched.starts.length} laps)`);
+            ok();
+            if (sched.starts.some((s) => s.loop)) fail('I15 no lap may use the node\'s own loop');
+            ok();
+            if (sched.starts.some((s) => s.when < 0 || !Number.isFinite(s.when))) {
+              fail(`I15 a start time is negative or non-finite: ${JSON.stringify(sched.starts.slice(0, 3))}`);
+            }
+            // Nothing may be told to read past the end of the decoded buffer.
+            ok();
+            for (const s of sched.starts) {
+              if (s.offset + (s.duration ?? 0) > bufDur + 1e-9) {
+                fail(`I15 a lap reads to ${s.offset + s.duration} past the ${bufDur}s buffer`);
+                break;
+              }
+            }
+
+            // NO TWO LAPS MAY SOUND AT ONCE. This needs its own assertion and
+            // cannot be left to the audit below, because `schedulePositionAt`
+            // returns the FIRST entry that covers an instant — so an overlap is
+            // INVISIBLE to the model while the real graph SUMS the two nodes and
+            // plays that stretch at double level. A model can only be trusted
+            // where the thing it models is known not to do something else.
+            ok();
+            for (let i = 1; i < sched.starts.length; i++) {
+              const prev = sched.starts[i - 1];
+              const ends = prev.when + (prev.duration ?? 0) / safeRate(prev.playbackRate);
+              if (ends > sched.starts[i].when + 1e-9) {
+                fail(`I15 lap ${i - 1} sounds until ${ends} and lap ${i} starts at `
+                  + `${sched.starts[i].when} — they overlap and will SUM `
+                  + `(w=[${w.inSec},${w.outSec}] buf=${bufDur} rate=${rate})`);
+                break;
+              }
+            }
+
+            // THE ASSERTION.
+            const bad = auditOne(w, rate, true, startAt, seconds, bufDur,
+              (u) => schedulePositionAt(sched.starts, u));
+            ok();
+            if (bad.length) {
+              fail(`I15 schedule disagrees with the picture on ${bad.length}/201 instants `
+                + `(span=${span} w=[${w.inSec.toFixed(3)},${w.outSec.toFixed(3)}] buf=${bufDur} `
+                + `rate=${rate} startAt=${startAt}): ${bad.slice(0, 2).join(' | ')}`);
+            }
+
+            // THE RED PROOF — the plan this replaces, through the same audit.
+            const old = audioPlan({ window: w, loop: true, rate }, startAt, bufDur);
+            const oldBad = auditOne(w, rate, true, startAt, seconds, bufDur,
+              (u) => audioPositionAt(old, u));
+            if (oldBad.length) redSeen++;
+          }
+        }
+      }
+    }
+  }
+  // THE CAP, ASSERTED IN THE DIRECTION THAT MATTERS. Every check above says the
+  // cap must NOT bind, which is trivially satisfied by having no cap at all —
+  // an audit confirmed that deleting the guard outright left this sweep green.
+  // So drive a take long enough to reach it and assert it both BINDS and SAYS
+  // it did, because `truncated` is a promise the interface makes and nothing in
+  // production reads.
+  {
+    const w = normaliseWindow(6, 2, 5);
+    const huge = MAX_AUDIO_LAPS * 3 * 2;          // laps of 3 s, twice the cap
+    const s = audioSchedule({ window: w, loop: true, rate: 1 }, 0, huge, 2.99998);
+    ok(); if (!s.truncated) fail(`I15 a ${huge}s take must exhaust the ${MAX_AUDIO_LAPS}-lap cap`);
+    ok(); if (s.starts.length !== MAX_AUDIO_LAPS) fail(`I15 the cap must bound the list: ${s.starts.length}`);
+    // Truncation must under-play, never mis-play: everything it DID schedule is
+    // still exactly on the picture's laps.
+    ok();
+    for (let i = 1; i < s.starts.length; i++) {
+      if (Math.abs((s.starts[i].when - s.starts[i - 1].when) - 3) > 1e-9) {
+        fail(`I15 truncated schedule lost its period at lap ${i}`);
+        break;
+      }
+    }
+  }
+
+  ok();
+  if (straddles < 20) fail(`I15 the sweep only found ${straddles} straddles — it is not exercising the case`);
+  ok();
+  if (sliver < 10) fail(`I15 only ${sliver} sub-10ms-overlap straddles — the sliver is not covered`);
+  // The bug must be REPRODUCIBLE by this instrument, or the instrument is not
+  // measuring what it claims to measure.
+  ok();
+  if (redSeen < straddles * 0.5) {
+    fail(`I15 RED PROOF: the OLD single-node plan failed the audit on only ${redSeen}/${straddles} `
+      + 'setups — an assertion that cannot see the defect it was written for is decoration');
+  }
+  console.log(`  I15: ${straddles} straddling setups; the old plan fails ${redSeen} of them.`);
+}
+
+// =============================================================================
+// I16 — THE SCOPE OF THE CHANGE. Everything that is NOT a straddle must come
+//       back as ONE entry carrying `audioPlan`'s own numbers, bit for bit, so
+//       every export that was correct before this cycle is untouched by it.
+//       `Object.is`, not `approx` — "close enough" is how a scale bug hides.
+// =============================================================================
+{
+  let single = 0;
+  for (const span of SPANS) {
+    if (!Number.isFinite(span) || span <= 0) continue;
+    for (const [a, b] of WINDOWS(span)) {
+      const w = normaliseWindow(span, a, b);
+      for (const bufDur of [undefined, 0, span, span * 1.4, span * 0.55, 0.05]) {
+        for (const loop of [true, false]) {
+          for (const rate of [1, 0.5, 2.4]) {
+            for (const startAt of [0, 1.5]) {
+              const plan = audioPlan({ window: w, loop, rate }, startAt, bufDur);
+              const sched = audioSchedule({ window: w, loop, rate }, startAt, 12, bufDur);
+
+              ok();
+              if (plan.silent !== sched.silent) fail(`I16 silent disagrees: ${plan.silent} vs ${sched.silent}`);
+              if (plan.silent) {
+                ok(); if (sched.starts.length) fail('I16 a silent schedule must wire nothing');
+                continue;
+              }
+              // The straddle is the ONE case allowed to differ, and it is
+              // decided on the WINDOW: a looping clip whose audio ends INSIDE
+              // its trim window, with a picture lap long enough to schedule.
+              // Deliberately NOT read off `plan.loop` — that is what left the
+              // sub-10 ms sliver on the single-node path, and a test that
+              // defines the boundary the same way the code does cannot see the
+              // boundary being wrong.
+              const hiA = bufDur > 0 ? Math.min(w.outSec, bufDur) : w.outSec;
+              const straddle = loop && (hiA - w.inSec) > 0 && hiA < w.outSec && w.length > 0.01;
+              ok();
+              if (sched.lapped !== straddle) {
+                fail(`I16 lapped=${sched.lapped} but straddle=${straddle} `
+                  + `(loop=${plan.loop} loopEnd=${plan.loopEnd} out=${w.outSec} buf=${bufDur})`);
+              }
+              if (straddle) continue;
+
+              single++;
+              ok();
+              if (sched.starts.length !== 1) fail(`I16 expected ONE start, got ${sched.starts.length}`);
+              const s = sched.starts[0];
+              for (const [k, mine, theirs] of [
+                ['when', s.when, 0],
+                ['offset', s.offset, plan.offset],
+                ['duration', s.duration, plan.stopAfter],
+                ['loop', s.loop, plan.loop],
+                ['loopStart', s.loopStart, plan.loopStart],
+                ['loopEnd', s.loopEnd, plan.loopEnd],
+                ['playbackRate', s.playbackRate, plan.playbackRate],
+              ]) {
+                ok();
+                if (!Object.is(mine, theirs)) {
+                  fail(`I16 ${k}: schedule ${mine} != plan ${theirs} (span=${span} buf=${bufDur} loop=${loop})`);
+                }
+              }
+              // And the two MODELS must agree, so `schedulePositionAt` is an
+              // extension of `audioPositionAt` rather than a second copy of it.
+              for (const u of [0, 0.033, 1.1, 4.7, 19]) {
+                ok();
+                const m = schedulePositionAt(sched.starts, u);
+                const n = audioPositionAt(plan, u);
+                if (!(m === null && n === null) && !(m !== null && n !== null && Object.is(m, n))) {
+                  fail(`I16 model split at u=${u}: schedule=${m} plan=${n}`);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ok();
+  if (single < 200) fail(`I16 only ${single} unchanged setups checked — too thin to call it compatibility`);
+  console.log(`  I16: ${single} non-straddle setups are bit-identical to audioPlan.`);
 }
 
 // =============================================================================

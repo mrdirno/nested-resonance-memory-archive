@@ -54,7 +54,7 @@
 // -----------------------------------------------------------------------------
 
 import { demuxAacTrack, toAudioSpecificConfig } from './mp4AudioDemux';
-import { normaliseWindow, audioPlan } from './clipWindow';
+import { normaliseWindow, audioSchedule } from './clipWindow';
 
 // =============================================================================
 // TYPES
@@ -424,25 +424,34 @@ const decodeWhole = async (
 /**
  * Lay every clip on the timeline the PICTURE is on.
  *
- * `audioPlan` (lib/clipWindow.ts) answers that in the node's own vocabulary —
- * loop / loopStart / loopEnd / playbackRate / offset — and its offset is the
- * same `sourceTimeAt` the video seek calls, so the two cannot be written to
- * disagree. Trim, video-length sync and the plain untrimmed case are all the
- * one function; there is no branch here to get wrong.
+ * `audioSchedule` (lib/clipWindow.ts) answers that in the node's own vocabulary
+ * — when / offset / duration / loop / loopStart / loopEnd / playbackRate — and
+ * its offsets come from the same `sourceTimeAt` the video seek calls, so the two
+ * cannot be written to disagree. Trim, video-length sync, a short audio track
+ * and the plain untrimmed case are all the one function; there is no branch here
+ * to get wrong, which is the point — this file used to hold the branch.
  *
- *   looping    : loopStart/loopEnd = the trim window, and the start offset is
- *                the picture's position at `startAt`. Wrapping happens inside
- *                the window, so a trimmed clip never plays a sample the viewer
- *                cannot see.
- *   non-looping: runs out at the OUT point. The video clamps there and holds its
- *                last frame; the sound stops. They agree everywhere the video is
- *                still moving, which is the only part that can desync.
+ *   looping    : ONE node. loopStart/loopEnd = the trim window, and the start
+ *                offset is the picture's position at `startAt`. Wrapping happens
+ *                inside the window, so a trimmed clip never plays a sample the
+ *                viewer cannot see.
+ *   non-looping: ONE node, running out at the OUT point. The video clamps there
+ *                and holds its last frame; the sound stops. They agree
+ *                everywhere the video is still moving, which is the only part
+ *                that can desync.
+ *   lapped     : N nodes, one per PICTURE lap, when the audio track ENDS INSIDE
+ *                the trim window. A single looping node cannot express this —
+ *                its loop region is the audio's length, so it laps at the
+ *                audio's period instead of the picture's and the two walk apart
+ *                for the rest of the take. Each lap plays what the file has and
+ *                then stops, which is what the live <video> does.
  */
 const mixSources = async (
   decoded: { buf: AudioBuffer; src: OfflineAudioSource }[],
   startAt: number,
   seconds: number,
   onSilent?: (n: number) => void,
+  onTruncated?: (n: number) => void,
 ): Promise<AudioBuffer | null> => {
   const OAC = oacCtor();
   if (!OAC) return null;
@@ -451,15 +460,10 @@ const mixSources = async (
 
   let wired = 0;
   let silent = 0;
+  let truncated = 0;
   for (const { buf, src } of decoded) {
     if (src.gain <= 0) continue;
     try {
-      const node = ctx.createBufferSource();
-      node.buffer = buf;
-      const gain = ctx.createGain();
-      gain.gain.value = src.gain;
-      node.connect(gain).connect(ctx.destination);
-
       // `span` is the Stage's, not ours — it carries the seek epsilon and the
       // video track's length, so resolving the window against it puts the sound
       // in the same window as the picture. `spanLimit` (the decoded buffer's own
@@ -468,9 +472,10 @@ const mixSources = async (
       // the buffer end is undefined behaviour.
       const span = src.span > 0 ? src.span : buf.duration;
       const window = normaliseWindow(span, src.inSec, src.outSec);
-      const plan = audioPlan(
+      const sched = audioSchedule(
         { window, loop: src.loop, rate: src.rate ?? 1 },
         startAt,
+        seconds,
         buf.duration,
       );
 
@@ -479,29 +484,87 @@ const mixSources = async (
       // trims into the part that has picture but no sound. Wiring nothing is the
       // honest answer: the alternative measured as the last 150 ms of the track
       // looped ~33 times across a 5 s take.
-      if (plan.silent) { silent++; continue; }
+      //
+      // AN EMPTY SCHEDULE COUNTS AS SILENCE TOO, and getting this wrong tells
+      // the user the wrong story about a correct render. A lapped schedule is
+      // legitimately empty when lap zero is already past the audio and the next
+      // boundary falls beyond the end of the take — reachable, and the honest
+      // message for it is the trimmed-out one ("that clip has no sound in the
+      // part you trimmed to"), which is exactly what `silent` produces. Falling
+      // through both counters instead leaves `wired === 0 && silent === 0`, and
+      // the reason ladder then reports "Mixing the sound failed." for a mix that
+      // did precisely what was asked.
+      if (sched.silent || !sched.starts.length) { silent++; continue; }
+      if (sched.truncated) truncated++;
 
-      node.playbackRate.value = plan.playbackRate;
-      if (plan.loop) {
-        node.loop = true;
-        node.loopStart = plan.loopStart;
-        node.loopEnd = plan.loopEnd;
-        node.start(0, plan.offset);
-      } else {
-        // A non-looping start must land inside the buffer, and must STOP at the
-        // OUT point: left unbounded the node plays to the end of the buffer,
-        // i.e. straight through the material the user trimmed away, beneath a
-        // picture that froze at OUT.
-        const off = Math.min(Math.max(0, plan.offset), Math.max(0, buf.duration - 0.001));
-        if (plan.stopAfter !== null && plan.stopAfter > 0) node.start(0, off, plan.stopAfter);
-        else node.start(0, off);
+      // ONE gain per CLIP, shared by its laps — the laps are the same source at
+      // the same level, and a gain each would be N times the graph for nothing.
+      const gain = ctx.createGain();
+      gain.gain.value = src.gain;
+      gain.connect(ctx.destination);
+
+      // ONE LAP'S FAILURE IS THAT LAP'S SILENCE, not the clip's. With a single
+      // node per clip the outer catch was the whole story; a schedule can be
+      // hundreds of nodes, and letting one bad `start` throw past them would
+      // discard every lap that was going to work — and, worse, leave the earlier
+      // ones connected while `wired` said the clip contributed nothing.
+      let started = 0;
+      let skipped = 0;
+      for (const s of sched.starts) {
+        // ZERO DURATION MEANS SILENCE, AND USED TO MEAN THE OPPOSITE. The old
+        // test was `duration > 0`, which sent a zero-length entry down the
+        // UNBOUNDED branch — where a BufferSource plays from `offset` to the END
+        // OF THE BUFFER, so the one case asking for nothing got everything,
+        // including all the material the user trimmed away. Both models read
+        // `local >= duration` as "already over", so the mixer was the only
+        // reader that disagreed. Latent rather than live (it needs `startAt > 0`,
+        // which nothing sets today) and inherited from the single-plan code, but
+        // a boundary two readers answer differently is a shape with a scar.
+        if (s.duration !== null && s.duration <= 0) { skipped++; continue; }
+        try {
+          const node = ctx.createBufferSource();
+          node.buffer = buf;
+          node.connect(gain);
+          node.playbackRate.value = s.playbackRate;
+          if (s.loop) {
+            node.loop = true;
+            node.loopStart = s.loopStart;
+            node.loopEnd = s.loopEnd;
+            node.start(s.when, s.offset);
+          } else {
+            // A non-looping start must land inside the buffer, and must STOP at
+            // the OUT point: left unbounded the node plays to the end of the
+            // buffer, i.e. straight through the material the user trimmed away,
+            // beneath a picture that froze at OUT.
+            const off = Math.min(Math.max(0, s.offset), Math.max(0, buf.duration - 0.001));
+            if (s.duration !== null) node.start(s.when, off, s.duration);
+            else node.start(s.when, off);
+          }
+          started++;
+        } catch { /* this lap does not sound; the rest still do */ }
       }
-      wired++;
+      // EVERY CLIP MUST LAND IN EXACTLY ONE BUCKET — wired, silent, or failed —
+      // and this block has now produced the same defect twice, which makes it
+      // the rule rather than the accident. A clip whose every entry was
+      // DELIBERATELY skipped (all zero-duration: the picture is parked past the
+      // end of its sound) contributed no node for a correct reason, so it is
+      // silence. Leaving it in neither bucket makes `wired === 0 && silent === 0`
+      // and the reason ladder then reports "Mixing the sound failed." for a mix
+      // that did exactly what was asked. `started === 0` with `skipped` SHORT of
+      // the list is different — those entries threw — and stays uncounted,
+      // because that one really is a failure.
+      if (started) wired++;
+      else if (skipped === sched.starts.length) silent++;
     } catch { /* one clip's failure is that clip's silence */ }
   }
   // Nothing to mix. `silent` distinguishes "every clip's trim window is past the
   // end of its audio" from "the graph would not build", which matter to the user
   // for opposite reasons — one is what they asked for, the other is a failure.
+  // A CAP THAT DEGRADES TO SILENCE MUST SAY SO. `AudioSchedule.truncated`
+  // documents itself as "the tail is silent", and a promise nothing reads is not
+  // a promise — the take would simply go quiet part-way through with no warning
+  // anywhere in the result.
+  if (truncated > 0) onTruncated?.(truncated);
   if (!wired) { if (silent > 0) onSilent?.(silent); return null; }
 
   let mixed: AudioBuffer;
@@ -750,7 +813,17 @@ export const prepareOfflineAudio = async (
   }
 
   let trimmedOut = 0;
-  const mixed = await mixSources(decoded, startAt, seconds, (n) => { trimmedOut = n; });
+  let cappedOut = 0;
+  const mixed = await mixSources(
+    decoded, startAt, seconds,
+    (n) => { trimmedOut = n; },
+    (n) => { cappedOut = n; },
+  );
+  if (cappedOut > 0) {
+    warnings.push(
+      `${cappedOut} clip(s) turn over so fast that their sound stops part-way through this take.`,
+    );
+  }
   if (!mixed) {
     return {
       track: null,

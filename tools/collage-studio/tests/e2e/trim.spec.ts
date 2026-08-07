@@ -297,6 +297,58 @@ const measureTones = async (page: Page, freqs: number[], controlHz: number) =>
     return { ok: true, reason: '', bins, control, rms };
   }, { freqs, controlHz, probes: TONE_PROBES });
 
+/**
+ * The exported sound's ENVELOPE — energy at one tone, slice by slice, across the
+ * whole file.
+ *
+ * `measureTones` above asks "is this tone anywhere in the file", which is the
+ * right question for a trim and the WRONG one for a period. The lap defect puts
+ * exactly the right tone in the file — 440 Hz is genuinely part of this clip —
+ * and gets it wrong only in WHEN: the sound should be there for one second of
+ * every three-second lap and it is there for all three. A measurement with no
+ * time axis cannot see that, and every existing assertion in this file passed
+ * while it was happening.
+ */
+const toneEnvelope = async (page: Page, hz: number, sliceSec: number) =>
+  page.evaluate(async ({ hz, sliceSec }) => {
+    const fail = (reason: string) =>
+      ({ ok: false, reason, dur: 0, slices: [] as { t: number; e: number; rms: number }[] });
+    const el = document.querySelector('video[controls]') as HTMLVideoElement | null;
+    if (!el || !el.src) return fail('no result preview element');
+    const bytes = await (await fetch(el.src)).arrayBuffer();
+    const Ctx: typeof AudioContext =
+      (window as unknown as { AudioContext: typeof AudioContext }).AudioContext
+      || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new Ctx();
+    let buf: AudioBuffer;
+    try { buf = await ctx.decodeAudioData(bytes.slice(0)); } catch (e) {
+      await ctx.close().catch(() => {});
+      return fail(`no decodable audio track (${(e as Error)?.message || e})`);
+    }
+    const rate = buf.sampleRate;
+    const ch = buf.getChannelData(0);
+    const goertzel = (data: Float32Array, freq: number): number => {
+      const n = data.length;
+      const k = Math.round((n * freq) / rate);
+      const w = (2 * Math.PI * k) / n;
+      const cw = Math.cos(w), sw = Math.sin(w), coeff = 2 * cw;
+      let s0 = 0, s1 = 0, s2 = 0;
+      for (let i = 0; i < n; i++) { s0 = data[i] + coeff * s1 - s2; s2 = s1; s1 = s0; }
+      const re = s1 - s2 * cw, im = s2 * sw;
+      return Math.sqrt(re * re + im * im) / (n / 2);
+    };
+    const n = Math.floor(rate * sliceSec);
+    const slices: { t: number; e: number; rms: number }[] = [];
+    for (let start = 0; start + n <= ch.length; start += n) {
+      const win = ch.slice(start, start + n);
+      let r = 0;
+      for (let i = 0; i < win.length; i++) r += win[i] * win[i];
+      slices.push({ t: start / rate, e: goertzel(win, hz), rms: Math.sqrt(r / win.length) });
+    }
+    await ctx.close().catch(() => {});
+    return { ok: true, reason: '', dur: ch.length / rate, slices };
+  }, { hz, sliceSec });
+
 const startPlaybackIfGated = async (page: Page) => {
   const tap = page.getByRole('button', { name: /tap to play/i });
   if (await tap.count()) await tap.first().click().catch(() => { /* raced with autoplay */ });
@@ -687,6 +739,152 @@ test.describe('a trim past the end of a short audio track', () => {
         `the exported audio must be silence, not a looped fragment — rms=${t.rms}`)
         .toBeLessThan(0.01);
     }
+  });
+});
+
+/**
+ * T7 — A TRIM THAT STRADDLES THE END OF THE AUDIO TRACK.
+ *
+ * T5 above covers the window landing ENTIRELY past the sound, which is why it is
+ * green and why it never saw this. Put the window ACROSS the boundary instead —
+ * `shortaudio.mp4` is 6 s of picture over 3 s of 440 Hz, so a trim to 2->5 has
+ * sound for its first second and none for its remaining two — and the two
+ * timelines have different periods for the first time:
+ *
+ *     the picture laps every 3 s          (the window)
+ *     the node looped every 1 s           (the window CLAMPED into the buffer)
+ *
+ * so from one second in they walk apart and never meet. What that sounds like is
+ * an unbroken 440 Hz drone under a picture the file has no sound for — the right
+ * tone, in the wrong place, for two thirds of the take. Every existing assertion
+ * in this file passes while it happens, because they all ask WHETHER a tone is
+ * in the file and this defect gets only the WHEN wrong.
+ *
+ * So the measurement here has a time axis. A correct render is loud for one
+ * second of every three:
+ *
+ *     t 0–1  loud   t 1–3  silent   t 3–4  loud   t 4–5  silent   = 40% duty
+ *
+ * and the defect is ~100%. The assertion is the DUTY CYCLE plus the existence of
+ * a long unbroken silence, which brackets the answer from both sides: a drone
+ * fails the first, and muting the clip outright fails both.
+ */
+test.describe('a trim that straddles the end of a short audio track', () => {
+  const NAME = 'shortaudio.mp4';
+  const T_IN = 2;
+  const T_OUT = 5;
+  const TAKE = 5;
+  /** Source seconds of sound the file actually has inside the window. */
+  const LAP = T_OUT - T_IN;          // 3 s of picture per lap
+  const SOUND = 3 - T_IN;            // ~1 s of it has audio
+
+  test.beforeEach(async ({ page }) => {
+    page.on('pageerror', (e) => console.log('[pageerror]', e.message));
+    await page.route('**/cdn.jsdelivr.net/**', (r) => r.abort());
+    await page.goto(APP_URL);
+  });
+
+  test('the sound laps with the PICTURE, not with the audio track', async ({ page }) => {
+    test.setTimeout(420_000);
+    await page.locator('input[type="file"]').first()
+      .setInputFiles([join(HERE, '..', 'fixtures', NAME)]);
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 200_000 });
+    await expect(page.getByRole('button', { name: `Stop playing ${NAME}` }))
+      .toBeVisible({ timeout: 200_000 });
+    await startPlaybackIfGated(page);
+
+    await page.getByRole('button', { name: `Trim ${NAME}` }).click();
+    const sheet = page.getByRole('dialog', { name: `Trim ${NAME}` });
+    await expect(sheet).toBeVisible({ timeout: 15_000 });
+    await sheet.getByLabel(`Out point for ${NAME}`).fill(String(T_OUT));
+    await sheet.getByLabel(`In point for ${NAME}`).fill(String(T_IN));
+    await sheet.getByRole('button', { name: 'Close trim' }).click();
+
+    const five = page.getByRole('button', { name: `${TAKE}s`, exact: true });
+    if (await five.count()) await five.first().click();
+    await page.getByRole('button', { name: 'Record video' }).click();
+    await expect(page.locator('p.tabular-nums').filter({ hasText: /frames/ }))
+      .toBeVisible({ timeout: 360_000 });
+
+    // The PICTURE first — the defect never touched it, and a "fix" that quiets
+    // the sound by breaking the window must not pass. [2,5] of an R/G/B sixth
+    // is green then blue; RED is before IN and cannot legitimately appear.
+    const frames = await exportedChannels(page, [0.4, 1.4, 2.6, 3.4, 4.4]);
+    console.log('[trim/straddle] exported frame channels:', JSON.stringify(frames));
+    expect(frames.includes('r'),
+      `RED is before the IN point and must not be in the file — got ${JSON.stringify(frames)}`).toBe(false);
+    expect(frames.filter((c) => c === 'g' || c === 'b').length,
+      `the export must show the trimmed window — got ${JSON.stringify(frames)}`).toBeGreaterThanOrEqual(4);
+
+    // ---- THE SOUND, WITH A TIME AXIS -------------------------------------
+    const env = await toneEnvelope(page, HZ_RED, 0.25);
+    expect(env.ok, `the export must contain audio — ${env.reason}`).toBe(true);
+    expect(env.slices.length, 'the envelope must have real slices').toBeGreaterThan(8);
+
+    const peak = Math.max(...env.slices.map((s) => s.e));
+    expect(peak, 'the 440 Hz tone must be in the file at all — the clip is not muted')
+      .toBeGreaterThan(0.005);
+    // Loud/quiet against THIS file's own peak, so the claim survives any encoder
+    // level. The tone is either fully present or at the noise floor; measured,
+    // the two populations sit three orders of magnitude apart.
+    const loud = env.slices.map((s) => s.e > peak * 0.35);
+    console.log(`[trim/straddle] dur=${env.dur.toFixed(2)}s peak=${peak.toFixed(5)} `
+      + `envelope=${env.slices.map((s) => (s.e > peak * 0.35 ? '#' : '.')).join('')}`);
+    console.log('[trim/straddle] slice energies: '
+      + env.slices.map((s) => `${s.t.toFixed(2)}:${s.e.toFixed(4)}`).join(' '));
+
+    const duty = loud.filter(Boolean).length / loud.length;
+    const expected = SOUND / LAP;                       // ~0.333 of every lap
+    expect(duty,
+      `the sound must be present for about ${(expected * 100).toFixed(0)}% of the take and is `
+      + `${(duty * 100).toFixed(0)}% — 100% is the audio track looping at ITS period instead of `
+      + 'the picture\'s, which is the defect this test exists for')
+      .toBeLessThan(0.55);
+    expect(duty,
+      `the sound is present for only ${(duty * 100).toFixed(0)}% of the take — the clip has been `
+      + 'silenced rather than re-timed')
+      .toBeGreaterThan(0.25);
+
+    /**
+     * THE PHASE ANCHOR — and it is the assertion that carries this test.
+     *
+     * The two statistics above are both invariant under TRANSLATION. An
+     * adversarial audit built this exact measurement over the real fixture and
+     * showed it: a render whose every lap is one second LATE — a full second of
+     * audible desync, sound playing under a picture the file is silent for —
+     * scores duty 40%, longest silence 2.00 s, peak 0.1247. Digit for digit the
+     * correct render's numbers. So do "only the first lap was wired" (20% /
+     * 3.00 s) and "each lap plays half its sound" (20% / 2.50 s). Every one of
+     * those passes a duty band and a longest-run rail, because those two say HOW
+     * MUCH sound and HOW LONG the biggest gap, and never WHERE.
+     *
+     * The picture's position has to appear in the assertion, so here it is: the
+     * file has sound at output `t` exactly when the picture's source time there
+     * is before the end of the audio track, i.e. when `t % LAP < SOUND`. Slices
+     * that straddle a transition are genuinely part-loud and are skipped by name
+     * rather than fudged with a threshold.
+     */
+    const EDGE = 0.02;
+    let anchored = 0;
+    const wrong: string[] = [];
+    env.slices.forEach((s, i) => {
+      const ph = s.t % LAP;
+      const wholeSliceLoud = ph + 0.25 <= SOUND + EDGE;
+      const wholeSliceQuiet = ph >= SOUND - EDGE && ph + 0.25 <= LAP + EDGE;
+      if (!wholeSliceLoud && !wholeSliceQuiet) return;       // straddles a transition
+      anchored++;
+      const want = wholeSliceLoud;
+      if (loud[i] !== want) {
+        wrong.push(`t=${s.t.toFixed(2)} (source ${(T_IN + ph).toFixed(2)}) want=`
+          + `${want ? 'SOUND' : 'silence'} got=${loud[i] ? 'SOUND' : 'silence'} e=${s.e.toFixed(4)}`);
+      }
+    });
+    expect(anchored,
+      'the phase anchor must classify most slices, or it is asserting nothing').toBeGreaterThan(12);
+    expect(wrong,
+      `${wrong.length} slice(s) have sound where the picture says they must not, or silence where `
+      + 'it says they must — the sound is not lapping with the picture')
+      .toEqual([]);
   });
 });
 

@@ -218,6 +218,18 @@ export const effectiveLength = (p: WindowedPlayback): number => {
  * window lands entirely past the end of the audio there is genuinely nothing to
  * play, and the plan says `silent` instead of inventing something to loop.
  */
+/**
+ * The point in the window past which THIS CLIP HAS NO SOUND — the OUT point, or
+ * the end of the decoded audio if that comes first.
+ *
+ * One line, and it is a function because two callers need it and the last time
+ * this quantity was computed in one place and inferred in another it produced
+ * the lap defect. `audioPlan` bounds the node with it; `audioSchedule` decides
+ * whether the clip straddles with it. Same number, one definition.
+ */
+const audibleEnd = (w: ClipWindow, spanLimit?: number): number =>
+  finite(spanLimit) && spanLimit > 0 ? Math.min(w.outSec, spanLimit) : w.outSec;
+
 export const audioPlan = (
   p: WindowedPlayback,
   startAt: number,
@@ -226,9 +238,7 @@ export const audioPlan = (
   const rate = safeRate(p.rate);
   const at = finite(startAt) && startAt > 0 ? startAt : 0;
   const lo = p.window.inSec;
-  const hi = finite(spanLimit) && spanLimit > 0
-    ? Math.min(p.window.outSec, spanLimit)
-    : p.window.outSec;
+  const hi = audibleEnd(p.window, spanLimit);
   const len = hi - lo;
 
   if (!(len > 0)) {
@@ -285,6 +295,213 @@ export const audioPositionAt = (plan: AudioPlan, u: number): number | null => {
   const len = plan.loopEnd - plan.loopStart;
   if (!(len > 0)) return plan.offset;
   return plan.loopStart + (((plan.offset - plan.loopStart) + elapsed) % len);
+};
+
+// -----------------------------------------------------------------------------
+// THE LAP SCHEDULE — WHEN THE AUDIO TRACK IS SHORTER THAN THE TRIM WINDOW.
+//
+// `audioPlan` above clamps `loopEnd` into the decoded buffer, which is right —
+// a loop region past the buffer is undefined behaviour. But a CLAMPED loop
+// region is also a clamped PERIOD, and the period is the thing the picture and
+// the sound have to share. `shortaudio.mp4` (6 s of picture, 3 s of sound)
+// trimmed to 2->5: the picture laps every 3 s and the node laps every 1 s, so
+// after the first second the two walk apart and never meet again. Measured by an
+// adversarial audit through real Web Audio: 16 of 24 sampled instants played a
+// 440 Hz tone under a picture the file has no sound for.
+//
+// It is NOT a clamp bug — the clamp is the only safe thing to hand the node.
+// The mistake is asking ONE node to express a signal that is not periodic at its
+// own loop length. So this case stops using the node's own loop and schedules
+// one NON-looping node per PICTURE lap: the sound plays the part the file has,
+// then there is nothing until the picture comes back round. Which is exactly
+// what the live `<video>` already does — its audio track simply runs out while
+// the picture keeps going — so the export now reproduces the preview instead of
+// inventing a drone the preview never had.
+// -----------------------------------------------------------------------------
+
+/**
+ * ONE `AudioBufferSourceNode.start(...)`, in the node's own vocabulary.
+ *
+ * `when` is CONTEXT seconds from the start of the mix (never negative — a lap
+ * that began before the mix window is entered part-way through instead, by
+ * advancing its `offset`). `offset` and `duration` are BUFFER seconds, which is
+ * the coordinate both of those arguments are defined in and the reason a rate
+ * never appears in them.
+ */
+export interface AudioStart {
+  when: number;
+  offset: number;
+  /** Third argument to `start`. Null only for a natively-looping node. */
+  duration: number | null;
+  loop: boolean;
+  loopStart: number;
+  loopEnd: number;
+  playbackRate: number;
+}
+
+/** Every node one clip needs, plus what the mixer has to tell the user. */
+export interface AudioSchedule {
+  starts: AudioStart[];
+  /** The window is past the end of this clip's audio — wire nothing, and SAY so. */
+  silent: boolean;
+  /** True when the lap schedule was used, i.e. this clip straddles its audio end. */
+  lapped: boolean;
+  /** The take is longer than `MAX_AUDIO_LAPS` laps; the tail is silent. */
+  truncated: boolean;
+}
+
+/**
+ * A ceiling on nodes per clip, because a lap schedule is unbounded in principle.
+ *
+ * IT IS REACHABLE, and the first two versions of this comment got the reason
+ * wrong in opposite directions — which is why the mechanism below is MEASURED
+ * rather than argued.
+ *
+ * The original claim was "a lap is at least `MIN_WINDOW_SEC` of OUTPUT time
+ * whatever the rate, because sync sets `rate = length / target` and so
+ * `length / rate` IS the target". That is false, but NOT for the reason the
+ * second version then asserted. The rate clamp (`videoSync`'s `RATE_MAX` = 16)
+ * is not a cause at all: where it engages it LENGTHENS the lap — an unclamped
+ * 16.667 against a 9 ms reference gives a 9.000 ms lap, the clamped 16 gives
+ * 9.375 ms — so it strictly REDUCES the node count. Swept over 23,040 real
+ * clip-cases (files 0.15–600 s × 3 sync modes × 5 trims), the rate clamped in
+ * 2,940 of them and the shortest output lap across all of them was exactly
+ * 0.150000 s, comfortably above the threshold.
+ *
+ * THE ACTUAL MECHANISM is `normaliseWindow`'s own floor clause: for a span at or
+ * under `MIN_WINDOW_SEC` it hands back the WHOLE span, so a source FILE shorter
+ * than 150 ms produces a sub-150 ms window, and that window becomes the sync
+ * reference every other clip is timed against. `lapOut = max(len / RATE_MAX,
+ * reference)`, so the cap binds only when some file is itself under the floor.
+ * Cheapest real reproduction: ONE 62 ms clip whose audio track is shorter than
+ * its video, in a 120 s take — 0.058 s laps, 2,048 entries, `truncated` true,
+ * and the sound stops at 118.726 s.
+ *
+ * The take bound is sound and stays: `prepareOfflineAudio` refuses past
+ * MAX_PCM_BYTES (~174.76 s), and `frameExport` clamps tighter still, which only
+ * widens the margin.
+ *
+ * What matters is that the degradation is SILENCE past the cap, never the wrong
+ * sound — a truncated schedule under-plays and cannot desync — and that it is no
+ * longer unannounced: `truncated` reaches the user as a warning through
+ * `mixSources`. A clip lapping every 58 ms is a strobe with a buzz on it long
+ * before the cap is the reason it sounds wrong.
+ */
+export const MAX_AUDIO_LAPS = 2048;
+
+const startFromPlan = (plan: AudioPlan): AudioStart => ({
+  when: 0,
+  offset: plan.offset,
+  duration: plan.stopAfter,
+  loop: plan.loop,
+  loopStart: plan.loopStart,
+  loopEnd: plan.loopEnd,
+  playbackRate: plan.playbackRate,
+});
+
+/**
+ * Every node this clip needs, for a mix of `seconds` starting at output time
+ * `startAt`.
+ *
+ * THE SCOPE OF THE CHANGE IS THE BRANCH CONDITION, and that is on purpose. A
+ * schedule differs from `audioPlan` if and ONLY IF the plan wanted to loop over
+ * LESS than the picture window — which is precisely the defect and nothing else.
+ * Every other input (untrimmed, trimmed with sound all the way to OUT,
+ * non-looping, silent) returns the plan's own numbers in one entry, so those
+ * exports are bit-identical to what shipped. Asserted, not asserted-in-a-comment:
+ * invariant I16.
+ */
+export const audioSchedule = (
+  p: WindowedPlayback,
+  startAt: number,
+  seconds: number,
+  spanLimit?: number,
+): AudioSchedule => {
+  const plan = audioPlan(p, startAt, spanLimit);
+  const one = (): AudioSchedule =>
+    ({ starts: [startFromPlan(plan)], silent: false, lapped: false, truncated: false });
+
+  if (plan.silent) return { starts: [], silent: true, lapped: false, truncated: false };
+
+  const r = plan.playbackRate;
+  const lo = p.window.inSec;
+  const hiA = audibleEnd(p.window, spanLimit);
+  const lenA = hiA - lo;                   // source seconds this clip actually has
+  const L = p.window.length;               // source seconds the PICTURE laps over
+  const lapOut = L / r;                    // output seconds per picture lap
+
+  /**
+   * THE STRADDLE IS DECIDED ON THE WINDOW, NOT ON WHETHER `audioPlan` CHOSE TO
+   * LOOP — and reading it off the plan left a hole exactly one slider detent
+   * wide. `audioPlan` refuses a loop region under 10 ms because a node's WRAP is
+   * unstable below that across engines; short-circuiting on `!plan.loop` then
+   * inherited that refusal into a path THAT NEVER WRAPS. A window overlapping
+   * its audio by 9 ms took the single-node path and played one blip for the
+   * whole take where the picture asks for one per lap (measured: 15 blips
+   * collapsed to 1 on a 30 s take). The trim slider's step is 0.01 s, so it was
+   * one detent from correct. The 10 ms floor still applies — to `L`, the period
+   * actually being scheduled, where its reason holds.
+   */
+  const straddles = p.loop
+    && lenA > 0
+    && hiA < p.window.outSec
+    && L > 0.01
+    && lapOut > 0 && Number.isFinite(lapOut);
+  if (!straddles) return one();
+
+  const dur = finite(seconds) && seconds > 0 ? seconds : 0;
+  const at = finite(startAt) && startAt > 0 ? startAt : 0;
+  // Where the PICTURE sits inside its lap at the mix's first sample — the same
+  // `% L` the frame loop walks, and the number `audioPlan` had to compute as
+  // `% lenA` because that was the only period its single node could express.
+  const raw = (at * r) % L;
+  const ph = finite(raw) && raw >= 0 ? raw : 0;
+
+  const starts: AudioStart[] = [];
+  const push = (when: number, offset: number, duration: number) => {
+    starts.push({ when, offset, duration, loop: false, loopStart: 0, loopEnd: 0, playbackRate: r });
+  };
+
+  // LAP ZERO is already in progress when the mix begins, so it is joined
+  // part-way. Past `lenA` there is nothing left of it to join — the file's sound
+  // for this lap has already run out — and the honest entry is no entry.
+  if (ph < lenA) push(0, lo + ph, lenA - ph);
+
+  // Every later lap, timed ABSOLUTELY off the first boundary rather than by
+  // adding `lapOut` to the previous one, so a thousand laps cannot accumulate a
+  // thousand roundings.
+  const firstBoundary = (L - ph) / r;
+  let truncated = false;
+  for (let k = 0; ; k++) {
+    const when = firstBoundary + k * lapOut;
+    if (!(when < dur)) break;
+    if (starts.length >= MAX_AUDIO_LAPS) { truncated = true; break; }
+    push(when, lo, lenA);
+  }
+
+  return { starts, silent: false, lapped: true, truncated };
+};
+
+/**
+ * A MODEL OF A WHOLE SCHEDULE — where the sound is at output time `u`, or `null`
+ * for silence. `audioPositionAt` models one node; this models the set of them,
+ * and the sweep asserts the two agree on every single-entry schedule so this is
+ * an EXTENSION of that contract rather than a second copy of it.
+ */
+export const schedulePositionAt = (starts: AudioStart[], u: number): number | null => {
+  const t = finite(u) && u > 0 ? u : 0;
+  for (const s of starts) {
+    if (t < s.when) continue;
+    const local = (t - s.when) * safeRate(s.playbackRate);
+    if (s.loop) {
+      const len = s.loopEnd - s.loopStart;
+      if (!(len > 0)) return s.offset;
+      return s.loopStart + (((s.offset - s.loopStart) + local) % len);
+    }
+    if (s.duration !== null && local >= s.duration) continue;
+    return s.offset + local;
+  }
+  return null;
 };
 
 /**

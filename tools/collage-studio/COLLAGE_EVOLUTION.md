@@ -38,7 +38,12 @@ or re-documenting an existing capability is DD, not delivery.
   TRIM — per-clip in/out points with a filmstrip sheet, held by ONE
   output-time-to-source-time function (`lib/clipWindow.ts`) that the live
   element, the offline frame seek and the offline audio mix all ask, and coupled
-  to video-length sync through the WINDOW length rather than the file's.
+  to video-length sync through the WINDOW length rather than the file's;
+  THE LAP SCHEDULE — when a clip's audio track ENDS INSIDE the trim window, the
+  export stops asking one looping node to express a signal that is not periodic
+  at its own loop length and schedules one non-looping node PER PICTURE LAP
+  (`clipWindow.audioSchedule`), so the sound laps with the picture instead of
+  with the audio track.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -62,21 +67,43 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       returns the input array untouched, so every existing seed, project and
       share code renders BIT-IDENTICALLY and only the exports move — onto the
       picture the user was already looking at.
-- [ ] **A TRIM THAT STRADDLES THE END OF A SHORT AUDIO TRACK LOOPS THE SOUND AT
-      THE WRONG PERIOD.** Confirmed by an adversarial audit that rendered the
-      real plan through real Web Audio: with the repo's own `shortaudio.mp4`
-      (6.000 s picture, 2.99998 s sound) trimmed to 2→5, the picture laps every
-      3 s and the sound every 1 s, and **16 of 24 sampled instants play a 440 Hz
-      tone under a picture the file has no sound for**. `audioPlan` clamps
-      `hi` into the decoded buffer and hands that truncated span to the node as
-      its LOOP REGION, so the surviving fragment repeats at the audio's period
-      instead of the picture's. Pre-existing in class (the base commit did the
-      same to an UNTRIMMED short-audio clip), new surface with trim, and NOT a
-      clamp bug — the honest fix is to stop using the node's own loop here and
-      schedule one non-looping node PER PICTURE LAP (`start(lapStart, inSec,
-      min(bufEnd, out) - inSec)`), which is exact for any rate and needs a cap
-      on lap count. `trim.spec.ts` only covers the window landing ENTIRELY past
-      the audio (→ `plan.silent`), which is why it is green.
+- [x] **THE LAP SCHEDULE** — a trim that straddles the end of a short audio
+      track now laps with the PICTURE instead of with the audio track.
+      `audioPlan` clamps `loopEnd` into the decoded buffer, which is the only
+      safe thing to hand a node — but a clamped loop region is also a clamped
+      PERIOD, and the period is the one thing the picture and the sound must
+      share. `shortaudio.mp4` (6.000 s picture, 2.99998 s sound) trimmed to 2→5:
+      the picture lapped every 3 s and the node every 1 s, so from one second in
+      they walked apart and never met again — an unbroken 440 Hz drone under a
+      picture the file is silent for. The fix is not a better clamp: ONE node
+      cannot express a signal that is not periodic at its own loop length. So
+      `audioSchedule` (lib/clipWindow.ts) emits one NON-LOOPING node PER PICTURE
+      LAP for that case — each lap plays what the file has and then stops, which
+      is exactly what the live `<video>` already did, so the export finally
+      reproduces the preview instead of inventing a drone the preview never had.
+      **The scope is the branch condition**: a schedule differs from the plan iff
+      the plan wanted to loop over LESS than the picture window, so every other
+      export is bit-identical (I16, 8,298 setups, `Object.is`). Proof:
+      envelope of the exported MP4 at 0.25 s resolution reads
+      `####........####....` — 40% duty, silence exactly where the file has none,
+      against ~100% before.
+- [ ] **`offlineAudio.mixSources` HAS NO UNIT COVERAGE, and it is where a
+      scheduling fix actually lands.** Raised by the adversarial audit of the lap
+      schedule and only half-closed. The sweep loads `clipWindow.ts` and
+      `videoSync.ts` only, so the translation from an `AudioStart` to a real
+      `node.start(when, offset, duration)` — the per-lap wiring loop — is
+      asserted by exactly ONE test in the whole tree (trim.spec.ts T7). The
+      audit's mutations of that loop (`start(0, …)` instead of `start(s.when, …)`,
+      wiring only the first entry) were green before T7 gained its phase anchor
+      and are red now, so the hole is narrowed rather than closed: a single e2e
+      is still the only guard on the loop, and it costs eight minutes to run.
+      The fix is a fake `OfflineAudioContext` (record `createBufferSource` /
+      `connect` / `start` calls) driven against a real schedule — cheap, since
+      the mixer only ever calls five methods — which would let mutation testing
+      reach the wiring in milliseconds instead of minutes.
+- [ ] **Drag-reorder, playhead scrub and split/cut** — the timeline WIDGET, the
+      remaining half of the timeline rung. Trim is a timing CONTRACT and is done;
+      these are direct manipulation and are their own increment.
 - [ ] **Transitions** — cross-dissolve / fade / wipe / slide between clips/scenes.
 - [ ] **Text & titles** — text overlays, fonts, animated titles / lower-thirds;
       later, auto-captions from the audio track.
@@ -141,6 +168,122 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A CLAMP THAT KEEPS A LOOP REGION SAFE ALSO CHANGES ITS PERIOD, and the period
+  is the shared quantity.** `audioPlan` clamped `loopEnd` into the decoded buffer
+  — correct, a loop region past the buffer is undefined behaviour — and by doing
+  so silently made the sound's lap length the AUDIO's instead of the WINDOW's.
+  Everything local was right: the region was inside the buffer, the IN point had
+  not moved, the offset was the picture's position, and the first lap was
+  perfect. Only the SECOND lap was wrong, and then every lap after it. The
+  general shape: when two timelines must agree, a bound applied to one of them is
+  not a safety measure, it is a change to the contract. Ask what the clamp does
+  to the PERIOD, not just to the range.
+- **ONE NODE CANNOT EXPRESS A SIGNAL THAT IS NOT PERIODIC AT ITS OWN LOOP
+  LENGTH.** The instinct on finding the above was to compute a better `loopEnd`.
+  There isn't one: the clip's sound is "1 s of tone then 2 s of nothing, every
+  3 s", and an `AudioBufferSourceNode` loop plays a contiguous region forever. No
+  choice of loopStart/loopEnd produces silence in the middle. The fix had to
+  change the SHAPE of the answer — a schedule of N starts, not a plan of one —
+  and the API changed from `audioPlan` returning a config to `audioSchedule`
+  returning a list. When no parameter value is right, the parameter is the wrong
+  question.
+- **THE LIVE PREVIEW WAS ALREADY CORRECT, AND THAT IS THE SPEC.** A `<video>`
+  element's audio track simply runs out while its picture keeps going, then both
+  restart on the wrap — which is precisely the lap schedule. Every earlier scar
+  in this file is the export drifting from the preview; this one is the export
+  drifting from the preview in the one place nobody had thought to look, because
+  the preview reached the behaviour for free and the export had to construct it.
+  When the export needs code to reproduce something the preview gets from the
+  platform, that is where to look for the next one.
+- **A DUTY CYCLE AND A LONGEST-RUN ARE BOTH INVARIANT UNDER TRANSLATION, so a
+  test built from them says HOW MUCH and HOW LONG and never WHERE.** T7's first
+  cut measured the exported audio's envelope in 0.25 s slices and asserted the
+  fraction that were loud plus the longest silence — which does separate the
+  drone (100% duty, no silence) from the fix (40%, 2.00 s), and separates nothing
+  else. An adversarial audit rebuilt the measurement over the real fixture and
+  showed that a render whose every lap is ONE SECOND LATE — a full second of
+  audible desync — scores duty 40%, longest silence 2.00 s, peak 0.1247: digit
+  for digit the correct render's numbers. So did "sound in the gap instead of on
+  the beat". The repair is to put the PICTURE in the assertion: the file has
+  sound at output `t` exactly when `t % LAP < SOUND`, asserted slice by slice.
+  Measured across seven candidate renders, the two statistics pass 4/7 and the
+  phase anchor passes 1/7. If an assertion would hold for a translated copy of
+  the signal, it is not testing a timing fix.
+- **A MODEL THAT RETURNS THE FIRST MATCH CANNOT SEE AN OVERLAP.**
+  `schedulePositionAt` walks the starts and returns the first one covering an
+  instant, so two laps sounding at once look identical to one lap sounding — and
+  in the real graph they SUM and that stretch plays at double level. The A/V
+  agreement audit would have passed a schedule with overlapping laps. Non-overlap
+  needed its own assertion, checked on the STARTS rather than through the model.
+  A model can only be trusted where the thing it models is known not to do
+  something else.
+- **A GUARD INHERITED INTO A PATH ITS REASON DOES NOT COVER LEAVES A HOLE ONE
+  SLIDER DETENT WIDE.** `audioPlan` refuses a loop region under 10 ms because a
+  node's WRAP is unstable below that across engines. The first cut of
+  `audioSchedule` decided "is this a straddle" by reading `plan.loop` — and so
+  inherited that refusal into the LAP path, WHICH NEVER WRAPS. A window
+  overlapping its audio by 9 ms therefore took the single-node path and played
+  one blip for the whole take where the picture asks for one per lap: measured,
+  15 blips collapsed to 1 on a 30 s take, and the trim slider's step is 0.01 s,
+  so it sat exactly one detent from correct. Found by two independent audit
+  lenses, neither of which was looking for it. Ask what a guard is FOR before
+  reusing the flag that carries it; the 10 ms floor belongs to the period being
+  scheduled (`L`), not to the one that happens to be nearby.
+- **A TEST THAT DEFINES THE BOUNDARY THE WAY THE CODE DEFINES IT CANNOT SEE THE
+  BOUNDARY BEING WRONG.** I16's first cut read the straddle off `plan.loop`,
+  exactly as the code did, so the sliver above was invisible to 5.4M checks: the
+  test and the defect agreed. Rewritten to derive the straddle from the WINDOW
+  independently, coverage went 738 → 1,440 straddles and reverting the fix now
+  fails 1,284 assertions. An invariant must state the property in its OWN terms
+  or it is a mirror.
+- **A DOCSTRING THAT ARGUES SOMETHING IS UNREACHABLE IS A CLAIM, AND A CORRECTION
+  IS ANOTHER CLAIM.** `MAX_AUDIO_LAPS` was documented unreachable because "a lap
+  is at least `MIN_WINDOW_SEC` of output time whatever the rate — sync sets
+  `rate = length / target`, so `length / rate` IS the target". An auditor
+  falsified it by reading the reasoning rather than the code, and the correction
+  written in response BLAMED THE RATE CLAMP — which a second auditor then
+  falsified by measurement: where `RATE_MAX` engages it LENGTHENS the lap
+  (9.000 ms unclamped → 9.375 ms clamped), so it strictly REDUCES the node
+  count. Swept over 23,040 clip-cases the rate clamped in 2,940 and the shortest
+  lap was exactly 0.150000 s. The real mechanism is `normaliseWindow`'s own floor
+  clause — a span at or under `MIN_WINDOW_SEC` comes back WHOLE, so a source FILE
+  under 150 ms yields a sub-150 ms window that becomes the sync reference.
+  Two wrong explanations for one true fact, the second written while fixing the
+  first. A comment that explains WHY is load-bearing and must be measured like
+  code; if it cannot be measured, state the fact and not the mechanism.
+- **A ZERO-LENGTH REQUEST WENT DOWN THE UNBOUNDED BRANCH, so the one case asking
+  for NOTHING got EVERYTHING.** The mixer tested `duration > 0` before passing a
+  stop length to `node.start`, and fell through to the two-argument form
+  otherwise — where a `BufferSource` plays from `offset` to the end of the
+  BUFFER, i.e. straight through all the material the user trimmed away. Both
+  models read `local >= duration` as "already over", so the mixer was the only
+  reader of that number that disagreed, and it disagreed maximally. Latent, not
+  live (it needs `startAt > 0`, which nothing sets today) and inherited from the
+  single-plan code. Guard on `!== null` and skip the entry, never `> 0`: a
+  falsy-guard on a quantity whose zero is MEANINGFUL is the same bug as
+  "absent means keep whatever is on screen", one scar further up this list.
+- **EVERY CLIP MUST LAND IN EXACTLY ONE BUCKET, and this one block produced the
+  same "lands in none" defect TWICE in a single cycle.** `mixSources` sorts each
+  clip into wired / silent / failed, and the reason ladder reads those counters
+  to tell the user what happened. First instance: an empty-but-not-silent
+  schedule fell through both, so `wired === 0 && silent === 0` reported "Mixing
+  the sound failed." for a correct render. Second instance, introduced BY THE FIX
+  FOR THE FIRST — the new zero-duration skip can skip EVERY entry of a non-empty
+  schedule, and `if (started) wired++` then fires for neither. Same wrong message,
+  new route, one edit later. Caught by an auditor who bundled the real module and
+  ran the real `prepareOfflineAudio` against stubbed Web Audio rather than
+  reading it. The lesson is structural, not local: when a function classifies
+  into N buckets and something downstream reads the counts, every `continue` is a
+  classification decision and must say which bucket. `started === 0` with
+  `skipped` SHORT of the list is the genuine third case — those entries threw —
+  and correctly stays uncounted.
+- **"ONE CLIP'S FAILURE IS THAT CLIP'S SILENCE" STOPS BEING TRUE WHEN A CLIP IS N
+  NODES.** The per-clip `try` was written when a clip was exactly one
+  `start()` call, so a throw cost that clip and nothing more. With a schedule it
+  would abandon every remaining lap AND leave the already-connected ones sounding
+  while `wired` recorded the clip as contributing nothing — which feeds the
+  "there was nothing to mix" message and can discard a mix that has audio in it.
+  Each lap now has its own catch and `wired` counts what actually started.
 - **THE TRIM SHEET AND THE STAGE RESOLVE THE WINDOW AGAINST DIFFERENT SPANS, and
   it is safe for a reason worth writing down rather than for luck.** The sheet
   only has `LiveClip.durationSec`; the Stage has `max(EPS, el.duration - EPS)`,
@@ -421,6 +564,56 @@ the next tier (pro effects, AI-assisted editing, collaboration) becomes the
 frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
+- 2026-08-07 · **[AXIS:COLLAGE] THE LAP SCHEDULE** — a trim that straddles the end of a
+  short audio track now laps with the PICTURE, not with the audio track. `audioPlan`
+  clamped `loopEnd` into the decoded buffer — the only safe thing to hand a node, and by
+  doing so it clamped the PERIOD, which is the one quantity the two timelines must share.
+  Measured on the repo's `shortaudio.mp4` (6.000 s picture / 2.99998 s sound) trimmed 2→5,
+  5 s take: **before → sound present 100% of the take, WRONG on 80% of sampled instants**
+  (an unbroken 440 Hz drone under a picture the file is silent for); **after → 40% and 0%**.
+  The fix is not a better clamp — ONE node cannot express a signal that is not periodic at
+  its own loop length — so `clipWindow.audioSchedule` emits one NON-LOOPING node per PICTURE
+  LAP, which is what the live `<video>` always did, so the export finally reproduces the
+  preview. Scope is the branch condition: differs from the plan iff the plan would loop over
+  LESS than the picture window, so everything else is bit-identical (I16, 8,298 setups,
+  `Object.is`). Proof: exported MP4 envelope at 0.25 s reads `####........####....`;
+  unit sweep 5,445,981 checks / 0 failures with a RED PROOF (the old plan fails 725 of 738
+  straddles); trim 9/9 + video-audio 4/4 e2e; `tsc` and `vite build` clean.
+  **The adversarial audit (4 lenses) earned its keep and changed the ship six times.**
+  It independently verified the schedule through REAL Web Audio in two engines (Chromium +
+  WebKit): 0 drift / 0 missing / 0 invented on 800 instants where the old plan scores 506
+  wrong, `duration` confirmed empirically as BUFFER seconds in both, no overlap; and
+  2,280,960 hostile inputs with no hang, throw or unbounded allocation. What it CHANGED:
+  **(1)** T7's duty-cycle + longest-silence pair is invariant under TRANSLATION — a render
+  whose laps are 1 s late scored digit-for-digit identical to the correct one — so T7 gained
+  a PHASE ANCHOR asserting slice-by-slice that sound is present exactly where
+  `t % LAP < SOUND` (the old pair passes 4 of 7 candidate renders, the anchor 1 of 7).
+  **(2)** THE SLIVER, raised by two lenses independently: the straddle was read off
+  `plan.loop`, which inherited `audioPlan`'s 10 ms loop-WRAP floor into a path that never
+  wraps — a 9 ms overlap played 1 blip where the picture asks for 15, one trim-slider detent
+  from correct. Now decided on the WINDOW; I16 rewritten to define the boundary
+  independently rather than mirror the code, coverage 738 → 1,440 straddles, and reverting
+  the fix fails 1,284 assertions. **(3)** a latent `duration > 0` guard sent a ZERO-length
+  request down the unbounded branch, so the one case asking for nothing got the whole buffer.
+  **(4)** an empty-but-not-silent schedule fell through both counters and reported "Mixing
+  the sound failed." for a mix that did exactly what was asked. **(5)** the cap was asserted
+  only in the direction a MISSING cap satisfies — now pinned from both sides. **(6)** the
+  `MAX_AUDIO_LAPS` docstring's "unreachable" proof was false in both halves (the rate clamp
+  at 16 shrinks the output lap without bound); comment corrected and `truncated` wired
+  through to a real user warning. **(7)** and the one that says most about the method: the
+  fix for (4) INTRODUCED A SECOND ROUTE TO THE SAME DEFECT — the new zero-duration skip can
+  skip every entry of a non-empty schedule, so the clip again landed in neither counter and
+  again reported "Mixing the sound failed." for a correct silent render. An auditor found it
+  by BUNDLING the real `offlineAudio.ts` and running the real `prepareOfflineAudio` against
+  stubbed Web Audio — the very harness this file's ladder now names as the missing coverage.
+  The audit's remaining half — `mixSources` has no unit coverage, so one 8-minute e2e is the
+  only guard on the wiring loop — is now a ladder rung rather than a silence, and (7) is the
+  argument for building it.
+  **Same-class sweep (the BACKPORT rider, applied within collage): CLEAN.** `videoSync` also
+  clamps — the browser's playbackRate range — but `describeAudioSources` and `seekClipTo`
+  both read the SAME `clip.playbackRate`, so that clamp moves both timelines together. The
+  audio-buffer clamp was the only bound applied to one side alone.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
 - 2026-08-03 · lane created · source-first fill + video-length sync already live · next rung: **timeline & trim**
 - 2026-08-04 · **[AXIS:WELL] export stopped lying** (wish d88093af, reported by the owner:
   *"when I hit export sometimes it will show a black screen… partial elements of the collage
