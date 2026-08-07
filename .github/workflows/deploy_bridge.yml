@@ -22,6 +22,8 @@ on:
       - 'hvac/**'
       - 'low-voltage/**'
       - 'gc/**'
+      # the commons — the human layer, shared by every trade and owned by none
+      - 'commons/**'
       - '.github/workflows/deploy_bridge.yml'
   workflow_dispatch:
 
@@ -121,6 +123,19 @@ jobs:
             echo "staged trade: $t"
           done
 
+          # THE COMMONS — the human layer, and deliberately NOT a trade: it has no
+          # trade.js (a config here would make every disk-derived trade count report
+          # a seventh trade that does not exist), so it cannot ride the loop above.
+          # shared/toolkit.js links it from the nav dropdown of EVERY page of EVERY
+          # trade with no per-trade guard, which is exactly the shape that put a 404
+          # behind /plumbing/credits.html for that toolkit's entire life — so it is
+          # staged here and asserted below rather than assumed.
+          test -d commons || { echo "MISSING: commons/"; exit 1; }
+          rm -rf HELIOS-BRIDGE/dist/commons
+          mkdir -p HELIOS-BRIDGE/dist/commons
+          cp -R commons/. HELIOS-BRIDGE/dist/commons/
+          echo "staged commons"
+
       # The wishing well POSTs to Supabase with the PUBLIC anon key. It is
       # public-by-design, but a JWT-shaped string cannot live in this public repo
       # (secret-scan guard), so it is injected HERE from repo secrets into the
@@ -179,10 +194,28 @@ jobs:
                    collage/index.html collage/sw.js collage/manifest.json \
                    collage-beta/index.html \
                    archive/index.html \
-                   shared/toolkit.js \
+                   shared/toolkit.js shared/feedback.js \
+                   commons/index.html commons/gear.js \
                    av/index.html av/trade.js av/tools.js av/consumables.html av/credits.html av/report-builder.html; do
             test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
           done
+
+          # THE COMMONS IS LINKED FROM EVERY TRADE'S NAV, so prove it works rather
+          # than prove it exists. Its data file is the whole page — an index.html
+          # that loads a missing gear.js returns 200 and renders an empty list, the
+          # exact "looks alive in a curl, blank in a foreman's hand" failure the
+          # per-trade dependency assert below was written for.
+          grep -q 'commons/' HELIOS-BRIDGE/dist/shared/toolkit.js \
+            || { echo "FAIL: shared/toolkit.js no longer links the Commons — the nav entry and the staged dir must move together"; exit 1; }
+          grep -q 'COMMONS_GEAR' HELIOS-BRIDGE/dist/commons/gear.js \
+            || { echo "FAIL: commons/gear.js does not define COMMONS_GEAR"; exit 1; }
+          for dep in gear.js ../shared/feedback.js; do
+            ( cd HELIOS-BRIDGE/dist/commons && test -f "$dep" ) \
+              || { echo "FAIL: commons/index.html loads $dep, which is not in the artifact"; exit 1; }
+          done
+          n_gear=$(grep -c 'id:' HELIOS-BRIDGE/dist/commons/gear.js || true)
+          [ "$n_gear" -ge 20 ] || { echo "FAIL: commons/gear.js carries only $n_gear items — an empty commons is not a commons"; exit 1; }
+          echo "commons: $n_gear gear items, deps resolve"
 
           # Every trade dir must carry the four files that make the shared runtime
           # work (config + registry + hub + credit ledger). A trade staged without

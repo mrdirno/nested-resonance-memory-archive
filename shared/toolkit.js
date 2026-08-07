@@ -47,7 +47,15 @@
     { slug: "electrical", name: "Electrical Field Toolkit" },
     { slug: "hvac",       name: "HVAC/R Field Toolkit" },
     { slug: "low-voltage", name: "Low-Voltage Field Toolkit" },
-    { slug: "gc",         name: "GC & Site Super Toolkit" }
+    { slug: "gc",         name: "GC & Site Super Toolkit" },
+    // NOT A TRADE — the commons, and the only entry here that is not a toolkit.
+    // It rides this list on purpose: the six hubs each render "whoever is not me"
+    // from it, so one line surfaces the human layer in every hub footer with zero
+    // per-hub edits — the same reasoning that put the trades here in the first
+    // place. Nothing else consumes this array (grepped: six index.html footers),
+    // and the disk-derived trade COUNT comes from `<dir>/trade.js`, which the
+    // commons deliberately does not have. So this cannot inflate breadth debt.
+    { slug: "commons",    name: "The Commons · What's in the Bag" }
   ];
 
   /* ---- WHO AM I: the per-trade config, with the AV defaults ---------------
@@ -263,6 +271,18 @@
     var drop = h("div", { class: "av-drop", role: "menu" });
     drop.appendChild(h("a", { href: "index.html", html: "<b>All tools</b><span>The " + esc(TRADE.name) + " home</span>" }));
     drop.appendChild(h("a", { href: "credits.html", html: "<b>&#9733; Wall of Wishes</b><span>Who wished each tool into existence</span>" }));
+    // THE COMMONS — the human layer, and the one surface that is NOT a trade. Every
+    // one of the 26 tools shipped before it generates a document you SEND; nothing
+    // on the site was a place to go when you have nothing to generate. It lives at
+    // the repo root beside the trades (never inside one — no trade owns it), and it
+    // deliberately carries no trade.js: every tool that counts served trades derives
+    // them from `<dir>/trade.js` on disk, so a config here would report a seventh
+    // trade that does not exist and corrupt the breadth-debt signal.
+    // Added HERE, in the shared runtime, so all six trades get it in one edit — and
+    // asserted in deploy_bridge.yml for the same reason credits.html is: a nav entry
+    // with no per-trade guard means a missing page 404s from every page of every
+    // trade at once (measured, 2026-08-04, /plumbing/credits.html).
+    drop.appendChild(h("a", { href: "../commons/", html: "<b>&#129520; What's in the bag</b><span>The gear the field actually carries &mdash; every trade</span>" }));
     if (TOOLS.length) drop.appendChild(h("hr"));
     TOOLS.forEach(function (t) {
       drop.appendChild(h("a", { href: t.href, html: "<b>" + esc(t.name) + "</b><span>" + esc(t.audience || "") + "</span>" }));
