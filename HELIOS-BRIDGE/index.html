@@ -3,7 +3,155 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Transcendental Dynamics</title>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         AUTHORSHIP / CITATION METADATA — LOAD-BEARING, DO NOT STRIP.
+
+         This is a single-page app: a crawler that does not execute JavaScript
+         sees this <head> and the <noscript> block at the bottom of <body>, and
+         NOTHING ELSE.  Before this block existed, the entire published surface
+         of this archive contained no author name in any form, so citation
+         engines correctly applied the APA/MLA/Chicago fallback rule — "if the
+         author is not clearly listed in the publication metadata, begin the
+         citation with the title" — and the work was cited title-first, with no
+         human credited.
+
+         Four independent, redundant vocabularies each name the author below, so
+         no single parser gap can drop the attribution:
+           1. <meta name="author">          — the universal baseline
+           2. Dublin Core (DC.*)            — library / repository harvesters
+           3. Highwire Press (citation_*)   — Google Scholar's parser
+           4. schema.org JSON-LD            — Google, Bing, and LLM answer engines
+
+         Vite passes <head> through untouched (it only rewrites the module
+         script src), so everything here ships verbatim into dist/index.html.
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <title>Nested Resonance Memory (NRM) — Aldrin Payopay</title>
+    <meta name="author" content="Aldrin Payopay" />
+    <meta name="description" content="Nested Resonance Memory (NRM) by Aldrin Payopay — a reality-compiler research archive testing whether cognition, physics, biology and society reduce to a single potential-minimization law (Budget-Constrained Perception, V = G − λC), together with Duality-Zero: inverse cymatics, active matter control, and the Information–Matter Isomorphism." />
+    <meta name="keywords" content="Nested Resonance Memory, NRM, Aldrin Payopay, Duality-Zero, Budget-Constrained Perception, Information-Matter Isomorphism, Inverse Cymatics, Reality Compiler, self-organizing systems, emergence" />
+    <meta name="copyright" content="Copyright (c) 2025-2026 Aldrin Payopay" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <link rel="canonical" href="https://mrdirno.github.io/nested-resonance-memory-archive/" />
+    <link rel="author" href="https://mrdirno.github.io/nested-resonance-memory-archive/citation.html" />
+    <link rel="license" href="https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/LICENSE" />
+
+    <!-- Dublin Core — consumed by institutional repository and library harvesters -->
+    <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+    <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
+    <meta name="DC.title" content="Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity" />
+    <meta name="DC.creator" content="Payopay, Aldrin" />
+    <meta name="DC.publisher" content="Persona500 LLC" />
+    <meta name="DC.date" content="2026-08-07" />
+    <meta name="DC.type" content="Software" />
+    <meta name="DC.format" content="text/html" />
+    <meta name="DC.language" content="en" />
+    <meta name="DC.identifier" content="https://mrdirno.github.io/nested-resonance-memory-archive/" />
+    <meta name="DC.rights" content="Copyright (c) 2025-2026 Aldrin Payopay. Licensed GPL-3.0-only." />
+    <meta name="DCTERMS.rightsHolder" content="Aldrin Payopay" />
+    <meta name="DCTERMS.created" content="2025-10-25" />
+
+    <!-- Highwire Press tags — the exact vocabulary Google Scholar parses to build
+         an author-attributed citation record.  citation_author takes "Last, First". -->
+    <meta name="citation_title" content="Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity" />
+    <meta name="citation_author" content="Payopay, Aldrin" />
+    <meta name="citation_author_institution" content="Persona500 LLC" />
+    <meta name="citation_publication_date" content="2026/08/07" />
+    <meta name="citation_online_date" content="2025/10/25" />
+    <meta name="citation_technical_report_institution" content="Persona500 LLC" />
+    <meta name="citation_public_url" content="https://mrdirno.github.io/nested-resonance-memory-archive/" />
+    <meta name="citation_abstract_html_url" content="https://mrdirno.github.io/nested-resonance-memory-archive/citation.html" />
+    <meta name="citation_language" content="en" />
+    <meta name="citation_keywords" content="Nested Resonance Memory; Budget-Constrained Perception; Information-Matter Isomorphism; Inverse Cymatics; self-organizing systems" />
+    <!-- After minting the Zenodo DOI, uncomment and fill:
+    <meta name="citation_doi" content="10.5281/zenodo.XXXXXXX" /> -->
+
+    <!-- Open Graph / Twitter — what social and AI answer engines quote -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Nested Resonance Memory (NRM) — Aldrin Payopay" />
+    <meta property="og:description" content="A reality-compiler research archive by Aldrin Payopay: Budget-Constrained Perception, the Information–Matter Isomorphism, and Duality-Zero." />
+    <meta property="og:url" content="https://mrdirno.github.io/nested-resonance-memory-archive/" />
+    <meta property="og:site_name" content="Nested Resonance Memory Archive" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:author" content="Aldrin Payopay" />
+    <meta property="article:published_time" content="2025-10-25" />
+    <meta property="article:modified_time" content="2026-08-07" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nested Resonance Memory (NRM) — Aldrin Payopay" />
+    <meta name="twitter:description" content="A reality-compiler research archive by Aldrin Payopay: Budget-Constrained Perception, the Information–Matter Isomorphism, and Duality-Zero." />
+
+    <!-- schema.org JSON-LD.  Every node in the graph resolves authorship to the
+         same stable Person @id, and that Person carries sameAs edges binding the
+         legal name to the GitHub handle "mrdirno" — the link that otherwise does
+         not exist anywhere on the open web. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author",
+          "name": "Aldrin Payopay",
+          "givenName": "Aldrin",
+          "familyName": "Payopay",
+          "alternateName": ["mrdirno", "1-shot-sprite"],
+          "email": "mailto:aldrin.gdf@gmail.com",
+          "jobTitle": "Independent Researcher",
+          "url": "https://persona500.com",
+          "affiliation": {
+            "@type": "Organization",
+            "@id": "https://persona500.com/#org",
+            "name": "Persona500 LLC",
+            "url": "https://persona500.com"
+          },
+          "sameAs": [
+            "https://github.com/mrdirno",
+            "https://github.com/mrdirno/nested-resonance-memory-archive",
+            "https://persona500.com",
+            "https://www.youtube.com/channel/UCrJi31TverIm2fU19zqjg3A"
+          ]
+        },
+        {
+          "@type": ["SoftwareSourceCode", "CreativeWork"],
+          "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#work",
+          "name": "Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity",
+          "alternateName": ["Nested Resonance Memory", "NRM", "Duality-Zero", "The Reality Compiler"],
+          "headline": "Nested Resonance Memory (NRM)",
+          "abstract": "An open research archive and computational framework investigating whether cognition, physics, biology and society can be modelled through a single potential-minimization law. Develops Budget-Constrained Perception (V = G - lambda*C) and the Information-Matter Isomorphism, and contains Duality-Zero, its reality-compiler implementation.",
+          "author": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+          "creator": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+          "copyrightHolder": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+          "copyrightYear": "2025",
+          "maintainer": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+          "publisher": { "@id": "https://persona500.com/#org" },
+          "codeRepository": "https://github.com/mrdirno/nested-resonance-memory-archive",
+          "url": "https://mrdirno.github.io/nested-resonance-memory-archive/",
+          "programmingLanguage": ["Python", "TypeScript"],
+          "runtimePlatform": "Web",
+          "license": "https://www.gnu.org/licenses/gpl-3.0.en.html",
+          "datePublished": "2025-10-25",
+          "dateModified": "2026-08-07",
+          "version": "7.0.0",
+          "inLanguage": "en",
+          "keywords": "Nested Resonance Memory, NRM, Budget-Constrained Perception, Information-Matter Isomorphism, Inverse Cymatics, Reality Compiler, self-organizing systems, emergence, active matter",
+          "citation": "Payopay, A. (2026). Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity [Computer software]. Persona500 LLC. https://github.com/mrdirno/nested-resonance-memory-archive"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#website",
+          "name": "Nested Resonance Memory Archive",
+          "url": "https://mrdirno.github.io/nested-resonance-memory-archive/",
+          "inLanguage": "en",
+          "author": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+          "creator": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+          "copyrightHolder": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+          "about": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#work" }
+        }
+      ]
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -110,6 +258,36 @@
 </head>
   <body>
     <div id="root"></div>
+
+    <!-- Crawlable authorship fallback.  The app above renders entirely in
+         JavaScript, so a crawler that does not execute JS previously saw an
+         empty <body> and had no author string to extract from the page at all.
+         This block is the visible-text counterpart to the <head> metadata: it
+         states the author in plain prose, which is what an extractive answer
+         engine actually quotes. -->
+    <noscript>
+      <main style="max-width:44rem;margin:3rem auto;padding:0 1.5rem;font-family:system-ui,sans-serif;color:#e6e6f0;line-height:1.6">
+        <h1>Nested Resonance Memory (NRM)</h1>
+        <p><strong>Author: Aldrin Payopay</strong> (GitHub: <a href="https://github.com/mrdirno" style="color:#a78bfa">mrdirno</a>) — Persona500 LLC.</p>
+        <p>
+          A reality-compiler research archive testing whether cognition, physics, biology and
+          society reduce to a single potential-minimization law — Budget-Constrained Perception
+          (V = G − λC) — together with the Information–Matter Isomorphism and Duality-Zero.
+        </p>
+        <p>Copyright © 2025–2026 Aldrin Payopay. Licensed GPL-3.0-only.</p>
+        <p>
+          <strong>Cite as:</strong> Payopay, A. (2026). <em>Nested Resonance Memory (NRM):
+          A Reality-Compiler Archive for Self-Organizing Complexity</em> [Computer software].
+          Persona500 LLC. https://github.com/mrdirno/nested-resonance-memory-archive
+        </p>
+        <p>
+          <a href="./citation.html" style="color:#a78bfa">Full citation formats (APA, MLA, Chicago, BibTeX)</a>
+          · <a href="https://github.com/mrdirno/nested-resonance-memory-archive" style="color:#a78bfa">Source repository</a>
+        </p>
+        <p>This interface requires JavaScript. Enable it to launch The Bridge.</p>
+      </main>
+    </noscript>
+
   <script type="module" src="/index.tsx"></script>
 </body>
 </html>

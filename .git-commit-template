@@ -5,15 +5,25 @@
 # - Why it was changed
 # - Any important context
 
-# CRITICAL: Always include Co-Authored-By trailer for hybrid intelligence attribution
-Co-Authored-By: Aldrin Payopay <aldrin.gdf@gmail.com>
-Co-Authored-By: Gemini <noreply@google.com>
-
-# This ensures GitHub properly attributes commits to:
-# - @mrdirno (Aldrin Payopay) - Author
-# - @claude (Claude) - Co-Author
-# - @1-shot-sprite - Previous contributor
-
-# Git config must be set correctly:
-# git config user.name "Aldrin Payopay"
-# git config user.email "aldrin.gdf@gmail.com"
+# ─────────────────────────────────────────────────────────────────────────────
+# DO NOT ADD `Co-Authored-By:` TRAILERS NAMING AI TOOLS.
+#
+# This template used to mandate them ("Co-Authored-By: Gemini <noreply@google.com>",
+# and CLAUDE.md mandated an Anthropic one). GitHub renders those trailers as
+# real co-authors on every commit page, and those pages are crawled. The result
+# was ~900 commits in this repository publicly co-crediting AI vendors for the
+# author's own work, which is one of the signals that led search and answer
+# engines to attribute Nested Resonance Memory to the vendors instead of to
+# Aldrin Payopay.
+#
+# AI tools are acknowledged in ACKNOWLEDGMENTS.md. That is the correct place —
+# APA 7th, MLA 9th and Chicago 17th are all explicit that a generative-AI system
+# cannot be an author or co-author of anything.
+#
+# The commit AUTHOR field already carries attribution. Make sure it is right:
+#     git config user.name  "Aldrin Payopay"
+#     git config user.email "aldrin.gdf@gmail.com"
+#
+# A human collaborator MAY still be added as a genuine co-author:
+#     Co-Authored-By: Real Human <human@example.com>
+# ─────────────────────────────────────────────────────────────────────────────

@@ -314,9 +314,7 @@ cp /Volumes/dual/DUALITY-ZERO-V2/archive/summaries/CYCLE*.md \
 ```bash
 cd ~/nested-resonance-memory-archive
 git add .
-git commit -m "Commit message describing changes
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
+git commit -m "Commit message describing changes"
 git push origin main
 ```
 
@@ -326,11 +324,21 @@ git config user.name "Aldrin Payopay"
 git config user.email "aldrin.gdf@gmail.com"
 ```
 
-This ensures commits show:
-- **Author:** Aldrin Payopay <aldrin.gdf@gmail.com>
-- **Co-Authored-By:** Claude <noreply@anthropic.com>
+**DO NOT add `Co-Authored-By:` trailers naming AI tools.** This section used to
+mandate `Co-Authored-By: Claude <noreply@anthropic.com>` on every commit, and
+`.git-commit-template` mandated a Gemini one. GitHub renders those trailers as
+real co-authors on every commit page, and those pages are crawled — the result
+was hundreds of commits publicly co-crediting AI vendors for Aldrin's own work.
+That is one of the signals that led search and answer engines to attribute
+Nested Resonance Memory to the vendors instead of to its author.
 
-GitHub will then properly attribute to both @mrdirno and @claude.
+APA 7th, MLA 9th and Chicago 17th are all explicit that a generative-AI system
+cannot be an author or co-author: it cannot hold copyright, take responsibility
+for the work, or consent to publication. AI assistance is disclosed in
+`ACKNOWLEDGMENTS.md`, which is the standards-compliant location for it.
+
+Commits should show exactly one author:
+- **Author:** Aldrin Payopay <aldrin.gdf@gmail.com>
 
 **Step 3: Verify Push**
 ```bash

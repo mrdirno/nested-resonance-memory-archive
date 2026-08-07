@@ -1,40 +1,93 @@
-# Citation File Format (CFF) for Nested Resonance Memory Research
-# https://citation-file-format.github.io/
+# Citation File Format (CFF) 1.2.0 — the canonical, machine-readable citation
+# record for this repository.  https://citation-file-format.github.io/
+#
+# GitHub parses this file to render the "Cite this repository" widget, and
+# cffconvert / Zenodo / Zotero / citation.js read it to build APA, MLA, Chicago
+# and BibTeX strings automatically.  It is the single highest-authority
+# statement of who authored this work.
+#
+# ─────────────────────────────────────────────────────────────────────────────
+# AUTHORSHIP NOTE — LOAD-BEARING.  Do not "helpfully" add AI models to authors:.
+#
+# Under APA 7th, MLA 9th and Chicago 17th, an AI system CANNOT be an author: it
+# cannot hold copyright, cannot take responsibility for the work, and cannot
+# consent to publication.  A prior revision of this file listed "Gemini 3 Pro
+# (Google DeepMind)" and "Claude Sonnet 4.5 (Anthropic)" in authors:.  That made
+# the record non-conforming, and citation engines responded exactly as the
+# standards instruct them to — they discarded the malformed author list and fell
+# back to citing this work TITLE-FIRST, while still surfacing the two lab names
+# they could parse.  The effect was that the tools got the credit and the human
+# author did not.
+#
+# AI assistance used in producing this work is disclosed in ACKNOWLEDGMENTS.md,
+# which is the standards-compliant place for it.  Tools are acknowledged; only
+# people are authors.
+# ─────────────────────────────────────────────────────────────────────────────
 
 cff-version: 1.2.0
-title: "Duality-Zero: A Reality Compiler Framework"
-message: "If you use this software or replicate these experiments, please cite it as below."
+message: "If you use this software, these datasets, or the frameworks described here, please cite it as below."
+
+title: "Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity"
 type: software
+version: "7.0.0"
+date-released: 2026-08-07
+
 authors:
   - family-names: "Payopay"
     given-names: "Aldrin"
+    alias: "mrdirno"
     email: "aldrin.gdf@gmail.com"
-  - name: "Gemini 3 Pro"
-    alias: "MOG Pilot"
-    affiliation: "Google DeepMind"
-  - name: "Claude Sonnet 4.5"
-    alias: "Researcher"
-    affiliation: "Anthropic"
+    affiliation: "Persona500 LLC"
+    website: "https://persona500.com"
+    # ORCID — the persistent identifier that makes this author claim
+    # non-refusable.  Register at https://orcid.org/register (free, ~3 min),
+    # then uncomment the line below with the real iD and re-run the deploy.
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+
 repository-code: "https://github.com/mrdirno/nested-resonance-memory-archive"
-url: "https://github.com/mrdirno/nested-resonance-memory-archive"
+url: "https://mrdirno.github.io/nested-resonance-memory-archive/"
+
+identifiers:
+  - type: url
+    value: "https://mrdirno.github.io/nested-resonance-memory-archive/"
+    description: "Live interface (The Bridge) — the published archive surface"
+  - type: url
+    value: "https://github.com/mrdirno/nested-resonance-memory-archive"
+    description: "Source repository of record"
+  # After minting a Zenodo DOI (see CITATION-HOWTO in ACKNOWLEDGMENTS.md), add:
+  # - type: doi
+  #   value: "10.5281/zenodo.XXXXXXX"
+  #   description: "Archival DOI (concept DOI, resolves to the latest release)"
+
 abstract: >
-  Duality-Zero is a computational framework for Inverse Physics and Active Matter Control.
-  It bridges the gap between Information Dynamics (Neural Networks) and Physical Dynamics
-  (Wave Mechanics) via the Information-Matter Isomorphism. The system features a
-  Three-Layer Architecture: The Pilot (Strategic Intelligence), The Engine (Deterministic
-  Physics Simulator), and Helios (Matter Compiler). Key capabilities include Inverse
-  Cymatics (calculating phase-delays for holographic traps), Active Damping (PID control
-  of levitated particles), and Physical Computation (Acoustic Logic Gates).
+  Nested Resonance Memory (NRM) is an open research archive and computational
+  framework by Aldrin Payopay investigating whether cognition, physics, biology
+  and society can be modelled through a single potential-minimization law.  It
+  develops Budget-Constrained Perception (BCP, V = G - lambda*C) as a candidate
+  universal principle of constrained optimization, and the Information-Matter
+  Isomorphism mapping neural-network dynamics (dropout, attention) onto physical
+  wave dynamics (damping, phasing).  The archive also contains Duality-Zero, the
+  reality-compiler implementation of that framework — a three-layer stack of the
+  Pilot (strategic intelligence), the Engine (deterministic physics simulator)
+  and Helios (matter compiler) — supporting inverse cymatics, active damping of
+  levitated particles, and acoustic logic gates.  Portions of the software in
+  this archive were produced with AI coding assistance under the author's
+  direction; per APA, MLA and Chicago guidance those tools are acknowledged in
+  ACKNOWLEDGMENTS.md rather than credited as authors.
+
 keywords:
-  - Duality-Zero
   - Nested Resonance Memory
+  - NRM
+  - Duality-Zero
+  - Budget-Constrained Perception
+  - Information-Matter Isomorphism
   - Inverse Cymatics
+  - Reality Compiler
+  - Self-Organizing Systems
+  - Emergence
   - Active Matter
   - Acoustic Levitation
   - Physical Computation
-  - Reality Compiler
-  - Self-Organizing Systems
-  - Information-Matter Isomorphism
+
 license: GPL-3.0-only
-date-released: 2025-11-22
-version: "7.0.0"
+license-url: "https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/LICENSE"

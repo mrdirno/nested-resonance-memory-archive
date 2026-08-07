@@ -1,0 +1,64 @@
+{
+  "@context": "https://w3id.org/codemeta/3.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "nested-resonance-memory-archive",
+  "name": "Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity",
+  "alternateName": "Duality-Zero",
+  "description": "An open research archive and computational framework investigating whether cognition, physics, biology and society can be modelled through a single potential-minimization law. Develops Budget-Constrained Perception (V = G - lambda*C) as a candidate universal principle of constrained optimization, and the Information-Matter Isomorphism mapping neural-network dynamics onto physical wave dynamics. Contains Duality-Zero, the reality-compiler implementation: a three-layer stack of the Pilot (strategic intelligence), the Engine (deterministic physics simulator) and Helios (matter compiler), supporting inverse cymatics, active damping of levitated particles, and acoustic logic gates.",
+  "version": "7.0.0",
+  "codeRepository": "https://github.com/mrdirno/nested-resonance-memory-archive",
+  "url": "https://mrdirno.github.io/nested-resonance-memory-archive/",
+  "license": "https://spdx.org/licenses/GPL-3.0-only",
+  "dateCreated": "2025-10-25",
+  "datePublished": "2025-10-25",
+  "dateModified": "2026-08-07",
+  "programmingLanguage": ["Python", "TypeScript"],
+  "runtimePlatform": "Web",
+  "developmentStatus": "active",
+  "inLanguage": "en",
+  "copyrightYear": 2025,
+  "author": [
+    {
+      "@type": "Person",
+      "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author",
+      "givenName": "Aldrin",
+      "familyName": "Payopay",
+      "name": "Aldrin Payopay",
+      "alternateName": "mrdirno",
+      "email": "aldrin.gdf@gmail.com",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Persona500 LLC",
+        "url": "https://persona500.com"
+      },
+      "sameAs": [
+        "https://github.com/mrdirno",
+        "https://persona500.com"
+      ]
+    }
+  ],
+  "creator": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+  "copyrightHolder": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+  "maintainer": { "@id": "https://mrdirno.github.io/nested-resonance-memory-archive/#author" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Persona500 LLC",
+    "url": "https://persona500.com"
+  },
+  "keywords": [
+    "Nested Resonance Memory",
+    "NRM",
+    "Duality-Zero",
+    "Budget-Constrained Perception",
+    "Information-Matter Isomorphism",
+    "Inverse Cymatics",
+    "Reality Compiler",
+    "self-organizing systems",
+    "emergence",
+    "active matter",
+    "acoustic levitation",
+    "physical computation"
+  ],
+  "readme": "https://github.com/mrdirno/nested-resonance-memory-archive/blob/main/README.md",
+  "issueTracker": "https://github.com/mrdirno/nested-resonance-memory-archive/issues"
+}

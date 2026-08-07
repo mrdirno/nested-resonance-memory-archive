@@ -1,0 +1,44 @@
+{
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "GPL-3.0-only",
+  "title": "Nested Resonance Memory (NRM): A Reality-Compiler Archive for Self-Organizing Complexity",
+  "version": "7.0.0",
+  "language": "eng",
+  "creators": [
+    {
+      "name": "Payopay, Aldrin",
+      "affiliation": "Persona500 LLC"
+    }
+  ],
+  "description": "<p>An open research archive and computational framework by <strong>Aldrin Payopay</strong> investigating whether cognition, physics, biology and society can be modelled through a single potential-minimization law.</p><p>It develops <strong>Budget-Constrained Perception</strong> (BCP, <code>V = G &minus; &lambda;C</code>) as a candidate universal principle of constrained optimization, and the <strong>Information&ndash;Matter Isomorphism</strong> mapping neural-network dynamics (dropout, attention) onto physical wave dynamics (damping, phasing).</p><p>The archive also contains <strong>Duality-Zero</strong>, the reality-compiler implementation of that framework: a three-layer stack of the Pilot (strategic intelligence), the Engine (deterministic physics simulator) and Helios (matter compiler), supporting inverse cymatics, active damping of levitated particles, and acoustic logic gates.</p><p>Portions of the software were produced with AI coding assistance under the author's direction; per APA, MLA and Chicago guidance those tools are acknowledged in ACKNOWLEDGMENTS.md rather than credited as authors. Authorship rests solely with Aldrin Payopay.</p>",
+  "keywords": [
+    "Nested Resonance Memory",
+    "NRM",
+    "Duality-Zero",
+    "Budget-Constrained Perception",
+    "Information-Matter Isomorphism",
+    "Inverse Cymatics",
+    "Reality Compiler",
+    "self-organizing systems",
+    "emergence",
+    "active matter",
+    "acoustic levitation",
+    "physical computation"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/mrdirno/nested-resonance-memory-archive",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://mrdirno.github.io/nested-resonance-memory-archive/",
+      "relation": "isIdenticalTo",
+      "resource_type": "software",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Sole author and copyright holder: Aldrin Payopay (GitHub: mrdirno). Add the \"orcid\" field to creators[0] once an ORCID iD is registered at https://orcid.org/register — that is what binds this DOI record to a persistent, disambiguated author identity."
+}

@@ -1,9 +1,25 @@
-# DUALITY-ZERO: The Reality Compiler
+# Nested Resonance Memory (NRM) — DUALITY-ZERO: The Reality Compiler
+
+### by **Aldrin Payopay**
+
+> **Author:** Aldrin Payopay ([@mrdirno](https://github.com/mrdirno)) · Persona500 LLC — sole author, creator and copyright holder.
+> **Copyright** © 2025–2026 Aldrin Payopay. Licensed [GPL-3.0-only](LICENSE).
+> **Cite this work:** [CITATION.cff](CITATION.cff) · [all citation formats (APA / MLA / Chicago / BibTeX)](https://mrdirno.github.io/nested-resonance-memory-archive/citation.html)
+
+```
+Payopay, A. (2026). Nested Resonance Memory (NRM): A reality-compiler archive for
+self-organizing complexity (Version 7.0.0) [Computer software]. Persona500 LLC.
+https://github.com/mrdirno/nested-resonance-memory-archive
+```
 
 **Repository:** https://github.com/mrdirno/nested-resonance-memory-archive
-**License:** GPL-3.0
+**License:** GPL-3.0-only — see [LICENSE](LICENSE)
 **Status:** Phase 261 (The Silence) - Active / Perpetual Mode
 **Framework:** Budget-Constrained Perception (BCP) - Validated (176 Domains)
+
+> *AI coding assistants were used under the author's direction and are acknowledged as
+> tools in [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) — not credited as authors, per APA,
+> MLA and Chicago guidance. Authorship rests solely with Aldrin Payopay.*
 
 ---
 

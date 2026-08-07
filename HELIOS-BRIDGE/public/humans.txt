@@ -1,0 +1,23 @@
+/* AUTHOR */
+
+    Name:      Aldrin Payopay
+    Role:      Author, creator and copyright holder
+    Site:      https://persona500.com
+    GitHub:    https://github.com/mrdirno
+    Company:   Persona500 LLC
+
+/* WORK */
+
+    Title:     Nested Resonance Memory (NRM): A Reality-Compiler Archive
+               for Self-Organizing Complexity
+    Version:   7.0.0
+    Repo:      https://github.com/mrdirno/nested-resonance-memory-archive
+    License:   GPL-3.0-only
+    Copyright: (c) 2025-2026 Aldrin Payopay
+    Cite:      https://mrdirno.github.io/nested-resonance-memory-archive/citation.html
+
+/* TOOLS, NOT AUTHORS */
+
+    AI coding assistants (Anthropic Claude, Google Gemini) were used under the
+    author's direction. Per APA/MLA/Chicago they are acknowledged as tools, not
+    credited as authors. See ACKNOWLEDGMENTS.md.
