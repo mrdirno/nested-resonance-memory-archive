@@ -43,7 +43,11 @@ or re-documenting an existing capability is DD, not delivery.
   export stops asking one looping node to express a signal that is not periodic
   at its own loop length and schedules one non-looping node PER PICTURE LAP
   (`clipWindow.audioSchedule`), so the sound laps with the picture instead of
-  with the audio track.
+  with the audio track;
+  THE COMPOSITION CODE — every composition has a short code, shown under the
+  dice, tap to copy, paste one back to open it, and carried in the address bar
+  so a LINK is a collage. `lib/rollCode.ts` owns the one seam between app state
+  and a `Roll` in both directions; the sources are deliberately not in it.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -132,12 +136,44 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       `null` unconditionally, so the file input advertises `.svg` and does
       nothing with it. Entirely pre-existing; small, self-contained, and it is a
       promise the UI already makes.
-- [ ] **A seed the user can pin** — nothing in the UI sets `seed` (it is
-      `Date.now()`), so no test and no user can reproduce a specific composition
-      on demand, and the known-flaky composition precondition has no way to stop
-      being seed-dependent. `encodeRoll`/`decodeRoll` already exist in
-      `diceRoll.ts` and are wired to NOTHING; a paste-a-code field would make
-      share codes real and pin the flake at the same time.
+- [x] **A seed the user can pin → THE COMPOSITION CODE.** `encodeRoll` /
+      `decodeRoll` existed and were wired to NOTHING, and `diceRoll.ts`'s own
+      header had promised "same code, same collage, on any device" the whole
+      time. The missing piece was never the codec: the roll flowed ONE WAY, into
+      fifteen `setState` calls with no route back, so there was no code to show.
+      `lib/rollCode.ts` is that route in both directions (`CompositionState` ↔
+      `Roll` ↔ string), pure, plus `codeFromUrl`. The UI is a strip under the
+      dice — tap the code to copy, paste one and press Open — and `?c=` is read
+      at mount and kept current with `replaceState`, so the address bar is the
+      share button. Wiring it up is what exposed that the codec could not
+      actually carry a composition: see the four scars below.
+- [ ] **The code is a recipe, so the next rung is a POST — a code plus the
+      pictures.** "Send someone your collage" currently means sending a code and
+      the photographs separately. The obvious extension is a single artifact
+      (the exported image with the code in its metadata, or a project file that
+      opens by drop), and it is a different problem — bytes, not parameters.
+- [ ] **PINNED FRAGMENTS cannot travel in a code, and are only DISCLOSED.** A
+      lock is a cell→imageId pin, and it does not just hold one picture in place:
+      it claims that image, which re-deals every slot after it. So a code minted
+      with pins does not describe what is on screen. The ids are per-session
+      (`${prefix}-${Date.now()}-${seq}`), so they genuinely cannot ride in a
+      source-independent code — the strip says so instead, which is honest but is
+      not the same as solved. A real fix needs a source-independent way to name
+      "the third picture you gave me", which is its own increment.
+- [ ] **THE CROP ANCHOR DEPENDS ON A CDN RACE, so one code plus one set of
+      photographs still has two possible pictures.** `analyzeImage` uses
+      tfjs/blazeface loaded at runtime from jsdelivr; whether it arrives before
+      the analysis runs changes the energy centroid every fragment crops around.
+      Entirely pre-existing and orthogonal to the code, but it is the one
+      remaining hole in "same code, same collage" and it belongs on this list
+      until the analysis is either deterministic or recorded.
+- [ ] **The share code cannot express an off-roster FRAME SHAPE.** Aspect
+      travels as an index into the seven-value roster, so a project saved with a
+      hand-set aspect (1.33, say) encodes to the NEAREST roster value. That is a
+      bounded, documented loss and it beats what it replaced (`findIndex` = -1
+      → index 0 → SQUARE, silently), but a code minted from a loaded legacy
+      project is not exact. Fix, if a real one is ever hit: an exact 4-char
+      aspect appended to the middle group, read by length like the others.
 
 ## THE PER-CYCLE LOOP (burn → build → verify → ship → ratchet)
 0. **PICK ONE RUNG** (entry condition, first). One line naming the capability. Or
@@ -168,6 +204,133 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A FEATURE THAT IS NEVER CALLED IS NEVER WRONG, AND THAT IS NOT THE SAME AS
+  BEING RIGHT.** `encodeRoll`/`decodeRoll` were written, documented with a
+  promise in the module header, covered by two unit sweeps, and imported by
+  nothing but those sweeps. Wiring them to the UI took an afternoon; making them
+  TRUE took the rest of the cycle, because the moment a real composition was fed
+  through them four separate fields could not survive the trip — and every one
+  of those defects had been sitting in a green test suite for months. The sweeps
+  were not weak: they asserted round-trips over ROLLED rolls, which is the one
+  region of the space where the codec happened to be exact. **Coverage measured
+  over the inputs a function currently receives says nothing about the inputs it
+  is about to receive.** When you connect a dormant module, audit it as new code.
+- **`Math.max(0, indexOf(x))` IS A SILENT WRONG ANSWER WEARING A DEFAULT'S
+  CLOTHES.** Four fields used it. `LAYOUT_ORDER` held only the 23 generators, so
+  every one of the five legacy modes — including `minimal`, **which the app boots
+  on** — returned -1 and encoded as index 0, a completely different construction.
+  The background index did the same for any colour off the eight-value roster,
+  and the "Average" swatch derives one from your photographs, so a paper-white
+  collage encoded as near-black. `-1` means NOT REPRESENTABLE and is information;
+  clamping it to 0 destroys that information and substitutes a plausible-looking
+  neighbour. Either widen the space (the legacy modes are now appended, so every
+  index already minted is stable), carry the value exactly (the background now
+  travels as 24 bits and the index only survives to degrade a truncated code), or
+  return null — but never quietly pick element zero.
+- **QUANTISING ONLY REPRODUCES EXACTLY IF THE STATE IS ON THE GRID, AND NOBODY
+  HAD PUT IT THERE.** The codec's docstring argued — correctly — that quantising
+  keeps a code short AND makes a shared roll reproduce exactly rather than
+  approximately. The argument holds only for states that are already on the
+  quantisation grid, and `rollDice` drew entropy, gutter and zoom from CONTINUOUS
+  ranges. So the very first encode of a fresh roll already lost something, and
+  the chaos grid (1/63) did not even contain the chaos slider's own step (0.01),
+  so a hand-tuned composition was off-grid too. The fix is one line in the right
+  place — `rollDice` returns `snapRoll(...)` — plus choosing the grid to CONTAIN
+  the UI's steps rather than the other way round. A rounding argument in a
+  comment is a claim about a value's provenance, and provenance is exactly what
+  a comment cannot enforce.
+- **I WROTE A TEST HELPER THAT FILTERED OUT THE FAILING HALF OF THE SPACE, AND
+  DOCUMENTED WHY.** `rollUsable()` re-rolled until the composition asked for at
+  least as many fragments as there were sources, with a docstring explaining that
+  below that line "the app grows the count to cover the sources … it would make a
+  code applied BEFORE the upload land on a different count than one applied
+  after." That is not a precondition. That is the bug, written down, in the
+  helper that stopped anything from seeing it — and all five tests called it, so
+  the suite was green over exactly the half where the feature worked. An
+  adversarial lens measured the other half in minutes: a 3-fragment code opened
+  with 6 photographs produced 6, and then the address-bar rewrite replaced the
+  sender's code with the wrong one 400ms later, so what they were sent could not
+  even be recovered. **If a helper's docstring explains why a case is excluded,
+  the case is the finding.** Read your own comments as evidence.
+- **THE FIRST FIX RACED REACT, AND "IT WORKS" WAS THE ONLY THING TESTING IT.**
+  Honouring the code's count needed the auto-follow effect to stand down for the
+  drop the code was waiting for, so the first cut set a ref and cleared it in the
+  ingest's `finally`. It never once worked: the upload loop yields with
+  `requestAnimationFrame`, which resolves BEFORE React flushes passive effects,
+  so the flag was already cleared by the time the effect read it. Rewritten as a
+  drop marker in STATE, the ordering is React's own and there is no window at
+  all. **A cleanup whose correctness depends on when a frame lands is a race
+  wearing a tidy-up's clothes** — put the marker in the same queue as the data.
+- **A COUNT AND A COUNT ARE NOT THE SAME COUNT.** The first fix then pinned the
+  code's count onto the next import unconditionally — right for a number the user
+  CHOSE, wrong for one the app DERIVED from "you happened to have six
+  photographs". The two are indistinguishable once serialised, and the address
+  bar now carries this page's own code, so a plain REFRESH replays it: a derived
+  6 would have been pinned onto every later pool forever. The app already knew
+  the difference (`countTouchedRef`) and the code did not, so the code learned to
+  carry it. **When a value can be a decision or a default, the serialisation has
+  to say which** — a number alone is not enough information to apply it correctly.
+- **A NEW BUTTON RENAMES EVERY OLD ONE THAT SHARED ITS WORD.** The strip's
+  "Open" is the second control on the page called that — the Header's has opened
+  a saved project since the beginning. Nothing about the Header changed, and yet
+  `project-roundtrip.spec.ts` started failing on a click that had worked for
+  months, because `getByRole('button', { name: 'Open' })` matches on a substring
+  and now found two. The test was right to fail: an accessible name is how
+  somebody navigating by voice or by a screen-reader's element list ADDRESSES a
+  control, so two controls answering to "Open" is an ambiguity for them before it
+  is one for Playwright. Fixed on both sides — the new button carries
+  `aria-label="Open the pasted composition code"` (which still CONTAINS its
+  visible label, so label-in-name holds) and the old test asks for
+  `{ name: 'Open', exact: true }`. **Adding a control edits the namespace every
+  existing by-name selector reads from; run the whole suite, not the new spec.**
+- **ALMOST EVERY MANGLING OF A VALID CODE WAS ANOTHER VALID CODE.** The seed is
+  the last field of the last group and the only one free to vary in length, so
+  lopping four characters off the end read as a smaller number and the code
+  opened — cleanly, silently — as somebody else's collage. For a string whose
+  entire job is to survive chat clients that wrap, truncate and autocorrect, "no
+  error case" is the error case. A checksum was the answer, but the FIRST one was
+  a position-weighted sum mod 36 and it only caught 88.9%, because 36 is not
+  prime: at every position whose weight shares a factor with it, whole families
+  of single-character changes multiply to zero and vanish. A multiply-and-mix
+  chain over two characters caught 99.9% (17,952 of 17,964 manglings), and the
+  remaining 12 are the 1-in-1296 floor. Two lessons, and the second is the one
+  that generalises: **a serialisation with no redundancy cannot distinguish
+  damage from a different message**, and **a checksum's modulus and its weights
+  must be coprime or half its positions are blind.** Measure the catch rate; do
+  not reason about it.
+- **A GUARD THAT COVERS THREE OF THE FOUR GROUPS IS A GUARD WITH A HOLE.** The
+  checksum lived in `encodeRoll` and covered the three groups that function
+  emits. `encodeState`, one layer up, appends a fourth for the shuffle — and
+  every single mangling that survived the sweep had landed in it. The fix was to
+  fold the upper layer's bytes into the lower layer's checksum rather than to add
+  a second one. **Ask what your integrity check does NOT cover, then go and look
+  at whether anything lives there.**
+- **`padStart` SETS A MINIMUM, AND EVERY READER TREATED IT AS A MAXIMUM.** The
+  code is read back by slicing at fixed offsets, so a field that needs one more
+  character than it was given does not clip — it lengthens its group and shifts
+  every later slice along by one. The result is not a rejected code, which would
+  be fine; it is a code that decodes CLEANLY into a different composition. Found
+  by probing the field ceilings by hand rather than by any test: `count` at
+  36³ = 46,656 made the reader see 1,296 fragments and take the chaos value out
+  of the seed's digits. Unreachable with the stepper (twenty minutes of holding
+  it down), one keystroke away in a saved project file. Two fixes, and the second
+  is the one that lasts: a single `fw()` helper clamps EVERY fixed-width field to
+  its own capacity instead of fixing them one at a time, and the sweep now
+  asserts each roster against the width that carries it, so a twelfth twist mode
+  or a 1,300th layout fails a test rather than silently corrupting codes. **Ask
+  what a serialiser does when a value is one larger than you imagined — if the
+  answer is "the next field moves", the format has no error case at all.**
+- **TWO LISTS OF THE SAME THING DRIFT, AND THE DRIFT HIDES INSIDE THE TOLERANCE
+  THAT WAS SUPPOSED TO ABSORB IT.** The frame-shape chips were typed by hand as
+  0.666 / 1 / 1.77 / 0.5625; the dice rolled from `ASPECTS` = …0.6667…1.7778….
+  Two of the four chips sat a rounding error off the roster, and NOTHING could
+  see it: the chip's own active test is `|aspect - v| < 0.01`, the canvas
+  difference is 2px of height at 1200 wide, and the encoder's `findIndex` used
+  the same 0.01 tolerance, so it matched. It only became visible when the code
+  had to round-trip: encode found the roster value, decode returned it, and the
+  collage moved. The chips now read the roster. **A tolerance that makes two
+  values interchangeable for a comparison does not make them interchangeable for
+  a round trip** — and a test built from the same tolerance is a mirror.
 - **A CLAMP THAT KEEPS A LOOP REGION SAFE ALSO CHANGES ITS PERIOD, and the period
   is the shared quantity.** `audioPlan` clamped `loopEnd` into the decoded buffer
   — correct, a loop region past the buffer is undefined behaviour — and by doing
@@ -564,6 +727,60 @@ the next tier (pro effects, AI-assisted editing, collaboration) becomes the
 frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
+- 2026-08-07 · **[AXIS:COLLAGE] THE COMPOSITION CODE** — a good roll is no longer lost.
+  Every composition now has a short code, shown under the dice (tap to copy), a box to
+  paste somebody else's into, and the same code in the ADDRESS BAR, so a link is a collage.
+  **before → `encodeRoll`/`decodeRoll` had existed since the roster landed, promised "same
+  code, same collage, on any device" in their own module header, and were imported by
+  nothing but two unit sweeps; after → `lib/rollCode.ts` is the missing direction**
+  (`CompositionState` ↔ `Roll` ↔ string, pure) plus `codeFromUrl`, wired to a strip in
+  SimpleControls and to `?c=` at mount + `replaceState`.
+  **Wiring it up is what proved the codec could not carry a composition.** Five defects,
+  all inside a green suite: `LAYOUT_ORDER` held only the 23 generators, so `minimal` — what
+  the app BOOTS on — encoded as index 0, a different construction; the background was an
+  index into 8 roster colours, so the "Average" swatch (derived from your photographs)
+  encoded a paper-white collage as near-black; `rollDice` drew entropy/gutter/zoom from
+  CONTINUOUS ranges while the code quantised them, so the first encode of a fresh roll was
+  already lossy and the chaos grid (1/63) did not even contain the chaos slider's step
+  (0.01); four frame chips were typed by hand (0.666, 1.77) against a roster of 0.6667 /
+  1.7778, invisible to the chip's own `< 0.01` test and to 2px of canvas but not to a round
+  trip; and `padStart` sets a MINIMUM, so a count at 36³ lengthened its group and shifted
+  every later slice — the code then decoded CLEANLY into a different composition.
+  Proof: unit sweep **206,120 checks / 0 failures** with a RED PROOF (the previous encoder
+  mis-carries **59,961 of the same 60,000 compositions**; per-field breakdown matches the
+  mechanism exactly); e2e **10/10 on chromium + Pixel 5**, asserting a PIXEL HASH of the
+  canvas rather than the controls, and deliberately dropping `setSeed` turns T1 and T2 red.
+  Regression: source-count, one-layout, composition, twist, export-integrity,
+  mobile-watertight, project-roundtrip and all six sibling sweeps green; `tsc` and
+  `vite build` clean; zero horizontal overflow at 320/360/390/430 with the strip's children
+  measured for spill.
+  **The four-lens adversarial audit earned its keep and changed the ship six times.**
+  **(1)** A SHIP-BLOCKER: grow-to-cover overrode the code's fragment count whenever the
+  recipient's pool was larger, and the address-bar rewrite then replaced the sender's code
+  with the wrong one — measured, a 3-fragment code opened with 6 photographs gave 6, and
+  21% of rolls ask for fewer fragments than a 40-photograph pool. **(2)** The same lens
+  showed my own e2e helper `rollUsable()` re-rolled until the count cleared the pool size,
+  with a docstring explaining why — so every test ran on the half of the space where the
+  feature worked. The helper is gone and T7 drives the excluded case on purpose.
+  **(3)** The first fix RACED: it cleared its flag in the ingest's `finally`, and the upload
+  loop yields with `requestAnimationFrame`, which resolves before React flushes passive
+  effects — so it never once worked. Rewritten as a drop marker in state. **(4)** The second
+  fix then pinned a DERIVED count onto every later pool, which matters now that a plain
+  refresh replays the address bar's own code; the code learned to carry whether its count is
+  a decision or a default, and T10 proves both branches. **(5)** A truncated code used to
+  open as somebody else's collage, because the seed is the only variable-length field — so
+  codes are now checksummed, and the first checksum (weighted sum mod 36) caught only 88.9%
+  because 36 is not prime and half its positions are blind; a multiply-and-mix pair catches
+  **99.9% (17,952/17,964)**. **(6)** And that checksum had a hole: it covered the three
+  groups `encodeRoll` emits, not the shuffle group the layer above appends — where every
+  surviving mangling had landed. Also disclosed rather than fixed: pinned fragments cannot
+  ride in a source-independent code, so the strip says so (T9).
+  **BACKPORT rider fired, and came back CLEAN.** The class fixed here is "a silent index
+  fallback that substitutes a plausible neighbour for an unrepresentable value"
+  (`Math.max(0, indexOf(…))`). Swept all six trade toolkits plus `shared/`: **0 hits**. Also
+  swept the sibling class "two lists of the same thing drift" — 225 array literals across the
+  six trades, **0 appearing in more than one file**.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
 - 2026-08-07 · **[AXIS:COLLAGE] THE LAP SCHEDULE** — a trim that straddles the end of a
   short audio track now laps with the PICTURE, not with the audio track. `audioPlan`
   clamped `loopEnd` into the decoded buffer — the only safe thing to hand a node, and by

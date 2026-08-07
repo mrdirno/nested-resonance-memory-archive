@@ -9,6 +9,7 @@ import {
   ARRANGEMENTS, ARRANGEMENT_BY_ID, FOCUS_MODES, FOCUS_BY_ID, TWIST_MODES, TWIST_BY_ID,
   type ArrangementId, type FocusId, type TwistId,
 } from '../lib/composition';
+import { ASPECT_ROSTER } from '../lib/diceRoll';
 
 interface AdvancedControlsProps {
   layoutMode: LayoutMode;
@@ -47,11 +48,22 @@ const MODES: { id: LayoutMode; label: string; icon: React.ReactNode; blurb: stri
   { id: 'stencil',  label: 'Stencil',  icon: <Scissors size={16} />, blurb: 'Fragments cut from the light and dark of each image. Slower to compute.' },
 ];
 
+/**
+ * The frame shapes, taken from the ROSTER rather than retyped.
+ *
+ * These four used to be written out by hand as 0.666 / 1 / 1.77 / 0.5625 while
+ * the dice rolled from `ASPECTS` = … 0.6667 … 1.7778 …, so two of the four
+ * chips sat a rounding error off the roster. Invisible on screen (2px of canvas
+ * height at 1200 wide) and invisible to the chip's own `< 0.01` active test —
+ * but the share code carries the frame as a roster INDEX, so a code copied from
+ * a hand-set 2:3 came back as the roster's 2:3 and the collage moved. One list,
+ * read by both, is the only version of this that stays true.
+ */
 const RATIOS = [
-  { v: 0.666,  l: '2:3',  n: 'Portrait' },
-  { v: 1,      l: '1:1',  n: 'Square' },
-  { v: 1.77,   l: '16:9', n: 'Wide' },
-  { v: 0.5625, l: '9:16', n: 'Story' },
+  { v: ASPECT_ROSTER[1], l: '2:3',  n: 'Portrait' },
+  { v: ASPECT_ROSTER[0], l: '1:1',  n: 'Square' },
+  { v: ASPECT_ROSTER[5], l: '16:9', n: 'Wide' },
+  { v: ASPECT_ROSTER[6], l: '9:16', n: 'Story' },
 ];
 
 const ratioBox = (a: number): React.CSSProperties =>
@@ -89,23 +101,32 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
   // has been ingested, so it is the honest proxy.
   const ready = count > 0;
 
+  /**
+   * ONE SPELLING FOR A COLOUR — `#rrggbb`, everywhere.
+   *
+   * These three derived backgrounds used to be written `rgb(r,g,b)` while the
+   * two fixed swatches were hex. Nothing rendered differently (canvas reads both
+   * identically), but the background is now serialised into the share code and
+   * read back out of it, and a round trip that returns the same COLOUR in a
+   * different SPELLING breaks every `bgColor === …` comparison on this panel —
+   * the swatch you are looking at stops highlighting itself. Canonicalising here
+   * is cheaper and more honest than teaching four comparisons to parse CSS.
+   */
+  const hexOf = (r: number, g: number, b: number) =>
+    `#${[r, g, b].map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('')}`;
+
+  const avgCss = avgColor ? hexOf(avgColor.r, avgColor.g, avgColor.b) : '#2b3134';
+  const greyCss = avgColor
+    ? (() => { const l = (avgColor.r + avgColor.g + avgColor.b) / 3; return hexOf(l, l, l); })()
+    : '#2b3134';
+  const invCss = avgColor ? hexOf(255 - avgColor.r, 255 - avgColor.g, 255 - avgColor.b) : '#2b3134';
+
   const setBgAdaptive = (type: 'avg' | 'grey' | 'contrast') => {
     if (!avgColor) return;
-    if (type === 'avg') setBgColor(`rgb(${avgColor.r},${avgColor.g},${avgColor.b})`);
-    if (type === 'grey') {
-      const l = Math.round((avgColor.r + avgColor.g + avgColor.b) / 3);
-      setBgColor(`rgb(${l},${l},${l})`);
-    }
-    if (type === 'contrast') {
-      setBgColor(`rgb(${255 - avgColor.r},${255 - avgColor.g},${255 - avgColor.b})`);
-    }
+    if (type === 'avg') setBgColor(avgCss);
+    if (type === 'grey') setBgColor(greyCss);
+    if (type === 'contrast') setBgColor(invCss);
   };
-
-  const avgCss = avgColor ? `rgb(${avgColor.r},${avgColor.g},${avgColor.b})` : '#2b3134';
-  const greyCss = avgColor
-    ? (() => { const l = Math.round((avgColor.r + avgColor.g + avgColor.b) / 3); return `rgb(${l},${l},${l})`; })()
-    : '#2b3134';
-  const invCss = avgColor ? `rgb(${255 - avgColor.r},${255 - avgColor.g},${255 - avgColor.b})` : '#2b3134';
 
   const countMax = Math.max(60, count + 12);
 

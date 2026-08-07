@@ -54,6 +54,18 @@ export interface Roll {
   twist: TwistId;
   /** Name of the recipe this came from, when it came from one. */
   recipe?: string;
+  /**
+   * Is `count` a DECISION or a DEFAULT?
+   *
+   * The app derives the fragment count from the number of sources until somebody
+   * takes it over (the stepper, the dice, a project, a code) — `countTouchedRef`
+   * in App.tsx. The two are indistinguishable once serialised, and they must not
+   * be: a code carrying a CHOSEN 3 has to survive being opened next to twenty
+   * photographs, and a code carrying a DERIVED 6 has to get out of the way of
+   * them. Without this bit a plain refresh — which now replays the address bar's
+   * own code — would pin a derived count onto the next import forever.
+   */
+  countOwned?: boolean;
 }
 
 /** Parameters the user can PIN before re-rolling — the slot-machine hold. */
@@ -305,7 +317,11 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
     ? prev.bg
     : BACKGROUNDS[recipe ? pick(recipe.bg, rnd) : bgFor(layout, rnd)];
 
-  return {
+  // SNAPPED ON THE WAY OUT — see `snapRoll`. The roll draws entropy, gutter and
+  // zoom from continuous ranges; the share code quantises them. Snapping here
+  // is what makes those two facts agree, so a rolled composition is exactly
+  // representable by its own code instead of nearly.
+  return snapRoll({
     layout,
     // Every generator defines its own cell shape; `primitive` only reaches the
     // two legacy grid modes, so the roll leaves it alone rather than pretending
@@ -328,51 +344,223 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
     // seed from a given rng as the build before it did.
     twist: twistFor(layout, rnd),
     recipe: recipe?.name,
-  };
+    // The dice picks a fragment count on purpose, out of the generator's own
+    // sane range. That is a decision, so a code minted from it must not be
+    // overridden by however many photographs the recipient happens to have.
+    countOwned: true,
+  });
 };
 
 // =============================================================================
 // SHARE CODES
 // =============================================================================
 
-const LAYOUT_ORDER: LayoutMode[] = GENERATORS.map((g) => g.id as LayoutMode);
+/**
+ * THE INDEX SPACE OF LAYOUTS, and why the legacy five are APPENDED.
+ *
+ * This used to be `GENERATORS.map(...)` alone — the 23 generative constructions
+ * and nothing else. The five legacy modes were therefore not in the space at
+ * all, and `indexOf` returned -1 for every one of them, which `Math.max(0, …)`
+ * turned into index 0. The app BOOTS on `minimal`: the very first code anybody
+ * could copy described a completely different construction, silently. Appending
+ * rather than prepending is what keeps every index already minted stable.
+ */
+const LAYOUT_ORDER: LayoutMode[] = [
+  ...GENERATORS.map((g) => g.id as LayoutMode),
+  'minimal', 'balanced', 'complex', 'field', 'stencil',
+];
+
+/** Fragment shape, in a fixed order because the index travels in share codes. */
+export const PRIMITIVE_ORDER: PrimitiveType[] = ['rect', 'tri', 'circle', 'octagon', 'random'];
+
+/** The roster of frame shapes — the ONE list the UI and the codec both read. */
+export const ASPECT_ROSTER: readonly number[] = ASPECTS;
+
+/**
+ * THE GRID.
+ *
+ * The code quantises, and quantising is only lossless if the STATE is on the
+ * grid too. `rollDice` used to draw entropy, gutter and zoom from continuous
+ * ranges, so the very first encode of a fresh roll already lost something and
+ * the "same code, same collage" promise in this file's header was false by a
+ * fraction of a slider detent. `snapRoll` puts the roll on the grid at the
+ * moment it is made, which is what makes the promise true rather than
+ * approximately true — and the grid is chosen to CONTAIN the UI's own slider
+ * steps (chaos 0.01, padding 0.001), so a hand-tuned composition is on it too.
+ */
+export const snapRoll = (r: Roll): Roll => ({
+  ...r,
+  entropy: Math.round(Math.min(1, Math.max(0, r.entropy)) * 100) / 100,
+  gutter: Math.round(Math.min(0.05, Math.max(0, r.gutter)) * 2000) / 2000,
+  zoom: Math.round(Math.min(4, Math.max(0.5, r.zoom)) * 100) / 100,
+  // CEILINGS THAT MATCH THE FIELD, not ceilings that seem generous. Every field
+  // below the LAST one in its group is read by fixed-width slicing, so a value
+  // that outgrows its width does not clip — it lengthens the group and shifts
+  // every later slice by a character, and the code then decodes CLEANLY into a
+  // different composition. `count` at 46,656 (= 36^3) did exactly that: the
+  // reader saw 1,296 fragments and read the chaos field out of the seed's
+  // digits. Unreachable by hand, one keystroke away in a saved project file.
+  count: Math.max(1, Math.min(MAX_COUNT, Math.round(r.count))),
+  // The seed is the LAST field of the LAST group, so it is the one value that
+  // may grow: `Date.now()` needs eight characters and MAX_SAFE_INTEGER ten.
+  seed: Math.max(0, Math.round(r.seed)),
+});
+
+/** 36^3 - 1: the largest fragment count three base-36 characters can hold. */
+export const MAX_COUNT = 36 ** 3 - 1;
+
+/** A CSS colour the app can actually hold — `#rrggbb` or `rgb(r,g,b)` — as 24 bits. */
+const rgb24 = (css: string): number => {
+  const s = css.trim().toLowerCase();
+  const hex = /^#([0-9a-f]{6})$/.exec(s);
+  if (hex) return parseInt(hex[1], 16);
+  const short = /^#([0-9a-f]{3})$/.exec(s);
+  if (short) {
+    const [r, g, b] = short[1].split('');
+    return parseInt(`${r}${r}${g}${g}${b}${b}`, 16);
+  }
+  const fn = /^rgba?\(\s*([0-9.]+)[\s,]+([0-9.]+)[\s,]+([0-9.]+)/.exec(s);
+  if (fn) {
+    const ch = (v: string) => Math.max(0, Math.min(255, Math.round(parseFloat(v))));
+    return (ch(fn[1]) << 16) | (ch(fn[2]) << 8) | ch(fn[3]);
+  }
+  return -1;
+};
+
+const hex6 = (n: number) => `#${Math.max(0, Math.min(0xffffff, n)).toString(16).padStart(6, '0')}`;
 
 /**
  * A roll as a short code.
  *
- * Eight base-36 fields, dash-separated in three groups so it survives being read
- * aloud, retyped, or wrapped by a chat client. The seed is the long one because
- * it is the only field that genuinely needs the range; everything else is
- * quantised to the precision the eye can actually distinguish (entropy to 1/64,
- * gutter to 1/2000, zoom to 1/100) — quantising is what keeps the code short
- * AND makes a shared roll reproduce EXACTLY rather than approximately.
+ * Base-36 fields, dash-separated in groups so it survives being read aloud,
+ * retyped, or wrapped by a chat client. The seed is the long one because it is
+ * the only field that genuinely needs the range; everything else is quantised to
+ * the precision the eye can actually distinguish (entropy to 1/100 = the chaos
+ * slider's own step, gutter to 1/2000, zoom to 1/100) — quantising is what keeps
+ * the code short AND makes a shared roll reproduce EXACTLY rather than
+ * approximately, PROVIDED the state is on the same grid (see `snapRoll`).
  *
- * Arrangement and focus were APPENDED to the middle group rather than given a
- * group of their own. A code minted before they existed has a 6-character middle
- * group instead of 8, and `decodeRoll` reads the two extra characters only when
- * they are there — so every code already sitting in somebody's chat log still
- * opens, as the composition it was when it was sent.
+ * GROWTH IS APPEND-ONLY, AND THE READER SWITCHES ON LENGTH. Arrangement and
+ * focus were appended to the middle group rather than given a group of their
+ * own; then twist; now the fragment SHAPE and the exact background. A code
+ * minted before a field existed is simply shorter, and `decodeRoll` reads each
+ * extra character only when it is there — so a code already sitting in
+ * somebody's chat log still opens, as the composition it was when it was sent.
+ *
+ * WHY THE BACKGROUND IS CARRIED TWICE. Position 5 is an index into the eight
+ * roster backgrounds and is what old codes have. But the app can hold a colour
+ * that is on no roster — the "Average" swatch derives one from your photographs
+ * — and an index cannot express it, so it fell back to index 0 and turned a
+ * paper-white collage near-black. Positions 10..14 carry the actual 24 bits and
+ * WIN when present. The index is still emitted so a truncated code degrades to
+ * the nearest roster colour instead of to nothing.
+ *
+ * WHAT IS DELIBERATELY NOT IN HERE: the images. A code is a RECIPE — the same
+ * code with your photographs is your collage, which is the whole point of being
+ * able to send one.
  */
-export const encodeRoll = (r: Roll): string => {
+export const encodeRoll = (r: Roll, extra = ''): string => {
   const li = Math.max(0, LAYOUT_ORDER.indexOf(r.layout));
-  const ai = Math.max(0, (ASPECTS as readonly number[]).findIndex((a) => Math.abs(a - r.aspect) < 0.01));
-  const e = Math.round(Math.min(1, Math.max(0, r.entropy)) * 63);
-  const g = Math.round(Math.min(0.03, Math.max(0, r.gutter)) * 2000);
+  // NEAREST, not first-within-0.01. A frame shape off the roster — reachable by
+  // loading an old project — used to hit `findIndex` = -1 and encode as SQUARE.
+  let ai = 0;
+  for (let i = 1; i < ASPECTS.length; i++) {
+    if (Math.abs(ASPECTS[i] - r.aspect) < Math.abs(ASPECTS[ai] - r.aspect)) ai = i;
+  }
+  const e = Math.round(Math.min(1, Math.max(0, r.entropy)) * 100);
+  // 0.05, matching the padding slider's maximum. It was 0.03 — the roll's own
+  // ceiling — so a hand-set 5% gutter came back as 3%.
+  const g = Math.round(Math.min(0.05, Math.max(0, r.gutter)) * 2000);
   const z = Math.round(Math.min(4, Math.max(0.5, r.zoom)) * 100);
-  const bgi = Math.max(0, BG_KEYS.findIndex((k) => BACKGROUNDS[k] === r.bg));
+  const rgb = rgb24(r.bg);
+  // NEAREST roster colour, by channel distance — not `indexOf` with a fallback
+  // to element zero. This index is only read by a code TRUNCATED below the exact
+  // colour, and "the closest background we have" is a survivable degradation
+  // where "near-black, always" turns a paper-white collage inside out.
+  let bgi = 0;
+  {
+    const dist = (i: number) => {
+      const c = rgb24(BACKGROUNDS[BG_KEYS[i]]);
+      return Math.abs((c >> 16) - (rgb >> 16))
+        + Math.abs(((c >> 8) & 255) - ((rgb >> 8) & 255))
+        + Math.abs((c & 255) - (rgb & 255));
+    };
+    if (rgb >= 0) for (let i = 1; i < BG_KEYS.length; i++) if (dist(i) < dist(bgi)) bgi = i;
+  }
   const ari = Math.max(0, ARRANGEMENT_IDS.indexOf(r.arrangement));
   const foi = Math.max(0, FOCUS_IDS.indexOf(r.focus));
   const twi = Math.max(0, TWIST_IDS.indexOf(r.twist));
-  const f = (n: number, w = 1) => Math.max(0, Math.round(n)).toString(36).padStart(w, '0');
-  return `${f(li, 2)}${f(r.count, 3)}${f(e, 2)}-${f(ai)}${f(g, 2)}${f(z, 2)}${f(bgi)}${f(ari)}${f(foi)}${f(twi)}-${f(r.seed, 4)}`
-    .toUpperCase();
+  const pri = Math.max(0, PRIMITIVE_ORDER.indexOf(r.primitive));
+  /**
+   * A FIXED-WIDTH field, and it may not exceed its width.
+   *
+   * `padStart` sets a MINIMUM, not a maximum. Every field but the last one in
+   * its group is read back by slicing at a fixed offset, so a value that needs
+   * one more character does not clip — it lengthens the group and shifts every
+   * later slice along, and the code then decodes cleanly into a DIFFERENT
+   * composition. Clamping here makes that impossible for all of them at once
+   * rather than one field at a time; `capacity` is asserted per roster in
+   * tests/unit/rollCode.invariants.mjs so a roster that outgrows its field
+   * fails a sweep instead of silently corrupting codes.
+   */
+  const fw = (n: number, w: number) => {
+    const cap = 36 ** w - 1;
+    return Math.max(0, Math.min(cap, Math.round(n))).toString(36).padStart(w, '0');
+  };
+  /** The seed is the last field of the last group, so it is free to grow. */
+  const tail = (n: number, w: number) => Math.max(0, Math.round(n)).toString(36).padStart(w, '0');
+  const mid = `${fw(ai, 1)}${fw(g, 2)}${fw(z, 2)}${fw(bgi, 1)}${fw(ari, 1)}${fw(foi, 1)}${fw(twi, 1)}${fw(pri, 1)}`
+    + fw(rgb < 0 ? rgb24(BACKGROUNDS[BG_KEYS[bgi] ?? 'void']) : rgb, 5);
+  const head = `${fw(li, 2)}${fw(r.count, 3)}${fw(e, 2)}`;
+  const seed = tail(r.seed, 4);
+  const owned = r.countOwned ? '1' : '0';
+  // `extra` is whatever a LAYER ABOVE has appended to the code — today that is
+  // rollCode's optional shuffle group. It is folded into the checksum but not
+  // into the code, because the guard has to cover the whole thing: the first cut
+  // checksummed only the three groups this function emits, and a mangling that
+  // landed in the shuffle group sailed through it. Measured: every escape in the
+  // sweep was exactly that.
+  return `${head}-${mid}${owned}${checksum(head + mid + owned + seed + extra)}-${seed}`.toUpperCase();
 };
 
-export const decodeRoll = (code: string): Roll | null => {
+/**
+ * ONE CHARACTER THAT SAYS "THIS ARRIVED WHOLE".
+ *
+ * Without it a code cannot tell damage from a different composition, because
+ * almost every mangling of one valid code is another valid code. Lop four
+ * characters off the end and the seed field — the last field of the last group,
+ * the only one allowed to vary in length — simply reads as a smaller number:
+ * the code opens, cleanly, as somebody else's collage. That is the worst
+ * possible failure for a thing whose entire job is to be sent through chat
+ * clients that wrap, truncate and autocorrect.
+ *
+ * TWO characters, from a multiplicative rolling hash rather than a weighted sum.
+ * The first cut was `sum += (i + 1) * digit`, mod 36, and it only caught 88.9%
+ * of manglings — far worse than the 1-in-36 that "one base-36 character" sounds
+ * like. The reason is that 36 is not prime: at any position whose weight shares
+ * a factor with 36 (half of them), whole families of single-character changes
+ * multiply to 0 and vanish. A multiply-and-mix chain has no such dead positions,
+ * and two characters take the residual from 1-in-36 to 1-in-1296.
+ *
+ * This is an accident detector for chat clients that wrap, truncate and
+ * autocorrect. It is not a signature and defends against nobody malicious.
+ */
+const CHECK_LEN = 2;
+const checksum = (body: string): string => {
+  let h = 7;
+  for (let i = 0; i < body.length; i++) {
+    // +1 so a leading run of zeros is not indistinguishable from a shorter body.
+    h = (h * 31 + parseInt(body[i], 36) + 1) % 1679616;
+  }
+  return (h % 36 ** CHECK_LEN).toString(36).padStart(CHECK_LEN, '0');
+};
+
+export const decodeRoll = (code: string, extra = ''): Roll | null => {
   const parts = code.trim().toLowerCase().replace(/\s+/g, '').split('-');
   if (parts.length !== 3) return null;
   const [a, b, c] = parts;
   if (a.length < 7 || b.length < 6 || c.length < 1) return null;
+  if (!/^[0-9a-z]+$/.test(a + b + c)) return null;
   const n = (s: string) => parseInt(s, 36);
   try {
     const li = n(a.slice(0, 2));
@@ -389,18 +577,40 @@ export const decodeRoll = (code: string): Roll | null => {
     // Pre-twist codes stop at 8. Absent means `none` — a code minted before this
     // feature existed described a square collage, and it still opens as one.
     const twi = b.length >= 9 ? n(b.slice(8, 9)) : 0;
+    // Pre-shape codes stop at 9; every one of them was drawn with rectangular
+    // fragments, which is index 0.
+    const pri = b.length >= 10 ? n(b.slice(9, 10)) : 0;
+    // Pre-exact-colour codes stop at 10 and the roster index above is all there
+    // is. -1 is the sentinel for "not carried", never a colour.
+    const rgb = b.length >= 15 ? n(b.slice(10, 15)) : -1;
+    // Pre-checksum codes stop at 15 and are taken on trust, exactly as they were
+    // when they were minted. Beyond that the trailing characters of the middle
+    // group are the guard, and a code that fails it is REFUSED — the whole point
+    // is that a damaged code must not open as a different collage.
+    // Pre-flag codes stop at 15. Absent means DERIVED, which is what every code
+    // minted before this bit existed described: the app's default behaviour.
+    const owned = b.length >= 16 ? b[15] === '1' : false;
+    if (b.length >= 16 + CHECK_LEN) {
+      const body = a + b.slice(0, 16) + c + extra.toLowerCase();
+      if (checksum(body) !== b.slice(16, 16 + CHECK_LEN)) return null;
+    }
     const seed = n(c);
     const layout = LAYOUT_ORDER[li];
-    if (!layout || ![count, e, ai, g, z, bgi, ari, foi, twi, seed].every(Number.isFinite)) return null;
+    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, seed];
+    if (!layout || !nums.every(Number.isFinite) || !Number.isFinite(rgb)) return null;
     return {
       layout,
-      primitive: 'rect',
-      count: Math.max(2, count),
-      entropy: e / 63,
+      primitive: PRIMITIVE_ORDER[pri] ?? 'rect',
+      // ONE fragment is a composition somebody can actually ask for — the
+      // stepper's own floor is 1 — and a floor of 2 here quietly told them their
+      // own code said something else.
+      count: Math.max(1, count),
+      countOwned: owned,
+      entropy: Math.min(1, e / 100),
       aspect: ASPECTS[ai] ?? 1,
       gutter: g / 2000,
       zoom: z / 100,
-      bg: BACKGROUNDS[BG_KEYS[bgi] ?? 'void'],
+      bg: rgb >= 0 ? hex6(rgb) : BACKGROUNDS[BG_KEYS[bgi] ?? 'void'],
       arrangement: ARRANGEMENT_IDS[ari] ?? 'natural',
       focus: FOCUS_IDS[foi] ?? 'auto',
       twist: TWIST_IDS[twi] ?? 'none',
@@ -410,5 +620,8 @@ export const decodeRoll = (code: string): Roll | null => {
     return null;
   }
 };
+
+/** The 24-bit reading of a CSS colour the app can hold; -1 when unreadable. */
+export const colourBits = rgb24;
 
 export const BACKGROUND_SWATCHES = BACKGROUNDS;

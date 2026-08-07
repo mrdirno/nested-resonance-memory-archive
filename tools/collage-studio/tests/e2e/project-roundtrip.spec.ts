@@ -58,7 +58,10 @@ test.describe('project round-trip', () => {
     await page.reload();
 
     const chooser = page.waitForEvent('filechooser', { timeout: 30_000 });
-    await page.getByRole('button', { name: 'Open' }).click();
+    // EXACT: the composition-code strip (SimpleControls) also has an "Open",
+    // and a substring match now finds both. This one is the Header's, which
+    // opens a saved project.
+    await page.getByRole('button', { name: 'Open', exact: true }).click();
     await (await chooser).setFiles(saved!);
 
     await expect(page.locator('svg g').first()).toBeVisible({ timeout: 60_000 });

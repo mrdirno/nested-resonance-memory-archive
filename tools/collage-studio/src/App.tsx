@@ -6,7 +6,8 @@ import {
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
 import { computeLayout, createRng } from './lib/layout';
-import { rollDice } from './lib/diceRoll';
+import { rollDice, ASPECT_ROSTER } from './lib/diceRoll';
+import { encodeState, decodeState, codeFromUrl, CODE_PARAM } from './lib/rollCode';
 import { assignSources, distinctSourceCount } from './lib/fill';
 import { arrangeBag, withFocus, withTwist, twistAngle, type ArrangementId, type FocusId, type TwistId } from './lib/composition';
 import { renderCanvas } from './lib/renderer';
@@ -118,9 +119,21 @@ export default function App() {
   // (one per photo/video). Flips true the moment the user owns the count
   // themselves — the slider, the dice, or a loaded project/template.
   const countTouchedRef = useRef(false);
+  /**
+   * A MIRROR of the ref above, for the one consumer that needs to re-render when
+   * it changes: the composition code. The ref has to stay, because the
+   * auto-follow effect reads it from inside a closure whose deps are `[images]`
+   * and a state read there would be one render stale. Both are written through
+   * `ownCount` so they cannot drift apart.
+   */
+  const [countOwned, setCountOwned] = useState(false);
+  const ownCount = (owned: boolean) => { countTouchedRef.current = owned; setCountOwned(owned); };
   const [density, setDensity] = useState(1);
   const [seed, setSeed] = useState(Date.now());
-  const [aspect, setAspect] = useState(0.666); 
+  // The roster value, not a retyped 0.666. The frame shape travels in the share
+  // code as a roster INDEX, so a default that is a rounding error off the roster
+  // cannot round-trip through its own code.
+  const [aspect, setAspect] = useState(ASPECT_ROSTER[1]);
   const [gutter, setGutter] = useState(0.005);
   const [entropy, setEntropy] = useState(0.5);
   // COMPOSITION — which photo lands in which fragment, what each fragment
@@ -240,11 +253,47 @@ export default function App() {
   // "nothing uploaded is stranded" guarantee, and it restores the behaviour the
   // old ceiling logic used to give a late video add, which the touched-gate had
   // otherwise removed.
+  //
+  // A CODE CHOOSES ITS COUNT BEFORE IT CAN SEE THE POOL, and grow-to-cover has
+  // to be told so. The sender picks a count against photographs that are already
+  // loaded, so the effect above never re-runs and their number stands. The
+  // recipient's order is reversed — `?c=` applies at mount, the photographs land
+  // afterwards — and grow-to-cover then read that as a late add and raised the
+  // count to the pool size. Same code, same photographs, different collage, and
+  // the address bar was rewritten to the NEW code 400ms later, so the thing they
+  // were sent could not even be recovered. Measured: a 3-fragment code opened
+  // with 6 sources produced 6.
+  //
+  // `pendingCountRef` holds the count a code asked for until the drop it is
+  // waiting for has landed, which makes the two orders agree. It is cleared at
+  // the END of an ingest rather than on the first batch, because one drop
+  // commits in several batches and each one re-runs this effect. Anything
+  // imported after that is a genuine late add and grows the count as before, so
+  // the "nothing uploaded is stranded" guarantee is untouched for every source
+  // that arrives once the composition is in place.
+  // The latch is keyed to a DROP, and the drop marker is React state rather than
+  // a flag cleared when the upload loop finishes. That first attempt raced and
+  // lost: the loop yields with `requestAnimationFrame`, which resolves BEFORE
+  // React flushes passive effects, so the flag was already cleared by the time
+  // this effect ran and the count grew anyway. Threading the marker through
+  // state puts it in the same ordered queue as `setImages`, so there is no
+  // window at all — the correctness comes from React's ordering rather than
+  // from a guess about when a frame lands.
+  const [dropId, setDropId] = useState(0);
+  const pendingCountRef = useRef<{ count: number; drop: number } | null>(null);
   useEffect(() => {
     if (images.length === 0) return;
+    if (pendingCountRef.current) {
+      // While the drop a code is waiting for is still landing, the count the
+      // code asked for stands — `applyCompositionCode` has already set it, so
+      // the honest thing here is to do nothing. Once that drop is over the latch
+      // retires, and every later import grows the count exactly as before.
+      if (pendingCountRef.current.drop !== dropId) pendingCountRef.current = null;
+      return;
+    }
     const n = distinctSourceCount(images);
     setCount(prev => (countTouchedRef.current ? Math.max(prev, n) : n));
-  }, [images]);
+  }, [images, dropId]);
 
   // --- ASYNC LAYOUT ENGINE ---
   useEffect(() => {
@@ -434,7 +483,9 @@ export default function App() {
     const roll = rollDice({ hasVideo: clips.length > 0 });
     // The dice chooses an explicit fragment count; don't let the next upload
     // silently overwrite a composition the user rolled on purpose.
-    countTouchedRef.current = true;
+    ownCount(true);
+    // This roll supersedes any count a link was still holding for a drop.
+    pendingCountRef.current = null;
     setLayoutMode(roll.layout);
     setCount(roll.count);
     setEntropy(roll.entropy);
@@ -454,7 +505,125 @@ export default function App() {
     setTwist(roll.twist);
     setLastRecipe(roll.recipe);
     setLockedCells(new Map());
+    // The deal is part of the composition and the roll re-deals it; leaving the
+    // old shuffle count on would make the SAME code describe two pictures.
+    setShuffleTrigger(0);
   };
+
+  // ===========================================================================
+  // THE COMPOSITION CODE — the good roll you can keep, come back to, and send.
+  //
+  // `diceRoll.ts` has promised "same code, same collage, on any device" since
+  // the roster landed and nothing ever called `encodeRoll`. The missing piece
+  // was never the codec: it was that the roll only flowed ONE way, into fifteen
+  // setState calls with no route back. `lib/rollCode.ts` is that route, in both
+  // directions, pure, so the round trip is swept to a hard equality.
+  //
+  // Everything the picture depends on rides in it EXCEPT the photographs, which
+  // is the point — a code is a recipe. Your photographs, their composition.
+  // ===========================================================================
+  const compositionCode = useMemo(() => encodeState({
+    layoutMode, primitive, count, density, entropy, aspect, gutter,
+    bgColor, seed, arrangement, focus, twist, shuffle: shuffleTrigger,
+    countOwned,
+  }), [layoutMode, primitive, count, density, entropy, aspect, gutter,
+       bgColor, seed, arrangement, focus, twist, shuffleTrigger, countOwned]);
+
+  /**
+   * Apply a pasted code. Returns false when it is not one, so the caller can
+   * say so instead of silently doing nothing — a half-applied composition on
+   * top of the one already on screen is worse than a refusal, because you
+   * cannot tell which half moved.
+   */
+  const applyCompositionCode = (code: string): boolean => {
+    const s = decodeState(code);
+    if (!s) return false;
+    // The code says whether its count was a DECISION or a DEFAULT, and that is
+    // the whole difference between "3 fragments, I meant it" and "6 fragments,
+    // because I had 6 photographs". Copying the sender's answer is what lets a
+    // derived count still get out of the way of the recipient's pool — including
+    // on a plain refresh, which now replays this page's own address bar.
+    ownCount(s.countOwned);
+    // And when an OWNED count arrives BEFORE the photographs — a `?c=` link on a
+    // cold page — latch it, or grow-to-cover reads the first drop as a late add
+    // and silently replaces the number the sender chose. Cleared when that
+    // drop ends. A derived count is never latched: it is a default, and the
+    // recipient's own pool is a better one.
+    if (s.countOwned && images.length === 0) {
+      pendingCountRef.current = { count: s.count, drop: dropId };
+    }
+    setLayoutMode(s.layoutMode);
+    setPrimitive(s.primitive);
+    setCount(s.count);
+    setDensity(s.density);
+    setEntropy(s.entropy);
+    setAspect(s.aspect);
+    setGutter(s.gutter);
+    setBgColor(s.bgColor);
+    setSeed(s.seed);
+    setArrangement(s.arrangement);
+    setFocus(s.focus);
+    setTwist(s.twist);
+    setShuffleTrigger(s.shuffle);
+    // Fragments pinned by hand refer to cells of the layout that is being
+    // replaced, so they cannot survive the change any more than they survive a
+    // roll. The recipe name belonged to a roll this session did not make.
+    setLockedCells(new Map());
+    setLastRecipe(undefined);
+    return true;
+  };
+
+  /**
+   * A CODE IN THE ADDRESS BAR, so a link is a composition.
+   *
+   * Read once on mount, then kept current with `replaceState` — replace, never
+   * push, or every slider tick would become a Back-button step. The address bar
+   * carrying the live code is what makes the browser's own share sheet work
+   * without this app shipping a share button of its own.
+   */
+  const bootCodeRef = useRef<string | null>(null);
+  if (bootCodeRef.current === null && typeof window !== 'undefined') {
+    bootCodeRef.current = codeFromUrl(window.location.href) ?? '';
+  }
+  /**
+   * A code that arrived damaged, kept where it can be read and repaired.
+   *
+   * A truncated or mangled `?c=` used to do NOTHING — no picture, no message —
+   * and 400ms later the address-bar rewrite replaced it with this session's own
+   * code, so the thing you were sent could not even be looked at. Refusing half
+   * a composition is right; refusing it silently and then destroying the
+   * evidence is not. It is handed to the paste box instead, where a missing
+   * character is visible and one keystroke from fixed.
+   */
+  const [rejectedBootCode, setRejectedBootCode] = useState('');
+  useEffect(() => {
+    const boot = bootCodeRef.current;
+    if (boot && !applyCompositionCode(boot)) {
+      setRejectedBootCode(boot);
+      flashNotice('That link’s composition code did not survive the trip — it is in the paste box below.');
+    }
+    // Mount only: a link opens the composition it names, and from then on the
+    // person driving the app owns the state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.history?.replaceState) return;
+    const t = setTimeout(() => {
+      try {
+        const url = new URL(window.location.href);
+        if (url.searchParams.get(CODE_PARAM) === compositionCode) return;
+        url.searchParams.set(CODE_PARAM, compositionCode);
+        // A link that arrived as `#CODE` has now been answered in the query, and
+        // leaving the hash behind would park a STALE code one character away
+        // from the live one in the same address bar. Cleared only when the hash
+        // is itself a code — a real anchor is somebody else's business.
+        if (url.hash && codeFromUrl(`${url.origin}${url.pathname}${url.hash}`)) url.hash = '';
+        window.history.replaceState(null, '', url.toString());
+      } catch { /* a URL the browser will not rewrite is not worth a crash */ }
+    }, 400);
+    return () => clearTimeout(t);
+  }, [compositionCode]);
 
   const handleRemix = async () => {
       const lockedGoals: {imgId: string, x: number, y: number}[] = [];
@@ -499,7 +668,7 @@ export default function App() {
 
   const updateCountSmart = (newValOrFn: number | ((prev: number) => number)) => {
     // The user is driving the count now — stop auto-following the upload total.
-    countTouchedRef.current = true;
+    ownCount(true);
     setCount(prev => {
       let candidate = typeof newValOrFn === 'function' ? newValOrFn(prev) : newValOrFn;
       if (candidate < 1) candidate = 1;
@@ -638,6 +807,10 @@ export default function App() {
       flashNotice('Import failed — see console for details.');
       // The counter must not strand the strip on screen at 12/30 forever.
       if (track) stepIngest(Math.max(0, files.length - allNewAssets.length));
+    } finally {
+      // This drop is over, however it went. Bumping the marker retires any code
+      // latch waiting on it, so the next import is a genuine late add again.
+      setDropId(d => d + 1);
     }
     return allNewAssets;
   };
@@ -854,11 +1027,11 @@ export default function App() {
       for (const c of clips) { try { URL.revokeObjectURL(c.url); } catch { /* ignore */ } }
       setClips([]); setStageOk(true);
       setImages([]); setPreviewUrl(null); setCount(0); setDensity(1); setLockedCells(new Map()); setAvgColor(null);
-      countTouchedRef.current = false; // a fresh import after Clear auto-follows the upload count again
+      ownCount(false); // a fresh import after Clear auto-follows the upload count again
   };
 
   const handleRestoreHistory = (item: HistoryItem) => {
-      countTouchedRef.current = true; // restoring a saved composition's own count
+      ownCount(true); // restoring a saved composition's own count
       setImages(item.images);
       const l = item.state.layout;
       setLayoutMode(l.mode); if(l.primitive) setPrimitive(l.primitive);
@@ -1145,13 +1318,13 @@ export default function App() {
     input.onchange = async (e:any) => {
         const file = e.target.files[0]; if(!file) return;
         const loaded = await loadProject(file);
-        if(loaded) { countTouchedRef.current = true; setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || 0.666); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); }
+        if(loaded) { ownCount(true); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || ASPECT_ROSTER[1]); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); }
     };
     input.click();
   };
 
   const handleApplyTemplate = (t: Template) => {
-      countTouchedRef.current = true; // a template carries its own explicit fragment count
+      ownCount(true); // a template carries its own explicit fragment count
       setLayoutMode(t.layout.mode); setCount(t.layout.count); setSeed(t.layout.seed); setAspect(t.layout.aspect); setGutter(t.layout.gutter);
   };
 
@@ -1287,7 +1460,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} framePicker={framePicker} setFramePicker={setFramePicker} />
          )}

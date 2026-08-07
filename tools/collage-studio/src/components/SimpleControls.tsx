@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import {
   Layout, Grid, Plus, Minus, RefreshCw, Shuffle, Square,
-  Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, ImagePlus, Dices
+  Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, ImagePlus, Dices, Copy
 } from 'lucide-react';
 import { LayoutMode, PrimitiveType } from '../types';
 import { GENERATORS, GENERATOR_BY_ID, FAMILIES, FAMILY_LABEL } from '../engine/geom/generators';
@@ -23,6 +23,12 @@ interface SimpleControlsProps {
   onDice?: () => void;
   /** Name of the recipe the last roll came from, for the readout. */
   lastRecipe?: string;
+  /** The composition on screen, as a code — see lib/rollCode.ts. */
+  compositionCode?: string;
+  /** Apply a pasted code. False when it is not one. */
+  onApplyCode?: (code: string) => boolean;
+  /** A code that arrived in the URL damaged — shown so it can be repaired. */
+  rejectedCode?: string;
   hasImages: boolean;
   isLayoutLocked: boolean;
 }
@@ -48,8 +54,46 @@ const SHAPES: { id: PrimitiveType; label: string; icon: React.ReactNode; blurb: 
 export const SimpleControls: React.FC<SimpleControlsProps> = ({
   layoutMode, setLayoutMode, primitive, setPrimitive, count, setCount,
   density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice,
-  lastRecipe, hasImages, isLayoutLocked
+  lastRecipe, compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked
 }) => {
+
+  // ---- THE COMPOSITION CODE --------------------------------------------------
+  // Two jobs on one strip because they are two halves of one act: the code of
+  // what is on screen (tap it to copy) and a box to put somebody else's in.
+  const [copied, setCopied] = React.useState(false);
+  const [pasted, setPasted] = React.useState('');
+  const [rejected, setRejected] = React.useState(false);
+  const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => { if (copiedTimer.current) clearTimeout(copiedTimer.current); }, []);
+
+  // A code that came in damaged lands here rather than vanishing, so a dropped
+  // character is visible and one keystroke from fixed.
+  useEffect(() => { if (rejectedCode) { setPasted(rejectedCode); setRejected(true); } }, [rejectedCode]);
+
+  const copyCode = async () => {
+    if (!compositionCode) return;
+    try {
+      await navigator.clipboard.writeText(compositionCode);
+    } catch {
+      // Clipboard permission is not granted everywhere, and an iOS Safari tab
+      // that has lost focus refuses outright. Selecting the text is a worse
+      // affordance than a copy, and a far better one than nothing happening.
+      const sel = window.getSelection?.();
+      const node = document.getElementById('composition-code-value');
+      if (sel && node) { const r = document.createRange(); r.selectNodeContents(node); sel.removeAllRanges(); sel.addRange(r); }
+    }
+    setCopied(true);
+    if (copiedTimer.current) clearTimeout(copiedTimer.current);
+    copiedTimer.current = setTimeout(() => setCopied(false), 1600);
+  };
+
+  const openCode = () => {
+    if (!onApplyCode) return;
+    const ok = onApplyCode(pasted);
+    setRejected(!ok);
+    if (ok) setPasted('');
+  };
 
   const generator = GENERATOR_BY_ID[layoutMode];
   const isClassic = !generator;
@@ -144,6 +188,75 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
             <i>{lastRecipe ? `Last roll: “${lastRecipe}”` : 'A whole new composition, all at once'}</i>
           </span>
         </button>
+      )}
+
+      {/* ---- THE CODE: keep the good roll, or open somebody else's ----------
+          Every composition has one, and it is in the address bar too, so the
+          link you already have IS the collage. The photographs are not in it —
+          that is what makes it worth sending. ---------------------------- */}
+      {compositionCode && (
+        <div className="ui-code">
+          <button
+            type="button"
+            onClick={copyCode}
+            className="ui-code__copy"
+            title="Copy this composition's code — paste it back here, or into a chat"
+            aria-label={`Copy composition code ${compositionCode}`}
+            data-copied={copied || undefined}
+          >
+            <span className="ui-code__tag">{copied ? 'Copied' : 'Code'}</span>
+            <span className="ui-code__value" id="composition-code-value" data-testid="composition-code">
+              {compositionCode}
+            </span>
+            <Copy size={14} className="shrink-0 opacity-70" />
+          </button>
+
+          {onApplyCode && (
+            <div className="ui-code__open">
+              <input
+                type="text"
+                value={pasted}
+                onChange={e => { setPasted(e.target.value); setRejected(false); }}
+                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); openCode(); } }}
+                placeholder="Paste a code"
+                spellCheck={false}
+                autoCapitalize="characters"
+                autoCorrect="off"
+                aria-label="Paste a composition code"
+                aria-invalid={rejected || undefined}
+                data-testid="composition-code-input"
+              />
+              <button
+                type="button"
+                onClick={openCode}
+                disabled={!pasted.trim()}
+                className="ui-code__go"
+                /* The Header already has a button that says "Open" — it opens a
+                   saved project. Two controls with the same accessible name and
+                   different meanings is a real ambiguity for anyone navigating
+                   by name, and it silently broke a passing test the moment this
+                   strip landed. The label stays visible and short; the
+                   accessible name CONTAINS it, so label-in-name still holds. */
+                aria-label="Open the pasted composition code"
+                data-testid="composition-code-open"
+              >
+                Open
+              </button>
+            </div>
+          )}
+
+          <p className="ui-caption">
+            {rejected
+              ? 'That is not a composition code — check it came across whole.'
+              : isLayoutLocked
+              // Pinning a fragment does not just hold one picture in place: it
+              // claims that image, which re-deals every slot after it. So a code
+              // minted with pins does not describe what is on screen, and saying
+              // nothing would be the same silent lie the pool count used to be.
+              ? 'Pinned fragments are not in the code — this opens unpinned, which deals the pictures differently.'
+              : 'Your photographs, their composition. Sources are never in the code.'}
+          </p>
+        </div>
       )}
 
       {/* ---- LAYOUT --------------------------------------------------------
