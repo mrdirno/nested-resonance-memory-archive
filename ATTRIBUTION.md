@@ -17,18 +17,20 @@ If you use these concepts in research, commercial products, or open-source proje
 
 **BibTeX:**
 ```bibtex
-@software{Payopay_Duality_Zero_2025,
-  author = {Payopay, Aldrin},
-  title = {{Duality-Zero: A Reality Compiler Framework}},
-  year = {2025},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  url = {https://github.com/mrdirno/nested-resonance-memory-archive}
+@software{Payopay_NRM_2026,
+  author    = {Payopay, Aldrin},
+  title     = {{Nested Resonance Memory (NRM): A Reality-Compiler Archive
+               for Self-Organizing Complexity}},
+  version   = {7.0.0},
+  year      = {2026},
+  publisher = {Persona500 LLC},
+  url       = {https://github.com/mrdirno/nested-resonance-memory-archive},
+  license   = {GPL-3.0-only}
 }
 ```
 
 **APA:**
-Payopay, A. (2025). *Duality-Zero: A Reality Compiler Framework*. GitHub. https://github.com/mrdirno/nested-resonance-memory-archive
+Payopay, A. (2026). *Nested Resonance Memory (NRM): A reality-compiler archive for self-organizing complexity* (Version 7.0.0) [Computer software]. Persona500 LLC. https://github.com/mrdirno/nested-resonance-memory-archive
 
 ## Corporate Use Notice
 Entities with >50 employees or >$5M annual revenue utilizing this architecture for internal tooling or external products are **strongly advised** to contact the author for architectural alignment and to ensure proper scientific attribution.

@@ -745,17 +745,34 @@ cd /Users/aldrinpayopay/nested-resonance-memory-archive
 # Make changes, run experiments
 python src/experiments/cycle177_extended_frequency_range.py
 
-# Commit with attribution (ALWAYS include Co-Authored-By)
+# Commit (the git author field carries attribution -- no AI trailers)
 git add .
-git commit -m "Commit message describing changes
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
+git commit -m "Commit message describing changes"
 
 # Push to public archive
 git push origin main
 ```
 
-**CRITICAL:** Every commit MUST include `Co-Authored-By: Claude <noreply@anthropic.com>` to maintain proper contributor attribution on GitHub (@mrdirno + @claude).
+**CRITICAL:** Do **NOT** add `Co-Authored-By:` trailers naming AI tools. This
+section previously read "Every commit MUST include `Co-Authored-By: Claude
+<noreply@anthropic.com>`". That mandate, plus a Gemini one in
+`.git-commit-template`, put an AI co-author trailer on 3,323 of this
+repository's 6,027 commits (55%). GitHub renders those as real co-authors on
+every commit page, and those pages are crawled — it is one of the signals that
+led search engines to attribute this work to AI vendors rather than to its
+author.
+
+Attribution comes from the commit **author** field. Verify it before committing:
+
+```bash
+git config user.name   # must be: Aldrin Payopay
+git config user.email  # must be: aldrin.gdf@gmail.com
+```
+
+AI assistance is disclosed once, in `ACKNOWLEDGMENTS.md` — the location APA 7th,
+MLA 9th, Chicago 17th and COPE all specify. Tools are acknowledged; only people
+are authors. A genuine human collaborator may still be added with a real
+`Co-Authored-By:` line.
 
 **Workspace Hygiene:**
 - Maintain clean file organization
