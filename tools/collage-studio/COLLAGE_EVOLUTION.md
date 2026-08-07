@@ -894,6 +894,18 @@ frontier. Today's ceiling is tomorrow's floor.
   HEAD, which discarded this cycle's uncommitted work in two files and left the
   mutation in place in the third (untracked, so the error scrolled past). Everything
   was still green, on broken code. Mutation cleanup is a byte copy you took yourself.
+  **BACKPORT rider fired, and came back CLEAN — with a structural reason.** The class
+  fixed here is "one quantity DERIVED independently in two places at two precisions, so
+  the two descriptions of it drift". Swept all 68 pages across the six trades plus
+  `shared/`: **0 hits, and not by luck — no trade page derives a number for display at
+  all** (0 `toFixed`, 0 `Math.round`, 0 `toLocaleString`). That is the SAFETY rail doing
+  a second job: because a tool may never ship authoritative computed data and is scoped
+  to structuring what the user ENTERS, there is no derived quantity for a precision to
+  disagree about. Also swept the sibling class this cycle avoided by construction —
+  "a load-bearing roster typed out twice" (`LOOK_IDS` is derived from `LOOKS`, never
+  re-listed): **0 literal rosters appear in more than one file** across the same 68.
+  Storefront: no manifest change owed — `fieldToolkits.ts` carries the six TRADES, and
+  a Collage capability is neither a new tool in a trade nor a new trade.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
 - 2026-08-07 · **[AXIS:COLLAGE] THE TITLE** — you can say what it is. A caption typed
   into the dock, four placements, three sizes, white on a scrim so it reads over any
