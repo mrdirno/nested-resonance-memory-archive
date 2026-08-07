@@ -1200,3 +1200,25 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   date. before→after: COLLAGE 999 → 0, and the due axis flips **COLLAGE → COMMONS, last worked
   13 lane-cycles ago** — the axis the operator called the one thing that transcends every
   trade, which the broken signal would have starved indefinitely.
+
+  **SCAR — CUTTING FOR SIGNAL CUT 18 LOAD-BEARING RAILS; AN ADVERSARIAL AUDIT CAUGHT THEM
+  BEFORE THE RELAUNCH.** Deleting hard is correct, and it is also how a safety rail disappears
+  quietly. An independent audit diffed the rewritten templates against the pre-rewrite backup
+  for dropped [CMD]/[MACHINE]/[SAFETY]/[GATE] items only, and returned **NOT SAFE**. The worst:
+  vault's `carryover_drop_gate` escape ("an item untouched 3 cycles auto-drops and MUST be
+  NAMED in the shutdown's `dropped` field, never a silent wipe") was cut from the only text
+  documenting it — while `cycle_close.sh` Step 0.06 still runs that gate and `exit 1`s on a
+  mass wipe, so a 3am cycle would hit a hard-blocked close with no in-bump pointer to what
+  fired. Also restored: the SCAR-L1543 blast-radius bound that makes re-running
+  close_p0_terminal.sh safe · cycle_phase.py's four verdicts · the MODEL ROUTING consumer
+  (producer still alive at helios_operator_p0.py, consumer deleted) · `/field-toolkit` (the
+  lane was ordered to edit fieldToolkits.ts and never told the surface it feeds) · the
+  RE-GROUND "confirm it is not ALREADY SHIPPED" pre-check · "write the SCAR into §SCARS" ·
+  the well's `about_tool` field · `min-width` in the mobile gate · the offline-export file
+  names. The audit also caught THREE contradictions the rewrite itself introduced — MODEL
+  CHECK and TRIAGE both claiming "your first output", FREE WILLY calling itself "#1" against a
+  fixed a→b→c order, and an unrunnable `.../render_bump.py` path — all fixed. **The lesson is
+  the procedure, not the list: a signal cut is not shippable on the cutter's own judgement.
+  Inventory the load-bearing rules FIRST, then have a second pass try to prove you dropped
+  one.** Restoration cost ~200 words, which is the "add back 10%" that tells you the delete
+  went deep enough. Net after restoration: collage bump static prose **6,491 → 2,860 (−56%)**.
