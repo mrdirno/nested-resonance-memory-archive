@@ -1186,3 +1186,17 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   the sound at the audio's period instead of the picture's (16 of 24 sampled instants play a
   tone under a picture the file has no sound for). BACKPORT rider: fired on the message system —
   the same TRIAGE block was swept into all 8 templates, not just the one the operator named.
+
+  **SCAR — THE ANTI-FIXATION SIGNAL WAS A FIXATION GENERATOR (found and fixed the same
+  cycle).** `field_toolkit_directive.axis_staleness()` reads the `[AXIS:*]` tags back out of
+  the cycle log to name the stalest axis — but `cycle_log_lines()` opened only
+  `av/AV_SOCIETY.md`, while the CLOSE contract routes a collage cycle's line to
+  `tools/collage-studio/COLLAGE_EVOLUTION.md`. So every `[AXIS:COLLAGE]` tag ever written
+  landed in a file the reader never opened, COLLAGE scored 999 = "never worked" forever, and
+  the moment breadth debt hit 0 the stalest-axis rule picked COLLAGE **every** cycle. The
+  mechanism built to prevent fixation was causing it, and it hid in plain sight because its
+  output — "last worked never worked" — is exactly what a genuinely never-worked axis prints;
+  six logged collage cycles said otherwise. Fixed by merging BOTH books on the leading ISO
+  date. before→after: COLLAGE 999 → 0, and the due axis flips **COLLAGE → COMMONS, last worked
+  13 lane-cycles ago** — the axis the operator called the one thing that transcends every
+  trade, which the broken signal would have starved indefinitely.
