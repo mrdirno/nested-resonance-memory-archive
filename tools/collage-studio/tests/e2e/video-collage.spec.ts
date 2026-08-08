@@ -57,37 +57,15 @@ const sampleCanvas = (page: Page): Promise<number> =>
   });
 
 /**
- * Drive the import sheet the way a user actually does: ONE tap on ADD VIDEO.
- * `viaFramePicker` walks the curate path instead, so both routes stay covered.
+ * There is ONE import route, because there is only one thing importing a video
+ * can mean. The `viaFramePicker` variant of this helper is gone with the route.
  */
-const enableFramePicker = async (page: Page) => {
-  await page.evaluate(() => localStorage.setItem('genart.framePicker', '1'));
-  await page.reload();
-};
-
-const importClip = async (page: Page, opts: { frames?: number; viaFramePicker?: boolean } = {}) => {
-  if (opts.viaFramePicker) await enableFramePicker(page);
+const importClip = async (page: Page) => {
   await page.locator('input[type="file"]').first().setInputFiles(CLIP);
-
-  if (!opts.viaFramePicker) {
-    // NO SHEET. Dropping a video means "put this in the collage"; every question
-    // the sheet used to ask has a defensible default, and asking turned a one
-    // gesture action into a three tap errand.
-    await expect(page.locator('canvas')).toBeVisible({ timeout: 120_000 });
-    return;
-  }
-
-  const sheet = page.getByRole('dialog', { name: 'Import video frames' });
-  const frames = opts.frames ?? 6;
-  const count = page.getByLabel('Number of frames to extract');
-  await expect(count).toBeVisible({ timeout: 20_000 });
-  await count.fill(String(frames));
-
-  await page.getByRole('button', { name: 'PICK FRAMES' }).click();
-  const add = page.getByRole('button', { name: /ADD \d+ FRAMES?/ });
-  await expect(add).toBeVisible({ timeout: 60_000 });
-  await add.click();
-  await expect(sheet).toBeHidden({ timeout: 60_000 });
+  // NO SHEET. Loading a video means "put this in the collage"; every question
+  // the sheet used to ask has a defensible default, and asking turned a one
+  // gesture action into a three tap errand.
+  await expect(page.locator('canvas')).toBeVisible({ timeout: 120_000 });
 };
 
 /** Autoplay is allowed to be refused; the gesture path is the supported answer. */
@@ -140,24 +118,57 @@ test.describe('video collage', () => {
     await expect(page.getByRole('button', { name: /Mute motion\.webm/ })).toBeVisible();
   });
 
-  test('the frame picker is off by default and switches on in settings', async ({ page }) => {
-    test.setTimeout(90_000);
-    await page.getByRole('button', { name: 'Settings' }).click();
-    const toggle = page.getByRole('switch', { name: /Choose frames on import/i });
-    await expect(toggle).toHaveAttribute('aria-checked', 'false');
-    await toggle.click();
-    await expect(toggle).toHaveAttribute('aria-checked', 'true');
+  /**
+   * THE ASK IS GONE, AND IT STAYS GONE.
+   *
+   * These two used to assert the opposite: that the frame picker was merely
+   * OFF BY DEFAULT and that its route "still works when enabled". That is the
+   * shape of the bug the owner reported three times — default-off is still an
+   * ask, because the switch sits in Settings offering to start asking. Both
+   * tests are now the negative, and they fail the moment anything re-introduces
+   * a way to be asked how many frames to pull.
+   */
+  test('nothing anywhere asks how many frames to pull', async ({ page }) => {
+    test.setTimeout(120_000);
 
+    // A stale preference from a visit BEFORE the route was deleted must not
+    // resurrect it. This is exactly how a returning user stays stuck on
+    // behaviour that has already been removed for everyone else.
+    await page.evaluate(() => localStorage.setItem('genart.framePicker', '1'));
+    await page.reload();
     await page.locator('input[type="file"]').first().setInputFiles(CLIP);
-    await expect(page.getByRole('dialog', { name: 'Import video frames' })).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByRole('button', { name: 'PICK FRAMES' })).toBeVisible();
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 120_000 });
+
+    await expect(page.getByRole('dialog', { name: /frame/i })).toHaveCount(0);
+    await expect(page.getByLabel(/number of frames/i)).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /PICK FRAMES/i })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /ADD \d+ FRAMES?/i })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /Stop playing motion\.webm/ })).toBeVisible();
   });
 
-  test('the frame-picker route still works when enabled', async ({ page }) => {
-    test.setTimeout(120_000);
-    await importClip(page, { viaFramePicker: true });
-    await expect(page.locator('canvas')).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByRole('button', { name: /Stop playing motion\.webm/ })).toBeVisible();
+  test('no control offers to extract frames, in the settings or on the canvas', async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.locator('input[type="file"]').first().setInputFiles(CLIP);
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 120_000 });
+
+    // The button that takes a video used to be LABELLED "Extract frames from a
+    // video" — a live surface still asking, long after the default path had
+    // stopped. Accessible names are the thing under test, not the icon.
+    await expect(page.getByRole('button', { name: /extract frames/i })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /Add a video/i })).toBeVisible();
+
+    await page.getByRole('button', { name: 'Settings' }).click();
+    await expect(page.getByRole('switch', { name: /frames/i })).toHaveCount(0);
+
+    // Belt and braces: no control ANYWHERE names frames as something to pick.
+    const asks = await page.evaluate(() => {
+      const bad = /(choose|pick|extract|how many|number of).{0,24}frames?/i;
+      return Array.from(document.querySelectorAll('button,[role=switch],label,input,a'))
+        .map(e => `${e.getAttribute('aria-label') || ''} ${e.getAttribute('title') || ''} ${e.textContent || ''}`)
+        .filter(t => bad.test(t))
+        .map(t => t.replace(/\s+/g, ' ').trim().slice(0, 90));
+    });
+    expect(asks, `controls still asking about frames: ${JSON.stringify(asks)}`).toEqual([]);
   });
 
   test('no chrome sits on top of the collage', async ({ page }) => {

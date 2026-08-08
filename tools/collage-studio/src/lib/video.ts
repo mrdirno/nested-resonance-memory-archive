@@ -899,6 +899,132 @@ export const extractFrames = async (
   }
 };
 
+/** What the collage needs from a clip: its shape, and ONE raster to sit under it. */
+export interface ClipIntake extends VideoProbe {
+  /** The single poster. Owns an object URL — dispose with `revokeFrames([poster])`. */
+  poster: ExtractedFrame | null;
+}
+
+/**
+ * OPEN A CLIP IN ONE PASS — the intake the app actually uses.
+ *
+ * The old intake was `probeVideo` followed by `extractFrames`, and that is THREE
+ * decoder set-ups for one file: probe opens a video element and throws it away,
+ * extract opens a second one, primes it and seeks it three times (smart@1
+ * oversamples by 3 to dodge black leader), and only then does the stage open the
+ * third one it will actually play. Measured on the live build against a 25 s
+ * 1080p H.264 clip: the decoder was ADVANCING at 256 ms and the clip did not
+ * reach the collage until 3,517 ms. Thirteen fourteenths of that wait is the app
+ * pulling a frame out of a video it had already decoded — which is exactly what
+ * the owner has been describing: "you're still asking for how many frames to
+ * pull instead of just loading the video."
+ *
+ * So: one session, one metadata wait, one prime, ONE seek. The poster still
+ * comes from the clip's interior (`trim` skips the fade/black leader at both
+ * ends) and a blank grab still gets its one nudge-and-retry, so the frame is a
+ * real moment rather than the head of a fade. What is gone is the oversampling —
+ * choosing the *most distinct* of three candidates only matters when you are
+ * keeping several, and we keep one.
+ *
+ * `extractFrames` is untouched and still exports the multi-frame path; nothing
+ * in the app calls it with `frameCount > 1` any more, and no UI asks for one.
+ */
+export const openClip = async (
+  file: File,
+  opts: {
+    maxDim?: number;
+    quality?: number;
+    signal?: AbortSignal;
+    onProgress?: (ratio: number) => void;
+  } = {},
+): Promise<ClipIntake> => {
+  const { signal, onProgress } = opts;
+  const maxDim = Math.max(160, opts.maxDim ?? 1600);
+  const quality = Math.min(1, Math.max(0.4, opts.quality ?? 0.9));
+  if (signal?.aborted) throw abortError();
+  if (file.size === 0) return { duration: 0, width: 0, height: 0, error: 'That file is empty', poster: null };
+
+  const s = openVideo(file);
+  const scratch = document.createElement('canvas');
+  let grab: Grab | null = null;
+  let retry: Grab | null = null;
+
+  try {
+    onProgress?.(0.05);
+    await waitForEvent(s, ['loadedmetadata'], LOAD_TIMEOUT_MS, 'video metadata', signal);
+
+    const duration = await resolveDuration(s, signal);
+    const width = s.v.videoWidth;
+    const height = s.v.videoHeight;
+    // Shape first, and reported even when the poster later fails: the caller's
+    // "audio only" / "could not be read" messages key off exactly these.
+    if (!Number.isFinite(duration) || duration <= 0) {
+      return { duration: 0, width, height, error: 'Could not determine the video length', poster: null };
+    }
+    if (!width || !height) {
+      return { duration, width, height, error: null, poster: null };
+    }
+
+    onProgress?.(0.25);
+    await primeDecoder(s, signal);
+    throwIfAborted(signal);
+
+    // Mid-clip, inside the trimmed interior — the same window the old smart pass
+    // sampled, minus the two extra seeks.
+    const trim = Math.min(duration * 0.02, 0.25);
+    const lo = Math.max(0, Math.min(trim, Math.max(0, duration - 0.05)));
+    const hi = Math.max(lo + 0.01, duration - trim);
+    const at = lo + (hi - lo) * 0.5;
+
+    onProgress?.(0.5);
+    const landed = await seekTo(s, at, signal);
+    grab = grabFrame(s, maxDim, landed);
+    let stats = analyzeFrame(grab.canvas, scratch);
+
+    if (stats.blank) {
+      // Same nudge the multi-frame path uses: a blank grab is usually a decoder
+      // that had not caught up, not a black clip. Backward at the tail, where a
+      // forward nudge clamps and re-reads the identical frame.
+      const step = Math.max(0.12, duration * 0.01);
+      const nudge = landed + step <= hi ? landed + step : Math.max(lo, landed - step);
+      if (Math.abs(nudge - landed) > 0.016) {
+        const landed2 = await seekTo(s, nudge, signal);
+        retry = grabFrame(s, maxDim, landed2);
+        const stats2 = analyzeFrame(retry.canvas, scratch);
+        if (!stats2.blank) {
+          releaseCanvas(grab.canvas);
+          grab = retry;
+          retry = null;
+          stats = stats2;
+        }
+      }
+    }
+
+    onProgress?.(0.85);
+    const blob = await toBlobSafe(grab.canvas, quality, signal);
+    const poster: ExtractedFrame = {
+      blob,
+      url: URL.createObjectURL(blob),
+      width: grab.canvas.width,
+      height: grab.canvas.height,
+      time: grab.time,
+      index: 0,
+      blank: stats.blank,
+    };
+    onProgress?.(1);
+    return { duration, width, height, error: null, poster };
+  } catch (e: unknown) {
+    if (isAbortError(e)) throw e;
+    const msg = e instanceof Error ? e.message : 'Could not read video';
+    return { duration: 0, width: 0, height: 0, error: s.lastError || msg, poster: null };
+  } finally {
+    releaseCanvas(grab?.canvas);
+    releaseCanvas(retry?.canvas);
+    releaseCanvas(scratch);
+    s.dispose();
+  }
+};
+
 /**
  * Greedy max-min diversity pick, with the per-candidate minimum distance CACHED.
  * The naive version rescans the whole picked set on every round: for 60 picks

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Layout, Grid, Hexagon, Scissors, Palette, Moon, Contrast, Zap, Activity,
-  Shuffle, RefreshCw, FileCode, History, Frame, Rows, Hash, Film, Crosshair, RotateCw
+  Shuffle, RefreshCw, FileCode, History, Frame, Rows, Hash, Crosshair, RotateCw
 } from 'lucide-react';
 import { getHistory, HistoryItem } from '../lib/history';
 import { LayoutMode } from '../types';
@@ -36,9 +36,6 @@ interface AdvancedControlsProps {
   onExportVector: () => void;
   onRestoreHistory: (item: HistoryItem) => void;
   isLayoutLocked: boolean;
-  /** Whether a dropped clip stops at the frame picker. Off by default. */
-  framePicker: boolean;
-  setFramePicker: (b: boolean) => void;
 }
 
 const MODES: { id: LayoutMode; label: string; icon: React.ReactNode; blurb: string }[] = [
@@ -79,7 +76,6 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
   layoutMode, setLayoutMode, count, setCount, aspect, setAspect, gutter, setGutter,
   entropy, setEntropy, arrangement, setArrangement, focus, setFocus, twist, setTwist, bgColor, setBgColor, avgColor,
   onRemix, onShuffle, onExportVector, onRestoreHistory, isLayoutLocked,
-  framePicker, setFramePicker
 }) => {
 
   const [history, setHistory] = useState<HistoryItem[]>([]);
@@ -441,39 +437,11 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
         )}
       </div>
 
-      {/* ---- VIDEO ---------------------------------------------------------- */}
-      <div className="ui-stack--tight">
-        <div className="ui-title"><Film size={12} /> Video</div>
-        <div className="ui-panel p-3">
-          <button
-            onClick={() => setFramePicker(!framePicker)}
-            role="switch"
-            aria-checked={framePicker}
-            /* min-h-11: the row is a switch, so the whole row is the hit box —
-               its natural height was 29px, which is a thumb-miss on a phone. */
-            className="w-full min-h-11 flex items-center gap-3 text-left"
-            title="Off: a dropped clip goes straight into the collage and plays. On: you choose which extracted frames to keep first."
-          >
-            <span
-              className="shrink-0 w-9 h-5 rounded-full transition-colors relative"
-              style={{ background: framePicker ? 'var(--signal)' : 'var(--line-1)' }}
-            >
-              <span
-                className="absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all"
-                style={{ left: framePicker ? '1.125rem' : '0.125rem' }}
-              />
-            </span>
-            <span className="flex-1 min-w-0">
-              <span className="block ui-label ui-label--on">Choose frames on import</span>
-              <span className="block ui-caption mt-0.5">
-                {framePicker
-                  ? 'A dropped clip stops at the frame picker first.'
-                  : 'A dropped clip goes straight in and plays.'}
-              </span>
-            </span>
-          </button>
-        </div>
-      </div>
+      {/* NO VIDEO SETTINGS BLOCK. It held one switch, "Choose frames on
+          import", which routed a dropped clip into a sheet that asked how many
+          frames to pull. Default-off was not enough — an opt-in ask is still an
+          ask, and the owner filed it a third time. A video loads and loops;
+          there is nothing left to configure about that. */}
 
       {/* ---- ACTIONS -------------------------------------------------------- */}
       <div className="ui-actionbar">

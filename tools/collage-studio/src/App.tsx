@@ -19,14 +19,13 @@ import { generateVectorExport } from './engine/color/vectorExport';
 import { addToHistory, HistoryItem } from './lib/history';
 import { Template } from './lib/templates';
 import { AppState, ImageAsset, LayoutItem, LayoutMode, LiveClip, Point, PrimitiveType } from './types';
-import { isVideoFile, formatTimecode, probeVideo, extractFrames, revokeFrames, type ExtractedFrame } from './lib/video';
+import { isVideoFile, formatTimecode, openClip, revokeFrames, type ExtractedFrame } from './lib/video';
 
 import { Header } from './components/Header';
 import { SimpleControls } from './components/SimpleControls';
 import { AdvancedControls } from './components/AdvancedControls';
 import { ExportDialog } from './components/ExportDialog';
 import { ResultModal } from './components/ResultModal';
-import { VideoImport } from './components/VideoImport';
 import { VideoStage, type StageRecorder } from './components/VideoStage';
 import RenderWorker from './workers/render.worker?worker';
 // THE LADDER. Built and unit-tested (57 cases) in an earlier cycle and then
@@ -216,7 +215,6 @@ export default function App() {
   const [resultBlobUrl, setResultBlobUrl] = useState<string | null>(null);
 
   // --- VIDEO INTAKE ---
-  const [videoQueue, setVideoQueue] = useState<File[]>([]);
   /**
    * Clips still playable, as opposed to the stills already taken from them.
    * The app owns their object URLs for the whole session — see `LiveClip`.
@@ -225,16 +223,24 @@ export default function App() {
   /** Cleared if the live compositor cannot be created; falls back to the still preview. */
   const [stageOk, setStageOk] = useState(true);
   /**
-   * Settings > Video. OFF means a dropped clip goes straight in and plays;
-   * ON restores the frame picker. Persisted because it is a standing preference
-   * about how the tool behaves, not a per-collage parameter.
+   * THERE IS NO FRAME PICKER. There is no setting for one either.
+   *
+   * This app used to answer "here is a video" with "how many frames shall I pull
+   * out of it?" — a slider, a strategy, a contact sheet, a commit button. It was
+   * made opt-in, then default-off, and the owner filed the same complaint a third
+   * time anyway: "you're still asking for how many frames to pull instead of just
+   * loading the video. Stop asking for frames period." Default-off was the wrong
+   * fix, because an opt-in ask is still an ask — the toggle sat in Settings under
+   * the words "Choose frames on import", and the button that took a video was
+   * labelled "Extract frames from a video". A video is a video.
+   *
+   * So the route is gone: no `videoQueue`, no sheet, no `genart.framePicker`
+   * preference (a persisted `'1'` from an older visit would otherwise pin a
+   * returning user to the behaviour they asked us to delete). Frames survive
+   * ONLY as an internal detail — one poster raster per clip, which is what the
+   * static exports draw and what a device with no decoder to spare falls back
+   * to. Nothing about it reaches the user, and nothing about it asks.
    */
-  const [framePicker, setFramePicker] = useState(() => {
-    try { return localStorage.getItem('genart.framePicker') === '1'; } catch { return false; }
-  });
-  useEffect(() => {
-    try { localStorage.setItem('genart.framePicker', framePicker ? '1' : '0'); } catch { /* private mode */ }
-  }, [framePicker]);
   /**
    * Where the live-stage transport renders. It is a DOM node in the control
    * dock rather than an overlay on the canvas: chrome that sits on the artwork
@@ -1042,62 +1048,59 @@ export default function App() {
   };
 
   /**
-   * SEAMLESS VIDEO INTAKE — a video becomes ONE looping cell, no sheet, no pool.
+   * VIDEO INTAKE — a video becomes ONE looping cell. Nothing is asked.
    *
-   * Dropping a video means "put this clip in the collage and loop it" — the same
-   * way a photo is one cell. It is NOT decomposed into a field of stills. (Operator,
-   * repeatedly: "if someone loads a video then load the video and loop it. simple
-   * as that.") So we grab exactly ONE poster frame — the single raster the STATIC
-   * export (JPEG/PNG/SVG) draws under the cell, and the fallback when a device
-   * cannot spare a decoder — and register the clip; the live compositor loops the
-   * real <video> over that poster. The multi-frame picker still exists, but only
-   * behind the opt-in setting, for someone who explicitly wants stills.
+   * Loading a video means "put this clip in the collage and loop it" — the same
+   * way a photo is one cell. It is NOT decomposed into a field of stills, and
+   * there is no sheet, no slider and no setting standing between the file and
+   * the collage. (Operator, three times: "just load the video"; "no more frame
+   * picking"; "stop asking for frames period.")
+   *
+   * ONE poster raster comes back with the clip. It is not a still the user asked
+   * for and it is never presented as one — it is what the STATIC exports
+   * (JPEG/PNG/SVG) draw under the cell, and the fallback for a device that
+   * cannot spare a decoder. `openClip` takes it in the same decoder pass that
+   * reads the clip's shape, so the wait before the collage moves is a single
+   * seek instead of a probe, a re-open, a prime and three seeks.
    */
   const autoIngestVideo = async (file: File) => {
       const shortName = file.name.length > 26 ? `${file.name.slice(0, 23)}…` : file.name;
-      subIngest(0, `Reading ${shortName}…`);
+      subIngest(0, `Loading ${shortName}…`);
+      let poster: ExtractedFrame | null = null;
       try {
-          const probe = await probeVideo(file);
-          if (probe.error || probe.duration <= 0) {
-              flashNotice(probe.error || `${file.name} could not be read.`);
+          const clip = await openClip(file, {
+              maxDim: isMobile ? 1280 : 1600,
+              onProgress: (r) => subIngest(r, `Loading ${shortName}…`),
+          });
+          poster = clip.poster;
+          if (clip.error || clip.duration <= 0) {
+              flashNotice(clip.error || `${file.name} could not be read.`);
               return;
           }
-          if (probe.width <= 0 || probe.height <= 0) {
+          if (clip.width <= 0 || clip.height <= 0) {
               flashNotice(`${file.name} has no visual track — it looks like audio only.`);
               return;
           }
-          // Trim the fade/black leader at both ends, then grab ONE representative
-          // poster. smart@1 oversamples a handful and keeps the most energetic
-          // non-blank frame, so the poster is a real moment, not black leader.
-          const trim = Math.min(probe.duration * 0.02, 0.25);
-          const res = await extractFrames(file, {
-              frameCount: 1,
-              strategy: 'smart',
-              maxDim: isMobile ? 1280 : 1600,
-              maxSamples: 6,
-              startTime: trim,
-              endTime: Math.max(trim + 0.1, probe.duration - trim),
-              knownDuration: probe.duration,
-              onProgress: (p) => subIngest(p.ratio ?? 0, `Reading ${shortName}…`),
-          });
-          try {
-              await handleVideoFrames(res.frames, {
-                  file,
-                  name: file.name,
-                  duration: probe.duration,
-                  width: probe.width,
-                  height: probe.height,
-              });
-          } finally {
-              // handleUpload minted its own URLs from these blobs.
-              revokeFrames(res.frames);
+          if (!clip.poster) {
+              flashNotice(`${file.name} could not be read.`);
+              return;
           }
+          await handleVideoFrames([clip.poster], {
+              file,
+              name: file.name,
+              duration: clip.duration,
+              width: clip.width,
+              height: clip.height,
+          });
       } catch (e) {
-          console.error('[video] auto import failed', e);
+          console.error('[video] import failed', e);
           flashNotice(isMobile
               ? `${file.name} could not be read. On iPhone, Photos exports are often HEVC — share it as “Most Compatible” (H.264) and retry.`
               : `${file.name} could not be read.`);
       } finally {
+          // handleUpload minted its OWN URLs from the blob, so the intake's copy
+          // is ours to give back however this went.
+          revokeFrames(poster ? [poster] : null);
           // The clip is DONE as far as the batch is concerned, however it went.
           stepIngest(1);
       }
@@ -1110,27 +1113,22 @@ export default function App() {
    */
   const videoJobRef = useRef<Promise<void>>(Promise.resolve());
 
-  /** Single intake for picker AND drop. Images go straight in; so do videos,
-   *  unless the frame picker has been switched on in Settings. */
+  /** Single intake for the picker AND drop. Pictures go in. Videos go in. There
+   *  is no third case and nothing is asked. */
   const ingestFiles = (list: File[]) => {
       if (!list.length) return;
       const videos = list.filter(isVideoFile);
       const pics = list.filter(f => !isVideoFile(f) && f.type.startsWith('image/'));
       const rejected = list.length - videos.length - pics.length;
 
-      // Videos routed to the opt-in sheet are NOT counted: the sheet drives its
-      // own progress and nothing here would ever mark them done.
-      const counted = pics.length + (framePicker ? 0 : videos.length);
+      const counted = pics.length + videos.length;
       if (counted > 0) beginIngest(counted, `Adding ${counted} item${counted === 1 ? '' : 's'}…`);
 
       if (pics.length) void handleUpload(pics);
       if (videos.length) {
-          if (framePicker) setVideoQueue(prev => [...prev, ...videos]);
-          else {
-              videoJobRef.current = videoJobRef.current
-                  .then(async () => { for (const v of videos) await autoIngestVideo(v); })
-                  .catch(() => { /* each clip already flashed its own notice */ });
-          }
+          videoJobRef.current = videoJobRef.current
+              .then(async () => { for (const v of videos) await autoIngestVideo(v); })
+              .catch(() => { /* each clip already flashed its own notice */ });
       }
       if (rejected > 0) flashNotice(`${rejected} unsupported file(s) ignored — images and video only.`);
   };
@@ -1793,8 +1791,8 @@ export default function App() {
                    ><Plus size={18} /></button>
                    <button
                      onClick={() => videoInputRef.current?.click()}
-                     title="Extract frames from a video"
-                     aria-label="Extract frames from a video"
+                     title="Add a video — it loads and loops"
+                     aria-label="Add a video"
                      className="w-11 h-11 rounded bg-[#111] text-emerald-400 border border-gray-800 flex items-center justify-center hover:bg-emerald-500/15 transition-colors shadow-lg"
                    ><Film size={18} /></button>
                    <button onClick={handleClear} title="Clear all" aria-label="Clear all" className="w-11 h-11 rounded bg-[#111] text-red-500 border border-gray-800 flex items-center justify-center hover:bg-red-900/30 transition-colors shadow-lg"><X size={18} /></button>
@@ -1838,25 +1836,13 @@ export default function App() {
          {activeTab === 'simple' ? (
            <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} />
          ) : (
-           <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} framePicker={framePicker} setFramePicker={setFramePicker} />
+           <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
          )}
       </div>
       {notice && (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[250] max-w-[92vw] px-4 py-2.5 rounded-xl bg-[#161616] border border-yellow-500/30 text-[10px] tracking-wide text-yellow-300 shadow-2xl">
           {notice}
         </div>
-      )}
-
-      {videoQueue.length > 0 && (
-        <VideoImport
-          key={`${videoQueue[0].name}:${videoQueue[0].size}:${videoQueue.length}`}
-          file={videoQueue[0]}
-          isMobile={isMobile}
-          queued={videoQueue.length - 1}
-          allowFramePicker={framePicker}
-          onCommit={handleVideoFrames}
-          onClose={() => setVideoQueue(q => q.slice(1))}
-        />
       )}
 
       <input ref={fileInputRef} type="file" multiple accept="image/*,video/*" className="hidden" onChange={onFileInputChange} />
