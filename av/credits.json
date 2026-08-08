@@ -40,6 +40,16 @@
       "wished_date": "2026-08-08",
       "shipped_date": "2026-08-08",
       "shipped_commit": "27687480"
+    },
+    {
+      "tool_name": "Collage Studio — a video just loads and loops, and nothing asks about frames",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-08",
+      "shipped_date": "2026-08-08",
+      "shipped_commit": "f305ee48"
     }
   ]
 }

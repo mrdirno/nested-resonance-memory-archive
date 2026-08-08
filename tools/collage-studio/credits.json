@@ -20,6 +20,16 @@
       "wished_date": "2026-08-05",
       "shipped_date": "2026-08-05",
       "shipped_note": "The 'twisting' half of the same wish, finished. 5 modes (Straight, Tilt, Scatter, Pinwheel, Cascade), rolled by the dice and carried in the share code. The fragments TILE the canvas, so nothing rotates a cell — the clip path stays exactly where it was and the SAMPLING inside it leans, with the destination grown by |cos|+|sin| so the corners cannot open up. Reaches all four render paths (live Stage, static preview, raster export, SVG export) through the one geometry function they already share."
+    },
+    {
+      "capability": "A video just loads and loops — nothing asks about frames",
+      "where": "Anywhere you add a video, and Settings > the line where the frame switch used to be",
+      "wish": "You're still asking for how many frames to pull instead of just loading the video. Stop asking for frames period.",
+      "wisher": null,
+      "wisher_display": "an anonymous Collage user",
+      "wished_date": "2026-08-08",
+      "shipped_date": "2026-08-08",
+      "shipped_note": "The third filing of this complaint, and the first one that changed the surfaces the wisher was actually looking at. The frame-picker route is DELETED, not defaulted off: no sheet, no queue, no genart.framePicker preference (a stale '1' had been pinning returning users to it), no Settings switch, and the button that takes a video no longer calls itself 'Extract frames from a video'. The intake also stopped making you wait for the frame it was pulling: probe + re-open + prime + three seeks became one openClip() pass with one seek, 3,517ms -> 490ms to the clip reaching the collage."
     }
   ]
 }

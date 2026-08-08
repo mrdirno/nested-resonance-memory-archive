@@ -441,7 +441,14 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
           import", which routed a dropped clip into a sheet that asked how many
           frames to pull. Default-off was not enough — an opt-in ask is still an
           ask, and the owner filed it a third time. A video loads and loops;
-          there is nothing left to configure about that. */}
+          there is nothing left to configure about that.
+
+          CREDIT, and an answer for anyone hunting the switch that used to be
+          here: the line says where it went and who got rid of it. */}
+      <p className="ui-caption ui-label--dim">
+        A video just loads and loops — no frames, nothing to pick, nothing to set.
+        Wished for by an anonymous Collage user.
+      </p>
 
       {/* ---- ACTIONS -------------------------------------------------------- */}
       <div className="ui-actionbar">
