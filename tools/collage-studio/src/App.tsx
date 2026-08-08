@@ -696,7 +696,15 @@ export default function App() {
   // the Stage is the only surface that can play it (its `masterGain` is what
   // `captureStream` taps), so without this the track would be inaudible and
   // absent from a realtime take.
-  const liveMode = (clips.length > 0 || moving || !!soundtrack) && stageOk;
+  // ...AND THERE HAS TO BE A COLLAGE. `images.length > 0` is what decides
+  // whether the art branch — and therefore the Stage — is rendered at all, so
+  // without it here `liveMode` claims a live surface that does not exist: the
+  // dock draws 13px of empty chrome (measured) and the Export sheet offers a
+  // video whose recorder handle is null. It is a no-op for the two older terms
+  // (`moving` already requires images, and a clip cannot exist without the
+  // frames it landed in the pool) and load-bearing for the third, because music
+  // is the one source that can arrive before any photograph.
+  const liveMode = images.length > 0 && (clips.length > 0 || moving || !!soundtrack) && stageOk;
 
   /**
    * THE WRAP IS DECIDED HERE, ONCE, and the RESULT is what travels.
@@ -1226,13 +1234,25 @@ export default function App() {
       // already disposes clip urls this way.
       if (soundtrack?.url) URL.revokeObjectURL(soundtrack.url);
       setSoundtrack({ url, name: file.name, durationSec: 0, muted: false });
-      flashNotice(`Music: ${file.name} — press the speaker to hear it.`);
+      // THE NOTICE MUST NOT NAME A CONTROL THAT IS NOT ON SCREEN. With no
+      // photographs there is no stage, so there is no dock, no chip and no
+      // speaker — the music is adopted and waits, and saying so is the honest
+      // version of "press the speaker".
+      flashNotice(images.length === 0
+          ? `Music: ${file.name} — add photos and it goes under them.`
+          : `Music: ${file.name} — press the speaker to hear it.`);
 
       try {
           const probe = document.createElement('audio');
           probe.preload = 'metadata';
           const land = (v: number) => {
               probe.onloadedmetadata = null; probe.onerror = null;
+              // RELEASE THE DECODER. A probe left holding a src is a decoder per
+              // adopted track, and picking a different song is a thing people do
+              // ten times in a row. `removeAttribute` + `load()` is the release;
+              // `src = ''` re-resolves against the document URL and fires a
+              // spurious error instead.
+              try { probe.removeAttribute('src'); probe.load(); } catch { /* ignore */ }
               if (!(v > 0)) return;
               setSoundtrack((prev) => (prev && prev.url === url ? { ...prev, durationSec: v } : prev));
           };
@@ -1325,8 +1345,12 @@ export default function App() {
   // only shape that frees everything exactly once, at the end.
   const clipsRef = useRef<LiveClip[]>([]);
   useEffect(() => { clipsRef.current = clips; }, [clips]);
+  // The music file is the user's too, and it is held by exactly one url.
+  const trackUrlRef = useRef<string>('');
+  useEffect(() => { trackUrlRef.current = soundtrack?.url ?? ''; }, [soundtrack]);
   useEffect(() => () => {
       for (const c of clipsRef.current) { try { URL.revokeObjectURL(c.url); } catch { /* ignore */ } }
+      if (trackUrlRef.current) { try { URL.revokeObjectURL(trackUrlRef.current); } catch { /* ignore */ } }
   }, []);
 
   // --- DRAG AND DROP (images AND video, same target) ---
@@ -1953,7 +1977,13 @@ export default function App() {
          {/* VIDEO DOCK — everything the live stage needs to say or be driven by,
              OUTSIDE the canvas. This used to float over the collage; chrome on
              top of the artwork covers the thing the user is here to look at. */}
-         {(clips.length > 0 || soundtrack) && (
+         {/* THE BAR EXISTS TO HOST THE STAGE'S PORTAL, so its condition is
+             "is the Stage mounted" — which is `liveMode`, not a guess at what
+             the Stage would contain. Gated on `clips.length > 0` it rendered
+             13px of empty chrome whenever a source existed but the Stage did
+             not: music dropped before any photograph (measured), and clips on a
+             device where the compositor could not start. */}
+         {liveMode && (
            <div className="flex items-center px-2 py-1.5 border-b border-white/5 bg-[#0c0c0c]">
              {/* The live stage portals its clip chips + transport in here. */}
              <div ref={setStageControlsHost} className="flex-1 flex items-center min-w-0" />

@@ -758,10 +758,13 @@ export const prepareOfflineAudio = async (
 
   const audible = (sources ?? []).filter((s) => s && s.url && s.gain > 0);
   if (!sources?.length) {
-    return { track: null, reason: 'No clips to take sound from.', decoded: 0 };
+    return { track: null, reason: 'Nothing to take sound from.', decoded: 0 };
   }
   if (!audible.length) {
-    return { track: null, reason: 'Every clip is muted, so the video is silent.', decoded: 0 };
+    // NOT "every clip": a collage of photographs with a muted MUSIC TRACK has
+    // no clips at all, and naming a thing the user does not have sends them
+    // looking for a switch that is not on screen.
+    return { track: null, reason: 'Nothing has its sound on, so the video is silent.', decoded: 0 };
   }
   if (!isOfflineAudioSupported()) {
     return { track: null, reason: "This browser can't encode audio.", decoded: 0 };
@@ -799,7 +802,7 @@ export const prepareOfflineAudio = async (
     return {
       track: null,
       reason: audible.length === 1
-        ? `That clip's sound could not be read — it ${detail}.`
+        ? `That sound could not be read — it ${detail}.`
         : `None of the ${audible.length} clips' sound could be read — they ${detail}.`,
       decoded: 0,
     };

@@ -458,6 +458,28 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       opens it, so "the exported SVG is the project" (THE POST) currently loses
       the move on the way out even though the manifest carries it. The manifest
       is the reason this is only a display gap: reopening the file restores it.
+- [ ] **THE REALTIME RECORDER ONLY CAPTURES WHAT THE SPEAKERS ARE PLAYING, and
+      the label promises intent.** `applyMutes` sets every source's graph gain
+      from `audible` (monitor AND intent), and `captureStream` taps `masterGain`
+      — so a REALTIME take made with the monitor off is silent, for clips and
+      now for music alike, while the Record tooltip says "sound from the music".
+      Entirely pre-existing and invisible on any device that takes the OFFLINE
+      path (which is the default, and which honours intent — that is what
+      `describeAudioSources` exists for), so this bites only where WebCodecs is
+      missing. It is not a one-line fix and that is the point: the element's own
+      `muted` is what gates signal INTO the graph, so honouring intent without
+      the monitor means UNMUTING THE SPEAKERS for the duration of the take. The
+      honest cut is either to say so on the button when the realtime path is the
+      one that will run, or to raise the monitor for the take and put it back.
+- [ ] **A SOUNDTRACK IS DECODED IN FULL, however long it is.** `prepareOfflineAudio`
+      bounds the TAKE (`MAX_PCM_BYTES` against `seconds`), not the DECODE: the
+      whole file goes through `decodeAudioData` before anything is windowed. For
+      clips that was fine — an imported clip is a clip. Music is different in
+      kind: dropping a 45-minute DJ set under a 10 s collage is an ordinary
+      thing to want, and it decodes 45 minutes of PCM (~500 MB at 48 kHz stereo
+      float) to use 10 seconds of it. Raised by the adversarial audit; not a
+      correctness bug and not reachable from the fixtures, which is exactly why
+      it needs writing down rather than fixing in a hurry.
 - [ ] **THE MIX HARD-CUTS AT THE END OF THE TAKE.** Ten seconds of music under a
       collage stops dead on the last sample, mid-phrase, which is the single
       most amateur-sounding thing a video editor can do and the reason CapCut
@@ -530,6 +552,30 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A PAUSE THAT COVERS EVERYTHING AND A REPLAY THAT COVERS ONE KIND.**
+  `beginOfflineRender` calls `pauseAll()`; `endOfflineRender` replays from
+  `offlineWantPlay`, a list only CLIPS are ever put on. Adding the soundtrack to
+  `pauseAll` — obviously correct on its own — therefore made every export stop
+  the live music FOR GOOD, with no control that revives it: the chip toggles
+  INTENT, and the intent never changed, so the one button that looks like the
+  answer does nothing. Nothing saw it. The unit sweep is about the mixer row;
+  all five e2e assertions were about the exported FILE, which was perfect; the
+  preview is simply silent from the first take onward. Found by an adversarial
+  audit that drove a real browser and probed `document.querySelector('audio')`
+  before and after a take (paused=false → paused=true, currentTime 0.00).
+  **The general shape: a stop-everything and a start-the-ones-I-know-about are
+  not inverses, and the asymmetry is invisible until something new is stopped.**
+  Now covered by soundtrack.spec T4, which is red on the pre-fix code.
+- **`liveMode` PROMISED A SURFACE THAT WAS NOT RENDERED.** It gates the dock's
+  portal bar and the Export sheet's video offer, but the Stage itself only
+  exists inside the `images.length > 0` branch. Both older terms hid this by
+  accident — `moving` already requires images and a clip cannot exist without
+  the frames it landed — and MUSIC is the one source that can arrive before any
+  photograph. Result, measured in a real browser: drop an mp3 on an empty app
+  and you get 13px of empty chrome and an Export sheet offering a video whose
+  recorder handle is null. The precondition now lives in `liveMode` itself
+  rather than being re-derived at each use, which is also what makes the dock
+  bar's condition sayable in one word: "is the Stage mounted".
 - **A THREE-STATE BUTTON WITH A TWO-STATE NAME, and the e2e is what found it.**
   The music chip's speaker has three states, not two, because music arrives IN
   the piece (adding it is an explicit act about sound) while the MONITOR starts
@@ -1200,6 +1246,22 @@ frontier. Today's ceiling is tomorrow's floor.
   now DERIVED from the button count, and the e2e walks each rail button's
   clipping ancestors so the next button cannot reintroduce it.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+  **AND THE AUDIT EARNED ITS KEEP AGAIN — a THIRD time on this project.** A
+  three-lens adversarial fan-out (lifecycle/ownership · the WebAudio graph and
+  the offline mixer · preview-file parity) ran against the shipped diff and drove
+  REAL BROWSERS, writing its own probe specs rather than only reading. It found
+  what five green e2e assertions could not, because all five were about the
+  exported FILE: **`beginOfflineRender` pauses everything and `endOfflineRender`
+  replays only CLIPS, so the first export stopped the live music for good** —
+  and the chip that looks like the answer toggles intent, which never changed.
+  Also confirmed, reproduced in a browser with `createObjectURL` instrumented:
+  music dropped before any photograph left 13px of empty dock chrome and an
+  Export sheet offering a video whose recorder handle is null, because
+  `liveMode` claimed a Stage the `images.length > 0` branch had not rendered.
+  Both fixed here, both now covered (T4, T5), and T4 is RED on the pre-fix code
+  (`paused=true, t=0.00`). Two further findings are written up on the ladder
+  rather than fixed: the realtime recorder captures only what the monitor is
+  playing, and a soundtrack is decoded in full however long it is.
 - 2026-08-08 · **[AXIS:COLLAGE] THE MOVE — the collage has a TIME AXIS**
   (well empty, breadth debt 0, LIVE STATE named COLLAGE the stalest axis; working
   tree read FIRST, per the scar directly below — nothing was stranded this time.)

@@ -29,6 +29,11 @@
  *       that changes nothing in the file is an inert control, which is the class
  *       of defect this project has already been filed against four times.
  *
+ *   T4  THE TAKE GIVES THE MUSIC BACK. The offline render pauses every source
+ *       and replays only the CLIPS, so the first export left the live music
+ *       stopped for good — with no control that revives it. Found by an
+ *       adversarial audit, not by any gate that existed.
+ *
  *   T3  IT IS WATERTIGHT ON A PHONE. A new chip in the dock's scroll row and a
  *       new button in the top-right column, at 320/360/390/430 px.
  *
@@ -200,6 +205,73 @@ test.describe('THE SOUNDTRACK', () => {
         `a muted track must not sound — music=${t.bins[0]} control=${t.control}`,
       ).toBeLessThan(t.control * 4);
     }
+  });
+
+  test('T4 — the music is still playing after a take', async ({ page }) => {
+    test.setTimeout(420_000);
+    await bootWithPhotos(page);
+    await musicInput(page).setInputFiles([MUSIC]);
+
+    // Monitor ON, so the music is genuinely audible before the render — this is
+    // the state a person is in when they press Record, and the state in which
+    // losing it is unmistakable.
+    await page.getByRole('button', { name: /Hear the music/ }).click();
+    await expect(page.getByRole('button', { name: /Mute the music/ })).toBeVisible({ timeout: 15_000 });
+
+    const rolling = () => page.evaluate(() => {
+      const el = document.querySelector('audio') as HTMLAudioElement | null;
+      return el ? { present: true, paused: el.paused, muted: el.muted, t: el.currentTime } : { present: false, paused: true, muted: true, t: 0 };
+    });
+    const before = await rolling();
+    expect(before.present, 'the Stage must hold an <audio> element for the music').toBe(true);
+    expect(before.paused, 'the music must be rolling before the take').toBe(false);
+
+    await renderTake(page);
+
+    // THE OFFLINE RENDER PAUSES EVERYTHING AND REPLAYS ONLY THE CLIPS.
+    // `beginOfflineRender` calls `pauseAll`, and `endOfflineRender` walked
+    // `offlineWantPlay` — a list only clips are ever put on — so the first
+    // export left the live soundtrack stopped for good. Nothing in the UI
+    // revives it: the chip toggles INTENT, and the intent never changed. Every
+    // other gate was green while the preview was silent from the first take on.
+    const after = await rolling();
+    console.log(`[soundtrack] audio after take: paused=${after.paused} muted=${after.muted} t=${after.t.toFixed(2)}`);
+    expect(after.present, 'the element must survive the render').toBe(true);
+    expect(after.paused, 'the music must still be playing AFTER the take').toBe(false);
+  });
+
+  test('T5 — music picked before any photograph waits, and says so', async ({ page }) => {
+    test.setTimeout(120_000);
+    page.on('pageerror', (e) => console.log('[pageerror]', e.message));
+    await page.route('**/cdn.jsdelivr.net/**', (r) => r.abort());
+    await page.goto(APP_URL);
+
+    // No photographs at all — the drop target is live at zero images and now
+    // advertises music, so this is a reachable path rather than a contrivance.
+    await musicInput(page).setInputFiles([MUSIC]);
+    await page.waitForTimeout(800);
+
+    // THE NOTICE MUST NOT NAME A CONTROL THAT IS NOT ON SCREEN. With no stage
+    // there is no dock, no chip and no speaker.
+    const notice = await page.locator('div.fixed.bottom-24').first().innerText().catch(() => '');
+    expect(notice, `the notice must not send anyone hunting for a speaker — got "${notice}"`)
+      .not.toMatch(/press the speaker/i);
+    expect(notice).toMatch(/add photos/i);
+
+    // AND NO EMPTY CHROME. The dock's portal bar used to render 13px of nothing
+    // whenever a source existed but the Stage did not.
+    const emptyBars = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('div.border-b.border-white\\/5'))
+        .filter((el) => el.textContent?.trim() === '' && el.querySelectorAll('button').length === 0)
+        .filter((el) => el.getBoundingClientRect().height > 0).length);
+    expect(emptyBars, 'no empty dock bar may be rendered with nothing to put in it').toBe(0);
+
+    // And it is genuinely WAITING: add photographs and the music turns up.
+    await page.locator('input[type="file"]').first().setInputFiles([IMG_A, IMG_B]);
+    await expect(
+      page.getByRole('button', { name: /Remove the music, music_1500\.m4a/ }),
+      'the music that was waiting must appear the moment there is a collage to put it under',
+    ).toBeVisible({ timeout: 120_000 });
   });
 
   test('T3 — the music chip and button are watertight on a phone', async ({ page }) => {

@@ -615,6 +615,9 @@ export class Stage {
    *  admit every clip; restored in `endOfflineRender`. */
   private savedCapsClips = 0;
   private savedCapsPixels = 0;
+  /** Was the SOUNDTRACK rolling when the render took the stage? `pauseAll`
+   *  stops it like everything else, and only clips have replay bookkeeping. */
+  private offlineTrackPlaying = false;
 
   // --- media -----------------------------------------------------------------
   private host: HTMLElement | null = null;
@@ -887,6 +890,10 @@ export class Stage {
     this.capsPixels = 0;                 // 0 disables the pixel guard (refreshAdmission)
     this.refreshAdmission();
 
+    // WHAT WAS ROLLING, BEFORE ANYTHING IS PAUSED. Clips are remembered by
+    // `wantPlay` two lines up; the soundtrack has no such flag, and `pauseAll`
+    // stops it just the same.
+    this.offlineTrackPlaying = !!(this.track && this.track.el && !this.track.el.paused);
     this.pauseAll();
     // Freezes the backing size for the whole take. A mid-stream resolution
     // change is what corrupts an H.264 stream.
@@ -924,6 +931,17 @@ export class Stage {
       c.wantPlay = true;
       this.tryPlay(c);
     });
+    // AND GIVE THE MUSIC BACK. `beginOfflineRender` pauses everything and this
+    // method replayed only the CLIPS, because clips were the only thing that
+    // could be playing when it was written — so the first export left the live
+    // soundtrack stopped for good, with no control that revives it (the chip
+    // toggles INTENT, and the intent never changed). It needs no gesture: the
+    // element was already rolling, which is proof the page had one.
+    const tel = this.track?.el;
+    if (tel && this.offlineTrackPlaying) {
+      try { const p = tel.play(); if (p && typeof p.then === 'function') p.then(() => { /* rolling */ }, () => { /* the tap comes back */ }); } catch { /* ignore */ }
+    }
+    this.offlineTrackPlaying = false;
     if (this.offlineWasRunning) this.start();
     this.markDirty();
     this.emitStatus();
