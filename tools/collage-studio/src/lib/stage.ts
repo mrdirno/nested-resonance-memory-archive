@@ -49,6 +49,7 @@ import {
   normaliseWindow, sourceTimeAt, liveWrapTarget,
   type ClipWindow, type WindowedPlayback,
 } from './clipWindow';
+import { soundtrackSource, soundtrackAudible } from './soundtrack';
 import type { LayoutItem } from '../types';
 
 // -----------------------------------------------------------------------------
@@ -218,6 +219,12 @@ export interface StageStatus {
   needsGesture: boolean;
   soundOn: boolean;
   audioAvailable: boolean;
+  /**
+   * THE SOUNDTRACK, or null when there is none. `wantsAudio` and `audible` mean
+   * exactly what they mean on a clip — intent vs the speakers — and a chip wired
+   * to the wrong one is the bug written up on `StageClipStatus.wantsAudio`.
+   */
+  soundtrack: { name: string; muted: boolean; wantsAudio: boolean; audible: boolean; broken: boolean } | null;
   capturing: boolean;
   /** Human-readable one-liner for the UI. Null when there is nothing to say. */
   message: string | null;
@@ -611,6 +618,22 @@ export class Stage {
 
   // --- media -----------------------------------------------------------------
   private host: HTMLElement | null = null;
+  /**
+   * THE SOUNDTRACK — music under the collage, held as A CLIP WITH NO PICTURE.
+   * It owns exactly what a clip owns on the audio side (an element, a
+   * MediaElementSource, a gain into `masterGain`, an intent flag) and nothing on
+   * the picture side, so every audio seam below treats it as one more source.
+   * The URL belongs to the caller and is never revoked here.
+   */
+  private track: {
+    url: string;
+    name: string;
+    el: HTMLAudioElement | null;
+    source: MediaElementAudioSourceNode | null;
+    gain: GainNode | null;
+    muted: boolean;
+    broken: boolean;
+  } | null = null;
   private soundOn = false;
   private needsGesture = false;
   private audioCtx: AudioContext | null = null;
@@ -2085,6 +2108,10 @@ export class Stage {
     if (opts && typeof opts.sound === 'boolean') this.soundOn = opts.sound;
     if (this.soundOn) this.ensurePrimaryAudible();
     this.applyMutes();
+    const tel = this.track?.el;
+    if (tel) {
+      try { const p = tel.play(); if (p && typeof p.then === 'function') p.then(() => { /* rolling */ }, () => { /* still blocked */ }); } catch { /* ignore */ }
+    }
     this.clips.forEach((clip) => {
       const el = clip.el;
       if (!el || !clip.live || clip.broken) return;
@@ -2123,6 +2150,8 @@ export class Stage {
   playAll(): void { this.clips.forEach((c) => { c.wantPlay = true; this.tryPlay(c); }); this.markDirty(); this.emitStatus(); }
 
   pauseAll(): void {
+    const tel = this.track?.el;
+    if (tel) { try { tel.pause(); } catch { /* ignore */ } }
     this.clips.forEach((c) => {
       c.wantPlay = false;
       const el = c.el;
@@ -2160,6 +2189,116 @@ export class Stage {
   }
 
   /**
+   * THE SOUNDTRACK — music under the collage. Pass null to remove it.
+   *
+   * A soundtrack is A CLIP WITH NO PICTURE: it gets the same element → source →
+   * gain → `masterGain` chain every clip gets, which is the only path by which a
+   * realtime recording can have sound, and it emits the same
+   * `describeAudioSources` row the offline mixer already knows how to render.
+   *
+   * SAME URL MEANS SAME TRACK. Only `muted` is updated then — rebuilding the
+   * element would restart the music every time React re-rendered the dock, and
+   * `createMediaElementSource` may be called ONCE PER ELEMENT EVER, so a rebuild
+   * is also the one operation that cannot be undone cheaply.
+   */
+  setSoundtrack(spec: { url: string; name?: string; muted?: boolean } | null): void {
+    if (this.destroyed) return;
+    const url = spec?.url || '';
+    if (!url) { this.disposeSoundtrack(); this.emitStatus(); return; }
+
+    if (this.track && this.track.url === url) {
+      this.track.name = spec?.name || this.track.name;
+      this.track.muted = !!spec?.muted;
+      this.applyMutes();
+      this.emitStatus();
+      return;
+    }
+
+    this.disposeSoundtrack();
+    this.track = {
+      url, name: spec?.name || 'music', el: null, source: null, gain: null,
+      muted: !!spec?.muted, broken: false,
+    };
+    const doc = this.doc;
+    const host = this.ensureHost();
+    if (!doc || !host) return;
+
+    const el = doc.createElement('audio');
+    // Muted FIRST, exactly as `createVideo` does: browsers autoplay muted media
+    // and nothing else, and `applyMutes` below is what opens it once the monitor
+    // is on inside a gesture.
+    el.muted = true;
+    el.volume = 0;
+    el.setAttribute('muted', '');
+    el.loop = true;                 // music laps under a take that outruns it
+    el.preload = 'auto';
+    el.autoplay = true;
+    el.setAttribute('aria-hidden', 'true');
+    el.style.cssText = 'position:fixed;left:-9999px;width:1px;height:1px;opacity:0.01;pointer-events:none;z-index:-1;';
+    el.addEventListener('error', () => {
+      if (this.track && this.track.el === el) { this.track.broken = true; this.emitStatus(); }
+    });
+    el.addEventListener('canplay', () => this.emitStatus());
+
+    // The graph is built at element creation for the same reason clips build
+    // theirs here: `captureStream` taps `masterGain`, and bolting a source on
+    // after a take has started is not a thing WebAudio allows.
+    if (this.audioEnabled && this.ensureAudio() && this.audioCtx && this.masterGain) {
+      try {
+        const src = this.audioCtx.createMediaElementSource(el);
+        const gain = this.audioCtx.createGain();
+        gain.gain.value = 0;
+        src.connect(gain);
+        gain.connect(this.masterGain);
+        this.track.source = src;
+        this.track.gain = gain;
+      } catch {
+        this.track.source = null;
+        this.track.gain = null;
+      }
+    }
+
+    el.src = url;
+    host.appendChild(el);
+    this.track.el = el;
+    try { const p = el.play(); if (p && typeof p.then === 'function') p.then(() => { /* rolling */ }, () => { /* gesture needed */ }); } catch { /* ignore */ }
+    this.applyMutes();
+    this.emitStatus();
+  }
+
+  /**
+   * The music's INTENT — "this track is part of the piece". Same contract as
+   * `setClipMuted`: it is what the EXPORT renders, and unmuting must happen
+   * inside a user gesture for the monitor to follow.
+   */
+  setSoundtrackMuted(muted: boolean): void {
+    if (!this.track) return;
+    this.track.muted = muted;
+    if (!muted) this.soundOn = true;
+    if (this.audioCtx && this.audioCtx.state === 'suspended') { try { void this.audioCtx.resume(); } catch { /* ignore */ } }
+    if (!muted) { const el = this.track.el; if (el) { try { const p = el.play(); if (p && typeof p.then === 'function') p.then(() => {}, () => {}); } catch { /* ignore */ } } }
+    this.applyMutes();
+    this.emitStatus();
+  }
+
+  private disposeSoundtrack(): void {
+    const t = this.track;
+    this.track = null;
+    if (!t) return;
+    const el = t.el;
+    if (el) {
+      try { el.pause(); } catch { /* ignore */ }
+      // `removeAttribute('src')` + `load()` is what actually releases the
+      // decoder; setting `src = ''` re-resolves against the document URL and
+      // fires a spurious `error`.
+      try { el.removeAttribute('src'); el.load(); } catch { /* ignore */ }
+      try { el.remove(); } catch { /* ignore */ }
+    }
+    try { t.gain?.disconnect(); } catch { /* ignore */ }
+    try { t.source?.disconnect(); } catch { /* ignore */ }
+  }
+
+  /**
    * GLOBAL sound switch. Turning it ON must happen synchronously inside a user
    * gesture — browsers only autoplay MUTED video, and `muted = false` is only
    * honoured from a gesture. With every clip muted, this unmutes the largest
@@ -2178,6 +2317,12 @@ export class Stage {
   get soundEnabled(): boolean { return this.soundOn; }
 
   private ensurePrimaryAudible(): void {
+    // AN UNMUTED SOUNDTRACK ALREADY PRODUCES SOUND, so "sound on" has done its
+    // job and there is nothing to rescue. Without this clause, pressing the
+    // speaker over a photo collage with music would ALSO unmute a video clip the
+    // user had deliberately left silent — this method's whole purpose is that
+    // the switch not be a no-op, and music is the switch not being a no-op.
+    if (this.track && !this.track.muted && !this.track.broken) return;
     let any = false;
     this.clips.forEach((c) => { if (c.live && !c.muted) any = true; });
     if (any) return;
@@ -2186,6 +2331,18 @@ export class Stage {
   }
 
   private applyMutes(): void {
+    const t = this.track;
+    if (t) {
+      // No `live` term: a soundtrack holds no VIDEO decoder, so the realtime
+      // admission budget has nothing to say about it.
+      const audible = this.soundOn && !t.muted && !t.broken;
+      if (t.gain) { try { t.gain.gain.value = audible ? 1 : 0; } catch { /* ignore */ } }
+      const el = t.el;
+      if (el) {
+        el.muted = !audible;
+        el.volume = audible ? 1 : 0;
+      }
+    }
     this.clips.forEach((c) => {
       const audible = this.soundOn && !c.muted && c.live && !c.broken;
       if (c.gain) {
@@ -2357,6 +2514,19 @@ export class Stage {
         inSec: c.inSec, outSec: c.outSec,
       });
     });
+    // THE SOUNDTRACK IS ONE MORE SOURCE, and the only row here whose `span` is
+    // deliberately 0. Every number in it is decided by `lib/soundtrack.ts`,
+    // which is also where the reason is written down: music has no picture to
+    // agree with, so its window must come from the DECODED buffer rather than
+    // from a container duration that differs by an encoder's padding — a
+    // difference `audioSchedule` would read as "the sound ends inside the
+    // picture's window" and answer with the LAPPED plan.
+    const trackRow = soundtrackSource(
+      this.track && !this.track.broken
+        ? { url: this.track.url, name: this.track.name, durationSec: 0, muted: this.track.muted }
+        : null,
+    );
+    if (trackRow) out.push(trackRow);
     return out;
   }
 
@@ -2388,6 +2558,17 @@ export class Stage {
       // preview had been on screen before you pressed record.
       this.outTime = 0;
       this.moveOriginMs = -1;
+      // AND SO DOES THE MUSIC, for exactly the same reason and it is the same
+      // bug. The offline mixer starts the soundtrack at output time 0, i.e. at
+      // the top of the track. The realtime recorder captures the LIVE element,
+      // which has been looping since the moment it was created — so without this
+      // the same collage recorded the two ways opens on two different bars, and
+      // which one you get depends on how long the preview sat on screen before
+      // the take. `moveOriginMs` above is this same reset for the picture.
+      const tel = this.track?.el;
+      if (tel) {
+        try { tel.currentTime = 0; } catch { /* pre-metadata; it starts at 0 anyway */ }
+      }
       this.markDirty();
     }
     this.emitStatus();
@@ -2460,6 +2641,18 @@ export class Stage {
       needsGesture: this.needsGesture,
       soundOn: this.soundOn,
       audioAvailable: this.audioAvailable,
+      soundtrack: this.track
+        ? {
+            name: this.track.name,
+            muted: this.track.muted,
+            wantsAudio: !this.track.muted && !this.track.broken,
+            audible: soundtrackAudible(
+              { url: this.track.url, name: this.track.name, durationSec: 0, muted: this.track.muted || this.track.broken },
+              this.soundOn,
+            ),
+            broken: this.track.broken,
+          }
+        : null,
       capturing: this.capturing,
       message,
     };
@@ -2470,7 +2663,8 @@ export class Stage {
     if (!this.onStatus || this.destroyed) return;
     const s = this.getStatus();
     let sig = s.running + '|' + s.liveCount + '|' + s.deferredCount + '|' + s.needsGesture + '|' +
-      s.soundOn + '|' + s.capturing + '|' + s.audioAvailable + '|' + (s.message || '');
+      s.soundOn + '|' + s.capturing + '|' + s.audioAvailable + '|' + (s.message || '') + '|' +
+      (s.soundtrack ? s.soundtrack.name + ':' + s.soundtrack.muted + ':' + s.soundtrack.broken : '-');
     for (let i = 0; i < s.clips.length; i++) {
       const c = s.clips[i];
       sig += '~' + c.id + ':' + c.state + ':' + c.playing + ':' + c.muted + ':' + c.ready + ':' + c.fragments;
@@ -2502,6 +2696,7 @@ export class Stage {
       this.stream = null;
     }
 
+    this.disposeSoundtrack();
     this.clips.forEach((c) => this.disposeClip(c));
     this.clips.clear();
     this.liveClips = [];

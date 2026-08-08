@@ -37,7 +37,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom';
 import {
   Play, Pause, Volume2, VolumeX, Video, Square, Download, Share2, X,
-  AlertTriangle, Loader2, Scissors, RotateCcw,
+  AlertTriangle, Loader2, Scissors, RotateCcw, Music,
 } from 'lucide-react';
 
 import { createStage, type Stage, type StageStatus, type StageClipInput } from '../lib/stage';
@@ -53,6 +53,7 @@ import {
 import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
 import { normaliseWindow, MIN_WINDOW_SEC } from '../lib/clipWindow';
+import { soundtrackLength } from '../lib/soundtrack';
 import type { TitlePlan } from '../lib/title';
 import type { LookId } from '../lib/grade';
 
@@ -108,6 +109,16 @@ export interface VideoStageProps {
   controlsHost?: HTMLElement | null;
   /** Drop a clip back to its stills. Rendered in the dock beside its sound toggle. */
   onRemoveClip?: (id: string) => void;
+  /**
+   * THE SOUNDTRACK — music under the collage, handed straight to the Stage,
+   * which holds it as a clip with no picture. Null means no music.
+   */
+  soundtrack?: { url: string; name: string; durationSec: number; muted?: boolean } | null;
+  /** Remove the music. The URL belongs to the parent, which revokes it. */
+  onRemoveSoundtrack?: () => void;
+  /** The music's INTENT changed. The parent owns it; the Stage is re-fed from
+   *  it whenever a Stage is (re)built. */
+  onSoundtrackMuted?: (muted: boolean) => void;
   /**
    * The WHOLE asset pool, used for one thing: the trim sheet's filmstrip.
    *
@@ -381,7 +392,7 @@ type RecPhase = 'idle' | 'running' | 'saving';
 
 export const VideoStage: React.FC<VideoStageProps> = ({
   layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, onNotice, onUnavailable,
-  controlsHost, onRemoveClip, recorderRef, poolAssets,
+  controlsHost, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<Stage | null>(null);
@@ -418,6 +429,14 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     }
     stageRef.current = stage;
     stage.start();
+    // A NEW STAGE KNOWS NOTHING. Every imperative thing handed to a Stage —
+    // the scene, and now the music — is pushed by an effect keyed on the VALUE
+    // pushed, so a Stage that is destroyed and rebuilt while those values sit
+    // unchanged never receives them again. `setScene` gets away with it because
+    // its inputs change on almost every render; a soundtrack does not change
+    // for minutes at a time. Bumping a generation gives every such effect an
+    // honest dependency on "which Stage is this".
+    setStageGen((n) => n + 1);
     return () => {
       // Order matters: abort any take BEFORE destroy, or the recorder keeps
       // pulling frames from a canvas whose decoders have just been released.
@@ -442,6 +461,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   // Video-length sync mode. 'loop' (default) leaves every clip at its own speed;
   // the two stretch modes rescale so all clips share one length. See videoSync.ts.
   const [clipLengthMode, setClipLengthMode] = useState<ClipLengthMode>('loop');
+
+  /** Bumped every time a Stage is constructed — see the note in that effect. */
+  const [stageGen, setStageGen] = useState(0);
 
   /**
    * TRIM — the user's in/out points, per clip. Session state, exactly like the
@@ -557,10 +579,34 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     });
   }, [layoutItems, orderedAssets, stageClips, mode, aspect, zoom, bgColor, titlePlan, look]);
 
+  /**
+   * THE MUSIC, handed over on its own effect and keyed on the URL, never on the
+   * object. The parent rebuilds this prop on every render that touches its
+   * state; `setSoundtrack` is idempotent for the same url (it updates `muted`
+   * and returns), so the element — and therefore the playhead — survives.
+   */
+  const trackUrl = soundtrack?.url ?? '';
+  const trackName = soundtrack?.name ?? '';
+  const trackMuted = !!soundtrack?.muted;
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    stage.setSoundtrack(trackUrl ? { url: trackUrl, name: trackName, muted: trackMuted } : null);
+  }, [stageGen, trackUrl, trackName, trackMuted]);
+
   // --- transport -------------------------------------------------------------
 
   const anyPlaying = !!status?.clips.some((c) => c.playing);
   const liveCount = status?.liveCount ?? 0;
+  const trackRow = status?.soundtrack ?? null;
+  /**
+   * IS THERE A TAKE TO MAKE? It used to be `liveCount > 0`, i.e. "are any video
+   * clips decoding", and that stopped being the same question the moment the
+   * Stage could record something that is not a clip. With music and no video the
+   * monitor button was DISABLED, so the one thing the user had just added was
+   * the one thing they could not hear.
+   */
+  const takeable = liveCount > 0 || !!trackRow;
 
   // STAGE OWNS `soundOn`, NOT US. It flips the flag itself in more places than
   // our toggle — `resumeFromGesture({sound})` sets it, and `setClipMuted(id,
@@ -798,6 +844,32 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     if (!currentlyWanted) stage.resumeFromGesture({ sound: true });
   }, []);
 
+  /**
+   * THE MUSIC'S OWN SWITCH — same contract as a clip's, one asymmetry.
+   *
+   * The FIRST press, when the track is already wanted but the monitor is off, is
+   * read as "let me hear it" rather than "silence it". Music arrives UNMUTED
+   * (adding it is an explicit act whose whole purpose is the sound), while the
+   * monitor starts off because browsers only autoplay muted media — so without
+   * this clause the one obvious control on the chip would, on its first press,
+   * do the opposite of what a user who just added music wants, and they would
+   * have to press it twice to hear anything.
+   */
+  const toggleTrackSound = useCallback((wanted: boolean, monitorOn: boolean) => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    if (wanted && !monitorOn) { soundRef.current = true; stage.resumeFromGesture({ sound: true }); return; }
+    // BOTH, and in this order. The Stage call is SYNCHRONOUS inside the click
+    // because unmuting is gesture-bound (iOS grants a gesture only to the task
+    // it fired in), and a prop routed through an effect arrives a task too
+    // late. The parent is told as well because the parent OWNS the track — a
+    // Stage that is rebuilt is re-fed from that prop, and a mute that lived
+    // only in the Stage would come back UNMUTED.
+    stage.setSoundtrackMuted(wanted);
+    if (!wanted) { soundRef.current = true; stage.resumeFromGesture({ sound: true }); }
+    onSoundtrackMuted?.(wanted);
+  }, [onSoundtrackMuted]);
+
   /** Either strategy will do. Only when BOTH are out is recording really gone. */
   const canRecord = support === null && frameSupport === null
     ? true                                   // not probed yet; assume yes
@@ -809,18 +881,39 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     if (!recorderRef) return;
     recorderRef.current = {
       start: startRecording,
-      canRecord: canRecord && liveCount > 0 && !busy,
+      canRecord: canRecord && takeable && !busy,
       isRecording: recPhase === 'running',
       maxSeconds: profile.maxSeconds,
     };
     return () => { recorderRef.current = null; };
-  }, [recorderRef, startRecording, canRecord, liveCount, busy, recPhase, profile.maxSeconds]);
+  }, [recorderRef, startRecording, canRecord, takeable, busy, recPhase, profile.maxSeconds]);
 
   const clipRows = status?.clips ?? [];
   // What the EXPORT will carry — intent, exactly as `describeAudioSources`
   // reads it. Deliberately not `audible`: a clip the realtime budget deferred
   // is inaudible in the room and still lands in the file.
   const soundClipCount = clipRows.filter((r) => r.wantsAudio).length;
+  /**
+   * WHAT THE FILE WILL CARRY, IN WORDS — and the music has to be in this
+   * sentence or the label repeats the exact mistake written up on the button
+   * below: a hard-coded "silent" sitting on the branch that renders sound.
+   * `describeAudioSources` appends the soundtrack row, so this counts it.
+   */
+  const trackWanted = !!trackRow?.wantsAudio;
+  /**
+   * The music chip's next ACTION, in words — the one string the title, the
+   * accessible name and `toggleTrackSound`'s branch all read, so the button can
+   * never say one thing and do another.
+   */
+  const trackAction = !trackWanted
+    ? 'Put the music back in the piece'
+    : trackRow?.audible ? 'Mute the music' : 'Hear the music';
+  const soundSummary = soundClipCount > 0 || trackWanted
+    ? ' · sound from ' + [
+        soundClipCount > 0 ? `${soundClipCount} clip${soundClipCount === 1 ? '' : 's'}` : '',
+        trackWanted ? 'the music' : '',
+      ].filter(Boolean).join(' + ')
+    : ' · silent (nothing has its sound on)';
 
   const dock = (
     /* THE BAR WRAPS ON A PHONE, and that is what makes 44px controls possible.
@@ -911,6 +1004,58 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             </div>
           );
         })}
+        {/* THE MUSIC CHIP — the same chip a clip gets, because a soundtrack IS a
+            clip with no picture: what it is, whether its sound is in the piece,
+            and a way out. It sits in the same scroll row so a phone gets one
+            horizontally-scrolling strip rather than a second line to find. */}
+        {trackRow && (
+          <div className="flex items-center gap-0.5 pl-2 pr-0.5 rounded-lg bg-[#161616] border border-emerald-500/25 shrink-0">
+            <Music size={11} className={trackRow.audible ? 'text-emerald-400' : 'text-gray-500'} aria-hidden="true" />
+            <span className="text-[9px] tracking-wide text-gray-300 truncate max-w-[7rem] ml-1" title={trackRow.name}>
+              {trackRow.broken ? `${trackRow.name} — will not decode` : trackRow.name}
+            </span>
+            {/* THE LENGTH, from the prop rather than from the Stage: the Stage
+                holds a url and an intent and has no reason to learn a duration
+                the render never reads (lib/soundtrack.ts, DECISION 1). This is
+                the ONE place that number is for — telling you which cut of the
+                song you just dropped in. */}
+            {!trackRow.broken && soundtrackLength(soundtrack?.durationSec ?? 0) && (
+              <span className="text-[9px] tracking-wide text-gray-500 tabular-nums shrink-0 ml-1">
+                {soundtrackLength(soundtrack?.durationSec ?? 0)}
+              </span>
+            )}
+            {/* THE NAME MUST NAME THE ACTION, and this button has three states
+                rather than two. Music arrives IN the piece while the monitor is
+                still off, so the first press means "let me hear it" — and an
+                accessible name reading "Mute the music" while the press unmutes
+                the monitor is the read-back-the-wrong-state defect this file is
+                already scarred by, one layer up. `aria-pressed` therefore
+                tracks INTENT (what the file will carry) and the NAME tracks the
+                next action, which are genuinely two different facts here. */}
+            <button
+              onClick={() => toggleTrackSound(trackRow.wantsAudio, !!status?.soundOn)}
+              disabled={trackRow.broken}
+              aria-pressed={trackRow.wantsAudio}
+              aria-label={`${trackAction}, ${trackRow.name}`}
+              title={trackRow.broken ? 'This file did not decode in this browser' : trackAction}
+              className={`w-11 h-11 rounded flex items-center justify-center transition-colors disabled:opacity-40 ${
+                trackRow.audible
+                  ? 'text-emerald-400 hover:bg-emerald-500/15'
+                  : trackRow.wantsAudio
+                    ? 'text-emerald-400/50 hover:bg-white/10'
+                    : 'text-gray-500 hover:text-white hover:bg-white/10'
+              }`}
+            >{trackRow.wantsAudio ? <Volume2 size={15} /> : <VolumeX size={15} />}</button>
+            {onRemoveSoundtrack && (
+              <button
+                onClick={onRemoveSoundtrack}
+                title={`Remove ${trackRow.name}`}
+                aria-label={`Remove the music, ${trackRow.name}`}
+                className="w-11 h-11 rounded flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-white/10 transition-colors"
+              ><X size={14} /></button>
+            )}
+          </div>
+        )}
         {/* VIDEO-LENGTH SYNC — lives INSIDE the scroll row (shrink-0), so it scrolls
             with the clip chips and never steals width from the status readout that
             follows the spacer (which is `truncate min-w-0` and would collapse). */}
@@ -972,7 +1117,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
       <button
         onClick={toggleSound}
-        disabled={liveCount === 0 || !status?.audioAvailable}
+        disabled={!takeable || !status?.audioAvailable}
         title={status?.soundOn
           ? 'Mute the preview (does not change what the export contains)'
           : 'Hear the preview'}
@@ -1008,7 +1153,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       ) : (
         <button
           onClick={() => startRecording()}
-          disabled={!canRecord || liveCount === 0 || busy}
+          disabled={!canRecord || !takeable || busy}
           // "(silent)" used to be hard-coded onto exactly this branch — which is
           // the branch that RENDERS SOUND. The offline renderer gained a mixer
           // and the label never moved, so the tool told you it was about to drop
@@ -1018,11 +1163,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           title={!canRecord
             ? 'Recording unavailable in this browser'
             : frameSupport?.supported
-              ? `Render ${Math.min(seconds, profile.maxSeconds)}s — frame by frame, no dropped frames${
-                  soundClipCount > 0
-                    ? ` · sound from ${soundClipCount} clip${soundClipCount === 1 ? '' : 's'}`
-                    : ' · silent (no clip has its sound on)'
-                }`
+              ? `Render ${Math.min(seconds, profile.maxSeconds)}s — frame by frame, no dropped frames${soundSummary}`
               : `Record ${Math.min(seconds, profile.maxSeconds)}s in real time`}
           aria-label="Record video"
           className="w-11 h-11 rounded-lg text-red-400 flex items-center justify-center hover:bg-red-500/15 disabled:opacity-30 transition-colors shrink-0"

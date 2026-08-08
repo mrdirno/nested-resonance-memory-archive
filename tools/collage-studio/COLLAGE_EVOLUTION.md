@@ -98,7 +98,20 @@ or re-documenting an existing capability is DD, not delivery.
   because a phase offset is exactly what would break rest-at-zero. And it
   WIDENED `liveMode`: the video export was gated on `clips.length > 0`, so a
   collage of photographs could not be recorded at all — the one thing a photo
-  collage could never be was a video, and a move is precisely what makes it one.
+  collage could never be was a video, and a move is precisely what makes it one;
+  THE SOUNDTRACK — music under the collage, held as A CLIP WITH NO PICTURE.
+  It plugs into the five audio seams the Stage already had (element →
+  `MediaElementSource` → gain → `masterGain`, an intent flag, and one
+  `describeAudioSources` row), so `offlineAudio.mixSources` changed by not one
+  line and the realtime recorder gets it free from `captureStream`'s tap on
+  `masterGain`. `lib/soundtrack.ts` carries only what is particular to music:
+  `span: 0` for every duration (a container's length is not the decoded
+  buffer's, and that hop would flip `audioSchedule` into its LAPPED branch and
+  cut a sliver of silence into every repeat), intent kept structurally free of
+  the monitor, and a file classifier disjoint from `isVideoFile` so every
+  picked file lands in exactly one bucket. Music arrives UNMUTED because adding
+  it is an explicit act whose whole purpose is the sound, and the take resets it
+  to the top beside `moveOriginMs` so both recorders open on the same bar.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -156,6 +169,12 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       `connect` / `start` calls) driven against a real schedule — cheap, since
       the mixer only ever calls five methods — which would let mutation testing
       reach the wiring in milliseconds instead of minutes.
+      **AND THE STAKES WENT UP WITH THE SOUNDTRACK.** That loop now wires a
+      source the user CHOSE for its sound rather than one that came along with a
+      picture, and it is the only source in a photo collage — so a mutation
+      there is no longer "one clip is quiet", it is "the export is silent".
+      `tests/unit/soundtrack.invariants.mjs` covers the row handed IN; nothing
+      still covers what the mixer does with it.
 - [ ] **THE TITLE CANNOT TRAVEL IN A COMPOSITION CODE, and that is a decision,
       not an oversight.** A code is a RECIPE anyone can open with their own
       photographs; somebody else's caption over your pictures is not the same
@@ -279,8 +298,53 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       presets, per-fragment grades, LUT import, and a grade on the BACKGROUND
       (deliberately excluded today — the frame colour comes out the colour you
       picked).
-- [ ] **Audio** — multi-track mix (partly done), volume envelopes / ducking, fade
-      in/out, a music track, beat-sync.
+- [~] **Audio** — part-shipped as **THE SOUNDTRACK**: music under the collage.
+      THE MOVE gave a collage of photographs a time axis, so a photo collage
+      could finally be exported as a video — and that video was NECESSARILY
+      SILENT, because every sample this app had ever mixed came out of a video
+      clip's own audio track and a collage of photographs has no clips. The file
+      picker took `image/*,video/*` and `ingestFiles` rejected everything else
+      with "images and video only", so there was no door at all.
+      **THE WHOLE DESIGN IS ONE SENTENCE: A SOUNDTRACK IS A CLIP WITH NO
+      PICTURE.** The Stage's audio architecture was already per-source and
+      complete — an element, a `MediaElementSource`, a gain into `masterGain`
+      (which is what `captureStream` taps, so the REALTIME recorder gets music
+      for free), an INTENT flag, and one row out of `describeAudioSources()` for
+      the offline mixer. Music plugs into all five, and
+      `offlineAudio.mixSources` changed by NOT ONE LINE: it decodes a url,
+      resolves a window through `clipWindow`, and sums under the true-peak
+      limiter, none of which cares whether the container also had pictures in
+      it. `lib/soundtrack.ts` holds only what is particular to music:
+      **SPAN 0, FOR EVERY DURATION.** `OfflineAudioSource.span` exists so a
+      clip's sound lands in the same window as its PICTURE. Music has no
+      picture, and its container duration is not its decoded duration (mp3
+      carries encoder delay and padding). Passing that hop as `span` does not
+      merely round differently — it changes BRANCH: `audioSchedule` reads "the
+      sound ends inside the window" as the LAPPED case and answers with one
+      non-looping node per lap, cutting a sliver of silence into every repeat
+      forever. `span: 0` is the documented "unknown" and the mixer then uses
+      `buf.duration`, which for music is the only length there is. The sweep
+      asserts 0 for SANE durations too, so the helpful edit fails instead of
+      shipping the sliver.
+      **INTENT IS NOT AUDIBILITY, and this time they live three lines apart.**
+      Same split that made every export silent once already: `gain` for the FILE
+      is `!muted`; `audible` also carries the monitor (which starts OFF, because
+      browsers only autoplay muted media). `soundtrackSource` takes no monitor
+      argument at all and the sweep is what keeps it that way.
+      **A CLIP IS A PICTURE THAT HAPPENS TO HAVE SOUND; A SOUNDTRACK IS NOTHING
+      BUT SOUND**, so music arrives UNMUTED where a clip arrives muted — which
+      is why the e2e's headline path presses record and touches nothing else.
+      **THE MUSIC RESTARTS WHEN THE TAKE DOES**, beside `moveOriginMs = -1` in
+      `setCaptureActive`, or the realtime recorder captures whatever bar the
+      preview happened to be on while the offline render starts at the top.
+      Proof: `5.0s · 999 KB · 30fps · 150 frames · sound`, decoded back to
+      samples — 1500 Hz at **3114x** the 5 kHz control, in the MIDDLE of a 5 s
+      take from a 2 s file, so it lapped; muting the chip gives
+      `150 frames · silent` and no decodable audio track at all.
+      Still owed on this rung: **a fade in/out** (the mix currently hard-cuts at
+      the end of the take — the honest place for it is the sample domain, right
+      where the peak limiter already walks the whole rendered buffer), volume
+      per source, ducking, and beat-sync.
 - [ ] **Speed** — per-clip speed ramps / freeze frames (video-length sync is step 1).
 - [ ] **Overlays** — stickers, shapes, picture-in-picture, masks, chroma-key.
 - [x] **Composition** — WHICH photo lands in WHICH fragment (11 arrangements) and
@@ -394,6 +458,39 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       opens it, so "the exported SVG is the project" (THE POST) currently loses
       the move on the way out even though the manifest carries it. The manifest
       is the reason this is only a display gap: reopening the file restores it.
+- [ ] **THE MIX HARD-CUTS AT THE END OF THE TAKE.** Ten seconds of music under a
+      collage stops dead on the last sample, mid-phrase, which is the single
+      most amateur-sounding thing a video editor can do and the reason CapCut
+      auto-fades. It is not new (a clip's audio has always ended this way) but
+      music is what makes it audible, because music is the thing that is still
+      playing at t = duration. The honest fix is NOT another node or another
+      envelope: `mixSources` already walks the whole rendered buffer sample by
+      sample for the true-peak limiter, so a fade is a few lines in the SAMPLE
+      DOMAIN at a place the code already visits, and it would cover clips and
+      music together rather than only the source that happens to be new.
+      Deliberately not taken this cycle: it changes the last ~0.6 s of EVERY
+      export the app has ever produced, which is a decision to make on its own
+      and not a rider on a feature.
+- [ ] **THE MUSIC DOES NOT TRAVEL, in a code OR in a project file.** A
+      composition code is a source-independent RECIPE, so a track cannot ride it
+      for the same reason photographs cannot — third on the "in the app but not
+      in the code" list after pinned fragments and the title. The project file
+      and the SVG are different: they DO carry bytes (every photograph, base64),
+      so a soundtrack could ride there and does not. `svgProject` embeds
+      `<image>` elements the format defines; audio would need a private
+      `<metadata>` blob, and a three-minute mp3 is 3 MB of base64 inside a file
+      Inkscape has to parse. Reopening a project therefore restores the collage
+      and silently loses its music, which is exactly the "absent means keep
+      whatever is on screen" shape already scarred here — the honest first cut
+      is for the loader to SAY the file had music rather than to grow the
+      format.
+- [ ] **A SOUNDTRACK IS ONE TRACK, AND THE LAST ONE PICKED WINS.** Two music
+      files dropped together take the last and flash a notice. Fine for "music
+      under this collage", wrong the moment anyone wants a voiceover UNDER a
+      music bed — which is two sources at two levels, i.e. the volume rung
+      above, not this one. The Stage holds `track` as a single field; making it
+      a list is mechanical (every seam already loops over clips) but the UI
+      question — per-source level — is the actual work.
 - [ ] **`refreshMoveCrops` re-crops EVERY fragment every frame while anything
       moves, including fragments whose picture is not visible.** The whole draw
       list, unconditionally, at 60 Hz. It is the honest first cut — a few dozen
@@ -433,6 +530,32 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A THREE-STATE BUTTON WITH A TWO-STATE NAME, and the e2e is what found it.**
+  The music chip's speaker has three states, not two, because music arrives IN
+  the piece (adding it is an explicit act about sound) while the MONITOR starts
+  off (browsers only autoplay muted media). So the first press means "let me
+  hear it", the second means "take it out of the file" — deliberate, and the
+  right behaviour. The `title` said so. The **accessible name did not**: it read
+  `Mute the music` in a state where pressing it unmutes the monitor and mutes
+  nothing. Caught because the e2e drives by ROLE AND NAME, clicked the thing
+  called "Mute the music", and then could not find the muted state it had just
+  asked for — a test written against the visible label would have sailed past,
+  and a screen-reader user would have been told the opposite of what the button
+  does. The fix is one string (`trackAction`) that the title, the accessible
+  name and the handler's branch all read, so the button cannot say one thing and
+  do another. `aria-pressed` still tracks INTENT (what the file will carry),
+  because with three states the name and the pressed-ness are genuinely two
+  different facts.
+- **A GATE NAMED AFTER ITS OLD REASON: `liveCount > 0` MEANT "IS THERE ANYTHING
+  TO RECORD", AND STOPPED MEANING IT TWICE.** Three dock controls — the monitor,
+  the Record button, and `recorderRef.canRecord` — were gated on the number of
+  live VIDEO DECODERS, which was the same question as "can this Stage produce a
+  take" right up until THE MOVE made a photographs-only collage recordable, and
+  then again when music did. With music and no video the monitor button rendered
+  DISABLED, so the one thing the user had just added was the one thing they
+  could not hear. Renamed to `takeable` and widened. The general shape: a
+  boolean named after the mechanism it currently reads survives every change to
+  what it is actually asking.
 - **A REALTIME BUDGET LEAKED INTO THE FILE, so the export FROZE every clip the
   device could not PLAY AT ONCE — while mixing that clip's SOUND in anyway.** The
   decoder caps (`detectStageCaps`: mobile 3, desktop 4-8) are a REALTIME limit —
@@ -1027,6 +1150,56 @@ the next tier (pro effects, AI-assisted editing, collaboration) becomes the
 frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
+- 2026-08-08 · **[AXIS:COLLAGE] THE SOUNDTRACK — music under the collage**
+  (well empty — 0 new, 0 stranded in `building`, read UNSCOPED across all trades
+  first; breadth debt 0, so LIVE STATE's stalest-axis rule governed and it named
+  COLLAGE.) before→after: **a collage of photographs could be a video and that
+  video was NECESSARILY SILENT → you can drop a song under it, hear it while you
+  work, and it is in the file.** THE MOVE shipped the time axis last cycle and
+  handed this one its own gap: every sample this app had ever mixed came out of
+  a video clip's audio track, the picker took `image/*,video/*`, and
+  `ingestFiles` rejected an mp3 with "images and video only" — there was no door.
+  THE WHOLE DESIGN IS ONE SENTENCE: **a soundtrack is A CLIP WITH NO PICTURE**,
+  so it plugs into the five audio seams the Stage already had (element →
+  `MediaElementSource` → gain → `masterGain`, an intent flag, one
+  `describeAudioSources` row) and **`offlineAudio.mixSources` changed by NOT ONE
+  LINE** — the realtime recorder gets it free from `captureStream`'s tap on
+  `masterGain`. `lib/soundtrack.ts` (~180 lines) holds only what is particular
+  to music: **`span: 0` for EVERY duration** (a container's length is not the
+  decoded buffer's — mp3 carries encoder delay and padding — and that hop does
+  not round differently, it flips `audioSchedule` into its LAPPED branch and
+  cuts a sliver of silence into every repeat forever); intent kept structurally
+  free of the monitor (`soundtrackSource` takes no `soundOn` argument, and the
+  sweep is what keeps it that way — the recorded bug that made every export
+  silent); and a file classifier DISJOINT from `isVideoFile`, so the ambiguous
+  containers (.mp4/.webm/.ogg) stay video and every picked file lands in exactly
+  one bucket. Music arrives UNMUTED where a clip arrives muted — a clip is a
+  picture that happens to have sound, a soundtrack is nothing but sound — and
+  **the music restarts when the take does**, beside `moveOriginMs = -1` in
+  `setCaptureActive`, or the two recorders open on two different bars.
+  PROOF, at the artifact: `5.0s · 30fps · 150 frames · sound`, the MP4 decoded
+  back to samples — **1500 Hz at 3114x the 5 kHz control**, measured at the
+  MIDDLE of a 5 s take from a 2.0 s file, so it LAPPED; muting the chip gives
+  `150 frames · silent` and no decodable audio track at all. Sweep: 4,920
+  assertions over 1,080 file shapes and 108 specs, and it BITES — three
+  mutations (span carrying the duration, an untyped .mp4 claimed as music, gain
+  reading a monitor) each fail it. Regressions green: video-audio-export 4/4
+  (its tone instrument was EXTRACTED to `tests/e2e/tone-measure.ts` and is now
+  read by both suites rather than copied), motion 5/5, mobile-watertight 6/6,
+  `tsc --noEmit` clean, `vite build` clean.
+  THREE DEFECTS THE VERIFICATION FOUND, all fixed here: (1) the chip's
+  ACCESSIBLE NAME said "Mute the music" in the state where pressing it unmutes
+  the MONITOR — found only because the e2e drives by role and name; (2) the
+  duration probe was AWAITED before adopting the track, so two quick picks meant
+  the FASTEST PROBE won and the other's url was revoked out from under it;
+  (3) **the fifth rail button pushed "Clear all" off the bottom of the band on
+  every phone with the dock open** — invisible to every existing gate, because
+  the rail is absolutely positioned inside an `overflow-hidden` parent and a
+  clipped child costs the document no scrollWidth. The threshold was the literal
+  `200`, already 16px short of the FOUR-button column it was written for; it is
+  now DERIVED from the button count, and the e2e walks each rail button's
+  clipping ancestors so the next button cannot reintroduce it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
 - 2026-08-08 · **[AXIS:COLLAGE] THE MOVE — the collage has a TIME AXIS**
   (well empty, breadth debt 0, LIVE STATE named COLLAGE the stalest axis; working
   tree read FIRST, per the scar directly below — nothing was stranded this time.)

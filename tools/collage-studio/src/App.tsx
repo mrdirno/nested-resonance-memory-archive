@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import {
   Upload, Activity, X, Lock, Unlock, RefreshCw, Shuffle, Settings, Layout, Film, Plus,
-  Maximize2, Minimize2, Dices
+  Maximize2, Minimize2, Dices, Music
 } from 'lucide-react';
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
@@ -21,6 +21,7 @@ import { addToHistory, HistoryItem } from './lib/history';
 import { Template } from './lib/templates';
 import { AppState, ImageAsset, LayoutItem, LayoutMode, LiveClip, Point, PrimitiveType } from './types';
 import { isVideoFile, formatTimecode, openClip, revokeFrames, type ExtractedFrame } from './lib/video';
+import { isAudioFile, type SoundtrackSpec } from './lib/soundtrack';
 
 import { Header } from './components/Header';
 import { SimpleControls } from './components/SimpleControls';
@@ -114,6 +115,24 @@ const createThumbnail = async (img: HTMLImageElement, maxDim = 1024): Promise<st
 
 /** A laid-across stage rail: 44px of button, 16px inset, 8px of air. */
 const RAIL_ROW_H = 68;
+
+/**
+ * HOW TALL THE STAGE RAIL IS AS A COLUMN — DERIVED, NOT GUESSED.
+ *
+ * Maximize · add · add video · add music · clear, at 44px with 8px between,
+ * inset 16px from the top and given the same 16px back at the bottom. The
+ * threshold that decides column-vs-row USED TO BE THE LITERAL 200, which was
+ * already 16px short of the FOUR-button column it was written for — so a band
+ * between 200 and 216px clipped the Clear button off the bottom, quietly,
+ * because the rail sits inside an `overflow-hidden` parent and a clipped
+ * absolute child costs the document no scrollWidth at all. Adding the music
+ * button made that gap 68px wide and turned a latent edge into the ordinary
+ * case: any phone with the video dock open lost Clear entirely.
+ *
+ * Deriving it means the next button added to the rail cannot reintroduce this.
+ */
+const RAIL_BUTTONS = 5;
+const RAIL_COL_H = 16 + RAIL_BUTTONS * 44 + (RAIL_BUTTONS - 1) * 8 + 16;
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'simple' | 'advanced'>('simple');
@@ -259,6 +278,14 @@ export default function App() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  const musicInputRef = useRef<HTMLInputElement>(null);
+  /**
+   * THE SOUNDTRACK. One track, because "music under this collage" is one job —
+   * a second one is a mix, and a mix is a different tool. The `blob:` URL is
+   * minted and OWNED here (revoked when replaced or cleared), exactly like a
+   * `LiveClip`'s: the Stage is handed the string and never revokes it.
+   */
+  const [soundtrack, setSoundtrack] = useState<SoundtrackSpec | null>(null);
   /**
    * HOW BIG THE ARTWORK IS ALLOWED TO BE — and why it has to be measured.
    *
@@ -333,7 +360,7 @@ export default function App() {
    * band clips, so `Clear all` was simply gone off the bottom with nothing to
    * scroll. Short band, lay the rail across instead of down.
    */
-  const railRow = !!artBand && artBand.h < 200;
+  const railRow = !!artBand && artBand.h < RAIL_COL_H;
 
   /**
    * The largest box of ratio `aspect` that fits the measured band.
@@ -664,7 +691,12 @@ export default function App() {
    * `moving` — which is the same flag this depends on.
    */
   const moving = move !== 'still' && images.length > 0;
-  const liveMode = (clips.length > 0 || moving) && stageOk;
+  // A LIVE COMPOSITION IS ONE THAT CHANGES OR SOUNDS. Clips move; THE MOVE makes
+  // photographs move; MUSIC makes a still collage a thing worth recording — and
+  // the Stage is the only surface that can play it (its `masterGain` is what
+  // `captureStream` taps), so without this the track would be inaudible and
+  // absent from a realtime take.
+  const liveMode = (clips.length > 0 || moving || !!soundtrack) && stageOk;
 
   /**
    * THE WRAP IS DECIDED HERE, ONCE, and the RESULT is what travels.
@@ -1143,20 +1175,76 @@ export default function App() {
    *  is no third case and nothing is asked. */
   const ingestFiles = (list: File[]) => {
       if (!list.length) return;
-      const videos = list.filter(isVideoFile);
-      const pics = list.filter(f => !isVideoFile(f) && f.type.startsWith('image/'));
-      const rejected = list.length - videos.length - pics.length;
+      // EXACTLY ONE BUCKET EACH. `isAudioFile` and `isVideoFile` are written to
+      // be disjoint (the ambiguous containers — .mp4, .webm, .ogg — belong to
+      // video), and the music filter runs first so the reject count below stays
+      // the honest "none of the three".
+      const music = list.filter(isAudioFile);
+      const videos = list.filter(f => !isAudioFile(f) && isVideoFile(f));
+      const pics = list.filter(f => !isAudioFile(f) && !isVideoFile(f) && f.type.startsWith('image/'));
+      const rejected = list.length - videos.length - pics.length - music.length;
 
       const counted = pics.length + videos.length;
       if (counted > 0) beginIngest(counted, `Adding ${counted} item${counted === 1 ? '' : 's'}…`);
 
+      // ONE TRACK. The last one picked wins, which is what "replace the music"
+      // means, and the rest are named rather than silently dropped.
+      if (music.length) {
+          adoptSoundtrack(music[music.length - 1]);
+          if (music.length > 1) flashNotice(`One music track at a time — using ${music[music.length - 1].name}.`);
+      }
       if (pics.length) void handleUpload(pics);
       if (videos.length) {
           videoJobRef.current = videoJobRef.current
               .then(async () => { for (const v of videos) await autoIngestVideo(v); })
               .catch(() => { /* each clip already flashed its own notice */ });
       }
-      if (rejected > 0) flashNotice(`${rejected} unsupported file(s) ignored — images and video only.`);
+      if (rejected > 0) flashNotice(`${rejected} unsupported file(s) ignored — images, video and music only.`);
+  };
+
+  /**
+   * ADOPT A MUSIC FILE — SYNCHRONOUSLY, then learn its length.
+   *
+   * The first cut awaited a metadata probe before calling `setSoundtrack`, and
+   * that is a race with an obvious loser: pick a long track, then a short one
+   * before the first probe returns, and the SHORT one lands first, the LONG
+   * one's probe then overwrites it and REVOKES the url of the track actually on
+   * screen. "The last file picked wins" quietly became "the fastest file to
+   * report its own duration wins", and the other one's music went dead.
+   *
+   * Nothing about the render needs the duration (`lib/soundtrack.ts`,
+   * DECISION 1 — the mixer takes its window from the DECODED buffer), so there
+   * is nothing to wait for: adopt now, and let the probe fill in the label if
+   * and when it arrives, and only if this is still the track it was probing.
+   * A probe that never fires leaves a fully working soundtrack with no length
+   * on its chip, which is the correct degradation.
+   */
+  const adoptSoundtrack = (file: File) => {
+      const url = URL.createObjectURL(file);
+      // Revoked HERE rather than inside the updater: a state updater must be a
+      // pure function of `prev` (React may call it twice), and `handleClear`
+      // already disposes clip urls this way.
+      if (soundtrack?.url) URL.revokeObjectURL(soundtrack.url);
+      setSoundtrack({ url, name: file.name, durationSec: 0, muted: false });
+      flashNotice(`Music: ${file.name} — press the speaker to hear it.`);
+
+      try {
+          const probe = document.createElement('audio');
+          probe.preload = 'metadata';
+          const land = (v: number) => {
+              probe.onloadedmetadata = null; probe.onerror = null;
+              if (!(v > 0)) return;
+              setSoundtrack((prev) => (prev && prev.url === url ? { ...prev, durationSec: v } : prev));
+          };
+          probe.onloadedmetadata = () => land(Number.isFinite(probe.duration) ? probe.duration : 0);
+          probe.onerror = () => land(0);
+          probe.src = url;
+      } catch { /* the chip simply shows no length */ }
+  };
+
+  const removeSoundtrack = () => {
+      if (soundtrack?.url) URL.revokeObjectURL(soundtrack.url);
+      setSoundtrack(null);
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1276,6 +1364,8 @@ export default function App() {
       // so the files would sit in memory unreachable for the rest of the session.
       for (const c of clips) { try { URL.revokeObjectURL(c.url); } catch { /* ignore */ } }
       setClips([]); setStageOk(true);
+      // The music is the user's file too, and its URL is owned here.
+      removeSoundtrack();
       setImages([]); setPreviewUrl(null); setCount(0); setDensity(1); setLockedCells(new Map()); setAvgColor(null);
       ownCount(false); // a fresh import after Clear auto-follows the upload count again
   };
@@ -1704,7 +1794,7 @@ export default function App() {
          {isDragging && (
             <div className="absolute inset-3 z-[150] pointer-events-none rounded-2xl border-2 border-dashed border-emerald-500/70 bg-emerald-500/5 flex flex-col items-center justify-center gap-2">
                <Film size={26} className="text-emerald-400" />
-               <span className="text-[10px] font-black tracking-[0.2em] text-white uppercase">Drop images or video</span>
+               <span className="text-[10px] font-black tracking-[0.2em] text-white uppercase">Drop images, video or music</span>
             </div>
          )}
          {images.length === 0 ? (
@@ -1754,6 +1844,9 @@ export default function App() {
                        onRemoveClip={removeClip}
                        recorderRef={recorderRef}
                        poolAssets={images}
+                       soundtrack={soundtrack}
+                       onRemoveSoundtrack={removeSoundtrack}
+                       onSoundtrackMuted={(muted) => setSoundtrack((prev) => (prev ? { ...prev, muted } : prev))}
                      />
                    ) : (
                      previewUrl && <img src={previewUrl} className="w-full h-full object-contain pointer-events-none" />
@@ -1822,6 +1915,16 @@ export default function App() {
                      aria-label="Add a video"
                      className="w-11 h-11 rounded bg-[#111] text-emerald-400 border border-gray-800 flex items-center justify-center hover:bg-emerald-500/15 transition-colors shadow-lg"
                    ><Film size={18} /></button>
+                   <button
+                     onClick={() => musicInputRef.current?.click()}
+                     title={soundtrack ? `Music: ${soundtrack.name} — pick another to replace it` : 'Add music — it plays under the collage and lands in the export'}
+                     aria-label={soundtrack ? 'Replace the music' : 'Add music'}
+                     className={`w-11 h-11 rounded bg-[#111] border flex items-center justify-center transition-colors shadow-lg ${
+                       soundtrack
+                         ? 'text-emerald-400 border-emerald-500/40 hover:bg-emerald-500/15'
+                         : 'text-gray-300 border-gray-800 hover:bg-white/10 hover:text-white'
+                     }`}
+                   ><Music size={18} /></button>
                    <button onClick={handleClear} title="Clear all" aria-label="Clear all" className="w-11 h-11 rounded bg-[#111] text-red-500 border border-gray-800 flex items-center justify-center hover:bg-red-900/30 transition-colors shadow-lg"><X size={18} /></button>
                </div>
                )}
@@ -1850,7 +1953,7 @@ export default function App() {
          {/* VIDEO DOCK — everything the live stage needs to say or be driven by,
              OUTSIDE the canvas. This used to float over the collage; chrome on
              top of the artwork covers the thing the user is here to look at. */}
-         {clips.length > 0 && (
+         {(clips.length > 0 || soundtrack) && (
            <div className="flex items-center px-2 py-1.5 border-b border-white/5 bg-[#0c0c0c]">
              {/* The live stage portals its clip chips + transport in here. */}
              <div ref={setStageControlsHost} className="flex-1 flex items-center min-w-0" />
@@ -1874,6 +1977,9 @@ export default function App() {
 
       <input ref={fileInputRef} type="file" multiple accept="image/*,video/*" className="hidden" onChange={onFileInputChange} />
       <input ref={videoInputRef} type="file" multiple accept="video/*,.mov,.mp4,.m4v,.webm" className="hidden" onChange={onFileInputChange} />
+      {/* `audio/*` plus the spellings some pickers refuse to match on type
+          alone. Not `multiple`: one track is the job. */}
+      <input ref={musicInputRef} type="file" accept="audio/*,.mp3,.m4a,.aac,.wav,.flac,.opus,.oga" className="hidden" onChange={onFileInputChange} />
     </div>
   );
 }
