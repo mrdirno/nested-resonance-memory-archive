@@ -11,6 +11,7 @@ import { rollDice, ASPECT_ROSTER } from './lib/diceRoll';
 import { encodeState, decodeState, codeFromUrl, CODE_PARAM } from './lib/rollCode';
 import { assignSources, distinctSourceCount } from './lib/fill';
 import { arrangeBag, withFocus, withTwist, twistAngle, type ArrangementId, type FocusId, type TwistId } from './lib/composition';
+import { withMove, type MoveId } from './lib/motion';
 import { renderCanvas } from './lib/renderer';
 import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/title';
 import type { LookId } from './lib/grade';
@@ -165,6 +166,8 @@ export default function App() {
   const [arrangement, setArrangement] = useState<ArrangementId>('natural');
   const [focus, setFocus] = useState<FocusId>('auto');
   const [twist, setTwist] = useState<TwistId>('none');
+  /** THE MOVE — how the picture drifts inside its fragment. See lib/motion.ts. */
+  const [move, setMove] = useState<MoveId>('still');
   const [bgColor, setBgColor] = useState('#050505'); 
   const [avgColor, setAvgColor] = useState<{r:number, g:number, b:number} | null>(null); 
 
@@ -630,10 +633,10 @@ export default function App() {
         const cell = b && b.w > 0 && b.h > 0
           ? { cx: (b.x + b.w / 2) / PREVIEW_W, cy: (b.y + b.h / 2) / H, area: (b.w * b.h) / (PREVIEW_W * H) }
           : null;
-        return withTwist(withFocus(images[idx], focus, slotSeed), twist, slotSeed, cell);
+        return withMove(withTwist(withFocus(images[idx], focus, slotSeed), twist, slotSeed, cell), move, cell);
       });
     },
-    [shuffledIndices, images, focus, twist, seed, layoutItems, aspect],
+    [shuffledIndices, images, focus, twist, move, seed, layoutItems, aspect],
   );
 
   /**
@@ -642,7 +645,26 @@ export default function App() {
    * and a composition containing video gets a canvas that keeps moving.
    * `stageOk` drops it back to the still path if the compositor cannot start.
    */
-  const liveMode = clips.length > 0 && stageOk;
+  /**
+   * LIVE when there is something to keep drawing — a clip to play, OR a move.
+   *
+   * THE MOVE HAD TO WIDEN THIS OR IT WOULD HAVE BEEN UNREACHABLE. The gate used
+   * to be `clips.length > 0` alone, and it feeds three things: which preview is
+   * mounted, whether the static JPEG is rendered at all, and — through
+   * `canExportVideo` — whether the export sheet offers video. So on the old
+   * gate a collage of PHOTOGRAPHS could not be recorded at all, which is fine
+   * for a still (there is nothing to record) and wrong the moment the fragments
+   * drift: the one thing a photo collage could never be was a video, and a move
+   * is precisely what makes it one.
+   *
+   * Widening it costs nothing when nothing moves. `Stage` composites stills on
+   * exactly the path it already uses for a video collage's photographic
+   * fragments, `syncClips([])` is a no-op, the transport dock renders per clip
+   * and so renders none, and the demand-driven tick idles at zero rAF unless
+   * `moving` — which is the same flag this depends on.
+   */
+  const moving = move !== 'still' && images.length > 0;
+  const liveMode = (clips.length > 0 || moving) && stageOk;
 
   /**
    * THE WRAP IS DECIDED HERE, ONCE, and the RESULT is what travels.
@@ -734,6 +756,9 @@ export default function App() {
     // same fragments graded differently is a different picture, and the point
     // of the button is a different picture.
     setLook(roll.look ?? 'none');
+    // And the move is part of it for the third time and the same reason — a
+    // collage that drifts is not the same picture as one that sits still.
+    setMove(roll.move ?? 'still');
     setLastRecipe(roll.recipe);
     setLockedCells(new Map());
     // The deal is part of the composition and the roll re-deals it; leaving the
@@ -755,10 +780,10 @@ export default function App() {
   // ===========================================================================
   const compositionCode = useMemo(() => encodeState({
     layoutMode, primitive, count, density, entropy, aspect, gutter,
-    bgColor, seed, arrangement, focus, twist, look, shuffle: shuffleTrigger,
+    bgColor, seed, arrangement, focus, twist, look, move, shuffle: shuffleTrigger,
     countOwned,
   }), [layoutMode, primitive, count, density, entropy, aspect, gutter,
-       bgColor, seed, arrangement, focus, twist, look, shuffleTrigger, countOwned]);
+       bgColor, seed, arrangement, focus, twist, look, move, shuffleTrigger, countOwned]);
 
   /**
    * Apply a pasted code. Returns false when it is not one, so the caller can
@@ -796,6 +821,7 @@ export default function App() {
     setArrangement(s.arrangement);
     setFocus(s.focus);
     setTwist(s.twist);
+    setMove(s.move);
     setShuffleTrigger(s.shuffle);
     // Fragments pinned by hand refer to cells of the layout that is being
     // replaced, so they cannot survive the change any more than they survive a
@@ -1244,7 +1270,7 @@ export default function App() {
   };
 
   const handleClear = () => {
-      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
       addToHistory(state, images, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
@@ -1276,6 +1302,7 @@ export default function App() {
       else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural');
       setFocus(l.focus ?? 'auto');
       setTwist(l.twist ?? 'none');
+      setMove(l.move ?? 'still');
       if(item.state.style?.background) setBgColor(item.state.style.background);
       // ABSENT MEANS THE DEFAULT, never "keep what is on screen" — restoring a
       // snapshot that predates the title must not leave today's caption on it.
@@ -1534,7 +1561,7 @@ export default function App() {
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
         const orderedImages = retwistFor(orderedAssets.map(a => a ?? null), items, 1000, 1000 / aspect);
-        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
         // `images` — the raw SOURCE POOL, last. Not `orderedImages`: that is the
         // drawn permutation with focus and twist already baked into each
         // analysis, and both are re-derived from focus/twist/seed on open. The
@@ -1546,7 +1573,7 @@ export default function App() {
     } catch (e) { setExportStatus('error'); }
   };
 
-  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined }; await saveProject(state, images); };
+  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined }; await saveProject(state, images); };
   const handleLoadProject = () => { 
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.collage,.svg';
     input.onchange = async (e:any) => {
@@ -1585,7 +1612,7 @@ export default function App() {
         const ld = loaded?.state.layout;
         const ldOwned = ld?.countOwned ?? true;
         if(loaded && ldOwned) pendingCountRef.current = { count: num(ld!.count, 12), drop: dropId };
-        if(loaded) { ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
+        if(loaded) { ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
           // THE TAB IS PART OF THE STATE, and it was WRITTEN and never read.
           // `stateForSave` has always put `mode: activeTab` in the manifest, so an
           // export taken with Settings open said "advanced" and reopening left the
@@ -1834,7 +1861,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={setMove} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
          )}

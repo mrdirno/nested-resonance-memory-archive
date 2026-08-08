@@ -1,6 +1,7 @@
 import type { ArrangementId, FocusId, TwistId } from './lib/composition';
 import type { TitleSpec } from './lib/title';
 import type { LookId } from './lib/grade';
+import type { MoveId } from './lib/motion';
 import { AnalysisResult } from './lib/analysis';
 
 /**
@@ -137,6 +138,14 @@ export interface AppState {
     focus?: FocusId;
     /** How far the picture leans inside its fragment. Absent = square. */
     twist?: TwistId;
+    /**
+     * THE MOVE — how the picture drifts inside its fragment over time (see
+     * lib/motion.ts). Under `layout` rather than `style` because it is
+     * geometry: it moves the CROP, exactly as `twist` rotates it and `focus`
+     * re-points it. Absent on every project saved before it existed, and absent
+     * means `still`, which is what those projects were.
+     */
+    move?: MoveId;
   };
   style: {
     background: string;

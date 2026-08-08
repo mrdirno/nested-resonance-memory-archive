@@ -422,17 +422,34 @@ for (const id of LOOK_IDS) {
   }
 }
 {
-  // A PRE-LOOK code — the exact string shape shipped before this cycle — must
-  // still open, ungraded. Built by deleting the look character and re-checksumming
-  // is not possible from out here, so instead: mint a `none` code and assert that
-  // TRUNCATING the middle group to the legacy 18 characters is REFUSED rather
-  // than opening as a different collage. (The checksum's whole job.)
+  // A code from an EARLIER GENERATION must still open, and a code truncated
+  // back to one must be REFUSED rather than re-read as a different collage.
+  // Built by deleting a field and re-checksumming is not possible from out
+  // here, so instead: mint a code and assert every legacy truncation of its
+  // middle group is rejected. (The checksum's whole job.)
+  //
+  // THE LENGTH MOVES EVERY TIME A FIELD IS ADDED, and that is the point of
+  // asserting it exactly rather than as a minimum. 18 was the flag form, 19
+  // added THE LOOK, 20 added THE MOVE (lib/motion.ts) — each one read by length,
+  // because a version character would have had to be present in the first code
+  // ever minted to be of any use now, and it was not. When this fails after a
+  // new field lands, the number is what changed; when it fails without one, the
+  // group silently grew and every fixed-offset slice below it has moved.
+  const LOOK_AT = 16;              // the look's own character, 0-indexed
+  const GROUP_LEN = 20;            // what THIS build mints
   const code = RC.encodeState({ ...baseState, look: 'none' });
   const [a, b, c] = code.split('-');
-  ok('I8c', b.length === 19, `a look-bearing middle group must be 19 chars, got ${b.length}`);
-  const truncated = `${a}-${b.slice(0, 18)}-${c}`;
-  ok('I8d', RC.decodeState(truncated) === null,
-    'a middle group truncated back to the legacy length must be refused, not re-read');
+  ok('I8c', b.length === GROUP_LEN, `the middle group must be ${GROUP_LEN} chars, got ${b.length}`);
+  // INCLUDING the two lengths BELOW the checksummed band. 16 and 17 were never
+  // minted by any build (this codec was wired to nothing until 2026-08-07), so
+  // a group of that length is a truncation of a real code and must not open on
+  // trust — which is what it used to do.
+  let refusedTruncations = 0;
+  for (const legacy of [16, 17, 18, 19]) {
+    if (RC.decodeState(`${a}-${b.slice(0, legacy)}-${c}`) === null) refusedTruncations++;
+  }
+  ok('I8d', refusedTruncations === 4,
+    `only ${refusedTruncations}/4 truncations back to a legacy length were refused`);
 }
 {
   // THE CHECKSUM MUST COVER THE LOOK CHARACTER. Without that, flipping one
@@ -445,6 +462,8 @@ for (const id of LOOK_IDS) {
     for (const other of LOOK_IDS) {
       const oi = LOOK_IDS.indexOf(other);
       if (LOOK_IDS.indexOf(id) === oi) continue;
+      // The look's character is at a FIXED offset from the START of the group,
+      // so this keeps working as later fields extend the tail.
       const mangled = `${a}-${b.slice(0, 16)}${oi.toString(36).toUpperCase()}${b.slice(17)}-${c}`;
       tried++;
       if (RC.decodeState(mangled) === null) caught++;

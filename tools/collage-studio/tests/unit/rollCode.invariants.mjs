@@ -468,12 +468,30 @@ console.log('8b. THE CHECKSUM — a mangled code is REFUSED, not opened as someb
     const st = reachableState(rngOf(i * 61 + 9));
     check(decodeState(encodeState(st)) !== null, `sample ${i}: the checksum refused a code it minted`);
   }
-  // A code minted before the checksum existed has a 15-character middle group
-  // and is taken on trust, exactly as it was when it was sent.
+  // A code minted before the checksum existed has a middle group of AT MOST 15
+  // characters and is taken on trust, exactly as it was when it was sent.
   const [la, lb, lc] = encodeState(reachableState(rngOf(3))).split('-');
-  for (const L of [6, 8, 9, 10, 15, 16]) {
+  for (const L of [6, 8, 9, 10, 15]) {
     check(decodeState(`${la}-${lb.slice(0, L)}-${lc}`) !== null,
       `a pre-checksum code with a ${L}-character middle group was refused`);
+  }
+  // AND THE GAP ABOVE IT IS NOT PART OF THAT TRUST. 16 and 17 sit between the
+  // last pre-checksum form and the first checksummed one (18), and NO BUILD
+  // EVER MINTED THEM — this codec was wired to nothing until 2026-08-07, so the
+  // only groups in the wild are 18 (the count flag), 19 (THE LOOK) and 20 (THE
+  // MOVE). A group of 16 or 17 is therefore a TRUNCATION of a real code, and it
+  // used to fall below the length at which the checksum was even consulted:
+  // lop two characters off a code in a chat client and it opened, cleanly, as
+  // somebody else's collage. Found by the move's own sweep; 16 was on the trust
+  // list above by over-inclusion, and the comment beside it always said 15.
+  for (const L of [16, 17]) {
+    check(decodeState(`${la}-${lb.slice(0, L)}-${lc}`) === null,
+      `a ${L}-character middle group is a truncation and must be refused`);
+  }
+  // ...and nothing LONGER than the newest form, either.
+  for (const junk of ['X', 'ZZ', '000']) {
+    check(decodeState(`${la}-${lb}${junk}-${lc}`) === null,
+      `a middle group with '${junk}' appended must be refused`);
   }
 }
 

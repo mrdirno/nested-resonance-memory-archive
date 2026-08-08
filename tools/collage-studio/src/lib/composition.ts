@@ -423,7 +423,13 @@ export const arrangeBag = ({ bag, cells, images, arrangement, shuffle }: Arrange
 const CENTRE = { x: 0.5, y: 0.5 };
 
 /** Deterministic 0..1 from an integer — no shared state, so no call-order coupling. */
-const hash01 = (n: number): number => {
+/**
+ * EXPORTED so `motion.ts` can key a fragment's bearing off the same mixer this
+ * file keys a scatter off. A second copy of an integer hash is a second thing
+ * that has to keep agreeing across builds, and the one it would have to agree
+ * with is this one — see the "never a copy" note on `twistedDest`.
+ */
+export const hash01 = (n: number): number => {
   let t = (n + 0x6d2b79f5) | 0;
   t = Math.imul(t ^ (t >>> 15), t | 1);
   t ^= t + Math.imul(t ^ (t >>> 7), t | 61);

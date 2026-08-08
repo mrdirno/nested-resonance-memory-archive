@@ -2,6 +2,7 @@ import { LayoutItem } from '../types';
 import { ImageAsset } from '../types';
 import { TitlePlan, titlePlanFor, drawTitlePlan } from './title';
 import { cssFilterFor, type LookId } from './grade';
+import { sampleMove, NO_MOVE } from './motion';
 
 export interface CropGeometry {
   sx: number; sy: number; sw: number; sh: number;
@@ -71,7 +72,23 @@ const CENTRE_ANCHOR = { x: 0.5, y: 0.5 };
 export const calculateSmartCrop = (
   box: {x:number, y:number, w:number, h:number},
   img: {width:number, height:number, analysis: any},
-  zoom: number = 1.0
+  zoom: number = 1.0,
+  /**
+   * THE MOVE'S CLOCK, in output seconds. See lib/motion.ts.
+   *
+   * A fourth parameter rather than a fifth channel on `analysis` because a move
+   * is the only per-slot decision here that is not a constant: which move, and
+   * this fragment's own phase in it, DO ride the analysis (that is the seam
+   * `withFocus` and `withTwist` share) — but the time cannot, because one
+   * analysis is drawn at many instants.
+   *
+   * DEFAULTED TO 0, and 0 is the identity by construction. The three surfaces
+   * that produce a single frame — the still preview, the export worker and the
+   * SVG — pass nothing and are therefore bit-identical to a build without
+   * motion; only the Stage, which is what both video recorders capture and what
+   * the offline render seeks, ever passes a real time.
+   */
+  timeSec: number = 0,
 ): CropGeometry => {
     // The DESTINATION first: a twist grows it, and the cover fit below has to be
     // computed against the grown aspect or the picture is drawn stretched.
@@ -90,8 +107,16 @@ export const calculateSmartCrop = (
         drawH = drawW / boxAsp;
     }
 
-    const cropW = drawW / zoom;
-    const cropH = drawH / zoom;
+    // THE MOVE. `sampleMove` returns the shared `NO_MOVE` BY REFERENCE whenever
+    // nothing should happen, so the untouched path is guarded by an identity
+    // check rather than by arithmetic that happens to be a no-op — no multiply
+    // by 1.0, no add of 0, no float that could round differently than it did
+    // before this feature existed.
+    const move = sampleMove(img.analysis?.move, timeSec);
+    const moving = move !== NO_MOVE;
+
+    const cropW = moving ? drawW / (zoom * move.zoom) : drawW / zoom;
+    const cropH = moving ? drawH / (zoom * move.zoom) : drawH / zoom;
 
     // GUARDED. The old unconditional `img.analysis.face` threw on any asset that
     // arrived without an analysis, which every caller then had to work around
@@ -100,8 +125,14 @@ export const calculateSmartCrop = (
     const an = img.analysis || {};
     const anchor = an.face || an.energy || CENTRE_ANCHOR;
 
-    const ax = anchor.x * img.width;
-    const ay = anchor.y * img.height;
+    // The move nudges the ANCHOR, not the finished rect: the clamp below is what
+    // keeps the crop inside the image, and a pan applied after it would leave
+    // that guarantee behind. `motion.sampleMove` sizes its own reach from the
+    // slack this zoom leaves, so in the ordinary centred case the clamp has
+    // nothing to do — but it stays the backstop for an off-centre anchor, which
+    // could already reach an edge before any of this existed.
+    const ax = (moving ? anchor.x + move.ax : anchor.x) * img.width;
+    const ay = (moving ? anchor.y + move.ay : anchor.y) * img.height;
 
     let sx = ax - (cropW / 2);
     let sy = ay - (cropH / 2);

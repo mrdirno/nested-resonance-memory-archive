@@ -6,6 +6,7 @@ import {
 import { LayoutMode, PrimitiveType } from '../types';
 import type { TitlePlace, TitleSize } from '../lib/title';
 import { LOOKS, type LookId } from '../lib/grade';
+import { MOVES, type MoveId } from '../lib/motion';
 import { GENERATORS, GENERATOR_BY_ID, FAMILIES, FAMILY_LABEL } from '../engine/geom/generators';
 
 interface SimpleControlsProps {
@@ -45,6 +46,10 @@ interface SimpleControlsProps {
   /** THE LOOK — the colour grade over every fragment. See lib/grade.ts. */
   look?: LookId;
   onLook?: (l: LookId) => void;
+
+  /** THE MOVE — how the picture drifts inside its fragment. See lib/motion.ts. */
+  move?: MoveId;
+  onMove?: (m: MoveId) => void;
 }
 
 /**
@@ -88,7 +93,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
   density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice,
   lastRecipe, compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
   titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize,
-  look = 'none', onLook
+  look = 'none', onLook, move = 'still', onMove
 }) => {
 
   // ---- THE COMPOSITION CODE --------------------------------------------------
@@ -255,6 +260,38 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
             {(look ?? 'none') === 'none'
               ? 'A colour grade on the photographs. The frame colour stays what you picked.'
               : 'On the picture, the video and the SVG. It travels in the code.'}
+          </p>
+        </div>
+      )}
+
+      {/* ---- THE MOVE: the picture drifts inside its fragment ----------------
+          The row that gives this app a time axis. A collage of PHOTOGRAPHS
+          exported as a video is a still image with a file size — the
+          compositor's own tick says so ("a photos-only scene draws once and
+          stops") — and this is what makes the file worth having. It reaches the
+          live preview and the exported video; a single frame has no time to
+          sample, so the picture, the SVG and this preview's first instant are
+          exactly what they were. It travels in the code. ------------------ */}
+      {hasImages && onMove && (
+        <div className="ui-looks">
+          <div className="ui-looks__chips" role="group" aria-label="Move">
+            {MOVES.map(m => (
+              <button
+                key={m.id}
+                type="button"
+                className="ui-chip ui-chip--mini"
+                data-active={(move ?? 'still') === m.id}
+                onClick={() => onMove(m.id)}
+                title={m.title}
+                aria-pressed={(move ?? 'still') === m.id}
+                data-testid={`move-${m.id}`}
+              >{m.label}</button>
+            ))}
+          </div>
+          <p className="ui-caption">
+            {(move ?? 'still') === 'still'
+              ? 'Make the collage move. Photographs drift and breathe in their fragments.'
+              : 'In the preview and in the exported video. The picture and the SVG stay still.'}
           </p>
         </div>
       )}

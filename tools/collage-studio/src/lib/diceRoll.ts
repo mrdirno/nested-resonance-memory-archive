@@ -29,6 +29,7 @@ import {
   ARRANGEMENT_IDS, FOCUS_IDS, TWIST_IDS, type ArrangementId, type FocusId, type TwistId,
 } from './composition';
 import { LOOK_IDS, type LookId } from './grade';
+import { MOVE_IDS, type MoveId } from './motion';
 
 // =============================================================================
 // SHAPE
@@ -61,6 +62,15 @@ export interface Roll {
    * rolls described.
    */
   look?: LookId;
+  /**
+   * THE MOVE — how the picture drifts inside its fragment over time. See
+   * lib/motion.ts.
+   *
+   * Optional for the same reason `look` is: every Roll built before this field
+   * existed is still a valid Roll, and absent means `still`, which is exactly
+   * the picture those rolls described.
+   */
+  move?: MoveId;
   /** Name of the recipe this came from, when it came from one. */
   recipe?: string;
   /**
@@ -276,6 +286,24 @@ const lookFor = (rnd: () => number): LookId => {
   return pick(LOOK_IDS.slice(1), rnd);
 };
 
+/**
+ * THE MOVE the dice picks.
+ *
+ * Still most of the time, and by a wider margin than the look is ungraded. A
+ * move is the only thing in the roster that changes what the collage IS rather
+ * than how it looks — a still becomes a clip — so a dice that animated two
+ * rolls in three would stop being a composition roll. 68% still; the rest flat
+ * across the five, which over a handful of presses is enough to show the row
+ * exists without ever being what you did not ask for.
+ */
+const moveFor = (rnd: () => number): MoveId => {
+  if (rnd() < 0.68) return 'still';
+  // Slice past `still` rather than re-rolling, for the reason `lookFor` records:
+  // a re-roll draws a variable number of values from the stream and makes the
+  // roll depend on how many times it happened to land on index 0.
+  return pick(MOVE_IDS.slice(1), rnd);
+};
+
 const bgFor = (layout: LayoutMode, rnd: () => number): BgKey => {
   const fam = GENERATOR_BY_ID[layout]?.family;
   // Radial and sacred figures glow out of the dark and go flat on paper; the
@@ -377,6 +405,12 @@ export const rollDice = (opts: RollOptions = {}): Roll => {
     // chaos, aspect, gutter, zoom, background, arrangement, focus, seed and
     // twist from a given rng as the build before it did.
     look: lookFor(rnd),
+    // Drawn LAST, after the look, for the third time and the same reason:
+    // appending to the end of the stream leaves every earlier draw untouched, so
+    // a build with the move rolls the same layout, count, chaos, aspect, gutter,
+    // zoom, background, arrangement, focus, seed, twist and look from a given
+    // rng as the build before it did.
+    move: moveFor(rnd),
     recipe: recipe?.name,
     // The dice picks a fragment count on purpose, out of the generator's own
     // sane range. That is a decision, so a code minted from it must not be
@@ -561,13 +595,17 @@ export const encodeRoll = (r: Roll, extra = ''): string => {
    */
   const loIdx = LOOK_IDS.indexOf((r.look ?? 'none') as LookId);
   const look = fw(loIdx < 0 ? 0 : loIdx, 1);
+  /** THE MOVE, as an index. Same honest-element-zero reading as the look: index
+   *  zero is `still`, and a move this build does not know about is no move. */
+  const mvIdx = MOVE_IDS.indexOf((r.move ?? 'still') as MoveId);
+  const move = fw(mvIdx < 0 ? 0 : mvIdx, 1);
   // `extra` is whatever a LAYER ABOVE has appended to the code — today that is
   // rollCode's optional shuffle group. It is folded into the checksum but not
   // into the code, because the guard has to cover the whole thing: the first cut
   // checksummed only the three groups this function emits, and a mangling that
   // landed in the shuffle group sailed through it. Measured: every escape in the
   // sweep was exactly that.
-  return `${head}-${mid}${owned}${look}${checksum(head + mid + owned + look + seed + extra)}-${seed}`.toUpperCase();
+  return `${head}-${mid}${owned}${look}${move}${checksum(head + mid + owned + look + move + seed + extra)}-${seed}`.toUpperCase();
 };
 
 /**
@@ -593,6 +631,16 @@ export const encodeRoll = (r: Roll, extra = ''): string => {
  * autocorrect. It is not a signature and defends against nobody malicious.
  */
 const CHECK_LEN = 2;
+
+/**
+ * EVERY MIDDLE-GROUP LENGTH THIS PROJECT HAS EVER MINTED WITH A CHECKSUM.
+ *
+ * 15 fixed fields, then one character per generation: `countOwned` (18), THE
+ * LOOK (19), THE MOVE (20). Add a field, add its length here — and the sweep in
+ * tests/unit/motion.invariants.mjs will tell you if you forget, because the
+ * codec would then refuse its own output.
+ */
+const MINTED_GROUP_LENGTHS = new Set([16 + CHECK_LEN, 17 + CHECK_LEN, 18 + CHECK_LEN]);
 const checksum = (body: string): string => {
   let h = 7;
   for (let i = 0; i < body.length; i++) {
@@ -645,8 +693,45 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
     // minted to be of any use now, and it was not.
     const hasLook = b.length >= 17 + CHECK_LEN;
     const loi = hasLook ? n(b.slice(16, 17)) : 0;
-    const bodyLen = hasLook ? 17 : 16;
-    if (b.length >= bodyLen + CHECK_LEN) {
+    // THE MOVE sits after the look and before the checksum, and is told apart
+    // by LENGTH exactly as the look is: 19 is the pre-move form, 20 carries a
+    // move. Absent means `still` — a code minted before this feature existed
+    // described a collage that did not move, and it still opens as one.
+    const hasMove = b.length >= 18 + CHECK_LEN;
+    const mvi = hasMove ? n(b.slice(17, 18)) : 0;
+    const bodyLen = hasMove ? 18 : hasLook ? 17 : 16;
+    if (b.length >= 16) {
+      /**
+       * A CHECKSUMMED GROUP IS ONE OF THE LENGTHS THIS PROJECT HAS MINTED, OR
+       * IT IS REFUSED. Two holes, closed by one comparison.
+       *
+       * TOO LONG was the scar: the group is read by LENGTH, the checksum is
+       * then sliced at a FIXED offset, and every character beyond it was simply
+       * ignored — so a code with junk appended validated cleanly. Untidy while
+       * there was one checksummed length above the flag form; genuinely
+       * dangerous now that there are two and a later field makes a third, at
+       * which point "ignore the tail" and "read the next generation" are the
+       * same bytes.
+       *
+       * TOO SHORT is the one the move's own sweep turned up, and it is the
+       * worse of the two. `hasLook`/`hasMove` enter the checksummed band BY
+       * LENGTH, so lopping two or three characters off a real code drops it
+       * BELOW the band — 16 and 17 — where the guard did not run at all and the
+       * code opened on trust as somebody else's collage. That is precisely the
+       * failure the checksum was added to prevent, arriving through the door
+       * that decides whether to look.
+       *
+       * 16 and 17 are safe to refuse because NO BUILD EVER MINTED THEM. This
+       * codec was written long before anything called it — `encodeRoll` and
+       * `decodeRoll` were wired to nothing until 2026-08-07 — so the only
+       * groups that exist in the wild are the three that shipped with a UI
+       * behind them: 18 (the count-provenance flag), 19 (THE LOOK), 20 (THE
+       * MOVE). Everything between the trust band and 18 is a truncation.
+       *
+       * Pre-checksum groups (under 16) are untouched: they were minted with no
+       * guard at all and are read exactly as they always have been.
+       */
+      if (!MINTED_GROUP_LENGTHS.has(b.length)) return null;
       const body = a + b.slice(0, bodyLen) + c + extra.toLowerCase();
       if (checksum(body) !== b.slice(bodyLen, bodyLen + CHECK_LEN)) return null;
     }
@@ -659,8 +744,13 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
     // substitution the layout roster's scar is about — the picture would be
     // wrong in a way the recipient cannot see. Same treatment as `layout`.
     const look = LOOK_IDS[loi];
-    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, loi, seed];
-    if (!layout || !look || !nums.every(Number.isFinite) || !Number.isFinite(rgb)) return null;
+    // Same treatment as the look and the layout: a move index this build has no
+    // entry for means the code was minted by a build that knows something this
+    // one does not, and opening it as a still collage would be a silent
+    // substitution the recipient cannot see.
+    const move = MOVE_IDS[mvi];
+    const nums = [count, e, ai, g, z, bgi, ari, foi, twi, pri, loi, mvi, seed];
+    if (!layout || !look || !move || !nums.every(Number.isFinite) || !Number.isFinite(rgb)) return null;
     return {
       layout,
       primitive: PRIMITIVE_ORDER[pri] ?? 'rect',
@@ -678,6 +768,7 @@ export const decodeRoll = (code: string, extra = ''): Roll | null => {
       focus: FOCUS_IDS[foi] ?? 'auto',
       twist: TWIST_IDS[twi] ?? 'none',
       look,
+      move,
       seed,
     };
   } catch {

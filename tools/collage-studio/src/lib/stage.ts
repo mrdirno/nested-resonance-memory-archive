@@ -42,6 +42,7 @@
 // -----------------------------------------------------------------------------
 
 import { calculateSmartCrop, twistedDest, twistOf } from './renderer';
+import { isMoving } from './motion';
 import { titlePlanFor, drawTitlePlan, type TitlePlan } from './title';
 import { cssFilterFor, type LookId } from './grade';
 import {
@@ -580,6 +581,25 @@ export class Stage {
   private destroyed = false;
   private frames = 0;
 
+  // --- the move --------------------------------------------------------------
+  //
+  // THE ONLY CLOCK THE PICTURE ITSELF READS. Every other time in this file is a
+  // clip's own playhead; this one is the OUTPUT timeline, which is what
+  // `lib/motion.ts` samples a move at.
+  //
+  //   live    — `tick` advances it from the rAF timestamp, anchored so the
+  //             preview starts at rest on the frame the still preview shows.
+  //   offline — `renderAtTime` SETS it, exactly as it sets every clip's seek, so
+  //             a frame's motion comes from the frame INDEX and not from a
+  //             clock. That is the same reason the offline path exists at all.
+  //
+  /** Output seconds. 0 is rest, and rest is bit-identical to no motion. */
+  private outTime = 0;
+  /** rAF timestamp of the first frame of this scene; -1 until one has run. */
+  private moveOriginMs = -1;
+  /** Does ANY fragment in this scene move? False keeps every cost at zero. */
+  private moving = false;
+
   // --- offline render --------------------------------------------------------
   private offline = false;
   private offlineWasRunning = false;
@@ -679,6 +699,11 @@ export class Stage {
 
     const items: DrawItem[] = [];
     const wanted = new Set<string>();
+    // THE MOVE, decided ONCE per scene rather than per frame. Everything this
+    // flag gates — the per-frame crop refresh, the loop staying alive on a
+    // photos-only composition — costs exactly nothing while it is false, which
+    // is the state every collage is in until somebody picks a move.
+    let moving = false;
 
     for (let i = 0; i < layout.length; i++) {
       const li = layout[i];
@@ -692,6 +717,7 @@ export class Stage {
       // The grown destination and the pivot, from the SHARED helper in
       // renderer.ts — never a second copy of the |cos|+|sin| arithmetic.
       const d = twistedDest(b, twistOf(asset.analysis));
+      if (!moving && isMoving((asset.analysis as { move?: unknown } | null)?.move)) moving = true;
       const clip = this.bindClip(asset, resolve);
       const stillKey = asset.previewSrc || asset.src;    // App.tsx:209 draws previewSrc
       if (stillKey) wanted.add(stillKey);
@@ -735,6 +761,12 @@ export class Stage {
     }
 
     this.items = items;
+    // A scene that stops moving must go back to REST, not freeze wherever the
+    // last frame left it — the still preview it hands back to is drawn at t=0,
+    // and a Stage parked at t=4.2 would hold a visibly different crop.
+    if (!moving && this.moving) this.outTime = 0;
+    this.moving = moving;
+    this.moveOriginMs = -1;
     this.ensureStills(wanted);
     this.refreshAdmission();
     this.markDirty();
@@ -849,6 +881,11 @@ export class Stage {
   endOfflineRender(): void {
     if (!this.offline) return;
     this.offline = false;
+    // Put the MOVE back to rest and re-anchor. The render left `outTime` at the
+    // last frame it encoded; resuming the live preview from there would drop it
+    // mid-cycle for no reason the viewer can see.
+    this.outTime = 0;
+    this.moveOriginMs = -1;
     // Restore the realtime decoder budget and RELEASE the extra decoders the
     // render admitted, BEFORE replaying: refreshAdmission evicts everything back
     // over the cap, so only clips inside the realtime budget come back live and
@@ -892,6 +929,15 @@ export class Stage {
       await Promise.all(targets.map((c) => this.seekClipTo(c, timeSec, opts.signal)));
     }
     if (this.destroyed) return;
+    // THE MOVE, on the OFFLINE timeline — the frame INDEX, never a clock. The
+    // whole point of this mode is that a render may take 10 ms or 400 ms per
+    // frame and still emit a perfectly even timeline; a move read off
+    // `performance.now()` here would put the judder straight back in, encoded
+    // into the file, where no amount of re-recording removes it.
+    if (this.moving) {
+      this.outTime = Number.isFinite(timeSec) ? Math.max(0, timeSec) : 0;
+      this.refreshMoveCrops();
+    }
     this.dirty = false;
     this.lastDrawAt = -1e9;      // never let the tick's skip-heuristic apply here
     this.drawFrame(0);
@@ -1099,11 +1145,31 @@ export class Stage {
     }
     if (this.capturing && ts - this.lastDrawAt >= this.captureHeartbeatMs) needDraw = true;
 
+    // THE MOVE, on the LIVE timeline.
+    //
+    // Anchored to the FIRST tick of this scene rather than read straight off
+    // the rAF timestamp, which is monotonic from page load: unanchored, opening
+    // the app would drop you at an arbitrary point in the cycle and the preview
+    // would not agree with the exported file's opening frame. Anchored, both
+    // start at rest, on the picture the still preview is already showing.
+    //
+    // This is also what keeps a photos-only composition alive. The tick is
+    // demand-driven — "nothing playing and nothing dirty -> NO rAF is
+    // rescheduled" — which is exactly right for a static collage and exactly
+    // wrong for one that is supposed to move, so `moving` joins the conditions
+    // that force a frame and the condition that reschedules the loop below.
+    if (this.moving && !this.offline) {
+      if (this.moveOriginMs < 0) this.moveOriginMs = ts;
+      this.outTime = Math.max(0, (ts - this.moveOriginMs) / 1000);
+      this.refreshMoveCrops();
+      needDraw = true;
+    }
+
     if (needDraw) this.drawFrame(ts);
     if (this.admissionPending) { this.admissionPending = false; this.refreshAdmission(); }
     if (this.statusPending) { this.statusPending = false; this.emitStatus(); }
 
-    if (playing > 0 || this.capturing || this.dirty) {
+    if (playing > 0 || this.capturing || this.dirty || (this.moving && !this.offline)) {
       this.rafId = this.view.requestAnimationFrame(this.tick);
     }
   };
@@ -1376,6 +1442,7 @@ export class Stage {
         { x: it.bx, y: it.by, w: it.bw, h: it.bh },
         { width: srcW, height: srcH, analysis },
         this.zoom,
+        this.outTime,
       );
       if (!Number.isFinite(c.sx) || !Number.isFinite(c.sy) || !(c.sw > 0) || !(c.sh > 0)) return null;
       return c;
@@ -1402,6 +1469,47 @@ export class Stage {
     if (!c) { it.vok = false; return; }
     it.vsx = c.sx; it.vsy = c.sy; it.vsw = c.sw; it.vsh = c.sh;
     it.vok = true;
+  }
+
+  /**
+   * RE-CROP EVERY FRAGMENT AT THE CURRENT `outTime`.
+   *
+   * A move makes the source rect a function of time, and the source rect is
+   * CACHED on the draw item as eight flat numbers. So somebody has to recompute
+   * it, and the choice of where is the whole design:
+   *
+   *   NOT in `drawFrame`. That loop's contract, written at the top of it, is
+   *   "fully synchronous, zero allocation, no promises, no closures, no map
+   *   lookups, no string building" — and `calculateSmartCrop` returns an object
+   *   literal. Recomputing inside the draw would trade a documented invariant
+   *   for a few saved lines, on the one path where the frame budget is the
+   *   product.
+   *
+   *   HERE instead, off the draw, called from `tick` and from `renderAtTime`
+   *   immediately before the draw. `drawFrame` is then byte-for-byte the loop
+   *   it already was, and the allocation — one small object per fragment per
+   *   frame, a few dozen objects, young-generation garbage — is paid only by
+   *   compositions that actually move.
+   *
+   * The still and the video are refreshed SEPARATELY and from their own source
+   * dimensions, for the reason `computeVideoCrop` records: a 4K clip's extracted
+   * still is 1600 wide while its `videoWidth` is 3840, and one set of numbers
+   * cannot address both pixel spaces.
+   */
+  private refreshMoveCrops(): void {
+    const items = this.items;
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (it.still !== null) {
+        const img = it.still;
+        this.computeStillCrop(it, img.naturalWidth || img.width, img.naturalHeight || img.height);
+      }
+      const clip = it.clip;
+      if (clip !== null && clip.vw > 0 && clip.vh > 0) {
+        this.computeVideoCrop(it, clip.vw, clip.vh);
+        if (clip.poster) this.computePosterCrop(it, clip);
+      }
+    }
   }
 
   private computePosterCrop(it: DrawItem, clip: ClipRecord): void {
@@ -2270,6 +2378,16 @@ export class Stage {
     this.applySize(true);
     if (active) {
       this.clips.forEach((c) => { if (c.live && c.wantPlay) this.tryPlay(c); });
+      // THE MOVE RESTARTS WHEN THE TAKE DOES, so the two recorders agree.
+      //
+      // The offline render sets `outTime` from the frame INDEX and therefore
+      // opens at rest, at t=0. The realtime fallback records the LIVE canvas,
+      // whose `outTime` is anchored to the first tick of the scene — so without
+      // this the same collage recorded the two ways would open at two different
+      // points in the cycle, and which one you got would depend on how long the
+      // preview had been on screen before you pressed record.
+      this.outTime = 0;
+      this.moveOriginMs = -1;
       this.markDirty();
     }
     this.emitStatus();

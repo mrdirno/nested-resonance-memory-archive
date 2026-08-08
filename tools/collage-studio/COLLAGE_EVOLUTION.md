@@ -79,7 +79,26 @@ or re-documenting an existing capability is DD, not delivery.
   CLOSED — a pool that comes back short is refused, visibly, rather than opened
   into a plausible collage that is not yours. `density` and `countOwned` are now
   persisted too, because a project that saved neither described neither the
-  number of fragments nor the crop it was looking at.
+  number of fragments nor the crop it was looking at;
+  THE MOVE — the collage has a TIME AXIS. Five per-fragment drifts (Push /
+  Drift / Sway / Pulse / Wander) on one chip row, on the dice and in the share
+  code, held by ONE pure module (`lib/motion.ts`) that every render path already
+  reaches through `calculateSmartCrop`. The static half of a move (which one,
+  and this fragment's own phase in it) rides the per-slot `analysis` — the seam
+  `withFocus` and `withTwist` share — and the TIME is a fourth argument
+  defaulted to 0, because one analysis is drawn at many instants. Zero at t=0
+  BY REFERENCE (`NO_MOVE`), so the three surfaces that produce a single frame
+  (still preview, raster export, SVG) pass no time and are bit-identical to a
+  build without it, and the video opens on the picture the preview is showing.
+  Periodic on a fixed 12 s raised cosine rather than on the export's duration:
+  the live preview has no end to ramp towards, and a duration-keyed ramp would
+  make the same collage move differently at 10 s and at 30 s — and differently
+  again when the device cap clips the take. The stagger that makes a collage
+  feel alive lives in the HARMONIC and the BEARING, never in a phase offset,
+  because a phase offset is exactly what would break rest-at-zero. And it
+  WIDENED `liveMode`: the video export was gated on `clips.length > 0`, so a
+  collage of photographs could not be recorded at all — the one thing a photo
+  collage could never be was a video, and a move is precisely what makes it one.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -172,8 +191,22 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       Still owed on this rung: a colour/weight choice, per-line styling, MOTION
       (animated titles and lower-thirds — the first thing here that needs a time
       axis), and auto-captions from the audio track.
-- [ ] **A code's middle group is read by LENGTH, and nothing rejects a LONGER
-      one.** Found while adding the look. `decodeRoll` picks the layout of that
+- [x] **A code's middle group is read by LENGTH, and nothing rejects a LONGER
+      one.** CLOSED — and THE MOVE is what made it load-bearing.
+      **AND IT WAS WORSE THAN WRITTEN.** Adding the move gave the group a THIRD
+      checksummed length, and the sweep written for it turned up the other half:
+      `hasLook`/`hasMove` enter the checksummed band BY LENGTH, so lopping two
+      or three characters off a real code drops it BELOW the band — 16 or 17 —
+      where the guard did not run at all and the code opened, cleanly, as
+      somebody else's collage. Truncation in a chat client is the exact hazard
+      the checksum exists for, arriving through the door that decides whether to
+      look. Both ends are closed by one comparison against
+      `MINTED_GROUP_LENGTHS` = {18, 19, 20}, and those three are safe to name
+      exactly because git says so: this codec was wired to nothing until
+      a1797423 (2026-08-07, "the code that was written, documented and never
+      called"), so no other length has ever existed in the wild. The old
+      assertion in rollCode's own sweep listed 16 on the TRUST side while the
+      comment beside it said 15 — over-inclusion, now narrowed. Original text: Found while adding the look. `decodeRoll` picks the layout of that
       group from its length (15 pre-flag, 16 flag-no-checksum, 18 pre-look, 19
       with a look) and then slices the checksum at a fixed offset — so trailing
       characters BEYOND 19 are simply ignored and a code with junk appended
@@ -189,7 +222,44 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       happens the two-decimal `GRADE_GRID` stops being a property of a
       hand-written roster and has to be enforced on the way in, exactly as
       `snapRoll` does for the composition sliders.
-- [ ] **Keyframes** — animate position/scale/opacity/rotation over time (Ken Burns).
+- [~] **Keyframes** — part-shipped as **THE MOVE**: POSITION and SCALE over
+      time, per fragment, as a named roster rather than as hand-set keyframes.
+      `lib/motion.ts` owns both halves — `movePhase` (a fragment's bearing, from
+      WHERE IT IS and never from its slot index, quantised to the same 1e-6 grid
+      `twistAngle` records the reason for) and `sampleMove` (that phase plus a
+      time, to a zoom multiplier and an anchor nudge). The load-bearing
+      decisions, in order of what they cost to get wrong:
+      **REST IS A SHARED OBJECT.** `sampleMove` returns `NO_MOVE` by reference
+      at t=0 and at every cycle boundary, and `calculateSmartCrop` branches on
+      that identity rather than on arithmetic that happens to be a no-op — no
+      multiply by 1.0, no add of 0. That is what makes the still preview, the
+      raster export and the SVG provably untouched: 27,000 swept setups where a
+      move at t=0 is `Object.is`-identical, field by field, to no move at all.
+      The mutation that returns a fresh `{zoom:1,ax:0,ay:0}` instead PASSES that
+      check today and fails the reference one — which is why both are asserted.
+      **A PAN IS A FRACTION OF THE ROOM ITS OWN ZOOM LEAVES.** The crop is
+      clamped inside the image, so a pan bigger than the slack does not pan, it
+      CLAMPS — and a clamped fragment sits still while its neighbours move,
+      which reads as a bug in the one place the eye is already looking. Defining
+      the reach as `(1 - 1/zoom)/2 * pan` makes "pan without room"
+      unrepresentable rather than merely tested: 69,000 crops, 0 clamped,
+      against a naive flat 0.25 pan that clamps 13,764 of 22,700 with a worst
+      overshoot of 1,495 source pixels.
+      **THE STAGGER IS IN THE HARMONIC, NOT THE PHASE.** The obvious way to make
+      a collage feel alive is to phase-shift each fragment, and a phase shift
+      inside the wave puts every shifted fragment somewhere other than rest at
+      t=0 — which would have cost the identity guarantee above. So a fragment
+      breathes once or twice per cycle (both exactly zero at both ends) and
+      drifts along its own bearing. Same liveliness, no discontinuity anywhere.
+      **THE RE-CROP IS NOT IN `drawFrame`.** That loop's written contract is
+      "fully synchronous, zero allocation", and `calculateSmartCrop` returns an
+      object literal. `refreshMoveCrops` runs off the draw — from the tick and
+      from `renderAtTime` — so the draw loop is byte-for-byte the loop it was
+      and the allocation is paid only by compositions that actually move.
+      Still owed on this rung: OPACITY and ROTATION over time, a user-set speed
+      (the 12 s cycle is fixed), per-fragment choice rather than one roster pick
+      for the whole collage, and real hand-set keyframes with a curve editor —
+      which is a timeline WIDGET and belongs with drag-reorder and scrub.
 - [~] **Adjustments & filters** — part-shipped as **THE LOOK**. Eight named
       grades (None / Punch / Faded / Mono / Noir / Warm / Cool / Bleach) on one
       wrapping chip row, on the dice and in the share code. The seam is that a
@@ -302,6 +372,37 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       → index 0 → SQUARE, silently), but a code minted from a loaded legacy
       project is not exact. Fix, if a real one is ever hit: an exact 4-char
       aspect appended to the middle group, read by length like the others.
+
+- [ ] **A MOVE IS ONE ROSTER PICK FOR THE WHOLE COLLAGE, and the speed is not a
+      control.** Same shape as the look's own open rung, and the same fix: the
+      cycle length is a constant (`MOVE_CYCLE_SEC = 12`) and every fragment
+      takes the same move. Per-fragment moves and a speed slider are both UI
+      changes rather than engine changes — `sampleMove` already takes the spec
+      per slot — but the moment a speed is user-set it has to be SNAPPED to a
+      grid on the way in and given a field in the code, exactly as `snapRoll`
+      does for the sliders, or the round trip stops being an equality.
+- [ ] **THE STILL PREVIEW OF A MOVING COLLAGE IS ITS FIRST FRAME, so at rest it
+      looks identical to a still one.** A deliberate consequence of rest-at-zero
+      and the right default (the preview agrees with the export's opening
+      frame), but it means the chip row is the only thing telling you a move is
+      on until the Stage mounts and starts. The honest next cut is a scrub or a
+      "show me" that runs one cycle, which is the same widget the timeline rung
+      wants anyway.
+- [ ] **THE MOVE IS NOT IN THE SVG, and that is a format limit rather than a
+      decision.** The vector export draws one instant, and a still is what an
+      SVG is for — but SMIL/CSS animation inside an SVG is real and Inkscape
+      opens it, so "the exported SVG is the project" (THE POST) currently loses
+      the move on the way out even though the manifest carries it. The manifest
+      is the reason this is only a display gap: reopening the file restores it.
+- [ ] **`refreshMoveCrops` re-crops EVERY fragment every frame while anything
+      moves, including fragments whose picture is not visible.** The whole draw
+      list, unconditionally, at 60 Hz. It is the honest first cut — a few dozen
+      small objects of young-generation garbage, paid only when moving — but the
+      obvious economy is to skip items whose source has not been decoded yet,
+      and the real one is to write the eight numbers in place instead of
+      allocating a `CropGeometry` per item per frame. Measure before doing
+      either: on a phone with the realtime budget already capping decoders, this
+      may not be what costs the frame.
 
 ## THE PER-CYCLE LOOP (burn → build → verify → ship → ratchet)
 0. **PICK ONE RUNG** (entry condition, first). One line naming the capability. Or
@@ -926,6 +1027,94 @@ the next tier (pro effects, AI-assisted editing, collaboration) becomes the
 frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
+- 2026-08-08 · **[AXIS:COLLAGE] THE MOVE — the collage has a TIME AXIS**
+  (well empty, breadth debt 0, LIVE STATE named COLLAGE the stalest axis; working
+  tree read FIRST, per the scar directly below — nothing was stranded this time.)
+  before→after: **a collage was a picture that could contain moving video → the
+  PHOTOGRAPHS move too, and a collage of nothing but photographs is now a video
+  you can record.** Five drifts on one chip row (Push / Drift / Sway / Pulse /
+  Wander), on the dice and in the share code, from ONE pure module —
+  `lib/motion.ts`, ~330 lines, `movePhase` (a fragment's bearing, from WHERE IT
+  IS) + `sampleMove` (that phase plus a time → a zoom multiplier and an anchor
+  nudge) — reaching every render path through the seam they already share:
+  `withFocus` re-points `analysis.face`, `withTwist` writes `analysis.twist`,
+  `withMove` writes `analysis.move`, and `calculateSmartCrop` reads all three.
+  The one thing a move needs that a twist does not is a CLOCK, and an analysis
+  has no clock, so the TIME is a fourth argument **defaulted to 0** — and 0 is
+  the identity BY REFERENCE (`NO_MOVE`), not by arithmetic. That is the whole
+  safety argument and it is measured, not asserted: **27,000 swept setups where
+  a move at t=0 is `Object.is`-identical, field by field, to no move at all**, so
+  the three surfaces that produce a single frame (still preview, raster export,
+  SVG) are provably the build they were, and only the Stage — which both video
+  recorders capture and which the offline render seeks — ever passes a real time.
+  **THE PREMISE I STARTED FROM WAS WRONG, AND CHECKING IT IS WHAT MADE THIS
+  REACHABLE.** I set out to fix "a photos-only collage exports as a video of a
+  still", then read the gate: `canExportVideo={liveMode}`, `liveMode =
+  clips.length > 0`. A photo collage could not export a video AT ALL. Correct
+  while nothing moves and exactly wrong the moment something does — so the gate
+  widened to `(clips.length > 0 || moving)`, which costs nothing when nothing
+  moves (`syncClips([])` is a no-op, the transport renders per clip and renders
+  none, the demand-driven tick idles at zero rAF) and is the difference between
+  a feature and a feature nobody without a video could see.
+  **PERIODIC ON A FIXED 12 s, NOT ON THE EXPORT'S DURATION**, for two reasons
+  about this app rather than about taste: the live preview loops forever and has
+  no end to ramp towards (a duration-keyed ramp would need a SECOND time
+  contract beside `clipWindow`'s, and the thing this codebase has learned twice
+  is that a formula in two places diverges), and the export duration is user-set
+  AND silently clipped by the device cap — so the same collage would move
+  differently at 10 s and at 30 s, and a capped take would be a different
+  picture from the one asked for. Raised cosine, so the turnaround and the loop
+  point are both smooth. **The stagger lives in the HARMONIC and the BEARING,
+  never in a phase offset** — a phase offset is precisely what would put a
+  fragment somewhere other than rest at t=0 and cost the guarantee above.
+  **A PAN IS A FRACTION OF THE ROOM ITS OWN ZOOM LEAVES**, so "pan without room"
+  is unrepresentable rather than merely tested: the crop is clamped inside the
+  image, and a clamped fragment sits still while its neighbours move. 69,000
+  crops, 0 clamped; the naive flat 0.25 pan clamps 13,764 of 22,700, worst
+  overshoot 1,495 source pixels. **The re-crop is NOT in `drawFrame`** — that
+  loop's written contract is "zero allocation" and `calculateSmartCrop` returns
+  an object literal, so `refreshMoveCrops` runs off the draw, from the tick and
+  from `renderAtTime`, and the draw loop is byte-for-byte the loop it was.
+  **THE SWEEP FOUND A SECOND, WORSE HALF OF AN OPEN SCAR.** The ladder carried
+  "a code's middle group is read by LENGTH and nothing rejects a LONGER one" as
+  untidy-but-unreachable. Adding the move gave the group a THIRD checksummed
+  length (18 flag → 19 look → 20 move) and the new sweep turned up the other
+  end: `hasLook`/`hasMove` ENTER the checksummed band by length, so lopping two
+  or three characters off a real code drops it BELOW the band — 16 or 17 — where
+  the guard never ran and the code opened, cleanly, as somebody else's collage.
+  Truncation in a chat client is the exact hazard the checksum exists for,
+  arriving through the door that decides whether to look. Both ends closed by
+  one comparison against `MINTED_GROUP_LENGTHS` = {18,19,20}, and those three
+  are safe to name EXACTLY because git says so: the codec was wired to nothing
+  until a1797423 (2026-08-07, "the code that was written, documented and never
+  called"), so no other length has ever existed in the wild. `rollCode`'s own
+  sweep had 16 on the TRUST side while the comment beside it said 15 —
+  over-inclusion, now narrowed, with the truncation and the append both asserted.
+  **WATCHED GOING RED, all four.** Rest returning a fresh `{zoom:1,ax:0,ay:0}`
+  instead of the shared object → I1b red (and I1 still GREEN, which is exactly
+  why both exist); pan as a flat 0.25 → I3 and I4 red; the length check deleted
+  → I8d red; the harmonic flattened → I6b red. Restored, 19/19.
+  Proof: unit **19/19** (`motion.invariants.mjs`) and all 11 sweeps green
+  (`grade` and `rollCode` updated for the new group length, not loosened);
+  e2e **motion 5/5** on the real UI — the picture measurably moves for every one
+  of the five (drift 19.4% of samples / worst 175, sway 15.4/167, push 10.0/159,
+  wander 7.9/158, pulse 5.9/139; bars set from the floor of three measured runs
+  rather than by taste, after a taste-picked 5% flaked on pulse), STILL restores
+  the opening frame, the exported PICTURE is untouched to within one channel,
+  the code round-trips, and the row is watertight at 320/360/390/430 with
+  scrollW 393 = clientW 393 and every chip 44px. Regression: title 10/10, trim
+  9/9, svg-project 16/16, look 12/12, twist 8/8, one-layout 4/4, mobile 6/6,
+  roll-code 20/20, composition 10/10, video-audio 4/4, project-roundtrip 1/1,
+  `tsc` + `vite build` clean.
+  **PRE-EXISTING, NOT FIXED:** `stage-room` R1b and R11, which the entry below
+  already records as failing on live's old code. **AND A FALSE RED THAT COST
+  REAL TIME:** `playwright.composition.config.ts` had no `workers: 1` where its
+  sibling roll-code config does, so its two projects each ran a
+  full-resolution worker export at once and timed each other out — chromium
+  alone 5/5, Mobile Chrome alone 2/2, both parallel 2 failed, both serial 10/10.
+  Pinned serial, with the measurement in the comment, so the next cycle does not
+  re-diagnose it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
 - 2026-08-08 · **[AXIS:COLLAGE] THE POST — the exported SVG IS the project file**
   (and, again, the increment had been BUILT AND STAGED BY A CYCLE THAT DIED BEFORE
   COMMITTING — nothing in any commit, nothing live, a dirty tree with 196 insertions

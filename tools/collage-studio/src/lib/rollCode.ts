@@ -37,6 +37,7 @@
 import type { LayoutMode, PrimitiveType } from '../types';
 import type { ArrangementId, FocusId, TwistId } from './composition';
 import type { LookId } from './grade';
+import type { MoveId } from './motion';
 import { type Roll, encodeRoll, decodeRoll, snapRoll } from './diceRoll';
 
 /**
@@ -66,6 +67,14 @@ export interface CompositionState {
    * not the same collage, which is why that one stays out.
    */
   look: LookId;
+  /**
+   * THE MOVE — how the picture drifts inside its fragment. In the code for the
+   * same reason the look is: "these fragments, dealt this way, leaning this
+   * far, graded like this, drifting like this" is a picture somebody can
+   * rebuild with their own photographs, which is the entire test for whether
+   * something belongs in a recipe.
+   */
+  move: MoveId;
   /** How many times "Shuffle images" has re-dealt. */
   shuffle: number;
   /** True once the count is the user's decision rather than the source total. */
@@ -91,6 +100,7 @@ export const rollFromState = (s: CompositionState): Roll => snapRoll({
   focus: s.focus,
   twist: s.twist,
   look: s.look,
+  move: s.move,
   countOwned: s.countOwned,
 });
 
@@ -111,6 +121,10 @@ export const stateFromRoll = (r: Roll, shuffle = 0): CompositionState => ({
   // described was ungraded — so the absence maps to `none` rather than to a
   // missing value the UI would have to defend against.
   look: r.look ?? 'none',
+  // Absent means `still` — a Roll built before this field existed described a
+  // collage that did not move, so the absence maps to the no-op rather than to
+  // a missing value the UI would have to defend against.
+  move: r.move ?? 'still',
   shuffle,
   countOwned: !!r.countOwned,
 });
