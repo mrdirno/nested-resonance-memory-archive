@@ -20,6 +20,26 @@
       "wished_date": "2026-08-08",
       "shipped_date": "2026-08-08",
       "shipped_commit": "4f0ae962"
+    },
+    {
+      "tool_name": "Collage Studio — a dropped video loads and loops instead of being taken apart for frames",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-08",
+      "shipped_date": "2026-08-08",
+      "shipped_commit": "480ba233"
+    },
+    {
+      "tool_name": "Collage Studio — the artwork gets the room (full bleed, and controls capped at half the screen)",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-08",
+      "shipped_date": "2026-08-08",
+      "shipped_commit": "27687480"
     }
   ]
 }
