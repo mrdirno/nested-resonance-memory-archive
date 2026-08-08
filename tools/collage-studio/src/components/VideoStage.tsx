@@ -903,7 +903,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
               {onRemoveClip && (
                 <button
                   onClick={() => onRemoveClip(c.id)}
-                  title={`Stop playing ${c.name} (keeps its ${c.frameCount} frames)`}
+                  title={`Stop playing ${c.name} (keeps its ${c.frameCount === 1 ? 'poster' : `${c.frameCount} frames`})`}
                   aria-label={`Stop playing ${c.name}`}
                   className="w-11 h-11 rounded flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-white/10 transition-colors"
                 ><X size={14} /></button>

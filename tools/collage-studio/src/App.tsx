@@ -861,17 +861,16 @@ export default function App() {
   };
 
   /**
-   * SEAMLESS VIDEO INTAKE — no sheet, no questions, no extra taps.
+   * SEAMLESS VIDEO INTAKE — a video becomes ONE looping cell, no sheet, no pool.
    *
-   * Dropping a video means "put this in the collage". Everything the app needs
-   * beyond that (a frame count, a sampling strategy, which frames to keep) has a
-   * defensible default, and asking for it turned a one-gesture action into a
-   * three-tap errand that also hid the fact that the clip plays at all.
-   *
-   * The frames are still extracted — they are the surface the clip is drawn
-   * into and the fallback when a device runs out of decoders — it just happens
-   * without making the user watch. Only a real failure interrupts, and only the
-   * opt-in setting brings the picker back.
+   * Dropping a video means "put this clip in the collage and loop it" — the same
+   * way a photo is one cell. It is NOT decomposed into a field of stills. (Operator,
+   * repeatedly: "if someone loads a video then load the video and loop it. simple
+   * as that.") So we grab exactly ONE poster frame — the single raster the STATIC
+   * export (JPEG/PNG/SVG) draws under the cell, and the fallback when a device
+   * cannot spare a decoder — and register the clip; the live compositor loops the
+   * real <video> over that poster. The multi-frame picker still exists, but only
+   * behind the opt-in setting, for someone who explicitly wants stills.
    */
   const autoIngestVideo = async (file: File) => {
       const shortName = file.name.length > 26 ? `${file.name.slice(0, 23)}…` : file.name;
@@ -886,14 +885,15 @@ export default function App() {
               flashNotice(`${file.name} has no visual track — it looks like audio only.`);
               return;
           }
-          // Same trim the sheet applies: the first and last instants of a clip
-          // are usually a fade or a black frame.
+          // Trim the fade/black leader at both ends, then grab ONE representative
+          // poster. smart@1 oversamples a handful and keeps the most energetic
+          // non-blank frame, so the poster is a real moment, not black leader.
           const trim = Math.min(probe.duration * 0.02, 0.25);
           const res = await extractFrames(file, {
-              frameCount: isMobile ? 8 : 12,
+              frameCount: 1,
               strategy: 'smart',
               maxDim: isMobile ? 1280 : 1600,
-              maxSamples: isMobile ? 48 : 96,
+              maxSamples: 6,
               startTime: trim,
               endTime: Math.max(trim + 0.1, probe.duration - trim),
               knownDuration: probe.duration,
@@ -961,14 +961,14 @@ export default function App() {
   };
 
   /**
-   * Frames accepted in the video sheet -> the SAME pool, the SAME analysis path.
+   * Poster(s) for a clip -> the SAME pool, the SAME analysis path. The default
+   * intake hands exactly ONE poster; only the opt-in sheet hands several.
    *
-   * AND, new: the clip itself is kept alive. Every frame is stamped with the
-   * `clipId` of the video it came from, which is the binding the live compositor
-   * uses to put the moving clip back where its still is sitting. Extraction is
-   * unchanged — the stills are still real assets, still shuffle and lock and
-   * export exactly as before, and a device that cannot spare a decoder simply
-   * shows them. The clip is an ADDITION to the still, never a replacement.
+   * The clip itself is kept alive: every poster is stamped with the `clipId` of
+   * the video it came from, the binding the live compositor uses to loop the
+   * moving clip where its still is sitting. A poster is a real asset — it shuffles
+   * and locks and exports, and a device that cannot spare a decoder simply shows
+   * it. The live clip is an ADDITION to the poster, never a replacement.
    */
   const handleVideoFrames = async (
       frames: ExtractedFrame[],
