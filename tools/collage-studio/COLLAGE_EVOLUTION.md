@@ -996,7 +996,10 @@ frontier. Today's ceiling is tomorrow's floor.
   roll-code 20/20, trim 9/9, commons 10/10, well-mobile 15/15 — plus a stress pass
   showing zero oscillation over 3s idle, exact ratios across four aspect changes
   (2:3 · 1:1 · 16:9 · 9:16, all fitting the band) and a single settled size after
-  rapid resizing; `tsc` + `vite build` clean.
+  rapid resizing; `tsc` + `vite build` clean. **Then re-run against PRODUCTION
+  after deploy — the same 16 checks that were red there before: 16/16 green**, and
+  a live phone capture at 390px shows full bleed at 382x572 (66.4% of the screen)
+  with the clip still playing.
   **BACKPORT rider: swept, and it does not apply.** The class is "a flex child with
   no ceiling starves its sibling, and a replaced element's intrinsic size becomes
   the layout's fixed point". Checked all six trade toolkits: they are document
