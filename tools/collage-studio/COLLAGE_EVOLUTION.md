@@ -1671,3 +1671,57 @@ frontier. Today's ceiling is tomorrow's floor.
   it is a standalone drop-in that may not assume the toolkit is present. Verified LIVE on
   all six trades plus a tool page: **0 of 26 stops outside, forwards and backwards.**
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-08 · **[AXIS:WELL] THE THIRD TIME HE ASKED, THE APP WAS STILL ASKING BACK**
+  (wish 8c2fc142, the owner: "You're still asking for how many frames to pull instead of
+  just loading the video. Stop asking for frames period.") — the THIRD filing of one
+  complaint in thirteen hours, after "stop pulling single frames" (0fd3a59f) and "why are
+  we pulling frames?" (b25242e0). **b25242e0 was closed as ALREADY SERVED, "verified on
+  LIVE this cycle rather than assumed", with no code changed — and it was not served.**
+  That live verification drove the default code PATH and never read what the page SAID.
+  Two surfaces were still asking, measured on production before the fix: the button that
+  takes a video was labelled, in title AND aria-label, **"Extract frames from a video"** —
+  a promise it had already stopped keeping — and Settings > Video carried a switch,
+  **"Choose frames on import"**, whose ON state routed every clip into a sheet whose
+  primary control is a 1..N **"Frames"** slider and whose commit button reads "ADD N
+  FRAMES". **Default-off was the wrong fix for "stop asking": an opt-in ask is still an
+  ask**, and a `genart.framePicker` of `'1'` persisted from an earlier visit pinned a
+  returning user to the exact behaviour we had removed for everyone else. So the route is
+  DELETED, not defaulted off — no sheet, no queue, no preference, no switch,
+  `VideoImport.tsx` (600 lines) gone. Frames survive only as an internal detail nothing
+  mentions: one poster raster, which is what the static exports draw and what a device with
+  no decoder to spare falls back to.
+  **AND THE OTHER HALF OF "INSTEAD OF JUST LOADING THE VIDEO" WAS REAL AND MEASURABLE.**
+  Intake was `probeVideo` + `extractFrames`: one decoder opened for metadata and thrown
+  away, a second opened, primed and seeked THREE times (smart@1 oversamples by 3), before
+  the stage opened the third one it would actually play. On LIVE, WebKit, a 25 s 1080p
+  H.264 clip: **the decoder was ADVANCING at 256 ms and the clip did not reach the collage
+  until 3,517 ms** — thirteen fourteenths of the wait was the app pulling a frame out of a
+  video it had already decoded. `openClip()` does it in one session and one seek.
+  **LIVE, same URL, same clip, after: 915 ms** (local dev 3,517 → 490).
+  Dropping the oversample is the one real risk — oversampling is what dodged black leader —
+  so it gets a GATE, not an assurance: `clip-intake.spec.ts` drives the REAL module against
+  a fixture that is black for its first 1.5 s of 5 s and asserts the poster is not, and it
+  **was watched going RED** (luma 0, t=0.1 s) on a deliberately reintroduced head-sample.
+  The two tests that asserted the OPPOSITE — that the picker was merely off by default, and
+  that its route "still works when enabled" — are now the negative, including a stale `'1'`
+  in localStorage that must not resurrect it. Regression: chromium video 17/17,
+  clip-intake 3/3, mobile-watertight + source-count + video-length-sync + video-audio-export
+  + trim 26/26, unit sweeps 10/10, `tsc` + `vite build` clean, LIVE mobile gate 6/6 and
+  4/4 at 320/360/390/430 with zero horizontal overflow.
+  **NOT FIXED, ON THE LADDER WITH ITS REPRO:** WebKit 19/20 — "the offline render seats
+  EVERY clip" times out waiting for the fifth of five clips (`tone_e.webm`) to register.
+  **Pre-existing: it fails IDENTICALLY against live's old code**, so it is not this
+  change, and it is in class with wish 0fd3a59f ("the videos aren't all playing"), on the
+  owner's own engine. Its own increment. Same for `stage-room` R1@320 / R1b / R11, which
+  fail on live's old code too in a gate the book above records as green.
+  **BACKPORT rider fired, and came back CLEAN.** The class is "a label or a persisted
+  preference that outlived the behaviour it described", and the trades share one runtime,
+  so it would land on all six at once. Swept: the only `localStorage` key in
+  `shared/toolkit.js` is `av.favorites.v1`, read solely as a deliberate legacy migration
+  into the namespaced key — the opposite of an orphan; and **0 inert labelled controls
+  across all six live trade hubs** (av, plumbing, electrical, hvac, gc, low-voltage).
+  Wisher credited anonymously in `tools/collage-studio/credits.json`, `av/credits.json`,
+  and ON THE PAGE — in Settings, on the line where the switch used to be, so anyone hunting
+  for it reads where it went.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
