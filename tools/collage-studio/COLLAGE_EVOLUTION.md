@@ -253,6 +253,17 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       `format` field, so a future v2 file would be parsed by a v1 reader as
       though it understood it. Costs one comparison; unreachable until the
       shape actually changes, which is exactly when it stops being free.
+- [ ] **Opening a project never releases the pool it replaced.** `loadFromSVG`
+      mints one object URL per pool image and `setImages` replaces the pool
+      wholesale; nothing revokes the old one, so every Open retains another full
+      copy of every photograph for the life of the tab (MEASURED: 8 photos =
+      15.64 MB, one Open = 30.58 MB, 17 of the original 18 URLs still
+      resolvable). NOT a one-liner, and that is the point: `addToHistory(state,
+      images, …)` retains the pool array, so blind revocation would blank a
+      restored history snapshot — a silent wrong picture, which is strictly
+      worse than the leak. `handleClear` has the same shape and the same reason.
+      The honest fix is refcounting the pool against history, as its own
+      increment.
 - [x] **A seed the user can pin → THE COMPOSITION CODE.** `encodeRoll` /
       `decodeRoll` existed and were wired to NOTHING, and `diceRoll.ts`'s own
       header had promised "same code, same collage, on any device" the whole
@@ -973,6 +984,65 @@ frontier. Today's ceiling is tomorrow's floor.
   href AND still lists the id) — unreachable in ordinary use, since a pool asset's
   object URL is never revoked while it is in `images`, and not a regression;
   and `PROJECT_FORMAT` is written and never read.
+  **THE ADVERSARIAL AUDIT EARNED ITS KEEP FOR THE FIFTH TIME IN SIX — 12 agents,
+  four lenses, EIGHT CONFIRMED and one refuted**, and it ran against the commit
+  rather than the plan: the increment shipped as `bd2f2f61` while the audit was
+  still probing, so one verifier materialised HEAD on its OWN port (:5411) to
+  keep "as delivered" separate from the fix landing under it mid-run, and then
+  reported the discriminator both ways — fails on delivered, passes on the patch.
+  That is the standard. Everything below was fixed in the SAME cycle, in
+  `1e2b0b5f`.
+  (1) **HIGH — SHUFFLE WAS IN NEITHER DIRECTION.** Found independently by two
+  lenses. `shuffleTrigger` seeds the deal twice (`createRng(seed + shuffle)` into
+  `assignSources`, and again as `arrangeBag({ shuffle })`), the composition CODE
+  has always carried it, and the project file carried neither half — so one press
+  of Shuffle before an export produced a file that reopened as a **different
+  pairing of the same photographs, silently**. Exactly the failure class
+  `svgProject.ts`'s own header says it fails closed to prevent, arriving through
+  the one door nothing was watching. S1 could not see it because S1's equality is
+  only as wide as the state it varies, and it varies none.
+  (2) **MEDIUM — `mode` WAS WRITTEN AND READ BY NOTHING.** An export taken with
+  Settings open reopened on Layout and re-exported a different manifest, so the
+  headline byte-identical guarantee was false for that path.
+  `handleRestoreHistory` had always restored it; this path forgot.
+  (3) **MEDIUM — THE COUNT LATCH OUTLIVED THE OPEN.** Nothing bumped `dropId`, so
+  the NEXT import took the `drop !== dropId` branch, cleared the latch and
+  returned WITHOUT reaching grow-to-cover: the first photos added after opening a
+  project got no fragment, once, silently — breaking the "nothing uploaded is
+  stranded" guarantee the effect's own comment states in full.
+  (4) **HIGH — MY OWN FIX FOR THE REFUSAL BROKE THE HEADER.** Swapping "Open" (4
+  chars) for "COULDN'T OPEN THAT FILE" (23) took `.ui-topbar__actions` from 317px
+  to 390px min-content and shoved EXPORT off the right edge: 94px gone at 320,
+  54px at 360, 24px at 390, leaving the primary action a 6.6px sliver. **Every
+  gate read clean** — the app sits in a `fixed inset-0` with `overflow: hidden`,
+  so those pixels are DESTROYED rather than scrolled and `scrollWidth` never
+  moves, and `getBoundingClientRect().width` cheerfully reports 100.6px for a
+  button 94px off-screen. And S6, which I had added THIS cycle specifically to
+  close the mobile blind spot, measured only the button it had just changed —
+  the same mistake one element over. S6 now measures every control on the row by
+  its INTERSECTION with the viewport, which immediately found a **pre-existing**
+  21px clip of Export at 320px *at rest*, fixed by letting the row wrap when it
+  genuinely does not fit (no breakpoint: wider widths are untouched).
+  (5) **MEDIUM — THE MESSAGE WAS UNREADABLE ANYWAY.** `.ui-btn__msg` caps at
+  108px and the string measures 174px, so it rendered "COULDN'T OPEN…" at EVERY
+  width including desktop, with the remainder reachable only via a `title`
+  attribute no touch device can surface; and `.ui-btn:hover` (0-2-0) beat
+  `.ui-btn--bad` (0-1-0) on background but not colour, painting #1a0505 on
+  --surface-3 at **1.25:1** — in precisely the state an error is born in, with
+  the pointer still on the button that just failed. `--primary` and `--warn` each
+  carry a hover rule and `--bad` simply did not. The sentence now goes to the
+  notice toast (this app's own idiom for a failure, and the only surface with
+  room), the button changes COLOUR and ICON only at zero pixel cost, and S6
+  asserts the settled contrast at ≥4.5:1 — an assertion that first failed at
+  3.77:1 by sampling mid-CSS-transition, which is a fact about the ruler, not the
+  wall.
+  (6) **LOW, now answered by (5):** every SVG exported before this is permanently
+  unopenable and nothing said so. The toast says so.
+  Named and NOT fixed, on the ladder with its measurement: **opening a project
+  never releases the pool it replaced** (8 photos = 15.64 MB → 30.58 MB after one
+  Open, 17 of 18 URLs still live). Deliberately not a one-liner —
+  `addToHistory(state, images, …)` retains the pool, so blind revocation blanks a
+  restored snapshot, and a silently wrong picture is worse than a leak.
   **BACKPORT rider fired, and came back clean on all three classes.** The classes
   fixed here are "a refusal that shows nothing", "`||` swallows a legal zero", and
   "a surface advertises a capability it does not have". Swept all 6 trades / 26

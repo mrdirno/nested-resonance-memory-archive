@@ -375,29 +375,51 @@ test.describe('the post — the SVG is the project', () => {
 
     const legacy = onDisk('legacy.svg',
       `<?xml version="1.0"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"/>`);
-    await openFile(page, legacy);
-    const bad = page.getByText(/COULDN'T OPEN THAT FILE/i).first();
-    await expect(bad).toBeVisible({ timeout: 6000 });
 
     for (const w of [320, 360, 390, 430]) {
       await page.setViewportSize({ width: w, height: 780 });
       await page.waitForTimeout(250);
 
-      // The message is still on screen — the 6 s timer has not run out mid-loop.
-      await expect(bad).toBeVisible();
+      // RE-TRIGGERED AT EVERY WIDTH, not triggered once and measured four times:
+      // the red button retires after 6 s and the notice toast after 4, so a loop
+      // that set the state once would be measuring a RESTING header by the third
+      // viewport and calling it proof. The refusal has to be live under the
+      // ruler.
+      await openFile(page, legacy);
+      const bad = page.getByText(/COULDN'T OPEN THAT FILE/i).first();
+      await expect(bad, `the refusal never appeared at ${w}px`).toBeVisible({ timeout: 6000 });
 
       const m = await page.evaluate(() => {
         const doc = document.documentElement;
-        // The button carrying the message, and the row it lives on.
         const btn = Array.from(document.querySelectorAll('button'))
-          .find((b) => /COULDN'T OPEN/i.test(b.textContent || ''))!;
+          .find((b) => /open/i.test(b.getAttribute('aria-label') || b.textContent || ''))!;
         const row = btn.parentElement!;
-        const r = btn.getBoundingClientRect();
+        // EVERY control on the row, not just the one that changed. The first
+        // version of this test measured the refusal button alone and passed
+        // while the button NEXT to it — Export, the primary action — hung 94px
+        // outside the viewport. A gate that only grades the element it just
+        // touched is grading its own author's assumptions.
+        const controls = Array.from(row.querySelectorAll('button')).map((b) => {
+          const r = b.getBoundingClientRect();
+          const label = b.getAttribute('aria-label') || (b.textContent || '').trim().slice(0, 20);
+          // How much of it is actually ON SCREEN. `getBoundingClientRect().width`
+          // reports the full 100.6px for a button 94px off the right edge, and
+          // the app sits in a `fixed inset-0` with `overflow: hidden`, so those
+          // pixels are destroyed rather than scrolled — `doc.scrollWidth` reads
+          // clean throughout. Visible width is the only honest number here.
+          const visible = Math.max(0, Math.min(r.right, doc.clientWidth) - Math.max(r.left, 0));
+          return { label, w: r.width, h: r.height, visible, right: r.right };
+        });
+        // And the text inside: `.ui-btn__msg` caps at 108px with an ellipsis, so
+        // a message longer than that renders as a lie with a "…" on the end.
+        const texts = Array.from(row.querySelectorAll('span')).map((s) => ({
+          t: (s.textContent || '').trim().slice(0, 24),
+          clipped: s.scrollWidth > s.clientWidth + 1,
+        })).filter((x) => x.t.length > 0);
         return {
           scrollW: doc.scrollWidth, clientW: doc.clientWidth,
           rowScrollW: row.scrollWidth, rowClientW: row.clientWidth,
-          h: r.height, right: r.right, left: r.left,
-          clipped: btn.scrollWidth > btn.clientWidth + 1,
+          controls, texts,
         };
       });
 
@@ -405,11 +427,170 @@ test.describe('the post — the SVG is the project', () => {
         .toBeLessThanOrEqual(m.clientW);
       expect(m.rowScrollW, `the header row overflows at ${w}px (${m.rowScrollW} > ${m.rowClientW})`)
         .toBeLessThanOrEqual(m.rowClientW + 1);
-      expect(m.h, `the refusal button is ${m.h}px tall at ${w}px — the law says 44`)
-        .toBeGreaterThanOrEqual(44);
-      expect(m.left, `the refusal starts off-screen left at ${w}px`).toBeGreaterThanOrEqual(0);
-      expect(m.right, `the refusal runs past the viewport at ${w}px`).toBeLessThanOrEqual(w);
-      expect(m.clipped, `the refusal text is clipped inside its own button at ${w}px`).toBe(false);
+
+      for (const c of m.controls) {
+        expect(c.h, `"${c.label}" is ${c.h}px tall at ${w}px — the law says 44`)
+          .toBeGreaterThanOrEqual(44);
+        expect(c.visible, `"${c.label}" is clipped at ${w}px — ${c.visible.toFixed(1)}px of ${c.w.toFixed(1)}px on screen`)
+          .toBeGreaterThan(c.w - 1);
+        expect(c.right, `"${c.label}" runs past the viewport at ${w}px (right=${c.right.toFixed(1)})`)
+          .toBeLessThanOrEqual(w + 1);
+      }
+      for (const t of m.texts) {
+        expect(t.clipped, `"${t.t}" is truncated inside the header at ${w}px`).toBe(false);
+      }
+
+      // AND THE MESSAGE IS READABLE WHERE IT LANDS. Contrast, in the state the
+      // refusal is actually born in: the pointer is still on the button that
+      // just failed. `.ui-btn:hover` (0-2-0) used to beat `.ui-btn--bad` (0-1-0)
+      // on background but not on colour, painting #1a0505 on --surface-3 at a
+      // measured 1.25:1. WCAG AA for this size is 4.5:1.
+      // `.ui-btn` transitions `background`, so reading `getComputedStyle`
+      // immediately after the state flips samples an INTERPOLATED colour — which
+      // is how this assertion first failed at 3.77:1 on a pair that settles at
+      // 8.97:1. The settled colour is the one a person reads.
+      await page.waitForTimeout(600);
+      const contrast = await page.evaluate(() => {
+        const btn = Array.from(document.querySelectorAll('button'))
+          .find((b) => b.className.includes('ui-btn--bad'));
+        if (!btn) return null;
+        const cs = getComputedStyle(btn);
+        const lum = (c: string) => {
+          const [r, g, b] = (c.match(/\d+(\.\d+)?/g) || ['0', '0', '0']).slice(0, 3).map(Number);
+          const f = (v: number) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+          return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+        };
+        const a = lum(cs.backgroundColor), b = lum(cs.color);
+        return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+      });
+      if (contrast !== null) {
+        expect(contrast, `the refusal button reads at ${contrast.toFixed(2)}:1 at ${w}px — AA wants 4.5`)
+          .toBeGreaterThanOrEqual(4.5);
+      }
     }
+  });
+
+  /**
+   * S7 — THE DOOR S1 WAS NOT WATCHING.
+   *
+   * S1's byte-identical equality is only as wide as the state it varies, and it
+   * varies none: it exports from a freshly booted app on the Layout tab. An
+   * adversarial audit drove the identical flow with THREE CLICKS ON SHUFFLE in
+   * front of it and the deal came back different — `shuffleTrigger` seeds which
+   * photograph lands in which fragment (twice: `createRng(seed + shuffleTrigger)`
+   * into `assignSources`, and again as `arrangeBag({ shuffle })`) and it was in
+   * NEITHER direction of the project file. The composition code had carried it
+   * the whole time, which is what makes it a gap rather than an unknown.
+   *
+   * The same run found `mode` written and never restored, so an export taken with
+   * SETTINGS open reopened on Layout and re-exported a different manifest.
+   *
+   * Both ride in one test on purpose: they are the same defect wearing two
+   * fields — live state that reaches the FILE and does not come back — so the
+   * proof is S1's own equality with those two knobs turned first.
+   */
+  test('S7: shuffled, and exported from Settings — still byte-identical', async ({ page }) => {
+    await boot(page, 6);
+
+    // The re-deal. Three presses, so a fix that restored only "was it shuffled"
+    // rather than the value itself does not pass by accident.
+    for (let i = 0; i < 3; i++) {
+      await page.getByRole('button', { name: /Shuffle\s*images/ }).first().click();
+      await page.waitForTimeout(400);
+    }
+    await page.waitForTimeout(1000);
+    const codeBefore = await code(page);
+
+    // And take the export from the OTHER tab, which is what put `mode` in the
+    // manifest as something other than what reopening would set.
+    await page.getByRole('button', { name: 'Settings' }).first().click();
+    await page.waitForTimeout(400);
+
+    const first = await downloadSvg(page);
+    const path = onDisk('shuffled.svg', first);
+
+    await page.goto(APP_URL);
+    await page.waitForTimeout(800);
+    expect(await page.locator('img[src^="blob:"], canvas').count(), 'the reload did not clear the app').toBe(0);
+
+    await openFile(page, path);
+    await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
+    await page.waitForTimeout(1800);
+
+    // THE TAB, CAPTURED BEFORE ANYTHING TOUCHES IT. The two defects are checked
+    // independently and in this order on purpose: reading the composition code
+    // means visiting the Layout tab, which destroys the evidence for the tab
+    // defect, and asserting the tab first would short-circuit the run before the
+    // shuffle was ever examined. One broken field must not hide the other.
+    const tabRestored = await page.getByRole('button', { name: 'Settings' })
+      .first().getAttribute('class') ?? '';
+
+    // THE SHUFFLE. The composition code is the cheap, readable witness — it folds
+    // the shuffle group into its checksum, which is how the audit localised this
+    // ("003G"->"00NC", trailing "-3" dropped). It only renders on the Layout tab.
+    await page.getByRole('button', { name: 'Layout' }).first().click();
+    await page.waitForTimeout(600);
+    expect(await code(page), 'the shuffle did not survive the round trip').toBe(codeBefore);
+
+    // THE TAB. `mode` was written into the manifest and read by nothing.
+    expect(tabRestored, 'the tab the export was taken from did not come back')
+      .toMatch(/border-emerald-500/);
+
+    // The second export has to be taken from the same tab as the first, or
+    // `mode` alone moves the bytes.
+    await page.getByRole('button', { name: 'Settings' }).first().click();
+    await page.waitForTimeout(600);
+
+    const second = await downloadSvg(page);
+    expect(srcIds(second), 'the photographs were dealt into different fragments')
+      .toEqual(srcIds(first));
+    expect(second === first, 'a shuffled project does not round-trip byte-exact').toBe(true);
+  });
+
+  /**
+   * S8 — THE LATCH HAS TO DIE WITH THE LOAD THAT ARMED IT.
+   *
+   * Opening a project latches its fragment count so the incoming pool cannot be
+   * read as a late add. Nothing bumped `dropId`, so the latch outlived the Open
+   * and the NEXT import paid for it: that drop's final effect pass took the
+   * `drop !== dropId` branch, cleared the latch and returned WITHOUT reaching
+   * grow-to-cover — so the first photographs added after opening a project got
+   * no fragment, exactly once, silently. That breaks the "nothing uploaded is
+   * stranded" guarantee the effect's own comment block states in full.
+   */
+  test('S8: photos added right after opening a project are not stranded', async ({ page }) => {
+    await boot(page, 4);
+
+    // The count has to be OWNED or there is no latch to outlive anything — a
+    // DERIVED count is a default and `handleLoadProject` deliberately does not
+    // protect it. One press of the stepper is what takes it over.
+    // (The stepper is press-and-hold, so one click can land more than one step.
+    //  What matters is that it moved off the derived value and now OWNS it.)
+    await page.getByRole('button', { name: 'More fragments' }).first().click();
+    await page.waitForTimeout(800);
+    const owned = await fragmentCount(page);
+    expect(owned, 'the stepper did not take the count over').toBeGreaterThan(4);
+
+    const svg = await downloadSvg(page);
+    const path = onDisk('owned.svg', svg);
+
+    await page.goto(APP_URL);
+    await openFile(page, path);
+    await expect(page.locator('img[src^="blob:"], canvas').first()).toBeVisible({ timeout: 120_000 });
+    await page.waitForTimeout(1800);
+    expect(await fragmentCount(page), 'the reopened project did not carry its own count').toBe(owned);
+
+    // A genuine late add, through the real file input, exactly as a second drop.
+    // SIX new sources, not two: the stepper is press-and-hold and can land on 6,
+    // and an expectation of ">= 6" is then satisfied by the BUG (the count simply
+    // stays where it was). The add has to overshoot the owned count by enough
+    // that "grew" and "did not grow" cannot produce the same number — this is the
+    // audit's own 4 -> 4 -> 10 shape.
+    await page.locator('input[type="file"]').first().setInputFiles(tiles(10).slice(4));
+    await page.waitForTimeout(3500);
+
+    expect(await fragmentCount(page),
+      `the import after Open was swallowed — grow-to-cover never ran for that drop (count stuck at the latched ${owned})`)
+      .toBeGreaterThanOrEqual(10);
   });
 });

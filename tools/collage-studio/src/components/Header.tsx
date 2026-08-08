@@ -106,9 +106,28 @@ export const Header: React.FC<HeaderProps> = ({
             ? `${openError} — a .collage archive, or an SVG exported by this app.`
             : 'Open a saved .collage project or an exported SVG (⌘O)'}
         >
-          {openError
-            ? <><AlertCircle size={15} /><span className="ui-btn__msg">{openError}</span></>
-            : <><FolderOpen size={15} /><span>Open</span></>}
+          {/* THE LABEL DOES NOT CHANGE WIDTH, and that is the whole point.
+              The first version of this swapped "Open" (4 characters) for
+              "COULDN'T OPEN THAT FILE" (23) inside `.ui-topbar__actions`, which
+              has no wrap, no `min-width: 0` and no `overflow-x` — so the row's
+              min-content width went 317px -> 390px and simply grew past the
+              viewport, shoving the EXPORT button off the right edge: 94px of it
+              gone at 320, 54px at 360, 24px at 390, leaving the primary action a
+              6.6px sliver. Nothing caught it, because the app sits inside a
+              `fixed inset-0` with `overflow: hidden`, so those pixels are
+              DESTROYED rather than scrolled and `documentElement.scrollWidth`
+              stays exactly equal to `clientWidth` — the mobile gate reads clean
+              while the button is off-screen. `getBoundingClientRect().width`
+              lies the same way: 100.6px for a button 94px outside the viewport.
+              The message itself was never readable here anyway — `.ui-btn__msg`
+              caps at 108px and the string measures 174px, so it rendered as
+              "COULDN'T OPEN…" at EVERY width, desktop included, with the rest
+              reachable only through a `title` attribute no touch device can
+              surface. So the sentence goes where this app already puts its
+              failures — the notice toast — and the button only changes COLOUR
+              and ICON, both of which cost exactly zero pixels. */}
+          {openError ? <AlertCircle size={15} /> : <FolderOpen size={15} />}
+          <span>Open</span>
         </button>
 
         {hasImages && (

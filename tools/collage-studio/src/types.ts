@@ -111,6 +111,20 @@ export interface AppState {
      * loading a project has always assumed.
      */
     countOwned?: boolean;
+    /**
+     * THE RE-DEAL, and the field a byte-identical round trip could not see.
+     *
+     * `shuffleTrigger` seeds WHICH photograph lands in WHICH fragment, twice
+     * over — `createRng(seed + shuffleTrigger)` feeds `assignSources`, and it is
+     * passed again as `arrangeBag({ shuffle })`. The composition CODE has always
+     * carried it (`rollCode.ts`, folded into the checksum); the project file
+     * carried neither direction of it, so pressing Shuffle once before an export
+     * produced a file that reopened as a different pairing of the same
+     * photographs — the exact silent-wrong-answer this format fails closed to
+     * prevent, arriving through the one door nothing was watching.
+     * Absent means 0, which is the untouched deal every older project has.
+     */
+    shuffle?: number;
     seed: number;
     aspect: number;
     gutter: number;

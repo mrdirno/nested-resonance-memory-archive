@@ -163,7 +163,23 @@
   display: flex;
   align-items: center;
   gap: var(--s-2);
+  /* WRAP INSTEAD OF CLIP.
+     This row had no wrap, no `min-width: 0` and no `overflow-x`, so when its
+     content outgrew the viewport it simply extended past it — and because the
+     whole app sits inside a `fixed inset-0` with `overflow: hidden`, those
+     pixels are DESTROYED rather than scrolled. `documentElement.scrollWidth`
+     therefore stays exactly equal to `clientWidth` and every mobile gate we had
+     read clean while Export, the primary action, hung 21px off the right edge at
+     320px — at REST, before any error state existed. `getBoundingClientRect()`
+     lies the same way, reporting the full width of a button that is half
+     off-screen, which is why S6 measures the INTERSECTION with the viewport.
+     No breakpoint on purpose: flex only wraps when the content genuinely does
+     not fit, so every width where it already fitted is untouched. */
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-left: auto;
 }
+.ui-topbar { flex-wrap: wrap; }
 
 .ui-mark {
   font-size: var(--t-label);
@@ -243,6 +259,15 @@
 .ui-btn--warn:hover:not(:disabled) { background: #ffd76b; }
 
 .ui-btn--bad { background: var(--danger); border-color: transparent; color: #1a0505; }
+/* --primary and --warn each carry one of these and --bad did not, which is the
+   whole bug: `.ui-btn:hover:not(:disabled)` is specificity 0-2-0 and beats
+   `.ui-btn--bad` at 0-1-0 on BACKGROUND but not on COLOR, so a hovered bad
+   button painted #1a0505 text on --surface-3 — a measured 1.25:1, against 7.09:1
+   at rest. That is the exact state an error is born in: the pointer is still on
+   the button that just failed, and mobile Chrome keeps :hover on the last-tapped
+   element until something else is tapped. So the one state where the app most
+   needs to be read was the one state it could not be. */
+.ui-btn--bad:hover:not(:disabled) { background: #ff8f8f; border-color: transparent; }
 
 .ui-btn--ghost { background: transparent; border-color: var(--line-2); color: var(--ink-2); }
 .ui-btn--ghost:hover:not(:disabled) { color: var(--ink-1); background: rgba(255,255,255,.04); }

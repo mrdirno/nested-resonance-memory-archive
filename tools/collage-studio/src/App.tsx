@@ -1246,7 +1246,7 @@ export default function App() {
   };
 
   const handleClear = () => {
-      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
       addToHistory(state, images, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
@@ -1536,7 +1536,7 @@ export default function App() {
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
         const orderedImages = retwistFor(orderedAssets.map(a => a ?? null), items, 1000, 1000 / aspect);
-        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
         // `images` — the raw SOURCE POOL, last. Not `orderedImages`: that is the
         // drawn permutation with focus and twist already baked into each
         // analysis, and both are re-derived from focus/twist/seed on open. The
@@ -1548,7 +1548,7 @@ export default function App() {
     } catch (e) { setExportStatus('error'); }
   };
 
-  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined }; await saveProject(state, images); };
+  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined }; await saveProject(state, images); };
   const handleLoadProject = () => { 
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.collage,.svg';
     input.onchange = async (e:any) => {
@@ -1558,7 +1558,16 @@ export default function App() {
         // tell a rejected file from a slow one. `loadProject` fails closed by
         // design (see loadFromSVG), so the refusal has to be visible, and it
         // belongs on the button that was pressed.
-        if(!loaded) { setOpenError("COULDN'T OPEN THAT FILE"); setTimeout(() => setOpenError(null), 6000); return; }
+        // The BUTTON goes red (colour and icon only — a label that changes width
+        // shoves Export off the edge; see Header.tsx), and the SENTENCE goes to
+        // the notice toast, which is where every other failure in this app
+        // already goes and is the only surface here with room to say it.
+        if(!loaded) {
+          setOpenError("COULDN'T OPEN THAT FILE");
+          flashNotice("COULDN'T OPEN THAT FILE — it must be a .collage archive, or an SVG exported by this app. SVGs exported before 2026-08-08 carry no image identity and cannot be reopened.");
+          setTimeout(() => setOpenError(null), 6000);
+          return;
+        }
         setOpenError(null);
         // `??`, NOT `||`, on every number here. `||` treats a legal ZERO as
         // absent, and three of these have a meaningful zero: seed 0 became
@@ -1578,7 +1587,37 @@ export default function App() {
         const ld = loaded?.state.layout;
         const ldOwned = ld?.countOwned ?? true;
         if(loaded && ldOwned) pendingCountRef.current = { count: num(ld!.count, 12), drop: dropId };
-        if(loaded) { ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md'); }
+        if(loaded) { ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
+          // THE TAB IS PART OF THE STATE, and it was WRITTEN and never read.
+          // `stateForSave` has always put `mode: activeTab` in the manifest, so an
+          // export taken with Settings open said "advanced" and reopening left the
+          // app on Layout — which then re-exported "simple" and broke the
+          // byte-identical guarantee outright. `handleRestoreHistory` already got
+          // this right; this is the same restore, in the path that forgot it.
+          if(loaded.state.mode) setActiveTab(loaded.state.mode);
+          // WHAT THE OLD POOL LEAVES BEHIND. `setImages` above replaces the pool
+          // wholesale, exactly as `handleClear` does — and `handleClear` is the
+          // one that documents why that orphans things. Nothing in the new pool
+          // can carry a `clipId` (`metaForAsset` keeps id/name/analysis and the
+          // video bytes are not in an SVG at all), so a surviving clip is
+          // unreachable for the rest of the session while the dock and live mode
+          // both keep rendering off `clips.length > 0`. Pinned cells refer to a
+          // layout being replaced and the recipe name to a roll this project did
+          // not make — the same reasoning `applyCompositionCode` uses.
+          for (const c of clips) { try { URL.revokeObjectURL(c.url); } catch { /* ignore */ } }
+          setClips([]); setStageOk(true); setLockedCells(new Map()); setLastRecipe(undefined);
+          // RETIRE THE LATCH WITH THE LOAD THAT ARMED IT. Nothing else bumps
+          // `dropId` here, so the latch stayed live past the Open and the NEXT
+          // import paid for it: its final effect pass took the `drop !== dropId`
+          // branch, cleared the latch and returned WITHOUT ever reaching
+          // grow-to-cover — so the first photos added after opening a project got
+          // no fragment, once, silently. `handleUpload`'s `finally` bumps this for
+          // exactly the same reason ("the next import is a genuine late add
+          // again"); opening a file is a drop too. Both effect passes return
+          // before `setCount`, so the loaded count is protected either way,
+          // batched or not.
+          setDropId(d => d + 1);
+        }
     };
     input.click();
   };
