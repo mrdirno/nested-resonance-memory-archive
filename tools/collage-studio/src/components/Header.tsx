@@ -11,6 +11,14 @@ interface HeaderProps {
   hasImages: boolean;
   onSaveProject: () => void;
   onLoadProject: () => void;
+  /**
+   * WHY THE LAST OPEN DID NOTHING. `loadProject` fails closed — a file it cannot
+   * reopen EXACTLY is refused rather than half-opened — and a refusal that shows
+   * nothing is indistinguishable from a hang. It belongs on the Open button and
+   * not on Export: the export button's error state says "Retry", which would
+   * retry a render the user never ran.
+   */
+  openError?: string | null;
 }
 
 /**
@@ -23,7 +31,7 @@ interface HeaderProps {
  */
 export const Header: React.FC<HeaderProps> = ({
   aiState, exportStatus, exportMsg, onExport, hasImages,
-  onSaveProject, onLoadProject
+  onSaveProject, onLoadProject, openError = null
 }) => {
 
   // Desktop shortcuts. Costs no layout space, and gives onSaveProject a home
@@ -93,11 +101,14 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           onClick={onLoadProject}
-          className="ui-btn ui-btn--quiet ui-btn--compact"
-          title="Open a saved .collage project or an exported SVG layout (⌘O)"
+          className={`ui-btn ui-btn--compact ${openError ? 'ui-btn--bad' : 'ui-btn--quiet'}`}
+          title={openError
+            ? `${openError} — a .collage archive, or an SVG exported by this app.`
+            : 'Open a saved .collage project or an exported SVG (⌘O)'}
         >
-          <FolderOpen size={15} />
-          <span>Open</span>
+          {openError
+            ? <><AlertCircle size={15} /><span className="ui-btn__msg">{openError}</span></>
+            : <><FolderOpen size={15} /><span>Open</span></>}
         </button>
 
         {hasImages && (

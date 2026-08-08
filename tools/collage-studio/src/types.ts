@@ -90,10 +90,31 @@ export interface AppState {
     mode: LayoutMode;
     primitive: PrimitiveType; 
     count: number;
+    /**
+     * THE MULTIPLIER on `count`, and the source of `zoom`.
+     *
+     * `effectiveCount = count * density` and `zoom = 1 + (density - 1) * 0.5`,
+     * so a project that saved `count` alone described neither the number of
+     * fragments nor the crop it was looking at. It was never persisted — the
+     * composition code has always carried it — which meant a saved project at
+     * any density but 1 reopened as a different collage. Absent means 1, which
+     * is what every project saved before this had no way to say.
+     */
+    density?: number;
+    /**
+     * Is `count` a DECISION or a DEFAULT? The app derives the fragment count
+     * from the number of sources until somebody takes it over, and the two are
+     * indistinguishable once serialised. The composition code has carried this
+     * bit since it shipped; a saved project never did, so every project reopened
+     * as though its count had been chosen by hand — which then refused to get
+     * out of the way of the next import. Absent means "chosen", which is what
+     * loading a project has always assumed.
+     */
+    countOwned?: boolean;
     seed: number;
     aspect: number;
-    gutter: number; 
-    entropy?: number; 
+    gutter: number;
+    entropy?: number;
     /** Pre-2026-08 projects: the binary hue sort, stored as a 0..1 slider. */
     resonance?: number; 
     /** Which photo lands in which fragment — see lib/composition.ts. */

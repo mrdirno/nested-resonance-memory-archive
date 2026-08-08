@@ -4,6 +4,7 @@ import { ImageAsset, AppState } from '../../types';
 import { calculateSmartCrop } from '../../lib/renderer';
 import { TitlePlan, titlePlanFor, titlePlanToSvg } from '../../lib/title';
 import { svgFilterFor, svgFilterAttrFor, type LookId } from '../../lib/grade';
+import { projectMetadata, metaForAsset, srcIdAttr } from '../../lib/svgProject';
 
 const blobToBase64 = async (url: string): Promise<string> => {
   try {
@@ -34,20 +35,23 @@ export const generateVectorExport = async (
   titlePlan: TitlePlan | null = null,
   /** THE LOOK — the colour grade, as real `<filter>` primitives. */
   look: LookId | null = null,
+  /**
+   * THE SOURCE POOL, in POOL ORDER — what makes this file a project rather than
+   * a picture. `orderedImages` above is the DRAWN permutation with the crop
+   * focus and the twist already baked into each `analysis`; those are derived
+   * per-slot from `focus`/`twist`/`seed` and must be re-derived on open, not
+   * restored. So the manifest carries the pool's own untouched analyses, and
+   * `arrangeBag` gets back the exact list — same members, same order, same
+   * length — that produced this collage.
+   */
+  sourcePool: ImageAsset[] = [],
 ): Promise<string> => {
   const height = width / aspect;
 
-  let metadataComment = '';
-  if (fullState) {
-      const slimState = { ...fullState };
-      metadataComment = `<!-- JSON_MANIFEST: ${JSON.stringify(slimState)} -->`;
-  }
-
   let svg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-${metadataComment}
 <svg width="${width}px" height="${height}px" viewBox="0 0 ${width} ${height}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <desc>Smart Crop GenArt Export</desc>
-  <defs>
+${projectMetadata(fullState ?? null, sourcePool.map(metaForAsset))}  <defs>
 `;
 
   layoutItems.forEach((item, i) => {
@@ -78,6 +82,10 @@ ${metadataComment}
   <g id="CollageLayer"${svgFilterAttrFor(look)}>
 `;
 
+  /** Which pool ids already have their bytes in the file. Drawn twice = written
+   *  once as far as the READER is concerned; the undrawn sweep below reads it. */
+  const embedded = new Set<string>();
+
   for (let i = 0; i < layoutItems.length; i++) {
     const item = layoutItems[i];
     const imgData = orderedImages[i];
@@ -106,9 +114,14 @@ ${metadataComment}
       ? ` transform="rotate(${((crop.twist * 180) / Math.PI).toFixed(3)} ${crop.tcx.toFixed(2)} ${crop.tcy.toFixed(2)})"`
       : '';
 
+    // `data-src-id` names WHICH source this is, so reopening the file can put
+    // the pool back in its own order instead of guessing from position. It is an
+    // annotation only: no renderer reads it and the drawn geometry is untouched.
+    if (imgData.id) embedded.add(imgData.id);
+
     svg += `    <g clip-path="url(#clip-${i})">
       <g${spin}>
-        <image
+        <image${srcIdAttr(imgData.id)}
           xlink:href="${base64}"
           x="${tx.toFixed(2)}"
           y="${ty.toFixed(2)}"
@@ -135,6 +148,31 @@ ${metadataComment}
 
   svg += `  </g>
 `;
+
+  // THE POOL'S UNDRAWN MEMBERS.
+  //
+  // A collage can hold fewer fragments than the project holds photographs, and
+  // `arrangeBag` deals from the pool's LENGTH as well as its order — so a file
+  // that carried only the pictures it happens to show would reopen as a
+  // different pairing of the same photographs. That is the plausible-looking
+  // wrong answer this repo has scarred before, so the rest of the pool goes in
+  // too, inside <defs>: referenced by nothing, rendered by nothing, byte for
+  // byte invisible in the picture. Costs nothing in the ordinary case, because
+  // the app derives the fragment count from the number of sources until
+  // somebody takes it over.
+  const undrawn = sourcePool.filter((a) => a && a.id && !embedded.has(a.id));
+  if (undrawn.length > 0) {
+    svg += `  <defs id="collage-sources">
+`;
+    for (const a of undrawn) {
+      const b64 = await blobToBase64(a.src ?? '');
+      if (!b64) continue;
+      svg += `    <image${srcIdAttr(a.id)} xlink:href="${b64}" width="1" height="1" />
+`;
+    }
+    svg += `  </defs>
+`;
+  }
 
   // THE TITLE — real <text>, not an outline, so it stays selectable, editable
   // and re-typeable in whatever the SVG is opened in. Same plan, same wrap, same

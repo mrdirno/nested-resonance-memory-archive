@@ -67,7 +67,19 @@ or re-documenting an existing capability is DD, not delivery.
   the deferred clips, restoring both on exit. Before, a clip past the cap
   exported as a FROZEN STILL while `describeAudioSources` mixed its sound in
   regardless, so the file played audio over a picture that never moved; now the
-  video matches the audio it was already carrying.
+  video matches the audio it was already carrying;
+  THE POST — the exported SVG IS the project file. A composition code is a
+  RECIPE and carries no pictures; the SVG already held both and could not be
+  opened. `lib/svgProject.ts` is the one pure seam between the writer
+  (`vectorExport`) and the reader (`project.ts:loadFromSVG`): the manifest lives
+  in `<metadata id="collage-project">` instead of an XML comment that a caption
+  containing `--` could make ill-formed, each `<image>` carries `data-src-id`,
+  and the pool's UNDRAWN members ride in `<defs id="collage-sources">` because
+  `arrangeBag` deals from the pool's length as well as its order. It fails
+  CLOSED — a pool that comes back short is refused, visibly, rather than opened
+  into a plausible collage that is not yours. `density` and `countOwned` are now
+  persisted too, because a project that saved neither described neither the
+  number of fragments nor the crop it was looking at.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -215,11 +227,32 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
 - [ ] **Templates & export presets** — one-tap templates; aspect presets 9:16 / 1:1
       / 16:9; platform sizes; resolution/bitrate choice.
 - [ ] **UX** — deeper undo/redo, robust project save/load, mobile-first touch editing.
-- [ ] **Reopening an exported .svg is a silent no-op** — `loadFromSVG`
-      (`lib/project.ts`) parses the embedded JSON_MANIFEST and then returns
-      `null` unconditionally, so the file input advertises `.svg` and does
-      nothing with it. Entirely pre-existing; small, self-contained, and it is a
-      promise the UI already makes.
+- [x] **Reopening an exported .svg is a silent no-op → THE POST.** `loadFromSVG`
+      (`lib/project.ts`) parsed the embedded JSON_MANIFEST and then returned
+      `null` unconditionally, so the file input advertised `.svg` and did
+      nothing with it. The TODO said it was waiting on "vectorExport MUST convert
+      images to Base64" — that fix had shipped long before and nobody came back
+      to tell it. `lib/svgProject.ts` is now the one seam in both directions;
+      the manifest moved out of the XML comment (a caption with `--` in it made
+      the file ill-formed XML — MEASURED at 4/14 captions) into `<metadata
+      id="collage-project">`, sources are matched by `data-src-id`, and the
+      undrawn pool rides in `<defs id="collage-sources">` because `arrangeBag`
+      deals from the pool's LENGTH as well as its order.
+- [ ] **The writer can emit a file the reader will always refuse.** If
+      `blobToBase64` fails for a pool source, `vectorExport` writes
+      `xlink:href=""` AND still lists that id in the manifest, so `loadFromSVG`
+      throws on it and refuses the whole file — at open time, with nothing said
+      at export time. NOT reachable in ordinary use (a pool asset's object URL
+      is never revoked while it is in `images`: App.tsx:973 only revokes a
+      source it is discarding, and `revokeFrames` disposes the extraction
+      batch's URLs, not the ones `handleUpload` minted), and not a regression —
+      that path already wrote an empty href. Repro: revoke an asset's `src`
+      before exporting. The honest fix is for the export to SAY the file is not
+      re-openable, not to quietly ship a shorter pool.
+- [ ] **`PROJECT_FORMAT` is written and never read.** `readProject` ignores the
+      `format` field, so a future v2 file would be parsed by a v1 reader as
+      though it understood it. Costs one comparison; unreachable until the
+      shape actually changes, which is exactly when it stops being free.
 - [x] **A seed the user can pin → THE COMPOSITION CODE.** `encodeRoll` /
       `decodeRoll` existed and were wired to NOTHING, and `diceRoll.ts`'s own
       header had promised "same code, same collage, on any device" the whole
@@ -882,6 +915,76 @@ the next tier (pro effects, AI-assisted editing, collaboration) becomes the
 frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
+- 2026-08-08 · **[AXIS:COLLAGE] THE POST — the exported SVG IS the project file**
+  (and, again, the increment had been BUILT AND STAGED BY A CYCLE THAT DIED BEFORE
+  COMMITTING — nothing in any commit, nothing live, a dirty tree with 196 insertions
+  in it. That is the SECOND time this exact thing has happened here, after TRIM on
+  2026-08-06, so it is no longer an accident: **the well was empty and breadth debt
+  was 0, and this cycle's first act was to read the working tree instead of starting
+  something new.** A stranded build looks exactly like an idle repo unless you look.)
+  before→after: **a collage you could send as a picture or as a recipe, never as
+  both → the file you send IS the project.** `loadFromSVG` had been `return null`
+  under thirty lines of deliberation about whether the pictures would be
+  recoverable, ending on "vectorExport MUST convert images to Base64 — I need to fix
+  vectorExport"; that fix shipped long ago and the TODO never heard, so the file
+  input advertised `.svg` and the Open button promised "or an exported SVG layout"
+  for as long as neither could work. `lib/svgProject.ts` is the one PURE seam
+  (string in, string out — no DOM, no fetch) that the writer and the reader both
+  ask, which is why the codec is swept under plain node instead of only inside an
+  eight-minute browser run.
+  **The manifest had to leave the XML comment, and that is a bug the title shipped.**
+  XML forbids `--` anywhere inside a comment and `-->` closes one early, and the
+  caption is free text that `JSON.stringify` passes through untouched — so
+  "DAY 3 -- the rough-in" produced an SVG that is not a degraded picture but a PARSE
+  ERROR. The sweep MEASURES that rather than asserting it: **4 of 14 ordinary
+  captions produced an ill-formed comment under the old construction**, all 14 clean
+  under `<metadata id="collage-project">`.
+  **Proof:** `svgProject.invariants.mjs` **2,070 checks, 0 failures** ·
+  `svg-project.spec.ts` **12/12 on the real UI, desktop AND Pixel 5**, the load-
+  bearing one being S1: export an SVG, RELOAD the page so nothing is in memory, open
+  the file, export again, and require the two downloads BYTE-IDENTICAL — one
+  equality that covers the settings, the caption, the look, each picture's analysis
+  floats, each picture's bytes, and the pool's ORDER and LENGTH, which is what
+  matters because `arrangeBag` deals from both and one missing source re-deals every
+  fragment after it. Regression: title 10/10, look 12/12, one-layout 4/4,
+  export-integrity 3/3, roundtrip 1/1, mobile 6/6, source-count 7/7, `tsc` clean,
+  `vite build` clean. Composition 9/10 — the documented seed flake, now PINNED
+  rather than waved at: the failing assertion is the fixture's own precondition
+  (`|previewGap| > 8`, got 6.14 on an unlucky roll of `blobs()`), not the assertion
+  under test, and it passed 2 of 3 reruns; this change touches the SVG writer and
+  that test reads a raster export.
+  **I FOUND TWO OF MY OWN, and both were the gate lying rather than the code.**
+  (1) THE MOBILE GATE HAD NEVER SEEN THE THING IT WAS GRADING — again, exactly as
+  in trim. S5 measured a header in its RESTING state, while the increment put a NEW
+  state in it: on a refused file the Open button stops saying "Open" (4 characters)
+  and says "COULDN'T OPEN THAT FILE" (23) in a `ui-btn--compact` sharing a row with
+  Export and Save. S6 now FORCES the refusal at 320/360/390/430 and measures the row
+  on its own (an overflowing header inside a scroll container never moves
+  `documentElement.scrollWidth`). It passes — and was **watched going RED** on a
+  bar raised to 999 to prove the numbers are live: the button measures **exactly
+  44px** at 320px, clearing the tap-target law with zero margin.
+  (2) THE COPY OVERPROMISED. The new Export caption said the SVG "drops back into
+  Open exactly as you left it" — untrue for a video project, because `metaForAsset`
+  keeps id/name/analysis and drops `clipId`/`sourceKind`, and the option is not
+  gated on the video tab. A clip comes back as the frame it drew. The caption now
+  says so, because the alternative is a man finding out after he sends the file.
+  Named and NOT fixed, both on the ladder with repros: `vectorExport` can emit a
+  file `loadFromSVG` will always refuse (a failed `blobToBase64` writes an empty
+  href AND still lists the id) — unreachable in ordinary use, since a pool asset's
+  object URL is never revoked while it is in `images`, and not a regression;
+  and `PROJECT_FORMAT` is written and never read.
+  **BACKPORT rider fired, and came back clean on all three classes.** The classes
+  fixed here are "a refusal that shows nothing", "`||` swallows a legal zero", and
+  "a surface advertises a capability it does not have". Swept all 6 trades / 26
+  tools: all **9 clipboard sites** (`shared/checklist-request.js`, `docspec.js`,
+  `note.js`, `rowlog.js`, `av/consumables`, `av/report-builder`, `gc/weather-day`,
+  `hvac/repair-recommendation`, `plumbing/supply-house-order`) carry BOTH a
+  rejection handler and an `execCommand` fallback, and every path ends in a visible
+  `flash()`/`done()` — structurally immune, not merely currently-correct; zero hits
+  for `||`-on-a-number (the only two matches are `(x || 0) + 1` counters, where
+  absent and zero ARE the same thing); and no trade tool has a file input or an
+  import to over-promise. Recorded so the next cycle does not re-sweep it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
 - 2026-08-08 · **[AXIS:WELL] THE ARTWORK GETS THE ROOM** — wishing-well IMPROVE (id
   `51c65a1c`, trade=collage, anonymous: *"it's hard to see the layouts when it's
   minimized and there's so many features stacking — you need a way to maximize the

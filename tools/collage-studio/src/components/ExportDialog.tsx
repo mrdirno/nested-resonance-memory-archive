@@ -198,7 +198,14 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
               <span className="ui-option__icon" style={{ color: '#6aa9ff' }}><FileCode size={16} /></span>
               <span className="min-w-0 flex-1">
                 <span className="block ui-label ui-label--on">Vector SVG</span>
-                <span className="block ui-caption mt-1">Fragment outlines with the images embedded — for plotters and editing.</span>
+                {/* "exactly as you left it" was the first draft of this line and
+                    it is not true of a video project. The SVG carries the FRAMES
+                    the collage drew — `metaForAsset` keeps id, name and analysis
+                    and drops `clipId`/`sourceKind` — so a reopened clip is a
+                    still, and this option is not gated on the video tab. Say the
+                    limit here rather than let a man find it after he sends the
+                    file to somebody. */}
+                <span className="block ui-caption mt-1">The picture AND the project in one file. Every photo embedded, prints at any size, drops back into Open. Clips come back as the frames they drew, not as video.</span>
               </span>
             </button>
 

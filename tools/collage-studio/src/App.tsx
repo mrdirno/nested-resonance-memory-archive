@@ -150,6 +150,8 @@ export default function App() {
   const [countOwned, setCountOwned] = useState(false);
   const ownCount = (owned: boolean) => { countTouchedRef.current = owned; setCountOwned(owned); };
   const [density, setDensity] = useState(1);
+  /** Why the last Open did nothing. Null when there is nothing to say. */
+  const [openError, setOpenError] = useState<string | null>(null);
   const [seed, setSeed] = useState(Date.now());
   // The roster value, not a retyped 0.666. The frame shape travels in the share
   // code as a roster INDEX, so a default that is a rounding error off the roster
@@ -1244,7 +1246,7 @@ export default function App() {
   };
 
   const handleClear = () => {
-      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+      const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
       addToHistory(state, images, previewUrl || undefined);
       // Clearing the pool orphans every clip: nothing is left carrying a clipId,
       // so the files would sit in memory unreachable for the rest of the session.
@@ -1534,21 +1536,49 @@ export default function App() {
         // `orderedAssets`, not the raw pool — the SVG crops from `analysis`, and
         // that is where the crop focus lives (see renderAtSize above).
         const orderedImages = retwistFor(orderedAssets.map(a => a ?? null), items, 1000, 1000 / aspect);
-        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
-        const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor, titlePlan, look);
+        const stateForSave: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined };
+        // `images` — the raw SOURCE POOL, last. Not `orderedImages`: that is the
+        // drawn permutation with focus and twist already baked into each
+        // analysis, and both are re-derived from focus/twist/seed on open. The
+        // SVG is the project file, so it carries the pool that made it.
+        const svgContent = await generateVectorExport(1000, aspect, layoutMode, items, orderedImages, seed, stateForSave, zoom, bgColor, titlePlan, look, images);
         const blob = new Blob([svgContent], {type: 'image/svg+xml'});
         const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `GENART-VECTOR-${seed}.svg`; a.click(); URL.revokeObjectURL(url);
         setExportStatus('done'); setTimeout(() => setExportStatus('idle'), 2000);
     } catch (e) { setExportStatus('error'); }
   };
 
-  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined }; await saveProject(state, images); };
+  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, seed, aspect, gutter, entropy, arrangement, focus, twist }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined }; await saveProject(state, images); };
   const handleLoadProject = () => { 
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.collage,.svg';
     input.onchange = async (e:any) => {
         const file = e.target.files[0]; if(!file) return;
         const loaded = await loadProject(file);
-        if(loaded) { ownCount(true); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(l.count || 12); setSeed(l.seed || Date.now()); setAspect(l.aspect || ASPECT_ROSTER[1]); setGutter(l.gutter || 0.005); if(l.entropy) setEntropy(l.entropy); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md'); }
+        // A refused file used to do NOTHING — no picture, no message, no way to
+        // tell a rejected file from a slow one. `loadProject` fails closed by
+        // design (see loadFromSVG), so the refusal has to be visible, and it
+        // belongs on the button that was pressed.
+        if(!loaded) { setOpenError("COULDN'T OPEN THAT FILE"); setTimeout(() => setOpenError(null), 6000); return; }
+        setOpenError(null);
+        // `??`, NOT `||`, on every number here. `||` treats a legal ZERO as
+        // absent, and three of these have a meaningful zero: seed 0 became
+        // `Date.now()` (a different collage every time you opened the same
+        // file), gutter 0 became 0.005 (fragments that touched grew a hairline),
+        // entropy 0 was skipped entirely and kept whatever was on screen. Same
+        // family as the `Math.max(0, indexOf(x))` scar: a plausible neighbour
+        // substituted for information that was actually there.
+        const num = (v: unknown, d: number) => (typeof v === 'number' && Number.isFinite(v) ? v : d);
+        // LATCH THE COUNT. `setImages` below replaces the pool wholesale, and the
+        // grow-to-cover effect reads any pool bigger than the count as a late ADD
+        // — so a project saved with FOUR fragments and FIVE photographs reopened
+        // with five, silently, and re-exported as a different collage. This is
+        // the same latch the composition code uses (see applyCompositionCode) and
+        // the same rule: only an OWNED count is protected, because a derived one
+        // is a default and the pool it lands next to is a better one.
+        const ld = loaded?.state.layout;
+        const ldOwned = ld?.countOwned ?? true;
+        if(loaded && ldOwned) pendingCountRef.current = { count: num(ld!.count, 12), drop: dropId };
+        if(loaded) { ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md'); }
     };
     input.click();
   };
@@ -1564,7 +1594,7 @@ export default function App() {
           `none` so maximizing costs the header its space WITHOUT unmounting it
           (it owns the export shortcut, and a remount would drop it). */}
       <div style={{ display: maximized ? 'none' : 'contents' }}>
-        <Header aiState={aiState} exportStatus={exportStatus} exportMsg={exportMsg} onExport={() => setShowExportDialog(true)} hasImages={images.length > 0} onSaveProject={handleSaveProject} onLoadProject={handleLoadProject} />
+        <Header aiState={aiState} exportStatus={exportStatus} exportMsg={exportMsg} onExport={() => setShowExportDialog(true)} hasImages={images.length > 0} onSaveProject={handleSaveProject} onLoadProject={handleLoadProject} openError={openError} />
       </div>
       {/* Leaving full bleed BEFORE the take starts: the Stop button and the
           recording indicator both live in the dock that full bleed hides, and

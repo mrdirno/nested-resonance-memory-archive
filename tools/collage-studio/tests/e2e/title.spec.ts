@@ -360,8 +360,11 @@ test.describe('the title', () => {
     ).toBeLessThan(0.03);
     expect(Math.abs(rows.first - svgTop)).toBeLessThan(Math.max(0.03, lineFrac * 0.6));
 
-    // And the state that a saved project restores carries the caption.
-    expect(svg).toContain('JSON_MANIFEST');
+    // And the state that a saved project restores carries the caption. The
+    // manifest moved out of an XML comment and into a <metadata> element when
+    // the SVG became re-openable — a caption containing `--` or `-->` made the
+    // comment form ill-formed XML. See tests/e2e/svg-project.spec.ts.
+    expect(svg).toContain('id="collage-project"');
     expect(svg).toContain('"title"');
   });
 
