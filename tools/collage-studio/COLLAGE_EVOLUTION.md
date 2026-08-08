@@ -951,7 +951,7 @@ frontier. Today's ceiling is tomorrow's floor.
   captions produced an ill-formed comment under the old construction**, all 14 clean
   under `<metadata id="collage-project">`.
   **Proof:** `svgProject.invariants.mjs` **2,070 checks, 0 failures** ·
-  `svg-project.spec.ts` **12/12 on the real UI, desktop AND Pixel 5**, the load-
+  `svg-project.spec.ts` **16/16 AGAINST LIVE PRODUCTION, desktop AND Pixel 5**, the load-
   bearing one being S1: export an SVG, RELOAD the page so nothing is in memory, open
   the file, export again, and require the two downloads BYTE-IDENTICAL — one
   equality that covers the settings, the caption, the look, each picture's analysis
@@ -991,7 +991,7 @@ frontier. Today's ceiling is tomorrow's floor.
   keep "as delivered" separate from the fix landing under it mid-run, and then
   reported the discriminator both ways — fails on delivered, passes on the patch.
   That is the standard. Everything below was fixed in the SAME cycle, in
-  `1e2b0b5f`.
+  `1af9a714`.
   (1) **HIGH — SHUFFLE WAS IN NEITHER DIRECTION.** Found independently by two
   lenses. `shuffleTrigger` seeds the deal twice (`createRng(seed + shuffle)` into
   `assignSources`, and again as `arrangeBag({ shuffle })`), the composition CODE
