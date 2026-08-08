@@ -272,6 +272,15 @@ const OFFLINE_SEEK_EPSILON = 0.004;
 /** A decoder that will not answer a seek costs this frame, never the render. */
 const OFFLINE_SEEK_TIMEOUT_MS = 400;
 
+/**
+ * A clip admitted only for an offline render has to LOAD before it can be
+ * seeked. Blob-URL metadata lands in milliseconds, so this ceiling is only ever
+ * paid on the first frame and only by a source that is slow or broken — after
+ * which the wait is a no-op. Generous, because it is a one-shot cost against the
+ * whole render, not a per-frame one.
+ */
+const OFFLINE_READY_TIMEOUT_MS = 4000;
+
 /** A poster refresh is an event-driven drawImage; never more often than this. */
 const POSTER_REFRESH_MS = 1500;
 
@@ -575,6 +584,10 @@ export class Stage {
   private offline = false;
   private offlineWasRunning = false;
   private offlineWantPlay: string[] = [];
+  /** The realtime decoder caps, parked while an offline render lifts them to
+   *  admit every clip; restored in `endOfflineRender`. */
+  private savedCapsClips = 0;
+  private savedCapsPixels = 0;
 
   // --- media -----------------------------------------------------------------
   private host: HTMLElement | null = null;
@@ -801,6 +814,24 @@ export class Stage {
     this.offlineWasRunning = this.running;
     this.offlineWantPlay = [];
     this.clips.forEach((c) => { if (c.wantPlay) this.offlineWantPlay.push(c.id); });
+
+    // ADMIT EVERY CLIP FOR THE RENDER. The decoder caps exist so REALTIME
+    // compositing keeps up with a clock; an offline render has no clock — it
+    // seeks, draws and encodes one frame at a time, and `applySize` already
+    // lifts the realtime BACKING-WIDTH cap here for exactly that reason. The
+    // count/pixel caps are the last realtime budget still leaking into the file:
+    // a clip past the cap renders a FROZEN STILL, while its SOUND is mixed in
+    // regardless (`describeAudioSources` never respected the cap), so the export
+    // plays audio over a picture that never moves. Lift both caps and re-run
+    // admission so the deferred clips get a decoder; `endOfflineRender` restores
+    // them. A seek on an over-budget decoder degrades to its last frame (the
+    // 400 ms `seekClipTo` timeout), never a crash — nothing here PLAYS them.
+    this.savedCapsClips = this.capsClips;
+    this.savedCapsPixels = this.capsPixels;
+    this.capsClips = Number.MAX_SAFE_INTEGER;
+    this.capsPixels = 0;                 // 0 disables the pixel guard (refreshAdmission)
+    this.refreshAdmission();
+
     this.pauseAll();
     // Freezes the backing size for the whole take. A mid-stream resolution
     // change is what corrupts an H.264 stream.
@@ -818,6 +849,13 @@ export class Stage {
   endOfflineRender(): void {
     if (!this.offline) return;
     this.offline = false;
+    // Restore the realtime decoder budget and RELEASE the extra decoders the
+    // render admitted, BEFORE replaying: refreshAdmission evicts everything back
+    // over the cap, so only clips inside the realtime budget come back live and
+    // the replay below (which `tryPlay`-guards on `c.live`) skips the rest.
+    this.capsClips = this.savedCapsClips;
+    this.capsPixels = this.savedCapsPixels;
+    this.refreshAdmission();
     this.setCaptureActive(false);
     const want = new Set(this.offlineWantPlay);
     this.offlineWantPlay = [];
@@ -846,6 +884,11 @@ export class Stage {
     const targets: ClipRecord[] = [];
     this.clips.forEach((c) => { if (c.live && !c.broken && c.el) targets.push(c); });
     if (targets.length > 0) {
+      // A clip admitted only for this render may not have loaded yet; without
+      // metadata its video crop is invalid and the seek has no span, so it would
+      // draw a still. Wait for the first frame's worth of metadata (bounded),
+      // then seek. A no-op on every later frame — `videoWidth` is known by then.
+      await Promise.all(targets.map((c) => this.ensureClipReady(c, opts.signal)));
       await Promise.all(targets.map((c) => this.seekClipTo(c, timeSec, opts.signal)));
     }
     if (this.destroyed) return;
@@ -930,6 +973,43 @@ export class Stage {
     try { el.currentTime = target; } catch { return false; }
     clip.lastTime = -1;                                 // force a repaint
     return true;
+  }
+
+  /**
+   * WAIT FOR A JUST-ADMITTED CLIP TO BECOME SEEKABLE. Resolves at once when the
+   * dimensions are already known (every frame after the first, and the whole
+   * realtime path), and otherwise on the first metadata event or the bounded
+   * timeout — so an offline render never encodes a still where the clip should
+   * be moving, and a broken source costs one wait, not the render.
+   *
+   * `videoWidth > 0` is the real gate, not `spanOf`: `spanOf` can be non-zero
+   * from the app-supplied `hintDur` before the element has any dimensions, and
+   * the video crop (`it.vok`) needs the dimensions.
+   */
+  private ensureClipReady(clip: ClipRecord, signal?: AbortSignal): Promise<void> {
+    const el = clip.el;
+    if (!el || clip.broken) return Promise.resolve();
+    if (el.videoWidth > 0 && el.readyState >= 1) return Promise.resolve();
+    return new Promise<void>((resolve) => {
+      let settled = false;
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        this.view.clearTimeout(timer);
+        el.removeEventListener('loadedmetadata', done);
+        el.removeEventListener('loadeddata', done);
+        el.removeEventListener('error', done);
+        signal?.removeEventListener('abort', done);
+        resolve();
+      };
+      // `onClipEvent` is registered on this element first (in `createVideo`), so
+      // on `loadedmetadata` it sets vw/vh and the video crop BEFORE this resolves.
+      const timer = this.view.setTimeout(done, OFFLINE_READY_TIMEOUT_MS);
+      el.addEventListener('loadedmetadata', done, { once: true });
+      el.addEventListener('loadeddata', done, { once: true });
+      el.addEventListener('error', done, { once: true });
+      signal?.addEventListener('abort', done, { once: true });
+    });
   }
 
   /**

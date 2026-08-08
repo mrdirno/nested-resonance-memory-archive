@@ -59,7 +59,15 @@ or re-documenting an existing capability is DD, not delivery.
   `cssFilterFor`, and the SVG emits the spec-equivalent `<filter>` primitives in
   the same order through the same formatter, pinned to `sRGB`. It rides the dice
   AND the composition code — unlike the title, because a grade IS part of a
-  recipe.
+  recipe.;
+  THE FULL WALL — the offline export admits EVERY clip, not just the realtime
+  decoder budget. The count/pixel caps (`lib/stage.ts`, mobile 3 / desktop 4-8)
+  exist so LIVE compositing keeps a clock; an offline render has no clock — it
+  seeks one frame at a time — so `beginOfflineRender` lifts them and re-admits
+  the deferred clips, restoring both on exit. Before, a clip past the cap
+  exported as a FROZEN STILL while `describeAudioSources` mixed its sound in
+  regardless, so the file played audio over a picture that never moved; now the
+  video matches the audio it was already carrying.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -280,6 +288,32 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A REALTIME BUDGET LEAKED INTO THE FILE, so the export FROZE every clip the
+  device could not PLAY AT ONCE — while mixing that clip's SOUND in anyway.** The
+  decoder caps (`detectStageCaps`: mobile 3, desktop 4-8) are a REALTIME limit —
+  they exist so live compositing keeps up with a clock. But the offline export
+  (`renderOffline` → `stage.renderAtTime`) draws only `c.live` clips, so a clip
+  the realtime budget deferred rendered its extracted STILL into the FILE, frozen
+  for the whole take. The tell that it was a leak and not a limit: the offline
+  AUDIO mixer (`describeAudioSources`) had ALREADY been fixed to ignore the cap —
+  its own scar, three entries down about `live` — so the export played the
+  deferred clip's sound over a picture that never moved. Two readers of one
+  resource, and only ONE of them had been told the resource was realtime-only.
+  The fix is the same shape as that audio one: `beginOfflineRender` lifts the
+  caps and re-admits every clip, `endOfflineRender` restores them and evicts back
+  to the realtime budget. Two general lessons. **A cap justified by one cost
+  (keeping a clock) must be re-examined at every reader that does not pay that
+  cost** — the offline path pays no clock, and already overrode the realtime
+  BACKING-WIDTH cap for exactly that reason, so the decoder cap was the one
+  realtime budget nobody had followed through. And **when you fix "a realtime
+  limit silently decided what the file contains" for one track, grep for every
+  other track reading the same limit** — the audio fix and this video fix are the
+  same bug in two media, filed a cycle apart. Also filed: the OVER-BUDGET seat is
+  safe because nothing offline PLAYS the clips — a seek on a throttled decoder
+  degrades to its last frame via the 400 ms `seekClipTo` timeout, never a crash —
+  and a just-admitted clip needs `ensureClipReady` before its first seek or that
+  frame is a still (its `videoWidth` is 0 until metadata lands; `spanOf` alone is
+  not enough — it can be non-zero from `hintDur` with no dimensions yet).
 - **A MEASUREMENT THAT LOOKS LIKE A PROOF AND IS ACTUALLY MEASURING THE
   BACKGROUND.** The title's first e2e counted DARK PIXELS in a band, on solid
   near-white tiles, reasoning that the only dark thing in the frame could be the
@@ -848,6 +882,29 @@ the next tier (pro effects, AI-assisted editing, collaboration) becomes the
 frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
+- 2026-08-08 · **[AXIS:WELL] THE FULL WALL** — wishing-well BUG (id `0fd3a59f`,
+  "The videos aren't all playing", trade=collage, anonymous): a multi-video
+  collage EXPORTED every clip past the realtime decoder budget as a FROZEN STILL
+  while still playing that clip's sound. **before → `renderOffline` →
+  `stage.renderAtTime` drew only `c.live` clips, and admission caps them at
+  mobile 3 / desktop 4-8, so a deferred clip's extracted still was baked into the
+  FILE while `describeAudioSources` (already cap-blind, its own scar) mixed the
+  audio in — sound over a picture that never moved. after → `beginOfflineRender`
+  lifts the count/pixel caps and re-admits EVERY clip; `endOfflineRender` restores
+  them and evicts back to the realtime budget; `renderAtTime` gained
+  `ensureClipReady` so a just-admitted clip's first frame is not a still.** The
+  caps are a REALTIME limit (keep up with a clock); an offline render has no clock
+  and already lifts the realtime backing-WIDTH cap here for the same reason, so
+  the decoder cap was the last realtime budget leaking into the file. **Proof
+  (chromium, dev :5199 + LIVE):** a new e2e imports FIVE clips on an iPhone UA
+  (cap 3), asserts the preview really is capped (<5 decoders), then asserts the
+  offline take seats ALL 5 and a real MP4 comes back, then that the realtime cap
+  is restored afterward (extra decoders evicted). Regression: video-collage 17/17
+  (incl. the exact-duration render invariant and "two HD clips BOTH play" live),
+  trim + video-audio-export 13/13; `tsc` + `vite build` clean. **BACKPORT rider:
+  swept, N/A** — the class ("a realtime cap leaked into an offline artifact") lives
+  in the collage engine (`lib/stage.ts`); no trade toolkit ships a video
+  compositor or an offline export, so there is no sibling to carry it to.
 - 2026-08-07 · **[AXIS:COLLAGE] THE LOOK** — the collage can be graded. Eight named
   looks (None · Punch · Faded · Mono · Noir · Warm · Cool · Bleach) on one wrapping
   chip row, on the dice, and **in the composition code** — unlike the caption, because

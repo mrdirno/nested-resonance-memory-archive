@@ -494,6 +494,11 @@ test.describe('video collage', () => {
 const HD_A = join(HERE, '..', 'fixtures', 'hd_a.webm');
 const HD_B = join(HERE, '..', 'fixtures', 'hd_b.webm');
 
+/** FIVE small clips — more than any mobile decoder budget, so the realtime
+ *  preview must defer some while the offline render must seat them all. */
+const TONES = ['tone_a', 'tone_b', 'tone_c', 'tone_d', 'tone_e']
+  .map((n) => join(HERE, '..', 'fixtures', `${n}.webm`));
+
 const IPHONE_UA =
   'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 '
   + '(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
@@ -592,6 +597,68 @@ test.describe('more than one clip, on a phone', () => {
       await page.waitForTimeout(150);
     }
     expect(sampled, 'the import finished before anything could be sampled').toBeGreaterThan(3);
+  });
+
+  /**
+   * THE EXPORT IS NOT CAPPED LIKE THE PREVIEW.
+   *
+   * The realtime decoder budget (mobile: 3) exists so LIVE compositing keeps up
+   * with a clock. It has no business in the FILE: an offline render seeks one
+   * frame at a time with no clock, so a clip it defers exports as a FROZEN STILL
+   * while its sound is mixed in regardless — audio over a picture that never
+   * moves. The complaint was exactly that ("stop pulling single frames … output
+   * the full videos"). This imports FIVE clips onto a 3-clip phone, proves the
+   * preview really is capped, then proves the render seats every one.
+   *
+   * Asserted on the DECODERS (`<video>` with a blob src), not on the dock: a
+   * chip renders for a deferred clip too, so counting chips would pass while the
+   * bug was live. A live clip has `stage.createVideo`'s element with its src set;
+   * an evicted one has had that src REMOVED, so the count is honest.
+   */
+  test('the offline render seats EVERY clip, not just the realtime budget', async ({ page }) => {
+    test.setTimeout(300_000);
+
+    // Stage clip decoders only. The result-preview <video controls> carries its
+    // own blob: URL, so it would inflate the count after the take — exclude it.
+    const blobVideos = () => page.evaluate(() =>
+      Array.from(document.querySelectorAll('video'))
+        .filter((v) => !v.hasAttribute('controls') && (v.getAttribute('src') || '').startsWith('blob:')).length);
+
+    await page.locator('input[type="file"]').first().setInputFiles(TONES);
+
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 200_000 });
+    await expect(page.getByRole('button', { name: /Stop playing tone_e\.webm/ }))
+      .toBeVisible({ timeout: 200_000 });
+    await startPlaybackIfGated(page);
+
+    // PRECONDITION: the live preview is capped — strictly fewer decoders than
+    // clips. Without this the render assertion below would pass even if nothing
+    // was ever deferred, proving nothing.
+    await expect.poll(blobVideos, {
+      message: 'the phone budget must defer at least one of the five clips',
+      timeout: 60_000,
+    }).toBeLessThan(5);
+
+    // Sound is off for every clip by default, so this takes the render path.
+    // beginOfflineRender lifts the caps synchronously at the start of the take,
+    // so all five elements carry a src for the whole render.
+    await page.getByRole('button', { name: 'Record video' }).click();
+
+    await expect.poll(blobVideos, {
+      message: 'the offline render must seat all five clips, not the realtime 3',
+      timeout: 180_000,
+    }).toBe(5);
+
+    // And a real file must come back — the render completed with every clip in
+    // it, not just started. The result sheet only shows on ok:true.
+    await expect(page.locator('video[controls]')).toBeVisible({ timeout: 180_000 });
+
+    // The budget is back: the extra decoders were released, so the preview is
+    // capped again and nothing leaked past the take.
+    await expect.poll(blobVideos, {
+      message: 'the realtime cap must be restored after the render',
+      timeout: 60_000,
+    }).toBeLessThan(5);
   });
 });
 
