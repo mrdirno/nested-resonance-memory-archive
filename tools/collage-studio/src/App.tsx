@@ -1,7 +1,8 @@
 /// <reference types="vite/client" />
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import {
-  Upload, Activity, X, Lock, Unlock, RefreshCw, Shuffle, Settings, Layout, Film, Plus
+  Upload, Activity, X, Lock, Unlock, RefreshCw, Shuffle, Settings, Layout, Film, Plus,
+  Maximize2, Minimize2, Dices
 } from 'lucide-react';
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
@@ -111,8 +112,26 @@ const createThumbnail = async (img: HTMLImageElement, maxDim = 1024): Promise<st
     });
 };
 
+/** A laid-across stage rail: 44px of button, 16px inset, 8px of air. */
+const RAIL_ROW_H = 68;
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<'simple' | 'advanced'>('simple');
+  /**
+   * FULL BLEED. The controls dock is `shrink-0` with no height cap, so every
+   * control panel added over the life of this app took its space out of the ONE
+   * thing the app exists to show. Measured on production before this: the
+   * artwork was 6.2% of a 1280x900 window, 10% of a 390px phone, and at 320px
+   * the stage band collapsed to 52px — inside which `p-6` left the collage
+   * rendering at THREE BY FOUR PIXELS. Every mobile gate passed, because they
+   * assert the canvas is *visible*, never that it is big enough to look at.
+   * (Operator: "it's hard to see the layouts when it's minimized and there's
+   * so many features stacking — you need a way to maximize the shot".)
+   * Maximized hides the header and the dock with `display:none`, which keeps
+   * both MOUNTED: the Stage never leaves its position in the tree, so the clip
+   * keeps its decoder, its AudioContext and its playhead across the toggle.
+   */
+  const [maximized, setMaximized] = useState(false);
   const [images, setImages] = useState<ImageAsset[]>([]);
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('minimal');
   const [primitive, setPrimitive] = useState<PrimitiveType>('rect');
@@ -229,9 +248,169 @@ export default function App() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  /**
+   * HOW BIG THE ARTWORK IS ALLOWED TO BE — and why it has to be measured.
+   *
+   * The frame was `{ aspectRatio, maxHeight: '100%', maxWidth: '100%' }` with no
+   * width or height, so it was CONTENT-SIZED: it sized to the canvas, and the
+   * canvas sizes itself from `cv.clientWidth` (Stage.resize, floored at 240),
+   * which comes from the frame. A circular definition resolves at the floor and
+   * stays there, so the collage rendered at 240x360 CSS px on a 1280px window
+   * and 300x450 on a 1900x1300 one — a 1900x776 band showing a 300px picture.
+   * `maxHeight` could only ever shrink that further; nothing could grow it. The
+   * two symptoms the operator reported are the same bug seen from both ends.
+   *
+   * So the BAND is measured and the frame is given explicit pixels. The canvas
+   * still picks its own backing store off that CSS width (a render budget, not
+   * a display size), but it can no longer decide how big the artwork looks.
+   */
+  const [artBand, setArtBand] = useState<{ w: number; h: number } | null>(null);
+  const bandObserverRef = useRef<ResizeObserver | null>(null);
+  const bandElRef = useRef<HTMLDivElement | null>(null);
+
+  /** Read the band's content box right now, from layout. */
+  const measureBand = useCallback((el: HTMLDivElement | null) => {
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const cs = getComputedStyle(el);
+    setArtBand({
+      w: Math.floor(r.width - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)),
+      h: Math.floor(r.height - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)),
+    });
+  }, []);
+
+  /**
+   * THE ONE TRANSITION THAT CANNOT WAIT A FRAME. A ResizeObserver reports after
+   * layout, so on a discontinuous band change the frame keeps its old explicit
+   * pixels for one paint — and the band is `overflow-hidden`, so that paint is
+   * CLIPPED, not letterboxed. An adversarial verifier caught it in real
+   * composited pixels (CDP screencast, frame-stamped): leaving full bleed at
+   * 1280x900 painted the collage at 589x884 inside a 1248x459 band, header and
+   * dock already back, top and bottom sliced off — 8 of 8 exits, 5 captured on
+   * screen. Entering and leaving full bleed is OUR state change, so it is
+   * measured in a layout effect: React flushes this before the browser paints,
+   * and the frame is never wrong on screen. `maxWidth/maxHeight` below stay as
+   * the backstop for the changes we do not drive (rotation, URL-bar collapse).
+   */
+  useLayoutEffect(() => { measureBand(bandElRef.current); }, [maximized, measureBand]);
+
+  const setBandEl = useCallback((el: HTMLDivElement | null) => {
+    bandObserverRef.current?.disconnect();
+    bandObserverRef.current = null;
+    bandElRef.current = el;
+    if (!el) return;
+    // MEASURE FIRST, OBSERVE SECOND. This needs no observer, and doing it after
+    // the ResizeObserver guard meant an engine without one fell through to the
+    // content-sized style FOREVER — silently restoring the exact bug this is
+    // here to delete, on the oldest devices, where it is worst.
+    measureBand(el);
+    if (typeof ResizeObserver === 'undefined') return;
+    // `contentRect` is the content box, so the band's own padding is already
+    // out of it and the fit below never has to know what the padding is.
+    const ro = new ResizeObserver((entries) => {
+      const box = entries[entries.length - 1].contentRect;
+      setArtBand({ w: Math.floor(box.width), h: Math.floor(box.height) });
+    });
+    ro.observe(el);
+    bandObserverRef.current = ro;
+  }, []);
+  useEffect(() => () => bandObserverRef.current?.disconnect(), []);
+
+  /**
+   * The stage rail is four 44px buttons and three gaps — 200px of column, plus
+   * its 16px inset. A phone held LANDSCAPE leaves the band about 118px, and the
+   * band clips, so `Clear all` was simply gone off the bottom with nothing to
+   * scroll. Short band, lay the rail across instead of down.
+   */
+  const railRow = !!artBand && artBand.h < 200;
+
+  /**
+   * The largest box of ratio `aspect` that fits the measured band.
+   *
+   * A rail laid ACROSS reaches back over the middle of a narrow viewport, where
+   * the column never did, so it would sit on top of the artwork instead of
+   * beside it — on a 320px phone it covered the picture outright. A row is
+   * therefore charged against the band (44px of buttons, 16px inset, 8px of
+   * air) and the artwork fits under it. Small, but never hidden — and full
+   * bleed, which is the honest answer at these heights, is one tap away.
+   */
+  const artFit = useMemo(() => {
+    if (!artBand || artBand.w < 1 || artBand.h < 1) return null;
+    const bandH = railRow ? artBand.h - RAIL_ROW_H : artBand.h;
+    if (bandH < 1) return null;
+    const w = Math.min(artBand.w, bandH * aspect);
+    return { w: Math.floor(w), h: Math.floor(w / aspect) };
+  }, [artBand, aspect, railRow]);
+
+  /**
+   * Never strand anyone in full bleed. Both exits — the pill and the rail —
+   * live on the stage, and the stage only renders while there are images, so an
+   * empty pool while maximized is a screen with no way out but a keyboard. The
+   * REACHABLE way in was pressing F with nothing loaded (the shortcut had no
+   * pool condition, this effect only re-runs when the COUNT changes, and F does
+   * not change it), so the entry is now refused at the door and this stays as
+   * the backstop for a pool that empties later.
+   */
+  const canMaximize = images.length > 0;
+  useEffect(() => { if (!canMaximize) setMaximized(false); }, [canMaximize]);
+  // Read through a ref: the key listener is bound once, on purpose.
+  const canMaximizeRef = useRef(canMaximize);
+  canMaximizeRef.current = canMaximize;
+
+  /**
+   * Put the caret on the control that REPLACED the one that just vanished.
+   * `display:none` on the dock blurs whatever had focus inside it, and the
+   * maximize button and the exit pill unmount each other, so without this a
+   * keyboard user is dumped back to the top of the tab order on every toggle.
+   * Skips the first run so nothing is focus-grabbed on load.
+   */
+  const maxBtnRef = useRef<HTMLButtonElement>(null);
+  const exitBtnRef = useRef<HTMLButtonElement>(null);
+  const maxSettled = useRef(false);
+  useEffect(() => {
+    if (!maxSettled.current) { maxSettled.current = true; return; }
+    (maximized ? exitBtnRef.current : maxBtnRef.current)?.focus();
+  }, [maximized]);
 
   const isMobile = useMemo(() => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent), []);
+
+  /**
+   * F toggles full bleed, Escape leaves it. Deliberately deaf while a field has
+   * focus (the title box takes an `f` like any other letter) and while a dialog
+   * is open, because Export, Result and the trim sheet each own Escape already
+   * and stealing it would close two things with one press.
+   */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const t = e.target as HTMLElement | null;
+      if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
+      // RENDERED, not merely PRESENT. The shared wishing well closes with
+      // `modal.classList.remove("on")` against a `.fb-wrap{display:none}` rule —
+      // it builds its sheet once and leaves it in the document forever. Testing
+      // for the existence of [role="dialog"] therefore killed F and Escape for
+      // the rest of the session the moment anyone opened Feedback once. A
+      // display:none subtree has no client rects, which is true for every
+      // dialog here and costs no layout to ask.
+      const dialogs = document.querySelectorAll('[role="dialog"]');
+      for (let i = 0; i < dialogs.length; i++) {
+        if (dialogs[i].getClientRects().length > 0) return;
+      }
+      if (e.key === 'Escape') { setMaximized(false); return; }
+      // Nothing to maximize with an empty pool — F used to hide the whole UI
+      // and leave the drop target alone on a black page.
+      if (e.key === 'f' || e.key === 'F') {
+        if (!canMaximizeRef.current) return;
+        // Stop lives in the transport row, and full bleed hides the dock. A take
+        // you cannot see and cannot stop is worse than no shortcut.
+        if (recorderRef.current?.isRecording) return;
+        e.preventDefault();
+        setMaximized(m => !m);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   useEffect(() => {
     const bootAI = async () => {
@@ -1381,8 +1560,17 @@ export default function App() {
 
   return (
     <div className="fixed inset-0 bg-black text-white font-sans flex flex-col select-none overflow-hidden">
-      <Header aiState={aiState} exportStatus={exportStatus} exportMsg={exportMsg} onExport={() => setShowExportDialog(true)} hasImages={images.length > 0} onSaveProject={handleSaveProject} onLoadProject={handleLoadProject} />
-      <ExportDialog canExportVideo={liveMode} onExportVideo={(secs) => recorderRef.current?.start(secs)} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
+      {/* `display: contents` so the wrapper is invisible to the flex column,
+          `none` so maximizing costs the header its space WITHOUT unmounting it
+          (it owns the export shortcut, and a remount would drop it). */}
+      <div style={{ display: maximized ? 'none' : 'contents' }}>
+        <Header aiState={aiState} exportStatus={exportStatus} exportMsg={exportMsg} onExport={() => setShowExportDialog(true)} hasImages={images.length > 0} onSaveProject={handleSaveProject} onLoadProject={handleLoadProject} />
+      </div>
+      {/* Leaving full bleed BEFORE the take starts: the Stop button and the
+          recording indicator both live in the dock that full bleed hides, and
+          Cmd-E still reaches this dialog while maximized because the Header
+          stays mounted under `display:none`. */}
+      <ExportDialog canExportVideo={liveMode} onExportVideo={(secs) => { setMaximized(false); recorderRef.current?.start(secs); }} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
       <ResultModal isOpen={!!resultBlobUrl} onClose={() => setResultBlobUrl(null)} blobUrl={resultBlobUrl} onShare={handleShareResult} onDownload={handleDownloadResult} isMobile={isMobile} />
 
       <div
@@ -1435,8 +1623,22 @@ export default function App() {
                <span className="text-[8px] tracking-widest text-gray-700 mt-1 uppercase">Images or video</span>
             </div>
          ) : (
-            <div className="relative z-10 w-full h-full p-6 flex items-center justify-center" ref={containerRef}>
-               <div className="relative shadow-2xl transition-all duration-300" style={{ aspectRatio: aspect, maxHeight: '100%', maxWidth: '100%' }}>
+            <div className={`relative z-10 w-full h-full flex justify-center ${railRow && !maximized ? 'items-end' : 'items-center'} ${maximized ? 'p-1 sm:p-2' : 'p-2 sm:p-4'}`} ref={setBandEl}>
+               {/* `items-end` under a laid-across rail: the fit already gave the
+                   rail its 68px, and centring the remainder would put half of
+                   that slack back ABOVE the artwork, under the buttons. */}
+               {/* Measured pixels once the band is known; the old content-sized
+                   style stays as the first-paint fallback. */}
+               <div
+                 className="relative shadow-2xl"
+                 // maxWidth/maxHeight stay ON TOP of the measured pixels: a
+                 // ResizeObserver is a frame behind layout, and without the CSS
+                 // clamp the frame keeps its old size for that frame and
+                 // overshoots a shrinking band into an overflow-hidden parent.
+                 style={artFit
+                   ? { width: artFit.w, height: artFit.h, maxWidth: '100%', maxHeight: '100%' }
+                   : { aspectRatio: aspect, maxHeight: '100%', maxWidth: '100%' }}
+               >
                    {liveMode ? (
                      // Same composition, same 1200-space, same smart crops — but
                      // the video fragments keep moving and the whole surface can
@@ -1478,7 +1680,42 @@ export default function App() {
                        })}
                    </svg>
                </div>
-               <div className="absolute top-4 right-4 flex flex-col gap-2">
+               {/* FULL BLEED: art, and one thumb-reachable bar. The three
+                   buttons here are the ones you are maximized IN ORDER to use —
+                   the operator maximizes to compare LAYOUTS, so rolling,
+                   reshuffling and remixing have to work without dropping back
+                   out to the dock every time. */}
+               {maximized && (
+                 // pb-safe: maximized hides the Header (pt-safe) and the dock
+                 // (pb-safe), so nothing else in the app honours the inset in
+                 // this state — and Exit is the only way out on a touch device,
+                 // which put it under the iOS home indicator.
+                 // `max(...)`, not the pb-safe utility: --safe-b is 0px on every
+                 // desktop, and the utility would win the cascade and take the
+                 // pill's own 12px of air with it.
+                 <div
+                   className="absolute inset-x-0 bottom-0 z-[130] flex justify-center px-3 pointer-events-none"
+                   style={{ paddingBottom: 'max(0.75rem, var(--safe-b))' }}
+                 >
+                   <div className="pointer-events-auto flex items-center gap-1 rounded-2xl border border-white/15 bg-black/70 backdrop-blur px-1.5 py-1.5 shadow-2xl">
+                     <button onClick={handleDice} title="Roll the dice" aria-label="Roll the dice" className="w-11 h-11 rounded-xl text-emerald-400 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Dices size={19} /></button>
+                     <button onClick={handleShuffle} title="Shuffle images" aria-label="Shuffle images" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Shuffle size={18} /></button>
+                     <button onClick={handleRemix} title="Remix shapes" aria-label="Remix shapes" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><RefreshCw size={18} /></button>
+                     <span className="mx-0.5 h-6 w-px bg-white/15" aria-hidden="true" />
+                     <button ref={exitBtnRef} onClick={() => setMaximized(false)} title="Exit full bleed (Esc)" aria-label="Exit full bleed" className="w-11 h-11 rounded-xl text-white bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-95 transition"><Minimize2 size={18} /></button>
+                   </div>
+                 </div>
+               )}
+
+               {!maximized && (
+               <div className={`absolute top-4 right-4 flex gap-2 ${railRow ? 'flex-row' : 'flex-col'}`}>
+                   <button
+                     ref={maxBtnRef}
+                     onClick={() => { if (!recorderRef.current?.isRecording) setMaximized(true); }}
+                     title="Maximize the shot (F)"
+                     aria-label="Maximize the shot"
+                     className="w-11 h-11 rounded bg-[#111] text-white border border-gray-800 flex items-center justify-center hover:bg-white/10 transition-colors shadow-lg"
+                   ><Maximize2 size={18} /></button>
                    <button
                      onClick={() => fileInputRef.current?.click()}
                      title="Add more images or video"
@@ -1493,12 +1730,29 @@ export default function App() {
                    ><Film size={18} /></button>
                    <button onClick={handleClear} title="Clear all" aria-label="Clear all" className="w-11 h-11 rounded bg-[#111] text-red-500 border border-gray-800 flex items-center justify-center hover:bg-red-900/30 transition-colors shadow-lg"><X size={18} /></button>
                </div>
+               )}
 
             </div>
          )}
       </div>
 
-      <div className="bg-[#0a0a0a] border-t border-white/10 pb-safe z-50 relative shrink-0">
+      {/* THE DOCK GIVES BACK ITS HEIGHT THROUGH THE SCROLLER IT ALREADY HAS.
+          It grew with every panel added and the stage got the leftovers — down
+          to 52px on a 320px phone. The first attempt wrapped the whole dock in a
+          SECOND capped scroller, and an adversarial audit caught what that costs:
+          `.ui-dock` is already a capped scroller (`--dock-max`) whose primary
+          action bar — the fragment count, Shuffle, Remix — is `position: sticky`
+          against ITS bottom. Nesting a second scroller pinned that bar to the
+          bottom of an inner box pushed below the outer scrollport, and the most
+          used controls in the app went off-screen (measured: 778..832 in a
+          844px viewport, to 869..923). So the cap moved to `--dock-max` itself,
+          where there is exactly one scroller and the sticky bar stays in it.
+          `display:none` (not an unmount) hides the dock when maximized, so the
+          Stage's portal host survives. */}
+      <div
+        style={{ display: maximized ? 'none' : undefined }}
+        className="bg-[#0a0a0a] border-t border-white/10 pb-safe z-50 relative shrink-0"
+      >
          {/* VIDEO DOCK — everything the live stage needs to say or be driven by,
              OUTSIDE the canvas. This used to float over the collage; chrome on
              top of the artwork covers the thing the user is here to look at. */}

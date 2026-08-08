@@ -93,8 +93,15 @@
 
   /* --- COMPONENT DEFAULTS ------------------------------------------------- */
   --slider-accent: var(--signal);
-  /* The canvas is the hero: the control dock never takes more than ~44% of
-     the viewport, and scrolls internally past that with its primary actions
-     pinned. */
-  --dock-max: min(44vh, 356px);
+  /* The canvas is the hero — but this caps the PANEL, not the dock. Above the
+     panel sit the clip/transport row and the tab bar, which together are 156px
+     on a 390px phone and 204px at 320px (the transport wraps), and none of that
+     was ever charged against the 44%. So "never more than ~44% of the viewport"
+     was measuring the wrong box: the real dock reached 60.8% at 390px and 80% at
+     320px, and the artwork was left rendering at THREE BY FOUR PIXELS. Tightened
+     so the panel plus its chrome lands near half on a phone and well under it on
+     a desktop. It stays the ONE scroller in the dock — its primary actions are
+     `position: sticky` against its bottom, and wrapping a second scroller around
+     it (tried, caught in audit) pushes that bar clean off the screen. */
+  --dock-max: min(34vh, 300px);
 }

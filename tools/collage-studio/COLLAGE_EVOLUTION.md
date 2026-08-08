@@ -882,6 +882,132 @@ the next tier (pro effects, AI-assisted editing, collaboration) becomes the
 frontier. Today's ceiling is tomorrow's floor.
 
 ## CYCLE LOG (append one line per collage cycle — capability · before→after · proof)
+- 2026-08-08 · **[AXIS:WELL] THE ARTWORK GETS THE ROOM** — wishing-well IMPROVE (id
+  `51c65a1c`, trade=collage, anonymous: *"it's hard to see the layouts when it's
+  minimized and there's so many features stacking — you need a way to maximize the
+  shot, and controls at most half the height"*). Measured on LIVE before touching
+  anything: the collage was **6.2% of a 1280x900 window, 10% of a 390px phone, and
+  at 320x568 it rendered at THREE BY FOUR PIXELS** — the thing the app exists to
+  show, gone. **TWO causes, one symptom. (1) The dock had no ceiling:** `shrink-0`
+  with no `max-h`, so every panel ever added took its space out of the picture —
+  measured at **60.8% of the screen**, leaving a 52px stage band that `p-6` then ate
+  48px of. **(2) The art frame was CONTENT-SIZED against a canvas that sizes itself
+  from the frame:** `{aspectRatio, maxHeight:'100%', maxWidth:'100%'}` with no width
+  or height, while `Stage.resize` reads `cv.clientWidth` and floors it at 240. A
+  circular definition resolves at its floor and stays — **the artwork was ~240-300
+  CSS px wide on ANY screen** (300x450 inside a 1900x776 band), and `maxHeight`
+  could only ever shrink it further. **after →** the cap moved onto `--dock-max`,
+  the panel's OWN existing scroller (its comment claimed "never more than ~44% of
+  the viewport" while measuring the wrong box — the clip/transport row and tab bar
+  above it, 156px at 390 and 204px at 320, were never charged against it); the band
+  is measured by a ResizeObserver and the frame is given **explicit pixels**
+  (`artFit` = largest box of `aspect` fitting the band), cutting the loop; padding
+  went responsive; and **full bleed** (button, `F`, `Esc`) hides header and dock
+  with `display:none` — *not* an unmount, so the Stage keeps its decoder, its
+  AudioContext and its playhead — over a translucent pill carrying Roll · Shuffle ·
+  Remix · Exit, because you maximize in order to COMPARE LAYOUTS.
+  **Result (normal → full bleed): 320x568 3x4 → 16x24 → 312x467 (80% of screen);
+  390x844 148x222 → 215x323 → 382x572 (66%); 430x932 → 265x398 → 422x632;
+  1280x900 219x328 → 266x400 → 589x884 (45%); 1900x1300 300x450 → 533x800.**
+  **Said plainly: 320x568 and landscape phones are CHROME-bound, not layout-bound**
+  — header plus a wrapping transport row plus the tab bar is 265px of things the app
+  needs before any panel opens, so the normal view there stays small and FULL BLEED
+  is the real answer. The gate says so out loud rather than carrying a floor it
+  cannot meet.
+  **THE GATES NEVER SAW IT, AND THAT IS THE SCAR:** `mobile-watertight` asserts the
+  canvas is *visible*, never that it is **big enough to look at**, so a stage
+  collapsing toward zero was green every single run. New `stage-room.spec.ts`
+  asserts SIZE — and was **watched going RED against LIVE production on all 8
+  original checks**, reporting the real numbers back ("artwork only 3px wide at
+  320px", "controls take 60.8% of the screen", "artwork only 450px tall in a 1300px
+  window"). Measuring rather than looking then found more, all now gated:
+  **(R6)** a phone held LANDSCAPE leaves a ~118px band and the 200px button rail
+  **clipped `Clear all` off the bottom** with nothing to scroll (measured 82px past
+  the edge) — the rail now lays across when the band is short; **(R7)** the new `F`
+  shortcut listens on `window`, so a title containing the letter f maximized the
+  app — the target guard is gated and was **watched going red without it**.
+  **THE ADVERSARIAL AUDIT EARNED ITS KEEP AGAIN, AND HARDER THAN USUAL — four
+  lenses, 21 distinct claims, and TWO of them changed the shape of the fix.**
+  **(1) THE FIRST CAP WAS A REGRESSION.** The dock was wrapped in
+  `max-h-[50vh] overflow-y-auto` — but `.ui-dock` is ALREADY a capped scroller
+  whose primary action bar (fragment count · Shuffle · Remix) is `position:
+  sticky` against ITS bottom. Nesting a second scroller pinned that bar to the
+  bottom of an inner box pushed below the outer scrollport, and the most-used
+  controls in the app went off screen: **measured 778..832 in an 844px viewport,
+  to 869..923.** Every gate was green; nothing in the suite asked whether the
+  primary actions were still visible. The cap moved to `--dock-max` (one
+  scroller, sticky bar in it), and R11 now asserts `scrollers <= 1` plus
+  `stickyInView` at three viewports. That single find also retired four other
+  claims with it — `pb-safe` inside a scroll container, `50vh` measuring iOS's
+  large viewport, the cap being a no-op, and the transport becoming
+  scroll-dependent were all consequences of the scroller that no longer exists.
+  **(2) A RUNNING TAKE BECAME INVISIBLE AND UNSTOPPABLE.** Stop lives in the
+  transport row inside the dock; full bleed hides the dock; and Cmd-E still
+  reaches Export while maximized because the Header stays MOUNTED under
+  `display:none`. So: maximize → Cmd-E → Record, and the pill keeps offering
+  Roll/Shuffle/Remix, changing the composition mid-take. Entering full bleed is
+  now refused while `recorder.isRecording`, and starting a take drops out of it
+  first. **(3) AND THE VERIFIER THAT WENT FURTHEST BUILT ITS OWN INSTRUMENT.**
+  Told to refute a claim that the measured-pixel style had lost the synchronous
+  `maxWidth/maxHeight: 100%` clamp, it first showed the ORIGINAL evidence was
+  worthless — a rAF sampler reads BEFORE that frame's style/layout step, so a
+  stale reading proves the DOM was stale, not that anything was painted — then
+  captured real composited frames over CDP `Page.startScreencast` with a 12-bit
+  barcode stamped into each frame to map it back to its layout. **Leaving full
+  bleed at 1280x900 painted the collage at 589x884 inside a 1248x459 band, header
+  and dock already restored, top and bottom sliced off by `overflow-hidden` — 8
+  of 8 exits, 5 caught on screen, 0 with the clamp restored.** Both remedies are
+  in: the CSS clamp (synchronous, and it covers the changes we do NOT drive —
+  rotation, URL-bar collapse) and a layout effect on `maximized` that measures our
+  own toggle before paint. R12 asserts the outcome and was red-checked properly:
+  **it goes green if EITHER remedy is present, so it was watched going RED with
+  BOTH removed**, reporting the verifier's own numbers back. Three smaller ones
+  taken as well: the first-paint measurement sat BEHIND the `ResizeObserver ===
+  undefined` guard even though it needs no observer, so an engine without one
+  reverted to the content-sized model permanently — on the oldest devices, where
+  it is worst; the `lg:p-6` padding step made the artwork ~9% SMALLER when the
+  window got one pixel wider; and the full-bleed pill had no safe-area inset
+  while being the only way out on a touch device, putting Exit under the iOS
+  home indicator. And the sharpest single find:
+  its sheet once and closes with `classList.remove("on")` against
+  `.fb-wrap{display:none}` — so **one Feedback click killed F and Escape for the
+  rest of the session**. Reproduced deterministically before fixing; the guard now
+  asks whether a dialog is RENDERED (`getClientRects().length`). **And the gate for
+  it had to be built to SEE the thing it grades** — in local dev `shared/feedback.js`
+  404s by design, so every other test in this file runs in an app with no feedback
+  modal at all, which is precisely how a production-only break could ship green;
+  R8 loads the real shared script into the page and drives `Feedback.open/close`.
+  Three more from the same lens, fixed whatever the verifiers ruled: the recorded-take
+  preview was **the one full-screen sheet in the app never declared `role="dialog"`**
+  (R9 now asserts generically that no fixed, screen-covering, z≥100 element lacks it);
+  `F` with an EMPTY pool hid the entire UI and the strand-guard could not fire because
+  `images.length` never changed (entry now refused at the door); and every toggle
+  dropped focus to `<body>` because `display:none` blurs and the two buttons unmount
+  each other (R10 asserts focus lands on the control that replaced the one removed).
+  Two tests were themselves corrected: the first playhead assertion failed on a
+  WORKING build because the clip loops and `currentTime` legitimately wraps — it now
+  stamps the live `<video>` and `<canvas>` and checks the stamps survive, which is
+  the real question (was the Stage remounted?); and an earlier R7 draft was DELETED
+  for **passing with the code it claimed to test removed** — the empty-pool backstop
+  is documented as defensive rather than covered, because a receipt for an
+  unreachable state is worth nothing. **Proof:** 133 tests —
+  stage-room 16/16, mobile 6/6, source-count 7/7, video-audio 4/4, one-layout 4/4,
+  export-integrity 3/3, look 12/12, title 10/10, twist 8/8, composition 9/9,
+  roll-code 20/20, trim 9/9, commons 10/10, well-mobile 15/15 — plus a stress pass
+  showing zero oscillation over 3s idle, exact ratios across four aspect changes
+  (2:3 · 1:1 · 16:9 · 9:16, all fitting the band) and a single settled size after
+  rapid resizing; `tsc` + `vite build` clean.
+  **BACKPORT rider: swept, and it does not apply.** The class is "a flex child with
+  no ceiling starves its sibling, and a replaced element's intrinsic size becomes
+  the layout's fixed point". Checked all six trade toolkits: they are document
+  GENERATORS — no canvas, no stage, no `flex-1`/`shrink-0` split, and the pages
+  scroll the document rather than pinning to `fixed inset-0`, so nothing there can
+  starve. Nothing to carry over.
+  Also closed this cycle: BUG `b25242e0` (*"Why are we pulling frames?"*), filed 22
+  minutes BEFORE `480ba233` deployed the fix for it. Verified at the artifact rather
+  than assumed — on LIVE, one dropped video is one looping cell, and nine fragments
+  run off ONE decoder with no sheet and no picker. Credited, not rebuilt.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
 - 2026-08-08 · **[AXIS:WELL] THE FULL WALL** — wishing-well BUG (id `0fd3a59f`,
   "The videos aren't all playing", trade=collage, anonymous): a multi-video
   collage EXPORTED every clip past the realtime decoder budget as a FROZEN STILL

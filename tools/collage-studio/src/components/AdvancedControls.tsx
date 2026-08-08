@@ -328,6 +328,15 @@ export const AdvancedControls: React.FC<AdvancedControlsProps> = ({
           ))}
         </div>
 
+        {/* CREDIT. The frame now fills the space it is given, the controls stop
+            at half the screen, and there is a full-bleed view — all because
+            somebody said the artwork was too small to judge a layout by. This
+            wisher stayed anonymous too. See credits.json. */}
+        <p className="ui-caption ui-label--dim mt-1">
+          Full bleed (the <span className="font-bold">⤢</span> on the stage, or <span className="font-bold">F</span>) and
+          giving the artwork the room were wished for by an anonymous Collage user.
+        </p>
+
         <span className="ui-label mt-1">Background</span>
         <div className="ui-grid-5">
           <button

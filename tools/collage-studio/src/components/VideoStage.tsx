@@ -1101,7 +1101,16 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           z-50 control dock painted over it. Save was genuinely unclickable —
           caught by a test click that kept being intercepted, not by looking. */}
       {result && createPortal((
-        <div className="fixed inset-0 z-[300] bg-black/90 backdrop-blur flex flex-col items-center justify-center p-5 gap-4">
+        // role/aria-modal are not decoration here: this was the ONE full-screen
+        // sheet in the app that never declared itself a dialog, so anything
+        // asking "is a modal open?" — including the full-bleed shortcut guard in
+        // App.tsx — saw an empty screen and acted behind it.
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Recorded take"
+          className="fixed inset-0 z-[300] bg-black/90 backdrop-blur flex flex-col items-center justify-center p-5 gap-4"
+        >
           <video
             src={result.url}
             controls
