@@ -10,6 +10,16 @@
       "wished_date": "2026-08-04",
       "shipped_date": "2026-08-04",
       "shipped_commit": "4e3820e4"
+    },
+    {
+      "tool_name": "Collage Studio — every video plays in the export",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-08",
+      "shipped_date": "2026-08-08",
+      "shipped_commit": "4f0ae962"
     }
   ]
 }
