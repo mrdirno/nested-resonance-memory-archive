@@ -1725,3 +1725,14 @@ frontier. Today's ceiling is tomorrow's floor.
   and ON THE PAGE — in Settings, on the line where the switch used to be, so anyone hunting
   for it reads where it went.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+  **POSTSCRIPT, and the reason this entry names its own verification method:** a FOURTH
+  filing (929ccef8) landed at 16:36:14Z — "I'm presented with select frames why? … nobody
+  will want to sit there and press and move the dial to 1 frame" — 14 minutes BEFORE this
+  fix's deploy finished (16:50:50Z). It describes the pre-fix build. It was NOT closed on
+  that timing, because closing by inference is exactly what went wrong with b25242e0.
+  Verified instead on the REAL returning-user path: LIVE, WebKit, service worker installed
+  and CONTROLLING (never unregistered — the fix has to reach a user who does not clear
+  their cache), `genart.framePicker` forced to `'1'`. The SW is network-first on
+  navigations and a new content hash misses the cache, so one reload carries the new
+  bundle; asserted, not assumed. 0 controls asking about frames.
+
