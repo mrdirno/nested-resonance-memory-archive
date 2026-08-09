@@ -2160,3 +2160,62 @@ frontier. Today's ceiling is tomorrow's floor.
   navigations and a new content hash misses the cache, so one reload carries the new
   bundle; asserted, not assumed. 0 controls asking about frames.
 
+
+- 2026-08-09 · **[AXIS:WELL] THE BIGGER FILE WOULD HAVE BEEN THE SAME PHOTOGRAPH, ONLY SOFTER**
+  (wish `608a5aab`, anonymous: "same hi res output feature like the photo **or** a simple way to
+  do full screen **and** capture data to a zip that can be preserved and loaded later… makes the
+  creation tool a utility and has presentation function all in one go") — three clauses, and only
+  ONE of them was unserved. **Full screen already exists** (F / the Maximize button → full bleed:
+  header and dock `display:none`, Esc out, safe-area action bar; and on iPhone Safari
+  `Element.requestFullscreen` does not exist at all, so full bleed IS as full-screen as the
+  platform permits). **The `.collage` zip already exists** and round-trips the sources and every
+  setting. Both verified on the RUNNING APP, not inferred — the b25242e0 scar is that "already
+  served" was once concluded from a code path and was wrong.
+  **THE UNSERVED CLAUSE WAS TWO CEILINGS STACKED, and only one was visible.** SIZE: `maxBackingW
+  = opts.maxBackingWidth ?? logicalW`, and VideoStage built the Stage as `createStage(cv, {
+  onStatus })` — passing neither, so every exported MP4 was **1200px wide on every device from
+  any source**, beside a still export offering 16384. SOURCE: `stillKey = asset.previewSrc ||
+  asset.src` — the Stage draws the **≤1024px THUMBNAIL**, while the still exporter draws the
+  ORIGINAL and names that exact asymmetry as a bug it already fixed (`render.worker.ts`: "TWO
+  SOURCES, IN ORDER OF QUALITY"). The video path never got that fix.
+  **THAT IS WHY IT IS ONE CHANGE.** Lifting the size alone passes every assertion — bigger file,
+  larger dimensions — and ships a 4K container of upscaled thumbnails, which no frame-size check
+  can detect. So the PICTURE is measured: one scene, one canvas size, rendered twice with only
+  the source swapped, scored on gradient energy along a scanline against a stripe fixture whose
+  period dies at 1024px and survives at 3000. **33.0 → 124.4 (3.8×)**, and the test **was watched
+  going RED** with the swap disabled (33.0 vs 33.0). End to end, driving the real UI:
+  **1200×1802 → 2488×3732**, with the sheet's label matching the delivered file.
+  **THE LADDER IS PROBED, PER DEVICE AND PER SHAPE.** H.264 caps the frame in MACROBLOCKS, so the
+  ceiling depends on the aspect (4096 on a 16:9 long edge, ~3760 on the default 2:3 portrait) — a
+  fixed list would carry rungs that fail only after a render has been waited out. Refused rungs
+  render unavailable with the real reason; MAX is probed DOWN from the ceiling so the top is the
+  true top. It deliberately does NOT mirror the still's 8K/16K/MAX and says so in the sheet: that
+  ceiling is the FORMAT's, not the device's.
+  **BUDGETED BY GEOMETRY, which is what makes it safe on the phone the wish came from.** A
+  fragment covering 400×600 device pixels cannot show more than that much of its source, so each
+  original is rasterised only to the scale its own fragments consume and released immediately,
+  sequentially. Pointing the key at the originals and letting `ensureStills` fetch them would
+  hold N full-res decodes at once — twenty 12MP photos ≈ 975MB, on the call stack that has just
+  admitted every clip decoder and is about to reallocate the canvas 4× larger. Both levers are
+  restored in `endOfflineRender`, including an EXPLICIT eviction of the take's rasters: the cache
+  prunes only above `wanted.size + 32`, so 40 entries against a threshold of 52 would have leaked
+  every raster for the rest of the session.
+  **THE PANEL WAS RUN TWICE, AND THE FIRST RUN WAS THE LESSON.** Round 1 voted 2–1 for a
+  fullscreen mode — on a fact sheet that said full screen was "absent entirely", which was MY
+  error, not theirs. Corrected and re-cast, the same three lenses went **3/3 for this increment**,
+  and the round-1 skeptic's own fail-mode prediction ("an immersive layer upscaling a 1200px stage
+  onto a 2560px display looks WORSE than the windowed app") turned out to name this very ceiling.
+  A panel agreeing on a false premise is not agreement; it is a broken instrument.
+  **FOUND BY THE NEW MOBILE GATE, PRE-EXISTING, BOTH FIXED:** the video length buttons were 43×30
+  — under a thumb, beside the take button, in a sheet only ever opened on a phone; and
+  `.ui-btn--icon` DECLARED the 44px tap size and RENDERED at 37px, because a flex ITEM shrinks
+  past its own width down to its content (an 18px icon). `flex: none` fixes every icon button in
+  the app at once — the rule was never wrong, it was being overruled by the box it sat in.
+  Gates: unit sweeps 13/13 (`videoSize` watched RED on two deliberate breaks — a MAX that stops
+  early, and a ladder that offers what the encoder refused); chromium e2e 115/115;
+  mobile-watertight at 320/360/390/430 with the new row, zero horizontal overflow, every rung
+  ≥44px. WebKit 37/39 on the touched paths — the two failures (`trim` "no duration in its
+  container", `video-collage` "seats EVERY clip") **verified failing IDENTICALLY on a clean HEAD
+  worktree**, so pre-existing and on the ladder with their repro. `tsc` + `vite build` clean.
+  Wisher credited in `credits.json` and ON the size row.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/

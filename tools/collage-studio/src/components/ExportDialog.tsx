@@ -179,9 +179,15 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                   <span className="ui-option__icon" style={{ color: '#ff6a6a' }}><Video size={16} /></span>
                   <span className="min-w-0 flex-1">
                     <span className="block ui-label ui-label--on">Record the moving collage</span>
+                    {/* This said "captures what is on screen" while the row
+                        directly beneath it said "drawn from your original
+                        photos, not the previews" — two claims about one button,
+                        and the screen one stopped being true when the render
+                        started drawing the originals at its own size. */}
                     <span className="block ui-caption mt-1">
-                      Captures what is on screen, with the sound of any unmuted clip. MP4 where the
-                      browser can write one.
+                      {canChooseVideoSize
+                        ? 'Rendered from your sources at the size you pick, with the sound of any unmuted clip. MP4 where the browser can write one.'
+                        : 'Captures what is on screen, with the sound of any unmuted clip. MP4 where the browser can write one.'}
                     </span>
                   </span>
                 </div>
