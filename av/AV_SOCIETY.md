@@ -606,6 +606,34 @@ ends of the boundary on the same day.
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
 
+- **A CLIP IS NOT A SPILL, and only one of them had a gate (2026-08-09).** Every
+  mobile assertion this program owns looks for content sticking OUT — horizontal
+  overflow, an element past the right edge, a tap target under 44px. Nothing was
+  watching for content quietly cut OFF. The nav brand — the only thing on the bar
+  that says which kit you are in — was hard-cut mid-word on FOUR of seven trades
+  for their entire lives (/plumbing/ −13px, /electrical/ −28px, /low-voltage/
+  −42px, /framing/ −92px, rendering as the two letters "FR"), and every gate was
+  green the whole time. Found by putting eyes on the live page after the tests
+  passed. **The rule: when a container has `overflow:hidden`, something must
+  assert what it is hiding.** A fragment with no ellipsis reads as a name, not as
+  a truncation, which is worse than showing nothing.
+
+- **A HARDCODED COUNT IS A CHORE, NOT A GATE (2026-08-09).** kit-switcher.spec
+  asserted `toBe(6)` and `toBe(5)` for the chips on a hub and in the nav. Trade #7
+  turned **35 tests red on nothing but two integers**, on a change whose entire
+  premise is that a new trade is one line in one array. A gate that has to be
+  hand-edited every time the thing it counts grows will eventually be edited
+  carelessly or switched off. Derive the expectation from the same source the
+  code reads.
+
+- **MEASURE THE TAP TARGET, NOT THE ELEMENT (2026-08-09).** A checkbox is 20px on
+  every browser there is and cannot be grown without breaking its own rendering —
+  but clicking its wrapping `<label>` toggles it, so the LABEL is the target. A
+  new gate that measured the input reported 17 failures on framing, 14 on
+  plumbing and 8 on electrical for controls that all clear 44px comfortably. A
+  gate that cries wolf on three shipped trades gets switched off, which is worse
+  than not having it.
+
 - **BUILT, TESTED, AND IMPORTED BY NOTHING (2026-08-04).** `collage-studio/src/lib/exportLimits.ts`
   was 1,490 lines of exactly the right machinery — canvas-ceiling probe, one-pixel
   surface sentinel, blob validation, a tier ladder — with a 57-case self-test that
@@ -1468,3 +1496,90 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `device-checkout` declares no filters, so `answer-back` was the only instance — fixed on
   all six in the same cycle.
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/answer-back.html
+
+- 2026-08-09 · **[AXIS:BREADTH] TRADE #7 IS LIVE — FRAMING & DRYWALL, and it is the first
+  trade the program CHOSE rather than inherited · 6 trades × 32 tools → 7 trades × 37 tools.**
+  The researched five-trade ladder ran out at trade #6, so the next family had to be
+  promoted rather than read off a list. It was not a guess. The INTERFACE MATRIX built in
+  August names, per served trade, who each one chases — and the framer / drywall crew is
+  named by **five of the six**: AV wants backing behind a TV and a wall left clear, EC wants
+  his boxes not cut through, HVAC wants a louver opening, plumbing wants the wet wall furred
+  out, LV wants blocking before rock. The most-requested-of party in the whole program was
+  served by nothing, and every `rough-in-request` page we ship was pointing at a man with no
+  toolkit. Every other candidate receiver was named twice or less.
+  **THE PIN IS THE OTHER END OF OUR OWN ASK.** `framing/whats-in-the-wall.html` — the backing
+  ledger, and the first place the ANSWER to a cross-boundary request has ever had anywhere to
+  live. Backing is requested five ways (a text, a marked print, a guy pointing at a stud) and
+  recorded zero. Every one of those conversations happens TWICE: once in June when he wants
+  it, once in October when he swears it isn't there, and in October the man with the list
+  wins. Its only real competitor is a can of keel on the stud, which loses for exactly one
+  reason — the keel gets covered and the list doesn't. Two documents off one ledger: COME
+  LOOK, scoped to one trade while the wall is still open, and the October message with the
+  day each piece got covered. Plus the four standards in framing words — *Before I Close It*
+  (this trade's ask is the mirror of everyone else's: **get out of my wall**), *What I'll Put
+  In*, the *Extra Work Tag*, and *The Write-Up I Owe*.
+  **THE ROSTER WAS RESEARCHED AND THEN ATTACKED.** 8-agent fan-out: four in-trade panels
+  (commercial metal stud · residential wood · taper/ceilings · and the RECEIVING lens — the
+  man who closes the wall) then three skeptics told to kill about a third. 19 candidates,
+  which the skeptics independently diagnosed as **six documents wearing nineteen hats** — four
+  backing registers, four order pages, four state-of-the-floor pages, two blame logs. All
+  three picked the same pin unprompted. The blame logs died on the money bar and the
+  certified-data bar; *Ready to Rock*, *Won't Fit* and *The Load* survived to the private
+  roster as this trade's next rungs.
+  **THE HEIGHT FIELD IS NAKED, AND THAT IS THE WHOLE SAFETY STORY OF THIS TRADE.** A mounting
+  height is the most damaging number this toolkit could ever volunteer: it is buried behind
+  rock before anybody notices it came from us and not the architect. No chips, no options, no
+  seeded example, no digit in the placeholder, and the page says it out loud — *these are your
+  numbers, we don't know them and we won't guess*. Gated, not trusted. Same reason the board
+  brand every hand in this trade says a hundred times a day appears nowhere: it is board, it
+  is rock, it is mud and bead and a lid.
+  **SHIP GATE** (`tools/collage-studio/tests/e2e/backing-ledger.spec.ts` + its config, new):
+  7 pages × 4 widths, 320px at a 22px root, and it **does the job** — walks a room, adds two
+  pieces through the real bar, taps a row up the ladder, scopes the send to one trade, and
+  reads the **clipboard** back. **32/32 local, 32/32 against LIVE.** Watched RED on two
+  deliberate breaks (a seeded height placeholder; the wording bug it found).
+  **IT FOUND TWO REAL BUGS AND ONE FALSE POSITIVE OF ITS OWN.** A man typing "48 to 84 off the
+  floor" into a field labelled *how high off the floor* got "…off the floor off the floor" —
+  on any other field a wart, on the height the page editing the one value it swore not to
+  touch. "asked text" is not English. Both fixed at the source. And measuring a CHECKBOX
+  reports 20px on every browser there is while the 44px+ LABEL wrapping it is what a thumb
+  hits: naive measurement flagged 17 controls here, 14 on plumbing and 8 on electrical, all
+  fine. A gate that cries wolf on three shipped trades gets switched off, so the probe
+  measures the effective target.
+  **AND THE GATE ITSELF WAS THE FIRST THING THE SEVENTH TRADE BROKE.** `kit-switcher.spec`
+  hardcoded two integers — 6 chips on a hub, 5 in the nav — and turned **35 tests red on
+  nothing but arithmetic**, on a change whose entire point is that a new trade is one line.
+  Both are now derived from its own TRADES list. Trade #8 will not re-break it. 77/77 local
+  and live; `well-mobile` 15/15 unmoved.
+  https://mrdirno.github.io/nested-resonance-memory-archive/framing/
+
+- 2026-08-09 · **[AXIS:BACKPORT] THE BAR NAMED THE KIT YOU WERE IN WITH TWO LETTERS ·
+  4 of 7 kits, hard-cut, for their whole lives.** Found by LOOKING at the live page after
+  every gate was already green. Trade #7's nav brand rendered as **"FR"** on a 390px phone —
+  the one control on the bar whose entire job is telling a man which kit he is standing in.
+  Measured across all seven: **/plumbing/ lost 13px of its word, /electrical/ 28px,
+  /low-voltage/ 42px, framing 92px.**
+  **THE MOBILE GATE COULD NOT SEE IT, AND THAT IS THE LESSON.** The defect is a CLIP, not a
+  spill: `scrollWidth` never exceeded `clientWidth`, nothing rendered past the right edge,
+  and the page was immaculate under every assertion we owned. Horizontal-overflow gates catch
+  things that stick OUT. Nothing was watching for something quietly cut OFF.
+  **TWO CAUSES.** The runtime's brand span could not shrink, so the PARENT's `overflow:hidden`
+  did the cutting — and a fragment with no ellipsis does not read as a truncation, it reads
+  as a name, which is strictly worse than showing less. The span now owns its own overflow:
+  hard-cut measured **false on all seven** at 390 and 430. And framing's own `brandLead` was
+  two words where every sibling ships one — the nav brand is the trade WORD, not the full name
+  (GC has shipped "GC" against "GC & Site Super Toolkit" since it stood up). At "Framing" it
+  measures 3px of overflow, which is the trailing space.
+  **GATED:** kit-switcher.spec now asserts on every trade at every width that the brand either
+  names the kit or says nothing — never a fragment.
+  **BACKPORT RIDER FIRED:** the runtime fix lands on all seven trades at once, which is the
+  only reason it was worth making rather than shortening one config string.
+  **OWED, named rather than half-built:** at 390px electrical and low-voltage still ellipsize
+  (27px and 40px short). Making them fit means taking width from the "Wish for a tool" CTA,
+  which the runtime protects by explicit documented decision as the demand funnel. That is a
+  judgement about the bar's priorities, not a bug fix.
+  **AND THE CHECK THAT SAVED THE WHOLE SITE:** `node --check` on the runtime. The comment
+  above the new rule used backticks inside a JS template literal and closed the CSS string. It
+  would have shipped a dead runtime on **all 32 pages of all 7 trades**, and every one of them
+  would still have returned 200.
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/
