@@ -31,7 +31,11 @@ window.TOOLKIT_TRADE = {
 
   name: "Framing & Drywall Field Toolkit",
   icon: "🪚",
-  brandLead: "Framing & Drywall",
+  // ONE WORD, like every sibling — the nav brand is the trade WORD, not the full
+  // name (GC ships "GC" against a name of "GC & Site Super Toolkit"). MEASURED
+  // LIVE at 390px: "Framing & Drywall" rendered as "FR". At 83px "Framing" is
+  // the same width as "Plumbing" and fits on every phone the program supports.
+  brandLead: "Framing",
   brandTail: "Field Toolkit",
 
   /* CHALK-LINE BLUE, pushed to the indigo end. The snap line is the first thing

@@ -152,6 +152,18 @@
     text-transform:uppercase;letter-spacing:.08em;font-weight:700;font-size:15px;white-space:nowrap;
     min-width:0;overflow:hidden;flex:0 1 auto;min-height:44px;}
   .av-brand b{color:var(--av-flag)}
+  /* A CUT WORD IS A DIFFERENT WORD. The rules below give the brand up in two
+     deliberate steps — the tail at 560px, the word at 380px — but between those
+     two the word was hard-cut by this element's own overflow:hidden, with no
+     ellipsis, because the SPAN could not shrink and so never became the overflow
+     box. MEASURED LIVE at 390px across all seven kits: /plumbing/ lost 13px,
+     /electrical/ 28px, /low-voltage/ 42px, and trade #7 rendered its brand as
+     the two letters "FR". A fragment with no ellipsis does not read as a
+     truncation, it reads as a name — which is worse than showing less. Letting
+     the span own the overflow costs nothing on the kits that already fit and
+     turns the rest into honest truncation. Swept to all seven the cycle it was
+     found (§THE EXPANSION ORDER). */
+  .av-brand span{min-width:0;overflow:hidden;text-overflow:ellipsis}
   /* MOBILE-WATERTIGHT (operator 2026-08-04: "don't make anything that's gonna clip
    * or alter if zoomed out on phone"). MEASURED BEFORE THE FIX, in a real browser
    * at a 390px viewport: this sticky bar's content was 433px on /av/, 487px on

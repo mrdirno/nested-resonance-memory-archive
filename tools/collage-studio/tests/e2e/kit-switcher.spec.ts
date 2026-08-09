@@ -128,6 +128,35 @@ for (const trade of TRADES) {
       });
     }
 
+    /* THE BRAND IS THE ONLY THING ON THE BAR THAT SAYS WHICH KIT YOU ARE IN, and
+       it was being hard-cut mid-word with no ellipsis: the span could not shrink,
+       so the PARENT's overflow:hidden did the cutting. MEASURED LIVE at 390px
+       before the fix — /plumbing/ lost 13px, /electrical/ 28px, /low-voltage/
+       42px, and trade #7 rendered "Framing & Drywall" as the two letters "FR".
+       A fragment with no ellipsis does not read as a truncation, it reads as a
+       name. The word may be shortened; it may be dropped entirely (the <=380px
+       rule does exactly that, deliberately); it may never be silently cut. */
+    for (const width of WIDTHS) {
+      test(`${width}px: the brand names the kit, or says nothing — never a fragment`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 800 });
+        await page.goto(`${trade}/`);
+        await expect(page.locator('.av-brand')).toBeVisible({ timeout: 10_000 });
+        const b = await page.evaluate(() => {
+          const a = document.querySelector('.av-brand') as HTMLElement;
+          const s = a.querySelector('span') as HTMLElement;
+          return {
+            hardCut: a.scrollWidth > Math.ceil(a.getBoundingClientRect().width) + 1,
+            wordShown: getComputedStyle(s).display !== 'none',
+            ellipsis: getComputedStyle(s).textOverflow,
+          };
+        });
+        expect(b.hardCut, 'the brand is cut off by its own container').toBe(false);
+        if (b.wordShown) {
+          expect(b.ellipsis, 'a visible brand word that can be squeezed must ellipsize').toBe('ellipsis');
+        }
+      });
+    }
+
     test('a tool page can reach another kit at all — the nav switcher', async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 800 });
       await page.goto(`${trade}/${TOOLPAGE[trade]}`);
