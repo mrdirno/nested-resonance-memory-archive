@@ -289,7 +289,14 @@
   color: var(--danger);
 }
 
-.ui-btn--icon { width: var(--tap); padding: 0; }
+/* `flex: none` is load-bearing, not tidiness. A flex ITEM shrinks past its own
+   `width` — its floor is the CONTENT, and the content here is an 18px icon — so
+   an icon button declared at the 44px tap size was measuring 37px wide inside
+   the export sheet's header row, and less in any tighter row. The declared size
+   was right everywhere and the rendered size was not, which is why it survived
+   a CSS read for so long: nothing in this rule was wrong, it was just being
+   overruled by the box it sat in. */
+.ui-btn--icon { width: var(--tap); padding: 0; flex: none; }
 /* Narrower chrome buttons — same 44px touch height, less horizontal cost so
    two of them plus the status chip still fit a 320px bar. */
 .ui-btn--compact { padding: 0 var(--s-3); font-size: var(--t-micro); letter-spacing: 0.07em; }

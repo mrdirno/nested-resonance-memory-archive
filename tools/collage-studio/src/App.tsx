@@ -1778,7 +1778,7 @@ export default function App() {
           recording indicator both live in the dock that full bleed hides, and
           Cmd-E still reaches this dialog while maximized because the Header
           stays mounted under `display:none`. */}
-      <ExportDialog canExportVideo={liveMode} onExportVideo={(secs) => { setMaximized(false); recorderRef.current?.start(secs); }} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
+      <ExportDialog canExportVideo={liveMode} onExportVideo={(secs, w) => { setMaximized(false); recorderRef.current?.start(secs, w); }} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} videoSizes={recorderRef.current?.sizes ?? []} canChooseVideoSize={!!recorderRef.current?.canChooseSize} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
       <ResultModal isOpen={!!resultBlobUrl} onClose={() => setResultBlobUrl(null)} blobUrl={resultBlobUrl} onShare={handleShareResult} onDownload={handleDownloadResult} isMobile={isMobile} />
 
       <div

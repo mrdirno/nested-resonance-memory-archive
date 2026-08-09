@@ -233,6 +233,118 @@ export const probeFrameExportSupport = async (
 };
 
 // =============================================================================
+// SIZE LADDER
+// =============================================================================
+
+export interface VideoSizeOption {
+  /** Long edge in px — the same thing the still ladder's labels mean. */
+  longEdge: number;
+  label: string;
+  /** The frame this rung actually produces at the composition's shape. */
+  width: number;
+  height: number;
+  /** Did THIS device's encoder accept this exact frame? */
+  supported: boolean;
+  /** Why not, in words that name the real limit rather than blaming the device. */
+  reason: string | null;
+}
+
+/**
+ * WHAT THIS DEVICE WILL ACTUALLY ENCODE, AT THIS COMPOSITION'S SHAPE.
+ *
+ * The still ladder can offer 2K/4K/8K/16K/MAX because a JPEG has no levels to
+ * satisfy — it is one buffer and one file. Video does: H.264 caps the FRAME in
+ * macroblocks, this app's ladder tops out at level 5.2 / 36,864 of them, and
+ * the ceiling therefore depends on the SHAPE. A 3:2 landscape reaches 4096 on
+ * its long edge; the default 2:3 portrait runs out near 3,760, because the same
+ * macroblock budget buys fewer long-edge pixels once it is spent on height.
+ *
+ * So the rungs are not a fixed list with some of them permanently dark — they
+ * are asked, one `isConfigSupported` each, against the frame the user would
+ * really get. `MAX` is not a wish either: it is probed DOWN from the ceiling
+ * until the encoder says yes, so the top of the ladder is the true top.
+ *
+ * Never throws. A device with no encoder returns every rung unsupported with
+ * the reason, which is a ladder the UI can render honestly.
+ */
+export const probeVideoSizes = async (
+  aspect: number,
+  opts: { fps?: number; bitrate?: number } = {},
+): Promise<VideoSizeOption[]> => {
+  const a = Number.isFinite(aspect) && aspect > 0 ? aspect : 1;
+  const fps = opts.fps ?? 30;
+  const bitrate = opts.bitrate ?? 12_000_000;
+
+  // The frame a given long edge produces at this aspect. Even on both axes:
+  // encoders reject odd dimensions and H.264 in particular wants them even.
+  const frameFor = (longEdge: number): { width: number; height: number } => {
+    const w = a >= 1 ? longEdge : longEdge * a;
+    const h = a >= 1 ? longEdge / a : longEdge;
+    return { width: even(w), height: even(h) };
+  };
+
+  const Enc = encoderCtor();
+  const RUNGS: ReadonlyArray<{ longEdge: number; label: string }> = [
+    { longEdge: 1080, label: 'HD' },
+    { longEdge: 2048, label: '2K' },
+  ];
+
+  if (!Enc) {
+    const dead = RUNGS.map((r) => ({
+      ...r, ...frameFor(r.longEdge), supported: false,
+      reason: "This browser can't encode video.",
+    }));
+    const { width, height } = frameFor(2048);
+    return [...dead, { longEdge: 2048, label: 'MAX', width, height, supported: false, reason: "This browser can't encode video." }];
+  }
+
+  const out: VideoSizeOption[] = [];
+  for (const r of RUNGS) {
+    const { width, height } = frameFor(r.longEdge);
+    const codec = await pickCodec(Enc, width, height, bitrate, fps);
+    out.push({
+      ...r, width, height,
+      supported: !!codec,
+      reason: codec ? null : `This device won't encode H.264 at ${width}x${height}.`,
+    });
+  }
+
+  // MAX — walk DOWN from the macroblock ceiling. The first accepted frame is
+  // the honest top of this device's ladder, so it is never a rung that fails
+  // only once someone has waited out a render.
+  const ceilingMbs = H264_LEVELS[H264_LEVELS.length - 1].maxMbs;
+  // Largest long edge whose frame fits the macroblock budget, before asking the
+  // encoder anything: mbs scales with the square of the long edge at fixed aspect.
+  const probe = frameFor(1000);
+  const mbsAt1000 = Math.ceil(probe.width / 16) * Math.ceil(probe.height / 16);
+  let edge = Math.floor(1000 * Math.sqrt(ceilingMbs / Math.max(1, mbsAt1000)));
+  edge = Math.min(edge, 4096);   // no rung above the still ladder's 4K vocabulary
+
+  let max: VideoSizeOption | null = null;
+  for (let i = 0; i < 24 && edge >= 640; i++) {
+    const { width, height } = frameFor(edge);
+    const codec = await pickCodec(Enc, width, height, bitrate, fps);
+    if (codec) {
+      max = {
+        longEdge: edge,
+        label: edge >= 3840 ? '4K' : 'MAX',
+        width, height, supported: true, reason: null,
+      };
+      break;
+    }
+    edge -= 128;
+  }
+  out.push(max ?? {
+    longEdge: 0, label: 'MAX', width: 0, height: 0, supported: false,
+    reason: "This device won't encode H.264 above the sizes offered.",
+  });
+
+  // A ladder must never offer the same frame twice, and on a very square
+  // composition MAX can land on a rung already listed.
+  return out.filter((o, i) => o.supported === false || out.findIndex((p) => p.supported && p.width === o.width && p.height === o.height) === i);
+};
+
+// =============================================================================
 // RECORD
 // =============================================================================
 
@@ -565,8 +677,19 @@ export const recordFrames = async (
  */
 export interface OfflineRenderSource {
   readonly canvas: HTMLCanvasElement;
-  beginOfflineRender(): void;
+  /**
+   * `opts` is OPTIONAL on both sides: every existing structural implementer and
+   * every test fake declares `beginOfflineRender(): void`, which stays assignable.
+   * A source that ignores it renders exactly as it always did.
+   */
+  beginOfflineRender(opts?: { maxWidth?: number; fullRes?: boolean }): void;
   endOfflineRender(): void;
+  /**
+   * Give the source a chance to fetch what it will draw BEFORE frame 0 — for
+   * the Stage, the full-resolution originals that replace its thumbnails.
+   * Optional, and awaited only when present, so a fake without it is valid.
+   */
+  prepareOfflineStills?(opts?: { signal?: AbortSignal; timeoutMs?: number }): Promise<unknown>;
   renderAtTime(timeSec: number, opts?: { signal?: AbortSignal }): Promise<void>;
   /** The clips' sound, for the offline mixer. OPTIONAL so every existing
    *  structural implementer — and every test fake — stays valid; its absence is
@@ -575,6 +698,17 @@ export interface OfflineRenderSource {
 }
 
 export interface OfflineRenderOptions extends FrameRecordOptions {
+  /**
+   * THE FRAME WIDTH TO RENDER AT, in pixels. Absent keeps the source's own
+   * size, which is what every caller did before this existed.
+   *
+   * The caller is expected to have PROBED it (`probeVideoSizes` below) — this
+   * is passed straight to the source and then frozen, so an unencodable size
+   * fails the take rather than silently shrinking it.
+   */
+  renderWidth?: number;
+  /** Draw full-resolution sources instead of preview thumbnails. Default true. */
+  fullResStills?: boolean;
   /** Where on the clips' timeline the take starts. Defaults to 0. */
   startTimeSec?: number;
   /** Mix the clips' sound into the file. Default true. `false` is an explicit
@@ -683,8 +817,30 @@ export const renderOffline = async (
     // Park the stage BEFORE measuring: setCaptureActive freezes the backing
     // size, and the encoder must be configured for the size it will actually
     // receive for every single frame.
-    source.beginOfflineRender();
+    source.beginOfflineRender({
+      maxWidth: options.renderWidth,
+      fullRes: options.fullResStills,
+    });
     started = true;
+
+    // FETCH WHAT WE ARE ABOUT TO DRAW, before frame 0 rather than during it. A
+    // render that starts while the originals are still decoding writes its
+    // opening frames from thumbnails and the rest from originals — one file
+    // with a visible quality step in it. Bounded inside the source; a source
+    // that has nothing to prepare does not implement this.
+    if (typeof source.prepareOfflineStills === 'function') {
+      phase = 'arming';
+      emit('Loading the originals…', 0);
+      try {
+        await source.prepareOfflineStills({ signal: options.signal });
+      } catch {
+        // Never fatal: the source falls back to what it already had drawn.
+        warnings.push('Some sources stayed at preview quality.');
+      }
+      if (options.signal?.aborted) {
+        return failure('aborted', 'Recording cancelled.', null, null, warnings);
+      }
+    }
 
     const width = even(canvas.width);
     const height = even(canvas.height);

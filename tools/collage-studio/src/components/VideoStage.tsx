@@ -47,8 +47,8 @@ import {
   type RecordProgress, type RecordSuccess, type VideoExportSupport,
 } from '../lib/videoExport';
 import {
-  recordFrames, renderOffline, probeFrameExportSupport,
-  type FrameExportSupport,
+  recordFrames, renderOffline, probeFrameExportSupport, probeVideoSizes,
+  type FrameExportSupport, type VideoSizeOption,
 } from '../lib/frameExport';
 import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
@@ -140,10 +140,22 @@ export interface VideoStageProps {
 }
 
 export interface StageRecorder {
-  start: (seconds?: number) => void;
+  start: (seconds?: number, renderWidth?: number) => void;
   canRecord: boolean;
   isRecording: boolean;
   maxSeconds: number;
+  /**
+   * THE SIZES THIS DEVICE WILL ACTUALLY ENCODE at the current composition's
+   * shape, probed rung by rung. Empty until the probe lands — the sheet renders
+   * the row only once there is something true to put in it.
+   */
+  sizes: VideoSizeOption[];
+  /**
+   * True when the take will be RENDERED offline rather than captured live. Only
+   * the offline path can spend pixels, so it is the only one the ladder applies
+   * to, and the sheet should not offer a choice it cannot honour.
+   */
+  canChooseSize: boolean;
 }
 
 /**
@@ -642,7 +654,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
   const stopRecording = useCallback(() => { abortRef.current?.abort(); }, []);
 
-  const startRecording = useCallback((secondsOverride?: number) => {
+  const startRecording = useCallback((secondsOverride?: number, renderWidth?: number) => {
     const stage = stageRef.current;
     if (!stage || recPhase !== 'idle') return;
 
@@ -732,6 +744,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       ? renderOffline(stage, {
           seconds: take,
           fps: profile.fps,
+          // The size the sheet PROBED. Absent keeps the source's own width,
+          // which is what every take did before the ladder existed.
+          renderWidth,
           signal: ac.signal,
           filenameBase: 'collage',
           onProgress: setProgress,
@@ -778,7 +793,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
         setRecPhase('idle');
         setProgress(null);
       });
-  }, [recPhase, seconds, profile.fps, profile.maxSeconds, onNotice, support, frameSupport, status]);
+  }, [recPhase, seconds, profile.fps, profile.maxSeconds, profile.videoBitsPerSecond, onNotice, support, frameSupport, status]);
 
   const closeResult = useCallback(() => {
     setResult((r) => { revokeRecording(r); return null; });
@@ -870,6 +885,28 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     onSoundtrackMuted?.(wanted);
   }, [onSoundtrackMuted]);
 
+  /**
+   * THE SIZE LADDER, RE-PROBED WHEN THE SHAPE CHANGES.
+   *
+   * The H.264 ceiling is in MACROBLOCKS, so the top rung depends on the aspect:
+   * a 3:2 landscape reaches 4096 on its long edge and the app's default 2:3
+   * portrait runs out near 3,760. A ladder probed once at load would therefore
+   * be wrong the moment anyone changes the shape — offering a size that fails
+   * only after the render, which is the one thing this row must never do.
+   *
+   * Rounded to 3 decimals so a resize that nudges the aspect by a float's worth
+   * does not re-run ~26 `isConfigSupported` calls for an identical answer.
+   */
+  const [sizes, setSizes] = useState<VideoSizeOption[]>([]);
+  const aspectKey = Math.round((aspect || 1) * 1000) / 1000;
+  useEffect(() => {
+    let alive = true;
+    probeVideoSizes(aspectKey, { fps: profile.fps, bitrate: profile.videoBitsPerSecond })
+      .then((s) => { if (alive) setSizes(s); })
+      .catch(() => { if (alive) setSizes([]); });
+    return () => { alive = false; };
+  }, [aspectKey, profile.fps, profile.videoBitsPerSecond]);
+
   /** Either strategy will do. Only when BOTH are out is recording really gone. */
   const canRecord = support === null && frameSupport === null
     ? true                                   // not probed yet; assume yes
@@ -884,9 +921,14 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       canRecord: canRecord && takeable && !busy,
       isRecording: recPhase === 'running',
       maxSeconds: profile.maxSeconds,
+      sizes,
+      // Only the offline renderer can spend pixels — the realtime paths sample
+      // a canvas that has to keep up with a clock. Offering the row when the
+      // take will be captured live would be a control that does nothing.
+      canChooseSize: !!frameSupport?.supported,
     };
     return () => { recorderRef.current = null; };
-  }, [recorderRef, startRecording, canRecord, takeable, busy, recPhase, profile.maxSeconds]);
+  }, [recorderRef, startRecording, canRecord, takeable, busy, recPhase, profile.maxSeconds, sizes, frameSupport]);
 
   const clipRows = status?.clips ?? [];
   // What the EXPORT will carry — intent, exactly as `describeAudioSources`

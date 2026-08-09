@@ -30,6 +30,16 @@
       "wished_date": "2026-08-08",
       "shipped_date": "2026-08-08",
       "shipped_note": "The third filing of this complaint, and the first one that changed the surfaces the wisher was actually looking at. The frame-picker route is DELETED, not defaulted off: no sheet, no queue, no genart.framePicker preference (a stale '1' had been pinning returning users to it), no Settings switch, and the button that takes a video no longer calls itself 'Extract frames from a video'. The intake also stopped making you wait for the frame it was pulling: probe + re-open + prime + three seeks became one openClip() pass with one seek, 3,517ms -> 490ms to the clip reaching the collage."
+    },
+    {
+      "capability": "Hi-res video export — the size ladder, drawn from your originals",
+      "where": "Export sheet > Video > Size — long edge (appears when a clip is on the canvas)",
+      "wish": "Would be nice to have same hi res output feature like the photo or a simple way to do full screen and capture data to a zip that can be preserved and loaded later,",
+      "wisher": null,
+      "wisher_display": "an anonymous Collage user",
+      "wished_date": "2026-08-08",
+      "shipped_date": "2026-08-09",
+      "shipped_note": "The first clause, and it was two stacked ceilings rather than a missing dropdown. SIZE: the Stage's maxBackingWidth was never passed, so it fell back to the 1200 logical width and EVERY exported MP4 was 1200px wide on every device, from any source, while the still export offered 16384. SOURCE: the Stage draws previewSrc, the <=1024px thumbnail — the still exporter draws the ORIGINAL and documents that exact asymmetry as a bug it already fixed; the video path never got it. Shipping the size alone would have been a bigger container of upscaled thumbnails, so both moved together: measured at one canvas size, detail energy went 33.0 -> 124.4 (3.8x). End to end on a real take: 1200x1802 -> 2488x3732. Rungs are PROBED per device AND per composition shape (H.264 caps the frame in macroblocks, so the ceiling depends on the aspect) and a rung the encoder refuses is shown unavailable with the real reason rather than offered and failed later. The full-res decodes are budgeted by geometry — each original is rasterised only to the pixels its own fragments consume and released immediately — because holding a pool of originals resident is a dead tab on a phone. ALREADY SERVED, verified on the running app rather than assumed: 'full screen' is the F key / the Maximize button (full bleed, Esc to leave), and the .collage archive already saves and reopens your sources and every setting. Video clips still are not carried in that archive."
     }
   ]
 }

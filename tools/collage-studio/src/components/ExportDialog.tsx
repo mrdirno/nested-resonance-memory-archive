@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { X, FileJson, FileCode, Zap, Share, Download, Image, Video } from 'lucide-react';
+import type { VideoSizeOption } from '../lib/frameExport';
 
 interface ExportDialogProps {
   isOpen: boolean;
@@ -16,9 +17,17 @@ interface ExportDialogProps {
    * click: starting a capture is gesture-bound, so anything that defers it by a
    * task records silence, or nothing.
    */
-  onExportVideo?: (seconds: number) => void;
+  onExportVideo?: (seconds: number, renderWidth?: number) => void;
   /** Device ceiling, so the offered lengths are ones that will actually survive. */
   videoMaxSeconds?: number;
+  /**
+   * The frame sizes THIS device accepted at THIS composition's shape, already
+   * probed. Empty renders no row at all — an unprobed ladder is a guess, and a
+   * guess here costs somebody a whole render.
+   */
+  videoSizes?: VideoSizeOption[];
+  /** False when the take will be captured live, where the size cannot be chosen. */
+  canChooseVideoSize?: boolean;
 }
 
 const PRESETS = [
@@ -31,12 +40,30 @@ const PRESETS = [
 
 export const ExportDialog: React.FC<ExportDialogProps> = ({
   isOpen, onClose, onExport, onExportSVG, onExportProject, canShare, onShare,
-  canExportVideo = false, onExportVideo, videoMaxSeconds = 30
+  canExportVideo = false, onExportVideo, videoMaxSeconds = 30,
+  videoSizes = [], canChooseVideoSize = false,
 }) => {
   const [resIndex, setResIndex] = useState(1); // 4K
   const current = PRESETS[resIndex];
   const videoLengths = [5, 10, 15, 30].filter(v => v <= videoMaxSeconds);
   const [vidSeconds, setVidSeconds] = useState(10);
+
+  // THE SIZE ROW. Only rungs this device really accepted are selectable; the
+  // refused ones stay visible with the reason, because "4K is missing" and "4K
+  // is impossible at this shape" are different facts and only one of them is
+  // ours to explain.
+  const okSizes = videoSizes.filter(s => s.supported);
+  const [vidSizeIdx, setVidSizeIdx] = useState(0);
+  // Default to 2K where the device reaches it, else the top it does reach — a
+  // real step up from the fixed 1200px this replaced, without defaulting
+  // everyone onto the slowest render on the ladder.
+  useEffect(() => {
+    if (!okSizes.length) return;
+    const twoK = okSizes.findIndex(s => s.longEdge >= 2048);
+    setVidSizeIdx(twoK >= 0 ? twoK : okSizes.length - 1);
+  }, [videoSizes]);   // eslint-disable-line react-hooks/exhaustive-deps
+  const vidSize = okSizes[Math.min(vidSizeIdx, Math.max(0, okSizes.length - 1))];
+  const showSizes = canChooseVideoSize && okSizes.length > 1;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -158,6 +185,54 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     </span>
                   </span>
                 </div>
+                {showSizes && (
+                  <div className="flex flex-col gap-1.5" role="radiogroup" aria-label="Video size">
+                    <span className="ui-label">Size — long edge</span>
+                    {/* Wraps rather than scrolls: three rungs at 44px fit a 320px
+                        screen in two rows, and a horizontally scrolling strip of
+                        options is the thing you cannot find with a thumb. */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {videoSizes.map((s, i) => {
+                        const idx = okSizes.indexOf(s);
+                        const on = s.supported && idx === Math.min(vidSizeIdx, okSizes.length - 1);
+                        return (
+                          <button
+                            key={`${s.label}-${s.width}x${s.height}-${i}`}
+                            role="radio"
+                            aria-checked={on}
+                            disabled={!s.supported}
+                            onClick={() => { if (s.supported) setVidSizeIdx(idx); }}
+                            title={s.supported ? `${s.width} × ${s.height}` : (s.reason ?? undefined)}
+                            className={`min-h-[44px] px-3 py-1.5 rounded-lg border text-left transition-colors ${
+                              on
+                                ? 'border-white/40 bg-white/15 text-white'
+                                : s.supported
+                                ? 'border-[color:var(--line-1)] text-[color:var(--ink-3)] hover:text-white hover:border-white/25'
+                                : 'border-[color:var(--line-1)] text-[color:var(--ink-3)] opacity-40 cursor-not-allowed'
+                            }`}
+                          >
+                            <span className="block text-[11px] font-black tracking-widest">{s.label}</span>
+                            <span className="block text-[9px] tabular-nums tracking-wide opacity-70">
+                              {s.supported ? `${s.width}×${s.height}` : 'not on this device'}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <p className="ui-caption">
+                      Drawn from your original photos, not the previews. Video tops out lower than the
+                      JPG on purpose — H.264 caps the frame, and at this shape that ceiling is
+                      {' '}{okSizes.length ? `${okSizes[okSizes.length - 1].width}×${okSizes[okSizes.length - 1].height}` : 'reached'}.
+                      Bigger takes longer to render.
+                    </p>
+                    {/* CREDIT ON THE PAGE, not only in credits.json — and on the
+                        control itself, so the person who asked finds it where
+                        they asked. This wisher stayed anonymous. */}
+                    <p className="ui-caption" style={{ opacity: 0.6 }}>
+                      Wished for by an anonymous Collage user.
+                    </p>
+                  </div>
+                )}
                 <div className="flex gap-2 items-center">
                   <div className="flex items-center rounded-lg overflow-hidden border border-[color:var(--line-1)] shrink-0">
                     {videoLengths.map(v => (
@@ -166,14 +241,19 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                         onClick={() => setVidSeconds(v)}
                         data-active={vidSeconds === v}
                         aria-pressed={vidSeconds === v}
-                        className={`px-2.5 py-2 text-[10px] font-black tracking-widest transition-colors ${
+                        // 44px MINIMUM, both axes. These were px-2.5 py-2 —
+                        // 43x30 — which is under a thumb on every phone this
+                        // ships to, and they sit directly beside the take
+                        // button in a sheet that is only ever opened on one.
+                        // Found by the size row's own mobile gate; pre-existing.
+                        className={`min-h-[44px] min-w-[44px] px-2.5 text-[10px] font-black tracking-widest transition-colors ${
                           vidSeconds === v ? 'bg-white/15 text-white' : 'text-[color:var(--ink-3)] hover:text-white'
                         }`}
                       >{v}s</button>
                     ))}
                   </div>
                   <button
-                    onClick={() => { onClose(); onExportVideo?.(Math.min(vidSeconds, videoMaxSeconds)); }}
+                    onClick={() => { onClose(); onExportVideo?.(Math.min(vidSeconds, videoMaxSeconds), vidSize?.width); }}
                     className="ui-btn ui-btn--primary ui-btn--tall flex-1"
                   >
                     <Video size={17} />
@@ -181,8 +261,9 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                   </button>
                 </div>
                 <p className="ui-caption">
-                  Unlike the JPG, this is captured live from the preview — keep the collage on screen
-                  while it records.
+                  {canChooseVideoSize
+                    ? 'Rendered frame by frame, so nothing drops — it takes longer than the clip is long.'
+                    : 'Captured live from the preview — keep the collage on screen while it records.'}
                 </p>
               </div>
 

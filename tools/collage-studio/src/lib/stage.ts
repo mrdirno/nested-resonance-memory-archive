@@ -383,8 +383,18 @@ interface DrawItem {
   path: Path2D;
   stroke: boolean;
   /** Decoded thumbnail element (the static preview draws previewSrc; so do we). */
-  still: HTMLImageElement | null;
+  still: StillSource | null;
   stillKey: string;
+  /**
+   * THE TWO KEYS THIS FRAGMENT COULD DRAW, both resolved at scene time.
+   *
+   * `stillKey` is one of these; which one depends on `offlineFullRes`. Keeping
+   * both on the item is what lets an offline render swap the whole scene from
+   * thumbnails to originals — and back — without a `setScene`, which the Stage
+   * could not do anyway: it never stores the scene it was handed.
+   */
+  previewKey: string;
+  fullKey: string;
   /** Still crop is valid (source dimensions were known when it was computed). */
   sok: boolean;
   isx: number; isy: number; isw: number; ish: number;
@@ -414,8 +424,25 @@ interface DrawItem {
   analysis: unknown;
 }
 
+/**
+ * WHAT A FRAGMENT DRAWS FROM.
+ *
+ * An `<img>` for the ordinary preview path, and a CANVAS for an offline render
+ * that upgraded to the original: the full-resolution decode is rasterised down
+ * to the pixels the fragment will really consume and then released, so peak
+ * memory is one decode rather than the whole pool. `drawImage` takes either,
+ * and `naturalWidth || width` reads either.
+ */
+type StillSource = HTMLImageElement | HTMLCanvasElement;
+
+/** Intrinsic size of either kind of still source. A canvas has no `natural*`. */
+const stillW = (s: StillSource): number =>
+  (s as HTMLImageElement).naturalWidth || s.width;
+const stillH = (s: StillSource): number =>
+  (s as HTMLImageElement).naturalHeight || s.height;
+
 interface StillRecord {
-  img: HTMLImageElement | null;
+  img: StillSource | null;
   state: 'loading' | 'ready' | 'error';
 }
 
@@ -618,6 +645,37 @@ export class Stage {
   /** Was the SOUNDTRACK rolling when the render took the stage? `pauseAll`
    *  stops it like everything else, and only clips have replay bookkeeping. */
   private offlineTrackPlaying = false;
+  /**
+   * THE BACKING WIDTH FOR THIS RENDER, or 0 for "whatever the Stage was built
+   * with". `maxBackingW` is welded to `logicalW` (1200) because nothing ever
+   * passed `maxBackingWidth` — which pinned every exported file at 1200px wide
+   * no matter what the sources held or the device could encode. An offline
+   * render pays no frame-rate budget, so it is the one path that can spend
+   * pixels. Frozen for the whole take by `setCaptureActive`; cleared on the way
+   * out, so the live preview's own clamp is never touched.
+   */
+  private offlineMaxW = 0;
+  /**
+   * DRAW THE ORIGINALS, not the thumbnails, for this render.
+   *
+   * The Stage draws `previewSrc` — a <=1024px JPEG — everywhere, which is right
+   * for a preview and wrong for a file you keep. The STILL export already draws
+   * the originals and says why (render.worker.ts: "TWO SOURCES, IN ORDER OF
+   * QUALITY"), so the video export drawing thumbnails was the asymmetry: an 8K
+   * JPG and a 1200px MP4 out of the same composition. Raising `offlineMaxW`
+   * WITHOUT this would be worse than not raising it — a 4K container full of
+   * upscaled 1024px thumbnails is a bigger file that is not a better picture.
+   */
+  private offlineFullRes = false;
+  /**
+   * ORIGINALS THAT WOULD NOT DECODE, so we stop asking for them.
+   *
+   * Straight from the still exporter's rule — "a softer fragment beats a hole,
+   * every time": an original whose object URL has been revoked renders fine in
+   * the preview (that is a different, always-live blob) and fails here. Those
+   * fragments fall back to the thumbnail rather than dropping out of the frame.
+   */
+  private deadOriginals = new Set<string>();
 
   // --- media -----------------------------------------------------------------
   private host: HTMLElement | null = null;
@@ -745,7 +803,13 @@ export class Stage {
       const d = twistedDest(b, twistOf(asset.analysis));
       if (!moving && isMoving((asset.analysis as { move?: unknown } | null)?.move)) moving = true;
       const clip = this.bindClip(asset, resolve);
-      const stillKey = asset.previewSrc || asset.src;    // App.tsx:209 draws previewSrc
+      // BOTH KEYS, ALWAYS. The preview is what the live path draws (App.tsx:209
+      // draws previewSrc, and so do we); the original is what an offline render
+      // asks for. Resolving both here rather than one is what makes
+      // `setFullResStills` a swap instead of a re-layout.
+      const previewKey = asset.previewSrc || asset.src || '';
+      const fullKey = asset.src || asset.previewSrc || '';
+      const stillKey = this.stillKeyFor(previewKey, fullKey);
       if (stillKey) wanted.add(stillKey);
 
       const it: DrawItem = {
@@ -753,6 +817,8 @@ export class Stage {
         stroke,
         still: null,
         stillKey,
+        previewKey,
+        fullKey,
         sok: false,
         isx: 0, isy: 0, isw: 0, ish: 0,
         clip,
@@ -773,7 +839,7 @@ export class Stage {
       const rec = this.stills.get(stillKey);
       if (rec && rec.state === 'ready' && rec.img) {
         it.still = rec.img;
-        this.computeStillCrop(it, rec.img.naturalWidth || rec.img.width, rec.img.naturalHeight || rec.img.height);
+        this.computeStillCrop(it, stillW(rec.img), stillH(rec.img));
       }
 
       if (clip) {
@@ -866,9 +932,20 @@ export class Stage {
    * it, and `setCaptureActive` runs AFTER, because it restarts anything still
    * marked `wantPlay` — which is exactly what this mode must not have.
    */
-  beginOfflineRender(): void {
+  beginOfflineRender(opts: { maxWidth?: number; fullRes?: boolean } = {}): void {
     if (this.destroyed || this.offline) return;
     this.offline = true;
+    // BEFORE `setCaptureActive` at the bottom of this method, which is what
+    // calls `applySize` and freezes the backing store for the whole take. Set
+    // after it and the render would size itself from the OLD value and then
+    // never be allowed to change — a mid-stream resize is what corrupts H.264.
+    const want = Math.floor(opts.maxWidth ?? 0);
+    this.offlineMaxW = Number.isFinite(want) && want >= 240 ? want : 0;
+    // Default ON: every caller that asks for an offline render wants the file
+    // to hold what the sources hold. `false` is the explicit opt-out (the
+    // realtime paths, and any caller that would rather have speed).
+    this.offlineFullRes = opts.fullRes !== false;
+    if (this.offlineFullRes) this.applyStillKeys();
     this.offlineWasRunning = this.running;
     this.offlineWantPlay = [];
     this.clips.forEach((c) => { if (c.wantPlay) this.offlineWantPlay.push(c.id); });
@@ -911,6 +988,36 @@ export class Stage {
   endOfflineRender(): void {
     if (!this.offline) return;
     this.offline = false;
+    // BOTH RENDER LEVERS GO BACK, and they go back HERE rather than being left
+    // to the next `beginOfflineRender` to overwrite. `applySize` reads
+    // `offlineMaxW` only while `offline` is true, but `offlineFullRes` is read
+    // by `stillKeyFor` on every LAYOUT — a leak would leave the live preview
+    // decoding full-resolution originals for the rest of the session, which is
+    // exactly the frame-rate budget this stays out of.
+    this.offlineMaxW = 0;
+    const wasFullRes = this.offlineFullRes;
+    this.offlineFullRes = false;
+    if (wasFullRes) {
+      // DROP THE RENDER'S RASTERS, EXPLICITLY.
+      //
+      // `ensureStills` prunes only when the cache exceeds `wanted.size + 32`,
+      // and after a render the map holds one preview key AND one full key per
+      // source: a twenty-photo collage sits at 40 entries against a threshold
+      // of 52, so nothing would ever be pruned and every raster this take built
+      // would outlive it — for the whole session, growing again on the next
+      // export at a different size. The eviction rule is right for the live
+      // path; it simply cannot see that these entries are a take's scaffolding.
+      const items = this.items;
+      const live = new Set<string>();
+      for (let i = 0; i < items.length; i++) if (items[i].previewKey) live.add(items[i].previewKey);
+      const dead: string[] = [];
+      this.stills.forEach((_v, k) => { if (!live.has(k)) dead.push(k); });
+      for (let i = 0; i < dead.length; i++) this.stills.delete(dead[i]);
+      // Originals that failed once are worth trying again next take: a revoked
+      // URL is the usual cause, and the pool may well have been reloaded since.
+      this.deadOriginals.clear();
+      this.applyStillKeys();
+    }
     // Put the MOVE back to rest and re-anchor. The render left `outTime` at the
     // last frame it encoded; resuming the live preview from there would drop it
     // mid-cycle for no reason the viewer can see.
@@ -1382,7 +1489,10 @@ export class Stage {
       // THAN THE PREVIEW ON THE SAME SCREEN — 720 wide from 1080p sources on
       // the one device that matters. Still frozen for the whole take either
       // way: a mid-stream resolution change is what corrupts an H.264 stream.
-      target = this.offline ? this.maxBackingW : this.captureBackingW;
+      // `offlineMaxW` is the size the CALLER asked this render for — it has
+      // probed the encoder and knows what this device will accept. 0 means it
+      // did not ask, which keeps the old behaviour exactly.
+      target = this.offline ? (this.offlineMaxW || this.maxBackingW) : this.captureBackingW;
     } else {
       const cssW = this.cv.clientWidth || lw;
       const dpr = this.view?.devicePixelRatio || 1;
@@ -1543,7 +1653,7 @@ export class Stage {
       const it = items[i];
       if (it.still !== null) {
         const img = it.still;
-        this.computeStillCrop(it, img.naturalWidth || img.width, img.naturalHeight || img.height);
+        this.computeStillCrop(it, stillW(img), stillH(img));
       }
       const clip = it.clip;
       if (clip !== null && clip.vw > 0 && clip.vh > 0) {
@@ -1563,6 +1673,207 @@ export class Stage {
   // ===========================================================================
   // STILL DECODE CACHE
   // ===========================================================================
+
+  /**
+   * WHICH OF THE TWO KEYS THIS FRAGMENT DRAWS RIGHT NOW.
+   *
+   * Preview everywhere, except inside an offline render that asked for the
+   * originals — and even then, an original already known not to decode falls
+   * straight back to the thumbnail rather than leaving a hole.
+   */
+  private stillKeyFor(previewKey: string, fullKey: string): string {
+    if (this.offlineFullRes && fullKey && !this.deadOriginals.has(fullKey)) return fullKey;
+    return previewKey || fullKey;
+  }
+
+  /**
+   * SWAP THE WHOLE SCENE BETWEEN THUMBNAILS AND ORIGINALS, in place.
+   *
+   * Not a `setScene`: the Stage is handed a scene and keeps no copy of it, so
+   * there is nothing to re-run. Both keys already live on every DrawItem, so
+   * this is a re-point plus a re-bind against the decode cache — the crop is
+   * recomputed from the NEW source's intrinsic size, which matters because the
+   * thumbnail and the original agree on aspect but not on pixels.
+   */
+  private applyStillKeys(): void {
+    const wanted = new Set<string>();
+    const items = this.items;
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      const key = this.stillKeyFor(it.previewKey, it.fullKey);
+      if (key) wanted.add(key);
+      if (key === it.stillKey) continue;
+      it.stillKey = key;
+      const rec = this.stills.get(key);
+      if (rec && rec.state === 'ready' && rec.img) {
+        it.still = rec.img;
+        this.computeStillCrop(it, stillW(rec.img), stillH(rec.img));
+      }
+      // Deliberately NOT clearing `it.still` when the new key has not landed:
+      // the fragment keeps drawing the thumbnail it already had until the
+      // original arrives. A momentarily soft fragment beats a blank one, and
+      // `adoptStill` patches the pointer in the instant the decode resolves.
+    }
+    this.ensureStills(wanted);
+    this.markDirty();
+  }
+
+  /**
+   * FETCH THE ORIGINALS FOR THIS RENDER — one at a time, downsampled to the
+   * pixels the frame will really use, and released as we go.
+   *
+   * THE TRAP THIS AVOIDS, WHICH IS THE REAL REASON THE SIZE AND THE SOURCE ARE
+   * ONE CHANGE. The still exporter can draw originals cheaply because it draws
+   * ONE, then calls `close()` on it (render.worker.ts). The Stage cannot: an
+   * animated frame draws EVERY fragment on every frame, so anything it draws
+   * from has to stay resident for the whole take. Pointing `stillKey` at the
+   * originals and letting `ensureStills` fetch them would therefore hold N
+   * full-resolution decodes at once — twenty 12 MP phone photos is about 975 MB
+   * of RGBA, on the same call stack that has just lifted the decoder caps to
+   * admit every clip and is about to reallocate the canvas several times
+   * larger. That is not a slow export, it is a dead tab.
+   *
+   * So the upgrade is BUDGETED BY GEOMETRY. A fragment that covers 400x600
+   * device pixels cannot show more than about 400x600 pixels of its source no
+   * matter how large that source is, so each original is rasterised to the
+   * scale its own fragments actually consume at THIS render's width, and the
+   * full-resolution decode is dropped immediately. Peak cost is one decode plus
+   * the rasters, and the rasters together are bounded by the canvas area.
+   *
+   * Sequential on purpose: parallel decodes would put every original in memory
+   * at once, which is the thing being avoided.
+   *
+   * Never throws. Anything that fails, times out, or is cancelled keeps its
+   * thumbnail — the still exporter's rule, verbatim: a softer fragment beats a
+   * hole, and only a source with neither is a failure.
+   */
+  async prepareOfflineStills(opts: { signal?: AbortSignal; timeoutMs?: number } = {}): Promise<{ requested: number; full: number; fellBack: number }> {
+    if (this.destroyed || !this.offlineFullRes) return { requested: 0, full: 0, fellBack: 0 };
+    const budget = Math.max(0, opts.timeoutMs ?? 20_000);
+    const clock = (): number =>
+      typeof performance !== 'undefined' && typeof performance.now === 'function'
+        ? performance.now() : Date.now();
+    const started = clock();
+
+    // HOW MANY DEVICE PIXELS ONE UNIT OF LOGICAL SPACE IS WORTH IN THIS RENDER.
+    // The crop maths lives in 1200-space; the canvas is whatever the ladder
+    // chose. This is the number that turns "this fragment is 300 logical units
+    // wide" into "this fragment is 627 real pixels wide".
+    const backingScale = (this.cv.width || this.logicalW) / this.logicalW;
+
+    // The largest scale any fragment needs from each original. Fragments SHARE
+    // sources, and two fragments of the same photo can want very different
+    // amounts of it, so the raster has to satisfy the hungriest one.
+    const need = new Map<string, number>();
+    for (let i = 0; i < this.items.length; i++) {
+      const it = this.items[i];
+      if (!it.fullKey || this.deadOriginals.has(it.fullKey)) continue;
+      // `isw`/`ish` are this fragment's crop in SOURCE pixels, measured against
+      // whatever source was bound when the crop was computed. The RATIO of
+      // destination pixels to crop pixels is what decides how much source
+      // resolution is worth keeping — and it is scale-free, so the thumbnail
+      // currently bound is a perfectly good yardstick for the original.
+      const dwPx = Math.abs(it.dw) * backingScale;
+      const dhPx = Math.abs(it.dh) * backingScale;
+      const want = it.sok && it.isw > 0 && it.ish > 0
+        ? Math.max(dwPx / it.isw, dhPx / it.ish)
+        : 1;
+      const prev = need.get(it.fullKey) ?? 0;
+      if (want > prev) need.set(it.fullKey, want);
+    }
+
+    const requested = need.size;
+    if (!requested) return { requested: 0, full: 0, fellBack: 0 };
+
+    let full = 0;
+    for (const [key, want] of need) {
+      if (this.destroyed || opts.signal?.aborted) break;
+      if (clock() - started > budget) break;
+      const ok = await this.upgradeStill(key, want, opts.signal);
+      if (ok) full++; else this.deadOriginals.add(key);
+    }
+    // Anything the budget or an abort never reached keeps its thumbnail too.
+    need.forEach((_v, k) => {
+      const rec = this.stills.get(k);
+      if (!rec || rec.state !== 'ready' || !rec.img) this.deadOriginals.add(k);
+    });
+
+    this.applyStillKeys();
+    const fellBack = requested - full;
+    return { requested, full, fellBack };
+  }
+
+  /**
+   * DECODE ONE ORIGINAL, KEEP ONLY WHAT WILL BE SEEN, DROP THE REST.
+   *
+   * `createImageBitmap` where it exists (it decodes off the main thread and
+   * `close()` frees deterministically); an `<img>` otherwise, because Safari has
+   * shipped both `createImageBitmap` gaps and `decode()` rejections on blob URLs.
+   * Either way what lands in the cache is a canvas no larger than the fragments
+   * that draw it, so the whole point survives on both paths.
+   */
+  private async upgradeStill(key: string, wantScale: number, signal?: AbortSignal): Promise<boolean> {
+    if (!key || typeof document === 'undefined') return false;
+    let bmp: ImageBitmap | null = null;
+    let el: HTMLImageElement | null = null;
+    try {
+      let srcW = 0, srcH = 0;
+      let draw: CanvasImageSource | null = null;
+
+      if (typeof createImageBitmap === 'function' && typeof fetch === 'function') {
+        const res = await fetch(key);
+        if (!res.ok) return false;
+        const blob = await res.blob();
+        if (signal?.aborted || this.destroyed) return false;
+        bmp = await createImageBitmap(blob);
+        srcW = bmp.width; srcH = bmp.height; draw = bmp;
+      } else {
+        el = await new Promise<HTMLImageElement | null>((resolve) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          let settled = false;
+          const done = (okay: boolean): void => {
+            if (settled) return; settled = true; resolve(okay ? img : null);
+          };
+          img.onload = () => done(!!(img.naturalWidth || img.width));
+          img.onerror = () => done(false);
+          img.src = key;
+        });
+        if (!el) return false;
+        srcW = el.naturalWidth || el.width; srcH = el.naturalHeight || el.height; draw = el;
+      }
+      if (!srcW || !srcH || !draw) return false;
+      if (signal?.aborted || this.destroyed) return false;
+
+      // NEVER UPSCALE — a raster larger than the source is bytes with no
+      // picture in them, which is the exact dishonesty this whole change exists
+      // to remove. And never below the thumbnail we already had, or "upgrading"
+      // would make a fragment softer than it was.
+      const scale = Math.min(1, Math.max(wantScale, 0));
+      const tw = Math.max(2, Math.min(srcW, Math.round(srcW * scale)));
+      const th = Math.max(2, Math.min(srcH, Math.round(srcH * scale)));
+      // An original no bigger than what it would be downsampled to is simply
+      // used as-is; drawing it through a canvas would only cost a copy.
+      const c = document.createElement('canvas');
+      c.width = tw; c.height = th;
+      const cx = c.getContext('2d');
+      if (!cx) return false;
+      cx.drawImage(draw, 0, 0, srcW, srcH, 0, 0, tw, th);
+
+      const rec = this.stills.get(key);
+      if (rec) { rec.img = c; rec.state = 'ready'; }
+      else this.stills.set(key, { img: c, state: 'ready' });
+      this.adoptStill(key, c);
+      return true;
+    } catch {
+      return false;
+    } finally {
+      // DETERMINISTIC RELEASE. The whole budget argument rests on the
+      // full-resolution decode being gone before the next one is asked for.
+      if (bmp) { try { bmp.close(); } catch { /* already gone */ } }
+      if (el) { el.onload = null; el.onerror = null; el.src = ''; }
+    }
+  }
 
   private ensureStills(wanted: Set<string>): void {
     wanted.forEach((key) => {
@@ -1602,9 +1913,9 @@ export class Stage {
     }
   }
 
-  private adoptStill(key: string, img: HTMLImageElement): void {
-    const w = img.naturalWidth || img.width;
-    const h = img.naturalHeight || img.height;
+  private adoptStill(key: string, img: StillSource): void {
+    const w = stillW(img);
+    const h = stillH(img);
     const items = this.items;
     let touched = false;
     for (let i = 0; i < items.length; i++) {

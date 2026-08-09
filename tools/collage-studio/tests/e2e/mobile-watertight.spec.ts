@@ -169,6 +169,59 @@ test('the VIDEO dock is thumb-sized too, at 320/360/390/430', async ({ page }) =
   }
 });
 
+test('the export sheet\'s VIDEO SIZE row is watertight at 320/360/390/430', async ({ page }) => {
+  // The size ladder only exists when a clip is on the canvas (video is the only
+  // thing it applies to) and it is the newest control in the sheet — a wrapping
+  // row of rungs, which is precisely the shape that runs off a 320px screen.
+  test.setTimeout(300_000);
+  await page.setViewportSize({ width: 390, height: 780 });
+  await page.goto(APP_URL);
+  await page.locator('input[type="file"]').first().setInputFiles([RAMP]);
+  await expect(page.locator('canvas').first()).toBeVisible({ timeout: 200_000 });
+  await expect(page.getByRole('button', { name: 'Trim ramp_rgb.mp4' }))
+    .toBeVisible({ timeout: 200_000 });
+
+  for (const width of WIDTHS) {
+    await page.setViewportSize({ width, height: 780 });
+    await page.waitForTimeout(300);
+
+    // Open the sheet fresh at each width: the row is laid out on open, and a
+    // sheet that was opened wide and then narrowed is not the case a phone hits.
+    await page.getByRole('button', { name: /export/i }).first().click();
+    const sheet = page.getByRole('dialog');
+    await expect(sheet).toBeVisible({ timeout: 20_000 });
+
+    const sizeRow = page.getByRole('radiogroup', { name: 'Video size' });
+    // The probe is async; on a device with no encoder there is legitimately no
+    // row, and asserting its absence is not this test's job.
+    if (await sizeRow.count() > 0) {
+      await expect(sizeRow).toBeVisible();
+      // Every rung sits inside the viewport — a rung you have to scroll
+      // sideways to find is a rung nobody picks.
+      const rungs = sizeRow.getByRole('radio');
+      const n = await rungs.count();
+      expect(n, 'the size row rendered with no rungs').toBeGreaterThan(0);
+      for (let i = 0; i < n; i++) {
+        const box = await rungs.nth(i).boundingBox();
+        expect(box, `rung ${i} is not laid out at ${width}px`).not.toBeNull();
+        expect(box!.x + box!.width, `size rung ${i} runs past the right edge at ${width}px`)
+          .toBeLessThanOrEqual(width + 0.5);
+        expect(box!.height, `size rung ${i} is under a thumb at ${width}px`).toBeGreaterThanOrEqual(44 - 0.5);
+      }
+    }
+
+    const o = await overflow(page);
+    expect(o.over, `the export sheet overflows by ${o.over}px at ${width} — ${JSON.stringify(o.worst)}`)
+      .toBeLessThanOrEqual(0);
+
+    const small = await smallTargets(page);
+    expect(small, `export-sheet controls under 44px at ${width}px: ${JSON.stringify(small)}`).toEqual([]);
+
+    await page.keyboard.press('Escape');
+    await expect(sheet).toBeHidden({ timeout: 10_000 });
+  }
+});
+
 test('zoomed out, the page still does not scroll sideways', async ({ page }) => {
   // "don't make anything that's gonna clip or alter if zoomed out on phone" —
   // a pinch-out is a wider layout viewport at the same CSS width, which is what
