@@ -237,7 +237,11 @@ test.describe('crash-safe session recovery', () => {
       const rows: { full: number; preview: number }[] = await new Promise((res) => {
         const tx = db.transaction('assets', 'readonly');
         const rq = tx.objectStore('assets').getAll();
-        rq.onsuccess = () => res((rq.result || []).map((a: any) => ({ full: a?.full?.size ?? 0, preview: a?.preview?.size ?? 0 })));
+        // byteLength: the rows hold ArrayBuffers, because WebKit refuses a Blob
+        // into IndexedDB. `size` is kept as a fallback for a row written by the
+        // one deploy that stored Blobs.
+        const sz = (v: any) => v?.byteLength ?? v?.size ?? 0;
+        rq.onsuccess = () => res((rq.result || []).map((a: any) => ({ full: sz(a?.full), preview: sz(a?.preview) })));
         rq.onerror = () => res([]);
       });
       db.close();
@@ -298,7 +302,13 @@ test.describe('crash-safe session recovery', () => {
     expect(puts.assets, 'a restore writes no image rows').toBe(0);
   });
 
-  test('a session whose image will not decode cannot hang the restore', async ({ page }) => {
+  // THE TWO LEGACY TESTS BELOW ARE CHROMIUM-ONLY, AND THE REASON IS THE BUG THEY
+  // SIT NEXT TO. A v1 session row held the project as a Blob, and WebKit REFUSES
+  // a Blob into IndexedDB — so a WebKit user never had a v1 row to migrate, and
+  // the seed cannot create one either. Skipping is the honest statement of a
+  // state that cannot exist on this engine; faking it would test nothing real.
+  test('a session whose image will not decode cannot hang the restore', async ({ page, browserName }) => {
+    test.skip(browserName === 'webkit', 'a v1 row is a Blob row, and WebKit cannot store one — no such session exists here');
     test.setTimeout(120_000);
 
     // THE ENDLESS LOOP. `loadProject`'s archive branch awaited `imgElem.onload`
@@ -330,7 +340,8 @@ test.describe('crash-safe session recovery', () => {
     await expect(page.locator('svg g').first()).toBeVisible({ timeout: 60_000 });
   });
 
-  test('a session written by the previous build still restores', async ({ page }) => {
+  test('a session written by the previous build still restores', async ({ page, browserName }) => {
+    test.skip(browserName === 'webkit', 'a v1 row is a Blob row, and WebKit cannot store one — no such session exists here');
     test.setTimeout(120_000);
 
     // The store changed shape under people who had unfinished work sitting in it.

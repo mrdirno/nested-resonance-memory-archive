@@ -1754,17 +1754,29 @@ export default function App() {
         // still a full copy of the image, which is exactly why it now happens
         // once per asset instead of once per keystroke.
         try {
-          const full = await (await fetch(img.src)).blob();
+          const fullBlob = await (await fetch(img.src)).blob();
           // THE THUMBNAIL TIER TRAVELS WITH THE ORIGINAL. The app draws
           // `previewSrc` — a ≤1024px JPEG — for every preview and every Stage
           // frame, so a restore that only kept the originals silently promoted
           // the whole pool to full-res previews and left the editor slower after
           // recovering than it was before the crash. Null when `createThumbnail`
           // aliased the source (already under 1024px): same bytes, stored once.
-          const preview = img.previewSrc && img.previewSrc !== img.src
+          const previewBlob = img.previewSrc && img.previewSrc !== img.src
             ? await (await fetch(img.previewSrc)).blob()
             : null;
-          write.push({ id, asset: { full, preview } });
+          // ARRAYBUFFER, NOT BLOB. WebKit refuses a Blob into IndexedDB and
+          // aborts the transaction — which took the manifest down with it and
+          // made this whole feature a silent no-op on every iOS browser, the
+          // exact device the crash it recovers from happens on. See StoredAsset.
+          write.push({
+            id,
+            asset: {
+              full: await fullBlob.arrayBuffer(),
+              fullType: fullBlob.type || 'image/jpeg',
+              preview: previewBlob ? await previewBlob.arrayBuffer() : null,
+              previewType: previewBlob ? (previewBlob.type || 'image/jpeg') : null,
+            },
+          });
         } catch { captured = false; }
       }
       // THE MANIFEST MUST NEVER NAME BYTES THE STORE DOES NOT HAVE. Restore fails

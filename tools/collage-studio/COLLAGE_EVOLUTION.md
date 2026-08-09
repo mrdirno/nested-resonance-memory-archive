@@ -552,6 +552,25 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **WEBKIT REFUSES A BLOB INTO INDEXEDDB, SO CRASH RECOVERY WAS A NO-OP ON EVERY
+  iOS BROWSER FROM THE DAY IT SHIPPED.** Measured, same page, same code:
+  plain object OK / ArrayBuffer OK / Uint8Array OK / **Blob → transaction error
+  with an EMPTY name and an EMPTY message, then abort**. Chromium stores Blobs
+  happily, which is exactly why nobody saw it: the whole suite was chromium-only
+  (`--project=chromium`), and the two WebKit projects in `playwright.config.ts`
+  — the only iOS-shaped coverage this repo has — were never pointed at this
+  feature. Because both stores are written in ONE transaction, one Blob took the
+  manifest down with it: nothing persisted, no banner ever appeared, and the
+  failure was *silent by design* (the store fails soft on purpose). A feature
+  whose premise is "a phone browser runs out of memory" did nothing on the
+  phone. Fixed by storing `ArrayBuffer` + a mime string and rebuilding the Blob
+  on the way out. **Three general shapes: (1) a capability that is universal on
+  your dev engine is not a capability, it is a coincidence; (2) fail-soft
+  insurance hides its own total absence — if it can silently do nothing, some
+  engine is silently doing nothing; (3) a config that HAS the other engines and
+  a habit that never invokes them is worse than not having them, because the
+  coverage looks present.** Standing rule: anything touching storage, codecs or
+  media runs `--project=webkit-desktop --project="Mobile Safari"` before ship.
 - **THE STORAGE FORMAT WAS COPIED FROM THE DOWNLOAD FORMAT, AND THE BYTES CAME
   WITH IT.** Crash-safe autosave stored the session as the same `.collage` ZIP a
   manual Save produces, argued for as "one format, no drift" — which reads as
@@ -2382,4 +2401,22 @@ frontier. Today's ceiling is tomorrow's floor.
   aliaser (an SVG carries only full-res base64; regenerating there is its own
   rung). All 7 trades re-checked for the `.collage`/IndexedDB class — none of them
   persist binary sessions, so there is nothing of this shape to carry over.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C78b · 2026-08-09 · [AXIS:WELL] THE SAME FEATURE, NOW ACTUALLY ON THE PHONE** —
+  ran the two WebKit projects at this feature for the first time and got **0/14**.
+  Checked it against the pre-fix commit in a worktree: **0/14 there too** — not a
+  regression, a feature that had *never once worked on iOS*. Narrowed by probe to
+  a single fact: **WebKit refuses a Blob into IndexedDB** (plain object OK,
+  ArrayBuffer OK, Uint8Array OK, Blob → empty-named transaction error, abort), and
+  since manifest and bytes share one transaction, one Blob silently killed the
+  whole snapshot. Session assets are now `ArrayBuffer` + mime, rebuilt into a Blob
+  on read; rows written by the Blob deploy are still read. before→after on WebKit
+  + Mobile Safari: **0/14 → 24 passed / 4 skipped** across all four engines (the 4
+  are the v1-legacy tests, skipped on WebKit *because a v1 row was a Blob row and
+  WebKit could never have written one* — an honest statement of a state that
+  cannot exist, not a green-washed skip). Also hardened in the same pass: a flush
+  that cannot capture an asset's bytes now writes NOTHING rather than a manifest
+  naming bytes the store lacks — restore fails closed and then clears, so a
+  poisoned snapshot would have destroyed the good one under it.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

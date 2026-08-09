@@ -113,10 +113,52 @@ export async function storedAssetIds(): Promise<string[]> {
  * preview path draws. `preview` is null when the asset never had a separate one
  * (`createThumbnail` returns the source unchanged under 1024px), so identical
  * bytes are never stored twice.
+ *
+ * ARRAYBUFFER, NOT BLOB, AND THIS IS THE WHOLE FEATURE ON SAFARI. WebKit accepts
+ * a plain object, an ArrayBuffer and a Uint8Array into IndexedDB and REFUSES a
+ * Blob — the transaction errors with an empty error and aborts. Both stores are
+ * written in one transaction, so a single Blob took the manifest down with it:
+ * on WebKit nothing was ever persisted, no banner was ever offered, and crash
+ * recovery was a silent no-op from the day it shipped. Chromium stores Blobs
+ * happily, which is exactly why nobody saw it. Measured, per engine:
+ *
+ *   value kind      Chromium   WebKit
+ *   plain object    OK         OK
+ *   ArrayBuffer     OK         OK
+ *   Uint8Array      OK         OK
+ *   Blob            OK         ERROR (empty name, empty message)
+ *
+ * A phone browser under memory pressure is the entire premise of this feature,
+ * and on iOS every browser is WebKit. The mime type rides along so the Blob can
+ * be rebuilt exactly on the way out.
  */
 export interface StoredAsset {
-  full: Blob;
-  preview: Blob | null;
+  full: ArrayBuffer;
+  fullType: string;
+  preview: ArrayBuffer | null;
+  previewType: string | null;
+}
+
+/** What v2 rows written before the WebKit fix hold — read, never written. */
+interface LegacyBlobAsset { full: Blob; preview: Blob | null }
+
+/** Rebuild the pair of blobs from a row of either shape. Null if unusable. */
+function assetToBlobs(v: unknown): { full: Blob; preview: Blob | null } | null {
+  const a = v as Partial<StoredAsset> & Partial<LegacyBlobAsset>;
+  if (!a || !a.full) return null;
+  // Rows written by the first v2 deploy hold real Blobs; keep reading them.
+  if (typeof Blob !== 'undefined' && a.full instanceof Blob) {
+    const p = a.preview instanceof Blob ? a.preview : null;
+    return { full: a.full, preview: p };
+  }
+  try {
+    const full = new Blob([a.full as ArrayBuffer], { type: (a as StoredAsset).fullType || 'image/jpeg' });
+    const pb = (a as StoredAsset).preview;
+    const preview = pb ? new Blob([pb], { type: (a as StoredAsset).previewType || 'image/jpeg' }) : null;
+    return { full, preview };
+  } catch {
+    return null;
+  }
 }
 
 export interface SessionWrite {
@@ -191,7 +233,7 @@ export async function getSessionMeta(): Promise<{ savedAt: number; images: numbe
 
 export type LoadedSession =
   /** v2: the manifest plus every image's bytes, ready to hydrate. No unzip. */
-  | { kind: 'session'; manifest: { images?: SessionAssetEntry[] } & Record<string, unknown>; assets: Record<string, StoredAsset> }
+  | { kind: 'session'; manifest: { images?: SessionAssetEntry[] } & Record<string, unknown>; assets: Record<string, { full: Blob; preview: Blob | null }> }
   /** v1: a `.collage` archive written by the previous build. */
   | { kind: 'archive'; blob: Blob };
 
@@ -215,18 +257,18 @@ export async function loadSession(): Promise<LoadedSession | null> {
 
   const manifest = rec.manifest as { images?: SessionAssetEntry[] } & Record<string, unknown>;
   const ids = (manifest.images ?? []).map((e) => e.id);
-  const assets = await new Promise<Record<string, StoredAsset> | null>((resolve) => {
+  const assets = await new Promise<Record<string, { full: Blob; preview: Blob | null }> | null>((resolve) => {
     try {
       if (!db.objectStoreNames.contains(SESSION_ASSETS)) { resolve(null); return; }
       const tx = db.transaction(SESSION_ASSETS, 'readonly');
       const store = tx.objectStore(SESSION_ASSETS);
-      const out: Record<string, StoredAsset> = {};
+      const out: Record<string, { full: Blob; preview: Blob | null }> = {};
       let missing = false;
       for (const id of ids) {
         const rq = store.get(id);
         rq.onsuccess = () => {
-          const v = rq.result as StoredAsset | undefined;
-          if (v?.full) out[id] = { full: v.full, preview: v.preview ?? null }; else missing = true;
+          const pair = assetToBlobs(rq.result);
+          if (pair) out[id] = pair; else missing = true;
         };
         rq.onerror = () => { missing = true; };
       }
