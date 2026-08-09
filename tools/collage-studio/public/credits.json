@@ -50,6 +50,16 @@
       "wished_date": "2026-08-09",
       "shipped_date": "2026-08-09",
       "shipped_note": "A 4K capture pushed the phone's browser over its memory line, the tab reloaded, and the whole collage was gone — because every bit of project state lived only in React state and NOTHING was ever autosaved; the only durable save was manually downloading a .collage, which nobody does mid-capture. Now the working project is written to IndexedDB continuously (debounced ~1.5s) with an IMMEDIATE checkpoint the instant an export or capture begins — the exact moment that crashes — and the next launch offers 'pick up where you left off', restoring your images and every setting. Built on the proven .collage round-trip (buildProjectBlob extracted from the manual save; restore = loadProject on the stored blob through the same hydration path Open uses), so there is one format and no drift; the archive never zips video, so autosaving stays cheap beside a heavy capture. A beforeunload guard also warns before an accidental refresh, and IndexedDB failing (private-mode Safari) can never break the editor. NOT yet carried into the session: the soundtrack and live video clips — a restored video project comes back as its stills plus every setting, the same limitation the manual .collage archive has, and the next rung."
+    },
+    {
+      "capability": "Wall of Wishes — see who wished each feature, right inside the wishing well",
+      "where": "The feedback modal (the ✦ button): a ★ Wall of Wishes link under the form opens the ledger; Back returns to the well",
+      "wish": "You should display who wished it better somewhere in this modal so if people want to see [it] — up to you how — stay consistent cross apps please",
+      "wisher": null,
+      "wisher_display": "an anonymous Collage user",
+      "wished_date": "2026-08-09",
+      "shipped_date": "2026-08-09",
+      "shipped_note": "The trade toolkits already showed every shipped wish and its wisher at <trade>/credits.html, linked from each page's nav — but Collage is a React app with no such nav, so the capabilities its users wished into it were credited in a ledger nobody could see. The fix lives in the ONE shared well (shared/feedback.js), not this app, so it lit up cross-app in a single edit: an in-modal Wall of Wishes that reads this same credits.json and reveals a '★ Wall of Wishes' link only when a surface actually has one, unifying the trade schema (tool_name / wisher) and the collage schema (capability / wisher_display) in one renderer that only ever prints the already-anonymised name. To make it reachable the ledger moved to public/credits.json so it deploys to /collage/credits.json (now asserted in deploy_bridge.yml). Every surface the well touches — Collage, the commons, every future non-trade page — now shows who wished it, matching the trades. This entry is the one that made the wall it appears on."
     }
   ]
 }

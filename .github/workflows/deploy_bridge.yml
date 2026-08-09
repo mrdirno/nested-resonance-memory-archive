@@ -192,7 +192,7 @@ jobs:
 
           echo "--- every published entry point present ---"
           for f in index.html .nojekyll \
-                   collage/index.html collage/sw.js collage/manifest.json \
+                   collage/index.html collage/sw.js collage/manifest.json collage/credits.json \
                    collage-beta/index.html \
                    archive/index.html \
                    shared/toolkit.js shared/feedback.js \

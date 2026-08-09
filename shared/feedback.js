@@ -92,7 +92,17 @@
     contextLabel: C.contextLabel || "You mostly use it for",
     newLabel:     C.newLabel || "Wish for a feature",
     trigger:      C.trigger !== false,   // set false to wire your own button
-    triggerText:  C.triggerText || "✦ Feedback"
+    triggerText:  C.triggerText || "✦ Feedback",
+    /* WALL OF WISHES — the in-modal ledger of shipped wishes and who wished them.
+     * Every trade toolkit already shows this at <trade>/credits.html, linked from
+     * its nav dropdown (shared/toolkit.js). A non-trade surface — Collage Studio,
+     * the commons — has no such nav, so the well itself carries the wall, fed by
+     * the surface's own credits.json (a relative URL, so the page at /collage/
+     * loads /collage/credits.json). Auto-revealed only when the ledger loads with
+     * >=1 credit, so a surface with no ledger simply never shows the link.
+     * Requested straight into this well (collage, 2026-08-09): "display who wished
+     * it better somewhere in this modal … stay consistent cross apps." */
+    creditsUrl:   C.creditsUrl || "credits.json"
   };
 
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); };
@@ -201,10 +211,33 @@
     + '.fb-done .fb-check{width:52px;height:52px;line-height:52px;margin:0 auto 12px;border-radius:50%;'
     + 'background:var(--fb-accent);color:var(--fb-ink);font-size:26px;font-weight:700}'
     + '.fb-done h3{margin:0 0 7px;font:700 19px/1.2 var(--fb-cond);text-transform:uppercase;letter-spacing:.03em}'
-    + '.fb-done p{margin:0 auto 16px;max-width:44ch;font-size:13px;line-height:1.5;color:var(--fb-muted)}';
+    + '.fb-done p{margin:0 auto 16px;max-width:44ch;font-size:13px;line-height:1.5;color:var(--fb-muted)}'
+    /* WALL OF WISHES — the footer entry point + the in-modal ledger view. Same
+     * mobile-watertight rules as the rest of the sheet: every control >=44px, no
+     * fixed widths, long strings break instead of pushing the layout sideways, and
+     * the list scrolls inside the sheet that already caps at 92vh. */
+    + '.fb-wall-link{display:flex;align-items:center;gap:9px;width:100%;min-height:44px;margin:13px 0 2px;'
+    + 'padding:11px 12px;cursor:pointer;text-align:left;background:transparent;border:1px solid var(--fb-line);'
+    + 'border-radius:7px;font:700 11px/1.3 var(--fb-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--fb-text)}'
+    + '.fb-wall-link:hover{border-color:var(--fb-accent)}'
+    + '.fb-wall-link span{flex:none;font-size:15px;line-height:1;color:var(--fb-accent)}'
+    + '.fb-wall-link i{font-style:normal;font-weight:400;text-transform:none;letter-spacing:.02em;'
+    + 'font-family:var(--fb-sans);font-size:11.5px;color:var(--fb-muted)}'
+    + '.fb-wall-back{min-height:44px;padding:10px 14px;margin:0 0 13px;background:transparent;'
+    + 'border:1px solid var(--fb-line);border-radius:7px;cursor:pointer;font:700 12px/1 var(--fb-sans);color:var(--fb-text)}'
+    + '.fb-wall-back:hover{border-color:var(--fb-accent)}'
+    + '.fb-wall-intro{font-size:12.5px;line-height:1.5;color:var(--fb-muted);margin:0 0 6px}'
+    + '.fb-wish{padding:12px 0;border-top:1px solid var(--fb-line)}'
+    + '.fb-wish-t{font:700 14px/1.32 var(--fb-sans);color:var(--fb-text);overflow-wrap:anywhere}'
+    + '.fb-wish-by{font-size:12px;color:var(--fb-muted);margin-top:4px;line-height:1.45;overflow-wrap:anywhere}'
+    + '.fb-wish-by b{color:var(--fb-text);font-weight:700}'
+    + '.fb-wish-where{font-size:11.5px;color:var(--fb-muted);margin-top:3px;line-height:1.4;overflow-wrap:anywhere}';
 
   var modal, form, errBox, sendBtn, stepsF, kind = "bug", anon = false, setKind, areaRow, leadEl, titleLab, bodyLab;
   var refs = null;
+  // WALL OF WISHES state: the head title (swapped when viewing the wall), the footer
+  // link (hidden until a ledger loads), the built wall node, and a once-guard.
+  var headH2 = null, wallLink = null, wallView = null, wallTried = false;
 
   function injectStyles() {
     if (document.querySelector('style[data-fb="1"]')) return;
@@ -335,10 +368,20 @@
       moreBtn.firstChild.textContent = open ? "−" : "+";
     });
 
+    // WALL OF WISHES entry point — hidden until loadWall() confirms a ledger with
+    // >=1 credit for this surface. Mirrors the trades' nav item so the two surfaces
+    // read as one system.
+    wallLink = h("button", { type: "button", class: "fb-wall-link", style: "display:none" }, [
+      h("span", {}, ["★"]),
+      h("i", {}, ["Wall of Wishes — see who wished these features into existence"])
+    ]);
+    wallLink.addEventListener("click", showWall);
+
     var kids = [leadEl, errBox, kindRow, areaRow, titleF, bodyF,
       h("div", { class: "fb-acts" }, [sendBtn, cancel]),
       moreBtn, moreWrap,
-      h("p", { class: "fb-note" }, ["Goes straight to the loop that builds this. Broken things get fixed first. Nothing you send is published."])];
+      h("p", { class: "fb-note" }, ["Goes straight to the loop that builds this. Broken things get fixed first. Nothing you send is published."]),
+      wallLink];
 
     form = h("form", {}, kids);
     form.setAttribute("novalidate", "novalidate");
@@ -347,8 +390,9 @@
     var body = h("div", { class: "fb-body" }, [form]);
     var closeBtn = h("button", { type: "button", class: "fb-x", "aria-label": "Close" }, ["×"]);
     closeBtn.addEventListener("click", close);
+    headH2 = h("h2", {}, ["Tell us"]);
     var head = h("div", { class: "fb-head" }, [
-      h("div", {}, [h("h2", {}, ["Tell us"]), h("p", {}, [S.name])]),
+      h("div", {}, [headH2, h("p", {}, [S.name])]),
       closeBtn
     ]);
 
@@ -477,8 +521,70 @@
     refs.body.innerHTML = ""; refs.body.appendChild(d);
   }
 
+  /* ------------------------------------------------------------------ the wall */
+  /* The in-modal Wall of Wishes. It reads the SAME public, git-permanent credits.json
+   * the trade toolkits render at <trade>/credits.html, so a non-trade surface gets an
+   * identical "who wished this" ledger with no page of its own. Two ledger dialects
+   * are unified here: the trade schema keys the title `tool_name` and carries the
+   * display name in `wisher`; the collage schema keys it `capability` and precomputes
+   * `wisher_display`. Both already store the ANONYMISED string, so nothing here can
+   * leak a requester — a named wisher chose to be named; an anonymous one reads as
+   * "an anonymous <surface> user". */
+  function renderWall(list) {
+    var back = h("button", { type: "button", class: "fb-wall-back" }, ["‹ Back to the well"]);
+    back.addEventListener("click", hideWall);
+    var intro = h("p", { class: "fb-wall-intro" }, [
+      "Every one of these started as a wish someone sent through this well. Yours could be next."
+    ]);
+    var rows = list.map(function (c) {
+      var title = c.tool_name || c.capability || "A shipped wish";
+      var who = c.wisher_display || c.wisher || ("an anonymous " + S.name + " user");
+      var when = c.shipped_date || c.shipped_on || "";
+      var byKids = [document.createTextNode("wished by "), h("b", {}, [who])];
+      if (when) byKids.push(document.createTextNode(" · shipped " + when));
+      var rk = [h("div", { class: "fb-wish-t" }, [title]), h("div", { class: "fb-wish-by" }, byKids)];
+      if (c.where) rk.push(h("div", { class: "fb-wish-where" }, [c.where]));
+      return h("div", { class: "fb-wish" }, rk);
+    });
+    return h("div", { class: "fb-wall" }, [back, intro].concat(rows));
+  }
+
+  function loadWall() {
+    if (wallTried || !S.creditsUrl) return;
+    wallTried = true;
+    fetch(S.creditsUrl, { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        var list = d && Array.isArray(d.credits) ? d.credits : [];
+        if (!list.length) return;                      // no ledger, no link — silent
+        wallView = renderWall(list.slice().reverse());  // newest wish first
+        if (wallLink) wallLink.style.display = "";
+      })
+      .catch(function () { /* a missing ledger is not an error on a drop-in */ });
+  }
+
+  function showWall() {
+    if (!wallView || !refs) return;
+    refs.body.innerHTML = "";
+    refs.body.appendChild(wallView);
+    if (headH2) headH2.textContent = "Wall of Wishes";
+    var sh = modal && modal.querySelector(".fb-sheet");
+    if (sh) sh.scrollTop = 0;
+  }
+
+  function hideWall() {
+    if (!refs) return;
+    refs.body.innerHTML = "";
+    refs.body.appendChild(form);
+    if (headH2) headH2.textContent = "Tell us";
+  }
+
   function open(k) {
     if (!modal) { injectStyles(); refs = build(); }
+    loadWall();
+    // Reopen on the form if a prior session was left on the wall — collecting is the
+    // well's job; the wall is a detour. (The thank-you screen is left as-is.)
+    if (wallView && refs && wallView.parentNode === refs.body) hideWall();
     if (k && KINDS.some(function (x) { return x.v === k; })) setKind(k);
     modal.classList.add("on");
     try {
