@@ -552,6 +552,52 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **THE STORAGE FORMAT WAS COPIED FROM THE DOWNLOAD FORMAT, AND THE BYTES CAME
+  WITH IT.** Crash-safe autosave stored the session as the same `.collage` ZIP a
+  manual Save produces, argued for as "one format, no drift" — which reads as
+  discipline and cost everything, because the archive carries the image BYTES.
+  Every debounce therefore re-fetched and re-zipped the whole pool: nudge a
+  slider on a twenty-photo project and 1.5s later ~80MB moved on the main
+  thread, to persist a manifest change of a few dozen characters. IndexedDB
+  stores Blobs natively; the zip only ever existed to make a FILE, and a stored
+  session is not a file. **The general shape: a serialization format encodes the
+  cost of its DESTINATION. Reusing one across destinations inherits a cost that
+  had a reason somewhere else.** The drift argument was real and survives — the
+  manifest and the hydration path are still shared; only the container split.
+- **THE PATH THAT FORGOT `onerror`, AGAIN, IN THE SAME FILE.** `loadProject`'s
+  archive branch awaited `imgElem.onload` with no `onerror` and no timeout;
+  `loadFromSVG`, twenty lines below in the same module, always handled it. One
+  asset the browser refuses to decode — a blob truncated by a quota failure, a
+  4K frame on a phone at its memory line — fires `error`, never `load`, and that
+  promise never settles. Open, or Restore, then hangs FOREVER: no picture, no
+  message, no failure to report. The user's words were "endless loop of restore",
+  and they were describing a HUMAN loop: tap, nothing, reload, the offer is back,
+  tap, nothing. **A promise awaited on a success event with no failure event is
+  not slow, it is stopped — and a stopped path looks exactly like a broken
+  button.** Pair rule shipped with it: a restore that cannot succeed CLEARS the
+  session, or the offer returns forever.
+- **THE THUMBNAIL TIER WAS DROPPED ON THE WAY BACK IN, SO RECOVERING MADE THE APP
+  SLOWER THAN THE CRASH DID.** Upload builds `previewSrc` as a ≤1024px JPEG and
+  the app draws `previewSrc` EVERYWHERE (`stage.ts` states the contract in its
+  own comment). Both restore paths set `previewSrc` to the full-resolution
+  original — one line, no error, no warning — so every restored project silently
+  promoted its whole pool to full-res previews: a 4032×3024 photo is 15.5× the
+  pixels of its thumbnail, re-decoded on every drag, ~48MB resident each. The
+  editor was permanently worse AFTER recovering than before, which pushes the
+  phone back toward the same OOM that started it. Missed by the e2e because the
+  fixtures are 1400×1000 — a 1.87× delta where a real photo is 15.5×. Found by an
+  adversarial subagent reading the consumers, not the feature. **Two general
+  shapes: (1) a derived tier that is REBUILT on one path and ALIASED on another
+  will diverge silently, because aliasing is always type-correct; (2) fixtures
+  chosen for speed can sit entirely inside the regime where the bug does not
+  exist.**
+- **:5173 WAS STILL THE PLAYWRIGHT DEFAULT.** Every spec's header documented
+  `COLLAGE_BASE_URL=http://localhost:5199/` as the way to avoid attaching to
+  Persona 500's dev server — while `playwright.config.ts` kept `baseURL:
+  'http://localhost:5173'` with `reuseExistingServer`, so the documented hazard
+  WAS the default and the safe path was a thing everyone had to remember. Now
+  5199 with `--strictPort`. **A convention that lives only in comments while the
+  config contradicts it is not a convention, it is a trap with a warning label.**
 - **A PAUSE THAT COVERS EVERYTHING AND A REPLAY THAT COVERS ONE KIND.**
   `beginOfflineRender` calls `pauseAll()`; `endOfflineRender` replays from
   `offlineWantPlay`, a list only CLIPS are ever put on. Adding the soundtrack to
@@ -2295,4 +2341,45 @@ frontier. Today's ceiling is tomorrow's floor.
   **BACKPORT RIDER — SWEPT, ALL GREEN.** All 7 trades' `credits.html` re-fetched live → 200; the
   wall they already had is intact. Extraction ran the OTHER way this cycle — the trades' proven
   credits pattern carried INTO the shared well for the surfaces that lacked it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C78 · 2026-08-09 · [AXIS:WELL] RESTORE IS INSTANT, AND IT CANNOT HANG** —
+  wishing-well **BUG** `b79c2df6` (collage, `about_tool=project`, anonymous):
+  *"Restoring images is slow and is glitching. Endless loop of restore also does
+  not restore quickly need to optimize do research perpetual improvements."*
+  Filed hours after the autosave shipped, and it named **three** defects, not one.
+  **1 · THE HANG (the "endless loop").** `loadProject`'s archive branch awaited
+  `onload` with no `onerror`, no timeout — an undecodable asset never settled the
+  promise, so Restore vanished the card and did nothing, forever; reload and the
+  offer was back. `measureSource` now resolves on load, error AND a 15s timer, and
+  a restore that cannot succeed **clears** the session instead of re-offering one
+  that can never load. **2 · THE GLITCH.** The session was the whole `.collage`
+  ZIP in one row, so every 1.5s debounce re-fetched and re-zipped the entire pool
+  for a settings change. Bytes now live one row per asset behind a pure diff
+  (`planAssetWrites`): before→after on a settings change = **4 image writes → 0**,
+  manifest still re-saved (both asserted; the 4 is the measured red).
+  **3 · THE SLOWNESS, twice.** The manifest now carries `width`/`height`, so
+  restore stops decoding every photo in sequence to relearn numbers it wrote down;
+  and the **≤1024px thumbnail is stored beside the original** — restoring only the
+  originals had silently promoted the pool to full-res previews (the app draws
+  `previewSrc` everywhere), leaving the editor slower AFTER recovering than before
+  the crash. Missed originally because the fixtures are 1400×1000; found by an
+  adversarial subagent reading the CONSUMERS. Same fix carried into the archive
+  itself (`previews/`, additive — older `.collage` files open unchanged).
+  **PROOF.** Restore **140ms** at 390px, zero horizontal overflow at 320/360/390/430,
+  stored tiers 74054→43413 and 186955→69411 bytes. Unit sweep **8028 checks / 0
+  failures** (+3 new invariant families), watched RED three ways: 783 failures with
+  the diff removed, 3 with `previewSrc` re-aliased, e2e red with the `onerror`
+  removed. **122/122 chromium e2e**, `tsc` clean, `vite build` clean. New e2e:
+  settings-change-writes-no-bytes, restore-is-quick, cannot-hang, and a **v1
+  legacy session still restores** (the old rows are somebody's unfinished work, so
+  they are read, not discarded). Also fixed the harness scar: `playwright.config.ts`
+  pointed at **:5173** — Persona 500's port — with `reuseExistingServer`, so the
+  documented hazard was the default. Now :5199 `--strictPort`.
+  **BACKPORT RIDER — SWEPT.** The class here is *within* this app rather than
+  across trades: both restore doors (`loadSession` and `loadProject`) got the
+  thumbnail tier and the decode fix, and `loadFromSVG` is noted as the remaining
+  aliaser (an SVG carries only full-res base64; regenerating there is its own
+  rung). All 7 trades re-checked for the `.collage`/IndexedDB class — none of them
+  persist binary sessions, so there is nothing of this shape to carry over.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

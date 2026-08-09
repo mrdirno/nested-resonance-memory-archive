@@ -15,8 +15,9 @@ import { withMove, type MoveId } from './lib/motion';
 import { renderCanvas } from './lib/renderer';
 import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/title';
 import type { LookId } from './lib/grade';
-import { saveProject, loadProject, buildProjectBlob } from './lib/project';
-import { canAutosave, hasUnsavedWork, shouldPromptRestore, formatAgo, AUTOSAVE_DEBOUNCE_MS } from './lib/session';
+import { saveProject, loadProject } from './lib/project';
+import { canAutosave, hasUnsavedWork, shouldPromptRestore, formatAgo, planAssetWrites, sessionEntries, hydrateSessionAssets, AUTOSAVE_DEBOUNCE_MS } from './lib/session';
+import type { AssetUrls } from './lib/session';
 import * as sessionStore from './lib/sessionStore';
 import { generateVectorExport } from './engine/color/vectorExport';
 import { addToHistory, HistoryItem } from './lib/history';
@@ -284,6 +285,11 @@ export default function App() {
   // guard warns about. The autosave itself is best-effort insurance in
   // IndexedDB — see lib/session.ts (gates) and lib/sessionStore.ts (I/O).
   const [restorePrompt, setRestorePrompt] = useState<{ savedAt: number; images: number } | null>(null);
+  // Restore in flight. The first cut cleared the banner on tap and then worked
+  // silently — so a slow restore looked like a button that did nothing, which is
+  // half of what "glitching" meant in the report. The card now stays and says
+  // what it is doing, and the tap cannot be fired twice.
+  const [restoring, setRestoring] = useState(false);
   const dirtyRef = useRef(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -1710,16 +1716,73 @@ export default function App() {
   const handleSaveProject = async () => { setShowExportDialog(false); await saveProject(buildStateForSave(), images); dirtyRef.current = false; };
 
   // Write the working project to IndexedDB — the crash-safe snapshot behind the
-  // well bug ("capturing at 4k ... lost what I was doing"). Cheap (the archive
-  // never carries video bytes) and silent (insurance, not a feature): a failed
-  // write just leaves the previous snapshot standing.
+  // first well bug ("capturing at 4k ... lost what I was doing"), and the source
+  // of the SECOND one ("slow and glitching").
+  //
+  // WHAT CHANGED. This used to call `buildProjectBlob` — the whole `.collage`
+  // archive, image bytes and all — on every debounce. Dragging the gutter slider
+  // on a twenty-photo project therefore re-fetched and re-zipped ~80MB of JPEG on
+  // the main thread, 1.5s after you let go, to persist a manifest change of a few
+  // dozen characters. Now the bytes live one row per asset and a flush writes
+  // ONLY what the store has never seen (`planAssetWrites`), so the steady state —
+  // every settings change, which is nearly every flush — is one small JSON row
+  // and zero image reads.
+  //
+  // Silent and best-effort as before: a failed write leaves the last snapshot
+  // standing, and nothing about it ever reaches the user.
+  const flushBusy = useRef(false);
+  const flushAgain = useRef(false);
+  const flushLatest = useRef<() => Promise<void>>(async () => {});
   const flushSession = async () => {
     if (images.length === 0) return;
+    // Overlap guard. The pre-capture checkpoint fires `flushSession` directly at
+    // the same moment a state change schedules one, and two writers racing the
+    // same rows is how a store ends up naming bytes it did not write. The second
+    // caller re-runs after the first lands, through `flushLatest` so it uses the
+    // CURRENT pool and not the closure that was queued.
+    if (flushBusy.current) { flushAgain.current = true; return; }
+    flushBusy.current = true;
     try {
-      const blob = await buildProjectBlob(buildStateForSave(), images);
-      await sessionStore.putSession(blob, images.length);
+      const stored = await sessionStore.storedAssetIds();
+      const plan = planAssetWrites(images.map(i => i.id), stored);
+      const write: { id: string; asset: sessionStore.StoredAsset }[] = [];
+      for (const id of plan.write) {
+        const img = images.find(i => i.id === id);
+        if (!img) continue;
+        // `fetch` on a blob: URL is a memory read, not a network hop — but it is
+        // still a full copy of the image, which is exactly why it now happens
+        // once per asset instead of once per keystroke.
+        try {
+          const full = await (await fetch(img.src)).blob();
+          // THE THUMBNAIL TIER TRAVELS WITH THE ORIGINAL. The app draws
+          // `previewSrc` — a ≤1024px JPEG — for every preview and every Stage
+          // frame, so a restore that only kept the originals silently promoted
+          // the whole pool to full-res previews and left the editor slower after
+          // recovering than it was before the crash. Null when `createThumbnail`
+          // aliased the source (already under 1024px): same bytes, stored once.
+          const preview = img.previewSrc && img.previewSrc !== img.src
+            ? await (await fetch(img.previewSrc)).blob()
+            : null;
+          write.push({ id, asset: { full, preview } });
+        } catch { /* that asset stays as-is */ }
+      }
+      await sessionStore.putSession({
+        // ONE manifest shape: the same `AppState` every save writes, plus the
+        // per-image metadata. `sessionEntries` carries width/height so restore
+        // never has to decode a picture to learn how big it is.
+        manifest: { ...buildStateForSave(), images: sessionEntries(images) },
+        savedAt: Date.now(),
+        images: images.length,
+        write,
+        drop: plan.drop,
+      });
     } catch { /* best-effort; never surface */ }
+    finally {
+      flushBusy.current = false;
+      if (flushAgain.current) { flushAgain.current = false; void flushLatest.current(); }
+    }
   };
+  flushLatest.current = flushSession;
 
   // APPLY A LOADED PROJECT — the single hydration path shared by Open (a file
   // the user picked) and Restore (the crash-safe session). It used to live only
@@ -1798,20 +1861,80 @@ export default function App() {
     input.click();
   };
 
-  // RESTORE THE CRASH-SAFE SESSION. The stored `.collage` blob is fed through the
-  // exact `loadProject` round-trip a picked file uses, then the shared apply
-  // path — one format, one hydration, no drift.
-  const handleRestoreSession = async () => {
+  // A SESSION THAT CANNOT BE RESTORED MUST BE FORGOTTEN.
+  //
+  // This is the other half of the "endless loop": a failed restore used to leave
+  // the row in place, so the offer came back on the next launch, and the next,
+  // for a session that could never load. Tap, nothing, reload, tap, nothing. If
+  // it cannot come back, say so once and clear it — the user gets a real start
+  // instead of a button that will fail forever.
+  const abandonSession = async (why: string) => {
     setRestorePrompt(null);
-    const blob = await sessionStore.getSessionBlob();
-    if (!blob) { flashNotice('That session could not be read — starting fresh.'); return; }
-    // `loadProject` reads `file.name`; a bare Blob has none, so wrap it. The name
-    // must not end in `.svg`, or it takes the SVG branch and fails.
-    const file = new File([blob], 'session.collage', { type: 'application/zip' });
-    const loaded = await loadProject(file);
-    if (!loaded) { flashNotice('That session could not be restored.'); return; }
-    applyLoadedProject(loaded);
-    flashNotice('Restored your last session.');
+    flashNotice(why);
+    try { await sessionStore.clearSession(); } catch { /* best-effort, as ever */ }
+  };
+
+  // RESTORE THE CRASH-SAFE SESSION.
+  //
+  // The stored rows are read straight into the pool: one object URL per asset and
+  // the sizes come out of the manifest, so nothing is unzipped and NOTHING is
+  // decoded. The old path unzipped the whole archive and then `new Image()`-
+  // decoded every photograph in sequence purely to relearn width and height —
+  // seconds of it on a phone, and a single undecodable asset hung the whole thing
+  // forever, because that await had no `onerror` (fixed in project.ts too, since
+  // Open goes through it).
+  //
+  // Still one hydration path: `applyLoadedProject`, exactly as Open uses.
+  // `archive` is a session written by the previous build — read once through the
+  // original round-trip rather than thrown away, because it is somebody's
+  // unfinished work; the next flush rewrites it in the new shape.
+  const handleRestoreSession = async () => {
+    if (restoring) return;
+    setRestoring(true);
+    const minted: string[] = [];
+    try {
+      const s = await sessionStore.loadSession();
+      if (!s) { await abandonSession('That session could not be read — starting fresh.'); return; }
+
+      if (s.kind === 'archive') {
+        // `loadProject` reads `file.name`; a bare Blob has none, so wrap it. The
+        // name must not end in `.svg`, or it takes the SVG branch and fails.
+        const loaded = await loadProject(new File([s.blob], 'session.collage', { type: 'application/zip' }));
+        if (!loaded) { await abandonSession('That session could not be restored.'); return; }
+        applyLoadedProject(loaded);
+      } else {
+        const urlById: Record<string, AssetUrls> = {};
+        for (const [id, a] of Object.entries(s.assets)) {
+          const src = URL.createObjectURL(a.full);
+          minted.push(src);
+          // Alias when there is no separate thumbnail, exactly as upload does.
+          let previewSrc = src;
+          if (a.preview) { previewSrc = URL.createObjectURL(a.preview); minted.push(previewSrc); }
+          urlById[id] = { src, previewSrc };
+        }
+        const restored = hydrateSessionAssets(s.manifest.images, urlById);
+        // Fails closed on a missing source: a pool that comes back short re-deals
+        // every fragment after the gap, so it is not a slightly different collage.
+        if (!restored) {
+          for (const u of minted) { try { URL.revokeObjectURL(u); } catch { /* already gone */ } }
+          minted.length = 0;
+          await abandonSession('That session could not be restored.');
+          return;
+        }
+        minted.length = 0; // handed to the pool; the app owns them now
+        // The store carries the settings half opaquely — it persists what this
+        // app hands it and never inspects it — so the shape is asserted here,
+        // where `buildStateForSave` is the thing that wrote it.
+        const { images: _entries, ...state } = s.manifest;
+        applyLoadedProject({ state: state as unknown as AppState, images: restored as ImageAsset[] });
+      }
+      // The banner clears itself the moment the pool is non-empty (the effect
+      // below), so success needs no explicit dismissal — only failure does.
+      flashNotice('Restored your last session.');
+    } finally {
+      for (const u of minted) { try { URL.revokeObjectURL(u); } catch { /* already gone */ } }
+      setRestoring(false);
+    }
   };
 
   const handleDismissRestore = async () => {
@@ -1835,11 +1958,11 @@ export default function App() {
   // previous one, which is the debounce.
   useEffect(() => {
     const exporting = exportStatus === 'processing' || !!recorderRef.current?.isRecording;
-    if (!canAutosave({ imageCount: images.length, isExporting: exporting, isRestoring: !!restorePrompt })) return;
+    if (!canAutosave({ imageCount: images.length, isExporting: exporting, isRestoring: !!restorePrompt || restoring })) return;
     dirtyRef.current = true; // there is now work that isn't on disk
     const t = window.setTimeout(() => { void flushSession(); }, AUTOSAVE_DEBOUNCE_MS);
     return () => window.clearTimeout(t);
-  }, [images, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, arrangement, focus, twist, move, titleText, titlePlace, titleSize, activeTab, soundtrack, exportStatus, restorePrompt]);
+  }, [images, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, arrangement, focus, twist, move, titleText, titlePlace, titleSize, activeTab, soundtrack, exportStatus, restorePrompt, restoring]);
 
   // OFFER TO RESTORE, once, at launch. Only the metadata is read here — the
   // (large) blob is pulled only if the user actually taps Restore. The banner's
@@ -2113,15 +2236,17 @@ export default function App() {
         <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[300] w-[min(28rem,94vw)] animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="rounded-xl bg-[#0d0d0d]/95 border border-emerald-500/40 shadow-2xl backdrop-blur px-3 py-2.5">
             <div className="flex items-center gap-2.5">
-              <RefreshCw size={15} className="text-emerald-400 shrink-0" />
+              <RefreshCw size={15} className={`text-emerald-400 shrink-0${restoring ? ' animate-spin' : ''}`} />
               <div className="flex-1 min-w-0">
-                <div className="text-[10px] font-black tracking-[0.14em] text-white uppercase truncate">Pick up where you left off</div>
+                <div className="text-[10px] font-black tracking-[0.14em] text-white uppercase truncate">{restoring ? 'Bringing it back' : 'Pick up where you left off'}</div>
                 <div className="text-[9px] text-white/50 tracking-wide truncate">
                   {restorePrompt.images} image{restorePrompt.images === 1 ? '' : 's'} · saved {formatAgo(Date.now() - restorePrompt.savedAt)}
                 </div>
               </div>
-              <button onClick={handleRestoreSession} className="shrink-0 min-h-[44px] px-3.5 rounded-lg bg-emerald-500 text-black text-[10px] font-black tracking-[0.1em] uppercase active:scale-95 transition-transform">Restore</button>
-              <button onClick={handleDismissRestore} aria-label="Dismiss saved session" className="shrink-0 min-h-[44px] min-w-[44px] grid place-items-center rounded-lg bg-white/5 text-white/60 hover:text-white active:scale-95 transition-transform"><X size={15} /></button>
+              {/* Disabled, not hidden, while the restore runs: the card holding its
+                  size is what stops the layout jumping under a thumb mid-tap. */}
+              <button onClick={handleRestoreSession} disabled={restoring} className="shrink-0 min-h-[44px] px-3.5 rounded-lg bg-emerald-500 text-black text-[10px] font-black tracking-[0.1em] uppercase active:scale-95 transition-transform disabled:opacity-60">{restoring ? 'Restoring' : 'Restore'}</button>
+              <button onClick={handleDismissRestore} disabled={restoring} aria-label="Dismiss saved session" className="shrink-0 min-h-[44px] min-w-[44px] grid place-items-center rounded-lg bg-white/5 text-white/60 hover:text-white active:scale-95 transition-transform disabled:opacity-40"><X size={15} /></button>
             </div>
           </div>
         </div>

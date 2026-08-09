@@ -24,6 +24,12 @@ export const buildProjectBlob = async (state: AppState, images: ImageAsset[]): P
       id: img.id,
       storageFilename: safeFilename, // Internal name in ZIP
       originalName: img.originalName || 'image.png',
+      // The asset has always known its own size and the manifest threw it away,
+      // so `loadProject` decoded every photograph back — sequentially — purely to
+      // relearn two numbers. Written from now on; absent on older archives, which
+      // is why the load path still has a decode fallback.
+      width: img.width,
+      height: img.height,
       analysis: img.analysis
     };
   });
@@ -35,8 +41,18 @@ export const buildProjectBlob = async (state: AppState, images: ImageAsset[]): P
 
   zip.file("manifest.json", JSON.stringify(manifest, null, 2));
 
-  // 2. Images
+  // 2. Images — the originals, and the thumbnail tier beside them.
+  //
+  // WHY `previews/` EXISTS. The app draws `previewSrc` — a <=1024px JPEG built at
+  // upload — for every preview render and every Stage frame (`stage.ts`: "The
+  // Stage draws `previewSrc` ... everywhere"). An archive that stored only the
+  // originals made `loadProject` alias `previewSrc` to the full-resolution
+  // image, so every reopened project quietly promoted its whole pool to full-res
+  // previews: a 4032x3024 photo is 15.5x the pixels of its thumbnail, re-decoded
+  // on every slider drag. Additive and backward compatible — an archive without
+  // this folder loads exactly as it always did.
   const imgFolder = zip.folder("images");
+  const previewFolder = zip.folder("previews");
   if (imgFolder) {
     for (let i = 0; i < images.length; i++) {
       const img = images[i];
@@ -47,6 +63,17 @@ export const buildProjectBlob = async (state: AppState, images: ImageAsset[]): P
         imgFolder.file(meta.storageFilename, blob);
       } catch (e) {
         console.warn(`Failed to save image ${img.id}`, e);
+      }
+      // Only when it is genuinely a different image: `createThumbnail` returns
+      // the source unchanged under 1024px, and storing those bytes twice would
+      // grow every archive for nothing.
+      if (previewFolder && img.previewSrc && img.previewSrc !== img.src) {
+        try {
+          const p = await (await fetch(img.previewSrc)).blob();
+          previewFolder.file(meta.storageFilename, p);
+        } catch (e) {
+          console.warn(`Failed to save preview for ${img.id}`, e);
+        }
       }
     }
   }
@@ -67,6 +94,47 @@ export const saveProject = async (state: AppState, images: ImageAsset[]) => {
   URL.revokeObjectURL(url);
 };
 
+/**
+ * How long a single image gets to decode before the load gives up on it.
+ *
+ * THE HANG THIS EXISTS FOR (collage well, bug: "endless loop of restore, also
+ * does not restore quickly"): the archive branch below used to await
+ * `imgElem.onload` with NO `onerror` and no timeout. An asset the browser
+ * refuses to decode — a truncated blob from a write that hit quota, or a 4K
+ * frame on a phone already at its memory line — fires `error`, never `load`, and
+ * that promise never settles. Open, or Restore, then hangs FOREVER: no picture,
+ * no message, no failure. Reload, and the offer is right there again. That is
+ * the loop the report describes. `loadFromSVG` twenty lines down always handled
+ * `onerror`; this branch is the one that forgot it.
+ */
+const DECODE_TIMEOUT_MS = 15_000;
+
+/**
+ * Intrinsic size for one source, without ever hanging. Manifest first (archives
+ * written from 2026-08-09 carry it, so the common path decodes NOTHING); then a
+ * real decode that resolves on load, on error, AND on a timer.
+ */
+const measureSource = (url: string, meta: any): Promise<{ w: number; h: number }> => {
+  const mw = meta?.width, mh = meta?.height;
+  if (typeof mw === 'number' && typeof mh === 'number' && mw > 0 && mh > 0) {
+    return Promise.resolve({ w: mw, h: mh });
+  }
+  return new Promise((resolve) => {
+    const el = new Image();
+    let settled = false;
+    const finish = (w: number, h: number) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      resolve({ w, h });
+    };
+    const timer = setTimeout(() => finish(0, 0), DECODE_TIMEOUT_MS);
+    el.onload = () => finish(el.naturalWidth || el.width, el.naturalHeight || el.height);
+    el.onerror = () => finish(0, 0);
+    el.src = url;
+  });
+};
+
 export const loadProject = async (file: File): Promise<{state: AppState, images: ImageAsset[]} | null> => {
   try {
     // Check if it's an SVG (Smart SVG)
@@ -83,7 +151,8 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
     
     const images: ImageAsset[] = [];
     const imgFolder = zip.folder("images");
-    
+    const previewFolder = zip.folder("previews");
+
     if (imgFolder) {
       for (const meta of manifest.images) {
         // Fallback for legacy files that used 'filename' instead of 'storageFilename'
@@ -92,23 +161,31 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
         if (file) {
           const blob = await file.async("blob");
           const url = URL.createObjectURL(blob);
-          
-          const imgElem = new Image();
-          imgElem.src = url;
-          await new Promise(r => imgElem.onload = r);
-          
+
+          const { w, h } = await measureSource(url, meta);
+
+          // THE THUMBNAIL TIER, when the archive carries one. Archives written
+          // before 2026-08-09 have no `previews/`, so `previewSrc` aliases the
+          // original exactly as it always did — but every archive written from
+          // now on reopens with the small tier the preview path expects, instead
+          // of quietly re-decoding full-resolution photographs on every drag.
+          let previewUrl = url;
+          const pf = previewFolder?.file(fname);
+          if (pf) {
+            try { previewUrl = URL.createObjectURL(await pf.async("blob")); } catch { previewUrl = url; }
+          }
+
           images.push({
             id: meta.id,
             src: url,
             // REQUIRED. Without it every loaded asset carries previewSrc
             // undefined, and stencil.ts does `img.src = imgAsset.previewSrc`,
             // which stringifies to "undefined", resolves to <base>/undefined
-            // and 404s. The archive stores one image per asset, so the full
-            // image IS the preview here.
-            previewSrc: url,
+            // and 404s. Aliases `src` when the archive has no preview for it.
+            previewSrc: previewUrl,
             originalName: meta.originalName || meta.filename,
-            width: imgElem.width,
-            height: imgElem.height,
+            width: w,
+            height: h,
             analysis: meta.analysis
           });
         }

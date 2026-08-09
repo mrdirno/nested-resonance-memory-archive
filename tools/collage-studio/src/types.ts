@@ -168,8 +168,12 @@ export interface AppState {
 export interface ProjectManifest extends AppState {
   images: {
     id: string;
-    storageFilename: string; 
+    storageFilename: string;
     originalName: string;
+    /** Intrinsic size. Optional: archives written before 2026-08-09 lack it and
+     *  `loadProject` falls back to decoding. Present, it skips the decode. */
+    width?: number;
+    height?: number;
     analysis: AnalysisResult;
   }[];
 }

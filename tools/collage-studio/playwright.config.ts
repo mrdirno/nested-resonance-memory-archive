@@ -9,7 +9,14 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:5173',
+    // :5199, NOT :5173. Vite's default port belongs to another project on this
+    // machine (Persona 500), and `reuseExistingServer` below means a run that
+    // aims at 5173 will happily attach to whatever is already listening there —
+    // so the whole suite goes green or red against an app that is not this one,
+    // silently, with no error to notice. Every spec here already documents
+    // `COLLAGE_BASE_URL=http://localhost:5199/`; the config is what made that an
+    // instruction people had to remember instead of the default.
+    baseURL: 'http://localhost:5199',
     trace: 'on-first-retry',
   },
   // `channel: 'chromium'` belongs HERE, per Chromium project — never at file
@@ -45,8 +52,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173',
+    // `--strictPort` so a busy 5199 FAILS the run instead of quietly sliding to
+    // the next free port while `url` waits on one nothing will ever serve.
+    command: 'npx vite --port 5199 --strictPort',
+    url: 'http://localhost:5199',
     reuseExistingServer: !process.env.CI,
   },
 });

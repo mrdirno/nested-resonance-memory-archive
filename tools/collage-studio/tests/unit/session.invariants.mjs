@@ -26,7 +26,9 @@ const tmp = join(mkdtempSync(join(tmpdir(), 'session-')), 'session.mjs');
 writeFileSync(tmp, code);
 const {
   canAutosave, hasUnsavedWork, shouldPromptRestore, formatAgo,
+  planAssetWrites, sessionEntries, hydrateSessionAssets,
   AUTOSAVE_DEBOUNCE_MS, SESSION_DB, SESSION_STORE, SESSION_KEY,
+  SESSION_ASSETS, SESSION_DB_VERSION,
 } = await import(pathToFileURL(tmp).href);
 
 let checks = 0, fails = 0;
@@ -99,12 +101,141 @@ for (let ms = 0; ms <= 10 * 86_400_000; ms += 137_000) {
   if (typeof s !== 'string' || s.length === 0) fail(`formatAgo(${ms}) empty`); else ok();
 }
 
+// --- planAssetWrites: THE CLAIM THAT MAKES AUTOSAVE CHEAP -------------------
+// The bug this fixes ("restoring is slow and glitching") was the autosave
+// re-zipping the entire image pool on every debounce. The cure is a diff, and
+// the load-bearing property is the steady state: a pool that did not change
+// writes NOTHING. Assert it directly, then the rest of the algebra.
+const ids = (n, p = 'a') => Array.from({ length: n }, (_, i) => `${p}${i}`);
+
+for (const n of [1, 2, 5, 40]) {
+  const pool = ids(n);
+  const p = planAssetWrites(pool, pool);
+  eq(p.write.length, 0, `unchanged pool of ${n} writes no bytes`);
+  eq(p.drop.length, 0, `unchanged pool of ${n} drops nothing`);
+}
+// A cold store writes everything, exactly once, in pool order.
+{
+  const pool = ids(6);
+  const p = planAssetWrites(pool, []);
+  eq(p.write.join(','), pool.join(','), 'cold store writes the whole pool in order');
+  eq(p.drop.length, 0, 'cold store drops nothing');
+}
+// One photo added -> exactly one write.
+{
+  const before = ids(5);
+  const p = planAssetWrites([...before, 'new'], before);
+  eq(p.write.join(','), 'new', 'adding one image writes exactly one row');
+  eq(p.drop.length, 0, 'adding one image drops nothing');
+}
+// One photo removed -> exactly one delete, no writes.
+{
+  const before = ids(5);
+  const p = planAssetWrites(before.slice(1), before);
+  eq(p.write.length, 0, 'removing an image writes nothing');
+  eq(p.drop.join(','), 'a0', 'removing an image drops exactly that id');
+}
+// Reordering is not a change: the same set in a different order is free.
+{
+  const pool = ids(8);
+  const p = planAssetWrites([...pool].reverse(), pool);
+  eq(p.write.length, 0, 'reordering writes nothing');
+  eq(p.drop.length, 0, 'reordering drops nothing');
+}
+// Duplicates collapse — the same bytes must never be written twice.
+{
+  const p = planAssetWrites(['x', 'x', 'y', 'x'], []);
+  eq(p.write.join(','), 'x,y', 'duplicate ids collapse to one write each');
+}
+// Empties are legal at both ends.
+eq(planAssetWrites([], []).write.length, 0, 'empty/empty writes nothing');
+eq(planAssetWrites([], ['g1', 'g2']).drop.join(','), 'g1,g2', 'emptied pool drops every stored id');
+eq(planAssetWrites(['n'], []).write.join(','), 'n', 'empty store writes the one id');
+// GENERAL PROPERTY over random pools: write = pool \ stored (deduped, pool
+// order), drop = stored \ pool, and the two are always disjoint.
+let seed = 12345;
+const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+for (let trial = 0; trial < 400; trial++) {
+  const universe = ids(12, 'u');
+  const pool = universe.filter(() => rnd() < 0.5);
+  const stored = universe.filter(() => rnd() < 0.5);
+  const p = planAssetWrites(pool, stored);
+  const wantWrite = [...new Set(pool)].filter((i) => !stored.includes(i));
+  const wantDrop = stored.filter((i) => !pool.includes(i));
+  eq(p.write.join(','), wantWrite.join(','), `trial ${trial} write set`);
+  eq(p.drop.join(','), wantDrop.join(','), `trial ${trial} drop set`);
+  if (p.write.some((i) => p.drop.includes(i))) fail(`trial ${trial}: an id was both written and dropped`); else ok();
+  // Nothing already stored is ever re-written — the whole point.
+  if (p.write.some((i) => stored.includes(i))) fail(`trial ${trial}: re-wrote a stored asset`); else ok();
+}
+
+// --- sessionEntries + hydrateSessionAssets: a lossless round trip -----------
+// Restore reads these two numbers instead of decoding the picture to relearn
+// them, so if the mapping loses them the fix silently reverts to the slow path.
+{
+  const pool = [
+    { id: 'i1', originalName: 'a.jpg', width: 4032, height: 3024, analysis: { k: 1 } },
+    { id: 'i2', originalName: 'b.png', width: 800, height: 1200, analysis: { k: 2 } },
+    { id: 'i3', width: 1, height: 1, analysis: null },
+  ];
+  const entries = sessionEntries(pool);
+  eq(entries.length, 3, 'one entry per image');
+  eq(entries.map((e) => e.id).join(','), 'i1,i2,i3', 'entry order follows the pool');
+  eq(entries[0].width, 4032, 'width survives the mapping');
+  eq(entries[0].height, 3024, 'height survives the mapping');
+  eq(entries[2].originalName, 'image.png', 'a nameless asset gets the documented default');
+
+  // Two of the three have a real thumbnail; the third aliases, exactly as
+  // `createThumbnail` leaves an image that was already under 1024px.
+  const urls = {
+    i1: { src: 'blob:full-1', previewSrc: 'blob:thumb-1' },
+    i2: { src: 'blob:full-2', previewSrc: 'blob:thumb-2' },
+    i3: { src: 'blob:full-3', previewSrc: 'blob:full-3' },
+  };
+  const back = hydrateSessionAssets(entries, urls);
+  eq(back.length, 3, 'hydrate returns the whole pool');
+  eq(back.map((a) => a.id).join(','), 'i1,i2,i3', 'hydrate preserves order (arrangeBag deals from it)');
+  for (let i = 0; i < 3; i++) {
+    eq(back[i].width, pool[i].width, `width round-trips for ${pool[i].id}`);
+    eq(back[i].height, pool[i].height, `height round-trips for ${pool[i].id}`);
+    eq(back[i].src, urls[pool[i].id].src, `src is the minted url for ${pool[i].id}`);
+    eq(JSON.stringify(back[i].analysis), JSON.stringify(pool[i].analysis), `analysis round-trips for ${pool[i].id}`);
+  }
+
+  // THE THUMBNAIL TIER MUST SURVIVE THE RESTORE. This is the regression that
+  // made the editor SLOWER after recovering than before the crash: previewSrc
+  // was set to the full-resolution original, and the app draws previewSrc
+  // everywhere. If these two ever collapse to src again, restore is quietly
+  // handing a 4032px photograph to a code path built for a 1024px one.
+  eq(back[0].previewSrc, 'blob:thumb-1', 'the stored thumbnail comes back as previewSrc');
+  eq(back[1].previewSrc, 'blob:thumb-2', 'the stored thumbnail comes back as previewSrc');
+  if (back[0].previewSrc === back[0].src) fail('previewSrc collapsed onto the full-res src'); else ok();
+  // ...and it still ALIASES when there genuinely is no separate thumbnail.
+  eq(back[2].previewSrc, back[2].src, 'no thumbnail means previewSrc aliases src');
+  // A blank/absent previewSrc falls back to src rather than to "undefined",
+  // which is the stencil.ts 404 this field's comment has always warned about.
+  eq(hydrateSessionAssets([entries[0]], { i1: { src: 'blob:full-1', previewSrc: '' } })[0].previewSrc, 'blob:full-1', 'an empty preview url falls back to src');
+
+  // FAILS CLOSED. One missing source must refuse the whole restore — a short
+  // pool re-deals every fragment after the gap, so it is somebody else's collage.
+  eq(hydrateSessionAssets(entries, { i1: urls.i1, i3: urls.i3 }), null, 'a missing source refuses the restore');
+  eq(hydrateSessionAssets(entries, { i1: urls.i1, i2: { src: '', previewSrc: 'x' }, i3: urls.i3 }), null, 'an empty source url refuses the restore');
+  eq(hydrateSessionAssets(entries, {}), null, 'no sources at all refuses the restore');
+  eq(hydrateSessionAssets([], { i1: 'blob:1' }), null, 'an empty manifest is not a session');
+  eq(hydrateSessionAssets(null, {}), null, 'a missing manifest is not a session');
+  eq(hydrateSessionAssets(undefined, {}), null, 'an undefined manifest is not a session');
+}
+
 // --- constants are the shape the store depends on ---------------------------
 eq(typeof AUTOSAVE_DEBOUNCE_MS, 'number', 'debounce is a number');
 ok(AUTOSAVE_DEBOUNCE_MS > 0 || fail('debounce must be positive'));
 eq(SESSION_DB, 'collage-session', 'db name stable (renaming orphans stored sessions)');
 eq(SESSION_STORE, 'project', 'store name stable');
 eq(SESSION_KEY, 'current', 'key stable');
+eq(SESSION_ASSETS, 'assets', 'assets store name stable');
+// v1 rows live in `project`; the upgrade must be a bump, never a rename, or
+// every session written by the previous build is orphaned on deploy.
+eq(SESSION_DB_VERSION, 2, 'db version is 2 (v1 rows still readable)');
 
 console.log(`session invariants: ${checks} checks, ${fails} failures`);
 process.exit(fails === 0 ? 0 : 1);
