@@ -217,6 +217,22 @@ jobs:
           [ "$n_gear" -ge 20 ] || { echo "FAIL: commons/gear.js carries only $n_gear items — an empty commons is not a commons"; exit 1; }
           echo "commons: $n_gear gear items, deps resolve"
 
+          # THE KIT SWITCHER OFFERS EVERY TRADES ROW FROM EVERY PAGE. It used to be
+          # 7 words in 6 hub footers; it is now a chip grid in the nav dropdown that
+          # all 32 pages carry, so a slug in that array with no staged directory is a
+          # 404 reachable from the whole site at once — the /plumbing/credits.html
+          # hazard above, multiplied by the switcher. Parse the array the RUNTIME
+          # actually shipped rather than the TRADES list this file stages: checking
+          # the staging list against itself would prove nothing, and the two drifting
+          # apart is precisely the failure.
+          sw_slugs=$(grep -oE 'slug: *"[a-z-]+"' HELIOS-BRIDGE/dist/shared/toolkit.js | sed 's/.*"\(.*\)"/\1/' | sort -u)
+          [ -n "$sw_slugs" ] || { echo "FAIL: no slugs parsed out of the runtime's TRADES array"; exit 1; }
+          for s in $sw_slugs; do
+            test -f "HELIOS-BRIDGE/dist/$s/index.html" \
+              || { echo "FAIL: the kit switcher offers /$s/ from every page of every trade, and it is not in the artifact"; exit 1; }
+          done
+          echo "kit switcher: $(echo "$sw_slugs" | wc -w | tr -d ' ') destinations, all staged"
+
           # Every trade dir must carry the four files that make the shared runtime
           # work (config + registry + hub + credit ledger). A trade staged without
           # them renders a bare page with no nav and a dead well — a silent break

@@ -40,14 +40,28 @@
    * trade from — which is exactly how /plumbing/ spent its whole life reachable
    * only from a hand-wired link inside av/index.html.
    * ONE list, here, in the runtime every trade already loads. A hub renders
-   * whoever is not itself. Adding trade #4 is one line in this array. */
+   * whoever is not itself. Adding trade #4 is one line in this array.
+   *
+   * EACH ENTRY CARRIES THE OTHER TRADE'S FACE, and that is a deliberate copy.
+   * `icon` and `accent` are the property of `<slug>/trade.js` — but a trade.js
+   * is loaded ONLY on its own pages, so /av/ cannot ask /plumbing/ what colour
+   * it is. Every cross-trade surface therefore has to hold a copy (the
+   * persona500 manifest already does, on the same terms). A copy that can drift
+   * is a copy that WILL drift, so the drift is a GATE rather than a promise:
+   * kit-switcher.spec asserts, on every hub, that this row's icon and accent
+   * are `Object.is`-equal to what that trade's own trade.js declares.
+   *
+   * `short` is what fits on a 44px chip in a 104px column on a 320px phone —
+   * "Low-Volt", not "Low-Voltage Field Toolkit". The long name still rides as
+   * the title/aria-label, so the chip is terse to the eye and complete to a
+   * screen reader. */
   var TRADES = [
-    { slug: "av",         name: "AV Field Toolkit" },
-    { slug: "plumbing",   name: "Plumbing Field Toolkit" },
-    { slug: "electrical", name: "Electrical Field Toolkit" },
-    { slug: "hvac",       name: "HVAC/R Field Toolkit" },
-    { slug: "low-voltage", name: "Low-Voltage Field Toolkit" },
-    { slug: "gc",         name: "GC & Site Super Toolkit" },
+    { slug: "av",          name: "AV Field Toolkit",             short: "AV",         icon: "🧰", accent: "#F0BE1E" },
+    { slug: "plumbing",    name: "Plumbing Field Toolkit",       short: "Plumbing",   icon: "🔧", accent: "#C87137" },
+    { slug: "electrical",  name: "Electrical Field Toolkit",     short: "Electrical", icon: "⚡", accent: "#3FB6F5" },
+    { slug: "hvac",        name: "HVAC/R Field Toolkit",         short: "HVAC/R",     icon: "❄️", accent: "#4FE0C0" },
+    { slug: "low-voltage", name: "Low-Voltage Field Toolkit",    short: "Low-Volt",   icon: "📹", accent: "#FF9E80" },
+    { slug: "gc",          name: "GC & Site Super Toolkit",      short: "GC & Super", icon: "🦺", accent: "#8CE86B" },
     // NOT A TRADE — the commons, and the only entry here that is not a toolkit.
     // It rides this list on purpose: the six hubs each render "whoever is not me"
     // from it, so one line surfaces the human layer in every hub footer with zero
@@ -55,7 +69,11 @@
     // place. Nothing else consumes this array (grepped: six index.html footers),
     // and the disk-derived trade COUNT comes from `<dir>/trade.js`, which the
     // commons deliberately does not have. So this cannot inflate breadth debt.
-    { slug: "commons",    name: "The Commons · What's in the Bag" }
+    // `kit:false` is what keeps it out of the NAV switcher only: the dropdown
+    // already carries "What's in the bag" as its own row three entries above, and
+    // the same destination twice in one menu is clutter. The FOOTER block still
+    // renders it, exactly as the footer link row it replaces did.
+    { slug: "commons",     name: "The Commons · What's in the Bag", short: "Commons", icon: "🎒", accent: "#BABEB6", kit: false }
   ];
 
   /* ---- WHO AM I: the per-trade config, with the AV defaults ---------------
@@ -163,8 +181,13 @@
     min-height:44px;white-space:nowrap;}
   .av-menu>button:hover{border-color:var(--av-flag);color:#fff}
   .av-menu[open]>button{border-color:var(--av-flag);color:#fff}
+  /* max-height: the menu now carries the kit switcher, and it had NO bound at all
+     before — a six-tool trade already ran past a 568px screen with nothing to
+     scroll. The bar is sticky, so subtracting its height keeps the last row of
+     the menu on the glass instead of under the fold. */
   .av-drop{position:absolute;top:calc(100% + 6px);left:0;min-width:250px;background:var(--av-paper);color:var(--av-ink);
-    border:1px solid var(--av-steel);border-radius:3px;box-shadow:0 10px 30px rgba(0,0,0,.28);padding:5px;display:none;}
+    border:1px solid var(--av-steel);border-radius:3px;box-shadow:0 10px 30px rgba(0,0,0,.28);padding:5px;display:none;
+    max-height:calc(100vh - 72px);overflow-y:auto;-webkit-overflow-scrolling:touch;}
   .av-menu[open] .av-drop{display:block}
   .av-drop a{display:block;text-decoration:none;color:var(--av-ink);padding:8px 9px;border-radius:2px;}
   /* Hover paints the row in the TRADE's accent, so the text on it has to be the
@@ -177,6 +200,63 @@
   .av-drop a span{display:block;font-family:var(--av-mono);font-size:9.5px;letter-spacing:.08em;color:var(--av-muted);text-transform:uppercase;}
   .av-drop hr{border:0;border-top:1px solid var(--av-line);margin:5px 3px}
   .av-drop .av-req b{color:#7a5a00}
+
+  /* ---- THE KIT SWITCHER ---------------------------------------------------
+   * The one control whose entire job is moving a tradesperson between kits, and
+   * it was the smallest thing we shipped. MEASURED on all six LIVE hubs at
+   * 320/360/390/430 before this: 16.7px tall, 7-8 of them per page, 100% under
+   * the 44px law — and it existed on the SIX HUBS ONLY. From any of the 26 TOOL
+   * pages there was no route to another kit at all, because the nav dropdown
+   * every page carries never knew the other trades existed.
+   * ONE component, TWO mounts: the hub footer block, and a section at the foot
+   * of that dropdown. A seventh trade is still one line in TRADES and lights up
+   * both, on every page of every trade, with no per-hub edit. */
+  .av-kits{margin:0}
+  .av-kits-foot{margin:26px 0 0;padding-top:16px;border-top:1px solid var(--av-line)}
+  .av-kits-h{font-family:var(--av-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--av-muted);margin:0 0 9px;padding:0 2px}
+  /* 112px is not a round number, it is the longest label plus its furniture.
+     "ELECTRICAL" is the widest single word in the roster and it cannot break at a
+     space: at 12px condensed it measures ~63px, and the chip spends 16 on padding,
+     4 on borders, 15 on the icon and 7 on the gap = 105. A 104px column split it
+     as ELECTRICA / L (MEASURED, 390px). Below the column count drops instead:
+     3 up at 430, 3 at 390, 2 at 320, 2 in the 238px-wide menu. */
+  .av-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:6px}
+  /* The chip wears the OTHER trade's colour as an index tab, never as a fill:
+     every accent in TRADES is tuned to be light and high-chroma on the dark nav
+     (§SCARS — "the trade accent is painted"), which makes it a poor background
+     for ink on paper. As a 3px edge it identifies without carrying any text. */
+  .av-kit{display:flex;align-items:center;gap:7px;min-height:44px;padding:5px 8px;
+    border:1px solid var(--av-line);border-left:3px solid var(--k,var(--av-line));border-radius:2px;
+    background:#FFF;text-decoration:none;color:var(--av-ink)}
+  .av-kit:hover{border-color:var(--av-steel);border-left-color:var(--k,var(--av-steel));background:#F4F5F1}
+  .av-kit i{font-style:normal;font-size:15px;line-height:1;flex:none}
+  /* overflow-wrap:anywhere stays as the SAFETY NET, not as the plan. A grid item's
+     min-width is auto, so an unbreakable word wider than its column would push the
+     whole page sideways — which is the one thing the mobile law forbids outright.
+     The column above is sized so it never has to fire; the gate asserts both (zero
+     horizontal overflow, and no one-word label rendering on two lines). */
+  .av-kit b{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.03em;font-weight:700;
+    font-size:12px;line-height:1.15;min-width:0;overflow-wrap:anywhere}
+  /* Inside the menu the generic .av-drop a rules (0,1,1) outrank the chip's own
+     (0,1,0), so every one of them has to be answered at (0,2,x) or the chips
+     render as the menu's block rows. The hover is answered too: painting another
+     trade's chip in the CURRENT trade's accent says the wrong thing. */
+  .av-drop .av-kit{display:flex;padding:5px 9px}
+  .av-drop .av-kit b{font-size:12px;letter-spacing:.03em}
+  .av-drop .av-kit:hover{background:#F4F5F1;color:var(--av-ink)}
+  .av-drop .av-kits-h{margin:0 0 6px}
+
+  /* THE FOOTER'S OTHER LINKS ARE THE SAME CLASS, and they are declared per page:
+     20 files carry a .foot, 12 of them with their own .foot a rule, and every
+     one measured 16.7px. This sheet is appended to <head> at boot — AFTER each
+     page's own <style> — so at equal specificity one rule here beats twelve
+     copies, and any page added later inherits the fix instead of re-earning it.
+     The accent underline goes because a 1px border sitting at the bottom of a
+     44px box is no longer under the words; the outline says "tap me" better. */
+  .foot a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;
+    border:1px solid var(--av-line);border-radius:2px}
+  .foot a:hover{border-color:var(--av-steel)}
   .av-spacer{flex:1}
   .av-req-btn{font-family:var(--av-cond);text-transform:uppercase;letter-spacing:.06em;font-size:14px;font-weight:700;
     background:var(--av-flag);color:var(--flag-ink);border:1px solid var(--av-flag);border-radius:2px;padding:7px 12px;cursor:pointer;white-space:nowrap;
@@ -266,6 +346,51 @@
     return el;
   }
 
+  /* ------------------------------------------------------------ kit switcher */
+  /* Renders "everyone who is not me" as real chips. `inNav` is the only thing
+   * that differs between the two mounts, and it decides exactly two questions:
+   * whether the commons rides along (see `kit:false` in TRADES), and which
+   * heading the block wears. Everything else — the chip, the colour, the href,
+   * the accessible name — is one code path, so the footer and the menu can never
+   * disagree about which kits exist. */
+  function kitChips(inNav) {
+    var me = TRADE.slug;
+    var grid = h("div", { class: "av-grid" });
+    TRADES.filter(function (t) { return t.slug !== me && !(inNav && t.kit === false); })
+      .forEach(function (t) {
+        grid.appendChild(h("a", {
+          // Every page of every trade sits exactly one directory below the root,
+          // so ../<slug>/ resolves from a hub and from a tool page alike — and it
+          // stays relative, which is what keeps the deployed repo-path prefix
+          // (/nested-resonance-memory-archive/) from being silently dropped.
+          class: "av-kit", href: "../" + t.slug + "/", style: "--k:" + t.accent,
+          title: t.name, "aria-label": t.name
+        }, [h("i", { "aria-hidden": "true" }, [t.icon]), h("b", null, [t.short])]));
+      });
+    return h("nav", {
+      class: "av-kits" + (inNav ? "" : " av-kits-foot"), "aria-label": "Other field toolkits"
+    }, [
+      h("p", { class: "av-kits-h" }, [inNav ? "Switch kit" : "The other kits — same deal, free"]),
+      grid
+    ]);
+  }
+
+  /* A hub declares WHERE the other kits belong with <span id="siblings"></span>.
+   * That span used to be filled by a copy of the same eight-line renderer pasted
+   * into each of the six hubs; the runtime owns it now, which is the whole point
+   * of the list living here (a hub that got forgotten is a kit nobody can reach —
+   * measured once already, on /plumbing/). The span sits INSIDE .foot, a wrapping
+   * flex row of words, and a grid of 44px chips is not a footer word — so the
+   * block is placed before the footer and the marker retires. */
+  function mountKitBlock() {
+    var slot = document.getElementById("siblings");
+    if (!slot || document.querySelector(".av-kits-foot")) return;
+    var foot = (slot.closest ? slot.closest(".foot") : null) || slot.parentNode;
+    var anchor = (foot && foot.parentNode) ? foot : slot;
+    anchor.parentNode.insertBefore(kitChips(false), anchor);
+    slot.parentNode.removeChild(slot);
+  }
+
   /* ---------------------------------------------------------------- toolkit bar */
   function buildBar() {
     var drop = h("div", { class: "av-drop", role: "menu" });
@@ -291,6 +416,14 @@
     var reqLink = h("a", { href: "#", class: "av-req", html: "<b>✦ Wish for a tool</b><span>Aldrin's AI builds it &mdash; for real</span>" });
     reqLink.addEventListener("click", function (e) { e.preventDefault(); closeMenu(); openWell(); });
     drop.appendChild(reqLink);
+
+    // LAST, and deliberately after the wish CTA. The menu reads as: where you are
+    // (all tools / wall / the bag), what you can do here (the tools), ask for more
+    // (the wish — the demand funnel the whole program runs on, and it keeps the
+    // position it has always had), then leave for another kit. Before this, the
+    // 26 tool pages had no route to another trade at all.
+    drop.appendChild(h("hr"));
+    drop.appendChild(kitChips(true));
 
     var menu = h("div", { class: "av-menu" }, [
       h("button", { type: "button", "aria-haspopup": "true", "aria-expanded": "false", onclick: toggleMenu }, ["Tools ▾"]),
@@ -637,6 +770,7 @@
       + ";--deep:" + TRADE.accentDeep + ";--tint:" + TRADE.accentTint + ";}\n";
     document.head.appendChild(style);
     document.body.insertBefore(buildBar(), document.body.firstChild);
+    mountKitBlock();
     // Toolkit is the canonical global; AV stays as an alias so every page the AV
     // toolkit already shipped (which calls AV.today() / AV.toggleFav()) keeps working.
     window.Toolkit = { openWell: openWell, tools: TOOLS, trade: TRADE, trades: TRADES,

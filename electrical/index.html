@@ -77,10 +77,8 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
 .foot a{color:var(--steel);text-decoration:none;border-bottom:1px solid var(--flag);padding-bottom:1px}
 .foot a:hover{color:var(--ink)}
 .foot .sp{flex:1}
-/* the sibling-trade links are injected into one span — display:contents makes
-   its children real flex items so they keep the footer's gap, not stack up as a
-   single run-on word that can push the row wide on a 320px phone. */
-#siblings{display:contents}
+/* #siblings is a MOUNT MARKER, not a styled element — shared/toolkit.js removes it
+   and inserts the kit switcher before this footer. Nothing to style here. */
 @media (prefers-reduced-motion:reduce){.tool{transition:none}}
 </style>
 </head>
@@ -107,6 +105,9 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
   <footer class="foot">
     <span>Electrical Field Toolkit</span>
     <span class="sp"></span>
+    <!-- MOUNT MARKER. The runtime (shared/toolkit.js) replaces this with the kit
+         switcher and places it ABOVE the footer: a grid of 44px chips is not a
+         footer word. Which kits exist, and how a chip looks, both live there. -->
     <span id="siblings"></span>
     <a href="https://github.com/mrdirno/nested-resonance-memory-archive/tree/main/electrical" target="_blank" rel="noopener">Project folder &rarr;</a>
   </footer>
@@ -144,21 +145,8 @@ body{background:var(--zinc);color:var(--ink);font-family:var(--sans);font-size:1
     });
   }
   function render(){ grid.innerHTML = order().map(card).join(""); }
-  /* SIBLING TRADES COME FROM THE RUNTIME, NEVER FROM THIS FILE. Trade #1 and #2
-     each hardcoded a link to the other, so trade #3 meant editing every hub that
-     already shipped — and the hub that forgot was the one nobody could reach the
-     new trade from. shared/toolkit.js owns the list; every hub renders whoever
-     is NOT itself. Trade #4 is one line there and zero here. */
-  function siblings(){
-    var el = document.getElementById("siblings");
-    var all = (window.Toolkit && Toolkit.trades) || [];
-    var me = (window.Toolkit && Toolkit.trade && Toolkit.trade.slug) || "";
-    el.innerHTML = all.filter(function(t){ return t.slug !== me; })
-      .map(function(t){ return '<a href="../'+esc(t.slug)+'/">'+esc(t.name)+' &rarr;</a>'; })
-      .join(" ");
-  }
-  render(); siblings();
-  document.addEventListener("av:ready", function(){ render(); siblings(); });
+  render();
+  document.addEventListener("av:ready", render);
   document.addEventListener("av:favorites", render);
   document.addEventListener("click", function(e){
     var b = (e.target && e.target.closest) ? e.target.closest(".cardfav") : null;
