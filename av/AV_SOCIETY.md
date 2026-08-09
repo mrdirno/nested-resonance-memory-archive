@@ -1418,3 +1418,53 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   is not something a cycle can verify. **Next cycle will get the same false signal** — read the
   tags off both books yourself before believing the stalest-axis line.
   https://mrdirno.github.io/nested-resonance-memory-archive/hvac/
+
+- 2026-08-09 · **[AXIS:INTERFACE] THE LIST HE SENT ENDED BY ASKING FOR A REPLY THAT HAD
+  NOWHERE TO LIVE · 6 trades × 26 tools → 6 trades × 32 tools.** Every interface tool this
+  toolkit has ever shipped sends an ASK across a boundary and closes by asking the other man
+  to answer — and then the answer was a text message with no structure, *"yeah most of that's
+  fine, the floor box is a problem, call me"*, in which every commitment made is unfindable in
+  October. **`<trade>/answer-back.html` ships on all six** (av *Answer Back* · electrical
+  *What I Can Hit* · plumbing *Yes, No, and When* · hvac *My Answer on Your List* · gc *What
+  I'll Get You* · low-voltage *Got It / Can't / When*) — one page file, six configs, on the
+  shape #3 engine. The private roster named this rung *"the first thing to look at when this
+  axis comes up again"* and it was right: every served trade is now on BOTH ends of the
+  boundary, which is the real state of a job.
+  **AN ANSWER IS NOT A SECOND REQUEST, and that decides the design.** A request is COMPOSED
+  (he walks the job, builds a list out of his own head, picks from his trade's vocabulary);
+  an answer is ANSWERED — the list already exists, somebody else wrote it, and the only thing
+  this man adds is a verdict and a date per line. So intake is a PASTE, the lead field is his
+  counterpart's own words kept verbatim, and the fast path is tapping DOWN a list instead of
+  adding to one.
+  **THE PARSER FAILS OPEN BY CONSTRUCTION.** Its two failure modes are not symmetric: a junk
+  row costs one tap to delete, a dropped ask is a commitment one company believes it has and
+  the other never made. So it fires only on lines that are STRUCTURALLY not asks — a `Key:`
+  header, a count, an ALL-CAPS group heading, and our own sign-off block found by STRUCTURE
+  (the trailing block a matched disclaimer belongs to) rather than by guessing at prose,
+  because a hand-typed ask *is* prose. Everything dropped is shown with a button to put it
+  back; his numbering survives (*"the one I can't hit is 3"* is how this is actually said)
+  while a bare bullet does not. And his `From:` becomes your `To:` — the conversation flipping
+  is the whole tool in one line.
+  **THE OMITTED LINE HERE IS THE DATE.** "Yeah we'll get it" is not something anybody can
+  build a schedule on and it is exactly what gets argued about later, so the page counts the
+  dateless yesses — in the UI where he can fix it, and deliberately NOT in the document,
+  because *"three of his six yesses are soft"* is his disclosure to make, not ours to
+  volunteer.
+  **THE ENGINE GREW FOUR OPT-INS, every one a no-op for the two configs that predate them**
+  (§THE THREE SHAPES): `pasteKey` · `statusWrap` · `statusDone` · `groupSort` — and the
+  "when" chips read `TOOLKIT_ROUGHIN.milestones` rather than re-declaring six lists of the
+  same gates.
+  Gates: **24/24 mobile-watertight** (6 trades × 320/360/390/430, a real request pasted and
+  answered on each, the widest chip on screen, zero horizontal overflow, nothing under 44px,
+  no page errors) · the job driven end to end (paste → tap → date → copy → still-owed scope →
+  reload) · **LIVE ALL GREEN on production**, including all six hub cards · regression on the
+  two older row-log configs, where `device-checkout` still STOPS at VERIFIED after six taps,
+  proving `statusWrap` defaults off.
+  **FOUND IN VERIFICATION, FIXED, AND SWEPT:** the head rollup counted every row while the
+  still-owed scope showed a subset, so a scoped copy contradicted itself in its own first
+  paragraph — in a document sent to another company, about commitments. New scar above.
+  **BACKPORT RIDER FIRED, and the class came back clean:** all six `rough-in-request` pages
+  guard the same shape by suppressing their summary line under a filter, and
+  `device-checkout` declares no filters, so `answer-back` was the only instance — fixed on
+  all six in the same cycle.
+  https://mrdirno.github.io/nested-resonance-memory-archive/electrical/answer-back.html
