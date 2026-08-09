@@ -2219,3 +2219,14 @@ frontier. Today's ceiling is tomorrow's floor.
   worktree**, so pre-existing and on the ladder with their repro. `tsc` + `vite build` clean.
   Wisher credited in `credits.json` and ON the size row.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+  **BACKPORT RIDER FIRED. CLEAN ON THE CLASS FIXED — AND IT FOUND A DIFFERENT ONE.** The class
+  is "a control that DECLARES the 44px tap size and RENDERS under it", swept on all six LIVE trade
+  hubs at 390px: **0 of 0 declared-but-shrunk** on av · plumbing · electrical · hvac · gc ·
+  low-voltage, and zero horizontal overflow on all six. But the same sweep measured something the
+  existing gates do not look at: the **cross-trade footer links** ("AV Field Toolkit →",
+  "Plumbing Field Toolkit →", …) are **17px tall on every one of the six hubs** — 7–8 controls per
+  page, under a thumb, on the one control whose entire job is moving a tradesperson between kits.
+  `well-mobile.spec.ts` passes because it is scoped to the wishing well and never sees them. NOT
+  fixed here: it is a layout change to six live footers needing its own 4-width × 6-trade
+  verification, which is an increment, not a rider — filed with its numbers rather than
+  half-landed at the end of a cycle. **NEXT RUNG, and it is a real one.**
