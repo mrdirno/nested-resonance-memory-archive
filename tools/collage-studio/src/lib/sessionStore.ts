@@ -176,6 +176,17 @@ export interface SessionWrite {
  * Commit a snapshot. One transaction over both stores, so the manifest and the
  * bytes it names can never land half-written: an abort leaves the PREVIOUS
  * snapshot whole, which is the only state a recovery feature may fail into.
+ *
+ * AND THE INVARIANT IS CHECKED INSIDE THE TRANSACTION, not assumed from the plan
+ * the caller computed. The caller reads `storedAssetIds()` on one connection and
+ * commits on another, so between those two points a SECOND TAB can have run a
+ * whole flush of its own — dropping this tab's assets as orphans of its pool —
+ * and this tab would then commit a manifest naming bytes that no longer exist.
+ * The next launch offers that session (the metadata read never touches `assets`),
+ * the restore fails closed, and the failure handler CLEARS it: both tabs' work
+ * gone. Re-deriving the key set here, after the writes and deletes, closes the
+ * window — a stale plan aborts and leaves the previous snapshot standing instead
+ * of replacing it with one that cannot load.
  */
 export async function putSession(w: SessionWrite): Promise<void> {
   const db = await openDb();
@@ -188,6 +199,16 @@ export async function putSession(w: SessionWrite): Promise<void> {
       for (const id of w.drop) assets.delete(id);
       const record: SessionRecordV2 = { v: 2, manifest: w.manifest, savedAt: w.savedAt, images: w.images };
       tx.objectStore(SESSION_STORE).put(record, SESSION_KEY);
+      // Reads issued after writes in the same readwrite transaction see those
+      // writes, so this is the post-state, not the plan's guess at it.
+      const named = (w.manifest.images ?? []).map((e) => e.id);
+      const check = assets.getAllKeys();
+      check.onsuccess = () => {
+        const have = new Set((check.result || []).map(String));
+        if (named.some((id) => !have.has(id))) {
+          try { tx.abort(); } catch { /* already going */ }
+        }
+      };
       tx.oncomplete = () => resolve();
       tx.onerror = () => resolve();
       tx.onabort = () => resolve();
@@ -235,7 +256,16 @@ export type LoadedSession =
   /** v2: the manifest plus every image's bytes, ready to hydrate. No unzip. */
   | { kind: 'session'; manifest: { images?: SessionAssetEntry[] } & Record<string, unknown>; assets: Record<string, { full: Blob; preview: Blob | null }> }
   /** v1: a `.collage` archive written by the previous build. */
-  | { kind: 'archive'; blob: Blob };
+  | { kind: 'archive'; blob: Blob }
+  /**
+   * The row is THERE and looks fine; this READ failed — the database would not
+   * open, a transaction aborted, a large value could not be pulled. Distinct
+   * from null on purpose: the caller deletes an unrecoverable session so a dead
+   * offer cannot return forever, and deleting on a transient read error would
+   * turn "try again" into "your work is gone". Reading the whole pool at once,
+   * on a device that just died of memory pressure, is exactly when this happens.
+   */
+  | { kind: 'unreadable' };
 
 /**
  * Pull everything needed for an actual restore. Null if there is nothing, or if
@@ -246,7 +276,9 @@ export type LoadedSession =
  */
 export async function loadSession(): Promise<LoadedSession | null> {
   const db = await openDb();
-  if (!db) return null;
+  // The database would not open — say so, rather than reporting "no session"
+  // and having the caller delete one that is probably sitting right there.
+  if (!db) return { kind: 'unreadable' };
   const rec = await readRecord(db);
   if (!rec) { closeQuietly(db); return null; }
 
@@ -257,29 +289,37 @@ export async function loadSession(): Promise<LoadedSession | null> {
 
   const manifest = rec.manifest as { images?: SessionAssetEntry[] } & Record<string, unknown>;
   const ids = (manifest.images ?? []).map((e) => e.id);
-  const assets = await new Promise<Record<string, { full: Blob; preview: Blob | null }> | null>((resolve) => {
+  const assets = await new Promise<Record<string, { full: Blob; preview: Blob | null }> | null | 'io'>((resolve) => {
     try {
       if (!db.objectStoreNames.contains(SESSION_ASSETS)) { resolve(null); return; }
       const tx = db.transaction(SESSION_ASSETS, 'readonly');
       const store = tx.objectStore(SESSION_ASSETS);
       const out: Record<string, { full: Blob; preview: Blob | null }> = {};
-      let missing = false;
+      // GONE = the row is structurally bad (a named id has no bytes) -> the
+      // session is dead and the caller should forget it. FAILED = the read broke
+      // -> the session may be perfectly fine, so it must survive to be retried.
+      let gone = false, failed = false;
       for (const id of ids) {
         const rq = store.get(id);
         rq.onsuccess = () => {
           const pair = assetToBlobs(rq.result);
-          if (pair) out[id] = pair; else missing = true;
+          if (pair) out[id] = pair;
+          else if (rq.result === undefined) gone = true;
+          else failed = true; // present but unusable — treat as a read problem
         };
-        rq.onerror = () => { missing = true; };
+        // A get that errors also aborts the transaction; either way this is I/O,
+        // not a missing asset.
+        rq.onerror = () => { failed = true; };
       }
-      tx.oncomplete = () => resolve(missing ? null : out);
-      tx.onerror = () => resolve(null);
-      tx.onabort = () => resolve(null);
+      tx.oncomplete = () => resolve(failed ? 'io' : gone ? null : out);
+      tx.onerror = () => resolve('io');
+      tx.onabort = () => resolve('io');
     } catch {
-      resolve(null);
+      resolve('io');
     }
   });
   closeQuietly(db);
+  if (assets === 'io') return { kind: 'unreadable' };
   return assets ? { kind: 'session', manifest, assets } : null;
 }
 

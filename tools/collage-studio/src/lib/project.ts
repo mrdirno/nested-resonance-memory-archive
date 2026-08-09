@@ -136,6 +136,13 @@ const measureSource = (url: string, meta: any): Promise<{ w: number; h: number }
 };
 
 export const loadProject = async (file: File): Promise<{state: AppState, images: ImageAsset[]} | null> => {
+  // Every object URL minted on the way in, so a refusal releases them all. The
+  // archive branch used to `return null` from its catch with every URL it had
+  // minted still live — a whole pool of full-resolution bytes pinned for the
+  // page's life, stranded at the worst possible moment (a failed restore during
+  // OOM recovery). `loadFromSVG` below always did this; this branch did not.
+  const minted: string[] = [];
+  const releaseMinted = () => { for (const u of minted) { try { URL.revokeObjectURL(u); } catch { /* already gone */ } } };
   try {
     // Check if it's an SVG (Smart SVG)
     if (file.type === 'image/svg+xml' || file.name.endsWith('.svg')) {
@@ -158,11 +165,29 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
         // Fallback for legacy files that used 'filename' instead of 'storageFilename'
         const fname = meta.storageFilename || meta.filename;
         const file = imgFolder.file(fname);
-        if (file) {
+        // FAIL CLOSED ON A MANIFEST ENTRY WITH NO MEMBER. This used to be a bare
+        // `if (file)` that silently dropped the entry and returned a SHORT pool —
+        // the exact thing `loadFromSVG` and the session path both refuse, and for
+        // the reason they both state: `arrangeBag` deals from the pool's order and
+        // length, so one missing source re-deals every fragment after it. Worse,
+        // if EVERY member were missing the pool came back empty, the caller
+        // treated that as success, the restore banner was never dismissed, and
+        // the offer came straight back — the reported endless loop, on this exact
+        // branch. A visible refusal beats a plausible picture that is not theirs.
+        if (!file) throw new Error(`archive is missing ${fname}`);
+        {
           const blob = await file.async("blob");
           const url = URL.createObjectURL(blob);
+          minted.push(url);
 
           const { w, h } = await measureSource(url, meta);
+          // A source that will not decode has no size, and an asset with no size
+          // is not a picture: `handleUpload` rejects exactly this on the way in
+          // (`if(!img.width) return null`), and letting one through here meant a
+          // permanent hole in the collage AND — once the session store copied the
+          // manifest forward — a zero-sized entry that restored blank on every
+          // future launch. Same rule on both doors.
+          if (!w || !h) throw new Error(`undecodable source for ${meta.id}`);
 
           // THE THUMBNAIL TIER, when the archive carries one. Archives written
           // before 2026-08-09 have no `previews/`, so `previewSrc` aliases the
@@ -172,7 +197,7 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
           let previewUrl = url;
           const pf = previewFolder?.file(fname);
           if (pf) {
-            try { previewUrl = URL.createObjectURL(await pf.async("blob")); } catch { previewUrl = url; }
+            try { previewUrl = URL.createObjectURL(await pf.async("blob")); minted.push(previewUrl); } catch { previewUrl = url; }
           }
 
           images.push({
@@ -194,9 +219,13 @@ export const loadProject = async (file: File): Promise<{state: AppState, images:
     
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { images: _ignore, ...state } = manifest;
+    // Handed to the caller — the app owns these URLs for the rest of the session.
+    minted.length = 0;
     return { state, images };
-    
+
   } catch (e) {
+    // Nothing partial escapes, and nothing leaks.
+    releaseMinted();
     console.error("Failed to load project", e);
     return null;
   }

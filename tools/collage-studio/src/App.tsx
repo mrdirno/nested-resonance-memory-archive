@@ -1746,10 +1746,12 @@ export default function App() {
       const stored = await sessionStore.storedAssetIds();
       const plan = planAssetWrites(images.map(i => i.id), stored);
       const write: { id: string; asset: sessionStore.StoredAsset }[] = [];
-      let captured = true;
+      // Ids whose bytes this flush could NOT read. They are excluded from the
+      // snapshot rather than blocking it — see below.
+      const uncaptured = new Set<string>();
       for (const id of plan.write) {
         const img = images.find(i => i.id === id);
-        if (!img) { captured = false; continue; }
+        if (!img) { uncaptured.add(id); continue; }
         // `fetch` on a blob: URL is a memory read, not a network hop — but it is
         // still a full copy of the image, which is exactly why it now happens
         // once per asset instead of once per keystroke.
@@ -1777,24 +1779,32 @@ export default function App() {
               previewType: previewBlob ? (previewBlob.type || 'image/jpeg') : null,
             },
           });
-        } catch { captured = false; }
+        } catch { uncaptured.add(id); }
       }
       // THE MANIFEST MUST NEVER NAME BYTES THE STORE DOES NOT HAVE. Restore fails
-      // closed on a missing source and then clears the session — correct on its
-      // own, and a data-loss trap if a flush could write a manifest listing an
-      // asset whose bytes it failed to capture: one transient read error would
-      // poison the snapshot AND take the previous good one with it. So a flush
-      // that could not capture everything writes NOTHING and leaves the last
-      // good snapshot standing, which is the fail-soft contract this store has
-      // always claimed.
-      if (!captured) return;
+      // closed on a missing source and then clears the session, so a manifest
+      // listing an asset whose bytes were never written would poison the snapshot
+      // AND destroy the good one under it.
+      //
+      // The first cut of this guard skipped the whole write instead — and that
+      // was worse, in a way that only shows up on the second flush: `plan.write`
+      // holds exactly the ids the store does not have, so a single asset that
+      // cannot be read is in EVERY subsequent plan, fails every time, and
+      // silently freezes autosave for the rest of the session. The user believes
+      // they are protected; nothing has been saved since it went bad.
+      //
+      // So the snapshot EXCLUDES what it could not capture rather than refusing
+      // to exist. A recovery that is one photograph short is a real recovery;
+      // an autosave that stopped an hour ago without saying so is not.
+      const snapshot = uncaptured.size ? images.filter(i => !uncaptured.has(i.id)) : images;
+      if (snapshot.length === 0) return; // nothing capturable — leave the last good one
       await sessionStore.putSession({
         // ONE manifest shape: the same `AppState` every save writes, plus the
         // per-image metadata. `sessionEntries` carries width/height so restore
         // never has to decode a picture to learn how big it is.
-        manifest: { ...buildStateForSave(), images: sessionEntries(images) },
+        manifest: { ...buildStateForSave(), images: sessionEntries(snapshot) },
         savedAt: Date.now(),
-        images: images.length,
+        images: snapshot.length,
         write,
         drop: plan.drop,
       });
@@ -1917,6 +1927,15 @@ export default function App() {
     try {
       const s = await sessionStore.loadSession();
       if (!s) { await abandonSession('That session could not be read — starting fresh.'); return; }
+      // THE READ BROKE, THE SESSION DID NOT. Keep it: the same memory pressure
+      // that caused the crash is what makes pulling a whole pool back out fail,
+      // and deleting on a transient failure would turn "try again in a moment"
+      // into "your work is gone" at exactly the wrong moment.
+      if (s.kind === 'unreadable') {
+        setRestorePrompt(null);
+        flashNotice('Could not read that session just now — it is still saved. Reload to try again.');
+        return;
+      }
 
       if (s.kind === 'archive') {
         // `loadProject` reads `file.name`; a bare Blob has none, so wrap it. The

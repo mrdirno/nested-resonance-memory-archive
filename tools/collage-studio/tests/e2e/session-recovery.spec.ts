@@ -334,7 +334,17 @@ test.describe('crash-safe session recovery', () => {
     await expect(page.getByText(/pick up where you left off|bringing it back/i))
       .toHaveCount(0, { timeout: 25_000 });
 
-    // And the app is still alive, not wedged behind a promise that never settled:
+    // AND IT SAYS SO. An asset that will not decode has no size, and an asset
+    // with no size is not a picture — the same rule the upload path enforces —
+    // so the load is refused rather than leaving a permanent hole in the collage.
+    await expect(page.getByText(/could not be restored/i)).toBeVisible({ timeout: 10_000 });
+
+    // AND THE DEAD SESSION IS FORGOTTEN. This is the loop-breaker: an offer that
+    // can never load must not return on the next launch, and the next, forever.
+    await page.reload();
+    await expect(page.getByText(/pick up where you left off/i)).toHaveCount(0, { timeout: 10_000 });
+
+    // The app is still alive, not wedged behind a promise that never settled:
     // a fresh import works.
     await page.locator('input[type="file"]').first().setInputFiles([IMG_A]);
     await expect(page.locator('svg g').first()).toBeVisible({ timeout: 60_000 });

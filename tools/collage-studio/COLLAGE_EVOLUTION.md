@@ -2420,3 +2420,39 @@ frontier. Today's ceiling is tomorrow's floor.
   naming bytes the store lacks — restore fails closed and then clears, so a
   poisoned snapshot would have destroyed the good one under it.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C78c · 2026-08-09 · [AXIS:WELL] WHAT THE ADVERSARIAL AUDIT FOUND, INCLUDING MY
+  OWN HOUR-OLD BUG** — cast a subagent at the shipped commit asking only "how does
+  a user LOSE WORK here". Five real findings, all fixed in this pass:
+  **(1) The guard I added an hour earlier was itself a data-loss bug.** "If a flush
+  cannot capture every asset, write nothing" sounds safe and freezes autosave
+  FOREVER — `plan.write` holds exactly the ids the store lacks, so one unreadable
+  asset is in every subsequent plan, fails every time, and silently stops saving
+  for the rest of the session while the user believes they are protected. Now the
+  snapshot EXCLUDES what it could not capture instead of refusing to exist: a
+  recovery one photograph short is a real recovery; an autosave that quietly
+  stopped an hour ago is not. **(2) Two tabs could destroy each other's session.**
+  The plan is computed on one connection and committed on another, so a second
+  tab's flush can drop this tab's assets as orphans in between — leaving a
+  manifest naming bytes that no longer exist, which the next restore fails closed
+  on and then CLEARS. `putSession` now re-derives the key set INSIDE the write
+  transaction and aborts on a stale plan, so the previous good snapshot stands.
+  **(3) A failed READ was treated as a dead session and deleted.** `loadSession`
+  now returns `unreadable` distinctly from "gone", and only a structurally-bad row
+  is forgotten — pulling a whole pool back out is exactly what fails on the device
+  that just died of memory pressure. **(4) The v1 archive branch accepted a SHORT
+  or EMPTY pool**, silently, while the SVG branch and the session path both
+  document why that is forbidden; an empty one never dismissed the banner, so the
+  endless loop was still live on that branch. Fails closed now. **(5) A
+  zero-dimension asset entered the pool** (the hang fix turned a hang into a
+  silently broken asset) and then got copied forward into the v2 manifest, so it
+  restored blank forever. Rejected on both doors now, the same rule `handleUpload`
+  already enforced. Plus the archive branch's `catch` leaked every object URL it
+  had minted. **24 passed / 4 skipped** across all four engines, **123/123**
+  chromium. The audit's clean negatives are on the record too — `putSession`
+  atomicity, `write ∩ drop = ∅`, restore ordering and settings fidelity, and the
+  URL bookkeeping in `handleRestoreSession` — all verified correct.
+  **NOTE FOR A LATER CYCLE (found, not fixed, not mine):** `svg-project` S1/S3/S8
+  fail on Mobile Chrome and Mobile Safari, and fail identically on the pre-fix
+  commit — a pre-existing mobile gap in the SVG round-trip, unrelated to this wish.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
