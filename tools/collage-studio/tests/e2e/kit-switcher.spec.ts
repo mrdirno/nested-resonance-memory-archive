@@ -31,7 +31,7 @@ import { test, expect, type Page } from '@playwright/test';
 // RELATIVE, deliberately. The deployed site lives under a repo path
 // (/nested-resonance-memory-archive/) and a leading slash resolves against the
 // ORIGIN — silently dropping the prefix and 404ing every live run.
-const TRADES = ['av', 'plumbing', 'electrical', 'hvac', 'gc', 'low-voltage'];
+const TRADES = ['av', 'plumbing', 'electrical', 'hvac', 'gc', 'low-voltage', 'framing'];
 // One real tool page per trade — the half of the site that had no route out.
 const TOOLPAGE: Record<string, string> = {
   av: 'consumables.html',
@@ -40,9 +40,20 @@ const TOOLPAGE: Record<string, string> = {
   hvac: 'repair-recommendation.html',
   gc: 'weather-day.html',
   'low-voltage': 'device-checkout.html',
+  // Trade #7's signature tool — the backing ledger, and the ANSWER to the ask
+  // five of the six trades above already send at this crew.
+  framing: 'whats-in-the-wall.html',
 };
 const WIDTHS = [320, 360, 390, 430];
 const MIN_TAP = 44;
+
+/* HOW MANY CHIPS SHOULD BE THERE, derived from TRADES above so that standing up
+ * the next trade is still one line. The HUB renders everyone-who-is-not-me PLUS
+ * the commons; the NAV dropdown renders everyone-who-is-not-me and omits the
+ * commons (`kit:false`), because that menu already carries "What's in the bag"
+ * three rows higher and the same destination twice in one menu is clutter. */
+const NAV_KITS = TRADES.length - 1;
+const HUB_KITS = NAV_KITS + 1; // + the commons
 
 interface HubProbe {
   kits: { t: string; h: number }[];
@@ -98,8 +109,12 @@ for (const trade of TRADES) {
         const r = await probeHub(page);
 
         // Everyone who is not me, including the commons — the footer link row it
-        // replaced listed exactly this set.
-        expect(r.kits.length, 'kits rendered').toBe(6);
+        // replaced listed exactly this set. DERIVED, not a literal: trade #7 was
+        // the first to be added after this gate existed and it turned 35 tests
+        // red on nothing but two hardcoded integers, on a change whose whole
+        // point is that a new trade is one line. A count that has to be edited
+        // every time the thing it counts grows is not a gate, it is a chore.
+        expect(r.kits.length, 'kits rendered').toBe(HUB_KITS);
         expect(r.kits.filter((k) => k.h < MIN_TAP), `kit chips under ${MIN_TAP}px`).toEqual([]);
         // The footer's own links are the same class and were the same 16.7px.
         expect(r.foot.filter((k) => k.h < MIN_TAP), `footer links under ${MIN_TAP}px`).toEqual([]);
@@ -135,9 +150,11 @@ for (const trade of TRADES) {
         };
       });
 
-      // Five: the other trades. The commons is `kit:false` — the menu already
-      // carries "What's in the bag" as its own row three entries above.
-      expect(nav.chips.length, 'kits offered on a tool page').toBe(5);
+      // The other trades, and NOT the commons: it is `kit:false` because the menu
+      // already carries "What's in the bag" as its own row three entries above.
+      // One fewer than the hub for exactly that reason — asserted as a
+      // relationship rather than as two integers somebody has to remember.
+      expect(nav.chips.length, 'kits offered on a tool page').toBe(NAV_KITS);
       expect(nav.chips.filter((c) => c.h < MIN_TAP), `nav chips under ${MIN_TAP}px`).toEqual([]);
       expect(nav.breaks, 'a nav label was broken mid-word').toEqual([]);
       expect(nav.right, 'the menu runs off the right edge').toBeLessThanOrEqual(nav.vw);

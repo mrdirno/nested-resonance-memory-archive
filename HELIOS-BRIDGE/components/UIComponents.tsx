@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat } from 'lucide-react';
+import { Settings, Waves, FlaskConical, Camera, Play, Pause, RotateCcw, Hash, Fingerprint, LayoutGrid, Activity, Eye, Timer, Images, Scissors, ExternalLink, Wrench, Pipette, Zap, Snowflake, Cctv, HardHat, Hammer } from 'lucide-react';
 import { SimulationState, SimulationMode, TranscendentalNumber, CameraTarget } from '../types';
 import { PRIME_NUMBERS } from '../constants';
 import { PRESETS } from '../presets';
@@ -244,6 +244,19 @@ const TOOLS: { name: string; href: string; blurb: string; tag?: string; icon: Re
     tag: 'field',
     blurb: 'Isomorphed to whoever runs the job — the weather day first: you lost the day, so tick what it did, what it stopped and what it cost besides the hours, and send your PM one thing he can answer in a thumb before he writes the letter.',
     icon: <HardHat size={18} />,
+  },
+  {
+    // TRADE #7 — and the FIRST one not on the original five-trade build order.
+    // It was promoted by an INTERFACE EDGE found in the trades already served:
+    // five of the six toolkits above name the framer / drywall crew as the party
+    // they chase for backing, blocking, a wall left clear and an access panel.
+    // The most-requested-of party in the whole program had no toolkit, and every
+    // rough-in-request page we ship was pointing at a man with nothing.
+    name: 'Framing & Drywall Field Toolkit',
+    href: './framing/',
+    tag: 'field',
+    blurb: 'Isomorphed to the crew that closes the wall — the backing ledger first: log what went in, how high and who asked for it as it goes in, then send the come-look message this week and the proof in October, when somebody swears there is nothing behind that rock.',
+    icon: <Hammer size={18} />,
   },
 ];
 

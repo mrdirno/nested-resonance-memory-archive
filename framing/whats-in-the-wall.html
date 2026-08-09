@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What&rsquo;s In The Wall — Framing &amp; Drywall Field Toolkit</title>
+<meta name="description" content="The backing ledger. Log the backing and blocking as it goes in — what it's for, what went in, who asked, how high — then send one message that says what's behind that rock and that anything not on the list isn't in there.">
+<meta name="apple-mobile-web-app-title" content="What's In The Wall">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#242A31">
+<link rel="stylesheet" href="../shared/rowlog.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow" id="eyebrow">Framing &amp; drywall &middot; what went in, before it disappears</span>
+    <h1 id="title">What&rsquo;s In The Wall</h1>
+    <p class="lede" id="lede">Log the backing and blocking as it goes in &mdash; what it&rsquo;s for, what went in, who asked, how high. Then send one message that says what&rsquo;s behind that rock, and that anything not on the list isn&rsquo;t in there.</p>
+  </header>
+
+  <div class="warn" id="warn">
+    <b>These are your numbers.</b> We don&rsquo;t know them and we won&rsquo;t guess &mdash; nothing on this page sets a height, a size, a fastener or a spacing, and nothing here is a code reference or an approved detail. It&rsquo;s a record of what <i>you</i> put in and who asked for it.
+  </div>
+
+  <section class="card">
+    <h2>The job <span class="why">&mdash; typed once, rides on every message</span></h2>
+    <div class="outrow" style="margin-bottom:0">
+      <div><label for="hJob">Job / site</label><input type="text" id="hJob" placeholder="Building C" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hOff">Working off</label><input type="text" id="hOff" placeholder="the sheet and revision &mdash; or their texts" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off"></div>
+      <div><label for="hFrom">You / your company</label><input type="text" id="hFrom" placeholder="your name &mdash; your shop" autocapitalize="words" autocomplete="off"></div>
+      <div><label for="hTel">Your number</label><input type="tel" id="hTel" placeholder="so he can call you at the wall" autocomplete="off"></div>
+    </div>
+    <p class="note" style="margin:9px 0 0" id="offHint">If there is no backing sheet, say so &mdash; &ldquo;off their texts and wall marks&rdquo; is an honest answer and it is the one that matters in October.</p>
+  </section>
+
+  <section class="card">
+    <h2>What went in</h2>
+    <div id="bar"></div>
+    <p class="note" style="margin:10px 0 0">Set the room and the wall once &mdash; they carry. Then it&rsquo;s pick what it&rsquo;s for, pick what you put in, pick who asked, type the height, <b>Add</b>. <b>Tap a row</b> to move it <b>Asked &rarr; In &rarr; Covered</b>; Covered stamps the day the wall closed.</p>
+  </section>
+
+  <section class="card">
+    <h2>The ledger</h2>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Group by</span>
+      <div class="seg" id="segGroup">
+        <button type="button" data-g="who" class="on">Who asked</button>
+        <button type="button" data-g="area">Where</button>
+        <button type="button" data-g="status">Where it&rsquo;s at</button>
+      </div>
+    </div>
+    <div id="tally"></div>
+    <p class="note" id="noheight" style="margin:8px 0 0" hidden></p>
+    <div id="list"></div>
+    <p class="note" style="margin:10px 0 0">The pencil opens a row to fix a height, flag it as held for a size, or delete it. A row flagged <b>Need a size</b> or <b>Need a height</b> is one you can&rsquo;t build yet &mdash; it lands in its own block at the bottom of the message.</p>
+  </section>
+
+  <section class="card">
+    <h2>Send it <span class="why">&mdash; come look now, or prove it in October</span></h2>
+
+    <div class="bararea">
+      <span class="lab" style="margin:0">Send to</span>
+      <div class="seg" id="segWho"></div>
+    </div>
+    <div class="bararea">
+      <span class="lab" style="margin:0">Include</span>
+      <div class="seg" id="segScope">
+        <button type="button" data-f="" class="on">Everything</button>
+        <button type="button" data-f="open" class="">Not covered yet</button>
+        <button type="button" data-f="held">Held for a size</button>
+      </div>
+    </div>
+
+    <div class="outrow">
+      <button type="button" class="btn flag" id="copyBtn">Copy it</button>
+      <button type="button" class="btn ghost" id="tsvBtn">Copy for spreadsheet</button>
+    </div>
+    <p class="note"><b>Not covered yet</b> is the come-look message &mdash; the one that pays this week, while the wall is still open. <b>Everything</b>, scoped to one trade, is the October message: what went in, how high, who asked for it and the day it got covered. The spreadsheet copy is every row with a tab between the columns, and it&rsquo;s also your backup: this lives in this browser on this phone.</p>
+    <pre id="preview"></pre>
+    <div style="margin-top:10px"><button type="button" class="btn ghost" id="clearBtn">Clear the whole ledger</button></div>
+  </section>
+
+  <p class="credit">Built for the Framing &amp; Drywall Field Toolkit. Something in here not how your crew says it, or a row you can&rsquo;t record? <a href="#" id="wishLink">Wish it better</a> &mdash; it gets built and you get the credit.</p>
+
+  <footer class="foot">
+    <span id="footName">Framing &amp; Drywall Field Toolkit</span>
+    <a href="index.html">All tools &rarr;</a>
+    <a href="credits.html">Wall of Wishes &rarr;</a>
+  </footer>
+
+</div>
+
+<script src="trade.js"></script>
+<script src="tools.js"></script>
+<script src="items.js"></script>
+<script src="../shared/toolkit.js"></script>
+<script src="../shared/rowlog.js"></script>
+<script>
+/* WHAT'S IN THE WALL — the backing ledger, and trade #7's signature tool.
+ *
+ * WHY THIS PAGE EXISTS AND WHY IT IS THIS TRADE'S. Five of the six toolkits
+ * shipped before this one send an ask AT this crew: AV wants backing behind a
+ * TV, low-voltage wants head-end plywood, plumbing wants backing for a carrier,
+ * casework wants a continuous run behind the uppers. Those asks arrive five
+ * different ways — a text, a marked print, a guy pointing at a stud — and they
+ * are recorded zero ways. Then the wall closes.
+ *
+ * Every one of those conversations happens TWICE: once in June when he wants it,
+ * and once in October when he swears it was never put in. In October the man
+ * with the list wins. This is the list, and it is the first time the ANSWER to
+ * the cross-boundary ask has had anywhere to live.
+ *
+ * Its only real competitor is a can of keel on the stud, which takes two seconds
+ * and loses for exactly one reason: the keel gets covered and the list doesn't.
+ *
+ * IT IS A CONFIG ON SHAPE #3. shared/rowlog.js owns the state, the grouping, the
+ * persistence, the document assembly and the copy; shared/rowlog.css owns every
+ * pixel; this file owns the WORDS and the two documents. The vocabulary is in
+ * items.js and the gates are the ones the request page already ships, so the ask
+ * and its record cannot drift apart.
+ *
+ * THE HEIGHT FIELD IS NAKED ON PURPOSE (§SAFETY). No chips, no options, no
+ * example, no greyed number. A seeded "48" here is a mounting-height
+ * recommendation published by people who have never seen the wall, and it would
+ * be buried behind rock before anybody caught it. He types his numbers or the
+ * field stays empty, and the page says so out loud in its own warn block.
+ *
+ * NOTHING IS COMPUTED. No takeoff, no sheets-needed, no percent complete. A
+ * count of rows he entered is a count; a quantity we asserted is a shortage
+ * somebody bought.
+ */
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var TRADE = window.TOOLKIT_TRADE || {};
+  var B = window.TOOLKIT_BACKING || {};
+  /* The gates are the trade's own and they already exist: the request page ships
+     them. Re-declaring them here would be two lists to keep in step, and one of
+     them would rot. */
+  var MILES = (window.TOOLKIT_ROUGHIN && window.TOOLKIT_ROUGHIN.milestones) || [];
+  var WHO = (B.asked_by || []).map(function (w) { return { v: w, label: w }; });
+  var STATUS = B.status || ["Asked", "In", "Covered"];
+  var KEY = "toolkit." + (TRADE.slug || "framing") + ".backing.v1";
+
+  function joinDots(parts) { return parts.filter(function (x) { return x != null && String(x).trim() !== ""; }).join(" · "); }
+  function joinDash(parts) { return parts.filter(function (x) { return x && String(x).trim(); }).join(" — "); }
+
+  /* Page copy comes from the trade's vocabulary file, exactly like every other
+     config on this engine — so a trade that adopts this page later changes words
+     and not code. */
+  if (B.toolName) {
+    $("#title").textContent = B.toolName;
+    document.title = B.toolName + " — " + (TRADE.name || "Field Toolkit");
+  }
+  if (B.lede) $("#lede").textContent = B.lede;
+  if (B.eyebrow) $("#eyebrow").textContent = B.eyebrow;
+  if (B.warn) $("#warn").innerHTML = B.warn;
+  if (B.phJob) $("#hJob").placeholder = B.phJob;
+  if (B.phOff) $("#hOff").placeholder = B.phOff;
+  if (B.phFrom) $("#hFrom").placeholder = B.phFrom;
+  if (TRADE.name) $("#footName").textContent = TRADE.name;
+
+  /* ── the receiver ─────────────────────────────────────────────────────────
+     Only the trades actually ON the ledger get a button. Six receiver buttons
+     when he has rows for two is six ways to send the wrong man the wrong list. */
+  var sendTo = "";
+  /* THE ENGINE RENDERS ONCE INSIDE mount(), WHICH IS BEFORE `rl` EXISTS, and
+     docHead / onChange / the tally all run in that first render. Reading `rl`
+     there throws and the page ships looking perfect with every word this file
+     owns dead (§SCARS). Everything that touches rows goes through here. */
+  function rowsNow() { return rl ? rl.rows() : []; }
+  function receiversOnList() {
+    var seen = {}, out = [];
+    rowsNow().forEach(function (r) { if (r.values.who) seen[r.values.who] = 1; });
+    WHO.forEach(function (w) { if (seen[w.v]) out.push(w); });
+    return out;
+  }
+  function paintSendTo() {
+    var box = $("#segWho"); if (!box) return;
+    var list = receiversOnList();
+    if (sendTo && !list.filter(function (w) { return w.v === sendTo; }).length) sendTo = "";
+    box.innerHTML = '<button type="button" data-w="" class="' + (sendTo ? "" : "on") + '">Everyone</button>'
+      + list.map(function (w) {
+        return '<button type="button" data-w="' + w.v + '"' + (sendTo === w.v ? ' class="on"' : "") + ">" + w.label + "</button>";
+      }).join("");
+    box.parentNode.style.display = list.length > 1 ? "" : "none";
+  }
+  function receiverLabel() {
+    if (sendTo) return sendTo;
+    var list = receiversOnList();
+    return list.length === 1 ? list[0].label : "";   // one receiver = address him anyway
+  }
+  function applyFilters() {
+    var f = [];
+    if (sendTo) f.push("who:" + sendTo);
+    var s = $("#segScope").querySelector("button.on");
+    if (s && s.getAttribute("data-f")) f.push(s.getAttribute("data-f"));
+    rl.setFilter(f);
+  }
+
+  /* ONE PREDICATE, TWO READERS. The scope filter hides rows from the BODY and
+     the head counts rows for the SUMMARY; when those disagree the document
+     contradicts itself in its own first line. So "still open" is written once
+     and both of them ask it. */
+  function stillOpen(v) { return v.status !== "Covered"; }
+  function isHeld(v, r) { return !!(r && r.flag); }
+
+  var rl = RowLog.mount({
+    bar: "#bar", list: "#list", tally: "#tally", preview: "#preview",
+    copyBtn: "#copyBtn", tsvBtn: "#tsvBtn",
+    persistKey: KEY,
+    noun: "piece", nounPlural: "pieces", groupNoun: "block", groupNounPlural: "blocks",
+    ungroupedLabel: "NOBODY NAMED",
+    emptyText: "Nothing logged yet. Walk the wall and put in the first piece — what it's for, what you put in, who asked for it.",
+
+    /* THE LADDER DOES NOT WRAP. A covered wall does not go back to asked, and
+       COVERED is the rung the whole ledger exists to reach — it is the day the
+       wall closed, which is the only date anybody argues about later. */
+    statusKey: "status", statusOrder: STATUS, statusDone: "Covered",
+    flagKey: "flag", flagValues: B.flags || ["Need a size", "Need a height"],
+
+    groupOptions: [
+      { key: "who", label: "Who asked" },
+      { key: "area", label: "Where" },
+      { key: "status", label: "Where it's at" }
+    ],
+
+    /* THE BLOCKS READ IN LADDER ORDER when grouped by status — asked, in,
+       covered — so the same ledger never arrives arranged differently depending
+       on which row he happened to tap first. */
+    groupSort: function (a, b, key) {
+      if (key !== "status") return 0;
+      var ia = STATUS.indexOf(a), ib = STATUS.indexOf(b);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    },
+
+    /* TWO INDEPENDENT SCOPES ON ONE LEDGER, and needing both at once is the
+       normal case: "not covered yet, for the AV guy" is Thursday's message. */
+    filters: [{
+      v: "open", label: "not covered yet",
+      emptyText: "Every piece on this ledger is covered. Nothing left open on this wall.",
+      test: function (v) { return stillOpen(v); }
+    }, {
+      v: "held", label: "held for a size or a height",
+      emptyText: "Nothing held — everything on here has what it needs to go in.",
+      test: function (v, r) { return isHeld(v, r); }
+    }].concat(WHO.map(function (w) {
+      return { v: "who:" + w.v, label: "for " + w.label, test: function (v) { return v.who === w.v; } };
+    })),
+
+    fields: [
+      { key: "what", label: "What it's for", input: "select", lead: true, required: true,
+        placeholder: "— what's going on it" },
+      { key: "went", label: "What you put in", input: "learn", wide: true,
+        placeholder: "or type your own",
+        emptyHint: "Pick one or type what you actually put in — it becomes a button." },
+      { key: "who", label: "Who asked", input: "chips", sticky: true, wide: true },
+      { key: "area", label: "Room / area", input: "learn", sticky: true,
+        placeholder: "Rm 314 — then it's a button",
+        emptyHint: "Type the room the way your crew says it. It becomes a button." },
+      { key: "wall", label: "Which wall / side", input: "learn", sticky: true, wide: true,
+        placeholder: "north wall, corridor side",
+        emptyHint: "Which wall and which face. It becomes a button." },
+      /* NAKED BY DESIGN. No options, no example, no greyed number — see the
+         header. The label says which direction to read it and nothing else. */
+      { key: "high", label: "How high off the floor", input: "text",
+        placeholder: "bottom to top — your numbers" },
+      { key: "size", label: "How wide / how long", input: "text",
+        placeholder: "as you put it in" },
+      { key: "how", label: "How they asked", input: "chips", wide: true },
+      { key: "by", label: "Has to beat", input: "chips", sticky: true, wide: true },
+      { key: "status", label: "Where it's at", input: "chips" },
+      { key: "note", label: "Note", input: "text", wide: true,
+        placeholder: "anything the next man needs to find it" }
+    ],
+
+    optionsFor: function (key, cur, learned) {
+      if (key === "what") return B.purpose || [];
+      if (key === "who") return (B.asked_by || []);
+      if (key === "how") return (B.how_asked || []);
+      if (key === "status") return STATUS;
+      if (key === "by") return MILES.map(function (m) { return m.label; });
+      if (key === "went") {
+        var out = (B.went_in || []).slice();
+        (learned || []).forEach(function (v) { if (out.indexOf(v) === -1) out.push(v); });
+        return out;
+      }
+      return null;
+    },
+
+    rowMain: function (v) { return joinDots([v.what, v.went]) || "(nothing on this row)"; },
+    rowSub: function (v) { return joinDots([v.area, v.wall, v.high, v.size, v.who, v.note]); },
+
+    /* ── the document ──────────────────────────────────────────────────────
+       LINE 1 IS AN INBOX SEARCH KEY and it names the JOB first, exactly like the
+       request this answers — so the ask and its record surface together when
+       somebody searches "Building C" in October. */
+    docHead: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      var from = $("#hFrom").value.trim(), tel = $("#hTel").value.trim();
+      var to = receiverLabel();
+      var subject = to
+        ? (B.docSubjectWith || "backing in — {to}").replace("{to}", to)
+        : (B.docSubject || "backing and blocking — what's in the wall");
+      var out = [joinDash([job, subject, c.today])];
+      out.push("");
+      if (job) out.push("Job: " + job);
+      if (to) out.push("To: " + to);
+      if (from) out.push("From: " + from + (tel ? " · " + tel : ""));
+      else if (tel) out.push("Call me: " + tel);
+      if (off) out.push("Working off " + off);
+      out.push("");
+
+      var line = c.shown + (c.shown === 1 ? " piece" : " pieces");
+      if (c.shown !== c.total) line += " of " + c.total;
+      if (c.filterLabel) line += " — " + c.filterLabel;
+
+      /* THE TALLY IS BY REQUESTER, counted over the rows this copy actually
+         CONTAINS — never over the whole ledger, or the header contradicts the
+         body it sits on top of. Dropped entirely once he has scoped to one
+         trade: "AV 6" above a list of six AV rows is noise. */
+      var src = rowsNow().filter(function (r) {
+        if (sendTo && r.values.who !== sendTo) return false;
+        if (c.filters.indexOf("open") > -1 && !stillOpen(r.values)) return false;
+        if (c.filters.indexOf("held") > -1 && !isHeld(r.values, r)) return false;
+        return true;
+      });
+      if (!sendTo) {
+        var seen = {};
+        src.forEach(function (r) { var v = r.values.who; if (v) seen[v] = (seen[v] || 0) + 1; });
+        var roll = WHO.filter(function (w) { return seen[w.v]; })
+          .map(function (w) { return w.label + " " + seen[w.v]; });
+        if (roll.length) line += " — " + roll.join(" · ");
+      }
+      out.push(line.toUpperCase());
+      return out.join("\n");
+    },
+
+    /* ONE LINE PER ROW, and it reads the way a man says it out loud: where it is,
+       what it's for, what went in, how high, who asked, and when it got covered.
+       The axis the list is grouped by is dropped from the line because it is
+       already the heading. */
+    docRow: function (v, r) {
+      var g = rl ? rl.group() : "who";
+      var where = joinDots([g === "area" ? null : v.area, v.wall]);
+      var what = joinDots([v.what, v.went, v.size]);
+      var tail = [];
+      /* HIS NUMBER, VERBATIM, and the label never repeats what he already said.
+         MEASURED by the ship gate: a man who types "48 to 84 off the floor" into
+         a field labelled "how high off the floor" was getting
+         "48 to 84 off the floor off the floor" in the document. On any other
+         field that is a cosmetic wart; on the height it is the page editing the
+         one value it swore it would not touch (§SAFETY). So the doc labels the
+         number and never appends to it — and skips the label when his own words
+         already carry it. */
+      if (v.high) {
+        tail.push(/\bheight\b|off the floor|\bAFF\b/i.test(v.high) ? v.high : "height " + v.high);
+      }
+      /* "asked text" is not English and "asked by on the walk" is worse — the
+         how-values are a mix of nouns and phrases, so the seam is a colon. */
+      if (g !== "who" && v.who) tail.push("asked by " + v.who + (v.how ? " (" + v.how.toLowerCase() + ")" : ""));
+      else if (v.how) tail.push("asked: " + v.how.toLowerCase());
+      if (g !== "status" && v.status) tail.push(v.status.toLowerCase());
+      if (v.by) tail.push(v.by.toLowerCase());
+      if (v.note) tail.push(v.note);
+      return joinDash([joinDots([where, what]), joinDots(tail)]);
+    },
+    docFlagRow: function (v, r) {
+      return joinDots([r.flag, v.area, v.wall, v.what, v.who ? "asked by " + v.who : null, v.by]);
+    },
+
+    /* THE CLOSING ASK IS THE POINT (§THE THREE SHAPES): a document the receiver
+       cannot reply to is a document he files. Then the sentence that makes the
+       ledger worth keeping — everything NOT on it is not in that wall — and the
+       boundary line, because a record of what we built is not an agreement to
+       build more. */
+    docFoot: function () {
+      var held = rowsNow().filter(function (r) {
+        return r.flag && (!sendTo || r.values.who === sendTo);
+      });
+      var out = [];
+      if (held.length) {
+        out.push("STILL NEED FROM YOU — I can't put these in until somebody gives me a number:");
+        held.forEach(function (r) {
+          var v = r.values;
+          out.push("  · " + joinDots([v.area, v.wall, v.what]) + " — " + r.flag
+            + (v.by ? " · " + v.by.toLowerCase() : ""));
+        });
+        out.push("");
+      }
+      out.push(B.closing || "Walk it with me before we close it. After we rock it, it's a cut-in and a patch.");
+      out.push("This is what went in and who asked for it. If it isn't on this list it isn't in that wall. No price on it, it isn't a change order, and it doesn't rate, size or approve anything — the heights and sizes here are the ones I was given.");
+      return out.join("\n");
+    },
+
+    tsvPreamble: function (c) {
+      var job = $("#hJob").value.trim(), off = $("#hOff").value.trim();
+      return (job ? job + " — " : "") + "backing and blocking log, " + c.total
+        + " pieces, " + c.today + (off ? ", working off " + off : "")
+        + " — recorded by hand as it went in. No price on it, nothing rated or sized by the page.";
+    },
+    tsvColumns: [
+      { label: "Room / area", key: "area" },
+      { label: "Wall / side", key: "wall" },
+      { label: "What it's for", key: "what" },
+      { label: "What went in", key: "went" },
+      { label: "How wide / long", key: "size" },
+      { label: "How high off the floor", key: "high" },
+      { label: "Who asked", key: "who" },
+      { label: "How they asked", key: "how" },
+      { label: "Has to beat", key: "by" },
+      { label: "Where it's at", key: "status" },
+      { label: "Held for", value: function (v, r) { return r.flag || ""; } },
+      { label: "Note", key: "note" }
+    ],
+
+    persistExtra: function () {
+      var j = $("#hJob").value.trim(), o = $("#hOff").value.trim();
+      var f = $("#hFrom").value.trim(), t = $("#hTel").value.trim();
+      return (j || o || f || t) ? { job: j, off: o, from: f, tel: t, sendTo: sendTo } : null;
+    },
+    onRestoreExtra: function (x) {
+      if (!x) return;
+      $("#hJob").value = x.job || ""; $("#hOff").value = x.off || "";
+      $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
+      sendTo = x.sendTo || "";
+    },
+    onChange: function () { paintSendTo(); paintNoHeight(); }
+  });
+
+  /* THE LINE EVERYONE LEAVES OUT OF A BACKING RECORD IS THE HEIGHT. "Backing's
+     in" is not a record anybody can find a piece of wood with, and the height is
+     precisely what the man who asked for it will need in October. So the page
+     counts the rows that went IN with no height on them and says so — in the UI
+     where he can fix it, and NOT in the document, because publishing "4 of these
+     have no height" invites the receiver to argue the record instead of walking
+     the wall. */
+  function paintNoHeight() {
+    var el = $("#noheight"); if (!el || !rl) return;
+    var n = rl.rows().filter(function (r) {
+      return r.values.status && r.values.status !== "Asked" && !String(r.values.high || "").trim();
+    }).length;
+    el.hidden = !n;
+    if (n) el.innerHTML = "<b>" + n + " piece" + (n === 1 ? "" : "s") + " in with no height on "
+      + (n === 1 ? "it" : "them") + ".</b> That's the number he'll ask you for in October — open the pencil and put it on while the wall is still open.";
+  }
+
+  /* The learn axes borrow the identifier's keyboard attributes, which exist so a
+     phone cannot destroy a device tag. "north wall, corridor side" is not a
+     device tag and it does not want to arrive as NORTH WALL, CORRIDOR SIDE. */
+  ["wall", "went"].forEach(function (k) {
+    var el = document.querySelector('[data-learn="' + k + '"]');
+    if (!el) return;
+    el.setAttribute("autocapitalize", "sentences");
+    el.setAttribute("autocorrect", "on");
+    el.removeAttribute("spellcheck");
+  });
+
+  $("#segGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    rl.setGroup(b.getAttribute("data-g"));
+  });
+  $("#segScope").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-f]"); if (!b) return;
+    [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("on", x === b); });
+    applyFilters();
+  });
+  $("#segWho").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-w]"); if (!b) return;
+    sendTo = b.getAttribute("data-w") || "";
+    paintSendTo();
+    applyFilters();
+    rl.schedulePersist();
+  });
+
+  $("#clearBtn").addEventListener("click", function () {
+    var b = this;
+    if (b.getAttribute("data-armed") !== "1") {
+      b.setAttribute("data-armed", "1");
+      b.setAttribute("data-label", b.textContent);
+      b.textContent = "Tap again to wipe it";
+      setTimeout(function () {
+        if (b.getAttribute("data-armed") === "1") { b.removeAttribute("data-armed"); b.textContent = b.getAttribute("data-label"); }
+      }, 4000);
+      return;
+    }
+    b.removeAttribute("data-armed");
+    b.textContent = b.getAttribute("data-label");
+    ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (s) { $(s).value = ""; });
+    sendTo = "";
+    rl.clearAll();
+    paintSendTo();
+  });
+
+  ["#hJob", "#hOff", "#hFrom", "#hTel"].forEach(function (s) {
+    $(s).addEventListener("input", function () { rl.schedulePersist(); rl.render(); });
+  });
+
+  $("#wishLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.Toolkit && Toolkit.openWell) Toolkit.openWell();
+  });
+
+  rl.restore();
+  paintSendTo();
+  applyFilters();
+  paintNoHeight();
+})();
+</script>
+</body>
+</html>
