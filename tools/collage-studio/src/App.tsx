@@ -1746,9 +1746,10 @@ export default function App() {
       const stored = await sessionStore.storedAssetIds();
       const plan = planAssetWrites(images.map(i => i.id), stored);
       const write: { id: string; asset: sessionStore.StoredAsset }[] = [];
+      let captured = true;
       for (const id of plan.write) {
         const img = images.find(i => i.id === id);
-        if (!img) continue;
+        if (!img) { captured = false; continue; }
         // `fetch` on a blob: URL is a memory read, not a network hop — but it is
         // still a full copy of the image, which is exactly why it now happens
         // once per asset instead of once per keystroke.
@@ -1764,8 +1765,17 @@ export default function App() {
             ? await (await fetch(img.previewSrc)).blob()
             : null;
           write.push({ id, asset: { full, preview } });
-        } catch { /* that asset stays as-is */ }
+        } catch { captured = false; }
       }
+      // THE MANIFEST MUST NEVER NAME BYTES THE STORE DOES NOT HAVE. Restore fails
+      // closed on a missing source and then clears the session — correct on its
+      // own, and a data-loss trap if a flush could write a manifest listing an
+      // asset whose bytes it failed to capture: one transient read error would
+      // poison the snapshot AND take the previous good one with it. So a flush
+      // that could not capture everything writes NOTHING and leaves the last
+      // good snapshot standing, which is the fail-soft contract this store has
+      // always claimed.
+      if (!captured) return;
       await sessionStore.putSession({
         // ONE manifest shape: the same `AppState` every save writes, plus the
         // per-image metadata. `sessionEntries` carries width/height so restore
