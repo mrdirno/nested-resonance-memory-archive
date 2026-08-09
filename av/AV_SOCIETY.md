@@ -1583,3 +1583,16 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   would have shipped a dead runtime on **all 32 pages of all 7 trades**, and every one of them
   would still have returned 200.
   https://mrdirno.github.io/nested-resonance-memory-archive/electrical/
+
+- 2026-08-09 · **[AXIS:WELL] THE WALL OF WISHES CAME OFF THE NAV AND INTO THE WELL ·
+  every non-trade surface now shows who wished it.** A Collage wisher asked to see "who wished it"
+  inside the modal, "consistent cross apps." Trades already show it at `<trade>/credits.html` from
+  the nav; `shared/feedback.js` — the well Collage and the commons carry, which has no nav — did
+  not. It now renders an in-modal **Wall of Wishes** from the surface's own `credits.json`: one
+  edit to the shared well lit up every non-trade surface at once, and it stays private-safe by only
+  ever printing the already-anonymised credit name (unifying the trade `tool_name`/`wisher` and
+  collage `capability`/`wisher_display` dialects in one renderer). The link self-reveals only when
+  a ledger with ≥1 credit loads, so a surface without one simply never shows it. Verified live with
+  Playwright at 320/360/390/430; all 7 trades' `credits.html` re-checked live → 200. Full write-up
+  in the collage book.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/

@@ -2270,3 +2270,29 @@ frontier. Today's ceiling is tomorrow's floor.
   (id `4124be76`) — show the wisher credit inside the well modal — and last cycle's 17px
   cross-trade footer links.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- 2026-08-09 · **[AXIS:WELL] THE WISHERS WERE CREDITED IN A LEDGER NOBODY COULD SEE ·
+  now the well shows them, in the modal, on every surface it touches.** Wished straight into the
+  Collage well (anonymous): "display who wished it better somewhere in this modal … stay consistent
+  cross apps." The trade toolkits already showed this at `<trade>/credits.html` from their nav;
+  Collage is a React app with no such nav, so the five capabilities its users had wished into it
+  lived in a `credits.json` nothing rendered.
+  **THE FIX IS IN THE ONE SHARED WELL, NOT THIS APP.** An in-modal **Wall of Wishes** landed in
+  `shared/feedback.js`, so Collage, the commons, and every future non-trade surface got it in a
+  SINGLE edit while the trades keep their `credits.html` — every surface the program ships now
+  shows who wished it. A "★ Wall of Wishes" link appears under the form ONLY when the surface's
+  ledger loads with ≥1 credit; it fetches that surface's own `credits.json` (relative, so
+  `/collage/` loads `/collage/credits.json`), unifies the two ledger dialects in one renderer
+  (trade `tool_name`/`wisher`, collage `capability`/`wisher_display`), and only ever prints the
+  already-anonymised name — nothing can leak a requester.
+  **DEPLOY:** the Collage ledger moved to `public/credits.json` so vite ships it to
+  `/collage/credits.json`, now asserted in `deploy_bridge.yml` (fail-closed vs a silent 404).
+  **VERIFIED AT THE LIVE ARTIFACT.** Playwright against the DEPLOYED site at **320/360/390/430**:
+  zero horizontal overflow in BOTH the form and the wall, every new control ≥44px, six rows
+  newest-first, head swaps to "Wall of Wishes" and Back restores the form, "wished by an anonymous
+  Collage user", no PII. `tsc` clean, `vite build` clean, `node --check` on the runtime clean.
+  Closes the NEXT RUNG the autosave cycle named (wish `4124be76`).
+  **BACKPORT RIDER — SWEPT, ALL GREEN.** All 7 trades' `credits.html` re-fetched live → 200; the
+  wall they already had is intact. Extraction ran the OTHER way this cycle — the trades' proven
+  credits pattern carried INTO the shared well for the surfaces that lacked it.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
