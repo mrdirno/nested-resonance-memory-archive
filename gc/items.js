@@ -580,3 +580,23 @@ window.TOOLKIT_ROUGHIN = {
     ] }
   ]
 };
+
+
+/* THE RETURN LEG (answer-back.html) — the reply to somebody else's cross-boundary
+ * request. The ENGINE is shared/rowlog.js and the PAGE owns the mechanics; this
+ * block is only the words this trade says, plus the four placeholders that make
+ * the example on screen look like this trade's own job.
+ *
+ * The gates it offers for "when" are NOT here on purpose: they are
+ * TOOLKIT_ROUGHIN.milestones above, and one list that two tools read cannot
+ * drift out of step with itself.
+ */
+window.TOOLKIT_ANSWER = {
+  toolName: "What I’ll Get You",
+  eyebrow: "GC · your subs → you → back",
+  lede: "Your subs send you lists all day — access, cores, backing, power, dates. Line one up, say what you’ll get them and when, and answer the whole thing in one message.",
+  docSubject: "what I’ll get you off your list",
+  closing: "That’s what I’ll get you and when. Anything under CAN’T or NEED TO KNOW, bring it to the morning huddle and we’ll sort it there instead of trading texts all week.",
+  phJob: "Building C", phTo: "Sal — Local 38", phFrom: "Ken — site super", phOff: "P-201 rev 2",
+  paste: "Building C — holes and backing — Aug 9\n\nJob: Building C\nFrom: Sal — Local 38\n\nLevel 2 · core through the deck at gridline D before we set carriers\nRestroom 210 · backing in the wet wall before rock\nSite · after-hours access Saturday for the tie-in"
+};

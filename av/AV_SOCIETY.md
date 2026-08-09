@@ -376,10 +376,29 @@ so an ask can offer the sizes anybody would pick for it *merged with the ones he
 himself* · and a **scoped flagged block**, so the receiver filter reaches the part of the
 document that used to ignore it.
 
+**AT THE THIRD INSTANCE (`answer-back`, 2026-08-09) IT GREW FOUR MORE, same rule: every
+one defaults to exactly what the first two instances already shipped.** ·
+**`pasteKey`** — which field a bulk-pasted line lands in. Bulk paste was built for a column
+of device tags so it wrote into the IDENTIFIER field, the only field a tag could be; a
+reply pastes somebody else's PROSE and must never inherit the identifier's
+uppercase-and-+1 keyboard. · **`statusWrap`** — the tap ladder cycles back to blank instead
+of stopping at the top. The stop is right for a PROGRESS ladder (committed → in), where an
+accidental second tap would destroy a fact somebody walked out and verified; it is wrong
+for an ANSWER ladder, where the wrong rung is not progress lost but a wrong answer, and
+making him open the pencil sheet to correct one tap is §THE GATE failing on its own
+control. · **`statusDone`** — which rung wears the settled green edge, because on an answer
+ladder that rung sits in the middle and the LAST one is a question still waiting on
+somebody. · **`groupSort`** — a stated block order. Insertion order is fine for a log a man
+keeps for himself and wrong for a DOCUMENT that crosses to another company, where *here is
+what you're getting / here is what you're not* must read the same way every time.
+
 Keep the boundary or the config rots: `trade.js` = IDENTITY + COPY · `tools.js` =
 REGISTRY · `items.js` = that trade's VOCABULARY DATA (categories, size ladders, config
 options, unit-of-issue sets). Size ladders and C×C/FIP/no-hub live in data — never in the
-identity config and never inline in a tool page.
+identity config and never inline in a tool page. **And a second tool may READ the first
+tool's data rather than re-declare it:** `answer-back` offers its "when" chips off
+`TOOLKIT_ROUGHIN.milestones`, because two lists of the same trade's gates is one list that
+rots.
 
 ## FEEDBACK IS BUILT IN — the standard for everything we make (operator 2026-08-04)
 > *"there's a lot of bugs still and people should be able to send the feedback so the
@@ -546,6 +565,43 @@ pipe.**
 **AND ONE RULE THE TRADES WROTE FOR US:** *"If I spec his material I own his warranty."*
 That is the same instinct as §SAFETY arriving from the field instead of from us — which is
 the strongest confirmation this doctrine has had.
+
+### THE RETURN LEG — the half of every boundary nobody builds (added 2026-08-09)
+The cross-boundary request has a **third** structural property, and it took a shipped tool
+to see it: **it ends by asking for a reply that has nowhere to live.** Every request
+document this toolkit produces closes with a line like *"anything on here you can't hit,
+call me before you cover it"* — and then the reply is a text message with no structure,
+*"yeah most of that's fine, the floor box is a problem, call me"*, in which every
+commitment made is unfindable three months later when it matters.
+
+**AN ANSWER IS NOT A SECOND REQUEST, and the difference decides the whole design.** A
+request is COMPOSED: he walks the job and builds a list out of his own head, so intake is a
+picker over his trade's vocabulary. An answer is ANSWERED: the list already exists,
+somebody else wrote it, and the only thing this man adds is a verdict and a date per line.
+So intake is a **paste**, the lead field is **his counterpart's own words kept verbatim**,
+and the fast path is **tapping down a list** instead of adding to one.
+
+**THREE RULES THAT ARE NOT OBVIOUS UNTIL YOU BUILD IT:**
+1. **NEVER RE-PHRASE HIS ASK.** The moment the reply says something different from the
+   request, the two documents stop being about the same items and cannot be laid beside
+   each other. His line is stored untouched — which is why the row-log engine grew a
+   nameable paste target rather than dropping his prose into the identifier axis that
+   uppercases and +1s device tags.
+2. **THE PARSER FAILS OPEN, ALWAYS.** An intake that guesses which pasted lines are asks
+   has two failure modes and they are not symmetric: a junk row costs one tap to delete, a
+   dropped ask is a commitment one company believes it has and the other never made. So
+   the rules fire only on lines that are STRUCTURALLY not asks — a `Key:` header, a count,
+   an ALL-CAPS group heading, our own sign-off block — never on prose, because a hand-typed
+   ask *is* prose. Everything dropped is shown, with a button to put it back.
+3. **THE LINE EVERYONE LEAVES OUT OF A REPLY IS THE DATE.** "Yeah we'll get it" is not
+   something anybody can build a schedule on, and it is exactly what gets argued about
+   later. So the page counts the dateless yesses and says so — in the UI where he can fix
+   it, and deliberately NOT in the document, because publishing *"three of his six yesses
+   are soft"* is his disclosure to make and not ours to volunteer.
+
+**THE MIRROR IS NOW COMPLETE ON EVERY SERVED TRADE:** each one both asks (`rough-in-request`
+and its six names) and answers (`answer-back`), because on a real job every trade is on both
+ends of the boundary on the same day.
 
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
@@ -880,6 +936,23 @@ ppm number and a cause the tech never diagnosed). Not one of those was visible f
 reading the first pass. **Rule:** persona proposes, generic disposes — and on this lane the
 skeptic's kill list is the deliverable, not the loss. A section HEADING can violate
 §SAFETY all by itself, before a single word of content exists.
+
+### 2026-08-09 — THE SUMMARY COUNTED ROWS THE DOCUMENT DID NOT CONTAIN
+`answer-back` heads its document with a rollup — *"4 lines — 1 will do · 1 in already · 1
+can't · 1 need to know"* — and offers a **still owed** scope that drops the done and the
+refused from the body. The rollup was built from `statusCounts()`, which counts EVERY row.
+So the scoped copy went out reading *"1 in already · 1 can't"* directly above a list that
+deliberately contained neither: a document that contradicts itself in its own first
+paragraph, sent to another company, about commitments. Found by driving the real page and
+reading what came out, not by reading the code — the code looks correct at both ends,
+because each end is.
+**Rule:** when a config has both a SCOPE and a SUMMARY, the summary is computed over the
+scoped set, and the predicate that defines the scope is written ONCE and asked by both.
+The first instance (`rough-in-request`) got away with it by SUPPRESSING its "still open"
+line whenever a filter is active — a legitimate answer, and the reason the class did not
+surface until a page wanted the rollup in both states. **Swept the same cycle:** all six
+`rough-in-request` pages are filter-guarded, `device-checkout` declares no filters, so
+`answer-back` was the only instance and it is fixed on all six.
 
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is

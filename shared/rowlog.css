@@ -110,6 +110,13 @@ details.more>summary::before{content:"▸";display:inline-block;transition:trans
 details.more[open]>summary::before{transform:rotate(90deg)}
 #carrySum{font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--muted);font-size:12px;min-width:0;overflow-wrap:anywhere}
 
+/* A quieter second block of plain text — what an intake skipped out of a paste.
+   It MUST wrap: a pasted line is arbitrarily long, and a <pre> at its default
+   `white-space:pre` scrolls the entire page sideways on a phone, which is the
+   one failure the mobile gate exists to catch. */
+pre.plain{font-family:var(--mono);font-size:11.5px;line-height:1.45;background:#F2F2EE;border:1px solid var(--line);border-radius:2px;
+  padding:9px;margin:0 0 9px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:190px;overflow-y:auto;color:var(--muted)}
+
 /* ── bulk ──────────────────────────────────────────────────────────────────── */
 .bulkgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:9px;align-items:end}
 .bulkgrid .go{grid-column:1/-1}

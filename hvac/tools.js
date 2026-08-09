@@ -45,6 +45,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The write-ups you put off — service call, startup, incident, delay notice, turnover. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate it at the unit and get back something the customer can read.",
     chip: "#4B3F8F",
     audience: "Techs · service managers"
+  },
+  {
+    name: "My Answer on Your List",
+    href: "answer-back.html",
+    desc: "The GC, the EC or the controls house sent you a list. Paste it, tap each line to say will do / in already / can’t / need to know, put a date on the yesses, and send one answer back instead of a phone call nobody wrote down.",
+    chip: "#8A1C4B",
+    audience: "HVAC → EC / GC / PC / controls"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];

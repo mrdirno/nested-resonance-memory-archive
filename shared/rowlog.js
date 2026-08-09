@@ -30,6 +30,15 @@
  *     request): a row log that tracks somebody ELSE's work is a chase list, and
  *     the message he sends on day two is not the list, it is WHAT IS STILL OPEN.
  *     `cfg.filters` composes with the delta and touches the DOCUMENT only.
+ *   · A NAMEABLE PASTE TARGET AND AN ANSWER LADDER (added at the third
+ *     instance, the RETURN LEG — the reply to a cross-boundary request).
+ *     `cfg.pasteKey` says which field a bulk-pasted line lands in, because the
+ *     line pasted there is somebody else's prose and not a device tag;
+ *     `cfg.statusWrap` lets the tap cycle back to blank, because an ANSWER is a
+ *     choice and a wrong choice must be reachable without the pencil sheet; and
+ *     `cfg.statusDone` says which rung wears the settled colour, because on an
+ *     answer ladder that rung is not the last one. All three default to the
+ *     behaviour the first two instances already shipped.
  *   · the plain-text document · the TSV · copy with the non-secure-context
  *     fallback · the self-aware date · re-render on the runtime's av:ready.
  *
@@ -334,6 +343,15 @@
     var idField = FIELDS.filter(function (f) { return f.identifier; })[0];
     var required = FIELDS.filter(function (f) { return f.required; });
 
+    /* WHERE A PASTED LINE LANDS. Bulk paste was built for a column of device
+     * tags, so it wrote into the IDENTIFIER field — the only field a tag could
+     * be. The return leg pastes somebody else's REQUEST, one ask per line, into
+     * a field that is prose and must never carry the identifier's
+     * uppercase-and-+1 behaviour. So the target is nameable. Unnamed, it is the
+     * identifier, exactly as before. */
+    var pasteField = (cfg.pasteKey
+      && FIELDS.filter(function (f) { return f.key === cfg.pasteKey; })[0]) || idField;
+
     /* One tag logged twice and the PM goes back to his own spreadsheet forever.
      * A WARNING, never a block: a real job legitimately has D-214 on the door
      * schedule and D-214 as a tag on two leaves of a pair. */
@@ -410,14 +428,14 @@
       return addTags(String(text || "").split(/\r?\n/));
     }
     function addTags(tags) {
-      if (!idField) return 0;
+      if (!pasteField) return 0;
       var base = readBar(), n = 0;
       tags.forEach(function (tag) {
         var t = String(tag).trim();
         if (!t) return;
         var v = {};
         FIELDS.forEach(function (f) { v[f.key] = f.sticky ? (base[f.key] || "") : ""; });
-        v[idField.key] = t;                            // NOT normalised, ever
+        v[pasteField.key] = t;                         // NOT normalised, ever
         if (cfg.statusKey) v[cfg.statusKey] = "";      // a bulk row claims nothing
         rows.push({ id: seq++, t: ++touch, values: v, flag: "" });
         n++;
@@ -449,12 +467,22 @@
     /* TAP THE ROW = ADVANCE ONE STEP. The row shows exactly one chip, so this
      * control can never wrap to a wheel no matter how long the ladder is. It
      * stops at the top rather than wrapping to blank — a man who taps twice by
-     * accident must never silently un-do a tested device. */
+     * accident must never silently un-do a tested device.
+     *
+     * `statusWrap` OPTS OUT OF THAT STOP, and only a ladder that is really a
+     * CHOICE should take it. A progress ladder (committed -> in) is monotone and
+     * un-doing it by mistake destroys a fact somebody walked out and verified.
+     * An ANSWER ladder (will do / can't / need to know) is categorical: picking
+     * the wrong one is not progress lost, it is a wrong answer that has to be
+     * reachable, and making a man open the pencil sheet to correct one tap is
+     * the "ticking beats typing" law failing on its own control. Default off,
+     * so every existing config keeps the stop. */
     function advance(id) {
       var r = rows.filter(function (x) { return x.id === id; })[0];
       if (!r || !cfg.statusKey || !STATUS.length) return;
       var i = STATUS.indexOf(r.values[cfg.statusKey]);
       if (i < STATUS.length - 1) { r.values[cfg.statusKey] = STATUS[i + 1]; r.t = ++touch; }
+      else if (cfg.statusWrap) { r.values[cfg.statusKey] = ""; r.t = ++touch; }
       render(); persistNow();
     }
 
@@ -473,10 +501,16 @@
         if (!map[g]) { map[g] = []; order.push(g); }
         map[g].push(r);
       });
-      // A row we hide is a row he loses: unset stays, last.
+      /* A row we hide is a row he loses: unset stays, last. Beyond that the
+         blocks come out in the order the rows happened to be added — fine for a
+         log somebody keeps, wrong for a DOCUMENT that crosses to another
+         company, where "here is what you're getting / here is what you're not"
+         should read the same way every time. `groupSort` is how a config states
+         that order; without one, insertion order stands exactly as before. */
       order.sort(function (a, b) {
         var ua = (cfg.ungroupedLabel || "NOT SET"), ia = a === ua ? 1 : 0, ib = b === ua ? 1 : 0;
-        return ia - ib;
+        if (ia !== ib) return ia - ib;
+        return cfg.groupSort ? cfg.groupSort(a, b, groupKey) : 0;
       });
       return order.map(function (g) {
         var name = g;
@@ -502,10 +536,18 @@
       var main = cfg.rowMain ? cfg.rowMain(r.values) : (r.values[FIELDS[0].key] || "");
       var sub = cfg.rowSub ? cfg.rowSub(r.values) : "";
       var st = cfg.statusKey ? (r.values[cfg.statusKey] || "") : "";
-      var atTop = cfg.statusKey && STATUS.length && st === STATUS[STATUS.length - 1];
+      /* THE GREEN EDGE MEANS SETTLED, NOT LAST. On a monotone ladder those are
+       * the same value and the default is unchanged; on an answer ladder the
+       * settled one sits in the middle ("in already") and the last is a
+       * question, so painting the last green would put the done colour on the
+       * one row still waiting on somebody. */
+      var doneVal = cfg.statusDone || (STATUS.length ? STATUS[STATUS.length - 1] : "");
+      var atTop = cfg.statusKey && st && st === doneVal;
+      var last = STATUS.length && st === STATUS[STATUS.length - 1];
       return '<div class="rl-row' + (r.id === editingId ? " is-editing" : "") + (r.flag ? " has-flag" : "") + '">'
         + '<button type="button" class="rl-tap' + (atTop ? " at-top" : "") + '" data-adv="' + r.id + '"'
-        + ' aria-label="' + esc((st ? st + " — " : "") + "tap to move to the next step") + '">'
+        + ' aria-label="' + esc((st ? st + " — " : "")
+            + (last && cfg.statusWrap ? "tap to clear it" : "tap to move to the next step")) + '">'
         + '<span class="rl-txt"><b class="rl-main">' + esc(main) + "</b>"
         + (sub ? '<span class="rl-sub">' + esc(sub) + "</span>" : "") + "</span>"
         + '<span class="rl-st' + (st ? "" : " none") + '" data-st="' + esc(st) + '">' + esc(st || "—") + "</span>"

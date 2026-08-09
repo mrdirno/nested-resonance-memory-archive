@@ -55,6 +55,13 @@ window.AV_TOOLS = [
     desc: "The write-ups you put off — incident, delay, turnover, site walk. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate the mess in the van and get back something you can forward.",
     chip: "#4B3F8F",
     audience: "Techs · leads · PMs"
+  },
+  {
+    name: "Answer Back",
+    href: "answer-back.html",
+    desc: "Somebody sent you a list of what they need out of you — the GC, the EC, the owner’s vendor. Paste it, tap each line to say will do / in already / can’t / need to know, put a date on the yesses, and send back one answer instead of a text nobody can work to.",
+    chip: "#8A1C4B",
+    audience: "AV → GC / EC / owner"
   }
   // The loop appends new tools here as it builds them from wishing-well requests.
 ];

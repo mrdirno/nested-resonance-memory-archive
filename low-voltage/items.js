@@ -382,3 +382,23 @@ window.TOOLKIT_ROUGHIN = {
     ] }
   ]
 };
+
+
+/* THE RETURN LEG (answer-back.html) — the reply to somebody else's cross-boundary
+ * request. The ENGINE is shared/rowlog.js and the PAGE owns the mechanics; this
+ * block is only the words this trade says, plus the four placeholders that make
+ * the example on screen look like this trade's own job.
+ *
+ * The gates it offers for "when" are NOT here on purpose: they are
+ * TOOLKIT_ROUGHIN.milestones above, and one list that two tools read cannot
+ * drift out of step with itself.
+ */
+window.TOOLKIT_ANSWER = {
+  toolName: "Got It / Can’t / When",
+  eyebrow: "Low-voltage · them → you → back",
+  lede: "The GC, the EC or the door guy sent you a list. Line it up, tap each line got it or can’t, put a day on the ones you’re taking, and send it back.",
+  docSubject: "what we can hit off your list",
+  closing: "That’s what we can hit. The flagged ones I need an answer on before the ceiling closes — after that it’s a lift, a tile and an argument.",
+  phJob: "Building C", phTo: "Ken — site super", phFrom: "Ray — Sentinel Systems", phOff: "A-201 rev 4",
+  paste: "Building C — close-in list — Aug 9\n\nJob: Building C\nFrom: Ken — site super\n\nLevel 2 · your backing in before rock at every reader\nDoors 210/211 · frame prep confirmed before the frames get ordered\nIDF 2 · head-end power and ground before we set the rack"
+};

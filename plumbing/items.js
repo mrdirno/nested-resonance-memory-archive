@@ -322,3 +322,23 @@ window.TOOLKIT_ROUGHIN = {
     ] }
   ]
 };
+
+
+/* THE RETURN LEG (answer-back.html) — the reply to somebody else's cross-boundary
+ * request. The ENGINE is shared/rowlog.js and the PAGE owns the mechanics; this
+ * block is only the words this trade says, plus the four placeholders that make
+ * the example on screen look like this trade's own job.
+ *
+ * The gates it offers for "when" are NOT here on purpose: they are
+ * TOOLKIT_ROUGHIN.milestones above, and one list that two tools read cannot
+ * drift out of step with itself.
+ */
+window.TOOLKIT_ANSWER = {
+  toolName: "Yes, No, and When",
+  eyebrow: "Plumbing · them → you → back",
+  lede: "The GC or another trade sent you a list. Line it up, give each one a yes, a no, or a question — and a date on every yes — then send it back in one message.",
+  docSubject: "my answer on your list",
+  closing: "That’s the yes, the no, and the when. Anything I flagged I need back from you before the pour, not after — once that slab is down we’re both talking about a core bit.",
+  phJob: "Building C", phTo: "Ken — site super", phFrom: "Sal — Local 38", phOff: "A-201 rev 4",
+  paste: "Building C — close-in list — Aug 9\n\nJob: Building C\nFrom: Ken — site super\n\nLevel 2 · all your sleeves in before Thursday’s pour\nRestroom 210 · carriers set and backing in before rock\nRoof · vents through before dry-in"
+};

@@ -492,3 +492,23 @@ window.TOOLKIT_ROUGHIN = {
     ] }
   ]
 };
+
+
+/* THE RETURN LEG (answer-back.html) — the reply to somebody else's cross-boundary
+ * request. The ENGINE is shared/rowlog.js and the PAGE owns the mechanics; this
+ * block is only the words this trade says, plus the four placeholders that make
+ * the example on screen look like this trade's own job.
+ *
+ * The gates it offers for "when" are NOT here on purpose: they are
+ * TOOLKIT_ROUGHIN.milestones above, and one list that two tools read cannot
+ * drift out of step with itself.
+ */
+window.TOOLKIT_ANSWER = {
+  toolName: "Answer Back",
+  eyebrow: "AV · them → you → back",
+  lede: "Somebody sent you a list of what they need out of you. Line it up, say what you’ll hit and when, and send back one answer he can work to.",
+  docSubject: "AV — my answer on your list",
+  closing: "That’s my answer on everything you sent. Anything under CAN’T or NEED TO KNOW, call me before you cover it — I’d rather move a device today than core your floor next month.",
+  phJob: "Building C", phTo: "Ken — site super", phFrom: "Rico — Acme AV", phOff: "A-201 rev 4",
+  paste: "Building C — what we need from AV — Aug 9\n\nJob: Building C\nFrom: Ken — site super\n\nCR-204 · confirm the display height before we rock\nLobby · your conduit stubbed above the hard lid\nBoard room · is the rack landing the week of the 18th"
+};

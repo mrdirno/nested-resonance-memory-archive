@@ -532,3 +532,23 @@ window.TOOLKIT_ROUGHIN = {
     ] }
   ]
 };
+
+
+/* THE RETURN LEG (answer-back.html) — the reply to somebody else's cross-boundary
+ * request. The ENGINE is shared/rowlog.js and the PAGE owns the mechanics; this
+ * block is only the words this trade says, plus the four placeholders that make
+ * the example on screen look like this trade's own job.
+ *
+ * The gates it offers for "when" are NOT here on purpose: they are
+ * TOOLKIT_ROUGHIN.milestones above, and one list that two tools read cannot
+ * drift out of step with itself.
+ */
+window.TOOLKIT_ANSWER = {
+  toolName: "What I Can Hit",
+  eyebrow: "Electrical · them → you → back",
+  lede: "Every trade on the job sends the electrician a list. Line his up, say what you can hit and when, flag what you can’t, and send it back in one message.",
+  docSubject: "what I can hit off your list",
+  closing: "That’s what I can hit off your list. Anything under CAN’T or NEED TO KNOW, get me an answer and I’ll work it into the same rough — chasing it after the walls close costs both of us.",
+  phJob: "Building C", phTo: "Rico — Acme AV", phFrom: "Dave — Local 3", phOff: "AV-101 rev 2",
+  paste: "Building C — what we need from the electrician — Aug 9\n\nJob: Building C\nFrom: Rico — Acme AV\n\nCR-204 · back box + 2-gang mud ring · 60 AFF · before rock\nCR-204 · 1in conduit to the ceiling above the rack · before rock\nBoard room · dedicated 20A at the credenza · before trim"
+};

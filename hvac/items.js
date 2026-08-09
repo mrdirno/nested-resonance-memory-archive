@@ -542,3 +542,23 @@ window.TOOLKIT_ROUGHIN = {
     ] }
   ]
 };
+
+
+/* THE RETURN LEG (answer-back.html) — the reply to somebody else's cross-boundary
+ * request. The ENGINE is shared/rowlog.js and the PAGE owns the mechanics; this
+ * block is only the words this trade says, plus the four placeholders that make
+ * the example on screen look like this trade's own job.
+ *
+ * The gates it offers for "when" are NOT here on purpose: they are
+ * TOOLKIT_ROUGHIN.milestones above, and one list that two tools read cannot
+ * drift out of step with itself.
+ */
+window.TOOLKIT_ANSWER = {
+  toolName: "My Answer on Your List",
+  eyebrow: "HVAC/R · them → you → back",
+  lede: "Somebody sent you a list — the GC, the EC, the controls guy. Line it up, say what you’ll hit and when, flag what you can’t, and send it back as one answer.",
+  docSubject: "mechanical — my answer on your list",
+  closing: "That’s my answer on the whole list. The flagged ones I need back from you — the unit doesn’t care whose gate it missed, and neither does the crane.",
+  phJob: "Building C", phTo: "Dave — Local 3", phFrom: "Manny — Apex Mechanical", phOff: "E-201 rev 3",
+  paste: "Building C — what we need from mechanical — Aug 9\n\nJob: Building C\nFrom: Dave — Local 3\n\nRoof · your unit weights and disconnect locations before we rough the whips\nMech 210 · t-stat box locations before rock\nRoof · confirm curb heights before dry-in"
+};

@@ -47,6 +47,13 @@ window.TOOLKIT_TOOLS = [
     desc: "The write-ups you put off — daily, meeting notes, incident, delay notice, closeout. Pick the one you're stuck with and get the exact instructions to paste into your AI once. Then dictate it walking back to the trailer and get back something you can send out.",
     chip: "#4B3F8F",
     audience: "Supers · PEs · PMs"
+  },
+  {
+    name: "What I’ll Get You",
+    href: "answer-back.html",
+    desc: "Your subs send you lists all day — access, cores, backing, power, dates. Paste one, tap each line to say will do / in already / can’t / need to know, put a date on the yesses, and answer the whole thing in one message.",
+    chip: "#8A1C4B",
+    audience: "GC → subs / owner vendors"
   }
   // The loop appends new tools here as it builds them from wishes + the seed roster.
 ];
