@@ -1278,3 +1278,70 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   client-side resize and moderation-before-render is a rights rail that deserves its own
   increment, not a ride on this one. Then tips, then guides.
   https://mrdirno.github.io/nested-resonance-memory-archive/commons/
+
+- 2026-08-09 · **[AXIS:BACKPORT] THE WAY BETWEEN KITS WAS THE SMALLEST THING ON THE PAGE ·
+  6 hubs → all 32 pages, 16.7px → 44px.** The previous cycle's backport sweep came back clean
+  on the class it was hunting and MEASURED a different one on the way past, then filed it
+  rather than half-landing it: the cross-trade footer links were **16.7px tall on every one of
+  the six LIVE hubs, at 320/360/390/430, 7–8 per page** — 100% under the 44px law, on the one
+  control whose entire job is moving a tradesperson between kits. Re-measured live before
+  touching anything (eyes first): 16.7px, all six, all four widths, confirmed.
+  **THE TAP TARGET WAS THE SMALLER HALF.** The switcher existed on the SIX HUBS ONLY. From any
+  of the 26 TOOL pages there was no route to another kit at all — `buildBar()` gave every page
+  All tools / Wall of Wishes / What's in the bag / its own tools / the wish, and never once
+  named another trade. **Six pages out of thirty-two could reach the rest of the program**, and
+  a fix scoped to "make the footer links bigger" would have shipped that gap intact.
+  **ONE COMPONENT, TWO MOUNTS.** `kitChips(inNav)` + `mountKitBlock()` in shared/toolkit.js:
+  a chip grid above the hub footer, and a SWITCH KIT section at the foot of the dropdown every
+  page already carries. `inNav` decides exactly two things — whether the commons rides along
+  (`kit:false`; the menu already carries "What's in the bag" three rows above) and which
+  heading it wears. Everything else is one code path, so the footer and the menu cannot
+  disagree about which kits exist.
+  **AND IT RETIRED THE LAST FORK.** The trade LIST moved into the runtime at trade #3, but the
+  RENDERER was still pasted into each hub — six copies of one eight-line function, the exact
+  shape that once left /plumbing/ reachable from nowhere. Six copies → one; each hub keeps only
+  `<span id="siblings">` as a mount marker. **Trade #7 is one line in TRADES and lights up both
+  mounts on every page of every trade.**
+  **THE COPY IS A GATE, NOT A PROMISE.** TRADES rows now carry each trade's `icon` and `accent`,
+  which is duplication with eyes open: a `trade.js` only loads on its own pages, so /av/ cannot
+  ask /plumbing/ what colour it is, and every cross-trade surface must hold a copy (the
+  persona500 manifest already does, on the same terms). So each hub asserts its own row against
+  its own trade.js — and the mutation proved the gate is SCOPED: drifting one accent turned
+  **exactly one** of six tests red, on the right trade.
+  **BACKPORT RIDER FIRED — AND THE SWEEP WAS THE FIX.** The footer's other links are the same
+  class, and `.foot` is declared per page: **20 pages carry one, 12 with their own `.foot a`
+  rule, every one at 16.7px.** One rule in the runtime — appended to `<head>` at boot, so it
+  wins at equal specificity — beats twelve per-page copies and every page added later inherits
+  it instead of re-earning it. All six trades swept in this cycle, not filed for the next one.
+  **TWO NUMBERS DECIDED THE GEOMETRY.** 112px columns are not round: "ELECTRICAL" is the widest
+  unbreakable label and a 104px column split it as ELECTRICA / L at 390px (MEASURED, and now a
+  gate — a ONE-word label rendering on TWO lines means the word broke, while "GC & Super" keeps
+  its space-wrap). And the dropdown had **no max-height at all**: a six-tool trade already ran
+  past a 568px screen with nothing to scroll, before the switcher made it taller.
+  **SHIP GATE** (`tools/collage-studio/tests/e2e/kit-switcher.spec.ts` + its config, new):
+  6 trades × 4 widths — chip count, 44px on chips AND footer links, zero horizontal overflow,
+  marker retired, block above the footer, accent/icon drift, `../slug/` hrefs, no self-link —
+  plus a tool-page nav probe, a 320×568 "the last kit is scrollable-to" probe, and a
+  CLICK-THROUGH that proves the chip lands you in the other kit and that the kit you land in
+  offers the one you came from. **42/42 local, 42/42 against LIVE.** Watched RED on three
+  deliberate breaks: shrunk chip 6/6 red, drifted accent 1/6 red, no mount 6/6 red.
+  `well-mobile` regression 15/15. Deploy now parses the RUNTIME's own TRADES array and asserts
+  every slug has a staged `index.html` — a chip with no directory is a 404 reachable from all
+  32 pages, the /plumbing/credits.html hazard multiplied by the switcher. Build printed
+  `kit switcher: 7 destinations, all staged`.
+  **OWED, named rather than half-built:** `commons/index.html` hard-wires its way back as
+  `../av/` and is the ONE page that does not load the shared runtime — so the commons cannot
+  carry the switcher without either a fork or an AV-branded nav bar on a surface no trade owns.
+  That is an increment, not a rider.
+  **AND THE ANTI-FIXATION SIGNAL IS LYING AGAIN.** This bump printed
+  `STALEST-AXIS SIGNAL = COLLAGE … last worked never worked` — the 999 signature the 2026-08-07
+  entry above says was fixed by merging both books. Ground truth: `[AXIS:COLLAGE]` last appears
+  2026-08-06, the two collage cycles since are tagged `[AXIS:WELL]`, and the last 8 commits are
+  all collage — a K≥4 stalled route the signal was pointing straight back into. Took BACKPORT
+  against the signal deliberately. The generator is NOT ON THIS DRIVE: a drive-wide `grep -rl
+  'STALEST-AXIS'` over /Volumes/dual returns nothing, and no file named
+  `field_toolkit_directive*` exists to depth 5. So the module the 2026-08-07 entry patched is
+  not the code path that writes this bump, and patching a reader that cannot be found from here
+  is not something a cycle can verify. **Next cycle will get the same false signal** — read the
+  tags off both books yourself before believing the stalest-axis line.
+  https://mrdirno.github.io/nested-resonance-memory-archive/hvac/
