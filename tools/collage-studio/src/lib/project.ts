@@ -2,16 +2,24 @@ import JSZip from 'jszip';
 import { AppState, ImageAsset, ProjectManifest } from '../types';
 import { readProject, readImageSources } from './svgProject';
 
-export const saveProject = async (state: AppState, images: ImageAsset[]) => {
+/**
+ * Build the `.collage` archive as a Blob WITHOUT downloading it. Extracted from
+ * `saveProject` so autosave (lib/sessionStore) can persist the EXACT same bytes
+ * a manual save produces — restore is then just `loadProject` on those bytes, so
+ * there is one serialization format and no second one to drift out of sync.
+ * The archive carries images + settings only; video bytes are never zipped, so
+ * this stays cheap even beside a heavy video project.
+ */
+export const buildProjectBlob = async (state: AppState, images: ImageAsset[]): Promise<Blob> => {
   const zip = new JSZip();
-  
+
   // 1. Manifest
   // Ensure unique filenames for ZIP storage
   const imageMeta = images.map((img, idx) => {
     // Get extension
     const ext = img.originalName ? img.originalName.split('.').pop() : 'png';
     const safeFilename = `asset-${idx}-${img.id}.${ext}`;
-    
+
     return {
       id: img.id,
       storageFilename: safeFilename, // Internal name in ZIP
@@ -24,9 +32,9 @@ export const saveProject = async (state: AppState, images: ImageAsset[]) => {
     ...state,
     images: imageMeta
   };
-  
+
   zip.file("manifest.json", JSON.stringify(manifest, null, 2));
-  
+
   // 2. Images
   const imgFolder = zip.folder("images");
   if (imgFolder) {
@@ -42,11 +50,15 @@ export const saveProject = async (state: AppState, images: ImageAsset[]) => {
       }
     }
   }
-  
+
   // 3. Generate
-  const content = await zip.generateAsync({type:"blob"});
-  
-  // 4. Download
+  return await zip.generateAsync({ type: "blob" });
+};
+
+export const saveProject = async (state: AppState, images: ImageAsset[]) => {
+  const content = await buildProjectBlob(state, images);
+
+  // Download
   const url = URL.createObjectURL(content);
   const a = document.createElement('a');
   a.href = url;

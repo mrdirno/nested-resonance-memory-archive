@@ -15,7 +15,9 @@ import { withMove, type MoveId } from './lib/motion';
 import { renderCanvas } from './lib/renderer';
 import { planTitle, measureWith, type TitlePlace, type TitleSize } from './lib/title';
 import type { LookId } from './lib/grade';
-import { saveProject, loadProject } from './lib/project';
+import { saveProject, loadProject, buildProjectBlob } from './lib/project';
+import { canAutosave, hasUnsavedWork, shouldPromptRestore, formatAgo, AUTOSAVE_DEBOUNCE_MS } from './lib/session';
+import * as sessionStore from './lib/sessionStore';
 import { generateVectorExport } from './engine/color/vectorExport';
 import { addToHistory, HistoryItem } from './lib/history';
 import { Template } from './lib/templates';
@@ -275,6 +277,14 @@ export default function App() {
   const [notice, setNotice] = useState<string | null>(null);
   const dragDepth = useRef(0);
   const noticeTimer = useRef<number | null>(null);
+  // CRASH-SAFE SESSION RECOVERY (well bug: "capturing at 4k ... lost what I was
+  // doing"). `restorePrompt` holds the stored session's metadata while the
+  // launch banner offers to bring it back; `dirtyRef` tracks whether the pool
+  // has changed since the last explicit download, which is what the unload
+  // guard warns about. The autosave itself is best-effort insurance in
+  // IndexedDB — see lib/session.ts (gates) and lib/sessionStore.ts (I/O).
+  const [restorePrompt, setRestorePrompt] = useState<{ savedAt: number; images: number } | null>(null);
+  const dirtyRef = useRef(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -1568,6 +1578,10 @@ export default function App() {
 
   const runExport = async (preferred: number | null) => {
       setShowExportDialog(false);
+      // CHECKPOINT BEFORE THE CLIFF. A still export at MAX allocates a canvas 4×
+      // larger; flush the pre-export state NOW so an OOM reload mid-render still
+      // has "what I was doing" durable. Fire-and-forget — it only zips images.
+      void flushSession();
       setExportStatus('processing');
       setExportMsg(preferred ? `${preferred}px Rendering…` : 'Finding your device’s limit…');
       await new Promise(r => setTimeout(r, 60)); // let the spinner paint before we block
@@ -1687,26 +1701,32 @@ export default function App() {
     } catch (e) { setExportStatus('error'); }
   };
 
-  const handleSaveProject = async () => { setShowExportDialog(false); const state: AppState = { version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined }; await saveProject(state, images); };
-  const handleLoadProject = () => { 
-    const input = document.createElement('input'); input.type = 'file'; input.accept = '.collage,.svg';
-    input.onchange = async (e:any) => {
-        const file = e.target.files[0]; if(!file) return;
-        const loaded = await loadProject(file);
-        // A refused file used to do NOTHING — no picture, no message, no way to
-        // tell a rejected file from a slow one. `loadProject` fails closed by
-        // design (see loadFromSVG), so the refusal has to be visible, and it
-        // belongs on the button that was pressed.
-        // The BUTTON goes red (colour and icon only — a label that changes width
-        // shoves Export off the edge; see Header.tsx), and the SENTENCE goes to
-        // the notice toast, which is where every other failure in this app
-        // already goes and is the only surface here with room to say it.
-        if(!loaded) {
-          setOpenError("COULDN'T OPEN THAT FILE");
-          flashNotice("COULDN'T OPEN THAT FILE — it must be a .collage archive, or an SVG exported by this app. SVGs exported before 2026-08-08 carry no image identity and cannot be reopened.");
-          setTimeout(() => setOpenError(null), 6000);
-          return;
-        }
+  // THE ONE `AppState` BUILDER. Save (download), autosave (crash-safe session)
+  // and Clear (history) each described the project by writing this same literal
+  // inline — three chances to drift, and the manifest is exactly where a silent
+  // field-omission becomes a wrong answer on reopen. One source of truth now.
+  const buildStateForSave = (): AppState => ({ version: "1.0", mode: activeTab, layout: { mode: layoutMode, primitive, count, density, countOwned, shuffle: shuffleTrigger, seed, aspect, gutter, entropy, arrangement, focus, twist, move }, style: { background: bgColor, look }, title: titleText ? { text: titleText, place: titlePlace, size: titleSize } : undefined });
+
+  const handleSaveProject = async () => { setShowExportDialog(false); await saveProject(buildStateForSave(), images); dirtyRef.current = false; };
+
+  // Write the working project to IndexedDB — the crash-safe snapshot behind the
+  // well bug ("capturing at 4k ... lost what I was doing"). Cheap (the archive
+  // never carries video bytes) and silent (insurance, not a feature): a failed
+  // write just leaves the previous snapshot standing.
+  const flushSession = async () => {
+    if (images.length === 0) return;
+    try {
+      const blob = await buildProjectBlob(buildStateForSave(), images);
+      await sessionStore.putSession(blob, images.length);
+    } catch { /* best-effort; never surface */ }
+  };
+
+  // APPLY A LOADED PROJECT — the single hydration path shared by Open (a file
+  // the user picked) and Restore (the crash-safe session). It used to live only
+  // inside `handleLoadProject`; the whole class of "the path that forgot it"
+  // bugs the comments below guard against is exactly what a second, hand-copied
+  // apply path would reintroduce, so Restore reuses THIS one verbatim.
+  const applyLoadedProject = (loaded: { state: AppState; images: ImageAsset[] }) => {
         setOpenError(null);
         // `??`, NOT `||`, on every number here. `||` treats a legal ZERO as
         // absent, and three of these have a meaningful zero: seed 0 became
@@ -1723,10 +1743,10 @@ export default function App() {
         // the same latch the composition code uses (see applyCompositionCode) and
         // the same rule: only an OWNED count is protected, because a derived one
         // is a default and the pool it lands next to is a better one.
-        const ld = loaded?.state.layout;
-        const ldOwned = ld?.countOwned ?? true;
-        if(loaded && ldOwned) pendingCountRef.current = { count: num(ld!.count, 12), drop: dropId };
-        if(loaded) { ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
+        const ld = loaded.state.layout;
+        const ldOwned = ld.countOwned ?? true;
+        if(ldOwned) pendingCountRef.current = { count: num(ld.count, 12), drop: dropId };
+        ownCount(ldOwned); setImages(loaded.images); const l = loaded.state.layout; setLayoutMode(l.mode || 'minimal'); setCount(num(l.count, 12)); setDensity(num(l.density, 1)); setShuffleTrigger(num(l.shuffle, 0)); setSeed(num(l.seed, Date.now())); setAspect(num(l.aspect, ASPECT_ROSTER[1])); setGutter(num(l.gutter, 0.005)); setEntropy(num(l.entropy, entropy)); if(l.primitive) setPrimitive(l.primitive); if(loaded.state.style?.background) setBgColor(loaded.state.style.background); setLook(loaded.state.style?.look ?? 'none'); if(l.arrangement) setArrangement(l.arrangement); else setArrangement((l.resonance ?? 0) > 0.1 ? 'flow' : 'natural'); setFocus(l.focus ?? 'auto'); setTwist(l.twist ?? 'none'); setMove(l.move ?? 'still'); setTitleText(loaded.state.title?.text ?? ''); setTitlePlace(loaded.state.title?.place ?? 'bl'); setTitleSize(loaded.state.title?.size ?? 'md');
           // THE TAB IS PART OF THE STATE, and it was WRITTEN and never read.
           // `stateForSave` has always put `mode: activeTab` in the manifest, so an
           // export taken with Settings open said "advanced" and reopening left the
@@ -1756,15 +1776,102 @@ export default function App() {
           // before `setCount`, so the loaded count is protected either way,
           // batched or not.
           setDropId(d => d + 1);
+  };
+
+  const handleLoadProject = () => {
+    const input = document.createElement('input'); input.type = 'file'; input.accept = '.collage,.svg';
+    input.onchange = async (e:any) => {
+        const file = e.target.files[0]; if(!file) return;
+        const loaded = await loadProject(file);
+        // A refused file used to do NOTHING — no picture, no message, no way to
+        // tell a rejected file from a slow one. `loadProject` fails closed by
+        // design (see loadFromSVG), so the refusal has to be visible, and it
+        // belongs on the button that was pressed.
+        if(!loaded) {
+          setOpenError("COULDN'T OPEN THAT FILE");
+          flashNotice("COULDN'T OPEN THAT FILE — it must be a .collage archive, or an SVG exported by this app. SVGs exported before 2026-08-08 carry no image identity and cannot be reopened.");
+          setTimeout(() => setOpenError(null), 6000);
+          return;
         }
+        applyLoadedProject(loaded);
     };
     input.click();
+  };
+
+  // RESTORE THE CRASH-SAFE SESSION. The stored `.collage` blob is fed through the
+  // exact `loadProject` round-trip a picked file uses, then the shared apply
+  // path — one format, one hydration, no drift.
+  const handleRestoreSession = async () => {
+    setRestorePrompt(null);
+    const blob = await sessionStore.getSessionBlob();
+    if (!blob) { flashNotice('That session could not be read — starting fresh.'); return; }
+    // `loadProject` reads `file.name`; a bare Blob has none, so wrap it. The name
+    // must not end in `.svg`, or it takes the SVG branch and fails.
+    const file = new File([blob], 'session.collage', { type: 'application/zip' });
+    const loaded = await loadProject(file);
+    if (!loaded) { flashNotice('That session could not be restored.'); return; }
+    applyLoadedProject(loaded);
+    flashNotice('Restored your last session.');
+  };
+
+  const handleDismissRestore = async () => {
+    setRestorePrompt(null);
+    dirtyRef.current = false;
+    await sessionStore.clearSession();
   };
 
   const handleApplyTemplate = (t: Template) => {
       ownCount(true); // a template carries its own explicit fragment count
       setLayoutMode(t.layout.mode); setCount(t.layout.count); setSeed(t.layout.seed); setAspect(t.layout.aspect); setGutter(t.layout.gutter);
   };
+
+  // CRASH-SAFE AUTOSAVE. A debounced snapshot of the working project to
+  // IndexedDB, so the next OOM reload / accidental refresh during a heavy 4K
+  // capture no longer takes the whole collage with it. `canAutosave` (unit-swept)
+  // is the chokepoint: never into an empty pool, never DURING an export or
+  // capture (the memory cliff we are fixing), never over a session a restore
+  // banner is about to bring back. Every field `buildStateForSave` serialises is
+  // a dep, so each run re-schedules with the latest state; the timer replaces the
+  // previous one, which is the debounce.
+  useEffect(() => {
+    const exporting = exportStatus === 'processing' || !!recorderRef.current?.isRecording;
+    if (!canAutosave({ imageCount: images.length, isExporting: exporting, isRestoring: !!restorePrompt })) return;
+    dirtyRef.current = true; // there is now work that isn't on disk
+    const t = window.setTimeout(() => { void flushSession(); }, AUTOSAVE_DEBOUNCE_MS);
+    return () => window.clearTimeout(t);
+  }, [images, layoutMode, primitive, count, density, countOwned, shuffleTrigger, seed, aspect, gutter, entropy, bgColor, look, arrangement, focus, twist, move, titleText, titlePlace, titleSize, activeTab, soundtrack, exportStatus, restorePrompt]);
+
+  // OFFER TO RESTORE, once, at launch. Only the metadata is read here — the
+  // (large) blob is pulled only if the user actually taps Restore. The banner's
+  // render is additionally gated on an empty pool (shouldPromptRestore), so a
+  // deep-link or Open that populates the pool first silently wins.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const meta = await sessionStore.getSessionMeta();
+      if (!cancelled && meta) setRestorePrompt(meta);
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  // If the user ignores the banner and just starts working, that IS a decision:
+  // dismiss the offer so autosave unfreezes and protects the NEW work. The old
+  // snapshot is then overwritten by the first save of the new project — the user
+  // saw "restore?" and chose to build instead.
+  useEffect(() => {
+    if (restorePrompt && images.length > 0) setRestorePrompt(null);
+  }, [images.length, restorePrompt]);
+
+  // Belt-and-suspenders for the SOFT reload — an accidental refresh, a back
+  // gesture, a tab close — where the browser lets us warn first. A hard OOM kill
+  // never fires this; that path is what the IndexedDB autosave covers.
+  useEffect(() => {
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedWork(images.length, dirtyRef.current)) { e.preventDefault(); e.returnValue = ''; }
+    };
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  }, [images.length]);
 
   return (
     <div className="fixed inset-0 bg-black text-white font-sans flex flex-col select-none overflow-hidden">
@@ -1778,7 +1885,7 @@ export default function App() {
           recording indicator both live in the dock that full bleed hides, and
           Cmd-E still reaches this dialog while maximized because the Header
           stays mounted under `display:none`. */}
-      <ExportDialog canExportVideo={liveMode} onExportVideo={(secs, w) => { setMaximized(false); recorderRef.current?.start(secs, w); }} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} videoSizes={recorderRef.current?.sizes ?? []} canChooseVideoSize={!!recorderRef.current?.canChooseSize} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
+      <ExportDialog canExportVideo={liveMode} onExportVideo={(secs, w) => { setMaximized(false); void flushSession(); recorderRef.current?.start(secs, w); }} videoMaxSeconds={recorderRef.current?.maxSeconds ?? 30} videoSizes={recorderRef.current?.sizes ?? []} canChooseVideoSize={!!recorderRef.current?.canChooseSize} isOpen={showExportDialog} onClose={() => setShowExportDialog(false)} onExport={handleExport} onExportSVG={handleExportSVG} onExportProject={handleSaveProject} canShare={!!navigator.share} onShare={handleShare} />
       <ResultModal isOpen={!!resultBlobUrl} onClose={() => setResultBlobUrl(null)} blobUrl={resultBlobUrl} onShare={handleShareResult} onDownload={handleDownloadResult} isMobile={isMobile} />
 
       <div
@@ -1999,6 +2106,26 @@ export default function App() {
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
          )}
       </div>
+      {/* CRASH RECOVERY. Shown only into an empty pool (shouldPromptRestore), so
+          it never shadows a project already on the stage. One-handed sizes: the
+          card caps at the viewport, the label truncates, both taps clear 44px. */}
+      {restorePrompt && shouldPromptRestore(true, images.length) && (
+        <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[300] w-[min(28rem,94vw)] animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="rounded-xl bg-[#0d0d0d]/95 border border-emerald-500/40 shadow-2xl backdrop-blur px-3 py-2.5">
+            <div className="flex items-center gap-2.5">
+              <RefreshCw size={15} className="text-emerald-400 shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] font-black tracking-[0.14em] text-white uppercase truncate">Pick up where you left off</div>
+                <div className="text-[9px] text-white/50 tracking-wide truncate">
+                  {restorePrompt.images} image{restorePrompt.images === 1 ? '' : 's'} · saved {formatAgo(Date.now() - restorePrompt.savedAt)}
+                </div>
+              </div>
+              <button onClick={handleRestoreSession} className="shrink-0 min-h-[44px] px-3.5 rounded-lg bg-emerald-500 text-black text-[10px] font-black tracking-[0.1em] uppercase active:scale-95 transition-transform">Restore</button>
+              <button onClick={handleDismissRestore} aria-label="Dismiss saved session" className="shrink-0 min-h-[44px] min-w-[44px] grid place-items-center rounded-lg bg-white/5 text-white/60 hover:text-white active:scale-95 transition-transform"><X size={15} /></button>
+            </div>
+          </div>
+        </div>
+      )}
       {notice && (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[250] max-w-[92vw] px-4 py-2.5 rounded-xl bg-[#161616] border border-yellow-500/30 text-[10px] tracking-wide text-yellow-300 shadow-2xl">
           {notice}

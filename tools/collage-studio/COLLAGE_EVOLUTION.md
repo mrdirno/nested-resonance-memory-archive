@@ -2230,3 +2230,43 @@ frontier. Today's ceiling is tomorrow's floor.
   fixed here: it is a layout change to six live footers needing its own 4-width × 6-trade
   verification, which is an increment, not a rider — filed with its numbers rather than
   half-landed at the end of a cycle. **NEXT RUNG, and it is a real one.**
+
+- 2026-08-09 · **[AXIS:WELL] "THE APP CRASHED AND I LOST WHAT I WAS DOING" — NOW THE NEXT
+  LAUNCH HANDS IT BACK** — wishing-well BUG (id `479a6da8`, collage, `about_tool=export`,
+  anonymous): a 4K video capture pushed the phone's browser over its memory line, the tab
+  reloaded, and the whole collage was gone. THE CAUSE WAS TOTAL — every bit of project state
+  lived in React `useState` and NOTHING was ever persisted; the only durable save was the user
+  manually downloading a `.collage`, which nobody does mid-capture. before→after: **no autosave
+  anywhere → the working project is written to IndexedDB continuously**, and the next launch
+  OFFERS "pick up where you left off".
+  **BUILT ON THE PROVEN ROUND-TRIP, NOT A SECOND FORMAT.** `buildProjectBlob` is extracted from
+  `saveProject`; autosave stores those exact bytes; restore is `loadProject` on the stored blob
+  fed through the SAME `applyLoadedProject` hydration Open uses — one serialization, one apply
+  path, no drift (the "path that forgot it" class this book already carries is exactly what a
+  hand-copied second apply path would reintroduce). The archive **never zips video**, so autosave
+  cost scales with still count, not clip size — cheap even beside a heavy capture.
+  **THE GATES ARE THE FEATURE.** New pure core `lib/session.ts` — `canAutosave` refuses to write
+  into an EMPTY pool (would clobber the session a tap from restoring), DURING an export/capture
+  (the memory cliff itself), or OVER a pending restore. Unit-swept **6376/0**, and WATCHED RED
+  with the export guard dropped (5 failures incl. "never autosave mid-export — the crash moment").
+  New `lib/sessionStore.ts` IDB shell **fails soft everywhere** (private-mode Safari denying
+  IndexedDB can never break the editor). An **immediate checkpoint** fires the instant
+  runExport/capture starts, so the one moment that actually crashes is saved at zero staleness; a
+  `beforeunload` guard covers the soft refresh the browser lets us warn about.
+  **VERIFIED AT THE ARTIFACT, DRIVING THE REAL UI.** chromium e2e **3/3**: cold start shows NO
+  banner (no false-fire on a first visit) → import two photos → autosave → `page.reload()` (the
+  crash) → banner appears and its subtitle names **"2 images"** (metadata round-tripped, not just
+  a box) → Restore puts the collage back on the stage → Dismiss clears it for good and a further
+  reload does not re-offer it. Mobile-watertight **320/360/390/430**: zero horizontal overflow,
+  Restore + Dismiss both ≥44px. `tsc` clean, all **14 unit sweeps** green, `vite build` clean.
+  **BACKPORT RIDER — SWEPT, NOTHING TO CARRY (yet).** Crash-safe autosave is a property of a
+  STATEFUL editor; the six trade toolkits are static single-tool pages whose output is copied out
+  immediately and hold no multi-field working session to lose, so there is no sibling surface with
+  this class today. Filed, not forced — the nearest future carry is the report-builder shape if it
+  ever grows persistent drafts.
+  **NEXT RUNG:** incremental blob cache (store each image once in IDB, autosave only the small
+  manifest) so a 30-photo project stops re-zipping on every idle; and persist the soundtrack + live
+  clips so a restored VIDEO project comes back whole, not just its stills. Plus the improve wish
+  (id `4124be76`) — show the wisher credit inside the well modal — and last cycle's 17px
+  cross-trade footer links.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/

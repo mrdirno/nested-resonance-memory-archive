@@ -40,6 +40,16 @@
       "wished_date": "2026-08-08",
       "shipped_date": "2026-08-09",
       "shipped_note": "The first clause, and it was two stacked ceilings rather than a missing dropdown. SIZE: the Stage's maxBackingWidth was never passed, so it fell back to the 1200 logical width and EVERY exported MP4 was 1200px wide on every device, from any source, while the still export offered 16384. SOURCE: the Stage draws previewSrc, the <=1024px thumbnail — the still exporter draws the ORIGINAL and documents that exact asymmetry as a bug it already fixed; the video path never got it. Shipping the size alone would have been a bigger container of upscaled thumbnails, so both moved together: measured at one canvas size, detail energy went 33.0 -> 124.4 (3.8x). End to end on a real take: 1200x1802 -> 2488x3732. Rungs are PROBED per device AND per composition shape (H.264 caps the frame in macroblocks, so the ceiling depends on the aspect) and a rung the encoder refuses is shown unavailable with the real reason rather than offered and failed later. The full-res decodes are budgeted by geometry — each original is rasterised only to the pixels its own fragments consume and released immediately — because holding a pool of originals resident is a dead tab on a phone. ALREADY SERVED, verified on the running app rather than assumed: 'full screen' is the F key / the Maximize button (full bleed, Esc to leave), and the .collage archive already saves and reopens your sources and every setting. Video clips still are not carried in that archive."
+    },
+    {
+      "capability": "Crash-safe autosave — your work survives a reload, and the app offers it back",
+      "where": "Automatic (IndexedDB, on every edit) + the restore banner at the top of the next launch",
+      "wish": "As I was capturing the video at 4k resolution — the app refreshed or crashed and lost what I was doing",
+      "wisher": null,
+      "wisher_display": "an anonymous Collage user",
+      "wished_date": "2026-08-09",
+      "shipped_date": "2026-08-09",
+      "shipped_note": "A 4K capture pushed the phone's browser over its memory line, the tab reloaded, and the whole collage was gone — because every bit of project state lived only in React state and NOTHING was ever autosaved; the only durable save was manually downloading a .collage, which nobody does mid-capture. Now the working project is written to IndexedDB continuously (debounced ~1.5s) with an IMMEDIATE checkpoint the instant an export or capture begins — the exact moment that crashes — and the next launch offers 'pick up where you left off', restoring your images and every setting. Built on the proven .collage round-trip (buildProjectBlob extracted from the manual save; restore = loadProject on the stored blob through the same hydration path Open uses), so there is one format and no drift; the archive never zips video, so autosaving stays cheap beside a heavy capture. A beforeunload guard also warns before an accidental refresh, and IndexedDB failing (private-mode Safari) can never break the editor. NOT yet carried into the session: the soundtrack and live video clips — a restored video project comes back as its stills plus every setting, the same limitation the manual .collage archive has, and the next rung."
     }
   ]
 }
