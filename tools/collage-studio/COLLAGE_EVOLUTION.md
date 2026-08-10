@@ -2543,3 +2543,49 @@ frontier. Today's ceiling is tomorrow's floor.
   into 24@1024/8@1307, trading an invisible split for a visible one. Design
   change, not a tweak.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C87b · 2026-08-10 · [AXIS:WELL] THE BUDGET WAS DOING CAREFUL ARITHMETIC
+  DOWNSTREAM OF THE CRASH — A CORRECTION TO C87 ABOVE** — cast an adversarial
+  audit at the commit I had just shipped, asking only "can this still exhaust
+  memory". It could, and the entry above **overclaims**: the pool is correct
+  about what it bounds, and what it bounds was **not the dominant term**.
+  **THE REAL CRASH.** `beginOfflineRender` sets `offlineFullRes = true` and
+  calls `applyStillKeys()`, which repoints every fragment's `stillKey` at its
+  ORIGINAL and hands that set to `ensureStills` — which starts every missing key
+  **AT ONCE**, one `new Image()` per source, each decode retained in
+  `this.stills` for the whole take. N full-resolution decodes went resident, in
+  parallel, **before `prepareOfflineStills` had ranked, budgeted or even counted
+  anything.** Thirty 12 MP photos is ~1.4 GB of RGBA; the pool was managing
+  136 MB of rasters downstream of it.
+  **THE PART THAT SHOULD HAVE CAUGHT ME.** `applyStillKeys`'s own doc comment,
+  twenty lines above the call, says it exactly: *"Pointing `stillKey` at the
+  originals and letting `ensureStills` fetch them would therefore hold N
+  full-resolution decodes at once … That is not a slow export, it is a dead
+  tab."* I read that comment while writing C87 — I quoted its neighbour in the
+  scar above — and read it as the rationale for the geometry budget rather than
+  as a live description of what the caller was doing. **A comment can be
+  simultaneously the best explanation in the file and a report of a bug nobody
+  noticed it was reporting.**
+  **FIX:** separate repointing from fetching. The offline path still repoints
+  (that is what makes `adoptStill` land a budgeted raster on the right
+  fragments) and leaves the FETCHING to `prepareOfflineStills`, which does it
+  sequentially, inside the pool, releasing each decode before the next.
+  **MEASURED BOTH DIRECTIONS**, because a guard that passes before AND after a
+  fix is not a guard — B4 counts full-res `<img>` decodes the offline pass
+  starts: **old line n=8→8, n=32→32** (linear, parallel, retained); **new line
+  n=8→0, n=32→0**. And the picture did not pay for it: `video-resolution` still
+  scores originals **124.4 vs thumbnails 33.0**.
+  **WHAT THIS SAYS ABOUT C87's METHOD.** 4,673 invariant checks and three
+  wiring e2e all passed against a fix that left the dominant allocation
+  untouched, because every one of them was scoped to the thing I had decided
+  was the bug. **A test suite inherits its author's hypothesis; only an
+  adversary re-derives it.** The cheap general rule: when you bound a resource,
+  measure the resource — not your model of it. B4 measures decodes; C87
+  measured only the pool.
+  **STILL OPEN FROM THE SAME AUDIT** (verified real, not fixed here): the
+  "never softer than the preview" floor reads `it.still`, so exporting BEFORE
+  thumbnails have decoded gives floor 0 and can render a take from 258px
+  rasters while reporting `fellBack: 0`; and `signalsOnce` caches a failed
+  WebGL probe for the page lifetime, pinning the pool to `FLOOR_POOL_PX` for
+  the rest of the session. Both are visible-quality, neither is a crash.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
