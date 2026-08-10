@@ -44,6 +44,9 @@ or re-documenting an existing capability is DD, not delivery.
   at its own loop length and schedules one non-looping node PER PICTURE LAP
   (`clipWindow.audioSchedule`), so the sound laps with the picture instead of
   with the audio track;
+  UNDO — the roll you liked comes back: undo+redo over the destructive
+  composition events (roll, shuffle, remix, applied code), in the full-bleed
+  rail, under the dice in the dock, and on Cmd-Z / Shift-Cmd-Z / Ctrl-Y;
   THE COMPOSITION CODE — every composition has a short code, shown under the
   dice, tap to copy, paste one back to open it, and carried in the address bar
   so a LINK is a collage. `lib/rollCode.ts` owns the one seam between app state
@@ -1290,6 +1293,53 @@ multi-agent audit for non-trivial changes.
   must be a byte copy you took yourself**, not a VCS operation whose reference
   point is a commit that predates the work. Copy the file aside, mutate, restore
   from the copy, and diff to confirm the restore.
+
+- **SCAR-C90-THE-RULER-MOVED-BEFORE-THE-APP-DID (an exact pixel hash is not a
+  witness for a picture that is supposed to move).** The first run of the new
+  undo e2e reported "undo did not restore the picture": same size, same luma to
+  two decimal places, different FNV hash. That reads exactly like a real defect
+  — same composition, pixels in different places, i.e. the deal moved. It was
+  the TEST. A composition carrying a MOVE mounts the live Stage canvas instead
+  of the static JPEG, and a drifting canvas renders different pixels every
+  frame; sampling one twice 700ms apart **with no interaction at all** produced
+  two different hashes at identical luma. Measured rather than argued: 20
+  readbacks of an untouched preview give **1 distinct hash on a still preview
+  and 6 on a drifting one**, while a 256-block signature (16x16, each block
+  reduced to its dominant channel or a luma bucket) gives **1 in every case and
+  still separates 10 of 10 distinct rolls** — stable under the drift and still
+  able to fail, which is the whole test for a witness. THE RULE: when a
+  comparison fails, ask whether the thing you are measuring with is allowed to
+  change on its own before you go looking in the code. The same defect was
+  sitting in `tests/e2e/roll-code.spec.ts`, which had been failing about one run
+  in five for this exact reason; fixed there in the same cycle (BACKPORT rider).
+
+- **SCAR-C90-NOT-YET-MOVED-IS-NOT-SETTLED.** The replacement wait sampled until
+  two consecutive readings agreed and returned that shot — which is satisfied
+  perfectly by the picture that has not started changing yet. Click undo, sample
+  twice before the repaint lands, get two identical readings **of the
+  composition undo is leaving**, and report "undo did not restore" against a
+  shot of the thing being replaced. It only ever fired on WebKit, where the
+  repaint is slower, so it looked like a WebKit product bug. A wait that can
+  return the PREVIOUS state is not a wait: it must be told what it is leaving
+  (`settled(page, changedFrom)`) and refuse to settle until the picture has
+  actually moved.
+
+- **SCAR-C90-EVERY-`<input>`-IS-NOT-A-TEXT-BOX.** The Cmd-Z handler guarded
+  itself with `/^(INPUT|TEXTAREA|SELECT)$/` so the caption box would keep its
+  own undo. A range slider, a colour swatch, a checkbox and the file input are
+  all `<input>` and none of them owns Cmd-Z — so undo would have been DEAD for
+  the rest of the session after any slider drag, silently, because a dead
+  shortcut is indistinguishable from a shortcut you imagined. Only a control
+  with TEXT in it has an undo to defend. Found by the WebKit run (Mobile Safari
+  leaves focus on the file input after an upload), not by reading the code.
+
+- **SCAR-C90-THE-WITNESS-CAN-BE-THE-FEATURE-WORKING.** The test asserting "Cmd-Z
+  inside the caption box must not step the collage back" compared PIXELS, and
+  went red on every engine. The caption is DRAWN ON THE COLLAGE, so the
+  browser's own field-undo removing the typed text changes the picture — the red
+  was the guard succeeding. The caption is deliberately not in the composition
+  code, which makes the code the only correct witness for "the composition did
+  not move".
 
 ## THE RATCHET (perpetual by construction)
 When a capability tier reaches broad parity with CapCut, the north star raises:
@@ -2588,4 +2638,55 @@ frontier. Today's ceiling is tomorrow's floor.
   rasters while reporting `fellBack: 0`; and `signalsOnce` caches a failed
   WebGL probe for the page lifetime, pinning the pool to `FLOOR_POOL_PX` for
   the rest of the session. Both are visible-quality, neither is a crash.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C90 · 2026-08-10 · [AXIS:WELL] THE ROLL YOU LIKED, BROUGHT BACK** — wish
+  `83c15771` (bug, collage/layout, anonymous): *"Need an undo button for quick
+  recall on quickly — rolling the dice in full view."* Full bleed puts the dice
+  under your thumb precisely so you can roll it again and again to compare
+  layouts, and **every press destroyed the one before it**: fifteen setState
+  calls land at once and the composition you were looking at three seconds ago
+  did not exist anywhere.
+  **WHAT A STEP IS.** A destructive COMPOSITION EVENT — the roll, the shuffle,
+  the remix, an applied code — not every setState, or one drag of the chaos
+  slider would put fifty entries in the stack and undo would walk you back
+  through a slider instead of back to a picture. The snapshot is taken at the
+  MOMENT of the action off the LIVE state, so a nudge between two rolls rides
+  along inside it: roll, tweak the gutter, roll, undo -> your tweaked version.
+  **WHAT IT COST.** Almost nothing, because `rollCode.ts` already made the
+  composition a round-trip-exact string: a step is that string plus the two
+  things a code deliberately omits (the fragments pinned by hand, the recipe
+  name). Undo restores a COMPOSITION, never a pool — clearing your images is not
+  an undoable step and this does not pretend it is. Undo+redo in the full-bleed
+  rail (where it was wished from), the same pair under the dice in the dock (the
+  dock's dice had the identical problem — the sibling sweep), Cmd-Z / Shift-Cmd-Z
+  / Ctrl-Y everywhere else.
+  **WHAT THE PHONE ENGINE CAUGHT THAT READING DID NOT.** The keyboard guard
+  bailed on any focused `INPUT` — and a range slider, a colour swatch and the
+  file input are all `INPUT`. Undo would have been DEAD for the rest of the
+  session after any slider drag, silently. Only a control with TEXT in it has an
+  undo to defend (SCAR above).
+  **PROOF. 569,253 invariant checks · 0 failures**, centred on an ORACLE: a
+  reference model of the obvious shape (one tape plus a cursor) driven through
+  **160,000 random operations** alongside the shipped past/future pair, both
+  asked after EVERY operation what is on screen and which buttons are live — two
+  different data structures reaching the same answer, which is the only reason
+  the comparison proves anything. Then **6 e2e driving the real UI, 72/72 green
+  across Chrome, Android Chrome and iOS Safari at four repeats each**, because a
+  unit sweep grades arithmetic and cannot see wiring (C87b). The rail went from
+  five children to seven, so the mobile law is asserted where it bites:
+  **320/360/390/430 and zoomed out — zero horizontal overflow, seven 44px
+  targets, none overlapping, none past the edge** (seven targets is 295 of the
+  304 usable pixels at 320, which is why the GAP tightens below 360 and the
+  buttons never do). Re-run against the LIVE deploy: **21/21 green.**
+  **AND THE RULER WAS WRONG BEFORE THE APP WAS.** The first red — "same size,
+  same luma, different hash" — was the witness, not the feature: a composition
+  carrying a MOVE mounts the live Stage canvas and a drifting canvas renders
+  different pixels every frame. Measured: 20 readbacks of an untouched preview ->
+  **1 distinct hash still, 6 drifting**, while a 256-block signature -> **1 in
+  every case and still 10 distinct signatures from 10 rolls**. Three scars
+  above. **BACKPORT RIDER FIRED:** the identical defect was live in
+  `tests/e2e/roll-code.spec.ts` (the only sibling sharing the pattern — grepped,
+  not assumed), where it had been failing about one run in five for this exact
+  reason; fixed there in the same cycle, 20/20 green.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

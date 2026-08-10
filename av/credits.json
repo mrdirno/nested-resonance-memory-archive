@@ -60,6 +60,16 @@
       "wished_date": "2026-08-09",
       "shipped_date": "2026-08-10",
       "shipped_commit": "ce35b8d1"
+    },
+    {
+      "tool_name": "Collage Studio — undo, so the roll you liked comes back",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-09",
+      "shipped_date": "2026-08-10",
+      "shipped_commit": "dafb616d"
     }
   ]
 }
