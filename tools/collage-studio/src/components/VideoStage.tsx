@@ -212,7 +212,10 @@ const TrimSheet: React.FC<{
   value: { inSec: number; outSec: number } | undefined;
   onChange: (v: { inSec: number; outSec: number } | undefined) => void;
   onClose: () => void;
-}> = ({ name, span, frames, value, onChange, onClose }) => {
+  /** CREDIT ON THE PAGE, where the thing they asked for is — not only in
+   *  credits.json. Absent on the clip sheet, which nobody wished into being. */
+  credit?: string;
+}> = ({ name, span, frames, value, onChange, onClose, credit }) => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const w = normaliseWindow(span, value?.inSec, value?.outSec);
   // A step fine enough to land on a beat, coarse enough that a thumb can hit it.
@@ -441,6 +444,12 @@ const TrimSheet: React.FC<{
             className="h-11 px-4 rounded-lg bg-white text-black text-[9px] font-black tracking-[0.2em] uppercase hover:bg-emerald-400 transition-colors shrink-0"
           >Done</button>
         </div>
+
+        {/* CREDIT ON THE PAGE, next to the thing they asked for — the ledger in
+            credits.json is permanent, but nobody reads a JSON file. */}
+        {credit && (
+          <p className="text-[9px] tracking-wide text-gray-600 leading-relaxed">{credit}</p>
+        )}
       </div>
     </div>
   ), document.body);
@@ -1359,6 +1368,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
             : undefined}
           onChange={onSoundtrackWindow}
           onClose={() => setTrimming(null)}
+          credit="Picking the part of the song that plays was wished for by an anonymous Collage user."
         />
       )}
 

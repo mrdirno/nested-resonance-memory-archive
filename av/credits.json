@@ -80,6 +80,16 @@
       "wished_date": "2026-08-10",
       "shipped_date": "2026-08-10",
       "shipped_commit": "1b16c643"
+    },
+    {
+      "tool_name": "Collage Studio — pick the part of the song that plays (music in/out range)",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-09",
+      "shipped_date": "2026-08-10",
+      "shipped_commit": "a19e5338"
     }
   ]
 }
