@@ -197,10 +197,50 @@
   /* max-height: the menu now carries the kit switcher, and it had NO bound at all
      before — a six-tool trade already ran past a 568px screen with nothing to
      scroll. The bar is sticky, so subtracting its height keeps the last row of
-     the menu on the glass instead of under the fold. */
+     the menu on the glass instead of under the fold.
+     THE UNIT WAS THE BUG. Reported into the well by someone using it on a phone
+     (bug a596d8c9, /av/consumables.html): "the tools modal when populated has no
+     scroll so whatever is on the bottom of the tools modal gets cutoff".
+     100vh is the LARGE viewport — the page height as if the browser's chrome were
+     hidden. On iOS Safari with the URL bar showing, that is ~130px taller than the
+     glass you can actually see, so calc(100vh - 72px) built a menu TALLER than the
+     screen and then told the scroller it fit. The last rows sat below the glass at
+     every scroll position: the menu scrolled a little, then stopped with its bottom
+     still cut off — exactly "no scroll ... gets cutoff".
+     REPRODUCED (Chromium cannot show this by itself, because there 100vh and
+     innerHeight are equal; run at the 794px large viewport with innerHeight
+     reporting the real 664px glass, which is what iOS does): last row 110.4px below
+     the glass on /av/consumables.html, and the SAME 110.4px on /av/index.html and
+     every other page of every trade — the report named consumables because that is
+     the page its author works in, not because it was the only one broken.
+     What was NOT the cause, checked before assuming it: consumables carries a
+     115px fixed action dock that geometrically overlaps the open menu, but the bar
+     is z-index 40 and every page dock measured 20-30, so the menu paints OVER them
+     (hit-test, 4 pages) and reserving space for a dock would only have made the
+     menu shorter for no reason.
+     The vh line stays first as the fallback for browsers that do not know dvh;
+     100dvh is the same number the eye gets. Both are only ever the pre-JS value,
+     since sizeMenu() measures the real glass and overwrites this on open. */
   .av-drop{position:absolute;top:calc(100% + 6px);left:0;min-width:250px;background:var(--av-paper);color:var(--av-ink);
     border:1px solid var(--av-steel);border-radius:3px;box-shadow:0 10px 30px rgba(0,0,0,.28);padding:5px;display:none;
-    max-height:calc(100vh - 72px);overflow-y:auto;-webkit-overflow-scrolling:touch;}
+    max-height:calc(100vh - 72px);
+    max-height:calc(100dvh - 72px);
+    overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+  /* THE SCROLL CUE. The report says "has no scroll", and on a touch screen there is
+     no scrollbar to say otherwise — a menu that is cut off and a menu that scrolls
+     look identical until you drag it. These four layers are the classic local/scroll
+     background pair: the two "local" covers ride with the content and hide the
+     shadow when you are at that end, so a soft edge appears at the bottom ONLY while
+     there is more menu below it, and nothing renders when it all fits. Declared as a
+     SECOND background after the plain one on purpose: if a browser cannot parse the
+     layered value it drops this line and keeps the solid paper above, instead of
+     rendering a transparent menu. */
+  .av-drop{background:
+    linear-gradient(var(--av-paper) 34%, rgba(251,251,248,0)) top/100% 15px local no-repeat,
+    linear-gradient(rgba(251,251,248,0), var(--av-paper) 66%) bottom/100% 15px local no-repeat,
+    radial-gradient(farthest-side at 50% 0, rgba(18,22,26,.17), rgba(18,22,26,0)) top/100% 7px scroll no-repeat,
+    radial-gradient(farthest-side at 50% 100%, rgba(18,22,26,.17), rgba(18,22,26,0)) bottom/100% 7px scroll no-repeat,
+    var(--av-paper);}
   .av-menu[open] .av-drop{display:block}
   .av-drop a{display:block;text-decoration:none;color:var(--av-ink);padding:8px 9px;border-radius:2px;}
   /* Hover paints the row in the TRADE's accent, so the text on it has to be the
@@ -462,9 +502,41 @@
       reqBtn
     ]);
   }
-  function toggleMenu() { var m = window.__avMenu; if (!m) return; var open = m.hasAttribute("open"); if (open) closeMenu(); else { m.setAttribute("open", ""); m.querySelector("button").setAttribute("aria-expanded", "true"); } }
+  /* ---- THE MENU'S FLOOR IS MEASURED, NEVER ASSUMED -------------------------
+   * Where the Tools menu has to stop is a fact about the device, and a
+   * stylesheet cannot know it: on iOS Safari with the URL bar showing, 100vh is
+   * the LARGE viewport and window.innerHeight is the glass you can actually see,
+   * and they differ by the height of the browser's own chrome. So the runtime
+   * asks the window instead of trusting a unit. window.innerHeight is the right
+   * question on every engine — it is the glass on iOS, and it equals 100vh on a
+   * desktop where nothing moves. Deliberately NOT visualViewport.height: that
+   * one also shrinks under pinch-zoom, and the operator's law is that a page
+   * must not alter when you zoom out. */
+  function sizeMenu() {
+    var m = window.__avMenu; if (!m || !m.hasAttribute("open")) return;
+    var drop = m.querySelector(".av-drop"); if (!drop) return;
+    var glass = window.innerHeight || document.documentElement.clientHeight || 0;
+    if (!glass) return;
+    // top does not depend on max-height, so this reads clean without a reset.
+    var top = drop.getBoundingClientRect().top;
+    var avail = Math.max(168, Math.round(glass - top - 10));
+    drop.style.maxHeight = "calc(" + avail + "px - env(safe-area-inset-bottom, 0px))";
+  }
+  var sizeQueued = false;
+  function sizeMenuSoon() {
+    if (sizeQueued) return; sizeQueued = true;
+    (window.requestAnimationFrame || setTimeout)(function () { sizeQueued = false; sizeMenu(); });
+  }
+  function toggleMenu() { var m = window.__avMenu; if (!m) return; var open = m.hasAttribute("open"); if (open) closeMenu(); else { m.setAttribute("open", ""); m.querySelector("button").setAttribute("aria-expanded", "true"); sizeMenu(); } }
   function closeMenu() { var m = window.__avMenu; if (m) { m.removeAttribute("open"); var b = m.querySelector("button"); if (b) b.setAttribute("aria-expanded", "false"); } }
   document.addEventListener("click", function (e) { var m = window.__avMenu; if (m && !m.contains(e.target)) closeMenu(); });
+  // The bar is sticky, so page scroll moves the menu's top until it pins, and a
+  // phone's glass changes height mid-gesture as the URL bar collapses. Both make a
+  // bound measured once at open stale, so it is re-measured while the menu is open.
+  window.addEventListener("resize", sizeMenuSoon);
+  window.addEventListener("orientationchange", sizeMenuSoon);
+  window.addEventListener("scroll", sizeMenuSoon, { passive: true });
+  if (window.visualViewport) { window.visualViewport.addEventListener("resize", sizeMenuSoon); }
 
   /* ------------------------------------------------------------------ the well */
   var modal, form, errBox, sendBtn, wellAnon = false, wellKind = "new_tool", resetWellKind = null;
