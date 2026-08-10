@@ -70,6 +70,16 @@
       "wished_date": "2026-08-09",
       "shipped_date": "2026-08-10",
       "shipped_commit": "dafb616d"
+    },
+    {
+      "tool_name": "Collage Studio — the export stopped reporting soft photos as full quality",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": null,
+      "company": null,
+      "role": "Collage user",
+      "wished_date": "2026-08-10",
+      "shipped_date": "2026-08-10",
+      "shipped_commit": "1b16c643"
     }
   ]
 }

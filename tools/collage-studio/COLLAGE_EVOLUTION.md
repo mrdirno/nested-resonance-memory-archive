@@ -2690,3 +2690,89 @@ frontier. Today's ceiling is tomorrow's floor.
   not assumed), where it had been failing about one run in five for this exact
   reason; fixed there in the same cycle, 20/20 green.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C93 · 2026-08-10 · [AXIS:WELL] THE EXPORT SAID TWELVE PHOTOS CAME BACK FULL
+  AND RENDERED THEM AT 200px** — wish `c39685fa` (bug, collage/export,
+  anonymous): *"once it reaches a recursive threshold you shouldn't be trying to
+  load the high resolution in each frame ... so that higher resolutions don't
+  crash but allow really powerful machines to do it."* The CRASH half shipped in
+  C87–C89. This is the QUALITY half, and it is the two defects C89 wrote down as
+  **verified real, not fixed here** — which is the whole reason that habit
+  exists.
+  **AN UN-DECODED PREVIEW IS NOT A FLOOR OF ZERO.** `beginOfflineRender`
+  repoints every fragment's still key from its preview to its ORIGINAL before
+  the budget runs, so a preview decode still in flight lands on a key nothing is
+  listening to. The floor a budgeted raster may not go under is read off the
+  still currently bound — none — so it came out 0, which reads as "this fragment
+  draws nothing, anything is an upgrade". Under a starved pool that adopted a
+  postage stamp, pinned the fragment to it for the whole take (its preview can
+  never arrive now, the key is orphaned) and reported the source as FULL. Drop
+  photos in and hit Export and that is the ORDINARY path, not a corner. Unknown
+  is now its own value and admits ONE size: the raster the budget did NOT
+  choose. An unclamped raster is bounded by the source or by the sampling the
+  destination can show, so it cannot be softer than any preview of that source —
+  and refusing sends the fragment back to the preview that was always on its way
+  instead of pinning a stamp. Two of the three cases still yield a real number,
+  and the second is free: the decode may have LANDED after the repoint.
+  **MEASURE THE ANSWER, NOT THE FAILURE.** `deviceSignals ??= readDeviceSignals()`
+  cached a blank WebGL probe as a permanent verdict. `getContext('webgl')`
+  returns null transiently for reasons that say nothing about the device —
+  Chromium evicts the oldest context past its per-page cap, a GPU-process crash
+  blanks every one until it restarts — and a blank verdict is `FLOOR_POOL_PX`,
+  the smallest pool there is, for the REST OF THE SESSION. Measured: **9.8x the
+  pool**, 15 MB instead of 149 MB. Cached only once it carries something, with a
+  bounded retry: without the retry a blip is permanent, without the settle a
+  WebGL-less realm probes forever.
+  **BACKPORT RIDER FIRED, AND IT FOUND THE WORSE ONE.** Swept the codebase for
+  the same class: `??=` now appears nowhere in `src`, but the SAME WebGL probe
+  lives spelled longhand in `exportLimits.ts`, and its copy is worse. The retry
+  alone would have fixed nothing there — `probeBudgetAreaPx` only consults the
+  GPU where `deviceMemory` is absent (Safari, iOS, Firefox), a blank falls
+  through to `SAFE_FLOOR_AREA*4`, and THAT is the ceiling `probeMaxArea`
+  searches up to, so the measurement is a fact about the guess. `probeMaxCanvas`
+  then wrote it to **sessionStorage as `source:'probe'`**, indistinguishable
+  from a real measurement, where `readCache` accepts anything clearing the
+  floor — and it runs once per session, so the retry never got a second chance.
+  One blank probe as the export sheet opened deleted the top of the size ladder
+  for the whole browser session AND SURVIVED THE RELOAD that would have cured
+  it. A measurement taken while the class is merely UNKNOWN is now provisional:
+  neither persisted nor memoised, bounded by the same settle. Reproduced on HEAD
+  (persists 4.2MP as `source:'probe'`, 1 write) vs fixed (0 writes).
+  **PROOF. 5,660 invariant checks · 0 failures** against the REAL transpiled
+  modules. The unknown-floor rule is swept as one TOTAL specification rather
+  than case by case — `rasterDims(…,null,…) === rasterDims(…,0,…)` when that
+  result is unclamped and `null` otherwise — over 80 seeds × 6 source shapes ×
+  starved and generous caps: 192 adopted, 208 refused, and **the narrowest
+  raster a floor of 0 would have adopted and reported as FULL was 59px.** The
+  probe-cache sweep runs under node precisely because there is no WebGL there —
+  the failure mode under test, permanently and for free — on a fresh module
+  instance per scenario, because the thing under test IS module-level mutable
+  state.
+  **AND THEN THE WIRING, BECAUSE A SWEEP CANNOT SEE WIRING (C87b).** Every
+  existing case waits 1200ms for thumbnails to bind, which is exactly why all
+  four passed and none could see this. B5 HOLDS the preview decodes instead —
+  deterministic, not a race — and asserts `heldPreviews === 12` FIRST so the
+  case cannot quietly degrade into B1. On HEAD it reproduces the defect verbatim:
+  `full 12, fellBack 0, clamped 12` at ~200px per photo. B6 is the half a
+  too-simple "refuse when unknown" fix would fail: a generous pool must still
+  upgrade, `clamped 0`. **24/24 across Chromium, Mobile Chrome, Mobile Safari
+  and WebKit-desktop**; every other unit sweep re-run unchanged. Live:
+  **28/28 mobile-watertight against the deploy** at 320/360/390/430 and zoomed
+  out, and **4/4 export tests driving the deployed UI**, one of them end to end
+  to a 2488×3732 file. The live bundle hash matched the local build both times.
+  **STILL OPEN, VERIFIED REAL BUT LATENT** (the same habit, paying forward):
+  `hydrateSessionAssets` (session.ts) manufactures `width: 0` for a manifest
+  entry with no usable intrinsic size, where every other pool door fails closed
+  — reachable only from a session persisted by a build older than the
+  `project.ts` door fix, and it would render a hole that `render.worker` counts
+  as drawn. And `span: 0` carries two meanings into the offline mixer ("unknown
+  duration" and soundtrack's deliberate "no picture to agree with"), which for a
+  TRIMMED clip routes around `audibleEnd`/`spanLimit` into the re-normalisation
+  `clipWindow.ts` documents as catastrophic — unreachable through the app today,
+  but `durationSec` is optional in the public `StageClipInput` type while
+  `inSec`/`outSec` are too. Neither is this cycle's fix; both are written down
+  so they get one.
+  **NOT SHIPPED FROM THIS WISH, AND SAID PLAINLY:** the stencil half — upload a
+  photo of a grid, detect the shapes, emit SVG slots to drop photos and video
+  into. That is its own tool, not an export fix.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/

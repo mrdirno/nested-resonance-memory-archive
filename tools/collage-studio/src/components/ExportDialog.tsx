@@ -233,9 +233,17 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                     </p>
                     {/* CREDIT ON THE PAGE, not only in credits.json — and on the
                         control itself, so the person who asked finds it where
-                        they asked. This wisher stayed anonymous. */}
+                        they asked. Both wishers stayed anonymous.
+
+                        TWO wishes now sit behind this one control: the ladder
+                        itself, and the memory budget that decides how much of
+                        each original a take can actually hold. A second
+                        identical credit line would be noise, and dropping the
+                        second wisher to avoid it would be worse — so the line
+                        names both. */}
                     <p className="ui-caption" style={{ opacity: 0.6 }}>
-                      Wished for by an anonymous Collage user.
+                      Wished for by anonymous Collage users — this ladder, and the quality
+                      fallbacks behind it.
                     </p>
                   </div>
                 )}
