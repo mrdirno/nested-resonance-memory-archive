@@ -606,6 +606,38 @@ ends of the boundary on the same day.
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
 
+- **THE HARNESS CANNOT SEE WHAT ITS ENGINE DOES NOT DO (2026-08-10).** Headless
+  Chromium has no collapsing URL bar, so in it `100vh === window.innerHeight`.
+  iOS Safari freezes `vh` to the LARGE viewport while the glass shrinks by ~130px,
+  and the Tools menu's `calc(100vh - 72px)` therefore built a menu taller than the
+  screen and told the scroller it fit — cut off on EVERY page of EVERY trade, for
+  as long as that line existed, with every mobile gate we own green the whole
+  time. A viewport-unit bug is structurally invisible to a harness whose viewport
+  has no browser chrome. RULE: to test a mobile-viewport condition you must
+  SIMULATE the discrepancy the device actually has — run at the large viewport and
+  override `innerHeight` to the real glass — and a green desktop run is not
+  evidence about a phone. Sibling of "A CLIP IS NOT A SPILL": both are the gate
+  measuring something adjacent to the thing that is broken.
+- **A SIMULATION IS ONLY FAITHFUL FOR WHAT IT MODELS (2026-08-10).** The same
+  `innerHeight` override that correctly exposes a `vh`-bound box LIES about a box
+  bound by `position:fixed; inset:0`, because iOS shrinks the layout viewport with
+  the toolbars but not `vh`. Run that way, the wishing well reported its send
+  button "18.8px below the glass — UNREACHABLE"; tested the way it is actually
+  bound, it is clear by 111.2px. One more cycle of trusting the harness and the
+  demand funnel would have been "fixed" for a bug it never had. RULE: every case
+  in a viewport gate declares how the box is BOUND and is tested that way, and a
+  finding from a simulation is a hypothesis until the model is checked against the
+  thing it claims to imitate.
+- **GEOMETRIC OVERLAP IS NOT OCCLUSION — HIT-TEST BEFORE YOU RESERVE (2026-08-10).**
+  Chasing the same bug, the first diagnosis was that consumables' 115px fixed
+  action dock buried 95.4px of the open menu; the geometry said so on three pages.
+  A screenshot said otherwise, and `elementFromPoint` confirmed it: the bar is
+  z-index 40, every page dock measured 20-30, and the menu paints over all of
+  them. Reserving space for the dock would have SHORTENED the menu on every tool
+  page to dodge a collision that does not happen. RULE: before subtracting an
+  obstruction, hit-test whether it is actually on top — and look at the render,
+  because a rect intersection cannot see paint order.
+
 - **A CLIP IS NOT A SPILL, and only one of them had a gate (2026-08-09).** Every
   mobile assertion this program owns looks for content sticking OUT — horizontal
   overflow, an element past the right edge, a tap target under 44px. Nothing was
@@ -1617,3 +1649,28 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   0px tap target — the probe was matching the closed tool dropdown's hidden
   links. A ruler that reads zero everywhere is a broken ruler, not 56 findings.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/
+- `2026-08-10` — **[AXIS:WELL]** bug a596d8c9 from the field ("the tools modal
+  when populated has no scroll so whatever is on the bottom gets cutoff",
+  /av/consumables.html) · the Tools menu was bounded by `calc(100vh - 72px)`, and
+  `100vh` is the LARGE viewport — on iOS Safari with the URL bar showing that is
+  ~130px taller than the glass, so the menu was built taller than the screen and
+  the scroller was then told it fit. **before→after: last row 110.4px BELOW the
+  glass and unreachable at any scroll position → 15.6px clear**, measured at the
+  794px large viewport with `innerHeight` reporting the real 664px glass (the
+  condition headless Chromium cannot produce by itself, which is why every mobile
+  gate we own was green). `sizeMenu()` now measures `window.innerHeight` on
+  open/resize/orientationchange/scroll instead of trusting a unit; CSS keeps
+  100vh→100dvh as the pre-JS fallback and adds `overscroll-behavior:contain`; a
+  scroll cue answers the "no scroll" half of the report. NOT the cause, checked
+  rather than assumed: consumables' 115px fixed dock overlaps the open menu, but
+  the bar is z-index 40 vs docks 20-30, so the menu paints over it and reserving
+  space would only have shortened the menu. **BACKPORT RIDER FIRED:** one shared
+  runtime meant all 7 trades were cut off and all 7 are fixed by the one change,
+  and the same bug class was swept across the other two overlays — the wishing
+  well and the feedback drop-in on /commons/ and Collage — both CLEAN (send button
+  clear by 111.2px / 4.2px / 73.8px). Two gates added, each deriving its page list
+  from disk so a new trade is covered the day it lands:
+  `tools/toolkit-gates/menu-reachability.mjs` (357 page×viewport checks over 51
+  pages in 8 dirs, ordinary glass AND the iOS condition) and
+  `overlay-reachability.mjs`. Credited on the Wall of Wishes.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/consumables.html
