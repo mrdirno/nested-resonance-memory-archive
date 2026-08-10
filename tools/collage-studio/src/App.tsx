@@ -195,6 +195,19 @@ export default function App() {
   const [twist, setTwist] = useState<TwistId>('none');
   /** THE MOVE — how the picture drifts inside its fragment. See lib/motion.ts. */
   const [move, setMove] = useState<MoveId>('still');
+  /**
+   * HAS ANYBODY ACTUALLY CHOSEN A MOVE? `'still'` is both the app's default and a
+   * legitimate answer, so the value alone cannot tell the two apart — and the
+   * difference decides whether adopting music is allowed to start the collage
+   * moving (see `adoptSoundtrack`).
+   *
+   * Only a LIVE choice counts: the move control and the dice. A restored session
+   * is deliberately not one, because `sessionStore` does not carry the soundtrack
+   * — so adding music after a restore is always a fresh act, never a replay of
+   * one.
+   */
+  const moveOwnedRef = useRef(false);
+  const chooseMove = (m: MoveId) => { moveOwnedRef.current = true; setMove(m); };
   const [bgColor, setBgColor] = useState('#050505'); 
   const [avgColor, setAvgColor] = useState<{r:number, g:number, b:number} | null>(null); 
 
@@ -872,6 +885,7 @@ export default function App() {
     setLook(roll.look ?? 'none');
     // And the move is part of it for the third time and the same reason — a
     // collage that drifts is not the same picture as one that sits still.
+    moveOwnedRef.current = true;   // a roll is a choice, even when it rolls STILL
     setMove(roll.move ?? 'still');
     setLastRecipe(roll.recipe);
     setLockedCells(new Map());
@@ -1391,13 +1405,36 @@ export default function App() {
       // already disposes clip urls this way.
       if (soundtrack?.url) URL.revokeObjectURL(soundtrack.url);
       setSoundtrack({ url, name: file.name, durationSec: 0, muted: false });
+
+      /**
+       * MUSIC MEANS THE PIECE MOVES — "looping image movement is the default",
+       * from the same field report that asked for the range.
+       *
+       * Adding a soundtrack is the one import that can only mean "this is a
+       * video now": a still collage exported with music under it is a photograph
+       * with a song stapled to it. So the collage starts moving, and DRIFT is the
+       * one that does not fight the music — a single slow camera move across the
+       * whole surface, on the same 12-second loop every move here runs on.
+       *
+       * IT ONLY EVER OVERRIDES THE UNSPOKEN DEFAULT. `'still'` is both the
+       * starting value and a real choice, which is exactly why `moveOwnedRef`
+       * exists: someone who set STILL, or rolled it, asked for a still collage
+       * and adding music does not un-ask it. And the notice SAYS what changed —
+       * a control that moves on its own without saying so is the same defect as
+       * a control that reads back the wrong state.
+       */
+      const started = !moveOwnedRef.current && move === 'still' && images.length > 0;
+      if (started) setMove('drift');
+
       // THE NOTICE MUST NOT NAME A CONTROL THAT IS NOT ON SCREEN. With no
       // photographs there is no stage, so there is no dock, no chip and no
       // speaker — the music is adopted and waits, and saying so is the honest
       // version of "press the speaker".
       flashNotice(images.length === 0
           ? `Music: ${file.name} — add photos and it goes under them.`
-          : `Music: ${file.name} — press the speaker to hear it.`);
+          : started
+            ? `Music: ${file.name} — the collage is drifting now. Press the speaker to hear it.`
+            : `Music: ${file.name} — press the speaker to hear it.`);
 
       try {
           const probe = document.createElement('audio');
@@ -2283,6 +2320,14 @@ export default function App() {
                        soundtrack={soundtrack}
                        onRemoveSoundtrack={removeSoundtrack}
                        onSoundtrackMuted={(muted) => setSoundtrack((prev) => (prev ? { ...prev, muted } : prev))}
+                       /* THE RANGE. `undefined` is "the whole track" and is
+                          stored as undefined rather than as [0, duration] —
+                          absent means the default everywhere in this app, and
+                          a stored pair would go stale the moment the probe
+                          revised the length. */
+                       onSoundtrackWindow={(v) => setSoundtrack((prev) => (
+                         prev ? { ...prev, inSec: v?.inSec, outSec: v?.outSec } : prev
+                       ))}
                      />
                    ) : (
                      previewUrl && <img src={previewUrl} className="w-full h-full object-contain pointer-events-none" />
@@ -2430,7 +2475,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={setMove} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={chooseMove} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
          )}

@@ -35,6 +35,11 @@ or re-documenting an existing capability is DD, not delivery.
   ONE LAYOUT — every render path (preview, Stage, video, raster export, SVG)
   draws ONE partition at four sizes, generated once at a 1200-space basis and
   scaled, instead of four partitions generated independently;
+  MUSIC RANGE — the soundtrack gets the same in/out window every clip has,
+  through the SAME sheet (`TrimSheet` now takes a name and a span, not a clip),
+  a ruler instead of a filmstrip where there is no picture, and the same
+  `clipWindow` formula on all three timelines; music also starts the collage
+  DRIFTING when nobody has chosen a move;
   TRIM — per-clip in/out points with a filmstrip sheet, held by ONE
   output-time-to-source-time function (`lib/clipWindow.ts`) that the live
   element, the offline frame seek and the offline audio mix all ask, and coupled
@@ -2775,4 +2780,87 @@ frontier. Today's ceiling is tomorrow's floor.
   **NOT SHIPPED FROM THIS WISH, AND SAID PLAINLY:** the stencil half — upload a
   photo of a grid, detect the shapes, emit SVG slots to drop photos and video
   into. That is its own tool, not an export fix.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C96 · 2026-08-10 · [AXIS:WELL] THE ONLY CUT OF A SONG THIS APP COULD PLAY
+  WAS THE FIRST N SECONDS OF IT** — wish `f6cbf511` (bug, collage/audio), the
+  oldest unserved row in the well: *"The audio import is cool. Need a way to
+  click it and select the range and also looping image movement is the
+  default."* Both halves shipped.
+  **THE RANGE IS THE SHEET THAT ALREADY EXISTED.** A soundtrack is a clip with
+  no picture — the file has said so since the day it was written — and the
+  second instance of a shape is where this project extracts the engine instead
+  of forking a page. So `TrimSheet` stopped taking a `LiveClip` and started
+  taking a NAME and a SPAN, and the music chip got the same Scissors button, the
+  same two native handles, the same focus trap, the same
+  both-handles-stop-at-each-other rule a ratcheting OUT point taught it, and the
+  same "All" reset. Zero new UI vocabulary; `SOUNDTRACK_ID` is minted so it can
+  never collide with a clip id, which is what lets ONE `trimming` slot hold
+  either and keeps the only-one-sheet-open invariant free.
+  **AND THE STRIP STAYED HONEST.** The tempting move for audio is a waveform,
+  which means decoding the whole file to draw a control — precisely the second
+  decoder the sheet's own comment refuses ("the difference between a trim UI
+  that works on a phone with three clips open and one that evicts a live decoder
+  to draw itself"), on the one import most likely to be a 5 MB song on a phone.
+  A track with no frames gets a RULER instead: minute marks on the same time
+  axis, which is the actual question you ask a song.
+  **THE BURIED PART IS THAT `span: 0` IS WHAT MAKES A RANGE ON MUSIC CORRECT.**
+  C93 wrote this down as latent and named the trim as the case that would reach
+  it. The user authors the range against the CONTAINER duration — the number the
+  probe reported and the max of the OUT slider — while the mixer resolves it
+  against the DECODED buffer, and an mp3's two lengths differ by the encoder's
+  delay and padding in either direction. Handing `durationSec` over as the span
+  to "help" the window sets OUT a hop PAST `buf.duration`, and `audioSchedule`
+  reads a window ending past the sound as the audio ENDING INSIDE the picture's
+  window: the LAPPED plan, one non-looping node per lap, a sliver of silence cut
+  into every repeat forever. With `span: 0` the mixer falls back to
+  `buf.duration` itself, OUT is clamped to real sound, `audibleEnd` equals OUT by
+  construction, and the straddle branch is UNREACHABLE for music. The hazard is
+  closed at the source rather than downstream. **`outSec === durationSec` is not
+  a corner case — it is what "from the drop to the end" produces on the first
+  drag.**
+  **PROOF, THREE WAYS.** (1) 45,719 unit assertions against the REAL transpiled
+  modules, over 30 ranges × 5 container lengths × 5 decode hops (0, ±26 ms, ±104
+  ms) × 3 take lengths, modelling the mixer with the real `normaliseWindow` +
+  `audioSchedule` rather than a paraphrase: never `silent`, never `lapped`, never
+  `truncated`, one node, `loopEnd` inside the buffer, and `schedulePositionAt`
+  inside the chosen window at 41 instants per case. **The contrast case is
+  asserted to REPRODUCE the defect** (`lappedWhenHelpful > 0`) — pass the
+  container duration as the span and the same user range laps — so I5 proves
+  something rather than describing it. (2) T6 at the artifact: a new
+  `music_thirds.m4a` fixture, 6 s in three 2 s thirds at 900/1500/2300 Hz (a
+  single-tone fixture measures identically whether the range was honoured or
+  ignored), trimmed to the middle third, exported, decoded: **1500 Hz = 0.10969,
+  900 Hz = 0.00011, 2300 Hz = 0.00012, control 0.00004** — the parts you cut are
+  ~1000× down and the take ran 5.01 s, so the 2 s window LAPPED. (3) The LIVE
+  timeline, because a range you can see in the file but cannot hear in the
+  monitor is the preview/export split this repo is scarred by wearing a new hat:
+  30 samples of the real `<audio>` element must all sit inside 2→4. **Negative
+  control run:** with the watchdog stubbed out it plays 0.47 → 3.40, straight
+  through the third the user cut, and the assertion fails.
+  **THE WATCHDOG DIVERGES FROM THE CLIP PATH, DELIBERATELY.** A trimmed clip is
+  held from `tick`, on frames the compositor is already drawing. Music is the one
+  source that can be playing while nothing is drawn at all — a still collage with
+  a soundtrack and no clips is an ordinary state — so it is held from the
+  element's own `timeupdate` as well, and native `loop` STAYS ON where a clip
+  turns it off: a paused element in a background tab needs a `play()` inside a
+  gesture that ended long ago, and a fraction of a second of intro once is a
+  better failure than silence that needs a tap to fix.
+  **THE SECOND HALF OF THE WISH.** Adding music is the one import that can only
+  mean "this is a video now", so the collage starts DRIFTING — but only when
+  nobody has chosen a move, because `'still'` is both the default and a real
+  answer, which is what `moveOwnedRef` is for; the move control and the dice both
+  claim it, a restored session does not (sessions never carry the soundtrack). The
+  notice says what changed, because a control that moves on its own without
+  saying so is the same defect as one that reads back the wrong state.
+  **SWEPT:** the same-url door in `setSoundtrack` updated only `muted`, so every
+  drag of the IN handle would have reached the export and not the monitor — the
+  one door built to prevent a preview/export split, reintroducing it. Fixed in
+  the same edit. Full soundtrack suite 6/6, clip trim suite 9/9 (the `TrimSheet`
+  refactor), mobile-watertight 7/7, video-audio-export 4/4, all 17 unit sweeps
+  green, `tsc --noEmit` clean.
+  **NOT SHIPPED, AND SAID PLAINLY:** no waveform (see above), no fade in/out at
+  the range edges, and the range is not carried in a saved project or share code
+  — the soundtrack has never been, and adding it is a format change that deserves
+  its own cycle rather than a rider on this one.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

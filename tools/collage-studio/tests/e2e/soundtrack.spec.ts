@@ -64,6 +64,19 @@ const MUSIC = join(HERE, '..', 'fixtures', 'music_1500.m4a');
 const HZ_MUSIC = 1500;
 const TRACK_SEC = 2.0;
 
+/**
+ * 6.0 s in three 2.0 s thirds — 900 Hz, then 1500 Hz, then 2300 Hz, AAC in an
+ * .m4a with no video track. The point is that WHICH PART of a song came out is a
+ * different measurement from WHETHER a song came out: a single-tone fixture
+ * measures identically whether the range was honoured or ignored. None of the
+ * three is a harmonic of another, nor of the 5000 Hz control (whose own
+ * neighbours, 4500 and 4600, are comfortably clear of it).
+ */
+const MUSIC_THIRDS = join(HERE, '..', 'fixtures', 'music_thirds.m4a');
+const HZ_LOW = 900;
+const HZ_MID = 1500;
+const HZ_HIGH = 2300;
+
 const musicInput = (page: Page) => page.locator('input[type="file"][accept*="audio"]');
 
 async function bootWithPhotos(page: Page) {
@@ -332,5 +345,160 @@ test.describe('THE SOUNDTRACK', () => {
         expect(box.height, `${width}px: ${name} is ${box.height}px tall`).toBeGreaterThanOrEqual(43.5);
       }
     }
+  });
+
+  /**
+   * T6 — THE RANGE, PROVED BY DECODING THE EXPORTED FILE.
+   *
+   * From the field: "the audio import is cool — need a way to click it and
+   * select the range". Until this, the only cut of a song this app could play
+   * was the first N seconds of it.
+   *
+   * WHY THE FIXTURE IS THREE TONES. A range is the one edit that changes WHICH
+   * PART of a file comes out while leaving every cheap signal identical: the
+   * readout still says "sound", the chip still says the track's name, the mix
+   * still has an audio track, and `music_1500.m4a` would measure exactly the
+   * same at 1500 Hz whether the window was honoured or ignored. So the track is
+   * 6 s in three 2 s thirds — 900 / 1500 / 2300 Hz, none of them a harmonic of
+   * another or of the 5000 Hz control — and the window is the MIDDLE third.
+   * Then "the range reached the file" and "the range was dropped" are two
+   * different measurements and not two readings of one.
+   *
+   * AND THE TAKE OUTRUNS THE WINDOW ON PURPOSE. 5 s of output over a 2 s window
+   * is two and a half laps, so this also asserts that a TRIMMED soundtrack still
+   * laps over its window — the branch `lib/soundtrack.ts` DECISION 1b is about,
+   * where handing the container duration over as the span would instead lap at
+   * the file's length with a sliver of silence cut into every repeat.
+   */
+  test('T6 — the music plays the range you picked, and laps inside it', async ({ page }) => {
+    test.setTimeout(420_000);
+    await bootWithPhotos(page);
+    await musicInput(page).setInputFiles([MUSIC_THIRDS]);
+    await expect(
+      page.getByRole('button', { name: /Remove the music, music_thirds\.m4a/ }),
+    ).toBeVisible({ timeout: 60_000 });
+
+    // THE LENGTH HAS TO LAND FIRST. It is probed asynchronously, and the range
+    // button is deliberately disabled until it does — two handles on a
+    // zero-width axis is a control that looks broken rather than pending.
+    const trimBtn = page.getByRole('button', { name: 'Trim music_thirds.m4a' });
+    await expect(trimBtn).toBeEnabled({ timeout: 30_000 });
+    await expect(
+      trimBtn, 'an untrimmed track wears no range badge',
+    ).not.toContainText('→');
+
+    await trimBtn.click();
+    const sheet = page.getByRole('dialog', { name: 'Trim music_thirds.m4a' });
+    await expect(sheet).toBeVisible({ timeout: 15_000 });
+
+    // MOBILE-WATERTIGHT, ON THE SHEET ITSELF — a new full-screen surface on a
+    // phone, checked where it is actually used rather than assumed from the
+    // clip sheet it shares code with.
+    await page.setViewportSize({ width: 390, height: 780 });
+    await page.waitForTimeout(300);
+    const sheetOverflow = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(
+      sheetOverflow.scrollWidth,
+      '390px with the range sheet open: the page must not scroll sideways',
+    ).toBeLessThanOrEqual(sheetOverflow.clientWidth);
+    for (const label of ['In point for music_thirds.m4a', 'Out point for music_thirds.m4a']) {
+      const box = await sheet.getByLabel(label).boundingBox();
+      expect(box?.height ?? 0, `${label} must be a 44px target`).toBeGreaterThanOrEqual(43.5);
+    }
+
+    // OUT first, then IN — pulling IN past the current OUT is repaired by the
+    // window's own floor, and setting the far edge first keeps every
+    // intermediate state legal instead of leaning on that repair.
+    await sheet.getByLabel('Out point for music_thirds.m4a').fill('4');
+    await sheet.getByLabel('In point for music_thirds.m4a').fill('2');
+    await expect(sheet.getByTestId('trim-readout')).toContainText('2.0s→4.0s');
+    await sheet.getByRole('button', { name: 'Close trim' }).click();
+    await expect(sheet).toBeHidden({ timeout: 10_000 });
+
+    // THE CHIP MUST SAY SO. A window is the one edit that changes what the
+    // export contains while leaving the collage looking identical, so it has to
+    // be legible without opening anything.
+    await expect(
+      page.getByTestId('track-range'),
+      'a trimmed track wears its range on the chip',
+    ).toHaveText('0:02→0:04', { timeout: 15_000 });
+
+    await page.setViewportSize({ width: 1280, height: 900 });
+
+    /**
+     * THE LIVE TIMELINE HOLDS THE RANGE TOO — asserted here because "the preview
+     * and the export derived the same thing independently and agreed right up
+     * until one of them changed" is the shape this project keeps getting burned
+     * by, and a range you can see in the file but not HEAR in the monitor is
+     * exactly that bug wearing a different hat.
+     *
+     * `<audio>` has no in/out points, so the window is held by watching
+     * `currentTime` — from the frame loop where one is running, and from the
+     * element's own `timeupdate` where none is (a still collage with music and
+     * no clips draws nothing at all). The tolerance is that event's ~250 ms plus
+     * a frame: the claim under test is "it stays inside the part you picked",
+     * not "it is sample-accurate", which is the offline mixer's job and is what
+     * the tone measurement below actually proves.
+     */
+    const walk = await page.evaluate(async () => {
+      const el = document.querySelector('audio') as HTMLAudioElement | null;
+      if (!el) return { found: false, samples: [] as number[], advanced: false };
+      const samples: number[] = [];
+      for (let i = 0; i < 30; i++) {
+        samples.push(el.currentTime);
+        await new Promise((r) => setTimeout(r, 100));
+      }
+      return { found: true, samples, advanced: new Set(samples.map((s) => s.toFixed(2))).size > 3 };
+    });
+    expect(walk.found, 'the Stage must hold a live <audio> element for the music').toBe(true);
+    expect(
+      walk.advanced,
+      `the monitor must actually be rolling, or "it stayed in range" is vacuous — ${walk.samples.join(',')}`,
+    ).toBe(true);
+    const stray = walk.samples.filter((s) => s < 2 - 0.4 || s > 4 + 0.4);
+    expect(
+      stray,
+      `the live monitor must stay inside the 2→4 range it was given — strayed to ${stray.join(',')} ` +
+      `(all: ${walk.samples.map((s) => s.toFixed(2)).join(',')})`,
+    ).toEqual([]);
+
+    const readout = await renderTake(page);
+    expect(readout, 'a trimmed track is still sound').toContain('sound');
+
+    const t = await measureTones(page, [HZ_LOW, HZ_MID, HZ_HIGH], HZ_CONTROL);
+    console.log(`[soundtrack] range: ${t.durationSec.toFixed(2)}s rms=${t.rms.toFixed(4)} ` +
+      `900=${t.bins[0].toFixed(5)} 1500=${t.bins[1].toFixed(5)} 2300=${t.bins[2].toFixed(5)} ` +
+      `control=${t.control.toFixed(5)}`);
+    expect(t.ok, `the export must carry an audio track — ${t.reason}`).toBe(true);
+    expect(t.rms, 'the audio track must not be digital silence').toBeGreaterThan(0.001);
+
+    // THE PART YOU PICKED IS THERE...
+    expect(
+      t.bins[1],
+      `1500 Hz (the middle third, which is what was selected) must be present — ` +
+      `mid=${t.bins[1]} control=${t.control}`,
+    ).toBeGreaterThan(t.control * 8);
+
+    // ...AND THE PARTS YOU CUT ARE NOT. This is the whole assertion: without the
+    // window the file starts at 0:00 and 900 Hz would be the loudest thing in it.
+    expect(
+      t.bins[0],
+      `900 Hz (the first third, cut away) must not be in the file — low=${t.bins[0]} mid=${t.bins[1]}`,
+    ).toBeLessThan(t.bins[1] / 8);
+    expect(
+      t.bins[2],
+      `2300 Hz (the last third, cut away) must not be in the file — high=${t.bins[2]} mid=${t.bins[1]}`,
+    ).toBeLessThan(t.bins[1] / 8);
+
+    // AND IT LAPPED INSIDE THE WINDOW. `measureTones` reads the MIDDLE of the
+    // decoded stream, which for a 5 s take is past the end of a 2 s window — the
+    // tone can only be there if the window repeated.
+    expect(
+      t.durationSec,
+      `the take must outrun the 2 s window, or lapping inside a range is not under test`,
+    ).toBeGreaterThan(3);
   });
 });

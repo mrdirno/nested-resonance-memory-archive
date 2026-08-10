@@ -44,6 +44,38 @@
 //   sweep asserts this for EVERY duration, sane ones included, so an edit that
 //   helpfully passes the real number fails rather than ships a sliver.
 //
+// DECISION 1b — THE RANGE. "Need a way to click it and select the range", from
+//   the field. A song is the one import where the part you want is almost never
+//   the part that starts at 0:00, and until now the only cut of a track this app
+//   could play was the first N seconds of it.
+//
+//   The range is `inSec`/`outSec`, resolved by `clipWindow` — the same module the
+//   video trim, the offline seek and the audio mix all ask, because three copies
+//   of one formula is the shape this project keeps getting burned by. Nothing new
+//   is invented here; the music simply stops being the one source that was not
+//   allowed a window.
+//
+//   AND DECISION 1 IS WHAT MAKES THE RANGE CORRECT, which is the opposite of what
+//   it looks like. The user authors the range against the CONTAINER duration —
+//   that is the number the probe reported and the number under the slider — while
+//   the mixer resolves it against the DECODED buffer, and an mp3's two lengths
+//   differ by the encoder's padding. Handing `durationSec` over as `span` to
+//   "help" the window would set OUT a hop PAST `buf.duration`, and `audioSchedule`
+//   reads a window whose end is past the sound as the audio ENDING INSIDE the
+//   picture's window: it would switch to the LAPPED plan and cut a sliver of
+//   silence into every repeat of the loop, forever. With `span: 0` the mixer
+//   resolves the window against `buf.duration` itself, so OUT is clamped to real
+//   sound, `audibleEnd` equals OUT by construction, and the straddle branch is
+//   unreachable for music. The trim is the case that would have made that latent
+//   hazard reachable; it is closed here rather than downstream, and the sweep
+//   asserts the row still carries `span === 0` with any range set.
+//
+//   THE LABEL IS THE ONE THING RESOLVED AGAINST `durationSec` (`soundtrackWindow`
+//   below), because the chip and the sliders have no other length to draw. The two
+//   disagree by that same padding hop at the OUT point and nowhere else — a
+//   difference below the trim slider's own step, and the honest alternative is a
+//   UI that cannot draw itself until the file has been fully decoded.
+//
 // DECISION 2 — INTENT IS NOT AUDIBILITY, and this file keeps them adjacent.
 //   Written down in `stage.ts` as the bug that made exports silent: `gain` for
 //   the FILE is the user's intent (`!muted`); `audible` is a fact about the
@@ -68,6 +100,8 @@
  * not a clip id and can never collide with one: clip ids are minted as
  * `clip-${Date.now()}-${seq}` / `vid-…`, so the leading `__` is unreachable.
  */
+import { normaliseWindow, type ClipWindow } from './clipWindow';
+
 export const SOUNDTRACK_ID = '__soundtrack__';
 
 /**
@@ -88,6 +122,14 @@ export interface SoundtrackSpec {
   durationSec: number;
   /** THE USER'S INTENT: "this music is part of the piece". Absent means NO. */
   muted?: boolean;
+  /**
+   * THE RANGE — seconds into the song. ABSENT MEANS THE WHOLE TRACK, never "keep
+   * what is there" (this project has a scar with that exact name), which is also
+   * `normaliseWindow`'s own rule, so an absent pair and an explicit [0, duration]
+   * resolve identically and the untrimmed path stays bit-identical.
+   */
+  inSec?: number;
+  outSec?: number;
 }
 
 /**
@@ -103,6 +145,9 @@ export interface SoundtrackSource {
   loop: boolean;
   gain: number;
   rate: number;
+  /** The range, passed straight through. Absent on an untrimmed track. */
+  inSec?: number;
+  outSec?: number;
 }
 
 /**
@@ -160,12 +205,45 @@ export const soundtrackSource = (t: SoundtrackSpec | null | undefined): Soundtra
   return {
     id: SOUNDTRACK_ID,
     url: t.url,
-    // DECISION 1. Never `t.durationSec`.
+    // DECISION 1 / 1b. Never `t.durationSec` — least of all now that a range can
+    // be set, which is the case that would turn the padding hop into a sliver of
+    // silence per lap.
     span: 0,
     loop: true,
     gain: t.muted ? 0 : 1,
     rate: 1,
+    // PASSED THROUGH, NOT RESOLVED. The mixer resolves them against the decoded
+    // buffer; resolving them here against `durationSec` would be the second copy
+    // of a window this project keeps only one of.
+    inSec: t.inSec,
+    outSec: t.outSec,
   };
+};
+
+/**
+ * THE RANGE, AS THE UI SEES IT — resolved against the probed container duration
+ * because that is the only length a chip or a slider has to draw against.
+ *
+ * This is the one place `durationSec` is legitimately a span, and its output is
+ * for LABELS and SLIDER POSITIONS only: nothing in the render reads it, and the
+ * mixer resolves the same pair independently against the decoded buffer
+ * (DECISION 1b). Before the length lands `durationSec` is 0, and
+ * `normaliseWindow` answers a zero span with a zero-length full window — so the
+ * chip says "whole track" until there is a length to say anything else about,
+ * which is the correct degradation rather than a guess.
+ */
+export const soundtrackWindow = (t: SoundtrackSpec | null | undefined): ClipWindow =>
+  normaliseWindow(t?.durationSec ?? 0, t?.inSec, t?.outSec);
+
+/**
+ * `0:34→1:12` for the chip, or `''` when the whole track plays. Empty is the
+ * signal the chip uses to stay quiet: a track nobody trimmed should not carry a
+ * badge saying so.
+ */
+export const soundtrackRangeLabel = (t: SoundtrackSpec | null | undefined): string => {
+  const w = soundtrackWindow(t);
+  if (w.full || !(w.length > 0)) return '';
+  return `${soundtrackClock(w.inSec)}→${soundtrackClock(w.outSec)}`;
 };
 
 /**
@@ -184,6 +262,17 @@ export const soundtrackAudible = (
  */
 export const soundtrackLength = (sec: number): string => {
   if (!Number.isFinite(sec) || sec <= 0) return '';
-  const total = Math.floor(sec);
+  return soundtrackClock(sec);
+};
+
+/**
+ * The same clock for a POSITION rather than a length, where `0:00` is a real
+ * answer and the empty string is not. Split from `soundtrackLength` rather than
+ * given a flag because the two differ only at zero and that is precisely the
+ * value the range readout has to be able to print.
+ */
+export const soundtrackClock = (sec: number): string => {
+  const s = Number.isFinite(sec) && sec > 0 ? sec : 0;
+  const total = Math.floor(s);
   return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
 };

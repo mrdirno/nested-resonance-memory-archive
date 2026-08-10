@@ -738,6 +738,9 @@ export class Stage {
     gain: GainNode | null;
     muted: boolean;
     broken: boolean;
+    /** THE RANGE. Absent means the whole track, and costs the watchdog one branch. */
+    inSec: number | undefined;
+    outSec: number | undefined;
   } | null = null;
   private soundOn = false;
   private needsGesture = false;
@@ -1338,6 +1341,10 @@ export class Stage {
       if (c.frameDirty) { c.frameDirty = false; needDraw = true; }
       else if (el.currentTime !== c.lastTime) needDraw = true;
     }
+    // THE MUSIC'S RANGE, held to the frame while there IS a frame. It does not
+    // set `needDraw` — moving the song changes nothing on the canvas.
+    this.enforceTrackWindow();
+
     if (this.capturing && ts - this.lastDrawAt >= this.captureHeartbeatMs) needDraw = true;
 
     // THE MOVE, on the LIVE timeline.
@@ -2687,12 +2694,20 @@ export class Stage {
    * realtime recording can have sound, and it emits the same
    * `describeAudioSources` row the offline mixer already knows how to render.
    *
-   * SAME URL MEANS SAME TRACK. Only `muted` is updated then — rebuilding the
-   * element would restart the music every time React re-rendered the dock, and
-   * `createMediaElementSource` may be called ONCE PER ELEMENT EVER, so a rebuild
-   * is also the one operation that cannot be undone cheaply.
+   * SAME URL MEANS SAME TRACK. Only the cheap fields are updated then —
+   * rebuilding the element would restart the music every time React re-rendered
+   * the dock, and `createMediaElementSource` may be called ONCE PER ELEMENT EVER,
+   * so a rebuild is also the one operation that cannot be undone cheaply.
+   *
+   * THE RANGE IS ONE OF THOSE CHEAP FIELDS, and it has to be: every drag of the
+   * IN slider arrives here on the same url, so a same-url path that updated only
+   * `muted` would take the new window, drop it, and leave the monitor playing the
+   * old one while the export rendered the new one — the preview/export split this
+   * project is scarred by, reintroduced through the one door built to avoid it.
    */
-  setSoundtrack(spec: { url: string; name?: string; muted?: boolean } | null): void {
+  setSoundtrack(
+    spec: { url: string; name?: string; muted?: boolean; inSec?: number; outSec?: number } | null,
+  ): void {
     if (this.destroyed) return;
     const url = spec?.url || '';
     if (!url) { this.disposeSoundtrack(); this.emitStatus(); return; }
@@ -2700,7 +2715,13 @@ export class Stage {
     if (this.track && this.track.url === url) {
       this.track.name = spec?.name || this.track.name;
       this.track.muted = !!spec?.muted;
+      this.track.inSec = spec?.inSec;
+      this.track.outSec = spec?.outSec;
       this.applyMutes();
+      // The window may have moved the playhead OUT of the new range — enforce at
+      // the moment the fact exists rather than waiting for the next frame, which
+      // on a still composition with no clips may be a while.
+      this.enforceTrackWindow();
       this.emitStatus();
       return;
     }
@@ -2709,6 +2730,7 @@ export class Stage {
     this.track = {
       url, name: spec?.name || 'music', el: null, source: null, gain: null,
       muted: !!spec?.muted, broken: false,
+      inSec: spec?.inSec, outSec: spec?.outSec,
     };
     const doc = this.doc;
     const host = this.ensureHost();
@@ -2730,6 +2752,20 @@ export class Stage {
       if (this.track && this.track.el === el) { this.track.broken = true; this.emitStatus(); }
     });
     el.addEventListener('canplay', () => this.emitStatus());
+    // THE RANGE, HELD ON THE ELEMENT'S OWN CLOCK.
+    //
+    // A trimmed CLIP is held from `tick`, on the frames the compositor is already
+    // drawing. Music has no picture, so it is the one source that can be playing
+    // while nothing is being drawn at all — a still collage with a soundtrack and
+    // no clips and no move is a real, ordinary state of this app, and a watchdog
+    // that only runs inside the draw loop would simply not run there. `timeupdate`
+    // is the element's own heartbeat, fires whether or not anything is painting,
+    // and costs one branch on an untrimmed track. `tick` calls the SAME method as
+    // well, so a range under a moving composition is held to the frame instead of
+    // to the event's ~250 ms.
+    el.addEventListener('timeupdate', () => {
+      if (this.track && this.track.el === el) this.enforceTrackWindow();
+    });
 
     // The graph is built at element creation for the same reason clips build
     // theirs here: `captureStream` taps `masterGain`, and bolting a source on
@@ -2770,6 +2806,50 @@ export class Stage {
     if (!muted) { const el = this.track.el; if (el) { try { const p = el.play(); if (p && typeof p.then === 'function') p.then(() => {}, () => {}); } catch { /* ignore */ } } }
     this.applyMutes();
     this.emitStatus();
+  }
+
+  /**
+   * HOLD THE MUSIC INSIDE ITS RANGE. Returns true if it moved the playhead.
+   *
+   * The decision is `liveWrapTarget` — the same module the offline mix asks — so
+   * the monitor and the export cannot hold two opinions about where the song is.
+   *
+   * THE SPAN IS THE ELEMENT'S OWN `duration`, and that is deliberate rather than
+   * convenient. `lib/soundtrack.ts` DECISION 1 says the Stage holds a url and an
+   * intent and no length, because a CONTAINER duration handed to the MIXER is the
+   * padding hop that cuts a sliver into every lap. Here the container duration is
+   * not a guess about the sound — it is the exact clock this `<audio>` element
+   * seeks on, so it is the only correct span for this timeline. Each timeline
+   * resolves the same pair against the length that is true for it: the element
+   * against `el.duration`, the mixer against the decoded buffer.
+   *
+   * NATIVE `loop` STAYS ON, where a trimmed clip turns it off. A clip that runs
+   * to its real end with `loop` off pauses, and the frame loop that would seek it
+   * back is the same loop that is drawing its picture — so it is never far away.
+   * Music can be the only thing happening while the tab is in the background,
+   * where nothing runs at all; a paused element there would need a `play()` to
+   * recover, inside a gesture that has long since ended. So the element keeps its
+   * own wrap as the floor, and `liveWrapTarget`'s "before IN" branch — which
+   * exists for exactly this wrap — pulls it up to the IN point on the first event
+   * after. The degradation is a fraction of a second of the intro, once, instead
+   * of silence that needs a tap to fix.
+   */
+  private enforceTrackWindow(): boolean {
+    const t = this.track;
+    const el = t?.el;
+    if (!t || !el) return false;
+    // UNTRIMMED IS FREE, and it is the overwhelmingly common case: one branch,
+    // no `duration` read, no window allocated, no seek.
+    if (t.inSec === undefined && t.outSec === undefined) return false;
+    const d = el.duration;
+    if (!Number.isFinite(d) || d <= 0) return false;   // metadata has not landed
+    const target = liveWrapTarget(
+      { window: normaliseWindow(d, t.inSec, t.outSec), loop: true, rate: 1 },
+      el.currentTime,
+    );
+    if (target === null) return false;
+    try { el.currentTime = target; } catch { return false; }
+    return true;
   }
 
   private disposeSoundtrack(): void {
@@ -3014,7 +3094,14 @@ export class Stage {
     // picture's window" and answer with the LAPPED plan.
     const trackRow = soundtrackSource(
       this.track && !this.track.broken
-        ? { url: this.track.url, name: this.track.name, durationSec: 0, muted: this.track.muted }
+        ? {
+            url: this.track.url, name: this.track.name, durationSec: 0,
+            muted: this.track.muted,
+            // The RANGE travels; the LENGTH does not. `durationSec: 0` above is
+            // still the whole of DECISION 1 — see DECISION 1b for why a window
+            // makes keeping it zero more load-bearing rather than less.
+            inSec: this.track.inSec, outSec: this.track.outSec,
+          }
         : null,
     );
     if (trackRow) out.push(trackRow);

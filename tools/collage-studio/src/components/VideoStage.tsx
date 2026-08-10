@@ -53,7 +53,9 @@ import {
 import type { ImageAsset, LayoutItem, LayoutMode, LiveClip } from '../types';
 import { computeClipPlayback, CLIP_LENGTH_MODES, type ClipLengthMode } from '../lib/videoSync';
 import { normaliseWindow, MIN_WINDOW_SEC } from '../lib/clipWindow';
-import { soundtrackLength } from '../lib/soundtrack';
+import {
+  soundtrackLength, soundtrackClock, soundtrackWindow, soundtrackRangeLabel, SOUNDTRACK_ID,
+} from '../lib/soundtrack';
 import type { TitlePlan } from '../lib/title';
 import type { LookId } from '../lib/grade';
 
@@ -113,7 +115,17 @@ export interface VideoStageProps {
    * THE SOUNDTRACK — music under the collage, handed straight to the Stage,
    * which holds it as a clip with no picture. Null means no music.
    */
-  soundtrack?: { url: string; name: string; durationSec: number; muted?: boolean } | null;
+  soundtrack?: { url: string; name: string; durationSec: number; muted?: boolean; inSec?: number; outSec?: number } | null;
+  /**
+   * THE MUSIC'S RANGE moved. `undefined` means the whole track — the same
+   * "absent is the default" the clip trims and `normaliseWindow` both use, so
+   * "All" is one call and not a special case anywhere downstream.
+   *
+   * It lives in App state rather than in this component's `trims` map because the
+   * soundtrack is App's to own (App holds the blob url and revokes it), and a
+   * range held here would silently reset every time the dock unmounted.
+   */
+  onSoundtrackWindow?: (v: { inSec: number; outSec: number } | undefined) => void;
   /** Remove the music. The URL belongs to the parent, which revokes it. */
   onRemoveSoundtrack?: () => void;
   /** The music's INTENT changed. The parent owns it; the Stage is re-fed from
@@ -175,16 +187,33 @@ export interface StageRecorder {
  * import, `sourceTime` and all. No second decoder — which is the difference
  * between a trim UI that works on a phone with three clips open and one that
  * evicts a live decoder to draw itself.
+ *
+ * IT TAKES A NAME AND A SPAN, NOT A CLIP, because the second thing that needed a
+ * range was the MUSIC ("need a way to click it and select the range", from the
+ * field) and a soundtrack is a clip with no picture. Everything this sheet was
+ * already doing — the two native handles, the modal it had to become, the
+ * focus trap, the both-handles-stop-at-each-other rule that a ratcheting OUT
+ * point taught it — is the same work for a song, and the second instance of a
+ * shape is where this project extracts the engine instead of forking a page.
+ *
+ * AND THE STRIP STAYS HONEST WHEN THERE IS NO PICTURE. The tempting move for
+ * audio is a waveform, which means decoding the whole file to draw a control —
+ * exactly the second decoder the paragraph above exists to refuse, and on the one
+ * import most likely to be a 5 MB song on a phone. So a track with no frames gets
+ * a RULER instead: minute marks against the same time axis, which is the actual
+ * question you are asking a song ("where is 1:30?") and costs nothing to answer.
  */
 const TrimSheet: React.FC<{
-  clip: LiveClip;
+  /** What is being cut, for every label in here. */
+  name: string;
+  /** Its length in seconds — the x-axis of the strip and the max of both handles. */
+  span: number;
   frames: ImageAsset[];
   value: { inSec: number; outSec: number } | undefined;
   onChange: (v: { inSec: number; outSec: number } | undefined) => void;
   onClose: () => void;
-}> = ({ clip, frames, value, onChange, onClose }) => {
+}> = ({ name, span, frames, value, onChange, onClose }) => {
   const closeRef = useRef<HTMLButtonElement>(null);
-  const span = clip.durationSec;
   const w = normaliseWindow(span, value?.inSec, value?.outSec);
   // A step fine enough to land on a beat, coarse enough that a thumb can hit it.
   const step = span > 60 ? 0.1 : 0.01;
@@ -266,7 +295,7 @@ const TrimSheet: React.FC<{
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={`Trim ${clip.name}`}
+        aria-label={`Trim ${name}`}
         onClick={(e) => e.stopPropagation()}
         onKeyDown={onKeyDown}
         className="w-full sm:max-w-lg bg-[#0e0e0e] border-t sm:border border-white/15 sm:rounded-2xl p-4 pb-6 sm:pb-4 flex flex-col gap-3"
@@ -274,7 +303,7 @@ const TrimSheet: React.FC<{
         <div className="flex items-center gap-2 min-w-0">
           <Scissors size={13} className="text-emerald-400 shrink-0" />
           <span className="text-[10px] font-black tracking-[0.2em] text-white uppercase shrink-0">Trim</span>
-          <span className="text-[10px] text-gray-500 truncate min-w-0" title={clip.name}>{clip.name}</span>
+          <span className="text-[10px] text-gray-500 truncate min-w-0" title={name}>{name}</span>
           <div className="flex-1" />
           <button
             ref={closeRef}
@@ -313,7 +342,30 @@ const TrimSheet: React.FC<{
                 />
               );
             }) : (
-              <div className="absolute inset-0 bg-gradient-to-r from-[#141414] to-[#1e1e1e]" />
+              /* NO FRAMES — the soundtrack, and anything else with a length but
+                 no picture. A flat gradient is a strip that says nothing, and a
+                 range you cannot place in the song is barely a range at all. So
+                 the axis gets marks: every minute on a long track, every ten
+                 seconds on a short one, capped so a 40-minute mix does not draw
+                 forty lines into a 16px-high box. */
+              <div className="absolute inset-0 bg-gradient-to-r from-[#141414] to-[#1e1e1e]">
+                {(() => {
+                  const stepSec = span > 600 ? 300 : span > 120 ? 60 : span > 30 ? 10 : 5;
+                  const marks: number[] = [];
+                  for (let t = stepSec; t < span && marks.length < 24; t += stepSec) marks.push(t);
+                  return marks.map((t) => (
+                    <div
+                      key={t}
+                      className="absolute inset-y-0 w-px bg-white/15"
+                      style={{ left: `${pct(t)}%` }}
+                    >
+                      <span className="absolute top-0.5 left-1 text-[8px] tabular-nums text-white/35">
+                        {soundtrackClock(t)}
+                      </span>
+                    </div>
+                  ));
+                })()}
+              </div>
             )}
           </div>
           {/* Everything OUTSIDE the window is dimmed — the cut is the thing you
@@ -344,7 +396,7 @@ const TrimSheet: React.FC<{
             <input
               type="range" min={0} max={span} step={step} value={w.inSec}
               onChange={(e) => setIn(parseFloat(e.target.value))}
-              aria-label={`In point for ${clip.name}`}
+              aria-label={`In point for ${name}`}
               /* `--fill` IS NOT OPTIONAL: the app's global range track is a
                  gradient stopped at `var(--fill, 50%)`, so a slider that never
                  sets it paints exactly half green FOREVER. On an untrimmed clip
@@ -361,7 +413,7 @@ const TrimSheet: React.FC<{
             <input
               type="range" min={0} max={span} step={step} value={w.outSec}
               onChange={(e) => setOut(parseFloat(e.target.value))}
-              aria-label={`Out point for ${clip.name}`}
+              aria-label={`Out point for ${name}`}
               style={{ ['--fill' as string]: `${pct(w.outSec)}%` } as React.CSSProperties}
               className="flex-1 min-w-0 h-11 accent-emerald-400 bg-transparent cursor-pointer"
             />
@@ -375,13 +427,13 @@ const TrimSheet: React.FC<{
             data-testid="trim-readout"
           >
             <span className="text-white font-black">{secs(w.length)}</span> of {secs(span)}
-            {w.full ? ' · whole clip' : ` · ${secs(w.inSec)}→${secs(w.outSec)}`}
+            {w.full ? ' · all of it' : ` · ${secs(w.inSec)}→${secs(w.outSec)}`}
           </span>
           <div className="flex-1" />
           <button
             onClick={() => onChange(undefined)}
             disabled={w.full}
-            aria-label={`Use all of ${clip.name}`}
+            aria-label={`Use all of ${name}`}
             className="h-11 px-3 rounded-lg text-[9px] font-black tracking-[0.15em] uppercase text-gray-400 border border-white/10 flex items-center gap-1.5 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:pointer-events-none transition-colors shrink-0"
           ><RotateCcw size={12} /> All</button>
           <button
@@ -405,6 +457,7 @@ type RecPhase = 'idle' | 'running' | 'saving';
 export const VideoStage: React.FC<VideoStageProps> = ({
   layoutItems, orderedAssets, clips, mode, aspect, zoom, bgColor, titlePlan, look, onNotice, onUnavailable,
   controlsHost, onRemoveClip, recorderRef, poolAssets, soundtrack, onRemoveSoundtrack, onSoundtrackMuted,
+  onSoundtrackWindow,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<Stage | null>(null);
@@ -600,11 +653,19 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   const trackUrl = soundtrack?.url ?? '';
   const trackName = soundtrack?.name ?? '';
   const trackMuted = !!soundtrack?.muted;
+  /* THE RANGE JOINS THE DEPS AS TWO PRIMITIVES, not as the object it came in.
+     `soundtrack` is rebuilt on every parent render, so depending on it would run
+     this effect constantly; depending on neither would run it never, and a drag
+     of the IN handle would reach the export and not the monitor. */
+  const trackIn = soundtrack?.inSec;
+  const trackOut = soundtrack?.outSec;
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
-    stage.setSoundtrack(trackUrl ? { url: trackUrl, name: trackName, muted: trackMuted } : null);
-  }, [stageGen, trackUrl, trackName, trackMuted]);
+    stage.setSoundtrack(trackUrl
+      ? { url: trackUrl, name: trackName, muted: trackMuted, inSec: trackIn, outSec: trackOut }
+      : null);
+  }, [stageGen, trackUrl, trackName, trackMuted, trackIn, trackOut]);
 
   // --- transport -------------------------------------------------------------
 
@@ -1066,6 +1127,46 @@ export const VideoStage: React.FC<VideoStageProps> = ({
                 {soundtrackLength(soundtrack?.durationSec ?? 0)}
               </span>
             )}
+            {/* THE RANGE — "click it and select the range", from the field. The
+                same button a clip gets, opening the same sheet, because a
+                soundtrack is a clip with no picture and the part of a song you
+                want is almost never the part that starts at 0:00.
+
+                DISABLED UNTIL THE LENGTH LANDS, and that is not a nicety: the
+                probe is asynchronous (lib/soundtrack.ts DECISION 1), and a sheet
+                opened against `durationSec: 0` is two handles on a zero-width
+                axis — every drag resolves to the same empty window and the
+                control looks broken rather than pending. `MIN_WINDOW_SEC` is the
+                same floor the clip chip uses, so a track too short to cut says
+                so by being unavailable instead of by failing quietly. */}
+            {onSoundtrackWindow && !trackRow.broken && (() => {
+              const w = soundtrackWindow(soundtrack);
+              const dur = soundtrack?.durationSec ?? 0;
+              return (
+                <button
+                  onClick={() => setTrimming(SOUNDTRACK_ID)}
+                  disabled={busy || !(dur > MIN_WINDOW_SEC)}
+                  title={dur > MIN_WINDOW_SEC
+                    ? (w.full
+                        ? `Pick the part of ${trackRow.name} that plays (${soundtrackLength(dur)})`
+                        : `${trackRow.name}: playing ${soundtrackRangeLabel(soundtrack)} of ${soundtrackLength(dur)}`)
+                    : 'Waiting for the length of this track'}
+                  aria-label={`Trim ${trackRow.name}`}
+                  className={`h-11 min-w-[2.75rem] px-2 rounded flex items-center justify-center gap-1 transition-colors disabled:opacity-30 disabled:pointer-events-none ${
+                    w.full
+                      ? 'text-gray-500 hover:text-white hover:bg-white/10'
+                      : 'text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20'
+                  }`}
+                >
+                  <Scissors size={14} />
+                  {!w.full && (
+                    <span className="text-[9px] font-black tabular-nums" data-testid="track-range">
+                      {soundtrackRangeLabel(soundtrack)}
+                    </span>
+                  )}
+                </button>
+              );
+            })()}
             {/* THE NAME MUST NAME THE ACTION, and this button has three states
                 rather than two. Music arrives IN the piece while the monitor is
                 still off, so the first press means "let me hear it" — and an
@@ -1244,7 +1345,24 @@ export const VideoStage: React.FC<VideoStageProps> = ({
       {/* THE TRIM SHEET. Mounted from the clip list rather than living in it:
           the dock is a one-line scroll row on a phone and a range slider does
           not fit in it — and a control you cannot drag is not a trim control. */}
-      {trimming && !busy && (() => {
+      {/* THE MUSIC'S RANGE, through the same sheet. `SOUNDTRACK_ID` is minted so
+          it can never collide with a clip id (lib/soundtrack.ts), which is what
+          lets one `trimming` slot hold either — and with it the invariant that
+          only one of these sheets can ever be open. */}
+      {trimming === SOUNDTRACK_ID && !busy && soundtrack && onSoundtrackWindow && (
+        <TrimSheet
+          name={soundtrack.name}
+          span={soundtrack.durationSec}
+          frames={[]}
+          value={soundtrack.inSec !== undefined && soundtrack.outSec !== undefined
+            ? { inSec: soundtrack.inSec, outSec: soundtrack.outSec }
+            : undefined}
+          onChange={onSoundtrackWindow}
+          onClose={() => setTrimming(null)}
+        />
+      )}
+
+      {trimming && trimming !== SOUNDTRACK_ID && !busy && (() => {
         const c = clips.find((x) => x.id === trimming);
         if (!c) return null;
         // The frames this clip already gave us, in time order. `sourceTime` is
@@ -1266,7 +1384,8 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           .sort((a, b) => (a.sourceTime ?? 0) - (b.sourceTime ?? 0));
         return (
           <TrimSheet
-            clip={c}
+            name={c.name}
+            span={c.durationSec}
             frames={frames}
             value={trims[c.id]}
             onChange={(v) => setTrim(c.id, v)}
