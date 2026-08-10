@@ -246,7 +246,25 @@ export const canAllocate = (w: number, h: number): boolean => {
 // 4. FREE PRE-FILTER — decide what is worth probing WITHOUT allocating anything
 // -----------------------------------------------------------------------------
 
+/**
+ * `null` = not settled yet. A NUMBER (including 0) = this realm's final answer.
+ *
+ * MEMOISE THE ANSWER, NOT THE FAILURE — the same policy `createSignalCache`
+ * applies to the Stage's copy of this probe in rasterBudget.ts, restated here
+ * rather than imported because both files take ZERO IMPORTS on purpose (their
+ * unit sweeps transpile one file and import it, so a relative import would not
+ * resolve). Two copies of an eight-line policy, and the comment on each names
+ * the other.
+ *
+ * `getContext('webgl')` returns null TRANSIENTLY for reasons that say nothing
+ * about the device: Chromium evicts the oldest context past its per-page cap, a
+ * GPU-process crash blanks every one until it restarts, and `createSurface`
+ * itself can fail under allocation pressure. Writing that straight into the
+ * cache made a blip permanent.
+ */
+export const BLANK_GL_PROBE_RETRIES = 3;
 let glMaxTextureCache: number | null = null;
+let glBlankProbes = 0;
 
 /** GPU class signal. Costs one 1x1 WebGL context, cached, context explicitly lost. */
 const gpuMaxTextureSize = (): number => {
@@ -269,9 +287,27 @@ const gpuMaxTextureSize = (): number => {
   } finally {
     releaseSurface(c);
   }
-  glMaxTextureCache = Number.isFinite(out) && out > 0 ? out : 0;
-  return glMaxTextureCache;
+  const got = Number.isFinite(out) && out > 0 ? out : 0;
+  if (got > 0) {
+    glMaxTextureCache = got;
+    return got;
+  }
+  // A blank is re-probed on the next call, then accepted — without the retry a
+  // blip is permanent, without the settle a realm that genuinely has no WebGL
+  // pays a context probe every time anyone asks.
+  glBlankProbes += 1;
+  if (glBlankProbes > BLANK_GL_PROBE_RETRIES) glMaxTextureCache = 0;
+  return 0;
 };
+
+/**
+ * Was the last `probeBudgetAreaPx()` answer a GUESS made because nothing
+ * answered, rather than a class we actually read? Distinguishing those two is
+ * the whole point: "this device has no WebGL" is a fact about the device, and
+ * "WebGL did not answer just now" is a fact about the last two milliseconds.
+ */
+let lastBudgetBlind = false;
+export const lastProbeBudgetWasBlind = (): boolean => lastBudgetBlind;
 
 /**
  * Ceiling on what we are willing to PROBE, derived with zero allocation.
@@ -284,6 +320,7 @@ export const probeBudgetAreaPx = (): number => {
 
   const gb = typeof nav?.deviceMemory === 'number' ? nav.deviceMemory : 0;
   if (gb > 0) {
+    lastBudgetBlind = false;
     // Spend at most 1/8 of reported RAM on backing store + encoder copy.
     const bytes = (gb * 1024 * 1024 * 1024) / 8;
     return Math.max(SAFE_FLOOR_AREA, Math.floor(bytes / BYTES_PER_PX_IN_FLIGHT));
@@ -292,6 +329,10 @@ export const probeBudgetAreaPx = (): number => {
   // No deviceMemory => Safari/iOS/Firefox. Infer device class from the GPU.
   // iOS: A7-A9 report 4096, A10-A11 report 8192, A12+/M-series report 16384.
   const tex = gpuMaxTextureSize();
+  // Recorded ONCE, from the same call that produced the number — asking the
+  // probe a second time would burn a retry and could answer differently, which
+  // would leave the budget and the verdict about the budget disagreeing.
+  lastBudgetBlind = tex <= 0 && glMaxTextureCache === null;
   if (tex >= 16384) return 268435456; // let the real probe find the truth
   if (tex >= 8192) return 134217728;
   if (tex >= 4096) return 33554432;
@@ -465,6 +506,9 @@ export const probeMaxCanvas = async (force = false): Promise<CanvasLimits> => {
     try {
       const maxDimPx = await probeMaxDim();
       const maxAreaPx = await probeMaxArea(maxDimPx);
+      // Read AFTER the probe, because `probeMaxArea` is what calls
+      // `probeBudgetAreaPx` — this is that run's own verdict, not a stale one.
+      const blind = lastProbeBudgetWasBlind();
       const out: CanvasLimits = {
         maxAreaPx,
         maxDimPx,
@@ -473,8 +517,26 @@ export const probeMaxCanvas = async (force = false): Promise<CanvasLimits> => {
         costMs: Date.now() - t0,
         probedAt: Date.now(),
       };
-      writeCache(out);
-      memo = out;
+      // A MEASUREMENT TAKEN UNDER A CEILING WE GUESSED IS PROVISIONAL.
+      //
+      // `probeMaxArea` searches up to `probeBudgetAreaPx()`, so when the GPU
+      // probe came back blank the search stopped at SAFE_FLOOR_AREA*4 — 16.7 MP
+      // against the 268 MP a real 16384 answer allows, a 16x cut — and the
+      // number it found is a fact about the guess, not about the device. It was
+      // then written to sessionStorage as `source: 'probe'`, indistinguishable
+      // from a genuine measurement, and `readCache` only checks it clears the
+      // floor. So one blank WebGL probe in the moment the export sheet first
+      // opened deleted the top rungs of the size ladder for the rest of the
+      // browser session AND SURVIVED THE RELOAD that would have cured it.
+      //
+      // Neither persisted nor memoised while the GPU class is merely UNKNOWN,
+      // so the next open re-probes and finds the truth. Bounded: after
+      // BLANK_GL_PROBE_RETRIES the class settles to known-absent, `blind` goes
+      // false, and a realm that really has no WebGL caches exactly as before.
+      if (!blind) {
+        writeCache(out);
+        memo = out;
+      }
       return out;
     } catch {
       const out: CanvasLimits = {
