@@ -352,12 +352,20 @@ test.describe('undo — the roll you liked, brought back', () => {
     }
   });
 
-  test('U4b — the rail holds at 320 / 360 / 390 / 430, with SEVEN 44px targets in it', async ({ page, browserName }) => {
+  test('U4b — the rail holds at 320 / 360 / 390 / 430, with every 44px target in it', async ({ page, browserName }) => {
     // THE MOBILE LAW, asserted at the width where it actually bites. Adding undo
-    // and redo took the full-bleed rail from five children to seven, and seven
-    // 44px targets plus a divider is 295 of the 304 usable pixels at 320 — which
-    // is why the gap tightens below 360 instead of the buttons. Nine pixels of
-    // headroom is not something to leave to inspection.
+    // and redo took the full-bleed rail from five children to seven, and six
+    // 44px targets plus a divider was 295 of the 304 usable pixels at 320 — nine
+    // pixels of headroom, which is not something to leave to inspection.
+    //
+    // THE ROW ASSUMPTION IS GONE, ON PURPOSE. This test used to assert every
+    // control sat to the RIGHT of the one before it, which was true only while
+    // the rail had one row left to spend. The colour dice (wished for from this
+    // rail) is the seventh button, and seven 44px targets cannot share a row at
+    // 320px at any legal tap size — so below 390 the pill wraps 4/3 and this
+    // assertion had to become the thing it was actually protecting: controls
+    // never OVERLAP each other, wherever they wrap to. Same guarantee, one fewer
+    // assumption about the layout that provides it.
     await boot(page, browserName);
     await page.getByRole('button', { name: /Maximize the shot/i }).click();
     await expect(page.getByTestId('undo')).toBeVisible();
@@ -372,8 +380,9 @@ test.describe('undo — the roll you liked, brought back', () => {
       expect(over.doc, `${width}px: the page scrolls sideways by ${over.doc}px`).toBeLessThanOrEqual(0);
       expect(over.body, `${width}px: the body scrolls sideways by ${over.body}px`).toBeLessThanOrEqual(0);
 
-      let prevRight = -Infinity;
-      for (const id of ['rail-dice', 'undo', 'redo']) {
+      const ids = ['rail-dice', 'rail-colour-dice', 'undo', 'redo'];
+      const boxes: { id: string; b: { x: number; y: number; width: number; height: number } }[] = [];
+      for (const id of ids) {
         const box = await page.getByTestId(id).boundingBox();
         expect(box, `${width}px: ${id} is not rendered`).not.toBeNull();
         expect(box!.width, `${width}px: ${id} is ${box!.width.toFixed(1)}px wide`).toBeGreaterThanOrEqual(43.5);
@@ -382,9 +391,17 @@ test.describe('undo — the roll you liked, brought back', () => {
         expect(box!.x + box!.width,
           `${width}px: ${id} ends at ${(box!.x + box!.width).toFixed(1)} — ${(box!.x + box!.width - width).toFixed(1)}px past the right edge`)
           .toBeLessThanOrEqual(width + 0.5);
-        // Laid out in a row, never wrapped or stacked on top of each other.
-        expect(box!.x, `${width}px: ${id} overlaps the control before it`).toBeGreaterThanOrEqual(prevRight - 0.5);
-        prevRight = box!.x + box!.width;
+        boxes.push({ id, b: box! });
+      }
+      // NEVER STACKED ON TOP OF EACH OTHER — the claim the old row assertion was
+      // really making. Pairwise, so it holds across a wrap as well as along one.
+      for (let i = 0; i < boxes.length; i++) {
+        for (let j = i + 1; j < boxes.length; j++) {
+          const a = boxes[i], c = boxes[j];
+          const overlaps = a.b.x < c.b.x + c.b.width - 0.5 && c.b.x < a.b.x + a.b.width - 0.5
+            && a.b.y < c.b.y + c.b.height - 0.5 && c.b.y < a.b.y + a.b.height - 0.5;
+          expect(overlaps, `${width}px: ${a.id} and ${c.id} overlap`).toBe(false);
+        }
       }
 
       // Zoomed out is the operator's own wording, and it is a DIFFERENT test: it

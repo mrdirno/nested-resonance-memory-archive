@@ -2,12 +2,13 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import {
   Upload, Activity, X, Lock, Unlock, RefreshCw, Shuffle, Settings, Layout, Film, Plus,
-  Maximize2, Minimize2, Dices, Music, Undo2, Redo2
+  Maximize2, Minimize2, Dices, Music, Undo2, Redo2, Palette
 } from 'lucide-react';
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
 import { computeLayout, createRng } from './lib/layout';
 import { rollDice, ASPECT_ROSTER } from './lib/diceRoll';
+import { rollDeal } from './lib/dealRoll';
 import { encodeState, decodeState, codeFromUrl, CODE_PARAM } from './lib/rollCode';
 import {
   emptyHistory, commit as commitHistory, undo as undoHistory, redo as redoHistory,
@@ -892,6 +893,42 @@ export default function App() {
     // The deal is part of the composition and the roll re-deals it; leaving the
     // old shuffle count on would make the SAME code describe two pictures.
     setShuffleTrigger(0);
+  };
+
+  /**
+   * THE COLOUR DICE — roll the colour sorting and the crop, KEEP the layout.
+   *
+   * Wished for (wishing well, collage/layout): *"Add another dice for color
+   * sorting and cropping style. For full view for better ui/ux."*
+   *
+   * The dice above is all-or-nothing: it is worth pressing precisely because it
+   * replaces everything, and useless the moment you like the shape on screen.
+   * Until now the only route to a different colour sort was to roll the shape
+   * away with it, or to leave full bleed, open Advanced and scroll thirty-two
+   * chips — which on a phone is not a control that exists.
+   *
+   * WHAT IT DOES NOT TOUCH is the whole point, and `seed` is the one to watch:
+   * the seed drives the subdivision, so rolling it would move every fragment
+   * edge and this button would quietly be the first dice again. Layout, count,
+   * entropy, aspect, gutter, background, look, move and the title all stay
+   * exactly where they are.
+   *
+   * `shuffleTrigger` stays too — an arrangement is a re-ordering of the SAME
+   * bag, so re-dealing underneath it would change which photo lands where for a
+   * reason the button did not claim. And the locks survive: they pin cells of a
+   * layout that is not being replaced, which is exactly the case `handleDice`
+   * has to release them for and this one does not.
+   *
+   * The roll is guaranteed to differ from what is on screen — see
+   * `lib/dealRoll.ts` and its sweep. A dice that hands back the picture you are
+   * already looking at is a broken button.
+   */
+  const handleColourDice = () => {
+    pushHistory();
+    const deal = rollDeal({ layout: layoutMode, previous: { arrangement, focus, twist } });
+    setArrangement(deal.arrangement);
+    setFocus(deal.focus);
+    setTwist(deal.twist);
   };
 
   // ===========================================================================
@@ -2365,11 +2402,28 @@ export default function App() {
                    className="absolute inset-x-0 bottom-0 z-[130] flex justify-center px-2 min-[360px]:px-3 pointer-events-none"
                    style={{ paddingBottom: 'max(0.75rem, var(--safe-b))' }}
                  >
-                   {/* SEVEN 44px TARGETS AT 320px is 295 of the 304 available, so
-                       the gap tightens below 360 rather than the buttons — the tap
-                       target is a law, the air between them is not. */}
-                   <div className="pointer-events-auto flex items-center gap-0.5 min-[360px]:gap-1 rounded-2xl border border-white/15 bg-black/70 backdrop-blur px-1.5 py-1.5 shadow-2xl">
-                     <button data-testid="rail-dice" onClick={handleDice} title="Roll the dice" aria-label="Roll the dice" className="w-11 h-11 rounded-xl text-emerald-400 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Dices size={19} /></button>
+                   {/* IT WRAPS, AND THAT IS THE POINT.
+                       Six 44px targets at 320px was already 295 of the 304
+                       available — nine pixels from an overflow, so the SEVENTH
+                       (the colour dice, wished for from this rail) could not be
+                       added in a single row at any tap size that is still legal.
+                       Shrinking the buttons is not on the table: the 44px target
+                       is a law, the air between them is not, and neither is the
+                       row count.
+
+                       So the pill is capped at four targets wide below 390px and
+                       wraps — which lands the split exactly where it should be:
+                       the four that MAKE a picture on one row, the three that
+                       navigate between pictures on the next. `max-w` is
+                       border-box, so 206 = 4x44 + 3x4 gap + 12 padding + 2
+                       border, and the fifth button cannot fit however the gap
+                       rounds. Above 390 the whole rail is one row again. */}
+                   <div className="pointer-events-auto flex flex-wrap items-center justify-center gap-0.5 min-[360px]:gap-1 max-w-[206px] min-[390px]:max-w-none rounded-2xl border border-white/15 bg-black/70 backdrop-blur px-1.5 py-1.5 shadow-2xl">
+                     <button data-testid="rail-dice" onClick={handleDice} title="Roll the dice — a whole new composition" aria-label="Roll the dice" className="w-11 h-11 rounded-xl text-emerald-400 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Dices size={19} /></button>
+                     {/* THE COLOUR DICE — wished for FROM THIS RAIL: you maximize
+                         to compare, and the one roll that keeps the shape you
+                         just found had no button anywhere near your thumb. */}
+                     <button data-testid="rail-colour-dice" onClick={handleColourDice} title="Roll the colour sort and the crop — keeps your layout" aria-label="Roll the colour sort and the crop, keeping the layout" className="w-11 h-11 rounded-xl text-amber-300 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Palette size={19} /></button>
                      <button onClick={handleShuffle} title="Shuffle images" aria-label="Shuffle images" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Shuffle size={18} /></button>
                      <button onClick={handleRemix} title="Remix shapes" aria-label="Remix shapes" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><RefreshCw size={18} /></button>
                      {/* UNDO lives HERE because this is where the wish came from:
@@ -2475,7 +2529,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={chooseMove} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} onColourDice={handleColourDice} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={chooseMove} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
          )}

@@ -216,8 +216,22 @@ const entropyFor = (layout: LayoutMode, rnd: () => number): number => {
 const RADIAL_ARRANGEMENTS: ArrangementId[] = ['wheel', 'spotlight', 'eclipse', 'vivid', 'drift'];
 const LINEAR_ARRANGEMENTS: ArrangementId[] = ['flow', 'horizon', 'heat', 'checker', 'hero'];
 
-const arrangementFor = (layout: LayoutMode, rnd: () => number): ArrangementId => {
-  if (rnd() < 0.2) return 'natural';
+/**
+ * EXPORTED for `lib/dealRoll.ts` — the colour dice draws its arrangement from
+ * this same family table rather than carrying a second copy of the lean. It
+ * passes `naturalChance: 0`, because a dice whose whole job is colour sorting
+ * has no business handing back the unsorted order.
+ *
+ * The gate still DRAWS at `naturalChance: 0` instead of skipping the branch, so
+ * the number of values taken off the stream does not depend on the caller — the
+ * seeded-reproduction hazard `lookFor` records, avoided the same way.
+ */
+export const arrangementFor = (
+  layout: LayoutMode,
+  rnd: () => number,
+  naturalChance = 0.2,
+): ArrangementId => {
+  if (rnd() < naturalChance) return 'natural';
   const fam = GENERATOR_BY_ID[layout]?.family;
   // A LEAN, not a rule. Nine of the twenty-four generators are sacred and only
   // four are rectilinear, so hard-gating by family would have starved the linear
@@ -232,7 +246,7 @@ const arrangementFor = (layout: LayoutMode, rnd: () => number): ArrangementId =>
  * not of the figure. Weighted rather than uniform because `auto` is right most
  * of the time (it finds the face), and the other four are looks you reach for.
  */
-const focusFor = (rnd: () => number): FocusId => {
+export const focusFor = (rnd: () => number): FocusId => {
   const r = rnd();
   if (r < 0.52) return 'auto';
   if (r < 0.70) return 'wander';
@@ -260,8 +274,19 @@ const focusFor = (rnd: () => number): FocusId => {
 const RADIAL_TWISTS: TwistId[] = ['pinwheel', 'cascade'];
 const LINEAR_TWISTS: TwistId[] = ['tilt', 'scatter'];
 
-const twistFor = (layout: LayoutMode, rnd: () => number): TwistId => {
-  if (rnd() < 0.58) return 'none';
+/**
+ * EXPORTED for `lib/dealRoll.ts`, same reason as `arrangementFor`: one family
+ * table, two dice. The colour dice lowers `straightChance` because a roll you
+ * pressed FOR the crop that comes back straight three times running has not
+ * shown you the row — but it does not drop it to zero, because the crop-in cost
+ * in the doc comment above is real whichever button asked for the lean.
+ */
+export const twistFor = (
+  layout: LayoutMode,
+  rnd: () => number,
+  straightChance = 0.58,
+): TwistId => {
+  if (rnd() < straightChance) return 'none';
   const fam = GENERATOR_BY_ID[layout]?.family;
   const radialBias = fam === 'sacred' || fam === 'recursive' ? 0.75 : fam === 'structure' ? 0.25 : 0.5;
   return pick(rnd() < radialBias ? RADIAL_TWISTS : LINEAR_TWISTS, rnd);

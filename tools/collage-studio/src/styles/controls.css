@@ -760,6 +760,39 @@
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
+/* --- THE COLOUR DICE ------------------------------------------------------
+   The roll that KEEPS the layout: colour sorting and crop only. Deliberately
+   the cooler, quieter sibling — the whole-composition roll above it stays the
+   widest, warmest control in the dock, because "show me something I would not
+   have chosen" is still the most valuable action here. This one is what you
+   reach for once it has already shown you something you want to keep.
+
+   Amber against the dice's signal green, and the same amber as the rail glyph,
+   so the two buttons read as the same act in both places.                   */
+.ui-dice--deal {
+  margin-top: var(--s-2);
+  padding: 10px 14px;
+  border-color: color-mix(in srgb, #fbbf24 30%, var(--line-1));
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, #fbbf24 9%, var(--surface-1)),
+    var(--surface-1) 70%
+  );
+  color: #fcd34d;
+}
+.ui-dice--deal .ui-dice__text b { font-size: 12px; }
+
+/* CREDIT ON THE PAGE, where the thing they asked for is. The ledger in
+   av/credits.json is permanent, but nobody reads a JSON file. */
+.ui-credit {
+  margin-top: 6px;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+  opacity: 0.75;
+}
+
 /* --- UNDO / REDO ----------------------------------------------------------
    Directly under the dice: that button replaces the whole composition, and
    this is the way back from it.

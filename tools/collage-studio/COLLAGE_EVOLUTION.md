@@ -30,6 +30,10 @@ or re-documenting an existing capability is DD, not delivery.
   (loop / stretch-to-longest / speed-to-shortest), live and in export;
   COMPOSITION — 11 arrangements (photo metric x fragment spatial key, zipped)
   and 5 crop-focus modes, both rolled by the dice and carried in the share code;
+  THE COLOUR DICE — a second roll (`lib/dealRoll.ts`) over the arrangement, the
+  focus and the twist ONLY, so a colour sort can be re-rolled without losing the
+  layout you just found; in the dock under the dice and in the full-bleed rail,
+  which now wraps 4/3 below 390px to hold its seventh 44px target;
   TWIST — 5 per-fragment rotation modes (the picture leans, the tiling does not),
   reaching all four render paths through the one geometry function they share;
   ONE LAYOUT — every render path (preview, Stage, video, raster export, SVG)
@@ -560,6 +564,37 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A TEST ASSERTED THE LAYOUT THAT PROVIDED THE GUARANTEE, NOT THE GUARANTEE.**
+  `undo.spec.ts` U4b checked that every full-bleed rail control started to the
+  RIGHT of the one before it. That was true, and it was really protecting
+  "controls never sit on top of each other" — but it encoded the single ROW as
+  if the row were the point. Adding the seventh 44px target (the colour dice)
+  made a single row impossible at 320px at any legal tap size, so the rail wraps
+  4/3 and three engines went red **against correct code**. The fix is not to
+  delete the assertion: it is to assert the invariant it was standing in for —
+  pairwise non-overlap, which holds along a row and across a wrap. **The general
+  shape: when a passing test fails on a deliberate design change, ask whether it
+  was asserting the promise or the current implementation of the promise.** One
+  of those is worth keeping.
+- **A FLAT FIXTURE CANNOT WITNESS A CROP.** The colour-dice spec built its
+  sources as solid-colour PNGs, then asserted that every roll repaints. A roll
+  that changes only `focus` moves WHERE IN THE PHOTO each fragment is centred —
+  and every part of a flat tile is the same pixel, so the correct button
+  repainted nothing and the spec reported "the picture did not repaint" on two
+  engines. The fixture could not express the property under test. **Before
+  believing a red, check that the fixture is capable of showing the thing being
+  asserted** — and note the sibling fact this turned up: `auto` falls back to the
+  busiest region on a photo with no face in it, which is exactly what `energy`
+  already is, so that pair genuinely paints the same picture on any content. The
+  per-press claim now rides on the arrangement (always visible across distinct
+  sources); the crop rides on a count across presses.
+- **A CHECKSUM IS NOT A PARAMETER.** "Every field of the composition code except
+  the three this button owns must come back byte-identical" reads airtight and
+  is wrong: the code ends in a checksum OVER ALL FIELDS, including the three
+  that legitimately changed. As written, the assertion could only pass against a
+  dead control — and its failure message said "the colour dice moved something
+  it does not own", which is exactly what a real bug would say. **A witness
+  derived from the thing under test is not an independent field.**
 - **A COMMENT CLAIMED A BOUND, THE CODE NEVER HAD ONE, AND THE COMMENT IS WHY
   NOBODY LOOKED.** `prepareOfflineStills` rasterised each source to the scale
   its own fragments consume — correct — under a doc sentence reading "and the
@@ -2863,4 +2898,46 @@ frontier. Today's ceiling is tomorrow's floor.
   the range edges, and the range is not carried in a saved project or share code
   — the soundtrack has never been, and adding it is a format change that deserves
   its own cycle rather than a rider on this one.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+- 2026-08-10 · **[AXIS:WELL] THE COLOUR DICE — roll the colour sort and the crop,
+  keep the layout** (well read UNSCOPED across all trades first: 2 new, 0
+  stranded in `building`; one `bug`-kind row on collage/layout, and bugs
+  outrank every roadmap — so the stalest-axis signal, DEPTH, yielded to it.)
+  before→after: **the only way to try a different colour sorting was to roll the
+  shape away with it → one press re-sorts and re-crops and the layout does not
+  move.** Wished for verbatim: *"Add another dice for color sorting and cropping
+  style. For full view for better ui/ux."* The dice this app already had
+  replaces the WHOLE composition — which is what makes it worth pressing and
+  exactly why it is useless the moment you like what is on screen; the
+  arrangement, focus and twist rosters (wished into being by the same person,
+  first entry in the collage ledger) lived only as thirty-two chips in the
+  Advanced panel, which on a phone in full bleed is not a control that exists.
+  `lib/dealRoll.ts` rolls those three and NOTHING else: layout, count, chaos,
+  aspect, gutter, background, zoom, grade, motion and above all the SEED — the
+  seed drives the subdivision, so rolling it would move every fragment edge and
+  the button would quietly be the first dice again. It never returns `natural`
+  (the unsorted order is not a colour sort) and never the deal already on
+  screen, guaranteed by a single deterministic step rather than a redraw loop
+  that could take unbounded draws off the stream. One family table, two dice:
+  `arrangementFor`/`twistFor` gained weight parameters instead of a second copy
+  of the lean, and the main dice's own spread is unchanged (`natural` 18%).
+  PROOF: `tests/unit/dealRoll.invariants.mjs` — 1,104,000 CHAINED rolls (every
+  generator x 400 seeds x 120 presses, each result fed back as the next
+  `previous`, because that is how the field presses it), 1,800 forced
+  collisions, 920 replays, 0 failures. `tests/e2e/colour-dice.spec.ts` — 9/9 on
+  Chrome, Android Chrome and iOS Safari, asserting "the layout did not move"
+  against the COMPOSITION CODE rather than by reading the controls back (which
+  would agree with the wiring by construction), and asserting the roll reaches
+  the pixels via a block fingerprint. MOBILE: this is the rail's seventh 44px
+  target and six were already 295 of the 304 pixels a 320px phone has, so the
+  pill now wraps below 390 — the four buttons that MAKE a picture on one row,
+  the three that navigate between pictures on the next — asserted at 320 / 360 /
+  390 / 430 with zero horizontal overflow, every target ≥44px, nothing off an
+  edge and no two controls overlapping. Regression: undo 21/21, mobile
+  watertight 7/7, rollCode + composition + twist sweeps green, `tsc --noEmit`
+  clean, `vite build` clean. Credited on the page under the button itself and in
+  BOTH ledgers. **NOT SHIPPED, AND SAID PLAINLY:** the colour dice is not in the
+  keyboard map (the main dice is not either), and it does not appear in the
+  share code as a distinguishable act — a code records the deal, not which
+  button produced it, which is correct and worth stating.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

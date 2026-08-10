@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import {
   Layout, Grid, Plus, Minus, RefreshCw, Shuffle, Square,
   Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, ImagePlus, Dices, Copy, Type, X,
-  Undo2, Redo2
+  Undo2, Redo2, Palette
 } from 'lucide-react';
 import { LayoutMode, PrimitiveType } from '../types';
 import type { TitlePlace, TitleSize } from '../lib/title';
@@ -25,6 +25,13 @@ interface SimpleControlsProps {
   onShuffle: () => void;
   /** Roll a whole composition — layout, count, chaos, aspect, gutter, colour. */
   onDice?: () => void;
+  /**
+   * THE COLOUR DICE — roll the colour sorting and the crop, keep the layout.
+   * The other half of the same wish that put it in the full-bleed rail: the
+   * dock's dice has exactly the same all-or-nothing problem, so the fix lands
+   * on both. See `lib/dealRoll.ts`.
+   */
+  onColourDice?: () => void;
   /** Name of the recipe the last roll came from, for the readout. */
   lastRecipe?: string;
   /** UNDO — step back to the composition before the last roll/shuffle/remix/code. */
@@ -96,7 +103,7 @@ const SHAPES: { id: PrimitiveType; label: string; icon: React.ReactNode; blurb: 
 
 export const SimpleControls: React.FC<SimpleControlsProps> = ({
   layoutMode, setLayoutMode, primitive, setPrimitive, count, setCount,
-  density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice,
+  density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice, onColourDice,
   lastRecipe, onUndo, onRedo, canUndo = false, canRedo = false,
   compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
   titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize,
@@ -226,6 +233,7 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
           disabled={!hasImages}
           onClick={onDice}
           className="ui-dice"
+          data-testid="dock-dice"
           title="Roll a whole composition — layout, fragments, chaos, shape of frame, gutter and colour, all at once."
         >
           <Dices size={20} />
@@ -234,6 +242,33 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
             <i>{lastRecipe ? `Last roll: “${lastRecipe}”` : 'A whole new composition, all at once'}</i>
           </span>
         </button>
+      )}
+
+      {/* ---- THE COLOUR DICE: the roll that keeps the shape you found -------
+          Directly under the dice above, because it is the answer to that
+          button's one weakness — the roll you cannot press once you like the
+          layout. Rolls the colour sorting and the crop, touches nothing else.
+          Narrower and cooler than the dice on purpose: the whole-composition
+          roll stays the widest, warmest thing in the dock. ----------------- */}
+      {onColourDice && (
+        <button
+          disabled={!hasImages}
+          onClick={onColourDice}
+          className="ui-dice ui-dice--deal"
+          data-testid="dock-colour-dice"
+          title="Roll the colour sorting and the crop — the layout, count, chaos, frame and background all stay exactly as they are."
+        >
+          <Palette size={18} />
+          <span className="ui-dice__text">
+            <b>Colour + crop</b>
+            <i>New sort and framing — keeps your layout</i>
+          </span>
+        </button>
+      )}
+      {/* CREDIT ON THE PAGE, next to the thing they asked for — the ledger in
+          av/credits.json is permanent, but nobody reads a JSON file. */}
+      {onColourDice && hasImages && (
+        <p className="ui-credit">The colour dice was wished for by an anonymous Collage user.</p>
       )}
 
       {/* ---- UNDO: the roll you liked, brought back -------------------------
