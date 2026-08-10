@@ -552,6 +552,42 @@ deploy artifact IS the whole site; staging order matters) · an adversarial
 multi-agent audit for non-trivial changes.
 
 ## SCARS (carried from the 2026-08 build — add to this)
+- **A COMMENT CLAIMED A BOUND, THE CODE NEVER HAD ONE, AND THE COMMENT IS WHY
+  NOBODY LOOKED.** `prepareOfflineStills` rasterised each source to the scale
+  its own fragments consume — correct — under a doc sentence reading "and the
+  rasters together are bounded by the canvas area" — false. It is true only for
+  a fragment showing its WHOLE source. A fragment shows a CROP, so asking for
+  `dwPx / isw` of a source that is `k` crops wide rasterises `k * dwPx`: the
+  raster is **k² times the destination area**, and k = 2 is an ordinary
+  cover-fit. Nothing bounded the total; the loop walked every source and
+  allocated whatever geometry asked. Its only limit was a 20-second wall clock,
+  **which on a faster machine lets it allocate MORE, not less** — so the bug got
+  worse the better the device and the more photos were in the collage. 30 photos
+  at k=2 was 415 MB of resident RGBA; 120 at k=3.5 was 5,089 MB. **The general
+  shape: a load-bearing claim written as prose is never checked again. If a
+  comment states a bound, either a test asserts that exact sentence or the
+  sentence is a liability** — this one survived every review precisely because
+  it sounded like the reasoning had already been done.
+- **A BOUND PROVEN IN CONTINUOUS MATH IS NOT A BOUND ONCE `Math.round` RUNS.**
+  The fix's allocator returned the scale where `srcPx * s² == capPx` exactly,
+  and the caller then rounded a width and a height to integers — **rounding up
+  from an exact fit lands above it, every time**. A few hundred pixels per
+  source, 135 breaches across the sweep, and each one individually invisible.
+  The rule that came out of it: **the function that produces the INTEGERS must
+  own the ceiling**, not inherit it through a real-valued scale. Flooring all
+  three ceilings (`source`, `wanted scale`, `sqrt(cap · srcW / srcH)`) makes
+  `w·h ≤ cap` an identity instead of a rounding accident. Two sibling defects
+  in the same module, same family: **the ceiling was applied AFTER the charge it
+  was meant to cover** (`min(ceiling, pool − canvas)` lets the ceiling swallow
+  the canvas charge whenever the device pool sits above it — i.e. exactly at the
+  top end, so the rung rendering the biggest canvases was the one rung not
+  paying for them); and **`navigator.deviceMemory` SATURATES AT 8**, so a 64 GB
+  Mac Studio and an 8 GB Air report the same number and the top rung must be
+  sized for the smallest machine in it, not the largest. That one had a tell
+  worth remembering: the Chromium path handed a laptop 512 MB while the GPU path
+  handed the SAME laptop 256 MB — **one machine, two budgets, decided by which
+  browser it was opened in. Two code paths disagreeing about one device is a
+  defect even when neither number looks wrong.**
 - **WEBKIT REFUSES A BLOB INTO INDEXEDDB, SO CRASH RECOVERY WAS A NO-OP ON EVERY
   iOS BROWSER FROM THE DAY IT SHIPPED.** Measured, same page, same code:
   plain object OK / ArrayBuffer OK / Uint8Array OK / **Blob → transaction error
@@ -2455,4 +2491,55 @@ frontier. Today's ceiling is tomorrow's floor.
   **NOTE FOR A LATER CYCLE (found, not fixed, not mine):** `svg-project` S1/S3/S8
   fail on Mobile Chrome and Mobile Safari, and fail identically on the pre-fix
   commit — a pre-existing mobile gap in the SVG round-trip, unrelated to this wish.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C87 · 2026-08-10 · [AXIS:WELL] THE RENDER ASKED FOR EVERY PHOTO AT FULL
+  RESOLUTION AT ONCE, AND THE TAB DIED** — wish `66ba8852` (bug, collage/export,
+  anonymous): *"The video export crashes when rendering higher than 2k. Please
+  audit the code and look for sota way to render higher photos."* Found it
+  **STRANDED in `status=building`** by a cycle that died mid-build, with
+  `rasterBudget.ts` and its 2,506-check sweep sitting uncommitted in the working
+  tree — **and the sweep was RED: 135 breaches of the very bound it was written
+  to prove.** Finishing it was the claim; a wish that looks served and is not is
+  worse than an unclaimed one.
+  **THE BUG:** `prepareOfflineStills` allocated `k²` × the destination area per
+  source with no global ceiling anywhere (see the scar above), so cost grew with
+  photo count AND with crop tightness, and its only limit was a wall clock that
+  a fast machine beats. **THE FIX:** a device-derived pool divided **fair-share
+  with roll-forward** — a greedy source is capped instead of eating the budget
+  and abandoning the tail at preview quality — floored at the thumbnail already
+  bound, so an over-tight budget means *"no upgrade happened"*, never a softer
+  frame and never a hole. **THE THREE DEFECTS THE SWEEP CAUGHT AND READING DID
+  NOT:** the continuous proof did not survive `Math.round`; the ceiling was
+  applied after the canvas charge; `deviceMemory` saturates at 8. All three in
+  the scar above.
+  **NUMBERS.** 30 photos @ k=2: **415 MB → 136 MB**. 30 @ k=3: 935 → 136.
+  60 @ k=3: 1,869 → 136. 120 @ k=3.5: **5,089 MB → 136 MB.** Flat — the pool
+  decides, the content no longer does.
+  **VERIFIED WHERE IT COULD HAVE SHIPPED AS A QUIETER VERSION OF ITSELF.**
+  Bounding memory by softening every photo passes a memory test perfectly, so
+  the picture was measured, not assumed: `video-resolution` scores gradient
+  energy along a scanline and the originals still read **124.4 against the
+  thumbnails' 33.0**. Added `tests/e2e/raster-budget.spec.ts` because the unit
+  sweep grades ARITHMETIC and cannot see WIRING — one missed `ledger.commit()`
+  on a refusal path leaves the arithmetic perfect while the pool runs over. On
+  the real Stage with real decodes: n=8 used 13,665,992 / budget 13,668,352;
+  n=12 used 13,668,273; **n=32 used 13,666,329 — four times the photos, the same
+  13.67 MP**; and starved to a 1-pixel pool, `full=0 fellBack=12` with the frame
+  still measurably whole.
+  **4,673 invariant checks · 26 export e2e · 3 new wiring e2e · tsc + vite build
+  clean · live bundle SHA-256 byte-identical to the local build.**
+  **RESIDUAL, MEASURED NOT GUESSED (next rung):** when the pool cannot lift
+  every source, WHICH sources get lifted is decided by iteration order — the
+  ledger's roll-forward grows the share as early sources refuse, so the ones
+  lifted are at the back. At n=32 the split is 19 photos at a 1024px thumbnail
+  against 13 at 1025px, i.e. **imperceptible by construction**, because the
+  floor rule forces the fallback to sit at most a pixel below the smallest
+  raster that beats it. It is still 13 full decodes and allocations bought for
+  one pixel each. Fixing it properly is a two-pass allocator that knows source
+  dimensions BEFORE deciding shares — which `prepareOfflineStills` cannot, since
+  it learns them from the decode. Tempting one-line thresholds make it WORSE:
+  requiring a 1.25× margin to be "worth the allocation" turns 19@1024/13@1025
+  into 24@1024/8@1307, trading an invisible split for a visible one. Design
+  change, not a tweak.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

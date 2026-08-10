@@ -50,6 +50,16 @@
       "wished_date": "2026-08-08",
       "shipped_date": "2026-08-08",
       "shipped_commit": "f305ee48"
+    },
+    {
+      "tool_name": "Collage Studio — the render no longer asks for every photo at full resolution at once",
+      "tool_href": "https://mrdirno.github.io/nested-resonance-memory-archive/collage/",
+      "wisher": "an anonymous Collage user",
+      "company": null,
+      "role": null,
+      "wished_date": "2026-08-09",
+      "shipped_date": "2026-08-10",
+      "shipped_commit": "ce35b8d1"
     }
   ]
 }
