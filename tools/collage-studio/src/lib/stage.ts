@@ -50,6 +50,9 @@ import {
   type ClipWindow, type WindowedPlayback,
 } from './clipWindow';
 import { soundtrackSource, soundtrackAudible } from './soundtrack';
+import {
+  rasterBudgetPx, readDeviceSignals, createRasterLedger, scaleForBudget, rasterDims,
+} from './rasterBudget';
 import type { LayoutItem } from '../types';
 
 // -----------------------------------------------------------------------------
@@ -445,6 +448,43 @@ interface StillRecord {
   img: StillSource | null;
   state: 'loading' | 'ready' | 'error';
 }
+
+/**
+ * WHAT THE ORIGINALS PASS ACTUALLY DID — the offline render's own account of the
+ * memory it spent, so "it stayed inside the budget" is a number a test can read
+ * rather than a claim a comment makes.
+ *
+ * `requested = full + fellBack` always: every source the scene asked for either
+ * got a raster or kept the thumbnail it was already drawing. There is no third
+ * outcome, and that is the property that makes a tight budget safe.
+ */
+export interface OfflineStillReport {
+  /** Distinct originals the scene asked to upgrade. */
+  requested: number;
+  /** Originals that got a raster of their own. */
+  full: number;
+  /** Originals still drawing their thumbnail — refused, failed, or out of time. */
+  fellBack: number;
+  /** Raster pixels the pool was allowed to hold for this take. */
+  budgetPx: number;
+  /** Raster pixels it actually allocated. Never above `budgetPx`. */
+  usedPx: number;
+  /** Of `full`, how many were sized by the BUDGET rather than by their geometry. */
+  clamped: number;
+}
+
+const EMPTY_STILL_REPORT: OfflineStillReport = Object.freeze({
+  requested: 0, full: 0, fellBack: 0, budgetPx: 0, usedPx: 0, clamped: 0,
+});
+
+/**
+ * The device signals, read once per realm. `deviceMemory` never changes and
+ * MAX_TEXTURE_SIZE costs a WebGL context to ask for — probing it on every take
+ * would spend a context per export for an answer that cannot have moved.
+ */
+let deviceSignals: ReturnType<typeof readDeviceSignals> | null = null;
+const signalsOnce = (): ReturnType<typeof readDeviceSignals> =>
+  (deviceSignals ??= readDeviceSignals());
 
 // -----------------------------------------------------------------------------
 // CAPABILITY PROBE
@@ -1737,8 +1777,25 @@ export class Stage {
    * device pixels cannot show more than about 400x600 pixels of its source no
    * matter how large that source is, so each original is rasterised to the
    * scale its own fragments actually consume at THIS render's width, and the
-   * full-resolution decode is dropped immediately. Peak cost is one decode plus
-   * the rasters, and the rasters together are bounded by the canvas area.
+   * full-resolution decode is dropped immediately.
+   *
+   * GEOMETRY ALONE IS NOT A CEILING, WHICH IS THE CRASH ABOVE 2K. This comment
+   * used to end "and the rasters together are bounded by the canvas area". That
+   * is only true for a fragment showing its WHOLE source. A fragment shows a
+   * CROP, and asking for `dwPx / isw` of a source that is `k` crops wide
+   * rasterises `k * dwPx` — so the raster is k^2 times the destination area,
+   * and k = 2 is an ordinary cover-fit. Thirty sources at the 4096 rung with a
+   * mean k of 2 is ~180 MB of resident RGBA beside the canvas, the encoder
+   * queue and every clip's decoder; at k = 3 it is 400 MB. Nothing bounded the
+   * total, so the better the device and the more photos in the collage, the
+   * harder it fell over.
+   *
+   * So there is now a POOL BUDGET on top of the geometry (lib/rasterBudget.ts):
+   * a device-derived total, divided fair-share-with-roll-forward, so a greedy
+   * source is capped instead of eating the budget and abandoning the tail at
+   * preview quality. Degradation bottoms out at the thumbnail that is already
+   * bound, so an over-tight budget means "no upgrade happened" — never a frame
+   * softer than the preview, never a hole.
    *
    * Sequential on purpose: parallel decodes would put every original in memory
    * at once, which is the thing being avoided.
@@ -1747,8 +1804,10 @@ export class Stage {
    * thumbnail — the still exporter's rule, verbatim: a softer fragment beats a
    * hole, and only a source with neither is a failure.
    */
-  async prepareOfflineStills(opts: { signal?: AbortSignal; timeoutMs?: number } = {}): Promise<{ requested: number; full: number; fellBack: number }> {
-    if (this.destroyed || !this.offlineFullRes) return { requested: 0, full: 0, fellBack: 0 };
+  async prepareOfflineStills(
+    opts: { signal?: AbortSignal; timeoutMs?: number; budgetPx?: number } = {},
+  ): Promise<OfflineStillReport> {
+    if (this.destroyed || !this.offlineFullRes) return EMPTY_STILL_REPORT;
     const budget = Math.max(0, opts.timeoutMs ?? 20_000);
     const clock = (): number =>
       typeof performance !== 'undefined' && typeof performance.now === 'function'
@@ -1765,9 +1824,17 @@ export class Stage {
     // sources, and two fragments of the same photo can want very different
     // amounts of it, so the raster has to satisfy the hungriest one.
     const need = new Map<string, number>();
+    // What each source is drawing RIGHT NOW, in source pixels across. It is the
+    // floor a budgeted raster may not go under: the render must never be softer
+    // than the preview the user was already looking at.
+    const floor = new Map<string, number>();
     for (let i = 0; i < this.items.length; i++) {
       const it = this.items[i];
       if (!it.fullKey || this.deadOriginals.has(it.fullKey)) continue;
+      if (it.still) {
+        const have = stillW(it.still);
+        if (have > (floor.get(it.fullKey) ?? 0)) floor.set(it.fullKey, have);
+      }
       // `isw`/`ish` are this fragment's crop in SOURCE pixels, measured against
       // whatever source was bound when the crop was computed. The RATIO of
       // destination pixels to crop pixels is what decides how much source
@@ -1783,14 +1850,34 @@ export class Stage {
     }
 
     const requested = need.size;
-    if (!requested) return { requested: 0, full: 0, fellBack: 0 };
+    if (!requested) return EMPTY_STILL_REPORT;
+
+    // THE POOL. Everything above decided what each source WANTS; this decides
+    // what the device can afford to hold at once, and the ledger divides it so
+    // no source can eat it and leave the tail on thumbnails.
+    const canvasPx = Math.max(0, (this.cv.width || 0) * (this.cv.height || 0));
+    const sig = signalsOnce();
+    const budgetPx = opts.budgetPx !== undefined && Number.isFinite(opts.budgetPx)
+      ? Math.max(0, Math.floor(opts.budgetPx))
+      : rasterBudgetPx({
+        canvasPx,
+        deviceMemoryGb: sig.deviceMemoryGb,
+        gpuMaxTextureSize: sig.gpuMaxTextureSize,
+      });
+    const ledger = createRasterLedger(budgetPx, requested);
 
     let full = 0;
+    let clamped = 0;
     for (const [key, want] of need) {
       if (this.destroyed || opts.signal?.aborted) break;
       if (clock() - started > budget) break;
-      const ok = await this.upgradeStill(key, want, opts.signal);
-      if (ok) full++; else this.deadOriginals.add(key);
+      const got = await this.upgradeStill(key, want, ledger.capFor(), floor.get(key) ?? 0, opts.signal);
+      // Committed for EVERY source, including the ones that took nothing — a
+      // missed commit shrinks every later source's share of a budget that was
+      // never actually spent.
+      ledger.commit(got.px);
+      if (got.px > 0) { full++; if (got.clamped) clamped++; }
+      else this.deadOriginals.add(key);
     }
     // Anything the budget or an abort never reached keeps its thumbnail too.
     need.forEach((_v, k) => {
@@ -1800,7 +1887,7 @@ export class Stage {
 
     this.applyStillKeys();
     const fellBack = requested - full;
-    return { requested, full, fellBack };
+    return { requested, full, fellBack, budgetPx, usedPx: ledger.usedPx, clamped };
   }
 
   /**
@@ -1811,9 +1898,21 @@ export class Stage {
    * shipped both `createImageBitmap` gaps and `decode()` rejections on blob URLs.
    * Either way what lands in the cache is a canvas no larger than the fragments
    * that draw it, so the whole point survives on both paths.
+   *
+   * `capPx` is this source's slice of the pool and `floorW` the thumbnail it is
+   * already drawing. Returns the pixels it actually took — 0 meaning "nothing
+   * was allocated, keep the preview", which is a legitimate outcome and never a
+   * failure. The caller commits that number against the ledger either way.
    */
-  private async upgradeStill(key: string, wantScale: number, signal?: AbortSignal): Promise<boolean> {
-    if (!key || typeof document === 'undefined') return false;
+  private async upgradeStill(
+    key: string,
+    wantScale: number,
+    capPx: number,
+    floorW: number,
+    signal?: AbortSignal,
+  ): Promise<{ px: number; clamped: boolean }> {
+    const NONE = { px: 0, clamped: false };
+    if (!key || typeof document === 'undefined') return NONE;
     let bmp: ImageBitmap | null = null;
     let el: HTMLImageElement | null = null;
     try {
@@ -1822,9 +1921,9 @@ export class Stage {
 
       if (typeof createImageBitmap === 'function' && typeof fetch === 'function') {
         const res = await fetch(key);
-        if (!res.ok) return false;
+        if (!res.ok) return NONE;
         const blob = await res.blob();
-        if (signal?.aborted || this.destroyed) return false;
+        if (signal?.aborted || this.destroyed) return NONE;
         bmp = await createImageBitmap(blob);
         srcW = bmp.width; srcH = bmp.height; draw = bmp;
       } else {
@@ -1839,34 +1938,42 @@ export class Stage {
           img.onerror = () => done(false);
           img.src = key;
         });
-        if (!el) return false;
+        if (!el) return NONE;
         srcW = el.naturalWidth || el.width; srcH = el.naturalHeight || el.height; draw = el;
       }
-      if (!srcW || !srcH || !draw) return false;
-      if (signal?.aborted || this.destroyed) return false;
+      if (!srcW || !srcH || !draw) return NONE;
+      if (signal?.aborted || this.destroyed) return NONE;
 
+      // TWO CEILINGS, THE TIGHTER ONE WINS. Geometry says how much of this
+      // source a fragment can possibly show; the pool says how much this device
+      // can afford to hold while thirty of these sit resident together. Asking
+      // geometry alone is what allocated k^2 x the destination area per source
+      // and killed the tab above 2K.
+      //
       // NEVER UPSCALE — a raster larger than the source is bytes with no
-      // picture in them, which is the exact dishonesty this whole change exists
-      // to remove. And never below the thumbnail we already had, or "upgrading"
-      // would make a fragment softer than it was.
-      const scale = Math.min(1, Math.max(wantScale, 0));
-      const tw = Math.max(2, Math.min(srcW, Math.round(srcW * scale)));
-      const th = Math.max(2, Math.min(srcH, Math.round(srcH * scale)));
+      // picture in them. And never at or below the thumbnail already bound:
+      // that would spend a whole allocation to make the fragment no sharper, or
+      // softer than the preview the user is looking at. `rasterDims` refuses
+      // both, and refusing is the safe outcome — the fragment keeps drawing
+      // what it has.
+      const scale = scaleForBudget(srcW * srcH, wantScale, capPx);
+      const dims = rasterDims(srcW, srcH, scale, floorW, wantScale, capPx);
+      if (!dims) return NONE;
       // An original no bigger than what it would be downsampled to is simply
       // used as-is; drawing it through a canvas would only cost a copy.
       const c = document.createElement('canvas');
-      c.width = tw; c.height = th;
+      c.width = dims.w; c.height = dims.h;
       const cx = c.getContext('2d');
-      if (!cx) return false;
-      cx.drawImage(draw, 0, 0, srcW, srcH, 0, 0, tw, th);
+      if (!cx) return NONE;
+      cx.drawImage(draw, 0, 0, srcW, srcH, 0, 0, dims.w, dims.h);
 
       const rec = this.stills.get(key);
       if (rec) { rec.img = c; rec.state = 'ready'; }
       else this.stills.set(key, { img: c, state: 'ready' });
       this.adoptStill(key, c);
-      return true;
+      return { px: dims.px, clamped: dims.clamped };
     } catch {
-      return false;
+      return NONE;
     } finally {
       // DETERMINISTIC RELEASE. The whole budget argument rests on the
       // full-resolution decode being gone before the next one is asked for.
