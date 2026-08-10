@@ -1596,3 +1596,24 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   Playwright at 320/360/390/430; all 7 trades' `credits.html` re-checked live → 200. Full write-up
   in the collage book.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+- 2026-08-10 · **[AXIS:WELL] the colour dice (Collage Studio) — and the BACKPORT
+  RIDER FIRED, MEASURED RATHER THAN ASSUMED.** The wish itself is a collage one
+  and its write-up lives in the collage book; what belongs here is the class it
+  exposed and the sweep that followed. THE CLASS: *a control row with a fixed
+  number of 44px targets and no room for the next one.* Collage's full-bleed rail
+  was six targets in 295 of the 304 pixels a 320px phone has — nine pixels from
+  an overflow — so the seventh could not be added at any legal tap size, and the
+  rail now wraps instead. SWEPT ALL 7 TRADES for the same class, on the LIVE
+  site, in a real browser: 7 trades x 4 pages x {320, 390} = **56 measurements,
+  zero horizontal overflow (`scrollWidth <= clientWidth` on both `documentElement`
+  and `body`), and the smallest VISIBLE sticky-bar control anywhere is exactly
+  44px.** CLEAN — the shared runtime already answers this class, by a different
+  and better strategy than wrapping: `shared/toolkit.js` degrades the brand
+  progressively (tail below 560px, word below 380px) and never shrinks the two
+  things someone came to tap. That was already written down; it had not been
+  re-measured since the trade count reached 7 and the tool count reached 37, and
+  "documented as fixed" is not the same claim as "measured today". NOTE FOR THE
+  NEXT CYCLE THAT SWEEPS: the first run of this sweep reported every page as a
+  0px tap target — the probe was matching the closed tool dropdown's hidden
+  links. A ruler that reads zero everywhere is a broken ruler, not 56 findings.
+  https://mrdirno.github.io/nested-resonance-memory-archive/av/

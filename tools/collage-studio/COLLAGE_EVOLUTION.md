@@ -2936,7 +2936,13 @@ frontier. Today's ceiling is tomorrow's floor.
   edge and no two controls overlapping. Regression: undo 21/21, mobile
   watertight 7/7, rollCode + composition + twist sweeps green, `tsc --noEmit`
   clean, `vite build` clean. Credited on the page under the button itself and in
-  BOTH ledgers. **NOT SHIPPED, AND SAID PLAINLY:** the colour dice is not in the
+  BOTH ledgers. **BACKPORT RIDER FIRED:** the class this exposed is *a control
+  row with a fixed number of 44px targets and no room for the next one*, so all
+  7 trades were swept for it on the LIVE site — 56 measurements (7 trades x 4
+  pages x {320, 390}) — and came back CLEAN: zero horizontal overflow anywhere,
+  smallest visible sticky-bar control exactly 44px. `shared/toolkit.js` already
+  answers the class by degrading the brand instead of wrapping; that was written
+  down but had not been re-measured since the trade count reached 7. **NOT SHIPPED, AND SAID PLAINLY:** the colour dice is not in the
   keyboard map (the main dice is not either), and it does not appear in the
   share code as a distinguishable act — a code records the deal, not which
   button produced it, which is correct and worth stating.
