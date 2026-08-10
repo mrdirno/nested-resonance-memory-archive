@@ -54,7 +54,10 @@ interface Report {
   requested: number; full: number; fellBack: number;
   budgetPx: number; usedPx: number; clamped: number;
 }
-interface Take { report: Report; ink: number; w: number; h: number; cells: number; fullImgLoads: number }
+interface Take {
+  report: Report; ink: number; inkAfter: number;
+  w: number; h: number; cells: number; fullImgLoads: number; heldPreviews: number;
+}
 
 /**
  * Build a scene of `n` distinct large photographs, run the offline still pass,
@@ -66,8 +69,8 @@ interface Take { report: Report; ink: number; w: number; h: number; cells: numbe
  * old code asked for was the crop factor SQUARED times the destination area.
  * A scene of small sources cannot reproduce the bug at any source count.
  */
-const runPass = (page: Page, n: number, maxWidth: number, budgetPx?: number) =>
-  page.evaluate(async ({ modUrl, n, maxWidth, budgetPx }) => {
+const runPass = (page: Page, n: number, maxWidth: number, budgetPx?: number, hold = false) =>
+  page.evaluate(async ({ modUrl, n, maxWidth, budgetPx, hold }) => {
     const mod = await import(/* @vite-ignore */ modUrl);
 
     const SRC = 2400;   // each source: 5.8 MP, a modest phone photo
@@ -123,11 +126,20 @@ const runPass = (page: Page, n: number, maxWidth: number, budgetPx?: number) =>
     const cv = document.createElement('canvas');
     cv.style.width = '600px'; cv.style.height = '600px';
     document.body.appendChild(cv);
-    const stage = mod.createStage(cv, {});
-    stage.setScene({ layoutItems, orderedAssets: assets, mode: 'simple', aspect: 1, bgColor: '#000' });
-    // Let the previews bind, so a fallback really is "keep the thumbnail" and
-    // not "there was never anything there".
-    await new Promise((r) => setTimeout(r, 1200));
+    // INK: the share of sampled pixels carrying picture rather than background.
+    // A hole, a black frame or a half-drawn scene all collapse this; softness
+    // does not. It is the "never a hole" half of the claim, measured.
+    const measureInk = (): number => {
+      const S = 64;
+      const t = document.createElement('canvas'); t.width = S; t.height = S;
+      t.getContext('2d')!.drawImage(cv, 0, 0, S, S);
+      const d = t.getContext('2d')!.getImageData(0, 0, S, S).data;
+      let lit = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        if (d[i] > 12 || d[i + 1] > 12 || d[i + 2] > 12) lit++;
+      }
+      return lit / (S * S);
+    };
 
     // COUNT THE FULL-RESOLUTION <img> DECODES THE OFFLINE PASS STARTS.
     //
@@ -141,19 +153,50 @@ const runPass = (page: Page, n: number, maxWidth: number, budgetPx?: number) =>
     //
     // Counting STARTS rather than concurrent liveness on purpose: every one of
     // those decodes is kept in `this.stills`, so a start IS a resident decode.
+    //
+    // `hold` ADDS THE SECOND JOB: intercept the PREVIEW decodes and never let
+    // them land. That is the un-decoded-thumbnail state, made deterministic —
+    // "export before the previews bind" is otherwise a race nobody can grade,
+    // and it is the ordinary way this app gets used (drop photos in, hit
+    // Export). The held loads are replayed after the pass so the frame's
+    // recovery can be measured too.
     const fullSrcs = new Set(assets.map((a) => a.src));
+    const previewSrcs = new Set(assets.map((a) => a.previewSrc));
     const desc = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src')!;
     let fullImgLoads = 0;
+    const held: Array<() => void> = [];
     const RealImage = window.Image;
-    (window as unknown as { Image: unknown }).Image = function PatchedImage(this: unknown) {
-      const img = new RealImage();
-      Object.defineProperty(img, 'src', {
-        configurable: true,
-        get() { return desc.get!.call(img); },
-        set(v: string) { if (fullSrcs.has(v)) fullImgLoads++; desc.set!.call(img, v); },
-      });
-      return img;
+    const patchImage = (): void => {
+      (window as unknown as { Image: unknown }).Image = function PatchedImage(this: unknown) {
+        const img = new RealImage();
+        Object.defineProperty(img, 'src', {
+          configurable: true,
+          get() { return desc.get!.call(img); },
+          set(v: string) {
+            if (fullSrcs.has(v)) fullImgLoads++;
+            if (hold && previewSrcs.has(v)) { held.push(() => desc.set!.call(img, v)); return; }
+            desc.set!.call(img, v);
+          },
+        });
+        return img;
+      };
     };
+
+    const stage = mod.createStage(cv, {});
+    // The hold has to be armed BEFORE the scene, because that is when the
+    // preview decodes start.
+    if (hold) patchImage();
+    stage.setScene({ layoutItems, orderedAssets: assets, mode: 'simple', aspect: 1, bgColor: '#000' });
+    if (hold) {
+      // Long enough that any decode that COULD land has landed — so a still of
+      // null is the hold working, not the test being quick.
+      await new Promise((r) => setTimeout(r, 400));
+    } else {
+      // Let the previews bind, so a fallback really is "keep the thumbnail" and
+      // not "there was never anything there".
+      await new Promise((r) => setTimeout(r, 1200));
+      patchImage();
+    }
 
     stage.beginOfflineRender({ maxWidth, fullRes: true });
     const report = await stage.prepareOfflineStills(
@@ -161,30 +204,34 @@ const runPass = (page: Page, n: number, maxWidth: number, budgetPx?: number) =>
     );
     await stage.renderAtTime(0);
     (window as unknown as { Image: unknown }).Image = RealImage;
+    const ink = measureInk();
 
-    // INK: the share of sampled pixels carrying picture rather than background.
-    // A hole, a black frame or a half-drawn scene all collapse this; softness
-    // does not. It is the "never a hole" half of the claim, measured.
-    const x = cv.getContext('2d')!;
-    const S = 64;
-    const t = document.createElement('canvas'); t.width = S; t.height = S;
-    t.getContext('2d')!.drawImage(cv, 0, 0, S, S);
-    const d = t.getContext('2d')!.getImageData(0, 0, S, S).data;
-    let lit = 0;
-    for (let i = 0; i < d.length; i += 4) {
-      if (d[i] > 12 || d[i + 1] > 12 || d[i + 2] > 12) lit++;
+    // RELEASE. A refused upgrade must send the fragment BACK to the preview it
+    // was always going to get — the alternative, and what actually shipped, is
+    // a fragment pinned to a budget-sized raster on a key the preview can never
+    // reach, for the whole take.
+    let inkAfter = ink;
+    if (hold) {
+      held.forEach((f) => f());
+      await new Promise((r) => setTimeout(r, 1500));
+      await stage.renderAtTime(0);
+      inkAfter = measureInk();
     }
+
     // `cells` is reported so the caller can DERIVE the coverage it should see
     // instead of guessing one: n photos in a cols x rows grid leave cols*rows-n
     // cells legitimately empty, and a hardcoded threshold would read those as a
     // hole in the render. The test must know its own fixture's geometry.
-    const out = { report, ink: lit / (S * S), w: cv.width, h: cv.height, cells: cols * rows, fullImgLoads };
+    const out = {
+      report, ink, inkAfter, w: cv.width, h: cv.height,
+      cells: cols * rows, fullImgLoads, heldPreviews: held.length,
+    };
 
     stage.endOfflineRender();
     stage.destroy();
     cv.remove();
     return out;
-  }, { modUrl: STAGE_MOD, n, maxWidth, budgetPx });
+  }, { modUrl: STAGE_MOD, n, maxWidth, budgetPx, hold });
 
 test.describe('the offline render stays inside its memory budget', () => {
   test.beforeEach(async ({ page }) => {
@@ -268,5 +315,74 @@ test.describe('the offline render stays inside its memory budget', () => {
     // thumbnail, so the frame is whole even when the pool bought nothing.
     expect(starved.ink).toBeGreaterThan((12 / starved.cells) * 0.97);
     expect(starved.w).toBeGreaterThan(2000);
+  });
+
+  // ---------------------------------------------------------------------------
+  // B5 EXPORTING BEFORE THE PREVIEWS HAVE DECODED.
+  //
+  // Every test above waits 1200ms for the thumbnails to bind, which is why they
+  // all pass and why none of them can see this: the floor a budgeted raster may
+  // not go under is read off the still CURRENTLY BOUND, and
+  // `beginOfflineRender` repoints every fragment's still key from its preview to
+  // its original BEFORE the budget runs. A preview decode still in flight
+  // therefore lands on a key nothing is listening to, `it.still` stays null, and
+  // the floor came out as 0 — "this fragment draws nothing, anything is an
+  // upgrade".
+  //
+  // Under a starved pool that adopted a postage stamp, pinned the fragment to it
+  // for the whole take (its preview can never arrive now, the key is orphaned)
+  // and reported the source as FULL. A soft render and a report that says every
+  // source was satisfied. Drop photos in and hit Export — which is how this app
+  // is used — and that is the ordinary path, not a corner.
+  // ---------------------------------------------------------------------------
+  test('B5: an un-decoded preview is not a floor of zero', async ({ page }) => {
+    test.skip(!(await devModules(page)), 'Stage module needs the dev server');
+    // Starved but NOT empty: 480,000px over 12 sources is 40,000px each, which
+    // the old path turned into a ~200px raster per photo and called a success.
+    // (B3's one-pixel pool refuses under any rule, which is why it never caught
+    // this.)
+    const POOL = 480_000, N = 12;
+    const t = (await runPass(page, N, 4096, POOL, true)) as Take;
+    console.log('B5 undecoded+starved:', JSON.stringify(t.report), 'held:', t.heldPreviews,
+      `| the old path would have adopted ~${Math.floor(Math.sqrt(POOL / N))}px per photo`);
+
+    // THE TEST IS NOT VACUOUS: the previews really were held, so `it.still` was
+    // null for every fragment. Without this the whole case degrades into B1.
+    expect(t.heldPreviews).toBe(N);
+
+    expect(t.report.requested).toBe(N);
+    expect(t.report.full + t.report.fellBack).toBe(N);
+    // THE DEFECT. There is no floor to check a budget-sized raster against, so
+    // nothing is adopted and the report says so.
+    expect(t.report.full).toBe(0);
+    expect(t.report.fellBack).toBe(N);
+    expect(t.report.usedPx).toBe(0);
+    // AND THE FRAGMENT GOES BACK TO ITS PREVIEW. A refusal marks the original
+    // dead, which repoints the still key to the preview that was always on its
+    // way — so when it lands, it lands on a fragment that is listening. Pinning
+    // a stamp is what breaks this: the key stays on the original forever.
+    expect(t.inkAfter).toBeGreaterThan((N / t.cells) * 0.97);
+  });
+
+  test('B6: an unknown floor still upgrades when the pool can afford it', async ({ page }) => {
+    test.skip(!(await devModules(page)), 'Stage module needs the dev server');
+    // The other half, and the one a too-simple fix fails: "refuse when the floor
+    // is unknown" would pass B5 and quietly stop upgrading anything on any
+    // render that starts promptly. A raster the BUDGET did not size is bounded
+    // by the source or by the sampling the destination can show, so it cannot be
+    // softer than any preview of that source — it is safe with no floor at all,
+    // and it must still be taken.
+    const N = 4;
+    const t = (await runPass(page, N, 4096, 40_000_000, true)) as Take;
+    console.log('B6 undecoded+generous:', JSON.stringify(t.report), 'held:', t.heldPreviews);
+
+    expect(t.heldPreviews).toBe(N);
+    expect(t.report.requested).toBe(N);
+    expect(t.report.full).toBeGreaterThan(0);
+    expect(t.report.full + t.report.fellBack).toBe(N);
+    expect(t.report.usedPx).toBeLessThanOrEqual(t.report.budgetPx);
+    // Nothing adopted with an unknown floor may have been sized by the budget.
+    expect(t.report.clamped).toBe(0);
+    expect(t.inkAfter).toBeGreaterThan((N / t.cells) * 0.97);
   });
 });

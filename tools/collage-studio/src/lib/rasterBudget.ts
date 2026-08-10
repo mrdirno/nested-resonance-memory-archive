@@ -165,11 +165,13 @@ export const rasterBudgetPx = (i: RasterBudgetInputs): number => {
   return Math.floor(Math.max(FLOOR_POOL_PX, afterCanvas));
 };
 
-/** Read the device signals this realm actually exposes. Safe anywhere, never throws. */
-export const readDeviceSignals = (): {
+export interface DeviceSignals {
   deviceMemoryGb: number | null;
   gpuMaxTextureSize: number | null;
-} => {
+}
+
+/** Read the device signals this realm actually exposes. Safe anywhere, never throws. */
+export const readDeviceSignals = (): DeviceSignals => {
   let deviceMemoryGb: number | null = null;
   let gpuMaxTextureSize: number | null = null;
   try {
@@ -201,6 +203,69 @@ export const readDeviceSignals = (): {
     /* no WebGL here */
   }
   return { deviceMemoryGb, gpuMaxTextureSize };
+};
+
+/** True when a probe came back carrying at least one usable device signal. */
+export const signalsUseful = (s: DeviceSignals | null | undefined): boolean =>
+  !!s
+  && ((typeof s.deviceMemoryGb === 'number' && s.deviceMemoryGb > 0)
+    || (typeof s.gpuMaxTextureSize === 'number' && s.gpuMaxTextureSize > 0));
+
+/**
+ * How many further attempts a BLANK probe is worth before we accept that this
+ * realm genuinely has nothing to tell us. Small on purpose: the retry exists to
+ * survive a transient GPU-process failure, not to poll.
+ */
+export const BLANK_PROBE_RETRIES = 3;
+
+/**
+ * MEMOISE THE ANSWER, NOT THE FAILURE.
+ *
+ * `MAX_TEXTURE_SIZE` costs a WebGL context to ask for and cannot change while
+ * the page lives, so it is read once. The trap is that `getContext('webgl')`
+ * DOES fail transiently and for reasons that have nothing to do with the
+ * device: Chromium caps live contexts per page and drops the oldest, and a GPU
+ * process crash returns null from every `getContext` until it restarts. Caching
+ * the FIRST result unconditionally turns one of those moments into a permanent
+ * verdict — `{null, null}` reads as "a realm that tells us nothing", which
+ * pins the pool at `FLOOR_POOL_PX` for the REST OF THE SESSION. On a machine
+ * that could have held sixteen times that. Every export after the blip renders
+ * from thumbnails, silently, and reloading the tab is the only cure.
+ *
+ * So a result is only cached once it CARRIES something. A blank is handed back
+ * for this call and re-probed on the next one, up to `retries` further attempts
+ * — after which the blank is cached too, because a realm with no
+ * `deviceMemory` and no WebGL at all must not pay a context probe per export
+ * forever. Both halves matter: without the retry a blip is permanent, without
+ * the settle a genuinely blank realm probes without end.
+ *
+ * The probe is injected rather than imported so the policy sweeps under plain
+ * node, where there is no DOM to fail in the first place.
+ */
+export const createSignalCache = (
+  probe: () => DeviceSignals,
+  retries: number = BLANK_PROBE_RETRIES,
+): (() => DeviceSignals) => {
+  const BLANK: DeviceSignals = { deviceMemoryGb: null, gpuMaxTextureSize: null };
+  const max = Number.isFinite(retries) && retries > 0 ? Math.floor(retries) : 0;
+  let cached: DeviceSignals | null = null;
+  let blanks = 0;
+  return (): DeviceSignals => {
+    if (cached) return cached;
+    let got: DeviceSignals;
+    try {
+      got = probe() || BLANK;
+    } catch {
+      got = BLANK;
+    }
+    if (signalsUseful(got)) {
+      cached = got;
+      return cached;
+    }
+    blanks += 1;
+    if (blanks > max) cached = got;
+    return got;
+  };
 };
 
 // -----------------------------------------------------------------------------
@@ -325,12 +390,34 @@ export interface RasterDims {
  * The existing code carried a comment promising the first of these and never
  * implemented it. Under a budget that pushes scales DOWN it stops being
  * theoretical, so it is enforced here where the numbers live.
+ *
+ * -----------------------------------------------------------------------------
+ * `floorW = null` MEANS "THE PREVIEW HAS NOT DECODED YET", WHICH IS NOT ZERO.
+ * -----------------------------------------------------------------------------
+ * Both rules above need a number, and the caller can only supply one once the
+ * thumbnail has landed. Passing 0 for "not yet" reads as "this fragment is
+ * drawing nothing, anything is an upgrade" — and the render then sizes a raster
+ * against a starved pool, adopts a 258px postage stamp, and reports it as a
+ * source that came back FULL. The user gets a soft take and a report that says
+ * every source was satisfied. It is the loudest possible version of the quiet
+ * failure this whole file exists to avoid, and it fires exactly when someone
+ * hits Export the moment the photos are in, which is the normal way to use it.
+ *
+ * So an unknown floor is its own value, and it admits ONE size: the raster the
+ * budget did NOT decide. An UNCLAMPED raster is bounded by the source itself or
+ * by `wantScale` — the sampling the destination can actually show — so it is
+ * exactly sufficient by construction and cannot be softer than any preview
+ * derived from the same source, whatever that preview turns out to be. A
+ * clamped one has no such guarantee, so it is refused, and refusing is the safe
+ * outcome twice over: the report tells the truth, and the fragment falls back
+ * to a preview that is still on its way rather than being pinned forever to a
+ * raster sized against a floor of zero.
  */
 export const rasterDims = (
   srcW: number,
   srcH: number,
   scale: number,
-  floorW: number,
+  floorW: number | null,
   wantScale: number,
   capPx: number,
 ): RasterDims | null => {
@@ -349,16 +436,24 @@ export const rasterDims = (
   // Under two pixels there is no picture to carry, only an allocation.
   if (w < 2) return null;
 
-  const floor = Number.isFinite(floorW) && floorW > 0 ? floorW : 0;
-  // Not worth the allocation: the thumbnail already carries this much picture.
-  if (w <= floor) return null;
-
-  const h = Math.floor((srcH * w) / srcW);
-  if (h < 2) return null;
-
   const want = Number.isFinite(wantScale) && wantScale > 0 ? Math.min(1, wantScale) : 0;
   // Reported clamped when EITHER ceiling was the budget's: the continuous scale
   // having been pushed down, or the integer cap having bound on its own.
   const clamped = s < want - 1e-9 || byCap < Math.min(bySource, byScale);
+
+  if (floorW === null) {
+    // No floor to measure against, so only the size the budget did NOT choose
+    // may be adopted. See the header: unclamped is exactly sufficient by
+    // construction; clamped is a guess against a floor of zero.
+    if (clamped) return null;
+  } else {
+    const floor = Number.isFinite(floorW) && floorW > 0 ? floorW : 0;
+    // Not worth the allocation: the thumbnail already carries this much picture.
+    if (w <= floor) return null;
+  }
+
+  const h = Math.floor((srcH * w) / srcW);
+  if (h < 2) return null;
+
   return { w, h, px: w * h, clamped };
 };

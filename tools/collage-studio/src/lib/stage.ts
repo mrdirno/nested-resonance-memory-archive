@@ -51,7 +51,7 @@ import {
 } from './clipWindow';
 import { soundtrackSource, soundtrackAudible } from './soundtrack';
 import {
-  rasterBudgetPx, readDeviceSignals, createRasterLedger, scaleForBudget, rasterDims,
+  rasterBudgetPx, readDeviceSignals, createSignalCache, createRasterLedger, scaleForBudget, rasterDims,
 } from './rasterBudget';
 import type { LayoutItem } from '../types';
 
@@ -481,10 +481,14 @@ const EMPTY_STILL_REPORT: OfflineStillReport = Object.freeze({
  * The device signals, read once per realm. `deviceMemory` never changes and
  * MAX_TEXTURE_SIZE costs a WebGL context to ask for — probing it on every take
  * would spend a context per export for an answer that cannot have moved.
+ *
+ * It memoises the ANSWER and not the FAILURE (rasterBudget.createSignalCache):
+ * `getContext('webgl')` returns null transiently — Chromium drops the oldest
+ * context past its per-page cap, and a GPU-process crash blanks every one until
+ * it restarts — and caching that blip pinned the pool to its floor for the rest
+ * of the session on hardware that could hold sixteen times as much.
  */
-let deviceSignals: ReturnType<typeof readDeviceSignals> | null = null;
-const signalsOnce = (): ReturnType<typeof readDeviceSignals> =>
-  (deviceSignals ??= readDeviceSignals());
+const signalsOnce = createSignalCache(readDeviceSignals);
 
 // -----------------------------------------------------------------------------
 // CAPABILITY PROBE
@@ -1849,13 +1853,39 @@ export class Stage {
     // What each source is drawing RIGHT NOW, in source pixels across. It is the
     // floor a budgeted raster may not go under: the render must never be softer
     // than the preview the user was already looking at.
+    //
+    // A FRAGMENT WITH NO STILL BOUND HAS NO FLOOR OF ZERO — IT HAS NO FLOOR YET.
+    // `beginOfflineRender` repoints every `stillKey` from the preview to the
+    // original BEFORE this runs, so a preview decode still in flight lands on a
+    // key nothing is listening to any more: `it.still` stays null and the
+    // fragment's real floor is a number that does not exist yet. Reading that as
+    // 0 told the budget "this fragment draws nothing, anything is an upgrade",
+    // which under a starved pool adopted a postage stamp, pinned the fragment to
+    // it for the whole take (the preview can never arrive now — its key is
+    // orphaned) and reported the source as FULL. Hit Export the moment the
+    // photos are in and that is the normal path, not a corner.
+    //
+    // Two of the three cases still yield a real number, and the second is free:
+    // the decode may have LANDED after the repoint, in which case the record is
+    // ready even though no item is bound to it — and it is a true floor, because
+    // a refusal here marks the original dead, which repoints the fragment back
+    // to exactly that preview. Only the third is unknown, and unknown is passed
+    // through as `null` rather than flattened to a number.
     const floor = new Map<string, number>();
+    const floorUnknown = new Set<string>();
     for (let i = 0; i < this.items.length; i++) {
       const it = this.items[i];
       if (!it.fullKey || this.deadOriginals.has(it.fullKey)) continue;
-      if (it.still) {
-        const have = stillW(it.still);
+      const pending = it.previewKey ? this.stills.get(it.previewKey) : undefined;
+      const have = it.still
+        ? stillW(it.still)
+        : (pending && pending.state === 'ready' && pending.img ? stillW(pending.img) : 0);
+      if (have > 0) {
         if (have > (floor.get(it.fullKey) ?? 0)) floor.set(it.fullKey, have);
+      } else {
+        // One un-decoded fragment makes the whole SOURCE unknown: fragments
+        // share originals, and the budget is decided per source.
+        floorUnknown.add(it.fullKey);
       }
       // `isw`/`ish` are this fragment's crop in SOURCE pixels, measured against
       // whatever source was bound when the crop was computed. The RATIO of
@@ -1893,7 +1923,8 @@ export class Stage {
     for (const [key, want] of need) {
       if (this.destroyed || opts.signal?.aborted) break;
       if (clock() - started > budget) break;
-      const got = await this.upgradeStill(key, want, ledger.capFor(), floor.get(key) ?? 0, opts.signal);
+      const floorW = floorUnknown.has(key) ? null : (floor.get(key) ?? 0);
+      const got = await this.upgradeStill(key, want, ledger.capFor(), floorW, opts.signal);
       // Committed for EVERY source, including the ones that took nothing — a
       // missed commit shrinks every later source's share of a budget that was
       // never actually spent.
@@ -1922,15 +1953,17 @@ export class Stage {
    * that draw it, so the whole point survives on both paths.
    *
    * `capPx` is this source's slice of the pool and `floorW` the thumbnail it is
-   * already drawing. Returns the pixels it actually took — 0 meaning "nothing
-   * was allocated, keep the preview", which is a legitimate outcome and never a
+   * already drawing — or `null`, meaning the preview has not decoded yet and
+   * there is no floor to measure against, which admits only a raster the budget
+   * did not size. Returns the pixels it actually took — 0 meaning "nothing was
+   * allocated, keep the preview", which is a legitimate outcome and never a
    * failure. The caller commits that number against the ledger either way.
    */
   private async upgradeStill(
     key: string,
     wantScale: number,
     capPx: number,
-    floorW: number,
+    floorW: number | null,
     signal?: AbortSignal,
   ): Promise<{ px: number; clamped: boolean }> {
     const NONE = { px: 0, clamped: false };

@@ -48,6 +48,7 @@ const tmp = join(mkdtempSync(join(tmpdir(), 'rasterbudget-')), 'rasterBudget.mjs
 writeFileSync(tmp, code);
 const {
   rasterBudgetPx, createRasterLedger, scaleForBudget, rasterDims,
+  createSignalCache, signalsUseful, BLANK_PROBE_RETRIES,
   BYTES_PER_RASTER_PX, CANVAS_WEIGHT, FLOOR_POOL_PX, CEILING_POOL_PX,
 } = await import(pathToFileURL(tmp).href);
 
@@ -440,6 +441,173 @@ for (const n of [12, 30, 64]) {
         }
       }
     }
+  }
+}
+
+// =============================================================================
+// I11 AN UNKNOWN FLOOR IS NOT A FLOOR OF ZERO.
+//
+//     `beginOfflineRender` repoints every fragment's still key from its preview
+//     to its original BEFORE the budget runs, so a preview decode still in
+//     flight lands on a key nothing is bound to any more. The fragment's floor
+//     is then a number that does not exist yet — and the caller used to flatten
+//     that to 0, which reads as "this fragment draws nothing, anything is an
+//     upgrade". Under a starved pool it adopted a postage stamp, pinned the
+//     fragment to it for the whole take (the preview can never land now), and
+//     reported the source as FULL. Export the moment the photos are in and that
+//     is the ordinary path.
+//
+//     THE WHOLE SPEC IN ONE LINE, and it is swept rather than asserted case by
+//     case because the failure lives in the interaction of cap, source size and
+//     wanted scale:
+//
+//       rasterDims(..., null, ...)  ===  rasterDims(..., 0, ...) when that
+//       result is UNCLAMPED, and null otherwise.
+//
+//     Unclamped means the size was chosen by the source or by the sampling the
+//     destination can show — never by the budget — so it cannot be softer than
+//     any preview derived from the same source, whoever that preview turns out
+//     to be. Everything else is a guess against a floor that was never read.
+// =============================================================================
+{
+  let refusedByUnknown = 0, keptByUnknown = 0, narrowestStamp = Infinity;
+  for (let seed = 1; seed <= 80; seed++) {
+    const rng = rngOf(seed * 31);
+    for (const base of [...SOURCES, { w: 12000, h: 400 }, { w: 3, h: 2 }]) {
+      // Caps spanning starved -> generous, so BOTH regimes are graded.
+      const cap = rng() < 0.5
+        ? Math.floor(1 + rng() * 400_000)
+        : Math.floor(1 + rng() * 40_000_000);
+      const want = rng();
+      const s = scaleForBudget(base.w * base.h, want, cap);
+      const known = rasterDims(base.w, base.h, s, 0, want, cap);
+      const unknown = rasterDims(base.w, base.h, s, null, want, cap);
+      const expected = known && !known.clamped ? known : null;
+
+      ok();
+      if (JSON.stringify(unknown) !== JSON.stringify(expected)) {
+        fail(`I11 ${base.w}x${base.h} cap=${cap} want=${want.toFixed(3)}: `
+          + `unknown-floor gave ${JSON.stringify(unknown)}, spec says ${JSON.stringify(expected)}`);
+      }
+      // I11b The adopted raster is never one the BUDGET sized.
+      if (unknown) {
+        keptByUnknown++;
+        ok(); if (unknown.clamped) fail(`I11b adopted a budget-sized raster with no floor to check it against`);
+        // I11c ...and it is exactly the geometry/source ceiling, derived here
+        // rather than read back off the module, so this grades it.
+        const ceiling = Math.min(Math.floor(base.w), Math.floor(base.w * Math.min(1, s)));
+        ok(); if (unknown.w !== ceiling) fail(`I11c ${unknown.w} != geometric ceiling ${ceiling}`);
+      } else if (known) {
+        // THE POSTAGE STAMP THE FIX REMOVES, on the record as a number. The
+        // NARROWEST refusal is the damage: a budget-sized raster can be wide
+        // and merely over-tight, or it can be this, adopted permanently and
+        // reported as a source that came back full.
+        refusedByUnknown++;
+        narrowestStamp = Math.min(narrowestStamp, known.w);
+      }
+    }
+  }
+  // I11d NOT VACUOUS IN EITHER DIRECTION. A rule that refused everything would
+  // pass every claim above and ship a render that never upgrades anything.
+  ok(); if (keptByUnknown === 0) fail(`I11d the unknown-floor path never adopted ANY raster — it is refusing everything`);
+  ok(); if (refusedByUnknown === 0) fail(`I11e the unknown-floor path never refused anything — the defect is not being reproduced`);
+  console.log(`  unknown floor: adopted ${keptByUnknown}, refused ${refusedByUnknown} `
+    + `(narrowest raster a floor of 0 would have adopted and reported as FULL: ${narrowestStamp}px)`);
+  // I11f A REAL FLOOR IS UNTOUCHED. The known-floor path is the one that ships
+  // on every settled render, and this change must not have moved it.
+  for (const floorW of [0, 256, 1024, 4096]) {
+    const cap = 900_000, want = 0.9;
+    const base = SOURCES[0];
+    const s = scaleForBudget(base.w * base.h, want, cap);
+    const d = rasterDims(base.w, base.h, s, floorW, want, cap);
+    ok(); if (d && d.w <= floorW) fail(`I11f floor ${floorW} let a ${d.w}px raster through`);
+  }
+}
+
+// =============================================================================
+// I12 MEMOISE THE ANSWER, NOT THE FAILURE.
+//
+//     MAX_TEXTURE_SIZE costs a WebGL context to ask for and cannot change while
+//     the page lives, so it is read once — but `getContext('webgl')` returns
+//     null TRANSIENTLY, for reasons that say nothing about the device: Chromium
+//     drops the oldest context past its per-page cap, and a GPU-process crash
+//     blanks every one of them until it restarts. `deviceSignals ??= probe()`
+//     cached that blip as a permanent verdict, and a blank verdict is
+//     `FLOOR_POOL_PX` — the smallest pool there is — for the REST OF THE
+//     SESSION, on a machine that could have held sixteen times as much. Every
+//     export after the blip silently renders from thumbnails and only a reload
+//     clears it.
+//
+//     Both halves are graded, because each alone is a different bug: without
+//     the retry a blip is permanent; without the settle, a realm that genuinely
+//     has no WebGL pays a context probe on every single export forever.
+// =============================================================================
+{
+  const BLANK = { deviceMemoryGb: null, gpuMaxTextureSize: null };
+  const GOOD = { deviceMemoryGb: null, gpuMaxTextureSize: 16384 };
+
+  ok(); if (signalsUseful(BLANK) || !signalsUseful(GOOD)) fail('I12 signalsUseful disagrees with itself');
+  ok(); if (signalsUseful(null) || signalsUseful({ deviceMemoryGb: 0, gpuMaxTextureSize: 0 })) {
+    fail('I12b zeroed signals counted as useful');
+  }
+
+  // I12c A GOOD ANSWER IS READ ONCE AND NEVER AGAIN.
+  {
+    let calls = 0;
+    const get = createSignalCache(() => { calls++; return GOOD; });
+    for (let i = 0; i < 50; i++) {
+      ok(); if (get().gpuMaxTextureSize !== 16384) fail('I12c cached answer changed under us');
+    }
+    ok(); if (calls !== 1) fail(`I12d a settled probe ran ${calls} times, expected 1`);
+  }
+
+  // I12e THE DEFECT: one blank probe, then a good one. `??=` returns the blank
+  // forever; this must recover on the very next call and then settle.
+  for (let blips = 1; blips <= BLANK_PROBE_RETRIES; blips++) {
+    let calls = 0;
+    const get = createSignalCache(() => { calls++; return calls <= blips ? BLANK : GOOD; });
+    for (let i = 0; i < blips; i++) {
+      ok(); if (get().gpuMaxTextureSize !== null) fail(`I12e blip ${i} did not report blank`);
+    }
+    ok(); if (get().gpuMaxTextureSize !== 16384) fail(`I12f ${blips} blip(s) were cached as permanent`);
+    const after = calls;
+    for (let i = 0; i < 20; i++) get();
+    ok(); if (calls !== after) fail(`I12g kept probing (${calls} > ${after}) after a good answer`);
+  }
+
+  // I12h A REALM THAT GENUINELY HAS NOTHING SETTLES — bounded probes, forever.
+  {
+    let calls = 0;
+    const get = createSignalCache(() => { calls++; return BLANK; });
+    for (let i = 0; i < 200; i++) get();
+    ok(); if (calls > BLANK_PROBE_RETRIES + 1) {
+      fail(`I12h probed ${calls} times over 200 calls; the settle is not bounded`);
+    }
+    ok(); if (calls < 2) fail(`I12i settled after ${calls} probe(s) — there is no retry at all`);
+  }
+
+  // I12j A THROWING PROBE IS A BLANK PROBE, never an exception out of a render.
+  {
+    let calls = 0;
+    const get = createSignalCache(() => { calls++; throw new Error('GPU process is gone'); });
+    for (let i = 0; i < 20; i++) {
+      const s = get();
+      ok(); if (!s || s.gpuMaxTextureSize !== null) fail('I12j a throwing probe did not yield a blank');
+    }
+    ok(); if (calls > BLANK_PROBE_RETRIES + 1) fail(`I12k a throwing probe was retried ${calls} times`);
+  }
+
+  // I12l THE COST OF THE BUG, IN THE UNIT THAT MATTERS: pool pixels. A cached
+  // blip is the floor; the recovered answer is the device's real class.
+  {
+    const canvasPx = 3840 * 2160;
+    const stuck = rasterBudgetPx({ canvasPx, ...BLANK });
+    const real = rasterBudgetPx({ canvasPx, ...GOOD });
+    ok(); if (stuck !== FLOOR_POOL_PX) fail(`I12l a blank verdict is not the floor (${stuck})`);
+    ok(); if (real <= stuck) fail(`I12m recovery bought nothing (${real} vs ${stuck})`);
+    console.log(`  one cached WebGL blip cost this device ${(real / stuck).toFixed(1)}x its pool `
+      + `(${(stuck * BYTES_PER_RASTER_PX / 1048576).toFixed(0)} MB vs ${(real * BYTES_PER_RASTER_PX / 1048576).toFixed(0)} MB) `
+      + `for the rest of the session`);
   }
 }
 
