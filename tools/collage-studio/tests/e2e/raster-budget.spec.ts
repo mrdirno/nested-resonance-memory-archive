@@ -54,7 +54,7 @@ interface Report {
   requested: number; full: number; fellBack: number;
   budgetPx: number; usedPx: number; clamped: number;
 }
-interface Take { report: Report; ink: number; w: number; h: number; cells: number }
+interface Take { report: Report; ink: number; w: number; h: number; cells: number; fullImgLoads: number }
 
 /**
  * Build a scene of `n` distinct large photographs, run the offline still pass,
@@ -129,11 +129,38 @@ const runPass = (page: Page, n: number, maxWidth: number, budgetPx?: number) =>
     // not "there was never anything there".
     await new Promise((r) => setTimeout(r, 1200));
 
+    // COUNT THE FULL-RESOLUTION <img> DECODES THE OFFLINE PASS STARTS.
+    //
+    // The pool bounds the RASTERS. It cannot see an allocation made upstream of
+    // it, and there was one: pointing every fragment's stillKey at its original
+    // made `ensureStills` start an <img> per source, ALL AT ONCE, each decode
+    // retained for the whole take. That peak is linear in source count and in
+    // source area, it happened before the budget ran, and it dwarfed everything
+    // the budget did control — the budget was doing careful arithmetic
+    // downstream of the allocation that actually killed the tab.
+    //
+    // Counting STARTS rather than concurrent liveness on purpose: every one of
+    // those decodes is kept in `this.stills`, so a start IS a resident decode.
+    const fullSrcs = new Set(assets.map((a) => a.src));
+    const desc = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src')!;
+    let fullImgLoads = 0;
+    const RealImage = window.Image;
+    (window as unknown as { Image: unknown }).Image = function PatchedImage(this: unknown) {
+      const img = new RealImage();
+      Object.defineProperty(img, 'src', {
+        configurable: true,
+        get() { return desc.get!.call(img); },
+        set(v: string) { if (fullSrcs.has(v)) fullImgLoads++; desc.set!.call(img, v); },
+      });
+      return img;
+    };
+
     stage.beginOfflineRender({ maxWidth, fullRes: true });
     const report = await stage.prepareOfflineStills(
       budgetPx === undefined ? { timeoutMs: 30000 } : { timeoutMs: 30000, budgetPx },
     );
     await stage.renderAtTime(0);
+    (window as unknown as { Image: unknown }).Image = RealImage;
 
     // INK: the share of sampled pixels carrying picture rather than background.
     // A hole, a black frame or a half-drawn scene all collapse this; softness
@@ -151,7 +178,7 @@ const runPass = (page: Page, n: number, maxWidth: number, budgetPx?: number) =>
     // instead of guessing one: n photos in a cols x rows grid leave cols*rows-n
     // cells legitimately empty, and a hardcoded threshold would read those as a
     // hole in the render. The test must know its own fixture's geometry.
-    const out = { report, ink: lit / (S * S), w: cv.width, h: cv.height, cells: cols * rows };
+    const out = { report, ink: lit / (S * S), w: cv.width, h: cv.height, cells: cols * rows, fullImgLoads };
 
     stage.endOfflineRender();
     stage.destroy();
@@ -198,6 +225,29 @@ test.describe('the offline render stays inside its memory budget', () => {
     expect(big.report.budgetPx).toBe(small.report.budgetPx);
     // 4x the sources must not buy 4x the resident raster.
     expect(big.report.usedPx).toBeLessThan(small.report.usedPx * 2);
+    expect(big.report.full + big.report.fellBack).toBe(32);
+    expect(big.ink).toBeGreaterThan((32 / big.cells) * 0.97);
+  });
+
+  test('B4: the pass never puts every original in memory at once', async ({ page }) => {
+    test.skip(!(await devModules(page)), 'Stage module needs the dev server');
+    const small = (await runPass(page, 8, 4096)) as Take;
+    const big = (await runPass(page, 32, 4096)) as Take;
+    console.log(`B4 full-res <img> decodes started: n=8 -> ${small.fullImgLoads}, n=32 -> ${big.fullImgLoads}`);
+
+    // THE ALLOCATION THE POOL COULD NOT SEE. beginOfflineRender repointed every
+    // stillKey at its original and let ensureStills start them ALL in parallel,
+    // each decode retained for the take — n full-resolution images resident
+    // before the budget had counted anything. It is the crash the pool was
+    // written to stop, sitting upstream of the pool.
+    //
+    // Asserted as "does not scale with source count" rather than a fixed
+    // number, because the number is not the property: 8 would be as wrong as
+    // 32 if it were 8 originals held at once.
+    expect(big.fullImgLoads).toBeLessThanOrEqual(small.fullImgLoads);
+    expect(big.fullImgLoads).toBeLessThan(32);
+    // And the render still resolved every source, so the fetching that moved
+    // out of beginOfflineRender really happens somewhere.
     expect(big.report.full + big.report.fellBack).toBe(32);
     expect(big.ink).toBeGreaterThan((32 / big.cells) * 0.97);
   });

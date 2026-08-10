@@ -985,7 +985,10 @@ export class Stage {
     // to hold what the sources hold. `false` is the explicit opt-out (the
     // realtime paths, and any caller that would rather have speed).
     this.offlineFullRes = opts.fullRes !== false;
-    if (this.offlineFullRes) this.applyStillKeys();
+    // REPOINT, DO NOT FETCH. See `applyStillKeys` — fetching here put every
+    // original in memory at once, ahead of the budget that exists to stop
+    // exactly that.
+    if (this.offlineFullRes) this.applyStillKeys(false);
     this.offlineWasRunning = this.running;
     this.offlineWantPlay = [];
     this.clips.forEach((c) => { if (c.wantPlay) this.offlineWantPlay.push(c.id); });
@@ -1735,7 +1738,7 @@ export class Stage {
    * recomputed from the NEW source's intrinsic size, which matters because the
    * thumbnail and the original agree on aspect but not on pixels.
    */
-  private applyStillKeys(): void {
+  private applyStillKeys(fetchNow = true): void {
     const wanted = new Set<string>();
     const items = this.items;
     for (let i = 0; i < items.length; i++) {
@@ -1754,7 +1757,26 @@ export class Stage {
       // original arrives. A momentarily soft fragment beats a blank one, and
       // `adoptStill` patches the pointer in the instant the decode resolves.
     }
-    this.ensureStills(wanted);
+    // `fetchNow: false` REPOINTS WITHOUT FETCHING, and that distinction is the
+    // difference between a budget and a decoration.
+    //
+    // `ensureStills` starts every missing key AT ONCE — `new Image()` per key,
+    // all in flight, each decode retained in `this.stills` for the whole take.
+    // On the offline path the keys it is handed are the ORIGINALS, so calling
+    // it from `beginOfflineRender` launched N full-resolution decodes in
+    // parallel BEFORE `prepareOfflineStills` had ranked, budgeted or even
+    // counted anything. Thirty 12 MP photos is ~1.4 GB of RGBA resident at
+    // once, which is the dead tab this function's own doc comment warns about
+    // twenty lines up — the budgeted, one-at-a-time upgrade below was doing
+    // careful arithmetic downstream of an allocation that had already happened.
+    //
+    // So the offline path repoints the keys (which is what makes `adoptStill`
+    // land a budgeted raster on the right fragments) and leaves the FETCHING to
+    // `prepareOfflineStills`, which does it sequentially, inside the pool, and
+    // releases each decode before asking for the next. Fragments keep drawing
+    // the thumbnails they already had in the meantime — the same "a softer
+    // fragment beats a blank one" rule the loop above relies on.
+    if (fetchNow) this.ensureStills(wanted);
     this.markDirty();
   }
 
