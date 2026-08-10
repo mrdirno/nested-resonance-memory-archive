@@ -2,13 +2,18 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import {
   Upload, Activity, X, Lock, Unlock, RefreshCw, Shuffle, Settings, Layout, Film, Plus,
-  Maximize2, Minimize2, Dices, Music
+  Maximize2, Minimize2, Dices, Music, Undo2, Redo2
 } from 'lucide-react';
 
 import { loadScriptSafe, analyzeImage } from './lib/analysis';
 import { computeLayout, createRng } from './lib/layout';
 import { rollDice, ASPECT_ROSTER } from './lib/diceRoll';
 import { encodeState, decodeState, codeFromUrl, CODE_PARAM } from './lib/rollCode';
+import {
+  emptyHistory, commit as commitHistory, undo as undoHistory, redo as redoHistory,
+  canUndo as histCanUndo, canRedo as histCanRedo,
+  type CompositionHistory, type CompositionSnapshot,
+} from './lib/compositionHistory';
 import { assignSources, distinctSourceCount } from './lib/fill';
 import { arrangeBag, withFocus, withTwist, twistAngle, type ArrangementId, type FocusId, type TwistId } from './lib/composition';
 import { withMove, type MoveId } from './lib/motion';
@@ -209,6 +214,13 @@ export default function App() {
   const [lastRecipe, setLastRecipe] = useState<string | undefined>(undefined);
 
   const [lockedCells, setLockedCells] = useState<Map<number, string>>(new Map());
+  /**
+   * UNDO — what is behind the composition on screen, and what is ahead of it.
+   * Reported from the field: rolling the dice in full bleed to compare layouts
+   * destroys the one before it, and there was no way back. See
+   * `lib/compositionHistory.ts` for what counts as a step and why.
+   */
+  const [history, setHistory] = useState<CompositionHistory>(emptyHistory);
   const [shuffledIndices, setShuffledIndices] = useState<number[]>([]); 
   const [shuffleTrigger, setShuffleTrigger] = useState(0);
 
@@ -435,10 +447,31 @@ export default function App() {
    * and stealing it would close two things with one press.
    */
   useEffect(() => {
+    /**
+     * WHICH FOCUSED CONTROLS OWN Cmd-Z, AND WHICH ONLY LOOK LIKE THEY DO.
+     *
+     * The letter shortcuts below bail on ANY focused field, which is right for
+     * them — `f` is a character. Cmd-Z is different: only a control with TEXT
+     * IN IT has its own undo to defend. A range slider, a colour swatch, a
+     * checkbox and the file input are all `<input>` and none of them owns the
+     * chord, so the broad test would have swallowed undo for the rest of the
+     * session after any slider drag — silently, since a dead shortcut looks
+     * exactly like a shortcut you imagined.
+     *
+     * Found by the WebKit run, not by reading: Mobile Safari leaves focus on
+     * the file input after an upload, so U5 failed on the phone engine and
+     * passed everywhere else.
+     */
+    const isTextEntry = (t: HTMLElement | null): boolean => {
+      if (!t) return false;
+      if (t.isContentEditable || t.tagName === 'TEXTAREA') return true;
+      if (t.tagName !== 'INPUT') return false;
+      const type = ((t as HTMLInputElement).type || 'text').toLowerCase();
+      return /^(text|search|url|email|password|tel|number)$/.test(type);
+    };
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
       const t = e.target as HTMLElement | null;
-      if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
       // RENDERED, not merely PRESENT. The shared wishing well closes with
       // `modal.classList.remove("on")` against a `.fb-wrap{display:none}` rule —
       // it builds its sheet once and leaves it in the document forever. Testing
@@ -450,6 +483,27 @@ export default function App() {
       for (let i = 0; i < dialogs.length; i++) {
         if (dialogs[i].getClientRects().length > 0) return;
       }
+      // UNDO / REDO, on the shortcut every other application on the machine
+      // uses. Both spellings of redo, because Shift-Cmd-Z is the Mac one and
+      // Ctrl-Y is the Windows one and a person reaches for whichever their
+      // hands already know.
+      if ((e.metaKey || e.ctrlKey) && !e.altKey && !isTextEntry(t)) {
+        const k = e.key.toLowerCase();
+        if (k === 'z' || (k === 'y' && !e.shiftKey)) {
+          const go = k === 'y' || e.shiftKey ? undoRef.current.handleRedo : undoRef.current.handleUndo;
+          const live = k === 'y' || e.shiftKey ? undoRef.current.canRedo : undoRef.current.canUndo;
+          // Swallow the key either way once it is ours: letting a dead Cmd-Z
+          // fall through to the browser's own undo would leave the page's form
+          // state stepping backwards behind a collage that did not move.
+          e.preventDefault();
+          if (live) go();
+          return;
+        }
+      }
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // From here down the keys are plain characters, and ANY focused field
+      // gets to keep them.
+      if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
       if (e.key === 'Escape') { setMaximized(false); return; }
       // Nothing to maximize with an empty pool — F used to hide the whole UI
       // and leave the drop target alone on a black page.
@@ -770,7 +824,7 @@ export default function App() {
     return () => clearTimeout(t);
   }, [images, layoutItems, shuffledIndices, orderedAssets, seed, zoom, bgColor, liveMode, titlePlan, look]);
 
-  const handleShuffle = () => setShuffleTrigger(prev => prev + 1);
+  const handleShuffle = () => { pushHistory(); setShuffleTrigger(prev => prev + 1); };
   /**
    * ROLL EVERYTHING AT ONCE — layout, fragment count, chaos, frame shape,
    * gutter, background and seed.
@@ -785,6 +839,10 @@ export default function App() {
    * exists for exactly that "keep what I chose" intent.
    */
   const handleDice = () => {
+    // Every press of this button used to destroy the picture before it. Record
+    // what is on screen FIRST — `compositionCode` is still this render's, i.e.
+    // the composition about to be replaced.
+    pushHistory();
     const roll = rollDice({ hasVideo: clips.length > 0 });
     // The dice chooses an explicit fragment count; don't let the next upload
     // silently overwrite a composition the user rolled on purpose.
@@ -847,9 +905,15 @@ export default function App() {
    * top of the one already on screen is worse than a refusal, because you
    * cannot tell which half moved.
    */
-  const applyCompositionCode = (code: string): boolean => {
+  const applyCompositionCode = (code: string, record = true): boolean => {
     const s = decodeState(code);
     if (!s) return false;
+    // Pasting a code replaces the whole composition, which is the same kind of
+    // event as a roll and gets the same way back. Recorded only when it is a
+    // REPLACEMENT: the boot code and an undo are both applications of a code
+    // that must not become steps of their own — the first because there is
+    // nothing behind it worth returning to, the second because it IS the return.
+    if (record) pushHistory();
     // The code says whether its count was a DECISION or a DEFAULT, and that is
     // the whole difference between "3 fragments, I meant it" and "6 fragments,
     // because I had 6 photographs". Copying the sender's answer is what lets a
@@ -887,6 +951,75 @@ export default function App() {
     return true;
   };
 
+  // ===========================================================================
+  // UNDO — the roll you liked, brought back.
+  //
+  // Reported from the field (wishing well, collage/layout): *"Need an undo
+  // button for quick recall … rolling the dice in full view."* Full bleed puts
+  // the dice under your thumb so you can roll repeatedly and compare — and
+  // every press destroyed the picture before it.
+  //
+  // The composition code already IS a complete, round-trip-exact serialisation
+  // of everything except the photographs, so a step costs a short string plus
+  // the two things a code deliberately omits (the fragments you pinned by hand
+  // and the recipe name). The stack itself is pure and swept against a
+  // reference model — see `lib/compositionHistory.ts`.
+  // ===========================================================================
+
+  /**
+   * The composition on screen RIGHT NOW.
+   *
+   * `compositionCode` is a `useMemo` over the state of this render, so inside a
+   * click handler it is still the PRE-action composition — which is precisely
+   * what a step needs to record. The state the button is about to produce does
+   * not exist yet and cannot be captured here; nothing needs it to be.
+   */
+  const liveSnapshot = (): CompositionSnapshot => ({
+    code: compositionCode,
+    locks: Array.from(lockedCells.entries()),
+    recipe: lastRecipe,
+  });
+
+  /** Record the composition that is on screen, immediately before something replaces it. */
+  const pushHistory = () => setHistory(h => commitHistory(h, liveSnapshot()));
+
+  /**
+   * Put a recorded composition back on screen.
+   *
+   * `applyCompositionCode` clears the locks and the recipe name on purpose —
+   * a code arriving from somebody else cannot carry either. An undo is not
+   * somebody else, so they are put back after it, in the same batch.
+   */
+  const restoreSnapshot = (s: CompositionSnapshot) => {
+    applyCompositionCode(s.code, false);
+    setLockedCells(new Map(s.locks));
+    setLastRecipe(s.recipe);
+  };
+
+  const canUndo = histCanUndo(history);
+  const canRedo = histCanRedo(history);
+
+  const handleUndo = () => {
+    const step = undoHistory(history, liveSnapshot());
+    if (!step) return;
+    setHistory(step.history);
+    restoreSnapshot(step.restore);
+  };
+
+  const handleRedo = () => {
+    const step = redoHistory(history, liveSnapshot());
+    if (!step) return;
+    setHistory(step.history);
+    restoreSnapshot(step.restore);
+  };
+
+  /**
+   * The keyboard listener below is bound once, on purpose, so it cannot close
+   * over this render's handlers. Everything it needs rides through a ref.
+   */
+  const undoRef = useRef({ canUndo, canRedo, handleUndo, handleRedo });
+  undoRef.current = { canUndo, canRedo, handleUndo, handleRedo };
+
   /**
    * A CODE IN THE ADDRESS BAR, so a link is a composition.
    *
@@ -912,7 +1045,10 @@ export default function App() {
   const [rejectedBootCode, setRejectedBootCode] = useState('');
   useEffect(() => {
     const boot = bootCodeRef.current;
-    if (boot && !applyCompositionCode(boot)) {
+    // `record: false` — a link opens the composition it names, and there is
+    // nothing behind it to go back to. Recording it would put the app's own
+    // cold-start default in the undo stack as if it were a picture you made.
+    if (boot && !applyCompositionCode(boot, false)) {
       setRejectedBootCode(boot);
       flashNotice('That link’s composition code did not survive the trip — it is in the paste box below.');
     }
@@ -940,6 +1076,11 @@ export default function App() {
   }, [compositionCode]);
 
   const handleRemix = async () => {
+      // Recorded BEFORE the await: a remix re-rolls the seed and re-grafts the
+      // pinned fragments onto a new layout, and both the seed and the pins are
+      // in the snapshot. Doing it after would capture a composition the layout
+      // computation had already started replacing.
+      pushHistory();
       const lockedGoals: {imgId: string, x: number, y: number}[] = [];
       lockedCells.forEach((imgId, idx) => {
           if (layoutItems[idx]) {
@@ -2176,13 +2317,37 @@ export default function App() {
                  // desktop, and the utility would win the cascade and take the
                  // pill's own 12px of air with it.
                  <div
-                   className="absolute inset-x-0 bottom-0 z-[130] flex justify-center px-3 pointer-events-none"
+                   className="absolute inset-x-0 bottom-0 z-[130] flex justify-center px-2 min-[360px]:px-3 pointer-events-none"
                    style={{ paddingBottom: 'max(0.75rem, var(--safe-b))' }}
                  >
-                   <div className="pointer-events-auto flex items-center gap-1 rounded-2xl border border-white/15 bg-black/70 backdrop-blur px-1.5 py-1.5 shadow-2xl">
-                     <button onClick={handleDice} title="Roll the dice" aria-label="Roll the dice" className="w-11 h-11 rounded-xl text-emerald-400 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Dices size={19} /></button>
+                   {/* SEVEN 44px TARGETS AT 320px is 295 of the 304 available, so
+                       the gap tightens below 360 rather than the buttons — the tap
+                       target is a law, the air between them is not. */}
+                   <div className="pointer-events-auto flex items-center gap-0.5 min-[360px]:gap-1 rounded-2xl border border-white/15 bg-black/70 backdrop-blur px-1.5 py-1.5 shadow-2xl">
+                     <button data-testid="rail-dice" onClick={handleDice} title="Roll the dice" aria-label="Roll the dice" className="w-11 h-11 rounded-xl text-emerald-400 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Dices size={19} /></button>
                      <button onClick={handleShuffle} title="Shuffle images" aria-label="Shuffle images" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><Shuffle size={18} /></button>
                      <button onClick={handleRemix} title="Remix shapes" aria-label="Remix shapes" className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition"><RefreshCw size={18} /></button>
+                     {/* UNDO lives HERE because this is where the wish came from:
+                         you maximize to roll repeatedly and compare, and every
+                         roll used to destroy the one before it. Disabled rather
+                         than hidden — a control that appears and disappears under
+                         your thumb moves the other four every time. */}
+                     <button
+                       data-testid="undo"
+                       onClick={handleUndo}
+                       disabled={!canUndo}
+                       title="Undo — back to the composition before this one (⌘Z)"
+                       aria-label="Undo the last composition change"
+                       className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition disabled:opacity-30 disabled:hover:bg-transparent disabled:active:scale-100"
+                     ><Undo2 size={18} /></button>
+                     <button
+                       data-testid="redo"
+                       onClick={handleRedo}
+                       disabled={!canRedo}
+                       title="Redo — forward again (⇧⌘Z)"
+                       aria-label="Redo the composition change"
+                       className="w-11 h-11 rounded-xl text-gray-200 flex items-center justify-center hover:bg-white/10 active:scale-95 transition disabled:opacity-30 disabled:hover:bg-transparent disabled:active:scale-100"
+                     ><Redo2 size={18} /></button>
                      <span className="mx-0.5 h-6 w-px bg-white/15" aria-hidden="true" />
                      <button ref={exitBtnRef} onClick={() => setMaximized(false)} title="Exit full bleed (Esc)" aria-label="Exit full bleed" className="w-11 h-11 rounded-xl text-white bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-95 transition"><Minimize2 size={18} /></button>
                    </div>
@@ -2265,7 +2430,7 @@ export default function App() {
              <button onClick={()=>setActiveTab('advanced')} title="Settings" aria-label="Settings" className={`flex-1 py-3.5 flex items-center justify-center ${activeTab==='advanced'?'text-white bg-[#1a1a1a] border-t-2 border-emerald-500':'text-gray-500 hover:text-white'}`}><Settings size={16} /></button>
          </div>
          {activeTab === 'simple' ? (
-           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={setMove} />
+           <SimpleControls layoutMode={layoutMode} setLayoutMode={setLayoutMode} primitive={primitive} setPrimitive={setPrimitive} count={count} setCount={updateCountSmart} density={density} setDensity={setDensity} entropy={entropy} setEntropy={setEntropy} onRemix={handleRemix} onShuffle={handleShuffle} onDice={handleDice} lastRecipe={lastRecipe} onUndo={handleUndo} onRedo={handleRedo} canUndo={canUndo} canRedo={canRedo} compositionCode={compositionCode} onApplyCode={applyCompositionCode} rejectedCode={rejectedBootCode} hasImages={images.length > 0} isLayoutLocked={lockedCells.size > 0} titleText={titleText} titlePlace={titlePlace} titleSize={titleSize} onTitleText={setTitleText} onTitlePlace={setTitlePlace} onTitleSize={setTitleSize} look={look} onLook={setLook} move={move} onMove={setMove} />
          ) : (
            <AdvancedControls aspect={aspect} setAspect={setAspect} gutter={gutter} setGutter={setGutter} entropy={entropy} setEntropy={setEntropy} bgColor={bgColor} setBgColor={setBgColor} avgColor={avgColor} onRemix={handleRemix} onShuffle={handleShuffle} onExportVector={handleExportSVG} onRestoreHistory={handleRestoreHistory} isLayoutLocked={lockedCells.size > 0} layoutMode={layoutMode} setLayoutMode={setLayoutMode} count={count} setCount={updateCountSmart} arrangement={arrangement} setArrangement={setArrangement} focus={focus} setFocus={setFocus} twist={twist} setTwist={setTwist} />
          )}

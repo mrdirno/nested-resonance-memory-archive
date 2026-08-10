@@ -57,18 +57,18 @@ const TILES = [
  * preview (so a frame-shape change cannot hide behind a stretch) and a hash of
  * its pixels sampled on a fixed grid.
  */
-async function fingerprint(page: Page): Promise<{ w: number; h: number; hash: string; mean: number }> {
+async function fingerprint(page: Page): Promise<{ w: number; h: number; hash: string; mean: number; sig: string; live: boolean }> {
   return page.evaluate(() => {
-    const el = (document.querySelector('canvas') as HTMLCanvasElement | null)
-      ?? (document.querySelector('img[src^="blob:"]') as HTMLImageElement | null);
-    if (!el) return { w: 0, h: 0, hash: 'no-preview', mean: -1 };
+    const liveEl = document.querySelector('canvas') as HTMLCanvasElement | null;
+    const el = liveEl ?? (document.querySelector('img[src^="blob:"]') as HTMLImageElement | null);
+    if (!el) return { w: 0, h: 0, hash: 'no-preview', mean: -1, sig: '', live: false };
     const sw = el instanceof HTMLCanvasElement ? el.width : el.naturalWidth;
     const sh = el instanceof HTMLCanvasElement ? el.height : el.naturalHeight;
-    if (!sw || !sh) return { w: 0, h: 0, hash: 'empty-preview', mean: -1 };
+    if (!sw || !sh) return { w: 0, h: 0, hash: 'empty-preview', mean: -1, sig: '', live: false };
     const c = document.createElement('canvas');
     c.width = 128; c.height = 128;
     const ctx = c.getContext('2d', { willReadFrequently: true });
-    if (!ctx) return { w: sw, h: sh, hash: 'no-2d', mean: -1 };
+    if (!ctx) return { w: sw, h: sh, hash: 'no-2d', mean: -1, sig: '', live: !!liveEl };
     ctx.drawImage(el as CanvasImageSource, 0, 0, c.width, c.height);
     const px = ctx.getImageData(0, 0, c.width, c.height).data;
     // FNV-1a over every byte. Any pixel that moves changes it.
@@ -78,15 +78,59 @@ async function fingerprint(page: Page): Promise<{ w: number; h: number; hash: st
       hash = Math.imul(hash, 0x01000193) >>> 0;
       if (i % 4 !== 3) sum += px[i];
     }
-    return { w: sw, h: sh, hash: hash.toString(16).padStart(8, '0'), mean: sum / ((px.length / 4) * 3) };
+    // THE BLOCK SIGNATURE — 256 blocks, each reduced to its dominant channel or
+    // a luma bucket. See `same` below for why an exact hash alone was not a
+    // witness here.
+    const N = 16, B = c.width / N;
+    let sig = '';
+    for (let by = 0; by < N; by++) {
+      for (let bx = 0; bx < N; bx++) {
+        let R = 0, G = 0, Bl = 0, n = 0;
+        for (let y = by * B; y < (by + 1) * B; y++) {
+          for (let x = bx * B; x < (bx + 1) * B; x++) {
+            const i = (y * c.width + x) * 4;
+            R += px[i]; G += px[i + 1]; Bl += px[i + 2]; n++;
+          }
+        }
+        R /= n; G /= n; Bl /= n;
+        const mx = Math.max(R, G, Bl), mn = Math.min(R, G, Bl);
+        sig += (mx - mn) > 36
+          ? (mx === R ? 'R' : mx === G ? 'G' : 'B')
+          : '0123'[Math.min(3, Math.floor(((R + G + Bl) / 3) / 64))];
+      }
+    }
+    return {
+      w: sw, h: sh, sig, live: !!liveEl,
+      hash: hash.toString(16).padStart(8, '0'),
+      mean: sum / ((px.length / 4) * 3),
+    };
   });
 }
 
+/**
+ * SAME PICTURE — and the exact pixel hash is only PART of that test.
+ *
+ * A composition carrying a MOVE mounts the live Stage canvas instead of the
+ * static JPEG, and a drifting canvas renders different pixels every frame:
+ * sampling one twice, 700ms apart, with no interaction at all, gives two
+ * different FNV hashes at identical luma. This spec's exact-hash comparison
+ * therefore reported a false red on roughly one run in five — always with the
+ * tell "same size, same luma, different hash", always on a live preview.
+ * Measured, not deduced: 20 readbacks of an untouched preview gave 1 distinct
+ * hash on a still one and 6 on a drifting one, while the block signature gave
+ * 1 in every case and still separated all ten of ten distinct rolls.
+ *
+ * So `sig` carries the comparison always, and the exact hash — strictly the
+ * stronger claim — is asserted wherever it is admissible, which is every pair
+ * where neither picture is supposed to be moving. (Same fix as
+ * tests/e2e/undo.spec.ts, which is where this was diagnosed.)
+ */
 const same = (a: Awaited<ReturnType<typeof fingerprint>>, b: typeof a) =>
-  a.w === b.w && a.h === b.h && a.hash === b.hash;
+  a.w === b.w && a.h === b.h && a.sig === b.sig
+  && (a.live || b.live || a.hash === b.hash);
 
 const show = (f: Awaited<ReturnType<typeof fingerprint>>) =>
-  `${f.w}x${f.h} #${f.hash} luma=${f.mean.toFixed(2)}`;
+  `${f.w}x${f.h} ${f.live ? 'live' : 'still'} #${f.hash} luma=${f.mean.toFixed(2)}`;
 
 /** The preview is debounced and rendered off a blob; give it room to settle. */
 async function settle(page: Page) {

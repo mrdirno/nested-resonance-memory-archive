@@ -760,6 +760,34 @@
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
+/* --- UNDO / REDO ----------------------------------------------------------
+   Directly under the dice: that button replaces the whole composition, and
+   this is the way back from it.
+
+   MOBILE-WATERTIGHT BY CONSTRUCTION: two equal flex children with `min-width:0`
+   and `flex: 1 1 0`, so the pair divides whatever width the dock has instead of
+   summing to a width the dock has to find. 44px tall either way — the label
+   sits beside the glyph and is allowed to ellipsis, never to widen the row. */
+.ui-undo {
+  display: flex;
+  gap: var(--s-2);
+  width: 100%;
+  min-width: 0;
+}
+.ui-undo__btn {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 44px;
+  gap: 7px;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+.ui-undo__btn > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* --- THE COMPOSITION CODE -------------------------------------------------
    A composition you can keep, come back to, and send. Sits directly under the
    dice because that is where a good roll happens and where you realise you

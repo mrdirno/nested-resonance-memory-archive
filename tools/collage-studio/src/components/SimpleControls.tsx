@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import {
   Layout, Grid, Plus, Minus, RefreshCw, Shuffle, Square,
-  Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, ImagePlus, Dices, Copy, Type, X
+  Triangle, Circle, Octagon, Shapes, Layers, Activity, Lock, ImagePlus, Dices, Copy, Type, X,
+  Undo2, Redo2
 } from 'lucide-react';
 import { LayoutMode, PrimitiveType } from '../types';
 import type { TitlePlace, TitleSize } from '../lib/title';
@@ -26,6 +27,11 @@ interface SimpleControlsProps {
   onDice?: () => void;
   /** Name of the recipe the last roll came from, for the readout. */
   lastRecipe?: string;
+  /** UNDO — step back to the composition before the last roll/shuffle/remix/code. */
+  onUndo?: () => void;
+  onRedo?: () => void;
+  canUndo?: boolean;
+  canRedo?: boolean;
   /** The composition on screen, as a code — see lib/rollCode.ts. */
   compositionCode?: string;
   /** Apply a pasted code. False when it is not one. */
@@ -91,7 +97,8 @@ const SHAPES: { id: PrimitiveType; label: string; icon: React.ReactNode; blurb: 
 export const SimpleControls: React.FC<SimpleControlsProps> = ({
   layoutMode, setLayoutMode, primitive, setPrimitive, count, setCount,
   density, setDensity, entropy, setEntropy, onRemix, onShuffle, onDice,
-  lastRecipe, compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
+  lastRecipe, onUndo, onRedo, canUndo = false, canRedo = false,
+  compositionCode, onApplyCode, rejectedCode, hasImages, isLayoutLocked,
   titleText = '', titlePlace = 'bl', titleSize = 'md', onTitleText, onTitlePlace, onTitleSize,
   look = 'none', onLook, move = 'still', onMove
 }) => {
@@ -227,6 +234,40 @@ export const SimpleControls: React.FC<SimpleControlsProps> = ({
             <i>{lastRecipe ? `Last roll: “${lastRecipe}”` : 'A whole new composition, all at once'}</i>
           </span>
         </button>
+      )}
+
+      {/* ---- UNDO: the roll you liked, brought back -------------------------
+          Directly under the dice, because that is the button that destroys the
+          composition and this is the way back from it. Same pair sits in the
+          full-bleed rail — the wish came from there, and the dock's dice has
+          exactly the same problem, so the fix lands on both. --------------- */}
+      {onUndo && onRedo && (
+        <div className="ui-undo" role="group" aria-label="Undo and redo">
+          <button
+            type="button"
+            data-testid="undo-dock"
+            className="ui-btn ui-undo__btn"
+            disabled={!canUndo}
+            onClick={onUndo}
+            title="Undo — back to the composition before this one (⌘Z)"
+            aria-label="Undo the last composition change"
+          >
+            <Undo2 size={16} />
+            <span>Undo</span>
+          </button>
+          <button
+            type="button"
+            data-testid="redo-dock"
+            className="ui-btn ui-undo__btn"
+            disabled={!canRedo}
+            onClick={onRedo}
+            title="Redo — forward again (⇧⌘Z)"
+            aria-label="Redo the composition change"
+          >
+            <Redo2 size={16} />
+            <span>Redo</span>
+          </button>
+        </div>
       )}
 
       {/* ---- THE TITLE: say what it is ---------------------------------------
