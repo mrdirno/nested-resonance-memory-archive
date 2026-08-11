@@ -51,6 +51,7 @@ import {
 } from './clipWindow';
 import { soundtrackSource, soundtrackAudible } from './soundtrack';
 import { fadeRamps, fadeSpan, type FadeRamp } from './fade';
+import { lapAdjust, resumeOriginMs } from './playhead';
 import {
   rasterBudgetPx, readDeviceSignals, createSignalCache, createRasterLedger, scaleForBudget, rasterDims,
 } from './rasterBudget';
@@ -230,6 +231,17 @@ export interface StageStatus {
    */
   soundtrack: { name: string; muted: boolean; wantsAudio: boolean; audible: boolean; broken: boolean } | null;
   capturing: boolean;
+  /**
+   * IS THE COMPOSITION ROLLING? Not "are any clips playing" — that was the
+   * transport's question for as long as a clip was the only thing that could
+   * move, and it answered NO for a collage of photographs drifting under a
+   * soundtrack, which is precisely the piece THE MOVE and THE SOUNDTRACK
+   * added. The Stage is the only place that can see all three sources of
+   * motion and the park, so it is the place that answers.
+   */
+  rolling: boolean;
+  /** Held on one instant by a scrub. */
+  parked: boolean;
   /** Human-readable one-liner for the UI. Null when there is nothing to say. */
   message: string | null;
 }
@@ -679,6 +691,27 @@ export class Stage {
   /** Does ANY fragment in this scene move? False keeps every cost at zero. */
   private moving = false;
 
+  // --- THE PLAYHEAD ----------------------------------------------------------
+  /**
+   * The take length the ruler measures, or 0 for "no ruler" — which is the
+   * DEFAULT and is exactly the behaviour every build before the playhead had:
+   * an unbounded clock that never laps. VideoStage pushes the user's chosen
+   * take through `setTake`.
+   */
+  private takeSec = 0;
+  /**
+   * Is the clock currently counting? False on the tick after a pause, a scrub
+   * or an idle loop, and it is what makes the origin RE-ANCHOR instead of
+   * counting the seconds the preview spent stopped.
+   */
+  private clockRunning = false;
+  /**
+   * PARKED ON ONE INSTANT by a scrub. The clock does not advance, the move is
+   * not re-sampled and the loop is allowed to idle, so the frame the scrub drew
+   * stays on the canvas at zero cost until something plays.
+   */
+  private parked = false;
+
   // --- offline render --------------------------------------------------------
   private offline = false;
   private offlineWasRunning = false;
@@ -950,6 +983,11 @@ export class Stage {
     if (!this.running) return;
     this.running = false;
     if (this.rafId) { this.view.cancelAnimationFrame(this.rafId); this.rafId = 0; }
+    // AND THE CLOCK STOPS WITH IT. This cancels the rAF outright, so the tick's
+    // own "this was the last frame" branch never runs — without this the origin
+    // would still be marked live and the next `start()` would count the whole
+    // stopped interval straight into the playhead.
+    this.clockRunning = false;
     this.emitStatus();
   }
 
@@ -1078,6 +1116,7 @@ export class Stage {
     // mid-cycle for no reason the viewer can see.
     this.outTime = 0;
     this.moveOriginMs = -1;
+    this.clockRunning = false;
     // Restore the realtime decoder budget and RELEASE the extra decoders the
     // render admitted, BEFORE replaying: refreshAdmission evicts everything back
     // over the cap, so only clips inside the realtime budget come back live and
@@ -1145,6 +1184,121 @@ export class Stage {
     this.lastDrawAt = -1e9;      // never let the tick's skip-heuristic apply here
     this.drawFrame(0);
     this.frames++;
+  }
+
+  // ===========================================================================
+  // THE PLAYHEAD
+  // ===========================================================================
+  //
+  // Two things the outside needs and one it does not. It NEEDS to read the
+  // clock (every frame, from its own rAF — `onStatus` is deduped and
+  // event-driven BY CONTRACT, and piping a position through it would fire a
+  // React render per frame) and it NEEDS to park the composition on an instant.
+  // It does not need to SET the clock while playing: `scrubTo` parks, and
+  // playing resumes from wherever the park left it.
+
+  /**
+   * THE RULER. `seconds` is the take the user chose; 0 turns the clock back into
+   * the unbounded one every build before this had, which is what makes the lap
+   * something this app opts INTO rather than a change to how a Stage behaves.
+   */
+  setTake(seconds: number): void {
+    const t = Number.isFinite(seconds) && seconds > 0 ? seconds : 0;
+    if (t === this.takeSec) return;
+    this.takeSec = t;
+    // A SHORTER RULER MUST NOT LEAVE THE PLAYHEAD OFF THE END. Dropping the take
+    // from 30s to 5s while parked at 20s would otherwise hold the clock at a
+    // position the bar's own maximum forbids, so the range input would clamp the
+    // DISPLAY to 5s while the picture stayed at 20s — the bar lying about the
+    // canvas, which is the one thing this whole module exists to prevent.
+    if (t > 0 && this.outTime > t) {
+      this.outTime = lapAdjust(this.outTime, t).position;
+      this.clockRunning = false;
+      this.markDirty();
+    }
+  }
+
+  /** Where the clock is, in output seconds. Read this from a rAF, not a status. */
+  get takePosition(): number { return this.outTime; }
+
+  /** The ruler this Stage measures against; 0 when it has none. */
+  get takeSeconds(): number { return this.takeSec; }
+
+  /** Is the composition held on one instant by a scrub? */
+  get isParked(): boolean { return this.parked; }
+
+  /**
+   * PARK THE PREVIEW ON ONE INSTANT.
+   *
+   * `renderAtTime` already knows how to put every clip on a given output time —
+   * it is what the offline exporter walks the take with — and it reads
+   * `this.offline` exactly zero times, so a scrub borrows it whole without
+   * entering the render mode and inheriting its lifted decoder caps, its frozen
+   * backing size and its full-resolution rasters.
+   *
+   * Two things it does NOT do, and both matter here:
+   *
+   *   * IT DOES NOT PAUSE. `seekClipTo` assigns `currentTime` and awaits
+   *     `seeked`; a PLAYING element resumes from the seek point and is already
+   *     past `t` by the time the frame is drawn, and the next tick's
+   *     `enforceWindow` may wrap it again. So this pauses first, and it is that
+   *     pause — not the seek — that makes a scrub land where it says it does.
+   *
+   *   * IT DOES NOT SEEK THE MUSIC. It never had to: the offline mixer renders
+   *     the soundtrack from the decoded FILE, so the element's position is
+   *     irrelevant to an export. A live scrub has no mixer — the element IS the
+   *     sound — so the track is seeked here through the same `sourceTimeAt` the
+   *     mixer would have used, which is also the one `enforceTrackWindow` uses.
+   *     Three callers, one formula, no second opinion about where music sits.
+   */
+  async scrubTo(timeSec: number, opts: { signal?: AbortSignal } = {}): Promise<void> {
+    if (this.destroyed || this.offline) return;
+    const t = Number.isFinite(timeSec) && timeSec > 0 ? timeSec : 0;
+    if (!this.parked) {
+      this.parked = true;
+      this.pauseAll();
+    }
+    this.seekTrackTo(t);
+    // BEFORE the render, because `renderAtTime` writes `outTime` only when the
+    // scene MOVES — a still composition would otherwise be parked in the picture
+    // and not on the ruler, and the bar would spring back on the next frame.
+    this.outTime = t;
+    this.clockRunning = false;
+    await this.renderAtTime(t, opts);
+    this.emitStatus();
+  }
+
+  /**
+   * THE MUSIC, AT OUTPUT TIME `t`. The window is resolved against the ELEMENT's
+   * duration rather than the app's `durationSec`: a container's length is not
+   * its decoded length (mp3 carries encoder delay and padding), and the element
+   * clock is the one being set here.
+   */
+  private seekTrackTo(timeSec: number): void {
+    const t = this.track;
+    const el = t?.el;
+    if (!t || !el) return;
+    const d = el.duration;
+    if (!Number.isFinite(d) || d <= 0) return;      // metadata has not landed
+    const target = sourceTimeAt(
+      { window: normaliseWindow(d, t.inSec, t.outSec), loop: true, rate: 1 },
+      timeSec,
+    );
+    try { el.currentTime = target; } catch { /* pre-metadata; the watchdog retries */ }
+  }
+
+  /**
+   * RELEASE THE PARK. The clock resumes from where the scrub left it rather than
+   * from zero. Called from every play entry point rather than by the component,
+   * so there is no reachable state where the picture is rolling and the clock is
+   * still frozen.
+   */
+  private releasePark(): void {
+    if (!this.parked) return;
+    this.parked = false;
+    this.clockRunning = false;      // re-anchor at `outTime`, never at 0
+    this.markDirty();
+    this.emitStatus();
   }
 
   /**
@@ -1365,19 +1519,64 @@ export class Stage {
     // rescheduled" — which is exactly right for a static collage and exactly
     // wrong for one that is supposed to move, so `moving` joins the conditions
     // that force a frame and the condition that reschedules the loop below.
-    if (this.moving && !this.offline) {
-      if (this.moveOriginMs < 0) this.moveOriginMs = ts;
+    //
+    // THE CLOCK RUNS WHETHER OR NOT ANYTHING MOVES — THE PLAYHEAD.
+    //   `outTime` was born as the move's own clock and was therefore gated on
+    //   `moving`, which made the take position unreadable for the commonest
+    //   scene there is: a collage of video clips with no move, whose playhead
+    //   would sit at 0 for the whole preview. Advancing it unconditionally is
+    //   provably free for a still composition — `sampleMove` returns the shared
+    //   `NO_MOVE` BY REFERENCE for a `still` spec at EVERY time, so a scene that
+    //   is not moving draws bit-identically at t=0 and t=37 — and the work that
+    //   is not free (`refreshMoveCrops`) stays behind the `moving` gate exactly
+    //   where it was.
+    const live = !this.offline && !this.parked;
+    if (live) {
+      // RE-ANCHOR ON RESUME, NOT JUST AT BIRTH. `moveOriginMs < 0` is the
+      // scene's first tick; `!this.clockRunning` is every tick after a pause, a
+      // scrub or an idled loop, and without it the clock would count the seconds
+      // the preview spent stopped and the playhead would jump forward by however
+      // long you were parked.
+      if (this.moveOriginMs < 0 || !this.clockRunning) {
+        this.moveOriginMs = resumeOriginMs(ts, this.moveOriginMs < 0 ? 0 : this.outTime);
+        this.clockRunning = true;
+      }
       this.outTime = Math.max(0, (ts - this.moveOriginMs) / 1000);
-      this.refreshMoveCrops();
-      needDraw = true;
+      // THE LAP — see `lib/playhead.ts` DECISION 2. Wrapping the READOUT over an
+      // unwrapped clock would have the bar claim 7 s while the move is at phase
+      // 37, so the clock itself wraps and the origin moves with it. It re-seeks
+      // NOTHING (DECISION 2b): a lap is the ruler coming round, not a transport
+      // event, and restarting every clip and the music here would change what
+      // every preview this app has ever shown does — which is a decision to make
+      // on its own and not a rider on a ruler.
+      if (this.takeSec > 0) {
+        const { laps, position } = lapAdjust(this.outTime, this.takeSec);
+        if (laps > 0) {
+          this.moveOriginMs += laps * this.takeSec * 1000;
+          this.outTime = position;
+        }
+      }
+      if (this.moving) {
+        this.refreshMoveCrops();
+        needDraw = true;
+      }
     }
 
     if (needDraw) this.drawFrame(ts);
     if (this.admissionPending) { this.admissionPending = false; this.refreshAdmission(); }
     if (this.statusPending) { this.statusPending = false; this.emitStatus(); }
 
-    if (playing > 0 || this.capturing || this.dirty || (this.moving && !this.offline)) {
+    // A PARKED SCENE IS ALLOWED TO IDLE, and that is the whole economy of the
+    // scrub: the frame `renderAtTime` drew stays on the canvas for nothing,
+    // instead of a moving composition holding a 60 Hz loop open to re-derive the
+    // same crops from the same frozen clock.
+    if (playing > 0 || this.capturing || this.dirty || (this.moving && live)) {
       this.rafId = this.view.requestAnimationFrame(this.tick);
+    } else {
+      // THE LAST TICK IS WHERE THE CLOCK STOPS. Nothing else knows this frame
+      // was the final one, and a clock still marked running is one that will
+      // count the whole idle gap into the playhead the moment something plays.
+      this.clockRunning = false;
     }
   };
 
@@ -1618,6 +1817,11 @@ export class Stage {
       this.markDirty();
     } else {
       if (this.rafId) { this.view.cancelAnimationFrame(this.rafId); this.rafId = 0; }
+      // AND THE CLOCK FREEZES, for the same reason `stop()` freezes it: the rAF
+      // is cancelled outright so the tick's "last frame" branch never runs, and
+      // a clock still marked live would count every second the Stage spent
+      // scrolled off the screen straight into the playhead.
+      this.clockRunning = false;
       this.clips.forEach((c) => { const el = c.el; if (el && !el.paused) { try { el.pause(); } catch { /* ignore */ } } });
     }
   }
@@ -2605,6 +2809,10 @@ export class Stage {
    */
   resumeFromGesture(opts?: { sound?: boolean }): void {
     if (this.destroyed) return;
+    // A GESTURE IS A PLAY, so it is also the end of a park — otherwise pressing
+    // Play after a scrub would start every element and leave the clock frozen,
+    // i.e. a picture that moves under a playhead that does not.
+    this.releasePark();
     if (this.audioCtx && this.audioCtx.state === 'suspended') {
       try { void this.audioCtx.resume(); } catch { /* ignore */ }
     }
@@ -2650,9 +2858,24 @@ export class Stage {
     this.emitStatus();
   }
 
-  playAll(): void { this.clips.forEach((c) => { c.wantPlay = true; this.tryPlay(c); }); this.markDirty(); this.emitStatus(); }
+  playAll(): void {
+    this.releasePark();
+    this.clips.forEach((c) => { c.wantPlay = true; this.tryPlay(c); });
+    this.markDirty();
+    this.emitStatus();
+  }
 
   pauseAll(): void {
+    // PAUSE MEANS THE COMPOSITION, NOT JUST THE MEDIA. Before the playhead this
+    // stopped every element and left the MOVE drifting, because the move had no
+    // transport to be stopped by — so a "paused" collage of photographs carried
+    // on breathing. Parking here is what makes the button honest, and it is
+    // safe to put on `pauseAll` itself because the only other callers are
+    // `beginOfflineRender` (which clears the park two lines later, in
+    // `setCaptureActive`) and `scrubTo` (which set it first). The offscreen
+    // power-down does NOT come through here — it pauses elements directly, and
+    // must not park a preview the viewer never touched.
+    this.parked = true;
     const tel = this.track?.el;
     if (tel) { try { tel.pause(); } catch { /* ignore */ } }
     this.clips.forEach((c) => {
@@ -3141,6 +3364,10 @@ export class Stage {
       // preview had been on screen before you pressed record.
       this.outTime = 0;
       this.moveOriginMs = -1;
+      // A TAKE IS NEVER PARKED. Recording out of a scrub would otherwise encode
+      // whatever single frame the playhead was resting on for the whole take.
+      this.parked = false;
+      this.clockRunning = false;
       // AND SO DOES THE MUSIC, for exactly the same reason and it is the same
       // bug. The offline mixer starts the soundtrack at output time 0, i.e. at
       // the top of the track. The realtime recorder captures the LIVE element,
@@ -3331,8 +3558,31 @@ export class Stage {
           }
         : null,
       capturing: this.capturing,
+      rolling: this.isRolling,
+      parked: this.parked,
       message,
     };
+  }
+
+  /**
+   * THE THREE THINGS THAT CAN BE IN MOTION, and the one that stops all of them.
+   *
+   * `moving` is checked as a whole rather than per fragment because a move is
+   * one roster pick for the entire collage; the soundtrack is checked on its
+   * ELEMENT rather than on its intent flag, because intent is what gets
+   * exported and this is a question about the preview in front of you.
+   */
+  private get isRolling(): boolean {
+    if (this.offline || this.parked) return false;
+    if (this.moving) return true;
+    const tel = this.track?.el;
+    if (tel && !tel.paused && !tel.ended) return true;
+    const clips = this.liveClips;
+    for (let i = 0; i < clips.length; i++) {
+      const el = clips[i].el;
+      if (el && !el.paused && !el.ended) return true;
+    }
+    return false;
   }
 
   /** Emitted on change only, deduped, and never from inside the draw. */
@@ -3341,6 +3591,7 @@ export class Stage {
     const s = this.getStatus();
     let sig = s.running + '|' + s.liveCount + '|' + s.deferredCount + '|' + s.needsGesture + '|' +
       s.soundOn + '|' + s.capturing + '|' + s.audioAvailable + '|' + (s.message || '') + '|' +
+      s.rolling + '|' + s.parked + '|' +
       (s.soundtrack ? s.soundtrack.name + ':' + s.soundtrack.muted + ':' + s.soundtrack.broken : '-');
     for (let i = 0; i < s.clips.length; i++) {
       const c = s.clips[i];

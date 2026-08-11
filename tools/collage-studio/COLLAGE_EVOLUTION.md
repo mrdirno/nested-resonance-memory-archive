@@ -137,7 +137,45 @@ or re-documenting an existing capability is DD, not delivery.
   the take's ENDS from setting the level of its middle. It lives beside the take
   LENGTH (same state, same bar, same lifetime) and therefore rides in no dice
   roll, no composition code and no project file, because a fade is a fact about
-  a render and a code is a recipe somebody else opens with their own music.
+  a render and a code is a recipe somebody else opens with their own music;
+  THE PLAYHEAD — the take has a clock you can SEE and DRAG. Six cycles of
+  time-domain work (the move, the trim window, the music range, the lap
+  schedule, the fade) had shipped without one of them being observable without
+  exporting a file, and two separate rungs of the ladder below asked for the
+  same widget in the same words. `lib/playhead.ts` owns the arithmetic — the
+  ruler, the lap, the seek grid, the fade's place on it, and the seek PUMP —
+  while the Stage owns the seek, which it already had: `renderAtTime` is what
+  the offline exporter walks the take with and it reads `this.offline` exactly
+  zero times, so a scrub borrows it whole without entering the render mode and
+  inheriting its lifted decoder caps, its frozen backing size and its
+  full-resolution rasters.
+  THE CLOCK LAPS THE TAKE AND A SCRUB SEEKS. Wrapping the readout over an
+  unwrapped clock would have the bar claim 7s while the move sat at phase 37
+  (the move is periodic on a FIXED 12s, deliberately not on the take), so the
+  CLOCK wraps and the origin moves with it — but the lap re-seeks NOTHING,
+  because restarting every clip and the music at a boundary changes what every
+  preview this app has ever shown, which is a decision to make on its own and
+  not a rider on a ruler. A SCRUB is the opposite case and seeks everything,
+  clips and music alike, because parking on 7s is a deliberate act by someone
+  who asked for that instant — and the music is seeked through the same
+  `sourceTimeAt` the offline mixer and the live watchdog already ask, so three
+  callers share one formula.
+  The bar is a native `<input type="range">`, which buys pointer capture
+  through a drag that leaves the element, the keyboard, the accessible name and
+  the app's own 44px range styling for free; `PLAYHEAD_STEP_SEC` is an exact
+  multiple of the seek grid so an arrow press and a thumb land on the same
+  instant and the pump can refuse a duplicate from either. The position is
+  written to the DOM from the component's own rAF and never to React state (a
+  `setState` per frame re-renders the whole transport sixty times a second),
+  and that loop BACKS OFF to a 250ms timer after forty motionless frames, so a
+  parked preview costs four wake-ups a second rather than sixty.
+  And it made the transport honest on the way past: `anyPlaying` asked
+  `clips.some(playing)`, which answered NO for a collage of photographs
+  drifting under a soundtrack — the exact thing THE MOVE and THE SOUNDTRACK
+  added — so the button showed Play while the picture moved, pressing it did
+  nothing, and on a photo collage it was disabled outright. `StageStatus.rolling`
+  answers from the Stage, which is the only place that can see the move, the
+  music, the clips AND the park at once.
 
 ## THE CAPABILITY LADDER (→ CapCut — GROW this list as you learn)
 Each cycle pick ONE rung by **leverage × feasibility** (what a real editor reaches
@@ -148,9 +186,13 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       that used to each carry a copy of that formula — the live `<video>`
       watchdog, the offline frame seek, the offline audio mix — now ask it. Trim
       composes with video-length sync, because sync is fed the WINDOW length
-      rather than the file's duration. Still owed on this rung: **drag-reorder**,
-      **playhead scrub** and **split/cut**, which are a timeline WIDGET rather
-      than a timing contract and are their own increment.
+      rather than the file's duration.
+      **PLAYHEAD SCRUB IS NOW DONE TOO** — see THE PLAYHEAD in CURRENT STATE.
+      It is the first timeline WIDGET in this app: a ruler over the take, a
+      position that tracks the clock, and a drag that parks the whole
+      composition on any instant of it. Still owed on this rung: **drag-reorder**
+      and **split/cut**, which are direct manipulation of the SOURCES rather
+      than of the clock, and are their own increment.
 - [x] **ONE LAYOUT** — the preview's partition IS the export's. `computeLayout`
       now runs the generators once at a canonical basis (1200-space = `PREVIEW_W`
       = the Stage's `DEFAULT_LOGICAL_W`) and SCALES the result to whatever size
@@ -495,13 +537,15 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       per slot — but the moment a speed is user-set it has to be SNAPPED to a
       grid on the way in and given a field in the code, exactly as `snapRoll`
       does for the sliders, or the round trip stops being an equality.
-- [ ] **THE STILL PREVIEW OF A MOVING COLLAGE IS ITS FIRST FRAME, so at rest it
-      looks identical to a still one.** A deliberate consequence of rest-at-zero
-      and the right default (the preview agrees with the export's opening
-      frame), but it means the chip row is the only thing telling you a move is
-      on until the Stage mounts and starts. The honest next cut is a scrub or a
-      "show me" that runs one cycle, which is the same widget the timeline rung
-      wants anyway.
+- [x] **THE STILL PREVIEW OF A MOVING COLLAGE IS ITS FIRST FRAME → THE
+      PLAYHEAD.** CLOSED, by exactly the widget this entry predicted: "the
+      honest next cut is a scrub or a 'show me' that runs one cycle, which is
+      the same widget the timeline rung wants anyway." Right on both counts —
+      one bar closed this rung and half the timeline rung, which is the whole
+      argument for reading the ladder before picking off it. The underlying
+      property is unchanged and still correct: rest-at-zero means the still
+      preview IS the export's opening frame. What changed is that you can now
+      move off zero without spending a render to see what is there.
 - [ ] **THE MOVE IS NOT IN THE SVG, and that is a format limit rather than a
       decision.** The vector export draws one instant, and a still is what an
       SVG is for — but SMIL/CSS animation inside an SVG is real and Inkscape
@@ -530,7 +574,12 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       float) to use 10 seconds of it. Raised by the adversarial audit; not a
       correctness bug and not reachable from the fixtures, which is exactly why
       it needs writing down rather than fixing in a hurry.
-- [ ] **THE MIX HARD-CUTS AT THE END OF THE TAKE.** Ten seconds of music under a
+- [x] **THE MIX HARD-CUTS AT THE END OF THE TAKE → THE FADE.** Shipped the very
+      next cycle and this entry was never marked — found by THIS cycle while
+      reading the ladder in order to pick from it, which is exactly the harm an
+      unmarked rung does: the next cycle can spend itself re-shipping something
+      that is already live. Original text follows.
+      **THE MIX HARD-CUTS AT THE END OF THE TAKE.** Ten seconds of music under a
       collage stops dead on the last sample, mid-phrase, which is the single
       most amateur-sounding thing a video editor can do and the reason CapCut
       auto-fades. It is not new (a clip's audio has always ended this way) but
@@ -572,6 +621,49 @@ for most, vs build cost). Mark shipped ones `[x]`; add rungs as you find gaps.
       allocating a `CropGeometry` per item per frame. Measure before doing
       either: on a phone with the realtime budget already capping decoders, this
       may not be what costs the frame.
+
+- [ ] **THE LAP RE-SEEKS NOTHING, so the preview and the export still walk apart
+      inside a take.** Deliberate, and named here so the next cycle can take it
+      as its own decision rather than as a rider: the clock wraps at the take
+      but the clips and the music are left running, because restarting every
+      source at a boundary changes what EVERY preview this app has ever shown.
+      The divergence it leaves is pre-existing and orthogonal — a clip's live
+      position is governed by its element (native loop, or the `enforceWindow`
+      watchdog) while the export computes `sourceTimeAt`, so the two free-run
+      against each other from the first frame — but a playhead is the first
+      thing in this app that makes it VISIBLE, which is exactly what raises it.
+      The honest next cut is `restartTake()`: one method that seeks every clip
+      to its window start, the music to its own, and the move to zero, called
+      from the lap AND from `setCaptureActive` (see the rung below), so the two
+      cannot drift apart.
+
+- [ ] **`setCaptureActive` RESTARTS THE MOVE AND THE MUSIC AND NOT THE CLIPS, so
+      a REALTIME take opens on whatever frame each clip happened to be showing.**
+      Found while mapping the Stage for the playhead. The comment there is
+      explicit that the move and the music are reset "so the two recorders
+      agree" — and clips, the one source that was already there when that was
+      written, are not. It bites only on the realtime path (the offline renderer
+      seeks every clip per frame through `renderAtTime`, so the reset would be
+      overwritten anyway), which is why nothing has caught it: every engine in
+      this suite has WebCodecs. Same fix as the rung above, and they should ship
+      together — one `restartTake()`, two callers.
+
+- [ ] **A STILL COLLAGE UNDER MUSIC HAS NO CLOCK, so its playhead sits at 0
+      while the song plays.** The take clock advances in the tick, and the tick
+      is demand-driven: photographs with no move and no clips draw once and the
+      loop idles, which is exactly right for the picture and wrong for the
+      ruler. Adding the soundtrack element to the reschedule condition would fix
+      it and would also hold a 60Hz rAF open for the length of a song to move a
+      bar — so the honest fix is a cheaper clock for that one case (the element's
+      own `currentTime` is already the answer), not a livelier loop. Bounded:
+      every other live scene — any clip, any move — ticks and reads correctly.
+
+- [ ] **THE RULER SHOWS THE TAKE AND NOT WHAT IS IN IT.** The bar knows the
+      take's length and the fade's shape and nothing else. A real timeline draws
+      each clip's extent on it, so you can see that the 3s clip laps three times
+      inside a 10s take and that the trimmed one covers only its window. That is
+      the same widget `drag-reorder` and `split/cut` want, and it is the natural
+      next rung now that a ruler exists to draw them on.
 
 ## THE PER-CYCLE LOOP (burn → build → verify → ship → ratchet)
 0. **PICK ONE RUNG** (entry condition, first). One line naming the capability. Or
@@ -1491,6 +1583,51 @@ multi-agent audit for non-trivial changes.
   was the guard succeeding. The caption is deliberately not in the composition
   code, which makes the code the only correct witness for "the composition did
   not move".
+
+- **SCAR-C126-A-BOUNDARY-MUST-BE-REACHED-THE-WAY-PRODUCTION-REACHES-IT.**
+  `lapAdjust` subtracts the laps rather than taking a modulo, and the module
+  said why: the two "disagree exactly at the boundary the caller is about to
+  test." The sweep asserted everything around that claim and never it, because
+  the sweep built its boundaries by MULTIPLYING (`k * take`, exact) while a
+  clock reaches them by ADDING. Mutation testing is what exposed the gap — `%`
+  for the subtraction SURVIVED the first pass — and the arm written to kill it
+  then went red against the REAL module and found a defect neither the code nor
+  the mutant had: ten laps of a 4.3s take arrive at 42.99999999999999, `floor`
+  reports NINE, and the playhead sits at the far RIGHT of the bar for one frame
+  at the exact instant it should be returning to the left. Measured once the arm
+  existed: `%` and the subtraction differ on 330,567 pairs with a worst delta of
+  a WHOLE TAKE. **The general shape: a claim about a boundary is only tested by
+  a boundary reached the way the shipped code reaches it. Accumulate if
+  production accumulates.** `LAP_EPSILON` is the fix; M14/M15 guard it.
+
+- **SCAR-C126-A-DERIVED-CLOCK-NEEDS-A-STOP-AT-EVERY-PLACE-THE-DRIVER-STOPS.**
+  The playhead's position is `(now - origin)`, so the origin must be re-anchored
+  whenever the loop was not running — and THREE different things end this app's
+  rAF, of which only one runs any code: the tick's own idle branch (which can be
+  told), `stop()` (which cancels the handle outright) and `applyPowerState`
+  (which cancels it when the Stage scrolls off screen or the tab hides). A clock
+  still marked "running" across one of those gaps counts the entire gap into the
+  playhead the moment something plays — scroll the Stage away for a minute and
+  the bar jumps a minute. Found by MAPPING the driver before writing the
+  consumer rather than by shipping it, which is the only reason it is a note and
+  not an incident. **The general shape: when you derive a value from elapsed
+  wall-clock, enumerate every place the driver stops — cancelling a timer is
+  silent, and silence is the failure mode.**
+
+- **SCAR-C126-A-CONTROL-THAT-ASKS-WHICH-SOURCES-EXIST-DISABLES-ITSELF, AND THE
+  ANSWER WAS ALREADY WRITTEN ONE BUTTON TO THE RIGHT.** The Play button was
+  `disabled={liveCount === 0}` and its icon read `clips.some(playing)` — so a
+  collage of photographs drifting under a soundtrack showed Play while the
+  picture moved, and could not be started or stopped at all. This is the SAME
+  bug, in the same bar, that `takeable` was invented to fix for the SOUND
+  button, with the fix's own comment sitting three lines above the broken
+  control: *"it stopped being the same question the moment the Stage could
+  record something that is not a clip."* One control was swept and its
+  neighbour was not. **The general shape, and it is this lane's BACKPORT rider
+  applied INSIDE a component: when you fix a "which sources exist" question on
+  one control, sweep the whole bar for the same question before you leave.**
+  `StageStatus.rolling` now answers from the Stage, which is the only place that
+  can see the move, the music, the clips AND the park at once.
 
 ## THE RATCHET (perpetual by construction)
 When a capability tier reaches broad parity with CapCut, the north star raises:
@@ -3160,4 +3297,65 @@ frontier. Today's ceiling is tomorrow's floor.
   not the moment it starts.** Live-verified on production BEFORE the fixes
   (fade off `79999999999999999999`, fade on `01345678999997654321`, worst delta
   0.024, plateau ratio 1.000) and again after them.
+  https://mrdirno.github.io/nested-resonance-memory-archive/collage/
+
+- **C126 — [AXIS:COLLAGE] THE PLAYHEAD — the take gets a clock you can see and
+  drag.** BEFORE: six cycles of time-domain work — THE MOVE, the trim window,
+  the music range, the lap schedule, THE FADE — and not one of them observable
+  without spending an export; the live preview had no beginning, no end and no
+  position, so "does the fade-out land where I think it does" cost a render and
+  "what does this look like at seven seconds" was unanswerable. AFTER: a ruler
+  over the take in the transport bar, a position that tracks the clock, a drag
+  (or an arrow key) that parks the WHOLE composition on any instant of it, a
+  `m:ss.d / m:ss.d` readout, and the fade drawn under it as its own two
+  triangles from `fadeSpan` rather than from the number on the chip.
+  THE RUNG PICKED ITSELF: two separate ladder entries asked for the same widget
+  in the same words — the timeline rung owed `playhead scrub`, and THE MOVE's
+  own rung said "the honest next cut is a scrub or a 'show me' that runs one
+  cycle, which is the same widget the timeline rung wants anyway." One bar
+  closed the second outright and half of the first.
+  THE SEAM: `lib/playhead.ts` owns the arithmetic (ruler, lap, seek grid, fade
+  marks, the seek PUMP) and the Stage owns the seek, which it already had —
+  `renderAtTime` is what the offline exporter walks the take with and it reads
+  `this.offline` exactly ZERO times, so a scrub borrows it whole without
+  entering the render mode and inheriting its lifted decoder caps, frozen
+  backing size and full-resolution rasters. **THE CLOCK LAPS, A SCRUB SEEKS:**
+  wrapping the readout over an unwrapped clock would have the bar claim 7s while
+  the move sat at phase 37 (the move is periodic on a fixed 12s, deliberately
+  not on the take), so the clock itself wraps — but the lap re-seeks NOTHING,
+  because restarting every source at a boundary changes what every preview this
+  app has ever shown, and this book's own precedent (the end-of-take hard cut,
+  deferred for exactly that reason) says that is a decision to make on its own
+  and not a rider on a feature. Filed as two open rungs instead.
+  PROOF, at the artifact and by pixel: `ramp_rgb.mp4` is 6s in three flat
+  thirds, so a seek can be GRADED — scrubbing to 1.0/3.0/4.5s shows r/g/b in
+  that order, the parked canvas hashes IDENTICAL across 1.1s of wall clock (a
+  park that holds), and Play resumes at >2.9s after a park at 3.0s rather than
+  from the top. Repeated at 390px with the same three colours, because a tap
+  target that is big enough and changes nothing is not a control.
+  SWEEP: `tests/unit/playhead.invariants.mjs`, 54,337 assertions — 400 seeded
+  pump interleavings, 2,880 lap adjustments, 252 origin round trips through the
+  tick's own expression spelled verbatim, 1,216 range-input readings, 3,600
+  snaps, 84 fade rulers, 64 garbage pairs. **MUTATION TESTING EARNED ITS KEEP
+  AGAIN: 15 injected defects, 13 died on the first pass and the two that
+  survived were both comments the sweep was asserting AROUND rather than
+  THROUGH** — and the arm written to kill the first of them then went red
+  against the REAL module and found a defect neither mutant had (see
+  SCAR-C126-A-BOUNDARY-MUST-BE-REACHED-THE-WAY-PRODUCTION-REACHES-IT).
+  RIDER FOUND ON THE WAY PAST: the Play button was `disabled={liveCount === 0}`
+  and its icon read `clips.some(playing)`, so a photo collage drifting under a
+  soundtrack showed Play while the picture moved and could not be started or
+  stopped at all — the SAME question `takeable` was invented to fix for the
+  sound button three lines above it. `StageStatus.rolling` answers from the
+  Stage now. Filed as SCAR-C126-A-CONTROL-THAT-ASKS-WHICH-SOURCES-EXIST.
+  REGRESSION (the changed tick, the parking Pause and the rewired transport are
+  what put these at risk): motion 5/5, trim 9/9 (including the 11s live watch
+  that the lap would have disturbed had it re-seeked), soundtrack 6/6,
+  source-count 7/7, video-audio-export 4/4, playhead 2/2, `tsc --noEmit` clean,
+  `vite build` clean.
+  NOT SHIPPED, AND SAID PLAINLY: the ruler shows the take and nothing IN it (no
+  clip extents, no trim windows); a still collage under music has no clock at
+  all, because the tick it rides is demand-driven and photographs do not demand
+  frames; and scrubbing is silent — a park stops the audio rather than scrubbing
+  it, which is the one thing a real NLE does here that this does not.
   https://mrdirno.github.io/nested-resonance-memory-archive/collage/

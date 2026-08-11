@@ -57,6 +57,8 @@ import {
   soundtrackLength, soundtrackClock, soundtrackWindow, soundtrackRangeLabel, SOUNDTRACK_ID,
 } from '../lib/soundtrack';
 import { fadeLabel, nextFade, fadeSpan } from '../lib/fade';
+import { takeLength } from '../lib/playhead';
+import { Playhead } from './Playhead';
 import type { TitlePlan } from '../lib/title';
 import type { LookId } from '../lib/grade';
 
@@ -694,7 +696,15 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
   // --- transport -------------------------------------------------------------
 
-  const anyPlaying = !!status?.clips.some((c) => c.playing);
+  /**
+   * IS THE PREVIEW ROLLING? It used to be `clips.some(playing)`, which was the
+   * right question for exactly as long as a clip was the only thing that could
+   * move. A collage of photographs drifting under a soundtrack answered NO — so
+   * the transport showed Play while the picture moved, and pressing it did
+   * nothing. The Stage answers now, because it is the only place that can see
+   * the move, the music, the clips AND the park at once.
+   */
+  const anyPlaying = !!status?.rolling;
   const liveCount = status?.liveCount ?? 0;
   const trackRow = status?.soundtrack ?? null;
   /**
@@ -723,6 +733,9 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   const togglePlay = useCallback(() => {
     const stage = stageRef.current;
     if (!stage) return;
+    // `pauseAll` parks the composition and `resumeFromGesture` releases the
+    // park, so this one button is the whole transport — including for a scene
+    // whose only motion is a move, which has no element to pause at all.
     if (anyPlaying) stage.pauseAll();
     else stage.resumeFromGesture({ sound: soundRef.current }); // may need the gesture again
   }, [anyPlaying]);
@@ -824,7 +837,7 @@ export const VideoStage: React.FC<VideoStageProps> = ({
     abortRef.current = ac;
     setRecPhase('running');
 
-    const take = Math.min(secondsOverride ?? seconds, profile.maxSeconds);
+    const take = takeLength(secondsOverride ?? seconds, profile.maxSeconds);
 
     /**
      * THE FADE REACHES THE FILE BY TWO DIFFERENT ROUTES, AND EXACTLY ONE OF
@@ -1075,7 +1088,22 @@ export const VideoStage: React.FC<VideoStageProps> = ({
   const willCarrySound = soundClipCount > 0 || trackWanted;
   /** What the fade will ACTUALLY be on the take that is queued — clamped, not
    *  requested — so the words under the record button describe the file. */
-  const fadeOnTake = fadeSpan(fadeSec, Math.min(seconds, profile.maxSeconds));
+  /**
+   * THE RULER, named once. `takeNow` was spelled
+   * inline in five places here, two of them feeding a user-facing label — and
+   * the playhead would have made it seven.
+   */
+  const takeNow = takeLength(seconds, profile.maxSeconds);
+
+  // PUSH IT TO THE STAGE. A Stage with no take has the unbounded clock every
+  // build before the playhead had, so this effect is what opts this app into
+  // the lap; `stageGen` is in the deps because a rebuilt Stage knows nothing
+  // (the same reason the soundtrack effect carries it).
+  useEffect(() => {
+    stageRef.current?.setTake(takeNow);
+  }, [stageGen, takeNow]);
+
+  const fadeOnTake = fadeSpan(fadeSec, takeNow);
   const soundSummary = willCarrySound
     ? ' · sound from ' + [
         soundClipCount > 0 ? `${soundClipCount} clip${soundClipCount === 1 ? '' : 's'}` : '',
@@ -1095,6 +1123,11 @@ export const VideoStage: React.FC<VideoStageProps> = ({
        (`basis-full`) and the transport keeps its own. On sm+ it is one line
        exactly as before. */
     <div className="flex flex-wrap items-center gap-1 min-w-0 w-full">
+      {/* THE PLAYHEAD, on its own full-width row above everything else. It is
+          the only control here that is about the TAKE rather than about a
+          source, and it is the one the eye should find first — every other
+          thing in this bar edits what the take contains. */}
+      <Playhead stageRef={stageRef} take={takeNow} fadeSec={fadeSec} disabled={busy} />
       {/* ONE CHIP PER CLIP: what it is, whether its sound is in the piece, and
           a way out. Sound starts OFF for every clip — a collage that shouts on
           import is not a nice thing to build — but each switch is INDEPENDENT,
@@ -1348,8 +1381,12 @@ export const VideoStage: React.FC<VideoStageProps> = ({
 
       <button
         onClick={togglePlay}
-        disabled={busy || liveCount === 0}
-        title={anyPlaying ? 'Pause clips' : 'Play clips'}
+        // `liveCount === 0` was the gate, and it is the same bug `takeable` was
+        // invented for one control to the right: a photo collage with a move or
+        // a soundtrack has no decoder, so the one thing the user had just added
+        // was the one thing they could not start or stop.
+        disabled={busy || !(takeable || anyPlaying || !!status?.parked)}
+        title={anyPlaying ? 'Pause the preview' : 'Play the preview'}
         aria-label={anyPlaying ? 'Pause clips' : 'Play clips'}
         className="w-11 h-11 rounded-lg text-gray-200 flex items-center justify-center hover:bg-white/10 disabled:opacity-30 transition-colors shrink-0"
       >
@@ -1404,8 +1441,8 @@ export const VideoStage: React.FC<VideoStageProps> = ({
           title={!canRecord
             ? 'Recording unavailable in this browser'
             : frameSupport?.supported
-              ? `Render ${Math.min(seconds, profile.maxSeconds)}s — frame by frame, no dropped frames${soundSummary}`
-              : `Record ${Math.min(seconds, profile.maxSeconds)}s in real time`}
+              ? `Render ${takeNow}s — frame by frame, no dropped frames${soundSummary}`
+              : `Record ${takeNow}s in real time`}
           aria-label="Record video"
           className="w-11 h-11 rounded-lg text-red-400 flex items-center justify-center hover:bg-red-500/15 disabled:opacity-30 transition-colors shrink-0"
         >{recPhase === 'saving' ? <Loader2 size={16} className="animate-spin" /> : <Video size={17} />}</button>
