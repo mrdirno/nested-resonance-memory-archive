@@ -1909,3 +1909,63 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   pages plus six per-page, **41 failing → 0**. Gates: mobile-watertight 0/52 · menu-
   reachability PASS over 54 · overlay-reachability PASS.
   https://mrdirno.github.io/nested-resonance-memory-archive/framing/the-load.html
+
+- 2026-08-11 · **[AXIS:COMMONS] THE COMMONS HAD ONE PAGE AND ONE OF THE SEVEN TRADES WAS
+  NOT ON IT ·** `/commons/` 1 surface → **2**, gear 68 → **88 rows**, and a new
+  **`/commons/tips.html` — LEARNED THE HARD WAY, 107 tips**, every trade seeing 28–41 of
+  them. COMMONS was the stalest axis (last worked 2026-08-07, when the gear list shipped and
+  named its own next steps: photos, then tips, then guides). Photos stay deferred **on
+  purpose** — EXIF stripping, client-side resize and moderation-before-render is a rights
+  rail that deserves its own increment, and half-building it was the temptation. So this
+  cycle took TIPS, the content half of the axis, and paid a debt found on the way in.
+  **THE DEBT: framing shipped a full toolkit on 2026-08-09 and the commons was never told.**
+  Zero gear rows, no chip, not in `COMMONS_TRADES`. For two days a framer opened the page
+  that calls itself *every trade* and found seven chips, none of them his — no error, no
+  404, nothing to notice, which is why it survived two days of cycles. Fixed with 20 framing
+  gear rows plus 3 shared rows re-tagged (the **drywall saw** was tagged to five trades and
+  not to the one it is named after), and then fixed so it cannot recur: the deploy now
+  parses `COMMONS_TRADES` out of the shipped engine and **refuses any staged toolkit with no
+  chip**, and the ship gate **refuses any chip with no rows**. Both directions, because each
+  alone leaves the other hole open. Proven, not assumed — the guard **fires on the pre-fix
+  state** and passes on the fixed one.
+  **SECOND INSTANCE OF A SHAPE, SO THE ENGINE CAME OUT** (§THE THREE SHAPES, applied to the
+  commons for the first time). The picker — trade chips, the always-shown universal floor,
+  tickable rows, per-device memory, the copy-out dock, the well — moved to
+  `commons/commons.js` + `commons/commons.css`. A commons surface is now a masthead, a data
+  file and a config object; tips.html is ~40 lines of config. Regression proof: the shipped
+  gear page passed the **existing gate 10/10 unchanged** immediately after the extraction.
+  Surface #3 (photos, guides) is now near-free, and the new `.rail` means adding one puts it
+  on every other surface at once — asserted in the deploy the same way the kit switcher is.
+  **THE TRADE FOLLOWS YOU ACROSS SURFACES** (shared view key, separate pick keys): a framer
+  who picked framing on the bag is still a framer on the tips. Re-picking your trade on
+  every page is the small tax that gets a page closed.
+  **CONTENT DID NOT SELF-CERTIFY, AND THE LENSES DISAGREED TWICE.** 8 seed agents → 145
+  candidates → 3 independent adversarial lenses → **23 of 130 tips cut**. The rails lens
+  killed **nine safety rows the seeders had priced as MONEY** — refrigerant cylinders, gas
+  flame-proving, energised rotation checks, shared neutrals, phase colours — the exact
+  failure mode this page dies of. The two disagreements were the point: (1) the partition
+  lens wanted *"ask what's in the slab before anybody shoots pins"* **widened** from framing
+  to six trades; the rails lens **killed it** because it frames ASKING as the clearance step
+  before shooting into post-tension, and a verbal answer is not a scan — rails won, and
+  widening it would have multiplied the exposure sixfold (same class as the non-contact
+  tester cut from gear.js in 2026-08); (2) the partition lens called the two control-line
+  rows one duplicate, but the journeyman had already split them by TAG — a super's authority
+  versus a layout hand's habit — and gc-only/framing-only means no reader ever meets both,
+  which is the only thing the rule protects, so both stayed. The rails lens also caught
+  seeder why-lines **citing internal source files**; none shipped. **A fan-out miss caught by
+  reading it rather than trusting it:** the framing-GEAR agent's best lines were better than
+  the ones written by hand (*"Snap blue — red is permanent, and it comes back through the
+  painter's finish"*), so they were merged in, and its 15 rows were held OUT of the tips file
+  — a gear row that leaks into a tips page is a page that lies about what it is.
+  **SHIP GATE, now parameterised over both surfaces** (24/24, was 10/10 on one) — 320/360/
+  390/430 plus 320px at a 22px root, zero overflow, nothing under 44px, the dock never
+  covering the last row — and it DOES THE JOB: ticks real rows and reads the CLIPBOARD back,
+  asserting the why-line rides along on tips (a tip with no reason attached gets ignored).
+  New in it: **no trade chip may land on an empty page**, which is the framing hole expressed
+  as the thing a user would actually feel. Site-wide `mobile-watertight` **56 pages, 0
+  failing** (was 52 — the new page is globbed in, not listed). Copy sweeps clean: no brands,
+  no torque/depth/slope/clearance figures anywhere in shipped copy, no code claims.
+  **BACKPORT RIDER FIRED:** the missing-trade class was swept across the whole commons, not
+  just patched for framing — both guards are trade-agnostic and will catch trade #8 on the
+  day it ships.
+  https://mrdirno.github.io/nested-resonance-memory-archive/commons/tips.html

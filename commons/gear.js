@@ -35,15 +35,9 @@
  * gear" well on the page, and a correction from someone who does the work outranks
  * anything here.
  */
-window.COMMONS_TRADES = [
-  { slug: "universal",   short: "Every trade",  name: "Every Trade",          color: "#FF6B1A" },
-  { slug: "av",          short: "AV",           name: "AV",                   color: "#F0BE1E" },
-  { slug: "plumbing",    short: "Plumbing",     name: "Plumbing",             color: "#C87137" },
-  { slug: "electrical",  short: "Electrical",   name: "Electrical",           color: "#3FB6F5" },
-  { slug: "hvac",        short: "HVAC/R",       name: "HVAC/R",               color: "#4FE0C0" },
-  { slug: "low-voltage", short: "Low-voltage",  name: "Low-Voltage & Fire",   color: "#FF9E80" },
-  { slug: "gc",          short: "GC / Super",   name: "GC & Site Super",      color: "#8CE86B" }
-];
+/* COMMONS_TRADES moved to commons.js when the tips surface landed — both
+ * surfaces partition by the same trades, and keeping the list in ONE data file
+ * is how framing shipped a toolkit on 2026-08-09 and never got a chip here. */
 
 window.COMMONS_GEAR = [
   /* ---- the floor: all six trades, no exceptions ------------------------- */
@@ -73,7 +67,7 @@ window.COMMONS_GEAR = [
     w: "Label both ends of every run. Unlabeled cable becomes somebody's whole afternoon." },
 
   /* ---- shared: more than one trade reaches for it, so it is ONE row ----- */
-  { id: "jab-saw", n: "Jab saw (drywall saw)", t: ["av", "plumbing", "electrical", "hvac", "low-voltage"],
+  { id: "jab-saw", n: "Jab saw (drywall saw)", t: ["av", "plumbing", "electrical", "hvac", "low-voltage", "framing"],
     w: "Cuts an access hole in drywall anywhere. No power, no cord." },
   { id: "spade-auger-bits", n: "Spade & auger bits", t: ["av", "plumbing", "electrical", "low-voltage"],
     w: "Somebody has to put the hole through the stud. Usually you." },
@@ -185,16 +179,64 @@ window.COMMONS_GEAR = [
     w: "Control lines and building dimensions don't fit on a pocket tape." },
   { id: "measuring-wheel", n: "Measuring wheel", t: ["gc"],
     w: "Walk off trench, paving and fence runs faster than the argument takes." },
-  { id: "box-level", n: "Box level", t: ["gc"],
+  { id: "box-level", n: "Box level", t: ["gc", "framing"],
     w: "Punch walls and door frames with something the finish trades can't argue." },
   { id: "moisture-meter", n: "Moisture meter", t: ["gc"],
     w: "Screens framing and board before finishes go on. On slab it's a heads-up only." },
-  { id: "keel", n: "Lumber crayon (keel)", t: ["gc"],
+  { id: "keel", n: "Lumber crayon (keel)", t: ["gc", "framing"],
     w: "Marks wet concrete, dirty steel and rough lumber where a marker quits." },
   { id: "marking-paint", n: "Inverted marking paint wand", t: ["gc"],
     w: "Lays out and flags on dirt and slab so nobody claims surprise." },
   { id: "punch-tape", n: "Punch tape (blue painter's tape)", t: ["gc"],
     w: "Flags the defect where the trade finds it, no explanation needed." },
   { id: "two-way-radio", n: "Two-way radio", t: ["gc"],
-    w: "Reaches the crane, the gate and every foreman without waiting on bars." }
+    w: "Reaches the crane, the gate and every foreman without waiting on bars." },
+
+  /* ---- framing & drywall -------------------------------------------------
+   * Added 2026-08-11. The trade shipped a full toolkit on 2026-08-09 and this
+   * list was never told, so for two days a framer opened the page that calls
+   * itself "every trade" and found seven chips, none of them his. The deploy
+   * now refuses a toolkit with no chip and the ship gate refuses a chip with no
+   * rows, because nothing about that failure was visible — no error, no 404,
+   * just a trade quietly absent from the commons. */
+  { id: "rafter-square", n: "Rafter square", t: ["framing"],
+    w: "Squares a cut and steps out an angle without doing the math twice." },
+  { id: "chalk-line", n: "Chalk line (chalk box)", t: ["framing"],
+    w: "Snap blue — red is permanent, and it comes back through the painter's finish." },
+  { id: "dry-line", n: "String line (dry line)", t: ["framing"],
+    w: "A wall can read plumb at every stud and still be bowed. The line shows it." },
+  { id: "aviation-snips", n: "Aviation snips, left, right & straight", t: ["framing"],
+    w: "Carry all three. The wrong pair curls the cut into your hand and burrs the edge." },
+  { id: "stud-crimper", n: "Stud crimper", t: ["framing"],
+    w: "Locks stud into track with nothing left proud on the flange for board to rock on." },
+  { id: "powder-tool", n: "Powder-actuated fastening tool", t: ["framing"],
+    w: "Puts track down on slab and deck. Dead weight without the right pins and the matching loads." },
+  { id: "framing-hammer", n: "Framing hammer, milled face", t: ["framing"],
+    w: "The milled face bites the head instead of skidding off it." },
+  { id: "framing-nailer", n: "Framing nailer", t: ["framing"],
+    w: "Wood goes together as fast as you can set the next piece." },
+  { id: "screw-gun", n: "Drywall screw gun with depth nose", t: ["framing"],
+    w: "The nose sets the dimple. A drill breaks the paper and the taper finds every one." },
+  { id: "collated-gun", n: "Collated screw gun", t: ["framing"],
+    w: "Hangs board standing up instead of one screw at a time out of a pouch." },
+  { id: "drywall-tsquare", n: "Drywall T-square", t: ["framing"],
+    w: "Scores a whole sheet in one pass. A cut that isn't square becomes the taper's problem." },
+  { id: "cutout-router", n: "Drywall cut-out router", t: ["framing"],
+    w: "Hang the sheet whole and find the box after — measuring every cut-out is how they land wrong." },
+  { id: "foot-lift", n: "Drywall foot lift (board lifter)", t: ["framing"],
+    w: "Levers the sheet tight to the one above, so the gap ends up down at the floor." },
+  { id: "drywall-lift", n: "Drywall lift", t: ["framing"],
+    w: "Holds a lid tight to the framing while you screw it. Beats two men and a cracked sheet." },
+  { id: "drywall-rasp", n: "Drywall rasp", t: ["framing"],
+    w: "Takes the last hair off a cut that won't drop in, instead of cutting a fresh sheet." },
+  { id: "stilts", n: "Drywall stilts", t: ["framing"],
+    w: "Walk the whole lid instead of moving a bench all day. The bench move is the time." },
+  { id: "taping-knives", n: "Taping knives & mud pan", t: ["framing"],
+    w: "Every coat goes on wider than the last, so you carry the set and not one favorite." },
+  { id: "pole-sander", n: "Pole sander", t: ["framing"],
+    w: "Reaches the ceiling and the top of the wall without dragging a bench around." },
+  { id: "rake-light", n: "Work light on a stand", t: ["framing"],
+    w: "Rake it across the wall and you find the ridges before the painter does." },
+  { id: "locking-pliers", n: "Locking pliers", t: ["framing"],
+    w: "Holds two pieces of steel together while your other hand drives the screw." }
 ];

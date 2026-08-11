@@ -1,0 +1,182 @@
+/* THE COMMONS — the shared skin for every commons surface.
+ *
+ * WHY THIS IS A FILE. It was inline in commons/index.html when the commons had
+ * exactly one page. The second surface (tips) is the same shape — a trade
+ * filter, a floor that is always shown, tickable rows, a dock that copies the
+ * picks out — and the book's rule is that the SECOND instance of a shape gets
+ * the engine extracted rather than a third page forked. So the picker's skin
+ * lives here, the picker's behaviour lives in commons.js, and a surface is now
+ * a masthead plus a data file.
+ *
+ * THE COMMONS IS NOT A TRADE, so it wears no trade flag: safety orange is the
+ * one colour every trade already has on the job. The house shell (steel/zinc/
+ * paper, condensed uppercase, mono eyebrows) matches the toolkits so a tech
+ * landing here from /av/ knows it is the same building.
+ *
+ * Author: Aldrin Payopay <aldrin.gdf@gmail.com>
+ */
+:root{
+  --steel:#242A31;
+  --ink:#12161A;
+  --zinc:#D7DAD3;
+  --paper:#FBFBF8;
+  --line:#BABEB6;
+  --muted:#5D656E;
+  --flag:#FF6B1A;
+  --flagink:#241000;
+  --deep:#8C3400;
+  --tint:#FFF1E7;
+  --sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond: "Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
+  --mono: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden}
+body{
+  background:var(--zinc);color:var(--ink);font-family:var(--sans);
+  font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 150px}
+
+/* ---------- masthead ---------- */
+.plate{background:var(--steel);color:#EEF0EA;margin:0 -16px 20px;padding:16px 16px 15px}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--flag);display:block;margin-bottom:6px;overflow-wrap:anywhere;
+}
+.plate h1{
+  font-family:var(--cond);font-weight:700;font-size:clamp(21px,5.6vw,34px);
+  letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.95;
+}
+.lede{margin:8px 0 0;max-width:56ch;color:#B9BFC6;font-size:12.5px}
+.oath{
+  margin:13px 0 0;padding:9px 11px;background:#1A1F25;border-left:3px solid var(--flag);
+  font-family:var(--mono);font-size:11px;line-height:1.55;color:#C6CCD3;letter-spacing:.01em;
+}
+.oath b{color:#fff;font-weight:600}
+
+/* ---------- the rail between commons surfaces ----------
+ * The commons stopped being one page. Without this a reader who landed on the
+ * gear list had no idea the tips existed — the nav dropdown links "the commons"
+ * as a single destination, so the only way across was to already know. Rendered
+ * by commons.js from ONE list, so surface #3 appears on every surface at once. */
+.rail{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 16px;padding:0;list-style:none}
+.rail a{
+  display:inline-flex;align-items:center;min-height:44px;padding:0 13px;
+  background:var(--paper);border:1px solid var(--line);border-radius:2px;
+  font-family:var(--cond);font-size:14px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink);text-decoration:none;white-space:nowrap;
+}
+.rail a[aria-current="page"]{background:var(--steel);border-color:var(--steel);color:#fff}
+.rail a:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+
+/* ---------- trade filter ---------- */
+.pickbar{margin:0 0 14px}
+.picklabel{
+  display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 8px;
+}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:0;padding:0;list-style:none}
+.chip{
+  appearance:none;-webkit-appearance:none;
+  min-height:44px;padding:0 13px;
+  background:var(--paper);border:1px solid var(--line);border-radius:2px;
+  font-family:var(--cond);font-size:14px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink);cursor:pointer;white-space:nowrap;
+}
+.chip[aria-pressed="true"]{background:var(--steel);border-color:var(--steel);color:#fff}
+.chip[aria-pressed="true"] .dot{background:var(--tradecol,var(--flag))}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--tradecol,var(--line));margin-right:7px;vertical-align:1px}
+.chip:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+
+/* ---------- section ---------- */
+.sec{margin:0 0 22px}
+.sechead{
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  margin:0 0 9px;padding:0 0 7px;border-bottom:2px solid var(--steel);
+}
+.sechead h2{
+  font-family:var(--cond);font-weight:700;font-size:clamp(16px,4.2vw,21px);
+  text-transform:uppercase;letter-spacing:.04em;margin:0;line-height:1.05;
+  overflow-wrap:anywhere;
+}
+.sechead .count{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.secnote{margin:0 0 10px;font-size:12.5px;color:var(--muted);max-width:60ch}
+
+/* ---------- rows ---------- */
+.gear{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.item{background:var(--paper);border:1px solid var(--line);border-radius:2px}
+.item.on{border-color:var(--deep);background:var(--tint)}
+.lab{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:10px 12px;min-height:44px;cursor:pointer;
+}
+.lab input{
+  appearance:none;-webkit-appearance:none;flex:0 0 auto;
+  width:22px;height:22px;margin:1px 0 0;border:2px solid var(--muted);border-radius:2px;
+  background:var(--paper);cursor:pointer;position:relative;
+}
+.lab input:checked{background:var(--deep);border-color:var(--deep)}
+.lab input:checked::after{
+  content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;
+  border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(43deg);
+}
+.lab input:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+.txt{min-width:0;flex:1}
+.nm{
+  font-family:var(--cond);font-size:16.5px;font-weight:700;letter-spacing:.02em;
+  text-transform:uppercase;line-height:1.12;overflow-wrap:anywhere;
+}
+/* Tips are sentences, not part names — uppercase condensed turns a sentence into
+ * a shout and kills the read. A surface opts out with data-voice="sentence". */
+.voice-sentence .nm{
+  font-family:var(--sans);font-size:15px;font-weight:600;text-transform:none;
+  letter-spacing:0;line-height:1.3;
+}
+.why{margin:3px 0 0;font-size:12.5px;color:var(--muted);line-height:1.4;overflow-wrap:anywhere}
+.tags{margin:6px 0 0;display:flex;flex-wrap:wrap;gap:5px}
+.tag{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 6px;border-radius:2px;background:#E6E8E3;color:#3A424B;white-space:nowrap;
+}
+
+/* ---------- add ---------- */
+.addcard{
+  margin:24px 0 0;padding:15px;background:var(--steel);color:#DDE1E6;border-radius:2px;
+}
+.addcard h3{
+  font-family:var(--cond);font-size:clamp(15px,4vw,19px);text-transform:uppercase;
+  letter-spacing:.04em;margin:0 0 6px;color:#fff;
+}
+.addcard p{margin:0 0 12px;font-size:12.5px;color:#A8B0B9;max-width:58ch}
+.btn{
+  appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;padding:0 16px;border-radius:2px;cursor:pointer;
+  font-family:var(--cond);font-size:15px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+  background:transparent;border:1px solid var(--line);color:var(--ink);
+}
+.btn:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
+.addcard .btn{background:var(--flag);border-color:var(--flag);color:var(--flagink)}
+
+/* ---------- dock ---------- */
+.dock{position:fixed;left:0;right:0;bottom:0;background:var(--steel);border-top:3px solid var(--flag);z-index:20}
+.dock-in{max-width:1080px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.readout{flex:1 1 120px;min-width:0;display:flex;align-items:baseline;gap:8px}
+.readout b{font-family:var(--mono);font-size:22px;color:var(--flag);line-height:1;font-weight:600}
+.readout span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#9BA4AE;overflow-wrap:anywhere}
+.dock .btn{border-color:#59626C;color:#DDE1E6;flex:0 0 auto}
+.dock .btn.go{background:var(--flag);border-color:var(--flag);color:var(--flagink)}
+.dock .btn.go[disabled]{opacity:.35;cursor:not-allowed}
+
+.foot{margin:26px 0 0}
+.foot p{margin:10px 0 0;font-size:12px;color:var(--muted);line-height:1.6;max-width:56ch}
+.backlink{
+  text-decoration:none;max-width:100%;
+  font-size:14px;letter-spacing:.04em;text-align:center;
+  overflow-wrap:anywhere;padding:8px 14px;
+}
+
+#none{display:none;padding:22px 4px;color:var(--muted);font-family:var(--cond);
+  font-size:18px;text-transform:uppercase;letter-spacing:.05em}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}

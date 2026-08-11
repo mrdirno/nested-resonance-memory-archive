@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learned The Hard Way — The Commons</title>
+<meta name="description" content="Trade tips from people who do the work. The things nobody writes down, across every trade. No code, no specs, nothing sponsored.">
+<meta name="theme-color" content="#242A31">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Hard Way">
+<link rel="stylesheet" href="commons.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="plate">
+    <span class="eyebrow">The Commons · Every Trade</span>
+    <h1>Learned The Hard Way</h1>
+    <p class="lede">
+      The stuff nobody writes down — the things you only find out by eating one. Tick the ones
+      worth passing on, copy the list, send it to whoever is about to find out the hard way.
+    </p>
+    <!-- This oath is the SAFETY rail said out loud. The page is read by people who
+         make real decisions on real jobs, so it states its own limits in the
+         masthead rather than in fine print nobody scrolls to. -->
+    <p class="oath">
+      <b>No code. No specs. No numbers.</b><br>
+      Nothing here gives you a torque, a slope or a clearance, and nothing here says a thing is
+      safe or dead. That comes off the print, the label and your own two eyes — every time.
+    </p>
+  </header>
+
+  <ul class="rail" id="rail" aria-label="The Commons"></ul>
+
+  <div class="pickbar">
+    <span class="picklabel">Show me</span>
+    <div class="chips" id="chips" role="group" aria-label="Filter tips by trade"></div>
+  </div>
+
+  <div id="sections"></div>
+  <div id="none">Nothing here yet — pick another trade.</div>
+
+  <section class="addcard">
+    <h3>Got one?</h3>
+    <p>
+      Every tip on here cost somebody something. If you learned one the hard way, drop it so the
+      next guy doesn't have to. No account, no email, about fifteen seconds.
+    </p>
+    <button type="button" class="btn" id="addbtn">＋ Add a tip</button>
+  </section>
+
+  <div class="foot">
+    <a class="btn backlink" href="../av/">&larr; Field Toolkit &mdash; free tools for the trades</a>
+    <p>Tips sent in by the field get read and checked before they show up here.</p>
+  </div>
+
+</div>
+
+<div class="dock">
+  <div class="dock-in">
+    <div class="readout"><b id="cnt">0</b><span id="cntlbl">to pass on</span></div>
+    <button type="button" class="btn" id="clr">Clear</button>
+    <button type="button" class="btn go" id="copy" disabled>Copy the list</button>
+  </div>
+</div>
+
+<script src="commons.js"></script>
+<script src="tips.js"></script>
+<script>
+/* `surface` stays "commons" — the SAME key the gear list uses, deliberately.
+ * `trade` is the surface key in the one shared queue, and every tool that counts
+ * served trades derives them from <dir>/trade.js on disk; minting "commons-tips"
+ * would put a slug in the queue with no directory behind it and report a trade
+ * with demand that nobody can ever build. Which commons page a wish came from
+ * reads straight off the wish text. */
+window.FEEDBACK = {
+  surface: "commons",
+  name: "the Commons tips",
+  accent: "#FF6B1A",
+  accentInk: "#241000",
+  areaLabel: "Which trade",
+  areas: [
+    { v: "universal", label: "Every trade" },
+    { v: "av", label: "AV" },
+    { v: "plumbing", label: "Plumbing" },
+    { v: "electrical", label: "Electrical" },
+    { v: "hvac", label: "HVAC/R" },
+    { v: "low-voltage", label: "Low-voltage / fire" },
+    { v: "gc", label: "GC / site super" },
+    { v: "framing", label: "Framing / drywall" }
+  ],
+  newLabel: "Add a tip",
+  trigger: false
+};
+</script>
+<script src="../shared/feedback.js"></script>
+
+<script>
+Commons.mount({
+  surface: "tips.html",
+  rows: window.COMMONS_TIPS || [],
+  pickKey: "commons.tips.v1",
+  countNoun: "tips",
+  pickLabel: "to pass on",
+  addKind: "new_tool",
+  /* Tips are sentences. Condensed uppercase turns a sentence into a shout and
+     kills the read, so this surface opts out of the part-name voice. */
+  voice: "sentence",
+  floor: {
+    title: "Everybody Learns These",
+    note: "Doesn't matter what's on the truck — every trade on the job eats these."
+  },
+  own: {
+    suffix: "— The Ones That Bite You",
+    note: "What this trade finds out the hard way that the others mostly don't."
+  },
+  copy: {
+    title: "LEARNED THE HARD WAY",
+    /* The why line rides along in the copy. A bare tip with no reason attached
+       gets ignored — the reason IS the tip. */
+    line: function (g) { return "- " + g.n + "\n  " + g.w; },
+    footer: function (n) { return String(n) + " tips · from the field, not from a manual"; }
+  }
+});
+</script>
+</body>
+</html>

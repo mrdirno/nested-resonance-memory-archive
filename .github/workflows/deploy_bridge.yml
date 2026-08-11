@@ -196,7 +196,8 @@ jobs:
                    collage-beta/index.html \
                    archive/index.html \
                    shared/toolkit.js shared/feedback.js \
-                   commons/index.html commons/gear.js \
+                   commons/index.html commons/gear.js commons/commons.js commons/commons.css \
+                   commons/tips.html commons/tips.js \
                    av/index.html av/trade.js av/tools.js av/consumables.html av/credits.html av/report-builder.html; do
             test -f "HELIOS-BRIDGE/dist/$f" || { echo "MISSING: $f"; exit 1; }
           done
@@ -210,13 +211,29 @@ jobs:
             || { echo "FAIL: shared/toolkit.js no longer links the Commons — the nav entry and the staged dir must move together"; exit 1; }
           grep -q 'COMMONS_GEAR' HELIOS-BRIDGE/dist/commons/gear.js \
             || { echo "FAIL: commons/gear.js does not define COMMONS_GEAR"; exit 1; }
-          for dep in gear.js ../shared/feedback.js; do
+          grep -q 'COMMONS_TIPS' HELIOS-BRIDGE/dist/commons/tips.js \
+            || { echo "FAIL: commons/tips.js does not define COMMONS_TIPS"; exit 1; }
+          for dep in commons.css commons.js gear.js tips.js ../shared/feedback.js; do
             ( cd HELIOS-BRIDGE/dist/commons && test -f "$dep" ) \
-              || { echo "FAIL: commons/index.html loads $dep, which is not in the artifact"; exit 1; }
+              || { echo "FAIL: a commons surface loads $dep, which is not in the artifact"; exit 1; }
           done
           n_gear=$(grep -c 'id:' HELIOS-BRIDGE/dist/commons/gear.js || true)
           [ "$n_gear" -ge 20 ] || { echo "FAIL: commons/gear.js carries only $n_gear items — an empty commons is not a commons"; exit 1; }
-          echo "commons: $n_gear gear items, deps resolve"
+          n_tips=$(grep -c 'id:' HELIOS-BRIDGE/dist/commons/tips.js || true)
+          [ "$n_tips" -ge 20 ] || { echo "FAIL: commons/tips.js carries only $n_tips tips — an empty commons is not a commons"; exit 1; }
+
+          # EVERY COMMONS SURFACE IS OFFERED FROM EVERY OTHER ONE. commons.js
+          # renders the rail from ONE list, so a surface added there with no file
+          # behind it is a dead link on every commons page at once — the same shape
+          # as the kit-switcher hazard below, one floor down. Parse what the engine
+          # actually shipped, never the list this file stages.
+          co_hrefs=$(grep -oE 'href: *"[A-Za-z0-9._-]+"' HELIOS-BRIDGE/dist/commons/commons.js | sed 's/.*"\(.*\)"/\1/' | sort -u)
+          [ -n "$co_hrefs" ] || { echo "FAIL: no surfaces parsed out of commons.js COMMONS_SURFACES"; exit 1; }
+          for h in $co_hrefs; do
+            test -f "HELIOS-BRIDGE/dist/commons/$h" \
+              || { echo "FAIL: the commons rail offers $h from every commons page, and it is not in the artifact"; exit 1; }
+          done
+          echo "commons: $n_gear gear, $n_tips tips, $(echo "$co_hrefs" | wc -w | tr -d ' ') surfaces, deps resolve"
 
           # THE KIT SWITCHER OFFERS EVERY TRADES ROW FROM EVERY PAGE. It used to be
           # 7 words in 6 hub footers; it is now a chip grid in the nav dropdown that
@@ -233,6 +250,24 @@ jobs:
               || { echo "FAIL: the kit switcher offers /$s/ from every page of every trade, and it is not in the artifact"; exit 1; }
           done
           echo "kit switcher: $(echo "$sw_slugs" | wc -w | tr -d ' ') destinations, all staged"
+
+          # A TRADE WITH A TOOLKIT AND NO CHIP IN THE COMMONS IS INVISIBLE THERE.
+          # This is not hypothetical: framing shipped a full toolkit on 2026-08-09
+          # and COMMONS_TRADES was never told, so for two days a framer opening the
+          # page that calls itself "every trade" saw seven chips and none of them
+          # were his — no error, no 404, nothing to notice. Breadth grows on its own
+          # cadence and the commons is a separate file, so the two WILL drift again
+          # unless the build refuses. A real trade is a switcher slug with a staged
+          # trade.js, which excludes the commons entry itself (it has none, on
+          # purpose) without hardcoding an exception.
+          co_slugs=$(grep -oE 'slug: *"[a-z-]+"' HELIOS-BRIDGE/dist/commons/commons.js | sed 's/.*"\(.*\)"/\1/' | sort -u)
+          [ -n "$co_slugs" ] || { echo "FAIL: no slugs parsed out of commons.js COMMONS_TRADES"; exit 1; }
+          for s in $sw_slugs; do
+            test -f "HELIOS-BRIDGE/dist/$s/trade.js" || continue
+            echo "$co_slugs" | grep -qx "$s" \
+              || { echo "FAIL: /$s/ has a toolkit but no chip in the commons — a whole trade cannot see itself on the page that claims to serve every trade. Add it to COMMONS_TRADES in commons/commons.js and give it rows in gear.js and tips.js."; exit 1; }
+          done
+          echo "commons trades: every staged toolkit has a chip"
 
           # Every trade dir must carry the four files that make the shared runtime
           # work (config + registry + hub + credit ledger). A trade staged without

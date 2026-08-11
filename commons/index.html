@@ -9,156 +9,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="The Bag">
-<style>
-/* THE COMMONS — the human layer. Not a trade, so it wears no trade flag: safety
- * orange is the one colour every trade already has on the job. House shell
- * (steel/zinc/paper, condensed uppercase, mono eyebrows) matches the toolkits so
- * a tech landing here from /av/ knows it is the same building. */
-:root{
-  --steel:#242A31;
-  --ink:#12161A;
-  --zinc:#D7DAD3;
-  --paper:#FBFBF8;
-  --line:#BABEB6;
-  --muted:#5D656E;
-  --flag:#FF6B1A;
-  --flagink:#241000;
-  --deep:#8C3400;
-  --tint:#FFF1E7;
-  --sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --cond: "Arial Narrow","Helvetica Neue Condensed","Liberation Sans Narrow","Roboto Condensed",var(--sans);
-  --mono: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
-}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;overflow-x:hidden}
-body{
-  background:var(--zinc);color:var(--ink);font-family:var(--sans);
-  font-size:14px;line-height:1.4;-webkit-text-size-adjust:100%;
-}
-.wrap{max-width:1080px;margin:0 auto;padding:0 16px 150px}
-
-/* ---------- masthead ---------- */
-.plate{background:var(--steel);color:#EEF0EA;margin:0 -16px 20px;padding:16px 16px 15px}
-.eyebrow{
-  font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--flag);display:block;margin-bottom:6px;overflow-wrap:anywhere;
-}
-.plate h1{
-  font-family:var(--cond);font-weight:700;font-size:clamp(21px,5.6vw,34px);
-  letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:.95;
-}
-.lede{margin:8px 0 0;max-width:56ch;color:#B9BFC6;font-size:12.5px}
-.oath{
-  margin:13px 0 0;padding:9px 11px;background:#1A1F25;border-left:3px solid var(--flag);
-  font-family:var(--mono);font-size:11px;line-height:1.55;color:#C6CCD3;letter-spacing:.01em;
-}
-.oath b{color:#fff;font-weight:600}
-
-/* ---------- trade filter ---------- */
-.pickbar{margin:0 0 14px}
-.picklabel{
-  display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--muted);margin:0 0 8px;
-}
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin:0;padding:0;list-style:none}
-.chip{
-  appearance:none;-webkit-appearance:none;
-  min-height:44px;padding:0 13px;
-  background:var(--paper);border:1px solid var(--line);border-radius:2px;
-  font-family:var(--cond);font-size:14px;letter-spacing:.05em;text-transform:uppercase;
-  color:var(--ink);cursor:pointer;white-space:nowrap;
-}
-.chip[aria-pressed="true"]{background:var(--steel);border-color:var(--steel);color:#fff}
-.chip[aria-pressed="true"] .dot{background:var(--tradecol,var(--flag))}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--tradecol,var(--line));margin-right:7px;vertical-align:1px}
-.chip:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
-
-/* ---------- section ---------- */
-.sec{margin:0 0 22px}
-.sechead{
-  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
-  margin:0 0 9px;padding:0 0 7px;border-bottom:2px solid var(--steel);
-}
-.sechead h2{
-  font-family:var(--cond);font-weight:700;font-size:clamp(16px,4.2vw,21px);
-  text-transform:uppercase;letter-spacing:.04em;margin:0;line-height:1.05;
-  overflow-wrap:anywhere;
-}
-.sechead .count{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.secnote{margin:0 0 10px;font-size:12.5px;color:var(--muted);max-width:60ch}
-
-/* ---------- gear rows ---------- */
-.gear{list-style:none;margin:0;padding:0;display:grid;gap:7px}
-.item{background:var(--paper);border:1px solid var(--line);border-radius:2px}
-.item.on{border-color:var(--deep);background:var(--tint)}
-.lab{
-  display:flex;align-items:flex-start;gap:11px;
-  padding:10px 12px;min-height:44px;cursor:pointer;
-}
-.lab input{
-  appearance:none;-webkit-appearance:none;flex:0 0 auto;
-  width:22px;height:22px;margin:1px 0 0;border:2px solid var(--muted);border-radius:2px;
-  background:var(--paper);cursor:pointer;position:relative;
-}
-.lab input:checked{background:var(--deep);border-color:var(--deep)}
-.lab input:checked::after{
-  content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;
-  border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(43deg);
-}
-.lab input:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
-.txt{min-width:0;flex:1}
-.nm{
-  font-family:var(--cond);font-size:16.5px;font-weight:700;letter-spacing:.02em;
-  text-transform:uppercase;line-height:1.12;overflow-wrap:anywhere;
-}
-.why{margin:3px 0 0;font-size:12.5px;color:var(--muted);line-height:1.4;overflow-wrap:anywhere}
-.tags{margin:6px 0 0;display:flex;flex-wrap:wrap;gap:5px}
-.tag{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
-  padding:2px 6px;border-radius:2px;background:#E6E8E3;color:#3A424B;white-space:nowrap;
-}
-
-/* ---------- add ---------- */
-.addcard{
-  margin:24px 0 0;padding:15px;background:var(--steel);color:#DDE1E6;border-radius:2px;
-}
-.addcard h3{
-  font-family:var(--cond);font-size:clamp(15px,4vw,19px);text-transform:uppercase;
-  letter-spacing:.04em;margin:0 0 6px;color:#fff;
-}
-.addcard p{margin:0 0 12px;font-size:12.5px;color:#A8B0B9;max-width:58ch}
-.btn{
-  appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;
-  min-height:44px;padding:0 16px;border-radius:2px;cursor:pointer;
-  font-family:var(--cond);font-size:15px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
-  background:transparent;border:1px solid var(--line);color:var(--ink);
-}
-.btn:focus-visible{outline:2px solid var(--flag);outline-offset:2px}
-.addcard .btn{background:var(--flag);border-color:var(--flag);color:var(--flagink)}
-
-/* ---------- dock ---------- */
-.dock{position:fixed;left:0;right:0;bottom:0;background:var(--steel);border-top:3px solid var(--flag);z-index:20}
-.dock-in{max-width:1080px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;gap:11px;flex-wrap:wrap}
-.readout{flex:1 1 120px;min-width:0;display:flex;align-items:baseline;gap:8px}
-.readout b{font-family:var(--mono);font-size:22px;color:var(--flag);line-height:1;font-weight:600}
-.readout span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#9BA4AE;overflow-wrap:anywhere}
-.dock .btn{border-color:#59626C;color:#DDE1E6;flex:0 0 auto}
-.dock .btn.go{background:var(--flag);border-color:var(--flag);color:var(--flagink)}
-.dock .btn.go[disabled]{opacity:.35;cursor:not-allowed}
-
-.foot{margin:26px 0 0}
-.foot p{margin:10px 0 0;font-size:12px;color:var(--muted);line-height:1.6;max-width:56ch}
-.backlink{
-  text-decoration:none;max-width:100%;
-  font-size:14px;letter-spacing:.04em;text-align:center;
-  overflow-wrap:anywhere;padding:8px 14px;
-}
-
-#none{display:none;padding:22px 4px;color:var(--muted);font-family:var(--cond);
-  font-size:18px;text-transform:uppercase;letter-spacing:.05em}
-
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-</style>
+<!-- The skin and the picker are shared by every commons surface (commons.css /
+     commons.js). This page is a masthead, a data file and a config object. -->
+<link rel="stylesheet" href="commons.css">
 </head>
 <body>
 
@@ -177,6 +30,8 @@ body{
       the <em>thing</em>, not the label on it — buy whatever your shop buys.
     </p>
   </header>
+
+  <ul class="rail" id="rail" aria-label="The Commons"></ul>
 
   <div class="pickbar">
     <span class="picklabel">Show me</span>
@@ -213,6 +68,7 @@ body{
   </div>
 </div>
 
+<script src="commons.js"></script>
 <script src="gear.js"></script>
 <script>
 window.FEEDBACK = {
@@ -228,7 +84,8 @@ window.FEEDBACK = {
     { v: "electrical", label: "Electrical" },
     { v: "hvac", label: "HVAC/R" },
     { v: "low-voltage", label: "Low-voltage / fire" },
-    { v: "gc", label: "GC / site super" }
+    { v: "gc", label: "GC / site super" },
+    { v: "framing", label: "Framing / drywall" }
   ],
   newLabel: "Add gear to the list",
   trigger: false
@@ -237,226 +94,27 @@ window.FEEDBACK = {
 <script src="../shared/feedback.js"></script>
 
 <script>
-(function () {
-  "use strict";
-
-  /* THE COMMONS is not a trade, so it does not load the trade runtime (that would
-   * need a trade.js, and a trade.js in this directory makes every tool that counts
-   * served trades from disk report a seventh trade that does not exist). It carries
-   * shared/feedback.js instead — the standalone drop-in built for exactly this. */
-
-  var GEAR = window.COMMONS_GEAR || [];
-  var TRADES = window.COMMONS_TRADES || [];
-  var KEY = "commons.bag.v1";
-  var VIEWKEY = "commons.view.v1";
-
-  var $ = function (id) { return document.getElementById(id); };
-  var esc = function (s) {
-    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
-      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c];
-    });
-  };
-
-  /* ---- the bag: per-device, no login. Same reasoning as the toolkit's
-   * favorites — an account is a step, and a step is why nobody uses it. ---- */
-  function loadBag() {
-    try {
-      var raw = JSON.parse(localStorage.getItem(KEY) || "[]");
-      return Array.isArray(raw) ? raw.filter(function (x) { return typeof x === "string"; }) : [];
-    } catch (e) { return []; }
+Commons.mount({
+  surface: "index.html",
+  rows: window.COMMONS_GEAR || [],
+  pickKey: "commons.bag.v1",
+  countNoun: "items",
+  pickLabel: "in your bag",
+  addKind: "new_tool",
+  floor: {
+    title: "Every Trade Carries This",
+    note: "Doesn't matter what's on the truck — this is the floor."
+  },
+  own: {
+    suffix: "— On Top Of That",
+    note: "The stuff this trade reaches for that the others mostly don't."
+  },
+  copy: {
+    title: "WHAT'S IN THE BAG",
+    line: function (g) { return "- " + g.n; },
+    footer: function (n) { return String(n) + " items · no brands, buy what your shop buys"; }
   }
-  function saveBag(a) { try { localStorage.setItem(KEY, JSON.stringify(a)); } catch (e) {} }
-  var bag = loadBag();
-  var inBag = function (id) { return bag.indexOf(id) !== -1; };
-
-  function loadView() {
-    try {
-      var v = localStorage.getItem(VIEWKEY);
-      return v && TRADES.some(function (t) { return t.slug === v; }) ? v : "universal";
-    } catch (e) { return "universal"; }
-  }
-  var view = loadView();
-
-  /* ---- chips ---- */
-  function buildChips() {
-    var box = $("chips");
-    box.textContent = "";
-    TRADES.forEach(function (t) {
-      var b = document.createElement("button");
-      b.type = "button";
-      b.className = "chip";
-      b.setAttribute("aria-pressed", String(t.slug === view));
-      b.style.setProperty("--tradecol", t.color);
-      b.innerHTML = '<span class="dot"></span>' + esc(t.short);
-      b.addEventListener("click", function () {
-        view = t.slug;
-        try { localStorage.setItem(VIEWKEY, view); } catch (e) {}
-        buildChips();
-        render();
-      });
-      box.appendChild(b);
-    });
-  }
-
-  /* ---- what shows for the current view: the universal floor is ALWAYS shown,
-   * because that is the whole thesis of a commons — the gear every trade shares
-   * is the point, and a plumber who only sees plumbing gear learned nothing. --- */
-  function sectionsFor(v) {
-    var uni = GEAR.filter(function (g) { return g.t.indexOf("universal") !== -1; });
-    var out = [{
-      slug: "universal",
-      title: "Every Trade Carries This",
-      note: "Doesn't matter what's on the truck — this is the floor.",
-      items: uni
-    }];
-    if (v !== "universal") {
-      var t = TRADES.filter(function (x) { return x.slug === v; })[0];
-      var own = GEAR.filter(function (g) {
-        return g.t.indexOf(v) !== -1 && g.t.indexOf("universal") === -1;
-      });
-      out.push({
-        slug: v,
-        title: (t ? t.name : v) + " — On Top Of That",
-        note: "The stuff this trade reaches for that the others mostly don't.",
-        items: own
-      });
-    }
-    return out;
-  }
-
-  function render() {
-    var host = $("sections");
-    host.textContent = "";
-    var secs = sectionsFor(view), total = 0;
-
-    secs.forEach(function (s) {
-      total += s.items.length;
-      if (!s.items.length) return;
-      var sec = document.createElement("section");
-      sec.className = "sec";
-
-      var head = document.createElement("div");
-      head.className = "sechead";
-      head.innerHTML = "<h2>" + esc(s.title) + "</h2>" +
-                       '<span class="count">' + s.items.length + " items</span>";
-      sec.appendChild(head);
-
-      var note = document.createElement("p");
-      note.className = "secnote";
-      note.textContent = s.note;
-      sec.appendChild(note);
-
-      var ul = document.createElement("ul");
-      ul.className = "gear";
-      s.items.forEach(function (g) { ul.appendChild(row(g)); });
-      sec.appendChild(ul);
-      host.appendChild(sec);
-    });
-
-    $("none").style.display = total ? "none" : "block";
-    tally();
-  }
-
-  function row(g) {
-    var li = document.createElement("li");
-    li.className = "item" + (inBag(g.id) ? " on" : "");
-
-    var lab = document.createElement("label");
-    lab.className = "lab";
-
-    var cb = document.createElement("input");
-    cb.type = "checkbox";
-    cb.checked = inBag(g.id);
-    cb.addEventListener("change", function () {
-      if (cb.checked) { if (!inBag(g.id)) bag.push(g.id); }
-      else { bag = bag.filter(function (x) { return x !== g.id; }); }
-      saveBag(bag);
-      li.className = "item" + (cb.checked ? " on" : "");
-      tally();
-    });
-
-    var txt = document.createElement("div");
-    txt.className = "txt";
-    var tags = g.t.filter(function (x) { return x !== "universal"; }).map(function (sl) {
-      var t = TRADES.filter(function (x) { return x.slug === sl; })[0];
-      return '<span class="tag">' + esc(t ? t.short : sl) + "</span>";
-    }).join("");
-    txt.innerHTML = '<div class="nm">' + esc(g.n) + "</div>" +
-                    '<p class="why">' + esc(g.w) + "</p>" +
-                    (tags ? '<div class="tags">' + tags + "</div>" : "");
-
-    lab.appendChild(cb);
-    lab.appendChild(txt);
-    li.appendChild(lab);
-    return li;
-  }
-
-  function tally() {
-    var n = bag.length;
-    $("cnt").textContent = String(n);
-    $("cntlbl").textContent = n === 1 ? "in your bag" : "in your bag";
-    $("copy").disabled = n === 0;
-  }
-
-  /* ---- the handoff: the reason this is a tool and not a blog post. What a
-   * journeyman actually does with this is paste it to the new guy. ---- */
-  function bagText() {
-    var picked = GEAR.filter(function (g) { return inBag(g.id); });
-    var t = TRADES.filter(function (x) { return x.slug === view; })[0];
-    var lines = ["WHAT'S IN THE BAG" + (t && t.slug !== "universal" ? " — " + t.name.toUpperCase() : ""), ""];
-
-    var uni = picked.filter(function (g) { return g.t.indexOf("universal") !== -1; });
-    var rest = picked.filter(function (g) { return g.t.indexOf("universal") === -1; });
-
-    if (uni.length) {
-      lines.push("EVERY TRADE");
-      uni.forEach(function (g) { lines.push("- " + g.n); });
-    }
-    if (rest.length) {
-      if (uni.length) lines.push("");
-      lines.push(t && t.slug !== "universal" ? t.name.toUpperCase() : "TRADE-SPECIFIC");
-      rest.forEach(function (g) { lines.push("- " + g.n); });
-    }
-    lines.push("");
-    lines.push(String(picked.length) + " items · no brands, buy what your shop buys");
-    return lines.join("\n");
-  }
-
-  function copyOut() {
-    var txt = bagText(), btn = $("copy"), old = btn.textContent;
-    var done = function (ok) {
-      btn.textContent = ok ? "✓ Copied" : "Select & copy";
-      setTimeout(function () { btn.textContent = old; }, 1900);
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(txt).then(function () { done(true); }, function () { fallback(txt, done); });
-    } else { fallback(txt, done); }
-  }
-
-  function fallback(txt, done) {
-    var ta = document.createElement("textarea");
-    ta.value = txt;
-    ta.setAttribute("readonly", "");
-    ta.style.cssText = "position:fixed;left:8px;bottom:74px;width:calc(100% - 16px);height:36vh;z-index:99";
-    document.body.appendChild(ta);
-    ta.select();
-    var ok = false;
-    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
-    if (ok) { document.body.removeChild(ta); done(true); }
-    else { done(false); setTimeout(function () { if (ta.parentNode) document.body.removeChild(ta); }, 9000); }
-  }
-
-  $("copy").addEventListener("click", copyOut);
-  $("clr").addEventListener("click", function () {
-    bag = []; saveBag(bag); render();
-  });
-  $("addbtn").addEventListener("click", function () {
-    if (window.Feedback && window.Feedback.open) window.Feedback.open("new_tool");
-  });
-
-  buildChips();
-  render();
-})();
+});
 </script>
 </body>
 </html>
