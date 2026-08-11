@@ -106,6 +106,7 @@ window.TRADE_DOCS = {
         "confirming what you told me",
         "memo to file"
       ],
+      "standalone": true,
       "family": "minutes",
       "from": "the foreman",
       "to": "the man who said it",

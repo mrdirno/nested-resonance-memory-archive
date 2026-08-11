@@ -1162,6 +1162,50 @@ also deliberately NOT maximal: inline links in prose are exempt (WCAG 2.5.8 exem
 too) and text fields are reported rather than failed, because a gate that reports every
 body-copy link is noise, and a noisy gate is one that stops being run.
 
+### 2026-08-11 — A DATA FILE WROTE TO A SCHEMA THAT DOES NOT EXIST, AND THE PAGE WENT BLANK
+`framing/docs.js` shipped five documents whose `omit` was a **list** where the engine
+called `.split` on it. That is a `TypeError` inside `compose()`, which throws out of
+`renderOut()` and out of `renderAll()`, so on the LIVE site every one of that trade's own
+documents produced **an empty output block** — the one thing shape #4 exists to make. The
+page did not look broken: the picked card rendered, the omitted line rendered (comma-joined,
+because an array handed to `textContent` is), the tuner rendered. Only section 3 — the block
+you paste into your AI — was blank, the bottom bar still read *"Pick a document to start"*,
+and the library never collapsed, because the line that collapses it sits AFTER the line that
+threw. Same file also set `family` to shared **document ids** (`handover`, `delay-notice`,
+`change-request`), which `FAMILIES[f] || FAMILIES.recurring` swallowed whole — so a damage
+letter read three years later was being written as a **delta against a previous one that
+does not exist**, and the card called it *"a report you send on a rhythm"*.
+**Why nothing caught it.** `node --check` passes: the file is valid JavaScript. The mobile
+gate passes: the layout is watertight around an empty box. The deploy's asset asserts pass:
+every dependency resolves. A screenshot passes: the page looks finished. **Every check we
+had verified the container and none of them verified the contents.** A data file and its
+engine have a contract, and this repo had written it down nowhere.
+**The sweep found the same class twice more, and the second one is the instructive one.**
+`low-voltage/inspection-deficiency-letter` was tagged `recurring` — a LEGAL family, so no
+schema check could ever flag it — on a one-shot letter whose whole purpose is *"every device
+you could not get to is yours until you name it in writing"*. Delta continuity tells the AI
+to drop anything already reported: the second letter silently omits the devices named in the
+first, and those devices are now his. `electrical/confirming-note` was tagged `minutes`,
+which is **semantically correct** — it records a conversation and what got decided — but
+minutes report deltas because a coordination meeting recurs, and a confirming note does not:
+each one memorialises a DIFFERENT conversation. Re-familying it would have fixed the
+behaviour by lying about what the document is, so the engine grew `standalone: true`
+instead — the family keeps the label and the spine, the document keeps every fact every
+time. The flag only ever moves TOWARD stand-alone; there is deliberately no way to force
+delta on, because that is the direction that corrupts a record.
+**Rule:** a fallback must fail in the SAFE direction. `FAMILIES[f] || FAMILIES.recurring`
+chose the one fallback that turns an unknown into a document written as an update; the cost
+of guessing stand-alone is a lost convenience, the cost of guessing recurring is a corrupted
+record. And the contract is now asserted twice, in the two places that catch different
+things: `tools/toolkit-gates/docspec-config.mjs` DRIVES every document in every trade
+through the real page (113 checks — it fires on the pre-fix state with all three diagnoses:
+the page error, the illegal family, and the omitted lines that never reached the block), and
+the deploy asserts the schema statically over the staged artifact, parsing FAMILIES out of
+the shipped engine rather than keeping a copy. Both discover trades from disk, so trade #8
+is covered the day it lands. The half a gate cannot judge — a wrong-but-legal family — is
+printed as a **DELTA ROSTER**: the complete list of documents written as an update, short
+enough to read, and anything on it not written repeatedly about the SAME job is wrong.
+
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
 covered, the toolkit trends toward the default field-AV utility layer, and the
@@ -1969,3 +2013,53 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   just patched for framing — both guards are trade-agnostic and will catch trade #8 on the
   day it ships.
   https://mrdirno.github.io/nested-resonance-memory-archive/commons/tips.html
+
+- 2026-08-11 · **[AXIS:DOCS] THE PAGE RENDERED EVERYTHING EXCEPT THE THING IT IS FOR ·
+  framing/write-up.html: 5 of 16 documents emitted an EMPTY block → 16/16 emit a real one.**
+  Picked up as the stalest axis, and the axis turned out to be carrying a live P0 nobody had
+  filed: `framing/docs.js` wrote `omit` as a LIST into an engine that called `.split` on it,
+  so `compose()` threw and the instruction block — the only product shape #4 has — was blank
+  on the live site for every framing-specific document. Proven at the artifact before a line
+  was changed: `PAGEERROR: (t || "").split is not a function`, block length **0**, bar still
+  reading *"Pick a document to start"*. Same file put shared DOCUMENT IDS in the `family`
+  slot on all five, which the engine swallowed into `recurring` — a damage letter read years
+  later was being written as a delta against a previous one that does not exist.
+  **THE ENGINE GREW TWO THINGS RATHER THAN THE DATA BEING BENT TO IT.** `omit` may now be a
+  LIST, because framing's author wrote three specific omission lines per document where the
+  field was built for one, and that is better authoring than the field deserved — each gets
+  its own bullet in the block AND its own bullet in the output format, so an AI cannot drop
+  two of three. And `famOf()` fails toward STAND-ALONE, never toward delta: guessing
+  stand-alone costs a convenience, guessing recurring corrupts a record.
+  **BACKPORT RIDER FIRED, and it found the class twice more in two other trades** —
+  `low-voltage/inspection-deficiency-letter` tagged `recurring` (a one-shot letter told to
+  drop what it already reported, on the document whose point is that an unnamed device stays
+  yours) → `notice`; and `electrical/confirming-note` tagged `minutes`, which is
+  semantically RIGHT and behaviourally wrong, so the engine grew `standalone: true` and the
+  document keeps both its true label and every fact. All 7 trades swept; 54 documents now
+  match the engine.
+  **ASSERTED IN TWO PLACES, EACH CATCHING WHAT THE OTHER CANNOT.**
+  `tools/toolkit-gates/docspec-config.mjs` drives every document in every trade through the
+  real page — 113 checks, 7 trades, 0 failing — asserting no throw, a non-empty block with
+  all eleven blocks, a legal family, continuity that matches the document, and that EVERY
+  omitted line reaches the block. It **fires on the pre-fix state with all three diagnoses**
+  and its trade list comes from disk. The deploy asserts the same contract statically over
+  the staged artifact, parsing FAMILIES out of the shipped engine rather than copying it
+  (also proven to fire pre-fix, 5 violations, exit 1). The half no gate can judge — a
+  wrong-but-LEGAL family — is printed as a **DELTA ROSTER**, now exactly the 28 documents
+  that genuinely recur. Mobile: site-wide 56 pages 0 failing, plus the PICKED state (which
+  the standing gate never reaches, because the omit list only exists after a pick) measured
+  at 320/360/390/430 default and bumped — 40/40 clean.
+  **THE PANEL EARNED ITS KEEP AND DISAGREED WITH THE PLAN.** Three lenses were cast on the
+  DOCS increment I intended (making the "not in the list" path stop shrugging). The skeptic
+  refused the brief and found this P0 independently; the PM lens found the family half from
+  the data alone. Both ranked *fix the P0 + gate the contract* above the increment, so the
+  increment did not ship and is not lost — see the named next rung below.
+  **NEXT RUNG, RECORDED SO IT IS TAKEN DELIBERATELY:** `matches()` (docspec.js) ANDs every
+  typed token against `name + aka + why`, so real document names miss and the empty state
+  routes people into the custom path — the custom path is where SEARCH DUMPS PEOPLE, not a
+  niche. Rank the search instead of the AND, show the closest three on a zero-match, and only
+  then improve the custom path (four omission classes carrying a concrete artefact — a date,
+  a name, a photo location, a before-value — not ten generic ones; no free-text heading,
+  `S.extra` already exists; no keyword classifier, because a wrong family silently flips
+  `delta` and the authors get that field wrong by hand).
+  https://mrdirno.github.io/nested-resonance-memory-archive/framing/write-up.html

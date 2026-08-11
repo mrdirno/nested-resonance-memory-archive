@@ -37,7 +37,7 @@ window.TRADE_DOCS = {
         "test and inspect letter",
         "the letter that goes with the inspection report"
       ],
-      "family": "recurring",
+      "family": "notice",
       "from": "the tech who ran the inspection",
       "to": "the property manager",
       "why": "Every device you could not get to is yours until you name it in writing.",

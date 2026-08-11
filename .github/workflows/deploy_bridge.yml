@@ -339,6 +339,79 @@ jobs:
               || { echo "FAIL: trade '$t' is staged but has NO entry in the site-root TOOLS registry (HELIOS-BRIDGE/components/UIComponents.tsx) — it would be unreachable from the front page"; exit 1; }
           done
 
+          # THE DOCUMENT LIBRARY HAS A CONTRACT WITH ITS ENGINE, AND NOTHING
+          # CHECKED IT (§SCARS 2026-08-11). framing/docs.js shipped five documents
+          # whose `omit` was a LIST where shared/docspec.js called .split on it —
+          # a TypeError inside compose(), so the ONE THING that page exists to
+          # produce, the block you paste into your AI, rendered EMPTY on the live
+          # site for every one of that trade's own documents. The same file set
+          # `family` to shared DOCUMENT IDS ("handover", "delay-notice"), which the
+          # engine silently fell back to `recurring` for — so a damage letter read
+          # three years later was being written as a DELTA against a previous one
+          # that does not exist.
+          #
+          # Neither is visible to any check above: the file is valid JavaScript, the
+          # page returns 200, its assets all resolve, and the layout is watertight
+          # around an empty box. The contract is what has to be asserted, so it is.
+          # FAMILIES is parsed OUT OF THE SHIPPED ENGINE rather than listed here —
+          # a copy of the thing being checked drifts from it and then reports green
+          # on the day it matters. Every trade is discovered from the artifact, so
+          # trade #8 is covered the day it lands with no edit to this file.
+          node -e '
+            const fs = require("fs");
+            const D = "HELIOS-BRIDGE/dist";
+            const eng = fs.readFileSync(D + "/shared/docspec.js", "utf8");
+            const FAM = [...eng.matchAll(/^\s{4}([a-z]+):\s*\{$/gm)].map(m => m[1]);
+            if (FAM.length < 3) { console.error("FAIL: could not parse FAMILIES out of shared/docspec.js"); process.exit(1); }
+            const trades = fs.readdirSync(D, { withFileTypes: true })
+              .filter(d => d.isDirectory() && fs.existsSync(`${D}/${d.name}/docs.js`)).map(d => d.name).sort();
+            if (!trades.length) { console.error("FAIL: no trade docs.js staged"); process.exit(1); }
+            let bad = 0, n = 0;
+            for (const t of trades) {
+              const win = {};
+              try { new Function("window", fs.readFileSync(`${D}/${t}/docs.js`, "utf8"))(win); }
+              catch (e) { console.error(`FAIL: ${t}/docs.js does not parse: ${e.message}`); bad++; continue; }
+              const L = win.TRADE_DOCS;
+              if (!L || !Array.isArray(L.docs)) { console.error(`FAIL: ${t}/docs.js defines no TRADE_DOCS.docs`); bad++; continue; }
+              if (typeof L.trade !== "string" || !L.trade.trim()) { console.error(`FAIL: ${t}/docs.js declares no trade word`); bad++; }
+              /* A DOCUMENT declares all of these; an OVERRIDE declares only the
+                 fields it changes and inherits the rest from the shared document
+                 it overrides. So each field is checked only where it is present,
+                 and `required` is what separates the two — an override that
+                 restates just `sections` (framing does exactly that to the daily)
+                 must not be failed for having no family of its own. */
+              const check = (d, where, required) => {
+                n++;
+                if (required || "family" in d) {
+                  if (!FAM.includes(d.family)) {
+                    console.error(`FAIL: ${where} family "${d.family}" is not one of the engine's (${FAM.join(", ")}) — it falls back silently and the continuity rule is wrong`);
+                    bad++;
+                  }
+                }
+                if (required || "omit" in d) {
+                  const o = d.omit;
+                  const okOmit = (typeof o === "string" && o.trim())
+                    || (Array.isArray(o) && o.length && o.every(x => typeof x === "string" && x.trim()));
+                  if (!okOmit) {
+                    console.error(`FAIL: ${where} omit must be a non-empty string or a list of them (got ${Array.isArray(o) ? "an array with a bad member" : typeof o}) — this is the field the whole library is built around`);
+                    bad++;
+                  }
+                }
+                if ("standalone" in d && typeof d.standalone !== "boolean") {
+                  console.error(`FAIL: ${where} standalone must be true/false`); bad++;
+                }
+                if ("sections" in d && (!Array.isArray(d.sections) || !d.sections.length
+                    || d.sections.some(s => !s || typeof s.h !== "string" || typeof s.r !== "string"))) {
+                  console.error(`FAIL: ${where} sections must be a non-empty list of {h,r} strings`); bad++;
+                }
+              };
+              L.docs.forEach(d => check(d, `${t}/${d.id}`, true));
+              Object.entries(L.overrides || {}).forEach(([id, o]) => check(o, `${t}/overrides.${id}`, false));
+            }
+            if (bad) { console.error(`docspec contract: ${bad} violation(s) across ${trades.length} trade(s)`); process.exit(1); }
+            console.log(`docspec contract: ${n} document(s) across ${trades.length} trade(s) match the engine (families: ${FAM.join(", ")})`);
+          '
+
           # FEEDBACK IS BUILT IN — the standard, asserted rather than remembered
           # (operator 2026-08-04: "make sure we have a solid scalable way of
           # addressing open item wishes/feedback for anything — standardize the

@@ -33,7 +33,7 @@ window.TRADE_DOCS = {
         "we put the backing in",
         "backing turnover"
       ],
-      "family": "handover",
+      "family": "verification",
       "from": "the framing/drywall foreman who closed the walls",
       "to": "our PM, the GC super, and the trade that asked — for the closeout file",
       "why": "Six trades ask this crew for backing and none of them keep a record of what they asked for. Months later the argument is one word against another, and the only thing that settles it is a dated list written while the wall was still open.",
@@ -63,7 +63,7 @@ window.TRADE_DOCS = {
         "cut and patch response",
         "who opened this"
       ],
-      "family": "damage-found",
+      "family": "incident",
       "from": "the framing/drywall foreman",
       "to": "the GC super, cc our PM",
       "why": "This trade closes the walls, so every hole anybody cuts afterwards lands on our punch list by default. The reply has to be written the day it is found, before the surface is patched and the evidence is gone.",
@@ -93,7 +93,7 @@ window.TRADE_DOCS = {
         "can't rock it",
         "out of sequence"
       ],
-      "family": "delay-notice",
+      "family": "notice",
       "from": "the framing/drywall foreman or GF",
       "to": "the GC super and our PM",
       "why": "Closing a wall is the one irreversible act on an interior, so this crew is held up more often than anybody and looks slower than anybody. The notice is what converts 'the drywall guys are behind' into 'these four walls are open and here is who owes what'.",
@@ -122,7 +122,7 @@ window.TRADE_DOCS = {
         "the wall doesn't fit",
         "clash at layout"
       ],
-      "family": "change-request",
+      "family": "notice",
       "from": "the layout man or foreman, at the line",
       "to": "the GC super — who turns it into the RFI in their system, where the number lives",
       "why": "The layout crew is the first trade to find out the drawings do not close, and it is found standing on the floor with a crew waiting. Written in five minutes it is a question; written next week it is a change order.",
@@ -152,7 +152,7 @@ window.TRADE_DOCS = {
         "what we carry",
         "scope gaps"
       ],
-      "family": "handover",
+      "family": "notice",
       "from": "our PM or GF, with the field foreman's input",
       "to": "the GC PM, cc the super who will run the job",
       "why": "Almost every extra this trade writes for a year traces back to something nobody clarified before the first wall went up — who owns the caulk at the deck, who backs the casework, who patches after the other trades. Writing it down once at the start is cheaper than tagging it twelve times.",

@@ -64,6 +64,12 @@
 .omit b{display:block;font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:14px;
   color:#B0201A;margin-bottom:3px}
 .omit p{margin:0;font-size:13px;color:#3A2321;line-height:1.4}
+/* A document may name more than one omitted line. They render as a list rather
+   than a comma-joined run-on, because the second and third lines are the ones
+   that get skipped when they are folded into a paragraph. */
+.omit ul{margin:0;padding-left:17px}
+.omit li{font-size:13px;color:#3A2321;line-height:1.4;margin:0 0 4px}
+.omit li:last-child{margin-bottom:0}
 
 /* THE SPINE — the sections of the finished document, as a tick list with a
    handle-free reorder-free honesty: you choose what is IN, not where it goes,

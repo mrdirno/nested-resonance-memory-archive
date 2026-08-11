@@ -413,10 +413,97 @@
     return out.concat(LIB.docs || []);
   }
 
+  /* ── THE FAMILY, RESOLVED SAFELY ────────────────────────────────────────
+   * The family drives the CONTINUITY RULE, so an unknown one must never resolve
+   * to a family that reports deltas. framing/docs.js declared `family:
+   * "handover"` — a shared DOCUMENT ID, not a family — on all five of its
+   * documents, and the old `FAMILIES[f] || FAMILIES.recurring` turned every one
+   * of them into a document written as an UPDATE to the last one. §THE THREE
+   * SHAPES says it plainly: an incident record read three years later must never
+   * be written as an update. A damage letter that opens by dropping "anything
+   * already reported finished" is the one document in the library that has to
+   * carry every fact every time.
+   *
+   * So the fallback is asymmetric ON PURPOSE. Falling back to stand-alone costs
+   * a recurring report its delta convenience — an inconvenience. Falling back to
+   * recurring corrupts a record somebody relies on years later — a defect. The
+   * gate (tools/toolkit-gates/docspec-config.mjs) refuses an unknown family
+   * outright; this is the belt underneath it, because a trade shipped from a
+   * branch that skipped the gate still must not emit a lie.
+   */
+  var UNKNOWN_FAMILY = {
+    name: "A record written once",
+    hint: "written once and read later",
+    delta: false,
+    spine: FAMILIES.incident.spine
+  };
+  var warned = {};
+  function famOf(doc) {
+    var f = doc && doc.family;
+    if (f && FAMILIES[f]) return FAMILIES[f];
+    var k = String(f);
+    if (!warned[k] && window.console && console.warn) {
+      warned[k] = 1;
+      console.warn("[docspec] unknown family " + JSON.stringify(f) + " on document " +
+        JSON.stringify(doc && doc.id) + " — treating it as stand-alone. Valid: " +
+        Object.keys(FAMILIES).join(", "));
+    }
+    return UNKNOWN_FAMILY;
+  }
+
+  /* ── ONE DOCUMENT MAY OPT OUT OF ITS FAMILY'S CONTINUITY RULE ───────────
+   * The family gives a document its spine AND its continuity rule, and for
+   * eleven of the twelve shared documents those two travel together. The
+   * exception found on the sweep is `electrical/confirming-note` — "a verbal
+   * instruction is worth nothing in April; this is the ten-line email that makes
+   * it worth something, sent the same hour". It is genuinely MINUTES-shaped: it
+   * records a conversation and what got decided. But minutes report DELTAS,
+   * because a coordination meeting recurs — and a confirming note does not.
+   * Each one memorialises a DIFFERENT conversation, so writing the second as an
+   * update to the first drops the facts of the first and carries open items
+   * across from a conversation that has nothing to do with it. The page was
+   * also telling him to run one chat per job and paste the last one in, which is
+   * precisely how that corruption happens.
+   *
+   * Re-familying it to a delta-false family would fix the behaviour by lying
+   * about what the document is — the card would call a confirming note "a record
+   * of a thing that happened". So the family keeps the label and the spine, and
+   * a document may say `standalone: true` to keep every fact every time. The
+   * flag only ever moves toward stand-alone; there is deliberately no way to
+   * force delta ON, because that is the direction that corrupts a record.
+   */
+  function deltaOf(doc) {
+    if (doc && doc.standalone === true) return false;
+    return !!famOf(doc).delta;
+  }
+
+  /* ── THE OMITTED LINE, WHICH MAY BE A LIST ──────────────────────────────
+   * `omit` is the highest-value field in the library (§THE FOURTH SHAPE), and
+   * framing/docs.js writes THREE specific omission lines per document where the
+   * field was built for one. That is better authoring, not a mistake — three
+   * named lines are three the AI cannot quietly drop — but it shipped as an
+   * ARRAY into shortOmit(), which called .split on it. compose() threw, and the
+   * entire product of the page (the block you paste into your AI) rendered
+   * EMPTY for all five of that trade's documents, on the live site, silently:
+   * the picked card appeared, the tuner appeared, and the one thing the page
+   * exists to produce was blank (§SCARS 2026-08-11).
+   *
+   * Both shapes are legal now and every trade may use either. The gate
+   * exercises EVERY document in EVERY trade through the real page, so a third
+   * shape cannot ship the same way this one did.
+   */
+  function omitLines(d) {
+    var o = d && d.omit;
+    if (Array.isArray(o)) {
+      return o.filter(function (x) { return typeof x === "string" && x.trim(); });
+    }
+    if (typeof o === "string" && o.trim()) return [o];
+    return [];
+  }
+
   function spineOf(doc) {
     if (doc.sections && doc.sections.length) return doc.sections;
-    var f = FAMILIES[doc.family] || FAMILIES.recurring;
-    return f.spine;
+    return famOf(doc).spine;
   }
 
   /* THE TWO ALWAYS-ON SECTIONS. The omitted line gets one because the whole
@@ -488,7 +575,8 @@
        recovered by cutting a different config value; §THE THREE SHAPES says the
        caller owns its own words, so it declares this one. */
     var tradeName = LIB.trade || "field";
-    var fam = FAMILIES[d.family] || FAMILIES.recurring;
+    var fam = famOf(d);
+    var omits = omitLines(d);
     var me = nz(S.me, "<my name>");
     var co = nz(S.company, "<my company>");
     var to = nz(S.to, d.to || "the office");
@@ -555,7 +643,7 @@
     INPUT_RULES.forEach(function (r) { L.push(n++ + ". " + r); });
     L.push("");
 
-    if (fam.delta) {
+    if (deltaOf(d)) {
       L.push("CONTINUITY");
       L.push("");
       DELTA.forEach(function (r, i) { L.push((i + 1) + ". " + r); });
@@ -576,10 +664,18 @@
     L.push("- Anything else missing: write the document anyway, put <MISSING> where the fact belongs, and list chasing it in the open items. A document with visible gaps is useful; a document that waits for me is not.");
     L.push("");
 
-    L.push("THE LINE EVERYONE LEAVES OUT — NEVER DROP IT");
+    /* A document may name more than one. Each gets its own bullet here AND its
+       own bullet in the output format below, because the whole point of this
+       block is that an AI cannot quietly drop the line nobody writes down —
+       and a list folded into one paragraph is a list it can drop half of. */
+    L.push(omits.length > 1 ? "THE LINES EVERYONE LEAVES OUT — NEVER DROP THEM"
+                            : "THE LINE EVERYONE LEAVES OUT — NEVER DROP IT");
     L.push("");
-    L.push(d.omit);
-    L.push("Give this its own line in the finished document every single time. If my input does not cover it, write <MISSING> against it and put chasing it at the TOP of the open items — do not quietly leave it out because I did not mention it.");
+    if (omits.length > 1) omits.forEach(function (o) { L.push("- " + o); });
+    else if (omits.length) L.push(omits[0]);
+    L.push(omits.length > 1
+      ? "Give each of these its own line in the finished document every single time. Where my input does not cover one, write <MISSING> against it and put chasing it at the TOP of the open items — do not quietly leave it out because I did not mention it."
+      : "Give this its own line in the finished document every single time. If my input does not cover it, write <MISSING> against it and put chasing it at the TOP of the open items — do not quietly leave it out because I did not mention it.");
     L.push("");
 
     if (T("co")) {
@@ -613,7 +709,13 @@
       L.push(s.h);
       L.push("=========================================");
       if (s.h === LOCKED[0].h) {
-        L.push("- <" + shortOmit(d.omit) + ". Write <MISSING> against it if I did not give it to you.>");
+        if (omits.length) {
+          omits.forEach(function (o) {
+            L.push("- <" + shortOmit(o) + ". Write <MISSING> against it if I did not give it to you.>");
+          });
+        } else {
+          L.push("- <the line everyone leaves out on this document. Write <MISSING> if I did not give it to you.>");
+        }
       } else if (s.h === LOCKED[1].h) {
         L.push("- <" + s.r + ". Write \"None\" if there is nothing.>");
       } else {
@@ -644,7 +746,12 @@
      inside the output format. Cut at the first sentence or em-dash and trim —
      without the trim it printed "…and why . <MISSING>". */
   function shortOmit(t) {
-    return (t || "").split(/(?:\.\s|\s—\s)/)[0].replace(/[\s.]+$/, "");
+    /* String() rather than (t || "") — the old form fed whatever it was given
+       straight to .split, so an `omit` that was a LIST threw a TypeError inside
+       compose(), and the page rendered its output block EMPTY on the live site
+       (§SCARS 2026-08-11). Callers now pass one line at a time via omitLines();
+       this coercion is the second belt, not the fix. */
+    return String(t == null ? "" : t).split(/(?:\.\s|\s—\s)/)[0].replace(/[\s.]+$/, "");
   }
 
   function defOn(id) {
@@ -656,10 +763,10 @@
     var p = PLATFORMS[S.platform] || PLATFORMS.other;
     var d = current();
     var nm = d ? d.name : "document";
-    var fam = d ? (FAMILIES[d.family] || FAMILIES.recurring) : FAMILIES.recurring;
+    var fam = d ? famOf(d) : FAMILIES.recurring;
     var steps = [
       "Open <b>" + p.name + "</b> and paste the block below into " + p.where + ". Name it “" + nm + "”.",
-      fam.delta
+      (d ? deltaOf(d) : fam.delta)
         ? "Run <b>one chat per job.</b> Starting a new chat mid-job? Paste your last one in first so it keeps the running items."
         : "Start a <b>new chat for each one.</b> These stand alone — they do not need the history.",
       "<b>Then just dump.</b> Voice-to-text it in the truck, paste your texts, whatever you have. You get back one clean " + nm + ".",
@@ -741,7 +848,7 @@
     box.style.display = "";
     var p = h("div", "picked");
     p.appendChild(h("h3", null, d.name));
-    p.appendChild(h("span", "rt", (FAMILIES[d.family] || FAMILIES.recurring).name));
+    p.appendChild(h("span", "rt", famOf(d).name));
     if (d.why) p.appendChild(h("p", "wy", d.why));
     var chg = h("button", "chg", "Pick a different one");
     chg.type = "button";
@@ -752,9 +859,21 @@
     p.appendChild(chg);
     box.appendChild(p);
 
+    /* One line stays a paragraph; several become a real list. Handing an ARRAY
+       to textContent joined them with commas — "…only an after,what was found
+       inside the opening…" — which reads as one run-on sentence and buries the
+       second and third lines, the exact opposite of what this block is for. */
+    var omits = omitLines(d);
     var o = h("div", "omit");
-    o.appendChild(h("b", null, "The line everyone leaves out"));
-    o.appendChild(h("p", null, d.omit));
+    o.appendChild(h("b", null, omits.length > 1 ? "The lines everyone leaves out"
+                                                : "The line everyone leaves out"));
+    if (omits.length > 1) {
+      var oul = h("ul", null);
+      omits.forEach(function (t) { oul.appendChild(h("li", null, t)); });
+      o.appendChild(oul);
+    } else {
+      o.appendChild(h("p", null, omits[0] || ""));
+    }
     box.appendChild(o);
   }
 
@@ -1040,5 +1159,10 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
   else mount();
 
-  window.DocSpec = { families: FAMILIES, shared: SHARED_DOCS, compose: compose };
+  /* THE VERIFY SURFACE. tools/toolkit-gates/docspec-config.mjs reads the FAMILIES
+     and the merged LIBRARY out of the shipped engine rather than keeping its own
+     copy of either — a gate that hardcodes the thing it is checking drifts from
+     it and then reports green on the day it matters. */
+  window.DocSpec = { families: FAMILIES, shared: SHARED_DOCS, library: library,
+                     omitLines: omitLines, famOf: famOf, deltaOf: deltaOf, compose: compose };
 })();
