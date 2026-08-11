@@ -1104,6 +1104,19 @@ cycle can take it:** `commit()` should write only the fields that CHANGED in the
 the pencil opened, which fixes the tap-ladder instance too — and that change touches the
 commit path of all 16 row-log pages, so it wants a gate across all of them, not a patch.
 
+**PAID 2026-08-11** (`2a0948e0`). `startEditing` now snapshots the bar with `readBar()`
+*after* `writeBar` — both sides of the diff read the same way, because a control that
+normalises what it was handed has not made an edit — and `commit()` writes only the keys
+whose bar value CHANGED. A field he never touched keeps whatever the row says NOW, and a
+key that is not a bar field at all survives instead of being dropped, which the whole-object
+assignment was also quietly doing. The gate the scar asked for is
+`tools/toolkit-gates/rowlog-commit-merge` in shape — a repro that adds a row, opens the
+pencil, advances the row underneath it, saves, and asserts the status survived: **16/16
+row-log pages FAILED it before the change and 16/16 pass after**, re-run against the
+deployed artifact on three trades. Worth keeping: the bug was found by an audit told to
+REFUTE, and its fix was proved by running the old code back under the new test. A test
+that passes on both is not evidence of anything.
+
 ### 2026-08-10 — A CLAIM THAT OUTLIVES THE THING IT CLAIMS
 Three of one kind, all in the walk, all found by the same audit and all fixed before ship.
 (a) The `keydown` listener was bound on the OVERLAY, so a tap on the row — the biggest
@@ -1120,6 +1133,34 @@ open" scope closed onto `<body>`.
 focus lands — has to be re-checked at the moment it is CLAIMED, not at the moment it was
 arranged. And each of the three is invisible to a screenshot, which is why the audit that
 found them was told to REFUTE rather than to review.
+
+### 2026-08-11 — MIN-HEIGHT WAS SET EVERYWHERE AND MIN-WIDTH NOWHERE
+The operator's mobile bar has been standing since 2026-08-04 and says tap targets are at
+least 44px. It lived in §MOBILE-WATERTIGHT as a rule, which is to say the twentieth page
+forgot it. Written as an ASSERTION instead and pointed at every page on disk, it found
+**41 of 52 LIVE pages failing**, and almost all of it one mistake: a control was given
+`min-height:44px` and nothing at all on the other axis. **A tap target is judged on its
+SHORTER side**, so height alone is half the measurement — and the narrow controls are the
+ones tapped most, because the shortest labels are the settled answers ("In", "No", a bare
+brand emoji). Three of the culprits were in SHARED files, so three edits swept 29 pages:
+the nav brand (20.2px wide below 380px, where the word hides), the row-log status chip
+(36.9px), and the write-up search clear (40×40, inset 2px inside a 48px field to look
+tidy — the tidiness cost a tap target and bought nothing a thumb can feel).
+**Two things worth keeping.** (a) Fixing only the breakpoint I had thought of — ≤380px —
+still left **37 pages failing at 390px**, the width of the phone most of this trade is
+holding, because the brand loses its TAIL at 560 and its WORD at 380 and between them it
+is an icon and two letters. `min-width` belonged in the BASE rule, not in a media query
+aimed at the case that occurred to me. (b) Widening the brand to a real 44px pushed the
+sticky bar 4px past a 360px glass, and the fix was to make the wish button give up three
+words below 380px — **something had to shrink and it was never going to be the thumb
+target.** A gate that only measures is half a gate; it has to be run again after the fix,
+because the fix is a layout change too.
+**Rule:** every tap-target rule is about the SHORT SIDE, at EVERY width, and it belongs in
+an assertion rather than a paragraph. `tools/toolkit-gates/mobile-watertight.mjs` derives
+its page list from disk so a trade shipped next month is covered the day it lands. It is
+also deliberately NOT maximal: inline links in prose are exempt (WCAG 2.5.8 exempts them
+too) and text fields are reported rather than failed, because a gate that reports every
+body-copy link is noise, and a noisy gate is one that stops being run.
 
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
@@ -1831,3 +1872,40 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   62px at both 390×664 and 320×480).** Credited on the
   Wall of Wishes and on all 7 pages.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
+
+- 2026-08-11 · **[AXIS:DEPTH] THREE TRADES COULD SEND A REQUEST, A NOTE AND A LOG — AND HAD
+  NO WAY TO ORDER MATERIAL.** Shape #1 (checklist → a request) shipped in 3 of 7 kits;
+  HVAC/R, low-voltage and framing each had the other three shapes plus one trade-specific
+  tool, and no order page at all — the largest shape gap in the toolkit, and all three name
+  their own on the private roster. Shipped all three: `hvac/truck-stock.html` (37 lines,
+  8 sections), `low-voltage/consumables.html` (35, 8), `framing/the-load.html` (44, 9).
+  **Zero engine code written** — three configs over `shared/checklist-request.js` plus each
+  trade's vocabulary in `items.js`, which is the claim the engine was extracted to make and
+  the first time it has been made three times at once. **The vocabulary was the work:** an
+  in-trade panel per trade, then a second hand told to kill about a third — 169 proposed,
+  116 kept, 53 killed — and it reads like the trade (BOARD, MUD, BEAD, a LID, never the
+  manufacturer's name every framer says a hundred times a day; REFRIGERANT and a VALVE CORE
+  at a SERVICE PORT, because HVAC's two most-said words are both trademarks). Each carries
+  one thing the others do not: **truck-stock ships DEFAULT COUNTS** (a van restocks caps
+  four at a time, not one of everything — the counts live in the data, and a page that
+  starts every line at 1 makes a tech retype the count on every tick) and its header is a
+  TRUCK, not a job; **the-load puts a DROP on every line** — the only order in the program
+  that needs one — printed as `→ 3rd east` where a driver's eye lands, rolled up into a
+  BY-DROP list because by-category is how the yard PULLS it and by-drop is how the driver
+  SETS it, with un-dropped lines NAMED at the bottom rather than quietly printed; **shop
+  list carries no device data at all**, because the head-end already exports it and
+  re-typing it is double entry. Nothing rated anywhere — not in an option, not in a sub,
+  not seeded in a placeholder, which is the back door this class of page leaks through.
+  Verified by DOING THE JOB at 390px in a real browser and reading the CLIPBOARD, then
+  re-run against the live deploy; neutrals checked against each page's own data rather than
+  a pattern, because a regex for "em-dash then a question word" also matches a rule the page
+  draws on purpose. Shape #1 now ships in **6 of 7** kits — GC is the seventh and correctly
+  has none. · **BACKPORT RIDER FIRED TWICE, both swept across all trades in this cycle:**
+  (1) the §SCARS 2026-08-10 pencil-photograph bug is **PAID** — `commit()` now writes only
+  what CHANGED in the bar since the pencil opened, measured **16/16 row-log pages FAILING
+  before → 16/16 after**, the gate-across-all-of-them the scar asked for, live-verified on
+  three trades; (2) the operator's 44px tap-target law was being violated on **41 of 52 live
+  pages** — new `tools/toolkit-gates/mobile-watertight.mjs`, three shared fixes sweeping 29
+  pages plus six per-page, **41 failing → 0**. Gates: mobile-watertight 0/52 · menu-
+  reachability PASS over 54 · overlay-reachability PASS.
+  https://mrdirno.github.io/nested-resonance-memory-archive/framing/the-load.html
