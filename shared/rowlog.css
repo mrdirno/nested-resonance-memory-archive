@@ -209,8 +209,12 @@ html.rl-walking, html.rl-walking body{overflow:hidden}
 .rl-wk-top{display:flex;align-items:center;gap:8px;min-height:44px;flex:0 0 auto}
 .rl-wk-ct{font-family:var(--mono);font-size:15px;letter-spacing:.06em;color:#F2F4F0;flex:0 0 auto}
 .rl-wk-ct i{font-style:normal;color:#6C757F;margin:0 1px}
+/* WRAPS TO TWO LINES rather than ellipsing at one. This label is the anti-lie
+   mechanism — it names the set he is about to walk — and "for Electrician · sti…"
+   is the mechanism failing quietly at 320px, which is the width it matters at. */
 .rl-wk-scope{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--flag);
-  flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  flex:1 1 auto;min-width:0;line-height:1.25;overflow-wrap:anywhere;overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .rl-wk-x{flex:0 0 auto;min-height:44px;min-width:64px;background:transparent;border:1px solid #39424C;border-radius:2px;
   color:#D3D8DD;font-family:var(--cond);text-transform:uppercase;letter-spacing:.07em;font-size:13px;cursor:pointer}
 .rl-wk-x:focus-visible{outline:3px solid var(--flag);outline-offset:2px}

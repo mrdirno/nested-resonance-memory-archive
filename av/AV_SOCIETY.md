@@ -411,10 +411,13 @@ Four things make it honest, and each is a rule for whatever mode is added here n
   (§SCARS 2026-08-09).
 · **THE TWO BUTTONS ARE NOT SYMMETRIC AND MUST NOT BE.** The affirmative SETS the settled
   rung rather than advancing one step, so a double tap cannot walk a row past a rung nobody
-  verified, and a man who taps twice has said the same true thing twice. The negative writes
-  **nothing at all**: the only honest record of *"I looked and it wasn't there"* this page
-  owns is that the row is STILL OPEN, and inventing a "checked, absent" rung would put a
-  value in the document that no field on the page can carry.
+  verified, and a man who taps twice has said the same true thing twice. The negative NEVER
+  INVENTS A RUNG — on a row short of the settled one it writes **nothing at all**, because
+  the only honest record of *"I looked and it wasn't there"* this page owns is that the row
+  is STILL OPEN, and a "checked, absent" value is one no field here can carry. But on a row
+  that ALREADY carries the settled rung it **retracts** it, one step down the declared
+  ladder. Writing nothing there was the first version and it was wrong (§SCARS): down the
+  ladder is not inventing, it is un-saying.
 · **IT PRODUCES NO NEW DOCUMENT, ON PURPOSE.** It makes the one the page already sends TRUE
   — "still open" is only worth sending if somebody laid eyes on the list today, and the walk
   IS that act — so the end of it does exactly one thing: puts the page on STILL OPEN and
@@ -1069,6 +1072,54 @@ when it happens, which is why it survives a look.
 **Rule:** a focus ring is built from what is REACHABLE, never from what is PRESENT — filter
 `el.closest("[hidden]")` out of it. And test it by ASSERTING `document.activeElement` after
 N presses of Tab; a screenshot of a dialog cannot show you where focus went.
+
+### 2026-08-10 — THE END CARD REPORTED THE LIST'S STATE AS IF IT WERE THE WALK
+Found by an adversarial audit cast on the walk before it shipped, and confirmed by
+measurement: four rows already `In`, tap **NOT YET four times**, and the end card reads
+*"4 are in · 0 still open"* and offers no follow-up button. He walked the job saying **no**
+to every row and the tool told him everything was in and handed him nothing to send. In the
+mixed case it is worse: the *"what's still open"* message he then sends **omits the rows he
+explicitly could not confirm**, because the scope predicate is `status !== "In"` and those
+rows still said In. Root: `doneN` counted CURRENT STATUS across the walked ids, so it
+reported the list, not the act — while the comment above it claimed it "says only what it
+watched happen".
+**Rule:** *a summary of an ACT is computed from the act, or the act must make the state
+true.* Here the second is right and cheaper: a hold on a row that already carries the
+settled rung now **retracts it one step down the declared ladder**, so the counts, the
+document and the button all follow from one honest write. The "negative writes nothing"
+principle survives intact for every row short of the settled rung — where it is still
+exactly right.
+
+### 2026-08-10 — THE PENCIL SHEET HOLDS A PHOTOGRAPH, AND SAVE PUTS IT BACK
+Same audit, and this one is OLDER than the surface that exposed it. `commit()` does
+`r.values = v` where `v` is read off the add/edit bar — a snapshot of the row taken when
+the pencil opened. Repro, measured: open the pencil on row 1 · walk the list and mark it
+IN · close · tap **Save** on the still-open editor → `status` is back to `""`. Field
+verification destroyed, silently, with no warning. It is reachable from the tap ladder too
+(advance to `Committed`, then Save, and it reverts), which is why it is written here as a
+CLASS and not as a walk bug.
+**Fixed for the walk:** `walkOpen` closes an open editor first — tapping "Walk it" is
+leaving the edit, exactly as tapping anywhere else is. **STILL OWED, and named so the next
+cycle can take it:** `commit()` should write only the fields that CHANGED in the bar since
+the pencil opened, which fixes the tap-ladder instance too — and that change touches the
+commit path of all 16 row-log pages, so it wants a gate across all of them, not a patch.
+
+### 2026-08-10 — A CLAIM THAT OUTLIVES THE THING IT CLAIMS
+Three of one kind, all in the walk, all found by the same audit and all fixed before ship.
+(a) The `keydown` listener was bound on the OVERLAY, so a tap on the row — the biggest
+thing on the screen and deliberately not focusable — moved focus to `<body>` and the
+Escape the page promises stopped working, while the dialog still advertised it. Bound on
+`document` while open now. (b) The screen wake-lock was stored unconditionally when its
+promise resolved, so closing the walk during that flight held the screen awake with no walk
+on the glass and nothing left that could ever release it; and the *"screen held awake"* line
+was never removed when the **UA** took the lock back on its own (tab hidden, screen asleep),
+so the page kept claiming a capability it no longer had. (c) `focus()` on a control that has
+since become `disabled` is a silent no-op, so a walk that settled every row in a "still
+open" scope closed onto `<body>`.
+**Rule:** every promise a surface makes — a key that works, a lock that is held, a place
+focus lands — has to be re-checked at the moment it is CLAIMED, not at the moment it was
+arranged. And each of the three is invisible to a screenshot, which is why the audit that
+found them was told to REFUTE rather than to review.
 
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is
@@ -1761,7 +1812,19 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   `document.activeElement` asserted after ten Tab presses; the walk surviving a reload;
   the end-card counts checked against what the walk was actually told; and a
   separate gate asserting all **9** row-log pages that did NOT opt in are untouched. **Re-run
-  against the LIVE site after deploy: 1,120 green again, plus the 9-page opt-out gate.**
-  Credited on the
+  against the LIVE site after deploy: 1,120 green, plus the 9-page opt-out gate.** THEN AN
+  ADVERSARIAL AUDIT WAS CAST ON THE SHIPPED FEATURE AND EARNED ITS KEEP — two ship-blockers
+  and four should-fixes, every one reproduced by measurement, every one fixed and turned
+  into a regression assertion in the same cycle: a hold on a row that already said IN left
+  the lie in the document and told him at the end that everything was in (it now RETRACTS
+  one rung) · an open pencil sheet silently reverted the whole walk on Save (the walk closes
+  it first; the older tap-ladder instance of that class is named in §SCARS as still owed) ·
+  Escape died after a tap on the row itself · the wake lock leaked when the walk closed
+  mid-request, and the "held awake" line outlived the UA taking the lock back · focus fell
+  to `<body>` when the walk emptied its own scope and disabled the launcher it came in from.
+  Suite after the fixes: **7 trades × 4 widths × 54 assertions = 1,512 green**, and
+  `tools/toolkit-gates/overlay-reachability.mjs` now carries the walk as its third overlay
+  (16 checks — and its "did it open" test moved from `offsetParent`, which is always null on
+  a `position:fixed` box, to `getClientRects()`). Credited on the
   Wall of Wishes and on all 7 pages.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html

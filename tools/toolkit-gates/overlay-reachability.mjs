@@ -40,6 +40,16 @@ const CASES = [
   { page: 'gc/index.html', overlay: 'the wishing well', bound: 'layout', open: '.av-req-btn', sheet: '.av-sheet', send: '.av-send' },
   // bound:'vh' -> .fb-sheet is max-height:min(92vh,100%); needs the large-viewport override
   { page: 'commons/index.html', overlay: 'the feedback drop-in', bound: 'vh', openFn: "window.Feedback && Feedback.open('bug')", sheet: '.fb-sheet', send: '.fb-send' },
+  // THE WALK (shared/rowlog.js) — the third full-screen overlay on these pages,
+  // and the only one whose opener is DISABLED until there is a list to walk, so
+  // the case seeds the page's own store before load. position:fixed inset:0 by
+  // construction, so it is layout-bound like the well.
+  { page: 'av/rough-in-request.html', overlay: 'the walk', bound: 'layout',
+    seedKey: 'toolkit.av.rough-in-request.v1', open: '.rl-walkgo', sheet: '.rl-walk', send: '[data-wk="yes"]' },
+  { page: 'plumbing/rough-in-request.html', overlay: 'the walk', bound: 'layout',
+    seedKey: 'toolkit.plumbing.rough-in-request.v1', open: '.rl-walkgo', sheet: '.rl-walk', send: '[data-wk="yes"]' },
+  { page: 'framing/rough-in-request.html', overlay: 'the walk', bound: 'layout',
+    seedKey: 'toolkit.framing.rough-in-request.v1', open: '.rl-walkgo', sheet: '.rl-walk', send: '[data-wk="yes"]' },
   // Collage Studio is a built bundle whose modules will not load over file://, so
   // this case only runs when a real base URL is given (i.e. against the deploy).
   { page: 'collage/', overlay: 'the feedback drop-in', bound: 'vh', liveOnly: true, openFn: "window.Feedback && Feedback.open('bug')", sheet: '.fb-sheet', send: '.fb-send' },
@@ -59,6 +69,16 @@ for (const c of CASES) {
   for (const vp of (c.bound === 'vh' ? VH_VPS : LAYOUT_VPS)) {
     const ctx = await b.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: true, hasTouch: true });
     if (vp.glass) await ctx.addInitScript(g => { Object.defineProperty(window, 'innerHeight', { get: () => g, configurable: true }); }, vp.glass);
+    // A LIST LONG ENOUGH THAT THE WALK CARD IS THE TALL CASE, not the empty one.
+    if (c.seedKey) await ctx.addInitScript(k => {
+      const rows = [];
+      for (let i = 1; i <= 24; i++) rows.push({ id: i, t: i, flag: i === 3 ? 'Blocking us' : '',
+        values: { ask: 'backbox', who: 'ec', area: 'CORRIDOR LEVEL 2 GRID F-14', spec: 'the longest size string a man would ever type in here',
+                  place: '60 AFF above the door', by: 'rock', status: i % 3 === 0 ? 'In' : '',
+                  note: 'the stud bay is full of duct and the framer is not back until Thursday' } });
+      try { localStorage.setItem(k, JSON.stringify({ v: 1, seq: 25, touch: 25, copiedAt: 0,
+        sticky: {}, learned: {}, groupKey: 'who', extra: null, rows })); } catch (e) {}
+    }, c.seedKey);
     const p = await ctx.newPage();
     await p.goto(BASE + c.page, { waitUntil: 'domcontentloaded' });
     await p.waitForTimeout(200);
@@ -75,7 +95,9 @@ for (const c of CASES) {
     const r = await p.evaluate(sel => {
       const glass = window.innerHeight;
       const sheet = document.querySelector(sel.sheet);
-      if (!sheet || !sheet.offsetParent) return { missing: true };
+      // getClientRects, NOT offsetParent: offsetParent is null for a
+      // position:fixed box, so the old check called the walk "did not open".
+      if (!sheet || !sheet.getClientRects().length) return { missing: true };
       // scroll whatever actually scrolls — the sheet or its overlay wrapper
       const scroller = sheet.scrollHeight > sheet.clientHeight + 1 ? sheet : sheet.parentElement;
       scroller.scrollTop = scroller.scrollHeight;

@@ -780,12 +780,18 @@
      *   · The affirmative SETS the settled rung — it does not advance one step —
      *     so a double tap cannot walk a row past a rung nobody verified, and a
      *     man who taps twice has said the same true thing twice.
-     *   · The negative writes NOTHING AT ALL. A row he could not confirm keeps
-     *     exactly the state it had, because the only honest record of "I looked
-     *     and it wasn't there" this page owns is that the row is STILL OPEN.
-     *     Inventing a "checked, absent" rung here would put a value in the
-     *     document that no field on this page can carry (§SCARS "A DEFAULT IS A
-     *     CLAIM").
+     *   · The negative NEVER INVENTS A RUNG, and on a row that has not reached
+     *     the settled one it writes nothing at all — the only honest record of
+     *     "I looked and it wasn't there" this page owns is that the row is STILL
+     *     OPEN, and a "checked, absent" value is one no field here can carry
+     *     (§SCARS "A DEFAULT IS A CLAIM"). But on a row that ALREADY carries the
+     *     settled rung it must RETRACT it, one step down the declared ladder.
+     *     Writing nothing there was the first version of this and it was wrong:
+     *     a man standing in front of a row that says IN, tapping NOT YET, is
+     *     telling you it is not in — and leaving it settled put that lie in the
+     *     document, dropped him from the "still open" message he then sent, and
+     *     told him at the end of a walk of pure NOT YET that everything was in.
+     *     Down the ladder is not inventing; it is un-saying.
      *
      * IT WALKS scopedRows(), so the filters the page already has ARE the walk —
      * "still open, for the electrician" is Thursday morning and needs no new
@@ -825,14 +831,14 @@
      * lights it up; no page has to grow a button it would then have to style. */
     function walkMountLauncher() {
       if (!walkOn() || !listEl || !listEl.parentNode) return;
-      var bar = document.createElement("div");
-      bar.className = "rl-walkbar";
+      var wbar = document.createElement("div");   // NOT `bar` — that is the add/edit bar
+      wbar.className = "rl-walkbar";
       walkGo = document.createElement("button");
       walkGo.type = "button";
       walkGo.className = "rl-walkgo";
       walkGo.addEventListener("click", walkOpen);
-      bar.appendChild(walkGo);
-      listEl.parentNode.insertBefore(bar, listEl);
+      wbar.appendChild(walkGo);
+      listEl.parentNode.insertBefore(wbar, listEl);
     }
     function walkSyncLauncher() {
       if (!walkGo) return;
@@ -853,7 +859,6 @@
       walkWrap.setAttribute("aria-modal", "true");
       walkWrap.setAttribute("aria-label", cfg.walk.label || "Walk the list");
       walkWrap.addEventListener("click", walkClick);
-      walkWrap.addEventListener("keydown", walkKey);
       document.body.appendChild(walkWrap);
     }
 
@@ -966,7 +971,18 @@
         }
         walkIx++; return walkPaint();
       }
-      if (a === "no") { walkIx++; return walkPaint(); }
+      if (a === "no") {
+        var nr = walkRowById(walkIds[walkIx]);
+        /* RETRACT, never invent — see the header. Only ever one step DOWN the
+         * ladder the config declared, and only from the settled rung. */
+        if (nr && nr.values[cfg.statusKey] === walkDoneVal()) {
+          var di = STATUS.indexOf(walkDoneVal());
+          nr.values[cfg.statusKey] = di > 0 ? STATUS[di - 1] : "";
+          nr.t = ++touch;
+          persistNow();
+        }
+        walkIx++; return walkPaint();
+      }
       if (a === "finish") {
         var scope = walkIds.map(walkRowById).filter(Boolean);
         var doneN = scope.filter(function (x) { return x.values[cfg.statusKey] === walkDoneVal(); }).length;
@@ -988,7 +1004,19 @@
     }
 
     function walkKey(e) {
-      if (e.key === "Escape") { e.preventDefault(); return walkClose(); }
+      if (!walkWrap || walkWrap.hidden) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        /* Escape means "close the thing I opened last". Inside the note that is
+         * the note row, not the walk — closing the whole surface because he
+         * dismissed a text field is the control overshooting its own scope. */
+        var nrow = walkWrap.querySelector(".rl-wk-nrow");
+        if (nrow && !nrow.hidden && document.activeElement === nrow.querySelector("input")) {
+          nrow.hidden = true;
+          return walkFocusPrimary();
+        }
+        return walkClose();
+      }
       /* THE NOTE FIELD IS IN THE MARKUP EVEN WHILE IT IS CLOSED, so a naive ring
        * hands Tab a `display:none` input, `focus()` quietly does nothing, and
        * focus falls out of a dialog that advertises `aria-modal` — the trap the
@@ -1016,21 +1044,31 @@
      * ANNOUNCED unless the request actually resolved — a line promising an awake
      * screen on a browser that has no such API is the page claiming a capability
      * it does not hold (§SCARS "A DEFAULT IS A CLAIM"). */
+    function walkAwakeLine(on) {
+      if (!walkWrap) return;
+      var m = walkWrap.querySelector(".rl-wk-mini"), el = walkWrap.querySelector(".rl-wk-awake");
+      if (!on) { if (el && el.parentNode) el.parentNode.removeChild(el); return; }
+      if (!m || el || walkWrap.hidden) return;
+      el = document.createElement("span");
+      el.className = "rl-wk-awake";
+      el.textContent = "screen held awake";
+      m.appendChild(el);
+    }
     function walkWake() {
       try {
         if (!navigator.wakeLock || !navigator.wakeLock.request) return;
         navigator.wakeLock.request("screen").then(function (s) {
+          /* THE WALK CAN CLOSE WHILE THIS PROMISE IS STILL IN FLIGHT. Storing the
+           * sentinel then would hold the screen awake with no walk on the glass,
+           * and walkClose has already returned — so nothing would ever release
+           * it, and the next open would orphan this one for the page's life. */
+          if (!walkWrap || walkWrap.hidden) { try { s.release(); } catch (e) {} return; }
           walkLock = s;
-          s.addEventListener("release", function () { walkLock = null; });
-          if (walkWrap && !walkWrap.hidden) {
-            var m = walkWrap.querySelector(".rl-wk-mini");
-            if (m && !m.querySelector(".rl-wk-awake")) {
-              var el = document.createElement("span");
-              el.className = "rl-wk-awake";
-              el.textContent = "screen held awake";
-              m.appendChild(el);
-            }
-          }
+          /* THE UA TAKES IT BACK ON ITS OWN — the tab hides, the screen sleeps.
+           * The line goes with it. A claim that outlives the thing it claims is
+           * the page asserting a capability it no longer holds. */
+          s.addEventListener("release", function () { walkLock = null; walkAwakeLine(false); });
+          walkAwakeLine(true);
         }, function () {});
       } catch (e) {}
     }
@@ -1040,6 +1078,14 @@
 
     function walkOpen() {
       if (!walkOn()) return;
+      /* AN OPEN PENCIL SHEET WOULD SILENTLY REVERT THE WHOLE WALK. The bar holds
+       * a PHOTOGRAPH of the row taken when the pencil opened, and commit() writes
+       * that photograph back wholesale — so Save, tapped after a walk, restores
+       * the status every row had before he walked out and looked. Close the
+       * editor first: tapping "Walk it" is leaving the edit, exactly as tapping
+       * anywhere else is. (The same wholesale write is reachable from the tap
+       * ladder and is older than this surface — §SCARS names it and its repro.) */
+      if (editingId != null) stopEditing(true);
       walkIds = scopedRows().map(function (r) { return r.id; });
       if (!walkIds.length) return;
       walkIx = 0;
@@ -1050,15 +1096,27 @@
       walkPaint();
       walkWake();
       document.addEventListener("visibilitychange", walkVis);
+      /* ON THE DOCUMENT, not on the overlay: the biggest thing on this screen is
+       * the row itself, which is not focusable, so one tap on it moves focus to
+       * <body> and a listener bound to the overlay stops hearing anything —
+       * including the Escape the header promises. */
+      document.addEventListener("keydown", walkKey, true);
     }
     function walkClose() {
       if (!walkWrap || walkWrap.hidden) return;
       walkWrap.hidden = true;
       document.documentElement.classList.remove("rl-walking");
       document.removeEventListener("visibilitychange", walkVis);
+      document.removeEventListener("keydown", walkKey, true);
       if (walkLock) { try { walkLock.release(); } catch (e) {} walkLock = null; }
       persistNow(); render();
-      if (walkPrev && walkPrev.focus) { try { walkPrev.focus(); } catch (e) {} }
+      /* The launcher he came in from may have just gone DISABLED — a walk that
+       * settled every row in a "still open" scope empties that scope — and
+       * focus() on a disabled control is a silent no-op that drops him on
+       * <body>. Fall back to the thing the walk was for. */
+      var back = (walkPrev && walkPrev.isConnected && !walkPrev.disabled) ? walkPrev
+        : (copyBtn && !copyBtn.disabled ? copyBtn : null);
+      if (back && back.focus) { try { back.focus(); } catch (e) {} }
     }
 
     buildBar();
