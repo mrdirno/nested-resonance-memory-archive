@@ -379,8 +379,26 @@
       };
     }
 
+    /* THE DEFAULT IS THE SAFETY PROPERTY, so it lives in one function and is
+     * read everywhere. A pair we are SURE of comes in switched on — that is the
+     * clean round trip, and making a man re-tick twenty exact matches is the
+     * "ticking beats typing" law failing on its own surface. A pair we are NOT
+     * sure of comes in switched OFF, because the whole design rests on a wrong
+     * join never being able to reach the list unless he put it there himself.
+     * `chosen` only ever holds what he EXPLICITLY toggled, so his choices
+     * survive a rebuild and the default still applies to everything else. */
+    function isOn(item) {
+      if (!item) return false;
+      var v = chosen[item.row.id];
+      return v === undefined ? !!item.sure : v !== false;
+    }
+    function pairOf(id) {
+      if (!report) return null;
+      return report.yes.filter(function (i) { return i.row.id === id; })[0] || null;
+    }
+
     function pairHTML(item, tickable) {
-      var on = tickable ? chosen[item.row.id] !== false : false;
+      var on = tickable ? isOn(item) : false;
       var tag = "";
       if (item.line.verdict === "in") tag = '<span class="rc-tag">he says it\'s in</span>';
       if (!item.sure) tag += '<span class="rc-tag rc-warn">not sure it\'s the same one</span>';
@@ -392,8 +410,17 @@
        * he ADDED, and when he added nothing the missing thing is the date.
        * Everybody leaves the date out of a reply and it is exactly what gets
        * argued about later. */
-      var his = !item.sure ? item.line.raw
-        : (item.line.tail || (item.line.verdict === "yes" ? "no date on it" : (item.row.sub || "")));
+      var his = item.line.tail;
+      if (!item.sure) his = item.line.raw;
+      else if (!his) {
+        /* WHAT HE LEFT OUT IS THE ACTIONABLE HALF, and it is a different thing
+         * on each rung. Echoing our own row back at him here says nothing; the
+         * gap says what to chase. */
+        his = item.line.verdict === "yes" ? "no date on it"
+          : item.line.verdict === "no" ? "he didn't say why"
+            : item.line.verdict === "ask" ? "he didn't say what he needs"
+              : (item.row.sub || "");
+      }
       var inner =
         '<span class="rc-mark" aria-hidden="true">' + (tickable ? (on ? "✓" : "○") : "·") + '</span>'
         + '<span class="rc-txt"><span class="rc-main">' + esc(item.row.label) + '</span>'
@@ -404,7 +431,7 @@
     }
 
     function ticked(rep) {
-      return rep.yes.filter(function (i) { return chosen[i.row.id] !== false && !i.row.settled; });
+      return rep.yes.filter(function (i) { return isOn(i) && !i.row.settled; });
     }
 
     function paint() {
@@ -416,13 +443,22 @@
         html.push('<div class="rc-block"><h3 class="rc-h">' + esc(W.yesHead || "He's doing these")
           + ' <span class="rc-n">' + rep.yes.length + "</span></h3>");
         html.push(rep.yes.map(function (i) { return pairHTML(i, !i.row.settled); }).join(""));
+        /* A DISABLED CONTROL HAS TO SAY WHY. Zero ticked means one of two
+         * completely different things — every pair is already on the list, or
+         * every pair is one we are not sure of and he has not vouched for any
+         * of them yet — and "nothing left to tick" is a lie in the second. */
+        var offer = rep.yes.filter(function (i) { return !i.row.settled; }).length;
         html.push('<div class="outrow" style="margin-top:9px"><button type="button" class="btn flag" id="rcApply"'
           + (n ? "" : " disabled") + '>'
-          + (n ? "Tick " + plural(n, "row") + " " + commitLabel.toLowerCase() : "Nothing left to tick")
+          + (n ? "Tick " + plural(n, "row") + " " + commitLabel.toLowerCase()
+            : (offer ? "Tap the ones that are really yours" : "Nothing left to tick"))
           + "</button></div>");
+        var unsure = rep.yes.filter(function (i) { return !i.sure && !i.row.settled; }).length;
         html.push('<p class="note" style="margin:8px 0 0">We only ever tick <b>' + esc(commitLabel)
           + "</b>. " + esc(W.onlyFirst || "The top of your ladder is you laying eyes on it, and a message isn't eyes.")
-          + " Tap a row to leave it out.</p></div>");
+          + " Tap a row to leave it out"
+          + (unsure ? ", or to vouch for one of the <b>" + unsure + "</b> we couldn't be sure of" : "")
+          + ".</p></div>");
       }
 
       if (rep.push.length) {
@@ -516,7 +552,7 @@
       var b = e.target.closest ? e.target.closest("[data-tick]") : null;
       if (!b) return;
       var id = Number(b.getAttribute("data-tick"));
-      chosen[id] = chosen[id] === false;
+      chosen[id] = !isOn(pairOf(id));
       paint();
     });
 

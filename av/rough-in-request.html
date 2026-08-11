@@ -585,7 +585,10 @@
       var a = labelOf(ASKS, v.ask) || "(nothing picked)";
       return joinDots([v.area, v.spec ? a + " — " + v.spec : a, v.place]);
     },
-    sub: function (v) { return joinDots([v.area, v.place, labelOf(MILES, v.by), labelOf(WHO, v.who)]); },
+    /* The label already carries WHERE and WHAT. What a row nobody answered needs
+       beside it is the two things that decide what you do about it: the gate it
+       has to beat, and who owes it. */
+    sub: function (v) { return joinDots([labelOf(MILES, v.by), labelOf(WHO, v.who)]); },
 
     /* A ROW WITH ANY ANSWER ON IT IS NOT NEWS. `He never mentioned these` is
        about the asks still sitting at nothing — a row already committed or
