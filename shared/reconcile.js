@@ -66,10 +66,19 @@
     "need to know": "ask"
   };
 
-  /* Tuned to the failure that costs something. A missed pair costs one tap on a
-   * row he can see; a wrong pair marks an item committed that nobody committed
-   * to. So SURE is high, the MARGIN insists the runner-up is clearly worse, and
-   * anything between MIN and SURE is shown switched off. */
+  /* MIN is the floor for PROPOSING a pair at all. There is deliberately no score
+   * that grants certainty — see `sure` in pair(). SURE survives only as the bar
+   * for "this is unambiguously the same row" in the flagged-duplicate pass.
+   *
+   * WHY NO FUZZY PATH TO SURE (found by an adversarial audit, 2026-08-11): Dice
+   * has no notion of an IDENTIFYING token. A row of N tokens whose line differs
+   * in k of them scores 1 - k/N, and every real row here is 8-14 tokens long —
+   * room, ask, spec, height, milestone, trade. So a 12-token row tolerated THREE
+   * wrong tokens and still cleared 0.75. One wrong room number — CR-208 answered
+   * against a CR-206 row A never asked about — scored 0.917, arrived switched ON,
+   * and hid his line because the pair was "sure". The more detail a man puts on a
+   * row, the more wrong tokens the ratio would forgive. A ratio cannot tell the
+   * difference between a typo and a different room, so it does not get a vote. */
   var SCORE = { MIN: 0.45, SURE: 0.75, MARGIN: 0.12 };
 
   function norm(s) {
@@ -127,21 +136,55 @@
    * is tail. Lifted whole from answer-back's parser, where it was already paid
    * for — a second solution to a solved problem is a second thing to maintain. */
   function tailStart(lines) {
-    var hit = -1, i;
-    for (i = 0; i < lines.length; i++) if (DISCLAIM.test(lines[i].trim())) { hit = i; break; }
-    if (hit < 0) return -1;
-    var j = hit;
-    while (j > 0 && lines[j - 1].trim() !== "") j--;
-    return j;
+    /* THE FIRST DISCLAIM HIT ANYWHERE USED TO CUT THE DOCUMENT FROM THAT
+     * PARAGRAPH TO THE END, and inside a document that paragraph is a GROUP
+     * HEADING — so one row killed every answer under it. It is not theoretical:
+     * `av/items.js` ships the spec "Walk the wall with me before anybody roughs
+     * it", two taps to put on a list, and it matches /before anybody roughs/.
+     * A reply carrying that row parsed to ZERO answers and the page told a
+     * foreman the other company had never mentioned any of them.
+     *
+     * The sign-off is not "a paragraph containing a disclaimer". It is THE LAST
+     * BLOCK, always, in both documents this parser reads. So look at that block
+     * and nowhere else: a disclaimer sentence in the middle of a message is a
+     * man talking, not our footer. */
+    var end = lines.length - 1;
+    while (end >= 0 && lines[end].trim() === "") end--;
+    if (end < 0) return -1;
+    var start = end;
+    while (start > 0 && lines[start - 1].trim() !== "") start--;
+    for (var i = start; i <= end; i++) if (DISCLAIM.test(lines[i].trim())) return start;
+    return -1;
   }
 
   function parseAnswer(text) {
-    var raw = String(text == null ? "" : text).split(/\r?\n/);
+    /* A PASTED EMAIL DOES NOT CARRY THE SPACES IT LOOKS LIKE IT CARRIES. Mail
+     * clients wrap an em dash in NO-BREAK SPACE so it never starts a line, and
+     * `indexOf(" — ")` then misses the seam entirely: his date ends up inside
+     * the ask, the pair still matches, and the page prints "no date on it" over
+     * a line that says Thursday. Every unicode space becomes a plain one first. */
+    var raw = String(text == null ? "" : text)
+      .replace(/[\u00A0\u2007\u202F\u2000-\u200A\u205F\u3000]/g, " ")
+      .split(/\r?\n/);
     /* A PASTE IS ONLY A MESSAGE IF IT LOOKS LIKE ONE. Without this the first
      * line of a one-line reply — "back box CR-204 60 aff — yeah thursday" — is
      * thrown away as a subject, and the man who pasted his answer gets an empty
      * report. (Found by the gate on its first run, which is what it is for.) */
-    var hasHead = raw.some(function (l) { return KEYLINE.test(l.trim()) || HEADING.test(l.trim()); });
+    /* "THIS PASTE IS ONE OF OUR DOCUMENTS" HAS A STRUCTURE, not just a keyword.
+     * `raw.some(KEYLINE)` was true for a bare three-line reply that happened to
+     * end with "Call me: 555-0134", and the subject rule below then ate the
+     * first of his three answers. Our documents are: subject, blank, `Key:`
+     * lines — or they carry group headings. Nothing else counts. */
+    var hasHead = (function () {
+      for (var i = 0; i < raw.length; i++) {
+        if (HEADING.test(raw[i].trim())) return true;
+        if (raw[i].trim() !== "") continue;
+        var j = i + 1;
+        while (j < raw.length && raw[j].trim() === "") j++;
+        if (j < raw.length && KEYLINE.test(raw[j].trim())) return true;
+      }
+      return false;
+    })();
     /* NOT `tail` — the loop below declares its own `tail` for the half of a line
      * that carries his answer, and a `var` inside the callback hoists over this
      * one, so the cutoff read `undefined` on every line and the whole sign-off
@@ -162,7 +205,12 @@
       var h = HEADING.exec(t);
       if (h) { verdict = verdictOf(h[1]); flagged = false; dropped.push(t); return; }
       if (FLAGHEAD.test(t)) { verdict = ""; flagged = true; dropped.push(t); return; }
-      if (KEYLINE.test(t) || ONLIST.test(t) || COUNTLINE.test(t) || RULELINE.test(t) || DISCLAIM.test(t)) { dropped.push(t); return; }
+      /* DISCLAIM is NOT in this list, deliberately. It is a prose rule, and a
+       * prose rule applied line by line drops the same real asks the tail rule
+       * above used to drop wholesale — "walk the wall with me before anybody
+       * roughs it" is a spec this toolkit ships, not our sign-off. Its only job
+       * is recognising the final block. */
+      if (KEYLINE.test(t) || ONLIST.test(t) || COUNTLINE.test(t) || RULELINE.test(t)) { dropped.push(t); return; }
 
       /* HIS LINE, THEN A DASH, THEN HIS ANSWER — that is answer-back's row and
        * the dash is the seam between what we asked for and what he committed
@@ -240,12 +288,16 @@
      * another line will end up claiming. That over-states the ambiguity a
      * little and it over-states it in the safe direction: an unsure pair is
      * shown switched off, never dropped. */
-    var best = {}, second = {};
-    cands.forEach(function (c) {
-      var b = best[c.lineIx];
-      if (!b || c.score > b.score) { second[c.lineIx] = b || null; best[c.lineIx] = c; }
-      else if (!second[c.lineIx] || c.score > second[c.lineIx].score) second[c.lineIx] = c;
-    });
+    /* HOW MANY ROWS MATCH THIS LINE EXACTLY. More than one is not a near miss —
+     * it is the SAME STRING, and no amount of scoring can separate them.
+     * It happens on the most ordinary list there is: `matchText` offers a form
+     * with the ROOM dropped (the document drops whichever axis it was grouped
+     * by), so the same device at the same height in three different rooms
+     * produces three identical strings. Answered "will do, will do, can't",
+     * WHICH ROOM HE REFUSED IS NOT IN HIS MESSAGE — and the greedy sort would
+     * have handed it out by row id and called all three exact and sure. */
+    var exactCount = {};
+    cands.forEach(function (c) { if (c.exact) exactCount[c.lineIx] = (exactCount[c.lineIx] || 0) + 1; });
 
     cands.sort(function (a, b) {
       return (b.score - a.score) || (a.rowId - b.rowId) || (a.lineIx - b.lineIx);
@@ -255,8 +307,11 @@
     cands.forEach(function (c) {
       if (usedRow[c.rowId] || usedLine[c.lineIx]) return;
       usedRow[c.rowId] = 1; usedLine[c.lineIx] = 1;
-      var sec = second[c.lineIx];
-      var sure = c.exact || (c.score >= SCORE.SURE && (!sec || (c.score - sec.score) >= SCORE.MARGIN));
+      /* ONE ROW, ONE LINE, CHARACTER FOR CHARACTER — that is the only thing this
+       * page is willing to call certain, and it is not a compromise: it is the
+       * normal case, because answer-back stores the ask verbatim. Everything
+       * else is a proposal he has to look at and switch on himself. */
+      var sure = c.exact && exactCount[c.lineIx] === 1;
       pairs.push({ rowId: c.rowId, lineIx: c.lineIx, score: c.score, exact: c.exact, sure: sure });
     });
 
@@ -332,34 +387,76 @@
       rws.forEach(function (r) { byId[r.id] = r; });
       parsed.lines.forEach(function (l) { byIx[l.ix] = l; });
 
+      /* ── HIS FLAG IS PRINTED TWICE AND THE QUIETER COPY WAS WINNING ──────
+       * answer-back emits a flagged row in its answer block AND again under
+       * FLAGGED. Two lines, one row, and a 1:1 join hands the row to whichever
+       * scored higher — which is the plain body line, because the flagged copy
+       * carries an extra word. So the flag itself ("Not mine", "Not on my set")
+       * dropped into the couldn't-place drawer, and the single loudest thing a
+       * reply can say — THAT ISN'T MY SCOPE, YOU ASKED THE WRONG COMPANY —
+       * never reached "he pushed back on these".
+       * Re-run the same join, one row against one line, rather than inventing a
+       * second notion of "these are the same item". */
+      var flagFor = {};
+      joined.unplaced.slice().forEach(function (ix) {
+        var l = byIx[ix];
+        if (!l || !l.flagged) return;
+        for (var k = 0; k < joined.pairs.length; k++) {
+          var pr = joined.pairs[k];
+          if (flagFor[pr.rowId]) continue;
+          var r = byId[pr.rowId];
+          var probe = pair([{ id: r.id, text: r.text }], [l]);
+          if (probe.pairs.length && probe.pairs[0].score >= SCORE.SURE) {
+            flagFor[pr.rowId] = l;
+            joined.unplaced = joined.unplaced.filter(function (x) { return x !== ix; });
+            break;
+          }
+        }
+      });
+
       var yes = [], push = [], quiet = [], mute = [];
       joined.pairs.forEach(function (p) {
         var r = byId[p.rowId], l = byIx[p.lineIx];
-        var item = { row: r, line: l, sure: p.sure, exact: p.exact, score: p.score };
-        if (l.flagged || l.verdict === "no" || l.verdict === "ask") push.push(item);
+        var fl = flagFor[p.rowId] || (l.flagged ? l : null);
+        var item = {
+          row: r, line: fl || l, sure: p.sure, exact: p.exact, score: p.score,
+          flagWord: fl ? String(fl.ask).split(" · ")[0] : ""
+        };
+        if (fl || l.verdict === "no" || l.verdict === "ask") push.push(item);
         else if (l.verdict === "yes" || l.verdict === "in") yes.push(item);
         else mute.push(item);                       // he wrote back, but said neither
       });
 
-      /* NARROW THE SILENCE TO THE MAN WHO ANSWERED. One walk, N messages: this
-       * list holds asks for three companies, and reporting the GC's items as
-       * "the electrician never mentioned these" is the page inventing a
-       * grievance. If every row he DID answer belongs to one receiver, the
-       * unanswered block is scoped to that receiver and says whose it is. */
-      var scopes = {}, nScope = 0, scope = "";
+      /* ── NARROW THE SILENCE TO WHAT HE WAS ACTUALLY ASKED ────────────────
+       * One walk, N messages: this list holds asks for three companies, so a
+       * reply from one of them says nothing about the other two, and printing
+       * their rows as HIS silence is the page inventing a grievance out of a
+       * filter it forgot to apply.
+       * A SET, not a single scope. The old all-or-nothing collapsed the moment
+       * one line crossed trades — one "is that mine or the GC's?" and the GC's
+       * unanswered rows landed in the electrician's silence. Now: a row is his
+       * silence only if he answered something for that receiver. */
+      var scopeSet = {}, scopeList = [];
       joined.pairs.forEach(function (p) {
         var s = (byId[p.rowId] || {}).scope || "";
-        if (!s || scopes[s]) return;
-        scopes[s] = 1; nScope++; scope = s;
+        if (!s || scopeSet[s]) return;
+        scopeSet[s] = 1; scopeList.push(s);
       });
-      var scoped = nScope === 1 ? scope : "";
 
       joined.unmatched.forEach(function (id) {
         var r = byId[id];
         if (!r || r.settled) return;                 // already answered or already in
-        if (scoped && r.scope && r.scope !== scoped) return;
+        if (scopeList.length && r.scope && !scopeSet[r.scope]) return;
         quiet.push(r);
       });
+
+      /* NAMING HIM IS A CLAIM ABOUT EVERY ROW IN THE BLOCK. "…and they're all on
+       * the electrician's list" was printed whenever one receiver appeared among
+       * the PAIRS, while the block itself deliberately keeps rows with no
+       * receiver at all — so a row on nobody's list was announced as being on
+       * his. Say his name only when it is true of every row shown. */
+      var scoped = (scopeList.length === 1 && quiet.length
+        && quiet.every(function (r) { return r.scope === scopeList[0]; })) ? scopeList[0] : "";
 
       return {
         yes: yes, push: push, mute: mute, quiet: quiet,
@@ -400,7 +497,8 @@
     function pairHTML(item, tickable) {
       var on = tickable ? isOn(item) : false;
       var tag = "";
-      if (item.line.verdict === "in") tag = '<span class="rc-tag">he says it\'s in</span>';
+      if (item.flagWord) tag = '<span class="rc-tag rc-warn">' + esc(item.flagWord) + "</span>";
+      else if (item.line.verdict === "in") tag = '<span class="rc-tag">he says it\'s in</span>';
       if (!item.sure) tag += '<span class="rc-tag rc-warn">not sure it\'s the same one</span>';
       if (!tickable && item.row.settled) tag += '<span class="rc-tag">already ' + esc(String(item.row.row.values[cfg.commitKey || "status"] || "").toLowerCase()) + '</span>';
       /* THE EVIDENCE, SHOWN EXACTLY WHEN IT IS NEEDED. On a pair we are unsure
@@ -412,6 +510,7 @@
        * argued about later. */
       var his = item.line.tail;
       if (!item.sure) his = item.line.raw;
+      else if (item.flagWord) his = item.line.raw;
       else if (!his) {
         /* WHAT HE LEFT OUT IS THE ACTIONABLE HALF, and it is a different thing
          * on each rung. Echoing our own row back at him here says nothing; the
@@ -450,7 +549,7 @@
         var offer = rep.yes.filter(function (i) { return !i.row.settled; }).length;
         html.push('<div class="outrow" style="margin-top:9px"><button type="button" class="btn flag" id="rcApply"'
           + (n ? "" : " disabled") + '>'
-          + (n ? "Tick " + plural(n, "row") + " " + commitLabel.toLowerCase()
+          + (n ? "Tick " + plural(n, "row") + " " + esc(commitLabel.toLowerCase())
             : (offer ? "Tap the ones that are really yours" : "Nothing left to tick"))
           + "</button></div>");
         var unsure = rep.yes.filter(function (i) { return !i.sure && !i.row.settled; }).length;
@@ -545,7 +644,12 @@
       if (report.quiet.length) bits.push("<b>" + plural(report.quiet.length, "item") + " he never mentioned</b>");
       say(bits.join(" · ") + ". Nothing has changed on your list yet.");
       $("#rcIntake").open = false;
-      card.scrollIntoView({ block: "start" });
+      /* CENTRE, never "start": every page of every trade wears a sticky bar, and
+       * a card scrolled to the top of the viewport is a card whose heading is
+       * under it (§SCARS — the sticky nav eats what it lands on). The MESSAGE is
+       * what he needs to read first, and it is one line tall, so centring that
+       * puts the report immediately under it. */
+      msg.scrollIntoView({ block: "center" });
     });
 
     out.addEventListener("click", function (e) {
@@ -556,7 +660,20 @@
       paint();
     });
 
-    return { report: function () { return report; }, refresh: function () { if (report) { report = build(lastText); paint(); } } };
+    /* THE REPORT IS A PHOTOGRAPH OF THE LIST AND THE LIST MOVES UNDER IT — he
+     * walks the job with the card open, settles a row by hand, and the card is
+     * still offering it. The page wires this to the engine's onChange so the
+     * two stay married. Guarded: paint() never triggers a render, but a caller
+     * that re-enters would rebuild forever. */
+    var refreshing = false;
+    return {
+      report: function () { return report; },
+      refresh: function () {
+        if (!report || refreshing) return;
+        refreshing = true;
+        try { report = build(lastText); paint(); } finally { refreshing = false; }
+      }
+    };
   }
 
   window.Reconcile = {

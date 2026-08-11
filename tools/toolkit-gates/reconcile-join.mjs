@@ -264,6 +264,88 @@ console.log('determinism — no ordering luck in the greedy assignment');
   ok(a2 === b, 'row order does not change the pairing', `${a2}\n        ${b}`);
 }
 
+/* ── 11. A RATIO IS NOT AN IDENTITY (adversarial audit 2026-08-11) ─────────── */
+console.log('identity — one wrong room number is never "sure", however high it scores');
+{
+  // a line about CR-208, which is on nobody's list. It differs from the CR-206
+  // row by exactly one token out of ~12.
+  const line = sent(ROWS[2], 'who').replace('CR-206', 'CR-208');
+  const parsed = R.parse(reply([{ line, status: 'Will do', when: 'Thursday', note: '' }]));
+  const res = R.pair(forMatch(ROWS), parsed.lines);
+  if (ok(res.pairs.length === 1, 'it still PROPOSES the closest row — nothing is hidden', JSON.stringify(res.pairs))) {
+    ok(res.pairs[0].score >= 0.85, `and it scores high (${res.pairs[0].score.toFixed(3)}) — which is exactly the trap`);
+    ok(!res.pairs[0].sure, 'BUT IT IS NOT SURE — a ratio cannot tell a typo from a different room');
+    ok(!res.pairs[0].exact, 'and not exact');
+  }
+}
+
+/* ── 12. IDENTICAL FORMS ACROSS ROWS — same device, three rooms ────────────── */
+console.log('ambiguity — one line matching several rows exactly is sure of none of them');
+{
+  const three = [1, 2, 3].map(i => ({ id: i, area: `CR-20${i}`, ask: 'Back box', spec: 'Deep box + 2-gang mud ring', place: '60 AFF', by: 'before rock', who: 'Electrician', note: '' }));
+  // copied grouped by WHERE, so the room is the heading and is not on the line
+  const line = sent(three[0], 'area');
+  const parsed = R.parse(reply([{ line, status: 'Will do', when: '', note: '' }]));
+  const res = R.pair(forMatch(three), parsed.lines);
+  ok(res.pairs.length === 1, 'one line claims one row', JSON.stringify(res.pairs));
+  ok(res.pairs[0] && res.pairs[0].exact, 'the match IS exact — three rows produce the same string');
+  ok(res.pairs[0] && !res.pairs[0].sure,
+    'and precisely because it is exact against THREE rows, it is not sure',
+    JSON.stringify(res.pairs[0]));
+  ok(res.unmatched.length === 2, 'the other two rooms come back unanswered, not silently ticked');
+}
+
+/* ── 13. A DISCLAIMER PHRASE INSIDE A ROW MUST NOT TRUNCATE THE DOCUMENT ───── */
+console.log('sign-off — our own shipped spec text is not a sign-off');
+{
+  // av/items.js ships this spec under "Keep the wall clear"; it matches DISCLAIM.
+  const trap = { area: 'CR-204', ask: 'Keep the wall clear', spec: 'Walk the wall with me before anybody roughs it', place: '', by: 'before rock', who: 'Electrician', note: '' };
+  const items = [
+    { line: sent(ROWS[0], 'who'), status: 'Will do', when: 'Thursday', note: '' },
+    { line: sent(trap, 'who'), status: 'Will do', when: 'Thursday', note: '' },
+    { line: sent(ROWS[2], 'who'), status: "Can't", when: '', note: 'panel is full' },
+  ];
+  const parsed = R.parse(reply(items));
+  ok(parsed.lines.length === 3, 'all three answers survive — the trap row does not cut the document',
+    `got ${parsed.lines.length}: ${parsed.lines.map(l => l.ask.slice(0, 30)).join(' | ')}`);
+  ok(parsed.lines.some(l => /Keep the wall clear/.test(l.ask)), 'including the trap row itself');
+  // and his own note carrying one of the phrases
+  const p2 = R.parse(reply([
+    { line: sent(ROWS[0], 'who'), status: 'Will do', when: 'Thursday', note: 'verify it before I set the box' },
+    { line: sent(ROWS[2], 'who'), status: 'Need to know', when: '', note: 'which column?' },
+  ]));
+  ok(p2.lines.length === 2, "his own note carrying a disclaimer phrase does not cut the rest either",
+    `got ${p2.lines.length}`);
+}
+
+/* ── 14. A SIGNATURE AT THE BOTTOM IS NOT A HEADER BLOCK AT THE TOP ────────── */
+console.log('subject rule — a phone number in the sign-off must not eat the first answer');
+{
+  const p = R.parse([
+    'back box CR-204 60 aff mud ring — will do thursday',
+    'conduit to the rack CR-206 — will do tuesday',
+    'Call me: 555-0134',
+  ].join('\n'));
+  ok(p.lines.length === 2, 'both answers survive', JSON.stringify(p.lines.map(l => l.ask)));
+  ok(p.lines.some(l => /back box/i.test(l.ask)), 'including the FIRST one');
+  // ...and a real document still loses its subject line
+  const q = R.parse(reply([{ line: sent(ROWS[0], 'who'), status: 'Will do', when: '', note: '' }]));
+  ok(q.dropped.some(l => /my answer on your list/.test(l)), 'while a real document still drops its subject');
+}
+
+/* ── 15. A PASTED EMAIL'S NO-BREAK SPACES ─────────────────────────────────── */
+console.log('unicode — NBSP around the em dash must not swallow his date');
+{
+  const clean = `${sent(ROWS[0], 'who')} — Thursday`;
+  const nbsp = clean.replace(' — ', ' — ');
+  const p = R.parse('WILL DO — 1 ROW\n' + nbsp);
+  ok(p.lines.length === 1, 'the line survives');
+  ok(p.lines[0].tail === 'Thursday', 'and his date is read off the tail, not buried in the ask', JSON.stringify(p.lines[0]));
+  const res = R.pair(forMatch(ROWS), p.lines);
+  ok(res.pairs.length === 1 && res.pairs[0].rowId === 1 && res.pairs[0].sure,
+    'and it is still an exact, sure match to row 1', JSON.stringify(res.pairs));
+}
+
 console.log('');
 console.log(fails ? `RECONCILE JOIN GATE: ${fails} FAILED of ${checks}` : `RECONCILE JOIN GATE: ${checks} checks, all green`);
 process.exit(fails ? 1 : 0);

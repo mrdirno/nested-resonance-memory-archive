@@ -432,7 +432,10 @@
       $("#hJob").value = x.job || ""; $("#hOff").value = x.off || "";
       $("#hFrom").value = x.from || ""; $("#hTel").value = x.tel || "";
     },
-    onChange: function () { paintSendTo(); syncCarry(); }
+    /* AND THE RECONCILE CARD FOLLOWS THE LIST. Its report is a photograph, and
+       he walks the job with it open — settling a row by hand while the card
+       still offers it. Rebuilt on every change so the two cannot disagree. */
+    onChange: function () { paintSendTo(); syncCarry(); if (rc && rc.refresh) rc.refresh(); }
   });
 
   /* ── the ask's usual gate ─────────────────────────────────────────────────
@@ -557,7 +560,7 @@
      the button, every pair is on the glass before he does, and the tick stops at
      COMMITTED — `In` is this page's word for HE LAID EYES ON IT, and a text
      message is not eyes. */
-  if (window.Reconcile) Reconcile.mount({
+  var rc = window.Reconcile ? Reconcile.mount({
     after: $("#list").closest(".card"),
     rows: function () { return rl.rows(); },
 
@@ -612,7 +615,7 @@
       }));
     },
     words: R.reconcile || null
-  });
+  }) : null;
 
   if (rl.count()) { var p = $("#pickers"); if (p) p.open = false; }
 })();

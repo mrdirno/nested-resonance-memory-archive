@@ -536,7 +536,11 @@
      * moved would revert it on the next Save, with nothing on screen to show it. */
     function applyValues(list) {
       if (!list || !list.length) return 0;
-      if (editingId != null) stopEditing(true);
+      /* CLOSE THE PENCIL ONLY IF IT IS OPEN ON A ROW THIS BATCH TOUCHES.
+       * stopEditing(true) throws away whatever is half-typed in the bar, and a
+       * batch write to twenty OTHER rows has no business doing that to the note
+       * he is in the middle of writing. */
+      if (editingId != null && list.some(function (x) { return x && x.id === editingId; })) stopEditing(true);
       var n = 0;
       list.forEach(function (item) {
         if (!item || item.id == null || !item.values) return;
@@ -546,7 +550,23 @@
         Object.keys(item.values).forEach(function (k) {
           if (!field(k)) return;                       // not a declared field
           var next = item.values[k] == null ? "" : String(item.values[k]);
-          if (String(r.values[k] == null ? "" : r.values[k]) === next) return;
+          var cur = String(r.values[k] == null ? "" : r.values[k]);
+          if (cur === next) return;
+          /* A BATCH WRITE MAY NEVER WALK A ROW BACK DOWN THE LADDER. The caller
+           * holds a photograph of the list taken when its report was built, and
+           * the list moves underneath it — he walks the job with the card open
+           * and settles a row by hand. Applying that photograph then pushed a
+           * row somebody had WALKED OUT AND VERIFIED ("In") back down to a claim
+           * somebody else made about it ("Committed"), silently, with the
+           * confirmation reading "ticked 3 rows". That is §SCARS' pencil-sheet
+           * photograph at list scale, and the guard belongs HERE rather than in
+           * any one caller: the ladder is monotone, so the engine that owns it
+           * is the only place that can say so for every caller there will be. */
+          if (cfg.statusKey && k === cfg.statusKey && STATUS.length) {
+            var to = STATUS.indexOf(next), from = STATUS.indexOf(cur);
+            if (to > -1 && from > -1 && to <= from) return;   // never demote, never re-state
+            if (to < 0 && cur) return;                        // never blank a stated rung
+          }
           r.values[k] = next; moved = true;
         });
         if (moved) { r.t = ++touch; n++; }

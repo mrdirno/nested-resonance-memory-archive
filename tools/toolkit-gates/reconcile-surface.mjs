@@ -149,6 +149,79 @@ const stored = await p.evaluate(() => {
 ok(stored.every(s => s === ''), 'NOTHING was committed while the only pair was unvouched', JSON.stringify(stored));
 ok(errs.length === 0, 'no page errors through the whole surface', errs.join(' | '));
 
+// ── D) AN "IN" ROW IS A FACT SOMEBODY WALKED OUT AND VERIFIED ──────────────
+// The report is a photograph and the list moves under it. Apply must never walk
+// a row back DOWN the ladder, and the card must not still be offering a row the
+// man already settled by hand.
+console.log('\nthe list moves under the report');
+{
+  await p.evaluate(() => { document.querySelector('#rcIntake').open = true; });
+  await p.fill('#rcPaste', 'WILL DO — 2 ROWS\n' + rowLines.join('\n'));
+  await p.click('#rcGo');
+  let n = await p.evaluate(() => (document.querySelector('#rcApply') || {}).textContent);
+  ok(/Tick 2 rows/i.test(n || ''), 'both rows are proposed', n);
+
+  // he walks the job with the card open and settles row 1 by hand: Committed, then In
+  await p.evaluate(() => { document.querySelectorAll('.rl-tap')[0].click(); document.querySelectorAll('.rl-tap')[0].click(); });
+  const mid = await p.evaluate(() => {
+    const k = Object.keys(localStorage).find(x => /rough-in-request/.test(x));
+    return { stored: JSON.parse(localStorage.getItem(k)).rows.map(r => r.values.status || ''),
+             btn: (document.querySelector('#rcApply') || {}).textContent };
+  });
+  ok(mid.stored[0] === 'In', 'row 1 is now In — verified with his own eyes', JSON.stringify(mid.stored));
+  ok(/Tick 1 row/i.test(mid.btn || ''), 'and the card followed the list down to 1', mid.btn);
+
+  await p.evaluate(() => { const b = document.querySelector('#rcApply'); if (b && !b.disabled) b.click(); });
+  const after = await p.evaluate(() => {
+    const k = Object.keys(localStorage).find(x => /rough-in-request/.test(x));
+    return { stored: JSON.parse(localStorage.getItem(k)).rows.map(r => r.values.status || ''),
+             msg: document.querySelector('#rcMsg').textContent };
+  });
+  ok(after.stored[0] === 'In', 'APPLY DID NOT WALK IT BACK DOWN TO COMMITTED', JSON.stringify(after.stored));
+  ok(after.stored[1] === 'Committed', 'and the other row was ticked normally', JSON.stringify(after.stored));
+  ok(/Ticked 1 row/i.test(after.msg), 'the confirmation counts what actually moved', after.msg);
+}
+
+// ── E) HIS FLAG IS THE LOUDEST THING IN A REPLY ────────────────────────────
+// answer-back prints a flagged row twice (its answer block AND the FLAGGED
+// block). The flag must reach "he pushed back", not the couldn't-place drawer.
+console.log('\nhis flag reaches the pushback block');
+{
+  /* CLEAR THROUGH THE PAGE'S OWN CONTROL, never localStorage.clear() + reload
+     (§SCARS 2026-08-05 — that is a circular test: the reload fires `pagehide`,
+     the engine flushes its still-in-memory rows straight back, and the "fresh"
+     page comes up carrying everything you thought you wiped. This gate proved
+     it on itself — two rows and an "already in" tag appeared on a list that had
+     just been emptied). #clearBtn is armed by the first tap and fires on the
+     second, exactly as a thumb would do it. */
+  await p.click('#clearBtn'); await p.click('#clearBtn');
+  await p.waitForFunction(() => document.querySelectorAll('.rl-tap').length === 0);
+  const asks2 = await p.$$eval('#bar select[data-k="ask"] option', o => o.map(x => x.value).filter(Boolean));
+  await p.selectOption('#bar select[data-k="ask"]', asks2[0]);
+  await p.evaluate(() => { const d = document.querySelector('#pickers'); if (d) d.open = true; });
+  await p.fill('[data-learn="area"]', 'CR-204'); await p.dispatchEvent('[data-learn="area"]', 'blur');
+  await p.click('.rl-add');
+  const line = (await p.textContent('#preview')).split('\n').filter(l => /CR-204/.test(l))[0];
+  await p.evaluate(() => { document.querySelector('#rcIntake').open = true; });
+  await p.fill('#rcPaste', [
+    'Building C — my answer on your list — Aug 11', '', 'Job: Building C', '',
+    'NEED TO KNOW — 1 ROW', line + ' — whose scope is this?', '',
+    'FLAGGED — 1', 'Not mine · ' + line + ' · Need to know',
+  ].join('\n'));
+  await p.click('#rcGo');
+  const r2 = await p.evaluate(() => {
+    const b = [...document.querySelectorAll('#rcOut .rc-block')]
+      .find(x => /pushed back/i.test((x.querySelector('.rc-h') || {}).textContent || ''));
+    const drawer = document.querySelector('#rcOut details');
+    return b ? { n: b.querySelectorAll('.rc-pair').length,
+                 tags: [...b.querySelectorAll('.rc-tag')].map(t => t.textContent),
+                 drawer: drawer ? drawer.querySelector('summary').textContent : '' } : null;
+  });
+  ok(!!r2 && r2.n === 1, 'the flagged row lands under "he pushed back on these"', JSON.stringify(r2));
+  ok(!!r2 && r2.tags.some(t => /not mine/i.test(t)), 'wearing his flag as a tag', JSON.stringify(r2 && r2.tags));
+  ok(!!r2 && !/couldn't place/i.test(r2.drawer), 'and nothing was left in the couldn\'t-place drawer', r2 && r2.drawer);
+}
+
 await browser.close();
 console.log('');
 console.log(fails ? `RECONCILE SURFACE GATE: ${fails} FAILED` : 'RECONCILE SURFACE GATE: all green');
