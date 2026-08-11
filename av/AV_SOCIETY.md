@@ -649,6 +649,58 @@ and the fast path is **tapping down a list** instead of adding to one.
 and its six names) and answers (`answer-back`), because on a real job every trade is on both
 ends of the boundary on the same day.
 
+### THE THIRD MESSAGE — the loop closing on itself (added 2026-08-11)
+Ask and answer shipped, and the loop still leaked, because **an answer arrives as one
+message about twenty rows and the man who asked has to walk both lists by hand.** He reads
+down the reply with his own page open on the other screen, ticks the eight he can find,
+misses two — and never notices the three the other man said nothing at all about. Silence
+is not a no and it is not a yes; it is the thing that shows up as a hole in a closed wall.
+
+**IT IS AN INTAKE, NOT A FOURTH PAGE.** The rows already live on the request page and the
+answer is about those rows. A separate page would need its own copy of them, and a second
+copy of a list is a second version of the truth. So `shared/reconcile.js` mounts INTO
+`<trade>/rough-in-request.html` — two lines per page, all seven at once.
+
+**THE JOIN IS ON PROSE, AND THAT IS THE WHOLE PROBLEM.** A wrong join silently marks the
+wrong item committed, which is worse than no automation at all. Four rules hold it up:
+
+1. **PROPOSE, NEVER APPLY.** Nothing moves until he taps the button, every pair is on the
+   glass — his line beside our row — before he does, and a pair we are not sure of comes in
+   switched OFF and says *not sure it's the same one*.
+2. **THE COMMON CASE IS NOT FUZZY AT ALL.** `answer-back` stores his counterpart's ask
+   verbatim and never re-phrases it (§THE RETURN LEG rule 1), so when the other man used the
+   toolkit the line coming home IS the line this page sent, character for character. That is
+   an EXACT match and it is treated as one — **which is what makes the "never re-phrase his
+   ask" rule pay for itself a second time.** Dice-scored fuzzy matching is the fallback for a
+   hand-typed reply, and it is deliberately timid: high floor, and the runner-up must be
+   clearly worse or nobody is sure of anything.
+   **A ROW HAS MORE THAN ONE TRUE FORM**, because the document drops whichever axis it was
+   grouped by. All four forms are offered to the matcher; without that, the exact match never
+   fires and a perfectly clean round trip comes back entirely unsure.
+3. **WE ONLY EVER TICK THE FIRST RUNG.** His answer is a claim by *him*. The top of this
+   page's ladder is the requester having LAID EYES ON IT, and a text message is not eyes —
+   so even *in already* ticks Committed and stops. The page says so where he can read it.
+4. **NOTHING IS THROWN AWAY, AND A CLEAN TRIP MUST NOT LOOK LIKE A FAILURE.** Two different
+   piles: lines of his we could not place (a real miss — read these, because one of them
+   might be the answer to a row now sitting under *never mentioned*), and his header, counts
+   and sign-off, which we recognised and stepped over. Merging them made a reply where every
+   ask matched announce *"10 lines we couldn't place"*.
+
+**AND THE OUTPUT NOBODY ELSE CAN COMPUTE — WHAT HE NEVER MENTIONED.** Only the page holding
+the original list knows which asks came back unanswered, because only it knows what was
+asked. It needs no join to be right (an unmatched row is unmatched), it is the reason to
+open the intake at all, and it is scoped: if every row he answered belongs to one receiver,
+the silence block narrows to that receiver and names him — reporting the GC's items as *"the
+electrician never mentioned these"* would be the page inventing a grievance out of a filter
+it forgot to apply.
+
+**ONE MORE FIELD TRUTH, FOR FREE.** A committed row with no date attached is the thing that
+gets argued about later, so a sure pair with nothing added reads **"no date on it"** — the
+requester's half of the same rule `answer-back` already holds on the responder's side.
+
+**WHERE INTERFACE GOES NEXT:** the supply-house / vendor edge and the sub → owner
+access/badge request are the two unbuilt ASK edges left. The loop itself is now closed.
+
 ## SCARS — what went wrong, so it does not go wrong twice
 Append here when a cycle finds one. Each is a rule, not a story.
 
@@ -1237,6 +1289,25 @@ those pages (`docspec.css` hides it under 480px, because its two buttons are the
 in the toolkit and its count cannot fit at any phone width). And: **a fix is not verified
 until you have LOOKED at the thing you shipped.** Three gates passed this page in the same
 session that a screenshot failed it.
+
+### 2026-08-11 — TWO THINGS UNDER ONE NAME, AND `var` PICKED THE WRONG ONE
+`shared/reconcile.js` computed where the other man's sign-off block starts and stored it in
+`var tail`. Two hundred lines down, INSIDE the per-line callback, the same function declared
+`var tail` for the half of a line that carries his answer. `var` hoists to the top of the
+callback, so at the moment the cutoff was tested — `if (tail >= 0 && i >= tail)` — `tail`
+was **`undefined` on every line**, the whole sign-off survived the parser, and our own
+closing paragraph came back as a line to match against a foreman's rows. `node --check`
+passes it, every browser runs it, and the symptom is one extra row in a report nobody has
+read yet. **A shadowed variable does not fail — it silently reads `undefined` and takes the
+false branch.** The name is the fix: the outer one became `signOff`, which is what it is.
+The class is already in this file one floor up (*two different things under one key*); this
+is the same law inside a single function, and the reason it was caught in ten minutes rather
+than in a field report is that the join has a unit sweep that runs the REAL module —
+`tools/toolkit-gates/reconcile-join.mjs`, which found this on its first execution along with
+two more: a one-line reply being eaten by the "first line is a subject" rule, and a header
+key without its colon (`^off\b`) eating *"Off the main tee · hold a full tile"*, a real ask
+in two of the seven vocabularies. **All three were invisible to every gate we own** — they
+are logic, not pixels, and nothing but an assertion was ever going to see them.
 
 ## THE RATCHET
 Each granted wish widens coverage of the real AV workflow. When a whole category is

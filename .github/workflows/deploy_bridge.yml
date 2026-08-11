@@ -337,6 +337,23 @@ jobs:
             # proves what actually ships, not what the source says.
             grep -rqF "./$t/" HELIOS-BRIDGE/dist/assets/ \
               || { echo "FAIL: trade '$t' is staged but has NO entry in the site-root TOOLS registry (HELIOS-BRIDGE/components/UIComponents.tsx) — it would be unreachable from the front page"; exit 1; }
+
+            # THE CROSS-BOUNDARY LOOP IS THREE MESSAGES AND ALL THREE ARE ONE PAGE
+            # FILE COPIED PER TRADE. Loading a shared module is asserted above;
+            # CALLING it is not, and the two drift independently — a trade whose
+            # copy carries the <script> and lost the mount block ships a page that
+            # renders everything except the block it exists to make (§SCARS
+            # 2026-08-11, the same shape one floor down). Assert the whole loop
+            # rather than the file: ask, answer, and reconcile the answer.
+            if [ -f "HELIOS-BRIDGE/dist/$t/rough-in-request.html" ]; then
+              test -f "HELIOS-BRIDGE/dist/$t/answer-back.html" \
+                || { echo "FAIL: $t can ask across a boundary and cannot answer one — every trade is on BOTH ends of it on the same day"; exit 1; }
+              grep -q 'shared/reconcile.js' "HELIOS-BRIDGE/dist/$t/rough-in-request.html" \
+                || { echo "FAIL: $t/rough-in-request.html does not load shared/reconcile.js — the answer would have nowhere to land"; exit 1; }
+              grep -q 'Reconcile.mount' "HELIOS-BRIDGE/dist/$t/rough-in-request.html" \
+                || { echo "FAIL: $t/rough-in-request.html loads reconcile.js and never mounts it — the script is dead weight and the card never appears"; exit 1; }
+              echo "  $t: ask -> answer -> reconcile, all three present"
+            fi
           done
 
           # THE DOCUMENT LIBRARY HAS A CONTRACT WITH ITS ENGINE, AND NOTHING

@@ -96,6 +96,7 @@
 <script src="items.js"></script>
 <script src="../shared/toolkit.js"></script>
 <script src="../shared/rowlog.js"></script>
+<script src="../shared/reconcile.js"></script>
 <script>
 /* THE CROSS-BOUNDARY REQUEST — the first tool in the toolkit whose output leaves
  * the company that made it (av/AV_SOCIETY.md §THE INTERFACE). Every tool before
@@ -540,6 +541,76 @@
   rl.restore();
   paintSendTo();
   syncCarry();
+
+  /* ── THE THIRD MESSAGE — his answer, laid back over the list that asked for it
+     (shared/reconcile.js, av/AV_SOCIETY.md §THE INTERFACE §THE RETURN LEG).
+
+     The loop shipped in two halves and stopped one message short: this page
+     asks, `answer-back.html` answers, and then the man who asked sits with the
+     reply in one hand and this list on the other screen, tapping rows one at a
+     time. Twenty asks come back as one message and he ticks the eight he can
+     find — and never notices the three the other man said nothing at all about,
+     which are the only three that matter, because silence is not a no.
+
+     IT IS AN INTAKE, NOT A FOURTH PAGE: the rows are already here, and a second
+     copy of a list is a second version of the truth. Nothing moves until he taps
+     the button, every pair is on the glass before he does, and the tick stops at
+     COMMITTED — `In` is this page's word for HE LAID EYES ON IT, and a text
+     message is not eyes. */
+  if (window.Reconcile) Reconcile.mount({
+    after: $("#list").closest(".card"),
+    rows: function () { return rl.rows(); },
+
+    /* EVERY FORM THE LINE COULD HAVE TAKEN. docRow drops whichever axis the
+       list was grouped by, because that axis is the heading above it — so the
+       row he is holding reads one of four ways and this page cannot know which
+       walk it was copied on. Offer all four and the round trip through
+       answer-back (which stores his counterpart's ask verbatim, and never
+       re-phrases it) comes home as an EXACT match instead of a guess. */
+    matchText: function (v) {
+      var a = labelOf(ASKS, v.ask), w = labelOf(WHO, v.who), m = labelOf(MILES, v.by);
+      return [
+        joinDots([v.area, a, v.spec, v.place, m, w, v.note]),
+        joinDots([v.area, a, v.spec, v.place, m, v.note]),
+        joinDots([a, v.spec, v.place, m, w, v.note]),
+        joinDots([v.area, a, v.spec, v.place, w, v.note])
+      ];
+    },
+    /* THE ROW HAS TO BE IDENTIFIABLE ON ITS OWN LINE. The list can render two
+       rows as "Back box" and let the sub-line separate them, because they sit
+       under a heading and next to each other. Here each one is being matched
+       against somebody else's sentence, and two identical labels in a pairing
+       is the one place a man cannot check our work. */
+    label: function (v) {
+      var a = labelOf(ASKS, v.ask) || "(nothing picked)";
+      return joinDots([v.area, v.spec ? a + " — " + v.spec : a, v.place]);
+    },
+    sub: function (v) { return joinDots([v.area, v.place, labelOf(MILES, v.by), labelOf(WHO, v.who)]); },
+
+    /* A ROW WITH ANY ANSWER ON IT IS NOT NEWS. `He never mentioned these` is
+       about the asks still sitting at nothing — a row already committed or
+       already seen in does not become a grievance because this reply skipped
+       it. */
+    settled: function (v) { return !!v.status; },
+
+    /* ONE WALK, N MESSAGES — so one REPLY is one receiver's. If every row he
+       answered belongs to one trade, the unanswered block narrows to that
+       trade and names him; otherwise it stays whole. Reporting the GC's items
+       as `the electrician never mentioned these` is the page inventing a
+       grievance out of a filter it forgot to apply. */
+    scopeOf: function (v) { return v.who || ""; },
+    scopeName: function (k) { return labelOf(WHO, k); },
+
+    commitKey: "status",
+    commitLabel: "Committed",
+    onApply: function (ids) {
+      return rl.applyValues(ids.map(function (id) {
+        return { id: id, values: { status: "Committed" } };
+      }));
+    },
+    words: R.reconcile || null
+  });
+
   if (rl.count()) { var p = $("#pickers"); if (p) p.open = false; }
 })();
 </script>

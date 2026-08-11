@@ -277,3 +277,39 @@ html.rl-walking, html.rl-walking body{overflow:hidden}
 .rl-wk-endn i{font-style:normal;font-family:var(--mono);font-size:clamp(24px,7vw,34px);font-weight:700;color:#F2F4F0;
   min-width:1.4em;text-align:right}
 .rl-wk-endn.is-open i{color:var(--flag)}
+
+/* ── THE RECONCILE INTAKE (shared/reconcile.js — THE THIRD MESSAGE) ──────────
+   The other man's answer, laid beside the rows that asked for it. Four blocks,
+   and only the first one has anything you can tap: the pairs he committed to.
+
+   A PAIR IS A BUTTON, NOT A CHECKBOX, and that is a field decision rather than
+   a taste one. A native checkbox is ~16px on its short side — a third of the
+   44px floor this sheet holds everything else to, unhittable in a glove, and a
+   control the mobile gate would fail on sight. The whole row is the target,
+   exactly like .rl-tap, so the thumb has 44px of anything to land on. */
+.rc-block{margin-top:12px}
+.rc-block+.rc-block{border-top:1px dashed var(--line);padding-top:11px}
+.rc-h{font-family:var(--cond);text-transform:uppercase;letter-spacing:.07em;font-size:13px;color:var(--muted);
+  margin:0 0 7px;display:flex;align-items:baseline;gap:7px}
+.rc-h .rc-n{font-family:var(--mono);font-size:13px;color:var(--deep);font-weight:700}
+.rc-block-warn .rc-h{color:var(--warn-ink)}
+.rc-block-quiet .rc-h{color:var(--bad-ink)}
+
+.rc-pair{display:flex;align-items:center;gap:8px;width:100%;text-align:left;margin-bottom:5px;
+  background:#fff;border:1px solid var(--line);border-left-width:4px;border-left-color:var(--line);
+  border-radius:2px;padding:7px 9px;min-height:44px;color:var(--ink);font:inherit;cursor:pointer}
+.rc-pair:hover{border-color:var(--deep)}
+.rc-pair.on{border-left-color:var(--ok)}
+.rc-pair.rc-static{cursor:default;background:#F7F7F3}
+.rc-block-warn .rc-pair{border-left-color:var(--warn)}
+.rc-block-quiet .rc-pair{border-left-color:var(--bad)}
+.rc-pair:focus-visible{outline:2px solid var(--deep);outline-offset:1px}
+.rc-mark{flex:0 0 auto;font-family:var(--mono);font-size:15px;line-height:1;color:var(--muted);width:1.1em;text-align:center}
+.rc-pair.on .rc-mark{color:var(--ok)}
+.rc-txt{flex:1 1 auto;min-width:0}
+.rc-main{display:block;font-family:var(--mono);font-size:13px;font-weight:700;overflow-wrap:anywhere}
+.rc-sub{display:block;font-size:11.5px;color:var(--muted);overflow-wrap:anywhere}
+.rc-tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:2px;padding:1px 5px;margin-left:6px;background:#fff;color:var(--muted);
+  white-space:nowrap}
+.rc-tag.rc-warn{border-color:var(--warn);background:var(--warn-bg);color:var(--warn-ink)}

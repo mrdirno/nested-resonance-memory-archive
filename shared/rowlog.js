@@ -39,6 +39,11 @@
  *     `cfg.statusDone` says which rung wears the settled colour, because on an
  *     answer ladder that rung is not the last one. All three default to the
  *     behaviour the first two instances already shipped.
+ *   · A BATCH WRITE FROM OUTSIDE THE BAR (`applyValues`, added at the fifth
+ *     instance — the reconcile intake). The other man's answer to a
+ *     cross-boundary request comes back as ONE message covering twenty rows,
+ *     and ticking twenty rows by hand is this engine's own law failing at the
+ *     scale it was written for. One call, one render, one save.
  *   · the plain-text document · the TSV · copy with the non-secure-context
  *     fallback · the self-aware date · re-render on the runtime's av:ready.
  *
@@ -511,6 +516,43 @@
       if (i < STATUS.length - 1) { r.values[cfg.statusKey] = STATUS[i + 1]; r.t = ++touch; }
       else if (cfg.statusWrap) { r.values[cfg.statusKey] = ""; r.t = ++touch; }
       render(); persistNow();
+    }
+
+    /* WRITE TO ROWS FROM OUTSIDE THE BAR — added at the fifth instance, for the
+     * reconcile intake (shared/reconcile.js, THE THIRD MESSAGE): the other man's
+     * answer comes back as one message and ticking twenty rows by hand is the
+     * "ticking beats typing" law failing at the scale it was written for.
+     *
+     * ONE CALL FOR THE WHOLE BATCH, so twenty rows are one render and one save
+     * rather than twenty of each — and one UNDO-shaped fact for the man reading
+     * the list afterwards.
+     *
+     * IT REFUSES A KEY THE CONFIG NEVER DECLARED. A caller that misspells the
+     * status key would otherwise write a field nothing renders, nothing copies
+     * and nothing can clear — a silent no-op that looks like a save.
+     *
+     * AND IT CLOSES THE PENCIL FIRST (§SCARS — the pencil sheet holds a
+     * photograph and Save puts it back): a sheet left open over a row this just
+     * moved would revert it on the next Save, with nothing on screen to show it. */
+    function applyValues(list) {
+      if (!list || !list.length) return 0;
+      if (editingId != null) stopEditing(true);
+      var n = 0;
+      list.forEach(function (item) {
+        if (!item || item.id == null || !item.values) return;
+        var r = rows.filter(function (x) { return x.id === item.id; })[0];
+        if (!r) return;
+        var moved = false;
+        Object.keys(item.values).forEach(function (k) {
+          if (!field(k)) return;                       // not a declared field
+          var next = item.values[k] == null ? "" : String(item.values[k]);
+          if (String(r.values[k] == null ? "" : r.values[k]) === next) return;
+          r.values[k] = next; moved = true;
+        });
+        if (moved) { r.t = ++touch; n++; }
+      });
+      if (n) { render(); persistNow(); }
+      return n;
     }
 
     /* ── the grouped list ─────────────────────────────────────────────────────
@@ -1164,7 +1206,7 @@
       flaggedCount: function () { return flagged().length; },
       text: text, tsv: tsv, render: render, restore: restore, clearAll: clearAll,
       persist: persistNow, schedulePersist: schedulePersist,
-      addRange: addRange, addPasted: addPasted,
+      addRange: addRange, addPasted: addPasted, applyValues: applyValues,
       setGroup: function (k) { if (GROUPS.filter(function (g) { return g.key === k; }).length) { groupKey = k; render(); persistNow(); } },
       group: function () { return groupKey; },
       setDeltaOnly: function (b) { deltaOnly = !!b; render(); },
