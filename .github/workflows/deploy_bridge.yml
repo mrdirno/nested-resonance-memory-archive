@@ -384,7 +384,12 @@ jobs:
                 n++;
                 if (required || "family" in d) {
                   if (!FAM.includes(d.family)) {
-                    console.error(`FAIL: ${where} family "${d.family}" is not one of the engine's (${FAM.join(", ")}) — it falls back silently and the continuity rule is wrong`);
+                    /* NO APOSTROPHES ANYWHERE IN THIS SCRIPT. It is delivered to
+                       node inside a bash SINGLE-quoted string, so one typed into
+                       a message ("the engine s") ends the quote and the shell
+                       dies on the next paren — which is exactly how this step
+                       failed the first time it ran. */
+                    console.error(`FAIL: ${where} family "${d.family}" is not one of the five the engine declares (${FAM.join(", ")}) — it falls back silently and the continuity rule is wrong`);
                     bad++;
                   }
                 }
