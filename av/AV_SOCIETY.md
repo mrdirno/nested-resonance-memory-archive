@@ -1825,6 +1825,9 @@ line here at CLOSE; keep it to one line. Never log request contents or requester
   Suite after the fixes: **7 trades × 4 widths × 54 assertions = 1,512 green**, and
   `tools/toolkit-gates/overlay-reachability.mjs` now carries the walk as its third overlay
   (16 checks — and its "did it open" test moved from `offsetParent`, which is always null on
-  a `position:fixed` box, to `getClientRects()`). Credited on the
+  a `position:fixed` box, to `getClientRects()`). **All of it re-run against the LIVE deploy
+  after the fixes landed: 1,512 e2e green on all 7 trades, the 9-page opt-out gate clean,
+  and 18 overlay-reachability checks PASS (the walk's action button clear of the glass by
+  62px at both 390×664 and 320×480).** Credited on the
   Wall of Wishes and on all 7 pages.
   https://mrdirno.github.io/nested-resonance-memory-archive/av/rough-in-request.html
