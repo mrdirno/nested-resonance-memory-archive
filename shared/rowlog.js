@@ -140,6 +140,13 @@
     var rows = [];          // {id, t, values:{}, flag:""}
     var seq = 1, touch = 1, copiedAt = 0;
     var editingId = null;
+    /* WHAT THE BAR SAID WHEN THE PENCIL OPENED (§SCARS 2026-08-10 — "the pencil
+     * sheet holds a photograph, and Save puts it back"). The edit bar is a
+     * SNAPSHOT of a row, and while it sits open the row underneath it can still
+     * move: the tap ladder advances it, the walk settles it. Saving the whole
+     * snapshot back therefore un-did field verification silently. So commit()
+     * needs to know what he actually CHANGED, which is the diff against this. */
+    var editingSnap = null;
     var sticky = {};
     var learned = {};       // {fieldKey: [values he has actually typed]}
     var groupKey = GROUPS[0].key;
@@ -374,7 +381,21 @@
         return;
       }
       if (editingId != null) {
-        rows.forEach(function (r) { if (r.id === editingId) { r.values = v; r.t = ++touch; } });
+        /* WRITE ONLY WHAT HE CHANGED IN THE BAR, never the whole snapshot. This
+         * used to be `r.values = v`, and v is what the bar was handed when the
+         * pencil opened — so any move the row made underneath it (a tap up the
+         * ladder, a walk that settled it) was reverted by Save, with no warning
+         * and nothing on screen to show it. Diffing against the snapshot means a
+         * field he never touched keeps whatever the row says NOW, and a key that
+         * is not a bar field at all survives instead of being dropped. */
+        var snap = editingSnap || {};
+        rows.forEach(function (r) {
+          if (r.id !== editingId) return;
+          var next = {};
+          Object.keys(r.values).forEach(function (k) { next[k] = r.values[k]; });
+          Object.keys(v).forEach(function (k) { if (v[k] !== snap[k]) next[k] = v[k]; });
+          r.values = next; r.t = ++touch;
+        });
         stopEditing(false);
       } else {
         rows.push({ id: seq++, t: ++touch, values: v, flag: "" });
@@ -448,6 +469,11 @@
       var r = rows.filter(function (x) { return x.id === id; })[0]; if (!r) return;
       editingId = id;
       writeBar(r.values);
+      // Snapshot AFTER writeBar, off the bar itself rather than off r.values: the
+      // diff in commit() is only honest if both sides were read the same way (a
+      // control can normalise what it was handed, and that normalisation is not
+      // an edit he made).
+      editingSnap = readBar();
       bar.querySelector("#rlEditing").hidden = false;
       bar.querySelector("#rlAdd").textContent = "Save";
       bar.querySelector("#rlNext").hidden = true;
@@ -457,6 +483,7 @@
     }
     function stopEditing(restore) {
       editingId = null;
+      editingSnap = null;
       bar.querySelector("#rlEditing").hidden = true;
       bar.querySelector("#rlAdd").textContent = "Add";
       bar.classList.remove("is-editing");
